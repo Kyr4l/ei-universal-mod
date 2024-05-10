@@ -1,0 +1,55 @@
+Version 1.8.2
+-----------
+ * The program is translated under an open license.
+ * The source is uploaded to the SVN repository + the public tracker of the project is open.
+ * Changed the default parameters for the size of the window when you first start the program.
+ * Changed way of numbering of config formats in ini.
+ * The version information now does not use the * .res binaries linked to the binary and takes into account the revision number.
+ * Improved documentation.
+
+Version 1.8.1.1
+-----------
+ * Changed dialog "about the program" - added information about the license.
+ * Actually added the text of the license to the distribution kit and sources.
+ * The distribution kit now, in addition to the standard version "in the archive", also exists in the form
+installer.
+
+Version 1.8.0.47
+-----------
+ * Added the ability to sort records (strings) in the database editor - sorting alphabetically, by the Name field (or equivalent).
+ * Fixed microbug with incorrect display of the S_Weapons window of the base editor - the window did not respond to the Cascade command because there was an option po_Designed for the position of the window. And the window was also resizable. Now nifigga :).
+ * Reworked the sorting of the list of files in the text editor with automatic (included with the dolphins) to self-written manual - the directories were all at the top and separate from the flies .... files, that is.
+ * Packing using a link to yourself - that is, you can click ".." 1 time (a link to a directory at a higher level - that is, to a directory that is currently open - usually it is poked to go to a level up) - well, in short, the packing button will be active and if click on it - then you can pack just the directory that is open for you at the moment. Ato I got sick of every time after I tweaked the file climb up and then look for this folder shob to pack. And so mustache right away :).
+ * Well, and like .... in general, I used to somehow make it possible to start a fucking bunch of text editor windows right away, but I did it crookedly - they were numbered there - if, for example, you close editor number 1 (there was the first and only one) - that is, there are no open editors left at all - and so - if you open the editor again - editor number 2 will be opened, although the first one seems to be already closed. And the numbering of that, and in general the array in which the references to the objects of the window were stored - actually that too .... in short, everything could grow and grow like that.
+
+Version 1.8.0.38
+-----------
+ * Fixed a bug with saving a text file under a new name
+ * Fixed a bug with the inability to delete files / folders after trying to edit the file name in the list.
+ * Now you won't be able to press the test loaf :)
+ * Something else I corrected, I don't remember what ...
+
+Version 1.8.0.36
+-----------
+ * You can open as many text editors per year.
+ * Added Windows menu.
+
+Version 1.8.0.34
+-----------
+ * Added text editor.
+ * Corrected the window for manual unpacking of the resbuild archive - now it does not ask stupid questions -
+everything is already in the window as a default checkbox disabled.
+ * Fixed a bug in the text editor options window - now if it was not on the way
+the last slash - it is added automatically.
+
+Version 1.7.0
+-----------
+ * Cleaned the code from garbage altogether.
+ * Removed nafig "working copies".
+ * Removed the old text editor.
+ * Completely changed the communication of the program with the resbuild, even for the user it should become more convenient - there was such a stupid window that climbed out with a proposal to press OK when the resbuild dies. Now no :). That is, there is a window, but without a button, and it itself waits until the above-described resbuild throws back its hooves.
+ * Redesigned the res window - added an optimization button, modified the manual unpacking / unpacking buttons - it should become more convenient. Added the ability to optimize the "standard" gamma resources - for this purpose, there is a checkbox at the bottom of the window.
+ * Due to changes in the code, I completely redesigned the program settings. Now there are 3 settings windows - for the text editor, for the base editor, and for the program in general (so far only the paths to the “standard” resources are edited there).
+ * In the DB window - now, after packing, res-database files are optimized. There was no :(.
+ * Program settings are now stored in EiEdit.ini.
+ * Screwed the manifesto. For those who do not know - you need the program to use new Windows * .dll, in particular, without them, the beauty of windows honk-honk xp does not work.
