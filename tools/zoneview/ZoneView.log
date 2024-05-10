@@ -1,32 +1,5 @@
-15:05:35(Basic): D3D created. Adapter name: NVIDIA GeForce GTX 1660 SUPER. Driver: nvldumd.dll
-15:05:36(Basic): D3DDevice created
-15:05:36(Basic): D3DFont created
-15:05:36(Basic): D3D8 Caps 1:1 2:0 3:131072 4:537526272 5:1056 6:2147483663 7:0 8:1818352 9:3826 10:15954321 11:255 12:8191 13:8191 14:255 15:541192 16:126149 17:50530048 18:50529024 19:50529024 20:63 21:63 22:31 23:16384 24:16384 25:2048 26:8192 27:16384 28:16 29:255 30:1572872 31:67043327 32:8 33:8 34:123 35:10 36:8 37:4 38:8 39:16777215 40:16777215 41:16 42:255 43:4294836481 44:96 45:4294902020
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\aiinfo.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\database.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\databaselmp.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\figures.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\gfx.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\materials.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\menus.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\outro.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\redress.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\sfx.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\speech.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\texts.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\textslmp.res loaded.
-15:05:36(Basic): Resource file C:\GOG Games\Evil Islands\res\textures.res loaded.
-15:05:36(Basic): Program Run
-15:05:36(Basic): Loaded units database from databaselmp.res
-15:05:36(Basic): Loaded items database from databaselmp.res
-15:06:41(Basic): Tracked script IDs/Names: merc2,merc1,Sheriff,Hero,NSheriff,BGoblinC,Elder,927062,341484,534153,1000059184,481569,999742,732495,1006565532,326331,196568,469697,183332,386717,686200,1000002436,85297,812970,601927,143005
-15:06:46(Basic): Tracked script IDs/Names: 927062,534153,481569,999742,732495,326331,196568,469697,183332,386717,686200,1000002436,812970,601927,143005
-15:06:53(Basic): Tracked script IDs/Names: merc2,merc1,Sheriff,Hero,NSheriff,BGoblinC,Elder,927062,341484,534153,1000059184,481569,999742,732495,1006565532,326331,196568,469697,183332,386717,686200,1000002436,85297,812970,601927,143005
-15:06:59(Basic): Tracked script IDs/Names: 927062,534153,481569,999742,732495,326331,196568,469697,183332,386717,686200,1000002436,812970,601927,143005
-15:18:26(Basic): Tracked script IDs/Names: Merc1,Merc2,Merc3,Merc4,57344,228013,745324,567996,903445,1000000,1000011
-15:18:45(Basic): Tracked script IDs/Names: merc4,678151,945408,661275,256621,129914,925597,222552,956881,756113,1375,467629,741404,373075,53210,204762,880952,738068
-15:19:00(Basic): Tracked script IDs/Names: Deva,Hero,merc1,merc3
-15:19:05(Basic): Tracked script IDs/Names: merc5,merc6,Magess,mthief,Hero,1000059188,1000059189,1000002627,79918,926041,2285,506671,7468,960939,481166,420812,439272,207068,623451,674680,136667,950152,919536,137765,724970,101964,287151,80556,325074,753775,243335,786595,990242
-15:19:23(Basic): Tracked script IDs/Names: 1000086
-15:19:27(Basic): Tracked script IDs/Names: 1000086
-15:19:44(Basic): Tracked script IDs/Names: Hero,663,666,699,702,1766,1804,1873,1884,1889,1898,1900,1901,1913,2003,1890
+15:58:51(Basic): D3D created. Adapter name: NVIDIA GeForce GTX 1660 SUPER. Driver: nvldumd.dll
+15:58:51(Basic): D3DDevice created
+15:58:51(Basic): D3DFont created
+15:58:51(Basic): D3D8 Caps 1:1 2:0 3:131072 4:537526272 5:1056 6:2147483663 7:0 8:1818352 9:3826 10:15954321 11:255 12:8191 13:8191 14:255 15:541192 16:126149 17:50530048 18:50529024 19:50529024 20:63 21:63 22:31 23:16384 24:16384 25:2048 26:8192 27:16384 28:16 29:255 30:1572872 31:67043327 32:8 33:8 34:123 35:10 36:8 37:4 38:8 39:16777215 40:16777215 41:16 42:255 43:4294836481 44:96 45:4294902020
+15:58:51(Basic): Resource file C:\Program Files (x86)\Evil Islands\autorun.res loaded.
