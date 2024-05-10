@@ -10,6 +10,11 @@ cd $rext
 for in in *_res; do
  out="${in%_res}.res"
  wine ../bin/eipacker.exe /pack $in
- echo "Done $in -> $out"
- mv ./$out ../"$res"/"$out"
+ echo "Done packing $in -> $out"
+ rsync -r --remove-source-files ./$out ../"$res"/"$out"
+ echo "RSync completed on $out"
+ find -depth -type d -empty -delete
+ echo "Empty directories deleted"
 done
+
+echo "DONE PACKING ASSETS"

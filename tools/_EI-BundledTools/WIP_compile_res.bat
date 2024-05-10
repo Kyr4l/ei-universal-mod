@@ -1,4 +1,5 @@
 @echo off
+setlocal enabledelayedexpansion
 
 rem Compiled resources folder
 set res=res
@@ -13,3 +14,6 @@ for %%i in (*_res) do (
     echo Done %%i -> !out!
     move !out! ..\%res%\!out!
 )
+endlocal
+
+echo DONE PACKING ASSETS
