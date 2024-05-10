@@ -1,0 +1,12 @@
+Brigands' loot
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+It looks like our village will never get rid of those Brigand neighbors! Whatever plans I make are good for nothing. We can never destroy them completely! But now I have an excellent new idea…
+#phrase Hero  2
+Hmmm... Actually, when I hear the words "an excellent new idea" I always expect a catch!
+#phrase Nsheriff  3
+Ah there is no catch! I merely want you to take the loot away from the Brigands. You need not even fight them. The main thing is to get the sack they keep in their camp.
+#phrase Nsheriff  4
+Of course, the approaches to the camp are well guarded, but you could cheat the guards...

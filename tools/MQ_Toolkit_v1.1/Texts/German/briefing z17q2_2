@@ -1,0 +1,8 @@
+Kholai bittet, zu warten
+#show Hero
+#show Glav
+#CAMERA 3 20 3 1.5
+#phrase Glav  1
+Totenbeschwörer Kholai konnte mich wissen lassen, dass die Gilde ihn zu einer Befragung vorgeladen hat, er wird also nicht in der Lage sein, den Kopf des Zombie-Zauberers einzusetzen, selbst wenn wir ihn bekommen.
+#phrase Glav  2
+Jetzt müssen wir also warten, bis die Befragung zu Ende ist und dann wieder nach dem Kopf suchen!

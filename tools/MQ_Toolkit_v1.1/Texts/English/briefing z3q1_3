@@ -1,0 +1,10 @@
+Done!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Good! I even pity the brigands a little - they lost almost all their loot!
+#phrase Hero  2
+But what if they decide after that to get more loot - from the village?
+#phrase Nsheriff  3
+In that case I would come to you again, you would complete another quest and we would all be very happy ... Except the Brigands, he-he ...

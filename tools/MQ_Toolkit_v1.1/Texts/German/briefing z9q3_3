@@ -1,0 +1,8 @@
+Die Königin ist tot!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Herzlichen Glückwunsch! Aber weißt du, dass die Irrlichter bald eine neue Königin haben werden, so dass du wieder für die Reparatur deiner Rüstung bezahlen wirst? 
+#phrase Hero  2
+Oh, mach dir darüber keine Sorgen! Ich kenne jetzt den Weg zur Schlucht, also wird die neue Königin nicht lange ein Problem für uns sein!

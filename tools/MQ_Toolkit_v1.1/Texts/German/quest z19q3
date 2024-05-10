@@ -1,0 +1,23 @@
+Die Invasion von Gipath
+Khadagan bereitet die Invasion von Gipath durch das Portal in Suslanger vor. Du musst das Portal verschliessen und so die Invasion aufhalten.
+#subobj  1
+Das Portal finden
+Das Portal befindet sich im Südosten. Der einzige Weg in diese Gegend führt über eine der Hängebrücken.
+#subobj  2
+Den Kommandanten der Invasions-Armee finden
+Das Hauptquartier der Armee befindet sich in einem kleinen Haus, nicht weit vom Portal.
+#subobj  3
+Den Kommandanten töten
+Der Kommandant der Invasions-Armee muss getötet werden.
+#subobj  4
+Den Schlüssel zum Portal nehmen
+Den Schlüssel, mit dem man das Portal nach Gipath verschließen kann, findest du bei der Leiche des Kommandanten.
+#subobj  5
+Den linken magischen Stein deaktivieren
+Um das Portal zu verschließen, musst du den Schlüssel sowohl am rechten als auch am linken magischen Obelisken verwenden.
+#subobj  6
+Den rechten magischen Stein deaktivieren
+Um das Portal zu verschließen, musst du den Schlüssel sowohl am rechten als auch am linken magischen Obelisken verwenden.
+#subobj  7
+Das Portal verschließen
+Wenn die beiden magischen Obelisken deaktiviert worden sind, ist das Portal verschlossen, so dass die Armee Gipath nicht angreifen kann.

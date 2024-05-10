@@ -1,0 +1,10 @@
+Die Drachen werden nicht angreifen!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Jetzt werden die Echsen nicht mehr in der Lage sein, die Drachen auf unser Dorf zu hetzen.
+#phrase Hero  2
+Das ist schön und gut... Aber was ist, wenn die Drachen sich ganz von selbst entschließen, das Dorf anzugreifen, ohne jeden Befehl?
+#phrase Nsheriff  3
+Oh, mach dir darüber keine Sorgen. Die Drachen haben genug Nahrung, dort wo sie sind. Es gibt keinen Grund, woanders hinzugehen!

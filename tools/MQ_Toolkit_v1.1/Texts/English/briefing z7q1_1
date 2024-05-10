@@ -1,0 +1,16 @@
+Save GoGo!
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+It seems to me the goblins are foraging near the village much more often these days. You remember how many times we eliminated their guards on the bridge, but every time they send a new party there!
+#phrase Nsheriff  2
+That is no surprise! While old GoGo was chief, the Goblins never bothered the humans very much. Frankly, that's why the Orcs hated GoGo. So they forced the Goblins to have a new chief, a much more vicious one. And now they have decided to execute poor GoGo.
+#phrase Nsheriff  3
+It would be much better if GoGo lived: the Goblins will never listen to the new chief's orders as long as the old chief is still alive.
+#phrase Hero  4
+I see! But how could we achieve that?
+#phrase Nsheriff  5
+GoGo's execution should take place in the river delta, on the central island. If you kill the Orcs and take GoGo to Barren Island, he will be safe!
+#phrase Nsheriff  6
+And here is a piece of advice to you: try to reach Orcs territory from the side of the broken bridge. I hear it can be repaired very easily, a single board would do the job! If you see one, just take it with you, it might come in handy.

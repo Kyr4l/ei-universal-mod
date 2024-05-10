@@ -1,0 +1,8 @@
+Der Sammler ist befreit!
+#show Hero
+#show Glav
+#CAMERA 3 20 3.5 1.5
+#phrase Glav  1
+Nicht alles lässt sich mit Waffengewalt lösen. Der Kommandant der Wachen hat sich als vernünftiger Mann erwiesen und zugestimmt, Baluddin gehen zu lassen.
+#phrase Glav  2
+Die Bruderschaft der Letzten Zuflucht musste eine große Summe zahlen, aber das Leben eines guten Mannes ist es wert, vor allem, wenn dieser Mann nützliche Informationen weitergibt!

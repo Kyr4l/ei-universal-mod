@@ -1,0 +1,12 @@
+Die Beute der Banditen
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Es sieht so aus, als würde unser Dorf diese räuberischen Nachbarn niemals loswerden! Was ich mir auch einfallen lasse, wir schaffen es nie, sie vollkommen zu vernichten! Aber nun habe ich eine neue wirklich gute Idee...
+#phrase Hero  2
+Hmmm... Ehrlich gesagt, jedes Mal wenn ich die Worte 'eine neue wirklich gute Idee' höre, rechne ich mit Schwierigkeiten!
+#phrase Nsheriff  3
+Es wird keine Schwierigkeiten geben! Ich möchte nur, dass du den Banditen die Beute abnimmst. Du musst noch nicht einmal mit ihnen kämpfen, es kommt nur darauf an, den Sack zu holen, den sie in ihrem Lager aufbewahren.
+#phrase Nsheriff  4
+Natürlich sind die Zugänge zum Lager gut bewacht, aber du könntest die Wachen übertölpeln...

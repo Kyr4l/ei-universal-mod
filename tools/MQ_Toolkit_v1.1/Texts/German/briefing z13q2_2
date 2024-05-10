@@ -1,0 +1,10 @@
+Die Waldleute konnten die Einhörner selber töten.
+#show Hero
+#show Huber
+#CAMERA 3 20 3.5 1
+#phrase Huber  1
+Ich bringe gute Nachrichten: Die Waldleute haben alle schwarzen Einhörner selbst getötet!
+#phrase Huber  2
+Mir wurde erzählt, dass der Seher des Schwarzen Clans eine Schneeflocke mit dreizehn Zacken sah, er dies als schlechtes Omen wertete und – man glaubt es kaum – die Gefahr hat sich in Luft aufgelöst! Wilde...
+#phrase Huber  3
+Zu schade, dass unsere brillante Magierin Diera nicht mehr bei uns ist! Ich würde sie bitten, unzählige Mengen dieser Schneeflocken zu machen!

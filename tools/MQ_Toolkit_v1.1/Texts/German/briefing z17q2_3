@@ -1,0 +1,8 @@
+Kholai hat den Kopf des Zombie-Zauberers!
+#show Hero
+#show Glav
+#CAMERA 2
+#phrase Hero  1
+Bruder Khatul! Kholai wird den Kopf des Zombie-Zauberers bekommen!
+#phrase Glav  2
+Ich danke dir. Jetzt können wir nur noch auf das Ergebnis seiner Experimente warten...

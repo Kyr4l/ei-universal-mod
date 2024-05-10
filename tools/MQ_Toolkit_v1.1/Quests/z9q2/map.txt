@@ -1,0 +1,17 @@
+## City of the Dead
+#zone z9q2 gipat game
+#res
+zone9 zone9-LMP
+#maps
+14 10 
+zone9map zone9questM
+
+## To Rift
+#exit 1
+bz1mpg 1
+#deploy
+205 295 210 300
+#remove
+205 305 215 320
+#view
+172.785

@@ -1,0 +1,10 @@
+Geschafft!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Gut! Mir tun die Banditen beinahe leid – sie haben fast ihre ganze Beute verloren!
+#phrase Hero  2
+Aber was ist, wenn sie danach beschließen, sich mehr Beute zu holen – aus dem Dorf?
+#phrase Nsheriff  3
+In diesem Fall wende ich mich wieder an dich, du wirst eine neue Aufgabe erfüllen und alle werden glücklich sein... Außer den Banditen, hehe....

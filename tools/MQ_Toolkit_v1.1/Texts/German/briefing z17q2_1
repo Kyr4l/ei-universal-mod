@@ -1,0 +1,20 @@
+Zombie-Zauberer
+#show Hero
+#show Glav
+#CAMERA 3 0 3.5 1.5
+#phrase Glav  1
+Ich erinnere mich oft, wie Bruder Kiran, der uns auf seltsame Weise verlassen hat, zu uns gekommen ist. Der junge Mann war von ziemlich durchschnittlicher Erscheinung, aber er war sehr schlau und listig. Selbst heute, wo er nicht mehr bei uns ist, bleiben seine Taten unvergessen.
+#phrase Glav  2
+So habe ich beispielsweise vor kurzem Nachrichten des in Unehre gefallenen Totenbeschwörers Kholai erhalten, mit dem Kiran irgendwelche mysteriösen Geschäfte abwickelte. Allerdings sind Kholais Wünsche diesmal sehr einfach und decken sich mit unseren.
+#phrase Glav  3
+Kholais Feind, dem jungen Magier Taivo, gelang es, den Körper eines verstorbenen Totenbeschwörers auferstehen zu lassen und ihn zu einem Zombie-Zauberer zu machen. Diese Kreatur wird niemals müde, ist stärker als ein gewöhnlicher Zombie und verwendet zudem noch Kampfmagie!
+#phrase Glav  4
+Kholai möchte uns beibringen, wie man solche Gegner schnell und sicher töten kann - er denkt, dass dies Taivos Autorität in Frage stellen wird. Allerdings benötigt Kholai dazu den Kopf des Zombie-Zauberers.
+#phrase Hero  5
+Befiehlst du mir, ihn zu holen?
+#phrase Glav  6
+Oh nein! Wir sind hier alle Brüder, niemand erteilt hier Befehle. Alles geschieht auf freiwilliger Basis, da jeder versteht, dass etwas getan werden muss.
+#phrase Glav  7
+Wenn auch du verstehst, dass es getan werden muss, denke daran, dass sich der Zombie-Zauberer nun in der Siedlung der Totenbeschwörer aufhält.
+#phrase Glav  8
+Der Turm des alten Kholai befindet sich im Norden der Siedlung. Aber sei bitte vorsichtig!! Sein Turm wird genauso gut bewacht wie die Siedlung selbst. 

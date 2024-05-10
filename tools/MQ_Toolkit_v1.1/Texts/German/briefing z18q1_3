@@ -1,0 +1,10 @@
+Der Sammler ist zu Hause!
+#show Hero
+#show Glav
+#CAMERA 3 20 3 1.5
+#phrase Glav  1
+Der Sammler ist jetzt also wieder sicher zu Hause. Aber denk noch mal nach: Sind alle Wachen tot? Ist es vielleicht irgendjemandem gelungen, zu entkommen?
+#phrase Hero  2
+Niemand, ich schwöre es!
+#phrase Glav  3
+Gute Arbeit, ich bin zufrieden. Nun weiß niemand, wessen Verbrechen Baluddin beschuldigt wurde, und welche Beweise gegen ihn existierten!

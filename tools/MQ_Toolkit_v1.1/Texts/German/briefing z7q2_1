@@ -1,0 +1,12 @@
+Der Wunsch des Eremiten
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Wir haben eine Chance, unsere Beziehung zu den Echsen zu verbessern und ich hoffe, dass du dabei die wichtigste Rolle spielen wirst!
+#phrase Hero  2
+Ich muss also die Expedition des Auserwählten nach der Großen Muschel wiederholen?
+#phrase Nsheriff  3
+Nein, nein, darum geht es nicht. Vor kurzem kam der Echsen-Eremit in das Dorf und bat darum, Angehörige seines Volkes aus der Falle zu befreien.
+#phrase Nsheriff  4
+Die dummen, jungen Echsen sind in das Ork-Land westlich des nördlichen Flussufers gegangen und dort in Gefangenschaft geraten. Der Eremit hat versprochen, dass er, wenn die Echsen befreit werden, dem Stamm für einen ganzen Monat verbieten wird, das Dorf anzugreifen.

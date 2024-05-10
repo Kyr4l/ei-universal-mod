@@ -1,0 +1,14 @@
+Keine Drachen! Aber der Schatz ist immer noch dort...
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+Ich bin auf diesem Berg gewesen and habe dort keine Drachen gesehen – weder alt noch jung. Das sind also alles Märchen. Vielleicht hat sich das der Auserwählte ausgedacht, um als Held dazustehen.
+#phrase Nsheriff  2
+Und der Schatz – war das auch ein Märchen?
+#phrase Hero  3
+Nein, das entsprach der Wirklichkeit. Obwohl sich der Schatz als eher bescheiden entpuppte – nur ein rostiges Eisenschwert... der alte Drachen gab dem Auserwählten auch eins, aber eines, das mit einem Zauber belegt war, während meines nur ein rostiges Stück Eisen ist... Und man kann nicht viel daran ändern, da Babur nicht weiß, wie man Metall bearbeitet.
+#phrase Nsheriff  4
+Du bist also all die Risiken umsonst eingegangen?
+#phrase Hero  5
+Oh nein! Ich habe Erfahrung gesammelt und die kann mir wohl keiner mehr wegnehmen, nicht wahr?

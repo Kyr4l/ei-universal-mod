@@ -1,0 +1,12 @@
+Meister der Schatten
+#show Hero
+#show Rick
+#CAMERA 3 30 3 1
+#phrase Rick  1
+Die Armee, die nach Gipath vordringen wird, besteht nicht allein aus Menschen, sondern auch aus Zombies und Ghouls und sehr gefährlichen Untoten, die Schatten genannt werden.
+#phrase Rick  2
+Der Zauberer, der Wesen aus der Unterwelt beschwören kann, lebt in der Stadt Suslanger. Wenn er getötet wird, wird die Invasion geschwächt.
+#phrase Hero  3
+Hmm... Wenn sich der Zauberer in der Nähe des Portals aufhalten würde, könnte ich versuchen, zu ihm zu gelangen. Aber wenn ich den ganzen Weg vom Portal zur Stadt zurücklegen muss, werde ich getötet!
+#phrase Rick  4
+Natürlich, also werde ich Euch nicht durch das Portal dorthin schicken! Ihr werdet direkt nach Suslanger teleportiert. Alles, was Ihr tun müsst, ist, in die Stadt zu gelangen und dort das Tor mit den zwei Adlerskulpturen zu finden. Dort lebt der Meister der Schatten - derjenige, den Ihr töten müsst.

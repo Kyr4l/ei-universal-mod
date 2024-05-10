@@ -1,0 +1,14 @@
+Magic pyramid
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Look, we have a big problem! You surely know how the Chosen disarmed the magic pyramid and forced the Orcs out of the eastern area of the Foothills?
+#phrase Hero  2
+Come on, everybody knows about that!
+#phrase Nsheriff  3
+Right, well the Orcs managed to get the pyramid working again! Those swine! Now we can not fight them on equal terms, and I fear they will conquer all of the Foothills soon! I would like you to score another coup, like the one the Chosen did a while ago: could you go and switch the pyramid off again?
+#phrase Nsheriff  4
+It would be even more difficult now: you can not just use the magic obelisk the way he did, you will need a special key first. My spies report that the Seer who has the key lives in the Orc village. You may find him on the plateau in the east of the Foothills, across the river.
+#phrase Nsheriff  5
+Do that and your glory will equal that of the Chosen!

@@ -1,0 +1,10 @@
+Das Gebiet um die Minen ist sicher
+#show Hero
+#show Huber
+#CAMERA 2
+#phrase Hero  1
+Eure Exzellenz! Ich bringe zwei Nachrichten. Darunter eine schlechte: Hauptmann Tilvar wurde nahe der Minentore erschlagen. Die andere ist besser – die Wurmköpfe wurden getötet!
+#phrase Huber  2
+Ja, natürlich werde ich Tilvar mit einer Schweigeminute ehren. Aber zuerst muss ich einen Boten in die Hauptstadt schicken und berichten, dass unter meiner fähigen Herrschaft die Bedrohung für Ingos eliminiert wurde!
+#phrase Huber  3
+Ich denke, ich werde Eure Dienste in meinem Bericht erwähnen, vielleicht bekommt Ihr in ungefähr drei Monaten eine offizielle Auszeichnung!

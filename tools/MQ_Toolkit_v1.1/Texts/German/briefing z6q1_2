@@ -1,0 +1,8 @@
+Es gibt keine Möglichkeit, sich dem Seher zu nähern...
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+Mmmm, ja, es ist nicht so leicht, wie es schien. Man kann nicht durch die Siedlung zum Seher gelangen. Wir müssen uns etwas anderes einfallen lassen!
+#phrase Nsheriff  2
+In Ordnung, lass uns nachdenken... Vielleicht könnte ich diesen Seher bestechen... Aber es wäre in jedem Fall besser, wenn ihn jemand töten würde.

@@ -1,0 +1,16 @@
+Die Wahrheit und die Legenden über die Stadt des Todes
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+Jeder kennt die Legende darüber, wie der Auserwählte mit dem Drachen in der Stadt des Todes sprach. Genau wie jeder weiß, dass er ein Schwert mit zurückbrachte – ein magisches noch dazu aus Eisen!
+#phrase Hero  2
+Was denkst du, Rivar, was ist Wahrheit und was Einbildung?
+#phrase Nsheriff  3
+Ehrlich gesagt weiß ich es nicht. Ich habe das Schwert mit meinen eigenen Augen gesehen, aber ich habe nie den Drachen getroffen. Vielleicht ist das nur ein Märchen. Wirst du es versuchen und dich in die Stadt des Todes wagen?
+#phrase Hero  4
+Nun... ja. Sie sagen, auf dem alten Friedhof gibt es eine Gruft, und dass man dort etwas Wertvolles finden könne.
+#phrase Nsheriff  5
+Es ist deine Entscheidung. Ich habe nicht vor, dich zu entmutigen, aber ich werde dir Folgendes sagen: Bevor du in die Gruft gehst, solltest du auf den Einsamen Berg steigen. Wer weiß, vielleicht ist dort oben wirklich ein alter Drachen? Und vielleicht würde er es nicht besonders schätzen, wenn du dich in seinem Gebiet herumtreibst, ohne vorher mit ihm gesprochen zu haben.
+#phrase Nsheriff  6
+Kurz gesagt: Sei einfach vorsichtig, in Ordnung?

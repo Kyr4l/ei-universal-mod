@@ -1,0 +1,10 @@
+Es gibt keine Möglichkeit, sich Aiset-Bek zu nähern...
+#show Hero
+#show Glav
+#CAMERA 3 20 3 1.5
+#phrase Glav  1
+Aiset-Bek ist noch am Leben?! Hm... Erinnerst du dich an unser kleines Gespräch über Vertauen und Misstrauen? Denkst du nicht, dass ich jetzt einen genauen Blick auf dich und deine Vergangenheit werfen werde?
+#phrase Hero  2
+Ich schwöre, ich werde Aiset-Bek umbringen! Vielleicht nicht sofort, aber ich bringe ihn um, koste es, was es wolle!
+#phrase Glav  3
+In Ordnung, ich glaube dir... Vorerst.

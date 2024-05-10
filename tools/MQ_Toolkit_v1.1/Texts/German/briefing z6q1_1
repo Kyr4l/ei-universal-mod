@@ -1,0 +1,14 @@
+Seher-Häuptling
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Zu schade, dass der Auserwählte nicht bei uns ist! Er würde sich schon was für die Orks einfallen lassen, aber nun werden sie unser Dorf angreifen!
+#phrase Nsheriff  2
+Sie haben die alte Goblin-Siedlung in den Mittelbergen eingenommen und haben kürzlich einen neuen Seher ernannt, der sie bei ihren Streifzügen anführt! Ich weiß nicht, was wir tun sollen...
+#phrase Hero  3
+Ist das so schwierig? Entsende ein paar fähige Leute, die dem Seher die Kehle aufschlitzen... es wird eine Weile dauern, bis die Orks einen neuen Häuptling ernennen!
+#phrase Nsheriff  4
+Denkst du, das wäre mir nicht schon in den Sinn gekommen? Aber es ist sehr schwierig, in ihr Dorf zu gelangen, und der Seher wird mit Sicherheit bewacht! Ich kann niemanden in den sicheren Tod schicken und bis jetzt hat sich noch niemand freiwillig gemeldet...
+#phrase Hero  5
+Jetzt schon, ich werde es tun!

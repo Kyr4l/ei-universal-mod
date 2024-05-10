@@ -1,0 +1,10 @@
+Hermit is going to be happy!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Far as I know, Hermit always keeps his word. You set the lizards free, now his tribe will leave the village alone.
+#phrase Hero  2
+Hey, sounds good. If there was only one Lizard tribe on Gipath and Hermit were to control it, that would be simply marvellous!
+#phrase Elder  3
+I agree! But alas, we will just have to be content with what we have.

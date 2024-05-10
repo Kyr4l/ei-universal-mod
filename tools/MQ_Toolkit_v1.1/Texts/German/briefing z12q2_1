@@ -1,0 +1,14 @@
+Der Kahle hat wieder zugeschlagen!
+#show Hero
+#show Huber
+#CAMERA 3 -10 3 1
+#phrase Huber  1
+Was für eine Frechheit! Der Kahle, dieser verdammte Dieb, hat es wieder gewagt, mein Haus auszurauben! Diese Verbrecher wissen, dass mein treuer Hauptmann Tilvar nicht länger bei uns ist, und schon machen sie, was sie wollen. Was für eine Schande, dass ich ihm nie befohlen habe, dieses Banditennest am westlichen Ufer des Sees zu vernichten, als ich noch die Möglichkeit dazu hatte...
+#phrase Huber  2
+So, da haben wir es! Dies sind nun die Früchte meiner Milde: Der Schlüssel zur Waffenkammer des Gouverneurs ist verschwunden, und wenn wir ihn nicht zurückbekommen, werden die Banditen bald hochmoderne Waffen haben!
+#phrase Hero  3
+Was, Ihr meint, dort gibt es etwas, was nicht bei Karansul gekauft werden kann?
+#phrase Huber  4
+Wenn ich es nur wüsste! Ehrlich gesagt habe ich mir nie die Mühe gemacht, einen Blick in diese Kammer zu werfen. Das lag in der Verantwortung von Hauptmann Tilvar.
+#phrase Huber  5
+Aber wie dem auch sei, wir müssen diesen Schlüssel zurückbekommen!

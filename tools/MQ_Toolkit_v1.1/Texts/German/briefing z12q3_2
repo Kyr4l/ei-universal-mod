@@ -1,0 +1,10 @@
+Mit diesen Wurmköpfen wird man nicht fertig...
+#show Hero
+#show Huber
+#CAMERA  2
+#phrase Hero  1
+Ich bedaure, Euer Ehren, ich war weder in der Lage, dem Hauptmann zu helfen, noch unseren Auftrag auszuführen. Vielleicht werde ich in einiger Zeit dazu in der Lage sein, aber jetzt bin ich noch nicht so weit...
+#phrase Huber  2
+Um ehrlich zu sein, ich habe mir keine großen Hoffnungen gemacht. Selbst Tilvar konnte dieser Bedrohung nicht Herr werden, was konnte man also von euch Abenteurern erwarten!
+#phrase Huber  3
+Ich denke, ich muss einen Boten in die Hauptstadt schicken und um Truppen bitten! Ihr könnt Euch nicht vorstellen, wie ungern ich das tue!

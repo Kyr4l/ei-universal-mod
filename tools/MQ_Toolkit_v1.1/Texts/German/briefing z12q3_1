@@ -1,0 +1,14 @@
+Hauptmann Tilvar wird vermisst!
+#show Hero
+#show Huber
+#CAMERA 3 20 3.5 1
+#phrase Huber  1
+Ich mache mir große Sorgen um Hauptmann Tilvar! Es gibt keine Nachrichten von ihm, seit ich ihn und einige Soldaten geschickt habe, all diese Wurmköpfe nahe der Minen zu töten!
+#phrase Huber  2
+Ich brauche einen Mann, der jenseits des Sees nach Norden geht und herausfindet, was ihm passiert ist. Und dabei fällt mir auf: Ihr könntet gut und gerne dieser Mann sein!
+#phrase Hero  3
+Es wäre mir eine Ehre, Eure Exzellenz! Aber eines würde ich gerne noch wissen: Ich dachte, die Wurmköpfe wären Wesen, die unterirdisch leben? Erwartet Ihr von mir, dass ich in die Höhlen gehe und sie dort unten bekämpfe?
+#phrase Huber  4
+Oh nein, lasst die fürchterlichen Kreaturen so lange in ihren Katakomben leben, wie sie wollen. Ich habe Tilvar nur befohlen, jene zu töten, die sich nach draußen wagten!
+#phrase Huber  5
+Und Ihr könntet ebenfalls an dieser Mission teilnehmen – und wenn sich meine schlimmsten Befürchtungen bewahrheiten, werdet Ihr diese Aufgabe allein erledigen müssen. Ich verspreche Euch keine Belohnung, aber die Erfahrung, die Ihr sammeln würdet, wäre unbezahlbar!

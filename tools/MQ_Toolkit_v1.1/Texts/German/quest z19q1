@@ -1,0 +1,17 @@
+Der Meister der Schatten
+Eine der wichtigsten Rollen bei der Invasion von Gipath wird ein Zauberer spielen, den man den Meister der Schatten nennt. Er hat die Macht Schatten zu beschwören und zu kontrollieren. Dieser Zauberer muss getötet werden.
+#subobj  1
+Die Stadt betreten
+Der Meister der Schatten lebt in einem luxuriösen Stadthaus. Um es zu finden, musst du erst in die Stadt.
+#subobj  2
+Das Anwesen des Meisters finden
+Du erkennst das Haus des Schattenmeisters an den Toren, die zwei große Adler, die auf Schildkröten sitzen, zieren.
+#subobj  3
+Die Tore öffnen
+Um das Anwesen zu betreten, musst du erst die Tore öffnen.
+#subobj  4
+Den Meister der Schatten finden
+Der Meister der Schatten befindet sich irgendwo auf dem Anwesen.
+#subobj  5
+Den Meister der Schatten töten
+Der Meister der Schatten muss getötet werden.

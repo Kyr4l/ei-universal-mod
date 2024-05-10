@@ -1,0 +1,14 @@
+Die Bedrohung durch Wurmköpfe
+Anscheinend haben einige Wurmköpfe ihre Katakomben verlassen und sind an die Oberfläche gelangt. Hauptmann Tilvar und eine Einheit Soldaten sind zu den Minen aufgebrochen, um die Bedrohung zu bekämpfen. Seitdem hat man nichts mehr von ihnen gehört. Du musst Tilvar finden und ihn, falls nötig, unterstützen.
+#subobj  1
+Den Weg zu den Minen finden
+Der Weg zu den Minen befindet sich im Norden, jenseits der Brücke, die über den Fluss führt, der aus dem Osten in den See fließt.
+#subobj  2
+Die Tore öffnen
+Um in die Minen zu gelangen, musst du die Tore öffnen.
+#subobj  3
+Hauptmann Tilvar finden
+Hauptmann Tilvar und seine Einheit sollten die Wurmköpfe töten, die aus den Katakomben an die Oberfläche gelangt sind. Du musst den Hauptmann finden.
+#subobj  4
+Wurmköpfe töten
+Der Hauptmann ist tot, aber sein Auftrag ist noch nicht erfüllt: Es müssen alle Wurmköpfe getötet werden.

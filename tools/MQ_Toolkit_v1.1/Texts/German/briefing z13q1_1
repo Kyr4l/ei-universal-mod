@@ -1,0 +1,12 @@
+Karansul braucht Hilfe
+#show Hero
+#show Huber
+#CAMERA 3 30 3 1
+#phrase Huber  1
+Mein guter Freund Kaufmann Karansul hat mich um eine... eine Art Gefallen gebeten. Er macht sich Sorgen, dass seine Werkstätten am östlichen Ufer des Sees nicht mehr arbeiten.
+#phrase Huber  2
+Es hat nun schon lange Zeit keine Lieferungen und keine Nachrichten von ihnen gegeben, niemand weiß, was vorgeht. Karansul hat mich bei diesem Problem um Hilfe gebeten und ich bitte wiederum Euch, Euch darum zu kümmern.
+#phrase Huber  3
+Ihr müsst verstehen, dass die Sorgen meiner Freunde mich wirklich erschüttern und ein besorgter Gouverneur kann für jedem unter seinem Kommando eine Gefahr sein.
+#phrase Huber  4
+Es wäre also in Eurem eigenen Interesse, wenn Ihr Karansuls Ländereien besucht und den Grund für die Ereignisse findet und beseitigt!

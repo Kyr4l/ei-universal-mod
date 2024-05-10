@@ -1,0 +1,20 @@
+Das Problem des Sammlers
+Baluddin, ein Antiquitätensammler, ist von einigen Wachen gefangen genommen worden. Du musst die Wachen töten und den Sammler nach Hause bringen.
+#subobj  1
+Das Haus des Sammlers finden
+Das Haus des Sammlers ist in der Stadt. Du erkennst es an den zwei kleinen Statuen vor der Tür. 
+#subobj  2
+Soldaten im Hinterhalt ausschalten
+Einige Wachen warten im Haus gegenüber in einem Hinterhalt, um jeden festzunehmen, der den Sammler besuchen will.
+#subobj  3
+Die Kaserne der Wachen betreten
+Die Kaserne ist in der Stadt, südwestlich der Tore. Um sie zu betreten, musst du erst die Tür öffnen.
+#subobj  4
+Die Wachen töten
+Die Wachen, die Baluddin gefangen halten, müssen getötet werden.
+#subobj  5
+Baluddin ansprechen
+Gehe einfach zu Baluddin und bitte ihn, mit dir zu gehen.
+#subobj  6
+Baluddin nach Hause bringen
+Bringe Baluddin bis zu seiner Eingangstür.

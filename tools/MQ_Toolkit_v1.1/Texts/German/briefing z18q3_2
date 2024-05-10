@@ -1,0 +1,10 @@
+Der Verräter starb eines natürlichen Todes
+#show Hero
+#show Glav
+#CAMERA 3 20 3 1.5
+#phrase Glav  1
+Du kannst die Sache vergessen. Der verräterische Sklave ist eines natürlichen Todes gestorben.
+#phrase Hero  2
+Natürlich?
+#phrase Glav  3
+Oh ja! Was kann natürlicher sein, als ein Tod durch Gift, das von einem Sklavenkoch auf seinen Teller gegeben wurde? Wie gesagt, unsere Zuflucht ist die letzte Hoffnung für diejenigen, die auf Plantagen arbeiten, und sie wollen diese Hoffnung nicht aufgeben!

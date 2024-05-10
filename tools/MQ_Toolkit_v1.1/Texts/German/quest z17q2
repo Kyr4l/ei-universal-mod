@@ -1,0 +1,14 @@
+Zombie-Zauberer
+Der junge Totenbeschwörer Taivo hat die Leiche eines Mitglied seines Ordens in einen Zombie-Zauberer verwandelt. Taivos Feind, der alte Kholai, kennt einen Weg, diese Kreatur zu besiegen, aber dafür braucht er den Kopf dieses Ghouls.
+#subobj  1
+Den Zombie-Zauberer finden
+Versuche, den Zombie-Zauberer in der Stadt der Totenbeschwörer zu finden.
+#subobj  2
+Den Zombie-Zauberer töten
+Der Zombie-Zauberer muss getötet werden.
+#subobj  3
+Den Kopf abschlagen
+Das einzige Ziel der Aufgabe ist es, den Kopf des Ghouls zu bekommen.
+#subobj  4
+Kholai den Kopf bringen
+Der Turm des alten Kholai befindet sich nördlich von der Stadt der Totenbeschwörer. Kholai ist in Ungnade gefallen, daher wird sein Turm streng bewacht. Trotzdem musst du ihm unbedingt den Kopf des Zombie-Zauberers bringen!

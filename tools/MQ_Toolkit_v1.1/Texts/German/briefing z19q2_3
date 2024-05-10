@@ -1,0 +1,10 @@
+Der Drachenlord wurde getötet
+#show Hero
+#show Rick
+#CAMERA 2
+#phrase Hero  1
+Der Drachenfürst ist erledigt! Er tut mir sogar ein wenig leid: Vielleicht hätten wir uns irgendwie einigen können...
+#phrase Rick  2
+Ja, Ihr könntet den Drachenfürst eventuell bemitleiden. Aber denkt mal über Folgendes nach: Würden diejenigen, die das Pech haben, in seiner Nähe zu leben, mit ihm Mitleid haben?
+#phrase Hero  3
+Mmm.. Ihr habt Recht, ich denke, ich sollte mich über das vorzeitige Ableben des Drachenfürsten nicht zu sehr grämen!

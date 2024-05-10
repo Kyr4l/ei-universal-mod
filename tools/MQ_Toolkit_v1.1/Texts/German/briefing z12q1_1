@@ -1,0 +1,18 @@
+Alte Minen
+#show Hero
+#show Huber
+#CAMERA 2
+#phrase Hero  1
+Eure Exzellenz, Ihr habt nicht zufällig irgendeinen Auftrag für mich, oder? Ich würde noch nicht einmal eine Bezahlung verlangen, das Wichtigste für mich ist die Erfahrung, die ich sammle.
+#phrase Huber  2
+Oh, ich mag deine Einstellung. Ja, ja, es ist sehr gut, wenn Leute bereit sind, Risiken ohne Bezahlung einzugehen. Natürlich habe ich einen Auftrag für dich!
+#phrase Huber  3
+Die Geldmittel unserer Provinz sind zurzeit etwas... beschränkt und ich habe beschlossen, die Arbeiten an den alten Minen wieder aufzunehmen. Aber das Problem ist, wir müssen sie zuerst von all den Monstern befreien, die sich dort herumtreiben!
+#phrase Hero  4
+In Ordnung, gebt mir den Schlüssel zu den Toren und ich mache es!
+#phrase Huber  5
+Nun, da gibt es auch ein Problem... Vor einiger Zeit habe ich befohlen, den Schlüssel in ein Versteck im Tal, das nordöstlich des Militärlagers liegt, zu bringen. Aber nun macht offenbar ein Rudel wilder Tiger das Tal unsicher und sie lassen meine Diener nicht den Schlüssel holen. Du wirst ihn also selbst besorgen müssen!
+#phrase Huber  6
+Und wo wir gerade dabei sind: Warum tötest du nicht direkt auch diese Tiger? Ich habe den Soldaten des Lagers befohlen, das zu erledigen, aber sie haben sozusagen rebelliert – angeblich haben sie ihren Sold nicht erhalten! Was für eine klägliche Einstellung, findest du nicht auch?
+#phrase Hero  7
+Nein... Oh, ich meine ja, natürlich habt Ihr Recht, Eure Exzellenz. Und macht Euch keine Sorgen wegen der Tiger und den alten Minen, alles wird zu Eurer vollsten Zufriedenheit erledigt werden!

@@ -1,0 +1,18 @@
+Ich habe einen guten Plan!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Also ehrlich gesagt denke ich nicht besonders gerne, aber jetzt wo ich Hauptmann bin, muss ich das wohl. Also ich denke... 
+#phrase Nsheriff  2
+Die Orks sind unsere Feinde. Wenn sie sich streiten, kann uns das nur von Nutzen sein!
+#phrase Hero  3
+Rivar, du bist ein echter Denker! Ein weiser Mann! Da wäre ich nie drauf gekommen! Eine brillante Idee!
+#phrase Hero  4
+Lass den Unsinn und sag, was du willst, ohne lange drumrum zu reden.
+#phrase Nsheriff  5
+Das ist mein Plan: Lass uns das Goblin-Totem stehlen und auf den Ratsberg der Orks bringen. Sobald die Orks diesen verrotteten Schädel an ihrem heiligen Ort sehen, werden sie wütend, und sie werden mindestens drei Dutzend andere Goblinköpfe dazulegen. Frischere, hehe... 
+#phrase Nsheriff  6
+Man hat mir mitgeteilt, dass das Goblin-Totem sich jetzt auf der östlichsten Insel im Flussdelta befindet. Und der Ratsberg ist immer am selben Ort – am nördlichen Ufer des Flusses.
+#phrase Hero  7
+Keine schlechte Idee. Lasst uns sehen, was wir tun können!
