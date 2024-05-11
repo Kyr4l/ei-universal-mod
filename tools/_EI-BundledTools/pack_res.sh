@@ -5,6 +5,8 @@ res="res"
 # unpacked res folder
 rext="res_unpacked"
 
+totalpacked=""
+
 cd $rext || exit
 
 for in in *_res; do
@@ -15,6 +17,8 @@ for in in *_res; do
  echo "RSync completed on $out"
  find . -depth -type d -empty -delete
  echo "Empty directories deleted"
+ totalpacked="$totalpacked $in"
 done
 
 echo "DONE PACKING ASSETS"
+echo "Processed the following file(s) : $totalpacked"
