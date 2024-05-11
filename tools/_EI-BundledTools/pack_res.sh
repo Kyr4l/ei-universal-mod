@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# compiled res folder
+# packed res folder
 res="res"
-# decompiled res folder
-rext="res_extracted"
+# unpacked res folder
+rext="res_unpacked"
 
 cd $rext || exit
 

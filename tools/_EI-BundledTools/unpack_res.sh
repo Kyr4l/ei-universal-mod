@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# compiled res folder
+# packed res folder
 res="res"
-# decompiled res folder
-rext="res_extracted"
+# unpacked res folder
+rext="res_unpacked"
 
 cd $res || exit
 
@@ -17,4 +17,4 @@ for in in *.res; do
  echo "Empty directories deleted"
 done
 
-echo "DONE EXTRACTING ASSETS"
+echo "DONE UNPACKING ASSETS"
