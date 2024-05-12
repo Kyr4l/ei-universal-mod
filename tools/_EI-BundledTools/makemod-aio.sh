@@ -26,6 +26,7 @@ mkdir "$modfolder"/res
 mkdir "$modfolder"/maps
 
 # ini2reg
+echo ""
 echo "========================"
 echo "| PROCESSING INI FILES |"
 echo "========================"
@@ -36,11 +37,12 @@ for iniin in "$inidir"/*.ini ; do
     regout="${iniin%ini}reg"
     wine bin/ini2reg.exe "$iniin"
     mv -fv "$regout" $regdir/
-    echo "Processed $iniin -> $regout"
     totalreg="$totalreg $iniin"
 done
 
+echo "==============================="
 echo "Processed the following files : $totalreg"
+echo "==============================="
 echo "Copying REG files into their respective folder..."
 echo "Files detected in $regdir : $(ls $regdir | xargs)"
 cp -v "$regdir"/config.reg "$modfolder" 2>/dev/null
@@ -52,6 +54,7 @@ cp -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
 
 
 # dds2mmp
+echo ""
 echo "========================"
 echo "| PROCESSING DDS FILES |"
 echo "========================"
@@ -63,17 +66,19 @@ for ddsin in *.dds ; do
     mmpout="${ddsin%dds}mmp"
     wine ../bin/MMPS.exe "$ddsin"
     mv -fv "$mmpout" ../$mmpdir/
-    echo "Processed $ddsin -> $mmpout"
     totalmmp="$totalmmp $ddsin"
 done
 
+echo "==============================="
 echo "Processed the following files : $totalmmp"
+echo "==============================="
 cd .. || exit
 echo "Moving MMP files to textures_res"
 mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
 mv -fv "$mmpdir"/* $rextdir/textures_res/
 
 # eipacker
+echo ""
 echo "========================"
 echo "| PROCESSING RES FILES |"
 echo "========================"
@@ -84,7 +89,6 @@ echo "========================"
 for rextin in "$rextdir"/*_res; do
     resout="${rextin%_res}.res"
     wine bin/eipacker.exe /pack "$rextin"
-    echo "Done packing $rextin -> $resout"
     rsync -r --remove-source-files "$resout" "$resdir"/
     echo "RSync completed on $resout"
     echo "========================"
