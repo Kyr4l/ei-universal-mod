@@ -59,7 +59,7 @@ echo ""
 echo "Converting DDS files to MMP..."
 cd $ddsdir || exit
 
-for ddsin in "$ddsdir"/*.dds ; do
+for ddsin in *.dds ; do
     mmpout="${ddsin%dds}mmp"
     wine ../bin/MMPS.exe "$ddsin"
     mv -fv "$mmpout" ../$mmpdir/
@@ -70,7 +70,7 @@ done
 echo "Processed the following files : $totalmmp"
 cd .. || exit
 echo "Moving MMP files to textures_res"
-mkdir "$rextdir"/textures_res || echo "textures_res already exists, overwriting..."
+mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
 mv -fv "$mmpdir"/* $rextdir/textures_res/
 
 # eipacker
@@ -79,6 +79,7 @@ echo "| PROCESSING RES FILES |"
 echo "========================"
 echo ""
 echo "Packing RES files..."
+echo "========================"
 
 for rextin in "$rextdir"/*_res; do
     resout="${rextin%_res}.res"
@@ -86,10 +87,12 @@ for rextin in "$rextdir"/*_res; do
     echo "Done packing $rextin -> $resout"
     rsync -r --remove-source-files "$resout" "$resdir"/
     echo "RSync completed on $resout"
-    find ./"$rextin" -depth -type d -empty -delete
-    echo "Empty directories deleted"
+    echo "========================"
     totalres="$totalres $rextin"
 done
+
+find ./"$rextin" -depth -type d -empty -delete
+echo "Empty directories deleted"
 
 echo "Moving RES files to $modfolder/res/"
 mv -fv "$resdir"/*.res "$modfolder"/res/
