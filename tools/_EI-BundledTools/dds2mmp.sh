@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# disable WINE debug messages
+export WINEDEBUG=-all
+
 # ressource folders
-dds=dds
-mmp=mmp
+dds="dds"
+mmp="mmp"
 
 totalmmp=""
 
-cd $dds || exit
+cd "$dds" || exit
 
 for in in *.dds; do
     out="${in%dds}mmp"
@@ -17,4 +20,4 @@ for in in *.dds; do
 done
 
 echo "DONE CONVERTING FILES TO MMP"
-echo "Processed the folllwing file(s) : $totalmmp"
+echo "Processed the folllwing files : $totalmmp"

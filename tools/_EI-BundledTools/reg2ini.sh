@@ -1,20 +1,22 @@
 #!/bin/bash
 
+# disable WINE debug messages
+export WINEDEBUG=-all
+
 # ressource folders
-ini=ini
-reg=reg
+ini="ini"
+reg="reg"
 
 totalini=""
 
-cd $reg || exit
 
-for in in *.reg; do
-    out="${in%reg}ini"
-    wine ../bin/reg2ini.exe "$in"
-    mv -fv "$out" ../$ini/
-    echo "Processed $in -> $out"
-    totaldds="$totaldds $in"
+for reg in "$reg"/*.reg ; do
+    out="${reg%reg}ini"
+    wine bin/reg2ini.exe "$reg"
+    mv -fv "$out" "$ini"/
+    echo "Processed $reg -> $out"
+    totalini="$totalini $reg"
 done
 
 echo "DONE CONVERTING FILES TO INI"
-echo "Processed the folllwing file(s) : $totalini"
+echo "Processed the following file(s) : $totalini"
