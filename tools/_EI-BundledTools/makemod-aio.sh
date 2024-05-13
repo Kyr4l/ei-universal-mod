@@ -11,6 +11,7 @@ inidir="ini"
 regdir="reg"
 ddsdir="dds"
 mmpdir="mmp"
+xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
 # total files
@@ -76,6 +77,18 @@ cd .. || exit
 echo "Moving MMP files to textures_res"
 mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
 mv -fv "$mmpdir"/* $rextdir/textures_res/
+
+# eidbeditor
+echo ""
+echo "=========================="
+echo "| PROCESSING DATABASELMP |"
+echo "=========================="
+echo ""
+cd $xlsxdir || exit
+echo "Converting XLSX databaselmp to RES..."
+wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
+mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"/
+cd .. || exit
 
 # eipacker
 echo ""
