@@ -1,0 +1,60 @@
+Des nouvelles d'Airy
+#show Daughter 5
+#show Witch 3
+#show Hero 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  1
+Regarde, Zak, elle est là. Elle est revenue comme si rien ne s'était passé. Elle peut remercier le ciel d'avoir réussi à dénicher quelque chose d'utile sinon je lui aurais donnée une bonne raclée à cette sauvageonne ! Mais nous verrons cela plus tard... pour l'instant, enfant dépravée, répète à l'Elu ce que tu m'as dit.
+#ANIMATION 62
+#CAMERA 7
+#phrase Daughter  2
+Au nord des Montagnes centrales, il y a un vieil Observatoire, construit par ceux-là mêmes qui ont bâti la Cité des Morts. A l'intérieur, il y a une bibliothèque. Je suis sûre que tu peux y trouver quelque chose te permettant d'entrer dans la Cité.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  3
+Tu en es certaine ?
+#ANIMATION 7
+#CAMERA 3
+#phrase Daughter  4
+A vrai dire, pas vraiment. On n'entre pas facilement dans l'Observatoire à cause de toutes les Harpies qui le gardent. Mais si on leur envoie un Dragon, elles ne pourront pas s'empêcher de le combattre.
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  5
+Ah bon, ben ce sera un jeu d'enfant, alors ! Je vais aller chercher mon Dragon apprivoisé et c'est dans la poche !
+#ANIMATION 32
+#CAMERA 4
+#phrase Witch  6
+Tes sarcasmes sont mal venus. C'était exactement ce que j'allais proposer.
+#ANIMATION 62
+#CAMERA 7
+#phrase Daughter  7
+Moi-même, je ne sais pas apprivoiser un Dragon, mais j'ai vu des Hommes-lézards le faire. Ils ont une amulette très spéciale grâce à laquelle on peut s'approcher d'un Dragon et le faire obéir à vos ordres. Mais cette amulette n'a d'effet que sur un Dragon bien particulier.
+#ANIMATION 44
+#CAMERA 7
+#phrase Daughter  8
+Et je sais aussi où trouver l'Homme-lézard qui possède l'amulette : à la vieille carrière dans les Montagnes centrales. Deux gros crapauds apprivoisés vivent avec lui, des bêtes horribles...
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  9
+Bon, d'accord, supposons que je me procure cette amulette. Mais où trouver le bon Dragon ?
+#ANIMATION 63
+#CAMERA 1
+#phrase Daughter  10
+Ce Dragon vit de l'autre côté du lac. Si tu attends l'hiver, tu pourras marcher sur la glace... mais maintenant, en été, il te sera très difficile de trouver un passage le long de la berge.
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  11
+C'est toi qui attendras jusqu'à l'hiver, espèce d'oie blanche ! L'Elu peut se frayer un passage maintenant, avec mon aide, naturellement. Au nord de la Cité des Morts, il y a un ravin avec des cristaux verts. Les cristaux sont les proches parents de la glace, comme tu sais. Si tu m'en apportes un, je gèlerai le lac comme en plein hiver.
+#ANIMATION 29
+#CAMERA 11
+#phrase Daughter  12
+J'irai chercher ce cristal.
+#ANIMATION 3
+#CAMERA 9
+#phrase Witch  13
+Silence, moulin à paroles ! Désormais, je ne te quitte plus des yeux. Que l'Elu aille récupérer ce cristal, s'il en a envie !
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  14
+Je vois ! Donc, pour entrer dans la Cité des Morts, je dois pénétrer dans l'Observatoire ? Pour pénétrer dans l'Observatoire, il me faut un Dragon apprivoisé. Pour apprivoiser le Dragon, j'ai besoin d'une amulette. Et pour accéder au Dragon, il me faut un cristal vert. Est-ce que j'ai bien tout compris ?

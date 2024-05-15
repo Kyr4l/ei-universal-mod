@@ -1,0 +1,62 @@
+A propos de l'enfant disparu
+#show Hero 1
+#show Merc10 2
+#ANIMATION 64
+#CAMERA 9
+#phrase Merc10  1
+Oh, quel dommage ! J’aimerais tant voir ce jeune homme à la peau rouge. Est-il très beau ? J’aimerais l'enlever, mais j’ai plutôt l’habitude de voler des objets et de l’argent !
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  2
+Je n’ai rencontré qu’un seul Joon dans ma vie et c’était une fille. C’est vraiment la plus belle fille que j’ai jamais vue !
+#ANIMATION 66
+#CAMERA 11
+#phrase Merc10  3
+Tu es amoureux d’elle, hein, et ce n’est pas réciproque ? Ne nie pas ! Laisse-moi te donner un conseil : arrête de rechercher ce jeune Joon. Elle sera triste pendant quelque temps, puis elle commencera à te regarder. Le cœur des femmes est changeant et je sais de quoi je parle !
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  4
+J’ai promis de le retrouver. Promis, tu comprends ?
+#ANIMATION 64
+#CAMERA 3
+#phrase Merc10  5
+Ha ! C’est bien les hommes... Vous donnez votre parole sans réfléchir et ensuite vous estimez devoir la tenir ! Les femmes agissent tout autrement !
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero  6
+Revenons à notre sujet, s’il te plaît.
+#ANIMATION 65
+#CAMERA 11
+#phrase Merc10  7
+Oh là là, quelle impatience ! Très bien, écoute : un jour j’ai cambriolé une maison remplie de toutes sortes de choses, des statuettes fêlées, des manuscrits poussiéreux, des tableaux... J’ai cru que ce butin me rapporterait de l’argent, mais le receleur n’en a pas voulu. Apparemment, les antiquités des Joons ne sont plus à la mode !
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  9
+Excellent ! Le propriétaire de cette collection sera content d’en récupérer au moins une partie en échange de quoi il répondra à toutes mes questions. Peux-tu me donner quelques-uns de ces objets ?
+#ANIMATION 63
+#CAMERA 7
+#phrase Merc10  10
+Prends tout, mais ils ne sont pas au Dernier sanctuaire. Ils sont dans une cachette près de la ville, dans les ruines d’une vieille caserne, sur les berges de la rivière. J’irais bien les chercher moi-même, mais entre temps ils ont construit une nouvelle caserne dans les parages et je n’ai pas très envie de rencontrer les gardes. Alors, pour utiliser mon butin, tu devras d’abord te rendre à la cachette !
+#show Note 5
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  11
+D’accord. Mais dis-moi, où est la maison de l’amateur d’antiquités Joon ? Je voudrais l’inviter ici pour discuter avec lui.
+#ANIMATION 64
+#CAMERA 11
+#phrase Merc10  12
+Yeux de crapaud, non ! Tu ne peux inviter personne ici ! Heureusement que Frère Khatul ne t’a pas entendu, tu aurais immédiatement perdu sa confiance !
+#ANIMATION 7
+#CAMERA 2
+#phrase Hero  13
+Mais je ne veux pas rencontrer le collectionneur chez lui ! Il risquerait de me jouer toutes sortes de mauvais tours...
+#ANIMATION 63
+#CAMERA 3
+#phrase Merc10  14
+Qui t’oblige à le rencontrer chez lui ? Propose-lui un endroit tranquille. Si tu n’en connais pas, demande à Frère Forgeron, il rencontre souvent des marchands de la ville et il connaît tous les lieux sûrs. Si Frère Khatul n’y voit pas d’inconvénients, il te dira tout.
+#hide Note
+#show Note 4
+#ANIMATION 69
+#CAMERA 9
+#phrase Merc10  15
+Tu ne peux pas manquer la maison. Le collectionneur a placé deux statues en pierre à l’entrée. Elles n'ont pas dû être faciles à transporter !

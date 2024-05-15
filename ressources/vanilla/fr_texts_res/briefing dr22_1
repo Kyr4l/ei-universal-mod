@@ -1,0 +1,21 @@
+Le cadeau du Dragon
+#show Hero 
+#show SKD
+#CAMERA 3
+#phrase SKD  1
+Ecoute, petit homme ! Ta compagnie m'a plu et j'aimerais te revoir... à l'occasion. Mais il est fort possible que tu te fasses tuer. Tu deviendrais alors un simple squelette... et parler à un squelette est sans intérêt.
+#CAMERA 9
+#phrase SKD  3
+Regarde... celui-là était autrefois un grand chef militaire, d'une intelligence exceptionnelle. Maintenant, il n'est plus qu'une goule. Peut-être a-t-il conservé sa mémoire mais il n'est plus capable de communiquer. J'ai décidé de te donner quelque chose pour que tu deviennes presque invulnérable.
+#CAMERA 3
+#ANIMATION 1
+#phrase SKD  4
+Je n’ai ni le temps, ni l’envie de te protéger. Pourtant, tu me sembles assez compétent. Mais pour transformer ce « assez » en « parfaitement », j’ai un cadeau pour toi. 
+#show Ancientsword 5
+#CAMERA 3
+#phrase SKD  5
+Prends cette arme et fais-en bon usage ! Elle n'est pas très impressionnante mais autrefois les meilleurs guerriers ne juraient que par elle. Regarde, ce squelette était l'un d'eux.
+#ANIMATION 31
+#CAMERA 6
+#phrase Hero  6
+Je te remercie ! Je te promets de faire bon usage de cette arme et d'être digne du présent que tu me fais.

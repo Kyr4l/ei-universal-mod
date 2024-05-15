@@ -1,0 +1,19 @@
+A propos du Doyen
+#show Smith
+#show Hero
+#ANIMATION 32
+#CAMERA 9
+#phrase Smith  1
+Eh bien, Noble Elu, tu es rusé comme un renard ! Ton histoire de seconde fleur, je n'y ai vu que du feu ! Mais maintenant, le Doyen est confondu. Quand j'ai su que tu l'avais démasqué, j'ai sauté de joie.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  2
+Ça, je peux le comprendre, vous n'avez jamais été de grands amis. Mais qu'en pensent les villageois ?
+#ANIMATION 29
+#CAMERA 3
+#phrase Smith  3
+Ils disent : "Bien joué, l'Elu !". Tu crois qu'ils vénéraient le Doyen ? Pas du tout ! Ils se tenaient tranquilles parce qu'ils avaient peur mais bientôt toutes les rancœurs s'exprimeront au grand jour, tu verras.
+#ANIMATION 8
+#CAMERA 9
+#phrase Smith  4
+Ils disent que l'Elu a été envoyé spécialement pour débarrasser le village de ce gredin. Je pense qu'il fallait en arriver là : entre toi et lui, il fallait qu'à un moment donné la balance penche d'un côté. Voilà le sentiment général.

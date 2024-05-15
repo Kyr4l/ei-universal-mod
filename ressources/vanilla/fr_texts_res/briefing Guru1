@@ -1,0 +1,45 @@
+Parler à l'Aveugle
+#show Hero
+#show Guru
+#show Glav
+#ANIMATION 3
+#CAMERA 5
+#phrase Glav  1
+Frère Aveugle ! J’ai quelque chose d’important à te dire.
+#ANIMATION 32
+#CAMERA 3
+#phrase Guru  2
+Que la lumière dont j’ai été privé soit à jamais avec toi ! Que puis-je faire pour toi, Frère Blondinet ?
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  3
+Comment savais-tu que j’étais là ? Et qu’est-ce qui te fait croire que j’ai besoin de quelque chose ?
+#ANIMATION 6
+#CAMERA 3
+#phrase Guru  4
+Je suis aveugle, pas sourd. Et j’ai encore toute ma tête.
+#ANIMATION 44
+#CAMERA 4
+#phrase Glav  5
+Frère Aveugle entend un rat sortir de son trou à l’autre bout de la caverne ! Et s’il avait un arc, il pourrait le transpercer du premier coup !
+#ANIMATION 31
+#CAMERA 3
+#phrase Guru  6
+Tu me flattes, mais je n’ai pas l’habitude de tirer sur des rats. Il y a des cibles bien plus grosses et intéressantes. Alors, qu’attends-tu d’un pauvre aveugle comme moi ?
+#ANIMATION 8
+#CAMERA 8
+#phrase Glav  7
+Tu as été un excellent professeur pour beaucoup de gens du Dernier sanctuaire. Pourrais-tu aussi former le Frère Blondinet ici présent ?
+#hide Glav
+#ANIMATION 11
+#CAMERA 3
+#phrase Guru  8
+Hé-hé ! Ici au Dernier sanctuaire, il faut obéir au Frère Khatul aussi vite qu’à un Sergent des Gardes de l’Empereur ! Tu veux améliorer ta dextérité, Blondinet ?
+#ANIMATION 14
+#CAMERA 2
+#phrase Hero  9
+Oui, volontiers ! Mais puis-je y arriver rapidement ?
+#ANIMATION 9
+#CAMERA 9
+#phrase Guru  10
+Je ne promets jamais l’impossible. Tu verras toi-même !

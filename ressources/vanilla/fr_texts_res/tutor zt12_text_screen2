@@ -1,0 +1,6 @@
+     La fenêtre d'information propose plusieurs modes. Pour passer de l'un à l'autre, utilisez les boutons situés à gauche ou le clavier. Ces différents modes sont les suivants :
+
+     Vue d'ensemble : affiche des généralités sur la vue du personnage (touche <,>).
+     Dégâts : affiche les dégâts infligés aux différentes parties du corps (touche <.>).
+     Caractéristiques : affiche les caractéristiques du personnage (touche </>).
+     Sorts : affiche les sorts jetés contre le personnage et le temps (en secondes) restant avant que l'effet qui y est associé ne se dissipe (touche <'>).

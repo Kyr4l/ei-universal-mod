@@ -1,0 +1,19 @@
+Refuser l'aide de Naya
+#show Hero 1
+#show Merc3 2
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  1
+Désolé Naya, mais j’ai de bonnes raisons de ne pas t’emmener avec moi.
+#ANIMATION 14
+#CAMERA 7
+#phrase Merc3  2
+Généralement, je ne pose pas de questions. Mais dis-moi, est-ce parce que tu n’es pas satisfait de mes talents ?
+#ANIMATION 31
+#CAMERA 6
+#phrase Hero  3
+Je n’ai absolument rien contre toi. Mes raisons sont purement personnelles...
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc3  4
+Je vois. Eh bien, si tu as besoin de moi, tu sais où me trouver !

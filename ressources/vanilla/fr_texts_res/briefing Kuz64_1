@@ -1,0 +1,15 @@
+A propos du travail du Forgeron
+#show Hero 3
+#show Kuzn 5
+#ANIMATION 9
+#CAMERA 9
+#phrase Kuzn  1
+Mon histoire est aussi simple qu’une ligne droite tracée sur le sable. Il semble que quelqu’un m’ait forcé la main pendant que le prêteur me tendait de l’argent. Le lendemain, ma forge brûlait comme un feu de joie ! Je ne suis pas un esclave évadé car je me suis enfui avant qu’ils n’aient eu le temps de m’assujettir.
+#ANIMATION 62
+#CAMERA 3
+#phrase Kuzn  2
+Certains marchands de la ville continuent à me vendre du matériel, c’est pourquoi ici, au sanctuaire, nous avons des armes et tout ce qu’il nous faut pour assurer notre protection. Bien sûr, cela nous coûte cher, mais les mendiants n’ont pas le choix !
+#ANIMATION 44
+#CAMERA 11
+#phrase Kuzn  3
+Tu devras aussi me donner de l’argent ; pour me permettre de payer le matériel et les sorts que me prépare Frère Kehel.

@@ -1,0 +1,19 @@
+Reprendre Rinas
+#show Hero 1
+#show Merc5 2
+#ANIMATION 14
+#CAMERA 3
+#phrase Merc5  1
+Je suis désolé, mais j’aimerais de nouveau me joindre à ton équipe.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+Comment ça ? Que s’est-il passé ?
+#ANIMATION 44
+#CAMERA 3
+#phrase Merc5  3
+Les circonstances font que je ne peux pas m’attarder en ville. J’ai entrepris quelque chose qui a quelque peu amélioré l’état de mes finances, mais aussi considérablement dégradé mes relations avec les Gardes. M’acceptes-tu ?
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  4
+Tes relations avec les Gardes ne me regardent pas. Et ton aide sera la bienvenue !

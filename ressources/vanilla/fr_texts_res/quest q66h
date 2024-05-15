@@ -1,0 +1,11 @@
+Lettre
+La maison du propriétaire de la collection se trouve en ville, dans la rue partant des portes nord et longeant les rives du lac. La maison en question est celle située après l’auberge ; vous la reconnaîtrez aux deux statues de pierre érigées près de la porte.
+#subobj  1
+Entrer dans la ville
+Pour pénétrer dans la ville, vous pouvez emprunter la porte nord. Allez-y de nuit ou utilisez le sort d’invisibilité pour ne pas attirer l’attention des gardes. Il serait très dangereux de les combattre.
+#subobj  2
+Entrer dans la cour de la maison
+La maison que vous cherchez se trouve dans la rue menant au sud des portes et longeant le lac. Comme les autres maisons, elle possède une petite clôture et vous devrez d’abord entrer dans la cour.
+#subobj  3
+Déposer la lettre
+Déposez juste la lettre chez le collectionneur.

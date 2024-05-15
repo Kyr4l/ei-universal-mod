@@ -1,0 +1,17 @@
+Ouvrir le passage menant à la vallée
+Vous connaissez l’existence d’un tunnel menant à la vallée. Pour y accéder, actionnez le levier du passage montagneux situé à l’est de la rivière. N’oubliez pas que le camp khadaganien se trouve dans les environs et que vous devez faire en sorte de l’éviter !
+#subobj  1
+Trouver l’entrée du tunnel
+L’entrée du tunnel se trouve à l’ouest du ravin au fond duquel coule la rivière.
+#subobj  2
+Trouver l’étroit petit ravin à l’est
+D’après le document khadaganien, le levier ouvrant l’entrée du tunnel se trouve à l’extrémité d’un petit ravin très étroit qui se forme à l’est du ravin et s’étire vers le nord.
+#subobj  3
+Trouver le levier
+Le levier devrait se trouver dans l’une des impasses du passage étroit.
+#subobj  4
+Activer le levier
+Vous devez activer le levier, puis revenir à l’entrée du tunnel. Les créateurs de ce système ont sûrement prévu un moyen d’ouvrir les portes rapidement - peut-être s’agit-il de cette chose étrange située à proximité ?
+#subobj  5
+Entrer dans le tunnel
+Le tunnel mène au ravin !

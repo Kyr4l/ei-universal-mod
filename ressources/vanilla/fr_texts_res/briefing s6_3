@@ -1,0 +1,11 @@
+En savoir plus sur le plan du Doyen
+#show Hero 3
+#show Elder 5
+#ANIMATION 9
+#CAMERA 9
+#phrase Elder  1
+La tribu dirigée par GoGo vit près du Lac où le grand fleuve forme un delta avec de nombreuses îles. Tu ne pourras pas atteindre les îles, et de toute façon ce n'est pas nécessaire : la colonie des Gobelins est de ce côté-ci du fleuve, entre le marais et la berge.
+#ANIMATION 15
+#CAMERA 11
+#phrase Elder  2
+Et rappelle-toi : les Gobelins sont les ennemis des Hommes-lézards. Tu pourras peut-être tirer parti de cette rivalité.

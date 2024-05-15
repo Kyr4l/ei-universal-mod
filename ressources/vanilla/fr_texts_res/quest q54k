@@ -1,0 +1,20 @@
+Mines abandonnées
+Diera a caché la jeune fille qu’elle a enlevée dans une mine abandonnée. Pour vous y rendre, vous aurez besoin de la clé.
+#subobj  1
+Atteindre les mines
+Les mines abandonnées sont situées au nord de la zone, de l’autre côté du lac. Le passage est bloqué par les portes. Pour atteindre ces portes, contournez le lac par l’est, empruntez le pont pour traverser la rivière et dirigez-vous vers le nord.
+#subobj  2
+Ouvrir les portes
+Pour ouvrir les portes des mines, utilisez la clé du gouverneur. Attention : les entrées des mines sont gardées par des assassins engagés et armés par Diera.
+#subobj  3
+Trouver l’entrée de la mine 1
+Cette mine est la plus proche des portes et la plus facile d’accès. Cependant, si vous empruntez cette entrée, vous parcourrez un plus long chemin dans les catacombes.
+#subobj  4
+Trouver l’entrée de la mine 2
+Celle-ci se trouve à l’ouest de l’entrée de la mine 1. Si vous l’empruntez, votre trajet sous terre sera un peu plus court.
+#subobj  5
+Trouver l’entrée de la mine 3
+Voici la mine la plus à l’ouest et aussi la plus difficile à atteindre. Cependant, si vous empruntez cette entrée, votre trajet dans les catacombes s’avérera plus facile, même si les catacombes ne sont jamais complètement sûres !
+#subobj  6
+Entrer dans la mine
+Pour continuer à chercher la Princesse, pénétrez dans la mine et explorez les catacombes.

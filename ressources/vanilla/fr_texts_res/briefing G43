@@ -1,0 +1,91 @@
+A propos de la flèche
+#show Hero 1
+#show Huber 2
+#show Kapitan
+#ANIMATION 9
+#CAMERA 9
+#phrase Huber  1
+Bonjour, jeune homme ! Ton visage m’est familier... Ah oui, Tilvar m’a parlé de toi ! Tu cherches la Princesse, hein ? Je te souhaite sincèrement bonne chance. J’aurais tant voulu... Mieux la connaître... Mais ces infâmes ravisseurs m’ont devancé...
+#ANIMATION 11
+#CAMERA 3
+#phrase Huber  2
+Mais aux dires du Capitaine, tu as réussi à trouver quelque chose d’autre, pas vrai ?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  3
+Oui. J’ai l’arme du crime...
+#ANIMATION 14
+#CAMERA 3
+#phrase Huber  4
+Du crime ?
+#ANIMATION 8
+#CAMERA 10
+#phrase Hero  5
+L’arme qui a servi à assassiner le Fouineur de la capitale. Là !
+#show Hero 3
+#show DriadArrow00 5
+#show Huber 5
+#ANIMATION 3
+#CAMERA 3
+#phrase Huber  7
+Oh là là, c’est magnifique ! Quelle pointe de flèche ! Un travail magnifique...
+#ANIMATION 6
+#CAMERA 2
+#phrase Hero  8
+J’ai trouvé le cadavre du Fouineur dans la forêt, près de la ferme...
+#ANIMATION 9
+#CAMERA 3
+#phrase Huber  9
+Quel cadavre ? Ah, ce cadavre-là... Dis à Tilvar de s’en occuper. Je l’emploie pour ne pas avoir à écouter ces histoires sordides.
+#ANIMATION 14
+#CAMERA 3
+#phrase Huber  10
+Mais cette flèche est superbe. Peut-être que... Oh non, quelle déception ! J’en ai déjà une comme celle-là dans ma collection.
+#hide DriadArrow00
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  11
+Votre collection est très réputée.
+#ANIMATION 63
+#CAMERA 3
+#phrase Huber  12
+Et à juste titre. Elle comporte des pièces très rares. J’apprécie les jeunes gens qui respectent leurs aînés. J’adorerais te montrer mes collections.
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber  13
+Je possède ici des spécimens très rares. Voici une fronde de Gobelin et ça, c’est une hache d’Orque. As-tu déjà vu un Orque, jeune homme ?
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  14
+Qui, moi ? Bien sûr que non !
+#ANIMATION 61
+#CAMERA 11
+#phrase Huber  15
+C’est bien ce que je pensais. Aahh, le passé, le passé... Je me revois... Dans le feu de l’action, j’en tuais un, puis deux tout en menant mes troupes.... Wouah !
+#show DriadArrow00 4
+#ANIMATION 62
+#CAMERA 9
+#phrase Huber  16
+Mais revenons à notre flèche... Hein ? Mince alors ! Où se trouve le coffret contenant les armes du Peuple de la forêt ? ! Elles constituaient le fleuron de ma collection ! Au voleur ! Au traître ! ! ! Faites immédiatement venir le Capitaine Tilvar !
+#hide DriadArrow00
+#ANIMATION 15
+#CAMERA 4
+#phrase Kapitan  17
+A votre service, votre Excellence.
+#ANIMATION 61
+#CAMERA 3
+#phrase Huber  18
+Que se passe-t-il dans ma province ? Des jeunes filles enlevées en ville, des gens assassinés dans la forêt et moi, victime d’un vol sous mon propre toit !
+#ANIMATION 31
+#CAMERA 12
+#phrase Kapitan  19
+Peut-être que si Madame Diera n’avait pas insisté pour poser ses pièges magiques à l’endroit où mes hommes avaient l’habitude de monter la garde...
+#ANIMATION 43
+#CAMERA 3
+#phrase Huber  20
+L’heure n’est pas aux excuses vaseuses ! Tout le monde dehors ! Et retrouvez-moi ces pièces de collection !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  21
+Si ce coffret contenait une flèche comme celle-ci, c’est peut-être celle qui a servi à tuer le Fouineur ? Il faut que je retrouve le voleur.

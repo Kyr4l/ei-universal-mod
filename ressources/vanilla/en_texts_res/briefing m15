@@ -1,0 +1,46 @@
+About the quarry
+#show Smith 1
+#show Hero 2
+#ANIMATION 44
+#CAMERA 9
+#phrase Smith  1
+Listen, since you removed the Big Shell from the Remote Mountains,  I can no longer go to the quarry. I am helpless!
+#DESC Exaggeratedly sad, complaining, clearly counting on pity and offer of help
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+Oh dear, is that not awful! Do not try to be clever, you are like an open book for me.
+#DESC Lightly, a bit mockingly
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith  3
+I am not clever or anything else! But if that road to the quarry were to be opened again, I would pay you well. Exceedingly well!
+#DESC Abruptly changes to businesslike
+#ANIMATION 7
+#CAMERA 2
+#phrase Hero  4
+Hmm, sounds good... but I am not going to take that Shell back, the damn thing is too heavy!
+#ANIMATION 15
+#CAMERA 7
+#phrase Smith  5
+Hah, and what if I told you that you do not need to lift the Shell! There is another road to my quarry, a long one, 'tis true, but I cannot use it because of a Cyclops. 
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  6
+A Cyclops? What kind of beast is that?
+#ANIMATION 9
+#CAMERA 9
+#phrase Smith  7
+No beast, Chosen. Cyclops look like Ogres but they are much, much cleverer.  At least the one I mean is definitely no fool: he stole a whole herd of pigs from our shepherds, and now he tends to them himself. When he spots anyone, he throws large stones at them. Sort of keeps them at a distance, so to speak.
+#ANIMATION 8
+#CAMERA 3
+#phrase Smith  8
+Please understand, I care not a whit for Cyclops or pigs, but that herd grazes right next to my quarry.
+#ANIMATION 31
+#CAMERA 11
+#phrase Smith  9
+So I think that if you could exterminate those wee pigs, the Cyclops would simply go away. Then I would indeed show my gratitude!
+#ANIMATION 32
+#CAMERA 9
+#phrase Smith  10
+And another thing: remember to watch the sky when you go to the Remote Mountains, I have seen Dragons flying there!

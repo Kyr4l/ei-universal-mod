@@ -1,0 +1,14 @@
+Rendre l’eau aux Hommes-lézards
+Les Orques ont construit un barrage pour détourner la source vers leur territoire. Vous devez dois lever le barrage et bloquer le canal.
+#subobj  1
+Le barrage
+Pour trouver le barrage, dirigez-vous vers le sud en longeant la berge est de la rivière qui commence près de chez l’Ermite. Le barrage se trouve un peu plus loin en aval après l’endroit où un petit ruisseau se jette dans la rivière (à l’est).
+#subobj  2
+Lever le barrage
+Pour permettre à l’eau de s’écouler le long de la rivière, vous devez lever le barrage à l'aide du levier du Lézard.
+#subobj  3
+Trouver la pierre
+Une grande pierre que les Orques seraient incapables de déplacer très loin surplombe le canal. Située en amont du barrage, il vous suffit de pousser la pierre pour la faire basculer et bloquer le canal ! 
+#subobj  5
+Pousser la pierre dans le canal
+Les Orques n’ont pas déplacé la pierre très loin des berges du canal, mais ils l’ont laissée à un endroit où même un homme seul pourrait la faire basculer.

@@ -1,0 +1,51 @@
+Rencontrer la Sorcière
+#show Hero 1
+#show Witch 2
+#ANIMATION 61
+#CAMERA 9
+#phrase Witch  1
+Eh, bonhomme, comment as-tu fait pour entrer ici ? Qu'est-ce que tu me veux ? Fiche le camp avant que je te transforme en chair à pâté !
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  2
+Bon, si tu n'as pas envie d'une Pierre magique, je m'en vais.
+#show CryptRune00 5
+#ANIMATION 9
+#CAMERA 3
+#phrase Witch  3
+Eh, pas si vite ! Tu es bien impatient ! Reste un peu. Bien sûr que je suis intéressée par une Pierre. Je vais même aller jusqu'à montrer un peu d'enthousiasme. Le cadeau en vaut la peine.
+#hide CryptRune00
+#show Hero 1
+#show Witch 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Witch  4
+Mais, au fait... qui es-tu ? Je te ne reconnais pas, tu n'es pas du village ?
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  5
+Sache, Sorcière Estera, que je suis l'Elu ! J'ai été envoyé par des forces divines pour protéger le peuple de Gipath !
+#ANIMATION 62
+#CAMERA 7
+#phrase Witch  6
+Par la bave de tous les crapauds, tu es bien arrogant ! N'essaie pas de me tromper. Et ne me sers pas ces fariboles à propos de l'Elu, car je vois dans les profondeurs de ton âme ! Reste humble. Un long chemin t'attend, mon mignon, et je vois ton esprit encombré par l'affliction. Pour ce qui est de ton passé... ton passé... ça alors, c'est un peu fort... je n'arrive pas à voir dans ton passé.
+#ANIMATION 46
+#CAMERA 5
+#phrase Hero  7
+Je ne connais pas mon passé, non plus. Je ne me souviens plus de rien.
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  8
+Là, tu me soulages ! J'ai cru, l'espace d'un moment, que le grand âge m'avait rattrapée et qu'il était temps pour moi de mourir.
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  9
+Vous n'êtes pas vieille. Vous êtes même dans la fleur de l'âge !
+#ANIMATION 63
+#CAMERA 3
+#phrase Witch  10
+Je sais que tu mens, mais ce genre de mensonge plaît beaucoup à mes veilles oreilles. Tu es un garçon poli, qui a de l'allure, ça me change de ces crétins du village. Repasse quand tu veux, je serai heureuse de te voir...
+#ANIMATION 30
+#CAMERA 9
+#phrase Witch  11
+Je me demande pourquoi je suis si gentille aujourd'hui. Il ne va pas tarder à pleuvoir !

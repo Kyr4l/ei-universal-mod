@@ -1,0 +1,35 @@
+Parler à GoGo
+#show Hero 3
+#show bGoblinC 4
+#show Sheriff 5
+#CAMERA 5
+#ANIMATION 45
+#phrase Hero  1
+Es-tu le Chef gobelin GoGo ?
+#CAMERA 9
+#phrase bGoblinC  2
+Oui, moi Chef GoGo, venu te demander libérer Premier Gobelin.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  3
+Je le ferai peut-être mais d'abord tu dois me dire quelque chose.
+#ANIMATION 3
+#CAMERA 8
+#phrase Sheriff  4
+Ferme ton clapet, le borgne, ou je le ferme pour toi ! On ne t'a jamais appris la politesse ?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  5
+Qu'est-ce que ça veut dire ?
+#ANIMATION 9
+#CAMERA 4
+#phrase Sheriff  6
+Le Doyen a dit de ne pas interroger le Gobelin hors de sa présence et de ne pas le laisser parler trop. Il a dit qu'ensuite il aurait une gentille petite conversation sans témoins avec l'Elu.
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  7
+Eh bien, je suis là. Où est le problème ?
+#ANIMATION 44
+#CAMERA 1
+#phrase Sheriff  8
+Tu es là, mais pas Erfar, voilà où est le problème. J'obéis aux ordres. Si on n'obéit pas aux ordres, on fait naître le désordre et après il faut ranger, ha ha ha, tu comprends ? Je ne manque pas d'humour, hein ?

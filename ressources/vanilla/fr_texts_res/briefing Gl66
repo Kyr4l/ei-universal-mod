@@ -1,0 +1,30 @@
+A propos de la rencontre avec le propriétaire des antiquités joons
+#show Hero 1
+#show Glav 2
+#ANIMATION 44
+#CAMERA 3
+#phrase Glav  1
+Je sais que tu vas rencontrer un homme de la ville. Laisse-moi te donner un conseil... Même si l’endroit où vous vous rencontrerez te paraît sûr, regarde bien autour de toi. Tu connais le vieux dicton... « Les forces divines viennent en aide à ceux qui savent prendre des précautions ».
+#ANIMATION 4
+#CAMERA 9
+#phrase Glav  2
+Frère Forgeron ! Peux-tu venir ?
+#show Hero 3
+#show Glav 4
+#show Kuzn 5
+#ANIMATION 6
+#CAMERA 9
+#phrase Glav  3
+Frère Blondinet aimerait savoir où tu retrouves les marchands de la ville.
+#ANIMATION 9
+#CAMERA 4
+#phrase Kuzn  4
+Rien de plus facile. Après avoir quitté nos catacombes et rejoint les faubourgs de la ville, poursuis ton chemin en direction du soleil levant et tu verras une vaste étendue désertique entourée de palmiers. C’est là que je fais affaire avec les marchands.
+#ANIMATION 7
+#CAMERA 12
+#phrase Kuzn  5
+Veille à ce que personne ne te voie en chemin ! Les gardes ne se doutent peut-être pas que les marchands livrent la Confrérie, mais il arrive qu’ils envoient des patrouilles dans les faubourgs, par précaution.
+#ANIMATION 32
+#CAMERA 1
+#phrase Kuzn  6
+Ces patrouilles ne sont jamais très fortes, alors si tu tombes sur des gardes, il te sera plus facile de les tuer que d’attendre qu’ils s’en prennent à quelqu’un d’autre !

@@ -1,0 +1,12 @@
+Se renseigner sur le document qui a été retrouvé
+#show Elder 3
+#show CodedHadaganNote 4
+#show Hero 5
+#ANIMATION 45
+#CAMERA 1
+#phrase Hero  1
+As-tu traduit le document dont je t'ai parlé ?
+#ANIMATION 32
+#CAMERA 9
+#phrase Elder  2
+Désolé, Noble Elu, mais je n'ai pas eu le temps. Tu sais bien que la situation est préoccupante, aussi bien au village qu'à l'extérieur.

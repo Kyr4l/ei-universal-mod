@@ -1,0 +1,26 @@
+Se procurer la Fleur Sacrée
+Chaque clan du Peuple des forêts a sa propre plante sacrée qui fleurit en hiver et en été. Le gardien du Clan Vert a été capturé par l’hostile Clan Blanc. Vous devez le libérer pour qu’il vous remette la Fleur Sacrée. S’il venait à mourir, emparez-vous de la fleur sur son cadavre.
+#subobj  1
+Traverser le lac
+Pour entrer sur le domaine du Clan Blanc, vous devez vous rendre sur la rive ouest du lac supérieur, puis vous enfoncer dans les bois. Attention : la population locale attaque tous les gens de la ville.
+#subobj  2
+Trouver la prison
+Le Clan Blanc a jeté le Gardien dans une prison primitive faite d’arbres morts. Les portes sont fermées, mais vous pourrez les ouvrir à la main. Néanmoins, cela ne suffira pas.... car un piège magique a été placé sur les portes de la prison. Pour le neutraliser, vous aurez besoin d’une feuille verte que le Prophète du Clan Blanc porte sur lui.
+#subobj  3
+Trouver le Prophète
+Le Prophète du Clan Blanc vit un peu plus loin à l’ouest de la prison.
+#subobj  4
+S’emparer de la feuille verte
+Le Prophète possède une feuille verte nécessaire pour neutraliser le piège magique de la prison. Vous devez vous en emparer.
+#subobj  5
+Neutraliser le piège
+L’autel qui contrôle le piège ressemble à une vieille souche couverte de champignons. Bon déguisement !
+#subobj  6
+S’approcher du Gardien
+Le Gardien n’est pas sûr de pouvoir apporter la Fleur Sacrée à son Clan. Si vous ouvrez la porte de la cage, il donnera la Fleur à son sauveur, puis tentera de s’enfuir.
+#subobj  7
+Palissade
+Le Clan Blanc emprisonne ses ennemis dans différents endroits, dont la palissade.
+#subobj  8
+Ouvrir les portes
+Aucune clé spéciale n’est nécessaire pour ouvrir les portes de la palissade.

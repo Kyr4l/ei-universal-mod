@@ -1,0 +1,32 @@
+Le cadeau de Kholai
+#show Hero 
+#show OldNekro
+#ANIMATION 58
+#CAMERA 11
+#phrase OldNekro  1
+Eh bien, jeune homme, ta visite peut aussi se révéler utile pour moi, mais pour une autre raison. Grâce à ce nigaud de Taivo, j’ai désormais tout mon temps et j’en ai profité pour faire quelques expériences que je n’aurais jamais pu mener auparavant.
+#ANIMATION 57
+#CAMERA 3
+#phrase OldNekro  2
+A présent, je voudrais mettre mes résultats en pratique. Et pour cela, j’aurai besoin de ton aide, jeune homme !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  3
+Vraiment ? S’il essaie de faire sortir de moi une espèce de zombie, je ne le manquerai pas !
+#ANIMATION 58
+#CAMERA 7
+#phrase OldNekro  4
+Ha-ha-ha ! Jeune homme, tu ne sais pas cacher tes sentiments, ton visage te trahit ! Détends-toi, je ne te ferai rien, bien que ta matière première ne soit pas mauvaise, pas mauvaise du tout...
+#ANIMATION 57
+#CAMERA 11
+#phrase OldNekro  5
+Je te donnerai un objet que tu testeras en... Comment dire, en situation de combat ? Si tu survis, l’expérience sera réussie.
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  6
+Et sinon ?
+#ANIMATION 59
+#CAMERA 7
+#phrase OldNekro  7
+Alors, j’étudierai une autre théorie. Quoi qu’il arrive, je gagnerai. Tes chances sont de cinquante-cinquante. Ce n’est pas si mal pour Suslanger !

@@ -1,0 +1,19 @@
+Prendre Myrana dans l'équipe
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+Alors, as-tu besoin de mon aide ou non ?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+Tu pourrais m’être utile, mais je suppose que tu attends de l’argent en échange de tes services ? Pour le risque, le danger et le reste...
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc6  3
+Eh bien, pour être honnête, n’étant pas encore membre de la Guilde des Mercenaires, je ne peux pas te demander d’argent. Ma récompense sera l’expérience que j’acquerrai, ce qui m’aidera ensuite à rejoindre la Guilde. Et après cela, je rattraperai le temps perdu, crois-moi !
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  4
+Hummm... Très bien, tu es des nôtres !

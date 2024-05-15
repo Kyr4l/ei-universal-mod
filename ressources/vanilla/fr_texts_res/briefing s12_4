@@ -1,0 +1,42 @@
+A propos de la nouvelle expédition contre les Gobelins
+#show Hero
+#show Sheriff
+#show Elder
+#ANIMATION 9
+#phrase Elder  1
+La mort de Tête-Rouge a bouleversé les Chasseurs libres. Ils t'en veulent beaucoup, mais je leur ai expliqué que tu avais agi avec les meilleures intentions. Pour nous prouver leur bon vouloir, ils nous ont averti que les Gobelins préparaient une nouvelle attaque. Nous avons décidé que les Chasseurs libres et les guerriers de Gort seraient en première ligne. Mais j'apprécierais que l'Elu prenne également part à l'attaque.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  2
+Personne ne me demande jamais ce que j'ai envie de faire. Mais bon, après tout, les Gobelins ne me font pas vraiment peur.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  3
+C'est bon, je le ferai.
+#ANIMATION 32
+#CAMERA 4
+#phrase Sheriff  4
+Magnifique ! Les Gobelins concentrent leur forces à l'ouest des marais, près des petites collines du fleuve. Mais, d'abord, tu dois voir le lieutenant du Chef. Il t'attend là où démarre la route qui mène au fleuve.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  6
+Seul ?
+#ANIMATION 29
+#CAMERA 7
+#phrase Sheriff  7
+Cela va de soi. Et sans arme ! Tu seras couvert de toutes parts. Tu sais sans doute que ce sont des régions très dangereuses. Aussi, les hommes agiront-ils avec une prudence extrême. Au lieu de rendez-vous, tu trouveras un comité d'accueil.
+#ANIMATION 15
+#CAMERA 9
+#phrase Elder  8
+Ne dis rien à Babur. Tu es peut-être son ami mais rappelle-toi qu'il ferait tout pour de l'argent.
+#ANIMATION 7
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  9
+Je n'aime pas la tournure que prennent les choses. Je commence à douter de tout. Les Brigands ne peuvent pas m'avoir pardonné si vite ! D'un autre côté, il est possible que le Doyen ait réellement conclu un accord avec eux. Ses paroles endormiraient les crapauds les plus cornus !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  10
+J'y vois de moins en moins clair. Il faut que je me méfie.

@@ -1,0 +1,19 @@
+Recruter Eila
+#show Hero 
+#show Merc4
+#CAMERA 3
+#ANIMATION 3
+#phrase Merc4  1
+Franchement, même si Shei-Var m’en empêchait, je t’accompagnerais quand même dans le Désert. Les Orques ne sont pas si terribles après tout, mais les humains me manquent !
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  2
+Qu’est-ce qui me prouve que le Prophète t’a bien appris à manier la magie ?
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc4  3
+Je suis toujours en vie. Quelle autre preuve te faut-il ?
+#CAMERA 6
+#ANIMATION 30
+#phrase Hero  4
+Humm... Bon argument. Attends-moi près des portes !

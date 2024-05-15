@@ -1,0 +1,20 @@
+A propos de la flèche qui a tué le fouineur
+#show Hero 3
+#show YCF 5
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  1
+Que s’est-il passé ? Pourquoi es-tu seul ici ? J’ai tant espéré percer le secret du Fouineur... J’ai découvert que le meurtrier ne faisait pas partie du Peuple de la forêt, mais qu’il s’agissait d’un humain obéissant à un ordre. Et maintenant, je dois trouver la personne qui a donné cet ordre !
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero  2
+Il semble que le Peuple de la forêt dispose d’informations susceptibles de compromettre l’assassin, ce qui signifie que tout a été mis en scène pour vous faire porter le chapeau. Mais où est ton peuple ? Où est-il allé ?
+#CAMERA 3
+#phrase YCF  5
+Nous avons emprunté un passage secret en direction de l’est. Je t’ai attendu pour te dire que les portes du passage te sont ouvertes.
+#CAMERA 11
+#phrase YCF  6
+Dirige-toi vers l’est, ouvre les portes et pénètre dans le labyrinthe entre les collines. Franchis ce labyrinthe, ouvre une autre porte et entre dans les vallées montagneuses. Jadis, des gens y vivaient, des mages qui avaient inventé des sorts pour faire la guerre, mais ils ont depuis bien longtemps abondonné la région. A la suite d’une terrible inondation, ils ne laissèrent derrière eux que des ruines et des traces de leur redoutable magie dans ces vallées montagneuses.
+#CAMERA 3
+#phrase YCF  7
+Mais le Clan Vert a réussi à contrôler cette magie pour en faire bon usage. Dirige-toi vers la paroi septentrionale de la vallée et utilise notre autel : le piège magique repoussera les tigres sauvages pour te permettre de poursuivre vers le sud-est, en direction du nouveau lieu de résidence du Clan Vert. 

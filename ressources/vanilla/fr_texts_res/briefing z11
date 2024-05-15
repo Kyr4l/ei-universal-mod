@@ -1,0 +1,51 @@
+A propos des archives des Orques
+#show Witch 3
+#show OrcAnnals00 4
+#show Hero 5
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  1
+Oh mon dieu, où ces monstres verts ont-ils appris à lire et à écrire ? Non seulement leur langue est horrible mais en plus ils ont une orthographe déplorable... Mais ne nous plaignons pas : c'est une vieille archive, du temps où les Orques utilisaient l'alphabet humain. Maintenant, ils ont le leur.
+#hide OrcAnnals00
+#show OrcAnnals00 5
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+Tu peux déchiffrer le passage sur le Globe ?
+#ANIMATION 15
+#CAMERA 7
+#phrase Witch  3
+Oui, je peux, mais je déteste être bousculée. Compris ? Ce Globe a été ramené de la Cité des Morts et aucun être humain ne peut pénétrer dans la Cité des Morts.
+#hide OrcAnnals00
+#show OrcAnnals00 4
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  4
+Attends un peu… J'ai entendu dire que certains villageois allaient régulièrement à la Cité des Morts !
+#hide OrcAnnals00
+#show OrcAnnals00 5
+#ANIMATION 61
+#CAMERA 3
+#phrase Witch  5
+C'était une façon de parler. Les villageois appellent "Cité des Morts" l'ensemble de la région, mais moi je te parle de la cité en elle-même. On peut bien sûr accéder à cette région, mais dès qu'on s'approche des forteresses de la cité, ou qu'on franchit les portes, on est perdu à tout jamais. Voilà la vérité, cervelle de moineau !
+#hide OrcAnnals00
+#show Daughter 4
+#ANIMATION 15
+#CAMERA 12
+#phrase Daughter  6
+Et je sais comment y aller ! Enfin, je ne sais pas exactement, mais je pourrais facilement me débrouiller.
+#ANIMATION 45
+#CAMERA 9
+#phrase Witch  7
+De quoi parles-tu ? Tu n'es qu'une enfant !
+#ANIMATION 11
+#CAMERA 12
+#phrase Daughter  8
+Eh bien, je vais te montrer ce que je sais faire. Tu ne me reverras que lorsque je saurai comment entrer dans la cité.
+#hide Daughter run
+#show Witch 1
+#show Hero 2
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  9
+Arrête, Airy ! Où vas-tu, petite idiote ? C'est une vraie petite diablesse, comme moi à son âge.

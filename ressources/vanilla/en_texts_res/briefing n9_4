@@ -1,0 +1,14 @@
+Take Eila on
+#show Hero 
+#show Merc4
+#CAMERA 3
+#phrase Merc4  1
+This is dangerous and I will not take unnecessary risks and go into the Sands with such a crowd!
+#ANIMATION 14
+#CAMERA 6
+#phrase Hero  2
+What crowd? There only three of us!
+#CAMERA 3
+#ANIMATION 32
+#phrase Merc4  3
+It will be four with me. And four is very much a crowd here!

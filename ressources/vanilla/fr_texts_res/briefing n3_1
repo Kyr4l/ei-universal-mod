@@ -1,0 +1,15 @@
+Reprendre le Voyou
+#show Hero 1
+#show Merc1 2
+#ANIMATION 45
+#phrase Hero  1
+Hé Voyou, ça te dirait de t’amuser un peu ?
+#ANIMATION 45
+#phrase Merc1  2
+De m’amuser, oh ouais ! Comment ?
+#ANIMATION 9
+#phrase Hero  3
+Il y a toujours du travail pour un bon soldat comme toi. Une fois de plus, je voudrais que tu m’accompagnes. D’accord ?
+#ANIMATION 15
+#phrase Merc1  4
+Ça me va !

@@ -1,0 +1,2 @@
+     Si votre personnage perd un bras, il attaque et jette des sorts plus lentement (hé, essayez donc de frapper avec un seul bras). Un personnage perd un bras lorsque le niveau de santé de ce bras atteint 0. Ceci apparaît dans la fenêtre d'information lorsqu'elle est en mode "Dégâts".
+     Si votre personnage perd une jambe, il se déplace plus lentement (pas d'échasse à ressort dans le jeu). Un personnage perd une jambe lorsque le niveau de santé de cette jambe atteint 0. Ceci apparaît dans la fenêtre d'information lorsqu'elle est en mode "Dégâts".

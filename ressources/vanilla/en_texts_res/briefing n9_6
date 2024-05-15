@@ -1,0 +1,15 @@
+Mairana doesn't want to be a fourth
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+A nice team you have collected, lad!
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  2
+Actually I was about to ask you to join us.
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc6  3
+What do you need me for? The three of you could deal with anyone.

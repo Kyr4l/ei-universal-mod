@@ -1,0 +1,20 @@
+Trouver un objet précieux pour le Gouverneur
+Vous devez vous procurer la clé de la mine fermée auprès du Gouverneur Valrasian. Dirigez-vous vers la région des vieux puits et trouvez une cachette contenant une pépite d’or.
+#subobj  1
+Portes des vieux puits
+Après que les employés aient quitté les puits pour échapper à l’apparition soudaine de tigres des neiges, le gouverneur a ordonné leur fermeture. Pour les trouver, introduisez-vous dans la région des mines abandonnées, franchissez le camp militaire au nord et continuez légèrement vers l’est. Le ravin menant au sud est fermé par des portes.
+#subobj  2
+Ouvrir les portes
+Vous aurez besoin d’une clé spéciale pour cette tâche.
+#subobj  3
+Trouver la cachette
+L’un des employés a déclaré qu’au cours de leur trajet, leurs superviseurs ont essayé de leur faire porter les dernières pépites des puits, mais ils se sont révoltés et les ont abandonnées. Elles doivent certainement se trouver quelque part au sud des vallées, là où les opérations minières ont eu lieu.
+#subobj  4
+Prendre la pépite
+Le coffre et la charrette ne sont pas là sans raison : ils ont dû être abandonnés par les employés. Vous devriez aller y jeter un coup d’œil et rapporter la pépite.
+#subobj  5
+Restes d’un vieux mineur d’or
+De toute évidence, quelqu’un a payé de sa vie pour avoir tenté d’atteindre les trésors abandonnés !
+#subobj  6
+Fouiller les restes
+Vous trouverez peut-être sur lui quelque chose dont vous ferez meilleur usage que lui. 

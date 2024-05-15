@@ -1,0 +1,55 @@
+Parler à Aiset-Bek
+#show Hero 3
+#show Karh 5
+#show IZ 4
+#ANIMATION 32
+#CAMERA 2 -30 10 10
+#phrase Karh  1
+Oh glorieux Aiset-Bek ! Notre donjon abrite de nouveaux prisonniers. Je crois que celui-là est un précieux spécimen. Nous avons capturé cet homme près du portail menant aux Terres Inutiles et il s’est battu comme un chien enragé ! Il est bien bâti et semble suffisamment vif. J’espère humblement que ma ferveur sera récompensée !
+#ANIMATION 14
+#CAMERA 4 30 5 3
+#phrase IZ  2
+Tu considères ce chien mal nourri comme un précieux spécimen ? J’ai bien envie de te fouetter pour avoir osé capturer une telle chose !
+#ANIMATION 31
+#CAMERA 2 30 7 7
+#phrase Karh  3
+Avec tout le respect que je vous dois, glorieux seigneur, je ne suis pas d’accord. Sur tous mes ancêtres jusqu’à la huitième génération, je jure qu’il s’agit là d’un précieux spécimen ou je ne suis pas le Lieutenant Kardaur!
+#ANIMATION 11
+#CAMERA 4 30 5 3
+#phrase IZ  4
+Je n’ai que faire de tes serments, tout ce dont j’ai besoin, c’est d’un bon entraînement pour mes soldats ! Allez, chacal blond ! Parle ! Tu veux vivre encore quelques heures ? Ou dois-je te massacrer sur-le-champ ?
+#ANIMATION 6
+#CAMERA 2 0 3 0.8
+#phrase Hero  5
+Tout le monde se conduit en héros face à un prisonnier désarmé. Rends-moi mes armes et mon armure, fais-moi sortir d’ici et nous verrons bien qui est le plus fort.
+#ANIMATION 32
+#CAMERA 4 30 5 3
+#phrase IZ  6
+Hah ! Le louveteau montre ses crocs !
+#ANIMATION 3
+#CAMERA 2 30 7 7
+#phrase Karh  7
+Je peux t’assurer que je sais mordre moi aussi !
+#ANIMATION 9
+#CAMERA 4 30 5 3
+#phrase IZ  8
+Très bien. Utilise-le, mais retiens ceci : s’il parcourt moins de la moitié du chemin, tu prendras sa place et tes flatteries n’y changeront rien !
+#ANIMATION 15
+#CAMERA 2 -30 7 7
+#phrase Karh  9
+Ordonne-le-moi et j’irai sur-le-champ au Canyon de la Mort. Et mes dernières paroles seront des paroles d’amour pour toi, mon seigneur !
+#hide IZ
+#show Hero 1
+#show Karh 2
+#ANIMATION 6
+#CAMERA 2 35 6 1.5
+#phrase Karh  10
+A présent, écoute bien, pitoyable jeune homme. Demain matin, tu recevras de la nourriture et des armes. Tu pourras ensuite te rendre aux portes principales de la forteresse sud. De jeunes soldats avides de promotion t’y rejoindront.
+#ANIMATION 9
+#CAMERA 2 -30 7 7
+#phrase Karh  11
+Ta mission consistera à rejoindre les portes de la forteresse nord et celle des soldats à t’empêcher de le faire. Franchement, ce ne sera pas très équitable car tu devras affronter des araignées entraînées à rattraper des prisonniers en fuite.
+#ANIMATION 11
+#CAMERA 2 35 6 1.5
+#phrase Karh  12
+Tu peux leur résister, tu ne seras pas puni pour cela. Mais si tu meurs avant l’heure, le glorieux Aiset-Bek sera mécontent. Et je veillerai à payer les Nécromanciens suffisamment cher pour qu’ils torturent ton esprit autant qu’un bourreau expérimenté torturerait ton corps, mais pendant beaucoup plus longtemps !

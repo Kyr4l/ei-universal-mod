@@ -1,0 +1,35 @@
+Traîtrise
+#show Hero
+#show Elder
+#ANIMATION 32
+#CAMERA 1
+#phrase Hero  1
+Toi ? Que fais-tu ici ? !
+#ANIMATION 11
+#CAMERA 11
+#phrase Elder  2
+Ah-ah, c’est simple ! Je suis né ici à Suslanger et chez toi, dans cet endroit puant qu’est Gipath, il n’y avait qu’une seule chose qui m’intéressait...
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero  3
+La météorite ? Celle que guettait l’expédition khadaganienne ?
+#ANIMATION 9
+#CAMERA 7
+#phrase Elder  4
+Ha-ha, c’est bien ça, Noble Elu ! J’ai tenté ma chance avant tout le monde ! J’ai rejoint le Portail et voyagé vers Gipath. Ah, ces pauvres villageois naïfs... Ils ont tant cherché ma météorite qu’ils en sont morts... Et sans même savoir pourquoi !
+#ANIMATION 43
+#CAMERA 3
+#phrase Elder  5
+Et tu... Tu étais aussi censé mourir, mais au lieu de cela, tu as tout gâché. Tu t’en es sorti, mais maintenant l’heure de la vengeance a sonné !
+#ANIMATION 7
+#CAMERA 11
+#phrase Elder  6
+Je ne t’ai pas menti. Je me suis fait un plaisir de t’expliquer comment accéder au Portail. Pendant ce temps, les Gardes que j’ai prévenus de ta présence ont tout juste eu le temps d’arriver à la sortie de la caverne. Mais mon plus grand plaisir sera de te voir mourir, ô Noble Elu !
+#ANIMATION 11
+#CAMERA 9
+#phrase Elder  7
+Mais je te laisse une dernière chance : agenouille-toi et demande-moi grâce. Au nom du bon vieux temps à Gipath, j’accepterai peut-être de te laisser la vie sauve. Mais avant cela, tu dois m’implorer ! Alors ? J’attends !
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero  8
+Tu as oublié quelque chose, Erfar. Je suis armé et tous tes gardes peuvent bien me tomber dessus, tu seras quand même le premier à mourir !!!

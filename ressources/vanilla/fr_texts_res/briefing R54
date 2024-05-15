@@ -1,0 +1,24 @@
+Parler au Grand mage
+#show Hero 3
+#show Rick 4
+#show Deva 5
+#CAMERA 1
+#ANIMATION 5
+#phrase Rick  1
+Dans nos légendes populaires, la chance a toujours été représentée par un cheval sauvage au galop sans crinière à laquelle se cramponner. Tout le monde ne peut pas le monter et rares sont ceux qui parviennent à le chevaucher très longtemps. A Ingos, tu te cramponnais à la chance, alors ne la laisse pas t’échapper à Suslanger ! Il y a ici beaucoup de gens qui aimeraient te voir mordre la poussière...
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  2
+J’en ai déjà eu un bel aperçu à Ingos. Diera en est un bel exemple !
+#ANIMATION 14
+#CAMERA 1
+#phrase Deva  3
+Ne m’en parle pas ! C’est... OOOhh ! Je ne connais pas de mots assez forts pour décrire la méchanceté de cette femme ! Diera a cru que je lui faisais de l’ombre auprès du Gouverneur !
+#ANIMATION 7
+#CAMERA 12
+#phrase Deva  4
+J’ai bien essayé de lui faire comprendre que seul At-Zako m’importait, mais elle ne m’a pas écoutée, pas une seule fois. Je frissonne en pensant aux catacombes où elle m’a retenue prisonnière ! Dieu soit loué, At-Zako ne connaîtra jamais ce froid et cette humidité horribles !
+#CAMERA 1
+#ANIMATION 6
+#phrase Rick  5
+Je ne connais pas grand-chose des autres contrées, mais je sais que Suslanger n’est ni froid ni humide. Ceci dit, je ne peux pas te certifier que le climat rendra notre séjour plus agréable. 

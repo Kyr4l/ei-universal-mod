@@ -1,0 +1,19 @@
+Dire au revoir à Fairakh
+#show Hero 
+#show Merc8
+#CAMERA 7
+#ANIMATION 15
+#phrase Merc8  1
+Au revoir, Blondinet. Malgré le danger, je me suis bien amusé avec toi.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  2
+Veux-tu rester ici, à Gipath, Fairakh ?
+#CAMERA 7
+#ANIMATION 45
+#phrase Merc8  3
+Et que ferais-je dans cette contrée barbare ? Qui apprécierait mes talents de mage ici ? Non, je suis très bien au sanctuaire. Au revoir.
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  4
+Au revoir, Fairakh. Ton aide m’a été très précieuse et je te suis très reconnaissant.

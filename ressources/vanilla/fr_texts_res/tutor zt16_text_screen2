@@ -1,0 +1,3 @@
+     Chaque zone de transfert d'une zone de jeu spécifique est reliée à la zone de transfert d'une autre zone de jeu. L'endroit où vous quittez une zone de jeu détermine la prochaine zone de jeu dans laquelle vous entrez et votre position dans cette zone.
+
+     Remarque : toutes les zones de transfert ne sont pas immédiatement disponibles. Certaines sont parfois inaccessibles. Les zones actuellement indisponibles clignotent en rouge et non en jaune.

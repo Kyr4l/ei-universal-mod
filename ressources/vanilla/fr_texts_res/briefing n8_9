@@ -1,0 +1,15 @@
+Rencontrer le Chevalier
+#show Hero 
+#show Merc9
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+Excuse-moi... Tu ne serais pas Brissen le Bon Chevalier, par hasard ? J’ai entendu parler de toi en ville, mais on m’a dit que tu étais mort !
+#ANIMATION 62
+#CAMERA 3
+#phrase Merc9  2
+Ces rumeurs sont très exagérées. C’est juste que certaines personnes prennent leurs rêves pour des réalités, alors chaque fois que je quitte quelques temps la ville, les rumeurs sur ma mort vont bon train. Mais je reviens toujours, car je suis le serviteur du bien et non du mal !
+#ANIMATION 11
+#CAMERA 11
+#phrase Merc9  3
+A propos, jeune homme, je suis ravi de faire ta connaissance. Grise-feuille m’a parlé de toi et de ta quête. Je crois que tu te bats pour le bien toi aussi, alors nous pourrions voyager ensemble. Qu’en penses-tu ?

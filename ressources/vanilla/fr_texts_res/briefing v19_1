@@ -1,0 +1,43 @@
+Accuser le Capitaine de trahison
+#show Elder 2
+#show Hero 5
+#show Sheriff 3
+#show Letter2orcs00 4
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero  1
+Gort ! Cette note est de toi, quelqu'un a reconnu ton écriture. Ce qui veut dire que c'est toi le traître.
+#hide Letter2orcs00
+#show Letter2orcs00 2
+#ANIMATION 32
+#CAMERA 4
+#phrase Sheriff  2
+Quoi ?? Cet avorton m'accuse ? C'est la meilleure ! On veut un traître ? Eh bien, je vais t'en donner un ! C'est sûrement mieux ainsi... j'en ai marre qu'on me dise ce que je dois faire. Je serai le nouveau chef du village !
+#hide Letter2orcs00
+#show Letter2orcs00 5
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  3
+Ça a le mérite d'être clair. Maintenant, tu vas payer pour ce que tu as fait.
+#CAMERA 5
+#ANIMATION 3
+#hide Letter2orcs00
+#phrase Sheriff  4
+Plus tard. Je dois d'abord revenir avec les hommes de la forêt.
+#hide Sheriff run
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  5
+Arrête ! Reviens ici, ver de terre !
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero  7
+Il s’est enfui, le vaurien !
+#ANIMATION 7
+#CAMERA 7
+#phrase Elder  8
+C'est vrai que c'est un lâche doublé d'un renégat. Mais fais attention, il est encore dangereux, et ses hommes aussi. Dire qu'il avait toute ma confiance... Comment ai-je pu être à ce point naïf ?
+#ANIMATION 15
+#CAMERA 9
+#phrase Elder  9
+Nous devons attraper Gort et le tuer avant qu'il ne revienne avec tous les Brigands qui restent. Il ne peut pas être allé loin. En te dépêchant, tu le rattraperas dans les contreforts.

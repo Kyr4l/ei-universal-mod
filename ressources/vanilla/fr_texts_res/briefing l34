@@ -1,0 +1,52 @@
+A propos de la mission réussie
+#show OLIZ 1
+#show Hero 2
+#ANIMATION 15
+#CAMERA 5
+#phrase Hero  1
+C’est fait ! Et cette fois, ce n’est pas une plaisanterie.
+#CAMERA 9
+#phrase OLIZ  2
+Bien. Tu as rempli ta part du marché. A moi, de remplir la mienne. Ecoute-moi. Les Hommes-lézards connaissent le vieux mage. Tout le monde vient de quelque part. Le vieil homme a toujours vécu à Gipath. Il appartient à ce lieu. En tant qu’humain, tu ne peux pas comprendre ça.
+#ANIMATION 45
+#CAMERA 10 -20 5 2
+#phrase Hero  3
+D’accord, je ne suis qu’un humain. Mais où puis-je le trouver ?
+#CAMERA 11 10 5 2
+#phrase OLIZ  4
+Le vieil homme habite dans une région que vous appelez les Montagnes lointaines. Sa maison se trouve dans le ravin. De l’autre côté du lac en venant du ravin se trouve une grande rivière. Les Hommes-lézards vivent sur les rives du lac. Ils ne sont pas comme moi. Ils n’aiment guère parler. En fait, ils n’aiment rien. Sauf une chose. Ils aiment tuer.
+#ANIMATION 46
+#CAMERA 6
+#phrase Hero  5
+Intéressant ! Y a-t-il un autre chemin ?
+#CAMERA 9
+#phrase OLIZ  6
+Tu peux accéder au ravin par le tunnel. Son entrée se trouve dans les montagnes, à l’ouest du col du ravin. Mais hélas, elle est fermée et je ne sais pas comment elle s’ouvre.
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  7
+Aha ! Voilà donc le tunnel et le levier mentionnés dans le rapport khadaganien ! Eh bien, il faut actionner le levier pour ouvrir le tunnel... Et après - je traverse le tunnel et c’est tout ?
+#CAMERA 3
+#phrase OLIZ  8
+Tu traverses le tunnel. Mais ce ne sera pas facile. J’y suis allé, avant ma décision de vivre en ermite. Le tunnel est terrifiant.
+#CAMERA 10 -20 5 2
+#ANIMATION 11
+#NOLIPS
+#phrase Hero  9
+Il a eu peur ? Que peut-il bien y avoir dans ce tunnel ?!
+#CAMERA 9
+#phrase OLIZ  10
+Le tunnel a été bloqué à la suite d’un éboulement qu’il faut contourner par la caverne. Des élémentaux de terre et de lave rôdent dans la caverne. Mais ça n'a rien d’extraordinaire. En revanche, quelque chose de terrifiant vit dans le tunnel. Les humains les appellent des « Golems ». Les Golems ne sont pas vivants, mais ils bougent. Ils ne sont pas mauvais mais ils tuent. Ils ne sont pas intelligents, mais ils exécutent des ordres.
+#CAMERA 11 10 5 2
+#phrase OLIZ  11
+Les Hommes-lézards ne peuvent pas leur donner ce genre d'ordre. Tu peux peut-être le faire. Il est possible que des autels te permettent de contrôler ces Golems.
+#CAMERA 3
+#phrase OLIZ  12
+Je t’ai tout dit, humain. Notre accord prend fin.
+#hide Hero
+#hide OLIZ
+#show Hero 4
+#ANIMATION 7
+#CAMERA 5
+#phrase Hero  13
+Eh bien, tout cela ne me plaît guère.... Des Golems, des Golems... Aah, je l’ai sur le bout de la langue... Où ai-je déjà entendu parler de ces Golems ?

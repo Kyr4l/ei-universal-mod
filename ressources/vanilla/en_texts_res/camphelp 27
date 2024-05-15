@@ -1,0 +1,2 @@
+Maximum stamina
+Shows the maximum stamina your characters must have to use the spells currently available in the constructor. You cannot make spells which demand a higher stamina than any of your characters have.

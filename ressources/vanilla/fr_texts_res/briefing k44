@@ -1,0 +1,28 @@
+A propos du domaine de Karansul
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  1
+Alors, cher ami, tu as déjà trouvé quelque chose ? Ou peut-être n'as-tu trouvé que des ennuis ?
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  2
+Je n’ai vraiment pas de quoi me vanter ! J’ai dépensé tout mon argent, mais en vain. Saurais-tu, par hasard, si Karansul a besoin de main d’œuvre pour travailler dans ses mines ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Kapitan  3
+Peut-être, jeune homme. Il s’est récemment doté d’un broyeur mécanique. Je me souviens avoir mis des gardes à son service pour surveiller la livraison.
+#ANIMATION 44
+#CAMERA 11
+#phrase Kapitan  4
+Et maintenant Karansul a besoin de personnes compétentes pour surveiller cette machine, car dès qu'un problème survient, tout le monde s’arrête de travailler pour aller voir ce qui se passe. Et ils restent planter là à bavarder tout le temps de la réparation...
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  5
+Aussi, mon cher ami, tu pourrais apprendre à la manipuler ! Et à défaut de la réparer, tu pourrais la casser, ha-ha !
+#NOLIPS
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  6
+Hum... C’est peut-être une bonne idée... Plus il y aura de monde à venir voir la machine cassée et plus j’aurai de chances de fouiller la maison du contremaître sans être vu !

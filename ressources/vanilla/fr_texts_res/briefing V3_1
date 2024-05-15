@@ -1,0 +1,39 @@
+Parler du plan du Capitaine
+#show Hero 1
+#show Sheriff 2
+#ANIMATION 44
+#CAMERA 9
+#phrase Sheriff  1
+D'accord, je propose qu'on rende aux Gobelins la monnaie de leur pièce. Nous ne pourrons pas anéantir toute la tribu mais si on en trucide sept ou huit, ce sera parfait.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+Et ensuite ?
+#ANIMATION 7
+#CAMERA 7
+#phrase Sheriff  3
+Mais le village entier sait que l'Elu compte punir les Gobelins pour leur attaque. 
+#ANIMATION 14
+#CAMERA 6
+#phrase Hero  4
+Vraiment ? Où as-tu péché cette idée ?
+#ANIMATION 9
+#CAMERA 11
+#phrase Sheriff  5
+C'est le Doyen qui leur a dit. J'allais envoyer mes hommes pour régler cette affaire mais si tu veux t'en charger, ils ne t'en tiendront pas rigueur. Ils seront très contents de rester chez eux.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  6
+Oh… je vois. Et si jamais je change d'avis ?
+#ANIMATION 7
+#CAMERA 9
+#phrase Sheriff  7
+Impossible, tu n'as qu'une parole. Tu feras ce que tu as dit, n'est-ce pas ?
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  8
+Eh bien, je crois que oui… Bon, merci beaucoup Erfar et merci aussi à toi, Gort. Je me souviendrai de votre bonté.
+#ANIMATION 31
+#CAMERA 7
+#phrase Sheriff  9
+Dans ce cas, tout est pour le mieux. Mais je te donne un conseil supplémentaire : évite les Orques et n'attaque que les Gobelins. Les Orques sont beaucoup plus puissants et ils vénèrent un Prophète qui vit dans les contreforts. C'est un mage bien plus puissant que notre Sorcière.

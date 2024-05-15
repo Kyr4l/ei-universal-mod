@@ -1,0 +1,37 @@
+A propos de l'hypothétique recherche de la Princesse
+#show Hero 1
+#show Magess 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Magess  1
+Oh, notre jeune héros ? Toujours pas de nouvelles de la Princesse, hein ? Ou peut-être as-tu déjà abandonné ?
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  2
+Tu avais raison au sujet des difficultés, Diera. Je suis complètement perdu et pourtant j’ai fouillé tous les environs de la ville. Mais j’ai entendu dire que les mines abandonnées étaient idéales pour cacher quelqu’un. Crois-tu que je devrais y aller ?
+#ANIMATION 45
+#CAMERA 3
+#phrase Magess  3
+Oh, voyons, mon cher, tu ne vas quand même pas croire de telles sottises ? Evidemment, tu peux essayer si tu as du temps à perdre, mais je vais te révéler un secret : le chemin qui mène aux mines est difficile et dangereux et les entrées souterraines se sont écroulées depuis bien longtemps.
+#ANIMATION 44
+#CAMERA 11
+#phrase Magess  4
+Et tu risques d’y rencontrer de redoutables bandits. Si tu entres dans ces mines, je ne donne pas cher de ta vie.
+#ANIMATION 9
+#CAMERA 3
+#phrase Magess  5
+Voyons, mon garçon, toutes ces histoires sur les vieilles mines ne sont que des sottises, je n’ai pas de temps à perdre... J’ai tant à faire... J’espère que tu comprends !
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  6
+Oh oui, bien sûr, excuse-moi !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  7
+Gagné ! Pourquoi essaierait-elle de me convaincre de ne pas m’approcher des mines si elles ne cachaient rien !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  8
+Et ce n’est pas une coïncidence si subitement elle n’avait pas de temps à perdre... Elle pense peut-être que je sais déjà quelque chose et compte prévenir ses mercenaires ?

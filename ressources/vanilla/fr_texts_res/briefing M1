@@ -1,0 +1,27 @@
+A propos du travail de l'Artisan
+#show Hero 1
+#show Smith 2
+#ANIMATION 11
+#CAMERA 9
+#phrase Smith  1
+Tiens ! Mais c'est notre Elu ! Je suppose que tu vas me demander un service, c'est ça ? Je vais te dire une bonne chose : qui que tu sois, je ne te donnerai jamais rien gratuitement, compris ?
+#ANIMATION 9
+#CAMERA 6
+#phrase Hero  2
+Ecoute-moi : j'ai besoin de ton aide, pas de ton mauvais caractère. Il n'est pas question de débourser quoi que ce soit pour t'entendre maugréer. Le Doyen m'a dit que…
+#ANIMATION 46
+#CAMERA 11
+#phrase Smith  3
+Je me fiche de ce que Langue d'Argent t'a dit. Je ne l'ai jamais aimé et je refuse de l'écouter. Qu'il se débrouille d'abord pour récupérer ce qu'ils m'ont pris.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  4
+Qu'est-ce qu'on t'a pris et qui te l'a pris ?
+#ANIMATION 44
+#CAMERA 3
+#phrase Smith  5
+Ce que je t'ai dit est pourtant clair. Je parle des "Chasseurs libres", enfin, c'est comme ça qu'il faut les appeler maintenant. Le Doyen dit qu'ils sont nos amis, mais ils m'ont volé ! Mon apprenti a tout vu et a essayé de les arrêter mais ils l'ont battu. Il n'a pas pu travailler pendant deux jours.
+#ANIMATION 7
+#CAMERA 11
+#phrase Smith  6
+Bref, ils m'ont pris beaucoup de choses, en particulier mes outils préférés. Je dois les récupérer sinon je ne peux plus rien faire.

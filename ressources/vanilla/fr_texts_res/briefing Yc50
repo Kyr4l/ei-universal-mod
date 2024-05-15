@@ -1,0 +1,61 @@
+A propos de l'homme en gris
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+Dommage que les nuages se soient regroupés au nord aujourd’hui et que ma pipe ne fonctionne pas. Te revoilà, humain ? Veux-tu faire une bonne action ?
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  2
+Mmm... Tout dépend de ce que tu entends par bonne action.
+#CAMERA 11
+#phrase YCF  3
+La flèche que tu as trouvée sur le cadavre ? Ramène-la au Clan Vert ! Nous la détruirons selon notre coutume !
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  4
+Oh, je peux te rendre la flèche, ce n’est pas un problème... Mais je voulais te demander, Chef, ta tribu connaît-elle un homme en gris ? Certains d’entre vous ont peut-être vu un homme qui se cache le visage.....
+#CAMERA 3
+#phrase YCF  5
+Oh, un homme qui se cache le visage... Celui qui s’attache à l’apparence manque l’essence. Le chevreuil court vers la mare mais tombe dans un piège dissimulant un pieu acéré.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  6
+Mmmm... C’est moi qui ne comprends rien ou quoi ?
+#CAMERA 11
+#phrase YCF  7
+Un cerf ne comprendra jamais la chanson d’une Licorne, un humain ne comprendra jamais le langage de la forêt. Je vais essayer d’être plus clair : nous avons vu cette personne, à visage caché et à visage découvert.
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  8
+Alors, à quoi ressemble-t-elle sans son déguisement ?
+#CAMERA 3
+#phrase YCF  9
+Cette personne ne te ressemble pas... Je crois que cette catégorie d’humains s’appelle des femmes. Ses cheveux étaient blancs comme la neige !
+#CAMERA 10
+#NOLIPS
+#ANIMATION 30
+#phrase Hero  10
+Une femme aux cheveux blancs... C’est Diera la Magicienne ! Elle a donné l’ordre de tuer le Fouineur qui était sur le point de trouver la Princesse... Alors, ça signifie que c’est Diera qui a enlevé la jeune fille !
+#ANIMATION 43
+#CAMERA 2
+#phrase Hero  11
+Mais où est-elle allée ensuite ? Qu’a-t-elle fait ? !
+#CAMERA 3
+#phrase YCF  12
+Elle rencontrait parfois des gens vivant à l’ouest du lac. Mais le plus souvent, elle se dirigeait à l’est du lac vers les portes qui bloquent le passage des mines abandonnées.
+#CAMERA 11
+#phrase YCF  13
+Nous ne sommes jamais allés plus loin... Des hommes en armure se trouvaient derrière ces portes. Mais il ne s’agissait pas de gardes de la ville !
+#hide YCF
+#show Hero 4
+#NOLIPS
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  14
+Des mines abandonnées, des hommes en armure ? Tout porte à croire que c’est là qu’elle retient la Princesse prisonnière ! Non ? Je me trompe peut-être ? Mais il y a un moyen de vérifier...
+#NOLIPS
+#ANIMATION 30
+#CAMERA 2
+#phrase Hero  15
+Je dois retourner en ville et poser une question innocente à Diera sur ces mines. Si elle élude ma question, alors je saurai que j’ai raison !

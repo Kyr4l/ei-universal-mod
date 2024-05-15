@@ -1,0 +1,30 @@
+A propos de l'unité mystérieuse
+#show Witch 1
+#show Hero 2
+#ANIMATION 63
+#CAMERA 9
+#phrase Witch  1
+Ah, notre héros ! J'ai appris comment tu avais démasqué le Doyen ! Mais pendant que tu t'amusais dans le village, je ne me suis pas tourné les pouces. Je ramassais des herbes quand tout à coup... Mais je vais te montrer !
+#show Witch 3
+#show Hero 4
+#show Clerk 5
+#ANIMATION 31
+#CAMERA 12
+#phrase Clerk  3
+C'est avec joie et émerveillement que je salue le vénérable Elu !
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  4
+Qu'est-ce que ça signifie ? Qui es-tu ?
+#ANIMATION 9
+#CAMERA 4
+#phrase Clerk  5
+J'ai l'honneur d'être un administrateur du puissant Empire khadaganien. Que la gloire de notre Empire dure éternellement et que la maudite Cania vive à tout jamais dans la honte ! Je suis venu dans les Terres Inutiles avec une expédition spéciale dont la mission était... euh... d'accroître notre connaissance du monde. Mais je me suis perdu. J'ai failli mourir mais la vénérable Sorcière m'a trouvé.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  6
+Il y a donc moyen de voyager vers d'autres terres ?
+#ANIMATION 15
+#CAMERA 4
+#phrase Clerk  7
+Bien sûr ! Et si tu désires voyager comme nous, je te conseille d'aller voir le Chef de notre expédition. Il sera ravi de rencontrer quelqu'un d'ici et de discuter avec lui.

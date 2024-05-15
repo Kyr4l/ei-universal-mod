@@ -1,0 +1,22 @@
+A propos de l'expédition pour trouver la Fleur
+#show Elder 3
+#show DriadIdol01 4
+#show Hero 5
+#phrase Hero  1
+Voici la Fleur !
+#hide DriadIdol01
+#show DriadIdol01 5
+#ANIMATION 31
+#CAMERA 11
+#phrase Elder  2
+Comment t'exprimer ma reconnaissance ? Une fois de plus, l'Elu sauve notre village d'une mort certaine. Heureusement, personne n'est encore tombé malade. Ton aide vient au bon moment.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  3
+Je suis heureux d'avoir été utile, mais maintenant il faut passer à un sujet plus déplaisant. Dis-moi pourquoi la fleur était gardée par les Orques, comme s'ils savaient à l'avance que quelqu'un viendrait la chercher.
+#hide DriadIdol01
+#show DriadIdol01 4
+#ANIMATION 45
+#CAMERA 9
+#phrase Elder  4
+Il faut effectivement tirer ça au clair. Qui a intérêt à ce que tu ne m'apportes pas la fleur ? Ce ne peut être que Babur !

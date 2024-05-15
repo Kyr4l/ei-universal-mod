@@ -1,0 +1,12 @@
+A propos des missions à Suslanger
+#show Hero 
+#show Merc10
+#ANIMATION 61
+#phrase Merc10  1
+Hé, tu en as de la chance ! Je te regarde et je me dis, oh là là ! Une petite portion de cette chance ne serait pas de refus...
+#ANIMATION 9
+#phrase Hero  2
+La chance est une chose complexe. Elle ne se découpe pas en portions ; tu devras la rechercher avec moi !
+#ANIMATION 64
+#phrase Merc10  3
+Eh bien, j’attendrai ton invitation et si elle ne vient pas, je penserai que tu as cherché à me duper !

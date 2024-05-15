@@ -1,0 +1,31 @@
+A propos des mines abandonnées
+#show Hero 1
+#show Trapper 2
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  1
+Bonjour, Sver ! Je voulais te remercier. Tu m’as bien aidé et Karansul est comme un frère pour moi maintenant.
+#ANIMATION 43
+#CAMERA 11
+#phrase Trapper  2
+Tu lui fais confiance ?
+#ANIMATION 62
+#CAMERA 2
+#phrase Hero  3
+En fait, non. C’est pour ça que je voulais te parler. Karansul m’a donné les clés des portes d’un puits situé à l’est des mines abandonnées. Il dit que j’y trouverai une pépite d’or. Il ne me ferait pas un tel cadeau, pas vrai ?
+#ANIMATION 46
+#CAMERA 11
+#phrase Trapper  4
+Bien sûr que non ! Il veut te voir mourir, voilà tout. Je connaissais un homme qui travaillait dans ces puits.
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  5
+Il travaillait comme d’habitude lorsque de redoutables tigres surgirent de nulle part. Tout le monde prit la fuite. Les gardes-chiourmes hurlèrent aux mineurs de prendre l’or, mais ceux-ci... tu sais comment sont les employés quand ils sont pressés.
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  6
+Alors l’or y est resté et le Gouverneur a ordonné que les entrées de ces puits soient fermées. Effectivement, il y a de l’or là-bas, mais il est difficile d’y accéder.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  7
+C'est toujours pareil, tout est toujours difficile pour moi ! Mais merci quand même de m’avoir prévenu.

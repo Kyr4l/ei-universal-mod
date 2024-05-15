@@ -1,0 +1,34 @@
+A propos de la flèche qui a tué le fouineur
+#show Hero 3
+#show DriadArrow00 3
+#show YCF 5
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  1
+S’il te plaît, Chef ! Parle-moi de cette flèche. J’ai entendu dire que chacun de tes guerriers fabriquait des flèches spéciales, toutes différentes, et qu’il était donc ainsi possible de reconnaître un chasseur à ses flèches.
+#CAMERA 3
+#hide DriadArrow00
+#show DriadArrow00 5
+#phrase YCF  2
+Comment sais-tu que le loup n’est pas à sa poursuite ? Mais, en dépit des apparences, cette flèche n’a jamais appartenu au Clan Vert. Et autre chose : ni le Clan Blanc ni le Clan Noir ne peignent ainsi leurs flèches.
+#CAMERA 11
+#phrase YCF  3
+Ces clans ont beau être mes ennemis, on bat ses ennemis par la force des armes et non par des mensonges.
+#hide DriadArrow00
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  4
+J’avais espéré que tu m’apprendrais quelque chose... Alors maintenant, je crois qu’il vaut mieux que je poursuive ma quête en ville.
+#CAMERA 3
+#phrase YCF  5
+J’en suis désolé. Mais personne ne peut dire que notre peuple ne connaît pas la gratitude ! Nous nous dirigerons vers l’est par le passage secret, mais ce passage te sera ouvert.
+#CAMERA 11
+#phrase YCF  6
+Dirige-toi vers l’est, ouvre les portes et pénètre dans le labyrinthe entre les collines. Franchis ce labyrinthe, ouvre une autre porte et entre dans les vallées montagneuses. Jadis, des gens y vivaient, des mages qui avaient inventé des sorts pour faire la guerre, mais ils ont depuis bien longtemps abondonné la région. A la suite d’une terrible inondation, ils ne laissèrent derrière eux que des ruines et des traces de leur redoutable magie dans ces vallées montagneuses.
+#CAMERA 3
+#phrase YCF  7
+Mais le Clan Vert a réussi à contrôler cette magie pour en faire bon usage. Dirige-toi vers la paroi septentrionale de la vallée et utilise notre autel : le piège magique repoussera les tigres sauvages pour te permettre de poursuivre vers le sud-est, en direction du nouveau lieu de résidence du Clan Vert. 
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  8
+Merci, Grise-feuille ! Si j’ai besoin de l’aide du Clan Vert, je saurai où te trouver. Et maintenant au revoir, je dois retourner en ville pour y poursuivre ma quête !

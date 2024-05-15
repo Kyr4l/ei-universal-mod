@@ -1,0 +1,31 @@
+Parler à l'odalisque
+#show Hero 1
+#show Nalo 2
+#ANIMATION 6
+#CAMERA 2 -30 10 10
+#phrase Nalo  1
+Ecoute-moi bien : au nord-ouest du Canyon, il y a un passage qui mène à une caverne. Les gardes n’y entrent jamais parce qu’ils ont peur des Tentacules, mais je sais pertinemment qu’il y a d’autres issues. Quand tu partiras, je voudrais que tu t’y rendes.
+#ANIMATION 31
+#CAMERA 2 35 6 1.5
+#phrase Nalo  2
+Mon père chassait les rats et allait souvent dans les cavernes... Un jour, il n’y est plus retourné... C’est ce qu’il m’a dit.
+#ANIMATION 9
+#CAMERA 2 -30 7 7
+#phrase Nalo  3
+Dans la caverne située près du Canyon de la Mort, les Seigneurs des Donjons ont construit leur temple ainsi que deux ponts enjambant les rivières de lave : le pont est et le pont ouest. De simples leviers permettent de les actionner, à condition de les trouver. Il te faudra traverser la caverne d’ouest en est ; il doit forcément y avoir une sortie !
+#ANIMATION 44
+#CAMERA 2 35 6 1.5
+#phrase Nalo  4
+Quand tu partiras, tu prendras tes affaires pour te diriger vers le nord, jusqu'aux portes principales. Kardaur sera de service aujourd’hui et il aura la clé. Tue-le, ouvre la forteresse et surtout ne perds pas de temps car ils ne tarderont pas à se lancer à ta poursuite !
+#ANIMATION 15
+#CAMERA 2 30 7 7
+#phrase Nalo  5
+Tu pourras les retenir un moment en ouvrant toutes les cages du zoo - elles sont là dans la forteresse sud. Près des portes, tu trouveras un levier qui te permettra d’ouvrir toutes les cages en même temps. Je ne sais pas ce qu’il fait là, mais les Gardes doivent certainement en avoir besoin.
+#ANIMATION 31
+#CAMERA 2 0 3 0.8
+#phrase Hero  6
+J’espère qu’il fonctionne ! Merci beaucoup. Bonne chance pour la suite...
+#ANIMATION 31
+#CAMERA 2 35 6 1.5
+#phrase Nalo  7
+Bonne chance à toi aussi. Adieu.

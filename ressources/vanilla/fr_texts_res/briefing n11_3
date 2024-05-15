@@ -1,0 +1,11 @@
+Désolé, mais je n'ai pas le temps !
+#show Hero
+#show Merc3
+#ANIMATION 31
+#CAMERA 7
+#phrase Merc3  1
+Je ne vois pas d’inconvénients à participer à tes expéditions, l’Elu ! Mais je dois d’abord terminer ce que j’ai à faire ici, au village.
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc3  2
+Ensuite seulement je pourrai t’accompagner, à condition bien sûr que tu ne m’aies pas oubliée d’ici là.

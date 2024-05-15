@@ -1,0 +1,15 @@
+Laisser l'Archer au village
+#show Hero 
+#show Merc2
+#CAMERA 2
+#ANIMATION 15
+#phrase Hero  1
+Tu dois rester au village aujourd’hui.
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc2  2
+Pourquoi, que s’est-il passé ?
+#CAMERA 6
+#ANIMATION 8
+#phrase Hero  3
+Rien. Mais je crois que tu as besoin de repos avant de partir en mission avec moi. Nous avons du pain sur la planche et je ne veux pas que tu sois fatigué au moment où j’aurai le plus besoin de tes yeux de lynx !

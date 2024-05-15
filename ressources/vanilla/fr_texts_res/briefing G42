@@ -1,0 +1,19 @@
+A propos de la fille disparue
+#show Hero 1
+#show Huber 2
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  1
+Gouverneur ! Je suis nouveau dans cette ville et j’ai quelque chose à vous demander...
+#ANIMATION 11
+#CAMERA 3
+#phrase Huber  2
+Tu as beaucoup de chance, jeune homme. Je suis d’excellente humeur et enclin à faire une bonne action. Aussi, ma première bonne action sera de te donner un conseil.
+#ANIMATION 63
+#CAMERA 11
+#phrase Huber  3
+Ne viens jamais me voir sans rendez-vous ou sans avoir été convié. J’excuse ton insolence pour cette fois, mais si cela devait se reproduire, je me verrais contraint d’appeler les gardes pour qu’ils te fouettent !
+#ANIMATION 44
+#CAMERA 3
+#phrase Huber  4
+Mais ne pense pas que je sois cruel. Au contraire, je suis assez libéral et je n’ai rien contre les roturiers, mais les traditions sont les traditions. Il est de mon devoir de les appliquer, même par le biais de mesures impopulaires !

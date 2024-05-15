@@ -1,0 +1,44 @@
+Parler à Khatul
+#show Hero 3
+#show Glav 4
+#show Kuzn 5
+#ANIMATION 61
+#CAMERA 4
+#phrase Kuzn  1
+Frère Khatul ! J’ai découvert cet homme blond au fond de la caverne Noire. Il dit avoir réussi à s’échapper du Canyon de la Mort. Il a été roué de coups, mais il est encore en vie. Il mérite bien de devenir l’un des nôtres !
+#ANIMATION 11
+#CAMERA 3
+#phrase Glav  2
+Pas si vite, Frère Forgeron ! Sais-tu combien d’or a été promis à quiconque révélerait aux Gardes le secret de notre refuge souterrain ?
+#ANIMATION 7
+#CAMERA 3
+#phrase Glav  3
+Notre invité n’a rien d’un espion d’Aiset-Bek, mais un serpent reste un serpent, quels que soient les motifs de sa peau !
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  4
+Je n’attends qu’une seule chose d’Aiset-Bek : l’affronter en duel.
+#ANIMATION 32
+#CAMERA 12
+#phrase Kuzn  5
+On peut se déguiser et masquer les marques de nos liens.... Mais on ne peut pas dissimuler la haine qui brûle dans nos yeux. Je n’arrive pas à savoir s’il ment, alors je te demande de le mettre à l’épreuve.
+#ANIMATION 15
+#CAMERA 3
+#phrase Glav  6
+Bien. Blondinet, nous t’acceptons parmi nous... A condition que tu me rapportes la Chevalière de l’Empereur. Alors que le messager qui l’avait en sa possession se rendait chez le vizir de l’Empereur, à Suslanger, il a rencontré un Cyclope. Et nous savons que le Cyclope l’a ajoutée à ses trésors. Rapporte-la-nous !
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  7
+Et qu’est-ce que cela prouvera ? Au risque de te déplaire... N’importe qui pourrait exécuter cette mission et ce, pour différentes raisons...
+#ANIMATION 9
+#CAMERA 8
+#phrase Kuzn  8
+Frère Khatul, les épreuves qu’a dû affronter cet homme dans le Canyon de la Mort l’ont perturbé ! Il en a même oublié quel sort est réservé à ceux qui osent toucher la Chevalière de l’Empereur, sans parler de la voler !
+#ANIMATION 8
+#CAMERA 7
+#phrase Glav  9
+Frère Forgeron, laisse-le prendre lui-même sa décision au sujet de la Chevalière. Pour ma part, je vais me contenter de lui dire où se trouve le Cyclope. Blondinet, tu devras te rendre dans le désert des Nécromanciens et, au nord-ouest, tu rechercheras un ravin de montagne.
+#ANIMATION 9
+#CAMERA 7
+#phrase Glav  10
+C’est là que vit le Cyclope et son repaire est cerné de spectateurs. Certains sont vieux et paresseux, mais d’autres attaquent quiconque leur semble hostile. Tu peux tuer ou duper les spectateurs, mais je te déconseille de tenter d’en faire autant avec le Cyclope. Voilà tout ce que j’ai à dire !

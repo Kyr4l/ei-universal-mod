@@ -1,0 +1,69 @@
+La rencontre au village
+#show  Hero 0 weapon
+#show Elder
+#show Sheriff
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  1
+Oh, mon dieu ! On dirait que tout le village est là !
+#ANIMATION 29
+#CAMERA 8
+#phrase Sheriff  2
+Bon, tout le monde est là ? Silence ! Le Doyen va parler !
+#ANIMATION 32
+#CAMERA 11
+#phrase Elder  3
+Compagnons ! Aujourd'hui est un jour important pour notre village ! Nous nous souvenons tous de cette légende qui annonce l'apparition de l'Elu aux Ruines Sacrées. Regardez, il est là parmi nous, en chair et en os !"
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+Hum, c'est vrai que j'ai vu des ruines quand j'ai repris mes esprits. Cela signifie-t-il que je suis réellement l'Elu ?
+#ANIMATION 11
+#phrase Elder  5
+Nous allons offrir le gite et le couvert à l'Elu. Nous l'honorerons et le respecterons. Il ne manquera de rien.
+#ANIMATION 6
+#NOLIPS
+#CAMERA 10
+#phrase Hero  6
+Ça me va, comme programme.
+#ANIMATION 31
+#phrase Elder  7
+L'Elu est notre sauveur et notre protecteur. Regardez ce visage valeureux : cet homme peut affronter tous les dangers !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  8
+Oh… Il y a des dangers à affronter ? Je devrais peut-être refuser les honneurs avant qu'il ne soit trop tard.
+#ANIMATION 14
+#CAMERA 7
+#phrase Elder  9
+Bien sûr, s'il s'avérait être un imposteur… Gort, peux-tu nous dire quel serait le châtiment pour un tel sacrilège ?
+#ANIMATION 3
+#CAMERA 8
+#phrase Sheriff  10
+Oh, nous nous occuperions de son cas vite fait bien fait en le jetant immédiatement dans ce feu, par exemple !
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  12
+Mais nous pouvons tous voir qu'il porte des vêtements singuliers, que son visage est vaillant et surtout qu'il possède un véritable poignard en métal. Même moi, je n'en ai pas un pareil. Tout cela prouve que nous sommes en présence d'un Elu. Qu'il nous montre son poignard et qu'il se présente !
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  13
+Cela a le mérite d'être clair, je serai soit l'Elu que tout le monde vénère soit un imposteur qui a profané des espèces de ruines. Bon, le choix s'impose de lui-même.
+#CAMERA 6
+#ANIMATION 49
+#phrase Hero  14
+Oui, je suis l'Elu, mais vous pouvez m'appeler Zak. Et j'ai bien un poignard en métal ! Je... euh... je vous protégerai du danger. Mais j'aimerais savoir de quel danger il s'agit.
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  15
+Nous le savions ! Voici celui qui nous protégera. Il a hâte de se battre. Ecoute bien, Noble Elu : notre village vient d'être attaqué par des Gobelins. Ces viles créatures ont établi près d'ici un poste de garde pour nous empêcher de nous venger.
+#ANIMATION 44
+#CAMERA 7
+#phrase Elder  16
+Si un de nos guerriers sort du village, la sentinelle des Gobelins repère immédiatement s'il est armé et donne l'alarme. Mais toi, Noble Elu, avec ton étrange poignard et tes modestes vêtements, tu pourrais le tuer avant même qu'il ne se doute de quelque chose.
+#ANIMATION 32
+#CAMERA 11
+#phrase Elder  17
+Nous sommes de tout cœur avec toi. Nous savons que l'Elu est infaillible. Tue le Gobelin et reviens aussitôt ! Nous t'attendons ici.

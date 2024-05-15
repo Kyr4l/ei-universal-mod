@@ -1,0 +1,11 @@
+A propos de la fille disparue
+#show Hero 1
+#show Magess 2
+#ANIMATION 9
+#CAMERA 3
+#phrase Magess  1
+Oh, la Princesse ? Cette jeune fille élancée à la peau rouge ? Je ne sais rien d’elle et je ne veux rien savoir, ça ne m’intéresse pas. A propos, jeune homme... Tu m’as l’air intelligent ! Aussi, moi la Magicienne Diera, je vais te donner un conseil parce que je t’aime bien : ne t’intéresse pas au sort de cette jeune fille disparue.
+#ANIMATION 45
+#CAMERA 11
+#phrase Magess  2
+Le Fouineur, qui lui aussi s’y intéressait, a récemment disparu. Il est peut-être mort ou peut-être est-il perdu dans la forêt... Penses-y, jeune homme. Et bonne chance !

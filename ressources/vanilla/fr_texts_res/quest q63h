@@ -1,0 +1,23 @@
+Sortie de la grotte
+Vous devez atteindre l’autre extrémité de la grotte. L’entrée se trouve à l’ouest, alors recherchez la sortie est pour vous éloigner le plus possible du Canyon de la Mort.
+#subobj  1
+Trouver le levier
+Il doit y avoir un levier permettant d’abaisser le pont-levis enjambant la rivière de lave de l'ouest quelque part dans la partie sud-est. Vous pourriez franchir cette rivière par le pont ordinaire, mais ce serait bien trop dangereux.
+#subobj  2
+Actionner le levier
+Le pont-levis enjambant la rivière de lave ouest s’abaissera et vous pourrez vous enfoncer dans la grotte.
+#subobj  3
+Trouver le pont ouest
+Le pont ouest se trouve approximativement au milieu de la rivière de lave ouest.
+#subobj  4
+Trouver le deuxième levier
+Le deuxième levier contrôlant le pont-levis enjambant la rivière de lave est se trouve sur une petite île près du temple des Seigneurs des Donjons.
+#subobj  5
+Actionner le deuxième levier
+Le pont-levis enjambant la rivière de lave est s’abaissera et vous pourrez continuer vers l’est.
+#subobj  6
+Trouver le pont est
+Le pont est se trouve en amont de la rivière de lave est.
+#subobj  7
+Explorer la partie est de la grotte
+Malgré l’absence de sortie directe vers la surface, veillez à bien explorer la partie est de la grotte, du nord au sud.

@@ -1,0 +1,35 @@
+A propos de la quête dans l'Observatoire
+#show Hero
+#show Daughter
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  1
+Oh, Airy ! Je ne pensais pas avoir autant de mal à rejoindre le vieil Observatoire ; ce qui s’y passe... Comment as-tu fait pour revenir saine et sauve des Montagnes centrales ?
+#ANIMATION 32
+#CAMERA 3
+#phrase Daughter  2
+Ah, tu comprends maintenant ? Je suis encore meilleure que toi !
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  3
+Oh, d’accord, d’accord. Alors, que sais-tu de plus que moi ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Daughter  4
+Ha ! Ce n’est pas pour rien que je suis la petite-fille d’une Sorcière ! Je maîtrise la Magie des Sentiments en un rien de temps et sans effort...
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  5
+Oui, c’est sûrement très utile ! J’aimerais beaucoup avoir ce genre de talent...
+#ANIMATION 63
+#CAMERA 7
+#phrase Daughter  6
+Ferme les yeux, puis... Voilà, c’est fini ! Ne me demande pas comment j’ai fait ça, je ne te le dirai pas.
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  7
+Merci, poupée ! Tu m’as beaucoup aidé.... Hé, qu’est-ce qu’il y a ?
+#ANIMATION 11
+#CAMERA 9
+#phrase Daughter  8
+Poupée ? Pourquoi pas ma poule tant que tu y es !!! Ne compte plus jamais sur moi ! Jamais !!!

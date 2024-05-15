@@ -1,0 +1,27 @@
+Parler à l'odalisque
+#show Hero 1
+#show Nalo 2
+#ANIMATION 3
+#CAMERA 2 -30 10 10
+#phrase Nalo  1
+Le garde-chiourme est enfin parti. Ecoute, petit, il faut que je te parle !
+#ANIMATION 6
+#CAMERA 2 0 3 0.8
+#phrase Hero  2
+Qui es-tu ? Que veux-tu ?
+#ANIMATION 31
+#CAMERA 2 30 7 7
+#phrase Nalo  3
+Je n’ai pas de nom. Je suis l’odalisque de Kardaur, le jouet anonyme de cette ordure ! Mais je ne suis pas venu ici pour me plaindre ! Je vais voler la clé de ta cage à mon maître et te laisserai partir.
+#ANIMATION 8
+#CAMERA 2 0 3 0.8
+#phrase Hero  5
+Mais pourquoi veux-tu m’aider ? Je t’en serai reconnaissant, bien sûr, mais......
+#ANIMATION 44
+#CAMERA 2 35 6 1.5
+#phrase Nalo  6
+C’est simple, pour t’échapper de la forteresse, tu vas devoir tuer l’officier de garde aux portes. Cette nuit, c’est Kardaur qui sera de garde... Oh, je serai si heureux de voir son corps sans vie !
+#ANIMATION 3
+#CAMERA 2 -30 7 7
+#phrase Nalo  9
+Quelqu’un arrive ! Je dois m’en aller, les gardes des cages ne doivent pas me voir...

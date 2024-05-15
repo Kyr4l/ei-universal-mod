@@ -1,0 +1,32 @@
+A propos des découvertes de l'Observatoire
+#show Witch 3
+#show Hero 4
+#show DCBook 4
+#ANIMATION 63
+#CAMERA 9
+#phrase Witch  1
+J'ai jeté un œil sur ce que tu as trouvé… tu as vraiment eu de la chance ! On se demanderait presque si tu es un homme ordinaire. Peut-être qu'après tout il y a un peu d'Elu en toi.
+#hide DCBook
+#show DCBook 5
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+Finies, les flatteries ! Dis-moi simplement ce qu'il y avait dans ce livre.
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  3
+Ecoute-moi bien, mon mignon. Il y a un passage secret menant à la cité, une sorte de défilé dans la montagne. Il commence au sud de la barrière. Pour y entrer tu dois dire : "Valir et Cania !"
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  4
+Ce qui veut dire ?
+#ANIMATION 61
+#CAMERA 7
+#phrase Witch  5
+Je n'en sais strictement rien mais ça fait toujours son effet. Autre chose : si j'étais le maître de la Cité des Morts, je m'établirais au sommet du Mont solitaire. On le voit de loin, impossible de le manquer. C'est là que tu dois aller.
+#hide DCBook
+#show DCBook 4
+#ANIMATION 31
+#CAMERA 9
+#phrase Witch  6
+Eh bien, bonne chance. Et sois poli quand tu seras face au vieil homme. Tu peux être insolent avec une vieille grenouille rabougrie comme moi mais tu dois être respectueux envers les grands mages.

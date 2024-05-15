@@ -1,0 +1,4 @@
+Aim at right leg
+Your character will aim at the enemy's right leg when 
+attacking. When the leg's "health" reaches 0, the enemy 
+will move much slower.

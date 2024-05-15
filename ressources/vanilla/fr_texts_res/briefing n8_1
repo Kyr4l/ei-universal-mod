@@ -1,0 +1,18 @@
+Rencontrer le soldat
+#show Hero 1
+#show Merc1 2
+#ANIMATION 9
+#phrase Merc1  1
+Ecoute, Noble Elu... Veux-tu m’emmener combattre les Gobelins ? Ou n’importe qui d’autre, cela m’est égal !
+#ANIMATION 45
+#phrase Hero  2
+Humm... Mais qui es-tu ?
+#ANIMATION 9
+#phrase Merc1  3
+J’étais autrefois sous le commandement de Gort ; nous étions même amis. Mais je suis tombé sur un lit de champignons et lui ai donné une bonne partie de mon esprit. Alors, nous sommes fâchés et je n’ai pas grand-chose à faire en ce moment... Mais donne-moi une hache et tu verras que je suis un vrai guerrier ! D’accord ?
+#ANIMATION 45
+#phrase Hero  4
+Comment t’appelles-tu ?
+#ANIMATION 3
+#phrase Merc1  5
+Je m’appelle Khador, mais appelle-moi le Voyou, comme tout le monde ! Alors... Penses-y, d’accord ? Au moment de combattre, je serai ton homme ! 

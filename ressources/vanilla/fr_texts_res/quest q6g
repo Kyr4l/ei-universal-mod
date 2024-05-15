@@ -1,0 +1,20 @@
+Aller trouver la sorcière
+Pour éviter les intrus, la sorcière a posé des pièges magiques sur la route qui mène à chez elle. Au nord, deux voies permettent d’accéder à la grotte de la sorcière : par le ravin de l’ouest et par le ravin de l’est. Les pièges du ravin de l’ouest sont moins dangereux, malgré la présence d’un gigantesque Troll ; le Troll du ravin de l’est est plus jeune et moins intelligent, mais les pièges y sont plus redoutables.
+#subobj  1
+Franchir les pièges
+Les pièges du passage ouest ne couvrent que certaines zones. En jouant de prudence, vous devriez pouvoir les contourner et accéder à l’endroit où se trouve un double de la clé permettant de contrôler tous les autres pièges.
+#subobj  2
+Trouver la clé des pièges
+L’Artisan Babur a récemment fait un double de la clé contrôlant tous les pièges pour Estera. Cette clé doit se trouver quelque part au bout du ravin ouest.
+#subobj  3
+Désactiver les pièges de foudre
+Utilisez la clé de l’obélisque magique pour désactiver les pièges de foudre et faciliter l’exploration des lieux.
+#subobj  4
+Désactiver les pièges de feu
+Utilisez la clé de l’obélisque magique pour désactiver les pièges de feu et vous permettre de vous approcher de l’obélisque contrôlant les pièges d’acide.
+#subobj  5
+Désactiver les pièges d’acide
+Utilisez la clé de l’obélisque magique pour désactiver les pièges d’acide et ouvrir le passage traversant le ravin est.
+#subobj  6
+Franchir le ravin est
+Maintenant que les pièges d’acide ont été désactivés, le ravin est va vous permettre d’accéder plus facilement à la grotte de la Sorcière. Mais soyez prudent : un Troll a élu domicile au bout du ravin, essayez de vous faufiler le plus discrètement possible (en rampant, peut-être ?).

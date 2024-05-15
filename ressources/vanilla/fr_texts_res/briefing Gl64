@@ -1,0 +1,24 @@
+Parler à Khatul
+#show Hero 3
+#show Glav 4
+#show Kuzn 5
+#ANIMATION 31
+#CAMERA 9
+#phrase Glav  1
+Je suis désolé de m’être montré si dur avec toi, mon frère ! Sans rancune, j’espère ! Tu me fais l’effet d’un oisillon tombé du nid, mais sache que la Confrérie du Dernier sanctuaire peut t’offrir un nouveau foyer et une nouvelle famille.
+#ANIMATION 15
+#CAMERA 3
+#phrase Glav  2
+Et ici, tu n’auras pas à révéler ton passé. Mais il serait préférable que tu nous parles au moins brièvement de toi et de la raison qui t’a poussé à t’aventurer dans le Canyon.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Je n’ai rien à cacher. Je recherche un jeune homme de la race Joon ; je sais seulement qu’il a la peau rouge. C’est la seule et unique raison qui m’a conduit ici, à Suslanger, et dès que je l’aurai trouvé, nous rentrerons ensemble à Gipath...
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  4
+Vous appelez cette région les Terres Inutiles, mais aussi étrange que cela puisse paraître, je m'y sens vraiment chez moi.
+#ANIMATION 44
+#CAMERA 7
+#phrase Glav  5
+Désolé que tu ne te joignes pas à nous. Mais moi, Khatul, en tant que responsable de cette confrérie égalitaire, je respecte ta décision et nous ferons tous de notre mieux pour t’aider dans ta quête !

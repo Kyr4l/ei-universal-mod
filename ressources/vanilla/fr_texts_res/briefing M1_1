@@ -1,0 +1,25 @@
+En savoir plus sur le vol
+#show Hero 1
+#show Smith 2
+#phrase Hero  1
+Tu m'as l'air un peu pingre. S'ils t'avaient volé tout ton argent, je comprendrais ta colère mais tu ne donnes pas l'impression d'être sur la paille.
+#ANIMATION 45
+#CAMERA 11
+#phrase Smith  2
+D'accord, ils ne m'ont pas pris tout mon argent, mais ils m'ont quand même volé. Je croyais avoir été clair : ils m'ont pris mon poinçon et mon burin et ça ne me plaît pas du tout.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Quoi ? C'est tout ? J'imaginais quelque chose de plus sérieux. Quelle perte, en effet : deux misérables morceaux de métal !
+#ANIMATION 9
+#CAMERA 7
+#phrase Smith  4
+Je vois que tu ne connais rien au travail d'un artisan. C'était des outils en fer. C'est irremplaçable. Dire que le Chef du clan a mon burin et que sa grosse femme répare ses chaussures avec mon poinçon.
+#ANIMATION 44
+#CAMERA 11
+#phrase Smith  5
+Jamais je ne pourrai accéder à leur camp. Le chemin qui traverse les contreforts est gardé par les Brigands. Et si on essaie par l'autre côté, en traversant le fleuve à gué, les crapauds vous crachent du poison à la figure.
+#ANIMATION 8
+#CAMERA 2 -30 5 3
+#phrase Hero  6
+Moi, je n'ai pas peur des crapauds… j'irai peut-être te chercher tes joujoux en fer, Babur, ne t'en fais pas.

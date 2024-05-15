@@ -1,0 +1,5 @@
+Afficher l'indicateur de dégâts.
+Les dégâts infligés peuvent s'afficher sous la
+forme d'un nombre quand votre personnage est touché.
+Activé : l'indicateur apparaît.
+Désactivé : l'indicateur n'apparaît pas.

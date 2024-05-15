@@ -1,0 +1,11 @@
+Commencer la quête à Ingos
+#show Rick 1
+#show Hero 2
+#CAMERA 9
+#ANIMATION 6
+#phrase Rick  1
+A présent, je vais utiliser mes pouvoirs magiques pour t’envoyer à Ingos. Cette amulette t’aidera à revenir ici, à condition que tu aies retrouvé la jeune fille !
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick  2
+Prépare-toi ! Tu vas te sentir un peu bizarre et lorsque tu retrouveras tes esprits, tu seras dans une autre contrée. Mon Dragonnet t’accompagnera... Et que la chance soit avec toi !

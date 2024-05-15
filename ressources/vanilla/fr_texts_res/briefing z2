@@ -1,0 +1,54 @@
+Utiliser le Globe magique
+#show Witch 1
+#show Hero 2
+#phrase Witch  1
+Bon, maintenant donne-moi le Globe… Attention, tu as failli le laisser tomber. C'est fragile et précieux. Quel maladroit tu fais !
+#show Witch 3
+#show Palantir 4
+#show Hero 5
+#CAMERA 5
+#phrase Hero  2
+Tiens, le voilà, ton Globe, en un seul morceau ! Qu'est-ce qu'on en fait maintenant ?
+#hide Palantir
+#show Palantir 5
+#ANIMATION 32
+#CAMERA 7
+#phrase Witch  3
+Toi, tu ne fais rien. Observe et souviens-toi de ce que tu vois. Je vais essayer de faire apparaître des images de ton passé.
+#ANIMATION 6
+#CAMERA 11
+#phrase Witch  4
+Il est fini, le temps du silence,
+Je t'en conjure, sphère d'éternité,
+Illumine notre ignorance,
+Et conduis-nous vers le passé.
+#hide Palantir
+#show PalantirRick00 5
+#show PalantirWork00 12
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  5
+Juste Ciel !… Ce vieillard, c'était dans mon passé ?
+#hide PalantirRick00
+#hide PalantirWork00
+#show PalantirBroken00 4
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero  6
+Qu'est-ce que c'était ? Qu'est-il arrivé au Globe ? Qui était cet homme et pourquoi l'ai-je vu ? Dis-le moi !
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  7
+Allons, ne t'excite pas comme ça... Je ne sais pas exactement ce que ça signifiait. Je ne peux que conjecturer. Le vieil homme dans le Globe, ce n'était pas toi, sois rassuré. Selon moi, c'était le Maître du Globe et que je serve de casse-croûte aux Gobelins s'il n'est pas un plus grand mage que moi ! Si quelqu'un peut t'aider, c'est bien lui. Essaie de le trouver.
+#hide PalantirBroken00
+#show PalantirBroken00 5
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  8
+Je dois donc découvrir où les Orques ont trouvé ce Globe. Mais comment faire ?
+#hide PalantirBroken00
+#show PalantirBroken00 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  9
+Je sais que chaque tribu orque a un Prophète qui garde ses archives. Si tu trouves les archives de la tribu qui détenait le Globe, je pourrais te dire d'où il vient. Il est probable que ce chroniqueur vit à un endroit où il y a plus d'Orques que nulle part ailleurs. Ce ne peut donc être que sur une des îles du Fleuve Delta. Je te conseille de te rendre là-bas.

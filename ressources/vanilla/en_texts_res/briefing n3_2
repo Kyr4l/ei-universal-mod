@@ -1,0 +1,11 @@
+Take Archer back on
+#show Hero 
+#show Merc2
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  1
+Well Archer, tired of village life? I am off on a trip to interesting parts. Care to join me?
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc2  2
+Of course! I will be at the gates as usual.

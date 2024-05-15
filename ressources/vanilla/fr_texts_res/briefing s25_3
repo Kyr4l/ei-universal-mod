@@ -1,0 +1,51 @@
+Faire traduire le document
+#show Elder 3
+#show CodedHadaganNote 4
+#show Hero 5
+#ANIMATION 1
+#CAMERA 5
+#phrase Hero  1
+Bon, d'accord, bâtard, je te donne une petite chance de rendre ton avenir un peu moins sombre, juste un peu moins, ce qui est beaucoup pour un homme dans ta situation. 
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+Tu peux me traduire cette lettre, oui ?
+#ANIMATION 15
+#CAMERA 3
+#phrase Elder  3
+Bien sûr, immédiatement !
+#ANIMATION 7
+#CAMERA 6
+#phrase Hero  4
+Inutile, je pense, de te dire que la moindre erreur te serait fatale ?
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 31
+#CAMERA 9
+#phrase Elder  5
+Je sais parfaitement que tu as droit de vie et de mort sur moi.
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 15
+#CAMERA 11
+#phrase Elder  6
+Il s'agit de l'alphabet officiel de l'Empire khadaganien et ce document est une sorte de rapport militaire. Une unité... plusieurs guerriers et un chef... un campement... un autre campement près des Montagnes lointaines... Ici, on a un passage plus cohérent : il est indiqué qu'à l'est des Montagnes lointaines il y a un défilé étroit qui mène au nord, mais il s'arrête net à l'endroit où il y a un levier.
+#ANIMATION 8
+#CAMERA 7
+#phrase Elder  7
+Ce levier est relié à un tunnel qui conduit à l'ouest du ravin. En actionnant ce levier, l'entrée du tunnel s'ouvre. Le passage est tortueux et dangereux, avec des crevasses et des impasses... Il est dit qu'il est périlleux de s'aventurer trop loin vers l'est, car il y a des Harpies.
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  8
+C'est tout ?
+#ANIMATION 2
+#CAMERA 7
+#hide CodedHadaganNote 4
+#phrase Elder  9
+Non, il est dit aussi que le tunnel est dangereux, mais on ne sait pas de quel type de danger il s'agit. Voilà, c'est tout.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  10
+Ha ! Tu croyais vraiment que je te laisserais libre en échange de ce charabia ? Tu resteras ici jusqu'à ce que je décide de ton sort.

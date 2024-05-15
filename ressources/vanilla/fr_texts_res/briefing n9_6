@@ -1,0 +1,15 @@
+Myrana ne veut pas être quatrième
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+Tu as là une bien belle équipe !
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  2
+En fait, j’allais te demander de te joindre à nous.
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc6  3
+Pourquoi ça ? A vous trois, vous pouvez très bien vous débrouiller.

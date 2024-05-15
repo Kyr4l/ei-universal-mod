@@ -1,0 +1,11 @@
+Amulette du dragon
+Les Hommes-lézards possèdent une amulette qui devrait vous permettre de prendre brièvement le contrôle du dragon. Cette amulette vous est nécessaire pour poursuivre votre quête.
+#subobj  1
+Trouver le propriétaire de l’amulette
+L’Homme-lézard qui détient l’amulette du dragon dresse ses crapauds apprivoisés près de la vieille carrière. La route de l’est vous y mènera directement. La charrette cassée située près de la colline vous permettra de vous repérer.
+#subobj  2
+Tuer le propriétaire de l’amulette
+L’Homme-lézard ne vous laissera pas partir avec l’amulette, et les crapauds dressés vous empêcheront de la voler. Vous n’avez qu’une seule solution : tuer le propriétaire.
+#subobj  3
+Prendre l’amulette
+Fouillez le cadavre de l’Homme-lézard et emparez-vous de l’amulette.

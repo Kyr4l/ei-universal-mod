@@ -1,0 +1,15 @@
+Dire au revoir à Eila
+#show Hero 
+#show Merc4
+#ANIMATION 8
+#CAMERA 6
+#phrase Hero  1
+Au revoir, Eila ! Nous n’avons pas passé beaucoup de temps ensemble, mais tu vas me manquer. Que vas-tu faire maintenant ?
+#ANIMATION 9
+#CAMERA 7
+#phrase Merc4  2
+Oh, je vais probablement retourner voir Shei-Var. Je crois qu’il a changé d’avis sur les humains depuis qu’il t’a rencontré. Je pourrais peut-être le convaincre de signer un traité avec le village ?
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  3
+Oui, voilà une noble idée... Bonne chance !

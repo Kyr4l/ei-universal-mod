@@ -1,0 +1,18 @@
+A propos des instructions pour tuer l'Elu
+#show Sheriff 3
+#show Hero 5
+#show Letter2orcs00 4
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  1
+Examine ça et essaie de me dire quelque chose que je puisse croire.
+#hide Letter2orcs00
+#show Letter2orcs00 5
+#ANIMATION 3
+#CAMERA 3
+#phrase Sheriff  2
+Pourquoi tu me demandes ça à moi ? Erfar Langue d'Argent est notre Chef, demande-lui.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  5
+Je vais certainement en toucher un mot au Doyen. Mais je n'en ai pas encore fini avec toi.

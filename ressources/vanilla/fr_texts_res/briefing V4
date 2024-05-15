@@ -1,0 +1,23 @@
+A propos de l'engrenage du pont de la caverne
+#show Hero 1
+#show Sheriff 2
+#ANIMATION 9
+#CAMERA 9
+#phrase Sheriff  1
+Ecoute, Noble Elu... j'ai réfléchi... et ça ne va pas. Je suis le Capitaine mais c'est toi qui as battu les Gobelins. C'est mauvais pour mon prestige. Pourrais-tu... en quelque sorte... dire que j'ai dirigé la manœuvre et que tu n'as fait que... m'aider un peu ? Je te revaudrai ça, naturellement.
+#ANIMATION 29
+#CAMERA 6
+#phrase Hero  2
+Comme tu veux, je n'ai pas d'ambition. Mais en retour, je te demanderai un service. On dit que tu possèdes un engrenage pour pont-levis que les Gobelins ont volé aux Orques des cavernes. J'aimerais m'en servir.
+#show Hero 3
+#show Sheriff 5
+#show CaveGear00 5
+#CAMERA 3
+#phrase Sheriff  3
+Ah, oui, ça ! Pas de problèmes, tu peux l'avoir.
+#hide CaveGear00
+#ANIMATION 30
+#NOLIPS
+#CAMERA 3
+#phrase Sheriff  4
+Finalement, notre Elu ne vaut pas plus que l'idiot du village ! Je croyais qu'il allait me demander quelque chose de valeur, mais cet engrenage n'a aucune valeur. Son ami Babur n'a pas réussi à lui enseigner l'art de la tractation.

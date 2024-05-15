@@ -1,0 +1,43 @@
+Demander de traduire la note
+#show Witch 3
+#show Instruction4orcs00 4
+#show Hero 5
+#ANIMATION 61
+#CAMERA 9
+#phrase Witch  1
+Pourquoi tu me fourres ce galimatias sous le nez ? Je pensais t'avoir dit que les Orques avaient inventé leur propre écriture. Impossible de la déchiffrer sans un livre de référence rédigé par leurs Prophètes. Il ne te reste plus qu'à te rendre dans le Pays des Orques pour te procurer cet abécédaire.
+#hide Instruction4orcs00
+#show Instruction4orcs00 5
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  2
+Encore une autre île ? Je commence à en avoir plein le dos, de toutes ces îles. Rien n'est plus lassant !
+#ANIMATION 63
+#CAMERA 11
+#phrase Witch  3
+Ne t'en fais pas, mignon, tu ne risques pas de t'ennuyer sur celle-là.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+Uh-hum ! On dirait que cette vieille pie me mijote une grosse surprise.
+#ANIMATION 44
+#CAMERA 7
+#phrase Witch  5
+Pour trouver le Prophète Gardien, rends-toi à l'extrémité sud de Gipath. Cette région est appelée "Les Sables", même si on n'y trouve pas beaucoup de sable.
+#hide Instruction4orcs00
+#show Instruction4orcs00 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  6
+Par contre on y trouve en abondance toutes sortes de délicieuses créatures : des Orques, des Ogres, des Hommes-lézards. Avec elles, impossible de s'ennuyer, hi-hi-hi !
+#hide Instruction4orcs00
+#show Instruction4orcs00 5
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  7
+Bon, ça va… Tu peux laisser tomber les plaisanteries et parler sérieusement pour changer ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Witch  8
+Tu veux du sérieux ? Alors ouvre grand tes oreilles : un grand promontoire s'avance dans le lac près de ces sables. C'est là que se trouve la cabane du Prophète Gardien. Prends-lui son abécédaire !

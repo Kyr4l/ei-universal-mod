@@ -1,0 +1,7 @@
+Rencontrer la petite-fille de la Sorcière
+#show Hero 1
+#show Daughter 2
+#ANIMATION 15
+#CAMERA 11
+#phrase Daughter  1
+Pars tout de suite ! Je ne voudrais pas que ma grand-mère voie un étranger ici en se réveillant. Tu ne t'en sortirais pas vivant !

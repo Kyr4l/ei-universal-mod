@@ -1,0 +1,9 @@
+Rotation de la caméra gauche/droite.
+Quand vous utilisez cette fonction, appuyez
+sur le bouton droit de la souris pour changer
+le sens de la rotation.
+Activée : la caméra pivote
+dans la direction de la souris.
+
+Désactivée : La caméra pivoter dans le sens
+inverse du mouvement de la souris.

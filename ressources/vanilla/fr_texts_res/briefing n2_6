@@ -1,0 +1,15 @@
+Laisser Myrana dans la cité
+#show Hero 1
+#show Merc6 2
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  1
+Cette fois, je crois que tu ferais mieux de rester en ville, au moins pour sauver les apparences. Je pense que le Capitaine Tilvar n’a pas confiance en moi et il risque aussi de te soupçonner.
+#ANIMATION 31
+#CAMERA 3
+#phrase Merc6  2
+Merci de ta compréhension ! Franchement, j’étais sur le point de t’en parler.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  3
+Nous sommes d’accord. Mais lorsque la situation s’apaisera, j’aurai peut-être besoin de tes services.

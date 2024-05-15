@@ -1,0 +1,23 @@
+About the killed slavedrivers
+#show Hero 3
+#show Kuzn 5
+#ANIMATION 32
+#CAMERA 5
+#phrase Hero  1
+Well, that was some job you gave me with those slavedrivers, Brother Blacksmith!
+#ANIMATION 3
+#CAMERA 11
+#phrase Kuzn  2
+Did the dogs put up any resistance?
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  3
+No, that is not the point.  I always thought that peons must hate their torturers, but instead of giving me help, they called the Guards and acted as if Whip-Aga and Lash-Aga were their best friends!
+#ANIMATION 14
+#CAMERA 3
+#phrase Kuzn  4
+If you had lived here in Suslanger all your life you would not have been surprised. Peons who do not raise the alarm when they see a stranger are beaten to death - that is the law.
+#ANIMATION 31
+#CAMERA 9
+#phrase Kuzn  5
+But now you have given me revenge upon the slavedriver brothers whom I hated and I will not remain in your debt!

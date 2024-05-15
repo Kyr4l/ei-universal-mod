@@ -1,0 +1,15 @@
+Rencontrer l'Artisan
+#show Hero 1
+#show Smith 2
+#ANIMATION 11
+#CAMERA 1 -15 6 3
+#phrase Smith  1
+C'est donc toi, l'Elu ? Tu veux me parler ? Sache que je m'appelle Babur. Il y a autre chose ?
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+Es-tu toujours aussi aimable ?
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  3
+Si tu ne m'aimes pas, libre à toi de partir.

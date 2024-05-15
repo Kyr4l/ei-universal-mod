@@ -1,0 +1,24 @@
+Meet the Magician
+#show Hero 1
+#show Merc5 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc5  1
+I hear you are looking for the Princess? Could you use a person with special talents?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+And who are you? What talents do you have, exactly?
+#ANIMATION 45
+#CAMERA 11
+#phrase Merc5  3
+My name is too long, but you can call me Rinas. As to my talent... I am not a bad sorcerer, but since Magician Diera came to the city other Magicians find it rather difficult to compete. The Governor forbade us to practice - all except that albino.
+#ANIMATION 43
+#CAMERA 11
+#phrase Merc5  4
+No, I will not reduce myself to cheap bickering. Let us put it this way: that very calculating and not overly squeamish woman.
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  5
+Hm... I really could use such a man. I should keep him in mind!
+#DESC To himself

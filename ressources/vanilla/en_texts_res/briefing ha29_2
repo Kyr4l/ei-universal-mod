@@ -1,0 +1,16 @@
+Talk to the Lizard
+#show Hero 1
+#show OLIZ 2
+#CAMERA 5
+#phrase OLIZ  1
+Human, I can free you.
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  2
+What? You can talk? Who are you and why are you here?
+#CAMERA 5
+#phrase OLIZ  3
+You ask too many questions, human. I will answer one now: call me Hermit. I will also answer your other questions. Later. I can free you and give you the Ancient Claw. You must give your word to come to my home. There I will talk to you.
+#CAMERA 5
+#phrase OLIZ  4
+Think about it. I will come later.

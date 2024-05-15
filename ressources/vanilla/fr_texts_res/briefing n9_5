@@ -1,0 +1,11 @@
+Rinas ne veut pas être quatrième.
+#show Hero 
+#show Merc5
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  1
+Rinas, veux-tu te joindre à notre équipe pour aller te promener dans le pays ?
+#ANIMATION 43
+#CAMERA 3
+#phrase Merc5  2
+Le trois est un chiffre porte-bonheur, mais pas le quatre. Je ne veux pas être le quatrième !

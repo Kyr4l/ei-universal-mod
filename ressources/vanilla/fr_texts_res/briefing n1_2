@@ -1,0 +1,19 @@
+Recruter l'Archer
+#show Hero 
+#show Merc2
+#CAMERA 3
+#ANIMATION
+#phrase Merc2  1
+Noble Elu, tu veux toujours de moi ?
+#CAMERA 10
+#ANIMATION 29
+#phrase Hero  2
+Bien sûr, un bon tireur est toujours le bienvenu ! Mais je croyais que tu étais occupé et que tu n’étais pas libre de tes actes...
+#CAMERA 11
+#ANIMATION 6
+#phrase Merc2  3
+Tout a changé. A présent, c’est moi qui décide de ce que j’ai à faire !
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  4
+Parfait. Alors, attends-moi devant les portes !

@@ -1,0 +1,23 @@
+Reprendre le Chevalier
+#show Hero 
+#show Merc9
+#ANIMATION 61
+#CAMERA 3
+#phrase Merc9  1
+D’après Grise-feuille, le calme règne en ville. Celui qui a prétendu me reconnaître jurerait qu’il s’est trompé.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+Et comment Grise-feuille sait-il cela ?
+#ANIMATION 62
+#CAMERA 11
+#phrase Merc9  3
+Oh jeune homme, tu sous-estimes les forces du bien ! Supposons qu’un citoyen ait une propriété en dehors de la ville. Une propriété susceptible de brûler ou de s’effondrer à tout moment. Et supposons également qu’il reçoive un message du Peuple de la forêt. Un message lui demandant gentiment de dire ou faire ceci et pas cela. Quel citoyen refuserait une faveur aussi insignifiante ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc9  4
+Et s’il s’avère qu’il y a quelqu’un d’autre qui n’oublie jamais un visage, on lui demandera aussi la même chose.
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  5
+Oui... Tu as raison, vénérable Chevalier. Tout se justifie dans une guerre.

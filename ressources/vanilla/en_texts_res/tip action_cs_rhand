@@ -1,0 +1,4 @@
+Aim at right hand
+Your character will aim at the enemy's right hand when 
+attacking. When the hand's "health" reaches 0, the enemy 
+will fight and cast spells much slower.

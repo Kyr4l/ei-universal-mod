@@ -1,0 +1,31 @@
+A propos du cristal bleu
+#show Hero 3
+#show LeftCrystal 4
+#show Witch 5
+#ANIMATION 9
+#CAMERA 1
+#phrase Witch  1
+Tu as mis les bouchées doubles ! Non seulement tu m'apportes le cristal vert dont j'ai besoin, mais tu m'en apportes également un bleu.
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  2
+Qu'est-ce que j'en fais, maintenant ? Je le jette ?
+#hide LeftCrystal
+#show LeftCrystal 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Witch  3
+Ne le jette surtout pas, idiot ! Il peut m'être utile pour un autre sortilège qui me tient à cœur. Je peux te l'acheter, si tu veux.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  4
+Et tu vas en faire quoi, exactement ?
+#ANIMATION 32
+#CAMERA 7
+#phrase Witch  5
+Oh, c'est un secret que je ne révèlerai à personne.
+#CAMERA 11
+#ANIMATION 30
+#NOLIPS
+#phrase Witch  6
+J'ai beau chercher, je ne me souviens plus ce qu'on peut faire de ce caillou. Mais je ne peux tout de même pas lui annoncer ça ! Peut-être que ça me reviendra un jour...

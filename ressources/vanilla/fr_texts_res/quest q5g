@@ -1,0 +1,14 @@
+Trouver l’objet magique
+Les Orques qui vivent dans la grotte située au nord-est des Contreforts possèdent un objet magique susceptible d’intéresser la sorcière. D’après la carte dérobée au brigand, cet objet est caché dans le sarcophage fermé. Le Prophète des Orques des grottes en a la clé. Remarque : pour atteindre la grotte, empruntez la route située au nord-est des Contreforts et leurrez le Troll vivant près de l’entrée de la grotte. Pour vous enfoncer dans la grotte, vous devez disposer d’un mécanisme de pont-levis. Si vous n’en avez pas, adressez-vous au Capitaine.
+#subobj  1
+Abaisser le pont
+Pour accéder aux parties intérieures de la grotte, vous devez abaisser le pont-levis. Pour ce faire, vous aurez besoin d’une pièce du pont-levis.
+#subobj  2
+Trouver la clé du sarcophage
+Le Prophète Orque l’a en sa possession.
+#subobj  3
+Trouver le sarcophage contenant la pièce magique
+Le sarcophage contenant la pièce magique doit se trouver près de l’endroit où vivent les Orques. Inutile de le chercher dans les lointains passages !.
+#subobj  4
+Prendre la pièce
+Pour récupérer la pièce, vous devez ouvrir le sarcophage à l’aide de la clé.

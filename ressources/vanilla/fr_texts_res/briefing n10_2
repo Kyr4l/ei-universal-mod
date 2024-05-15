@@ -1,0 +1,15 @@
+Dire au revoir à l'Archer
+#show Hero 
+#show Merc2
+#CAMERA 6
+#ANIMATION 7
+#phrase Hero  1
+Eh bien, l’Archer, je crois qu’il est temps de nous dire au revoir. Tes talents de tireur m’ont été d’une aide très précieuse !
+#CAMERA 7
+#ANIMATION 8
+#phrase Merc2  2
+Merci, c’est gentil... J’espère que tu trouveras un autre bon tireur pour t’aider au cours de ta quête dans les contrées étrangères. Au revoir, Noble Elu !
+#CAMERA 6
+#ANIMATION 11
+#phrase Hero  3
+Au revoir, l’Archer !

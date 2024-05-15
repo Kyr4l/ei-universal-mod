@@ -1,0 +1,19 @@
+Rencontrer la petite-fille d'Estera
+#show Daughter
+#show Witch
+#show Hero
+#phrase Witch  1
+Voici ma petite-fille : Airy. Et maintenant, écoute-moi. Ne joue pas les Don Juan avec elle ! Airy est encore jeune et un peu stupide, Dieu nous garde quelle s'entiche de toi. Après tout, nous ne savons même pas qui tu es.
+#ANIMATION 3
+#CAMERA 7
+#phrase Daughter  2
+Je ne suis plus une enfant, grand-mère. Quand me traiteras-tu en adulte ?
+#ANIMATION 32
+#CAMERA 12
+#phrase Witch  3
+Oh, ma petite ! Le sol n'a pas été nettoyé, les assiettes ne sont pas lavées et tu interromps notre conversation.
+#hide Daughter 
+#ANIMATION 7
+#CAMERA 8
+#phrase Witch  4
+Elle est un peu rebelle, comme moi ! Je te mets en garde : si tu tentes quoi que ce soit avec ma petite-fille, je te truciderai de mes propres mains.

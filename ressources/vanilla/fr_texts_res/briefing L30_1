@@ -1,0 +1,28 @@
+Le cadeau de l'Ermite
+#show Hero 
+#show OLIZ 
+#CAMERA 9
+#phrase OLIZ  1
+Humain, je dois te dire que.... Tu rencontreras bien des dangers.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero  2
+Vraiment ? Tu parles d’une surprise !
+#CAMERA 3
+#phrase OLIZ  3
+Eh bien maintenant, tu le sais. Je veux que tu sois capable de survivre à ces dangers. Ceci t’aidera.
+#show DragonWand 7
+#ANIMATION 6
+#CAMERA 6
+#phrase Hero  4
+Qu’est-ce que c’est ? On dirait une corne ou une conque. Son créateur ne savait sans doute pas à quoi cela ressemblerait une fois fini !
+#CAMERA 11 10 5 2
+#phrase OLIZ  5
+Peut-être que non. Peut-être que si. Mais prends-le quand même. Il t’aidera.
+#ANIMATION 32
+#CAMERA 2 25 6 3
+#phrase Hero  6
+Mais comment ? Que suis-je censé en faire ?
+#CAMERA 1 0 4 4
+#phrase OLIZ  7
+Je ne sais pas. Tu es un humain, tu es intelligent. Réfléchis.

@@ -1,0 +1,62 @@
+Finding Princess
+The girl is hidden somewhere deep in the catacombs. You must find and save her. Remember that close to the entrance there are posts manned by the mercenaries in the employ of Diera and in the deeper parts live sinister Lords of the Dungeons - magic beings who have a hatred of anyone who lives on the surface.
+#subobj  2
+Find the former punishment cell
+In the north western part of the catacombs there is a place which used to serve as a punishment cell for offending miners. Perchance that is where the girl is being kept.
+#subobj  3
+Find the mercenaries' Commander
+The Commander of Magician Diera's mercenaries is in the underground camp. Mayhap he has something which would help you in your quest.
+#subobj  4
+Get the Commander's things
+If there is something which could help you to find the girl, the Commander will have it.
+#subobj  5
+Go to the north eastern part of the catacombs
+There was no girl in the former punishment cell. Mayhap she managed to escape and now hides deep in the catacombs. The underground corridors lead east of the former cell; you should continue your quest in the north eastern part of the subterranean labyrinth. There are two ways to get there. The first one is direct but is blocked by a locked door. The second way is to take the northern corridor. There are no insurmountable barriers there but it is much more dangerous.
+#subobj  6
+Go to the south eastern part of the catacombs
+Probably the girl managed to get even further, so look for her in the south eastern part of the subterranean labyrinth. But be careful: you may encounter Wormheads here - the intelligent beings who hate all surface dwellers and know how to use magic.
+#subobj  7
+Find the door
+If that is where the girl is in hiding, she must be behind one of the doors which block the passages.
+#subobj  8
+Open the door
+To find out if the girl is here you have to open the door. You do not need a key to do that.
+#subobj  9
+Enter the shelter
+The girl is here!
+#subobj  10
+Find the "South-East" lever
+The gates which open the way to the south-eastern part of the catacombs are controlled by the "South East" lever located in the north eastern part of the labyrinth behind one of the gates. You can reach it by a roundabout way.
+#subobj  11
+Turn the "South-East" lever
+When the "South-East" lever is switched on, the way to the south eastern part of the catacombs will be open.
+#subobj  12
+Find the "South" lever
+This lever is located in the southern part of the catacombs.
+#subobj  13
+Turn the "South" lever
+Apparently there is nothing near the lever which could be controlled by it. However, the lever is here for a purpose: mayhap it opens passages in some other parts of the catacombs.
+#subobj  14
+Find the "North-East" lever
+Apparently there is nothing near the lever which could be controlled by it. However, the lever is here for a purpose...
+#subobj  15
+Turn the "North-East" lever
+Mayhap it opens passages in some other parts of the catacombs.
+#subobj  16
+Yes! ("South" lever)
+After you turned the "South" lever a passage opened, and something not completely useless awaits you there...
+#subobj  17
+Pick up the find
+Whatever it is, it would feel better in the hands of the finder than in the cave.
+#subobj  18
+Yes! ("North-East" lever)
+When you turned the "North East" lever a passage opened, and something not completely useless awaits you there...
+#subobj  19
+Pick up the find
+Whatever it is, it would feel better in the hands of the finder than in the cave.
+#subobj  20
+Find the "North" lever
+The way to the north east of the catacombs is blocked by the gates controlled by a lever. To find the lever go east of the former punishing cell.
+#subobj  21
+Turn the "North" lever
+To turn the "North" lever, use the key which the mercenaries' Commander had.

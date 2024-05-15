@@ -1,0 +1,8 @@
+     Tout au long du jeu, vous disposez du contrôle intégral de la caméra. Vous pouvez la faire pivoter, la déplacer, effectuer un zoom avant ou arrière et suivre un personnage sélectionné. Vous pourrez voir le terrain et les objets de la zone de jeu, que vous les ayez déjà explorés ou non.
+
+     Pour déplacer la caméra, placez le curseur au bord de l'écran ou utilisez les touches fléchées.
+     Pour faire pivoter la caméra, utilisez le bouton droit de la souris ou appuyez sur <CTRL> + touches fléchées.
+     Pour effectuer un zoom avant ou arrière, utilisez la molette de la souris ou les touches Page Suiv. ou Page Préc.
+     Pour suivre un personnage, double-cliquez sur sa représentation en bas de l'écran ou appuyez sur la touche Origine.
+
+     Remarque : le mode poursuite est indiqué par un symbole qui s’affiche au-dessus de la représentation du personnage. Si vous déplacez la caméra, la poursuite s'arrête. Si vous faites pivoter la caméra ou effectuez un zoom avant ou arrière, cela n'a pas d'incidence.

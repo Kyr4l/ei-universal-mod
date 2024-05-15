@@ -1,0 +1,12 @@
+Recruter le Voyou
+#show Hero 
+#show Merc1
+#ANIMATION 45
+#phrase Merc1  1
+Où vas-tu avec tout ce monde ?
+#ANIMATION 8
+#phrase Hero  2
+Il se trame quelque chose. Tu veux te joindre à nous ? Tu as l’air d’aimer ce genre de situations.
+#ANIMATION 32
+#phrase Merc1  3
+Non, vous êtes déjà trois. Tu me connais, quand je me laisse emporter, je ne sais plus ce que je fais... Au cœur de l’action, je serais capable de m’attaquer à mes alliés, tu comprends ?

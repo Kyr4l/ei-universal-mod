@@ -1,0 +1,23 @@
+Parler à Chafouin
+#show Hero
+#show MThief
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  1
+Je suis un ami de Sver - on le surnomme le Trappeur - et il m’a conseillé de venir te parler. Il dit que tu as un secret qui permet de... err.... d’agir discrètement et sans bruit quand la situation l’exige.
+#ANIMATION 63
+#CAMERA 3
+#phrase MThief  2
+Ha ! Tu n’as pas la langue dans ta poche, jeune homme, mais on ne peut pas en dire autant de tes mains. Ne le prends pas mal, mais le professionnel que je suis a immédiatement remarqué que tes mains ne sont pas assez vives.
+#ANIMATION 9
+#CAMERA 11
+#phrase MThief  3
+Mais on peut y remédier... Et c’est la raison pour laquelle le Trappeur t’a envoyé ici, n’est-ce pas ?
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  4
+Franchement, oui. Il a dit que tu pourrais m’entraîner.
+#ANIMATION 11
+#CAMERA 3
+#phrase MThief  5
+Le vieux renard ! Il y a quelque temps, le Trappeur m’a rendu un très grand service et il sait que je ne peux rien lui refuser !

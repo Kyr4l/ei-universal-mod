@@ -1,0 +1,63 @@
+Learn what the Lizard wants
+#show OLIZ 1
+#show Hero 2
+#CAMERA 9
+#phrase OLIZ  1
+You came, human. That is good.
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  2
+Is that all you wanted to tell me?
+#CAMERA 3
+#phrase OLIZ  3
+You are so hasty. I remember your questions, and I will answer them. I came to the people who wear iron to make an agreement with them. But I saw what they did to you. They do not keep their word, so I do not believe them anymore. You kept your word. So I will make you the offer.
+#CAMERA 11 10 5 2
+#phrase OLIZ  4
+Humans like gold. Lizards are not interested in gold. Complete the mission I give you and I will give you all the gold I have. And I have a lot of gold.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  5
+Hmmm... gold... Well, it won't do me any harm, I suppose...
+#DESC (Reflecting, not very interested)
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  6
+But I would much rather you helped me find out where the old Magician lives, the one I have been trying to find for so long. Since the Lizards are after all an ancient people, I thought perchance you might have this information!
+#CAMERA 9
+#phrase OLIZ  7
+You are right. Lizards are an ancient people. I can put together all the knowledge we have about the old man. Do you agree to complete my mission?
+#ANIMATION 3
+#CAMERA 10 -20 5 2
+#phrase Hero  8
+But of course! Consider it done.
+#CAMERA 11 10 5 2
+#phrase OLIZ  9
+Done? Are you trying to cheat me?
+#DESC (Seriously)
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  10
+Actually, I was trying to make a joke, because you are too serious.
+#CAMERA 9
+#phrase Oliz  11
+Now I see. That was a joke. Maybe I could make a joke too. Later. But now I need you to get the water back into the Canal. Orcs stole our water.
+#CAMERA 7
+#show DumbLever 7
+#phrase Oliz  12
+Go south along the water. You will see the dam and the canal. You must lift the dam. With a lever. I will give it to you. You must block the canal. With a rock. The rock I will not give you. It is already there on the bank of the canal. Upstream from the dam. The rock is heavy. When Orcs dug there, they spent a lot of time lifting it. Push it, and it will fall quickly.
+#CAMERA 11 10 5 2
+#phrase Oliz  13
+After that return here. I will tell you everything I found out about the old Magician.
+#ANIMATION 15
+#CAMERA 10 -20 5 2
+#hide DumbLever
+#phrase Hero  14
+Agreed! And, by the way, if you add a few coins to your tale I will not be offended at all.
+#CAMERA 9
+#phrase Oliz  15
+For coins go to my fellow Lizards who live on the shallows farther south. Cross over to the most remote sand island, the third one. The treasure will be yours!
+#nolips
+#CAMERA 11 10 5 2
+#phrase OLIZ  16
+Strange. That man likes humor. I made a joke. The man did not smile. Very strange.
+#DESC To himself

@@ -1,0 +1,23 @@
+Rencontrer le mage
+#show Hero 1
+#show Merc5 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc5  1
+J’ai entendu dire que tu cherchais la Princesse ? Est-ce que mes talents spéciaux t’intéressent ?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+Qui es-tu ? Quels talents ?
+#ANIMATION 45
+#CAMERA 11
+#phrase Merc5  3
+Mon nom est trop long, mais tu peux m’appeler Rinas. Quant à mes talents... Je ne suis pas un mauvais sorcier, mais depuis l’arrivée en ville de la Magicienne Diera, les autres Magiciens ont du mal à faire le poids. Le Gouverneur nous a interdit de pratiquer, sauf à cette albinos.
+#ANIMATION 43
+#CAMERA 11
+#phrase Merc5  4
+Non, je refuse de me laisser aller à de stupides querelles. Disons cela comme ça : cette femme est très calculatrice et manque de délicatesse.
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  5
+Humm... Un homme tel que lui pourrait m’être utile. Je vais y réfléchir !

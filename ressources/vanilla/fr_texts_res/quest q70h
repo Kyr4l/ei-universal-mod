@@ -1,0 +1,11 @@
+Amulette
+Vous aurez besoin de cette amulette pour savoir où le jeune Joon a été téléporté. Les ruines du manoir appartenant au savant se trouvent au nord de la ville.
+#subobj  1
+Trouver les ruines du manoir
+Les ruines du manoir se trouvent au nord de la ville. Les portes sud permettent d’y accéder. Mais n’oubliez pas qu’à la suite des mystérieux agissements qui s’y sont déroulés, il a été placé sous haute surveillance.
+#subobj  2
+Fouiller les ruines
+Les morceaux de l’amulette utilisés par le jeune Joon doivent se trouver quelque part par là.
+#subobj  3
+Fouiller le coffre
+Il est possible qu’au cours de leur enquête, ils aient rassemblé tous les événements liés au manoir dans ce coffre. Jetez-y un coup d’œil.

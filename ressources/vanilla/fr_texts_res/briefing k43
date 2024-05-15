@@ -1,0 +1,18 @@
+A propos du corps retrouvé
+#show Hero 3
+#show DriadArrow00 4
+#show Kapitan 5
+#ANIMATION 31
+#CAMERA 5
+#phrase Hero  1
+Capitaine ! J’ai trouvé un cadavre dans la forêt. L’homme a été tué par cette flèche. Je crois qu’il s’agit du Fouineur qu’on a vu en ville...
+#hide DriadArrow00
+#show DriadArrow00 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Kapitan  2
+Aha ! Le Peuple de la forêt a violé le traité et tué un homme ! Maintenant, j’ai une bonne raison de montrer à ces ignobles créatures qui est le maître ici ! Je dépêcherai une expédition punitive dont on parlera aux quatre coins d’Ingos. Sur mon honneur !
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  3
+Et je crois que tu devrais montrer cette flèche au Gouverneur. Il apprécie ce genre de choses et ça ne fait pas de mal d’être dans ses petits papiers, pas vrai ? Je lui parlerai de toi. Mais souviens-toi, jeune homme, son Excellence aime montrer ses collections aux visiteurs et il adore tout autant qu’on admire ses babioles que sa personne !

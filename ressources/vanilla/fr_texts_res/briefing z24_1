@@ -1,0 +1,33 @@
+A propos de l'ennemi au village
+#show Witch 1
+#show Hero 2
+#CAMERA 9
+#ANIMATION 9
+#phrase Witch  1
+Alors, mon mignon, que racontent les villageois ?
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+Je suis sûr que tu le sais.
+#ANIMATION 8
+#CAMERA 11
+#phrase Witch  3
+Ils se rejettent la faute ?
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  4
+En un sens, oui. Mais les deux partis avancent des arguments sensés. Et je n'arrive pas à y voir clair.
+#ANIMATION 63
+#CAMERA 9
+#phrase Witch  5
+Tu me désoles parfois. En fait, tu ne sais rien du tout ? Si tu n'arrives pas à démêler l'affaire, prends les devants et piège-les !
+#hide Witch 
+#show Hero 4
+#ANIMATION 30
+#CAMERA 6
+#phrase Hero  6
+Oui, tu as raison... Mais quel genre de piège mettre en place ? Ah oui ! Je dirai aux villageois qu'Estera m'a révélé un secret... qu'apparemment il y a une autre Fleur Blanche dans les Montagnes centrales et que j'ai promis de la lui ramener.
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  7
+J'indiquerai un lieu à Babur et un autre au Doyen. Et selon l'endroit où aura lieu l'embuscade, je saurai qui est le traître.

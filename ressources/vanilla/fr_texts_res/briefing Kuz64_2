@@ -1,0 +1,35 @@
+A propos de l'enfant disparu
+#show Hero 3
+#show Kuzn 5
+#ANIMATION 61
+#CAMERA 1
+#phrase Kuzn  1
+Je ne sais rien sur les Joons. C’est un peuple trop ancien. J’ai toujours pensé que les histoires qu’on entendait sur eux n’étaient que des légendes. Je crois que tu devrais chercher le jeune homme à la peau rouge dans le donjon des Gardes ; ces chiens n’aiment pas les gens différents !
+#ANIMATION 62
+#CAMERA 3
+#phrase Kuzn  2
+Et si tu achèves au passage un ou deux gardes, j’en serai ravi. Surtout s’il s’agit d’Aga-Fouetteur et d’Aga-Flagelleur. Ils sont frères et il aurait mieux valu que leur mère meure avant de rencontrer leur père !
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  3
+Quels noms étranges !
+#ANIMATION 61
+#CAMERA 7
+#phrase Kuzn  4
+Ce ne sont pas leurs vrais noms, mais des surnoms... Tu devines pourquoi. J’ai de très vieux comptes à régler avec eux, oui, de très vieux comptes. Si je ne m'étais pas réfugié ici, j'aurais sans doute déjà trouvé quelqu’un pour me venger du fouetteur et du flagelleur ! Et si je te le demandais à toi ?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  6
+Tu peux toujours me le demander, mais je ne te promets rien !
+#ANIMATION 44
+#CAMERA 3
+#phrase Kuzn  7
+Inutile de promettre quoi que ce soit, il y a bien longtemps que je ne prends plus les promesses au sérieux... Bon, laisse-moi t’indiquer où se trouvent Aga-Fouetteur et Aga-Flagelleur et ensuite, ce sera à toi de voir.
+#ANIMATION 62
+#CAMERA 11
+#phrase Kuzn  8
+Au moment où nous parlons, ces deux chacals torturent les paysans qui travaillent dans les plantations du nord-est de la ville. Un des frères supervise les plantations du centre et l’autre celles du sud. Tu n’auras aucun mal à les trouver, il y a un réseau de canaux.
+#ANIMATION 14
+#CAMERA 9
+#phrase Kuzn  9
+Trouve-les et tue-les ! Personne ne les pleurera et je t'en serai éternellement reconnaissant.

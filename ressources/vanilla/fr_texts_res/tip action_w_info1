@@ -1,0 +1,6 @@
+Vue générale.
+La fenêtre d'information affiche une vue générale
+du personnage sur lequel est placé le curseur.
+Si le curseur n'est sur personne, vous aurez
+une vue du personnage sélectionné.
+

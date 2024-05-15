@@ -1,0 +1,15 @@
+Take Eila back on
+#show Hero 
+#show Merc4
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc4  1
+You still want me to stay in the settlement?
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  2
+On the contrary. I need your magic!
+#CAMERA 3
+#ANIMATION 3
+#phrase Merc4  3
+So what is the problem then? I am ready and willing!

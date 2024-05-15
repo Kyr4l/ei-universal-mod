@@ -1,0 +1,29 @@
+Obtenir les livres comptables
+Le contremaître des ateliers de Karansul transporte un livre comptable. Si vous parvenez à le récupérer, vous pourrez faire pression sur le marchand. Les berges sud, est et nord du grand lac abritent des mines, des scieries et autres entreprises appartenant à Karansul. Cette région est bien gardée et toujours très fréquentée à la fois par les gardes et les employés. Ces derniers ne sont pas armés, mais en voyant un étranger, ils peuvent donner l’alerte et appeler les gardes.
+#subobj  1
+Se rendre sur le territoire gardé
+Pour vous rendre sur le territoire des entreprises de Karansul, vous pouvez passer par le poste situé sur la rive sud du lac. Les gardes qui y sont postés ne devraient pas vous poser trop de problèmes. Pour atteindre le poste, trouvez le pont qui enjambe la rivière se jetant dans le lac depuis l’ouest, puis passez de la rive nord à la rive sud.
+#subobj  2
+Trouver le document
+D’après le Trappeur, le contremaître transporte les livres comptables sur lui. Mais cette information n’est pas confirmée et certains documents se trouvent peut-être quelque part près d’une mine. Jetez un coup d’œil autour de la mine la plus proche de l’entrée sur la rive sud du lac.
+#subobj  3
+Prendre le document
+Vous ne savez pas ce que contiennent ces documents, mais vous devriez les prendre, on ne sait jamais....
+#subobj  4
+Traverser le pont
+Le pont relie la partie sud de la zone industrielle à la partie nord et est gardé par des mercenaires de Karansul.
+#subobj  5
+Trouver la maison du contremaître
+Le contremaître vit dans la partie nord de la zone industrielle. Le toit de sa maison est surmonté de deux petites cheminées en briques. Le contremaître et ses gardes du corps doivent se trouver quelque part dans les parages.
+#subobj  6
+Récupérer le livre comptable
+Vous devez trouver un moyen de vous procurer le livre que le contremaître transporte sur lui.
+#subobj  7
+Quitter le territoire gardé
+Vous pouvez quitter la zone industrielle par le poste situé au nord du lac. De nombreux gardes y sont postés, mais leur attention se concentre sur une éventuelle menace venant de l’extérieur du territoire et non de l’intérieur.
+#subobj  8
+Trouver la broyeuse mécanique
+La fierté de Karansul - une broyeuse de minerais mécanique alimentée par un moulin à vent. Elle se trouve quelque part au nord-est de la zone industrielle. A la moindre défaillance, les employés s’arrêtent de travailler.
+#subobj  9
+Panne de la broyeuse
+En cas de panne de la broyeuse mécanique, les employés et les gardes accourront pour voir ce qui ne va pas. Pendant ce temps, vous pourrez facilement vous occuper du contremaître.

@@ -1,0 +1,23 @@
+A propos des gardes d'esclaves assassinés
+#show Hero 3
+#show Kuzn 5
+#ANIMATION 32
+#CAMERA 5
+#phrase Hero  1
+Eh bien, cette mission avec les gardes-chiourmes était loin d’être facile, Frère Forgeron !
+#ANIMATION 3
+#CAMERA 11
+#phrase Kuzn  2
+Ces chiens t’ont-ils donnés du fil à retordre ?
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  3
+Non, là n’est pas la question. J’ai toujours cru que les paysans détestaient leurs tortionnaires, mais au lieu de m’aider, ils ont appelé les Gardes et agi comme si Aga-Fouetteur et Aga-Flagelleur étaient leurs meilleurs amis !
+#ANIMATION 14
+#CAMERA 3
+#phrase Kuzn  4
+Si tu avais toujours vécu ici, à Suslanger, cela ne te surprendrait pas. Les paysans qui ne donnent pas l’alerte quand ils voient un étranger sont battus à mort ; c’est la loi.
+#ANIMATION 31
+#CAMERA 9
+#phrase Kuzn  5
+Puisque tu m’as vengé en tuant ces deux gardes-chiourmes que je haïssais tant, j’ai une dette envers toi !

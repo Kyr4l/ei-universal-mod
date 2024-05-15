@@ -1,0 +1,60 @@
+Découvrir ce que veut l'Homme-Lézard
+#show OLIZ 1
+#show Hero 2
+#CAMERA 9
+#phrase OLIZ  1
+Te voilà, humain. C’est bien.
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  2
+Est-ce donc tout ce que tu voulais me dire ?
+#CAMERA 3
+#phrase OLIZ  3
+Tu es si pressé. Je me souviens de tes questions et je vais y répondre. Je suis allé voir les gens vêtus de fer pour conclure un marché. Mais j’ai vu ce qu’ils t’ont fait. Ils ne tiennent pas parole et je ne leur fais donc plus confiance. Tu as tenu ta promesse et c’est donc à toi que je vais proposer ce marché.
+#CAMERA 11 10 5 2
+#phrase OLIZ  4
+Contrairement aux Hommes-lézards, les humains aiment l’or. Mène à bien la mission que je te confie et je te donnerai tout l’or que je possède. Et j’en possède beaucoup.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  5
+Humm... De l’or... Eh bien, ça ne me fera pas de mal, je suppose...
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  6
+Mais j’aurais préféré que tu m’aides à trouver le vieux mage, celui que je cherche depuis si longtemps. Les Hommes-lézards sont un peuple ancestral après tout. Je me disais que tu le saurais peut-être !
+#CAMERA 9
+#phrase OLIZ  7
+Tu as raison. Les Hommes-lézards existent depuis très longtemps. Je peux rassembler tout ce que nous savons sur le vieil homme. Acceptes-tu de mener à bien cette mission ?
+#ANIMATION 3
+#CAMERA 10 -20 5 2
+#phrase Hero  8
+Mais bien sûr ! C’est comme si c’était fait.
+#CAMERA 11 10 5 2
+#phrase OLIZ  9
+Comme si c’était fait ? Tu te moques de moi ?
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  10
+En fait, je voulais juste plaisanter un peu. Tu es si sérieux !
+#CAMERA 9
+#phrase Oliz  11
+Ah, tu plaisantais ! Moi aussi, je peux faire des plaisanteries. Mais plus tard. Pour le moment, j’ai besoin de toi pour remettre de l’eau dans le canal. Les Orques ont volé notre eau.
+#CAMERA 7
+#show DumbLever 7
+#phrase Oliz  12
+Dirige-toi vers le sud en longeant l’eau. Tu verras le barrage et le canal. Tu dois ouvrir le barrage. Avec un levier. Je te le donnerai. Tu dois bloquer le canal. Avec un rocher. Le rocher, je ne te le donnerai pas. Tu le trouveras sur les berges du canal. En aval du barrage. Ce rocher est lourd. Lorsque les Orques ont creusé là, ils ont mis beaucoup de temps à le déplacer. Pousse-le et il tombera rapidement.
+#CAMERA 11 10 5 2
+#phrase Oliz  13
+Ensuite, reviens ici. Je te dirai tout ce que j’ai découvert sur le vieux mage.
+#ANIMATION 15
+#CAMERA 10 -20 5 2
+#hide DumbLever
+#phrase Hero  14
+D’accord ! Et à propos, quelques pièces me feraient le plus grand bien.
+#CAMERA 9
+#phrase Oliz  15
+Pour ça, va voir mes amis Hommes-lézards qui vivent dans les bas-fonds, un peu plus au sud. Dirige-toi vers l’île sablonneuse la plus éloignée, la troisième. Le trésor t’appartiendra !
+#nolips
+#CAMERA 11 10 5 2
+#phrase OLIZ  16
+Bizarre. Cet homme apprécie l’humour. J’ai fait une plaisanterie. L’homme n’a pas souri. Vraiment bizarre.

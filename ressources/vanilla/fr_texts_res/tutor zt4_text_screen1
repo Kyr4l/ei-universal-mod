@@ -1,0 +1,8 @@
+     Définissez la vitesse de jeu de votre choix en utilisant le panneau encadré situé en bas à droite de l'écran. Ce panneau indique votre vitesse de jeu actuelle et depuis combien de temps vous jouez.
+
+     Vous disposez de trois modes : vitesse "normale", vitesse "maximale" et "pause". En vitesse "maximale", paramètre standard, tous les personnages (les vôtres et les ennemis) se déplacent plus rapidement. En mode "pause", vous pouvez interrompre momentanément le jeu pour réfléchir.
+
+     Vous pouvez également modifier la vitesse du jeu via les touches clavier ci-dessous : 
+     Vitesse maximale : touche <+> du pavé num.
+     Vitesse normale : touche <-> du pavé num.
+     Pause : barre <ESPACE>

@@ -1,0 +1,49 @@
+A propos des mines abandonnées
+#show Hero 1
+#show Shopper 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  1
+Ah, le conteur... Qu’est-ce que tu veux maintenant ? Me raconter une autre histoire ?
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  2
+Je sais que tes intérêts commerciaux ici sont grands, et tu dois donc tout savoir sur la région ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  3
+Eh bien, je crois que oui... Et alors ?
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  4
+Certaines mines sont fermées, pourtant la région est riche. Pourquoi la moitié des mines ne fonctionnent-elles pas ?
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  5
+Ils exploitaient les mines souterraines, là où vivent toutes sortes de créatures. A chaque fois que mes mineurs tombaient sur un nid de goules, tous les investissements humains et matériels partaient en fumée. C’est pourquoi le Gouverneur a publié un décret pour condamner ces mines... Mais attends un peu ! Tu veux les exploiter ?
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  6
+Peut-être, peut-être. Mais je dois d’abord trouver un moyen d’obtenir la permission du Gouverneur. Tu peux peut-être m’aider. Je t’ai raconté une histoire heureuse et nous sommes amis maintenant, pas vrai ?
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase Shopper  7
+Les amis comme toi gisent dans la forêt, le ventre ouvert, tu verras ! Mais d’accord, petit, je vais t’aider.....
+#ANIMATION 63
+#CAMERA 3
+#phrase Shopper  8
+Pourquoi ne pas offrir au Gouverneur quelque chose de « raffiné, précieux et élégant » ou quelque chose de cher. Comme une vieille pépite d’or. Il s’intéressera immédiatement aux mines et te donnera la permission de les exploiter, crois-moi. Et tu n’auras même pas à aller sous terre pour ça !
+#ANIMATION 61
+#CAMERA 11
+#phrase Shopper  9
+Au sud-est des mines abandonnées se trouve un autre puits, fermé lui aussi, car les employés qui y travaillaient, des fainéants, en sont partis. L’un d’entre eux m’a dit avoir caché une pépite d’or dans la partie la plus au sud du puits.
+#ANIMATION 62
+#CAMERA 3
+#phrase Shopper  10
+Ces employés paresseux ont raconté une histoire invraisemblable et le Gouverneur a ordonné que la mine soit fermée. Mais nous sommes amis et je vais te donner les clés des portes. Elles sont faciles à trouver : entre dans la région des mines abandonnées, dirige-toi vers l’est, contourne le camp militaire par le nord et tu y seras presque.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase Shopper  11
+Allez, va chercher la pépite ! Ce sera parfait pour toi. Tu iras rejoindre les squelettes qui gisent au fond de ces puits... Conteur, hé-hé !

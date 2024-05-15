@@ -1,0 +1,15 @@
+Prendre Fairakh dans l'équipe
+#show Hero 
+#show Merc8
+#ANIMATION 45
+#phrase Merc8  1
+Nous n’avions pas fini notre conversation la dernière fois, alors je te le redemande... Acceptes-tu l’aide du mage que je suis ?
+#ANIMATION 15
+#phrase Hero  2
+Oui, bien sûr ! Si tu me promets qu’il n’y aura pas de violence injustifiée.
+#ANIMATION 9
+#phrase Merc8  3
+Bien sûr que non. Je ferai ce que tu me demanderas. Mais si jamais nous rencontrons mes ennemis, là tu verras ce que c’est que la violence !
+#ANIMATION 15
+#phrase Hero  4
+Dans ce cas, tu peux m’accompagner. Mais il vaudrait mieux pour toi comme pour moi que tu tiennes ta parole.

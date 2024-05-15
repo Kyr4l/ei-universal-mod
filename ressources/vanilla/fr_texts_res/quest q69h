@@ -1,0 +1,20 @@
+Restes du savant
+Vous devez voler le cadavre du savant dans le laboratoire situé au sud du désert. Ce laboratoire est protégé par des pièges magiques, et une caserne pleine de gardes se trouve juste à côté.
+#subobj  1
+Trouver le Commandant
+La maison du Commandant du laboratoire, située au sud du village des Nécromanciens, est entourée d’un mur. La meilleure façon d’y accéder consiste à emprunter les portes nord : ce poste, le plus ennuyeux et le plus inconfortable, est généralement attribué aux plus jeunes gardes.
+#subobj  2
+Entrer dans la maison du Commandant
+La maison du Commandant du laboratoire se trouve au sud-ouest du village des Nécromanciens.
+#subobj  3
+Se procurer la clé
+Pour entrer dans le laboratoire, vous devez en posséder la clé située dans la maison du Commandant.
+#subobj  4
+Trouver le laboratoire
+Le laboratoire du Nécromancien Taivo se trouve à l’est du village des Nécromanciens.
+#subobj  5
+Ouvrir les portes du laboratoire
+Pour ouvrir les portes du laboratoire, vous aurez besoin de la clé du Commandant.
+#subobj  6
+Prendre la tête du savant
+Le cadavre du savant gît sur la table du laboratoire. Pour interroger son esprit, vous devez prendre la tête et l’apporter à la tour du Nécromancien Kholai.

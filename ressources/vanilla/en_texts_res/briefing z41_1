@@ -1,0 +1,24 @@
+About Estera's granddaughter, saved
+#show Hero
+#show Daughter
+#show Witch
+#ANIMATION 61
+#CAMERA 4
+#phrase Witch  1
+Now that is what I call a nasty, shameless girl - people risk their lives to save her and not even a thank you! But never mind, I will make it worth your while.
+#ANIMATION 63
+#CAMERA 12
+#phrase Witch  2
+Do not be so sceptical, it is a very rare thing! And I have another request - will you talk to that damn girl? She has not been herself at all.
+#DESC Shows item
+#hide Witch 
+#show Hero 1
+#ANIMATION 11
+#CAMERA 11
+#phrase Daughter  3
+Why can you not look at me even now? What is wrong with me?
+#DESC (Guiltily but challenging)
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero  4
+It is not you, Airy, it is me. You see... although I do not remember my past, I still can feel something in my heart. I know, I... I feel that I love another person and that she waits even now for me! But I cannot remember where she is or how to find her. You are a very nice girl, Airy, but I will neither cheat you nor anyone else. And please, do not do any more foolish things. Next time I may not arrive in time.

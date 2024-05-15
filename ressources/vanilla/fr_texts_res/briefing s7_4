@@ -1,0 +1,29 @@
+A propos du Globe magique
+#show Hero 1
+#show Elder 2
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  1
+Erfar ! J'aimerais que tu me racontes l'histoire du Globe magique. Tu ne peux pas l'avoir oubliée. On m'a dit que tu étais l'homme qui connaissait les réponses à toutes les questions.
+#ANIMATION 29
+#CAMERA 9
+#phrase Elder  2
+Bien sûr que je me souviens du Globe. Mais c'était il y si longtemps et c'est une très, très longue histoire…
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  3
+Je ne suis pas pressé. Raconte-moi, au lieu de tourner autour du pot.
+#ANIMATION 9
+#CAMERA 11
+#phrase Elder  4
+Eh bien, nous avions capturé un Gobelin, qui n'était rien moins que le serviteur du Prophète orque. Comme les Gobelins sont des créatures stupides, il fut difficile d'en tirer quoi que ce soit.
+#ANIMATION 44
+#CAMERA 3
+#phrase Elder  5
+J'ai tout de même compris que le Globe magique était posé sur un autel quelque part sur l'île la plus au sud. Apparemment, les Orques y tiennent beaucoup et ils ont placé l'île sous haute surveillance. Je suis désolé, Noble Elu, mais si tu pensais mettre la main sur ce Globe, tu devras y renoncer car le chemin qui mène aux îles lointaines regorge de dangers. 
+#hide Elder 
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  7
+Tout ce qu'il me faut, c'est un engrenage pour le pont-levis qui donne accès aux îles. Pour ce qui est d'atteindre l'autel, j'en fais mon affaire.

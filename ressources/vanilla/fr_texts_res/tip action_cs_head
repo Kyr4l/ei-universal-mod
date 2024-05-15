@@ -1,0 +1,4 @@
+Vise la tête.
+Votre personnage visera la tête de l'ennemi
+en attaquant. Quand la "santé" de la tête
+atteint 0, l'ennemi meurt.

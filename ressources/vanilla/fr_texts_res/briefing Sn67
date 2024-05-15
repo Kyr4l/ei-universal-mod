@@ -1,0 +1,23 @@
+Parler à Kholai
+#show Hero 1
+#show OldNekro 2
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  1
+Ô, grand maître ! Aurais-tu la bonté euh... dans ta grande sagesse euh... de considérer la requête d’un humble mortel ? Ta euh... vénérable présence m’emplit de respect et d’admiration !
+#ANIMATION 59
+#CAMERA 11
+#phrase OldNekro  2
+Jeune homme ! La flatterie doit être à l’image d’un couteau empoisonné enveloppé de soie... douce et tendre, mais imprégnée de poison mortel. Peu de gens peuvent se vanter de maîtriser cet art de nos jours et tu n’en fais pas partie. Alors, dis-moi clairement ce que tu attends de moi.
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  3
+Je dois parler à l’esprit d’un des savants dont les cadavres se trouvent dans ton ancien laboratoire. Et en échange, je suis prêt à t’offrir la tête de Taivo. Cela te paraît-il suffisant ?
+#ANIMATION 57
+#CAMERA 3
+#phrase OldNekro  4
+Je pourrais tuer Taivo moi-même. Mais je ne veux pas le voir mort, je veux qu’il soit humilié et déshonoré. Je veux le voir perdre son rang et son poste, je veux l’entendre se plaindre, gémir et mendier... Et je crois que tu peux m’y aider, jeune homme.
+#ANIMATION 59
+#CAMERA 11
+#phrase OldNekro  5
+Je voudrais qu’un corps ou qu’au moins la tête d’un des corps disparaisse du laboratoire pour réapparaître chez moi. Tu parleras à l’esprit et je... Oh, comment vais-je dénoncer Taivo, quelles rumeurs vais-je faire circuler sur lui ? Il regrettera le jour où il a décidé se placer en travers de mon chemin !

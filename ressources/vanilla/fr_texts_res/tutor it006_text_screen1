@@ -1,0 +1,8 @@
+     Cet écran vous permet d’équiper vos personnages en vêtements, armes, potions, baguettes magiques, etc. Les noms des différents personnages apparaissent sur le panneau de gauche. Pour consulter la liste des personnages, utilisez les boutons situés à gauche et à droite du panneau.
+     La barre supérieure de l’écran indique les objets que le personnage emportera dans la zone de jeu. Les quatre fentes de gauche sont réservées aux armes et celles de droite aux potions et aux baguettes magiques.
+
+     La barre inférieure correspond à "l’inventaire" de vos personnages, c’est-à-dire aux objets qu’ils n’emporteront pas dans la zone de jeu. Pour n’afficher que certains types d’objets, utilisez les boutons situés à gauche et à droite de la barre. Pour afficher les types d’objets associés à un bouton, maintenez le curseur sur ce bouton quelques secondes. Un conseil déroulant apparaîtra alors avec les informations appropriées.
+
+     Comme décrit ci-dessus, les objets sont sélectionnés par le personnage (barre supérieure) ou placés dans l’inventaire (barre inférieure). Pour déplacer un objet de votre inventaire vers le personnage, cliquez sur l’objet de votre choix sur la barre d’inventaire (inférieure). Il sera placé sur la barre active (supérieure). Pour sélectionner une arme active à utiliser, cliquez avec le bouton droit de la souris sur sa représentation sur la barre supérieure. Un cadre apparaîtra alors autour d’elle pour indiquer qu’elle peut être utilisée. Pour placer un objet actif dans votre inventaire, cliquez sur sa représentation sur la barre supérieure.
+
+     Remarque : si toutes les fentes de la barre supérieure sont vides, votre personnage entrera dans la zone de jeu sans arme - et n’en ressortira probablement pas indemne !

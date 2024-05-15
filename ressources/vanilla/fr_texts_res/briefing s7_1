@@ -1,0 +1,59 @@
+Interroger GoGo en présence du Doyen
+#show bGoblinC 4
+#show Elder 3
+#show Hero 5
+#CAMERA 9
+#phrase bGoblinC  1
+Moi venu demander rendre Premier Gobelin. Moi promettre pas voler porcs pendant trois semaines. Serment de Pierre Bleue !
+#ANIMATION 46
+#CAMERA 4
+#phrase Elder  2
+Drôle de serment ! Je n'en ai rien à faire de ta pierre, tu l'as peut-être trouvée dans la boue et ton serment n'a alors aucune valeur.
+#CAMERA 11
+#phrase bGoblinC  3
+Pierre Bleue pas trouvée dans la boue. Jamais dire ça ! Ancien Chef donner pierre pour œil à moi quand lui devenir trop faible.
+#ANIMATION 45
+#CAMERA 12
+#phrase Elder  4
+Et où l'ancien Chef l'a-t-il trouvée ?
+#CAMERA 7
+#phrase bGoblinC  5
+Il a eu à très vieux Chef avec jambe cassée. Très vieux Chef ensuite mangé cru par vieux Chef. Quand moi devenir gaga, nouveau Chef me rôtir et prendre Pierre œil. Tradition : Chef Gobelin porte Pierre œil.
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  6
+Ben, dis donc, elles sont réjouissantes, vos traditions ! Mais d'où venait la pierre à l'origine ?
+#CAMERA 9
+#phrase bGoblinC  7
+Orque donner quand Premier Gobelin permettre à lui vivre même territoire. Orque écrire lettre pour révéler origine. Moi, pas connaître lettre.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  8
+Je vois. Alors, c'est simple : ramène-moi ce document et je te rends ton épouvantail, d'accord ?
+#CAMERA 11
+#phrase bGoblinC  9
+Moi refuser ramener parchemin. Quand Premier Gobelin disparu, moi aller demander aide à Orque. Orque me conduire sur Ile Chauve et me battre. Orque dire : "Toi, GoGo..." Moi pas comprendre après mais vilain mot.
+#CAMERA 3
+#phrase bGoblinC  10
+Puis Orque prendre mon argent, mettre lui dans coffre et chasser moi. Pauvre GoGo ! Moi était Chef, maintenant, moi... vilain mot.
+#CAMERA 7
+#phrase bGoblinC  11
+Toi rendre Premier Gobelin, Si toi pas rendre, moi rester ici et supplier, aujourd'hui, demain, toujours...
+#ANIMATION 11
+#CAMERA 8
+#phrase Elder  12
+Moi, ça m'est égal, tu peux rester là tant qu'il te plaira. Je ne vois pourquoi je te rendrais l'idole : tu ne nous as pas dit ce que nous voulions savoir.
+#hide bGoblinC
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  13
+Quel genre d'endroit peut bien être cette Île Chauve ? C'est là que les Orques mettent leurs déchets ? Tu sais quelque chose ?
+#ANIMATION 44
+#CAMERA 4
+#phrase Elder  14
+Je ne sais pas grand chose. Elle est située au sud-est et on dit que rien n'y pousse. Mais cela ne nous avance pas, car il n'y a pas moyen de franchir les ponts des Orques et les humains ne peuvent pas accéder aux îles.
+#NOLIPS
+#ANIMATION 30
+#CAMERA 6
+#phrase Hero  15
+Ce n'est pas si sûr. Si on arrive à traverser le pont de la caverne, pourquoi pas ceux qui mènent aux îles ?

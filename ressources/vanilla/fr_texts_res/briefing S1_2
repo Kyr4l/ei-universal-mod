@@ -1,0 +1,47 @@
+A propos des villageois
+#show Hero 1
+#show Elder 2
+#ANIMATION 9
+#CAMERA 9
+#phrase Elder  1
+Je serai ravi de présenter les villageois à notre Elu . Tu me connais déjà, je suis le Doyen Erfar. J'ai un assistant, un capitaine du nom de Gort. C'est un homme de grande valeur. Ses manières sont un peu rudes mais il obéit à tous mes ordres.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  3
+Et si, moi, je lui donne un ordre ? Je suis l'Elu, non ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Elder  4
+Oui, tu es bien l'Elu. Mais le problème, c'est que Gort... euh, disons qu'il n'est pas très malin et qu'il pourrait ne pas comprendre tes ordres. Ce serait plus simple si tu me disais ce que tu veux et je lui transmettrai ensuite tes ordres.
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  5
+Et qui t'aide pour la magie ?
+#ANIMATION 44
+#CAMERA 9
+#phrase Elder  6
+Nous sommes dans une bien triste situation. Nous avions une Sorcière du nom d'Estera au village. C'était une vieille femme méchante, qui nous cherchait toujours querelle. Mais elle est partie s'établir ailleurs. Personne ne peut l'approcher sauf sa petite-fille Airy et son apprentie. Pauvres filles ! Quand j'imagine ce que cette Harpie leur fait subir, ça me fait pleurer !
+#ANIMATION 46
+#CAMERA 7
+#phrase Elder  7
+La seule personne qui soit pire qu'Estera est Babur le Pingre, un homme avide et sans loyauté. Il a offensé les Chasseurs libres. Si les Gobelins ont attaqué, c'est à cause de lui.
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  9
+Une seconde... c'était qui, ces Chasseurs ? Et comment Babur peut-il être responsable de l'attaque des Gobelins ?
+#ANIMATION 9
+#CAMERA 11
+#phrase Elder  10
+Les Chasseurs libres vivent dans les bois près du village. Habituellement, ils sont toujours les premiers à attaquer les Gobelins. Récemment, certains d'entre eux ont volé des babioles dans l'atelier de l'artisan, mais sans penser à mal, juste pour s'amuser.
+#ANIMATION 11
+#CAMERA 3
+#phrase Elder  11
+Mais notre Pingre en a fait toute une montagne. Il est allé voir les Chasseurs pour exiger qu'on lui rende ses affaires. Le Chef était si bouleversé qu'il n'a pas vu l'ennemi approcher et c'est comme ça que les Gobelins ont attaqué le village. Nous avons frôlé la catastrophe, tout ça à cause d'un artisan qui n'en a jamais assez.
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  12
+Je vois… tu as autre chose à me dire ?
+#ANIMATION 31
+#CAMERA 11
+#phrase Elder  13
+Non, j'en ai presque fini. Il va de soi que les simples villageois seraient ravis de pouvoir aider l'Elu, mais je ne crois pas qu'ils puissent t'être très utiles.

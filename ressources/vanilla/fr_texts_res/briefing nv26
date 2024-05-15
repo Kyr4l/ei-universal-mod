@@ -1,0 +1,19 @@
+Le Doyen est un traître !
+#show NSheriff
+#show Hero
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  1
+Ecoute, j’ai quelque chose d’important à te dire. Suppose que je te demande de faire quelque chose et que le Doyen te demande le contraire. Que ferais-tu ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Nsheriff  2
+Rien de plus simple. Tu es l’Elu et jusqu'à présent tu n’as fait que de bonnes choses. Le Doyen ? Je le trouve un peu bizarre. Quand il ne traite pas avec les Brigands, il est mêlé à une obscure affaire d’or volé ou son Capitaine se révèle être un traître. Je n’ai pas vraiment confiance en lui. Ou... Ai-je dit quelque chose de mal ?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  3
+Tu as dit ce qu’il fallait. J’ai découvert que c’est le Doyen qui à maintes reprises a tenté de m’anéantir. Mais à présent, je vais le défier ouvertement.
+#ANIMATION 6
+#CAMERA 9
+#phrase Nsheriff  4
+Je vois... Je pensais bien que quelque chose clochait dans notre village ! Ne t’inquiète pas, Noble Elu. Je suis de ton côté, tu peux compter sur moi et sur mes hommes !

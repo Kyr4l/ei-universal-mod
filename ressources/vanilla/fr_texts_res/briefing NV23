@@ -1,0 +1,30 @@
+Parler au nouveau Capitaine
+#show Hero 
+#show NSheriff 
+#CAMERA 9
+#phrase NSheriff  1
+Humm... Franchement, que dire ? Je suis Rivar. Les gens m’appellent le Mastodonte. Je suis le nouveau Capitaine qu’ils ont élu. J’ignore pourquoi, mais le Doyen n’a rien dit, alors qu’il sait que je n’aime pas trop me battre.
+#CAMERA 2
+#phrase Hero  2
+Eh bien, si tu ne sais pas quoi dire, laisse-moi te proposer quelque chose. Pourquoi ne pas commencer par « Je jure de ne jamais faire de mal à l’Elu et de punir sévèrement tous ceux qui s’y essaieraient ! »
+#CAMERA 3
+#phrase NSheriff  3
+Je jure de ne jamais faire de mal à l’Elu et de punir sévèrement tous ceux qui s’y essaieraient !
+#CAMERA 3
+#phrase NSheriff  4
+Ça sonne très bien ! Mais je ne pourrai jamais le dire aussi bien, je suis un piètre orateur.
+#CAMERA 2
+#phrase Hero  5
+Et alors ? Tu as d’autres talents. Regarde tes bras ! Je parie que tu es  le plus fort du village.
+#CAMERA 3
+#phrase NSheriff  6
+Ah, je crois que oui... C’est sans doute pour ça qu’ils m’ont élu Capitaine. Mon père était aussi le plus fort, tout comme mon grand-père et mon arrière-grand-père. Nous avons un secret de famille pour décupler notre force physique. Un mot secret. Il ne doit pas être prononcé à haute voix, mais en se le murmurant à soi-même. Tu veux que je te montre ? Je te le murmure ?
+#CAMERA 2
+#phrase Hero  7
+Oui, pourquoi pas ? Ça marchera peut-être !
+#CAMERA 2
+#phrase Hero  8
+Eh bien ? Vas-y, murmure-le-moi, Mastodonte !
+#CAMERA 3
+#phrase NSheriff  9
+C’est fait ! Essaie, tu verras la différence ! Mais ne me remercie pas où ça ne fonctionnera plus.

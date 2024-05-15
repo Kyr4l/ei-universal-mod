@@ -1,0 +1,43 @@
+A propos de la carrière
+#show Smith 1
+#show Hero 2
+#ANIMATION 44
+#CAMERA 9
+#phrase Smith  1
+Depuis que tu as enlevé la Grande Conque des Montagnes lointaines, je ne peux plus aller à la carrière. Que vais-je faire ?
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+Ce n'est pas aussi terrible que tu le dis. Ne fais pas le malin, je vois clair dans ton petit jeu. 
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith  3
+Je ne joue aucun jeu et je ne fais pas le malin. Mais si la route de la carrière venait à s'ouvrir à nouveau, tu serais substantiellement récompensé. 
+#ANIMATION 7
+#CAMERA 2
+#phrase Hero  4
+Hum, la proposition est alléchante mais je ne remettrai pas cette Conque à sa place : elle est beaucoup trop lourde.
+#ANIMATION 15
+#CAMERA 7
+#phrase Smith  5
+Et si je te disais que tu n'as pas besoin de soulever la Conque. Il existe une autre route menant à ma carrière. Elle est très longue et je ne peux pas la prendre à cause d'un Cyclope.
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  6
+Un Cyclope ? Qu'est-ce que c'est que ça ? Une bête sauvage ?
+#ANIMATION 9
+#CAMERA 9
+#phrase Smith  7
+Ce n'est pas une bête, Noble Elu. Les Cyclopes ressemblent à des Ogres, mais ils sont beaucoup plus malins et celui dont je parle est loin d'être idiot : il a volé tout un troupeaux de porcs à nos bergers et maintenant il les élève lui-même. Il lance des grosses pierres sur ceux qui s'approchent trop près de lui.
+#ANIMATION 8
+#CAMERA 3
+#phrase Smith  8
+Comprends bien que je me contrefiche des Cyclopes et des porcs mais le troupeau en question broute l'herbe près de ma carrière.
+#ANIMATION 31
+#CAMERA 11
+#phrase Smith  9
+Si tu pouvais tuer tous ces porcs, je suis sûr que le Cyclope s'en irait. Et moi, je saurais te montrer ma gratitude.
+#ANIMATION 32
+#CAMERA 9
+#phrase Smith  10
+Une dernière chose : surveille bien le ciel en te rendant aux Montagnes lointaines. J'ai déjà vu des Dragons voler dans le coin.

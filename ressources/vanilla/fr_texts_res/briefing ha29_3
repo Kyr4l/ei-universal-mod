@@ -1,0 +1,48 @@
+Evasion
+#show Hero 1
+#show OLIZ 2
+#CAMERA 5
+#phrase OLIZ  1
+As-tu réfléchi à ma proposition ? Veux-tu que je t'aide à t'évader ?
+#CAMERA 2
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  2
+Il blague ou quoi ? Ils sont sur le point de me torturer et il me demande si je veux m'évader !
+#ANIMATION 29
+#CAMERA 2
+#phrase Hero  3
+J'accepte ! Aide-moi à sortir d'ici le plus vite possible.
+#CAMERA 5
+#phrase OLIZ  4
+Tu n'as pas engagé ta parole
+#CAMERA 2
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  5
+J'engage tout ce que tu veux mais fais-moi sortir ! Le temps presse !
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  6
+Je promets de te suivre. Ça te va ? Tu veux bien me libérer, maintenant ?
+#CAMERA 5
+#phrase OLIZ  7
+Tu trouveras mon logis au nord-ouest de la région appelée Les Sables. Pour y arriver, tu dois traverser les terres de la Cité des Morts du nord au sud, puis pénétrer dans les Sables par cette direction. Tu vas retenir ?
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  8
+Oui. Mais je ne dois pas entrer dans la Cité en elle-même ?
+#CAMERA 5
+#phrase OLIZ  9
+Non. Tu vas du nord au sud et tu entres dans les Sables. Va au nord-ouest de cette zone. Avant que tu n'atteignes mon logis, tu verras un plan d'eau circulaire et une île. C'est un piège. La Griffe des Anciens t'aidera probablement à déjouer ce piège.
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  10
+Eh, attends, tu as dit "probablement" ! Ça veut dire que je peux échouer ? Qu'arriverait-il alors ?
+#CAMERA 5
+#phrase OLIZ  11
+Alors, je ne serais pas en mesure de te parler. Il vaut donc mieux que tu franchisses le piège. Tu es d'accord ?
+#ANIMATION 8
+#CAMERA 2
+#phrase Hero  12
+Je n'ai pas le choix… donne-moi cette Griffe des Anciens et fais-moi sortir d'ici.

@@ -1,0 +1,11 @@
+Nouvelles instructions
+#show Hero 
+#show Elder
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero  1
+Alors, où est notre pauvre Go-Go ? Où est-il allé ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Elder  2
+Je l’ai chassé d’ici. Il ne faisait rien de mal, mais j’en avais assez de lui. Et on devrait aussi jeter cet « objet Gobelin sacré », il ne nous sert à rien.

@@ -1,0 +1,75 @@
+The meeting in the village
+#show  Hero 0 weapon
+#show Elder
+#show Sheriff
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  1
+Oh dear! Looks like the whole village is here!
+#DESC To himself
+#ANIMATION 29
+#CAMERA 8
+#phrase Sheriff  2
+Right, everyone here? Quiet, now! The Elder is going to speak!
+#ANIMATION 32
+#CAMERA 11
+#phrase Elder  3
+My people! Today is a great day for our village! We all remember the legend about the Chosen One who should appear at the Sacred Ruins - and now behold, here he is in the flesh!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+Hmm, actually I did see some ruins when I came back to my senses... Does that mean I am really a Chosen One?
+#DESC To himself, suspiciously
+#ANIMATION 11
+#phrase Elder  5
+The best food, the best home, respect and honor - that is what we will provide for the Chosen! He will want for nothing!
+#ANIMATION 6
+#NOLIPS
+#CAMERA 10
+#phrase Hero  6
+Sounds good to me!
+#DESC To himself, in better mood now.
+#ANIMATION 31
+#phrase Elder  7
+The Chosen is our savior and protector. Behold this brave countenance: this man can deal with any danger!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  8
+Oh... So I shall face dangers? Maybe I should refuse the honor before it is too late?
+#DESC Still to himself
+#ANIMATION 14
+#CAMERA 7
+#phrase Elder  9
+But of course if he is mayhap an impostor... Gort, what punishment would be appropriate for such sacrilege?
+#ANIMATION 3
+#CAMERA 8
+#phrase Sheriff  10
+Oh, We would deal with him right away - just throw him in that fire, yes we would!
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  12
+But we all can see the strange clothes the Chosen is wearing, his brave countenance, and most wonderously his knife, made of real metal! 
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  13
+Right, now everything is clear - either I shall be the Chosen One whom everyone loves, or an impostor who defiled some ruins or other! Well, the choice is easy, then...
+#DESC To himself
+#CAMERA 6
+#ANIMATION 49
+#phrase Hero  14
+Yes, I am the Chosen, though you may call me Zak. And I do have a metal knife! I... I shall protect you from danger! Only I would like to know what that danger is, exactly.
+#DESC At first loudly and almost confidently, then losing his ground
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  15
+We knew it! This is our protector! He wishes to immediately plunge into the fray! Lend me your ear, Chosen: our village has been continually raided by Goblins. And those same foul Goblins set up a sentry post nearby, lest we decide to retaliate.
+#ANIMATION 44
+#CAMERA 7
+#phrase Elder  16
+If any of our warriors leave the village, the Goblin watchman sees their weapons and armor and straight away raises the alarm. But you, Chosen, with your unusual dagger and simple modest clothes could kill that sentry before he realizes what is afoot.
+#ANIMATION 32
+#CAMERA 11
+#phrase Elder  17
+We shall wait here and pray for your safe return! But we shall not worry because the Chosen cannot fail! Go, kill the Goblin and return as soon as you can!

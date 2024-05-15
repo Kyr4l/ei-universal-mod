@@ -1,0 +1,9 @@
+     Au centre de l’écran se trouve un portrait de votre personnage vêtu de l’armure qu’il portera dans la zone de jeu. L’armure choisie peut déterminer l’issue, heureuse ou malheureuse, d’une quête, c’est pourquoi il est important de l’adapter aux spécificités de la tâche qui vous est confiée. Les fentes situées à gauche et à droite du portrait affichent les armures qu’il porte actuellement. Placez le curseur sur une fente pour afficher le nom et les caractéristiques de l’armure présentée dans le panneau de droite.
+L’armure est divisée en pièces légères et lourdes. Le personnage peut enfiler une armure lourde par-dessus une armure légère pour mieux se protéger. Mais sachez que plus il pèsera lourd, plus il sera lent.
+
+     Cliquez sur l’armure de votre choix dans l’inventaire pour la sélectionner. Elle apparaîtra alors immédiatement sur le portrait du personnage et son icône s’affichera dans la fente qui convient..
+     Pour ôter une armure de votre personnage, cliquez sur la fente contenant l’icône de l’armure. Celle-ci retournera alors dans l’inventaire.
+
+Le panneau situé à gauche de l’écran indique les valeurs de caractéristiques totales de l’ensemble de l’équipement de protection porté par votre personnage. Celui-ci possède maintenant une "valeur" totale d’attaque et de défense et un certain potentiel pour infliger des dégâts. Ces valeurs sont affichées sous la valeur de caractéristique totale et dépendent de ce que porte le personnage ainsi que de son développement, de ses compétences avec l’arme sélectionnée et des caractéristiques de l’arme.
+
+Maintenez le curseur sur une arme quelques secondes pour en savoir plus sur ses caractéristiques. Sa description complète s’affichera dans le panneau de droite.

@@ -1,0 +1,11 @@
+Reprendre Harad dans l'équipe
+#show Hero 3
+#show Merc7 
+#CAMERA 2
+#ANIMATION 9
+#phrase Hero  1
+Bonne nouvelle, Harad, j’ai encore besoin de toi !
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc7  2
+La bonne nouvelle serait pour moi de voir mes ennemis baigner dans leur sang...

@@ -1,0 +1,45 @@
+A propos de Karansul
+#show Hero 1
+#show Trapper 2
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  1
+Karansul me tient à la gorge. Les gens d’ici le détestent. Tout le monde lui est redevable. Il achète nos trophées pour une bouchée de pain et les revend à prix d’or. Mais malheur à celui qui essaie de trouver un autre acheteur ! Karansul est de connivence avec les brutes locales. Au moindre faux pas, il lâche ses assassins sur toi. Et de ça, mon ami, on ne se remet pas.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  2
+Oui, en effet. Mais ne vois-tu pas un moyen de faire pression sur cette vermine ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Trapper  3
+J’ai un marché honnête à te proposer : tu m’aides et je t’aide. Si tu acceptes de faire quelque chose pour moi, je te dirai ce que je sais sur le marchand. D’accord ?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  4
+Que veux-tu que je fasse ?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper  5
+C’est simple... Un acheteur de fourrures de la capitale va bientôt arriver dans la région. Il achète les peaux à bon prix, rien à voir avec ce sale Karansul. Mais je ne pourrai pas me rendre à l’endroit où il récupère les peaux, car les brutes de Karansul m’auront à l’œil.
+#show Hero
+#show Trapper
+#show SquirrelSkin 5
+#ANIMATION 44
+#CAMERA 3
+#phrase Trapper  6
+Si tu pouvais y emporter mes peaux... Ensuite, je te dirais ce que je sais sur le marchand ! La route menant au lieu de rendez-vous n'est pas particulièrement dangereuse, mais elle se trouve sur les terres de Karansul, ce qui explique ma prudence.
+#hide  SquirrelSkin
+#show SquirrelSkin 3
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  7
+Marché conclu. J’y emporterai tes peaux, mais tu dois d’abord me dire comment trouver cet endroit....
+#hide  SquirrelSkin
+#ANIMATION 62
+#CAMERA 3
+#phrase Trapper  8
+C’est facile... Lorsque tu arriveras sur le domaine de Karansul, dirige-toi vers la première vallée au sud. Tu trouveras une vieille tente avec un feu. Près de ce feu se dressent plusieurs fourches. Suspends les peaux à ces fourches et ce sera tout !
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper  9
+Ne t’aventure pas dans les parages, car une unité de gardes y patrouille. Compte tenu du climat actuel, les gardes seront tentés de tirer avant de poser des questions.

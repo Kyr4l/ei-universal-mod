@@ -1,0 +1,62 @@
+About the Man in grey
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+It was not mere chance that the clouds all gathered in the north today and my pipe would not get going. You come again, human? Do you want to do a good deed?
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  2
+Mmm... Depends on what you mean.
+#CAMERA 11
+#phrase YCF  3
+The arrow you found in the dead body. Return it to the Green Clan! We will destroy it according to our custom!
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  4
+Oh I can give you the arrow back, that is no problem... But I wanted to ask you, Chief, do your tribe know anything about a man in grey? Maybe some of you saw a person who hides his face...
+#CAMERA 3
+#phrase YCF  5
+Oh, a man-who-hides-his-face... The one who looks at appearance misses the essence. The roe runs to watering hole but falls into a hole with a sharp stick.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  6
+Is my brain slow or what?
+#CAMERA 11
+#phrase YCF  7
+A deer would never understand a unicorn's song, a human would not understand the language of the woods. I will try to make it easier for you: we did see that person, both with his face covered and open.
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  8
+So what does he look like without his disguise?
+#CAMERA 3
+#phrase YCF  9
+That person is not like you... I think that breed of humans is called woman. Her hair was white as snow!
+#CAMERA 10
+#NOLIPS
+#ANIMATION 30
+#phrase Hero  10
+A woman with white hair... It is Diera the Magician! So that is who gave the order to kill the Snoop who almost found the Princess... but that means Diera is the kidnapper!
+#DESC To himself
+#ANIMATION 43
+#CAMERA 2
+#phrase Hero  11
+So where did she go after that? What did she do?!
+#CAMERA 3
+#phrase YCF  12
+Sometimes she met people who live on the western shore of the lake. But more often she walked around the lake from the east and went to the gates which block the passage to the abandoned mines.
+#CAMERA 11
+#phrase YCF  13
+We never went further... there were people in iron armor past those gates. But they were not city guards!
+#hide YCF
+#show Hero 4
+#NOLIPS
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  14
+Abandoned mines, armed men - that is surely where she has hidden the Princess! Or is it? Mayhap I am wrong? But... there is a way to check it...
+#NOLIPS
+#ANIMATION 30
+#CAMERA 2
+#phrase Hero  15
+I must go back to the city and ask Diera an innocent question about those mines. If she starts to avoid the answers, then I guessed right!

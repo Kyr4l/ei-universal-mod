@@ -1,0 +1,20 @@
+A propos de la transformation
+#show JunBoy
+#show Rick
+#show Deva
+#ANIMATION 32
+#CAMERA 5
+#phrase JunBoy  1
+Alors, voilà ce que dissimulait mon passé ? Et pendant tout ce temps, c’est... moi que je cherchais ?
+#CAMERA 9
+#ANIMATION 6
+#phrase Rick  2
+Oui, At-Zako, c’est bien ça. Les Grands mages sont humains eux aussi et comme tout le monde ils font des erreurs... Je te cherchais au loin alors que tu te trouvais devant moi ! Je ne puis me pardonner d’avoir été si aveugle...
+#ANIMATION 9
+#CAMERA 10
+#phrase JunBoy  3
+Comment ça, grand Tka-Rik ? ! Tu as tenu ta promesse envers Zak, c’est-à-dire envers celui que j’étais : tu lui as rendu ses souvenirs. Et lui aussi a tenu sa promesse : me voilà, devant toi ! Tout est rentré dans l’ordre !
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick  4
+Tu as sans doute raison... A présent, va parler à Lu-a-Jalla : elle a tant attendu ces retrouvailles et la voilà maintenant qui croit t’avoir blessé !

@@ -1,0 +1,11 @@
+Voler la clé de la cage
+Une femme n’est pas assez forte pour tuer Kardaur. Elle doit donc voler la clé sans avoir recours à la force. La prudence est de mise près de la cage des prisonniers : les gardes prennent leur travail très au sérieux et n’hésitent pas à attaquer quiconque s’en approche, quels que soient son grade et sa position.
+#subobj  1
+Trouver le lieutenant
+Le Lieutenant Kardaur se trouve parfois dans la citadelle, à l’extrémité est de la forteresse. Cette citadelle se dresse sur la partie escarpée de la rivière qui coule au fond du canyon. Pour vous y rendre, vous devez ouvrir les portes.
+#subobj  2
+Se procurer les clés
+Une femme n’est pas assez forte pour tuer Kardaur rapidement et en silence. Même si elle essaie, il criera et les gardes accourront. Il n’y aura alors pratiquement aucun moyen de leur échapper. L’idéal serait de dérober les clés du lieutenant et d’espérer qu’il ne s’en aperçoit pas.
+#subobj  3
+Ouvrir la cage
+Après avoir récupéré les clés, retournez ouvrir la cellule du prisonnier. Et méfiez-vous des gardes.

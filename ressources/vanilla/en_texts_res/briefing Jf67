@@ -1,0 +1,47 @@
+Meeting the owner of the collection
+#show Junofil 1
+#show Hero 2
+#ANIMATION 57
+#CAMERA 9
+#phrase Junofil  1
+May your hair grow like straw inside your skull, your scum! You stole my life's work and you dare to look me in the face?
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+Easy, easy now, I never stole anything from you. On the contrary, I found some of the stolen objects.
+#ANIMATION 58
+#CAMERA 11
+#phrase Junofil  3
+I do not believe you! If you are not a thief, then you must be an accomplice. May you both fall into the Black Cave, that the Lords of the Dungeons devour your brains and your bodies burn in the lava rivers!
+#hide Junofil
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+T'will be easier just to wait 'til he is finished ranting... then I will speak.
+#DESC To himself
+#show Junofil 1
+#show Hero 2
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  5
+All right,  mister, I have your things here. But you will only get them if you answer my questions. Do you know anything about a young Joon man who recently visited Suslanger?
+#ANIMATION 59
+#CAMERA 3
+#phrase Junofil  6
+Of course I do! I will tell you, scum, I was the first who recognised the young man for a live Joon. If I had it my way, he would be living happily in my house for the rest of his life. But those fat jackals, those... scientists sent the Guards. You cowardly stole everything from me in the night, ha!. They did the same openly in daylight!
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  7
+So they have the youth now? Where do I find those scientists?
+#ANIMATION 58
+#CAMERA 7
+#phrase Junofil  8
+Try looking for them in the graves! A dozen days later I was summoned to the laboratory to see Necromancer Taivo, and he showed me a few bodies. It was those so-called learned Magicians, and their bodies had been disfigured so much, I was barely able to recognize them. May the same thing happen to you a...and your accomplice!
+#hide Junofil
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  9
+What did he say - Taivo's laboratory? I should ask the old Necromancer in the Last Shelter about that. If he knows so much about the Guild's affairs, he must know that name!
+#DESC To himself

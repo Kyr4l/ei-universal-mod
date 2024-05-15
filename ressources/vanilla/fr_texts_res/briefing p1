@@ -1,0 +1,9 @@
+Donner un coup de pied au porc
+#show Hero 1
+#show Pig 2
+#CAMERA 10
+#phrase Hero  1
+Sors d’ici !
+#CAMERA 3 30 6 4
+#phrase Pig  2
+Hrrr... Weeeeee !(Traduction du langage des porcs : « Oh mes pieds, quand mourrai-je enfin ? ! ! »)

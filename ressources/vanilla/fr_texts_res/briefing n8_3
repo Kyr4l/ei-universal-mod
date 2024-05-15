@@ -1,0 +1,22 @@
+A propos de l'apprenti d'Estera
+#show Merc3
+#show Witch
+#show Hero
+#ANIMATION 9
+#CAMERA 4
+#phrase Witch  1
+Très bien, Noble Elu, va voir cette fainéante ; c’est mon apprentie, elle s’appelle Naya. Je me suis dit, mon cher, que tu aurais peut-être besoin d’aide, même si tu es l’Elu et que tu détiens puissance et sagesse.
+#ANIMATION 9
+#CAMERA 8
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  3
+Quelle vieille pie ! Elle sait très bien que je ne suis pas un Elu et elle continue quand même à me titiller !
+#ANIMATION 31
+#CAMERA 6
+#phrase Hero  4
+Merci de ton aide, Estera...
+#ANIMATION 9
+#CAMERA 4
+#phrase Witch  5
+T’ai-je dit que je te suivrais n’importe où ? Mais je n’ai plus l’âge d’aller courir dans les bois ! Alors, Naya t’accompagnera partout, même dans un repaire d’Orques s’il le faut ! Ce sera pour elle une expérience intéressante et nous verrons si elle a bien assimilé mes leçons.

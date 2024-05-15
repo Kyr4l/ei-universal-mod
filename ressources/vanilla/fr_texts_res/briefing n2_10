@@ -1,0 +1,9 @@
+Laisser Sahilia au sanctuaire
+#show Hero 
+#show Merc10
+#ANIMATION 9
+#phrase Hero  1
+Je pars pour une mission dangereuse dont l’issue sera déterminée par la force pure et la magie du combat, et non par la discrétion et la dextérité. Cette fois, tu ferais mieux de rester ici.
+#ANIMATION 70
+#phrase Merc10  2
+Je ne veux pas me disputer avec toi, mais je suis sûre que tu ne tarderas pas à revenir me demander de l’aide !

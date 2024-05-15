@@ -1,0 +1,5 @@
+     Lorsque vous utilisez les sorts, souvenez-vous de certaines règles élémentaires.
+
+     Chaque sort a sa propre portée. Si un personnage reçoit l'ordre de jeter un sort sur une cible située hors de sa portée, il tentera dans un premier temps de s'en approcher.
+     L'effet des sorts n'est pas immédiat. Un certain temps est en effet nécessaire pour qu’ils atteignent leurs cibles. Ce laps de temps dépend de la complexité du sort et de la santé du personnage (plus la santé des personnages est bonne, plus ils sont résistants).
+     Certains sorts affectent leurs cibles pendant plus longtemps, mais leurs effets ne peuvent pas être cumulés. En clair, il est inutile de jeter plusieurs fois le même sort sur un même personnage. Le personnage visé subit uniquement l’effet du sort le plus fort.

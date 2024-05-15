@@ -1,0 +1,47 @@
+Traverser le tunnel
+Vous pouvez emprunter le tunnel pour vous rendre au ravin, évitant ainsi de vous battre contre les redoutables Hommes-lézards Tueurs.
+#subobj  1
+Trouver la faille dans le mur
+Suite à un tremblement de terre, un éboulement a bloqué le tunnel. Et ce même tremblement de terre a aussi fissuré le mur pour former un passage jusqu'à la grotte naturelle.
+#subobj  2
+Contourner l’éboulement
+Vous pouvez contourner l’éboulement par la grotte naturelle, avant de revenir au tunnel principal.
+#subobj  3
+Eviter les Golems
+Les Golems sont des créatures mécaniques dont la mission consiste à protéger les catacombes des intrus. Veillez à ne pas vous faire repérer par un Golem actif ou vous serez en danger.
+#subobj  4
+Sortir du tunnel
+En quittant le tunnel, vous vous retrouverez à l’intérieur du ravin, près de la maison du Magicien.
+#subobj  5
+Sarcophage
+Vous avez trouvé un sarcophage !
+#subobj  6
+S’emparer du contenu du sarcophage
+Le sarcophage peut contenir des objets utiles. N’ayant pas la clé, vous devez disposer d’un niveau de compétence « Utiliser/Voler » suffisamment élevé pour voir ce qu’il renferme !
+#subobj  7
+Trouver le sarcophage avec la clé de contrôle
+Le sarcophage renferme depuis la nuit des temps un double de la clé permettant de contrôler les Golems.
+#subobj  8
+Prendre la clé de contrôle
+Aucune clé n’est nécessaire pour ouvrir le sarcophage ; vous pouvez utiliser la clé de contrôle sur l’autel.
+#subobj  9
+Trouver la salle de l’autel
+L’autel qui contrôle les Golems doit se trouver quelque part près du tunnel ; selon toute vraisemblance, le passage menant à cette salle est caché ou fermé.
+#subobj  10
+Trouver l’autel
+Vous ne savez pas à quoi ressemble l’autel de contrôle, mais vous le reconnaîtrez probablement lorsque vous le verrez.
+#subobj  11
+Utiliser l’autel
+D’après les signes affichés sur le panneau de contrôle, l’autel activera un Golem passif chargé d’éliminer les élémentaux de la partie ouest de la grotte naturelle. Pour utiliser l’autel, vous aurez besoin de la clé.
+#subobj  12
+Attendez...
+Aussi impitoyable qu’il soit, un Golem a besoin d’un peu de temps pour braver les élémentaux.
+#subobj  14
+Trouver le champ de bataille
+L’endroit où le Golem a combattu les élémentaux se trouve à l’ouest de la grotte, après le petit lac de lave.
+#subobj  16
+Trouver la salle du sarcophage
+Une des salles renferme un sarcophage taillé dans la roche et gardé par un Golem. Il est peu probable que le Golem monte la garde sur un sarcophage vide !
+#subobj  17
+Fouiller le sarcophage
+Vous devriez jeter un coup d’œil à l’intérieur du sarcophage ; mais n’oubliez pas que les Golems ne dorment jamais...

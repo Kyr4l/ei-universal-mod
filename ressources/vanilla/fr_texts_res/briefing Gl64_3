@@ -1,0 +1,28 @@
+A propos des gardes d'esclaves assassinés
+#show Hero 3
+#show Glav 4
+#show Kuzn 5
+#ANIMATION 9
+#CAMERA 1
+#phrase Glav  1
+Même les actes les plus justes peuvent avoir de tristes conséquences, Frère Blondinet. Je ne regretterai pas les gardes-chiourmes que tu as tués, mais tu as pris le risque de semer des indices qui auraient pu attirer les Gardes vers le Dernier sanctuaire !
+#ANIMATION 6
+#CAMERA 7
+#phrase Glav  2
+Heureusement, il n’en est rien et je te pardonne ton insubordination. Mais à l’avenir, n’oublie pas... de me consulter ou de consulter les autres frères avant de prendre des risques inconsidérés, sauf bien sûr s’il s’agit de ta quête personnelle.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Mais j’ai agi à la demande du Frère Forgeron !
+#ANIMATION 11
+#CAMERA 3
+#phrase Glav  4
+Je vais en toucher un mot au Frère Forgeron et j’espère qu’il se souviendra de ce que je lui dirai - tout comme toi. Nous courrons trop de risques ici. J’espère que tu me comprends.
+#ANIMATION 29
+#CAMERA 2
+#phrase Hero  5
+Oui, je te comprends, mais je ne peux pas éviter tous les gardes à cent pas à la ronde ! Tôt ou tard, je devrai les affronter, c’est inévitable !
+#ANIMATION 15
+#CAMERA 9
+#phrase Glav  6
+Dans un sens, tu as raison, Frère Blondinet. Mais si tu entames un combat, tu dois absolument le remporter et ne laisser derrière toi aucun ennemi vivant susceptible de raconter ce qui s’est passé. Tu devrais demander au Frère Aveugle de te donner quelques leçons... Je vais lui demander de t’entraîner.

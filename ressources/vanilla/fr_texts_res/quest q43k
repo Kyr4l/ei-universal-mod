@@ -1,0 +1,11 @@
+Trouver le cadavre du fouineur
+Le fouineur qui a essayé de trouver la jeune fille a disparu sans laisser de traces. Il est sans doute mort. Vous devez retrouver son cadavre. Il a été vu pour la dernière fois alors qu’il se rendait au village des bûcherons, à l’est de la vallée.
+#subobj  1
+Trouver le village des Bûcherons
+La vallée qui abrite le village se trouve à l’est de la ville. Elle est encerclée de collines et n’est accessible que par le nord. N’oubliez pas que la province est au bord de la révolte et que les étrangers, notamment les citadins, ne sont pas les bienvenus.
+#subobj  2
+Trouver le corps du fouineur
+Le corps du fouineur se trouve quelque part dans les environs. Il est peu probable que les Bûcherons aient pris la peine de l’enterrer.
+#subobj  3
+Fouiller le cadavre
+Il semble que le fouineur ait été tué par ceux qui ont enlevé la Princesse. Vous trouverez peut-être quelque chose qui vous aidera à les trouver.

@@ -1,0 +1,15 @@
+Laisser le Chevalier avec le Clan vert
+#show Hero 
+#show Merc9
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+Vénérable Chevalier ! Cette fois, je dois partir en mission sans toi.
+#ANIMATION 45
+#CAMERA 3
+#phrase Merc9  2
+Pourquoi ? Ma compagnie t’ennuie-t-elle ?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  3
+Non, ce n’est pas ça. Il se trouve que quelqu’un de la ville t’a reconnu ou a cru te reconnaître. Mieux vaut donc que tu restes ici avec le Clan Vert. 

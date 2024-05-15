@@ -1,0 +1,11 @@
+Recruter Naya
+#show Hero 
+#show Merc3
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  1
+Alors Naya, veux-tu nous accompagner ?
+#ANIMATION 31
+#CAMERA 3
+#phrase Merc3  2
+Désolée Noble Elu, mais vous êtes déjà suffisamment nombreux. J’ai l’habitude de vivre dans le calme de la forêt et je ne supporterais pas d’être entourée de tant de monde.

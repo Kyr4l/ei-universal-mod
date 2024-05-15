@@ -1,0 +1,5 @@
+     Les personnages ne savent pas nager mais peuvent traverser à gué des eaux peu profondes ou des marais. Le personnage doit toujours avoir pied. Ainsi, un humain est plus apte à traverser des rivières à gué qu'un loup, et un Troll peut s'aventurer encore plus profondément qu'un humain.
+
+     Exemple : votre personnage atteint une rivière. Pour poursuivre sa quête, il doit la traverser. Ne vous inquiétez pas, il trouvera de lui-même un moyen de la traverser à gué.
+
+     Remarque : une fois dans l'eau, le personnage ne change pas de position s’il risque de ne plus avoir pied (nos personnages ne sont pas suicidaires). Le personnage refusera simplement d'exécuter un tel ordre.

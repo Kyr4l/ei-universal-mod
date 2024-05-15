@@ -1,0 +1,11 @@
+A propos du vol chez le gouverneur
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+Capitaine ! Le Gouverneur offre-t-il une récompense pour son coffret ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Kapitan  2
+Peut-être, mais tu ne l’auras pas, jeune homme. Je n’aimerais pas que le Gouverneur se rende compte que d’autres peuvent faire mon travail mieux que moi. 

@@ -1,0 +1,40 @@
+A propos du Loup Blanc mort
+#show Hero 3
+#show White_Wolf_Hide 4
+#show Elder 5
+#ANIMATION 15
+#CAMERA 1
+#phrase Hero  1
+Oui, ce serait au moins un problème de réglé.
+#hide White_Wolf_Hide
+#show White_Wolf_Hide 5
+#ANIMATION 29
+#CAMERA 11
+#phrase Elder  2
+Je savais que l'Elu ne nous décevrait pas. Le village est en fête car le Loup Blanc est mort ! Longue vie à l'Elu ! 
+#show Hero 1
+#hide White_Wolf_Hide 4
+#show Elder 2
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  3
+Bon, on se calme ! J'ai tué un vulgaire toutou et ça m'a amusé… il n'y rien d'extraordinaire là-dedans.
+#ANIMATION 9
+#CAMERA 7
+#phrase Elder  4
+Ta modestie fait plaisir à voir, Noble Elu... Mais s'il en est ainsi, serais-tu d'accord pour donner la tête du loup au Capitaine Gort ? Tu disais que ça n'avait pas d'importance pour toi, alors que cela permettrait à notre Capitaine de conserver son prestige au sein du village.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  5
+Ce Erfar est rusé comme un renard ! Si je ne donne pas la tête du loup, ils diront que je ne tiens pas parole.
+#show Hero 1
+#show Elder 2
+#CAMERA 2
+#ANIMATION 46
+#phrase Hero  6
+D'accord, il peut avoir la tête.
+#ANIMATION 9
+#CAMERA 7
+#phrase Elder  7
+Tu es la générosité même. Les missions les plus difficiles ne sont qu'un jeu d'enfant pour toi. Le Capitaine a un plan et j'aimerais que tu en fasses partie. Je vais annoncer la bonne nouvelle aux villageois, je leur dirai que l'Elu veut bien continuer à nous aider.

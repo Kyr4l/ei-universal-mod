@@ -1,0 +1,8 @@
+     Lorsque votre personnage se trouve dans une zone de jeu, il n’a pas accès à certaines actions. Par exemple, il ne peut pas parler avec les autres personnages, ni acheter, vendre ou commander des objets ou des sorts. Ces actions ne sont disponibles que dans la zone de dialogue.
+
+     Votre personnage peut entrer dans la zone de dialogue, mais vous ne pouvez alors pas lui ordonner d’attaquer quelqu’un, de voler des objets ou de jeter des sorts. Ces activités y sont interdites.
+
+     Votre personnage peut cependant parler à d’autres personnages à condition qu’ils aient un sujet de conversation disponible. Pour vous en assurer, placez le curseur sur un personnage. Si celui-ci est "autorisé" à parler, son nom apparaît près du curseur, accompagné d’une icône en forme de bouche animée. Si le personnage n’a rien à dire à ce moment précis, seul son nom apparaît (sans la bouche). Pour de plus amples informations sur les dialogues entre personnages dans la zone de dialogue, reportez-vous à l’écran suivant.
+          Les îles abritent différentes zones de dialogue. En fonction des circonstances, celles-ci ne sont pas toujours disponibles. Cependant, chaque île renferme au moins une zone de dialogue (appelée "base") toujours disponible où votre personnage peut acheter, vendre et commander des objets ou des sorts. Lorsque vous obtenez une liste de sujets disponibles et que figure parmi eux le sujet "acheter, vendre, commander", celui-ci reste disponible jusqu'à ce que toutes les quêtes de l’île aient été accomplies.
+
+    Remarque : à Gipath, vous pouvez échanger des objets et des sorts sur différentes bases.

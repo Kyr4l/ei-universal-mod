@@ -1,0 +1,64 @@
+A propos des biens du Brigand Tête-Rouge
+#show Hero 3
+#show Smith 5
+#show Map00 4
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  1
+J'ai trouvé cette carte dans le sac du Brigand Tête-Rouge, celui que j'ai vu en train de parler avec l'Orque. On dirait que cela a un rapport avec un objet que possèdent les Orques. Regarde, on voit également un Prophète avec une clé...
+#hide Map00
+#show Map00 5
+#ANIMATION 29
+#CAMERA 7
+#phrase Smith  2
+Regardons cela… Aha ! Une image de sarcophage avec à l'intérieur une Pierre magique.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Tu veux dire une rune ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Smith  4
+Non, les runes ce n'est pas pareil. Les Pierres... sont... de la vapeur de crapaud. Je ne sais pas vraiment ce que c'est mais quand la Sorcière vivait au village elle en offrait un bon prix. Et même maintenant, je suis sûr qu'elle est prête à payer le prix fort pour des petites choses de ce genre... On partagera les bénéfices.
+#ANIMATION 29
+#CAMERA 6
+#phrase Hero  5
+Je n'ai encore rien trouvé et tu parles déjà de partager les bénéfices ! Regarde, il y a un Troll, là, et quelque chose qui ressemble à l'entrée d'une caverne. Sais-tu où ça se trouve ?
+#ANIMATION 7
+#CAMERA 7
+#phrase Smith  6
+La caverne des Trolls est au nord-est des contreforts. On y pénètre facilement : le Troll qui la garde est costaud mais stupide, on peut aisément le tromper. Mais une fois dans la caverne, c'est une autre histoire !
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  7
+Les Orques sont rusés et pernicieux. Ils savent se battre et fabriquer des choses compliquées. A droite de l'entrée de cette caverne, il y a une crevasse avec un pont-levis. J'ai découvert comment il fonctionnait mais je n'ai pas pu le baisser. Pour cela, il faudrait une sorte d'engrenage.
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  8
+On ne peut pas en fabriquer un ?
+#hide Map00
+#show Map00 4
+#ANIMATION 45
+#CAMERA 9
+#phrase Smith  9
+Qui me fournira le modèle pour le construire ? De plus, chaque tribu orque a ses propres secrets, si bien qu'un engrenage pour le pont des Orques des îles ne fonctionnerait pas pour le pont des Orques des cavernes.
+#hide Map00
+#show Map00 5
+#ANIMATION 14
+#CAMERA 6
+#phrase Hero  10
+Cela veut dire que les Orques des différentes tribus ne se font pas confiance ?
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  11
+Exactement. J'ai entendu dire que les Orques des îles ont envoyé un commando de Gobelins voler un engrenage pour pont aux Orques des cavernes et que les hommes du Capitaine le leur ont pris.
+#ANIMATION 31
+#CAMERA 7
+#phrase Smith  12
+Il faut essayer de le reprendre à Gort. Montre-lui un peu de respect, rends-lui service et il te sera redevable. Tu pourras alors lui demander l'engrenage.
+#hide Smith
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  13
+Le Pingre est un pingre. Pour lui, le monde n'est fait que d'argent et de dettes. Le Doyen a peut-être raison de se méfier de lui.

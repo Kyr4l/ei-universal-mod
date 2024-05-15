@@ -1,0 +1,33 @@
+A propos du nouvel engrenage
+#show Sheriff 1
+#show Hero 2
+#CAMERA 5
+#phrase Hero  1
+Ecoute, Gort, tu te rappelles m'avoir donné l'engrenage pour pont des Orques des cavernes ? Tu n'en aurais pas un semblable qui fonctionnerait pour les Orques des îles ?
+#ANIMATION 32
+#CAMERA 9
+#phrase Sheriff  2
+Que vas-tu en faire ? Du boudin blanc pour Noël ? Ha-ha-ha, elle est bonne, non ?
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  3
+Oui, très drôle. Tu en as un, oui ou non ?
+#ANIMATION 9
+#CAMERA 7
+#phrase Sheriff  4
+J'ai entendu une histoire où on parlait de ça. Des Chasseurs libres avaient volé un coffre aux Orques des îles et il y avait à l'intérieur, parmi d'autres choses, un mécanisme de ce genre. Ils ont tout mis sur un chariot, mais ils ont commencé à se bagarrer. Un seul d'entre eux est revenu tandis que l'autre est resté gisant près du chariot.
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  5
+Ces chasseurs sont vraiment charmants, ils sont doux comme des agneaux. Et où se trouve le coffre maintenant ?
+#ANIMATION 7
+#CAMERA 9
+#phrase Sheriff  6
+Dans les Montagnes centrales, pas loin de la route… Le Chasseur qui a battu l'autre a tout emporté sauf l'engrenage. Qui aurait besoin d'un truc comme ça ?
+#hide Hero 1
+#show Sheriff 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase Sheriff  7
+C'est un type étrange, toujours à la recherche de babioles sans valeur. Peut-être qu'il n'est pas l'Elu, quoi qu'en dise le Doyen !

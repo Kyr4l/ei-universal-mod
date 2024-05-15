@@ -1,0 +1,22 @@
+A propos de la petite-fille d'Estera, sauvée
+#show Hero
+#show Daughter
+#show Witch
+#ANIMATION 61
+#CAMERA 4
+#phrase Witch  1
+Eh bien, c’est ce que j’appelle une vilaine fille - on risque sa vie pour la sauver et elle ne dit même pas merci ! Peu importe, je te récompenserai pour tes efforts.
+#ANIMATION 63
+#CAMERA 12
+#phrase Witch  2
+Ne sois pas dur avec elle, cela ne lui arrive que rarement ! Et j’ai une autre requête : vas-tu parler à cette satanée fille ? Elle n’est plus elle-même.
+#hide Witch 
+#show Hero 1
+#ANIMATION 11
+#CAMERA 11
+#phrase Daughter  3
+Pourquoi refuses-tu encore de me regarder ? Que me reproches-tu ?
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero  4
+Ce n’est pas toi, Airy, c’est moi. Tu sais... Bien que je sois amnésique, je ressens toujours une étrange émotion. Je sens que j’aime quelqu’un d’autre et que cette personne m’attend ! Mais je ne sais plus où elle se trouve ni comment la retrouver. Tu es une jeune fille adorable, Airy, mais je ne te duperai pas, ni toi ni quiconque. Et s’il te plaît, arrête tes bêtises. La prochaine fois, je n’arriverai peut-être pas à temps.

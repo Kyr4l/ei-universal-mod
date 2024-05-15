@@ -1,0 +1,51 @@
+A propos des mines abandonnées
+#show Hero 1
+#show Huber 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Huber  1
+Ah, jeune homme, pourquoi tant de hâte ? Quelle est la raison de cet empressement ?
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  2
+La mine !
+#ANIMATION 45
+#CAMERA 3
+#phrase Huber  3
+Quelle mine ? Que veux-tu dire par « la mine » ? Et où sont passées tes bonnes manières ? Tu ne dis plus « Bonjour » ?
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  4
+Votre Excellence, excusez mon empressement mais j’ai de bonnes raisons de vouloir vous parler. J’ai décidé de faire quelque chose de ma vie. Je veux faire des affaires. L’exploitation minière.
+#ANIMATION 3
+#CAMERA 3
+#phrase Huber  5
+Oh, que tu es ennuyeux ! Quelles sont ces bonnes raisons ?
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  6
+Eh bien, votre Excellence, j’ai remarqué que vous aimiez les belles choses et je suis certain de pouvoir trouver des merveilles dans les mines abandonnées...
+#show Hero 3
+#show GoldNugget00 4
+#show Huber 5
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  7
+Comme cette pépite, par exemple. Vous m’honoreriez en acceptant ce présent !
+#ANIMATION 62
+#CAMERA 7
+#hide GoldNugget00
+#show GoldNugget00 5
+#phrase Huber  8
+Hum... Eh bien, ce sont effectivement de bonnes raisons, je dirais même d’excellentes raisons. Tu as de bonnes manières et un esprit romantique. En effet, qu’y a-t-il de plus romantique qu’une magnifique pépite d’or, et qui pèse son poids de surcroît !
+#show Hero 1
+#hide GoldNugget00
+#show Huber 2
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  9
+Mais pour me mettre au travail, je vais avoir besoin des clés des mines abandonnées - et ces clés sont sous le contrôle de Votre Excellence ! Je suis sûr que j’y trouverai d’autres choses intéressantes et certaines trouveront à coup sûr une place de choix dans votre collection.
+#ANIMATION 9
+#CAMERA 9
+#phrase Huber  10
+Oh, la clé ? Oui, je l’avais quelque part... Eh bien, si cette clé est le seul obstacle entre la beauté et moi, comment pourrais-je te la refuser ?

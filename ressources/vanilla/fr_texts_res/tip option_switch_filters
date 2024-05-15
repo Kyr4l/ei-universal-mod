@@ -1,0 +1,10 @@
+Filtres automatiques.
+Vous pouvez utilisez les filtres de l'inventaire pour
+n'afficher qu'une catégorie d'objets.
+Ces filtres peuvent être activés manuellement
+ou manuellement et automatiquement.
+ACTIVE : Les filtres sont automatiquement activés
+quand un nouvel objet est ajouté à l'inventaire.
+(selon le type d'objet).
+DESACTIVE : L'activation des filtres
+se fait manuellement.

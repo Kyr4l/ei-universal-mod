@@ -1,0 +1,31 @@
+A propos de la quête à Suslanger
+#show Hero 3
+#show Rick 4
+#CAMERA 1
+#ANIMATION 6
+#phrase Rick  1
+Lorsque je t’ai envoyé à Suslanger, je m’attendais à ce que tu y trouves des amis susceptibles de t’aider dans ta quête.
+#CAMERA 11
+#ANIMATION 4
+#phrase Rick  2
+Mais j’étais loin d’imaginer que tu ramènerais quelqu'un à Gipath ! Je ne t’en blâme pas, mais n’était-ce pas quelque peu imprudent ?
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Peut-être, mais je ne pouvais laisser personne là-bas, au Portail ? Personne n'y aurait survécu !
+#CAMERA 7
+#ANIMATION 6
+#phrase Rick  4
+Peut-être. Quoi qu’il en soit, je ne veux pas de nouveaux venus ici dans ma caverne !
+#ANIMATION 11
+#CAMERA 6
+#phrase Hero  5
+Alors que faisons-nous ? Tu serais prêt à aggresser quelqu'un qui m’a aidé au cours de la mission que toi, tu m’as confiée ?
+#CAMERA 3
+#ANIMATION 6
+#phrase Rick  6
+Combien de fois devrai-je te le répéter, Zak : lorsqu’on est trop hâtif et que l’on se contente de présomptions pour tirer des conclusions, on peut faire des erreurs ! Je ne veux de mal à personne. Je vais simplement procéder à une inversion de téléportation et tout rentrera dans l’ordre.
+#CAMERA 9
+#ANIMATION 6
+#phrase Rick  7
+Ton exemple m’a beaucoup appris et je veillerai à ce que les gardes khadaganiens ne remarquent rien au sujet de ce voyage entre le Portail et un lieu sûr.

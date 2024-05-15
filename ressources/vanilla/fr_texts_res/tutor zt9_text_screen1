@@ -1,0 +1,9 @@
+     En fonction de la situation, votre personnage peut adopter l'un des deux modes suivants : Agressif ou Défensif.
+     
+     En mode Agressif, le personnage attaque systématiquement tous les ennemis qu'il rencontre.
+     En mode Défensif, le personnage n'attaque que si vous lui ordonnez d'attaquer un ennemi précis.
+
+     Pour passer d'un mode à l'autre, utilisez le panneau de commandes encadré situé en bas à gauche de l'écran ou le clavier :
+     Pour passer du mode "Agressif" au mode "Défensif", utilisez la touche <A>.
+
+     Remarque : vous pouvez attribuer chacun de ces modes à n'importe quel personnage.

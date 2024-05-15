@@ -1,0 +1,7 @@
+     Vous pouvez insérer des sorts dans certains objets comme des armes ou des armures afin de leur attribuer des caractéristiques "magiques". Pour ce faire, le sort doit contenir une rune permettant de l’y insérer. Ces runes s’appellent "Objet (Déclencheur)" et "Objet (Permanent)". Elles sont disponibles en cours de jeu.
+     Remarque : ces runes ne sont pas nécessaires pour assembler une baguette magique associée à un sort.
+Pour les sorts "à insérer", le concepteur comprend une fente spéciale située sous la fente du modèle. Une fois le modèle et les matériaux nécessaires placés dans le concepteur, cette fente sera disponible. Pour y placer un sort de votre inventaire, cliquez sur sa représentation.
+
+     Cliquez sur le bouton <V> pour assembler ou sur <X> pour annuler.
+
+     Remarque : le sort et l’objet dans lequel vous voulez l’insérer sont dotés de valeurs de "complexité". La valeur de complexité de l’objet doit être supérieure à celle du sort. En effet, cela ne rimerait à rien d’insérer un sort complexe dans un objet qui ne permettrait pas de l’utiliser, car trop simple. De même, vous ne pouvez pas insérer un sort nécessitant une valeur de "résistance" élevée dans un objet doté d’une faible valeur "énergétique". 

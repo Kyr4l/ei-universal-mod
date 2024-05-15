@@ -1,0 +1,36 @@
+About the quest in the Observatory
+#show Hero
+#show Daughter
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  1
+Oh Airy! I thought it would be much easier to reach the old Observatory - the things which are going on there... how did you manage to get back from the Middle Mountains unharmed?
+#ANIMATION 32
+#CAMERA 3
+#phrase Daughter  2
+Do you see now? I am even more capable than you!
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  3
+Oh all right, all right. So what can you do that I cannot?
+#ANIMATION 11
+#CAMERA 11
+#phrase Daughter  4
+Ha! I am not a Witch's granddaughter for nothing! I know how to master the Magic of Feelings quickly and without any effort...
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  5
+Yes, that could prove useful! I would not mind that ability myself...
+#ANIMATION 63
+#CAMERA 7
+#phrase Daughter  6
+Close your eyes, then... right, finished! Just do not ask how I did it, I will not tell you.
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  7
+Thank you little girl! You really have helped a lot... Hey, what is wrong?
+#ANIMATION 11
+#CAMERA 9
+#phrase Daughter  8
+Little?! May I be struck down if I ever do anything for you again! Never, ever!!!
+#DESC Indignantly

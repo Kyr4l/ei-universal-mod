@@ -1,0 +1,11 @@
+S’emparer de la collection du Gouverneur
+Un voleur surnommé Le Chauve a caché son butin près de sa ferme, dans la région des mines abandonnées. Pour le faire chanter, vous devez vous rendre à la propriété du Gouverneur.
+#subobj  1
+Trouver la ferme
+La famille du Chauve vit dans une ferme située sur la rive ouest du grand lac. Pour vous y rendre, dirigez-vous d’abord vers le rivage sud, puis ouest. Attention : outre la famille du criminel, vous vous heurterez également aux tigres des neiges domptés à la ferme.
+#subobj  2
+Trouver la grange et la cachette
+Le butin est caché dans une grange, située au nord de la vallée abritant la ferme. Vous remarquerez deux tas de bois de chaque côté de la grange.
+#subobj  3
+Prendre la boîte renfermant la collection
+Emparez-vous du butin de la grange.

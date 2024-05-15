@@ -1,0 +1,58 @@
+A propos de la pierre trouvée dans la caverne
+#show Hero 3
+#show CryptRune00 4
+#show Smith 5
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+Regarde… je peux offrir cela à la Sorcière ?
+#hide CryptRune00
+#show CryptRune00 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  2
+Il s'agit bien d'une Pierre magique et on peut en retirer un bon prix. Mais personnellement, je n'irais jamais là-bas. Le chemin qui mène à la caverne d'Estera est parsemé de pièges magiques.
+#ANIMATION 7
+#CAMERA 10
+#phrase Hero  3
+Il n'y a pas moyen de les éviter ?
+#ANIMATION 15
+#CAMERA 7
+#phrase Smith  4
+Je n'ai jamais essayé, je ne tiens pas à m'exposer à une mort certaine. Ceci dit, je connais un moyen mais ce ne sera pas facile. Ces pièges sont contrôlés par des obélisques magiques. Mais il faut avoir une clé spéciale.
+#ANIMATION 8
+#CAMERA 6
+#phrase Hero  6
+Comment sais-tu cela ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Smith  7
+Qui d'autre que moi aurait forgé une clé de rechange pour la Sorcière ? Elle ressemble à ça…
+#show Hero 3
+#hide CryptRune00
+#show AmbushKey00 5
+#show Smith 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  8
+Estera la conserve quelque part au bout du ravin, à l'ouest. Il y a des pièges là-bas aussi, mais les éclairs ne frappent qu'à certains endroits précis. Tu pourrais essayer de les éviter puis désactiver l'obélisque qui contrôle les pièges. Ce n'est pas loin d'ici, au bout du ravin...
+#ANIMATION 44
+#CAMERA 7
+#phrase Smith  9
+Mais il y a un autre problème : un Troll rôde en permanence autour de la clé. Il ne dérange jamais la Sorcière, mais si quelqu'un essaie de s'emparer de la clé... cette sale petite bestiole se fait un plaisir de le manger tout cru, ou tout cuit si c'est son bon plaisir.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  10
+Je te remercie beaucoup. Tu m'as tout dit ? Tu n'as plus de conseils à me donner ?
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  11
+Bien sûr que si ! En voilà un, de conseil : quand tu montreras la Pierre magique à Estera, attends qu'elle fixe un prix. Quand elle l'aura fixé, attends encore un peu puis demande trois fois plus. Elle va payer, ne t'en fais pas. Mais rappelle-toi que j'ai droit à la moitié.
+#hide Smith
+#hide AmbushKey00 4
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  12
+S'il croit que je vais marchander avec la Sorcière ! J'ai besoin de son aide, pas de son argent. J'ai déjà rendu quelques services aux villageois, maintenant il est temps que je pense à moi.

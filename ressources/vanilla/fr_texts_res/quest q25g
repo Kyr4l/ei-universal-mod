@@ -1,0 +1,14 @@
+Démasquer l’ennemi !
+L’Artisan Babur et le Doyen Erfar ont tous deux des raisons d’en vouloir à l’Elu. Ils savent que celui-ci va retourner dans les Montagnes centrales pour se procurer la plante magique. S’il se fait piéger à l’endroit où le lit asséché rejoint la rivière, Babur sera le traître, si cela se produit près de la charrette cassée, le Doyen sera le traître.
+#subobj  1
+Vérifier le lit de la rivière asséché
+Le lit asséché de la rivière s’étire entre le milieu des Montagnes centrales et le sud-ouest. Il rejoint la rivière dans une petite baie. Si une embuscade a été tendue près de cette baie, c’est que l’Artisan Babur est le traître.
+#subobj  2
+Examiner la charrette cassée
+La charrette cassée se trouve près d’une colline, à l’extrémité de la route entre les Contreforts et l’est. Si une embuscade y a été tendue, c’est que le Doyen est le traître.
+#subobj  3
+Eliminer les ennemis
+Vous savez à présent que l’ennemi du village est le Doyen. Il va payer pour sa trahison, mais tous les ennemis qui ont participé à l’embuscade doivent aussi être éliminés !
+#subobj  4
+Prouver l’innocence de l’Artisan
+Il n’y a pas eu d’embuscade près du lit asséché de la rivière, ce qui prouve que l’Artisan Babur est innocent.

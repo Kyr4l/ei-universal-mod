@@ -1,0 +1,5 @@
+Tips delay
+This option sets the delay time for 
+of the tips popping up near the screen 
+element you placed the cursor over.
+The range is between 0 and 5 seconds.

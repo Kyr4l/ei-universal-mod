@@ -1,0 +1,15 @@
+Parler à Archer
+#show Hero 
+#show Merc2
+#CAMERA 6
+#ANIMATION 9
+#phrase Hero  1
+Eh, l’ami ! Je t’ai remarqué depuis longtemps : tu es un excellent tireur. Et si je te proposais de tirer sur des cibles plus intéressantes ? Par exemple sur les goules qui se mettent toujours en travers de mon chemin lors de mes expéditions ?
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc2  2
+Hummm... On ne m'appelle pas l'Archer pour rien. Mes flèches ne sont pas faites pour rester dans leur carquois. Mais je ne peux pas partir comme ça. Je dois rendre des comptes au Capitaine.
+#CAMERA 2
+#ANIMATION 11
+#phrase Hero  3
+Je vois. Mais j’aimerais que tu réfléchisses à ma proposition !

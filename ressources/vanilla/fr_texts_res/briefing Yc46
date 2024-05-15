@@ -1,0 +1,16 @@
+A propos du ravisseur du Doyen
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+Si le corbeau s’empare du butin d’un faucon, que fait le faucon ? Il se venge du corbeau ! Si un homme tue, un autre homme se vengera du tueur.
+#CAMERA 11
+#phrase YCF  2
+Dirige-toi vers les mines abandonnées depuis les faubourgs de la ville et poursuis un peu ton chemin vers l’est. Tu découvriras un camp militaire niché entre deux collines où des soldats s’entraînent à tuer. L’espion qui est parmi eux est plus voyant qu'un tigre au milieu des rats, tu ne peux pas le manquer. Tu feras une bonne action en te vengeant de l’espion qui a enlevé Habbura !
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  3
+Il me semble que récemment je n’ai fait que de bonnes actions. Mais étrangement, elles s’achèvent toutes par la mort de quelqu’un. Je ne suis pas un lâche, mais pas un tireur à gages non plus !
+#CAMERA 11
+#phrase YCF  4
+Le chasseur tue le tigre et vend sa fourrure. Cela signifie-t-il que le tigre était un chaton inoffensif ? Un ami du Clan Vert se venge de l’enlèvement d’Habbura. Cela signifie-t-il que le responsable de l’enlèvement était une victime innocente ? Réfléchis-y, humain !

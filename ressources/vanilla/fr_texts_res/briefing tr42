@@ -1,0 +1,15 @@
+A propos de la fille disparue
+#show Hero 1
+#show Shopper 2
+#ANIMATION 63
+#CAMERA 11
+#phrase Shopper  1
+On dit, jeune homme, que tu es à la recherche de la Princesse ? Alors, pourquoi ne t’en charges-tu pas toi-même ? Je suis le marchand Karansul, pas Monsieur-J'Aide-Tout-Le-Monde. Je vends des marchandises à bon prix et c’est tout ce qui m’importe.
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  2
+D’accord, d’accord... Mais supposons que je veuille acheter quelque chose de magique, où irais-je ? Tu es peut-être un bon marchand, mais tu n’as rien d’un mage !
+#ANIMATION 44
+#CAMERA 11
+#phrase Shopper  3
+Il ne faut pas toujours se fier aux apparences. Je gère tout le commerce de cette ville. Et je vends aussi des runes. Le fabricant importe peu. Je ne paie pas la Magicienne Diera pour rien, n’est-ce pas ?

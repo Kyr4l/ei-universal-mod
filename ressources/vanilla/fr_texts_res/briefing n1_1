@@ -1,0 +1,12 @@
+Recruter le Voyou
+#show Hero 
+#show Merc1
+#ANIMATION 9
+#phrase Merc1  1
+Eh, Noble Elu, quelle triste vie nous menons, pas le moindre combat digne de ce nom ! Il n’y a personne à affronter ici, au village...
+#ANIMATION 15
+#phrase Hero  2
+Très bien, le Voyou, j’ai quelque chose pour toi au bout de ta rue... Ça devrait te plaire !
+#ANIMATION 3
+#phrase Merc1  3
+A la bonne heure ! J’attendrai devant les portes !

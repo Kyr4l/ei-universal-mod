@@ -1,0 +1,22 @@
+A propos de la vie au village
+#show Hero 1
+#show Sheriff 2
+#CAMERA 5
+#phrase Hero  1
+Quelque chose qui ne va pas, Gort ?
+#ANIMATION 32
+#CAMERA 11
+#phrase Sheriff  2
+Eh bien… je voulais donner une bonne correction à Babur mais le Doyen me l'a interdit. Il m'a dit que ce n'était pas le bon moment. Moi, je veux bien mais l'artisan est trop arrogant... et puis il est tellement cher qu'on ne peut rien lui acheter.
+#ANIMATION 14
+#CAMERA 3
+#phrase Sheriff  3
+Et cette histoire avec les Chasseurs libres, je ne veux pas en entendre parler ! Tout ce ramdam pour rien du tout ! Mais il ne perd rien pour attendre. Le Doyen et moi, on va le faire payer !
+#ANIMATION 7
+#CAMERA 10
+#phrase Hero  4
+Tout ça ne me regarde pas. J'aimerais plutôt savoir... j'ai vu plusieurs fois... ah, c'est difficile à décrire... une sorte de petit Dragon, mais vraiment petit, comme une mouche. Il s'est approché, il a volé autour de moi en bourdonnant puis il est reparti. Tu sais ce que c'est ?
+#ANIMATION 31
+#CAMERA 7
+#phrase Sheriff  5
+Oh, je n'ai pas de temps à perdre avec des mouches. Si j'en vois une, je l'écrase et on n'en parle plus, ha ha ha !

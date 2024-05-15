@@ -1,0 +1,11 @@
+Reprendre Archer
+#show Hero 
+#show Merc2
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  1
+Bien, l’Archer, tu t’ennuies au village ? Je pars pour des contrées intéressantes. Veux-tu m’accompagner ?
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc2  2
+Bien sûr ! Je serai devant les portes, comme d’habitude.

@@ -1,0 +1,37 @@
+About the dead White Wolf
+#show Hero 1
+#show Sheriff 2
+#ANIMATION 9
+#CAMERA 9
+#phrase Sheriff  1
+Look, Chosen... here is a quick proposition: would you consider giving me the White Wolf's head?
+#show Hero 3
+#show Sheriff 5
+#show White_Wolf_Hide 5
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  2
+You mean this one?
+#ANIMATION 29
+#CAMERA 11
+#phrase Sheriff  3
+Hah! You do not have any use for it, do you? And I need it for my prestige and authority. That is the custom, you see?
+#hide White_Wolf_Hide
+#show White_Wolf_Hide 4
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  4
+I like that! When someone has to run around and catch wolves, you go moaning "Oh dear Chosen, will you please help us?" And when it is done, you take all the credit.
+#hide White_Wolf_Hide
+#show White_Wolf_Hide 5
+#ANIMATION 32
+#CAMERA 3
+#phrase Sheriff  5
+And you begrudge it, do you not? What is it, caught the meanness bug from Babur the Tightfist? And I hoped we would be friends. And the Elder already told everyone you would help me with my plan...
+#show Hero 1
+#show Sheriff 2
+#hide White_Wolf_Hide
+#ANIMATION 11
+#CAMERA 2 -20 5 3
+#phrase Hero  6
+We will see how it goes. As to the Elder and the plan - tell me about it later.

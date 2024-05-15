@@ -1,0 +1,10 @@
+     Dans l’échoppe des objets, vous pouvez acheter et vendre des armes, des armures, des matériaux, des modèles et des trophées. Les éléments-clés ne sont pas à vendre.
+
+     La barre supérieure de l’écran indique ce qui est disponible dans l’échoppe, tandis que la barre inférieure répertorie le contenu de votre inventaire. Utilisez les boutons situés de part et d’autres des barres pour choisir le type d’objets à afficher.
+
+     Le centre de l’écran fait office de "comptoir". La partie supérieure du comptoir contient les objets que vous achetez et la partie inférieure ceux que vous vendez. En bas à gauche de l’écran se trouve la "valeur commerciale" totale qui correspond au montant que vous pouvez encaisser (si vous vendez) ou que vous devez débourser (si vous achetez).
+
+     Pour placer un objet sur le comptoir de l’échoppe, cliquez sur sa représentation sur la barre qui convient (supérieure ou inférieure).
+     Cliquez sur un objet situé sur le comptoir de l’échoppe pour le remettre sur la barre.
+     Cliquez sur plusieurs objets du même type en appuyant sur la touche MAJ pour les déplacer.
+     Pour mettre fin à l’opération, cliquez sur le bouton <V> près de la valeur de l’opération ou sur le bouton <X> pour annuler.

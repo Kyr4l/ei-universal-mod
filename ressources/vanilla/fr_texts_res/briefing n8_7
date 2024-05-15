@@ -1,0 +1,15 @@
+Rencontrer le Soldat
+#show Hero
+#show Merc7 
+#CAMERA 3
+#ANIMATION 9
+#phrase Merc7  1
+Frère Khatul m’a dit que tu pourrais avoir besoin de mon aide, Frère Blondinet. Je m’appelle Harad. Récemment encore, ma plus grande ambition était de capturer et de tuer des gens comme toi.
+#CAMERA 3
+#ANIMATION 32
+#phrase Merc7  2
+Mais il s’avère que les Khadaganiens en savent moins sur l’honneur et la décence que le plus vil des paysans ! Alors, j’ai décidé de vouer ma vie à me venger de ceux que j’ai autrefois vénérés !
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  3
+Eh bien, si j’ai besoin d’un compagnon, je ferai appel à toi.

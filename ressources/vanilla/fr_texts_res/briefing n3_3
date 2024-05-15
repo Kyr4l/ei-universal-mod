@@ -1,0 +1,15 @@
+Reprendre Naya
+#show Hero 1
+#show Merc3 2
+#ANIMATION 45
+#CAMERA 9
+#phrase Merc3  1
+Tu n’as toujours pas besoin de mon aide ?
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  2
+Si. Je voulais justement t’en parler.
+#ANIMATION 3
+#CAMERA 7
+#phrase Merc3  3
+Parfait. Je serais ravie de participer à tes aventures !

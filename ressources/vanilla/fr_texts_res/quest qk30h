@@ -1,0 +1,20 @@
+Maison de campagne
+Un riche citoyen possède une maison dans les faubourgs du nord-ouest. En allant fouiller ses coffres, qui sait ce que vous y trouverez ?
+#subobj  1
+Trouver le manoir
+La propriété appartenant à l’homme riche se trouve au nord-ouest de la ville. Il n’y est que très rarement, mais la demeure est toujours bien gardée.
+#subobj  2
+Trouver le détenteur de la clé
+Pour vous introduire dans le manoir, vous devez vous procurer la clé des portes que détient l’un des gardes.
+#subobj  3
+Se procurer la clé
+Le détenteur de la clé n’est pas très vigilant et passe de longs moments à rêvasser ! La meilleure solution consiste à essayer de lui dérober la clé plutôt que de l’attaquer au risque d’attirer l’attention des gardes.
+#subobj  4
+Ouvrir les portes du manoir
+Utilisez la clé pour ouvrir les portes. Attention : des gardes sont également postés dans la cour du manoir.
+#subobj  5
+Trouver le coffre
+Le coffre de l’homme riche se trouve dans la cour du manoir.
+#subobj  6
+Fouiller le coffre
+Ce coffre doit certainement contenir quelque chose d’intéressant... ou du moins quelque chose de beau et de cher !

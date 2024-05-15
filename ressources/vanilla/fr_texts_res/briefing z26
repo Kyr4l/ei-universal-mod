@@ -1,0 +1,14 @@
+A propos du document trouvé dans le camp abandonné
+#show Witch 3
+#show CodedHadaganNote 5
+#show Hero 5
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  1
+Regarde, j'ai trouvé ça. As-tu déjà vu des lettres de ce genre ?
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 15
+#CAMERA 9
+#phrase Witch  2
+Oui, j'en ai déjà vues. Mais je n'ai pas dit que je savais les lire. J'ai simplement déjà vu des archives où il y en avait. C'est le Doyen qui les possède.

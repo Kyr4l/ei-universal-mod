@@ -1,0 +1,37 @@
+Rendre au Gobelin son "objet sacré"
+#show Hero 
+#show BGoblinC
+#ANIMATION 45
+#CAMERA 1
+#phrase Hero  1
+Ecoute-moi Go-Go, combien de temps vas-tu rester ici ? Un mois ? Un an ? Dix ans ?
+#CAMERA 11
+#phrase BGoblinC  2
+Moi rester ici jusqu'à ce que toi donner moi tête du Premier Gobelin. Ou moi mourir ici !
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  3
+Pourquoi te rendrais-je cet épouvantail ? Tu ne m’as jamais dit quoi que soit d’intéressant !
+#CAMERA 3
+#phrase BGoblinC  4
+Moi avoir dit tout ce que moi savoir, pas ma faute si pas intéressant !
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  5
+Eh bien, ce n’était pas de ma faute non plus ! Tu sais, je crois que je vais jeter cette breloque au feu ; ça te fera peut-être enfin partir !
+#show VoodooWand 5
+#CAMERA 7
+#ANIMATION 60
+#phrase BGoblinC  6
+Pas au feu ! Pas jeter ! Go-Go vouloir acheter Premier Gobelin. Echanger contre poupée ; pas simple poupée, poupée magique !
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  7
+Tu as perdu la tête, espèce de borgne ? Tu veux que je joue à la poupée ?
+#CAMERA 11
+#phrase BGoblinC  8
+Poupée pas pour jouer ! Poupée pour magie ! Pour affaiblir ennemis, enlever leur force !
+#ANIMATION 46
+#CAMERA 10
+#phrase Hero  9
+Humm... Intéressant... D’accord, donne-moi cette poupée. Mais si tu me joues un sale tour, gare à toi !

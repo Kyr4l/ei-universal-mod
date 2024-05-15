@@ -1,0 +1,26 @@
+Créatures souterraines
+Le Vieux Dragon respecte les anciennes traditions. Aussi, il vous promettra de vous révéler de précieuses informations à condition que vous éliminiez les tatous qui l’exaspèrent. Pour vous faciliter la tâche, il vous remettra un poison à utiliser dans l’une des trois rivières souterraines.
+#subobj  1
+Tuer la mère tatou
+Si vous ne tuez pas la grande femelle tatou, elle donnera naissance à beaucoup d’autres bébés tatous et le Vieux Dragon ne connaîtra jamais la paix et le repos. Mieux vaut l’attaquer après avoir empoisonné une des sources - l’eau empoisonnée ne la tuera pas, mais elle sera très affaiblie.
+#subobj  2
+Exterminer les petits tatous
+Ce sont eux qui agacent le Vieux Dragon avec leurs histoires et leur chahut.
+#subobj  3
+Trouver la source la plus proche
+La source la plus proche se trouve au nord-est de la grotte. Pour y accéder, vous devez remonter la rivière souterraine à pied.
+#subobj  4
+Empoisonner la source la plus proche
+Utilisez le poison du dragon. Ainsi, plusieurs petits tatous mourront et leur mère sera très affaiblie.
+#subobj  5
+Trouver la source centrale
+La source centrale se trouve à l’ouest de la source la plus proche, dans la grotte. Pour y accéder, vous devez remonter la rivière souterraine centrale à pied.
+#subobj  6
+Empoisonner la source centrale
+Utilisez le poison du dragon. Ainsi, plusieurs petits tatous mourront et leur mère sera très affaiblie.
+#subobj  7
+Trouver la source la plus éloignée
+La source la plus éloignée se trouve près du centre de l’extrémité nord de la grotte. Pour y accéder, vous devez remonter la rivière souterraine la plus éloignée à pied.
+#subobj  8
+Empoisonner la source la plus éloignée
+Utilisez le poison du dragon. Ainsi, plusieurs petits tatous mourront et leur mère sera très affaiblie.

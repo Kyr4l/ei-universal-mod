@@ -1,0 +1,41 @@
+Libérer la fille
+#show Hero 1
+#show Deva 2
+#ANIMATION 72
+#CAMERA 11
+#phrase Deva  1
+Arrête ! Un pas de plus et j’appelle les Seigneurs des Donjons et tu périras dans d’atroces souffrances !
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  2
+Je suis déjà perdu... Cieux miséricordieux, comme elle est belle !
+#ANIMATION 11
+#CAMERA 3
+#phrase Deva  3
+Quoi, as-tu peur au point d’être incapable de prononcer le moindre mot ? Je savais que mes ravisseurs n’étaient qu’une bande de lâches !
+#ANIMATION 45
+#NOLIPS
+#CAMERA 2
+#phrase Hero  4
+Et sa voix ! Je pourrais l’écouter pendant des heures... Une seconde, qu’a-t-elle dit ?
+#ANIMATION 72
+#CAMERA 11
+#phrase Deva  5
+Et Diera, ta maîtresse, n’est qu’une misérable créature qui ment pendant son sommeil !
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  6
+Attends, Princesse, attends ! Je ne suis pas au service de Diera, bien au contraire, je viens de me battre contre ses mercenaires ! Je suis ici pour te sauver !
+#ANIMATION 45
+#CAMERA 3
+#phrase Deva  7
+Toi ? Mais qui es-tu ? Et comment as-tu su que j’étais ici ?
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  9
+C’est Tka-Rik, le Grand mage, qui m’envoie... Mais c’est une longue histoire que je te raconterai plus tard. Pour le moment, je dois me remettre de ce périple dans les cavernes !
+#ANIMATION 11
+#CAMERA 3
+#phrase Deva  10
+Très bien. Mais je t’en prie, ne m’appelle pas Princesse. Mon nom est Lu-a-Jalla et j’aimerais oublier ce stupide titre.

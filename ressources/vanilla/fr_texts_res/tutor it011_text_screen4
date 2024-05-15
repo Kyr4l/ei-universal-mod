@@ -1,0 +1,8 @@
+     Pour désassembler un sort, cliquez sur celui-ci et il apparaîtra dans une fente du concepteur. En bas à gauche de l’écran, vous verrez le coût total du désassemblage du sort.
+     Si vous retirez la pierre maîtresse de sa fente du concepteur après avoir désassemblé le sort, les runes qui y étaient contenues seront également retirées.
+     Lorsque vous désassemblez un sort de l’échoppe, nous considérons que vous l’avez acheté (désolé, le vol à l’étalage correspond à un autre chapitre). Les runes du sort rejoignent alors votre inventaire.
+
+     Cliquez sur le bouton <V> pour désassembler un sort.
+     Cliquez sur le bouton <X> pour annuler.
+
+     Remarque : si vous désassemblez un sort pour le réassembler immédiatement après (sans placer la pierre maîtresse et les runes dans votre inventaire), vous devrez payer le prix de l’assemblage et du désassemblage, alors attention !

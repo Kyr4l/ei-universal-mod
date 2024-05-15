@@ -1,0 +1,21 @@
+zt15_head
+#screen
+zt15_head_screen1
+#position 155 34 645 22
+#text
+zt15_text_screen1
+#screen
+zt15_head_screen2
+#position 155 34 645
+#text
+zt15_text_screen2
+#screen
+zt15_head_screen3
+#position 155 34 645 22
+#text
+zt15_text_screen3
+#screen
+zt15_head_screen4
+#position 155 34 645 22
+#text
+zt15_text_screen4

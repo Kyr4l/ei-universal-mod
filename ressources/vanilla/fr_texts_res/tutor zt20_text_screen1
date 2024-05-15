@@ -1,0 +1,15 @@
+     Vous pouvez gérer jusqu'à trois personnages à la fois pour les contrôler ensemble ou individuellement. Pour contrôler les personnages individuellement, sélectionnez le(s) personnage(s) à qui vous voulez donner des ordres.
+
+     Dans la zone de jeu, cliquez sur le personnage de votre choix ou sur sa représentation en bas de l'écran pour le sélectionner.
+    Pour sélectionner plusieurs personnages, procédez comme indiqué précédemment tout en maintenant la touche MAJ enfoncée.
+
+     Vous pouvez également sélectionner un ou plusieurs personnages en créant un cadre autour d'eux à l'aide de la souris tout en maintenant le bouton gauche (de la souris) enfoncé. Tous les personnages encadrés seront sélectionnés.
+
+     Les touches clavier ci-dessous vous permettent de sélectionner les personnages tous ensemble ou individuellement :
+
+     Sélectionner personnage 1 : touche F1
+     Sélectionner personnage 2 : touche F2
+     Sélectionner personnage 3 : touche F3
+     Sélectionner tous les personnages : touche F4
+
+     Remarque : lorsque vous sélectionnez un personnage (en double-cliquant sur sa représentation ou en appuyant sur la touche <ALT>), la caméra se met immédiatement à le suivre.

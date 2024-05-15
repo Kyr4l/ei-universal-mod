@@ -1,0 +1,14 @@
+A propos des conversations avec l'Artisan
+#show Hero 1
+#show Elder 2
+#ANIMATION 31
+#phrase Elder  1
+Noble Elu ! Laisse-moi te donner un bon conseil à propos de Babur et de vos conversations. N'oublie jamais qu'il a beaucoup de choses à se reprocher !
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+J'espère que tu n'as pas l'intention de me donner des ordres ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  3
+Non ! Dieu m'en garde. Mais réfléchis bien, Noble Elu, chacune de tes rencontres avec Babur nuit à ta réputation. Et quand on entre dans son jeu, on est piégé. C'est pourquoi, je te conseille respectueusement d'arrêter tout ça. Crois-moi, ce sera mieux pour tout le monde, y compris pour toi.

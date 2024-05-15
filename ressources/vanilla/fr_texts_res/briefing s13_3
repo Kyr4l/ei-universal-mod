@@ -1,0 +1,24 @@
+A propos de la lettre en langue orque
+#show Elder 3
+#show Instruction4orcs00 4
+#show Hero 5
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero  1
+J'en ai assez de ces accusations faciles ! Je ne ferai rien tant que je ne saurai pas le fin mot de l'histoire. Voilà le document en orque. Tu sais lire cette langue, non ?
+#ANIMATION 30
+#CAMERA 9
+#phrase Elder  2
+Mmmm, en un mot, il est dit qu'ils veulent te tuer et qu'il y a une belle récompense pour celui qui le fera. Il est ajouté que le Doyen, c'est-à-dire moi, ne doit rien savoir de cela.
+#hide Instruction4orcs00
+#show Instruction4orcs00 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Elder  3
+Tout s'éclaire, c'est Babur qui tire les ficelles ! C'est dans sa poche qu'a atterri l'or volé. Pour moi, la preuve est faite. Je vais appeler le Capitaine et nous allons donner à ce traître la leçon qu'il mérite.
+#hide Instruction4orcs00
+#show Instruction4orcs00 4
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  4
+Attends ! Pour moi, ça reste un peu nébuleux.

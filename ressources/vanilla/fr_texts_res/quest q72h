@@ -1,0 +1,77 @@
+Portail
+Le portail est le seul moyen de quitter Suslanger pour retourner à Gipath. Il est très bien gardé et difficile à utiliser.
+#subobj  1
+Anéantir vos ennemis
+Erfar a informé les gardes de la présence d’un prisonnier évadé dans la grotte. Ils attendent leur proie à l’entrée de la grotte, alors n’attendez aucune pitié de leur part. La seule solution consiste à tous les éliminer !
+#subobj  2
+Traverser le pont ouest
+Pour éviter les portes principales (trop dangereuses), rejoignez la ville par le pont enjambant la rivière ouest. Ce pont est moins gardé que les portes principales.
+#subobj  3
+Traverser le pont sud
+Pour quitter la ville, empruntez le deuxième pont au sud.
+#subobj  4
+Trouver le détenteur de la clé des pièges
+Le garde qui vérifie parfois les autels de contrôle détient la clé des pièges. Cachez-vous près de l’autel pour le surprendre.
+#subobj  5
+Prendre la clé
+Dérobez la clé sur le cadavre de son détenteur.
+#subobj  6
+Trouver l’autel des pièges du premier cercle
+Les abords de l’autel sont recouverts de plusieurs cercles de protection. Outre les gardes armés, des pièges magiques anéantiront quiconque franchira la zone magique sans y avoir été autorisé. Ces pièges sont contrôlés par les autels et pour chacun d’entre eux, vous devez utiliser une clé spéciale.
+#subobj  7
+Désactiver les pièges du premier cercle
+Vous ne pourrez pas vous approcher de l’autel avant d’avoir désactivé les pièges du premier cercle.
+#subobj  8
+Trouver qui détient la clé des pièges du 2è cercle
+Le détenteur de la clé du deuxième cercle se trouve près de l’autel, de l’autre côté de la zone magique. Pour le trouver, utilisez un sort de « Clairvoyance » et attirez-le à l’aide du sort « Feux d’artifice ».
+#subobj  9
+Prendre la clé
+Prenez la clé sur son cadavre.
+#subobj  10
+Trouver l’autel des pièges du deuxième cercle
+Les pièges du deuxième cercle de protection du portail se trouvent sur la route menant au pont sud qui enjambe le canyon.
+#subobj  11
+Désactiver les pièges du deuxième cercle
+Vous ne pourrez pas vous approcher de l’autel avant d’avoir désactivé les pièges du deuxième cercle.
+#subobj  15
+Trouver le gardien des cercles du troisième cercle
+Le pont sud enjambant le canyon est gardé par une importante unité de gardes. Mais vous pouvez escalader la façade abrupte sans vous faire remarquer. Les pièges du troisième cercle s’y trouvent mais un passage étroit traverse la zone magique. Un jeune Mage guerrier l’utilise pour surveiller les pièges. Vous devez localiser ce Mage et vous souvenir exactement de l’endroit où il va !
+#subobj  16
+Accéder aux pièges du troisième cercle
+Il est impossible de désactiver les pièges du troisième cercle, mais vous pouvez les éviter en suivant le chemin utilisé par le Gardien.
+#subobj  20
+Trouver le Commandant des gardes du portail
+Pour trouver sa demeure, dirigez-vous vers l’est depuis l’endroit où la rivière décrit une courbe vers l’ouest. La maison du Commandant se dresse sur une petite colline près du mur délimitant le premier cercle de la protection du portail.
+#subobj  21
+Se procurer la clé
+Pour activer le portail, utilisez la clé que détient le commandant des gardes.
+#subobj  22
+Franchir le canyon
+Pour atteindre le portail, empruntez l’un des ponts enjambant le canyon.
+#subobj  23
+Trouver la commande en pierre est
+Pour activer le portail, utilisez la clé sur deux commandes en pierre : la commande est et la commande ouest. Elles se trouvent près de l’entrée du portail.
+#subobj  24
+Activer la commande en pierre est
+Le portail ne fonctionnera qu’après avoir été activé.
+#subobj  25
+Trouver la commande en pierre ouest
+Pour activer le portail, utilisez la clé sur deux commandes en pierre : la commande est et la commande ouest. Elles se trouvent près de l’entrée du portail.
+#subobj  26
+Activer la commande en pierre ouest
+Le portail ne fonctionnera qu’après avoir été activé.
+#subobj  27
+Franchir le portail
+Pour revenir à Gipath, entrez dans le portail (la zone de téléportation).
+#subobj  34
+Echapper aux gardes de la ville
+Les gardes de la ville ont été alertés !
+#subobj  35
+Echapper aux gardes des portes principales
+Les gardes des portes principales ont été alertés !
+#subobj  36
+Echapper aux gardes du portail
+Les gardes du portail ont été alertés !
+#subobj  37
+Echapper aux gardes du portail
+Les gardes du portail ont été alertés !

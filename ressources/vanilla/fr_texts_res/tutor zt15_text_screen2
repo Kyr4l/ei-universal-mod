@@ -1,0 +1,13 @@
+     Lorsque vous ordonnez à votre personnage d'attaquer l'ennemi, vous pouvez indiquer la partie du corps qu'il doit viser. Utilisez les touches du pavé numérique suivantes pour infliger des coups précis :
+
+     4: viser la main gauche (ou patte avant gauche)
+     6: viser la main droite (ou patte avant droite)
+     1: viser la jambe gauche
+     3: viser la jambe droite
+     5: viser le corps
+     8: viser la tête
+
+     Pour administrer un coup précis, appuyez sur la touche qui convient et placez le curseur sur l'ennemi. Votre personnage visera alors la partie du corps indiquée jusqu'à ce que vous donniez un nouvel ordre ou que le niveau de santé de cette partie du corps ait atteint zéro. Si l'ennemi est toujours en vie, les coups suivants ne seront pas précis.
+
+     Remarque : certaines créatures du jeu n'ont ni bras ni jambes. Si vous donnez l'ordre de viser une partie du corps inexistante, votre personnage l'ignorera.
+     Remarque : les différentes parties du corps des personnages peuvent être protégées par des armures dotées de caractéristiques spécifiques - comme la capacité à absorber les dégâts infligés par les armes ; ainsi les dégâts subis par les parties protégées du corps sont moins lourds.

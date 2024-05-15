@@ -1,0 +1,11 @@
+Trouver le camp Orque dans les Montagnes centrales
+La sorcière a fait un mauvais rêve. Airy, sa petite fille, était prisonnière des Gobelins vivant dans les Montagnes centrales sous la protection des Orques. Vous devriez peut-être vérifier si ce mauvais rêve est ou non fondé ?
+#subobj  1
+Se rendre au camp des Orques
+Le camp des Orques et des Gobelins se situe à l’ouest des Montagnes centrales. Pour vous y rendre, vous devez traverser le pont qui enjambe le lit asséché de la rivière. L’une des entrées du camp se trouve juste après le pont, au nord. Cette entrée étant bien gardée, mieux vaut essayer de contourner les gardes.
+#subobj  2
+Trouver la palissade
+Le camp abrite une prison dont les quatre murs sont clôturés ; les portes sont concentrées sur un seul mur.
+#subobj  3
+Trouver des preuves de la présence d’Airy
+La petite-fille de la Sorcière n’est pas là. Les Gobelins l’ont peut-être emmenée. Recherchez des indices de sa présence.

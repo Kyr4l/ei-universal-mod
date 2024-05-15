@@ -1,0 +1,14 @@
+Emprunter le labyrinthe
+Les membres du Clan Vert du Peuple des forêts se sont installés dans les vallées montagneuses, au sud du domaine de Karansul. Pour vous y rendre, vous devez emprunter le labyrinthe situé dans les collines qui entourent la ville.
+#subobj  1
+Trouver l’entrée du labyrinthe
+Les portes du labyrinthe se trouvent à l’ouest de la nouvelle zone du Clan Vert, dans les faubourgs de la ville.
+#subobj  2
+Ouvrir l’entrée du labyrinthe
+Vous n’avez pas besoin de clé pour ouvrir les portes du labyrinthe.
+#subobj  3
+Trouver les portes de sortie
+La sortie du labyrinthe se trouve dans le secteur est. Soyez prudent dans le labyrinthe : les créatures y sont nombreuses, y compris les créatures magiques difficiles à repérer.
+#subobj  4
+Ouvrir les portes de sortie
+Vous n’avez pas besoin de clé pour ouvrir les portes.

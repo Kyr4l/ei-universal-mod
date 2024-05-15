@@ -1,0 +1,38 @@
+Ogre Utundry
+Shei-Var veut être sûr que le Démon sera vaincu. Pour lui prouver que c’est effectivement le cas, vous devez lui apporter le contenu du coffre de l’Ogre Utundry ; il s’agit de l’aîné des trois frères Ogres vivant dans le Désert. Une fois que vous aurez rencontré leur Chef Shei-Var, les Orques afficheront une neutralité face aux humains. Mais la quête n’est pas si simple, car les frères Ogres s’échangent les clés de leurs coffres et vous devrez pas conséquent vous occuper des trois !
+#subobj  1
+Trouver l’Ogre Byr
+Byr, le premier Ogre que vous devez vaincre, vit dans une vallée circulaire au nord de la maison de Shei-Var. Non loin se trouve le campement du clan des Orques Kharu, hostiles à Shei-Var.
+#subobj  2
+Tuer Byr
+L’Ogre Byr doit mourir.
+#subobj  3
+Trouver le coffre de Byr
+Le coffre de Byr contient la clé de celui de l’Ogre Gym.
+#subobj  4
+Fouiller le coffre de Byr
+Prenez la clé du coffre de Gym.
+#subobj  5
+Trouver l’Ogre Gym
+Gym, le deuxième Ogre que vous devez vaincre, vit à l’ouest du village de Shei-Var. Pour trouver sa demeure, vous devez franchir la rivière par le barrage des Orques et poursuivre un peu vers l’ouest.
+#subobj  6
+Tuer Gym
+L’Ogre Gym doit mourir.
+#subobj  7
+Trouver le coffre appartenant à Gym
+Le coffre de Gym contient la clé de celui de l’Ogre Utundry.
+#subobj  8
+Prenez la clé de Gym
+Prenez la clé du coffre d’Utundry
+#subobj  9
+Trouver l’Ogre Utundry
+Le plus âgé des frères Ogres, Utundry, vit dans une petite vallée circulaire au nord des berges est du lac.
+#subobj  10
+Tuer Utundry
+L’Ogre Utundry doit mourir.
+#subobj  11
+Trouver le coffre appartenant à Utundry
+Ce coffre est votre principal objectif.
+#subobj  12
+Fouiller le coffre appartenant à Utundry
+Shei-Var veut se procurer le contenu du coffre appartenant à Utundry.

@@ -1,0 +1,23 @@
+Dire au revoir à Myrana
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+Alors, l’heure est venue de nous dire au revoir ?
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  2
+Hélas oui, Myrana. Désolé de ne pouvoir te demander de m’accompagner dans d’autres contrées...
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc6  3
+Inutile de t’excuser, Zak. J’aurais refusé ton offre de toute façon. Je suis ici chez moi, à Ingos, et je ne veux pas partir.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  4
+Eh bien, dans ce cas, je pars la conscience tranquille. Au revoir, Myrana.
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc6  5
+Au revoir !

@@ -1,0 +1,17 @@
+Quelles nouvelles choses a appris le Clan Vert ?
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+Je suis ravi de te voir ici, humain. Tu as franchi le passage secret, ce qui témoigne de ton courage et de ton habileté !
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  2
+Dis-moi, Doyen, as-tu appris quelque chose qui pourrait m’être utile ?
+#CAMERA 11
+#phrase YCF  3
+Comment pourrais-je savoir ce qui peut t’aider ? Si tu veux une bonne réponse, pose une bonne question !
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  4
+Je vois... Visiblement, je suis venu ici trop tôt. Désolé de t’avoir importuné, Chef ! Je vais retourner en ville et je reviendrai lorsque je saurai quelle question te poser.

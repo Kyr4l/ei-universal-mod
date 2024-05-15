@@ -1,0 +1,63 @@
+Parler au Dragon
+#show SKD 1
+#show Hero 2
+#CAMERA 1
+#phrase SKD  1
+Je suis content de toi, petit homme. Jusqu'à présent, tout s'est déroulé comme le prescrivent les anciennes traditions. Tu as fais ce que je t'avais demandé. Je suis donc prêt à répondre à ta question.
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  2
+Ô grand Dragon ! Un malheur m'a frappé. J'ai perdu toute trace de mon passé. Je ne sais même pas quel est mon vrai nom. Peux-tu me dire qui je suis vraiment ?
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  3
+Hum… apparemment, j'avais tort. Ta question est des plus intéressantes... mais j'ai bien peur de ne pas pouvoir y répondre. Quelle est la marche à suivre en pareil cas ? Suis-je censé te dévorer ? Je n'y tiens pas vraiment...
+#ANIMATION 30
+#NOLIPS
+#CAMERA 6
+#phrase Hero  4
+Ce n'est pas que j'y tienne non plus…
+#CAMERA 3
+#phrase SKD  5
+Dans ce cas, voici ce que nous allons faire : je te dirai ce que je pense de ton problème et tu as la permission de me poser une autre question. Quant à celle-ci... Faisons comme si je ne l'avais pas entendue.
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  6
+Tu veux retrouver ta mémoire ? Pour cela, il te faut un mage, et pas n'importe lequel : seul un grand mage pourra t'aider. Il y a bien sûr un Grand mage à Gipath, sinon cette contrée aurait depuis longtemps disparu avec tous ceux qui y vivent.
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  7
+Mais c'est un être très secret. Même moi, je ne sais ni à quoi il ressemble ni où on peut le trouver. Peut-être les Hommes-lézards en savent-ils plus car ils étaient ici bien avant les Dragons. Mais je serais surpris que tu parviennes à un accord avec eux.
+#CAMERA 11
+#phrase SKD  8
+Le mieux serait peut-être de quitter Gipath pour chercher de l'aide ailleurs, là où les Grand mages sont plus disponibles.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  9
+Bonne idée. On m'a dit qu'il y avait un Portail non loin d'ici. Dois-je te demander où il se trouve ?
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  10
+Franchement, je ne me suis jamais intéressé aux Portails. Mais il y en a certainement un par ici. Récemment, j'ai vu un campement avec des guerriers portant de vraies armures, pas comme celles en cuir que possèdent les guerriers de Gipath. Ils venaient d'une autre terre et avaient donc eu recours à un Portail.
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  11
+Où était ce campement ?
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  12
+Enfin, une question sensée ! J'ai vu ce campement au nord-est de la Cité des Morts. Une partie de mes squelettes s'y trouve en ce moment, mais je vais les rappeler.
+#CAMERA 3
+#phrase SKD  13
+Je me suis bien amusé avec ces nouveaux venus ! J'ai envoyé mes petits squelettes pour les combattre mais ils se sont montré plus coriaces que je ne le croyais !
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  14
+Ils ont survécu ? Je suis sûr que tu aurais pu les anéantir !
+#CAMERA 3
+#phrase SKD  15
+Evidemment ! Mais quand je joue, je respecte les règles du jeu. Et quand on gagne tout le temps, ça devient vite lassant.
+#CAMERA 9
+#ANIMATION 4
+#phrase SKD  16
+Adieu, petit homme. J'ai répondu à ta question. Tu peux partir.

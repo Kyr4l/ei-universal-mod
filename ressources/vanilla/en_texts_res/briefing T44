@@ -1,0 +1,51 @@
+How to put pressure on Karansul
+#show Hero 1
+#show Trapper 2
+#ANIMATION 63
+#CAMERA 11
+#phrase Trapper  1
+Well guy, you helped me and now I will do what I promised. I will give you a share in my profits and tell you what I know. Karansul is tremendously rich. We cannot even imagine how rich.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+So where did those riches come from?
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  3
+No surprises there! He owns mines, pits, sawmills and the list goes on... and he pays about one tenth of the taxes he should rightfully pay. He makes a lot of money, sells directly to the capital, and the Governor gets nothing - I tell you this in confidence.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper  5
+The Governor trusts Karansul. He knows how to talk civilly and sometimes gives the Governor some stuff for his collection. But no one has ever had a look at his accounting ledgers.
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  6
+You mean no evidence - no crime, is that it?
+#ANIMATION 63
+#CAMERA 11
+#phrase Trapper  7
+That is correct. Just one look at his accounts would tell us what and how much has been sold illegally... But Karansul's bodyguards are no joke. No, you can see it but you cannot get it.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  8
+But I can try, can I not?
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  9
+Open your ears! The mines foreman carries the accounting book with him. The mines and sawmills in Karansul's domain are located around the lake. On the northeastern lake shore there are two important buildings - the foreman's house and the mechanical grinder. Now that machine cost him an arm and a leg, and a really clever apparatus it is!...
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  11
+But that is not the point. That is how to find the foreman's house: it has two short chimneys on the roof. Just make sure you do not confuse it with the Guards' canteen, for it also has two chimneys but they are longer.
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  12
+And two last things: first, ask the Captain about Karansul's business. Tell him some tale, like you have hardly any money left and you need work. Maybe then you can squeeze something useful out of him! And secondly, find a man by the name of Trickster in the city and tell him hello from me.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  13
+And then what?
+#ANIMATION 62
+#CAMERA 3
+#phrase Trapper  14
+I do not know, really. You see, Trickster is a thief but a good man too. Maybe he will give you some advice, some professional secrets... Just tell him you came from me!

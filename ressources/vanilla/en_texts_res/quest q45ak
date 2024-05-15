@@ -1,0 +1,26 @@
+Getting Sacred Flower
+Each clan of Woodsfolk has its own sacred plant which blossoms winter and summer. The keeper of the Green Clan has been captured by the hostile White clan. You must free him, upon which he will give you the Sacred Flower. If the Keeper dies, you can take the flower from his corpse.
+#subobj  1
+Cross the lake
+To enter the domain of the White Clan you must go to the western shore of the upper lake, then a little further into the woods. Beware of the locals, they will attack anyone from the city.
+#subobj  2
+Find the prison
+The White Clan threw the Keeper into a primitive prison built of dead trees. The gates are closed, but you can open them with your bare hands. But that will not suffice....there is also a magic trap guarding the prison gates. To switch it off you will need a green leaf which the White Clan Seer carries with him.
+#subobj  3
+Find the Seer
+The White Clan Seer lives further to the west of the prison.
+#subobj  4
+Take the green leaf
+The Seer has a green leaf which is needed to switch off the magic trap in the prison. You must get that leaf.
+#subobj  5
+Switch off the trap
+The altar which controls the trap looks like an old stump covered with mushrooms. Well disguised indeed!
+#subobj  6
+Get close to the Keeper
+The Keeper is unsure whether he can bring the Sacred Flower to his Clan or not. If you open the cage gate, he will give the Flower to his rescuer. Then he will try to escape.
+#subobj  7
+Stockade
+The White Clan have several places where they keep their enemies in captivity. The stockade is one of them.
+#subobj  8
+Open the gates
+You do not need a special key to open the stockade gates.

@@ -1,0 +1,15 @@
+Essayer de conclure un marché
+#show Hero 1
+#show HWLeader 2
+#ANIMATION 8
+#CAMERA 5
+#phrase HWLeader  1
+Que veux-tu, misérable ?
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  2
+Quand je gardais mes porcs, j'ai vu un homme qui faisait partie de ta troupe. Il portait des lunettes. Tu me laisseras libre si je te dis où le trouver ?
+#ANIMATION 3
+#CAMERA 5
+#phrase HWLeader  3
+Tu es vraiment un idiot ! Pourquoi aurais-je besoin d'un administrateur ici ? Ferme-la et tiens-toi à carreau si tu ne veux pas que mes hommes te torturent.

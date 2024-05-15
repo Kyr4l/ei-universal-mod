@@ -1,0 +1,8 @@
+Tuer la sentinelle gobelin
+Une sentinelle gobelin surveille en permanence le village et informe sa tribu de toutes les allées et venues empêchant ainsi les villageois d’emmener leurs animaux aux champs ou l’envoi d’une force pour combattre les Gobelins. Si elle voit un soldat, la sentinelle s’enfuit immédiatement et la meilleure façon de l’approcher consiste donc à ne pas avoir l’air d’un soldat. Une fois la sentinelle éliminée, regagnez le village. Les Contreforts sont très dangereux !
+#subobj  1
+Trouver la sentinelle gobelin
+La sentinelle gobelin surveille la route menant aux Contreforts. Son poste est tout près du village.
+#subobj  2
+Tuer la sentinelle gobelin
+Vous devez la tuer, puis retourner au village.

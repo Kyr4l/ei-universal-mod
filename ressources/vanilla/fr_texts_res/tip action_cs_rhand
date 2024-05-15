@@ -1,0 +1,4 @@
+Vise la main droite
+Votre personnage visera la main droite de l'ennemi
+en attaquant. Quand la "santé" de la main
+atteint 0, la vitesse d'action de l'ennemi diminue.

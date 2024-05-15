@@ -1,0 +1,27 @@
+Talk to odalisque
+#show Hero 1
+#show Nalo 2
+#ANIMATION 3
+#CAMERA 2 -30 10 10
+#phrase Nalo  1
+At last the slavedriver is gone. Listen, I must talk to you!
+#ANIMATION 6
+#CAMERA 2 0 3 0.8
+#phrase Hero  2
+Who are you? What do you want?
+#ANIMATION 31
+#CAMERA 2 30 7 7
+#phrase Nalo  3
+I do not have a name. I am Kardaur's Odalisque, a faceless toy for that scum! But I did not come here to complain! I shall steal the key to your cage from my master and let you out.
+#ANIMATION 8
+#CAMERA 2 0 3 0.8
+#phrase Hero  5
+But why do you want to help me? Do not think I am ungrateful, but...
+#ANIMATION 44
+#CAMERA 2 35 6 1.5
+#phrase Nalo  6
+It is simple - to escape from the fortress you will have to kill the duty officer at the gates. This night Kardaur will be on duty... Oh, how happy I will  be to see his lifeless body!
+#ANIMATION 3
+#CAMERA 2 -30 7 7
+#phrase Nalo  9
+Someone is coming! I must run - the cage guards do not care who I am...

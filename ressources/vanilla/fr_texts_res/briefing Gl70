@@ -1,0 +1,20 @@
+A propos du Portail
+#show Zaku 3
+#show Hero 4 
+#show Glav 5
+#ANIMATION 9
+#CAMERA 9
+#phrase Glav  1
+Quel dommage que tu nous quittes, mon frère ! J’espérais te voir me succéder. Penses-y.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  2
+Ma décision est prise, Frère Khatul.
+#ANIMATION 6
+#CAMERA 4
+#phrase Glav  3
+Ton voyage sera semé d’embûches : le Portail est gardé comme s’il menait à une maison remplie d’or et non aux Terres Inutiles. Mais l’un de nos frères sait comment s’y rendre. Frère Anonyme, je compte sur toi ! Frère Blondinet mérite bien notre aide.
+#ANIMATION 32
+#CAMERA 11
+#phrase Zaku  4
+Oh oui, Frère Khatul. Dans les contreforts au nord du désert, là où se trouve le Portail, il y a une caverne. Nous nous y retrouverons et j’expliquerai à Frère Blondinet comment se procurer la clé du Portail et éviter les patrouilles. Je m’engage à ce qu’il ait tout ce qu’il mérite !

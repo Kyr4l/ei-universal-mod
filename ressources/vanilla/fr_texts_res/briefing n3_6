@@ -1,0 +1,11 @@
+Reprendre Myrana
+#show Hero 1
+#show Merc6 2
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  1
+J’ai encore besoin de ton arc. Puis-je compter sur toi ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc6  2
+Bien sûr ! Grâce à toi, les Gardes m’acceptent... Comment pourrais-je refuser de t’aider ?

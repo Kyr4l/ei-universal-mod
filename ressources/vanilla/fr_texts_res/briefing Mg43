@@ -1,0 +1,22 @@
+A propos du corps retrouvé
+#show Hero 1
+#show Magess 2
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  1
+J’ai trouvé le cadavre du Fouineur. C’est de cela dont tu voulais me parler en me mettant en garde ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Magess  2
+Cher jeune homme, souviens-toi d’une chose : je ne mets jamais en garde qui que ce soit. Je ne fais qu’exposer des faits.
+#show Hero 3
+#show DriadArrow00 3
+#show Magess 5
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  3
+Regarde, il a été tué avec ça !
+#ANIMATION 11
+#CAMERA 3
+#phrase Magess  4
+Eh bien, les humains meurent. Et ils meurent parfois de façon soudaine.

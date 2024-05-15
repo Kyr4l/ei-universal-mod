@@ -1,0 +1,11 @@
+Trouver la ville
+Vous devez vous rendre en ville pour chercher la jeune fille d’Ingos. La région se caractérise par deux lacs, l’un supérieur et l’autre inférieur, reliés par la rivière. La ville doit se trouver quelque part au nord du lac supérieur.
+#subobj  1
+Le village des Bûcherons
+Pour vous rendre à la ville d’où vous avez été téléporté, dirigez-vous d’abord vers le sud, puis traversez le petit village des Bûcherons. Ils n’apprécient guère les étrangers ; vous avez donc deux solutions.... traverser discrètement le village ou affronter ses résidents. Dirigez-vous ensuite vers l’est et longez le ravin étroit.
+#subobj  2
+Le pont et le village des chasseurs
+Au nord du pont, de l’autre côté de la rivière, se trouve un village de chasseurs ; comme les Bûcherons, les chasseurs attaquent tous les étrangers. Pour entrer dans la ville, franchissez le pont et quittez le village.
+#subobj  3
+Arrivée en ville
+La ville se trouve au nord du lac supérieur. Elle est entourée d’une vieille muraille de forteresse, c’est pourquoi vous ne pouvez y entrer que par les portes du mur de l’est.

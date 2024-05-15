@@ -1,0 +1,47 @@
+Interroger Shei-Var à propos d'Airy
+#show OrcC 1
+#show Hero 2
+#CAMERA 9
+#ANIMATION 4
+#phrase OrcC  1
+Quoi toi faire ici ? Toi beaucoup le regretter-regretter ! Toi vivre-vivre dans le village, village être loin, Shei-Var se foutre de village. Pourquoi-pourquoi toi t'intéresser à Shei-Var ?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero  2
+C’est très simple : j’aimerais que tu libères la jeune fille que les Gobelins t’ont apportée. Si tu veux une rançon, annonce ton prix !
+#ANIMATION 5
+#CAMERA 7
+#phrase OrcC  3
+Shei-Var pas avoir besoin de ta rançon-rançon ! Nous vouloir utiliser jeune fille comme rançon-rançon nous-mêmes. Un Démon-Humain venir ici des montagnes du nord - mauvais, effrayant, prendre Orque, l’emmener avec lui. Shei-Var avoir réfléchi-réfléchi et décidé si Démon prendre fille, lui être moins mauvais.
+#ANIMATION 43
+#CAMERA 2 -30 5 3
+#phrase Hero  4
+Alors, j’emmenerai la prisonnière de force. Si tu as déjà entendu parler de moi, tu dois savoir qui je suis !
+#CAMERA 3
+#ANIMATION 9
+#phrase OrcC  5
+Shei-Var connaître toi - Elu-Elu. Shei-Var avoir caché fille pour pas toi la trouver. Si toi employer force, fille avoir mal. Toi vouloir ça ?
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  6
+Non, attends ! Et si je faisais en sorte que ce Démon ne t’embête plus ? Libérerais-tu la jeune fille ? Tu as dit que les humains t’importaient peu, pas vrai ?
+#CAMERA 7
+#ANIMATION 4
+#phrase OrcC  7
+Humain, toi bien faire rigoler-rigoler Shei-Var ! Démon être fort. Toi être faible. Toi dire pouvoir battre Démon-Démon ? Moi pas croire toi !
+#ANIMATION 11
+#CAMERA 6
+#phrase Hero  8
+Alors, pourquoi ne me mets-tu pas à l’épreuve ? Laisse-moi affronter le plus fort de tes guerriers.
+#CAMERA 3
+#ANIMATION 6
+#phrase OrcC  9
+Moi avoir besoin-besoin de mon guerrier. Si toi vouloir montrer force à moi, toi ouvrir coffre d'Ogre Utundry et apporter à moi ce que toi trouver. Orques Kharu-Khary et Khamsy-Khamsy aimer Utundry car lui être riche. Si lui être pauvre, Kharu et Khamsy écouter moi et alors moi être le plus riche dans Désert !
+#CAMERA 7
+#ANIMATION 7
+#phrase OrcC  11
+Mais ça être difficile-difficile : Utundry être aîné de la famille, mais avoir aussi frères jumeaux, Byr et Gym.
+#CAMERA 9
+#ANIMATION 8
+#phrase OrcC  12
+Chaque Ogre avoir coffre-coffre et eux échanger clés. Pour prendre coffre Utundry, toi devoir trouver d’abord-d’abord coffre de Byr, puis trouver-trouver coffre de Gym. Si toi battre Utundry, toi venir ici-ici. Moi te dire où trouver Démon-Démon.

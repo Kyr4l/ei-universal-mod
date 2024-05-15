@@ -1,0 +1,11 @@
+Say goodbye to Rinas
+#show Hero
+#show Merc5 
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  1
+Well Rinas, it is time to say goodbye. I remember you promised not to ask for compensation, but maybe I do owe you something.
+#ANIMATION 43
+#CAMERA 3
+#phrase Merc5  2
+Do not worry about that. Diera's time in our city is over, mainly thanks to you. What other compensation could I want? So farewell Zak, and good luck to you!

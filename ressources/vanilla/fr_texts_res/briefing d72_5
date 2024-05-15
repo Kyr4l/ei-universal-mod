@@ -1,0 +1,27 @@
+A propos de la "blessure"
+#show JunBoy 1
+#show Deva 2
+#ANIMATION 31
+#CAMERA 9
+#phrase Deva  1
+Je... Je ne sais pas quoi dire, At-Zako. J’ai si souvent rêvé de toi et rien ne se passe comme je l’avais imaginé. Tu étais si près de moi et je ne t’ai pas reconnu ! Me pardonnes-tu ?!?
+#ANIMATION 7
+#CAMERA 6
+#phrase JunBoy  2
+Je n’ai rien à te pardonner, mon amour. Ce n’est pas moi qui étais près de toi, c’était Zak. Bien sûr, c’était un homme bien, mais honnêtement : je suis très heureux que tu ne lui aies pas ouvert ton cœur.
+#ANIMATION 44
+#CAMERA 10
+#phrase JunBoy  3
+Quelle importance à présent ? ! Nous sommes ensemble, un pays merveilleux nous accueille, un puissant protecteur veille sur nous et il me semble que le soleil ne se lève sur ce monde que pour toi et moi !
+#ANIMATION 6
+#CAMERA 5
+#phrase JunBoy  4
+Mais que se passe-t-il ? Tu es si pâle ?
+#ANIMATION 72
+#CAMERA 11
+#phrase Deva  5
+Tu ne te souviens donc pas ? Tu avais dit à peu près la même chose la première fois que nous avons échappé à la Malédiction. Ou que nous pensions y avoir échappé...
+#ANIMATION 15
+#CAMERA 10
+#phrase JunBoy  6
+Oui, tu as raison. Nous ne pouvons parler de bonheur et de paix tant que cette Malédiction existe. Mais je te jure qu’un jour viendra où je te répéterai ces mots sur le monde qui s’illumine devant nous. Et nous n’aurons alors plus à nous soucier de cette malédiction !

@@ -1,0 +1,15 @@
+A propos du corps retrouvé
+#show Hero 1
+#show Shopper 2
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  1
+Je n’aime pas dire du mal des morts, mais il l’a bien cherché. Il agaçait tout le monde ici à s’occuper de ce qui ne le regardait pas. Je mettrais ma main à couper que sa curiosité a eu raison de lui.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+En réalité, il a été tué par le Peuple de la forêt.
+#ANIMATION 44
+#CAMERA 11
+#phrase Shopper  3
+C’est idiot, hein ? La forêt est pleine de gens et il a fallu que ce soit le Fouineur qui se fasse tuer. Alors, que crois-tu qu’il ait fait pour s’attirer les foudres du Peuple de la forêt ? Ou de quelqu’un d’autre, hein ?

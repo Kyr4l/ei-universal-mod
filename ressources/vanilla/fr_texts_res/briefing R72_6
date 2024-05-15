@@ -1,0 +1,48 @@
+A propos de la Malédiction joon
+#show JunBoy 3
+#show Rick 4
+#show Deva 5
+#ANIMATION 6
+#CAMERA 5
+#phrase JunBoy  1
+J’ai une question importante à te poser, Tka-Rik ! Un savant khadaganien est parvenu à détourner la Malédiction des Joons en me transformant en Zak. Mais en retrouvant mon ancienne identité, serai-je de nouveau victime de la Malédiction ?
+#CAMERA 3
+#ANIMATION 6
+#phrase Rick  2
+Hélas, oui. En outre, je ne peux pas te cacher sous une autre identité : le sort de transformation précédent a été lancé à la hâte par un mauvais mage. Je ne voulais pas te le dire, mais tu aurais pu y perdre définitivement la mémoire. Et tu n’es vraiment pas prêt pour un autre changement de personnalité. Hélas, mes connaissances sur la magie sont elles aussi limitées.
+#ANIMATION 6
+#CAMERA 12
+#phrase Deva  3
+Alors, nous avons espéré inutilement ? Nous devons reprendre la fuite ?
+#CAMERA 7
+#ANIMATION 6
+#phrase Rick  4
+Vous seuls pouvez prendre cette décision. Si vous fuyez, je vous aiderai en tenant la Malédiction en échec le plus longtemps possible. Mais il existe un autre moyen...
+#ANIMATION 8
+#CAMERA 10
+#phrase JunBoy  5
+Lequel ?
+#CAMERA 11
+#ANIMATION 3
+#phrase Rick  6
+En finir avec la Malédiction une bonne fois pour toutes !
+#CAMERA 3
+#ANIMATION 6
+#phrase Rick  7
+At-Zako, tu es désormais plus fort et plus compétent que jamais. Moi, Tka-Rik, je suis à tes côtés et toute modestie gardée, je suis un bon mage. Nous défierons la Malédiction de venir ici, à Gipath, et nous l’affronterons ! Ce sera dangereux : aucun mot ne suffit à décrire la puissance de la Malédiction des Joons. Mais nous avons une chance de la vaincre et cette chance n’est pas si mince que tu le crois.
+#CAMERA 9
+#ANIMATION 6
+#phrase Rick  8
+Je te trouverai le matériel qu’utilisaient les anciens Joons et tu pourras l’imprégner des sorts les plus puissants. Et au moment décisif, je combattrai à tes côtés.
+#CAMERA 11
+#ANIMATION 3
+#phrase Rick  9
+A toi de choisir. Préfères-tu fuir ou te battre ?
+#ANIMATION 3
+#CAMERA 10
+#phrase JunBoy  10
+Ma décision est prise, Tka-Rik. Lorsque j’étais Zak, j’ignorais pourquoi je risquais si souvent ma vie. A présent, j’ai tout ce dont un homme peut rêver. Comment ne pas protéger mon rêve et mon amour ?
+#CAMERA 1
+#ANIMATION 6
+#phrase Rick  11
+Tu as fait le bon choix. Prépare-toi à te battre, At-Zako !

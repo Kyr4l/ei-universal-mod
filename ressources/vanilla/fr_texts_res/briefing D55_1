@@ -1,0 +1,27 @@
+A propos des Brigands et de la caverne
+#show Hero 1
+#show Deva 2
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  1
+Lorsque tu croyais encore que j’étais un brigand, tu as dit que tu allais appeler les Seigneurs des Donjons à l’aide. Voulais-tu parler des Tentacules ? Es-tu réellement capable de contrôler ces horribles créatures ?
+#ANIMATION 63
+#CAMERA 3
+#phrase Deva  4
+Non, je ne peux pas leur donner d’ordres... Les Tentacules se contentent de respecter le traité qu’elles ont jadis passé avec les Joons. Le déclin de notre race, le désastre qui s’est abattu sur le monde, les Seigneurs des Donjons ne s’en soucient guère. Ils tiennent parole, voilà tout.
+#ANIMATION 61
+#CAMERA 11
+#phrase Deva  5
+C’est donc pour ça que j’ai réussi à m’enfuir du camp souterrain des brigands sans qu’ils me poursuivent... Ils avaient peur ! De la même façon que j’ai été surprise et effrayée en te voyant arriver, bien que je n’étais pas seule.
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  6
+Ça n’a pas été facile. Et à propos, j’espère que tu sais comment sortir de cette caverne ? Un sort de téléportation nous ramènera à Tka-Rik, mais il ne fonctionnera que pour nous deux. Et celui qui reste ici ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Deva  7
+Oh, c’est simple. Les Seigneurs des Donjons savent maintenant que tous mes visiteurs sont dignes de confiance.
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  8
+Parfait ! Bon, peux-tu m’accorder quelques minutes ? Je dois faire mes adieux...

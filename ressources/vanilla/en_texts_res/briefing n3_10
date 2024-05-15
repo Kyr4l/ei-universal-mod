@@ -1,0 +1,9 @@
+Take Sahilia back on the team
+#show Hero 
+#show Merc10
+#ANIMATION 45
+#phrase Hero  1
+You were right: I do need your help again. I hope you will not refuse me?
+#ANIMATION 71
+#phrase Merc10  2
+Why should I? It is rather boring here!

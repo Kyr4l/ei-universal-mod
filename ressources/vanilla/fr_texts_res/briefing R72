@@ -1,0 +1,40 @@
+A propos de la quête khadaganienne
+#show Hero 3
+#show Rick 4
+#show Deva 5
+#CAMERA 1
+#ANIMATION 6
+#phrase Rick  1
+Alors, tu es revenu seul. Le Dragonnet a vu ce qui t’était arrivé à Khadagan, mais il est trop jeune pour comprendre le sens de ces événements. Par conséquent, j’attends une véritable explication !
+#ANIMATION 32
+#CAMERA 12
+#phrase Deva  2
+Oh grand Tka-Rik ! Tu t’attendais à revoir ton ami Joon, tandis que j’attendais mon bien-aimé... Alors, lequel de nous est le plus désespéré à présent ? Mais je te supplie de ne pas te mettre trop en colère contre cet homme. Sa quête a peut-être échoué, mais il a échappé de peu à la mort ! Ne mérite-t-il pas au moins le respect ?
+#CAMERA 11
+#ANIMATION 3
+#phrase Rick  3
+Certes, Lu-a... Je crains d’avoir laissé ma déception se changer en colère. Je le regrette, Zak, et je te demande de me pardonner. Mais je t’en prie, dis-moi ce qui s’est passé.
+#ANIMATION 31
+#CAMERA 6
+#phrase Hero  6
+Je crains encore de te décevoir ! At-Zako n’est pas à Khadagan, il a utilisé une amulette de téléportation. Je pense qu’un Grand mage n’aurait aucun mal à découvrir où l’amulette l’a emmené. Mais nous avons un autre problème.
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  7
+L’homme est sous l’emprise d’un sort de transformation et personne ne sait à quoi il ressemble désormais ! Franchement, je ne vois vraiment pas comment je pourrais le trouver !
+#CAMERA 11
+#ANIMATION 3
+#phrase Rick  8
+Voilà une bien mauvaise nouvelle... Mais tu as dit que tu comptais poursuivre ta quête ? Je t’ai vu frôler la mort à maintes reprises... Je ne peux te demander de continuer à prendre autant de risques.
+#ANIMATION 31
+#CAMERA 6
+#phrase Hero  9
+Je vais être franc avec toi : si ça ne tenait qu’à moi, j’oublierais tout. Mais je vois la tristesse dans les yeux de Lu-a-Jalla... Je réalise que lorsqu’elle verra At-Zako, le bonheur lui fera tout oublier, moi y compris ! Mais je persiste à vouloir faire cela pour elle !
+#ANIMATION 7
+#CAMERA 8
+#phrase Deva  10
+Non, je ne t’oublierai pas, je te le promets. Tu es fort, tu es courageux, tu m’as sauvée sans rien me demander en échange ; comment pourrais-je oublier cela ?
+#ANIMATION 3
+#CAMERA 1
+#phrase Hero  11
+Tu sais ce que je veux dire... Mais n'en parlons plus !

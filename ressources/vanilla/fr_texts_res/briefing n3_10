@@ -1,0 +1,9 @@
+Reprendre Sahilia dans l'équipe
+#show Hero 
+#show Merc10
+#ANIMATION 45
+#phrase Hero  1
+Tu avais raison : j’ai encore besoin de ton aide. J’espère que tu ne vas pas me la refuser ?
+#ANIMATION 71
+#phrase Merc10  2
+Pourquoi le ferais-je ? Cet endroit est tellement ennuyeux !

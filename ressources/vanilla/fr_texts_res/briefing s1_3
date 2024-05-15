@@ -1,0 +1,30 @@
+A propos du Gobelin assassiné
+#show Hero 1
+#show Elder 2
+#ANIMATION 31
+#phrase Elder  1
+Je te remercie, Noble Elu, au nom de tous les villageois. Maintenant nous pouvons emmener paître ce qu'il reste de notre troupeau sans craindre les Gobelins. Si le ciel le permet, nous pourrons conserver un nombre suffisant de bêtes. Tel est mon vœu.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  2
+Je ne comprends pas, Erfar. Il n'y a plus rien à craindre des Gobelins et pourtant tu parles comme si ton troupeau avait été décimé.
+#ANIMATION 7
+#CAMERA 11
+#phrase Elder  3
+Il n'y a pas que les Gobelins. Les loups attaquent notre troupeau toutes les nuits. Mais peut-être es-tu également capable de combattre les loups, Noble Elu ?
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  4
+Tu veux que je chasse des misérables loups ? Ce n'est pas digne de moi !
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  5
+Ils sont tout sauf misérables. La horde qui dérobe nos porcs n'est pas une horde ordinaire. Elle est menée par Loup Blanc, qui est plus malin que n'importe quel chien... Combien de fois il a trompé nos Chasseurs ! Tu es le seul à pouvoir déjouer ses ruses. Ton intelligence aura raison de lui.
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  8
+D'accord, mais est-ce que je ne risque pas de me faire devancer par le petit Dragon ? A plusieurs reprises, j'ai vu un petit Dragon scintillant, ici, à Gipath. Il semble apparaître à chaque fois que quelque chose est sur le point de se produire.
+#ANIMATION 14
+#CAMERA 7
+#phrase Elder  9
+Je ne sais pas de quoi tu parles, Noble Elu. Peut-être vois-tu plus de choses que nous, simples mortels. En tout cas, moi, je n'ai jamais rien vu de tel.

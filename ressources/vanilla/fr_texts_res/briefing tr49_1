@@ -1,0 +1,59 @@
+A propos de la collection volée
+#show Hero
+#show Vor
+#show Shopper
+#ANIMATION 32
+#CAMERA 4
+#phrase Shopper  1
+Très bien, tu voulais rencontrer le Chauve, c’est arrangé. Mais n’oublie pas notre histoire !
+#hide Shopper
+#ANIMATION 11
+#CAMERA 7
+#phrase Vor  2
+Mmmm... Tu voulais me voir ?
+#ANIMATION 62
+#CAMERA 2
+#show GovenorChest00 3
+#phrase Hero  3
+Tu ferais mieux de me demander où je me suis procuré ce coffret portant les armoiries de Valrasian. Du calme, du calme, il est vide et son contenu a été placé en lieu sûr ! Alors de deux choses l’une : soit tu me parles ou j’appelle les gardes et tu parles au Capitaine Tilvar.
+#hide GovenorChest00
+#ANIMATION 43
+#CAMERA 11
+#show GovenorChest00 5
+#phrase Vor  4
+Va te faire voir ! Je déteste les gens de la ville ! Bon, combien veux-tu ?
+#hide GovenorChest00
+#ANIMATION 11
+#CAMERA 10
+#show GovenorChest00 3
+#phrase Hero  5
+Pas « combien veux-tu » mais « que veux-tu ». Dis-moi comment la flèche de ce coffret s’est retrouvée dans le corps du Fouineur ? Et un conseil, pas de baratin.
+#hide GovenorChest00
+#ANIMATION 63
+#CAMERA 3
+#phrase Vor  6
+Hum... Eh bien... Ils m’ont montré ce Fouineur et m’ont dit de le tuer, mais de faire en sorte que le Peuple de la forêt soit accusé. Alors, je... l’ai fait, ouais ? Je l’ai tué avec une flèche. C’est moi qui ai trouvé où m’en procurer une. Je ne voulais en aucun cas contrarier ce Peuple de la forêt, alors je l’ai volée au Gouverneur. Un jeu d’enfant, le Grand Gris a réussi à déjouer les pièges magiques.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  7
+Quel Grand Gris ?
+#ANIMATION 61
+#CAMERA 3
+#phrase Vor  8
+Un nouveau. Je ne l’ai pas vraiment vu. Lorsqu’il est venu me parler, il portait un manteau avec une capuche qui ne laissait rien voir de lui, pas même son museau ! Et il parlait d’une voix étrange. De peur d’être reconnu, je suppose.
+#ANIMATION 62
+#CAMERA 11
+#phrase Vor  9
+A mon avis, le Fouineur et le Peuple de la forêt avaient découvert quelque chose sur lui, quelque chose qui ne lui plaisait pas. Le Fouineur était sur le point de retrouver la Princesse, c’est sûr. Quant au Peuple de la forêt, il avait peut-être vu le Gris changer de vêtements ?
+#hide vor
+#show Hero 4 
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  10
+Aha. Encore le Peuple de la forêt ! Je dois emprunter le « passage secret » qui mène à leur nouvel abri... Ainsi, je découvrirai peut-être ce qu’ils savent sur l’homme en gris.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  11
+J’aurais dû le leur demander plus tôt... Mais comment ? Je viens juste d’apprendre pour l’homme en gris ? !

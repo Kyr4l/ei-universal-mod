@@ -1,0 +1,8 @@
+     Après avoir choisi une zone de jeu sur la carte globale, l’écran des quêtes apparaît. En haut à droite de l’écran se trouve une carte simplifiée de la zone. Au moins un triangle (voire plus) doit y figurer.
+    Les triangles verts désignent les zones de transfert. Ce sont elles qui permettent à votre personnage d’entrer dans la zone de jeu. Cliquez sur la zone à utiliser pour entrer dans la zone de jeu afin de la sélectionner. Notez qu’elle s’agrandit alors, ce qui indique qu’elle est "sélectionnée" et que vous pouvez y entrer.
+     Les triangles rouges désignent les zones de transfert auxquelles votre personnage n’a pas accès. Vous pouvez cliquer sur ces zones autant de fois que vous voulez, il ne se passera rien.
+
+     L’absence de triangle vert sur la carte de la zone indique qu’il existe une autre zone de jeu "inexplorée" quelque part entre la position de votre personnage et la zone de jeu dans laquelle vous essayez d’entrer. Vous devez la trouver et la traverser pour pouvoir continuer.
+
+     Pour entrer dans une zone de jeu, cliquez sur le bouton <V> situé en bas de l’écran.
+     Pour revenir à la carte globale, cliquez sur le bouton <X> situé en haut de l’écran.

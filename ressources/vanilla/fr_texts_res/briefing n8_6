@@ -1,0 +1,27 @@
+Rencontrer l'Archer
+#show Hero 1
+#show Merc6 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+Hé là ! On dit que tu es à la recherche de la Princesse, tout comme l’était le défunt Fouineur ?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+Et même si c’était vrai ? Qui es-tu et pourquoi veux-tu le savoir ?
+#ANIMATION 44
+#CAMERA 3
+#phrase Merc6  3
+Je m’appelle Myrana et je sais manier un arc... Enfin, c’est ce que je crois. Si tu comptes souvent t’aventurer hors de la ville, je pense pouvoir t’être utile.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  4
+Qu’est-ce qui te fait penser cela ?
+#ANIMATION 63
+#CAMERA 3
+#phrase Merc6  5
+Eh bien, tu dois être nouveau ici, sinon tu ne poserais pas cette question. Le bon Capitaine ne t’a-t-il pas parlé de ce qui se passe dans les provinces ? Fais une centaine de pas hors de la ville et ils te transformeront en pelote à épingles. Tu sais que les archers d’Ingos sont d’excellents tireurs !
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  6
+Tu as peut-être raison, Myrana. C’est vrai que je n’ai pas trouvé les villageois très accueillants. Si j’ai besoin d’un compagnon, je penserai à toi.

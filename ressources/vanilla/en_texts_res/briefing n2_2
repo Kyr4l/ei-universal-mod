@@ -1,0 +1,15 @@
+Leave Archer in the village
+#show Hero 
+#show Merc2
+#CAMERA 2
+#ANIMATION 15
+#phrase Hero  1
+You must stay in the village today.
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc2  2
+Why, what happened?
+#CAMERA 6
+#ANIMATION 8
+#phrase Hero  3
+Nothing much. I just decided you need some rest before you go on a mission with me. We have a lot of things to attend to and I do not want you to be tired when I need those eagle eyes of yours fresh and ready!

@@ -1,0 +1,6 @@
+Courir.
+Quand un personnage court, il fait plus de bruit
+qu'en marchant et attire l'attention de l'ennemi.
+Sa vitesse est élevée et son endurance diminue.
+Quand cette dernière est à zéro, il se met
+automatiquement à marcher.

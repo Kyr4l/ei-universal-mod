@@ -1,0 +1,11 @@
+Laisser Harad au sanctuaire
+#show Hero 3
+#show Merc7 5
+#CAMERA 2
+#ANIMATION 9
+#phrase Hero  1
+Tu ferais mieux de rester ici. L’affaire que je dois régler nécessite plus de discrétion que de force. Ne le prends pas mal, mais il me semble que les missions secrètes ne sont pas ton fort, n’est-ce pas ?
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc7  2
+Je serais idiot de m’offenser pour si peu. J’attendrai ici, au Dernier sanctuaire. Sache que si tu as besoin de moi, je serai prêt à combattre à tes côtés !

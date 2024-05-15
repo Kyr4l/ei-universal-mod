@@ -1,0 +1,49 @@
+L'affaire urgente du Doyen
+#show Hero 1
+#show Elder 2
+#ANIMATION 9
+#CAMERA 9
+#phrase Elder  1
+J'ai rassemblé toutes les rumeurs, les légendes et les contes des anciens du village et j'en suis arrivé à une conclusion incroyable : notre île est peut-être moins isolée qu'on ne le croit. Tu dois absolument découvrir s'il est possible de communiquer avec d'autres terres, avec mon aide naturellement. Ce serait une immense joie pour notre village.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  2
+Je suis persuadé que dans d'autres contrées je trouverais des mages vraiment puissants qui m'aideraient à recouvrer la mémoire. Il serait plus utile de franchir un Portail là-bas que de continuer à déambuler sur Gipath, cette terre dévastée.
+#show Hero 1
+#show Elder 2
+#ANIMATION 15
+#CAMERA 5
+#phrase Hero  3
+Raconte-moi !
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  4
+Il existe une petite tribu de Gobelins dont le Chef s'appelle GoGo. Il lui manque un œil et s'est inséré une pierre bleue dans l'orbite. Dans les temps anciens, on fabriquait des Portails avec ce genre de pierre, des portails capables de transporter les gens d'un endroit à l'autre en une seconde. Si nous pouvions découvrir la provenance de cette pierre, je pourrais dire si nous avons un tel Portail à Gipath.
+#ANIMATION 5
+#CAMERA 2
+#phrase Hero  5
+Excellente idée ! Mais où puis-je trouver… euh… j'ai oublié son nom… GoGo ?
+#ANIMATION 44
+#CAMERA 11
+#phrase Elder  6
+Il viendra nous voir de lui-même et nous dira ce qu'il sait. La tribu de GoGo vénère le Premier Gobelin et ils ont toujours son crâne. Si nous mettons la main sur cet objet sacré, GoGo fera tout pour le récupérer. Voilà ce à quoi il ressemble...
+#show Hero 3
+#show Elder 5
+#show GoblinFright00 5
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  7
+Il faut vraiment être un Gobelin pour vénérer un tel… euh… objet sacré !
+#ANIMATION 3
+#CAMERA 7
+#phrase Elder  8
+Je t'en prie, pas un mot à propos du Portail avant qu'on ne le trouve. Inutile de donner de faux espoirs à tout le monde.
+#hide Elder 
+#hide GoblinFright00 4
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  9
+Tu penses bien que je ne vais pas le répéter ! Je commencerai par me servir moi-même du Portail et ils ne me verront plus jamais. Ou peut-être pas... après tout, ils semblent reporter tous leurs espoirs sur moi... Baahhh !... Ce village a vécu une centaine d'années sans Elu, alors ils peuvent bien passer un autre siècle sans moi.

@@ -1,0 +1,17 @@
+A propos du trésor des Hommes-lézards
+#show OLIZ 1
+#show Hero 2
+#CAMERA 9
+#phrase OLIZ  1
+Tu as récupéré le trésor des Hommes-lézards ? Tu es content ?
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  2
+Je serais surtout content quand je t'aurai fait manger tes écailles ! Pourquoi m’as-tu trompé ? !
+#CAMERA 11 5 5 2
+#phrase OLIZ  3
+Je t’ai trompé ? Tu as le sens de l’humour et ce n’était qu’une plaisanterie. Tu ne trouves pas ça drôle ?
+#ANIMATION 7
+#CAMERA 5
+#phrase Hero  4
+Pas du tout. Tu sais, ermite... Je préfère te voir sérieux. Ne t’avise plus de faire des plaisanteries, d’accord ?

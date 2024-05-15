@@ -1,0 +1,27 @@
+A propos du prophète et de la pyramide
+#show Hero 1
+#show Smith 2
+#ANIMATION 29
+#CAMERA 9
+#phrase Smith  1
+Dieu te bénisse, Noble Elu ! Nous pouvons désormais nous promener librement dans les contreforts. Tu auras la récompense que je t'ai promise.
+#ANIMATION 45
+#CAMERA 2 -30 8 3
+#phrase Hero  7
+Au fait, d'où vient l'argent à Gipath ? On m'a dit qu'il n'y avait pas de roi ici, et maintenant je vois des pièces marquées d'un sceau royal. Comment ça se fait ?
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  8
+Cela s'explique facilement. Gipath n'a pas toujours été le lieu dévasté que tu connais. Jadis vivait ici un autre peuple, très différent de nous. Il a disparu sans laisser de traces. Il n'a laissé derrière lui que quelques ruines et des pièces.
+#ANIMATION 7
+#CAMERA 10
+#phrase Hero  9
+Si je comprends bien, il suffit de fouiller les ruines pour devenir plus riche que toi ou Erfar ?
+#ANIMATION 15
+#CAMERA 3
+#phrase Smith  10
+C'est une éventualité. Mais le problème est que les lieux les plus accessibles ont été fouillés depuis longtemps. Et ailleurs, on peut s'attendre à des choses plus que déplaisantes.
+#ANIMATION 11
+#CAMERA 9
+#phrase Smith  11
+C'est pourquoi il y a peu de chance de voir apparaître des fortunes soudaines par ici. Et je ne peux pas dire que cela me déplaise.

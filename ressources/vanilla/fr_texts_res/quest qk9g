@@ -1,0 +1,8 @@
+Trésor des harpies
+Les harpies sont incapables d’utiliser des objets ou des armes, mais si elles viennent à trouver quelque chose, elles le déposent près de leurs nids.
+#subobj  1
+Trouver le trésor appartenant à la Harpie
+Les Harpies cachent généralement ce qu’elles trouvent près de chez elles.
+#subobj  2
+Prendre le trésor appartenant à la Harpie
+Vous n’avez pas besoin de clé pour ouvrir le coffre. En fait, il est peu probable que les Harpies sachent à quoi sert une clé !

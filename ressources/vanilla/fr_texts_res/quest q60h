@@ -1,0 +1,11 @@
+Traverser le Canyon de la Mort
+Les soldats khadaganiens libèrent des prisonniers dans le Canyon de la Mort avant de les traquer pour aiguiser leurs talents au combat. Tout prisonnier parvenant à rejoindre les portes de la forteresse nord depuis les portes principales de la forteresse sud est épargné. Jusqu'à la séance d’entraînement suivante.....
+#subobj  1
+Courir vers les portes nord
+La forteresse nord se trouve au nord-est du canyon. C’est l’unique moyen de s’y rendre et il est très difficile d’échapper aux poursuivants.
+#subobj  2
+Ouvrir les portes nord
+Vous n’avez pas besoin de clé pour ouvrir les portes nord ; ouvrez-les avec les mains.
+#subobj  3
+Franchir les portes
+Lorsque le prisonnier franchit les portes de la forteresse nord, il a mené à bien sa tâche et peut regagner son poste.

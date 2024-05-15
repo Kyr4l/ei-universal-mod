@@ -1,0 +1,11 @@
+Dire au revoir au Voyou
+#show Hero
+#show Merc1
+#ANIMATION 9
+#CAMERA 6
+#phrase Hero  1
+Eh bien Voyou, tu es quelqu’un de bien et ton aide m’a été très précieuse. Mais désormais, je dois me débrouiller seul. Prends soin de toi !
+#ANIMATION 3
+#CAMERA 7
+#phrase Merc1  2
+C'est dommage.... Bonne chance ! Reviens-nous sain et sauf, d’accord ?

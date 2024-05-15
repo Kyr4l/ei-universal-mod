@@ -1,0 +1,6 @@
+     Chaque objet est doté d’une certaine "durabilité". Les objets en bon état de marche sont dotés d’une valeur de durabilité maximale, tandis que ceux qui ne sont plus utilisables (parce qu’ils sont usés par exemple), ont une durabilité nulle. Dans cet écran, vous pouvez réparer des objets et rétablir leur durabilité à leur valeur maximale.
+
+     Si vous vous trouvez dans la zone de jeu et qu’un objet est très endommagé, au point de devenir bientôt inutilisable, vous entendrez un son spécial dès que vous essaierez de l’utiliser (son variable selon qu’il s’agit d’une arme ou d’une armure). Lorsque vous entendez ce son, mieux vaut revenir à la base pour réparer l’objet avant qu’il ne devienne complètement inutilisable.
+     Pour réparer un objet, placez-le sur la table du centre de l’écran. Le panneau situé en bas à gauche indiquera le prix de sa réparation. Pour accepter ce prix et réparer l’objet, cliquez sur le bouton <V>, sinon cliquez sur le bouton <X>.
+
+     Remarque : les objets devenus inutilisables sont placés dans l’inventaire et vos personnages n’y ont plus accès, même pendant les quêtes. Vérifiez donc à l’avance que l’équipement de tous vos personnages est en bon état de marche pour éviter le pire.

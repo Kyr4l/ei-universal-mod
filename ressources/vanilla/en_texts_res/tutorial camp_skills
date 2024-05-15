@@ -1,0 +1,36 @@
+it007_head
+#screen
+it007_head_screen1
+#position 150 50 650
+#text
+it007_text_screen1
+#screen
+it007_head_screen2
+#position 240 50 700
+#rectangle 11 109 191 491
+#text
+it007_text_screen2
+#screen
+it007_head_screen3
+#position 207 275 700
+#rectangle 208 100 396 245
+#text
+it007_text_screen3
+#screen
+it007_head_screen5
+#position 20 20 400
+#rectangle 403 102 600 499
+#text
+it007_text_screen5
+#screen
+it007_head_screen4
+#position 412 10 790
+#rectangle 210 301 392 443
+#text
+it007_text_screen4
+#screen
+it007_head_screen6
+#position 110 100 700
+#rectangle 0 0 800 100
+#text
+it007_text_screen6

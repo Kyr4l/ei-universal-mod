@@ -1,0 +1,14 @@
+Recruter Eila
+#show Hero 
+#show Merc4
+#CAMERA 3
+#phrase Merc4  1
+C’est dangereux et je préfère éviter de prendre des risques inutiles en entrant dans le Désert avec une telle foule !
+#ANIMATION 14
+#CAMERA 6
+#phrase Hero  2
+Quelle foule ? Nous ne sommes que trois !
+#CAMERA 3
+#ANIMATION 32
+#phrase Merc4  3
+Quatre avec moi. Et ici, quatre, c’est déjà une foule !

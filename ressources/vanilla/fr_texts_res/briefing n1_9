@@ -1,0 +1,19 @@
+Prendre le Chevalier dans l'équipe
+#show Hero 
+#show Merc9
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  1
+Euh... Vénérable Chevalier ! Je serais ravi de t’avoir comme compagnon, mais... j’ai parfois recours à.... éh bien... à des méthodes discutables et j’ignore comment tu réagirais, si tu vois ce que je veux dire...
+#ANIMATION 63
+#CAMERA 3
+#phrase Merc9  2
+Lorsque je dis que je sers le bien, cela ne signifie pas que je suis une fleur fanée en gants blancs. Tout se justifie dans une guerre, même s’il s’agit d’une guerre entre le bien et le mal. Je jure de t’accompagner partout et de faire tout ce qu’il faudra !
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  3
+Oui, mais je devrai parfois me rendre en ville !
+#ANIMATION 9
+#CAMERA 11
+#phrase Merc9  4
+Oh, ne t’inquiète pas pour ça. Plus personne en ville ne se souvient de mon visage !

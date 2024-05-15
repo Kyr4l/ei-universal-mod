@@ -1,0 +1,39 @@
+En savoir plus sur le Peuple des forêts
+#show Hero 1
+#show Trapper 2
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  1
+Tu voulais me parler du Peuple de la forêt et tu m’as demandé de te le rappeler. Je t’écoute !
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  2
+Ah oui, c’est vrai ! Les membres du Peuple de la forêt sont plus ou moins des « Enfants de la Nature ». Ils ne construisent pas de maisons, ne travaillent pas la terre et bien sûr, ne possèdent pas de villes. Mais ils sont loin d’être stupides, disons que leurs esprits fonctionnent différemment des nôtres.
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper  3
+Et bien sûr, pour cette raison, les humains ne les comprennent pas, ne les aiment pas et en ont peur. Regarde le Capitaine des Gardes : il est tellement courageux... qu’il promet toujours de s’occuper du Peuple de la forêt une bonne fois pour toutes. Et pourquoi crois-tu qu’il ne met pas ses promesses à exécution ? Parce qu’il a peur, voilà tout...
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  4
+Mais il ne faut pas en avoir peur. Bien au contraire, ils peuvent nous apprendre beaucoup de choses : par exemple, est-ce qu’un humain sait apprivoiser une Licorne ? Non ! Eh bien, c’est quelque chose de naturel pour le Peuple de la forêt. Ils connaissent la forêt mieux que je ne la connaîtrai jamais et pourtant, je chasse depuis mon enfance !
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  5
+En fait, ils ne s’intéressent guère aux humains. Mais si quelqu’un venait à les mettre en colère, il le regretterait amèrement. Malgré leur petite taille, ces enfants de la nature sont de redoutables combattants. Ils possèdent une arme spéciale : un tube qu’ils utilisent pour lancer des flèches empoisonnées, comme celle qui a eu raison du Fouineur.
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  6
+Quel mal pourrait bien faire cette drôle de petite chose ? Elle ne transpercerait même pas un plastron en cuir, si ?
+#ANIMATION 46
+#CAMERA 3
+#phrase Trapper  7
+Même si c’était du mithrill ! Chaque blindage a une faille et le Peuple de la forêt n’a peur de rien. 
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  8
+Et bien sûr, il y a leurs Licornes apprivoisées. Ces créatures sont magnifiques mais si tu les mets en colère, tu regretteras toute ta vie d’avoir pu admirer leur beauté ! Ah, autre chose... Le Peuple de la forêt connaît la magie.
+#ANIMATION 9
+#CAMERA 11
+#phrase Trapper  9
+Voilà donc les petits êtres qui nous entourent. Si tu les abordes en ennemi, attends-toi à des ennuis, mais si tu parviens à t’en faire des amis, tu n’en tireras que des avantages. Des amis qui pourraient se révéler très précieux !

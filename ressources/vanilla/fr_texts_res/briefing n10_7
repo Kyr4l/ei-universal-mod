@@ -1,0 +1,19 @@
+Dire au revoir à Harad
+#show Hero 
+#show Merc7
+#ANIMATION 15
+#CAMERA 7
+#phrase Merc7  1
+Je serai ravi de t’être utile, Blondinet.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  2
+Ecoute Harad, pourquoi ne restes-tu pas à Gipath ? Je ne peux rien te promettre, mais je vais demander au Grand mage de t’envoyer au village...
+#CAMERA 7
+#ANIMATION 9
+#phrase Merc7  3
+Non, Blondinet, mon cœur m’appelle chez moi et mon âme crie vengeance. Je ne peux pas abandonner les frères du Dernier sanctuaire. Je dois retourner à Suslanger. Au revoir !
+#CAMERA 6
+#ANIMATION 31
+#phrase Hero  4
+Je comprends : pour toi, le devoir passe avant tout. Alors, au revoir et que la chance soit avec toi !

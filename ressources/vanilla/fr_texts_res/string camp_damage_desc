@@ -1,0 +1,1 @@
+Quand on frappe avec cette arme, les dégâts infligés à l'ennemi dépassent la valeur minimum mais n'atteignent pas la valeur maximum du paramètre 'dégâts'. Si l'ennemi est protégé par une armure, le dégât infligé par l'arme décroît en fonction de la valeur du paramètre de l'armure. Si l'armure de l'ennemi dépasse la valeur maximale de dégâts, cette arme devient inefficace.

@@ -1,0 +1,27 @@
+About the missing girl
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+Captain! Could you give me any hint at all where I could find the girl? I understand that you are a busy man, of course...
+#ANIMATION 44
+#CAMERA 3
+#phrase Kapitan  2
+But I have already told you my opinion about this whole business, young man, do not make me repeat it! If you have nothing better to do, try looking for the Good Knight Brissen, ha-ha!
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  3
+Sorry, look for whom?
+#ANIMATION 63
+#CAMERA 11
+#phrase Kapitan  4
+Listen, what backwater village are you from? Everyone knows about Knight Brissen who decided that cities are hotbeds of evil and went to live in the woods. But when he ventured out of those woods, it was total chaos!
+#ANIMATION 62
+#CAMERA 3
+#phrase Kapitan  5
+He sometimes would kill the taxman and leave the money on the road, then he would start chasing Hunters - allegedly they were hunting deer out of season, or it was some other stupid thing. So that is how his nickname came about  - the Good Knight.
+#ANIMATION 45
+#CAMERA 11
+#phrase Kapitan  6
+Though I must say I have not heard any new stories about him recently... maybe he died... If that is the case, then good riddance to bad rubbish, I say... he was more trouble alive than dead!

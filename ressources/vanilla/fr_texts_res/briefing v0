@@ -1,0 +1,19 @@
+Rencontrer le Capitaine
+#show Hero 1
+#show Sheriff 2
+#CAMERA 9
+#ANIMATION 3
+#phrase Sheriff  1
+Je suis le Capitaine ! C'est moi qui commande à tous les guerriers. Mon nom est Gort, mais on m'appelle aussi le Briseur de crânes. Si tu as un ennui, siffle et j'arrive. Je me ferai un plaisir de t'aider.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  2
+Quelle sorte d'ennui pourrais-je avoir ?
+#ANIMATION 9
+#CAMERA 11 -15 5 4
+#phrase Sheriff  3
+C'est que, on en a parmi nous... des qui se croient très malins... mais t'occupe pas de ça ! Le principal, c'est que tu règles son compte à la sentinelle des Gobelins. Ce petit mécréant envoie en permanence des signaux à son gang : si notre berger conduit les porcs en prairie, ils sont immédiatement sur lui, mais quand j'essaie de les poursuivre avec mes hommes ils disparaissent sans laisser de trace. 
+#ANIMATION 31
+#CAMERA 7
+#phrase Sheriff  4
+C'est une bonne chose que nous t'ayons avec nous. Tu es notre seul espoir.

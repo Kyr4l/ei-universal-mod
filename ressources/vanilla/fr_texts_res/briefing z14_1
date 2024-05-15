@@ -1,0 +1,62 @@
+A propos de l'amulette du Dragon
+#show Witch 
+#show Daughter
+#show DragonAmulet 4
+#show Hero
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+Et voilà, une amulette de Dragon ! Je dois faire quoi, maintenant ?
+#hide DragonAmulet
+#show DragonAmulet 5
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase Witch  2
+Oui, quoi ?
+#ANIMATION 3
+#CAMERA 11
+#phrase Witch  3
+Airy, c'est toi qui as lancé l'idée, alors maintenant prends tes responsabilités. Dis-nous tout ce que tu sais, le temps presse.
+#ANIMATION 63
+#CAMERA 8
+#phrase Daughter  4
+En fait, c'est très simple. Si on s'approche du Dragon vert qui vit de l'autre côté du lac avec cette amulette, il vous suivra docilement partout. Une fois qu'on a l'amulette, le reste est facile.
+#ANIMATION 9
+#CAMERA 4
+#phrase Daughter  5
+Conduis le Dragon à l'observatoire. S'il y voit des Harpies, il les attaquera et tu pourras passer.
+#hide DragonAmulet
+#ANIMATION 61
+#CAMERA 11
+#phrase Witch  6
+Arrête tout de suite ! Quelle idiote je fais… j'ai failli envoyer ce garçon à une mort certaine. Tu n'y as pas pensé non plus.
+#ANIMATION 3
+#CAMERA 12
+#phrase Daughter  7
+Que veux-tu dire, grand-mère ?
+#ANIMATION 8
+#CAMERA 3
+#phrase Witch  8
+On a oublié les Hommes-lézards qui vivent dans les Montagnes centrales près du passage menant au lac.
+#ANIMATION 45
+#CAMERA 8
+#phrase Daughter  9
+Mais ils sont inoffensifs !
+#ANIMATION 46
+#CAMERA 7
+#phrase Witch  10
+Autrefois oui, mais plus maintenant. S'ils repèrent l'Elu, c'en est fini de lui. Même moi, je ne sais pas trop comment les combattre... bien qu'il y ait une possibilité…
+#ANIMATION 62
+#CAMERA 9
+#phrase Witch  11
+Pourquoi n'en touches-tu pas un mot à Babur ? Il se rend souvent aux Montagnes lointaines pour y chercher ses pierres et les Hommes-lézards ne l'attaquent jamais. En tous cas, ne va pas là-bas avant d'avoir trouvé un moyen de pacifier des Hommes-lézards.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  12
+C'est le pompon ! Il faut en plus que je devienne ami avec ces Hommes-lézards ! Ça devient lassant ! Mais merci tout de même pour tes conseils, Estera, et pour tes informations, Airy. Tu es une petite fille futée.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase Daughter  13
+Le voilà qui recommence ! "Petite fille !" Quand se rendra-t-on compte que je ne suis pas une petite fille ? Comment puis-je prouver à l'Elu que je vaux mieux que ce genre de compliment ? Mais, je ne renonce pas !

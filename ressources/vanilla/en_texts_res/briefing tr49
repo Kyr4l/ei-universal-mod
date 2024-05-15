@@ -1,0 +1,61 @@
+About the stolen collection
+#show Hero
+#show Vor
+#show Shopper
+#ANIMATION 32
+#CAMERA 4
+#phrase Shopper  1
+All right, you wanted to meet Baldie, it is done. Just do not forget about the tale!
+#hide Shopper
+#ANIMATION 11
+#CAMERA 7
+#phrase Vor  2
+Did you want to see me?
+#ANIMATION 62
+#CAMERA 2
+#show GovenorChest00 3
+#phrase Hero  3
+You better ask where I got that case with Valrasian's crest on it. Be still, it is empty anyway and the stuff is in a safe place! So you have got a very simple choice: either you talk to me or I call the Guards and you talk to Captain Tilvar.
+#hide GovenorChest00
+#ANIMATION 43
+#CAMERA 11
+#show GovenorChest00 5
+#phrase Vor  4
+Toad's warts on your face! I hate city folks! All right, how much do you want?
+#hide GovenorChest00
+#ANIMATION 11
+#CAMERA 10
+#show GovenorChest00 3
+#phrase Hero  5
+Not "how much" but "what". Tell me how the arrow from this case found its way into the Snoop's body? And take my advice, no lies.
+#hide GovenorChest00
+#ANIMATION 63
+#CAMERA 3
+#phrase Vor  6
+Well, they showed me that Snoop, yeh, and told me to make a corpse outta him, but to putta blame on the Woodsfolk. So I done him in, yeh? And I stick an arrow in him. It was my own idea where to get one. No way I wanna annoy those Woodsfolk, so I nicked it from the Guvnor. Dead easy it was and that Big Grey knew how to bypass the magic traps.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  7
+What Big Grey?
+#ANIMATION 61
+#CAMERA 3
+#phrase Vor  8
+A newcomer. Never saw him myself. Comes to talk all wrapped up in a cloak'n'hood - can see nothin', not even his snout! And talks funny too, mumbles in a weird voice. Afraid to be recognized, I reckon.
+#ANIMATION 62
+#CAMERA 11
+#phrase Vor  9
+Methinks the Snoop and the Woodsfolk found out something about him and he did not like that. The Snoop almost found the Princess, for sure. And what was that about the Woodsfolk - beats me, maybe they saw how the Big Grey changed his clothes?
+#hide vor
+#show Hero 4 
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  10
+Aha, the Woodsfolk again! I must take the "secret path" to their new shelter... mayhap I can find out what they know about that man in grey.
+#DESC To himself
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  11
+I should have asked them before... but how could I, I only just learned about that Grey person?!
+#DESC To himself

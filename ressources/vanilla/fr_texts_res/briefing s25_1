@@ -1,0 +1,44 @@
+Accuser Erfar de trahison
+#show Elder
+#show Hero
+#show Nsheriff
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  1
+Je sais tout, maintenant. Comme je suis généreux, je te laisse choisir ta mort.
+#ANIMATION 54
+#CAMERA 9
+#phrase Elder  2
+Non ! J'ai été trahi, c'était un coup monté. Je suis innocent. A l'aide ! L'Elu est devenu fou !!
+#ANIMATION 29
+#CAMERA 2
+#phrase Hero  3
+Tu peux toujours crier ! Plus tu crieras fort, plus j'aurai de plaisir à te faire taire, maudit menteur !
+#ANIMATION 11
+#CAMERA 8
+#phrase NSheriff  4
+Non, tu ne devrais pas crier. Cela ne fera qu'aggraver ton cas.
+#ANIMATION 56
+#CAMERA 9
+#phrase Elder  5
+Oh, Noble Elu, je suis à ta merci... mais, je t'en prie, ne me tue pas. Je peux encore t'être utile. Je suis le seul à pouvoir te révéler ce qu'il y avait dans cette lettre. Si tu me promets de me laisser partir, je te la traduirai.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  6
+Quel toupet ! Bon, mon ami… tu me traduiras de toute façon cette lettre mais je ne te fais aucune promesse. Peut-être que...
+#ANIMATION 1
+#CAMERA 6
+#phrase Hero  7
+En tout cas, je n'agirai pas à la légère.
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  8
+Et si je suis vraiment dans de bonnes dispositions…
+#ANIMATION 61
+#CAMERA 9
+#phrase Hero  9
+Alors, je déciderai si tu dois vivre ou non. Bien qu'un renégat de ton espèce ne mérite pas la pitié ! Rivar, dis à tes hommes de le surveiller de près.
+#ANIMATION 15
+#CAMERA 12
+#phrase NSheriff  10
+A tes ordres !

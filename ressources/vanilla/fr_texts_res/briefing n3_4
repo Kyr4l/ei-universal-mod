@@ -1,0 +1,15 @@
+Reprendre Eila
+#show Hero 
+#show Merc4
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc4  1
+Tu veux toujours que je reste au campement ?
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  2
+Non, j’ai besoin de tes pouvoirs magiques !
+#CAMERA 3
+#ANIMATION 3
+#phrase Merc4  3
+Alors, où est le problème ? Je suis prête et pleine de bonne volonté !

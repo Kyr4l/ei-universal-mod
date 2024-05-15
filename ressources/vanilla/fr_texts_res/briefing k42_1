@@ -1,0 +1,27 @@
+A propos de la fille disparue
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+Capitaine ! Pourrais-tu me donner un indice sur l’endroit où je peux trouver la jeune fille ? Je sais que tu as beaucoup à faire...
+#ANIMATION 44
+#CAMERA 3
+#phrase Kapitan  2
+Mais je t’ai déjà donné mon avis sur tout cela, jeune homme, et je n’ai aucune envie de me répéter ! Si tu n’as rien de mieux à faire, essaie de trouver Brissen le Bon Chevalier, ha-ha !
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  3
+Qui ?
+#ANIMATION 63
+#CAMERA 11
+#phrase Kapitan  4
+Mais d’où sors-tu ? Tout le monde a entendu parler du Chevalier Brissen, celui qui déclara que toutes les villes sont le foyer du mal avant de partir vivre dans la forêt. Mais lorsqu’il s’aventura hors de la forêt, ce fut le chaos total !
+#ANIMATION 62
+#CAMERA 3
+#phrase Kapitan  5
+Il lui est arrivé de tuer le percepteur et de laisser l’argent sur la route, puis de traquer les Chasseurs, prétextant que la chasse aux cerfs n’était pas ouverte ou de faire toutes sortes de choses stupides. Et c’est ce qui lui a valu le surnom de Bon Chevalier.
+#ANIMATION 45
+#CAMERA 11
+#phrase Kapitan  6
+Mais je dois dire que ça fait un moment que je n’ai pas entendu parler de lui... Il est peut-être mort... Si c’est le cas, alors bon débarras... Mort, au moins il ne nous embêtera plus !

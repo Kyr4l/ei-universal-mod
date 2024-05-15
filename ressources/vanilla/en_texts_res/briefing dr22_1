@@ -1,0 +1,21 @@
+Dragon's present
+#show Hero 
+#show SKD
+#CAMERA 3
+#phrase SKD  1
+Listen, human! You proved to be good company and I would like to see you again - sometime. But then I thought that soon you may be killed and will be nothing but a skeleton - and what is the point of a conversation with a skeleton?
+#CAMERA 9
+#phrase SKD  3
+Look there... that one used to be a skilled military commander and a very clever person. And now he is simply a ghoul. He may still remember something but he is unable to tell us anything. So I have decided to do something which would make it very difficult to kill you.
+#CAMERA 3
+#ANIMATION 1
+#phrase SKD  4
+I have no opportunity or inclination to protect you. However, you seem to be quite capable. But to turn that "quite" into "perfectly", I shall present you with a gift. 
+#show Ancientsword 5
+#CAMERA 3
+#phrase SKD  5
+Take this weapon and try to make good use of it! It does not look very impressive now, but believe me, the best of the best used this sword in the past - people like the one who are now like this skeleton.
+#ANIMATION 31
+#CAMERA 6
+#phrase Hero  6
+Thank you! And I promise that I will make good use of a good weapon in this world - that will be no problem at all!

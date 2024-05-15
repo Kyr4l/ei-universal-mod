@@ -1,0 +1,17 @@
+Libérer l’Honorable Doyen
+Le Capitaine des gardes a lancé une expédition punitive contre le Peuple des forêts et a ordonné à un espion d’enlever leur Honorable Doyen. Vous devez le libérer !
+#subobj  1
+Trouver le camp de l’unité de gardes
+Après avoir quitté les faubourgs de la ville et atteint le domaine de Karansul, dirigez-vous vers l’est. Soyez prudent.... Outre les gardes, cette région est aussi fréquentée par les mercenaires de Karansul.
+#subobj  2
+Trouver l’Honorable Doyen
+L’Honorable Doyen du Clan Vert du Peuple des forêts est retenu prisonnier dans une cage située en plein cœur du camp des gardes. La cage est verrouillée et le commandant de l’unité en a la clé.
+#subobj  3
+Trouver le commandant de l’unité
+Pour vous emparer de la clé de la cage, vous devez trouver le Commandant de l’unité. Il porte une plus belle armure et de meilleures armes que les gardes ordinaires. S’il n’est pas au camp, vous le trouverez en train de faire sa ronde entre les différents postes.
+#subobj  4
+S’emparer de la clé
+Vous ne pouvez pas ouvrir la cage et libérer le Chasseur sans la clé du commandant de l’unité.
+#subobj  5
+Libérer le prisonnier
+Pour libérer l’Honorable Doyen, ouvrez simplement la porte de la cage.

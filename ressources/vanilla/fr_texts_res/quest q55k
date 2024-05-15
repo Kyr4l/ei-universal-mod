@@ -1,0 +1,62 @@
+Retrouver la Princesse
+La jeune fille est cachée quelque part dans les catacombes. Vous devez la trouver et la sauver. N’oubliez pas qu’à l’entrée, des postes sont gardés par des mercenaires au service de Diera et que les profondeurs sont peuplées des sinistres Seigneurs des Donjons - des êtres magiques qui haïssent ceux qui vivent à la surface.
+#subobj  2
+Trouver l’ancienne cellule de châtiments
+La partie nord-ouest des catacombes abrite un lieu qui faisait autrefois office de cellule de châtiments pour les mineurs récalcitrants. C’est peut-être là que la jeune fille est retenue.
+#subobj  3
+Trouver le Commandant des mercenaires
+Le Commandant des mercenaires de la Magicienne Diera se trouve au camp souterrain. Il détient peut-être quelque chose susceptible de vous aider dans votre quête.
+#subobj  4
+Récupérer les affaires du Commandant
+S’il existe quelque chose susceptible de vous aider à retrouver la jeune fille, cette chose est entre les mains du Commandant.
+#subobj  5
+Aller au nord-est des catacombes
+Il n’y avait personne dans l’ancienne cellule de châtiments. La jeune fille a peut-être réussi à s’enfuir pour se réfugier au cœur des catacombes. Les couloirs souterrains mènent à l’est de l’ancienne cellule ; vous devez continuer votre quête vers le nord-est du labyrinthe souterrain. On peut y accéder de deux manières. La première est directe mais est bloquée par une porte verrouillée. La seconde consiste à emprunter le couloir nord. Malgré l’absence de barrières insurmontables, cet endroit demeure extrêmement dangereux.
+#subobj  6
+Aller au sud-est des catacombes
+La jeune fille a dû réussir à aller plus loin et vous devez donc la chercher dans la partie sud-est du labyrinthe souterrain. Attention : vous pourrez des Tentacules, ces êtres intelligents détestant les habitants de la surface et adeptes de magie.
+#subobj  7
+Trouver la porte
+Si la jeune fille se trouve ici, elle doit se cacher derrière l’une des portes bloquant les passages.
+#subobj  8
+Ouvrir la porte
+Pour savoir si la jeune fille se trouve ici, vous devez ouvrir la porte. Pour ce faire, vous n’avez pas besoin de clé.
+#subobj  9
+Entrer dans l’abri
+La jeune fille est ici !
+#subobj  10
+Trouver le levier « Sud-Est »
+Les portes permettant d’accéder à la partie sud-est des catacombes sont contrôlées par le levier « Sud-Est » situé au nord-est du labyrinthe, derrière l’une des portes. Un croisement permet d’y accéder.
+#subobj  11
+Actionner le levier « Sud-Est »
+Une fois le levier « Sud-Est » actionné, l’accès à la partie sud-est des catacombes sera ouvert.
+#subobj  12
+Trouver le levier « Sud »
+Ce levier se trouve dans la partie sud des catacombes.
+#subobj  13
+Actionner le levier « Sud »
+Visiblement, rien près du levier ne permet de l’actionner. Cependant, il n’est pas là pour rien : il ouvre peut-être des passages donnant sur d’autres endroits des catacombes.
+#subobj  14
+Trouver le levier « Nord-Est »
+Visiblement, rien dans les parages ne semble contrôlé par le levier. Pourtant, il n’est pas là pour rien...
+#subobj  15
+Actionner le levier « Nord-Est »
+Il ouvre peut-être des passages donnant sur d’autres endroits des catacombes.
+#subobj  16
+Oui ! (levier « Sud »)
+Une fois le levier « Sud » actionné, un passage s’ouvre et quelque chose de totalement inhabituel vous y attend...
+#subobj  17
+Prendre la trouvaille
+Quelle qu’elle soit, cette chose est mieux entre les mains de la personne qui l’a trouvée que dans la grotte.
+#subobj  18
+Oui ! (levier « Nord-Est »)
+Une fois le levier « Nord-Est » actionné, un passage s’ouvre et quelque chose de totalement inhabituel vous y attend...
+#subobj  19
+Prendre la trouvaille
+Quelle qu’elle soit, cette chose est mieux entre les mains de la personne qui l’a trouvée que dans la grotte.
+#subobj  20
+Trouver le levier « Nord »
+L’accès au nord-est des catacombes est bloqué par des portes contrôlées par un levier. Pour trouver ce levier, dirigez-vous à l’est de l’ancienne cellule de châtiments.
+#subobj  21
+Actionner le levier « Nord »
+Pour actionner le levier « Nord », utilisez la clé que détenait le Commandant des mercenaires.

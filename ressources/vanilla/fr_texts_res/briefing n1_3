@@ -1,0 +1,15 @@
+Recruter Naya
+#show Hero 1
+#show Merc3 2
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  1
+Eh bien Naya, tu as entendu Estera. Est-ce vrai ? Veux-tu vraiment mettre tes connaissances en pratique ?
+#ANIMATION 3
+#CAMERA 3
+#phrase Merc3  2
+Je n’ai pas besoin de « mettre mes connaissances en pratique ». Estera a oublié de te dire que je chasse pour elle depuis déjà longtemps. Je sais effrayer des Gobelins égarés et j’ai déjà affronté des Orques. Alors si tu acceptes mon aide, sache que je ne serai pas un fardeau pour toi.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  30
+Très bien. Ne t’éloigne pas... Nous partons bientôt !

@@ -1,0 +1,60 @@
+Parler à l'esprit
+#show Hero
+#show OldNekro
+#show Spirit
+#ANIMATION 6
+#CAMERA 4
+#phrase Spirit  2
+Ici, je vais parler. L’homme vivant a quelque chose de caché à l’intérieur de toi, pose ta question.
+#ANIMATION 8
+#CAMERA 2
+#phrase Hero  3
+Où se trouve le jeune Joon ?
+#ANIMATION 7
+#CAMERA 12
+#phrase Spirit  4
+Danger. Peur. Horreur. Peau rouge : l’horreur surgit. L’horreur doit être dupée. Plus de jeune homme.
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  5
+Est-il mort ? !
+#ANIMATION 7
+#CAMERA 4
+#phrase Spirit  6
+Il n’est pas parmi les morts. Ni parmi les vivants. Il n’est nulle part. Il y en a un autre, un autre visage, une autre peau. L’autre : pas d’horreur. Peau rouge : l’horreur surgit.
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  7
+De quelle horreur parles-tu ? Pourquoi a-t-elle surgi ?
+#ANIMATION 15
+#CAMERA 12
+#phrase Spirit  8
+L’horreur tue. L’horreur a poursuivi le Joon. Le jeune homme est devenu quelqu’un d’autre, il est allé quelque part à travers nulle part. L’horreur m’a tué, a tué tout le monde. Puis, elle est partie. Laisse-moi partir, homme vivant, tu me tortures.
+#hide Spirit
+#ANIMATION 5
+#CAMERA 2
+#phrase Hero  9
+Attends, reviens !
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  10
+Par l'haleine du crapaud ! Ça n’avait aucun sens.....
+#show Hero
+#show OldNekro
+#ANIMATION 59
+#CAMERA 7
+#phrase OldNekro  11
+Il est plus difficile de communiquer avec les esprits que d’écouter des commérages, jeune homme ! Pour l’instant, j’attends la chute de Taivo et ensuite je me mettrai à ton niveau et t’expliquerai ce que tu viens d’entendre.
+#ANIMATION 58
+#CAMERA 7
+#phrase OldNekro  12
+Quelque chose s’est introduit dans le manoir des savants pour détruire le jeune Joon. Pour parer à ce danger, le jeune homme a été transformé en quelqu’un d’autre et téléporté quelque part. Le sort de téléportation prend du temps, alors le jeune homme a dû utiliser un objet imprégné du sort.
+#ANIMATION 57
+#CAMERA 11
+#phrase OldNekro  13
+Si tu veux le trouver, cherche cet objet ou ses fragments dans les ruines du manoir. A partir des fragments, un bon mage devrait pouvoir dire où il a été téléporté.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  14
+Un bon mage ? Je me demande si le vieux Nécromancien du Dernier sanctuaire en est un ? Quoi qu’il en soit, je vais essayer de trouver l’amulette et en parler à Kehel !

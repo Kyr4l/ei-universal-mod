@@ -1,0 +1,8 @@
+     Pour construire un objet, cliquez sur son modèle dans votre inventaire (barre inférieure) ou dans l’échoppe (barre supérieure). Le modèle sera alors placé dans la fente appropriée.
+     Une fois le modèle placé dans sa fente, les fentes de matériaux sont mises en surbrillance et entourées d’un cadre clignotant. Le nombre de fentes en surbrillance est égal au nombre d’unités de matériaux mentionnées sur le modèle. Cliquez sur un matériau  - le cas échéant dans votre inventaire ou dans l’échoppe - et il rejoindra une des fentes. Vous ne pouvez utiliser qu’un seul type de matériau pour fabriquer un objet. L’association de matériaux divers n’est pas autorisée, même s’ils appartiennent à la même catégorie.
+
+     Remarque : vous devez d’abord placer un modèle dans le concepteur avant de pouvoir y placer des matériaux. Si vous placez le modèle dans le concepteur, puis l’en retirez (en le replaçant dans votre inventaire ou dans l’échoppe), tous les matériaux placés dans le concepteur sont automatiquement retirés des fentes pour revenir à leur emplacement d’origine.
+
+     Lorsque toutes les fentes de matériaux sont remplies, le panneau de gauche affiche les caractéristiques de l’objet assemblé. En bas de l’écran, vous verrez le prix de l’objet. Ceci comprend le prix des articles que vous avez achetés, le cas échéant.
+
+      Cliquez sur le bouton <V> pour assembler l’objet ou sur <X> pour annuler.

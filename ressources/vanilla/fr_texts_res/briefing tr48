@@ -1,0 +1,87 @@
+A propos des dossiers volés
+#show Hero 1
+#show Shopper 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  1
+Encore toi ? ! Je ne sais rien sur la Princesse ! Alors, inutile de m’interroger !
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+Ce n’était pas mon intention. Je voulais te raconter une histoire.
+#ANIMATION 43
+#CAMERA 11
+#phrase Shopper  3
+Tu es devenu fou ? Je suis un homme d’affaires et mon temps, c’est de l’argent. Quelle histoire ? ! Tu ne dois pas être dans ton état normal...
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  4
+Pourquoi ? Ecoute, ça ne sera pas long. Il était une fois un marchand qui en apparence semblait bon, mais il était malhonnête et escroquait le Gouverneur. Tout ceci passa inaperçu jusqu’au jour où...
+#ANIMATION 45
+#CAMERA 11
+#phrase Shopper  5
+Je ne comprends pas où tu veux en venir, jeune homme. Quelle escroquerie ?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero  6
+Un jour, il perdit des papiers très importants... Sa comptabilité. Et ces derniers révélaient toutes sortes de malversations sur lesquelles ne planait aucun doute.
+#ANIMATION 15
+#CAMERA 11
+#phrase Shopper  7
+Et ensuite, que s’est-il passé ?
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  8
+Ensuite un homme est venu voir le marchand et lui a dit ceci : « Si tu veux récupérer tes papiers, tu vas devoir me dire ce que je veux savoir ». Mais le marchand était stupide et ne le prit pas au sérieux. Aussi, les papiers furent envoyés le jour même au Gouverneur et là...
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  9
+Oui, c’est une histoire intéressante. Mais es-tu sûr que le marchand était le seul impliqué ? Et cet homme ? Ne se plaignait-il pas de sa santé ou d’autre chose ? Les temps sont durs, tu sais, et tout peut arriver...
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  10
+Oh, il y a de nombreuses manières d’interpréter cette histoire. Elle peut mal finir. Cet homme a de sérieux ennuis, mais le Gouverneur possède toujours les papiers. L’homme n’était pas assez stupide pour les avoir sur lui, tu vois.
+#ANIMATION 11
+#CAMERA 3
+#phrase Shopper  11
+Tu te répètes trop souvent....Gouverneur, Gouverneur ! Je n’apprécie guère ce genre d’histoires. Elles sont tristes et sinistres. Pourquoi ne me racontes-tu pas quelque chose de plus joyeux ?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  12
+Pour ça, tu vas d’abord devoir me dire quelque chose.
+#ANIMATION 46
+#CAMERA 11
+#phrase Shopper  13
+D’accord, que veux-tu savoir ! Je veux entendre une fin heureuse !
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  14
+Dis-moi qui a volé Valrasian. Et où se trouve le butin.
+#ANIMATION 45
+#CAMERA 11
+#phrase Shopper  15
+Comment un honnête homme peut-il savoir cela ? Mais on dit qu’un voleur du nom de Flein et que les gens appellent le Chauve n’y serait pas étranger...
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  16
+Bien. Peux-tu m’en dire davantage ?
+#ANIMATION 62
+#CAMERA 3
+#phrase Shopper  17
+Que veux-tu savoir ? Il vit dans une ferme, située sur des mines abandonnées, à l’ouest du lac. Sa famille... comment dire... est des plus désagréables. Elle possède une sorte de zoo où elle dompte des tigres et ne craint donc personne.
+#ANIMATION 61
+#CAMERA 11
+#phrase Shopper  18
+Ces gens sont si imprévisibles ! J’ai plusieurs fois proposé au père de rejoindre mes gardes aux mines avec ses tigres. Mais il a toujours refusé. « Je ne suis l’esclave de personne » a-t-il dit ! Et le Chauve est l’expert de la famille en matière de vol. Mais cette fois, il est allé trop loin en volant le Gouverneur ! Son Excellence l’a très mal pris...
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  19
+Eh bien, puisque tu connais si bien ton ami... Où est le butin maintenant ?
+#ANIMATION 45
+#CAMERA 11
+#phrase Shopper  20
+A la ferme, bien sûr, où pourrait-il être ? Il doit se trouver dans l’une des granges.
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  21
+Eh bien, merci de ton aide. Et encore une chose : envoie un message à ce Flein pour lui dire que j’aimerais lui parler. Si tu organises cette rencontre, tu entendras la fin de mon histoire. La fin heureuse.

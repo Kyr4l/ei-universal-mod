@@ -1,0 +1,47 @@
+A propos du Grand mage
+#show Rick 1
+#show Hero 2
+#CAMERA 1
+#ANIMATION 5
+#phrase Rick  1
+Je t’attendais, toi que l’on appelle l’Elu !
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+Es-tu... Tu me connais ?
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick  3
+Ton arrivée impromptue a suscité mon attention et cela n’a fait qu’augmenter lorsque tu as réussi à regarder dans le Globe Magique. Mon Dragonnet t’a accompagné partout. D'ailleurs, je crois que tu l'as remarqué. Plus tu te rapprochais de la victoire, plus je me languissais de cette rencontre.
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  4
+Mais qui es-tu ? Comment t’appelles-tu ? Et si tu es assez puissant pour pouvoir m’observer sans quitter ta caverne, pourquoi ne m’aides-tu pas à résoudre mes problèmes ? Je suppose qu’il est inutile de t’en dire davantage - tu dois déjà tout savoir...
+#CAMERA 9
+#ANIMATION 5
+#phrase Rick  5
+Tu poses trop de questions et tu ne réfléchis pas assez... Que dirais-tu si j’en faisais autant ? Mais ta curiosité va être satisfaite… en partie.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick  6
+Je m’appelle Tka-a-Litan Rich-ty-a-Nik. Mais vu ta nature impatiente, je suppose que tu trouves ça trop long. Aussi, contente-toi de m’appeler Tka-Rik. Tu peux aussi ajouter « Grand mage » à mon nom, même si je n’ai nul besoin d’un titre aussi pompeux.
+#CAMERA 3
+#ANIMATION 6
+#phrase Rick  7
+Je peux t’aider à résoudre ton problème, mais pour ça... nous devons conclure un accord. J’ai aussi besoin de ton aide.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  8
+Toi ? Un Grand mage ? Tu plaisantes !
+#CAMERA 7
+#ANIMATION 5
+#phrase Rick  9
+Oh, non, l’heure n’est pas aux plaisanteries. Dans ce monde, tout a un prix et je paie toujours le prix fort. Aucun Grand mage n’a le droit de quitter son île - et je suis donc enchaîné à Gipath, cette terre désolée. C’est pour cette raison que j’ai besoin de quelqu’un pour accomplir certaines missions sur d’autres terres.
+#CAMERA 9
+#ANIMATION 6
+#phrase Rick  10
+Tu vas devoir amener ici deux jeunes gens, un garçon et une fille. Comme moi, ils appartiennent à la race des Joons, autrefois puissante et je dois... Mais je te raconterai tout cela plus tard, si ça t’intéresse. Alors dis-moi, tu es d’accord ?
+#ANIMATION 32
+#CAMERA 5
+#phrase Hero  11
+Hum... Comme si tu ne connaissais pas la réponse ! Evidemment que je suis d’accord !

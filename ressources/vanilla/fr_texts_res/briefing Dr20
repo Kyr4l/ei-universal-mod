@@ -1,0 +1,73 @@
+Parler au Dragon
+#show Hero 4
+#show SKD 1
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  1
+Me voilà donc au sommet de la montagne… et bien sûr pas de trace de mage, ou de qui que ce soit. J'aurais fait tout ce chemin pour rien ? Quel gâchis !
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  2
+Quel est ce bruit ? On dirait… oh non, c'est un Dragon !!!
+#show SKD 1
+#show Hero 2
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  3
+Qu'est-ce que c'est que ça ? Un humain ? Que fais-tu ici ? Tu veux peut-être m'affronter, selon une ancienne coutume ? Je n'ai rien contre les vieilles traditions, mais je ne vois pas l'intérêt.
+#CAMERA 7
+#phrase SKD  4
+Je n'aime pas les devinettes. Ce serait plus sympa si tu me disais tout de suite pourquoi tu es là.
+#ANIMATION 6
+#CAMERA 6
+#phrase Hero  5
+… Je… euh… je ne m'attendais pas à te trouver ici, je me suis trompé.
+#CAMERA 11
+#ANIMATION 5
+#phrase SKD  6
+Je veux bien te croire. C'est en effet une grosse erreur pour un humain de venir dans un repaire de Dragon. Mais notre petite conversation m'amuse. Je suis curieux de savoir qui tu t'attendais à trouver ici et qu'est-ce que tu recherches.
+#ANIMATION 8
+#CAMERA 6
+#phrase Hero  7
+J'espérais trouver le mage que j'ai vu dans un Globe magique... Et comme ce Globe vient de la Cité des Morts, je pensais que le mage devait vivre ici et qu'il contrôlait les squelettes qui le gardent !
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  8
+Tout cela me paraît parfaitement logique, enfin d'un point de vue humain. Mais c'est moi que tu as trouvé et non un mage. Tu t'es trompé aussi à propos des squelettes : il m'arrive de leur donner des ordres, mais c'est juste pour m'amuser. Qu'est-ce je que dois faire de toi ?
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  9
+Tu n'es pas obligé de faire quoi que ce soit… si tu le veux bien, j'aimerais repartir. Je te promets de ne plus te déranger.
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  10
+C'est malheureusement impossible. Comme je t'ai déjà dit, je respecte les traditions, et tu ne peux donc pas repartir comme ça. Tu as bravé de nombreux dangers et mis tout ton cœur dans ta quête. Tu ne peux pas abandonner.
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  11
+Tu peux exiger que je me batte contre toi, que je libère une vierge ou que je te propose une mission à accomplir. Si tu fais cela, je répondrai à une de tes questions, n'importe laquelle. Je n'ai présentement aucune vierge en captivité et je vois bien que tu n'as pas envie de te battre. Il ne reste plus que la dernière solution. Es-tu prêt ?
+#ANIMATION 30
+#NOLIPS
+#CAMERA 6
+#phrase Hero  12
+Je dois saisir cette chance. Il m'a dit qu'il répondrait à n'importe quelle question. Je pourrais lui demander qui je suis et d'où je viens. Ça vaut le coup de risquer sa vie pour ça.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  13
+Je suis prêt. Que me proposes-tu ?
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  14
+La région est pleine de cavernes. Elles sont peuplées de créatures dégoûtantes appelées tatous. Ces bestioles se reproduisent en toute impunité. Quand la nuit tombe, les petits remontent à la surface et viennent parfois jusqu'à mon repaire. Ils font beaucoup de bruit, ils se battent pour leur nourriture, bref, ils m'agacent énormément.
+#CAMERA 7
+#ANIMATION 5
+#phrase SKD  15
+Je suis trop corpulent pour pénétrer dans la caverne. C'est pourquoi je te demande d'y aller pour moi. Je te donnerai une potion pour empoisonner ces créatures souterraines. Ainsi, je serai débarrassé de celles qui vivent en aval du fleuve.
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  16
+Ne quitte pas la caverne sans avoir tué la mère de tous ces tatous. Mon poison ne la tuera pas mais l'affaiblira. Tu pourras donc l'achever. Une fois la chose accomplie, reviens me voir pour me poser ta question. Mais réfléchis bien avant de la poser ou tu pourrais le regretter.
+#CAMERA 9
+#ANIMATION 4
+#phrase SKD  17
+Je doute toutefois que tu puisses me poser une question qui ait vraiment de l'intérêt.

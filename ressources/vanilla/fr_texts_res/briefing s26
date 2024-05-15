@@ -1,0 +1,24 @@
+A propos du document retrouvé dans le camp abandonné
+#show Elder 3
+#show CodedHadaganNote 4
+#show Hero 5
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+Erfar, peux-tu lire ceci ?
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 44
+#CAMERA 11
+#phrase Elder  2
+Il existe une conspiration contre toi et ta vie est en danger, alors laisse tomber les papiers.
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  3
+Tu ne m'as pas répondu, tu peux lire ça ?
+#ANIMATION 30
+#CAMERA 9
+#phrase Elder  4
+Bon, d'accord… je verrai cela plus tard, quand l'Elu sera hors de danger.

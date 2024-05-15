@@ -1,0 +1,37 @@
+About the missing youth
+#show Hero 1
+#show Nekro 2
+#ANIMATION 58
+#CAMERA 3
+#phrase Nekro  1
+No wonder you young man cannot be found...it is harder to find a live Joon than to buy a tame Harpy. We in Khadagan have scientists - no good lazy slouches to whom the Emperor pays good money. In return they pretend to study the heritage of that race. Perchance you should look in that direction.
+#ANIMATION 57
+#CAMERA 11
+#phrase Nekro  2
+Oh yes, and about the Harpies... you seem to be an enterprising and greedy young man...
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Greedy? Are you trying to insult me?
+#ANIMATION 59
+#CAMERA 7
+#phrase Nekro  4
+No, no, of course not. You are still young and cannot see the underlying reasons for peoples' actions, even your own. They say "kindness, nobility and honor...", I hear only "greed, vengeance and cruelty". These qualities are really what make people tick.
+#ANIMATION 57
+#CAMERA 11
+#phrase Nekro  5
+So I want to throw some business your way. Before I was disgraced, I carried out experiments on Harpies and I do not want any others to claim the credit... Oh, those wicked two-faced plotters!
+#ANIMATION 59
+#CAMERA 3
+#phrase Nekro  6
+The Harpy I experimented with lives in the southwestern part of the Necromancers' desert. Destroy it and I will reward you handsomely. My vengeance combined with your greed will be the cause of an evil creature's death... many would call that a good deed, would they not? Ha-ha-ha!
+#ANIMATION 57
+#CAMERA 11
+#phrase Nekro  7
+Now do you see that I do know the real reason for everything which happens in the world?
+#Hide Nekro
+#ANIMATION 30
+#CAMERA 5
+#NOLIPS
+#phrase Hero  8
+Mmm, yes, that old man really knows how to reason... but I will be damned if I ever believe in such logic!

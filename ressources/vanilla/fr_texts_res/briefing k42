@@ -1,0 +1,63 @@
+Première arrivée dans la cité d'Ingos
+#show Hero 4
+#ANIMATION 5
+#NOLIPS
+#CAMERA 10
+#phrase Hero  1
+Me voilà enfin dans cette ville ! Il faut bien avouer qu’elle n’a rien à voir avec notre village. Je me demande qui dirige cette ville ?
+#ANIMATION 11
+#NOLIPS
+#CAMERA 6
+#phrase Hero  2
+Euh-heuh, il y a des papiers accrochés au mur. Allons y jeter un coup d’œil...
+#show Hero 1
+#show BillBoard00 2
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero  3
+Aha... « Personne disparue ! Récompense ! Jeune fille connue sous le nom de Princesse et descendue à l’auberge de la Licorne portée disparue depuis le deuxième jour du dixième mois et toujours introuvable. Signes particuliers : peau inhabituellement rouge et vêtement étranges. La personne qui retrouvera cette jeune fille sera RECOMPENSEE. Le Gouverneur Valrasian promet en effet de l’élever au rang de Lieutenant des Gardes de la ville et de lui offrir une jolie somme d’argent. Le temps est compté ! »
+#hide Hero
+#hide BillBoard00
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  4
+Oui ! Il doit s’agir de la jeune fille que je recherche !
+#hide Hero
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 11
+#phrase Kapitan  5
+Jeune homme ! Pourrais-tu décliner ton identité et me dire ce que tu fais dans cette ville ? Je suis le Capitaine Tilvar, Commandant des Gardes, et je dois savoir qui vient ici et pourquoi... Mais ton allure en dit plus que tu ne pourrais l'exprimer. Dans tes rêves, tu as déjà trouvé la Princesse, pas vrai ?
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  8
+Est-ce interdit par la loi ?
+#ANIMATION 9
+#CAMERA 3
+#phrase Kapitan  9
+Il n’existe évidemment pas de lois contre les rêves. Mais hélas, ils ne se réalisent pas toujours. Réfléchis un peu : une jeune fille chère au Gouverneur Valrasian a été enlevée. Et tu n’imagines pas à quel point ses ravisseurs ont dû bien la cacher.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  10
+Alors, pourquoi ne la cherches-tu pas ?
+#ANIMATION 9
+#CAMERA 11
+#phrase Kapitan  11
+Merci, mon salaire me suffit amplement. Quant à toi, jeune homme, j’aimerais te donner un conseil : laisse tomber. Depuis que le Gouverneur a créé de nouveaux impôts, les fermiers et les bûcherons sont en colère contre les habitants de la ville.
+#ANIMATION 44
+#CAMERA 3
+#phrase Kapitan  12
+Ils ne s’attaqueraient pas aux gardes, mais ils pourraient bien assouvir leur vengeance contre toi. Comme tu l’as certainement remarqué, jeune homme, au cours de ton séjour ici, les gens ne se montrent pas très accueillants ?
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  13
+C’est le moins qu’on puisse dire ! J’ai bien failli mourir ! Et toi, Capitaine des Gardes, tu m’en parles calmement comme si de rien n’était ?
+#ANIMATION 31
+#CAMERA 11
+#phrase Kapitan  14
+Oh, je suis désolé ! Bien sûr, j’aurais dû donner l’alerte et envoyer une horde de gardes pour te protéger !
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  15
+Désolé, jeune homme, mais je me plie aux ordres et à l’intérêt du Gouverneur. Et si je ne m’abuse, tu n’es qu’un jeune aventurier agissant à ses risques et périls. Alors, n’attends aucune aide de la part des gardes !

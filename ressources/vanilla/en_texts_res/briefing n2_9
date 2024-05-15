@@ -1,0 +1,15 @@
+Leave the Knight with the Green Clan
+#show Hero 
+#show Merc9
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+Esteemed Knight! This time I shall have to go on a mission without you.
+#ANIMATION 45
+#CAMERA 3
+#phrase Merc9  2
+Why? Do you find my company tiresome?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  3
+No, no, it's not that. Someone in the city did recognize you after all, or thought they did. So you had better stay here with the Green Clan.

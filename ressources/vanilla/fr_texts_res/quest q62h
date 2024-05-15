@@ -1,0 +1,32 @@
+Atteindre l’entrée de la grotte
+La seule façon d’éviter les gardes est de passer par la grotte dont l’entrée se trouve à l’extrémité du canyon.
+#subobj  1
+Trouver l’officier de garde
+Les portes principales de la forteresse sud sont verrouillées et vous aurez besoin d’une clé pour les ouvrir. L’officier de garde a cette clé et vous allez devoir le trouver (le lieutenant Kardaur sera de garde). Son poste se trouve près des portes.
+#subobj  2
+Se procurer la clé
+Vous devez tuer Kardaur pour vous emparer de la clé des portes.
+#subobj  3
+Ouvrir les portes principales
+Pour ouvrir les portes principales de la forteresse, utilisez la clé que vous avez prise à Kardaur. Ensuite, dépêchez-vous, l’ouverture des portes attirera inévitablement l’attention des gardes qui lanceront immédiatement la poursuite.
+#subobj  4
+Ouvrir les cages
+Le gardien des portes est aussi responsable des cages renfermant les araignées sauvages. Le levier situé près des portes permet d’ouvrir simultanément toutes les cages. Ainsi, les araignées attaqueront les gardes, faisant diversion pendant un moment.
+#subobj  5
+Trouver le passage menant à la grotte
+Un passage étroit mène à la grotte située au nord-ouest du canyon. Ce passage est fermé par des portes généralement verrouillées.
+#subobj  6
+Trouver le garde
+Le passage menant à la grotte est verrouillé et le garde en détient la clé.
+#subobj  7
+Tuer le garde
+Le garde doit être tué pour éviter qu’il ne donne l’alerte.
+#subobj  8
+Prendre la clé
+Prenez la clé sur le cadavre du garde pour accéder au passage menant à la grotte.
+#subobj  9
+Ouvrir les portes de la grotte
+Pour ouvrir les portes menant à la grotte, utilisez la clé que vous avez dérobée au garde.
+#subobj  10
+Echapper à la poursuite
+La poursuite est lancée !

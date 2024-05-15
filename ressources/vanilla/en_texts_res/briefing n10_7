@@ -1,0 +1,19 @@
+Say goodbye to Kharad
+#show Hero 
+#show Merc7
+#ANIMATION 15
+#CAMERA 7
+#phrase Merc7  1
+I am glad to be of help, Blondie.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  2
+Listen Kharad, why not stay in Gipath? I cannot promise anything but I will ask the Great Magician to send you to the village...
+#CAMERA 7
+#ANIMATION 9
+#phrase Merc7  3
+No, Blondie, my heart calls me home and revenge still burns in my soul. I cannot abandon the brothers in the Last Shelter. I must get back to Suslanger. Fare thee well!
+#CAMERA 6
+#ANIMATION 31
+#phrase Hero  4
+I understand: for you, duty comes above all else. Well goodbye, and may luck be with you!

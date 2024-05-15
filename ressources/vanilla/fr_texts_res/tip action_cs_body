@@ -1,0 +1,4 @@
+Vise le corps.
+Votre personnage visera le corps de l'ennemi
+en attaquant. Quand la "santé" du corps
+atteint 0, l'ennemi meurt.

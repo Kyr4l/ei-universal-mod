@@ -1,0 +1,35 @@
+A propos du vol chez le gouverneur
+#show Hero 1
+#show Shopper 2
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  1
+J’ai toujours dit que la magie ne remplacerait jamais des gardes ! Par exemple, je paie très bien mes hommes et aucun n’a encore réussi à me voler quelque chose. Mais qu’on commence à parler de magie et les esprits se mettent au repos ! Le Gouverneur n’a qu’à s’en prendre à lui-même pour avoir fait confiance à la Magicienne Diera. Même le pauvre Flein le Chauve a réussi à éviter ses pièges !
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+Le Chauve ?
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  3
+Euh... De quoi parles-tu ?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  4
+Tu as dit que c’était un certain Chauve qui avait volé le Gouverneur ?
+#ANIMATION 61
+#CAMERA 11
+#phrase Shopper  5
+Je n’ai rien dit de tel. Tu ne serais pas adepte des champignons ou des herbes bizarres par hasard ? Non ? Bon, ça va, mais lorsqu’on commence à entendre des choses qui n’ont pas été dites, on finit par voir des choses qui n’existent pas !
+#hide Shopper
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  6
+Quel rusé ce Karansul ! Il insinue certaines choses et se rétracte immédiatement ! De toute évidence, il sait quelque chose, mais comment le faire parler ?
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  7
+D’un autre côté, Sver n’a pas l’air d’apprécier le marchand ; il va peut-être m’aider à le faire parler ?

@@ -1,0 +1,11 @@
+Faire une offre à l'Archer pour rejoindre l'équipe
+#show Hero 
+#show Merc2
+#CAMERA 2
+#ANIMATION 45
+#phrase Hero  1
+Alors, l’Archer, ta vie au village te convient toujours ? Je pars pour un endroit intéressant. Veux-tu m’accompagner ?
+#CAMERA 3
+#ANIMATION 14
+#phrase Merc2  2
+Eh... Ce n’est peut-être pas une bonne idée... Tu es déjà en bonne compagnie et je crains d’être un fardeau pour vous. Je dis toujours qu’on ne doit pas être plus de trois pour les expéditions dangereuses.

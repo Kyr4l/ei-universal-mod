@@ -1,0 +1,15 @@
+Laisser  le Voyou au village
+#show Hero 1
+#show Merc1 2
+#ANIMATION 9
+#phrase Hero  1
+Désolé, mais cette fois je voudrais que tu restes ici.
+#ANIMATION 45
+#phrase Merc1  2
+Pourquoi ?
+#ANIMATION 45
+#phrase Hero  3
+C’est mon choix. Cela ne te suffit pas ?
+#ANIMATION 15
+#phrase Merc1  4
+D'accord... Mais si tu as besoin de moi, je serai ici, au village, d’accord ? !

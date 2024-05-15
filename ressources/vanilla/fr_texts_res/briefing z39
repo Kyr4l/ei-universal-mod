@@ -1,0 +1,51 @@
+A propos des objets provenant du camp des Gobelins
+#show Witch 1
+#show Hero 2
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  1
+Sorcière, ton cauchemar était bien réel. J’ai trouvé le campement des Gobelins et il abritait bien une palissade, mais aucune trace de ta petite-fille.
+#ANIMATION 31
+#CAMERA 11
+#phrase Witch  2
+Oh mon Dieu, ne t’avise pas de me refaire une telle frayeur ! Alors, elle n’est pas aux mains des Gobelins. Tant mieux ! Et je n’ai pas besoin de la voir en rêve pour savoir qu’elle est vivante.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  3
+Ne te réjouis pas top vite ! Regarde ce que j’ai trouvé dans ce trou...
+#show Witch 3
+#show GirlSign 5
+#show Hero 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  4
+Oh... Ma fiole, je l’ai moi-même remplie de potion... Bon, que fait-on maintenant ? Bon sang, Noble Elu, réfléchis !
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  5
+Regarde cette fiole de plus près... Y as-tu attaché ce morceau de papier ? Malgré la haute estime que je porte à tes compétences, je ne crois pas que tu utiliserais la langue des Orques pour rédiger tes notes !
+#hide GirlSign 
+#ANIMATION 44
+#CAMERA 3
+#phrase Witch  6
+Allez, laisse-moi voir... Aha ! On peut y lire qu’un Orque appelé Shei-Var les a autorisés à garder la fiole. Alors il a emmené ma petite-fille à leur campement !?! Je vais arracher les yeux de ce Shei-Var, tu vas voir !
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  7
+Attends, attends. Puisque visiblement tout est de ma faute, je dois m’en charger. Sais-tu où vit ce Shei-Var ?
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  8
+J’ai entendu parler de Shei-Var... C’est le chef d’une petite mais puissante tribu Orque appelée simplement « Tribu de Sheivar ». Jusqu’à présent, il ne s’est jamais attaqué aux humains, et je ne vois donc pas pourquoi il s’en est pris à Airy.
+#ANIMATION 31
+#CAMERA 7
+#phrase Witch  9
+Tu vas aller le voir, dis, s'il-te-plait ? Si ce Shei-Var commence à marchander, ne discute pas, contente-toi de récupérer ma petite-fille adorée !
+#ANIMATION 6
+#CAMERA 3
+#phrase Witch  10
+Le campement de Sheivar est facile à trouver. Va dans le Désert à partir de la Cité des morts, puis dirige-toi vers le sud. Tu verras un pont-levis et à côté, la cabane du gardien Orque.
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  11
+Dérobe l'engrenage au gardien, abaisse le pont, traverse la rivière et tu seras presque à la maison de Shei-Var. Sois malin lorsque tu lui parleras et sois généreux s’il est question d’une rançon. Je te rembourserai tout, avec les intérêts !

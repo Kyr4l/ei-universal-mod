@@ -1,0 +1,54 @@
+Use the Magic Orb
+#show Witch 1
+#show Hero 2
+#phrase Witch  1
+Right, now give me the Orb... Easy, easy, you almost dropped it! It is a valuable and fragile thing and you are so clumsy!
+#show Witch 3
+#show Palantir 4
+#show Hero 5
+#CAMERA 5
+#phrase Hero  2
+All right, all right, here is the Orb, all in one piece. So what do we do with it now?
+#hide Palantir
+#show Palantir 5
+#ANIMATION 32
+#CAMERA 7
+#phrase Witch  3
+You do not do anything. Just watch and remember what you see. And now I will try to make it show us images from your past.
+#ANIMATION 6
+#CAMERA 11
+#phrase Witch  4
+The time for silence is no more,
+Now, oh shining glass,
+Show us what we do not know,
+And take us to the past!
+#hide Palantir
+#show PalantirRick00 5
+#show PalantirWork00 12
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  5
+Merciful Heavens!... That old man - was it my past?
+#hide PalantirRick00
+#hide PalantirWork00
+#show PalantirBroken00 4
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero  6
+What was that? What happened to the Orb? Who was that man, why did I see him? Tell me!
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  7
+Come, come, no need to get so excited... I do not really know what it was all about. I could only guess. That old man in the Orb was not you, lad, do not worry about that. I would say he was the Master of the Orb, and may some Goblin have me for dinner if he is not a greater Magician than me! If anyone can help you, it is he. Try to find him.
+#hide PalantirBroken00
+#show PalantirBroken00 5
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  8
+So I will have to find out where the Orcs got the Orb. But how?
+#hide PalantirBroken00
+#show PalantirBroken00 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  9
+Well, I hear that every Orc tribe has a Seer who keeps their records. If you can get the records of the Orcs who had the Orb, then maybe I could figure out where it came from. Probably that chronicler lives where there are more Orc than in any other area - and in the river delta that can only be the central island. That is where you must go!

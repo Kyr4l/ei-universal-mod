@@ -1,0 +1,48 @@
+A propos des mines abandonnées
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  1
+Capitaine, je suis toujours à la recherche de la Princesse ! Je m’en rapproche, mais j’ai besoin d’un peu d’aide. Il va sans dire que ma gratitude sera infinie... Euh ... Enfin dans la limite du raisonnable.
+#ANIMATION 11
+#CAMERA 11
+#phrase Kapitan  2
+Jeune homme, tu aurais beau me proposer la totalité de la récompense, je n’accepterais pas de t’aider. Je sais que cet argent s’accompagne aussi du grade de Lieutenant des Gardes et je n’ai nul besoin d’officiers trop indépendants et énergiques dans mon unité. 
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  3
+Oh, mais je pourrais me passer de cette partie de la récompense ! 
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+Et du reste aussi ! Mais je ne voudrais pas que Tilvar commence à se faire des idées.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  5
+Et nous partagerons l’argent en deux parts égales : c’est ce que je suis prêt à payer en échange de renseignements sur les mines abandonnées.
+#ANIMATION 9
+#CAMERA 3
+#phrase Kapitan  6
+Oh, tu crois que c’est là que la Princesse est retenue prisonnière ? Dans ce cas, jeune homme, je vais te décevoir : le Gouverneur a bloqué l’entrée des mines. Mais si tu parviens à convaincre son Excellence, peut-être acceptera-t-il de la rouvrir.
+#ANIMATION 44
+#CAMERA 11
+#phrase Kapitan  7
+Ceci dit, ne te fais pas trop d’illusion. La mauvaise réputation de ces mines est bien fondée : les mineurs ont dérangé les Seigneurs des Donjons et tout le monde sait qu’il n’est pas bon de jouer avec ces êtres !
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  8
+De quels Seigneurs parles-tu ? Je n’en ai jamais entendu parler !
+#ANIMATION 43
+#CAMERA 11
+#phrase Kapitan  9
+« Moins tu en sauras, mieux tu dormiras », mon ami. Ces créatures, connues sous le nom de Tentacules, vivent dans les profondeurs souterraines. Les personnes qui les voient font de terribles cauchemars pendant des mois. Elles sont intelligentes, connaissent la magie et n’ont aucune pitié à l’égard des étrangers... En un mot, jeune homme, si tu te rends dans ces mines, je te plains du fond du cœur !
+#ANIMATION 31
+#CAMERA 3
+#phrase Kapitan  10
+Et je vais te donner un conseil, né de cette compassion... Trois mines mènent sous terre, la une, la deux et la trois. Essaie la mine la plus à l’ouest, la trois... Elle sera peut-être moins dangereuse.
+#ANIMATION 62
+#CAMERA 11
+#phrase Kapitan  11
+Quelque part au nord-ouest de ces catacombes se trouvait autrefois une cage pour les mineurs ayant commis des fautes. C’est là qu’a débuté ma carrière, comme chef des gardes de cette prison. Oh, jeune homme ! J’étais aussi naïf que toi et j’avais confiance en la justice... Tu es trop jeune pour comprendre !

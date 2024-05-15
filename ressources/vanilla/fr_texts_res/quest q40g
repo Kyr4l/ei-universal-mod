@@ -1,0 +1,14 @@
+Atteindre la demeure de Shei-Var
+Les Gobelins ont remis Airy au chef Orque Shei-Var. Il vit à l’est du grand lac, non loin du désert. Pour minimiser le danger, vous devez vous enfoncer dans le Désert depuis la Cité des Morts. Vous trouverez alors le campement de Shei-Var.
+#subobj  1
+Trouver l’Orque détenteur de la clé
+Pour accéder au domaine du clan de Shei-Var, vous devez d’abord traverser la crevasse asséchée par le pont-levis. Celui-ci se trouve au sud-est du passage reliant la Cité des Morts au Désert. Le mécanisme qui abaisse le pont est gardé par l’Orque détenteur de la clé qui vit dans une cabane isolée près du pont.
+#subobj  2
+S’emparer du mécanisme
+Vous pourriez tuer l’Orque détenteur de la clé pour vous procurer le mécanisme du pont-levis, mais pourquoi ne pas essayer de la lui voler ?
+#subobj  3
+Abaisser le pont-levis
+Utilisez le mécanisme pour abaisser le pont-levis ; ensuite, vous pourrez continuer.
+#subobj  4
+Trouver la maison de Shei-Var
+La demeure du chef Shei-Var se situe non loin du pont. Pour la trouver, dirigez-vous vers le sud-est et recherchez des maisons d’Orques.

@@ -1,0 +1,27 @@
+A propos de la flèche trouvée dans le corps
+#show Hero 1
+#show YCF 2
+#show DriadIdol00 5
+#CAMERA 3
+#phrase YCF  1
+Tu as apporté la Fleur Sacrée ! Je te remercie, mais le chagrin me pince le cœur comme les serres d’un oiseau de proie...
+#ANIMATION 11
+#CAMERA 2
+#hide DriadIdol00
+#show DriadIdol00 3
+#phrase Hero  2
+Je ne comprends pas. Voici la Fleur, je te l’ai apportée. S’est-il passé autre chose ?
+#CAMERA 11
+#hide DriadIdol00
+#phrase YCF  3
+Si un serpent se pâme sous le soleil d’octobre, cela signifie-t-il qu’il va neiger ? Si un homme te tend la main, cela signifie-t-il que les hommes ne commettent jamais d’actes déshonorants ? L’espion des gardes a enlevé notre vieux Chef, l’Honorable Doyen, le Grand Habbura. Nous devons lui porter secours !
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  4
+Eh bien, si tu le dois, tu le feras. Où se trouve-t-il maintenant ?
+#CAMERA 3
+#phrase YCF  5
+Sur des terres qu’un certain Karansul considère comme les siennes. Si tu t’y rends au soleil levant, tu verras les gardes qui surveillent Habbura. Les murs sont hauts, le château est fortifié et les gardes sont rusés, mais si tu te montres fort et habile, tu réussiras à ramener Habbura parmi nous !
+#CAMERA 11
+#phrase YCF  6
+Il y a autre chose que j’aimerais te dire : si un nuage noir couvre le soleil, si le mal triomphe de l’espoir, si le Doyen succombe... Reviens ici pour me le dire. La vérité quelle qu’elle soit vaut toujours mieux que de longs jours d’espoirs déçus !

@@ -1,0 +1,8 @@
+Inverser le mouvement haut/bas de la caméra.
+Quand on fait bouger la caméra vers le haut ou le bas
+tout en maintenant enfoncé le bouton droit de la souris,
+on peut changer le mouvement de la caméra.
+Activé : La caméra se déplace dans le sens
+du mouvement haut/bas de la souris.
+Désactivé : La caméra se déplace dans le sens opposé
+à la direction prise par la souris.

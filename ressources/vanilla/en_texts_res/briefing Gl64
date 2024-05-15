@@ -1,0 +1,24 @@
+Talk to Khatul
+#show Hero 3
+#show Glav 4
+#show Kuzn 5
+#ANIMATION 31
+#CAMERA 9
+#phrase Glav  1
+I want to apologise for my harshness, brother! I hope there will not be any hard feelings between us because of that. Now you look like a bird from a shattered nest, but the Brotherhood of the Last Shelter can give you a new home and a new family.
+#ANIMATION 15
+#CAMERA 3
+#phrase Glav  2
+And you may keep your past to yourself here. But it would be better if you could tell us at least briefly about yourself and how you happened to get into the Canyon.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+There is no secret about that. I am looking for a young man of the Joon race; the only thing I know about him is that he has reddish skin. I do not have any other business here in Suslanger and as soon as I find him we will go back to Gipath...
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  4
+You call this area the Useless Lands but it is as close to home as I can get now, however strange that may sound.
+#ANIMATION 44
+#CAMERA 7
+#phrase Glav  5
+I am sorry you will not join us. But I, Khatul, the first among equals in our brotherhood, respect your decision, so everyone who is able will help you in your quest!

@@ -1,0 +1,15 @@
+Adieu, l'ami !
+#show Hero 
+#show Merc9
+#ANIMATION 11
+#CAMERA 11
+#phrase Merc9  1
+Oh jeune homme ! Tu ne souhaites tout de même pas t’écarter du droit chemin ? Tu y es engagé depuis si peu de temps ! 
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  2
+Hélas, tel est mon devoir. Il ne nous reste donc plus qu’à nous dire adieu.
+#ANIMATION 45
+#CAMERA 11
+#phrase Merc9  3
+Eh bien, ne pense pas à moi en mal ! Et si tu entends encore des rumeurs sur ma mort, n’y prête pas attention !

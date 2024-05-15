@@ -1,0 +1,9 @@
+Reprendre Fairakh
+#show Hero 3
+#show Merc8 5
+#ANIMATION 45
+#phrase Hero  1
+Frère Fairakh, peux-tu m’accompagner maintenant ? Dehors, nos ennemis se languissent sûrement de ta magie !
+#ANIMATION 15
+#phrase Merc8  2
+Et moi aussi, je me languis ! Bien sûr, je suis prêt à t’accompagner.

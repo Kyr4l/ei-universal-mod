@@ -1,0 +1,44 @@
+A propos du Grand mage et de la quête
+#show Hero 1
+#show Deva 2
+#ANIMATION 30
+#CAMERA 11
+#phrase Deva  1
+Tka-Rik... C’est le nom de l’un des mages des contes de fées que l’on me racontait lorsque j’étais enfant ! Ce mage dort dans une caverne sur une île lointaine et lorsqu’il se réveillera, la grande époque renaîtra... Et je ne sais pas pourquoi, mais je crains que la réalité soit très éloignée de ce conte de fées !
+#ANIMATION 62
+#CAMERA 2
+#phrase Hero  2
+Je ne sais pas... Ils ont peut-être quelque chose en commun. Tka-Rik vit bien dans une caverne sur une île lointaine et il souhaite faire renaître les temps anciens. C’est pour cela que je suis ici, j’avais pour mission de te retrouver.
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  4
+J’ai accompli ma mission et cela me ravit. Non pas parce que le mage sera content de moi, même s’il est grand, mais parce que je viens de rencontrer la plus belle et la plus délicieuse jeune fille au monde !
+#ANIMATION 40
+#CAMERA 5
+#phrase Hero  5
+Dorénavant, je te jure qu’aucune autre femme n’existera pour moi et je te jure... Cieux miséricordieux... Je m’embrouille !
+#ANIMATION 31
+#CAMERA 11
+#phrase Deva  6
+Je t’en prie, ne dis pas de telles choses. Tu m’as sauvée et je t’en suis reconnaissante... Mais mon cœur appartient à quelqu’un d’autre et je ne le trahirai jamais malgré la distance qui nous sépare !
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  7
+Comment a-t-il osé t’abandonner ? Quel lâche ! Si nos chemins venaient à se croiser, il le regretterait amèrement !
+#ANIMATION 73
+#CAMERA 3
+#phrase Deva  8
+Ne parle pas ainsi d’At-Zako ! Ensemble, nous avons échappé de justesse à la Malédiction des Joons. Tu ne peux pas t’imaginer les horreurs dont nous avons été témoins... Des familles et des amis morts, les uns après les autres, des maisons vides, des empreintes ensanglantées dans la poussière de la route et puis la Malédiction, ce monstre contre lequel même ton Grand mage ne pourrait triompher.
+#ANIMATION 73
+#CAMERA 11
+#phrase Deva  9
+At-Zako m’a à plusieurs reprises sauvée de la mort et il s’est éloigné de moi uniquement pour me protéger de la Malédiction, pour qu’elle le poursuive, lui ! Si tu continues à dire du mal de lui, je... Je... Ne partirai pas d’ici et tu pourras retourner de là où tu viens !
+#ANIMATION 31
+#CAMERA 5
+#phrase Hero  10
+Je dois accepter ta décision, Lu-a-Jalla, et je promets de ne plus dire de mal d’At-Zako.
+#CAMERA 10
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  11
+Mais je lui dirai le fond de ma pensée lorsque je le rencontrerai. Et si cette rencontre ne s’achève pas en duel, c’est qu’il est encore plus lâche que je ne l’imagine !

@@ -1,0 +1,9 @@
+Prendre Sahilia dans l'équipe
+#show Hero 
+#show Merc10
+#ANIMATION 9
+#phrase Hero  1
+Si tu tiens toujours à partager ma chance, prépare-toi ! Je voudrais que tu m’accompagnes lors de ma prochaine mission.
+#ANIMATION 70
+#phrase Merc10  2
+Tu es quelqu’un d’intelligent, mais tu parles sans réfléchir. Prépare-toi, dis-tu ? J’ai toujours sur moi tout ce qu’il me faut... Ne l’oublie pas !

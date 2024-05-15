@@ -1,0 +1,14 @@
+Prendre Harad dans l'équipe
+#show Hero 
+#show Merc7
+#CAMERA 3
+#phrase Merc7  1
+Frère Blondinet, je connais ta quête. Laisse-moi t’aider ! Permets-moi d’utiliser ma soif de vengeance à de nobles fins.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  2
+D’accord, mais attention : ton ardeur ne doit pas te faire oublier la prudence. Je ne veux pas te voir mourir parce que tu as décidé d’attaquer seul une armée entière !
+#ANIMATION 3
+#CAMERA 3
+#phrase Merc7  3
+Ne t’en fais pas. Oui, je ne vis que pour me venger ! Et je tiens plus que tout à rester en vie, car si je venais à mourir, ma vengeance ne serait pas assouvie !

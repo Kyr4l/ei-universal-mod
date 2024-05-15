@@ -1,0 +1,40 @@
+A propos de la visite à la Sorcière
+#show Hero 
+#show Smith 
+#ANIMATION 31
+#CAMERA 9
+#phrase Smith  1
+Euh… on n'avait pas parlé de l'argent que nous rapporterait la Pierre magique ?
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  2
+En effet, je crois que tu avais dit que tu en voulais la moitié.
+#ANIMATION 15
+#CAMERA 11
+#phrase Smith  4
+Et je n'ai pas changé d'avis.
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  5
+Alors, sers-toi.
+#ANIMATION 5
+#CAMERA 7
+#phrase Smith  6
+Me servir ? Mais tu ne m'as rien proposé.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  7
+C'est vrai. Voici exactement la moitié de ce que la Sorcière m'a donné.
+#ANIMATION 3
+#CAMERA 11
+#phrase Smith  8
+Quoiii ? Elle n'a pas payé ? Cette vieille Sorcière, cette misérable bonne femme !
+#ANIMATION 14
+#CAMERA 9
+#phrase Smith  9
+Tu as… une cervelle de crapaud et encore je suis poli. C'est de ma faute aussi : je n'aurais pas dû te confier un objet si précieux. Maintenant, pour l'argent, je peux toujours me brosser.
+#nolips
+#ANIMATION 30
+#CAMERA 2 0 2.2 2
+#phrase Hero  10
+Tu ne comprendras donc jamais rien ? Si tu savais ce qu'elle m'a donné en échange de ce truc !

@@ -1,0 +1,15 @@
+Rencontrer le mage
+#show Hero
+#show Merc8
+#ANIMATION 45
+#phrase Merc8  1
+Les frères du Dernier sanctuaire n’ont aucun secret lorsqu'ils sont entre eux. Je sais que ta quête sera longue et difficile à mener, alors l’aide d’un mage te sera peut-être utile ?
+#ANIMATION 9
+#phrase Merc8  2
+Nous vivons sous terre. Et nous avons tous des raisons de haïr ceux qui vivent au dehors. J’ai moi aussi mes raisons et j’aimerais de tout cœur causer le plus grand tort à ces donneurs de leçons !
+#ANIMATION 32
+#phrase Hero  3
+Mais ce n’est pas du tout ce que je veux !
+#ANIMATION 31
+#phrase Merc8  4
+Non, non, je sais. Mais écoute-moi bien, tu ne pourras pas faire le moindre geste sans avoir à faire un choix : tuer ou être tué. Et moi, le mage Fairakh, je pourrais t’être d’une aide très précieuse. Sans compter le plaisir que cela me procurerait !

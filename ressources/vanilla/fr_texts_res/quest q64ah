@@ -1,0 +1,20 @@
+Tuer deux gardes-chiourmes
+Le Forgeron aimerait beaucoup se venger des deux cruels gardes-chiourmes surnommés Aga-Fouetteur et Aga-Flagelleur. Ils supervisent actuellement les paysans qui travaillent dans les plantations proches de la ville de Suslanger.
+#subobj  1
+Trouver les plantations centrales
+Les plantations centrales se trouvent au nord-est de la ville. Vous pouvez aisément les trouver en suivant l’excellent réseau de canaux d’irrigation.
+#subobj  2
+Trouver Aga-Flagelleur
+Aga-Flagelleur supervise les travaux des plantations centrales.
+#subobj  3
+Tuer Aga-Flagelleur
+Aga-Flagelleur doit mourir.
+#subobj  4
+Trouver les plantations sud
+Les plantations sud sont situées en aval de la rivière, près de l’endroit où elle se jette dans le lac. Les canaux d'irrigation sont ici moins nombreux et moins grands que ceux du centre.
+#subobj  5
+Trouver Aga-Flagelleur
+Aga-Flagelleur supervise les travaux des plantations sud.
+#subobj  6
+Tuer Aga-Flagelleur
+Aga-Flagelleur doit mourir.

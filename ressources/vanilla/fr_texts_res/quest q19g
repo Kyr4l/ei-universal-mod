@@ -1,0 +1,11 @@
+Preuve principale
+Le plan détaillé visant à éliminer l’Elu a été envoyé aux Orques. Ce plan démasquera l’ennemi qui se cache parmi les villageois.
+#subobj  1
+Trouver l’emplacement secret
+Le document adressé aux Orques se trouve dans un endroit secret au pied de la colline, à l’est de l’endroit d’où part la route séparant les Contreforts de la rivière. Dépêchez-vous : un messager Orque accompagné de gardes s’y rend également pour s’emparer du document.
+#subobj  2
+Rattraper le messager Orque
+L’Orque a réussi à s’emparer du document et se dirige actuellement vers la Montagne du conseil pour le remettre aux chefs. Cette montagne se trouve non loin de la route séparant les Contreforts de la rivière ; au sommet de la montagne, un chemin est indiqué par des panneaux des Orques.
+#subobj  3
+S’emparer du document
+Pour connaître l’identité de l’ennemi du village, vous devez récupérer le document dont s’est emparé le messager orque.

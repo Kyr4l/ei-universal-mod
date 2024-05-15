@@ -1,0 +1,27 @@
+A propos des Orques des contreforts
+#show Hero 1
+#show Smith 2
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  1
+Les Orques sont moins effrayants que ne le dit Gort. Je suis surpris que vous n'ayez pas réussi à leur faire peur et à les chasser.
+#ANIMATION 7
+#CAMERA 7
+#phrase Smith  2
+Ce n'est pas une mince affaire. Ce n'est pas que la tribu établie dans les contreforts soit très puissante, mais leur Prophète est malin. 
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  4
+Il sait comment contrôler la pyramide magique. Il y en a une tout près de leur village. Elle a un drôle d'aspect et elle est très vieille, mais ses pouvoirs sont intacts. Si on s'en approche, on reçoit une décharge sous la forme d'un éclair.
+#ANIMATION 14
+#CAMERA 3
+#phrase Smith  5
+Si quelqu'un pouvait tuer le Prophète et désactiver la pyramide, la tribu des Orques rentrerait dans le rang, vite fait ! Mais il est impossible d'atteindre le Prophète. Je sais qu'aucun de nos hommes n'est assez discret pour rentrer en douce dans le camp avec un poignard pour régler l'affaire.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero  6
+Supposons que j'en sois capable.
+#ANIMATION 31
+#CAMERA 11
+#phrase Smith  7
+Si tu faisais cela, je t'en serais éternellement reconnaissant. Il est important pour nous de pouvoir aller librement dans les contreforts. Il va de soi que ma gratitude aurait une forme bien tangible. Si seulement tu pouvais réussir contre les Orques !

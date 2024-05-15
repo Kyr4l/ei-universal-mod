@@ -1,0 +1,15 @@
+Dire au revoir à Naya
+#show Hero
+#show Merc3
+#ANIMATION 3
+#CAMERA 7
+#phrase Merc3  1
+Au revoir, Noble Elu ! Un jour, je prendrai la place d’Estera, j’aurai ma propre apprentie et je serai très fière de lui dire que je t’ai connu.
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+Tu parles comme si nous ne devions plus nous revoir ! Insinues-tu que je risque de trouver la mort dans les contrées étrangères ?
+#ANIMATION 44
+#CAMERA 7
+#phrase Merc3  3
+Non, pas la mort... Autre chose. Je ne peux rien te dire, ce serait injuste envers Estera. Les apprenties ne doivent pas en faire plus que leur professeur. Adieu !

@@ -1,0 +1,11 @@
+Laisser Eila au camp
+#show Hero 
+#show Merc4
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  1
+Ecoute Eila ! Je pense que Shei-Var n’apprécierait pas de te voir partir avec moi. Mieux vaut éviter de le contrarier.
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc4  2
+Tu as raison, je n’y avais pas pensé. Dans ce cas, je resterai au campement aujourd’hui.

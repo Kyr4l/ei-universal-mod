@@ -1,0 +1,11 @@
+Dire au revoir à Rinas
+#show Hero
+#show Merc5 
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  1
+Eh bien, Rinas, l’heure est venue de nous dire au revoir. Je me souviens que tu avais promis de ne rien me demander, mais je te dois peut-être quelque chose ?
+#ANIMATION 43
+#CAMERA 3
+#phrase Merc5  2
+Ne t’en fais pas pour ça. Notre ville est débarrassée de Diera, en partie grâce à toi. Quelle autre compensation pourrais-je attendre ? Alors, au revoir Zak et bonne chance à toi !

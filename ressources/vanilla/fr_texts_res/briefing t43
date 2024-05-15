@@ -1,0 +1,69 @@
+A propos du corps retrouvé
+#show Hero 1
+#show Trapper 2
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  1
+J’ai découvert un cadavre et il pourrait bien s’agir de celui du Fouineur. Regarde comment il a été tué...
+#show Hero 3
+#show DriadArrow00 5
+#show Trapper 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  2
+Oh mon Dieu ! Le Peuple de la forêt utilise ce genre de flèches ! Il est facile de savoir à qui elles appartiennent, chaque tribu possède ses propres couleurs et signes !
+#hide DriadArrow00
+#show DriadArrow00 3
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  3
+Le Peuple de la forêt ? On n’en a jamais entendu parler chez moi !
+#hide DriadArrow00
+#show DriadArrow00 5
+#ANIMATION 62
+#CAMERA 3
+#phrase Trapper  4
+On en apprend tous les jours, petit gars ! Je croyais qu’on les connaissait dans tout Ingos, mais visiblement ce n’est pas le cas. Pour résumer, ce sont de minuscules humains qui vivent dans la forêt. Je les vois souvent et j’en connais même certains. Si ça t’intéresse, je t’en dirai davantage plus tard, rappelle-le-moi.
+#hide DriadArrow00
+#show DriadArrow00 3
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  5
+Ce ne sera pas nécessaire. Mais pourrais-tu me dire à quelle tribu appartient cette flèche ?
+#hide DriadArrow00
+#show DriadArrow00 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  6
+Je ne sais pas lire les signes des flèches, c’est le problème ! Seul le Peuple de la forêt pourra t’aider. Mais je vais te dire à qui t’adresser.
+#hide DriadArrow00
+#show Hero 1
+#show Trapper 2
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  7
+Le Capitaine Tilvar cherche depuis longtemps une excuse pour soumettre le Peuple de la forêt et voilà que tu trouves un homme tué par une de ses flèches. Les gardes vont à coup sûr mener une expédition punitive ! Et le Peuple de la forêt a par conséquent tout intérêt à démasquer la tribu responsable.
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  8
+Tu veux dire que je devrais aller les voir pour qu’ils me parlent ? C’est possible ?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper  9
+Oui, mais c’est risqué, fiston. Tu vois, le Peuple de la forêt se divise en plusieurs clans et tous n’ont de cesse de s’affronter. Le Clan Blanc, par exemple, a récemment enlevé le gardien du Clan Vert et le retient prisonnier.
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  10
+Tu vois, chaque clan possède sa propre Fleur Sacrée comme notre armée possède des bannières. Et les gardiens surveillent ces fleurs. Aussi, si tu vois le gardien du Clan Vert, il te remettra la Fleur Sacrée que tu devras apporter au clan. Ce n’est qu’ensuite que son chef acceptera de te parler !
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  11
+Parfait ! Dis-moi où je peux trouver le gardien !
+#ANIMATION 63
+#CAMERA 11
+#phrase Trapper  12
+Ecoute-moi bien, fiston. A la sortie de la ville, dirige-toi vers l’ouest et traverse le lac. Après avoir trouvé la prison abritant le gardien, n’oublie pas de désamorcer le piège ! Le Clan Blanc possède une feuille toujours verte. Prends-la et place-la sur l’autel devant la prison. Enfin, le Peuple de la forêt appelle cela un autel mais il s’agit plutôt d’une vieille souche couverte de champignons.
+#ANIMATION 44
+#CAMERA 3
+#phrase Trapper  14
+Et après avoir récupéré la Fleur Sacrée, va voir le Clan Vert ! La route qui y mène est relativement simple à trouver : dirige-toi vers le sud de la ville et tu le trouveras. Son chef s’appelle Grise-feuille et je le connais.

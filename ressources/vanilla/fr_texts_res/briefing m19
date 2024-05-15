@@ -1,0 +1,8 @@
+A propos des instructions pour tuer l'Elu
+#show Hero 3
+#show Manual 4
+#show Smith 5
+#ANIMATION 29
+#CAMERA 1
+#phrase Smith  1
+Je t'avais prévenu ! Cela a été écrit par le Capitaine Gort et c'est probablement le Chef qui le lui a dicté.

@@ -1,0 +1,16 @@
+Parler à l'Homme-lézard
+#show Hero 1
+#show OLIZ 2
+#CAMERA 5
+#phrase OLIZ  1
+Je peux te libérer.
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  2
+Quoi ? Tu parles ? Qui es-tu et pourquoi es-tu là ?
+#CAMERA 5
+#phrase OLIZ  3
+Tu poses trop de questions. Pour l'instant, je répondrai à une seule d'entre elles : on m'appelle l'Ermite. Plus tard, je répondrai aux autres. Je peux te libérer et te donner la Griffe des Anciens. Mais tu dois me promettre de venir chez moi et je te parlerai.
+#CAMERA 5
+#phrase OLIZ  4
+Réfléchis. Je reviens plus tard.

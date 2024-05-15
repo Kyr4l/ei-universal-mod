@@ -1,0 +1,53 @@
+About completed mission
+#show OLIZ 1
+#show Hero 2
+#ANIMATION 15
+#CAMERA 5
+#phrase Hero  1
+All done! And this time I am not joking.
+#CAMERA 9
+#phrase OLIZ  2
+Good. You kept your side of the bargain. I will keep mine. Hear me. The Lizards know about the old Magician.  All people came from somewhere at some time or other. The old man has always lived in Gipath. He is part of it. You are human, you cannot understand that.
+#ANIMATION 45
+#CAMERA 10 -20 5 2
+#phrase Hero  3
+All right, I am only human. But where do I find him?
+#CAMERA 11 10 5 2
+#phrase OLIZ  4
+The old man lives in the area you call the Remote Mountains. His home is in the ravine. Across the lake from the ravine flows the big river. Lizards live on the shores of the lake. They are not like me. They do not like to talk a lot. They do not like anything. Except one thing. They like to kill.
+#ANIMATION 46
+#CAMERA 6
+#phrase Hero  5
+This sounds good! Is there any other way?
+#CAMERA 9
+#phrase OLIZ  6
+You can get to the ravine through the tunnel. The entrance is in the mountains to the west of the neck of the ravine. But the entrance to the tunnel is closed. I do not know how to open it.
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  7
+Aha! So that is the tunnel and the lever mentioned in the Khadaganian report! So you press the lever and the tunnel opens... And... and what then - do I just go down the tunnel and that is that?
+#CAMERA 3
+#phrase OLIZ  8
+You go down the tunnel. But that is not easy. Before I became Hermit I was there. It is scary in the tunnel.
+#CAMERA 10 -20 5 2
+#ANIMATION 11
+#NOLIPS
+#phrase Hero  9
+He was scared?! What can possibly be in that tunnel?!
+#DESC (Exclaims to himself)
+#CAMERA 9
+#phrase OLIZ  10
+The tunnel is blocked by a landslide. You have to bypass it through the cave. Elementals of earth and lava live in the cave. But that is common. Yet another thing is scary. There is something in the tunnel which humans call "Golems". Golems are not alive but they move. They are not evil but they kill. They are not intelligent but they obey orders.
+#CAMERA 11 10 5 2
+#phrase OLIZ  11
+Lizards cannot give those orders. Mayhap you can do that. Perchance there are altars there for controlling the Golems.
+#CAMERA 3
+#phrase OLIZ  12
+I told you everything, human. The agreement is completed.
+#hide Hero
+#hide OLIZ
+#show Hero 4
+#ANIMATION 7
+#CAMERA 5
+#phrase Hero  13
+Well, I do not like the sound of it... golems, golems... aah, it is on the tip of my tongue, where have I heard that word golems before?

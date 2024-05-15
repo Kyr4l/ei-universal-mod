@@ -1,0 +1,23 @@
+A propos de la bagarre contre Tête-Rouge
+#show Elder 1
+#show Hero 2
+#ANIMATION 14
+#CAMERA 9
+#phrase Elder  1
+Ne le prends pas mal, mais je crois que tu as commis une grave erreur, Noble Elu ! Tu ne comprends pas que tu as été manipulé par l'artisan et que tu as par conséquent aggravé la rivalité entre les villageois et les Chasseurs libres ?
+#ANIMATION 44
+#CAMERA 6
+#phrase Hero  2
+Oui, je voulais justement t'en parler. Je ne sais pas pour l'artisan mais j'ai vu, de mes propres yeux, Tête-Rouge en conversation amicale avec un Orque.
+#ANIMATION 3
+#CAMERA 3
+#phrase Elder  3
+Quoi ? Ce n'est pas possible ! Je ne mets pas en doute la parole de l'Elu, mais dis-moi, c'est l'artisan qui t'a mis au courant pour ce Chasseur ?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  4
+Oui, c'est lui, et alors ?
+#ANIMATION 9
+#CAMERA 11
+#phrase Elder  5
+Tu es si candide, Noble Elu. Ta naïveté me stupéfie ! Tu ne vois pas clair dans les manigances de cet escroc. Il voulait se servir de toi pour se débarrasser du témoin qu'il avait lui-même poussé à devenir un traître. La prochaine fois que tu veux t'engager dans ce genre d'affaire, demande-moi conseil avant. Je te ferai voir les choses sous un angle différent.

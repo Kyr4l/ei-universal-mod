@@ -1,0 +1,20 @@
+About the arrow which killed the snoop
+#show Hero 3
+#show YCF 5
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  1
+What happened? Why are you alone here? And I so much hoped to get to the bottom of the Snoop mystery... You see, I found out that the murderer was not from the Woodsfolk but a human who acted on someone's orders. So now I want to find out who gave that order!
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero  2
+It appears that the Woodsfolk have some information which is dangerous to the villain, so everything has been set up to put the blame on you. But where are your people? Where did they go?
+#CAMERA 3
+#phrase YCF  5
+We went east by a secret path. I stayed behind to tell you about it because the gates to the path should be open to you.
+#CAMERA 11
+#phrase YCF  6
+Go east from here, open the gates and enter the labyrinth between the hills. Go through the labyrinth, open another gate and enter the mountain valleys. A long time ago people lived there - Magicians who invented new spells for wars, but they have long since abandoned that area. As the flood leaves dirt and litter where the water flowed, so did they leave ruins and traces of their deadly magic in those mountain valleys.
+#CAMERA 3
+#phrase YCF  7
+But the Green Clan managed to control that magic and make good use of it. Go along the southern wall of the valleys and use our altar: the magic trap will keep off the savage tigers so you can proceed southeast, to the new place of residence of the Green Clan. 

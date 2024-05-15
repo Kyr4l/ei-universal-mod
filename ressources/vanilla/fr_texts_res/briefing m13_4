@@ -1,0 +1,30 @@
+A propos de la lettre en langue orque
+#show Smith 1
+#show Hero 2
+#ANIMATION 32
+#CAMERA 1
+#phrase Smith  1
+Pourquoi ne m'as-tu pas dit que tu avais trouvé la lettre ?
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+Comment es-tu au courant ?
+#ANIMATION 9
+#CAMERA 9
+#phrase Smith  3
+C'est mon petit doigt qui me l'a dit. Non, en fait, le Capitaine est venu pour me dire que j'étais démasqué. Le Doyen aurait lu quelque part que je complotais contre toi.
+#hide Smith 
+#hide Hero 
+#show Smith 3
+#show Instruction4orcs00 5
+#show Hero 5
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  4
+Exactement. Voici la lettre, et j'aimerais entendre tes explications.
+#hide Instruction4orcs00
+#show Instruction4orcs00 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Smith  5
+Je n'ai rien à expliquer. Je ne sais pas de quoi parle cette lettre. Déjà, je ne suis pas doué pour les lettres, alors en langage orque, n'en parlons pas ! Pourquoi ne la fais-tu pas traduire par la Sorcière ?

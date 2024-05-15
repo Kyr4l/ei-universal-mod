@@ -1,0 +1,11 @@
+Désolé, mais je n'ai pas le temps !
+#show Merc9
+#show Hero
+#CAMERA 11
+#ANIMATION 9
+#phrase Merc9  1
+Ah ! Mes amis du Peuple de la forêt redoutent une attaque du Clan Noir. Alors, ils m’ont demandé de rester ici pour surveiller la clairière.
+#CAMERA 3
+#ANIMATION 44
+#phrase Merc9  2
+Mais dès que le danger sera écarté, je serai libéré de mes obligations et nous pourrons servir la bonne cause ensemble !

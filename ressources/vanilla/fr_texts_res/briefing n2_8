@@ -1,0 +1,9 @@
+Laisser Fairakh au sanctuaire
+#show Hero 3
+#show Merc8 5
+#phrase Hero  1
+Ça n’a pas l’air d’aller, Fairakh... Je veux dire, Frère Fairakh. Tu es souffrant ?
+#phrase Merc8  2
+Pas vraiment... Mais il me faut quelques jours pour récupérer. Pourras-tu te passer de moi ?
+#phrase Hero  3
+Je ferai de mon mieux. Remets-toi vite !

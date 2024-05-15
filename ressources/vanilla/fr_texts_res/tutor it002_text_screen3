@@ -1,0 +1,7 @@
+     La carte globale n’indique que les zones auxquelles votre personnage a actuellement accès. Ces zones peuvent être identifiées par différentes couleurs. Lorsque vous placez votre curseur sur une zone, les couleurs apparaissent telles qu’elles ont été désignées.
+
+     Les zones dans lesquelles vous avez accompli une quête importante (c’est-à-dire, les zones "explorées") sont désignées par une couleur plus sombre. Vos personnages peuvent contourner ces zones "explorées" sans avoir à les traverser. Si plusieurs zones de ce type sont adjacentes et reliées par des zones de transfert, vous pouvez toutes les contourner.
+
+     Remarque : vous n’êtes pas tenu d’accomplir toutes les quêtes disponibles d’une zone ou de tuer tous les ennemis qui s’y trouvent pour qu’elle devienne une zone "explorée".
+
+     Les zones disponibles n’ayant pas encore été "explorées" sont désignées par une couleur plus claire. Si votre quête exige que vous traversiez une de ces zones, vos personnages devront y entrer et la traverser jusqu'à leur destination. Vous ne pouvez pas contourner les zones "inexplorées".

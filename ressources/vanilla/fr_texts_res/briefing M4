@@ -1,0 +1,52 @@
+Parler de ce qui a été pris au capitaine
+#show Hero 1
+#show Smith 2
+#show Awl 6
+#show Knife 7
+#phrase Hero  1
+Regarde, je les ai pris au Chef et à sa femme.
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  2
+Ce sont les outils qu'on m'a volés ! Je n'en crois pas mes yeux.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  3
+Dans ce cas, touche-les !
+#ANIMATION 9
+#CAMERA 7
+#phrase Smith  4
+Ce sont bien eux, mes outils ! Maintenant tu peux me demander ce que tu veux. Sauf bien sûr des sortilèges, pour ça il faut demander à la Sorcière. Mais si c'est dans mes compétences, je te ferai même une remise.
+#CAMERA 3
+#phrase Smith  15
+Enfin, une petite remise, bien sûr…
+#CAMERA 11
+#phrase Smith  16
+Je veux dire... si tu me le demandes…
+#ANIMATION 7
+#CAMERA 6
+#phrase Hero  17
+Ne t'en fais pas, je ne veux pas de remise. Comment se fait-il que les Chasseurs libres vivent si proches des Gobelins et que l'un des deux camps n'a pas encore étripé l'autre ?
+#ANIMATION 6
+#CAMERA 7
+#phrase Smith  18
+Les Chasseurs libres… Pour moi, un Brigand reste un Brigand. Quoi qu'en dise le Doyen. Ce n'était pas la première fois qu'ils me volaient…
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  19
+Bon, si tu arrêtais un peu de te plaindre. Je voudrais en savoir plus sur les Gobelins.
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  20
+Tu n'écoutes pas ce que je te dis. Il paraît que les Brigands sont non seulement en contact avec les Gobelins mais aussi avec les Orques. Certains villageois jurent avoir vu un Brigand, du nom de Tête-Rouge, parler plusieurs fois à un Orque sur le chemin menant à la caverne des Trolls.
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  21
+Tout cela me semble clair. Les hommes de la forêt mènent le Doyen en bateau et prétendent être les sauveurs du village.
+#CAMERA 3
+#phrase Smith  22
+Ils mènent le Doyen en bateau ? Je me demande…
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  23
+Je suis sûr que j'ai raison. Il nous suffit de trouver ce Tête-Rouge et nous saurons tout.

@@ -1,0 +1,36 @@
+Rencontrer Eila
+#show Hero 
+#show Merc4
+#show OrcC
+#CAMERA 9
+#ANIMATION 4
+#phrase OrcC  1
+Eh, Femme des sables, toi dire que villageois être lâches-lâches, que personne jamais venir ici. Et celui-là être venu ! Lui vouloir te parler-parler.
+#CAMERA 3
+#ANIMATION 30
+#phrase Merc4  2
+Humm, alors tu es l’Elu ? Les Orques m’ont parlé de toi, mais je t’imaginais autrement.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  3
+Personne ne m’a parlé de toi ! Que fais-tu avec les Orques ?
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc4  4
+Je m’appelle Eila, j’ai fui le village il y a longtemps pour devenir l’apprentie de la Sorcière. Mais je n’étais pas assez bien pour cette femme hâbleuse ! Alors, je suis allée voir les Brigands, hélas j’ai eu le même problème avec cette misérable Cheftaine. Heureusement que Tête-Rouge m’a parlé du Chef Shei-Var : c’est un Orque, c’est vrai, mais il m’a acceptée.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  5
+Et toi, tu l’as accepté ?
+#CAMERA 3
+#ANIMATION 44
+#phrase Merc4  6
+Comme tu le vois. Les Orques m’appellent la Femme des sables. Le Prophète m’enseigne la magie, en échange de quoi je me bats pour lui. La tribu de Sheivar a beaucoup d’ennemis ! Finalement, Tête-Rouge m’a bien conseillée. Si tu le vois, salue-le de ma part !
+#CAMERA 6
+#ANIMATION 30
+#phrase Hero  7
+Err... Comment dire... Nous nous sommes déjà rencontrés, mais depuis je ne l’ai jamais revu.
+#CAMERA 4
+#ANIMATION 6
+#phrase OrcC  8
+Oh, venir, parler-parler plus tard. Maintenant, moi vouloir te parler-parler, Têtue-Têtue. Elu vouloir faire affaires-affaires pour moi. Si lui besoin, toi l’aider-l’aider, moi te donner permission- permission !

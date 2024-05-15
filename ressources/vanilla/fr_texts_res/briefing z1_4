@@ -1,0 +1,15 @@
+Demander de l'aide pour le recours à la magie
+#show Hero 1
+#show Witch 2
+#ANIMATION 63
+#CAMERA 5
+#phrase Hero  1
+Estera, sais-tu vraiment préparer de nouveaux sortilèges avec des runes ? Je sais utiliser les sorts existants mais quant à en faire de nouveaux... Je crois que seuls les mages les plus expérimentés en sont capables.
+#ANIMATION 11
+#CAMERA 11
+#phrase Witch  2
+Tu possèdes l'art de la flatterie sur le bout des doigts ! Pourquoi ne me demandes-tu carrément de t'aider ?
+#ANIMATION 7
+#CAMERA 9
+#phrase Witch  4
+Bon, d'accord, je fais comme si tu me l'avais demandé. Voici ma réponse. Je ferai les sortilèges que tu me demandes, si tu as assez d'argent. Mes tarifs ne sont pas aussi exorbitants que ceux de Babur, mais je ne fais jamais rien pour rien.

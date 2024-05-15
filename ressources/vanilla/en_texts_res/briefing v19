@@ -1,0 +1,18 @@
+About instructions to kill the Chosen
+#show Sheriff 3
+#show Hero 5
+#show Letter2orcs00 4
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  1
+Take a look at this and try telling me something I can believe!
+#hide Letter2orcs00
+#show Letter2orcs00 5
+#ANIMATION 3
+#CAMERA 3
+#phrase Sheriff  2
+Why ask me? Erfar is our Chief Silvertongue, ask him! He will explain everything to you.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  5
+I will certainly have a word with the Elder. But I am not finished with you yet!

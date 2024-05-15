@@ -1,0 +1,37 @@
+A propos du Loup Blanc mort
+#show Hero 1
+#show Sheriff 2
+#ANIMATION 9
+#CAMERA 9
+#phrase Sheriff  1
+Ecoute, Noble Elu, j'ai une demande à te faire : consens-tu à me donner la tête du Loup Blanc ?
+#show Hero 3
+#show Sheriff 5
+#show White_Wolf_Hide 5
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  2
+Tu veux dire celle-là ?
+#ANIMATION 29
+#CAMERA 11
+#phrase Sheriff  3
+Oui. A quoi pourrait-elle te servir ? Moi, j'en ai besoin pour mon prestige et mon autorité. C'est la coutume, tu comprends ?
+#hide White_Wolf_Hide
+#show White_Wolf_Hide 4
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  4
+J'adore ça ! Quand il faut trouver quelqu'un pour chasser des loups, tu gémis : "Oh, Noble Elu, peux-tu nous aider ?" Et quand c'est fait, tu veux en tirer tout le profit.
+#hide White_Wolf_Hide
+#show White_Wolf_Hide 5
+#ANIMATION 32
+#CAMERA 3
+#phrase Sheriff  5
+Et ça ne te convient pas ? Qu'est-ce que c'est ? Tu es devenu comme Babur le Pingre ? Je croyais qu'on serait amis. Le Doyen a déjà dit à tout le monde que tu m'aiderais.
+#show Hero 1
+#show Sheriff 2
+#hide White_Wolf_Hide
+#ANIMATION 11
+#CAMERA 2 -20 5 3
+#phrase Hero  6
+Nous verrons cela. Pour ce que est du Doyen et de ton plan, nous en reparlerons plus tard.

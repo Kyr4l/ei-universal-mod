@@ -1,0 +1,2 @@
+Encombrement :
+Détermine le poids porté par votre personnage. Plus il porte d'armes et d'armures et plus celles-ci sont lourdes, plus la charge du personnage sera grande. S'il dépasse la valeur "Charge maximale" (fonction de la Force du personnage), il ne peut plus courir.

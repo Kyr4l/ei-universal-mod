@@ -1,0 +1,14 @@
+Maître de la Cité des Morts
+Quelqu’un contrôle la Cité des Morts. Il s’agit peut-être du puissant Magicien que vous devriez essayer de rencontrer, ou du moins dont vous devriez vérifier l’existence. Souvenez-vous de ceci : il est pratiquement impossible de pénétrer dans la Cité des Morts par les grandes portes. Les goules montent la garde tout comme les gardes de la cité le faisaient en des temps meilleurs. Pour accéder à la cité, vous pouvez emprunter un passage secret à condition de connaître le mot de passe.
+#subobj  1
+Trouver comment entrer dans la Cité des Morts
+Un passage secret traverse les montagnes. Son entrée, située au sud des grandes portes, est indiquée par deux tours, mais pour les franchir, vous devez connaître le mot de passe inscrit dans le livre de l’observatoire.
+#subobj  2
+Franchir le passage ouvert
+Le passage ouvert mène exactement là où vous devez vous rendre : à la Cité des Morts.
+#subobj  3
+Trouver le Mont solitaire
+D’après des informations incomplètes, le maître de la Cité vit au sommet du Mont solitaire, au fond de la vallée. Redoublez de prudence lors de vos recherches : les goules de la Cité des Morts ne rôdent pas seulement près des grandes portes !
+#subobj  4
+Escalader le Mont solitaire
+Le sommet du Mont solitaire a tout d’un lieu de résidence idéal pour le Maître de la Cité des Morts. Pour vous y rendre, empruntez le chemin en spirale menant au sommet de la montagne.

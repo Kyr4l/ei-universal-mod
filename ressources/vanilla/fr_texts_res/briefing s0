@@ -1,0 +1,40 @@
+A propos du village
+#show Hero 1
+#show Elder 2
+#ANIMATION 3
+#phrase Hero  1
+Si j'ai bien compris, tu es le Doyen de ce village ?
+#ANIMATION 11
+#CAMERA 3
+#phrase Elder  2
+C'est bien moi. Les membres de ce village m'ont donné pour mission de les gouverner. Ils m'appellent parfois Langue d'argent, mais je ne leur en tiens pas rigueur. Je trouve même cela respectueux.
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  3
+Etrange ! Le maître de cette contrée permet à son peuple de choisir qui va les gouverner ? Je me demande ce qu'en pense votre roi…
+#ANIMATION 9
+#CAMERA 11
+#phrase Elder  4
+Hélas, Noble Elu, nous n'avons ni maître ni roi. Personne ne veut d'une contrée désolée comme Gipath. Le village vit en autarcie et personne ne sait comment atteindre les autres contrées.
+#ANIMATION 44
+#CAMERA 3
+#phrase Elder  5
+C'est pourquoi en tant que chef ici je dois prendre toutes les décisions. C'est difficile et astreignant mais il faut porter sa croix pour le bien de son peuple. Heureusement que j'ai le Capitaine pour m'aider. Je crois que l'ordre qui règne ici n'est pas si mauvais et je ne pense pas qu'un roi ferait mieux.
+#ANIMATION 7
+#CAMERA 2
+#phrase Hero  6
+Mais les autres villages, ils se débrouillent aussi tout seuls ?
+#ANIMATION 8
+#CAMERA 11
+#phrase Elder  7
+Il n'y a qu'un seul village à Gipath. Il y a très longtemps, un peuple a vécu ici mais il est parti. Il n'y a plus que des ruines et des routes abandonnées, avec des Gobelins et des Orques aux alentours.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  8
+Je ne m'attendais pas du tout à ça. Je dois réfléchir.
+#NOLIPS
+#show Hero 4
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  9
+Grands dieux ! Où suis-je donc, que m'est-il arrivé ? Je sais que je ne suis pas né ici, mais où alors ? J'étais sûrement censé faire quelque chose, mais je ne sais plus que c'était. Qui peut m'aider ?

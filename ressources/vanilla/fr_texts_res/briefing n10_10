@@ -1,0 +1,23 @@
+Dire au revoir au voleur
+#show Hero 
+#show Merc10
+#ANIMATION 64
+#CAMERA 7
+#phrase Merc10  1
+Hé, j’ai toujours pensé que tu étais à part ! Tu t’adresses à de Grands mages d’égal à égal et ta copine n’est pas n’importe qui !
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+Si seulement elle était à moi...
+#ANIMATION 65
+#CAMERA 7
+#phrase Merc10  3
+Eh bien, elle le sera, n’aie pas peur ! Crois-moi, je vois ce genre de choses... Mais ne me demande pas de conseils : tout doit venir de toi. Bon, je dois te quitter : puisse le Grand mage me renvoyer à Suslanger ! Je ne veux pas rester ici : je me sentirais mal si je volais mes propres amis et je suis née pour voler !
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  4
+Dans ce cas, disons-nous au revoir.
+#ANIMATION 67
+#CAMERA 7
+#phrase Merc10  5
+Non, pas au revoir. Adieu !

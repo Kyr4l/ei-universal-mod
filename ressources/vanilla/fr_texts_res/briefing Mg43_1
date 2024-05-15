@@ -1,0 +1,11 @@
+A propos du vol chez le gouverneur
+#show Hero 1
+#show Magess 2
+#ANIMATION 44
+#CAMERA 3
+#phrase Magess  1
+Mon cher jeune homme, je n’apprécie guère l’intérêt que tu portes à ce coffret. Oui, le Gouverneur Valrasian et moi sommes de bons amis et oui, j’ai posé des pièges magiques dans sa demeure. Je suis même prête à reconnaître qu’ils n’ont pas fonctionné correctement.
+#ANIMATION 43
+#CAMERA 11
+#phrase Magess  2
+Mais tout cela ne regarde que le Gouverneur et moi. Excuse-moi, mais ce ne sont pas tes affaires, même si ton intellect était à la hauteur de ta curiosité !

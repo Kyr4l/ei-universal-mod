@@ -1,0 +1,32 @@
+A propos de l'amulette de téléportation
+#show Hero
+#show Rick
+#CAMERA 9
+#ANIMATION 6
+#phrase Rick  1
+A présent, si tu es prêt à poursuivre ta quête, donne-moi les fragments de l’amulette de téléportation que tu as trouvés à Suslanger.
+#show BrokenToy 5
+#CAMERA 3
+#ANIMATION 2
+#phrase Rick  2
+Un peu de silence ! Je dois écouter ce que disent ces fragments....
+#CAMERA 11
+#phrase Rick  3
+Quoi ? ! C’est incroyable...
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  4
+Qu’y a-t-il ?
+#hide BrokenToy
+#CAMERA 7
+#ANIMATION 6
+#phrase Rick  5
+La téléportation a été dirigée vers ici, à Gipath ! Mais tous ceux qui sont venus ici récemment ont emprunté le vieux Portail, une seule personne est arrivée par un autre chemin et cette personne, c’est toi !
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  6
+Attends... Tu veux dire que.... Non ! Mais c’est impossible ! Je suis moi !
+#CAMERA 9
+#ANIMATION 4
+#phrase Rick  7
+Oui, tu es toi. Au revoir, Zak, bienvenue à Gipath, At-Zako !

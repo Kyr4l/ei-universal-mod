@@ -1,0 +1,9 @@
+Prendre Fairakh au sein de l'équipe
+#show Hero 
+#show Merc8
+#ANIMATION 45
+#phrase Merc8  1
+Pourquoi réunir tant de monde ? Juste pour s’occuper de ces gens pathétiques, dehors ?
+#ANIMATION 32
+#phrase Hero  2
+Certains d’entre eux savent se battre et nous ne sommes pas trop nombreux pour les affronter.

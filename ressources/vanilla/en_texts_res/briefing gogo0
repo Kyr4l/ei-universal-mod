@@ -1,0 +1,35 @@
+Talk to GoGo
+#show Hero 3
+#show bGoblinC 4
+#show Sheriff 5
+#CAMERA 5
+#ANIMATION 45
+#phrase Hero  1
+Are you the Goblin Chief GoGo?
+#CAMERA 9
+#phrase bGoblinC  2
+Me GoGo, Chiefa GoGo, come to ask ya give First Goblin back!
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  3
+Maybe I will, but first you must tell me something.
+#ANIMATION 3
+#CAMERA 8
+#phrase Sheriff  4
+Hey you single eye, shut your mouth, or I will shut it for you! Have you not been told to keep your mouth shut?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  5
+What was that?!
+#ANIMATION 9
+#CAMERA 4
+#phrase Sheriff  6
+The Elder said not to interrogate the Goblin unless he himself was here, and not to let him talk too much. He said, he and the Chosen would have a nice friendly chat later, with no witnesses.
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  7
+Well, here I am. So what is the matter?
+#ANIMATION 44
+#CAMERA 1
+#phrase Sheriff  8
+Well, you are here, but not Erfar, that is what is the matter! And I do exactly as I am told. Otherwise there is no order, and if there is no order we got disorder on our hands, do we not, he-he-he! I have a good sense of humor, do I not?!

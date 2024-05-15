@@ -1,0 +1,4 @@
+Défilement en bordure.
+Définit la distance entre le curseur et
+la bordure de l'écran. La caméra
+se déplace dans la direction du curseur.

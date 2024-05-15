@@ -1,0 +1,51 @@
+Comment mettre Karansul sous pression
+#show Hero 1
+#show Trapper 2
+#ANIMATION 63
+#CAMERA 11
+#phrase Trapper  1
+Très bien, jeune homme, maintenant à moi de tenir ma promesse. Je vais te donner une part de mes bénéfices et te révéler ce que je sais. Karansul est riche, incroyablement riche.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+Et d’où lui vient toute sa richesse ?
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  3
+Rien de très mystérieux ! Il possède des mines, des puits, des scieries... La liste est longue... Et il ne paie qu’un dixième des impôts qui lui incombent. Il gagne beaucoup d’argent et le Gouverneur n’en obtient rien. Tout ceci est confidentiel.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper  5
+Le Gouverneur fait confiance à Karansul. Il parle avec éloquence et n’hésite pas à lui offrir des pièces pour sa collection. Mais personne n’a encore mis le nez dans ses livres comptables.
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  6
+Tu veux dire, pas vu, pas pris, c’est ça ?
+#ANIMATION 63
+#CAMERA 11
+#phrase Trapper  7
+Exactement. Il suffirait de jeter un coup d’œil à ses comptes pour savoir ce qui a été vendu illégalement... Mais les gardes de Karansul sont redoutables. Non, petit, il n’y a rien à faire.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  8
+Mais je peux toujours essayer, n’est-ce pas ?
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  9
+Alors, écoute-moi bien ! Le contremaître des mines transporte avec lui le livre comptable. Les mines et les scieries du domaine de Karansul s’étendent autour du lac. Les berges orientales du lac abritent deux vastes bâtiments : la maison du contremaître et le broyeur mécanique. Sache que cette machine sophistiquée lui a coûté un bras et une jambe !...
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  11
+Mais ce n’est pas le propos. Voilà à quoi ressemble la maison du contremaître : son toit est surmonté de deux petites cheminées. Veille à ne pas la confondre avec la cantine des gardes surmontée elle aussi de deux cheminées, mais plus hautes.
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  12
+Et deux dernières choses : premièrement, interroge le Capitaine sur les activités de Karansul. Raconte-lui une histoire, dis-lui par exemple que tu n’as plus d’argent et que tu dois travailler. Ainsi, tu en tireras peut-être quelque chose d’intéressant ! Et deuxièmement, va en ville, trouve un homme plus connu sous le nom de Chafouin et dis-lui bonjour de ma part.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  13
+Et ensuite ?
+#ANIMATION 62
+#CAMERA 3
+#phrase Trapper  14
+Je ne sais pas vraiment. En fait, Chafouin est un voleur, mais c’est aussi un homme de bien. Il te donnera peut-être des conseils ou te révélera des secrets professionnels... Dis-lui juste que tu viens de ma part !

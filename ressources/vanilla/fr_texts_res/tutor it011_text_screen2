@@ -1,0 +1,11 @@
+     Pour assembler un sort, cliquez sur sa pierre maîtresse dans votre inventaire (barre inférieure) ou dans l’échoppe (barre supérieure). La pierre maîtresse sera placée dans la fente qui convient.
+     Les fentes réservées seront alors mises en surbrillance et entourées d’un cadre clignotant. Le nombre de fentes en surbrillance est égal au nombre de runes que vous pouvez insérer dans ce sort. Ce nombre change chaque fois que vous ajoutez une rune dans le concepteur. Pour ajouter une rune, cliquez sur sa représentation dans votre inventaire ou dans l’échoppe et elle sera placée dans la prochaine fente disponible.
+     La pierre maîtresse détermine les runes utilisables pour ce sort. Les runes non utilisables sont grisées.
+
+     Remarque : vous ne pouvez pas placer de runes dans le concepteur tant que vous n’y avez pas placé de pierre maîtresse. Si vous retirez la pierre maîtresse du concepteur pour la remettre dans votre inventaire ou dans l’échoppe, toutes les runes que vous avez ajoutées seront également retirées de leurs fentes pour revenir à leur emplacement d’origine.
+
+     Les caractéristiques du sort que vous avez assemblé apparaissent dans le panneau de gauche, avec les éventuelles caractéristiques supplémentaires ajoutées par les runes que vous avez utilisées. La partie inférieure de l’écran indique le prix total du sort. Ceci comprend le prix des éventuels articles que vous avez achetés.
+
+     Cliquez sur le bouton <V> pour assembler l’objet ou sur <X> pour annuler.
+
+     Remarque : si vous assemblez un sort pour le désassembler immédiatement après (sans le placer dans l’inventaire), vous devrez payer le prix de l’assemblage et du désassemblage - alors, veillez à faire les bons choix.
