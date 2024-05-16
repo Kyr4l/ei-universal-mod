@@ -1,1 +1,1 @@
-../../../ressources/lua/main.lua
+../../../resources/lua/main.lua
