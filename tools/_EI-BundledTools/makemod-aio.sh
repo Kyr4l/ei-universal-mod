@@ -14,6 +14,7 @@ mmpdir="mmp"
 xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
+luadir="lua"
 # total files
 totalreg=""
 totalmmp=""
@@ -113,6 +114,24 @@ echo "Empty directories deleted"
 
 echo "Moving RES files to $modfolder/res/"
 mv -fv "$resdir"/*.res "$modfolder"/res/
+
+# lua
+echo ""
+echo "======================"
+echo "| ADDING LUA SCRIPTS |"
+echo "======================"
+echo ""
+cp -v "$luadir"/main.lua "$modfolder"/
+cp -vrL "$luadir"/lua "$modfolder"/lua
+
+# last step
+echo "DONE PROCESSING $modfolder"
+
+
+
+
+
+
 
 
 
