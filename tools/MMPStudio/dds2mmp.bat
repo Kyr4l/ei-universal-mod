@@ -2,12 +2,12 @@
 
 setlocal
 
-set folder_path=".\dds\"
+set folder_path=".\dds2mmp\"
 
 cd /d %folder_path%
-for %%f in (*) do (
+for %%f in (*.dds) do (
     echo Processing file: %%f
-    .\MMPS.exe "%%f"
+    ..\MMPS.exe "%%f"
 )
 
 echo All files have been processed.
