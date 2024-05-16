@@ -9,15 +9,15 @@ modfolder="$modout"/"$(date +"%Y-%m-%d_%H-%M-%S")"
 # ressources directories
 inidir="ini"
 regdir="reg"
-ddsdir="dds"
-mmpdir="mmp"
+# ddsdir="dds"
+# mmpdir="mmp"
 xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
 luadir="lua"
 # total files
 totalreg=""
-totalmmp=""
+# totalmmp=""
 totalres=""
 
 
@@ -56,28 +56,28 @@ cp -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
 
 
 # dds2mmp
-echo ""
-echo "========================"
-echo "| PROCESSING DDS FILES |"
-echo "========================"
-echo ""
-echo "Converting DDS files to MMP..."
-cd $ddsdir || exit
-
-for ddsin in *.dds ; do
-    mmpout="${ddsin%dds}mmp"
-    wine ../bin/MMPS.exe "$ddsin"
-    mv -fv "$mmpout" ../$mmpdir/
-    totalmmp="$totalmmp $ddsin"
-done
-
-echo "==============================="
-echo "Processed the following files : $totalmmp"
-echo "==============================="
-cd .. || exit
-echo "Moving MMP files to textures_res"
-mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
-mv -fv "$mmpdir"/* $rextdir/textures_res/
+# echo ""
+# echo "========================"
+# echo "| PROCESSING DDS FILES |"
+# echo "========================"
+# echo ""
+# echo "Converting DDS files to MMP..."
+# cd $ddsdir || exit
+#
+# for ddsin in *.dds ; do
+#     mmpout="${ddsin%dds}mmp"
+#     wine ../bin/MMPS.exe "$ddsin"
+#     mv -fv "$mmpout" ../$mmpdir/
+#     totalmmp="$totalmmp $ddsin"
+# done
+#
+# echo "==============================="
+# echo "Processed the following files : $totalmmp"
+# echo "==============================="
+# cd .. || exit
+# echo "Moving MMP files to textures_res"
+# mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
+# mv -fv "$mmpdir"/* $rextdir/textures_res/
 
 # eidbeditor
 echo ""
