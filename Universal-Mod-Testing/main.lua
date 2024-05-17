@@ -10,7 +10,7 @@ function CalcRunningManaCost(unit_server_stats_addr, unit_server_addr, common_se
     local common_stats = UnitServerCommonStats(common_server_stats_addr)
     local mp = common_stats.mp
 
-    mp.curr = mp.curr - mp.max * (1 / 300)
+    mp.curr = mp.curr - mp.max * (1 / 375)
 end
 
 -- Здесь можно заменить следующие функции (см. lua/default.lua для примера реализации):

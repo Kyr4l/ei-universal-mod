@@ -89,12 +89,12 @@ function RegenerateHp(common_server_stats_addr, unit_server_stats_addr, unit_add
     local hp = common_stats.hp
     if hp.curr >= hp.max then return false end
 
-    hp.regen = hp.regen + hp.regen * unit_stats:perkModifier(PerkType.Vitality) * 0.01
+    local hp_regen = hp.regen + hp.regen * unit_stats:perkModifier(PerkType.Vitality) * 0.01
     local regen_spell = unit:spellEffect(SpellType.Regeneration)
     if regen_spell > 0 then
-        hp.regen = hp.regen * regen_spell
+        hp_regen = hp_regen * regen_spell
     end
-    unit_stats:heal(common_server_stats_addr, hp.max * hp.regen)
+    unit_stats:heal(common_server_stats_addr, hp.max * hp_regen)
     return true
 end
 
