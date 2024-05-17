@@ -34,7 +34,7 @@ end
 
 -- do not divide xp
 function DistributeLmpExp(exp, playersNum) --> float
-    return exp / 1 -- playersNum
+    return exp
 end
 
 
