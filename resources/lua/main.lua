@@ -4,6 +4,7 @@
 
 require("default")
 
+-- decrease the mana cost of sprinting
 function CalcRunningManaCost(unit_server_stats_addr, unit_server_addr, common_server_stats_addr) --> none
     local unit_stats = UnitServerStats(unit_server_stats_addr)
     local unit = UnitServer(unit_server_addr)
@@ -13,6 +14,7 @@ function CalcRunningManaCost(unit_server_stats_addr, unit_server_addr, common_se
     mp.curr = mp.curr - mp.max * (1 / 375)
 end
 
+-- fix the perma regen bug
 function RegenerateHp(common_server_stats_addr, unit_server_stats_addr, unit_addr) --> bool
     local common_stats = UnitServerCommonStats(common_server_stats_addr)
     local unit_stats   = UnitServerStats(unit_server_stats_addr)
@@ -29,6 +31,14 @@ function RegenerateHp(common_server_stats_addr, unit_server_stats_addr, unit_add
     unit_stats:heal(common_server_stats_addr, hp.max * hp_regen)
     return true
 end
+
+-- do not divide xp
+function DistributeLmpExp(exp, playersNum) --> float
+    return exp / 1 -- playersNum
+end
+
+
+
 
 
 -- Здесь можно заменить следующие функции (см. lua/default.lua для примера реализации):
