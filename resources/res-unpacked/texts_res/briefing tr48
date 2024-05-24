@@ -1,0 +1,87 @@
+About the stolen records
+#show Hero 1
+#show Shopper 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  1
+You again?!  I do not know anything about the Princess! So don't even ask!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+That was not my intent. I came to tell you a tale.
+#ANIMATION 43
+#CAMERA 11
+#phrase Shopper  3
+You are completely mad. I am a businessman and my time is money. What tales?! You must be high on mushrooms...
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  4
+Why? Listen, it will not take long. Once upon a time there was a merchant. He seemed to be all right but the problem was, he was dishonest and cheated on the Governor. So it all went very well for a while but then one day...
+#ANIMATION 45
+#CAMERA 11
+#phrase Shopper  5
+I do not understand what you mean, young man. What cheating?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero  6
+One day he lost some very important papers... Accounts. And these accounts told of all sorts of dirty tricks, all plain to see, in black and white.
+#ANIMATION 15
+#CAMERA 11
+#phrase Shopper  7
+So what happened next?
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  8
+Next a man comes to the merchant and tells him: "You want your papers back, you tell me what I want to know". But the merchant was stupid and did not believe the man. So the papers went to the Governor that very day, and after that...
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  9
+Yes, it is an interesting tale. But you sure it was only about the merchant? What about that man? Did he not complain about his health or something? You know, we live in difficult times, anything can happen...
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  10
+Oh, there are many ways to tell that tale. There is also a sad ending - that man got into some serious trouble, but the point is, the Governor still got the papers. The man was not stupid enough to carry them around on his person, you see.
+#ANIMATION 11
+#CAMERA 3
+#phrase Shopper  11
+You repeat yourself too often: Governor, Governor! I do not like such tales, they are sad and dull. Why not tell me something better?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  12
+To do that, I will have to hear something from you first.
+#ANIMATION 46
+#CAMERA 11
+#phrase Shopper  13
+All right, ask! I want to hear a happy ending!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  14
+Tell me who robbed Valrasian. And where is the loot.
+#ANIMATION 45
+#CAMERA 11
+#phrase Shopper  15
+How could an honest man know such things? But there was a rumor that a thief by the name of Flein, whom people call Baldie, had a fit of greed...
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  16
+Right. Could you give me more details?
+#ANIMATION 62
+#CAMERA 3
+#phrase Shopper  17
+What more do you want? He lives in the land of abandoned mines on a farm on the western lake shore. Their family... how should I put it... they are a disagreeable sort. They have got a sort of zoo where they tame tigers, so they are afraid of no one.
+#ANIMATION 61
+#CAMERA 11
+#phrase Shopper  18
+These people are so unpredictable! So many times I've asked their father to come and join my guard force at the mines with his tigers. But he would not - I am no man's slave, he said! And Baldie is the family expert on domestic theft. But this time he got really bold and robbed the Governor's house! His Excellency was so upset...
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  19
+Well if you sympathize with your friend so much... where is the loot now?
+#ANIMATION 45
+#CAMERA 11
+#phrase Shopper  20
+At the farm of course, where else? I am sure it's all in some barn or other.
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  21
+Well, thanks for your kind words. And one more thing: send that Flein a message that I want to talk to him. If you set up a meeting, you will hear the end of my tale. The happy end.

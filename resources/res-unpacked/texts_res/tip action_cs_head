@@ -1,0 +1,4 @@
+Aim at head
+Your character will aim at the enemy's head 
+when attacking. When the head's "health" 
+reaches 0, the enemy will die.

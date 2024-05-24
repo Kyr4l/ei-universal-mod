@@ -1,0 +1,27 @@
+About the illness
+#show Smith 1
+#show Hero 2
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+How do you feel, Babur?
+#ANIMATION 45
+#CAMERA 7
+#phrase Smith  2
+Oh, I cannot complain. Why do you ask?
+#ANIMATION 8
+#CAMERA 10
+#phrase Hero  3
+They say the Orc Seer has cast an illness on the village. The Elder is very scared. He begged me to bring a White Flower to him to heal the people.
+#ANIMATION 44
+#CAMERA 11
+#phrase Smith  4
+Hmmm... Listen, why do you not give the Plant to me? T'will be good for business. Look, the whole village would have to come to me. I will make an excellent profit and share it with you. And we will get rid of Erfar in the bargain - I will charge him so much, that he will find it cheaper to die!
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  5
+Are you mad?! Your greed has addled your brains! People could die and all you can think about is money!
+#ANIMATION 14
+#CAMERA 9
+#phrase Smith  6
+Oh all right, go and listen to the others, with your "Oh, I am soooo honest!" speech. Just make sure that flower does not turn out to be the last thing you ever see!

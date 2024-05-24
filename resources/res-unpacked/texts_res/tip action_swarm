@@ -1,0 +1,5 @@
+Aggressive/Defensive mode
+This switches a character's mode between "aggressive" and "defensive".
+In "Aggressive" mode the character will attack all enemies who have detected him. 
+In "Defensive" mode he will only attack after you issue the appropriate 
+command.

@@ -1,0 +1,14 @@
+Take Kharad on the team
+#show Hero 
+#show Merc7
+#CAMERA 3
+#phrase Merc7  1
+Brother Blondie, I know about your quest. Let me help you! Let us make my revenge serve a decent purpose too.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  2
+I agree, but remember: your fervor must not overcome caution. I definitely do not want you to see you dead because you attacked a whole army single-handed!
+#ANIMATION 3
+#CAMERA 3
+#phrase Merc7  3
+Do not worry about that. Yes, my mission in life is revenge! And I very much want to stay alive for as long as possible, because if I die I there will be no revenge!

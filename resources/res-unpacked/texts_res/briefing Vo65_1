@@ -1,0 +1,19 @@
+About the rich mansion
+#show Hero 1
+#show Merc10 2
+#ANIMATION 61
+#CAMERA 11
+#phrase Merc10  1
+Oh dear me! Such a good looking youth and all for nothing... what a waste.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero  2
+Huh? Me, a waste?
+#ANIMATION 45
+#CAMERA 3
+#phrase Merc10  3
+What a waste, I said! You will find your young Joon and rush back to your no-good Gipath. And that will be the end of you...
+#ANIMATION 64
+#CAMERA 9
+#phrase Merc10  4
+You told me yourself that there are no rich houses there, nothing to steal and no one to sell to. You will ruin your talent, I am telling you, and when you are old and grey, you will remember that I warned you, but then it will be too late!

@@ -1,0 +1,27 @@
+About the Orcs from the foothills
+#show Hero 1
+#show Smith 2
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  1
+The Orcs are not so frightening as Gort pictures them! I am surprised you never managed to scare them off yourselves.
+#ANIMATION 7
+#CAMERA 7
+#phrase Smith  2
+It is not so easy, you know. The thing is, the tribe which settled in the Foothills is not all that strong, but they have a very clever Seer living with them.
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  4
+He learned to control the magic pyramid - there is one right near the settlement. A funny thing really - it is an ancient device but works as good as new, damn it! So anyone who comes close to it gets a very nice lightning blast.
+#ANIMATION 14
+#CAMERA 3
+#phrase Smith  5
+But if someone could kill that Seer and switch the pyramid off, the Orc tribe would start to behave themselves very quickly. But I fear that no one could fight their way through to the Seer and I know that none of our men is capable of getting there by stealth to do the job quietly with a knife.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero  6
+Let us suppose I could do that.
+#ANIMATION 31
+#CAMERA 11
+#phrase Smith  7
+God bless you, Chosen! If you do that I will be eternally grateful, because I do want to be able to walk around the Foothills freely. And of course I would show my gratitude in a quite tangible way - if only you could deal with the Orcs!

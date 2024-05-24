@@ -1,0 +1,9 @@
+Leave Fairakh in the Shelter
+#show Hero 3
+#show Merc8 5
+#phrase Hero  1
+You do not look too good, Fairakh... I mean, Brother Fairakh. Do you feel unwell?
+#phrase Merc8  2
+Not really... but I need a few days to recover. Could you do without me?
+#phrase Hero  3
+I will do my best! Get well soon!

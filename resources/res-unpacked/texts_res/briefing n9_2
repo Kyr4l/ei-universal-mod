@@ -1,0 +1,11 @@
+Make Archer an offer to join the team
+#show Hero 
+#show Merc2
+#CAMERA 2
+#ANIMATION 45
+#phrase Hero  1
+Well Archer, still not tired of village life? I am bound for somewhere interesting. Care to join me?
+#CAMERA 3
+#ANIMATION 14
+#phrase Merc2  2
+Mmm... Mayhap not a good idea...you already have good company and I am afraid I will get in the way. I always say three is the top number for dangerous trips.

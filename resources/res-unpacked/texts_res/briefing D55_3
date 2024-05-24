@@ -1,0 +1,45 @@
+About the Great Magician and the quest
+#show Hero 1
+#show Deva 2
+#ANIMATION 30
+#CAMERA 11
+#phrase Deva  1
+Tka-Rik... that was the name of a Magician in one of the fairy tales I heard in my childhood! That Magician sleeps in a cave on a remote island, and when he awakes the good times will return... but somehow I do not think the actual reality will be anything like the tale!
+#ANIMATION 62
+#CAMERA 2
+#phrase Hero  2
+Oh do not be so sure... mayhap they do have something in common. Tka-Rick does live in a cave in a remote land, and he does want to bring the good times back. That is why I am here - my mission was to find you.
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  4
+I accomplished my mission and now I am happy. Not because the Magician will be pleased with me - however great he may be - but because I met the most beautiful and delightful girl in the world!
+#ANIMATION 40
+#CAMERA 5
+#phrase Hero  5
+I swear I shall think of no other woman from now on, and I swear I... Oh, Merciful heavens... I am lost for words!
+#ANIMATION 31
+#CAMERA 11
+#phrase Deva  6
+Please do not say such things, I beg you. You saved me and I like you... But I do love someone else and I will never betray him even if he is far away!
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  7
+How dared he abandon you? I think he is just a coward, and if our paths ever cross he will be sorry!
+#ANIMATION 73
+#CAMERA 3
+#phrase Deva  8
+Do not dare speak about At-Zako like that! We narrowly escaped the Curse of Joons together. You cannot imagine the horror of that...family and friends dead, one after the other, empty homes, bloody footprints in the dust of the road, and finally the Curse, the monster over which even your Great Magician would never be able to triumph.
+#ANIMATION 73
+#CAMERA 11
+#phrase Deva  9
+At-Zako saved me from certain death several times, and he left me only to avert the Curse from me, to make it chase himself! If you say anything bad about him again, I... will not leave here and you can go back to wherever you came from!
+#ANIMATION 31
+#CAMERA 5
+#phrase Hero  10
+I must accept your decision, Lu-a-Jalla, and I swear you will never hear a bad word about your At-Zako from me again.
+#CAMERA 10
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  11
+But he is going to hear an earful when we meet. And if that meeting does not end in a duel, he is an even worse coward than I think!
+#DESC To himself

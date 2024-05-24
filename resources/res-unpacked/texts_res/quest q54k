@@ -1,0 +1,20 @@
+Abandoned mines
+Diera hid the kidnapped girl in an abandoned mine. To get there you will need the key.
+#subobj  1
+Reach the mines
+The abandoned mines are located in the northern part of the area, across the lake. The passage is blocked by the gates. To reach these gates, go around the lake from the east, cross the river by the bridge and then go north.
+#subobj  2
+Open the gates
+To open the gates to the mines use the governor's key. Be careful: the entrances to the mines are guarded by the cutthroats hired and equipped by Diera.
+#subobj  3
+Find the entrance to mine 1
+This mine is the closest to the gates and the easiest to enter. However, if you take this entrance you will have the longest journey through the catacombs.
+#subobj  4
+Find the entrance to mine 2
+This one is located to the west of the entrance to mine 1. If you use it, your journey underground will be somewhat shorter.
+#subobj  5
+Find the entrance to mine 3
+This is the westernmost mine and the most difficult to reach. However, if you use this entrance your journey in the catacombs will prove somewhat easier, although the catacombs are never truly safe!
+#subobj  6
+Enter the mine
+To continue your search for the Princess, enter the mine and look in the catacombs.

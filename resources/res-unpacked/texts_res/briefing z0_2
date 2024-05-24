@@ -1,0 +1,19 @@
+Meet Estera's granddaughter
+#show Daughter
+#show Witch
+#show Hero
+#phrase Witch  1
+This is my granddaughter Airy. And now you listen to me. Do not even think about making any sort of pass at her! Airy is still very young and silly, God forbid that she fall in love with you. And we do not even know who you really are, do we?
+#ANIMATION 3
+#CAMERA 7
+#phrase Daughter  2
+Granny, I am not a child!  Will you ever treat me like an adult?
+#ANIMATION 32
+#CAMERA 12
+#phrase Witch  3
+Oh dear! The floor has not been cleaned, the plates are not washed and you interrupt our conversation! Now go!
+#hide Daughter 
+#ANIMATION 7
+#CAMERA 8
+#phrase Witch  4
+A restive girl, just like me! But you, you beware: if you try anything with my granddaughter, I will find you and bury you!

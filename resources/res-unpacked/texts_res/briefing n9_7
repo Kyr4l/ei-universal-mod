@@ -1,0 +1,11 @@
+Take Kharad on to the team
+#show Hero 
+#show Merc7
+#CAMERA 2
+#ANIMATION 45
+#phrase Hero  1
+Well Kharad, do you come with us today?
+#CAMERA 3
+#ANIMATION 32
+#phrase Merc7  2
+I think there are too many of you already. I will find myself my own mission and then we will compare how many dead enemies we have.

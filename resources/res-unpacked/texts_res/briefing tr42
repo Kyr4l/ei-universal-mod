@@ -1,0 +1,15 @@
+About the missing girl
+#show Hero 1
+#show Shopper 2
+#ANIMATION 63
+#CAMERA 11
+#phrase Shopper  1
+They say, lad, that you are trying to find Princess? Well, why not do it yourself then? My name's merchant Karansul, not Help All. I sell good stuff for good money and I do not care about anything else.
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  2
+All right, that is good enough... but suppose I wanted to buy something magical, where would I go? You may be a good merchant but you do not look like a Magician!
+#ANIMATION 44
+#CAMERA 11
+#phrase Shopper  3
+Appearances can be deceptive. I control all trade in this city. So I sell runes as well. And never mind who makes them for me. I do not pay Magician Diera for nothing, do I?

@@ -1,0 +1,23 @@
+Talk to Kholai
+#show Hero 1
+#show OldNekro 2
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  1
+Oh your greatness! Would you be so kind in your eh... brilliant wisdom to eh... consider a request by a humble mortal? Your eh... distinguished appearance fills me with awe and admiration!
+#ANIMATION 59
+#CAMERA 11
+#phrase OldNekro  2
+Young man! Good flattery should be like a poisoned knife wrapped in silk... soft and tender with lethal poison inside. Few people can say they have mastered this art nowadays and you are definitely not one of them. So tell me in plain language what you want from me.
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  3
+I need to talk to the spirit of one of the scientists whose dead bodies are stored in your former laboratory. And in return I am prepared to offer you Taivo's head - will that be enough?
+#ANIMATION 57
+#CAMERA 3
+#phrase OldNekro  4
+I can kill Taivo myself. I do not want him dead, I want him humiliated and disgraced. I want to see how he loses his rank and his office, I want to hear him complain and moan and beg for coins... and I believe you might just be able to help me achieve that, young man.
+#ANIMATION 59
+#CAMERA 11
+#phrase OldNekro  5
+I would like a body or at least the head of one of the bodies to disappear from the laboratory and appear on my premises. You will have your chat with the spirit, and I... Oh, what denunciations I will write about Taivo, what rumors I will circulate about him! He will rue the day when he decided to move against me!

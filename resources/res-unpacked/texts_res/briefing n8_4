@@ -1,0 +1,36 @@
+Meet Eila
+#show Hero 
+#show Merc4
+#show OrcC
+#CAMERA 9
+#ANIMATION 4
+#phrase OrcC  1
+Ho Sandwoman, you say village people cowards-cowards, and no one come here. And this one did come! Wants talk-talk with you.
+#CAMERA 3
+#ANIMATION 30
+#phrase Merc4  2
+Hm, so you are the Chosen then? The Orcs told me about you but I thought you were different.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  3
+And no one told me about you! How do you happen to be with Orcs?
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc4  4
+My name's is Eila, I escaped from the village a long time ago to become the Witch's apprentice. But that braggardly woman decided I was no good! So I went to the Brigands but it was the same story again with that spiteful cat the Chieftess. It was a good thing that Redhead mentioned Chief Shei-Var to me: he is an Orc, true, but one can come to terms with him.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  5
+So you came to terms with him?
+#CAMERA 3
+#ANIMATION 44
+#phrase Merc4  6
+As you can see. The Orcs call me Sandwoman, but I do not take any other nonsense from them. The Seer teaches me magic, and in exchange I fight for him. The Shei-Var tribe have many enemies! So Redhead gave me good advice indeed. If you see him, say hello from me!
+#CAMERA 6
+#ANIMATION 30
+#phrase Hero  7
+Err... how should I put it... we have actually met, but I never saw him after that one time.
+#CAMERA 4
+#ANIMATION 6
+#phrase OrcC  8
+Oh people, come, talk-talk later. And now I want a word-word with you, Sandwoman. Chosen wants do business-business for me. If he need, you help-help him, I give you permission, allow-allow!

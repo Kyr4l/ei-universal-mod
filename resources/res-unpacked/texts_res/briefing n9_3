@@ -1,0 +1,11 @@
+Take Naya on
+#show Hero 
+#show Merc3
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  1
+Well Naya, want to join us?
+#ANIMATION 31
+#CAMERA 3
+#phrase Merc3  2
+Sorry, Chosen, but your company is large enough already. I am used to quiet forest living and cannot endure so many people around me.

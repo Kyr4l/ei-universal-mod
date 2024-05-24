@@ -1,0 +1,39 @@
+Accuse Erfar of treason
+#show Elder
+#show Hero
+#show Nsheriff
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  1
+I know everything now! So choose what kind of death you would like!
+#ANIMATION 54
+#CAMERA 9
+#phrase Elder  2
+No, no! I was betrayed, it was all a set-up, I am innocent! Help, help! The Chosen has gone mad!!!
+#DESC Frightened, but still hopes he is trusted
+#ANIMATION 29
+#CAMERA 2
+#phrase Hero  3
+All right, scream. The louder you scream, the more pleasure it will give me to shut your lying mouth!
+#DESC Icy voice
+#ANIMATION 11
+#CAMERA 8
+#phrase NSheriff  4
+No, you better not scream. Otherwise it will be go badly with you.
+#ANIMATION 56
+#CAMERA 11
+#phrase Elder  5
+Oh Chosen, I am in your power. But please do not kill me, I could still be useful to you!  No one but I could tell you what was in that note you found! Give me your word that you will let me go, and I will translate it for you!
+#DESC Understands that he will not get away and abruptly changes his tone
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero  6
+I cannot imagine why you think so, but I will not kill you... yet. I will let you live a little longer while I decide what to do with you. I do not know, mayhap there is some custom in the village which determines how such filth should be dealt with!
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  7
+Rivar, tell your people to keep a very good eye on Erfar!
+#ANIMATION 15
+#CAMERA 12
+#phrase NSheriff  8
+Yes, sir!

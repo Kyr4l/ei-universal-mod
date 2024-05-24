@@ -1,0 +1,16 @@
+About the dead Goblins
+#show Hero 1
+#show Sheriff 2
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  1
+Well, not a bad job, eh? Now the Goblins will want to forget the way to the village for a long time to come!
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero  2
+Hey Gort, what is the matter? Are you unhappy?
+#ANIMATION 9
+#CAMERA 11
+#phrase Sheriff  3
+Hah, I am... very happy. Hurrah. Glory, glory, Chosen. And the Elder says you have a reward due to you, eh. If I had done it, the reward would come to me. But now you will get it.
+#DESC Without any enthusiasm at all

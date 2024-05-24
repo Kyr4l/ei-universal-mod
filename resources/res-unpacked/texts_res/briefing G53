@@ -1,0 +1,51 @@
+About abandoned mines
+#show Hero 1
+#show Huber 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Huber  1
+Ah, young man, why are you in such a hurry? What is the reason for all this haste?
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  2
+The mine!
+#ANIMATION 45
+#CAMERA 3
+#phrase Huber  3
+What mine? What does it mean, "the mine"? And where is "Hello", where are your manners?
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  4
+Your Excellency, I apologise for my haste but I have very serious reasons to speak with you. I decided it was time for me to see sense. To start business. Mining business.
+#ANIMATION 3
+#CAMERA 3
+#phrase Huber  5
+Oh, how unbearably dull... and what are those serious reasons?
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  6
+Well, your Excellency, I noticed you love beauty and I am sure I can find a lot of wonderful things in the old abandoned mines...
+#show Hero 3
+#show GoldNugget00 4
+#show Huber 5
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  7
+like this nugget, for example. It would be an honor for me if you accepted it as a gift from me!
+#ANIMATION 62
+#CAMERA 7
+#hide GoldNugget00
+#show GoldNugget00 5
+#phrase Huber  8
+Hmm... Well, those are indeed serious reasons, I would even say they are critical. I see you know your manners, and you have a romantic spirit too. Indeed, what can be more romantic than a lovely, heavy golden nugget!
+#show Hero 1
+#hide GoldNugget00
+#show Huber 2
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  9
+But to start business I will need the keys to the abandoned mines - and those keys are under your Excellency's control! I am sure I will find many other interesting things there, and the best of them may even deserve a place in your collection.
+#ANIMATION 9
+#CAMERA 9
+#phrase Huber  10
+Oh, the key? Yes, I did have it somewhere... Well, if the lock is the only barrier between myself and beauty, how can I refuse you the key?

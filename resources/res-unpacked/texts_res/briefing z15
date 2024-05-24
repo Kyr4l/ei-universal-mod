@@ -1,0 +1,32 @@
+About the finds from the Observatory
+#show Witch 3
+#show Hero 4
+#show DCBook 4
+#ANIMATION 63
+#CAMERA 9
+#phrase Witch  1
+I have had a look at your finds... you really did get lucky, you know! It makes one wonder if you are indeed an ordinary man, or mayhap there is a bit of a Chosen in you?
+#hide DCBook
+#show DCBook 5
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+All right, all right, no flattery, just tell me what was in that book!
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  3
+Right, now listen, sweetheart. There is a secret passage to the city, like a narrow corridor in the mountain. It starts south of the gate. To enter, you must say, "Valir and Cania!"
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  4
+What does that mean?
+#ANIMATION 61
+#CAMERA 7
+#phrase Witch  5
+No idea what it means, but it sounds impressive. Next thing: if I were master of the Dead City, I would settle down on the top of Lone Mountain. You can see it from afar, no way to miss it. That is where you must go.
+#hide DCBook
+#show DCBook 4
+#ANIMATION 31
+#CAMERA 9
+#phrase Witch  6
+Well, good luck! And when you meet that old man, be polite! You can be insolent to old useless toads like myself, but you must treat serious Magicians respectfully!

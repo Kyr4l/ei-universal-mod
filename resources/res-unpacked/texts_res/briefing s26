@@ -1,0 +1,24 @@
+About the paper found in the abandoned camp
+#show Elder 3
+#show CodedHadaganNote 4
+#show Hero 5
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+Erfar! Can you read this?
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 44
+#CAMERA 11
+#phrase Elder  2
+There is a conspiracy against you, your life is in danger, never mind papers!
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  3
+You did not answer - can you read it or not?
+#ANIMATION 30
+#CAMERA 9
+#phrase Elder  4
+Well I will think about it... maybe later, when the danger to the Chosen has passed!

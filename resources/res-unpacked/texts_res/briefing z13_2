@@ -1,0 +1,45 @@
+Ask to translate the note
+#show Witch 3
+#show Instruction4orcs00 4
+#show Hero 5
+#ANIMATION 61
+#CAMERA 9
+#phrase Witch  1
+So what are you thrusting that rubbish under my nose for? I thought I told you that the Orcs invented their own scribbles! No way to decipher them without a book which their Seers use to teach each other. So, pretty boy, you will have to go to the Orc-land and get yourself an ABC Book there.
+#hide Instruction4orcs00
+#show Instruction4orcs00 5
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  2
+Another island, then? If you only knew how sick I am of those islands! Toad's eyes, how boring...
+#ANIMATION 63
+#CAMERA 11
+#phrase Witch  3
+Never mind, dear, never mind. You will not suffer from boredom there, have no fear!
+#DESC (Sweetly, mockingly)
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+Right... It seems the old crow is going to surprise me.
+#DESC (To himself. Concerned, like having bad premonition)
+#ANIMATION 44
+#CAMERA 7
+#phrase Witch  5
+To find the Keeper Seer, you will have to go to the southernmost point of Gipath. We call those lands "Sands", though there is not a lot of actual sand around there.
+#hide Instruction4orcs00
+#show Instruction4orcs00 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  6
+But what is plentiful there, are all kinds of lovely, sweet creatures. Orcs, Ogres, Lizards... Just the company to cheer up a bored man, he-he-he.
+#hide Instruction4orcs00
+#show Instruction4orcs00 5
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  7
+All right, all right, enough jokes for now. Could you be serious for one minute?
+#ANIMATION 9
+#CAMERA 3
+#phrase Witch  8
+Oh, if you want serious, listen carefully... a large promontory enters the lake near those sands. That is where the Keeper Seer's cabin is located. Get the ABC Book from him!

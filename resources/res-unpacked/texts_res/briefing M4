@@ -1,0 +1,56 @@
+Talk about the stuff taken from the Chieftain
+#show Hero 1
+#show Smith 2
+#show Awl 6
+#show Knife 7
+#phrase Hero  1
+Look! I took these from the Chieftain and his wife.
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  2
+But... these are the tools have been stolen from me! I cannot believe my eyes!
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  3
+Well, touch them, then!
+#ANIMATION 9
+#CAMERA 7
+#phrase Smith  4
+They are real, my wee tools! Chosen, now you may order whatever you want from me! Err, well, I do not make spells for magic stuff, you have to talk to the Witch about that. But for regular work I would even give you a discount...
+#DESC (At first enthusiastically, then catches himself at talking too much)
+#CAMERA 3
+#phrase Smith  15
+I mean, a small discount, of course...
+#DESC (Much less enthusiastically)
+#CAMERA 11
+#phrase Smith  16
+I mean, if you really ask me to...
+#DESC (With great pain)
+#ANIMATION 7
+#CAMERA 6
+#phrase Hero  17
+Oh relax, I do not want any discounts from you.  But tell me:  how come Free Hunters live so close to the Goblins but they have not beat each other to a pulp yet?
+#DESC (At first squeamishly, then businesslike)
+#ANIMATION 6
+#CAMERA 7
+#phrase Smith  18
+Free Hunters... In my book Brigands they were and Brigands they will stay. And never mind what the Elder says! That was not the first time that they robbed me...
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  19
+Look, could we talk about your grudges later? I asked you about the Goblins!
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  20
+And what do you think I just told you? Listen! There is a rumor that Brigands have dealings not only with Goblins but even with Orcs. Some of the villagers swear they saw a Brigand - Redhead his nickname is - talking with an Orc a couple of times on the road to the Troll cave.
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  21
+Well, that is quite clear. The forest men lead the Elder a merry dance and at the same time pretend to be the village saviors!
+#CAMERA 3
+#phrase Smith  22
+Leading Erfar a merry dance? I wonder...
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  23
+I am sure I am right! We just have to find that Redhead, then we will get to the bottom of it.

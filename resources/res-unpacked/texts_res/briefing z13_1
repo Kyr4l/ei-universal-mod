@@ -1,0 +1,65 @@
+Airy's news
+#show Daughter 5
+#show Witch 3
+#show Hero 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  1
+Look, Chosen, here she is! Just came in as if nothing ever happened! She should thank her lucky stars that she actually managed to find out something useful, otherwise I would give her a good thrashing, the impudent scallywag! But all in good time... all right you shameless creature, tell the Chosen everything, exactly as you told me.
+#ANIMATION 62
+#CAMERA 7
+#phrase Daughter  2
+Well, to the north of the Middle Mountains, there is an old observatory built by the same people who built the Dead City. And there was a library there... Mayhap you can find something there which could help you enter into the city?
+#DESC Proudly
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  3
+Are you sure about that?
+#DESC With certain reservation
+#ANIMATION 7
+#CAMERA 3
+#phrase Daughter  4
+Well, not really... You cannot just walk into the observatory, there are lots of Harpies there! But you can set a Dragon on them, they always fight with one another!
+#DESC A bit embarrassed but then quickly recovers
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  5
+Oh right, it is easy then! I will just go and fetch my tame Dragon, and everything will be just fine!
+#DESC Nastily
+#ANIMATION 32
+#CAMERA 4
+#phrase Witch  6
+There is no need for sarcasm! That is what I was going to suggest!
+#ANIMATION 62
+#CAMERA 7
+#phrase Daughter  7
+Of course I cannot tame Dragons, but I saw how Lizards do it! They have a special amulet, and if the bearer of that amulet nears a Dragon, it will not attack, but instead will follow that person! But the amulet only works with one special Dragon!
+#ANIMATION 44
+#CAMERA 7
+#phrase Daughter  8
+And I also know where you can find the Lizard who has that amulet: he went to the old quarry in the Middle Mountains. He keeps two tame toads there - uh they are so fat and ugly...
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  9
+All right, all right. Let us suppose I get that amulet. Then where do I find that special Dragon?
+#ANIMATION 63
+#CAMERA 1
+#phrase Daughter  10
+The Dragon lives across the lake... If you wait for winter, you can just walk across the ice... but now, in summer, t'will be awfully hard for you to find your way along the shore!
+#DESC Regretfully
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  11
+Tis you who can wait until winter, you silly goose! The Chosen can get there now - with my help, of course. To the north of Dead City is a ravine with green crystals. Crystals are closely related to ice, you know. Bring one to me and I will freeze the lake as if it were winter!
+#ANIMATION 29
+#CAMERA 11
+#phrase Daughter  12
+I will get the crystal!
+#ANIMATION 3
+#CAMERA 9
+#phrase Witch  13
+Be still, chatterbox! I will never let you out of my sight again! Let the Chosen go and fetch that crystal - if he wants to, that is.
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  14
+I see! So to get into the Dead City I need to get to the Observatory. To get into the Observatory I need a tame Dragon. To tame the Dragon I need the amulet. And to get close to the Dragon I need a green crystal... that is about the size of it, is it not? So now all is perfectly simple - just go and fetch all that stuff!

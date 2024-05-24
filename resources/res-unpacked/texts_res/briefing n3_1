@@ -1,0 +1,15 @@
+Take Rowdy back
+#show Hero 1
+#show Merc1 2
+#ANIMATION 45
+#phrase Hero  1
+Hey Rowdy, want to have some fun?
+#ANIMATION 45
+#phrase Merc1  2
+Fun, huh! What do you have in mind then?
+#ANIMATION 9
+#phrase Hero  3
+There is always work for a good soldier like you. I would like you to keep me company once again. All right?
+#ANIMATION 15
+#phrase Merc1  4
+Fine by you, fine by me!

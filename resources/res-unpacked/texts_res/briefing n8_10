@@ -1,0 +1,12 @@
+About the Suslanger missions
+#show Hero 
+#show Merc10
+#ANIMATION 61
+#phrase Merc10  1
+Hey lad, you are lucky! I look at you and I think, hey! I would not mind a slice of that luck for myself...
+#ANIMATION 9
+#phrase Hero  2
+Luck is a tricky thing. You cannot cut off a slice of it, you will have to search for it with me!
+#ANIMATION 64
+#phrase Merc10  3
+Well lad, you said it and I did not. Now I will expect your invitation, and if it does not come, then, in troth, I must believe that you wish to cheat me!

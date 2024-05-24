@@ -1,0 +1,37 @@
+Giving the Goblin his "sacred object" back
+#show Hero 
+#show BGoblinC
+#ANIMATION 45
+#CAMERA 1
+#phrase Hero  1
+Listen Go-Go, how long do you want to stay here? A month? A year? Ten years?
+#CAMERA 11
+#phrase BGoblinC  2
+Me stay here to you give me First Goblin head. Or me just die here!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  3
+Why should I give you back this scarecrow? You never told me anything useful!
+#CAMERA 3
+#phrase BGoblinC  4
+Me told all me knows, not me fault it not useful!
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  5
+Well, it was not my fault either! You know, I think I will just throw this trinket in the fire - maybe then you will finally go away!
+#show VoodooWand 5
+#CAMERA 7
+#ANIMATION 60
+#phrase BGoblinC  6
+Oh, not in fire! Not throw! Go-Go want buy First Goblin, swap for doll. Not just doll-doll, magic doll!
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  7
+Have you lost your brains, single eye? Do you expect me to play with dolls?
+#CAMERA 11
+#phrase BGoblinC  8
+This doll not for play! This doll for magic! Weaken enemy, take strength away!
+#ANIMATION 46
+#CAMERA 10
+#phrase Hero  9
+Hm... Well, that is interesting... All right, give me the doll. But if this is a trick, woe betide you!

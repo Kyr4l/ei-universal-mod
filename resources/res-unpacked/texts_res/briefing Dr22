@@ -1,0 +1,68 @@
+Talk to Dragon
+#show SKD 1
+#show Hero 2
+#CAMERA 1
+#phrase SKD  1
+I am pleased with you, human. So far everything has gone exactly as it should, according to the old traditions. You completed the task I set you. Now I am ready to answer your question.
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  2
+Oh wise Dragon! A misfortune has befallen me. I lost all memories of my past, I do not even know my real name. Could you tell me who I really am?
+#DESC Solemnly, like a prepared speech
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  3
+Hmm... Apparently I was wrong. It is an interesting question... and I am afraid that even I cannot answer it! So what is the appropriate thing to do in such a case? Do I have to eat the human? I would not like to do that...
+#DESC Speaks loudly but to himself as if the hero was not there
+#ANIMATION 30
+#NOLIPS
+#CAMERA 6
+#phrase Hero  4
+Actually, I would not like it either...
+#DESC To himself
+#CAMERA 3
+#phrase SKD  5
+That is what we are going to do, then: I will tell you what I think about your problem, and you will have a chance to ask me another question. As to this one... Let us say I did not quite hear it.
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  6
+So you want to have your memory back. To do that you will need a Magician, and not just any Magician - only a Great Magician would do. Of course there is a Great Magician here in Gipath, otherwise this land would have long since disappeared, along with everyone who lives here.
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  7
+But apparently he is very secretive. Even I have no idea what he looks like and where he can be found. Maybe the Lizards know something about him - they were here long before the Dragons... but if you manage to come to an agreement with them, even I would be surprised.
+#CAMERA 11
+#phrase SKD  8
+Probably you should leave Gipath and look for help in other lands. Maybe Great Magicians will not be so elusive there.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  9
+Yes! I heard there was a Portal somewhere around here! So should I ask where it is?
+#DESC Interrupting
+#CAMERA 3
+#ANIMATION 5
+#phrase SKD  10
+Hmm... Frankly I was never interested in that. But there certainly is a Portal here. Recently I saw a camp set by people wearing real armor - not the leather favored by the locals. They were definitely from other lands, so methinks they would know about Portals!
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  11
+So where was that camp?
+#CAMERA 9
+#ANIMATION 5
+#phrase SKD  12
+Aah, at last you ask a really sensible question. I saw the camp to the northeast of Dead City. There is a party of my skeletons there at the moment, but I will call them back.
+#CAMERA 3
+#phrase SKD  13
+I have had good sport with those newcomers recently! I sent my little skeletons against their soldiers, but the soldiers actually proved to be a good match for them!
+#DESC Not so much to the hero as to himself, reminiscing with gusto
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  14
+So the people survived? I am sure you could have destroyed them!
+#CAMERA 3
+#phrase SKD  15
+Of course I could. But when I play I play fair and respect the rules. And when you always win, it can become boring...
+#CAMERA 9
+#ANIMATION 4
+#phrase SKD  16
+Farewell, human. I answered your question. Now you may leave.

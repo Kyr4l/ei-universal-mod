@@ -1,0 +1,23 @@
+Interrogation
+#show Hero 1
+#show HWLeader 2
+#ANIMATION 11
+#CAMERA 5
+#phrase HWLeader  1
+Pitiful savage, I did you a great honor when I agreed to speak with you! If you wish to live, tell me everything you know about the meteorite which fell on your lands. Talk to me, you animal!
+#CAMERA 2
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  2
+That damn official lured me into a trap! What do I do now? I think that soldier believes me to be a stupid savage - well, let us give him a savage!
+#DESC To himself
+#show Hero
+#show HWLeader
+#ANIMATION 8
+#CAMERA 2
+#phrase Hero  3
+Me... There... Me look after piggies, dunno about no meterites, never heard... no, no...
+#ANIMATION 14
+#CAMERA 5
+#phrase HWLeader  4
+Do not play the fool now!  I do not have a torturer in my unit but my men are real professionals. They do know how to make people talk!

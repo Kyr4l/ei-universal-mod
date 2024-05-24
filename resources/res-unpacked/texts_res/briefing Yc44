@@ -1,0 +1,17 @@
+Ask the chief to help
+#show Hero 1
+#show YCF 2
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  1
+I want to ask your help, Chief!
+#CAMERA 11
+#phrase YCF  2
+Each river flows down its own riverbed, and they only meet in the lake. But you cannot see the lake even from the highest of mountain peaks...
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  3
+Lake? Could say what you want to say in plain language?
+#CAMERA 3
+#phrase YCF  4
+I am telling you, human, that maybe you could become a friend of the Green Clan, but I do not know when it may happen - if at all. Go back to the city, you have no business here!

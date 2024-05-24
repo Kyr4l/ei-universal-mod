@@ -1,0 +1,15 @@
+About Blacksmith's work
+#show Hero 3
+#show Kuzn 5
+#ANIMATION 9
+#CAMERA 9
+#phrase Kuzn  1
+My story is as simple as a straight line in the sand. Apparently someone pushed my hand while the money-lender was giving me money - the very next day my smithy burnt like a bonfire! I am not an escaped slave because I escaped before they had a chance to enslave me.
+#ANIMATION 62
+#CAMERA 3
+#phrase Kuzn  2
+Some of the merchants in town still sell me materials and samples, so here in the Shelter we have weapons and protection. Of course we have to pay for this with good solid gold, but beggars cannot be choosers!
+#ANIMATION 44
+#CAMERA 11
+#phrase Kuzn  3
+You will also have to pay me - so I can pay for the materials and the spells Brother Kehel makes for me.

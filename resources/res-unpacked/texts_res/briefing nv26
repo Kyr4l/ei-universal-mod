@@ -1,0 +1,21 @@
+The Elder is a traitor!
+#show NSheriff
+#show Hero
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  1
+Listen, I want to discuss a very serious matter with you. Suppose I asked you to do one thing and the Elder told you to do something very different - what would you do?
+#DESC Quietly, very seriously
+#ANIMATION 9
+#CAMERA 3
+#phrase Nsheriff  2
+An easy question. You are the Chosen, and you've done everything right thus far. The Elder? Methinks he is a bit weird. Either he deals with Brigands, or there is this murky business about the stolen gold, or his Captain turns out to be a traitor. I do not really trust him. Or... have I said something wrong?
+#DESC Still quietly and seriously. At the end a bit frightened: what if he said something stupid? After it is the Elder, such an important man...
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  3
+You said everything right. And I found out that it was the Elder who has repeatedly tried to destroy me. But now I shall challenge him openly.
+#ANIMATION 6
+#CAMERA 9
+#phrase Nsheriff  4
+I see... I thought something was wrong in our village! Do not worry, Chosen. I am on your side, you can count on me and my people!

@@ -1,0 +1,16 @@
+Ask for help with magic
+#show Hero 1
+#show Witch 2
+#ANIMATION 63
+#CAMERA 5
+#phrase Hero  1
+Estera, do you really know how to make new spells using runes? I know how to use existing spells, but to make new ones... I think only the most wise and experienced Magicians could do that!
+#ANIMATION 11
+#CAMERA 11
+#phrase Witch  2
+Well, you do know how to flatter, I will grant you that! Why not simply ask for help with magic?
+#DESC (A bit mockingly)
+#ANIMATION 7
+#CAMERA 9
+#phrase Witch  4
+All right, all right, let us pretend that you did so. So here is my answer: I will make you the spells you want, pretty boy - providing of course you have enough money. I will not charge you too much like Babur does, but do not expect to get anything for nothing!

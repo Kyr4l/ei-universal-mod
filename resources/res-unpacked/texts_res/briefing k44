@@ -1,0 +1,29 @@
+About Karansul's domain
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  1
+So, my dear fellow, did you manage to find something yet, or did you only find trouble for yourself?
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  2
+I really cannot boast! I've spent all my money and all for nothing. I am afraid I must look for work soon. Would you by any chance know if Karansul needs people to work in his mines?
+#ANIMATION 9
+#CAMERA 3
+#phrase Kapitan  3
+Maybe he does, young man. Recently he installed a mechanical grinder at his site - I remember I gave him Guards to secure the delivery.
+#ANIMATION 44
+#CAMERA 11
+#phrase Kapitan  4
+So now Karansul needs knowledgeable people to look after that machine, because as soon as anything goes wrong with it everyone stops work and rushes to see what happened. They do not move from the spot and chatter the whole time it takes to fix it...
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  5
+So maybe, my dear fellow, you could learn to handle it! If not to fix it, then at least to break it, ha-ha!
+#NOLIPS
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  6
+Hm... Maybe I should try that... The more people come to the broken machine, the more chances I will have to sneak to the foreman's house unseen!
+#DESC To himself

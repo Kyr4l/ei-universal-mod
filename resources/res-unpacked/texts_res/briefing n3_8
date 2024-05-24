@@ -1,0 +1,9 @@
+Take Fairakh back on
+#show Hero 3
+#show Merc8 5
+#ANIMATION 45
+#phrase Hero  1
+Brother Fairakh, could you come with me now? Our enemies outside are probably bored without the benefit of your magic!
+#ANIMATION 15
+#phrase Merc8  2
+I am somewhat bored myself! Of course I am ready to accompany you.

@@ -1,0 +1,32 @@
+Talk to the new Captain
+#show Hero 
+#show NSheriff 
+#CAMERA 9
+#phrase NSheriff  1
+Hmm... Frankly, I do not know what I am supposed to say. I am Rivar. People call me Hulk. They elected me as their new Captain. And the Elder raised no objections for some reason, although he is aware I am not too enamored of fighting.
+#CAMERA 2
+#phrase Hero  2
+Well, if you do not know what to say let me suggest something. Why not start with "I swear I will never do the Chosen any harm, and let anyone who tries be punished severely!"
+#CAMERA 3
+#phrase NSheriff  3
+I swear I will never do the Chosen any harm, and let anyone who tries to do that be punished severely!
+#DESC Eager, happy, solemn
+#CAMERA 3
+#phrase NSheriff  4
+My, sounds really nice! I could never say it so well, I am a very poor speaker.
+#CAMERA 2
+#phrase Hero  5
+And? You have other talents. Look at your arms! I bet you are the strongest man in the village.
+#CAMERA 3
+#phrase NSheriff  6
+Hah, I guess so... probably that is why they elected me Captain. My father was also the strongest, and my grandfather and his father before him.  We have a family secret - how to increase physical strength. A secret word - you do not say it loudly, you just whisper it to yourself. Want me to show you? Want me to whisper it to you now?
+#DESC Pretends to be modest but clearly with pride
+#CAMERA 2
+#phrase Hero  7
+All right, why not? Mayhap it will work!
+#CAMERA 2
+#phrase Hero  8
+Well? Do not tarry, whisper it, Hulk!
+#CAMERA 3
+#phrase NSheriff  9
+It is done! Just try, you will see the difference! But do not thank me, or it will work no more.

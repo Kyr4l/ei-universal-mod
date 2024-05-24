@@ -1,0 +1,13 @@
+zt4_head
+#screen
+zt4_head_screen1
+#position 155 34 645 22
+#rectangle 720 519 799 599
+#text
+zt4_text_screen1
+#screen
+zt4_head_screen2
+#position 155 34 645 22
+#rectangle 720 519 799 599
+#text
+zt4_text_screen2

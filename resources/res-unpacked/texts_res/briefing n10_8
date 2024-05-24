@@ -1,0 +1,19 @@
+Say goodbye to Fairakh
+#show Hero 
+#show Merc8
+#CAMERA 7
+#ANIMATION 15
+#phrase Merc8  1
+Goodbye Blondie. It was fun being with you, though at times it was rather dangerous too.
+#CAMERA 6
+#ANIMATION 45
+#phrase Hero  2
+Would you like to stay here in Gipath, Fairakh?
+#CAMERA 7
+#ANIMATION 45
+#phrase Merc8  3
+And what I would do in this poor barbaric land? Who would appreciate my magic art here? No, I am quite all right in the Shelter. Farewell.
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  4
+Farewell, Fairakh. You helped me a lot and I am grateful to you and for your art.

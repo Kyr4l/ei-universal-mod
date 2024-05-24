@@ -1,0 +1,22 @@
+About life in the village
+#show Hero 1
+#show Sheriff 2
+#CAMERA 5
+#phrase Hero  1
+Why are you so moody, Gort?
+#ANIMATION 32
+#CAMERA 11
+#phrase Sheriff  2
+Well... I wanted to give Babur a nice thrashing but the Elder would not let me. Says now is not the right time. Huh, looks just right to me! The Craftsman's too arrogant... charges so much, no one can afford it!
+#ANIMATION 14
+#CAMERA 3
+#phrase Sheriff  3
+And that story with the Free Hunters - I do not even want to talk about it. Made such a fuss about nothing! But never mind, the Elder and me will make him pay for everything yet!
+#ANIMATION 7
+#CAMERA 10
+#phrase Hero  4
+Well, that is not my business. Just tell me this... several times I saw... I do not even know how to describe it... something like a little Dragon but very small, like a fly, really. It would fly to me, buzz around and fly away. What is that?
+#ANIMATION 31
+#CAMERA 7
+#phrase Sheriff  5
+Oh, I do not have much time for those flies - smash, and that is that! Now a fly, now a flake, he-he-he!

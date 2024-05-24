@@ -1,0 +1,10 @@
+Autofilters
+You can use inventory filters to display only 
+those items belonging to a particular category. 
+These filers may be activated only manually 
+or both manually and automatically.
+On: the filters will be switched on automatically 
+every time a new item is put into inventory 
+(according to the item type).
+Off: the filers will be switched on/off only 
+manually.
