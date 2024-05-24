@@ -1,0 +1,19 @@
+Take Mairana on the team
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+Well, do you need my help or not?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+I could use it, but you would probably want money for your services? The risk, the danger and all that...
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc6  3
+Well to be honest I am not a member of the Mercenaries' Guild yet so I cannot demand money. My reward will be the experience I gain which will help me join the Guild later. And after that I will make up for lost time, I assure you!
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  4
+Well... all right then, you are in!

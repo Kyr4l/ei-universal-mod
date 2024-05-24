@@ -1,0 +1,44 @@
+Accuse the Captain of treason
+#show Elder 2
+#show Hero 5
+#show Sheriff 3
+#show Letter2orcs00 4
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero  1
+Gort! I was told this note was written by you, it is your handwriting. And that means you are the traitor!
+#hide Letter2orcs00
+#show Letter2orcs00 2
+#ANIMATION 32
+#CAMERA 4
+#phrase Sheriff  2
+Whaaat? That wart put the blame on me?! All right then! You want a traitor? I'll give you a traitor! Ha, it is probably for the best... I am sick of people telling me what to do. I shall be the new boss in this village!
+#hide Letter2orcs00
+#show Letter2orcs00 5
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  3
+Is that so?! You are going to pay for everything now!!!
+#DESC (Sound of drawn weapon)
+#CAMERA 5
+#ANIMATION 3
+#hide Letter2orcs00
+#phrase Sheriff  4
+Oh, now is too early. Time enough when I return with the forest men!
+#hide Sheriff run
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  5
+Stop! Get back here, you cowardly toad!
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero  7
+He escaped, the dirty scum!
+#ANIMATION 7
+#CAMERA 7
+#phrase Elder  8
+Yes, he is indeed a lowly man, a scoundrel! But do not err - he is still dangerous, he and his people! Oh dear, I trusted him so much... there can be no excuse for someone so naive!
+#ANIMATION 15
+#CAMERA 9
+#phrase Elder  9
+We must catch Gort and kill him before he gathers all the remaining Brigands and returns with them. He cannot have gone too far, so if you make haste, you will catch him in the Foothills!

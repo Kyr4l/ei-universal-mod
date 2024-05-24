@@ -1,0 +1,18 @@
+About the found body
+#show Hero 3
+#show DriadArrow00 4
+#show Kapitan 5
+#ANIMATION 31
+#CAMERA 5
+#phrase Hero  1
+Captain! I found the body of a man in the woods, he was killed with this arrow. It seems to be the snoop from the city…
+#hide DriadArrow00
+#show DriadArrow00 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Kapitan  2
+Aha! The Woodsfolk violated the treaty and killed a human! Now I have a reason to show those toad-like creatures who is the boss around here! I will send such a punitive expedition, people will talk about it all around Ingos. On my honor!
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  3
+And I think you should show this arrow to the Governor. He likes such things, and it never hurts to be in the Governor's good books, does it? I will tell him about you. But remember, young man, his Excellency likes to show visitors his collections and just loves it when they show sufficient admiration, both for him and for his baubles!

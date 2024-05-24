@@ -1,0 +1,16 @@
+About the Elder's kidnapper
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+If the raven takes a hawk's booty, what is left for the hawk? Only to take his revenge upon the raven! If one man offends us mortally, another man will take revenge on the offender.
+#CAMERA 11
+#phrase YCF  2
+Go to the land of abandoned mines from the city suburbs and walk a short distance to the east. You will see a military camp between the two hills and soldiers who are training to kill. The spy among them is like a tiger among rats, you cannot miss him. You will do a good deed if you avenge the spy who kidnapped Habbura!
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  3
+It seems to me that lately I have done nothing but good deeds. But somehow they all end with someone being killed by me. I am neither faint-hearted, nor am I a hired killer!
+#CAMERA 11
+#phrase YCF  4
+The Hunter kills the tiger and sells its skin. Does that mean that the tiger was a harmless kitten? A Friend of the Green Clan avenges Habbura's kidnapping. Does that mean that the dead kidnapper was an innocent victim? Think about that, human!

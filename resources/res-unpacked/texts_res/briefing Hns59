@@ -1,0 +1,55 @@
+Talk to Aiset-Bek
+#show Hero 3
+#show Karh 5
+#show IZ 4
+#ANIMATION 32
+#CAMERA 2 -30 10 10
+#phrase Karh  1
+Oh glorious Aiset-Bek! We have new prisoners in our dungeon. I believe this one to be a very valuable specimen. We caught this man near the Portal leading to the Useless Lands, and he resisted arrest like a mad dog! He is well built and looks bright enough. I humbly hope my fervor will not go unrewarded!
+#ANIMATION 14
+#CAMERA 4 30 5 3
+#phrase IZ  2
+Are you calling that underfed dog a valuable specimen? I am inclined to give you a good lashing for even daring to acquire something like that!
+#ANIMATION 31
+#CAMERA 2 30 7 7
+#phrase Karh  3
+With all due respect, glorious sir, I cannot agree with that. I swear by all my ancestors right down to the eighth generation, he is very good or I am not Lieutenant Kardaur!
+#ANIMATION 11
+#CAMERA 4 30 5 3
+#phrase IZ  4
+I have no use for your oaths, what I need is a decent training for my soldiers! Ho, blonde jackal! Speak up! Do you want to live for a few more hours? Or should I have you butchered right now?
+#ANIMATION 6
+#CAMERA 2 0 3 0.8
+#phrase Hero  5
+Everyone acts like a hero with an unarmed prisoner. Give me back my weapons and armour, let me out of here and we will see who has how long to live.
+#ANIMATION 32
+#CAMERA 4 30 5 3
+#phrase IZ  6
+Hah! The cub shows teeth!
+#ANIMATION 3
+#CAMERA 2 30 7 7
+#phrase Karh  7
+I assure you sir, he can bite too!
+#ANIMATION 9
+#CAMERA 4 30 5 3
+#phrase IZ  8
+All right then. Use him, but remember: if he makes less than half of the road, you will take his place and no flattery will save you then!
+#ANIMATION 15
+#CAMERA 2 -30 7 7
+#phrase Karh  9
+Just give the order, and I go to Death Canyon right now. And my last words will be words of love for you, my lord!
+#hide IZ
+#show Hero 1
+#show Karh 2
+#ANIMATION 6
+#CAMERA 2 35 6 1.5
+#phrase Karh  10
+Now listen carefully, you pitiful nobody. Tomorrow morning you will be given food and weapons. Then you will be let out in Death Canyon near the main gates of the southern fortress. And you will be joined by a few young soldiers who crave for promotion.
+#ANIMATION 9
+#CAMERA 2 -30 7 7
+#phrase Karh  11
+Your task will be to reach the gates of the northern fortress, and the soldiers' task will be to prevent you from doing so. Frankly, it will not be a very fair sports, ha-ha, since you will also have to face spiders trained to catch escaped prisoners.
+#ANIMATION 11
+#CAMERA 2 35 6 1.5
+#phrase Karh  12
+You can resist, there will be no punishment for that. But if you die before time and the glorious Aiset-Bek is displeased, I promise you, I will pay the Necromancers enough to make them torture your spirit just as an experienced butcher would torture your body, only for much, much longer!

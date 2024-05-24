@@ -1,0 +1,15 @@
+Leave Rowdy in the village
+#show Hero 1
+#show Merc1 2
+#ANIMATION 9
+#phrase Hero  1
+Sorry but this time I need you here.
+#ANIMATION 45
+#phrase Merc1  2
+Why is that?
+#ANIMATION 45
+#phrase Hero  3
+That is my decision. Is that not enough for you?
+#ANIMATION 15
+#phrase Merc1  4
+Of course...but if you need me, I will be right here in the village, y'see!!

@@ -1,0 +1,16 @@
+Meeting the Craftsman
+#show Hero 1
+#show Smith 2
+#ANIMATION 11
+#CAMERA 1 -15 6 3
+#phrase Smith  1
+So you are the Chosen? And you came to meet me? Well, all right, suppose my name is Babur. Anything else?
+#DESC Defiantly, clearly wanting to start a conflict
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+Are you always so polite?
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  3
+You do not like me, you are free to go any time.

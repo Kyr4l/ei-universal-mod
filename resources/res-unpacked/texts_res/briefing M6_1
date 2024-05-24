@@ -1,0 +1,43 @@
+About the visit to the Witch
+#show Hero 
+#show Smith 
+#ANIMATION 31
+#CAMERA 9
+#phrase Smith  1
+Emm... Sorry, did we not mention the money for the Magic Bit a while ago?
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  2
+Yes, we did. I seem to remember that you wanted half or better, something like that?
+#ANIMATION 15
+#CAMERA 11
+#phrase Smith  4
+That is right, I did. And I still do.
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  5
+So take it!
+#ANIMATION 5
+#CAMERA 7
+#phrase Smith  6
+Take what? You have not offered me anything!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  7
+Correct. That is exactly half of the amount I received from the Witch.
+#ANIMATION 3
+#CAMERA 11
+#phrase Smith  8
+Whaaat? She did not pay? That old Witch, that miserable old hag!
+#DESC Amazed, nastily
+#ANIMATION 14
+#CAMERA 9
+#phrase Smith  9
+And you... You are a toad brain, to put it very mildly. And it is my fault too. Such an expensive object, and I let it out of my hands! Now I can kiss the money goodbye!
+#DESC At first defiantly, after "you" a pause - he wanted to say something else but reconsidered just in time. After that talks darkly, admitting his own fault.
+#nolips
+#ANIMATION 30
+#CAMERA 2 0 2.2 2
+#phrase Hero  10
+That is all right, get it out of your system. You could never understand what I got in return for that thing!
+#DESC To himself, mockingly. Accent on "what"

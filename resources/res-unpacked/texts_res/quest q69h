@@ -1,0 +1,20 @@
+Scientist's remains
+You must steal the corpse of the scientist from the laboratory in the southern part of the desert. The laboratory is well protected by magic traps, plus there are barracks nearby, full of guards.
+#subobj  1
+Find the Commandant
+The house of the laboratory Commandant is located in the southern part of the Necromancers' village, surrounded by a round wall. The easiest way to get there is through the northern gates: that is the most boring and uncomfortable of posts, so they usually assign the youngest guards to it.
+#subobj  2
+Enter the Commandant's house
+The laboratory Commandant's house is located in the south western part of the Necromancers' village.
+#subobj  3
+Get the key
+To get into the laboratory you must have the key; you will find it in the Commandant's house.
+#subobj  4
+Find the laboratory
+Necromancer Taivo's laboratory is located in the eastern part of the Necromancers' village.
+#subobj  5
+Open laboratory's gates
+To open the laboratory gates you will need the Commandant's key.
+#subobj  6
+Take the scientist's head
+The body of the dead scientist lies on the laboratory table. To interrogate his spirit you must take the head and bring it to Necromancer Kholai's tower.

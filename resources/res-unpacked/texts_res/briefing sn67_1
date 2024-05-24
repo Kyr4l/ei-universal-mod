@@ -1,0 +1,33 @@
+Kholai's present
+#show Hero 
+#show OldNekro
+#ANIMATION 58
+#CAMERA 11
+#phrase OldNekro  1
+Oh by the way, young man! Your visit may prove to be useful to me also for another reason. Thanks to that sucker Taivo I now have a lot of free time on my hands. So I use it to make certain experiments which I could never conduct before.
+#ANIMATION 57
+#CAMERA 3
+#phrase OldNekro  2
+Now I wish to put the results to the test. And I will need your help here, young man!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  3
+Is that so? If he tries to make some kind of special zombie out of me, I will strike first and fast!
+#DESC To himself, wary, tense
+#ANIMATION 58
+#CAMERA 7
+#phrase OldNekro  4
+Ha-ha-ha! Young man, you cannot hide your feelings, they are written all over your face! Relax, I am not going to work on you seriously although the material is not bad, not bad at all...
+#ANIMATION 57
+#CAMERA 11
+#phrase OldNekro  5
+I will give you an object which you will test in..., shall we say, combat conditions? If you stay alive, then the experiment is a success.
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  6
+And if not?
+#ANIMATION 59
+#CAMERA 7
+#phrase OldNekro  7
+Then I shall pursue a different theory. So I win whatever happens, and your chances are... mmm... fifty-fifty. Not bad odds for Suslanger at all!

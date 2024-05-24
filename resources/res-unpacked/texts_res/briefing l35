@@ -1,0 +1,17 @@
+About the Lizards' treasure
+#show OLIZ 1
+#show Hero 2
+#CAMERA 9
+#phrase OLIZ  1
+Did you get the Lizards' treasure? Are you pleased?
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  2
+I will be pleased when your scales grow inside your skin! Why did you cheat me?!
+#CAMERA 11 5 5 2
+#phrase OLIZ  3
+Did I cheat you? You like humor. I made a joke. Do you not find it funny?
+#ANIMATION 7
+#CAMERA 5
+#phrase Hero  4
+Not one bit. You know, Hermit... I think a serious style suits you much better. Do not make any more jokes, will you?

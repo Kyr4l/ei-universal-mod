@@ -1,0 +1,31 @@
+Talk to odalisque
+#show Hero 1
+#show Nalo 2
+#ANIMATION 6
+#CAMERA 2 -30 10 10
+#phrase Nalo  1
+Listen carefully: northwest of the Canyon there is a passage which leads to a cave. Guards never enter it because they are afraid of the Wormheads, but I know for a fact that it also has other exits to the outside. When I let you out try to get there.
+#ANIMATION 31
+#CAMERA 2 35 6 1.5
+#phrase Nalo  2
+My father hunted rats and often went to the caves... one day he did not return...this is what he told me.
+#ANIMATION 9
+#CAMERA 2 -30 7 7
+#phrase Nalo  3
+In the cave next to Death Canyon, the Lords of the Dungeons built their temple and two bridges across the lava rivers - the eastern and the western one. They are controlled by simple levers, so the main thing is to find them. You will have to go all the way through the cave from west to east; there must be a way out!
+#ANIMATION 44
+#CAMERA 2 35 6 1.5
+#phrase Nalo  4
+When I let you out take your things and go north to the main gates. Kardaur will be on duty today and he will have the key. Kill him, open the fortress and do not waste time - they will be after you very soon!
+#ANIMATION 15
+#CAMERA 2 30 7 7
+#phrase Nalo  5
+You could hold them up for a while if you open all the cages in the zoo - they are right here in the southern fortress. There is a lever near the gates which opens all cages at once. I do not know why it is there, but I think the Guards must need it for one purpose or other.
+#ANIMATION 31
+#CAMERA 2 0 3 0.8
+#phrase Hero  6
+I hope it is in good working order! And now thank you, sweetheart. I hope you find a more agreeable destiny...
+#ANIMATION 31
+#CAMERA 2 35 6 1.5
+#phrase Nalo  7
+And I wish you luck too. Farewell now.

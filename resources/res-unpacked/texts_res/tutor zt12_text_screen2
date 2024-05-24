@@ -1,0 +1,6 @@
+     The Information window has several modes. To switch between them use the buttons at its left edge, or use the keyboard. Here are the modes and a description:
+
+     General view: shows general information about the character's view (<,> key)
+     Hit locations: shows what damage has been inflicted on his/her different body parts (<.> key)
+     Attributes: shows the character's attributes (</> key)
+     Spell effects: shows what spells are currently affecting the character and the time (in seconds) remaining before the effect wears off (<'> key)

@@ -1,0 +1,2660 @@
+## format:
+## 
+## #zone zone_name allod_name type // types can be: game, brief, edge
+## #res
+## MprFile MobFile                 // files to load
+## #maps
+## Xsize Ysize                     // size in sectors
+## MinimapTexture ObjTexture       // textures to load: for minimap and objectives screen
+## #figure
+## FigureName                      // for single player only: figure to load
+## #position
+## x y z                           // for single player only: position on global map
+## #weather
+## none | rain | snow              // weather type in this zone. default: rain
+## #sky
+## normal | cave                   // sky type in this zone. default: normal
+## #exit 1
+## neighbour_zone_name NExit       // neighbour zone for this exit and corresponding exit there
+## #deploy
+## x1 y1 x2 y2                     // deploy rectangle for this exit
+## #remove
+## x1 y1 x2 y2                     // remove rectangle for this exit
+## #passtime
+## PassTime                        // for single player only: default pass time 
+## #view
+## Angle                           // camera rotate angle of this entrance
+## #exit 2
+## ...
+##
+## #quest quest_name
+## x y z                           // for single player only: position on global map
+##
+################################################
+
+## figure names - for single player only
+
+#allod gipat
+ingm2arrow
+ingm2pointball
+ingm2scull
+ingm1down
+ingm2armor
+
+#allod ingos
+ingm5arrow
+ingm5pointball
+ingm5flag1
+ingm3down
+ingm5armor
+
+#allod suslanger
+ingm6arrow
+ingm6pointball
+ingm6flag1
+ingm4down
+ingm6armor
+
+################################################
+
+## Base on Gipat
+#zone bz1g gipat brief
+#res
+basegipat basecam
+#camera
+bz1g
+#figure
+ingm2base
+#position
+-2.749 -0.186 0.261
+#restrict
+66 66 20
+
+## To Ruins
+#exit 1
+gz1g_bz1g 1
+#deploy
+56 52 62.5 56.5
+#remove
+56 39 62.5 45
+#view
+135.2
+## #remove
+## 322 0 469 139
+
+################################################
+
+## WAY FROM BASE TO Ruins
+#zone gz1g_bz1g gipat edge
+#position
+-2.749 -0.277 0.235
+
+## To Ruins
+#exit 1
+gz1g 2
+
+## To Foothills
+#exit 2
+gz3g 1
+
+## To Witch
+#exit 3
+gz1g_gz2g 1
+
+################################################
+
+## Zone GZ1G RUINS
+#zone gz1g gipat game
+#res
+zone1 zone1
+#maps
+8 6
+zone1map zone1quest
+#figure
+ingm101
+#position
+-2.370 0.120 0.805
+
+## one-way entrance in the beginning of the game
+#exit 1
+none 0
+#deploy
+49 133 59 143
+#view
+90
+
+## to base
+#exit 2
+bz1g 1
+#deploy
+184 101 190 108
+#remove
+181 108 193 120
+
+## ## To Witch
+## #exit 3
+## gz1g_gz2g 1
+## #deploy
+## 172 182 185 188
+## #remove
+## 165 175 190 190
+## #passtime
+## 35
+
+## ## To Foothills
+## #exit 4
+## gz1g_gz3g 1
+## #deploy
+## 227 67 233 75
+## #remove
+## 233 45 243 75
+## #passtime
+## 13
+
+################################################
+
+
+## ## CRAP for making gz1g two-type zone: game and edge
+## #zone gz1g_ gipat edge
+## #position
+## -2.370 0.120 0.805
+
+## ## To Gipat base
+## #exit 1
+## bz1g 1
+
+## ## To Foothills
+## #exit 2
+## gz1g_gz3g 1
+
+## ## To Witch
+## #exit 3
+## gz1g_gz2g 1
+
+################################################
+
+## WAY FROM RUINS TO FOOTHILLS
+#zone gz1g_gz3g gipat edge
+#position
+-2.596 -0.176 0.229
+
+## ## To Ruins
+## #exit 1
+## gz1g 4
+## #passtime
+## 3
+
+## To Base
+#exit 1
+bz1g 1
+#passtime
+1
+
+## To Foothills
+#exit 2
+gz3g 1
+#passtime
+5
+
+################################################
+
+## WAY FROM RUINS TO WITCH
+#zone gz1g_gz2g gipat edge
+#position
+-2.798 -0.021 0.235
+
+## ## To Ruins
+## #exit 1
+## gz1g 3
+## #passtime
+## 4
+
+## To Base
+#exit 1
+bz1g 1
+#passtime
+1
+
+## To Witch
+#exit 2
+gz2g 1
+#passtime
+2
+
+#################################################
+
+## Witch
+#zone gz2g gipat game
+#res
+zone2 zone2
+#maps
+4 6
+zonemap zone2quest
+#figure
+ingm102
+#position
+0 0 0
+
+## To Ruins
+#exit 1
+gz1g_gz2g 2
+#deploy
+60 13 74 17
+#remove
+60 0 74 13
+#passtime
+2
+
+## To Foothills
+#exit 2
+gz2g_gz3g 2
+#deploy
+106 40 111 55
+#remove
+111 40 128 55
+#view
+66.4321
+#passtime
+4
+
+## T0 Witch-Brief
+#exit 3
+bz2g 1
+#deploy
+49 138 53 142.7
+#remove
+51.8 144.2 55.5 150 45
+#view
+278.18
+
+########################################################3
+
+## Witch-Briefing
+#zone bz2g gipat brief
+#res
+bz2g bz2g
+#camera
+bz2g
+#figure
+ingm2witchhouse
+#position
+-2.785 0.435 0.363
+#restrict
+64 82 15
+
+## To Witch
+#exit 1
+gz2g_bz2g 1
+#deploy
+55 84 57 87
+#remove 
+52.6 80.1 55.4 85.4 30
+#view
+95.5
+
+##deploy 58.9 80.3 60.25 86.75
+
+##deploy 50.6 73.6 52.7 81.8
+##remove 48.1 68.9 52.7 73.6
+
+##deploy 16.06 12.17 24.35 13.28
+##remove 16.06 5.26 18.65 13.28
+
+################################################
+
+## WAY FROM Witch-Briefing to Witch
+#zone gz2g_bz2g gipat edge
+#position
+-2.792 0.33 0.275
+
+## To Witch
+#exit 1
+gz2g 3
+
+################################################
+
+## Zone GZ3G FOOTHILLS
+#zone gz3g gipat game
+#res
+zone3obr zone3obr
+#maps
+9 10
+zone3obrmap zone3quest
+#figure
+ingm103
+#position
+-0.617 -0.214 0.941
+
+## To Ruins
+#exit 1
+gz1g_gz3g 2
+#deploy
+20 130 26 147
+#remove
+0 130 20 147
+#view
+336.9
+#passtime
+5
+
+## To Witch
+#exit 2
+gz2g_gz3g 1
+#deploy
+20 192.5 25 206
+#remove
+0 192.5 20 206
+#view
+271.436
+#passtime
+4
+
+## To Mountains
+#exit 3
+gz3g_gz6g 1
+#deploy
+265 10 270 30
+#remove
+270 10 287 30
+#view
+78.575
+#passtime
+10
+
+## To Orc Delta
+#exit 4
+gz3g_gz7g 1
+#deploy
+215 15 230 20
+#remove
+215 0 230 15
+#view
+3.2189
+#passtime
+7
+
+## To Cave
+#exit 5
+gz3g_gz5g 1
+#deploy
+230 243 234 253
+#remove
+220 248 230 257
+#view
+146.022
+#passtime
+16
+
+#################################################
+##TEST!!!!!!!!!
+## WAY FROM Foothills to Cave
+#zone gz3g_gz5g gipat edge
+#position
+-1.742 0.386 0.34
+## -1.068 -0.031 0.288
+
+## To Foothills
+#exit 1
+gz3g 5
+
+## To Cave
+#exit 2
+gz5g 1
+
+################################################
+
+## WAY FROM Foothills to MOUNTAINS
+#zone gz3g_gz6g gipat edge
+#position
+-1.72 -0.166 0.24
+
+## To Foothills
+#exit 1
+gz3g 3
+
+## To Mountains
+#exit 2
+gz6g 1
+
+################################################
+
+## WAY FROM FOOTHILLS TO ORC DELTA
+#zone gz3g_gz7g gipat edge
+#position
+-1.896 -0.227 0.251
+
+## To Foothills
+#exit 1
+gz3g 4
+
+## To Orc Delta
+#exit 2
+gz7g 1
+
+################################################
+
+## WAY FROM FOOTHILLS TO WITCH
+#zone gz2g_gz3g gipat edge
+#position
+-2.6 0.129 0.274
+
+## To Foothills
+#exit 1
+gz3g 2
+
+## To Witch
+#exit 2
+gz2g 2
+
+################################################
+
+## Dragon's Cave
+#zone gz5g gipat game
+#res
+zone5_1 zone5_1
+#maps
+8 5
+zone5_1map zone5quest
+#figure
+ingm105
+#position
+0.809 -1.553 0.796
+#weather
+none
+#sky
+cave
+
+## CRAP!!!!!!!!!!!!!!
+## To Foothills
+
+## To Mountains
+## #exit 1
+## gz5g_gz6g 1
+## #deploy
+## 20 80 25 85
+## #remove
+## 5 75 20 85
+
+## To Cave
+#exit 1
+gz3g_gz5g 2
+#deploy
+13 81.5 18.3 84.7
+#remove
+0 81.5 13 84.7
+##deploy 20 80 25 85
+##remove 5 75 20 85
+#view
+266.267
+#passtime
+16
+
+## To City of Dead
+#exit 2
+gz5g_gz9g 1
+#deploy
+230 20 238 23
+#remove
+245 0 250 8
+##remove 235 10 250 15
+#view
+39.9149
+#passtime
+1
+
+######################################################
+
+## WAY FROM CAVE to MOUNTAINS
+#zone gz5g_gz6g gipat edge
+#position
+-1.068 -0.031 0.288
+
+## To Cave
+#exit 1
+gz5g 1
+       
+## To City of Dead
+#exit 2
+gz6g 4
+
+########################################################
+
+## WAY FROM CAVE to CITY OF DEAD
+#zone gz5g_gz9g gipat edge
+#position
+-0.305 -0.381 0.392
+
+## To Cave
+#exit 1
+gz5g 2
+
+## To City of Dead
+#exit 2
+gz9g 4
+
+########################################################
+
+## Rift
+#zone gz4g gipat game
+#res
+zone4 zone4
+#maps
+16 10
+zone4map zone4quest
+#figure
+ingm104
+#position
+0 0 0
+
+##CRAP!!!!!!!!!!!!!!!!!!!!!!!!
+## To Foothills
+
+## To Mountains
+#exit 1
+gz4g_gz6g 1
+#deploy
+20 60 30 68
+#remove
+0 45 10 70
+#view
+279.09
+#passtime
+6
+
+## CRAP!!!!!!!!!!!!!!!!!!
+## To Orc Delta
+
+## To City of Dead
+#exit 2
+gz4g_gz9g 1
+#deploy
+218 17 224 23
+#remove
+218 7 224 17
+#view
+359.931
+#passtime
+4
+
+## To Tunnel
+#exit 3
+gz4g_gz10g 1
+#deploy
+109 190 112 196
+#remove
+113 196 116 200 45
+#view
+1.74041
+#passtime
+1
+
+## To Tunnel2
+#exit 4
+gz4g_gz10g_exit 1
+#deploy
+197 218 199 227
+#remove
+190 225 197 227 45
+#view
+0
+#passtime
+1
+
+## To Hadagans
+#exit 5
+none 0
+#deploy
+290 60 300 80
+#view
+0
+
+## To Rick
+#exit 6
+bz7g 1
+#deploy
+242 251 248 256
+#remove
+240 256 251 261
+#view
+333.143
+
+#######################################################
+
+## Had-Briefing
+#zone bz4g gipat brief
+#res
+bz4g bz4g
+#camera
+bz4g
+#cage
+#position
+0 0 0
+#restrict
+73 73 20
+
+## To Rift
+#exit 1
+none 0
+## gz4g_bz4g 1
+#deploy
+74.35 85.1 76.4 86.25
+#remove
+74.35 85.1 76.4 86.25
+
+##deploy 42.9 53.12 44.27 53.9
+##remove 42.9 53.12 44.27 53.9
+
+#############################################################
+
+## From H-Br to Rift
+#zone gz4g_bz4g gipat edge
+#position
+-0.211 0.238 0.293
+
+## To Rift
+#exit 1
+gz4g 5
+
+#############################################################
+
+## Rick-Briefing
+#zone bz7g gipat brief
+#res
+bz7g bz7g
+#camera
+bz7g
+#figure
+ingm2rick
+#position
+-0.24 0.691 0.272
+#weather
+none
+#sky
+cave
+#restrict
+58 72 25
+
+## To Rift
+#exit 1
+gz4g_bz7g 1
+#deploy
+48 84 54 90
+#remove
+36.3 94.1 57.6 99.5
+
+##deploy 14.2 40 18.2 44
+##remove 10 40 14.2 44
+
+#############################################################
+
+## From Rick-Br to Rift
+#zone gz4g_bz7g gipat edge
+#position
+-0.24 0.691 0.272
+
+## To Rift
+#exit 1
+gz4g 6
+
+#############################################################
+
+## WAY FROM RIFT to MOUNTAINS
+#zone gz4g_gz6g gipat edge
+#position
+-1.001 0.211 0.353
+
+## To Rift
+#exit 1
+gz4g 1
+
+## To Mountains
+#exit 2
+gz6g 3
+
+#########################################################
+
+## WAY FROM RIFT to City of Dead
+#zone gz4g_gz9g gipat edge
+#position
+-0.383 -0.043 0.349
+
+## To Rift
+#exit 1
+gz4g 2
+
+## To City of Dead
+#exit 2
+gz9g 1
+
+##########################################################
+
+## Way from Rift to Tunnel
+#zone gz4g_gz10g gipat edge
+#position
+-0.675 0.397 0.247
+
+##To Rift
+#exit 1
+gz4g 3
+
+##To Tunnel
+#exit 2
+gz10g 1
+
+###########################################################
+
+## Way from Rift to Tunnel 2
+#zone gz4g_gz10g_exit gipat edge
+#position
+-0.486 0.657 0.331
+
+##To Rift
+#exit 1
+gz4g 4
+
+##To Tunnel
+#exit 2
+gz10g 2
+
+###########################################################
+
+## Mountains
+#zone gz6g gipat game
+#res
+zone6 zone6
+#maps
+7 12 
+zone6map zone6quest
+#figure
+ingm106
+#position
+0 0 0
+
+## To Foothills
+#exit 1
+gz3g_gz6g 2
+#deploy
+10 25 20 45
+#remove
+0 15 10 35
+#view
+293.346
+#passtime
+10
+
+## To Orc Delta
+#exit 2
+gz6g_gz7g 1
+#deploy
+40 10 53 15
+#remove
+40 0 53 10
+#view
+337.039
+#passtime
+8
+
+## To Rift
+#exit 3
+gz4g_gz6g 2
+#deploy
+204 180 214 190
+#remove
+214 168 223 195 
+#view
+136.269
+#passtime
+6
+
+## ## To Cave
+## ## WHERE?
+## #exit 4
+## gz5g_gz6g 2
+## #deploy
+## 182 130 188 136
+## #remove
+## 177 136 188 141
+
+############################################################
+
+## Way From Mountains to Orc-Delta
+#zone gz6g_gz7g gipat edge
+#position
+-1.425 -0.341 0.237
+
+##To Mountains
+#exit 1
+gz6g 2
+
+##To Orc-Delta
+#exit 2
+gz7g 2
+
+###########################################################
+
+## Orc Delta
+#zone gz7g gipat game
+#res
+zone7 zone7
+#maps
+15 10
+zone7map zone7quest
+#figure
+ingm107
+#position
+0 0 0
+
+## To Foothills
+#exit 1
+gz3g_gz7g 2
+#deploy
+152 300 161 305 
+#remove
+152 305 161 319
+#view
+183.929
+#passtime
+7
+
+## To Mountains
+#exit 2
+gz6g_gz7g 2
+#deploy
+295 300 305 305
+#remove
+295 305 305 319
+#view
+188.95
+#passtime
+8
+
+## To City of Dead
+#exit 3
+gz7g_gz9g 1
+#deploy
+454 235 460 246
+#remove
+460 235 479 246
+#view
+86.3075
+#passtime
+11
+
+## To Orc-Lizardmans
+#exit 4
+gz7g_gz8g 1
+#deploy
+453 173 458 178
+#remove
+458 178 479 192
+#view
+104.04
+#passtime
+14
+
+##CRAP!!!!!!!!!!!!!!!!!!!!!!!!
+## To Rift
+
+#########################################################
+
+## Way From Orc-Delta to City of Dead
+#zone gz7g_gz9g gipat edge
+#position
+-1.177 -0.694 0.235
+
+##To Orc-Delta
+#exit 1
+gz7g 3
+
+##To City of Dead
+#exit 2
+gz9g 2
+
+##########################################################
+
+## Way From Orc-Delta to Orc-Lizardmans
+#zone gz7g_gz8g gipat edge
+#position
+-1.097 -1.164 0.193
+
+##To Mountains
+#exit 1
+gz7g 4
+
+##To Orc-Delta
+#exit 2
+gz8g 1
+
+############################################################
+
+## Orc-Lizardmans
+## CHECK MAPS and COORDS
+#zone gz8g gipat game
+#res
+zone8 zone8
+#maps
+11 11 
+zone8map zone8quest
+#figure
+ingm108
+#position
+0 0 0
+
+## To Orc-Delta
+#exit 1
+gz7g_gz8g 2
+#deploy
+9 232 14 238
+#remove
+2 238 14 247.4
+#view
+230.386
+#passtime
+14
+
+## To City of Dead
+#exit 2
+gz8g_gz9g 1
+#deploy
+169 332 179 338
+#remove
+165 338 179 349
+#view
+192.876
+#passtime
+9
+
+## To Lizards
+#exit 3
+bz5g 1
+#deploy
+## 110 80 130 107
+57 296 61 306
+#remove
+47 296 57 306
+#view
+244.759
+
+## To Orcs
+#exit 4
+bz6g 1
+#deploy
+275 154 280 163
+#remove
+280 154 287 162
+#view
+244.751
+
+##########################################################
+
+## Way From Orc-Lizardmans To City of Dead
+#zone gz8g_gz9g gipat edge
+#position
+-0.634 -1.067 0.215
+
+##To Orc-Lizardmans
+#exit 1
+gz8g 2
+
+##To Orc-Delta
+#exit 2
+gz9g 3
+
+###########################################################
+
+## Liz-Briefing
+#zone bz5g gipat brief
+#res
+bz5g bz5g
+#camera
+bz5g
+#position
+0 0 0
+#restrict
+60 75 35
+
+## To Orcs-Lizards
+#exit 1
+gz8g_bz5g 1
+#deploy
+66.4 76.6 70.2 81
+#remove
+70.2 74.7 74 81
+
+##deploy 42 15.4 45.9 20.4
+##remove 45.9 15.4 49.4 20.7
+
+#############################################################
+
+## From L-Br to Orc-Liz
+#zone gz8g_bz5g gipat edge
+#position
+-0.76 -1.223 0.233
+
+## To Orcs-Liz
+#exit 1
+gz8g 3
+
+#############################################################
+
+## Orcs-Briefing
+#zone bz6g gipat brief
+#res
+bz6g bz6g
+#camera
+bz6g
+#position
+0 0 0
+#restrict
+78 65 25
+
+## To Orcs-Lizards
+#exit 1
+gz8g_bz6g 1
+#deploy
+60 62 62.11 66.13
+#remove
+55.1 60 60.4 66
+
+##deploy 60.4 60 65.2 66
+##remove 55.1 60 60.4 66
+
+##deploy 5.58 32.24 9.25 35.9
+##remove 1 32.24 5.58 36.57
+
+#############################################################
+
+## From O-Br to Orc-Liz
+#zone gz8g_bz6g gipat edge
+#position
+-0.221 -1.548 0.209
+
+## To Orcs-Liz
+#exit 1
+gz8g 4
+
+#############################################################
+
+## City of the Dead
+## CHECK MAPS and COORDS
+#zone gz9g gipat game
+#res
+zone9 zone9
+#maps
+14 10 
+zone9map zone9quest
+#figure
+ingm109
+#position
+0 0 0
+
+## To Rift
+#exit 1
+gz4g_gz9g 2
+#deploy
+205 295 210 300
+#remove
+205 305 215 320
+#view
+172.785
+#passtime
+4
+
+## To Orc-Delta
+#exit 2
+gz7g_gz9g 2
+##deploy 15 245 20 255
+##remove 0 240 15 260
+#deploy
+10 148 15 155
+#remove
+0 148 10 155
+#view
+298.155
+#passtime
+11
+
+## To Orc-Lizardmans
+#exit 3
+gz8g_gz9g 2
+#deploy
+10 90 15 100
+#remove
+0 90 10 100
+#view
+281.534
+#passtime
+9
+
+## To Cave
+#exit 4
+gz5g_gz9g 2
+#deploy
+## 354 225 370 228
+361.7 224.75 368 228
+#remove
+## 364 219 370 228
+359 228 368 232
+#view
+52.1216
+#passtime
+1
+
+## To Dragon-Briefing
+#exit 5
+bz3g 1
+#deploy
+379 182 389 192
+#remove
+379 182 389 192
+#view
+347.813
+
+#############################################################
+
+## WAY FROM City of Dead to Dragon
+#zone gz9g_bz3g gipat edge
+#position
+0.044 -0.531 0.235
+
+## To City of Dead
+#exit 1
+gz9g 5
+
+#############################################################
+
+## Dragon-Briefing
+#zone bz3g gipat brief
+#res
+bz3g bz3g
+#camera
+bz3g
+#position
+0 0 0
+#restrict
+61 60 10
+
+## To City of Dead
+#exit 1
+gz9g_bz3g 1
+#deploy
+52.6 59 56.4 63 
+#remove
+52.6 63 56.4 66
+
+##deploy 56.4 59 60 63
+##remove 52.6 59.4 56.1 66.1
+##deploy 26.6 28 28.9 31.8
+##remove 26.6 28 28.9 31.8
+
+#############################################################
+
+## Tunnel
+## CHECK MAPS and COORDS
+#zone gz10g gipat game
+#res
+zone10 zone10
+#maps
+8 6
+zone10map zone10quest
+#figure
+ingm110
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+
+## To Rift 1
+#exit 1
+gz4g_gz10g 2
+#deploy
+122 10 125 20
+#remove
+116 2 122 14 45
+#view
+349.289
+#passtime
+1
+
+## To Rift 2
+#exit 2
+gz4g_gz10g_exit 2
+#deploy
+234.4 137.4 244.2 159.8
+#remove
+244.4 150.23 256 163.8 45
+#view
+186.734
+#passtime
+1
+
+#############################################################
+
+## FAKE - Monster Condo
+#zone gz21g gipat game
+#res
+zonemichel zonemichel
+#maps
+9 10
+zone3map zone3quest
+#figure
+ingm120
+#position
+0 0 0
+
+## To Ruins
+#exit 1
+gz1g_gz21g 2
+#deploy
+20 135 26 143
+#remove
+5 125 20 150
+#passtime
+1
+
+## To Monster's Condo
+#zone gz1g_gz21g gipat edge
+#position
+0.0 0.0 0.0
+
+##To Ruins
+#exit 1
+gz1g 2
+
+##To Monster's Condo
+#exit 2
+gz21g 1
+
+#############################################################
+##INGOS                                                    ##
+#############################################################
+
+## Town and Driads
+## CHECK MAPS and COORDS
+#zone gz11k ingos game
+#res
+zone11 zone11
+#maps
+16 12
+zone11map zone11quest
+#figure
+ingm311
+#position
+-1.097 -0.285 -0.163
+#weather
+snow
+#sky
+normal
+
+## To Far Forest
+#exit 1
+gz11k_gz12k 1
+#deploy
+489 332 496 342
+#remove
+496 332 509 363
+#view
+105.4
+#passtime
+12
+
+## To Manufacture
+#exit 2
+gz11k_gz13k 1
+#deploy
+496 189 508 198
+#remove
+496 189 508 214
+#view
+2.78706
+#passtime
+13
+
+## To Driad Way
+#exit 3
+gz11k_gz13dk 1
+#deploy
+497 75 502 83
+#remove
+502 75 509 82
+#view
+83.1368
+#passtime
+22
+
+## Enter from Gipat
+## FAKE DEPLOY
+#exit 4
+none 0
+#deploy
+54 202 57 205
+#view
+190.728
+
+##deploy 46 200 100 210
+
+## To town
+#exit 5
+bz8k 1
+#deploy
+330 255 344 260
+#remove
+330 265 344 270 45
+#view
+195.472
+
+## To Driads
+#exit 6
+bz9k 1
+#deploy
+300 92 310 99
+#remove
+288 86 302 94
+#view
+322.528
+
+#############################################################
+
+## Far Forest
+## CHECK MAPS and COORDS
+#zone gz12k ingos game
+#res
+zone12 zone12
+#maps
+10 16
+zone12map zone12quest
+#figure
+ingm312
+#position
+0 0 0
+#weather
+snow
+#sky
+normal
+
+## To Town and Driads
+#exit 1
+gz11k_gz12k 2
+#deploy
+22 108 35 122
+#remove
+6 108 22 128
+#view
+295.418
+#passtime
+12
+
+## To Manufacture
+#exit 2
+gz12k_gz13k 1
+#deploy
+97 15 106 23
+#remove
+94 5 106 15
+#view
+17.7266
+#passtime
+7
+
+## To Mine A
+#exit 3
+gz12k_gz14ak 1
+#deploy
+64 454 67 461
+#remove
+54 451 64 461
+#view
+309.888
+#passtime
+2
+
+## To Mine
+#exit 4
+gz12k_gz14k 1
+#deploy
+240 439 252 449
+#remove
+236 449 252 459
+#view
+32.0946
+#passtime
+2
+
+## To Mine B
+#exit 5
+gz12k_gz14bk 1
+#deploy
+104 457 109 461
+#remove
+96 461 102.5 468
+#view
+46.5843
+#passtime
+2
+
+#############################################################
+
+## Manufacture
+## CHECK MAPS and COORDS
+#zone gz13k ingos game
+#res
+zone13 zone13
+#maps
+14 10
+zone13map zone13quest
+#figure
+ingm313
+#position
+0 0 0
+#weather
+snow
+#sky
+normal
+
+## To Town and Driads
+#exit 1
+gz11k_gz13k 2
+#deploy
+20 255 30 266
+#remove
+5 255 20 270
+#view
+254.72
+#passtime
+13
+
+## To Driad Way
+#exit 2
+gz11k_gz13dk 2
+#deploy
+15 120 26 137
+#remove
+5 120 15 135
+#view
+270.652
+#passtime
+22
+
+## To Far Forest
+#exit 3
+gz12k_gz13k 2
+#deploy
+136 297 151 305
+#remove
+131 305 151 316
+#view
+185.13
+#passtime
+7
+
+## To new Driads
+#exit 4
+bz10k 1
+#deploy
+212 9 221 14
+#remove
+212 2 221 9
+#view
+346.447
+
+#############################################################
+
+## Mine
+## CHECK MAPS and COORDS
+#zone gz14k ingos game
+#res
+zone14 zone14
+#maps
+8 6
+zone14map zone14quest
+#figure
+ingm314
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+
+## To Far Forest A
+#exit 1
+gz12k_gz14k 2
+#deploy
+112.3 15.2 116.9 26.4
+#remove
+114 8 122 16 45
+#view
+0.690968
+#passtime
+2
+
+## To Far Forest
+#exit 2
+gz12k_gz14ak 2
+#deploy
+15 99 20 106
+#remove
+3 99 15 106
+#view
+288.36
+#passtime
+2
+
+## To Far Forest B
+#exit 3
+gz12k_gz14bk 2
+#deploy
+14 30 20 40
+#remove
+3 30 14 39
+#view
+276.013
+#passtime
+2
+
+## To Dgirl
+#exit 4
+bz11k 1
+#deploy
+215 48 221 53
+#remove
+214 49 219 54
+#view
+162.321
+
+###########################################################
+
+## Way From Town to Far Forest
+#zone gz11k_gz12k ingos edge
+#position
+-0.563 -0.189 0.024
+
+##To Town
+#exit 1
+gz11k 1
+
+##To Far Forest
+#exit 2
+gz12k 1
+
+###########################################################
+
+## Way From Town to Manufacture
+#zone gz11k_gz13k ingos edge
+#position
+## -0.012 -1.009 0.189
+-0.566 -0.672 0.072
+
+##To Town
+#exit 1
+gz11k 2
+
+##To Manufacture
+#exit 2
+gz13k 1
+
+###########################################################
+
+## Way From Town to Driad Way
+#zone gz11k_gz13dk ingos edge
+#position
+## -0.048 -1.277 0.161
+-0.568 -1.065 0.099
+
+##To Town
+#exit 1
+gz11k 3
+
+##To Manufacture
+#exit 2
+gz13k 2
+
+###########################################################
+
+## Way From Forest to Manufacture
+#zone gz12k_gz13k ingos edge
+#position
+## 0.23 -0.791 0.208
+-0.302 -0.37 0.022
+
+##To Far Forest
+#exit 1
+gz12k 2
+
+##To Manufacture
+#exit 2
+gz13k 3
+
+###########################################################
+
+## Way From Far Forest to Mine
+#zone gz12k_gz14k ingos edge
+#position
+## 0.768 0.341 0.278
+0.719 0.639 0.066
+
+##To Forest
+#exit 1
+gz12k 4
+
+##To Mine
+#exit 2
+gz14k 1
+
+###########################################################
+
+## Way From Far Forest to Mine A
+#zone gz12k_gz14ak ingos edge
+#position
+0.768 0.341 0.278
+
+##To Forest
+#exit 1
+gz12k 3
+
+##To Mine
+#exit 2
+gz14k 2
+
+###########################################################
+
+## Way From Far Forest to Mine B
+#zone gz12k_gz14bk ingos edge
+#position
+0.768 0.341 0.278
+
+##To Forest
+#exit 1
+gz12k 5
+
+##To Mine
+#exit 2
+gz14k 3
+
+###########################################################
+
+## Town
+#zone bz8k ingos brief
+#res
+bz8k bz8k
+#camera
+bz8k
+#figure
+ingm5base
+#position
+-1.097 -0.285 -0.163
+#weather
+snow
+#restrict
+63 63 30
+
+## To TownDr
+#exit 1
+gz11k_bz8k 1
+#deploy
+80.6 39.5 82.7 49
+#remove
+85 34.5 89.4 44.3 45
+
+##deploy 46.85 7.2 54.4 13
+##remove 54.4 3.2 59.35 7.2
+
+#############################################################
+
+## From Town to Town-dr
+#zone gz11k_bz8k ingos edge
+#position
+## -0.527 -0.756 0.167
+-0.914 -0.485 -0.078
+
+## To Town
+#exit 1
+gz11k 5
+
+#############################################################
+
+## Dr1
+#zone bz9k ingos brief
+#res
+bz9k bz9k
+#camera
+bz9k
+#figure
+ingm5drbase
+#position
+-1.513 -1.143 -0.078
+#weather
+snow
+#restrict
+69 52 30
+
+## To Dr1
+#exit 1
+gz11k_bz9k 1
+#deploy
+68 59 75.5 62
+#remove
+68 62 75.5 66
+
+##deploy 39.8 6.8 42.65 12
+##remove 39.8 2 45 6.8
+
+#############################################################
+
+## From Town to Dr1
+#zone gz11k_bz9k ingos edge
+#position
+## -0.898 -1.371 0.18
+-1.403 -1.122 -0.061
+
+## To Town
+#exit 1
+gz11k 6
+
+#############################################################
+
+## N-Dr
+#zone bz10k ingos brief
+#res
+bz10k bz10k
+#camera
+bz10k
+#figure
+ingm5drbase
+#position
+0.572 -1.53 -0.023
+#weather
+snow
+#restrict
+63 66 20
+
+## To N-Dr
+#exit 1
+gz13k_bz10k 1
+#deploy
+53 50 59.8 55.2
+#remove
+53 44.9 59.8 50
+
+##deploy 73 47.4 80 51.6
+##remove 75.9 40.1 80 51.6
+
+##deploy 16.66 52.16 19.6 57.6
+##remove 13.7 57.6 19.6 62.3
+
+#############################################################
+
+## From Manufacture to N-Dr
+#zone gz13k_bz10k ingos edge
+#position
+## 0.447 -1.57 0.23
+0.653 -1.506 -0.023
+
+## To Manufacture
+#exit 1
+gz13k 4
+
+#############################################################
+
+## DGril
+#zone bz11k ingos brief
+#res
+bz11k bz11k
+#camera
+bz11k
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+#restrict
+89 45 15
+
+## To Cave
+#exit 1
+gz14k_bz11k 1
+#deploy
+84.3 40.1 89 42.3
+#remove
+87.8 50.7 92 54
+
+
+##deploy 87.8 50.7 92 54
+##remove 87.8 50.7 92 54
+
+##deploy 23.9 52.4 27.5 55.8
+##remove 23.5 55.8 27.5 58.6
+
+#############################################################
+
+## From Cave to DGril
+#zone gz14k_bz11k ingos edge
+#position
+## 1.184 0.02 0.365
+1.161 0.337 0.274
+
+## To Cave
+#exit 1
+gz14k 4
+
+#############################################################
+##SUSLANGER                                                ##
+#############################################################
+
+## Canyon
+## CHECK MAPS and COORDS
+#zone gz15h suslanger game
+#res
+zone15 zone15
+#maps
+10 12
+zone15map zone15quest
+#figure
+ingm415
+#position
+0 0 0
+#weather
+tornado
+#sky
+normal
+
+## To CCave
+#exit 1
+gz15h_gz16h 1
+#deploy
+105 315 115 320
+#remove
+102 315 110 321.75
+#view
+107.239
+#passtime
+26
+
+## First Deploy
+#exit 2
+none 0
+#deploy
+75 154 83 159
+#view
+216.837
+
+## Second Deploy
+#exit 3
+none 0
+#deploy
+61 120 71 128
+
+## Baba Deploy
+#exit 4
+none 0
+#deploy
+64 88 68 96
+
+#############################################################
+
+## CCave
+## CHECK MAPS and COORDS
+#zone gz16h suslanger game
+#res
+zone16 zone16
+#maps
+10 5
+zone16map zone16quest
+#figure
+ingm416
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+
+## To Canyon
+#exit 1
+gz15h_gz16h 2
+#deploy
+5 74 25 86
+#view
+254.196
+#passtime
+26
+
+#######################################################################
+
+## Necromancer's Desert
+## CHECK MAPS and COORDS
+#zone gz17h suslanger game
+#res
+zone17 zone17
+#maps
+12 12
+zone17map zone17quest
+#figure
+ingm417
+#position
+0 0 0
+#weather
+tornado
+#sky
+normal
+
+## To Pritown
+#exit 1
+gz17h_gz18h 1
+#deploy
+371 60 381 75
+#view
+83.5508
+#passtime
+15
+
+## To base
+#exit 2
+bz14h 1
+#deploy
+73 174 90 187.5
+#view
+26.6911
+#passtime
+3
+
+## To Tower
+#exit 3
+bz15h 1
+#deploy
+300 287 306 295	
+#view
+309.735
+
+###################################################################
+
+## Pritown
+## CHECK MAPS and COORDS
+#zone gz18h suslanger game
+#res
+zone18 zone18
+#maps
+10 12
+zone18map zone18quest
+#figure
+ingm418
+#position
+0 0 0
+#weather
+tornado
+#sky
+normal
+
+## To Necro Desert
+#exit 1
+gz17h_gz18h 2
+#deploy
+55 299 59 312
+#remove
+46 299 55 312
+#view
+329.346
+#passtime
+15
+
+## To Portal
+#exit 2
+gz18h_gz19h 1
+#deploy
+304 70 316 80
+#view
+75.4368
+#passtime
+8
+
+## To JF
+#exit 3
+bz16h 1
+## #deploy 141 216 160 235
+#deploy
+144 227 151 244
+#remove
+135 227 144 244 
+
+#######################################################################
+
+## Portal
+## CHECK MAPS and COORDS
+#zone gz19h suslanger game
+#res
+zone19 zone19
+#maps
+16 16
+zone19map zone19quest
+#figure
+ingm419
+#position
+0 0 0
+#weather
+tornado
+#sky
+normal
+
+## To Pritown
+#exit 1
+gz18h_gz19h 2
+#deploy
+2 428 14 437
+#view
+254.724
+#passtime
+8
+
+## To Starosta
+#exit 2
+bz18h 1
+#deploy
+400 423.5 409.5 428.2
+#remove
+400 428.2 409.5 432.7
+#view
+46.237
+
+###################################################################
+
+## Way From Canyon to CCave
+#zone gz15h_gz16h suslanger edge
+#position
+-1.643 -0.826 0.03
+
+##To Canyon
+#exit 1
+gz15h 1
+
+##To Mine
+#exit 2
+gz16h 1
+
+###################################################################
+
+## Way From Canyon to Canyon
+#zone gz15h_gz15h suslanger edge
+#position
+0 0 0
+
+##To Canyon
+#exit 1
+gz15h 3
+
+###################################################################
+
+## Way From Necro Desert to PriTown
+#zone gz17h_gz18h suslanger edge
+#position
+-0.816 0.931 0.032
+
+##To Necro Desert
+#exit 1
+gz17h 1
+
+##To Mine
+#exit 2
+gz18h 1
+
+###################################################################
+
+## Way From PriTown To Portal
+#zone gz18h_gz19h suslanger edge
+#position
+0.395 0.03 -0.308
+
+##To PriTown
+#exit 1
+gz18h 2
+
+##To Portal
+#exit 2
+gz19h 1
+
+####################################################################
+
+## Cage
+#zone bz13h suslanger brief
+#res
+bz13h bz13h
+#camera
+bz13h
+#cage
+#position
+0 0 0
+#weather
+none
+#restrict
+65 60 15
+
+## To Cave
+#exit 1
+none 0
+#deploy
+62.4 59.9 62.6 60
+#remove
+56 56.6 58.1 63
+#deployangle
+95
+
+##deploy 62.6 60.45 62.65 60.5
+
+##deploy 62.8 59.9 62.89 59.99
+
+##deploy 62.4 59.9 62.6 60.1
+
+##deploy 62.1 56.6 63.2 63
+
+##deploy 29 2 32.8 5.4
+##remove 29 5.4 34.2 8.6
+
+#############################################################
+
+## beglye
+#zone bz14h suslanger brief
+#res
+bz14h bz14h
+#camera
+bz14h
+#figure
+ingm6base
+#position
+-2.128 1.315 0.109
+#weather
+none
+#sky
+cave
+#restrict
+58 37 25
+
+## To Desert
+#exit 1
+gz17h_bz14h 1
+#deploy
+64.4 39.4 69.6 45.5
+#remove
+69.6 39.6 73 45.5
+#passtime
+3
+
+##deploy 52.3 54.66 57.83 58
+##remove 57.83 54.66 59.6 58.24
+
+#############################################################
+
+## From Begl to DGril
+#zone gz17h_bz14h suslanger edge
+#position
+-2.128 1.315 0.148
+
+## To Desert
+#exit 1
+gz17h 2
+
+####################################################################
+
+## Necrotower
+#zone bz15h suslanger brief
+#res
+bz15h bz15h
+#camera
+bz15h
+#position
+0 0 0
+#weather
+none
+#restrict
+46 45 15
+
+## To Desert
+#exit 1
+gz17h_bz15h 1
+#deploy
+44.4 26.4 48.5 31.4
+#remove
+44.4 21.4 48.5 26.4
+
+##deploy 13.1 5 15.6 7
+##remove 13.5 1.2 15.6 5
+
+#############################################################
+
+## From Ntower to Desert
+#zone gz17h_bz15h suslanger edge
+#position
+-1.074 1.491 0.009
+
+## To Desert
+#exit 1
+gz17h 3
+
+####################################################################
+
+## Junofil
+#zone bz16h suslanger brief
+#res
+bz16h bz16h
+#camera
+bz16h
+#position
+0 0 0
+#weather
+none
+#restrict
+60 46 20
+
+## To Town
+#exit 1
+gz18h_bz16h 1
+#deploy
+79.2 37.8 87.3 40.8
+#remove
+80 31.4 87.3 37.8
+
+##deploy 44.4 5.9 48.8 9.7
+##remove 48.8 2 52.6 5.9
+
+
+#############################################################
+
+## From JF to Pritown
+#zone gz18h_bz16h suslanger edge
+#position
+-0.236 0.528 -0.366
+
+## To Town
+#exit 1
+gz18h 3
+
+####################################################################
+
+## Starosta
+#zone bz18h suslanger brief
+#res
+bz18h bz18h
+#camera
+bz18h
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+#restrict
+55 60 10
+
+## To Portal
+#exit 1
+gz19h_bz18h 1
+#deploy
+51.5 44.2 57.9 46.7
+#remove
+49 39.5 55 44.2
+
+
+##deploy 49 54 55.5 58.4
+##remove 49 58.4 55.5 62.1
+
+#############################################################
+
+## From Starosta to Portal
+#zone gz19h_bz18h suslanger edge
+#position
+1.971 -0.054 -0.332
+
+## To Portal
+#exit 1
+gz19h 2
+
+####################################################################
+##FINAL								  ##
+####################################################################
+
+## FINAL
+## CHECK MAPS and COORDS
+#zone gz20g gipat game
+#res
+zone20 zone20
+#maps
+5 5
+zone20map zone20quest
+#figure
+ingm120
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+
+## Enter to Final 
+#exit 1
+none 0
+#deploy
+78.06 69.92 81.96 71.91
+#view
+180
+#deployangle
+270
+
+###########################################################################
+
+## quests coordinates
+
+#quest q0g
+-2.871  -0.307  0.235
+190 106
+#quest q1ag
+-2.45  0.05  0.222
+37.5 138.75
+#quest q1g
+-2.391  0.335  0.222
+44 250
+#quest q2g
+-2.189  0.177  0.198
+148 185
+#quest q3g
+-2.286 -0.091  0.197
+101 73 
+#quest q4g
+-1.942 0.195  0.215
+197.5 207.5
+#quest q5g
+-0.862 -0.06 0.341
+74 61
+#quest q5dg
+-1.897 -0.107 0.206
+243 57
+#quest q6g
+-2.695 0.383 0.367
+60 150.75
+## 66 145
+#quest q7g
+-1.514 -0.095 0.209
+55 69
+#quest q8g
+-2.381 -0.739 0.23
+58.125 166.875
+#quest q9g
+-1.346 -1.101 0.163
+379 84
+#quest q10g
+-1.773 -1.195 0.36
+253 71
+#quest q11g
+-1.521 -0.879 0.181
+337 154
+#quest q12g
+-0.763 -0.505 0.234
+103.25 189
+#quest q13g
+-2.309 -0.533 0.172
+93.75 264.375
+#quest q13ag
+-2.085 -0.47 0.244
+150 268.125
+#quest q14g
+-0.579 -1.623 0.184
+99 193.875
+#quest q14ag
+-1.393 -0.186 0.211
+102 57
+#quest q15bg
+-1.312 0.109 0.252
+136.5 169.5
+#quest q15ag
+-0.837  0.323 0.341
+50 122
+#quest q16g
+-0.883 0.69 0.402
+60 272
+#quest q17g
+0.054 -0.228 0.424
+372.75 273
+#quest q18g
+-1.238 0.619 0.303
+168 319.5
+#quest q19g
+-1.775 -0.483 0.242
+225 296.25
+#quest q20g
+0.084 -0.488 0.284
+381.5 194.25
+#quest q22g
+-0.667 -0.171 0.241
+100 46
+#quest q23g
+-2.384 -0.022 0.193
+70 137.5
+#quest q24g
+-1.226 0.008 0.246
+159 88.5
+#quest q25g
+-1.406 -0.028 0.219
+108 63 63 118.5
+#quest q26g
+-0.876 -0.305 0.281
+33.25 288.75
+#quest q29g
+-0.318 0.277 0.256
+312 106 
+## #quest q30ag
+## -0.342 0.126 0.279
+## #quest q30bg
+## -0.779 -1.696 0.2
+#quest q30g
+-0.826 -1.228 0.249
+60.5 302.5
+## #quest q31ag
+## -0.296 0.091 0.307
+## #quest q31bg
+## -0.777 -1.711 0.2
+#quest q34g
+-0.656 -1.571 0.17
+158.125 145.75 154 185.625
+#quest q35g
+-0.677 -1.84 0.163
+138.875 83.875
+#quest q35ag
+-0.707 -1.965 0.15
+145.75 107.25
+#quest q36g
+-0.694 0.346 0.286
+354 230
+#quest q36ag
+-0.533 0.621 0.427
+238 143
+#quest q37g
+-0.306 0.64 0.158
+250 252
+#quest q39g
+-1.576 0.171 0.309
+57 177
+#quest q40g
+-0.123 -1.524 0.198
+305.25 163.625
+#quest q40ag
+-0.582 -1.379 0.229
+136.125 264
+#quest q41g
+-0.424 -1.902 0.277
+264 99
+#quest qk9g
+0.37 0.239 0.241
+452 30
+#quest q42k
+-0.981 -0.326 -0.139
+340 256
+## -1.225 -1.044 0.222
+#quest q43k
+-0.705 -0.293 -0.138
+444 248
+## -0.167 -0.78 0.235
+#quest q44k
+-0.189 -0.828 -0.02
+64.75 182
+## 0.509 -0.933 0.194
+#quest q45ak
+-1.985 -0.278 -0.089
+164 324
+## -1.173 -0.674 0.185
+#quest q45k
+## -0.764 -1.25 0.226
+-1.144 -1.251 -0.138
+304 94
+#quest q46k
+## 0.294 -0.958 0.198
+-0.255 -0.686 -0.058
+140 236.25
+#quest q46ak
+## 0.294 -0.958 0.198
+-0.255 -0.586 -0.058
+#quest q46bk
+-0.433 -0.707 -0.036
+31.5 259 141.75 294
+#quest q47bk
+0.13 -1.096 0.149
+24.5 250.25
+#quest q47ck
+-0.596 -1.335 0.173
+#quest q47ak
+## 0.389 -0.608 0.226
+0.04 -0.08 -0.167
+146 120
+#quest q48k
+## 0.656 -108 0.128
+1.238 -0.556 -0.001
+355.25 243.25
+#quest q49k
+## 0.107 0.123 0.208
+-0.014 0.513 -0.123
+64 392
+#quest q50ak
+## -0.238 -1.216 0.21
+-0.723 -1.026 -0.029
+496 80
+#quest q50bk
+## 0.225 -1.518 0.194
+0.588 -1.38 -0.013
+227.5 22.75
+#quest q50ck
+0.398 -1.557 0.23
+304 94
+#quest q51k
+## 0.152 -0.351 0.196
+## -0.174 0.276 -0.128
+## 0.214 0.369 0.203
+0.214 0.369 -0.1
+264 382
+#quest q52k
+0.619 -0.066 0.233
+#quest q53k
+## 0.591 -0.52 0.161
+0.422 0.003 -0.092
+270 68
+#quest q54k
+## 0.214 0.369 0.155
+0.13 0.836 -0.155
+72 450 106 444 222 438
+#quest q55k
+## 1.277 0.032 0.32
+1.253 0.33 0.189
+218 45
+#quest qk10k
+-0.142 0.099 -0.132
+176 276
+#quest qk11k
+-0.07 -1.271 0.101
+98 105
+#quest qk12k
+0.931 -0.56 0.024
+285.25 276.5
+#quest qk13k
+0.119 -0.751 0
+171.5 232.75
+#quest qk14k
+0.302 -0.616 0.014
+231 287
+#quest qk15k
+-1.641 -1.044 0.147
+168 46
+#quest q60h
+-1.102 -1.053 -0.028
+207 321
+#quest q61h
+-1.329 -2.032 -0.017
+186 70.5
+#quest q62h
+-1.649 -1.032 0.001
+111 319.5
+#quest q63h
+-1.566 0.084 -0.036
+276.25 117.5
+#quest q64h
+0.091 0.285 -0.264
+#quest q64ah
+0.091 0.285 -0.264
+273 192 151.5 103.5
+#quest q65h
+-0.416 0.223 -0.328
+60 84
+#quest q66h
+0.179 -0.096 -0.327
+286.5 43.5
+#quest q67h
+-0.267 0.542 -0.284
+124.5 243
+#quest q68h
+-1.142 1.436 0.027
+297 294
+#quest q69h
+-1.247 0.772 0.009
+255 105
+#quest q70h
+0.125 0.967 -0.173
+210 327
+#quest q71h
+1.866 -0.078 -0.306
+404 430
+#quest q72h
+2.123 -1.415 -0.287
+456 62
+#quest q73g
+0.126 1.186 0.24
+81.875 61.875
+#quest qk30h
+-0.246 0.945 -0.272
+102 343.5
+#quest qk31h
+-1.945 0.454 0.006
+45 82.5
+#quest qk32h
+-1.961 1.368 -0.002
+78 349.5
+#quest qk16h
+0.887 0.11 -0.262
+152 472
+#quest qk17h
+0.504 -0.324 -0.379
+56 340
+#quest qh1h
+-1.765 -1.255 0.035
+51 285
+#quest qh2h
+-0.967 -1.968 0.004
+253.5 48
+#quest qh3h
+-1.825 -1.488 -0.016
+48 187.5
+#quest qh4h
+-0.858 -1.629 -0.052
+276 168
+#quest qh5h
+-1.35 -1.379 -0.024
+237 234
+#quest qh6h
+-0.922 -1.276 -0.006
+273 252

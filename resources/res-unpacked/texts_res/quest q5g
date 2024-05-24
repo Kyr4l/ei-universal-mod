@@ -1,0 +1,14 @@
+Finding magic bit
+The Orcs who live in the cave in the north-east of the Foothills have a magic object which can be of interest to the witch. According to the map taken from the brigand, the object is hidden in the closed sarcophagus. The Seer of the Cave Orcs has the key. Note: To reach the cave, take the road to the north-east of the Foothills and trick the Troll who lives next to the cave entrance. To get deeper into the cave you must have a drawbridge mechanism. If you do not have it, you could ask the Captain.
+#subobj  1
+Lower the bridge
+To get into the inner parts of the cave you must lower the drawbridge. To achieve that you will need a drawbridge part.
+#subobj  2
+Find the sarcophagus key
+The Orc Seer has it.
+#subobj  3
+Find the sarcophagus containing the magic bit
+The sarcophagus containing the magic bit must be somewhere close to the place where the Orcs live. To look for it in the remote passages? Not very productive!.
+#subobj  4
+Take the bit
+To get the bit you must open the sarcophagus with the key.

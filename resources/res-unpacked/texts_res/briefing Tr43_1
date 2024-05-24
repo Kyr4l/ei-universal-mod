@@ -1,0 +1,37 @@
+About the theft in the governor's house
+#show Hero 1
+#show Shopper 2
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  1
+I always say no magic can replace live guards! For example, I pay good money to my guards and no one has managed to steal anything from me yet. But start talking about magic and your brains go on holiday! It is the Governor's own fault that he trusted the Magician Diera - even an amateur like Baldie Flein managed to get past her traps!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+What Baldie?
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  3
+ What are you talking about?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  4
+You said that it was some Baldie who robbed the Governor?
+#ANIMATION 61
+#CAMERA 11
+#phrase Shopper  5
+I said nothing of the kind. You do not use some unusual sort of mushrooms or grass by any chance, do you? No? Well, all right then, but when you start hearing things which have not been said, the next stage is seeing things which are not there!
+#hide Shopper
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  6
+A cunning fox that Karansul  - he let it slip in excitement, but then immediately backed off! He definitely knows something, but how can I make him talk?
+#DESC To himself
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  7
+On the other hand, Sver seems to dislike the merchant so mayhap he could help me make him talk?
+#DESC To himself

@@ -1,0 +1,8 @@
+Inverse camera up/down move
+When moving the camera up/down with the 
+right mouse button pressed, the direction of 
+the camera movement may be changed:
+Off: The camera will turn accordingly to 
+the direction of the mouse shifted up or down.
+On: The camera will turn in the direction 
+opposite to that where mouse moves.

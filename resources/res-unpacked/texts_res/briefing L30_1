@@ -1,0 +1,28 @@
+Hermit's present
+#show Hero 
+#show OLIZ 
+#CAMERA 9
+#phrase OLIZ  1
+Human, I must tell you... you will face many dangers.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero  2
+Is that so? What a surprise!
+#CAMERA 3
+#phrase OLIZ  3
+So now you know. I want you to be able to survive these dangers. This will help you.
+#show DragonWand 7
+#ANIMATION 6
+#CAMERA 6
+#phrase Hero  4
+What is it? Looks like a horn or a Shell. The one who made it probably did not know how it would turn out in the end!
+#CAMERA 11 10 5 2
+#phrase OLIZ  5
+Maybe not. Maybe he did. But take it anyway. It will help you.
+#ANIMATION 32
+#CAMERA 2 25 6 3
+#phrase Hero  6
+But how? What I am supposed to do with it?
+#CAMERA 1 0 4 4
+#phrase OLIZ  7
+I do not know that. You are human, you are clever. Work it out for yourself.

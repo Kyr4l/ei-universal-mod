@@ -1,0 +1,69 @@
+About the body which has been found
+#show Hero 1
+#show Trapper 2
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  1
+I found the body of a man, and it looks like it was Snoop. Look how he was killed...
+#show Hero 3
+#show DriadArrow00 5
+#show Trapper 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  2
+Oh dear! Woodsfolk shoot such arrows out of their tubes! And you can always tell whose arrow it was - each tribe has its own colors and signs!
+#hide DriadArrow00
+#show DriadArrow00 3
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  3
+What Woodsfolk? We never heard of them where I come from!
+#hide DriadArrow00
+#show DriadArrow00 5
+#ANIMATION 62
+#CAMERA 3
+#phrase Trapper  4
+You live and learn, boy! I thought they were known throughout Ingos, but apparently that is not so. Briefly, they are tiny humans who live in the woods. I often see them and I even know some of them. I will tell you more about them later if you wish, just ask me.
+#hide DriadArrow00
+#show DriadArrow00 3
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  5
+I will not. Meanwhile could you tell me about this arrow and which tribe it belongs to?
+#hide DriadArrow00
+#show DriadArrow00 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Trapper  6
+I cannot read the signs on arrows, that is the problem! Only the Woodsfolk can help you there. But I will tell you who can help.
+#hide DriadArrow00
+#show Hero 1
+#show Trapper 2
+#ANIMATION 63
+#CAMERA 3
+#phrase Trapper  7
+Captain Tilvar has been looking for an excuse to subdue the Woodsfolk for a long time now and now you find a man killed by one of their arrows. The Guards would definitely go for a punitive expedition! So it would be in the Woodsfolks' best interests to find out which tribe is responsible.
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  8
+You mean I should go to them and somehow make them talk to me? Is that possible?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper  9
+Yes it is, but you will have to risk your hide to do it, sonny. You see, there are several Woodsfolk clans with permanent feuds going on between them. For example the White Clan recently kidnapped the Keeper of the Green Clan and now they hold him captive.
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  10
+You see, each Clan has its own Sacred Flower, to them like banners are to our army. And Keepers look after these flowers. So if you free the Keeper of the Green Clan, he will give you the Sacred Flower to bring to the Clan. After that their Chief will just have to talk to you!
+#ANIMATION 3
+#CAMERA 2
+#phrase Hero  11
+Excellent! Tell me where I can find the Keeper!
+#ANIMATION 63
+#CAMERA 11
+#phrase Trapper  12
+Listen carefully, sonny. After you leave the city go west across the lake. When you find the prison where the Keeper is held, do not forget to switch off the trap - first! The White Clan Seer has an evergreen leaf - take it and place on the altar in front of the prison. I mean, the Woodsfolk call it an altar but it looks more like a rotten stump covered with mushrooms to me.
+#ANIMATION 44
+#CAMERA 3
+#phrase Trapper  14
+And after you get the Sacred Flower go to the Green Clan! The road there is not difficult: go south from the city and you will find it. Their Chief is called Grey Leaf, I know him.

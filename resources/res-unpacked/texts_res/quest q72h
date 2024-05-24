@@ -1,0 +1,77 @@
+Portal
+The portal is the only way to leave Suslanger and return to Gipath. It is heavily guarded and will not be easy to use.
+#subobj  1
+Destroy your enemies
+Erfar informed the guards that there was an escaped prisoner in the cave. The guards await their prey at the cave entrance; expect no mercy from them. The only way is to destroy them all!
+#subobj  2
+Cross the western bridge
+To avoid the main gates (that route is very dangerous!) go to the city by the bridge across the western river. That bridge is guarded less closely than the main gates.
+#subobj  3
+Cross the southern bridge
+To leave the city take the second bridge in the southern area.
+#subobj  4
+Find the traps key holder
+The Guardian who from time to time checks the control altars keeps the key to the traps. If you hide near the altar you could catch him unawares.
+#subobj  5
+Take the key
+Take the key from the key-holder's corpse.
+#subobj  6
+Find the first circle traps altar
+The approaches to the altar are covered by several circles of protection. Apart from armed guards, there also magic traps which will destroy anyone who steps on the magic-infused area without proper authorization. The traps are controlled by altars, for each of which you have to use a special key.
+#subobj  7
+Switch off the first circle traps
+Until the first circle traps are switched off you will not be able to approach the altar.
+#subobj  8
+Find the second circle traps key holder
+The second circle traps key holder can be found next to the altar on the other side of the magical area. To find him, use a "Clairvoyance" spell...to lure him out, use a "Fireworks" spell.
+#subobj  9
+Take the key
+Take the key from the key-holder's corpse.
+#subobj  10
+Find the second circle traps altar
+The traps of the portal's second protection circle are located on the road to the southern bridge across the canyon.
+#subobj  11
+Switch the second circle traps off
+Until the second circle traps are switched off you cannot get close to the altar.
+#subobj  15
+Spot the third circle traps Guardian
+The southern bridge across the canyon is guarded by a large guards' unit. But you can go along the bluff edge to the northern bridge unnoticed. The third circle traps are located here, but there is a narrow passage through the magical area - it is  used by a young warrior Magician who oversees the traps. You must spot that Magician and remember exactly where he goes!
+#subobj  16
+Take the path through the third circle traps
+There is no way to switch the third circle traps off, but you can get past them if you follow the path used by the Guardian.
+#subobj  20
+Find the Commander of the portal guards
+To find his home, go east from the point where the river turns west. The Commander's house stands on the hillock near the wall which marks the edge of the first circle of the portal's protection.
+#subobj  21
+Get the key
+To activate the portal use the key which the commander of the guards has.
+#subobj  22
+Cross the canyon
+To get to the portal, cross the canyon by one of the bridges.
+#subobj  23
+Find the eastern stone control
+To activate the portal you must use the key on two stone controls - the eastern and the western one. These are located near the entrance to the portal.
+#subobj  24
+Turn the eastern stone control
+Until it is turned, the portal will not work.
+#subobj  25
+Find the western stone control
+To activate the portal you must use the key on two stone controls - the eastern one and the western one. They are located near the entrance to the portal.
+#subobj  26
+Turn the western stone control
+Until it is turned, the portal will not work.
+#subobj  27
+Enter the portal
+To return to Gipath, simply enter the portal (the teleport zone).
+#subobj  34
+Escape from the city guards
+The city guards have been alerted!
+#subobj  35
+Escape from the main gate guards
+The main gate guards have been alerted!
+#subobj  36
+Escape from the portal guards
+The portal guards have been alerted!
+#subobj  37
+Escape from the portal guards
+The portal guards have been alerted!

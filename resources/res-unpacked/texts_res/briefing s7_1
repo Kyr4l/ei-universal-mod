@@ -1,0 +1,60 @@
+Interrogate GoGo together with the Elder
+#show bGoblinC 4
+#show Elder 3
+#show Hero 5
+#CAMERA 9
+#phrase bGoblinC  1
+Me come ask ya give First Goblin back. And for that me not steal any pig two three week. Swear my Blue Eye Stone!
+#ANIMATION 46
+#CAMERA 4
+#phrase Elder  2
+What kind of oath is that? What do I care about your stone - maybe you found it in the dirt and now you are making an oath on it.
+#CAMERA 11
+#phrase bGoblinC  3
+Blue Eye Stone not in dirt! Ya not never say that ever! Old Chief give me Eye Stone when he getta weak and go into soup!
+#ANIMATION 45
+#CAMERA 12
+#phrase Elder  4
+And where did the old Chief get it from?
+#CAMERA 7
+#phrase bGoblinC  5
+From old-old Chief when he break leg and old Chief eat him raw. When me get bad news Chief fry me and take the Eye Stone. Tradition - Goblin Chief wear Eye Stone! The First Goblin got it!
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  6
+A jolly good life you have, do you not? But where did that stone come from in the first place?
+#CAMERA 9
+#phrase bGoblinC  7
+Orc give when First Goblin allow live near. Orc write letter on hide where it come from. Only me not know any letter.
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  8
+I see! Well that is easy then: bring that hide here and you will get your scarecrow back, right?
+#CAMERA 11
+#phrase bGoblinC  9
+Ay, me no bring hide here! When First Goblin vanish, me come to Orc ask for help. Orc take me to Bald Island and beat me up, bad. Orc say "You GoGo now..." and say some word. Bad word. Me forget.
+#CAMERA 3
+#phrase bGoblinC  10
+Then Orc take me money, take me hide with letter, put in coffer, kick me out. Poor poor GoGo! Me was Chief, now me... that one. The bad word.
+#CAMERA 7
+#phrase bGoblinC  11
+Man, man, give First Goblin back! Ya do not give back, me sit here ask, beg. Tomorrow sit too, after tomorrow sit again...
+#ANIMATION 11
+#CAMERA 8
+#phrase Elder  12
+Oh that is all right, you may sit here as long as you like. I do not see why I should give you the idol back: you have not told us what we need to know!
+#hide bGoblinC
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  13
+And what about that Bald Island? Must be some Orc dump... Erfar, do you know anything about that place?
+#ANIMATION 44
+#CAMERA 4
+#phrase Elder  14
+Very little: it is located somewhere in the southeast, they also call it "barren". But that is hardly going to help us: there is no way to cross the Orc bridges, and humans cannot get to the islands!
+#NOLIPS
+#ANIMATION 30
+#CAMERA 6
+#phrase Hero  15
+Mayhap they can, mayhap they cannot. If one can cross the cave bridge, why not the ones on the islands?
+#DESC Under his nose

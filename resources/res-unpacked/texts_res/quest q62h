@@ -1,0 +1,32 @@
+Reaching the cave entrance
+The only way to escape the pursuit of the guards is through the cave; the entrance is located at the remote end of the canyon.
+#subobj  1
+Find the duty officer
+The main gates of the southern fortress are locked and to open them you will need the key. The duty officer at the gates has it; you will have to find him (lieutenant Kardaur is going to be on duty). His post is near the gates.
+#subobj  2
+Get the key
+You must kill Kardaur to get the key to the gates.
+#subobj  3
+Open the main gates
+To open the main fortress gates use the key you took from Kardaur. After that make haste: the open gates will inevitably attract the guards' attention and the chase will start immediately.
+#subobj  4
+Open cages
+The gate keeper is also responsible for cages with wild spiders. Next to the gates there is a lever which opens all cages at once. If you do that the released spiders will attack the guards and that will certainly distract them for a while.
+#subobj  5
+Find the passage to the cave
+There is a narrow passage which leads to the cave located at the north western end of the canyon. The passage is blocked by gates which are usually locked.
+#subobj  6
+Find the guard
+The passage to the cave is locked and the guard has the key.
+#subobj  7
+Kill the guard
+The guard must be killed, otherwise he will raise alarm.
+#subobj  8
+Take the key
+Take the key to the passage which leads to the cave from the guard's corpse.
+#subobj  9
+Open the cave gates
+To open the gates to the cave use the key you took from the guard.
+#subobj  10
+Get away from the chase
+The chase is underway!

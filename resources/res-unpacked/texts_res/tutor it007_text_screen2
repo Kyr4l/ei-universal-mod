@@ -1,0 +1,6 @@
+     The Attributes panel shows a character's basic attributes (framed). These are : "Strength", "Dexterity" and "Intelligence", and their derivatives: "Health", "Stamina", "Actions" and "Encumbrance". The panel also shows the "Experience" the character has gained.
+
+     To learn more about each attribute, place the cursor over it and read the text which appears in the Descriptions panel.
+     "Experience" shows the total amount of experience your character has built up during the game. Part of that experience has already been invested in his skills and abilities (i.e. it's spent). You can use the remaining experience to develop the character's skills even further and to acquire new abilities. The amount at your disposal is shown in the "Your Experience" section.
+
+     You can invest available experience into skills and abilities using the appropriate panels. The "Your Experience" section will show the amount of experience you are spending. To confirm, click the "V" button, to cancel click "X".

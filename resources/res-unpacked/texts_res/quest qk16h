@@ -1,0 +1,11 @@
+Estate
+As thief Sahilia says, "Show me a rich house and I will find a coffer in that house. And that coffer will not be empty!"
+#subobj  1
+Find the estate
+A rich estate is not the main objective of your journey. But if you happen to walk past one, why not take a look at it?
+#subobj  2
+Find the coffer
+The coffer must be somewhere around here... it is unlikely that they hid it at any distance....
+#subobj  3
+Open the coffer
+The only way to find out what is inside is to open it!

@@ -1,0 +1,19 @@
+Meet the Captain
+#show Hero 1
+#show Sheriff 2
+#CAMERA 9
+#ANIMATION 3
+#phrase Sheriff  1
+I am the Captain! I mean, I am the boss of all soldiers. My name's Gort, but they also call me the Skullcrusher. If there is any trouble you just whistle and I will deal with it - that will be no problem at all!
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  2
+What sort of trouble?
+#ANIMATION 9
+#CAMERA 11 -15 5 4
+#phrase Sheriff  3
+You see, we have some people... they think they are very clever... but never mind that! The main thing is, you just go and deal with that sentry Goblin! The little scum sends signals to his gang all the time: if our shepherd takes the pigs out to the field, they are all around them in a second, but when the men and I try to go after them, they disappear without a trace.
+#ANIMATION 31
+#CAMERA 7
+#phrase Sheriff  4
+So it is a very good thing to have you with us, Chosen.  You are our only hope now.

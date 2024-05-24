@@ -1,0 +1,15 @@
+Leave Mairana in the city
+#show Hero 1
+#show Merc6 2
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  1
+I think this time you had better stay in the city, at least for appearances' sake. I do not think Captain Tilvar trusts me too much and his suspicions would also fall upon you.
+#ANIMATION 31
+#CAMERA 3
+#phrase Merc6  2
+Thank you for your understanding! Frankly, I was going to ask that anyway.
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  3
+Deal. But when things calm down I may still need your services.

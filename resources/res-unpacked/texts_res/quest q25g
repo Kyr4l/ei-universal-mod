@@ -1,0 +1,14 @@
+Getting the enemy in the clear!
+Both Craftsman Babur and Elder Erfar have their own reasons to wish trouble on the Chosen. Each of them knows that the Chosen will again go to the Middle Mountains to obtain another magic plant. If he is ambushed where the dry riverbed joins the river, the traitor is Babur; if the ambush happens near the broken cart, it is the work of the Elder.
+#subobj  1
+Check the dry riverbed
+The dry riverbed stretches from the central part of the Middle Mountains to the south west. There is a small bay where it joins the river. If the ambush lies in wait near that bay, Craftsman Babur is the traitor.
+#subobj  2
+Check the broken cart
+The broken cart lays near a hill at the end of the road leading from the Foothills to the east. If the ambush lies there, the traitor is the Elder.
+#subobj  3
+Destroy the ambush
+Now you know for sure that the enemy in the village is the Elder. He will pay for his treason, but the enemies who lie in ambush must also be wholly exterminated!
+#subobj  4
+Establishing the innocence of the Craftsman
+There was no ambush near the dry riverbed, thus is Craftsman Babur is innocent.

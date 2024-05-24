@@ -1,0 +1,69 @@
+First time in the city of Ingos
+#show Hero 4
+#ANIMATION 5
+#NOLIPS
+#CAMERA 10
+#phrase Hero  1
+At last I am in the city! I must say it really does not look anything like our village. I wonder what sort of life people lead here?
+#DESC To himself
+#ANIMATION 11
+#NOLIPS
+#CAMERA 6
+#phrase Hero  2
+Uh-huh, there is some paper stuck to the wall. Let us have a look...
+#DESC To himself
+#show Hero 1
+#show BillBoard00 2
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero  3
+Aha... "Missing Person! Reward! A young lady known by the name of Princess who took residence in the "Unicorn" inn, disappeared on the second day of the tenth month and has still not been found. Features: skin of unusual reddish colour, strange clothes. The person who finds the girl will be REWARDED: Governor Valrasian hereby promises to promote him to the rank of Lieutenant of the City Guards and pay him a handsome sum in silver. Do not tarry!" Ha!
+#DESC Reads aloud
+#hide Hero
+#hide BillBoard00
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  4
+Yes! This must be the one I am looking for!
+#DESC To himself
+#hide Hero
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 11
+#phrase Kapitan  5
+Young man! Could you please tell me your name and the purpose of your visit to the city? I am Captain Tilvar, Commander of  the Guards, and I must know who comes here and why... but your look is more eloquent than any words. In your dreams you have already found the Princess, am I right?
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  8
+Is there any law against that?
+#ANIMATION 9
+#CAMERA 3
+#phrase Kapitan  9
+There is no law against dreams, of course not. But, alas, they cannot possibly come true. Just think: a girl whom Governor Valrasian himself particularly liked has been kidnapped. And you cannot even begin to imagine how well these rogues have hidden her.
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  10
+Why do you not look for her then?
+#ANIMATION 9
+#CAMERA 11
+#phrase Kapitan  11
+Thank you, my regular wages are quite sufficient. As to you, young man, I'd like to give you a piece of advice: forget about the whole thing. After Governor Valrasian introduced new taxes, the farmers and woodcutters are really angry with the inhabitants of the city.
+#ANIMATION 44
+#CAMERA 3
+#phrase Kapitan  12
+They would not touch the Guards, but they can get their revenge at your expense. Probably, young man, you've experienced a... how shall I put it... a certain lack of hospitality from our commoners during your trip here?
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  13
+That is more than true, sir! I was almost killed! And you, the Captain of the Guards, speak about this so calmly, as if nothing had happened!
+#ANIMATION 31
+#CAMERA 11
+#phrase Kapitan  14
+Oh I am so sorry! Of course I should have called a general alarm and sent the whole guard force to protect you!
+#DESC Ironically
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  15
+Sorry, young man but I act exclusively according to the Governor's orders and in his interests. And you, excuse the observation, would seem to be just a young adventurer who acts at his own risk. So do not expect any help from the Guards!
+#DESC Serious, businesslike

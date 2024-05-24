@@ -1,0 +1,25 @@
+More about the theft
+#show Hero 1
+#show Smith 2
+#phrase Hero  1
+I can see that you are a bit thrifty. If they had stolen your last penny I could understand your anger, but you do not look like a poor man to me!
+#ANIMATION 45
+#CAMERA 11
+#phrase Smith  2
+Well, last penny or not, I still cannot be happy when they steal from me, can I? And secondly, I thought I already explained it. It is not about money, the point is, they stole my bodkin and my chisel!
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  3
+Is that all? And I thought it was serious! Oh dear, this is a really big loss - a knife and a scraper!
+#ANIMATION 9
+#CAMERA 7
+#phrase Smith  4
+Uh, yes, I can see what an expert you are in craft. They were iron tools! You simply cannot replace them, see? And now that fat Chieftess uses my bodkin to mend her shoes, and the Chieftain has my chisel!
+#ANIMATION 44
+#CAMERA 11
+#phrase Smith  5
+Me, myself, I would never get into their camp. The direct route to the foothills is guarded by the Brigands. And if you try to go the other way, through the ford upriver, the toads would spit poison all over you.
+#ANIMATION 8
+#CAMERA 2 -30 5 3
+#phrase Hero  6
+Well, I am not afraid of toads... all right, Babur, maybe you have not seen the last of your iron toys yet!

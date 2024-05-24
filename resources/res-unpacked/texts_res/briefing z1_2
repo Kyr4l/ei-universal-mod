@@ -1,0 +1,23 @@
+About restoring memory
+#show Witch 1
+#show Hero 2
+#ANIMATION 45
+#CAMERA 9
+#phrase Witch  1
+You know you are not the Chosen one, but there is certainly something unusual about you... So you do not know who you really are? Would you like to find out?
+#ANIMATION 29
+#CAMERA 6
+#phrase Hero  2
+Of course I would! That is what I want more than anything else right now!
+#ANIMATION 62
+#CAMERA 7
+#phrase Witch  3
+While I still lived in the village, the Elder said that one of the Orcs had a Magic Orb. And if I am not completely senile, I would say that this Orb is just what you need to have a good look at your memory!
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  4
+So where do I find this Orb? There are many Orcs on Gipath...
+#ANIMATION 11
+#CAMERA 3
+#phrase Witch  5
+Who is the Chosen here, me or you? Go and find out for yourself, ask Erfar!

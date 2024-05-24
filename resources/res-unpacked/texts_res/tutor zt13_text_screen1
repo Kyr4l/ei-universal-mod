@@ -1,0 +1,6 @@
+     Depending on the situation you can choose one of several movement modes for your character. To switch between modes use the control panel in the lower-left part of the screen, or use the keyboard. Here are the different movement modes, along with a description of each:
+
+     Walk: when a character walks, his speed is normal. "Stamina" stays constant (<X> key).
+     Run: running is faster than walking, but makes a lot of noise. He might end up attracting the attention of enemies who otherwise wouldn't see him. Also, when running, his "Stamina" diminishes; when it reaches zero, the character automatically starts walking (<Z> key).
+     Sneak: as you can imagine, a sneaking character makes almost no sound at all.  Naturally, sneaking around is slow, though "Stamina" remains constant  (<C> key).
+     Crawl: a crawling character is much less visible to enemies but moves very, very slowly. Like sneaking, a crawling character maintains his "Stamina" level (<V> key.)

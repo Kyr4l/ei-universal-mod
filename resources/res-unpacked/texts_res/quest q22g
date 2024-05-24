@@ -1,0 +1,26 @@
+Subterranean creatures
+The Old Dragon respects old traditions, so he will promise to tell you something of interest but in return will ask that you exterminate the armadillos who constantly annoy him. To make your task easier, the dragon will give you poison to use on one of the three underground rivers.
+#subobj  1
+Kill the Armadillo Mother
+If you let the large female armadillo live, she will give birth to many more baby armadillos and the Old Dragon will never have peace and quiet. Better attack her after one of the springs is poisoned - she will not die of the poisoned water but she will be much weakened.
+#subobj  2
+Exterminating small Armadillos
+They are the ones who irritate the Old Dragon with their fussing and messing around.
+#subobj  3
+Find the nearest spring
+The nearest spring is in the north-eastern corner of the cave. You can reach it by walking up the eastern underground river.
+#subobj  4
+Poison the nearest spring
+Use the poison of the dragon. Then several small armadillos will die and the armadillo mother will be somewhat weakened.
+#subobj  5
+Find the middle spring
+The middle spring is to the west of the nearest one in the cave. You can reach it by walking up the middle underground river.
+#subobj  6
+Poison the middle spring
+Use the poison of the dragon. Then several small armadillos will die and the armadillo mother will be somewhat weakened.
+#subobj  7
+Find the farthest spring
+The farthest spring is near the centre of the northern end of the cave. You can reach it by walking up the farthest underground river.
+#subobj  8
+Poison the farthest spring
+Use the poison of the dragon. Then all the small armadillos will die and the armadillo mother will be greatly weakened.
