@@ -82,7 +82,7 @@ function GetPerkPrice(unit_server_stats_addr, perk_addr) --> int
     for i = 0, 35 do
         perks_count = perks_count + unit_stats.perks:value(i)
     end
-    base_price = base_price * (1.9 ^ perks_count)
+    base_price = base_price * (1.95 ^ perks_count)
 
     -- Округление до двух старших разрядов (1`234`567 -> 12`000`000)
     local dec_base = 10 ^ math.floor(math.log10(base_price))
