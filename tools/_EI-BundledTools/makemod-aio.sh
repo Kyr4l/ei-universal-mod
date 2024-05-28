@@ -47,12 +47,12 @@ echo "Processed the following files : $totalreg"
 echo "==============================="
 echo "Copying REG files into their respective folder..."
 echo "Files detected in $regdir : $(ls $regdir | xargs)"
-cp -v "$regdir"/config.reg "$modfolder" 2>/dev/null
-cp -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
-cp -v "$regdir"/music.reg "$modfolder"/config 2>/dev/null
-cp -v "$regdir"/streamsn.reg "$modfolder"/config 2>/dev/null
-cp -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
-cp -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
+mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
+mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
+mv -v "$regdir"/music.reg "$modfolder"/config 2>/dev/null
+mv -v "$regdir"/streamsn.reg "$modfolder"/config 2>/dev/null
+mv -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
+mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
 
 
 # dds2mmp
