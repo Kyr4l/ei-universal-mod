@@ -1,0 +1,27 @@
+和奴婢交談
+#show Hero 1
+#show Nalo 2
+#ANIMATION 3
+#CAMERA 2 -30 10 10
+#phrase Nalo  1
+這個監工終於走了。聽好小子，我要和你談談！
+#ANIMATION 6
+#CAMERA 2 0 3 0.8
+#phrase Hero  2
+你是誰？你要什麼？
+#ANIMATION 31
+#CAMERA 2 30 7 7
+#phrase Nalo  3
+我沒有名字。我是卡道爾的奴婢，那個混蛋手中沒臉見人的玩具！不 過我可不是來這邊抱怨的！我打算從我的主人手中偷取鑰匙，並把你 放出來。
+#ANIMATION 8
+#CAMERA 2 0 3 0.8
+#phrase Hero  5
+但是你為什麼要冒險幫我？我不是不相信你，但．．．
+#ANIMATION 44
+#CAMERA 2 35 6 1.5
+#phrase Nalo  6
+這很簡單－要逃離堡壘你必須殺掉大門前的值班官員。今晚卡道爾就 是那個當班的人．．．噢，如果能夠看到他的死屍，一切都有代價了 ！
+#ANIMATION 3
+#CAMERA 2 -30 7 7
+#phrase Nalo  9
+有人來了！我得跑了－牢籠的警衛不會在乎我是誰．．．

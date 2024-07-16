@@ -1,0 +1,19 @@
+帶著弓箭手在
+#show Hero 
+#show Merc2
+#CAMERA 3
+#ANIMATION
+#phrase Merc2  1
+聽好神選者，你還想要我與你同行？
+#CAMERA 10
+#ANIMATION 29
+#phrase Hero  2
+當然，一個好射手對我而言時時都派得上用場！但是我以為你很忙， 被綁住了．．．
+#CAMERA 11
+#ANIMATION 6
+#phrase Merc2  3
+現在不一樣了，我可以自己決定要做些什麼！
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  4
+太好了，那在大門等我吧！

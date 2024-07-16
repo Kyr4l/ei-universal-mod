@@ -1,0 +1,23 @@
+關於回復記憶
+#show Witch 1
+#show Hero 2
+#ANIMATION 45
+#CAMERA 9
+#phrase Witch  1
+你知道你不是神選者，但是你身上還是有些不尋常的事．．．原來你 也不知道自己從何而來？你想知道嗎？
+#ANIMATION 29
+#CAMERA 6
+#phrase Hero  2
+我當然想知道！這也是我急著來到此地的主要原因！
+#ANIMATION 62
+#CAMERA 7
+#phrase Witch  3
+當我還住在村落中的時候，長老有一次提到一個半獸人擁有一個魔法 球。如果我的腦袋沒有記錯的話，我敢說這個球就是用來觀看你記憶 內容的最好用的東西！
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  4
+我要去那找這個球？在吉佩特有很多半獸人．．．
+#ANIMATION 11
+#CAMERA 3
+#phrase Witch  5
+誰才是神選者？是你還是我？自己去找啊，要不然去問厄發！

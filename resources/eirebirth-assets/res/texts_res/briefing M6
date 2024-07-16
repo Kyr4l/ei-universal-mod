@@ -1,0 +1,58 @@
+關於洞窟中找到的碎片
+#show Hero 3
+#show CryptRune00 4
+#show Smith 5
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+等一下－我能把這個交給女巫嗎？
+#hide CryptRune00
+#show CryptRune00 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  2
+是的，這的確是魔法碎片，你可以向她要個好價錢．．．不過就我而 言，我絕不會到那邊去！通往艾絲特拉所居的洞穴通路已經被魔法陷 阱所封閉了。
+#ANIMATION 7
+#CAMERA 10
+#phrase Hero  3
+沒有辦法繞過去嗎？
+#ANIMATION 15
+#CAMERA 7
+#phrase Smith  4
+我從來沒有試過－我沒有笨到用自己的生命來冒險的程度！不過我的 確知道一個方法，雖然這並不容易。是這樣的，這些陷阱是由魔法的 石碑所控制，想要控制石碑，必須有一把特殊的鑰匙。
+#ANIMATION 8
+#CAMERA 6
+#phrase Hero  6
+你怎麼會知道的？
+#ANIMATION 9
+#CAMERA 3
+#phrase Smith  7
+這個嘛，你以為除了我以外，還有誰能為女巫製作備份的鑰匙？它看 起來是這樣的．．．
+#show Hero 3
+#hide CryptRune00
+#show AmbushKey00 5
+#show Smith 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  8
+艾絲特拉把它放在西方峽谷中的某處，雖然那邊也有陷阱，但是閃電 只會攻擊特定的地方。所以可以讓一個人試著通過陷阱後，關掉控制 陷阱的石碑。這個地方離此不遠，就在峽谷的盡頭．．．
+#ANIMATION 44
+#CAMERA 7
+#phrase Smith  9
+不過還有另一個問題：巨魔通常在鑰匙附近打轉。他從來不會去打擾 女巫，但是如果有人試著去拿鑰匙而被巨魔看到．．．我是指，那個 大怪物一定想來頓早餐，不是嗎？或是晚餐－看時間而定。
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  10
+嗯，多謝了。你能告訴我的就這麼多了？或許還有一些提示或是暗示 ？
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  11
+當然有！這是我的建議：當你把碎片放在艾絲特拉眼前時，先等她提 出她的價錢。之後再等一下，然後向她要三倍的金錢。她會付的，不 用怕！但是你要記得，我要分一半。
+#hide Smith
+#hide AmbushKey00 4
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  12
+他真的以為我打算和女巫喊價？我要的又不是錢幣，要的是協助。我 已經為村民做了不少好事了，現在該為我自己想想了！

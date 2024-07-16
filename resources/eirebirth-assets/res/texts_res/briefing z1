@@ -1,0 +1,51 @@
+和女巫見面
+#show Hero 1
+#show Witch 2
+#ANIMATION 61
+#CAMERA 9
+#phrase Witch  1
+嘿，小伙子！你是怎麼過來這邊的？而且你又想要什麼，嗯？在我把 你烤熟之前滾蛋！
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  2
+好吧，如果你對魔法碎片一點興趣也沒有，我就走人！
+#show CryptRune00 5
+#ANIMATION 9
+#CAMERA 3
+#phrase Witch  3
+嘿，嘿，別那麼急．．．噢，親愛的，我們不用太急燥！停下來，好 不好？我當然有興趣！只要來拜託的客人擁有這樣的禮物，我當然都 是雙手歡迎的。
+#hide CryptRune00
+#show Hero 1
+#show Witch 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Witch  4
+對了．．．你是那位？我不記得我曾經見過你，你不是從村落來的嗎 ？
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  5
+放聰明點，女巫艾絲特拉，我是神選者！我被天上的力量派來此地， 以保護吉佩特的人民！
+#ANIMATION 62
+#CAMERA 7
+#phrase Witch  6
+老天，我們還真榮幸．．．你想要騙誰啊？別告訴我與神選者有關的 故事，我可以直接看穿人們。現在安靜！你的面前有一條很漫長的路 ，英俊的小子，你的意識中有很多悲傷，你的往事．．．在你的往事 ．．．呃，我完蛋了！我看不到你的過去！
+#ANIMATION 46
+#CAMERA 5
+#phrase Hero  7
+這個嘛，我也不知道我的過去。我一直想不起來，你瞭解嗎？
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  8
+哦，還真是多謝你，我鬆了一口氣。我還以為我已經太老，該是我準 備死亡的時候了。
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  9
+噢，別鬧了，你一點也不老！我寧願說你正值美麗年華！
+#ANIMATION 63
+#CAMERA 3
+#phrase Witch  10
+我知道你在說謊不過我還真的蠻喜歡的。你是個好小子，有禮又長得 好看，一點也不像村落中的莽漢。你隨時都可以來造訪此地，我很高 興見到你．．．
+#ANIMATION 30
+#CAMERA 9
+#phrase Witch  11
+我懷疑今天為什麼這麼好心，嗯？我猜馬上就會下雨了！

@@ -1,0 +1,9 @@
+踢豬一下
+#show Hero 1
+#show Pig 2
+#CAMERA 10
+#phrase Hero  1
+滾出這邊！
+#CAMERA 3 30 6 4
+#phrase Pig  2
+呵－呵．．．嗚依依依依！！！

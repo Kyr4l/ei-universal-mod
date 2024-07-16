@@ -1,0 +1,59 @@
+關於被偷的收藏品
+#show Hero
+#show Vor
+#show Shopper
+#ANIMATION 32
+#CAMERA 4
+#phrase Shopper  1
+好，你想要和光頭見面，沒問題。別忘了把故事講完！
+#hide Shopper
+#ANIMATION 11
+#CAMERA 7
+#phrase Vor  2
+嗯～～～．．．是你要見我？
+#ANIMATION 62
+#CAMERA 2
+#show GovenorChest00 3
+#phrase Hero  3
+你的問法不對。你該問我從那邊找到裝維爾萊森州長頭飾的外箱。安 靜，現在安靜，反正它已經空了，而且裡面的東西放在安全的地方了 ！現在你有個很簡單的選擇：你可以和我談談，否則我會叫警衛來， 讓你直接和提法隊長談。
+#hide GovenorChest00
+#ANIMATION 43
+#CAMERA 11
+#show GovenorChest00 5
+#phrase Vor  4
+該死．．．我討厭城市人！好吧，你到底想分多少？
+#hide GovenorChest00
+#ANIMATION 11
+#CAMERA 10
+#show GovenorChest00 3
+#phrase Hero  5
+不是「多少」而是「什麼」。告訴我這個箱子中的箭，是不是射中探 查員的這一把？我非常不建議你在這個時候說謊。
+#hide GovenorChest00
+#ANIMATION 63
+#CAMERA 3
+#phrase Vor  6
+嘿．．．呃，我可沒有．．．有人告訴我那個探查員，不是我，而且 叫我讓他變成僵硬的死屍，但是讓別人以為是森林人做的好事。所以 我．．．呃，把他處理得很好，不是嗎？在他身上釘個吹箭。而且找 吹箭還是我自己想的，我才不想和森林人有什麼瓜葛，所以我才溜進 州長家。這實在簡單多了，而且大灰知道怎麼通過魔法陷阱。
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  7
+什麼大灰？
+#ANIMATION 61
+#CAMERA 3
+#phrase Vor  8
+一個新來的。從來沒有看到他本人。他來時都蓋了一件大斗蓬－啥都 看不見，連鼻尖都看不到！說話的語調也很好笑，老是用怪聲音喃喃 唸東唸西。我猜是怕人認出他的聲音。
+#ANIMATION 62
+#CAMERA 11
+#phrase Vor  9
+我想探查員和森林人發現了一些和他有關的東西，而他不能接受。探 查員幾乎要找到公主了，這點很確定。而且那和森林人有關－我講錯 可以打我，也許他們看到大灰在換衣服？
+#hide vor
+#show Hero 4 
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  10
+啊，原來又導向森林人了！我得再去找他們一次，看看他們的新庇難 所還有「秘密通道」是通往什麼地方，並找出他們和大灰之間的關係 。
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  11
+我應該以前問過他們．．．不過我是怎麼問的，我一直到現在才知道 大灰啊？！

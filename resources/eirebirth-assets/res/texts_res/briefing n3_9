@@ -1,0 +1,23 @@
+帶回騎士
+#show Hero 
+#show Merc9
+#ANIMATION 61
+#CAMERA 3
+#phrase Merc9  1
+灰葉告訴我城市中已經完全靜下來了。那個傳說能認出我的人，發誓 他不過是在酒醉後的睡夢中看過我。
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+灰葉是怎麼知道的？
+#ANIMATION 62
+#CAMERA 11
+#phrase Merc9  3
+噢，年輕人，你低估了善良的力量！假設有個市民在城市圍牆外面有 一塊自己的財產。這些財產在任何時候都可能燒毀或是崩塌。而且假 設他收到從森林人那邊寄來的信，上面很客氣的請他這樣聲名，而且 沒有拒絕的權利。你想市民會拒絕這樣的好意嗎？
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc9  4
+如果剛好有另一個人過目不忘，他也會碰上相同的問題。
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  5
+是．．．你說得對，尊貴的騎士。戰爭中一切都是公平的。

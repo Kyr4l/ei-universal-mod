@@ -1,0 +1,51 @@
+關於妖精帳蓬的東西
+#show Witch 1
+#show Hero 2
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero  1
+女巫，我怕你的惡夢成真的：我發現了妖精的營地，的確有一個圍欄 ，但是沒有看到你的孫女。
+#ANIMATION 31
+#CAMERA 11
+#phrase Witch  2
+噢，親愛的，以後別再像這樣嚇我！那她沒有被妖精關起來，至少這 點還不錯，而且我再也不要任何夢來感受到她還活著。
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  3
+別以為這樣就沒事了！看看我在那個洞中找到了什麼．．．
+#show Witch 3
+#show GirlSign 5
+#show Hero 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  4
+噢．．．這是我的小葯瓶，我親自在裡面裝滿葯水的．．．那我們現 在該怎麼辦，呃？該死的神選者，快想！
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  5
+看仔細點：你有沒有把裡面的紙張放進去？我當然很信任你的技巧， 不過我不認為你會用半獸人的語言來寫一些筆記！
+#hide GirlSign 
+#ANIMATION 44
+#CAMERA 3
+#phrase Witch  6
+這樣，我們來看看．．．啊～哈！上面說一個叫做西伐的半獸人給他 們這個葯瓶。原來是他抓走了我的孫女到他們的聚落去？我會把西伐 的眼睛挖出來，你看我辦不辦得到！
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  7
+等一下，等一下。由於這是我的錯，我來解決這樣的事情。妳知道這 個西伐住在什麼地方嗎？
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  8
+我聽說過西伐：他是一個半獸人小部族的首長，但這個部族十分強壯 ；而且很簡單自稱為「西伐部族」。到目前為止我沒有聽說他們曾經 侵犯人類，所以我想不出他抓走艾麗要做什麼。
+#ANIMATION 31
+#CAMERA 7
+#phrase Witch  9
+拜託，你可以去找他嗎？如果那個西伐開始討價還價，不要和他爭， 只要把我親愛的孫女帶回來就好！
+#ANIMATION 6
+#CAMERA 3
+#phrase Witch  10
+要找到西伐的聚落十分簡單，你只要從死之城那個方向進入沙地，然 後直直向南走就對了。在半獸人管理者的小屋旁邊有一個吊橋。
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  11
+你只要從管理者的手中取得零件，放下吊橋，你就幾乎到達西伐的房 子旁邊了。當你和他交談時好好運用你的機智，如果要付贖金的話也 不要太小氣。只要你能安全把人帶回來，我會付你所有的金額，外加 利息！

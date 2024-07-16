@@ -1,0 +1,15 @@
+把流氓留在村落
+#show Hero 1
+#show Merc1 2
+#ANIMATION 9
+#phrase Hero  1
+很抱歉，但此時你必須待在這邊。
+#ANIMATION 45
+#phrase Merc1  2
+為什麼？
+#ANIMATION 45
+#phrase Hero  3
+這是我的決定。難道對你還不夠？
+#ANIMATION 15
+#phrase Merc1  4
+當然．．．不過只要你用得著我，我就在村落中的這個地方。

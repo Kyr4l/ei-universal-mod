@@ -1,0 +1,52 @@
+談談關於首領夫人拿走的東西
+#show Hero 1
+#show Smith 2
+#show Awl 6
+#show Knife 7
+#phrase Hero  1
+來！我從獵人首領和他妻子手中取得這些東西。
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  2
+這．．．這些是我被偷走的工具！我不敢相信我的眼睛！
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  3
+那你就碰碰看吧！
+#ANIMATION 9
+#CAMERA 7
+#phrase Smith  4
+沒錯，就是它！太好了，神選者，現在你可以訂購我的東西了！我不 能做的只有魔法物品和法術，這方面你必須找巫師才行。但是一般的 工作，我甚至願意給你一些折扣．．．
+#CAMERA 3
+#phrase Smith  15
+我是指，一個很小的折扣．．．
+#CAMERA 11
+#phrase Smith  16
+我的意思是，如果你要求我的話．．．
+#ANIMATION 7
+#CAMERA 6
+#phrase Hero  17
+噢，輕鬆點，我不需要你的任何折扣。不過請告訴我：為什麼自由獵 人這麼靠近妖精，但是他們之間為什麼沒有彼此交戰，把對方撕成碎 片？
+#ANIMATION 6
+#CAMERA 7
+#phrase Smith  18
+獵人們．．．在我的記錄中，他們就是強盜。而且你千萬別理長老所 說的話！他們搶劫我也不是第一次了．．．
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  19
+等一下，我們能不能待會再來談你的宿怨？我在問你與妖精有關的事 ！
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith  20
+那你以為我在講什麼？謠傳中指出強盜不只和妖精有交易，甚至連半 獸人也有牽涉。有些村民發誓他們有好幾次看到一個強盜－他的渾名 是紅頭－在前往巨魔洞窟的路上和半獸人交談。
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  21
+嗯，那一切都清楚了。森林中的傢伙假裝是村落的拯救者，讓長老以 為看到一片美景！
+#CAMERA 3
+#phrase Smith  22
+讓長老以為看到一片美景？我懷疑．．．
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero  23
+我確定這才是對的！我們現在得找到紅頭－然後我們才能夠查出真像 。

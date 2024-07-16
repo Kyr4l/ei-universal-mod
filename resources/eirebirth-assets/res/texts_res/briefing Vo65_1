@@ -1,0 +1,19 @@
+關於有錢人的大宅
+#show Hero 1
+#show Merc10 2
+#ANIMATION 61
+#CAMERA 11
+#phrase Merc10  1
+噢，真是的！這麼好看的人，卻一無是處．．．真是浪費．．．
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero  2
+你是說我是個垃圾？
+#ANIMATION 45
+#CAMERA 3
+#phrase Merc10  3
+當然是啊！你會找到你的穹恩斯年輕人並衝回一點好處都沒有的吉佩 特。那就是你結束的時候了．．．
+#ANIMATION 64
+#CAMERA 9
+#phrase Merc10  4
+你不是親口告訴我的：那邊沒有滿是財富的房子，沒東西可偷、沒有 人可以賣。你的才能將就此埋沒，我告訴你，在你年紀大一把時你會 想起我給你的警告，但一切都太遲了！

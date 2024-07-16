@@ -1,0 +1,23 @@
+向瑪伊拉那道別
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+我想，是說再見的時候了？
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  2
+啊，瑪伊拉那，你又說對了。抱歉我不能要你與我同行，前往其他大 陸．．．
+#ANIMATION 9
+#CAMERA 3
+#phrase Merc6  3
+不用道歉，撒克。我反正會拒絕你的提議。我的家就是在這裡，所以 我是不會離開因格斯。
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  4
+嗯，這樣我離開良心上就平靜多了。再見了，瑪伊拉那。
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc6  5
+再見！

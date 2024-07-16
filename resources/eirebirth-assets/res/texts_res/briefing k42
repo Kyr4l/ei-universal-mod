@@ -1,0 +1,63 @@
+第一次來到因格斯的城市
+#show Hero 4
+#ANIMATION 5
+#NOLIPS
+#CAMERA 10
+#phrase Hero  1
+我終於在這個城市之中了！我必須講這真的和我們的村落完全不同。 我在想這邊的人是過著怎麼樣的生活？
+#ANIMATION 11
+#NOLIPS
+#CAMERA 6
+#phrase Hero  2
+對，在牆上塞了什麼紙張。我來看看．．．
+#show Hero 1
+#show BillBoard00 2
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero  3
+啊哈．．．「失蹤人口！懸賞！一個年輕的女子，大家稱之為公主曾 經住在”獨角獸旅店”中，第二天離奇失蹤，並在十個月之中不見蹤 影。特點：她的皮膚泛著異樣的紅色，服飾特殊。找到這個女孩可以 領取獎賞：州長維爾萊森保證可以成為城市警衛的副官，並提供可觀 的銀幣。」
+#hide Hero
+#hide BillBoard00
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#phrase Hero  4
+噢，天啊！這一定是我在找的人！
+#hide Hero
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 11
+#phrase Kapitan  5
+年輕人！可以請你告訴我你的名字和你來到這個城市的目的！我是提 法隊長，警衛的指揮官，我必須知道誰來到這邊以及他的目標是什麼 ．．．不過你的表情看來勝過任何雄辯。在你的夢中你已經找到公主 了，不是嗎？
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  8
+這違反任何法律嗎？
+#ANIMATION 9
+#CAMERA 3
+#phrase Kapitan  9
+當然不會，做什麼夢都不會觸犯法律。不過，唉，找到他們幾乎是不 可能的。你想想：一個維爾萊森州長特別喜歡的女孩被綁架了。他們 很可能把她藏得極好，你連想都想不到的地方。
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  10
+那你為什麼不把她找出來？
+#ANIMATION 9
+#CAMERA 11
+#phrase Kapitan  11
+謝謝你，我一般的薪水已經夠用了。至於你，年輕人，我倒是願意給 你一點建議：忘了這整件事吧。在維爾萊森州長宣佈新的稅率後，農 夫和伐木人真的很氣城市中的人．．．
+#ANIMATION 44
+#CAMERA 3
+#phrase Kapitan  12
+他們不會招惹城市中的警衛，但是他們會對你的努力冷眼相看。很可 能，年輕人，你會碰上一些．．．我該怎麼形容．．．在你旅行到此 地時，一般老百姓可能會不怎麼友善？
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  13
+這真是很溫和的形容！我幾乎被宰掉了！至於你，城市中的警衛，可 以把這整件事說得這麼平靜？
+#ANIMATION 31
+#CAMERA 11
+#phrase Kapitan  14
+噢，我真的很抱歉！我當然應該打響警鐘並且派遣所有的警衛來保護 你！
+#ANIMATION 11
+#CAMERA 3
+#phrase Kapitan  15
+抱歉，年輕人，但是我只服從州長的命令，以及他的興趣。至於你， 很對不起，看來像是一個年輕的冒險者，必須自行承擔風險。所以不 要期待從警衛這邊得到任何幫助！

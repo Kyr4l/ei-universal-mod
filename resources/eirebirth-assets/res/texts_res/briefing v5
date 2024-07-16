@@ -1,0 +1,33 @@
+關於新的零件
+#show Sheriff 1
+#show Hero 2
+#CAMERA 5
+#phrase Hero  1
+聽好，高特，記得你給我那個洞穴中用的裝置？你不會剛好有另一個 很像，但是卻是由島上半獸人所做的東西吧？
+#ANIMATION 32
+#CAMERA 9
+#phrase Sheriff  2
+你要拿這些東西幹嘛？用來準備冬天的醃肉，呃？嘻－嘻－嘻，這個 點子不錯，對吧？
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  3
+是，很好笑。不過你到底是有還是沒有？
+#ANIMATION 9
+#CAMERA 7
+#phrase Sheriff  4
+呃，這個東西就有個故事了．．．自由獵人從島上的半獸人手中騙到 了一個櫃子，在所有的東西之中的確有你講的裝置。他們把搶來的東 西放上貨車，開始拉動之前卻不知道為什麼吵了起來。你知道，一字 字的計較，最後只有一個人回來，而其他的躺在那個車子旁邊。
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  5
+是，我瞭解他們都是很好的人，非常友善。你說的那個櫃子到底怎樣 了？
+#ANIMATION 7
+#CAMERA 9
+#phrase Sheriff  6
+在中央山區，離路不遠的地方．．．留下來的獵人把有價值的東西都 拿走了，但卻沒拿那個裝置－誰要一個那樣的垃圾？
+#hide Hero 1
+#show Sheriff 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase Sheriff  7
+他是個怪胎。一個在找些奇怪東西的笨蛋，而且一般來說．．．或許 他根本就不是神選者？不用管長老說什麼！

@@ -1,0 +1,15 @@
+關於殺死的妖精
+#show Hero 1
+#show Sheriff 2
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  1
+嗯，我想這不會是個太難的工作，不是嗎？現在妖精會有一段很長的 時間，忘掉如何前來村落的道路！
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero  2
+嘿，高特，發生什麼事了？你不高興嗎？
+#ANIMATION 9
+#CAMERA 11
+#phrase Sheriff  3
+啊，我是．．．很高興。萬歲，光榮、榮耀，神選者。而且長老說你 會得到一些獎賞。如果我做到了，這個獎賞就會是我的。不過現在顯 然是朝你而去了。

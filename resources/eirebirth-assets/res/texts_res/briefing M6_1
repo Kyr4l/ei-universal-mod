@@ -1,0 +1,40 @@
+關於拜訪女巫
+#show Hero 
+#show Smith 
+#ANIMATION 31
+#CAMERA 9
+#phrase Smith  1
+呃．．．抱歉，我們之前沒有提到與魔法碎片有關的金錢事宜？
+#ANIMATION 29
+#CAMERA 10
+#phrase Hero  2
+是的，我們有。我好像記得你要一半，還是一半上下？
+#ANIMATION 15
+#CAMERA 11
+#phrase Smith  4
+那沒錯，我是這樣說。目前也還是如此。
+#ANIMATION 32
+#CAMERA 6
+#phrase Hero  5
+那就拿去吧！
+#ANIMATION 5
+#CAMERA 7
+#phrase Smith  6
+拿什麼？你沒有給我任何東西！
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  7
+沒錯，這就是我從女巫那邊得到東西的一半。
+#ANIMATION 3
+#CAMERA 11
+#phrase Smith  8
+什～麼～？她沒有付錢？那個老女巫，那個不幸的女人！
+#ANIMATION 14
+#CAMERA 9
+#phrase Smith  9
+還有你．．．你是個白癡，客氣得不得了。我也有錯：這麼貴重的東 西，我居然讓它從我的手中溜走！現在只有和錢說再見了！
+#nolips
+#ANIMATION 30
+#CAMERA 2 0 2.2 2
+#phrase Hero  10
+沒錯。但你永遠都不會瞭解到，我因為那個東西所得到的回報！

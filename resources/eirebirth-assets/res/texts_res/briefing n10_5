@@ -1,0 +1,11 @@
+向雷因那斯道別
+#show Hero
+#show Merc5 
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  1
+好吧，雷因那斯，該是說再見的時候了。我記得你說過你不會要求補 償，但也許我欠你一些東西？
+#ANIMATION 43
+#CAMERA 3
+#phrase Merc5  2
+不用擔心這點。狄耶拉在我們城市中的詭計已經沒有用了，這都是你 的功勞。我還求什麼補報嗎？再見了，撒克，祝你好運！

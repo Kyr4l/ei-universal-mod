@@ -1,0 +1,45 @@
+關於卡蘭索
+#show Hero 1
+#show Trapper 2
+#ANIMATION 61
+#CAMERA 3
+#phrase Trapper  1
+卡蘭索用他的雙手掐住我的喉嚨。所有的當地人都討厭他：任誰都欠 他一筆，他用小錢買走我們的東西，然後再用三倍的價錢出售．．． 如果你想找其他買主，你就會有麻煩。卡蘭索和本地的流氓合夥，你 只要想動一下，他就會派他那殘暴的同伴來和你打交道；你就完蛋了 。
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  2
+嗯，我知道事情的嚴重性了。不過你無法想出任何方式，對這些混蛋 施壓嗎？
+#ANIMATION 11
+#CAMERA 11
+#phrase Trapper  3
+我們來做個很老實的生意－你幫我，我幫你。如果你幫我做些事情， 我就告訴你與商人有關的所有事情，行嗎？
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  4
+你要我做些什麼？
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper  5
+是這樣的：從首都來的買商很快就會來到附近的區域。他會為皮毛出 很好的價錢，和我們的高利貸完全相反。但是我無法前往他一向收購 毛皮的會面地區－我到不了的。卡蘭索的手下會不斷的盯著我的一舉 一動。
+#show Hero
+#show Trapper
+#show SquirrelSkin 5
+#ANIMATION 44
+#CAMERA 3
+#phrase Trapper  6
+不過，如果你能拿著我的毛皮到那邊．．．那我們就可以好好談談與 商人有關的事情了！要走到會面地區的路並不難記，不過問題是位於 卡蘭索的地盤中。如果你瞭解的話，我的舉動不過是很小心的把我的 頭放在脖子上面。
+#hide  SquirrelSkin
+#show SquirrelSkin 3
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  7
+好，成交。我會帶著你的東西到那邊，不過你是不是該告訴我怎麼找 到那個交易的場地？
+#hide  SquirrelSkin
+#ANIMATION 62
+#CAMERA 3
+#phrase Trapper  8
+事實上，也沒什麼太難的要講。在你來到卡蘭索的地盤後，前往南方 的第一個山谷。那邊有個老舊的帳蓬，附近有一個營火和一些人。把 這些皮毛交給那些人就行了！
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper  9
+在那附近不要到處跑：在這個區域中也有一些警備部隊。這一陣子並 不平靜，所以警衛會傾向先開槍，再問問題的巡邏方式。

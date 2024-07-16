@@ -1,0 +1,37 @@
+關於傳言中的公主下落
+#show Hero 1
+#show Magess 2
+#ANIMATION 11
+#CAMERA 3
+#phrase Magess  1
+噢，我們的年輕英雄？找公主時沒碰到什麼好運氣，嗯？或許你連試 都沒試？
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  2
+你在告訴我有多困難時說的一點也沒錯，狄耶拉。雖然我幾乎把城市 都翻了一遍，我還是完全沒有頭緒。不過我聽說廢棄的礦坑是個藏人 的好地方，你知道我該從那個地方著手嗎？
+#ANIMATION 45
+#CAMERA 3
+#phrase Magess  3
+噢，別鬧了，親愛的。你不致於想要相信那種無稽之談吧，嗯？你當 然可以在那種地方浪費時間，不過我告訴你一個秘密好了：通往礦坑 的路很難走而且十分危險，更何況通往地底的入口早就崩塌了。
+#ANIMATION 44
+#CAMERA 11
+#phrase Magess  4
+你也可能在那附近碰上冷酷的強盜。如果你冒險進入礦坑，你也有迷 路的可能－光靠一個腦袋是出不來的。
+#ANIMATION 9
+#CAMERA 3
+#phrase Magess  5
+所以，親愛的小伙子，所有和舊礦坑有關的傳言都是謠傳，我甚至不 想花時間去討論真偽。太多事情要做了．．．我希望你還能聽到下一 個小提示？
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  6
+噢，是的，當然，我洗耳恭聽！
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  7
+賓果！如果那邊沒有玄機的話，她才不會浪費唇舌叫我遠離那些礦坑 ！
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  8
+而且我不認為她會剛好忙得沒時間聊天．．．或許她猜想我已經知道 了一些事情，現在要去警告她的傭兵？

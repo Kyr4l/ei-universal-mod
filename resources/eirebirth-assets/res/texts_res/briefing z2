@@ -1,0 +1,54 @@
+使用球體
+#show Witch 1
+#show Hero 2
+#phrase Witch  1
+好，現在把球給我．．．慢點，慢點，要掉下去了！這是很貴重而易 碎的東西，你的動作太笨拙了！
+#show Witch 3
+#show Palantir 4
+#show Hero 5
+#CAMERA 5
+#phrase Hero  2
+好，好，這是你的球，完整無缺。現在我們要拿它幹嘛？
+#hide Palantir
+#show Palantir 5
+#ANIMATION 32
+#CAMERA 7
+#phrase Witch  3
+你什麼都不用做。只管看著並記下你所看到的東西。我現在試著讓它 顯現出影像，照出你的過去。
+#ANIMATION 6
+#CAMERA 11
+#phrase Witch  4
+「靜止時間已逝；
+說話，透明的玻璃；
+告訴我們過去隱藏的事，
+在此地與現在，告訴我們！」
+#hide Palantir
+#show PalantirRick00 5
+#show PalantirWork00 12
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  5
+我的天啊．．．這個老人－這是我的過去？
+#hide PalantirRick00
+#hide PalantirWork00
+#show PalantirBroken00 4
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero  6
+什麼跟什麼？這個球發生了什麼事？那個人是誰，我為什麼會看到他 ？告訴我！
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  7
+噢，別鬧了，你根本不用這麼興奮．．．我不知道這是怎麼一回事， 我只能用猜的。那個球中的老人不是你，小子，你用不著擔心。我想 那是球的主人，如果他不是比我更偉大的魔法師，你可以叫我用妖精 當晚餐！如果還有人能幫得上你，這就是答案。試著把他找出來。
+#hide PalantirBroken00
+#show PalantirBroken00 5
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  8
+那我得找出半獸人是從什麼地方弄到這枚球。我怎麼樣才會找到答案 ？
+#hide PalantirBroken00
+#show PalantirBroken00 4
+#ANIMATION 9
+#CAMERA 9
+#phrase Witch  9
+呃，我聽說每一個半獸人的種族都有一個先知，保留了部族中的記錄 。如果你能找到那個擁有球體半獸人部族的記錄，或許我可以瞭解它 是從那來的。也許這個記錄者住在半獸人最密集的地區－在三角洲河 流地帶有個這樣的地方，就是中央海島。這就是你的下一個目標！

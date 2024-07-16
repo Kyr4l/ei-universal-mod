@@ -1,0 +1,35 @@
+與勾勾交談
+#show Hero 3
+#show bGoblinC 4
+#show Sheriff 5
+#CAMERA 5
+#ANIMATION 45
+#phrase Hero  1
+你就是妖精族長勾勾？
+#CAMERA 9
+#phrase bGoblinC  2
+我勾勾，族頭勾勾，來要你還我妖精始祖！
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  3
+我可能願意，但你必須先告訴我一些事情。
+#ANIMATION 3
+#CAMERA 8
+#phrase Sheriff  4
+嘿，你這個獨眼龍，閉上你的嘴好嗎，要不要我幫你？！沒有人告訴 你把嘴巴閉上嗎？
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  5
+為什麼？！
+#ANIMATION 9
+#CAMERA 4
+#phrase Sheriff  6
+長老說不要問妖精，除非他自己講。而且不要讓他講太多。他說他待 會將和神選者好好談談，而且不要有其他人在場。
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  7
+哦？那我在這啦？！
+#ANIMATION 44
+#CAMERA 1
+#phrase Sheriff  8
+是，你在這裡，但是厄發不在，這就是問題！我只告訴你我接到的命 令。要不然這裡就沒有秩序了，如果無法維持秩序，我們就讓它毫無 秩序，嘻嘻嘻！我很有幽默感，對不對？！

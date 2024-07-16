@@ -1,0 +1,51 @@
+要求翻譯文件
+#show Elder 3
+#show CodedHadaganNote 4
+#show Hero 5
+#ANIMATION 1
+#CAMERA 5
+#phrase Hero  1
+好了，老兄，你有機會改善你未來的處境了。提醒你一下，可能只會 好一點，不過嘛．．．
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+你可以翻譯這些紙張，不是嗎？
+#ANIMATION 15
+#CAMERA 3
+#phrase Elder  3
+當然，當然！馬上翻！
+#ANIMATION 7
+#CAMERA 6
+#phrase Hero  4
+那我應該不用提醒你，如果翻譯出來的東西有任何錯誤會怎樣吧？
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 31
+#CAMERA 9
+#phrase Elder  5
+不，不用，神選者，我很清楚我在你的手中！
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 15
+#CAMERA 11
+#phrase Elder  6
+這是可達干尼恩帝國所用的正式文字，而且這份文件是某種草擬的報 告。一個部隊．．．數位士兵以及官方．．．一個營地．．．一個靠 近遙遠山的營地．．．而且有一條連通的走道：上面說在遙遠山的東 邊，在石堆中有一個狹窄的通道通往北方，而在通道盡頭有一個拉柄 。
+#ANIMATION 8
+#CAMERA 7
+#phrase Elder  7
+這個拉柄可以連接到通往西方峽谷。如果你拉動拉柄，就可以打開通 道的入口！這個通道十分彎曲而且很危險，這邊提到一些裂縫和死路 ．．．上面說往東方冒險是十分危險的－那邊有鳥身女妖。
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  8
+就這樣？
+#ANIMATION 2
+#CAMERA 7
+#hide CodedHadaganNote 4
+#phrase Elder  9
+不，還沒完！上面說通道中十分危險，但是並沒有說明是那一種危險 。現在真的寫完了。
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  10
+哈！你真的希望我用這種沒意義的事情來交換你的自由？不，你得待 在這個地方，直到我決定怎麼處理你為止！

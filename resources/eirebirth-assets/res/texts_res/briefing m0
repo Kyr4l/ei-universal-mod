@@ -1,0 +1,15 @@
+與工匠見面
+#show Hero 1
+#show Smith 2
+#ANIMATION 11
+#CAMERA 1 -15 6 3
+#phrase Smith  1
+原來你就是神選者？你是來見我的？好吧，你就叫我巴布爾吧。有什 麼事嗎？
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+你一向都這麼有禮貌嗎？
+#ANIMATION 29
+#CAMERA 11
+#phrase Smith  3
+要是你看我不順眼，你隨時都可以離開。

@@ -1,0 +1,15 @@
+向娜亞道別
+#show Hero
+#show Merc3
+#ANIMATION 3
+#CAMERA 7
+#phrase Merc3  1
+再見了，神選者！有一天我將會取代艾絲特拉的地位，並擁有自己的 門徒；而且我將會十分榮幸的告訴她，我曾經與你共事。
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+妳講的好像我們再也見不到面了。你是指我將在外地面對我的死亡嗎 ？
+#ANIMATION 44
+#CAMERA 7
+#phrase Merc3  3
+不，不是死亡，而是．．．不，我還不能告訴你－這對艾絲特拉不公 平。學徒不應該看到老師目前還看不到的東西。再見！

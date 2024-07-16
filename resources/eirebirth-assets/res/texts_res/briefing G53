@@ -1,0 +1,51 @@
+關於廢棄的礦坑
+#show Hero 1
+#show Huber 2
+#ANIMATION 11
+#CAMERA 11
+#phrase Huber  1
+啊，年輕人，你為什麼這麼急？你在急什麼？
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero  2
+礦坑！
+#ANIMATION 45
+#CAMERA 3
+#phrase Huber  3
+什麼礦坑？這是什麼意思，「礦坑」？那「你好」到那邊去了？我的 官職難道是假的？
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  4
+閣下，我為我的匆忙感到抱歉，但是我有很嚴重的事情得和你談談。 我感覺到我該做的事情出現了，該是開始做生意的時候了，礦場生意 。
+#ANIMATION 3
+#CAMERA 3
+#phrase Huber  5
+噢，真是笨得難以忍受．．．你的理由是什麼？
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  6
+噢，就在這邊！我注意到你喜愛美麗的東西，而且我很確定我可以找 到很多這類美妙的物品，它們都在老舊的廢棄礦坑之中．．．
+#show Hero 3
+#show GoldNugget00 4
+#show Huber 5
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero  7
+像這個金塊就是個好例子，我很榮幸的把它當做禮物送給你！
+#ANIMATION 62
+#CAMERA 7
+#hide GoldNugget00
+#show GoldNugget00 5
+#phrase Huber  8
+嗯．．．好吧，這個理由真是不錯，甚至可以說夠重了。我看得出你 是個懂禮貌的人，而羅曼蒂克的想法已經與你無關了。沒錯，還有什 麼能夠比沈重的金塊要來得更羅曼蒂克和可愛的呢！
+#show Hero 1
+#hide GoldNugget00
+#show Huber 2
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  9
+不過要開始我的生意之前，我需要打開這些廢棄的礦坑－而這些鑰匙 都在閣下您的控制之下！我很確定我會找到其他有趣的東西，而且它 們的價值甚至可以列為閣下的收藏品。
+#ANIMATION 9
+#CAMERA 9
+#phrase Huber  10
+噢，鑰匙？是的，我把它放在哪了．．．好吧，如果這個鎖是我和這 些美妙物品之間的唯一障礙，我怎麼能拒絕把鑰匙給你？

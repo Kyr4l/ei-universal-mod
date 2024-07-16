@@ -1,0 +1,31 @@
+關於藍水晶
+#show Hero 3
+#show LeftCrystal 4
+#show Witch 5
+#ANIMATION 9
+#CAMERA 1
+#phrase Witch  1
+天啊，你真是個超級努力的人！我只要你把綠水晶帶回來，你連藍水 晶都拿了；不過我的冰凍法術用不到它。
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  2
+那我該怎麼辦？把它丟了？
+#hide LeftCrystal
+#show LeftCrystal 5
+#ANIMATION 61
+#CAMERA 11
+#phrase Witch  3
+噢，不用。這個法術中它雖然沒用，不過另一個法術很需要它。我向 你買下來好了。
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  4
+那你要拿它做什麼？
+#ANIMATION 32
+#CAMERA 7
+#phrase Witch  5
+噢，那是個天大的秘密！連你都不會知道的！
+#CAMERA 11
+#ANIMATION 30
+#NOLIPS
+#phrase Witch  6
+我不可能一輩子都想不起這個水晶有什麼用！不過現在也不能告訴他 ，對吧？也許有一天我會想起來的．．．

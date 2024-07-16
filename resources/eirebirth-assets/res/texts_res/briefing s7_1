@@ -1,0 +1,59 @@
+和長老一塊審問勾勾
+#show bGoblinC 4
+#show Elder 3
+#show Hero 5
+#CAMERA 9
+#phrase bGoblinC  1
+我是來要回妖精始祖。我二、三個星期不偷任何豬。用我藍眼石發誓 ！
+#ANIMATION 46
+#CAMERA 4
+#phrase Elder  2
+這是那門子的宣誓？我為什麼要在乎你的藍眼石－你可能是剛剛在土 中撿來發毒誓用的。
+#CAMERA 11
+#phrase bGoblinC  3
+藍眼石不是土！你別再說！老酋長給我藍眼石，當他虛弱並煮入湯前 ！
+#ANIMATION 45
+#CAMERA 12
+#phrase Elder  4
+那你的老酋長是從那邊找到的？
+#CAMERA 7
+#phrase bGoblinC  5
+從老老酋長跌斷腿，而老酋長把他吃了後。在我抓到新的壞酋長烤了 他並且拿走眼石。這是傳統！妖精族長戴藍眼石！搶第一個的妖精可 以得到它！
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  6
+你們的生活方式真愉快，不是嗎？但第一枚藍眼石是從什麼地方拿到 的？
+#CAMERA 9
+#phrase bGoblinC  7
+妖精始祖讓一個半獸人住在附近，半獸人就給了妖精始祖這顆藍眼石 。半獸人寫字在獸皮上，寫著去哪邊拿。只是我不懂字。
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  8
+我懂了！那接下來就簡單了：把獸皮拿來，你就可以把稻草人拿回去 ，懂嗎？
+#CAMERA 11
+#phrase bGoblinC  9
+呀，我不帶獸皮來！在妖精始祖消失，我找半獸人求救。半獸人帶我 到光頭島，然後打我，很狠。半獸人說「你勾勾現在．．．」然後說 些話，壞話，我忘了。
+#CAMERA 3
+#phrase bGoblinC  10
+然後半獸人拿走我的錢，拿走上面寫字的獸皮，放在箱櫃中，踢我出 去。可憐可憐的勾勾！我是酋長，現在我．．．那個人。壞話。
+#CAMERA 7
+#phrase bGoblinC  11
+人類，人類，把妖精始祖還來！你不還，我坐這求、問。明天也坐， 再明天也坐．．．
+#ANIMATION 11
+#CAMERA 8
+#phrase Elder  12
+噢，沒錯，你可以坐在這個地方多久都行。我看不出為什麼要把神像 還你：你沒有告訴我們重要的事情！
+#hide bGoblinC
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  13
+那光頭島呢？一定是某些半獸人的儲存場．．．厄發，你知道與這個 地方有關的事嗎？
+#ANIMATION 44
+#CAMERA 4
+#phrase Elder  14
+很少：它位於東南方的某處，他們也稱之為「瘠地」。但是這對我們 的幫助有限：沒有通過半獸人橋樑的方法，而且人類無法上島！
+#NOLIPS
+#ANIMATION 30
+#CAMERA 6
+#phrase Hero  15
+或許他們不行，或許他們可以。如果有人能通過洞穴的橋樑，為什麼 沒有人能上島？

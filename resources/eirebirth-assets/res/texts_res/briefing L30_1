@@ -1,0 +1,28 @@
+隱士的禮物
+#show Hero 
+#show OLIZ 
+#CAMERA 9
+#phrase OLIZ  1
+人類，我要告訴你。你要面對很多危險。
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero  2
+是這樣嗎？真是驚喜！
+#CAMERA 3
+#phrase OLIZ  3
+現在你知道了。我想幫你，這可以幫你。
+#show DragonWand 7
+#ANIMATION 6
+#CAMERA 6
+#phrase Hero  4
+這是什麼？看來像是號角或是貝殼．．．做這東西的人可能弄到最後 ，連自己要做的是什麼都不知道！
+#CAMERA 11 10 5 2
+#phrase OLIZ  5
+也許他不知道；也許知道。不過拿著這東西。它會幫你。
+#ANIMATION 32
+#CAMERA 2 25 6 3
+#phrase Hero  6
+不過它怎麼幫我？我要怎麼用它？
+#CAMERA 1 0 4 4
+#phrase OLIZ  7
+我不知道這點。你是人類，你聰明。自己想辦法弄清楚。

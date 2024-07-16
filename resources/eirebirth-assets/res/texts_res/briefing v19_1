@@ -1,0 +1,43 @@
+指控隊長的背叛
+#show Elder 2
+#show Hero 5
+#show Sheriff 3
+#show Letter2orcs00 4
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero  1
+高特！我聽說這份筆記是你寫的，這是你的筆跡。這表示你是個叛徒 。
+#hide Letter2orcs00
+#show Letter2orcs00 2
+#ANIMATION 32
+#CAMERA 4
+#phrase Sheriff  2
+什麼？這個小東西就陷我入罪？！那好吧．．．你要找背叛者，你找 到了！哈，還有更好的消息：我真的受夠了那些支使我的人，我要成 為這個村落的老大！
+#hide Letter2orcs00
+#show Letter2orcs00 5
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  3
+是這樣嗎？！你現在要為一切付出代價！！！
+#CAMERA 5
+#ANIMATION 3
+#hide Letter2orcs00
+#phrase Sheriff  4
+現在還有點早。在我帶著森林的傢伙回來之後，才是正確的時機！
+#hide Sheriff run
+#ANIMATION 3
+#CAMERA 6
+#phrase Hero  5
+站住！回來，你這懦夫！！！
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero  7
+他逃掉了，這個下三濫！
+#ANIMATION 7
+#CAMERA 7
+#phrase Elder  8
+是的，他是個卑微的人，一個無賴！但是不要搞錯了－他還是很危險 ，他和他的手下！噢，親愛的，我是這麼信任他．．．我對他太冷漠 都是我的錯！
+#ANIMATION 15
+#CAMERA 9
+#phrase Elder  9
+我們必須在高特把所有剩餘的盜賊群聚起來之前抓到他並把他給宰了 。他不會跑太遠的，如果你的動作再快一點，你可以在小丘上抓到他 ！

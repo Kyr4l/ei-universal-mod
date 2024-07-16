@@ -1,0 +1,11 @@
+關於州長家的失竊案
+#show Hero 1
+#show Kapitan 2
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+隊長！州長有沒有為他被偷的箱子懸賞？
+#ANIMATION 11
+#CAMERA 11
+#phrase Kapitan  2
+他或許會吧，不過你別想拿到它，年輕人。我不會喜歡讓州長覺得有 人可以做事比我還穩當。

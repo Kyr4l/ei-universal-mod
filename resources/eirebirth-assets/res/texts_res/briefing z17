@@ -1,0 +1,26 @@
+冰凍法術
+#show Hero 1
+#show Witch 2
+#ANIMATION 15
+#CAMERA 9
+#phrase Witch  1
+啊～哈！現在一切都相當美好。麻煩你，站開點行不行．．．
+#show Witch 3
+#show RightCrystal 5
+#show Hero 5
+#ANIMATION 6
+#CAMERA 7
+#phrase Witch  2
+「我毋需靜候冬天、
+將水束縛為冰塊。
+水晶光芒閃耀，
+湖水化為冰霜！」
+#hide Witch 
+#hide RightCrystal 
+#hide Hero 
+#show Witch 1
+#show Hero 2
+#ANIMATION 11
+#CAMERA 1
+#phrase Witch  3
+好了，準備好了，甜心！我可能老了，不過我還是知道一些偏方，嗯 ？

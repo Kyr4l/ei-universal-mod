@@ -1,0 +1,15 @@
+帶回伊利亞
+#show Hero 
+#show Merc4
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc4  1
+你還要我待在聚落中嗎？
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  2
+噢，正相反，我需要你的魔法！
+#CAMERA 3
+#ANIMATION 3
+#phrase Merc4  3
+那有什麼問題？我準備好而且樂意出發！

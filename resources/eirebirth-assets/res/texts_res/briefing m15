@@ -1,0 +1,43 @@
+關於採石場
+#show Smith 1
+#show Hero 2
+#ANIMATION 44
+#CAMERA 9
+#phrase Smith  1
+聽好，在你把大貝殼從遙遠山區拿走之後，我就進不了採石場了。現 在我什麼辦法也沒有！
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+噢，親愛的，那還真糟糕！不要裝可愛了，我可以看穿你的心思。
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith  3
+我不是在裝可愛，我是在告訴你：如果通往採石場的路再度開啟，我 會讓你有足夠的報酬。你開個價吧！
+#ANIMATION 7
+#CAMERA 2
+#phrase Hero  4
+聽起來不錯．．．不過我才不打算把貝殼搬回去，那個混球東西還真 重！
+#ANIMATION 15
+#CAMERA 7
+#phrase Smith  5
+是啊，我想也是．．．不過你沒必要這樣做！有另一條通往採石場的 路，另一條較遠的路，不過，你知道嗎？現在有一個獨眼巨人住在那 邊。
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  6
+獨眼巨人？那是個什麼樣的怪物？
+#ANIMATION 9
+#CAMERA 9
+#phrase Smith  7
+那不是怪物－不管怎麼說，不像怪物。獨眼巨人看來像是巨魔，但是 他們通常要聰明得多。至少我講的那一個一點也不笨：他從我們的牧 人手中偷走了一整群的豬，現在他變得有點像是牧羊人。只要他看到 任何人，就開始猛丟石塊，把生人趕跑。
+#ANIMATION 8
+#CAMERA 3
+#phrase Smith  8
+你知道，我才不在乎獨眼巨人或是豬，不過問題是那個牧人就在我的 採石場旁邊。
+#ANIMATION 31
+#CAMERA 11
+#phrase Smith  9
+所以我想，如果你能把所有的豬都解決掉，獨眼巨人就會自行離開。 而我在這邊表現我的誠意！
+#ANIMATION 32
+#CAMERA 9
+#phrase Smith  10
+還有另一件事：在前往遙遠山區時別忘了抬頭看看天空，我好幾次看 到龍！

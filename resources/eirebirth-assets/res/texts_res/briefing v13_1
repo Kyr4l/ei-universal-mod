@@ -1,0 +1,23 @@
+關於背叛
+#show Sheriff 1
+#show Hero 2
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  1
+該死，高特，你算是那門子的隊長？你的人在攻擊我，神選者！
+#ANIMATION 29
+#CAMERA 3
+#phrase Sheriff  2
+我什麼事都不知道！我給他們的命令是對的！也許盜賊殺了我的人， 然後穿上他們的衣服－然後現在你和長老都把問題怪到我頭上。我發 誓如果你繼續這樣做，就會一直有麻煩－我會一直反抗，你儘管試試 看好了！
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  3
+你說什麼？不介意再講一次？
+#ANIMATION 8
+#CAMERA 11
+#phrase Sheriff  4
+噢，好吧．．．我剛才太激動了。
+#ANIMATION 3
+#CAMERA 5
+#phrase Hero  5
+看！你現在的態度又不一樣了，不是嗎？不過，我提醒你，這件事還 沒完！

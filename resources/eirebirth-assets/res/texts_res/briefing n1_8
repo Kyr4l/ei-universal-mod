@@ -1,0 +1,15 @@
+帶著菲爾哈克在隊伍中
+#show Hero 
+#show Merc8
+#ANIMATION 45
+#phrase Merc8  1
+我們上次還沒決定，所以我就直接問你好了：你要不要魔法師的幫助 ？
+#ANIMATION 15
+#phrase Hero  2
+我該說我非常渴望你的力量！如果你能保證你不會做出不正當的暴力 行為的話．．．
+#ANIMATION 9
+#phrase Merc8  3
+當然不會。我只會和你所指定的敵人交手。不過，如果我們剛好碰上 我個人的仇敵，你就知道什麼叫做暴力！
+#ANIMATION 15
+#phrase Hero  4
+好，那就跟我來吧。但是如果你能信守承諾，對我們二個都好。

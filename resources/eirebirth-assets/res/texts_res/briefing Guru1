@@ -1,0 +1,45 @@
+和目盲之人交談
+#show Hero
+#show Guru
+#show Glav
+#ANIMATION 3
+#CAMERA 5
+#phrase Glav  1
+盲目兄弟！我來此和你討論一個很嚴肅的事情。
+#ANIMATION 32
+#CAMERA 3
+#phrase Guru  2
+讓永遠離開我的光明與你同在！我能為你做些什麼？金髮兄弟？
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  3
+你是怎麼知道我在這邊？而且你怎麼知道我的需求？
+#ANIMATION 6
+#CAMERA 3
+#phrase Guru  4
+我瞎了但是我沒有聾，而且最重要的是，我還沒有失去我的智慧。
+#ANIMATION 44
+#CAMERA 4
+#phrase Glav  5
+盲目兄弟可以聽到一隻老鼠走出洞穴的另一端！如果你手中有弓的話 ，第一箭就可以射穿老鼠！
+#ANIMATION 31
+#CAMERA 3
+#phrase Guru  6
+這是你說的，我可從來沒有射過老鼠。不過有更大而且更有價值的目 標。現在你要從我這個可憐的瞎子身上找什麼？
+#ANIMATION 8
+#CAMERA 8
+#phrase Glav  7
+你是在最後庇難所中最好的老師。你可以在這邊一塊訓練金髮兄弟嗎 ？
+#hide Glav
+#ANIMATION 11
+#CAMERA 3
+#phrase Guru  8
+嘻嘻！在最後庇難所中卡吐爾兄弟的要求，要比帝王壓迫下的士官命 令來更得更有效！我希望你不介意提昇你的靈敏度，嗯？
+#ANIMATION 14
+#CAMERA 2
+#phrase Hero  9
+當然不介意！但是這件事有可能這麼快達成嗎？
+#ANIMATION 9
+#CAMERA 9
+#phrase Guru  10
+我從來不保證不可能的事，但是接下來要看你自己了！

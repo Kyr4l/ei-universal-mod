@@ -1,0 +1,32 @@
+關於天文台的發現
+#show Witch 3
+#show Hero 4
+#show DCBook 4
+#ANIMATION 63
+#CAMERA 9
+#phrase Witch  1
+我看過你找到的東西．．．你知道嗎，你的運氣真好！這真的有點讓 人懷疑你到底是個普通人，或者你真的是位神選者？
+#hide DCBook
+#show DCBook 5
+#ANIMATION 3
+#CAMERA 10
+#phrase Hero  2
+好，好，不要拐彎抹角了，就來看看書中寫的東西吧！
+#ANIMATION 9
+#CAMERA 11
+#phrase Witch  3
+這個嘛，聽好了，甜心。有一條通往城市的秘密通道，就像山中的狹 長走道一樣。它是從南方的大門開始延伸，不過要進入這個地方，要 說一句通關秘語。秘語是：「伐來亞和加尼亞！」。
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  4
+這句話是什麼函意？
+#ANIMATION 61
+#CAMERA 7
+#phrase Witch  5
+完全不知道它的意思，不過聽起來印象深刻。接下來，如果我是死之 城的主人，我會定居在孤寂山的山頂。你可以從很遠的地方就看到它 ，不會漏掉的。這就是你的下一個目標。
+#hide DCBook
+#show DCBook 4
+#ANIMATION 31
+#CAMERA 9
+#phrase Witch  6
+這樣，祝好運！當你見到老人的時候，對他尊敬點！你看到像我這樣 的老古董可以狂妄自大一點，不過你在碰到資深的魔法師時，尊敬一 點絕對不會有錯！

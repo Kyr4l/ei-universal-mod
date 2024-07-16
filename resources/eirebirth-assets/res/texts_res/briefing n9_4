@@ -1,0 +1,14 @@
+帶著伊利亞在
+#show Hero 
+#show Merc4
+#CAMERA 3
+#phrase Merc4  1
+那不但有危險，而且我不會冒任何不必要的危機，和這一大群人進入 沙地！
+#ANIMATION 14
+#CAMERA 6
+#phrase Hero  2
+什麼一大群？我們這邊只有三個人！
+#CAMERA 3
+#ANIMATION 32
+#phrase Merc4  3
+再加我就是四個了。四個人在這邊就是一大群！

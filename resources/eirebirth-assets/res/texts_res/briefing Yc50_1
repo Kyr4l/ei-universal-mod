@@ -1,0 +1,17 @@
+綠之一族有什麼新發現？
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+我很高興再度在此見到你，人類。你走過我的秘密通道－你不但勇敢 ，而且靈巧！
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero  2
+告訴我，長老，你不會剛好知道一些可以幫我的事吧，嗯？
+#CAMERA 11
+#phrase YCF  3
+我怎麼知道我能不能幫你？如果你想知道正確的答案，就要問對問題 ！
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  4
+我懂了．．．我好像來得太早了。很抱歉打擾到你，酋長。我會回到 城市之中，只有在我知道該問你什麼的時候，才會回到這邊來。

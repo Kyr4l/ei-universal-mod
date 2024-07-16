@@ -1,0 +1,22 @@
+關於找花的旅程
+#show Elder 3
+#show DriadIdol01 4
+#show Hero 5
+#phrase Hero  1
+花在這邊！
+#hide DriadIdol01
+#show DriadIdol01 5
+#ANIMATION 31
+#CAMERA 11
+#phrase Elder  2
+我不知道我怎麼表達我的感謝！神選者再次從無法避免的死亡命運中 ，拯救了整個村落的居民！幸好沒有人生病，所以你的協助來得正是 時候！
+#ANIMATION 15
+#CAMERA 2
+#phrase Hero  3
+嗯，我很高興能做好事，不過現在我們來談談一些比較不愉快的事情 好了。告訴我，為什麼這些花有半獸人在看守，而且他們好像很清楚 有人要去採花？
+#hide DriadIdol01
+#show DriadIdol01 4
+#ANIMATION 45
+#CAMERA 9
+#phrase Elder  4
+呃，你為什麼不去問問那個不想讓花來到我手中的人？除了巴布爾大 概不會有第二個。

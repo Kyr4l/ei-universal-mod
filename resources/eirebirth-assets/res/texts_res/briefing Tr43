@@ -1,0 +1,15 @@
+關於發現的屍體
+#show Hero 1
+#show Shopper 2
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  1
+我不喜歡講些關於死亡的壞消息，但這都是他自己的錯。他把這附近 的人都弄得很煩，干涉其他人的事情。我會把我一年賺的錢拿來打賭 ，他會被他自己的好奇心害死。
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  2
+事實上，他被森林人殺了。
+#ANIMATION 44
+#CAMERA 11
+#phrase Shopper  3
+真笨，嗯？森林充滿了人，但是一定只有這個探查員才會被殺。那你 認為他做了什麼事情，把森林人惹火了？也許他也惹火了某些人，嗯 ？

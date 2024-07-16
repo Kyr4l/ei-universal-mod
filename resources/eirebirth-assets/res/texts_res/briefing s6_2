@@ -1,0 +1,49 @@
+長老最重要的事
+#show Hero 1
+#show Elder 2
+#ANIMATION 9
+#CAMERA 9
+#phrase Elder  1
+噢，神選者！我把所有的傳言都拚湊起來了，我們村落長老的傳說和 學問，以及一個很驚人結論－我們這個島嶼並不像外表一樣的獨立。 我們必須找出這是不是真的，而且如果你能找到與其他土地連繫的方 式－當然了，靠著我謙卑的協助，我們的村落會非常的快樂．．．
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  2
+啊～哈！嗯，我確定在其他的大陸中我可以找到真正強大的法師，可 以回復我的記憶！穿過一個傳送門，要比跑遍整個荒廢的吉佩特容易 多了！
+#show Hero 1
+#show Elder 2
+#ANIMATION 15
+#CAMERA 5
+#phrase Hero  3
+說吧！
+#ANIMATION 9
+#CAMERA 3
+#phrase Elder  4
+有一個較小的妖精族，族長的名字叫做勾勾。他取得了一枚藍色的石 塊，放在他的眼睛之中。我聽說古代他們利用這一類的材料來製作傳 送點，而且這些傳送點可以把人們從一個地方瞬間移到另一個地點。 如果我們能找到這些東西的來源，我就可以知道吉佩特中是不是有這 樣的傳送點。
+#ANIMATION 5
+#CAMERA 2
+#phrase Hero  5
+這個點子太好了！但我要去那才能找到．．．他的名字叫什麼來著． ．．勾勾？
+#ANIMATION 44
+#CAMERA 11
+#phrase Elder  6
+他自己會過來告訴我們他所知的一切。勾勾的部族崇拜著妖精始祖， 他們還握有這個始祖的頭蓋骨。如果我們能先拿到這個神聖的物品， 勾勾會做任何事情把這個東西拿回去！看來情勢是這樣．．．
+#show Hero 3
+#show Elder 5
+#show GoblinFright00 5
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  7
+這一定只有妖精才會去崇拜這種．．．呃．．．聖物！
+#ANIMATION 3
+#CAMERA 7
+#phrase Elder  8
+不過拜託一下－在我們真的找到傳送點之前，一個字也不要提。我們 不需要讓人們有錯誤的期望！
+#hide Elder 
+#hide GoblinFright00 4
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2 0 2.2 2
+#phrase Hero  9
+好像我會向任何人都講一次！我要做的第一件事情是自己進入傳送點 ，這就是村民最後一次看到我了。要不然我該怎麼做？不管怎麼說， 他們對我有許多的希望．．．噢，受不了。這個村落在沒有神選者的 情況下已經存活了上百年，就算沒有神選者，也可以輕易再存活一百 年！

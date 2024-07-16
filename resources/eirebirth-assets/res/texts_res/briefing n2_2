@@ -1,0 +1,15 @@
+把弓箭手留在村落
+#show Hero 
+#show Merc2
+#CAMERA 2
+#ANIMATION 15
+#phrase Hero  1
+你今天待在村落中。
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc2  2
+為什麼，發生什麼事了？
+#CAMERA 6
+#ANIMATION 8
+#phrase Hero  3
+沒啥大事。我只是決定你在和我一塊進行下一個任務之前，需要多一 些休息。我們有太多的事情要注意，而且我不希望你在重要時刻射不 中目標！

@@ -1,0 +1,37 @@
+交還「妖精的聖物」
+#show Hero 
+#show BGoblinC
+#ANIMATION 45
+#CAMERA 1
+#phrase Hero  1
+聽好，勾勾，你待在這邊有多久了？一個月？一年？十年？
+#CAMERA 11
+#phrase BGoblinC  2
+我待在這邊，直到你給我妖精始祖的頭。要不然我就死在這裡！
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  3
+我為什麼要把稻草人還你？你從來不告訴我它有什麼用途！
+#CAMERA 3
+#phrase BGoblinC  4
+我告訴你我知道的，我不知道不是我的錯！
+#ANIMATION 43
+#CAMERA 6
+#phrase Hero  5
+呃，這也不是我的錯！你知道嗎，我想我乾脆把這個小東西丟進火中 －也許這樣你就會走掉了！
+#show VoodooWand 5
+#CAMERA 7
+#ANIMATION 60
+#phrase BGoblinC  6
+不要火！不要丟！勾勾想買妖精始祖。用娃娃換－不是普通娃娃，魔 法娃娃！
+#ANIMATION 29
+#CAMERA 5
+#phrase Hero  7
+你真的越來越離譜了，獨眼龍，你知不知你在講什麼？你以為我還扮 家家酒？
+#CAMERA 11
+#phrase BGoblinC  8
+這不是拿來玩的娃娃！施法的娃娃！這可以讓敵人變弱，把他的力量 拿走！
+#ANIMATION 46
+#CAMERA 10
+#phrase Hero  9
+嗯．．．這倒是有趣．．．好，把娃娃給我。不過如果你敢騙我．． ．

@@ -1,0 +1,33 @@
+關於村落中的敵人
+#show Witch 1
+#show Hero 2
+#CAMERA 9
+#ANIMATION 9
+#phrase Witch  1
+那麼，甜心，村落中的人們怎麼說？
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero  2
+我想你可以猜猜看。
+#ANIMATION 8
+#CAMERA 11
+#phrase Witch  3
+每一個人都在怪對方？
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  4
+很接近－看來雙方都很有道理，而且我分不出那邊在搞鬼！
+#ANIMATION 63
+#CAMERA 9
+#phrase Witch  5
+噢，你們這些年輕人！你啥都不知道，對不對？如果你不能看到其中 的陰謀，就想辦法把事情浮顯出來！設一個陷阱！
+#hide Witch 
+#show Hero 4
+#ANIMATION 30
+#CAMERA 6
+#phrase Hero  6
+對．．．設一個陷阱．．．我現在能設那一種陷阱．．．噢，對了！ 我回村落告訴大家艾絲特拉告訴我一個秘密，在中央山區還有一個地 方有白花，現在我準備去幫她拿。
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  7
+我會告訴巴布爾我要去一個地方找，然後對長老說－我去另一個地方 。我很確定一定有一邊安排了陷阱，只要看那一邊有埋伏，我就知道 誰是敵人了！

@@ -1,0 +1,41 @@
+放開女孩
+#show Hero 1
+#show Deva 2
+#ANIMATION 72
+#CAMERA 11
+#phrase Deva  1
+站住！再走一步我就會呼叫地下城之主來幫忙－然後你就會在可怕的 死亡之中消失！
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  2
+我想我失了魂了．．．老天，她真美！
+#ANIMATION 11
+#CAMERA 3
+#phrase Deva  3
+什麼，你已經嚇到說不出話來了？我知道綁架我的人只不過是一群懦 夫！
+#ANIMATION 45
+#NOLIPS
+#CAMERA 2
+#phrase Hero  4
+而且這個聲音！我願意聽上一個小時．．．等一下，她在說什麼？
+#ANIMATION 72
+#CAMERA 11
+#phrase Deva  5
+而且你的主人狄耶拉是一個只會撒謊，可悲的雙面生物！
+#ANIMATION 63
+#CAMERA 2
+#phrase Hero  6
+嘿，嘿，公主，等一下！我完完全全不是妳想的那樣！我不是狄耶拉 的雇員，正好相反，我剛剛和她的傭兵交過手！我穿過這些洞穴來救 你！
+#ANIMATION 45
+#CAMERA 3
+#phrase Deva  7
+你？不過你是誰？而且你是怎麼知道我在這邊的？
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  9
+我是大法師塔克里克派來的．．．不過這是個很長的故事。我會把一 切都告訴你，但是妳必須先讓我休息一下，我剛剛才穿過這一堆洞穴 ！
+#ANIMATION 11
+#CAMERA 3
+#phrase Deva  10
+好吧。但請你不要叫我公主。我的名字是魯－阿－加拉，我寧願忘掉 那個可笑的笨名字。

@@ -1,0 +1,35 @@
+關於州長家的失竊案
+#show Hero 1
+#show Shopper 2
+#ANIMATION 62
+#CAMERA 11
+#phrase Shopper  1
+我不是一直說沒有什麼魔法可以取代活生生的警衛！舉例來說，我為 了警衛付出不少錢，到目前為止沒有人從我這邊偷取任何東西。不過 一談到魔法，你的腦袋可能暫時無法接受！州長要相信魔法師狄耶拉 是他自己的錯－就算是生手貝兒黛‧芙蓮也可以穿過她的陷阱！
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+什麼貝兒黛？
+#ANIMATION 11
+#CAMERA 11
+#phrase Shopper  3
+呃．．．你在說什麼？
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  4
+你剛剛說什麼貝兒黛搶了州長的東西？
+#ANIMATION 61
+#CAMERA 11
+#phrase Shopper  5
+我沒有那樣說。你不是那種只要逮住機會，就專門在雞蛋裡挑骨頭的 人吧？不是！那好！我要去忙別的事了，再見！
+#hide Shopper
+#show Hero 4
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  6
+卡蘭索真是個冷靜的老狐狸－他在興奮之際說溜了嘴，不過馬上就反 悔了！很顯然他知道一些事情，不過我要怎樣才能逼他說出來？
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero  7
+不過．．．我想瑟佛不怎麼喜歡商人，所以他也許會幫我讓他開始喋 喋不休？

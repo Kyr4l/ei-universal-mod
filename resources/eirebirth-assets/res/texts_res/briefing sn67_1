@@ -1,0 +1,32 @@
+卡歐萊的禮物
+#show Hero 
+#show OldNekro
+#ANIMATION 58
+#CAMERA 11
+#phrase OldNekro  1
+噢，對了，年輕人！你的來訪在另一個理由之下，可能對我十分有用 。多謝那個混蛋泰佛，我現在有更多的時間，所以我做了一些以前從 來沒空嚐試的實驗。
+#ANIMATION 57
+#CAMERA 3
+#phrase OldNekro  2
+現在我希望把我的實驗結果進入實用階段。而且我需要你的幫助，年 輕人！
+#ANIMATION 30
+#NOLIPS
+#CAMERA 2
+#phrase Hero  3
+是這樣嗎？如果他要從我身上做出一些特殊的僵屍，我就先砍他一刀 ！
+#ANIMATION 58
+#CAMERA 7
+#phrase OldNekro  4
+哈哈哈！年輕人，你藏不住內心的感覺，統統寫在你的臉上了！輕鬆 點，我沒打算在你身上做什麼事情，而且這個物質並不壞，一點壞處 都沒有．．．
+#ANIMATION 57
+#CAMERA 11
+#phrase OldNekro  5
+我會給你一個物品讓你在，呃，戰鬥環境下進行測試。如果你還活著 ，這個實驗就算成功了。
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  6
+如果我沒活下來？
+#ANIMATION 59
+#CAMERA 7
+#phrase OldNekro  7
+那我就用不同的方式來繼續我的工作。我不管什麼情況都贏，你有一 半的機會。相信我，這在瑟斯蘭格並沒有那麼奇怪！

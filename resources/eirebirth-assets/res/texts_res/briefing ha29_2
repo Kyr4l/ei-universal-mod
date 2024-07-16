@@ -1,0 +1,16 @@
+和蜥蜴交談
+#show Hero 1
+#show OLIZ 2
+#CAMERA 5
+#phrase OLIZ  1
+人類，我可以放你走。
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  2
+什麼？你會說話？你是誰，而且你為什麼在這邊？
+#CAMERA 5
+#phrase OLIZ  3
+你的問題太多了，人類。我現在只回答一個問題：叫我隱士。我也會 回答你的其他問題。待會吧。我可以放你走並把古代之爪交給你。你 必須保證你到我的家裡來，我會在那邊和你交談。
+#CAMERA 5
+#phrase OLIZ  4
+好好想想，我等一下再來。

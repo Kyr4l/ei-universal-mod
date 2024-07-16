@@ -1,0 +1,15 @@
+再見了，朋友！
+#show Hero 
+#show Merc9
+#ANIMATION 11
+#CAMERA 11
+#phrase Merc9  1
+噢，年輕人！你只走了這麼一點點路，就打算遠離前往至善的路途了 嗎？
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  2
+啊，這是我的工作。而且現在我們只好互道珍重了。
+#ANIMATION 45
+#CAMERA 11
+#phrase Merc9  3
+呃，不要把我想得這麼壞！而且，如果你又聽到我的死訊，連想都不 用去想！

@@ -1,0 +1,11 @@
+抱歉，但我現在很忙！
+#show Merc9
+#show Hero
+#CAMERA 11
+#ANIMATION 9
+#phrase Merc9  1
+啊！我在森林中的朋友害黑之一族開始攻擊，所以他們要我在這個空 曠地區擔任警戒。
+#CAMERA 3
+#ANIMATION 44
+#phrase Merc9  2
+在他們看到威脅消失之後，我就可以從責任中解脫，並一塊遊走各地 了！

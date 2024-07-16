@@ -1,0 +1,11 @@
+雷因那斯不願成為第四人
+#show Hero 
+#show Merc5
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  1
+雷因那斯，能加入我們這一群人，並到外面走走嗎？
+#ANIMATION 43
+#CAMERA 3
+#phrase Merc5  2
+你們已經有三個人了，四個就不夠幸運了。我不要在四個人的狀況下 出去！

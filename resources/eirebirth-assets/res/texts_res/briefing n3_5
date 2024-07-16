@@ -1,0 +1,19 @@
+帶回雷因那斯
+#show Hero 1
+#show Merc5 2
+#ANIMATION 14
+#CAMERA 3
+#phrase Merc5  1
+我很抱歉，不過我很願意再度加入你們的隊伍。
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  2
+你願意？發生什麼事了？
+#ANIMATION 44
+#CAMERA 3
+#phrase Merc5  3
+我的情況要求我應該儘可能的待在城市之中。我承擔了一些事業來增 加我的財富，但不知怎麼的也讓我和警衛之間的關係越來越差。你願 意讓我回到隊伍中嗎？
+#ANIMATION 46
+#CAMERA 2
+#phrase Hero  4
+我不介意你和警衛之間的關係，而且我需要你的協助！

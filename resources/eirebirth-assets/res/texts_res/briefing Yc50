@@ -1,0 +1,61 @@
+關於灰衣人
+#show Hero 1
+#show YCF 2
+#CAMERA 3
+#phrase YCF  1
+今天所有的雲都集中到北邊，絕對不是巧合；而且我的煙斗點不起來 。你又來了，人類？你想要做什麼好事嗎？
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  2
+嗯．．．看你所指的是什麼。
+#CAMERA 11
+#phrase YCF  3
+把你所找到的箭矢送回去給綠之一族！我們會根據我們的傳統把它毀 掉！
+#ANIMATION 44
+#CAMERA 2
+#phrase Hero  4
+噢，我可以把箭送回去，這沒有問題．．．不過事實上我要問你，酋 長，你或是你的族人知不知道有個叫「大灰」的人？也許你們有些人 在森林中看到他，老是把自己的臉藏起來．．．
+#CAMERA 3
+#phrase YCF  5
+噢，一個老是蓋住臉的人．．．一個看來像是沒有形體的人。麆鹿用 跑的進入水塘，但是用尖棒進入洞穴。
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  6
+嗯嗯嗯嗯．．．我是不是漏聽了什麼？
+#CAMERA 11
+#phrase YCF  7
+鹿絕對不會瞭解獨角獸之歌；而人類永遠無法聽懂森林的語言。我試 著讓你比較容易瞭解：我們看過那個人，不管他的臉有沒有掩蓋起來 。
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  8
+那他的遮蔽拿開之後是什麼樣子？
+#CAMERA 3
+#phrase YCF  9
+那個人不像你．．．我想人類稱那種人為女人。她的頭髮白的像雪一 樣！
+#CAMERA 10
+#NOLIPS
+#ANIMATION 30
+#phrase Hero  10
+白髮的女人．．．是魔法師狄耶拉！原來就是她下令殺了探查員，以 阻止他找到公主．．．這就表示狄耶拉就是綁架者！
+#ANIMATION 43
+#CAMERA 2
+#phrase Hero  11
+那她之後到那邊去了？她又做了什麼？
+#CAMERA 3
+#phrase YCF  12
+有時她會和住在湖西岸的人見面，但是她更常做的事情是沿著湖的東 邊走動，前往擋住廢棄礦脈通道的大門。
+#CAMERA 11
+#phrase YCF  13
+我們從來沒有冒險繼續跟下去：通過這些門之後會看到穿著金屬的人 。不過他們不是城市的警衛！
+#hide YCF
+#show Hero 4
+#NOLIPS
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero  14
+廢棄的礦道，有武裝的人－看來她就是把公主關在那個地方！是嗎？ 也許我錯了？不過倒是有辦法確認．．．
+#NOLIPS
+#ANIMATION 30
+#CAMERA 2
+#phrase Hero  15
+我必須到城市中，去問狄耶拉一個天真的問題。如果她開始打草驚蛇 ，那我的猜想就不會錯了！

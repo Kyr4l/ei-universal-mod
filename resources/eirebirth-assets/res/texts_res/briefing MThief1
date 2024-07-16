@@ -1,0 +1,23 @@
+和席格斯特交談
+#show Hero
+#show MThief
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  1
+我是瑟佛的朋友－大家叫他捕獸人－而且他建議我來找你談談。他說 你知道一個秘密，可以讓一個人．．．我該怎麼講．．．行動安靜而 且在任何情況下都不會亂了手腳。
+#ANIMATION 63
+#CAMERA 3
+#phrase MThief  2
+哈！你講得真好，年輕人，雖然你的手並沒有你的伶牙利齒來的敏捷 。別動怒：我的專業技能可以馬上看出你的手並非這麼靈活。
+#ANIMATION 9
+#CAMERA 11
+#phrase MThief  3
+但是我們可以做點事來改善－而且我想這是捕獸人要你來找我的原因 ，不是嗎？
+#ANIMATION 31
+#CAMERA 10
+#phrase Hero  4
+老實說，是的。他說過你可以訓練我。
+#ANIMATION 11
+#CAMERA 3
+#phrase MThief  5
+老狐狸！前一陣子捕獸人幫了我一個大忙，他知道我現在不可能拒絕 他！

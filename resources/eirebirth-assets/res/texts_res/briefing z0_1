@@ -1,0 +1,19 @@
+與女巫有關的進一步消息
+#show Hero 1
+#show Daughter 2
+#ANIMATION 61
+#CAMERA 9
+#phrase Daughter  1
+聽好小伙子，如果你不怕我奶奶，你一定很勇敢，但是聽我一句話， 你真的應該害怕！
+#ANIMATION 45
+#CAMERA 6
+#phrase Hero  2
+原來妳就是艾絲特拉的孫女？我必須和她談談。當然了，那些在村落 中的人告訴我，她並不是很容易交涉。不過她不可能真的這麼壞，對 嗎？！
+#ANIMATION 63
+#CAMERA 11
+#phrase Daughter  3
+她就是這麼壞！往此地路上的陷阱－你以為是自己長出來的？我不敢 想像有人在她的洞穴附近出現！
+#ANIMATION 7
+#CAMERA 5
+#phrase Hero  4
+好，好，如果她不喜歡陌生人，我會想辦法和她熟悉．．．

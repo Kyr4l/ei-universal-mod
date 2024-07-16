@@ -1,0 +1,11 @@
+帶著哈拉德進入隊伍
+#show Hero 
+#show Merc7
+#CAMERA 2
+#ANIMATION 45
+#phrase Hero  1
+呃，卡拉德，你今天想和我們一塊走嗎？
+#CAMERA 3
+#ANIMATION 32
+#phrase Merc7  2
+我覺得你們的人數已經太多了。我會自己去找尋我的目標，再來比比 敵人死屍的數量。

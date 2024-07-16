@@ -1,0 +1,15 @@
+把騎士留在綠之一族
+#show Hero 
+#show Merc9
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  1
+尊貴的騎士！這一次我必須在沒有你的情況下，來完成任務了。
+#ANIMATION 45
+#CAMERA 3
+#phrase Merc9  2
+為什麼？你覺得我當同伴很累了？
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero  3
+不，不是那樣。在城市中的某人真的記得你，或者他們以為還能認出 你。所以你最好留在這邊，待在綠之一族之中。

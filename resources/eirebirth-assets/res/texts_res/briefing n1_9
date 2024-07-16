@@ -1,0 +1,19 @@
+帶著騎士在隊伍中
+#show Hero 
+#show Merc9
+#ANIMATION 61
+#CAMERA 2
+#phrase Hero  1
+呃．．．倍受尊重的騎士！我很高興能接受你成為同伴，但是．．． 你知道．．．有時候我必須靠著不是很誠實的方式，而且我不知道你 的反應是怎麼樣．．．
+#ANIMATION 63
+#CAMERA 3
+#phrase Merc9  2
+當我說我在做善事時，那一定不是指我不過是個戴著白手套的花朵。 所有事情在戰爭中都是公平的，這也包括正邪之戰。我發誓我會和你 走到海角天邊，並完成你交付的任何事情！
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero  3
+是的，不過我偶爾會回到城市去！
+#ANIMATION 9
+#CAMERA 11
+#phrase Merc9  4
+噢，不用擔心這點。在城市中已經沒有人還記得我的長像了！

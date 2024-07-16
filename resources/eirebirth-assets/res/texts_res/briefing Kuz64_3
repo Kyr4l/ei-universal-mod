@@ -1,0 +1,23 @@
+關於被殺的監工
+#show Hero 3
+#show Kuzn 5
+#ANIMATION 32
+#CAMERA 5
+#phrase Hero  1
+好吧，這是你們給我對付監工的工作，鐵匠兄弟！
+#ANIMATION 3
+#CAMERA 11
+#phrase Kuzn  2
+這些狗會強烈的反抗嗎？
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero  3
+不，這不是重點。我一直在想這些工人一定憎恨他們的刑求人，但是 他們不會幫助我們而叫警衛，是因為他們得表現像是鞭刑大將和鞭打 大將最要好的朋友一樣！
+#ANIMATION 14
+#CAMERA 3
+#phrase Kuzn  4
+如果你在瑟斯蘭格活了一輩子就一點也不奇怪了。如果工人在看到陌 生人時不拉警報，他們會被活活打死－這就是法律。
+#ANIMATION 31
+#CAMERA 9
+#phrase Kuzn  5
+但是現在你已經為我向那一對可惡兄弟報復，所以你就不再欠我一筆 了！

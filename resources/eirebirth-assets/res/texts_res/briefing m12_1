@@ -1,0 +1,27 @@
+關於被偷的黃金
+#show Smith 1
+#show Hero 2
+#ANIMATION 43
+#CAMERA 9
+#phrase Smith  1
+我從來就不相信我的學徒有能力從厄發手中偷東西！這根本就不可能 ！
+#ANIMATION 46
+#CAMERA 10
+#phrase Hero  2
+但是金子真的不見了，不是嗎？而且你的工人也失蹤了！
+#ANIMATION 45
+#CAMERA 11
+#phrase Smith  3
+為什麼沒有人懷疑那些強盜呢？從我這邊偷東西，跟從厄發手中偷東 西－還不是都一樣！而且我相信他們連我的學徒一塊帶走了！如果長 老又要把這件事怪到我的頭上，叫他拿出證明，否則就把那些話吞回 去！
+#ANIMATION 32
+#CAMERA 7
+#phrase Smith  4
+一直到現在我還是不想知道他的問題在那裡。他從不相信任何人，而 且一直到現在還我行我素。
+#ANIMATION 14
+#CAMERA 6
+#phrase Hero  5
+就算是隊長和他手下所用的武器？萬一妖精再度攻擊怎麼辦？
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith  6
+隊長和長老有在我的家當被翻過一次之後幫助過我嗎？所以現在我打 算用一樣的方式對待他們！
