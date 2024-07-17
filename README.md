@@ -19,15 +19,30 @@ And more!
 
 *Requires EIStarter, which is provided on this repo, but it can also be found on `gipat.ru`*
 
-
 We value feedback! If you have any comments to make please open an issue on this repo.
 
+# Installation
+
+- Download this repo (using `git clone` is recommended)
+- Install the Evil Islands Addon, located in `/tools/eistarter-1046-en.exe` (skip if you already have it installed)
+- Copy (or make a junction/symlink) the `Universal-Mod` directory into the  `<EIStarter Path>/Mods` directory
+
+Extra step for running on Linux with WINE :
+*WINE requires a DLL override to run EIStarter properly, otherwise the injection will fail and the game will launch in vanilla.*
+You need to use the following environment variable : `WINEDLLOVERRIDES="dinput=n,b"`
+
+# Disclaimer
+
+- We __do not__ own any of the tools used *except* the scripts in eimultitool, the binaries used are community tools.
+- Some files included in `./resources/` come from the vanilla game, some others come from other mods and some others are from us.
+
+# Credits
 
 Made with the precious help of the Russian modding community.
-
 
 Special thanks to :
 - Atom (Atm)
 - SunGuru
 
 Спасибо
+
