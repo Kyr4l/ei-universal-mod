@@ -3,6 +3,7 @@
 A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Based on EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
+
 The mod includes (but is not limited to) :
 - Severely reduced stamina consumption while sprinting
 - No XP loss on death, but 10x higher money loss
@@ -14,9 +15,11 @@ The mod includes (but is not limited to) :
 - New materials/runes/potions/monsters/blueprints
 - Reworked melee combat
 - Better looting
+
 And more!
 
 *This mod includes HD Lands*
+
 *Requires EIStarter, which is provided on this repo, but it can also be found on `gipat.ru`*
 
 We value feedback! If you have any comments to make please open an Issue on this repo.
@@ -28,7 +31,9 @@ We value feedback! If you have any comments to make please open an Issue on this
 - Copy (or make a junction/symlink) the `Universal-Mod` directory into the  `<EIStarter Path>/Mods` directory
 
 Extra step for running on Linux with WINE :
+
 *WINE requires a DLL override to run EIStarter properly, otherwise the injection will fail and the game will launch in vanilla.*
+
 You need to use the following environment variable : `WINEDLLOVERRIDES="dinput=n,b"`
 
 # Disclaimer
