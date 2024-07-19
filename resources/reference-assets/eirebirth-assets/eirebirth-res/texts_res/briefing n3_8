@@ -1,9 +1,0 @@
-帶回菲爾哈克
-#show Hero 3
-#show Merc8 5
-#ANIMATION 45
-#phrase Hero  1
-菲爾哈克兄弟，你現在可以跟我走嗎？外面的敵人如果再看不到你的 魔法，可能開始覺得無聊了！
-#ANIMATION 15
-#phrase Merc8  2
-我自己都快無聊死了！我當然願意和你同行。

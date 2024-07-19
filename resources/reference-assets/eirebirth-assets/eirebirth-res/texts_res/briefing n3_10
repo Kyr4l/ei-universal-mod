@@ -1,9 +1,0 @@
-把莎希利亞帶回隊伍
-#show Hero 
-#show Merc10
-#ANIMATION 45
-#phrase Hero  1
-你是對的：我又需要你的幫助了。希望你不會拒絕我？
-#ANIMATION 71
-#phrase Merc10  2
-我幹嘛拒絕？我在這邊無聊得要死！

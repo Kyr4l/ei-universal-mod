@@ -1,9 +1,0 @@
-帶著菲爾哈克進入隊伍
-#show Hero 
-#show Merc8
-#ANIMATION 45
-#phrase Merc8  1
-為什麼要聚這麼一團人？只是為了要對付外面那些可悲的人們？
-#ANIMATION 32
-#phrase Hero  2
-他們有些人戰鬥起來很強，所以我們的人數得剛好。
