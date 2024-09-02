@@ -27,7 +27,7 @@ We value feedback! If you have any comments to make please open an Issue on this
 
 # Installation
 
-First, you need to pick which branch of the mod you want to play with, the `beta` branch is currently recommended as it contains the latest fixes, balance changes, and has overall more content.
+*You need to pick which branch of the mod you want to play with, the `beta` branch is currently recommended as it contains the latest fixes, balance changes, and has overall more content.*
 
 - Download the latest archive of this mod in the [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) section __OR__ Download the entire repo for `beta` testing (using `git` is strongly recommended)
 - Install the Evil Islands Addon, located in `tools/eistarter-1046-en.exe` (skip if you already have it installed)
