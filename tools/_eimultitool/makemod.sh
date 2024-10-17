@@ -20,6 +20,20 @@ totalreg=""
 # totalmmp=""
 totalres=""
 
+function injectCommitIntoVersion {
+    commithashshort="$(git rev-parse --short HEAD)"
+    versionfile="modversion.txt"
+    resversionname="./res-unpacked/texts_res/string version_name"
+
+    echo ""
+    echo "=========================="
+    echo "| INJECTING VERSION HASH |"
+    echo "=========================="
+    echo ""
+    cp "$versionfile" "$resversionname"
+    sed -i "s/ver\./ver. $commithashshort/" "$resversionname"
+    echo "File $resversionname updated with commit hash: $commithashshort"
+}
 
 # directory creation
 echo "Creating mod directory : $modfolder"
@@ -91,6 +105,9 @@ wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
 mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"/
 cd .. || exit
 
+# call func to add version hash shortened
+injectCommitIntoVersion
+
 # eipacker
 echo ""
 echo "========================"
@@ -124,7 +141,7 @@ echo ""
 cp -v "$luadir"/main.lua "$modfolder"/
 cp -vrL "$luadir"/lua "$modfolder"/lua
 
-# last step
+
 echo "DONE PROCESSING $modfolder"
 
 
