@@ -10,9 +10,3 @@ rsync -rv "$modfolder"/ ../../Universal-Mod
 
 # echo rsync
 echo "FILES MOVED TO MOD RELEASE DIRECTORY"
-
-
-
-
-
-
