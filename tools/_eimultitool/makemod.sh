@@ -52,7 +52,7 @@ function ini2Reg {
     mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
     
     echo ""
-    echo "=============================== INI FILES PROCESSED ==============================="
+    echo "======================================================================"
     echo ""
 }
 
@@ -78,7 +78,7 @@ function dds2MMP {
     mv -fv "$mmpdir"/* $rextdir/textures_res/
 
     echo ""
-    echo "=============================== DDS FILES PROCESSED ==============================="
+    echo "===================================================================================="
     echo ""
 }
 
@@ -94,7 +94,7 @@ function eiDBEditor {
     cd .. || exit
 
     echo ""
-    echo "=============================== DATABASELMP PROCESSED ==============================="
+    echo "======================================================================================"
     echo ""
 }
 
@@ -112,7 +112,7 @@ function writeCommitIntoVersion {
     echo "File $resversionname updated with commit hash: $commithashshort"
 
     echo ""
-    echo "======================== VERSION HASH WRITTEN ========================"
+    echo "======================================================================"
     echo ""
 }
 
@@ -137,7 +137,7 @@ function eiPacker {
     mv -fv "$resdir"/*.res "$modfolder"/res/
 
     echo ""
-    echo "=============================== RES FILES PROCESSED ==============================="
+    echo "===================================================================================="
     echo ""
 }
 
@@ -150,7 +150,7 @@ function addLua {
     cp -vrL "$luadir"/lua "$modfolder"/lua
 
     echo ""
-    echo "=============================== LUA SCRIPTS ADDED ==============================="
+    echo "=================================================================================="
     echo ""
 }
 
