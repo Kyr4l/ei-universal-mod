@@ -29,9 +29,7 @@ function directoryCreation {
 
 function ini2Reg {
     echo ""
-    echo "========================"
-    echo "| PROCESSING INI FILES |"
-    echo "========================"
+    echo "======================== PROCESSING INI FILES ========================"
     echo ""
     echo "Converting INI files to REG..."
 
@@ -42,26 +40,28 @@ function ini2Reg {
         totalreg="$totalreg $iniin"
     done
 
-    echo "==============================="
     echo "Processed the following files : $totalreg"
-    echo "==============================="
     echo "Copying REG files into their respective folder..."
     echo "Files detected in $regdir : $(ls $regdir | xargs)"
+    
     mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
     mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/music.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/streamsn.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
     mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
+    
+    echo ""
+    echo "=============================== INI FILES PROCESSED ==============================="
+    echo ""
 }
 
 function dds2MMP {
     echo ""
-    echo "========================"
-    echo "| PROCESSING DDS FILES |"
-    echo "========================"
+    echo "=============================== PROCESSING DDS FILES ==============================="
     echo ""
     echo "Converting DDS files to MMP..."
+
     cd $ddsdir || exit
 
     for ddsin in *.dds; do
@@ -71,26 +71,31 @@ function dds2MMP {
         totalmmp="$totalmmp $ddsin"
     done
 
-    echo "==============================="
     echo "Processed the following files : $totalmmp"
-    echo "==============================="
     cd .. || exit
     echo "Moving MMP files to textures_res"
     mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
     mv -fv "$mmpdir"/* $rextdir/textures_res/
+
+    echo ""
+    echo "=============================== DDS FILES PROCESSED ==============================="
+    echo ""
 }
 
 function eiDBEditor {
     echo ""
-    echo "=========================="
-    echo "| PROCESSING DATABASELMP |"
-    echo "=========================="
+    echo "=============================== PROCESSING DATABASELMP ==============================="
     echo ""
+
     cd $xlsxdir || exit
     echo "Converting XLSX databaselmp to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
     mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"/
     cd .. || exit
+
+    echo ""
+    echo "=============================== DATABASELMP PROCESSED ==============================="
+    echo ""
 }
 
 function writeCommitIntoVersion {
@@ -99,30 +104,29 @@ function writeCommitIntoVersion {
     resversionname="./res-unpacked/texts_res/string version_name"
 
     echo ""
-    echo "========================"
-    echo "| WRITING VERSION HASH |"
-    echo "========================"
+    echo "======================== WRITING VERSION HASH ========================"
     echo ""
+
     cp -v "$versionfile" "$resversionname"
     sed -i "s/ver\./ver. $commithashshort/" "$resversionname"
     echo "File $resversionname updated with commit hash: $commithashshort"
+
+    echo ""
+    echo "======================== VERSION HASH WRITTEN ========================"
+    echo ""
 }
 
 function eiPacker {
     echo ""
-    echo "========================"
-    echo "| PROCESSING RES FILES |"
-    echo "========================"
+    echo "=============================== PROCESSING RES FILES ==============================="
     echo ""
     echo "Packing RES files..."
-    echo "========================"
 
     for rextin in "$rextdir"/*_res; do
         resout="${rextin%_res}.res"
         wine bin/eipacker.exe /pack "$rextin"
         rsync -r --remove-source-files "$resout" "$resdir"/
         echo "RSync completed on $resout"
-        echo "========================"
         totalres="$totalres $rextin"
     done
 
@@ -135,9 +139,7 @@ function eiPacker {
 
 function addLua {
     echo ""
-    echo "======================"
-    echo "| ADDING LUA SCRIPTS |"
-    echo "======================"
+    echo "=============================== ADDING LUA SCRIPTS ==============================="
     echo ""
     cp -v "$luadir"/main.lua "$modfolder"/
     cp -vrL "$luadir"/lua "$modfolder"/lua
