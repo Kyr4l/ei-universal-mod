@@ -135,14 +135,23 @@ function eiPacker {
 
     echo "Moving RES files to $modfolder/res/"
     mv -fv "$resdir"/*.res "$modfolder"/res/
+
+    echo ""
+    echo "=============================== RES FILES PROCESSED ==============================="
+    echo ""
 }
 
 function addLua {
     echo ""
     echo "=============================== ADDING LUA SCRIPTS ==============================="
     echo ""
+
     cp -v "$luadir"/main.lua "$modfolder"/
     cp -vrL "$luadir"/lua "$modfolder"/lua
+
+    echo ""
+    echo "=============================== LUA SCRIPTS ADDED ==============================="
+    echo ""
 }
 
 # CALLING FUNCTIONS IN THE RIGHT ORDER
