@@ -11,6 +11,7 @@ totalmmp=""
 
 cd "$dds" || exit
 
+function dds2MMP {
 for in in *.dds; do
     out="${in%dds}mmp"
     wine ../bin/MMPS.exe "$in"
@@ -18,6 +19,9 @@ for in in *.dds; do
     echo "Processed $in -> $out"
     totalmmp="$totalmmp $in"
 done
+}
+
+dds2MMP
 
 echo "DONE CONVERTING FILES TO MMP"
 echo "Processed the folllwing files : $totalmmp"
