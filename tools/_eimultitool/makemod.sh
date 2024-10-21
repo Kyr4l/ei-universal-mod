@@ -41,7 +41,7 @@ function ini2Reg {
 
     echo "Processed the following files : $totalreg"
     echo "Copying REG files into their respective folder..."
-    echo "Files detected in $regdir : $(ls $regdir | xargs)"
+    echo "Files detected in $regdir : $(find .. -print0 | xargs -0 ..)"
 
     mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
     mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
