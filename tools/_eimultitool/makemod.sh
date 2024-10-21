@@ -6,18 +6,17 @@ export WINEDEBUG=-all
 # mod folder location and naming
 modout="mods-out"
 modfolder="$modout"/"$(date +"%Y-%m-%d_%H-%M")"
-# ressources directories
+# resources directories
 inidir="ini"
 regdir="reg"
-# ddsdir="dds"
-# mmpdir="mmp"
+ddsdir="dds"
+mmpdir="mmp"
 xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
 luadir="lua"
 # total files
 totalreg=""
-# totalmmp=""
 totalres=""
 
 function directoryCreation {
@@ -43,14 +42,14 @@ function ini2Reg {
     echo "Processed the following files : $totalreg"
     echo "Copying REG files into their respective folder..."
     echo "Files detected in $regdir : $(ls $regdir | xargs)"
-    
+
     mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
     mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/music.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/streamsn.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
     mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
-    
+
     echo ""
     echo "======================================================================"
     echo ""
@@ -62,12 +61,12 @@ function dds2MMP {
     echo ""
     echo "Converting DDS files to MMP..."
 
-    cd $ddsdir || exit
+    cd "$ddsdir" || exit
 
     for ddsin in *.dds; do
         mmpout="${ddsin%dds}mmp"
         wine ../bin/MMPS.exe "$ddsin"
-        mv -fv "$mmpout" ../$mmpdir/
+        mv -fv "$mmpout" ../"$mmpdir"/
         totalmmp="$totalmmp $ddsin"
     done
 
@@ -98,21 +97,49 @@ function eiDBEditor {
     echo ""
 }
 
-function writeCommitIntoVersion {
-    commithashshort="$(git rev-parse --short HEAD)"
-    versionfile="modversion.txt"
+function writeVersion {
     resversionname="./res-unpacked/texts_res/string version_name"
+    versiontemplate="./version/version-name-format.txt"
+    versionfile="./version/mod-version.txt"
+
+    commithashshort="$(git rev-parse --short HEAD)"
+    version=$(cat "$versionfile")
 
     echo ""
-    echo "======================== WRITING VERSION HASH ========================"
+    echo "==================================== WRITING VERSION ===================================="
     echo ""
 
-    cp -v "$versionfile" "$resversionname"
-    sed -i "s/ver\./ver. $commithashshort/" "$resversionname"
-    echo "File $resversionname updated with commit hash: $commithashshort"
+    read -rp "Increment version ? (y/n) " answer
+    if [[ "$answer" == "y" ]]; then
+        major=$(echo "$version" | cut -d. -f1)
+        minor=$(echo "$version" | cut -d. -f2)
+        patch=$(echo "$version" | cut -d. -f3)
+
+        if [ "$patch" -lt 9 ]; then
+            patch=$((patch + 1))
+        else
+            patch=0
+            if [ "$minor" -lt 9 ]; then
+                minor=$((minor + 1))
+            else
+                minor=0
+                major=$((major + 1))
+            fi
+        fi
+        newversion="$major.$minor.$patch"
+        version=$newversion
+        echo "$newversion" > "$versionfile"
+    fi
+
+    cp -v "$versiontemplate" "$resversionname"
+
+    sed -i "s/ver\./ver. $version/" "$resversionname"
+    sed -i "s/commit\./commit. $commithashshort/" "$resversionname"
+    
+    echo "File $resversionname updated with version $newversion and commit hash $commithashshort"
 
     echo ""
-    echo "======================================================================"
+    echo "========================================================================================="
     echo ""
 }
 
@@ -159,9 +186,8 @@ directoryCreation
 ini2Reg
 #dds2MMP // function declared but disabled
 eiDBEditor
-writeCommitIntoVersion
+writeVersion
 eiPacker
 addLua
-
 
 echo "DONE PROCESSING $modfolder"
