@@ -1,6 +1,6 @@
 Universal Mod
 ver. 
+commit. 
 
 HD Lands 1.5.7
-
-Game version: 1.06+
+Evil Islands 1.06+
