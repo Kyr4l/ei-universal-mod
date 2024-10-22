@@ -35,7 +35,7 @@ function CalcRunningManaCost(unit_server_stats_addr, unit_server_addr, common_se
     mp.curr = mp.curr - mp.max * (1 / 900)
 end
 
--- fix the perma regen bug // SHOULD BE FIXED - REVIEW THE PATCH AND DELETE THIS FUNCTION
+-- fix the perma regen bug // SHOULD BE FIXED IN DEFAULT.CONF, REVIEW AND DELETE THIS COMMENT IF THE PATCH SUCCEEDED
 -- function RegenerateHp(common_server_stats_addr, unit_server_stats_addr, unit_addr) --> bool
 --     local common_stats = UnitServerCommonStats(common_server_stats_addr)
 --     local unit_stats   = UnitServerStats(unit_server_stats_addr)

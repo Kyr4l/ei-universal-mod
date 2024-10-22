@@ -80,7 +80,7 @@ end
 -- hp_only - true, если эта функция должна провести только регенерацию жизней
 ----------------------------------------------------------------------------------------------------
 
--- Регенерация жизней
+-- Регенерация жизней -- fixed the perma regen bug
 function RegenerateHp(common_server_stats_addr, unit_server_stats_addr, unit_addr) --> bool
     local common_stats = UnitServerCommonStats(common_server_stats_addr)
     local unit_stats   = UnitServerStats(unit_server_stats_addr)
