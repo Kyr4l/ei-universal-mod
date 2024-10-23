@@ -109,7 +109,7 @@ function writeVersion {
     echo "==================================== WRITING VERSION ===================================="
     echo ""
 
-    read -rp "Increment version ? (y/n) " answer
+    read -rp "Increment version ? (y/N) " answer
     if [[ "$answer" == "y" ]]; then
         major=$(echo "$version" | cut -d. -f1)
         minor=$(echo "$version" | cut -d. -f2)
