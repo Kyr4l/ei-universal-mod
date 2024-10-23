@@ -1,0 +1,49 @@
+On eternal gratitude
+#DESC 
+#show Hero 
+#show Deva
+#ANIMATION 64
+#CAMERA 11
+#phrase Deva 1
+How nice of you to save us! We were treated terribly there. We will be grateful to you for eternity.
+#ANIMATION 5
+#CAMERA 11
+#phrase Deva 2
+I seem to remember you. You're the boy who used to stare at me forever.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+Yes! I mean no! I didn't dare stare at you, I marveled. I've always been a slave to your beauty.
+#ANIMATION 66
+#CAMERA 11
+#phrase Deva 4
+And why 'have you been'? So now you don't like me anymore? And as you grew up... you became so... grown up. I like these changes.
+#ANIMATION 14
+#NOLIPS
+#CAMERA 10
+#phrase Hero 5
+She said she liked the changes! That she likes me! Great powers, my dreams are coming true!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 6
+I'm... I'm glad you like me. I've come a long way to save you. 
+#ANIMATION 70
+#CAMERA 11
+#phrase Deva 7
+Oh, you can't even imagine what I had to go through! After you ran away, I always believed you would come back for us. You were always so resourceful.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 8
+I... Tai... I've always known. I mean, I want to say that to me, your words are very important. I should have told you-
+#ANIMATION 66
+#CAMERA 11
+#phrase Deva 9
+Yes, yes, you will. But now I want to ask you something. You are so strong and brave now, this will definitely not be difficult for you.
+#ANIMATION 64
+#CAMERA 11
+#phrase Deva 10
+I didn't manage to take some things. They were left there, in a trunk next to our barrack. Will you bring them for me?
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 11
+Yes, in a flash! Of course!

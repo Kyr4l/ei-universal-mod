@@ -1,0 +1,32 @@
+About the red-skinned young man
+#DESC 
+#show Hero 
+#show Sheriff
+#ANIMATION 12
+#CAMERA 0
+#phrase Sheriff 1
+Kir! Kir! Come here! I want to ask you something.
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 2
+There, I'm listening. And please: don't shout like that!
+#ANIMATION 59
+#CAMERA 0
+#phrase Sheriff 3
+Oh, sorry. Say: and why do you have skin of such a strange red hue? I haven't seen one like it on you once.
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 4
+Nothing weird about it. I am of the Joon race, that explains everything. But the fact that you have not once seen the likes of me only confirms my assumption that on Suslanger, and perhaps in all of Khadagan, the existence of the Joons has been forgotten.
+#ANIMATION 32
+#CAMERA 0
+#phrase Sheriff 5
+Good people, you just look at this boy. He hasn't checked yet, hasn't asked Karim - and he's already jumping to conclusions! Kir, you are strongly mistaken! Now I just remembered that quite recently I heard somewhere about the fact that Khadagan scientists were engaged in the research of an unusual red-skinned young man, and this... what's his name... o! - phenomenon associated with him!
+#ANIMATION 62
+#CAMERA 0
+#phrase Hero 6
+Only Joons have red skin! That was Joon! And where is he now? Who did you hear that from? What kind of phenomenon is this?
+#ANIMATION 61
+#CAMERA 0
+#phrase Sheriff 7
+Don't be in such a hurry. I myself don't remember who told me about it - whether a peddler in the market or a drunken soldier over a glass of wine. But if you give me time, I will find out everything in detail and tell you. Just give me time!

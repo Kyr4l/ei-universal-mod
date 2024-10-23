@@ -1,0 +1,24 @@
+Wandering in the dark
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 14
+#CAMERA 11
+#phrase Hero 1
+Kiel, you're alive! You're alive, my love!
+#ANIMATION 5
+#CAMERA 10
+#phrase merc2 2
+But... what? I think I missed something...
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 3
+Wait, did I hear you? Did you say you love me?
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 4
+Yes! Forgive me, Kiel, I was an unthinking dumb ass! My blindness nearly lost you...
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 5
+Get it out of your head! The most important thing is that you love me! And the rest let the troll eat, my Kira!     :D

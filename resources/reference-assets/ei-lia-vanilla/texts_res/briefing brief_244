@@ -1,0 +1,38 @@
+About the found thing
+#DESC
+#show Hero
+#show Vor
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase Vor 1
+They say you found a knife?
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 2
+Or maybe we did find one. What's it to you?
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+Kiel wait, maybe he can help us.
+#show DeadBrissen 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 4
+Look, have you seen this knife before?
+#ANIMATION 62
+#CAMERA 11
+#phrase Vor 5
+HA! Now do you need my help? Of course, I saw that knife. But I'm just going to think about whether to tell you more.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 6
+If you don't tell us right away, I'll make sure that someday you'll suddenly get tangled up in your rope and hang awkwardly in a tree.
+#ANIMATION 44
+#CAMERA 11
+#phrase Vor 7
+Let it be... It's a Hysa knife. I saw it the other day... I was looking into his lab.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 8
+His! You need to tell the governor about this immediately!

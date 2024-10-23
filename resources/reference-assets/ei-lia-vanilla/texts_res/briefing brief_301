@@ -1,0 +1,36 @@
+Get to know the Baron
+#DESC 
+#show Hero 
+#show Baron
+#ANIMATION 12
+#CAMERA 11
+#phrase Baron 1
+We were unexpectedly interrupted, and I missed your explanation.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 2
+I have nothing more to add: The portal is functional, we've already proven that. As the mage said, the problem lies with the Jygran itself - it's sealed by a spell, which is why everyone has forgotten its existence.
+#ANIMATION 60
+#CAMERA 11
+#phrase Baron 3
+Hm, so that's the thing. And we always thought that Cania betrayed us by abandoning us to this cursed place.
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 4
+I, Baron Wiryl, am at your service. Everything you see around you has always belonged to my family. It is my duty and honor to care for my people and protect the borders of the Canian Empire, even though the connection to it has long been lost.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 5
+I am pleased to meet you, Baron. We, on the other hand, are simple adventurers. Though no, I am driven by personal purpose, which is why I was so intent on getting to Jygran. Here, captive to the cursed Firez, is my entire family!
+#ANIMATION 43
+#CAMERA 11
+#phrase Baron 6
+Hrm, FIREZ! How I hate that name! To him belongs almost all of Jygran. This mad mage has put himself in the service of higher necromancy!
+#ANIMATION 6
+#CAMERA 11
+#phrase Baron 7
+Our land is dying. He's doing everything to hasten its agony instead of trying to save it.
+#ANIMATION 46
+#CAMERA 11
+#phrase Baron 8
+This is a sick subject for me. You people need to rest now. Here, in the fortress, you will find everything you need.

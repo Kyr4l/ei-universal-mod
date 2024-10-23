@@ -1,0 +1,34 @@
+Get to know the magician
+#DESC 
+#show Hero 
+#show KMage
+#show ElemMat 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Mr. Mage, I found out about your interest in the ice elementals from the mine, and I brought some samples of them.
+#ANIMATION 14
+#CAMERA 11
+#phrase KMage 2
+What extraordinary magical reflections.... yes... yes, yes. That explains a lot. I always assumed that the basis of their magical energy was formed by the finest particles, reflecting all material objects...
+#hide ElemMat 5
+#ANIMATION 62
+#CAMERA 11
+#phrase KMage 3
+Ah, sorry, I got complacent. Let me introduce myself. My name is Jam-Akara, and I am a practicing first degree mage, and a member of the honorable church of mages of the three worlds. I am pleased to be acquainted with a representative of a very ancient race. After all, you are a Joon, if I am not mistaken?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 4
+You guessed it infallibly. My name is Kir, and it is also a great honor for me to get to know you.
+#ANIMATION 12
+#CAMERA 11
+#phrase KMage 5
+I hear you guys have a thing for me. After all, it's not like you've just come such a long way.
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 6
+Yes, recently a magic orb showed me that there is an ancient artifact on Ingos, gifted with Joon magic. It is extremely important to me to find it and save my family. But my meager abilities are not enough to bring it to light. And I would like to ask for your help in the search.
+#ANIMATION 59
+#CAMERA 11
+#phrase KMage 7
+A Joon artifact! What an interesting case! Yes, I will dutifully help you. This will allow me to gather enough material to speak at the next church meeting with a paper.

@@ -1,0 +1,20 @@
+On the gratitude of the witch
+#DESC 
+#show Hero 
+#show Witch
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 1
+Well, thank you sweetie, you didn't give the grandmother a forfeit in the Dead City. If it wasn't for that flower I never would have gone to the dragon!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+And actually, why to him?
+#ANIMATION 62
+#CAMERA 11
+#phrase Witch 3
+Well, where? The flower is called the Dragon Flower - you said yourself that it's an extraordinary flower, and all signs pointed to it blooming somewhere recently. And who but the Dragon could tell me where to look for it!
+#ANIMATION 65
+#CAMERA 11
+#phrase Witch 4
+So I went to this old feller, and he said - he didn't agree to say anything! If you hadn't shown up, I don't know how this case would have ended. So thank you boy, you bailed me out, and I won't be left with a debt!

@@ -1,0 +1,11 @@
+Buy Thieves' Sword (1150)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I think this sword is the best thing in your forge.
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 2
+So here it is, but you don't have the money for it anyway.

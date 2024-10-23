@@ -1,0 +1,24 @@
+Last assault
+#DESC 
+#show Hero 
+#show Baron
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 1
+Lord Baron. Please recommend the siege of Firez's citadel. I should have fought him. I've waited too long for this moment. The moment of my revenge has arrived!
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 2
+Come to your senses, soldiers! We are too weak to attack Firez's main force! No, you must wait, take the fortress under siege by weakening the enemy first with minor skirmishes.
+#ANIMATION 61
+#CAMERA 11
+#phrase Baron 3
+No, we can't attack now. There is necromancy on his side and only my dear soldiers on mine.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+Baron, you don't know everything. I have replenished your army with new allies. They are raring to fight. Now our forces have equalled or even surpassed the Khadagans.
+#ANIMATION 59
+#CAMERA 11
+#phrase Baron 5
+Well, if that's the case... then we begin the assault on Firez's main force! And in this battle, the history of all Jygran will be decided! Rightness is on our side, but our fate in this battle is in the power of the Great Forces!

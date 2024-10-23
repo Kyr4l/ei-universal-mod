@@ -1,0 +1,34 @@
+About the encounter with the blackmailer
+#DESC 
+#show Hero2 
+#show YCF
+#show merc2
+#ANIMATION 62
+#CAMERA 11
+#phrase YCF 1
+You're just in time, kids! You told me not long ago that you would help me count the blackmailer. So will you help?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero2 2
+Of course, Aunt Zaro. Tell us what you need to do.
+#ANIMATION 66
+#CAMERA 11
+#phrase YCF 3
+Nothing difficult. There is money in this bellows for the wicked man. It should be left on the plantations. Then the scoundrel will keep quiet.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 4
+You part with your hard-earned money so lightly?
+#ANIMATION 70
+#CAMERA 11
+#phrase YCF 5
+My sainted husband always said: 'Zara, sunshine, the most expensive thing in a merchant is his good name. And I'm willing to pay if only that scumbag would keep quiet.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero2 6
+Don't worry, we'll make sure he keeps quiet.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero2 7
+And it's forever silent! Kiel will surely agree. Hm... only this money will be no one to give.... I wonder how it will be.

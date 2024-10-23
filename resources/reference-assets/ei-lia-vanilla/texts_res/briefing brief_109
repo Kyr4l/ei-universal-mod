@@ -1,0 +1,12 @@
+On the gratitude of the chief
+#DESC 
+#show Hero 
+#show OrcC
+#ANIMATION 64
+#CAMERA 10
+#phrase Hero 1
+I'm so glad we got here just in time. It's strange that the harpy attacked you. Judging by everything it wasn't her territory.
+#ANIMATION 8
+#CAMERA 0
+#phrase OrcC 2
+The young orc dumbfounded. He wanted to kill a harpy-harp. Alone! She's strong, the first-first to go. You're a brash warrior, the chief you saved. Great warrior! Urk-Tar is grateful to you.

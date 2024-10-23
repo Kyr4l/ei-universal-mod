@@ -1,0 +1,36 @@
+About to leave quickly
+#DESC + automatically 
+#show Hero 
+#show merc2 
+#animation 64
+#CAMERA 11
+#phrase merc2 1
+Kir, from what I understand there is a Portal leading to Suslanger somewhere. Tell me how to get to it, I want to go home.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 2
+How? I mean... why now? I don't understand it. Why so suddenly?
+#animation 12
+#CAMERA 11
+#phrase merc2 3
+Well, as it seems to Kiel, here the thing smells like a wedding, and I hate weddings.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+But what kind of wedding? I can't even get my hopes up for that. She's so pretty, and I... she's never noticed me.
+#animation 66
+#CAMERA 11
+#phrase merc2 5
+Believe me, fool, she's going to behave in a completely different way towards you now. But Kiel doesn't want to see that. Therefore, tell me how to get to the Portal.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 6
+Kiel, please don't go away. I'm so used to you being close! I can't imagine what it would be like without you. And just so you know, we have one more adventure ahead of us. Tai-Ilara asked me to bring her things she couldn't take.
+#animation 11
+#CAMERA 11
+#phrase merc2 7
+Ah... well... for the sake of her bullshit you're willing to put your head in the noose without hesitation. Eh, if Kiel doesn't watch you this time too, it's gonna be bad...
+#animation 65
+#CAMERA 11
+#phrase merc2 8
+But I feel this will be our last adventure together. After it, our paths will part. I won't need you much longer and I can go home.

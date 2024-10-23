@@ -1,0 +1,25 @@
+Kir - ABILITY, Kiel - ABILITY
+#DESC 
+#show Hero
+#show Clerk
+#show merc2
+#ANIMATION 11
+#CAMERA 11
+#phrase Clerk 1
+Now listen to me: if you want to prolong your useless life then answer honestly. Speak what trait is most developed in you, and I will appoint you to the appropriate jobs. Well, say: strength, dexterity or reason?
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+Dexterity.
+#animation 9
+#CAMERA 11
+#phrase Clerk 3
+I doubt it... but you'll be fishing in the river. With your hands! And just try not to catch the daily standard! Now you, slave!
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 4
+Agility.
+#animation 9
+#CAMERA 11
+#phrase clerk 5
+So you will be fishing together!

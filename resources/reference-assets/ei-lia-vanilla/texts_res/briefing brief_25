@@ -1,0 +1,25 @@
+About the captured meteorite
+#DESC 
+#show Hero2 
+#show Elder
+#ANIMATION 9
+#CAMERA 0
+#phrase Elder 1
+O! I see, I can already see that you are carrying it for me! I'm so happy!
+#show Note02 5
+#CAMERA 0
+#ANIMATION 17
+#phrase Hero2 2
+Yes Rindeil, I brought you the meteorite. Now you will finally be able to make your exchange a reality.
+#ANIMATION 11
+#CAMERA 0
+#phrase Elder 3
+Yes my boy, and you don't even know how much that means to me. And, come to think of it, I managed to predict everything: you managed to step forward for such a precious, such a protected thing-...
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero2 4
+Ekhm-khm...!
+#ANIMATION 17
+#CAMERA 0
+#phrase Elder 5
+Oh, yes, I'm so grateful to you that I even prepared something for you. I hope you spend the money wisely.

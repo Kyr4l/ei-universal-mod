@@ -1,0 +1,36 @@
+On 'crazy antics'
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Kiel, what happened? You've been silent all the way.
+#ANIMATION 12
+#CAMERA 0
+#phrase merc2 2
+Nothing.
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero 3
+I can see that. Speak up! Did someone insult you? If so, he's already dead.
+#ANIMATION 11
+#CAMERA 11
+#phrase merc2 4
+Then go ahead and hang yourself.
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 5
+I don't understand. You're mad at me? For what? I don't understand. At least explain.
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 6
+There's nothing to explain here. I'm just confused! I'm embarrassed that for the sake of anything you decide to go against the odds! And for what? You could have died if the clairvoyant had noticed the theft. It makes me angry that you're risking yourself for the sake of anyone who looks in your direction. But you don't notice that there are others who are willing to sacrifice themselves for you...
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 7
+No one's going to sacrifice themselves for my sake! Kiel, you sure are getting tired a lot. If you'd like, you can stay with Airy while I continue my search.
+#ANIMATION 73
+#CAMERA 11
+#phrase merc2 8
+Well, no, with this hysterical, capricious girl I'm definitely not staying. I'm better off putting up with your crazy antics than being next to Aira.

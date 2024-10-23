@@ -1,0 +1,29 @@
+About coming home
+#DESC 
+#show Hero 
+#show Witch
+#show SwampFlower 5
+#CAMERA 10
+#ANIMATION 5
+#phrase Hero 1
+Estero, I found a flower. I didn't expect it to be so dangerous in the swamp, and the flower resisted a bit.
+#ANIMATION 65
+#CAMERA 11
+#phrase Witch 2
+Well, what did you want, that everything should go in your hand by itself?! All right, hand me the flower - a little more carefully, look.... - Leaves like you messed up, eh! But anyway, thank you, now we can go home! There you'll tell me what you wanted from me.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+And where is Dragon? I'd like to say goodbye to him.
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 4
+Who knows, he flew off somewhere, completely aged apparently. He even forgot to take his skeletons away from the mountain! Hey boy, I don't even know your name!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+My name is Kir, and she's Kiel.
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 6
+Aaah, she's a nice and fierce girl. You won't go wrong with her! I was like that myself in my youth. And now I can still be like that for a while, and I'll cut my own way out of the Dead City!

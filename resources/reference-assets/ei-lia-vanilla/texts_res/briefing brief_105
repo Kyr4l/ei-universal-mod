@@ -1,0 +1,33 @@
+On the life of orcs
+#DESC 
+#show Hero 
+#show OrcC
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Chief, we have been living in your camp for some time now. We don't want to be a burden to you. Maybe we could help with something, do something useful?
+#ANIMATION 11
+#CAMERA 5
+#phrase merc2 2
+Kir, speak for yourself. I feel good here and I'm not tired of any remorse.
+#CAMERA 11
+#ANIMATION 7
+#phrase OrcC 3
+Man-to-man wants to help the orc! But strangely! You good-guy. For now you are our guest-guest. If you want to become like us - a true warrior-warrior, you should-get a battle axe.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero 4
+Okay. And where do I get this axe?
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcC 5
+The axe-the axe the clairvoyant makes. And you stone-stone you bring. When the stone is good the axe is good too, and the warrior is mighty. The best stone is in the Dead city-town.
+#ANIMATION 15
+#CAMERA 5
+#phrase Hero 6
+Perfect. In that case, we'll go to the Dead City for the best stone.
+#ANIMATION 11
+#CAMERA 5
+#phrase merc2 7
+And didn't you forget that we also have to return the stone patterns with the report? You're not going to send the best ones to Suslanger, are you? I would suggest the other way around, which is to look for the worst and somewhere else, such as here in Distant Peaks.

@@ -1,0 +1,29 @@
+About the obstacle
+#DESC 
+#show Hero 
+#show KMage
+#show MThief
+#ANIMATION 44
+#CAMERA 11
+#phrase KMage 1
+Okay, where were we? Ah yes, Portal. Initial review of the materials led me to conclude that we would encounter a problem. More specifically, an obstacle.
+#ANIMATION 62
+#CAMERA 11
+#phrase KMage 2
+Judging by the documents I found, after some time the way to the portal was blocked by gates. Data on who put them there and for what purpose are absent. But I managed to find sketches of the gate itself and the lock to it. Incredible craftsmanship. Once upon a time this was known as the essence of real magic!
+#ANIMATION 9
+#CAMERA 12
+#phrase MThief 3
+Ha! I'm willing to bet whatever you want that we're no worse off. The lock is complicated, of course, but I'd be willing to produce a key to it.
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero 4
+Trickster, that would be just great!
+#ANIMATION 62
+#CAMERA 12
+#phrase MThief 5
+And I'm curious to see what I get out of it myself. Only that for such a lock the key should not be a simple one. For it I need a magic ore. And such is only found in the far ravine, southeast of the city.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 6
+I'll go get the ore right away!

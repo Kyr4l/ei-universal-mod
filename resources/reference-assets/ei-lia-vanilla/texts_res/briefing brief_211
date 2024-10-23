@@ -1,0 +1,35 @@
+About the march to the Hys lab
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#show MagicItems 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Here, take a look. These are the things we took from the trunk. Is this what you needed?
+#ANIMATION 12
+#CAMERA 11
+#phrase His 2
+Yeah, you guys did well on the assignment.... Was the road safe this time?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 3
+No, this time we encountered something more dangerous than your traps and tigers!
+#ANIMATION 9
+#CAMERA 11
+#phrase His 4
+I think I know what you're talking about. You've met the forest people! They've been acting just defiant lately!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 5
+And no, we met people. And they were acting weird. They were following us for something.
+#ANIMATION 62
+#CAMERA 11
+#phrase His 6
+They're highwaymen, no doubt highwaymen. I'm about to announce to the head of the guard that highwaymen have appeared around town!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase merc2 7
+He's getting a little too confused! Could it be that he's the one sending stalkers after us?

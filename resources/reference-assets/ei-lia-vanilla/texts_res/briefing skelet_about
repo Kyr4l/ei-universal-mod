@@ -1,0 +1,36 @@
+Get to know the fairy
+#DESC
+#show Hero2 
+#show skelet 
+#ANIMATION 70
+#CAMERA 11 
+#phrase skelet 1
+Please dear sir, come here! I'll tell you the fortune, I'll tell you the whole truth, what's been with you, what's... 
+#ANIMATION 11
+#CAMERA 10 
+#phrase Hero2 2
+Well, well, well! And what will be, can you tell me?
+#ANIMATION 62
+#CAMERA 11 
+#phrase skelet 3
+Oh you, how interesting! No, I can only tell you what you may meet on your way, but I won't tell you what will happen. Just put your hand together and I'll sing it all out!
+#ANIMATION 9
+#CAMERA 10 
+#phrase Hero2 4
+I will. But what if you tell me an untruth? I don't want you to deceive me.
+#ANIMATION 70
+#CAMERA 11
+#phrase skelet 5
+Oh dear, how stern you are. Well, I'll tell you, and then you'll just thank me.
+#ANIMATION 66
+#CAMERA 11
+#phrase skelet 6
+So listen. A path to a fruit garden awaits you. There you will find something special - it will amaze you.
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero2 7
+This is interesting... I've seen a lot of plantations around the Portal here. You have to look carefully around there now.  
+#ANIMATION 71
+#CAMERA 11
+#phrase skelet 8
+Suit yourself, just don't forget to thank me afterwards! I'll be waiting here.

@@ -1,0 +1,8 @@
+     You have full control over of the camera throughout the game. You can turn it, move it, zoom in and out and follow a selected character. You'll also be able to see terrain and objects throughout the Game zone regardless of whether you've already explored them or not.
+
+     To move the camera simply move the cursor to the screen edge or use the arrow keys.
+     To turn the camera use the right mouse button or use the <CTRL> + arrow keys.
+     To zoom in/out move the mouse wheel or use the <PgUp>/<PgDn> keys.
+     To track a character double-click on the character's picture at the bottom of the screen, or press the <HOME> key.
+
+     Note: you're in the tracking mode when you see a symbol on top of the character's picture. If you manually move the camera, tracking stops.

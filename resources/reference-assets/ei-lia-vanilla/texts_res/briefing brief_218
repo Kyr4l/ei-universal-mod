@@ -1,0 +1,28 @@
+About the collapsed task
+#DESC
+#show Hero
+#show Trapper
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 1
+Sver, here's the thing. I blew the assignment! The trunk they should have been carrying the nugget in turned out to be empty.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper 2
+I already know. After you didn't return to the accommodation, Trickster sent me a message. You were afraid to go back into that accommodation! They're not animals after all, they won't eat you.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 3
+They may not be, but their alumni... have you seen what kind of animals they have there?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper 4
+Don't shake your pants, boy. It's all good. They all figured the caravan was empty, I mean. But the Trickster told me that your mage had actually settled in their lodgings!
+#ANIMATION 59
+#CAMERA 11
+#phrase Trapper 5
+And he also heard that this mage would like to examine the ice elemental from the abandoned mines, well, or at least shards of it. And listen to what I tell you: go into those mines and bring him what he wants.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 6
+Exactly! I'll have something to offer the mage, and then he won't refuse to talk to me. Thank you, Sver.

@@ -1,0 +1,29 @@
+On bold success
+#DESC 
+#show Hero 
+#show Baron
+#show merc2 
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 1
+Ah, my dears have arrived! To punish you forbids me honor. For how can one punish heroes of whom the whole countryside speaks? After all, everyone only speaks of you as saviors who have come to help defeat Khadagan evil on Jygran!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+I assure your Baron that we were driven only by a desire to free your land from the magic of Yamanin. We don't want to take away the glory of your victory over Firez for anything.
+#ANIMATION 46
+#CAMERA 11
+#phrase Baron 3
+And what are you talking about? Where's the glory... We sit after strongholds, our noses afraid to put forward. This is not how our ancestors warred! We should not hide and fear every breath of those vile khadagans.
+#animation 9
+#CAMERA 12
+#phrase merc2 4
+And here is the speech of a true warrior! Kiel has long proposed staging an uprising. But war is not a woman's business, and no one would listen to me!
+#ANIMATION 17
+#CAMERA 11
+#phrase Baron 5
+Uh... dear lady, as I watched you do your thing for the hundredth time, I realized my words were wrong.
+#ANIMATION 60
+#CAMERA 11
+#phrase Baron 6
+But enough about that. I am now developing a plan for an offensive operation. Soon the ground will start shaking under the feet of the enemies fleeing from us!!!

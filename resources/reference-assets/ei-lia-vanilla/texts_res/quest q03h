@@ -1,0 +1,11 @@
+Catacombs
+Going through the old catacombs is the only way to get out of the fortress. These corridors have not been used for a long time, and dangerous creatures may have nested here!
+#subobj 1
+Use the elevator
+The elevator was previously used for smuggling heavy goods from the fortress to the outside and back. It is most likely still in operation.
+#subobj 2
+Search the trunk 
+It is possible that some of the stolen goods were forgotten or not carried away in time. Even the old stuff left here may be useful now.
+#subobj 3
+Leave the catacombs!
+The guards must have figured out by now that someone stole the map of this passage to use it. Better not stop here...

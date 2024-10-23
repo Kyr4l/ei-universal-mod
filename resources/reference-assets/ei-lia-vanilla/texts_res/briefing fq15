@@ -1,0 +1,27 @@
+Talk to Habbur
+#DESC 
+#show Hero
+#show Haburu
+#CAMERA 11
+#phrase Haburu 1
+Elder Habbur is pleased to see a human who shares the concerns of the People of the Forest. The humans, like the snowflakes, appear to be the same at first glance, but a closer look reveals that each is different.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+And I'm glad to have met you, Habbur. You won't believe it, but people also sometimes think that all Forest People look the same.
+#CAMERA 11
+#phrase Haburu 3
+I know, people kept me in a cage until another human freed me.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 4
+They kept me in a cage? That's horrible!
+#CAMERA 11
+#phrase Haburu 5
+What the wind has carried away won't come back, and it's not worth talking about. But what can be fixed is far more important.
+#CAMERA 11
+#phrase Haburu 6
+Where people have built many houses, and what you call manufactories, there are many dog cages in the northwest.
+#CAMERA 11
+#phrase Haburu 7
+Power and fear force the poor animals to serve. But it's inappropriate. Just as our dear unicorns come to us of their own accord, so should dogs choose their own hosts.

@@ -1,0 +1,25 @@
+About the ad theft
+#DESC 
+#show Hero 
+#show Sheriff
+#show merc2
+#ANIMATION 9
+#CAMERA 5
+#phrase merc2 1
+Well Karim, where's the proof? And didn't I say it was all just a figment of your imagination?
+#ANIMATION 32
+#CAMERA 5
+#phrase Sheriff 2
+Kiel, you are insulting me. I almost got this ad, but it's very secret.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero2 3
+Karim, if you know where it is stored, I can go and get it myself. You don't have anything to risk.
+#ANIMATION 62
+#CAMERA 5
+#phrase Sheriff 4
+Good people, like a stone from the heart! I am very pleased with your proposal. I have already bribed one guard so that he will open the gates and flush out the rest of the security. All that's left for you to do is to enter, find an ad among the other junk, and leave quietly. Nothing difficult. You'll have to get to the Necromancer Citadel, but it's not as bad as they say.
+#ANIMATION 17
+#CAMERA 5
+#phrase Hero2 5
+I hope everything really does go as easy as you say. We'll head that way when the time comes.

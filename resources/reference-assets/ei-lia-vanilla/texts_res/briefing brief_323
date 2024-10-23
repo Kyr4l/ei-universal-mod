@@ -1,0 +1,29 @@
+About the good lesson
+#DESC 
+#show Hero 
+#show Baron
+#show merc2 
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 1
+Ah it's you young people. I just wanted to see you. I've learned of the transgression you've committed on my land. First, arbitrary raids on the enemy, then a duel... a duel with my son!
+#ANIMATION 59
+#CAMERA 11
+#phrase Baron 2
+Well if Dartas... he's too spoiled to be responsible for his actions. But you guys! How could you!
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 3
+How could we?! That son of yours, Mr. Baron, lets himself go too far! If it wasn't Kir and Kiel fighting him, he wouldn't have come out of it with only superficial wounds.
+#ANIMATION 30
+#CAMERA 11
+#phrase Baron 4
+Oh, so that's the point. So, as it turns out you're involved in this, missy. Well, that certainly changes things. Dartas grew up in rough times and didn't get a proper upbringing.
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 5
+I will not punish you. Moreover, I will speak to my son and teach him a good lesson in respect when dealing with women.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 6
+Mr. Viryl, the lesson I gave your son I gave its effect. Dartas is wise enough to learn from it. I ask you not to punish him any further.

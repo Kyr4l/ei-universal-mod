@@ -1,0 +1,29 @@
+Get to know the trapper
+#DESC
+#show Hero
+#show Trapper
+#show merc2
+#ANIMATION 64
+#CAMERA 0
+#phrase merc2 1
+Good morning sir! You certainly know everything and everyone here and will be able to help us. Hint: where can we find a reasonable magician here?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+Kiel, wait. We should introduce ourselves first. And you get right to the point... Sir, we just arrived in your town. The girl is called Kiel, and I'm called Kir. But actually, we're looking for a good mage.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper 3
+My name is Sver, trapper in the sense that. And you kids, which magician are you looking for? There's more than one. Our governor is Hys. He's a very clever man! He's got a lab just east of town.
+#ANIMATION 59
+#CAMERA 11
+#phrase Trapper 4
+But there's another mage who's only recently arrived, but he's already made a name for himself. He's a good friend of mine, Brissen. But it will be harder to find him. Brissen is always walking in the woods, he doesn't stay in one place, that's how it is. And his friend the mage travels with him. What do you need a mage for?
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 5
+Well... we need the advice and help of a good magician. And anyway, it's a long story.
+#ANIMATION 9
+#CAMERA 11
+#phrase Trapper 6
+Agreed, you don't want - don't tell, I don't insist! :)

@@ -1,0 +1,12 @@
+On the doom of the caravan
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero2 1
+Your fears were correct. The caravan had indeed succumbed to an attack. And I failed to make it in time before the guards arrived. I'm very sorry, but the guards found all the illegal goods.
+#ANIMATION 68
+#CAMERA 5
+#phrase YCF 2
+Oh, it's the Great Powers punishing me for my greed!

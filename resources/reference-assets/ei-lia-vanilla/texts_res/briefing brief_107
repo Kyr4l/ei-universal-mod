@@ -1,0 +1,35 @@
+About the axe material
+#DESC 
+#show Hero 
+#show OrcPyr
+#show merc2
+#show SackofMat 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 1
+Tyn-Acheiu, I have acquired the material for my axe. Urk-Tar told me that you will make an axe for me to symbolize that I have become a true warrior.
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcPyr 2
+You've proved-you've proved that you're bold if you're not afraid to go into the Dead City-City. You're strong if you brought a good stone. You now-now are a warrior.
+#hide SackofMat 5
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 3
+And me, I too have followed the stone! The axe is due to me too. It's unfair if Kir gets the axe and Kiel doesn't!
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcPyr 4
+You're the axe-girl. The man-girl axe-topor does not get. You stone little-you brought little. 
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 5
+I just knew it!
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcPyr 6
+But Tyn-Achei knows-what to do with your stone-you can do. I'll make you beads, almost like an orc-woman you'll be!
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 7
+What a fab... Thank you-thank you!

@@ -1,0 +1,31 @@
+About Babur's return
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 66
+#CAMERA 12
+#phrase merc2 1
+I hope Babur becomes more honest after such a lesson. After all, it's not every day they carry you to an ogre's dinner as their main course.
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 2
+The orcs gave up about the ogre? Well what a cruelty! I never would have thought that island orcs are savage to such an extent. But I'm very glad that Babur is all right now. It would be so bad if something happened to such a great man.
+#ANIMATION 65
+#CAMERA 12
+#phrase merc2 3
+Or did you mean to say that you'd be sorry if your camp was left without a skilled craftsman? Kiel you don't mess around!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 4
+Kiel, don't insult the ataman. He receives us so well in his camp!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 5
+And why is she still clinging to Bor? Such a good ataman, taking care of his camp. And she always doesn't like something. She's used to seeing only evil in people.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase merc2 6
+Eh, Kir... you still have so much to learn! You believe everyone, and you don't see that everyone around you is using you. I'm the one defending you, and you're still unhappy...

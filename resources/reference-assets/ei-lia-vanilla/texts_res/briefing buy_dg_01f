@@ -1,0 +1,11 @@
+Buy Kitchen Knife (170)
+#show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I need this knife.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+Why do you need a Kitchen Knife when with so much money you can barely afford food, ha, ha!

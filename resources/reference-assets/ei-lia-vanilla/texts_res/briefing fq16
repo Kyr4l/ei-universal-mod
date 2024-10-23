@@ -1,0 +1,22 @@
+Obstacle
+#DESC 
+#show Hero
+#show Haburu
+#CAMERA 11
+#phrase Haburu 1
+You did a good deed by freeing the dogs. And now I want to tell the story that will interest you.
+#CAMERA 11
+#phrase Haburu 2
+As clear water draws a swift-legged deer to itself, so does shining metal draw a bold man to himself. Where men have built a large maisto, to the south is a small camp of men. Behind the big fence you will find a lot of shiny metal.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 3
+Behind the big fence? And the gates are there?
+#CAMERA 11
+#phrase Haburu 4
+Where a strong tiger will not pass, a skillful and small hare may sneak through.
+#ANIMATION 32
+#NOLIPS
+#CAMERA 10
+#phrase Hero 5
+There go those riddles again. I wonder what metal he's talking about - gold or steel?

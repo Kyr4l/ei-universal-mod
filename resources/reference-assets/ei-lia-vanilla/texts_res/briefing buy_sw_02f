@@ -1,0 +1,11 @@
+Buy Broken Sword (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+This wedge suits me!
+#ANIMATION 44
+#CAMERA 0
+#phrase NSheriff 2
+First, think about where to get the money for it.

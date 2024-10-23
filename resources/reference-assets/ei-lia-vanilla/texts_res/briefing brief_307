@@ -1,0 +1,28 @@
+On being well-informed
+#DESC 
+#show Hero 
+#show Stark
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 1
+Well craftsman, you have helped us. Without your advice and Uncle Council's knowledge, it would have taken us a long time to find the cause of the undead's appearance. And now we know everything.
+#ANIMATION 15
+#CAMERA 11
+#phrase Stark 2
+All right, then. And what did the trader tell you?
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+That there's a necromancer who corrupts the whole neighborhood. He has his tower on the Island of Death.
+#ANIMATION 6
+#CAMERA 11
+#phrase Stark 4
+Well, well, well! He knows everything. And he can still bake cupcakes!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+And you, craftsman, are no worse either. How did you find out about this Baron's secret man?
+#ANIMATION 9
+#CAMERA 11
+#phrase Stark 6
+Ah, the curious? You're not the only one who comes here to talk. People talk, and I listen to myself. What's so weird about that?

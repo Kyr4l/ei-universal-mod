@@ -1,0 +1,24 @@
+On the effects of running away
+#DESC 
+#show Hero 
+#show Elder
+#ANIMATION 58
+#CAMERA 0
+#phrase Elder 1
+Oh, my young friend! Are you rushing to see my collection? I feel honored by it.
+#ANIMATION 6
+#CAMERA 0
+#phrase Hero 2
+Well, no, unfortunately, I'm worried about something else. Kiel and I escaped, but they'll be looking for us. I've kind of figured out that they don't just let slaves go.
+#ANIMATION 59
+#CAMERA 0
+#phrase Elder 3
+Yeah, you're right, my boy, I've thought about that too. But what to do I don't know. Maybe you have an idea?
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 4
+I'm afraid there are records left with the clerk about the red-skinned slave and the young girl. Those records would have to be stolen or destroyed...
+#ANIMATION 59
+#CAMERA 0
+#phrase Elder 5
+Yes, you are right again, my boy! You need to get through to the house of the chief warden, you will easily recognize this building - there are always officials hanging around next to it - and there you need to steal the records that mention slaves. Perhaps without the records no one will start looking for escaped slaves. I wish you luck, my heart is with you.

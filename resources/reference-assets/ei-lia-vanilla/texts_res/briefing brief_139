@@ -1,0 +1,32 @@
+On the key and the troubles of the craftsman
+#DESC 
+#show Hero 
+#show Smith
+#ANIMATION 62
+#CAMERA 11
+#phrase Smith 1
+So, did the witch chase you away right away? I warned you, she's a mean old woman. Don't go to her empty-handed.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+No, why? She helped us a lot! Now we know where to look for the bullet. Only your help would be useful too.
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith 3
+So that's it! Something is wrong and you run to Babur right away! Because that he may have some problems no one will guess, right? And no one will come and ask me how I'm doing. On the contrary, they'll just take everything away.
+#ANIMATION 59
+#CAMERA 11
+#phrase Smith 4
+The Chosen One gave me his knife, which I kept as a memento of my friend. But no, suddenly everyone screamed: 'This is a sacred thing, it must be taken to the place of worship! - and they took the knife away from me! And it was iron, you comprehend, iron!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 5
+Is it the knife that made you so angry? But it wasn't yesterday that they took it away from you, why did you suddenly think of it?
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith 6
+And what is it that interests you? Yes, not yesterday, but it's offensive anyway! After all, now I can't go to Ruin to, I mean, to get a knife to go and look...
+#ANIMATION 46
+#CAMERA 10
+#phrase Hero 7
+All right, Babura, don't be sad, I'll bring you the knife of the Chosen One. Wait here and don't go anywhere.

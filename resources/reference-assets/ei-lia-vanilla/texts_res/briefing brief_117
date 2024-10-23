@@ -1,0 +1,36 @@
+On the Road to the Great Magician
+#DESC 
+#show Hero 
+#show IZ
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero 1
+I put the Shell where you asked. Now it's your turn to fulfill your part of the bargain.
+#ANIMATION 5
+#CAMERA 5
+#phrase IZ 2
+Yes, I know. The shell is there. The lake lizards no longer bother me. Good. Now I will fulfill my part of the bargain.
+#ANIMATION 5
+#CAMERA 5
+#phrase IZ 3
+When I met with this man, he was interested in an old mage who lives on Gipath. I told him about the way to him. He went there.
+#ANIMATION 30
+#CAMERA 5
+#phrase Hero 4
+Oh, so that's it: Joon went to the old magician. Surely it won't hurt me to meet him too. Anyway, you have to try to do it. Tell me how to reach this magician too.
+#ANIMATION 5
+#CAMERA 0
+#phrase IZ 5
+Yeah, that's what I was going to do. But I'm not going to tell you the same thing I told that man over there.
+#ANIMATION 43
+#CAMERA 5
+#phrase Hero 6
+Why? I did everything you asked and now I have a right to know!
+#ANIMATION 5
+#CAMERA 0
+#phrase IZ 7
+You didn't understand. I'm not fooling you, and the path to the magician has changed. Let me tell you about the new path.
+#ANIMATION 5
+#CAMERA 0
+#phrase IZ 8
+An old man lives in the Distant Peaks. Find the ravine that starts in the east of the mountains and goes through them. He will lead you to a lake. The mage's cave is on the north shore of the lake. And here I have fulfilled my part of the bargain.

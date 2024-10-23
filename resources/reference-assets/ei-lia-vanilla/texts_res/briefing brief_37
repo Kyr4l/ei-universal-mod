@@ -1,0 +1,57 @@
+About Fieruza's fiancée
+#DESC 
+#show Hero2 
+#show merc8
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 1
+Fieruzie, have you been looking for me? Did something happen?
+#ANIMATION 43
+#CAMERA 11
+#phrase merc8 2
+No, I just missed you. Well of course it happened!!! Otherwise I wouldn't have wasted my time on you! I want to remind you of your debt. You're coming with me. My Aliya got caught by the guards, and now she's in jail. You come with me to get her out.
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 3
+And who is this Aliya? And why is she supposedly 'yours'?
+#ANIMATION 9
+#CAMERA 11
+#phrase merc8 4
+What difference does it make to you? Don't go where you're not asked!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 5
+Come on, dear Fieruz, if there's hot business going on, Kiel has a right to know who he's risking his life for.
+#ANIMATION 12
+#CAMERA 11
+#phrase merc8 6
+Well... this is my fiancée...
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 7
+Oh hold me!!! A fiancée has turned up at the menacing Fieruz! What, you hid her from us? Were you afraid someone would find out you weren't so scary? That you had a heart?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero2 8
+Kiel, I think you're being rude. Fieruz is in trouble and asks for help and you're laughing.
+#ANIMATION 15
+#CAMERA 11
+#phrase merc8 9
+Thank you boy, you understand me. I can see that you also managed to like some pretty girl. Isn't that our Kiel?
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero2 10
+Kiel? No, what are you, we're just friends.
+#ANIMATION 68
+#CAMERA 12
+#phrase merc2 11
+Oh, just listen to them! So smart, but he can't see beyond his own nose!
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero2 12
+Kiel, come on.
+#ANIMATION 46
+#CAMERA 11
+#phrase merc8 13
+Don't worry about it. Woman! What to do about them... Agreed, also like this: don't go far, we have little time to gather supplies, we need to get going.

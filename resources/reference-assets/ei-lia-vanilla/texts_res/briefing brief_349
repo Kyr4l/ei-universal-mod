@@ -1,0 +1,64 @@
+About revenge
+#DESC + automatically 
+#show Hero 
+#show Firez
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 1
+Firez! Prepare to die! I've come for your life!
+#ANIMATION 62
+#CAMERA 11
+#phrase Firez 2
+Oh, let's avoid this chatter. I'm happy to get to know you personally, Kit-A-Chit-Lan. Or should I just call you Kir? My little dragon has followed you since the beginning of your escape. I have watched you with interest.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+Who are you? You are Joon! But how is that possible!
+#ANIMATION 11
+#CAMERA 11
+#phrase Firez 4
+Are you surprised? And what do you know about me? You're used to hating me without even knowing anything about me.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 5
+It was enough for me that you held the Joons captive. And you're a Joon yourself! How could you decide to do that!
+#ANIMATION 59
+#CAMERA 11
+#phrase Firez 6
+You fool! I saved them from the Curse of the race. They were safe under my protection.
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 7
+You killed my parents. You're the reason they died. I hate you!
+#ANIMATION 32
+#CAMERA 11
+#phrase Firez 8
+Oh, and how I hate all of you. Joons. They were all wrong to cast me out. They said it was unworthy of a true Joon to engage in necromancy!
+#ANIMATION 43
+#CAMERA 11
+#phrase Firez 9
+But it was necromancy that allowed me to save them from the Curse! And they were laughing at me! Necromancy gave me practically eternal life! You fools! How I hate you all!
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 10
+You're insane. In order to prolong your life, you lose Jygran. You are a murderer and a villain!
+#ANIMATION 62
+#CAMERA 11
+#phrase Firez 11
+Am I a murderer? Are you! How many dead bodies have you left behind in your path? And how many innocents have you killed for the sake of a few coins?
+#ANIMATION 32
+#CAMERA 11
+#phrase Firez 12
+And yet you dare call me a villain. Yes! I'm crazy. But I understood higher necromancy. I have conquered death!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 13
+In your madness you inspire pity.
+#ANIMATION 11
+#CAMERA 11
+#phrase Firez 14
+Oh no! I don't need your pity Joonie! I will kill you now. And then I will revive you and make you my faithful slave. I'll make you kill your foolish baron with your own hands, and I'll crucify his little son, so that he can feel all your romanticism of death firsthand...
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 15
+Enough! It's time to die, monster!

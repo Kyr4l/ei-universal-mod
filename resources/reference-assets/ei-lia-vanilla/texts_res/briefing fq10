@@ -1,0 +1,37 @@
+Talk to Ulka ( )
+#DESC 
+#show Hero
+#show Spletnica
+#show merc2
+#ANIMATION 5
+#CAMERA 12
+#phrase merc2 1
+It's quiet on Gipath somehow. Don't you think?
+#ANIMATION 64
+#CAMERA 11
+#phrase Spletnica 2
+Come on! How quiet? There's so much going on here! I just found out that on the islands they keep orcs and goblins captive, and force them to work!
+#ANIMATION 66
+#CAMERA 11
+#phrase Spletnica 3
+But the worst part is, they've taken Go-Go himself captive! He sits in a cage with them, like a wild animal. If Go-Go were free, he would punish those nasty orcs.
+#ANIMATION 70
+#CAMERA 11
+#phrase Spletnica 4
+After all, he's so brave! So smart! He certainly became a leader for a reason, and he certainly knows how to speak beautifully. And, I'm told - not a peep from anyone - that he's insanely pretty, for a goblin.
+#ANIMATION 65
+#CAMERA 11
+#phrase Spletnica 5
+Too bad he's sitting in captivity, that's how I don't even get to see him.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 6
+Pretty goblin? Something doesn't want me to believe that. But go and look at him.... By the way maybe we'll set him free too.
+#ANIMATION 9
+#CAMERA 11
+#phrase Spletnica 7
+Hey, wait, I need to clean up my house here!
+#ANIMATION 6
+#CAMERA 12
+#phrase merc2 8
+You know we don't have time to help you! Hold the money.

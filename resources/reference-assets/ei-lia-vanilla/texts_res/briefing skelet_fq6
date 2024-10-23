@@ -1,0 +1,28 @@
+Ask for one last divination (50)
+#DESC
+#show Hero2 
+#show skelet 
+#ANIMATION 11
+#CAMERA 10 
+#phrase Hero2 1
+Fairy, will you foretell my fate? What awaits me? As for the coins, I have already prepared for you.
+#ANIMATION 64
+#CAMERA 11 
+#phrase skelet 2
+Ah, what a nice gentleman! It's a pleasure to read your fortune! 
+#ANIMATION 62
+#CAMERA 11 
+#phrase skelet 3
+Oh, it's going to be dark...
+#ANIMATION 5
+#CAMERA 10 
+#phrase Hero2 4
+What, that bad?
+#ANIMATION 66
+#CAMERA 11 
+#phrase skelet 5
+No, don't be in such a hurry, I'm not finished yet. Darkness will encircle you, deep underground you will go. You will need persistence and luck, and if you make the right choice you will encounter a big surprise that will amaze and delight you.
+#ANIMATION 6
+#CAMERA 10 
+#phrase Hero2 6
+It amuses me to solve your puzzles. I mean - you're saying I'm gonna enjoy this little surprise? Well, you can go and have a look, I wonder what awaits me in the darkness of the underworld.

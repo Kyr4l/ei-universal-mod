@@ -1,0 +1,36 @@
+About the antique collector
+#DESC
+#show Hero2
+#show Guru
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 1
+I see you have fulfilled your part of the bargain and returned the Priest of Silence to us.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero2 2
+Yes, I made it.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 3
+Now I am ready to tell you the important news. You asked me about the Joons. Well, some time ago a man came to our caves. He did not ask our permission to stay here. He started destroying the walls, scratching at them with some tools. He was looking for things the Joons had left behind when they left this land. We frightened him and drove him out.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero2 4
+And that's it? Then where is he now?
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 5
+I don't know where to find this man, ask people. That's all I wanted to tell you.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 6
+Well then, thank you for the information Braingod.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero2 7
+I doubt it will be useful to me, but who knows....

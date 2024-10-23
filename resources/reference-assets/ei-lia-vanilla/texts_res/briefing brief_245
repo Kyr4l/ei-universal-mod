@@ -1,0 +1,38 @@
+About the crime scene scapes
+#DESC 
+#show Hero 
+#show Huber
+#show His
+#show DeadBrissen 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 1
+Governor, I've been investigating the crime scene and I found something. This will help us find out who the real murderer is. Take a look, do you recognize the knife too?
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 2
+What an impertinence! Do you think I know every knife in my province? Although... Yeah, I recognize that exquisite blade. And the handle... HYS! And how do you understand that? How did my gift end up at the scene of the murder?
+#ANIMATION 32
+#CAMERA 12
+#phrase His 3
+The arguments of this self-proclaimed investigative judge accept no criticism! Yes, this knife belongs to me. It was given to me by his highness Governor Valrasian. But it was stolen from me!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 4
+Then why are you only now bringing this up? Does losing such a precious thing mean so little to you?
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 5
+Or did you keep quiet about it because you lost the knife after killing Brissen during your hasty escape? After all, it was to your advantage both the death of the knight and the removal of the old mage.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 6
+One tried to interfere with your experiments on nature, and the other you were simply afraid of. But with one strike you remove both. How convenient!
+#ANIMATION 43
+#CAMERA 12
+#phrase His 7
+What a brazen lie! Mr. Governor, I have no intention of listening to any more crazy accusations unsupported by any evidence. Even Karansul had more motives and opportunities to do so. He is the real criminal!
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 8
+You have been told that the knife was stolen. My magician is not a murderer. Your zeal is laudable, but let it know its limits!

@@ -1,0 +1,40 @@
+About Joons
+#DESC
+#show Hero2
+#show Guru
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 1
+My lord, I have killed the necromancer. He will not threaten your cave again.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 2
+I already know that. I also see that you have already done what you came to us to do. And we respect your word - you can go deeper, even if you don't need it anymore.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero2 3
+How do you know I found what I was looking for? After all, no one was around!
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 4
+Something... hush! Your screams are like bright flames to the eyes of someone who has come out of darkness, they hurt. I know a lot about you. We live in darkness, and we see not with our eyes. Therefore, in order to see, we do not need to look. Even if I can't see what you are I know who you are.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero2 5
+Ruler! Tell me what else you know! Tell me about the Joons, please!
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 6
+For what purpose to tell about the Joons to someone who is one himself? You should have known everything yourself better than I do. I have nothing to tell you. And don't call me Lord, that's the name the surface people invented for us.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 7
+So tell me what to call you and I'll remember your name.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 8
+O last of the Joons, you will not be able to pronounce my name, our language is inaccessible to your hearing. But if you translate it into sounds and words you can understand, you can call me: 'He who came to the cave of the Ancient Giants and was summoned to serve in the name of the Eternals, depriving the enemies of intelligence and creating confusion in their minds.

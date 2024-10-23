@@ -1,0 +1,39 @@
+About the balm for Svera
+#DESC
+#show Hero
+#show Trapper
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase Trapper 1
+So, how was your meeting with Gray Leaf? I can't sit still here anymore!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 2
+Take it easy. You're probably waiting for us to bring you some balm from the forest people?
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper 3
+Son, you brought it! Well, Gray Leaf after all told you what a useful remedy this is, and I'm not young anymore: joints broken, back aches. And if you rub this on them, everything goes away at once!
+#show SverMark 5
+#CAMERA 12
+#ANIMATION 15
+#phrase merc2 4
+Yes, yes... But you could tell us all about it at the beginning!
+#hide SverMark 5
+#CAMERA 11
+#ANIMATION 46
+#phrase Trapper 5
+All right, kids, but you went to the forest people anyway. So what interesting stories did they tell you?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 6
+According to Grey Leaf, Brissen is now in some accommodation in the west of the mine. Do you know where that is?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper 7
+Ah, the old head! I wish I had thought of that myself! Exactly, he said something about his friend being interested in old mines.
+#ANIMATION 59
+#CAMERA 11
+#phrase Trapper 8
+And this accommodation was set up by peasants and workers who no longer wanted to live under the governor. The authorities now think of them as highwaymen, but really they just want to live on their own, that kind of thing.

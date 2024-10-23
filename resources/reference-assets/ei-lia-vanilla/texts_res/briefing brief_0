@@ -1,0 +1,50 @@
+Hi! My name is...
+#DESC + automatically
+#show Hero
+#show First
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 1
+What luck! This man may be able to help me...
+#ANIMATION 62
+#CAMERA 9 
+#phrase First 2
+Boy! Where do you think you're going, trying to get bitten by armadillos? You know what, sitting in this dry-throated hollow is boring, I don't even have a drop of wine left!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 3
+He took me for someone else. The most important thing is that he doesn't guess who I really am.
+#ANIMATION 6
+#CAMERA 9
+#phrase Hero 4
+Well, I got a little lost...
+#ANIMATION 44
+#CAMERA 9 
+#phrase First 5
+Boy, don't fret. You're incredibly lucky. There's no use sitting here waiting for a job. I know someone who hires young men temporarily, we can send you there.
+#ANIMATION 29
+#CAMERA 9
+#phrase Hero 6
+I agree.
+#ANIMATION 9
+#CAMERA 9 
+#phrase First 7
+You're doing me a favor too... As if you had a choice. Keep your papers and walk down the road, thanks to them the guards will let you through. Once you get to the camp, show the papers, people will help you through the Portal. Before you go to Suslanger. Although... the climate there is such that you can't help it, and there are a lot of soldiers.
+#ANIMATION 14
+#CAMERA 9
+#phrase Hero 8
+I can handle it. I'll visit you again if I need to.
+#ANIMATION 46
+#CAMERA 9 
+#phrase First 9
+You all say that... And then they go off to die under the table in the first better joint.
+#ANIMATION 11
+#CAMERA 9
+#phrase Hero 10
+This is not the kind of thing I've been through before. But thanks for the warning, I'll be careful.
+#ANIMATION 6
+#CAMERA 9 
+#phrase First 11
+We're talking... Okay, tell the camp to send me a couple of barrels of wine. I'm not gonna drink water!

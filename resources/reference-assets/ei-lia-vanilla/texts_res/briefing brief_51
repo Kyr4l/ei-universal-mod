@@ -1,0 +1,27 @@
+Get to know the Brainchild
+#DESC + automatically
+#show Hero2
+#show Guru
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 1
+Eeem... Lord of the underworld? I come in peace! May the Great Powers be with you!
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 2
+Shh... keep it down! With a loud tone you insult the Silence. And your Great Powers have power only in the upper world. Here we are under the protection of the all-pervading Darkness and the wise Silence.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 3
+Forgive me, ruler. My name is Kir, I have come to ask for help.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 4
+You're a Joon! In my opinion, the last of the Joons. That's the only reason you and your companion are still alive. Obey the Old Agreement. We will allow you and that girl to descend into our underworld if need be. But abide by the agreement above all else.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 5
+You should kill the necromancer who has been troubling us for a long time. We ourselves have tried to kill him, but some have even died from it. We respect our lives too much in the darkness. Kill him so that he does not offend our caves with his presence.

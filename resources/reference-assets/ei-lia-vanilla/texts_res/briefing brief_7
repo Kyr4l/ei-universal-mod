@@ -1,0 +1,32 @@
+Get to know the trader
+#DESC 
+#show Hero 
+#show YCF
+#ANIMATION 2
+#CAMERA 10
+#phrase Hero 1
+Greetings dear lady!
+#ANIMATION 15
+#CAMERA 0
+#phrase YCF 2
+Hello, hello, you must be Kir, the boy Kiel brought. The girl has good taste!
+#animation 11
+#CAMERA 0
+#phrase Hero 3
+Kiel saved me. I am grateful to her and value our friendship.
+#ANIMATION 46
+#CAMERA 0
+#phrase YCF 4
+Friendship? Well, well... Oh yeah, I forgot to introduce myself. I'm Zara, the owner of this stall. But you can call me Aunt Zara.
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 5
+You have a beautiful stall!
+#ANIMATION 9
+#CAMERA 0
+#phrase YCF 6
+My late husband used to say: 'Zara, gold: it is not the customer who praises your goods, but the one who buys them.
+#ANIMATION 15
+#CAMERA 0
+#phrase Hero 7
+Yes, I will definitely be buying something here. But maybe a little later.

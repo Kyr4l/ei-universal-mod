@@ -1,0 +1,29 @@
+About useful things found
+#DESC 
+#show Hero 
+#show Witch
+#ANIMATION 12
+#CAMERA 11
+#phrase Witch 1
+Aah, he's back! Well, did you find the bullet? What's that still in your hands?
+#show KleverBook 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 2
+It's a book from the observatory. I understood so much that it talks about how to restore lost magical properties to various objects. I decided to show it to you. The sphere needs to be repaired.
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 3
+Oh, I've gotten completely old, how could I forget that the sphere broke after use? And you're a good boy, you thought of everything right away! Well now give me the book, I'll quickly find the page I need.
+#ANIMATION 70
+#CAMERA 11
+#phrase Witch 4
+Aha, I found it! So that means: you need to wash the sphere with water from underground springs! I think the water in the cave will be there. I just don't know exactly which source you need.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 5
+Well, it won't hurt if I try each of them. The most important thing is that it helps.
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 6
+It will, don't doubt it. Just leave me that book. It's of no use to you now, but it's still useful to me. And I'll give you a useful thing for it!

@@ -1,0 +1,21 @@
+About the meeting with Gov.
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#ANIMATION 44
+#CAMERA 11
+#phrase His 1
+Young people, you've been incredibly lucky! His Highness the Governor of Valrasian has taken an interest in you. And you should appear before his highness immediately. I strongly advise you not to postpone this meeting.
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 2
+But cool! We get to meet the governor himself!
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+Kiel, what about your hatred of official government officials?
+#ANIMATION 46
+#CAMERA 12
+#phrase merc2 4
+Oh don't be a bore. We better go there faster, let's not make his height wait.

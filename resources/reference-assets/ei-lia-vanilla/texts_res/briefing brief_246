@@ -1,0 +1,38 @@
+About Karansul's escape
+#DESC 
+#show Hero 
+#show Huber
+#show merc2
+#ANIMATION 62
+#CAMERA 11
+#phrase Huber 1
+Ah, so it's you guys. While you guys are chastising the woods for your ill-considered hyoptheses, the murders follow one after another. This time my faithful mage Hys fell by the murderer's hand!
+#ANIMATION 66
+#CAMERA 12
+#phrase merc2 2
+We know that perfectly well! After all, we were the ones who found him dead. But we still know that Hys was there to meet with someone. He was ready to provide some evidence of his innocence.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+I think Hys was killed by this man. Kiel, recall who Hys suspected the most? Karansul! He definitely invited him to a meeting and tried to drive him to an empty field. That's clear. Governor, you must arrest Karansul immediately!
+#ANIMATION 59
+#CAMERA 11
+#phrase Huber 4
+Yes, I will make the appropriate recommendation immediately, but I am afraid that finding Karansul will be problematic. This morning he should have come to me for an audience, but he didn't! This is unheard of impudence!
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 5
+I sent a man to voice my displeasure to Karansul, but he turned out not to be in town.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 6
+Karansul has escaped! That means he's a murderer. He gave himself away!
+#ANIMATION 6
+#CAMERA 11
+#phrase Huber 7
+Well, young people, are you not too hasty in your conclusions? Karansul is such a respectable man. Not until he admits it himself - then I'll believe it.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 8
+Yeah... now all that's left is to find Karansul and get him to confess. Easy...

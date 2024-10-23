@@ -1,0 +1,34 @@
+About traps in the lab
+#DESC
+#show Hero
+#show Trader
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase Trader 1
+And what were those noises from the side of Hys's lab? Could it be that the sneaky guy is finally up in the air?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 2
+And which noise are you talking about? The one caused by magic traps? The trained tigers? Or about the angry scream of Hys himself when he saw the uninvited guests?
+#ANIMATION 9
+#CAMERA 11
+#phrase Trader 3
+Ah, so it was he who shouted like that? And what, was he very angry with your arrival?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 4
+Well, no more than we were when we discovered that the passage to the lab was protected.
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 5
+Yes Karansulu, you knew about it! Why didn't you warn us?
+#ANIMATION 62
+#CAMERA 11
+#phrase trader 6
+What am I, a good fairy? I didn't send you to Hys. Or even the other way around! So get your hands off me.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 7
+And yet Kiel warned me that this idea could go wrong. And why do I never listen to her the first time?

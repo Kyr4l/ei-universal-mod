@@ -1,0 +1,29 @@
+About Cania and the province of Ingos
+#DESC 
+#show Hero 
+#show Rick
+#show merc2
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 1
+I definitely need to learn more about Ingos before I go there. Tell me everything you know about him.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 2
+Yeah, and also about what they wear there. I'm afraid of freezing, but I also don't want to look stupid.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 3
+You are already familiar with the Khadagan Empire, or rather Suslanger. A cruel and hot world. And now before you is its opposite, the soft and cool Ingos. But don't let that fool you. The people there live freer than on Suslanger, but the power there can also be cruel, and sometimes unexpectedly cruel.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 4
+You are about to be introduced to an unknown world with a new climate and new people. Be careful and considerate. Do not trust anyone! Your quest may open up a great magical power to the world. Always remember this.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 5
+I get it.
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick 6
+Get ready to travel. Come when you're ready.

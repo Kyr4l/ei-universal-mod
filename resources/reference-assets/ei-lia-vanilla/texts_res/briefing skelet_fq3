@@ -1,0 +1,24 @@
+Ask for a third divination (50)
+#DESC
+#show Hero2 
+#show skelet 
+#ANIMATION 9
+#CAMERA 10 
+#phrase Hero2 1
+I enjoyed listening to you. Hold the coins and tell me my fortune. Just please, without your riddles and surprises! Difficulties are enough for me in my life, and my goal has long been set. Tell everything in normal language, and save the riddles for the simpletons. 
+#ANIMATION 70
+#CAMERA 11 
+#phrase skelet 2
+For the coins I thank you, generous sir. And don't be angry with my speech, I'm used to making fortunes this way. But for you, I'll try to tell it straight.
+#ANIMATION 66
+#CAMERA 11 
+#phrase skelet 3
+Let's see... what's in store for you? I see... if you go to the plantation, you'll find something. But it's not that easy - you'll have to wait a long time before you get what you want. But if the midday sun doesn't fry your head, it should work out. So, was that clear?
+#ANIMATION 6
+#CAMERA 10 
+#phrase Hero2 4
+Well... as if to tell you... not really.
+#ANIMATION 11
+#CAMERA 11 
+#phrase skelet 5
+Who's ever seen a fortune-teller make a simple prediction? My ruby, you listen to the prophecies with your ear, but don't forget to think with your head!

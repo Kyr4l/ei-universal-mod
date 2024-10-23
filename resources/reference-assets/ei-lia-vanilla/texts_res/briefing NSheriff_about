@@ -1,0 +1,47 @@
+About the work of a craftsman
+#show Hero2
+#show NSheriff
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 1
+Hello friend, are you here for the first time?
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero2 2
+Yes, and can you see it that way? 
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 3
+And because we happen to have a fairly closed society, not...
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero2 4
+Society?
+#ANIMATION 15
+#CAMERA 0
+#phrase NSheriff 5
+Specifically, society. 
+#ANIMATION 44
+#CAMERA 0
+#phrase NSheriff 6
+A scientist said this, when I was still making him these thin scissors, and something he called scalpels, that and I remembered.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero2 7
+So you're a blacksmith, right?
+#ANIMATION 44
+#CAMERA 0
+#phrase NSheriff 8
+No. I am not a blacksmith but a craftsman. They call me Arhar.  
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero2 9
+And what kind of artisan are you and why do you work here?
+#ANIMATION 62
+#CAMERA 0
+#phrase NSheriff 10
+I'm a craftsman making all kinds of clever little things that scientific people need for experiments or whatever. And I make guns, I have to live for something. And why here? Because there's nowhere else, it's not convenient for the masters of magic that there's anyone but them, the masters.
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 11
+Also, if you need anything, come on over and I'll do it.

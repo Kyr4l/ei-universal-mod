@@ -1,0 +1,33 @@
+Talk to Gray Leaf
+#DESC
+#show Hero
+#show Grey
+#show merc2
+#CAMERA 11
+#phrase Grey 1
+I'm glad to see you, man. But you come at a sad time.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+What happened?
+#CAMERA 11
+#phrase Grey 3
+Far to the north where a river flows, animals are dying. They go to drink the water, but find only death in it. My best healers went there to save the animals, but death proved to be stronger.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 4
+Turns out there's some kind of poison in the water. That means you don't have to treat the animals but clean the water!
+#CAMERA 11
+#phrase Grey 5
+As sometimes in the sound of the wind one can hear a beautiful song, so in your words this time one can hear a wise truth. To the healers of my people, the healing of water has proven too difficult.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 6
+And did you find out where the poison gets into the water?
+#CAMERA 11
+#phrase Grey 7
+A wolf killing a sick hare frees it from torment, but at the same time brings death to it. The machines of men serve them well, but at the same time they bring no small amount of damage. By the river, there is... a manufactory. It is because of it that the water in the river is poisoned.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 8
+Kir, you'll have to go to Karansul and find out what and how, after all it's definitely his doing.

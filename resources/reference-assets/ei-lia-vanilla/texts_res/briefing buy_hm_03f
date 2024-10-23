@@ -1,0 +1,11 @@
+Buy Thieves' Blade (1150)
+#show Hero2 
+#show NSheriff
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero2 1
+Oh, this is just what I need!
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+I'm glad, but come as soon as you've raised enough money.

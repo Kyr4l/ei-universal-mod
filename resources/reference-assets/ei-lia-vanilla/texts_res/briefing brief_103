@@ -1,0 +1,45 @@
+About the newcomers on Gipath
+#DESC 
+#show Hero 
+#show OrcC
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Urk-Tar, I want to ask you something. Have any other aliens appeared here besides the ones you already told about?
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcC 2
+No, we killed-all of them. Shei-Var thought-thought they were demons. Clad in iron, weapons of iron. Invincible demons. But the Chosen One demon-demon killed. Urk-Tar thought: the Chosen-She-Var could, that means the strong-strong orc will be able to too.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 3
+And who is this Chosen One you keep talking about?
+#CAMERA 0
+#ANIMATION 6
+#phrase OrcC 4
+The Chosen One is the Chosen One! He came-from nowhere, the people called him the Chosen One. He helped people, he helped Shei-Var. Then he was lost. The people became evil, attacked the orcs, drove them from the Foothills. Completely evil.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 5
+Wait. What do you mean it came out of nowhere?
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcC 6
+They say-they say he appeared in the ruins when nothing-nothing was there, and then-then the Chosen One appeared. Out of nowhere.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 7
+Well, there you go! Surely the Chosen One has teleported to Gipath. That means he's the Joon I'm looking for.
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 8
+And where is the Chosen One now?
+#CAMERA 11
+#ANIMATION 7
+#phrase OrcC 9
+Orcs-orcs don't know. He was looking for something-he was looking for something. Then the abyss. With certainty-with certainty, he found.
+#CAMERA 10
+#ANIMATION 9
+#phrase Hero 10
+If there's a chance that the Chosen One is still here, you should try to find him.

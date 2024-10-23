@@ -1,0 +1,29 @@
+On maintaining balance
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 65
+#CAMERA 12
+#phrase merc2 1
+Bor, I'm sick of you carrying out your dirty intentions with our hands! There, in the New Village, a real slaughter has taken place!
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 2
+For now the people have returned to their old Village, and no sooner will the desire to go to war on anyone be born in them. Now everything will be like before again.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 3
+I understand your train of thought. You just wanted everything to be the way it was before.
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 4
+Yes Kir, you guessed right. When the Chosen One showed up, Gipath buzzed like a frightened beehive. Even the hordes began to feel unsafe poking their noses out of their huts. After all, the Chosen One had found a way to clean out the pockets of the first ogre he met! Hy, hy, hy, hy, hy... !
+#ANIMATION 59
+#CAMERA 11
+#phrase Karh 5
+I'm not saying that he was somehow gravely evil, he just disrupted the order that had existed here for a long time. And when you showed up, the same strange and extraordinary boy, I understood that you were the one who would restore our peace.
+#ANIMATION 14
+#CAMERA 11
+#phrase Karh 6
+And from now on they will remember you as the one who could calm the aggravated water in the swamp called Gipath.

@@ -1,0 +1,31 @@
+About the attack on people
+#DESC 
+#show Hero 
+#show OrcPyr
+#show merc2
+#show Shell 5
+#CAMERA 10
+#ANIMATION 5
+#phrase Hero 1
+Tyn-Acheiu, and where is the leader? I have the Shell, and from what I noticed the lizards actually became very aggressive immediately after it disappeared.
+#hide Shell 5
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcPyr 2
+Urk-Tar has taken the warriors and gone-away. He raids the people, reclaims the encampment. You too go-go. Help!
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 3
+Don't even think about it! After all, you're going to attack people!
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcPyr 4
+They came, they attacked-they attacked the encampment. They killed everyone. Warriors, children, old men!
+#ANIMATION 63
+#CAMERA 12
+#phrase merc2 5
+Kir, do as you wish, but I will go with Urk-Tar. The Orcs have related to us very well, we should help them reclaim their lands. Furthermore, these people have simply behaved like pigs.
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero 6
+Well, when you think about it, people behave like this very often. There's no surprise here. All right, we'll go together. We'll retake the camp and make sure the orcs don't become too much like humans in their bloodlust.

@@ -1,0 +1,41 @@
+Meeting at the mansion
+#DESC 
+#show Hero 
+#show Elder
+#show merc2
+#ANIMATION 9
+#CAMERA 11
+#phrase Elder 1
+Oh Kiel, you're just in time. My collection has just been enriched by a great copy. Come on, let me show you.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 2
+Rindeil, maybe a little later. I get so tired, and you still want me after this run.... aa- yes, how are your beetles doing?
+#ANIMATION 58
+#CAMERA 11
+#phrase Elder 3
+Spiders, Kiel, spiders! How many times do I have to say it! But wait girl, what escape are you talking about? What happened?
+#ANIMATION 30
+#CAMERA 12
+#phrase merc2 4
+Well, as if to tell you... anyway, if it wasn't for that boy's help, I'd be working in some shithole for the rest of my life.
+#ANIMATION 57
+#CAMERA 11
+#phrase Elder 5
+Monsters, how dare they! I'm not leaving it like this!
+#ANIMATION 66
+#CAMERA 12
+#phrase merc2 6
+Oh my good Rindeil, don't take it so personally. After all, it's over! Now get acquainted with my new colleague, which is called Kir. And imagine that he has become acquainted with the treaty of the Great Zufie... Zielifu, Ziefajfus or whatever they call him, I don't remember. But you know who it's about...
+#ANIMATION 59
+#CAMERA 11
+#phrase Elder 7
+Oh, my boy! You know the treatises of the Great Ziefius! Welcome to my mansion! I'm always happy to welcome new guests, and even more so those who share my passions! I am Rindeil, the host of this estate, as well as the owner of the largest collection of spiders in Khadagan. And now you tell us about yourself.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 8
+Thank you very much for such hospitality, dear Rindeil. I don't have much to tell about myself, my whole life is subordinated to one goal - to free the people close to me and to deal with Firiez. He tricked my family into slavery and made them work for it. And they are scholars, like you, Rindeil. Firiez uses their knowledge for an evil purpose...
+#ANIMATION 6
+#CAMERA 11
+#phrase Elder 9
+A sad story, no doubt about it. I will do what I can to help you. Science is the future of the world but in the hands of fools and scoundrels it will only bring misery.... I'll be glad to help you.

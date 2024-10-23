@@ -1,0 +1,40 @@
+On the art of espionage
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+My blood is already boiling! Ah, to get to Firez faster... but he's settled in his fortress. Damn!
+#ANIMATION 11
+#CAMERA 11
+#phrase Doctor 2
+Calm down. Eat a cookie better, I had a special one today, they just melt in your mouth!
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 3
+And Firez isn't the only one you'd like to reach. The Baron has already given me an assignment to gather information about Firez's castle. I'm just preparing my spy network.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 4
+How's that gonna work out for you? In the end, look where you are and where Firez is.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 5
+Didn't I already tell you I'm selling my rachatlum and sorbets to Firez's palace? He won't be eating it himself, but his many loved ones, namely his wife and children, simply adore my sweets.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 6
+Some of them are literally losing their minds from them! You surely know that chocolate makes a person happier? And when a man is happy, he talks a lot. He talks... and I'm listening.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 7
+If I listen to you like this, it sounds like being a spy is so easy!
+#ANIMATION 6
+#CAMERA 11
+#phrase Doctor 8
+But it's not simple, of course. But if approached with due skill and ingenuity, it makes the task simpler. I always carefully develop a plan and then follow it.
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 9
+So you don't have to doubt. We'll soon know what Firez is having for breakfast, what the journeyman in the kitchen is gossiping about, and which soldier got shot in the eye in the last fight.

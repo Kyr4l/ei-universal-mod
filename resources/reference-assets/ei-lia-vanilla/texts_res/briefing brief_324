@@ -1,0 +1,36 @@
+About bug fixes
+#DESC 
+#show Hero 
+#show BSon
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 1
+Have you learned enough lessons? Thank me that I felt sorry for your father and didn't want to kill you.
+#ANIMATION 9
+#CAMERA 11
+#phrase BSon 2
+I don't need your schleppiness! It would be better if you killed me. Anything's better than seeing your own family and all your hopes for the future die.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 3
+There will be no future if no one fights for it.
+#ANIMATION 62
+#CAMERA 11
+#phrase BSon 4
+How to fight? In recent times, we have lost the Dar-Ugorn! Our people are dying from disease and at the hands of enemies. When the father dies - the last hope will die too.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 5
+You're young, it's all in your hands. Take up your weapon and fight. Today you proved that you can fight. So channel your skills for the cause of Jygran's rebirth!
+#ANIMATION 5
+#CAMERA 11
+#phrase BSon 6
+Do you believe in our victory? Are you that much of a fool or do you really believe? I can't understand you at all. What's in it for you after this war?
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 7
+Firez! He's a bloody executioner and tyrant, keeping my family in slavery! I was a slave all my youth, but I managed to escape even though everyone thought it was a crazy idea and never even tried. But I escaped, found friends and help. And now I'm back for revenge.
+#ANIMATION 14
+#CAMERA 11
+#phrase BSon 8
+You really are crazy. But I like that. Your insanity will lead us to victory. I believe you.

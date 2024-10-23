@@ -1,0 +1,26 @@
+Country house
+#DESC 
+#show Hero
+#Show Haburu
+#CAMERA 11
+#phrase Haburu 1
+The warm rays of joy from meeting you would warm my soul, if only a dark cloud of anxiety did not bedevil my reason.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 2
+Could it be that something has happened again?
+#ANIMATION 5
+#NOLIPS
+#CAMERA 10
+#phrase Hero 3
+I just feel like the savior of the forest. I let the dogs out of their cages, I water the trees... I wonder what shook the forest to its foundations this time: a rabbit twisted its paw?
+#CAMERA 11
+#phrase Haburu 4
+Not far from where people forcibly kept dogs, there is an animal that needs our help. It is frightened and tired.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 5
+Well, I get it: you want me to bring this animal to you?
+#CAMERA 11
+#phrase Haburu 6
+Yes, but it won't be easy. Just as a light breeze plays with a leaf without letting it fall to the ground, so should you push forward the frightened animal in the correct direction.

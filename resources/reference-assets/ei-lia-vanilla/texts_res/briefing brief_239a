@@ -1,0 +1,16 @@
+About meeting a soldier
+#DESC 
+#show Hero 
+#show MThief
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 1
+I brought back a message for a soldier. 
+#ANIMATION 6
+#CAMERA 11
+#phrase MThief 2
+Ha, ha! Well, what are you doing here? Are you waiting for HER to arrive? Don't make me laugh! He'll be in town.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 3
+Yeah, somehow I didn't think of that. Granted, I'll go look for it in town.

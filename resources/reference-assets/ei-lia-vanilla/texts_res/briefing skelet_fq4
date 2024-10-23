@@ -1,0 +1,20 @@
+Ask for a fourth divination (50)
+#DESC
+#show Hero2 
+#show skelet 
+#ANIMATION 70
+#CAMERA 11 
+#phrase skelet 1
+My malachite, and again you come to hear a prediction? But know that 'Divination is like a precious stone - it needs a golden setting.
+#ANIMATION 11
+#CAMERA 10 
+#phrase Hero2 2
+You know how to find a fairy approach to people. Hold the money and please tell me what's in store for me too.  
+#ANIMATION 66
+#CAMERA 11 
+#phrase skelet 3
+Oh generous sir! I'll tell you everything! You have a long way to go. I see... you will go from the Portal to the City, there will stand a rich house that will give you great wonder. But there's a difficult obstacle. The fence is high, the locks strong. But even to this you can find the key, if you search around properly.
+#ANIMATION 17
+#CAMERA 11 
+#phrase skelet 4
+I don't know what's in there, but I think it's going to end well.

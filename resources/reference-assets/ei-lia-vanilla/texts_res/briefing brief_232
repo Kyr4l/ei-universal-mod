@@ -1,0 +1,37 @@
+On crime and punishment
+#DESC 
+#show Hero 
+#show Huber
+#show merc2
+#ANIMATION 43
+#CAMERA 11
+#phrase Huber 1
+This is simply outrageous! Murder happened on my land! At least it's a good thing none of my subjects suffered. That old rebel Brissen deserved to die like that.
+#ANIMATION 62
+#CAMERA 11
+#phrase Huber 2
+And his friend was no better! He pretended to be such a seemingly harmless maverick, but in reality he turned out to be a common murderer! But he shouldn't have done it on my soil after all. This is unforgivable! I will judge him with all severity.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 3
+Governor! The old mage may not be a murderer! It's just impossible.
+#ANIMATION 44
+#CAMERA 11
+#phrase Huber 4
+All the clues speak for themselves. A message written by Jam-Akara's hand was found with Brissen, in which he sets his friend to meet at the very place and time they killed him. So what is this if not proof of guilt?
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 5
+Let me prove he's innocent!
+#ANIMATION 6
+#CAMERA 11
+#phrase Huber 6
+Are you not very confident?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 7
+Governor, after all, you said yourself that you uphold liberal views. Please let my colleague conduct an independent investigation.
+#ANIMATION 59
+#CAMERA 11
+#phrase Huber 8
+Ah lovely child, what can you know about politics? But so be it. I'll even let you talk to the arresting officer.

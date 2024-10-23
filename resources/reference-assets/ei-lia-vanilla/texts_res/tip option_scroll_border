@@ -1,0 +1,4 @@
+Scrolling border
+Sets the distance between the cursor and 
+the screen border to start scrolling the camera from. 
+The camera scrolls in the direction the cursor moves.

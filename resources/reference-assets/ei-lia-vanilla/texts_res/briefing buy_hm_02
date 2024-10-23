@@ -1,0 +1,11 @@
+Buy a Shaking Baton (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I think this baton will come in handy.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+Well, if you think so, take it.

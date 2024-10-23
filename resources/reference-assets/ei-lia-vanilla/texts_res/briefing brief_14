@@ -1,0 +1,60 @@
+Get to know Fieruz
+#DESC 
+#show Hero 
+#show merc8
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero 1
+Hi. You must be Fieruz? Kiel was talking about you.
+#ANIMATION 11
+#CAMERA 4
+#phrase merc8 2
+I'm Fieruz. And you must be Kiel's new friend? And where does she find these guys? ...
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 3
+We're just friends.
+#ANIMATION 46
+#CAMERA 0
+#phrase merc8 4
+I could care less what kind of relationship you have with her. What are you coming for?
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 5
+I have a problem and I need some advice.
+#ANIMATION 12
+#CAMERA 11
+#phrase merc8 6
+So why didn't you run to your Kiel, huh?
+#ANIMATION 61
+#CAMERA 0
+#phrase Hero 7
+Firstly because Kiel isn't in the mansion right now, and secondly I don't understand your reason for being mean to me.
+#ANIMATION 11
+#CAMERA 0
+#phrase merc8 8
+And I don't really like uninvited guests and even less so those who want something from me. But agreed, say what's bothering you.
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 9
+I need to mask my distinguishing superficiality. Maybe you can give me a hint how?
+#ANIMATION 9
+#CAMERA 5
+#phrase merc8 10
+Ha, ha, ha, ha! You've been learning all your life! You take a piece of thin cloth, wrap it around your head - and that's it.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero 11
+Just like that? But won't a man with his face wrapped around it arouse suspicion?
+#ANIMATION 62
+#CAMERA 5
+#phrase merc8 12
+Where did you come from? Recently there was a plague here, and half the beggars died, and whoever survived walks around with his face specially covered, or shows himself only at night, because his face is so disfigured. People will take you for one of these.
+#ANIMATION 17
+#CAMERA 5
+#phrase Hero 13
+And where can I find the right fabric?
+#ANIMATION 6
+#CAMERA 5
+#phrase merc8 14
+What, you need to be shown everything? All right, you come with me. You will insure me, and I will get you a scarf for this time. Just let's make a deal like this: I invented everything, then the whole plot is for me too.

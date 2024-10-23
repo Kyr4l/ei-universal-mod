@@ -1,0 +1,12 @@
+On revenge against a murderer
+#DESC 
+#show Hero2 
+#show merc10
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero2 1
+Beauty, I can see by your eyes that you've already regained your composure and are looking at the world with eyes full of life. And I can see that there's a spark hidden in them that just lit a big fire.
+#ANIMATION 66
+#CAMERA 0
+#phrase merc10 1
+Ah, boy, you noticed everything. Yes, I have an idea, and you dutifully should take part in it. And believe me - we will have a lot of valuable things to steal!

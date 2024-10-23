@@ -1,0 +1,11 @@
+Buy Unbalanced Sword (170)
+#show Hero2
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I think I'll take this sword.
+#ANIMATION 46
+#CAMERA 0
+#phrase NSheriff 2
+Well, you don't even have that kind of money.

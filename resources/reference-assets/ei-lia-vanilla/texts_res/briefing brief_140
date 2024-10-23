@@ -1,0 +1,42 @@
+On the disappearance of an artisan
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 32
+#CAMERA 11
+#phrase Karh 1
+Oh disaster has struck, such a mishap!
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 2
+I can just see Babur's workshop has been demolished, and he himself is not here. What happened here?
+#ANIMATION 59
+#CAMERA 11
+#phrase Karh 3
+At night, the orcs attacked us. By the time my boys grabbed their weapons, the trail behind them had already cooled. At first we were glad they got scared and ran away, but then we noticed Babur was gone.
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 4
+But who attacked? Which orcs? And how were they able to get through the posts?
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 5
+I have a suspicion. They were island orcs, definitely them. They slaughtered all the goblins, complete savages. The ones from the Middle Peaks they would just bribe, and slaughter them all. I almost feel sorry for them, those hooflegs.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 6
+And where did they take Babur?
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 7
+And how is anyone supposed to know! You'd have to ask the orcs themselves. By the time such news reaches us, it may be too late.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 8
+Babur must be rescued immediately! Without him we can't get through the observatory.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 9
+You have to go to Urk-Tar quickly. He should know what happened to Babur.

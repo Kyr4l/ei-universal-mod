@@ -1,0 +1,28 @@
+About rapid change
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 14
+#CAMERA 11
+#phrase Doctor 1
+Noo, you're a real master of arts! Steal the map right from under the nose of the entire Khadagan staff! That's perfect! Don't let them relax!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+Yes, but they'll come to their senses quickly. And they won't be so easy to deal with.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 3
+Baron doesn't miss a moment. To tell you the truth, I've never seen him so active before. I think it was your appearance that brought him out of that coma he was in.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 4
+Before, all he did was complain about himself, his family and our country. And now it's so nice to look at him! Come on, eat some candy you hero!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 5
+You'll have to get used to the fact that things are going to change around here soon. I will not leave Jygran until I fulfill my destiny. Only one of us will stay here - either me or Firez.
+#ANIMATION 11
+#CAMERA 11
+#phrase Doctor 6
+Well, we'll just hope you stay with us. No one's gonna cry to Firez.

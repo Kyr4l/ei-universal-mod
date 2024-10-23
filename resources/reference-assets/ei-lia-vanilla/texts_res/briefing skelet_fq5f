@@ -1,0 +1,16 @@
+Ask for the fifth divination (50)
+#DESC
+#show Hero2
+#show skelet 
+#ANIMATION 11
+#CAMERA 10 
+#phrase Hero2 1
+Will you reveal my future to me fairy? 
+#ANIMATION 66
+#CAMERA 11 
+#phrase skelet 2
+Why not tell such a good gentleman his fortune? I'd be happy to! But after all, as they say - 'The less the payment is mean, the truer the prediction!
+#ANIMATION 16
+#CAMERA 10 
+#phrase Hero2 3
+Yes, they say rightly. That is, when they have something to pay with, then I will listen to the divination. In the meantime - forgive me for bothering you.

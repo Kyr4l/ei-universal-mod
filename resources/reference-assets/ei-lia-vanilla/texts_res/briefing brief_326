@@ -1,0 +1,21 @@
+About the job of a spy
+#DESC 
+#show Hero 
+#show Baron
+#show Jdocs 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Mr. Baron! I have an important report. It details the positions of enemy troops. And in his words, I would like to convey that Uncle Council is preparing some sort of venture to facilitate the capture of the fortress.
+#ANIMATION 61
+#CAMERA 11
+#phrase Baron 2
+Yes, I know how to choose people who know what they're doing. Take Stark's craftsman, for example, or my cook. Not to mention the Council trader. If there were spies like that on Firez's side, we'd be dead!
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 3
+I'm sure he'll manage to create an unforgettable surprise for the Khadagans. But he will definitely need some help too. I can't find better helpers than you, so you and your friend are coming under his full command. Let's go.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 4
+Thank you, Baron. I was just about to ask for it anyway.

@@ -1,0 +1,42 @@
+About Aunt Zara's worry
+#DESC 
+#show Hero2 
+#show YCF
+#show merc2
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero2 1
+Aunt Zaro, I feel awkward saying this, but somehow you look suspiciously strange.
+#ANIMATION 32
+#CAMERA 12
+#phrase merc2 2
+Kir! How can you say such a thing to a woman! Aunt Zaro, you are definitely in love! I know what that absent-minded look and distracted smile means!
+#ANIMATION 70
+#CAMERA 11
+#phrase YCF 3
+Oh girl, you are holy right! I met such a wonderful man! And just imagine, he's a scientist, he works for the emperor. And such a handsome man he is!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 4
+We're very excited about this. You'll probably invite us to your wedding soon, I hope?
+#ANIMATION 65
+#CAMERA 11
+#phrase YCF 5
+Ah children, everything is so complicated. He's busy now, and he's suffering. Some zealot, necromancer Kehel, is trying to mess up my beloved's experiments. And guess what? He's trying on the position of leader of the Necromancer's Guild, but only my beloved is worthy of that honor!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero2 6
+Yes Aunt Zaro, a difficult task indeed.
+#ANIMATION 15
+#CAMERA 11
+#phrase YCF 7
+You're right, but I know what needs to be done. Help me free myself from this Kehel, and I'll already find a way to pay you back!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero2 8
+What do you suggest I do with him? Kill a powerful necromancer? You've got to be kidding me.
+#show BurnBaby 5
+#CAMERA 11
+#ANIMATION 66
+#phrase YCF 9
+No! Something simpler. I've procured a special scroll to tarnish the reputation of that necromancer and set the entire Guild against him. You can do it! I believe in you for a reason!

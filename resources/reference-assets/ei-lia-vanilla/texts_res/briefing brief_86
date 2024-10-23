@@ -1,0 +1,36 @@
+On further action
+#DESC 
+#show hero2 
+#show merc2
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero2 1
+Kiel, the time has come for us to part ways. Sahilla helped get papers for me, and now I'm ready to join the army to get one step closer to my goal.
+#ANIMATION 63
+#CAMERA 11
+#phrase merc2 2
+E, that's not the way it is. What did you want? I've saved your... so many times. e... head so they could finish you off somewhere in the Useless Lands? I'm coming with you!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 3
+Where to.
+#ANIMATION 12
+#CAMERA 11
+#phrase merc2 4
+To the army, of course! Are you happy?
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero2 5
+Well, you're a girl! And in general it's very dangerous!
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 6
+Kir, are you worried about me? How nice. I knew that sooner or later you would finally understand that we were made for each other...
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero2 7
+Kiel, I'm not talking about that. You just really aren't allowed to go with me!
+#ANIMATION 46
+#CAMERA 11
+#phrase merc2 8
+Bullshit! I have papers too, and I'll pretend to be a boy. I've already come to terms with everything. Also, someone should show you the way to the North Fortress.

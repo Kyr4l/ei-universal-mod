@@ -1,0 +1,24 @@
+Wandering in the dark
+#DESC 
+#show Hero 
+#Show Junofil
+#ANIMATION 59
+#CAMERA 11
+#phrase Junofil 1
+My young friend, I see great pain in you. I feel that something has happened.... where is your companion?
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 2
+I was blind! She loved me, but I didn't notice my happiness! Kiel died when we went to get Tai-Illara's stuff!
+#ANIMATION 62
+#CAMERA 11
+#phrase Junofil 3
+It's sad, but there's something to be done for your pain...
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 4
+How! I'm willing to give my life and everything else just to keep Kiel alive!
+#ANIMATION 44
+#CAMERA 11
+#phrase Junofil 5
+I feel that you have three parts of a powerful artifact - the Staff of Life. If you combine them properly, we can resurrect your love.

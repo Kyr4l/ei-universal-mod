@@ -1,0 +1,41 @@
+About Hys's request
+#DESC 
+#show Hero 
+#show His
+#ANIMATION 62
+#CAMERA 11
+#phrase His 1
+Kir, please listen to me. I am aware that I find it hard to believe, but this knife really was stolen! Some arrogant thief infiltrated my laboratory and robbed me! He stole my knife, many valuable items, and even what was given to me for safekeeping by the governor!
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 2
+Are you talking about the nugget?
+#ANIMATION 5
+#CAMERA 11
+#phrase His 3
+How do you know about the nugget!
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero 4
+What I do know is that the caravan that was supposed to carry the nugget was empty! But I don't see why I should believe you.
+#ANIMATION 44
+#CAMERA 11
+#phrase His 5
+It fell to me to outfit the caravan. I couldn't admit that a nugget had been stolen from me. Then, a man contacted me, and communicated that there was a robbery planned for the caravan. That suited me so well!
+#ANIMATION 44
+#CAMERA 11
+#phrase His 6
+I decided to set up an ambush to catch the robbers and then blame the missing nugget on them. But nothing came of it!
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero 7
+I need evidence. For now, the knife found at the crime scene convinces me more.
+#ANIMATION 59
+#CAMERA 11
+#phrase His 8
+I will arrange a meeting with this man! I have evidence! Come to the edge of the woods outside of town. I'll bring the evidence.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 0
+#phrase Hero 9
+This reminds me too much of a trap, but go you must. And find out who so successfully warned Hys of our attempted caravan robbery.

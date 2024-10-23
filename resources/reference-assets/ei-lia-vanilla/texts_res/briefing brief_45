@@ -1,0 +1,35 @@
+About the recovered signee
+#DESC
+#show Hero2
+#show Glav
+#show GoldNugget 4
+#CAMERA 0
+#ANIMATION 17
+#phrase Glav 1
+You brought the ring! Yes brother, you proved we can trust you. Sorry I was so suspicious, but our situation is too fragile to allow ourselves to trust anyone.
+#hide GoldNugget 4
+#show GoldNugget 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero2 2
+I'm not offended at all there.
+#ANIMATION 17
+#CAMERA 0
+#phrase Glav 3
+You can keep quiet about your past and hide from us, but it's better if we know a little about you.
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero2 4
+I can't tell you much about myself. They call me Kir here. I escaped slavery, but my whole family stayed there. That's why I swore to go back, rescue them and take revenge on whoever imprisoned them.
+#ANIMATION 62
+#CAMERA 0
+#phrase Glav 5
+As a sharpened blade seeks the blood of its enemy, so do you thirst for vengeance. Here, in our Brotherhood where all are equal and are friends to each other, you will find help and support. Now you are one of us.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero2 6
+Brother Khatul, I have brought you the ring, and I see that you are glad to receive it, but I am sorry to disappoint you: I have spent much time on books, and in one of them I came across a description of the Emperor's Signet...
+#ANIMATION 59
+#CAMERA 0
+#phrase Glav 7
+Don't finish, brother, I know what you want to talk about. He in whom faith is strong has no time for doubt. Let everyone believe that we possess the true Signet. That is why I hope you will keep everything a secret.

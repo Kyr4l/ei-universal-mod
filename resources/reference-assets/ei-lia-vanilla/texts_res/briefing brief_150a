@@ -1,0 +1,32 @@
+On the legacy of junow
+#DESC 
+#show Hero 
+#show Rick
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 1
+I notice that during your time on Gipat you have been to almost all parts of it, and even those inaccessible to the simple inhabitants of this old land.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+There is much to look at in Gipatie: A dead city, traces of a Junovian civilization. Aptly enough, I found a strange place. Now, anteaters live there, but it seems to me that the rooms that they've found were built by the jungle.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 3
+Yeah, you're right. The old-timers built this temple. And believe me, he was by no means the only one on Gipat. But time has washed away all traces.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 4
+There may be nothing left!
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick 5
+Well, why? There is. There's an old lab underground. I stopped using it a long time ago, so now it's deserted and legal underground.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 6
+I kind of wanted to be there! 
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 7
+Well, you ain't got much time. But don't forget, you need to hurry up with your mission. When you've satisfied your curiosity, we'll take care of business, and there won't be time to visit the lab with you again.

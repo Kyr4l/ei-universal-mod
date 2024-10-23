@@ -1,0 +1,11 @@
+Buy Dagger (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I'll take this knife.
+#ANIMATION 18
+#CAMERA 0
+#phrase NSheriff 2
+Take it, it stings good.

@@ -1,0 +1,14 @@
+     When you order your character to attack an enemy you can specify what body part he should aim at. Use the following keypad keys for precise blows:
+
+     <4>: aim at left hand (left fore leg)
+     <6>: aim at right hand (right fore leg)
+     <1>: aim at left leg
+     <3>: aim at right leg
+     <5>: aim at body
+     <8>: aim at head
+
+     To land a precise blow, hold the appropriate key down, and place the cursor over the enemy. Your character will aim right at the specified body part until you issue a different command or until the health of this body part reaches 0. If the enemy is still alive, additional blows will not be precise ones.
+
+    Some of the beings in the game have no arms or legs. If you issue a command to aim at a nonexistent body part your character will just ignore it.
+
+    All characters' body parts can be protected by armor which has specific "armor" properties - so the damage inflicted on such protected body parts reduced.

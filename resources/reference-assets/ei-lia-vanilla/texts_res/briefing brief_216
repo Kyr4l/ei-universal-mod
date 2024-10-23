@@ -1,0 +1,21 @@
+On Baldi's suspicions
+#DESC
+#show Hero
+#show Vor
+#show merc2
+#ANIMATION 62
+#CAMERA 11
+#phrase Vor 1
+Ahaa, you may have fooled simpletons like Geraldine and Trickster, but you won't fool me! I can see right through you! You must have appropriated the nugget and told everyone the tale of the empty trunk! If I were you-
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 2
+Would you in our shoes do that too? I don't doubt it one bit.
+#ANIMATION 62
+#CAMERA 11
+#phrase Vor 3
+Oh, oh, oh, oh, and who cares what you think? They came here... You guys best not forget that I'm watching you. And my lingo is always ready.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 4
+That's beautiful. I mean, we can't be afraid of anything. Because after all, you're behind us!

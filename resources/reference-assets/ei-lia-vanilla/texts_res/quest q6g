@@ -1,0 +1,17 @@
+Urk-Tar
+The orc chieftain and his two young warriors went hunting a long time ago and have not returned yet. You have to find them, most likely the orcs got into trouble.
+#subobj 1
+Find the orc troop
+Urk-Tar should have led the hunters to the east, to an area rich in game.
+#subobj 2
+Drive away the harpy
+Apparently, the harpy living in this area has set a flock of bats on the troop. The orcs won't be able to get through on their own, they need help.
+#subobj 3
+Kill the bats
+The way to the ward is blocked by bats that the harpy has bitten. The way should be cleared!
+#subobj 4
+Escort the leader to the fortress
+Urk-Tar has been wounded. He will now need an escort to reach the tribe.
+#subobj 5
+Urk-Tar must survive
+The death of the chief will mean the end of the tribe.

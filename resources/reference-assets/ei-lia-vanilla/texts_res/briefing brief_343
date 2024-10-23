@@ -1,0 +1,37 @@
+About friendly enemies
+#DESC 
+#show Hero 
+#show Junofil
+#ANIMATION 12
+#CAMERA 11
+#phrase Junofil 1
+The young hero is successful again.
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 2
+Yes, in the cave I found a beautiful armor. Now I'm as ready as ever to fight my worst enemy. Hate will give me extra strength.
+#ANIMATION 62
+#CAMERA 11
+#phrase Junofil 3
+It is unbecoming to be driven by such a strong and subversive emotion. Only when the forces of light are on your side, then you will prevail. Do not be confident, after all, for youth is appropriate. Agree: you need help.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+Yeah, it's hard to argue with that. The villain has settled into his castle. I can't do without the Baron's forces. But he won't risk attacking the castle. What to do?
+#ANIMATION 61
+#CAMERA 11
+#phrase Junofil 5
+Let's ask for help from our... enemies! Everything is unstable in this world, today it's your enemy and tomorrow it will be ready to die for you!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 6
+What are you talking about Dear Tui-Lena? I don't understand.
+#show Jcontrol 5
+#ANIMATION 44
+#CAMERA 11
+#phrase Junofil 7
+Take this amulet. It will allow you to win over your worst enemy. Like an ogre or a dragon.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 8
+That's great! But where do I find them? Ah well, I'll ask Uncle Rada. Thank you, wise Tui-Lena!

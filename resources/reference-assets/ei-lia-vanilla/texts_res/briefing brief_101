@@ -1,0 +1,62 @@
+Get to know the chief 
+#DESC
+#show Hero
+#show OrcC
+#show merc2
+#CAMERA 11
+#ANIMATION 7
+#phrase OrcC 1
+My warriors have seen that you from the Dead-Dead city have come. There the living-living did not. Where did you come from?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+We have come from another land. Here is an expedition of the Khadagan Empire that we should find and hand over a packet with orders.
+#CAMERA 5
+#ANIMATION 0
+#phrase OrcC 3
+Uhr-rrr...
+#ANIMATION 6
+#CAMERA 12
+#phrase merc2 4
+Kir, your words made too much of an impression on him. Because he obviously understood everything about it.
+#ANIMATION 66
+#CAMERA 12
+#phrase merc2 5
+We search the camp for aliens who wear iron armor and are looking for something here. Do you know where they are?
+#CAMERA 11
+#ANIMATION 7
+#phrase OrcC 6
+Orcs don't like aliens. We killed them, we smashed the camp. Ah, it was fun and merry! No more aliens on Gipath.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 7
+Ah, yes! And what, there's nothing left of them? Did anyone even survive?
+#CAMERA 5
+#ANIMATION 6
+#phrase OrcC 8
+No. My warriors-warriors in the camp destroyed everything. One chest-cuff remains, iron, strong, the key at the ogre's lies. He helped us. Good ogre.
+#ANIMATION 11
+#CAMERA 5
+#phrase merc2 9
+Kiel would advise you to remember this. There might be something useful in that trunk. You'd just have to steal the key from the ogre.
+#ANIMATION 64
+#CAMERA 5
+#phrase merc2 10
+And look, you're a brave, bold and savvy warrior. Surely you can help us in our quest.
+#CAMERA 5
+#ANIMATION 11
+#phrase OrcC 11
+I am the chief of my-my tribe. I Urk-Tar. I the most powerful chief on Gipath. Only Shei-var more-more me, but he is far-away, in the Sands.
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcC 12
+Ah, now I will-be like Shei-var. The Chosen One helped him. Now with me the Chosen One will be. He will help the tribe. It will be good.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 13
+What seems to be the story with this Chosen One? But if the chief will let me tame Gipath here, one might agree to help his tribe. 
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 14
+My name is Kir, and my child's name is Kiel. We agree to help your tribe, and we hope you will help us too.

@@ -1,0 +1,11 @@
+Missing goods
+A caravan of goods that should go to Aunt Zara's store has stopped along the way for some unknown reason. The town guard has already set out to look for it, but since not all the goods from it are legal you have to outrun them!
+#subobj 1
+Find the caravan
+The caravan should have passed from east to west south of the fortress walls.
+#subobj 2
+Kill the wild animals
+Apparently the caravan was attacked by wild animals. In order to take what survives you need to kill them.
+#subobj 3
+Search the trunk
+All the illegal goods are lying in a large chest. If you manage to take them the guards will not suspect anything and will return the rest of the goods intact and whole to Aunt Zara.

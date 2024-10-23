@@ -1,0 +1,37 @@
+About a roadside ambush
+#DESC 
+#show Hero 
+#show MThief
+#show merc2
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 1
+Fellow Trickster, for Kiel you have shown yourself to be a man experienced in certain matters. So tell me: why would a governor send an empty trunk to the capital as a gift, and protected by a squad of soldiers?
+#ANIMATION 9
+#CAMERA 11
+#phrase MThief 2
+Ha, a wench came to me for advice? Pleasant, pleasant... And about the empty trunk, the governor might not have known. After all, he didn't personally send this caravan. Now such matters are handled by old Hys, all cleaned up for himself, slyly.
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 3
+Aha! Yeah, that means it could be Hys's doing...
+#ANIMATION 17
+#CAMERA 11
+#phrase MThief 4
+What was it?
+#ANIMATION 6
+#CAMERA 12
+#phrase merc2 5
+You're so clever, but you think slowly. The caravan was ambushed on this road. Now do you understand?
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 6
+You mean Hys could have cleaned up that nugget...
+#ANIMATION 15
+#CAMERA 12
+#phrase merc2 7
+... and then play out the caravan robbery, that they supposedly robbed it. All basic.
+#ANIMATION 30
+#CAMERA 11
+#phrase MThief 8
+Hm. I knew Hys wasn't a very nice guy, but to rob the governor... Yeah, he could do it. But he could and he didn't. Karansul has his hands all over the place, too. I'll have to think about it.

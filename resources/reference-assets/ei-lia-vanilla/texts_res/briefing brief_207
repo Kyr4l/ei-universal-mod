@@ -1,0 +1,43 @@
+Speak with Grey Leaf
+#DESC
+#show Hero
+#show Grey
+#show merc2
+#CAMERA 11
+#phrase Grey 1
+He who wakes a bear in winter will strongly regret that he did not pass by it in silence. Go away man, this is no place for you.
+#show SverMark 5
+#CAMERA 10
+#ANIMATION 11
+#phrase Hero 2
+No, I'm not leaving. I'm the one who sent you the invitation. I am sent to you by the trapper Sver. To make you believe me, I bring you this thing.
+#CAMERA 11
+#phrase Grey 3
+There's a reason the snow is especially white today, the balm has finished its final stage of being ready! I knew it, an old friend would remember. This time he was able to prepare the right vessel.
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 4
+So Sver sent us to you for some cream for himself? And that's the only reason we went to all this trouble!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 5
+Kiel, you know you're wrong. Gray leaf can tell us how to find Brissen.
+#hide SverMark 5
+#show SverAlc 5
+#CAMERA 11
+#phrase Grey 6
+Having seen a lying tiger, one need not conclude that it is dead. Having seen the vessel, you should not conclude that the trapper has deceived you. The balm heals illnesses, heals wounds, and ensures peaceful sleep. It is invaluable to the People of the Forest and useful to humans.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 7
+Don't worry, I'll bring it back to Sver so that not a single drop is lost. And can you tell us where to find Brissen?
+#CAMERA 11
+#phrase Grey 8
+Remembering this man my heart fills with gratitude to him. But he recently walked away from us. He and his friend are now in human lodging, not far from the abandoned mines.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 9
+Thank you chief!
+#CAMERA 11
+#phrase Grey 10
+Like a young tree enjoying every ray of sunshine, I feel you can be trusted. You can find the headquarters of our clan at the end of a long ravine beyond the gates. Come, I will be glad to see you there.

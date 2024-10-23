@@ -1,0 +1,44 @@
+On the effects of stupidity
+#DESC 
+#show Hero 
+#show BSon
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 1
+Dartas, we need to have a serious talk.
+#ANIMATION 9
+#CAMERA 11
+#phrase BSon 2
+Well, how are you? Talk faster, I don't have time.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 3
+Kiel is very angry and you are the reason. What did you say to her?
+#ANIMATION 11
+#CAMERA 11
+#phrase BSon 4
+HA, she sent a defender. Let's agree like men: what do you want for her?
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 5
+Dartas, don't you even dare think about it! Kiel is my best friend.
+#ANIMATION 62
+#CAMERA 11
+#phrase BSon 6
+Ah, you're just friends! I don't want to believe it. I'm the one with the big magic! Or you're just missing something...
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 7
+You have a perverted and disgusting mind. You will yet come to pay for your filthy thoughts and language. Too bad I have more important things to do right now.
+#ANIMATION 11
+#CAMERA 11
+#phrase BSon 8
+And what business could you possibly have? Come on, admit it, you're a coward! Yes, a coward! And not worthy to be called a man!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 9
+Well, that's it, my patience has run out. I'll prove to you who the real man is!
+#ANIMATION 17
+#CAMERA 11
+#phrase BSon 10
+Finally! A duel! We will meet on the Island of Death!

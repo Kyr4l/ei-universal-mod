@@ -1,0 +1,16 @@
+About the researchers' expedition
+#DESC
+#show Hero2
+#show Glav
+#ANIMATION 44
+#CAMERA 5
+#phrase Glav 1
+Brother Kir, while you were away a shadow of danger fell upon our Brotherhood. My people have seen that an explorer scout has found our cave. Now he will return to his camp and tell us where to find us! He must not be allowed to do this!
+#ANIMATION 9
+#CAMERA 4
+#phrase Hero2 2
+Yes, I will immediately go in pursuit. You can rely on me, brother Khatul.
+#ANIMATION 62
+#CAMERA 5
+#phrase Glav 3
+I believe you will succeed, but just in case, I will instruct you to prepare to defend the hideout. Many have found a new home and family for themselves here, and we must not let our brothers lose the last thing they have left. So go, and let the Great Powers guide you!

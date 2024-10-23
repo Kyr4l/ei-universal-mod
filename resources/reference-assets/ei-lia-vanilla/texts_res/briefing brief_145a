@@ -1,0 +1,37 @@
+About the way past the lake
+#DESC 
+#show Hero 
+#show Smith
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 1
+Well, there you go bothering us! Good thing I got there in time.
+#ANIMATION 43
+#CAMERA 11
+#phrase Smith 2
+As if I'd ever want to get involved with those green-murders again. And never in my life! Well, they don't understand trade or craft! And if so, shall they give me, I mean, to the ogres at once? No, with all of them, but with orcs I won't be involved anymore!
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 3
+Yeah, that's good. Because next time I might not be around to save you.
+#show ZakKnife 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 4
+But now I hope you won't refuse me service. Especially since I brought you the weapon of the Chosen One. You must produce the key to the gate in the ravine that runs along the lake in the Middle Peaks. Can you help?
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith 5
+And why are you going there? Do you think those gates put themselves there?
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 6
+I need to get to the observatory. Airy told me that the Magic Bullet broke down after being used, and the means to fix it can supposedly be found in the observatory.
+#ANIMATION 59
+#CAMERA 11
+#phrase Smith 7
+Maybe yes and maybe no. So you're not even sure if you really need to go to the observatory, and already you need the key! No, that's not going to happen. You find the ball first, and then I'll make you a key if you need it.
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith 8
+And if the Sphere is all right, it'll look like I worked unnecessarily? No, I'm not going to take on an optional job!

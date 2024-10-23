@@ -1,0 +1,40 @@
+Sergeant's briefing
+#DESC + automatically
+#show Hero2
+#show Sergant
+#ANIMATION 11
+#CAMERA 11
+#phrase Sergant 1
+Well, has everyone gathered? Attention! Jackal seed!
+#ANIMATION 62
+#CAMERA 11
+#phrase Sergant 2
+I'm Sergeant Zairak. A man once called me Zairak the Cheerful, he had a very peculiar sense of humor. My sense of humor is worse, so I will try to wipe those smiles off your happy faces. Forget everything you left outside the walls of this fortress! Now you are soldiers in the mighty army of the Khadagan Empire, whose power will last forever! I congratulate you for this!
+#ANIMATION 17
+#CAMERA 11
+#phrase Hero2 3
+Kiel, it's not too late to back out. Why don't you think about it?
+#ANIMATION 43
+#CAMERA 11
+#phrase Sergant 4
+Hey, you two, keep quiet! When I say others must not dare even breathe!
+#ANIMATION 9
+#CAMERA 11
+#phrase Sergant 5
+But wait. Hey you, chatterbox, how dare you bring yourself to our fortress with a plague? Did you want to set up a diversion? You think if you cover your blisters with your clothes I won't notice!
+#ANIMATION 3
+#CAMERA 11
+#phrase Hero2 6
+Not at all, Sergeant! I'm fine now! It's just that my face is so disfigured by the scars of illness.
+#ANIMATION 17
+#CAMERA 11
+#phrase Sergant 7
+Well if that's the case then I agree. But either way I'll keep an eye on you!
+#ANIMATION 62
+#CAMERA 11
+#phrase Sergant 8
+Well: in order for our army to continue to be as powerful and invincible, we must only accept the best of the best into it. That is why you will now head to the Canyon of Death. Whoever comes out of there alive and still with loot, that's his luck. He will serve in our brave army. The others, or rather their remains, will be sent to their relatives... if we can find them. These remains.
+#ANIMATION 11
+#CAMERA 11
+#phrase Sergant 9
+Let the Great Powers help you - it's the only thing a misfit like you can hope for! Forward into the Canyon! Don't stop!

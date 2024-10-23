@@ -1,0 +1,21 @@
+On successful action
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero2 1
+There you go, you can rest easy now. The blackmailer won't tell anyone anything ever again.
+#ANIMATION 14
+#CAMERA 0
+#phrase YCF 2
+Oh how good, you guys just saved me! I am so grateful to you! And I know how to return the favor.
+#ANIMATION 32
+#CAMERA 0
+#phrase Hero2 3
+Aunt Zaro! Come on!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 0
+#phrase Hero2 4
+Awkward as it was. Twice we made money from the trader's troubles. But on the other hand, she gave us the money herself. After all, it was impossible to quit.

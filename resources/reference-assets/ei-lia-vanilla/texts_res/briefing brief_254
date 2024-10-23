@@ -1,0 +1,40 @@
+On the road to the unknown
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 1
+Kir, doesn't a shiver run down your spine, too? It just makes my hair stand on end when I think of what might be waiting for us down the road.
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero 2
+Don't be afraid, my friend, we're together! I believe - no, I am CONFIDENT that we are on the right path! I feel that this path will lead me to my goal!
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 3
+Tka-Rick thought about what it was - a weapon, or maybe a powerful artifact, but it was a road. The road to Jygran.
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 4
+So now we're back to Tka-Rick?
+#ANIMATION 62
+#CAMERA 0
+#phrase Hero 5
+No, now that I am so close to my goal, I feel I have enough strength to face Firiez! I have found that help that I have been looking for since the beginning of my journey. I am going to Jygran!
+#ANIMATION 11
+#CAMERA 11
+#phrase merc2 6
+I think you meant to say, WE are going. After all, I'm going with you!
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 7
+What do you mean, and I thought you were going to stay with your beloved Trickster.
+#ANIMATION 46
+#CAMERA 11
+#phrase merc2 8
+What else! He's obviously a cutie and all, but you - more so.     :)
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero 9
+Thank you, Kiel. I'm glad you'll be with me.

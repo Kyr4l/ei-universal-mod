@@ -1,0 +1,11 @@
+Buy Thieves Crossbow (1150)
+show Hero2 
+#show NSheriff
+#ANIMATION 11 
+#CAMERA 0
+#phrase Hero2 1
+Give your pearl.
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 2
+For such a pittance I will not give!

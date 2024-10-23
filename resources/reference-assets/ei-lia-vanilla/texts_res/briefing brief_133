@@ -1,0 +1,49 @@
+About the problem of Esther
+#DESC 
+#show Hero 
+#show SKD
+#show Witch
+#ANIMATION 11
+#CAMERA 12
+#phrase Witch 1
+Ahaa, you were secretly going to kidnap me? That's not going to happen! Before you tell me where to find the flower, I won't take a step from here. Even if you eat me!
+#ANIMATION 5
+#CAMERA 9
+#phrase SKD 2
+If this is the only way out...
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+Wait, wait! There's no need to eat anyone. Dear Estero, your granddaughter is very worried about you and sent me after you.
+#ANIMATION 65
+#CAMERA 9
+#phrase Witch 4
+And who are you for anyway? ... - I mean, when I'm not at home, my granddaughter's the one who gets all the gropes! But wait... there's something about you... Hey, dragon, look! Doesn't he remind you of anyone?
+#ANIMATION 5
+#CAMERA 9
+#phrase SKD 5
+Yes, if you look not at the appearance but on the inside, he reminds me of that bold man to whom I gave the ancient sword.
+#ANIMATION 9
+#CAMERA 12
+#phrase Witch 6
+Let the Troll vomit me out! To the Chosen One he resembles! Where did you come from, boy?
+#ANIMATION 46
+#CAMERA 0
+#phrase Hero 7
+It's a long story. Now your dispute must be brought to an end. From what I understand, you want to find a flower?
+#ANIMATION 65
+#CAMERA 0
+#phrase Witch 8
+Not just any flower, but a particular flower! But what I need it for, you don't need to know. And this host of bone soldiers won't tell you where to find it!
+#ANIMATION 5
+#CAMERA 9
+#phrase SKD 9
+If you promise to go right away, I'll tell you. Go to the lake area in the northwest where the swamps are. There you will find your flower.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 10
+To make it faster, I'll go get the flower myself.
+#ANIMATION 66
+#CAMERA 12
+#phrase Witch 11
+Yes, go, my dear, make your grandmother happy, I'll wait for you here. I'll sweeten the dragon's loneliness, why should he sit here alone.

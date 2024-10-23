@@ -1,0 +1,32 @@
+About the search for the artifact
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 64
+#CAMERA 0
+#phrase merc2 1
+What a chiller here. Why didn't Tka-Rick warn me? We better find this mysterious artifact faster and get back out there.
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 2
+Yeah, not very hot. But so beautiful! All white...
+#ANIMATION 71
+#CAMERA 0
+#phrase merc2 3
+Let's get back to the topic: how will we look for the artifact? Because Kiel's ears are already frozen.
+#ANIMATION 17
+#CAMERA 0
+#phrase hero 4
+Well, I suggest you ask around with the local citizens.
+#ANIMATION 70
+#CAMERA 0
+#phrase merc2 5
+Beautiful idea! Why don't you also ask for information on where to look for this ancient artifact?
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 6
+Well, then we'll have to find a magician, and get him to do the search with us. We'll probably have to pay him for that...
+#ANIMATION 9
+#CAMERA 0
+#phrase merc2 7
+I somehow don't doubt that anymore!

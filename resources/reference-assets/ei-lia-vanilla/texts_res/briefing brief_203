@@ -1,0 +1,28 @@
+About the magicians on Ingos
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero 1
+We are faced with a choice: we can go to the Governor's Magician or we can try to find a friend for that elusive Brissen.
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 2
+My inner voice tells me it's better not to get involved with the authorities. But why don't we try to find another magician?
+#ANIMATION 65
+#CAMERA 11
+#phrase merc2 3
+And if that sleazy trader doesn't like him, there's a chance the mage might turn out to be a decent human being! Believe me, Kiel has had dealings with traders before, I know them inside out.
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero 4
+I don't doubt that anymore. It's just that it'll be easier for us to meet with Hys. His lab isn't far from here, and that mage still needs to be found.
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero 5
+Yeah, that's what we're gonna do. We'll go to Hys, and if nothing comes up with him we'll look for Brissen and his friend.
+#ANIMATION 11
+#CAMERA 11
+#phrase merc2 6
+Suit yourself, but I warned you that nothing good would come of it.

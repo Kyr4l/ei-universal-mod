@@ -1,0 +1,32 @@
+Expedition to Ingos
+#DESC 
+#show Hero 
+#show Rick
+#ANIMATION 6
+#CAMERA 11
+#phrase Rick 1
+You're ready now. It grieves me to let you go this far knowing that there you will encounter dangers and I will not be able to come to your aid.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+We have no other choice.
+#ANIMATION 6
+#CAMERA 11
+#phrase Rick 3
+Yes, it's true. There's a story in the Joons about how once upon a time long ago the Joons didn't believe there was magic in the world, and only one young man...
+#ANIMATION 4
+#CAMERA 10
+#phrase Hero 4
+... who everyone thought was crazy, was able to prove that the world was full of magical forces. This legend was told to me by my father, a long time ago. It inspired me and helped bring my crazy plan to life - to escape from Firez's castle.
+#ANIMATION 5
+#CAMERA 11
+#phrase Rick 5
+Yes, it all comes together. Believe Kir that nothing is impossible, and then it will indeed be so.
+#ANIMATION 5
+#CAMERA 11
+#phrase Rick 6
+Now I'm going to send you to Ingos. You've already been through teleportation, you know more what it's like.
+#ANIMATION 6
+#CAMERA 11
+#phrase Rick 7
+You will be alone on Ingos, but I will be watching over you. If anything goes wrong I will bring you back here right away. May the Great Powers be with you.

@@ -1,0 +1,24 @@
+On inviting highwaymen
+#DESC 
+#show Hero 
+#show OrcPyr
+#ANIMATION 7
+#CAMERA 11
+#phrase OrcPyr 1
+The man-man is back. The mage has seen, now the clairvoyant- clairvoyant you don't need.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 2
+It's the other way around, Tyn-Acheiu. I need your help. Have you ever heard of the Magic Bullet that the Chosen One found on Gipath?
+#CAMERA 5
+#ANIMATION 5
+#phrase OrcPyr 3
+The Chosen One-The Chosen One stole the Orb from the OrcPyr. Wrong-wrong he did.
+#ANIMATION 12
+#CAMERA 11
+#phrase Hero 4
+And do you know where the Sphere is now?
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcPyr 5
+No, the Chosen One took the Orb to the people and left it there. Look there, ask the people.

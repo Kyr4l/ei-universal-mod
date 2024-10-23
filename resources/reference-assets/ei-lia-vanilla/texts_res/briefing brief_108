@@ -1,0 +1,25 @@
+On the chief's absence
+#DESC 
+#show Hero 
+#show OrcPyr
+#show merc2
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 1
+And where is the leader lost? I look at it this way, some warriors are gone too.
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcPyr 2
+The chieftain for the hunt-hunt is gone. To the mountains to the east. There hunting-hunting good, animals many-many, birds many-many. Long gone, long gone.
+#ANIMATION 70
+#CAMERA 12
+#phrase merc2 3
+Has he been gone a long time? Kir, you know what, I think there's something wrong with this. And Kiel has a nose for such things!
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 4
+Yeah, you're right. It's strange that the chief hasn't returned from the hunt so far, especially since the terrain there is good and the hunt should be a success.
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcPyr 5
+If you follow the chief, strong-strong the tribe will do well. Tribe-tribe without a chief weak, all may offend him. When Urk-Tar returns it will be at once-at once-good.

@@ -1,0 +1,49 @@
+On the unfortunate march to the lab
+#DESC
+#show Hero
+#show Trapper
+#show merc2
+#ANIMATION 6
+#CAMERA 11
+#phrase Trapper 1
+What a mess! But you kids are out of luck! To incur the wrath of Hysa himself...
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+Things didn't go so badly. Hys promised to rethink helping us.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 3
+Ha! And you believed this Hys? Sver, you better tell us how to find that other mage.
+#ANIMATION 44
+#CAMERA 11
+#phrase trapper 4
+Well, I can't tell you that. But I can tell you who to ask. You're on your way to the Green Clan, to my friend, Chief Gray Leaf.
+#ANIMATION 59
+#CAMERA 11
+#phrase Trapper 5
+Where the clan headquarters is now I do not know, but if you bring the sacred flower to a certain place, the Gray leaf with his forest people will come to meet you.
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero 6
+The forest people? I read something about them... They are such little forest people, worshipping nature. I never would have thought I would have the opportunity to meet them!
+#ANIMATION 15
+#CAMERA 11
+#phrase Trapper 7
+Yes, exactly. But in order to meet them, you have to try to get the sacred flower. You can get it from the White Clan for a while. But don't forget: First, you'll need to get the Evergreen Leaf from the Forest Mage. With its help, you can enter the clan's territory and then find the Altar with the Flower. Just don't forget about the traps!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 8
+And that's it? Somehow it sounds too simple.
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper 9
+Don't worry, daughter! You need to find a magician, and without the Grey Leaf, there's no way you can do that. But in order to get the chief to agree to speak with you, you will show him one thing, and you will say that you come from me.
+#ANIMATION 15
+#CAMERA 12
+#phrase merc2 10
+Okay. Come on, what is this thing?
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper 11
+Not so fast! This item should be taken from a storage locker. It's in Karansul's property, near his military camp. You there too, be careful!

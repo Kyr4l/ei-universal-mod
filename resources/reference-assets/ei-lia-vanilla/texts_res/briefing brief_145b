@@ -1,0 +1,33 @@
+About the manufacture of the key
+#DESC 
+#show Hero 
+#show Smith
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Babura, I'm glad you're all right now. How are you feeling? How are you doing?
+#ANIMATION 12
+#CAMERA 11
+#phrase Smith 2
+Yeah, I'm fine. You, this, that... thank you for coming in time. I'll never forget it.
+#show ZakKnife 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero 3
+That's good. I hope you won't deny me now in a request. I brought you the knife of the Chosen One.
+#hide ZakKnife 5
+#show PalantirBroken00 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 4
+The key to the gate in the gorge that stretches along the lake in the Middle Peaks, could you make? I found the Magic Bullet, and it's broken. It is necessary to go to the ruined observatory, and maybe there I will find some means to do it.
+#hide PalantirBroken00 5
+#show AmbushKey02 5
+#CAMERA 10
+#ANIMATION 62
+#phrase Smith 5
+Well if you say it's essential with this observatory, I'll help. I have a spare key for that gate. After all, those gates have been there for a long time. So I decided to get myself a key just in case. I thought it might come in handy someday. And here it is!
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 6
+Thank you Babur. Now I can find the means to repair the bullet.

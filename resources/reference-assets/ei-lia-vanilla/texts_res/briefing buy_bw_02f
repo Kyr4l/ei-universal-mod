@@ -1,0 +1,11 @@
+Buy The Wrong Bow (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I'll take this arc.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+I'll take it when the money shows up.

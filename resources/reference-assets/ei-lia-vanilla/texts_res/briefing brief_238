@@ -1,0 +1,38 @@
+About the evidence
+#DESC 
+#show Hero 
+#show MThief
+#show merc2
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 1
+Have you heard yet? We've decided to do our own investigation, prove Jam-Akara innocent, and find the knight's real murderer.
+#ANIMATION 11
+#CAMERA 11
+#phrase MThief 2
+And the staves are not missing?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 3
+And you don't get teased, you just better help us! The old magician said that on the day of the murder he went to the mine and there a soldier he knew let him pass. Don't you know this soldier? This is very important.
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 4
+Ha, well, I'm the one who introduced the old man to this soldier. Yes, he has family here nearby, in the countryside. There was a plague there recently. And the mage cured them all. Saved them, you might say. So, clearly, the soldier was very grateful to him.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+And how can you meet this soldier?
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 6
+And how am I supposed to know. After all, he's not on guard duty every day, they have a schedule there. Leave him a note at the station, he'll come to you for a meeting.
+#ANIMATION 6
+#CAMERA 12
+#phrase merc2 7
+Heh. Kir, and that you didn't guess it yourself? Smart guy, thank you for your advice, what would we do without you!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 8
+Kiel ever since she got acquainted with this Clever Man it's like she's been switched. At first glance it seems like she doesn't live up to him, and then suddenly: 'Let's go ask the Clever Man!", or "How about the Clever Man give us some advice?". I don't understand at all.     :/

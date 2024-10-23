@@ -1,0 +1,20 @@
+Find the technical drawing of the secret weapon
+It should be located in the lab. 
+#subobj 1
+Find another entrance
+The door is locked from the inside, so you need to look for another entrance.
+#subobj 2
+Find the key
+The door to the lab is locked - you need to find the key located somewhere nearby.
+#subobj 3
+Enter the lab
+You need to unlock the door with the key and open it.
+#subobj 4
+Take the technical drawing
+He is located somewhere here.
+#subobj 5
+Charge the golems
+If you took one away, no enemy would be afraid!
+#subobj 6
+Unload the golems
+Now they'll never fight again.

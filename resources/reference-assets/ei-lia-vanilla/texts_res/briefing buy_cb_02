@@ -1,0 +1,11 @@
+Buy Old Crossbow (315)
+show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I'll take this crossbow.
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 2
+Not the most successful crossbow, but you can shoot with it.

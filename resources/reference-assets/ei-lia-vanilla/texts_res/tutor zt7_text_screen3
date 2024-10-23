@@ -1,0 +1,5 @@
+     When casting spells, don't forget about some basic rules.
+
+     Each spell has a range. If a character receives a command to cast a spell on a target out of that range, he'll try to get closer first.
+     Don't expect spells to have an immediate effect. Each spell takes a certain time to affect the target. The time depends on the spell's complexity and the character's health (it is difficult to cast spell with crippled arm). 
+     Some spells affect targets for longer periods of time. But the effects are not cumulative. Casting multiple spells of the same type at the same character will have no additional effect; the targeted character will only be effected by the strongest spell cast.

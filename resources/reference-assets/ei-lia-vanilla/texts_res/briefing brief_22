@@ -1,0 +1,25 @@
+About meeting with Fieruz
+#DESC 
+#show Hero2 
+#show Sheriff
+#show merc2
+#ANIMATION 9
+#CAMERA 5
+#phrase Sheriff 1
+O! How cute you two look together! You'll make a great couple.  
+#ANIMATION 64
+#CAMERA 5
+#phrase merc2 2
+I've always known that you Karimie are a perceptive and wise man. It's just a shame that not everyone listens to your advice.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 3
+Ekhm... we're looking for Fieruz, by the way. Do you know where he's gone?
+#ANIMATION 11
+#CAMERA 5
+#phrase merc2 4
+Karim, if you tell me now that he thought I was a better thief and he decided to retire, I'll kiss you!
+#ANIMATION 17
+#CAMERA 5
+#phrase Sheriff 5
+I would have been happy to receive a kiss from such a beauty, but Fieruz just went to the Black Market outside of town.

@@ -1,0 +1,13 @@
+Fieruz's separation from the team
+#DESC 
+#show Hero2 
+#show merc8
+#show merc2
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 1
+Now I'm ready to admit that you are the biggest thief! You could only handle a lock like that.
+#ANIMATION 9
+#CAMERA 11
+#phrase merc8 2
+You've been learning all your life. And don't forget, you owe me a debt. Well now get lost, I need to rest. I think I'm getting old...

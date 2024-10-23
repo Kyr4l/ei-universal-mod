@@ -1,0 +1,12 @@
+Get to know the blacksmith
+#DESC 
+#show Hero2 
+#show Zaku
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 1
+Hello Blacksmith! Is the fire burning hot in your furnaces? It is a pleasure to meet a man of your profession, especially when you need his services.
+#ANIMATION 17
+#CAMERA 5
+#phrase Zaku 2
+Yes, may the Great Powers help you too! I am glad that you are now one of us. My craft will serve you well, if only you can find some coins to pay me for it.

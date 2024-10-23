@@ -1,0 +1,41 @@
+About found money
+#DESC 
+#show Hero 
+#show Gerald
+#show MThief
+#ANIMATION 11
+#CAMERA 12
+#phrase MThief 1
+What is this news about found money? I daresay it's some kind of invention.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+No, Kiel specifically told everyone that we found the stash to lure out the thief. And yes, the ruse was successful!
+#ANIMATION 72
+#CAMERA 11
+#phrase Gerald 3
+Where's that bastard? Get him over here! I won't leave a dry thread on him! And then we'll hang him! On the nearest tree!
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 4
+Quiet, Geraldine. The thief I cannot hand over to you, he has already been arrested by the Governor himself. After all, your thief not only stole your money, he killed Brissen.
+#ANIMATION 11
+#CAMERA 12
+#phrase MThief 5
+That means I was right when I thought the knight was killed because of his suspicions. And who is this scumbag, as expressed by Geraldine?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 6
+I don't think I'm going to surprise you guys. It's Crooked.
+#ANIMATION 70
+#CAMERA 11
+#phrase Gerald 7
+This one's always been a mean and pathetic person. Nrgh, what a shame he didn't get his hands on me.... !
+#ANIMATION 9
+#CAMERA 12
+#phrase MThief 8
+And as for the money... I hope Kiel's stories about the found stash aren't a joke anymore?
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 9
+No, not a joke. We found all the money. And we are returning it to you in full and intact.

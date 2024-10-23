@@ -1,0 +1,33 @@
+About the new shelter
+#DESC 
+#show Hero2 
+#show Elder
+#show merc10
+#ANIMATION 57
+#CAMERA 11
+#phrase Elder 1
+This is unheard of! Do you know what you've done? The murder of the prison warden has brought the entire garrison to its feet! The soldiers are searching all the houses! And they'll come to me too, TO ME! They can ruin and loot my collection!
+#ANIMATION 45
+#CAMERA 10
+#phrase Hero2 2
+Rindeil, I could not prevent this death, though I did everything I could.
+#ANIMATION 58
+#CAMERA 11
+#phrase Elder 3
+My boy, I believe you. But you must not stay here any longer. I can't jeopardize my collection.
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero2 4
+You're kicking me out? And where am I supposed to go? There are soldiers all around!
+#ANIMATION 9
+#CAMERA 12
+#phrase merc10 5
+If you asked me, I'll say I know where you can hide from the soldiers. In the Last Hideout! I'll take you and Kiel there.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero2 6
+I hope this Last Hideout doesn't become my last haven.
+#ANIMATION 59
+#CAMERA 11
+#phrase Elder 7
+Go my boy, and don't do any more foolishness. And when it's all done, you can come back.

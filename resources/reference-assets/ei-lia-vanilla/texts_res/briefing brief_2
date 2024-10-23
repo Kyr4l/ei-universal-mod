@@ -1,0 +1,60 @@
+Read about Kiel
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 1
+Boy! Yes, yes, that's you I'm talking to. Did they ever maybe tell you that you were born under a lucky star? Can you talk? I saw that you were alive, otherwise I wouldn't have gone after you.... You were brought here by soldiers, beaten half to death. I don't know why I decided to help you, but I don't regret saving such a nice guy. Well... you, uh... you had it coming.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 2
+But what's wrong with me? How did I get here?
+#ANIMATION 59
+#CAMERA 11
+#phrase merc2 3
+Do you really not remember anything? But those monsters finished you off... They were beating you with their legs, the riffraff... And just why did the head of security tell you to be especially careful, huh?
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 4
+The head of security? This is a prison! 
+#ANIMATION 73
+#CAMERA 11
+#phrase merc2 5
+Worse, it's a slave enclosure. They say they'll soon send us all out to plow the land for sunflowers. ... I'm in no hurry to do that!
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 6
+No, this can't be! I was striving for freedom... but now I find myself a slave again! And what to do...
+#ANIMATION 66
+#CAMERA 11
+#phrase merc2 7
+Well that's what I thought too! I immediately said to myself: Kiel, this boy is not as ordinary as he looks, your actions will be fully rewarded if only by satisfying your curiosity! Well, yes, that uncommonly reddish skin of yours interested not only me. You know, it's hard not to. So you're saying "What to do?" Well, think about it.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 8
+You're funny. What do they call you? Me: Kir-Achit-La.
+#ANIMATION 8
+#CAMERA 11
+#phrase merc2 9
+That's how I am... I'm Kiel, and you're Kira-like? E, it's me... I'll call you Kir.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 10
+Thank you for helping me get back on my feet. Now it's time to get out of here, and as soon as possible. I'm not going to live in slavery.
+#ANIMATION 65
+#CAMERA 11
+#phrase merc2 11
+Get out, you say? And this is where Kiel will help you again! I'm too good today... or maybe not... because I just needed an accomplice. I can't escape on my own, and I think you're a good match!
+#ANIMATION 18
+#CAMERA 10
+#phrase Hero 12
+Run away? Maybe we can get along peacefully somehow after all...
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 13
+Quiet! The head of security is on his way here. He's sure to have seen you waking up by now. Just don't spill anything unnecessary to him!
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero 14
+You can trust me, but I'll still try to convince him of my innocence. It can't hurt to try.

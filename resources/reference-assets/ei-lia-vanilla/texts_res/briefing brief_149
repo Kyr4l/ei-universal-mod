@@ -1,0 +1,54 @@
+About the Magic Bullet
+#DESC 
+#show Hero 
+#show Rick
+#show merc2
+#show PalantirWork00 5
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick 1
+Kir, your luck and persistence will go into the legends of our race. I see you brought the ball.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 2
+Hold it tighter and look carefully. It will now show us Jygran, and open up the knowledge of it.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+What it is. It has become white and cool. What does it mean? Is the sphere not working?
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 4
+No, it's working, I can feel it. You have to understand what it means, White and cold.... not an easy task... also let me touch the bullet. Of course! The sphere points to Ingos! The bullet showed us the snow.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 5
+Even the sphere couldn't show us Jygran, but it gave us a hint. Snow - that means Ingos. The remote province of Cania.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 6
+Tka-Rick, I can't keep up with you. Tell me everything in detail.
+#CAMERA 11
+#ANIMATION 6
+#phrase Rick 7
+I can draw the conclusion that the key to Jygran is located on Ingos. I cannot say what it is, but I feel that it contains great power. Perhaps it is a magical weapon or perhaps something else. It falls to you to explain it on the spot.
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 8
+What will it take for us to go somewhere?
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick 9
+I'm afraid you're gonna stay here. You won't be able to follow your friend.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 10
+No, and that's it. Either the two of us go or I'll run after him one way or another. You guys can't stop me!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 11
+I don't think there's much point in arguing here. Kiel won't back down from what he wants anyway.
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick 12
+All right, since you're asking for it too, let's have it your way. You two go to Ingos.

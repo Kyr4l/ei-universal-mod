@@ -1,0 +1,35 @@
+About the magic bullet
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 9
+#CAMERA 11
+#phrase Karh 1
+Kir, I see you want to ask me something. Don't be shy, boy! After all, we're all our own people here. Well, what's troubling you?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+I heard the Chosen One found a magic bullet on Gipath. I need that sphere too. Do you not know where it is now?
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 3
+Turns out our little Gipath is full of secrets! And everyone is drawn to discover those secrets. I've heard there's a sphere here, but where it is I never knew.
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 4
+Babur, the blacksmith of the Village had the most of any business with this Chosen One. We, on the other hand, the Free Hunters, never once came into contact with him. Well... or maybe we have, but it doesn't matter. So you have to go ask Babur.
+#ANIMATION 65
+#CAMERA 12
+#phrase merc2 5
+You've made up your mind! How are we supposed to ask him if he's in the village! Who will let us in there?
+#show BaburLetter 5
+#CAMERA 11
+#ANIMATION 62
+#phrase Karh 6
+And that's why I have an idea. Babur could be lured out of the Village. Toss this letter to him. He's greedy, he'll agree - and then he'll come to our camp himself. Or if not to Babur, toss it to the elder, and then they will drive the blacksmith away. But either way he will come to us. And then you can talk to him in peace!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase merc2 7
+He's made up his mind! He wants to lure the blacksmith to his camp, but he's afraid to do it himself. He pretends not to quarrel with the Village. But agreed, his luck as long as we have a stake in it too.

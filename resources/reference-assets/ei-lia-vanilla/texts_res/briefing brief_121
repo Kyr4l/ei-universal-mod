@@ -1,0 +1,46 @@
+Get acquainted with ataman
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 14
+#CAMERA 11
+#phrase Karh 1
+And here are the saviors of our children! Well, finally. We've all been waiting for you! I am Bor, ataman of the Free Hunters. This is our camp. Make yourselves comfortable, make yourselves at home.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+It is a great honor for me to get to know you. I have heard a lot about the Free Hunters from the orcs. Is it true when they say that in the war between humans and orcs, you side with the orcs?
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 3
+Yes and no, the people of the Village have always considered us enemies, though we have never harassed them. Well, almost never. That's why in this war we sympathize more with the orcs than the Village. But it's their war, we don't interfere.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 4
+Oh, how noble! I would never be able to do that. The village considers you enemies, and you never once took the opportunity to take revenge on them. And now such a convenient time, war is finally coming!
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 5
+You're such a sly girl! I like you! I would have one idea, by the way, but I'm afraid my kids are inadequately prepared for it. We're hunters, not fighters, after all.
+#ANIMATION 46
+#CAMERA 12
+#phrase merc2 6
+Don't be so modest! Look at your eagles! It takes my breath away when I look at them!
+#ANIMATION 61
+#CAMERA 11
+#phrase Karh 7
+Well, they're only seemingly like that, they've never seen a real battle. But you guys are a different matter! You would help me. I would like to disturb the village hunters, they are used to coming to our area to hunt. Not that I begrudge them space, there's enough for everyone, but I should also think about my camp! There are so many children here, and everyone needs to be fed!
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 8
+All right, let's see what you can do.
+#ANIMATION 14
+#CAMERA 11
+#phrase Karh 9
+Oh how good! Just you guys get so specific with them so they don't get too tired. So that once - and they would die from the first blow.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase merc2 10
+Oh, I don't like this ataman. He sings too sweetly, and his eyes are evil-evil. You have to be careful with him.

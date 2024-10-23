@@ -1,0 +1,45 @@
+About the situation on Gipath
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 1
+Bor, I've been to the Village and it seems to me that the people live well there. Why did they attack the orcs? I could still understand it if the orcs were pressuring them.
+#ANIMATION 9
+#CAMERA 11
+#phrase Karh 2
+It's a long story. The people of the Village have always lived quietly and peacefully.
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 3
+Then came the Chosen One. How much trouble he made! So much silt he lifted from the bottom of the old swamp that is our Gipath! And after he was gone, it all began.
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 4
+Someone asked: 'And what are we worse than the Chosen One at? And they all went to beat the orcs. First they chased them out of the Foothills, and a second village came up to replace the orc camp. And now they're trying on the Middle Peaks!
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 5
+And for having such high prices on Gipath, surely the Chosen One is to blame too?
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 6
+You guessed it baby! He, after Erfar, the previous elder of the Village, was exposed clean, all his wealth was plundered by the people. And the elder was the richest man! And all of a sudden, everyone has a lot of money now.
+#ANIMATION 59
+#CAMERA 11
+#phrase Karh 7
+Babur didn't care and just hiked up the prices in his store. Hm, for cash he is greedy. And from then on, prices all over Gipath started going up.... Oh, I got an idea... !
+#ANIMATION 6
+#CAMERA 12
+#phrase merc2 8
+Oh no! One more idea!
+#ANIMATION 63
+#CAMERA 11
+#phrase Karh 9
+You'd better listen first! I would like to organize an ambush on a caravan. It carries money and armaments from one Village to another. But my boys are still young and inexperienced...
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 10
+In the end, most of them died when on the Cho... y... well, when the Chosen One was still here. Generally I want you to help my boys. I mean, you know, just watch after them in case something goes wrong. And what a lot of good that'll do for our camp!

@@ -1,0 +1,50 @@
+Get to know Valrasian
+#DESC 
+#show Hero 
+#show Huber
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Pane Governor, your court mage told us you wanted to see us. Is there anything we can do for you?
+#ANIMATION 62
+#CAMERA 11
+#phrase Huber 2
+Fortunately, you can't be of any use to me. For the simple reason that I need nothing from you. But the rules of good manners require that when you arrive in town, you introduce yourselves to the governor.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+Sorry, Governor. But I always thought that a man of such high rank as yours would not show favor to acquaint himself with simple travelers.
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 4
+I hold rather liberal views and have nothing to do with intercourse with simple people.
+#ANIMATION 59
+#CAMERA 11
+#phrase Huber 5
+And what a beautiful face next to you! And you have hidden such a lovely creature from me! Do you travel in this man's company, my child? Is this your... ehm... fiancé?
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 6
+Kir is the closest person to me. But not a fiancé.
+#ANIMATION 14
+#CAMERA 11
+#phrase Huber 7
+How lucky! This is, I wanted to say - wouldn't you like to get acquainted with my collection? We could get to know each other better.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 8
+There are legends about your exquisite collection! They say you have collected every rare specimen that can be found on this earth.
+#ANIMATION 11
+#CAMERA 11
+#phrase Huber 9
+And not just on this one! Unfortunately, I can't boast of owning the arrow of the forest people mage from the Blue Clan. And she would have embellished my collection in such a bizarre way!
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 10
+Mr. Governor, it will be a great honor for you to bring you this arrow. Especially since we owe you something, having failed to show you due respect upon your arrival in town.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase merc2 11
+You better get out of here as soon as possible. I don't like the way this governor is looking at me....

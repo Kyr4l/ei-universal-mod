@@ -1,0 +1,35 @@
+About Sachila's clipboards
+#DESC 
+#show Hero2 
+#show merc7
+#ANIMATION 64
+#CAMERA 5
+#phrase merc7 1
+Ah, you came back too soon, I wasn't waiting for you yet.
+#ANIMATION 5
+#CAMERA 4
+#phrase Hero2 2
+So the documents aren't ready yet?
+#show Note05 5
+#CAMERA 11
+#ANIMATION 70
+#phrase merc7 3
+Why not ready? Are you trying to insult me? Or do you not believe me? Here they are, your documents, no one can tell them from the real thing.
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero2 4
+Thank you Sahillo. You don't even know how you helped me.
+#ANIMATION 6
+#CAMERA 11
+#phrase merc7 5
+Don't thank me with words but with good deeds. Did you bring me what I asked for?
+#hide note05 5
+#show ThiefSack2 5
+#CAMERA 0
+#ANIMATION 15
+#phrase Hero2 6
+Yes, of course, keep it. I found your cache in the isles, but also troll still there. Nice security you arranged there. I didn't manage to get through.
+#ANIMATION 70
+#CAMERA 11
+#phrase merc7 7
+Ah, who would have thought, you were always so brave and now you're scared of some troll. But never mind, I'll take everything from the other locker myself.

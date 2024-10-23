@@ -1,0 +1,45 @@
+Get to know your leader
+#DESC 
+#show Hero 
+#show Gerald
+#show Vor 
+#ANIMATION 64
+#CAMERA 11
+#phrase Gerald 1
+Just in time you kids came running! We could have done without you, but you made it quicker.
+#ANIMATION 62
+#CAMERA 12
+#phrase Vor 2
+And why are you crawling around in front of them! They're spies after all! Hang them! It's written on their foreheads: Valrasian spy! Hang them!
+#ANIMATION 11
+#CAMERA 11
+#phrase Gerald 3
+Crooked, shut the fuck up. Nobody asked you at all.
+#ANIMATION 66
+#CAMERA 11
+#phrase Gerald 4
+But the question remains. Where did you come from? To us, the rulers of animals, no one is taking any chances. Or, not to put it nicely, you're as desperate as we are, but Crooked is right and you're spies. Well, answer me!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 5
+We are not spies. I'm Kir, the girl with me - Kiel. We're looking for Brissen, or more specifically his friend, the mage.
+#ANIMATION 43
+#CAMERA 12
+#phrase Vor 6
+I don't believe them at all! They could have set tigers on us just to gain our trust. And how did they know Brissen was here? Suspicious! I have a rope ready, by the way! Shall we hang them?
+#ANIMATION 9
+#CAMERA 11
+#phrase Gerald 7
+Get out of my sight until I hang you myself!
+#ANIMATION 17
+#CAMERA 12
+#phrase Vor 8
+Well, let's put them to some kind of test!
+#ANIMATION 15
+#CAMERA 11
+#phrase Gerald 9
+Heh, first reasonable suggestion!
+#ANIMATION 64
+#CAMERA 11
+#phrase Gerald 10
+Also kids if you can stand this test, we'll take you on. And if not... ...then Crooked's line will come in handy.

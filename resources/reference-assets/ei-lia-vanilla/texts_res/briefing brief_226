@@ -1,0 +1,34 @@
+About strange occurrences
+#DESC
+#show Hero
+#show Trader
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Turns out your governor is quite the lover of the uncommon. He asked me to try to get a forest people mage arrow for him. That's just a silly task.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trader 2
+I'm ready to disagree. He'll be more gracious to you after your gift. Ha, boy, that's a rule as old as the world. Valrasian himself sends such gifts to the capital from time to time, and for that they look through their fingers at what is being created here.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 3
+Yes, we've heard something about these gifts. These caravans are certainly tasty morsels for the highwaymen.
+#ANIMATION 62
+#CAMERA 11
+#phrase Trader 4
+And what did you think? Last time his highness sent a giant nugget to the capital. I wish I had one, I wouldn't let it out of my hands anymore!
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 5
+Yes, such things know how to attract attention. But how do you know exactly what the governor is sending in those caravans?
+#ANIMATION 9
+#CAMERA 11
+#phrase Trader 6
+Why, I'm a trader! I can buy and sell not only items but information. That's not a crime!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase merc2 7
+Yes, yes... If Karansul is so clued up, he might have also arranged the theft of the nugget. One should keep an eye on him.

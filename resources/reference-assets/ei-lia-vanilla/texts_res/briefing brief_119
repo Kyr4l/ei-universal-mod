@@ -1,0 +1,36 @@
+Tell your story
+#DESC 
+#show Hero 
+#show Rick
+#CAMERA 0
+#ANIMATION 5
+#phrase Rick 1
+Are you ready to continue our conversation yet? I look forward to hearing your story.
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 2
+You say you started following my progress on Suslanger. But first it all began on Jygran, the land of eternal autumn, wilting, and the limitless wielding of Firiez, the mad mage.
+#CAMERA 11
+#ANIMATION 5
+#phrase Rick 3
+Jygran... Jygran... I don't know anything about that name. It's a strange one. But go on, I'm listening intently.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 4
+No one has heard anything about Jygran, as if it doesn't exist at all.... The saddest thing is that my entire family is left there. They live in slavery, subjugated and humiliated. They work for Firiez, helping with his crazy plans.
+#ANIMATION 9
+#CAMERA 4
+#phrase Hero 5
+I managed to escape the castle. But I vowed to go back there, free my family, and take revenge on Firiez for all the humiliation I endured.
+#CAMERA 4
+#ANIMATION 6
+#phrase Rick 6
+Yes, I've always known that the world hides many secrets and doesn't want to share them, especially to those most interested in them. I spent so much time looking for Joons all over the world. Finding two of them, I calmed down and stopped my search, and here I find that there are still so many Joons who need my help! We should proceed to rescue them immediately.
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 7
+But how? After all, even you don't know about Jygran, where it is or how to get at it.
+#CAMERA 0
+#ANIMATION 6
+#phrase Rick 8
+At-Zako has used the Magic Bullet in some way. This Orb is still located on Gipath. You must find it and deliver it to me. It will make it possible to see further, which I could not have done without it. Kir, take care, and hold tightly to the neck of the fast-legged steed called Luck.

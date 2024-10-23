@@ -1,0 +1,39 @@
+About the old magician's request
+#DESC 
+#show Hero 
+#show Huber
+#show merc2
+#show DArrow 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Mr. Governor, allow me to present you with a Blue Clan magician's arrow.
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 2
+Beautiful, beautiful! And I had no doubt you would bring it to me! Admit it, it wasn't that hard.
+#ANIMATION 62
+#CAMERA 11
+#phrase Huber 3
+When I was your age, I could have collected a hundred of these arrows. I remember like yesterday: arrows are wheezing around me, and I'm standing, so beautiful and tall, and I'm leading my soldiers behind me on these people of the forest.
+#hide DArrow 5
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 4
+Ah Mr. Governor, you are such a hero! Thanks to your actions, life on Ingos has definitely started to get a lot safer! That's why I don't understand why the mine district is closed.
+#ANIMATION 44
+#CAMERA 11
+#phrase Huber 5
+My child, why do you bother your pretty head with such foolishness? You can go to the mine district, but only with permission, which I write out personally. But believe me, there's nothing interesting there!
+#ANIMATION 17
+#CAMERA 11
+#phrase Huber 6
+Only this eccentric type, Jam-Akara, goes there. I don't even understand what he's looking for there.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 7
+Governor, now that you've remembered him... he's asked you to write him a new permit.
+#ANIMATION 6
+#CAMERA 11
+#phrase Huber 8
+Ah, what a cliché.... but so be it. I'll write him a new permit. But this is the last time! I'm getting tired of him walking my grounds.

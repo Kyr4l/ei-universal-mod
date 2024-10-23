@@ -1,0 +1,26 @@
+On excessive zealotry
+#DESC 
+#show Hero 
+#show Baron
+#show merc2 
+#animation 70
+#CAMERA 12
+#phrase merc2 1
+Lord Baron, we have quickly captured this cursed corpse-mage! No one has managed so far, and we once and done!     :D
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 2
+And do you understand that you have dared to attack the enemy arbitrarily, and without my permission have undertaken an excursion and taken a prisoner? Well... but your initiative was successful, and as you know, the victors are not judged.
+#ANIMATION 44
+#CAMERA 11
+#phrase Baron 3
+Therefore, I will limit myself to a verbal warning: your antics will have a devastating effect on discipline in the fortress. Everyone will want to prove himself, to do something, unreasonable and unjustified risks will begin. Not what I need!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+We apologize most sincerely, Mr. Baron, and with a sincere oath we promise: nothing like this will ever happen again!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 5
+It won't happen again, just... just wait! You have to act specifically, not like a fly in the ointment...

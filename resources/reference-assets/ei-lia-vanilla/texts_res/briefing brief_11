@@ -1,0 +1,25 @@
+On the impact of the accident
+#DESC 
+#show Hero 
+#show Elder
+#show DragonPoison 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero 1
+Rindeil, just as you guessed, I managed everything with ease.
+#ANIMATION 58
+#CAMERA 0
+#phrase Elder 2
+Well, that's it, and that's how you experienced it. Now you can breathe easy, all your worries behind you.
+#ANIMATION 6
+#CAMERA 0
+#phrase Hero 3
+No, it's not all over yet. I still attract too much attention because of my skin color. Something needs to be figured out, and the sooner the better.
+#ANIMATION 59
+#CAMERA 0
+#phrase Elder 4
+Yes, you have to think. Hm... There is one measure... The venom of Prettnotulius sackbutus has been shown to affect the color of the skin, turning it gray, but in doing so it causes convulsions or paralysis of the limbs. Well, every remedy has side effects, you understand. But in my opinion it would be useful to give up this remedy and come up with something else...
+#ANIMATION 15
+#CAMERA 0
+#phrase Hero 5
+That's right, we'd better leave it for a moment of desperation. Anyway thanks for the suggestion....

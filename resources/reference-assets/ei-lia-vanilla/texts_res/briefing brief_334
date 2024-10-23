@@ -1,0 +1,22 @@
+On the importance of moving forward
+#DESC 
+#show Hero 
+#show Baron
+#ANIMATION 9
+#CAMERA 11
+#phrase Baron 1
+You serve me faithfully, soldier! I see you have provided me with a report from the Council. What's in it?
+#show Jmap 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 2
+Lord Baron, Uncle Rada obeyed your order and once again amazed us with his being knowledgeable. With his help we were able to apply for a map. A more detailed map is nowhere to be found and at Firez himself!
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 3
+Great! Yes, now we just have a way forward! The Khadagan lands lie before me as if in plain sight. Reading this map, I can already see that the song of our enemies has already been sung. Inform the soldiers! WE ARE GOING TO STORM!!!
+#ANIMATION 14
+#NOLIPS
+#CAMERA 10
+#phrase Hero 4
+Finally. By taking this crossover, I will get one more step closer to my goal. But oh how I hate the anticipation! But I will fight the khadagans all the more fervently!

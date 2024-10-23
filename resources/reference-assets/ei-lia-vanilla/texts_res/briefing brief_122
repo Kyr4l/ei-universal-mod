@@ -1,0 +1,26 @@
+About the results of the outing
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 1
+We met the hunters from the Village. And we explained to them that it's not nice to hunt on other people's land.
+#ANIMATION 17
+#CAMERA 11
+#phrase Karh 2
+And what did they understand?
+#ANIMATION 6
+#CAMERA 12
+#phrase merc2 3
+I don't know. One of the people that we... we were talking to managed to make some kind of sound, but what he wanted to say was impossible to understand. The rest of them scattered, or at least tried to in any case.
+#ANIMATION 32
+#CAMERA 11
+#phrase Karh 4
+Hush, hush, hush! There may be babies nearby, they shouldn't be listening to such things.
+#show SackHunter 5
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 5
+And just so you're worried about supplies for the camp, we brought something from what the hunters have already stockpiled.

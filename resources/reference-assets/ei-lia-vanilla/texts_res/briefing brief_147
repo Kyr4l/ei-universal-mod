@@ -1,0 +1,33 @@
+On a pleasant acquaintance
+#DESC 
+#show Hero 
+#show Daughter
+#show merc2
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+Nice Airy, we have to leave now. And we certainly won't see each other again. I want you to know: I am very happy to have made your acquaintance. I will keep your sight in my heart.
+#ANIMATION 70
+#CAMERA 11
+#phrase Daughter 2
+Thank you, I, too, am very glad to be acquainted with you. And I want to remind you again that it might be a good idea to pay attention more often to those who are close to you.
+#ANIMATION 44
+#CAMERA 12
+#phrase merc2 3
+I'm sorry Airy that I attacked you like that back then. You're not the worst kind of girl. And a lot smarter and more attentive than some.
+#ANIMATION 15
+#CAMERA 11
+#phrase Daughter 4
+I understand you perfectly! I used to be in the same situation as you.
+#ANIMATION 64
+#CAMERA 11
+#phrase Daughter 5
+Kiel, if you see the Chosen One at the Great Magician's, give him my regards. Tell him that I still remember him.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 6
+I don't think I understand anything I'm hearing. What are you guys talking about? Airy, what have you noticed? What's the situation, Kiel? What are you guys talking about? Did I miss something?
+#ANIMATION 46
+#CAMERA 12
+#phrase merc2 7
+Eh men... let's go Kir, Tka-Rick can't wait for us.

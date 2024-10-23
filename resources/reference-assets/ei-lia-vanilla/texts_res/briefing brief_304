@@ -1,0 +1,29 @@
+About joint operations
+#DESC 
+#show Hero 
+#show Baron
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 1
+Baron, there is an almost unprotected working Portal in Khadagan territory. Though it leads into the territory of this dark empire, from there you can get to Cania. You may ask for assistance. I'm amazed why you haven't done it so far. But I'm sure Cania will not refuse you.
+#ANIMATION 43
+#CAMERA 11
+#phrase Baron 2
+No! Our family has never asked anyone for help. For a long time we have been fighting against the forces of the Khadagan empire in the person of that scoundrel Firez and yet not once has our spirit been broken.
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 3
+Yes... They recently succeeded in driving us from the fortress of Dar-Ulgorn, and we are reliving hard the loss of this very important strategic facility. But we will never give up!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+But baron, think of your people! After the recent attack, many warriors are wounded, the rest tired. And I hear there are many undead roaming the countryside. There's no way to avoid future attacks. The Empire would send you reinforcements, and together we would defeat the enemy without wasting our strength on petty skirmishes.
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 5
+You, by volunteering to participate in the battle under my leadership, have become my soldier! So don't push your way into things that are not yours! Strategy and planning is my job. Yours is to follow orders. But while you're talking about the undead in the area, be kind enough to fulfill the first order - to free the inhabitants of the adjacent village from this threat.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 6
+But that baron is unbearable! Good thing Kiel didn't hear him chastise me. Well, I can only break through to Firez with the help of the Baron's forces, so you have to try not to argue with him.

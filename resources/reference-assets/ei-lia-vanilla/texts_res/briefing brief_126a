@@ -1,0 +1,41 @@
+Get to know Babur
+#DESC 
+#show Hero 
+#show Karh
+#show Smith
+#ANIMATION 11
+#CAMERA 12
+#phrase Smith 1
+A, that you are Bor - ataman of the Free Hunters. Well hello, I received your message.
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 2
+Blacksmith, we are all very happy that you have agreed to accept our invitation. There are many opportunities to make money here. You can sell your wares even to orcs! The money will flow to you!
+#ANIMATION 60
+#CAMERA 12
+#phrase Smith 3
+Orcs? I will never trade with them in my life! Although... if they, I mean, pay with real coins, I'll still think about whether to trade with them or not.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+Well will you sell me something from armor or weapons? I have something to pay for!
+#ANIMATION 9
+#CAMERA 12
+#phrase Smith 5
+Er, what about you for one? I haven't seen you once on Gipath! And yet people come here once or twice and know each other inside out. And you're strange. Another Chosen One, I suppose?
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 6
+I'm not the Chosen One, although I do have a certain affection for him. I was told that you and he were friends, and I very much hope you can tell me something about him.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 7
+But first I'd really like to order some good stuff from you, because the hunters are about to start laughing at me.
+#ANIMATION 62
+#CAMERA 12
+#phrase Smith 8
+Well... to make a suit of armor so that no one would laugh at it, I need a Magic Needle. I've heard, I mean, there's a grave of some blacksmith in the Tomb of the Lizards, and there in it, I mean, there should be such a needle once.
+#ANIMATION 44
+#CAMERA 12
+#phrase Smith 9
+And... if you bring me this needle, I'll use it to sew you a suit of armor. Only you, this one, don't forget to pay me for the work!

@@ -1,0 +1,29 @@
+Get to know Ulka Uszasta
+#DESC 
+#show Hero 
+#show Karh
+#show Spletnica
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 1
+And here, get acquainted, Ula. We call her Uszasta, because she hears everything. A toad in the Ruins will hum, and the Hive will hear. And then she tells everyone about it. Sometimes she says useful things. In return we help her run the farm. Because she lives alone and it's hard for her. Right Ulka?
+#ANIMATION 32
+#CAMERA 12
+#phrase Spletnica 2
+What Ulka? Always that Ulka!
+#ANIMATION 9
+#CAMERA 11
+#phrase Karh 3
+Well, what rumors have you heard lately? Let us and Karh in on them.
+#ANIMATION 70
+#CAMERA 12
+#phrase Spletnica 4
+What have I heard? I didn't hear anything. Only the goblins in the watchtower said that the Magic Mushroom grew in the Middle Peaks. And they say that the Chosen One himself found the White Flower there. And now the mushroom has grown! They say no one has ever seen such a big mushroom on Gipath. It sure is tasty.
+#ANIMATION 6
+#CAMERA 11
+#phrase Karh 5
+Ulka, but you disappoint me. I thought you were going to say something clever... and you're talking about some fungus.
+#ANIMATION 9
+#CAMERA 10 
+#phrase Hero 6
+Well why, very interesting. If this mushroom is magical, it could be useful for something,

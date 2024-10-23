@@ -1,0 +1,8 @@
+Great Lizard Shell
+Before attacking the Human Camp, you must confront the Lizard People. For this you need to take the Great Shell, a symbol of peace between humans and lizardmen.
+#subobj 1
+Come to the altar
+The altar on which the Great Shell rests is located in the center of the Lizardmen's forest area. As long as the peace symbol is in place the lizardmen are not threatened.
+#subobj 2
+Steal the Shell
+As soon as the peace symbol is gone from the altar, the lizards will become hostile towards humans.

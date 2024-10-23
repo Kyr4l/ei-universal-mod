@@ -1,0 +1,11 @@
+Buy a Thieving Axe (1150)
+#show Hero2 
+#show NSheriff
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero2 1
+What a beautiful axe!
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 2
+May it serve you just as beautifully!

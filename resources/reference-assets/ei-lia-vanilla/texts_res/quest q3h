@@ -1,0 +1,17 @@
+Masking
+To get Rindeil's permission to stay at his estate, Kir must disguise his person. The guards should not find out that Rindeil is hiding an escaped slave.
+#subobj 1
+Go to the trader's house
+The trader's house is located in the south of the city. The city guard is looking for fugitives as before, so caution won't hurt.
+#subobj 2
+Get the key
+To get into the house you need a key. You can search for it in the merchant's pockets while Fieruz distracts him.
+#subobj 3
+Give the key to Fieruz
+Give the keys back to Fieruz and you can proceed directly to the case.
+#subobj 4
+Wait for Fieruz
+While Fieruz is taking care of the case inside the house, you need to keep an eye on the outside. No one should go near the house!
+#subobj 5
+Go back to the mansion
+Job done! Now you better get far away from here before the trader returns.

@@ -1,0 +1,25 @@
+On ancient mysteries
+#DESC 
+#show Hero 
+#show BSon
+#ANIMATION 12
+#CAMERA 11
+#phrase BSon 1
+Well, how did it go? Did you get the talisman?
+#show Jamul 5
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+Not a talisman but an amulet. And so, here it is. Now there is no doubt in my mind that this is what is missing to open the entrance. The amulet was made by an ancient craftsman, Joon.
+#ANIMATION 62
+#CAMERA 11
+#phrase BSon 3
+Joons, Joons... so many stories about them, and all my life I've only seen one of you. And now, it turns out, there's a cave to be found.
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 4
+There are hardly any of us left. The Joons have passed into history, making way for the young. But they left many mysteries and riddles, and often by guessing one of those riddles you get the answers to the questions that have been bugging you.
+#ANIMATION 61
+#CAMERA 11
+#phrase BSon 5
+Yes, my father also always tells me to study history. That there are answers to many questions locked in it. I'm sure he's right. What do you think?

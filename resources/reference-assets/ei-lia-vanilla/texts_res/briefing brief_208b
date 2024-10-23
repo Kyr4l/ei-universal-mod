@@ -1,0 +1,38 @@
+About Production
+#DESC
+#show Hero
+#show Trader
+#show merc2
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 1
+And I'm telling you it's not Karansul! It can't be!
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 2
+How is it impossible?! No one but him could do it!
+#ANIMATION 17
+#CAMERA 11
+#phrase Trader 3
+Hey, I'm very pleased for you, but you about what? What are you blaming me for?
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 4
+After all, no one's blaming you. We're just arguing about who owns that manufactory by the river west of your mines. Kiel thinks it's you.
+#ANIMATION 9
+#CAMERA 11
+#phrase Trader 5
+Yeah, me. Well, who else? Not a trapper! Ha, ha, ha, ha! What's she got you so interested in?
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 6
+Ooh, I am just in awe of the majesty and grandeur of this design! Such a display of engineering thought!
+#ANIMATION 62
+#CAMERA 11
+#phrase Trader 7
+Yes, yes, I know how to find good professionals! I find them everywhere. And what things they come up with! One boy invented a powder you can use to blow up whole mountains. Digging mines is a trivial matter now! Yes!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 8
+Well, well, well! This powder will help us stop the discharge of poisons into the river. If it can blow up mountains, it can definitely handle one cuppa too!

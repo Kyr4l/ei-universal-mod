@@ -1,0 +1,44 @@
+On being a useful companion
+#DESC 
+#show Hero 
+#show Nekro
+#ANIMATION 62
+#CAMERA 11
+#phrase Nekro 1
+Oh my savior! I am not angry with you, even though you have uninvitedly interfered in my life. We are all in the hands of death, and only it will judge us.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 2
+Don't scare me with your tales of death. I do not come to ask you for forgiveness. You've done a lot of damage, your undead have overrun the entire neighborhood.
+#ANIMATION 59
+#CAMERA 11
+#phrase Nekro 3
+As I said, I'm a theorist. This was my first practical experience. I know a hundred and one ways to calm the undead, but I've never applied them. If you'll just give me a month to practice...
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 4
+O Great Powers. A month! Every day people die and you want a month! 
+#ANIMATION 61
+#CAMERA 11
+#phrase Nekro 5
+I dare suppose there's a way to appease copies of the experience without my participation.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 6
+Speak.
+#ANIMATION 44
+#CAMERA 11
+#phrase Nekro 7
+While studying in the library of the old tower, I found a scroll. It said that a hero was buried on the Isle of Death. He was credited with defeating the great necromancer who built this tower.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 8
+Sum it up somehow.
+#ANIMATION 27
+#CAMERA 11
+#phrase Nekro 9
+Excuse me, ladies. Well, this hero had a remedy to fight the undead - Magic Herbs. When he died, the remains of this remedy were buried with the hero.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 10
+Reason. There is hope that the tincture still lies in the tomb. Eh, it's not the first time I've disturbed the peace of the dead to then restore peace to the living.

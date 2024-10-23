@@ -1,0 +1,42 @@
+On cruel beauty
+#DESC 
+#show Hero 
+#show Deva
+#ANIMATION 64
+#CAMERA 11
+#phrase Deva 1
+Oh, how quickly you came back! Did you bring it? You know, a decent girl can't live without a comb and a mirror! And other little things like that.
+#show Jtoys 5
+#CAMERA 10
+#ANIMATION 11
+#phrase Hero 2
+So I went there for the comb and mirror? Is that what got Kiel killed!
+#ANIMATION 70
+#CAMERA 11
+#phrase Deva 3
+Kiel... is that the burly girl who kept an eye on you? Hm, I feel sorry for her, of course. But I couldn't leave my comb there! It's made of real dragon bone!
+#ANIMATION 66
+#CAMERA 11
+#phrase Deva 4
+It makes your hair so silky... Would you like to stroke my hair? :)
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 5
+A comb and a mirror... Kiel! You had a hunch! You wanted to leave! What a fool I am. Fool! I didn't notice anything!
+#hide Jtoys 5
+#ANIMATION 9
+#CAMERA 11
+#phrase Deva 6
+Hey! My name is Tai-Ilara! Forget Kiel, she's gone now. :)
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 7
+NO! Get away from me! Your beauty is poisoning! You don't measure up to her. She was devoted to me, she was the closest thing to me!
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 8
+Dearest... what a mess I am! I didn't notice her, and now I can't imagine life without her...
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 9
+No, I will not leave her death unforgiven. I feel a double force within me! Jygran will find out what the Wrath of Joon is!

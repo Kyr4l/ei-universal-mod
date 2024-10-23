@@ -1,0 +1,20 @@
+Get to know the Blacksmith
+#DESC 
+#show Hero2 
+#show Zaku
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 1
+Hello Blacksmith! Is the fire burning hot in your furnaces? It is a pleasure to meet a man of your profession, especially when you need his services.
+#ANIMATION 17
+#CAMERA 5
+#phrase Zaku 2
+Yes, may the Great Powers help you too, stranger of men. And though I am a blacksmith and take pride in my craft, I will not create anything for you.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero2 3
+But why this? Are you afraid I'll pay you with counterfeit coins?
+#ANIMATION 6
+#CAMERA 5
+#phrase Zaku 4
+That's not the point. As long as you're a stranger here, it's like you don't exist for us. And when you become one of us, then everyone will be happy to help you. Including me.

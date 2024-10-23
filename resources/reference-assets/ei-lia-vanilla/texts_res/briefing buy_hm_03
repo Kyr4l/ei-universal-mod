@@ -1,0 +1,11 @@
+Buy Thieves' Blade (1150)
+#show Hero2 
+#show NSheriff
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero2 1
+Oh, this is just what I need!
+#ANIMATION 5
+#CAMERA 0
+#phrase NSheriff 2
+If you're looking for a good old gun, and I know a few lovers of such things.

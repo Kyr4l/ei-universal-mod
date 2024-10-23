@@ -1,0 +1,30 @@
+About the permit found!
+#DESC 
+#show Hero 
+#show Huber
+#show MageDocs 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 1
+Mr. Governor! Here's the proof I found! Jam-Akara couldn't have killed Brissen! He was in the mines at the time. Sir, look, it's a stamped permit!
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 2
+Err, what are you shoving under my face here? Take it away now, it's rotten!
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 3
+But look, here's your signature, you gave permission to the mage yourself, and here's a stamp that he was going into the mine that day!
+#ANIMATION 62
+#CAMERA 11
+#phrase Huber 4
+If you think I'm going to let a murderer off based on this soaked paper with smeared ink, you're deeply mistaken.
+#ANIMATION 59
+#CAMERA 11
+#phrase Huber 5
+This is so soggy that even I can't recognize my own signature, much less read the date on the stamp!
+#hide MageDocs 5
+#ANIMATION 11
+#CAMERA 11
+#phrase Huber 6
+Come when you have something more concrete. And hurry - my patience is running out.

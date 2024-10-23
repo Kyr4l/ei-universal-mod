@@ -1,0 +1,14 @@
+Lost in the Astral
+It turns out that the magical artifact that Tka-Rick felt was a Portal to another land. Not one to return empty handed, one must at least find out where this Portal leads.
+#subobj 1
+Find the key to the gate
+To get to the room with the Portal, you need the key.
+#subobj 2
+Take the key to the Portal
+The teleport key should be in one of the Portal service rooms. Without it, it cannot be activated.
+#subobj 3
+Turn on the Portal
+The item that manages the Portal is located not far from the Portal itself.
+#subobj 4
+Enter the Portal
+You can only find out what is on the other side of the Portal by walking through it.

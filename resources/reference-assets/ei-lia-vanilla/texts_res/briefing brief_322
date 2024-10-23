@@ -1,0 +1,41 @@
+About the secret report
+#DESC 
+#show Hero 
+#show Doctor
+#show merc2 
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+Uncle Council! It has begun! The Baron is preparing an uprising! He's finally made up his mind! :D
+#ANIMATION 46
+#CAMERA 11
+#phrase Doctor 2
+After all, I already know that. Am I a spy or not? I prepared a report for him.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+Yes, we're coming for him. The Baron is eagerly awaiting him.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 4
+Well, don't be so quick to let anyone suspect me. After all, I'm often looked in on by firezers. That's why the report is tucked away in a storage room. You can take it from there.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+Smart. So where's the clipboard?
+#ANIMATION 12
+#CAMERA 11
+#phrase Doctor 6
+In the cemetery.
+#animation 64
+#CAMERA 12
+#phrase merc2 7
+Ah yes, that we didn't guess it either! A cemetery is exactly the kind of place that doesn't raise suspicion of being attended by a confectioner. Kiel is about to die laughing...
+#ANIMATION 61
+#CAMERA 11
+#phrase Doctor 8
+Don't laugh! You want a yeast cake? You obviously don't have a clue when it comes to confectionery. The cemetery grows a lot of spicy grasses that you won't find anywhere else. I often go there for them.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 9
+I hid the documents in a jug in the northern cemetery. Take them back to the Baron and come back, I still have some business to attend to. And I need you.

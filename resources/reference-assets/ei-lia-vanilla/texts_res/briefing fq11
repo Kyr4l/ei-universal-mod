@@ -1,0 +1,24 @@
+Talk to Ulka ( )
+#DESC 
+#show Hero
+#show Spletnica
+#ANIMATION 14
+#CAMERA 11
+#phrase Spletnica 1
+Oh, it's so good of you to come. I found out such a thing here! And I struggled so hard not to tell anyone! Until I ate all the food!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 2
+Somehow you didn't break out of it. Here, buy yourself a new supply. So what's your news?
+#ANIMATION 70
+#CAMERA 0
+#phrase Spletnica 3
+Oh, you'll never believe me! A hunter, you know, with a moustache like that, went to the Dead City. And right there the undead attacked him, he fought them like a tiger!
+#ANIMATION 64
+#CAMERA 0
+#phrase Spletnica 4
+He chopped one of them in half, evenly separating the torso from the legs. The torso fell down, and the legs picked themselves up and ran into the distance. And now they are running around the Dead City.
+#ANIMATION 71
+#CAMERA 4
+#phrase Spletnica 5
+And I don't want to believe such things, but he swears that's what happened. I wish I could go there to check.

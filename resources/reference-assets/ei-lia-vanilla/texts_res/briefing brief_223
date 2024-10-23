@@ -1,0 +1,22 @@
+On new and old issues
+#DESC 
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#ANIMATION 62
+#CAMERA 11
+#phrase His 1
+You guys haven't brought me the ingredients from the lab yet. My work is at a standstill! But nevertheless, his highness Governor Valrasian wants to see you, even though I told him whose fault it is that I can't follow his orders.
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 2
+But cool! We get to meet the governor himself!
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+Kiel, what about your hatred of official government officials?
+#ANIMATION 46
+#CAMERA 12
+#phrase merc2 4
+Oh don't be a bore. We better go there faster, let's not make his height wait.

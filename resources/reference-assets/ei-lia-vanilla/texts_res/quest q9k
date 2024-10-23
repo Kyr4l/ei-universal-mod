@@ -1,0 +1,11 @@
+Magic ingredients
+Hys asks you to bring him some ingredients from his lab that he needs for his spells. It is possible that after this he will agree to help.
+#subobj 1
+Go to the lab
+This time there should be no problems with the lab - the traps are off and the guardian tigers are gone.
+#subobj 2
+Destroy the 'tail'
+Unknown people have organized a ruse, you need to get away from them.
+#subobj 3
+Get the ingredients
+Everything you need lies in a box next to the lab.
