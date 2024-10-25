@@ -9,8 +9,14 @@ modfolder="$modout"/"$(date +"%Y-%m-%d_%H-%M")"
 # resources directories
 inidir="ini"
 regdir="reg"
+
+# dds directories
 ddsdir="dds"
-mmpdir="mmp"
+texturesddsdir="$ddsdir/textures_res_dds"
+texturesmmpdir="$modfolder/textures_dds"
+redressddsdir="$ddsdir/redress_res_dds"
+redressmmpdir="$modfolder/redress_dds"
+
 xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
@@ -29,7 +35,6 @@ function directoryCreation {
 function ini2Reg {
     echo ""
     echo "======================== PROCESSING INI FILES ========================"
-    echo ""
     echo "Converting INI files to REG..."
 
     for iniin in "$inidir"/*.ini; do
@@ -50,7 +55,6 @@ function ini2Reg {
     mv -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
     mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
 
-    echo ""
     echo "======================================================================"
     echo ""
 }
@@ -58,25 +62,40 @@ function ini2Reg {
 function dds2MMP {
     echo ""
     echo "=============================== PROCESSING DDS FILES ==============================="
-    echo ""
     echo "Converting DDS files to MMP..."
 
     cd "$ddsdir" || exit
 
-    for ddsin in *.dds; do
-        mmpout="${ddsin%dds}mmp"
-        wine ../bin/MMPS.exe "$ddsin"
-        mv -fv "$mmpout" ../"$mmpdir"/
-        totalmmp="$totalmmp $ddsin"
-    done
+    read -rp "Pack REDRESS DDS to MMP ? (y/N) " redressAnswer
+    if [[ "$redressAnswer" == "y" ]]; then
+        cd "$redressddsdir" || exit
+        for redressdds in *.dds; do
 
-    echo "Processed the following files : $totalmmp"
-    cd .. || exit
-    echo "Moving MMP files to textures_res"
-    mkdir "$rextdir"/textures_res 2>/dev/null || echo "textures_res already exists, overwriting..."
-    mv -fv "$mmpdir"/* $rextdir/textures_res/
+            redressmmpout="${redressdds%dds}mmp"
+            wine ../bin/MMPS.exe "$redressdds"
+            mv -fv "$redressmmpout" ../"$redressmmpdir"/
+            totalredressmmp="$totalredressmmp $redressdds"
+        done
+        echo "Processed the following files : $totalredressmmp"
+        cd ..
+    fi
 
-    echo ""
+    read -rp "Pack TEXTURES DDS to MMP ? (y/N) " texturesAnswer
+    if [[ "$texturesAnswer" == "y" ]]; then
+        cd "$texturesddsdir" || exit
+        for texturesdds in *.dds; do
+
+            texturesmmpout="${texturesdds%dds}mmp"
+            wine ../bin/MMPS.exe "$texturesdds"
+            mv -fv "$texturesmmpout" ../"$texturesmmpdir"/
+            totalTexturesmmp="$totalTexturesmmp $texturesdds"
+        done
+        echo "Processed the following files : $totalTexturesmmp"
+        cd ..
+    fi
+
+    cd ..
+
     echo "===================================================================================="
     echo ""
 }
@@ -84,7 +103,6 @@ function dds2MMP {
 function eiDBEditor {
     echo ""
     echo "=============================== PROCESSING DATABASELMP ==============================="
-    echo ""
 
     cd $xlsxdir || exit
     echo "Converting XLSX databaselmp to RES..."
@@ -92,7 +110,6 @@ function eiDBEditor {
     mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"/
     cd .. || exit
 
-    echo ""
     echo "======================================================================================"
     echo ""
 }
@@ -107,10 +124,9 @@ function writeVersion {
 
     echo ""
     echo "==================================== WRITING VERSION ===================================="
-    echo ""
 
-    read -rp "Increment version ? (y/N) " answer
-    if [[ "$answer" == "y" ]]; then
+    read -rp "Increment version ? (y/N) " wvAnswer
+    if [[ "$wvAnswer" == "y" ]]; then
         major=$(echo "$version" | cut -d. -f1)
         minor=$(echo "$version" | cut -d. -f2)
         patch=$(echo "$version" | cut -d. -f3)
@@ -138,7 +154,6 @@ function writeVersion {
     
     echo "File $resversionname updated with version $newversion and commit hash $commithashshort"
 
-    echo ""
     echo "========================================================================================="
     echo ""
 }
@@ -146,7 +161,6 @@ function writeVersion {
 function eiPacker {
     echo ""
     echo "=============================== PROCESSING RES FILES ==============================="
-    echo ""
     echo "Packing RES files..."
 
     for rextin in "$rextdir"/*_res; do
@@ -163,7 +177,6 @@ function eiPacker {
     echo "Moving RES files to $modfolder/res/"
     mv -fv "$resdir"/*.res "$modfolder"/res/
 
-    echo ""
     echo "===================================================================================="
     echo ""
 }
@@ -171,12 +184,10 @@ function eiPacker {
 function addLua {
     echo ""
     echo "=============================== ADDING LUA SCRIPTS ==============================="
-    echo ""
 
     cp -v "$luadir"/main.lua "$modfolder"/
     cp -vrL "$luadir"/lua "$modfolder"/lua
 
-    echo ""
     echo "=================================================================================="
     echo ""
 }
@@ -184,7 +195,7 @@ function addLua {
 # CALLING FUNCTIONS IN THE RIGHT ORDER
 directoryCreation
 ini2Reg
-#dds2MMP // function declared but disabled
+dds2MMP // function declared but disabled
 eiDBEditor
 writeVersion
 eiPacker
