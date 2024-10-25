@@ -70,10 +70,9 @@ function dds2MMP {
     if [[ "$redressAnswer" == "y" ]]; then
         cd "$redressddsdir" || exit
         for redressdds in *.dds; do
-
             redressmmpout="${redressdds%dds}mmp"
-            wine ../bin/MMPS.exe "$redressdds"
-            mv -fv "$redressmmpout" ../"$redressmmpdir"/
+            wine ../../bin/MMPS.exe "$redressdds"
+            mv -fv "$redressmmpout" ../../"$redressmmpdir"/
             totalredressmmp="$totalredressmmp $redressdds"
         done
         echo "Processed the following files : $totalredressmmp"
@@ -84,10 +83,9 @@ function dds2MMP {
     if [[ "$texturesAnswer" == "y" ]]; then
         cd "$texturesddsdir" || exit
         for texturesdds in *.dds; do
-
             texturesmmpout="${texturesdds%dds}mmp"
-            wine ../bin/MMPS.exe "$texturesdds"
-            mv -fv "$texturesmmpout" ../"$texturesmmpdir"/
+            wine ../../bin/MMPS.exe "$texturesdds"
+            mv -fv "$texturesmmpout" ../../"$texturesmmpdir"/
             totalTexturesmmp="$totalTexturesmmp $texturesdds"
         done
         echo "Processed the following files : $totalTexturesmmp"
