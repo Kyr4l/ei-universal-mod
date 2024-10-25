@@ -22,5 +22,5 @@ done
 }
 mmp2DDS
 
-echo "DONE CONVERTING FILES TO MMP"
+echo "DONE CONVERTING FILES TO DDS"
 echo "Processed the following files : $totaldds"
