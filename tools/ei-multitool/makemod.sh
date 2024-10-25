@@ -9,14 +9,6 @@ modfolder="$modout"/"$(date +"%Y-%m-%d_%H-%M")"
 # resources directories
 inidir="ini"
 regdir="reg"
-
-# dds directories
-ddsdir="dds"
-texturesddsdir="$ddsdir/textures_res_dds"
-texturesmmpdir="$modfolder/textures_dds"
-redressddsdir="$ddsdir/redress_res_dds"
-redressmmpdir="$modfolder/redress_dds"
-
 xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
@@ -46,7 +38,7 @@ function ini2Reg {
 
     echo "Processed the following files : $totalreg"
     echo "Copying REG files into their respective folder..."
-    echo "Files detected in $regdir : $(find .. -print0 | xargs -0 ..)"
+    echo "Files detected in $regdir : $(find .. -print0 | xargs -0 .. 2>/dev/null)"
 
     mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
     mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
@@ -64,35 +56,39 @@ function dds2MMP {
     echo "=============================== PROCESSING DDS FILES ==============================="
     echo "Converting DDS files to MMP..."
 
-    cd "$ddsdir" || exit
+    resddsdir="res-dds"
+    # DDS
+    texturesddsdir="$resddsdir/textures_res_dds"
+    redressddsdir="$resddsdir/redress_res_dds"
+    # MMP
+    texturesmmpdir="$rextdir/textures_res"
+    redressmmpdir="$rextdir/redress_res"
 
-    read -rp "Pack REDRESS DDS to MMP ? (y/N) " redressAnswer
+    read -rp "Convert REDRESS from DDS to MMP ? (y/N) " redressAnswer
     if [[ "$redressAnswer" == "y" ]]; then
-        cd "$redressddsdir" || exit
+        cd $redressddsdir || exit
         for redressdds in *.dds; do
             redressmmpout="${redressdds%dds}mmp"
             wine ../../bin/MMPS.exe "$redressdds"
             mv -fv "$redressmmpout" ../../"$redressmmpdir"/
             totalredressmmp="$totalredressmmp $redressdds"
         done
-        echo "Processed the following files : $totalredressmmp"
         cd ..
+        echo "Processed redress"
     fi
 
-    read -rp "Pack TEXTURES DDS to MMP ? (y/N) " texturesAnswer
+    read -rp "Convert TEXTURES from DDS to MMP ? (y/N) " texturesAnswer
     if [[ "$texturesAnswer" == "y" ]]; then
-        cd "$texturesddsdir" || exit
+        cd $texturesddsdir || exit
         for texturesdds in *.dds; do
             texturesmmpout="${texturesdds%dds}mmp"
-            wine ../../bin/MMPS.exe "$texturesdds"
-            mv -fv "$texturesmmpout" ../../"$texturesmmpdir"/
+            wine ../../bin/MMPS.exe ../../"$texturesdds"
+            mv -fv "$texturesmmpout" "$texturesmmpdir"/
             totalTexturesmmp="$totalTexturesmmp $texturesdds"
         done
-        echo "Processed the following files : $totalTexturesmmp"
         cd ..
+        echo "Processed textures"
     fi
-
-    cd ..
 
     echo "===================================================================================="
     echo ""
@@ -142,14 +138,14 @@ function writeVersion {
         fi
         newversion="$major.$minor.$patch"
         version=$newversion
-        echo "$newversion" > "$versionfile"
+        echo "$newversion" >"$versionfile"
     fi
 
     cp -v "$versiontemplate" "$resversionname"
 
     sed -i "s/ver\./ver. $version/" "$resversionname"
     sed -i "s/commit\./commit. $commithashshort/" "$resversionname"
-    
+
     echo "File $resversionname updated with version $newversion and commit hash $commithashshort"
 
     echo "========================================================================================="
