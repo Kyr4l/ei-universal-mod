@@ -189,7 +189,7 @@ function addLua {
 # CALLING FUNCTIONS IN THE RIGHT ORDER
 directoryCreation
 ini2Reg
-dds2MMP // function declared but disabled
+dds2MMP
 eiDBEditor
 writeVersion
 eiPacker
