@@ -109,9 +109,9 @@ function eiDBEditor {
 }
 
 function writeVersion {
-    resversionname="./res-unpacked/texts_res/string version_name"
-    versiontemplate="./version/version-name-format.txt"
-    versionfile="./version/mod-version.txt"
+    resversionname="res-unpacked/texts_res/string version_name"
+    versiontemplate="version/version-name-format.txt"
+    versionfile="version/mod-version.txt"
 
     commithashshort="$(git rev-parse --short HEAD)"
     version=$(cat "$versionfile")
