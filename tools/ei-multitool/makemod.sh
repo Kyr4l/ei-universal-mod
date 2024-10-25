@@ -73,7 +73,7 @@ function dds2MMP {
             mv -fv "$redressmmpout" ../../"$redressmmpdir"/
             totalredressmmp="$totalredressmmp $redressdds"
         done
-        cd ..
+        cd ../..
         echo "Processed redress"
     fi
 
@@ -82,11 +82,11 @@ function dds2MMP {
         cd $texturesddsdir || exit
         for texturesdds in *.dds; do
             texturesmmpout="${texturesdds%dds}mmp"
-            wine ../../bin/MMPS.exe ../../"$texturesdds"
-            mv -fv "$texturesmmpout" "$texturesmmpdir"/
+            wine ../../bin/MMPS.exe "$texturesdds"
+            mv -fv "$texturesmmpout" ../../"$texturesmmpdir"/
             totalTexturesmmp="$totalTexturesmmp $texturesdds"
         done
-        cd ..
+        cd ../..
         echo "Processed textures"
     fi
 
