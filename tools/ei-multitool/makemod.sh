@@ -40,10 +40,10 @@ function ini2Reg {
     totalreg=""
 
     for iniin in "$inidir"/*.ini; do
-            regout="${iniin%ini}reg"
-            wine bin/ini2reg.exe "$iniin"
-            mv -fv "$regout" "$regdir"
-            totalreg="$totalreg $iniin"
+        regout="${iniin%ini}reg"
+        wine bin/ini2reg.exe "$iniin"
+        mv -fv "$regout" "$regdir"
+        totalreg="$totalreg $iniin"
     done
 
     echo "Processed the following files : $totalreg"
@@ -61,7 +61,7 @@ function ini2Reg {
     echo ""
 }
 
-function dds2MMP {
+function dds2Mmp {
     echo ""
     echo "=============================== PROCESSING DDS FILES ==============================="
     echo "Converting DDS files to MMP..."
@@ -80,7 +80,7 @@ function dds2MMP {
         for redressdds in *.dds; do
             redressmmpout="${redressdds%dds}mmp"
             wine ../../bin/MMPS.exe "$redressdds"
-            mv -fv "$redressmmpout" ../../"$redressmmpdir"/
+            mv -fv "$redressmmpout" ../../"$redressmmpdir"
             totalredressmmp="$totalredressmmp $redressdds"
         done
         cd ../..
@@ -93,7 +93,7 @@ function dds2MMP {
         for texturesdds in *.dds; do
             texturesmmpout="${texturesdds%dds}mmp"
             wine ../../bin/MMPS.exe "$texturesdds"
-            mv -fv "$texturesmmpout" ../../"$texturesmmpdir"/
+            mv -fv "$texturesmmpout" ../../"$texturesmmpdir"
             totalTexturesmmp="$totalTexturesmmp $texturesdds"
         done
         cd ../..
@@ -111,7 +111,7 @@ function eiDBEditor {
     cd $xlsxdir || exit
     echo "Converting XLSX databaselmp to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
-    mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"/
+    mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"
     cd .. || exit
 
     echo "======================================================================================"
@@ -170,7 +170,7 @@ function eiPacker {
     for rextin in "$rextdir"/*_res; do
         resout="${rextin%_res}.res"
         wine bin/eipacker.exe /pack "$rextin"
-        rsync -r --remove-source-files "$resout" "$resdir"/
+        rsync -r --remove-source-files "$resout" "$resdir"
         echo "RSync completed on $resout"
         totalres="$totalres $rextin"
     done
@@ -178,8 +178,8 @@ function eiPacker {
     find ./"$rextin" -depth -type d -empty -delete
     echo "Empty directories deleted"
 
-    echo "Moving RES files to $modfolder/res/"
-    mv -fv "$resdir"/*.res "$modfolder"/res/
+    echo "Moving RES files into $modfolder/res"
+    mv -fv "$resdir"/*.res "$modfolder"/res
 
     echo "===================================================================================="
     echo ""
@@ -189,7 +189,7 @@ function addLua {
     echo ""
     echo "=============================== ADDING LUA SCRIPTS ==============================="
 
-    cp -v "$luadir"/main.lua "$modfolder"/
+    cp -v "$luadir"/main.lua "$modfolder"
     cp -vrL "$luadir"/lua "$modfolder"/lua
 
     echo "=================================================================================="
@@ -200,7 +200,7 @@ function addLua {
 checkCommands
 directoryCreation
 ini2Reg
-dds2MMP
+dds2Mmp
 eiDBEditor
 writeVersion
 eiPacker
