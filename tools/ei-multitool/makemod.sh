@@ -133,8 +133,7 @@ function eiPacker {
 
     for rextin in "$rextdir"/*_res; do
         local resout="${rextin%_res}.res"
-        wine bin/eipacker.exe /pack "$rextin" && rsync -r --remove-source-files "$resout" "$resdir"
-        echo "RSync completed on $resout"
+        wine bin/eipacker.exe /pack "$rextin" && rsync -rv --remove-source-files "$resout" "$resdir"
     done
 
     echo "Deleting empty directories"
