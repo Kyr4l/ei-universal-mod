@@ -5,74 +5,66 @@ export WINEDEBUG=-all
 
 # mod folder location and naming
 modout="mods-out"
-modfolder="$modout"/"$(date +"%y%m%d-%H%M")"
+moddir="$modout"/"$(date +"%y%m%d-%H%M")"
 # resources directories
-xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
 luadir="lua"
-# total res files
-totalres=""
 
+# stop execution if rsync/wine/progress is missing
 function checkCommands {
     for cmd in wine rsync; do
         if ! command -v "$cmd" &>/dev/null; then
-            echo "Error : command '$cmd' is required."
+            echo "Error : command '$cmd' is required"
             exit 1
         fi
     done
 }
 
+# create mod directory structure
 function directoryCreation {
-    echo "CREATED MOD DIRECTORY: $modfolder"
-    echo ""
-    mkdir -p "$modfolder"/config
-    mkdir "$modfolder"/res
-    mkdir "$modfolder"/maps
+    echo "CREATED MOD DIRECTORY: $moddir"
+    mkdir -vp "$moddir"/{config,res,maps}
 }
 
 function ini2Reg {
-    echo "======================== PROCESSING INI FILES ========================"
-    echo "Converting INI files to REG…"
-
-    inidir="ini"
-    regdir="reg"
+    local inidir="ini"
+    local regdir="reg"
+    echo "======================================== PROCESSING INI FILES ========================================"
+    echo "Converting INI files to REG"
 
     for iniin in "$inidir"/*.ini; do
-        regout="${iniin%ini}reg"
-        wine bin/ini2reg.exe "$iniin"
-        mv -fv "$regout" "$regdir"
+        local regout="${iniin%ini}reg"
+        wine bin/ini2reg.exe "$iniin" && mv -fv "$regout" "$regdir"
     done
 
     echo "Copying REG files into their respective folder…"
     echo "Files detected in $regdir : $(find .. -print0 | xargs -0 .. 2>/dev/null)"
-    mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
-    mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
-    mv -v "$regdir"/music.reg "$modfolder"/config 2>/dev/null
-    mv -v "$regdir"/streamsn.reg "$modfolder"/config 2>/dev/null
-    mv -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
-    mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
-    echo "======================================================================"
-    echo ""
+    mv -v "$regdir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
+    mv -v "$regdir"/{ai,music,streamsn}.reg "$moddir"/config 2>/dev/null
+    mv -v "$regdir"/smessbase.reg "$moddir"/res 2>/dev/null
+}
+
+function copyMaps {
+    local mapsdir="maps"
+    echo "======================================== COPYING MAPS ========================================"
+    cp -vrL "$mapsdir" "$moddir"
 }
 
 function dds2Mmp {
-    echo "=============================== PROCESSING DDS FILES ==============================="
-    resddsdir="res-dds"
-    # DDS
-    texturesddsdir="$resddsdir/textures_res_dds"
-    redressddsdir="$resddsdir/redress_res_dds"
-    # MMP
-    texturesmmpdir="$rextdir/textures_res"
-    redressmmpdir="$rextdir/redress_res"
+    local resddsdir="res-dds"
+    local texturesddsdir="$resddsdir/textures_res_dds"
+    local redressddsdir="$resddsdir/redress_res_dds"
+    local texturesmmpdir="$rextdir/textures_res"
+    local redressmmpdir="$rextdir/redress_res"
+    echo "======================================== PROCESSING DDS FILES ========================================"
 
     read -rp "Convert REDRESS from DDS to MMP ? (y/N) " redressAnswer
     if [[ "$redressAnswer" == "y" ]]; then
         cd $redressddsdir || exit
         for redressdds in *.dds; do
-            redressmmpout="${redressdds%dds}mmp"
-            wine ../../bin/MMPS.exe "$redressdds"
-            mv -fv "$redressmmpout" ../../"$redressmmpdir"
+            local redressmmpout="${redressdds%dds}mmp"
+            wine ../../bin/MMPS.exe "$redressdds" && mv -fv "$redressmmpout" ../../"$redressmmpdir"
         done
         cd ../..
         echo "Processed redress"
@@ -82,104 +74,89 @@ function dds2Mmp {
     if [[ "$texturesAnswer" == "y" ]]; then
         cd $texturesddsdir || exit
         for texturesdds in *.dds; do
-            texturesmmpout="${texturesdds%dds}mmp"
-            wine ../../bin/MMPS.exe "$texturesdds"
-            mv -fv "$texturesmmpout" ../../"$texturesmmpdir"
+            local texturesmmpout="${texturesdds%dds}mmp"
+            wine ../../bin/MMPS.exe "$texturesdds" && mv -fv "$texturesmmpout" ../../"$texturesmmpdir"
         done
         cd ../..
         echo "Processed textures"
     fi
-    echo "===================================================================================="
-    echo ""
 }
 
-function eiDBEditor {
-    echo "=============================== PROCESSING DATABASELMP ==============================="
-    cd $xlsxdir || exit
+function eiDbEditor {
+    local xlsxdir="xlsx"
+    echo "======================================== PROCESSING DATABASELMP ========================================"
+    cd "$xlsxdir" || exit
     echo "Converting XLSX databaselmp to RES..."
-    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
-    mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"
-    cd .. || exit
-    echo "======================================================================================"
-    echo ""
+    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"
+    cd ..
 }
 
 function writeVersion {
-    resversionname="res-unpacked/texts_res/string version_name"
-    versiontemplate="version/version-name-format.txt"
-    versionfile="version/mod-version.txt"
+    # version hash shortened and version file are declared globally to avoid "Declare and assign separately to avoid masking return values."
     commithashshort="$(git rev-parse --short HEAD)"
+    versionfile="version/mod-version.txt"
     version=$(cat "$versionfile")
-    echo "==================================== WRITING VERSION ===================================="
+    local resversionname="res-unpacked/texts_res/string version_name"
+    local versiontemplate="version/version-name-format.txt"
+    echo "======================================== WRITING VERSION ========================================"
 
     read -rp "Increment version ? (y/N) " wvAnswer
     if [[ "$wvAnswer" == "y" ]]; then
-        major=$(echo "$version" | cut -d. -f1)
-        minor=$(echo "$version" | cut -d. -f2)
-        patch=$(echo "$version" | cut -d. -f3)
-
-        if [ "$patch" -lt 9 ]; then
-            patch=$((patch + 1))
+        IFS='.' read -r major minor patch <<<"$version"
+        if ((patch < 9)); then
+            ((patch++))
         else
             patch=0
-            if [ "$minor" -lt 9 ]; then
-                minor=$((minor + 1))
+            if ((minor < 9)); then
+                ((minor++))
             else
                 minor=0
-                major=$((major + 1))
+                ((major++))
             fi
         fi
-        newversion="$major.$minor.$patch"
-        version=$newversion
-        echo "$newversion" >"$versionfile"
+        version="$major.$minor.$patch"
+        echo "$version" >"$versionfile"
     fi
 
-    cp -v "$versiontemplate" "$resversionname"
+    cp -vL "$versiontemplate" "$resversionname"
     sed -i "s/ver\./ver. $version/" "$resversionname"
     sed -i "s/commit\./commit. $commithashshort/" "$resversionname"
 
-    echo "File $resversionname updated with version $newversion and commit hash $commithashshort"
-    echo "========================================================================================="
-    echo ""
+    echo "File $resversionname updated with version $version and commit hash $commithashshort"
 }
 
 function eiPacker {
-    echo "=============================== PACKING RES FILES ==============================="
+    echo "======================================== PACKING RES FILES ========================================"
 
     for rextin in "$rextdir"/*_res; do
-        resout="${rextin%_res}.res"
-        wine bin/eipacker.exe /pack "$rextin"
-        rsync -r --remove-source-files "$resout" "$resdir"
+        local resout="${rextin%_res}.res"
+        wine bin/eipacker.exe /pack "$rextin" && rsync -r --remove-source-files "$resout" "$resdir"
         echo "RSync completed on $resout"
-        totalres="$totalres $rextin"
     done
 
     echo "Deleting empty directories"
     find ./"$rextin" -depth -type d -empty -delete
-    echo "Moving RES files into $modfolder/res"
-    mv -fv "$resdir"/*.res "$modfolder"/res
-
-    echo "================================================================================="
-    echo ""
+    echo "Moving RES files into $moddir/res"
+    mv -fv "$resdir"/*.res "$moddir"/res
 }
 
 function addLua {
-    echo "=============================== ADDING LUA SCRIPTS ==============================="
-    cp -v "$luadir"/main.lua "$modfolder"
-    cp -vrL "$luadir"/lua "$modfolder"/lua
-    echo "=================================================================================="
-    echo ""
+    echo "======================================== ADDING LUA SCRIPTS ========================================"
+    cp -vL "$luadir"/main.lua "$moddir"
+    cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
 # CALLING FUNCTIONS IN THE RIGHT ORDER
 checkCommands
 directoryCreation
 ini2Reg
+copyMaps
 dds2Mmp
-eiDBEditor
+eiDbEditor
 writeVersion
 eiPacker
 addLua
 
-echo "DONE PROCESSING $modfolder"
+echo ""
+echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"
 echo ""

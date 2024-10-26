@@ -1,6 +1,1 @@
-Universal Mod
-ver. 
-commit. 
-
-HD Lands 1.5.7
-Evil Islands 1.06+
+../../../resources/version/version-name-format.txt
