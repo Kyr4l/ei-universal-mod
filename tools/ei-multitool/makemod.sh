@@ -7,15 +7,21 @@ export WINEDEBUG=-all
 modout="mods-out"
 modfolder="$modout"/"$(date +"%Y-%m-%d_%H-%M")"
 # resources directories
-inidir="ini"
-regdir="reg"
 xlsxdir="xlsx"
 resdir="res"
 rextdir="res-unpacked"
 luadir="lua"
-# total files
-totalreg=""
+# total res files
 totalres=""
+
+function checkCommands {
+    for cmd in sem wine rsync; do
+        if ! command -v "$cmd" &>/dev/null; then
+            echo "Error : command '$cmd' is required."
+            exit 1
+        fi
+    done
+}
 
 function directoryCreation {
     echo "Creating mod directory : $modfolder"
@@ -29,11 +35,15 @@ function ini2Reg {
     echo "======================== PROCESSING INI FILES ========================"
     echo "Converting INI files to REG..."
 
+    inidir="ini"
+    regdir="reg"
+    totalreg=""
+
     for iniin in "$inidir"/*.ini; do
-        regout="${iniin%ini}reg"
-        wine bin/ini2reg.exe "$iniin"
-        mv -fv "$regout" $regdir/
-        totalreg="$totalreg $iniin"
+            regout="${iniin%ini}reg"
+            wine bin/ini2reg.exe "$iniin"
+            mv -fv "$regout" "$regdir"
+            totalreg="$totalreg $iniin"
     done
 
     echo "Processed the following files : $totalreg"
@@ -187,6 +197,7 @@ function addLua {
 }
 
 # CALLING FUNCTIONS IN THE RIGHT ORDER
+checkCommands
 directoryCreation
 ini2Reg
 dds2MMP

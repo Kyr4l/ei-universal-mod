@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# call makemod.sh
-# using source allows catching the variables
+# calling makemod.sh using source allows catching the variables and performs early checks
 source ./makemod.sh
 
 # copy modfiles to release
