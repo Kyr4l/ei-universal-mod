@@ -31,7 +31,6 @@ function directoryCreation {
 }
 
 function ini2Reg {
-    echo ""
     echo "======================== PROCESSING INI FILES ========================"
     echo "Converting INI files to REG..."
 
@@ -49,20 +48,17 @@ function ini2Reg {
     echo "Processed the following files : $totalreg"
     echo "Copying REG files into their respective folder..."
     echo "Files detected in $regdir : $(find .. -print0 | xargs -0 .. 2>/dev/null)"
-
     mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
     mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/music.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/streamsn.reg "$modfolder"/config 2>/dev/null
     mv -v "$regdir"/smessbase.reg "$modfolder"/res 2>/dev/null
     mv -v "$regdir"/autorunpro.reg "$modfolder" 2>/dev/null
-
     echo "======================================================================"
     echo ""
 }
 
 function dds2Mmp {
-    echo ""
     echo "=============================== PROCESSING DDS FILES ==============================="
     echo "Converting DDS files to MMP..."
 
@@ -99,7 +95,6 @@ function dds2Mmp {
         cd ../..
         echo "Processed textures"
     fi
-
     echo "===================================================================================="
     echo ""
 }
@@ -107,13 +102,11 @@ function dds2Mmp {
 function eiDBEditor {
     echo ""
     echo "=============================== PROCESSING DATABASELMP ==============================="
-
     cd $xlsxdir || exit
     echo "Converting XLSX databaselmp to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
     mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"
     cd .. || exit
-
     echo "======================================================================================"
     echo ""
 }
@@ -122,11 +115,9 @@ function writeVersion {
     resversionname="res-unpacked/texts_res/string version_name"
     versiontemplate="version/version-name-format.txt"
     versionfile="version/mod-version.txt"
-
     commithashshort="$(git rev-parse --short HEAD)"
     version=$(cat "$versionfile")
 
-    echo ""
     echo "==================================== WRITING VERSION ===================================="
 
     read -rp "Increment version ? (y/N) " wvAnswer
@@ -152,18 +143,15 @@ function writeVersion {
     fi
 
     cp -v "$versiontemplate" "$resversionname"
-
     sed -i "s/ver\./ver. $version/" "$resversionname"
     sed -i "s/commit\./commit. $commithashshort/" "$resversionname"
 
     echo "File $resversionname updated with version $newversion and commit hash $commithashshort"
-
     echo "========================================================================================="
     echo ""
 }
 
 function eiPacker {
-    echo ""
     echo "=============================== PROCESSING RES FILES ==============================="
     echo "Packing RES files..."
 
@@ -175,9 +163,8 @@ function eiPacker {
         totalres="$totalres $rextin"
     done
 
+    echo "Deleting empty directories"
     find ./"$rextin" -depth -type d -empty -delete
-    echo "Empty directories deleted"
-
     echo "Moving RES files into $modfolder/res"
     mv -fv "$resdir"/*.res "$modfolder"/res
 
@@ -186,12 +173,9 @@ function eiPacker {
 }
 
 function addLua {
-    echo ""
     echo "=============================== ADDING LUA SCRIPTS ==============================="
-
     cp -v "$luadir"/main.lua "$modfolder"
     cp -vrL "$luadir"/lua "$modfolder"/lua
-
     echo "=================================================================================="
     echo ""
 }
