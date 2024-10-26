@@ -29,26 +29,29 @@ function directoryCreation {
 
 function ini2Reg {
     local inidir="ini"
-    local regdir="reg"
     echo "======================================== PROCESSING INI FILES ========================================"
     echo "Converting INI files to REG"
 
     for iniin in "$inidir"/*.ini; do
-        local regout="${iniin%ini}reg"
-        wine bin/ini2reg.exe "$iniin" && mv -fv "$regout" "$regdir"
+        wine bin/ini2reg.exe "$iniin" 
     done
 
     echo "Copying REG files into their respective folder…"
-    echo "Files detected in $regdir : $(find .. -print0 | xargs -0 .. 2>/dev/null)"
-    mv -v "$regdir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
-    mv -v "$regdir"/{ai,music,streamsn}.reg "$moddir"/config 2>/dev/null
-    mv -v "$regdir"/smessbase.reg "$moddir"/res 2>/dev/null
+    mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
+    mv -v "$inidir"/{ai,music,streamsn}.reg "$moddir"/config 2>/dev/null
+    mv -v "$inidir"/smessbase.reg "$moddir"/res 2>/dev/null
 }
 
 function copyMaps {
     local mapsdir="maps"
     echo "======================================== COPYING MAPS ========================================"
-    cp -vrL "$mapsdir" "$moddir"
+    rsync -rv "$mapsdir"/ "$moddir/maps"
+}
+
+function copyHdPack {
+    local hdpackdir="hdlands"
+    echo "======================================== COPYING HD PACK ========================================"
+    rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
 function dds2Mmp {
@@ -87,7 +90,7 @@ function eiDbEditor {
     echo "======================================== PROCESSING DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX databaselmp to RES..."
-    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv ../"$xlsxdir"/databaselmp.res ../"$resdir"
+    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv databaselmp.res ../"$resdir"/
     cd ..
 }
 
@@ -151,6 +154,7 @@ checkCommands
 directoryCreation
 ini2Reg
 copyMaps
+copyHdPack
 dds2Mmp
 eiDbEditor
 writeVersion
