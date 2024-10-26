@@ -24,7 +24,8 @@ function checkCommands {
 }
 
 function directoryCreation {
-    echo "Creating mod directory : $modfolder"
+    echo "CREATED MOD DIRECTORY: $modfolder"
+    echo ""
     mkdir -p "$modfolder"/config
     mkdir "$modfolder"/res
     mkdir "$modfolder"/maps
@@ -32,7 +33,7 @@ function directoryCreation {
 
 function ini2Reg {
     echo "======================== PROCESSING INI FILES ========================"
-    echo "Converting INI files to REG..."
+    echo "Converting INI files to REG…"
 
     inidir="ini"
     regdir="reg"
