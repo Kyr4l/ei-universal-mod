@@ -5,7 +5,7 @@ export WINEDEBUG=-all
 
 # mod folder location and naming
 modout="mods-out"
-modfolder="$modout"/"$(date +"%Y-%m-%d_%H-%M")"
+modfolder="$modout"/"$(date +"%y%m%d-%H%M")"
 # resources directories
 xlsxdir="xlsx"
 resdir="res"
@@ -15,7 +15,7 @@ luadir="lua"
 totalres=""
 
 function checkCommands {
-    for cmd in sem wine rsync; do
+    for cmd in wine rsync; do
         if ! command -v "$cmd" &>/dev/null; then
             echo "Error : command '$cmd' is required."
             exit 1
@@ -36,17 +36,14 @@ function ini2Reg {
 
     inidir="ini"
     regdir="reg"
-    totalreg=""
 
     for iniin in "$inidir"/*.ini; do
         regout="${iniin%ini}reg"
         wine bin/ini2reg.exe "$iniin"
         mv -fv "$regout" "$regdir"
-        totalreg="$totalreg $iniin"
     done
 
-    echo "Processed the following files : $totalreg"
-    echo "Copying REG files into their respective folder..."
+    echo "Copying REG files into their respective folder…"
     echo "Files detected in $regdir : $(find .. -print0 | xargs -0 .. 2>/dev/null)"
     mv -v "$regdir"/config.reg "$modfolder" 2>/dev/null
     mv -v "$regdir"/ai.reg "$modfolder"/config 2>/dev/null
@@ -60,8 +57,6 @@ function ini2Reg {
 
 function dds2Mmp {
     echo "=============================== PROCESSING DDS FILES ==============================="
-    echo "Converting DDS files to MMP..."
-
     resddsdir="res-dds"
     # DDS
     texturesddsdir="$resddsdir/textures_res_dds"
@@ -77,7 +72,6 @@ function dds2Mmp {
             redressmmpout="${redressdds%dds}mmp"
             wine ../../bin/MMPS.exe "$redressdds"
             mv -fv "$redressmmpout" ../../"$redressmmpdir"
-            totalredressmmp="$totalredressmmp $redressdds"
         done
         cd ../..
         echo "Processed redress"
@@ -90,7 +84,6 @@ function dds2Mmp {
             texturesmmpout="${texturesdds%dds}mmp"
             wine ../../bin/MMPS.exe "$texturesdds"
             mv -fv "$texturesmmpout" ../../"$texturesmmpdir"
-            totalTexturesmmp="$totalTexturesmmp $texturesdds"
         done
         cd ../..
         echo "Processed textures"
@@ -100,7 +93,6 @@ function dds2Mmp {
 }
 
 function eiDBEditor {
-    echo ""
     echo "=============================== PROCESSING DATABASELMP ==============================="
     cd $xlsxdir || exit
     echo "Converting XLSX databaselmp to RES..."
@@ -117,7 +109,6 @@ function writeVersion {
     versionfile="version/mod-version.txt"
     commithashshort="$(git rev-parse --short HEAD)"
     version=$(cat "$versionfile")
-
     echo "==================================== WRITING VERSION ===================================="
 
     read -rp "Increment version ? (y/N) " wvAnswer
@@ -152,8 +143,7 @@ function writeVersion {
 }
 
 function eiPacker {
-    echo "=============================== PROCESSING RES FILES ==============================="
-    echo "Packing RES files..."
+    echo "=============================== PACKING RES FILES ==============================="
 
     for rextin in "$rextdir"/*_res; do
         resout="${rextin%_res}.res"
@@ -168,7 +158,7 @@ function eiPacker {
     echo "Moving RES files into $modfolder/res"
     mv -fv "$resdir"/*.res "$modfolder"/res
 
-    echo "===================================================================================="
+    echo "================================================================================="
     echo ""
 }
 
@@ -191,3 +181,4 @@ eiPacker
 addLua
 
 echo "DONE PROCESSING $modfolder"
+echo ""
