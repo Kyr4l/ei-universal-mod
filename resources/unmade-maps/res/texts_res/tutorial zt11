@@ -1,0 +1,15 @@
+zt11_head
+#screen
+zt11_head_screen1
+#position 155 110 645 21
+#rectangle 183 0 618 96
+#rectangle 385 1 412 19
+#text
+zt11_text_screen1
+#screen
+zt11_head_screen2
+#position 155 110 645 21
+#rectangle 183 0 618 96
+#rectangle 385 1 412 19
+#text
+zt11_text_screen2

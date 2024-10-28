@@ -1,0 +1,19 @@
+Об указаниях по убийству Избранного
+#DESC /!
+#show Sheriff 3
+#show Hero 5
+#show Letter2orcs00 4
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero  1
+Ну-ка глянь вот на эту вещицу... Можешь сказать что-нибудь насчет нее, да так, чтобы я поверил?
+#hide Letter2orcs00
+#show Letter2orcs00 5
+#ANIMATION 45
+#CAMERA 3
+#phrase Sheriff  2
+А чего сразу я? Вот Эрфар у нас говорить мастак, его и проси! Он тебе все как есть объяснит.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero  5
+Со старостой я, конечно, побеседую. Но и с тобой разговор не окончен!

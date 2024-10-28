@@ -1,0 +1,15 @@
+Вернуть Наю в команду
+#show Hero 1
+#show Merc3 2
+#ANIMATION 45
+#CAMERA 9
+#phrase Merc3  1
+Тебе все еще не требуется моя помощь?
+#ANIMATION 15
+#CAMERA 6
+#phrase Hero  2
+Требуется. Об этом я и хотел тебе сказать.
+#ANIMATION 3
+#CAMERA 7
+#phrase Merc3  3
+Отлично. Я по-прежнему готова участвовать в твоих приключениях!

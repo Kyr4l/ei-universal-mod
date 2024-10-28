@@ -1,0 +1,23 @@
+О найденном теле
+#DESC /!
+#show Hero 1
+#show Magess 2
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero  1
+Я нашел тело сыщика. Ты это имела в виду, когда предупреждала об опасности?
+#ANIMATION 11
+#CAMERA 11
+#phrase Magess  2
+Милейший юноша, запомни: я никого не предупреждаю. Я всего лишь констатирую факты.
+#show Hero 3
+#show DriadArrow00 3
+#show Magess 5
+#ANIMATION 32
+#CAMERA 2
+#phrase Hero  3
+Смотри: его убили вот этим!
+#ANIMATION 11
+#CAMERA 3
+#phrase Magess  4
+Что поделать, человек смертен. А порою - внезапно смертен.

@@ -1,0 +1,15 @@
+Оставить Забияку в Поселке
+#show Hero 1
+#show Merc1 2
+#ANIMATION 9
+#phrase Hero  1
+Извини, но на этот раз тебе придется остаться здесь.
+#ANIMATION 45
+#phrase Merc1  2
+А почему?
+#ANIMATION 45
+#phrase Hero  3
+Я так решил. Этого достаточно?
+#ANIMATION 15
+#phrase Merc1  4
+Ну, как скажешь... Но смотри, если что - я буду здесь, в Поселке!

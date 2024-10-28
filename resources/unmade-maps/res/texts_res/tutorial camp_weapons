@@ -1,0 +1,11 @@
+it006_head
+#screen
+it006_head_screen1
+#position 60 50 740 23
+#text
+it006_text_screen1
+#screen
+it006_head_screen2
+#position 60 50 740 23
+#text
+it006_text_screen2

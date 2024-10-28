@@ -1,0 +1,11 @@
+Вновь взять Харада в команду
+#show Hero 3
+#show Merc7 
+#CAMERA 2
+#ANIMATION 9
+#phrase Hero  1
+Радуйся, Харад, вновь пришло твое время!
+#CAMERA 3
+#ANIMATION 15
+#phrase Merc7  2
+Я обрадуюсь, когда увижу кровь моих врагов...

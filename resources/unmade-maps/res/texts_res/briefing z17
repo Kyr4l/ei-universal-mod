@@ -1,0 +1,27 @@
+Ледяное заклинание
+#DESC /!
+#show Hero 1
+#show Witch 2
+#ANIMATION 15
+#CAMERA 9
+#phrase Witch  1
+Ага! Сейчас все в лучшем виде будет. Отойди-ка в сторонку...
+#show Witch 3
+#show RightCrystal 5
+#show Hero 5
+#ANIMATION 6
+#CAMERA 7
+#phrase Witch  2
+Чтобы воду льдом сковать,
+Мне зимы не надо ждать.
+Засверкал в руке кристалл... 
+Водный путь ледовым стал!
+#hide Witch 
+#hide RightCrystal 
+#hide Hero 
+#show Witch 1
+#show Hero 2
+#ANIMATION 11
+#CAMERA 1
+#phrase Witch  3
+Вот так-то, голубь мой! Хоть и старая я, а кое на что гожусь, а?
