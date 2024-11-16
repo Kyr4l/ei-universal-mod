@@ -154,8 +154,8 @@ directoryCreation
 ini2Reg
 copyMaps
 copyHdPack
-dds2Mmp
 eiDbEditor
+dds2Mmp
 writeVersion
 eiPacker
 addLua
