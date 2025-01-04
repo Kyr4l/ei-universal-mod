@@ -21,7 +21,7 @@ function checkCommands {
     done
 }
 
-# create mod directory structure
+# create the mod directory structure
 function directoryCreation {
     echo "CREATED MOD DIRECTORY: $moddir"
     mkdir -vp "$moddir"/{config,res,maps}
@@ -62,7 +62,6 @@ function dds2Mmp {
     local redressmmpdir="$rextdir/redress_res"
     echo "======================================== PROCESSING DDS FILES ========================================"
 
-    read -rp "Convert REDRESS from DDS to MMP ? (y/N) " redressAnswer
     if [[ "$redressAnswer" == "y" ]]; then
         cd $redressddsdir || exit
         for redressdds in *.dds; do
@@ -73,7 +72,6 @@ function dds2Mmp {
         echo "Processed redress"
     fi
 
-    read -rp "Convert TEXTURES from DDS to MMP ? (y/N) " texturesAnswer
     if [[ "$texturesAnswer" == "y" ]]; then
         cd $texturesddsdir || exit
         for texturesdds in *.dds; do
@@ -103,7 +101,6 @@ function writeVersion {
     local versiontemplate="version/version-name-format.txt"
     echo "======================================== WRITING VERSION ========================================"
 
-    read -rp "Increment version ? (y/N) " wvAnswer
     if [[ "$wvAnswer" == "y" ]]; then
         IFS='.' read -r major minor patch <<<"$version"
         if ((patch < 9)); then
@@ -148,6 +145,21 @@ function addLua {
     cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
+function replaceOldMod {
+    if [[ "$mvAnswer" != "n" ]]; then
+        rsync -r "$moddir"/ ../../Universal-Mod
+        echo "FILES MOVED TO MOD RELEASE DIRECTORY"
+    fi
+}
+
+echo "Welcome to the Evil Islands Auto-Compiler script for GNU/Linux !"
+echo "Please press y or n to configure the options, or press Enter to keep the default settings :"
+read -rp "Convert REDRESS from DDS to MMP ? (y/N) " redressAnswer
+read -rp "Convert TEXTURES from DDS to MMP ? (y/N) " texturesAnswer
+read -rp "Increment version ? (y/N) " wvAnswer
+read -rp "Replace the older mod files ? (Y/n)" mvAnswer
+echo ""
+
 # CALLING FUNCTIONS IN THE RIGHT ORDER
 checkCommands
 directoryCreation
@@ -159,6 +171,7 @@ dds2Mmp
 writeVersion
 eiPacker
 addLua
+replaceOldMod
 
 echo ""
 echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"
