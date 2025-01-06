@@ -9,7 +9,9 @@ moddir="$modout"/"$(date +"%y%m%d-%H%M")"
 # resources directories
 resdir="res"
 rextdir="res-unpacked"
+reslangdir="res-texts"
 luadir="lua"
+
 
 # stop execution if rsync/wine/progress is missing
 function checkCommands {
@@ -54,15 +56,32 @@ function copyHdPack {
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
+function packLanguageTexts {
+    # language specific text res
+    local textseng="$reslangdir/texts_res_eng"
+    local textsfra="$reslangdir/texts_res_fra"
+
+    echo "======================================== PACKING TEXTS.RES ========================================"
+    if [[ "$lang" == "eng" ]]; then
+            echo "Selected language: $lang" 
+            local restextsout="${textseng%_eng}.eng"
+            echo "$restextsout"
+            local restextsoutpacked="${restextsout%_res.eng}.res"
+            echo "$restextsoutpacked"
+            wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$restextsoutpacked" && mv -v "$restextsoutpacked" "$moddir/res"
+    fi
+
+}
+
 function dds2Mmp {
     local resddsdir="res-dds"
     local texturesddsdir="$resddsdir/textures_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
     local texturesmmpdir="$rextdir/textures_res"
     local redressmmpdir="$rextdir/redress_res"
-    echo "======================================== PROCESSING DDS FILES ========================================"
 
-    if [[ "$redressAnswer" == "y" ]]; then
+    if [[ "$redressnswr" == "y" ]]; then
+        echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
         cd $redressddsdir || exit
         for redressdds in *.dds; do
             local redressmmpout="${redressdds%dds}mmp"
@@ -72,7 +91,8 @@ function dds2Mmp {
         echo "Processed redress"
     fi
 
-    if [[ "$texturesAnswer" == "y" ]]; then
+    if [[ "$texturesnswr" == "y" ]]; then
+        echo "======================================== PROCESSING TEXTURES DDS FILES ========================================"
         cd $texturesddsdir || exit
         for texturesdds in *.dds; do
             local texturesmmpout="${texturesdds%dds}mmp"
@@ -97,11 +117,11 @@ function writeVersion {
     commithashshort="$(git rev-parse --short HEAD)"
     versionfile="version/mod-version.txt"
     version=$(cat "$versionfile")
-    local resversionname="res-unpacked/texts_res/string version_name"
+    local resversionname="$reslangdir/texts_res_$lang/string version_name"
     local versiontemplate="version/version-name-format.txt"
     echo "======================================== WRITING VERSION ========================================"
 
-    if [[ "$wvAnswer" == "y" ]]; then
+    if [[ "$writeversionnswr" == "y" ]]; then
         IFS='.' read -r major minor patch <<<"$version"
         if ((patch < 9)); then
             ((patch++))
@@ -115,7 +135,7 @@ function writeVersion {
             fi
         fi
         version="$major.$minor.$patch"
-        echo "$version" >"$versionfile"
+        echo "$version" > "$versionfile"
     fi
 
     cp -vL "$versiontemplate" "$resversionname"
@@ -146,18 +166,25 @@ function addLua {
 }
 
 function replaceOldMod {
-    if [[ "$mvAnswer" != "n" ]]; then
+    if [[ "$replaceoldnswr" != "n" ]]; then
         rsync -r "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
 
-echo "Welcome to the Evil Islands Auto-Compiler script for GNU/Linux !"
-echo "Please press y or n to configure the options, or press Enter to keep the default settings :"
-read -rp "Convert REDRESS from DDS to MMP ? (y/N) " redressAnswer
-read -rp "Convert TEXTURES from DDS to MMP ? (y/N) " texturesAnswer
-read -rp "Increment version ? (y/N) " wvAnswer
-read -rp "Replace the older mod files ? (Y/n)" mvAnswer
+echo "Welcome to the Evil Islands Auto-Compiler script for GNU/Linux!"
+echo "The options in caps are the defaults, options must be written in lowercase."
+read -rp "Select the target language for the mod (ENG/fra): " lang
+
+if [[ ! $lang =~ ^(eng|fra)$ ]] ; then
+    echo "Unsupported language or empty string detected, defaulting to English."
+    lang="eng"
+fi
+
+read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
+read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
+read -rp "Increment version? (y/N) " writeversionnswr
+read -rp "Replace the older mod files? (Y/n) " replaceoldnswr
 echo ""
 
 # CALLING FUNCTIONS IN THE RIGHT ORDER
@@ -167,6 +194,7 @@ ini2Reg
 copyMaps
 copyHdPack
 eiDbEditor
+packLanguageTexts
 dds2Mmp
 writeVersion
 eiPacker
