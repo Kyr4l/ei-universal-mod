@@ -1,0 +1,12 @@
+A propos de la vie dans la cité d'Ingos
+#show Hero
+#show Huber
+#CAMERA 3 30 3 1
+#phrase Huber  1
+Oh, tu viens d'arriver en ville ? On ne voit pas beaucoup de voyageurs, par ici ! Et je parie que tu appartiens plutôt à la catégorie des « aventuriers ». J'ai raison, n'est-ce pas ?
+#phrase Huber  2
+Eh bien dans ce cas, tu as sonné à la bonne porte ! Tu trouveras ici tout ce que tu cherches, probablement dans des quantités que tu es loin d'imaginer !
+#phrase Huber  3
+En ce qui me concerne, j'ai besoin d'un homme avec l'esprit d'initiative, quelqu'un qui n'a pas froid aux yeux. Mon loyal Capitaine Tilvar et son équipe ont été portés disparus. Depuis, je n'ai plus personne à ma disposition pour m'apporter les raretés qui manquent à ma collection !
+#phrase Huber  4
+Mais ce n'est pas tout ! Il y a bien d'autres missions, pas toujours aussi intéressantes... Comme neutraliser des brigands, des rebelles ou des créatures dangereuses... En un mot comme en cent, tu n'auras pas le temps de t'ennuyer !

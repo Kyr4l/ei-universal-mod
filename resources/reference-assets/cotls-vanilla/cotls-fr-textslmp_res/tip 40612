@@ -1,0 +1,7 @@
+Serveur privé 
+Un serveur ouvert peut être enregistré dans la liste des serveurs disponibles
+pour tous les joueurs. Pour démarrer un serveur ouvert, le joueur doit disposer d'un accès à Internet. 
+L'adresse d'un serveur privé est visualisée dans un réseau local, et les joueurs
+ne doivent pas forcément disposer d'un accès à Internet. 
+Attention ! Les joueurs ne peuvent accéder à un serveur privé par Internet que s'ils
+disposent de son adresse IP, et si le serveur dispose d'un accès à Internet.

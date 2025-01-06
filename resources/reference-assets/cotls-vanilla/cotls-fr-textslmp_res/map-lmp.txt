@@ -1,0 +1,140 @@
+## format:
+## 
+## #zone zone_name allod_name type // types can be: game, brief, edge
+## #res
+## MprFile MobFile                 // files to load
+## #maps
+## Xsize Ysize                     // size in sectors
+## MinimapTexture ObjTexture       // textures to load: for minimap and objectives screen
+## #figure
+## FigureName                      // for single player only: figure to load
+## #position
+## x y z                           // for single player only: position on global map
+## #weather
+## none | rain | snow              // weather type in this zone. default: rain
+## #sky
+## normal | cave                   // sky type in this zone. default: normal
+## #exit 1
+## neighbour_zone_name NExit       // neighbour zone for this exit and corresponding exit there
+## #deploy
+## x1 y1 x2 y2                     // deploy rectangle for this exit
+## #remove
+## x1 y1 x2 y2                     // remove rectangle for this exit
+## #passtime
+## PassTime                        // for single player only: default pass time 
+## #view
+## Angle                           // camera rotate angle of this entrance
+## #exit 2
+## ...
+##
+## #quest quest_name
+## x y z                           // for single player only: position on global map
+##
+################################################
+
+###############################################################################
+
+## Briefing Gipath LMP
+#zone bz1mpg gipat brief
+#res
+basegipat basecam-mp
+#camera
+bz1g
+#figure
+ingm2base
+#position
+-2.749 -0.186 0.261
+#restrict
+66 66 20
+
+## To Test
+#exit 1
+MPGame1 1
+#deploy
+56 52 62.5 56.5
+#remove
+56 39 62.5 45
+#view
+135.2
+
+###########################################################################
+
+## Briefing Ingos LMP
+#zone bz2mpg ingos brief
+#res
+bz8k bz8k-LMP
+#camera
+bz8k
+#figure
+ingm5base
+#position
+-1.097 -0.285 -0.163
+#weather
+snow
+#restrict
+63 63 30
+
+## To TownDr
+#exit 1
+MPGame1 1
+#deploy
+82.5 39.5 85.6 47.2
+#remove
+85 34.5 89.4 44.3 45
+
+###########################################################################
+
+## Briefing Suslanger LMP
+#zone bz3mpg suslanger brief
+#res
+bz14h bz14h-LMP
+#camera
+bz14h
+#figure
+ingm6base
+#position
+-2.128 1.315 0.109
+#weather
+none
+#sky
+cave
+#restrict
+58 37 25
+
+## To Desert
+#exit 1
+MPGame1 1
+#deploy
+64.4 39.4 69.6 45.5
+#remove
+69.6 39.6 73 45.5
+
+#############################################################
+
+## Briefing Rick LMP
+#zone bz4mpg gipat brief
+#res
+bz7g bz7g-LMP
+#camera
+bz7g
+#figure
+ingm2rick
+#position
+0 0 0
+#weather
+none
+#sky
+cave
+#restrict
+58 72 25
+
+## To Rift
+#exit 1
+MPGame1 1
+#deploy
+48 84 54 90
+#remove
+36.3 94.1 57.6 99.5
+
+###########################################################################
+

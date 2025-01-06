@@ -4,14 +4,12 @@
 export WINEDEBUG=-all
 
 # mod folder location and naming
-modout="mods-out"
-moddir="$modout"/"$(date +"%y%m%d-%H%M")"
+moddir="mods-out"/"$(date +"%y%m%d-%H%M")"
 # resources directories
 resdir="res"
 rextdir="res-unpacked"
 reslangdir="res-texts"
 luadir="lua"
-
 
 # stop execution if rsync/wine/progress is missing
 function checkCommands {
@@ -35,7 +33,7 @@ function ini2Reg {
     echo "Converting INI files to REG"
 
     for iniin in "$inidir"/*.ini; do
-        wine bin/ini2reg.exe "$iniin" 
+        wine bin/ini2reg.exe "$iniin"
     done
 
     echo "Copying REG files into their respective folder…"
@@ -59,16 +57,22 @@ function copyHdPack {
 function packLanguageTexts {
     # language specific text res
     local textseng="$reslangdir/texts_res_eng"
+    local textslmpeng="$reslangdir/textslmp_res_eng"
     local textsfra="$reslangdir/texts_res_fra"
+    local textslmpfra="$reslangdir/textslmp_res_fra"
+    echo "======================================== PACKING TEXTS & TEXTSLMP ========================================"
+    echo "Selected language: $lang"
 
-    echo "======================================== PACKING TEXTS.RES ========================================"
     if [[ "$lang" == "eng" ]]; then
-            echo "Selected language: $lang" 
-            local restextsout="${textseng%_eng}.eng"
-            echo "$restextsout"
-            local restextsoutpacked="${restextsout%_res.eng}.res"
-            echo "$restextsoutpacked"
-            wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$restextsoutpacked" && mv -v "$restextsoutpacked" "$moddir/res"
+        local restextsout="${textseng%_eng}.eng"
+        local restextslmpout="${textslmpeng%_eng}.eng"
+        wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
+        wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
+    elif [[ "$lang" == "fra" ]]; then
+        local restextsout="${textsfra%_fra}.fra"
+        local restextslmpout="${textslmpfra%_fra}.fra"
+        wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
+        wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
     fi
 
 }
@@ -135,7 +139,7 @@ function writeVersion {
             fi
         fi
         version="$major.$minor.$patch"
-        echo "$version" > "$versionfile"
+        echo "$version" >"$versionfile"
     fi
 
     cp -vL "$versiontemplate" "$resversionname"
@@ -172,14 +176,31 @@ function replaceOldMod {
     fi
 }
 
+# main function
+function main {
+    checkCommands
+    directoryCreation
+    ini2Reg
+    copyMaps
+    copyHdPack
+    eiDbEditor
+    packLanguageTexts
+    dds2Mmp
+    writeVersion
+    eiPacker
+    addLua
+    replaceOldMod
+}
+
 echo "Welcome to the Evil Islands Auto-Compiler script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."
 read -rp "Select the target language for the mod (ENG/fra): " lang
 
-if [[ ! $lang =~ ^(eng|fra)$ ]] ; then
+if [[ ! $lang =~ ^(eng|fra)$ ]]; then
     echo "Unsupported language or empty string detected, defaulting to English."
     lang="eng"
 fi
+moddir="$moddir-$lang"
 
 read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
@@ -187,19 +208,7 @@ read -rp "Increment version? (y/N) " writeversionnswr
 read -rp "Replace the older mod files? (Y/n) " replaceoldnswr
 echo ""
 
-# CALLING FUNCTIONS IN THE RIGHT ORDER
-checkCommands
-directoryCreation
-ini2Reg
-copyMaps
-copyHdPack
-eiDbEditor
-packLanguageTexts
-dds2Mmp
-writeVersion
-eiPacker
-addLua
-replaceOldMod
+main
 
 echo ""
 echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"

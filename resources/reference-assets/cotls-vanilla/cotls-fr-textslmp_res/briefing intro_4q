@@ -1,0 +1,16 @@
+Le Grand mage accueille ses invités
+#show Hero
+#show Rick
+#CAMERA 3
+#phrase Rick  1
+Il n'y a pas si longtemps, je n'aurais jamais espéré trouver quelqu'un dans ma caverne. J'ai toujours été tellement occupé à retrouver les héritiers du peuple Joon, que je n'ai jamais fait attention aux autres races !
+#phrase Rick  2
+Mais par une ironie du sort, je n'ai pas reconnu l'homme que je cherchais, bien qu'il fut à mes côtés depuis bien longtemps. Sa véritable identité avait été dissimulée par un sort d'une extrême simplicité !
+#phrase Rick  3
+Ne l'ayant pas reconnu, j'ai envoyé le jeune Joon vers une mort certaine, à Suslanger. Quelle ne fut pas ma surprise à son retour, surtout quand j'ai découvert sa véritable identité…
+#phrase Rick  4
+Mais je ne répéterai pas mon erreur. Je te souhaite la bienvenue, qui que tu sois. Un grand danger menace Gipath et j'ai besoin d'hommes loyaux et solides pour y faire face.
+#phrase Rick  5
+L'empire khadaganien prépare l'invasion de Gipath. Une gigantesque armée se constitue près du portail de Suslanger ! Je suis assez puissant pour me défendre, mais je ne veux pas rayer Gipath de la carte.
+#phrase Rick  6
+Je préfèrerais que tu affaiblisses l'armée à Suslanger, ou encore mieux, que tu empêches purement et simplement l'invasion.

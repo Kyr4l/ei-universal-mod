@@ -1,0 +1,12 @@
+La vie au Dernier sanctuaire
+#show Glav
+#show Hero
+#CAMERA 3 30 3 1.5
+#phrase Glav  1
+Le Dernier sanctuaire est prêt accepter quiconque se présente le cœur ouvert et l'âme à nue. Nous ne te demandons ni qui tu es, ni d'où tu viens. Nous ne voulons pas savoir ce que tu as fait hier, ni ce que tu attends pour demain.
+#phrase Glav  2
+Etant donné que notre confrérie ne se souvient pas de son passé, il est inutile de demander quoi que ce soit. Le frère Blondinet, par exemple, est arrivé ici après avoir fui le Canyon de la mort et il est reparti par le portail qui mène aux Terres inutiles.
+#phrase Glav  3
+C'est vrai que le frère Blondinet n'est pas un homme ordinaire. Il n'a jamais eu peur de se battre contre les gardes et n'a jamais hésité à poignarder ses ennemis dans le dos...
+#phrase Glav  4
+Mais assez parlé de lui ! L'homme qui passe son temps à regarder derrière lui ne peut pas aller de l'avant !

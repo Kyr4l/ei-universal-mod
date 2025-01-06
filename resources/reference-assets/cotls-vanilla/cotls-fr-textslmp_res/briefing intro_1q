@@ -1,0 +1,12 @@
+A propos de la vie dans le village
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase NSheriff  1
+Je croyais que c'était facile, de diriger le village, qu'il suffisait de dicter ses ordres le matin, puis de s'allonger dans un endroit frais et confortable.
+#phrase NSheriff  2
+Mais maintenant que j'ai goûté aux responsabilités, j'ai un peu changé d'avis : ce n'est qu'une succession de problèmes sans fin. Les brigands, les Orques, les Gobelins... Et maintenant ces Hommes-lézards. Devrions-nous faire la paix avec eux ou leur déclarer la guerre ?
+#phrase NSheriff  3
+Et l'Elu n'est même plus là. Nous ne pouvons plus nous appuyer que sur nous-même !
+#phrase NSheriff  4
+J'ai longuement réfléchi à une éventuelle abdication, mais j'ai vite chassé ces pensées de mon esprit ! Après tout les villageois m'ont donné toute leur confiance. Si j'abandonnais, j'aurais l'impression de les trahir. Et ça, je ne peux pas me le permettre, n'est-ce pas ?

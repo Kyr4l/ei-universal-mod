@@ -1,0 +1,8 @@
+Bienvenue
+#show Hero
+#show Shopper
+#CAMERA 3 30 3 1
+#phrase Shopper  1
+Bienvenue, cher client !
+#phrase Shopper  2
+Voici comment mon commerce fonctionne : si tu as de l'argent, tu es le bienvenu. Si tu n'as pas d'argent, tu es le bienvenu aussi. Tant que tu regardes, c'est gratuit. En revanche, la maison ne fait pas crédit. Reviens me voir quand tu auras de l'argent, et achète ce que tu souhaites.
