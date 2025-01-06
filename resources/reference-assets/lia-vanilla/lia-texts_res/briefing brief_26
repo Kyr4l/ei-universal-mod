@@ -1,0 +1,17 @@
+About the list
+#DESC 
+#show Hero2 
+#show YCF
+#show merc2
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 1
+We have delivered your letter. You will need to prepare the money soon.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 2
+Yes! Aunt Zaro, promise you won't do anything about it yourself. We'll help you with that too! Kiel promises you!
+#ANIMATION 62
+#CAMERA 11
+#phrase YCF 3
+Ah, young people, and you think I could do better without you? Oh, don't make me laugh. I am so grateful to you, so grateful!

@@ -1,0 +1,41 @@
+About the Baron's dream
+#DESC 
+#show Hero 
+#show Baron
+#show merc2 
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 1
+Girl, come here. Let's celebrate this sweet victory together! We've crushed those disgusting Khadaganians to a crisp! Never before has my success been so complete! My descendants will glorify this deed.
+#animation 11
+#CAMERA 12
+#phrase merc2 2
+The Baron is happy. I too rejoice in this victory.
+#ANIMATION 5
+#CAMERA 11
+#phrase Baron 3
+But you are somehow unhappy. And where's your friend? Why didn't he come to congratulate me?
+#animation 44
+#CAMERA 12
+#phrase merc2 4
+Well, Kir is no longer like before. Soon he will free his family and his journey will be over. And then mine too, for sure. And Kiel has been dreaming so...
+#ANIMATION 14
+#CAMERA 11
+#phrase Baron 5
+Ah, dreams... When you are young, you dream of personal happiness. My aspirations, on the other hand, are directed only to the flourishing of my land and the prosperity of my people. By defeating the hated Firez and his necromancy, I will turn Jygran from a dying land into a rich and flourishing one!
+#ANIMATION 61
+#CAMERA 11
+#phrase Baron 6
+I hope that the sealing spell will disappear with the death of this villain, and then Jygran will open up to the world. And we won't be needy anymore, oh no! We ourselves will be able to offer help!
+#ANIMATION 9
+#CAMERA 11
+#phrase Baron 7
+My family will rule this country as it was and always will be. I will give to my descendants a province rich and respected by all.
+#animation 11
+#CAMERA 12
+#phrase merc2 8
+Noble aspirations. Where am I to them with my 'To be next to Kira and for him to notice me more often....
+#ANIMATION 9
+#CAMERA 11
+#phrase Baron 9
+Don't worry girl, he's still young, but he'll soon understand what a treasure is next to him. Smile! Today we celebrate victory! : )

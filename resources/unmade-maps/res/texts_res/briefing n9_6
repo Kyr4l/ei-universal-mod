@@ -1,0 +1,15 @@
+Взять Майрану в команду
+#show Hero 
+#show Merc6
+#ANIMATION 11
+#CAMERA 3
+#phrase Merc6  1
+Хорошую команду ты собрал, парень!
+#ANIMATION 31
+#CAMERA 2
+#phrase Hero  2
+Вообще-то я и тебя хотел позвать с нами.
+#ANIMATION 15
+#CAMERA 3
+#phrase Merc6  3
+А зачем я тебе? Вы и втроем справитесь с кем угодно.

@@ -1,0 +1,12 @@
+Buy Dagger (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I'll take this knife.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+It falls to your sister to defend your honor however she can, because you lack money.
+

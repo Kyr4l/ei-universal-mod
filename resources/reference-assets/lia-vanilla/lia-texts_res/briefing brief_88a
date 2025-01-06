@@ -1,0 +1,16 @@
+About the expedition to the Useless Lands
+#DESC
+#show Hero2
+#show Sergant
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero2 1
+Sergeant! We are ready to proceed to complete the task!
+#ANIMATION 62
+#CAMERA 11
+#phrase Sergant 2
+Soldiers! Do not forget that you are on duty in the most valiant army! And the service sends you to distant lands. It is cold and damp there, and you will meet savages and wild animals. Life there will prove to be harsh and full of dangers for you. But all because of the power of our Empire! Remember this, and your service will be lighter.
+#ANIMATION 17
+#CAMERA 11
+#phrase Sergant 3
+Here's the packet with instructions for the expedition leader and permission to go to the Useless Lands. Good luck, sons!

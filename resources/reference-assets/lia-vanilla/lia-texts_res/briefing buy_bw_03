@@ -1,0 +1,11 @@
+Thief's Bow (1150)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I think I'll take this arc.
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 2
+Good choice, with it you won't make any misses.

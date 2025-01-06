@@ -1,0 +1,20 @@
+About the new superficiality
+#DESC 
+#show Hero2 
+#show Elder
+#ANIMATION 32
+#CAMERA 0
+#phrase Elder 1
+Aaaaa! Guards, guards! There's a thief, I caught him! Quick, to me!
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero2 2
+Rindeil! Rindeil! Well, it's me, Kir! But if even you didn't recognize me, it means the cloak is working. It's hot in here, but like you said, every remedy has side effects.
+#ANIMATION 59
+#CAMERA 0
+#phrase Elder 3
+My boy! You've scared the hell out of me. But now you'll be free to go into areas with Japingus. As you know they jump from trees onto the heads of their victims and dig their fangs into the uncovered skin. And just as I look at it now, would you like to go to them now? I've been wanting to show you my collection for a long time.
+#ANIMATION 29
+#CAMERA 0
+#phrase Hero2 4
+Hm... Yes, of course... I'll just check first to see if I have an uncovered piece of skin left somewhere....

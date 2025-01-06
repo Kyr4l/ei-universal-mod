@@ -1,0 +1,37 @@
+About the information gained
+#DESC 
+#show Hero2 
+#show Elder
+#show merc2
+#ANIMATION 14
+#CAMERA 11
+#phrase Elder 1
+My boy! I've been waiting for you so much! Did you manage to find out anything?
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero2 2
+No, Rindeil. I'm very sorry, but I couldn't get close enough.
+#ANIMATION 58
+#CAMERA 11
+#phrase Elder 3
+But... how... it's all gone! I can't survive this... and yet I've already prepared a place for a new alumnus... Oh!
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 4
+Rindeil, come on! He was joking! We found out everything: the stone lies in a trunk in a protected courtyard in the city, next to the north gate!
+#ANIMATION 57
+#CAMERA 11
+#phrase Elder 5
+Ah ye! I'll have the servants tickle you to death so you'll get over your desire to joke about such serious things!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 6
+Well, forgive me, I don't know what came over me. So, do you want me to go get that meteorite of yours?
+#ANIMATION 15
+#CAMERA 11
+#phrase Elder 7
+Yeah, that's right. I was going to send Karim to get it, but since you volunteered to do it yourself, go ahead. I don't mind.
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 8
+Kir, I'm afraid we won't be able to give ourselves. You'd have to talk to Fieruz.

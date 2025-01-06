@@ -1,0 +1,24 @@
+About the permit to enter the mines
+#DESC 
+#show Hero 
+#show KMage
+#ANIMATION 17
+#CAMERA 11
+#phrase KMage 1
+Dear Kira, I still left unfinished business in the mines. But the governor allowed me to enter there only with permission, and accompanied by a soldier.
+#ANIMATION 44
+#CAMERA 11
+#phrase KMage 2
+My present permit has already expired, and I would have to write a new one to the governor. But I don't want to appear in town, lest I cause too much displeasure to the governor and his court magician.
+#ANIMATION 59
+#CAMERA 11
+#phrase KMage 3
+Therefore, Kira, I want to ask you to go to the governor and convince him to issue a new permit. And in the meantime, I'm going to learn Ingos magic space so I can determine the whereabouts of your artifact.
+#ANIMATION 62
+#CAMERA 11
+#phrase KMage 4
+Admittedly, I'm afraid that the increased activity of the robalogs will cause some delays and affect the accuracy of the data. That's why I want to complete the mine survey sooner so that their magical manifestations can be disregarded.
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero 5
+Dear Jam-Akaro! It is my great honor to do you a favor. You won't even blink an eye, and I'll be back with your permission!

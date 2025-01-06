@@ -1,0 +1,28 @@
+On consolidating success
+#DESC 
+#show Hero 
+#show Baron
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+Mr. Baron, I'm at a loss for words. You have won a wonderful victory!
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 2
+Yes, we showed our enemies that the Canians are still strong. We have recaptured Dar-Ugorn, which has long belonged to my family. But this is only the beginning. The time has come to root out the Khadagan weed on Jygran!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+I share your enthusiasm. It is imperative to consolidate this success. It would be good to move on and bounce off the Khadaganian isthmus. And from there to Firez will be a stone's throw!
+#ANIMATION 30
+#CAMERA 11
+#phrase Baron 4
+The isthmus... Yeah, I've thought about that before. But it's not worth letting initial success cloud our sanity. Now we've fortified ourselves on our former borders. More to the west lie the ancient lands of the Khadagan Empire, and they feel at home there.
+#ANIMATION 59
+#CAMERA 11
+#phrase Baron 5
+If we go in there unprepared, we are like newborn kittens - blind and helpless. We need to work out what lies further west of Dar-Ugorn.
+#ANIMATION 61
+#CAMERA 11
+#phrase Baron 6
+Yes, give Rad my instructions. He must prepare for me immediately a very detailed map of the Khadagan lands. Hurry! The battle fervor in the blood of my warriors must not be allowed to cool.

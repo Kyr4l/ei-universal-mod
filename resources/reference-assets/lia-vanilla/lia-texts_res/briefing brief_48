@@ -1,0 +1,29 @@
+About medicinal herbs
+#DESC 
+#show Hero2 
+#show merc7
+#show SuperSpear 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero2 1
+Sahillo, I brought you herbs. Now you will recover quickly.
+#ANIMATION 64
+#CAMERA 11
+#phrase merc7 2
+Ah, what a caring boy! It's a pity you've already been groped by Kiel, for once I would have stolen you from her. But for the herbs, thank you anyway.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero2 3
+Did you all make up?! Me and Kiel are just friends!
+#ANIMATION 63
+#CAMERA 11
+#phrase merc7 4
+Well, boy, you don't listen to your heart. And you should, it will tell you the truth.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero2 5
+Enough about that. You better tell me where Aliya went.
+#ANIMATION 64
+#CAMERA 11
+#phrase merc7 6
+Why, do you miss her already? She's gone. She misses Fieruz so much, and here everything reminds her of him! She won't be back anytime soon now... Although maybe there will be someone to comfort her.

@@ -1,0 +1,15 @@
+About the situation in The Last Hideout
+#DESC
+#show Hero2
+#show Glav
+#show SackofBones 4
+#CAMERA 0
+#ANIMATION 62
+#phrase Glav 1
+Brother Kir, in sending you on this assignment I never thought I'd see you alive again! He, he, he. But verily, this is the strangest thing I have ever seen in my life. Your return and successful deliverance of us from the threat that hung over the Last Sanctuary proved that the Great Powers are in our favor!
+#hide SackofBones 4
+#show SackofBones 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero2 2
+Yes, now you don't have to worry about someone wanting to prolong the search for your shelter. Being underground, I finally understood why no one dares to go that far underground. I hope I won't have to do it again.

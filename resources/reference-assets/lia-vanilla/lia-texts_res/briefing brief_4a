@@ -1,0 +1,26 @@
+About Kiel's plans
+#DESC 
+#show Hero 
+#show merc2
+#show Map00 4
+#CAMERA 5
+#ANIMATION 44
+#phrase Hero 1
+Judging by the map the entrance to the catacombs is just ahead.
+#ANIMATION 70
+#CAMERA 5
+#phrase merc2 2
+Something doesn't appeal to me about this map.... And these dark, murky catacombs. Maybe there is some other passage here?
+#show Map00 2
+#ANIMATION 5
+#CAMERA 5
+#phrase Hero 3
+Kiel! You're scared! I would never have believed, much less after such a daring escape, that you would be scared of what.... the dark?!
+#ANIMATION 64
+#CAMERA 5
+#phrase merc2 4
+I am afraid of what! Kiel is not afraid of anything! It's just that you can't see anything in the dark and it makes me sick. And anyway: who knows what awaits us there?
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero 5
+Don't worry. We'll get in there and then we'll find out, and in the process we'll get a little further away from the guards.

@@ -1,0 +1,52 @@
+About distant walks
+#DESC 
+#show Hero 
+#show BSon
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Dartas, I've been told you like long walks.
+#ANIMATION 5
+#CAMERA 11
+#phrase BSon 2
+Yeah. What's so weird about that? You need something to do eventually. It's so boring here...
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+It's a good habit. I also like to travel, to discover different mysteries. Walking in a valley between two rivers recently, I found a cave.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 4
+I wasn't able to get into it, the entrance is closed with a slab. There's a Joon sign on the slab, and a small rectangular hollow in the middle, as if an element was missing there. And yet - this cave was protected by harpies.
+#ANIMATION 6
+#CAMERA 11
+#phrase BSon 5
+Harpies? That's very strange. That village was raided by harpies too.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 6
+What village? 
+#ANIMATION 61
+#CAMERA 11
+#phrase BSon 7
+There was a village west of Dar-Leanos. A pretty village, and the starotsa's daughter was a real beauty. And the starosta found a nice... medallion, I think. He showed it to me.
+#ANIMATION 62
+#CAMERA 11
+#phrase BSon 8
+The next night, this village was raided by harpies. And the village was not saved. The harpies settled there for good.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 9
+And where is the medallion now? Describe it.
+#ANIMATION 44
+#CAMERA 11
+#phrase BSon 10
+Well it was a rectangular one, with a nice blue stone. I asked him to sell it to me, but the governor didn't want it. He said it was his family heirloom.
+#ANIMATION 17
+#CAMERA 11
+#phrase BSon 11
+And now his whole family's dead and the memento's lying there in their destroyed house.
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero 12
+I'm not sure, but I think it's worth trying to find that amulet. And try using it to remove the seal from the cave entrance.

@@ -1,0 +1,33 @@
+About the new armor
+#DESC 
+#show Hero 
+#show Smith
+#show Awl 5
+#CAMERA 10
+#ANIMATION 61
+#phrase Hero 1
+Babur, just like you said, I searched the tombs in the lizard graveyard. But all I found there was a crowd of unknown living lizards, and some rusty shrapnel.
+#ANIMATION 12
+#CAMERA 0
+#phrase Smith 2
+And what did you do with those lizards?
+#ANIMATION 62
+#CAMERA 0
+#phrase Hero 3
+Like what... figure it out yourself!
+#ANIMATION 44
+#CAMERA 11
+#phrase Smith 4
+All right, I finally see how many lizard skins you brought. Just right. That means your armor will be strong now.
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 5
+You're the one who tricked me? You said you needed a needle and told you to go no where past the rust shard! And in reality you only needed material!
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith 6
+Well, whether I cheated or not is still up for debate. But now you'll have good armor. Is that more important to you? Or that I made up the needle thing? I'm not forcing you, you can go to another craftsman.
+#ANIMATION 46
+#CAMERA 4
+#phrase Hero 7
+Agreed Babura, I don't want to argue over such nonsense. Make me armor and I will be very grateful to you.

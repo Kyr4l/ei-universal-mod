@@ -1,0 +1,29 @@
+About success!
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 14
+#CAMERA 11
+#phrase Karh 1
+I already know everything, you guys are just heroes! If it wasn't for your help my boys would never have made it!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 2
+Your boys are badasses too! Especially that one with the mustache. What a guy!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 3
+Where? What's so great about him? And his mustache is crooked.
+#ANIMATION 62
+#CAMERA 11
+#phrase Karh 4
+Yeah, he's a brave young man. Now thanks to your exploits, everyone will believe in their strength! Yes, and we will finally put the Village back in its place - chase it back into the Ruins. And let him sit there and keep his head down!
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 5
+And you said the hunters don't fight against the Village!
+#ANIMATION 44
+#CAMERA 11
+#phrase Karh 6
+Noooo... I just wanted my boys to believe in themselves and that not only the Village can fight for themselves, but the Free Hunters too! What, did you guys hear something wrong? Heard it, heard it. You've heard it all!

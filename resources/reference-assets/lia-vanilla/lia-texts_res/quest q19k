@@ -1,0 +1,11 @@
+Material for the key
+To produce a key, the Clever Man needs a magical material that can only be obtained from the most remote ravines in the mountains.
+#subobj 1
+Enter the ravine
+To enter the gorge you must go through the gates in the southeast of the town area.
+#subobj 2
+Cross the ravine
+Suitable material can only be found at the very end of the ravine.
+#subobj 3
+Get the material
+The Trickster was wrong - the material does not have magical properties, but as evidence, the sample should be taken anyway.

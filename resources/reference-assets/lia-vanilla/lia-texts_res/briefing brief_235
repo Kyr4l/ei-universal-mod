@@ -1,0 +1,46 @@
+About the crime that was committed
+#DESC
+#show Hero
+#show Trader
+#show merc2
+#ANIMATION 44
+#CAMERA 11
+#phrase Trader 1
+Did you hear the news? Brissen's been shot! He lived to see it, the 'Good Knight', defender of the oppressed. HA!
+#ANIMATION 5
+#CAMERA 12
+#phrase merc2 2
+Something doesn't even try to show sadness.
+#ANIMATION 62
+#CAMERA 11
+#phrase Trader 3
+Why should I be sad? He was just asking to get tapped! It's a wonder this hasn't happened before. And his friend is no worse! I wonder what it was all about.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 4
+I can't believe Jam-Akara killed Brissen. 
+#ANIMATION 15
+#CAMERA 11
+#phrase Trader 5
+I don't believe it either, too wimpy for that. Well, but he won't stir underfoot now....
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 6
+But all is well for you now! And Brissen is gone, and the mage is under lock and key. Didn't you have a hand in this?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trader 7
+What are you talking about, girl? I didn't have a way. You'd better ask Hysa. He hated the old magician more than me, he hated him like a thorn in his throat - he just couldn't live!
+#ANIMATION 59
+#CAMERA 11
+#phrase Trader 8
+And Brissen, too, ever since he set up his lab and started doing experiments on nature.
+#ANIMATION 4
+#CAMERA 11
+#phrase Trader 9
+And just the other day I saw Hys hanging out in the woods with some shady type. Yeah, he was definitely dating some associate of his!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 10
+Karansul blames everything on Hys, but his eyes are running back and forth. He is dimming something. Well, what was he doing in the forest by himself then?

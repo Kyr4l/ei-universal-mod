@@ -1,0 +1,55 @@
+Hys anger
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#ANIMATION 32
+#CAMERA 11
+#phrase His 1
+What's that supposed to mean! You what, didn't see the warning sign when you entered my lab area?
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 2
+I guess that sign got lost among your traps and giant tigers who, by the way, wanted to kill us!
+#ANIMATION 62
+#CAMERA 11
+#phrase His 3
+All these measures were adopted by me for safety reasons. A careless person walking around my lab could cause a lot of mischief! Items of incredible magical power are stored here!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+Dear Hys, we've heard about your craft and want to ask you for help.
+#ANIMATION 9
+#CAMERA 11
+#phrase His 5
+And who are you that I should help you? I am the court mage of his highness Governor Valrasian!
+#ANIMATION 44
+#CAMERA 11
+#phrase His 6
+Hm. And let me ask you: how did you manage to get through all my protective measures? I thought it would be beyond the power of mere mortals!
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 7
+How ridiculous! After all, even a child can get through your traps, and tigers are not worth mentioning.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase His 8
+What a cheeky kid! But one way or another, it will be necessary to reconstruct the security system. If these two can do it, others can.
+#ANIMATION 59
+#CAMERA 11
+#phrase His 9
+Young people, you have come at an inopportune time. But I will soon appear in town and it is imperative that I listen to your problem. I will dutifully deal with it if I find the time.
+#ANIMATION 12
+#CAMERA 11
+#phrase His 10
+By the way, name your names.
+#ANIMATION 9
+#NOLIPS
+#CAMERA 11
+#phrase His 11
+So the guards know who to look for, in case of an emergency.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 12
+This is Kiel, and I'm Kir.

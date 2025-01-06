@@ -1,0 +1,15 @@
+About cured animals
+#DESC
+#show Hero
+#show Grey
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Chief, I'm happy to tell you that the water in the river will no longer poison the animals.
+#CAMERA 11
+#phrase Grey 2
+When a baby chick falls out of its nest and its parents can't pick it up, we forest people help them. This time the forest people themselves needed help. And you helped us.
+#ANIMATION 46
+#CAMERA 0
+#phrase Hero 3
+Well, agreed. I understand that the factory was doing a lot of damage to nature and it had to be stopped.

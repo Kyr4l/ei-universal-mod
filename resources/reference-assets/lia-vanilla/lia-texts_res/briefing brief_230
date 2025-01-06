@@ -1,0 +1,41 @@
+About meeting a stranger
+#DESC 
+#show Hero 
+#show MThief
+#show merc2
+#ANIMATION 43
+#CAMERA 12
+#phrase merc2 1
+What were you trying to get us into? Admit it!
+#ANIMATION 5
+#CAMERA 11
+#phrase MThief 2
+What are you talking about, wench?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 3
+And about that, fellow Sly, that by your suspicion we nearly fell in.
+#ANIMATION 62
+#CAMERA 11
+#phrase MThief 4
+Ha! Don't tell me you couldn't track a young woman in the woods. Girl, I obviously overestimated you.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 5
+First of all, don't call me a wench, and second, we tracked after her just like you wanted.
+#ANIMATION 17
+#CAMERA 11
+#phrase MThief 6
+Well, did you see where she was going?
+#ANIMATION 70
+#CAMERA 12
+#phrase merc2 7
+We saw it. Except we couldn't get close. Everything around was covered with magic traps. As soon as we stepped on one we both freaked out. Because we saw that she was going there to meet some man.
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 8
+Aha, magic traps that is. Interesting... You did pretty well, Dean-- -woman. You'll have to forgive me, I couldn't predict the traps.
+#ANIMATION 46
+#CAMERA 12
+#phrase merc2 9
+All right, what the hell. It was even fun.

@@ -1,0 +1,14 @@
+A propos de la vie au Dernier sanctuaire
+#show Hero
+#show Kuzn
+#CAMERA 3 30 3 1
+#phrase Kuzn  1
+Ha... Une nouvelle tête ! Très bien ! Le frère Khatul a enfin mis de côté ses soupçons et admet maintenant des nouveaux au sanctuaire.
+#phrase Kuzn  2
+Mais attention, il est facile de perdre sa confiance : s'il te demande une chose ou s'il t'en interdit une autre, il vaut mieux lui obéir. Sinon, il fera tout son possible pour te mettre des bâtons dans les roues !
+#phrase Kuzn  3
+Mais ça ne me regarde pas. Ce qui me regarde, c'est le marteau et l'enclume. Et les sorts, maintenant. Le frère Kehel s'en occupait, mais il n'est plus parmi nous.
+#phrase Kuzn  4
+Il a été malade pendant très longtemps. Il est mort juste avant ton arrivée. Nous ne nous sommes jamais vraiment liés d'amitié... De toutes façons, je crois qu'il n'a jamais eu d'amis !
+#phrase Kuzn  5
+Mais bizarrement, le frère Kehel m'a légué les sorts et les runes qu'il possédait !

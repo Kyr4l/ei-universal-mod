@@ -1,0 +1,37 @@
+About the goblin invasion
+#DESC 
+#show Hero 
+#show OrcPyr
+#show merc2
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcPyr 1
+The clairvoyant wise, then, and knows-knows. A tribe without a chief is weak-weak, his even goblins-goblins are not afraid.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 2
+So what? Why are you just cracking misery?
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcPyr 3
+The misfortune-unhappiness has already crept up. Evil-evil goblins have crept up, lots and lots. They saw that the chief-chief was gone, they came-to rob us. They took a lot of goods. They frightened the children.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 4
+As far as I can see, everyone's okay, which is the most important thing. And you'll still get the goods.
+#CAMERA 11
+#ANIMATION 9
+#phrase OrcPyr 5
+They took Urk-Tar's wife. Urk-Tar will be strong-willed.
+#ANIMATION 70
+#CAMERA 5
+#phrase merc2 6
+I doubt if he will be strongly evil. Judging by what I've heard about his wife, I think he'll even be happy about it. Should I go make him happy?
+#CAMERA 5
+#ANIMATION 6
+#phrase OrcPyr 7
+You're saying it wrong. A chief guards his wife-wife as he guards his-her tribe. He will throw-away his wife, that is to say, a wicked-wicked chief.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 8
+But after all, Urk-Tar is injured now, and he can't go save anyone. Eh, I guess we'll have to set out again. First we save the chief, then we save his wife. Agreed, but I hope none of his relatives are planning to get into trouble.

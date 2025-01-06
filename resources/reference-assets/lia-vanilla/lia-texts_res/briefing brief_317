@@ -1,0 +1,44 @@
+On rash words
+#DESC 
+#show Hero 
+#show merc2 
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+We did a nice job. Now life here will be a lot more peaceful. We should have taken Dartas with us! I'm sure he was bored to death sitting in the fortress non-stop.
+#animation 72
+#CAMERA 11
+#phrase merc2 2
+Don't remind me of him! It's better for him to die in the womb!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 3
+Kiel, how can you say that? What happened?
+#animation 71
+#CAMERA 11
+#phrase merc2 4
+So far, nothing yet. But it will happen if he looks in my direction again. No one has ever insulted me like that before!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+Calm down, Kiel. Tell me everything one by one. Did he insult you?
+#animation 70
+#CAMERA 11
+#phrase merc2 6
+Insulted me? He insulted you? Ha! You forgot who you were dealing with. He didn't insult me, he insulted my feelings! I didn't chop him up on the spot just because he knocked me off track with his insolence.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 7
+Poor Kiel. Well, what did he tell you?
+#animation 11
+#CAMERA 11
+#phrase merc2 8
+Never mind! 
+#animation 64
+#CAMERA 11
+#phrase merc2 9
+Look, you really don't want me to remember all this and tell you the crap I heard from that bug! And I don't need your pity!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 10
+It's okay, Kiel, don't worry. Whatever he tells you in there, he'll regret his words. I'll take care of it.

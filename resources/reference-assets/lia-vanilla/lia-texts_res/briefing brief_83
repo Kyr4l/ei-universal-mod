@@ -1,0 +1,42 @@
+About the information gained
+#DESC 
+#show Hero2 
+#show Sheriff
+#show merc2
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 1
+Karim! That soldier of yours didn't do very well! All the security was on their feet!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero2 2
+It doesn't matter. Karim is not to blame for this. The most important thing is that we now have a documentary.
+#ANIMATION 14
+#CAMERA 11
+#phrase Sheriff 3
+So come on, let's read what it says. I'm very curious too.
+#show Report 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero2 4
+Me first. Yeah... it's not interesting... um... Oh yeah! Yeah... aha!
+#ANIMATION 70
+#CAMERA 12
+#phrase merc2 5
+So what?
+#ANIMATION 44
+#CAMERA 10
+#phrase hero2 6
+In the midst of various things it is said here that '... after the robbery of the estate of the unknown being, a careful investigation of the circumstances of the incident was carried out, the result of which was that immediately prior to the robbery a spell of teleportation and transmutation had been cast, as indicated by the shard of the amulet triggering the spell.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero2 7
+From the shard found, it was possible to determine that the teleported object was aimed at the Useless Lands. Based on the fact that among the corpses found, none resembled those of the red-skinned young man, it was concluded that he had been teleported.' I must get to the Useless Lands immediately!
+#ANIMATION 63
+#CAMERA 12
+#phrase merc2 8
+This is insane. The portal there is more protected than the emperor's palace!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero2 9
+That's okay, I'll figure something out. I'll join the army and that way I can get access to the portal!

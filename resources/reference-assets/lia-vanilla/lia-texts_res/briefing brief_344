@@ -1,0 +1,36 @@
+On the search for allies
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 12
+#CAMERA 11
+#phrase Doctor 1
+Ah, our hero has visited me. So tell me: how did everything go? Did you save the relatives?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+Thank you, everything went great. You helped us a lot.
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 3
+Why are you so unhappy? That's not appropriate. Eat a doughnut, it'll make you feel better.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 4
+But I don't need to make myself feel better. Better tell me where to find the cyclops and the dragon.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 5
+Oh, and you can't do it yourself? The cyclops lives in the mountains to the north between two rivers. And there are enough dragons on the Isle of Death.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 6
+But the thing is, after my time on this island, there are no more dragons! And I really need one! You know what I mean? Very much!
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero 7
+I must force the Baron to fortify the citadel. But without strong allies, he won't agree to it. With the Tui-Lena amulet, I will subdue the dragon and cyclops, and they will fight on our side.
+#ANIMATION 11
+#CAMERA 11
+#phrase Doctor 8
+Well, if that's the case, it changes things. Look for the dragon in the northern mountains, where the river flows out. They always settle in the mountains next to the water.

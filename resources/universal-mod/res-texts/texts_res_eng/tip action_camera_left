@@ -1,0 +1,3 @@
+Camera left
+Camera scrolls left. If you press this key + <CTRL>, 
+the camera will move left, but remain pointed in the same direction.

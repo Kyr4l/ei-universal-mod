@@ -1,0 +1,28 @@
+Ask for the fifth divination (50)
+#DESC
+#show Hero2 
+#show skelet 
+#ANIMATION 70
+#CAMERA 11 
+#phrase skelet 1
+Oh precious my lord, it is good that you have come! I want to warn you.
+#ANIMATION 17
+#CAMERA 10 
+#phrase Hero2 2
+Yes? And what happened? 
+#ANIMATION 6
+#CAMERA 11 
+#phrase skelet 3
+Don't be in such a hurry, remember the folk adage: 'It is gold that drives away shadows from men'! Here's a legitimate rant!
+#ANIMATION 9
+#CAMERA 10 
+#phrase Hero2 4
+You're not a fairy, you're a scam artist! Well, take it, and speak quickly.
+#ANIMATION 66
+#CAMERA 11 
+#phrase skelet 5
+Oh, I had a vision. I saw... how you went into the sands under the cover of night, out of town, headed for some mansion. And there all was green, and in this strange world death was alive. And the knowledge that has come to me is that if you overcome this, you will get a worthy reward for it! 
+#ANIMATION 11
+#CAMERA 10 
+#phrase Hero2 6
+And what is there to warn against? I wasn't going anywhere after the night anyway. Although after your story I think... what's the harm in taking a stroll around town? It's been pretty interesting so far...

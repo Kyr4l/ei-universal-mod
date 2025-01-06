@@ -1,0 +1,28 @@
+About the change in appearance
+#DESC 
+#show Hero 
+#show Sheriff
+#ANIMATION 12
+#CAMERA 0
+#phrase Sheriff 1
+Kir, you came too early, I haven't learned anything yet.
+#ANIMATION 6
+#CAMERA 0
+#phrase Hero 2
+But that's not what I'm here for. I need to do something about my skin so I don't attract attention. I come for advice.
+#ANIMATION 44
+#CAMERA 0
+#phrase Sheriff 3
+Ha, ha, ha! And what's the problem? I know a great preparation that our mage used: you take the dried liver of an ogre, grind it with the saliva of a pregnant spider...
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 4
+Except I don't have ogre liver, let alone dried liver. And saliva... brr! Such a preparation for me....
+#ANIMATION 9
+#CAMERA 0
+#phrase Sheriff 5
+My friend, you're just lucky you came to see me! If you want, we'll go hunting tomorrow morning. I know where an ogre lives. For our purposes, his liver will do just fine. And then we'll wait a month or two for it to dry out, and then...
+#ANIMATION 62
+#CAMERA 0
+#phrase Hero 6
+A month, you say? That's too long! Well, anyway, thanks for the offer....

@@ -1,0 +1,17 @@
+Canyon of Death
+To prove your devotion to the Khadagan Empire in the person of Sergeant Zairak, you must search the three gorges in the canyon and kill anyone you find there.
+#subobj 1
+Search the northern gorge
+This gorge is the closest on the way from the North fortress to the South fortress.
+#subobj 2
+Murder the slaves
+The sergeant said that the slaves who hid in the ravine are murderers and thieves. They must be killed.
+#subobj 3
+Search the south ravine
+The south gorge is the largest in the canyon. It's a great place to hide.
+#subobj 4
+Kill all the slaves
+According to Sergeant Zairak, there are many lives of innocent people on the account of those who hid here.
+#subobj 5
+Search the western ravine
+The western ravine is the closest to the southern fortress. It is unlikely that anyone is hiding there, but check it out.

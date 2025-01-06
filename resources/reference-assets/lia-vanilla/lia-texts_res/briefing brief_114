@@ -1,0 +1,50 @@
+Talk to Hermit
+#DESC 
+#show Hero 
+#show IZ
+#show merc2
+#CAMERA 5
+#ANIMATION 64
+#phrase IZ 1
+Man, I came here to offer you a deal.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero 2
+What kind of deal?
+#ANIMATION 64
+#CAMERA 5
+#phrase IZ 3
+I found out you were looking for this man who called himself The Chosen One. I know where he could be right now.
+#ANIMATION 64
+#CAMERA 5
+#phrase merc2 4
+Oh, how nice! Kiel always knew not to judge by appearance. You're such a scary dude, and yet you're willing to help us.
+#ANIMATION 64
+#CAMERA 5
+#phrase IZ 5
+Hmm... I've been called all sorts of things, but not once. I must remember. I liked it.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero 6
+It's cool that you liked it, but tell me what kind of deal you're proposing. Because I understand you're not just gonna tell anything.
+#ANIMATION 64
+#CAMERA 5
+#phrase IZ 7
+You are the default. I want to settle by a lake in the Distant Peaks. The lake lizards are stupid, they don't want me to settle there.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 8
+A sad story, but what's in it for us?
+#ANIMATION 64
+#CAMERA 5
+#phrase IZ 9
+I want you to put the Great Shell on a pedestal in the Distant Peaks. I know you have the Shell. I will do that, and I will tell you where to find this man.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 5
+#phrase Hero 10
+He's a strange one, maybe not worth trusting, but I don't have a choice either. The Shell will have to be referenced.
+#ANIMATION 15
+#CAMERA 5
+#phrase Hero 11
+Okay, it's done. I'll take the Shell to the Distant Peaks, and you can tell me where the Chosen One is.

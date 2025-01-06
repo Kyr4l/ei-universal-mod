@@ -1,0 +1,25 @@
+About the Magic Bullet
+#DESC 
+#show Hero 
+#show Witch
+#show Daughter
+#ANIMATION 65
+#CAMERA 11
+#phrase Witch 1
+Come on, tell me why you came. I see you're a new man on Gipath. Apparently you've been carried to our wilderness by bad luck, huh?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+It's true, it's true. My journey began far from here, but it was only here that I finally found the help I needed. The Great Mage Gipath himself is willing to help me, but he needs the Magic Bullet that the Chosen One once used.
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 3
+Yeah, I remember, he brought me a sphere here, some grandfather appeared in it. But unfortunately I don't have the sphere, the orcs stole it from me somehow. And this is Airy, the loser, the misguided one! Why did she let it out of her sight? How can I help the boy now?
+#ANIMATION 70
+#CAMERA 12
+#phrase Daughter 4
+But I know where the bullet is! They have brought it back to the islands and are now guarding it more than before. The islands themselves will also be hard to get to because of the drawbridges, but you can get the mechanism for the bridges on Council Mountain.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 5
+And that's not a problem! The most important thing is that the sphere is found. Esther, Airy, I am so grateful to you!

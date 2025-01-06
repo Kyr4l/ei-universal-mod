@@ -1,0 +1,41 @@
+On serving Cania
+#DESC 
+#show Hero 
+#show Baron
+#show Nekro 
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Lord Baron, we have captured the necromancer who is to blame for the appearance of the undead in the area. He lived on Death Island, in an old tower.
+#ANIMATION 43
+#CAMERA 11
+#phrase Baron 2
+Well how dare he on my land create such mischief! Answer: who are you and how did you get to that island?
+#animation 27
+#CAMERA 12
+#phrase Nekro 3
+My lord, your humble slave call Jamanin, I am a humble follower of the school of theoretical necromancy. I have long since settled in a tower to deal with my experiences away from everyone.
+#ANIMATION 9
+#CAMERA 11
+#phrase Baron 4
+So your experiences are over. Now you are in my power, I will have you punished with death to end your defilement.
+#animation 56
+#CAMERA 12
+#phrase Nekro 5
+I dare you to beg for mercy! My death will do no good, but alive I will be far more useful.
+#ANIMATION 11
+#CAMERA 11
+#phrase Baron 6
+And what use is a corpse-eater to us?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 7
+Surely the necromancer is right. We'll always have time to condemn him to death, and if he's willing to cooperate before that - he can be of use to us.
+#animation 29
+#CAMERA 12
+#phrase Nekro 8
+My merciful Lord! At your feet please grant me life. I swear to serve you and use my knowledge for your benefit and to the detriment of your enemies.
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 9
+Don't count on being pardoned. For now I dismiss your execution. But if you serve both me and Cania faithfully, you will regain your freedom.

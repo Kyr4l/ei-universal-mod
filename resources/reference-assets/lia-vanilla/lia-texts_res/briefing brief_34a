@@ -1,0 +1,29 @@
+On the doom of the caravan
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 17
+#CAMERA 5
+#phrase Hero2 1
+Your fears have been confirmed. The caravan had indeed succumbed to a robbery. But don't worry, I managed to take all the illegal goods before the guards arrived.
+#ANIMATION 32
+#CAMERA 5
+#phrase YCF 2
+Oh, how heavy it all is, how heavy! The goods are gone, the caravan is gone. Well, what am I supposed to do now? And what happened to the caravan? I'll know what to be afraid of.
+#show Note04 5
+#CAMERA 0
+#ANIMATION 44
+#phrase Hero2 3
+The strangest thing was that at first glance, I thought the caravan had been attacked by wild animals. But having examined the scene more closely, I found a short note. It said: 'I am at Azbek's', and the signature: 'Tarik'.
+#ANIMATION 43
+#CAMERA 11
+#phrase YCF 4
+Give me a look! Tarik... my old caravan chaser. But, Azbek! And this is all his doing? I always knew he was a dishonest merchant, but how could he fall so low?
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero2 5
+Aunty Zaro, you need to rescue your herder quickly and finally deal with this Azbek. Otherwise he won't give you a break.
+#ANIMATION 64
+#CAMERA 5
+#phrase YCF 6
+And you're right again. Azbek has a well-protected house in the city, and that's definitely where my Tariq is kept. Bring him to me alive, please, he's my best chaser!

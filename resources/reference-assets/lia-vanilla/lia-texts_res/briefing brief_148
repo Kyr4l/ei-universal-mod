@@ -1,0 +1,33 @@
+About the new path to the Great Magician
+#DESC 
+#show Hero 
+#show Witch
+#show PalantirWork00 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Estero, I'm here to tell you that the advice in the book helped. Look, the sphere has become clear again.
+#ANIMATION 64
+#CAMERA 11
+#phrase Witch 2
+Yes, I see. Now you're going back to the Great Magician? Wasn't it scary to go through the tunnel?
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+What tunnel? I went to his cave through a ravine in Distant Peaks.
+#ANIMATION 66
+#CAMERA 11
+#phrase Witch 4
+Well, you got lucky, boy! But only that time. Now they say there was a landslide in the Distant Peaks. The whole eastern gorge has collapsed.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 5
+Disaster! Now what?
+#ANIMATION 70
+#CAMERA 11
+#phrase Witch 6
+Why are you so scared right now? Don't be afraid, there's another way, albeit a dangerous one. True - the Chosen One has gone through it, which means you will too. I don't think the golems will scare you... if you find a way to turn them off.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 7
+I have no choice but to go through the tunnel.

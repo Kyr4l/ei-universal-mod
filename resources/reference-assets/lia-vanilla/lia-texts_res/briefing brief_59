@@ -1,0 +1,40 @@
+About the conscription documents
+#DESC 
+#show Hero2 
+#show merc7
+#ANIMATION 64
+#CAMERA 5
+#phrase merc7 1
+And you come to me again. Unveil your face to me, I want to look at you so much.
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero2 2
+Dear Sahillo, you're too curious, and that's what often gets you lost.
+#ANIMATION 70
+#CAMERA 4
+#phrase merc7 3
+You worry about me? Ah, how pleasant.
+#ANIMATION 5
+#CAMERA 5
+#phrase Hero2 4
+Hm... well, I generally come on another matter. I need to join the army, and for that I need documents.
+#ANIMATION 63
+#CAMERA 5
+#phrase merc7 5
+Boy, you sure got overheated in the sun. You are willingly going to an unjust death. Please don't do this!
+#ANIMATION 6
+#CAMERA 5
+#phrase Hero2 6
+No, don't turn me away from this. It's already decided. Will you be able to help me with these documents?
+#ANIMATION 66
+#CAMERA 5
+#phrase merc7 7
+Well if you've already decided.... there's a boy who can do a pretty good job of forging documents.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 8
+Where can I find him?
+#ANIMATION 64
+#CAMERA 5
+#phrase merc7 9
+And why do you want to look for him? I'll go get it myself, and in the meantime you do something for me. Look in my lockers and bring me everything you find from there.

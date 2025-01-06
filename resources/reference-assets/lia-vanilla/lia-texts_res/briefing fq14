@@ -1,0 +1,25 @@
+On the legacy of the Joons
+#DESC 
+#show Hero
+#show Rick
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Teacher, I have been to the neglected temple of our people, but tell me, is there anything left?
+#ANIMATION 66
+#CAMERA 0
+#phrase Rick 2
+Of course there was left, young hero. The life force overflowed our people in the days of prosperity, so that we shared with Vasyak.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 3
+Teacher, talk about the exchange with Vasyak.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+I mean, that's what it was about.
+#ANIMATION 9
+#CAMERA 11
+#phrase Rick 5
+There's his lab, there might be something useful there, but you have to hurry and that's why you only get one try.

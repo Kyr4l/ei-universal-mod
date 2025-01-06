@@ -1,0 +1,21 @@
+Wandering in the dark
+#DESC 
+#show Hero
+#show Haburu
+#CAMERA 11
+#phrase Haburu 1
+Your help is priceless, man. I can repay you by entrusting you with a secret I know.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+If it will benefit me, that would be pretty good.
+#CAMERA 11
+#phrase Haburu 3
+Where people have dug deep burrows in the mountains, I saw one man drop this key. It is very important, as is the man who lost it. The man was so weak that he wobbled when he walked, but he tried to hold on, so he kept singing all this time.
+#CAMERA 11
+#phrase Haburu 4
+And when he fell and could not get up for a long time, his friends came and took care of him by carrying him in their arms. And that's when he lost that key. I'm sure this key is from something secret.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 5
+I hope this turns out to be true. Thank you, Habbur, for the key. I will dutifully look for the lock that it opens.

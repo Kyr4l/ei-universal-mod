@@ -1,0 +1,29 @@
+About the report to Suslanger
+#DESC 
+#show Hero 
+#show merc2
+#show Paper 5
+#show SackBabur 3
+#CAMERA 11
+#ANIMATION 64
+#phrase merc2 1
+I won't say it was easy, but we made it! We already have everything we need for the Suslanger shipment.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Yeah, all that's left is to get it all back to that dilapidated cabin in the Dead City. The sergeant told us they use it to relay reports.
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero 3
+Thank you Kiel for then suggesting where to pick the stone samples from. I wouldn't have guessed without you. You're my best friend, although I have to admit I never had friends before.
+#hide Paper 5
+#hide SackBabur 3
+#ANIMATION 72
+#NOLIPS
+#CAMERA 11
+#phrase merc2 4
+A friend, a friend! Why does he only see me as a friend! I followed him to this Gipath forgotten by everyone just to be near him and he won't notice any of it!
+#ANIMATION 46
+#CAMERA 0
+#phrase merc2 5
+Be that as it may, for a pleaser like you Kiel will invent more than one good idea. That's what friends are for.

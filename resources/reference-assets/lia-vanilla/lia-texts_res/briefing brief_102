@@ -1,0 +1,49 @@
+Get to know the clairvoyant
+#DESC 
+#show Hero 
+#show OrcPyr
+#show merc2
+#CAMERA 11
+#ANIMATION 7
+#phrase OrcPyr 1
+Tyn-Achei didn't call you. What did he come for?  
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 2
+I just came to get acquainted. My name is Kir, and the girl with me is Kiel. We had already gotten acquainted with the chief, so we decided to talk to the shaman too.
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcPyr 3
+Clairvoyant- clairvoyant protects the spirit of the tribe, protects the strength. Clairvoyant strong-strong-the tribe lives. Strangers come and destroy everything-destroy everything. Tyn-Achei does not like aliens-aliens.
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero 4
+The chief received us very well. It seemed to me that he was speaking for the whole tribe.
+#CAMERA 11
+#ANIMATION 0
+#phrase OrcPyr 5
+Urk-Tar is a strong chief, wise-wise. The clairvoyant should not have argued-argued with the chief. You will come, then you will go. The clairvoyant and the chief always-will be.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 6
+You guessed correctly. I won't stay here for long. But you don't have to spoil your contact with the chief because of me. Don't be afraid, I won't do your tribe any harm, on the contrary, if help is needed, I'll be happy to help.
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcPyr 7
+Man, you well-wishers speak well. But I will-will look behind you. Watch without ceasing.
+#ANIMATION 5
+#CAMERA 5
+#phrase merc2 8
+And I'll- I'll watch that you're not only clairvoyant, but you're tinkering with magic!
+#CAMERA 5
+#ANIMATION 6
+#phrase OrcPyr 9
+The clairvoyant and the chief always-will do everything themselves for the tribe-tribe. An axe then-when strong, if the chief made it, and the clairvoyant gave it strength.
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 10
+Well, will you do something for us?  
+#CAMERA 11
+#ANIMATION 0
+#phrase OrcPyr 11
+As long as you help the tribe, we will.

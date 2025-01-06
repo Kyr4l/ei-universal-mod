@@ -1,0 +1,29 @@
+About Baron's plans
+#DESC 
+#show Hero 
+#show Baron
+#show merc2 
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 1
+Craftsman Stark came to me to complain. I thought it was enough for you to meddle only in my affairs. But I was wrong. Stark told me that you had introduced some kind of 'weapon innovation' to his forge.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Yeah, that's right. I once read a book about different types of weapons. There was a chapter on fighting against undead- ...
+#ANIMATION 61
+#CAMERA 11
+#phrase Baron 3
+You don't have to justify yourself. I know my old craftsman inside out, and I can say with certainty that deep down he's happy with your advice.
+#ANIMATION 44
+#CAMERA 11
+#phrase Baron 4
+With new wedges, my warriors will detect the dead every last one! Now I am confident of our quick victory! But there are still final preparations left before the uprising. You must meet a certain man of mine, he secretly serves me- ...
+#animation 9
+#CAMERA 12
+#phrase merc2 5
+Uncle Council, huh? But cool! He's so popular, and it smells good in there!
+#ANIMATION 6
+#CAMERA 11
+#phrase Baron 6
+Yeah... so you know about that, too. But I'm not surprised anymore. That's even good, you don't have to explain the way. He should give me the package. I'll expect you with it as soon as possible. That's all, you can go.

@@ -1,0 +1,52 @@
+About the ore, the key and the Portal into the void [conclusion].
+#DESC 
+#show Hero 
+#show MThief
+#show KMage
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 1
+This is simply a disaster! Clever man, there was no magic ore in this ravine! It's all gone! We'll never be able to produce the key!
+#show KKey04 5
+#CAMERA 11
+#ANIMATION 11
+#phrase MThief 2
+What key? The one about?
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 3
+You... have already done it? But how? Without special material!
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 4
+Don't be mad, but I sent you away on purpose, knowing in advance there was nothing there. It's just that if you'd stayed here, you'd have been in my way. At least you were busy doing something useful.
+#hide KKey04 5
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 5
+How could you?! You tricked me like that!
+#ANIMATION 62
+#CAMERA 12
+#phrase KMage 6
+Don't be angry young man. Something else is more important now. We have a gate, opening the way to an unknown passage, and we have a key opening that gate. We must decide what to do next.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 7
+After all, there's nothing to decide here! I have to go through this portal immediately!
+#ANIMATION 44
+#CAMERA 12
+#phrase KMage 8
+It's not that simple. A closer examination of the situation forces me to conclude that the Portal is malfunctioning. I can't feel the ground on the other side of it at all. It's as if there is a void there.
+#ANIMATION 59
+#CAMERA 12
+#phrase KMage 9
+Or something more dangerous - an absorbing spell so powerful that all my attempts at mental passage simply go out in it, like fire in water.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 10
+Tka-Rick also said that he absolutely does not detect Jygran. There is no doubt. This Portal will lead me to Jygran!
+#ANIMATION 9
+#CAMERA 12
+#phrase KMage 11
+But if your destination is on the other side of it, then I can't help but wish you good luck.

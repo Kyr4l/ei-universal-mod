@@ -1,0 +1,38 @@
+About the creation of the spell
+#DESC 
+#show Hero 
+#show Nekro
+#show merc2 
+#show Percovka 5
+#CAMERA 11
+#ANIMATION 14
+#phrase Nekro 1
+Oh I am happy to know that my knowledge proved useful! The old scroll did not deceive, there actually turned out to be herbs in the tomb!
+#animation 11
+#CAMERA 12
+#phrase merc2 2
+Yes, we found the herbs. But their owner was not so lucky. They couldn't protect him! Your spell raised even him from the grave!
+#ANIMATION 62
+#CAMERA 11
+#phrase Nekro 3
+I dare say it doesn't work as a preventative measure against necromancy. But it is known to bring peace to those who have already risen from their graves.
+#animation 6
+#CAMERA 12
+#phrase merc2 4
+Don't tell me we're supposed to fly all over the place and pour a bottle of magic on every dead person! There's not enough magic herbs for everyone. You better come up with something better!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 5
+Kiel, don't get so hot. I'm sure there's another way out. Right, necromancer!
+#ANIMATION 61
+#CAMERA 11
+#phrase Nekro 6
+Theoretically, there is a way out, not even one... For example, you could sacrifice a human and mix herbs with blood, then...
+#animation 11
+#CAMERA 12
+#phrase merc2 7
+If I were you, Kiel would strain her brain and try to come up with something less radical.
+#ANIMATION 44
+#CAMERA 11
+#phrase nekro 8
+Ah, and this would be such an interesting experiment... But there are also, um... less radical ways. Just pour some liquor over the main tomb in the cemetery, repeating the words in your mind: 'Dar, Daierat, Daierun'.

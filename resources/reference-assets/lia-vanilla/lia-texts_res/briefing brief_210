@@ -1,0 +1,43 @@
+About the promised help
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase His 1
+I'm sure I didn't keep you waiting long. Well, here I am ready to listen to you.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 2
+Tka-Rick warned me that confiding information about an artifact could be dangerous. Certainly not worth telling him everything.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+We search for traces of an ancient race of Joons. The mages are well known for their magical artifacts and spells.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+We were told that there was another mage hanging around, but we decided that the most experienced and knowledgeable one was the one who serves the governor. That's why we turned to you. 
+#ANIMATION 62
+#CAMERA 11
+#phrase His 5
+And you did well to turn to me and not to this charlatan! He only claims to be a magician! He...-! Easy, easy, I'm not going to be led off balance by the likes of him!
+#ANIMATION 9
+#CAMERA 11
+#phrase His 6
+You say you're looking for traces of an ancient race? Yes, I know a lot about these... Joons.
+#ANIMATION 6
+#NOLIPS
+#CAMERA 12
+#phrase merc2 7
+But he's lying! He doesn't know anything! He didn't even get the real Joon in Kira!
+#ANIMATION 44
+#CAMERA 11
+#phrase His 8
+I'll tell you what I know, but I need your help too. The governor needs me to be in the city, but... in my lab... there are some things left.
+#ANIMATION 59
+#CAMERA 11
+#phrase His 9
+I'm asking you to go to the lab. Bring me everything you can find in the trunk next to the building. I will disable the traps - and the road will be safe! ...

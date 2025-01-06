@@ -1,0 +1,11 @@
+Buy Peasant Axe (170)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I think I'm going to buy this axe.
+#ANIMATION 32
+#CAMERA 0
+#phrase NSheriff 2
+If you have almost no money, why did I present so much merchandise through you? ...

@@ -1,0 +1,2 @@
+Spell
+You can combine spells with weapons with armor. The spell must have an "item" rune that determines when the spell can take effect. Parts of the equipment have certain restrictions that determine the strength and the way the implemented spell works. You can also disintegrate the "enchanted" item - then you can use the spell in the traditional way.

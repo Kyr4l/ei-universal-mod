@@ -1,0 +1,32 @@
+About what the magician was doing at the time
+#DESC 
+#show Hero 
+#show Guard
+#ANIMATION 62
+#CAMERA 0
+#phrase Guard 1
+I got your message. And I've already heard about an old mage that they want to hang him for murdering a knight. It's ridiculous to even think about it, that such an old man could slaughter a grown knight!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+Well, that's the thing, he didn't kill Brissen! And I want to prove it. The Governor has given me time to investigate, but I need to hurry.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 3
+Jam-Akara said he went to the mines that day. 
+#ANIMATION 44
+#CAMERA 0
+#phrase Guard 4
+Uh... That's right. An old man came by the mine the other day. He had an outdated permit, but it's nothing if he hangs around there, it won't be any worse for anyone. He's a funny old man, he helped my village...
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 5
+Wait a minute, tell me about that day!
+#ANIMATION 44
+#CAMERA 0
+#phrase Guard 6
+Aha. I put a stamp on his old permit that he'd gone to the mine. But when he came back, the permit was gone. He dropped it somewhere. But I was running out of duty, so I let him go anyway.
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero 7
+That means the permit is still in the mines somewhere! This paper will help me justify Jam-Akara!

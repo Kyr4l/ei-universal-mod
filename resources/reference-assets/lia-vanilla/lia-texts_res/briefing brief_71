@@ -1,0 +1,40 @@
+On Compliance with the Old Deal
+#DESC
+#show Hero2
+#show Guru
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 1
+I greet you, the One who came to the Cave of the ancient Giants and was summoned to serve in the name of the Eternal, stripping enemies of their intelligence and creating confusion in their minds! Uch...
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 2
+You managed to remember my name correctly! But call me by a simpler name: BrainGuru. It'll be easier for you that way.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 3
+I had a strange feeling you were calling me.... Brainchild.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 4
+Yes, I have called upon you. I sent you my thought. Silence has blessed me with its wisdom and I have comprehended that I can communicate to you what will prove to be useful to you. But first I want to know if you are willing to abide by the Old Agreement.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero2 5
+What deal? You've mentioned it a few times before, but I don't really understand what you're talking about.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 6
+There has always been an Agreement between us and the Joons that we will help each other, each in our own world. Are you willing to abide by the Old Agreement?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero2 7
+Hmm... well yes, I'm ready to follow the Old Deal.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Guru 8
+That's good. So listen up: not long ago, the necromancers invaded our caves again, and kidnapped the Priest of Silence with them. Retrieve him for us, and I will give you important information.

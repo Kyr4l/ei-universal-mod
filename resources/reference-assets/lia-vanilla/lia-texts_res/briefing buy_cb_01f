@@ -1,0 +1,11 @@
+Buy a Shattered Crossbow (170)
+show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+Give me that crossbow.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+You can't buy any gun for that kind of money, ha, ha!

@@ -1,0 +1,6 @@
+Run
+When a character runs, he makes more noise than when 
+he walks, so he attracts the attention of enemies who 
+otherwise couldn't see him. Speed is high. "Stamina" diminishes; 
+when it reaches zero, the character will automatically start 
+walking.

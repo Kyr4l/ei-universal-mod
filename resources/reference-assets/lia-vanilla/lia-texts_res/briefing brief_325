@@ -1,0 +1,29 @@
+About kitchen revolutions
+#DESC 
+#show Hero 
+#show Doctor
+#show merc2 
+#ANIMATION 12
+#CAMERA 11
+#phrase Doctor 1
+And there you are, my helpers! While the Baron is busy with final preparations before the assault, we'll find ourselves busy too.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 2
+Now it's high time to go mushrooming. Yes, and a big pumpkin will come in handy too. The spices I have: salt, pepper... Exactly, everything else is.
+#animation 5
+#CAMERA 12
+#phrase merc2 3
+Hm, I think our Uncle Council has overworked himself. The Canisians are about to hold a century-long uprising, and he wants to make mushroom soup.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 4
+Yes, and you guys are going to help me with that! I'm missing the mushrooms and pumpkin. Oh, but this will be good! The Khadagans are sure to love it. Ooh, how gluttonous they are!
+#animation 6
+#CAMERA 12
+#phrase merc2 5
+Well, no. He's really not himself. He definitely ate too many of his dumplings. He felt like feeding the enemy!
+#ANIMATION 11
+#CAMERA 11
+#phrase Doctor 6
+You'd better eat some yeast. Sweets are good for the brain. Ragout is not only filling, but debilitating it will be! Do you understand?      [Ragout (pronounced 'Ragu') is a French meat dish].

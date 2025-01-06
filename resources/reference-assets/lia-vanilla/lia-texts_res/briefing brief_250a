@@ -1,0 +1,67 @@
+About the real killer [ending].
+#DESC
+#show Hero
+#show Huber
+#show Vor
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+Governor, we have caught the man who is guilty of the deaths of Birssen and Hys.
+#ANIMATION 11
+#CAMERA 11
+#phrase Huber 2
+You set me up with some highwayman and you think I'll happily accept him as a murderer? I am a knowledgeable man and I know that to accuse a man you must first prove his guilt.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+Now I'll tell it all: Birssen found out that someone was stealing from the common lodging money. The thief grasped that Brissen had seen through him, so he killed the knight. After all, the accommodation would not spare him if they found out who was stealing their money!
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 4
+I understand, but what did my faithful mage Hys fall for!
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 5
+And for the fact that the accommodation money turned out to be too little for him, and he decided to fly into the lab. Hys told the truth about the knife being stolen from him. But apart from that, the nugget that you had prepared as a gift to the capital was also stolen from him.
+#ANIMATION 32
+#CAMERA 11
+#phrase Huber 6
+Ah, what a villain! I hope you found my nugget?
+#show GoldNugget00 5
+#CAMERA 10
+#ANIMATION 44
+#phrase Hero 7
+Yes, of course, here it is. Hys knew that losing the nugget would be a big blow to the master. Crooked, on the other hand, took advantage of the situation to free himself from his undesirables, and told Hys that they were going to conduct a caravan robbery to the capital.
+#hide GoldNugget00 5
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 8
+For Hys, it was a chance to blame the robbers for losing the nugget. But that's not the main thing. The criminal was afraid that he would be caught too, so he decides to throw suspicion on Hys who we suspect anyway. So he drops off a knife stolen from Hys at the crime scene.
+#ANIMATION 12
+#CAMERA 11
+#phrase Huber 9
+Now I understand why my people didn't find anything there the first time.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 10
+Yes, he did later. But then the Forest People saw him. Just like that, when he was hiding the stolen money. But let's go back to Hys. Wanting to justify himself, he made an appointment with me promising to bring a man with him who would confirm that he had nothing to do with Brissen's death. He brought to the meeting - Crooked.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 11
+But the highwayman judges people as himself. That's why he foresaw that Hys was preparing a trap for him, so he'd strike first.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 12
+All his ways proved futile. In the end, he was delivered by what it all started with - greed. We caught him at a place where he was hiding stolen goods. Baldie, is that it? Well?!
+#ANIMATION 15
+#CAMERA 12
+#phrase Vor 13
+Yes, yes! Satisfied?
+#ANIMATION 56
+#CAMERA 12
+#phrase Vor 14
+Mr. Governor, and the fact that I'm self-admitted to everything is going to help me?
+#ANIMATION 9
+#CAMERA 11
+#phrase Huber 15
+How dare you... BARGAIN WITH ME! Your fate will be determined by the JUDGE!

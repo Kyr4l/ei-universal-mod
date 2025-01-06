@@ -1,0 +1,51 @@
+About ataman's new plan
+#DESC 
+#show Hero 
+#show Karh
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase Karh 1
+How good of you to come up to me! An idea has come to me. I would like to discuss it with you.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 2
+Kiel has long noticed: all your ideas are related to the assault on the Village. What is it this time?
+#ANIMATION 9
+#CAMERA 11
+#phrase Karh 3
+You're right lovely. The idea is simply brilliant! And just a small favor will be required of you. You have to get to the New Village and activate the Magic Pyramid that the orcs left behind.
+#ANIMATION 64
+#CAMERA 10
+#phrase Hero 4
+What a small favor! After all, we have no idea how to activate magic pyramids!
+#show AmbushKey01 5
+#CAMERA 11
+#ANIMATION 44
+#phrase Karh 5
+Don't worry, the orcs left me a key. You have to put it in the recess on the altar and turn it. And the pyramid will start working!
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 6
+And then what will happen?
+#ANIMATION 12
+#CAMERA 11
+#phrase Karh 7
+Well... of course... she's gonna shoot lightning bolts at people.
+#ANIMATION 65
+#CAMERA 12
+#phrase merc2 8
+Into people, that is. And it's nothing that Kira and I are human too, and we'll be right under her nose? Did you want to kill us, you sly fox?
+#ANIMATION 14
+#CAMERA 11
+#phrase Karh 9
+Come on, come on! How could you think such a thing! You will have enough time to run far away before she starts working. And then you will become real heroes! The orcs will compose a song about you!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 10
+And what a tempting idea. Here everyone only talks about the Chosen One, but after all, I too have done a lot for Gipath! I want something to glorify myself too, let them make songs about me too!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 11
+Of course Bor, there's nothing to talk about. We'll help the orcs exterminate the humans from their settlement. Because to make it the first time, no?

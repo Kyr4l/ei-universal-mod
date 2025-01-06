@@ -1,0 +1,36 @@
+Accepting Kiel into the team 
+#DESC 
+#show Hero2 
+#show merc2
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero2 1
+Kiel! Glad to see you again!
+#ANIMATION 9
+#CAMERA 5
+#phrase merc2 2
+Kir? Is that you? What kind of pig you got on your head! Fu!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero2 3
+It's so you don't attract attention on the streets. Fieruz told me that it's appropriate for many sick people after the plague to cover their faces like this. He also helped me get a proper scarf.
+#ANIMATION 62
+#CAMERA 11
+#phrase merc2 4
+The right one! And tearing off a piece of the leg and doing the same thing was a no brainer? You wanted to pass yourself off as a sage by wrapping your head in fabric that is worth at least ten coins per elbow! HA, ha, ha!!! I haven't laughed so much in a long time! What a sly one this Fieruz is....
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero2 5
+I'm glad I made you laugh... and just in case, Rindeil promised to help me get back to Jygran, and free my family!
+#ANIMATION 6
+#CAMERA 0
+#phrase merc2 6
+Rindeil promised something? Don't be particularly hopeful. I think he has already forgotten about it. He's only interested in his spiders and ladybugs.... He's a harmless old man, but there's no help to be expected from him.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 7
+Also something... I usually only rely on myself anyway. Karim told me that there were rumors about Joon on Suslanger. He in turn promised to find out more about it. If I find this Joon, I will find my people!
+#ANIMATION 30
+#CAMERA 0
+#phrase merc2 8
+Hm... Joon? I've never heard of such a thing. But Karim interacts with all kinds of people, so maybe it's true. Anyway, I've decided to keep an eye on you to make sure you don't get tricked by some Fieruz again. From now on, your friend Kiel will be inseparable from you!

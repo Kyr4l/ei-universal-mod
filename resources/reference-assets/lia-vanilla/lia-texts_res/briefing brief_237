@@ -1,0 +1,23 @@
+About a strange man
+#DESC
+#show Hero
+#show Grey
+#show merc2
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 1
+Chief, I'm trying to find evidence to justify the old magician. But I know too little and suspect too many. The forest is your home, no one knows it better than you. Tell me, have you seen anything strange lately?
+#CAMERA 11
+#phrase Grey 2
+Will it be strange if you meet a tiger with red skin? We often see people in the forest who behave in ways that are strange for the Forest People to understand. We saw that a strange man came to the place where we found Brissen's corpse. He was looking for something there.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 3
+Kir, we should search the place. I'm sure we can find something important!
+#CAMERA 11
+#phrase Grey 4
+An owl hunts in the dark of night, but the slightest rustle will tell it where its prey is. We saw a man hiding something in the woods. Does that give you anything?
+#ANIMATION 6
+#CAMERA 0
+#phrase Hero 5
+No. It's definitely one of the hunters, everyone here has a stash in the woods. But to search the crime scene is a good thought.

@@ -1,0 +1,41 @@
+About the magic bullet
+#DESC 
+#show Hero 
+#show Smith
+#show merc2
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 1
+Babura, you know a lot about the Chosen One. I learned that he somehow found a Magic Ball on Gipath, and was even able to use it. Do you happen to know where that sphere is now?
+#ANIMATION 11
+#CAMERA 11
+#phrase Smith 2
+If that sphere was magic, then a trip to the Witch awaits. She's the only one on Gipath who's strong in magic.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+Do you think the Witch will help me? Does she know where the sphere is?
+#ANIMATION 9
+#CAMERA 11
+#phrase Smith 4
+Well, whether she knows it or not, I can't say. But the Chosen One did a lot of business with her, and even saved her granddaughter, Aira, I mean. Esther can certainly tell you many interesting things. And when it comes to magical things, it's all the more reason to ask her.
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 5
+It means: no need to think, you have to go to the witch. And there we'll figure out what she can tell us.
+#ANIMATION 62
+#CAMERA 11
+#phrase Smith 6
+Well, that's for you to decide. I would never go to her myself. She doesn't like visitors, I mean, uninvited. The way to her cave is guarded by traps, and trolls still stand.
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 7
+No, well how to understand such a one! First you say you have to go to the witch, and then you say you can't do that. But after all, the Chosen One somehow went to her!
+#ANIMATION 61
+#CAMERA 11
+#phrase Smith 8
+Well, who do you think told the way to the Chosen One? Me, of course! Except that the Chosen One didn't go into it empty-handed. But all right, I'll tell you the way, and you can decide for yourselves what to do.
+#ANIMATION 44
+#CAMERA 11
+#phrase Smith 9
+The traps can be turned off, but first you must find a spare key. It is stored at the very north of the ridge that separates the two gorges. If you get the key, you can turn off the traps, too. Only you there, don't forget about the trolls either.

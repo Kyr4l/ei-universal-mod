@@ -1,0 +1,25 @@
+О бумаге, найденной в покинутом лагере
+#DESC /!
+#show Elder 3
+#show CodedHadaganNote 4
+#show Hero 5
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  1
+Эрфар! Ты можешь это прочесть?
+#hide CodedHadaganNote
+#show CodedHadaganNote 5
+#ANIMATION 44
+#CAMERA 11
+#phrase Elder  2
+Против тебя зреет заговор, твоя жизнь в опасности, тут не до бумажек! 
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 45
+#CAMERA 5
+#phrase Hero  3
+Ты не ответил: можешь или нет?
+#ANIMATION 30
+#CAMERA 9
+#phrase Elder  4
+Ну, я посижу... подумаю... Может быть, потом, когда опасность минует Избранного!

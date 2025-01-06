@@ -1,0 +1,25 @@
+On greed
+#DESC
+#show Hero
+#show Vor
+#show merc2
+#ANIMATION 64
+#CAMERA 0
+#phrase merc2 1
+Aha! He's in! That'll make Geraldine happy when we tell her who turned out to be the mole stealing from his friends!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 2
+Have you ever heard the saying that greed is the death of even the most cautious man?
+#ANIMATION 43
+#CAMERA 11
+#phrase Vor 3
+Don't get smart with me! If I could convince that dull-headed woman over there, you'd be hanged the first time you met!
+#ANIMATION 62
+#CAMERA 0
+#phrase merc2 4
+If they didn't hang you right away! At Geraldine's, I'm sure there's already a rope and a tall oak waiting. And at the governor's, I don't even know. If you confess to everything, I promise to stand up for you before the governor. Well, what do you choose?
+#ANIMATION 11
+#CAMERA 11
+#phrase Vor 5
+Don't you guess? Lead the way to the governor!

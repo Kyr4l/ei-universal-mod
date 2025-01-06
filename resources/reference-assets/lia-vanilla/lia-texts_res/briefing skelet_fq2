@@ -1,0 +1,32 @@
+Ask for a second divination (50)
+#DESC
+#show Hero2 
+#show skelet 
+#ANIMATION 64
+#CAMERA 11 
+#phrase skelet 1
+I knew you would come to me! Now you'll probably be thanking me?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero2 2
+You are right fairy, you said about the garden truthfully. Thank you.
+#ANIMATION 70
+#CAMERA 11 
+#phrase skelet 3
+Oh, so now you believe me? My Lord, I'm still ready to tell you! But you know what they say... "A fortune is always fulfilled when the purse is filled with gold"!
+#ANIMATION 11
+#CAMERA 10 
+#phrase Hero2 4
+Well, keep it up. And tell everything you see, don't make up anything unnecessary!
+#ANIMATION 66
+#CAMERA 11 
+#phrase skelet 5
+Well, where else! My words are true, only the most important thing is to believe them. I see... there will be great joy in you - you will find it in the house of the red lord. But first you'll have some trouble looking for something. The flame will open the way for you. And so the matter will end in great riches!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 6
+It's all nice and pretty, only if I understood what you were telling me...
+#ANIMATION 6
+#CAMERA 11 
+#phrase skelet 7
+Eh, my golden lord, you should have listened more carefully! But I can give you a complimentary piece of advice: take a stroll through the Portal city area. Perhaps then you will guess what my divination was about.

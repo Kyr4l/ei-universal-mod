@@ -1,0 +1,53 @@
+Get to know the merchant
+#DESC
+#show Hero
+#show Trader
+#show merc2
+#ANIMATION 66
+#CAMERA 12
+#phrase merc2 1
+Kir, let's ask this bearded man about magicians. He's a trader and should know everything.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+Good morning, sir! Couldn't you help us with something? We're looking for a magician.
+#ANIMATION 11
+#CAMERA 11
+#phrase Trader 3
+And here what, it says where that I give information? I am a Karansul trader and I run a store not a message board!
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 4
+How about being more polite, trader? We may become your customers. And we may or may not become one! Depends on how you behave.
+#ANIMATION 12
+#CAMERA 11
+#phrase Trader 5
+All right. What were you guys saying about the mag there?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 6
+We need a magician, and we have business with him. We want to ask him for help.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trader 7
+Ah well, if you're looking for help then you need that abnormal one who's been hanging around with Brissen. I wonder which lich brought him to us here!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 8
+And where can you find him?
+#ANIMATION 62
+#CAMERA 11
+#phrase Trader 9
+How would I know? It would be better for me if it was deep in the ground! He's ruined my whole trade! He's giving away the right runes for free! Who's gonna buy from me?!
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 10
+Wait a minute. You said if we need help, we need this magician. Does that mean there's another one?
+#ANIMATION 44
+#CAMERA 11
+#phrase Trader 11
+Oh, yes! There's a Hys serving at Governor Valrasian's. He's set up a lab for himself, sits there now and doesn't come out. But that's nothing, he'll still be up in the air someday. Believe me!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 12
+Well, it's all clear now. All right, let's go Kir.

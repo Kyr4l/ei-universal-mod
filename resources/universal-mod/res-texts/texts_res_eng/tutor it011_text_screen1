@@ -1,0 +1,5 @@
+     To construct a spell, you'll need its keystone. Spell keystones determine what school of magic the spell belongs to, as well as its principle and initial properties.
+     You can construct a spell using only a keystone, or you can add runes which change the spell's properties.
+     You can use your own keystones and runes (assuming, of course, you have them) or you can buy them in the shop just like you buy any other item.
+
+     Note: You cannot construct spells that are too complex or demand too much stamina for any of your characters to use them. The maximum complexity and stamina you have available will be shown framed in separate lines below the slot your keystone is in.

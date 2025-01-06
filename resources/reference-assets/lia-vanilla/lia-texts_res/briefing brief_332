@@ -1,0 +1,33 @@
+About the map search
+#DESC 
+#show Hero 
+#show Doctor
+#show merc2 
+#animation 64
+#CAMERA 12
+#phrase merc2 1
+Uncle Council, we come to you with a new task from the Baron. He wishes to venture deeper into Khadagan territory, but without a map he is afraid to take even a step west of Dar-Ugorn.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 2
+Well, our baron has always been distinguished by the caution and forethought of his actions. One can understand him. Soldiers, after all, don't grow on beds, they have to be watched.
+#animation 70
+#CAMERA 12
+#phrase merc2 3
+But he does it in such a way that not even a speck falls on them! But now we have to run among the enemies and look for the map again. If only we knew where... !
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 4
+Don't worry. Eat a better candied peach. There's no need to run after the map. It lies quietly in the Khadaganian headquarters waiting for you to take it from there.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 5
+You mean it's that easy?
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 6
+What's so hard about it? You'll find the staff by the road to the north. Go to the mountains at two rivers, it's impossible to miss. The Khadaganians are not expecting an attack, and they don't know about the capture of the fortress yet. But now the most important thing is not to waste time!
+#animation 15
+#CAMERA 12
+#phrase merc2 7
+Right, because the baron will still make up his mind.

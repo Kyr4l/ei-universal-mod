@@ -1,0 +1,37 @@
+About Fieruz's death
+#DESC 
+#show Hero2 
+#show merc10
+#show merc2
+#ANIMATION 61
+#CAMERA 10
+#phrase Hero2 1
+Kind Aliyo, I share your sadness. I am saddened that Fieruz died. I knew him very little.
+#ANIMATION 32
+#CAMERA 11
+#phrase merc10 2
+No one knew him intimately. Only to me he was kind, so gracious, caring.... I loved him so...
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 3
+And are you going to sprinkle your tears on the sand after him for a long time? You know it won't help him anymore. But if you take revenge for your loved one's death then know that Fieruz would approve.
+#ANIMATION 6
+#CAMERA 11
+#phrase merc10 4
+Yes, but I don't know who to take revenge on, I don't know who killed him.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 5
+Buddy, you forgot you had Kiel with you! I saw who dealt the final blow to Fieruz. So gather your things, you will lead us to revenge for the best of us.
+#ANIMATION 43
+#CAMERA 11
+#phrase merc10 6
+Yes, I will make the murderer regret he was born into this world!
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero2 7
+But how?! How can you! You are knowingly going to murder!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 8
+Kir, I respect you, of course, and more, but that's our right. We must take revenge whether you like it or not.

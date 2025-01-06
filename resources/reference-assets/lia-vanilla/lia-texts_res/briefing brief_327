@@ -1,0 +1,42 @@
+About culinary tastes
+#DESC 
+#show Hero 
+#show Doctor
+#show merc2 
+#show Jpump 5
+#show Jmush 3
+#CAMERA 11
+#ANIMATION 14
+#phrase Doctor 1
+Here come the mushrooms! Just in time. Now the mushrooms are fried, and with onions, and mushrooms. Mmm... yummy.
+#hide Jpump 5
+#hide Jmush 3
+#show Ragu 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero 2
+And can you try?
+#animation 64
+#CAMERA 12
+#phrase merc2 3
+And you what! Did you forget what Uncle Council said? This is poisoned ragout. You want to sit in the bushes for the entire assault?
+#animation 6
+#CAMERA 12
+#phrase merc2 4
+I just don't understand why we're dragging a pumpkin in here? I think for the ragout it will be rather unnecessary. It will give unnecessary sweetness and kill the flavor of the mushrooms.
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 5
+It will. But what's most important to us? That everything works in time! Many operations have fallen through poor preparation of possible options.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 6
+And suddenly it would happen that their soldiers would eat the ragout beforehand - and its effect would end by the beginning of the assault! And then - consider everything lost. And the pumpkin will slow down and prolong the effect of the mushroom venom.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 7
+And that's what'll keep them running around the johns for half the day. You want a cookie? No? Tough. 
+#animation 70
+#CAMERA 12
+#phrase merc2 8
+Excellent! But it seems to Kiel that we're going to run too. To spread your stock over the soldiers' food supplies. And on our successful actions depends the success of the entire assault.

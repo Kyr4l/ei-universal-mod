@@ -1,0 +1,27 @@
+About the manufacture of the key
+#DESC 
+#show Hero 
+#show Smith
+#show PalantirBroken00 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Well look, the ball is indeed defective. Now do you believe we need to go after the lake?
+#ANIMATION 12
+#CAMERA 11
+#phrase Smith 2
+What are you doing sticking that glass thing in my face? I don't understand any of it anyway.
+#hide PalantirBroken00 5
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+And you don't have to understand any of this! The thing is, can you make me the key to that gate? Will you be able to?
+#hide PalantirBroken00 5
+#CAMERA 11
+#ANIMATION 44
+#phrase Smith 4
+Well, who do you think on Gipath can still orient in the craft, I mean, the sly? Only me. Well, hold the key. Just don't forget to come back later!
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 5
+Thank you Babur. Now I can find the means to repair the bullet.

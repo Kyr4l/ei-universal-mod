@@ -1,0 +1,37 @@
+Declaration of love
+#DESC 
+#show Hero 
+#show Daughter
+#show Ogrepresent 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero 1
+Airy, try on this necklace. It's the same one worn by the clairvoyant cave orcs.
+#ANIMATION 14
+#CAMERA 0
+#phrase Daughter 2
+Is it the same one? Yes, I can feel how much magical power can be sensed in it!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 3
+I'm so glad you like the necklace. But its beauty pales in comparison to the sparkle of your eyes, your velvety skin and your kind smile. One look from you is the best reward for me.
+#ANIMATION 44
+#CAMERA 11
+#phrase Daughter 4
+Kir, you're a good boy and I don't mean to offend you, but it's unnecessary for you to tell me all this. My heart is already taken!
+#ANIMATION 62
+#CAMERA 0
+#phrase Hero 5
+It's a shame, but maybe there's at least a little place for me too? It seems to me that it was to meet you that I made this long journey.
+#ANIMATION 6
+#CAMERA 0
+#phrase Daughter 6
+Don't get your hopes up. And to find your love you don't have to walk far at all, just look!
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 7
+What do you mean?
+#ANIMATION 46
+#CAMERA 11
+#phrase Daughter 8
+And oh nothing, in time I'm sure you'll figure it out for yourself.

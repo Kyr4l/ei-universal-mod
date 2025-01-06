@@ -1,0 +1,11 @@
+Buy Sharpened Axe (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I'm sure this axe will suit me.
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 2
+I was hoping for better. 

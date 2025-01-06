@@ -1,0 +1,53 @@
+Read about Airy
+#DESC 
+#show Hero 
+#show Daughter
+#show merc2
+#ANIMATION 64
+#CAMERA 11
+#phrase Daughter 1
+Hey, and who are you guys? How did you guys get here? Did you walk past the traps and they didn't work?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+Don't worry, pretty, the traps are fine, Babur just showed us the way. We came to the witch Esther for advice. My name is Kir, and this is Kiel. And surely you are Esther's granddaughter, Airy?
+#ANIMATION 11
+#CAMERA 11
+#phrase Daughter 3
+So you know everything. Oh, Babur's gonna get it, he's gonna get it. And my grandmother will stop trading with him.
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 4
+Yeah, where's your grandma? 
+#ANIMATION 9
+#CAMERA 11
+#phrase Daughter 5
+And that's none of your business, she left on business. And I don't have time to talk to you here.
+#ANIMATION 46
+#CAMERA 12
+#phrase merc2 6
+Let's go Kir, this girl doesn't know anything, she doesn't even know where her grandmother is.
+#ANIMATION 72
+#CAMERA 11
+#phrase Daughter 7
+A girl? Damn you! You think when you put on your orcish beads you instantly became an adult!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 8
+Ha! You make me jealous!
+#ANIMATION 63
+#CAMERA 11
+#phrase Daughter 9
+No, I can get my own, I just don't want to. But I do know that the prettiest and most powerful magic necklace has the clairvoyant of the cave orcs. The entrance to their cave is in the northeastern part of Podgórze. Only my grandmother won't let me go there, she says I'm still too young.
+#ANIMATION 15
+#CAMERA 12
+#phrase merc2 10
+She's right, you are still a baby!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 11
+Kiel! Come on, what's with the girl? Airy, it will be my joy to bring you the clairvoyant necklace from the cave. I hope your grandmother is home by then.
+#ANIMATION 44
+#CAMERA 11
+#phrase Daughter 12
+You might not wait for her to come back and go get her yourself. She went to the Dead City, to the host of the city - a talking dragon.

@@ -1,0 +1,29 @@
+About a future task
+#DESC 
+#show Hero 
+#show Gerald
+#show MThief
+#ANIMATION 64
+#CAMERA 11
+#phrase Gerald 1
+Don't be angry that we don't believe you. Our accommodation is like a sore thumb to Valrasian - ... let's say a heel. He thinks we are highwaymen, and sometimes sends spies to us.
+#ANIMATION 70
+#CAMERA 11
+#phrase Gerald 2
+We just don't want to depend on someone and live alone. We have learned to tame animals, and they serve us. And we don't bother anyone!
+#ANIMATION 66
+#CAMERA 11
+#phrase Gerald 3
+Well, now about the task. Quite near here a caravan of goods will soon be passing through to the capital. Trickster, tell the children the details of the matter.
+#ANIMATION 62
+#CAMERA 12
+#phrase MThief 4
+All too simple. This time Valrasian has prepared a giant nugget as a gift. They say it was given to him by a boy. But that's not important. The important thing is that we find a better use for this nugget before those rich guys in the capital.
+#ANIMATION 44
+#CAMERA 12
+#phrase MThief 5
+At the Karansula property, the caravan will make a stop. There it will be best to take out the nugget. It's important not to make any noise, so the caravan and security won't guess that the trunk is empty.
+#ANIMATION 9
+#CAMERA 11
+#phrase Gerald 6
+It's simple! You bring a nugget, we'll welcome you as a friend. If you don't bring one, you know. And don't think of running away!

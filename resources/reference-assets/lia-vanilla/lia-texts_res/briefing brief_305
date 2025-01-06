@@ -1,0 +1,57 @@
+About the Baron's secret man
+#DESC 
+#show Hero 
+#show Stark
+#show merc2 
+#ANIMATION 9
+#CAMERA 11
+#phrase Stark 1
+Ah, here you are again, here to nag. After all, I told you: I've got a lot to do, I don't have time to deal with silly things.
+#animation 11
+#CAMERA 12
+#phrase merc2 2
+That's interesting! First he complained that they only came to him with business and now he's unhappy that they're pulling him away from them!
+#ANIMATION 12
+#CAMERA 11
+#phrase Stark 3
+Well because I don't like it.
+#animation 6
+#CAMERA 12
+#phrase merc2 4
+But that you don't like what? That they're pulling you away or just coming in on business?
+#ANIMATION 46
+#CAMERA 11
+#phrase stark 5
+And this and that. Be that as it may, tell me what news you have there.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 6
+We've freed the village from the wandering dead. Now the neighborhood will become more peaceful.
+#ANIMATION 59
+#CAMERA 11
+#phrase Stark 7
+Yeah, well, let's hope so! How many times has our garrison supposedly weeded out the territory from this swine...
+#ANIMATION 61
+#CAMERA 11
+#phrase Stark 8
+But each time it flies again from under the ground. Just like rust, no way you can get away from it!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 9
+It's a strange thing. Surely there's an explanation for it. Magic or something. How would you explain it?
+#ANIMATION 9
+#CAMERA 11
+#phrase Stark 10
+Take a walk to the candy merchant. He will be able to help you.
+#animation 12
+#CAMERA 12
+#phrase merc2 11
+To the candy vendor? What's he gonna help you with?
+#ANIMATION 62
+#CAMERA 11
+#phrase Stark 12
+He secretly serves our baron. He gives us all the news from the khadagan side. And in general he knows a lot about everything. Just don't tell anyone!
+#ANIMATION 44
+#CAMERA 11
+#phrase Stark 13
+Follow the road to Dar-Ulgorn and then south. There his tent stands. But in order for him to receive you, you must tell him a special phrase. Lean closer, I'll say it in a whisper....

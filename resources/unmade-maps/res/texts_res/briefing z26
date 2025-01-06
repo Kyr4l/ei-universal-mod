@@ -1,0 +1,15 @@
+О бумаге, найденной в покинутом лагере
+#DESC /!
+#show Witch 3
+#show CodedHadaganNote 5
+#show Hero 5
+#ANIMATION 45
+#CAMERA 2
+#phrase Hero  1
+Смотри, я нашел вот такую бумагу. Тебе знакомы эти письмена?
+#hide CodedHadaganNote
+#show CodedHadaganNote 4
+#ANIMATION 70
+#CAMERA 9
+#phrase Witch  2
+Знакомы-то знакомы... Только не радуйся раньше времени. Я не сказала, что знаю их. Я видела такие записи когда-то у старосты.

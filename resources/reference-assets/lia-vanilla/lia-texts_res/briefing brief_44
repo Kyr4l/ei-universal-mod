@@ -1,0 +1,20 @@
+About the trial
+#DESC
+#show Hero2
+#show Glav
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 1
+Brother Khatul, please tell me: what trial awaits me?
+#ANIMATION 44
+#CAMERA 5
+#phrase Glav 2
+Of course, stranger. Recently there was an important incident. A chaser was carrying the imperial signet ring to the emperor's governor, but succumbed to an attack by a cyclops that lives nearby. And so the ring fell into his paws. If you manage to find this ring, you'll be doing The Last Hideout a huge favor and showing us that we can trust you.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero2 3
+And aren't you afraid I'll take the ring and hide with it? Or what if I'm a spy and I bring it back to its owner?
+#ANIMATION 62
+#CAMERA 5
+#phrase Glav 4
+He, he, he! No, I'm not afraid of that. If you need shelter then you will come back to us, you have no choice at all. And if, having seized the signet ring, you go with it to the authorities, you will face a terrible death for daring to touch it, even more so if you are a faithful subject of Khadagan. Now go and return with the ring.

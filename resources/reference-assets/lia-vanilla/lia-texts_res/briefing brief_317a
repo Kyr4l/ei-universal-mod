@@ -1,0 +1,28 @@
+About the duel
+#DESC 
+#show Hero 
+#show merc2 
+#animation 70
+#CAMERA 11
+#phrase merc2 1
+Kir, my love, are you okay? I was so worried! You were gone so suddenly!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 2
+I needed to teach someone a lesson. An arrogant youngster needed a lesson in politeness.
+#animation 64
+#CAMERA 11
+#phrase merc2 3
+Kir, how noble that is! You don't even know how much that means to me! I've always suffered so much because of you not paying attention to me at all. But now it's even me being grateful to Dartas. By standing up for me, you have shown that I am not indifferent to you!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 4
+Kiel, it is obvious that you are not indifferent to me. You are my good companion and I value your friendship very much. But why are you here? I was fighting with Dartas to make him understand that he was dealing with a real man. That boy insulted me by calling me a coward and... whatever.
+#animation 73
+#CAMERA 11
+#phrase merc2 5
+Ah. Well, yes. A coward is such a terrible insult. Especially to a real man. Kiel, you're so dumb! You're imagining things!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 6
+Kiel, what's wrong again? Oh great powers, I'll never understand you!

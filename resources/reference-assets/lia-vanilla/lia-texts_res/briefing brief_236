@@ -1,0 +1,41 @@
+About the crime that was committed
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase His 1
+The Governor has communicated to me that you will be proving that Jam-Akara did not kill Brissen. Do you really believe in his innocence?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Of course. He claims he was in the mine at the time.
+#ANIMATION 62
+#CAMERA 11
+#phrase His 3
+And you believe him more. This charlatan and self-deluded man will say more than that!
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 4
+What do you dislike him so much for? They say you didn't like Brissen either.
+#ANIMATION 11
+#CAMERA 11
+#phrase His 5
+Let me interest you: who is spreading such rumors about me?
+#ANIMATION 44
+#CAMERA 11
+#phrase His 6
+So let it be known to you that I know who was the most connected of all to the situation that occurred. And he had the means to do it!
+#ANIMATION 62
+#CAMERA 11
+#phrase His 7
+Recently, Karansul came to me, and asked me to teach him how to use protection spells. Can you imagine that? He had spent so many years trading magic, not even interested in how it worked! And here suddenly his curiosity was awakened.
+#ANIMATION 62
+#CAMERA 11
+#phrase His 8
+Suspiciously! And I started investigating what he was up to. And it turned out that he was going somewhere regularly in the woods! What for? He must have hired a robber to kill that Brissen!
+#ANIMATION 9
+#CAMERA 11
+#phrase His 9
+And in the end, everyone is well aware of this trader's animosity towards the slain man. Oh - and draw your own conclusions!

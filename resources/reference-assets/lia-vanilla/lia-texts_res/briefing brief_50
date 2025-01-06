@@ -1,0 +1,33 @@
+On the impact of the assault
+#DESC 
+#show Hero2
+#show Glav
+#show merc2
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 1
+It was quite a hustle and bustle. How surprised these kids were when instead of squealing rats they were met by our arrows and spears!
+#ANIMATION 62
+#CAMERA 5
+#phrase Glav 2
+You're too young and rash in your judgments. You are like a running antelope which, escaping from a hunter, runs straight into the lair of a tiger. Soon it will be known that the entire research team has disappeared, and the search will begin. Then sooner or later they will find our hideout.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 3
+You might want to think about finding another place for the Brotherhood?
+#ANIMATION 44
+#CAMERA 5
+#phrase Glav 4
+No, I have another idea. If they find, let's say, a few robalogle bodies at the battle site, then everyone will come to the conclusion that the squad died in the fight against the rulers of the underworld. And the investigation will be over!
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 5
+Khatulu, did you just decide to send us after these bodies? I knew it! I knew from the very beginning!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 6
+Kiel, if you don't want to come with me.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 7
+No more, I'm not going to let an adventure like this pass me by. Let's go, there's no time to waste.

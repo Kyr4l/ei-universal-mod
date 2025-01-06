@@ -1,0 +1,20 @@
+About the great assault
+#DESC 
+#show Hero 
+#show Baron
+#ANIMATION 14
+#CAMERA 11
+#phrase Baron 1
+Well, at last! We've long been ready to begin the assault! The soldiers have already settled into their seats, they're even raring to fight!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+Yes, it's about time. Thanks to Uncle Council's work, the sentries on the walls and at the gates will be pulled back, and you'll be able to easily infiltrate the fortress. And there you will find work for your warriors.
+#ANIMATION 9
+#CAMERA 11
+#phrase Baron 3
+We will begin immediately! I hope you'll join the attack? A pair of these valiant wedges will be a great help to us in battle.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+We are ready to serve, Baron!

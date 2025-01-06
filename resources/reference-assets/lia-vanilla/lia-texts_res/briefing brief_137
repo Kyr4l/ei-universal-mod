@@ -1,0 +1,37 @@
+About fixing the Magic Bullet
+#DESC 
+#show Hero 
+#show Daughter
+#show merc2
+#ANIMATION 66
+#CAMERA 11
+#phrase Daughter 1
+Not that I want to pry, but Grandma sure forgot that the ball broke down after use, and all its magical power flew out of it.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 2
+Not that one! So what to do now? We're not gonna bring Tka-Rick a broken ball! Maybe we should ask a witch.
+#ANIMATION 11
+#CAMERA 11
+#phrase Daughter 3
+What about me? You think I can't know?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 4
+Oh, and you know something? Can you tell us how to fix a bullet?
+#ANIMATION 70
+#CAMERA 11
+#phrase Daughter 5
+No. But there's a ruined observatory across the lake in the Middle Peaks where you can find lots of useful things. I would go there if I were you.
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 6
+And you don't want to help us? While we'd be going for the bullet, you'd be running to the observatory.
+#ANIMATION 9
+#CAMERA 11
+#phrase Daughter 7
+And yet what, I have so many things on my mind! And anyway, the road there is locked with a gate, and I don't have the key to it. And it's dangerous there, they say mountain lizards have nested there.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 8
+It's nothing, I think the key can go ask Babur to do it, and we can deal with the lizards too. Thank you Airy, you are very wise!

@@ -1,0 +1,37 @@
+On innocence
+#DESC
+#show Hero
+#show Trapper
+#show merc2
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 1
+No no, I just can't believe it! As soon as we found a man willing to help us, he was immediately behind bars. More bad luck I've never seen in my life!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+Kiel, don't worry, we're going to save this magician.
+#ANIMATION 73
+#CAMERA 12
+#phrase merc2 3
+HOW? We will make our way to the prison at night under the cover of darkness! Or shall we storm the fortress by day? And destroy it not by force but by our brazen thrust?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 4
+Stop being so hysterical! We'll free it by coming up with a solution!
+#ANIMATION 62
+#CAMERA 11
+#phrase Trapper 5
+You said it right, boy! You must now find Brissen's murderer, poor man. That bastard should be punished! I'd like to look him straight in the eye before they hang him.
+#ANIMATION 59
+#CAMERA 11
+#phrase Trapper 6
+Listen to old Sver, sonny. It's imperative that you speak with Gray Leaf. The forest is his home, and Brissen was just killed in the forest.
+#ANIMATION 44
+#CAMERA 11
+#phrase Trapper 7
+And one still has to think: who was benefited by his death? And also the removal of the magician was to the benefit of many.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 8
+You're right. And the magician and Brissen bothered a lot of people. And most of all, Karansul and Hys. We'll start our investigation with them.

@@ -1,0 +1,32 @@
+Get to know Tka-Rick
+#DESC 
+#show Hero 
+#show Rick
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+You! You're Joon! Oh, this is the happiest moment of my life! How I searched for so long for other Joons in this world, and I met a real magician! I am Kir-Achit-La, and I am also a Joon.
+#ANIMATION 6
+#CAMERA 11
+#phrase Rick 2
+Yes, I too have waited a long time for you, Kir. That's what your companion calls you, right? You can call me Tka-Rick. I am the Great Mage of Gipath. Unfortunately I am chained to this earth and could not help you on Suslanger.
+#ANIMATION 6
+#CAMERA 11
+#phrase Rick 3
+And on Gipath you reached me earlier than I had time to come to you for help in your search. With that you proved that you are a Joon not only in appearance but in spirit.
+#ANIMATION 6
+#CAMERA 4
+#phrase Rick 4
+I am happy to see you here no less than you are to see me. For too long I have lived here in solitude, nurturing the hope that someday a better time will come, and the ancient Joon race will once again be reborn and regain its power.
+#ANIMATION 6
+#CAMERA 4
+#phrase Rick 5
+That time has come. That Joon you followed from Suslanger to Gipath turned out to be not the only one in the world. There is also a girl, the beautiful Lu-a-Jalla. Now these two youngsters are the sprouts of a resurgent race, and they travel the world gaining experience and skill.
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 6
+Great Tka-Rick, I need to learn so many things! I have lived so long in ignorance about this! But yet I don't have time for long lectures either.
+#ANIMATION 5
+#CAMERA 11
+#phrase Rick 7
+You're right, you got tired of the road. Get some rest first and then tell me your story.

@@ -1,0 +1,25 @@
+Tree of life
+#DESC 
+#show Hero
+#Show Haburu
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 1
+Haburu, I managed to guess your riddle and guessed to crawl under the fence.
+#CAMERA 11
+#phrase Haburu 2
+He who can hear should be able to listen too.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 3
+Well, that's how it goes. Otherwise, we wouldn't understand each other.
+#CAMERA 11
+#phrase Haburu 4
+It happens, but not always. You can hear but not understand. You can freeze next to fire, die of thirst next to water and starve next to food.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 5
+Now I don't understand you at all.
+#CAMERA 11
+#phrase Haburu 6
+Let me explain. There is a tree in the mountains where many people put on iron armor. It grows next to water, but it does not get a drop. People have tamed the water and located it in a well. But people do not think about the living tree which also needs water, like they need food.

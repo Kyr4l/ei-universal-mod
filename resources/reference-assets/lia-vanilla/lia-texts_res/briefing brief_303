@@ -1,0 +1,49 @@
+Get to know the artisan
+#DESC 
+#show Hero 
+#show Stark
+#show merc2 
+#ANIMATION 5
+#CAMERA 11
+#phrase Stark 1
+So are you the strangers who came through the old portal?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Yeah, those are the ones. We even managed to take part in the defense of the fortress.
+#ANIMATION 9
+#CAMERA 11
+#phrase Stark 3
+Oh, the zombie attack. And by the way, I've seen it. I don't like it.
+#animation 64
+#CAMERA 12
+#phrase merc2 4
+What exactly is it that you don't like? That we defended your fortress or that zombies were attacking?
+#ANIMATION 44
+#CAMERA 11
+#phrase stark 5
+That the zombies were attacking, of course! Defenders are not expendable, and I could use some helpers. How many times have I asked the Baron to assign men to me...
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 6
+Apparently, you're a very good craftsman. I've noticed that weapons and armor are fine in warriors.
+#ANIMATION 9
+#CAMERA 11
+#phrase Stark 7
+And you still doubt that? I am the craftsman Stark! I know all the secrets and wisdom of the craft of blacksmithing, spell recipes, and the making of complex herbs! I am a very good craftsman. Ancestral!
+#animation 17
+#CAMERA 12
+#phrase merc2 8
+Well, that's some good luck for us. And will you be able to make something for us as well?
+#ANIMATION 62
+#CAMERA 11
+#phrase stark 9
+More what! Don't you think I have anything else to do? I got a whole garrison of soldiers here! And everyone needs to patch things up, sharpen things up, heal things up...
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 10
+Well, if we need anything, it's the little things.
+#ANIMATION 44
+#CAMERA 11
+#phrase Stark 11
+Little things? Little things you can. But no more! And just plain come talk. Because only come to me when you need something. And not just to stop by, ask how things are going, tell me the news...

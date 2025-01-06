@@ -1,0 +1,15 @@
+Снова взять Эйлу в команду
+#show Hero 
+#show Merc4
+#CAMERA 3
+#ANIMATION 45
+#phrase Merc4  1
+Ты все еще хочешь, чтобы я не покидала стойбища?
+#CAMERA 6
+#ANIMATION 15
+#phrase Hero  2
+Как раз наоборот. Мне здорово не хватает твоей магии!
+#CAMERA 3
+#ANIMATION 3
+#phrase Merc4  3
+Так за чем дело стало? Я готова!

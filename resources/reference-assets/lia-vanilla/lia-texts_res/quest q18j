@@ -1,0 +1,11 @@
+The Treasure of the Joons
+The wise man Tui-Len managed to open a secret cave in the valley of the Two Rivers. In this place, the Joons hid the armor of one of their heroes, and enchanted the tomb with an ancient amulet. Now the spell has been lifted, and the armor can be taken.
+#subobj 1
+Take the key
+The door to the armory room is locked. You need to find the key with which you can open the door.
+#subobj 2
+Use the key
+To open the door you need to turn on the altar in the northwest room.
+#subobj 3
+Take the treasure
+The items lie in the sarcophagus in the eastern room.

@@ -1,0 +1,12 @@
+On successful theft
+#DESC 
+#show Hero 
+#show merc8
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero 1
+It all worked out! I'm grateful to you Fieruza.
+#ANIMATION 46
+#CAMERA 0
+#phrase merc8 2
+Ha... who would have thought. And you held up pretty well too, for a newbie. Here's to you - you earned it. The whole lot. Now get out of here while I'm ahead!

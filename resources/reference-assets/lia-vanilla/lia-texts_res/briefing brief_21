@@ -1,0 +1,38 @@
+About Aunt Zara's trouble
+#DESC 
+#show Hero2 
+#show YCF
+#show merc2
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 1
+Aunt Zaro, I hear you're having some trouble.
+#ANIMATION 70
+#CAMERA 11
+#phrase YCF 2
+What, the rumors have reached you too? And what am I supposed to do now? My late husband was right!
+#ANIMATION 12
+#CAMERA 11
+#phrase YCF 3
+He always said: 'Zara, sunshine, everything in life comes with a price! And what do you think, ot why am I crying!
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 4
+Well, what happened?
+#ANIMATION 66
+#CAMERA 11
+#phrase YCF 5
+Kiel, remember when you bought that miracle powder for your mom from me? You were still surprised that they don't sell it anywhere else. And right! It's a forbidden commodity after all! So now what? Someone threatens to tell an officer everything if I don't pay him!
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 6
+Stinking jackals! How they laugh!
+#show note01 5
+#CAMERA 11
+#ANIMATION 6
+#phrase YCF 7
+Girl, it's not appropriate for you to express yourself like that. I will pay, I have already prepared a letter for these wicked men. They told me to appoint a meeting place to hand over the money. That's where you have to bring it.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero2 8
+No, it might be dangerous. We'll reference the letter ourselves.

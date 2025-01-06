@@ -1,0 +1,11 @@
+Buy Thieving Spade (1150)
+show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+Give me that pic.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+Come back when you have the money for it. 

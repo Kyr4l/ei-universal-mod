@@ -1,0 +1,41 @@
+About the mag for The Last Hideout
+#DESC
+#show Hero2
+#show Glav
+#ANIMATION 17
+#CAMERA 5
+#phrase Hero2 1
+Brother Khatul, glad to see you again! I hope the Brotherhood has already recovered from the battle.
+#ANIMATION 62
+#CAMERA 5
+#phrase Glav 2
+Yes Brother Kir, the situation has improved and there is a renewed sense of confidence and duty in the people.
+#ANIMATION 12
+#CAMERA 5
+#phrase Hero2 3
+From what I remember, you lost your mage in that battle. Who will replace him now?
+#ANIMATION 17
+#CAMERA 5
+#phrase Glav 4
+So far we are lamenting the loss of brother Keb. We will miss him very much, especially since there is no one to replace him now.
+#ANIMATION 0
+#NOLIPS
+#CAMERA 0
+#phrase Mozgodier 5
+The last of the Joons! The Wisdom of Silence has come to me, and now I am ready to answer your question. Come. I will be waiting for you.
+#ANIMATION 5
+#CAMERA 5
+#phrase Hero2 6
+What did you say?
+#ANIMATION 12
+#CAMERA 5
+#phrase Glav 7
+That now there is no one to replace him.
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero2 8
+Yes, yes, I remember. And do you know a necromancer named Kehel? I think your help is needed now. Find him and offer him shelter, he will probably be very grateful to you.
+#ANIMATION 15
+#CAMERA 5
+#phrase Glav 9
+Yes, I know who Kehel is. We will be advised if he joins our Brotherhood. Thank you for that advice, Brother Kir.

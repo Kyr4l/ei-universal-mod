@@ -1,0 +1,40 @@
+On the fate of the necromancer
+#DESC 
+#show Hero 
+#show Nekro
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 1
+Jamanin, you got lucky. The magic herbs actually worked on your dead men through the graveyard soil and calmed them down. But if your advice turned out to be useless, things would not be rosy with you.
+#ANIMATION 27
+#CAMERA 11
+#phrase Nekro 2
+Don't be angry with me. Haven't I proven myself right yet?
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 3
+You don't seem like much of a necromancer to me... you're so pathetic. I just can't believe you managed to reanimate that many undead.
+#ANIMATION 62
+#CAMERA 11
+#phrase Nekro 4
+I'm a theorist, not a practitioner like that zealot Firez, but that doesn't mean I'm weak!
+#ANIMATION 9
+#CAMERA 11
+#phrase Nekro 5
+And the brightest lord was good enough to let me continue practicing!
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero 6
+That's something not like the Baron. You didn't by any chance enchant him?
+#ANIMATION 9
+#CAMERA 11
+#phrase Nekro 7
+Your suspicions are off. I just managed to show Mr. Baron that astral magic, of which necromancy is partly composed, not only summons death but vice versa! Though I lack practice, I can already create protective and healing spells.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 8
+I have never yet met a single necromancer in the service of Cania. You are certainly the first. Your let and weak abilities but extensive knowledge could indeed come in handy.
+#ANIMATION 44
+#CAMERA 11
+#phrase Nekro 9
+I am happy to have the opportunity to use them and serve the Baron. I have realized one simple truth: there is little use in knowing the dead. But much from practically changing your habits.

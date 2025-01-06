@@ -1,0 +1,36 @@
+About the Rindeil problem
+#DESC 
+#show Hero2 
+#show Elder
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero2 1
+Dear Rindeil, I would like to thank you again for your kindness!
+#ANIMATION 58
+#CAMERA 0
+#phrase Elder 2
+Oh my boy, that's the way I am, you don't have to. We men of science should help each other. But since you're here, perhaps you won't refuse me a favor?
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 3
+Whatever you want, esteemed Rindeil.
+#ANIMATION 59
+#CAMERA 0
+#phrase Elder 4
+And I didn't doubt it, my boy. The point is, I have been contacted by one very influential man in our circles, and he has offered a deal: he is giving me a magnificent specimen for my collection, and in return he asks for a sample of the meteroite that was recently delivered from the Useless Lands. I simply cannot pass up such an opportunity!
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero2 5
+Okay, I'd be honored to bring something like this. Just where to look for it?
+#ANIMATION 57
+#CAMERA 0
+#phrase Elder 6
+Don't worry, I've already thought of everything. I learned that the protection of the meteorite is assigned to the commander of the city guard. To start, get through to their headquarters and overhear what they're talking about there.
+#ANIMATION 15
+#CAMERA 0
+#phrase Hero2 7
+Exactly! That's where I can find out where they store the samples they brought in!
+#ANIMATION 17
+#CAMERA 0
+#phrase Elder 8
+Go then, my boy, I will wait for you impatiently.

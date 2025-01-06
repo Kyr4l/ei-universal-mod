@@ -1,0 +1,46 @@
+Get to know the Baron's son
+#DESC 
+#show Hero 
+#show BSon
+#show merc2 
+#ANIMATION 11
+#CAMERA 11
+#phrase BSon 1
+You guys had a lovely fight with those pigs! I can't stand them, so scary! You guys made my daddy happy!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+You seem to be the Baron's son. We're pleased to meet you.
+#ANIMATION 9
+#CAMERA 11
+#phrase BSon 3
+And how pleased I am to meet you! I am Dartas, the future host of Jygran. Don't forget this!!!
+#animation 11
+#CAMERA 12
+#phrase merc2 4
+Well even if you try you still won't forget it seeing your commanding gaze! ...
+#ANIMATION 9
+#CAMERA 11
+#phrase BSon 5
+Ooh, the kitty is showing her claws! But that's okay, I like it that way.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 6
+Dartas, tell me: do you often get attacked by the undead?
+#ANIMATION 44
+#CAMERA 11
+#phrase BSon 7
+A... I don't know. I don't care. I'm not some kind of soldier to fight zombies. And the walls are high, they can't get through!
+#animation 64
+#CAMERA 12
+#phrase merc2 8
+Well, there you have it, how to be economical! Just so you don't suddenly find yourself without something to hold on to when it's your turn.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 9
+O great forces, again Kiel shows hostility!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 10
+We've enjoyed getting to know you, Dartas. We will chat some day, but now we must go.

@@ -1,0 +1,43 @@
+About strange accidents
+#DESC 
+#show Hero 
+#show His
+#show merc2
+#ANIMATION 12
+#CAMERA 11
+#phrase His 1
+How did the audience with the governor go?
+#ANIMATION 70
+#CAMERA 12
+#phrase merc2 2
+Just great. First he scolded us for not arriving sooner, then he started courting me, and finally he forced a gift on us for him. All in all, we fell out wandering into the woods people for some dang arrow!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 3
+Kiel, you're wrong. The Governor has shown us great honor, we should be grateful to him.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 4
+Let's hope after these words from Kiel Hys doesn't run to tell the governor about everything. Then we wouldn't be out of trouble.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 5
+Valrasian is, it turns out, a lover of extraordinary and expensive things.
+#ANIMATION 62
+#CAMERA 11
+#phrase His 6
+Yes, there has been such a fad among the Valrasians recently - to collect rare and cosseted items. Our governor regularly directs gifts to the capital.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 7
+Ah yes! And then there are caravans on your roads with these precious trinkets.
+#ANIMATION 44
+#CAMERA 11
+#phrase His 8
+As a rule, it's the combined forces of the city garrison and Karansul security that protect the caravans. Admittedly, last time they came to do without Karansul's services.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 9
+Who ordered the second line of security to be taken off the caravan? One of the two of them, Hys, or Karansul.

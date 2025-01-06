@@ -1,0 +1,8 @@
+Samples from Gipath
+In the packet of orders for the expedition, it says that you must give the messenger stone samples from the Dead City mines. If traces of precious stones are found in these ores, a new expedition will be sent to Gipath. This must not happen, so the samples must be obtained in another mine, where there must be no precious stones.
+#subobj 1
+Find mine
+The mine from which you can extract poor ore samples for your command pack is located in the west of Distant Peaks.
+#subobj 2
+Take the samples
+There are definitely no gemstones in the samples from this mine.

@@ -1,0 +1,34 @@
+About the rescued village and the women's allotment for Kiel
+#DESC 
+#show Hero 
+#show Baron
+#show merc2 
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+Sir Baron! Your order has been fulfilled. The village has been freed from the wandering corpses attacking it.
+#ANIMATION 9
+#CAMERA 11
+#phrase Baron 2
+Well done! I appreciate such zeal. But why are you dragging the girl along? Enough of clinging to mommy's skirt! Be a man!
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 3
+War is not a woman's business. Blood is shed there, many suffer. It is not befitting for women to see this. Their place is at home, in the kitchen. Oh, and that's where we'll send your friend. Also, girl, go to the cooks, they'll get you a job fast.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 4
+Well, it's about to be... >_<
+#animation 72
+#CAMERA 12
+#phrase merc2 5
+WHAT?! Kiel to the kitchen?! War is not a woman's business?! After all, I against every soldier of yours, I'm ready to fight Mr. Baron!!! You can start making stakes after which my strike will beg for mercy! Even the Great Mage Gipath couldn't handle me! Into the kitchen! ...
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 6
+Mr. Baron, allow me to interject. It would be better to let Kiel accompany me. Me and her make a beautiful team together.
+#ANIMATION 6
+#CAMERA 11
+#phrase Baron 7
+Well, I never knew how to argue with women. It would take more than that for her to really chop up my fighter.... And there are enough hands in the kitchen, they can do without her.

@@ -1,0 +1,12 @@
+Moi machine à servir
+#show Hero
+#show Golem
+#CAMERA 3 30 8 2
+#phrase Golem  1
+Moi Golem. Moi machine à servir. Moi servir le Grand mage.
+#phrase Golem  2
+Si lui dire moi tuer toi, moi tuer toi. Si lui dire moi mourir pour toi, moi mourir pour toi.
+#phrase Golem  3
+Le Grand mage dire moi servir toi. Moi servir toi.
+#phrase Golem  4
+Moi Golem. Moi machine à servir. Prêt à travailler.

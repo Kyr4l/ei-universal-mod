@@ -1,0 +1,25 @@
+Get to know Sahilla
+#DESC 
+#show Hero2 
+#show merc10
+#show merc7
+#ANIMATION 70
+#CAMERA 5
+#phrase merc10 1
+Sahil, my poor thing, how I was worried about you! Kir! You saved her!
+#ANIMATION 9
+#CAMERA 5
+#phrase Hero2 2
+Well, let's just say I got there just in time. Sahilla wouldn't have survived out there on her own for long. Glad I helped save another pretty girl's life.
+#ANIMATION 64
+#CAMERA 5
+#phrase merc7 3
+Oh boy, I will repay you, oh how I will repay you.... oh!
+#ANIMATION 46
+#CAMERA 5
+#phrase merc10 4
+Silence Sahilla, you are too weak yet. For the time being you need help. Kir, how about helping us again? You can find healing herbs at necromancers, in the desert they have a composition.
+#ANIMATION 11
+#CAMERA 5
+#phrase Hero2 5
+Not another word! Once I've helped Sahilla avoid death, I'll help get her back on her feet too. While Sahilla is resting, I will get the herbs.

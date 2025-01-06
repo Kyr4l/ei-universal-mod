@@ -1,0 +1,28 @@
+On living a peaceful life
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 1
+That's it. The most important moment has arrived. I'm about to look my enemy straight in the eye!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+You have helped me greatly, Uncle Council. Without your help, neither I nor the Baron would have been able to get this far.
+#ANIMATION 46
+#CAMERA 11
+#phrase Doctor 3
+But what the hell! I'm the one who should be thanking you. It was fun. And most importantly, the khadagans didn't guess anything! Eh, too bad it'll all be over soon.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+It's nothing, for that a peaceful, peaceful life will begin. You'll be able to settle down in your valley and have a house with a garden.
+#ANIMATION 11
+#CAMERA 11
+#phrase Doctor 5
+Don't forget that it's all with a loving wife and a pack of kids! Yes, I'm sure the quiet life will appeal to me. Eh, boy, what would we do without you.... Come on, get your candy from me.
+#ANIMATION 46
+#CAMERA 10
+#phrase Hero 6
+Come on. I should finally taste your excellent candy.

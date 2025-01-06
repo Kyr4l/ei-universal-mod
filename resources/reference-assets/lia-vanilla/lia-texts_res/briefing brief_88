@@ -1,0 +1,41 @@
+About the first task
+#DESC
+#show Hero2
+#show Sergant
+#show merc2
+#ANIMATION 11
+#CAMERA 11
+#phrase Sergant 1
+You again! I was hoping such a talker wouldn't survive in Death Canyon! You sure have puzzled your enemies to death, huh? Ha, ha, ha, ha, ha, ha!
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero2 2
+But no, Sergeant! I fought with all my might just to become a soldier in the great army of the Khadagan Empire! Ever since I was a child, I dreamed of becoming a soldier! It's a great honor for me! I... for my friend too!
+#ANIMATION 62
+#CAMERA 11
+#phrase Sergant 3
+Son, how pleasant to hear such words! I have been watching you and your friend. You have indeed fought well. And I have a task for just such young but effective soldiers.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero2 4
+At your command, Sergeant!
+#ANIMATION 44
+#CAMERA 11
+#phrase Sergant 5
+You have to go to the Useless Lands with orders for the head of the expedition. They must be having a picnic there, because they don't send reports or messengers. Give them the orders, wait for them to write back and give the answer to the messenger who will follow you in a while!
+#ANIMATION 44
+#CAMERA 11
+#phrase Sergant 6
+And also: go to the depot, there they will issue you new uniforms. Why destroy your private clothing on duty? And leave your items here. And don't worry, nothing will happen to them. I'll personally see to it.
+#ANIMATION 30
+#CAMERA 12
+#phrase merc2 7
+Oh well, since we're going to leave our stuff here anyway, Kiel would advise Kira to sell anything unnecessary. Money even in the Useless Lands is money!
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero2 8
+We're happy to obey orders, Sergeant!
+#ANIMATION 11
+#CAMERA 11
+#phrase Sergant 9
+When you are ready to leave approach me, I will hand you the package and permission to use the portal.

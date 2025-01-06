@@ -1,0 +1,11 @@
+Buy The Forged Baton (170)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+I think I'll take this baton.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+What, you decided to shake the dust off the carpet?

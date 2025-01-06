@@ -1,0 +1,29 @@
+On the innocence of the magician
+#DESC 
+#show Hero 
+#show KMage
+#show merc2
+#ANIMATION 43
+#CAMERA 11
+#phrase KMage 1
+It's just terrible - to think that I could have killed my old friend! The ignorance of the local authorities simply makes me furious!
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 2
+Mr. Mage, calm down. Emotions won't get you anywhere. We believe in your innocence and want to prove it. But you should help us.
+#ANIMATION 44
+#CAMERA 11
+#phrase KMage 3
+Yes, you are right girl. I can definitely state that I was in the mines all day, and showed up at the crime scene too late to fix anything.
+#ANIMATION 59
+#CAMERA 11
+#phrase KMage 4
+In the morning I left a message for Brissen, writing where and when we would meet to then head together to his forest people friends for a visit. But I came too late.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+And how did you go to the mine if you didn't have permission?
+#ANIMATION 62
+#CAMERA 11
+#phrase KMage 6
+I learned a long time ago to get around without the little formalities when I really need to. One good soldier lets me through to the mine just like that.

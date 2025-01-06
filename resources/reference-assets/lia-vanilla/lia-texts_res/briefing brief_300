@@ -1,0 +1,38 @@
+Unexpected visit
+#DESC + automatically 
+#show Hero 
+#show Baron
+#show merc2 
+#ANIMATION 62
+#CAMERA 11
+#phrase Baron 1
+Who are you guys! Be kind enough to explain your appearance, or I will call the guard. The portal you just came out of never worked. I look forward to your explanations, what does it all mean?
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 2
+Damn! Did I make a mistake? This place is totally not like the Jygran I remember.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+Sir, we are surprised no less than you. We intended to get to a completely different place.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+This abandoned portal was shown to us by a mage, and we decided to test his guess. He guessed that the portal would take us to Jygran. But apparently we got into one of the provinces of Cania.
+#ANIMATION 59
+#CAMERA 11
+#phrase Baron 5
+You're both right, you and your mage. This fortress is the last refuge of the Canian empire on Jygran. For many generations my family has maintained-.
+#ANIMATION 9
+#CAMERA 11
+#phrase Soldier 6
+The dead are attacking! To arms!
+#animation 11
+#CAMERA 12
+#phrase merc2 7
+Ah, we're just in time. Looks like we're about to get into a wedding rut here.
+#ANIMATION 14
+#CAMERA 11
+#phrase baron 8
+If you wish to fight, I will gladly accept you into the soldiers of the garrison. Your weapons will serve a good cause. If not, step aside and do not interfere, or else I will recommend that you be thrown into prison. We will continue our conversation after the attack. Heh, if we survive it.

@@ -1,0 +1,41 @@
+About new knowledge
+#DESC 
+#show Hero 
+#show Stark
+#show merc2 
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Look: I bring you a new alloy. Try it, make something out of it. You'll find out!
+#ANIMATION 11
+#CAMERA 11
+#phrase Stark 2
+Well, what's so special about it? Stop like stop.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 3
+Make a sword out of it. And give it to an experienced warrior, he'll notice the difference right away!
+#ANIMATION 30
+#CAMERA 11
+#phrase Stark 4
+Hm, interesting. If you're so sure it's special... All right, I'll do as you say. But you should keep in mind that you haven't convinced me yet, I'm just... curious.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 5
+What are you so afraid of? After all, on the contrary, you should be happy that we will have the opportunity to beat the enemy with double the force!
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 6
+And I have you figured out, craftsman Stark! If you think Kira's alloy is better, you've confirmed your own ignorance.
+#ANIMATION 62
+#CAMERA 11
+#phrase Stark 7
+You're right girl. I am a family craftsman after all! The knowledge and secrets of our craft are passed down from father to son. And suddenly I don't know something...
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 8
+Well, good! That means you'll be able to enrich your family's knowledge. And you'll pass on to your son something your father didn't know.
+#ANIMATION 30
+#CAMERA 11
+#phrase Stark 9
+I didn't look at it that way. All right, get that alloy of yours over here. We'll see what it's good for soon!

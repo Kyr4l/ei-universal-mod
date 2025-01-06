@@ -1,0 +1,42 @@
+On the benefit of closure [coming out of Ingos].
+#DESC 
+#show Hero 
+#show KMage
+#show Huber
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 1
+Dear Jam-Akaro, I have great news! I found the real Birssen killer, and now you're free!
+#ANIMATION 15
+#CAMERA 12
+#phrase Huber 2
+Yes, I have come to agree with this young man's evidence. I am compelled to express my deepest apologies for any possible inconvenience.
+#ANIMATION 6
+#CAMERA 11
+#phrase KMage 3
+Inconveniences? And what are you talking about? On the contrary, I'm the one who should be thanking you, Governor Valrasian!
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 4
+Thank you? For what? After all, they threw you in jail like some criminal!
+#ANIMATION 6
+#CAMERA 11
+#phrase KMage 5
+No, Mr. Governor was good enough to let me use his library, and it's just amazing!
+#ANIMATION 30
+#NOLIPS
+#CAMERA 12
+#phrase Huber 6
+Ah yes! You'd have to invite someone over to estimate its value. Could it be that I, too contemptuously refer to these old books? Exactly! Today I'm going to move all the papers from the basement to the attic!
+#ANIMATION 44
+#CAMERA 11
+#phrase KMage 7
+In the old reports, the first ones made when this province was first surveyed, it says that here was a road to another land. Having compared this with my own data and historical maps, I realized that the artifact we were looking for and this road were one and the same.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 8
+You mean the artifact is just a portal to another land?
+#ANIMATION 62
+#CAMERA 11
+#phrase KMage 9
+Not quite. It's all hard to explain because he literally doesn't exist. Until I stumbled upon the old records it didn't feel like there was another passage located here. But about that later. In the meantime, I want to wash up and eat properly. I'll meet you at the lodge.

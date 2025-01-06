@@ -1,0 +1,40 @@
+About a certain shelter
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 14
+#CAMERA 5
+#phrase Hero 1
+Kiel, you're such a badass! I can't believe we're free again! You know, I've never met a girl so resourceful, so smart-...
+#ANIMATION 9
+#CAMERA 5
+#phrase merc2 2
+Yeah, yeah, I know. But still, it's nice to hear something like that again.
+#ANIMATION 62
+#CAMERA 2
+#phrase Hero 3
+I'm so grateful to you. So that you don't know how! You saved not only me, but also the hope of saving my whole family!
+#ANIMATION 66
+#CAMERA 3
+#phrase merc2 4
+This one... you're obviously a little out of sorts with your emotions. It's still too early to be happy, you still have to think about where to hide now. Hm... aren't you afraid of spiders and such, generally... bugs?
+#ANIMATION 11
+#CAMERA 2
+#phrase Hero 5
+Where do you think spiders come from?
+#ANIMATION 6
+#CAMERA 3
+#phrase merc2 6
+Well... because if you're afraid of those nice, hairy, eight-legged creatures, then I can't bring myself to visit my friends at Rindeil's mansion.
+#ANIMATION 9
+#CAMERA 2
+#phrase Hero 7
+No, come on, I'm not afraid of any spiders. And when I was a kid I even read the Great Ziefius' treatise 'On Perfection with Eight Legs'...
+#ANIMATION 64
+#CAMERA 3
+#phrase merc2 8
+Well, then I'll rest assured about you. You'll at least have something to talk about with Rindeil, I think, and because of that he'll be delighted with you because he's not interested in anything else. He owns the estate, but Karim manages everything there. Anyway, you'll see everything for yourself.
+#ANIMATION 71
+#CAMERA 5
+#phrase merc2 9
+And I also want to ask you one more favor. Kiel is a proud girl, and she doesn't like to admit her failures. Also, at the mansion, try not to talk about the fact that I got into the slave pen next to the Portal. And especially that sly Fieruz. Remember - I trusted you.

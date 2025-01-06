@@ -1,0 +1,4 @@
+Aim at left leg
+Your character will aim at the enemy's left leg when 
+attacking. When the leg's "health" reaches 0, the enemy 
+will move much slower.

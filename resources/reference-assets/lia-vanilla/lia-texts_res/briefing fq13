@@ -1,0 +1,26 @@
+One last chat with Ulka ( )
+#DESC 
+#show Hero
+#show Spletnica
+#show AmbushKey04 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+Ulka, what's that thing around your neck like that? A key or something? I haven't seen that on you before.
+#ANIMATION 66
+#CAMERA 0
+#phrase Spletnica 2
+And I don't know. I found it somewhere in the mountains. It seemed to me that this is a magic object, so I decided: let it drive away evil forces from me, and maybe it can scare away lizards! But it is a burden for me, for it pulls my neck so terribly, brings me closer to the ground.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 3
+I think I saw a lock somewhere that opens with this key.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+Sell me that key. It's no use to you, and I've still got a long way to go, so maybe it'll come in handy somewhere.
+#ANIMATION 9
+#CAMERA 11
+#phrase Spletnica 5
+Why not sell? I'll sell, of course.

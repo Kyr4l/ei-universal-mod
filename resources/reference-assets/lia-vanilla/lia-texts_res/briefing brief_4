@@ -1,0 +1,36 @@
+About Kiel's plans
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 1
+Kiel, so you were talking about running away? I want to get out of here as soon as possible.
+#ANIMATION 63
+#CAMERA 11
+#phrase merc2 2
+Well, you've finally figured out that the only way out of here is to run! Hang on Kiel, I won't let you die!
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 3
+Yeah, I figured you were pretty smart. So what's your plan?
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 4
+Yesterday I managed to overhear a conversation between officers: it turns out that they have a map of the catacombs, with the help of which you can get to the other side of the hills. And from there it's a stone's throw to town! All in all, it's a breeze!
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+Oh, easy... all we have to do is steal this map from the officer and get to the catacombs by bypassing the guards. But first, we need to get out of this enclosure.
+#ANIMATION 30
+#CAMERA 11
+#phrase merc2 6
+Out of the homestead? A... that's what I need you for.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 7
+Look! What kind of light is that? Have you ever seen one?
+#ANIMATION 6
+#CAMERA 11
+#phrase merc2 8
+No, and I don't burn to observe such. Just in case, stay close, I feel something bad is about to happen.

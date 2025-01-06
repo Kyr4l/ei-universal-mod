@@ -1,0 +1,29 @@
+About the secret announcement
+#DESC 
+#show Hero2 
+#show Sheriff
+#show merc2
+#ANIMATION 9
+#CAMERA 11
+#phrase Sheriff 1
+Kir, just in time! I remembered how I found out about your Joon!
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 2
+I always said you were smart! Well, tell me all about it.
+#ANIMATION 44
+#CAMERA 11
+#phrase Sheriff 3
+Well, a soldier told me about it. There's been quite a ruckus over this Joon, there's been a terrible robbery on the property he was in. I don't know who attacked him, but they told me that no one was left alive, and the dead were taken away in wheelbarrows. And Joon disappeared like a stone into water.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 4
+Kir, don't listen to this, it's just some fairy tale. What these drunken soldiers don't talk about....
+#ANIMATION 9
+#CAMERA 11
+#phrase Sheriff 5
+That's right, they don't! This is the truth! And I will find a way to prove it to you! I'll try to get an ad that talks about a robbery on the property.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero2 6
+Okay Karim, we can do that.

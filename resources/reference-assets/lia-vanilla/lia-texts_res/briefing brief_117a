@@ -1,0 +1,28 @@
+About the search for the Chosen One
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 1
+There you go, thanks to the lizard we know the way to the magician.
+#ANIMATION 6
+#CAMERA 11
+#phrase merc2 2
+When I remember that lizard, I get chills all over my skin. He was so strange.
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 3
+And I shudder to think that soon I'll meet a real magician, and possibly this Joon, and get help and support, and be able to save my family!
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 4
+I think it's too early to think about it. It remains to be seen whether that awful talking lizard has tricked you - after all, you don't know how his brain is arranged! Only when we reach the cave of this mysterious mage will we be able to enjoy ourselves, and only if he decides to talk to us at all.
+#ANIMATION 9
+#CAMERA 0
+#phrase Hero 5
+Come on, you ruined the whole mood! Kiel, how can you do that! At a time like this!
+#ANIMATION 71
+#CAMERA 11
+#phrase merc2 6
+No offense, Kir. I'm just afraid that when our adventure is over I'll become expendable to you. Let's go to your magician. A good walk will make us both feel better.

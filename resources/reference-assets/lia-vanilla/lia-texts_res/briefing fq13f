@@ -1,0 +1,24 @@
+One last chat with Ulka ( )
+#DESC 
+#show Hero
+#show Spletnica
+#ANIMATION 14
+#CAMERA 11
+#phrase Spletnica 1
+Oh how good of you to come! I've heard such things! Such- !
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+Come on, don't torture me.
+#ANIMATION 64
+#CAMERA 11
+#phrase Spletnica 3
+I'll tell you, I'll tell you. Only my clothes are completely rubbed off, stupid holes have grown.
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 4
+Ulka, maybe I'll give you money for new clothes later, now I don't have any. So what news have you heard?
+#ANIMATION 6
+#CAMERA 0
+#phrase Spletnica 5
+A... that sort of thing, nothing special, just the usual girlie gossip. Come back later, when they... when there's news.

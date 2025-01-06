@@ -1,0 +1,40 @@
+About the closeness of purpose
+#DESC 
+#show Hero 
+#show merc2 
+#animation 17
+#CAMERA 11
+#phrase merc2 1
+We've bounced down the isthmus, now it's a stone's throw to Firez. Soon you'll meet your family.
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 2
+Yeah, I've thought about that before. They are out there, on the other side, somewhere in the cathedrals. And they don't know how close their freedom is! As long as they're still alive, of course...
+#animation 6
+#CAMERA 11
+#phrase merc2 3
+Don't think about it. You'll save them.
+#ANIMATION 43
+#CAMERA 10
+#phrase Hero 4
+Damn! You don't even realize how hard it is to get through to the prison! Firez protects the Joons too thoroughly. I then just miraculously managed to escape!
+#animation 5
+#CAMERA 11
+#phrase merc2 5
+Kir, I don't recognize you. You went all the way so boldly, and now you're afraid of something? That's just stupid! And also, you forgot that Kiel is with you. And while you were indulging in empty ruminations, I made a plan for you.
+#animation 44
+#CAMERA 11
+#phrase merc2 6
+At my request, Uncle Rada obtained information about the Joon captives. And listen to what he found out: Firez, fearing a Canian attack, will move all the Joons from the mountain prison to himself in a fortress!
+#animation 11
+#CAMERA 11
+#phrase merc2 7
+At what point do you think it would be best to stage an escape?
+#ANIMATION 14
+#CAMERA 10
+#phrase Hero 8
+We'll attack the caravan on the way! That's the easiest way. Kiel! You're great! When this is all over, I'm gonna kiss you! What would I do without you?! Thank you. :)
+#animation 46
+#CAMERA 11
+#phrase merc2 9
+Agreed. Just don't forget that you promised Kiel to kiss her. Because she will remember, and wait.

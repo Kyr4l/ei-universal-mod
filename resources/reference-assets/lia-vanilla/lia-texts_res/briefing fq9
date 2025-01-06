@@ -1,0 +1,41 @@
+Talk to Ulka (500)
+#DESC 
+#show Hero
+#show Spletnica
+#ANIMATION 32
+#CAMERA 11
+#phrase Spletnica 1
+Hey, Kir, come here, I'll tell you something!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+What?
+#ANIMATION 32
+#CAMERA 0
+#phrase Spletnica 3
+Do you know the Witch Esther? Because you see, she has become terribly mean and spiteful in her old age, even those she saves run away from her! Ha, ha, ha!
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 4
+I don't understand. What do you mean?
+#ANIMATION 32
+#CAMERA 11
+#phrase Spletnica 5
+Well, she once met a man in the wilderness who came to Gipath with these people from a faraway land. And the orcs slaughtered them all, and before they did, he went away, and Esther found him and took him in. And then he ran away from her! They say he has now settled in the Distant Peaks.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 6
+So what?
+#ANIMATION 32
+#CAMERA 0
+#phrase Spletnica 7
+Well, nothing, just saying. But my roof broke! I don't know what to do.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 8
+I understand. I don't have time to patch your roof, but I can help you with money.
+#ANIMATION 44
+#NOLIPS
+#CAMERA 10
+#phrase Hero 9
+If this man is a member of the expedition and is still alive, he could be dangerous. After all, he could try to return to Suslanger! That must not be allowed to happen!

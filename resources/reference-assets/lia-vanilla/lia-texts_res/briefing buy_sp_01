@@ -1,0 +1,11 @@
+Buy Wicked Spade (170)
+#show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I need this pika.
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 2
+And what do you need this junk for?

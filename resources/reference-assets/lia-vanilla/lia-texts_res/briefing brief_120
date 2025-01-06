@@ -1,0 +1,25 @@
+On inviting highwaymen
+#DESC 
+#show Hero 
+#show Loozer
+#show merc2
+#ANIMATION 9
+#CAMERA 11
+#phrase Loozer 1
+Are you the boy who saved our children from the lizards in Distant Peaks? Dobrak sent me. Our ataman said he would be glad to see you at our camp and thank you in person.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+Yes, I gladly accept his invitation.
+#ANIMATION 14
+#CAMERA 12
+#phrase merc2 3
+That's great! That's where we can start our search for the Magic Bullet. We best go there right away!
+#ANIMATION 44
+#CAMERA 11
+#phrase Loozer 4
+You will easily find your way to our camp, it is located in the north of the Foothills. Just be careful when passing by the New Village. The people there are too suspicious - they shoot first and then ask who's coming!
+#ANIMATION 11
+#CAMERA 11
+#phrase Loozer 5
+And also: if our goblin guards don't want to let you through the watchtower, then you can not deal with them, then we will hire new ones. Well, we look forward to your visit!

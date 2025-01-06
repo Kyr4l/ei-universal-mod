@@ -1,0 +1,11 @@
+Buy Old Bow (170)
+#show Hero2 
+#show NSheriff
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+I take this arc.
+#ANIMATION 11
+#CAMERA 0
+#phrase NSheriff 2
+Well finally, I thought I'd never be free of this junk.

@@ -1,0 +1,41 @@
+Recruiting Fieruz to the task
+#DESC 
+#show Hero2 
+#show merc8
+#show merc2
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 1
+Fieruzie, you helped me a lot last time, I'm still marveling at how cleverly you handled it all.
+#ANIMATION 9
+#CAMERA 11
+#phrase merc8 2
+Yeah, it's obvious right away that you need something from me again. But you didn't come here alone. And what, Kiel, can't you do it alone? Or will you finally admit that I'm the better thief?
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 3
+You don't even expose yourself to me, you don't even know yet what Kir wants to offer you.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 4
+You have to infiltrate the courtyard of a certain mansion and open a certain chest there. All in all, it's nothing difficult.
+#ANIMATION 44
+#CAMERA 11
+#phrase merc8 5
+No well, if Kiel had proposed then I would have still understood, what to do that girls foolish. But after all, only the insane would choose to enter such a guarded lineup!
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 6
+Ha, and that's exactly how I thought you'd quit! You're scared! Well, admit it! You're a coward! Ha, ha!!!
+#ANIMATION 12
+#CAMERA 11
+#phrase merc8 7
+Er, come on. Who says I quit? Eh... we just haven't worked out how much you guys are gonna pay me for this yet.
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 8
+As for paying you, no way. That's a job for a real thief. It's a matter of honor, you might say.
+#ANIMATION 15
+#CAMERA 11
+#phrase merc8 9
+Honorable, you say? All right, let it be. Only next time it will be you who helps me, because you never know how life might turn out.

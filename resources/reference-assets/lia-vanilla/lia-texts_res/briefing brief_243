@@ -1,0 +1,35 @@
+About a recent conversation with Brissen
+#DESC 
+#show Hero 
+#show MThief
+#show merc2
+#show DeadBrissen 5
+#CAMERA 10
+#ANIMATION 12
+#phrase Hero 1
+Smart guy, look at this - this is the knife I found at the murder scene. Is it familiar to you?
+#ANIMATION 5
+#CAMERA 11
+#phrase MThief 2
+An expensive trinket. I wish I'd seen it before. Do you think that's what killed Brissen?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 3
+No doubt.
+#hide DeadBrissen 5
+#ANIMATION 62
+#CAMERA 11
+#phrase MThief 4
+Poor that knight. He was a strange little fellow, of course. Always sticking his nose in where it didn't belong, sometimes imposing himself out of spite. But to kill... apparently he hurt someone very badly.
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 5
+Ha, and now I just remembered! Last time I talked to him, he told me that he had tracked down some wicked man who was stealing from his people, the ones who earn for their hard work.... and stuff like that. He generally liked to spread justice everywhere, where it was needed and where it wasn't, so it was said.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 6
+Someone is robbing someone.... well it could have been anyone. So now what, we're gonna have to look for the thief?
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 7
+I don't think it matters. The most important thing is to find the owner of this knife - he's the murderer!

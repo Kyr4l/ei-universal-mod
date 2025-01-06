@@ -1,0 +1,132 @@
+Assortment
+#show Hero2
+#show NSheriff
+#ANIMATION 44
+#CAMERA 0
+#phrase NSheriff 1
+My friend I see you are looking for a good wedge, is that not so? Let me present the right weapon. 
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 2
+Well foreman, show your work.
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 3
+In my place is everything from a kitchen knife to a stealthy crossbow...
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero2 4
+Well, show everything that's there!
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 5
+As you wish.
+#show CodedHadaganNote 4
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 6
+This Unbalanced Sword while not the best weapon, costs very little. Damage 24-27, Defense +10 Price - 170 gold.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 7
+Don't let the not-so-showy size of this Broken Sword fool you, it will serve you faithfully, and for a truly unaffordable price. Damage 31-34, Defense +10. Price - 315 gold pieces.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 8
+Thief's Sword - With a blade like this, you'll transform yourself into a god of war, and for the right price. Damage 38-43, Defense +10 Price - 1150 gold.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 9
+This is a peasant's axe: simply indispensable on a farm, and you can even get rid of robbers with it. Damage 22-29, attack +5, defense -5. Price - 170 gold pieces.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 10
+With the Sharpened Axe I wouldn't be afraid to go up against a giant spider, but for real battles I would recommend taking something else. Damage 28-37, attack +5, defense -5. Price - 315 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 11
+With the Thieving Axe no city guard is afraid. Damage 34-47, attack +5, defense -5. Price - 1150 gold pieces.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 12
+This forged cudgel is perfect for shaking the dust out of the carpet, and knocking sense into the heads of slaves. Damage 20-31, attack +5, defense -10. price - 170 gold.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 13
+With the Shoveling Baton, even the most stubborn and unruly slave will follow your orders in half a word. Damage 26-39, attack +5, defense -10 Price - 315 gold.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 14
+A thieves' sledgehammer should be purchased by anyone who wants to have a good means against malicious skeletons protecting old tombs and ruined cities. Damage 32-49, attack +5, defense -10. Price - 1150 gold pieces.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 15
+These Kitchen Knives are used only by the best Suslangier cooks. Damage 24-26, attack +5. Price - 170 gold pieces.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 16
+This Dagger is liked to be bought by young and rich city dwellers to defend their virginity, ha, ha, ha! Damage 31-33, attack +5 Price - 315 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 17
+Using the Thief's Dagger, more than one purse of the city's rich has been cut off. Damage 38-40, attack +5. Price - 1150 gold pieces.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 18
+An old bow is a good thing as a beginner archer, dreaming of becoming better at his craft. Damage 23-28, attack +5. Price - 170 gold pieces.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 19
+A bad bow is already a better value for money. Damage 29-36, attack +5. price - 315 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 20
+The Thieving Bow is used by only the most experienced hunters. Damage 36-45, attack +5. Price - 1150 gold pieces.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 21
+Evil spades are used to teach recruit guards. Damage 24-27, attack +5, defense +5. Price - 170 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 22
+Light spades are used by personal guards of rich merchants. Damage 31-34, attack +5, defense +5. Price - 315 gold pieces.
+#show VoodooWand 5
+#ANIMATION 6
+#CAMERA 0
+#phrase NSheriff 23
+Rumor has it that a small squad of the Brotherhood of the Last Hideout recently killed an Adult Black Troll, and they were aided in this task by Thieves' Spades. Damage 38-43 , attack +5, defense +5 Price - 1150 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 24
+A smashed crossbow can also be used as a bludgeon - it won't be such a pity. Damage 20-31 Price - 170 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 25
+The old crossbow pierces leather armor from a hundred paces away! Damage 26-39 Price - 315 gold.
+#show VoodooWand 5
+#ANIMATION 12
+#CAMERA 0
+#phrase NSheriff 26
+And here is the pearl of my forge: the Thief's Crossbow. Damage 32-49 Price - 1150 gold.
+#ANIMATION 9
+#CAMERA 0
+#phrase NSheriff 27
+Take your pick, my friend. 

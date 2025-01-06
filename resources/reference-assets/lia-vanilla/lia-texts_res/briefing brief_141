@@ -1,0 +1,28 @@
+About Babur's searches
+#DESC 
+#show Hero 
+#show OrcC
+#CAMERA 11
+#ANIMATION 7
+#phrase OrcC 1
+Ay, the man-man has come to us again. Orcas advises- advises to see you.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+Yeah, I'm glad to see you guys too. I'm looking for another man, craftsman Babur from the hunter's camp. They say he was kidnapped by orcs. Do you not know why they did this and where they took the craftsman?
+#CAMERA 11
+#ANIMATION 8
+#phrase OrcC 3
+Urk-Tar knows-it-all. The craftsman is a bad man-the man was. He gave his word to the orcs, then he cheated. The orcs of the artisan-craftsman stole. They punished him.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+And what did they do with Babur? I hope they didn't kill him?
+#CAMERA 0
+#ANIMATION 5
+#phrase OrcC 5
+The orcs of the artisan-craftsman didn't kill him. They gifted him. The ogre on the island-island lives. He will eat the craftsman - he will be good. The orcs will listen.
+#ANIMATION 32
+#CAMERA 0
+#phrase Hero 6
+O Great Powers! Just in time to save Babur! This is what greed leads people to! Save one now...

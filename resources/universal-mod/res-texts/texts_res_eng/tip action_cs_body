@@ -1,0 +1,4 @@
+Aim at body
+Your character will aim at the enemy's body 
+when attacking. When the body's "health" 
+reaches 0, the enemy will die.

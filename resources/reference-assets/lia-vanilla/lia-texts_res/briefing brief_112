@@ -1,0 +1,40 @@
+About the people on Gipath
+#DESC 
+#show Hero 
+#show OrcC
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 1
+You told me that there are humans living on Gipath as well, but I haven't seen any so far.
+#CAMERA 0
+#ANIMATION 8
+#phrase OrcC 2
+We fight. The people of the Village-Village attacked the orcs on the Foothills. A second village was created. The orcs are gone. Only the hunters remain.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 3
+Who are the hunters again?
+#CAMERA 0
+#ANIMATION 7
+#phrase OrcC 4
+Also people-people, but they live not with them, but with orcs they make friends.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 5
+What if I wanted to meet the hunters?
+#CAMERA 11
+#ANIMATION 6
+#phrase OrcC 6
+Not allowed. The people in the Middle Peaks have come-come. The orcs continue to drive them out. They must be stopped.
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero 7
+And what do you propose? That I should fight against the people?
+#CAMERA 0
+#ANIMATION 5
+#phrase OrcC 8
+No. First- first the Shell must be stolen. If the Shell is gone, the lizard-people will attack the humans. The humans will become weak, the orc-orcs will drive them from the Middle Peaks.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 9
+Fine, I'll steal that Shell, just don't hope I'll help you fight against the humans. After all, I'm human too.

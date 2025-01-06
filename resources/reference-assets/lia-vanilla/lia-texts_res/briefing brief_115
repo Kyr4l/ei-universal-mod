@@ -1,0 +1,21 @@
+About hunters in need
+#DESC 
+#show Hero 
+#show OrcC
+#CAMERA 0
+#ANIMATION 8
+#phrase OrcC 1
+You wanted-needed-to see the hunters. Now you can. The free hunters got into trouble. They came to us. They were caught by the lizards, but when you brought the Shell-Shell to the lizards, they let the robbers-robbers go.
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 2
+Oddly enough, it was without even realizing it that I saved the highwaymen. I hope this doesn't make me set a bad attitude towards people...
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 3
+So now I can go to the hunters? Will they want to see me?
+#CAMERA 11
+#ANIMATION 5
+#phrase OrcC 4
+Wait here-there. They'll come by themselves. They always-selves come.

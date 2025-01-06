@@ -1,0 +1,12 @@
+Trader's Gratitude
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 1
+Well, Aunt Zaro, you don't need any more to be happy. Kehel will no longer bother your beloved.
+#ANIMATION 70
+#CAMERA 0
+#phrase YCF 2
+I knew I could count on you! And I will not be stingy in my gratitude. My sainted husband will be glad to have a worthy man standing beside me again now.

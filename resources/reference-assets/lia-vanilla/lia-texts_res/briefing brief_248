@@ -1,0 +1,33 @@
+About stealing money
+#DESC 
+#show Hero 
+#show Gerald
+#show merc2
+#ANIMATION 64
+#CAMERA 11
+#phrase Gerald 1
+On our unfortunate accommodation the annoyances fall one after another. First Brissen, now money.
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 2
+What happened? What money?
+#ANIMATION 66
+#CAMERA 11
+#phrase Gerald 3
+In our house there has always been a general fund - money that we kept just in case. We started collecting it a long time ago and now a large amount has accumulated. I kept all the money at my house, and they knew all about it.
+#ANIMATION 65
+#CAMERA 11
+#phrase Gerald 4
+But recently they were all gone. At first I started to notice that there was less and less, but I thought I had made a mistake in my bills and didn't pay attention to it. But now the whole bag is gone!
+#ANIMATION 70
+#CAMERA 11
+#phrase Gerald 5
+I've already told the whole story so everyone knows that a disgusting mole has taken root among us. If you're interested, Baldie suspects you.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 6
+And why am I not surprised? ...
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 7
+After all, we didn't even know about the money! Kir, we need to talk urgently. I have an idea! Don't worry Geraldine, we'll find your mole and maybe something else....

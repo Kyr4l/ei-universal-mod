@@ -1,0 +1,45 @@
+About the mystery of Geraldine
+#DESC 
+#show Hero 
+#show Gerald
+#show merc2
+#ANIMATION 17
+#CAMERA 12
+#phrase merc2 1
+Geraldine, did you hear the news? We found the real criminal! He turned himself in!
+#ANIMATION 6
+#CAMERA 11
+#phrase Gerald 2
+All this is not true! It's not Karansul!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 3
+And how do you know we're talking about Karansul?
+#ANIMATION 66
+#CAMERA 11
+#phrase Gerald 4
+Well, I... agreed, I'll tell you everything. I found out that Hys is putting all the blame on Karansul. I convinced him to flee the city, and I'm keeping him in my hunting lodge.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 5
+And why are you so sure it's not him? After all, he was really driving suspiciously. He kept going somewhere. I'm sure Brissen caught him at something, and he finished the poor guy off. And Hysa, for sure, was following him too. It all comes together!
+#ANIMATION 73
+#CAMERA 11
+#phrase Gerald 6
+Nah, it's all not true! She knew it would all end with this. And yet I told him it was time to tell everyone...
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 7
+What to talk about? 
+#ANIMATION 70
+#CAMERA 11
+#phrase Gerald 8
+The reason Karansul couldn't kill Brissen was because at the time he was  with me. I was the one he was hanging out with. He even learned a few protection spells to to keep our meetings safe. After all, people are curious.
+#ANIMATION 44
+#CAMERA 11
+#phrase Gerald 9
+We decided to get married. But we were afraid to tell people about it. Everyone here will laugh at me if they find out.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 10
+Oh Great Powers!!! And because of such trifles we lost so much time suspecting Karansul! You can let him go, no one will suspect him again.

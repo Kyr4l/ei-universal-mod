@@ -1,0 +1,45 @@
+Get to know the dragon
+#DESC 
+#show Hero 
+#show SKD
+#show merc2
+#ANIMATION 5
+#CAMERA 12
+#phrase merc2 1
+What a colossus! Kir, have you ever seen a dragon this huge?
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+Shh! Quiet, or he'll hear! Good morning, oh great dragon!
+#ANIMATION 5
+#CAMERA 9
+#phrase SKD 3
+People? Apparently it's becoming a new tradition to come visit me. Have you also come to ask me a question? According to tradition, you should do my job first.
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 4
+Well look, he needs something from us too. Kiel warned you to wait for the witch at her house!
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 5
+Kiel, be silent for a moment, please. I'll speak to the dragon myself.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 6
+Wise dragon, we would be willing to do your bidding if tradition demands it, but we have come not for your boundless knowledge but for the witch Esther.
+#ANIMATION 5
+#CAMERA 9
+#phrase SKD 7
+And, well, if that's the case... I'm very happy for you. You can take that whine away.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 8
+I must admit I'm very amazed that you let her go willingly, I was afraid she was captive with you.
+#ANIMATION 5
+#CAMERA 9
+#phrase SKD 9
+No, if she were a beautiful princess, then maybe. But a witch... I urge you to get her out of here quickly, before it falls to me to... eh...! - EAT.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 10
+Yes, of course, I'll see her off right away.

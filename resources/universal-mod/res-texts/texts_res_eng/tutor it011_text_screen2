@@ -1,0 +1,11 @@
+     To construct a spell click on its keystone in your inventory (bottom bar) or in the shop (top bar). The keystone will be placed into the appropriate slot.
+     The slots reserved will then be highlighted with a flickering frame. The number of highlighted slots is equal to the number of runes you can insert into this spell. This number changes each time you add a rune to the constructor. To add a rune click on its picture in either your inventory or in the shop and it will go to the next available slot.
+     The keystone determines what runes can be used for this spell. Runes which cannot be used will be dimmed.
+
+     Note: you can't place any runes into the constructor until you've placed a keystone. If you take the keystone out of the constructor and put it back into your inventory or shop, all runes you've added will also be removed from their slots and returned to where they came from.
+
+     The properties of the spell you have constructed are shown in the left panel, including any additional properties added by the runes you have used. The lower part of the screen shows the total price of the spell. This includes the price of any articles you bought.
+
+     To construct the item click on the "V" button, to cancel click on "X".
+
+     Note: if you construct a spell and then deconstruct it immediately afterwards you'll still be charged for the constructing and deconstructing cost. Caveat Emptor!

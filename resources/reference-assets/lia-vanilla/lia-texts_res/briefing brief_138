@@ -1,0 +1,25 @@
+About the long-awaited found thing
+#DESC 
+#show Hero 
+#show merc2
+#show PalantirBroken00 5
+#CAMERA 10
+#ANIMATION 17
+#phrase Hero 1
+There it is - the magic bullet!
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 2
+Exactly the same one I saw in the Fairy tent in the Black Market, only that one was clear, and this one is somehow cloudy and cracked.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+Yeah, Airy was talking about that. Now you have to go behind the lake in the Middle Peaks to look in the observatory for a remedy to restore its magical properties.
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 4
+Too bad she didn't want to go to the observatory herself, we would have saved so much time! Now you see, you personally volunteered to go and bring that idiotic necklace for her, and she refused to help you!
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 5
+Kiel, get away from Aira! Maybe there were indeed some issues on her mind. Instead, we get to see with our own eyes the old observatory of a lost people.

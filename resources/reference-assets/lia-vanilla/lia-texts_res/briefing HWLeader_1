@@ -1,0 +1,8 @@
+On waiting for the portal to open
+#show Hero 1
+#show HWLeader 2
+#show Clerk 3
+#ANIMATION 11
+#CAMERA 5
+#phrase HWLeader 2
+Dialog 1

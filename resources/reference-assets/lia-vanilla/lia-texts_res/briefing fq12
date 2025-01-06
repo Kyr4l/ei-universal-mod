@@ -1,0 +1,28 @@
+Talk to Ulka ( )
+#DESC 
+#show Hero
+#show Spletnica
+#ANIMATION 32
+#CAMERA 11
+#phrase Spletnica 1
+Sonny, come here faster! Misfortune has struck, oh woe!
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 2
+What happened? Tell it faster!
+#ANIMATION 70
+#CAMERA 11
+#phrase Spletnica 3
+The orcs have bred a giant ogre! I'm told they keep it on the islands, specially fed. Oh, what happens now? What if he runs away from them? The biggest ogre in all of Gipath!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 4
+Yes, that is indeed not good. But how do you defeat such a giant ogre?
+#ANIMATION 66
+#CAMERA 0
+#phrase Spletnica 5
+I've also heard that the bigger the ogres, the hungrier they are for food. What you don't give them, they'll eat it all. You just have to know how much you can fit in.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 6
+Hold Ulka, for you to help. And I might look at how to deal with this ogre....

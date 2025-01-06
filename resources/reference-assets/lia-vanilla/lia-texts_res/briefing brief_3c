@@ -1,0 +1,25 @@
+Kir - STRENGTH, Kiel - MIND
+#DESC 
+#show Hero
+#show Clerk
+#show merc2
+#ANIMATION 11
+#CAMERA 11 
+#phrase Clerk 1
+Now listen to me: if you want to prolong your useless life then answer honestly. Speak what trait is most developed in you, and I will appoint you to the appropriate jobs. Well, say: strength, dexterity or reason?
+#ANIMATION 12
+#CAMERA 12
+#phrase merc2 2
+Reason. 
+#animation 9
+#CAMERA 11
+#phrase clerk 3
+Oh, really? Let's just say I believed it. Still, it doesn't take much brains to count the number of wheelbarrows of ore hauled away. Now you, slave!
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 4
+Strength.
+#animation 9
+#CAMERA 11
+#phrase Clerk 5
+I didn't expect a different answer. A pile of meat with an empty head on its shoulders. But that's enough to haul stones from the quarry.

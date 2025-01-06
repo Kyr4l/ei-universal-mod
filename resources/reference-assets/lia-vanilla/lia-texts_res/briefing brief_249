@@ -1,0 +1,32 @@
+About the final plan
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 14
+#CAMERA 11
+#phrase merc2 1
+Everything, now everything has become quite clear!
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 2
+Wait, I haven't understood anything yet.
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 3
+Kir, come on, it's all so simple! Recall: The gray leaf said he saw some man hiding something in the woods. But we paid no attention to it. Then Trickster told us that Brissen was going to reveal the person who was robbing his own.
+#ANIMATION 66
+#CAMERA 11
+#phrase merc2 4
+It all adds up! The person who stole the cash also killed Brissen! After all, then Gray Leaf didn't say that another man was hiding something - he meant the same man they saw at the murder scene.
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 5
+Turns out it was. But how do we find out who the thief is?
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 6
+I'll take it from here. I'm about to spread the word to everyone that we stumbled upon a stash of money in the woods. We'll set an official refund for tomorrow. And tonight the thief will run to his stash to move everything.
+#ANIMATION 14
+#CAMERA 0
+#phrase Hero 7
+And all that's left for us to do is track him there. That's easy! Kiel, bravo!

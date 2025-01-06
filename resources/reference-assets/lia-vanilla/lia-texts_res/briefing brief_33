@@ -1,0 +1,28 @@
+About the missing caravan
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero2 1
+Aunt Zaro, I'm looking and I see your store has been empty lately.
+#ANIMATION 70
+#CAMERA 0
+#phrase YCF 2
+Oh, you don't remind me, I suffer so! The caravan of goods should have returned long ago! And what do you think? She's still gone and gone. And yet there-... just don't tell anyone! ...not all the legal goods...
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero2 3
+What do you mean you're dealing in illegals again?
+#ANIMATION 64
+#CAMERA 0
+#phrase YCF 4
+Well, what to do? People will only buy stuff like this. And my sainted husband used to say: 'For a risk to be worthwhile it must be less than the profits it will bring! But anyway, I started sleeping badly at night...
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero2 5
+If you want I can go out in front of your caravan and see what might have happened to it too.
+#ANIMATION 15
+#CAMERA 0
+#phrase YCF 6
+Okay, go there. And most importantly - bring me everything from the big chest. Everything most precious is in it.

@@ -1,0 +1,14 @@
+A propos du travail de l'Artisan
+#show Hero
+#show Smith
+#CAMERA 9
+#phrase Smith  1
+Mon travail a toujours été le même : fabriquer, acheter, vendre ou réparer, et faire un peu d'argent, bien entendu, hé-hé…
+#phrase Smith  2
+J'ai du nouveau. Depuis que l'Elu a éclairé Erfar le doyen, la sorcière Estera a commencé à traiter les villageois un peu mieux...
+#phrase Smith  3
+Elle a même fait la paix avec moi. On a conclu un accord : elle m'apprend des sorts et moi, je les vends.
+#phrase Smith  4
+Elle m'a même appris à créer de nouveaux sorts, à la condition que je ne révèle pas le secret. Ce qui ne me viendrait même pas à l'esprit, je ne suis pas fou !!
+#phrase Smith  5
+Si tout le monde se met à fabriquer des objets et des sorts, comment je vais gagner ma croûte, moi ? Je fonctionne donc toujours à l'ancienne : tu veux quelque chose ? Tu n'as qu'à venir me le demander. C'est la seule façon de faire !

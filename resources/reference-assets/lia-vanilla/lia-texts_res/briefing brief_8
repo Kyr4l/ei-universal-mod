@@ -1,0 +1,24 @@
+Get to know Karim
+#DESC 
+#show Hero 
+#show Sheriff
+#ANIMATION 14
+#CAMERA 0
+#phrase Sheriff 1
+Oh, good people, look! Kir came to see me to get acquainted!
+#ANIMATION 5
+#CAMERA 0
+#phrase Hero 2
+How do you know my name? Are you clairvoyant?
+#ANIMATION 44
+#CAMERA 0
+#phrase Sheriff 3
+Ha, ha, ha! Me clairvoyant? No. I am Karim, Rindeil's assistant, and my most important duty is to know everything about what is happening in this mansion. Also, my friend, if you need any help, please do. If I can - I will help.
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 4
+Thank you, but I don't need anything temporarily. And you don't have to shout like that, I'm not deaf.
+#ANIMATION 61
+#CAMERA 0
+#phrase Sheriff 5
+Oh, sorry. It's a habit. From my childhood years at the circus.... what a time that was! People came to our shows even from faraway accommodations! And the clairvoyant you say... we had one. He could read thoughts from a distance! Eh... But you must be in a hurry, I won't keep you. But come whenever you want, we'll talk.

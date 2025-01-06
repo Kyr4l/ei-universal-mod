@@ -1,0 +1,20 @@
+On the doom of the caravan
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 17
+#CAMERA 5
+#phrase Hero2 1
+Your fears have been confirmed. The caravan had indeed succumbed to a robbery. But don't worry, I managed to take all the illegal goods before the guards arrived.
+#ANIMATION 32
+#CAMERA 5
+#phrase YCF 2
+Oh, how heavy it all is, how heavy! The goods are gone, the caravan is gone. Well, what am I supposed to do now? And what happened to the caravan? I'll know what to be afraid of.
+#ANIMATION 44
+#CAMERA 5
+#phrase Hero2 3
+The caravan was attacked by wild animals. Apparently the protection was inadequate.
+#ANIMATION 70
+#CAMERA 5
+#phrase YCF 4
+Poor things, my poor chasers! I lost so many good people, they were such good employees! And it worked out so badly! My sainted husband was right when he used to say, 'There is nothing to put aside for the black hour, otherwise it will come and take everything precious it finds.' And such were my hopes for this caravan....

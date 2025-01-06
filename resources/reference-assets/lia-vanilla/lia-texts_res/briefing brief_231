@@ -1,0 +1,31 @@
+On the sad news
+#DESC
+#show Hero
+#show Grey
+#show merc2
+#ANIMATION 17
+#CAMERA 0
+#phrase Hero 1
+Grey leaf, we found green leaves around the Animal Lords accommodation. I thought it was a sign from you that you wanted to see us.
+#CAMERA 11
+#phrase Grey 2
+As a bird that flies from its nest always finds its way home, so your good heart led you to us. A misfortune happened. The good knight Brissen has been found dead!
+#ANIMATION 5
+#CAMERA 12
+#phrase merc2 3
+What do you mean killed! After all, we saw him in the lodging so recently!
+#ANIMATION 12
+#CAMERA 0
+#phrase Hero 4
+Who killed him?
+#CAMERA 11
+#phrase Grey 5
+When an arrow flies from a distance and pierces your heart, how do you understand whose hand fired it? Podlec didn't leave his signature at the murder scene. But the men found Brissen's friend there, and took him away.
+#ANIMATION 32
+#CAMERA 0
+#phrase Hero 6
+By the Great Powers! The mage must not be allowed to be accused of murder!
+#ANIMATION 44
+#CAMERA 0
+#phrase Hero 7
+Thank you, Grey Leaf, for warning me. I must immediately run to the city and rescue the mage. Brissen won't be brought back, but the mage can still be saved.

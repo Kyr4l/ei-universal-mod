@@ -1,0 +1,33 @@
+About good advice
+#DESC 
+#show Hero 
+#show Doctor
+#show merc2 
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 1
+Well, how did it go? Although no, don't tell me, I'll find out everything myself. Not only from khadagans I can collect information! Hm, do you want some yeast?
+#animation 64
+#CAMERA 12
+#phrase merc2 2
+Everything's beautiful! We, in the literal sense of the word, chased this defecator out of his burrow. But his skin was turning blue! But without your advice, we wouldn't have been able to find the necromancer ourselves.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 3
+Oh, I asked not to speak! But I'm glad anyway. I'm tired of sitting here without anything to do. It's good that at least the trade brings some profit. Soldiers are like children, they like candy too.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 4
+Uncle Council, how come you started spying against Firez?
+#ANIMATION 61
+#CAMERA 11
+#phrase Doctor 5
+Somehow. My sweets are famous both in the east and west of Jygran. Children of all sorts of fathers used to come to me. Sometimes they would tell me many interesting facts.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 6
+That's how I learned that the Khadagans were preparing an assault on Dar-Ulgorn. I managed to warn the baron in time, and our losses were minimal! And so it began. I realized then that espionage is my calling!
+#animation 30
+#CAMERA 12
+#phrase merc2 7
+And you went from being a confectioner to a secret spy. Now that's something! I have a feeling we'll be needing your advice and information more than once.

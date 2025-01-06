@@ -1,0 +1,28 @@
+On how things are going
+#DESC 
+#show Hero 
+#show merc2
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero 1
+So what do you think of all this?
+#ANIMATION 64
+#CAMERA 11
+#phrase merc2 2
+Well, you look much nicer without those nasty cloths on your face. I'm glad you finally took it off. And the chief's mouth is so bad, and his skin is so green. Horror, in a word!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 3
+That's not what I mean! What are we supposed to do now? After all, the camp is gone, the khadananian is gone, and where to look for our Joon - no one knows!
+#ANIMATION 70
+#CAMERA 11
+#phrase merc2 4
+Dear Kira, it seems to me that you have forgotten that your faithful friend Kiel is with you. Above all we must do so that no one on Suslanger begins to suspect that the expedition no longer exists.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 5
+Right! We must prepare a report, and as ordered, give it to the messenger who will come for it.
+#ANIMATION 9
+#CAMERA 0
+#phrase merc2 6
+Yes, and once you can be unconcerned about the arrival of a new crowd of Khadagan soldiers in shining armor, we will proceed to look for your friend.

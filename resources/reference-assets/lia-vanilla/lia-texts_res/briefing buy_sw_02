@@ -1,0 +1,11 @@
+Buy Broken Sword (315)
+#show Hero2 
+#show NSheriff
+#ANIMATION 30
+#CAMERA 0
+#phrase Hero2 1
+This wedge suits me!
+#ANIMATION 44
+#CAMERA 0
+#phrase NSheriff 2
+Not the worst choice, but not the best either.  

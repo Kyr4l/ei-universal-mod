@@ -1,0 +1,16 @@
+About the good ending
+#DESC 
+#show Hero2 
+#show YCF
+#ANIMATION 62
+#CAMERA 0
+#phrase Hero2 1
+Aunt Zaro, now you can truly rest easy, and not fear that your caravan will succumb to another attack. Azbek's men will not be able to block its path, and it will be led by your best pursuer Tarik.
+#ANIMATION 14
+#CAMERA 0
+#phrase YCF 2
+I just don't know how to thank you!
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero2 3
+Well don't be so modest, I'm sure you'll come up with something.

@@ -1,6 +1,6 @@
 # EI-Universal-Mod
 
-A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Based on EI-Mod, HG-Mod, and others.
+A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
 
@@ -44,7 +44,7 @@ You need to use the following environment variable : `WINEDLLOVERRIDES="dinput=n
 
 # Disclaimer
 
-- We __do not__ own any of the tools used *except* the scripts in __eimultitool__, the binaries used are community tools.
+- We __do not__ own any of the tools used *except* the scripts in __ei-multitool__, the binaries used are community tools.
 - Some files included in `./resources/reference-assets` come from the vanilla game, some others come from other mods.
 
 

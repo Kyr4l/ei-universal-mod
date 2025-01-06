@@ -1,0 +1,8 @@
+     Set your desired game speed using the highlighted panel in the lower-right corner of the screen. The panel has a marker indicating your current game speed. The panel also indicates how long you've been playing.
+
+     You can choose one of three modes: "normal" speed, "accelerated" speed and "pause". Accelerated speed mode makes all characters (both yours and enemies) move quicker. Normal is, of course, the standard setting. With "pause" you can interrupt the game for a while to think about what's going on.
+
+     You can also set the game speed via the keyboard: 
+     Accelerated speed: <+> key.
+     Normal speed: <-> key.
+     Pause: <SPACE> bar.

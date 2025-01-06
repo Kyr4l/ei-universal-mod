@@ -1,0 +1,14 @@
+The Magic Ball
+The great mage Tka-Rick needs the Magic Ball in order to find Jygran. The orb was recently taken by island orcs from the Witch Esther, and now it must be retrieved again by breaking through their islands and troops. However, to get to the islands you have to leave the bridge, and you can only do that with a certain mechanism.
+#subobj 1
+Climb to the top of the Council
+Fortunately, island orcs sometimes go ashore on the Council Mountain to make important decisions. Then they dutifully take the bridge mechanism with them.
+#subobj 2
+Get the mechanism
+Without the mechanism, you will not be able to get to the orc islands and also find the Magic Ball.
+#subobj 3
+Find the Magic Ball
+The orcs have placed the Magic Ball on its old pedestal on one of the southern islands.
+#subobj 4
+Take the sphere
+The artifact is well protected, so taking it quietly is unlikely to succeed.

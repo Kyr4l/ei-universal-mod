@@ -1,0 +1,33 @@
+Meeting at the Last Hideout
+#DESC + automatically
+#show Hero2
+#show merc10
+#show Glav
+#ANIMATION 12
+#CAMERA 11
+#phrase merc10 1
+Khatul! Will you take me and my friends in for a time or will you say we are too dangerous for your Hideout?
+#ANIMATION 44
+#CAMERA 5
+#phrase Glav 2
+Aliyo, you acted too hastily by coming here while they are looking for you, and yet you brought strangers to us. After all, you know there's a hefty reward for exposing us!
+#ANIMATION 11
+#CAMERA 11
+#phrase merc10 3
+You haven't changed one bit. I can vouch for my friends. They saved me from prison. Or does that mean nothing to you either?
+#ANIMATION 62
+#CAMERA 5
+#phrase Glav 4
+For the chance to discover The Last Hideout, the authorities could release many a prisoner from jail. One should not blindly believe even one who appears to be truthful.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero2 5
+Brother Khatul, let me interject. You may not trust me, but I am willing to swear to whatever you want that I am not anyone's spy. And if you wish, put me to the test!
+#ANIMATION 11
+#CAMERA 11
+#phrase merc10 6
+Well, what do you say to that Khatulu? Can you manage to come up with a worthy trial for him? Or are you even afraid to do that?
+#ANIMATION 6
+#CAMERA 5
+#phrase Glav 7
+Aliya, you are confusing cowardice with caution. The Great Powers would not help us if we did not take care of ourselves. I will invent a suitable trial for strangers.

@@ -1,0 +1,32 @@
+About the consequences of necromancy
+#DESC
+#show hero
+#show Stark
+#ANIMATION 9
+#CAMERA 11
+#phrase Stark 1
+The hero complained. Well, tell me how you managed to become famous so quickly, and even saved this walker from the abomination.
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 2
+Yes, actually, there is nothing to tell here. Everything is as usual. Only with the undead we still have to fight and fight. Firez has good necromancers in his service, and we still have to fight the army of the living dead.
+#ANIMATION 43
+#CAMERA 11
+#phrase Stark 3
+How tired of all this! After them, the sword is no longer good for anything, all jagged, it begins to rust, as if it were not a combat blade, but a peasant's hoe.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 4
+Master Stark, how do you feel about the fact that I will give you advice on how to make excellent blades for the fight against the undead? It uses a special alloy.
+#ANIMATION 32
+#CAMERA 11
+#phrase Stark 5
+I don't need your advice! I know all alloys. What can you teach me, boy!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 6
+Why don't you even want to listen? Well, I could even make this alloy for you myself. You will find that it is much better than the one you are used to.
+#ANIMATION 62
+#CAMERA 11
+#phrase Stark 7
+I won't even let you cross the threshold of my forge. What did you think! If you want to do something, go to the abandoned forge. It stands behind the river, south of the fortress, no one has been using it for a long time.

@@ -1,0 +1,41 @@
+Trying to justify yourself
+#DESC 
+#show Hero 
+#show HWLeader 
+#ANIMATION 59
+#CAMERA 10
+#phrase Hero 1
+Sir! Mr. Warden! Please listen to me!
+#ANIMATION 9
+#CAMERA 11
+#phrase HWLeader 2
+Shut up! In what tone do you address Hartweik, an imperial officer! I'd have you flogged if it weren't for the few coins you can get for your strange skin!
+#animation 61
+#CAMERA 10
+#phrase Hero 3
+Forgive me, noble sir, but there's been a mistake! I should not be here...
+#animation 11
+#CAMERA 11
+#phrase HWLeader 4
+Ha, ha, ha! If you only knew how many slaves I hear that phrase from! Don't waste my time...
+#ANIMATION 30
+#NOLIPS
+#CAMERA 11
+#phrase HWLeader 5
+Hmm... actually some strange skin color.... AND there was some ad where it said a red youngster had snuck into the scientists' mansion. I'll write where I need to, that I have him - and I'll win a prize!
+#animation 44
+#CAMERA 10
+#phrase Hero 6
+But, Officer! Humbly, please hear me out. This is a mistake!
+#animation 62
+#CAMERA 11
+#phrase HWLeader 7
+How dare you! A mistake!!! You unlawfully broke into Suslanger province without documents! Only a suspicious letter of recommendation was found with you! You should be thankful that you weren't tortured on the spot! Tfu -and that I'm talking to you at all!
+#animation 15
+#CAMERA 10
+#phrase Hero 8
+For that, of course... thank you...
+#animation 9
+#CAMERA 11
+#phrase HWLeader 9
+Get out of my sight! And pray to your wild idols that you live to at least the next morning! Ha, ha, ha, ha!

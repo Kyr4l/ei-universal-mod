@@ -1,0 +1,28 @@
+About the rescued chief's wife
+#show Hero
+#show OrcC
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 1
+Urk-Tar, rejoice, we have restored your wife.
+#CAMERA 11
+#ANIMATION 6
+#phrase OrcC 2
+I-know-what. Tyn-Achei said, the man-to-man after his wife went. 
+#ANIMATION 9
+#CAMERA 5
+#phrase merc2 3
+I just knew you wouldn't be too happy to have your wife back. And after all, I told Kira, you'd have to be consulted first whether to go for her or not.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 4
+Tyn-Achei said that the chief could not be without a wife. We had no choice but to save her.
+#CAMERA 5
+#ANIMATION 8
+#phrase OrcC 5
+Tyn-Achei did not all-in tell you. When a wife dies, the chief takes another. I like the man-girl, her new wife would be.
+#ANIMATION 5
+#CAMERA 5
+#phrase merc2 6
+What are you looking at me for! We gave you back your wife and now you can't marry anyone else! And I'll already make sure your wife is all right! Look at him, the 'man-girl' has taken a liking to him!

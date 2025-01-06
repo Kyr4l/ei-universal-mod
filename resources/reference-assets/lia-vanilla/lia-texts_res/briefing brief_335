@@ -1,0 +1,36 @@
+About a strange cave
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 1
+Uncle Council, I just got back from that valley you told me about. You'll never guess what I found there!
+#ANIMATION 12
+#CAMERA 11
+#phrase Doctor 2
+What? Tell it faster!
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 3
+After clearing the valley of the harpies that inhabited it, I noticed that there was a cave in the rock. But I was unable to get into it. The entrance is blocked by a stone gate with a strange design.
+#ANIMATION 62
+#CAMERA 10
+#phrase Hero 4
+I could have sworn these doors were set up by the Joons. And the pattern on them is nothing more than a complex lock. But where's the key? We must get into this cave!
+#ANIMATION 6
+#CAMERA 11
+#phrase Doctor 5
+Interesting. I have to, but I don't know anything about this cave. I had a feeling it smelled like a secret! The key must now be found by you.
+#ANIMATION 30
+#CAMERA 11
+#phrase Doctor 6
+I've heard something recently about a particular trinket. Whether it be from a starost of some sort, or from a baron...
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 7
+Uncle Council, please remember! This is very important to me.
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 8
+Ah, exactly! Dartas was telling this story. He likes to walk around the neighborhood, that and he sees and notices a lot. Ask him.

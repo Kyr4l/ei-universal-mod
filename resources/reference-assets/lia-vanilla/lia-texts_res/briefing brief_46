@@ -1,0 +1,37 @@
+About Sahilla in the desert
+#DESC 
+#show Hero2 
+#show merc10
+#show merc2
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero2 1
+Aliya, you seem concerned. Has something happened?
+#ANIMATION 44
+#CAMERA 11
+#phrase merc10 2
+You're guessing right. Yes, I was caused quite a bit of worry. My friend is gone! When I was captured by the soldiers Sahilla managed to escape, and I hoped to meet her here. But it's been a long time and she's still missing.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero2 3
+Well, maybe she's hiding somewhere? There's a lot of soldiers around, she could be hiding somewhere for a while.
+#ANIMATION 6
+#CAMERA 11
+#phrase merc10 4
+No, I feel with my heart that something has happened to her. I am going to go in search of her.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero2 5
+No Aliyo, I can't let you risk your life. I will find her myself.
+#ANIMATION 72
+#CAMERA 12
+#phrase merc2 6
+I can't believe my ears! Kir, don't you have enough worries of your own? Or are you going to throw yourself into doing favors for the sake of every pretty face!
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero2 7
+Kiel, I'm amazed by your attitude. Anyway, if this is too dangerous for you then you can stay here.
+#ANIMATION 70
+#CAMERA 12
+#phrase merc2 8
+Well, no, if I let you go alone, you'll get into trouble again! I'm coming with you, and don't even try to leave me here!

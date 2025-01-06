@@ -1,0 +1,17 @@
+Prison
+In one of the cells of this prison sits Aliya, Fieruza's fiancée. She must be found, freed, and helped to escape while her friends the thieves hold back the guards on the surface.
+#subobj 1
+Enter the judgment room
+The judgment room is located between the tortue room and death row.
+#subobj 2
+Take the key
+The key to the cells is stored in the judge's chest, but the judge himself has apparently gone somewhere.
+#subobj 3
+Find Aliya
+Aliya has been imprisoned in one of the farthest cells. The cell can only be opened with the judge's key.
+#subobj 4
+Leave the prison
+There's no more for you to do here...
+#subobj 5
+Stay unnoticed
+The guards are very cautious and will raise the alarm as soon as they notice that the bars of at least one of the cells are not closed.

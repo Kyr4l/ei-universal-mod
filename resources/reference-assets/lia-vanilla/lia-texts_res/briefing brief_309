@@ -1,0 +1,57 @@
+Get to know the merchant
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 30
+#NOLIPS
+#CAMERA 10
+#phrase Hero 1
+What is the phrase-password you need to say to the trader? ... Ah, I remembered.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+Trader, I need to buy twenty baskets of cinnamon cookies immediately.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 3
+There are none with cinnamon, but there are with sweet pumpkin, and not twenty but only eight. Can it be?
+#ANIMATION 17
+#CAMERA 10
+#phrase Hero 4
+It could be. My name is Kir.
+#ANIMATION 12
+#CAMERA 11
+#phrase Doctor 5
+I'm Uncle Council. Are you sent by the Baron?
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 6
+No, Craftsman Stark. Meanwhile, the Baron is busy, settled in his fortress and fending off attacks from the Celestials.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 7
+The situation is getting more and more difficult, even more so if you don't try to fix it. And sitting in a fortress won't help much. But what brought you to me?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 8
+The whole neighborhood has been overrun by corpses. We're destroying them everywhere we meet them, but more and more are mowing down every time!
+#ANIMATION 59
+#CAMERA 11
+#phrase Doctor 9
+Yeah, hard... You want a donut? No. Let me tell you this: when your sugar burns, there's no need to rush to scrape it out of the bottom, first you need to take the pot off the heat. Get it?
+#ANIMATION 12
+#CAMERA 11
+#phrase Doctor 10
+Dead people don't just rise from their graves. You have to look for a necromancer.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 11
+But where to find him? He could be anywhere!
+#ANIMATION 61
+#CAMERA 11
+#phrase Doctor 12
+It's obvious you're not local. There's an island nearby called the Island of Death. And on it a necromancer has long since settled. Only the Baron has no business being there, he's only busy protecting the borders of his estate.
+#ANIMATION 9
+#CAMERA 10
+#phrase Hero 13
+So you need to capture the necromancer as soon as possible and force him to pacify the graveyards!

@@ -1,0 +1,45 @@
+About Brissen's friend
+#DESC 
+#show Hero 
+#show MThief
+#show merc2
+#ANIMATION 17
+#CAMERA 11
+#phrase MThief 1
+Admit it: horrible was it for you in accommodation to return? After the nugget you couldn't find?
+#ANIMATION 11
+#CAMERA 12
+#phrase merc2 2
+Terrible or not - it doesn't matter! We got a case here, that and we're back.
+#ANIMATION 9
+#CAMERA 11
+#phrase MThief 3
+Ah, so the case. That's what I understand now. And what is a case like this?
+#ANIMATION 44
+#CAMERA 10
+#phrase Hero 4
+We're looking for a magician, a friend of Brissen's. And the forest people said Brissen should be in this accommodation.
+#ANIMATION 11
+#CAMERA 11
+#phrase MThief 5
+Then suppose the forest people have not deceived you. You find a magician. What do you want to do next?
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 6
+Well... We'll ask him to help us.
+#ANIMATION 44
+#CAMERA 11
+#phrase MThief 7
+What if he has his own issues? And he doesn't have time to deal with your problems yet? What then?
+#ANIMATION 64
+#CAMERA 12
+#phrase merc2 8
+Kiel has this feeling that you want to give us advice. So go ahead, speak up, feel free.
+#ANIMATION 62
+#CAMERA 11
+#phrase MThief 9
+You're thinking right, girl. I know from a good source that the mage is very interested in the ice elementals of the mine district. Also, if I were you, I'd help him with his research. Anyway, that's your business. You can wait for him here.
+#ANIMATION 9
+#CAMERA 12
+#phrase merc2 10
+Yeah, yeah, thanks for the advice. But don't you dare call me a wench again!

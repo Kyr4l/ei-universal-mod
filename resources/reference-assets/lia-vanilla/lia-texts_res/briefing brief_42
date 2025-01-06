@@ -1,0 +1,12 @@
+About the murder of a murderer
+#DESC 
+#show Hero2 
+#show merc10
+#ANIMATION 11
+#CAMERA 0
+#phrase Hero2 1
+Well, my beauties, now we can talk in peace. Tell me, why did you drag me into that mansion? You know it wasn't a robbery, it was at least a robbery. I know what I'm talking about! And no lip curves, you can't get away with this.
+#ANIMATION 63
+#CAMERA 0
+#phrase merc10 1
+Ah Fazil, you don't understand anything. If I told you I was going for the cause alone, you wouldn't go with me for anything. But I had to take revenge for my sister's death! To one who has not spared her and such an end is not a fitting punishment. Oh, then you don't know what a heroic thing to do with him? You don't know... it's all right, you'll sleep better.

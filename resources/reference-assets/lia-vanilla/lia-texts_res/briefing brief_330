@@ -1,0 +1,32 @@
+About unpleasant neighbors
+#DESC 
+#show Hero 
+#show Doctor
+#ANIMATION 11
+#CAMERA 11
+#phrase Doctor 1
+Tweirdza has been taken over. But I didn't doubt it. We worked a lot, made sure the gates were left unguarded.
+#ANIMATION 12
+#CAMERA 10
+#phrase Hero 2
+Yes, the Baron appreciated your help.
+#ANIMATION 9
+#CAMERA 11
+#phrase Doctor 3
+I don't doubt it. It's just that he will only appropriate the victory one way or another. History is usually silent about spies and the outstanding work they do. But I'm not chasing fame.
+#ANIMATION 44
+#CAMERA 11
+#phrase Doctor 4
+Something else is important to me: a quiet corner, a house with a garden, a beloved wife and a pack of kids. I would love to prepare dumplings and cookies for them.
+#ANIMATION 6
+#CAMERA 10
+#phrase Hero 5
+As long as there's a war going on and you're connected to such dangerous things, dreaming about it will only make you nervous.
+#ANIMATION 62
+#CAMERA 11
+#phrase Doctor 6
+Don't even tell me... But I've already picked out a place to call home. There is a beautiful valley between two rivers - the mountains cover it from the north, the river from the south. It is peaceful and nice there. And only one drawback: too dangerous neighbors live there. Harpies, wild animals... and it still smells of mystery!
+#ANIMATION 30
+#CAMERA 10
+#phrase Hero 7
+Mystery? That's interesting. You'd have to look into that place. We could fend off your future neighbors, too, by the way.

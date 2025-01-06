@@ -1,0 +1,41 @@
+About the collapsed task
+#DESC 
+#show Hero 
+#show Gerald
+#show MThief
+#ANIMATION 9
+#CAMERA 12
+#phrase MThief 1
+And lo and behold, our heroes are back! Congratulations. I thought you guys were gonna get captured.
+#ANIMATION 5
+#CAMERA 10
+#phrase Hero 2
+I don't know how to say this. The thing is, I didn't bring a nugget.
+#ANIMATION 73
+#CAMERA 11
+#phrase Gerald 3
+What do you mean you didn't bring it?! Where did you put it?
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 4
+I didn't put it anywhere! It just wasn't in the trunk!
+#ANIMATION 72
+#CAMERA 11
+#phrase Gerald 5
+What, you decided to fool us? You're gonna regret this!
+#ANIMATION 62
+#CAMERA 12
+#phrase MThief 6
+Geraldine, wait. Let's think about this. If the boy wanted to deceive us, why would he come back? Apparently he's telling the truth: the trunk was empty. It was Valrasian who tricked us.
+#ANIMATION 11
+#CAMERA 10
+#phrase Hero 7
+And that's what I'm talking about! There was nothing in the trunk. How was I supposed to bring you what wasn't there!
+#ANIMATION 15
+#CAMERA 11
+#phrase Gerald 8
+Okay, not nice to say, you stood the test. Though I don't understand where the nugget went.
+#ANIMATION 17
+#CAMERA 12
+#phrase MThief 9
+We'll deal with the nugget later. Most importantly, these guys are not spies. Oh sorry! A boy - and a girl. :)
