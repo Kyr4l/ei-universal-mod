@@ -180,14 +180,14 @@ function replaceOldMod {
 function main {
     checkCommands
     directoryCreation
-    ini2Reg
     copyMaps
     copyHdPack
     eiDbEditor
-    packLanguageTexts
     dds2Mmp
     writeVersion
+    packLanguageTexts
     eiPacker
+    ini2Reg
     addLua
     replaceOldMod
 }
