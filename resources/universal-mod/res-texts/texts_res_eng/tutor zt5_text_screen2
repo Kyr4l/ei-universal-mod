@@ -1,5 +1,0 @@
-     You can issue your character the "Go and prepare to attack" command. This puts him in a fighting mode and he'll attack all enemies he sees.
-
-     To issue this command, press and hold the <CTRL> key then click on a destination point. He will move towards this location, fighting any enemies he sees on the way.
-
-     Note: in this mode your character will attack all enemies he sees near his location. If you try to send him to a location too far off, he'll defend himself if attacked on the way. After that, however, he will stop and wait for further instruction.

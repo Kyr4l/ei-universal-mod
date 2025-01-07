@@ -1,1 +1,0 @@
-When hitting an enemy, this weapon inflicts damage between the minimum and maximum value of the 'damage' parameter. If the enemy is protected by armor, the damage inflicted by the weapon decreases to an amount equal to the armor parameter value. If the enemy's armor exceeds the maximum damage value, this weapon is rendered ineffective.

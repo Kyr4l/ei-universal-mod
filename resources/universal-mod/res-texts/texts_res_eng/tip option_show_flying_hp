@@ -1,7 +1,0 @@
-Show hit results
-You can see the result of every blow in the game: damage inflicted 
-by the characters, method of damage infliction, and experience gained. 
-These results can be seen as strings and numbers flying away 
-from the character after hit.
-On: show hit results. 
-Off: do not show hit results.

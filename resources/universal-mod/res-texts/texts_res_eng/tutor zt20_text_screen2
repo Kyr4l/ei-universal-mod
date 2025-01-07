@@ -1,5 +1,0 @@
-     To make it easier to control several characters at the same time, you should make them follow one another.
-     To do this, select a character then place the cursor over the "Follow" icon (it's framed), and click. You'll see that the cursor changes its shape. Now place the cursor on another character (the target doesn't have to be under your control) and click again. The selected character will start following the one you just clicked on.
-     If you send your character to a particular place, the "Follow" mode will be cancelled.
-
-     You can also issue the "Follow" command using the <F> key.

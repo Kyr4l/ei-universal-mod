@@ -1,2 +1,0 @@
-Health
-Health determines how much damage your character can sustain. When damaged, the character's Health diminishes. When Health reaches 0 or less, the character dies.
