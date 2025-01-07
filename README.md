@@ -35,16 +35,25 @@ We value feedback! If you have any comments to make please open an Issue on this
 - Run EIStarter and select "Universal-Mod", then click "Play""
 
 
-### Linux only : Extra step to run the game with WINE :
+### Linux only : Extra steps to run the game with WINE :
 
 WINE requires a DLL override to run EIStarter properly, otherwise the injection will fail and the game will launch in vanilla.
 
-You need to use the following environment variable : `WINEDLLOVERRIDES="dinput=n,b"`
+It is **strongly** recommended to install the game with Lutris, as it provides a dedicated environment to run the game.
+
+Here is how to set it up with Lutris:
+- Open Lutris and right click on your game then open the **Properties** menu
+- Switch to the **Game options** tab and select the starter executable (EIStarter.exe)
+- Go to the **Runner options** and add the following **DLL override**: `dinput` as the **Key** and `n,b` as **Value**
+- Save and play!
+
+If you use EIStarter 2.0 instead of the old version, you need to install `dotnet8`. 
+Simply select your game in Lutris and click the WINE drop-down menu, then open Winetricks and install `dotnet8` from there.
 
 
 # Disclaimer
 
-- We __do not__ own any of the tools used *except* the scripts in __ei-multitool__, the binaries used are community tools.
+- We **do not** own any of the tools used *except* the scripts in **ei-multitool**, the binaries used are community tools.
 - Some files included in `./resources/reference-assets` come from the vanilla game, some others come from other mods.
 
 
