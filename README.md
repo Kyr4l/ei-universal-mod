@@ -20,8 +20,10 @@ And more!
 
 *This mod includes HD Lands*
 
-*Requires EIStarter, which is provided on this repo, but it can also be found on `gipat.ru` with the following links*
+*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory*
+
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z) 
+
 [Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (Old) 
 
 We value feedback! If you have any comments to make please open an Issue on this repo.
