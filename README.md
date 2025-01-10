@@ -55,6 +55,17 @@ If you use EIStarter 2.0 instead of the old version, you need to install `dotnet
 Simply select your game in Lutris and click the WINE drop-down menu, then open Winetricks and install `dotnet8` from there.
 
 
+# Hosting & Joining Servers
+
+*The master servers of this game have been shut down long ago, therefore server discovery is no longer possible unless you use a few community servers.*
+
+Unless you use a master server, the multiplayer menu will be empty unless there is a host on your local network. Connecting to a game has to be done directly, which means by connecting to an IP manually, this can be done in the Multiplayer menu.
+Simply enter the IP of the other player hosting the game, if everything goes right then you should see a ping value, if this value is 999 that means either the IP is invalid, or the host didn't setup their NAT/Firewall to allow incoming connections.
+
+In order to host servers for this game outside of a local network (LAN), you need to open the port 8888/UDP, this must be done on your router configuration panel. 
+Then your compouter should display a prompt asking to allow the game to access the firewall, this must be granted.
+
+
 # Disclaimer
 
 - We **do not** own any of the tools used *except* the scripts in **ei-multitool**, the binaries used are community tools.
