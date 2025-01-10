@@ -10,6 +10,7 @@ resdir="res"
 rextdir="res-unpacked"
 reslangdir="res-texts"
 luadir="lua"
+inidir="ini"
 
 # stop execution if rsync/wine/progress is missing
 function checkCommands {
@@ -28,7 +29,6 @@ function directoryCreation {
 }
 
 function ini2Reg {
-    local inidir="ini"
     echo "======================================== PROCESSING INI FILES ========================================"
     echo "Converting INI files to REG"
 
@@ -123,6 +123,7 @@ function writeVersion {
     version=$(cat "$versionfile")
     local resversionname="$reslangdir/texts_res_$lang/string version_name"
     local versiontemplate="version/version-name-format.txt"
+    local configini="$inidir/config.ini"
     echo "======================================== WRITING VERSION ========================================"
 
     if [[ "$writeversionnswr" == "y" ]]; then
@@ -142,9 +143,11 @@ function writeVersion {
         echo "$version" >"$versionfile"
     fi
 
+    sed -i "s/^Version=.*/Version=$version/" "$configini" && echo "Version written in $configini"
     cp -vL "$versiontemplate" "$resversionname"
-    sed -i "s/ver\./ver. $version/" "$resversionname"
-    sed -i "s/commit\./commit. $commithashshort/" "$resversionname"
+    sed -i "s/ver\./ver. $version/" "$resversionname" && echo "Version written in $resversionname"
+    sed -i "s/commit\./commit. $commithashshort/" "$resversionname" && echo "Commit hash written in $resversionname "
+
 
     echo "File $resversionname updated with version $version and commit hash $commithashshort"
 }
@@ -180,14 +183,14 @@ function replaceOldMod {
 function main {
     checkCommands
     directoryCreation
-    ini2Reg
     copyMaps
     copyHdPack
     eiDbEditor
-    packLanguageTexts
     dds2Mmp
     writeVersion
+    packLanguageTexts
     eiPacker
+    ini2Reg
     addLua
     replaceOldMod
 }

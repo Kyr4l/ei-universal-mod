@@ -1,2 +1,0 @@
-Spell
-You can insert a spell into your weapons or armor. The spell must contain the rune of "item", which determines when this particular spell will work. Items have certain limitations which dictate the complexity and the amount of energy the inserted spells will have. If you deconstruct a "spell-loaded" item later, the spell will be returned to you and you can then use it normally.
