@@ -1,5 +1,8 @@
 # EI-Universal-Mod
 
+[Discord Server](https://discord.gg/nGm2mwakQx)
+
+
 A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
