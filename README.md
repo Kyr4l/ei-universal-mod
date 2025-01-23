@@ -1,5 +1,8 @@
 # EI-Universal-Mod
 
+[Discord Server](https://discord.gg/nGm2mwakQx)
+
+
 A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
@@ -62,7 +65,7 @@ Simply select your game in Lutris and click the WINE drop-down menu, then open W
 Unless you use a master server, the multiplayer menu will be empty unless there is a host on your local network. Connecting to a game has to be done directly, which means by connecting to an IP manually, this can be done in the Multiplayer menu.
 Simply enter the IP of the other player hosting the game, if everything goes right then you should see a ping value, if this value is 999 that means either the IP is invalid, or the host didn't setup their NAT/Firewall to allow incoming connections.
 
-In order to host servers for this game outside of a local network (LAN), you need to open the port 8888/UDP, this must be done on your router configuration panel. 
+In order to host servers for this game outside of a local network (LAN), you need to open the port `8888`/`UDP`, this must be done on your router configuration panel. 
 Then your compouter should display a prompt asking to allow the game to access the firewall, this must be granted.
 
 
