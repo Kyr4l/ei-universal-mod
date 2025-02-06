@@ -1,8 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_CURRENT_USER\Software\Robin]
-
-[HKEY_CURRENT_USER\Software\Robin\MapED]
-
-"PATH"="C:\\Program Files (x86)\\Evil Islands\\"
-"PATH_EI"="C:\\Program Files (x86)\\Evil Islands"

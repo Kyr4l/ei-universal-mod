@@ -174,7 +174,7 @@ function addLua {
 
 function replaceOldMod {
     if [[ "$replaceoldnswr" != "n" ]]; then
-        rsync -r "$moddir"/ ../../Universal-Mod
+        rsync -r --exclude "saves" --exclude "mp" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
@@ -195,7 +195,7 @@ function main {
     replaceOldMod
 }
 
-echo "Welcome to the Evil Islands Auto-Compiler script for GNU/Linux!"
+echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."
 read -rp "Select the target language for the mod (ENG/fra): " lang
 
