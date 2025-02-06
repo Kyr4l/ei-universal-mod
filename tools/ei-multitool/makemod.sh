@@ -195,7 +195,7 @@ function main {
     replaceOldMod
 }
 
-echo "Welcome to the Evil Islands Auto-Compiler script for GNU/Linux!"
+echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."
 read -rp "Select the target language for the mod (ENG/fra): " lang
 
