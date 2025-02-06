@@ -72,7 +72,7 @@ Then your compouter should display a prompt asking to allow the game to access t
 # Disclaimer
 
 - We **do not** own any of the tools used *except* the scripts in **ei-multitool**, the binaries used are community tools.
-- Some files included in `./resources/reference-assets` come from the vanilla game, some others come from other mods.
+- Some files included in `extra-assets/reference-assets` come from the vanilla game, some others come from other mods.
 
 
 # Credits
