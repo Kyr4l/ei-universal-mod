@@ -174,7 +174,7 @@ function addLua {
 
 function replaceOldMod {
     if [[ "$replaceoldnswr" != "n" ]]; then
-        rsync -r "$moddir"/ ../../Universal-Mod
+        rsync -r --exclude "saves" --exclude "mp" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
