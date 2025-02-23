@@ -8,7 +8,7 @@ moddir="mods-out"/"$(date +"%y%m%d-%H%M")"
 # resources directories
 resdir="res"
 resxdir="res-unpacked"
-reslangdir="res-texts"
+resxtextsdir="res-texts"
 luadir="lua"
 inidir="ini"
 
@@ -56,13 +56,13 @@ function copyHdPack {
 
 function packTexts {
     # language specific text res
-    # local textseng="$reslangdir/texts-eng_res"
-    # local textslmpeng="$reslangdir/textslmp-eng_res"
-    # local textsfra="$reslangdir/texts-fra_res"
-    # local textslmpfra="$reslangdir/textslmp-fra_res"
+    # local textseng="$resxtextsdir/texts-eng_res"
+    # local textslmpeng="$resxtextsdir/textslmp-eng_res"
+    # local textsfra="$resxtextsdir/texts-fra_res"
+    # local textslmpfra="$resxtextsdir/textslmp-fra_res"
     echo "======================================== PACKING TEXTS & TEXTSLMP ========================================"
 
-    for restexts in "$reslangdir"/*_res ; do
+    for restexts in "$resxtextsdir"/*_res; do
         local packedtexts="${restexts%_res}.res"
         wine bin/eipacker.exe /pack "$restexts" && rsync -rv --remove-source-files "$packedtexts" "$moddir"/res/lang/
     done
@@ -128,7 +128,6 @@ function writeVersion {
     commithashshort="$(git rev-parse --short HEAD)"
     versionfile="version/mod-version.txt"
     version=$(cat "$versionfile")
-    local resversionname="$reslangdir/texts_res_$lang/string version_name"
     local versiontemplate="version/version-name-format.txt"
     local configini="$inidir/config.ini"
     echo "======================================== WRITING VERSION ========================================"
@@ -150,13 +149,17 @@ function writeVersion {
         echo "$version" >"$versionfile"
     fi
 
-    sed -i "s/^Version=.*/Version=$version/" "$configini" && echo "Version written in $configini"
-    cp -vL "$versiontemplate" "$resversionname"
-    sed -i "s/ver\./ver. $version/" "$resversionname" && echo "Version written in $resversionname"
-    sed -i "s/commit\./commit. $commithashshort/" "$resversionname" && echo "Commit hash written in $resversionname "
+    for textsres in "$resxtextsdir"/texts-*_res; do
+        local stringversionname="$textsres/string version_name"
 
+        sed -i "s/^Version=.*/Version=$version/" "$configini" && echo "Version written in $configini"
+        cp -vL "$versiontemplate" "$stringversionname"
+        sed -i "s/ver\./ver. $version/" "$stringversionname" && echo "Version written in $stringversionname"
+        sed -i "s/commit\./commit. $commithashshort/" "$stringversionname" && echo "Commit hash written in $stringversionname"
 
-    echo "File $resversionname updated with version $version and commit hash $commithashshort"
+        echo "File $stringversionname updated with version $version and commit hash $commithashshort"
+    done
+
 }
 
 function packRes {
