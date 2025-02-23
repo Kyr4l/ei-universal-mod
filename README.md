@@ -27,7 +27,7 @@ And more!
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z) 
 
-[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (Old, use Starter 2.0 if possible)
+[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (DEPRECATED / SOME FEATURES AREN'T SUPPORTED)
 
 We value feedback! If you have any comments to make please open an Issue on this repo.
 

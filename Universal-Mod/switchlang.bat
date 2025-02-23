@@ -1,0 +1,2 @@
+@echo off
+echo "UNIVERSAL MOD - LANGUAGE SWITCH TOOL"

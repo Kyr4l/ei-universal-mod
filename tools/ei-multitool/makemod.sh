@@ -7,7 +7,7 @@ export WINEDEBUG=-all
 moddir="mods-out"/"$(date +"%y%m%d-%H%M")"
 # resources directories
 resdir="res"
-rextdir="res-unpacked"
+resxdir="res-unpacked"
 reslangdir="res-texts"
 luadir="lua"
 inidir="ini"
@@ -25,7 +25,7 @@ function checkCommands {
 # create the mod directory structure
 function directoryCreation {
     echo "CREATED MOD DIRECTORY: $moddir"
-    mkdir -vp "$moddir"/{config,res,maps}
+    mkdir -vp "$moddir"/{config,"res/lang",maps}
 }
 
 function ini2Reg {
@@ -54,35 +54,42 @@ function copyHdPack {
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
-function packLanguageTexts {
+function packTexts {
     # language specific text res
-    local textseng="$reslangdir/texts_res_eng"
-    local textslmpeng="$reslangdir/textslmp_res_eng"
-    local textsfra="$reslangdir/texts_res_fra"
-    local textslmpfra="$reslangdir/textslmp_res_fra"
+    # local textseng="$reslangdir/texts-eng_res"
+    # local textslmpeng="$reslangdir/textslmp-eng_res"
+    # local textsfra="$reslangdir/texts-fra_res"
+    # local textslmpfra="$reslangdir/textslmp-fra_res"
     echo "======================================== PACKING TEXTS & TEXTSLMP ========================================"
-    echo "Selected language: $lang"
 
-    if [[ "$lang" == "eng" ]]; then
-        local restextsout="${textseng%_eng}.eng"
-        local restextslmpout="${textslmpeng%_eng}.eng"
-        wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
-        wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-    elif [[ "$lang" == "fra" ]]; then
-        local restextsout="${textsfra%_fra}.fra"
-        local restextslmpout="${textslmpfra%_fra}.fra"
-        wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
-        wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-    fi
+    for restexts in "$reslangdir"/*_res ; do
+        local packedtexts="${restexts%_res}.res"
+        wine bin/eipacker.exe /pack "$restexts" && rsync -rv --remove-source-files "$packedtexts" "$moddir"/res/lang/
+    done
 
+    cp -v "$moddir"/res/lang/texts-eng.res "$moddir"/res/texts.res
+    cp -v "$moddir"/res/lang/textslmp-eng.res "$moddir"/res/textslmp.res
+    # echo "Selected language: $lang"
+
+    # if [[ "$lang" == "eng" ]]; then
+    #     local restextsout="${textseng%_eng}.eng"
+    #     local restextslmpout="${textslmpeng%_eng}.eng"
+    #     wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
+    #     wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
+    # elif [[ "$lang" == "fra" ]]; then
+    #     local restextsout="${textsfra%_fra}.fra"
+    #     local restextslmpout="${textslmpfra%_fra}.fra"
+    #     wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
+    #     wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
+    # fi
 }
 
 function dds2Mmp {
     local resddsdir="res-dds"
     local texturesddsdir="$resddsdir/textures_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
-    local texturesmmpdir="$rextdir/textures_res"
-    local redressmmpdir="$rextdir/redress_res"
+    local texturesmmpdir="$resxdir/textures_res"
+    local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
         echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
@@ -152,16 +159,16 @@ function writeVersion {
     echo "File $resversionname updated with version $version and commit hash $commithashshort"
 }
 
-function eiPacker {
+function packRes {
     echo "======================================== PACKING RES FILES ========================================"
 
-    for rextin in "$rextdir"/*_res; do
-        local resout="${rextin%_res}.res"
-        wine bin/eipacker.exe /pack "$rextin" && rsync -rv --remove-source-files "$resout" "$resdir"
+    for resxin in "$resxdir"/*_res; do
+        local resout="${resxin%_res}.res"
+        wine bin/eipacker.exe /pack "$resxin" && rsync -rv --remove-source-files "$resout" "$resdir"
     done
 
     echo "Deleting empty directories"
-    find ./"$rextin" -depth -type d -empty -delete
+    find ./"$resxin" -depth -type d -empty -delete
     echo "Moving RES files into $moddir/res"
     mv -fv "$resdir"/*.res "$moddir"/res
 }
@@ -188,8 +195,8 @@ function main {
     eiDbEditor
     dds2Mmp
     writeVersion
-    packLanguageTexts
-    eiPacker
+    packTexts
+    packRes
     ini2Reg
     addLua
     replaceOldMod
@@ -197,13 +204,13 @@ function main {
 
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."
-read -rp "Select the target language for the mod (ENG/fra): " lang
+# read -rp "Select the target language for the mod (ENG/fra): " lang
 
-if [[ ! $lang =~ ^(eng|fra)$ ]]; then
-    echo "Unsupported language or empty string detected, defaulting to English."
-    lang="eng"
-fi
-moddir="$moddir-$lang"
+# if [[ ! $lang =~ ^(eng|fra)$ ]]; then
+#     echo "Unsupported language or empty string detected, defaulting to English."
+#     lang="eng"
+# fi
+# moddir="$moddir-$lang"
 
 read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
