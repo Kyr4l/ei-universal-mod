@@ -6,6 +6,14 @@ set "reslangdir=%resdir%\lang"
 
 set "languages="
 
+echo.
+echo =====================================
+echo UNIVERSAL MOD LANGUAGE SWITCHING TOOL
+echo =====================================
+echo.
+echo Detected Languages:!languages!
+echo.
+
 for %%f in (%reslangdir%\texts-*res) do (
     set filename=%%~nf
     set langcode=!filename:~6,3!
@@ -16,14 +24,6 @@ for %%f in (%reslangdir%\texts-*res) do (
         echo !langcode! is incomplete!
     )
 )
-
-echo.
-echo =====================================
-echo UNIVERSAL MOD LANGUAGE SWITCHING TOOL
-echo =====================================
-echo.
-echo Detected Languages:!languages!
-echo.
 
 if "!languages!"=="" (
     echo No languages found. Exiting.
