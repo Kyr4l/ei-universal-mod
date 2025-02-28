@@ -1,6 +1,8 @@
 @echo off
 setlocal enabledelayedexpansion
 
+cd %~dp0
+
 set "resdir=.\res"
 set "reslangdir=%resdir%\lang"
 
@@ -27,6 +29,7 @@ for %%f in (%reslangdir%\texts-*res) do (
 
 if "!languages!"=="" (
     echo No languages found. Exiting.
+    pause
     exit /b 1
 )
 
