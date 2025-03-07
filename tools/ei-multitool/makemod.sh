@@ -139,7 +139,7 @@ function writeVersion {
         sed -i "s/^Version=.*/Version=$version/" "$configini" && echo "Version written in $configini"
         cp -vL "$versiontemplate" "$stringversionname"
         sed -i "s/ver\./ver. $version/" "$stringversionname" && echo "Version written in $stringversionname"
-        sed -i "s/commit\./commit. $commithashshort/" "$stringversionname" && echo "Commit hash written in $stringversionname"
+        sed -i "s/post-commit\./post-commit. $commithashshort/" "$stringversionname" && echo "Commit hash written in $stringversionname"
 
         echo "File $stringversionname updated with version $version and commit hash $commithashshort"
     done
