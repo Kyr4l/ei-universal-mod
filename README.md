@@ -66,10 +66,17 @@ Simply enter the IP of the other player hosting the game, if everything goes rig
 In order to host servers for this game outside of a local network (LAN), you need to open the port `8888`/`UDP`, this must be done on your router configuration panel.
 Then your compouter should display a prompt asking to allow the game to access the firewall, this must be granted.
 
+## Assets ownership
+This mod is open-source, however open source doesn't mean «free to stel».
+Every asset used in Universal Mod (besides the vanilla ones) are either created/modified by us, or taken from other mods or resources with permission.
+If we accidentaly used assets that we do not have permission to use, then please feel free to submit an issue and point which assets we used without permission, mistakes can happen.
+For every asset that we created, we require from modders using our assets to link Universal Mod in the credits, that includes the mod name, along with the repository link.
+
 ## Disclaimer
 
 - We __do not__ own any of the tools used *except* the scripts in __ei-multitool__, the binaries used are community tools.
 - Some files included in `extra-assets/reference-assets` come from the vanilla game, some others come from other mods.
+- This mod was created by Westerners and helped by a few Russians, we do __not__ wish to participate in any conflict related or not to the current events. Politics shall __not__ interfere with out love for an old game.
 
 ## Credits
 
