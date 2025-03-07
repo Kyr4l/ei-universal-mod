@@ -7,8 +7,8 @@ export WINEDEBUG=-all
 moddir="mods-out"/"$(date +"%y%m%d-%H%M")"
 # resources directories
 resdir="res"
-rextdir="res-unpacked"
-reslangdir="res-texts"
+resxdir="res-unpacked"
+resxtextsdir="res-texts"
 luadir="lua"
 inidir="ini"
 
@@ -25,7 +25,7 @@ function checkCommands {
 # create the mod directory structure
 function directoryCreation {
     echo "CREATED MOD DIRECTORY: $moddir"
-    mkdir -vp "$moddir"/{config,res,maps}
+    mkdir -vp "$moddir"/{config,"res/lang",maps}
 }
 
 function ini2Reg {
@@ -54,35 +54,26 @@ function copyHdPack {
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
-function packLanguageTexts {
-    # language specific text res
-    local textseng="$reslangdir/texts_res_eng"
-    local textslmpeng="$reslangdir/textslmp_res_eng"
-    local textsfra="$reslangdir/texts_res_fra"
-    local textslmpfra="$reslangdir/textslmp_res_fra"
+function packTexts {
     echo "======================================== PACKING TEXTS & TEXTSLMP ========================================"
-    echo "Selected language: $lang"
 
-    if [[ "$lang" == "eng" ]]; then
-        local restextsout="${textseng%_eng}.eng"
-        local restextslmpout="${textslmpeng%_eng}.eng"
-        wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
-        wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-    elif [[ "$lang" == "fra" ]]; then
-        local restextsout="${textsfra%_fra}.fra"
-        local restextslmpout="${textslmpfra%_fra}.fra"
-        wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
-        wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-    fi
+    for restexts in "$resxtextsdir"/*_res; do
+        local packedtexts="${restexts%_res}.res"
+        wine bin/eipacker.exe /pack "$restexts" && mv -v "$packedtexts" "$moddir"/res/lang/
+    done
 
+    cp -v "$moddir"/res/lang/texts-eng.res "$moddir"/res/texts.res
+    cp -v "$moddir"/res/lang/textslmp-eng.res "$moddir"/res/textslmp.res
+
+    echo "Copy the texts-<LANGUAGE>.res and textslmp-<LANGUAGE>.res files from this directory and paste them in the directory above this one, then rename them to texts.res and textslmp.res" > "$moddir"/res/lang/HOWTO-SWITCHLANG.txt
 }
 
 function dds2Mmp {
     local resddsdir="res-dds"
     local texturesddsdir="$resddsdir/textures_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
-    local texturesmmpdir="$rextdir/textures_res"
-    local redressmmpdir="$rextdir/redress_res"
+    local texturesmmpdir="$resxdir/textures_res"
+    local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
         echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
@@ -121,7 +112,6 @@ function writeVersion {
     commithashshort="$(git rev-parse --short HEAD)"
     versionfile="version/mod-version.txt"
     version=$(cat "$versionfile")
-    local resversionname="$reslangdir/texts_res_$lang/string version_name"
     local versiontemplate="version/version-name-format.txt"
     local configini="$inidir/config.ini"
     echo "======================================== WRITING VERSION ========================================"
@@ -143,25 +133,28 @@ function writeVersion {
         echo "$version" >"$versionfile"
     fi
 
-    sed -i "s/^Version=.*/Version=$version/" "$configini" && echo "Version written in $configini"
-    cp -vL "$versiontemplate" "$resversionname"
-    sed -i "s/ver\./ver. $version/" "$resversionname" && echo "Version written in $resversionname"
-    sed -i "s/commit\./commit. $commithashshort/" "$resversionname" && echo "Commit hash written in $resversionname "
+    for textsres in "$resxtextsdir"/texts-*_res; do
+        local stringversionname="$textsres/string version_name"
 
+        sed -i "s/^Version=.*/Version=$version/" "$configini" && echo "Version written in $configini"
+        cp -vL "$versiontemplate" "$stringversionname"
+        sed -i "s/ver\./ver. $version/" "$stringversionname" && echo "Version written in $stringversionname"
+        sed -i "s/post-commit\./post-commit. $commithashshort/" "$stringversionname" && echo "Commit hash written in $stringversionname"
 
-    echo "File $resversionname updated with version $version and commit hash $commithashshort"
+        echo "File $stringversionname updated with version $version and commit hash $commithashshort"
+    done
 }
 
-function eiPacker {
+function packRes {
     echo "======================================== PACKING RES FILES ========================================"
 
-    for rextin in "$rextdir"/*_res; do
-        local resout="${rextin%_res}.res"
-        wine bin/eipacker.exe /pack "$rextin" && rsync -rv --remove-source-files "$resout" "$resdir"
+    for resxin in "$resxdir"/*_res; do
+        local resout="${resxin%_res}.res"
+        wine bin/eipacker.exe /pack "$resxin" && mv -v "$resout" "$resdir"
     done
 
     echo "Deleting empty directories"
-    find ./"$rextin" -depth -type d -empty -delete
+    find ./"$resxin" -depth -type d -empty -delete
     echo "Moving RES files into $moddir/res"
     mv -fv "$resdir"/*.res "$moddir"/res
 }
@@ -174,7 +167,8 @@ function addLua {
 
 function replaceOldMod {
     if [[ "$replaceoldnswr" != "n" ]]; then
-        rsync -r --exclude "saves" --exclude "mp" --delete "$moddir"/ ../../Universal-Mod
+        echo "============================== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
+        rsync -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
@@ -188,8 +182,8 @@ function main {
     eiDbEditor
     dds2Mmp
     writeVersion
-    packLanguageTexts
-    eiPacker
+    packTexts
+    packRes
     ini2Reg
     addLua
     replaceOldMod
@@ -197,13 +191,6 @@ function main {
 
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."
-read -rp "Select the target language for the mod (ENG/fra): " lang
-
-if [[ ! $lang =~ ^(eng|fra)$ ]]; then
-    echo "Unsupported language or empty string detected, defaulting to English."
-    lang="eng"
-fi
-moddir="$moddir-$lang"
 
 read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
@@ -216,3 +203,30 @@ main
 echo ""
 echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"
 echo ""
+
+# UNUSED CODE SECTION
+
+# read -rp "Select the target language for the mod (ENG/fra): " lang
+# if [[ ! $lang =~ ^(eng|fra)$ ]]; then
+#     echo "Unsupported language or empty string detected, defaulting to English."
+#     lang="eng"
+# fi
+# moddir="$moddir-$lang"
+# echo "Selected language: $lang"
+
+# language specific text res
+# local textseng="$resxtextsdir/texts-eng_res"
+# local textslmpeng="$resxtextsdir/textslmp-eng_res"
+# local textsfra="$resxtextsdir/texts-fra_res"
+# local textslmpfra="$resxtextsdir/textslmp-fra_res"
+# if [[ "$lang" == "eng" ]]; then
+#     local restextsout="${textseng%_eng}.eng"
+#     local restextslmpout="${textslmpeng%_eng}.eng"
+#     wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
+#     wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
+# elif [[ "$lang" == "fra" ]]; then
+#     local restextsout="${textsfra%_fra}.fra"
+#     local restextslmpout="${textslmpfra%_fra}.fra"
+#     wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
+#     wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
+# fi
