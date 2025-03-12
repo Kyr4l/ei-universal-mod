@@ -29,5 +29,5 @@ jobs:
           prerelease: true
           generateReleaseNotes: true
           allowUpdates: true
-          replaceArtifacts: true
+          replacesArtifacts: true
           
