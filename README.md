@@ -82,7 +82,7 @@ For every asset that we created, we require from modders using our assets to lin
 
 ### License Notice
 
-This repository contains a mix of original code, community-created assets, and files from *Evil Islands* for reference purposes.
+This repository contains a mix of original code, community-created assets, and files from *Evil Islands* mostly for reference purposes.
 
 #### Code 
 
