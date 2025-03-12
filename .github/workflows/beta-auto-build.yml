@@ -33,7 +33,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: beta-${VERSION}-${COMMIT_HASH}
-          release_name: "Beta ${VERSION} (${COMMIT_HASH})"
+          name: "Beta ${VERSION} (${COMMIT_HASH})"
           body: "This is an automated beta release of Universal Mod.\n\nVersion: ${VERSION}\nCommit: ${COMMIT_HASH}"
           prerelease: true
           files: ${{ env.ZIP_NAME }}
