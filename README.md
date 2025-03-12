@@ -94,7 +94,7 @@ All scripts and configuration files in the `assets/universal-mod/` directory alo
 The **GPL-3.0 license does not apply** to the following:
 - **HD Lands** included in `resources/hd-lands-1.5/`.
 - **Modding tools** included in `tools/`, which remain the property of their respective authors.
-- **Extra-assets** stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are **provided for reference and internal modification only**.  
+- **Extra-assets** stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are **mostly provided for reference and internal modification only**.  
 
 These assets **cannot be redistributed separately or used outside of this project**.  
 If any rights holder requests removal, we will comply immediately.  
