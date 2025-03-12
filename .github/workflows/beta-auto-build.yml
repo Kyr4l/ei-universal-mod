@@ -26,6 +26,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
           name: "Latest Beta Build"
+          tag: "beta-latest"
           prerelease: true
           generateReleaseNotes: true
           allowUpdates: true
