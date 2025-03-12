@@ -69,6 +69,7 @@ Then your compouter should display a prompt asking to allow the game to access t
 ## Assets ownership
 
 This mod is open-source, however open source doesn't mean «free to steal».
+
 Some community assets used in this mod have unclear ownership. We use them only within the Universal Mod project and do not claim any rights over them. If any rights holder requests removal, we will comply immediately.
 If we accidentaly used assets that we do not have permission to use, then please feel free to submit an issue and point which assets we used without permission, mistakes can happen.
 For every asset that we created, we require from modders using our assets to link Universal Mod in the credits, that includes the mod name, along with the repository link.
