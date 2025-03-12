@@ -53,8 +53,8 @@ Here is how to set it up with Lutris:
 - Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__
 - Save and play!
 
-If you use EIStarter 2.0 instead of the old version, you need to install `dotnet8`.
-Simply select your game in Lutris and click the WINE drop-down menu, then open Winetricks and install `dotnet8` from there.
+If you use EIStarter 2.0 instead of the old version, you need to install `dotnet8` and `vcrun2022`.
+Simply select your game in Lutris and click the WINE drop-down menu, then open Winetricks and install `dotnet8` & `vcrun2022` from there.
 
 ## Hosting & Joining Servers
 
@@ -67,8 +67,9 @@ In order to host servers for this game outside of a local network (LAN), you nee
 Then your compouter should display a prompt asking to allow the game to access the firewall, this must be granted.
 
 ## Assets ownership
-This mod is open-source, however open source doesn't mean «free to stel».
-Every asset used in Universal Mod (besides the vanilla ones) are either created/modified by us, or taken from other mods or resources with permission.
+
+This mod is open-source, however open source doesn't mean «free to steal».
+Some community assets used in this mod have unclear ownership. We use them only within the Universal Mod project and do not claim any rights over them. If any rights holder requests removal, we will comply immediately.
 If we accidentaly used assets that we do not have permission to use, then please feel free to submit an issue and point which assets we used without permission, mistakes can happen.
 For every asset that we created, we require from modders using our assets to link Universal Mod in the credits, that includes the mod name, along with the repository link.
 
@@ -76,7 +77,26 @@ For every asset that we created, we require from modders using our assets to lin
 
 - We __do not__ own any of the tools used *except* the scripts in __ei-multitool__, the binaries used are community tools.
 - Some files included in `extra-assets/reference-assets` come from the vanilla game, some others come from other mods.
-- This mod was created by Westerners and helped by a few Russians, we do __not__ wish to participate in any conflict related or not to the current events. Politics shall __not__ interfere with out love for an old game.
+- This mod was developed with contributions from both Western and Russian modders. It is strictly a passion project, and we do not endorse or engage in any political discussions or conflicts. Our goal is solely to enhance and preserve an old game we love.
+
+### License Notice
+
+This repository contains a mix of original code, community-created assets, and files from *Evil Islands* for reference purposes.
+
+#### Code 
+
+All scripts and configuration files in the `assets/universal-mod/` directory along with their packed versions in `Universal-Mod/` are licensed under **GPL-3.0**, allowing modification and redistribution under the terms of that license.
+̀The `makemod.sh` script in `tools/ei-multitool/` directory is also licensed under that same license.
+
+#### Assets & Modding Tools
+
+The **GPL-3.0 license does not apply** to the following:
+- **HD Lands** included in `resources/hd-lands-1.5/`.
+- **Modding tools** included in `tools/`, which remain the property of their respective authors.
+- **Extra-assets** stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are **provided for reference and internal modification only**.  
+
+These assets **cannot be redistributed separately or used outside of this project**.  
+If any rights holder requests removal, we will comply immediately.  
 
 ## Credits
 
