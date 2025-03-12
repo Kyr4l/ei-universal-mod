@@ -69,6 +69,7 @@ Then your compouter should display a prompt asking to allow the game to access t
 ## Assets ownership
 
 This mod is open-source, however open source doesn't mean «free to steal».
+
 Some community assets used in this mod have unclear ownership. We use them only within the Universal Mod project and do not claim any rights over them. If any rights holder requests removal, we will comply immediately.
 If we accidentaly used assets that we do not have permission to use, then please feel free to submit an issue and point which assets we used without permission, mistakes can happen.
 For every asset that we created, we require from modders using our assets to link Universal Mod in the credits, that includes the mod name, along with the repository link.
@@ -93,7 +94,7 @@ All scripts and configuration files in the `assets/universal-mod/` directory alo
 The **GPL-3.0 license does not apply** to the following:
 - **HD Lands** included in `resources/hd-lands-1.5/`.
 - **Modding tools** included in `tools/`, which remain the property of their respective authors.
-- **Extra-assets** stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are **provided for reference and internal modification only**.  
+- **Extra-assets** stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are **mostly provided for reference and internal modification only**.  
 
 These assets **cannot be redistributed separately or used outside of this project**.  
 If any rights holder requests removal, we will comply immediately.  
