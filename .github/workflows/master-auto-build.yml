@@ -27,7 +27,7 @@ jobs:
 
       - name: Declare ZIPNAME and echo the other variables
         run: |
-          ZIPNAME="Universal-Mod-$VERSION-beta-$COMMITHASH.zip"
+          ZIPNAME="Universal-Mod-$VERSION-$COMMITHASH.zip"
           echo "ZIPNAME=$ZIPNAME" >> $GITHUB_ENV
 
       - name: Create ZIP Archive
@@ -42,7 +42,7 @@ jobs:
           artifacts: ${{ env.ZIPNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
-          name: Latest Beta Build ${{ env.VERSION }} ${{ env.COMMITHASH }}
+          name: Universal Mod ${{ env.VERSION }} ${{ env.COMMITHASH }}
           tag: ${{ env.VERSION }}
           prerelease: false
           generateReleaseNotes: true
