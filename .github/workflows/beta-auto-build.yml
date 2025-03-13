@@ -6,25 +6,45 @@ on:
     branches: [ "beta" ]
   workflow_dispatch:
 jobs:
-  build:
+  build-beta:
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Archive Release
+
+      - name: Extract Version
+        run: |
+          VERSION=$(cat "resources/universal-mod/version/mod-version.txt" | tr -d ' \n')
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Extract Commit Hash
+        run: |
+          COMMIT_HASH=$(grep -oE '[0-9a-f]{7,}' "resources/universal-mod/res-texts/texts-eng_res/string version_name" | head -n 1)
+          echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
+
+      - name: Check and compute variables
+        run: |
+          ZIP_NAME="Universal-Mod-$VERSION-beta-$COMMIT_HASH.zip"
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          echo "$VERSION"
+          echo "$COMMIT_HASH"
+          echo "$ZIP_NAME"
+          
+      - name: Create Release Archive
         uses: thedoctor0/zip-release@0.7.5
         with:
           type: 'zip'
           path: "Universal-Mod"
-          filename: "Universal-Mod-beta-latest.zip"
+          filename: "$ZIP_NAME"
+          
       - name: Upload Release
         uses: ncipollo/release-action@v1.12.0
         # Docs here : https://github.com/marketplace/actions/create-release
         with:
-          artifacts: "Universal-Mod-beta-latest.zip"
+          artifacts: "$env.ZIP_NAME"
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
-          name: "Latest Beta Build"
+          name: "Latest Beta Build $VERSION $COMMIT_HASH "
           tag: "beta-latest"
           prerelease: true
           generateReleaseNotes: true
