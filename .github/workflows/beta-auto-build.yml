@@ -19,12 +19,12 @@ jobs:
 
       - name: Extract commit Hash
         run: |
-          COMMIT_HASH=$(grep -oE '[0-9a-f]{7,}' "resources/universal-mod/res-texts/texts-eng_res/string version_name" | head -n 1)
+          COMMITHASH=$(grep -oE '[0-9a-f]{7,}' "resources/universal-mod/res-texts/texts-eng_res/string version_name" | head -n 1)
           echo "COMMITHASH=$COMMITHASH" >> $GITHUB_ENV
 
-      - name: Declare ZIP_NAME and check the other variables
+      - name: Declare ZIPNAME and echo the other variables
         run: |
-          ZIP_NAME="Universal-Mod-$VERSION-beta-$COMMITHASH.zip"
+          ZIPNAME="Universal-Mod-$VERSION-beta-$COMMITHASH.zip"
           echo "ZIPNAME=$ZIPNAME" >> $GITHUB_ENV
           echo "$VERSION"
           echo "$COMMITHASH"
