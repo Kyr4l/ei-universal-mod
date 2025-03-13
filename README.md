@@ -35,10 +35,17 @@ We value feedback! If you have any comments to make please open an Issue on this
 
 *You need to pick which branch of the mod you want to play with, the `beta` branch is currently recommended as it contains the latest fixes, balance changes, and has overall more content.*
 
-- Download the latest archive of this mod in the [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) section __OR__ Download the entire repo for `beta` testing (using `git` is strongly recommended)
+	-> Download the mod
+- [Recommended – Stable] - Download the [Latest](https://github.com/Kyr4l/ei-universal-mod/releases/latest) archive of this mod
+__OR__
+- [Testing – Beta] - Download the [Pre-Release](https://github.com/Kyr4l/ei-universal-mod/releases) archive of this mod (automatically built from the `beta` branch and updated after each new commit)
+__OR__ 
+- [Advanced – Development] Download the entire repo and link the mod directory to EIStarter's `Mod` directory
+
+	-> Install the mod 
 - Download & extract the Evil Islands Addon 2.0, located in `tools/eistarter_obt_1.7z` (skip if you already have it installed)
 - Copy (or make a junction/symlink) the `Universal-Mod` directory into the  `<EIStarter Path>/Mods` directory
-- Run EIStarter and select "Universal-Mod", then click "Play""
+- Run EIStarter and select "Universal-Mod", then click "Play"
 
 ### Linux only : Extra steps to run the game with WINE
 
