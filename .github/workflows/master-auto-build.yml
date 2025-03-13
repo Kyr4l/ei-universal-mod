@@ -1,12 +1,15 @@
-name: Beta Auto Build
+name: Master Auto Build
 permissions:
     contents: write
 on:
-  push:
-    branches: [ "beta" ]
+  pull_request_target:
+    types:
+      - closed
+    branches: [ "master" ]
   workflow_dispatch:
 jobs:
-  build-beta:
+  build-master:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -38,10 +41,10 @@ jobs:
         with:
           artifacts: ${{ env.ZIPNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          makeLatest: false
+          makeLatest: true
           name: Latest Beta Build ${{ env.VERSION }} ${{ env.COMMITHASH }}
           tag: ${{ env.VERSION }}
-          prerelease: true
+          prerelease: false
           generateReleaseNotes: true
           allowUpdates: true
           removeArtifacts: true
