@@ -20,32 +20,32 @@ jobs:
       - name: Extract commit Hash
         run: |
           COMMIT_HASH=$(grep -oE '[0-9a-f]{7,}' "resources/universal-mod/res-texts/texts-eng_res/string version_name" | head -n 1)
-          echo "COMMIT_HASH=$COMMIT_HASH" >> $GITHUB_ENV
+          echo "COMMITHASH=$COMMITHASH" >> $GITHUB_ENV
 
       - name: Declare ZIP_NAME and check the other variables
         run: |
-          ZIP_NAME="Universal-Mod-$VERSION-beta-$COMMIT_HASH.zip"
-          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          ZIP_NAME="Universal-Mod-$VERSION-beta-$COMMITHASH.zip"
+          echo "ZIPNAME=$ZIPNAME" >> $GITHUB_ENV
           echo "$VERSION"
-          echo "$COMMIT_HASH"
-          echo "$ZIP_NAME"
+          echo "$COMMITHASH"
+          echo "$ZIPNAME"
           
       - name: Create release archive
         uses: thedoctor0/zip-release@0.7.5
         with:
           type: 'zip'
           path: "Universal-Mod"
-          filename: "$ZIP_NAME"
+          filename: "$ZIPNAME"
           
       - name: Upload release
         uses: ncipollo/release-action@v1.12.0
         # Docs here : https://github.com/marketplace/actions/create-release
         with:
-          artifacts: "${{ ZIP_NAME }}"
+          artifacts: $ZIPNAME
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
-          name: "Latest Beta Build ${{ VERSION }} ${{ COMMIT_HASH }} "
-          tag: "beta-latest"
+          name: Latest Beta Build $VERSION $COMMITHASH
+          tag: beta-latest
           prerelease: true
           generateReleaseNotes: true
           allowUpdates: true
