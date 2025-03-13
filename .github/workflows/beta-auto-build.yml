@@ -40,7 +40,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
           name: Latest Beta Build ${{ env.VERSION }} ${{ env.COMMITHASH }}
-          tag: ${{ env.version }}
+          tag: ${{ env.VERSION }}
           prerelease: true
           generateReleaseNotes: true
           allowUpdates: true
