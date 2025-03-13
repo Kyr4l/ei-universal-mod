@@ -43,5 +43,5 @@ jobs:
           tag: ${{ env.VERSION }}
           prerelease: true
           generateReleaseNotes: true
-          allowUpdates: true
+          allowUpdates: false
           removeArtifacts: true
