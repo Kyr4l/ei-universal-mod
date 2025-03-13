@@ -26,22 +26,20 @@ jobs:
         run: |
           ZIPNAME="Universal-Mod-$VERSION-beta-$COMMITHASH.zip"
           echo "ZIPNAME=$ZIPNAME" >> $GITHUB_ENV
-          echo "$VERSION"
-          echo "$COMMITHASH"
-          echo "$ZIPNAME"
           
       - name: Create ZIP Archive
         run: |
-          zip -r "$ZIPNAME" "Universal-Mod"
+          zip -r $ZIPNAME "Universal-Mod"
+          ls -lah
           
       - name: Upload release
         uses: ncipollo/release-action@v1.12.0
         # Docs here : https://github.com/marketplace/actions/create-release
         with:
-          artifacts: "$ZIPNAME"
+          artifacts: ${{ env.ZIPNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
-          name: "Latest Beta Build $VERSION $COMMITHASH "
+          name: Latest Beta Build ${{ env.VERSION }} ${{ env.COMMITHASH }}
           tag: beta-latest
           prerelease: true
           generateReleaseNotes: true
