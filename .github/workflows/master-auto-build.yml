@@ -37,7 +37,6 @@ jobs:
 
       - name: Upload release
         uses: ncipollo/release-action@v1.12.0
-        # Docs here : https://github.com/marketplace/actions/create-release
         with:
           artifacts: ${{ env.ZIPNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}

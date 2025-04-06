@@ -14,7 +14,7 @@ inidir="ini"
 
 # stop execution if rsync/wine/progress is missing
 function checkCommands {
-    for cmd in wine rsync; do
+    for cmd in wine rsync parallel; do
         if ! command -v "$cmd" &>/dev/null; then
             echo "Error : command '$cmd' is required"
             exit 1
@@ -197,30 +197,3 @@ main
 echo ""
 echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"
 echo ""
-
-# UNUSED CODE SECTION
-
-# read -rp "Select the target language for the mod (ENG/fra): " lang
-# if [[ ! $lang =~ ^(eng|fra)$ ]]; then
-#     echo "Unsupported language or empty string detected, defaulting to English."
-#     lang="eng"
-# fi
-# moddir="$moddir-$lang"
-# echo "Selected language: $lang"
-
-# language specific text res
-# local textseng="$resxtextsdir/texts-eng_res"
-# local textslmpeng="$resxtextsdir/textslmp-eng_res"
-# local textsfra="$resxtextsdir/texts-fra_res"
-# local textslmpfra="$resxtextsdir/textslmp-fra_res"
-# if [[ "$lang" == "eng" ]]; then
-#     local restextsout="${textseng%_eng}.eng"
-#     local restextslmpout="${textslmpeng%_eng}.eng"
-#     wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
-#     wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-# elif [[ "$lang" == "fra" ]]; then
-#     local restextsout="${textsfra%_fra}.fra"
-#     local restextslmpout="${textslmpfra%_fra}.fra"
-#     wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
-#     wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-# fi
