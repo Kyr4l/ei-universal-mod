@@ -93,8 +93,8 @@ This repository contains a mix of original code, community-created assets, and f
 
 #### Code 
 
-All scripts and configuration files in the `assets/universal-mod/` directory along with their packed versions in `Universal-Mod/` are licensed under **GPL-3.0**, allowing modification and redistribution under the terms of that license.
-̀The `makemod.sh` script in `tools/ei-multitool/` directory is also licensed under that same license.
+All scripts and configuration files in the `assets/universal-mod/` directory along with their packed versions in `Universal-Mod/` are licensed under **GPL-3.0**, allowing modification and redistribution under the terms of that license. 
+The `makemod.sh` script in `tools/ei-multitool/` directory is also licensed under that same license.
 
 #### Assets & Modding Tools
 
