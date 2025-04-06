@@ -78,10 +78,7 @@ function dds2Mmp {
     if [[ "$redressnswr" == "y" ]]; then
         echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
         cd $redressddsdir || exit
-        for redressdds in *.dds; do
-            local redressmmpout="${redressdds%dds}mmp"
-            wine ../../bin/MMPS.exe "$redressdds" && mv -fv "$redressmmpout" ../../"$redressmmpdir"
-        done
+        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds
         cd ../..
         echo "Processed redress"
     fi
@@ -89,10 +86,7 @@ function dds2Mmp {
     if [[ "$texturesnswr" == "y" ]]; then
         echo "======================================== PROCESSING TEXTURES DDS FILES ========================================"
         cd $texturesddsdir || exit
-        for texturesdds in *.dds; do
-            local texturesmmpout="${texturesdds%dds}mmp"
-            wine ../../bin/MMPS.exe "$texturesdds" && mv -fv "$texturesmmpout" ../../"$texturesmmpdir"
-        done
+        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds
         cd ../..
         echo "Processed textures"
     fi
