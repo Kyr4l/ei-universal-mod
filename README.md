@@ -37,9 +37,7 @@ We value feedback! If you have any comments to make please open an Issue on this
 
 ### Download the mod
 - [Recommended – Stable] - Download the [Latest](https://github.com/Kyr4l/ei-universal-mod/releases/latest) archive of this mod
-__OR__
 - [Testing – Beta] - Download the [Pre-Release](https://github.com/Kyr4l/ei-universal-mod/releases) archive of this mod (automatically built from the `beta` branch and updated after each new commit)
-__OR__ 
 - [Advanced – Development] Download the entire repo and link the mod directory to EIStarter's `Mod` directory
 
 ### Install the mod 
