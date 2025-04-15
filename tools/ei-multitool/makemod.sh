@@ -11,12 +11,16 @@ resxdir="res-unpacked"
 resxtextsdir="res-texts"
 luadir="lua"
 inidir="ini"
+mapsdir="maps"
+hdpackdir="hdlands"
+resddsdir="res-dds"
+xlsxdir="xlsx"
 
 # stop execution if rsync/wine/progress is missing
 function checkCommands {
-    for cmd in wine rsync; do
+    for cmd in wine rsync parallel; do
         if ! command -v "$cmd" &>/dev/null; then
-            echo "Error : command '$cmd' is required"
+            echo "Error: command '$cmd' is required"
             exit 1
         fi
     done
@@ -31,10 +35,7 @@ function directoryCreation {
 function ini2Reg {
     echo "======================================== PROCESSING INI FILES ========================================"
     echo "Converting INI files to REG"
-
-    for iniin in "$inidir"/*.ini; do
-        wine bin/ini2reg.exe "$iniin"
-    done
+    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/*.ini
 
     echo "Copying REG files into their respective folder…"
     mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
@@ -43,13 +44,11 @@ function ini2Reg {
 }
 
 function copyMaps {
-    local mapsdir="maps"
     echo "======================================== COPYING MAPS ========================================"
     rsync -rv "$mapsdir"/ "$moddir/maps"
 }
 
 function copyHdPack {
-    local hdpackdir="hdlands"
     echo "======================================== COPYING HD PACK ========================================"
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
@@ -69,7 +68,6 @@ function packTexts {
 }
 
 function dds2Mmp {
-    local resddsdir="res-dds"
     local texturesddsdir="$resddsdir/textures_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
     local texturesmmpdir="$resxdir/textures_res"
@@ -93,7 +91,6 @@ function dds2Mmp {
 }
 
 function eiDbEditor {
-    local xlsxdir="xlsx"
     echo "======================================== PROCESSING DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX databaselmp to RES..."
@@ -102,7 +99,6 @@ function eiDbEditor {
 }
 
 function writeVersion {
-    # version hash shortened and version file are declared globally to avoid "Declare and assign separately to avoid masking return values."
     commithashshort="$(git rev-parse --short HEAD)"
     versionfile="version/mod-version.txt"
     version=$(cat "$versionfile")
@@ -197,30 +193,3 @@ main
 echo ""
 echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"
 echo ""
-
-# UNUSED CODE SECTION
-
-# read -rp "Select the target language for the mod (ENG/fra): " lang
-# if [[ ! $lang =~ ^(eng|fra)$ ]]; then
-#     echo "Unsupported language or empty string detected, defaulting to English."
-#     lang="eng"
-# fi
-# moddir="$moddir-$lang"
-# echo "Selected language: $lang"
-
-# language specific text res
-# local textseng="$resxtextsdir/texts-eng_res"
-# local textslmpeng="$resxtextsdir/textslmp-eng_res"
-# local textsfra="$resxtextsdir/texts-fra_res"
-# local textslmpfra="$resxtextsdir/textslmp-fra_res"
-# if [[ "$lang" == "eng" ]]; then
-#     local restextsout="${textseng%_eng}.eng"
-#     local restextslmpout="${textslmpeng%_eng}.eng"
-#     wine bin/eipacker.exe /pack "$textseng" && mv -v "$restextsout" "$moddir/res/texts.res"
-#     wine bin/eipacker.exe /pack "$textslmpeng" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-# elif [[ "$lang" == "fra" ]]; then
-#     local restextsout="${textsfra%_fra}.fra"
-#     local restextslmpout="${textslmpfra%_fra}.fra"
-#     wine bin/eipacker.exe /pack "$textsfra" && mv -v "$restextsout" "$moddir/res/texts.res"
-#     wine bin/eipacker.exe /pack "$textslmpfra" && mv -v "$restextslmpout" "$moddir/res/textslmp.res"
-# fi

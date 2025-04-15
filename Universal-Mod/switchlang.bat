@@ -1,9 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-cd %~dp0
+cd /d "%~dp0"
 
-set "resdir=.\res"
+set "resdir=res"
 set "reslangdir=%resdir%\lang"
 
 set "languages="
