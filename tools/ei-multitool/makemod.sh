@@ -11,12 +11,16 @@ resxdir="res-unpacked"
 resxtextsdir="res-texts"
 luadir="lua"
 inidir="ini"
+mapsdir="maps"
+hdpackdir="hdlands"
+resddsdir="res-dds"
+xlsxdir="xlsx"
 
 # stop execution if rsync/wine/progress is missing
 function checkCommands {
     for cmd in wine rsync parallel; do
         if ! command -v "$cmd" &>/dev/null; then
-            echo "Error : command '$cmd' is required"
+            echo "Error: command '$cmd' is required"
             exit 1
         fi
     done
@@ -31,10 +35,7 @@ function directoryCreation {
 function ini2Reg {
     echo "======================================== PROCESSING INI FILES ========================================"
     echo "Converting INI files to REG"
-
-    for iniin in "$inidir"/*.ini; do
-        wine bin/ini2reg.exe "$iniin"
-    done
+    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/*.ini
 
     echo "Copying REG files into their respective folder…"
     mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
@@ -43,13 +44,11 @@ function ini2Reg {
 }
 
 function copyMaps {
-    local mapsdir="maps"
     echo "======================================== COPYING MAPS ========================================"
     rsync -rv "$mapsdir"/ "$moddir/maps"
 }
 
 function copyHdPack {
-    local hdpackdir="hdlands"
     echo "======================================== COPYING HD PACK ========================================"
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
@@ -69,7 +68,6 @@ function packTexts {
 }
 
 function dds2Mmp {
-    local resddsdir="res-dds"
     local texturesddsdir="$resddsdir/textures_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
     local texturesmmpdir="$resxdir/textures_res"
@@ -93,7 +91,6 @@ function dds2Mmp {
 }
 
 function eiDbEditor {
-    local xlsxdir="xlsx"
     echo "======================================== PROCESSING DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX databaselmp to RES..."
@@ -102,7 +99,6 @@ function eiDbEditor {
 }
 
 function writeVersion {
-    # version hash shortened and version file are declared globally to avoid "Declare and assign separately to avoid masking return values."
     commithashshort="$(git rev-parse --short HEAD)"
     versionfile="version/mod-version.txt"
     version=$(cat "$versionfile")
