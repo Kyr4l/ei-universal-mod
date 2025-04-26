@@ -36,11 +36,13 @@ We value feedback! If you have any comments to make please open an Issue on this
 *You need to pick which branch of the mod you want to play with, the `beta` branch is currently recommended as it contains the latest fixes, balance changes, and has overall more content.*
 
 ### Download the mod
+
 - [Recommended – Stable] - Download the [Latest](https://github.com/Kyr4l/ei-universal-mod/releases/latest) archive of this mod
 - [Testing – Beta] - Download the [Pre-Release](https://github.com/Kyr4l/ei-universal-mod/releases) archive of this mod (automatically built from the `beta` branch and updated after each new commit)
 - [Advanced – Development] Download the entire repo and link the mod directory to EIStarter's `Mod` directory
 
-### Install the mod 
+### Install the mod
+
 - Download & extract the Evil Islands Addon 2.0, located in `tools/eistarter_obt_1.7z` (skip if you already have it installed)
 - Copy (or make a junction/symlink) the `Universal-Mod` directory into the  `<EIStarter Path>/Mods` directory
 - Run EIStarter and select "Universal-Mod", then click "Play"
@@ -89,19 +91,20 @@ For every asset that we created, we require from modders using our assets to lin
 
 This repository contains a mix of original code, community-created assets, and files from *Evil Islands* mostly for reference purposes.
 
-#### Code 
+#### Code
 
-All scripts and configuration files in the `assets/universal-mod/` directory along with their packed versions in `Universal-Mod/` are licensed under **GPL-3.0**, allowing modification and redistribution under the terms of that license. 
+All scripts and configuration files in the `assets/universal-mod/` directory along with their packed versions in `Universal-Mod/` are licensed under __GPL-3.0__, allowing modification and redistribution under the terms of that license.
 The `makemod.sh` script in `tools/ei-multitool/` directory is also licensed under that same license.
 
 #### Assets & Modding Tools
 
-The **GPL-3.0 license does not apply** to the following:
-- **HD Lands** included in `resources/hd-lands-1.5/`.
-- **Modding tools** included in `tools/`, which remain the property of their respective authors.
-- **Extra-assets** stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are **mostly provided for reference and internal modification only**.  
+The __GPL-3.0 license does not apply__ to the following:
 
-These assets **cannot be redistributed separately or used outside of this project**.  
+- __HD Lands__ included in `resources/hd-lands-1.5/`.
+- __Modding tools__ included in `tools/`, which remain the property of their respective authors.
+- __Extra-assets__ stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are __mostly provided for reference and internal modification only__.  
+
+These assets __cannot be redistributed separately or used outside of this project__.  
 If any rights holder requests removal, we will comply immediately.  
 
 ## Credits

@@ -1,8 +1,0 @@
-The amulet is not dangerous now
-#show Hero
-#show Nsheriff
-#CAMERA 9
-#phrase Nsheriff  1
-I am sorry. It seems I should not have panicked. The dragon amulet only works on certain days of the year, and we have to wait for quite a while yet.
-#phrase Nsheriff  2
-We are in no hurry at the moment, so you can see to other business as you like.

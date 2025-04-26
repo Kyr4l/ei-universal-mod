@@ -1,8 +1,0 @@
-No way to beat that toad!
-#show Hero
-#show Nsheriff
-#CAMERA 5
-#phrase Hero  1
-I cannot deal with that monster! And getting to the cave is not a very pleasant business either...
-#phrase Nsheriff  2
-Such a shame! Well, in that case somebody else will have to deal with the Ogre toad.

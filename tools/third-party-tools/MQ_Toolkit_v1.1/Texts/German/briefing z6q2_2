@@ -1,8 +1,0 @@
-Das Amulett ist nicht länger gefährlich
-#show Hero
-#show Nsheriff
-#CAMERA 9
-#phrase Nsheriff  1
-Es tut mir leid, ich hätte nicht in Panik geraten sollen. Das Drachenamulett wirkt nur an bestimmten Tagen des Jahres und wir müssen jetzt noch eine ganze Zeit warten.
-#phrase Nsheriff  2
-Im Augenblick drängt die Zeit nicht, du könntest dich also auch um irgendetwas anderes kümmern.

@@ -1,8 +1,0 @@
-Es gibt keine Möglichkeit, diese Kröte zu vernichten!
-#show Hero
-#show Nsheriff
-#CAMERA 5
-#phrase Hero  1
-Ich werde mit diesem Monster nicht fertig! Und zu dieser Höhle zu gelangen ist auch nicht gerade ein leichtes Unterfangen…
-#phrase Nsheriff  2
-Zu schade! Na ja, in diesem Fall muss sich jemand anderes um die Oger-Kröte kümmern.
