@@ -1,8 +1,0 @@
-Geschenk an den Gouverneur
-#show Hero
-#show Huber
-#CAMERA 2
-#phrase Hero  1
-Gouverneur! Würdet Ihr dieses bescheidene Geschenk in Anerkennung Eurer... hm... Uneigennützigkeit und Großzügigkeit annehmen!
-#phrase Huber  2
-Oh jeh! Wisst Ihr, das Problem ist, wenn mich ein guter Mann um etwas bittet, kann ich es einfach nicht abschlagen! In Ordnung, gib mir den Goldklumpen...

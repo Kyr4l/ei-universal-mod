@@ -35,7 +35,7 @@ Configuration files placed in folder: "\Quests\z3q1"
 \Quests\z3q1\map.txt   - Game zone places for Enter end Exit and quest point coordinates.
 \Quests\z3q1\quest.Ini - Quest and Briefing configuration.
 
-English languahe birefing sceanrio in folder "\English"
+English language briefing sceanrio in folder "\English"
 \Rus\briefing z3q1_1   - Dialogue 1 (Get quest) - "Brigands' loot"
 \Rus\briefing z3q1_2   - Dialogue 2 (Refuse quest) - "Brigands are too strong!"
 \Rus\briefing z3q1_3   - Dialogue 3 (Quest compleate) - "Done!"
