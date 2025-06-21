@@ -5,6 +5,7 @@
 A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
+Several bugs and inconsistencies have also been patched or worked around.
 
 The mod includes (but is not limited to) :
 
@@ -13,7 +14,8 @@ The mod includes (but is not limited to) :
 - No XP splitting when playing with other people
 - Increased XP gain from monsters
 - Reduced perk cost multiplier
-- Reworked healing, potions are more common but cheaper
+- Reworked healing, potions are more common and cheaper
+- Simplified & rounded stats
 - More Quests/Maps
 - New materials/runes/potions/monsters/blueprints
 - Reworked melee combat
