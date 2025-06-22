@@ -1,0 +1,8 @@
+Done!
+#show Hero
+#show Sheriff
+#CAMERA 9
+#phrase Sheriff  1
+Good! This means we can still reach the Great Mage in an emergency.
+#phrase Sheriff  1
+Not good! I barely survived! Ask someone else next time.

@@ -1,0 +1,8 @@
+There is no way to kill this wolf!
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+I can't handle this monster! This wolf is just too strong for me...
+#phrase Nsheriff  2
+Too bad! Well, in this case someone else will have to take care of it.

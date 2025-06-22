@@ -17,7 +17,7 @@ ReadMe.rus.txt - Documentation in Russian.
 
      * * *
 
-Start BildAll.bat and as a result you will see:
+Start BuildAll.bat and as a result you will see:
 English .MQ in folder: "mq\English"
 Russian .MQ in folder: "mq\Russian"
 German .MQ in folder:  "mq\German"

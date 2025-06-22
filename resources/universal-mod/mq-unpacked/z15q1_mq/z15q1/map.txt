@@ -1,0 +1,23 @@
+## Todesschlucht
+#zone z15q1 suslanger game
+#res
+zone15 zone15-LMP
+#maps
+10 12
+zone15map zone15quest
+#weather
+tornado
+#sky
+normal 
+## To base
+#exit 1
+bz3mpg 1
+#deploy
+108 318 108 318
+#deployangle			
+45			
+#view
+45
+#remove
+105 317 108 321
+

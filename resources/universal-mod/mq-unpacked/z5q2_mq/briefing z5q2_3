@@ -1,0 +1,10 @@
+I have recovered a dangerous magical artifact!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Well done! We have weakened the orcs considerably.
+#phrase Hero  2
+Let's hope so, I'm getting tired of all this tension between the villagers and the orcs.
+#phrase Nsheriff  3
+For now the situation is calm and you can rest. Thank you!

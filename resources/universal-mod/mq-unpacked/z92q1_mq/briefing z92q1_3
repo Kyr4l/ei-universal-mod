@@ -1,0 +1,10 @@
+Done!
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+Well done! I'm glad you got through this safely!
+#phrase Hero  2
+Well... this task was anything but easy. I hope the reward is great.
+#phrase sheriff  3
+Of course! Here take this pile of gold as your reward!

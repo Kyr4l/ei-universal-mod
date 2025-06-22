@@ -1,0 +1,12 @@
+The treasure of the harpies
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+Our village is short of valuables due to the ongoing war with the orcs in the Sands. I heard that there are harpies in the remote mountains who have great treasure.
+#phrase Hero  2
+Hmmm... To be honest, I'm expecting a lot of trouble! Harpies are serious opponents and they are unlikely to part with their treasure voluntarily.
+#phrase sheriff  3
+There will be no difficulties! I just want you to take the harpies treasure. You don't even have to fight them... in theory.
+#phrase sheriff  4
+Of course, this is still a dangerous undertaking. Fine i'll do it! But I want part of the treasure as a reward!

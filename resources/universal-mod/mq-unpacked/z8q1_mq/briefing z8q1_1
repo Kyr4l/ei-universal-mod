@@ -1,0 +1,12 @@
+Ogres in the Sands
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+Our ally the Shei-Var Clan of orcs, has asked us for help. They report that the three ogres living in the Sands have joined forces with their enemies!
+#phrase Hero  2
+Let me guess... You're probably going to ask me to take care of it?
+#phrase sheriff  3
+Correct! We must stand by our allies. They keep the Sands under control for us.
+#phrase sheriff  4
+Be careful, these ogres are serious opponents! They are really tough and very strong. And while you're there you can also plunder the ogres' treasures!

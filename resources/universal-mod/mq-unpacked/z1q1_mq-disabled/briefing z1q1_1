@@ -1,0 +1,15 @@
+Goblins in the ruins
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+What happened? The whole Village is in a state of shock! They talk about some goblins in the ruins.
+#CAMERA 7
+#phrase Nsheriff  2
+Yes...! The goblins have taken over the old ruins. A holy place for the people of the Village. The Chosen One appeared there for the first time!
+#CAMERA 3
+#phrase Nsheriff  3
+No one can get in there to pray. The goblins attack anyone who gets close.
+#CAMERA 3 15 3 2
+#phrase Nsheriff  4
+The new leader of the goblins gathered and led a group of goblins. Find and kill them all.

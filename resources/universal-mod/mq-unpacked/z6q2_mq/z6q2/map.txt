@@ -1,0 +1,17 @@
+## Mountains
+#zone z6q2 gipat game
+#res
+zone6 zone6-LMP
+#maps
+7 12 
+zone6map zone6questM
+
+## To Base
+#exit 1
+bz1mpg 1
+#deploy
+10 25 20 45
+#remove
+0 15 10 35
+#view
+293.346

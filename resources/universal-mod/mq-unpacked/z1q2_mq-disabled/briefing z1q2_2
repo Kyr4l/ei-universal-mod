@@ -1,0 +1,8 @@
+I don’t want to be bitten by wolves, I’ll tell them!
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+The pack is too big, I can’t handle it!
+#phrase Nsheriff  2
+That is a shame. Looks like I’ll have to deal with the wolves myself.

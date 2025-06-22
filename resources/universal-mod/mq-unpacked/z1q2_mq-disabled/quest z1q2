@@ -1,0 +1,11 @@
+Wolf Pack
+The wolf pack attacked the pig pen and killed almost all of them.
+#subobj  1
+Destroy the pack
+The pig pen is located to the left of the exit from the Village.
+#subobj  2
+Find runaway pigs
+After the wolves attacked some of the pigs fled. You need to find and bring back at least one of the remaining ones.
+#subobj  3
+Lead the pigs to the pen
+The frightened pigs need to be returned to the pen.

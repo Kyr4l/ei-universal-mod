@@ -1,0 +1,10 @@
+The Armadillo Mother is dead!
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+So the rumors were true?
+#phrase Hero  2
+The entire cave is full of orcs and monsters. We should clean the whole tunnel.
+#phrase sheriff  3
+For now the immediate threat is averted. There are other, more urgent threats.

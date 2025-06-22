@@ -1,0 +1,11 @@
+The three ogres are dead!
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+Well done! This should put us in a better position in the fight against the orcs.
+#phrase Hero  2
+It wasn't easy either. It almost cost me my life!
+#phrase sheriff  3
+Well... fortunately that's not the case and you can continue to support us. Most of what you found is worthless. However, the Orc Alphabet is of great value to us!
+Here take this gold as your reward!

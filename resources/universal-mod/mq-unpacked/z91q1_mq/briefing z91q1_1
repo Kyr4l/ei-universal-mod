@@ -1,0 +1,12 @@
+The path to the Great Mage
+#show Hero
+#show Sheriff
+#CAMERA 9
+#phrase Sheriff  1
+The old witch reported that the path to the Great Mage was blocked. Now we have to take a dangerous path through the lava caves. Can you make the path safer for us?
+#phrase Hero  1
+As long as there is a reward for it... and a good one! It sounds pretty dangerous!
+#phrase Sheriff  3
+Of course, whatever we can muster shall be yours. I'm sure you're up to it.
+#phrase Sheriff  4
+Now go and clear the corridors of all the lava elementals. However, beware of the golems!

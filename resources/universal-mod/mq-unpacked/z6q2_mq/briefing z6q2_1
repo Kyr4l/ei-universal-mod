@@ -1,0 +1,14 @@
+Dragons are threatening the village!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Middle Mountains are a real headache! Orcs, goblins and now lizards ...
+#phrase Hero  2
+So what about those Lizards? Do we not have peace with them since the Chosen returned the Big Shell to its proper place? And our relations with the Hermit are good enough...
+#phrase Nsheriff  3
+I was talking about another tribe, who accept neither the Shell or the Hermit. They live in the valley in the north of the Middle Mountains, and they steal our cattle, but that is not the main problem...
+#phrase Nsheriff  4
+They managed to make a new dragon amulet, so now they can set the dragons to attack humans! So far they keep the amulet in a stash, in the ruins of the observatory, but they can take it out and use it at any time.
+#phrase Hero  5
+I see. So the amulet must disappear? All right then, I shall see what I can do...

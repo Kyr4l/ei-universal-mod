@@ -1,0 +1,12 @@
+Subterranean creatures
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+Please help us, rumors are spreading that armadillos have been spotted near the old mine. But this is impossible! These monsters have been extinct for generations.
+#phrase Hero  2
+Hmmm... Is there anyway I can help you?
+#phrase sheriff  3
+If these rumors are true, our village could be in danger. Please go and explore the old mine.
+#phrase sheriff  4
+Be careful, strange creatures seem to be hanging around in tunnels that the orcs have settled in. Find out if the rumors are true and deal with the problem at once!
