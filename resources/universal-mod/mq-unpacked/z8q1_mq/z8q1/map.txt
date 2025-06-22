@@ -1,0 +1,16 @@
+#zone z8q1 gipat game
+#res
+zone8 zone8-lmp
+#maps
+11 11
+zone8map zone8quest
+
+## To Ruins
+#exit 1
+bz1mpg 1
+#deploy
+6 240 16 248
+#remove
+2 240 10 248
+#view
+336.9

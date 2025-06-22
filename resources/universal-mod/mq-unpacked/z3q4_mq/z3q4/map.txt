@@ -1,0 +1,16 @@
+#zone z3q4 gipat game
+#res
+zone3Obr zone3Obr-LMP
+#maps
+9 10
+zone3obrmap zone3questM
+
+## To Ruins
+#exit 1
+bz1mpg 1
+#deploy
+20 130 26 147
+#remove
+0 130 20 147
+#view
+336.9

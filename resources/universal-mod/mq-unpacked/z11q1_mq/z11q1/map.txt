@@ -1,0 +1,23 @@
+## Stadtrand
+#zone z11q1 ingos game
+#res
+zone11 zone11-LMP
+#maps
+16 12
+zone11map zone11quest
+#weather
+snow
+#sky
+normal
+
+## To Town and Driads
+#exit 1
+bz2mpg 1
+#deploy
+341.8 259.85 343.8 261.85
+#remove
+330.8 260.85 343.8 273.85
+#view
+350
+#deployangle
+45

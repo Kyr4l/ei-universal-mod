@@ -1,0 +1,18 @@
+Old opencast mines
+#show Hero
+#show Huber
+#CAMERA 2
+#phrase Hero  1
+Your Excellency, you would not perchance have any assignments for me, would you? I shall not even ask for a fee. For me, the most important thing is to gain experience.
+#phrase Huber  2
+Oh, I like your approach. Yes, yes, it is ideal when people are willing to take risks for free. Of course I have an assignment for you!
+#phrase Huber  3
+The budget of our province is a bit ... strained at the moment, and I decided to renew works at the old opencast mines. But the problem is, we must first clean them up from all the monsters which breed there!
+#phrase Hero  4
+All right, just give me the key to the gates and I will do it!
+#phrase Huber  5
+Well, there's a problem here too... A while ago I ordered the key to be hidden in the valley which begins north-east of the military camp. But now apparently a herd of rabid tigers is roaming in the valley, and they will not let my servants go in and take the key. So you will have to get it yourself!
+#phrase Huber  6
+And while we are about it, why do you not kill those tigers as well? I ordered the soldiers from the camp to do it, but they dared to rebel - allegedly they have not been paid their wages! Oh, what a miserable attitude, would you not agree?
+#phrase Hero  7
+No ... Oh, I mean, yes, of course you are right, Your Excellency. And do not worry about the tigers and the old mines, everything will be done to your satisfaction!

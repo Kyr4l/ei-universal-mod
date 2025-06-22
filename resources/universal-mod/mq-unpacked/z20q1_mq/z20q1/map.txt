@@ -1,0 +1,19 @@
+## Final
+#zone z20q1 final game
+#res
+zone20 zone20-LMP
+#maps
+5 5 
+zone20map zone20quest
+#weather
+none
+#sky
+cave
+
+## To Pritown
+#exit 1
+bz4mpg 1
+#deploy
+75 135 86 145
+#view
+360

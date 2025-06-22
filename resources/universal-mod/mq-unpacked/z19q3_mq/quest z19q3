@@ -1,0 +1,23 @@
+Invasion in Gipath
+Khadagan is preparing to invade Gipath through the Portal located in Suslanger. You must switch the Portal off and make this invasion impossible.
+#subobj  1
+Getting to the portal
+The portal is located in the south-east; the only way to get near it is via one of the hanging bridges.
+#subobj  2
+Finding the Commander of the invading army
+The army headquarters is in a small house not far from the Portal.
+#subobj  3
+Killing the Commander
+The Commander of the invading army must be killed.
+#subobj  4
+Taking the Portal key
+Take the key which locks the Portal leading to Gipath from the Commander's corpse.
+#subobj  5
+Using the left magic stone
+To disable the Portal you must use the key on both the right and left Magic Obelisks.
+#subobj  6
+Using the right magic stone
+To disable the Portal you must use the key on both the right and left Magic Obelisks.
+#subobj  7
+Switching off the portal
+When both Magic Obelisks have been used, the Portal will be switched off and the army cannot then invade Gipath.

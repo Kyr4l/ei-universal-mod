@@ -1,0 +1,12 @@
+The orc artifact
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+We have heard that the orcs in the mine are guarding an old artifact.
+#phrase Hero  2
+Why are they showing interest in such an antique piece of junk?
+#phrase Nsheriff  3
+We should get a hold of it in case it has any remaining magical properties.
+#phrase Nsheriff  4
+It might help us weaken the orcs if they ever plan to attack the village.

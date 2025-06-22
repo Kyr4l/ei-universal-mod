@@ -1,0 +1,9 @@
+The pack is gone!
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+We managed to deal with the wolves, but the leader was not among them!
+#CAMERA 9
+#phrase Nsheriff  1
+Excellent! The leader is sure to collect a new pack. So it’s great that you’ve got some experience now, next time you will finish them even faster!

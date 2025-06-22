@@ -1,0 +1,12 @@
+The spider queen is dead!
+#show Hero
+#show Glav
+#CAMERA 9
+#phrase Glav  1
+Well done, my friend! That should give us an advantage in the next battles.
+#phrase Hero  1
+However, this will not work again, the spider was heavily guarded. They'll definitely double their guards next time.
+#phrase Glav  2
+For now, the queen is dead. I don't think the Khadaganians will find a new one anytime soon. You have to know that females are very rare in this species.
+#phrase Hero  2
+I hope you are right...

@@ -1,0 +1,14 @@
+Poachers in the Duke's hunting grounds!
+#show Hero
+#show Huber
+#CAMERA 3 30 3 1
+#phrase Huber  1
+The Duke has ordered me to take care of a problem. Poachers hunting on the Duke's hunting grounds...this must stop!
+#phrase Huber  2
+The city guards report that they discovered deer killed in the hunting area outside the city. It's best to look there first to find these poachers.
+#phrase Huber  3
+You must understand that the Duke's concerns are also mine, as the hunting grounds around the city also support us. We can't afford to share these grounds with any outsiders.
+#phrase Hero  1
+All right, I'll go and drive these poachers away. But there has to be something for me in it other than a warm soup once I return!
+#phrase Huber  4
+Of course my friend, the Duke is kind and generous to his allies! As long as they serve him faithfully.

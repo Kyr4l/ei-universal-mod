@@ -1,0 +1,20 @@
+Governor is waiting for a present
+#show Hero
+#show Huber
+#CAMERA 3 0 3.5 1
+#phrase Huber  1
+Mayhap you heard that I collect exotic weapons and other rarities?
+#phrase Hero  2
+Of course, Your Excellency. Everybody knows about your wonderful collection!
+#phrase Huber  3
+Good, good ... And do you know that people who are called "Your Excellency" should occasionally receive some nice gifts? Mayhap you did not know that, but now I have enlightened you, so to speak, yes?
+#NOLIPS
+#CAMERA 10
+#phrase Hero  4
+Mmm... I think I know what you mean!
+#phrase Hero  5
+Mmmm... Your Excellency!  I would like to make you a present; could you tell me what would be especially please you?
+#phrase Huber  6
+Of course I could! I would like to have that gold nugget which decorates the neck of the Royal Deer. The beast is very easy to find - he grazes in the wide valley north of the river, with the rest of his herd.
+#phrase Huber  7
+But please be careful. The Royal Deer, unlike common deer, can defend himself, so if you die, my collection will not gain a new exhibit! That would be very, very sad, don't you think?

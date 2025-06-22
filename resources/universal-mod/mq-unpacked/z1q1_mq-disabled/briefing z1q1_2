@@ -1,0 +1,8 @@
+I couldn't beat the goblins!
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+I can't deal with goblins yet!
+#phrase Nsheriff  2
+Well, I will have to deal with them myself then.

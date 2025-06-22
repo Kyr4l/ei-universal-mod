@@ -1,0 +1,12 @@
+The white wolf
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+I heard that some of the pigs in the village have been killed lately?
+#phrase Nsheriff  2
+Yes, that's right, the wolves have never been so bold as to venture near our village at night.
+#phrase Nsheriff  3
+It seems as if there is a new pack of wolves living in the nearby forest.
+#phrase Nsheriff  4
+Word is that a white wolf was spotted there, I think he is the pack leader. If we kill him the wolf pack might disappear. Please take care of the problem!

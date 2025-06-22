@@ -1,0 +1,10 @@
+Queen of will-o'-the-wisps
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+If only you knew, Rivar, how fed up I am with those Will-o'-the-wisps! My burns are healing, but every time I must pay to repair my armor, and frankly, it does not come cheap!
+#phrase Nsheriff  2
+Well, in that case you must find the Queen of the Will-o'-the-wisps - the one who breeds them. If you kill her, there will be far fewer of these creatures for a while.
+#phrase Nsheriff  3
+Try looking for the Queen in the mountain ravine north of the main gates to Dead City. There is a crystal site there, and the Queen lives somewhere near it. Good luck!

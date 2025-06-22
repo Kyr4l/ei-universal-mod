@@ -1,0 +1,14 @@
+The city treasury is empty!
+#show Hero
+#show Huber
+#CAMERA 3 30 3 1
+#phrase Huber  1
+My good friend, the city is short of money and if we don't get more gold we won't be able to pay people like you anymore.
+#phrase Huber  2
+I heard there's a treasure far to the south. However, I don't believe in fairy tales and so far there has been no reason to risk the lives of my people.
+#phrase Huber  3
+You look adventurous to me. Maybe you would like to see if there is any truth to the stories? As a reward, I promise you a good share of the treasure if it really exists.
+#phrase Hero  1
+Well, that's a great... I'm going to walk around the area on a chance basis to find a fairytale treasure and then perhaps be rewarded?
+#phrase Huber  4
+I'm sorry my friend, I can't offer you another assignment at the moment! Now go, I have an important meeting with the city guards soon.

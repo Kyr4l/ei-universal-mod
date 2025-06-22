@@ -1,0 +1,16 @@
+#zone z92q2 gipat game
+#res
+zone92 zone92-LMP
+#maps
+16 12
+zone4map zone4quest
+
+## To Ruins
+#exit 1
+bz1mpg 1
+#deploy
+20 55 26 72
+#remove
+0 55 20 72
+#view
+336.9

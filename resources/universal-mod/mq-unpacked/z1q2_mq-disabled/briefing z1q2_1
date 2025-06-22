@@ -1,0 +1,15 @@
+Wolf Pack
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+You seem sad today, Rivar. What are you so worried about?
+#CAMERA 7
+#phrase Nsheriff  2
+Oh, don’t get me started… I didn’t pay attention and the wolves in our area have grown out of control. Our pigs were attacked and the shepherds barely escaped with their lives.
+#CAMERA 3
+#phrase Nsheriff  3
+The Chosen once killed the leader of the pack and the wolves left us alone for a while. But now a cunning and ferocious leader has been spotted with the pack, it is he who inspires fear in the shepherds.
+#CAMERA 3 15 3 2
+#phrase Nsheriff  4
+It’s giving me a headache and I’m too busy to go and deal with it myself. You’re going to have to hunt them yourself the old fashioned way. We need you to get rid of them as soon as possible. The shepherds are terrified of the leader.

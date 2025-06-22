@@ -1,0 +1,17 @@
+## Ruins
+#zone z1q1 gipat game
+#res
+zone1 zone1-LMP
+#maps
+8 6
+zone1map zone1quest
+
+## To Base
+#exit 1
+bz1mpg 1
+#deploy
+184 101 190 108
+#remove
+181 108 193 120
+#view
+90

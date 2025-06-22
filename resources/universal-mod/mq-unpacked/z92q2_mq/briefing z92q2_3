@@ -1,0 +1,10 @@
+The dragons are dead!
+#show Hero
+#show sheriff
+#CAMERA 9
+#phrase sheriff  1
+I knew that these young dragons were completely harmless!
+#phrase Hero  2
+Totally harmless?... Those dragons almost ate me for breakfast! I was very lucky to have escaped safely!
+#phrase sheriff  3
+Please forgive, I didn't know that these monsters were so dangerous! We should be better prepared in the future!

@@ -1,0 +1,30 @@
+#zone z5q1 gipat game
+#res
+zone5 zone51-lmp
+#maps
+8 5
+zone5_1map zone5quest
+
+#weather
+none
+
+#sky
+cave 
+
+
+## To Ruins
+#exit 1
+bz1mpg 1
+
+#deploy
+8 80 12 87
+
+#deployangle			
+90			
+
+#view
+90
+
+#remove
+5 81 10 86
+
