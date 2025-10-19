@@ -13,7 +13,8 @@ luadir="lua"
 inidir="ini"
 mprdir="mpr"
 mobdir="mob"
-mqdir="mq"
+#mqdir="mq" # disabled cause the only line using this is disabled as well
+mqxdir="mq-unpacked"
 hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
@@ -45,11 +46,32 @@ function ini2Reg {
     mv -v "$inidir"/smessbase.reg "$moddir"/res 2>/dev/null
 }
 
+function makeQuests {
+    # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
+    echo "Converting quest INI files to REG"
+    find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe {}
+
+    echo "Removing INI files before packing" 
+    find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -delete -print
+
+    echo "Packing quests"
+    parallel wine bin/eipacker.exe {} ::: "$mqxdir"/*
+
+    echo "Converting REG files back to INI"
+    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe /pack {}
+
+    echo "Cleaning up REG files"
+    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -delete -print
+
+    echo "Moving MQ files to the mod's MAPS directory"
+    mv -v "$mqxdir"/*.mq "$moddir/maps"
+}
+
 function copyMaps {
     echo "======================================== COPYING MAPS ========================================"
     cp -rv "$mprdir"/* "$moddir/maps"
     cp -rv "$mobdir"/* "$moddir/maps"
-    cp -rv "$mqdir"/* "$moddir/maps"
+    #cp -rv "$mqdir"/* "$moddir/maps" # disabled cause replaced in makeQuests
 }
 
 function copyHdPack {
@@ -160,6 +182,7 @@ function addLua {
 }
 
 function replaceOldMod {
+    echo "======================================== REPLACING OLD MOD FILES ========================================"
     if [[ "$replaceoldnswr" != "n" ]]; then
         echo "============================== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
         rsync -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
@@ -167,10 +190,19 @@ function replaceOldMod {
     fi
 }
 
+# function cleanUp {
+#     echo "======================================== REMOVING PACKED ASSETS ========================================"
+#     if [[ "$cleanupnswr" != "n" ]]; then
+#         echo "TODO"
+#     fi
+# }
+
 # main function
 function main {
     checkCommands
     directoryCreation
+    ini2Reg
+    makeQuests
     copyMaps
     copyHdPack
     eiDbEditor
@@ -178,9 +210,9 @@ function main {
     writeVersion
     packTexts
     packRes
-    ini2Reg
     addLua
     replaceOldMod
+    #cleanUp
 }
 
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
@@ -190,6 +222,7 @@ read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
 read -rp "Increment version? (y/N) " writeversionnswr
 read -rp "Replace the older mod files? (Y/n) " replaceoldnswr
+#read -rp "Cleanup after packing? (Y/n) " cleanupnswr
 echo ""
 
 main
