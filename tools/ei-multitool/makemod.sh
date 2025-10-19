@@ -11,7 +11,9 @@ resxdir="res-unpacked"
 resxtextsdir="res-texts"
 luadir="lua"
 inidir="ini"
-mapsdir="maps"
+mprdir="mpr"
+mobdir="mob"
+mqdir="mq"
 hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
@@ -45,7 +47,9 @@ function ini2Reg {
 
 function copyMaps {
     echo "======================================== COPYING MAPS ========================================"
-    rsync -rv "$mapsdir"/ "$moddir/maps"
+    cp -rv "$mprdir"/* "$moddir/maps"
+    cp -rv "$mobdir"/* "$moddir/maps"
+    cp -rv "$mqdir"/* "$moddir/maps"
 }
 
 function copyHdPack {
