@@ -51,14 +51,14 @@ function makeQuests {
     echo "Converting quest INI files to REG"
     find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe {}
 
-    echo "Removing INI files before packing" 
-    find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -delete -print
+    #echo "Removing INI files before packing" 
+    #find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -delete -print
 
     echo "Packing quests"
     parallel wine bin/eipacker.exe {} ::: "$mqxdir"/*
 
     echo "Converting REG files back to INI"
-    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe /pack {}
+    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe {}
 
     echo "Cleaning up REG files"
     find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -delete -print
