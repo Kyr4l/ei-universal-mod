@@ -1,0 +1,220 @@
+***********************************
+*** Что нового в версии 0.5.0.2 ***
+***********************************
+11.03.2004 22:48
+& Исправлены мелкие недочеты интерфейса (tnx 2 heller).
+& Исправлена ошибка, из-за которой программа
+  не запускалась под управлением Windows 98, Windows ME.
+
+***********************************
+*** Что нового в версии 0.5.0.1 ***
+***********************************
+12.02.2004 16:25
++ Первый публичный релиз, для форума "Программисты".
+& Исправлено несколько ошибок в интерфейсе.
+- Удален код экспорта в БД.
+& Изменился Minor номер версии на "5".
+& Библиотека PSAPI.DLL больше не требуется (Отсутствует в Windows-98).
+
+***********************************
+*** Что нового в версии 0.4.0.7 ***
+***********************************
+30.10.2003 00:51
+& В интерфейсной части изменился формат STR_DW4 на RECT (Rectangle)
+& Изменился формат таблицы: MOB_VSS_CHECK.TXT
+    Изменен порядок данных в поле координат фигуры
+    -Было:  X, Y, HIGHT, WIDTH
+    +Стало: LEFT, TOP, RIGHT, BOTTOM
+
+***********************************
+*** Что нового в версии 0.4.0.6 ***
+***********************************
+17.07.2003 20:20
++ Добавлена возможность выгружать "Unload" загруженные .mob файлы.
++ В интерфейс добавлена новая информация: 
+	TypeID - шестнадцатиричный идентификатор тпа
+	Offset - Указывает на смещения в .mob файле.
+
+***********************************
+*** Что нового в версии 0.4.0.5 ***
+***********************************
+16.07.2003 16:30
+& Исправлена ошибка с исчезновением пустых каталогов в конце секции.
+& Изменился формат таблиц: MOB_VSS_BS_CHECK.TXT и MOB_VSS_BS_COMMANDS.TXT
+  В таблице MOB_VSS_BS_COMMANDS.TXT 
+    + добавлено поле связи: MOB_VSS_BS_CHECK
+    - удалил поля: VARIABLE_NUMBER и LINE_NUMBER
+  В таблице MOB_VSS_BS_CHECK 
+    -удалил поле VARIABLE_NUMBER
+
+11.07.2003 20:15
+& Исправлена ошибка в поле ID_UNIT_STATS
+	Вместо dwAIClassLie выводилось содержимое поля dwAIClassStay.
+	
+
+***********************************
+*** Что нового в версии 0.4.0.4 ***
+***********************************
+
+& Расшифровано поле ID_UNIT_STATS
+	Изменились поля "UNIT_STATS_*" в таблице - MOB_OBJECT_UNIT.TXT 
+	Изменился формат вывода поля во время просмотра MOB файлов.
+
+***********************************
+*** Что нового в версии 0.4.0.3 ***
+***********************************
+
+22.04.2003 15:04
+& Поле MOB_MOB заменил на MOB_NAME
+  и вместо номера моба теперь имя моб файла
+
+& Переименованы следующие таблицы:
+MOB_VSS_BSCHECK.TXT		->	MOB_VSS_BS_CHECK.TXT
+MOB_VSS_BSCOMMANDS.TXT	->	MOB_VSS_BS_COMMANDS.TXT
+
+& Изменилась структура следующийх таблиц:
+	MOB_VSS_BS_CHECK.TXT	- Добавлено 3 поля: VARIABLE_NUMBER, BS_CHECK_NAME, BS_CHECK_PROPERTY.
+	MOB_VSS_CHECK_TITLE.TXT - В поле TITLE для многосточнх комментариях используюется перенос строки.
+
+***********************************
+*** Что нового в версии 0.4.0.2 ***
+***********************************
+
+10.03.2003 19:50
++ Добавлена таблица:
+	MOB_MOB_SS.TXT							ID_SS_TEXT и ID_SS_TEXT_OLD
+
+10.03.2003 19:20
+& Поле MOB_MOB теперь вместо MOB_NAME
++ Добавлены таблицы:
+	MOB_DIPLOMATION_FOF.TXT					ID_DIPLOMATION_FOF
+	MOB_DIPLOMATION_PLN.TXT					ID_DIPLOMATION_PL_NAMES
+	MOB_DIR.TXT								ID_DIRICTORY
+	MOB_DIR_ELEMENTS.TXT					ID_DIR_ELEMENTS
+	MOB_MAINRANGE.TXT						ID_MAINRANGE
+	MOB_SECRANGE.TXT						ID_SECRANGE
+	MOB_MOB.TXT								Имена МОБ файлов
+	MOB_MOB_TYPE.TXT						Типы МОБ файлов (Primary Secondary)
+	MOB_OBJECT_MAGICTRAP_SPELLRUNES.TXT		Руны ID_MT...
+	MOB_OBJECT_UNIT_ARMORS_AND_WEAPONS.TXT	Объединенная база, ID_UNIT_ARMORS + ID_UNIT_WEAPONS
+	MOB_OBJECT_UNIT_SPELLS_RUNES.TXT		Руны ID_UNIT_SPELLS
+	MOB_VSS_BSCHECK.TXT						ID_VSS_BSCHECK
+	MOB_VSS_BSCOMMANDS.TXT					ID_VSS_BSCOMMANDS
+	MOB_VSS_CHECK.TXT						ID_VSS_CHECK
+	MOB_VSS_CHECK_COMMANDS.TXT				ID_VSS_CHECK_COMMANDS
+	MOB_VSS_CHECK_TITLE.TXT					ID_VSS_CHECK_TITLE
+	MOB_VSS_CUSTOMSCRIPT.TXT				ID_VSS_CUSTOMSCRIPT
+	MOB_VSS_PATHLINK.TXT					ID_VSS_PATH и ID_VSS_LINK
+	MOB_VSS_TRIGGER.TXT						ID_VSS_TRIGGER
+	MOB_VSS_VARIABLE.TXT					ID_VSS_VARIABLE
+	MOB_WORLDSET.TXT						ID_WORLDSET
+	
+04.03.2003 18:10
+& Измене алгоритм формирования базы изменен, в сторону улучшения.
+& Именен алогритм формирования первого(индексного поля) в таблице, теперь он содержит имя таблицы
++ Добавлены таблицы:
+	MOB_LIGHT.TXT							ID_LIGHT..
+	MOB_PARTICL.TXT							ID_PARTICL..
+	MOB_SOUND.TXT							ID_SOUND..
+	MOB_OBJECT.TXT							ID_OBJECT 
+	MOB_OBJECT_BODYPARTS.TXT				ID_OBJECT_BODYPARTS
+	MOB_OBJECT_LEVER.TXT					ID_LEVERS..
+	MOB_OBJECT_MAGICTRAP.TXT				ID_MT..
+	MOB_OBJECT_MAGICTRAP_AREAS.TXT			ID_MT_AREAS
+	MOB_OBJECT_MAGICTRAP_TARGETS.TXT		ID_MT_TARGETS
+	MOB_OBJECT_TORCH.TXT					ID_TORCH..
+	MOB_OBJECT_UNIT.TXT						ID_UNIT..
+	MOB_OBJECT_UNIT_ARMORS.TXT				ID_UNIT_ARMORS
+	MOB_OBJECT_UNIT_LOGIC.TXT				ID_UNIT_LOGIC
+	MOB_OBJECT_UNIT_LOGIC_GUARD.TXT			ID_LOGIC_GUARD
+	MOB_OBJECT_UNIT_LOGIC_GUARD_ACTION.TXT	ID_ACTION
+	MOB_OBJECT_UNIT_QUICKITEMS.TXT			ID_UNIT_QUICKITEMS
+	MOB_OBJECT_UNIT_QUSETITEMS.TXT			ID_UNIT_QUEST_ITEMS
+	MOB_OBJECT_UNIT_SPELLS.TXT				ID_UNIT_SPELLS
+	MOB_OBJECT_UNIT_WEAPONS.TXT				ID_UNIT_WEAPONS
+
+***********************************
+*** Что нового в версии 0.4.0.1 ***
+***********************************
+
+03.03.2003 16:55
++ Добавлен экспорт базы объектов: ID_OBJECT (файлы: Mob_Object.TXT и Mob_ObjectBodyParts.TXT)
+  Планируется добавить:
+  ID_PARTICL (файлы Mob_Particl)
+  ID_SOUND (файлы Mob_Sound)
+  ID_LIGHT (файлы Mob_Light)
+  ID_TORCH (файлы Mob_Torch)
+  ID_LEVER (файлы Mob_Lever)
+  ID_MAGIC_TRAP (файлы Mob_Trap)
+
+& Поля STATS в файле Mob_Unit.TXT теперь выводятся последними
+
+02.03.2003 17:50
++ Добален экспорт поля ID_OBJBODYPARTS в файл: "Mob_Unit_BodyParts.TXT"
+
+26.02.2003 06:20
++ Второе поле всех подчиненных таблиц - ссылка на поле [N_REC] родителя
+  UNIT_N_REC на N_REC талицы Mob_Unit.TXT
+  UNIT_LOGIC_N_REC на N_REC талицы Mob_Unit_Logic.TXT
+  UNIT_LOGIC_GUARD_N_REC на N_REC талицы Mob_Unit_Logic_Guard.TXT
+& Изменены поля таблиц:
+   Mob_Unit_Spells.TXT = SPELL_PROTOTYPE,RUNE1,RUNE2,RUNE3...,RUNE8	
+   Mob_Unit_Armor.TXT = ARMOR_PROTOTYPE, ARMOR_MATERIAL
+   Mob_Unit_Weapon.TXT = WEAPON_PROTOTYPE, WEAPON_MATERIAL   
+
+23.02.2003 22:16
++ Во все таблицы добавлено поле N_REC
++ Добавлены новые таблицы Unit_Logic_Guard и связанная с ней Unit_Logic_Guard_Action.
+
+23.02.2003 19:40
+& В Mob_Unit.TXT теперь выводится ПОЧТИ ВСЯ информация из секции ID_UNIT, 
+  исключением является: ID_BODYPARTS
+
+23.02.2003
+& Исправлена ошибка приводившая к появлению неверной информации
+& Поля STATS_11 STATS_13 STATS_15 и STATS_23 теперь выводятся в HEX виде
+
+от 22.02.2003
++ В базы добавлено поле MOB_NAME и теперь все моб-файлы распаковываются в одну базу MOB_*.txt
+& UINT_STATS разбит на 41 + 8 (42 составное поле, состоит из 8-и полей)
+& GUARD_PT разбит на 3 поля (XYZ)
++ При завершении экспорта выводим сообщение о завершении процесса.
+& Точки в имени файла теперь заменяем на символ подчеркивания '.' -> '_'
+& Исправлена ошибка в типе поля ID_UNIT_QUICK_ITEMS (было: DWORD стало: STR_SAR)
+  В этом поле по идее должен был находится лут с юнита, но в игре он всегда равен 0.
+& Расширена информация в поле редактирования ID_UNIT_STATS
++ Добавлен режим экспорта юнитов из моб файлов в отдельные таблицы. (в разработке)
+  Unpack2DB или кнопка Unpack.
+  
+**********************************************
+*** Что нового в версии 0.3b от 13.11.2002 ***
+**********************************************
+
+& Исправлена серьезная ошибка, приводившая к неработоспособности отредактированных .mob файлов
++ Появилась возможность редактирования дипломатии.
++ Увеличена скорость загрузки .mob файлов (теперь во время загрузки "mob file tree" не обновляется)
+
+***************************************
+*** Что нового в версии 0.2b (pre4) ***
+***************************************
+
++ В файле mob_desc.txt появились имена полей
+
+***************************************
+*** Что нового в версии 0.2b (pre3) ***
+***************************************
+
++ При экспорте в текстовый файл в начале файла добавляются имена полей.
++ Появилась возможность сохранения .mob файла
++ Можно изменять данные (редактировать)
+
+***************************************
+*** Что нового в версии 0.2b (pre1) ***
+***************************************
+
++ Добавлена возможность выбора нескольких файлов, в связи с этим можно
+  изменять размер диалога выбора файлов.
+  
++ В дереве теперь стали видны имя и путь загруженного файла. 
+  Если имя и путь к файлу длиннее 40 символов, то они урезаются до 40 символов.
+

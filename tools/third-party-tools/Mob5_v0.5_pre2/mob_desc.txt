@@ -1,0 +1,152 @@
+0x0000ABD0	REC	ID_WORLD_SET	"Одно значение: ""...Coordinates???"" (всего 50)"
+0x0000B010	NULL	ID_OBJ_DEF_LOGIC	n/a
+0x0000C000	NULL	ID_PR_OBJECTDBFILE	"Квестовая зона!!! (D000) (всего 50)"""
+0x0000E002	STRING	ID_DIR_NAME	Имя объекта на игровой зоне
+0xDDDDDDD1	REC	ID_DIPLOMATION	"Одно значение: ""...some landscape data"""
+0x0000ABD1	PLOT	ID_WS_WIND_DIR	
+0x0000B000	REC	ID_OBJECTSECTION	Контейнер объектов. нет ни единого значения (всего 99)
+0x0000B00A	QUATERNION	ID_OBJROTATION	
+0x0000B011	BYTE	ID_OBJ_PLAYER	Номер игрока
+0x0000E003	DWORD	ID_DIR_NINST	Уникальный код объекта
+0xDDDDDDD2	DIPLOMACY	ID_DIPLOMATION_FOF	"Одно значение: ""...Binary data (01 etc...)"" (всего 50)"
+0x0000A000	REC	ID_OBJECTDBFILE	"Одно значение: ""...Main mob-file resources"""
+0x0000AA00	NULL	ID_LIGHT_SECTION	
+0x0000ABD2	FLOAT	ID_WS_WIND_STR	
+0x0000B001	REC	ID_OBJECT	Begin of the object. Нет ни единого значения (всего 43665)
+0x0000B00B	NULL	ID_OBJTEXTURE	n/a
+0x0000B012	DWORD	ID_OBJ_PARENT_ID	
+0x0000CC00	NULL	ID_SOUND_SECTION	
+0x0000CC0A	STR_SAR	ID_SOUND_RESNAME	"Одно занчение: ""nature\Fire\small.wav"" (всего 87) в bz4g.mob ошибка - ""ature\Fire\small.wav}"""
+0x0000DD00	NULL	ID_PARTICL_SECTION	n/a
+0x0000E004	DWORD	ID_DIR_PARENT_FOLDER	значения от (-99982 до -10)
+0x0000FF00	REC	ID_SEC_RANGE	Нет ни единого значения (всего 49)
+0xDDDDDDD3	STR_SAR	ID_DIPLOMATION_PL_NAMES	"...Player names ""Player-0""...""Player-31"" (всего 50)"
+0x0000AA01	REC	ID_LIGHT	Нет ни единого значения (всего 209)
+0x0000ABD3	FLOAT	ID_WS_TIME	
+0x0000B002	DWORD	ID_NID	Присваеваемый объекту уникальный код (всего 52162)
+0x0000B00C	PLOT	ID_OBJCOMPLECTION	
+0x0000B013	BYTE	ID_OBJ_USE_IN_SCRIPT	
+0x0000CC01	REC	ID_SOUND	Нет ни единого значения (всего 87)
+0x0000CC0B	DWORD	ID_SOUND_RANGE2	Одно значение: 0 (всего 87)
+0x0000DD01	REC	ID_PARTICL	Группа объекто Particles source.  Нет ни единого значения (всего 212)
+0x0000E005	BYTE	ID_DIR_TYPE	
+0x0000FF01	REC	ID_MAIN_RANGE	"Одно значение: ""...MPR Zones???"" (всего 50)"
+0x00001E10	STR_SAR	ID_VSS_BS_COMMANDS	Сингл; Установка квестовых перемнных; только для бриффинг зон.
+0x0000AA02	FLOAT	ID_LIGHT_RANGE	Зачения от 1.5 до 9.6. (всего 209)
+0x0000ABD4	FLOAT	ID_WS_AMBIENT	
+0x0000B003	DWORD	ID_OBJTYPE	Тип оьъекта Значения: от 50 до 60 (всего 52162)
+0x0000B00D	STR_SAR	ID_OBJBODYPARTS	Части тела
+0x0000B014	BYTE	ID_OBJ_IS_SHADOW	Как правило значение = 1
+0x0000CC02	DWORD	ID_SOUND_ID	Уникальный код звука на зоне (всего 87)
+0x0000DD02	DWORD	ID_PARTICL_ID	Уникальный код Particles source (всего 212)
+0x0000FF02	REC	ID_RANGE	Нет ни единого значения (всего 187)
+0x00001E00	REC	ID_VSS_SECTION	Модуль процедур
+0x00001E0A	BYTE	ID_VSS_ISSTART	
+0x00001E11	STRING	ID_VSS_CUSTOM_SRIPT	Нет ни единого значения (всего 99)
+0x0000AA03	STRING	ID_LIGHT_NAME	"Значение: ""Light-#..."" (всего 209)"
+0x0000ABD5	FLOAT	ID_WS_SUN_LIGHT	
+0x0000B004	STRING	ID_OBJNAME	Присваеваемое объекту уникальное имя (всего 52162)
+0x0000B00E	STRING	ID_PARENTTEMPLATE	Имя юнита с пробелами
+0x0000B015	NULL	ID_OBJ_R	n/a
+0x0000CC03	PLOT	ID_SOUND_POSITION	
+0x0000CC0D	BYTE	ID_SOUND_AMBIENT	Одно значение: 0 (всего 87)
+0x0000DD03	PLOT	ID_PARTICL_POSITION	
+0xBBBB0000	REC	ID_UNIT	Контейнер добавляемого объекта (всего 7953)
+0xBBBB000A	BYTE	ID_UNIT_NEED_IMPORT	Как правило 0 в 85 случаях=1 (всего 7953)
+0x00001E01	REC	ID_VSS_TRIGER	тело условия скрипт процедуры
+0x00001E0B	REC	ID_VSS_LINK	
+0x0000AA04	PLOT	ID_LIGHT_POSITION	трех значные значения (всего 209)
+0x0000B005	NULL	ID_OBJINDEX	n/a
+0x0000B00F	STRING	ID_OBJCOMMENTS	"Значеиние: ""none"" и три раза """" (всего 52162)"
+0x0000B016	STRING	ID_OBJ_QUEST_INFO	Название квеста к которому принадлежит юнит (всего 52162)
+0x0000CC04	DWORD	ID_SOUND_RANGE	
+0x0000CC0E	BYTE	ID_SOUND_IS_MUSIC	Одно значение: 0 (всего 87)
+0x0000DD04	STRING	ID_PARTICL_COMMENTS	"Одно значение: ""none"" (всего 212)"
+0xBBAB0000	REC	ID_MAGIC_TRAP	Нет ни единого значения ( всего 13)
+0xBBBB0001	NULL	ID_UNIT_R	n/a
+0xBBBC0000	REC	ID_UNIT_LOGIC	
+0xBBBC000A	FLOAT	ID_UNIT_LOGIC_WAIT	Как правило 1 (в 39715 случаях );  (всего 39765)
+0x00001E02	REC	ID_VSS_CHECK	Условие скрипт процедуры
+0x00001E0C	STRING	ID_VSS_GROUP	Партии или группы
+0x0000AA05	DWORD	ID_LIGHT_ID	уникальный код объекта освещения
+0x0000B006	STRING	ID_OBJTEMPLATE	Шаблон Название файла анимации в ресурсах (всего 52162)
+0x0000CC05	STRING	ID_SOUND_NAME	имя звукового объекта на игровой зоне (всего 87)
+0x0000DD05	STRING	ID_PARTICL_NAME	Уникальное имя на игровой зоне Particles source (всего 212)
+0x0000FF05	DWORD	ID_MIN_ID	значения 0 или 1 или выше 1000000 (всего 187)
+0xBBAB0001	DWORD	ID_MT_DIPLOMACY	значение (-1) (всего 13)
+0xBBAC0000	REC	ID_LEVER	
+0xBBBB0002	STRING	ID_UNIT_PROTOTYPE	Имя Юнита добавляемого на карту из ресурсов
+0xBBBC0001	NULL	ID_UNIT_LOGIC_AGRESSIV	n/a
+0xBBBC000B	BYTE	ID_UNIT_LOGIC_ALARM_CONDITION	Одно значение: 0  (всего 39765)
+0xBBBD0000	REC	ID_GUARD_PT	
+0x00001E03	REC	ID_VSS_PATH	
+0x00001E0D	BYTE	ID_VSS_IS_USE_GROUP	
+0x0000AA06	BYTE	ID_LIGHT_SHADOW	Значение: 1 (всего 209)
+0x0000B007	STRING	ID_OBJPRIMTXTR	Graphics data; Primary textures (всего 52162)
+0x0000CC06	DWORD	ID_SOUND_MIN	Одно значение: 1500 (всего 87)
+0x0000DD06	DWORD	ID_PARTICL_TYPE	
+0x0000FF06	DWORD	ID_MAX_ID	значения от 999999 до 1000999999  (всего 187)
+0xBBAB0002	STRING	ID_MT_SPELL	значение: litnwall
+0xBBAC0001	NULL	ID_LEVER_SCIENCE_STATS	
+0xBBBB0003	NULL	ID_UNIT_ITEMS	n/a
+0xBBBC0002	BYTE	ID_UNIT_LOGIC_CYCLIC	Как правило = 1 в 920 случаях=0 (всего 39765)
+0xBBBC000C	FLOAT	ID_UNIT_LOGIC_HELP	
+0xBBBD0001	PLOT	ID_GUARD_PT_POSITION	Координаты размещения ... на игровой зоне (всего 4948)
+0xBBBE0000	REC	ID_ACTION_PT	
+0x00001E04	DWORD	ID_VSS_ID	Уникальный Код процедуры скрипта. Сортированный по
+0x00001E0E	REC	ID_VSS_VARIABLE	Нет ни единого значения (всего 11)
+0x0000AA07	PLOT	ID_LIGHT_COLOR	Значения: более 0 и не более 1 (всего 209) (RGB)
+0x0000B008	STRING	ID_OBJSECTXTR	Graphics data; Secondary textures (всего 52162)
+0x0000CC07	DWORD	ID_SOUND_MAX	Одно значение: 3000 (всего 87)
+0x0000DD07	FLOAT	ID_PARTICL_SCALE	
+0x31415926	STR_S08	ID_AIGRAPH	"Одно значение:  ""...some Graphics data"" (всего 49)"
+0xBBAB0003	STR_S01	ID_MT_AREAS	
+0xBBAC0002	BYTE	ID_LEVER_CUR_STATE	Как правило = 0 в 18 случаях=1 (всего 408)
+0xBBBB0004	STR_S06	ID_UNIT_STATS	Параметры добавляемого юнита
+0xBBBC0003	DWORD	ID_UNIT_LOGIC_MODEL	Дипломатическая принадлежность юнита. Как правило = 3; значения:  0 в 49 случаях макс значение 5 (всего 39765)
+0xBBBC000D	BYTE	ID_UNIT_LOGIC_ALWAYS_ACTIVE	Как правило = 0; в 212 случаях=1 (всего 39765)
+0xBBBD0002	NULL	ID_GUARD_PT_ACTION	n/a
+0xBBBE0001	PLOT	ID_ACTION_PT_LOOK_PT	Координаты размещения ... на игровой зоне (всего 4727)
+0xBBBF0000	REC	ID_TORCH	
+0x00001E05	RECT	ID_VSS_RECT	Then
+0x00001E0F	STR_SAR	ID_VSS_BS_CHECK	Сингл; Квестовые перемнные; только для бриффинг зон.
+0x0000AA08	STRING	ID_LIGHT_COMMENTS	"Значения: ""none"" (всего 209)"
+0x0000B009	PLOT	ID_OBJPOSITION	Координаты размещения объекта на игровой зоне? (всего 52162)
+0x0000CC08	STRING	ID_SOUND_COMMENTS	"Одно значение: ""none"" (всего 87)"
+0xBBAB0004	STR_S02	ID_MT_TARGETS	
+0xBBAC0003	BYTE	ID_LEVER_TOTAL_STATE	
+0xBBBB0005	STR_SAR	ID_UNIT_QUEST_ITEMS	Ключевые предметы у юнитов
+0xBBBC0004	FLOAT	ID_UNIT_LOGIC_GUARD_R	Как правило = 10; от 1 до 10 (всего 39765)
+0xBBBC000E	BYTE	ID_UNIT_LOGIC_AGRESSION_MODE	Как правило = 0; от 0 до 3  (всего 39765)
+0xBBBE0002	DWORD	ID_ACTION_PT_WAIT_SEG	
+0xBBBF0001	FLOAT	ID_TORCH_STRENGHT	
+0x00001E06	DWORD	ID_VSS_SRC_ID	
+0x0000CC09	NULL	ID_SOUND_VOLUME	n/a
+0xBBAB0005	DWORD	ID_MT_CAST_INTERVAL	
+0xBBAC0004	BYTE	ID_LEVER_IS_CYCLED	
+0xBBBB0006	STR_SAR	ID_UNIT_QUICK_ITEMS	Одно значение: 0 (всего 7953)
+0xBBBC0005	PLOT	ID_UNIT_LOGIC_GUARD_PT	Координаты размещения юнита на игровой зоне (всего 39765)
+0xBBBE0003	DWORD	ID_ACTION_PT_TURN_SPEED	
+0xBBBF0002	PLOT	ID_TORCH_PTLINK	
+0x00001E07	DWORD	ID_VSS_DST_ID	
+0xBBAC0005	BYTE	ID_LEVER_CAST_ONCE	
+0xBBBB0007	STR_SAR	ID_UNIT_SPELLS	Заклинания у юнита. (всего 7953) 8 полей (ячеек заклинаний)
+0xBBBC0006	BYTE	ID_UNIT_LOGIC_NALARM	Как правило 0; только на zone12...  в 24 случаях=1 (всего 39765)
+0xBBBE0004	BYTE	ID_ACTION_PT_FLAGS	Как правило = 0; в 1 случаях=1 (всего 4727)
+0xBBBF0003	STRING	ID_TORCH_SOUND	путь к wav
+0x00001E08	STRING	ID_VSS_TITLE	??? Примечание
+0xBBAC0006	BINARY	ID_LEVER_SCIENCE_STATS_NEW	
+0xBBBB0008	STR_SAR	ID_UNIT_WEAPONS	Оружие у юнита. (всего 7953)
+0xBBBC0007	BYTE	ID_UNIT_LOGIC_USE	n/a
+0x00001E09	STRING	ID_VSS_COMMANDS	строка условий или выполнения
+0x0000F000	REC	ID_DIRICTORY_ELEMENTS	Нет ни единого значения ( всего 99)
+0xBBAC0007	BYTE	ID_LEVER_IS_DOOR	
+0xBBBB0009	STR_SAR	ID_UNIT_ARMORS	Одежда юнита
+0xBBBC0008	NULL	ID_UNIT_LOGIC_REVENGE	
+0x0000E000	REC	ID_DIRICTORY	
+0xACCEECCA	SCRIPT	ID_SS_TEXT_OLD	Одно значение: ...WorldScript (всего 2)
+0xBBAC0008	BYTE	ID_LEVER_RECALC_GRAPH	
+0xBBBC0009	NULL	ID_UNIT_LOGIC_FEAR	n/a
+0x0000D000	NULL	ID_SC_OBJECTDBFILE	Зона без квеста (C000) (всего 49)
+0x0000E001	REC	ID_FOLDER	
+0xACCEECCB	SCRIPT_ENC	ID_SS_TEXT	...WorldScript **ENCRYPTED** (всего 97)
