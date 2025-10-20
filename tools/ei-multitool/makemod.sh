@@ -38,7 +38,7 @@ function directoryCreation {
 function ini2Reg {
     echo "======================================== PROCESSING INI FILES ========================================"
     echo "Converting INI files to REG"
-    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/*.ini
+    parallel wine bin/ini2reg.exe {} ::: "$inidir"/*.ini
 
     echo "Copying REG files into their respective folder…"
     mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
@@ -47,6 +47,7 @@ function ini2Reg {
 }
 
 function makeQuests {
+    echo ""======================================== PROCESSING QUEST FILES ========================================""
     # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
     echo "Converting quest INI files to REG"
     find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe {}
