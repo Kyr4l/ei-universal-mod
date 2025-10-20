@@ -11,7 +11,7 @@ The mod includes (but is not limited to) :
 
 - Severely reduced stamina consumption while sprinting
 - No XP loss on death, but 10x higher money loss
-- No XP splitting when playing with other people
+- XP gains aren't divided by the amount of players, instead each non-host player applies a -20% XP reduction (max -60%)
 - Increased XP gain from monsters
 - Reduced perk cost multiplier
 - Reworked healing, potions are more common and cheaper
@@ -19,7 +19,7 @@ The mod includes (but is not limited to) :
 - More Quests/Maps
 - New materials/runes/potions/monsters/blueprints
 - Reworked melee combat
-- Better looting
+- Enemies drop materials on death
 
 And more!
 
