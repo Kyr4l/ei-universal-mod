@@ -38,28 +38,28 @@ function directoryCreation {
 function ini2Reg {
     echo "======================================== PROCESSING INI FILES ========================================"
     echo "Converting INI files to REG"
-    parallel wine bin/ini2reg.exe {} ::: "$inidir"/*.ini
+    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/*.ini > /dev/null
 
     echo "Copying REG files into their respective folder…"
-    mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2>/dev/null
-    mv -v "$inidir"/{ai,music,streamsn}.reg "$moddir"/config 2>/dev/null
-    mv -v "$inidir"/smessbase.reg "$moddir"/res 2>/dev/null
+    mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2> /dev/null
+    mv -v "$inidir"/{ai,music,streamsn}.reg "$moddir"/config 2> /dev/null
+    mv -v "$inidir"/smessbase.reg "$moddir"/res 2> /dev/null
 }
 
 function makeQuests {
     echo ""======================================== PROCESSING QUEST FILES ========================================""
     # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
     echo "Converting quest INI files to REG"
-    find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe {}
+    find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
 
     #echo "Removing INI files before packing" 
     #find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -delete -print
 
     echo "Packing quests"
-    parallel wine bin/eipacker.exe {} ::: "$mqxdir"/*
+    parallel --bar wine bin/eipacker.exe {} ::: "$mqxdir"/* > /dev/null
 
     echo "Converting REG files back to INI"
-    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/reg2ini.exe {}
+    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/reg2ini.exe {} > /dev/null
 
     echo "Cleaning up REG files"
     find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -delete -print
@@ -103,7 +103,7 @@ function dds2Mmp {
     if [[ "$redressnswr" == "y" ]]; then
         echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
         cd $redressddsdir || exit
-        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds
+        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds > /dev/null
         cd ../..
         echo "Processed redress"
     fi
@@ -111,7 +111,7 @@ function dds2Mmp {
     if [[ "$texturesnswr" == "y" ]]; then
         echo "======================================== PROCESSING TEXTURES DDS FILES ========================================"
         cd $texturesddsdir || exit
-        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds
+        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds > /dev/null
         cd ../..
         echo "Processed textures"
     fi
