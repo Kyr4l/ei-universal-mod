@@ -59,7 +59,7 @@ function makeQuests {
     parallel wine bin/eipacker.exe {} ::: "$mqxdir"/*
 
     echo "Converting REG files back to INI"
-    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/eipacker.exe {}
+    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel -0 wine bin/reg2ini.exe {}
 
     echo "Cleaning up REG files"
     find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -delete -print
