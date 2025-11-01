@@ -1,0 +1,15 @@
+[Hard] Lord of Atlantis (WIP)
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+What happened? The land is a flooded mess! Strange creatures everywhere...        
+#CAMERA 7
+#phrase Nsheriff  2
+It was a Tsunami! The Lord of Atlantis himself sent it to punish an outlaw. Disaster has struck.            
+#CAMERA 3
+#phrase Nsheriff  3
+Mayhap you can help? Kill the evil creature to pacify his majesty's anger. Will you try?  
+#CAMERA 3 15 3 2
+#phrase Nsheriff  4
+Take care, traps are activated. I heard there's even a dragon around!                                                                                   

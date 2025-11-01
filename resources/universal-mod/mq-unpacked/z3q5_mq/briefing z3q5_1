@@ -1,0 +1,12 @@
+[Hard] Sh-Yuggoth
+#show Hero
+#show Nsheriff
+#CAMERA 5
+#phrase Hero  1
+There's a strange admosphere hanging over the allods... Things seem... Differend! It makes me think of Death City, Very weird!    ...
+#phrase Nsheriff  2
+Its the curse of Sh-Yuggoth! When the moons eclipse parts of the underworld materialize here, in our peacefull land. In ancient ruins skelletons and other creatures awake...    
+#phrase Nsheriff  3
+After one day they will vanish and everything will become normal again. Its rumored that the leader of the skelletons is one of the Old Ones; A foul creature that can kill with the blink of an eye! Many adventurers looked for it. 
+#phrase Nsheriff  4
+No one returned... Its a secret that puzzles me. Mayhap you have more chance? It could end the curse, who knows! Take care...

@@ -25,20 +25,39 @@
 
 require("default")
 
--- decrease the mana cost of sprinting
+-- decrease the stamina cost of sprinting
 function CalcRunningManaCost(unit_server_stats_addr, unit_server_addr, common_server_stats_addr) --> none
     local unit_stats = UnitServerStats(unit_server_stats_addr)
     local unit = UnitServer(unit_server_addr)
     local common_stats = UnitServerCommonStats(common_server_stats_addr)
     local mp = common_stats.mp
 
-    mp.curr = mp.curr - mp.max * (1 / 900)
+    -- mp.curr = mp.curr - mp.max * (1 / 900) -- this line makes it so sprinting cost is a % of the player's max's stamina value
+
+    -- this new code instead makes spriting cost a fixed amount of stamina, meaning that the more stamina you have, the longer you can sprint
+    local fixedCost = 0.3 -- stamina cost
+    mp.curr = mp.curr - fixedCost
+
 end
 
--- do not divide xp
+
+-- change XP distribution based on the amount of players
 function DistributeLmpExp(exp, playersNum) --> float
+
+    -- check how many players are in the game (except the host, that's why we add -1)
+    local extraPlayers = playersNum - 1
+
+    -- if there are more than 3 extra players in the game, the value is capped to prevent XP from reducing too much
+    if extraPlayers > 3 then
+        extraPlayers = 3
+    end
+
+    local expReduction = extraPlayers * 0.2 -- the value here indicates the % of XP reduction per extra player, 0.2 = 20%
+    exp = exp * (1 - expReduction) -- applies the reduction percentage to the final exp value
+
     return exp
 end
+
 
 -- change the perk cost multiplier
 function GetPerkPrice(unit_server_stats_addr, perk_addr) --> int
