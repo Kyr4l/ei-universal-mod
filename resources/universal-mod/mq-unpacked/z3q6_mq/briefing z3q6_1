@@ -1,0 +1,12 @@
+[DEBUG] BRIGAND'S LOOT
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+PHRASE NSHERIFF 1
+#phrase Hero  2
+PHRASE HERO 2
+#phrase Nsheriff  3
+PHRASE NSHERIFF 3
+#phrase Nsheriff  4
+PHRASE NSHERIFF 4
