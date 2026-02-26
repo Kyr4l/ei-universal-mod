@@ -13,8 +13,8 @@ luadir="lua"
 inidir="ini"
 mprdir="mpr"
 mobdir="mob"
-#mqdir="mq" # disabled cause the only line using this is disabled as well
 mqxdir="mq-unpacked"
+musicdir="stream"
 hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
@@ -32,7 +32,7 @@ function checkCommands {
 # create the mod directory structure
 function directoryCreation {
     echo "CREATED MOD DIRECTORY: $moddir"
-    mkdir -vp "$moddir"/{config,"res/lang",maps}
+    mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands}
 }
 
 function ini2Reg {
@@ -72,12 +72,16 @@ function copyMaps {
     echo "======================================== COPYING MAPS ========================================"
     cp -rv "$mprdir"/* "$moddir/maps"
     cp -rv "$mobdir"/* "$moddir/maps"
-    #cp -rv "$mqdir"/* "$moddir/maps" # disabled cause replaced in makeQuests
+}
+
+function copyMusic {
+    echo "======================================== COPYING MUSIC ========================================"
+    cp -rv "$musicdir"/* "$moddir/stream"
 }
 
 function copyHdPack {
     echo "======================================== COPYING HD PACK ========================================"
-    rsync -rv "$hdpackdir"/ "$moddir/hdlands"
+    cp -rv "$hdpackdir"/* "$moddir/hdlands"
 }
 
 function packTexts {
@@ -191,13 +195,6 @@ function replaceOldMod {
     fi
 }
 
-# function cleanUp {
-#     echo "======================================== REMOVING PACKED ASSETS ========================================"
-#     if [[ "$cleanupnswr" != "n" ]]; then
-#         echo "TODO"
-#     fi
-# }
-
 # main function
 function main {
     checkCommands
@@ -205,6 +202,7 @@ function main {
     ini2Reg
     makeQuests
     copyMaps
+    copyMusic
     copyHdPack
     eiDbEditor
     dds2Mmp
@@ -223,7 +221,6 @@ read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
 read -rp "Increment version? (y/N) " writeversionnswr
 read -rp "Replace the older mod files? (Y/n) " replaceoldnswr
-#read -rp "Cleanup after packing? (Y/n) " cleanupnswr
 echo ""
 
 main
