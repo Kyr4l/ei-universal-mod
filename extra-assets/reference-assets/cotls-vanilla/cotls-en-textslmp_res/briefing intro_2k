@@ -1,0 +1,8 @@
+Welcome
+#show Hero
+#show Shopper
+#CAMERA 3 30 3 1
+#phrase Shopper  1
+Welcome, dear customer!
+#phrase Shopper  2
+I run my business like this: you have money, you are welcome. You have no money, you are also welcome. There is no charge for having a look, but there is no credit either. Earn some money, come back and buy what you want.

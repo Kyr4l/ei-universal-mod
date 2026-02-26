@@ -1,0 +1,432 @@
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 18:48:24] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 18:48:25] {INFO} 	 aux objects loaded
+[26.02.2026 18:48:25] {INFO} 	 aux texture loaded
+[26.02.2026 18:50:48] {WARNING} 	 cannot find texture for zone, loading default
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 18:52:03] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 18:52:04] {INFO} 	 aux objects loaded
+[26.02.2026 18:52:04] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 18:52:17] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 18:52:18] {INFO} 	 aux objects loaded
+[26.02.2026 18:52:18] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 19:36:02] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 19:36:04] {INFO} 	 aux objects loaded
+[26.02.2026 19:36:04] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 19:36:22] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 19:36:24] {INFO} 	 aux objects loaded
+[26.02.2026 19:36:24] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 19:36:31] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 19:36:32] {INFO} 	 aux objects loaded
+[26.02.2026 19:36:32] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 19:36:44] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 19:36:45] {INFO} 	 aux objects loaded
+[26.02.2026 19:36:45] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 19:37:13] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 19:37:13] {INFO} 	 aux objects loaded
+[26.02.2026 19:37:13] {INFO} 	 aux texture loaded
+[26.02.2026 19:39:30] {INFO} 	 Start read terrain: D:/temp-workspace/ei/ei_maper/maps/bz4g.mpr
+[26.02.2026 19:39:30] {INFO} 	 End read terrain
+[26.02.2026 19:39:45] {INFO} 	 Landscape unloaded
+[26.02.2026 19:40:15] {INFO} 	 Start read terrain: D:/temp-workspace/ei/ei_maper/maps/bz4g.mpr
+[26.02.2026 19:40:15] {INFO} 	 End read terrain
+[26.02.2026 19:40:23] {INFO} 	 Landscape unloaded
+[26.02.2026 19:40:29] {INFO} 	 Start read terrain: D:/temp-workspace/ei/ei_maper/maps/bz7g.mpr
+[26.02.2026 19:40:29] {INFO} 	 End read terrain
+[26.02.2026 19:40:53] {INFO} 	 Landscape unloaded
+[26.02.2026 19:40:57] {INFO} 	 Start read terrain: D:/temp-workspace/ei/ei_maper/maps/bz7g.mpr
+[26.02.2026 19:40:57] {INFO} 	 End read terrain
+[26.02.2026 19:42:16] {INFO} 	 Start read mob: D:/temp-workspace/ei/ei_maper/maps/bz7g-lmp.mob
+[26.02.2026 19:42:16] {INFO} 	 End read mob
+[26.02.2026 19:42:16] {INFO} 	 Start update 47 objects
+[26.02.2026 19:42:16] {INFO} 	 End update objects
+[26.02.2026 20:13:03] {INFO} 	 Start read mob: D:/temp-workspace/ei/ei_maper/maps/bz4g.mob
+[26.02.2026 20:13:03] {INFO} 	 End read mob
+[26.02.2026 20:13:03] {INFO} 	 Start update 207 objects
+[26.02.2026 20:13:03] {INFO} 	 End update objects
+[26.02.2026 20:13:16] {INFO} 	 unloading mob bz4g.mob
+[26.02.2026 20:13:16] {INFO} 	 Mob unloaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 20:47:27] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 20:47:28] {INFO} 	 aux objects loaded
+[26.02.2026 20:47:28] {INFO} 	 aux texture loaded
+[26.02.2026 20:50:54] {INFO} 	 Start read terrain: D:/temp-workspace/ei/ei_maper/maps/zone31.mpr
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 57
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 180
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 181
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 392
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 393
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 406
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 432
+[26.02.2026 20:50:54] {WARNING} 	 incorrect tile type at index: 433
+[26.02.2026 20:50:54] {INFO} 	 End read terrain
+[26.02.2026 20:51:25] {INFO} 	 Start read mob: D:/temp-workspace/ei/ei_maper/maps/zone31.mob
+[26.02.2026 20:51:26] {INFO} 	 End read mob
+[26.02.2026 20:51:26] {INFO} 	 Start update 3803 objects
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 20:51:54] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 20:51:55] {INFO} 	 aux objects loaded
+[26.02.2026 20:51:55] {INFO} 	 aux texture loaded
+[26.02.2026 20:52:03] {INFO} 	 Start read terrain: D:/temp-workspace/ei/ei_maper/maps/zone31.mpr
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 57
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 180
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 181
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 392
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 393
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 406
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 432
+[26.02.2026 20:52:03] {WARNING} 	 incorrect tile type at index: 433
+[26.02.2026 20:52:03] {INFO} 	 End read terrain
+[26.02.2026 20:52:12] {INFO} 	 Start read mob: D:/temp-workspace/ei/ei_maper/maps/zone31.mob
+[26.02.2026 20:52:13] {INFO} 	 End read mob
+[26.02.2026 20:52:13] {INFO} 	 Start update 3803 objects
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[26.02.2026 20:52:34] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[26.02.2026 20:52:35] {INFO} 	 aux objects loaded
+[26.02.2026 20:52:35] {INFO} 	 aux texture loaded
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 57
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 180
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 181
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 392
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 393
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 406
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 432
+[26.02.2026 20:53:33] {WARNING} 	 incorrect tile type at index: 433
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:34. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:35. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1010850. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:1010858. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1031761. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1031801. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1045894. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1045951. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1052604. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1066945. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1067014. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1073590. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1073596. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1094445. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1115382. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1115434. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394643. Logic count: 1
+[26.02.2026 20:54:26] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394644. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Low Level Female-25, Id:44397024. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397025. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397026. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397027. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397028. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397029. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397030. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397031. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397032. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397033. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397034. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397035. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397036. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397037. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397038. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397039. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397040. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397041. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397042. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397043. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397044. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397045. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397046. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397047. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397048. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397049. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397050. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397051. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397052. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397053. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397054. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397055. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397056. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397057. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397058. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397059. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397060. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397061. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397062. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397063. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397064. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397065. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397066. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397067. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397068. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:Jun, Id:1000010720. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000010798. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000051898. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000059739. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000064485. Logic count: 1
+[26.02.2026 20:54:27] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1001482691. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:34. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:35. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1010850. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:1010858. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1031761. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1031801. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1045894. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1045951. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1052604. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1066945. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1067014. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1073590. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1073596. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1094445. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1115382. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1115434. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394643. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394644. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Low Level Female-25, Id:44397024. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397025. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397026. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397027. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397028. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397029. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397030. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397031. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397032. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397033. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397034. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397035. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397036. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397037. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397038. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397039. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397040. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397041. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397042. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397043. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397044. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397045. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397046. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397047. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397048. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397049. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397050. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397051. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397052. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397053. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397054. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397055. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397056. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397057. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397058. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397059. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397060. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397061. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397062. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397063. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397064. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397065. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397066. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397067. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397068. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:Jun, Id:1000010720. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000010798. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000051898. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000059739. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000064485. Logic count: 1
+[26.02.2026 21:04:23] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1001482691. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:34. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:35. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1010850. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:1010858. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1031761. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1031801. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1045894. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1045951. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1052604. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1066945. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1067014. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1073590. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1073596. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1094445. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1115382. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1115434. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394643. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394644. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Low Level Female-25, Id:44397024. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397025. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397026. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397027. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397028. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397029. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397030. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397031. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397032. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397033. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397034. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397035. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397036. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397037. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397038. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397039. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397040. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397041. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397042. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397043. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397044. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397045. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397046. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397047. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397048. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397049. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397050. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397051. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397052. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397053. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397054. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397055. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397056. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397057. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397058. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397059. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397060. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397061. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397062. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397063. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397064. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397065. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397066. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397067. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397068. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:Jun, Id:1000010720. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000010798. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000051898. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000059739. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000064485. Logic count: 1
+[26.02.2026 21:12:28] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1001482691. Logic count: 1
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 57
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 180
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 181
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 392
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 393
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 406
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 432
+[26.02.2026 21:18:53] {WARNING} 	 incorrect tile type at index: 433
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:34. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:35. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1010850. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:1010858. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1031761. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1031801. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1045894. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1045951. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1052604. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1066945. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1067014. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1073590. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1073596. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1094445. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:1115382. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:1115434. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394643. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:2394644. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Low Level Female-25, Id:44397024. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397025. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397026. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397027. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397028. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397029. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397030. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397031. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397032. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397033. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397034. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397035. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397036. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397037. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397038. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397039. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397040. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397041. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397042. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397043. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397044. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397045. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397046. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397047. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397048. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397049. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397050. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397051. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397052. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397053. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397054. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397055. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397056. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397057. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Workers Male-26, Id:44397058. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397059. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:PeasantA, Id:44397060. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397061. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Human Kania Mid Level Male-34, Id:44397062. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397063. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397064. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397065. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397066. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397067. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Peasant, Id:44397068. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:Jun, Id:1000010720. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000010798. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000051898. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000059739. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1000064485. Logic count: 1
+[26.02.2026 21:19:01] {WARNING} 	 Logic has incorrect data. Unit name:zone1 Human Citizen M, Id:1001482691. Logic count: 1
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 57
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 180
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 181
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 392
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 393
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 406
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 432
+[26.02.2026 21:25:16] {WARNING} 	 incorrect tile type at index: 433
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 00:24:11] {INFO} 	 icon folder found::Z:/home/kyral/temp-workspace/ei/ei_maper/icons_fluent
+[27.02.2026 00:24:12] {INFO} 	 aux objects loaded
+[27.02.2026 00:24:12] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 00:25:13] {INFO} 	 icon folder found::Z:/home/kyral/repositories/github/Kyr4l/ei-universal-mod/tools/third-party-tools/ei_maper/icons_fluent
+[27.02.2026 00:25:14] {INFO} 	 aux objects loaded
+[27.02.2026 00:25:14] {INFO} 	 aux texture loaded
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 57
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 180
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 181
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 392
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 393
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 406
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 432
+[27.02.2026 00:26:26] {WARNING} 	 incorrect tile type at index: 433
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 57
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 180
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 181
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 392
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 393
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 406
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 432
+[27.02.2026 00:27:42] {WARNING} 	 incorrect tile type at index: 433
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 57
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 180
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 181
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 392
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 393
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 406
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 432
+[27.02.2026 00:30:07] {WARNING} 	 incorrect tile type at index: 433
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 00:39:45] {INFO} 	 icon folder found::Z:/home/kyral/repositories/github/Kyr4l/ei-universal-mod/tools/third-party-tools/ei_maper/icons_fluent
+[27.02.2026 00:39:46] {INFO} 	 aux objects loaded
+[27.02.2026 00:39:46] {INFO} 	 aux texture loaded
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 00:39:59] {INFO} 	 icon folder found::Z:/home/kyral/repositories/github/Kyr4l/ei-universal-mod/tools/third-party-tools/ei_maper/icons_fluent
+[27.02.2026 00:40:00] {INFO} 	 aux objects loaded
+[27.02.2026 00:40:00] {INFO} 	 aux texture loaded

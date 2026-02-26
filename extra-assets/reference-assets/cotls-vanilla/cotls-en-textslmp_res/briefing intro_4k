@@ -1,0 +1,12 @@
+I am a mechanical servant
+#show Hero
+#show Golem
+#CAMERA 3 30 8 2
+#phrase Golem  1
+I am Golem. I am mechanical servant. I serve Great Magician.
+#phrase Golem  2
+If he tells me to kill you, I kill you. If he tells me to die for you, I die for you.
+#phrase Golem  3
+Great Magician told me to work for you - I work for you.
+#phrase Golem  4
+I am Golem. I am mechanical servant. I am ready to work.

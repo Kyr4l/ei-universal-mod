@@ -214,7 +214,6 @@ function main {
     packRes
     addLua
     replaceOldMod
-    #cleanUp
 }
 
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
