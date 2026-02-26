@@ -37,8 +37,11 @@ function directoryCreation {
 
 function ini2Reg {
     echo "======================================== PROCESSING INI FILES ========================================"
+    echo "Copying INI config"
+    cp -v "$inidir"/{lightsjigran,lightscavejigran}.ini "$moddir"/config 2> /dev/null
+
     echo "Converting INI files to REG"
-    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/*.ini > /dev/null
+    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/{config,autorunpro,ai,music,streamsn,smessbase}.ini > /dev/null
 
     echo "Copying REG files into their respective folder…"
     mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2> /dev/null
