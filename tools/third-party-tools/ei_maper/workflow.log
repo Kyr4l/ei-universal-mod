@@ -462,3 +462,34 @@
 [27.02.2026 01:25:49] {WARNING} 	 incorrect tile type at index: 406
 [27.02.2026 01:25:49] {WARNING} 	 incorrect tile type at index: 432
 [27.02.2026 01:25:49] {WARNING} 	 incorrect tile type at index: 433
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 02:09:31] {INFO} 	 icon folder found::Z:/home/kyral/repositories/github/Kyr4l/ei-universal-mod/tools/third-party-tools/ei_maper/icons_fluent
+[27.02.2026 02:09:32] {INFO} 	 aux objects loaded
+[27.02.2026 02:09:32] {INFO} 	 aux texture loaded
+[27.02.2026 02:09:32] {ERROR} 	 D:/temp-workspace/ei/res/textures.res does not exists
+[27.02.2026 02:09:32] {ERROR} 	 D:/temp-workspace/ei/res/figures.res does not exists
+[27.02.2026 02:09:48] {INFO} 	 Start read terrain: D:/temp-workspace/ei/eicopy/maps/bz10k.mpr
+[27.02.2026 02:09:48] {ERROR} 	 D:/temp-workspace/ei/res/textures.res does not exists
+[27.02.2026 02:09:48] {WARNING} 	 cannot find texture for zone, loading default
+[27.02.2026 02:09:48] {INFO} 	 End read terrain
+[27.02.2026 02:09:48] {ERROR} 	 D:/temp-workspace/ei/res/textures.res does not exists
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 02:10:52] {INFO} 	 icon folder found::Z:/home/kyral/repositories/github/Kyr4l/ei-universal-mod/tools/third-party-tools/ei_maper/icons_fluent
+[27.02.2026 02:10:52] {INFO} 	 aux objects loaded
+[27.02.2026 02:10:52] {INFO} 	 aux texture loaded
+[27.02.2026 02:10:52] {ERROR} 	 D:/temp-workspace/ei/res/textures.res does not exists
+[27.02.2026 02:10:52] {ERROR} 	 D:/temp-workspace/ei/res/figures.res does not exists
+[   DATE	  TIME  ] {TYPE} 	 MESSAGE
+[27.02.2026 02:11:15] {INFO} 	 icon folder found::Z:/home/kyral/repositories/github/Kyr4l/ei-universal-mod/tools/third-party-tools/ei_maper/icons_fluent
+[27.02.2026 02:11:16] {INFO} 	 aux objects loaded
+[27.02.2026 02:11:16] {INFO} 	 aux texture loaded
+[27.02.2026 02:11:16] {ERROR} 	 D:/temp-workspace/ei/res/textures.res does not exists
+[27.02.2026 02:11:16] {ERROR} 	 D:/temp-workspace/ei/res/figures.res does not exists
+[27.02.2026 02:17:40] {WARNING} 	 show distance is null. object empty
+[27.02.2026 02:17:40] {WARNING} 	 empty texture, set default
+[27.02.2026 02:17:51] {WARNING} 	 show distance is null. object empty
+[27.02.2026 02:17:52] {WARNING} 	 empty texture, set default
+[27.02.2026 02:17:57] {WARNING} 	 show distance is null. object empty
+[27.02.2026 02:17:57] {WARNING} 	 empty texture, set default
+[27.02.2026 02:48:51] {WARNING} 	 show distance is null. object empty
+[27.02.2026 02:48:51] {WARNING} 	 empty texture, set default
