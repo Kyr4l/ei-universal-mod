@@ -15,6 +15,7 @@ mprdir="mpr"
 mobdir="mob"
 mqxdir="mq-unpacked"
 musicdir="stream"
+moviesdir="movies"
 hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
@@ -32,7 +33,7 @@ function checkCommands {
 # create the mod directory structure
 function directoryCreation {
     echo "CREATED MOD DIRECTORY: $moddir"
-    mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands}
+    mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands,movies}
 }
 
 function ini2Reg {
@@ -77,9 +78,10 @@ function copyMaps {
     cp -rv "$mobdir"/* "$moddir/maps"
 }
 
-function copyMusic {
-    echo "======================================== COPYING MUSIC ========================================"
+function copyMedia {
+    echo "======================================== COPYING MUSIC & MOVIES ========================================"
     cp -rv "$musicdir"/* "$moddir/stream"
+    cp -vr "$moviesdir"/* "$moddir"/movies
 }
 
 function copyHdPack {
@@ -205,7 +207,7 @@ function main {
     ini2Reg
     makeQuests
     copyMaps
-    copyMusic
+    copyMedia
     copyHdPack
     eiDbEditor
     dds2Mmp
