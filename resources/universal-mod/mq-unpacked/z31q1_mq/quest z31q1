@@ -1,0 +1,8 @@
+Zombie Sentries
+A zombie sentry has been spotted guarding the bridges near the castle, take them out!
+#subobj  1
+Kill the East bridge sentry
+This sentry is guarding the Eastern bridge.
+#subobj  2
+Kill the West bridge sentry
+This sentry is guarding the Western bridge.

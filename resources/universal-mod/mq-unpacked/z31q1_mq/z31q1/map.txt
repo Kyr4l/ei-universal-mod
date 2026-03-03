@@ -1,0 +1,16 @@
+#zone z31q1 jigran game
+#res
+zone31 zone31
+#maps
+10 12
+zone31map zone31quest
+
+## To zone31
+#exit 1
+bz4mpg 1
+#deploy
+170 301 180 304
+#remove
+170 304 180 310
+#view
+2.78706

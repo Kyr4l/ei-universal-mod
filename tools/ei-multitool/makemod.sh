@@ -37,7 +37,7 @@ function directoryCreation {
 }
 
 function ini2Reg {
-    echo "======================================== PROCESSING INI FILES ========================================"
+    echo "===== PROCESSING INI FILES ========================================"
     echo "Copying INI config"
     cp -v "$inidir"/{lightsjigran,lightscavejigran}.ini "$moddir"/config 2> /dev/null
 
@@ -51,7 +51,7 @@ function ini2Reg {
 }
 
 function makeQuests {
-    echo ""======================================== PROCESSING QUEST FILES ========================================""
+    echo "===== PROCESSING QUEST FILES ========================================"
     # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
     echo "Converting quest INI files to REG"
     find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
@@ -73,24 +73,24 @@ function makeQuests {
 }
 
 function copyMaps {
-    echo "======================================== COPYING MAPS ========================================"
-    cp -rv "$mprdir"/* "$moddir/maps"
-    cp -rv "$mobdir"/* "$moddir/maps"
+    echo "===== COPYING MAPS ========================================"
+    rsync -rv "$mprdir"/ "$moddir/maps"
+    rsync -rv "$mobdir"/ "$moddir/maps"
 }
 
 function copyMedia {
-    echo "======================================== COPYING MUSIC & MOVIES ========================================"
-    cp -rv "$musicdir"/* "$moddir/stream"
-    cp -vr "$moviesdir"/* "$moddir"/movies
+    echo "===== COPYING MUSIC & MOVIES ========================================"
+    rsync -rv "$musicdir"/ "$moddir/stream"
+    rsync -vr "$moviesdir"/ "$moddir"/movies
 }
 
 function copyHdPack {
-    echo "======================================== COPYING HD PACK ========================================"
-    cp -rv "$hdpackdir"/* "$moddir/hdlands"
+    echo "===== COPYING HD PACK ========================================"
+    rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
 function packTexts {
-    echo "======================================== PACKING TEXTS & TEXTSLMP ========================================"
+    echo "===== PACKING TEXTS & TEXTSLMP ========================================"
 
     for restexts in "$resxtextsdir"/*_res; do
         local packedtexts="${restexts%_res}.res"
@@ -110,7 +110,7 @@ function dds2Mmp {
     local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
-        echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
+        echo "===== PROCESSING REDRESS DDS FILES ========================================"
         cd $redressddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -118,7 +118,7 @@ function dds2Mmp {
     fi
 
     if [[ "$texturesnswr" == "y" ]]; then
-        echo "======================================== PROCESSING TEXTURES DDS FILES ========================================"
+        echo "===== PROCESSING TEXTURES DDS FILES ========================================"
         cd $texturesddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -127,7 +127,7 @@ function dds2Mmp {
 }
 
 function eiDbEditor {
-    echo "======================================== PROCESSING DATABASELMP ========================================"
+    echo "===== PROCESSING DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX databaselmp to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv databaselmp.res ../"$resdir"/
@@ -140,7 +140,7 @@ function writeVersion {
     version=$(cat "$versionfile")
     local versiontemplate="version/version-name-format.txt"
     local configini="$inidir/config.ini"
-    echo "======================================== WRITING VERSION ========================================"
+    echo "===== WRITING VERSION ========================================"
 
     if [[ "$writeversionnswr" == "y" ]]; then
         IFS='.' read -r major minor patch <<<"$version"
@@ -172,7 +172,7 @@ function writeVersion {
 }
 
 function packRes {
-    echo "======================================== PACKING RES FILES ========================================"
+    echo "===== PACKING RES FILES ========================================"
 
     for resxin in "$resxdir"/*_res; do
         local resout="${resxin%_res}.res"
@@ -186,15 +186,15 @@ function packRes {
 }
 
 function addLua {
-    echo "======================================== ADDING LUA SCRIPTS ========================================"
+    echo "===== ADDING LUA SCRIPTS ========================================"
     cp -vL "$luadir"/main.lua "$moddir"
     cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
 function replaceOldMod {
-    echo "======================================== REPLACING OLD MOD FILES ========================================"
+    echo "===== REPLACING OLD MOD FILES ========================================"
     if [[ "$replaceoldnswr" != "n" ]]; then
-        echo "============================== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
+        echo "===== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
         rsync -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
