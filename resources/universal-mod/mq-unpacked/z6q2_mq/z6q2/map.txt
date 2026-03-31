@@ -10,8 +10,8 @@ zone6map zone6questM
 #exit 1
 bz1mpg 1
 #deploy
-10 25 20 45
+204 180 214 190
 #remove
-0 15 10 35
+214 168 223 195
 #view
-293.346
+136.269
