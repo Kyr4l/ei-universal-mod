@@ -35,7 +35,7 @@ function CalcRunningManaCost(unit_server_stats_addr, unit_server_addr, common_se
     -- mp.curr = mp.curr - mp.max * (1 / 900) -- this line makes it so sprinting cost is a % of the player's max's stamina value
 
     -- this new code instead makes spriting cost a fixed amount of stamina, meaning that the more stamina you have, the longer you can sprint
-    local fixedCost = 0.3 -- stamina cost
+    local fixedCost = 0.2 -- stamina cost
     mp.curr = mp.curr - fixedCost
 
 end
