@@ -1,0 +1,9 @@
+Add/remove server in the address book 
+For your convenience you can bookmark a server in your address book. 
+These servers will be always in the list (they are marked yellow). 
+Add server to the address book: pressing the "Add/remove" button 
+calls up the window to enter/edit the server address. In case one of the 
+active servers has been selected from the list at the moment, its address 
+will appear in the window. 
+Remove server: choose a server from the address book and press the
+"add/remove" button.

@@ -10,7 +10,7 @@ zone7map zone7questM
 #exit 1
 bz1mpg 1
 #deploy
-152 300 161 305 
+152 300 161 305
 #remove
 152 305 161 319
 #view

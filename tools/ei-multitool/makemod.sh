@@ -13,8 +13,9 @@ luadir="lua"
 inidir="ini"
 mprdir="mpr"
 mobdir="mob"
-#mqdir="mq" # disabled cause the only line using this is disabled as well
 mqxdir="mq-unpacked"
+musicdir="stream"
+moviesdir="movies"
 hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
@@ -32,13 +33,16 @@ function checkCommands {
 # create the mod directory structure
 function directoryCreation {
     echo "CREATED MOD DIRECTORY: $moddir"
-    mkdir -vp "$moddir"/{config,"res/lang",maps}
+    mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands,movies}
 }
 
 function ini2Reg {
-    echo "======================================== PROCESSING INI FILES ========================================"
+    echo "===== PROCESSING INI FILES ========================================"
+    echo "Copying INI config"
+    cp -v "$inidir"/{lightsjigran,lightscavejigran}.ini "$moddir"/config 2> /dev/null
+
     echo "Converting INI files to REG"
-    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/*.ini > /dev/null
+    parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/{config,autorunpro,ai,music,streamsn,smessbase}.ini > /dev/null
 
     echo "Copying REG files into their respective folder…"
     mv -v "$inidir"/{config,autorunpro}.reg "$moddir" 2> /dev/null
@@ -47,7 +51,7 @@ function ini2Reg {
 }
 
 function makeQuests {
-    echo ""======================================== PROCESSING QUEST FILES ========================================""
+    echo "===== PROCESSING QUEST FILES ========================================"
     # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
     echo "Converting quest INI files to REG"
     find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
@@ -69,19 +73,24 @@ function makeQuests {
 }
 
 function copyMaps {
-    echo "======================================== COPYING MAPS ========================================"
-    cp -rv "$mprdir"/* "$moddir/maps"
-    cp -rv "$mobdir"/* "$moddir/maps"
-    #cp -rv "$mqdir"/* "$moddir/maps" # disabled cause replaced in makeQuests
+    echo "===== COPYING MAPS ========================================"
+    rsync -rv "$mprdir"/ "$moddir/maps"
+    rsync -rv "$mobdir"/ "$moddir/maps"
+}
+
+function copyMedia {
+    echo "===== COPYING MUSIC & MOVIES ========================================"
+    rsync -rv "$musicdir"/ "$moddir/stream"
+    rsync -vr "$moviesdir"/ "$moddir"/movies
 }
 
 function copyHdPack {
-    echo "======================================== COPYING HD PACK ========================================"
+    echo "===== COPYING HD PACK ========================================"
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
 function packTexts {
-    echo "======================================== PACKING TEXTS & TEXTSLMP ========================================"
+    echo "===== PACKING TEXTS & TEXTSLMP ========================================"
 
     for restexts in "$resxtextsdir"/*_res; do
         local packedtexts="${restexts%_res}.res"
@@ -101,7 +110,7 @@ function dds2Mmp {
     local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
-        echo "======================================== PROCESSING REDRESS DDS FILES ========================================"
+        echo "===== PROCESSING REDRESS DDS FILES ========================================"
         cd $redressddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -109,7 +118,7 @@ function dds2Mmp {
     fi
 
     if [[ "$texturesnswr" == "y" ]]; then
-        echo "======================================== PROCESSING TEXTURES DDS FILES ========================================"
+        echo "===== PROCESSING TEXTURES DDS FILES ========================================"
         cd $texturesddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -118,7 +127,7 @@ function dds2Mmp {
 }
 
 function eiDbEditor {
-    echo "======================================== PROCESSING DATABASELMP ========================================"
+    echo "===== PROCESSING DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX databaselmp to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv databaselmp.res ../"$resdir"/
@@ -131,7 +140,7 @@ function writeVersion {
     version=$(cat "$versionfile")
     local versiontemplate="version/version-name-format.txt"
     local configini="$inidir/config.ini"
-    echo "======================================== WRITING VERSION ========================================"
+    echo "===== WRITING VERSION ========================================"
 
     if [[ "$writeversionnswr" == "y" ]]; then
         IFS='.' read -r major minor patch <<<"$version"
@@ -163,7 +172,7 @@ function writeVersion {
 }
 
 function packRes {
-    echo "======================================== PACKING RES FILES ========================================"
+    echo "===== PACKING RES FILES ========================================"
 
     for resxin in "$resxdir"/*_res; do
         local resout="${resxin%_res}.res"
@@ -177,26 +186,19 @@ function packRes {
 }
 
 function addLua {
-    echo "======================================== ADDING LUA SCRIPTS ========================================"
+    echo "===== ADDING LUA SCRIPTS ========================================"
     cp -vL "$luadir"/main.lua "$moddir"
     cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
 function replaceOldMod {
-    echo "======================================== REPLACING OLD MOD FILES ========================================"
+    echo "===== REPLACING OLD MOD FILES ========================================"
     if [[ "$replaceoldnswr" != "n" ]]; then
-        echo "============================== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
+        echo "===== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
         rsync -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
-
-# function cleanUp {
-#     echo "======================================== REMOVING PACKED ASSETS ========================================"
-#     if [[ "$cleanupnswr" != "n" ]]; then
-#         echo "TODO"
-#     fi
-# }
 
 # main function
 function main {
@@ -205,6 +207,7 @@ function main {
     ini2Reg
     makeQuests
     copyMaps
+    copyMedia
     copyHdPack
     eiDbEditor
     dds2Mmp
@@ -213,7 +216,6 @@ function main {
     packRes
     addLua
     replaceOldMod
-    #cleanUp
 }
 
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
@@ -223,7 +225,6 @@ read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
 read -rp "Increment version? (y/N) " writeversionnswr
 read -rp "Replace the older mod files? (Y/n) " replaceoldnswr
-#read -rp "Cleanup after packing? (Y/n) " cleanupnswr
 echo ""
 
 main

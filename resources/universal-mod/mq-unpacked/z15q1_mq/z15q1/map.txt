@@ -1,4 +1,3 @@
-## Todesschlucht
 #zone z15q1 suslanger game
 #res
 zone15 zone15-LMP

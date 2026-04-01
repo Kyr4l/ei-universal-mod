@@ -1,0 +1,8 @@
+There's too many zombies out there!
+#show Hero
+#show Baron
+#CAMERA 11
+#phrase Hero  1
+There's too many! I can't fight these!
+#phrase Baron  2
+I thought you'd be able to deal with them! The guards will take care of this problem soon enough anyway...
