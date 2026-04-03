@@ -9,8 +9,8 @@ zone4map zone4quest
 #exit 1
 bz1mpg 1
 #deploy
-20 55 26 72
+218 17 224 23
 #remove
-0 55 20 72
+218 7 224 17
 #view
-336.9
+359.931
