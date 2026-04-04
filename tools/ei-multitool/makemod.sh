@@ -195,7 +195,7 @@ function replaceOldMod {
     echo "===== REPLACING OLD MOD FILES ========================================"
     if [[ "$replaceoldnswr" != "n" ]]; then
         echo "===== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
-        rsync -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
+        rsync --checksum -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
