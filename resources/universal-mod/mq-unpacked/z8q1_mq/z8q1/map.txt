@@ -9,8 +9,8 @@ zone8map zone8quest
 #exit 1
 bz1mpg 1
 #deploy
-6 240 16 248
+169 332 179 338
 #remove
-2 240 10 248
+165 338 179 349
 #view
-336.9
+192.876

@@ -1,0 +1,13 @@
+Get to know the artisan
+#show Hero
+#show Stark
+#ANIMATION 5
+#CAMERA 11
+#phrase Stark 1
+So are you the strangers who came through the old portal?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Nah, we just spawned here cause it's a multiplayer lobby.
+#phrase Stark 3
+bruh wtf...
