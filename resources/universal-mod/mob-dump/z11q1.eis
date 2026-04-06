@@ -1,0 +1,95 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  BSChest: object,
+  Wilderer : group,
+  Heroes : group
+)
+
+DeclareScript Triger1 ( this:object )
+DeclareScript Triger2 ( this:object )
+DeclareScript Check1 (  this : object )
+DeclareScript Check2 (  this : object )
+
+Script Triger1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    EnableLever( BSChest, 0 ) 
+  )
+)
+
+Script Triger2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 440, 300, 460, 320 ) 
+  )
+)
+
+Script Check2
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z11q1.z11q1.1", 2 )
+    Sleep ( 2 )
+    GSSetVarMax( 0, "q.z11q1.z11q1.2", 1 )
+  )
+)
+
+Script Check1
+(
+  if
+  (
+    Not( Any( i, Wilderer, IsAlive( i )  )  )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z11q1.z11q1.2", 2 )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z11q1.z11q1", 2 )
+    Sleep( 2 )
+    QuestComplete( 0, "z11q1" )
+  )
+)
+
+WorldScript
+(
+  BSChest = GetObjectByID( "4044" ) 
+  AddObject( Wilderer, GetObject( 1000324  )  )
+  AddObject( Wilderer, GetObject( 3592 )  )
+  AddObject( Wilderer, GetObject( 76 )  )
+  AddObject( Wilderer, GetObject( 78)  )
+  AddObject( Wilderer, GetObject( 3751 )  )
+  AddObject( Wilderer, GetObject( 3753 )  )
+  AddObject( Wilderer, GetObject( 3756 )  )
+  AddObject( Wilderer, GetObject( 3894 )  )
+  AddObject( Wilderer, GetObject( 3895 )  )
+  AddObject( Wilderer, GetObject( 3953 )  )
+  AddObject( Wilderer, GetObject( 3758 )  )
+  AddObject( Wilderer, GetObject( 3752 )  )
+  AddObject( Wilderer, GetObject( 3896 )  )
+  Sleep( 2)
+  Triger1( NULL ) 
+  Triger2( NULL ) 
+  Sleep( 2 )
+  Check1( NULL )
+  Check2( NULL )
+)
+
+

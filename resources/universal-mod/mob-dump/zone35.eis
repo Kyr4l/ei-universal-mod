@@ -1,0 +1,1480 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group,
+  Kanians : group,
+  ArEvil : group,
+  Green : group
+)
+
+DeclareScript Start (  this : object )
+DeclareScript CheckFail (  this : object )
+DeclareScript EndOfGame (  this : object )
+DeclareScript VCheck#0#1 (  this : object )
+DeclareScript VCheck#0#2 (  this : object )
+DeclareScript VCheck#0#3 (  this : object )
+DeclareScript VCheck#0#4 (  this : object )
+DeclareScript VCheck#0#5 (  this : object )
+DeclareScript VCheck#0#6 (  this : object )
+DeclareScript VCheck#1#1 (  this : object )
+DeclareScript VCheck#1#2 (  this : object )
+DeclareScript VCheck#1#3 (  this : object )
+DeclareScript VCheck#1#4 (  this : object )
+DeclareScript VCheck#2#1 (  this : object )
+DeclareScript VCheck#2#2 (  this : object )
+DeclareScript VCheck#2#3 (  this : object )
+DeclareScript VCheck#2#4 (  this : object )
+DeclareScript VCheck#2#5 (  this : object )
+DeclareScript VCheck#2#6 (  this : object )
+DeclareScript VCheck#2#7 (  this : object )
+DeclareScript VCheck#2#8 (  this : object )
+DeclareScript VCheck#2#9 (  this : object )
+DeclareScript VCheck#2#10 (  this : object )
+DeclareScript VCheck#2#11 (  this : object )
+DeclareScript VFire#0#1 (  this : object )
+DeclareScript VFire#0#2 (  this : object )
+DeclareScript VFire#0#3 (  this : object )
+DeclareScript VFire#1#1 (  this : object )
+DeclareScript VFire#1#3 (  this : object )
+DeclareScript VFireCity#0#1 (  this : object )
+DeclareScript VFireCity#0#2 (  this : object )
+DeclareScript VFireCity#0#3 (  this : object )
+DeclareScript VCityGates#0#1 (  this : object )
+DeclareScript VCityGates#0#2 (  this : object )
+DeclareScript KChest#1 (  this : object )
+DeclareScript KChest#2 (  this : object )
+DeclareScript KChest#3 (  this : object )
+DeclareScript Barell#1 (  this : object )
+DeclareScript Barell#2 (  this : object )
+DeclareScript Barell#3 (  this : object )
+DeclareScript Barell#4 (  this : object )
+DeclareScript Barell#5 (  this : object )
+DeclareScript Barell#6 (  this : object )
+DeclareScript Barell#7 (  this : object )
+DeclareScript VTeleport#0#1 (  this : object )
+DeclareScript VTeleport#0#2 (  this : object )
+DeclareScript VTeleport#0#3 (  this : object )
+DeclareScript VTeleport#1#1 (  this : object )
+DeclareScript VTeleport#1#2 (  this : object )
+DeclareScript VTeleport#1#3 (  this : object )
+DeclareScript Popper#1 (  this : object )
+DeclareScript Popper#2 (  this : object )
+DeclareScript Popper#3 (  this : object )
+DeclareScript Popper#4 (  this : object )
+DeclareScript Popper#5 (  this : object )
+DeclareScript Popper#6 (  this : object )
+DeclareScript Popper#7 (  this : object )
+DeclareScript Popper#8 (  this : object )
+DeclareScript Popper#9 (  this : object )
+DeclareScript Popper#10 (  this : object )
+DeclareScript Popper#11 (  this : object )
+DeclareScript Popper#12 (  this : object )
+DeclareScript Popper#13 (  this : object )
+DeclareScript Popper#14 (  this : object )
+DeclareScript Popper#15 (  this : object )
+DeclareScript Popper#16 (  this : object )
+DeclareScript Caboom#0#1 (  this : object )
+DeclareScript Caboom#0#2 (  this : object )
+DeclareScript Caboom#0#3 (  this : object )
+DeclareScript Caboom#1#1 (  this : object )
+DeclareScript Caboom#1#2 (  this : object )
+DeclareScript Caboom#1#3 (  this : object )
+DeclareScript Caboom#2#1 (  this : object )
+DeclareScript Caboom#2#2 (  this : object )
+DeclareScript Caboom#2#3 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script Start
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 ) 
+  )
+)
+
+Script CheckFail
+(
+  if
+  (
+    Not( Every( i, Heroes, IsAlive( i ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    EndOfGame( this )
+  )
+)
+
+Script EndOfGame
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    UMSentry( GetUnitOfPlayer( 0, 0 ), 1, 1 )
+    RemoveUnitFromServer( GetUnitOfPlayer( 0, 0 ) )
+    Sleep( 15 )
+    GameOver()
+  )
+)
+
+Script VCheck#0#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz35j.q17j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    AddRoundToArea( 1, 247, 171 , 15 )
+    AddRoundToArea( 2, 136, 210 , 5 )
+    Sleep( 20 )
+    GSSetVarMax( 0, "q.gz35j.q17j", 1 )
+    GSSetVarMax( 0, "q.gz35j.q17j.1", 1 )
+    GSSetVarMax( 0, "q.gz35j.q17j.4", 1 )
+    UMSentry( GetObject( 1017000 ), 136, 210 )
+    UMFollow( GetObject( 1017001 ) ,GetObject( 1017000 ) )
+    UMFollow( GetObject( 1017002 ) ,GetObject( 1017001 ) )
+    UMFollow( GetObject( 1017003 ) ,GetObject( 1017002 ) )
+    UMFollow( GetObject( 1017004 ) ,GetObject( 1017003 ) )
+    UMFollow( GetObject( 1017005 ) ,GetObject( 1017004 ) )
+    UMFollow( GetObject( 1017006 ) ,GetObject( 1017005 ) )
+    UMFollow( GetObject( 1017007 ) ,GetObject( 1017006 ) )
+    UMFollow( GetObject( 1017008 ) ,GetObject( 1017007 ) )
+    VCheck#0#2( this )
+    VCheck#0#5( this )
+    VCheck#0#6( this )
+  )
+)
+
+Script VCheck#0#2
+(
+  if
+  (
+    Any( i , Heroes , IsLess( DistanceUnitUnit( GetObject ( 1017000 ) , i ) , 15 ) )
+  )
+  then
+  (
+    KillScript(  )
+    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , GetZ( GetUnitOfPlayer( 0 , 0 ) ) , 15, 50, "Acks\Scenario\36.wav" )
+    Attack( GetObject( 1017005 ) , GetUnitOfPlayer( 0, 0 ) )
+    Attack( GetObject( 1017006 ) , GetUnitOfPlayer( 0, 0 ) )
+    Attack( GetObject( 1017007 ) , GetUnitOfPlayer( 0, 0 ) )
+    Attack( GetObject( 1017008 ) , GetUnitOfPlayer( 0, 0 ) )
+    GSSetVarMax( 0, "q.gz35j.q17j.1", 2 )
+    GSSetVarMax( 0, "q.gz35j.q17j.2", 1 )
+    VCheck#0#3( this )
+  )
+)
+
+Script VCheck#0#3
+(
+  if
+  (
+    Not( IsAlive( GetObject ( 1017000 ) ) )
+    Not( IsAlive( GetObject ( 1017005 ) ) )
+    Not( IsAlive( GetObject ( 1017006 ) ) )
+    Not( IsAlive( GetObject ( 1017007 ) ) )
+    Not( IsAlive( GetObject ( 1017008 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz35j.q17j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    UMFollow( GetObject( 1017001 ) , GetUnitOfPlayer( 0 , 0 ) )
+    UMFollow( GetObject( 1017002 ) , GetUnitOfPlayer( 0 , 0 ) )
+    UMFollow( GetObject( 1017003 ) , GetUnitOfPlayer( 0 , 0 ) )
+    UMFollow( GetObject( 1017004 ) , GetUnitOfPlayer( 0 , 0 ) )
+    Run( GetObject( 1017001 ) )
+    Run( GetObject( 1017002 ) )
+    Run( GetObject( 1017003 ) )
+    Run( GetObject( 1017004 ) )
+    GSSetVarMax( 0, "q.gz35j.q17j.2", 2 )
+    GSSetVarMax( 0, "q.gz35j.q17j.3", 1 )
+    VCheck#0#4( this )
+  )
+)
+
+Script VCheck#0#4
+(
+  if
+  (
+    Every( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  )
+    IsEqual( GSGetVar( 0, "q.gz35j.q17j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q17j.3", 2 )
+    GSSetVarMax( 0, "q.gz35j.q17j.4", 2 )
+    GSSetVarMax( 0, "q.gz35j.q17j", 2 )
+    QuestComplete( 0, "q17j" )
+    GSSetVarMax( 0 , "b.Deva.brief_340", 1 )
+    GSSetVar( 0, "z.gz34j_gz35j", 2 )
+    Sleep( 15 )
+    RemoveUnitFromServer( GetObject( 1017001 ) )
+    RemoveUnitFromServer( GetObject( 1017002 ) )
+    RemoveUnitFromServer( GetObject( 1017003 ) )
+    RemoveUnitFromServer( GetObject( 1017004 ) )
+    DeleteArea( 1 )
+    DeleteArea( 2 )
+  )
+)
+
+Script VCheck#0#5
+(
+  if
+  (
+    IsInArea( 2, GetX( GetObject( 1017000 ) ) , GetY( GetObject( 1017000 ) )  )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q17j", 3 )
+    EndOfGame( this )
+    DeleteArea( 2 )
+  )
+)
+
+Script VCheck#0#6
+(
+  if
+  (
+    Not( IsAlive( GetObject ( 1017001 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz35j.q17j.4" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q17j.4", 3 )
+    GSSetVarMax( 0, "q.gz35j.q17j", 3 )
+    EndOfGame( this )
+  )
+  if
+  (
+    Not( IsAlive( GetObject ( 1017002 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz35j.q17j.4" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q17j.4", 3 )
+    GSSetVarMax( 0, "q.gz35j.q17j", 3 )
+    EndOfGame( this )
+  )
+)
+
+Script VCheck#1#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz35j.q19j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    AddRoundToArea( 1, 27 , 65 , 10 )
+    Sleep( 20 )
+    GSSetVarMax( 0, "q.gz35j.q19j.1", 1 )
+    CreateParticleSource( 2001, GetX( GetObject( 973970 ) ) , GetY( GetObject( 973970 ) ) , GetZ( GetObject( 973970 ) ) , 0.1, "Portal" )
+    CreateParticleSource( 2002, GetX( GetObject( 1973970 ) ) , GetY( GetObject( 1973970 ) ) , GetZ( GetObject( 1973970 ) ) , 0.1, "Portal" )
+    VCheck#1#2( this ) 
+  )
+)
+
+Script VCheck#1#2
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q19j.1", 2 )
+    GSSetVarMax( 0, "q.gz35j.q19j.2", 1 )
+    DeleteArea( 1 )
+    VCheck#1#3( this )
+  )
+)
+
+Script VCheck#1#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1019001 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q19j.2", 2 )
+    GSSetVarMax( 0, "q.gz35j.q19j", 2 )
+    QuestComplete( 0, "q19j" )
+    GiveQuestItem( 0, "JToys" )
+    GSSetVarMax( 0 , "b.Deva.brief_345", 1 )
+    Sleep( 15 )
+    LeaveToZone( 0, "cz3j", 0 )
+  )
+)
+
+Script VCheck#1#4
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "b.Deva.brief_345" ) , 1 )
+    IsEqual( GSGetVar( 0, "kel_dead" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 25 )
+    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , GetZ( GetUnitOfPlayer( 0 , 0 ) ) , 15, 50, "Acks\Scenario\6.wav" )
+    GSSetVarMax( 0 , "kel_dead", 1 )
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+  )
+)
+
+Script VCheck#2#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz35j.q21j" ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  )
+    AddRoundToArea( 1, 34 , 221 , 4 )
+    GSSetVar( 0, "z.gz34j_gz35j", 1 )
+    RemoveUnitFromServer( GetObject( 1032949 ) )
+    AddMob("zone35battle.mob")
+    FixWorldTime( 0 )
+    Sleep( 20 )
+    FixWorldTime( 0 )
+    GSSetVarMax( 0, "q.gz35j.q21j.1", 1 )
+    Sleep( 60 )
+    For( i , Kanians ) 
+    (
+      UMSentry( i , Add( GetX( i ), -20 ) , GetY ( i ) )
+    )
+    UMSentry( GetObject( 1021051 ), 146, 213 )
+    UMSentry( GetObject( 1021052 ), 148, 219 )
+    VCheck#2#2( this )
+  )
+)
+
+Script VCheck#2#2
+(
+  if
+  (
+    Every( i, ArEvil , Not( IsAlive( i ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q21j.1", 2 )
+    GSSetVarMax( 0, "q.gz35j.q21j.2", 1 )
+    Sleep( 600 )
+    UMSentry( GetObject( 1021001 ), 112, 219 )
+    UMSentry( GetObject( 1021002 ), 109, 201 )
+
+    UMFollow( GetObject( 1021003 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021005 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021006 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021007 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021008 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021009 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021010 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021011 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021012 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021013 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021031 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021032 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021033 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021041 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021042 ) ,GetObject( 1021001 ) )
+    UMFollow( GetObject( 1021043 ) ,GetObject( 1021001 ) )
+
+    UMFollow( GetObject( 1021004 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021015 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021016 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021017 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021018 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021019 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021020 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021021 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021022 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021023 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021034 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021035 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021036 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021044 ) ,GetObject( 1021002 ) )
+    UMFollow( GetObject( 1021045 ) ,GetObject( 1021002 ) )
+    VCheck#2#3( this )
+    VCheck#2#4( this )
+    VCheck#2#5( this )
+    VCheck#2#6( this )
+    VCheck#2#9( this )
+  )
+)
+
+Script VCheck#2#3
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz35j.q21j.2", 2 )
+    GSSetVarMax( 0, "q.gz35j.q21j", 2 )
+    DeleteArea( 1 )
+    QuestComplete( 0, "q21j" )
+    Sleep( 15 )
+    LeaveToZone( 0, "cz4j", 0 )
+  )
+)
+
+Script VCheck#2#4
+(
+  if
+  (
+    Not( IsAlive( GetObject ( 1021001 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 20 )
+    UMSentry( GetObject( 1021003 ), 30 , 220 )
+    UMSentry( GetObject( 1021005 ), 30 , 220 )
+    UMSentry( GetObject( 1021006 ), 30 , 220 )
+    UMSentry( GetObject( 1021007 ), 30 , 220 )
+    UMSentry( GetObject( 1021008 ), 30 , 220 )
+    UMSentry( GetObject( 1021009 ), 30 , 220 )
+    UMSentry( GetObject( 1021010 ), 30 , 220 )
+    UMSentry( GetObject( 1021011 ), 30 , 220 )
+    UMSentry( GetObject( 1021012 ), 30 , 220 )
+    UMSentry( GetObject( 1021013 ), 30 , 220 )
+    UMSentry( GetObject( 1021031 ), 30 , 220 )
+    UMSentry( GetObject( 1021032 ), 30 , 220 )
+    UMSentry( GetObject( 1021033 ), 30 , 220 )
+    UMSentry( GetObject( 1021041 ), 30 , 220 )
+    UMSentry( GetObject( 1021042 ), 30 , 220 )
+    UMSentry( GetObject( 1021043 ), 30 , 220 )
+
+  )
+)
+
+Script VCheck#2#5
+(
+  if
+  (
+    Not( IsAlive( GetObject ( 1021002 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 50 )
+    UMSentry( GetObject( 1021004 ), 30 , 220 )
+    UMSentry( GetObject( 1021014 ), 30 , 220 )
+    UMSentry( GetObject( 1021015 ), 30 , 220 )
+    UMSentry( GetObject( 1021016 ), 30 , 220 )
+    UMSentry( GetObject( 1021017 ), 30 , 220 )
+    UMSentry( GetObject( 1021018 ), 30 , 220 )
+    UMSentry( GetObject( 1021019 ), 30 , 220 )
+    UMSentry( GetObject( 1021020 ), 30 , 220 )
+    UMSentry( GetObject( 1021021 ), 30 , 220 )
+    UMSentry( GetObject( 1021022 ), 30 , 220 )
+    UMSentry( GetObject( 1021023 ), 30 , 220 )
+    UMSentry( GetObject( 1021034 ), 30 , 220 )
+    UMSentry( GetObject( 1021035 ), 30 , 220 )
+    UMSentry( GetObject( 1021036 ), 30 , 220 )
+    UMSentry( GetObject( 1021044 ), 30 , 220 )
+    UMSentry( GetObject( 1021045 ), 30 , 220 )
+  )
+)
+
+Script VCheck#2#6
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( GetObject ( 1021001 ) , 112, 219 ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    UMSentry( GetObject( 1021001 ), 87, 229 )
+    VCheck#2#7( this )
+  )
+)
+
+Script VCheck#2#7
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( GetObject ( 1021001 ) , 87, 229 ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 44456 ) , 1 )
+    Sleep( 30 )
+    UMSentry( GetObject( 1021001 ), 67, 230 )
+    VCheck#2#8( this )
+  )
+)
+
+Script VCheck#2#8
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( GetObject ( 1021001 ) , 67, 230 ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 144456 ) , 1 )
+    Sleep( 30 )
+    UMSentry( GetObject( 1021001 ), 38, 223 )
+  )
+)
+
+Script VCheck#2#9
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( GetObject ( 1021002 ) , 109, 201 ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    UMSentry( GetObject( 1021002 ), 86, 171 )
+    VCheck#2#10( this )
+  )
+)
+
+Script VCheck#2#10
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( GetObject ( 1021002 ) , 86, 171 ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    UMSentry( GetObject( 1021002 ), 36, 187 )
+    VCheck#2#11( this )
+  )
+)
+
+Script VCheck#2#11
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( GetObject ( 1021002 ) , 36, 187 ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    UMSentry( GetObject( 1021002 ), 28, 209 )
+  )
+)
+
+Script VFire#0#1
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 20 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#1( this )
+    VFire#1#1( this )
+  )
+)
+
+Script VFire#1#1
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#1( this ) 
+  )
+)
+
+Script VFire#0#2
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#2( this )
+  )
+)
+
+Script VFire#0#3
+(
+  if
+  ( 
+    IsGreater( GetWorldTime( ) , 5 ) 
+    IsLess( GetWorldTime( ) , 6 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#3( this )
+    VFire#1#3( this )
+  )
+)
+
+Script VFire#1#3
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 6 ) 
+    IsLess( GetWorldTime( ) , 19.9 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#3( this ) 
+  )
+)
+
+Script VFireCity#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1395067 ) ), -0.1 ), Add( GetY( GetObject( 1395067 ) ), -0.1 ), Add( GetZ( GetObject( 1395067 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1395067 ) ), GetY( GetObject( 1395067 ) ), Add(GetZ(GetObject( 1395067 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1397266 ) ), -0.1 ), Add( GetY( GetObject( 1397266 ) ), -0.1 ), Add( GetZ( GetObject( 1397266 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1397266 ) ), GetY( GetObject( 1397266 ) ), Add(GetZ(GetObject( 1397266 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1397267 ) ), -0.1 ), Add( GetY( GetObject( 1397267 ) ), -0.1 ), Add( GetZ( GetObject( 1397267 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1397267 ) ), GetY( GetObject( 1397267 ) ), Add(GetZ(GetObject( 1397267 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1397268 ) ), -0.1 ), Add( GetY( GetObject( 1397268 ) ), -0.1 ), Add( GetZ( GetObject( 1397268 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1397268 ) ), GetY( GetObject( 1397268 ) ), Add(GetZ(GetObject( 1397268 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1397269 ) ), -0.1 ), Add( GetY( GetObject( 1397269 ) ), -0.1 ), Add( GetZ( GetObject( 1397269 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1397269 ) ), GetY( GetObject( 1397269 ) ), Add(GetZ(GetObject( 1397269 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1397270 ) ), -0.1 ), Add( GetY( GetObject( 1397270 ) ), -0.1 ), Add( GetZ( GetObject( 1397270 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1397270 ) ), GetY( GetObject( 1397270 ) ), Add(GetZ(GetObject( 1397270 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1397271 ) ), -0.1 ), Add( GetY( GetObject( 1397271 ) ), -0.1 ), Add( GetZ( GetObject( 1397271 ) ), -1.3 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1397271 ) ), GetY( GetObject( 1397271 ) ), Add(GetZ(GetObject( 1397271 ) ), 1 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1397272 ) ), -0.1 ), Add( GetY( GetObject( 1397272 ) ), -0.1 ), Add( GetZ( GetObject( 1397272 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1397272 ) ), GetY( GetObject( 1397272 ) ), Add(GetZ(GetObject( 1397272 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1397273 ) ), -0.1 ), Add( GetY( GetObject( 1397273 ) ), -0.1 ), Add( GetZ( GetObject( 1397273 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1397273 ) ), GetY( GetObject( 1397273 ) ), Add(GetZ(GetObject( 1397273 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1397274 ) ), -0.1 ), Add( GetY( GetObject( 1397274 ) ), -0.1 ), Add( GetZ( GetObject( 1397274 ) ), -1.45 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1397274 ) ), GetY( GetObject( 1397274 ) ), Add(GetZ(GetObject( 1397274 ) ), 0.5 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1397275 ) ), -0.1 ), Add( GetY( GetObject( 1397275 ) ), -0.1 ), Add( GetZ( GetObject( 1397275 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1397275 ) ), GetY( GetObject( 1397275 ) ), Add(GetZ(GetObject( 1397275 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1397276 ) ), -0.1 ), Add( GetY( GetObject( 1397276 ) ), -0.1 ), Add( GetZ( GetObject( 1397276 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1397276 ) ), GetY( GetObject( 1397276 ) ), Add(GetZ(GetObject( 1397276 ) ), 3 ), 10, 255, 225, 225 )
+  )
+)
+
+Script VFireCity#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1395067 ) ), -0.1 ), Add( GetY( GetObject( 1395067 ) ), -0.1 ), Add( GetZ( GetObject( 1395067 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1395067 ) ), GetY( GetObject( 1395067 ) ), Add(GetZ(GetObject( 1395067 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1397266 ) ), -0.1 ), Add( GetY( GetObject( 1397266 ) ), -0.1 ), Add( GetZ( GetObject( 1397266 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1397266 ) ), GetY( GetObject( 1397266 ) ), Add(GetZ(GetObject( 1397266 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1397267 ) ), -0.1 ), Add( GetY( GetObject( 1397267 ) ), -0.1 ), Add( GetZ( GetObject( 1397267 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1397267 ) ), GetY( GetObject( 1397267 ) ), Add(GetZ(GetObject( 1397267 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1397268 ) ), -0.1 ), Add( GetY( GetObject( 1397268 ) ), -0.1 ), Add( GetZ( GetObject( 1397268 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1397268 ) ), GetY( GetObject( 1397268 ) ), Add(GetZ(GetObject( 1397268 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1397269 ) ), -0.1 ), Add( GetY( GetObject( 1397269 ) ), -0.1 ), Add( GetZ( GetObject( 1397269 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1397269 ) ), GetY( GetObject( 1397269 ) ), Add(GetZ(GetObject( 1397269 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1397270 ) ), -0.1 ), Add( GetY( GetObject( 1397270 ) ), -0.1 ), Add( GetZ( GetObject( 1397270 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1397270 ) ), GetY( GetObject( 1397270 ) ), Add(GetZ(GetObject( 1397270 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1397271 ) ), -0.1 ), Add( GetY( GetObject( 1397271 ) ), -0.1 ), Add( GetZ( GetObject( 1397271 ) ), -1.3 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1397271 ) ), GetY( GetObject( 1397271 ) ), Add(GetZ(GetObject( 1397271 ) ), 1 ), 10, 255, 225, 225 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1397272 ) ), -0.1 ), Add( GetY( GetObject( 1397272 ) ), -0.1 ), Add( GetZ( GetObject( 1397272 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1397272 ) ), GetY( GetObject( 1397272 ) ), Add(GetZ(GetObject( 1397272 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1397273 ) ), -0.1 ), Add( GetY( GetObject( 1397273 ) ), -0.1 ), Add( GetZ( GetObject( 1397273 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1397273 ) ), GetY( GetObject( 1397273 ) ), Add(GetZ(GetObject( 1397273 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1397274 ) ), -0.1 ), Add( GetY( GetObject( 1397274 ) ), -0.1 ), Add( GetZ( GetObject( 1397274 ) ), -1.45 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1397274 ) ), GetY( GetObject( 1397274 ) ), Add(GetZ(GetObject( 1397274 ) ), 0.5 ), 10, 255, 225, 225 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1397275 ) ), -0.1 ), Add( GetY( GetObject( 1397275 ) ), -0.1 ), Add( GetZ( GetObject( 1397275 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1397275 ) ), GetY( GetObject( 1397275 ) ), Add(GetZ(GetObject( 1397275 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1397276 ) ), -0.1 ), Add( GetY( GetObject( 1397276 ) ), -0.1 ), Add( GetZ( GetObject( 1397276 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1397276 ) ), GetY( GetObject( 1397276 ) ), Add(GetZ(GetObject( 1397276 ) ), 3 ), 10, 255, 225, 225 )
+  )
+)
+
+Script VFireCity#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 101 )
+    DeleteParticleSource( 101 )
+    Sleep( 10 )
+    DeletePointLight( 102 )
+    DeleteParticleSource( 102 )
+    Sleep( 10 )
+    DeletePointLight( 103 )
+    DeleteParticleSource( 103 )
+    Sleep( 10 )
+    DeletePointLight( 104 )
+    DeleteParticleSource( 104 )
+    Sleep( 10 )
+    DeletePointLight( 105 )
+    DeleteParticleSource( 105 )
+    Sleep( 10 )
+    DeletePointLight( 106 )
+    DeleteParticleSource( 106 )
+    Sleep( 10 )
+    DeletePointLight( 107 )
+    DeleteParticleSource( 107 )
+    Sleep( 10 )
+    DeletePointLight( 108 )
+    DeleteParticleSource( 108 )
+    Sleep( 10 )
+    DeletePointLight( 109 )
+    DeleteParticleSource( 109 )
+    Sleep( 10 )
+    DeletePointLight( 110 )
+    DeleteParticleSource( 110 )
+    Sleep( 10 )
+    DeletePointLight( 111 )
+    DeleteParticleSource( 111 )
+    Sleep( 10 )
+    DeletePointLight( 112 )
+    DeleteParticleSource( 112 )
+  )
+)
+
+Script VCityGates#0#1
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( GetUnitOfPlayer( 0 , 0 ) , 84 , 225 ) , 7 ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 44456 ) , 1 )
+  )
+)
+
+Script VCityGates#0#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( GetUnitOfPlayer( 0 , 0 ) , 64 , 135 ) , 7 ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 44457 ) , 1 )
+  )
+)
+
+Script KChest#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 6085 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 6085 ) , 0 )
+  )
+)
+
+Script KChest#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 394351 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 394351 ) , 0 )
+  )
+)
+
+Script KChest#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4044 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 4044 ) , 0 )
+  )
+)
+
+Script Barell#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 155277 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 155277 ) , 0 )
+  )
+)
+
+Script Barell#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1396179 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 1396179 ) , 0 )
+  )
+)
+
+Script Barell#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1396180 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 1396180 ) , 0 )
+  )
+)
+
+Script Barell#4
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1396770 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 1396770 ) , 0 )
+  )
+)
+
+Script Barell#5
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1396771 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 1396771 ) , 0 )
+  )
+)
+
+Script Barell#6
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1396772 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 1396772 ) , 0 )
+  )
+)
+
+Script Barell#7
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1396775 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 1396775 ) , 0 )
+  )
+)
+
+Script VTeleport#0#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , 80 , 84.6 ) , 1 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz35j.q19j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( VSS#i#val, Heroes ) 
+    (
+      VTeleport#0#2( VSS#i#val )
+    )
+    VTeleport#0#3( this )
+  )
+)
+
+Script VTeleport#0#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( this , 80 , 84.6 ) , 1 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP ( this , 22.9 , 65.1, 0 )
+    Sleep( 3 )
+    CreateParticleSource( 1001, GetX( this ) , GetY( this ) , GetZ( this ) , 1, "teleport" )
+  )
+)
+
+Script VTeleport#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 3 )
+    VTeleport#0#1( this )
+  )
+)
+
+Script VTeleport#1#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , 38.3 , 41.3 ) , 1 ) ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( VSS#i#val, Heroes ) 
+    (
+      VTeleport#1#2( VSS#i#val )
+    )
+    VTeleport#1#3( this )
+  )
+)
+
+Script VTeleport#1#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( this , 38.3 , 41.3 ) , 1 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP ( this , 79.5 , 79, 0 )
+    Sleep( 3 )
+    CreateParticleSource( 1001, GetX( this ) , GetY( this ) , GetZ( this ) , 1, "teleport" )
+  )
+)
+
+Script VTeleport#1#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 3 )
+    VTeleport#1#1( this )
+  )
+)
+
+Script Popper#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 0 , GetX( GetObject(1000000) ) , GetY( GetObject(1000000) ) , Add( GetZValue( GetX( GetObject(1000000) ) , GetY( GetObject(1000000) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#2( this ) 
+  )
+)
+
+Script Popper#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 0 , GetX( GetObject(1000000) ) , GetY( GetObject(1000000) ) , Add( GetZValue( GetX( GetObject(1000000) ) , GetY( GetObject(1000000) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#1( this ) 
+  )
+)
+
+Script Popper#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 1 , GetX( GetObject(1000001) ) , GetY( GetObject(1000001) ) , Add( GetZValue( GetX( GetObject(1000001) ) , GetY( GetObject(1000001) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#4( this ) 
+  )
+)
+
+Script Popper#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 1 , GetX( GetObject(1000001) ) , GetY( GetObject(1000001) ) , Add( GetZValue( GetX( GetObject(1000001) ) , GetY( GetObject(1000001) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#3( this ) 
+  )
+)
+
+Script Popper#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 2 , GetX( GetObject(1000002) ) , GetY( GetObject(1000002) ) , Add( GetZValue( GetX( GetObject(1000002) ) , GetY( GetObject(1000002) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#6( this ) 
+  )
+)
+
+Script Popper#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 2 , GetX( GetObject(1000002) ) , GetY( GetObject(1000002) ) , Add( GetZValue( GetX( GetObject(1000002) ) , GetY( GetObject(1000002) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#5( this ) 
+  )
+)
+
+Script Popper#7
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 3 , GetX( GetObject(1000003) ) , GetY( GetObject(1000003) ) , Add( GetZValue( GetX( GetObject(1000003) ) , GetY( GetObject(1000003) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#8( this ) 
+  )
+)
+
+Script Popper#8
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 3 , GetX( GetObject(1000003) ) , GetY( GetObject(1000003) ) , Add( GetZValue( GetX( GetObject(1000003) ) , GetY( GetObject(1000003) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#7( this ) 
+  )
+)
+
+Script Popper#9
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 4 , GetX( GetObject(1000004) ) , GetY( GetObject(1000004) ) , Add( GetZValue( GetX( GetObject(1000004) ) , GetY( GetObject(1000004) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#10( this ) 
+  )
+)
+
+Script Popper#10
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 4 , GetX( GetObject(1000004) ) , GetY( GetObject(1000004) ) , Add( GetZValue( GetX( GetObject(1000004) ) , GetY( GetObject(1000004) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#9( this ) 
+  )
+)
+
+Script Popper#11
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 5 , GetX( GetObject(1000005) ) , GetY( GetObject(1000005) ) , Add( GetZValue( GetX( GetObject(1000005) ) , GetY( GetObject(1000005) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#12( this ) 
+  )
+)
+
+Script Popper#12
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 5 , GetX( GetObject(1000005) ) , GetY( GetObject(1000005) ) , Add( GetZValue( GetX( GetObject(1000005) ) , GetY( GetObject(1000005) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#11( this ) 
+  )
+)
+
+Script Popper#13
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 6 , GetX( GetObject(1000006) ) , GetY( GetObject(1000006) ) , Add( GetZValue( GetX( GetObject(1000006) ) , GetY( GetObject(1000006) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#14( this ) 
+  )
+)
+
+Script Popper#14
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 6 , GetX( GetObject(1000006) ) , GetY( GetObject(1000006) ) , Add( GetZValue( GetX( GetObject(1000006) ) , GetY( GetObject(1000006) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#13( this ) 
+  )
+)
+
+Script Popper#15
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 7 , GetX( GetObject(1000007) ) , GetY( GetObject(1000007) ) , Add( GetZValue( GetX( GetObject(1000007) ) , GetY( GetObject(1000007) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 ) 
+    Popper#16( this ) 
+  )
+)
+
+Script Popper#16
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )  
+    CreateParticleSource( 7 , GetX( GetObject(1000007) ) , GetY( GetObject(1000007) ) , Add( GetZValue( GetX( GetObject(1000007) ) , GetY( GetObject(1000007) ) ) , -0.4 ) , 0.5 , "poisonfog" ) 
+    Sleep( 3 )
+    Popper#15( this ) 
+  )
+)
+
+Script Caboom#0#1
+(
+  if
+  (
+    Any( i , Green , IsLess( DistanceUnitUnit( i , GetUnitOfPlayer( 0, 0 ) ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  )
+    For( VSS#i#val, Green ) 
+    (
+      Caboom#0#2( VSS#i#val )
+    )
+    Caboom#0#3( this ) 
+  )
+)
+
+Script Caboom#0#2
+(
+  if
+  (
+    IsLess( DistanceUnitUnit( this , GetUnitOfPlayer( 0, 0 ) ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    KillUnit( this )
+  )
+)
+
+Script Caboom#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 )
+    Caboom#0#1( this ) 
+  )
+)
+
+Script Caboom#1#1
+(
+  if
+  (
+    Any( i , Green , IsLess( DistanceUnitUnit( i , GetUnitOfPlayer( 0, 1 ) ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  )
+    For( VSS#i#val, Green ) 
+    (
+      Caboom#1#2( VSS#i#val )
+    )
+    Caboom#1#3( this ) 
+  )
+)
+
+Script Caboom#1#2
+(
+  if
+  (
+    IsLess( DistanceUnitUnit( this , GetUnitOfPlayer( 0, 1 ) ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    KillUnit( this )
+  )
+)
+
+Script Caboom#1#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 )
+    Caboom#1#1( this ) 
+  )
+)
+
+Script Caboom#2#1
+(
+  if
+  (
+    Any( i , Green , IsDead( i ) )
+  )
+  then
+  (
+    KillScript(  )
+    For( VSS#i#val, Green ) 
+    (
+      Caboom#2#2( VSS#i#val )
+    )
+    Caboom#2#3( this ) 
+  )
+)
+
+Script Caboom#2#2
+(
+  if
+  (
+    IsDead( this )
+  )
+  then
+  (
+    KillScript(  )
+    CastSpellPoint( "fireball{ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5}" , GetX( this ), GetY( this ), GetX( this ), GetY( this ) )
+    Sleep( 2 )
+    RemoveUnitFromServer( this )
+  )
+)
+
+Script Caboom#2#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 )
+    Caboom#2#1( this ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  AddObject( Green, GetObject( 1000000 ) )
+  AddObject( Green, GetObject( 1000001 ) )
+  AddObject( Green, GetObject( 1000002 ) )
+  AddObject( Green, GetObject( 1000003 ) )
+  AddObject( Green, GetObject( 1000004 ) )
+  AddObject( Green, GetObject( 1000005 ) )
+  AddObject( Green, GetObject( 1000006 ) )
+  AddObject( Green, GetObject( 1000007 ) )
+  Start( NULL )
+  CheckFail( NULL )
+  VCheck#0#1( NULL )
+  VCheck#1#1( NULL )
+  VCheck#1#4( NULL )
+  VCheck#2#1( NULL )
+  VFire#0#1( NULL )
+  VFire#0#2( NULL )
+  VFire#0#3( NULL )
+  VCityGates#0#1( NULL )
+  VCityGates#0#2( NULL )
+  KChest#1( NULL )
+  KChest#2( NULL )
+  KChest#3( NULL )
+  Barell#1( NULL )
+  Barell#2( NULL )
+  Barell#3( NULL )
+  Barell#4( NULL )
+  Barell#5( NULL )
+  Barell#6( NULL )
+  Barell#7( NULL )
+  VTeleport#0#3( NULL )
+  VTeleport#1#3( NULL )
+  Popper#1( NULL )
+  Popper#3( NULL )
+  Popper#5( NULL )
+  Popper#7( NULL )
+  Popper#9( NULL )
+  Popper#11( NULL )
+  Popper#13( NULL )
+  Popper#15( NULL )
+  Caboom#0#1( NULL )
+  Caboom#1#1( NULL )
+  Caboom#2#1( NULL )
+)

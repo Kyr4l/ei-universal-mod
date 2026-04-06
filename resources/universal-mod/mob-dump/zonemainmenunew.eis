@@ -1,0 +1,23 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object 
+)
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+)

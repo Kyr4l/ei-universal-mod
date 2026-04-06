@@ -1,0 +1,203 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPUniOct : object,
+  LMPOctopus121000255 : object,
+  LMPOctopus121000243 : object,
+  LMPUniqueTigerRamp50 : object,
+  LMPOctopus121000233 : object,
+  LMPOctopus121000249 : object,
+  LMPOctopus121000241 : object,
+  LMPOctopus121000244 : object,
+  LMPOctopus121000254 : object,
+  LMPOctopus121000236 : object,
+  Captain : object,
+  LMPOctopus121000256 : object,
+  LMPOctopus121000253 : object,
+  LMPOctopus121000248 : object,
+  LMPUniqueTigerRamp42 : object,
+  LMPOctopus121000247 : object,
+  LMPUniqueTigerRamp30 : object,
+  LMPOctopus121000250 : object,
+  LMPUniqueTigerRamp26 : object,
+  LMPOctopus121000239 : object,
+  LMPOctopus121000260 : object,
+  LMPOctopus121000238 : object,
+  LMPUniqueTigerRamp32 : object,
+  LMPOctopus121000235 : object,
+  LMPUniqueTigerRamp18 : object,
+  LMPUniqueTigerRamp20 : object,
+  LMPUniqueTigerRamp48 : object,
+  LMPOctopus121000240 : object,
+  LMPOctopus121000251 : object,
+  LMPOctopus121000259 : object,
+  LMPOctopus121000246 : object,
+  LMPOctopus121000258 : object,
+  LMPOctopus121000237 : object,
+  LMPOctopus121000242 : object,
+  LMPUniqueTigerRamp36 : object,
+  LMPUniqueTigerRamp46 : object,
+  LMPOctopus121000245 : object,
+  LMPOctopus121000234 : object,
+  LMPUniqueTigerRamp24 : object,
+  LMPOctopus121000231 : object,
+  LMPUniqueTigerRamp34 : object,
+  LMPOctopus121000257 : object,
+  LMPOctopus121000252 : object,
+  LMPUniqueTigerRamp40 : object,
+  WTiger25 : object,
+  WTiger12 : object,
+  WTiger23 : object,
+  WTiger14 : object,
+  WTiger13 : object,
+  WTiger22 : object 
+)
+
+DeclareScript VTriger#3#1 (  this : object )
+DeclareScript VCheck#3#2 (  this : object )
+DeclareScript VTriger#3#3 (  this : object )
+DeclareScript VTriger#3#5 (  this : object )
+
+Script VTriger#3#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    KillUnit( Captain ) 
+  )
+)
+
+Script VCheck#3#2
+(
+  if
+  (
+    IsEqual( GetLeverState( Door2 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#3( this ) 
+  )
+)
+
+Script VTriger#3#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    EraseQuestItem( 0, 30 ) 
+  )
+)
+
+Script VTriger#3#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z12q3" ) 
+    QObjSeeObject( "GetObject(5636)" ) 
+    QObjUse( "GetObject(5636)", 1 ) 
+    QObjSeeUnit( "GetObject(1000219)" ) 
+    QObjKillGroup( "AllMonsters1" ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPUniOct = GetObjectByID( "1000200" ) 
+  LMPOctopus121000255 = GetObjectByID( "1000202" ) 
+  LMPOctopus121000243 = GetObjectByID( "1000206" ) 
+  LMPUniqueTigerRamp50 = GetObjectByID( "1000209" ) 
+  LMPOctopus121000233 = GetObjectByID( "1000210" ) 
+  LMPOctopus121000249 = GetObjectByID( "1000211" ) 
+  LMPOctopus121000241 = GetObjectByID( "1000213" ) 
+  LMPOctopus121000244 = GetObjectByID( "1000214" ) 
+  LMPOctopus121000254 = GetObjectByID( "1000215" ) 
+  LMPOctopus121000236 = GetObjectByID( "1000217" ) 
+  Captain = GetObjectByID( "1000219" ) 
+  LMPOctopus121000256 = GetObjectByID( "1000220" ) 
+  LMPOctopus121000253 = GetObjectByID( "1000221" ) 
+  LMPOctopus121000248 = GetObjectByID( "1000222" ) 
+  LMPUniqueTigerRamp42 = GetObjectByID( "1000224" ) 
+  LMPOctopus121000247 = GetObjectByID( "1000226" ) 
+  LMPUniqueTigerRamp30 = GetObjectByID( "1000229" ) 
+  LMPOctopus121000250 = GetObjectByID( "1000230" ) 
+  LMPUniqueTigerRamp26 = GetObjectByID( "1000232" ) 
+  LMPOctopus121000239 = GetObjectByID( "1000233" ) 
+  LMPOctopus121000260 = GetObjectByID( "1000236" ) 
+  LMPOctopus121000238 = GetObjectByID( "1000242" ) 
+  LMPUniqueTigerRamp32 = GetObjectByID( "1000243" ) 
+  LMPOctopus121000235 = GetObjectByID( "1000244" ) 
+  LMPUniqueTigerRamp18 = GetObjectByID( "1000245" ) 
+  LMPUniqueTigerRamp20 = GetObjectByID( "1000249" ) 
+  LMPUniqueTigerRamp48 = GetObjectByID( "1000251" ) 
+  LMPOctopus121000240 = GetObjectByID( "1000252" ) 
+  LMPOctopus121000251 = GetObjectByID( "1000255" ) 
+  LMPOctopus121000259 = GetObjectByID( "1000256" ) 
+  LMPOctopus121000246 = GetObjectByID( "1000258" ) 
+  LMPOctopus121000258 = GetObjectByID( "1000259" ) 
+  LMPOctopus121000237 = GetObjectByID( "1000261" ) 
+  LMPOctopus121000242 = GetObjectByID( "1000262" ) 
+  LMPUniqueTigerRamp36 = GetObjectByID( "1000263" ) 
+  LMPUniqueTigerRamp46 = GetObjectByID( "1000266" ) 
+  LMPOctopus121000245 = GetObjectByID( "1000267" ) 
+  LMPOctopus121000234 = GetObjectByID( "1000270" ) 
+  LMPUniqueTigerRamp24 = GetObjectByID( "1000273" ) 
+  LMPOctopus121000231 = GetObjectByID( "1000274" ) 
+  LMPUniqueTigerRamp34 = GetObjectByID( "1000275" ) 
+  LMPOctopus121000257 = GetObjectByID( "1000276" ) 
+  LMPOctopus121000252 = GetObjectByID( "1000278" ) 
+  LMPUniqueTigerRamp40 = GetObjectByID( "1000284" ) 
+  WTiger25 = GetObjectByID( "1000288" ) 
+  WTiger12 = GetObjectByID( "1000290" ) 
+  WTiger23 = GetObjectByID( "1000291" ) 
+  WTiger14 = GetObjectByID( "1000292" ) 
+  WTiger13 = GetObjectByID( "1000295" ) 
+  WTiger22 = GetObjectByID( "1000296" ) 
+  AddObject( AllMonsters1, GetObject( 1000274 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000210 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000270 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000244 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000217 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000261 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000242 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000233 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000252 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000213 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000262 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000206 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000214 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000267 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000258 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000226 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000222 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000211 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000230 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000255 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000278 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000221 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000215 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000202 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000220 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000276 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000259 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000256 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000236 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000207 )  ) 
+  AddObject( AllMonsters1, GetObject( 1000200 )  ) 
+  VTriger#3#1( NULL ) 
+  VCheck#3#2( NULL ) 
+  VTriger#3#5( NULL ) 
+)

@@ -1,0 +1,106 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  SkelMineG2 : object,
+  Crypt : object,
+  SkelMineG1 : object 
+)
+
+DeclareScript VTriger#1#1 (  this : object )
+DeclareScript VCheck#1#2 (  this : object )
+DeclareScript VTriger#1#5 (  this : object )
+DeclareScript VCheck#1#7 (  this : object )
+DeclareScript VCheck#1#8 (  this : object )
+DeclareScript VTriger#1#10 (  this : object )
+
+Script VTriger#1#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRoundToArea( 1, 382, 188, 12 ) 
+    QStart( "z90q1" ) 
+    QObjArea( 1 ) 
+    QObjSeeObject( "GetObject(1000064)" ) 
+    QObjUse( "GetObject(1000064)", 1 ) 
+    QFinish(  ) 
+  )
+)
+
+Script VCheck#1#2
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#5( this ) 
+  )
+)
+
+Script VTriger#1#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetScience( Crypt, 0, 0, 1, 0, 0, 0 ) 
+  )
+)
+
+Script VCheck#1#7
+(
+  if
+  (
+    IsEqual( GetLeverState( Crypt ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#1#8( this ) 
+  )
+)
+
+Script VCheck#1#8
+(
+  if
+  (
+    IsEqual( GetLeverState( Crypt ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#10( this ) 
+  )
+)
+
+Script VTriger#1#10
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "AncientSword" ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  SkelMineG2 = GetObjectByID( "1000085" ) 
+  Crypt = GetObjectByID( "1000064" ) 
+  SkelMineG1 = GetObjectByID( "1000083" ) 
+  VTriger#1#1( NULL ) 
+  VCheck#1#2( NULL ) 
+  VCheck#1#7( NULL ) 
+)

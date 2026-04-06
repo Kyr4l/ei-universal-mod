@@ -1,0 +1,33 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  KingDeer : object 
+)
+
+DeclareScript VTriger#3#1 (  this : object )
+
+Script VTriger#3#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z13q3" ) 
+    AddRectToArea( 1, 206, 204, 249, 221 ) 
+    QObjArea( 1 ) 
+    QObjSeeUnit( "GetObject(1000128)" ) 
+    QObjKillUnit( "GetObject(1000128)" ) 
+    QObjGetItem( 86 ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  KingDeer = GetObjectByID( "1000128" ) 
+  VTriger#3#1( NULL ) 
+)

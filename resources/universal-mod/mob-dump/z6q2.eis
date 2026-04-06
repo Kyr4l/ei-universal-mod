@@ -1,0 +1,74 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  OChest : object 
+)
+
+DeclareScript VCheck#2#1 (  this : object )
+DeclareScript VCheck#2#2 (  this : object )
+DeclareScript VTriger#2#4 (  this : object )
+DeclareScript VTriger#2#6 (  this : object )
+
+Script VCheck#2#1
+(
+  if
+  (
+    IsEqual( GetLeverState( OChest ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#2#2( this ) 
+  )
+)
+
+Script VCheck#2#2
+(
+  if
+  (
+    IsEqual( GetLeverState( OChest ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#2#4( this ) 
+  )
+)
+
+Script VTriger#2#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "dragonAmuletS" ) 
+  )
+)
+
+Script VTriger#2#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 103.4, 293.7, 119.3, 305.6 ) 
+    QStart( "z6q2" ) 
+    QObjArea( 1 ) 
+    QObjSeeObject( "GetObject(1000170)" ) 
+    QObjGetItem( 81 ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  OChest = GetObjectByID( "1000170" ) 
+  VCheck#2#1( NULL ) 
+  VTriger#2#6( NULL ) 
+)

@@ -1,0 +1,103 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1000000
+      MAX_ID: 1000399
+  VSS_SECTION:
+  DIRICTORY_ELEMENTS:
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "AncientCurseM13"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "curse_magic"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 1000
+        - 1000
+        - 1000
+        - 1000
+        - 1065353216
+        - 1097859072
+        - 1057523849
+        - 1057523849
+        - 1040746633
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 0
+        - 1092616192
+        - 1128792064
+        - 1128792064
+        - 1065353216
+        - 1120403456
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1101004800
+        - 1120403456
+        - 1101004800
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 2103731300
+        - 2105376125
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 13
+      NID: 666666
+      OBJTYPE: 51
+      OBJNAME: "JunCurse"
+      OBJTEMPLATE: "unmocu"
+      PARENTTEMPLATE: "AncientCurseM13"
+      OBJPRIMTXTR: "Curse01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 54.0
+        - 138.0
+        - -20.0
+      OBJROTATION:
+        - 0.08715559542179108
+        - 0.0
+        - 0.0
+        - 0.9961946606636047
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.25999999046325684
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 0
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 54.0
+          - 138.0
+          - -20.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0

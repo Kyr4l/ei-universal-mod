@@ -1,0 +1,2877 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1000301
+      MAX_ID: 1000400
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 2.382207389352189e-44
+        - 8.547920632381384e-44
+        - 3.6433760072445244e-44
+        - 1.6255062186167878e-43
+      VSS_TITLE: "z18q4"
+      VSS_COMMANDS: "QStart(\"z18q4\")\nAddRectToArea(1,203,295,216,304)\nQObjArea(1)\nQObjKillGroup(\"JunScientifics\")\nQFinish()\n"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 1000315
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists1"
+    FOLDER:
+      DIR_NINST: 1000370
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists2"
+    FOLDER:
+      DIR_NINST: 1000392
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists9"
+    FOLDER:
+      DIR_NINST: 1000393
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists8"
+    FOLDER:
+      DIR_NINST: 1000394
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists7"
+    FOLDER:
+      DIR_NINST: 1000395
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists6"
+    FOLDER:
+      DIR_NINST: 1000398
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists5"
+    FOLDER:
+      DIR_NINST: 1000399
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists4"
+    FOLDER:
+      DIR_NINST: 1000400
+      DIR_PARENT_FOLDER: 4294964439
+      DIR_TYPE: 2
+      DIR_NAME: "LMPJunScientists3"
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000315
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists1"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 198.9810333251953
+        - 341.3681945800781
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 198.9810333251953
+          - 341.3681945800781
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 200.75079345703125
+            - 340.46258544921875
+            - 11.110856056213379
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 198.32102966308594
+              - 334.5691833496094
+              - 11.30578327178955
+            ACTION_PT_WAIT_SEG: 90
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 195.8026885986328
+            - 344.4082946777344
+            - 10.915928840637207
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 189.66146850585938
+              - 353.3319091796875
+              - 10.818465232849121
+            ACTION_PT_WAIT_SEG: 300
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 201.20323181152344
+            - 344.55755615234375
+            - 11.110856056213379
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 207.04623413085938
+              - 357.7715759277344
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 300
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 198.9810333251953
+          - 341.3681945800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 198.9810333251953
+          - 341.3681945800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 198.9810333251953
+          - 341.3681945800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 198.9810333251953
+          - 341.3681945800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Mage 16"
+      UNIT_ARMORS:
+        - "hadagan medium helm.cotton"
+        - "hadagan high shirt.troll black"
+        - "hadagan high pants.troll black"
+        - "hadagan high boots.troll black"
+        - "hadagan medium gloves.cotton"
+      UNIT_WEAPONS:
+        - "curved dagger.mithrill"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000342
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards M14-150067"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Mage 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 242.55831909179688
+        - 315.3124084472656
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.11999999731779099
+        - 0.25999999046325684
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.55831909179688
+          - 315.3124084472656
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 189.78526306152344
+            - 358.38201904296875
+            - 10.233682632446289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 188.1106719970703
+              - 340.2047119140625
+              - 10.623537063598633
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 208.07118225097656
+              - 358.91424560546875
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 240.60671997070312
+            - 357.8387451171875
+            - 11.403246879577637
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 245.09237670898438
+              - 333.6197204589844
+              - 13.352519989013672
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.2557373046875
+              - 357.63275146484375
+              - 11.79310131072998
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 233.30462646484375
+            - 315.5102844238281
+            - 12.76773738861084
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 239.87928771972656
+              - 310.5843505859375
+              - 13.547447204589844
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 220.40240478515625
+              - 306.7514343261719
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 187.38134765625
+            - 326.30535888671875
+            - 10.623537063598633
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 185.8681182861328
+              - 313.94482421875
+              - 10.233682632446289
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 195.7017059326172
+              - 326.1979675292969
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.55831909179688
+          - 315.3124084472656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.55831909179688
+          - 315.3124084472656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.55831909179688
+          - 315.3124084472656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.55831909179688
+          - 315.3124084472656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000370
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists2"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 199.6543731689453
+        - 337.6623840332031
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 199.6543731689453
+          - 337.6623840332031
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 200.58277893066406
+            - 338.7304992675781
+            - 11.208319664001465
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 202.34866333007812
+              - 341.4870300292969
+              - 11.30578327178955
+            ACTION_PT_WAIT_SEG: 20000
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 199.6543731689453
+          - 337.6623840332031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 199.6543731689453
+          - 337.6623840332031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 199.6543731689453
+          - 337.6623840332031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 199.6543731689453
+          - 337.6623840332031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Mage 16"
+      UNIT_ARMORS:
+        - "hadagan medium helm.cotton"
+        - "hadagan high shirt.troll black"
+        - "hadagan high pants.troll black"
+        - "hadagan high boots.troll black"
+        - "hadagan medium gloves.cotton"
+      UNIT_WEAPONS:
+        - "curved dagger.mithrill"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000378
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards M14-150067"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Mage 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 243.23251342773438
+        - 316.3482971191406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.11999999731779099
+        - 0.25999999046325684
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 243.23251342773438
+          - 316.3482971191406
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 190.45944213867188
+            - 359.41790771484375
+            - 10.233682632446289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 188.78485107421875
+              - 341.2406005859375
+              - 10.623537063598633
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 208.745361328125
+              - 359.95013427734375
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 241.28089904785156
+            - 358.8746337890625
+            - 11.403246879577637
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 245.7665557861328
+              - 334.6556091308594
+              - 13.352519989013672
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.92991638183594
+              - 358.66864013671875
+              - 11.79310131072998
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 233.9788055419922
+            - 316.5461730957031
+            - 12.76773738861084
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 240.553466796875
+              - 311.6202392578125
+              - 13.547447204589844
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 221.0765838623047
+              - 307.7873229980469
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 188.05552673339844
+            - 327.34124755859375
+            - 10.623537063598633
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 186.54229736328125
+              - 314.980712890625
+              - 10.233682632446289
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 196.37588500976562
+              - 327.2338562011719
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 243.23251342773438
+          - 316.3482971191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 243.23251342773438
+          - 316.3482971191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 243.23251342773438
+          - 316.3482971191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 243.23251342773438
+          - 316.3482971191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000392
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists9"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 217.10964965820312
+        - 336.9610900878906
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 217.10964965820312
+          - 336.9610900878906
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 217.10964965820312
+          - 336.9610900878906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 217.10964965820312
+          - 336.9610900878906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 217.10964965820312
+          - 336.9610900878906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 217.10964965820312
+          - 336.9610900878906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000393
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists8"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 232.52999877929688
+        - 347.5320129394531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 232.52999877929688
+          - 347.5320129394531
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 234.67327880859375
+            - 346.9902648925781
+            - 12.475346565246582
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 246.0155487060547
+              - 338.68487548828125
+              - 13.449983596801758
+            ACTION_PT_WAIT_SEG: 900
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 234.81787109375
+            - 350.68231201171875
+            - 12.182955741882324
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 240.25502014160156
+              - 357.2328796386719
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 900
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 230.62957763671875
+            - 350.79705810546875
+            - 12.377882957458496
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 228.5008544921875
+              - 357.2339782714844
+              - 11.598174095153809
+            ACTION_PT_WAIT_SEG: 900
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 232.52999877929688
+          - 347.5320129394531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 232.52999877929688
+          - 347.5320129394531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 232.52999877929688
+          - 347.5320129394531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 232.52999877929688
+          - 347.5320129394531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000394
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists7"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 195.7570037841797
+        - 358.1889953613281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 195.7570037841797
+          - 358.1889953613281
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 200.6925506591797
+            - 355.1648864746094
+            - 10.818465232849121
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 215.67991638183594
+              - 335.2096862792969
+              - 12.962664604187012
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 206.3941650390625
+            - 355.4644775390625
+            - 11.013392448425293
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 199.46817016601562
+              - 341.3787536621094
+              - 11.110856056213379
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 195.7570037841797
+          - 358.1889953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 195.7570037841797
+          - 358.1889953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 195.7570037841797
+          - 358.1889953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 195.7570037841797
+          - 358.1889953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000395
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists6"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 239.15199279785156
+        - 349.5249938964844
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.15199279785156
+          - 349.5249938964844
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 238.77731323242188
+            - 347.25390625
+            - 12.377882957458496
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 230.71339416503906
+              - 337.14202880859375
+              - 13.352519989013672
+            ACTION_PT_WAIT_SEG: 900
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.15199279785156
+          - 349.5249938964844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.15199279785156
+          - 349.5249938964844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.15199279785156
+          - 349.5249938964844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.15199279785156
+          - 349.5249938964844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Mage 16"
+      UNIT_ARMORS:
+        - "hadagan medium helm.cotton"
+        - "hadagan high shirt.troll black"
+        - "hadagan high pants.troll black"
+        - "hadagan high boots.troll black"
+        - "hadagan medium gloves.cotton"
+      UNIT_WEAPONS:
+        - "curved dagger.mithrill"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000396
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards M14-150067"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Mage 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 190.3131866455078
+        - 347.4718933105469
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.11999999731779099
+        - 0.25999999046325684
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.3131866455078
+          - 347.4718933105469
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 190.45944213867188
+            - 359.41790771484375
+            - 10.233682632446289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 188.78485107421875
+              - 341.2406005859375
+              - 10.623537063598633
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 208.745361328125
+              - 359.95013427734375
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 241.28089904785156
+            - 358.8746337890625
+            - 11.403246879577637
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 245.7665557861328
+              - 334.6556091308594
+              - 13.352519989013672
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.92991638183594
+              - 358.66864013671875
+              - 11.79310131072998
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 233.9788055419922
+            - 316.5461730957031
+            - 12.76773738861084
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 240.553466796875
+              - 311.6202392578125
+              - 13.547447204589844
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 221.0765838623047
+              - 307.7873229980469
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 188.05552673339844
+            - 327.34124755859375
+            - 10.623537063598633
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 186.54229736328125
+              - 314.980712890625
+              - 10.233682632446289
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 196.37588500976562
+              - 327.2338562011719
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.3131866455078
+          - 347.4718933105469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.3131866455078
+          - 347.4718933105469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.3131866455078
+          - 347.4718933105469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.3131866455078
+          - 347.4718933105469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Mage 16"
+      UNIT_ARMORS:
+        - "hadagan medium helm.cotton"
+        - "hadagan high shirt.troll black"
+        - "hadagan high pants.troll black"
+        - "hadagan high boots.troll black"
+        - "hadagan medium gloves.cotton"
+      UNIT_WEAPONS:
+        - "curved dagger.mithrill"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000397
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards M14-150067"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Mage 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 189.63900756835938
+        - 346.4360046386719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.11999999731779099
+        - 0.25999999046325684
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.63900756835938
+          - 346.4360046386719
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 189.78526306152344
+            - 358.38201904296875
+            - 10.233682632446289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 188.1106719970703
+              - 340.2047119140625
+              - 10.623537063598633
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 208.07118225097656
+              - 358.91424560546875
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 240.60671997070312
+            - 357.8387451171875
+            - 11.403246879577637
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 245.09237670898438
+              - 333.6197204589844
+              - 13.352519989013672
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.2557373046875
+              - 357.63275146484375
+              - 11.79310131072998
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 233.30462646484375
+            - 315.5102844238281
+            - 12.76773738861084
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 239.87928771972656
+              - 310.5843505859375
+              - 13.547447204589844
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 220.40240478515625
+              - 306.7514343261719
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 187.38134765625
+            - 326.30535888671875
+            - 10.623537063598633
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 185.8681182861328
+              - 313.94482421875
+              - 10.233682632446289
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 195.7017059326172
+              - 326.1979675292969
+              - 11.500710487365723
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.63900756835938
+          - 346.4360046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.63900756835938
+          - 346.4360046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.63900756835938
+          - 346.4360046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.63900756835938
+          - 346.4360046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000398
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists5"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 219.2530059814453
+        - 347.22900390625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 219.2530059814453
+          - 347.22900390625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 218.81919860839844
+            - 350.1711730957031
+            - 12.572810173034668
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 213.39498901367188
+              - 359.3009033203125
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 219.16549682617188
+            - 342.0151062011719
+            - 12.572810173034668
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 231.0688018798828
+              - 349.6961975097656
+              - 12.28041934967041
+            ACTION_PT_WAIT_SEG: 300
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 219.2530059814453
+          - 347.22900390625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 219.2530059814453
+          - 347.22900390625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 219.2530059814453
+          - 347.22900390625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 219.2530059814453
+          - 347.22900390625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000399
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists4"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 186.89999389648438
+        - 312.010009765625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 186.89999389648438
+          - 312.010009765625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 186.89999389648438
+          - 312.010009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 186.89999389648438
+          - 312.010009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 186.89999389648438
+          - 312.010009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 186.89999389648438
+          - 312.010009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Jun Scientists 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.wool"
+        - "hadagan high shirt.dragon red"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 7
+      NID: 1000400
+      OBJTYPE: 50
+      OBJNAME: "LMPJunScientists3"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Jun Scientists 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 203.29931640625
+        - 339.97467041015625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.10000000149011612
+        - 0.800000011920929
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 203.29931640625
+          - 339.97467041015625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 201.86376953125
+            - 339.276611328125
+            - 11.30578327178955
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 196.813232421875
+              - 335.787841796875
+              - 11.110856056213379
+            ACTION_PT_WAIT_SEG: 90
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 214.09280395507812
+            - 342.3582763671875
+            - 12.572810173034668
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 206.97250366210938
+              - 358.7908630371094
+              - 10.721001625061035
+            ACTION_PT_WAIT_SEG: 300
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 203.29931640625
+          - 339.97467041015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 203.29931640625
+          - 339.97467041015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 203.29931640625
+          - 339.97467041015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 203.29931640625
+          - 339.97467041015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0

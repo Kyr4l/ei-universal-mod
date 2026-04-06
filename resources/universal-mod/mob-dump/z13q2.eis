@@ -1,0 +1,54 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPUniqueUnicornCorrupted8 : object,
+  LMPUniqueUnicornCorrupted6 : object,
+  LMPUniqueUnicornCorrupted7 : object,
+  LMPUniqueUnicornCorrupted3 : object,
+  LMPUniqueUnicornCorrupted1 : object,
+  LMPUniqueUnicornCorrupted5 : object,
+  LMPUniqueUnicornCorrupted9 : object,
+  LMPUniqueUnicornCorrupted10 : object,
+  LMPUniqueUnicornCorrupted4 : object 
+)
+
+DeclareScript VTriger#2#1 (  this : object )
+
+Script VTriger#2#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z13q2" ) 
+    QObjKillGroup( "BlackUni" ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPUniqueUnicornCorrupted8 = GetObjectByID( "1000005" ) 
+  LMPUniqueUnicornCorrupted6 = GetObjectByID( "1000006" ) 
+  LMPUniqueUnicornCorrupted7 = GetObjectByID( "1000014" ) 
+  LMPUniqueUnicornCorrupted3 = GetObjectByID( "1000020" ) 
+  LMPUniqueUnicornCorrupted1 = GetObjectByID( "1000021" ) 
+  LMPUniqueUnicornCorrupted5 = GetObjectByID( "1000031" ) 
+  LMPUniqueUnicornCorrupted9 = GetObjectByID( "1000050" ) 
+  LMPUniqueUnicornCorrupted10 = GetObjectByID( "1000058" ) 
+  LMPUniqueUnicornCorrupted4 = GetObjectByID( "1000091" ) 
+  AddObject( BlackUni, GetObject( 1000021 )  ) 
+  AddObject( BlackUni, GetObject( 1000058 )  ) 
+  AddObject( BlackUni, GetObject( 1000020 )  ) 
+  AddObject( BlackUni, GetObject( 1000091 )  ) 
+  AddObject( BlackUni, GetObject( 1000031 )  ) 
+  AddObject( BlackUni, GetObject( 1000006 )  ) 
+  AddObject( BlackUni, GetObject( 1000014 )  ) 
+  AddObject( BlackUni, GetObject( 1000005 )  ) 
+  AddObject( BlackUni, GetObject( 1000050 )  ) 
+  VTriger#2#1( NULL ) 
+)

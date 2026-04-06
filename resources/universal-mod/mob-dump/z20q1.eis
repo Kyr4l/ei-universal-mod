@@ -1,0 +1,82 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  JunCurse : object,
+  BPB : object,
+  BP : object,
+  Rick : object,
+  Gate : object
+)
+
+DeclareScript Triger1 (  this : object )
+DeclareScript Triger2 (  this : object )
+DeclareScript Triger3 (  this : object )
+
+
+Script Triger1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+
+Script Triger2
+(
+  if
+  (
+   GroupHas( PlayerSee(0), Rick ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep(150) 
+    CreateFX( GetX( JunCurse ) , GetY( JunCurse ) , 0, 15, 50, "magic\Teleport\start.wav" ) 
+    CreateParticleSource( 15, GetX( Rick ) , GetY( Rick ) , 0, 4, "portal" )
+    RemoveUnitFromServer( Rick ) 
+    Sleep(30)
+    CreateFX( GetX( JunCurse ) , GetY( JunCurse ) , 0, 15, 50, "Tools\Evil.wav" ) 
+    CreateParticleSource( 15, GetX( JunCurse ) , GetY( JunCurse ) , 0, 4, "Mushroom" ) 
+    SetCP( JunCurse, GetX( JunCurse ) , GetY( JunCurse ) , 0 ) 
+    Sleep(10)
+    SetDiplomacy( 0, 1, -1 ) 
+    SetDiplomacy( 1, 0, -1 ) 
+  )
+)
+
+Script Triger3
+(
+  if
+  (
+    Not(IsAlive( JunCurse ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z20q1.z20q1.1", 2 ) 
+    Sleep(2)
+    GSSetVarMax( 0, "q.z20q1.z20q1", 2 ) 
+    Sleep(2)
+    QuestComplete( 0, "z20q1" ) 
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 ) 
+  JunCurse = GetObjectByID( "666666" ) 
+  BPB = GetObjectByID( "666667" ) 
+  BP = GetObjectByID( "666669" ) 
+  Rick = GetObjectByID( "640706" ) 
+  Gate = GetObjectByID( "640721" ) 
+  Triger1( NULL ) 
+  Triger2( NULL ) 
+  Triger3( NULL )  
+)
+

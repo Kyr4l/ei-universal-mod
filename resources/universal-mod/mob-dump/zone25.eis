@@ -1,0 +1,292 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+DeclareScript Start (  this : object )
+DeclareScript CheckFail (  this : object )
+DeclareScript EndOfGame (  this : object )
+DeclareScript KChest#1 (  this : object )
+DeclareScript VFire#0#1 (  this : object )
+DeclareScript VFire#0#2 (  this : object )
+DeclareScript VFire#0#3 (  this : object )
+DeclareScript VFire#1#1 (  this : object )
+DeclareScript VFire#1#3 (  this : object )
+DeclareScript VFireAll#0#1 (  this : object )
+DeclareScript VFireAll#0#2 (  this : object )
+DeclareScript VFireAll#0#3 (  this : object )
+DeclareScript Barell#1 (  this : object )
+DeclareScript VCheck#0#1 (  this : object )
+DeclareScript VCheck#0#2 (  this : object )
+DeclareScript VCheck#0#3 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script Start
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "start_zone25" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "start_zone25", 1 )
+    Sleep( 5 )
+  )
+)
+
+Script CheckFail
+(
+  if
+  (
+    Not( Every( i, Heroes, IsAlive( i ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    EndOfGame( this )
+  )
+)
+
+Script EndOfGame
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    KillUnit( GetUnitOfPlayer( 0, 0 ) )
+    GameOver()
+  )
+)
+
+Script KChest#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4044 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 4044 ) , 0 )
+  )
+)
+
+Script VFire#0#1
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 18 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireAll#0#1( this )
+    VFire#1#1( this )
+  )
+)
+
+Script VFire#1#1
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 7 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#1( this ) 
+  )
+)
+
+Script VFire#0#2
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 7 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireAll#0#2( this )
+  )
+)
+
+Script VFire#0#3
+(
+  if
+  ( 
+    IsGreater( GetWorldTime( ) , 7 ) 
+    IsLess( GetWorldTime( ) , 8 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireAll#0#3( this )
+    VFire#1#3( this )
+  )
+)
+
+Script VFire#1#3
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 8 ) 
+    IsLess( GetWorldTime( ) , 17.9 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#3( this ) 
+  )
+)
+
+Script VFireAll#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 11, 20.35 , 78.35, 10.8, 0.25, "campfire" )
+    CreatePointLight( 11, 20.35 , 78.35, 10.8, 8, 200, 200, 200 )
+    Sleep( 15 )
+    CreateParticleSource( 12, 23.25 , 96, 10.55, 0.25, "campfire" )
+    CreatePointLight( 12, 23.25 , 96, 10.55, 8, 200, 200, 200 )
+    Sleep( 15 )
+    CreatePointLight( 13, 78.0 , 105, 37, 154, 100, 155, 100 )
+  )
+)
+
+Script VFireAll#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 11, 20.35 , 78.35, 10.8, 0.25, "campfire" )
+    CreatePointLight( 11, 20.35 , 78.35, 10.8, 8, 200, 200, 200 )
+    CreateParticleSource( 12, 23.25 , 96, 10.55, 0.25, "campfire" )
+    CreatePointLight( 12, 23.25 , 96, 10.55, 8, 200, 200, 200 )
+    CreatePointLight( 13, 78.0 , 105, 37, 154, 100, 155, 100 )
+  )
+)
+
+Script VFireAll#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeleteParticleSource( 11 )
+    DeletePointLight( 11 )
+    Sleep( 15 )
+    DeleteParticleSource( 12 )
+    DeletePointLight( 12 )
+    Sleep( 15 )
+    DeletePointLight( 13 )
+  )
+)
+
+Script Barell#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 2259321 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 2259321 ) , 0 )
+  )
+)
+
+Script VCheck#0#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz25k.q20k" ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  )
+    AddRoundToArea( 1, 95, 173, 25 )
+    Sleep( 20 )
+    GSSetVarMax( 0, "q.gz25k.q20k.1", 1 )
+    VCheck#0#2( this ) 
+  )
+)
+
+Script VCheck#0#2
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz25k.q20k.1", 2 )
+    GSSetVarMax( 0, "q.gz25k.q20k.2", 1 )
+    DeleteArea( 1 )
+    VCheck#0#3( this )
+  )
+)
+
+Script VCheck#0#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4368 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz25k.q20k.2", 2 )
+    GSSetVarMax( 0, "q.gz25k.q20k", 2 )
+    QuestComplete( 0, "q20k" )
+    SwitchLeverState( GetObject( 1122 ) , 1 )
+    GSSetVar( 0 , "z.gz25k" , 2 )
+    GSSetVar( 0 , "z.gz26k" , 2 )
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  Start( NULL )
+  CheckFail( NULL )
+  KChest#1( NULL )
+  VFire#0#1( NULL )
+  VFire#0#2( NULL )
+  VFire#0#3( NULL )
+  Barell#1( NULL )
+  VCheck#0#1( NULL )
+)

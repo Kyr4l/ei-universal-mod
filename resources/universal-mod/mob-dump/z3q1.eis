@@ -1,0 +1,86 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  BanditsChest : object 
+)
+
+DeclareScript VCheck#1#1 (  this : object )
+DeclareScript VCheck#1#2 (  this : object )
+DeclareScript VTriger#1#4 (  this : object )
+DeclareScript VTriger#1#6 (  this : object )
+DeclareScript VTriger#1#7 (  this : object )
+
+Script VCheck#1#1
+(
+  if
+  (
+    IsEqual( GetLeverState( BanditsChest ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#4( this ) 
+  )
+)
+
+Script VCheck#1#2
+(
+  if
+  (
+    IsEqual( GetLeverState( BanditsChest ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#1#1( this ) 
+  )
+)
+
+Script VTriger#1#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "SackofGold" ) 
+  )
+)
+
+Script VTriger#1#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z3q1" ) 
+    QObjSeeObject( "GetObject(1000086)" ) 
+    QObjGetItem( 17 ) 
+    QFinish(  ) 
+  )
+)
+
+Script VTriger#1#7
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    ActivateTrap( Pyramid, 0 ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  BanditsChest = GetObjectByID( "1000086" ) 
+  VCheck#1#2( NULL ) 
+  VTriger#1#6( NULL ) 
+  VTriger#1#7( NULL ) 
+)

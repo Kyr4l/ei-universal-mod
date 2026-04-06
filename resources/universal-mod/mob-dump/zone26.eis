@@ -1,0 +1,322 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+DeclareScript Start (  this : object )
+DeclareScript CheckFail (  this : object )
+DeclareScript EndOfGame (  this : object )
+DeclareScript Lever#0#1 (  this : object )
+DeclareScript Lever#0#2 (  this : object )
+DeclareScript Barell#1 (  this : object )
+DeclareScript Barell#2 (  this : object )
+DeclareScript Barell#3 (  this : object )
+DeclareScript VCheck#0#1 (  this : object )
+DeclareScript VCheck#0#2 (  this : object )
+DeclareScript VCheck#0#3 (  this : object )
+DeclareScript VCheck#0#4 (  this : object )
+DeclareScript VCheck#0#5 (  this : object )
+DeclareScript VCheck#0#6 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script Start
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "start_zone26" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "start_zone26", 1 )
+    GSSetVarMax( 0, "q.gz26k.q21k", 1 )
+    Sleep( 5 )
+  )
+)
+
+Script CheckFail
+(
+  if
+  (
+    Not( Every( i, Heroes, IsAlive( i ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    EndOfGame( this )
+  )
+)
+
+Script EndOfGame
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    KillUnit( GetUnitOfPlayer( 0, 0 ) )
+    GameOver()
+  )
+)
+
+Script Lever#0#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021001 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 5223993 ) , 1 )
+  )
+)
+
+Script Lever#0#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021002 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 4555 ) , 1 )
+  )
+)
+
+Script Barell#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 2223991 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.steel[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 2223991 ) , 0 )
+  )
+)
+
+Script Barell#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 5223991 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.steel[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 5223991 ) , 0 )
+  )
+)
+
+Script Barell#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 5223992 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.steel[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 5223992 ) , 0 )
+  )
+)
+
+Script VCheck#0#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz26k.q21k" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    AddRoundToArea( 1, 67, 163, 7 )
+    Sleep( 20 )
+    GSSetVarMax( 0, "q.gz26k.q21k.1", 1 )
+    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , GetZ( GetUnitOfPlayer( 0 , 0 ) ) , 15, 50, "Acks\Scenario\17.wav" )
+  )
+)
+
+Script VCheck#0#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021003 ) ) , 1 )
+    IsEqual( GSGetVar( 0, "q.gz26k.q21k.1" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz26k.q21k.1", 2 )
+    GSSetVarMax( 0, "q.gz26k.q21k.2", 1 )
+    GiveQuestItem( 0, "KKey05" )
+  )
+)
+
+Script VCheck#0#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4309 ) ) , 1 )
+    IsEqual( GSGetVar( 0, "q.gz26k.q21k.2" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz26k.q21k.2", 2 )
+    GSSetVarMax( 0, "q.gz26k.q21k.3", 1 )
+    GiveQuestItem( 0, "TeleportKey01" )
+  )
+)
+
+Script VCheck#0#4
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 43974 ) ) , 1 )
+    IsEqual( GSGetVar( 0, "q.gz26k.q21k.3" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 10 )
+    CreateFX( 67, 163, 6.1, 40, 70, "Tools\ATZAKO02.wav" )
+    CreateParticleSource( 1, 58.9, 161.8, 28.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 28.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 28.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 26.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 26.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 26.7, 0.7, "portalstar" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 24.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 24.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 24.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 22.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 22.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 22.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 20.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 20.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 20.7, 0.7, "portalstar" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 18.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 18.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 18.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 16.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 16.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 16.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 14.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 14.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 14.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 12.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 12.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 12.7, 0.7, "portalstar" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 10.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 10.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 10.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 8.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    GSSetVarMax( 0, "q.gz26k.q21k.3", 2 )
+    GSSetVarMax( 0, "q.gz26k.q21k.4", 1 )
+    VCheck#0#5( this )
+  )
+)
+
+Script VCheck#0#5
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  )
+    IsEqual( GetLeverState( GetObject( 43974 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz26k.q21k.4", 2 )
+    GSSetVarMax( 0, "q.gz26k.q21k", 2 )
+    DeleteArea( 1 )
+    QuestComplete( 0, "q21k" )
+    LeaveToZone( 0, "cz4k", 0 )
+  )
+)
+
+Script VCheck#0#6
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz26k.q21k.3" ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 1, 58.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreatePointLight( 1, 58.9, 161.8, 8.7, 5, 155, 155, 455 )
+    CreateParticleSource( 2, 74.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreatePointLight( 2, 74.9, 161.8, 8.7, 5, 155, 155, 455 )
+    CreateParticleSource( 3, 66.9, 169.8, 8.7, 0.7, "portalstar" )
+    CreatePointLight( 3, 66.9, 169.8, 8.7, 5, 155, 155, 455 )
+    CreateFXSource( -1, 67, 163, 6.1, 40, 70, "Tools\Teleport1.wav" ) 
+    Sleep( 20 )
+    CreateParticleSource( 4, 67, 163, 6.1, 1, "Portal" )
+    CreatePointLight( 4, 67, 163, 6.7, 10, 155, 155, 455 )
+    CreateFXSource( -1, 67, 163, 6.1, 40, 70, "Tools\Teleport2.wav" )
+    CreateFXSource( -1, 67, 163, 6.1, 40, 70, "Tools\Teleport3.wav" )
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  Start( NULL )
+  CheckFail( NULL )
+  Lever#0#1( NULL )
+  Lever#0#2( NULL )
+  Barell#1( NULL )
+  Barell#2( NULL )
+  Barell#3( NULL )
+  VCheck#0#1( NULL )
+  VCheck#0#2( NULL )
+  VCheck#0#3( NULL )
+  VCheck#0#4( NULL )
+  VCheck#0#5( NULL )
+  VCheck#0#6( NULL )
+)

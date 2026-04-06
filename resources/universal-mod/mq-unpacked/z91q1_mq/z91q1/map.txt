@@ -1,4 +1,3 @@
-## Der Weg zum Magier
 #zone z91q1 gipat game
 #res
 zone91 zone91-LMP
@@ -10,7 +9,6 @@ none
 #sky
 cave
 
-## To Pritown
 #exit 1
 bz1mpg 1
 #deploy

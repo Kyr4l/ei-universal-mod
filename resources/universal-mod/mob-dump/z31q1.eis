@@ -1,0 +1,74 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  ZombieSentry0: object,
+  ZombieSentry1: object,
+  Heroes: group
+)
+
+DeclareScript VCheck#3#2 (  this : object )
+DeclareScript VCheck#6#5 (  this : object )
+DeclareScript VCheck#8#7 (  this : object )
+
+
+Script VCheck#3#2
+(
+  if
+  (
+    IsDead ( ZombieSentry0 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z31q1.z31q1.1", 2 )
+  )
+)
+
+Script VCheck#6#5
+(
+  if
+  (
+    IsDead ( ZombieSentry1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z31q1.z31q1.2", 2 )
+  )
+)
+
+Script VCheck#8#7
+(
+  if
+  (
+    IsDead ( ZombieSentry0 )
+    IsDead ( ZombieSentry1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z31q1.z31q1.1", 2 )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z31q1.z31q1.2", 2 )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z31q1.z31q1", 2 )
+    Sleep( 2 )
+    QuestComplete( 0, "z31q1" )
+  )
+)
+
+
+WorldScript
+(
+  ZombieSentry0 = GetObjectByID( "1976614267" )
+  ZombieSentry1 = GetObjectByID( "1976614268" )
+  Sleep( 2 ) 
+  VCheck#3#2( NULL ) 
+  Sleep( 2 ) 
+  VCheck#6#5( NULL ) 
+  Sleep( 2 ) 
+  VCheck#8#7( NULL ) 
+ )
+
+

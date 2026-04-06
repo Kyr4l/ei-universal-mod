@@ -1,0 +1,6543 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1000001
+      MAX_ID: 1000100
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 8.407790785948902e-45
+        - 7.006492321624085e-44
+        - 4.203895392974451e-45
+        - 1.3032075718220799e-43
+      VSS_TITLE: "z18q1"
+      VSS_COMMANDS: "QStart(\"z18q1\")\nAddRectToArea(1,263,31,267,37)\nQObjArea(1)\nQObjKillGroup(\"OhranaJunHouse\")\nQObjKillGroup(\"Police\")\nQFinish()"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 2
+      VSS_RECT:
+        - 6.964453367694341e-43
+        - 7.58102469199726e-43
+        - 3.5032461608120427e-44
+        - 1.6114932339735396e-43
+      VSS_TITLE: "Ohrana2"
+      VSS_COMMANDS: "Sleep(Add(400,Random(50)))\nfor(i,Ohrana2)\n(\nRun(i)\nUMGuard(i,278,41,7)\n)\nSwitchLeverState(GateOhrana2,1)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 3
+      VSS_COMMANDS: "GroupSize(GroupCross(GroupSee(Ohrana1),Heroes))"
+      VSS_RECT:
+        - 5.857427580877735e-43
+        - 6.473998905180655e-43
+        - 3.5032461608120427e-44
+        - 1.6114932339735396e-43
+      VSS_TITLE: "If Ohrana1 See Hero"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 5
+      VSS_RECT:
+        - 1.14906474074635e-43
+        - 1.7656360650492695e-43
+        - 1.2891945871788317e-43
+        - 2.550363205071167e-43
+      VSS_TITLE: "z18q1.1"
+      VSS_COMMANDS: "GSSetVarMax(0,\"q.z18q1.z18q1.1\",2)\nGSSetVarMax(0,\"q.z18q1.z18q1.2\",1)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 6
+      VSS_RECT:
+        - 1.1770907100328463e-43
+        - 1.793662034335766e-43
+        - 2.5783891743576634e-43
+        - 3.839557792249999e-43
+      VSS_TITLE: "z18q1.2"
+      VSS_COMMANDS: "GSSetVarMax(0,\"q.z18q1.z18q1.2\",2)\nGSSetVarMax(0,\"q.z18q1.z18q1.3\",1)\nGSSetVarMax(0,\"q.z18q1.z18q1.6\",1)\nSwitchLeverState(HadoganGate14483e,1)\nSwitchLeverState(HadoganGate14483f,1)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 7
+      VSS_COMMANDS: "Any(i,Heroes,\nIsLess(DistanceUnitUnit(i,DgunistHouse),10))\n\n"
+      VSS_RECT:
+        - 1.401298464324817e-45
+        - 6.305843089461677e-44
+        - 1.2891945871788317e-43
+        - 2.550363205071167e-43
+      VSS_TITLE: " JunHouse"
+      VSS_ISSTART: 1
+    VSS_CHECK:
+      VSS_ID: 8
+      VSS_COMMANDS: "Every(i,OhranaJunHouse,Not(IsAlive(i)))"
+      VSS_RECT:
+        - 1.401298464324817e-45
+        - 6.305843089461677e-44
+        - 2.5783891743576634e-43
+        - 3.839557792249999e-43
+      VSS_TITLE: "KillGroup OhranaJunHouse"
+      VSS_ISSTART: 1
+    VSS_CHECK:
+      VSS_ID: 11
+      VSS_COMMANDS: "Every(i,Police,Not(IsAlive(i)))"
+      VSS_RECT:
+        - 1.401298464324817e-45
+        - 6.305843089461677e-44
+        - 6.3618950280346695e-43
+        - 7.623063645927005e-43
+      VSS_TITLE: "KillGroup Police "
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 12
+      VSS_RECT:
+        - 1.1350517561031018e-43
+        - 1.7516230804060213e-43
+        - 6.3618950280346695e-43
+        - 7.623063645927005e-43
+      VSS_TITLE: "z18q1.4"
+      VSS_COMMANDS: "GSSetVarMax(0,\"q.z18q1.z18q1.4\",2)\nGSSetVarMax(0,\"q.z18q1.z18q1.5\",1)\n"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 14
+      VSS_COMMANDS: "IsLess(DistanceUnitPoint(Junophile,280,45),5)"
+      VSS_RECT:
+        - 0.0
+        - 6.165713243029195e-44
+        - 9.65494641919799e-43
+        - 1.0916115037090325e-42
+      VSS_TITLE: "Follow Junophile"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 15
+      VSS_RECT:
+        - 1.1350517561031018e-43
+        - 1.7516230804060213e-43
+        - 9.682972388484486e-43
+        - 1.0944141006376821e-42
+      VSS_TITLE: "z18q1.6"
+      VSS_COMMANDS: "GSSetVarMax(0,\"q.z18q1.z18q1.6\",2)\nGSSetVarMax(0,\"q.z18q1.z18q1\",2)\nRemoveUnitFromServer(Junophile)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 17
+      VSS_COMMANDS: "IsEqual(GSGetVar(0,\"q.z18q1.z18q1\"),1)\n"
+      VSS_RECT:
+        - 2.4102333586386854e-43
+        - 3.026804682941605e-43
+        - 4.344025239406933e-44
+        - 1.6955711418330287e-43
+      VSS_TITLE: "Equal 1"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 18
+      VSS_RECT:
+        - 4.400077177979926e-43
+        - 5.016648502282845e-43
+        - 4.484155085839415e-44
+        - 1.7095841264762768e-43
+      VSS_TITLE: "QuestComplete"
+      VSS_COMMANDS: "QuestComplete(0,\"z18q1\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 19
+      VSS_COMMANDS: "IsEqual(GSGetVar(0,\"q.z18q1.z18q1\"),2)"
+      VSS_RECT:
+        - 3.461207206882298e-43
+        - 4.077778531185218e-43
+        - 4.484155085839415e-44
+        - 1.7095841264762768e-43
+      VSS_TITLE: "Equal 2"
+      VSS_ISSTART: 0
+    VSS_TRIGER:
+      VSS_ID: 22
+      VSS_RECT:
+        - 2.4102333586386854e-43
+        - 3.026804682941605e-43
+        - 2.1860256043467146e-43
+        - 3.44719422223905e-43
+      VSS_TITLE: "z18q1.1"
+      VSS_COMMANDS: "GSSetVar(0,\"q.z18q1.z18q1.1\",1)\n"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 24
+      VSS_RECT:
+        - 1.14906474074635e-43
+        - 1.7656360650492695e-43
+        - 4.400077177979926e-43
+        - 5.661245795872261e-43
+      VSS_TITLE: "z18q1.3"
+      VSS_COMMANDS: "GSSetVarMax(0,\"q.z18q1.z18q1.3\",2)\nGSSetVarMax(0,\"q.z18q1.z18q1.4\",1)\nfor(i,Pursuit)\n(\nRun(i)\nUMGuard(i,278,41,7)\n)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 25
+      VSS_COMMANDS: "UnitInSquare(GetLeader(),229,70,232,74)"
+      VSS_RECT:
+        - 0.0
+        - 6.165713243029195e-44
+        - 3.8115318229635024e-43
+        - 5.072700440855838e-43
+      VSS_TITLE: "Open Police"
+      VSS_ISSTART: 1
+    VSS_CHECK:
+      VSS_ID: 27
+      VSS_COMMANDS: "UnitInSquare(GetLeader(),215.88,55.88,220.23,58.77)\n//IsLess(DistanceUnitPoint(GetLeader(),219,56),7)"
+      VSS_RECT:
+        - 0.0
+        - 6.165713243029195e-44
+        - 5.100726410142334e-43
+        - 6.3618950280346695e-43
+      VSS_TITLE: "Open Police"
+      VSS_ISSTART: 1
+    VSS_CHECK:
+      VSS_ID: 31
+      VSS_COMMANDS: "IsLess(DistanceUnitUnit(GetLeader(),Junophile),4)\n "
+      VSS_RECT:
+        - 0.0
+        - 6.165713243029195e-44
+        - 7.637076630570253e-43
+        - 8.898245248462588e-43
+      VSS_TITLE: "Junophil& Leader"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 32
+      VSS_RECT:
+        - 1.1350517561031018e-43
+        - 1.7516230804060213e-43
+        - 7.763193492359487e-43
+        - 9.024362110251822e-43
+      VSS_TITLE: "z18q1.5"
+      VSS_COMMANDS: "Run(Junophile)\nSetPlayer(Junophile,0)\nUMFollow(Junophile,GetLeader()) \nGSSetVarMax(0,\"q.z18q1.z18q1.5\",2)\nGSSetVarMax(0,\"q.z18q1.z18q1.6\",1)\n"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 34
+      VSS_COMMANDS: "Not(IsAlive(Junophile))"
+      VSS_RECT:
+        - 3.0127916982983567e-43
+        - 3.629363022601276e-43
+        - 4.105804500471714e-43
+        - 5.366973118364049e-43
+      VSS_TITLE: "IsJunophilDead"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 35
+      VSS_RECT:
+        - 4.3019862854771884e-43
+        - 4.918557609780108e-43
+        - 4.105804500471714e-43
+        - 5.366973118364049e-43
+      VSS_TITLE: "QuestFiled"
+      VSS_COMMANDS: "GSSetVar(0,\"q.z18q1.z18q1\",3)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_PATH:
+      VSS_ID: 4
+      VSS_SRC_ID: 3
+      VSS_DST_ID: 2
+    VSS_PATH:
+      VSS_ID: 9
+      VSS_SRC_ID: 7
+      VSS_DST_ID: 5
+    VSS_PATH:
+      VSS_ID: 10
+      VSS_SRC_ID: 8
+      VSS_DST_ID: 6
+    VSS_PATH:
+      VSS_ID: 13
+      VSS_SRC_ID: 11
+      VSS_DST_ID: 12
+    VSS_PATH:
+      VSS_ID: 16
+      VSS_SRC_ID: 14
+      VSS_DST_ID: 15
+    VSS_PATH:
+      VSS_ID: 20
+      VSS_SRC_ID: 17
+      VSS_DST_ID: 19
+    VSS_PATH:
+      VSS_ID: 21
+      VSS_SRC_ID: 19
+      VSS_DST_ID: 18
+    VSS_PATH:
+      VSS_ID: 23
+      VSS_SRC_ID: 17
+      VSS_DST_ID: 22
+    VSS_PATH:
+      VSS_ID: 26
+      VSS_SRC_ID: 25
+      VSS_DST_ID: 24
+    VSS_PATH:
+      VSS_ID: 28
+      VSS_SRC_ID: 27
+      VSS_DST_ID: 24
+    VSS_PATH:
+      VSS_ID: 33
+      VSS_SRC_ID: 31
+      VSS_DST_ID: 32
+    VSS_PATH:
+      VSS_ID: 36
+      VSS_SRC_ID: 34
+      VSS_DST_ID: 35
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 1000002
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F14-150072"
+    FOLDER:
+      DIR_NINST: 1000003
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana16"
+    FOLDER:
+      DIR_NINST: 1000004
+      DIR_PARENT_FOLDER: 4294962902
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana23"
+    FOLDER:
+      DIR_NINST: 1000013
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana17"
+    FOLDER:
+      DIR_NINST: 1000016
+      DIR_PARENT_FOLDER: 4294963810
+      DIR_TYPE: 2
+      DIR_NAME: "G2"
+    FOLDER:
+      DIR_NINST: 1000021
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana12"
+    FOLDER:
+      DIR_NINST: 1000027
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A14-150068"
+    FOLDER:
+      DIR_NINST: 1000028
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana14"
+    FOLDER:
+      DIR_NINST: 1000038
+      DIR_PARENT_FOLDER: 4294962902
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana21"
+    FOLDER:
+      DIR_NINST: 1000048
+      DIR_PARENT_FOLDER: 4294962902
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana22"
+    FOLDER:
+      DIR_NINST: 1000053
+      DIR_PARENT_FOLDER: 4294963810
+      DIR_TYPE: 2
+      DIR_NAME: "G3"
+    FOLDER:
+      DIR_NINST: 1000066
+      DIR_PARENT_FOLDER: 4294962902
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana24"
+    FOLDER:
+      DIR_NINST: 1000068
+      DIR_PARENT_FOLDER: 4294963810
+      DIR_TYPE: 2
+      DIR_NAME: "G1"
+    FOLDER:
+      DIR_NINST: 1000077
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F14-150072"
+    FOLDER:
+      DIR_NINST: 1000081
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana13"
+    FOLDER:
+      DIR_NINST: 1000087
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana11"
+    FOLDER:
+      DIR_NINST: 1000096
+      DIR_PARENT_FOLDER: 4294964408
+      DIR_TYPE: 2
+      DIR_NAME: "Ohrana15"
+    FOLDER:
+      DIR_NINST: 1000097
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-150200"
+    FOLDER:
+      DIR_NINST: 1000098
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A14-150069"
+    FOLDER:
+      DIR_NINST: 1000099
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards M14-150071"
+    FOLDER:
+      DIR_NINST: 1000100
+      DIR_PARENT_FOLDER: 4294966141
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F14-150072"
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000001
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 226.32846069335938
+        - 12.557853698730469
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.32846069335938
+          - 12.557853698730469
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.32846069335938
+          - 12.557853698730469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.32846069335938
+          - 12.557853698730469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.32846069335938
+          - 12.557853698730469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.32846069335938
+          - 12.557853698730469
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000002
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards F14-150072"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 209.2559356689453
+        - 66.75515747070312
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 209.2559356689453
+          - 66.75515747070312
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 208.6880340576172
+            - 67.36751556396484
+            - 10.038755416870117
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 212.08560180664062
+              - 70.26390075683594
+              - 10.331146240234375
+            ACTION_PT_WAIT_SEG: 9000
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 209.2559356689453
+          - 66.75515747070312
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 209.2559356689453
+          - 66.75515747070312
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 209.2559356689453
+          - 66.75515747070312
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 209.2559356689453
+          - 66.75515747070312
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 10
+      NID: 1000003
+      OBJTYPE: 50
+      OBJNAME: "Ohrana16"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 280.26300048828125
+        - 40.607200622558594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.26300048828125
+          - 40.607200622558594
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 279.1697082519531
+            - 44.184814453125
+            - 9.99893569946289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 278.5224914550781
+              - 45.87421798706055
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 279.9396667480469
+              - 41.89444351196289
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 276.6961669921875
+              - 42.998783111572266
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 282.16064453125
+              - 44.9637336730957
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 281.70880126953125
+            - 38.96136474609375
+            - 9.99893569946289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 283.2457580566406
+              - 36.74515151977539
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 280.1742248535156
+              - 41.869083404541016
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 284.5921325683594
+              - 40.16935729980469
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 278.5708312988281
+              - 38.01242446899414
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.26300048828125
+          - 40.607200622558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.26300048828125
+          - 40.607200622558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.26300048828125
+          - 40.607200622558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.26300048828125
+          - 40.607200622558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000004
+      OBJTYPE: 50
+      OBJNAME: "Ohrana23"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.4179992675781
+        - 21.34469985961914
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.09999999403953552
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.4179992675781
+          - 21.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.4179992675781
+          - 21.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.4179992675781
+          - 21.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.4179992675781
+          - 21.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.4179992675781
+          - 21.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000013
+      OBJTYPE: 50
+      OBJNAME: "Ohrana17"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 275.27099609375
+        - 11.23009967803955
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.09999999403953552
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.27099609375
+          - 11.23009967803955
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.27099609375
+          - 11.23009967803955
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.27099609375
+          - 11.23009967803955
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.27099609375
+          - 11.23009967803955
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.27099609375
+          - 11.23009967803955
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000015
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 293.7965393066406
+        - 245.35202026367188
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.7965393066406
+          - 245.35202026367188
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.7965393066406
+          - 245.35202026367188
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.7965393066406
+          - 245.35202026367188
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.7965393066406
+          - 245.35202026367188
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.7965393066406
+          - 245.35202026367188
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000016
+      OBJTYPE: 50
+      OBJNAME: "G2"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 228.57400512695312
+        - 71.8656005859375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.08999999612569809
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.57400512695312
+          - 71.8656005859375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.57400512695312
+          - 71.8656005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.57400512695312
+          - 71.8656005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.57400512695312
+          - 71.8656005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.57400512695312
+          - 71.8656005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 10
+      NID: 1000021
+      OBJTYPE: 50
+      OBJNAME: "Ohrana12"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 274.49200439453125
+        - 44.76919937133789
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 274.49200439453125
+          - 44.76919937133789
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 276.79730224609375
+            - 45.364009857177734
+            - 10.038755416870117
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 278.06280517578125
+              - 41.617103576660156
+              - 10.038755416870117
+            ACTION_PT_WAIT_SEG: 900
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 274.49200439453125
+          - 44.76919937133789
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 274.49200439453125
+          - 44.76919937133789
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 274.49200439453125
+          - 44.76919937133789
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 274.49200439453125
+          - 44.76919937133789
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000024
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 228.25418090820312
+        - 7.963554382324219
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.25418090820312
+          - 7.963554382324219
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.25418090820312
+          - 7.963554382324219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.25418090820312
+          - 7.963554382324219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.25418090820312
+          - 7.963554382324219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 228.25418090820312
+          - 7.963554382324219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 16"
+      UNIT_ARMORS:
+        - "hadagan highest helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan highest leggins.mithrill"
+      UNIT_WEAPONS:
+        - "crossbow.mithrill"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6574160
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000027
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards A14-150068"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 212.19566345214844
+        - 76.5995101928711
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.30000001192092896
+        - 0.5600000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 212.19566345214844
+          - 76.5995101928711
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 212.6200408935547
+            - 77.4486083984375
+            - 9.99893569946289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 214.0288543701172
+              - 75.97810363769531
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 3600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 212.19566345214844
+          - 76.5995101928711
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 212.19566345214844
+          - 76.5995101928711
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 212.19566345214844
+          - 76.5995101928711
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 212.19566345214844
+          - 76.5995101928711
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 10
+      NID: 1000028
+      OBJTYPE: 50
+      OBJNAME: "Ohrana14"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 288.2409973144531
+        - 35.14630126953125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 288.2409973144531
+          - 35.14630126953125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 286.61505126953125
+            - 37.98807144165039
+            - 9.99893569946289
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 290.9705505371094
+            - 26.990930557250977
+            - 9.999695777893066
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 293.8146057128906
+            - 18.67183494567871
+            - 9.999695777893066
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 288.2409973144531
+          - 35.14630126953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 288.2409973144531
+          - 35.14630126953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 288.2409973144531
+          - 35.14630126953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 288.2409973144531
+          - 35.14630126953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 16"
+      UNIT_ARMORS:
+        - "hadagan highest helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan highest leggins.mithrill"
+      UNIT_WEAPONS:
+        - "crossbow.mithrill"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6574160
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000038
+      OBJTYPE: 50
+      OBJNAME: "Ohrana21"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 280.6600036621094
+        - 27.981199264526367
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.09999999403953552
+        - 0.29999998211860657
+        - 0.5600000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.6600036621094
+          - 27.981199264526367
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.6600036621094
+          - 27.981199264526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.6600036621094
+          - 27.981199264526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.6600036621094
+          - 27.981199264526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.6600036621094
+          - 27.981199264526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000046
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 250.32623291015625
+        - 15.960151672363281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 250.32623291015625
+          - 15.960151672363281
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 250.32623291015625
+          - 15.960151672363281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 250.32623291015625
+          - 15.960151672363281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 250.32623291015625
+          - 15.960151672363281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 250.32623291015625
+          - 15.960151672363281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000047
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 237.198486328125
+        - 32.287391662597656
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 237.198486328125
+          - 32.287391662597656
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 237.198486328125
+          - 32.287391662597656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 237.198486328125
+          - 32.287391662597656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 237.198486328125
+          - 32.287391662597656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 237.198486328125
+          - 32.287391662597656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 16"
+      UNIT_ARMORS:
+        - "hadagan highest helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan highest leggins.mithrill"
+      UNIT_WEAPONS:
+        - "crossbow.mithrill"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6574160
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000048
+      OBJTYPE: 50
+      OBJNAME: "Ohrana22"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.7560119628906
+        - 24.71820068359375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.09999999403953552
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.7560119628906
+          - 24.71820068359375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.7560119628906
+          - 24.71820068359375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.7560119628906
+          - 24.71820068359375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.7560119628906
+          - 24.71820068359375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 281.7560119628906
+          - 24.71820068359375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000051
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 254.64328002929688
+        - 16.23052215576172
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 254.64328002929688
+          - 16.23052215576172
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 254.64328002929688
+          - 16.23052215576172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 254.64328002929688
+          - 16.23052215576172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 254.64328002929688
+          - 16.23052215576172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 254.64328002929688
+          - 16.23052215576172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000053
+      OBJTYPE: 50
+      OBJNAME: "G3"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 226.23899841308594
+        - 70.92369842529297
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.08999999612569809
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.23899841308594
+          - 70.92369842529297
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.23899841308594
+          - 70.92369842529297
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.23899841308594
+          - 70.92369842529297
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.23899841308594
+          - 70.92369842529297
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.23899841308594
+          - 70.92369842529297
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000063
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 296.1878662109375
+        - 250.21670532226562
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 296.1878662109375
+          - 250.21670532226562
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 296.1878662109375
+          - 250.21670532226562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 296.1878662109375
+          - 250.21670532226562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 296.1878662109375
+          - 250.21670532226562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 296.1878662109375
+          - 250.21670532226562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000066
+      OBJTYPE: 50
+      OBJNAME: "Ohrana24"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 282.6470031738281
+        - 23.16790008544922
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.09999999403953552
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 282.6470031738281
+          - 23.16790008544922
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 282.6470031738281
+          - 23.16790008544922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 282.6470031738281
+          - 23.16790008544922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 282.6470031738281
+          - 23.16790008544922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 282.6470031738281
+          - 23.16790008544922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000072
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 239.12420654296875
+        - 27.693092346191406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.12420654296875
+          - 27.693092346191406
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.12420654296875
+          - 27.693092346191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.12420654296875
+          - 27.693092346191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.12420654296875
+          - 27.693092346191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.12420654296875
+          - 27.693092346191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000077
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards F14-150072"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 207.26548767089844
+        - 69.90824890136719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.26548767089844
+          - 69.90824890136719
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 232.10157775878906
+            - 67.3357925415039
+            - 9.997415542602539
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 231.14540100097656
+              - 69.70619201660156
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 229.6703643798828
+              - 66.77050018310547
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 226.6690216064453
+            - 65.37560272216797
+            - 9.997415542602539
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 223.85609436035156
+              - 64.05754852294922
+              - 9.998847961425781
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.6203155517578
+              - 68.45457458496094
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 228.8426513671875
+              - 66.30445098876953
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 220.92494201660156
+            - 62.863529205322266
+            - 10.000170707702637
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 218.1176300048828
+              - 61.44208908081055
+              - 10.129731178283691
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 220.49496459960938
+              - 66.18592834472656
+              - 10.67867660522461
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 224.11416625976562
+              - 64.33209228515625
+              - 9.998431205749512
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 207.05709838867188
+            - 69.35262298583984
+            - 10.038755416870117
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 210.9855194091797
+              - 72.19660949707031
+              - 10.428609848022461
+            ACTION_PT_WAIT_SEG: 9000
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.26548767089844
+          - 69.90824890136719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.26548767089844
+          - 69.90824890136719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.26548767089844
+          - 69.90824890136719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.26548767089844
+          - 69.90824890136719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000080
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 230.64553833007812
+        - 12.828224182128906
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 230.64553833007812
+          - 12.828224182128906
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 230.64553833007812
+          - 12.828224182128906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 230.64553833007812
+          - 12.828224182128906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 230.64553833007812
+          - 12.828224182128906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 230.64553833007812
+          - 12.828224182128906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 10
+      NID: 1000081
+      OBJTYPE: 50
+      OBJNAME: "Ohrana13"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 269.6700134277344
+        - 33.0786018371582
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 269.6700134277344
+          - 33.0786018371582
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 268.4994201660156
+            - 29.314340591430664
+            - 9.99893569946289
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 271.7573547363281
+            - 19.784029006958008
+            - 9.99893569946289
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 275.5691223144531
+            - 9.056183815002441
+            - 9.99893569946289
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 269.6700134277344
+          - 33.0786018371582
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 269.6700134277344
+          - 33.0786018371582
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 269.6700134277344
+          - 33.0786018371582
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 269.6700134277344
+          - 33.0786018371582
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000084
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 241.51556396484375
+        - 32.557762145996094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 241.51556396484375
+          - 32.557762145996094
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 241.51556396484375
+          - 32.557762145996094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 241.51556396484375
+          - 32.557762145996094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 241.51556396484375
+          - 32.557762145996094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 241.51556396484375
+          - 32.557762145996094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 10
+      NID: 1000087
+      OBJTYPE: 50
+      OBJNAME: "Ohrana11"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 275.4049987792969
+        - 33.661399841308594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.4049987792969
+          - 33.661399841308594
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 270.2933349609375
+            - 35.14995193481445
+            - 9.99893569946289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 272.8327331542969
+              - 35.8193359375
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 269.1085510253906
+              - 37.51329803466797
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 271.06829833984375
+              - 32.80157470703125
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 267.39141845703125
+              - 34.1948127746582
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 268.954345703125
+            - 40.57323455810547
+            - 9.99893569946289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 271.5939636230469
+              - 41.282588958740234
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 266.4706726074219
+              - 40.04977035522461
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 269.41839599609375
+              - 37.55905532836914
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 267.3693542480469
+              - 43.03009796142578
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.4049987792969
+          - 33.661399841308594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.4049987792969
+          - 33.661399841308594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.4049987792969
+          - 33.661399841308594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 275.4049987792969
+          - 33.661399841308594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000088
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 252.251953125
+        - 11.365852355957031
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 252.251953125
+          - 11.365852355957031
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 252.251953125
+          - 11.365852355957031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 252.251953125
+          - 11.365852355957031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 252.251953125
+          - 11.365852355957031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 252.251953125
+          - 11.365852355957031
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Human Junophile Friend 13"
+      UNIT_ARMORS:
+        - "hadagan medium leggins.silk blue"
+        - "hadagan high shirt.troll blue"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee3,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee3,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee3,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 160
+        - 160
+        - 242
+        - 242
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1119879168
+        - 1119879168
+        - 1065353216
+        - 1107296256
+        - 1104674816
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 23
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 29
+      NID: 1000094
+      OBJTYPE: 50
+      OBJNAME: "Junophile"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Human Junophile Friend 13"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 207.8090057373047
+        - 68.35700225830078
+        - 0.0
+      OBJROTATION:
+        - 0.5299192667007446
+        - 0.0
+        - 0.0
+        - 0.848048210144043
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.28999999165534973
+        - 0.08999999612569809
+        - 0.75
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 2
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.8090057373047
+          - 68.35700225830078
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.8090057373047
+          - 68.35700225830078
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.8090057373047
+          - 68.35700225830078
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.8090057373047
+          - 68.35700225830078
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.8090057373047
+          - 68.35700225830078
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Hyena 15"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 334
+        - 334
+        - 1065353216
+        - 1097859072
+        - 1052271462
+        - 1038675206
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1121714176
+        - 1121714176
+        - 1065353216
+        - 1109393408
+        - 1108082688
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000095
+      OBJTYPE: 52
+      OBJNAME: "HyenaF6-150183"
+      OBJTEMPLATE: "unanwihy"
+      PARENTTEMPLATE: "LMP Hyena 15"
+      OBJPRIMTXTR: "Hyena00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 291.8708190917969
+        - 249.94631958007812
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 291.8708190917969
+          - 249.94631958007812
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 291.8708190917969
+          - 249.94631958007812
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 291.8708190917969
+          - 249.94631958007812
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 291.8708190917969
+          - 249.94631958007812
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 291.8708190917969
+          - 249.94631958007812
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 10
+      NID: 1000096
+      OBJTYPE: 50
+      OBJNAME: "Ohrana15"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 283.1579895019531
+        - 48.5625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 283.1579895019531
+          - 48.5625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 280.4360656738281
+            - 47.0126838684082
+            - 10.038755416870117
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 282.2447509765625
+              - 43.06340408325195
+              - 10.038755416870117
+            ACTION_PT_WAIT_SEG: 900
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 311.190185546875
+            - 56.353004455566406
+            - 9.999695777893066
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 283.1579895019531
+          - 48.5625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 283.1579895019531
+          - 48.5625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 283.1579895019531
+          - 48.5625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 283.1579895019531
+          - 48.5625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 16"
+      UNIT_ARMORS:
+        - "hadagan highest helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan highest leggins.mithrill"
+      UNIT_WEAPONS:
+        - "crossbow.mithrill"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6574160
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000097
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Citizens A1-150200"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 215.16400146484375
+        - 62.80720138549805
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.09999999403953552
+        - 0.29999998211860657
+        - 0.5600000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 215.16400146484375
+          - 62.80720138549805
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 215.16400146484375
+          - 62.80720138549805
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 215.16400146484375
+          - 62.80720138549805
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 215.16400146484375
+          - 62.80720138549805
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 215.16400146484375
+          - 62.80720138549805
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 16"
+      UNIT_ARMORS:
+        - "hadagan highest helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan highest leggins.mithrill"
+      UNIT_WEAPONS:
+        - "crossbow.mithrill"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6574160
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000098
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards A14-150069"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 216.72132873535156
+        - 80.17349243164062
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.30000001192092896
+        - 0.5600000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 216.72132873535156
+          - 80.17349243164062
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 215.3837890625
+            - 79.75309753417969
+            - 9.99893569946289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 216.65164184570312
+              - 78.29622650146484
+              - 9.99893569946289
+            ACTION_PT_WAIT_SEG: 3600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 216.72132873535156
+          - 80.17349243164062
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 216.72132873535156
+          - 80.17349243164062
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 216.72132873535156
+          - 80.17349243164062
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 216.72132873535156
+          - 80.17349243164062
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Mage 16"
+      UNIT_ARMORS:
+        - "hadagan medium helm.cotton"
+        - "hadagan high shirt.troll black"
+        - "hadagan high pants.troll black"
+        - "hadagan high boots.troll black"
+        - "hadagan medium gloves.cotton"
+      UNIT_WEAPONS:
+        - "curved dagger.mithrill"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 260
+        - 260
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000099
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards M14-150071"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Mage 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 221.22427368164062
+        - 71.74298095703125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.11999999731779099
+        - 0.25999999046325684
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 221.22427368164062
+          - 71.74298095703125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 221.12803649902344
+            - 72.3571548461914
+            - 9.999032974243164
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 224.2832489013672
+              - 72.2658462524414
+              - 9.997748374938965
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 219.80563354492188
+              - 67.20651245117188
+              - 10.707830429077148
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 221.22427368164062
+          - 71.74298095703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 221.22427368164062
+          - 71.74298095703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 221.22427368164062
+          - 71.74298095703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 221.22427368164062
+          - 71.74298095703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000100
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Guards F14-150072"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 227.46449279785156
+        - 67.75816345214844
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.46449279785156
+          - 67.75816345214844
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 232.10157775878906
+            - 67.3357925415039
+            - 9.997415542602539
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 231.14540100097656
+              - 69.70619201660156
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 229.6703643798828
+              - 66.77050018310547
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 226.6690216064453
+            - 65.37560272216797
+            - 9.997415542602539
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 223.85609436035156
+              - 64.05754852294922
+              - 9.998847961425781
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.6203155517578
+              - 68.45457458496094
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 228.8426513671875
+              - 66.30445098876953
+              - 9.997415542602539
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 220.92494201660156
+            - 62.863529205322266
+            - 10.000170707702637
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 218.1176300048828
+              - 61.44208908081055
+              - 10.129731178283691
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 220.49496459960938
+              - 66.18592834472656
+              - 10.67867660522461
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 224.11416625976562
+              - 64.33209228515625
+              - 9.998431205749512
+            ACTION_PT_WAIT_SEG: 50
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.46449279785156
+          - 67.75816345214844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.46449279785156
+          - 67.75816345214844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.46449279785156
+          - 67.75816345214844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.46449279785156
+          - 67.75816345214844
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "hadagan high helm.mithrill"
+        - "hadagan high plate.mithrill"
+        - "hadagan high leggins.mithrill"
+        - "hadagan medium gloves.silk red"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 400
+        - 400
+        - 391
+        - 391
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1122631680
+        - 1122631680
+        - 1065353216
+        - 1110704128
+        - 1109131264
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 17
+      NID: 1000068
+      OBJTYPE: 50
+      OBJNAME: "G1"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 227.05299377441406
+        - 73.01139831542969
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.08999999612569809
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.05299377441406
+          - 73.01139831542969
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.05299377441406
+          - 73.01139831542969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.05299377441406
+          - 73.01139831542969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.05299377441406
+          - 73.01139831542969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.05299377441406
+          - 73.01139831542969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0

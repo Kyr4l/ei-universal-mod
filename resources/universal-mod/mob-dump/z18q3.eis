@@ -1,0 +1,103 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPUniqueHumanBetrayerSoldiers1 : object,
+  LMPUniqueHumanBetrayerSoldiers2 : object,
+  LMPUniqueHumanBetrayerSoldiers3 : object,
+  LMPUniqueHumanBetrayerSoldiers4 : object,
+  BetrayerSlave : object,
+  LMPUniqueHumanBetrayerSoldiers5 : object 
+)
+
+DeclareScript VTriger#3#2 (  this : object )
+DeclareScript VTriger#3#4 (  this : object )
+DeclareScript VCheck#3#5 (  this : object )
+DeclareScript VTriger#3#9 (  this : object )
+
+Script VTriger#3#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z18q3" ) 
+    AddRectToArea( 1, 184, 146, 239, 200 ) 
+    QObjArea( 1 ) 
+    QObjSeeUnit( "GetObject(1000284)" ) 
+    QObjKillUnit( "GetObject(1000284)" ) 
+    QFinish(  ) 
+  )
+)
+
+Script VTriger#3#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 96 ) 
+    PlayAnimation( LMPUniqueHumanBetrayerSoldiers1, "uspecial19" ) 
+    PlayAnimation( LMPUniqueHumanBetrayerSoldiers2, "uspecial19" ) 
+    PlayAnimation( LMPUniqueHumanBetrayerSoldiers3, "uspecial19" ) 
+    PlayAnimation( LMPUniqueHumanBetrayerSoldiers4, "uspecial19" ) 
+    PlayAnimation( LMPUniqueHumanBetrayerSoldiers5, "uspecial19" ) 
+    PlayAnimation( BetrayerSlave, "uspecial19" ) 
+    VCheck#3#5( this ) 
+  )
+)
+
+Script VCheck#3#5
+(
+  if
+  (
+    GroupSize( GroupCross( GroupSee( Tablers ) , Heroes )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#9( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#4( this ) 
+  )
+)
+
+Script VTriger#3#9
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPUniqueHumanBetrayerSoldiers1 = GetObjectByID( "1000224" ) 
+  LMPUniqueHumanBetrayerSoldiers2 = GetObjectByID( "1000243" ) 
+  LMPUniqueHumanBetrayerSoldiers3 = GetObjectByID( "1000252" ) 
+  LMPUniqueHumanBetrayerSoldiers4 = GetObjectByID( "1000261" ) 
+  BetrayerSlave = GetObjectByID( "1000284" ) 
+  LMPUniqueHumanBetrayerSoldiers5 = GetObjectByID( "1000299" ) 
+  AddObject( Tablers, GetObject( 1000284 )  ) 
+  AddObject( Tablers, GetObject( 1000224 )  ) 
+  AddObject( Tablers, GetObject( 1000243 )  ) 
+  AddObject( Tablers, GetObject( 1000252 )  ) 
+  AddObject( Tablers, GetObject( 1000261 )  ) 
+  AddObject( Tablers, GetObject( 1000299 )  ) 
+  VTriger#3#2( NULL ) 
+  VCheck#3#5( NULL ) 
+)

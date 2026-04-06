@@ -1,0 +1,3836 @@
+OBJECTDBFILE:
+  MAIN_RANGE:
+    RANGE:
+      MIN_ID: 1
+      MAX_ID: 1000000
+  DIPLOMATION:
+    DIPLOMATION_FOF:
+      - 0
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+    DIPLOMATION_PL_NAMES:
+      - "Player-0"
+      - "Player-1"
+      - "Player-2"
+      - "Player-3"
+      - "Player-4"
+      - "Player-5"
+      - "Player-6"
+      - "Player-7"
+      - "Player-8"
+      - "Player-9"
+      - "Player-10"
+      - "Player-11"
+      - "Player-12"
+      - "Player-13"
+      - "Player-14"
+      - "Player-15"
+      - "Player-16"
+      - "Player-17"
+      - "Player-18"
+      - "Player-19"
+      - "Player-20"
+      - "Player-21"
+      - "Player-22"
+      - "Player-23"
+      - "Player-24"
+      - "Player-25"
+      - "Player-26"
+      - "Player-27"
+      - "Player-28"
+      - "Player-29"
+      - "Player-30"
+      - "Player-31"
+  WORLD_SET:
+    WS_WIND_DIR:
+      - 0.0
+      - 1.0
+      - 0.0
+    WS_WIND_STR: 0.0
+    WS_TIME: 12.199999809265137
+    WS_AMBIENT: 0.20000000298023224
+    WS_SUN_LIGHT: 0.6000000238418579
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 2
+      VSS_RECT:
+        - 2.1019476964872256e-44
+        - 8.267660939516421e-44
+        - 1.2611686178923354e-44
+        - 1.3872854796815689e-43
+      VSS_TITLE: "START"
+      VSS_COMMANDS: "Sleep(125)\nCreateFX(GetX(JunCurse),GetY(JunCurse),0,15,50,\"Tools\Evil.wav\")\nCreateParticleSource(15,GetX(JunCurse),GetY(JunCurse),0,4,\"Mushroom\")\nSetCP(JunCurse,GetX(JunCurse),GetY(JunCurse),0)\nRemoveObjectFromServer(BP)\nSetCPFast(BPB,GetX(BPB),GetY(BPB),-0.55)\nSendStringEvent(0,\"say s51 Hero\")\nSleep(20)\nSetDiplomacy(1,3,-1)\nSetDiplomacy(3,1,-1)\n//CreateParticleSource(15,80,59,0.5,5,\"Fireblast\")\n//RemoveObjectFromServer(BPS)\n//Sleep(5)\n//HideObject(JunCurse,1)\n//HideObject(JunCurse,0)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 3
+      VSS_COMMANDS: "IsDead(JunCurse)"
+      VSS_RECT:
+        - 2.382207389352189e-44
+        - 8.547920632381384e-44
+        - 2.2701035122062037e-43
+        - 3.531272130098539e-43
+      VSS_TITLE: "Is d"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 4
+      VSS_RECT:
+        - 1.2191296639625909e-43
+        - 1.8357009882655104e-43
+        - 2.1860256043467146e-43
+        - 3.44719422223905e-43
+      VSS_TITLE: "Q73C"
+      VSS_COMMANDS: "GSSetVarMax(0,\"q.gz20g.q73g\",2)\n"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 6
+      VSS_COMMANDS: "IsLess(GSGetVar(0,\"q.gz20g.q73g\"),2)"
+      VSS_RECT:
+        - 4.203895392974451e-45
+        - 6.58610278232664e-44
+        - 4.175869423687955e-43
+        - 5.43703804158029e-43
+      VSS_TITLE: "Is L Q73"
+      VSS_ISSTART: 1
+    VSS_CHECK:
+      VSS_ID: 7
+      VSS_COMMANDS: "IsEqual(GSGetVar(0,\"q.gz20g.q73g\"),2)"
+      VSS_RECT:
+        - 9.388699710976274e-44
+        - 1.555441295400547e-43
+        - 4.189882408331203e-43
+        - 5.4510510262235384e-43
+      VSS_TITLE: "Is E Q73"
+      VSS_ISSTART: 0
+    VSS_TRIGER:
+      VSS_ID: 8
+      VSS_RECT:
+        - 2.0038568039844884e-43
+        - 2.620428128287408e-43
+        - 4.119817485114962e-43
+        - 5.3809861030072976e-43
+      VSS_TITLE: "END!!!"
+      VSS_COMMANDS: "QuestComplete(0,\"q73g\")\nSleep(60)\nLeaveToZone(0,\"EndofGame\",0)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_CHECK:
+      VSS_ID: 11
+      VSS_COMMANDS: "IsDead(Rick)"
+      VSS_RECT:
+        - 2.6624670822171524e-44
+        - 8.828180325246348e-44
+        - 5.927492504093976e-43
+        - 7.188661121986312e-43
+      VSS_TITLE: "Deathof Rick"
+      VSS_ISSTART: 1
+    VSS_TRIGER:
+      VSS_ID: 12
+      VSS_RECT:
+        - 1.14906474074635e-43
+        - 1.7656360650492695e-43
+        - 5.9555184733804726e-43
+        - 7.216687091272808e-43
+      VSS_TITLE: "Aggr"
+      VSS_COMMANDS: "SetDiplomacy(0,1,-1)\nSetDiplomacy(1,0,-1)\nCreateParticleSource(15,GetX(Rick),GetY(Rick),0,4,\"Mushroom\")\nSleep(7)\nRemoveUnitFromServer(Rick)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 14
+      VSS_RECT:
+        - 3.040817667584853e-43
+        - 3.6573889918877726e-43
+        - 8.828180325246348e-44
+        - 2.14398665041697e-43
+      VSS_TITLE: "PLay"
+      VSS_COMMANDS: "PlayMusic(0,\"evil\")\n//PlayMusic(0,\"final\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 15
+      VSS_RECT:
+        - 3.040817667584853e-43
+        - 3.6573889918877726e-43
+        - 2.9847657290118604e-43
+        - 4.245934346904196e-43
+      VSS_TITLE: "Sleep"
+      VSS_COMMANDS: "Sleep(1469)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_PATH:
+      VSS_ID: 5
+      VSS_SRC_ID: 3
+      VSS_DST_ID: 4
+    VSS_PATH:
+      VSS_ID: 9
+      VSS_SRC_ID: 6
+      VSS_DST_ID: 7
+    VSS_PATH:
+      VSS_ID: 10
+      VSS_SRC_ID: 7
+      VSS_DST_ID: 8
+    VSS_PATH:
+      VSS_ID: 13
+      VSS_SRC_ID: 11
+      VSS_DST_ID: 12
+    VSS_PATH:
+      VSS_ID: 16
+      VSS_SRC_ID: 14
+      VSS_DST_ID: 15
+    VSS_PATH:
+      VSS_ID: 17
+      VSS_SRC_ID: 15
+      VSS_DST_ID: 14
+  DIRICTORY:
+    FOLDER:
+      DIR_NINST: 4294960174
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Heroes"
+  DIRICTORY_ELEMENTS:
+  OBJECTSECTION:
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640755
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 109.45268249511719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640756
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 105.96391296386719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640757
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 54.55815124511719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640758
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 47.570159912109375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640759
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 51.05885314941406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640760
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 44.07073974609375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640634
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.226314544677734
+        - 102.50159454345703
+        - 0.0
+      OBJROTATION:
+        - 9.313225746154785e-10
+        - 0.0
+        - 0.0
+        - 0.9999996423721313
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666671
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-666670"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 110.85281372070312
+        - 100.29772186279297
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666672
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-666670"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 104.83719635009766
+        - 100.34356689453125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640637
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.3927001953125
+        - 32.144901275634766
+        - -7.049994945526123
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666674
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-666670"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 100.76483917236328
+        - 113.99725341796875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "box"
+      OBJ_PLAYER: 0
+      NID: 640766
+      OBJTYPE: 54
+      OBJNAME: "Dgun Dragon 00_box-640620"
+      OBJTEMPLATE: "stst12"
+      PARENTTEMPLATE: "Dgun Dragon 00_box"
+      OBJPRIMTXTR: "DgunDragon00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 62.776058197021484
+        - 57.59891128540039
+        - -1.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 515
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640767
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn00-600126"
+      OBJTEMPLATE: "stst21"
+      PARENTTEMPLATE: "DgunColoumn00"
+      OBJPRIMTXTR: "DgunTorch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 62.733001708984375
+        - 57.28157424926758
+        - -7.950002670288086
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 156
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640640
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.11122131347656
+        - 32.144901275634766
+        - -10.85000228881836
+      OBJROTATION:
+        - 0.9999619126319885
+        - 0.0
+        - 0.0
+        - 0.008726535364985466
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640641
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 46.02263641357422
+        - 32.144901275634766
+        - -6.849996089935303
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    PARTICL:
+      PARTICL_ID: 640769
+      PARTICL_POSITION:
+        - 62.78860092163086
+        - 57.44437026977539
+        - 1.149999737739563
+      PARTICL_NAME: "Particles source-640764"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 1.0
+    PARTICL:
+      PARTICL_ID: 640770
+      PARTICL_POSITION:
+        - 58.5968017578125
+        - 58.10919952392578
+        - 12.050000190734863
+      PARTICL_NAME: "Particles source-640764"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 2.0
+    PARTICL:
+      PARTICL_ID: 640771
+      PARTICL_POSITION:
+        - 58.52944564819336
+        - 102.43875885009766
+        - 12.050000190734863
+      PARTICL_NAME: "Particles source-640764"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 2.0
+    PARTICL:
+      PARTICL_ID: 640772
+      PARTICL_POSITION:
+        - 102.252197265625
+        - 102.26679992675781
+        - 12.050000190734863
+      PARTICL_NAME: "Particles source-640764"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640747
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 112.62918853759766
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640648
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.26869201660156
+        - 57.96454620361328
+        - 0.0
+      OBJROTATION:
+        - 9.96515154838562e-08
+        - 0.0
+        - 0.0
+        - -0.9999998211860657
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640651
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.06118774414062
+        - 44.702659606933594
+        - 0.0
+      OBJROTATION:
+        - -0.7071065306663513
+        - 0.0
+        - 0.0
+        - -0.7071065902709961
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640652
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.685279846191406
+        - 44.822471618652344
+        - 0.0
+      OBJROTATION:
+        - -0.7071062922477722
+        - 0.0
+        - 0.0
+        - -0.7071065902709961
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640653
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn00-600126"
+      OBJTEMPLATE: "stst21"
+      PARENTTEMPLATE: "DgunColoumn00"
+      OBJPRIMTXTR: "DgunTorch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.5968017578125
+        - 58.10919952392578
+        - 0.0
+      OBJROTATION:
+        - -1.0000001192092896
+        - 0.0
+        - 0.0
+        - -2.7939677238464355e-09
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 156
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 5.0
+        - 2.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640655
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.423397064208984
+        - 58.02998733520508
+        - 0.0
+      OBJROTATION:
+        - -1.0000001192092896
+        - 0.0
+        - 0.0
+        - -2.7939677238464355e-09
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640659
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 125.05249786376953
+        - 102.19151306152344
+        - 8.599992752075195
+      OBJROTATION:
+        - -4.563480615615845e-08
+        - 0.0
+        - 0.0
+        - 0.9999998807907104
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640761
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 40.576202392578125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640762
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 37.07695007324219
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640763
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.44575881958008
+        - 33.58818817138672
+        - -3.8499982357025146
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    PARTICL:
+      PARTICL_ID: 640764
+      PARTICL_POSITION:
+        - 102.24099731445312
+        - 57.9833984375
+        - 12.050000190734863
+      PARTICL_NAME: "Particles source-640764"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 2.0
+    PARTICL:
+      PARTICL_ID: 640765
+      PARTICL_POSITION:
+        - 97.94850158691406
+        - 57.819801330566406
+        - 1.149999737739563
+      PARTICL_NAME: "Particles source-640764"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 19218
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.44820404052734
+        - 102.18399047851562
+        - 0.0
+      OBJROTATION:
+        - -4.563480615615845e-08
+        - 0.0
+        - 0.0
+        - 0.9999998807907104
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640668
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn00-600126"
+      OBJTEMPLATE: "stst21"
+      PARENTTEMPLATE: "DgunColoumn00"
+      OBJPRIMTXTR: "DgunTorch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.24099731445312
+        - 57.9833984375
+        - 0.0
+      OBJROTATION:
+        - -0.9999999403953552
+        - 0.0
+        - 0.0
+        - -1.9837170839309692e-07
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 156
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 5.0
+        - 2.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640670
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn00-600126"
+      OBJTEMPLATE: "stst21"
+      PARENTTEMPLATE: "DgunColoumn00"
+      OBJPRIMTXTR: "DgunTorch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.26499938964844
+        - 102.30799865722656
+        - 0.0
+      OBJROTATION:
+        - -1.0
+        - 0.0
+        - 0.0
+        - -6.612390279769897e-08
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 156
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 5.0
+        - 2.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 19223
+      OBJTYPE: 54
+      OBJNAME: "DgunNewDragon00-600119"
+      OBJTEMPLATE: "stst121"
+      PARENTTEMPLATE: "DgunNewDragon00"
+      OBJPRIMTXTR: "dgunDragon00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 97.91519165039062
+        - 52.475677490234375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 510
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640749
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 105.64118194580078
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 19227
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn00-600126"
+      OBJTEMPLATE: "stst21"
+      PARENTTEMPLATE: "DgunColoumn00"
+      OBJPRIMTXTR: "DgunTorch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 97.89289855957031
+        - 57.65700149536133
+        - -7.950002670288086
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 156
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 2.0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "AncientCurseM25"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "curse_magic"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 1000
+        - 1000
+        - 1000
+        - 1000
+        - 1065353216
+        - 1097859072
+        - 1057523849
+        - 1057523849
+        - 1040746633
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 0
+        - 1092616192
+        - 1128792064
+        - 1128792064
+        - 1065353216
+        - 1120403456
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1101004800
+        - 1120403456
+        - 1101004800
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 1077936128
+        - 2103731300
+        - 2105376125
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 666666
+      OBJTYPE: 51
+      OBJNAME: "JunCurse"
+      OBJTEMPLATE: "unmocu"
+      PARENTTEMPLATE: "AncientCurseM25"
+      OBJPRIMTXTR: "Curse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.52249908447266
+        - 59.22779846191406
+        - -20.0
+      OBJROTATION:
+        - 0.08715559542179108
+        - 0.0
+        - 0.0
+        - 0.9961946606636047
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "q73g"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.52249908447266
+          - 59.22779846191406
+          - -20.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.52249908447266
+          - 59.22779846191406
+          - -20.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.52249908447266
+          - 59.22779846191406
+          - -20.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.52249908447266
+          - 59.22779846191406
+          - -20.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.52249908447266
+          - 59.22779846191406
+          - -20.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666667
+      OBJTYPE: 60
+      OBJNAME: "BPB"
+      OBJTEMPLATE: "stst108"
+      PARENTTEMPLATE: "BrokenPlateBig00"
+      OBJPRIMTXTR: "brokenPlate01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.83480072021484
+        - 58.657901763916016
+        - -5.550000190734863
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666669
+      OBJTYPE: 54
+      OBJNAME: "BP"
+      OBJTEMPLATE: "stst139"
+      PARENTTEMPLATE: "Plate00"
+      OBJPRIMTXTR: "brokenPlate00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.83480072021484
+        - 58.650001525878906
+        - -0.550000011920929
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 77
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666670
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-666670"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 121.12066650390625
+        - 100.31182861328125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640636
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.518714904785156
+        - 115.56865692138672
+        - 0.0
+      OBJROTATION:
+        - -0.7071067690849304
+        - 0.0
+        - 0.0
+        - 0.7071064114570618
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666675
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-666670"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 100.79415130615234
+        - 123.69696807861328
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640691
+      OBJTYPE: 54
+      OBJNAME: "Dgun Face 01-640691"
+      OBJTEMPLATE: "stst001"
+      PARENTTEMPLATE: "Dgun Face 01"
+      OBJPRIMTXTR: "DgunFace01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.75810241699219
+        - 33.10490036010742
+        - -11.432499885559082
+      OBJROTATION:
+        - 1.7043203115463257e-07
+        - 0.0
+        - 0.0
+        - 1.000000238418579
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 519
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640692
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 88.33650207519531
+        - 32.144901275634766
+        - -10.300000190734863
+      OBJROTATION:
+        - 0.9999619126319885
+        - 0.0
+        - 0.0
+        - 0.008726535364985466
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640672
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn00-600126"
+      OBJTEMPLATE: "stst21"
+      PARENTTEMPLATE: "DgunColoumn00"
+      OBJPRIMTXTR: "DgunTorch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.56340026855469
+        - 102.427001953125
+        - 0.0
+      OBJROTATION:
+        - -0.9999997615814209
+        - 0.0
+        - 0.0
+        - -4.6566128730773926e-09
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 156
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 5.0
+        - 2.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640700
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.68220520019531
+        - 58.14946746826172
+        - 8.599987983703613
+      OBJROTATION:
+        - -1.0000003576278687
+        - 0.0
+        - 0.0
+        - 2.3096799850463867e-07
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640702
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 89.8801498413086
+        - 133.16453552246094
+        - -10.580853462219238
+      OBJROTATION:
+        - 0.7071068286895752
+        - 0.0
+        - 0.0
+        - 0.7071067094802856
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640703
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.96719360351562
+        - 143.025390625
+        - -10.464315414428711
+      OBJROTATION:
+        - -0.7071070075035095
+        - 0.0
+        - 0.0
+        - 0.7071070075035095
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Rick"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "rick_magic"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 700
+        - 700
+        - 700
+        - 700
+        - 1065353216
+        - 1097859072
+        - 1040746633
+        - 1040683998
+        - 1044477887
+        - 1038943641
+        - 613232640
+        - 1082130432
+        - 613232640
+        - 1053609165
+        - 259
+        - 1092616192
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1112014848
+        - 0
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1101004800
+        - 1112014848
+        - 1101004800
+        - 1087792742
+        - 0
+        - 0
+        - 1073741824
+        - 1065353216
+        - 1073741824
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1684300900
+        - 1684300900
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 640706
+      OBJTYPE: 51
+      OBJNAME: "Rick"
+      OBJTEMPLATE: "unmori"
+      PARENTTEMPLATE: "Rick"
+      OBJPRIMTXTR: "Rick"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 80.12735748291016
+        - 68.93501281738281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.12735748291016
+          - 68.93501281738281
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 80.21110534667969
+            - 68.1176986694336
+            - 0.0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 79.9461441040039
+              - 66.85987854003906
+              - 0.0
+            ACTION_PT_WAIT_SEG: 3000
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.12735748291016
+          - 68.93501281738281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.12735748291016
+          - 68.93501281738281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.12735748291016
+          - 68.93501281738281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.12735748291016
+          - 68.93501281738281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640707
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.0754165649414
+        - 35.076637268066406
+        - 8.599985122680664
+      OBJROTATION:
+        - -0.7071068286895752
+        - 0.0
+        - 0.0
+        - -0.7071069478988647
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640708
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 112.22134399414062
+        - 102.1913070678711
+        - 8.599992752075195
+      OBJROTATION:
+        - -4.563480615615845e-08
+        - 0.0
+        - 0.0
+        - 0.9999998807907104
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640709
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.21472930908203
+        - 125.08425903320312
+        - 8.399989128112793
+      OBJROTATION:
+        - 0.7071068286895752
+        - 0.0
+        - 0.0
+        - 0.70710688829422
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640710
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.03396606445312
+        - 112.20013427734375
+        - 8.49998950958252
+      OBJROTATION:
+        - 0.7071068286895752
+        - 0.0
+        - 0.0
+        - 0.70710688829422
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640711
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.676185607910156
+        - 102.40707397460938
+        - 8.599992752075195
+      OBJROTATION:
+        - -4.563480615615845e-08
+        - 0.0
+        - 0.0
+        - 0.9999998807907104
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640712
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.50093078613281
+        - 102.34656524658203
+        - 8.599992752075195
+      OBJROTATION:
+        - -4.563480615615845e-08
+        - 0.0
+        - 0.0
+        - 0.9999998807907104
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640713
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.34160232543945
+        - 125.25204467773438
+        - 8.499984741210938
+      OBJROTATION:
+        - -0.7132505178451538
+        - 0.0
+        - 0.0
+        - 0.7009093165397644
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640714
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.3857307434082
+        - 112.36672973632812
+        - 8.40000057220459
+      OBJROTATION:
+        - -0.7132505178451538
+        - 0.0
+        - 0.0
+        - 0.7009093165397644
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640715
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.67110061645508
+        - 35.11924362182617
+        - 8.40000057220459
+      OBJROTATION:
+        - -0.7132505178451538
+        - 0.0
+        - 0.0
+        - 0.7009093165397644
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640716
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.62697219848633
+        - 48.00455856323242
+        - 8.499984741210938
+      OBJROTATION:
+        - -0.7132505178451538
+        - 0.0
+        - 0.0
+        - 0.7009093165397644
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640718
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.19813537597656
+        - 47.89812469482422
+        - 8.599985122680664
+      OBJROTATION:
+        - -0.7071068286895752
+        - 0.0
+        - 0.0
+        - -0.7071069478988647
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640721
+      OBJTYPE: 60
+      OBJNAME: "Gate"
+      OBJTEMPLATE: "stga2"
+      PARENTTEMPLATE: "Dgun Gate 00"
+      OBJPRIMTXTR: "DgunGate00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 80.88860321044922
+        - 152.43299865722656
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 529
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.7799999713897705
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640726
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 68.2947998046875
+        - 127.97837829589844
+        - -8.859955787658691
+      OBJROTATION:
+        - -0.008726420812308788
+        - 0.0
+        - 0.0
+        - 0.9999622702598572
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640727
+      OBJTYPE: 54
+      OBJNAME: "DgunNewFace01-600122"
+      OBJTEMPLATE: "stst123"
+      PARENTTEMPLATE: "DgunNewFace01"
+      OBJPRIMTXTR: "dgunFace02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 93.82683563232422
+        - 127.74102020263672
+        - -6.549997329711914
+      OBJROTATION:
+        - 1.1734664440155029e-07
+        - 0.0
+        - 0.0
+        - 1.0000003576278687
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 513
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640768
+      OBJTYPE: 54
+      OBJNAME: "DgunNewDragon00-600119"
+      OBJTEMPLATE: "stst121"
+      PARENTTEMPLATE: "DgunNewDragon00"
+      OBJPRIMTXTR: "dgunDragon00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 62.75529479980469
+        - 52.100250244140625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 510
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640753
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 116.44645690917969
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 666673
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-666670"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 100.80230712890625
+        - 104.337646484375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640736
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 54.568111419677734
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640737
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 47.58010482788086
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640738
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 51.06879806518555
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640739
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 44.080684661865234
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640740
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 40.58614730834961
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640741
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 37.08689498901367
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640742
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.21830749511719
+        - 33.5981330871582
+        - -3.7999980449676514
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640743
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 126.61115264892578
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640744
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 119.6231460571289
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640745
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 123.11183166503906
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640746
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 116.12372589111328
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "box"
+      OBJ_PLAYER: 0
+      NID: 640620
+      OBJTYPE: 54
+      OBJNAME: "Dgun Dragon 00_box-640620"
+      OBJTEMPLATE: "stst12"
+      PARENTTEMPLATE: "Dgun Dragon 00_box"
+      OBJPRIMTXTR: "DgunDragon00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 97.93596649169922
+        - 57.974327087402344
+        - -1.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 515
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640748
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 115.46269226074219
+        - 109.12993621826172
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640622
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-600128"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.18632507324219
+        - 115.39151763916016
+        - 0.0
+      OBJROTATION:
+        - -0.7071065306663513
+        - 0.0
+        - 0.0
+        - 0.707106351852417
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 158
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640750
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 126.93388366699219
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640751
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 119.94587707519531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640752
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 123.43458557128906
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 640699
+      OBJTYPE: 54
+      OBJNAME: "DgunNewBird00_1-600116"
+      OBJTEMPLATE: "stst118"
+      PARENTTEMPLATE: "DgunNewBird00_1"
+      OBJPRIMTXTR: "dgunBirdRuins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 124.93155670166016
+        - 58.084510803222656
+        - 8.599985122680664
+      OBJROTATION:
+        - -0.9999998807907104
+        - 0.0
+        - 0.0
+        - -3.818422555923462e-08
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 507
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS:
+        - "dguncoloumnparts00"
+      OBJ_PLAYER: 0
+      NID: 640754
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumnParts00_1-640728"
+      OBJTEMPLATE: "stst25"
+      PARENTTEMPLATE: "DgunColoumnParts00_1"
+      OBJPRIMTXTR: "DgunTorchRuins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2141227722168
+        - 112.95191955566406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 175
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.8199999928474426
+        - 2.0

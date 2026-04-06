@@ -1,0 +1,100 @@
+GlobalVars (
+  NumberE : float,
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Dragon1: object,
+  Dragon2: object,
+  Dragon3: object
+)
+
+DeclareScript Triger1 ( this:object )
+DeclareScript Triger2 ( this:object )
+DeclareScript Triger3 ( this:object )
+DeclareScript Triger4 ( this:object )
+DeclareScript Triger5 ( this:object )
+
+Script Triger1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    SetDiplomacy( 0, 1, -1 ) 
+    Sleep( 2 )
+    SetDiplomacy( 1, 0, -1 ) 
+  )
+)
+
+Script Triger2
+(
+  if
+  (
+    Not(IsAlive( Dragon1 ) ) 
+  )
+    then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z92q2.z92q2.1", 2 ) 
+  )
+)
+
+Script Triger3
+(
+  if
+  (
+    Not(IsAlive( Dragon2 ) )  
+  )
+    then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z92q2.z92q2.2", 2 ) 
+  )
+)
+
+Script Triger4
+(
+  if
+  (
+    Not(IsAlive( Dragon3 ) )  
+  )
+    then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z92q2.z92q2.3", 2 ) 
+  )
+)
+
+Script Triger5
+(
+  if
+  (
+    Not(IsAlive( Dragon1 ) )  
+    Not(IsAlive( Dragon2 ) )  
+    Not(IsAlive( Dragon3 ) )  
+  )
+    then
+  (
+    KillScript(  ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z92q2.z92q2", 2 ) 
+    Sleep( 2 )
+    QuestComplete( 0, "z92q2" )
+  )
+)
+  
+
+WorldScript
+(
+  Sleep( 5 )
+  Dragon1 = GetObjectByID( "1000200" ) 
+  Dragon2 = GetObjectByID( "1001370665" ) 
+  Dragon3 = GetObjectByID( "1001370666" )
+  Triger1( NULL ) 
+  Triger2( NULL ) 
+  Triger3( NULL ) 
+  Triger4( NULL ) 
+  Triger5( NULL ) 
+)

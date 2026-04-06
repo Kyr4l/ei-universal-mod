@@ -1,0 +1,108 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  GTotem : object,
+  GTotem2 : object 
+)
+
+DeclareScript VCheck#3#1 (  this : object )
+DeclareScript VTriger#3#2 (  this : object )
+DeclareScript VTriger#3#4 (  this : object )
+DeclareScript VCheck#3#5 (  this : object )
+DeclareScript VTriger#3#6 (  this : object )
+DeclareScript VTriger#3#8 (  this : object )
+
+Script VCheck#3#1
+(
+  if
+  (
+    IsInArea( 1, GetX( GetLeader(  )  ) , GetY( GetLeader(  )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#2( this ) 
+  )
+)
+
+Script VTriger#3#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    EraseQuestItem( 0, 85 ) 
+    SetCPFast( GTotem2, GetX( GTotem2 ) , GetY( GTotem2 ) , 0 ) 
+  )
+)
+
+Script VTriger#3#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRoundToArea( 1, 218.75, 237.25, 5 ) 
+    QStart( "z7q3" ) 
+    QObjSeeObject( "GetObject(1000279)" ) 
+    QObjGetItem( 85 ) 
+    QObjArea( 1 ) 
+    QFinish(  ) 
+  )
+)
+
+Script VCheck#3#5
+(
+  if
+  (
+    IsEqual( GetLeverState( GTotem ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#6( this ) 
+  )
+)
+
+Script VTriger#3#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    RemoveObjectFromServer( GTotem ) 
+    GiveQuestItem( 0, "HeadGoblinS" ) 
+  )
+)
+
+Script VTriger#3#8
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB1, 0 ) 
+    SwitchLeverState( OB2, 0 ) 
+    SwitchLeverState( OB3, 0 ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  GTotem = GetObjectByID( "1000279" ) 
+  GTotem2 = GetObjectByID( "1000287" ) 
+  VCheck#3#1( NULL ) 
+  VTriger#3#4( NULL ) 
+  VCheck#3#5( NULL ) 
+  VTriger#3#8( NULL ) 
+)

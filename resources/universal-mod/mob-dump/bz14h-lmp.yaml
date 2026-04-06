@@ -1,0 +1,7052 @@
+OBJECTDBFILE:
+  MAIN_RANGE:
+    RANGE:
+      MIN_ID: 1
+      MAX_ID: 1000000
+    RANGE:
+      MIN_ID: 1
+      MAX_ID: 1000000
+    RANGE:
+      MIN_ID: 1
+      MAX_ID: 1000000
+  DIPLOMATION:
+    DIPLOMATION_FOF:
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+    DIPLOMATION_PL_NAMES:
+      - "Player-0"
+      - "Player-1"
+      - "Player-2"
+      - "Player-3"
+      - "Player-4"
+      - "Player-5"
+      - "Player-6"
+      - "Player-7"
+      - "Player-8"
+      - "Player-9"
+      - "Player-10"
+      - "Player-11"
+      - "Player-12"
+      - "Player-13"
+      - "Player-14"
+      - "Player-15"
+      - "Player-16"
+      - "Player-17"
+      - "Player-18"
+      - "Player-19"
+      - "Player-20"
+      - "Player-21"
+      - "Player-22"
+      - "Player-23"
+      - "Player-24"
+      - "Player-25"
+      - "Player-26"
+      - "Player-27"
+      - "Player-28"
+      - "Player-29"
+      - "Player-30"
+      - "Player-31"
+  WORLD_SET:
+    WS_WIND_DIR:
+      - -0.7900000214576721
+      - -0.6200000047683716
+      - 0.0
+    WS_WIND_STR: 0.6100000143051147
+    WS_TIME: 0.0
+    WS_AMBIENT: 0.20000000298023224
+    WS_SUN_LIGHT: 0.20000000298023224
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 8.407790785948902e-45
+        - 7.006492321624085e-44
+        - 7.006492321624085e-45
+        - 1.3312335411085762e-43
+      VSS_TITLE: "BabaSit"
+      VSS_COMMANDS: "PlayAnimation(BabaSit,\"uspecial08\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 2
+      VSS_RECT:
+        - 9.80908925027372e-45
+        - 7.146622168056567e-44
+        - 1.5274153261140506e-43
+        - 2.788583944006386e-43
+      VSS_TITLE: "MuzicSit"
+      VSS_COMMANDS: "PlayAnimation(MuzicSit,\"uspecial19\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 3
+      VSS_RECT:
+        - 1.0930128021733573e-43
+        - 1.7095841264762768e-43
+        - 2.802596928649634e-45
+        - 1.2891945871788317e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(31)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 8
+      VSS_RECT:
+        - 1.401298464324817e-44
+        - 7.567011707354012e-44
+        - 2.9847657290118604e-43
+        - 4.245934346904196e-43
+      VSS_TITLE: "ManTalk1"
+      VSS_COMMANDS: "PlayAnimation(ManTalk1,\"ubriefing09\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 9
+      VSS_RECT:
+        - 1.1070257868166055e-43
+        - 1.723597111119525e-43
+        - 2.9987787136551085e-43
+        - 4.259947331547444e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(122)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 13
+      VSS_RECT:
+        - 1.2611686178923354e-44
+        - 7.42688186092153e-44
+        - 4.4701421011961665e-43
+        - 5.731310719088502e-43
+      VSS_TITLE: "BabaSit2"
+      VSS_COMMANDS: "PlayAnimation(BabaSit2,\"crest\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 14
+      VSS_RECT:
+        - 7.006492321624085e-45
+        - 6.866362475191604e-44
+        - 5.885453550164232e-43
+        - 7.146622168056567e-43
+      VSS_TITLE: "MuzicSit2"
+      VSS_COMMANDS: "PlayAnimation(MuzicSit2,\"uspecial13\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 15
+      VSS_RECT:
+        - 1.1210387714598537e-43
+        - 1.7376100957627732e-43
+        - 5.8714405655209835e-43
+        - 7.132609183413319e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(46)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 18
+      VSS_RECT:
+        - 1.9197788961249994e-43
+        - 2.536350220427919e-43
+        - 4.414090162623174e-43
+        - 5.675258780515509e-43
+      VSS_TITLE: "MuzicSit4"
+      VSS_COMMANDS: "PlayAnimation(MuzicSit4,\"uspecial13\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 19
+      VSS_RECT:
+        - 2.9147008057956195e-43
+        - 3.531272130098539e-43
+        - 4.3860641933366774e-43
+        - 5.647232811229013e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(46)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 22
+      VSS_RECT:
+        - 9.80908925027372e-45
+        - 7.146622168056567e-44
+        - 7.384842906991786e-43
+        - 8.646011524884121e-43
+      VSS_TITLE: "MuzicSitTalk1"
+      VSS_COMMANDS: "PlayAnimation(MuzicSitTalk1,\"uspecial16\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 23
+      VSS_RECT:
+        - 1.1210387714598537e-43
+        - 1.7376100957627732e-43
+        - 7.398855891635034e-43
+        - 8.66002450952737e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(206)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 26
+      VSS_RECT:
+        - 1.961817850054744e-43
+        - 2.5783891743576634e-43
+        - 7.342803953062041e-43
+        - 8.603972570954377e-43
+      VSS_TITLE: "MuzicSitTalk2"
+      VSS_COMMANDS: "PlayAnimation(MuzicSitTalk2,\"uspecial15\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 27
+      VSS_RECT:
+        - 2.9006878211523713e-43
+        - 3.517259145455291e-43
+        - 7.342803953062041e-43
+        - 8.603972570954377e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(206)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 30
+      VSS_RECT:
+        - 1.064986832886861e-43
+        - 1.6815581571897805e-43
+        - 1.5694542800437951e-43
+        - 2.8306228979361305e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(96)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 33
+      VSS_RECT:
+        - 3.363116314379561e-43
+        - 3.9796876386824805e-43
+        - 1.2611686178923354e-44
+        - 1.3872854796815689e-43
+      VSS_TITLE: "MuzicGoer"
+      VSS_COMMANDS: "Idle(MuzicGoer)\nPlayAnimation(MuzicGoer,\"uspecial12\")\nSleep(53)\nUMSentry(MuzicGoer,55,40)\nSleepUntil( IsLess( DistanceUnitPoint(MuzicGoer,55,40), 0.2 ) )  \nSleep(5)\nRotateto(MuzicGoer,53,38)\nSleep(5)\nIdle(MuzicGoer)\nPlayAnimation(MuzicGoer,\"ubriefing19\")\nSleep(35)\nUMSentry(MuzicGoer,56,38)\nSleepUntil( IsLess( DistanceUnitPoint(MuzicGoer,56,38), 0.2 ) ) \nSleep(5)\nRotateto(MuzicGoer,55.5,35)\nSleep(5)\nIdle(MuzicGoer)\nPlayAnimation(MuzicGoer,\"ubriefing17\")\nSleep(186)\nPlayAnimation(MuzicGoer,\"uspecial02\")\nSleep(123)\nUMSentry(MuzicGoer,49.4392,40.8781)\nSleepUntil( IsLess( DistanceUnitPoint(MuzicGoer,49.4392,40.8781), 0.2 ) ) \nRotateto(MuzicGoer,45.76,39.33)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 41
+      VSS_RECT:
+        - 4.44211613190967e-43
+        - 5.05868745621259e-43
+        - 1.401298464324817e-44
+        - 1.401298464324817e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(5)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 44
+      VSS_RECT:
+        - 1.9197788961249994e-43
+        - 2.536350220427919e-43
+        - 2.942726775082116e-43
+        - 4.203895392974451e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "PlayAnimation(MuzicPretty,\"uspecial19\")"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 45
+      VSS_RECT:
+        - 2.9006878211523713e-43
+        - 3.517259145455291e-43
+        - 2.970752744368612e-43
+        - 4.2319213622609476e-43
+      VSS_TITLE: "none"
+      VSS_COMMANDS: "Sleep(96)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 0
+      VSS_IS_USE_GROUP: 0
+    VSS_PATH:
+      VSS_ID: 6
+      VSS_SRC_ID: 3
+      VSS_DST_ID: 1
+    VSS_PATH:
+      VSS_ID: 7
+      VSS_SRC_ID: 1
+      VSS_DST_ID: 3
+    VSS_PATH:
+      VSS_ID: 11
+      VSS_SRC_ID: 8
+      VSS_DST_ID: 9
+    VSS_PATH:
+      VSS_ID: 12
+      VSS_SRC_ID: 9
+      VSS_DST_ID: 8
+    VSS_PATH:
+      VSS_ID: 16
+      VSS_SRC_ID: 15
+      VSS_DST_ID: 14
+    VSS_PATH:
+      VSS_ID: 17
+      VSS_SRC_ID: 14
+      VSS_DST_ID: 15
+    VSS_PATH:
+      VSS_ID: 20
+      VSS_SRC_ID: 19
+      VSS_DST_ID: 18
+    VSS_PATH:
+      VSS_ID: 21
+      VSS_SRC_ID: 18
+      VSS_DST_ID: 19
+    VSS_PATH:
+      VSS_ID: 24
+      VSS_SRC_ID: 23
+      VSS_DST_ID: 22
+    VSS_PATH:
+      VSS_ID: 25
+      VSS_SRC_ID: 22
+      VSS_DST_ID: 23
+    VSS_PATH:
+      VSS_ID: 28
+      VSS_SRC_ID: 27
+      VSS_DST_ID: 26
+    VSS_PATH:
+      VSS_ID: 29
+      VSS_SRC_ID: 26
+      VSS_DST_ID: 27
+    VSS_PATH:
+      VSS_ID: 31
+      VSS_SRC_ID: 30
+      VSS_DST_ID: 2
+    VSS_PATH:
+      VSS_ID: 32
+      VSS_SRC_ID: 2
+      VSS_DST_ID: 30
+    VSS_PATH:
+      VSS_ID: 42
+      VSS_SRC_ID: 41
+      VSS_DST_ID: 33
+    VSS_PATH:
+      VSS_ID: 43
+      VSS_SRC_ID: 33
+      VSS_DST_ID: 41
+    VSS_PATH:
+      VSS_ID: 46
+      VSS_SRC_ID: 44
+      VSS_DST_ID: 45
+    VSS_PATH:
+      VSS_ID: 47
+      VSS_SRC_ID: 45
+      VSS_DST_ID: 44
+  OBJECTSECTION:
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 947850
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-947850"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 41.939170837402344
+        - 46.72541046142578
+        - 0.40350914001464844
+      OBJROTATION:
+        - 0.7431449294090271
+        - 0.0
+        - 0.0
+        - 0.6691306233406067
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 213
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 213310
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-213310"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 40.92336654663086
+        - 37.49542236328125
+        - -0.027959823608398438
+      OBJROTATION:
+        - 0.7604060173034668
+        - 0.0
+        - 0.0
+        - 0.6494481563568115
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 213
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LIGHT:
+      LIGHT_ID: 855800
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 73.6549072265625
+        - 40.12903594970703
+        - 12.039177894592285
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-855800"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 424590
+      OBJTYPE: 54
+      OBJNAME: "Jug04-424590"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug04"
+      OBJPRIMTXTR: "jug03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 52.864498138427734
+        - 26.077699661254883
+        - -0.25
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 195
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6200000047683716
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 726777
+      OBJTYPE: 55
+      OBJNAME: "StoneSet03 Cave Red-726777"
+      OBJTEMPLATE: "nast12"
+      PARENTTEMPLATE: "StoneSet03 Cave Red"
+      OBJPRIMTXTR: "Stone05"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.4778060913086
+        - 59.07709503173828
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 314
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.29999998211860657
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "bottom2"
+      OBJ_PLAYER: 0
+      NID: 888705
+      OBJTYPE: 54
+      OBJNAME: "Van03-888705"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van03"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 54.98676681518555
+        - 53.02759552001953
+        - -0.8500000834465027
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 666
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 677818
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-677818"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 63.52567672729492
+        - 57.31019973754883
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 213
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 616111
+      OBJTYPE: 54
+      OBJNAME: "Wheel00-616111"
+      OBJTEMPLATE: "stst45"
+      PARENTTEMPLATE: "Wheel00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 60.90641403198242
+        - 51.1044807434082
+        - 0.0
+      OBJROTATION:
+        - 0.9814760684967041
+        - -0.1815258264541626
+        - -0.06124654412269592
+        - -0.0008326125098392367
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 174
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants A1"
+      UNIT_ARMORS:
+        - "gipat low helm.thin"
+        - "hadagan low leggins.thin"
+        - "hadagan low shirt.cotton"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{e2}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 11
+        - 11
+        - 22
+        - 22
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 991988
+      OBJTYPE: 50
+      OBJNAME: "BabaSit2"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "Human Hadagan Peasants A1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.92770004272461
+        - 37.1708984375
+        - 0.0
+      OBJROTATION:
+        - 1.000000238418579
+        - 0.0
+        - 0.0
+        - 7.739107843462989e-08
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.4699999988079071
+        - 0.3400000035762787
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.92770004272461
+          - 37.1708984375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.92770004272461
+          - 37.1708984375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.92770004272461
+          - 37.1708984375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.92770004272461
+          - 37.1708984375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.92770004272461
+          - 37.1708984375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    PARTICL:
+      PARTICL_ID: 982046
+      PARTICL_POSITION:
+        - 72.09185791015625
+        - 50.27263259887695
+        - 9.278580665588379
+      PARTICL_NAME: "Particles source-270501"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8195
+      PARTICL_SCALE: 0.20000000298023224
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 820376
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 52.45623016357422
+        - 51.648468017578125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 796836
+      OBJTYPE: 54
+      OBJNAME: "Jug03-773345"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.84770202636719
+        - 54.705501556396484
+        - 1.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.09999999403953552
+    LIGHT:
+      LIGHT_ID: 636775
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 42.522300720214844
+        - 42.70017623901367
+        - 11.888335227966309
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-636775"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 594703
+      OBJTYPE: 55
+      OBJNAME: "StoneSet03 Cave Red-726777"
+      OBJTEMPLATE: "nast12"
+      PARENTTEMPLATE: "StoneSet03 Cave Red"
+      OBJPRIMTXTR: "Stone05"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 72.06845092773438
+        - 63.945167541503906
+        - 0.0
+      OBJROTATION:
+        - 0.6087613105773926
+        - 0.0
+        - 0.0
+        - 0.7933533787727356
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 314
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.29999998211860657
+        - 0.0
+    PARTICL:
+      PARTICL_ID: 986645
+      PARTICL_POSITION:
+        - 42.36284255981445
+        - 46.69211196899414
+        - 13.07750129699707
+      PARTICL_NAME: "Particles source-195537"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.30000001192092896
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 386622
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-386622"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 52.89325714111328
+        - 52.770713806152344
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 487350
+      OBJTYPE: 54
+      OBJNAME: "Carpet00-487350"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet00"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.32361602783203
+        - 52.251380920410156
+        - 0.0
+      OBJROTATION:
+        - 0.7009092569351196
+        - 0.0
+        - 0.0
+        - 0.713250458240509
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 201
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5999999046325684
+    OBJECT:
+      OBJBODYPARTS:
+        - "bottom2"
+      OBJ_PLAYER: 0
+      NID: 360361
+      OBJTYPE: 54
+      OBJNAME: "Van03-360361"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van03"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 63.017822265625
+        - 54.7255744934082
+        - -0.3999999761581421
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 666
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 41093
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-850874"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 62.69865798950195
+        - 29.58577537536621
+        - 0.0
+      OBJROTATION:
+        - 0.9961948990821838
+        - 0.0
+        - 0.0
+        - 0.08715571463108063
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.30000001192092896
+        - 1.0
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 982831
+      OBJTYPE: 54
+      OBJNAME: "Jug00-982831"
+      OBJTEMPLATE: "stst93"
+      PARENTTEMPLATE: "Jug00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.94822311401367
+        - 21.583858489990234
+        - 0.0
+      OBJROTATION:
+        - 0.8532174825668335
+        - -0.06730800122022629
+        - 0.5019394755363464
+        - -0.1246868371963501
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 59
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 577378
+      OBJTYPE: 54
+      OBJNAME: "PotFire00-577378"
+      OBJTEMPLATE: "stst127"
+      PARENTTEMPLATE: "PotFire00"
+      OBJPRIMTXTR: "PotFire00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 43.476341247558594
+        - 43.72323226928711
+        - 0.8999999165534973
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 162
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.09999999403953552
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 305546
+      OBJTYPE: 54
+      OBJNAME: "RunnersTent00-305546"
+      OBJTEMPLATE: "stbuho53"
+      PARENTTEMPLATE: "RunnersTent00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.26051712036133
+        - 53.27104568481445
+        - 0.0
+      OBJROTATION:
+        - -0.02617703564465046
+        - 0.0
+        - 0.0
+        - 0.9996574521064758
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 628
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 325692
+      OBJTYPE: 54
+      OBJNAME: "Sack00-325692"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 59.86271667480469
+        - 52.504615783691406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand boots.tanned thin"
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand leggins.thick"
+        - "hadagan brigand pants.tanned thin"
+        - "hadagan brigand shirt.tanned thin"
+      UNIT_WEAPONS:
+        - "spiked mace.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 426933
+      OBJTYPE: 50
+      OBJNAME: "MuzicSitTalk1"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.60739135742188
+        - 50.709686279296875
+        - 0.0
+      OBJROTATION:
+        - 0.09584563970565796
+        - 0.0
+        - 0.0
+        - -0.9953969120979309
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 0
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8700000047683716
+        - 0.8700000047683716
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 64.60739135742188
+          - 50.709686279296875
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 64.60739135742188
+          - 50.709686279296875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 64.60739135742188
+          - 50.709686279296875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 64.60739135742188
+          - 50.709686279296875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 64.60739135742188
+          - 50.709686279296875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 951477
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 47.74421691894531
+        - 21.273826599121094
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 112771
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 43.30690002441406
+        - 44.68769836425781
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.28999999165534973
+        - 0.28999999165534973
+        - 0.4899999797344208
+    PARTICL:
+      PARTICL_ID: 448185
+      PARTICL_POSITION:
+        - 41.37075424194336
+        - 37.42464828491211
+        - 13.316301345825195
+      PARTICL_NAME: "Particles source-195537"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.30000001192092896
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 102574
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 47.0507926940918
+        - 22.838851928710938
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.29999998211860657
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand boots.tanned thin"
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand pants.tanned thin"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 483553
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Peasants F1-749130"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 56.7364616394043
+        - 37.0647087097168
+        - 0.0
+      OBJROTATION:
+        - -0.8870110511779785
+        - 0.0
+        - 0.0
+        - 0.4617486894130707
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.28999999165534973
+        - 1.0
+        - 0.7099999785423279
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 56.7364616394043
+          - 37.0647087097168
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 56.7364616394043
+          - 37.0647087097168
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 56.7364616394043
+          - 37.0647087097168
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 56.7364616394043
+          - 37.0647087097168
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 56.7364616394043
+          - 37.0647087097168
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand boots.tanned thin"
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand leggins.thick"
+        - "hadagan brigand pants.tanned thin"
+        - "hadagan brigand shirt.tanned thin"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 28372
+      OBJTYPE: 50
+      OBJNAME: "MuzicGoer"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 49.43920135498047
+        - 40.87810134887695
+        - 0.0
+      OBJROTATION:
+        - -0.7009093761444092
+        - 0.0
+        - 0.0
+        - 0.7132505774497986
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8700000047683716
+        - 0.8700000047683716
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 0
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.43920135498047
+          - 40.87810134887695
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.43920135498047
+          - 40.87810134887695
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.43920135498047
+          - 40.87810134887695
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.43920135498047
+          - 40.87810134887695
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.43920135498047
+          - 40.87810134887695
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 178574
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 63.79059982299805
+        - 55.43009948730469
+        - -0.05000000074505806
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    PARTICL:
+      PARTICL_ID: 252785
+      PARTICL_POSITION:
+        - 42.358436584472656
+        - 42.69343948364258
+        - 11.663403511047363
+      PARTICL_NAME: "Particles source-252785"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.20000000298023224
+    LIGHT:
+      LIGHT_ID: 226777
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 51.121620178222656
+        - 19.042722702026367
+        - 13.28347110748291
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-226777"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 509834
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-509834"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 57.582950592041016
+        - 53.39708709716797
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 107800
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 49.156253814697266
+        - 21.88937759399414
+        - 0.29999983310699463
+      OBJROTATION:
+        - 0.6648451685905457
+        - 0.33586862683296204
+        - 0.5783121585845947
+        - 0.3327600359916687
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 4935
+      OBJTYPE: 54
+      OBJNAME: "Jug04-4935"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug04"
+      OBJPRIMTXTR: "jug03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.2552490234375
+        - 53.67585372924805
+        - 0.9500001072883606
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 195
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.9799999594688416
+        - -0.14999999105930328
+    LIGHT:
+      LIGHT_ID: 976246
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 86.80712127685547
+        - 50.232994079589844
+        - 7.435239791870117
+      LIGHT_COLOR:
+        - 1.0
+        - 0.0
+        - 0.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-976246"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 190836
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 52.626827239990234
+        - 38.46171951293945
+        - 0.20000000298023224
+      OBJROTATION:
+        - -0.6891937851905823
+        - 0.5190743207931519
+        - -0.4830644726753235
+        - 0.14907263219356537
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8799999952316284
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 998692
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-998692"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 53.775020599365234
+        - 54.19404983520508
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 528721
+      OBJTYPE: 54
+      OBJNAME: "RunnersBlacksmith00-528721"
+      OBJTEMPLATE: "stbuho50"
+      PARENTTEMPLATE: "RunnersBlacksmith00"
+      OBJPRIMTXTR: "runnersBlacksmith00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.52940368652344
+        - 48.42547607421875
+        - 0.0
+      OBJROTATION:
+        - 0.9969171285629272
+        - 0.0
+        - 0.0
+        - 0.07845918089151382
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 627
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 272871
+      OBJTYPE: 54
+      OBJNAME: "Carpet01-272871"
+      OBJTEMPLATE: "stst159"
+      PARENTTEMPLATE: "Carpet01"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 70.50770568847656
+        - 46.94319152832031
+        - 0.949999988079071
+      OBJROTATION:
+        - 0.25038018822669983
+        - 0.0
+        - 0.0
+        - 0.9681479930877686
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 201
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.7899999618530273
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 548104
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-548104"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 26.166004180908203
+        - 54.31169128417969
+        - 0.0
+      OBJROTATION:
+        - 0.9588197469711304
+        - 0.0
+        - 0.0
+        - 0.28401532769203186
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 1.5
+        - 0.5
+    PARTICL:
+      PARTICL_ID: 842125
+      PARTICL_POSITION:
+        - 77.99490356445312
+        - 50.936100006103516
+        - 5.638750076293945
+      PARTICL_NAME: "Particles source-842125"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.699999988079071
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan low leggins.thick"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 25
+        - 25
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1095761920
+        - 1094713344
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 7
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 585377
+      OBJTYPE: 50
+      OBJNAME: "MuzicPretty"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 57.73030090332031
+        - 22.49839973449707
+        - -0.10000000149011612
+      OBJROTATION:
+        - -0.16504760086536407
+        - 0.0
+        - 0.0
+        - 0.9862855672836304
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.2800000011920929
+        - 0.949999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.73030090332031
+          - 22.49839973449707
+          - -0.10000000149011612
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.73030090332031
+          - 22.49839973449707
+          - -0.10000000149011612
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.73030090332031
+          - 22.49839973449707
+          - -0.10000000149011612
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.73030090332031
+          - 22.49839973449707
+          - -0.10000000149011612
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.73030090332031
+          - 22.49839973449707
+          - -0.10000000149011612
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 928579
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-928579"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 28.563600540161133
+        - 22.328899383544922
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 1.0
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 810259
+      OBJTYPE: 54
+      OBJNAME: "Jug04-4935"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug04"
+      OBJPRIMTXTR: "jug03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.28136444091797
+        - 51.9715690612793
+        - 0.9500001072883606
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 195
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.9799999594688416
+        - -0.14999999105930328
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand boots.tanned thin"
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand pants.tanned thin"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 900787
+      OBJTYPE: 50
+      OBJNAME: "ManTalk1"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 44.19020080566406
+        - 46.34469985961914
+        - 0.0
+      OBJROTATION:
+        - 0.7132505178451538
+        - 0.0
+        - 0.0
+        - 0.7009093165397644
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 1.0
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 44.19020080566406
+          - 46.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 44.19020080566406
+          - 46.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 44.19020080566406
+          - 46.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 44.19020080566406
+          - 46.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 44.19020080566406
+          - 46.34469985961914
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 952813
+      OBJTYPE: 54
+      OBJNAME: "RunnersThrone00-952813"
+      OBJTEMPLATE: "stbuho51"
+      PARENTTEMPLATE: "RunnersThrone00"
+      OBJPRIMTXTR: "runnersThrone00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 43.0861930847168
+        - 41.231876373291016
+        - 0.0
+      OBJROTATION:
+        - 0.7132503986358643
+        - 0.0
+        - 0.0
+        - -0.7009091377258301
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 626
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 832707
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.2022705078125
+        - 52.79494857788086
+        - -0.10000002384185791
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.09999999403953552
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 662622
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 63.110599517822266
+        - 53.664798736572266
+        - 0.0
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 354069
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-354069"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 41.767601013183594
+        - 25.319931030273438
+        - 0.0
+      OBJROTATION:
+        - 0.5877851247787476
+        - 0.0
+        - 0.0
+        - 0.8090173602104187
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 213
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    PARTICL:
+      PARTICL_ID: 174805
+      PARTICL_POSITION:
+        - 51.09708023071289
+        - 19.04032325744629
+        - 13.149711608886719
+      PARTICL_NAME: "Particles source-195537"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.30000001192092896
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand helm.thick"
+        - "hadagan brigand leggins.thin"
+        - "hadagan brigand pants.thick"
+        - "hadagan brigand plate.thin"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 451996
+      OBJTYPE: 50
+      OBJNAME: "MuzicSitTalk2"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 65.1001205444336
+        - 51.79015350341797
+        - 0.0
+      OBJROTATION:
+        - 0.9455192685127258
+        - 0.0
+        - 0.0
+        - -0.3255685865879059
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 0
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.8700000047683716
+        - 0.6499999761581421
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 65.1001205444336
+          - 51.79015350341797
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 65.1001205444336
+          - 51.79015350341797
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 65.1001205444336
+          - 51.79015350341797
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 65.1001205444336
+          - 51.79015350341797
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 65.1001205444336
+          - 51.79015350341797
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 249524
+      OBJTYPE: 54
+      OBJNAME: "Jug04-4935"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug04"
+      OBJPRIMTXTR: "jug03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.64414978027344
+        - 50.21394348144531
+        - 0.15000006556510925
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 195
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.9799999594688416
+        - -0.14999999105930328
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 979629
+      OBJTYPE: 54
+      OBJNAME: "Carpet00-979629"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet00"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 77.43294525146484
+        - 53.20216751098633
+        - 0.05000000074505806
+      OBJROTATION:
+        - 0.7431450486183167
+        - 0.0
+        - 0.0
+        - -0.669130802154541
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 201
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 402710
+      OBJTYPE: 54
+      OBJNAME: "RunnersTent01-402710"
+      OBJTEMPLATE: "stbuho54"
+      PARENTTEMPLATE: "RunnersTent01"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 56.73295211791992
+        - 22.25418472290039
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 629
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    PARTICL:
+      PARTICL_ID: 270501
+      PARTICL_POSITION:
+        - 72.07990264892578
+        - 50.18709945678711
+        - 9.28699016571045
+      PARTICL_NAME: "Particles source-270501"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8195
+      PARTICL_SCALE: 0.20000000298023224
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 906422
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 47.95707321166992
+        - 22.0456485748291
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS:
+        - "bottom2"
+      OBJ_PLAYER: 0
+      NID: 446143
+      OBJTYPE: 54
+      OBJNAME: "Van03-360361"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van03"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 65.6149673461914
+        - 53.81703567504883
+        - -0.34999996423721313
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 666
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 47574
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 57.00864028930664
+        - 37.49810791015625
+        - 0.0
+      OBJROTATION:
+        - -0.43837109208106995
+        - 0.0
+        - 0.0
+        - 0.8987941145896912
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 511937
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 66.40480041503906
+        - 54.380401611328125
+        - 0.0
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 533359
+      OBJTYPE: 54
+      OBJNAME: "Jug03-773345"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.13020324707031
+        - 52.29280090332031
+        - 1.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - -0.28999999165534973
+        - -0.19999998807907104
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 111880
+      OBJTYPE: 54
+      OBJNAME: "WitchKettle00-111880"
+      OBJTEMPLATE: "stst141"
+      PARENTTEMPLATE: "WitchKettle00"
+      OBJPRIMTXTR: "witchStuff00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 77.82701873779297
+        - 50.85145950317383
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 99
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.8999999761581421
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 391072
+      OBJTYPE: 54
+      OBJNAME: "Carpet01-391072"
+      OBJTEMPLATE: "stst159"
+      PARENTTEMPLATE: "Carpet01"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.530418395996094
+        - 51.38867950439453
+        - 1.0999999046325684
+      OBJROTATION:
+        - 0.017452288419008255
+        - 0.0
+        - 0.0
+        - 0.9998478293418884
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 202
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.8999999761581421
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 997727
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.2995491027832
+        - 22.243438720703125
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.29999998211860657
+    LIGHT:
+      LIGHT_ID: 312023
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 78.48258209228516
+        - 51.03971862792969
+        - 9.87279987335205
+      LIGHT_COLOR:
+        - 1.0
+        - 0.0
+        - 0.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-312023"
+      LIGHT_COMMENTS: "none"
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Peasants A1"
+      UNIT_ARMORS:
+        - "hadagan low leggins.thin"
+        - "hadagan low shirt.cotton"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{e1}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 13
+        - 13
+        - 22
+        - 22
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1095761920
+        - 1094713344
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 7
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 401593
+      OBJTYPE: 50
+      OBJNAME: "BabaSit"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "Human Hadagan Peasants A1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.22809600830078
+        - 50.32366180419922
+        - 0.0
+      OBJROTATION:
+        - 0.8241261839866638
+        - 0.0
+        - 0.0
+        - 0.5664063096046448
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.29999998211860657
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 71.22809600830078
+          - 50.32366180419922
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 71.22809600830078
+          - 50.32366180419922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 71.22809600830078
+          - 50.32366180419922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 71.22809600830078
+          - 50.32366180419922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 71.22809600830078
+          - 50.32366180419922
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand gloves.thick"
+        - "hadagan brigand helm.thick"
+        - "hadagan brigand shirt.thick"
+        - "hadagan low leggins.thick"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 423464
+      OBJTYPE: 50
+      OBJNAME: "MuzicSit2"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 53.43600082397461
+        - 38.24870300292969
+        - 0.0
+      OBJROTATION:
+        - 0.9426417350769043
+        - 0.0
+        - 0.0
+        - 0.33380693197250366
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.6800000071525574
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.43600082397461
+          - 38.24870300292969
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.43600082397461
+          - 38.24870300292969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.43600082397461
+          - 38.24870300292969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.43600082397461
+          - 38.24870300292969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.43600082397461
+          - 38.24870300292969
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 589473
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.537193298339844
+        - 52.254615783691406
+        - 0.0
+      OBJROTATION:
+        - 0.7132503986358643
+        - 0.0
+        - 0.0
+        - 0.7009093761444092
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.09999999403953552
+    TORCH:
+      TORCH_PTLINK:
+        - 0.0
+        - 0.0
+        - 0.0
+      TORCH_STRENGHT: 0.20000000298023224
+      TORCH_SOUND: "nature\fire\small.wav"
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 103181
+      OBJTYPE: 58
+      OBJNAME: "Fireplace00-103181"
+      OBJTEMPLATE: "stto8"
+      PARENTTEMPLATE: "Fireplace00"
+      OBJPRIMTXTR: "torchBase00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 52.8700065612793
+        - 26.07314682006836
+        - 0.2499999850988388
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 310
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 397967
+      OBJTYPE: 54
+      OBJNAME: "Jug00-982831"
+      OBJTEMPLATE: "stst93"
+      PARENTTEMPLATE: "Jug00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 53.66774368286133
+        - 22.4805850982666
+        - 0.0
+      OBJROTATION:
+        - 0.5769988298416138
+        - -0.09984756261110306
+        - 0.5807572603225708
+        - -0.5655315518379211
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 59
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.08999999612569809
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 619057
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 43.82000732421875
+        - 45.40537643432617
+        - 0.20000000298023224
+      OBJROTATION:
+        - 0.4935333728790283
+        - -0.6776066422462463
+        - -0.36438867449760437
+        - 0.4055807590484619
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand boots.tanned thin"
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand pants.tanned thin"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 263075
+      OBJTYPE: 50
+      OBJNAME: "MuzicSit4"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 63.922977447509766
+        - 54.13283157348633
+        - 0.0
+      OBJROTATION:
+        - -0.8141157031059265
+        - 0.0
+        - 0.0
+        - -0.5807027816772461
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 0
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8700000047683716
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 63.922977447509766
+          - 54.13283157348633
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 63.922977447509766
+          - 54.13283157348633
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 63.922977447509766
+          - 54.13283157348633
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 63.922977447509766
+          - 54.13283157348633
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 63.922977447509766
+          - 54.13283157348633
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan NPC Rebel Boss F15"
+      UNIT_ARMORS:
+        - "hadagan special brigand leggins.tanned thin"
+        - "hadagan special brigand shirt.tanned thin"
+        - "hadagan special brigand pants.thick"
+        - "hadagan brigand gloves.tanned thin"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 1
+        - 1
+        - 0
+        - 0
+        - 1065353216
+        - 1095552205
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 3221225472
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1123680256
+        - 1121058816
+        - 1065353216
+        - 1105723392
+        - 1103626240
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 845433675
+        - 12850
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 1000011186
+      OBJTYPE: 50
+      OBJNAME: "Glav"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan NPC Rebel Boss F15"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.58626937866211
+        - 39.35810852050781
+        - 0.0
+      OBJROTATION:
+        - 0.3338068127632141
+        - 0.0
+        - 0.0
+        - 0.9426414370536804
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.4000000059604645
+        - 0.800000011920929
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.58626937866211
+          - 39.35810852050781
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.58626937866211
+          - 39.35810852050781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.58626937866211
+          - 39.35810852050781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.58626937866211
+          - 39.35810852050781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.58626937866211
+          - 39.35810852050781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    PARTICL:
+      PARTICL_ID: 139910
+      PARTICL_POSITION:
+        - 72.12779998779297
+        - 50.09170150756836
+        - 9.245450019836426
+      PARTICL_NAME: "Particles source-270501"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8195
+      PARTICL_SCALE: 0.20000000298023224
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 248543
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-548104"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.02131652832031
+        - 66.19606018066406
+        - 0.0
+      OBJROTATION:
+        - 0.7253744006156921
+        - 0.0
+        - 0.0
+        - 0.6883545517921448
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 1.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 773345
+      OBJTYPE: 54
+      OBJNAME: "Jug03-773345"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.581520080566406
+        - 22.22998046875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.09999999403953552
+        - 0.4899999797344208
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "RatSmallF1"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 25
+        - 25
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1095761920
+        - 1094713344
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 7
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 328965
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 398490
+      OBJTYPE: 52
+      OBJNAME: "RatSmallF1-398490"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatSmallF1"
+      OBJPRIMTXTR: "Rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 41.93629837036133
+        - 29.219100952148438
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.93629837036133
+          - 29.219100952148438
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 39.573062896728516
+            - 29.415475845336914
+            - 10.211969375610352
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 42.93309783935547
+              - 31.247295379638672
+              - 10.03902530670166
+            ACTION_PT_WAIT_SEG: 15
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 35.63718795776367
+            - 28.109437942504883
+            - 9.991220474243164
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 37.93756103515625
+              - 29.690519332885742
+              - 10.439093589782715
+            ACTION_PT_WAIT_SEG: 15
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 32.84934616088867
+            - 25.711957931518555
+            - 9.964448928833008
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 33.2999382019043
+              - 24.125505447387695
+              - 10.03359603881836
+            ACTION_PT_WAIT_SEG: 5
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.93629837036133
+          - 29.219100952148438
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.93629837036133
+          - 29.219100952148438
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.93629837036133
+          - 29.219100952148438
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.93629837036133
+          - 29.219100952148438
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 908499
+      OBJTYPE: 54
+      OBJNAME: "Jug02-908499"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug02"
+      OBJPRIMTXTR: "jug01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 59.27704620361328
+        - 22.83793830871582
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 193
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    PARTICL:
+      PARTICL_ID: 162614
+      PARTICL_POSITION:
+        - 63.53791427612305
+        - 56.861045837402344
+        - 13.01669979095459
+      PARTICL_NAME: "Particles source-195537"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.30000001192092896
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 735496
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-735496"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 51.09425735473633
+        - 18.61289405822754
+        - 0.0
+      OBJROTATION:
+        - 0.008726466447114944
+        - 0.0
+        - 0.0
+        - 0.9999622106552124
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 213
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    UNIT:
+      UNIT_NEED_IMPORT: 1
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan brigand boots.tanned thin"
+        - "hadagan brigand gloves.tanned thin"
+        - "hadagan brigand pants.tanned thin"
+        - "hadagan brigand shirt.tanned thin"
+      UNIT_WEAPONS:
+        - "spiked mace.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 22
+        - 22
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1065353216
+        - 259
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 1
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 749130
+      OBJTYPE: 50
+      OBJNAME: "Human Hadagan Peasants F1-749130"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.38650131225586
+        - 46.412601470947266
+        - 0.0
+      OBJROTATION:
+        - -0.7009093761444092
+        - 0.0
+        - 0.0
+        - 0.7132505774497986
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 0
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8799999952316284
+        - 0.8799999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.38650131225586
+          - 46.412601470947266
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.38650131225586
+          - 46.412601470947266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.38650131225586
+          - 46.412601470947266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.38650131225586
+          - 46.412601470947266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 45.38650131225586
+          - 46.412601470947266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    TORCH:
+      TORCH_PTLINK:
+        - 0.0
+        - 0.0
+        - 0.20000000298023224
+      TORCH_STRENGHT: 0.30000001192092896
+      TORCH_SOUND: "nature\fire\small.wav"
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 594347
+      OBJTYPE: 58
+      OBJNAME: "Fireplace00-594347"
+      OBJTEMPLATE: "stto8"
+      PARENTTEMPLATE: "Fireplace00"
+      OBJPRIMTXTR: "torchBase00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.163700103759766
+        - 48.30459976196289
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 316
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 213882
+      OBJTYPE: 54
+      OBJNAME: "Carpet00-487350"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet00"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 57.94099044799805
+        - 22.2154483795166
+        - 0.05000000074505806
+      OBJROTATION:
+        - 0.06975627690553665
+        - -0.0
+        - 0.0
+        - -0.9975640773773193
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 201
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5999999046325684
+    LIGHT:
+      LIGHT_ID: 770812
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 42.17265701293945
+        - 25.509729385375977
+        - 12.974052429199219
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-770812"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 600473
+      OBJTYPE: 54
+      OBJNAME: "Jug02-600473"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug02"
+      OBJPRIMTXTR: "jug01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.42570114135742
+        - 52.040199279785156
+        - 1.1000001430511475
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 193
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 482407
+      OBJTYPE: 54
+      OBJNAME: "Jug00-982831"
+      OBJTEMPLATE: "stst93"
+      PARENTTEMPLATE: "Jug00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 42.136898040771484
+        - 38.1934700012207
+        - -0.4000000059604645
+      OBJROTATION:
+        - 0.7038998603820801
+        - 0.4467829167842865
+        - 0.19227734208106995
+        - 0.5176329612731934
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 59
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.08999999612569809
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 102962
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-102962"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 54.42805862426758
+        - 55.28343200683594
+        - 0.10000000149011612
+      OBJROTATION:
+        - 0.7061728835105896
+        - 0.3511657118797302
+        - 0.5322137475013733
+        - -0.30781570076942444
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 332683
+      OBJTYPE: 54
+      OBJNAME: "Jug03-773345"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 70.64871215820312
+        - 47.195716857910156
+        - 1.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - -0.28999999165534973
+        - -0.19999998807907104
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "RatSmallF1"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 25
+        - 25
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1095761920
+        - 1094713344
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 7
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 328965
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 374800
+      OBJTYPE: 52
+      OBJNAME: "RatSmallF1-374800"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatSmallF1"
+      OBJPRIMTXTR: "Rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 49.35810089111328
+        - 43.743900299072266
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.35810089111328
+          - 43.743900299072266
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 40.52620315551758
+            - 52.22005844116211
+            - 10.03902530670166
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 42.03009033203125
+              - 51.497196197509766
+              - 10.03902530670166
+            ACTION_PT_WAIT_SEG: 0
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 42.68977737426758
+            - 51.563697814941406
+            - 10.03902530670166
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 43.806121826171875
+              - 50.92727279663086
+              - 10.03909683227539
+            ACTION_PT_WAIT_SEG: 15
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 33.57345962524414
+            - 59.09794998168945
+            - 9.970956802368164
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 36.424400329589844
+              - 58.346134185791016
+              - 10.03902530670166
+            ACTION_PT_WAIT_SEG: 10
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 32.674983978271484
+            - 55.77989196777344
+            - 10.039026260375977
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 30.957414627075195
+              - 56.05220413208008
+              - 10.103591918945312
+            ACTION_PT_WAIT_SEG: 15
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.35810089111328
+          - 43.743900299072266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.35810089111328
+          - 43.743900299072266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.35810089111328
+          - 43.743900299072266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.35810089111328
+          - 43.743900299072266
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    PARTICL:
+      PARTICL_ID: 195537
+      PARTICL_POSITION:
+        - 73.93949890136719
+        - 39.95539855957031
+        - 12.189200401306152
+      PARTICL_NAME: "Particles source-195537"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.4000000059604645
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Peasants F1"
+      UNIT_ARMORS:
+        - "hadagan low leggins.thick"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 25
+        - 25
+        - 11
+        - 11
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1095761920
+        - 1094713344
+        - 1065353216
+        - 1090519040
+        - 1086324736
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 7
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6554885
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 679026
+      OBJTYPE: 50
+      OBJNAME: "MuzicSit"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Peasants F1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 77.3136978149414
+        - 53.0547981262207
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.4899999797344208
+        - 0.4899999797344208
+        - 0.9899999499320984
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 77.3136978149414
+          - 53.0547981262207
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 77.3136978149414
+          - 53.0547981262207
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 77.3136978149414
+          - 53.0547981262207
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 77.3136978149414
+          - 53.0547981262207
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 77.3136978149414
+          - 53.0547981262207
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 917716
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 65.18194580078125
+        - 54.901710510253906
+        - 0.0
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.09999999403953552
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan NPC Rebel Smith F15"
+      UNIT_ARMORS:
+        - "hadagan brigand helm.tanned thin"
+        - "hadagan brigand leggins.thick"
+        - "hadagan brigand pants.tanned thin"
+        - "hadagan brigand gloves.thick"
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 1
+        - 1
+        - 0
+        - 0
+        - 1065353216
+        - 1095552205
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 3221225472
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1123680256
+        - 1121058816
+        - 1065353216
+        - 1105723392
+        - 1103626240
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 28
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 845433675
+        - 12850
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 0
+      NID: 1000012028
+      OBJTYPE: 50
+      OBJNAME: "Kuzn"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan NPC Rebel Smith F15"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 51.209556579589844
+        - 48.45457458496094
+        - 0.0
+      OBJROTATION:
+        - 0.9743703007698059
+        - 0.0
+        - 0.0
+        - 0.22495123744010925
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6399999856948853
+        - 1.0
+        - 0.8399999737739563
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 51.209556579589844
+          - 48.45457458496094
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 51.209556579589844
+          - 48.45457458496094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 51.209556579589844
+          - 48.45457458496094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 51.209556579589844
+          - 48.45457458496094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 51.209556579589844
+          - 48.45457458496094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    LIGHT:
+      LIGHT_ID: 433409
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 63.573143005371094
+        - 56.739784240722656
+        - 13.232077598571777
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-433409"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 668842
+      OBJTYPE: 54
+      OBJNAME: "FakeBox00-668842"
+      OBJTEMPLATE: "stst151"
+      PARENTTEMPLATE: "FakeBox00"
+      OBJPRIMTXTR: "fake00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 76.06253814697266
+        - 40.45881271362305
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 139
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 942390
+      OBJTYPE: 54
+      OBJNAME: "Jug03-942390"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.7912483215332
+        - 52.865745544433594
+        - 1.0000001192092896
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8999999761581421
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 378985
+      OBJTYPE: 54
+      OBJNAME: "TortureWheel00-378985"
+      OBJTEMPLATE: "stst97"
+      PARENTTEMPLATE: "TortureWheel00"
+      OBJPRIMTXTR: "sortir00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 73.84556579589844
+        - 39.76899719238281
+        - 0.0
+      OBJROTATION:
+        - 0.2503799796104431
+        - 0.0
+        - 0.0
+        - 0.9681476950645447
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 52
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 575262
+      OBJTYPE: 54
+      OBJNAME: "Jug00-59391"
+      OBJTEMPLATE: "stst93"
+      PARENTTEMPLATE: "Jug00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.00904083251953
+        - 48.00217819213867
+        - 0.8499998450279236
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 59
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.3499999940395355
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 59391
+      OBJTYPE: 54
+      OBJNAME: "Jug00-59391"
+      OBJTEMPLATE: "stst93"
+      PARENTTEMPLATE: "Jug00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 42.70795822143555
+        - 43.04990005493164
+        - 1.0999999046325684
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 59
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.3499999940395355
+    LIGHT:
+      LIGHT_ID: 393447
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 63.40635681152344
+        - 29.718664169311523
+        - 8.201040267944336
+      LIGHT_COLOR:
+        - 1.0
+        - 0.0
+        - 0.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-393447"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 524775
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.60916137695312
+        - 50.19636917114258
+        - 0.0
+      OBJROTATION:
+        - -0.9612617492675781
+        - 0.0
+        - 0.0
+        - 0.27563759684562683
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    PARTICL:
+      PARTICL_ID: 814970
+      PARTICL_POSITION:
+        - 42.17118453979492
+        - 25.45094871520996
+        - 12.695686340332031
+      PARTICL_NAME: "Particles source-195537"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.30000001192092896
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 393196
+      OBJTYPE: 54
+      OBJNAME: "OrcBridge00-393196"
+      OBJTEMPLATE: "stbr6"
+      PARENTTEMPLATE: "OrcBridge00"
+      OBJPRIMTXTR: "orcBridge00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 80.15741729736328
+        - 39.50004959106445
+        - 3.949997901916504
+      OBJROTATION:
+        - 0.9816271066665649
+        - 0.0
+        - 0.0
+        - -0.190808966755867
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 127
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.09999999403953552
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 955397
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-713741"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 47.0369758605957
+        - 21.931169509887695
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 434252
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 65.69259643554688
+        - 52.6870002746582
+        - 0.0
+      OBJROTATION:
+        - -0.5372995138168335
+        - 0.0
+        - 0.0
+        - 0.843391478061676
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    LIGHT:
+      LIGHT_ID: 503871
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 75.09606170654297
+        - 33.92744064331055
+        - 9.855690002441406
+      LIGHT_COLOR:
+        - 1.0
+        - 0.0
+        - 0.0
+      LIGHT_RANGE: 10.0
+      LIGHT_NAME: "Light-503871"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 713741
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-713741"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.73809814453125
+        - 21.188642501831055
+        - 0.0
+      OBJROTATION:
+        - 0.829037606716156
+        - 0.0
+        - 0.0
+        - 0.559192955493927
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 605622
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 62.56871032714844
+        - 51.18927001953125
+        - 0.0
+      OBJROTATION:
+        - -0.8703556656837463
+        - 0.0
+        - 0.0
+        - 0.4924236238002777
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - -0.04999999701976776
+    TORCH:
+      TORCH_PTLINK:
+        - 0.0
+        - 0.0
+        - 0.30000001192092896
+      TORCH_STRENGHT: 0.4000000059604645
+      TORCH_SOUND: "nature\fire\small.wav"
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 763470
+      OBJTYPE: 58
+      OBJNAME: "Fireplace00-763470"
+      OBJTEMPLATE: "stto8"
+      PARENTTEMPLATE: "Fireplace00"
+      OBJPRIMTXTR: "torchBase00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.50669860839844
+        - 35.374900817871094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 317
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    PARTICL:
+      PARTICL_ID: 460528
+      PARTICL_POSITION:
+        - 72.79889678955078
+        - 50.17430114746094
+        - 11.710100173950195
+      PARTICL_NAME: "Particles source-460528"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8196
+      PARTICL_SCALE: 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 261116
+      OBJTYPE: 54
+      OBJNAME: "Jug03-261116"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.908050537109375
+        - 21.909414291381836
+        - -0.20000000298023224
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 496953
+      OBJTYPE: 54
+      OBJNAME: "Oven00-496953"
+      OBJTEMPLATE: "stst94"
+      PARENTTEMPLATE: "Oven00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 72.79010009765625
+        - 50.139400482177734
+        - -0.09999992698431015
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 60
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.25
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 37990
+      OBJTYPE: 54
+      OBJNAME: "Ladder00-37990"
+      OBJTEMPLATE: "stst128"
+      PARENTTEMPLATE: "Ladder00"
+      OBJPRIMTXTR: "ladder00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.65137481689453
+        - 23.36008071899414
+        - 0.0
+      OBJROTATION:
+        - 0.8704581260681152
+        - 0.1444309949874878
+        - -0.276897132396698
+        - 0.3804878294467926
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 65
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 805553
+      OBJTYPE: 54
+      OBJNAME: "Sack00-325692"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 59.05003356933594
+        - 53.14339828491211
+        - 0.0
+      OBJROTATION:
+        - 0.7547094821929932
+        - 0.0
+        - 0.0
+        - 0.6560590267181396
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 121890
+      OBJTYPE: 54
+      OBJNAME: "Jug00-59391"
+      OBJTEMPLATE: "stst93"
+      PARENTTEMPLATE: "Jug00"
+      OBJPRIMTXTR: "hadoganChest00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.19329833984375
+        - 47.60020065307617
+        - 0.8500000238418579
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 59
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 567383
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 70.85506439208984
+        - 47.571163177490234
+        - 0.0
+      OBJROTATION:
+        - 0.8660255074501038
+        - 0.0
+        - 0.0
+        - 0.5000001192092896
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.09999999403953552
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Rick"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "rick_magic"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 1
+        - 1
+        - 0
+        - 0
+        - 1065353216
+        - 1113762475
+        - 1040746633
+        - 1040683998
+        - 1044477887
+        - 1038943641
+        - 3221225472
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 1092616192
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1112014848
+        - 0
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 150
+        - 1091043328
+        - 1112014848
+        - 1101004800
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1684300900
+        - 1684300900
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000012485
+      OBJTYPE: 51
+      OBJNAME: "Rick"
+      OBJTEMPLATE: "unmori"
+      PARENTTEMPLATE: "Rick"
+      OBJPRIMTXTR: "Rick"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 49.32251739501953
+        - 27.07764434814453
+        - 0.0
+      OBJROTATION:
+        - 0.2588190734386444
+        - 0.0
+        - 0.0
+        - 0.9659258127212524
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 4
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 49.32251739501953
+          - 27.07764434814453
+          - 10158.6337890625
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 62.682674407958984
+          - 59.48386764526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 62.682674407958984
+          - 59.48386764526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 62.682674407958984
+          - 59.48386764526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 62.682674407958984
+          - 59.48386764526367
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1
+      OBJTYPE: 54
+      OBJNAME: "RunnersTent01-402710"
+      OBJTEMPLATE: "stbuho54"
+      PARENTTEMPLATE: "RunnersTent01"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.86768341064453
+        - 26.070316314697266
+        - 0.0
+      OBJROTATION:
+        - 0.9717554450035095
+        - 0.0
+        - 0.0
+        - -0.23599009215831757
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 629
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.2500000596046448
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2
+      OBJTYPE: 54
+      OBJNAME: "Carpet00-487350"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet00"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.82558822631836
+        - 27.12079620361328
+        - 0.05000000074505806
+      OBJROTATION:
+        - 0.6540815234184265
+        - 0.0
+        - 0.0
+        - 0.756424069404602
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 201
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5999999046325684
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 3
+      OBJTYPE: 54
+      OBJNAME: "Carpet01-391072"
+      OBJTEMPLATE: "stst159"
+      PARENTTEMPLATE: "Carpet01"
+      OBJPRIMTXTR: "carpet00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.47159957885742
+        - 26.08814239501953
+        - 0.660000205039978
+      OBJROTATION:
+        - 0.8300122618675232
+        - 0.0
+        - 0.0
+        - 0.5577451586723328
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 202
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.19999989867210388
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 4
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.49170684814453
+        - 25.51047706604004
+        - 0.0
+      OBJROTATION:
+        - 0.8246198892593384
+        - 0.0
+        - 0.0
+        - 0.5656872391700745
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.32499998807907104
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 5
+      OBJTYPE: 54
+      OBJNAME: "Jug02-600473"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug02"
+      OBJPRIMTXTR: "jug01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 46.948360443115234
+        - 26.998929977416992
+        - 0.16000023484230042
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 193
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 6
+      OBJTYPE: 54
+      OBJNAME: "Jug03-942390"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.66764450073242
+        - 25.929841995239258
+        - 0.6800002455711365
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 194
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.8999999761581421
+        - -0.20500001311302185

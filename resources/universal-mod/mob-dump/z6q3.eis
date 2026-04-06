@@ -1,0 +1,149 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Borka : object 
+)
+
+DeclareScript VCheck#3#1 (  this : object )
+DeclareScript VTriger#3#2 (  this : object )
+DeclareScript VCheck#3#4 (  this : object )
+DeclareScript VTriger#3#5 (  this : object )
+DeclareScript VCheck#3#7 (  this : object )
+DeclareScript VTriger#3#8 (  this : object )
+DeclareScript VCheck#3#10 (  this : object )
+DeclareScript VTriger#3#11 (  this : object )
+DeclareScript VTriger#3#12 (  this : object )
+
+Script VCheck#3#1
+(
+  if
+  (
+    Any( i, Heroes, IsLess( DistanceUnitUnit( i, BoarCage ) , 7 )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#2( this ) 
+  )
+)
+
+Script VTriger#3#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.1", 2 ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.2", 1 ) 
+  )
+)
+
+Script VCheck#3#4
+(
+  if
+  (
+    IsEqual( GetLeverState( BoarCage ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#5( this ) 
+  )
+)
+
+Script VTriger#3#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.2", 2 ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.3", 1 ) 
+  )
+)
+
+Script VCheck#3#7
+(
+  if
+  (
+    IsLess( DistanceUnitUnit( GetUnitOfPlayer( 0, 0 ) , Borka ) , 7 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#8( this ) 
+  )
+)
+
+Script VTriger#3#8
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.3", 2 ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.4", 1 ) 
+    Run( Borka ) 
+    SetPlayer( Borka, 0 ) 
+    UMFollow( Borka, GetUnitOfPlayer( 0, 0 )  ) 
+  )
+)
+
+Script VCheck#3#10
+(
+  if
+  (
+    IsAlive( Borka ) 
+    IsInArea( 1, GetX( Borka ) , GetY( Borka )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#12( this ) 
+  )
+)
+
+Script VTriger#3#11
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 1.5, 15.9, 14.4, 40 ) 
+  )
+)
+
+Script VTriger#3#12
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3.4", 2 ) 
+    GSSetVarMax( 0, "q.z6q3.z6q3", 2 ) 
+    RemoveUnitFromServer( Borka ) 
+    QuestComplete( 0, "z6q3" ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Borka = GetObjectByID( "1000263" ) 
+  VCheck#3#1( NULL ) 
+  VCheck#3#4( NULL ) 
+  VCheck#3#7( NULL ) 
+  VCheck#3#10( NULL ) 
+  VTriger#3#11( NULL ) 
+)

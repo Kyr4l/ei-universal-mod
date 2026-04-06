@@ -1,0 +1,884 @@
+GlobalVars (
+  F : float,
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  TalkerM1 : object,
+  TalkerM12 : object,
+  TalkerM2 : object,
+  TalkerM22 : object,
+  TalkerM23 : object,
+  TalkerM3 : object,
+  TalkerM32 : object,
+  TalkerM4 : object,
+  TalkerF1 : object,
+  TalkerF12 : object,
+  TalkerF2 : object,
+  TalkerF3 : object,
+  TalkerF4 : object,
+  Stark : object,
+  Heroes : group
+)
+
+DeclareScript VTriger#0#1 (  this : object )
+DeclareScript VTriger#0#2 (  this : object )
+DeclareScript VTriger#0#3 (  this : object )
+DeclareScript VTriger#0#4 (  this : object )
+DeclareScript VTriger#0#5 (  this : object )
+DeclareScript VTriger#0#6 (  this : object )
+DeclareScript VTriger#0#7 (  this : object )
+DeclareScript VTriger#0#8 (  this : object )
+DeclareScript VTriger#0#9 (  this : object )
+DeclareScript VTriger#0#10 (  this : object )
+DeclareScript VTriger#0#11 (  this : object )
+DeclareScript VTriger#0#12 (  this : object )
+DeclareScript VTriger#0#13 (  this : object )
+DeclareScript VTriger#0#14 (  this : object )
+DeclareScript VTriger#0#15 (  this : object )
+DeclareScript VTriger#0#16 (  this : object )
+DeclareScript VTriger#0#17 (  this : object )
+DeclareScript VTriger#0#18 (  this : object )
+DeclareScript VTriger#0#19 (  this : object )
+DeclareScript VTriger#0#20 (  this : object )
+DeclareScript VTriger#0#21 (  this : object )
+DeclareScript VTriger#0#22 (  this : object )
+DeclareScript VTriger#0#23 (  this : object )
+DeclareScript VTriger#0#24 (  this : object )
+DeclareScript VTriger#0#25 (  this : object )
+DeclareScript VTriger#0#26 (  this : object )
+DeclareScript VTriger#0#27 (  this : object )
+DeclareScript VTriger#0#28 (  this : object )
+DeclareScript VFire#0#1 (  this : object )
+DeclareScript VFire#0#2 (  this : object )
+DeclareScript VFire#0#3 (  this : object )
+DeclareScript VFire#1#1 (  this : object )
+DeclareScript VFire#1#3 (  this : object )
+DeclareScript VFireCity#0#1 (  this : object )
+DeclareScript VFireCity#0#2 (  this : object )
+DeclareScript VFireCity#0#3 (  this : object )
+DeclareScript VFireHouse#0#1 (  this : object )
+DeclareScript VFireHouse#0#2 (  this : object )
+DeclareScript VFireHouse#0#3 (  this : object )
+
+DeclareScript ShopKeeper (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VTriger#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM32 , "uspecial13" ) 
+    VTriger#0#2( this ) 
+  )
+)
+
+Script VTriger#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#1( this ) 
+  )
+)
+
+Script VTriger#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM22 , "uspecial16" ) 
+    VTriger#0#4( this ) 
+  )
+)
+
+Script VTriger#0#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 206 ) 
+    VTriger#0#3( this ) 
+  )
+)
+
+Script VTriger#0#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM12 , "uspecial15" ) 
+    VTriger#0#6( this ) 
+  )
+)
+
+Script VTriger#0#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 206 ) 
+    VTriger#0#5( this ) 
+  )
+)
+
+Script VTriger#0#7
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    PlayAnimation( TalkerM2 , "ubriefing22" ) 
+    VTriger#0#8( this )
+  )
+)
+
+Script VTriger#0#8
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 91 )
+    VTriger#0#7( this ) 
+  )
+)
+
+Script VTriger#0#9
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM3 , "ubriefing18" ) 
+    VTriger#0#10( this ) 
+  )
+)
+
+Script VTriger#0#10
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 121 ) 
+    VTriger#0#9( this ) 
+  )
+)
+
+Script VTriger#0#11
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerF1 , "ubriefing21" )
+    VTriger#0#12( this ) 
+  )
+)
+
+Script VTriger#0#12
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 79 ) 
+    VTriger#0#11( this ) 
+  )
+)
+
+Script VTriger#0#13
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM1 , "ubriefing09" )
+    VTriger#0#14( this ) 
+  )
+)
+
+Script VTriger#0#14
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 79 ) 
+    VTriger#0#13( this ) 
+  )
+)
+
+Script VTriger#0#15
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerF2, "uspecial08" )
+    VTriger#0#16( this ) 
+  )
+)
+
+Script VTriger#0#16
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 31 )
+    VTriger#0#15( this ) 
+  )
+)
+
+Script VTriger#0#17
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerF3, "uspecial08" )
+    VTriger#0#18( this ) 
+  )
+)
+
+Script VTriger#0#18
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 31 )
+    VTriger#0#17( this ) 
+  )
+)
+
+Script VTriger#0#19
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM4 , "uspecial13" ) 
+    VTriger#0#20( this ) 
+  )
+)
+
+Script VTriger#0#20
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#19( this ) 
+  )
+)
+
+Script VTriger#0#21
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM12 , "uspecial13" ) 
+    VTriger#0#22( this ) 
+  )
+)
+
+Script VTriger#0#22
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#21( this ) 
+  )
+)
+
+Script VTriger#0#23
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerF12 , "uspecial16" ) 
+    VTriger#0#24( this ) 
+  )
+)
+
+Script VTriger#0#24
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 206 ) 
+    VTriger#0#23( this ) 
+  )
+)
+
+
+Script VTriger#0#25
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerF4 , "uspecial13" ) 
+    VTriger#0#26( this ) 
+  )
+)
+
+Script VTriger#0#26
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#25( this ) 
+  )
+)
+
+
+Script VTriger#0#27
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( TalkerM23 , "uspecial08" ) 
+    VTriger#0#28( this ) 
+  )
+)
+
+Script VTriger#0#28
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 98 ) 
+    VTriger#0#27( this ) 
+  )
+)
+
+Script VFire#0#1
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 20 )
+  )
+  then
+  (
+    KillScript(  )
+    F = 1
+    VFireCity#0#1( this )
+    VFireHouse#0#1( this )
+    VFire#1#1( this )
+  )
+)
+
+Script VFire#1#1
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#1( this ) 
+  )
+)
+
+Script VFire#0#2
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    F = 1
+    VFireCity#0#2( this )
+    VFireHouse#0#2( this )
+  )
+)
+
+Script VFire#0#3
+(
+  if
+  ( 
+    IsGreater( GetWorldTime( ) , 5 ) 
+    IsLess( GetWorldTime( ) , 6 )
+    IsEqual( F, 1 )
+  )
+  then
+  (
+    KillScript(  )
+    F = 0
+    VFireCity#0#3( this )
+    VFireHouse#0#3( this )
+    VFire#1#3( this )
+  )
+)
+
+Script VFire#1#3
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 6 ) 
+    IsLess( GetWorldTime( ) , 19.9 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#3( this ) 
+  )
+)
+
+Script VFireCity#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 101, 179, 324.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 201, 179, 324.7, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 102, 205.5, 334, 15, 17, 255, 230, 75 )
+    CreatePointLight( 202, 205.5, 334, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 103, 181, 348.4, 15, 17, 255, 230, 75 )
+    CreatePointLight( 203, 181, 348.4, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 104, 170.3, 337.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 204, 170.3, 337.7, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 105, 147.3, 324.5, 15, 17, 255, 230, 75 )
+    CreatePointLight( 205, 147.3, 324.5, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 106, 135.3, 328.2, 15, 17, 255, 230, 75 )
+    CreatePointLight( 206, 135.3, 328.2, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 107, 118.3, 333.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 207, 118.3, 333.7, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 108, 192.1, 338.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 208, 192.1, 338.7, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 109, 194.7, 322.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 209, 194.7, 322.8, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 110, 206.5, 352.6, 15, 17, 255, 230, 75 )
+    CreatePointLight( 210, 206.5, 352.6, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 111, 211.3, 367.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 211, 211.3, 367.8, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 112, 195.0, 371.6, 15, 17, 255, 230, 75 )
+    CreatePointLight( 212, 195.0, 371.6, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 113, 174.4, 368.5, 15, 17, 255, 230, 75 )
+    CreatePointLight( 213, 174.4, 368.5, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 114, 150.1, 363.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 214, 150.1, 363.8, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 115, 135.8, 363.6, 15, 17, 255, 230, 75 )
+    CreatePointLight( 215, 135.8, 363.6, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 116, 140.0, 354.3, 15, 17, 255, 230, 75 )
+    CreatePointLight( 216, 140.0, 354.3, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 117, 123.7, 344.9, 15, 17, 255, 230, 75 )
+    CreatePointLight( 217, 123.7, 344.9, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 118, 117.5, 370.4, 15, 17, 255, 230, 75 )
+    CreatePointLight( 218, 117.5, 370.4, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 119, 105.4, 361.1, 15, 17, 255, 230, 75 )
+    CreatePointLight( 219, 105.4, 361.1, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 120, 100.2, 372.0, 15, 17, 255, 230, 75 )
+    CreatePointLight( 220, 100.2, 372.0, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 121, 215.2, 320.5, 15, 17, 255, 230, 75 )
+    CreatePointLight( 221, 215.2, 320.5, 21, 17, 255, 230, 75 )
+    Sleep( 10 )
+    CreatePointLight( 122, 164.3, 349.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 222, 164.3, 349.8, 21, 17, 255, 230, 75 )
+  )
+)
+
+Script VFireCity#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 101, 179.0, 324.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 201, 179.0, 324.7, 21, 17, 255, 230, 75 )
+    CreatePointLight( 102, 205.5, 334.0, 15, 17, 255, 230, 75 )
+    CreatePointLight( 202, 205.5, 334.0, 21, 17, 255, 230, 75 )
+    CreatePointLight( 103, 181.0, 348.4, 15, 17, 255, 230, 75 )
+    CreatePointLight( 203, 181.0, 348.4, 21, 17, 255, 230, 75 )
+    CreatePointLight( 104, 170.3, 337.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 204, 170.3, 337.7, 21, 17, 255, 230, 75 )
+    CreatePointLight( 105, 147.3, 324.5, 15, 17, 255, 230, 75 )
+    CreatePointLight( 205, 147.3, 324.5, 21, 17, 255, 230, 75 )
+    CreatePointLight( 106, 135.3, 328.2, 15, 17, 255, 230, 75 )
+    CreatePointLight( 206, 135.3, 328.2, 21, 17, 255, 230, 75 )
+    CreatePointLight( 107, 118.3, 333.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 207, 118.3, 333.7, 21, 17, 255, 230, 75 )
+    CreatePointLight( 108, 192.1, 338.7, 15, 17, 255, 230, 75 )
+    CreatePointLight( 208, 192.1, 338.7, 21, 17, 255, 230, 75 )
+    CreatePointLight( 109, 194.7, 322.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 209, 194.7, 322.8, 21, 17, 255, 230, 75 )
+    CreatePointLight( 110, 206.5, 352.6, 15, 17, 255, 230, 75 )
+    CreatePointLight( 210, 206.5, 352.6, 21, 17, 255, 230, 75 )
+    CreatePointLight( 111, 211.3, 367.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 211, 211.3, 367.8, 21, 17, 255, 230, 75 )
+    CreatePointLight( 112, 195.0, 371.6, 15, 17, 255, 230, 75 )
+    CreatePointLight( 212, 195.0, 371.6, 21, 17, 255, 230, 75 )
+    CreatePointLight( 113, 174.4, 368.5, 15, 17, 255, 230, 75 )
+    CreatePointLight( 213, 174.4, 368.5, 21, 17, 255, 230, 75 )
+    CreatePointLight( 114, 150.1, 363.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 214, 150.1, 363.8, 21, 17, 255, 230, 75 )
+    CreatePointLight( 115, 135.8, 363.6, 15, 17, 255, 230, 75 )
+    CreatePointLight( 215, 135.8, 363.6, 21, 17, 255, 230, 75 )
+    CreatePointLight( 116, 140.0, 354.3, 15, 17, 255, 230, 75 )
+    CreatePointLight( 216, 140.0, 354.3, 21, 17, 255, 230, 75 )
+    CreatePointLight( 117, 123.7, 344.9, 15, 17, 255, 230, 75 )
+    CreatePointLight( 217, 123.7, 344.9, 21, 17, 255, 230, 75 )
+    CreatePointLight( 118, 117.5, 370.4, 15, 17, 255, 230, 75 )
+    CreatePointLight( 218, 117.5, 370.4, 21, 17, 255, 230, 75 )
+    CreatePointLight( 119, 105.4, 361.1, 15, 17, 255, 230, 75 )
+    CreatePointLight( 219, 105.4, 361.1, 21, 17, 255, 230, 75 )
+    CreatePointLight( 120, 100.2, 372.0, 15, 17, 255, 230, 75 )
+    CreatePointLight( 220, 100.2, 372.0, 21, 17, 255, 230, 75 )
+    CreatePointLight( 121, 215.2, 320.5, 15, 17, 255, 230, 75 )
+    CreatePointLight( 221, 215.2, 320.5, 21, 17, 255, 230, 75 )
+    CreatePointLight( 122, 164.3, 349.8, 15, 17, 255, 230, 75 )
+    CreatePointLight( 222, 164.3, 349.8, 21, 17, 255, 230, 75 )
+  )
+)
+
+Script VFireCity#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 101 )
+    DeletePointLight( 201 )
+    Sleep( 10 )
+    DeletePointLight( 102 )
+    DeletePointLight( 202 )
+    Sleep( 10 )
+    DeletePointLight( 103 )
+    DeletePointLight( 203 )
+    Sleep( 10 )
+    DeletePointLight( 104 )
+    DeletePointLight( 204 )
+    Sleep( 10 )
+    DeletePointLight( 105 )
+    DeletePointLight( 205 )
+    Sleep( 10 )
+    DeletePointLight( 106 )
+    DeletePointLight( 206 )
+    Sleep( 10 )
+    DeletePointLight( 107 )
+    DeletePointLight( 207 )
+    Sleep( 10 )
+    DeletePointLight( 108 )
+    DeletePointLight( 208 )
+    Sleep( 10 )
+    DeletePointLight( 109 )
+    DeletePointLight( 209 )
+    Sleep( 10 )
+    DeletePointLight( 110 )
+    DeletePointLight( 210 )
+    Sleep( 10 )
+    DeletePointLight( 111 )
+    DeletePointLight( 211 )
+    Sleep( 10 )
+    DeletePointLight( 112 )
+    DeletePointLight( 212 )
+    Sleep( 10 )
+    DeletePointLight( 113 )
+    DeletePointLight( 213 )
+    Sleep( 10 )
+    DeletePointLight( 114 )
+    DeletePointLight( 214 )
+    Sleep( 10 )
+    DeletePointLight( 115 )
+    DeletePointLight( 215 )
+    Sleep( 10 )
+    DeletePointLight( 116 )
+    DeletePointLight( 216 )
+    Sleep( 10 )
+    DeletePointLight( 117 )
+    DeletePointLight( 217 )
+    Sleep( 10 )
+    DeletePointLight( 118 )
+    DeletePointLight( 218 )
+    Sleep( 10 )
+    DeletePointLight( 119 )
+    DeletePointLight( 219 )
+    Sleep( 10 )
+    DeletePointLight( 120 )
+    DeletePointLight( 220 )
+    Sleep( 10 )
+    DeletePointLight( 121 )
+    DeletePointLight( 221 )
+    Sleep( 10 )
+    DeletePointLight( 122 )
+    DeletePointLight( 222 )
+  )
+)
+
+Script VFireHouse#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 151, 188, 352.3, 10, 7, 255, 230, 75 )
+    CreatePointLight( 251, 188, 352.3, 15, 7, 255, 230, 75 )
+    CreatePointLight( 152, 199.5, 352.3, 10, 7, 255, 230, 75 )
+    CreatePointLight( 252, 199.5, 352.3, 15, 7, 255, 230, 75 )
+    CreatePointLight( 153, 199.2, 367.7, 10, 7, 255, 230, 75 )
+    CreatePointLight( 253, 199.2, 367.7, 15, 7, 255, 230, 75 )
+    CreatePointLight( 154, 187.7, 367.7, 10, 7, 255, 230, 75 )
+    CreatePointLight( 254, 187.7, 367.7, 15, 7, 255, 230, 75 )
+    Sleep( 15 )
+    CreatePointLight( 155, 186.3, 363.3, 13, 12, 255, 230, 75 )
+    CreatePointLight( 255, 186.3, 363.3, 19, 12, 255, 230, 75 )
+    CreatePointLight( 156, 186.3, 356.7, 13, 12, 255, 230, 75 )
+    CreatePointLight( 256, 186.3, 356.7, 19, 12, 255, 230, 75 )
+    CreatePointLight( 157, 200.9, 356.7, 13, 7, 255, 230, 75 )
+    CreatePointLight( 257, 200.9, 356.7, 19, 7, 255, 230, 75 )
+    CreatePointLight( 158, 200.9, 363.3, 13, 7, 255, 230, 75 )
+    CreatePointLight( 258, 200.9, 363.3, 19, 7, 255, 230, 75 )
+    Sleep( 15 )
+    CreatePointLight( 159, 198.8, 365.3, 16, 7, 255, 230, 75 )
+    CreatePointLight( 259, 198.8, 365.3, 20, 7, 255, 230, 75 )
+    CreatePointLight( 160, 188.4, 365.3, 16, 7, 255, 230, 75 )
+    CreatePointLight( 260, 188.4, 365.3, 20, 7, 255, 230, 75 )
+    CreatePointLight( 161, 188.4, 354.8, 16, 7, 255, 230, 75 )
+    CreatePointLight( 261, 188.4, 354.8, 20, 7, 255, 230, 75 )
+    CreatePointLight( 162, 198.8, 354.8, 16, 7, 255, 230, 75 )
+    CreatePointLight( 262, 198.8, 354.8, 20, 7, 255, 230, 75 )
+  )
+)
+
+Script VFireHouse#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 151, 188, 352.3, 10, 7, 255, 230, 75 )
+    CreatePointLight( 251, 188, 352.3, 15, 7, 255, 230, 75 )
+    CreatePointLight( 152, 199.5, 352.3, 10, 7, 255, 230, 75 )
+    CreatePointLight( 252, 199.5, 352.3, 15, 7, 255, 230, 75 )
+    CreatePointLight( 153, 199.2, 367.7, 10, 7, 255, 230, 75 )
+    CreatePointLight( 253, 199.2, 367.7, 15, 7, 255, 230, 75 )
+    CreatePointLight( 154, 187.7, 367.7, 10, 7, 255, 230, 75 )
+    CreatePointLight( 254, 187.7, 367.7, 15, 7, 255, 230, 75 )
+    CreatePointLight( 155, 186.3, 363.3, 13, 12, 255, 230, 75 )
+    CreatePointLight( 255, 186.3, 363.3, 19, 12, 255, 230, 75 )
+    CreatePointLight( 156, 186.3, 356.7, 13, 12, 255, 230, 75 )
+    CreatePointLight( 256, 186.3, 356.7, 19, 12, 255, 230, 75 )
+    CreatePointLight( 157, 200.9, 356.7, 13, 7, 255, 230, 75 )
+    CreatePointLight( 257, 200.9, 356.7, 19, 7, 255, 230, 75 )
+    CreatePointLight( 158, 200.9, 363.3, 13, 7, 255, 230, 75 )
+    CreatePointLight( 258, 200.9, 363.3, 19, 7, 255, 230, 75 )
+    CreatePointLight( 159, 198.8, 365.3, 16, 7, 255, 230, 75 )
+    CreatePointLight( 259, 198.8, 365.3, 20, 7, 255, 230, 75 )
+    CreatePointLight( 160, 188.4, 365.3, 16, 7, 255, 230, 75 )
+    CreatePointLight( 260, 188.4, 365.3, 20, 7, 255, 230, 75 )
+    CreatePointLight( 161, 188.4, 354.8, 16, 7, 255, 230, 75 )
+    CreatePointLight( 261, 188.4, 354.8, 20, 7, 255, 230, 75 )
+    CreatePointLight( 162, 198.8, 354.8, 16, 7, 255, 230, 75 )
+    CreatePointLight( 262, 198.8, 354.8, 20, 7, 255, 230, 75 )
+  )
+)
+
+Script VFireHouse#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 151 )
+    DeletePointLight( 251 )
+    DeletePointLight( 152 )
+    DeletePointLight( 252 )
+    DeletePointLight( 153 )
+    DeletePointLight( 253 )
+    DeletePointLight( 154 )
+    DeletePointLight( 254 )
+    Sleep( 15 )
+    DeletePointLight( 155 )
+    DeletePointLight( 255 )
+    DeletePointLight( 156 )
+    DeletePointLight( 256 )
+    DeletePointLight( 157 )
+    DeletePointLight( 257 )
+    DeletePointLight( 158 )
+    DeletePointLight( 258 )
+    Sleep( 15 )
+    DeletePointLight( 159 )
+    DeletePointLight( 259 )
+    DeletePointLight( 160 )
+    DeletePointLight( 260 )
+    DeletePointLight( 161 )
+    DeletePointLight( 261 )
+    DeletePointLight( 162 )
+    DeletePointLight( 262 )
+  )
+)
+
+Script ShopKeeper
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Stark = GetObjectByID( "1000064485" ) 
+    GSSetVar(0,"b.Stark.constr_5",1)
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  TalkerM1 = GetObjectByID( "34" )
+  TalkerM12 = GetObjectByID( "1010850" )
+  TalkerM2 = GetObjectByID( "1031761" )
+  TalkerM22 = GetObjectByID( "1052604" )
+  TalkerM23 = GetObjectByID( "2394644" )
+  TalkerM3 = GetObjectByID( "1073596" )
+  TalkerM32 = GetObjectByID( "1094445" )
+  TalkerM4 = GetObjectByID( "1115434" )
+  TalkerF1 = GetObjectByID( "35" )
+  TalkerF12 = GetObjectByID( "1010858" )
+  TalkerF2 = GetObjectByID( "1031801" )
+  TalkerF3 = GetObjectByID( "1073590" )
+  TalkerF4 = GetObjectByID( "1115382" )
+  VFire#0#1( NULL )
+  VFire#0#2( NULL )
+  VFire#0#3( NULL )
+  VTriger#0#1( NULL )
+  VTriger#0#3( NULL )
+  VTriger#0#5( NULL )
+  VTriger#0#7( NULL )
+  VTriger#0#9( NULL )
+  VTriger#0#11( NULL )
+  VTriger#0#13( NULL )
+  VTriger#0#15( NULL )
+  VTriger#0#17( NULL )
+  VTriger#0#19( NULL )
+  VTriger#0#21( NULL )
+  VTriger#0#23( NULL )
+  VTriger#0#25( NULL )
+  VTriger#0#27( NULL )
+  ShopKeeper( NULL )
+)

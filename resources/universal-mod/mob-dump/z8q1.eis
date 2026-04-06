@@ -1,0 +1,165 @@
+GlobalVars (
+  NumberE : float,
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  OG1: object,
+  OG2: object,
+  OG3: object,
+  OC1: object,
+  OC2: object,
+  OC3: object
+)
+
+DeclareScript Triger1 ( this:object )
+DeclareScript Triger2 ( this:object )
+DeclareScript Triger3 ( this:object )
+DeclareScript Triger4 ( this:object )
+DeclareScript Triger5 ( this:object )
+DeclareScript Triger6 ( this:object )
+DeclareScript Triger7 ( this:object )
+DeclareScript Triger8 ( this:object )
+
+Script Triger1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    SetDiplomacy( 0, 3, 0 ) 
+    Sleep( 2 )
+    SetDiplomacy( 3, 0, 0 ) 
+    Sleep( 2 ) 
+    SetDiplomacy( 1, 3, -1) 
+    Sleep( 2 )
+    SetDiplomacy( 3, 1, -1) 
+    Sleep( 2 ) 
+    SetDiplomacy( 2, 3, -1) 
+    Sleep( 2 )
+    SetDiplomacy( 3, 2, -1) 
+  )
+)
+
+Script Triger2
+(
+  if
+  (
+    Not(IsAlive ( OG1 ) )
+    IsEqual( GetLeverState( OC1 ) , 1) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z8q1.z8q1.1", 2 ) 
+  )
+)
+
+Script Triger3
+(
+  if
+  (
+    Not(IsAlive ( OG2 ) )
+    IsEqual( GetLeverState( OC2 ) , 1 )  
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z8q1.z8q1.2", 2 ) 
+  )
+)
+
+Script Triger4
+(
+  if
+  (
+    Not(IsAlive ( OG3 ) )
+    IsEqual( GetLeverState( OC3 ) , 1 )  
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z8q1.z8q1.3", 2 ) 
+  )
+)
+
+Script Triger5
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z8q1.z8q1.1" ) , 2 ) 
+    IsEqual( GSGetVar( 0, "q.z8q1.z8q1.2" ) , 2 ) 
+    IsEqual( GSGetVar( 0, "q.z8q1.z8q1.3" ) , 2 )  
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z8q1.z8q1", 2 ) 
+    Sleep( 2 )
+    QuestComplete( 0, "z8q1" ) 
+  )
+)
+
+Script Triger6
+(
+  if
+  (
+    IsEqual( GetLeverState( OC1 ) , 1 )  
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "Ogrestuff" ) 
+  )
+)
+
+Script Triger7
+(
+  if
+  (
+    IsEqual( GetLeverState( OC2 ) , 1 )  
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "PalantirBroken00" ) 
+  )
+)
+
+Script Triger8
+(
+  if
+  (
+    IsEqual( GetLeverState( OC3 ) , 1 )  
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "OrcAlphabet" ) 
+  )
+)
+
+
+
+
+WorldScript
+(
+  Triger1( NULL)
+  OG1 = GetObjectByID( "1000206" ) 
+  OG2 = GetObjectByID( "1000205" ) 
+  OG3 = GetObjectByID( "1000203" ) 
+  OC1 = GetObjectByID( "1000201" ) 
+  OC2 = GetObjectByID( "1000200" ) 
+  OC3 = GetObjectByID( "1000202" ) 
+  Sleep( 2 )
+  Triger2( NULL)
+  Triger3( NULL)
+  Triger4( NULL)
+  Sleep( 2 )
+  Triger5( NULL)
+  Sleep( 2 )
+  Triger6( NULL)
+  Triger7( NULL)
+  Triger8( NULL)
+)

@@ -1,0 +1,57 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  BSChest: object,
+  Warlord: object,
+  Heroes : group
+)
+
+DeclareScript Triger1 ( this:object )
+DeclareScript Triger2 ( this:object )
+
+Script Triger1
+(
+  if
+  (
+   IsEqual( GetLeverState( BSChest ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "SackofGold" ) 
+    Sleep(2 )
+    GSSetVarMax( 0, "q.z11q2.z11q2.2", 2 )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z11q2.z11q2", 2 )
+    Sleep( 2 )
+    QuestComplete( 0, "z11q2" )
+  )
+)
+
+Script Triger2
+(
+  if
+  (
+   Any( i , Heroes , GroupHas ( UnitSee (i) , Warlord) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z11q2.z11q2.1", 2 ) 
+    Sleep (2)
+    GSSetVarMax( 0, "q.z11q2.z11q2.2", 1 ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  BSChest = GetObjectByID( "4044" ) 
+  Warlord = GetObjectByID( "1000191" )
+  Sleep( 2)
+  Triger1( NULL ) 
+  Triger2( NULL ) 
+)
+
+

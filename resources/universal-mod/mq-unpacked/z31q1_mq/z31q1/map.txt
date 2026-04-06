@@ -1,9 +1,9 @@
 #zone z31q1 jigran game
 #res
-zone31 zone31
+zone31 zone31-lmp
 #maps
 10 12
-zone31map zone31quest
+zone31map zone31questM
 
 ## To zone31
 #exit 1

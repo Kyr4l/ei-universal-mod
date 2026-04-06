@@ -1,0 +1,51 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Scrabmother: object,
+  Heroes: group
+)
+
+DeclareScript VTriger#2#1 (  this : object )
+DeclareScript VCheck#3#2 (  this : object )
+
+Script VTriger#2#1
+(
+  if
+  (
+   Any( i , Heroes , GroupHas ( UnitSee (i) , Scrabmother) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z15q1.z15q1.1", 2 ) 
+  )
+)
+
+Script VCheck#3#2
+(
+  if
+  (
+    IsDead ( Scrabmother )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z15q1.z15q1.2", 2 )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z15q1.z15q1", 2 )
+    Sleep( 2 )
+    QuestComplete( 0, "z15q1" )
+  )
+)
+
+WorldScript
+(
+  Scrabmother = GetObjectByID( "1000324" )
+  Sleep( 2 ) 
+  VTriger#2#1( NULL ) 
+  Sleep( 2 ) 
+  VCheck#3#2( NULL ) 
+ )
+
+

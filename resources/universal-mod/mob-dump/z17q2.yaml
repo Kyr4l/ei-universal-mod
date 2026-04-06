@@ -1,0 +1,1863 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1000100
+      MAX_ID: 1000199
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 3.923635700109488e-44
+        - 1.0089348943138683e-43
+        - 7.987401246651457e-44
+        - 2.059908742557481e-43
+      VSS_TITLE: "z17q2"
+      VSS_COMMANDS: "QStart(\"z17q2\")\nAddRectToArea(1,286,286,320,320)\nQObjSeeUnit(\"GetObject(1000181)\")\nQObjKillUnit(\"GetObject(1000181)\")\nQObjGetItem(83)\nQObjArea(1)\nQFinish()\n"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+  DIRICTORY_ELEMENTS:
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan BMZombie 17"
+      UNIT_ARMORS:
+        - "hadagan highest2 plate.steel"
+        - "hadagan highest2 leggins.steel"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee3,ee4,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee3,ee4,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee3,ee4,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS:
+        - "headnecro"
+      UNIT_STATS:
+        - 310
+        - 310
+        - 455
+        - 455
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1123549184
+        - 1123549184
+        - 1065353216
+        - 1112276992
+        - 1110179840
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 33
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000181
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan BMZombie 17-1000181"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan BMZombie 17"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 190.9810028076172
+        - 100.02300262451172
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z17q2"
+      OBJCOMPLECTION:
+        - 0.5999999642372131
+        - 0.8999999761581421
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 20.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.9810028076172
+          - 100.02300262451172
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 188.78506469726562
+            - 99.7688217163086
+            - 7.03338623046875
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 191.933349609375
+              - 89.5940933227539
+              - 6.843294620513916
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 187.4949493408203
+              - 110.06568145751953
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 211.1577606201172
+            - 70.07322692871094
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 209.8095245361328
+              - 80.03813934326172
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 229.8378143310547
+            - 57.86975860595703
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 241.9208221435547
+              - 55.68409729003906
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 246.64732360839844
+            - 75.50650024414062
+            - 7.413569450378418
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 246.04562377929688
+              - 83.89659881591797
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 268.78387451171875
+            - 75.95249938964844
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 257.3098449707031
+              - 66.0199203491211
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 288.9842834472656
+            - 95.27538299560547
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 289.5658874511719
+              - 106.93074798583984
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 294.7444152832031
+              - 88.77468872070312
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.2466735839844
+            - 107.7777099609375
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 281.22088623046875
+              - 106.44761657714844
+              - 7.476933002471924
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 307.8150939941406
+            - 108.11056518554688
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 302.6651611328125
+              - 98.38089752197266
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 309.18841552734375
+            - 158.41944885253906
+            - 7.223477840423584
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 299.9410705566406
+              - 152.9722442626953
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 291.0463562011719
+            - 171.57369995117188
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 287.4572448730469
+              - 177.57339477539062
+              - 7.730388641357422
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 246.4725341796875
+            - 176.88392639160156
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 248.17294311523438
+              - 189.99420166015625
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 213.20645141601562
+            - 179.16554260253906
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 214.7479705810547
+              - 184.88702392578125
+              - 7.667024612426758
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 195.0504150390625
+            - 152.8921356201172
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 190.5358428955078
+              - 155.3102264404297
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 206.922119140625
+              - 142.0398712158203
+              - 7.983843803405762
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.9810028076172
+          - 100.02300262451172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.9810028076172
+          - 100.02300262451172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.9810028076172
+          - 100.02300262451172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 190.9810028076172
+          - 100.02300262451172
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 14"
+      UNIT_ARMORS:
+        - "hadagan high plate.steel"
+        - "hadagan high leggins.steel"
+      UNIT_WEAPONS:
+        - "long spear.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 290
+        - 290
+        - 285
+        - 285
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1120796672
+        - 1120796672
+        - 1065353216
+        - 1108344832
+        - 1106247680
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 25
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000152
+      OBJTYPE: 50
+      OBJNAME: "LMP Human Hadagan Fighter 14-1000152"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 14"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 191.60508728027344
+        - 98.09333801269531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 20.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.60508728027344
+          - 98.09333801269531
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 189.40914916992188
+            - 97.83915710449219
+            - 7.03338623046875
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 192.55743408203125
+              - 87.6644287109375
+              - 6.843294620513916
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 188.11903381347656
+              - 108.13601684570312
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 211.78184509277344
+            - 68.14356231689453
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 210.43360900878906
+              - 78.10847473144531
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 230.46189880371094
+            - 55.940093994140625
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 242.54490661621094
+              - 53.754432678222656
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 247.2714080810547
+            - 73.57683563232422
+            - 7.413569450378418
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 246.66970825195312
+              - 81.96693420410156
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 269.407958984375
+            - 74.02283477783203
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 257.9339294433594
+              - 64.09025573730469
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.6083679199219
+            - 93.34571838378906
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 290.1899719238281
+              - 105.00108337402344
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 295.3684997558594
+              - 86.84502410888672
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.8707580566406
+            - 105.8480453491211
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 281.844970703125
+              - 104.51795196533203
+              - 7.476933002471924
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 308.4391784667969
+            - 106.18090057373047
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 303.28924560546875
+              - 96.45123291015625
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 309.8125
+            - 156.48977661132812
+            - 7.223477840423584
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 300.5651550292969
+              - 151.04257202148438
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 291.6704406738281
+            - 169.64404296875
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 288.0813293457031
+              - 175.64373779296875
+              - 7.730388641357422
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 247.09661865234375
+            - 174.95425415039062
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 248.79702758789062
+              - 188.06454467773438
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 213.83053588867188
+            - 177.23587036132812
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 215.37205505371094
+              - 182.95736694335938
+              - 7.667024612426758
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 195.67449951171875
+            - 150.96246337890625
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 191.15992736816406
+              - 153.38055419921875
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 207.54620361328125
+              - 140.11019897460938
+              - 7.983843803405762
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.60508728027344
+          - 98.09333801269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.60508728027344
+          - 98.09333801269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.60508728027344
+          - 98.09333801269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.60508728027344
+          - 98.09333801269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Mage 14"
+      UNIT_ARMORS:
+        - "hadagan high shirt.dragon red"
+        - "hadagan high pants.dragon green"
+        - "hadagan high boots.dragon black"
+        - "hadagan high gloves.dragon green"
+      UNIT_WEAPONS:
+        - "curved dagger.steel"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee3,ee3,ee4}"
+        - "acid_column{r2,a2,fe,ee3,ee3,ee4}"
+        - "acid_ray{r2,t2,fe,ee3,ee3,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 190
+        - 190
+        - 285
+        - 285
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1120796672
+        - 1120796672
+        - 1065353216
+        - 1108344832
+        - 1106247680
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 25
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000121
+      OBJTYPE: 50
+      OBJNAME: "LMP Human Hadagan Mage 14-1000121"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Mage 14"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 191.36859130859375
+        - 96.48860931396484
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.11999999731779099
+        - 0.25999999046325684
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 20.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.36859130859375
+          - 96.48860931396484
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 189.1726531982422
+            - 96.23442840576172
+            - 7.03338623046875
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 192.32093811035156
+              - 86.05970001220703
+              - 6.843294620513916
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 187.88253784179688
+              - 106.53128814697266
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 211.54534912109375
+            - 66.53883361816406
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 210.19711303710938
+              - 76.50374603271484
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 230.22540283203125
+            - 54.335365295410156
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 242.30841064453125
+              - 52.14970397949219
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 247.034912109375
+            - 71.97210693359375
+            - 7.413569450378418
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 246.43321228027344
+              - 80.3622055053711
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 269.17144775390625
+            - 72.41810607910156
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 257.69744873046875
+              - 62.48552703857422
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.37188720703125
+            - 91.7409896850586
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 289.9534912109375
+              - 103.39635467529297
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 295.13201904296875
+              - 85.24029541015625
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.63427734375
+            - 104.24331665039062
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 281.60845947265625
+              - 102.91322326660156
+              - 7.476933002471924
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 308.20269775390625
+            - 104.576171875
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 303.052734375
+              - 94.84650421142578
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 309.57598876953125
+            - 154.8850555419922
+            - 7.223477840423584
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 300.32867431640625
+              - 149.43785095214844
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 291.4339599609375
+            - 168.039306640625
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 287.8448486328125
+              - 174.03900146484375
+              - 7.730388641357422
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 246.86012268066406
+            - 173.3495330810547
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 248.56053161621094
+              - 186.45980834960938
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 213.5940399169922
+            - 175.6311492919922
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 215.13555908203125
+              - 181.35263061523438
+              - 7.667024612426758
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 195.43800354003906
+            - 149.3577423095703
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 190.92343139648438
+              - 151.7758331298828
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 207.30970764160156
+              - 138.50547790527344
+              - 7.983843803405762
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.36859130859375
+          - 96.48860931396484
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.36859130859375
+          - 96.48860931396484
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.36859130859375
+          - 96.48860931396484
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 191.36859130859375
+          - 96.48860931396484
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 14"
+      UNIT_ARMORS:
+        - "hadagan high plate.steel"
+        - "hadagan high leggins.steel"
+      UNIT_WEAPONS:
+        - "long spear.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 290
+        - 290
+        - 285
+        - 285
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1120796672
+        - 1120796672
+        - 1065353216
+        - 1108344832
+        - 1106247680
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 25
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000178
+      OBJTYPE: 50
+      OBJNAME: "LMP Human Hadagan Fighter 14-1000178"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 14"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 189.6768341064453
+        - 98.1781005859375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 20.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.6768341064453
+          - 98.1781005859375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 187.48089599609375
+            - 97.92391967773438
+            - 7.03338623046875
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 190.62918090820312
+              - 87.74919128417969
+              - 6.843294620513916
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 186.19078063964844
+              - 108.22077941894531
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 209.8535919189453
+            - 68.22832489013672
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 208.50535583496094
+              - 78.1932373046875
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 228.5336456298828
+            - 56.02485656738281
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 240.6166534423828
+              - 53.839195251464844
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 245.34315490722656
+            - 73.6615982055664
+            - 7.413569450378418
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 244.741455078125
+              - 82.05169677734375
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 267.4797058105469
+            - 74.10759735107422
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 256.00567626953125
+              - 64.17501831054688
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 287.68011474609375
+            - 93.43048095703125
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 288.26171875
+              - 105.08584594726562
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 293.44024658203125
+              - 86.9297866821289
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 287.9425048828125
+            - 105.93280792236328
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 279.9167175292969
+              - 104.60271453857422
+              - 7.476933002471924
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 306.51092529296875
+            - 106.26566314697266
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 301.3609924316406
+              - 96.53599548339844
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 307.8842468261719
+            - 156.57455444335938
+            - 7.223477840423584
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 298.63690185546875
+              - 151.12734985351562
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.7421875
+            - 169.72879028320312
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 286.153076171875
+              - 175.72848510742188
+              - 7.730388641357422
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 245.16836547851562
+            - 175.03903198242188
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 246.8687744140625
+              - 188.1492919921875
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 211.90228271484375
+            - 177.32064819335938
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 213.4438018798828
+              - 183.0421142578125
+              - 7.667024612426758
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 193.74624633789062
+            - 151.0472412109375
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 189.23167419433594
+              - 153.46533203125
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 205.61795043945312
+              - 140.19497680664062
+              - 7.983843803405762
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.6768341064453
+          - 98.1781005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.6768341064453
+          - 98.1781005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.6768341064453
+          - 98.1781005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.6768341064453
+          - 98.1781005859375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 14"
+      UNIT_ARMORS:
+        - "hadagan high leggins.steel"
+        - "hadagan high shirt.troll black"
+        - "hadagan high gloves.troll black"
+      UNIT_WEAPONS:
+        - "crossbow.steel"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 290
+        - 290
+        - 285
+        - 285
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1038943641
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1120796672
+        - 1120796672
+        - 1065353216
+        - 1108344832
+        - 1106247680
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 25
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6571590
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 8
+      NID: 1000180
+      OBJTYPE: 50
+      OBJNAME: "LMP Human Hadagan Archer 14-1000180"
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 14"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 189.4869384765625
+        - 96.18669891357422
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.30000001192092896
+        - 0.5600000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 20.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.4869384765625
+          - 96.18669891357422
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 187.29100036621094
+            - 95.9325180053711
+            - 7.03338623046875
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 190.4392852783203
+              - 85.7577896118164
+              - 6.843294620513916
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 186.00088500976562
+              - 106.22937774658203
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 209.6636962890625
+            - 66.23692321777344
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 208.31546020507812
+              - 76.20183563232422
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 228.34375
+            - 54.03345489501953
+            - 7.16011381149292
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 240.4267578125
+              - 51.84779357910156
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 245.15325927734375
+            - 71.67019653320312
+            - 7.413569450378418
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 244.5515594482422
+              - 80.06029510498047
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 267.289794921875
+            - 72.11619567871094
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 255.81578063964844
+              - 62.183616638183594
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 287.490234375
+            - 91.43907928466797
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 288.07183837890625
+              - 103.09444427490234
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 293.2503662109375
+              - 84.93838500976562
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 287.75262451171875
+            - 103.94140625
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 279.726806640625
+              - 102.61131286621094
+              - 7.476933002471924
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 306.321044921875
+            - 104.27426147460938
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 301.17108154296875
+              - 94.54459381103516
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 307.6943359375
+            - 154.58314514160156
+            - 7.223477840423584
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 298.447021484375
+              - 149.1359405517578
+              - 7.223477840423584
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 289.55230712890625
+            - 167.73739624023438
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 285.96319580078125
+              - 173.73709106445312
+              - 7.730388641357422
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 244.9784698486328
+            - 173.04762268066406
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 246.6788787841797
+              - 186.15789794921875
+              - 7.413569450378418
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 211.71238708496094
+            - 175.32923889160156
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 213.25390625
+              - 181.05072021484375
+              - 7.667024612426758
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 193.5563507080078
+            - 149.0558319091797
+            - 7.350205421447754
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 189.04177856445312
+              - 151.4739227294922
+              - 7.350205421447754
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 205.4280548095703
+              - 138.2035675048828
+              - 7.983843803405762
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.4869384765625
+          - 96.18669891357422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.4869384765625
+          - 96.18669891357422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.4869384765625
+          - 96.18669891357422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 189.4869384765625
+          - 96.18669891357422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
