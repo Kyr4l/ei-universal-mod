@@ -2,16 +2,7 @@ OBJECTDBFILE:
   SEC_RANGE:
     RANGE:
       MIN_ID: 1
-      MAX_ID: 1000000
-    RANGE:
-      MIN_ID: 1000001
-      MAX_ID: 1000100
-    RANGE:
-      MIN_ID: 1000101
-      MAX_ID: 1000200
-    RANGE:
-      MIN_ID: 1000201
-      MAX_ID: 1000300
+      MAX_ID: 1000002714
   VSS_SECTION:
   DIRICTORY:
     FOLDER:
@@ -445,9 +436,9 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 5
-      NID: 1976614268
-      OBJTYPE: 51
-      OBJNAME: "ZombieSentry1"
+      NID: 1000002714
+      OBJTYPE: 52
+      OBJNAME: "zs1"
       OBJTEMPLATE: "unmozo0"
       PARENTTEMPLATE: "ZombieMaleF16"
       OBJPRIMTXTR: "zombiemale00"
@@ -462,21 +453,21 @@ OBJECTDBFILE:
         - 0.0
         - 0.0
         - 0.999996542930603
-      OBJ_USE_IN_SCRIPT: 0
+      OBJ_USE_IN_SCRIPT: 1
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
+      OBJ_QUEST_INFO: "z31q1.2"
       OBJCOMPLECTION:
         - 1.0
         - 0.5
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_HELP: 5.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_MODEL: 3
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
@@ -625,9 +616,9 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 5
-      NID: 1976614267
-      OBJTYPE: 51
-      OBJNAME: "ZombieSentry0"
+      NID: 1000002713
+      OBJTYPE: 52
+      OBJNAME: "zs0"
       OBJTEMPLATE: "unmozo0"
       PARENTTEMPLATE: "ZombieMaleF16"
       OBJPRIMTXTR: "zombiemale00"
@@ -642,21 +633,21 @@ OBJECTDBFILE:
         - 0.0
         - 0.0
         - -0.8171454668045044
-      OBJ_USE_IN_SCRIPT: 0
+      OBJ_USE_IN_SCRIPT: 1
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
+      OBJ_QUEST_INFO: "z31q1.1"
       OBJCOMPLECTION:
         - 1.0
         - 0.5
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 1.0
+        UNIT_LOGIC_HELP: 5.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 3
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:

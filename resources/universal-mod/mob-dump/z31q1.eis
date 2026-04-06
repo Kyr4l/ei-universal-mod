@@ -7,16 +7,16 @@ GlobalVars (
   Heroes: group
 )
 
-DeclareScript VCheck#3#2 (  this : object )
-DeclareScript VCheck#6#5 (  this : object )
-DeclareScript VCheck#8#7 (  this : object )
+DeclareScript CheckZ0 (  this : object )
+DeclareScript CheckZ1 (  this : object )
+DeclareScript CheckZE (  this : object )
 
 
-Script VCheck#3#2
+Script CheckZ0
 (
   if
   (
-    IsDead ( ZombieSentry0 )
+    Not(IsAlive( ZombieSentry0 ) ) 
   )
   then
   (
@@ -25,11 +25,11 @@ Script VCheck#3#2
   )
 )
 
-Script VCheck#6#5
+Script CheckZ1
 (
   if
   (
-    IsDead ( ZombieSentry1 )
+    Not(IsAlive( ZombieSentry1 ) ) 
   )
   then
   (
@@ -38,18 +38,17 @@ Script VCheck#6#5
   )
 )
 
-Script VCheck#8#7
+Script CheckZE
 (
   if
   (
-    IsDead ( ZombieSentry0 )
-    IsDead ( ZombieSentry1 )
+    Not(IsAlive( ZombieSentry0 ) ) 
+    Not(IsAlive( ZombieSentry1 ) ) 
   )
   then
   (
     KillScript(  )
     GSSetVarMax( 0, "q.z31q1.z31q1.1", 2 )
-    Sleep( 2 )
     GSSetVarMax( 0, "q.z31q1.z31q1.2", 2 )
     Sleep( 2 )
     GSSetVarMax( 0, "q.z31q1.z31q1", 2 )
@@ -61,14 +60,14 @@ Script VCheck#8#7
 
 WorldScript
 (
-  ZombieSentry0 = GetObjectByID( "1976614267" )
-  ZombieSentry1 = GetObjectByID( "1976614268" )
   Sleep( 2 ) 
-  VCheck#3#2( NULL ) 
+  ZombieSentry0 = GetObjectByID( "1000002713" )
+  ZombieSentry1 = GetObjectByID( "1000002714" )
   Sleep( 2 ) 
-  VCheck#6#5( NULL ) 
+  CheckZ0 
+  CheckZ1
   Sleep( 2 ) 
-  VCheck#8#7( NULL ) 
+  CheckZE
  )
 
 

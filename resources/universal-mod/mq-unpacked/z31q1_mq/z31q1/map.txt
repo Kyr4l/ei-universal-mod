@@ -3,7 +3,7 @@
 zone31 zone31-lmp
 #maps
 10 12
-zone31map zone31questM
+zone31map zone31quest
 
 ## To zone31
 #exit 1
