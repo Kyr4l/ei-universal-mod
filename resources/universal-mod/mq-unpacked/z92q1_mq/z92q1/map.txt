@@ -3,7 +3,7 @@
 zone92 zone92-LMP
 #maps
 16 12
-zone92map zone92questM
+zone4map zone4quest
 
 ## To Ruins
 #exit 1

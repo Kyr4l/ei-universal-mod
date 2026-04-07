@@ -31658,8 +31658,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 199.59043884277344
-        - 39.39278793334961
+        - 199.3631591796875
+        - 40.111793518066406
         - 0.0
       OBJROTATION:
         - 1.0
@@ -31684,9 +31684,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 199.59043884277344
-          - 39.39278793334961
-          - 0.0
+          - 199.3631591796875
+          - 40.111793518066406
+          - 138.12738037109375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -31812,8 +31812,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 196.7729949951172
-        - 37.43638610839844
+        - 197.35328674316406
+        - 36.220550537109375
         - 0.0
       OBJROTATION:
         - 1.0
@@ -31838,9 +31838,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 196.7729949951172
-          - 37.43638610839844
-          - 1162.8924560546875
+          - 197.35328674316406
+          - 36.220550537109375
+          - 1327.174072265625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -31966,8 +31966,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 199.79286193847656
-        - 35.74354934692383
+        - 197.80226135253906
+        - 32.65862274169922
         - 0.0
       OBJROTATION:
         - 1.0
@@ -31992,9 +31992,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 199.79286193847656
-          - 35.74354934692383
-          - 0.0
+          - 197.80226135253906
+          - 32.65862274169922
+          - 673.7791748046875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -32330,8 +32330,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 167.89561462402344
-        - 20.22914695739746
+        - 175.94654846191406
+        - 34.75302505493164
         - 0.0
       OBJROTATION:
         - 1.0
@@ -32356,9 +32356,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 167.89561462402344
-          - 20.22914695739746
-          - 0.0
+          - 175.94654846191406
+          - 34.75302505493164
+          - 634.4657592773438
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -32639,8 +32639,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 170.17189025878906
-        - 19.1009578704834
+        - 178.2228240966797
+        - 33.62483596801758
         - 0.0
       OBJROTATION:
         - 1.0
@@ -32665,9 +32665,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 170.17189025878906
-          - 19.1009578704834
-          - 0.0
+          - 178.2228240966797
+          - 33.62483596801758
+          - 645.259765625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -32758,160 +32758,6 @@ OBJECTDBFILE:
         - 0.0
         - 0.0
         - 0.0
-    UNIT:
-      UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "SkeletonF4"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
-      UNIT_SPELLS: None
-      UNIT_QUICK_ITEMS: None
-      UNIT_QUEST_ITEMS: None
-      UNIT_STATS:
-        - 60
-        - 60
-        - 16
-        - 16
-        - 1065353216
-        - 1097859072
-        - 1061234969
-        - 1044764217
-        - 1049135241
-        - 1040746633
-        - 3007036718
-        - 1071225242
-        - 3007036718
-        - 1053609165
-        - 1285
-        - 0
-        - 1110704128
-        - 1108869120
-        - 1065353216
-        - 1093664768
-        - 1092616192
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 11
-        - 1091043328
-        - 1120403456
-        - 1091043328
-        - 1077097267
-        - 0
-        - 0
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 3
-      NID: 996962
-      OBJTYPE: 51
-      OBJNAME: "SkeletonF4-996962"
-      OBJTEMPLATE: "unmosk"
-      PARENTTEMPLATE: "SkeletonF4"
-      OBJPRIMTXTR: "Skeleton00"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 178.87258911132812
-        - 45.15718078613281
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.800000011920929
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 178.87258911132812
-          - 45.15718078613281
-          - 0.0
-        UNIT_LOGIC_USE: 1
-        UNIT_LOGIC_NALARM: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 178.87258911132812
-          - 45.15718078613281
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 178.87258911132812
-          - 45.15718078613281
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 178.87258911132812
-          - 45.15718078613281
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 178.87258911132812
-          - 45.15718078613281
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 0
     OBJECT:
       OBJBODYPARTS: None
       OBJ_PLAYER: 0
@@ -33003,8 +32849,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 177.7547607421875
-        - 42.99514389038086
+        - 180.28785705566406
+        - 44.56601333618164
         - 0.0
       OBJROTATION:
         - 1.0
@@ -33029,9 +32875,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 177.7547607421875
-          - 42.99514389038086
-          - 381.17730712890625
+          - 180.28785705566406
+          - 44.56601333618164
+          - 670.4961547851562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -33185,8 +33031,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 180.1676483154297
-        - 42.95903778076172
+        - 182.70074462890625
+        - 44.5299072265625
         - 0.0
       OBJROTATION:
         - 1.0
@@ -33211,9 +33057,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 180.1676483154297
-          - 42.95903778076172
-          - 0.0
+          - 182.70074462890625
+          - 44.5299072265625
+          - 285.7960510253906
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -33339,8 +33185,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 191.4728240966797
-        - 54.808353424072266
+        - 191.2003936767578
+        - 54.257781982421875
         - 0.0
       OBJROTATION:
         - 1.0
@@ -33365,9 +33211,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 191.4728240966797
-          - 54.808353424072266
-          - 0.0
+          - 191.2003936767578
+          - 54.257781982421875
+          - 295.70086669921875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -33493,8 +33339,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 191.75985717773438
-        - 53.33877182006836
+        - 191.4874267578125
+        - 52.78820037841797
         - 0.0
       OBJROTATION:
         - 1.0
@@ -33519,9 +33365,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 191.75985717773438
-          - 53.33877182006836
-          - 0.0
+          - 191.4874267578125
+          - 52.78820037841797
+          - 299.00567626953125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -64274,43 +64120,6 @@ OBJECTDBFILE:
         - 0.85999995470047
         - 0.8999999761581421
         - 0.2199999988079071
-    LEVER:
-      LEVER_SCIENCE_STATS_NEW:
-        - 0
-        - 0
-        - 0
-      LEVER_CUR_STATE: 0
-      LEVER_TOTAL_STATE: 2
-      LEVER_IS_CYCLED: 0
-      LEVER_IS_DOOR: 0
-      LEVER_RECALC_GRAPH: 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 0
-      NID: 533094
-      OBJTYPE: 60
-      OBJNAME: "DShell"
-      OBJTEMPLATE: "stst64"
-      PARENTTEMPLATE: "DragonShell00"
-      OBJPRIMTXTR: "moneySack00"
-      OBJSECTXTR: ""
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 41.14649963378906
-        - 130.8249969482422
-        - 1.350000023841858
-      OBJROTATION:
-        - 0.371304988861084
-        - 0.16443680226802826
-        - -0.6868838667869568
-        - -0.6027308702468872
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 493
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.3199999928474426
     OBJECT:
       OBJBODYPARTS: None
       OBJ_PLAYER: 0
@@ -72930,43 +72739,6 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
-    LEVER:
-      LEVER_SCIENCE_STATS_NEW:
-        - 1
-        - 0
-        - 0
-      LEVER_CUR_STATE: 0
-      LEVER_TOTAL_STATE: 2
-      LEVER_IS_CYCLED: 0
-      LEVER_IS_DOOR: 0
-      LEVER_RECALC_GRAPH: 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 6
-      NID: 999448
-      OBJTYPE: 60
-      OBJNAME: "BChest"
-      OBJTEMPLATE: "stst43"
-      PARENTTEMPLATE: "Chest01"
-      OBJPRIMTXTR: "kanianArc01"
-      OBJSECTXTR: ""
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 399.37701416015625
-        - 22.8572998046875
-        - 0.0
-      OBJROTATION:
-        - 0.6427874565124512
-        - 0.0
-        - 0.0
-        - 0.7660441398620605
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 672
-      OBJ_QUEST_INFO: "z92q1"
-      OBJCOMPLECTION:
-        - 0.0
-        - 0.5
-        - 0.5
     OBJECT:
       OBJBODYPARTS: None
       OBJ_PLAYER: 0
@@ -83762,3 +83534,2081 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 49
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000001
+      OBJTYPE: 60
+      OBJNAME: "LizardCage"
+      OBJTEMPLATE: "stst32"
+      PARENTTEMPLATE: "LizardCage00"
+      OBJPRIMTXTR: "lizardcage00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 331.29400634765625
+        - 117.1780014038086
+        - 0.0
+      OBJROTATION:
+        - 0.052335839718580246
+        - 0.0
+        - 0.0
+        - 0.9986294507980347
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 13121
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - 0.46000000834465027
+    OBJECT:
+      OBJBODYPARTS:
+        - "tent00"
+      OBJ_PLAYER: 0
+      NID: 1000003
+      OBJTYPE: 54
+      OBJNAME: "Tent00-1715"
+      OBJTEMPLATE: "stbuho11"
+      PARENTTEMPLATE: "Tent00"
+      OBJPRIMTXTR: "tent01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 319.0539855957031
+        - 110.43299865722656
+        - 0.0
+      OBJROTATION:
+        - 0.9945218563079834
+        - 0.0
+        - 0.0
+        - 0.10452845692634583
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3371
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.3799999952316284
+        - 0.25
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000004
+      OBJTYPE: 54
+      OBJNAME: "Van00-1000048"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 323.72979736328125
+        - 112.3960952758789
+        - 0.0
+      OBJROTATION:
+        - 0.8433918356895447
+        - 0.0
+        - 0.0
+        - -0.5372998118400574
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 473
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000005
+      OBJTYPE: 54
+      OBJNAME: "Van00-1000048"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 337.29119873046875
+        - 103.82301330566406
+        - 0.0
+      OBJROTATION:
+        - -0.6087617874145508
+        - 0.0
+        - 0.0
+        - -0.7933539152145386
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 473
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000006
+      OBJTYPE: 54
+      OBJNAME: "Van00-1000048"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 317.75714111328125
+        - 100.51436614990234
+        - 0.0
+      OBJROTATION:
+        - 0.9636307954788208
+        - 0.0
+        - 0.0
+        - 0.2672385573387146
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 473
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000007
+      OBJTYPE: 54
+      OBJNAME: "MainTent00-1708"
+      OBJTEMPLATE: "stbuho11"
+      PARENTTEMPLATE: "MainTent00"
+      OBJPRIMTXTR: "tent01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 332.8039855957031
+        - 98.22599792480469
+        - 0.0
+      OBJROTATION:
+        - 0.8788170218467712
+        - 0.0
+        - 0.0
+        - -0.4771587550640106
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3370
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.2800000011920929
+        - 0.3700000047683716
+    TORCH:
+      TORCH_PTLINK:
+        - 0.0
+        - 0.0
+        - 0.0
+      TORCH_STRENGHT: 0.0
+      TORCH_SOUND: ""
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000008
+      OBJTYPE: 58
+      OBJNAME: "Fireplace00-1"
+      OBJTEMPLATE: "stto8"
+      PARENTTEMPLATE: "Fireplace00"
+      OBJPRIMTXTR: "torchbase00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 324.93280029296875
+        - 102.83078002929688
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 7956
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000009
+      OBJTYPE: 54
+      OBJNAME: "TortureWheel00-1000093"
+      OBJTEMPLATE: "stst97"
+      PARENTTEMPLATE: "TortureWheel00"
+      OBJPRIMTXTR: "sortir00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 328.5892333984375
+        - 96.53690338134766
+        - 0.0
+      OBJROTATION:
+        - 0.8829474449157715
+        - 0.0
+        - 0.0
+        - -0.4694715142250061
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 52
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.2199999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000010
+      OBJTYPE: 54
+      OBJNAME: "KanianBench00-1000096"
+      OBJTEMPLATE: "stst79"
+      PARENTTEMPLATE: "KanianBench00"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 323.78887939453125
+        - 92.87970733642578
+        - 0.0
+      OBJROTATION:
+        - 0.9799246191978455
+        - 0.0
+        - 0.0
+        - 0.19936791062355042
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 87
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.14999999105930328
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000011
+      OBJTYPE: 54
+      OBJNAME: "TortureWheel00-1000093"
+      OBJTEMPLATE: "stst97"
+      PARENTTEMPLATE: "TortureWheel00"
+      OBJPRIMTXTR: "sortir00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 329.7869873046875
+        - 94.61900329589844
+        - 0.0
+      OBJROTATION:
+        - 0.8949341177940369
+        - 0.0
+        - 0.0
+        - -0.4461977779865265
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 52
+      OBJ_QUEST_INFO: "q2g.3"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.2199999988079071
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "OgreGipatF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS:
+        - "OgreKey"
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1066365442
+        - 1047869121
+        - 1049135241
+        - 1045220558
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1542
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1095552205
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1069547520
+        - 1065353216
+        - 1069547520
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 593766440
+        - 8995
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 1000013
+      OBJTYPE: 51
+      OBJNAME: "Ogre-1105"
+      OBJTEMPLATE: "unmoog1"
+      PARENTTEMPLATE: "OgreGipatF7"
+      OBJPRIMTXTR: "ogre01"
+      OBJSECTXTR: "goblinaxebag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 229.40199279785156
+        - 128.14999389648438
+        - 0.0
+      OBJROTATION:
+        - 0.7960773706436157
+        - 0.0
+        - 0.0
+        - 0.6051947474479675
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 229.40199279785156
+          - 128.14999389648438
+          - 169.9967803955078
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 231.4949951171875
+            - 128.91200256347656
+            - 9.601232528686523
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 234.7790069580078
+              - 128.8249969482422
+              - 9.857452392578125
+            ACTION_PT_WAIT_SEG: 300
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 230.8769989013672
+              - 123.8290023803711
+              - 9.018844604492188
+            ACTION_PT_WAIT_SEG: 30
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 128
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 132
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 7
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 132
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 7
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 132
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 7
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000014
+      OBJTYPE: 54
+      OBJNAME: "Ogre House 00-722"
+      OBJTEMPLATE: "stbuho3"
+      PARENTTEMPLATE: "Ogre House 00"
+      OBJPRIMTXTR: "ogrhouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 233.0449981689453
+        - 133.99899291992188
+        - 0.0
+      OBJROTATION:
+        - -0.9775509238243103
+        - 0.0
+        - 0.0
+        - 0.21069921553134918
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 11612
+      OBJ_QUEST_INFO: "q2g.1"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.7699999809265137
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000015
+      OBJTYPE: 54
+      OBJNAME: "Crypt00-1787"
+      OBJTEMPLATE: "stst27"
+      PARENTTEMPLATE: "Crypt00"
+      OBJPRIMTXTR: "crypt00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 160.36839294433594
+        - 20.123628616333008
+        - -0.5000000596046448
+      OBJROTATION:
+        - 0.9794461131095886
+        - 0.19246667623519897
+        - 0.05363726615905762
+        - -0.027623850852251053
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3222
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000016
+      OBJTYPE: 54
+      OBJNAME: "Dgun Face 02-1764"
+      OBJTEMPLATE: "stst002"
+      PARENTTEMPLATE: "Dgun Face 02"
+      OBJPRIMTXTR: "dgunface02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 168.3314666748047
+        - 26.620376586914062
+        - -0.649999737739563
+      OBJROTATION:
+        - -0.013908828608691692
+        - -0.12003812193870544
+        - 0.5876473188400269
+        - -0.8000423312187195
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3247
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000017
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 164.4437255859375
+        - 13.561053276062012
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 164.4437255859375
+          - 13.561053276062012
+          - 90.96349334716797
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000018
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 172.73497009277344
+        - 18.495576858520508
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 172.73497009277344
+          - 18.495576858520508
+          - 102.0141372680664
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000019
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 157.9189910888672
+        - 25.125459671020508
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 157.9189910888672
+          - 25.125459671020508
+          - 89.72227478027344
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 1
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 3
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS:
+        - "bird1"
+        - "bird2"
+        - "bird8"
+        - "bird3"
+      OBJ_PLAYER: 0
+      NID: 1000020
+      OBJTYPE: 54
+      OBJNAME: "Dgun Bird Ruins 00-1785"
+      OBJTEMPLATE: "stst8"
+      PARENTTEMPLATE: "Dgun Bird Ruins 00"
+      OBJPRIMTXTR: "dgunbirdruins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 159.01254272460938
+        - 13.269623756408691
+        - 0.0
+      OBJROTATION:
+        - 0.8114932775497437
+        - 0.0
+        - 0.0
+        - -0.5843616127967834
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3662
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "torch4"
+      OBJ_PLAYER: 0
+      NID: 1000021
+      OBJTYPE: 54
+      OBJNAME: "Dgun Torch Ruins 01-1766"
+      OBJTEMPLATE: "stst9"
+      PARENTTEMPLATE: "Dgun Torch Ruins 01"
+      OBJPRIMTXTR: "dguntorchruins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 157.9088592529297
+        - 11.900014877319336
+        - 0.0
+      OBJROTATION:
+        - 0.98195880651474
+        - -0.126298725605011
+        - 0.1266307681798935
+        - -0.061390526592731476
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3727
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000022
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumns00-1775"
+      OBJTEMPLATE: "stst23"
+      PARENTTEMPLATE: "DgunColoumns00"
+      OBJPRIMTXTR: "dguntorchruins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 167.16453552246094
+        - 9.568164825439453
+        - -1.6500000953674316
+      OBJROTATION:
+        - 0.9112311005592346
+        - 0.11986084282398224
+        - 0.08036469668149948
+        - 0.3857879936695099
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3241
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000023
+      OBJTYPE: 54
+      OBJNAME: "Dgun bird 00-1761"
+      OBJTEMPLATE: "stst1"
+      PARENTTEMPLATE: "Dgun bird 00"
+      OBJPRIMTXTR: "dgunbird00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 157.4619598388672
+        - 14.42141056060791
+        - -1.1999999284744263
+      OBJROTATION:
+        - 0.8989869356155396
+        - 0.23007209599018097
+        - -0.2950356900691986
+        - 0.22768816351890564
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3726
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000024
+      OBJTYPE: 54
+      OBJNAME: "Dgun Face 02-1764"
+      OBJTEMPLATE: "stst002"
+      PARENTTEMPLATE: "Dgun Face 02"
+      OBJPRIMTXTR: "dgunface02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 101.31914520263672
+        - 19.7834529876709
+        - -0.3499999940395355
+      OBJROTATION:
+        - 0.863616943359375
+        - -0.48713791370391846
+        - -0.10015349090099335
+        - 0.08265343308448792
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3247
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000025
+      OBJTYPE: 54
+      OBJNAME: "Dgun Gate 00-1767"
+      OBJTEMPLATE: "stga2"
+      PARENTTEMPLATE: "Dgun Gate 00"
+      OBJPRIMTXTR: "dgungate00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 108.680908203125
+        - 31.4373836517334
+        - -0.9999995827674866
+      OBJROTATION:
+        - 0.480848103761673
+        - -0.3289715051651001
+        - 0.30144697427749634
+        - -0.7547798752784729
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3246
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.1599999964237213
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000026
+      OBJTYPE: 54
+      OBJNAME: "Crypt00-1787"
+      OBJTEMPLATE: "stst27"
+      PARENTTEMPLATE: "Crypt00"
+      OBJPRIMTXTR: "crypt00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 98.65274810791016
+        - 30.837705612182617
+        - -0.5000000596046448
+      OBJROTATION:
+        - 0.9794461131095886
+        - 0.19246667623519897
+        - 0.05363726615905762
+        - -0.027623850852251053
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3222
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 0.5
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000027
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 109.54054260253906
+        - 20.335369110107422
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 109.54054260253906
+          - 20.335369110107422
+          - 96.5618896484375
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 7
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 16
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000028
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 101.6089859008789
+        - 14.31982421875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 101.6089859008789
+          - 14.31982421875
+          - 96.84825897216797
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 2
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 3
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000029
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 93.07555389404297
+        - 23.431859970092773
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 93.07555389404297
+          - 23.431859970092773
+          - 99.65345001220703
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 2
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000030
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 104.52587890625
+        - 35.889122009277344
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 104.52587890625
+          - 35.889122009277344
+          - 92.70623779296875
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "DragonkinJunF7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 110
+        - 110
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1057781099
+        - 1042545150
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 1285
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 1056964608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 2
+      NID: 1000031
+      OBJTYPE: 51
+      OBJNAME: "JunLizardman-1825"
+      OBJTEMPLATE: "unmoli"
+      PARENTTEMPLATE: "DragonkinJunF7"
+      OBJPRIMTXTR: "lizardman00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 104.71794128417969
+        - 26.406978607177734
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 104.71794128417969
+          - 26.406978607177734
+          - 95.08768463134766
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    OBJECT:
+      OBJBODYPARTS:
+        - "bird1"
+        - "bird2"
+        - "bird8"
+        - "bird3"
+      OBJ_PLAYER: 0
+      NID: 1000032
+      OBJTYPE: 54
+      OBJNAME: "Dgun Bird Ruins 00-1782"
+      OBJTEMPLATE: "stst8"
+      PARENTTEMPLATE: "Dgun Bird Ruins 00"
+      OBJPRIMTXTR: "dgunbirdruins00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 98.9559555053711
+        - 33.50843811035156
+        - 0.0
+      OBJROTATION:
+        - 0.9063077569007874
+        - 0.0
+        - 0.0
+        - -0.4226180911064148
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3662
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000033
+      OBJTYPE: 54
+      OBJNAME: "DgunColoumn01-1754"
+      OBJTEMPLATE: "stst22"
+      PARENTTEMPLATE: "DgunColoumn01"
+      OBJPRIMTXTR: "dguntorchruins01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 103.67963409423828
+        - 23.064884185791016
+        - -0.5500000715255737
+      OBJROTATION:
+        - 0.9697891473770142
+        - 0.19782190024852753
+        - -0.1426858901977539
+        - -0.003982589114457369
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 3722
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 1000034
+      OBJTYPE: 54
+      OBJNAME: "ExpeditorSack"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "DragonShell00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 331.5418701171875
+        - 117.84291076660156
+        - 0.0
+      OBJROTATION:
+        - 0.5081762075424194
+        - 0.0
+        - 0.0
+        - 0.8612531423568726
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 493
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.5

@@ -63,7 +63,7 @@ Script Triger3
 WorldScript
 (
   Sleep( 2 )
-  Chest = GetObjectByID( "999448" ) 
+  Chest = GetObjectByID( "1000200" ) 
   Warlord = GetObjectByID( "1000324" )
   Sleep( 2 )
   Triger1( NULL ) 

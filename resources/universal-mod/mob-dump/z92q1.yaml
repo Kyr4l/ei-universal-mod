@@ -4,7 +4,6 @@ OBJECTDBFILE:
       MIN_ID: 1000200
       MAX_ID: 1000399
   VSS_SECTION:
-  DIRICTORY_ELEMENTS:
   OBJECTSECTION:
     UNIT:
       UNIT_NEED_IMPORT: 0
@@ -160,3 +159,40 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 6
+      NID: 1000200
+      OBJTYPE: 60
+      OBJNAME: "BChest"
+      OBJTEMPLATE: "stst43"
+      PARENTTEMPLATE: "Chest01"
+      OBJPRIMTXTR: "kanianArc01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 399.37701416015625
+        - 22.8572998046875
+        - 0.0
+      OBJROTATION:
+        - 0.6427874565124512
+        - 0.0
+        - 0.0
+        - 0.7660441398620605
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 672
+      OBJ_QUEST_INFO: "z92q1"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.5
