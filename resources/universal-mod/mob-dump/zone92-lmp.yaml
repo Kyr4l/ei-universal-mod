@@ -51666,7 +51666,7 @@ OBJECTDBFILE:
         - 0.0
     LEVER:
       LEVER_SCIENCE_STATS_NEW:
-        - 1
+        - 0
         - 0
         - 0
       LEVER_CUR_STATE: 0
@@ -64276,7 +64276,7 @@ OBJECTDBFILE:
         - 0.2199999988079071
     LEVER:
       LEVER_SCIENCE_STATS_NEW:
-        - 1
+        - 0
         - 0
         - 0
       LEVER_CUR_STATE: 0

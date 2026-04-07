@@ -1518,7 +1518,7 @@ OBJECTDBFILE:
         - 0.6200000047683716
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -1574,7 +1574,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -2294,7 +2294,7 @@ OBJECTDBFILE:
         - 0.8999999761581421
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Shadow"
+      UNIT_PROTOTYPE: "Shadow J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -2352,7 +2352,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ShadowM15-47329"
       OBJTEMPLATE: "unmosh"
-      PARENTTEMPLATE: "ShadowM15"
+      PARENTTEMPLATE: "Shadow J1"
       OBJPRIMTXTR: "shadow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -2782,7 +2782,7 @@ OBJECTDBFILE:
         - 2.0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Succub"
+      UNIT_PROTOTYPE: "Succub J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -2840,7 +2840,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "SuccubRedM9-996791"
       OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "SuccubRedM9"
+      PARENTTEMPLATE: "Succub J1"
       OBJPRIMTXTR: "succubus01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -3214,84 +3214,9 @@ OBJECTDBFILE:
         - 0.5
         - 0.5
         - 1.5
-    LEVER:
-      LEVER_SCIENCE_STATS_NEW:
-        - 0
-        - 0
-        - 0
-      LEVER_CUR_STATE: 0
-      LEVER_TOTAL_STATE: 2
-      LEVER_IS_CYCLED: 0
-      LEVER_IS_DOOR: 0
-      LEVER_RECALC_GRAPH: 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 0
-      NID: 1008001
-      OBJTYPE: 60
-      OBJNAME: "Stone"
-      OBJTEMPLATE: "nast9"
-      PARENTTEMPLATE: ""
-      OBJPRIMTXTR: "stone01"
-      OBJSECTXTR: ""
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 88.5530014038086
-        - 340.94500732421875
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 223
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - -0.20000000298023224
-    LEVER:
-      LEVER_SCIENCE_STATS_NEW:
-        - 0
-        - 0
-        - 0
-      LEVER_CUR_STATE: 0
-      LEVER_TOTAL_STATE: 2
-      LEVER_IS_CYCLED: 0
-      LEVER_IS_DOOR: 0
-      LEVER_RECALC_GRAPH: 0
-      OBJBODYPARTS:
-        - "mekh"
-      OBJ_PLAYER: 0
-      NID: 1008002
-      OBJTYPE: 60
-      OBJNAME: "Smith"
-      OBJTEMPLATE: "stbuho50"
-      PARENTTEMPLATE: ""
-      OBJPRIMTXTR: "runnersblacksmith00"
-      OBJSECTXTR: ""
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 36.38100051879883
-        - 213.9219970703125
-        - 0.0
-      OBJROTATION:
-        - 0.9390349984169006
-        - 0.0
-        - 0.0
-        - -0.34382155537605286
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 223
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.20000000298023224
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie M"
+      UNIT_PROTOTYPE: "Zombie M J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3347,7 +3272,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieMaleF16-47276"
       OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "ZombieMaleF16"
+      PARENTTEMPLATE: "Zombie M J1"
       OBJPRIMTXTR: "zombiemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -3473,7 +3398,7 @@ OBJECTDBFILE:
         - -0.10999999940395355
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie F"
+      UNIT_PROTOTYPE: "Zombie F J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3529,7 +3454,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieFemaleF14-47277"
       OBJTEMPLATE: "unmozo1"
-      PARENTTEMPLATE: "ZombieFemaleF14"
+      PARENTTEMPLATE: "Zombie F J1"
       OBJPRIMTXTR: "zombiefemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -3655,7 +3580,7 @@ OBJECTDBFILE:
         - 0.5
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3711,7 +3636,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -3809,7 +3734,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 212
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -3866,7 +3791,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -3964,7 +3889,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 122
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -4020,7 +3945,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -4203,7 +4128,7 @@ OBJECTDBFILE:
         - 0.14000000059604645
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -4982,7 +4907,7 @@ OBJECTDBFILE:
         - 0.8999999761581421
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -5038,7 +4963,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -5136,7 +5061,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 171
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -5193,7 +5118,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -6452,7 +6377,7 @@ OBJECTDBFILE:
         - 0.08999999612569809
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -6508,7 +6433,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -29343,7 +29268,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -29497,7 +29422,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -29621,7 +29546,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Ogre"
+      UNIT_PROTOTYPE: "Ogre J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -29675,9 +29600,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 4
       NID: 44357284
       OBJTYPE: 51
-      OBJNAME: "zone25 Ogre"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoog1"
-      PARENTTEMPLATE: "OgreHadaganF13"
+      PARENTTEMPLATE: "Ogre J1"
       OBJPRIMTXTR: "jogre00"
       OBJSECTXTR: "goblinaxebag00"
       OBJCOMMENTS: "none"
@@ -101857,7 +101782,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 3
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant F"
+      UNIT_PROTOTYPE: "Human Peasant F J1"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -101933,7 +101858,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Peasant"
       OBJTEMPLATE: "unhufe"
-      PARENTTEMPLATE: "Human Kania Citizen A8"
+      PARENTTEMPLATE: "Human Peasant F J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102031,7 +101956,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 252
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant M"
+      UNIT_PROTOTYPE: "Human Peasant M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -102108,7 +102033,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Peasant M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102206,7 +102131,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 75
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -102262,7 +102187,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102360,7 +102285,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 85
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -102416,7 +102341,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102514,7 +102439,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 213
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -102570,7 +102495,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102668,7 +102593,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 253
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -102724,7 +102649,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102822,7 +102747,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 189
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -102878,7 +102803,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -102976,7 +102901,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 40
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -103032,7 +102957,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -103130,7 +103055,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 138
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -103186,7 +103111,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -103284,7 +103209,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 168
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -103340,7 +103265,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -103365,7 +103290,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -103438,7 +103363,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 255
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -103515,7 +103440,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -103613,7 +103538,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 85
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -103669,7 +103594,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -103694,7 +103619,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -103767,7 +103692,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 245
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -103823,7 +103748,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -103848,7 +103773,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -103921,7 +103846,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 255
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -103977,7 +103902,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -104002,7 +103927,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -104075,7 +104000,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 120
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -104131,7 +104056,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -104156,7 +104081,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -104229,7 +104154,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 104
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -104285,7 +104210,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -104310,7 +104235,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -104383,7 +104308,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 95
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -104439,7 +104364,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -104464,7 +104389,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -104537,7 +104462,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 47
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -104593,7 +104518,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -104618,7 +104543,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -104691,7 +104616,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 232
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -104747,7 +104672,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -104772,7 +104697,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -104845,7 +104770,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 90
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -104922,7 +104847,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -105020,7 +104945,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 148
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -105097,7 +105022,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -105195,7 +105120,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 85
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -105272,7 +105197,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -105370,7 +105295,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 62
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -105447,7 +105372,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -105545,7 +105470,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 11
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -105601,7 +105526,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -105699,7 +105624,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 128
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -105755,7 +105680,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -105853,7 +105778,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 1
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -105909,7 +105834,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106007,7 +105932,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 189
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -106063,7 +105988,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106161,7 +106086,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 169
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -106217,7 +106142,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106242,7 +106167,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -106315,7 +106240,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 165
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -106371,7 +106296,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106396,7 +106321,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -106469,7 +106394,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 248
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -106525,7 +106450,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106550,7 +106475,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -106623,7 +106548,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 254
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -106679,7 +106604,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106704,7 +106629,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -106777,7 +106702,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 175
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant F"
+      UNIT_PROTOTYPE: "Human Peasant F J1"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -106853,7 +106778,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Peasant"
       OBJTEMPLATE: "unhufe"
-      PARENTTEMPLATE: "Human Kania Citizen A8"
+      PARENTTEMPLATE: "Human Peasant F J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -106951,7 +106876,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 190
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant F"
+      UNIT_PROTOTYPE: "Human Peasant F J1"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -107027,7 +106952,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Peasant"
       OBJTEMPLATE: "unhufe"
-      PARENTTEMPLATE: "Human Kania Citizen A8"
+      PARENTTEMPLATE: "Human Peasant F J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -107125,7 +107050,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 114
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant F"
+      UNIT_PROTOTYPE: "Human Peasant F J1"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -107201,7 +107126,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Peasant"
       OBJTEMPLATE: "unhufe"
-      PARENTTEMPLATE: "Human Kania Citizen A8"
+      PARENTTEMPLATE: "Human Peasant F J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -107299,7 +107224,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 251
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant M"
+      UNIT_PROTOTYPE: "Human Peasant M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -107376,7 +107301,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Peasant M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -107474,7 +107399,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 124
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant M"
+      UNIT_PROTOTYPE: "Human Peasant M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -107551,7 +107476,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Peasant M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -107649,7 +107574,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 201
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant M"
+      UNIT_PROTOTYPE: "Human Peasant M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -107726,7 +107651,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Peasant M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -107824,7 +107749,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 94
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -107881,7 +107806,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -107979,7 +107904,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 92
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108036,7 +107961,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -108134,7 +108059,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 175
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108191,7 +108116,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -108289,7 +108214,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 215
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108346,7 +108271,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -108444,7 +108369,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 94
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108501,7 +108426,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -108599,7 +108524,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 248
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108656,7 +108581,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -108754,7 +108679,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 220
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108811,7 +108736,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -108909,7 +108834,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 213
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -108966,7 +108891,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109064,7 +108989,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 170
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -109121,7 +109046,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109219,7 +109144,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 95
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -109276,7 +109201,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109374,7 +109299,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 107
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -109431,7 +109356,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109529,7 +109454,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 12
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -109586,7 +109511,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109684,7 +109609,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 232
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -109741,7 +109666,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109839,7 +109764,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 248
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -109896,7 +109821,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -109994,7 +109919,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 201
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110051,7 +109976,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -110149,7 +110074,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 248
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110206,7 +110131,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -110304,7 +110229,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 96
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110361,7 +110286,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -110459,7 +110384,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 183
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110516,7 +110441,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -110614,7 +110539,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 175
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110671,7 +110596,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -110769,7 +110694,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 224
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110826,7 +110751,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -110924,7 +110849,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 248
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -110981,7 +110906,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -111079,7 +111004,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 53
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -111136,7 +111061,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -111234,7 +111159,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 174
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -111291,7 +111216,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -111389,7 +111314,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 247
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -111446,7 +111371,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -111544,7 +111469,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 57
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -111601,7 +111526,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -111699,7 +111624,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 172
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -111756,7 +111681,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -111854,7 +111779,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 247
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -111911,7 +111836,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -112009,7 +111934,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 66
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -112066,7 +111991,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -112164,7 +112089,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 235
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Succub"
+      UNIT_PROTOTYPE: "Succub J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -112222,7 +112147,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "SuccubRedM9-996791"
       OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "SuccubRedM9"
+      PARENTTEMPLATE: "Succub J1"
       OBJPRIMTXTR: "succubus01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -112359,7 +112284,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 222
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Succub"
+      UNIT_PROTOTYPE: "Succub J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -112417,7 +112342,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "SuccubRedM9-996791"
       OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "SuccubRedM9"
+      PARENTTEMPLATE: "Succub J1"
       OBJPRIMTXTR: "succubus01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -112554,7 +112479,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 178
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Succub"
+      UNIT_PROTOTYPE: "Succub J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -112612,7 +112537,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "SuccubRedM9-996791"
       OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "SuccubRedM9"
+      PARENTTEMPLATE: "Succub J1"
       OBJPRIMTXTR: "succubus01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -113519,7 +113444,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 198
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -113575,7 +113500,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -113673,7 +113598,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 118
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -113729,7 +113654,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -113827,7 +113752,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 89
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -113883,7 +113808,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -114289,7 +114214,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 104
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -114345,7 +114270,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -114443,7 +114368,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 71
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -114499,7 +114424,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -114597,7 +114522,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 164
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -114751,7 +114676,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 182
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -114807,7 +114732,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -114905,7 +114830,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 11
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -114961,7 +114886,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115059,7 +114984,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 230
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -115115,7 +115040,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115213,7 +115138,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 99
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -115269,7 +115194,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115367,7 +115292,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 134
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -115423,7 +115348,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115521,7 +115446,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 149
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -115577,7 +115502,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115675,7 +115600,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 234
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -115731,7 +115656,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115829,7 +115754,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 29
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -115885,7 +115810,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -115983,7 +115908,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 188
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -116039,7 +115964,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -116137,7 +116062,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 211
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -116193,7 +116118,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -116291,7 +116216,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 5
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -116347,7 +116272,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -116445,7 +116370,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 179
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -116501,7 +116426,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -116599,7 +116524,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 239
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -116655,7 +116580,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -116753,7 +116678,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 106
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -116810,7 +116735,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -116908,7 +116833,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 193
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -116965,7 +116890,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -117371,7 +117296,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 249
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -117427,7 +117352,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -117525,7 +117450,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 111
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -117581,7 +117506,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -117987,7 +117912,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 11
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -118043,7 +117968,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -118141,7 +118066,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 168
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Succub"
+      UNIT_PROTOTYPE: "Succub J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -118199,7 +118124,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "SuccubRedM9-996791"
       OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "SuccubRedM9"
+      PARENTTEMPLATE: "Succub J1"
       OBJPRIMTXTR: "succubus01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -118336,7 +118261,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 94
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -118393,7 +118318,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -118491,7 +118416,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 235
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -118547,7 +118472,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -118645,7 +118570,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 162
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -118701,7 +118626,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -118799,7 +118724,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 251
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -118855,7 +118780,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -118953,7 +118878,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 107
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119009,7 +118934,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -119107,7 +119032,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 141
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119163,7 +119088,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -119261,7 +119186,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 48
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119415,7 +119340,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 252
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119569,7 +119494,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 48
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119625,7 +119550,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -119723,7 +119648,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 181
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119779,7 +119704,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -119877,7 +119802,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 227
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -119933,7 +119858,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -120031,7 +119956,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 75
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -120087,7 +120012,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -120647,7 +120572,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 67
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -120703,7 +120628,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -120801,7 +120726,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 133
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -120857,7 +120782,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -120955,7 +120880,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 23
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -121011,7 +120936,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -121109,7 +121034,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 195
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -121165,7 +121090,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -121263,7 +121188,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 116
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -121319,7 +121244,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -121725,7 +121650,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 147
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -121781,7 +121706,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -121879,7 +121804,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 65
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -121935,7 +121860,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122033,7 +121958,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 81
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -122089,7 +122014,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122187,7 +122112,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 69
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -122243,7 +122168,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122341,7 +122266,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 227
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -122397,7 +122322,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122495,7 +122420,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 243
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -122551,7 +122476,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122649,7 +122574,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 204
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -122705,7 +122630,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122803,7 +122728,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 177
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -122859,7 +122784,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -122957,7 +122882,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 171
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123013,7 +122938,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -123111,7 +123036,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 133
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123167,7 +123092,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -123265,7 +123190,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 55
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123321,7 +123246,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -123419,7 +123344,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 184
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123475,7 +123400,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -123573,7 +123498,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 104
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123629,7 +123554,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -123727,7 +123652,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 57
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123783,7 +123708,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -123881,7 +123806,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 95
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -123937,7 +123862,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -124035,7 +123960,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 35
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -124091,7 +124016,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -124189,7 +124114,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 61
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -124245,7 +124170,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -124343,7 +124268,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 174
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -124399,7 +124324,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -125071,7 +124996,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 94
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -125225,7 +125150,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 60
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -125687,7 +125612,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 117
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -125743,7 +125668,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -125898,7 +125823,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126053,7 +125978,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126208,7 +126133,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126363,7 +126288,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126518,7 +126443,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126673,7 +126598,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126828,7 +126753,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkM14"
       OBJTEMPLATE: "unmoba1"
-      PARENTTEMPLATE: "BansheeDarkM14"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Mage 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -126982,7 +126907,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -127162,7 +127087,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -127342,7 +127267,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -127522,7 +127447,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -127646,7 +127571,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 6
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie M"
+      UNIT_PROTOTYPE: "Zombie M J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -127702,7 +127627,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieMaleF16-47276"
       OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "ZombieMaleF16"
+      PARENTTEMPLATE: "Zombie M J1"
       OBJPRIMTXTR: "zombiemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -127800,7 +127725,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 167
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie F"
+      UNIT_PROTOTYPE: "Zombie F J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -127856,7 +127781,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieFemaleF14-47277"
       OBJTEMPLATE: "unmozo1"
-      PARENTTEMPLATE: "ZombieFemaleF14"
+      PARENTTEMPLATE: "Zombie F J1"
       OBJPRIMTXTR: "zombiefemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -127954,7 +127879,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 165
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -128010,7 +127935,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -128108,7 +128033,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 92
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -128164,7 +128089,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -128262,7 +128187,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 34
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -128318,7 +128243,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -128416,7 +128341,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 204
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Shadow"
+      UNIT_PROTOTYPE: "Shadow J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -128474,7 +128399,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ShadowM15-47329"
       OBJTEMPLATE: "unmosh"
-      PARENTTEMPLATE: "ShadowM15"
+      PARENTTEMPLATE: "Shadow J1"
       OBJPRIMTXTR: "shadow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -128572,7 +128497,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 169
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Shadow"
+      UNIT_PROTOTYPE: "Shadow J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -128630,7 +128555,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ShadowM15-47329"
       OBJTEMPLATE: "unmosh"
-      PARENTTEMPLATE: "ShadowM15"
+      PARENTTEMPLATE: "Shadow J1"
       OBJPRIMTXTR: "shadow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -128728,7 +128653,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 253
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -128784,7 +128709,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -128882,7 +128807,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 80
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -128938,7 +128863,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129036,7 +128961,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 110
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -129092,7 +129017,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129190,7 +129115,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 240
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -129246,7 +129171,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129344,7 +129269,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 32
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -129400,7 +129325,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129498,7 +129423,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 255
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -129554,7 +129479,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129652,7 +129577,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 191
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -129708,7 +129633,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129806,7 +129731,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 86
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie F"
+      UNIT_PROTOTYPE: "Zombie F J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -129862,7 +129787,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieFemaleF14-47277"
       OBJTEMPLATE: "unmozo1"
-      PARENTTEMPLATE: "ZombieFemaleF14"
+      PARENTTEMPLATE: "Zombie F J1"
       OBJPRIMTXTR: "zombiefemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -129960,7 +129885,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 64
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie F"
+      UNIT_PROTOTYPE: "Zombie F J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -130016,7 +129941,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieFemaleF14-47277"
       OBJTEMPLATE: "unmozo1"
-      PARENTTEMPLATE: "ZombieFemaleF14"
+      PARENTTEMPLATE: "Zombie F J1"
       OBJPRIMTXTR: "zombiefemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -130114,7 +130039,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 113
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie M"
+      UNIT_PROTOTYPE: "Zombie M J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -130170,7 +130095,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieMaleF16-47276"
       OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "ZombieMaleF16"
+      PARENTTEMPLATE: "Zombie M J1"
       OBJPRIMTXTR: "zombiemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -130268,7 +130193,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 253
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie M"
+      UNIT_PROTOTYPE: "Zombie M J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -130324,7 +130249,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieMaleF16-47276"
       OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "ZombieMaleF16"
+      PARENTTEMPLATE: "Zombie M J1"
       OBJPRIMTXTR: "zombiemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -130422,7 +130347,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 71
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Zombie M"
+      UNIT_PROTOTYPE: "Zombie M J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -130478,7 +130403,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ZombieMaleF16-47276"
       OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "ZombieMaleF16"
+      PARENTTEMPLATE: "Zombie M J1"
       OBJPRIMTXTR: "zombiemale00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -130576,7 +130501,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 45
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Skeleton"
+      UNIT_PROTOTYPE: "Skeleton J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -130632,7 +130557,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "Skeleton-1490"
       OBJTEMPLATE: "unmosk2"
-      PARENTTEMPLATE: "SkeletonF4"
+      PARENTTEMPLATE: "Skeleton J1"
       OBJPRIMTXTR: "jskeleton01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -130786,7 +130711,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -130910,7 +130835,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 169
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -130966,7 +130891,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131064,7 +130989,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 168
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -131120,7 +131045,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131218,7 +131143,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 125
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -131274,7 +131199,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131372,7 +131297,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 249
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -131428,7 +131353,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131526,7 +131451,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 41
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -131582,7 +131507,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131680,7 +131605,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 213
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -131736,7 +131661,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131834,7 +131759,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 19
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -131890,7 +131815,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -131988,7 +131913,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 72
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -132044,7 +131969,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -132142,7 +132067,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 159
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -132198,7 +132123,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -132296,7 +132221,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 144
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -132352,7 +132277,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -132450,7 +132375,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 69
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -132506,7 +132431,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -132604,7 +132529,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 207
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -132660,7 +132585,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -132758,7 +132683,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 119
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -132814,7 +132739,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -132912,7 +132837,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 218
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -133066,7 +132991,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 192
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -133220,7 +133145,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 112
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -133374,7 +133299,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 3
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -133528,7 +133453,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 3
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -133682,7 +133607,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 64
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -133759,7 +133684,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -133857,7 +133782,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 171
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -133934,7 +133859,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -134032,7 +133957,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 93
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -134109,7 +134034,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -134207,7 +134132,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 59
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Gangster M"
+      UNIT_PROTOTYPE: "Human Gangster M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -134284,7 +134209,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Gangster M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -134438,7 +134363,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "BansheeDarkF16"
       OBJTEMPLATE: "unmoba2"
-      PARENTTEMPLATE: "BansheeDarkF16"
+      PARENTTEMPLATE: "LMP Banshee Hadagan Fighter 15"
       OBJPRIMTXTR: "banshee02"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -134870,7 +134795,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 228
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -134926,7 +134851,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135024,7 +134949,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 138
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -135080,7 +135005,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135178,7 +135103,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 127
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -135234,7 +135159,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135332,7 +135257,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 64
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -135388,7 +135313,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135486,7 +135411,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 64
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -135542,7 +135467,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135567,7 +135492,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -135640,7 +135565,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 117
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -135696,7 +135621,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135721,7 +135646,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -135794,7 +135719,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 189
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -135850,7 +135775,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -135948,7 +135873,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 247
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -136004,7 +135929,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -136102,7 +136027,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 159
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -136158,7 +136083,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -136183,7 +136108,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -136256,7 +136181,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 89
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -136312,7 +136237,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -136337,7 +136262,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -136718,7 +136643,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 74
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -136774,7 +136699,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -136872,7 +136797,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 137
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -136928,7 +136853,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -137026,7 +136951,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 172
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -137082,7 +137007,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -137180,7 +137105,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 168
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -137236,7 +137161,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -137796,7 +137721,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 232
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -137852,7 +137777,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -137950,7 +137875,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 47
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138006,7 +137931,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -138104,7 +138029,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 245
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138160,7 +138085,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -138258,7 +138183,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 225
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138314,7 +138239,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -138412,7 +138337,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 3
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138468,7 +138393,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -138566,7 +138491,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 215
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138622,7 +138547,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -138720,7 +138645,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 202
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 WolfBrown"
+      UNIT_PROTOTYPE: "WolfBrown J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138776,7 +138701,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
       OBJTEMPLATE: "unanwiwo"
-      PARENTTEMPLATE: "zone10 WolfWhite2"
+      PARENTTEMPLATE: "WolfBrown J1"
       OBJPRIMTXTR: "jwolf00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -138874,7 +138799,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 180
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -138930,7 +138855,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139028,7 +138953,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 83
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -139084,7 +139009,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139182,7 +139107,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 166
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -139238,7 +139163,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139336,7 +139261,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 245
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab"
+      UNIT_PROTOTYPE: "Scrab J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -139392,7 +139317,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139490,7 +139415,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 247
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -139546,7 +139471,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139571,7 +139496,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -139644,7 +139569,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 29
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -139700,7 +139625,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139725,7 +139650,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -139798,7 +139723,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 106
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -139854,7 +139779,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -139879,7 +139804,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -139952,7 +139877,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 85
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -140008,7 +139933,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -140033,7 +139958,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -140106,7 +140031,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 160
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Scrab0"
+      UNIT_PROTOTYPE: "Scrab0 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -140162,7 +140087,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "Scrab1-23"
       OBJTEMPLATE: "unanwicr"
-      PARENTTEMPLATE: "ScrabBlueF5"
+      PARENTTEMPLATE: "Scrab0 J1"
       OBJPRIMTXTR: "crab00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -140187,7 +140112,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
         UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
@@ -140722,7 +140647,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 105
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -140778,7 +140703,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -140876,7 +140801,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 31
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -140932,7 +140857,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -141030,7 +140955,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 63
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -141086,7 +141011,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -141184,7 +141109,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 112
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -141240,7 +141165,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -141338,7 +141263,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 139
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -141492,7 +141417,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 234
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -141646,7 +141571,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 252
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -141703,7 +141628,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -141801,7 +141726,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 90
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad2"
+      UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -141858,7 +141783,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad2 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -141956,7 +141881,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 62
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -142013,7 +141938,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -142111,7 +142036,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 160
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Toad1"
+      UNIT_PROTOTYPE: "Toad1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -142168,7 +142093,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
       OBJTEMPLATE: "unmoto"
-      PARENTTEMPLATE: "ToadM1"
+      PARENTTEMPLATE: "Toad1 J1"
       OBJPRIMTXTR: "toad01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -142420,7 +142345,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 190
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -142476,7 +142401,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -142574,7 +142499,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 115
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -142630,7 +142555,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -142728,7 +142653,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 184
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -142784,7 +142709,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -142882,7 +142807,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 151
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -142938,7 +142863,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143036,7 +142961,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 190
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -143092,7 +143017,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143190,7 +143115,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 255
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -143246,7 +143171,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143344,7 +143269,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 127
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -143400,7 +143325,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143498,7 +143423,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 185
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -143554,7 +143479,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143652,7 +143577,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 174
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -143708,7 +143633,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143806,7 +143731,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 168
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -143862,7 +143787,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -143960,7 +143885,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 190
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox2"
+      UNIT_PROTOTYPE: "Fox2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -144016,7 +143941,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox2 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -144114,7 +144039,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 184
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -144170,7 +144095,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -144268,7 +144193,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 117
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -144324,7 +144249,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -144422,7 +144347,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 15
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Tiger"
+      UNIT_PROTOTYPE: "Tiger J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -144478,7 +144403,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
       OBJTEMPLATE: "unanwiti"
-      PARENTTEMPLATE: "TigerRedF4"
+      PARENTTEMPLATE: "Tiger J1"
       OBJPRIMTXTR: "tiger00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -144576,7 +144501,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 110
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -144730,7 +144655,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 171
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -144884,7 +144809,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 212
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 BoarDark"
+      UNIT_PROTOTYPE: "BoarDark J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145038,7 +144963,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 246
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145094,7 +145019,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -145192,7 +145117,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 107
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145248,7 +145173,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -145346,7 +145271,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 254
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145402,7 +145327,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -145500,7 +145425,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 85
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145556,7 +145481,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -145654,7 +145579,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 62
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145710,7 +145635,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -145808,7 +145733,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 11
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Fox1"
+      UNIT_PROTOTYPE: "Fox1 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -145864,7 +145789,7 @@ OBJECTDBFILE:
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
       OBJTEMPLATE: "unanhodo"
-      PARENTTEMPLATE: "DogRedF12"
+      PARENTTEMPLATE: "Fox1 J1"
       OBJPRIMTXTR: "fox00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -145962,7 +145887,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 11
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant F"
+      UNIT_PROTOTYPE: "Human Peasant F J1"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -146038,7 +145963,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Peasant"
       OBJTEMPLATE: "unhufe"
-      PARENTTEMPLATE: "Human Kania Citizen A8"
+      PARENTTEMPLATE: "Human Peasant F J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -146136,7 +146061,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 235
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant F"
+      UNIT_PROTOTYPE: "Human Peasant F J1"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -146212,7 +146137,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Peasant"
       OBJTEMPLATE: "unhufe"
-      PARENTTEMPLATE: "Human Kania Citizen A8"
+      PARENTTEMPLATE: "Human Peasant F J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -146310,7 +146235,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 235
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant M"
+      UNIT_PROTOTYPE: "Human Peasant M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -146387,7 +146312,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Peasant M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -146485,7 +146410,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 160
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "zone31 Human Peasant M"
+      UNIT_PROTOTYPE: "Human Peasant M J1"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -146562,7 +146487,7 @@ OBJECTDBFILE:
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
       OBJTEMPLATE: "unhuma"
-      PARENTTEMPLATE: "Human Kania Citizen F8"
+      PARENTTEMPLATE: "Human Peasant M J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -147134,7 +147059,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1396771
       OBJTYPE: 60
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "HadoganChest00_lock"
       OBJPRIMTXTR: "moneysack00"
@@ -147162,7 +147087,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395366
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147190,7 +147115,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395443
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147218,7 +147143,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395730
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147246,7 +147171,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395731
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147274,7 +147199,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395732
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147302,7 +147227,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395733
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147330,7 +147255,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395734
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147358,7 +147283,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395735
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147386,7 +147311,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395736
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147414,7 +147339,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395737
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147442,7 +147367,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395738
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147470,7 +147395,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395739
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147498,7 +147423,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395740
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147526,7 +147451,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395741
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147554,7 +147479,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395742
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147582,7 +147507,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395743
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147610,7 +147535,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395744
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147638,7 +147563,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395745
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147666,7 +147591,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395746
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147694,7 +147619,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395747
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147722,7 +147647,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395748
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147750,7 +147675,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395749
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147778,7 +147703,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395750
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147806,7 +147731,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395751
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147834,7 +147759,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395752
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147862,7 +147787,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395753
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147890,7 +147815,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395754
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147918,7 +147843,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395802
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147946,7 +147871,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395803
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -147974,7 +147899,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44395804
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148002,7 +147927,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396175
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148030,7 +147955,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396176
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148058,7 +147983,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396177
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148086,7 +148011,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396178
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148114,7 +148039,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396763
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148142,7 +148067,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396764
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148170,7 +148095,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396765
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148198,7 +148123,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396766
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148226,7 +148151,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396767
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148254,7 +148179,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396768
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148282,7 +148207,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396776
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148310,7 +148235,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 44396777
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148338,7 +148263,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1000201
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148366,7 +148291,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1000202
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148394,7 +148319,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1000203
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148422,7 +148347,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1000204
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148450,7 +148375,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1000205
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148478,7 +148403,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 979973
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148506,7 +148431,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1000206
       OBJTYPE: 54
-      OBJNAME: "Barrel00-46376"
+      OBJNAME: "Barrel00"
       OBJTEMPLATE: "stst83"
       PARENTTEMPLATE: "Barrel00"
       OBJPRIMTXTR: "moneysack00"
@@ -148529,3 +148454,63 @@ OBJECTDBFILE:
         - 0.5
         - 0.5
         - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "st2"
+        - "st3"
+        - "stones01"
+      OBJ_PLAYER: 0
+      NID: 1000207
+      OBJTYPE: 54
+      OBJNAME: "Stone"
+      OBJTEMPLATE: "nast9"
+      PARENTTEMPLATE: ""
+      OBJPRIMTXTR: "stone01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 88.55536651611328
+        - 340.9617004394531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.20000000298023224
+    OBJECT:
+      OBJBODYPARTS:
+        - "mekh"
+      OBJ_PLAYER: 0
+      NID: 1000208
+      OBJTYPE: 54
+      OBJNAME: "Smith"
+      OBJTEMPLATE: "stbuho50"
+      PARENTTEMPLATE: ""
+      OBJPRIMTXTR: "runnersblacksmith00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 36.38347244262695
+        - 213.91448974609375
+        - 0.0
+      OBJROTATION:
+        - 0.9390349984169006
+        - -0.0
+        - 0.0
+        - -0.34382158517837524
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
