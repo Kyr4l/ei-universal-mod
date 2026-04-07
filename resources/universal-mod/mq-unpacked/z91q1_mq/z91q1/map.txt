@@ -1,6 +1,6 @@
 #zone z91q1 gipat game
 #res
-zone91 zone91-LMP
+zone91 zone91-lmp
 #maps
 8 6 
 zone10map zone10quest

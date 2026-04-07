@@ -4,7 +4,6 @@ OBJECTDBFILE:
       MIN_ID: 1000200
       MAX_ID: 1000399
   VSS_SECTION:
-  DIRICTORY_ELEMENTS:
   OBJECTSECTION:
     UNIT:
       UNIT_NEED_IMPORT: 0
@@ -160,3 +159,63 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS:
+        - "st1"
+        - "st2"
+        - "stones04"
+      OBJ_PLAYER: 0
+      NID: 1000200
+      OBJTYPE: 54
+      OBJNAME: "StoneSet03-9"
+      OBJTEMPLATE: "nast12"
+      PARENTTEMPLATE: "StoneSet03"
+      OBJPRIMTXTR: "Stone02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 135.27613830566406
+        - 133.72811889648438
+        - 0.0
+      OBJROTATION:
+        - 0.9745657444000244
+        - 0.0
+        - 0.0
+        - -0.22410188615322113
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 5574
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6299999952316284
+        - 0.8100000023841858
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "stones04"
+      OBJ_PLAYER: 0
+      NID: 1000201
+      OBJTYPE: 54
+      OBJNAME: "StoneSet03-9"
+      OBJTEMPLATE: "nast12"
+      PARENTTEMPLATE: "StoneSet03"
+      OBJPRIMTXTR: "Stone02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 134.6240997314453
+        - 102.9755859375
+        - 0.0
+      OBJROTATION:
+        - 0.061045415699481964
+        - -0.0
+        - 0.0
+        - -0.998134970664978
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 5574
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6299999952316284
+        - 0.8100000023841858
+        - 2.0
