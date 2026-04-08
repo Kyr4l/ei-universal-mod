@@ -1,0 +1,323 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Board : object,
+  GoGo : object 
+)
+
+DeclareScript VTriger#1#1 (  this : object )
+DeclareScript VCheck#1#2 (  this : object )
+DeclareScript VTriger#1#3 (  this : object )
+DeclareScript VTriger#1#4 (  this : object )
+DeclareScript VCheck#1#6 (  this : object )
+DeclareScript VTriger#1#7 (  this : object )
+DeclareScript VCheck#1#11 (  this : object )
+DeclareScript VCheck#1#12 (  this : object )
+DeclareScript VTriger#1#14 (  this : object )
+DeclareScript VTriger#1#18 (  this : object )
+DeclareScript VCheck#1#19 (  this : object )
+DeclareScript VTriger#1#20 (  this : object )
+DeclareScript VCheck#1#22 (  this : object )
+DeclareScript VTriger#1#23 (  this : object )
+DeclareScript VCheck#1#25 (  this : object )
+DeclareScript VTriger#1#26 (  this : object )
+DeclareScript VCheck#1#28 (  this : object )
+DeclareScript VTriger#1#29 (  this : object )
+DeclareScript VCheck#1#31 (  this : object )
+DeclareScript VTriger#1#32 (  this : object )
+
+Script VTriger#1#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 286, 105, 357.6, 168 ) 
+    QStart( "z7q1" ) 
+    QObjArea( 1 ) 
+    QObjKillGroup( "OrcG" ) 
+    QFinish(  ) 
+  )
+)
+
+Script VCheck#1#2
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#4( this ) 
+  )
+)
+
+Script VTriger#1#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 286, 105, 357.6, 168 ) 
+    AddRectToArea( 2, 370, 72.5, 390, 84 ) 
+    AddRectToArea( 3, 216, 97, 232, 112 ) 
+  )
+)
+
+Script VTriger#1#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.1", 2 ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.2", 1 ) 
+  )
+)
+
+Script VCheck#1#6
+(
+  if
+  (
+    Every( i, OrcG, IsDead( i )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#7( this ) 
+  )
+)
+
+Script VTriger#1#7
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.2", 2 ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.3", 1 ) 
+  )
+)
+
+Script VCheck#1#11
+(
+  if
+  (
+    IsLess( GSGetVar( 0, "q.z7q1.z7q1" ) , 2 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#1#12( this ) 
+  )
+)
+
+Script VCheck#1#12
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z7q1.z7q1" ) , 2 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#14( this ) 
+  )
+)
+
+Script VTriger#1#14
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QuestComplete( 0, "z7q1" ) 
+  )
+)
+
+Script VTriger#1#18
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB1, 0 ) 
+  )
+)
+
+Script VCheck#1#19
+(
+  if
+  (
+    IsLess( DistanceUnitUnit( GetUnitOfPlayer( 0, 0 ) , GoGo ) , 4 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#20( this ) 
+  )
+)
+
+Script VTriger#1#20
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Run( GoGo ) 
+    SetPlayer( GoGo, 0 ) 
+    UMFollow( GoGo, GetUnitOfPlayer( 0, 0 )  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.3", 2 ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.4", 1 ) 
+  )
+)
+
+Script VCheck#1#22
+(
+  if
+  (
+    IsInArea( 2, GetX( GoGo ) , GetY( GoGo )  ) 
+    IsAlive( GoGo ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#23( this ) 
+  )
+)
+
+Script VTriger#1#23
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.4", 2 ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1", 2 ) 
+    RemoveUnitFromServer( GoGo ) 
+  )
+)
+
+Script VCheck#1#25
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 2, GetX( i ) , GetY( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#26( this ) 
+  )
+)
+
+Script VTriger#1#26
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.5", 1 ) 
+  )
+)
+
+Script VCheck#1#28
+(
+  if
+  (
+    IsEqual( GetLeverState( Board ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#29( this ) 
+  )
+)
+
+Script VTriger#1#29
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.5", 2 ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.6", 1 ) 
+    GiveQuestItem( 0, "BridgeBoard00" ) 
+    RemoveObjectFromServer( Board ) 
+  )
+)
+
+Script VCheck#1#31
+(
+  if
+  (
+    IsInArea( 3, GetX( GetUnitOfPlayer( 0, 0 )  ) , GetY( GetUnitOfPlayer( 0, 0 )  )  ) 
+    HaveItem( 0, 71 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#32( this ) 
+  )
+)
+
+Script VTriger#1#32
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z7q1.z7q1.6", 2 ) 
+    EraseQuestItem( 0, 71 ) 
+    RemoveObjectFromServer( FBoard ) 
+    SetCP( BBoard, GetX( BBoard ) , GetY( BBoard ) , 13.55 ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Board = GetObjectByID( "1000062" ) 
+  GoGo = GetObjectByID( "1000084" ) 
+  AddObject( OrcG, GetObject( 1000002 )  ) 
+  AddObject( OrcG, GetObject( 1000032 )  ) 
+  AddObject( OrcG, GetObject( 1000036 )  ) 
+  AddObject( OrcG, GetObject( 1000052 )  ) 
+  AddObject( OrcG, GetObject( 1000068 )  ) 
+  AddObject( OrcG, GetObject( 1000072 )  ) 
+  AddObject( OrcG, GetObject( 1000058 )  ) 
+  VCheck#1#2( NULL ) 
+  VTriger#1#3( NULL ) 
+  VCheck#1#6( NULL ) 
+  VCheck#1#11( NULL ) 
+  VTriger#1#18( NULL ) 
+  VCheck#1#19( NULL ) 
+  VCheck#1#22( NULL ) 
+  VCheck#1#25( NULL ) 
+  VCheck#1#28( NULL ) 
+  VCheck#1#31( NULL ) 
+)

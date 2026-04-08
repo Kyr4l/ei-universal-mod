@@ -1,0 +1,34 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Aizet-Bek : object 
+)
+
+DeclareScript VTriger#2#1 (  this : object )
+
+Script VTriger#2#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z18q2" ) 
+    AddRectToArea( 1, 0, 144, 155, 204 ) 
+    QObjArea( 1 ) 
+    QObjSeeObject( "GetObject(46470)" ) 
+    QObjUse( "GetObject(46470)", 1 ) 
+    QObjSeeUnit( "GetObject(1000183)" ) 
+    QObjKillUnit( "GetObject(1000183)" ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Aizet-Bek = GetObjectByID( "1000183" ) 
+  VTriger#2#1( NULL ) 
+)

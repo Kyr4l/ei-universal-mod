@@ -1,0 +1,46 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPMessanger : object 
+)
+
+DeclareScript VTriger#1#1 (  this : object )
+DeclareScript VTriger#1#2 (  this : object )
+
+Script VTriger#1#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    KillUnit( LMPMessanger ) 
+  )
+)
+
+Script VTriger#1#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z17q1" ) 
+    AddRectToArea( 1, 71, 170, 93, 197 ) 
+    QObjSeeUnit( "GetObject(1000061)" ) 
+    QObjGetItem( 82 ) 
+    QObjArea( 1 ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPMessanger = GetObjectByID( "1000061" ) 
+  VTriger#1#1( NULL ) 
+  VTriger#1#2( NULL ) 
+)

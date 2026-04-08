@@ -1,0 +1,45 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Scrabs : group,
+  Heroes : group
+)
+
+DeclareScript VCheck#3#31 (  this : object )
+
+Script VCheck#3#31
+(
+  if
+  (
+    Not( Any( i, Scrabs, IsAlive( i )  )  )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z91q1.z91q1.1", 2 )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z91q1.z91q1", 2 )
+    Sleep( 2 )
+    QuestComplete( 0, "z91q1" )
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  AddObject( Scrabs, GetObject( 1 )  )
+  AddObject( Scrabs, GetObject( 11 )  )
+  AddObject( Scrabs, GetObject( 12 )  )
+  AddObject( Scrabs, GetObject( 13 )  )
+  AddObject( Scrabs, GetObject( 14 )  )
+  AddObject( Scrabs, GetObject( 18 )  )
+  AddObject( Scrabs, GetObject( 19 )  )
+  AddObject( Scrabs, GetObject( 20 )  )
+  AddObject( Scrabs, GetObject( 324 )  )
+  AddObject( Scrabs, GetObject( 325 )  )
+  Sleep( 2 )
+  VCheck#3#31( NULL)
+)
+
+

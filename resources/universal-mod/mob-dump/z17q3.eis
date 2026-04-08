@@ -1,0 +1,34 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPCyclop47386 : object,
+  LMPCyclops47384 : object 
+)
+
+DeclareScript VTriger#3#1 (  this : object )
+
+Script VTriger#3#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z17q3" ) 
+    QObjKillGroup( "Ciclopa3" ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPCyclop47386 = GetObjectByID( "1000263" ) 
+  LMPCyclops47384 = GetObjectByID( "1000264" ) 
+  AddObject( Ciclopa3, GetObject( 1000263 )  ) 
+  AddObject( Ciclopa3, GetObject( 1000264 )  ) 
+  AddObject( Ciclopa3, GetObject( 1000265 )  ) 
+  VTriger#3#1( NULL ) 
+)

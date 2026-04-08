@@ -1,0 +1,186 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPTrollBlueK6 : object,
+  LMPTrollBlueK5 : object,
+  LMPTrollBlueK4 : object,
+  LMPTrollBlueK3 : object,
+  LMPTrollBlueK2 : object,
+  LMPTrollBlueK1 : object,
+  LMPElementalIceK17 : object,
+  LMPTigerWhite24 : object,
+  LMPElementalIceK16 : object,
+  LMPTigerWhite23 : object,
+  LMPElementalIceK15 : object,
+  LMPTigerWhite22 : object,
+  LMPElementalIceK14 : object,
+  LMPTigerWhite21 : object,
+  LMPElementalIceK13 : object,
+  LMPTigerWhite20 : object,
+  LMPElementalIceK12 : object,
+  LMPTigerWhite19 : object,
+  LMPElementalIceK11 : object,
+  LMPTigerWhite18 : object,
+  LMPElementalIceK10 : object,
+  LMPTigerWhite17 : object,
+  LMPTigerWhite16 : object,
+  LMPTigerWhite15 : object,
+  LMPTigerWhite14 : object,
+  LMPTigerWhite13 : object,
+  LMPTigerWhite12 : object,
+  LMPTigerWhite11 : object,
+  LMPTigerWhite10 : object,
+  LMPTigerWhite9 : object 
+)
+
+DeclareScript VTriger#1#1 (  this : object )
+DeclareScript VTriger#1#2 (  this : object )
+DeclareScript VTriger#1#3 (  this : object )
+DeclareScript VCheck#1#4 (  this : object )
+DeclareScript VTriger#1#5 (  this : object )
+
+Script VTriger#1#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z13q1" ) 
+    AddRectToArea( 1, 297, 221, 313, 232 ) 
+    AddRectToArea( 1, 362, 157, 373, 182 ) 
+    QObjArea( 1 ) 
+    QObjKillGroup( "MonstersK" ) 
+    QFinish(  ) 
+  )
+)
+
+Script VTriger#1#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( BigMachine, 1 ) 
+    SetScience( BigMachine, 0, 0, 0, 0, 0, 0 ) 
+    SwitchLeverState( FarmGate004058, 1 ) 
+    SetScience( FarmGate004058, 0, 0, 0, 0, 0, 0 ) 
+  )
+)
+
+Script VTriger#1#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( LMPTrollBlueK1, "uattack" ) 
+    Sleep( 26 ) 
+    VCheck#1#4( this ) 
+  )
+)
+
+Script VCheck#1#4
+(
+  if
+  (
+    GroupSize( GroupCross( UnitSee( LMPTrollBlueK1 ) , Heroes )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#5( this ) 
+  )
+)
+
+Script VTriger#1#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPTrollBlueK6 = GetObjectByID( "4579" ) 
+  LMPTrollBlueK5 = GetObjectByID( "4580" ) 
+  LMPTrollBlueK4 = GetObjectByID( "4581" ) 
+  LMPTrollBlueK3 = GetObjectByID( "4582" ) 
+  LMPTrollBlueK2 = GetObjectByID( "4583" ) 
+  LMPTrollBlueK1 = GetObjectByID( "4584" ) 
+  LMPElementalIceK17 = GetObjectByID( "4585" ) 
+  LMPTigerWhite24 = GetObjectByID( "4586" ) 
+  LMPElementalIceK16 = GetObjectByID( "4587" ) 
+  LMPTigerWhite23 = GetObjectByID( "4588" ) 
+  LMPElementalIceK15 = GetObjectByID( "4589" ) 
+  LMPTigerWhite22 = GetObjectByID( "4590" ) 
+  LMPElementalIceK14 = GetObjectByID( "4591" ) 
+  LMPTigerWhite21 = GetObjectByID( "4592" ) 
+  LMPElementalIceK13 = GetObjectByID( "4593" ) 
+  LMPTigerWhite20 = GetObjectByID( "4594" ) 
+  LMPElementalIceK12 = GetObjectByID( "4595" ) 
+  LMPTigerWhite19 = GetObjectByID( "4596" ) 
+  LMPElementalIceK11 = GetObjectByID( "4597" ) 
+  LMPTigerWhite18 = GetObjectByID( "4598" ) 
+  LMPElementalIceK10 = GetObjectByID( "4599" ) 
+  LMPTigerWhite17 = GetObjectByID( "4600" ) 
+  LMPTigerWhite16 = GetObjectByID( "4602" ) 
+  LMPTigerWhite15 = GetObjectByID( "4604" ) 
+  LMPTigerWhite14 = GetObjectByID( "4606" ) 
+  LMPTigerWhite13 = GetObjectByID( "4608" ) 
+  LMPTigerWhite12 = GetObjectByID( "4610" ) 
+  LMPTigerWhite11 = GetObjectByID( "4612" ) 
+  LMPTigerWhite10 = GetObjectByID( "4614" ) 
+  LMPTigerWhite9 = GetObjectByID( "4616" ) 
+  AddObject( MonstersK, GetObject( 4599 )  ) 
+  AddObject( MonstersK, GetObject( 4597 )  ) 
+  AddObject( MonstersK, GetObject( 4595 )  ) 
+  AddObject( MonstersK, GetObject( 4593 )  ) 
+  AddObject( MonstersK, GetObject( 4591 )  ) 
+  AddObject( MonstersK, GetObject( 4589 )  ) 
+  AddObject( MonstersK, GetObject( 4587 )  ) 
+  AddObject( MonstersK, GetObject( 4585 )  ) 
+  AddObject( MonstersK, GetObject( 4614 )  ) 
+  AddObject( MonstersK, GetObject( 4612 )  ) 
+  AddObject( MonstersK, GetObject( 4610 )  ) 
+  AddObject( MonstersK, GetObject( 4608 )  ) 
+  AddObject( MonstersK, GetObject( 4606 )  ) 
+  AddObject( MonstersK, GetObject( 4604 )  ) 
+  AddObject( MonstersK, GetObject( 4602 )  ) 
+  AddObject( MonstersK, GetObject( 4600 )  ) 
+  AddObject( MonstersK, GetObject( 4598 )  ) 
+  AddObject( MonstersK, GetObject( 4596 )  ) 
+  AddObject( MonstersK, GetObject( 4594 )  ) 
+  AddObject( MonstersK, GetObject( 4592 )  ) 
+  AddObject( MonstersK, GetObject( 4590 )  ) 
+  AddObject( MonstersK, GetObject( 4588 )  ) 
+  AddObject( MonstersK, GetObject( 4586 )  ) 
+  AddObject( MonstersK, GetObject( 4616 )  ) 
+  AddObject( MonstersK, GetObject( 4584 )  ) 
+  AddObject( MonstersK, GetObject( 4583 )  ) 
+  AddObject( MonstersK, GetObject( 4582 )  ) 
+  AddObject( MonstersK, GetObject( 4581 )  ) 
+  AddObject( MonstersK, GetObject( 4580 )  ) 
+  AddObject( MonstersK, GetObject( 4579 )  ) 
+  VTriger#1#1( NULL ) 
+  VTriger#1#2( NULL ) 
+  VTriger#1#3( NULL ) 
+)

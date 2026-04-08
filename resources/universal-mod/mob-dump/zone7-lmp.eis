@@ -1,0 +1,255 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  BSHouse : object,
+  FBoard : object,
+  AltarF1 : object,
+  AltarE : object,
+  GCage : object,
+  OB2 : object,
+  OB3 : object,
+  OB2G1 : object,
+  OB2G2 : object,
+  OB3G1 : object,
+  OB3G2 : object,
+  OB1G1 : object,
+  OB1G2 : object,
+  OB1 : object,
+  Orc1SP : object,
+  Orc2SP : object,
+  Orc3SP : object,
+  Orc4SP : object,
+  OrcSSP : object,
+  LPen : object,
+  BBoard : object,
+  Dkins : group,
+  OrcG : group,
+  Heroes : group 
+)
+
+DeclareScript VCheck#0#130 (  this : object )
+DeclareScript VTriger#0#131 (  this : object )
+DeclareScript VCheck#0#133 (  this : object )
+DeclareScript VTriger#0#134 (  this : object )
+DeclareScript VCheck#0#136 (  this : object )
+DeclareScript VTriger#0#137 (  this : object )
+DeclareScript VCheck#0#139 (  this : object )
+DeclareScript VCheck#0#140 (  this : object )
+DeclareScript VTriger#0#141 (  this : object )
+DeclareScript VTriger#0#142 (  this : object )
+DeclareScript VCheck#0#122 (  this : object )
+DeclareScript VTriger#0#124 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VCheck#0#130
+(
+  if
+  (
+    IsEqual( GetLeverState( OB3G2 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#131( this ) 
+  )
+)
+
+Script VTriger#0#131
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB3, -1 ) 
+    SwitchLeverState( OB3G2, 0 ) 
+  )
+)
+
+Script VCheck#0#133
+(
+  if
+  (
+    IsEqual( GetLeverState( OB1G1 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#134( this ) 
+  )
+)
+
+Script VTriger#0#134
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB1, -1 ) 
+    SwitchLeverState( OB1G1, 0 ) 
+  )
+)
+
+Script VCheck#0#136
+(
+  if
+  (
+    IsEqual( GetLeverState( OB1G2 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#137( this ) 
+  )
+)
+
+Script VTriger#0#137
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB1, -1 ) 
+    SwitchLeverState( OB1G2, 0 ) 
+  )
+)
+
+Script VCheck#0#139
+(
+  if
+  (
+    IsEqual( GetLeverState( OB2G1 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#141( this ) 
+  )
+)
+
+Script VCheck#0#140
+(
+  if
+  (
+    IsEqual( GetLeverState( OB2G2 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#142( this ) 
+  )
+)
+
+Script VTriger#0#141
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB2, -1 ) 
+    SwitchLeverState( OB2G1, 0 ) 
+  )
+)
+
+Script VTriger#0#142
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB2, -1 ) 
+    SwitchLeverState( OB2G2, 0 ) 
+  )
+)
+
+Script VCheck#0#122
+(
+  if
+  (
+    IsEqual( GetLeverState( OB3G1 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#124( this ) 
+  )
+)
+
+Script VTriger#0#124
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB3, -1 ) 
+    SwitchLeverState( OB3G1, 0 ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  BSHouse = GetObjectByID( "106" ) 
+  FBoard = GetObjectByID( "4795" ) 
+  AltarF1 = GetObjectByID( "4948" ) 
+  AltarE = GetObjectByID( "4949" ) 
+  GCage = GetObjectByID( "4955" ) 
+  OB2 = GetObjectByID( "4956" ) 
+  OB3 = GetObjectByID( "4960" ) 
+  OB2G1 = GetObjectByID( "4972" ) 
+  OB2G2 = GetObjectByID( "4973" ) 
+  OB3G1 = GetObjectByID( "4976" ) 
+  OB3G2 = GetObjectByID( "4979" ) 
+  OB1G1 = GetObjectByID( "4996" ) 
+  OB1G2 = GetObjectByID( "5008" ) 
+  OB1 = GetObjectByID( "5010" ) 
+  Orc1SP = GetObjectByID( "5019" ) 
+  Orc2SP = GetObjectByID( "5020" ) 
+  Orc3SP = GetObjectByID( "5021" ) 
+  Orc4SP = GetObjectByID( "5022" ) 
+  OrcSSP = GetObjectByID( "5235" ) 
+  LPen = GetObjectByID( "2375" ) 
+  BBoard = GetObjectByID( "286307" ) 
+  AddObject( OrcG, GetObject( 625264 )  ) 
+  AddObject( OrcG, GetObject( 625248 )  ) 
+  AddObject( OrcG, GetObject( 625249 )  ) 
+  AddObject( OrcG, GetObject( 625263 )  ) 
+  AddObject( OrcG, GetObject( 625265 )  ) 
+  AddObject( OrcG, GetObject( 4876 )  ) 
+  AddObject( OrcG, GetObject( 4878 )  ) 
+  AddObject( OrcG, GetObject( 4894 )  ) 
+  AddObject( OrcG, GetObject( 4895 )  ) 
+  AddObject( OrcG, GetObject( 4901 )  ) 
+  AddObject( OrcG, GetObject( 4875 )  ) 
+  AddObject( OrcG, GetObject( 4896 )  ) 
+  AddObject( OrcG, GetObject( 4897 )  ) 
+  VCheck#0#130( NULL ) 
+  VCheck#0#133( NULL ) 
+  VCheck#0#136( NULL ) 
+  VCheck#0#139( NULL ) 
+  VCheck#0#140( NULL ) 
+  VCheck#0#122( NULL ) 
+)

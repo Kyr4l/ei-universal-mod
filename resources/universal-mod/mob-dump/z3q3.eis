@@ -1,0 +1,79 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object 
+)
+
+DeclareScript VCheck#3#1 (  this : object )
+DeclareScript VCheck#3#2 (  this : object )
+DeclareScript VTriger#3#4 (  this : object )
+DeclareScript VTriger#3#6 (  this : object )
+
+Script VCheck#3#1
+(
+  if
+  (
+    IsEqual( GetLeverState( LeverP ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#3#2( this ) 
+  )
+)
+
+Script VCheck#3#2
+(
+  if
+  (
+    IsEqual( GetLeverState( LeverP ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#3#4( this ) 
+  )
+)
+
+Script VTriger#3#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    ActivateTrap( Pyramid, 0 ) 
+  )
+)
+
+Script VTriger#3#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRoundToArea( 1, 230, 220, 15 ) 
+    QStart( "z3q3" ) 
+    QObjArea( 1 ) 
+    QObjKillGroup( "BrodGuard" ) 
+    QObjSeeUnit( "GetObject(1000583)" ) 
+    QObjKillUnit( "GetObject(1000583)" ) 
+    QObjGetItem( 84 ) 
+    QObjSeeObject( "GetObject(4636)" ) 
+    QObjUse( "GetObject(4636)", 1 ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  AddObject( BrodGuard, GetObject( 1000577 )  ) 
+  AddObject( BrodGuard, GetObject( 1000578 )  ) 
+  AddObject( BrodGuard, GetObject( 1000579 )  ) 
+  VCheck#3#1( NULL ) 
+  VTriger#3#6( NULL ) 
+)

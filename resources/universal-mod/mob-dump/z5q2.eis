@@ -1,0 +1,122 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  OB1L1 : object,
+  OB1 : object,
+  OB1L2 : object,
+  Chest : object,
+  Heroes : group
+)
+
+DeclareScript VCheck#0#104 (  this : object )
+DeclareScript VTriger#0#105 (  this : object )
+DeclareScript VTriger#0#54 ( this : object )
+DeclareScript VCheck#0#47 ( this : object )
+DeclareScript VTriger#0#46 ( this : object )
+DeclareScript VCheck#0#55 ( this : object )
+
+Script VCheck#0#104
+(
+  if
+  (
+    IsEqual( GetLeverState( OB1L1 ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#105( this ) 
+  )
+)
+
+Script VTriger#0#105
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB1, 0 ) 
+    Sleep(2)
+    SwitchLeverState( OB1L1, 0 ) 
+    Sleep(2)
+    EraseQuestItem( 0, 52 ) 
+    Sleep(2)
+    VCheck#0#47( NULL ) 
+  )
+)
+
+Script VCheck#0#47
+(
+  if
+  (
+    HaveItem( 0, 7 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#46( this ) 
+  )
+)
+
+Script VTriger#0#46
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z5q2.z5q2.1", 2 ) 
+    Sleep(2)
+    GSSetVarMax( 0, "q.z5q2.z5q2.2", 1 ) 
+    VCheck#0#55( NULL )
+  )
+)
+
+Script VCheck#0#55
+(
+  if
+  (
+    IsEqual( GetLeverState( Chest ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#54( this ) 
+  )
+)
+
+Script VTriger#0#54
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z5q2.z5q2.2", 2 ) 
+    Sleep(2)
+    GSSetVarMax( 0, "q.z5q2.z5q2", 2 ) 
+    Sleep(2)
+    QuestComplete( 0, "z5q2" )
+    Sleep(2)
+    EraseQuestItem( 0, 7 ) 
+    Sleep(2)
+    GiveQuestItem( 0, "CryptRune00" ) 
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 ) 
+  VCheck#0#104( NULL )
+  OB1L1 = GetObjectByID( "4583" ) 
+  OB1 = GetObjectByID( "4575" ) 
+  OB1L2 = GetObjectByID( "4570" ) 
+  Chest = GetObjectByID( "4522" ) 
+)
+
+

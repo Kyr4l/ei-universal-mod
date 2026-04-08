@@ -1,0 +1,117 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  KeyOrc : object 
+)
+
+DeclareScript VTriger#2#1 (  this : object )
+DeclareScript VCheck#2#2 (  this : object )
+DeclareScript VTriger#2#3 (  this : object )
+DeclareScript VTriger#2#5 (  this : object )
+DeclareScript VCheck#2#6 (  this : object )
+DeclareScript VTriger#2#7 (  this : object )
+
+Script VTriger#2#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z7q2" ) 
+    QObjSeeUnit( "GetObject(1000146)" ) 
+    QObjGetItem( 48 ) 
+    QObjSeeObject( "GetObject(4955)" ) 
+    QObjUse( "GetObject(4955)", 1 ) 
+    QFinish(  ) 
+  )
+)
+
+Script VCheck#2#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GCage ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#2#3( this ) 
+  )
+)
+
+Script VTriger#2#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    EraseQuestItem( 0, 48 ) 
+    For( i, Dkins ) 
+    (
+      Run( i ) 
+      UMSentry( i, Add( 6, Random( 3 )  ) , Add( 160, Random( 5 )  )  ) 
+    )
+  )
+)
+
+Script VTriger#2#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SwitchLeverState( OB1, 0 ) 
+    SwitchLeverState( OB2, 0 ) 
+    SwitchLeverState( OB3, 0 ) 
+  )
+)
+
+Script VCheck#2#6
+(
+  if
+  (
+    Every( i, Dkins, IsLess( DistanceUnitPoint( i, 6, 160 ) , 7 )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#2#7( this ) 
+  )
+)
+
+Script VTriger#2#7
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    For( i, Dkins ) 
+    (
+      RemoveUnitFromServer( i ) 
+    )
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  KeyOrc = GetObjectByID( "1000146" ) 
+  AddObject( Dkins, GetObject( 1000110 )  ) 
+  AddObject( Dkins, GetObject( 1000122 )  ) 
+  AddObject( Dkins, GetObject( 1000124 )  ) 
+  AddObject( Dkins, GetObject( 1000143 )  ) 
+  AddObject( Dkins, GetObject( 1000174 )  ) 
+  VTriger#2#1( NULL ) 
+  VCheck#2#2( NULL ) 
+  VTriger#2#5( NULL ) 
+  VCheck#2#6( NULL ) 
+)

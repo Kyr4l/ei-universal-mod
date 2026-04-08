@@ -1,0 +1,291 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Warlord : object
+)
+
+DeclareScript VTriger#6#1 (  this : object )
+DeclareScript VTriger#6#2 (  this : object )
+DeclareScript VCheck#6#3 (  this : object )
+DeclareScript VTriger#6#4 (  this : object )
+DeclareScript VCheck#6#6 (  this : object )
+DeclareScript VTriger#6#7 (  this : object )
+DeclareScript VCheck#6#9 (  this : object )
+DeclareScript VTriger#6#10 (  this : object )
+DeclareScript VCheck#6#12 (  this : object )
+DeclareScript VTriger#6#13 (  this : object )
+DeclareScript VCheck#6#15 (  this : object )
+DeclareScript VTriger#6#16 (  this : object )
+DeclareScript VCheck#6#18 (  this : object )
+DeclareScript VTriger#6#19 (  this : object )
+DeclareScript VCheck#6#21 (  this : object )
+DeclareScript VTriger#6#22 (  this : object )
+DeclareScript VCheck#6#24 (  this : object )
+DeclareScript VTriger#6#25 (  this : object )
+
+Script VTriger#6#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z19q3.z19q3.2", 1 )  
+    Sleep(2)
+    GSSetVarMax( 0, "q.z19q3.z19q3.3", 1 ) 
+    Sleep(2)
+    GSSetVarMax( 0, "q.z19q3.z19q3.4", 1 ) 
+    Sleep(2) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.5", 1 ) 
+    Sleep(2) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.6", 1 ) 
+    Sleep(2) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.7", 1 )  
+    Sleep(2)
+    Portal1(  ) 
+    Sleep( 90 ) 
+    CreateFXSource( -1, 456, 61, 25, 25, 50, "Tools\teleport1.wav" ) 
+    CreateFXSource( -1, 456, 61, 25, 25, 50, "Tools\teleport3.wav" ) 
+    Portal2(  ) 
+    Sleep( 150 ) 
+    CreateFXSource( -1, 456, 61, 25, 25, 50, "Tools\teleport2.wav" )
+ )
+)
+
+Script VTriger#6#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.1", 2 ) 
+    Sleep( 2 ) 
+  )
+)
+
+Script VCheck#6#3
+(
+  if
+  (
+    Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#2( this ) 
+  )
+)
+
+Script VTriger#6#4
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 392, 18, 432, 33.3 ) 
+    AddRectToArea( 1, 442, 101, 458, 129 ) 
+  )
+)
+
+Script VCheck#6#6
+(
+  if
+  (
+    Any( i , Heroes , GroupHas ( UnitSee (i) , Warlord) )
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#7( this ) 
+  )
+)
+
+Script VTriger#6#7
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.2", 2 ) 
+  )
+)
+
+Script VCheck#6#9
+(
+  if
+  (
+    Not( IsAlive( Warlord )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#10( this ) 
+  )
+)
+
+Script VTriger#6#10
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.3", 2 ) 
+  )
+)
+
+Script VCheck#6#12
+(
+  if
+  (
+    HaveItem( 0, 46 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#13( this ) 
+  )
+)
+
+Script VTriger#6#13
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.4", 2 ) 
+  )
+)
+
+Script VCheck#6#15
+(
+  if
+  (
+    IsEqual( GetLeverState( TCP-A ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#16( this ) 
+  )
+)
+
+Script VTriger#6#16
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.5", 2 ) 
+  )
+)
+
+Script VCheck#6#18
+(
+  if
+  (
+    IsEqual( GetLeverState( TCP-B ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#19( this ) 
+  )
+)
+
+Script VTriger#6#19
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.6", 2 ) 
+  )
+)
+
+Script VCheck#6#21
+(
+  if
+  (
+    IsEqual( GetLeverState( TCP-A ) , 0 ) 
+    IsEqual( GetLeverState( TCP-B ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#6#22( this ) 
+  )
+)
+
+Script VTriger#6#22
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3.7", 2 ) 
+  )
+)
+
+Script VCheck#6#24
+(
+  if
+  (
+    IsEqual( GetLeverState( TCP-A ) , 0 ) 
+    IsEqual( GetLeverState( TCP-B ) , 0 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    DeleteFXSource ( 125 )
+    Sleep ( 2 )
+    VTriger#6#25( this ) 
+  )
+)
+
+Script VTriger#6#25
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z19q3.z19q3", 2 ) 
+    Sleep(2)
+    QuestComplete( 0, "z19q3" ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Warlord = GetObjectByID( "1001936" ) 
+  VTriger#6#1( NULL ) 
+  VCheck#6#3( NULL ) 
+  VTriger#6#4( NULL ) 
+  VCheck#6#6( NULL ) 
+  VCheck#6#9( NULL ) 
+  VCheck#6#12( NULL ) 
+  VCheck#6#15( NULL ) 
+  VCheck#6#18( NULL ) 
+  VCheck#6#21( NULL ) 
+  VCheck#6#24( NULL ) 
+)

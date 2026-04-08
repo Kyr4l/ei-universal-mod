@@ -1,0 +1,329 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+DeclareScript VFire#0#1 (  this : object )
+DeclareScript VFire#0#2 (  this : object )
+DeclareScript VFire#0#3 (  this : object )
+DeclareScript VFire#1#1 (  this : object )
+DeclareScript VFire#1#3 (  this : object )
+DeclareScript VFireCity#0#1 (  this : object )
+DeclareScript VFireCity#0#2 (  this : object )
+DeclareScript VFireCity#0#3 (  this : object )
+DeclareScript VFireHouse#0#1 (  this : object )
+DeclareScript VFireHouse#0#2 (  this : object )
+DeclareScript VFireHouse#0#3 (  this : object )
+DeclareScript VFireDead#0#1 (  this : object )
+DeclareScript VFireDead#0#2 (  this : object )
+DeclareScript VFireDead#0#3 (  this : object )
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+
+
+Script VFire#0#1
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 20 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#1( this )
+    VFireHouse#0#1( this )
+    VFireDead#0#1( this )
+    VFire#1#1( this )
+  )
+)
+
+Script VFire#1#1
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#1( this ) 
+  )
+)
+
+Script VFire#0#2
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#2( this )
+    VFireHouse#0#2( this )
+    VFireDead#0#2( this )
+  )
+)
+
+Script VFire#0#3
+(
+  if
+  ( 
+    IsGreater( GetWorldTime( ) , 5 ) 
+    IsLess( GetWorldTime( ) , 6 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#3( this )
+    VFireHouse#0#3( this )
+    VFireDead#0#3( this )
+    VFire#1#3( this )
+  )
+)
+
+Script VFire#1#3
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 6 ) 
+    IsLess( GetWorldTime( ) , 19.9 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#3( this ) 
+  )
+)
+
+Script VFireCity#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1395067 ) ), -0.1 ), Add( GetY( GetObject( 1395067 ) ), -0.1 ), Add( GetZ( GetObject( 1395067 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1395067 ) ), GetY( GetObject( 1395067 ) ), Add(GetZ(GetObject( 1395067 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1397266 ) ), -0.1 ), Add( GetY( GetObject( 1397266 ) ), -0.1 ), Add( GetZ( GetObject( 1397266 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1397266 ) ), GetY( GetObject( 1397266 ) ), Add(GetZ(GetObject( 1397266 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1397267 ) ), -0.1 ), Add( GetY( GetObject( 1397267 ) ), -0.1 ), Add( GetZ( GetObject( 1397267 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1397267 ) ), GetY( GetObject( 1397267 ) ), Add(GetZ(GetObject( 1397267 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1397268 ) ), -0.1 ), Add( GetY( GetObject( 1397268 ) ), -0.1 ), Add( GetZ( GetObject( 1397268 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1397268 ) ), GetY( GetObject( 1397268 ) ), Add(GetZ(GetObject( 1397268 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1397269 ) ), -0.1 ), Add( GetY( GetObject( 1397269 ) ), -0.1 ), Add( GetZ( GetObject( 1397269 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1397269 ) ), GetY( GetObject( 1397269 ) ), Add(GetZ(GetObject( 1397269 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1397270 ) ), -0.1 ), Add( GetY( GetObject( 1397270 ) ), -0.1 ), Add( GetZ( GetObject( 1397270 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1397270 ) ), GetY( GetObject( 1397270 ) ), Add(GetZ(GetObject( 1397270 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1397271 ) ), -0.1 ), Add( GetY( GetObject( 1397271 ) ), -0.1 ), Add( GetZ( GetObject( 1397271 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1397271 ) ), GetY( GetObject( 1397271 ) ), Add(GetZ(GetObject( 1397271 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1397272 ) ), -0.1 ), Add( GetY( GetObject( 1397272 ) ), -0.1 ), Add( GetZ( GetObject( 1397272 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1397272 ) ), GetY( GetObject( 1397272 ) ), Add(GetZ(GetObject( 1397272 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1397273 ) ), -0.1 ), Add( GetY( GetObject( 1397273 ) ), -0.1 ), Add( GetZ( GetObject( 1397273 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1397273 ) ), GetY( GetObject( 1397273 ) ), Add(GetZ(GetObject( 1397273 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1397274 ) ), -0.1 ), Add( GetY( GetObject( 1397274 ) ), -0.1 ), Add( GetZ( GetObject( 1397274 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1397274 ) ), GetY( GetObject( 1397274 ) ), Add(GetZ(GetObject( 1397274 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1397275 ) ), -0.1 ), Add( GetY( GetObject( 1397275 ) ), -0.1 ), Add( GetZ( GetObject( 1397275 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1397275 ) ), GetY( GetObject( 1397275 ) ), Add(GetZ(GetObject( 1397275 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1397276 ) ), -0.1 ), Add( GetY( GetObject( 1397276 ) ), -0.1 ), Add( GetZ( GetObject( 1397276 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1397276 ) ), GetY( GetObject( 1397276 ) ), Add(GetZ(GetObject( 1397276 ) ), 3 ), 10, 255, 225, 225 )
+  )
+)
+
+Script VFireCity#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1395067 ) ), -0.1 ), Add( GetY( GetObject( 1395067 ) ), -0.1 ), Add( GetZ( GetObject( 1395067 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1395067 ) ), GetY( GetObject( 1395067 ) ), Add(GetZ(GetObject( 1395067 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1397266 ) ), -0.1 ), Add( GetY( GetObject( 1397266 ) ), -0.1 ), Add( GetZ( GetObject( 1397266 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1397266 ) ), GetY( GetObject( 1397266 ) ), Add(GetZ(GetObject( 1397266 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1397267 ) ), -0.1 ), Add( GetY( GetObject( 1397267 ) ), -0.1 ), Add( GetZ( GetObject( 1397267 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1397267 ) ), GetY( GetObject( 1397267 ) ), Add(GetZ(GetObject( 1397267 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1397268 ) ), -0.1 ), Add( GetY( GetObject( 1397268 ) ), -0.1 ), Add( GetZ( GetObject( 1397268 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1397268 ) ), GetY( GetObject( 1397268 ) ), Add(GetZ(GetObject( 1397268 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1397269 ) ), -0.1 ), Add( GetY( GetObject( 1397269 ) ), -0.1 ), Add( GetZ( GetObject( 1397269 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1397269 ) ), GetY( GetObject( 1397269 ) ), Add(GetZ(GetObject( 1397269 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1397270 ) ), -0.1 ), Add( GetY( GetObject( 1397270 ) ), -0.1 ), Add( GetZ( GetObject( 1397270 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1397270 ) ), GetY( GetObject( 1397270 ) ), Add(GetZ(GetObject( 1397270 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1397271 ) ), -0.1 ), Add( GetY( GetObject( 1397271 ) ), -0.1 ), Add( GetZ( GetObject( 1397271 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1397271 ) ), GetY( GetObject( 1397271 ) ), Add(GetZ(GetObject( 1397271 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1397272 ) ), -0.1 ), Add( GetY( GetObject( 1397272 ) ), -0.1 ), Add( GetZ( GetObject( 1397272 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1397272 ) ), GetY( GetObject( 1397272 ) ), Add(GetZ(GetObject( 1397272 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1397273 ) ), -0.1 ), Add( GetY( GetObject( 1397273 ) ), -0.1 ), Add( GetZ( GetObject( 1397273 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1397273 ) ), GetY( GetObject( 1397273 ) ), Add(GetZ(GetObject( 1397273 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1397274 ) ), -0.1 ), Add( GetY( GetObject( 1397274 ) ), -0.1 ), Add( GetZ( GetObject( 1397274 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1397274 ) ), GetY( GetObject( 1397274 ) ), Add(GetZ(GetObject( 1397274 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1397275 ) ), -0.1 ), Add( GetY( GetObject( 1397275 ) ), -0.1 ), Add( GetZ( GetObject( 1397275 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1397275 ) ), GetY( GetObject( 1397275 ) ), Add(GetZ(GetObject( 1397275 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1397276 ) ), -0.1 ), Add( GetY( GetObject( 1397276 ) ), -0.1 ), Add( GetZ( GetObject( 1397276 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1397276 ) ), GetY( GetObject( 1397276 ) ), Add(GetZ(GetObject( 1397276 ) ), 3 ), 10, 255, 225, 225 )
+  )
+)
+
+Script VFireCity#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 101 )
+    DeleteParticleSource( 101 )
+    Sleep( 10 )
+    DeletePointLight( 102 )
+    DeleteParticleSource( 102 )
+    Sleep( 10 )
+    DeletePointLight( 103 )
+    DeleteParticleSource( 103 )
+    Sleep( 10 )
+    DeletePointLight( 104 )
+    DeleteParticleSource( 104 )
+    Sleep( 10 )
+    DeletePointLight( 105 )
+    DeleteParticleSource( 105 )
+    Sleep( 10 )
+    DeletePointLight( 106 )
+    DeleteParticleSource( 106 )
+    Sleep( 10 )
+    DeletePointLight( 107 )
+    DeleteParticleSource( 107 )
+    Sleep( 10 )
+    DeletePointLight( 108 )
+    DeleteParticleSource( 108 )
+    Sleep( 10 )
+    DeletePointLight( 109 )
+    DeleteParticleSource( 109 )
+    Sleep( 10 )
+    DeletePointLight( 110 )
+    DeleteParticleSource( 110 )
+    Sleep( 10 )
+    DeletePointLight( 111 )
+    DeleteParticleSource( 111 )
+    Sleep( 10 )
+    DeletePointLight( 112 )
+    DeleteParticleSource( 112 )
+  )
+)
+
+Script VFireHouse#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 151, 155, 60, 40, 30, 125, 125, 755 )
+    CreatePointLight( 152, 175, 60, 40, 30, 125, 125, 755 )
+    Sleep( 900 )
+    CreatePointLight( 151, 155, 60, 40, 30, 125, 125, 2255 )
+    CreatePointLight( 152, 175, 60, 40, 30, 125, 125, 2255 )
+  )
+)
+
+Script VFireHouse#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 151, 155, 60, 40, 30, 125, 125, 2255 )
+    CreatePointLight( 152, 175, 60, 40, 30, 125, 125, 2255 )
+  )
+)
+
+Script VFireHouse#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 151 )
+    DeletePointLight( 152 )
+  )
+)
+
+Script VFireDead#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 301, 176, 225, 30, 25, 125, 210, 125 )
+    Sleep( 900 )
+    CreatePointLight( 301, 176, 225, 30, 30, 145, 250, 145 )
+  )
+)
+
+Script VFireDead#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreatePointLight( 301, 176, 225, 30, 30, 145, 250, 145 )
+  )
+)
+
+Script VFireDead#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 301 )
+  )
+)
+
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  VFire#0#1( NULL )
+  VFire#0#2( NULL )
+  VFire#0#3( NULL )
+)

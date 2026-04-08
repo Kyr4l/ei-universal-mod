@@ -1,0 +1,66 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  ZS0 : object,
+  ZS1 : object
+)
+
+DeclareScript CheckZ0 ( this : object )
+DeclareScript CheckZ1 ( this : object )
+DeclareScript CheckQ ( this : object )
+
+
+Script CheckZ0
+(
+  if
+  (
+    Not(IsAlive( ZS0 ) ) 
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z31q1.z31q1.1", 2 )
+  )
+)
+
+Script CheckZ1
+(
+  if
+  (
+    Not(IsAlive( ZS1 ) ) 
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z31q1.z31q1.2", 2 )
+  )
+)
+
+Script CheckQ
+(
+  if
+  (
+    Not(IsAlive( ZS0 ) )
+    Not(IsAlive( ZS1 ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z31q1.z31q1", 2 )
+    Sleep( 2 )
+    QuestComplete( 0, "z31q1" )
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 )
+  ZS0 = GetObjectByID( "1000002713" )
+  ZS1 = GetObjectByID( "1000002714" )
+  CheckZ0 ( NULL )
+  CheckZ1 ( NULL )
+  CheckQ ( NULL )
+ )

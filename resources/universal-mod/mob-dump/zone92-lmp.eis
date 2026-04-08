@@ -1,0 +1,11 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+WorldScript
+(
+  Sleep( 2 )
+)

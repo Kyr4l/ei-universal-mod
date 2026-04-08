@@ -13,6 +13,7 @@ luadir="lua"
 inidir="ini"
 mprdir="mpr"
 mobdir="mob"
+mobdumpdir="mob-dump"
 mqxdir="mq-unpacked"
 musicdir="stream"
 moviesdir="movies"
@@ -76,6 +77,13 @@ function copyMaps {
     echo "===== COPYING MAPS ========================================"
     rsync -rv "$mprdir"/ "$moddir/maps"
     rsync -rv "$mobdir"/ "$moddir/maps"
+}
+
+function dumpMobFiles {
+    if [[ "$dumpmobnswr" == "y" ]]; then
+        echo "===== DUMPING MOB FILES FOR GIT ========================================"
+        parallel -j 8 --bar "python3 bin/mob.py {} $mobdumpdir/{/.}.yaml $mobdumpdir/{/.}.eis" ::: $mobdir/* > /dev/null
+    fi
 }
 
 function copyMedia {
@@ -207,6 +215,7 @@ function main {
     ini2Reg
     makeQuests
     copyMaps
+    dumpMobFiles
     copyMedia
     copyHdPack
     eiDbEditor
@@ -221,10 +230,11 @@ function main {
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."
 
-read -rp "Convert REDRESS from DDS to MMP? (y/N) " redressnswr
-read -rp "Convert TEXTURES from DDS to MMP? (y/N) " texturesnswr
-read -rp "Increment version? (y/N) " writeversionnswr
-read -rp "Replace the older mod files? (Y/n) " replaceoldnswr
+read -rp "Convert REDRESS from DDS to MMP? [y/N] " redressnswr
+read -rp "Convert TEXTURES from DDS to MMP? [y/N] " texturesnswr
+read -rp "Dump MOB files? (only for version tracking with git) [y/N] " dumpmobnswr
+read -rp "Increment version? [y/N] " writeversionnswr
+read -rp "Replace the older mod files? [Y/n] " replaceoldnswr
 echo ""
 
 main

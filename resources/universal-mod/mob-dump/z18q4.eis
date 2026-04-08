@@ -1,0 +1,56 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPJunScientists1 : object,
+  LMPJunScientists2 : object,
+  LMPJunScientists9 : object,
+  LMPJunScientists8 : object,
+  LMPJunScientists7 : object,
+  LMPJunScientists6 : object,
+  LMPJunScientists5 : object,
+  LMPJunScientists4 : object,
+  LMPJunScientists3 : object 
+)
+
+DeclareScript VTriger#4#1 (  this : object )
+
+Script VTriger#4#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z18q4" ) 
+    AddRectToArea( 1, 203, 295, 216, 304 ) 
+    QObjArea( 1 ) 
+    QObjKillGroup( "JunScientifics" ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPJunScientists1 = GetObjectByID( "1000315" ) 
+  LMPJunScientists2 = GetObjectByID( "1000370" ) 
+  LMPJunScientists9 = GetObjectByID( "1000392" ) 
+  LMPJunScientists8 = GetObjectByID( "1000393" ) 
+  LMPJunScientists7 = GetObjectByID( "1000394" ) 
+  LMPJunScientists6 = GetObjectByID( "1000395" ) 
+  LMPJunScientists5 = GetObjectByID( "1000398" ) 
+  LMPJunScientists4 = GetObjectByID( "1000399" ) 
+  LMPJunScientists3 = GetObjectByID( "1000400" ) 
+  AddObject( JunScientifics, GetObject( 1000315 )  ) 
+  AddObject( JunScientifics, GetObject( 1000370 )  ) 
+  AddObject( JunScientifics, GetObject( 1000400 )  ) 
+  AddObject( JunScientifics, GetObject( 1000399 )  ) 
+  AddObject( JunScientifics, GetObject( 1000398 )  ) 
+  AddObject( JunScientifics, GetObject( 1000395 )  ) 
+  AddObject( JunScientifics, GetObject( 1000394 )  ) 
+  AddObject( JunScientifics, GetObject( 1000393 )  ) 
+  AddObject( JunScientifics, GetObject( 1000392 )  ) 
+  VTriger#4#1( NULL ) 
+)

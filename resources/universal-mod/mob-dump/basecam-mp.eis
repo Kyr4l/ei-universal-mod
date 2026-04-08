@@ -1,0 +1,1676 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  PodMaster : object,
+  Human9 : object,
+  Human11 : object,
+  HumanHighFigh : object,
+  Human2 : object,
+  Human4 : object,
+  Human1 : object,
+  Human3 : object,
+  DogRedF12-422369 : object,
+  Human6 : object,
+  Human10 : object,
+  Pig : object,
+  Human5 : object,
+  Human8 : object,
+  Human7 : object,
+  Fake : object,
+  Salut : group 
+)
+
+DeclareScript VCheck#0#299 (  this : object )
+DeclareScript VCheck#0#309 (  this : object )
+DeclareScript VTriger#0#310 (  this : object )
+DeclareScript VTriger#0#312 (  this : object )
+DeclareScript VTriger#0#570 (  this : object )
+DeclareScript VCheck#0#317 (  this : object )
+DeclareScript VTriger#0#569 (  this : object )
+DeclareScript VTriger#0#320 (  this : object )
+DeclareScript VTriger#0#324 (  this : object )
+DeclareScript VCheck#0#327 (  this : object )
+DeclareScript VTriger#0#331 (  this : object )
+DeclareScript VCheck#0#334 (  this : object )
+DeclareScript VTriger#0#335 (  this : object )
+DeclareScript VTriger#0#336 (  this : object )
+DeclareScript VTriger#0#340 (  this : object )
+DeclareScript VCheck#0#342 (  this : object )
+DeclareScript VCheck#0#343 (  this : object )
+DeclareScript VCheck#0#594 (  this : object )
+DeclareScript VTriger#0#600 (  this : object )
+DeclareScript VTriger#0#348 (  this : object )
+DeclareScript VTriger#0#349 (  this : object )
+DeclareScript VTriger#0#354 (  this : object )
+DeclareScript VCheck#0#355 (  this : object )
+DeclareScript VCheck#0#356 (  this : object )
+DeclareScript VCheck#0#357 (  this : object )
+DeclareScript VTriger#0#358 (  this : object )
+DeclareScript VTriger#0#359 (  this : object )
+DeclareScript VTriger#0#360 (  this : object )
+DeclareScript VTriger#0#361 (  this : object )
+DeclareScript VTriger#0#116 (  this : object )
+DeclareScript VTriger#0#627 (  this : object )
+DeclareScript VCheck#0#628 (  this : object )
+DeclareScript VTriger#0#629 (  this : object )
+DeclareScript VTriger#0#630 (  this : object )
+DeclareScript VCheck#0#626 (  this : object )
+DeclareScript VTriger#0#374 (  this : object )
+DeclareScript VCheck#0#375 (  this : object )
+DeclareScript VTriger#0#373 (  this : object )
+DeclareScript VCheck#0#377 (  this : object )
+DeclareScript VTriger#0#378 (  this : object )
+DeclareScript VCheck#0#376 (  this : object )
+DeclareScript VTriger#0#380 (  this : object )
+DeclareScript VTriger#0#379 (  this : object )
+DeclareScript VTriger#0#392 (  this : object )
+DeclareScript VCheck#0#393 (  this : object )
+DeclareScript VTriger#0#394 (  this : object )
+DeclareScript VTriger#0#395 (  this : object )
+DeclareScript VCheck#0#396 (  this : object )
+DeclareScript VCheck#0#397 (  this : object )
+DeclareScript VTriger#0#398 (  this : object )
+DeclareScript VTriger#0#399 (  this : object )
+DeclareScript VTriger#0#411 (  this : object )
+DeclareScript VCheck#0#412 (  this : object )
+DeclareScript VCheck#0#413 (  this : object )
+DeclareScript VCheck#0#414 (  this : object )
+DeclareScript VTriger#0#415 (  this : object )
+DeclareScript VTriger#0#416 (  this : object )
+DeclareScript VTriger#0#417 (  this : object )
+DeclareScript VTriger#0#418 (  this : object )
+DeclareScript VTriger#0#430 (  this : object )
+DeclareScript VCheck#0#431 (  this : object )
+DeclareScript VTriger#0#432 (  this : object )
+DeclareScript VTriger#0#433 (  this : object )
+DeclareScript VCheck#0#434 (  this : object )
+DeclareScript VCheck#0#435 (  this : object )
+DeclareScript VTriger#0#436 (  this : object )
+DeclareScript VTriger#0#437 (  this : object )
+DeclareScript VTriger#0#449 (  this : object )
+DeclareScript VCheck#0#450 (  this : object )
+DeclareScript VCheck#0#451 (  this : object )
+DeclareScript VCheck#0#452 (  this : object )
+DeclareScript VTriger#0#453 (  this : object )
+DeclareScript VTriger#0#454 (  this : object )
+DeclareScript VTriger#0#455 (  this : object )
+DeclareScript VTriger#0#456 (  this : object )
+DeclareScript VTriger#0#237 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VCheck#0#299
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "FirstComing" ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#0#334( this ) 
+    VCheck#0#393( this ) 
+    VCheck#0#309( this ) 
+    VCheck#0#355( this ) 
+    VCheck#0#377( this ) 
+    VCheck#0#431( this ) 
+    VCheck#0#450( this ) 
+    VCheck#0#412( this ) 
+  )
+)
+
+Script VCheck#0#309
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 4 ) 
+    IsLess( GetWorldTime(  ) , 23 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#310( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#312( this ) 
+  )
+)
+
+Script VTriger#0#310
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human1, 56.5616, 74.8637, 0 ) 
+    SetCP( Human2, 57.6281, 74.7471, 0 ) 
+    SetCP( Human11, 58.6764, 74.7008, 0 ) 
+    UMPlayer( Human1 ) 
+    UMPlayer( Human2 ) 
+    UMPlayer( Human11 ) 
+    Sleep( 5 ) 
+    RotateTo( Human1, 56.3, 74 ) 
+    RotateTo( Human2, 57, 71 ) 
+    RotateTo( Human11, 58, 71 ) 
+    SleepUntilIdle( Human1 ) 
+    Idle( Human1 ) 
+    SleepUntilIdle( Human2 ) 
+    Idle( Human2 ) 
+    SleepUntilIdle( Human11 ) 
+    Idle( Human11 ) 
+    HideObject( Human1, 0 ) 
+    HideObject( Human2, 0 ) 
+    HideObject( Human11, 0 ) 
+    VTriger#0#320( this ) 
+  )
+)
+
+Script VTriger#0#312
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human1, 47.2, 80.8, 0 ) 
+    SetCP( Human2, 45.9, 79.4, 0 ) 
+    SetCP( Human11, 45, 77.9, 0 ) 
+    RotateTo( Human1, 48, 79.6 ) 
+    RotateTo( Human2, 47.4, 78.4 ) 
+    RotateTo( Human11, 47.3, 76.8 ) 
+    SleepUntilIdle( Human1 ) 
+    SleepUntilIdle( Human2 ) 
+    SleepUntilIdle( Human11 ) 
+    HideObject( Human1, 1 ) 
+    HideObject( Human2, 1 ) 
+    HideObject( Human11, 1 ) 
+    VCheck#0#327( this ) 
+  )
+)
+
+Script VTriger#0#570
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 98 ) 
+    VTriger#0#569( this ) 
+  )
+)
+
+Script VCheck#0#317
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 4 ) 
+    IsLess( GetWorldTime(  ) , 23 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#320( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#324( this ) 
+  )
+)
+
+Script VTriger#0#569
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( PodMaster, "uspecial08" ) 
+    VTriger#0#570( this ) 
+  )
+)
+
+Script VTriger#0#320
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human1, "uspecial10" ) 
+    PlayAnimation( Human2, "uspecial10" ) 
+    PlayAnimation( Human11, "uspecial10" ) 
+    Sleep( 40 ) 
+    VCheck#0#317( this ) 
+  )
+)
+
+Script VTriger#0#324
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human1, "uspecial09" ) 
+    PlayAnimation( Human2, "uspecial09" ) 
+    PlayAnimation( Human11, "uspecial09" ) 
+    Sleep( 40 ) 
+    UMSentry( Human1, 44, 78 ) 
+    UMSentry( Human2, 46, 81 ) 
+    UMSentry( Human11, 44, 78 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human11, 44, 78 ) , 1 )  ) 
+    UMPlayer( Human11 ) 
+    Sleep( 5 ) 
+    RotateTo( Human11, 58, 71 ) 
+    SleepUntilIdle( Human11 ) 
+    Idle( Human11 ) 
+    HideObject( Human11, 1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human2, 46, 81 ) , 1 )  ) 
+    UMPlayer( Human2 ) 
+    Sleep( 5 ) 
+    RotateTo( Human2, 57, 71 ) 
+    SleepUntilIdle( Human2 ) 
+    Idle( Human2 ) 
+    HideObject( Human2, 1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human1, 44, 78 ) , 1 )  ) 
+    UMPlayer( Human1 ) 
+    Sleep( 5 ) 
+    RotateTo( Human1, 56.3, 74 ) 
+    SleepUntilIdle( Human1 ) 
+    Idle( Human1 ) 
+    HideObject( Human1, 1 ) 
+    VCheck#0#327( this ) 
+  )
+)
+
+Script VCheck#0#327
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 4 ) 
+    IsLess( GetWorldTime(  ) , 23 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#331( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#312( this ) 
+  )
+)
+
+Script VTriger#0#331
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human1, 0 ) 
+    HideObject( Human2, 0 ) 
+    HideObject( Human11, 0 ) 
+    UMSentry( Human1, 56.5616, 74.8637 ) 
+    UMSentry( Human2, 57.6281, 74.7471 ) 
+    UMSentry( Human11, 58.6764, 74.7008 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human2, 57.6281, 74.7471 ) , 0.2 )  ) 
+    UMPlayer( Human2 ) 
+    Sleep( 5 ) 
+    RotateTo( Human2, 57, 71 ) 
+    SleepUntilIdle( Human2 ) 
+    Idle( Human2 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human1, 56.5616, 74.8637 ) , 0.2 )  ) 
+    UMPlayer( Human1 ) 
+    Sleep( 5 ) 
+    RotateTo( Human1, 56.3, 74 ) 
+    SleepUntilIdle( Human1 ) 
+    Idle( Human1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human11, 58.6764, 74.7008 ) , 0.2 )  ) 
+    UMPlayer( Human11 ) 
+    Sleep( 5 ) 
+    RotateTo( Human11, 58, 71 ) 
+    SleepUntilIdle( Human11 ) 
+    Idle( Human11 ) 
+    VTriger#0#320( this ) 
+  )
+)
+
+Script VCheck#0#334
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 10 ) 
+    IsLess( GetWorldTime(  ) , 13 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#335( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#336( this ) 
+  )
+)
+
+Script VTriger#0#335
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human10, 79.5, 69.8, 0 ) 
+    UMPlayer( Human10 ) 
+    Sleep( 5 ) 
+    RotateTo( Human10, 80.8, 69.7 ) 
+    SleepUntilIdle( Human10 ) 
+    Idle( Human10 ) 
+    HideObject( Human10, 0 ) 
+    VTriger#0#340( this ) 
+  )
+)
+
+Script VTriger#0#336
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human10, 88.7, 82.6, 0 ) 
+    RotateTo( Human10, 80, 80.3 ) 
+    SleepUntilIdle( Human10 ) 
+    HideObject( Human10, 1 ) 
+    VCheck#0#343( this ) 
+  )
+)
+
+Script VTriger#0#340
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human10, "uattack09" ) 
+    Sleep( 25 ) 
+    VCheck#0#342( this ) 
+  )
+)
+
+Script VCheck#0#342
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 10 ) 
+    IsLess( GetWorldTime(  ) , 13 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#340( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#348( this ) 
+  )
+)
+
+Script VCheck#0#343
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 10 ) 
+    IsLess( GetWorldTime(  ) , 13 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#349( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#336( this ) 
+  )
+)
+
+Script VCheck#0#594
+(
+  if
+  (
+    Not( IsEqual( GSGetVar( 0, "ElderUndertheguards" ) , 1 )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#600( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#432( this ) 
+  )
+)
+
+Script VTriger#0#600
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human5, "uspecial11" ) 
+    Sleep( 40 ) 
+    VTriger#0#432( this ) 
+  )
+)
+
+Script VTriger#0#348
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human10, 88.7, 82.6 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human10, 88.7, 82.6 ) , 1 )  ) 
+    UMPlayer( Human10 ) 
+    Sleep( 5 ) 
+    RotateTo( Human10, 80, 80.3 ) 
+    SleepUntilIdle( Human10 ) 
+    Idle( Human10 ) 
+    HideObject( Human10, 1 ) 
+    VCheck#0#343( this ) 
+  )
+)
+
+Script VTriger#0#349
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human10, 0 ) 
+    UMSentry( Human10, 79.5, 69.8 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human10, 79.5, 69.8 ) , 0.2 )  ) 
+    UMPlayer( Human10 ) 
+    Sleep( 5 ) 
+    RotateTo( Human10, 80.8, 69.7 ) 
+    SleepUntilIdle( Human10 ) 
+    Idle( Human10 ) 
+    VTriger#0#340( this ) 
+  )
+)
+
+Script VTriger#0#354
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human6, 79.412, 67.5253, 0 ) 
+    UMPlayer( Human6 ) 
+    Sleep( 5 ) 
+    RotateTo( Human6, 81.2, 67.9 ) 
+    SleepUntilIdle( Human6 ) 
+    Idle( Human6 ) 
+    HideObject( Human6, 0 ) 
+    VTriger#0#358( this ) 
+  )
+)
+
+Script VCheck#0#355
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 17 ) 
+    IsLess( GetWorldTime(  ) , 20 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#354( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#359( this ) 
+  )
+)
+
+Script VCheck#0#356
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 17 ) 
+    IsLess( GetWorldTime(  ) , 20 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#358( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#360( this ) 
+  )
+)
+
+Script VCheck#0#357
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 17 ) 
+    IsLess( GetWorldTime(  ) , 20 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#361( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#359( this ) 
+  )
+)
+
+Script VTriger#0#358
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human6, "uattack10" ) 
+    Sleep( 21 ) 
+    VCheck#0#356( this ) 
+  )
+)
+
+Script VTriger#0#359
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human6, 88.7, 75.5, 0 ) 
+    RotateTo( Human6, 90, 62.85 ) 
+    SleepUntilIdle( Human6 ) 
+    HideObject( Human6, 1 ) 
+    VCheck#0#357( this ) 
+  )
+)
+
+Script VTriger#0#360
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human6, 88.7, 75.5 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human6, 88.7, 75.5 ) , 1 )  ) 
+    UMPlayer( Human6 ) 
+    Sleep( 5 ) 
+    RotateTo( Human6, 90, 62.85 ) 
+    SleepUntilIdle( Human6 ) 
+    Idle( Human6 ) 
+    HideObject( Human6, 1 ) 
+    VCheck#0#357( this ) 
+  )
+)
+
+Script VTriger#0#361
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human6, 0 ) 
+    UMSentry( Human6, 79.454, 67.5253 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human6, 79.454, 67.5253 ) , 0.2 )  ) 
+    UMPlayer( Human6 ) 
+    Sleep( 5 ) 
+    RotateTo( Human6, 81.2, 67.9 ) 
+    SleepUntilIdle( Human6 ) 
+    Idle( Human6 ) 
+    VTriger#0#358( this ) 
+  )
+)
+
+Script VTriger#0#116
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( HumanHighFigh, "uspecial10" ) 
+    VTriger#0#237( this ) 
+  )
+)
+
+Script VTriger#0#627
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Pig, 1 ) 
+    VCheck#0#628( this ) 
+  )
+)
+
+Script VCheck#0#628
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z6q3.z6q3" ) , 2 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#629( this ) 
+  )
+)
+
+Script VTriger#0#629
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Pig, 0 ) 
+  )
+)
+
+Script VTriger#0#630
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Pig, 0 ) 
+  )
+)
+
+Script VCheck#0#626
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "b.Nsheriff.z6q3_1" ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#627( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#630( this ) 
+  )
+)
+
+Script VTriger#0#374
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human4, "uspecial13" ) 
+    Sleep( 46 ) 
+    VCheck#0#375( this ) 
+  )
+)
+
+Script VCheck#0#375
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 16 ) 
+    IsLess( GetWorldTime(  ) , 21 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#374( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#379( this ) 
+  )
+)
+
+Script VTriger#0#373
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human4, 72, 60.55, 0 ) 
+    UMPlayer( Human4 ) 
+    Sleep( 5 ) 
+    RotateTo( Human4, 71, 63 ) 
+    SleepUntilIdle( Human4 ) 
+    Idle( Human4 ) 
+    HideObject( Human4, 0 ) 
+    VTriger#0#374( this ) 
+  )
+)
+
+Script VCheck#0#377
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 16 ) 
+    IsLess( GetWorldTime(  ) , 21 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#373( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#378( this ) 
+  )
+)
+
+Script VTriger#0#378
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human4, 79.08, 57.52, 0 ) 
+    RotateTo( Human4, 75.67, 56.76 ) 
+    SleepUntilIdle( Human4 ) 
+    HideObject( Human4, 1 ) 
+    VCheck#0#376( this ) 
+  )
+)
+
+Script VCheck#0#376
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 16 ) 
+    IsLess( GetWorldTime(  ) , 21 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#380( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#378( this ) 
+  )
+)
+
+Script VTriger#0#380
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human4, 0 ) 
+    UMSentry( Human4, 72, 60.4 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human4, 72, 60.4 ) , 0.2 )  ) 
+    UMPlayer( Human4 ) 
+    Sleep( 5 ) 
+    RotateTo( Human4, 71, 63 ) 
+    SleepUntilIdle( Human4 ) 
+    Idle( Human4 ) 
+    VTriger#0#374( this ) 
+  )
+)
+
+Script VTriger#0#379
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human4, 79.08, 57.52 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human4, 79.08, 57.52 ) , 1 )  ) 
+    UMPlayer( Human4 ) 
+    Sleep( 5 ) 
+    RotateTo( Human4, 75.67, 56.76 ) 
+    SleepUntilIdle( Human4 ) 
+    Idle( Human4 ) 
+    HideObject( Human4, 1 ) 
+    VCheck#0#376( this ) 
+  )
+)
+
+Script VTriger#0#392
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human7, 74.3472, 61.7766, 0 ) 
+    UMPlayer( Human7 ) 
+    Sleep( 5 ) 
+    RotateTo( Human7, 73, 60 ) 
+    SleepUntilIdle( Human7 ) 
+    Idle( Human7 ) 
+    HideObject( Human7, 0 ) 
+    VTriger#0#394( this ) 
+  )
+)
+
+Script VCheck#0#393
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 7 ) 
+    IsLess( GetWorldTime(  ) , 12 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#392( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#395( this ) 
+  )
+)
+
+Script VTriger#0#394
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human7, "uspecial08" ) 
+    Sleep( 31 ) 
+    VCheck#0#396( this ) 
+  )
+)
+
+Script VTriger#0#395
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human7, 87.5, 61, 0 ) 
+    RotateTo( Human7, 91, 54.6 ) 
+    SleepUntilIdle( Human7 ) 
+    HideObject( Human7, 1 ) 
+    VCheck#0#397( this ) 
+  )
+)
+
+Script VCheck#0#396
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 7 ) 
+    IsLess( GetWorldTime(  ) , 12 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#394( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#398( this ) 
+  )
+)
+
+Script VCheck#0#397
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 7 ) 
+    IsLess( GetWorldTime(  ) , 12 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#399( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#395( this ) 
+  )
+)
+
+Script VTriger#0#398
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human7, 87.5, 61 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human7, 87.5, 61 ) , 1 )  ) 
+    UMPlayer( Human7 ) 
+    Sleep( 5 ) 
+    RotateTo( Human7, 91, 54.6 ) 
+    SleepUntilIdle( Human7 ) 
+    Idle( Human7 ) 
+    HideObject( Human7, 1 ) 
+    VCheck#0#397( this ) 
+  )
+)
+
+Script VTriger#0#399
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human7, 0 ) 
+    UMSentry( Human7, 74.312, 61.4789 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human7, 74.312, 61.4789 ) , 0.2 )  ) 
+    UMPlayer( Human7 ) 
+    Sleep( 5 ) 
+    RotateTo( Human7, 73, 61.5 ) 
+    SleepUntilIdle( Human7 ) 
+    Idle( Human7 ) 
+    VTriger#0#394( this ) 
+  )
+)
+
+Script VTriger#0#411
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human8, 70.4, 75, 0 ) 
+    SetCP( Human9, 71.5, 74.2, 0 ) 
+    UMPlayer( Human8 ) 
+    UMPlayer( Human9 ) 
+    Sleep( 5 ) 
+    RotateTo( Human8, 72.1, 73.7 ) 
+    RotateTo( Human9, 69.4, 75.15 ) 
+    SleepUntilIdle( Human8 ) 
+    Idle( Human8 ) 
+    SleepUntilIdle( Human9 ) 
+    Idle( Human9 ) 
+    HideObject( Human8, 0 ) 
+    HideObject( Human9, 0 ) 
+    VTriger#0#415( this ) 
+  )
+)
+
+Script VCheck#0#412
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 9 ) 
+    IsLess( GetWorldTime(  ) , 14 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#411( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#416( this ) 
+  )
+)
+
+Script VCheck#0#413
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 9 ) 
+    IsLess( GetWorldTime(  ) , 14 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#415( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#417( this ) 
+  )
+)
+
+Script VCheck#0#414
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 9 ) 
+    IsLess( GetWorldTime(  ) , 14 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#418( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#416( this ) 
+  )
+)
+
+Script VTriger#0#415
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human9, "ubriefing09" ) 
+    PlayAnimation( Human8, "ubriefing17" ) 
+    Sleep( 133 ) 
+    PlayAnimation( Human9, "ubriefing09" ) 
+    Sleep( 53 ) 
+    PlayAnimation( Human8, "ubriefing17" ) 
+    Sleep( 80 ) 
+    PlayAnimation( Human9, "ubriefing09" ) 
+    Sleep( 133 ) 
+    VCheck#0#413( this ) 
+  )
+)
+
+Script VTriger#0#416
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human8, 62.8, 80.8, 0 ) 
+    SetCP( Human9, 75, 84, 0 ) 
+    RotateTo( Human8, 64, 79.7 ) 
+    RotateTo( Human9, 56, 82.6 ) 
+    SleepUntilIdle( Human8 ) 
+    SleepUntilIdle( Human9 ) 
+    HideObject( Human8, 1 ) 
+    HideObject( Human9, 1 ) 
+    VCheck#0#414( this ) 
+  )
+)
+
+Script VTriger#0#417
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human8, 62.8, 80.8 ) 
+    UMSentry( Human9, 75, 84 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human8, 62.8, 80.8 ) , 1 )  ) 
+    UMPlayer( Human8 ) 
+    Sleep( 5 ) 
+    RotateTo( Human8, 64, 79.7 ) 
+    SleepUntilIdle( Human8 ) 
+    Idle( Human8 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human9, 75, 84 ) , 1 )  ) 
+    UMPlayer( Human9 ) 
+    Sleep( 5 ) 
+    RotateTo( Human9, 56, 82.6 ) 
+    SleepUntilIdle( Human9 ) 
+    Idle( Human9 ) 
+    HideObject( Human8, 1 ) 
+    HideObject( Human9, 1 ) 
+    VCheck#0#414( this ) 
+  )
+)
+
+Script VTriger#0#418
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human8, 0 ) 
+    HideObject( Human9, 0 ) 
+    UMSentry( Human8, 70.4, 75 ) 
+    UMSentry( Human9, 71.5, 74.2 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human8, 70.4, 75 ) , 0.2 )  ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human9, 71.5, 74.2 ) , 0.2 )  ) 
+    UMPlayer( Human8 ) 
+    UMPlayer( Human9 ) 
+    Sleep( 5 ) 
+    RotateTo( Human8, 72.1, 73.7 ) 
+    RotateTo( Human9, 69.4, 75.15 ) 
+    SleepUntilIdle( Human8 ) 
+    Idle( Human8 ) 
+    SleepUntilIdle( Human9 ) 
+    Idle( Human9 ) 
+    VTriger#0#415( this ) 
+  )
+)
+
+Script VTriger#0#430
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human5, 67.4, 69.2, 0 ) 
+    UMPlayer( Human5 ) 
+    Sleep( 5 ) 
+    RotateTo( Human5, 65.529, 69.962 ) 
+    SleepUntilIdle( Human5 ) 
+    Idle( Human5 ) 
+    HideObject( Human5, 0 ) 
+    VCheck#0#594( this ) 
+  )
+)
+
+Script VCheck#0#431
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 16 ) 
+    IsLess( GetWorldTime(  ) , 21 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#430( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#433( this ) 
+  )
+)
+
+Script VTriger#0#432
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human5, 71.15, 62 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human5, 71.15, 62 ) , 0.2 )  ) 
+    UMClear( Human5 ) 
+    PlayAnimation( Human5, "ubriefing09" ) 
+    Sleep( 122 ) 
+    UMSentry( Human5, 68.1, 62.1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human5, 68.1, 62.1 ) , 0.2 )  ) 
+    UMPlayer( Human5 ) 
+    Sleep( 5 ) 
+    RotateTo( Human5, 70, 64 ) 
+    SleepUntilIdle( Human5 ) 
+    UMClear( Human5 ) 
+    PlayAnimation( Human5, "uspecial13" ) 
+    Sleep( 46 ) 
+    PlayAnimation( Human5, "uspecial13" ) 
+    Sleep( 61 ) 
+    UMSentry( Human5, 67.4, 69.2 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human5, 67.4, 69.2 ) , 0.2 )  ) 
+    UMPlayer( Human5 ) 
+    Sleep( 5 ) 
+    RotateTo( Human5, 65.529, 69.962 ) 
+    SleepUntilIdle( Human5 ) 
+    UMClear( Human5 ) 
+    VCheck#0#434( this ) 
+  )
+)
+
+Script VTriger#0#433
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human5, 94, 66.7, 0 ) 
+    RotateTo( Human5, 77.1, 69.6 ) 
+    SleepUntilIdle( Human5 ) 
+    HideObject( Human5, 1 ) 
+    VCheck#0#435( this ) 
+  )
+)
+
+Script VCheck#0#434
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 16 ) 
+    IsLess( GetWorldTime(  ) , 21 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#0#594( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#436( this ) 
+  )
+)
+
+Script VCheck#0#435
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 16 ) 
+    IsLess( GetWorldTime(  ) , 21 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#437( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#433( this ) 
+  )
+)
+
+Script VTriger#0#436
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human5, 94, 66.7 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human5, 94, 66.7 ) , 1 )  ) 
+    UMPlayer( Human5 ) 
+    Sleep( 5 ) 
+    RotateTo( Human5, 77.1, 69.6 ) 
+    SleepUntilIdle( Human5 ) 
+    Idle( Human5 ) 
+    HideObject( Human5, 1 ) 
+    VCheck#0#435( this ) 
+  )
+)
+
+Script VTriger#0#437
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human5, 0 ) 
+    UMSentry( Human5, 67.4, 69.2 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human5, 67.4, 69.2 ) , 0.2 )  ) 
+    UMPlayer( Human5 ) 
+    Sleep( 5 ) 
+    RotateTo( Human5, 65.529, 69.962 ) 
+    SleepUntilIdle( Human5 ) 
+    Idle( Human5 ) 
+    VCheck#0#594( this ) 
+  )
+)
+
+Script VTriger#0#449
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human3, 65.3, 61.9, 0 ) 
+    UMPlayer( Human3 ) 
+    Sleep( 5 ) 
+    RotateTo( Human3, 65.3, 61.4 ) 
+    SleepUntilIdle( Human3 ) 
+    Idle( Human3 ) 
+    HideObject( Human3, 0 ) 
+    VTriger#0#453( this ) 
+  )
+)
+
+Script VCheck#0#450
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 8 ) 
+    IsLess( GetWorldTime(  ) , 11 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#449( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#454( this ) 
+  )
+)
+
+Script VCheck#0#451
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 8 ) 
+    IsLess( GetWorldTime(  ) , 11 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#453( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#455( this ) 
+  )
+)
+
+Script VCheck#0#452
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 8 ) 
+    IsLess( GetWorldTime(  ) , 11 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#456( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#454( this ) 
+  )
+)
+
+Script VTriger#0#453
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Human3, "uattack02" ) 
+    Sleep( 56 ) 
+    PlayAnimation( Human3, "uattack03" ) 
+    Sleep( 77 ) 
+    VCheck#0#451( this ) 
+  )
+)
+
+Script VTriger#0#454
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP( Human3, 87.1, 75.9, 0 ) 
+    RotateTo( Human3, 89.5, 73.6 ) 
+    SleepUntilIdle( Human3 ) 
+    HideObject( Human3, 1 ) 
+    VCheck#0#452( this ) 
+  )
+)
+
+Script VTriger#0#455
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Human3, 87.1, 75.9 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human3, 87.1, 75.9 ) , 1 )  ) 
+    UMPlayer( Human3 ) 
+    Sleep( 5 ) 
+    RotateTo( Human3, 89.5, 73.6 ) 
+    SleepUntilIdle( Human3 ) 
+    Idle( Human3 ) 
+    HideObject( Human3, 1 ) 
+    VCheck#0#452( this ) 
+  )
+)
+
+Script VTriger#0#456
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Human3, 0 ) 
+    UMSentry( Human3, 65.3, 61.9 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Human3, 65.3, 61.9 ) , 0.2 )  ) 
+    UMPlayer( Human3 ) 
+    Sleep( 5 ) 
+    RotateTo( Human3, 65.3, 61.4 ) 
+    SleepUntilIdle( Human3 ) 
+    Idle( Human3 ) 
+    VTriger#0#453( this ) 
+  )
+)
+
+Script VTriger#0#237
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 50 ) 
+    VTriger#0#116( this ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  PodMaster = GetObjectByID( "927062" ) 
+  Human9 = GetObjectByID( "534153" ) 
+  Human11 = GetObjectByID( "481569" ) 
+  HumanHighFigh = GetObjectByID( "999742" ) 
+  Human2 = GetObjectByID( "732495" ) 
+  Human4 = GetObjectByID( "326331" ) 
+  Human1 = GetObjectByID( "196568" ) 
+  Human3 = GetObjectByID( "469697" ) 
+  DogRedF12-422369 = GetObjectByID( "183332" ) 
+  Human6 = GetObjectByID( "386717" ) 
+  Human10 = GetObjectByID( "686200" ) 
+  Pig = GetObjectByID( "1000002436" ) 
+  Human5 = GetObjectByID( "812970" ) 
+  Human8 = GetObjectByID( "601927" ) 
+  Human7 = GetObjectByID( "143005" ) 
+  AddObject( Salut, GetObject( 196568 )  ) 
+  AddObject( Salut, GetObject( 481569 )  ) 
+  AddObject( Salut, GetObject( 732495 )  ) 
+  VCheck#0#299( NULL ) 
+  VTriger#0#569( NULL ) 
+  VTriger#0#116( NULL ) 
+  VCheck#0#626( NULL ) 
+)

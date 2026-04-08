@@ -1,0 +1,422 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Ohrana16 : object,
+  Ohrana23 : object,
+  Ohrana17 : object,
+  G2 : object,
+  Ohrana12 : object,
+  Ohrana14 : object,
+  Ohrana21 : object,
+  Ohrana22 : object,
+  G3 : object,
+  Ohrana24 : object,
+  Ohrana13 : object,
+  Ohrana11 : object,
+  Junophile : object,
+  Ohrana15 : object,
+  G1 : object 
+)
+
+DeclareScript VTriger#1#1 (  this : object )
+DeclareScript VTriger#1#2 (  this : object )
+DeclareScript VCheck#1#3 (  this : object )
+DeclareScript VTriger#1#5 (  this : object )
+DeclareScript VTriger#1#6 (  this : object )
+DeclareScript VCheck#1#7 (  this : object )
+DeclareScript VCheck#1#8 (  this : object )
+DeclareScript VCheck#1#11 (  this : object )
+DeclareScript VTriger#1#12 (  this : object )
+DeclareScript VCheck#1#14 (  this : object )
+DeclareScript VTriger#1#15 (  this : object )
+DeclareScript VCheck#1#17 (  this : object )
+DeclareScript VTriger#1#18 (  this : object )
+DeclareScript VCheck#1#19 (  this : object )
+DeclareScript VTriger#1#22 (  this : object )
+DeclareScript VTriger#1#24 (  this : object )
+DeclareScript VCheck#1#25 (  this : object )
+DeclareScript VCheck#1#27 (  this : object )
+DeclareScript VCheck#1#31 (  this : object )
+DeclareScript VTriger#1#32 (  this : object )
+DeclareScript VCheck#1#34 (  this : object )
+DeclareScript VTriger#1#35 (  this : object )
+
+Script VTriger#1#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z18q1" ) 
+    AddRectToArea( 1, 263, 31, 267, 37 ) 
+    QObjArea( 1 ) 
+    QObjKillGroup( "OhranaJunHouse" ) 
+    QObjKillGroup( "Police" ) 
+    QFinish(  ) 
+  )
+)
+
+Script VTriger#1#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( Add( 400, Random( 50 )  )  ) 
+    For( i, Ohrana2 ) 
+    (
+      Run( i ) 
+      UMGuard( i, 278, 41, 7 ) 
+    )
+    SwitchLeverState( GateOhrana2, 1 ) 
+  )
+)
+
+Script VCheck#1#3
+(
+  if
+  (
+    GroupSize( GroupCross( GroupSee( Ohrana1 ) , Heroes )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#2( this ) 
+  )
+)
+
+Script VTriger#1#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z18q1.z18q1.1", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.2", 1 ) 
+  )
+)
+
+Script VTriger#1#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z18q1.z18q1.2", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.3", 1 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.6", 1 ) 
+    Sleep( 2 )
+    SwitchLeverState( HadoganGate14483e, 1 ) 
+    Sleep( 2 )
+    SwitchLeverState( HadoganGate14483f, 1 ) 
+  )
+)
+
+Script VCheck#1#7
+(
+  if
+  (
+    Any( i, Heroes, IsLess( DistanceUnitUnit( i, DgunistHouse ) , 10 )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#5( this ) 
+  )
+)
+
+Script VCheck#1#8
+(
+  if
+  (
+    Every( i, OhranaJunHouse, Not( IsAlive( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#6( this ) 
+  )
+)
+
+Script VCheck#1#11
+(
+  if
+  (
+    Every( i, Police, Not( IsAlive( i )  )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#12( this ) 
+  )
+)
+
+Script VTriger#1#12
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z18q1.z18q1.4", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.5", 1 ) 
+  )
+)
+
+Script VCheck#1#14
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( Junophile, 280, 45 ) , 5 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#15( this ) 
+  )
+)
+
+Script VTriger#1#15
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z18q1.z18q1.6", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1", 2 ) 
+    Sleep( 2 )
+    RemoveUnitFromServer( Junophile ) 
+  )
+)
+
+Script VCheck#1#17
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z18q1.z18q1" ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#1#19( this ) 
+    VTriger#1#22( this ) 
+  )
+)
+
+Script VTriger#1#18
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QuestComplete( 0, "z18q1" ) 
+  )
+)
+
+Script VCheck#1#19
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z18q1.z18q1" ) , 2 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#18( this ) 
+  )
+)
+
+Script VTriger#1#22
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z18q1.z18q1.1", 1 ) 
+  )
+)
+
+Script VTriger#1#24
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z18q1.z18q1.3", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.4", 1 ) 
+    For( i, Pursuit ) 
+    (
+      Run( i ) 
+      UMGuard( i, 278, 41, 7 ) 
+    )
+  )
+)
+
+Script VCheck#1#25
+(
+  if
+  (
+    UnitInSquare( GetLeader(  ) , 229, 70, 232, 74 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#24( this ) 
+  )
+)
+
+Script VCheck#1#27
+(
+  if
+  (
+    UnitInSquare( GetLeader(  ) , 215.88, 55.88, 220.23, 58.77 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#24( this ) 
+  )
+)
+
+Script VCheck#1#31
+(
+  if
+  (
+    IsLess( DistanceUnitUnit( GetLeader(  ) , Junophile ) , 4 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#32( this ) 
+  )
+)
+
+Script VTriger#1#32
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Run( Junophile ) 
+    SetPlayer( Junophile, 0 ) 
+    UMFollow( Junophile, GetLeader(  )  ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.5", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z18q1.z18q1.6", 1 ) 
+  )
+)
+
+Script VCheck#1#34
+(
+  if
+  (
+    Not( IsAlive( Junophile )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#1#35( this ) 
+  )
+)
+
+Script VTriger#1#35
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z18q1.z18q1", 3 ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Ohrana16 = GetObjectByID( "1000003" ) 
+  Ohrana23 = GetObjectByID( "1000004" ) 
+  Ohrana17 = GetObjectByID( "1000013" ) 
+  G2 = GetObjectByID( "1000016" ) 
+  Ohrana12 = GetObjectByID( "1000021" ) 
+  Ohrana14 = GetObjectByID( "1000028" ) 
+  Ohrana21 = GetObjectByID( "1000038" ) 
+  Ohrana22 = GetObjectByID( "1000048" ) 
+  G3 = GetObjectByID( "1000053" ) 
+  Ohrana24 = GetObjectByID( "1000066" ) 
+  Ohrana13 = GetObjectByID( "1000081" ) 
+  Ohrana11 = GetObjectByID( "1000087" ) 
+  Junophile = GetObjectByID( "1000094" ) 
+  Ohrana15 = GetObjectByID( "1000096" ) 
+  G1 = GetObjectByID( "1000068" ) 
+  AddObject( Ohrana1, GetObject( 1000087 )  ) 
+  AddObject( Ohrana1, GetObject( 1000021 )  ) 
+  AddObject( Ohrana1, GetObject( 1000081 )  ) 
+  AddObject( Ohrana1, GetObject( 1000028 )  ) 
+  AddObject( Ohrana1, GetObject( 1000096 )  ) 
+  AddObject( Ohrana1, GetObject( 1000003 )  ) 
+  AddObject( Ohrana1, GetObject( 1000013 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000087 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000021 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000081 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000028 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000096 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000003 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000013 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000038 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000048 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000004 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 1000066 )  ) 
+  AddObject( Pursuit, GetObject( 1000068 )  ) 
+  AddObject( Pursuit, GetObject( 1000016 )  ) 
+  AddObject( Pursuit, GetObject( 1000053 )  ) 
+  AddObject( Ohrana2, GetObject( 1000038 )  ) 
+  AddObject( Ohrana2, GetObject( 1000048 )  ) 
+  AddObject( Ohrana2, GetObject( 1000004 )  ) 
+  AddObject( Ohrana2, GetObject( 1000066 )  ) 
+  AddObject( Police, GetObject( 1000097 )  ) 
+  AddObject( Police, GetObject( 1000027 )  ) 
+  AddObject( Police, GetObject( 1000098 )  ) 
+  AddObject( Police, GetObject( 1000002 )  ) 
+  AddObject( Police, GetObject( 1000077 )  ) 
+  AddObject( Police, GetObject( 1000100 )  ) 
+  AddObject( Police, GetObject( 1000099 )  ) 
+  Sleep( 2 )
+  VCheck#1#3( NULL ) 
+  VCheck#1#7( NULL ) 
+  VCheck#1#8( NULL ) 
+  VCheck#1#11( NULL ) 
+  VCheck#1#14( NULL ) 
+  VCheck#1#17( NULL ) 
+  VCheck#1#25( NULL ) 
+  VCheck#1#27( NULL ) 
+  VCheck#1#31( NULL ) 
+  VCheck#1#34( NULL ) 
+)

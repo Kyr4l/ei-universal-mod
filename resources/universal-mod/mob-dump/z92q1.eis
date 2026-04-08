@@ -1,0 +1,72 @@
+GlobalVars (
+  NumberE : float,
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Chest: object,
+  Warlord: object
+)
+
+DeclareScript Triger1 ( this:object )
+DeclareScript Triger2 ( this:object )
+DeclareScript Triger3 ( this:object )
+
+Script Triger1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sentry (Warlord, 399, 26)
+    Sleep( 2 )
+    SetDiplomacy( 0, 1, -1 ) 
+    Sleep( 2 )
+    SetDiplomacy( 1, 0, -1 ) 
+  )
+)
+
+Script Triger2
+(
+  if
+  (
+   Any( i , Heroes , GroupHas ( UnitSee (i) , Warlord) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z92q1.z92q1.1", 2 ) 
+  )
+)
+
+Script Triger3
+(
+  if
+  (
+    IsEqual( GetLeverState( Chest ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveQuestItem( 0, "SackofGold" ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z92q1.z92q1.2", 2 ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z92q1.z92q1", 2 ) 
+    Sleep( 2 )
+    QuestComplete( 0, "z92q1" )
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 )
+  Chest = GetObjectByID( "1000200" ) 
+  Warlord = GetObjectByID( "1000324" )
+  Sleep( 2 )
+  Triger1( NULL ) 
+  Triger2( NULL ) 
+  Triger3( NULL ) 
+)

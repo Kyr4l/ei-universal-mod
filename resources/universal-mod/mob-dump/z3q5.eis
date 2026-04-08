@@ -1,0 +1,42 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object 
+)
+
+DeclareScript VTriger#2#1 (  this : object )
+DeclareScript VTriger#2#2 (  this : object )
+
+Script VTriger#2#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z3q5" ) 
+    QObjSeeUnit( "GetObject(1000324)" ) 
+    QObjKillUnit( "GetObject(1000324)" ) 
+    QFinish(  ) 
+  )
+)
+
+Script VTriger#2#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    ActivateTrap( Pyramid, 0 ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  VTriger#2#1( NULL ) 
+  VTriger#2#2( NULL ) 
+)

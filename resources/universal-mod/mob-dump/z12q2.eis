@@ -1,0 +1,195 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  LMPOctopus121000257 : object,
+  LMPOctopus121000249 : object,
+  LMPUniqueTigerRamp30 : object,
+  LMPOctopus121000239 : object,
+  LMPUniqueTigerRamp42 : object,
+  Pleshivy : object,
+  LMPOctopus121000236 : object,
+  LMPUniqueTigerRamp40 : object,
+  LMPUniqueTigerRamp46 : object,
+  LMPOctopus121000237 : object,
+  LMPUniqueTigerRamp32 : object,
+  LMPUniqueTigerRamp36 : object,
+  LMPUniqueTigerRamp48 : object,
+  LMPOctopus121000240 : object,
+  LMPOctopus121000253 : object,
+  LMPOctopus121000248 : object,
+  LMPOctopus121000254 : object,
+  LMPOctopus121000246 : object,
+  LMPOctopus121000256 : object,
+  LMPOctopus121000231 : object,
+  LMPOctopus121000243 : object,
+  LMPOctopus121000250 : object,
+  LMPUniqueTigerRamp34 : object,
+  LMPUniqueTigerRamp26 : object,
+  LMPOctopus121000251 : object,
+  LMPOctopus121000260 : object,
+  LMPOctopus121000233 : object,
+  LMPOctopus121000235 : object,
+  LMPUniqueTigerRamp50 : object,
+  LMPOctopus121000252 : object,
+  MPTiger : object,
+  WTiger11 : object,
+  WTiger21 : object,
+  WTiger15 : object,
+  WTiger22 : object,
+  WTiger14 : object,
+  WTiger25 : object,
+  WTiger13 : object,
+  WTiger23 : object,
+  WTiger24 : object,
+  WTiger12 : object,
+  LMPUniqueTigerRamp18 : object,
+  LMPUniqueTigerRamp20 : object,
+  LMPUniqueTigerRamp24 : object 
+)
+
+DeclareScript VTriger#2#1 (  this : object )
+DeclareScript VCheck#2#2 (  this : object )
+DeclareScript VTriger#2#3 (  this : object )
+DeclareScript VTriger#2#5 (  this : object )
+DeclareScript VCheck#2#7 (  this : object )
+
+Script VTriger#2#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z12q2" ) 
+    QObjSeeUnit( "GetObject(1000110)" ) 
+    QObjKillUnit( "GetObject(1000110)" ) 
+    QObjGetItem( 80 ) 
+    QFinish(  ) 
+  )
+)
+
+Script VCheck#2#2
+(
+  if
+  (
+    GroupSize( GroupCross( UnitSee( Pleshivy ) , Heroes )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#2#3( this ) 
+  )
+)
+
+Script VTriger#2#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Run( Pleshivy ) 
+    SwitchLeverState( WTigerGate, 1 ) 
+    VTriger#2#5( this ) 
+  )
+)
+
+Script VTriger#2#5
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    For( i, WTiger1 ) 
+    (
+      Run( i ) 
+      UMGuard( i, 79, 329, 7 ) 
+    )
+    Sleep( 40 ) 
+    For( i, WTiger2 ) 
+    (
+      Run( i ) 
+      UMGuard( i, 58, 335, 7 ) 
+    )
+  )
+)
+
+Script VCheck#2#7
+(
+  if
+  (
+    IsEqual( GetLeverState( WTigerGate ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#2#5( this ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  LMPOctopus121000257 = GetObjectByID( "1000101" ) 
+  LMPOctopus121000249 = GetObjectByID( "1000102" ) 
+  LMPUniqueTigerRamp30 = GetObjectByID( "1000105" ) 
+  LMPOctopus121000239 = GetObjectByID( "1000106" ) 
+  LMPUniqueTigerRamp42 = GetObjectByID( "1000107" ) 
+  Pleshivy = GetObjectByID( "1000110" ) 
+  LMPOctopus121000236 = GetObjectByID( "1000111" ) 
+  LMPUniqueTigerRamp40 = GetObjectByID( "1000112" ) 
+  LMPUniqueTigerRamp46 = GetObjectByID( "1000118" ) 
+  LMPOctopus121000237 = GetObjectByID( "1000119" ) 
+  LMPUniqueTigerRamp32 = GetObjectByID( "1000121" ) 
+  LMPUniqueTigerRamp36 = GetObjectByID( "1000130" ) 
+  LMPUniqueTigerRamp48 = GetObjectByID( "1000133" ) 
+  LMPOctopus121000240 = GetObjectByID( "1000134" ) 
+  LMPOctopus121000253 = GetObjectByID( "1000135" ) 
+  LMPOctopus121000248 = GetObjectByID( "1000140" ) 
+  LMPOctopus121000254 = GetObjectByID( "1000142" ) 
+  LMPOctopus121000246 = GetObjectByID( "1000143" ) 
+  LMPOctopus121000256 = GetObjectByID( "1000145" ) 
+  LMPOctopus121000231 = GetObjectByID( "1000147" ) 
+  LMPOctopus121000243 = GetObjectByID( "1000149" ) 
+  LMPOctopus121000250 = GetObjectByID( "1000150" ) 
+  LMPUniqueTigerRamp34 = GetObjectByID( "1000152" ) 
+  LMPUniqueTigerRamp26 = GetObjectByID( "1000153" ) 
+  LMPOctopus121000251 = GetObjectByID( "1000154" ) 
+  LMPOctopus121000260 = GetObjectByID( "1000156" ) 
+  LMPOctopus121000233 = GetObjectByID( "1000158" ) 
+  LMPOctopus121000235 = GetObjectByID( "1000160" ) 
+  LMPUniqueTigerRamp50 = GetObjectByID( "1000162" ) 
+  LMPOctopus121000252 = GetObjectByID( "1000163" ) 
+  MPTiger = GetObjectByID( "1000170" ) 
+  WTiger11 = GetObjectByID( "1000171" ) 
+  WTiger21 = GetObjectByID( "1000172" ) 
+  WTiger15 = GetObjectByID( "1000173" ) 
+  WTiger22 = GetObjectByID( "1000174" ) 
+  WTiger14 = GetObjectByID( "1000175" ) 
+  WTiger25 = GetObjectByID( "1000176" ) 
+  WTiger13 = GetObjectByID( "1000177" ) 
+  WTiger23 = GetObjectByID( "1000178" ) 
+  WTiger24 = GetObjectByID( "1000179" ) 
+  WTiger12 = GetObjectByID( "1000180" ) 
+  LMPUniqueTigerRamp18 = GetObjectByID( "1000197" ) 
+  LMPUniqueTigerRamp20 = GetObjectByID( "1000198" ) 
+  LMPUniqueTigerRamp24 = GetObjectByID( "1000199" ) 
+  AddObject( WTiger1, GetObject( 1000171 )  ) 
+  AddObject( WTiger1, GetObject( 1000180 )  ) 
+  AddObject( WTiger1, GetObject( 1000175 )  ) 
+  AddObject( WTiger1, GetObject( 1000172 )  ) 
+  AddObject( WTiger1, GetObject( 1000176 )  ) 
+  AddObject( WTiger2, GetObject( 1000177 )  ) 
+  AddObject( WTiger2, GetObject( 1000173 )  ) 
+  AddObject( WTiger2, GetObject( 1000174 )  ) 
+  AddObject( WTiger2, GetObject( 1000178 )  ) 
+  AddObject( WTiger2, GetObject( 1000179 )  ) 
+  VTriger#2#1( NULL ) 
+  VCheck#2#2( NULL ) 
+  VCheck#2#7( NULL ) 
+)

@@ -1,0 +1,192 @@
+GlobalVars (
+  i : object,
+  Pigs : group,
+  Wolfs : group 
+)
+
+DeclareScript #Wolfs#Dead (  )
+DeclareScript #Find#Pig (  this : object )
+DeclareScript #Move#Pig (  this : object )
+
+Script #Wolfs#Dead
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.1" ) , 0 )
+    Not( IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs" ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.1", 1 )
+    #Wolfs#Dead (  ) 
+  )
+  if
+  (
+    Not( Any( i, Wolfs, IsAlive( i ) ) ) 
+    Not( IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.1" ) , 2 ) )
+    Not( IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs" ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 202, 74.52, 224.7, 86.4 ) 
+    AddRectToArea( 1, 207, 74.52, 214, 86.5 ) 
+    AddRectToArea( 1, 219, 67.5, 225, 74.52 ) 
+    AddRectToArea( 1, 187.8, 67.8, 207, 82.3 ) 
+    AddRectToArea( 1, 191.5, 82.3, 207, 84 ) 
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.1", 2 )
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.2", 1 )
+    Sleep( 2 ) 
+    For( i, Pigs ) 
+    (
+      #Find#Pig( i ) 
+    )
+  )
+  if
+  (
+    Not( Any( i, Wolfs, IsAlive( i ) ) ) 
+    IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.1" ) , 2 )
+    Not( IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs" ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 202, 74.52, 224.7, 86.4 ) 
+    AddRectToArea( 1, 207, 74.52, 214, 86.5 ) 
+    AddRectToArea( 1, 219, 67.5, 225, 74.52 ) 
+    AddRectToArea( 1, 187.8, 67.8, 207, 82.3 ) 
+    AddRectToArea( 1, 191.5, 82.3, 207, 84 ) 
+    For( i, Pigs ) 
+    (
+      #Find#Pig( i ) 
+    )
+  )
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs" ) , 2 )
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+Script #Find#Pig
+(
+  if
+  (
+    Any( i , Heroes , IsLess( DistanceUnitUnit( i , this ) , 8 ) ) 
+    IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.3" ) , 0 )
+    IsAlive( this ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.2", 2 )
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.3", 1 )
+    Sleep( 2 ) 
+    UMGuard( this, 206, 76, 90 ) 
+    #Move#Pig( this ) 
+  )
+  if
+  (
+    Any( i , Heroes , IsLess( DistanceUnitUnit( i , this ) , 8 ) ) 
+    Not( IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.3" ) , 0 ) )
+    IsAlive( this ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.2", 2 )
+    Sleep( 2 ) 
+    UMGuard( this, 206, 76, 90 ) 
+    #Move#Pig( this ) 
+  )
+  if
+  (
+    Not( IsAlive( this ) )
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+Script #Move#Pig
+(
+  if
+  (
+    IsAlive( this ) 
+    IsInArea( 1, GetX( this ) , GetY( this )  ) 
+    Not( IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.3" ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    UMGuard( this, 206, 76, 18 ) 
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.3", 2 )
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs", 2 )
+    Sleep( 2 ) 
+    QuestComplete( 0, "z1q2wolfs" )
+    GSSetVarMax( 0, "b.nsheriff.z1q2_complete", 1 ) 
+  )
+  if
+  (
+    IsAlive( this ) 
+    IsInArea( 1, GetX( this ) , GetY( this )  ) 
+    IsEqual( GSGetVar( 0, "q.gz1g.z1q2wolfs.3" ) , 2 )
+  )
+  then
+  (
+    KillScript(  ) 
+    UMGuard( this, 206, 76, 18 ) 
+    Sleep( 2 ) 
+    GSSetVarMax( 0, "q.gz1g.z1q2wolfs.3", 2 )
+  )
+  if
+  (
+    Not( IsAlive( this ) )
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  AddObject( Pigs, GetObject( 1947 )  ) 
+  AddObject( Pigs, GetObject( 1948 )  ) 
+  AddObject( Pigs, GetObject( 1949 )  ) 
+  AddObject( Pigs, GetObject( 1950 )  ) 
+  AddObject( Pigs, GetObject( 1000101 )  ) 
+  AddObject( Pigs, GetObject( 1000102 )  ) 
+  AddObject( Pigs, GetObject( 1000103 )  ) 
+  AddObject( Pigs, GetObject( 1000104 )  ) 
+  AddObject( Wolfs, GetObject( 1000001 )  ) 
+  AddObject( Wolfs, GetObject( 1000002 )  ) 
+  AddObject( Wolfs, GetObject( 1000003 )  ) 
+  AddObject( Wolfs, GetObject( 1000004 )  ) 
+  AddObject( Wolfs, GetObject( 1000005 )  ) 
+  AddObject( Wolfs, GetObject( 1000006 )  ) 
+  AddObject( Wolfs, GetObject( 1000007 )  ) 
+  AddObject( Wolfs, GetObject( 1000008 )  ) 
+  AddObject( Wolfs, GetObject( 1000009 )  ) 
+  AddObject( Wolfs, GetObject( 1000010 )  ) 
+  AddObject( Wolfs, GetObject( 1000011 )  ) 
+  AddObject( Wolfs, GetObject( 1000012 )  ) 
+  AddObject( Wolfs, GetObject( 1000013 )  ) 
+  AddObject( Wolfs, GetObject( 1000014 )  ) 
+  SetDiplomacy( 4, 5, -1 ) 
+  #Wolfs#Dead (  ) 
+)

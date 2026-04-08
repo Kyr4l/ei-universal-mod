@@ -1,0 +1,28 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object 
+)
+
+DeclareScript VTriger#5#1 (  this : object )
+
+Script VTriger#5#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z19q2" ) 
+    QObjSeeUnit( "GetObject(1001479)" ) 
+    QObjKillUnit( "GetObject(1001479)" ) 
+    QFinish(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  VTriger#5#1( NULL ) 
+)

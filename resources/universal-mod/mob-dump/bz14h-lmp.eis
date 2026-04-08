@@ -1,0 +1,343 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  BabaSit2 : object,
+  MuzicSitTalk1 : object,
+  MuzicGoer : object,
+  MuzicPretty : object,
+  FakeBox00-928579 : object,
+  ManTalk1 : object,
+  MuzicSitTalk2 : object,
+  BabaSit : object,
+  MuzicSit2 : object,
+  MuzicSit4 : object,
+  MuzicSit : object 
+)
+
+DeclareScript VTriger#0#1 (  this : object )
+DeclareScript VTriger#0#2 (  this : object )
+DeclareScript VTriger#0#3 (  this : object )
+DeclareScript VTriger#0#8 (  this : object )
+DeclareScript VTriger#0#9 (  this : object )
+DeclareScript VTriger#0#13 (  this : object )
+DeclareScript VTriger#0#14 (  this : object )
+DeclareScript VTriger#0#15 (  this : object )
+DeclareScript VTriger#0#18 (  this : object )
+DeclareScript VTriger#0#19 (  this : object )
+DeclareScript VTriger#0#22 (  this : object )
+DeclareScript VTriger#0#23 (  this : object )
+DeclareScript VTriger#0#26 (  this : object )
+DeclareScript VTriger#0#27 (  this : object )
+DeclareScript VTriger#0#30 (  this : object )
+DeclareScript VTriger#0#33 (  this : object )
+DeclareScript VTriger#0#41 (  this : object )
+DeclareScript VTriger#0#44 (  this : object )
+DeclareScript VTriger#0#45 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VTriger#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( BabaSit, "uspecial08" ) 
+    VTriger#0#3( this ) 
+  )
+)
+
+Script VTriger#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( MuzicSit, "uspecial19" ) 
+    VTriger#0#30( this ) 
+  )
+)
+
+Script VTriger#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 31 ) 
+    VTriger#0#1( this ) 
+  )
+)
+
+Script VTriger#0#8
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( ManTalk1, "ubriefing09" ) 
+    VTriger#0#9( this ) 
+  )
+)
+
+Script VTriger#0#9
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 122 ) 
+    VTriger#0#8( this ) 
+  )
+)
+
+Script VTriger#0#13
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( BabaSit2, "crest" ) 
+  )
+)
+
+Script VTriger#0#14
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( MuzicSit2, "uspecial13" ) 
+    VTriger#0#15( this ) 
+  )
+)
+
+Script VTriger#0#15
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#14( this ) 
+  )
+)
+
+Script VTriger#0#18
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( MuzicSit4, "uspecial13" ) 
+    VTriger#0#19( this ) 
+  )
+)
+
+Script VTriger#0#19
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#18( this ) 
+  )
+)
+
+Script VTriger#0#22
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( MuzicSitTalk1, "uspecial16" ) 
+    VTriger#0#23( this ) 
+  )
+)
+
+Script VTriger#0#23
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 206 ) 
+    VTriger#0#22( this ) 
+  )
+)
+
+Script VTriger#0#26
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( MuzicSitTalk2, "uspecial15" ) 
+    VTriger#0#27( this ) 
+  )
+)
+
+Script VTriger#0#27
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 206 ) 
+    VTriger#0#26( this ) 
+  )
+)
+
+Script VTriger#0#30
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 96 ) 
+    VTriger#0#2( this ) 
+  )
+)
+
+Script VTriger#0#33
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Idle( MuzicGoer ) 
+    PlayAnimation( MuzicGoer, "uspecial12" ) 
+    Sleep( 53 ) 
+    UMSentry( MuzicGoer, 55, 40 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( MuzicGoer, 55, 40 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( MuzicGoer, 53, 38 ) 
+    Sleep( 5 ) 
+    Idle( MuzicGoer ) 
+    PlayAnimation( MuzicGoer, "ubriefing19" ) 
+    Sleep( 35 ) 
+    UMSentry( MuzicGoer, 56, 38 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( MuzicGoer, 56, 38 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( MuzicGoer, 55.5, 35 ) 
+    Sleep( 5 ) 
+    Idle( MuzicGoer ) 
+    PlayAnimation( MuzicGoer, "ubriefing17" ) 
+    Sleep( 186 ) 
+    PlayAnimation( MuzicGoer, "uspecial02" ) 
+    Sleep( 123 ) 
+    UMSentry( MuzicGoer, 49.4392, 40.8781 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( MuzicGoer, 49.4392, 40.8781 ) , 0.2 )  ) 
+    RotateTo( MuzicGoer, 45.76, 39.33 ) 
+    VTriger#0#41( this ) 
+  )
+)
+
+Script VTriger#0#41
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 5 ) 
+    VTriger#0#33( this ) 
+  )
+)
+
+Script VTriger#0#44
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( MuzicPretty, "uspecial19" ) 
+    VTriger#0#45( this ) 
+  )
+)
+
+Script VTriger#0#45
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 96 ) 
+    VTriger#0#44( this ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  BabaSit2 = GetObjectByID( "991988" ) 
+  MuzicSitTalk1 = GetObjectByID( "426933" ) 
+  MuzicGoer = GetObjectByID( "28372" ) 
+  MuzicPretty = GetObjectByID( "585377" ) 
+  FakeBox00-928579 = GetObjectByID( "928579" ) 
+  ManTalk1 = GetObjectByID( "900787" ) 
+  MuzicSitTalk2 = GetObjectByID( "451996" ) 
+  BabaSit = GetObjectByID( "401593" ) 
+  MuzicSit2 = GetObjectByID( "423464" ) 
+  MuzicSit4 = GetObjectByID( "263075" ) 
+  MuzicSit = GetObjectByID( "679026" ) 
+  VTriger#0#1( NULL ) 
+  VTriger#0#2( NULL ) 
+  VTriger#0#8( NULL ) 
+  VTriger#0#13( NULL ) 
+  VTriger#0#14( NULL ) 
+  VTriger#0#18( NULL ) 
+  VTriger#0#22( NULL ) 
+  VTriger#0#26( NULL ) 
+  VTriger#0#33( NULL ) 
+  VTriger#0#44( NULL ) 
+)

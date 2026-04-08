@@ -1,0 +1,739 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1
+      MAX_ID: 1000002714
+  VSS_SECTION:
+  DIRICTORY:
+    FOLDER:
+      DIR_NINST: 4294965127
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Heroes"
+    FOLDER:
+      DIR_NINST: 4294963239
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "slaves"
+    FOLDER:
+      DIR_NINST: 4294965292
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "a1"
+    FOLDER:
+      DIR_NINST: 4294964847
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "a3"
+    FOLDER:
+      DIR_NINST: 4294958736
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "s1"
+    FOLDER:
+      DIR_NINST: 4294963396
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "a2"
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 997005
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P1"
+    FOLDER:
+      DIR_NINST: 791498
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-843163"
+    FOLDER:
+      DIR_NINST: 78954
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-380067"
+    FOLDER:
+      DIR_NINST: 40300
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996770"
+    FOLDER:
+      DIR_NINST: 648741
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-843164"
+    FOLDER:
+      DIR_NINST: 898937
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Overseer F14-898937"
+    FOLDER:
+      DIR_NINST: 370537
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-370569"
+    FOLDER:
+      DIR_NINST: 643142
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-918999"
+    FOLDER:
+      DIR_NINST: 996987
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-996966"
+    FOLDER:
+      DIR_NINST: 996990
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996991"
+    FOLDER:
+      DIR_NINST: 251726
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Overseer F14-251726"
+    FOLDER:
+      DIR_NINST: 932473
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-932473"
+    FOLDER:
+      DIR_NINST: 461614
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619205"
+    FOLDER:
+      DIR_NINST: 979748
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Gds6"
+    FOLDER:
+      DIR_NINST: 179588
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996773"
+    FOLDER:
+      DIR_NINST: 21322
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Overseer F14-21322"
+    FOLDER:
+      DIR_NINST: 599762
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F14-599762"
+    FOLDER:
+      DIR_NINST: 647795
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619204"
+    FOLDER:
+      DIR_NINST: 334400
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619209"
+    FOLDER:
+      DIR_NINST: 568756
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619203"
+    FOLDER:
+      DIR_NINST: 617463
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619206"
+    FOLDER:
+      DIR_NINST: 997058
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997056"
+    FOLDER:
+      DIR_NINST: 993088
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619202"
+    FOLDER:
+      DIR_NINST: 752367
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-918991"
+    FOLDER:
+      DIR_NINST: 142398
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards M20-142398"
+    FOLDER:
+      DIR_NINST: 606130
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards M17-606130"
+    FOLDER:
+      DIR_NINST: 997006
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P8"
+    FOLDER:
+      DIR_NINST: 935457
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-935465"
+    FOLDER:
+      DIR_NINST: 310986
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-310968"
+    FOLDER:
+      DIR_NINST: 336998
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-380065"
+    FOLDER:
+      DIR_NINST: 290601
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-290601"
+    FOLDER:
+      DIR_NINST: 825755
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-380066"
+    FOLDER:
+      DIR_NINST: 694022
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-694022"
+    FOLDER:
+      DIR_NINST: 292392
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-292367"
+    FOLDER:
+      DIR_NINST: 394692
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Gds2"
+    FOLDER:
+      DIR_NINST: 997009
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P7"
+    FOLDER:
+      DIR_NINST: 915890
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619208"
+    FOLDER:
+      DIR_NINST: 645847
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-843161"
+    FOLDER:
+      DIR_NINST: 996988
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996988"
+    FOLDER:
+      DIR_NINST: 996989
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996989"
+    FOLDER:
+      DIR_NINST: 996992
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996992"
+    FOLDER:
+      DIR_NINST: 996993
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996990"
+    FOLDER:
+      DIR_NINST: 334495
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F14-334496"
+    FOLDER:
+      DIR_NINST: 997002
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P2"
+    FOLDER:
+      DIR_NINST: 997003
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P5"
+    FOLDER:
+      DIR_NINST: 997004
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P3"
+    FOLDER:
+      DIR_NINST: 432427
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants F1-619207"
+    FOLDER:
+      DIR_NINST: 997007
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P6"
+    FOLDER:
+      DIR_NINST: 997008
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "P4"
+    FOLDER:
+      DIR_NINST: 391120
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens A1-843162"
+    FOLDER:
+      DIR_NINST: 997011
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997014"
+    FOLDER:
+      DIR_NINST: 243734
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-918998"
+    FOLDER:
+      DIR_NINST: 997021
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997011"
+    FOLDER:
+      DIR_NINST: 997023
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997012"
+    FOLDER:
+      DIR_NINST: 997024
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997013"
+    FOLDER:
+      DIR_NINST: 153729
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants A1-762200"
+    FOLDER:
+      DIR_NINST: 47651
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F14-334495"
+    FOLDER:
+      DIR_NINST: 645637
+      DIR_PARENT_FOLDER: 4294963239
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Peasants A1-762201"
+    FOLDER:
+      DIR_NINST: 909314
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996771"
+    FOLDER:
+      DIR_NINST: 997047
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-997052"
+    FOLDER:
+      DIR_NINST: 997048
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997057"
+    FOLDER:
+      DIR_NINST: 997051
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards M17-997058"
+    FOLDER:
+      DIR_NINST: 997052
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards M17-997059"
+    FOLDER:
+      DIR_NINST: 997053
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-997049"
+    FOLDER:
+      DIR_NINST: 997054
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997054"
+    FOLDER:
+      DIR_NINST: 997055
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-997050"
+    FOLDER:
+      DIR_NINST: 997056
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards F17-997055"
+    FOLDER:
+      DIR_NINST: 997057
+      DIR_PARENT_FOLDER: 4294964847
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Guards A17-997051"
+    FOLDER:
+      DIR_NINST: 4801
+      DIR_PARENT_FOLDER: 4294963396
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan Citizens F1-996772"
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Zombie M J1"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 280
+        - 280
+        - 46
+        - 46
+        - 1065353216
+        - 1097859072
+        - 1050540053
+        - 1033932846
+        - 1040746633
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 0
+        - 0
+        - 1124401152
+        - 1121976320
+        - 1065353216
+        - 1107296256
+        - 1105199104
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000002714
+      OBJTYPE: 51
+      OBJNAME: "zs1"
+      OBJTEMPLATE: "unmozo0"
+      PARENTTEMPLATE: "Zombie M J1"
+      OBJPRIMTXTR: "zombiemale00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 111.1532211303711
+        - 236.39431762695312
+        - 0.0
+      OBJROTATION:
+        - 0.0026185044553130865
+        - 0.0
+        - 0.0
+        - 0.999996542930603
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z31q1.2"
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 111.1532211303711
+          - 236.39431762695312
+          - 11.93847942352295
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 111.16341400146484
+            - 239.2698516845703
+            - 11.999086380004883
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 109.97872161865234
+              - 241.66168212890625
+              - 12.085580825805664
+            ACTION_PT_WAIT_SEG: 0
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 114.14572143554688
+            - 240.95579528808594
+            - 11.960132598876953
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 117.18000030517578
+              - 241.04916381835938
+              - 11.995317459106445
+            ACTION_PT_WAIT_SEG: 0
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 214
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 207
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 93
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 86
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 95
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 77
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 89
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 81
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Zombie M J1"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 280
+        - 280
+        - 46
+        - 46
+        - 1065353216
+        - 1097859072
+        - 1050540053
+        - 1033932846
+        - 1040746633
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 0
+        - 0
+        - 1124401152
+        - 1121976320
+        - 1065353216
+        - 1107296256
+        - 1105199104
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 5
+      NID: 1000002713
+      OBJTYPE: 51
+      OBJNAME: "zs0"
+      OBJTEMPLATE: "unmozo0"
+      PARENTTEMPLATE: "Zombie M J1"
+      OBJPRIMTXTR: "zombiemale00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 218.39833068847656
+        - 277.1217956542969
+        - 0.0
+      OBJROTATION:
+        - 0.5764315128326416
+        - 0.0
+        - 0.0
+        - -0.8171454668045044
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z31q1.1"
+      OBJCOMPLECTION:
+        - 1.0
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 218.39833068847656
+          - 277.1217956542969
+          - 252.7298126220703
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 216.80140686035156
+            - 277.3805236816406
+            - 11.707452774047852
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 214.99130249023438
+              - 278.4146423339844
+              - 11.940570831298828
+            ACTION_PT_WAIT_SEG: 0
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 214.96957397460938
+              - 276.3662414550781
+              - 11.999086380004883
+            ACTION_PT_WAIT_SEG: 0
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 214
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 207
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 93
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 86
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 95
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 77
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 89
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 81
