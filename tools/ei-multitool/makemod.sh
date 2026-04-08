@@ -82,7 +82,7 @@ function copyMaps {
 function dumpMobFiles {
     if [[ "$dumpmobnswr" == "y" ]]; then
         echo "===== DUMPING MOB FILES FOR GIT ========================================"
-        parallel --bar "python3 bin/mob.py {} $mobdumpdir/{/.}.yaml $mobdumpdir/{/.}.eis" ::: $mobdir/* > /dev/null
+        parallel -j 8 --bar "python3 bin/mob.py {} $mobdumpdir/{/.}.yaml $mobdumpdir/{/.}.eis" ::: $mobdir/* > /dev/null
     fi
 }
 
