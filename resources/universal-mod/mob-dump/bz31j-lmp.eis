@@ -60,8 +60,9 @@ DeclareScript VFireHouse#0#1 (  this : object )
 DeclareScript VFireHouse#0#2 (  this : object )
 DeclareScript VFireHouse#0#3 (  this : object )
 
-DeclareScript ShopKeeper (  this : object )
+DeclareScript InfinityBriefing(npc: string, brief: string)
 DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
 
 Script VTriger#0#1
 (
@@ -823,17 +824,14 @@ Script VFireHouse#0#3
   )
 )
 
-Script ShopKeeper
+Script InfinityBriefing
 (
-  if
-  (
-  )
-  then
-  (
-    KillScript(  ) 
-    Stark = GetObjectByID( "1000064485" ) 
-    GSSetVar(0,"b.Stark.constr_5",1)
-  )
+if(Not(IsEqual(GSGetVar(0, StrCat("b.", npc, ".", brief)), 1))) then
+(
+  KillScript( )
+  GSSetVar(0, StrCat("b.", npc, ".", brief), 1)
+  InfinityBriefing(npc, brief)
+)
 )
 
 Script #OnBriefingComplete
@@ -863,6 +861,7 @@ WorldScript
   TalkerF2 = GetObjectByID( "1031801" )
   TalkerF3 = GetObjectByID( "1073590" )
   TalkerF4 = GetObjectByID( "1115382" )
+  Stark = GetObjectByID( "1000064485" ) 
   VFire#0#1( NULL )
   VFire#0#2( NULL )
   VFire#0#3( NULL )
@@ -880,5 +879,5 @@ WorldScript
   VTriger#0#23( NULL )
   VTriger#0#25( NULL )
   VTriger#0#27( NULL )
-  ShopKeeper( NULL )
+  InfinityBriefing("Stark", "constr_5") // shop5
 )
