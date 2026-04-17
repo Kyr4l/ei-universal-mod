@@ -77,8 +77,6 @@ Then your compouter should display a prompt asking to allow the game to access t
 
 ## Assets ownership
 
-This mod is open-source, however open source doesn't mean «free to steal».
-
 Some community assets used in this mod have unclear ownership. We use them only within the Universal Mod project and do not claim any rights over them. If any rights holder requests removal, we will comply immediately.
 If we accidentaly used assets that we do not have permission to use, then please feel free to submit an issue and point which assets we used without permission, mistakes can happen.
 For every asset that we created, we require from modders using our assets to link Universal Mod in the credits, that includes the mod name, along with the repository link.
@@ -89,25 +87,7 @@ For every asset that we created, we require from modders using our assets to lin
 - Some files included in `extra-assets/reference-assets` come from the vanilla game, some others come from other mods.
 - This mod was developed with contributions from both Western and Russian modders. It is strictly a passion project, and we do not endorse or engage in any political discussions or conflicts. Our goal is solely to enhance and preserve an old game we love.
 
-### License Notice
-
 This repository contains a mix of original code, community-created assets, and files from *Evil Islands* mostly for reference purposes.
-
-#### Code
-
-All scripts and configuration files in the `assets/universal-mod/` directory along with their packed versions in `Universal-Mod/` are licensed under __GPL-3.0__, allowing modification and redistribution under the terms of that license.
-The `makemod.sh` script in `tools/ei-multitool/` directory is also licensed under that same license.
-
-#### Assets & Modding Tools
-
-The __GPL-3.0 license does not apply__ to the following:
-
-- __HD Lands__ included in `resources/hd-lands-1.5/`.
-- __Modding tools__ included in `tools/`, which remain the property of their respective authors.
-- __Extra-assets__ stored in `extra-assets/`, which contain a mix of files from the vanilla game and community-created resources. These assets are __mostly provided for reference and internal modification only__.  
-
-These assets __cannot be redistributed separately or used outside of this project__.  
-If any rights holder requests removal, we will comply immediately.  
 
 ## Credits
 
