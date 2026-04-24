@@ -1,0 +1,811 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Spear2 : object,
+  WinterFirTree00-243337 : object,
+  AGuard2 : object,
+  Eater : object,
+  FemaleTalk1 : object,
+  PoorMan : object,
+  AGuard1 : object,
+  SitterPolice : object,
+  Talker1 : object,
+  WinterFirTree00-243336 : object,
+  WinterFirTree000-243335 : object,
+  Batrak1 : object,
+  Eda2 : object,
+  SitterMan : object,
+  Spear3 : object,
+  Bow1 : object,
+  Bow2 : object,
+  Spear1 : object,
+  Spear4 : object,
+  FemaleTalk2 : object,
+  WinterFirTree00-243335 : object,
+  Talker : object,
+  Tiger : object,
+  Eda1 : object 
+)
+
+DeclareScript VTriger#0#138 (  this : object )
+DeclareScript VTriger#0#143 (  this : object )
+DeclareScript VCheck#0#146 (  this : object )
+DeclareScript VTriger#0#152 (  this : object )
+DeclareScript VTriger#0#160 (  this : object )
+DeclareScript VCheck#0#161 (  this : object )
+DeclareScript VTriger#0#163 (  this : object )
+DeclareScript VTriger#0#37 (  this : object )
+DeclareScript VTriger#0#38 (  this : object )
+DeclareScript VTriger#0#166 (  this : object )
+DeclareScript VTriger#0#164 (  this : object )
+DeclareScript VTriger#0#41 (  this : object )
+DeclareScript VTriger#0#42 (  this : object )
+DeclareScript VCheck#0#167 (  this : object )
+DeclareScript VTriger#0#165 (  this : object )
+DeclareScript VTriger#0#45 (  this : object )
+DeclareScript VTriger#0#46 (  this : object )
+DeclareScript VTriger#0#49 (  this : object )
+DeclareScript VTriger#0#51 (  this : object )
+DeclareScript VCheck#0#178 (  this : object )
+DeclareScript VCheck#0#183 (  this : object )
+DeclareScript VTriger#0#181 (  this : object )
+DeclareScript VTriger#0#186 (  this : object )
+DeclareScript VTriger#0#188 (  this : object )
+DeclareScript VTriger#0#62 (  this : object )
+DeclareScript VTriger#0#190 (  this : object )
+DeclareScript VCheck#0#191 (  this : object )
+DeclareScript VTriger#0#63 (  this : object )
+DeclareScript VTriger#0#193 (  this : object )
+DeclareScript VTriger#0#192 (  this : object )
+DeclareScript VCheck#0#189 (  this : object )
+DeclareScript VTriger#0#72 (  this : object )
+DeclareScript VTriger#0#73 (  this : object )
+DeclareScript VTriger#0#74 (  this : object )
+DeclareScript VTriger#0#75 (  this : object )
+DeclareScript VTriger#0#80 (  this : object )
+DeclareScript VTriger#0#81 (  this : object )
+DeclareScript VTriger#0#84 (  this : object )
+DeclareScript VTriger#0#97 (  this : object )
+DeclareScript VTriger#0#98 (  this : object )
+DeclareScript VCheck#0#108 (  this : object )
+DeclareScript VTriger#0#110 (  this : object )
+DeclareScript VTriger#0#116 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VTriger#0#138
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( FemaleTalk1, 89, 49 ) 
+    RotateTo( FemaleTalk2, 80, 53 ) 
+    RotateTo( FemaleTalk1, 92, 50 ) 
+    HideObject( FemaleTalk1, 1 ) 
+    UMSentry( FemaleTalk2, 83, 57 ) 
+    HideObject( FemaleTalk2, 1 ) 
+    VCheck#0#108( this ) 
+  )
+)
+
+Script VTriger#0#143
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( FemaleTalk2, "ubriefing18" ) 
+    Sleep( 52 ) 
+    VCheck#0#146( this ) 
+  )
+)
+
+Script VCheck#0#146
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 7 ) 
+    IsLess( GetWorldTime(  ) , 18 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#143( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#138( this ) 
+  )
+)
+
+Script VTriger#0#152
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( FemaleTalk1, "ubriefing19" ) 
+    Sleep( 35 ) 
+    VCheck#0#183( this ) 
+  )
+)
+
+Script VTriger#0#160
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#0#161( this ) 
+  )
+)
+
+Script VCheck#0#161
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 10 ) 
+    IsLess( GetWorldTime(  ) , 15 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#164( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#163( this ) 
+  )
+)
+
+Script VTriger#0#163
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Bow1, 26, 42 ) 
+    RotateTo( Bow2, 69, 41 ) 
+    Sleep( 30 ) 
+    UMSentry( Bow2, 26, 44 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Bow1, 26, 42 ) , 1 )  ) 
+    RotateTo( Bow1, 32, 36 ) 
+    Sleep( 5 ) 
+    HideObject( Bow1, 1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Bow2, 26, 44 ) , 1 )  ) 
+    RotateTo( Bow2, 32, 36 ) 
+    Sleep( 5 ) 
+    HideObject( Bow2, 1 ) 
+    VCheck#0#161( this ) 
+  )
+)
+
+Script VTriger#0#37
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Batrak1, "uspecial26" ) 
+    VTriger#0#38( this ) 
+  )
+)
+
+Script VTriger#0#38
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 28 ) 
+    VTriger#0#37( this ) 
+  )
+)
+
+Script VTriger#0#166
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Bow2, "uattack03" ) 
+    Sleep( 77 ) 
+    VCheck#0#178( this ) 
+  )
+)
+
+Script VTriger#0#164
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Bow2, 0 ) 
+    UMSentry( Bow2, 65.1, 41.8 ) 
+    Sleep( 30 ) 
+    HideObject( Bow1, 0 ) 
+    UMSentry( Bow1, 66.8, 40.1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Bow2, 65.1, 41.8 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( Bow2, 57, 34 ) 
+    Sleep( 5 ) 
+    Idle( Bow2 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Bow1, 66.8, 40.1 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( Bow1, 60, 34 ) 
+    Sleep( 5 ) 
+    Idle( Bow1 ) 
+    VTriger#0#165( this ) 
+    VTriger#0#166( this ) 
+  )
+)
+
+Script VTriger#0#41
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Eda1, "uspecial08" ) 
+    VTriger#0#42( this ) 
+  )
+)
+
+Script VTriger#0#42
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 31 ) 
+    VTriger#0#41( this ) 
+  )
+)
+
+Script VCheck#0#167
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 10 ) 
+    IsLess( GetWorldTime(  ) , 15 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#165( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#163( this ) 
+  )
+)
+
+Script VTriger#0#165
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Bow1, "uattack02" ) 
+    Sleep( 56 ) 
+    VCheck#0#167( this ) 
+  )
+)
+
+Script VTriger#0#45
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Eda2, "uspecial08" ) 
+    VTriger#0#46( this ) 
+  )
+)
+
+Script VTriger#0#46
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 31 ) 
+    VTriger#0#45( this ) 
+  )
+)
+
+Script VTriger#0#49
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Eater, "uspecial13" ) 
+    VTriger#0#51( this ) 
+  )
+)
+
+Script VTriger#0#51
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#49( this ) 
+  )
+)
+
+Script VCheck#0#178
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 10 ) 
+    IsLess( GetWorldTime(  ) , 15 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#166( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#181( this ) 
+  )
+)
+
+Script VCheck#0#183
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 7 ) 
+    IsLess( GetWorldTime(  ) , 18 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#152( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#186( this ) 
+  )
+)
+
+Script VTriger#0#181
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+Script VTriger#0#186
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+Script VTriger#0#188
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#0#189( this ) 
+  )
+)
+
+Script VTriger#0#62
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( SitterPolice, "uspecial13" ) 
+    VTriger#0#63( this ) 
+  )
+)
+
+Script VTriger#0#190
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    UMSentry( Talker, 64, 90 ) 
+    Sleep( 10 ) 
+    RotateTo( Talker1, 62, 84 ) 
+    RotateTo( Talker, 58, 86 ) 
+    HideObject( Talker, 1 ) 
+    VCheck#0#189( this ) 
+  )
+)
+
+Script VCheck#0#191
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 14 ) 
+    IsLess( GetWorldTime(  ) , 17 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#192( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#190( this ) 
+  )
+)
+
+Script VTriger#0#63
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VTriger#0#62( this ) 
+  )
+)
+
+Script VTriger#0#193
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( Talker, 0 ) 
+    UMSentry( Talker, 62.4, 83.1 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( Talker, 62.4, 83.1 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( Talker, 60, 81 ) 
+    Sleep( 5 ) 
+    Idle( Talker ) 
+    VTriger#0#192( this ) 
+  )
+)
+
+Script VTriger#0#192
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    RotateTo( Talker1, 63, 83 ) 
+    PlayAnimation( Talker, "ubriefing09" ) 
+    Sleep( 122 ) 
+    VCheck#0#191( this ) 
+  )
+)
+
+Script VCheck#0#189
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 14 ) 
+    IsLess( GetWorldTime(  ) , 17 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#193( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#190( this ) 
+  )
+)
+
+Script VTriger#0#72
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( AGuard1, "uspecial10" ) 
+    VTriger#0#73( this ) 
+  )
+)
+
+Script VTriger#0#73
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 50 ) 
+    VTriger#0#72( this ) 
+  )
+)
+
+Script VTriger#0#74
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( AGuard2, "uspecial10" ) 
+    VTriger#0#75( this ) 
+  )
+)
+
+Script VTriger#0#75
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 50 ) 
+    VTriger#0#74( this ) 
+  )
+)
+
+Script VTriger#0#80
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( SitterMan, "uspecial15" ) 
+    VTriger#0#81( this ) 
+  )
+)
+
+Script VTriger#0#81
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 206 ) 
+    VTriger#0#80( this ) 
+  )
+)
+
+Script VTriger#0#84
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Tiger, "crest" ) 
+  )
+)
+
+Script VTriger#0#97
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( PoorMan, "uspecial20" ) 
+    VTriger#0#98( this ) 
+  )
+)
+
+Script VTriger#0#98
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 119 ) 
+    VTriger#0#97( this ) 
+  )
+)
+
+Script VCheck#0#108
+(
+  if
+  (
+    IsGreater( GetWorldTime(  ) , 7 ) 
+    IsLess( GetWorldTime(  ) , 18 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#116( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#138( this ) 
+  )
+)
+
+Script VTriger#0#110
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VCheck#0#108( this ) 
+  )
+)
+
+Script VTriger#0#116
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    HideObject( FemaleTalk2, 0 ) 
+    UMSentry( FemaleTalk2, 81.3, 56.25 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( FemaleTalk2, 81.3, 56.25 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( FemaleTalk2, 82.88, 55.88 ) 
+    Sleep( 5 ) 
+    Idle( FemaleTalk2 ) 
+    HideObject( FemaleTalk1, 0 ) 
+    UMSentry( FemaleTalk1, 82.56, 55.89 ) 
+    SleepUntil( IsLess( DistanceUnitPoint( FemaleTalk1, 82.56, 55.89 ) , 0.2 )  ) 
+    Sleep( 5 ) 
+    RotateTo( FemaleTalk1, 81, 56 ) 
+    Sleep( 5 ) 
+    Idle( FemaleTalk1 ) 
+    VTriger#0#143( this ) 
+    VTriger#0#152( this ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Spear2 = GetObjectByID( "79918" ) 
+  WinterFirTree00-243337 = GetObjectByID( "926041" ) 
+  AGuard2 = GetObjectByID( "2285" ) 
+  Eater = GetObjectByID( "506671" ) 
+  FemaleTalk1 = GetObjectByID( "7468" ) 
+  PoorMan = GetObjectByID( "960939" ) 
+  AGuard1 = GetObjectByID( "481166" ) 
+  SitterPolice = GetObjectByID( "420812" ) 
+  Talker1 = GetObjectByID( "439272" ) 
+  WinterFirTree00-243336 = GetObjectByID( "207068" ) 
+  WinterFirTree000-243335 = GetObjectByID( "674680" ) 
+  Batrak1 = GetObjectByID( "136667" ) 
+  Eda2 = GetObjectByID( "919536" ) 
+  SitterMan = GetObjectByID( "137765" ) 
+  Spear3 = GetObjectByID( "724970" ) 
+  Bow1 = GetObjectByID( "101964" ) 
+  Bow2 = GetObjectByID( "287151" ) 
+  Spear1 = GetObjectByID( "325074" ) 
+  Spear4 = GetObjectByID( "950152" ) 
+  FemaleTalk2 = GetObjectByID( "753775" ) 
+  WinterFirTree00-243335 = GetObjectByID( "243335" ) 
+  Talker = GetObjectByID( "80556" ) 
+  Tiger = GetObjectByID( "786595" ) 
+  Eda1 = GetObjectByID( "990242" ) 
+  VTriger#0#160( NULL ) 
+  VTriger#0#37( NULL ) 
+  VTriger#0#41( NULL ) 
+  VTriger#0#45( NULL ) 
+  VTriger#0#49( NULL ) 
+  VTriger#0#188( NULL ) 
+  VTriger#0#62( NULL ) 
+  VTriger#0#72( NULL ) 
+  VTriger#0#74( NULL ) 
+  VTriger#0#80( NULL ) 
+  VTriger#0#84( NULL ) 
+  VTriger#0#97( NULL ) 
+  VTriger#0#110( NULL ) 
+)
