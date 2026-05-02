@@ -75,6 +75,10 @@ Simply enter the IP of the other player hosting the game, if everything goes rig
 In order to host servers for this game outside of a local network (LAN), you need to open the port `8888`/`UDP`, this must be done on your router configuration panel.
 Then your compouter should display a prompt asking to allow the game to access the firewall, this must be granted.
 
+### Troubleshooting
+
+If the game crashes or freezes after clicking on __Multiplayer__, edit the `ei_plugin.ini` config file and add a new line containing `NewMaster=0`. Then save and retry launching multiplayer.
+
 ## Assets ownership
 
 Some community assets used in this mod have unclear ownership. We use them only within the Universal Mod project and do not claim any rights over them. If any rights holder requests removal, we will comply immediately.
