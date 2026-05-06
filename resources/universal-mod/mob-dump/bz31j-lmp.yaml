@@ -28168,7 +28168,7 @@ OBJECTDBFILE:
         - 0.5
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "bz31j Jun Deva F"
+      UNIT_PROTOTYPE: "Jun Deva F"
       UNIT_ARMORS:
         - "gipat medium leggins.tanned thin"
         - "gipat brigand shirt.tiger hide"
@@ -28345,7 +28345,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 144
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "bz31j Human BSon M"
+      UNIT_PROTOTYPE: "Human BSon M"
       UNIT_ARMORS:
         - "hadagan medium shirt.wool"
         - "hadagan medium pants.cotton"
@@ -28519,7 +28519,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 192
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "bz31j Human Baron M"
+      UNIT_PROTOTYPE: "Human Baron M"
       UNIT_ARMORS:
         - "hadagan medium shirt.wool"
         - "hadagan medium pants.cotton"
@@ -28693,7 +28693,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 80
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "bz31j Human Necro M"
+      UNIT_PROTOTYPE: "Human Necro M"
       UNIT_ARMORS:
         - "hadagan medium shirt.wool"
         - "hadagan medium pants.cotton"
@@ -28867,7 +28867,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "bz31j Human Stark M"
+      UNIT_PROTOTYPE: "Human Stark M"
       UNIT_ARMORS:
         - "hadagan medium shirt.wool"
         - "hadagan medium pants.cotton"
