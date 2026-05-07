@@ -66,7 +66,7 @@ Script CheckLever
   (
     KillScript(  )
     SwitchLeverState( GetObject( 1122 ) , 1 )
-    GSSetVarMax( 0, "q.z25q1.z25q1.3", 2 )
+    GSSetVarMax( 0, "q.z25q1.z25q1.4", 2 )
   )
 )
 
@@ -95,8 +95,12 @@ WorldScript
   Sleep( 2 )
   CaveLever = GetObjectByID( "4368" )
   OgreGuard = GetObjectByID( "6969" )
-  OgreL0 = GetObjectByID( "2259791" )
-  OgreR0 = GetObjectByID( "2259793" )
-  OgreR1 = GetObjectByID( "2259794" )
-  
+  OgreL0 = GetObjectByID( "203" )
+  OgreR0 = GetObjectByID( "200" )
+  OgreR1 = GetObjectByID( "201" )
+  KillOgresR( NULL )
+  KillOgresL( NULL )
+  KillGuard( NULL )
+  CheckLever( NULL )
+  CheckAllObjs( NULL )
 )

@@ -17439,9 +17439,9 @@ OBJECTDBFILE:
       UNIT_PROTOTYPE: "Human Mercenary Kania Archer"
       UNIT_ARMORS:
         - "kania medium shirt.silk red"
-        - "kania brigand pants.thick"
-        - "kania brigand boots.thin"
-        - "kania brigand gloves.thin"
+        - "kania brigand pants.black"
+        - "kania brigand boots.tanned thin"
+        - "kania brigand gloves.tanned thin"
       UNIT_WEAPONS:
         - "long bow.steel"
       UNIT_SPELLS: None
@@ -17787,9 +17787,9 @@ OBJECTDBFILE:
       UNIT_NEED_IMPORT: 1
       UNIT_PROTOTYPE: "Human Mercenary Kania Thief"
       UNIT_ARMORS:
-        - "kania low plate.thick"
+        - "kania low plate.black"
         - "kania medium shirt.silk blue"
-        - "kania brigand pants.tanned thin"
+        - "kania brigand pants.black"
         - "kania medium boots.cotton"
         - "kania medium gloves.cotton"
       UNIT_WEAPONS:

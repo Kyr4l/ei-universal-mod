@@ -6,9 +6,6 @@ OBJECTDBFILE:
   DIPLOMATION:
     DIPLOMATION_FOF:
       - 0
-      - 1
-      - 2
-      - 1
       - 2
       - 2
       - 1
@@ -16,6 +13,9 @@ OBJECTDBFILE:
       - 2
       - 1
       - 2
+      - 2
+      - 1
+      - 2
       - 1
       - 1
       - 1
@@ -37,7 +37,7 @@ OBJECTDBFILE:
       - 1
       - 1
       - 1
-      - 1
+      - 2
       - 0
       - 1
       - 0
@@ -1362,7 +1362,7 @@ OBJECTDBFILE:
   OBJECTSECTION:
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Peasant F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A7"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thin"
@@ -1436,7 +1436,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 25
       OBJTYPE: 50
-      OBJNAME: "Human Kania Low Level Female-25"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A7"
       OBJPRIMTXTR: "default0"
@@ -1536,7 +1536,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 7
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Peasant M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F1"
       UNIT_ARMORS:
         - "kania low shirt.wool"
         - "kania low pants.wool"
@@ -1610,7 +1610,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 26
       OBJTYPE: 50
-      OBJNAME: "Human Kania Workers Male-26"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F1"
       OBJPRIMTXTR: "default0"
@@ -1738,7 +1738,7 @@ OBJECTDBFILE:
         - 1.0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Dog1"
+      UNIT_PROTOTYPE: "DogGreyF6"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -1792,7 +1792,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 53
       OBJTYPE: 52
-      OBJNAME: "Dog-53"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhodo"
       PARENTTEMPLATE: "DogGreyF6"
       OBJPRIMTXTR: "dog00"
@@ -3034,7 +3034,7 @@ OBJECTDBFILE:
         - 0.3799999952316284
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Deer"
+      UNIT_PROTOTYPE: "DeerF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3336,7 +3336,7 @@ OBJECTDBFILE:
         - 0.5
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Hare"
+      UNIT_PROTOTYPE: "HareF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3390,7 +3390,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 3971
       OBJTYPE: 52
-      OBJNAME: "HareF0-3969"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoha"
       PARENTTEMPLATE: "HareF0"
       OBJPRIMTXTR: "hare01"
@@ -3490,7 +3490,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3544,9 +3544,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 3999
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -3644,7 +3644,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Cow"
+      UNIT_PROTOTYPE: "CowF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3698,15 +3698,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 3
       NID: 4133
       OBJTYPE: 52
-      OBJNAME: "CowF0-3774"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoco"
       PARENTTEMPLATE: "CowF0"
       OBJPRIMTXTR: "cow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 13.013023376464844
-        - 114.95913696289062
+        - 12.150362968444824
+        - 116.60044860839844
         - 0.0
       OBJROTATION:
         - 0.9063076972961426
@@ -3731,9 +3731,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 13.013023376464844
-          - 114.95913696289062
-          - 0.0
+          - 12.150362968444824
+          - 116.60044860839844
+          - 8.487607955932617
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -3798,7 +3798,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Unicorn White"
+      UNIT_PROTOTYPE: "UnicornWhiteM15"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -3853,7 +3853,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 2
       NID: 4161
       OBJTYPE: 51
-      OBJNAME: "UnicornWhiteM15-3604"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoun"
       PARENTTEMPLATE: "UnicornWhiteM15"
       OBJPRIMTXTR: "unicorn00"
@@ -4243,7 +4243,7 @@ OBJECTDBFILE:
         - 1.0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -4318,7 +4318,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 1000804
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
@@ -4431,7 +4431,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Hunter F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A8"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -4505,15 +4505,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 1000867
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Female-35"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A8"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 31.405162811279297
-        - 119.34723663330078
+        - 34.300716400146484
+        - 117.64431762695312
         - 0.0
       OBJROTATION:
         - 1.0
@@ -4534,13 +4534,13 @@ OBJECTDBFILE:
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 31.405162811279297
-          - 119.34723663330078
-          - 1324.959228515625
+          - 34.300716400146484
+          - 117.64431762695312
+          - 8.595805168151855
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -4552,7 +4552,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 36.5201301574707
               - 122.06015014648438
-              - 8.497803688049316
+              - 8.51725959777832
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -4786,7 +4786,7 @@ OBJECTDBFILE:
         - 0.5
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Cow"
+      UNIT_PROTOTYPE: "CowF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -4840,15 +4840,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 3
       NID: 1021694
       OBJTYPE: 52
-      OBJNAME: "CowF0-3774"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoco"
       PARENTTEMPLATE: "CowF0"
       OBJPRIMTXTR: "cow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 13.131522178649902
-        - 113.02289581298828
+        - 12.917948722839355
+        - 112.11389923095703
         - 0.0
       OBJROTATION:
         - 0.9063076972961426
@@ -4873,9 +4873,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 13.131522178649902
-          - 113.02289581298828
-          - 0.0
+          - 12.917948722839355
+          - 112.11389923095703
+          - 8.48703384399414
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -4940,7 +4940,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Cow"
+      UNIT_PROTOTYPE: "CowF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -4994,15 +4994,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 3
       NID: 1021695
       OBJTYPE: 52
-      OBJNAME: "CowF0-3774"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoco"
       PARENTTEMPLATE: "CowF0"
       OBJPRIMTXTR: "cow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 14.993335723876953
-        - 114.25347900390625
+        - 16.38519859313965
+        - 112.87507629394531
         - 0.0
       OBJROTATION:
         - 0.9063076972961426
@@ -5027,9 +5027,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 14.993335723876953
-          - 114.25347900390625
-          - 0.0
+          - 16.38519859313965
+          - 112.87507629394531
+          - 8.567116737365723
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -5094,7 +5094,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Cow"
+      UNIT_PROTOTYPE: "CowF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -5148,15 +5148,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 3
       NID: 1021696
       OBJTYPE: 52
-      OBJNAME: "CowF0-3774"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoco"
       PARENTTEMPLATE: "CowF0"
       OBJPRIMTXTR: "cow00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 15.140149116516113
-        - 115.68232727050781
+        - 16.429540634155273
+        - 116.5486831665039
         - 0.0
       OBJROTATION:
         - 0.9063076972961426
@@ -5181,9 +5181,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 15.140149116516113
-          - 115.68232727050781
-          - 0.0
+          - 16.429540634155273
+          - 116.5486831665039
+          - 8.579147338867188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -11978,7 +11978,7 @@ OBJECTDBFILE:
         - 0.5
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Doctor F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A8"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -12052,7 +12052,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 1027303
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Female-35"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A8"
       OBJPRIMTXTR: "default0"
@@ -24089,7 +24089,7 @@ OBJECTDBFILE:
         - 0.699999988079071
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Hare"
+      UNIT_PROTOTYPE: "HareF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24143,7 +24143,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 2259755
       OBJTYPE: 52
-      OBJNAME: "HareF0-3969"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoha"
       PARENTTEMPLATE: "HareF0"
       OBJPRIMTXTR: "hare01"
@@ -24243,7 +24243,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Deer"
+      UNIT_PROTOTYPE: "DeerF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24297,7 +24297,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 2259756
       OBJTYPE: 52
-      OBJNAME: "DeerF0-3809"
+      OBJNAME: ""
       OBJTEMPLATE: "unanwide"
       PARENTTEMPLATE: "DeerF0"
       OBJPRIMTXTR: "deer01"
@@ -24397,7 +24397,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24451,9 +24451,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259757
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -24551,7 +24551,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24605,9 +24605,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259758
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -24705,7 +24705,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24759,9 +24759,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259759
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel1"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -24859,7 +24859,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24913,15 +24913,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259760
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 228.96022033691406
-        - 37.947853088378906
+        - 225.2848358154297
+        - 38.70347213745117
         - 0.0
       OBJROTATION:
         - 1.0
@@ -24946,9 +24946,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 228.96022033691406
-          - 37.947853088378906
-          - 0.0
+          - 225.2848358154297
+          - 38.70347213745117
+          - 8.294570922851562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -25013,7 +25013,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25067,9 +25067,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259761
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25167,7 +25167,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25221,9 +25221,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259762
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25321,7 +25321,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25375,9 +25375,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259763
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25475,7 +25475,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25529,9 +25529,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259764
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25629,7 +25629,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25683,9 +25683,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259765
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25783,7 +25783,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25837,9 +25837,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259766
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25937,7 +25937,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Elemental Ice"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25991,9 +25991,9 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 2259767
       OBJTYPE: 51
-      OBJNAME: "ElementalIceF11"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "ElementalIceF11"
+      PARENTTEMPLATE: "LMP Elemental Ice 10"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -26091,7 +26091,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Unicorn White"
+      UNIT_PROTOTYPE: "UnicornWhiteM15"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -26146,7 +26146,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 2
       NID: 2259768
       OBJTYPE: 51
-      OBJNAME: "UnicornWhiteM15-3604"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoun"
       PARENTTEMPLATE: "UnicornWhiteM15"
       OBJPRIMTXTR: "unicorn00"
@@ -26246,7 +26246,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Unicorn White"
+      UNIT_PROTOTYPE: "UnicornWhiteM15"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -26301,7 +26301,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 2
       NID: 2259769
       OBJTYPE: 51
-      OBJNAME: "UnicornWhiteM15-3604"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoun"
       PARENTTEMPLATE: "UnicornWhiteM15"
       OBJPRIMTXTR: "unicorn00"
@@ -26401,7 +26401,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Unicorn White"
+      UNIT_PROTOTYPE: "UnicornWhiteM15"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -26456,7 +26456,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 2
       NID: 2259770
       OBJTYPE: 51
-      OBJNAME: "UnicornWhiteM15-3604"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoun"
       PARENTTEMPLATE: "UnicornWhiteM15"
       OBJPRIMTXTR: "unicorn00"
@@ -26556,7 +26556,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Unicorn White"
+      UNIT_PROTOTYPE: "UnicornWhiteM15"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -26611,15 +26611,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 2
       NID: 2259771
       OBJTYPE: 51
-      OBJNAME: "UnicornWhiteM15-3604"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoun"
       PARENTTEMPLATE: "UnicornWhiteM15"
       OBJPRIMTXTR: "unicorn00"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 64.6636962890625
-        - 43.85288619995117
+        - 78.35394287109375
+        - 47.99262619018555
         - 0.0
       OBJROTATION:
         - 1.0
@@ -26644,9 +26644,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 64.6636962890625
-          - 43.85288619995117
-          - 0.0
+          - 78.35394287109375
+          - 47.99262619018555
+          - 8.843554496765137
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -26711,7 +26711,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Unicorn White"
+      UNIT_PROTOTYPE: "UnicornWhiteM15"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS:
@@ -26766,7 +26766,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 2
       NID: 2259772
       OBJTYPE: 51
-      OBJNAME: "UnicornWhiteM15-3604"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoun"
       PARENTTEMPLATE: "UnicornWhiteM15"
       OBJPRIMTXTR: "unicorn00"
@@ -26866,7 +26866,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Hare"
+      UNIT_PROTOTYPE: "HareF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -26920,7 +26920,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 2259773
       OBJTYPE: 52
-      OBJNAME: "HareF0-3969"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoha"
       PARENTTEMPLATE: "HareF0"
       OBJPRIMTXTR: "hare01"
@@ -27020,7 +27020,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Hare"
+      UNIT_PROTOTYPE: "HareF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -27074,7 +27074,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 2259774
       OBJTYPE: 52
-      OBJNAME: "HareF0-3969"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhoha"
       PARENTTEMPLATE: "HareF0"
       OBJPRIMTXTR: "hare01"
@@ -27174,7 +27174,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Dog1"
+      UNIT_PROTOTYPE: "DogGreyF6"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -27228,7 +27228,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259775
       OBJTYPE: 52
-      OBJNAME: "Dog-53"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhodo"
       PARENTTEMPLATE: "DogGreyF6"
       OBJPRIMTXTR: "dog00"
@@ -27328,7 +27328,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Dog1"
+      UNIT_PROTOTYPE: "DogGreyF6"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -27382,7 +27382,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259776
       OBJTYPE: 52
-      OBJNAME: "Dog-53"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhodo"
       PARENTTEMPLATE: "DogGreyF6"
       OBJPRIMTXTR: "dog00"
@@ -27482,7 +27482,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Dog1"
+      UNIT_PROTOTYPE: "DogGreyF6"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -27536,7 +27536,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259777
       OBJTYPE: 52
-      OBJNAME: "Dog-53"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhodo"
       PARENTTEMPLATE: "DogGreyF6"
       OBJPRIMTXTR: "dog00"
@@ -27636,7 +27636,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Dog1"
+      UNIT_PROTOTYPE: "DogGreyF6"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -27690,7 +27690,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259778
       OBJTYPE: 52
-      OBJNAME: "Dog-53"
+      OBJNAME: ""
       OBJTEMPLATE: "unanhodo"
       PARENTTEMPLATE: "DogGreyF6"
       OBJPRIMTXTR: "dog00"
@@ -27790,7 +27790,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Hunter F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A8"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -27864,7 +27864,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259779
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Female-35"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A8"
       OBJPRIMTXTR: "default0"
@@ -27977,7 +27977,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Hunter F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A8"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -28051,7 +28051,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259780
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Female-35"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A8"
       OBJPRIMTXTR: "default0"
@@ -28164,7 +28164,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -28239,7 +28239,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259781
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
@@ -28352,7 +28352,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -28427,7 +28427,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259782
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
@@ -28553,7 +28553,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -28628,7 +28628,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259783
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
@@ -28754,7 +28754,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -28829,7 +28829,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259784
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
@@ -28942,7 +28942,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Peasant F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A7"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thin"
@@ -29016,7 +29016,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259785
       OBJTYPE: 50
-      OBJNAME: "Human Kania Low Level Female-25"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A7"
       OBJPRIMTXTR: "default0"
@@ -29116,7 +29116,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Peasant M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F1"
       UNIT_ARMORS:
         - "kania low shirt.wool"
         - "kania low pants.wool"
@@ -29190,7 +29190,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259786
       OBJTYPE: 50
-      OBJNAME: "Human Kania Workers Male-26"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F1"
       OBJPRIMTXTR: "default0"
@@ -29290,7 +29290,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Peasant M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F1"
       UNIT_ARMORS:
         - "kania low shirt.wool"
         - "kania low pants.wool"
@@ -29364,7 +29364,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259787
       OBJTYPE: 50
-      OBJNAME: "Human Kania Workers Male-26"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F1"
       OBJPRIMTXTR: "default0"
@@ -29464,7 +29464,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Peasant F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A7"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thin"
@@ -29538,7 +29538,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259788
       OBJTYPE: 50
-      OBJNAME: "Human Kania Low Level Female-25"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A7"
       OBJPRIMTXTR: "default0"
@@ -29638,7 +29638,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -29713,7 +29713,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259789
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
@@ -29826,7 +29826,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -29901,15 +29901,15 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 2259790
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 38.013580322265625
-        - 114.48683166503906
+        - 40.71925735473633
+        - 111.61237335205078
         - 0.0
       OBJROTATION:
         - 1.0
@@ -29930,13 +29930,13 @@ OBJECTDBFILE:
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_MODEL: 1
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 38.013580322265625
-          - 114.48683166503906
-          - 789.253173828125
+          - 40.71925735473633
+          - 111.61237335205078
+          - 8.486483573913574
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -30014,7 +30014,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Ogre"
+      UNIT_PROTOTYPE: "OgreGipatF7"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -30066,17 +30066,17 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 4
-      NID: 2259791
+      NID: 203
       OBJTYPE: 51
-      OBJNAME: "Ogre"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoog1"
       PARENTTEMPLATE: "OgreGipatF7"
       OBJPRIMTXTR: "ogre03"
       OBJSECTXTR: "goblinaxebag00"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 58.601200103759766
-        - 135.00100708007812
+        - 62.827796936035156
+        - 138.16612243652344
         - 0.0
       OBJROTATION:
         - 1.0
@@ -30101,46 +30101,46 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 58.601200103759766
-          - 135.00100708007812
-          - 0.0
+          - 62.827796936035156
+          - 138.16612243652344
+          - 8.737113952636719
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 54.95100021362305
-            - 132.9199981689453
-            - 8.50857925415039
+            - 57.61081314086914
+            - 134.24978637695312
+            - 8.493185997009277
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 53.035701751708984
-              - 130.625
+              - 54.51471710205078
+              - 132.23341369628906
               - 8.498503684997559
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 69.59950256347656
-            - 147.72799682617188
-            - 8.69228458404541
+            - 71.65589904785156
+            - 139.0649871826172
+            - 8.672525405883789
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 73.63480377197266
-              - 143.08599853515625
+              - 94.30465698242188
+              - 129.2777099609375
               - 8.652450561523438
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 90.71379852294922
-            - 160.9429931640625
-            - 8.860329627990723
+            - 82.72454071044922
+            - 154.6957550048828
+            - 8.710219383239746
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 95.69709777832031
-              - 163.2830047607422
+              - 86.73387908935547
+              - 158.02618408203125
               - 8.81242561340332
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
@@ -30207,7 +30207,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Ogre"
+      UNIT_PROTOTYPE: "OgreGipatF7"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -30259,17 +30259,17 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 4
-      NID: 2259793
+      NID: 200
       OBJTYPE: 51
-      OBJNAME: "Ogre"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoog1"
       PARENTTEMPLATE: "OgreGipatF7"
       OBJPRIMTXTR: "ogre03"
       OBJSECTXTR: "goblinaxebag00"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 136.6479949951172
-        - 138.35400390625
+        - 135.32505798339844
+        - 144.6132354736328
         - 0.0
       OBJROTATION:
         - 1.0
@@ -30294,20 +30294,20 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 136.6479949951172
-          - 138.35400390625
-          - 0.0
+          - 135.32505798339844
+          - 144.6132354736328
+          - 8.598676681518555
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 138.9239959716797
-            - 134.9320068359375
+            - 135.0410614013672
+            - 142.3304443359375
             - 8.598676681518555
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 142.58700561523438
-              - 132.6009979248047
+              - 136.69493103027344
+              - 137.3611602783203
               - 8.598676681518555
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
@@ -30327,13 +30327,13 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 104.66999816894531
-            - 159.4929962158203
-            - 8.746678352355957
+            - 111.2072525024414
+            - 153.57571411132812
+            - 8.563748359680176
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 95.69709777832031
-              - 163.2830047607422
+              - 105.5177001953125
+              - 157.5428009033203
               - 8.81242561340332
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
@@ -30400,7 +30400,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Ogre"
+      UNIT_PROTOTYPE: "OgreGipatF7"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -30452,17 +30452,17 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 4
-      NID: 2259794
+      NID: 201
       OBJTYPE: 51
-      OBJNAME: "Ogre"
+      OBJNAME: ""
       OBJTEMPLATE: "unmoog1"
       PARENTTEMPLATE: "OgreGipatF7"
       OBJPRIMTXTR: "ogre03"
       OBJSECTXTR: "goblinaxebag00"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 173.3800048828125
-        - 116.06400299072266
+        - 167.9146270751953
+        - 123.54889678955078
         - 0.0
       OBJROTATION:
         - 1.0
@@ -30487,28 +30487,28 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 173.3800048828125
-          - 116.06400299072266
-          - 0.0
+          - 167.9146270751953
+          - 123.54889678955078
+          - 8.596773147583008
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 179.031005859375
-            - 114.0260009765625
-            - 8.460543632507324
+            - 175.57791137695312
+            - 117.90960693359375
+            - 8.592405319213867
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 183.74200439453125
-              - 116.42500305175781
+              - 182.75758361816406
+              - 113.08163452148438
               - 8.537899017333984
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 179.41200256347656
-              - 106.1780014038086
+              - 177.76287841796875
+              - 110.3548355102539
               - 8.35505485534668
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
@@ -30520,34 +30520,34 @@ OBJECTDBFILE:
             - 9.132171630859375
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 163.906005859375
-              - 104.9520034790039
+              - 164.96034240722656
+              - 105.2809066772461
               - 8.63560676574707
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 149.03700256347656
-            - 128.9810028076172
-            - 8.598676681518555
+            - 147.80770874023438
+            - 126.63220977783203
+            - 8.233236312866211
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 144.64500427246094
-              - 130.80499267578125
+              - 143.22598266601562
+              - 131.27767944335938
               - 8.598676681518555
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 164.3560028076172
-            - 131.4969940185547
+            - 162.5071258544922
+            - 128.6434783935547
             - 8.598676681518555
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 162.3769989013672
-              - 127.5989990234375
+              - 160.5281219482422
+              - 124.7454605102539
               - 8.598676681518555
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
@@ -30614,7 +30614,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Deer"
+      UNIT_PROTOTYPE: "DeerF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -30668,7 +30668,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 2259795
       OBJTYPE: 52
-      OBJNAME: "DeerF0-3809"
+      OBJNAME: ""
       OBJTEMPLATE: "unanwide"
       PARENTTEMPLATE: "DeerF0"
       OBJPRIMTXTR: "deer01"
@@ -30768,7 +30768,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Deer"
+      UNIT_PROTOTYPE: "DeerF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -30822,7 +30822,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 6
       NID: 2259796
       OBJTYPE: 52
-      OBJNAME: "DeerF0-3809"
+      OBJNAME: ""
       OBJTEMPLATE: "unanwide"
       PARENTTEMPLATE: "DeerF0"
       OBJPRIMTXTR: "deer01"
@@ -30978,7 +30978,7 @@ OBJECTDBFILE:
         - 1.0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human Hunter F"
+      UNIT_PROTOTYPE: "Human Kania Citizen A8"
       UNIT_ARMORS:
         - "kania low helm.tanned thin"
         - "kania low plate.tanned thin"
@@ -31052,7 +31052,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 33398722
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Female-35"
+      OBJNAME: ""
       OBJTEMPLATE: "unhufe"
       PARENTTEMPLATE: "Human Kania Citizen A8"
       OBJPRIMTXTR: "default0"
@@ -31165,7 +31165,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Human WoodCuter M"
+      UNIT_PROTOTYPE: "Human Kania Citizen F8"
       UNIT_ARMORS:
         - "kania low helm.thick"
         - "kania low plate.thick"
@@ -31240,7 +31240,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 1
       NID: 33398723
       OBJTYPE: 50
-      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJNAME: ""
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Kania Citizen F8"
       OBJPRIMTXTR: "default0"
