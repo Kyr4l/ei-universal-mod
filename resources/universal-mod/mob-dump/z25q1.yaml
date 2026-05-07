@@ -1,0 +1,498 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 0
+      MAX_ID: 999999
+  VSS_SECTION:
+  DIRICTORY:
+    FOLDER:
+      DIR_NINST: 4294966030
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Heroes"
+    FOLDER:
+      DIR_NINST: 4294959942
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Slaves"
+    FOLDER:
+      DIR_NINST: 4294966435
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "HunterGroup"
+    FOLDER:
+      DIR_NINST: 4294959327
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Golden"
+    FOLDER:
+      DIR_NINST: 4294966849
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Woodcutters"
+    FOLDER:
+      DIR_NINST: 4294963967
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "MinersGroup"
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 3021
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "WinterLeafTree00-1094"
+    FOLDER:
+      DIR_NINST: 25
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-25"
+    FOLDER:
+      DIR_NINST: 26
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Male-26"
+    FOLDER:
+      DIR_NINST: 27
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Male-27"
+    FOLDER:
+      DIR_NINST: 28
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Male-28"
+    FOLDER:
+      DIR_NINST: 29
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Male-29"
+    FOLDER:
+      DIR_NINST: 30
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Female-30"
+    FOLDER:
+      DIR_NINST: 31
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Female-31"
+    FOLDER:
+      DIR_NINST: 32
+      DIR_PARENT_FOLDER: 4294963967
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania High Workers Female-32"
+    FOLDER:
+      DIR_NINST: 34
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-34"
+    FOLDER:
+      DIR_NINST: 35
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-35"
+    FOLDER:
+      DIR_NINST: 36
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-36"
+    FOLDER:
+      DIR_NINST: 37
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-37"
+    FOLDER:
+      DIR_NINST: 38
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-38"
+    FOLDER:
+      DIR_NINST: 39
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-39"
+    FOLDER:
+      DIR_NINST: 40
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania High Workers Male-40"
+    FOLDER:
+      DIR_NINST: 41
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-41"
+    FOLDER:
+      DIR_NINST: 42
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Female-42"
+    FOLDER:
+      DIR_NINST: 43
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Male-43"
+    FOLDER:
+      DIR_NINST: 45
+      DIR_PARENT_FOLDER: 4294959327
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Workers Male-45"
+    FOLDER:
+      DIR_NINST: 47
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-47"
+    FOLDER:
+      DIR_NINST: 48
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Male-48"
+    FOLDER:
+      DIR_NINST: 49
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-49"
+    FOLDER:
+      DIR_NINST: 50
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-50"
+    FOLDER:
+      DIR_NINST: 51
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-51"
+    FOLDER:
+      DIR_NINST: 52
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "AlarmDog"
+    FOLDER:
+      DIR_NINST: 53
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Dog-53"
+    FOLDER:
+      DIR_NINST: 54
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Dog-54"
+    FOLDER:
+      DIR_NINST: 55
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Dog-55"
+    FOLDER:
+      DIR_NINST: 56
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Dog-56"
+    FOLDER:
+      DIR_NINST: 57
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Dog-57"
+    FOLDER:
+      DIR_NINST: 58
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-58"
+    FOLDER:
+      DIR_NINST: 59
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-59"
+    FOLDER:
+      DIR_NINST: 60
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Male-60"
+    FOLDER:
+      DIR_NINST: 62
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-62"
+    FOLDER:
+      DIR_NINST: 63
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-63"
+    FOLDER:
+      DIR_NINST: 64
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Male-64"
+    FOLDER:
+      DIR_NINST: 65
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Male-65"
+    FOLDER:
+      DIR_NINST: 66
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-66"
+    FOLDER:
+      DIR_NINST: 67
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-67"
+    FOLDER:
+      DIR_NINST: 68
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-68"
+    FOLDER:
+      DIR_NINST: 61
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Male-61"
+    FOLDER:
+      DIR_NINST: 69
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Male-69"
+    FOLDER:
+      DIR_NINST: 70
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-70"
+    FOLDER:
+      DIR_NINST: 71
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Male-71"
+    FOLDER:
+      DIR_NINST: 72
+      DIR_PARENT_FOLDER: 4294966435
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Low Level Female-72"
+    FOLDER:
+      DIR_NINST: 76
+      DIR_PARENT_FOLDER: 4294966849
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-76"
+    FOLDER:
+      DIR_NINST: 78
+      DIR_PARENT_FOLDER: 4294966849
+      DIR_TYPE: 2
+      DIR_NAME: "Human Kania Mid Level Female-78"
+    FOLDER:
+      DIR_NINST: 3851
+      DIR_PARENT_FOLDER: 4294959942
+      DIR_TYPE: 2
+      DIR_NAME: "Slave1"
+    FOLDER:
+      DIR_NINST: 3852
+      DIR_PARENT_FOLDER: 4294959942
+      DIR_TYPE: 2
+      DIR_NAME: "Slave3"
+    FOLDER:
+      DIR_NINST: 3853
+      DIR_PARENT_FOLDER: 4294959942
+      DIR_TYPE: 2
+      DIR_NAME: "Slave2"
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Ogre"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 190
+        - 190
+        - 35
+        - 35
+        - 1065353216
+        - 1097859072
+        - 1066365442
+        - 1047869121
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1542
+        - 0
+        - 1121583104
+        - 1119354880
+        - 1065353216
+        - 1103101952
+        - 1101529088
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 23
+        - 1095552205
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1069547520
+        - 1065353216
+        - 1069547520
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6570305
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 6969
+      OBJTYPE: 51
+      OBJNAME: "OgreGuard"
+      OBJTEMPLATE: "unmoog1"
+      PARENTTEMPLATE: "OgreGipatF7"
+      OBJPRIMTXTR: "ogre03"
+      OBJSECTXTR: "goblinaxebag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 96.93785095214844
+        - 162.68589782714844
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z25q1"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 96.93785095214844
+          - 162.68589782714844
+          - 1013.4910888671875
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 93.36448669433594
+            - 158.71128845214844
+            - 8.779705047607422
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 91.44918823242188
+              - 156.41629028320312
+              - 8.661869049072266
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 11
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 85
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1122
+      OBJTYPE: 60
+      OBJNAME: "FallingStone"
+      OBJTEMPLATE: "stst102"
+      PARENTTEMPLATE: "FallingStone00"
+      OBJPRIMTXTR: "stone02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 94.89700317382812
+        - 173.06399536132812
+        - -4.349999904632568
+      OBJROTATION:
+        - -0.9941666722297668
+        - 0.0
+        - 0.0
+        - 0.10785411298274994
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 1245202
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - 0.10000000149011612

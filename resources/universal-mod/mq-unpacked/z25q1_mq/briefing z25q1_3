@@ -1,0 +1,10 @@
+The path is now safe!
+#show Hero
+#show Huber
+#CAMERA 10
+#phrase Huber  1
+Thanks you very much. We can hopefully trade with the other islands soon!
+#phrase Hero  2
+But what if they decide to fight the Canian Empire ?
+#phrase Huber  3
+Well that's a fair point. Maybe we'll have to wait then...

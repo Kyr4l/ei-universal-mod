@@ -1,0 +1,102 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group,
+  CaveLever : object,
+  OgreGuard : object,
+  OgreL0 : object,
+  OgreR0 : object,
+  OgreR1 : object
+)
+
+DeclareScript CheckLever ( this:object )
+DeclareScript KillOgresR ( this:object )
+DeclareScript KillOgresL ( this:object )
+DeclareScript KillGuard ( this:object )
+DeclareScript CheckAllObjs ( this:object )
+
+Script KillOgresR
+(
+  if
+  (
+    Not(IsAlive( OgreR0 ) ) 
+    Not(IsAlive( OgreR1 ) ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z25q1.z25q1.1", 2 ) 
+  )
+)
+
+Script KillOgresL
+(
+  if
+  (
+    Not(IsAlive( OgreL0 ) ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z25q1.z25q1.2", 2 ) 
+  )
+)
+
+Script KillGuard
+(
+  if
+  (
+    Not(IsAlive( OgreGuard ) ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z25q1.z25q1.3", 2 ) 
+  )
+)
+
+Script CheckLever
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4368 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 1122 ) , 1 )
+    GSSetVarMax( 0, "q.z25q1.z25q1.3", 2 )
+  )
+)
+
+Script CheckAllObjs
+(
+  if
+  (
+    Not(IsAlive( OgreGuard ) )
+    Not(IsAlive( OgreL0 ) )
+    Not(IsAlive( OgreR0 ) )
+    Not(IsAlive( OgreR1 ) )
+    IsEqual( GetLeverState( CaveLever ) , 1 ) 
+  )
+    then
+  (
+    KillScript(  ) 
+    Sleep( 2 )
+    GSSetVarMax( 0, "q.z25q1.z25q1", 2 ) 
+    Sleep( 2 )
+    QuestComplete( 0, "z25q1" )
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  CaveLever = GetObjectByID( "4368" )
+  OgreGuard = GetObjectByID( "6969" )
+  OgreL0 = GetObjectByID( "2259791" )
+  OgreR0 = GetObjectByID( "2259793" )
+  OgreR1 = GetObjectByID( "2259794" )
+  
+)
