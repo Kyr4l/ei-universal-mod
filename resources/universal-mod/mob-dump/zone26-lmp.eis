@@ -1,0 +1,59 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+DeclareScript Lever1 (  this : object )
+DeclareScript Lever2 (  this : object )
+DeclareScript KKey05 (  this : object )
+
+
+Script Lever1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021001 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 5223993 ) , 1 )
+  )
+)
+
+Script Lever2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021002 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 4555 ) , 1 )
+  )
+)
+
+Script KKey05
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021003 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveQuestItem( 0, "KKey05" )
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 )
+  Lever1( NULL )
+  Lever2( NULL )
+  KKey05( NULL )
+)

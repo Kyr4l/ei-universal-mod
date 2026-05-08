@@ -1,0 +1,172 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+DeclareScript CheckGatesKey (  this : object )
+DeclareScript CheckGates (  this : object )
+DeclareScript PortalKey (  this : object )
+DeclareScript PortalOn (  this : object )
+DeclareScript PortalOn2 (  this : object )
+DeclareScript CheckAll (  this : object )
+
+
+Script CheckGatesKey
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021003 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z26q1.z26q1.1", 2 )
+  )
+)
+
+Script CheckGates
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1021001 ) ) , 1 )
+    IsEqual( GetLeverState( GetObject( 1021002 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z26q1.z26q1.2", 2 )
+  )
+)
+
+Script PortalKey
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4309 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z26q1.z26q1.3", 2 )
+    GiveQuestItem( 0, "TeleportKey01" )
+  )
+)
+
+Script PortalOn
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 43974 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 10 )
+    CreateFX( 67, 163, 6.1, 40, 70, "Tools\ATZAKO02.wav" )
+    CreateParticleSource( 1, 58.9, 161.8, 28.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 28.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 28.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 26.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 26.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 26.7, 0.7, "portalstar" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 24.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 24.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 24.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 22.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 22.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 22.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 20.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 20.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 20.7, 0.7, "portalstar" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 18.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 18.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 18.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 16.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 16.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 16.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 14.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 14.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 14.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 12.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 12.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 12.7, 0.7, "portalstar" )
+    Sleep( 1 )
+//    CreateParticleSource( 1, 58.9, 161.8, 10.7, 0.7, "portalstar" )
+//    CreateParticleSource( 2, 74.9, 161.8, 10.7, 0.7, "portalstar" )
+//    CreateParticleSource( 3, 66.9, 169.8, 10.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+    Sleep( 1 )
+    CreateParticleSource( 1, 58.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreateParticleSource( 2, 74.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreateParticleSource( 3, 66.9, 169.8, 8.7, 0.7, "portalstar" )
+    CreateParticleSource( 4, 66.9, 163.8, 0.0, 1, "mushroom" )
+  )
+)
+
+Script PortalOn2
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z26q1.z26q1.4" ) , 2 )
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 1, 58.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreatePointLight( 1, 58.9, 161.8, 8.7, 5, 155, 155, 455 )
+    CreateParticleSource( 2, 74.9, 161.8, 8.7, 0.7, "portalstar" )
+    CreatePointLight( 2, 74.9, 161.8, 8.7, 5, 155, 155, 455 )
+    CreateParticleSource( 3, 66.9, 169.8, 8.7, 0.7, "portalstar" )
+    CreatePointLight( 3, 66.9, 169.8, 8.7, 5, 155, 155, 455 )
+    CreateFXSource( -1, 67, 163, 6.1, 40, 70, "Tools\Teleport1.wav" ) 
+    Sleep( 20 )
+    CreateParticleSource( 4, 67, 163, 6.1, 1, "Portal" )
+    CreatePointLight( 4, 67, 163, 6.7, 10, 155, 155, 455 )
+    CreateFXSource( -1, 67, 163, 6.1, 40, 70, "Tools\Teleport2.wav" )
+    CreateFXSource( -1, 67, 163, 6.1, 40, 70, "Tools\Teleport3.wav" )
+  )
+)
+
+Script CheckAll
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 43974 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z26q1.z26q1.4", 2 )
+    GSSetVarMax( 0, "q.z26q1.z26q1", 2 )
+    Sleep( 1 )
+    QuestComplete( 0, "z26q1" )
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 )
+  CheckGatesKey( NULL )
+  CheckGates( NULL )
+  PortalKey( NULL )
+  PortalOn( NULL )
+  PortalOn2( NULL )
+  CheckAll( NULL )
+)
