@@ -1,0 +1,20 @@
+#zone z11d2q1 gipat game
+#res
+zone11dun2 zone11dun2-lmp
+#maps
+4 4
+zone11dun2map zone11dun2quest
+#weather
+none
+#sky
+cave
+
+## Babur Mine
+#exit 1
+bz1mpg 1
+#deploy
+75 11 84 12
+#remove
+75 3 84 10
+#view
+349.289
