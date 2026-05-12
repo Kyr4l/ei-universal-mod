@@ -7051,7 +7051,7 @@ OBJECTDBFILE:
         - 0.8999999761581421
         - -0.20500001311302185
     UNIT:
-      UNIT_NEED_IMPORT: 1
+      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Human Hadagan NPC Rebel Necro M15"
       UNIT_ARMORS:
         - "hadagan low leggins.thin"
@@ -7224,7 +7224,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
     UNIT:
-      UNIT_NEED_IMPORT: 1
+      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Human Hadagan NPC Rebel Guru F20"
       UNIT_ARMORS:
         - "hadagan brigand pants.tanned thin"

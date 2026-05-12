@@ -2,7 +2,7 @@ OBJECTDBFILE:
   SEC_RANGE:
     RANGE:
       MIN_ID: 1
-      MAX_ID: 1000002714
+      MAX_ID: 100
   VSS_SECTION:
   DIRICTORY:
     FOLDER:
@@ -436,7 +436,7 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 5
-      NID: 1000002714
+      NID: 11
       OBJTYPE: 51
       OBJNAME: "zs1"
       OBJTEMPLATE: "unmozo0"
@@ -616,7 +616,7 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 5
-      NID: 1000002713
+      NID: 10
       OBJTYPE: 51
       OBJNAME: "zs0"
       OBJTEMPLATE: "unmozo0"

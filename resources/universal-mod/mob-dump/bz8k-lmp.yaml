@@ -16914,7 +16914,7 @@ OBJECTDBFILE:
         - 2.0
         - 0.5
     UNIT:
-      UNIT_NEED_IMPORT: 1
+      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Human Kania NPC Trapper F9"
       UNIT_ARMORS:
         - "kania brigand shirt.tanned thin"
@@ -17088,7 +17088,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
     UNIT:
-      UNIT_NEED_IMPORT: 1
+      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Human Kania NPC Thief A10"
       UNIT_ARMORS:
         - "kania low shirt.silk blue"
@@ -17262,7 +17262,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
     UNIT:
-      UNIT_NEED_IMPORT: 1
+      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Human Kania NPC Captain F14"
       UNIT_ARMORS:
         - "kania special highest plate.meteoric"
@@ -17610,7 +17610,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
     UNIT:
-      UNIT_NEED_IMPORT: 1
+      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Human Kania NPC Lovkach A10"
       UNIT_ARMORS:
         - "kania medium shirt.silk blue"
