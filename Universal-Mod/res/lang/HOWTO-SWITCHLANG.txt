@@ -1,0 +1,1 @@
+Copy the texts-<LANGUAGE>.res and textslmp-<LANGUAGE>.res files from this directory and paste them in the directory above this one, then rename them to texts.res and textslmp.res
