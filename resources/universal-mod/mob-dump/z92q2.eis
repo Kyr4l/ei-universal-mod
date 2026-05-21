@@ -89,9 +89,9 @@ Script Triger5
 WorldScript
 (
   Sleep( 5 )
-  Dragon1 = GetObjectByID( "1000200" ) 
-  Dragon2 = GetObjectByID( "1001370665" ) 
-  Dragon3 = GetObjectByID( "1001370666" )
+  Dragon1 = GetObjectByID( "1001" ) 
+  Dragon2 = GetObjectByID( "1002" ) 
+  Dragon3 = GetObjectByID( "1003" )
   Triger1( NULL ) 
   Triger2( NULL ) 
   Triger3( NULL ) 
