@@ -17,8 +17,8 @@ Script VTriger#2#1
   (
     KillScript(  ) 
     QStart( "z3q4" ) 
-    QObjSeeUnit( "GetObject(2000324)" ) 
-    QObjKillUnit( "GetObject(2000324)" ) 
+    QObjSeeUnit( "GetObject(1000324)" ) 
+    QObjKillUnit( "GetObject(1000324)" ) 
     QFinish(  ) 
   )
 )
@@ -31,7 +31,7 @@ Script Triger1
   then
   (
     KillScript(  )
-    Sentry (GetObject(2000324), 45, 253)
+    Sentry (GetObject(1000324), 45, 253)
     RunWorldTime(16)
   )
 )

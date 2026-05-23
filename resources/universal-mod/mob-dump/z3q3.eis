@@ -59,8 +59,8 @@ Script VTriger#3#6
     QStart( "z3q3" ) 
     QObjArea( 1 ) 
     QObjKillGroup( "BrodGuard" ) 
-    QObjSeeUnit( "GetObject(2000583)" ) 
-    QObjKillUnit( "GetObject(2000583)" ) 
+    QObjSeeUnit( "GetObject(1000583)" ) 
+    QObjKillUnit( "GetObject(1000583)" ) 
     QObjGetItem( 84 ) 
     QObjSeeObject( "GetObject(4636)" ) 
     QObjUse( "GetObject(4636)", 1 ) 
@@ -71,9 +71,9 @@ Script VTriger#3#6
 WorldScript
 (
   Sleep( 2 ) 
-  AddObject( BrodGuard, GetObject( 2000577 )  ) 
-  AddObject( BrodGuard, GetObject( 2000578 )  ) 
-  AddObject( BrodGuard, GetObject( 2000579 )  ) 
+  AddObject( BrodGuard, GetObject( 1000577 )  ) 
+  AddObject( BrodGuard, GetObject( 1000578 )  ) 
+  AddObject( BrodGuard, GetObject( 1000579 )  ) 
   VCheck#3#1( NULL ) 
   VTriger#3#6( NULL ) 
 )

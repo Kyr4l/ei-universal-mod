@@ -58,7 +58,7 @@ Script VTriger#1#6
   (
     KillScript(  ) 
     QStart( "z3q1" ) 
-    QObjSeeObject( "GetObject(2000086)" ) 
+    QObjSeeObject( "GetObject(1000086)" ) 
     QObjGetItem( 17 ) 
     QFinish(  ) 
   )
@@ -79,7 +79,7 @@ Script VTriger#1#7
 WorldScript
 (
   Sleep( 2 ) 
-  BanditsChest = GetObjectByID( "2000086" ) 
+  BanditsChest = GetObjectByID( "1000086" ) 
   VCheck#1#2( NULL ) 
   VTriger#1#6( NULL ) 
   VTriger#1#7( NULL ) 

@@ -1,7 +1,10 @@
 OBJECTDBFILE:
   MAIN_RANGE:
     RANGE:
-      MIN_ID: 101
+      MIN_ID: 1
+      MAX_ID: 1000000
+    RANGE:
+      MIN_ID: 1
       MAX_ID: 1000000
   DIPLOMATION:
     DIPLOMATION_FOF:
@@ -1128,7 +1131,7 @@ OBJECTDBFILE:
         - 505290270
       OBJBODYPARTS: None
       OBJ_PLAYER: 2
-      NID: 225
+      NID: 25
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmobe1"
@@ -6080,7 +6083,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 26.73064613342285
               - 18.33789825439453
-              - 2.116230010986328
+              - 2.405853509902954
             ACTION_PT_WAIT_SEG: 15
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -7177,7 +7180,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 69.58745574951172
               - 38.71541213989258
-              - 2.0318119525909424
+              - 2.133716344833374
             ACTION_PT_WAIT_SEG: 15
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -8739,7 +8742,7 @@ OBJECTDBFILE:
         - 505290270
       OBJBODYPARTS: None
       OBJ_PLAYER: 2
-      NID: 201
+      NID: 1
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmobe1"
@@ -8894,7 +8897,7 @@ OBJECTDBFILE:
         - 505290270
       OBJBODYPARTS: None
       OBJ_PLAYER: 2
-      NID: 202
+      NID: 2
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmobe1"
