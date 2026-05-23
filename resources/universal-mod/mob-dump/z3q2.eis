@@ -16,8 +16,8 @@ Script VTriger#2#1
   (
     KillScript(  ) 
     QStart( "z3q2" ) 
-    QObjSeeUnit( "GetObject(1000324)" ) 
-    QObjKillUnit( "GetObject(1000324)" ) 
+    QObjSeeUnit( "GetObject(2000324)" ) 
+    QObjKillUnit( "GetObject(2000324)" ) 
     QFinish(  ) 
   )
 )
