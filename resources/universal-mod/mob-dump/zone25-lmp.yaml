@@ -3490,7 +3490,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -3546,7 +3546,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -24397,7 +24397,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24453,7 +24453,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -24551,7 +24551,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24607,7 +24607,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -24705,7 +24705,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24760,14 +24760,14 @@ OBJECTDBFILE:
       NID: 2259759
       OBJTYPE: 51
       OBJNAME: ""
-      OBJTEMPLATE: "unmoel1"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      OBJTEMPLATE: "unmoel2"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 234.60154724121094
-        - 60.01594543457031
+        - 230.96636962890625
+        - 65.53236389160156
         - 0.0
       OBJROTATION:
         - 1.0
@@ -24792,9 +24792,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 234.60154724121094
-          - 60.01594543457031
-          - 0.0
+          - 230.96636962890625
+          - 65.53236389160156
+          - 949.1104125976562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -24859,7 +24859,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -24915,13 +24915,13 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 225.2848358154297
-        - 38.70347213745117
+        - 223.37200927734375
+        - 44.42047119140625
         - 0.0
       OBJROTATION:
         - 1.0
@@ -24946,9 +24946,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 225.2848358154297
-          - 38.70347213745117
-          - 8.294570922851562
+          - 223.37200927734375
+          - 44.42047119140625
+          - 995.7943725585938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -25013,7 +25013,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25069,7 +25069,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25167,7 +25167,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25223,7 +25223,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25321,7 +25321,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25377,7 +25377,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25475,7 +25475,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25531,7 +25531,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25629,7 +25629,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25685,7 +25685,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25783,7 +25783,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 226
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25839,7 +25839,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -25937,7 +25937,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "LMP Elemental Ice 10"
+      UNIT_PROTOTYPE: "LMP Elemental Ice 12"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
       UNIT_SPELLS: None
@@ -25993,7 +25993,7 @@ OBJECTDBFILE:
       OBJTYPE: 51
       OBJNAME: ""
       OBJTEMPLATE: "unmoel2"
-      PARENTTEMPLATE: "LMP Elemental Ice 10"
+      PARENTTEMPLATE: "LMP Elemental Ice 12"
       OBJPRIMTXTR: "earth01"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
@@ -30115,7 +30115,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 54.51471710205078
               - 132.23341369628906
-              - 8.498503684997559
+              - 8.506641387939453
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30128,7 +30128,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 94.30465698242188
               - 129.2777099609375
-              - 8.652450561523438
+              - 10.15273666381836
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30141,7 +30141,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 86.73387908935547
               - 158.02618408203125
-              - 8.81242561340332
+              - 8.591419219970703
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30308,7 +30308,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 136.69493103027344
               - 137.3611602783203
-              - 8.598676681518555
+              - 8.598677635192871
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30334,7 +30334,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 105.5177001953125
               - 157.5428009033203
-              - 8.81242561340332
+              - 8.718758583068848
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30501,7 +30501,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 182.75758361816406
               - 113.08163452148438
-              - 8.537899017333984
+              - 8.422945022583008
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30509,7 +30509,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 177.76287841796875
               - 110.3548355102539
-              - 8.35505485534668
+              - 8.313936233520508
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30522,7 +30522,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 164.96034240722656
               - 105.2809066772461
-              - 8.63560676574707
+              - 8.551668167114258
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -30548,7 +30548,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 160.5281219482422
               - 124.7454605102539
-              - 8.598676681518555
+              - 8.520211219787598
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
