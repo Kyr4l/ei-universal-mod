@@ -3,9 +3,6 @@ OBJECTDBFILE:
     RANGE:
       MIN_ID: 1
       MAX_ID: 1000000
-    RANGE:
-      MIN_ID: 1
-      MAX_ID: 1000000
   DIPLOMATION:
     DIPLOMATION_FOF:
       - 0
