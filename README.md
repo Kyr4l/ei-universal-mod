@@ -25,7 +25,7 @@ And more!
 
 This mod also includes HD Lands
 
-*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory*
+*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory (with pre-configured .ini settings)*
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z)
 
