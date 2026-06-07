@@ -1,0 +1,738 @@
+GlobalVars (
+  X : float,
+  Y : float,
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group
+)
+
+DeclareScript Start (  this : object )
+DeclareScript VFSit#0#1 (  this : object )
+DeclareScript VFSit#0#2 (  this : object )
+DeclareScript VCheck#0#1 (  this : object )
+DeclareScript VCheck#0#2 (  this : object )
+DeclareScript VCheck#0#3 (  this : object )
+DeclareScript VCheck#0#4 (  this : object )
+DeclareScript VCheck#0#5 (  this : object )
+DeclareScript VCheck#0#6 (  this : object )
+DeclareScript VTeleport#0#1 (  this : object )
+DeclareScript VTeleport#0#2 (  this : object )
+DeclareScript VTeleport#0#3 (  this : object )
+DeclareScript VTeleport#1#1 (  this : object )
+DeclareScript VTeleport#1#2 (  this : object )
+DeclareScript VTeleport#1#3 (  this : object )
+DeclareScript Trap#0#1 (  this : object )
+DeclareScript Trap#0#2 (  this : object )
+DeclareScript Trap#0#3 (  this : object )
+DeclareScript Trap#0#4 (  this : object )
+DeclareScript Trap#1#1 (  this : object )
+DeclareScript Trap#1#2 (  this : object )
+DeclareScript Healing#0#1 (  this : object )
+DeclareScript Healing#0#2 (  this : object )
+DeclareScript Healing#1#1 (  this : object )
+DeclareScript Healing#1#2 (  this : object )
+DeclareScript Firez#0#1 (  this : object )
+DeclareScript Firez#0#2 (  this : object )
+DeclareScript Firez#1#1 (  this : object )
+DeclareScript Firez#1#2 (  this : object )
+DeclareScript Firez#1#3 (  this : object )
+DeclareScript Firez#1#4 (  this : object )
+DeclareScript VCrypt#0#1 (  this : object )
+DeclareScript VCrypt#0#2 (  this : object )
+DeclareScript VCrypt#0#3 (  this : object )
+DeclareScript VCrypt#0#4 (  this : object )
+DeclareScript VCrypt#0#5 (  this : object )
+DeclareScript VCrypt#0#6 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script Start
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 1001, 45.2 , 81 , 10.5 , 2, "firearrow" )
+    CreateParticleSource( 1002, 50.7 , 81 , 10.5 , 2, "firearrow" )
+    CreateParticleSource( 1003, GetX( GetObject( 1022115 ) ) , GetY( GetObject( 1022115 ) ) , GetZ( GetObject( 1022115 ) ) , 0.2, "Portal" )
+    Sleep( 20 )
+    EnableLever( GetObject( 1022102 ) , 0 )
+    EnableLever( GetObject( 1022103 ) , 0 )
+    EnableLever( GetObject( 1022104 ) , 0 )
+    PlayMusic( 0, "jfinal" )
+  )
+)
+
+Script VFSit#0#1
+(
+  if
+  (
+    Not( IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 ) )
+    Not( IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 2 ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 666666 ) , 47.9 , 102.5 , 0 )
+    PlayAnimation( GetObject( 666666 ) , "uspecial13" ) 
+    VFSit#0#2( this ) 
+  )
+)
+
+Script VFSit#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 46 ) 
+    VFSit#0#1( this ) 
+  )
+)
+
+Script VCheck#0#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 20 )
+    GSSetVarMax( 0, "q.gz36j.q22j.1", 1 )
+    VCheck#0#2( this ) 
+  )
+)
+
+Script VCheck#0#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1022101 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz36j.q22j.1", 2 )
+    GSSetVarMax( 0, "q.gz36j.q22j.2", 1 )
+    EnableLever( GetObject( 1022102 ) , 1 )
+    SetCP( GetObject( 1022001 ) , 47 , 44 , 0 )
+    SetCP( GetObject( 1022002 ) , 49 , 44 , 0 )
+    SetCP( GetObject( 1022003 ) , 47 , 46 , 0 )
+    SetCP( GetObject( 1022004 ) , 49 , 46 , 0 )
+    UMSentry( GetObject( 1022001 ) , GetX( GetObject( 1022101 ) ) , GetY( GetObject( 1022101 ) ) )
+    UMSentry( GetObject( 1022002 ) , GetX( GetObject( 1022101 ) ) , GetY( GetObject( 1022101 ) ) )
+    UMSentry( GetObject( 1022003 ) , GetX( GetObject( 1022101 ) ) , GetY( GetObject( 1022101 ) ) )
+    UMSentry( GetObject( 1022004 ) , GetX( GetObject( 1022101 ) ) , GetY( GetObject( 1022101 ) ) )
+    VCheck#0#3( this )
+  )
+)
+
+Script VCheck#0#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1022102 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz36j.q22j.2", 2 )
+    GSSetVarMax( 0, "q.gz36j.q22j.3", 1 )
+    EnableLever( GetObject( 1022103 ) , 1 )
+    SetCP( GetObject( 1022005 ) , 47 , 44 , 0 )
+    SetCP( GetObject( 1022006 ) , 49 , 44 , 0 )
+    SetCP( GetObject( 1022007 ) , 47 , 46 , 0 )
+    SetCP( GetObject( 1022008 ) , 49 , 46 , 0 )
+    UMSentry( GetObject( 1022005 ) , GetX( GetObject( 1022102 ) ) , GetY( GetObject( 1022102 ) ) )
+    UMSentry( GetObject( 1022006 ) , GetX( GetObject( 1022102 ) ) , GetY( GetObject( 1022102 ) ) )
+    UMSentry( GetObject( 1022007 ) , GetX( GetObject( 1022102 ) ) , GetY( GetObject( 1022102 ) ) )
+    UMSentry( GetObject( 1022008 ) , GetX( GetObject( 1022102 ) ) , GetY( GetObject( 1022102 ) ) )
+    VCheck#0#4( this )
+  )
+)
+
+Script VCheck#0#4
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1022103 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz36j.q22j.3", 2 )
+    GSSetVarMax( 0, "q.gz36j.q22j.4", 1 )
+    EnableLever( GetObject( 1022104 ) , 1 )
+    SetCP( GetObject( 1022009 ) , 47 , 44 , 0 )
+    SetCP( GetObject( 1022010 ) , 49 , 44 , 0 )
+    SetCP( GetObject( 1022011 ) , 47 , 46 , 0 )
+    SetCP( GetObject( 1022012 ) , 49 , 46 , 0 )
+    UMSentry( GetObject( 1022009 ) , GetX( GetObject( 1022103 ) ) , GetY( GetObject( 1022103 ) ) )
+    UMSentry( GetObject( 1022010 ) , GetX( GetObject( 1022103 ) ) , GetY( GetObject( 1022103 ) ) )
+    UMSentry( GetObject( 1022011 ) , GetX( GetObject( 1022103 ) ) , GetY( GetObject( 1022103 ) ) )
+    UMSentry( GetObject( 1022012 ) , GetX( GetObject( 1022103 ) ) , GetY( GetObject( 1022103 ) ) )
+    VCheck#0#5( this )
+  )
+)
+
+Script VCheck#0#5
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1022104 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz36j.q22j.4", 2 )
+    GSSetVarMax( 0, "q.gz36j.q22j.5", 1 )
+    CreateParticleSource( 1001, GetX( GetObject( 1022111 ) ) , GetY( GetObject( 1022111 ) ) , GetZ( GetObject( 1022111 ) ) , 0.1, "Portal" )
+    CreateParticleSource( 1002, GetX( GetObject( 1022114 ) ) , GetY( GetObject( 1022114 ) ) , GetZ( GetObject( 1022114 ) ) , 0.1, "Portal" )
+    CreateParticleSource( 1003, GetX( GetObject( 1022115 ) ) , GetY( GetObject( 1022115 ) ) , GetZ( GetObject( 1022115 ) ), 4, "Mushroom" ) 
+    RemoveUnitFromServer( GetObject( 1022115 ) )
+    SetCP( GetObject( 1022116 ) , 47.9 , 45 , -0.2 )
+    SetCP( GetObject( 666666 ) , 48 , 100 , 0 )
+    VCheck#0#6( this )
+  )
+)
+
+Script VCheck#0#6
+(
+  if
+  (
+    Not( IsAlive( GetObject( 666666 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.gz36j.q22j.5", 2 )
+    GSSetVarMax( 0, "q.gz36j.q22j", 2 )
+    QuestComplete( 0, "q22j" )
+    Sleep( 15 )
+//    PlayMovie( "outtro1.bik" )
+    LeaveToZone( 0, "EndofGame", 0 )
+  )
+)
+
+Script VTeleport#0#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , 20.6 , 71.4 ) , 1 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( VSS#i#val, Heroes ) 
+    (
+      VTeleport#0#2( VSS#i#val )
+    )
+    VTeleport#0#3( this )
+  )
+)
+
+Script VTeleport#0#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( this , 20.6 , 71.4 ) , 1 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP ( this , 20.4 , 18.6, 0 )
+    Sleep( 3 )
+    CreateParticleSource( 2001, GetX( this ) , GetY( this ) , GetZ( this ) , 1, "teleport" )
+  )
+)
+
+Script VTeleport#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 3 )
+    VTeleport#0#1( this )
+  )
+)
+
+Script VTeleport#1#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , 75.4 , 18.6 ) , 1 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( VSS#i#val, Heroes ) 
+    (
+      VTeleport#1#2( VSS#i#val )
+    )
+    VTeleport#1#3( this )
+  )
+)
+
+Script VTeleport#1#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( this , 75.4 , 18.6 ) , 1 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP ( this , 75.4 , 71.4, 0 )
+    Sleep( 3 )
+    CreateParticleSource( 2001, GetX( this ) , GetY( this ) , GetZ( this ) , 1, "teleport" )
+  )
+)
+
+Script VTeleport#1#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 3 )
+    VTeleport#1#1( this )
+  )
+)
+
+Script Trap#0#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    CastSpellPoint( "litnwall{a1;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5}" , 48, 74, 48, 75 )
+    Trap#0#2( this )
+  )
+)
+
+Script Trap#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 148 )
+    Trap#0#1( this )
+  )
+)
+
+Script Trap#0#3
+(
+  if
+  (
+    IsGreater( GetY( GetUnitOfPlayer( 0 , 0 ) ) , 75 )
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    KillUnit( GetUnitOfPlayer( 0 , 0 ) )
+  )
+)
+
+Script Trap#0#4
+(
+  if
+  (
+    IsGreater( GetY( GetUnitOfPlayer( 0 , 1 ) ) , 75 )
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    KillUnit( GetUnitOfPlayer( 0 , 1 ) )
+  )
+)
+
+Script Trap#1#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ), GetY( GetUnitOfPlayer( 0 , 0 ) ), 8, 5, 20, "MAGIC\Clairvoyence\START.wav" )
+    CreateParticleSource( 3001, Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -5 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -5 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , 2, "firearrow" )
+    CreateParticleSource( 3002, Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -5 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 5 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , 2, "firearrow" )
+    CreateParticleSource( 3003, Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 5 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -5 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , 2, "firearrow" )
+    CreateParticleSource( 3004, Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 5 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 5 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , 2, "firearrow" )
+    MoveParticleSource( 3001 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -4 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -4 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3002 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -4 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 4 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3003 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 4 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -4 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3004 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 4 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 4 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    Sleep( 5 )
+    MoveParticleSource( 3001 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -3 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -3 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3002 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -3 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 3 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3003 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 3 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -3 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3004 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 3 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 3 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    Sleep( 5 )
+    MoveParticleSource( 3001 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -2 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -2 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3002 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -2 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3003 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -2 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3004 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 2 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    Sleep( 5 )
+    MoveParticleSource( 3001 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -1 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -1 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3002 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), -1 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 1 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3003 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 1 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), -1 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    MoveParticleSource( 3004 , Add( GetX( GetUnitOfPlayer( 0 , 0 ) ), 1 ) , Add( GetY( GetUnitOfPlayer( 0 , 0 ) ), 1 ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 0 )
+    Sleep( 5 )
+    MoveParticleSource( 3001 , GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 1 )
+    MoveParticleSource( 3002 , GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 1 )
+    MoveParticleSource( 3003 , GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 1 )
+    MoveParticleSource( 3004 , GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , Add( GetZ( GetUnitOfPlayer( 0 , 0 ) ), 2 ), 5 , 1 )
+    Sleep( 5 )
+    X = GetX( GetUnitOfPlayer( 0 , 0 ) )
+    Y = GetY( GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellPoint( "fireball{a1;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5}" , 50.7, 81, Add( X , -0.5 ) , Y )
+    Sleep( 3 )
+    CastSpellPoint( "fireball{a1;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5}" , 45.1, 81, X , Add( Y , -0.5 ) )
+    Sleep( 3 )
+    CastSpellPoint( "fireball{a1;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5}" , 50.7, 81, Add( X , 0.5 ), Y )
+    Sleep( 3 )
+    CastSpellPoint( "fireball{a1;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5;ee5}" , 45.1, 81, X , Add( Y , 0.5 ) )
+    Trap#1#2( this )
+  )
+)
+
+Script Trap#1#2
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 300 )
+    Trap#1#1( this )
+  )
+)
+
+Script Healing#0#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1022201 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    EnableLever( GetObject( 1022202 ) , 1 )
+    SwitchLeverState( GetObject( 1022202 ) , 0 )
+    CastSpellUnit( "strength{d2;d2}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "speed{d2;d2;e2;e2;e2}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "healing{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "antimagic{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "strength{d2;d2}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CastSpellUnit( "speed{d2;d2;e2;e2;e2}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CastSpellUnit( "healing{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CastSpellUnit( "antimagic{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022201 ) ), GetY( GetObject( 1022201 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CreateParticleSource( 4001, GetX( GetObject( 1022201 ) ) , GetY( GetObject( 1022201 ) ) , Add( GetZ( GetObject( 1022201 ) ), 2 ) , 2, "firearrow" )
+    MoveParticleSource( 4001, GetX( GetObject( 1022202 ) ) , GetY( GetObject( 1022202 ) ) , Add( GetZ( GetObject( 1022202 ) ), 2 ), 25 , 1 )
+    Healing#1#1( this )
+//    Healing#0#2( this )
+  )
+)
+
+Script Healing#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    EnableLever( GetObject( 1022201 ) , 1 )
+    SwitchLeverState( GetObject( 1022201 ) , 0 )
+    Healing#0#1( this )
+  )
+)
+
+Script Healing#1#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1022202 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    EnableLever( GetObject( 1022201 ) , 1 )
+    SwitchLeverState( GetObject( 1022201 ) , 0 )
+    CastSpellUnit( "strength{d2;d2}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "speed{d2;d2;e2;e2;e2}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "healing{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "antimagic{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 0 ) )
+    CastSpellUnit( "strength{d2;d2}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CastSpellUnit( "speed{d2;d2;e2;e2;e2}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CastSpellUnit( "healing{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CastSpellUnit( "antimagic{ee5;ee5;ee5;ee5}" , GetX( GetObject( 1022202 ) ), GetY( GetObject( 1022202 ) ), GetUnitOfPlayer( 0 , 1 ) )
+    CreateParticleSource( 4001, GetX( GetObject( 1022202 ) ) , GetY( GetObject( 1022202 ) ) , Add( GetZ( GetObject( 1022202 ) ), 2 ) , 2, "firearrow" )
+    MoveParticleSource( 4001, GetX( GetObject( 1022201 ) ) , GetY( GetObject( 1022201 ) ) , Add( GetZ( GetObject( 1022201 ) ), 2 ), 25 , 1 )
+    Healing#0#1( this )
+//    Healing#1#2( this )
+  )
+)
+
+Script Healing#1#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    EnableLever( GetObject( 1022202 ) , 1 )
+    SwitchLeverState( GetObject( 1022202 ) , 0 )
+    Healing#1#1( this )
+  )
+)
+
+Script Firez#0#1
+(
+  if
+  (
+    IsLess( Add( HP( GetObject( 666666 ) ) , 1 ) , MaxHP( GetObject( 666666 ) ) )
+    IsAlive( GetObject( 666666 ) )
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    CastSpellUnit( "healing{ee5;ee5;ee5;ee5}" , GetX( GetObject( 666666 ) ), GetY( GetObject( 666666 ) ), GetObject( 666666 ) )
+    Firez#0#2( this )
+  )
+)
+
+Script Firez#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Firez#0#1( this )
+  )
+)
+
+Script Firez#1#1
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 )
+    Not( IsAlive( GetObject( 1022009 ) ) )
+    Not( IsAlive( GetObject( 1022010 ) ) )
+    Not( IsAlive( GetObject( 1022011 ) ) )
+    Not( IsAlive( GetObject( 1022012 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 300 )
+    Attack( GetObject( 666666 ) , GetUnitOfPlayer( 0 , 0 ) )
+    Firez#1#2( this )
+  )
+)
+
+Script Firez#1#2
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 400 )
+    Firez#1#1( this )
+  )
+)
+
+Script Firez#1#3
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 )
+    IsGreater( DistanceUnitUnit( GetUnitOfPlayer( 0 , 0 ), GetObject( 666666 ) ),  60 )
+  )
+  then
+  (
+    KillScript(  )
+    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , GetZ( GetUnitOfPlayer( 0 , 0 ) ) , 15, 50, "Acks\Scenario\41.wav" )
+    Sleep( 400 )
+    Firez#1#4( this )
+  )
+)
+
+Script Firez#1#4
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.gz36j.q22j.5" ) , 1 )
+    IsGreater( DistanceUnitUnit( GetUnitOfPlayer( 0 , 0 ), GetObject( 666666 ) ),  60 )
+  )
+  then
+  (
+    KillScript(  )
+    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , GetZ( GetUnitOfPlayer( 0 , 0 ) ) , 15, 50, "Acks\Scenario\39.wav" )
+  )
+)
+
+Script VCrypt#0#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , GetX( GetObject( 1026001 ) ) , GetY( GetObject( 1026001 ) ) ) , 7 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 1025001 ) , 36 , 15 , 0 )
+    SwitchLeverState( GetObject( 1026001 ) , 1 )
+    Sleep( 5 )
+    CreateFX( GetX( GetObject( 1025001 ) ) , GetY( GetObject( 1025001 ) ) , 13, 5, 30, "MONSTERS\Skeleton\Death\2.wav" )
+  )
+)
+
+Script VCrypt#0#2
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , GetX( GetObject( 1026002 ) ) , GetY( GetObject( 1026002 ) ) ) , 7 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 1025002 ) , 30 , 15 , 0 )
+    SwitchLeverState( GetObject( 1026002 ) , 1 )
+    Sleep( 5 )
+    CreateFX( GetX( GetObject( 1025002 ) ) , GetY( GetObject( 1025002 ) ) , 13, 5, 30, "MONSTERS\Skeleton\Death\2.wav" )
+  )
+)
+
+Script VCrypt#0#3
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , GetX( GetObject( 1026003 ) ) , GetY( GetObject( 1026003 ) ) ) , 5 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 1025003 ) , 63 , 17.5 , 0 )
+    SwitchLeverState( GetObject( 1026003 ) , 1 )
+    Sleep( 5 )
+    CreateFX( GetX( GetObject( 1025003 ) ) , GetY( GetObject( 1025003 ) ) , 13, 5, 30, "MONSTERS\Skeleton\Death\2.wav" )
+  )
+)
+
+Script VCrypt#0#4
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , GetX( GetObject( 1026004 ) ) , GetY( GetObject( 1026004 ) ) ) , 7 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 1025004 ) , 66 , 74.5 , 0 )
+    SwitchLeverState( GetObject( 1026004 ) , 1 )
+    Sleep( 5 )
+    CreateFX( GetX( GetObject( 1025004 ) ) , GetY( GetObject( 1025004 ) ) , 13, 5, 30, "MONSTERS\Skeleton\Death\2.wav" )
+  )
+)
+
+Script VCrypt#0#5
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , GetX( GetObject( 1026005 ) ) , GetY( GetObject( 1026005 ) ) ) , 7 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 1025005 ) , 60 , 74.5 , 0 )
+    SwitchLeverState( GetObject( 1026005 ) , 1 )
+    Sleep( 5 )
+    CreateFX( GetX( GetObject( 1025005 ) ) , GetY( GetObject( 1025005 ) ) , 13, 5, 30, "MONSTERS\Skeleton\Death\2.wav" )
+  )
+)
+
+Script VCrypt#0#6
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , GetX( GetObject( 1026006 ) ) , GetY( GetObject( 1026006 ) ) ) , 5 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 1025006 ) , 33 , 72.5 , 0 )
+    SwitchLeverState( GetObject( 1026006 ) , 1 )
+    Sleep( 5 )
+    CreateFX( GetX( GetObject( 1025006 ) ) , GetY( GetObject( 1025006 ) ) , 13, 5, 30, "MONSTERS\Skeleton\Death\2.wav" )
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  Start( NULL )
+  VCheck#0#1( NULL )
+  VFSit#0#1( NULL )
+  VTeleport#0#3( NULL )
+  VTeleport#1#3( NULL )
+  Trap#0#1( NULL )
+  Trap#0#3( NULL )
+  Trap#0#4( NULL )
+  Trap#1#2( NULL )
+  Healing#0#1( NULL )
+  Healing#1#1( NULL )
+  Firez#0#1( NULL )
+  Firez#1#1( NULL )
+  VCrypt#0#1( NULL )
+  VCrypt#0#2( NULL )
+  VCrypt#0#3( NULL )
+  VCrypt#0#4( NULL )
+  VCrypt#0#5( NULL )
+  VCrypt#0#6( NULL )
+)

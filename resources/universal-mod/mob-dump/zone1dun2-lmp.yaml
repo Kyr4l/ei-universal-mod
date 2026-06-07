@@ -1,0 +1,5321 @@
+OBJECTDBFILE:
+  MAIN_RANGE:
+    RANGE:
+      MIN_ID: 1
+      MAX_ID: 1000000
+  DIPLOMATION:
+    DIPLOMATION_FOF:
+      - 0
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+    DIPLOMATION_PL_NAMES:
+      - "Player-0"
+      - "Player-1"
+      - "Player-2"
+      - "Player-3"
+      - "Player-4"
+      - "Player-5"
+      - "Player-6"
+      - "Player-7"
+      - "Player-8"
+      - "Player-9"
+      - "Player-10"
+      - "Player-11"
+      - "Player-12"
+      - "Player-13"
+      - "Player-14"
+      - "Player-15"
+      - "Player-16"
+      - "Player-17"
+      - "Player-18"
+      - "Player-19"
+      - "Player-20"
+      - "Player-21"
+      - "Player-22"
+      - "Player-23"
+      - "Player-24"
+      - "Player-25"
+      - "Player-26"
+      - "Player-27"
+      - "Player-28"
+      - "Player-29"
+      - "Player-30"
+      - "Player-31"
+  WORLD_SET:
+    WS_WIND_DIR:
+      - 1.0
+      - 0.0
+      - 0.0
+    WS_WIND_STR: 0.4000000059604645
+    WS_TIME: 10.859999656677246
+    WS_AMBIENT: 0.20000000298023224
+    WS_SUN_LIGHT: 0.20000000298023224
+  VSS_SECTION:
+  DIRICTORY:
+    FOLDER:
+      DIR_NINST: 4294964100
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Heroes"
+    FOLDER:
+      DIR_NINST: 4294961941
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Rebels"
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 16505
+      DIR_PARENT_FOLDER: 4294961941
+      DIR_TYPE: 2
+      DIR_NAME: "Human Hadagan NPC Rebel Smith F15-16505"
+  OBJECTSECTION:
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 4309
+      OBJTYPE: 60
+      OBJNAME: "Chest3"
+      OBJTEMPLATE: "stst43"
+      PARENTTEMPLATE: "Chest00"
+      OBJPRIMTXTR: "kanianarc00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 17.365400314331055
+        - 107.70800018310547
+        - 0.0
+      OBJROTATION:
+        - 0.998841404914856
+        - 0.0
+        - 0.0
+        - -0.04812179505825043
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 16328
+      OBJ_QUEST_INFO: "q03h.2"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.7699999809265137
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 4334
+      OBJTYPE: 54
+      OBJNAME: "KanianBed00-28"
+      OBJTEMPLATE: "stst77"
+      PARENTTEMPLATE: "KanianBed00"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 19.656936645507812
+        - 137.1747283935547
+        - 0.0
+      OBJROTATION:
+        - 0.8949344754219055
+        - 0.0
+        - 0.0
+        - 0.4461979568004608
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 12907
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.14999999105930328
+    OBJECT:
+      OBJBODYPARTS:
+        - "minetorch00"
+      OBJ_PLAYER: 0
+      NID: 4504
+      OBJTYPE: 54
+      OBJNAME: "torch00-4501"
+      OBJTEMPLATE: "stst30"
+      PARENTTEMPLATE: "torch00"
+      OBJPRIMTXTR: "minedetails00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 31.58799934387207
+        - 47.51100158691406
+        - 0.3499999940395355
+      OBJROTATION:
+        - 0.7660444378852844
+        - 0.0
+        - 0.0
+        - 0.6427876949310303
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 16382
+      OBJTYPE: 53
+      OBJNAME: "Log00-16382"
+      OBJTEMPLATE: "nafltr20"
+      PARENTTEMPLATE: "Log00"
+      OBJPRIMTXTR: "tree02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 28.308326721191406
+        - 91.45344543457031
+        - 1.9500000476837158
+      OBJROTATION:
+        - 0.9845661520957947
+        - 0.0
+        - 0.0
+        - 0.17501257359981537
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 5656
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - -0.8999999761581421
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 45011
+      OBJTYPE: 54
+      OBJNAME: "HadoganHouse01-14474"
+      OBJTEMPLATE: "stbuho43"
+      PARENTTEMPLATE: "HadoganHouse01"
+      OBJPRIMTXTR: "hadoganhouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 44.762542724609375
+        - 150.17152404785156
+        - -2.0
+      OBJROTATION:
+        - -0.00024633013526909053
+        - 0.0
+        - 0.0
+        - 1.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 17615
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6899999976158142
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 45098
+      OBJTYPE: 54
+      OBJNAME: "KanianBed01-45098"
+      OBJTEMPLATE: "stst78"
+      PARENTTEMPLATE: "KanianBed01"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 22.192319869995117
+        - 139.572265625
+        - 0.0
+      OBJROTATION:
+        - 0.999048113822937
+        - 0.0
+        - 0.0
+        - 0.04361938312649727
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 392
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.2199999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 46521
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.49540710449219
+        - 46.782081604003906
+        - 0.0
+      OBJROTATION:
+        - 0.9483238458633423
+        - 0.0
+        - 0.0
+        - 0.31730470061302185
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 52258
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.58975601196289
+        - 44.99401092529297
+        - 0.0
+      OBJROTATION:
+        - 0.9483238458633423
+        - 0.0
+        - 0.0
+        - 0.31730470061302185
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5199999809265137
+        - 0.7699999809265137
+        - 0.7199999690055847
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Bat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{e2,e2,e2}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 280
+        - 280
+        - 92
+        - 92
+        - 1065353216
+        - 1097859072
+        - 1049135241
+        - 1049135241
+        - 1040746633
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 0
+        - 1090519040
+        - 1124401152
+        - 1121976320
+        - 1065353216
+        - 1107296256
+        - 1105199104
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 5268580
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 105543
+      OBJTYPE: 52
+      OBJNAME: "zone1 Bat"
+      OBJTEMPLATE: "unanwiba"
+      PARENTTEMPLATE: "BatDarkM16"
+      OBJPRIMTXTR: "bat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 38.829185485839844
+        - 44.930755615234375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 38.829185485839844
+          - 44.930755615234375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 224
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 176
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 64
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 48
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 1
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 16
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 338779
+      OBJTYPE: 60
+      OBJNAME: "CageLever"
+      OBJTEMPLATE: "stst58"
+      PARENTTEMPLATE: "CaveLevel00"
+      OBJPRIMTXTR: "cavelevel00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.62972068786621
+        - 61.677371978759766
+        - 0.20000000298023224
+      OBJROTATION:
+        - 0.6967067122459412
+        - 0.0
+        - 0.0
+        - -0.7173560857772827
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 200
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 4.0
+        - -0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 364485
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.843847274780273
+        - 46.296993255615234
+        - 0.0
+      OBJROTATION:
+        - 0.9483238458633423
+        - 0.0
+        - 0.0
+        - 0.31730470061302185
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 0.10999999940395355
+        - 0.17999999225139618
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 524775
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.97615051269531
+        - 55.260902404785156
+        - 0.0
+      OBJROTATION:
+        - -0.9612617492675781
+        - 0.0
+        - 0.0
+        - 0.27563759684562683
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 832707
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnerstent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.29787826538086
+        - 53.91850662231445
+        - 1.2000000476837158
+      OBJROTATION:
+        - -0.0427490659058094
+        - 0.9990394115447998
+        - -0.001501098508015275
+        - -0.009513217024505138
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.10000000149011612
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1001001
+      OBJTYPE: 60
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "HadoganChest00_lock"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.792400360107422
+        - 53.90919876098633
+        - 0.0
+      OBJROTATION:
+        - 0.9553365111351013
+        - 0.0
+        - 0.0
+        - -0.29552021622657776
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1001002
+      OBJTYPE: 60
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "HadoganChest00_lock"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.79520034790039
+        - 132.30999755859375
+        - 0.0
+      OBJROTATION:
+        - 0.9553365111351013
+        - 0.0
+        - 0.0
+        - -0.29552021622657776
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1001003
+      OBJTYPE: 60
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "HadoganChest00_lock"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.752899169921875
+        - 85.86100006103516
+        - 0.0
+      OBJROTATION:
+        - 0.9553365111351013
+        - 0.0
+        - 0.0
+        - -0.29552021622657776
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1014204
+      OBJTYPE: 54
+      OBJNAME: "PlatformBig00"
+      OBJTEMPLATE: "stbr6"
+      PARENTTEMPLATE: "OrcBridge00"
+      OBJPRIMTXTR: "orcbridge00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 30.613000869750977
+        - 57.26599884033203
+        - -8.5
+      OBJROTATION:
+        - 0.696707010269165
+        - 0.0
+        - 0.0
+        - -0.7173560261726379
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4129
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 58.0
+        - 1.100000023841858
+        - 0.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 1
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "bars"
+      OBJ_PLAYER: 0
+      NID: 1032949
+      OBJTYPE: 60
+      OBJNAME: "Bars00Up-16372"
+      OBJTEMPLATE: "stst38"
+      PARENTTEMPLATE: "Bars00Up"
+      OBJPRIMTXTR: "kaniangate00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 27.899641036987305
+        - 91.33531188964844
+        - 0.0
+      OBJROTATION:
+        - 0.9847259521484375
+        - 0.0
+        - 0.0
+        - 0.1741112470626831
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 1064304862
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1052297
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 28.29772186279297
+        - 62.827701568603516
+        - 0.0
+      OBJROTATION:
+        - 0.9483238458633423
+        - 0.0
+        - 0.0
+        - 0.31730470061302185
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1055854
+      OBJTYPE: 54
+      OBJNAME: "KanianFireplace00-45096"
+      OBJTEMPLATE: "stst80"
+      PARENTTEMPLATE: "KanianFireplace00"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 20.83427619934082
+        - 104.08079528808594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 390
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1055911
+      OBJTYPE: 54
+      OBJNAME: "KanianBench00-45097"
+      OBJTEMPLATE: "stst79"
+      PARENTTEMPLATE: "KanianBench00"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 17.569011688232422
+        - 104.7533187866211
+        - -0.20000000298023224
+      OBJROTATION:
+        - 0.6967067122459412
+        - 0.0
+        - 0.0
+        - -0.7173560857772827
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 391
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.14000000059604645
+        - 0.5
+        - 0.25
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1092525
+      OBJTYPE: 54
+      OBJNAME: "TorchBase00-382318"
+      OBJTEMPLATE: "stto6"
+      PARENTTEMPLATE: "TorchBase00"
+      OBJPRIMTXTR: "torchbase00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 26.637346267700195
+        - 63.510677337646484
+        - -0.05000000074505806
+      OBJROTATION:
+        - 0.9110381603240967
+        - 0.0
+        - 0.0
+        - 0.41232192516326904
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 110
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 1326498
+      OBJTYPE: 54
+      OBJNAME: "Sack00-325692"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.561941146850586
+        - 55.036521911621094
+        - 0.0
+      OBJROTATION:
+        - 0.5403022766113281
+        - 0.0
+        - 0.0
+        - 0.8414710164070129
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 1339956
+      OBJTYPE: 54
+      OBJNAME: "Sack00-325692"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.111873626708984
+        - 55.61482620239258
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1357456
+      OBJTYPE: 60
+      OBJNAME: "CageLever"
+      OBJTEMPLATE: "stst58"
+      PARENTTEMPLATE: "CaveLevel00"
+      OBJPRIMTXTR: "cavelevel00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.667078018188477
+        - 62.68576431274414
+        - 0.20000000298023224
+      OBJROTATION:
+        - 0.6967067122459412
+        - 0.0
+        - 0.0
+        - -0.7173560857772827
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 200
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 4.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1369841
+      OBJTYPE: 60
+      OBJNAME: "CageLever"
+      OBJTEMPLATE: "stst58"
+      PARENTTEMPLATE: "CaveLevel00"
+      OBJPRIMTXTR: "cavelevel00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.26689910888672
+        - 56.464900970458984
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 200
+      OBJ_QUEST_INFO: "q03h.1"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - 0.0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Rat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 50
+        - 50
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 257
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 4271405
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1642211
+      OBJTYPE: 52
+      OBJNAME: "zone1dun2 Rat"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatGiantF9"
+      OBJPRIMTXTR: "rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.997806549072266
+        - 75.28207397460938
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 29.997806549072266
+          - 75.28207397460938
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 105
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 46
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 105
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 46
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 111
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 109
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 119
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 111
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1983521
+      OBJTYPE: 54
+      OBJNAME: "StolbVert-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.19379997253418
+        - 60.847599029541016
+        - 0.0
+      OBJROTATION:
+        - -0.9063085317611694
+        - 0.0
+        - 0.0
+        - 0.4226188659667969
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 49.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000473
+      OBJTYPE: 54
+      OBJNAME: "Jug03-565541"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.877540588378906
+        - 65.72032928466797
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 737
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.4399999976158142
+        - 0.8700000047683716
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2008863
+      OBJTYPE: 54
+      OBJNAME: "Carpet01-565547"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet01"
+      OBJPRIMTXTR: "carpet01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 30.850601196289062
+        - 64.78157806396484
+        - 0.0
+      OBJROTATION:
+        - 0.7144197821617126
+        - 0.0
+        - 0.0
+        - -0.6997172832489014
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 744
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2013444
+      OBJTYPE: 54
+      OBJNAME: "Jug01-565539"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug01"
+      OBJPRIMTXTR: "jug00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 26.35597801208496
+        - 66.74767303466797
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 735
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.7699999809265137
+        - 0.7099999785423279
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2024446
+      OBJTYPE: 54
+      OBJNAME: "Jug01-565539"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug01"
+      OBJPRIMTXTR: "jug00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.578901290893555
+        - 67.53865814208984
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 735
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.7699999809265137
+        - 0.7099999785423279
+    PARTICL:
+      PARTICL_ID: 2040026
+      PARTICL_POSITION:
+        - 14.600000381469727
+        - 18.020000457763672
+        - 36.79999923706055
+      PARTICL_NAME: "Particles source-997040"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.20000000298023224
+    SOUND:
+      SOUND_ID: 2040358
+      SOUND_POSITION:
+        - 14.600000381469727
+        - 18.020000457763672
+        - 36.79999923706055
+      SOUND_RANGE: 10
+      SOUND_NAME: "Sound-997041"
+      SOUND_MIN: 1500
+      SOUND_MAX: 3000
+      SOUND_COMMENTS: "none"
+      SOUND_RESNAME:
+        - "nature\Fire\small.wav"
+      SOUND_RANGE2: 15
+      SOUND_AMBIENT: 0
+      SOUND_IS_MUSIC: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2040961
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-1"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.082000732421875
+        - 64.41300201416016
+        - 0.6000000238418579
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    LIGHT:
+      LIGHT_ID: 2041014
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 14.600000381469727
+        - 18.020000457763672
+        - 36.79999923706055
+      LIGHT_COLOR:
+        - 0.699999988079071
+        - 0.699999988079071
+        - 0.699999988079071
+      LIGHT_RANGE: 7.0
+      LIGHT_NAME: "Light-997638"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2067080
+      OBJTYPE: 54
+      OBJNAME: "Jug03-565541"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 31.191722869873047
+        - 101.6280517578125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 737
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.4399999976158142
+        - 0.699999988079071
+    PARTICL:
+      PARTICL_ID: 2067251
+      PARTICL_POSITION:
+        - 40.20000076293945
+        - 145.9499969482422
+        - 7.0
+      PARTICL_NAME: "Particles source-997040"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.20000000298023224
+    SOUND:
+      SOUND_ID: 2067671
+      SOUND_POSITION:
+        - 40.20000076293945
+        - 145.9499969482422
+        - 7.0
+      SOUND_RANGE: 10
+      SOUND_NAME: "Sound-997041"
+      SOUND_MIN: 1500
+      SOUND_MAX: 3000
+      SOUND_COMMENTS: "none"
+      SOUND_RESNAME:
+        - "nature\Fire\small.wav"
+      SOUND_RANGE2: 15
+      SOUND_AMBIENT: 0
+      SOUND_IS_MUSIC: 0
+    LIGHT:
+      LIGHT_ID: 2068188
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 40.20000076293945
+        - 145.9499969482422
+        - 7.0
+      LIGHT_COLOR:
+        - 0.699999988079071
+        - 0.699999988079071
+        - 0.699999988079071
+      LIGHT_RANGE: 8.0
+      LIGHT_NAME: "Light-997638"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2069726
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-1"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.082000732421875
+        - 64.41300201416016
+        - 10.600000381469727
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2098507
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-1"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.082000732421875
+        - 64.41300201416016
+        - 20.600000381469727
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2100439
+      OBJTYPE: 54
+      OBJNAME: "Jug03-565541"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.390777587890625
+        - 101.25894165039062
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 737
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.4399999976158142
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2127311
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-1"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.082000732421875
+        - 64.41300201416016
+        - 29.200000762939453
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2132980
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 24.96125030517578
+        - 53.23002624511719
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2134161
+      OBJTYPE: 54
+      OBJNAME: "Jug03-565541"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 20.01883888244629
+        - 99.23626708984375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 737
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.4399999976158142
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2166913
+      OBJTYPE: 54
+      OBJNAME: "TorchBase00-1501"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "torchbase00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 14.562999725341797
+        - 17.631999969482422
+        - 0.20000000298023224
+      OBJROTATION:
+        - 0.020794518291950226
+        - 0.0
+        - 0.0
+        - 0.9997836947441101
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2171692
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.212364196777344
+        - 64.19892883300781
+        - 0.4000000059604645
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2195856
+      OBJTYPE: 54
+      OBJNAME: "TorchBase00-1501"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "torchbase00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 40.207733154296875
+        - 146.34754943847656
+        - -0.10000000149011612
+      OBJROTATION:
+        - 0.9996872544288635
+        - 0.0
+        - 0.0
+        - 0.025005556643009186
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2206284
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.7588996887207
+        - 64.1740951538086
+        - 1.100000023841858
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2240358
+      OBJTYPE: 60
+      OBJNAME: "Lift00-1"
+      OBJTEMPLATE: "stbr6"
+      PARENTTEMPLATE: "HadoganChest00_lock"
+      OBJPRIMTXTR: "orcbridge00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 30.722000122070312
+        - 60.45100021362305
+        - -0.30000001192092896
+      OBJROTATION:
+        - 0.696707010269165
+        - 0.0
+        - 0.0
+        - -0.7173560261726379
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2251723
+      OBJTYPE: 54
+      OBJNAME: "HadoganHouse01-14474"
+      OBJTEMPLATE: "stbuho43"
+      PARENTTEMPLATE: "HadoganHouse01"
+      OBJPRIMTXTR: "hadoganhouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 20.350147247314453
+        - 13.800265312194824
+        - -2.0
+      OBJROTATION:
+        - -0.999989926815033
+        - 0.0
+        - 0.0
+        - -0.004478351213037968
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 17615
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6899999976158142
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2251724
+      OBJTYPE: 54
+      OBJNAME: "StolbVert-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.215999603271484
+        - 60.84199905395508
+        - 0.0
+      OBJROTATION:
+        - -0.9063085317611694
+        - 0.0
+        - 0.0
+        - 0.4226188659667969
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 49.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2251725
+      OBJTYPE: 54
+      OBJNAME: "StolbVert-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 29.191999435424805
+        - 63.5
+        - 0.0
+      OBJROTATION:
+        - -0.9063085317611694
+        - 0.0
+        - 0.0
+        - 0.4226188659667969
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 49.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2251726
+      OBJTYPE: 54
+      OBJNAME: "StolbVert-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.215999603271484
+        - 63.5
+        - 0.0
+      OBJROTATION:
+        - -0.9063085317611694
+        - 0.0
+        - 0.0
+        - 0.4226188659667969
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 49.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2251727
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-2"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.3650016784668
+        - 64.41300201416016
+        - 0.6000000238418579
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2280587
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-2"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.3650016784668
+        - 64.41300201416016
+        - 10.600000381469727
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2309456
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-2"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.3650016784668
+        - 64.41300201416016
+        - 20.600000381469727
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338345
+      OBJTYPE: 54
+      OBJNAME: "StolbHor-2"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.3650016784668
+        - 64.41300201416016
+        - 29.200000762939453
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 12.0
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338346
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 24.766958236694336
+        - 54.432281494140625
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338348
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.32898712158203
+        - 64.18484497070312
+        - 0.4000000059604645
+      OBJROTATION:
+        - -0.5386951565742493
+        - -0.532095193862915
+        - -0.4549499750137329
+        - 0.4687260091304779
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338349
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.24943542480469
+        - 58.704166412353516
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338350
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.26327133178711
+        - 59.923316955566406
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.5801294445991516
+        - 0.0
+        - 0.0
+        - 0.814524233341217
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338351
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.2836799621582
+        - 61.11192321777344
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.8515260815620422
+        - 0.0
+        - 0.0
+        - 0.5243121385574341
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338352
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.233253479003906
+        - 62.44017028808594
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338354
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 28.439565658569336
+        - 60.33279037475586
+        - 0.0
+      OBJROTATION:
+        - 0.69822096824646
+        - 0.0
+        - 0.0
+        - 0.7158821821212769
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338355
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 28.32683563232422
+        - 61.607398986816406
+        - 0.0
+      OBJROTATION:
+        - 0.7947393655776978
+        - 0.0
+        - 0.0
+        - -0.6069507002830505
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338356
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 31.163789749145508
+        - 46.236656188964844
+        - 0.0
+      OBJROTATION:
+        - 0.7973611950874329
+        - 0.0
+        - 0.0
+        - 0.6035022139549255
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5199999809265137
+        - 0.7699999809265137
+        - 0.7199999690055847
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2338357
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 31.626535415649414
+        - 47.59931564331055
+        - 0.0
+      OBJROTATION:
+        - 0.733127772808075
+        - 0.0
+        - 0.0
+        - 0.6800908446311951
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 0.10999999940395355
+        - 0.17999999225139618
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359936
+      OBJTYPE: 54
+      OBJNAME: "Table00-917716"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnerstent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.374000549316406
+        - 52.457000732421875
+        - 0.0
+      OBJROTATION:
+        - -0.1669761687517166
+        - 0.0
+        - 0.0
+        - -0.9859609603881836
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 172
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.10000000149011612
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359937
+      OBJTYPE: 54
+      OBJNAME: "Carpet01-565547"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet01"
+      OBJPRIMTXTR: "carpet01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 32.3659553527832
+        - 45.737037658691406
+        - 0.0
+      OBJROTATION:
+        - 0.7144197821617126
+        - 0.0
+        - 0.0
+        - -0.6997172832489014
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 744
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359938
+      OBJTYPE: 54
+      OBJNAME: "Carpet01-565547"
+      OBJTEMPLATE: "stst158"
+      PARENTTEMPLATE: "Carpet01"
+      OBJPRIMTXTR: "carpet01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 30.945972442626953
+        - 46.66449737548828
+        - 0.0
+      OBJROTATION:
+        - 0.9004454612731934
+        - 0.0
+        - 0.0
+        - -0.4349685609340668
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 744
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359939
+      OBJTYPE: 54
+      OBJNAME: "TorchBase00-382318"
+      OBJTEMPLATE: "stto6"
+      PARENTTEMPLATE: "TorchBase00"
+      OBJPRIMTXTR: "torchbase00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.2238655090332
+        - 55.83934020996094
+        - -0.05000000074505806
+      OBJROTATION:
+        - -0.2995372712612152
+        - 0.0
+        - 0.0
+        - 0.954084575176239
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 110
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359940
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-820376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.4510383605957
+        - 54.95536804199219
+        - 0.0
+      OBJROTATION:
+        - -0.9612617492675781
+        - 0.0
+        - 0.0
+        - 0.27563759684562683
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.2800000011920929
+        - 0.2800000011920929
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359941
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.576744079589844
+        - 18.8056583404541
+        - 0.0
+      OBJROTATION:
+        - 0.9483238458633423
+        - 0.0
+        - 0.0
+        - 0.31730470061302185
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5199999809265137
+        - 0.7699999809265137
+        - 0.7199999690055847
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359942
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.84961700439453
+        - 19.666685104370117
+        - 0.0
+      OBJROTATION:
+        - 0.6426173448562622
+        - 0.0
+        - 0.0
+        - 0.7661871910095215
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5199999809265137
+        - 0.7699999809265137
+        - 0.7199999690055847
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359943
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 15.17137336730957
+        - 23.554759979248047
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359944
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 14.992094993591309
+        - 22.50273895263672
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359945
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 23.32594871520996
+        - 17.714113235473633
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359946
+      OBJTYPE: 54
+      OBJNAME: "KanianBench00-45097"
+      OBJTEMPLATE: "stst79"
+      PARENTTEMPLATE: "KanianBench00"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 19.373231887817383
+        - 101.23676300048828
+        - -0.20000000298023224
+      OBJROTATION:
+        - -0.3701804280281067
+        - 0.0
+        - 0.0
+        - -0.9289597868919373
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 391
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.14000000059604645
+        - 0.5
+        - 0.25
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Bat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{e2,e2,e2}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 280
+        - 280
+        - 92
+        - 92
+        - 1065353216
+        - 1097859072
+        - 1049135241
+        - 1049135241
+        - 1040746633
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 0
+        - 1090519040
+        - 1124401152
+        - 1121976320
+        - 1065353216
+        - 1107296256
+        - 1105199104
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 5268580
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359947
+      OBJTYPE: 52
+      OBJNAME: "zone1 Bat"
+      OBJTEMPLATE: "unanwiba"
+      PARENTTEMPLATE: "BatDarkM16"
+      OBJPRIMTXTR: "bat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 30.530099868774414
+        - 50.87702941894531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 30.530099868774414
+          - 50.87702941894531
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 119
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 119
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 166
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 32
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 41
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Rat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 50
+        - 50
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 257
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 4271405
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359948
+      OBJTYPE: 52
+      OBJNAME: "zone1dun2 Rat"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatGiantF9"
+      OBJPRIMTXTR: "rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 38.4312858581543
+        - 24.771825790405273
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 38.4312858581543
+          - 24.771825790405273
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 105
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 46
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Rat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 50
+        - 50
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 257
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 4271405
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359949
+      OBJTYPE: 52
+      OBJNAME: "zone1dun2 Rat"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatGiantF9"
+      OBJPRIMTXTR: "rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 43.85313034057617
+        - 28.664369583129883
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 43.85313034057617
+          - 28.664369583129883
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359950
+      OBJTYPE: 54
+      OBJNAME: "Jug03-565541"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug02"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 31.5727596282959
+        - 100.36543273925781
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 737
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.4399999976158142
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359951
+      OBJTYPE: 54
+      OBJNAME: "Jug03-565541"
+      OBJTEMPLATE: "stst156"
+      PARENTTEMPLATE: "Jug03"
+      OBJPRIMTXTR: "jug01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 21.125415802001953
+        - 99.58026123046875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 737
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.4399999976158142
+        - 0.699999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359952
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.91452407836914
+        - 86.22868347167969
+        - 0.0
+      OBJROTATION:
+        - 0.9483238458633423
+        - 0.0
+        - 0.0
+        - 0.31730470061302185
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5199999809265137
+        - 0.7699999809265137
+        - 0.7199999690055847
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359953
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.56789016723633
+        - 87.19703674316406
+        - 0.0
+      OBJROTATION:
+        - 0.9013646245002747
+        - 0.0
+        - 0.0
+        - 0.433060884475708
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359954
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.657238006591797
+        - 84.74806213378906
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359955
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.99222946166992
+        - 88.04736328125
+        - 0.0
+      OBJROTATION:
+        - 0.7820259928703308
+        - 0.0
+        - 0.0
+        - 0.6232456564903259
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5199999809265137
+        - 0.7699999809265137
+        - 0.7199999690055847
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359956
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 33.70587921142578
+        - 88.4765396118164
+        - 0.0
+      OBJROTATION:
+        - 0.6615692377090454
+        - 0.0
+        - 0.0
+        - 0.7498840093612671
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359957
+      OBJTYPE: 54
+      OBJNAME: "Box00-46375"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 34.45551300048828
+        - 89.64424133300781
+        - 0.0
+      OBJROTATION:
+        - 0.5209040641784668
+        - 0.0
+        - 0.0
+        - 0.8536151051521301
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 91
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.3199999928474426
+        - 1.0
+        - 0.28999999165534973
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359958
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 24.81171989440918
+        - 85.55428314208984
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.7130846381187439
+        - 0.0
+        - 0.0
+        - 0.7010778784751892
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359960
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 24.963672637939453
+        - 86.71026611328125
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359961
+      OBJTYPE: 54
+      OBJNAME: "KanianBed01-45098"
+      OBJTEMPLATE: "stst78"
+      PARENTTEMPLATE: "KanianBed01"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.547664642333984
+        - 139.57327270507812
+        - 0.0
+      OBJROTATION:
+        - 0.9877989888191223
+        - 0.0
+        - 0.0
+        - -0.15573391318321228
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 392
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.2199999988079071
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359963
+      OBJTYPE: 54
+      OBJNAME: "KanianFireplace00-45096"
+      OBJTEMPLATE: "stst80"
+      PARENTTEMPLATE: "KanianFireplace00"
+      OBJPRIMTXTR: "kanianfurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 23.24237823486328
+        - 136.42510986328125
+        - 0.0
+      OBJROTATION:
+        - 0.9999998807907104
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 390
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359964
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 35.371498107910156
+        - 131.1982879638672
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359965
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 37.20145034790039
+        - 132.5125274658203
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.5174662470817566
+        - 0.0
+        - 0.0
+        - 0.855703592300415
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359966
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 36.00494384765625
+        - 132.15603637695312
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359968
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 36.308372497558594
+        - 133.31442260742188
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359969
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.00155258178711
+        - 146.07443237304688
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33359970
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-46376"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneysack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 48.73268127441406
+        - 145.2746124267578
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.4067438542842865
+        - 0.0
+        - 0.0
+        - 0.9135421514511108
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 57
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.4000000059604645
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Rat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 50
+        - 50
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 257
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 4271405
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359971
+      OBJTYPE: 52
+      OBJNAME: "zone1dun2 Rat"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatGiantF9"
+      OBJPRIMTXTR: "rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 30.335506439208984
+        - 86.10456085205078
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 30.335506439208984
+          - 86.10456085205078
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 51
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 109
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Rat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 50
+        - 50
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 257
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 4271405
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359972
+      OBJTYPE: 52
+      OBJNAME: "zone1dun2 Rat"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatGiantF9"
+      OBJPRIMTXTR: "rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 25.573348999023438
+        - 96.83665466308594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 25.573348999023438
+          - 96.83665466308594
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 109
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 105
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Rat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 50
+        - 50
+        - 24
+        - 24
+        - 1065353216
+        - 1097859072
+        - 1053721014
+        - 1040746633
+        - 1049135241
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 257
+        - 0
+        - 1117388800
+        - 1115815936
+        - 1065353216
+        - 1099431936
+        - 1096810496
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 16
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 1077237077
+        - 1092616192
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 4271405
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359973
+      OBJTYPE: 52
+      OBJNAME: "zone1dun2 Rat"
+      OBJTEMPLATE: "unanwira"
+      PARENTTEMPLATE: "RatGiantF9"
+      OBJPRIMTXTR: "rat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 20.846176147460938
+        - 107.96881103515625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.20000000298023224
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 20.846176147460938
+          - 107.96881103515625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 114
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 110
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Bat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{e2,e2,e2}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 280
+        - 280
+        - 92
+        - 92
+        - 1065353216
+        - 1097859072
+        - 1049135241
+        - 1049135241
+        - 1040746633
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 0
+        - 1090519040
+        - 1124401152
+        - 1121976320
+        - 1065353216
+        - 1107296256
+        - 1105199104
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 5268580
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359974
+      OBJTYPE: 52
+      OBJNAME: "zone1 Bat"
+      OBJTEMPLATE: "unanwiba"
+      PARENTTEMPLATE: "BatDarkM16"
+      OBJPRIMTXTR: "bat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 18.101364135742188
+        - 126.0916976928711
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 18.101364135742188
+          - 126.0916976928711
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 97
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 97
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "zone1dun2 Bat"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{e2,e2,e2}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 280
+        - 280
+        - 92
+        - 92
+        - 1065353216
+        - 1097859072
+        - 1049135241
+        - 1049135241
+        - 1040746633
+        - 1040746633
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 0
+        - 1090519040
+        - 1124401152
+        - 1121976320
+        - 1065353216
+        - 1107296256
+        - 1105199104
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 30
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 5268580
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 33359975
+      OBJTYPE: 52
+      OBJNAME: "zone1 Bat"
+      OBJTEMPLATE: "unanwiba"
+      PARENTTEMPLATE: "BatDarkM16"
+      OBJPRIMTXTR: "bat00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 31.81317901611328
+        - 136.77011108398438
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 31.81317901611328
+          - 136.77011108398438
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 105
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 46
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 97
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226

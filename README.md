@@ -25,7 +25,7 @@ And more!
 
 This mod also includes HD Lands
 
-*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory*
+*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory (with pre-configured .ini settings)*
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z)
 
@@ -51,7 +51,7 @@ We value feedback! If you have any comments to make please open an Issue on this
 
 ### Linux only : Extra steps to run the game with WINE
 
-WINE requires a DLL override to run EIStarter properly, otherwise the injection will fail and the game will launch in vanilla.
+WINE requires a few DLL overrides to run EIStarter properly, otherwise the injection will fail and the game will launch in vanilla.
 
 It is __strongly__ recommended to install the game with Lutris, as it provides a dedicated environment to run the game.
 
@@ -59,7 +59,7 @@ Here is how to set it up with Lutris:
 
 - Open Lutris and right click on your game then open the __Properties__ menu
 - Switch to the __Game options__ tab and select the starter executable (EIStarter.exe)
-- Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__
+- Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__, repeat this action for `binkw32` and `mss32`. 
 - Save and play!
 
 If you use EIStarter 2.0 instead of the old version, you need to install `dotnet8` and `vcrun2022`.
@@ -74,6 +74,10 @@ Simply enter the IP of the other player hosting the game, if everything goes rig
 
 In order to host servers for this game outside of a local network (LAN), you need to open the port `8888`/`UDP`, this must be done on your router configuration panel.
 Then your compouter should display a prompt asking to allow the game to access the firewall, this must be granted.
+
+### Troubleshooting
+
+If the game crashes or freezes after clicking on __Multiplayer__, edit the `ei_plugin.ini` config file and add a new line containing `NewMaster=0`. Then save and retry launching multiplayer.
 
 ## Assets ownership
 

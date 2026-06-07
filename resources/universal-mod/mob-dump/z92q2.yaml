@@ -1,8 +1,8 @@
 OBJECTDBFILE:
   SEC_RANGE:
     RANGE:
-      MIN_ID: 1000200
-      MAX_ID: 1000399
+      MIN_ID: 1000
+      MAX_ID: 1010
   VSS_SECTION:
   OBJECTSECTION:
     UNIT:
@@ -61,7 +61,7 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 1
-      NID: 1000200
+      NID: 1001
       OBJTYPE: 51
       OBJNAME: "Dragon1"
       OBJTEMPLATE: "unmodg"
@@ -81,7 +81,7 @@ OBJECTDBFILE:
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: "z92q2"
+      OBJ_QUEST_INFO: "z92q2.1"
       OBJCOMPLECTION:
         - 0.5
         - 0.5
@@ -217,7 +217,7 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 1
-      NID: 1001370665
+      NID: 1002
       OBJTYPE: 51
       OBJNAME: "Dragon2"
       OBJTEMPLATE: "unmodg"
@@ -237,7 +237,7 @@ OBJECTDBFILE:
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: "z92q2"
+      OBJ_QUEST_INFO: "z92q2.2"
       OBJCOMPLECTION:
         - 0.5
         - 0.5
@@ -371,7 +371,7 @@ OBJECTDBFILE:
         - 0
       OBJBODYPARTS: None
       OBJ_PLAYER: 4
-      NID: 1001370666
+      NID: 1003
       OBJTYPE: 51
       OBJNAME: "Dragon3"
       OBJTEMPLATE: "unmodg"
@@ -391,7 +391,7 @@ OBJECTDBFILE:
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: "z92q2"
+      OBJ_QUEST_INFO: "z92q2.3"
       OBJCOMPLECTION:
         - 0.5
         - 0.5

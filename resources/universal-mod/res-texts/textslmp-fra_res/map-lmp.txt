@@ -62,7 +62,7 @@ MPGame1 1
 ## Briefing Ingos LMP
 #zone bz2mpg ingos brief
 #res
-bz8k bz8k-LMP
+bz8k bz8k-lmp
 #camera
 bz8k
 #figure
@@ -87,7 +87,7 @@ MPGame1 1
 ## Briefing Suslanger LMP
 #zone bz3mpg suslanger brief
 #res
-bz14h bz14h-LMP
+bz14h bz14h-lmp
 #camera
 bz14h
 #figure

@@ -1,0 +1,10 @@
+The path is now safe!
+#show Hero
+#show Huber
+#CAMERA 10
+#phrase Huber  1
+Thank you  so much! I will send workers to clear the rocks as soon as possible!
+#phrase Hero  2
+What about the monsters?
+#phrase Huber  3
+They can deal with it, hopefully...

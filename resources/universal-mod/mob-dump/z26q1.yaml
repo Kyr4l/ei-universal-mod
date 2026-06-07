@@ -1,0 +1,98 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 0
+      MAX_ID: 999999
+  VSS_SECTION:
+  DIRICTORY:
+    FOLDER:
+      DIR_NINST: 4294957334
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Heroes"
+    FOLDER:
+      DIR_NINST: 4294962277
+      DIR_PARENT_FOLDER: 4294967286
+      DIR_TYPE: 1
+      DIR_NAME: "Felem"
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 20
+      DIR_PARENT_FOLDER: 4294962277
+      DIR_TYPE: 2
+      DIR_NAME: "Lava Elemental-20"
+  OBJECTSECTION:
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1020002
+      OBJTYPE: 60
+      OBJNAME: "Docs"
+      OBJTEMPLATE: "stst153"
+      PARENTTEMPLATE: "FakeDocument00"
+      OBJPRIMTXTR: "fakedocument00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 109.56800079345703
+        - 136.66200256347656
+        - 1.0
+      OBJROTATION:
+        - 0.7316888570785522
+        - 0.0
+        - 0.0
+        - -0.681638777256012
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 235
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 4309
+      OBJTYPE: 60
+      OBJNAME: "Chest"
+      OBJTEMPLATE: "stst43"
+      PARENTTEMPLATE: "Chest00"
+      OBJPRIMTXTR: "kanianarc00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 111.48899841308594
+        - 138.5330047607422
+        - 0.0
+      OBJROTATION:
+        - -0.10613847523927689
+        - 0.0
+        - 0.0
+        - 0.994351327419281
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 16328
+      OBJ_QUEST_INFO: "z26q1.3"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.7699999809265137

@@ -1,0 +1,89 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group 
+)
+
+DeclareScript Door#0#1 (  this : object )
+DeclareScript Door#0#2 (  this : object )
+DeclareScript Door#1#1 (  this : object )
+DeclareScript Door#1#2 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+
+Script Door#0#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 16372 ) ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 120 )
+    Door#0#2( this )
+  )
+)
+
+Script Door#0#2
+(
+  if
+  (
+    Not( Any( i, Heroes, IsInArea( 1, GetX( i ) , GetY( i )  )  ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 16372 ) , 0 )
+    EnableLever( GetObject( 16372 ) , 1 )
+    Door#0#1( this )
+  )
+)
+
+Script Door#1#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1032949 ) ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 120 )
+    Door#1#2( this )
+  )
+)
+
+Script Door#1#2
+(
+  if
+  (
+    Not( Any( i, Heroes, IsInArea( 2, GetX( i ) , GetY( i )  )  ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 1032949 ) , 0 )
+    EnableLever( GetObject( 1032949 ) , 1 )
+    Door#1#1( this )
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  Door#0#1( NULL )
+  Door#1#1( NULL )
+)

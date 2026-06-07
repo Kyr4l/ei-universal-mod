@@ -1,0 +1,211 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group 
+)
+
+DeclareScript Lift#01 (  this : object )
+DeclareScript Lift#11 (  this : object )
+DeclareScript Lift#12 (  this : object )
+DeclareScript Lift#13 (  this : object )
+DeclareScript Lift#14 (  this : object )
+DeclareScript Lift#21 (  this : object )
+DeclareScript Lift#22 (  this : object )
+DeclareScript Lift#23 (  this : object )
+DeclareScript Lift#24 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+
+Script Lift#01
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1369841 ) ) , 1 )
+//     IsEqual( GSGetVar( 0 , "gz1d2_poezdka" ) , 0 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 )
+    SwitchLeverState( GetObject( 338779 ) , 1 )
+    Lift#11( this )
+    Lift#12( this )
+    Lift#22( this )
+  )
+)
+
+Script Lift#11
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 338779 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 ) 
+    CreateFX( 165 , 420.9 , 26, 15, 50, "OtherShit\doormove.wav" )
+//     GSSetVar( 0 , "gz1d2_poezdka", 0 )
+    Lift#14( this )
+  )
+)
+
+Script Lift#12
+(
+  if
+  (
+    IsLess( GetZ( GetObject( 2240358 ) ) , 61.95 )
+    IsEqual( GetLeverState( GetObject( 338779 ) ) , 1 )
+//     IsLess( GSGetVar( 0 , "gz1d2_poezdka" ) , 0.5 )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.422 ) )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 1 )
+    Lift#13( this )
+  )
+)
+
+Script Lift#13
+(
+  if
+  (
+    IsLess( GetZ( GetObject( 2240358 ) ) , 61.95 )
+    IsEqual( GetLeverState( GetObject( 338779 ) ) , 1 )
+//     IsLess( GSGetVar( 0 , "gz1d2_poezdka" ) , 0.5 )
+  )
+  then
+  (
+    KillScript(  )
+//     SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), Add( GetZ( GetObject( 2240358 // ) ) , -33.08 ) )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.422 ) )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 1 )
+    Lift#12( this )
+  )
+)
+
+Script Lift#14
+(
+  if
+  (
+    Not( IsLess( GetZ( GetObject( 2240358 ) ) , 61.95 ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 2 )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), 28.654 )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 1 )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), 28.654 )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 15 )
+    SwitchLeverState( GetObject( 338779 ) , 0 )
+    EnableLever( GetObject( 1357456 ) , 1 )
+    Lift#21( this )
+  )
+)
+
+Script Lift#21
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1357456 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 5 ) 
+    CreateFX( 165 , 420.9 , 26, 15, 50, "OtherShit\doormove.wav" )
+//    GSSetVar( 0 , "gz1d2_poezdka", 1 )
+    Lift#24( this )
+  )
+)
+
+Script Lift#22
+(
+  if
+  (
+    IsGreater( GetZ( GetObject( 2240358 ) ) , 33.48 )
+    IsEqual( GetLeverState( GetObject( 1357456 ) ) , 1 )
+//     IsLess( GSGetVar( 0 , "gz1d2_poezdka" ) , 1.5 )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.972 ) )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 1 )
+    Lift#23( this )
+  )
+)
+
+Script Lift#23
+(
+  if
+  (
+    IsGreater( GetZ( GetObject( 2240358 ) ) , 33.48 )
+    IsEqual( GetLeverState( GetObject( 1357456 ) ) , 1 )
+//     IsLess( GSGetVar( 0 , "gz1d2_poezdka" ) , 1.5 )
+  )
+  then
+  (
+    KillScript(  )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.972 ) )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 1 )
+    Lift#22( this )
+  )
+)
+
+Script Lift#24
+(
+  if
+  (
+    Not( IsGreater( GetZ( GetObject( 2240358 ) ) , 33.48 ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 2 )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), -0.3 )
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 1 )
+    SetCP( GetObject( 2240358 ), GetX( GetObject( 2240358 ) ), GetY( GetObject( 2240358 ) ), -0.3)
+    SetCP( GetObject( 1357456 ), GetX( GetObject( 1357456 ) ) , GetY( GetObject( 1357456 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    SetCP( GetObject( 338779 ), GetX( GetObject( 338779 ) ) , GetY( GetObject( 338779 ) ), Add( GetZ( GetObject( 2240358 ) ) , -33.08 ) )
+    Sleep( 15 )
+    SwitchLeverState( GetObject( 1357456 ) , 0 )
+    EnableLever( GetObject( 338779 ) , 1 )
+    Lift#11( this )
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 )
+  Lift#01( NULL )
+)

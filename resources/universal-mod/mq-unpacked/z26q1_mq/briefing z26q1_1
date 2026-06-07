@@ -1,0 +1,18 @@
+[Easy] Open the portal
+#show Hero
+#show Huber
+#CAMERA 2
+#phrase Hero  1
+So, tell me about this secret cave!
+#phrase Huber  2
+In this cave there's an ancient portal, we use it to travel across islands. However the main path has recently been blocked by falling rocks, the other path has been closed to prevent anyone from coming through the portal...
+#phrase Hero  3
+But why did you block the path ?
+#phrase Huber  4
+We have noticed that some monsters started paying attention to this cave and it is no longer safe for us. We can't send people to travel through the portal or even guard the cave, some monsters made this cave their hiding spot!
+#phrase Huber  5
+You will need to open the gates and activate the portal. There are 2 keys you need to get in order to first open the gates, then activate the portal. Each key has been stored in a chest before my guards fled the area.
+#phrase Hero  6
+Sounds easy enough already! Anything else?
+#phrase Huber 7
+Well... If you are good enough with your hands however, the gates can be opened without a key, the mechanism is old. Good luck!

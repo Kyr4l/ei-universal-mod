@@ -1,0 +1,107 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group,
+  ScrabsL : group,
+  ScrabsR : group
+)
+
+DeclareScript Chest1 (  this : object )
+DeclareScript Chest2 (  this : object )
+DeclareScript GroupL (  this : object )
+DeclareScript GroupR (  this : object )
+DeclareScript CheckAll (  this : object )
+
+
+Script Chest1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 30 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z11d2q1.z11d2q1.1", 2 )
+    GiveQuestItem( 0, "sackofgold" )
+  )
+)
+
+
+Script Chest2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 31 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVarMax( 0, "q.z11d2q1.z11d2q1.2", 2 )
+    GiveQuestItem( 0, "goldnugget00" )
+  )
+)
+
+Script GroupL
+(
+  if
+  (
+    Not( Any( i, ScrabsL, IsAlive( i )  )  )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z11d2q1.z11d2q1.3", 2 )
+  )
+)
+
+Script GroupR
+(
+  if
+  (
+    Not( Any( i, ScrabsR, IsAlive( i )  )  )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z11d2q1.z11d2q1.4", 2 )
+  )
+)
+
+Script CheckAll
+(
+  if
+  (
+    Not( Any( i, ScrabsL, IsAlive( i )  )  )
+    Not( Any( i, ScrabsR, IsAlive( i )  )  )
+    HaveItem( 0, 17 )
+    HaveItem( 0, 28 )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.z11d2q1.z11d2q1", 2 )
+    QuestComplete( 0, "z11d2q1" )
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  AddObject( ScrabsL, GetObject( 10 )  )
+  AddObject( ScrabsL, GetObject( 11 )  )
+  AddObject( ScrabsL, GetObject( 12 )  )
+  AddObject( ScrabsL, GetObject( 13 )  )
+  AddObject( ScrabsL, GetObject( 14 )  )
+  AddObject( ScrabsR, GetObject( 20 )  )
+  AddObject( ScrabsR, GetObject( 21 )  )
+  AddObject( ScrabsR, GetObject( 22 )  )
+  AddObject( ScrabsR, GetObject( 23 )  )
+  AddObject( ScrabsR, GetObject( 24 )  )
+  Chest1( NULL )
+  Chest2( NULL )
+  GroupL( NULL )
+  GroupR( NULL )
+  CheckAll( NULL )
+)
