@@ -1,8 +1,11 @@
 Khadagan Recon
 The Khadagan empire has sent recon units through a portal.
 #subobj  1
-<title placeholder>
-<subtitle placeholder>
+Kill the recon units
+Make sure none of them can escape the area.
 #subobj  2
-<title placeholder>
-<subtitle placeholder>
+Get the portal key
+You need this key to shut the portal off.
+#subobj  3
+Close the portal
+Use the key to disable the portal and prevent reinforcements from coming.
