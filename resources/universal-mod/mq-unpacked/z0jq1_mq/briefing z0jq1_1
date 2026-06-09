@@ -1,0 +1,12 @@
+[Easy] Kadagan Recons (WIP)
+#show Hero
+#show Baron
+#CAMERA 11
+#phrase Baron  1
+<placeholder>
+#phrase Hero  2
+<placeholder>
+#phrase Baron  3
+<placeholder>
+#phrase Baron  4
+<placeholder>

@@ -113,8 +113,10 @@ function packTexts {
 
 function dds2Mmp {
     local texturesddsdir="$resddsdir/textures_res_dds"
+    local textureszonesddsdir="$resddsdir/textures-zones_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
     local texturesmmpdir="$resxdir/textures_res"
+    local textureszonesmmpdir="$resxdir/textures-zones_res"
     local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
@@ -131,6 +133,14 @@ function dds2Mmp {
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds > /dev/null
         cd ../..
         echo "Processed textures"
+    fi
+
+    if [[ "$textureszonesnswr" == "y" ]]; then
+        echo "===== PROCESSING TEXTURES-ZONES DDS FILES ========================================"
+        cd $textureszonesddsdir || exit
+        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$textureszonesmmpdir" ::: *.dds > /dev/null
+        cd ../..
+        echo "Processed textures-zones"
     fi
 }
 
@@ -234,6 +244,7 @@ echo "The options in caps are the defaults, options must be written in lowercase
 
 read -rp "Convert REDRESS from DDS to MMP? [y/N] " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? [y/N] " texturesnswr
+read -rp "Convert TEXTURES-ZONES from DDS to MMP? [y/N] " textureszonesnswr
 read -rp "Dump MOB files? (only for version tracking with git) [y/N] " dumpmobnswr
 read -rp "Increment version? [y/N] " writeversionnswr
 read -rp "Replace the older mod files? [Y/n] " replaceoldnswr
