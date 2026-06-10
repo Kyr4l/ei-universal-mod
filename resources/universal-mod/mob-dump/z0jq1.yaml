@@ -444,7 +444,7 @@ OBJECTDBFILE:
         - 0.699999988079071
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 6.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
@@ -998,7 +998,7 @@ OBJECTDBFILE:
         - 0.6299999952316284
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_HELP: 6.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
@@ -1021,33 +1021,33 @@ OBJECTDBFILE:
               - 18.311973571777344
               - 94.16188049316406
               - 9.995681762695312
-            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_WAIT_SEG: 300
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 24.437076568603516
-            - 101.0364761352539
-            - 10.769668579101562
+            - 25.724803924560547
+            - 97.77316284179688
+            - 10.036346435546875
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 25.860036849975586
-              - 104.52240753173828
-              - 11.267231941223145
-            ACTION_PT_WAIT_SEG: 60
+              - 30.031734466552734
+              - 92.35051727294922
+              - 8.435738563537598
+            ACTION_PT_WAIT_SEG: 300
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 17.83544921875
-            - 96.89180755615234
-            - 10.010979652404785
+            - 26.137271881103516
+            - 100.56464385986328
+            - 10.618663787841797
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 15.929688453674316
-              - 92.5905532836914
-              - 10.00032901763916
-            ACTION_PT_WAIT_SEG: 60
+              - 27.177146911621094
+              - 103.31400299072266
+              - 11.1780366897583
+            ACTION_PT_WAIT_SEG: 300
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
@@ -1147,3 +1147,192 @@ OBJECTDBFILE:
         - 0.0
         - 0.5
         - 0.5
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Archer 16"
+      UNIT_ARMORS:
+        - "gipat brigand helm.tiger hide"
+        - "gipat brigand plate.tiger hide"
+        - "gipat brigand leggins.tiger hide"
+        - "gipat high shirt.thick"
+        - "gipat high pants.thick"
+      UNIT_WEAPONS:
+        - "stone battle axe.malachite"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 19
+        - 19
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1112539136
+        - 1065353216
+        - 1096810496
+        - 1093664768
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 12
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 425984000
+        - 6425
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 5
+      NID: 1000006
+      OBJTYPE: 50
+      OBJNAME: "Boss"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Archer 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 15.419939041137695
+        - 95.9417724609375
+        - 0.0
+      OBJROTATION:
+        - 0.9010769724845886
+        - 0.0
+        - 0.0
+        - 0.4336591362953186
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 10974
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.30000001192092896
+        - 0.5600000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 6.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 15.419939041137695
+          - 95.9417724609375
+          - 20.216007232666016
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 23.60455894470215
+            - 100.51146697998047
+            - 10.661417007446289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 25.138408660888672
+              - 103.97295379638672
+              - 9.997968673706055
+            ACTION_PT_WAIT_SEG: 3000
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 105
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 46
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 132
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 7
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 132
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 7
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 132
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 7
