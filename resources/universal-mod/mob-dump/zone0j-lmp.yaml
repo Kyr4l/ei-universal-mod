@@ -24640,12 +24640,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -24794,12 +24794,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -24948,12 +24948,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -25102,12 +25102,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -25256,12 +25256,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -25410,12 +25410,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -25564,12 +25564,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -25718,12 +25718,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0
@@ -25872,12 +25872,12 @@ OBJECTDBFILE:
         - 0.0
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5972
+      OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.0
-        - 0.0
-        - 0.0
+        - 0.5
+        - 0.5
+        - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 5.0

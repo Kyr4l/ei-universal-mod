@@ -55193,34 +55193,6 @@ OBJECTDBFILE:
     OBJECT:
       OBJBODYPARTS: None
       OBJ_PLAYER: 0
-      NID: 1000467
-      OBJTYPE: 54
-      OBJNAME: "Skin 00-667"
-      OBJTEMPLATE: "stst4"
-      PARENTTEMPLATE: "Skin 00"
-      OBJPRIMTXTR: "skin00"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 132.07069396972656
-        - 193.15921020507812
-        - -0.15000000596046448
-      OBJROTATION:
-        - 0.796083927154541
-        - 0.0
-        - 0.0
-        - -0.6051862239837646
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 5054
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.5
-    OBJECT:
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 0
       NID: 1000468
       OBJTYPE: 54
       OBJNAME: "Tipy 00-3245"
@@ -55401,8 +55373,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 131.06565856933594
-        - 184.19508361816406
+        - 132.29591369628906
+        - 180.80638122558594
         - -0.15000000596046448
       OBJROTATION:
         - 0.5590202808380127
@@ -66589,7 +66561,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 212.31982421875
               - 75.97196960449219
-              - 5.680568218231201
+              - 5.621709823608398
             ACTION_PT_WAIT_SEG: 60
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0

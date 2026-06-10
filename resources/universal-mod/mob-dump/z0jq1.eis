@@ -2,77 +2,148 @@ GlobalVars (
   NULL : object,
   VSS#i#val : object,
   i : object,
-  Heroes : group 
+  Heroes : group,
+  Recon : group,
+  TCPB : object
 )
 
+DeclareScript Quest ( this: object )
+DeclareScript QuestCheck (this:object)
+DeclareScript Chest ( this : object )
+DeclareScript PortalOn ( this : object )
+DeclareScript PortalOff ( this : object )
+DeclareScript CheckRecon (this:object)
 
 
-DeclareScript VCheck#1#4 (  this : object )
-DeclareScript VCheck#1#5 (  this : object )
-
-
-
-Script VCheck#1#4
+Script Quest
 (
   if
   (
-    IsEqual( GetLeverState( GetObject( 3340943 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    QStart("z0jq1")
+    //EnableLever(TCPB,1)
+    PortalOn(this)
+  )
+)
+
+Script QuestCheck
+(
+  if
+  (
+    IsEqual( GetLeverState(TCPB) , 1 )
+    HaveItem(0,46)
+    Not(Any(i,Recon,IsAlive(i)))
+  )
+  then
+  (
+    KillScript()
+    Sleep(5)
+    QFinish()
+  )
+)
+
+Script CheckRecon
+(
+  if
+  (
+    Not(Any(i,Recon,IsAlive(i)))
+  )
+  then
+  (
+    KillScript()
+    GSSetVarMax(0,"q.z0jq1.z0jq1.1",2)
+  )
+)
+
+Script Chest
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 1000005 ) ) , 1 )
   )
   then
   (
     KillScript(  )
     GiveQuestItem( 0, "TeleportKey00" )
-    GSSetVarMax( 0, "q.gz1g.q1r.3", 2 )
-    GSSetVarMax( 0, "q.gz1g.q1r.4", 1 )
-    VCheck#1#5( this )
+    GSSetVarMax( 0, "q.z0jq1.z0jq1.2", 2 )
+    PortalOff( this )
   )
 )
 
-Script VCheck#1#5
+Script PortalOn
 (
   if
   (
-    IsEqual( GetLeverState( GetObject( 43974 ) ) , 1 )
+    IsEqual(GetLeverState(TCPB),0)
   )
   then
   (
-    KillScript(  )
-    GSSetVarMax( 0, "q.gz1g.q1r.4", 2 )
-    GSSetVarMax( 0, "q.gz1g.q1r.5", 1 )
-    Sleep( 10 )
-    CreateParticleSource( 1, 36.5, 49.7, 17.5, 0.3, "portalstar" )
-    CreateParticleSource( 2, 70.5, 49.7, 17.5, 0.3, "portalstar" )
-    CreateParticleSource( 3, 53.5, 32.5, 17.5, 0.3, "portalstar" )
-    Sleep( 3 )
-    CreateParticleSource( 1, 39.5, 49.7, 17.5, 0.5, "portalstar" )
-    CreateParticleSource( 2, 67.5, 49.7, 17.5, 0.5, "portalstar" )
-    CreateParticleSource( 3, 53.5, 35.5, 17.5, 0.5, "portalstar" )
-    Sleep( 3 )
-    CreateParticleSource( 1, 42.5, 49.7, 17.5, 0.8, "portalstar" )
-    CreateParticleSource( 2, 64.5, 49.7, 17.5, 0.8, "portalstar" )
-    CreateParticleSource( 3, 53.5, 38.5, 17.5, 0.8, "portalstar" )
-    Sleep( 5 )
-    CreateParticleSource( 1, 45.5, 49.7, 17.5, 1, "portalstar" )
-    CreatePointLight( 1, 45.5, 49.7, 17.5, 5, 155, 155, 455 )
-    CreateParticleSource( 2, 61.5, 49.7, 17.5, 1, "portalstar" )
-    CreatePointLight( 2, 61.5, 49.7, 17.5, 5, 155, 155, 455 )
-    CreateParticleSource( 3, 53.5, 41.5, 17.5, 1, "portalstar" )
-    CreatePointLight( 3, 53.5, 41.5, 17.5, 5, 155, 155, 455 )
-    CreateFXSource( -1, 53.5, 41.5, 17.5, 40, 70, "Tools\Teleport1.wav" ) 
-    Sleep( 20 )
-    CreateParticleSource( 4, 53.7, 49.5, 17, 0.1, "Portal" )
-    CreatePointLight( 4, 53.7, 49.5, 17, 10, 155, 155, 455 )
-    CreateFXSource( -1, 53.7, 49.5, 16.5, 40, 70, "Tools\Teleport2.wav" )
-    CreateFXSource( -1, 53.7, 49.5, 16.5, 40, 70, "Tools\Teleport3.wav" )
-    VCheck#1#6( this )
-    Sleep( 40 )
-    CreateFX( GetX( GetUnitOfPlayer( 0 , 0 ) ) , GetY( GetUnitOfPlayer( 0 , 0 ) ) , GetZ( GetUnitOfPlayer( 0 , 0 ) ) , 15, 50, "Acks\Scenario\8.wav" )
+   KillScript(  )
+   Sleep( 3 )
+   CreateParticleSource( 1, 36.5, 49.7, 17.5, 0.3, "portalstar" )
+   CreateParticleSource( 2, 70.5, 49.7, 17.5, 0.3, "portalstar" )
+   CreateParticleSource( 3, 53.5, 32.5, 17.5, 0.3, "portalstar" )
+   Sleep( 3 )
+   CreateParticleSource( 1, 39.5, 49.7, 17.5, 0.5, "portalstar" )
+   CreateParticleSource( 2, 67.5, 49.7, 17.5, 0.5, "portalstar" )
+   CreateParticleSource( 3, 53.5, 35.5, 17.5, 0.5, "portalstar" )
+   Sleep( 3 )
+   CreateParticleSource( 1, 42.5, 49.7, 17.5, 0.8, "portalstar" )
+   CreateParticleSource( 2, 64.5, 49.7, 17.5, 0.8, "portalstar" )
+   CreateParticleSource( 3, 53.5, 38.5, 17.5, 0.8, "portalstar" )
+   Sleep( 5 )
+   CreateParticleSource( 1, 45.5, 49.7, 17.5, 1, "portalstar" )
+   CreatePointLight( 1, 45.5, 49.7, 17.5, 5, 155, 155, 455 )
+   CreateParticleSource( 2, 61.5, 49.7, 17.5, 1, "portalstar" )
+   CreatePointLight( 2, 61.5, 49.7, 17.5, 5, 155, 155, 455 )
+   CreateParticleSource( 3, 53.5, 41.5, 17.5, 1, "portalstar" )
+   CreatePointLight( 3, 53.5, 41.5, 17.5, 5, 155, 155, 455 )
+   CreateFXSource( 5, 53.5, 41.5, 17.5, 40, 70, "Tools\Teleport1.wav" ) 
+   Sleep( 20 )
+   CreateParticleSource( 4, 53.7, 49.5, 17, 0.1, "Portal" )
+   CreatePointLight( 4, 53.7, 49.5, 17, 10, 155, 155, 455 )
+   CreateFXSource( 5, 53.7, 49.5, 16.5, 40, 70, "Tools\Teleport2.wav" )
+   CreateFXSource( 5, 53.7, 49.5, 16.5, 40, 70, "Tools\Teleport3.wav" )
   )
 )
 
+Script PortalOff
+(
+  if
+  (
+    IsEqual(GetLeverState(TCPB),1)
+  )
+  then
+  (
+   KillScript(  )
+   GSSetVarMax( 0, "q.z0jq1.z0jq1.3", 2 )
+   Sleep( 10 )
+   DeleteParticleSource( 1 )
+   DeleteParticleSource( 2 )
+   DeleteParticleSource( 3 )
+   Sleep( 5 )
+   DeletePointLight( 1 )
+   DeletePointLight( 2 )
+   DeletePointLight( 3 )
+   DeleteFXSource( 5 ) 
+   Sleep( 20 )
+   DeleteParticleSource( 4 )
+   DeletePointLight( 4 )
+  )
+)
 
 
 WorldScript
 (
   Sleep( 2 )
+  TCPB = GetObjectByID( "43974" ) 
+  AddObject( Recon, GetObject( 1000000 )  )
+  AddObject( Recon, GetObject( 1000001 )  )
+  Quest( NULL )
+  QuestCheck(NULL)
+  CheckRecon(NULL)
+  Chest( NULL )
 )

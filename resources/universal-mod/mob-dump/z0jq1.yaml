@@ -262,11 +262,11 @@ OBJECTDBFILE:
       OBJ_USE_IN_SCRIPT: 1
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
+      OBJ_QUEST_INFO: "z0jq1.1"
       OBJCOMPLECTION:
-        - 0.10000000149011612
+        - 0.20000000298023224
         - 0.5
-        - 0.6000000238418579
+        - 0.699999988079071
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 4.0
@@ -419,27 +419,27 @@ OBJECTDBFILE:
       OBJ_PLAYER: 5
       NID: 1000001
       OBJTYPE: 50
-      OBJNAME: "Recon0"
+      OBJNAME: "Recon1"
       OBJTEMPLATE: "unhuma"
       PARENTTEMPLATE: "Human Hadagan Recon J1"
       OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 19.896181106567383
-        - 97.12478637695312
+        - 17.714387893676758
+        - 93.84620666503906
         - 0.0
       OBJROTATION:
-        - 0.993272066116333
+        - 0.3786485195159912
         - 0.0
         - 0.0
-        - -0.11580399423837662
+        - 0.925540566444397
       OBJ_USE_IN_SCRIPT: 1
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
+      OBJ_QUEST_INFO: "z0jq1.1"
       OBJCOMPLECTION:
-        - 0.10000000149011612
+        - 0.20000000298023224
         - 0.5
         - 0.699999988079071
       UNIT_LOGIC:
@@ -449,12 +449,12 @@ OBJECTDBFILE:
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
         UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 19.89617919921875
-          - 97.12478637695312
-          - 2072.643798828125
+          - 17.714387893676758
+          - 93.84620666503906
+          - 9.997281074523926
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -895,3 +895,255 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 7
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Human Hadagan Fighter 16"
+      UNIT_ARMORS:
+        - "gipat brigand helm.tiger hide"
+        - "gipat brigand plate.tiger hide"
+        - "gipat brigand leggins.tiger hide"
+        - "gipat high shirt.thick"
+        - "gipat high pants.thick"
+      UNIT_WEAPONS:
+        - "stone battle axe.malachite"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 19
+        - 19
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1112539136
+        - 1065353216
+        - 1096810496
+        - 1093664768
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 12
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 425984000
+        - 6425
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 5
+      NID: 1000004
+      OBJTYPE: 50
+      OBJNAME: "Boss"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Human Hadagan Fighter 16"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 21.618074417114258
+        - 95.74405670166016
+        - 0.0
+      OBJROTATION:
+        - 0.8438600301742554
+        - 0.0
+        - 0.0
+        - -0.5365633964538574
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 10974
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.10000000149011612
+        - 0.47999998927116394
+        - 0.6299999952316284
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 21.618074417114258
+          - 95.74405670166016
+          - 10.079383850097656
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 20.978580474853516
+            - 95.46844482421875
+            - 10.035400390625
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 18.311973571777344
+              - 94.16188049316406
+              - 9.995681762695312
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 24.437076568603516
+            - 101.0364761352539
+            - 10.769668579101562
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 25.860036849975586
+              - 104.52240753173828
+              - 11.267231941223145
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 17.83544921875
+            - 96.89180755615234
+            - 10.010979652404785
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 15.929688453674316
+              - 92.5905532836914
+              - 10.00032901763916
+            ACTION_PT_WAIT_SEG: 60
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 148
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 159
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000005
+      OBJTYPE: 60
+      OBJNAME: "Chest"
+      OBJTEMPLATE: "stst43"
+      PARENTTEMPLATE: "Chest01"
+      OBJPRIMTXTR: "kanianarc01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 105.93099975585938
+        - 91.74199676513672
+        - 0.10000000149011612
+      OBJROTATION:
+        - -0.17824606597423553
+        - 0.0
+        - 0.0
+        - 0.983985960483551
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 300
+      OBJ_QUEST_INFO: "z0jq1.2"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.5
