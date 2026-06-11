@@ -41,6 +41,7 @@ function ini2Reg {
     echo "===== PROCESSING INI FILES ========================================"
     echo "Copying INI config"
     cp -v "$inidir"/{lightsjigran,lightscavejigran}.ini "$moddir"/config 2> /dev/null
+    cp -v "$inidir"/SPELLADDON.INI "$moddir"/ 2> /dev/null
 
     echo "Converting INI files to REG"
     parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/{config,autorunpro,ai,music,streamsn,smessbase}.ini > /dev/null
