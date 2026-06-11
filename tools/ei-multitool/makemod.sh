@@ -148,9 +148,12 @@ function eiDbEditor {
     echo "===== PROCESSING DATABASE & DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX database to RES..."
-    wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx && mv -fv database.res ../"$resdir"/
+    wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx
     echo "Converting XLSX databaselmp to RES..."
-    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv databaselmp.res ../"$resdir"/
+    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
+    
+    mv -fv database.res ../"$resdir"/
+    mv -fv databaselmp.res ../"$resdir"/
     cd ..
 }
 

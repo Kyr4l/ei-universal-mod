@@ -1,12 +1,14 @@
-[Easy] Kadagan Recons (WIP)
+[Easy] Kadagan Recons
 #show Hero
 #show Baron
 #CAMERA 11
 #phrase Baron  1
-<placeholder>
+I've just received a report that indicates the other portal was turned on!
 #phrase Hero  2
-<placeholder>
+What portal? There's more than this one in the city?
 #phrase Baron  3
-<placeholder>
+There is an abandonned portal at the East, we thought it was broken but apparently someone has managed to turn it back on!
 #phrase Baron  4
-<placeholder>
+And apparently the Khadagan empire is preparing an invasion, they sent recon units to explore Jigran. If you can take them out and close the portal, that might earn enough time for us to prepare defenses. If they ever try to come back...
+#phrase Hero 5
+If these are recon units then I suppose they should not be that strong, I guess I can do it...

@@ -1,10 +1,12 @@
-Done!
+They won't come back!
 #show Hero
 #show Baron
 #CAMERA 11
-#phrase Baron  1
-<placeholder>
-#phrase Hero  2
-<placeholder>
-#phrase Baron  3
-<placeholder>
+#phrase Hero  1
+I got rid of these units! The portal is closed and they won't come back for a while hopefully.
+#phrase Baron  2
+Do you know what they were preparing?
+#phrase Hero  3
+They were preparing an exploration, or maybe an invasion. They seemed pretty scared of this place and attacked anything on sight!
+#phrase Baron  4
+That makes sense, these recons are probably afraid of anything they aren't used to see. Typical Khadaganians...
