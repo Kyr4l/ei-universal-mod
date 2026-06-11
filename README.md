@@ -96,11 +96,12 @@ This repository contains a mix of original code, community-created assets, and f
 ## Credits
 
 SpellAddon Developers:
-<https://evilislandsaddon.forumotion.com/>
-<https://vk.com/evil_islands_addon>
 
 - VeryGoodGirl
-- Arrogant
+- PlayHard_GoPro
+
+<https://evilislandsaddon.forumotion.com/>
+<https://vk.com/evil_islands_addon>
 
 Special thanks to :
 
