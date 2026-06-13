@@ -1,6 +1,6 @@
 #zone z15q1 suslanger game
 #res
-zone15 zone15-LMP
+zone15 zone15-lmp
 #maps
 10 12
 zone15map zone15quest
