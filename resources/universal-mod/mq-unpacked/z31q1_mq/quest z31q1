@@ -1,8 +1,14 @@
-Zombie Sentries
-A zombie sentry has been spotted guarding the bridges near the castle, take them out!
+Khadagan patrols
+A recent report suggests that Khadaganians are roaming near the castle, take them out!
 #subobj  1
-Kill the East bridge sentry
-This sentry is guarding the Eastern bridge.
+Kill the Northern patrols
+There should be 2 groups of Khadagan soldiers, they rarely leave the road.
 #subobj  2
-Kill the West bridge sentry
-This sentry is guarding the Western bridge.
+Kill the Southern patrols
+Two groups of roaming soldiers are coming from the south.
+#subobj  3
+Free the Western village
+A group of soldiers are blocking the path fo the Western village, free the villagers.
+#subobj  4
+Deal with the captain
+The captain of these roaming soldiers is at the East of the castle, threatening the villagers.

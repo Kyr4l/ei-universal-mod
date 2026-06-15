@@ -1,12 +1,12 @@
-[Easy] Kill the Zombie sentry! (WIP)
+[Easy] Khadagan Patrols (WIP)
 #show Hero
 #show Baron
 #CAMERA 11
 #phrase Baron  1
-The guards have noticed Zombie sentries guarding the bridges, take them down!
+<placeholder>
 #phrase Hero  2
-That's all? only two zombie sentries to kill?
+<placeholder>
 #phrase Baron  3
-Consider this to be a test of your abilities. I don't want to send a guard to kill these two...
+<placeholder>
 #phrase Baron  4
-Don't worry, you'll be rewarded if you manage to come back alive.
+<placeholder>
