@@ -1,10 +1,10 @@
 The path is now safe!
 #show Hero
-#show Huber
+#show KMage
 #CAMERA 10
-#phrase Huber  1
+#phrase KMage  1
 Thank you  so much! I will send workers to clear the rocks as soon as possible!
 #phrase Hero  2
 What about the monsters?
-#phrase Huber  3
+#phrase KMage  3
 They can deal with it, hopefully...

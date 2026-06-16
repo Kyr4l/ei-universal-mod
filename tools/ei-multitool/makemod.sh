@@ -21,7 +21,7 @@ hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
 
-# stop execution if rsync/wine/progress is missing
+# stop execution if rsync/wine/parallel is missing
 function checkCommands {
     for cmd in wine rsync parallel; do
         if ! command -v "$cmd" &>/dev/null; then

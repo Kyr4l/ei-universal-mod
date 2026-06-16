@@ -1,14 +1,14 @@
 [Easy] Clear the path to the cave
 #show Hero
-#show Huber
+#show KMage
 #CAMERA 2
 #phrase Hero  1
 You don't seem alright. What happened?
-#phrase Huber  2
+#phrase KMage  2
 Well, scouts have reported that ogres are now guarding the path to a cave!
 #phrase Hero  3
 And what is wrong with that?
-#phrase Huber  4
+#phrase KMage  4
 Inside that cave there is an ancient portal... We can't let these monsters block the way. There are also a few ice elementals near the center of the lake...
-#phrase Huber  5
+#phrase KMage  5
 Of course clearing the way will grant you a small reward, that shouldn't take too long for someone like you!
