@@ -239,7 +239,7 @@ function main {
     writeVersion
     packTexts
     packRes
-    addLua
+    #addLua # disabled since 0.7.8
     replaceOldMod
 }
 

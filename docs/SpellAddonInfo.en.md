@@ -1,6 +1,7 @@
 # SpellAddon – Detailed Configuration Guide
 
 ## General Information & Author Contacts
+
 * **Community:** A group dedicated to a full storyline add-on for Evil Islands (EI): [vk.com/evil_islands_addon](https://vk.com/evil_islands_addon)
 * **Author's Website:** [evilislandsaddon.forumotion.com](https://evilislandsaddon.forumotion.com/)
 * **Co-author Discord (PlayHard_GoPRo):** `arrogant2818`
@@ -13,14 +14,17 @@
 This add-on allows you to customize various aspects of the game engine through the `SPELLADDON.INI` file.
 
 ### `[skills]`
-* `extendedskills=0` *(1 = Enabled / 0 = Disabled)* – Modifies the maximum leveling cap for all skills **except** Sleight of Hand (Stealing). 
+
+* `extendedskills=0` *(1 = Enabled / 0 = Disabled)* – Modifies the maximum leveling cap for all skills **except** Sleight of Hand (Stealing).
 * `skills=130` *(Integer)* – Sets the maximum level for non-stealing skills.
 
 ### `[stealing]`
+
 * `extendedstealing=0` *(1 = Enabled / 0 = Disabled)* – Modifies the maximum leveling cap for Sleight of Hand (Stealing).
 * `stealing=130` *(Integer)* – Sets the maximum level for the Sleight of Hand skill.
 
 ### `[gameplay]`
+
 * `randomlessaimedhits=1` – Target selection behavior for mobs:
   * `0` = Disabled.
   * `1` = Mobs target more vulnerable body parts after "testing" armor with an initial hit to the legs.
@@ -87,13 +91,14 @@ This add-on allows you to customize various aspects of the game engine through t
   * `1` = CC success depends entirely on the target's resistances.
   * `3` = CC potency scales with the caster's Intelligence attribute.
   * `4` = CC potency scales with both the caster's Intelligence and Experience level.
-* `slownessmultiplier=11.05` *(Float)* – Slow effect formula: 
+* `slownessmultiplier=11.05` *(Float)* – Slow effect formula:
   $$\text{Final Effect} = \frac{(\text{Base Effect} \times \text{slownessmultiplier}) - \text{Resistance}}{\text{slownessmultiplier}}$$
-* `weaknessmultiplier=0.55` *(Float)* – Weakness effect formula: 
+* `weaknessmultiplier=0.55` *(Float)* – Weakness effect formula:
   $$\text{Final Effect} = \frac{(\text{Base Effect} \times \text{weaknessmultiplier}) - \text{Resistance}}{\text{weaknessmultiplier}}$$
 * `durcoeff=0.04` *(Used for Mode 3)* – Determines how much the Intelligence gap between the caster and victim increases or decreases spell duration (percentage based).
 
 #### Crowd Control (CC) Spell Classifications (`1` = Yes, `0` = No)
+
 | Spell Flag Key | Value | Description |
 | :--- | :---: | :--- |
 | `prot_fire` / `prot_electro` / `prot_acid` | `0` | Elemental Protections (Not CC) |
@@ -108,7 +113,9 @@ This add-on allows you to customize various aspects of the game engine through t
 | `slow` | `1` | Treated as Crowd Control |
 
 #### Base Un-runed Spell Effects (`b[spellname]`)
+
 *These values provide flat, base adjustments to spells that cannot be upgraded via runes.*
+
 * `beagle_sight=1.0` \| `binfravision=15.0` \| `bdetect_life=2.0` \| `binvisibility=15.0` \| `bsilence=15.0`
 * `blichdom=15.0` \| `bstench=25.0` \| `bstrength=95.0` \| `bweak=25.0` \| `bregeneration=80.0`
 * `bspeed=180.0` \| `bslow=180.0`
@@ -248,10 +255,10 @@ This add-on allows you to customize various aspects of the game engine through t
   * `framey=340` (Y axis resolution frame dimensions)
 * `allowheroesarmors=1` *(1 = Enabled / 0 = Disabled)* – Heroes possess a baseline, non-reducible natural armor rating originating from their body stats.
 * `encumbrancemovespeed=1` – Encumbrance penalizes movement speed based on weight.
-  * Formula: 
+  * Formula:
     $$\text{Penalty} = \left(\frac{\text{Current Weight}}{\text{Current Weight} + \text{Max Weight}}\right)^3 \times \text{encumbrancemovemul (1.100)}$$
 * `encumbranceattackspeed=2` – Encumbrance penalizes combat attack speeds.
-  * Formula: 
+  * Formula:
     $$\text{Penalty} = \left(\frac{\text{Current Weight}}{\text{Current Weight} + \text{Max Weight}}\right)^3 \times \text{encumbranceattackmul (1.100)}$$
 * `speedslowmovemul=0.2` – Degree to which *Speed* & *Slow* debuffs interact with encumbered movement speeds.
 * `notrash=1` *(1 = Enabled / 0 = Disabled)* – Optimizes memory; removes the simultaneous requirement for both `s` & `t` subfolders inside the `speech.res` archive.
@@ -261,12 +268,15 @@ This add-on allows you to customize various aspects of the game engine through t
 ### Memory Offsets and Tracking Data
 
 #### `hptrans=1` (HP/Stat Tracking Offsets)
+
 When enabled, returns the following raw entity states:
+
 * `+10` HP Current \| `+11` HP Max \| `+12` HP Regeneration
 * `+13` MP Current \| `+14` MP Max \| `+15` MP Regeneration
 * **Absorptions/Resistances:** `+16` Piercing \| `+17` Slashing \| `+18` Bludgeoning \| `+19` Thermal \| `+20` Chemical \| `+21` Electric \| `+22` General
 
 #### `mptrans=1` (Extended Stat Tracking Offsets)
+
 Maps various internal attributes, limb parameters, and visibility modifiers (Offsets span from `+1` total experience, attribute totals, tracking metrics, down to individual limb breakdown stats such as `+125 head.hp.curr`, `+186 body.hp.curr`, `+308 rhand.hp.curr`, and `+430 rleg.hp.curr`).
 
 ---
@@ -289,9 +299,11 @@ Maps various internal attributes, limb parameters, and visibility modifiers (Off
 ---
 
 ### `[saves]`
+
 * `savecontrol=1` *(1 = Enabled / 0 = Disabled)* – Allows scripts to explicitly toggle saving permissions. `GSSetVar(0, "Save", 0)` enables saving (Default), while `GSSetVar(0, "Save", 1)` locks saving mechanics out.
 
 ### `[speed]`
+
 * `allowmpspeed=1` *(1 = Enabled / 0 = Disabled)* – Unlocks fast-forward speeds during multiplayer games.
 * `rewritespeed=0` – Allows custom engine game speeds mapped to mouse clicks.
   * `normal=55` \| `fast=27` (Values proportional to game slow-down metrics).
@@ -304,12 +316,13 @@ Maps various internal attributes, limb parameters, and visibility modifiers (Off
 * `pause=25` \| `pausekey=56` – Fine-tunes pause slow-down speeds.
 
 ### `[rebalanceengine]`
+
 * `useonlymindamage=1` *(1 = Enabled / 0 = Disabled)* – Disables the maximum damage roll ceiling for mobs; they will only roll their minimum base damage values.
 * `rewriteherolevelcounting=1` *(1 = Enabled / 0 = Disabled)* – Overrides mob level formulas:
   $$\text{Level} = \text{mullvla} \times \log_2\left(\text{addlvla} + \frac{\text{Experience}}{\text{divlvla}}\right) + \text{addlvlb}$$
   * *Values:* `mullvla=2.94`, `divlvla=295.0`, `addlvla=1.00`, `addlvlb=1.00`
 * `rewriteskillscounting=0` – Custom skill costing formulas: $\text{Cost} = (\text{pow}^{\text{lvl}}) \times \text{mul} + \text{add}$.
-* `rewriterunabilitytime=1` – Activates custom constants for relative stamina draining while sprinting.
+* `rewriterunabilitytime=1` – Activates custom constants for relative stamina draining while sprinting. 0=(nowMP=nowMP-maxMP*runconst) 1=(nowMP=nowMP-runconst) 2=(nowMP=nowMP-maxMP*runconst-runconstex)
 * `newrunsystem=0` – Switches to an *absolute* stamina drain format, completely overriding relative modes.
   * `runconst=0.001666...` (Stamina cost calculation step per frame).
 * `backstabvisualbase=1` *(1 = Enabled / 0 = Disabled)* – Modifies how backstab numbers look within description texts.
@@ -317,14 +330,17 @@ Maps various internal attributes, limb parameters, and visibility modifiers (Off
 * `meleesum_low=1` & `meleesum_2=1` – Engine recalculation structures for Attack and Defense math. *(Note: Avoid enabling `meleesum_1=1` as it is unstable).*
 
 ### `[animationsspeed]`
+
 * `rewriteactionsspeed=1` *(1 = Enabled / 0 = Disabled)* – Overrides global skeletal animation speed rates.
   * `attackspeed=1` (Attacks) \| `castspeed=1` (Spells) \| `hitspeed=1` (Flinching) \| `deathspeed=1` (Ragdoll physics decay) \| `specialspeed=1` (Special actions) \| `idlespeed=1` (Resting state loops).
 
 ### `[fonts]`
+
 * `changefont=1` *(1 = Enabled / 0 = Disabled)* – Replaces native font mappings.
   * `newfont1=Arial` \| `newfont2=Times New Roman` \| `newfont3=Arial` \| `newfont4=Arial`
 
 ### `[speedrun]`
+
 * `timervars=3` – Speedrun timer implementation. Freezes automatically during screen loads.
   * Key mapping and positioning presets: `starthk=57` (Start), `pausehk=F6` (Pause), `resethk=48` (Reset), `windowx=1082`, `windowy=751`, `opacity=255`.
 
@@ -333,17 +349,21 @@ Maps various internal attributes, limb parameters, and visibility modifiers (Off
 ## Installation Instructions
 
 ### Compatibility Constraints
+>
 > ⚠️ **Important Starter Rules:**
+>
 > * If you run the game alongside the **Standard Starter**, you must disable the extended skills limit: set `extendedskills=0`.
 > * If you run the game alongside the **Newest Starter**, you must additionally turn off animations rewriting (`rewriteactionsspeed=0`) and turn off extended stealing limits (`extendedstealing=0`).
 
 ### Clean Setup (Manual Installation)
+
 1. Navigate to your game folder and remove any legacy files from older releases of `SpellAddon` found in your primary directory or the Starter's `Engine` directory.
 2. Extract and drop `SpellAddonX.asi`, `SpellAddonInfo.txt`, and `SPELLADDON.INI` directly into your main game directory.
 3. Move `AutoRunSpellAddon123.mob` into the `Maps` folder inside your game directory.
 4. **Starter Check:** When playing with the absolute newest EI Starter, copy and duplicate `SpellAddonX.asi`, `SpellAddonInfo.txt`, and `SPELLADDON.INI` into the **`Engine`** folder of your starter layout if initialization errors occur.
 
 ### Mod-Specific Configurations
+
 * Setting a completely clean, default config inside the primary directory prevents SpellAddon from executing changes on standard vanilla game states or overarching cross-mod files.
 * To configure SpellAddon to trigger **only on a specific mod**, move your customized `SPELLADDON.INI` configuration profile inside that specific mod's folder layout.
 * Custom scripts are supported uniquely per mod; place any tailored version of `AutoRunSpellAddon123.mob` within that specific mod's `Maps` directory.
