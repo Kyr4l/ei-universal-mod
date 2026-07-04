@@ -1,0 +1,27 @@
+Translation helper
+
+General:
+Use two letters ISO 639 (https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) for language identification.
+
+Texts:
+folder 'lang'
+UTF-16 LE with BOM for all texts (Recommended use Notepad++)
+<rn> in multiline texts is a next line marker
+Naming:
+[window title] - which window is this texts
+window title - caption of window
+tab* - options tab
+tb* - text box
+bt* - button
+cb* - check box
+cbb*__<index> - combobox items
+lb* - label
+
+
+Images:
+folder 'design'
+.png OR .bmp format for images. PNG is important, support opacity.
+
+
+Share/Publication:
+Inform Atm, Demoth or other developer about your translation.

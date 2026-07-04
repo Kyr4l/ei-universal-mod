@@ -25,11 +25,13 @@ And more!
 
 This mod also includes HD Lands
 
-*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory (with pre-configured .ini settings)*
+*Requires EIStarter & SpellAddon, already provided in the `tools/` directory (with pre-configured .ini settings)*
+*OR these can also be manually downloaded from these links below*
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z)
+[SpellAddon](https://evilislandsaddon.forumotion.com/t2-spelladdon)
 
-[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (Deprecated)
+~~[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe)~~ (Deprecated)
 
 We value feedback! If you have any comments to make please open an Issue on this repo.
 

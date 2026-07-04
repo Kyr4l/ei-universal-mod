@@ -1,0 +1,24 @@
+
+[EN] English ########################################
+Mod example with new features.
+1. `design` folder for custom GUI images.
+2. readme and changelog for buttons in ModInfo dialog.
+3. updater.bat with 
+[starter]
+pluginpath=updater.bat
+plugintext=Updater
+
+in config.reg for demonstration button in ModInfo.
+
+
+[RU] Russian ########################################
+Пример мода с новыми возможностями.
+1. папка design с оформлением для стартера.
+2. readme и changelog для демонстрации кнопок в ModInfo.
+3. updater.bat и
+
+[starter]
+pluginpath=updater.bat
+plugintext=Updater
+
+в config.reg для демонстрации кнопки в ModInfo.

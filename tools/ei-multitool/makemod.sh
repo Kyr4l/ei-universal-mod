@@ -215,8 +215,12 @@ function addLua {
     cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
+function compileDll {
+    echo "===== COMPILING DLL ========================================"
+    i686-w64-mingw32-g++ -shared -o "$moddir"/um.dll um.cpp -static -s -O2 -Wall -Wno-unused-parameter -v
+}
+
 function replaceOldMod {
-    echo "===== REPLACING OLD MOD FILES ========================================"
     if [[ "$replaceoldnswr" != "n" ]]; then
         echo "===== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
         rsync --checksum -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
@@ -239,6 +243,7 @@ function main {
     writeVersion
     packTexts
     packRes
+    compileDll
     #addLua # disabled since 0.7.8
     replaceOldMod
 }
