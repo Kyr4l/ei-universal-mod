@@ -2,7 +2,7 @@
 
 [Discord Server](https://discord.gg/nGm2mwakQx)
 
-A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
+A Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
 Several bugs and inconsistencies have also been patched or worked around.
@@ -29,7 +29,7 @@ This mod also includes HD Lands
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z)
 
-[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (DEPRECATED / SOME FEATURES AREN'T SUPPORTED)
+[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (Deprecated)
 
 We value feedback! If you have any comments to make please open an Issue on this repo.
 
