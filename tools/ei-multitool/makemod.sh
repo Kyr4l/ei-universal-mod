@@ -21,7 +21,7 @@ hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
 
-# stop execution if rsync/wine/progress is missing
+# stop execution if rsync/wine/parallel is missing
 function checkCommands {
     for cmd in wine rsync parallel; do
         if ! command -v "$cmd" &>/dev/null; then
@@ -41,6 +41,7 @@ function ini2Reg {
     echo "===== PROCESSING INI FILES ========================================"
     echo "Copying INI config"
     cp -v "$inidir"/{lightsjigran,lightscavejigran}.ini "$moddir"/config 2> /dev/null
+    cp -v "$inidir"/SPELLADDON.INI "$moddir"/ 2> /dev/null
 
     echo "Converting INI files to REG"
     parallel --bar wine bin/ini2reg.exe {} ::: "$inidir"/{config,autorunpro,ai,music,streamsn,smessbase}.ini > /dev/null
@@ -113,8 +114,10 @@ function packTexts {
 
 function dds2Mmp {
     local texturesddsdir="$resddsdir/textures_res_dds"
+    local textureszonesddsdir="$resddsdir/textures-zones_res_dds"
     local redressddsdir="$resddsdir/redress_res_dds"
     local texturesmmpdir="$resxdir/textures_res"
+    local textureszonesmmpdir="$resxdir/textures-zones_res"
     local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
@@ -132,15 +135,26 @@ function dds2Mmp {
         cd ../..
         echo "Processed textures"
     fi
+
+    if [[ "$textureszonesnswr" == "y" ]]; then
+        echo "===== PROCESSING TEXTURES-ZONES DDS FILES ========================================"
+        cd $textureszonesddsdir || exit
+        parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$textureszonesmmpdir" ::: *.dds > /dev/null
+        cd ../..
+        echo "Processed textures-zones"
+    fi
 }
 
 function eiDbEditor {
     echo "===== PROCESSING DATABASE & DATABASELMP ========================================"
     cd "$xlsxdir" || exit
     echo "Converting XLSX database to RES..."
-    wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx && mv -fv database.res ../"$resdir"/
+    wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx
     echo "Converting XLSX databaselmp to RES..."
-    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx && mv -fv databaselmp.res ../"$resdir"/
+    wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
+    
+    mv -fv database.res ../"$resdir"/
+    mv -fv databaselmp.res ../"$resdir"/
     cd ..
 }
 
@@ -201,8 +215,12 @@ function addLua {
     cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
+function compileDll {
+    echo "===== COMPILING DLL ========================================"
+    i686-w64-mingw32-g++ -shared -o "$moddir"/um.dll um.cpp -static -s -O2 -Wall -Wno-unused-parameter -v
+}
+
 function replaceOldMod {
-    echo "===== REPLACING OLD MOD FILES ========================================"
     if [[ "$replaceoldnswr" != "n" ]]; then
         echo "===== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
         rsync --checksum -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
@@ -225,7 +243,8 @@ function main {
     writeVersion
     packTexts
     packRes
-    addLua
+    compileDll
+    #addLua # disabled since 0.7.8
     replaceOldMod
 }
 
@@ -234,6 +253,7 @@ echo "The options in caps are the defaults, options must be written in lowercase
 
 read -rp "Convert REDRESS from DDS to MMP? [y/N] " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? [y/N] " texturesnswr
+read -rp "Convert TEXTURES-ZONES from DDS to MMP? [y/N] " textureszonesnswr
 read -rp "Dump MOB files? (only for version tracking with git) [y/N] " dumpmobnswr
 read -rp "Increment version? [y/N] " writeversionnswr
 read -rp "Replace the older mod files? [Y/n] " replaceoldnswr

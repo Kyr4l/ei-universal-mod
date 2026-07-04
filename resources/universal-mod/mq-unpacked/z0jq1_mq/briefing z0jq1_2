@@ -1,0 +1,8 @@
+Where are they?
+#show Hero
+#show Baron
+#CAMERA 11
+#phrase Hero  1
+I couldn't see any of these Khadaganian recons you mentionned earlier, your information might be outdated!
+#phrase Baron  2
+I will send a few guards just to be sure...

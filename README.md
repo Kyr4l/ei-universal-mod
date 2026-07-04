@@ -2,7 +2,7 @@
 
 [Discord Server](https://discord.gg/nGm2mwakQx)
 
-A complete, Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
+A Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired by EI-Mod, HG-Mod, and others.
 
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
 Several bugs and inconsistencies have also been patched or worked around.
@@ -25,11 +25,14 @@ And more!
 
 This mod also includes HD Lands
 
-*Requires EIStarter, which can be downloaded from the following links, or from the `tools/` directory (with pre-configured .ini settings)*
+*Requires EIStarter & SpellAddon, available in the [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) section*
+*also provided in the `tools/` directory (with pre-configured .ini settings)*
+*OR these can also be manually downloaded from these links below*
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z)
+[SpellAddon](https://evilislandsaddon.forumotion.com/t2-spelladdon)
 
-[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe) (DEPRECATED / SOME FEATURES AREN'T SUPPORTED)
+~~[Starter 1.046](https://allods.gipat.ru/files/ei/soft/setup%20addon%20v.1.046.0.exe)~~ (Deprecated)
 
 We value feedback! If you have any comments to make please open an Issue on this repo.
 
@@ -59,7 +62,7 @@ Here is how to set it up with Lutris:
 
 - Open Lutris and right click on your game then open the __Properties__ menu
 - Switch to the __Game options__ tab and select the starter executable (EIStarter.exe)
-- Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__, repeat this action for `binkw32` and `mss32`. 
+- Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__, repeat this action for `binkw32` and `mss32`.
 - Save and play!
 
 If you use EIStarter 2.0 instead of the old version, you need to install `dotnet8` and `vcrun2022`.
@@ -95,12 +98,19 @@ This repository contains a mix of original code, community-created assets, and f
 
 ## Credits
 
-Made with the precious help of the Russian modding community.
+SpellAddon Developers:
+
+- VeryGoodGirl
+- PlayHard_GoPro
+
+<https://evilislandsaddon.forumotion.com/>
+<https://vk.com/evil_islands_addon>
 
 Special thanks to :
 
 - Atom (Atm)
 - SunGuru
+- As bestos
 - HD Lands Team
 
 Спасибо

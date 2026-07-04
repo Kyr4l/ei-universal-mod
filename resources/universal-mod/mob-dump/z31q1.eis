@@ -2,33 +2,32 @@ GlobalVars (
   NULL : object,
   VSS#i#val : object,
   i : object,
-  ZS0 : object,
-  ZS1 : object
+  SPE : group,
+  SPW : group
 )
 
-DeclareScript CheckZ0 ( this : object )
-DeclareScript CheckZ1 ( this : object )
-DeclareScript CheckQ ( this : object )
+DeclareScript Quest (this:object)
+DeclareScript CheckSP (this:object)
 
 
-Script CheckZ0
+Script Quest
 (
   if
   (
-    Not(IsAlive( ZS0 ) ) 
   )
   then
   (
     KillScript(  )
-    GSSetVarMax( 0, "q.z31q1.z31q1.1", 2 )
+    CheckSP(this)
   )
 )
 
-Script CheckZ1
+Script CheckSP
 (
   if
   (
-    Not(IsAlive( ZS1 ) ) 
+    Not(Any(i,SPE,IsAlive(i)))
+    Not(Any(i,SPW,IsAlive(i))) 
   )
   then
   (
@@ -37,29 +36,17 @@ Script CheckZ1
   )
 )
 
-Script CheckQ
-(
-  if
-  (
-    Not(IsAlive( ZS0 ) )
-    Not(IsAlive( ZS1 ) )
-  )
-  then
-  (
-    KillScript(  )
-    GSSetVarMax( 0, "q.z31q1.z31q1", 2 )
-    Sleep( 2 )
-    QuestComplete( 0, "z31q1" )
-  )
-)
+
 
 
 WorldScript
 (
   Sleep( 2 )
-  ZS0 = GetObjectByID( "10" )
-  ZS1 = GetObjectByID( "11" )
-  CheckZ0 ( NULL )
-  CheckZ1 ( NULL )
-  CheckQ ( NULL )
+  AddObject(SPE,GetObject(1))
+  AddObject(SPE,GetObject(2))
+  AddObject(SPE,GetObject(3))
+  AddObject(SPW,GetObject(4))
+  AddObject(SPW,GetObject(5))
+  AddObject(SPW,GetObject(6))
+  Quest ( NULL )
  )

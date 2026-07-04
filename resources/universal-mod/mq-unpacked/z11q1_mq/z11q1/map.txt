@@ -1,7 +1,7 @@
 ## Stadtrand
 #zone z11q1 ingos game
 #res
-zone11 zone11-LMP
+zone11 zone11-lmp
 #maps
 16 12
 zone11map zone11quest

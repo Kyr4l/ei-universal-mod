@@ -1,6 +1,6 @@
 #zone z3q1 gipat game
 #res
-zone3Obr zone3Obr-LMP
+zone3obr zone3obr-lmp
 #maps
 9 10
 zone3obrmap zone3questM

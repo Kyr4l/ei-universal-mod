@@ -5,20 +5,7 @@ GlobalVars (
   Heroes : group
 )
 
-DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
-
-Script #OnBriefingComplete
-(
-  if
-  (
-  )
-  then
-  (
-    KillScript(  ) 
-  )
-)
 
 WorldScript
 (
-  Sleep( 2 )
 )

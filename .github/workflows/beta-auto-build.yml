@@ -30,17 +30,20 @@ jobs:
       - name: Create ZIP Archive
         run: |
           zip -r $ZIPNAME "Universal-Mod"
-          ls -lah
+          ls -lah $ZIPNAME
 
       - name: Upload release
         uses: ncipollo/release-action@v1.12.0
         with:
-          artifacts: ${{ env.ZIPNAME }}
+          artifacts: |
+            ${{ env.ZIPNAME }}
+            tools/eistarter-obt-1.zip
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: false
-          name: Universal Mod Beta ${{ env.VERSION }} ${{ env.COMMITHASH }}
+          name: Universal Mod Beta ${{ env.VERSION }}
           tag: ${{ env.VERSION }}
           prerelease: true
           generateReleaseNotes: true
           allowUpdates: true
           removeArtifacts: true
+          artifactErrorsFailBuild: true
