@@ -47,3 +47,4 @@ jobs:
           generateReleaseNotes: true
           allowUpdates: true
           removeArtifacts: true
+          artifactErrorsFailBuild: true
