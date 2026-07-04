@@ -33,7 +33,7 @@ jobs:
       - name: Create ZIP Archive
         run: |
           zip -r $ZIPNAME "Universal-Mod"
-          ls -lah
+          ls -lah $ZIPNAME
 
       - name: Upload release
         uses: ncipollo/release-action@v1.12.0
