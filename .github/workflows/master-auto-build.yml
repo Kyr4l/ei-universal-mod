@@ -41,7 +41,7 @@ jobs:
           artifacts: ${{ env.ZIPNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
-          name: Universal Mod ${{ env.VERSION }} ${{ env.COMMITHASH }}
+          name: Universal Mod ${{ env.VERSION }}
           tag: ${{ env.VERSION }}
           prerelease: false
           generateReleaseNotes: true
