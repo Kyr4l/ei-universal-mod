@@ -4,7 +4,8 @@ GlobalVars (
   i : object,
   Heroes : group,
   Recon : group,
-  TCPB : object
+  TCPB : object,
+  KChest:object
 )
 
 DeclareScript Quest ( this: object )
@@ -23,9 +24,8 @@ Script Quest
   then
   (
     KillScript(  )
-    QStart("z0jq1")
     //EnableLever(TCPB,1)
-    PortalOn(this)
+    QuestCheck(this)
   )
 )
 
@@ -40,8 +40,7 @@ Script QuestCheck
   then
   (
     KillScript()
-    Sleep(5)
-    QFinish()
+    GSSetVarMax(0,"q.z0jq1.z0jq1",2)
   )
 )
 
@@ -62,13 +61,14 @@ Script Chest
 (
   if
   (
-    IsEqual( GetLeverState( GetObject( 1000005 ) ) , 1 )
+    IsEqual(GetLeverState(KChest),1)
   )
   then
   (
     KillScript(  )
-    GiveQuestItem( 0, "TeleportKey00" )
-    GSSetVarMax( 0, "q.z0jq1.z0jq1.2", 2 )
+    GiveQuestItem( 0,"TeleportKey00")
+    GSSetVarMax( 0,"q.z0jq1.z0jq1.2",2)
+    GSSetVarMax( 0,"q.z0jq1.z0jq1.3",1)
     PortalOff( this )
   )
 )
@@ -138,12 +138,16 @@ Script PortalOff
 
 WorldScript
 (
+  TCPB=GetObjectByID("43974")
+  KChest=GetObjectByID("1000005")
+  AddObject(Recon,GetObject(1000000))
+  AddObject(Recon,GetObject(1000001))
+  AddObject(Recon,GetObject(1000009))
+  AddObject(Recon,GetObject(1000010))
+  AddObject(Recon,GetObject(1000017))
   Sleep( 2 )
-  TCPB = GetObjectByID( "43974" ) 
-  AddObject( Recon, GetObject( 1000000 )  )
-  AddObject( Recon, GetObject( 1000001 )  )
+  PortalOn(NULL)
   Quest( NULL )
-  QuestCheck(NULL)
   CheckRecon(NULL)
   Chest( NULL )
 )

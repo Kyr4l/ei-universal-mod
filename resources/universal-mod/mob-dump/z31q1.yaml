@@ -384,45 +384,50 @@ OBJECTDBFILE:
   OBJECTSECTION:
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Zombie M J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
+      UNIT_PROTOTYPE: "Human Hadagan Mage J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
       UNIT_SPELLS: None
       UNIT_QUICK_ITEMS: None
       UNIT_QUEST_ITEMS: None
       UNIT_STATS:
-        - 280
-        - 280
-        - 46
-        - 46
+        - 90
+        - 90
+        - 21
+        - 21
         - 1065353216
         - 1097859072
-        - 1050540053
-        - 1033932846
-        - 1040746633
-        - 1040746633
-        - 613232640
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
         - 1071225242
-        - 613232640
+        - 3007036718
         - 1053609165
+        - 259
         - 0
-        - 0
-        - 1124401152
-        - 1121976320
+        - 1116340224
+        - 1114112000
         - 1065353216
-        - 1107296256
-        - 1105199104
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
         - 0
         - 0
         - 0
         - 0
-        - 0
-        - 0
-        - 0
-        - 30
+        - 14
         - 1091043328
-        - 1120403456
-        - 1091043328
+        - 1112014848
+        - 0
         - 1077097267
         - 0
         - 0
@@ -432,78 +437,112 @@ OBJECTDBFILE:
         - 1065353216
         - 1065353216
         - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 5
-      NID: 11
-      OBJTYPE: 51
-      OBJNAME: "zs1"
-      OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "Zombie M J1"
-      OBJPRIMTXTR: "zombiemale00"
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+      OBJ_PLAYER: 15
+      NID: 1
+      OBJTYPE: 50
+      OBJNAME: ""
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "Human Hadagan Mage J1"
+      OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 111.1532211303711
-        - 236.39431762695312
+        - 268.00494384765625
+        - 17.976564407348633
         - 0.0
       OBJROTATION:
-        - 0.0026185044553130865
+        - 0.19936689734458923
+        - -0.0
         - 0.0
-        - 0.0
-        - 0.999996542930603
-      OBJ_USE_IN_SCRIPT: 1
+        - -0.9799249172210693
+      OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
       OBJ_QUEST_INFO: "z31q1.2"
       OBJCOMPLECTION:
-        - 1.0
         - 0.5
-        - 1.0
+        - 0.5
+        - 0.75
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
-        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 3.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 111.1532211303711
-          - 236.39431762695312
-          - 11.93847942352295
+          - 268.00494384765625
+          - 17.9765567779541
+          - 1514.8497314453125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 111.16341400146484
-            - 239.2698516845703
-            - 11.999086380004883
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 109.97872161865234
-              - 241.66168212890625
-              - 12.085580825805664
-            ACTION_PT_WAIT_SEG: 0
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
+            - 261.5057067871094
+            - 42.13286209106445
+            - 11.700699806213379
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 114.14572143554688
-            - 240.95579528808594
-            - 11.960132598876953
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 117.18000030517578
-              - 241.04916381835938
-              - 11.995317459106445
-            ACTION_PT_WAIT_SEG: 0
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
+            - 223.86419677734375
+            - 56.87504959106445
+            - 12.003005027770996
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 202.11495971679688
+            - 90.66244506835938
+            - 11.995537757873535
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 202.20375061035156
+            - 107.37257385253906
+            - 12.032732963562012
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 208.79554748535156
+            - 117.99553680419922
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 217.5616455078125
+            - 141.82260131835938
+            - 17.37276840209961
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 248.4965362548828
+            - 152.61685180664062
+            - 17.396644592285156
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 280.818359375
+            - 181.6223907470703
+            - 17.123172760009766
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 276.7206726074219
+            - 199.57569885253906
+            - 17.267854690551758
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 214
+        UNIT_LOGIC_ALARM_CONDITION: 85
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -516,9 +555,9 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 207
+        UNIT_LOGIC_NALARM: 65
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 93
+        UNIT_LOGIC_ALARM_CONDITION: 166
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -531,9 +570,9 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 86
+        UNIT_LOGIC_NALARM: 131
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 95
+        UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -546,9 +585,9 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 77
+        UNIT_LOGIC_NALARM: 65
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 89
+        UNIT_LOGIC_ALARM_CONDITION: 190
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -561,48 +600,53 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 81
+        UNIT_LOGIC_NALARM: 171
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Zombie M J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
+      UNIT_PROTOTYPE: "Human Hadagan Archer J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
       UNIT_SPELLS: None
       UNIT_QUICK_ITEMS: None
       UNIT_QUEST_ITEMS: None
       UNIT_STATS:
-        - 280
-        - 280
-        - 46
-        - 46
+        - 90
+        - 90
+        - 21
+        - 21
         - 1065353216
         - 1097859072
-        - 1050540053
-        - 1033932846
-        - 1040746633
-        - 1040746633
-        - 613232640
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
         - 1071225242
-        - 613232640
+        - 3007036718
         - 1053609165
+        - 259
         - 0
-        - 0
-        - 1124401152
-        - 1121976320
+        - 1116340224
+        - 1114112000
         - 1065353216
-        - 1107296256
-        - 1105199104
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
         - 0
         - 0
         - 0
         - 0
-        - 0
-        - 0
-        - 0
-        - 30
+        - 14
         - 1091043328
-        - 1120403456
-        - 1091043328
+        - 1112014848
+        - 0
         - 1077097267
         - 0
         - 0
@@ -612,73 +656,112 @@ OBJECTDBFILE:
         - 1065353216
         - 1065353216
         - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 5
-      NID: 10
-      OBJTYPE: 51
-      OBJNAME: "zs0"
-      OBJTEMPLATE: "unmozo0"
-      PARENTTEMPLATE: "Zombie M J1"
-      OBJPRIMTXTR: "zombiemale00"
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+      OBJ_PLAYER: 15
+      NID: 2
+      OBJTYPE: 50
+      OBJNAME: ""
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "Human Hadagan Archer J1"
+      OBJPRIMTXTR: "default0"
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 218.39833068847656
-        - 277.1217956542969
+        - 270.6547546386719
+        - 19.102447509765625
         - 0.0
       OBJROTATION:
-        - 0.5764315128326416
+        - 0.22154833376407623
+        - -0.0
         - 0.0
-        - 0.0
-        - -0.8171454668045044
-      OBJ_USE_IN_SCRIPT: 1
+        - -0.975149393081665
+      OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: "z31q1.1"
+      OBJ_QUEST_INFO: "z31q1.2"
       OBJCOMPLECTION:
-        - 1.0
         - 0.5
-        - 1.0
+        - 0.5
+        - 0.75
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
-        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 3
-        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 3.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 218.39833068847656
-          - 277.1217956542969
-          - 252.7298126220703
+          - 270.6547546386719
+          - 19.102439880371094
+          - 1994.8155517578125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 216.80140686035156
-            - 277.3805236816406
-            - 11.707452774047852
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 214.99130249023438
-              - 278.4146423339844
-              - 11.940570831298828
-            ACTION_PT_WAIT_SEG: 0
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 214.96957397460938
-              - 276.3662414550781
-              - 11.999086380004883
-            ACTION_PT_WAIT_SEG: 0
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
+            - 263.3258361816406
+            - 43.65882873535156
+            - 11.71011734008789
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 225.86834716796875
+            - 57.40895080566406
+            - 11.98666763305664
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 204.21304321289062
+            - 90.56365203857422
+            - 11.910027503967285
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 204.3422088623047
+            - 106.4744873046875
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 210.94290161132812
+            - 117.3144302368164
+            - 12.005363464355469
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 219.37501525878906
+            - 141.0029754638672
+            - 17.371646881103516
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 249.807373046875
+            - 151.4157257080078
+            - 17.253202438354492
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 282.5347900390625
+            - 181.7724151611328
+            - 17.25193214416504
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 278.6493835449219
+            - 200.33827209472656
+            - 17.194164276123047
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 214
+        UNIT_LOGIC_ALARM_CONDITION: 85
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -691,9 +774,9 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 207
+        UNIT_LOGIC_NALARM: 65
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 93
+        UNIT_LOGIC_ALARM_CONDITION: 166
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -706,9 +789,9 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 86
+        UNIT_LOGIC_NALARM: 131
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 95
+        UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -721,9 +804,9 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 77
+        UNIT_LOGIC_NALARM: 65
       UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 89
+        UNIT_LOGIC_ALARM_CONDITION: 190
         UNIT_LOGIC_HELP: 10.0
         UNIT_LOGIC_CYCLIC: 0
         UNIT_LOGIC_AGRESSION_MODE: 0
@@ -736,4 +819,957 @@ OBJECTDBFILE:
           - 0.0
           - 0.0
         UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 81
+        UNIT_LOGIC_NALARM: 171
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Fighter J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 15
+      NID: 3
+      OBJTYPE: 50
+      OBJNAME: ""
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Fighter J1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 268.6662292480469
+        - 20.404163360595703
+        - 0.0
+      OBJROTATION:
+        - 0.20620355010032654
+        - -0.0
+        - 0.0
+        - -0.9785091280937195
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z31q1.2"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.75
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 3.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 268.6662292480469
+          - 20.404155731201172
+          - 2642.71435546875
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 260.4420471191406
+            - 45.07887268066406
+            - 11.722713470458984
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 223.80528259277344
+            - 59.62083435058594
+            - 11.989087104797363
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 203.2076416015625
+            - 93.65156555175781
+            - 11.99856948852539
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 204.55279541015625
+            - 109.10787200927734
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 210.8520050048828
+            - 120.19544219970703
+            - 12.134998321533203
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 218.9908447265625
+            - 143.1630401611328
+            - 17.282428741455078
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 250.4971160888672
+            - 153.22633361816406
+            - 17.270719528198242
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 282.00244140625
+            - 183.17434692382812
+            - 17.20067596435547
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 276.94793701171875
+            - 202.19448852539062
+            - 17.222064971923828
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 85
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 166
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 131
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 190
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 171
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Mage J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+      OBJ_PLAYER: 15
+      NID: 4
+      OBJTYPE: 50
+      OBJNAME: ""
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "Human Hadagan Mage J1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 51.47076416015625
+        - 14.769104957580566
+        - 0.0
+      OBJROTATION:
+        - 0.0949784368276596
+        - 0.0
+        - 0.0
+        - 0.9954793453216553
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z31q1.2"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.75
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 3.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 51.47075653076172
+          - 14.769097328186035
+          - 3144.63525390625
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 54.95283889770508
+            - 50.18722915649414
+            - 11.461238861083984
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 73.9538345336914
+            - 93.7541275024414
+            - 11.428780555725098
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 59.94166564941406
+            - 133.62832641601562
+            - 7.360321521759033
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 67.20975494384766
+            - 153.25245666503906
+            - 9.865763664245605
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 85.76945495605469
+            - 190.4036102294922
+            - 12.046671867370605
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 102.94292449951172
+            - 206.50155639648438
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 109.54351043701172
+            - 214.82289123535156
+            - 12.031561851501465
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 120.73100280761719
+            - 207.93807983398438
+            - 12.037077903747559
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 152.69454956054688
+            - 194.6107940673828
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 201.6575469970703
+            - 164.4564666748047
+            - 12.085052490234375
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 217.5924072265625
+            - 147.1957550048828
+            - 17.35313606262207
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 246.92076110839844
+            - 155.13584899902344
+            - 17.243133544921875
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 278.6346130371094
+            - 183.7735137939453
+            - 17.237390518188477
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 273.4417724609375
+            - 204.63153076171875
+            - 17.292970657348633
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 85
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 166
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 131
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 190
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 171
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Archer J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+      OBJ_PLAYER: 15
+      NID: 5
+      OBJTYPE: 50
+      OBJNAME: ""
+      OBJTEMPLATE: "unhufe"
+      PARENTTEMPLATE: "Human Hadagan Archer J1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 53.93069076538086
+        - 14.396973609924316
+        - 0.0
+      OBJROTATION:
+        - 0.05582142993807793
+        - 0.0
+        - 0.0
+        - 0.9984407424926758
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z31q1.2"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.75
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 3.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.93068313598633
+          - 14.396965980529785
+          - 3320.837890625
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 56.81926345825195
+            - 49.11237716674805
+            - 11.423561096191406
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 76.1130599975586
+            - 94.24654388427734
+            - 11.387944221496582
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 61.866546630859375
+            - 133.63919067382812
+            - 7.259518146514893
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 69.13463592529297
+            - 153.26332092285156
+            - 9.923833847045898
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 87.05892944335938
+            - 188.98704528808594
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 104.2323989868164
+            - 205.08499145507812
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 112.15596771240234
+            - 214.75746154785156
+            - 11.999086380004883
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 119.73696899414062
+            - 206.3201141357422
+            - 12.036526679992676
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 151.7005157470703
+            - 192.99282836914062
+            - 12.056708335876465
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 200.46487426757812
+            - 162.6794891357422
+            - 12.126935005187988
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 216.17935180664062
+            - 145.93064880371094
+            - 17.35487174987793
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 247.8426513671875
+            - 153.666015625
+            - 17.412826538085938
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 279.6732177734375
+            - 182.60498046875
+            - 17.14219856262207
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 274.8486633300781
+            - 205.35891723632812
+            - 17.22303581237793
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 85
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 166
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 131
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 190
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 171
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Hadagan Fighter J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 15
+      NID: 6
+      OBJTYPE: 50
+      OBJNAME: ""
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Hadagan Fighter J1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 53.02517318725586
+        - 16.6927547454834
+        - 0.0
+      OBJROTATION:
+        - 0.027922652661800385
+        - 0.0
+        - 0.0
+        - 0.9996100664138794
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z31q1.2"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.75
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 1
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 3.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.02516555786133
+          - 16.692747116088867
+          - 4148.33984375
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 57.777530670166016
+            - 52.298187255859375
+            - 11.69619369506836
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 74.59161376953125
+            - 97.11009216308594
+            - 10.735635757446289
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 60.97157287597656
+            - 136.24620056152344
+            - 7.479316234588623
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 68.23965454101562
+            - 155.87034606933594
+            - 10.265852928161621
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 89.10401916503906
+            - 192.18003845214844
+            - 11.997642517089844
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 106.27748107910156
+            - 208.27796936035156
+            - 11.999085426330566
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 111.32444763183594
+            - 218.1503448486328
+            - 11.989730834960938
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 122.03524780273438
+            - 206.1027069091797
+            - 11.968185424804688
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 153.99879455566406
+            - 192.7754364013672
+            - 12.022911071777344
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 203.48289489746094
+            - 162.28273010253906
+            - 12.845367431640625
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 217.98155212402344
+            - 145.08135986328125
+            - 17.316909790039062
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 249.00413513183594
+            - 155.20877075195312
+            - 17.254526138305664
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 280.39239501953125
+            - 184.6633758544922
+            - 17.191686630249023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 273.16973876953125
+            - 206.87745666503906
+            - 17.194568634033203
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 85
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 166
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 131
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 65
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 190
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 171

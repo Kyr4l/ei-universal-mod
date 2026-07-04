@@ -1,0 +1,360 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Heroes : group,
+  Kanians : group,
+  ArEvil : group,
+  Green : group
+)
+
+
+DeclareScript VFire#0#1 (  this : object )
+DeclareScript VFire#0#2 (  this : object )
+DeclareScript VFire#0#3 (  this : object )
+DeclareScript VFire#1#1 (  this : object )
+DeclareScript VFire#1#3 (  this : object )
+DeclareScript VFireCity#0#1 (  this : object )
+DeclareScript VFireCity#0#2 (  this : object )
+DeclareScript VFireCity#0#3 (  this : object )
+DeclareScript VCityGates#0#1 (  this : object )
+DeclareScript VCityGates#0#2 (  this : object )
+DeclareScript VTeleport#0#1 (  this : object )
+DeclareScript VTeleport#0#2 (  this : object )
+DeclareScript VTeleport#0#3 (  this : object )
+DeclareScript VTeleport#1#1 (  this : object )
+DeclareScript VTeleport#1#2 (  this : object )
+DeclareScript VTeleport#1#3 (  this : object )
+
+
+
+Script VFire#0#1
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 20 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#1( this )
+    VFire#1#1( this )
+  )
+)
+
+Script VFire#1#1
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#1( this ) 
+  )
+)
+
+Script VFire#0#2
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#2( this )
+  )
+)
+
+Script VFire#0#3
+(
+  if
+  ( 
+    IsGreater( GetWorldTime( ) , 5 ) 
+    IsLess( GetWorldTime( ) , 6 )
+  )
+  then
+  (
+    KillScript(  )
+    VFireCity#0#3( this )
+    VFire#1#3( this )
+  )
+)
+
+Script VFire#1#3
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 6 ) 
+    IsLess( GetWorldTime( ) , 19.9 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    VFire#0#3( this ) 
+  )
+)
+
+Script VFireCity#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1395067 ) ), -0.1 ), Add( GetY( GetObject( 1395067 ) ), -0.1 ), Add( GetZ( GetObject( 1395067 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1395067 ) ), GetY( GetObject( 1395067 ) ), Add(GetZ(GetObject( 1395067 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1397266 ) ), -0.1 ), Add( GetY( GetObject( 1397266 ) ), -0.1 ), Add( GetZ( GetObject( 1397266 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1397266 ) ), GetY( GetObject( 1397266 ) ), Add(GetZ(GetObject( 1397266 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1397267 ) ), -0.1 ), Add( GetY( GetObject( 1397267 ) ), -0.1 ), Add( GetZ( GetObject( 1397267 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1397267 ) ), GetY( GetObject( 1397267 ) ), Add(GetZ(GetObject( 1397267 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1397268 ) ), -0.1 ), Add( GetY( GetObject( 1397268 ) ), -0.1 ), Add( GetZ( GetObject( 1397268 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1397268 ) ), GetY( GetObject( 1397268 ) ), Add(GetZ(GetObject( 1397268 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1397269 ) ), -0.1 ), Add( GetY( GetObject( 1397269 ) ), -0.1 ), Add( GetZ( GetObject( 1397269 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1397269 ) ), GetY( GetObject( 1397269 ) ), Add(GetZ(GetObject( 1397269 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1397270 ) ), -0.1 ), Add( GetY( GetObject( 1397270 ) ), -0.1 ), Add( GetZ( GetObject( 1397270 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1397270 ) ), GetY( GetObject( 1397270 ) ), Add(GetZ(GetObject( 1397270 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1397271 ) ), -0.1 ), Add( GetY( GetObject( 1397271 ) ), -0.1 ), Add( GetZ( GetObject( 1397271 ) ), -1.3 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1397271 ) ), GetY( GetObject( 1397271 ) ), Add(GetZ(GetObject( 1397271 ) ), 1 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1397272 ) ), -0.1 ), Add( GetY( GetObject( 1397272 ) ), -0.1 ), Add( GetZ( GetObject( 1397272 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1397272 ) ), GetY( GetObject( 1397272 ) ), Add(GetZ(GetObject( 1397272 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1397273 ) ), -0.1 ), Add( GetY( GetObject( 1397273 ) ), -0.1 ), Add( GetZ( GetObject( 1397273 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1397273 ) ), GetY( GetObject( 1397273 ) ), Add(GetZ(GetObject( 1397273 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1397274 ) ), -0.1 ), Add( GetY( GetObject( 1397274 ) ), -0.1 ), Add( GetZ( GetObject( 1397274 ) ), -1.45 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1397274 ) ), GetY( GetObject( 1397274 ) ), Add(GetZ(GetObject( 1397274 ) ), 0.5 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1397275 ) ), -0.1 ), Add( GetY( GetObject( 1397275 ) ), -0.1 ), Add( GetZ( GetObject( 1397275 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1397275 ) ), GetY( GetObject( 1397275 ) ), Add(GetZ(GetObject( 1397275 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1397276 ) ), -0.1 ), Add( GetY( GetObject( 1397276 ) ), -0.1 ), Add( GetZ( GetObject( 1397276 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1397276 ) ), GetY( GetObject( 1397276 ) ), Add(GetZ(GetObject( 1397276 ) ), 3 ), 10, 255, 225, 225 )
+  )
+)
+
+Script VFireCity#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1395067 ) ), -0.1 ), Add( GetY( GetObject( 1395067 ) ), -0.1 ), Add( GetZ( GetObject( 1395067 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1395067 ) ), GetY( GetObject( 1395067 ) ), Add(GetZ(GetObject( 1395067 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1397266 ) ), -0.1 ), Add( GetY( GetObject( 1397266 ) ), -0.1 ), Add( GetZ( GetObject( 1397266 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1397266 ) ), GetY( GetObject( 1397266 ) ), Add(GetZ(GetObject( 1397266 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1397267 ) ), -0.1 ), Add( GetY( GetObject( 1397267 ) ), -0.1 ), Add( GetZ( GetObject( 1397267 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1397267 ) ), GetY( GetObject( 1397267 ) ), Add(GetZ(GetObject( 1397267 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1397268 ) ), -0.1 ), Add( GetY( GetObject( 1397268 ) ), -0.1 ), Add( GetZ( GetObject( 1397268 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1397268 ) ), GetY( GetObject( 1397268 ) ), Add(GetZ(GetObject( 1397268 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1397269 ) ), -0.1 ), Add( GetY( GetObject( 1397269 ) ), -0.1 ), Add( GetZ( GetObject( 1397269 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1397269 ) ), GetY( GetObject( 1397269 ) ), Add(GetZ(GetObject( 1397269 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1397270 ) ), -0.1 ), Add( GetY( GetObject( 1397270 ) ), -0.1 ), Add( GetZ( GetObject( 1397270 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1397270 ) ), GetY( GetObject( 1397270 ) ), Add(GetZ(GetObject( 1397270 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1397271 ) ), -0.1 ), Add( GetY( GetObject( 1397271 ) ), -0.1 ), Add( GetZ( GetObject( 1397271 ) ), -1.3 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1397271 ) ), GetY( GetObject( 1397271 ) ), Add(GetZ(GetObject( 1397271 ) ), 1 ), 10, 255, 225, 225 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1397272 ) ), -0.1 ), Add( GetY( GetObject( 1397272 ) ), -0.1 ), Add( GetZ( GetObject( 1397272 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1397272 ) ), GetY( GetObject( 1397272 ) ), Add(GetZ(GetObject( 1397272 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1397273 ) ), -0.1 ), Add( GetY( GetObject( 1397273 ) ), -0.1 ), Add( GetZ( GetObject( 1397273 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1397273 ) ), GetY( GetObject( 1397273 ) ), Add(GetZ(GetObject( 1397273 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1397274 ) ), -0.1 ), Add( GetY( GetObject( 1397274 ) ), -0.1 ), Add( GetZ( GetObject( 1397274 ) ), -1.45 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1397274 ) ), GetY( GetObject( 1397274 ) ), Add(GetZ(GetObject( 1397274 ) ), 0.5 ), 10, 255, 225, 225 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1397275 ) ), -0.1 ), Add( GetY( GetObject( 1397275 ) ), -0.1 ), Add( GetZ( GetObject( 1397275 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1397275 ) ), GetY( GetObject( 1397275 ) ), Add(GetZ(GetObject( 1397275 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1397276 ) ), -0.1 ), Add( GetY( GetObject( 1397276 ) ), -0.1 ), Add( GetZ( GetObject( 1397276 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1397276 ) ), GetY( GetObject( 1397276 ) ), Add(GetZ(GetObject( 1397276 ) ), 3 ), 10, 255, 225, 225 )
+  )
+)
+
+Script VFireCity#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 101 )
+    DeleteParticleSource( 101 )
+    Sleep( 10 )
+    DeletePointLight( 102 )
+    DeleteParticleSource( 102 )
+    Sleep( 10 )
+    DeletePointLight( 103 )
+    DeleteParticleSource( 103 )
+    Sleep( 10 )
+    DeletePointLight( 104 )
+    DeleteParticleSource( 104 )
+    Sleep( 10 )
+    DeletePointLight( 105 )
+    DeleteParticleSource( 105 )
+    Sleep( 10 )
+    DeletePointLight( 106 )
+    DeleteParticleSource( 106 )
+    Sleep( 10 )
+    DeletePointLight( 107 )
+    DeleteParticleSource( 107 )
+    Sleep( 10 )
+    DeletePointLight( 108 )
+    DeleteParticleSource( 108 )
+    Sleep( 10 )
+    DeletePointLight( 109 )
+    DeleteParticleSource( 109 )
+    Sleep( 10 )
+    DeletePointLight( 110 )
+    DeleteParticleSource( 110 )
+    Sleep( 10 )
+    DeletePointLight( 111 )
+    DeleteParticleSource( 111 )
+    Sleep( 10 )
+    DeletePointLight( 112 )
+    DeleteParticleSource( 112 )
+  )
+)
+
+Script VCityGates#0#1
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( GetUnitOfPlayer( 0 , 0 ) , 84 , 225 ) , 7 ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 44456 ) , 1 )
+  )
+)
+
+Script VCityGates#0#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( GetUnitOfPlayer( 0 , 0 ) , 64 , 135 ) , 7 ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( GetObject( 44457 ) , 1 )
+  )
+)
+
+
+
+Script VTeleport#0#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , 80 , 84.6 ) , 1 ) ) )
+    IsEqual( GSGetVar( 0, "q.gz35j.q19j" ) , 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( VSS#i#val, Heroes ) 
+    (
+      VTeleport#0#2( VSS#i#val )
+    )
+    VTeleport#0#3( this )
+  )
+)
+
+Script VTeleport#0#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( this , 80 , 84.6 ) , 1 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP ( this , 22.9 , 65.1, 0 )
+    Sleep( 3 )
+    CreateParticleSource( 1001, GetX( this ) , GetY( this ) , GetZ( this ) , 1, "teleport" )
+  )
+)
+
+Script VTeleport#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 3 )
+    VTeleport#0#1( this )
+  )
+)
+
+Script VTeleport#1#1
+(
+  if
+  (
+    Any( i, Heroes, Not( IsGreater( DistanceUnitPoint( i , 38.3 , 41.3 ) , 1 ) ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( VSS#i#val, Heroes ) 
+    (
+      VTeleport#1#2( VSS#i#val )
+    )
+    VTeleport#1#3( this )
+  )
+)
+
+Script VTeleport#1#2
+(
+  if
+  (
+    Not( IsGreater( DistanceUnitPoint( this , 38.3 , 41.3 ) , 1 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    SetCP ( this , 79.5 , 79, 0 )
+    Sleep( 3 )
+    CreateParticleSource( 1001, GetX( this ) , GetY( this ) , GetZ( this ) , 1, "teleport" )
+  )
+)
+
+Script VTeleport#1#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 3 )
+    VTeleport#1#1( this )
+  )
+)
+
+
+
+WorldScript
+(
+  Sleep( 2 )
+  VFire#0#1( NULL )
+  VFire#0#2( NULL )
+  VFire#0#3( NULL )
+  VCityGates#0#1( NULL )
+  VCityGates#0#2( NULL )
+  VTeleport#0#3( NULL )
+  VTeleport#1#3( NULL )
+)

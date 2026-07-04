@@ -74,7 +74,7 @@ OBJECTDBFILE:
       - 0
       - 1
       - 1
-      - 1
+      - 2
       - 1
       - 1
       - 1
@@ -106,7 +106,7 @@ OBJECTDBFILE:
       - 1
       - 0
       - 1
-      - 1
+      - 2
       - 1
       - 1
       - 1
@@ -138,7 +138,7 @@ OBJECTDBFILE:
       - 1
       - 1
       - 0
-      - 1
+      - 2
       - 1
       - 1
       - 1
@@ -167,9 +167,9 @@ OBJECTDBFILE:
       - 1
       - 2
       - 1
-      - 1
-      - 1
-      - 1
+      - 2
+      - 2
+      - 2
       - 0
       - 1
       - 1
@@ -2331,14 +2331,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 57.518924713134766
-        - 195.14273071289062
+        - 57.47459030151367
+        - 194.95884704589844
         - 0.0
       OBJROTATION:
-        - 0.28559890389442444
+        - 0.2384430170059204
+        - -0.0
         - 0.0
-        - 0.0
-        - -0.9583491683006287
+        - -0.9711564779281616
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2359,14 +2359,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 59.41215133666992
-        - 195.57958984375
+        - 59.30145263671875
+        - 195.21864318847656
         - 0.0
       OBJROTATION:
-        - 0.026944909244775772
+        - 0.08792056143283844
         - 0.0
         - 0.0
-        - 0.9996369481086731
+        - 0.9961274862289429
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2387,14 +2387,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 61.13350296020508
-        - 194.68875122070312
+        - 61.118255615234375
+        - 194.361083984375
         - 0.0
       OBJROTATION:
-        - -0.42174407839775085
+        - 0.330427885055542
         - 0.0
         - 0.0
-        - -0.9067148566246033
+        - 0.9438312649726868
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2443,14 +2443,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 63.87160873413086
-        - 191.4510498046875
+        - 63.415260314941406
+        - 191.48439025878906
         - 0.0
       OBJROTATION:
         - 0.002539771143347025
-        - -0.0022939415648579597
-        - -0.6704107522964478
-        - -0.7419822812080383
+        - -0.0022939404007047415
+        - -0.6704105734825134
+        - -0.7419824600219727
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2751,14 +2751,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 79.04415130615234
-        - 178.0938720703125
+        - 79.15162658691406
+        - 178.31436157226562
         - 0.0
       OBJROTATION:
-        - -0.13495519757270813
+        - 0.023664485663175583
         - 0.0
         - 0.0
-        - -0.990851640701294
+        - 0.9997199773788452
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2779,42 +2779,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 80.80027770996094
-        - 177.36573791503906
+        - 81.09259796142578
+        - 178.91818237304688
         - 0.0
       OBJROTATION:
-        - -0.2574363350868225
+        - 0.31535086035728455
+        - -0.0
         - 0.0
-        - 0.0
-        - -0.9662953019142151
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 440
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 1.0
-        - 0.5
-    OBJECT:
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 0
-      NID: 1095186
-      OBJTYPE: 54
-      OBJNAME: "Light wall 00 (fence00)-486"
-      OBJTEMPLATE: "stwali1"
-      PARENTTEMPLATE: "Light wall 00 (fence00)"
-      OBJPRIMTXTR: "fence00"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 82.68843841552734
-        - 176.3837890625
-        - 0.0
-      OBJROTATION:
-        - -0.20881998538970947
-        - 0.0
-        - 0.0
-        - -0.9779540300369263
+        - -0.948975145816803
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2835,14 +2807,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 84.5505142211914
-        - 175.73785400390625
+        - 84.69824981689453
+        - 176.01246643066406
         - 0.0
       OBJROTATION:
-        - -0.13495522737503052
-        - 0.0
-        - 0.0
-        - -0.990851640701294
+        - 0.26007741689682007
+        - 0.4265097379684448
+        - 0.6398764848709106
+        - 0.5839583873748779
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -2863,14 +2835,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 85.77934265136719
-        - 174.51925659179688
+        - 84.94522857666016
+        - 174.4485321044922
         - 0.0
       OBJROTATION:
-        - -0.5525066256523132
-        - 0.0
-        - 0.0
-        - -0.8335084319114685
+        - 0.41489145159721375
+        - 0.5835603475570679
+        - 0.5206514596939087
+        - 0.46502092480659485
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 440
@@ -3087,42 +3059,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 81.28852844238281
-        - 176.72943115234375
+        - 80.11321258544922
+        - 178.3118896484375
         - 0.0
       OBJROTATION:
-        - 0.41489413380622864
+        - 0.05211514234542847
+        - -0.0
         - 0.0
-        - 0.0
-        - 0.9098696112632751
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 296
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.28999999165534973
-        - 0.5199999809265137
-    OBJECT:
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 0
-      NID: 1095198
-      OBJTYPE: 53
-      OBJNAME: "ReedBush01-3538"
-      OBJTEMPLATE: "naflbu8"
-      PARENTTEMPLATE: "ReedBush01"
-      OBJPRIMTXTR: "tree01"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 83.05632019042969
-        - 176.390625
-        - 0.0
-      OBJROTATION:
-        - 0.9976904988288879
-        - 0.0
-        - 0.0
-        - 0.0679233968257904
+        - -0.9986410737037659
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 296
@@ -24630,14 +24574,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 58.15943908691406
-        - 176.46206665039062
+        - 59.26388168334961
+        - 184.998046875
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.32886597514152527
         - 0.0
         - 0.0
-        - 0.0
+        - 0.9443765878677368
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -24648,7 +24592,7 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
@@ -24656,9 +24600,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 58.15943908691406
-          - 176.46206665039062
-          - 153.38107299804688
+          - 59.26388168334961
+          - 184.998046875
+          - 9.996487617492676
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -24784,14 +24728,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 73.42744445800781
-        - 169.19906616210938
+        - 68.40470123291016
+        - 172.96701049804688
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.5082898736000061
         - 0.0
         - 0.0
-        - 0.0
+        - 0.8611860275268555
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -24802,7 +24746,7 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
@@ -24810,9 +24754,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 73.42744445800781
-          - 169.19906616210938
-          - 60.02265930175781
+          - 68.40470123291016
+          - 172.96701049804688
+          - 9.92494010925293
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -24938,14 +24882,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 81.03121948242188
-        - 152.18197631835938
+        - 78.70133209228516
+        - 152.314453125
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.04449122026562691
+        - -0.0
         - 0.0
-        - 0.0
-        - 0.0
+        - -0.9990097880363464
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -24956,7 +24900,7 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
@@ -24964,9 +24908,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 81.03121948242188
-          - 152.18197631835938
-          - 10.164637565612793
+          - 78.70133209228516
+          - 152.314453125
+          - 9.997968673706055
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -25092,14 +25036,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 82.5546646118164
-        - 171.664306640625
+        - 81.89933776855469
+        - 172.62562561035156
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.09150105714797974
         - 0.0
         - 0.0
-        - 0.0
+        - 0.9958049654960632
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -25110,19 +25054,37 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 82.5546646118164
-          - 171.664306640625
-          - 10.277368545532227
+          - 81.89933776855469
+          - 172.62562561035156
+          - 10.572901725769043
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 83.71946716308594
+            - 177.81752014160156
+            - 10.915289878845215
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 87.7884750366211
+            - 186.46189880371094
+            - 10.432987213134766
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 91.09713745117188
+              - 184.37860107421875
+              - 9.83499526977539
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 226
         UNIT_LOGIC_HELP: 10.0
@@ -25246,14 +25208,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 70.74665832519531
-        - 192.6052703857422
+        - 60.33197021484375
+        - 191.21502685546875
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.3705572783946991
         - 0.0
         - 0.0
-        - 0.0
+        - 0.928809642791748
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -25264,19 +25226,45 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 70.74665832519531
-          - 192.6052703857422
-          - 282.0889587402344
+          - 60.33197021484375
+          - 191.21502685546875
+          - 9.996870040893555
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 64.47166442871094
+            - 190.9834442138672
+            - 9.997968673706055
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 66.4109878540039
+            - 195.1316375732422
+            - 9.997968673706055
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 62.25788116455078
+              - 196.78709411621094
+              - 9.997968673706055
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 70.47198486328125
+              - 193.6316375732422
+              - 9.997969627380371
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 226
         UNIT_LOGIC_HELP: 10.0
@@ -25400,14 +25388,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 62.7775993347168
-        - 198.8208770751953
+        - 57.2950325012207
+        - 191.82615661621094
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.07584822177886963
         - 0.0
         - 0.0
-        - 0.0
+        - 0.9971193671226501
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -25418,19 +25406,37 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 62.7775993347168
-          - 198.8208770751953
-          - 262.2744140625
+          - 57.2950325012207
+          - 191.82615661621094
+          - 9.997711181640625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 53.86845016479492
+            - 193.09400939941406
+            - 9.997967720031738
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 53.211524963378906
+            - 199.6201171875
+            - 9.997968673706055
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 56.54307174682617
+              - 198.89306640625
+              - 9.997967720031738
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 132
         UNIT_LOGIC_HELP: 10.0
@@ -25554,14 +25560,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 51.21044158935547
-        - 199.18382263183594
+        - 52.232215881347656
+        - 191.9569854736328
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.0505930632352829
         - 0.0
         - 0.0
-        - 0.0
+        - 0.998719334602356
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -25572,19 +25578,32 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 51.21044158935547
-          - 199.18382263183594
-          - 249.9598388671875
+          - 52.232215881347656
+          - 191.9569854736328
+          - 9.997904777526855
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 51.63845443725586
+            - 198.50076293945312
+            - 9.997968673706055
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 46.9744758605957
+              - 199.90872192382812
+              - 9.997968673706055
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 132
         UNIT_LOGIC_HELP: 10.0
@@ -25708,14 +25727,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 82.3110580444336
-        - 183.48524475097656
+        - 76.14868927001953
+        - 176.91433715820312
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.8033369183540344
         - 0.0
         - 0.0
-        - 0.0
+        - 0.595524787902832
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -25726,19 +25745,37 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 82.3110580444336
-          - 183.48524475097656
-          - 170.32638549804688
+          - 76.14868927001953
+          - 176.91433715820312
+          - 10.756182670593262
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 82.43694305419922
+            - 178.6330108642578
+            - 10.781598091125488
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 85.81488037109375
+            - 188.0309600830078
+            - 11.03925895690918
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 83.07294464111328
+              - 190.83998107910156
+              - 10.630393981933594
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 132
         UNIT_LOGIC_HELP: 10.0
@@ -25862,14 +25899,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 88.02086639404297
-        - 188.8998260498047
+        - 61.29996109008789
+        - 187.4673614501953
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.3255682587623596
         - 0.0
         - 0.0
-        - 0.0
+        - 0.9455185532569885
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -25880,19 +25917,50 @@ OBJECTDBFILE:
         - 1.0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 5.0
+        UNIT_LOGIC_HELP: 8.0
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 88.02086639404297
-          - 188.8998260498047
-          - 181.96360778808594
+          - 61.29996109008789
+          - 187.4673614501953
+          - 9.996487617492676
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 61.74333572387695
+            - 189.2262725830078
+            - 9.996487617492676
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 65.28606414794922
+            - 190.40892028808594
+            - 9.997968673706055
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 68.54653930664062
+            - 192.45834350585938
+            - 9.997968673706055
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 65.04486846923828
+              - 194.3020782470703
+              - 9.997968673706055
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 72.83245849609375
+              - 192.69500732421875
+              - 9.997969627380371
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 226
         UNIT_LOGIC_HELP: 10.0
@@ -27586,7 +27654,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 100.0009994506836
           - 172.156005859375
-          - 39.99088668823242
+          - 23.37425994873047
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -27817,3 +27885,2331 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 7
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 22
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.88482666015625
+        - 178.66943359375
+        - 0.0
+      OBJROTATION:
+        - 0.21899467706680298
+        - 0.0
+        - 0.0
+        - 0.9757260680198669
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 64.88482666015625
+          - 178.66943359375
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 23
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 80.92032623291016
+        - 167.69094848632812
+        - 0.0
+      OBJROTATION:
+        - 0.04710666462779045
+        - -0.0
+        - 0.0
+        - -0.9988898634910583
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.92032623291016
+          - 167.69094848632812
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 24
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.24366760253906
+        - 158.30105590820312
+        - 0.0
+      OBJROTATION:
+        - 0.0680156722664833
+        - 0.0
+        - 0.0
+        - 0.9976842403411865
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.24366760253906
+          - 158.30105590820312
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 25
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 76.26487731933594
+        - 152.4659423828125
+        - 0.0
+      OBJROTATION:
+        - 0.04449122026562691
+        - -0.0
+        - 0.0
+        - -0.9990097880363464
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 76.26487731933594
+          - 152.4659423828125
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 139
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 145
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 26
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.03485107421875
+        - 173.75819396972656
+        - 0.0
+      OBJROTATION:
+        - 0.3469356894493103
+        - 0.0
+        - 0.0
+        - 0.9378889203071594
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.03485107421875
+          - 173.75819396972656
+          - 10.756181716918945
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 83.69673156738281
+            - 179.06423950195312
+            - 10.88883113861084
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 87.11385345458984
+            - 187.85145568847656
+            - 10.736360549926758
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 91.17333221435547
+              - 185.90414428710938
+              - 10.053016662597656
+            ACTION_PT_WAIT_SEG: 100
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 80
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 139
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 27
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 80.94219207763672
+        - 159.430908203125
+        - 0.0
+      OBJROTATION:
+        - 0.05320701375603676
+        - 0.0
+        - 0.0
+        - 0.9985834956169128
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.94219207763672
+          - 159.430908203125
+          - 10.142361640930176
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 28
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 71.30390930175781
+        - 169.07162475585938
+        - 0.0
+      OBJROTATION:
+        - 0.24022838473320007
+        - 0.0
+        - 0.0
+        - 0.9707164168357849
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 71.30390930175781
+          - 169.07162475585938
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 80
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 144
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 29
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 56.7523307800293
+        - 182.2986297607422
+        - 0.0
+      OBJROTATION:
+        - 0.07323766499757767
+        - 0.0
+        - 0.0
+        - 0.9973145127296448
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 56.7523307800293
+          - 182.2986297607422
+          - 9.996487617492676
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 30
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 58.31040954589844
+        - 179.8050994873047
+        - 0.0
+      OBJROTATION:
+        - 0.07845813035964966
+        - 0.0
+        - 0.0
+        - 0.9969174265861511
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 58.31040954589844
+          - 179.8050994873047
+          - 9.996487617492676
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 31
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 77.67237854003906
+        - 154.08070373535156
+        - 0.0
+      OBJROTATION:
+        - 0.04449122026562691
+        - 0.0
+        - 0.0
+        - -0.9990097880363464
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 77.67237854003906
+          - 154.08070373535156
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 139
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 145
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 32
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 80.7021484375
+        - 166.2120361328125
+        - 0.0
+      OBJROTATION:
+        - 0.04710666462779045
+        - 0.0
+        - 0.0
+        - -0.9988898634910583
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 80.7021484375
+          - 166.2120361328125
+          - 9.997968673706055
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 33
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 61.90330123901367
+        - 175.36737060546875
+        - 0.0
+      OBJROTATION:
+        - 0.40832945704460144
+        - 0.0
+        - 0.0
+        - 0.912834644317627
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 61.90330123901367
+          - 175.36737060546875
+          - 9.996488571166992
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 34
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.101966857910156
+        - 189.77041625976562
+        - 0.0
+      OBJROTATION:
+        - 0.08889365941286087
+        - 0.0
+        - 0.0
+        - 0.9960411190986633
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.101966857910156
+          - 189.77041625976562
+          - 9.996487617492676
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 35
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 53.43217849731445
+        - 187.53518676757812
+        - 0.0
+      OBJROTATION:
+        - 0.07323766499757767
+        - 0.0
+        - 0.0
+        - 0.9973145127296448
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 53.43217849731445
+          - 187.53518676757812
+          - 9.996487617492676
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 40
+        - 40
+        - 13
+        - 13
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1105723392
+        - 1103626240
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 3
+      NID: 36
+      OBJTYPE: 51
+      OBJNAME: ""
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 70.95235443115234
+        - 177.15029907226562
+        - 0.0
+      OBJROTATION:
+        - 0.23768267035484314
+        - 0.0
+        - 0.0
+        - 0.9713428616523743
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 8.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 70.95235443115234
+          - 177.15029907226562
+          - 10.408560752868652
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 202
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 226
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 226

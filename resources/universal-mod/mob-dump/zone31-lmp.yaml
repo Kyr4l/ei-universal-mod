@@ -5,16 +5,13 @@ OBJECTDBFILE:
       MAX_ID: 1000000
     RANGE:
       MIN_ID: 1000001
-      MAX_ID: 1000100
-    RANGE:
-      MIN_ID: 1000101
-      MAX_ID: 1000200
-    RANGE:
-      MIN_ID: 1000201
       MAX_ID: 1000300
   DIPLOMATION:
     DIPLOMATION_FOF:
       - 0
+      - 1
+      - 1
+      - 2
       - 2
       - 2
       - 2
@@ -27,442 +24,10 @@ OBJECTDBFILE:
       - 2
       - 2
       - 2
-      - 2
-      - 2
       - 1
       - 1
       - 1
       - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 0
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 1
-      - 2
       - 1
       - 1
       - 1
@@ -507,6 +72,435 @@ OBJECTDBFILE:
       - 1
       - 1
       - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 0
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 2
       - 1
       - 1
       - 0
@@ -2588,7 +2582,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 590813
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -2780,201 +2774,6 @@ OBJECTDBFILE:
         - 0.5
         - 0.5
         - 2.0
-    UNIT:
-      UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Succub J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
-      UNIT_SPELLS:
-        - "firewall{e1,e2}"
-        - "arrow{e1,e2}"
-      UNIT_QUICK_ITEMS: None
-      UNIT_QUEST_ITEMS: None
-      UNIT_STATS:
-        - 60
-        - 60
-        - 47
-        - 47
-        - 1065353216
-        - 1097859072
-        - 1057778862
-        - 1057778862
-        - 1040746633
-        - 1040746633
-        - 3007036718
-        - 1071225242
-        - 3007036718
-        - 1053609165
-        - 0
-        - 1090519040
-        - 1117388800
-        - 1115815936
-        - 1065353216
-        - 1099431936
-        - 1096810496
-        - 0
-        - 8388608
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 16
-        - 1091043328
-        - 1120403456
-        - 0
-        - 1077097267
-        - 0
-        - 0
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 2
-      NID: 996791
-      OBJTYPE: 51
-      OBJNAME: "SuccubRedM9-996791"
-      OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "Succub J1"
-      OBJPRIMTXTR: "succubus01"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 35.0123405456543
-        - 292.84796142578125
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.5
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
-        UNIT_LOGIC_GUARD_R: 5.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 35.0123405456543
-          - 292.84796142578125
-          - 12.03754997253418
-        UNIT_LOGIC_USE: 1
-        UNIT_LOGIC_NALARM: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 36.99315643310547
-            - 293.7171325683594
-            - 12.139525413513184
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 41.31144332885742
-              - 297.65875244140625
-              - 12.234169960021973
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 49.35859680175781
-            - 282.9753723144531
-            - 11.437666893005371
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 55.403018951416016
-              - 282.6747131347656
-              - 12.025875091552734
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 41.130210876464844
-            - 279.0126953125
-            - 11.869266510009766
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 36.77886962890625
-              - 281.19659423828125
-              - 11.973102569580078
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 105
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 46
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 105
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 46
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 116
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 114
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 115
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 143
     OBJECT:
       OBJBODYPARTS: None
       OBJ_PLAYER: 4
@@ -3786,7 +3585,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 1095181
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -3940,7 +3739,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 1095192
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -4179,7 +3978,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 1095236
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -4958,7 +4757,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 1124757
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -5113,7 +4912,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 1125265
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -6428,7 +6227,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 2150749
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -101371,7 +101170,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44397029
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -101525,7 +101324,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44397030
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -101679,7 +101478,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44397031
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -101853,7 +101652,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44397032
       OBJTYPE: 50
       OBJNAME: "Peasant"
@@ -102028,7 +101827,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44397033
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
@@ -102182,7 +101981,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44397034
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -106773,7 +106572,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432610
       OBJTYPE: 50
       OBJNAME: "Peasant"
@@ -106947,7 +106746,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432611
       OBJTYPE: 50
       OBJNAME: "Peasant"
@@ -107121,7 +106920,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432612
       OBJTYPE: 50
       OBJNAME: "Peasant"
@@ -107296,7 +107095,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432613
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
@@ -107471,7 +107270,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432614
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
@@ -107646,7 +107445,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432615
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
@@ -107801,7 +107600,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432619
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -107956,7 +107755,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432620
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -108111,7 +107910,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432621
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -108266,7 +108065,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432622
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -108421,7 +108220,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432623
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -108576,7 +108375,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432624
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -108731,7 +108530,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432625
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -108886,7 +108685,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432626
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109041,7 +108840,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432627
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109196,7 +108995,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432628
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109351,7 +109150,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432629
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109506,7 +109305,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432630
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109661,7 +109460,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432631
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109816,7 +109615,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432632
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -109971,7 +109770,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432633
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -110126,7 +109925,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432634
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -110281,7 +110080,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432635
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -110436,7 +110235,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432636
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -110591,7 +110390,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432637
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -110746,7 +110545,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432639
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -110901,7 +110700,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432640
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111056,7 +110855,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432641
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111211,7 +111010,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432642
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111366,7 +111165,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432643
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111521,7 +111320,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432644
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111676,7 +111475,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432645
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111831,7 +111630,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432646
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -111986,7 +111785,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432647
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -112089,591 +111888,6 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 235
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Succub J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
-      UNIT_SPELLS:
-        - "firewall{e1,e2}"
-        - "arrow{e1,e2}"
-      UNIT_QUICK_ITEMS: None
-      UNIT_QUEST_ITEMS: None
-      UNIT_STATS:
-        - 60
-        - 60
-        - 47
-        - 47
-        - 1065353216
-        - 1097859072
-        - 1057778862
-        - 1057778862
-        - 1040746633
-        - 1040746633
-        - 3007036718
-        - 1071225242
-        - 3007036718
-        - 1053609165
-        - 0
-        - 1090519040
-        - 1117388800
-        - 1115815936
-        - 1065353216
-        - 1099431936
-        - 1096810496
-        - 0
-        - 8388608
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 16
-        - 1091043328
-        - 1120403456
-        - 0
-        - 1077097267
-        - 0
-        - 0
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 2
-      NID: 44432648
-      OBJTYPE: 51
-      OBJNAME: "SuccubRedM9-996791"
-      OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "Succub J1"
-      OBJPRIMTXTR: "succubus01"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 47.522701263427734
-        - 300.5452880859375
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.5
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
-        UNIT_LOGIC_GUARD_R: 5.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 47.522701263427734
-          - 300.5452880859375
-          - 11.94701862335205
-        UNIT_LOGIC_USE: 1
-        UNIT_LOGIC_NALARM: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 51.56937026977539
-            - 310.7786560058594
-            - 11.979369163513184
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 50.10733413696289
-              - 315.730224609375
-              - 12.01750373840332
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 50.14267349243164
-            - 297.4216003417969
-            - 11.838212013244629
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 59.97182083129883
-              - 296.9335021972656
-              - 12.594881057739258
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 42.37583923339844
-            - 294.7019348144531
-            - 12.101189613342285
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 40.70852279663086
-              - 303.8608703613281
-              - 12.174077987670898
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 168
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 171
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 162
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 87
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 122
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 107
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 160
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 222
-    UNIT:
-      UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Succub J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
-      UNIT_SPELLS:
-        - "firewall{e1,e2}"
-        - "arrow{e1,e2}"
-      UNIT_QUICK_ITEMS: None
-      UNIT_QUEST_ITEMS: None
-      UNIT_STATS:
-        - 60
-        - 60
-        - 47
-        - 47
-        - 1065353216
-        - 1097859072
-        - 1057778862
-        - 1057778862
-        - 1040746633
-        - 1040746633
-        - 3007036718
-        - 1071225242
-        - 3007036718
-        - 1053609165
-        - 0
-        - 1090519040
-        - 1117388800
-        - 1115815936
-        - 1065353216
-        - 1099431936
-        - 1096810496
-        - 0
-        - 8388608
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 16
-        - 1091043328
-        - 1120403456
-        - 0
-        - 1077097267
-        - 0
-        - 0
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 2
-      NID: 44432649
-      OBJTYPE: 51
-      OBJNAME: "SuccubRedM9-996791"
-      OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "Succub J1"
-      OBJPRIMTXTR: "succubus01"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 28.2945499420166
-        - 287.46893310546875
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.5
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
-        UNIT_LOGIC_GUARD_R: 5.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 28.2945499420166
-          - 287.46893310546875
-          - 11.849367141723633
-        UNIT_LOGIC_USE: 1
-        UNIT_LOGIC_NALARM: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 31.56062889099121
-            - 288.0191955566406
-            - 11.811505317687988
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 26.59512710571289
-              - 289.1586608886719
-              - 11.848901748657227
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 33.449188232421875
-            - 278.6249694824219
-            - 11.93741226196289
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 36.335384368896484
-              - 274.5376892089844
-              - 12.11275863647461
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 18.629079818725586
-            - 281.4435729980469
-            - 11.191654205322266
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 13.725249290466309
-              - 278.3540344238281
-              - 11.511262893676758
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 170
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 91
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 139
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 172
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 159
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 222
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 114
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 178
-    UNIT:
-      UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Succub J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
-      UNIT_SPELLS:
-        - "firewall{e1,e2}"
-        - "arrow{e1,e2}"
-      UNIT_QUICK_ITEMS: None
-      UNIT_QUEST_ITEMS: None
-      UNIT_STATS:
-        - 60
-        - 60
-        - 47
-        - 47
-        - 1065353216
-        - 1097859072
-        - 1057778862
-        - 1057778862
-        - 1040746633
-        - 1040746633
-        - 3007036718
-        - 1071225242
-        - 3007036718
-        - 1053609165
-        - 0
-        - 1090519040
-        - 1117388800
-        - 1115815936
-        - 1065353216
-        - 1099431936
-        - 1096810496
-        - 0
-        - 8388608
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 16
-        - 1091043328
-        - 1120403456
-        - 0
-        - 1077097267
-        - 0
-        - 0
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 2
-      NID: 44432650
-      OBJTYPE: 51
-      OBJNAME: "SuccubRedM9-996791"
-      OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "Succub J1"
-      OBJPRIMTXTR: "succubus01"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 38.632545471191406
-        - 309.791015625
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.5
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
-        UNIT_LOGIC_GUARD_R: 5.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 38.632545471191406
-          - 309.791015625
-          - 12.178031921386719
-        UNIT_LOGIC_USE: 1
-        UNIT_LOGIC_NALARM: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 40.8183479309082
-            - 308.0570983886719
-            - 12.03244686126709
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 48.64835739135742
-              - 304.6535949707031
-              - 11.977754592895508
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 39.11370849609375
-            - 320.3831787109375
-            - 12.134970664978027
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 36.79568862915039
-              - 326.4580078125
-              - 12.115926742553711
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 30.96105194091797
-            - 304.9316101074219
-            - 12.11021614074707
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 33.879268646240234
-              - 300.3923034667969
-              - 12.488288879394531
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 61
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 216
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 194
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 252
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 191
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 249
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 183
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 90
-    UNIT:
-      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "CowF0"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
@@ -112725,7 +111939,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432651
       OBJTYPE: 52
       OBJNAME: "CowF0-3774"
@@ -112879,7 +112093,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432652
       OBJTYPE: 52
       OBJNAME: "CowF0-3774"
@@ -113033,7 +112247,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432653
       OBJTYPE: 52
       OBJNAME: "CowF0-3774"
@@ -113187,7 +112401,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432657
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -113341,7 +112555,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432658
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -113495,7 +112709,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432659
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -113649,7 +112863,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432660
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -113803,7 +113017,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432661
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -113957,7 +113171,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432662
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -114111,7 +113325,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432663
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -114265,7 +113479,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432664
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -114419,7 +113633,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432665
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -114573,7 +113787,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432666
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -114727,7 +113941,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432667
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -114881,7 +114095,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432668
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115035,7 +114249,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432669
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115189,7 +114403,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432670
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115343,7 +114557,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432671
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115497,7 +114711,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432672
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115651,7 +114865,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432673
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115805,7 +115019,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432674
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -115959,7 +115173,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432675
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -116113,7 +115327,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432676
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -116267,7 +115481,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432677
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -116421,7 +115635,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432678
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -116575,7 +115789,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432679
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -116730,7 +115944,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432681
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -116885,7 +116099,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432682
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -117039,7 +116253,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432683
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -117193,7 +116407,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432684
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -117347,7 +116561,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432685
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -117501,7 +116715,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432686
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -117655,7 +116869,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432688
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -117809,7 +117023,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432689
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -117963,7 +117177,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432690
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -118066,201 +117280,6 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 168
     UNIT:
       UNIT_NEED_IMPORT: 0
-      UNIT_PROTOTYPE: "Succub J1"
-      UNIT_ARMORS: None
-      UNIT_WEAPONS: None
-      UNIT_SPELLS:
-        - "firewall{e1,e2}"
-        - "arrow{e1,e2}"
-      UNIT_QUICK_ITEMS: None
-      UNIT_QUEST_ITEMS: None
-      UNIT_STATS:
-        - 60
-        - 60
-        - 47
-        - 47
-        - 1065353216
-        - 1097859072
-        - 1057778862
-        - 1057778862
-        - 1040746633
-        - 1040746633
-        - 3007036718
-        - 1071225242
-        - 3007036718
-        - 1053609165
-        - 0
-        - 1090519040
-        - 1117388800
-        - 1115815936
-        - 1065353216
-        - 1099431936
-        - 1096810496
-        - 0
-        - 8388608
-        - 0
-        - 0
-        - 0
-        - 0
-        - 0
-        - 16
-        - 1091043328
-        - 1120403456
-        - 0
-        - 1077097267
-        - 0
-        - 0
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 1065353216
-        - 6579300
-        - 0
-      OBJBODYPARTS: None
-      OBJ_PLAYER: 2
-      NID: 44432691
-      OBJTYPE: 51
-      OBJNAME: "SuccubRedM9-996791"
-      OBJTEMPLATE: "unmosu"
-      PARENTTEMPLATE: "Succub J1"
-      OBJPRIMTXTR: "succubus01"
-      OBJSECTXTR: "default0"
-      OBJCOMMENTS: "none"
-      OBJPOSITION:
-        - 54.29684829711914
-        - 279.6594543457031
-        - 0.0
-      OBJROTATION:
-        - 1.0
-        - 0.0
-        - 0.0
-        - 0.0
-      OBJ_USE_IN_SCRIPT: 0
-      OBJ_IS_SHADOW: 1
-      OBJ_PARENT_ID: 4294967295
-      OBJ_QUEST_INFO: ""
-      OBJCOMPLECTION:
-        - 0.5
-        - 0.5
-        - 0.5
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 0
-        UNIT_LOGIC_HELP: 7.0
-        UNIT_LOGIC_CYCLIC: 1
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 2
-        UNIT_LOGIC_GUARD_R: 5.0
-        UNIT_LOGIC_WAIT: -1.0
-        UNIT_LOGIC_GUARD_PT:
-          - 54.29684829711914
-          - 279.6594543457031
-          - 12.186445236206055
-        UNIT_LOGIC_USE: 1
-        UNIT_LOGIC_NALARM: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 64.49884033203125
-            - 305.83551025390625
-            - 11.835977554321289
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 67.13188171386719
-              - 307.2347106933594
-              - 12.25546646118164
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 60.133384704589844
-            - 284.8127746582031
-            - 12.634703636169434
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 59.613887786865234
-              - 279.2635498046875
-              - 13.468390464782715
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 48.31707000732422
-            - 267.3512878417969
-            - 12.097807884216309
-          ACTION_PT:
-            ACTION_PT_LOOK_PT:
-              - 43.972476959228516
-              - 260.6700439453125
-              - 11.876176834106445
-            ACTION_PT_WAIT_SEG: 90
-            ACTION_PT_TURN_SPEED: 0
-            ACTION_PT_FLAGS: 0
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 34
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 42
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 54
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 187
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 227
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 86
-      UNIT_LOGIC:
-        UNIT_LOGIC_ALARM_CONDITION: 234
-        UNIT_LOGIC_HELP: 10.0
-        UNIT_LOGIC_CYCLIC: 0
-        UNIT_LOGIC_AGRESSION_MODE: 0
-        UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
-        UNIT_LOGIC_GUARD_R: 10.0
-        UNIT_LOGIC_WAIT: 0.0
-        UNIT_LOGIC_GUARD_PT:
-          - 0.0
-          - 0.0
-          - 0.0
-        UNIT_LOGIC_USE: 0
-        UNIT_LOGIC_NALARM: 94
-    UNIT:
-      UNIT_NEED_IMPORT: 0
       UNIT_PROTOTYPE: "Toad2 J1"
       UNIT_ARMORS: None
       UNIT_WEAPONS: None
@@ -118313,7 +117332,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432692
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -118467,7 +117486,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432693
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -118621,7 +117640,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432694
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -118775,7 +117794,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432695
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -118929,7 +117948,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432696
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -119083,7 +118102,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432697
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -119237,7 +118256,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432698
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -119391,7 +118410,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432699
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -119545,7 +118564,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432700
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -119699,7 +118718,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432701
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -119853,7 +118872,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432702
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -120007,7 +119026,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432705
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -120161,7 +119180,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432706
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -120315,7 +119334,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432707
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -120469,7 +119488,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432708
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -120623,7 +119642,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432709
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -120777,7 +119796,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432710
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -120931,7 +119950,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432711
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -121085,7 +120104,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432712
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -121239,7 +120258,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432713
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -121393,7 +120412,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432714
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -121547,7 +120566,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432715
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -122163,7 +121182,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432719
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -122317,7 +121336,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432720
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -122471,7 +121490,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432721
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -122625,7 +121644,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432722
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -122779,7 +121798,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432723
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -122933,7 +121952,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432724
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -123087,7 +122106,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432725
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -123241,7 +122260,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432726
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -123395,7 +122414,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432727
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -123549,7 +122568,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432728
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -123703,7 +122722,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432729
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -123857,7 +122876,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432730
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -124011,7 +123030,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432731
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -124165,7 +123184,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432732
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -124319,7 +123338,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432733
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -124585,7 +123604,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432738
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -124739,7 +123758,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432739
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -124893,7 +123912,7 @@ OBJECTDBFILE:
         - 0
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 1
       NID: 44432740
       OBJTYPE: 52
       OBJNAME: "Pig"
@@ -125047,7 +124066,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432741
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -125201,7 +124220,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432742
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -125355,7 +124374,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432743
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -125509,7 +124528,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432744
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -125663,7 +124682,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432745
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -130886,7 +129905,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432778
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131040,7 +130059,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432779
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131194,7 +130213,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432780
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131348,7 +130367,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432781
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131502,7 +130521,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432782
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131656,7 +130675,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432783
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131810,7 +130829,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432784
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -131964,7 +130983,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432785
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -132118,7 +131137,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432786
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -132272,7 +131291,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432787
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -132426,7 +131445,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432788
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -132580,7 +131599,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432789
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -132734,7 +131753,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432790
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -132888,7 +131907,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432791
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -133042,7 +132061,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432792
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -133196,7 +132215,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432793
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -133350,7 +132369,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432794
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -133504,7 +132523,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432795
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -133689,14 +132708,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 216.32669067382812
-        - 146.7952117919922
+        - 219.10366821289062
+        - 146.17201232910156
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.46406906843185425
+        - -0.0
         - 0.0
-        - 0.0
-        - 0.0
+        - -0.8857990503311157
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -133715,9 +132734,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 3.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 216.32669067382812
-          - 146.7952117919922
-          - 0.0
+          - 219.10366821289062
+          - 146.17201232910156
+          - 1528.400390625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -133864,14 +132883,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 218.09881591796875
-        - 140.9685821533203
+        - 219.80604553222656
+        - 142.53073120117188
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.9600498676300049
         - 0.0
         - 0.0
-        - 0.0
+        - -0.2798289656639099
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -133890,9 +132909,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 3.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 218.09881591796875
-          - 140.9685821533203
-          - 0.0
+          - 219.80604553222656
+          - 142.53073120117188
+          - 1145.3878173828125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -134039,14 +133058,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 219.3985595703125
-        - 144.1833953857422
+        - 224.14962768554688
+        - 145.5061492919922
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.8309847116470337
         - 0.0
         - 0.0
-        - 0.0
+        - -0.5562952756881714
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -134065,9 +133084,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 3.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 219.3985595703125
-          - 144.1833953857422
-          - 0.0
+          - 224.14962768554688
+          - 145.5061492919922
+          - 798.466064453125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -134214,14 +133233,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 246.99876403808594
-        - 151.34080505371094
+        - 248.01820373535156
+        - 151.12246704101562
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.5097925662994385
         - 0.0
         - 0.0
-        - 0.0
+        - 0.8602973818778992
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -134240,9 +133259,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 3.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 246.99876403808594
-          - 151.34080505371094
-          - 0.0
+          - 248.01820373535156
+          - 151.12246704101562
+          - 1159.7945556640625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -134538,7 +133557,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432801
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -134692,7 +133711,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432802
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -136386,7 +135405,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432813
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -136540,7 +135559,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432814
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -136694,7 +135713,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432815
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -136848,7 +135867,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432816
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -137002,7 +136021,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432817
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -137156,7 +136175,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432818
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -137310,7 +136329,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432819
       OBJTYPE: 52
       OBJNAME: "DeerF0-3809"
@@ -137464,7 +136483,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432820
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -137618,7 +136637,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432821
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -137772,7 +136791,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432822
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -137926,7 +136945,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432823
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -138080,7 +137099,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432824
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -138234,7 +137253,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432825
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -138388,7 +137407,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432826
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -138542,7 +137561,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432827
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -138696,7 +137715,7 @@ OBJECTDBFILE:
         - 174351460
         - 2570
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432828
       OBJTYPE: 52
       OBJNAME: "Grey Wolf-3329"
@@ -140236,7 +139255,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432838
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -140390,7 +139409,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432839
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -140544,7 +139563,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432840
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -140698,7 +139717,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432841
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -140852,7 +139871,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432842
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -141006,7 +140025,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432843
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -141160,7 +140179,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432844
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -141314,7 +140333,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432845
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -141468,7 +140487,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432846
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -141623,7 +140642,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432847
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -141778,7 +140797,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432848
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -141933,7 +140952,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432849
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -142088,7 +141107,7 @@ OBJECTDBFILE:
         - 84567140
         - 84215045
       OBJBODYPARTS: None
-      OBJ_PLAYER: 8
+      OBJ_PLAYER: 3
       NID: 44432850
       OBJTYPE: 51
       OBJNAME: "ToadM1-4519"
@@ -142242,7 +141261,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432851
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -142396,7 +141415,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432852
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -142550,7 +141569,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432853
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -142704,7 +141723,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432854
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -142858,7 +141877,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432855
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143012,7 +142031,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432856
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143166,7 +142185,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432857
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143320,7 +142339,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432858
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143474,7 +142493,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432859
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143628,7 +142647,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432860
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143782,7 +142801,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432861
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -143936,7 +142955,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432862
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -144090,7 +143109,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432863
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -144244,7 +143263,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432864
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -144398,7 +143417,7 @@ OBJECTDBFILE:
         - 1336420
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 9
+      OBJ_PLAYER: 3
       NID: 44432865
       OBJTYPE: 52
       OBJNAME: "TigerRedF4-5230"
@@ -144552,7 +143571,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432868
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -144706,7 +143725,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432869
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -144860,7 +143879,7 @@ OBJECTDBFILE:
         - 353380
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 3
       NID: 44432870
       OBJTYPE: 52
       OBJNAME: "BoarRedF1-1296"
@@ -145014,7 +144033,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432871
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -145168,7 +144187,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432872
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -145322,7 +144341,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432873
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -145476,7 +144495,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432874
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -145630,7 +144649,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432875
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -145784,7 +144803,7 @@ OBJECTDBFILE:
         - 3957860
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 1
+      OBJ_PLAYER: 3
       NID: 44432876
       OBJTYPE: 52
       OBJNAME: "DogRedF12-422369"
@@ -145958,7 +144977,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432877
       OBJTYPE: 50
       OBJNAME: "Peasant"
@@ -146132,7 +145151,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432878
       OBJTYPE: 50
       OBJNAME: "Peasant"
@@ -146307,7 +145326,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432879
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
@@ -146482,7 +145501,7 @@ OBJECTDBFILE:
         - "ll1"
         - "ll2"
         - "ll3"
-      OBJ_PLAYER: 0
+      OBJ_PLAYER: 2
       NID: 44432880
       OBJTYPE: 50
       OBJNAME: "Human Kania Mid Level Male-34"
@@ -146636,7 +145655,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432881
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -146790,7 +145809,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432882
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -146944,7 +145963,7 @@ OBJECTDBFILE:
         - 25443
         - 0
       OBJBODYPARTS: None
-      OBJ_PLAYER: 6
+      OBJ_PLAYER: 1
       NID: 44432883
       OBJTYPE: 52
       OBJNAME: "HareF0-3969"
@@ -148514,3 +147533,178 @@ OBJECTDBFILE:
         - 0.5
         - 0.5
         - 0.20000000298023224
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "Human Gangster M J1"
+      UNIT_ARMORS:
+        - "kania low helm.thick"
+        - "kania low plate.thick"
+        - "kania low leggins.tanned thin"
+        - "kania low gloves.silk red"
+      UNIT_WEAPONS:
+        - "long sword.iron"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1042536203
+        - 1042536203
+        - 1040191867
+        - 3007036718
+        - 1071225242
+        - 3007036718
+        - 1053609165
+        - 259
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1112014848
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 677652520
+        - 10280
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 12
+      NID: 1000001
+      OBJTYPE: 50
+      OBJNAME: "Human Kania Mid Level Male-34"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "Human Gangster M J1"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 246.79710388183594
+        - 153.65829467773438
+        - 0.0
+      OBJROTATION:
+        - 0.5262133479118347
+        - 0.0
+        - 0.0
+        - 0.8503525853157043
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.75
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 3.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 3.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 246.79710388183594
+          - 153.65829467773438
+          - 1094.794189453125
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 128
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 52
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 32
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 41
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 208
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 113
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 32
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 0.0
+        UNIT_LOGIC_GUARD_PT:
+          - 0.0
+          - 0.0
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 120

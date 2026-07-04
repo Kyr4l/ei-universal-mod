@@ -25,7 +25,8 @@ And more!
 
 This mod also includes HD Lands
 
-*Requires EIStarter & SpellAddon, already provided in the `tools/` directory (with pre-configured .ini settings)*
+*Requires EIStarter & SpellAddon, available in the [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) section*
+*also provided in the `tools/` directory (with pre-configured .ini settings)*
 *OR these can also be manually downloaded from these links below*
 
 [Starter 2.0](https://allods.gipat.ru/files/ei/soft/eistarter_obt_1.7z)
