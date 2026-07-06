@@ -1,0 +1,59 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  WoodCutter1 : object,
+  Heroes: group
+  )
+
+DeclareScript VTriger#0#156 (  this : object )
+DeclareScript VTriger#0#157 (  this : object )
+DeclareScript VCheck#0#230 (  this : object )
+
+
+Script VCheck#0#230
+(
+  if
+  (
+    GroupSize( GroupCross( UnitSee( WoodCutter1 ) , Heroes )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#157( this ) 
+  )
+)
+
+Script VTriger#0#157
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( Add( 60, Random( 10 )  )  ) 
+    VTriger#0#156( this ) 
+  )
+)
+
+Script VTriger#0#156
+(
+  if
+  (
+  )
+  then
+  ( 
+    KillScript(  ) 
+    PlayAnimation( WoodCutter1, "uattack04" ) 
+    VCheck#0#230( this ) 
+  )
+)
+
+
+WorldScript
+(
+  Sleep( 2 ) 
+  WoodCutter1 = GetObjectByID( "3751" ) 
+  VTriger#0#156( NULL ) 
+)
