@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# set colors variables
+RESTORE=$(echo -en '\001\033[0m\002')
+RED=$(echo -en '\001\033[00;31m\002')
+GREEN=$(echo -en '\001\033[00;32m\002')
+YELLOW=$(echo -en '\001\033[00;33m\002')
+BLUE=$(echo -en '\001\033[00;34m\002')
+PURPLE=$(echo -en '\001\033[00;35m\002')
+CYAN=$(echo -en '\001\033[00;36m\002')
+LYELLOW=$(echo -en '\001\033[01;33m\002')
+WHITE=$(echo -en '\001\033[01;37m\002')
+
 # disable WINE debug messages
 export WINEDEBUG=-all
 
@@ -25,7 +36,7 @@ xlsxdir="xlsx"
 function checkCommands {
     for cmd in wine rsync parallel i686-w64-mingw32-g++; do
         if ! command -v "$cmd" &>/dev/null; then
-            echo "Error: command '$cmd' is required"
+            echo "${RED}Error: command '$cmd' is required ${RESTORE}"
             exit 1
         fi
     done
@@ -33,12 +44,12 @@ function checkCommands {
 
 # create the mod directory structure
 function directoryCreation {
-    echo "CREATED MOD DIRECTORY: $moddir"
+    echo "${CYAN}CREATED MOD DIRECTORY: $moddir ${RESTORE}"
     mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands,movies}
 }
 
 function ini2Reg {
-    echo "===== PROCESSING INI FILES ========================================"
+    echo "${YELLOW}===== PROCESSING INI FILES ======================================== ${RESTORE}"
     echo "Copying INI config"
     cp -v "$inidir"/{lightsjigran,lightscavejigran}.ini "$moddir"/config 2> /dev/null
     cp -v "$inidir"/SPELLADDON.INI "$moddir"/ 2> /dev/null
@@ -53,7 +64,7 @@ function ini2Reg {
 }
 
 function makeQuests {
-    echo "===== PROCESSING QUEST FILES ========================================"
+    echo "${YELLOW}===== PROCESSING QUEST FILES ======================================== ${RESTORE}"
     # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
     echo "Converting quest INI files to REG"
     find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
@@ -75,31 +86,31 @@ function makeQuests {
 }
 
 function copyMaps {
-    echo "===== COPYING MAPS ========================================"
+    echo "${YELLOW}===== COPYING MAPS ======================================== ${RESTORE}"
     rsync -rv "$mprdir"/ "$moddir/maps"
     rsync -rv "$mobdir"/ "$moddir/maps"
 }
 
 function dumpMobFiles {
     if [[ "$dumpmobnswr" == "y" ]]; then
-        echo "===== DUMPING MOB FILES FOR GIT ========================================"
+        echo "${YELLOW}===== DUMPING MOB FILES FOR GIT ======================================== ${RESTORE}"
         parallel -j 8 --bar "python3 bin/mob.py {} $mobdumpdir/{/.}.yaml $mobdumpdir/{/.}.eis" ::: $mobdir/* > /dev/null
     fi
 }
 
 function copyMedia {
-    echo "===== COPYING MUSIC & MOVIES ========================================"
+    echo "${YELLOW}===== COPYING MUSIC & MOVIES ======================================== ${RESTORE}"
     rsync -rv "$musicdir"/ "$moddir/stream"
     rsync -vr "$moviesdir"/ "$moddir"/movies
 }
 
 function copyHdPack {
-    echo "===== COPYING HD PACK ========================================"
+    echo "${YELLOW}===== COPYING HD PACK ======================================== ${RESTORE}"
     rsync -rv "$hdpackdir"/ "$moddir/hdlands"
 }
 
 function packTexts {
-    echo "===== PACKING TEXTS & TEXTSLMP ========================================"
+    echo "${YELLOW}===== PACKING TEXTS & TEXTSLMP ======================================== ${RESTORE}"
 
     for restexts in "$resxtextsdir"/*_res; do
         local packedtexts="${restexts%_res}.res"
@@ -121,7 +132,7 @@ function dds2Mmp {
     local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
-        echo "===== PROCESSING REDRESS DDS FILES ========================================"
+        echo "${BLUE} ===== PROCESSING REDRESS DDS FILES ======================================== ${RESTORE}"
         cd $redressddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -129,7 +140,7 @@ function dds2Mmp {
     fi
 
     if [[ "$texturesnswr" == "y" ]]; then
-        echo "===== PROCESSING TEXTURES DDS FILES ========================================"
+        echo "${BLUE} ===== PROCESSING TEXTURES DDS FILES ======================================== ${RESTORE}"
         cd $texturesddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -137,7 +148,7 @@ function dds2Mmp {
     fi
 
     if [[ "$textureszonesnswr" == "y" ]]; then
-        echo "===== PROCESSING TEXTURES-ZONES DDS FILES ========================================"
+        echo "${BLUE} ===== PROCESSING TEXTURES-ZONES DDS FILES ======================================== ${RESTORE}"
         cd $textureszonesddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$textureszonesmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -146,7 +157,7 @@ function dds2Mmp {
 }
 
 function eiDbEditor {
-    echo "===== PROCESSING DATABASE & DATABASELMP ========================================"
+    echo "${YELLOW}===== PROCESSING DATABASE & DATABASELMP ======================================== ${RESTORE}"
     cd "$xlsxdir" || exit
     echo "Converting XLSX database to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx
@@ -164,7 +175,7 @@ function writeVersion {
     version=$(cat "$versionfile")
     local versiontemplate="version/version-name-format.txt"
     local configini="$inidir/config.ini"
-    echo "===== WRITING VERSION ========================================"
+    echo "${PURPLE} ===== WRITING VERSION ======================================== ${RESTORE}"
 
     if [[ "$writeversionnswr" == "y" ]]; then
         IFS='.' read -r major minor patch <<<"$version"
@@ -196,7 +207,7 @@ function writeVersion {
 }
 
 function packRes {
-    echo "===== PACKING RES FILES ========================================"
+    echo "${YELLOW} ===== PACKING RES FILES ======================================== ${RESTORE}"
 
     for resxin in "$resxdir"/*_res; do
         local resout="${resxin%_res}.res"
@@ -210,19 +221,19 @@ function packRes {
 }
 
 function addLua {
-    echo "===== ADDING LUA SCRIPTS ========================================"
+    echo "${BLUE}===== ADDING LUA SCRIPTS ======================================== ${RESTORE}"
     cp -vL "$luadir"/main.lua "$moddir"
     cp -vrL "$luadir"/lua "$moddir"/lua
 }
 
 function compileDll {
-    echo "===== COMPILING DLL ========================================"
+    echo "${YELLOW}===== COMPILING DLL ======================================== ${RESTORE}"
     i686-w64-mingw32-g++ -shared -o "$moddir"/um.dll um.cpp -static -s -O2 -Wall -Wno-unused-parameter -v
 }
 
 function replaceOldMod {
     if [[ "$replaceoldnswr" != "n" ]]; then
-        echo "===== COPYING FILES TO MOD RELEASE DIRECTORY =============================="
+        echo "${GREEN}===== COPYING FILES TO MOD RELEASE DIRECTORY ==============================${RESTORE}"
         rsync --checksum -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
@@ -249,19 +260,19 @@ function main {
 
 checkCommands
 
-echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
-echo "The options in caps are the defaults, options must be written in lowercase."
+echo "${YELLOW}Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
+echo "The options in caps are the defaults, options must be written in lowercase. ${RESTORE}"
 
-read -rp "Convert REDRESS from DDS to MMP? [y/N] " redressnswr
+read -rp "${LYELLOW}Convert REDRESS from DDS to MMP? [y/N] " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? [y/N] " texturesnswr
 read -rp "Convert TEXTURES-ZONES from DDS to MMP? [y/N] " textureszonesnswr
 read -rp "Dump MOB files? (only for version tracking with git) [y/N] " dumpmobnswr
 read -rp "Increment version? [y/N] " writeversionnswr
-read -rp "Replace the older mod files? [Y/n] " replaceoldnswr
+read -rp "Replace the older mod files? [Y/n] ${RESTORE}" replaceoldnswr
 echo ""
 
 main
 
 echo ""
-echo "DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort"
+echo "${WHITE}DONE PROCESSING $moddir | MOD VERSION $version | COMMIT HASH $commithashshort ${RESTORE}"
 echo ""
