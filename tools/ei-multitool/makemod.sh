@@ -23,7 +23,7 @@ xlsxdir="xlsx"
 
 # stop execution if rsync/wine/parallel is missing
 function checkCommands {
-    for cmd in wine rsync parallel; do
+    for cmd in wine rsync parallel i686-w64-mingw32-g++; do
         if ! command -v "$cmd" &>/dev/null; then
             echo "Error: command '$cmd' is required"
             exit 1
@@ -230,7 +230,6 @@ function replaceOldMod {
 
 # main function
 function main {
-    checkCommands
     directoryCreation
     ini2Reg
     makeQuests
@@ -247,6 +246,8 @@ function main {
     #addLua # disabled since 0.7.8
     replaceOldMod
 }
+
+checkCommands
 
 echo "Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
 echo "The options in caps are the defaults, options must be written in lowercase."

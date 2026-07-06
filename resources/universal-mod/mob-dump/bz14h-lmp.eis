@@ -12,7 +12,8 @@ GlobalVars (
   BabaSit : object,
   MuzicSit2 : object,
   MuzicSit4 : object,
-  MuzicSit : object 
+  MuzicSit : object, 
+  Rick : object
 )
 
 DeclareScript VTriger#0#1 (  this : object )
@@ -34,6 +35,7 @@ DeclareScript VTriger#0#33 (  this : object )
 DeclareScript VTriger#0#41 (  this : object )
 DeclareScript VTriger#0#44 (  this : object )
 DeclareScript VTriger#0#45 (  this : object )
+DeclareScript #RecastSpell (  this : object )
 DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
 
 Script VTriger#0#1
@@ -305,6 +307,20 @@ Script VTriger#0#45
   )
 )
 
+Script #RecastSpell
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    CastSpellUnit( "invisibility", 0, 0, Rick )
+    Sleep( 500 )
+    #RecastSpell( this )
+  )
+)
+
 Script #OnBriefingComplete
 (
   if
@@ -330,6 +346,7 @@ WorldScript
   MuzicSit2 = GetObjectByID( "423464" ) 
   MuzicSit4 = GetObjectByID( "263075" ) 
   MuzicSit = GetObjectByID( "679026" ) 
+  Rick = GetObjectByID( "1000012485" ) 
   VTriger#0#1( NULL ) 
   VTriger#0#2( NULL ) 
   VTriger#0#8( NULL ) 
@@ -339,5 +356,6 @@ WorldScript
   VTriger#0#22( NULL ) 
   VTriger#0#26( NULL ) 
   VTriger#0#33( NULL ) 
-  VTriger#0#44( NULL ) 
+  VTriger#0#44( NULL )
+  #RecastSpell( Rick )
 )
