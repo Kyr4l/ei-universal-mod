@@ -1,0 +1,13 @@
+Get to know the Master Sukro
+#show Hero
+#show Sukro
+#ANIMATION 5
+#CAMERA 11
+#phrase Sukro 1
+Greetings. I am Master Sukro, an excellent blacksmith. It's always good to see new faces in our town, especially those willing to lend a hand in these difficult times.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+And I greet you, noble blacksmith. I hope you will do something for me as well?
+#phrase Sukro 3
+Of course. But since you're not in Hadagan's service under Lord Firez, I'll be selling my craft. The results, however, won't disappoint you!

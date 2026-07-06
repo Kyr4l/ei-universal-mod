@@ -1,0 +1,17 @@
+Salute the Marshall
+#show Hero
+#show Marshal
+#ANIMATION 24
+#CAMERA 2
+#phrase Hero 1
+Greetings, noble sir!
+#ANIMATION 15
+#CAMERA 3
+#phrase Marshal 2
+The Empire needs people willing to act, not just talk. If you're looking for action, you'll find it.
+#CAMERA 2
+#phrase Hero 3
+I will try to affirm your hospitality, but now I need to get ready...
+#CAMERA 3
+#phrase Marshal 4
+At ease!

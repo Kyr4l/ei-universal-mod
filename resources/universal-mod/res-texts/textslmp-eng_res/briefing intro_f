@@ -1,0 +1,19 @@
+Pay Homage to Lord Firez
+#show Hero
+#show Firez
+#ANIMATION 26
+#CAMERA 0
+#phrase Hero 1
+Greetings, Your Excellency! How may I earn your trust?
+#ANIMATION 57
+#CAMERA 11
+#phrase Firez 2
+Survive your first week.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 3
+I want to help Hadagan reclaim its greatness on Jigran and be a part of it.
+#ANIMATION 11
+#CAMERA 11
+#phrase FirezStark 4
+Excellent. I need the living. I already have enough of the dead.
