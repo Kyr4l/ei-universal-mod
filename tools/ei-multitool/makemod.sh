@@ -7,7 +7,6 @@ GREEN=$(echo -en '\001\033[00;32m\002')
 YELLOW=$(echo -en '\001\033[00;33m\002')
 BLUE=$(echo -en '\001\033[00;34m\002')
 PURPLE=$(echo -en '\001\033[00;35m\002')
-CYAN=$(echo -en '\001\033[00;36m\002')
 LYELLOW=$(echo -en '\001\033[01;33m\002')
 WHITE=$(echo -en '\001\033[01;37m\002')
 
@@ -44,7 +43,7 @@ function checkCommands {
 
 # create the mod directory structure
 function directoryCreation {
-    echo "${CYAN}CREATED MOD DIRECTORY: $moddir ${RESTORE}"
+    echo "${GREEN}CREATED MOD DIRECTORY: $moddir ${RESTORE}"
     mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands,movies}
 }
 
@@ -175,7 +174,7 @@ function writeVersion {
     version=$(cat "$versionfile")
     local versiontemplate="version/version-name-format.txt"
     local configini="$inidir/config.ini"
-    echo "${PURPLE} ===== WRITING VERSION ======================================== ${RESTORE}"
+    echo "${PURPLE}===== WRITING VERSION ======================================== ${RESTORE}"
 
     if [[ "$writeversionnswr" == "y" ]]; then
         IFS='.' read -r major minor patch <<<"$version"

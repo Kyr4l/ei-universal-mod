@@ -1,3 +1,0 @@
-﻿It is strictly forbidden to transfer/distribute the contents of the SpellAddon folder separately!
-Files: SpellAddonInfo.txt, SPELLADDON.INI, SpellAddonX.asi must be in the same folder
-Otherwise, distribution and/or use of the SpellAddon program is NOT ALLOWED!
