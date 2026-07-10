@@ -1,0 +1,18 @@
+Crazy animals
+#show Hero
+#show Marshal
+#CAMERA 3 0 3.5 1.5
+#phrase Marshal  1
+I see you've got nothing better to do. Get over here!
+#phrase Hero  2
+Huh?
+#phrase Marshal  3
+Our men are out there holding back attacks from crazed beasts, while you're wandering around. And I can tell you've got the makings of a fine warrior. I'll put your name down. If none of our men fall, you'll earn yourself some gold.
+#phrase Hero  4
+If only Lord Firez weren't conducting his disastrous experiments...
+#phrase Marshal  5
+That is none of your concern.
+#phrase Hero  6
+I'll make sure our soldiers suffer no losses while repelling the attacks, sir.
+#phrase Marshal  7
+At ease!

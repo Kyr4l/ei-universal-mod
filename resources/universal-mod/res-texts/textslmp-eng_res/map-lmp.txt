@@ -114,9 +114,9 @@ MPGame1 1
 ## Briefing Jigran LMP
 #zone bz4mpg jigran brief
 #res
-zone31 bz31j-lmp
+zone35 bz35j-lmp
 #camera
-bz31j-lmp
+bz35j-lmp
 #figure
 ingm8leanos
 #position
@@ -124,15 +124,15 @@ ingm8leanos
 #sky
 normal
 #restrict
-167 348 30
+225 225 200
 
 ## Exit
 #exit 1
 MPGame1 1
 #deploy
-172 343 177 348
+271 218 281 225
 #remove
-169 315 180 328
+281 218 291 225
 #deployangle
 180
 

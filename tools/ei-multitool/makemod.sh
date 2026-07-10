@@ -206,7 +206,7 @@ function writeVersion {
 }
 
 function packRes {
-    echo "${YELLOW} ===== PACKING RES FILES ======================================== ${RESTORE}"
+    echo "${YELLOW}===== PACKING RES FILES ======================================== ${RESTORE}"
 
     for resxin in "$resxdir"/*_res; do
         local resout="${resxin%_res}.res"
