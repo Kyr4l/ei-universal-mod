@@ -131,7 +131,7 @@ function dds2Mmp {
     local redressmmpdir="$resxdir/redress_res"
 
     if [[ "$redressnswr" == "y" ]]; then
-        echo "${BLUE} ===== PROCESSING REDRESS DDS FILES ======================================== ${RESTORE}"
+        echo "${BLUE}===== PROCESSING REDRESS DDS FILES ======================================== ${RESTORE}"
         cd $redressddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$redressmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -139,7 +139,7 @@ function dds2Mmp {
     fi
 
     if [[ "$texturesnswr" == "y" ]]; then
-        echo "${BLUE} ===== PROCESSING TEXTURES DDS FILES ======================================== ${RESTORE}"
+        echo "${BLUE}===== PROCESSING TEXTURES DDS FILES ======================================== ${RESTORE}"
         cd $texturesddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$texturesmmpdir" ::: *.dds > /dev/null
         cd ../..
@@ -147,7 +147,7 @@ function dds2Mmp {
     fi
 
     if [[ "$textureszonesnswr" == "y" ]]; then
-        echo "${BLUE} ===== PROCESSING TEXTURES-ZONES DDS FILES ======================================== ${RESTORE}"
+        echo "${BLUE}===== PROCESSING TEXTURES-ZONES DDS FILES ======================================== ${RESTORE}"
         cd $textureszonesddsdir || exit
         parallel --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$textureszonesmmpdir" ::: *.dds > /dev/null
         cd ../..
