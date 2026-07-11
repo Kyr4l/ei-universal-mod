@@ -1,8 +1,8 @@
-<placeholder>
+placeholder
 #show Hero
-#show Baron
+#show Marshal
 #CAMERA 11
 #phrase Hero  1
-<placeholder>
-#phrase Baron  2
-<placeholder>
+placeholder
+#phrase Marshal  2
+placeholder
