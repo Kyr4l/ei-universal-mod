@@ -1,0 +1,23 @@
+## Pritown
+#zone z35q2 jigran game
+#res
+zone35 zone35-LMP
+#maps
+15 18
+zone35map zone35quest
+#weather
+rain
+#sky
+normal
+
+## To Base
+#exit 1
+bz4mpg 1
+#deploy
+357 205 367 215
+#remove
+357 205 367 215
+#deployangle
+90
+#view
+329.346
