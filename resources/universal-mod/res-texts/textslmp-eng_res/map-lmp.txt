@@ -132,7 +132,7 @@ MPGame1 1
 #deploy
 271 218 281 225
 #remove
-281 218 291 225
+290 226.6 294 233.5
 #deployangle
 180
 
