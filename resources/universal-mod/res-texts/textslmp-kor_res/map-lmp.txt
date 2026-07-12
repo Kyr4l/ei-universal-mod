@@ -114,9 +114,9 @@ MPGame1 1
 ## Briefing Jigran LMP
 #zone bz4mpg jigran brief
 #res
-zone35 bz35j-lmp
+zone35x bz35xj-lmp
 #camera
-bz35j-lmp
+bz35xj-lmp
 #figure
 ingm8leanos
 #position

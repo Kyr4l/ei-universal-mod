@@ -1,10 +1,10 @@
 ## Pritown
 #zone z35q1 suslanger game
 #res
-zone35 zone35-LMP
+zone35x zone35x-lmp
 #maps
 15 18
-zone35map zone35quest
+zone35xmap zone35xquest
 #weather
 rain
 #sky
