@@ -1,5 +1,5 @@
 ## Pritown
-#zone z35q1 suslanger game
+#zone z35q1 jigran game
 #res
 zone35x zone35x-lmp
 #maps
