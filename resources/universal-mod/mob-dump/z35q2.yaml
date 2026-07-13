@@ -1,0 +1,23 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 8000101
+      MAX_ID: 8000200
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 3.363116314379561e-44
+        - 9.528829557408756e-44
+        - 7.006492321624085e-44
+        - 1.961817850054744e-43
+      VSS_TITLE: "z18q2"
+      VSS_COMMANDS: "QStart(\"z18q2\")\nAddRectToArea(1,0,144,155,204)\nQObjArea(1)\nQObjSeeObject(\"GetObject(46470)\")\nQObjUse(\"GetObject(46470)\",1)\nQObjSeeUnit(\"GetObject(1000183)\")\nQObjKillUnit(\"GetObject(1000183)\")\nQFinish()"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+  DIRICTORY_ELEMENTS:
+  OBJECTSECTION:

@@ -1,0 +1,550 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  j : object,
+  k : object,
+  Left1 : group,
+  LeftUp1 : group,
+  LeftUp2 : group,
+  LeftUp3 : group,
+  LeftUp4 : group,
+  LeftUp5 : group,
+  LeftUp6 : group,
+  LeftUp7 : group,
+  RightUp1 : group,
+  RightUp2 : group,
+  RightUp3 : group,
+  RightUp4 : group,
+  Right1 : group,
+  Right2 : group,
+  Right3 : group,
+  Right4 : group,
+  Right5 : group
+)
+
+DeclareScript #z35q1Start (  this : object )
+DeclareScript #Wave#0 (  )
+DeclareScript #Wave#1 (  )
+DeclareScript #Wave#2 (  )
+DeclareScript #Wave#3 (  )
+DeclareScript #Wave#4 (  )
+DeclareScript #Wave#5 (  )
+DeclareScript #Wave#6 (  )
+DeclareScript #Wave#7 (  )
+DeclareScript #Wave#8 (  )
+DeclareScript #Wave#9 (  )
+DeclareScript #Fail (  )
+DeclareScript #Complete (  )
+DeclareScript #Victory#0 (  )
+DeclareScript #Victory#1 (  )
+DeclareScript #Victory#2 (  )
+DeclareScript #GoInside#0 (  )
+DeclareScript #GoInside#1 (  this : object )
+DeclareScript #Timer (  )
+
+Script #z35q1Start
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z35q1" )
+    RemoveUnitFromServer( GetObjectByID( "44432400" ) )
+    RemoveUnitFromServer( GetObjectByID( "44432401" ) )
+    RemoveUnitFromServer( GetObjectByID( "44432402" ) )
+    RemoveUnitFromServer( GetObjectByID( "44432403" ) )
+    Sleep( 2 )
+    AddMob( "z35q1_strongwarriors.mob" )
+    Sleep( 250 )
+    For( i, LeftUp1 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    ConsoleString( "#z35q1Start" )
+  )
+)
+
+Script #Wave#0
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 120 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( i, LeftUp2 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    ConsoleString( "#Wave#0" )
+  )
+)
+
+Script #Wave#1
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 190 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( i, LeftUp3 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    For( i, RightUp1 ) (
+      Run( i )
+      UMGuard( i, 301, 310, 7 )
+    )
+    ConsoleString( "#Wave#1" )
+    GSSetVar( 0, "q.z35q1.z35q1.2", 1 )
+  )
+)
+
+Script #Wave#2
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 260 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( i, LeftUp4 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    For( i, RightUp2 ) (
+      Run( i )
+      UMGuard( i, 301, 310, 7 )
+    )
+    ConsoleString( "#Wave#2" )
+  )
+)
+
+Script #Wave#3
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 330 )
+  )
+  then
+  (
+    KillScript(  ) 
+    For( i, LeftUp5 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    For( i, RightUp3 ) (
+      Run( i )
+      UMGuard( i, 301, 310, 7 )
+    )
+    ConsoleString( "#Wave#3" )
+  )
+)
+
+Script #Wave#4
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 400 )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddMob( "z35q1_add_r1.mob" )
+    Sleep( 2 )
+    AddObject( Right1, GetObjectByID( "8000201" ) )
+    AddObject( Right1, GetObjectByID( "8000202" ) )
+    For( i, LeftUp6 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    For( i, Right1 ) (
+      Run( i )
+      UMGuard( i, 367, 210, 7 )
+    )
+    ConsoleString( "#Wave#4" )
+    GSSetVar( 0, "q.z35q1.z35q1.3", 1 )
+  )
+)
+
+Script #Wave#5
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 470 )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddMob( "z35q1_add_r2.mob" )
+    Sleep( 2 )
+    AddObject( Right2, GetObjectByID( "8000203" ) )
+    AddObject( Right2, GetObjectByID( "8000204" ) )
+    For( i, LeftUp7 ) (
+      Run( i )
+      UMGuard( i, 87, 277, 7 )
+    )
+    For( i, RightUp4 ) (
+      Run( i )
+      UMGuard( i, 301, 310, 7 )
+    )
+    For( i, Right2 ) (
+      Run( i )
+      UMGuard( i, 367, 210, 7 )
+    )
+    ConsoleString( "#Wave#5" )
+  )
+)
+
+Script #Wave#6
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 540 )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddMob( "z35q1_add_r3.mob" )
+    Sleep( 2 )
+    AddObject( Right3, GetObjectByID( "8000205" ) )
+    AddObject( Right3, GetObjectByID( "8000206" ) )
+    For( i, Right3 ) (
+      Run( i )
+      UMGuard( i, 367, 210, 7 )
+    )
+    ConsoleString( "#Wave#6" )
+  )
+)
+
+Script #Wave#7
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 610 )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddMob( "z35q1_add_r4.mob" )
+    Sleep( 2 )
+    AddObject( Right4, GetObjectByID( "8000207" ) )
+    AddObject( Right4, GetObjectByID( "8000208" ) )
+    AddObject( Right4, GetObjectByID( "8000209" ) )
+    For( i, Right4 ) (
+      Run( i )
+      UMGuard( i, 367, 210, 7 )
+    )
+    ConsoleString( "#Wave#7" )
+  )
+)
+
+Script #Wave#8
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 680 )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddMob( "z35q1_add_r5.mob" )
+    Sleep( 2 )
+    GSSetVar( 0, "z35q1.crap1o", 1 )
+    AddObject( Right5, GetObjectByID( "8000210" ) )
+    AddObject( Right5, GetObjectByID( "8000211" ) )
+    AddObject( Right5, GetObjectByID( "8000212" ) )
+    For( i, Right5 ) (
+      Run( i )
+      UMGuard( i, 367, 210, 7 )
+    )
+    ConsoleString( "#Wave#8" )
+  )
+)
+
+Script #Wave#9
+(
+  if
+  (
+    IsGreater( GSGetVar( 0, "techtime" ), 750 )
+  )
+  then
+  (
+    KillScript(  ) 
+    AddMob( "z35q1_add_l1.mob" )
+    Sleep( 2 )
+    AddObject( Left1, GetObjectByID( "8000213" ) )
+    AddObject( Left1, GetObjectByID( "8000214" ) )
+    AddObject( Left1, GetObjectByID( "8000215" ) )
+    AddObject( Left1, GetObjectByID( "8000216" ) )
+    AddObject( Left1, GetObjectByID( "8000217" ) )
+    AddObject( Left1, GetObjectByID( "8000218" ) )
+    AddObject( Left1, GetObjectByID( "8000219" ) )
+    For( i, Left1 ) (
+      Run( i )
+      UMGuard( i, 21, 225, 7 )
+    )
+    ConsoleString( "#Wave#9" )
+    GSSetVar( 0, "q.z35q1.z35q1.4", 1 )
+  )
+)
+
+Script #Fail
+(
+  if
+  (
+    Any( i, GetPlayerUnits( 1 ), IsDead( i ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q1.z35q1.1", 3 )
+    GSSetVar( 0, "q.z35q1.z35q1", 3 )
+  )
+  if
+  (
+    Any( i, GetPlayerUnits( 2 ), IsDead( i ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q1.z35q1.1", 3 )
+    GSSetVar( 0, "q.z35q1.z35q1", 3 )
+  )
+)
+
+Script #Complete
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "q.z35q1.z35q1.2" ), 2 )
+    IsEqual( GSGetVar( 0, "q.z35q1.z35q1.3" ), 2 )
+    IsEqual( GSGetVar( 0, "q.z35q1.z35q1.4" ), 2 )
+    Not( IsEqual( GSGetVar( 0, "q.z35q1.z35q1" ), 3 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q1.z35q1.1", 2 )
+    GSSetVar( 0, "q.z35q1.z35q1", 2 )
+    QuestComplete( 0, "q.z35q1" )
+    //QFinish(  )
+  )
+)
+
+Script #Victory#0
+(
+  if
+  (
+    GSGetVar( 0, "q.z35q1.z35q1.4" )
+    Every( k, Left1, Not( IsAlive( k ) ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q1.z35q1.4", 2 )
+  )
+)
+
+Script #Victory#1
+(
+  if
+  (
+    GSGetVar( 0, "q.z35q1.z35q1.3" )
+    Every( k, Right1, Not( IsAlive( k ) ) )
+    Every( k, Right2, Not( IsAlive( k ) ) )
+    Every( k, Right3, Not( IsAlive( k ) ) )
+    Every( k, Right4, Not( IsAlive( k ) ) )
+    Every( k, Right5, Not( IsAlive( k ) ) )
+    GSGetVar( 0, "z35q1.crap1o" )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q1.z35q1.3", 2 )
+  )
+)
+
+Script #Victory#2
+(
+  if
+  (
+    GSGetVar( 0, "q.z35q1.z35q1.2" )
+    Every( k, LeftUp1, Not( IsAlive( k ) ) )
+    Every( k, LeftUp2, Not( IsAlive( k ) ) )
+    Every( k, LeftUp3, Not( IsAlive( k ) ) )
+    Every( k, LeftUp4, Not( IsAlive( k ) ) )
+    Every( k, LeftUp5, Not( IsAlive( k ) ) )
+    Every( k, LeftUp6, Not( IsAlive( k ) ) )
+    Every( k, LeftUp7, Not( IsAlive( k ) ) )
+    Every( k, RightUp1, Not( IsAlive( k ) ) )
+    Every( k, RightUp2, Not( IsAlive( k ) ) )
+    Every( k, RightUp3, Not( IsAlive( k ) ) )
+    Every( k, RightUp4, Not( IsAlive( k ) ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q1.z35q1.2", 2 )
+  )
+)
+
+Script #GoInside#0
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    For( j, GetPlayerUnits( 16 ) ) (
+      #GoInside#1( j )
+    )
+    For( j, GetPlayerUnits( 13 ) ) (
+      #GoInside#1( j )
+    )
+    For( j, GetPlayerUnits( 20 ) ) (
+      #GoInside#1( j )
+    )
+    For( j, GetPlayerUnits( 27 ) ) (
+      #GoInside#1( j )
+    )
+    For( j, GetPlayerUnits( 28 ) ) (
+      #GoInside#1( j )
+    )
+    ConsoleString( "#GoInside#0" )
+  )
+)
+
+Script #GoInside#1
+(
+  if
+  (
+    IsLess( DistanceUnitPoint( this, 87, 277 ), 7 )
+  )
+  then
+  (
+    KillScript(  ) 
+    UMGuard( this, 262, 222, 7 )
+    //ConsoleString( "#GoInside#1 a" )
+  )
+  if
+  (
+    IsLess( DistanceUnitPoint( this, 301, 310 ), 7 )
+  )
+  then
+  (
+    KillScript(  ) 
+    UMGuard( this, 262, 222, 7 )
+    //ConsoleString( "#GoInside#1 b" )
+  )
+  if
+  (
+    IsLess( DistanceUnitPoint( this, 367, 210 ), 7 )
+  )
+  then
+  (
+    KillScript(  ) 
+    UMGuard( this, 262, 222, 7 )
+    //ConsoleString( "#GoInside#1 c" )
+  )
+  if
+  (
+    IsLess( DistanceUnitPoint( this, 21, 225 ), 7 )
+  )
+  then
+  (
+    KillScript(  ) 
+    UMGuard( this, 262, 222, 7 )
+    //ConsoleString( "#GoInside#1 d" )
+  )
+)
+
+Script #Timer
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 15 )
+    GSSetVar( 0, "techtime", Add( GSGetVar( 0, "techtime" ), 1 ) )
+    #Timer(  )
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  FixWorldTime( 9 )
+  AddObject( LeftUp4, GetObjectByID( "8000102" ) )
+  AddObject( LeftUp4, GetObjectByID( "8000103" ) )
+  AddObject( LeftUp3, GetObjectByID( "8000104" ) )
+  AddObject( LeftUp1, GetObjectByID( "8000105" ) )
+  AddObject( LeftUp1, GetObjectByID( "8000106" ) )
+  AddObject( LeftUp1, GetObjectByID( "8000107" ) )
+  AddObject( LeftUp3, GetObjectByID( "8000108" ) )
+  AddObject( LeftUp2, GetObjectByID( "8000109" ) )
+  AddObject( LeftUp2, GetObjectByID( "8000110" ) )
+  AddObject( LeftUp2, GetObjectByID( "8000111" ) )
+  AddObject( LeftUp2, GetObjectByID( "8000112" ) )
+  AddObject( LeftUp2, GetObjectByID( "8000113" ) )
+  AddObject( LeftUp3, GetObjectByID( "8000114" ) )
+  AddObject( LeftUp3, GetObjectByID( "8000115" ) )
+  AddObject( LeftUp1, GetObjectByID( "8000116" ) )
+  AddObject( LeftUp1, GetObjectByID( "8000117" ) )
+  AddObject( LeftUp1, GetObjectByID( "8000118" ) )
+  AddObject( LeftUp4, GetObjectByID( "8000119" ) )
+  AddObject( LeftUp4, GetObjectByID( "8000120" ) )
+  AddObject( LeftUp5, GetObjectByID( "8000137" ) )
+  AddObject( LeftUp5, GetObjectByID( "8000138" ) )
+  AddObject( LeftUp6, GetObjectByID( "8000136" ) )
+  AddObject( LeftUp6, GetObjectByID( "8000139" ) )
+  AddObject( LeftUp7, GetObjectByID( "8000140" ) )
+  AddObject( LeftUp7, GetObjectByID( "8000141" ) )
+  AddObject( LeftUp7, GetObjectByID( "8000142" ) )
+  AddObject( LeftUp7, GetObjectByID( "8000143" ) )
+  AddObject( RightUp1, GetObjectByID( "8000123" ) )
+  AddObject( RightUp1, GetObjectByID( "8000124" ) )
+  AddObject( RightUp1, GetObjectByID( "8000125" ) )
+  AddObject( RightUp1, GetObjectByID( "8000126" ) )
+  AddObject( RightUp2, GetObjectByID( "8000121" ) )
+  AddObject( RightUp2, GetObjectByID( "8000122" ) )
+  AddObject( RightUp2, GetObjectByID( "8000127" ) )
+  AddObject( RightUp2, GetObjectByID( "8000128" ) )
+  AddObject( RightUp3, GetObjectByID( "8000120" ) )
+  AddObject( RightUp3, GetObjectByID( "8000133" ) )
+  AddObject( RightUp3, GetObjectByID( "8000129" ) )
+  AddObject( RightUp3, GetObjectByID( "8000130" ) )
+  AddObject( RightUp4, GetObjectByID( "8000134" ) )
+  AddObject( RightUp4, GetObjectByID( "8000135" ) )
+  AddObject( RightUp4, GetObjectByID( "8000131" ) )
+  AddObject( RightUp4, GetObjectByID( "8000132" ) )
+  #z35q1Start( NULL ) 
+  #Wave#0(  )
+  #Wave#1(  )
+  #Wave#2(  )
+  #Wave#3(  )
+  #Wave#4(  )
+  #Wave#5(  )
+  #Wave#6(  )
+  #Wave#7(  )
+  #Wave#8(  )
+  #Wave#9(  )
+  #Victory#0(  )
+  #Victory#1(  )
+  #Victory#2(  )
+  #Fail(  )
+  #Complete(  )
+  #Timer(  )
+  #GoInside#0(  )
+  ConsoleString( "starts nice" )
+)

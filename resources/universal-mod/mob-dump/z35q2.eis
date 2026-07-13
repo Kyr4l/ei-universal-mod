@@ -1,0 +1,180 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  z35q2Chest : object,
+  HGate6 : object,
+  HKeykeeper : object
+)
+
+DeclareScript #z35q2Start (  )
+DeclareScript #Steal (  )
+DeclareScript #Find (  )
+DeclareScript #Inside (  )
+DeclareScript #MiniFail (  )
+DeclareScript #Fail (  )
+DeclareScript #Complete (  )
+
+Script #z35q2Start
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    QStart( "z35q2" )
+    ConsoleString( "#z35q2Start" )
+  )
+)
+
+Script #Steal
+(
+  if
+  (
+    IsEqual( GetLeverState( z35q2Chest ), 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    GiveItem( 0, "sackofitems" )
+    ConsoleString( "#Steal" )
+  )
+)
+
+Script #Find
+(
+  if
+  (
+    Any( i, Heroes, IsLess( DistanceUnitUnit( i, HGate6 ), 12.5 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.2", 2 )
+    GSSetVar( 0, "q.z35q2.z35q2.3", 1 )
+    ConsoleString( "#Find" )
+  )
+)
+
+Script #Inside
+(
+  if
+  (
+    Any( i, Heroes, Mul( IsLess( GetZ( i ), 30.25 ), Mul( IsLess( DistanceUnitPoint( i, 275, 49 ), 32.25 ), IsGreater( GetZ( i ), 27.25 ) ) ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.2", 2 )
+    GSSetVar( 0, "q.z35q2.z35q2.3", 2 )
+    GSSetVar( 0, "q.z35q2.z35q2.4", 1 )
+    ConsoleString( "#Inside a" )
+  )
+  if
+  (
+    IsEqual( GetLeverState( HGate6 ), 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.2", 2 )
+    GSSetVar( 0, "q.z35q2.z35q2.3", 2 )
+    GSSetVar( 0, "q.z35q2.z35q2.4", 1 )
+    ConsoleString( "#Inside b" )
+  )
+)
+
+Script #MiniFail
+(
+  if
+  (
+    GroupSize( GroupCross( GroupSee( GetPlayerUnits( 4 ) ), Heroes ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.4", 3 )
+    ConsoleString( "#MiniFail" )
+  )
+)
+
+Script #Fail
+(
+  if
+  (
+    Any( i, GetPlayerUnits( 1 ), IsEnemy( i, 0 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.4", 3 )
+    GSSetVar( 0, "q.z35q2.z35q2", 3 )
+    ConsoleString( "#Fail a" )
+  )
+  if
+  (
+    Any( i, GetPlayerUnits( 2 ), IsEnemy( i, 0 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.4", 3 )
+    GSSetVar( 0, "q.z35q2.z35q2", 3 )
+    ConsoleString( "#Fail b" )
+  )
+  if
+  (
+    Any( i, GetPlayerUnits( 4 ), IsDead( i ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.4", 3 )
+    GSSetVar( 0, "q.z35q2.z35q2", 3 )
+    ConsoleString( "#Fail c" )
+  )
+  if
+  (
+    Any( i, GetPlayerUnits( 4 ), IsEnemy( i, 0 ) )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2.4", 3 )
+    GSSetVar( 0, "q.z35q2.z35q2", 3 )
+    ConsoleString( "#Fail d" )
+  )
+)
+
+Script #Complete
+(
+  if
+  (
+    Not( IsEqual( GSGetVar( 0, "q.z35q2.z35q2" ), 3 ) )
+    HaveItem( 0, 152 )
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "q.z35q2.z35q2", 2 )
+    QuestComplete( 0, "q.z35q2" )
+    //QFinish(  )
+    ConsoleString( "#Complete" )
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  HGate6 = GetObjectByID( "1003832" )
+  HKeykeeper = GetObjectByID( "44433379" )
+  #z35q2Start(  )
+  #Steal(  )
+  #Find(  )
+  #Inside(  )
+  #Fail(  )
+  #MiniFail(  )
+  #Complete(  )
+  ConsoleString( "starts nice" )
+)

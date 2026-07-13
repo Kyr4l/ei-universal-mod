@@ -1,0 +1,962 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  j : object,
+  k : object,
+  Heroes : group,
+  Kanians : group,
+  ArEvil : group,
+  Green : group,
+  BarsLeft2 : object,
+  BarsULeft2 : object,
+  BarsURight3 : object,
+  BarsRight3 : object,
+  GearLeft : object,
+  GearULeft : object,
+  GearURight : object,
+  GearRight : object,
+  Firez : object,
+  Marshal : object,
+  Sukro : object,
+  YGLeft : object,
+  YGULeft : object,
+  YGURight : object,
+  YGRight : object,
+  TPlateLever : object,
+  z35q2Chest : object,
+  OutBP : object,
+  InBP : object
+)
+
+DeclareScript #Start#0 (  this : object )
+DeclareScript #Dialog#0 (  this : object, dialog : string )
+DeclareScript #CycleLever#0 ( this : object, state : float )
+DeclareScript #CycleLever#1 ( this1 : object, this2 : object, state : float, gate : string )
+DeclareScript #Teleport (  )
+DeclareScript #VFire#0#1 (  this : object )
+DeclareScript #VFire#0#2 (  this : object )
+DeclareScript #VFire#0#3 (  this : object )
+DeclareScript #VFire#1#1 (  this : object )
+DeclareScript #VFire#1#3 (  this : object )
+DeclareScript #VFireCity#0#1 (  this : object )
+DeclareScript #VFireCity#0#2 (  this : object )
+DeclareScript #VFireCity#0#3 (  this : object )
+DeclareScript #VCityGates#0#1 (  this1 : object, this2 : object, this3 : object )
+DeclareScript #VCityGates#0#2 (  this1 : object, this2 : object, this3 : object )
+DeclareScript #KChest#1 (  this : object )
+DeclareScript #KChest#2 (  this : object )
+DeclareScript #KChest#3 (  this : object )
+DeclareScript #Barell#1 (  this : object )
+DeclareScript #ESight (  )
+DeclareScript #IVision (  )
+DeclareScript #TPlate (  )
+DeclareScript #MainChest (  )
+DeclareScript #TPIn (  )
+DeclareScript #TPOut (  )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #Start#0
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    AddMob( "Autogz5jgoodtown.mob" )
+    Sleep( 5 ) 
+  )
+)
+
+Script #Dialog#0
+(
+  if
+  (
+    Not( IsEqual( GSGetVar( 0, dialog ), 1 ) )
+  )
+  then
+  (
+    KillScript(  )
+    GSSetVar( 0, dialog, 1 )
+  )
+)
+
+Script #CycleLever#0
+(
+  if
+  (
+    Not( IsEqual( GetLeverState( this ), state ) )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 45 )
+    EnableLever( this, 1 )
+    #CycleLever#0( this, GetLeverState( this ) )
+  )
+)
+
+Script #CycleLever#1
+(
+  if
+  (
+    IsEqual( GetLeverState( this1 ), GSGetVar( 0, gate ) )
+    Not( IsEqual( GetLeverState( this1 ), state ) )
+    IsEqual( GetLeverState( this1 ), 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( this2, Not( GetLeverState( this2 ) ) )
+    //ConsoleString( "g____0" )
+    //ConsoleFloat( GetX( this1 ) )
+    //ConsoleFloat( GetY( this1 ) )
+    Sleep( 45 )
+    EnableLever( this1, 1 )
+    #CycleLever#1( this1, this2, GetLeverState( this1 ), gate )
+  )
+  if
+  (
+    IsEqual( GetLeverState( this1 ), GSGetVar( 0, gate ) )
+    Not( IsEqual( GetLeverState( this1 ), state ) )
+    IsEqual( GetLeverState( this1 ), 0 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( this2, Not( GetLeverState( this2 ) ) )
+    //ConsoleString( "g____1" )
+    //ConsoleFloat( GetX( this1 ) )
+    //ConsoleFloat( GetY( this1 ) )
+    Sleep( 45 )
+    EnableLever( this1, 1 )
+    #CycleLever#1( this1, this2, GetLeverState( this1 ), gate )
+  )
+  if
+  (
+    Not( IsEqual( GetLeverState( this1 ), GSGetVar( 0, gate ) ) )
+    Not( IsEqual( GetLeverState( this1 ), state ) )
+    IsEqual( GetLeverState( this1 ), 1 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( this2, Not( GetLeverState( this2 ) ) )
+    //CastSpellPoint( "fireworks{a4;a4;a4;a4;a4;a4;a4;a4}", GetX( this1 ), GetY( this1 ), GetX( this1 ), GetY( this1 ), GetUnitOfPlayer( 0, 0 ) )
+    //ConsoleString( "g____2" )
+    //ConsoleFloat( GetX( this1 ) )
+    //ConsoleFloat( GetY( this1 ) )
+    Sleep( 45 )
+    EnableLever( this1, 1 )
+    #CycleLever#1( this1, this2, GetLeverState( this1 ), gate )
+  )
+  if
+  (
+    Not( IsEqual( GetLeverState( this1 ), GSGetVar( 0, gate ) ) )
+    Not( IsEqual( GetLeverState( this1 ), state ) )
+    IsEqual( GetLeverState( this1 ), 0 )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( this2, Not( GetLeverState( this2 ) ) )
+    //CastSpellPoint( "fireworks{a4;a4;a4;a4;a4;a4;a4;a4}", GetX( this1 ), GetY( this1 ), GetX( this1 ), GetY( this1 ), GetUnitOfPlayer( 0, 0 ) )
+    //ConsoleString( "g____3" )
+    //ConsoleFloat( GetX( this1 ) )
+    //ConsoleFloat( GetY( this1 ) )
+    Sleep( 45 )
+    EnableLever( this1, 1 )
+    #CycleLever#1( this1, this2, GetLeverState( this1 ), gate )
+  )
+)
+
+Script #VFire#0#1
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 20 )
+  )
+  then
+  (
+    KillScript(  )
+    #VFireCity#0#1( this )
+    #VFire#1#1( this )
+  )
+)
+
+Script #VFire#1#1
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    #VFire#0#1( this ) 
+  )
+)
+
+Script #VFire#0#2
+(
+  if
+  ( 
+    IsLess( GetWorldTime( ) , 5 )
+  )
+  then
+  (
+    KillScript(  )
+    #VFireCity#0#2( this )
+  )
+)
+
+Script #VFire#0#3
+(
+  if
+  ( 
+    IsGreater( GetWorldTime( ) , 5 ) 
+    IsLess( GetWorldTime( ) , 6 )
+  )
+  then
+  (
+    KillScript(  )
+    #VFireCity#0#3( this )
+    #VFire#1#3( this )
+  )
+)
+
+Script #VFire#1#3
+(
+  if
+  (
+    IsGreater( GetWorldTime( ) , 6 ) 
+    IsLess( GetWorldTime( ) , 19.9 )
+  )
+  then
+  (
+    KillScript(  )
+    Sleep( 30 )
+    #VFire#0#3( this ) 
+  )
+)
+
+Script #VFireCity#0#1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1000845 ) ), -0.1 ), Add( GetY( GetObject( 1000845 ) ), -0.1 ), Add( GetZ( GetObject( 1000845 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1000845 ) ), GetY( GetObject( 1000845 ) ), Add(GetZ(GetObject( 1000845 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1000847 ) ), -0.1 ), Add( GetY( GetObject( 1000847 ) ), -0.1 ), Add( GetZ( GetObject( 1000847 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1000847 ) ), GetY( GetObject( 1000847 ) ), Add(GetZ(GetObject( 1000847 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 103, Add(GetX( GetObject(  1000846 ) ), -0.1 ), Add( GetY( GetObject( 1000846 ) ), -0.1 ), Add( GetZ( GetObject( 1000846 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1000846 ) ), GetY( GetObject( 1000846 ) ), Add(GetZ(GetObject( 1000846 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1000848 ) ), -0.1 ), Add( GetY( GetObject( 1000848 ) ), -0.1 ), Add( GetZ( GetObject( 1000848 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1000848 ) ), GetY( GetObject( 1000848 ) ), Add(GetZ(GetObject( 1000848 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 105, Add(GetX( GetObject(  1000849 ) ), -0.1 ), Add( GetY( GetObject( 1000849 ) ), -0.1 ), Add( GetZ( GetObject( 1000849 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1000849 ) ), GetY( GetObject( 1000849 ) ), Add(GetZ(GetObject( 1000849 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1000850 ) ), -0.1 ), Add( GetY( GetObject( 1000850 ) ), -0.1 ), Add( GetZ( GetObject( 1000850 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1000850 ) ), GetY( GetObject( 1000850 ) ), Add(GetZ(GetObject( 1000850 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1000851 ) ), -0.1 ), Add( GetY( GetObject( 1000851 ) ), -0.1 ), Add( GetZ( GetObject( 1000851 ) ), -1.3 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1000851 ) ), GetY( GetObject( 1000851 ) ), Add(GetZ(GetObject( 1000851 ) ), 1 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1000852 ) ), -0.1 ), Add( GetY( GetObject( 1000852 ) ), -0.1 ), Add( GetZ( GetObject( 1000852 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1000852 ) ), GetY( GetObject( 1000852 ) ), Add(GetZ(GetObject( 1000852 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1000853 ) ), -0.1 ), Add( GetY( GetObject( 1000853 ) ), -0.1 ), Add( GetZ( GetObject( 1000853 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1000853 ) ), GetY( GetObject( 1000853 ) ), Add(GetZ(GetObject( 1000853 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1000854 ) ), -0.1 ), Add( GetY( GetObject( 1000854 ) ), -0.1 ), Add( GetZ( GetObject( 1000854 ) ), -1.45 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1000854 ) ), GetY( GetObject( 1000854 ) ), Add(GetZ(GetObject( 1000854 ) ), 0.5 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1000855 ) ), -0.1 ), Add( GetY( GetObject( 1000855 ) ), -0.1 ), Add( GetZ( GetObject( 1000855 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1000855 ) ), GetY( GetObject( 1000855 ) ), Add(GetZ(GetObject( 1000855 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1000856 ) ), -0.1 ), Add( GetY( GetObject( 1000856 ) ), -0.1 ), Add( GetZ( GetObject( 1000856 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1000856 ) ), GetY( GetObject( 1000856 ) ), Add(GetZ(GetObject( 1000856 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 113, Add(GetX( GetObject( 1095157 ) ), -0.1 ), Add( GetY( GetObject( 1095157 ) ), -0.1 ), Add( GetZ( GetObject( 1095157 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 113, GetX( GetObject( 1095157 ) ), GetY( GetObject( 1095157 ) ), Add(GetZ(GetObject( 1095157 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 114, Add(GetX( GetObject( 1095158 ) ), -0.1 ), Add( GetY( GetObject( 1095158 ) ), -0.1 ), Add( GetZ( GetObject( 1095158 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 114, GetX( GetObject( 1095158 ) ), GetY( GetObject( 1095158 ) ), Add(GetZ(GetObject( 1095158 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 115, Add(GetX( GetObject( 1095159 ) ), -0.1 ), Add( GetY( GetObject( 1095159 ) ), -0.1 ), Add( GetZ( GetObject( 1095159 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 115, GetX( GetObject( 1095159 ) ), GetY( GetObject( 1095159 ) ), Add(GetZ(GetObject( 1095159 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 116, Add(GetX( GetObject( 1095160 ) ), -0.1 ), Add( GetY( GetObject( 1095160 ) ), -0.1 ), Add( GetZ( GetObject( 1095160 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 116, GetX( GetObject( 1095160 ) ), GetY( GetObject( 1095160 ) ), Add(GetZ(GetObject( 1095160 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 117, Add(GetX( GetObject( 1095161 ) ), -0.1 ), Add( GetY( GetObject( 1095161 ) ), -0.1 ), Add( GetZ( GetObject( 1095161 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 117, GetX( GetObject( 1095161 ) ), GetY( GetObject( 1095161 ) ), Add(GetZ(GetObject( 1095161 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 118, Add(GetX( GetObject( 1095162 ) ), -0.1 ), Add( GetY( GetObject( 1095162 ) ), -0.1 ), Add( GetZ( GetObject( 1095162 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 118, GetX( GetObject( 1095162 ) ), GetY( GetObject( 1095162 ) ), Add(GetZ(GetObject( 1095162 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 119, Add(GetX( GetObject( 1095163 ) ), -0.1 ), Add( GetY( GetObject( 1095163 ) ), -0.1 ), Add( GetZ( GetObject( 1095163 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 119, GetX( GetObject( 1095163 ) ), GetY( GetObject( 1095163 ) ), Add(GetZ(GetObject( 1095163 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 120, Add(GetX( GetObject( 1095164 ) ), -0.1 ), Add( GetY( GetObject( 1095164 ) ), -0.1 ), Add( GetZ( GetObject( 1095164 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 120, GetX( GetObject( 1095164 ) ), GetY( GetObject( 1095164 ) ), Add(GetZ(GetObject( 1095164 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 121, Add(GetX( GetObject( 1095165 ) ), -0.1 ), Add( GetY( GetObject( 1095165 ) ), -0.1 ), Add( GetZ( GetObject( 1095165 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 121, GetX( GetObject( 1095165 ) ), GetY( GetObject( 1095165 ) ), Add(GetZ(GetObject( 1095165 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 122, Add(GetX( GetObject( 1095166 ) ), -0.1 ), Add( GetY( GetObject( 1095166 ) ), -0.1 ), Add( GetZ( GetObject( 1095166 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 122, GetX( GetObject( 1095166 ) ), GetY( GetObject( 1095166 ) ), Add(GetZ(GetObject( 1095166 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 123, Add(GetX( GetObject( 1095167 ) ), -0.1 ), Add( GetY( GetObject( 1095167 ) ), -0.1 ), Add( GetZ( GetObject( 1095167 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 123, GetX( GetObject( 1095167 ) ), GetY( GetObject( 1095167 ) ), Add(GetZ(GetObject( 1095167 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 124, Add(GetX( GetObject( 1095168 ) ), -0.1 ), Add( GetY( GetObject( 1095168 ) ), -0.1 ), Add( GetZ( GetObject( 1095168 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 124, GetX( GetObject( 1095168 ) ), GetY( GetObject( 1095168 ) ), Add(GetZ(GetObject( 1095168 ) ), 3 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 125, Add(GetX( GetObject( 1097444 ) ), 0 ), Add( GetY( GetObject( 1097444 ) ), 0 ), Add( GetZ( GetObject( 1097444 ) ), 0.15 ), 0.137, "campfire" )
+    CreatePointLight( 125, GetX( GetObject( 1097444 ) ), GetY( GetObject( 1097444 ) ), Add(GetZ(GetObject( 1097444 ) ), 0.313 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreateParticleSource( 126, Add(GetX( GetObject( 1097464 ) ), 0 ), Add( GetY( GetObject( 1097464 ) ), 0 ), Add( GetZ( GetObject( 1097464 ) ), 0.15 ), 0.137, "campfire" )
+    CreatePointLight( 126, GetX( GetObject( 1097464 ) ), GetY( GetObject( 1097464 ) ), Add(GetZ(GetObject( 1097464 ) ), 0.313 ), 10, 255, 225, 225 )
+    Sleep( 10 )
+    CreatePointLight( 127, GetX( GetObject( 2000426 ) ), GetY( GetObject( 2000426 ) ), Add(GetZ(GetObject( 2000426 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 128, GetX( GetObject( 2000427 ) ), GetY( GetObject( 2000427 ) ), Add(GetZ(GetObject( 2000427 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 129, GetX( GetObject( 2000428 ) ), GetY( GetObject( 2000428 ) ), Add(GetZ(GetObject( 2000428 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 130, GetX( GetObject( 2000429 ) ), GetY( GetObject( 2000429 ) ), Add(GetZ(GetObject( 2000429 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 131, GetX( GetObject( 2000430 ) ), GetY( GetObject( 2000430 ) ), Add(GetZ(GetObject( 2000430 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 132, GetX( GetObject( 2000431 ) ), GetY( GetObject( 2000431 ) ), Add(GetZ(GetObject( 2000431 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 133, GetX( GetObject( 2000432 ) ), GetY( GetObject( 2000432 ) ), Add(GetZ(GetObject( 2000432 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 134, GetX( GetObject( 2000433 ) ), GetY( GetObject( 2000433 ) ), Add(GetZ(GetObject( 2000433 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 135, GetX( GetObject( 2000434 ) ), GetY( GetObject( 2000434 ) ), Add(GetZ(GetObject( 2000434 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 136, GetX( GetObject( 2000435 ) ), GetY( GetObject( 2000435 ) ), Add(GetZ(GetObject( 2000435 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 137, GetX( GetObject( 2000436 ) ), GetY( GetObject( 2000436 ) ), Add(GetZ(GetObject( 2000436 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 138, GetX( GetObject( 2000437 ) ), GetY( GetObject( 2000437 ) ), Add(GetZ(GetObject( 2000437 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 139, GetX( GetObject( 2000438 ) ), GetY( GetObject( 2000438 ) ), Add(GetZ(GetObject( 2000438 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 140, GetX( GetObject( 2000439 ) ), GetY( GetObject( 2000439 ) ), Add(GetZ(GetObject( 2000439 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 141, GetX( GetObject( 2000440 ) ), GetY( GetObject( 2000440 ) ), Add(GetZ(GetObject( 2000440 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 142, GetX( GetObject( 2000441 ) ), GetY( GetObject( 2000441 ) ), Add(GetZ(GetObject( 2000441 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 143, GetX( GetObject( 2000442 ) ), GetY( GetObject( 2000442 ) ), Add(GetZ(GetObject( 2000442 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 144, GetX( GetObject( 2000443 ) ), GetY( GetObject( 2000443 ) ), Add(GetZ(GetObject( 2000443 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 145, GetX( GetObject( 2000444 ) ), GetY( GetObject( 2000444 ) ), Add(GetZ(GetObject( 2000444 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 146, GetX( GetObject( 2000445 ) ), GetY( GetObject( 2000445 ) ), Add(GetZ(GetObject( 2000445 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 147, GetX( GetObject( 2000446 ) ), GetY( GetObject( 2000446 ) ), Add(GetZ(GetObject( 2000446 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 148, GetX( GetObject( 2000447 ) ), GetY( GetObject( 2000447 ) ), Add(GetZ(GetObject( 2000447 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 149, GetX( GetObject( 2000448 ) ), GetY( GetObject( 2000448 ) ), Add(GetZ(GetObject( 2000448 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 150, GetX( GetObject( 2000449 ) ), GetY( GetObject( 2000449 ) ), Add(GetZ(GetObject( 2000449 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 151, GetX( GetObject( 2000450 ) ), GetY( GetObject( 2000450 ) ), Add(GetZ(GetObject( 2000450 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 153, GetX( GetObject( 2000452 ) ), GetY( GetObject( 2000452 ) ), Add(GetZ(GetObject( 2000452 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 154, GetX( GetObject( 2000453 ) ), GetY( GetObject( 2000453 ) ), Add(GetZ(GetObject( 2000453 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 155, GetX( GetObject( 2000454 ) ), GetY( GetObject( 2000454 ) ), Add(GetZ(GetObject( 2000454 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 156, GetX( GetObject( 2000455 ) ), GetY( GetObject( 2000455 ) ), Add(GetZ(GetObject( 2000455 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 157, GetX( GetObject( 2000456 ) ), GetY( GetObject( 2000456 ) ), Add(GetZ(GetObject( 2000456 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 158, GetX( GetObject( 2000457 ) ), GetY( GetObject( 2000457 ) ), Add(GetZ(GetObject( 2000457 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 159, GetX( GetObject( 2000458 ) ), GetY( GetObject( 2000458 ) ), Add(GetZ(GetObject( 2000458 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 160, GetX( GetObject( 2000459 ) ), GetY( GetObject( 2000459 ) ), Add(GetZ(GetObject( 2000459 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 161, GetX( GetObject( 2000460 ) ), GetY( GetObject( 2000460 ) ), Add(GetZ(GetObject( 2000460 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 162, GetX( GetObject( 2000461 ) ), GetY( GetObject( 2000461 ) ), Add(GetZ(GetObject( 2000461 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 163, GetX( GetObject( 2000462 ) ), GetY( GetObject( 2000462 ) ), Add(GetZ(GetObject( 2000462 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 164, GetX( GetObject( 2000463 ) ), GetY( GetObject( 2000463 ) ), Add(GetZ(GetObject( 2000463 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 165, GetX( GetObject( 2000464 ) ), GetY( GetObject( 2000464 ) ), Add(GetZ(GetObject( 2000464 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 166, GetX( GetObject( 2000465 ) ), GetY( GetObject( 2000465 ) ), Add(GetZ(GetObject( 2000465 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 167, GetX( GetObject( 2000466 ) ), GetY( GetObject( 2000466 ) ), Add(GetZ(GetObject( 2000466 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 168, GetX( GetObject( 2000467 ) ), GetY( GetObject( 2000467 ) ), Add(GetZ(GetObject( 2000467 ) ), 5 ), 15, 255, 100, 150 )
+    Sleep( 10 )
+    CreatePointLight( 169, GetX( GetObject( 2000483 ) ), GetY( GetObject( 2000483 ) ), Add(GetZ(GetObject( 2000483 ) ), 5 ), 15, 255, 100, 150 )
+  )
+)
+
+Script #VFireCity#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 101, Add(GetX( GetObject( 1000845 ) ), -0.1 ), Add( GetY( GetObject( 1000845 ) ), -0.1 ), Add( GetZ( GetObject( 1000845 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 101, GetX( GetObject( 1000845 ) ), GetY( GetObject( 1000845 ) ), Add(GetZ(GetObject( 1000845 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 102, Add(GetX( GetObject( 1000847 ) ), -0.1 ), Add( GetY( GetObject( 1000847 ) ), -0.1 ), Add( GetZ( GetObject( 1000847 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 102, GetX( GetObject( 1000847 ) ), GetY( GetObject( 1000847 ) ), Add(GetZ(GetObject( 1000847 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 103, Add(GetX( GetObject( 1000846 ) ), -0.1 ), Add( GetY( GetObject( 1000846 ) ), -0.1 ), Add( GetZ( GetObject( 1000846 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 103, GetX( GetObject( 1000846 ) ), GetY( GetObject( 1000846 ) ), Add(GetZ(GetObject( 1000846 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 104, Add(GetX( GetObject( 1000848 ) ), -0.1 ), Add( GetY( GetObject( 1000848 ) ), -0.1 ), Add( GetZ( GetObject( 1000848 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 104, GetX( GetObject( 1000848 ) ), GetY( GetObject( 1000848 ) ), Add(GetZ(GetObject( 1000848 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 105, Add(GetX( GetObject( 1000849 ) ), -0.1 ), Add( GetY( GetObject( 1000849 ) ), -0.1 ), Add( GetZ( GetObject( 1000849 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 105, GetX( GetObject( 1000849 ) ), GetY( GetObject( 1000849 ) ), Add(GetZ(GetObject( 1000849 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 106, Add(GetX( GetObject( 1000850 ) ), -0.1 ), Add( GetY( GetObject( 1000850 ) ), -0.1 ), Add( GetZ( GetObject( 1000850 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 106, GetX( GetObject( 1000850 ) ), GetY( GetObject( 1000850 ) ), Add(GetZ(GetObject( 1000850 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 107, Add(GetX( GetObject( 1000851 ) ), -0.1 ), Add( GetY( GetObject( 1000851 ) ), -0.1 ), Add( GetZ( GetObject( 1000851 ) ), -1.3 ), 0.7, "campfire" )
+    CreatePointLight( 107, GetX( GetObject( 1000851 ) ), GetY( GetObject( 1000851 ) ), Add(GetZ(GetObject( 1000851 ) ), 1 ), 10, 255, 225, 225 )
+    CreateParticleSource( 108, Add(GetX( GetObject( 1000852 ) ), -0.1 ), Add( GetY( GetObject( 1000852 ) ), -0.1 ), Add( GetZ( GetObject( 1000852 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 108, GetX( GetObject( 1000852 ) ), GetY( GetObject( 1000852 ) ), Add(GetZ(GetObject( 1000852 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 109, Add(GetX( GetObject( 1000853 ) ), -0.1 ), Add( GetY( GetObject( 1000853 ) ), -0.1 ), Add( GetZ( GetObject( 1000853 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 109, GetX( GetObject( 1000853 ) ), GetY( GetObject( 1000853 ) ), Add(GetZ(GetObject( 1000853 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 110, Add(GetX( GetObject( 1000854 ) ), -0.1 ), Add( GetY( GetObject( 1000854 ) ), -0.1 ), Add( GetZ( GetObject( 1000854 ) ), -1.45 ), 0.7, "campfire" )
+    CreatePointLight( 110, GetX( GetObject( 1000854 ) ), GetY( GetObject( 1000854 ) ), Add(GetZ(GetObject( 1000854 ) ), 0.5 ), 10, 255, 225, 225 )
+    CreateParticleSource( 111, Add(GetX( GetObject( 1000855 ) ), -0.1 ), Add( GetY( GetObject( 1000855 ) ), -0.1 ), Add( GetZ( GetObject( 1000855 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 111, GetX( GetObject( 1000855 ) ), GetY( GetObject( 1000855 ) ), Add(GetZ(GetObject( 1000855 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 112, Add(GetX( GetObject( 1000856 ) ), -0.1 ), Add( GetY( GetObject( 1000856 ) ), -0.1 ), Add( GetZ( GetObject( 1000856 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 112, GetX( GetObject( 1000856 ) ), GetY( GetObject( 1000856 ) ), Add(GetZ(GetObject( 1000856 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 113, Add(GetX( GetObject( 1095157 ) ), -0.1 ), Add( GetY( GetObject( 1095157 ) ), -0.1 ), Add( GetZ( GetObject( 1095157 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 113, GetX( GetObject( 1095157 ) ), GetY( GetObject( 1095157 ) ), Add(GetZ(GetObject( 1095157 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 114, Add(GetX( GetObject( 1095158 ) ), -0.1 ), Add( GetY( GetObject( 1095158 ) ), -0.1 ), Add( GetZ( GetObject( 1095158 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 114, GetX( GetObject( 1095158 ) ), GetY( GetObject( 1095158 ) ), Add(GetZ(GetObject( 1095158 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 115, Add(GetX( GetObject( 1095159 ) ), -0.1 ), Add( GetY( GetObject( 1095159 ) ), -0.1 ), Add( GetZ( GetObject( 1095159 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 115, GetX( GetObject( 1095159 ) ), GetY( GetObject( 1095159 ) ), Add(GetZ(GetObject( 1095159 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 116, Add(GetX( GetObject( 1095160 ) ), -0.1 ), Add( GetY( GetObject( 1095160 ) ), -0.1 ), Add( GetZ( GetObject( 1095160 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 116, GetX( GetObject( 1095160 ) ), GetY( GetObject( 1095160 ) ), Add(GetZ(GetObject( 1095160 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 117, Add(GetX( GetObject( 1095161 ) ), -0.1 ), Add( GetY( GetObject( 1095161 ) ), -0.1 ), Add( GetZ( GetObject( 1095161 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 117, GetX( GetObject( 1095161 ) ), GetY( GetObject( 1095161 ) ), Add(GetZ(GetObject( 1095161 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 118, Add(GetX( GetObject( 1095162 ) ), -0.1 ), Add( GetY( GetObject( 1095162 ) ), -0.1 ), Add( GetZ( GetObject( 1095162 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 118, GetX( GetObject( 1095162 ) ), GetY( GetObject( 1095162 ) ), Add(GetZ(GetObject( 1095162 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 119, Add(GetX( GetObject( 1095163 ) ), -0.1 ), Add( GetY( GetObject( 1095163 ) ), -0.1 ), Add( GetZ( GetObject( 1095163 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 119, GetX( GetObject( 1095163 ) ), GetY( GetObject( 1095163 ) ), Add(GetZ(GetObject( 1095163 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 120, Add(GetX( GetObject( 1095164 ) ), -0.1 ), Add( GetY( GetObject( 1095164 ) ), -0.1 ), Add( GetZ( GetObject( 1095164 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 120, GetX( GetObject( 1095164 ) ), GetY( GetObject( 1095164 ) ), Add(GetZ(GetObject( 1095164 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 121, Add(GetX( GetObject( 1095165 ) ), -0.1 ), Add( GetY( GetObject( 1095165 ) ), -0.1 ), Add( GetZ( GetObject( 1095165 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 121, GetX( GetObject( 1095165 ) ), GetY( GetObject( 1095165 ) ), Add(GetZ(GetObject( 1095165 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 122, Add(GetX( GetObject( 1095166 ) ), -0.1 ), Add( GetY( GetObject( 1095166 ) ), -0.1 ), Add( GetZ( GetObject( 1095166 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 122, GetX( GetObject( 1095166 ) ), GetY( GetObject( 1095166 ) ), Add(GetZ(GetObject( 1095166 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 123, Add(GetX( GetObject( 1095167 ) ), -0.1 ), Add( GetY( GetObject( 1095167 ) ), -0.1 ), Add( GetZ( GetObject( 1095167 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 123, GetX( GetObject( 1095167 ) ), GetY( GetObject( 1095167 ) ), Add(GetZ(GetObject( 1095167 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 124, Add(GetX( GetObject( 1095168 ) ), -0.1 ), Add( GetY( GetObject( 1095168 ) ), -0.1 ), Add( GetZ( GetObject( 1095168 ) ), 1.15 ), 0.7, "campfire" )
+    CreatePointLight( 124, GetX( GetObject( 1095168 ) ), GetY( GetObject( 1095168 ) ), Add(GetZ(GetObject( 1095168 ) ), 3 ), 10, 255, 225, 225 )
+    CreateParticleSource( 125, Add(GetX( GetObject( 1097444 ) ), 0 ), Add( GetY( GetObject( 1097444 ) ), 0 ), Add( GetZ( GetObject( 1097444 ) ), 0.15 ), 0.137, "campfire" )
+    CreatePointLight( 125, GetX( GetObject( 1097444 ) ), GetY( GetObject( 1097444 ) ), Add(GetZ(GetObject( 1097444 ) ), 0.313 ), 10, 255, 225, 225 )
+    CreateParticleSource( 126, Add(GetX( GetObject( 1097464 ) ), 0 ), Add( GetY( GetObject( 1097464 ) ), 0 ), Add( GetZ( GetObject( 1097464 ) ), 0.15 ), 0.137, "campfire" )
+    CreatePointLight( 126, GetX( GetObject( 1097464 ) ), GetY( GetObject( 1097464 ) ), Add(GetZ(GetObject( 1097464 ) ), 0.313 ), 10, 255, 225, 225 )
+    CreatePointLight( 127, GetX( GetObject( 2000426 ) ), GetY( GetObject( 2000426 ) ), Add(GetZ(GetObject( 2000426 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 128, GetX( GetObject( 2000427 ) ), GetY( GetObject( 2000427 ) ), Add(GetZ(GetObject( 2000427 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 129, GetX( GetObject( 2000428 ) ), GetY( GetObject( 2000428 ) ), Add(GetZ(GetObject( 2000428 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 130, GetX( GetObject( 2000429 ) ), GetY( GetObject( 2000429 ) ), Add(GetZ(GetObject( 2000429 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 131, GetX( GetObject( 2000430 ) ), GetY( GetObject( 2000430 ) ), Add(GetZ(GetObject( 2000430 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 132, GetX( GetObject( 2000431 ) ), GetY( GetObject( 2000431 ) ), Add(GetZ(GetObject( 2000431 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 133, GetX( GetObject( 2000432 ) ), GetY( GetObject( 2000432 ) ), Add(GetZ(GetObject( 2000432 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 134, GetX( GetObject( 2000433 ) ), GetY( GetObject( 2000433 ) ), Add(GetZ(GetObject( 2000433 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 135, GetX( GetObject( 2000434 ) ), GetY( GetObject( 2000434 ) ), Add(GetZ(GetObject( 2000434 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 136, GetX( GetObject( 2000435 ) ), GetY( GetObject( 2000435 ) ), Add(GetZ(GetObject( 2000435 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 137, GetX( GetObject( 2000436 ) ), GetY( GetObject( 2000436 ) ), Add(GetZ(GetObject( 2000436 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 138, GetX( GetObject( 2000437 ) ), GetY( GetObject( 2000437 ) ), Add(GetZ(GetObject( 2000437 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 139, GetX( GetObject( 2000438 ) ), GetY( GetObject( 2000438 ) ), Add(GetZ(GetObject( 2000438 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 140, GetX( GetObject( 2000439 ) ), GetY( GetObject( 2000439 ) ), Add(GetZ(GetObject( 2000439 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 141, GetX( GetObject( 2000440 ) ), GetY( GetObject( 2000440 ) ), Add(GetZ(GetObject( 2000440 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 142, GetX( GetObject( 2000441 ) ), GetY( GetObject( 2000441 ) ), Add(GetZ(GetObject( 2000441 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 143, GetX( GetObject( 2000442 ) ), GetY( GetObject( 2000442 ) ), Add(GetZ(GetObject( 2000442 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 144, GetX( GetObject( 2000443 ) ), GetY( GetObject( 2000443 ) ), Add(GetZ(GetObject( 2000443 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 145, GetX( GetObject( 2000444 ) ), GetY( GetObject( 2000444 ) ), Add(GetZ(GetObject( 2000444 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 146, GetX( GetObject( 2000445 ) ), GetY( GetObject( 2000445 ) ), Add(GetZ(GetObject( 2000445 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 147, GetX( GetObject( 2000446 ) ), GetY( GetObject( 2000446 ) ), Add(GetZ(GetObject( 2000446 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 148, GetX( GetObject( 2000447 ) ), GetY( GetObject( 2000447 ) ), Add(GetZ(GetObject( 2000447 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 149, GetX( GetObject( 2000448 ) ), GetY( GetObject( 2000448 ) ), Add(GetZ(GetObject( 2000448 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 150, GetX( GetObject( 2000449 ) ), GetY( GetObject( 2000449 ) ), Add(GetZ(GetObject( 2000449 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 151, GetX( GetObject( 2000450 ) ), GetY( GetObject( 2000450 ) ), Add(GetZ(GetObject( 2000450 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 153, GetX( GetObject( 2000452 ) ), GetY( GetObject( 2000452 ) ), Add(GetZ(GetObject( 2000452 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 154, GetX( GetObject( 2000453 ) ), GetY( GetObject( 2000453 ) ), Add(GetZ(GetObject( 2000453 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 155, GetX( GetObject( 2000454 ) ), GetY( GetObject( 2000454 ) ), Add(GetZ(GetObject( 2000454 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 156, GetX( GetObject( 2000455 ) ), GetY( GetObject( 2000455 ) ), Add(GetZ(GetObject( 2000455 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 157, GetX( GetObject( 2000456 ) ), GetY( GetObject( 2000456 ) ), Add(GetZ(GetObject( 2000456 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 158, GetX( GetObject( 2000457 ) ), GetY( GetObject( 2000457 ) ), Add(GetZ(GetObject( 2000457 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 159, GetX( GetObject( 2000458 ) ), GetY( GetObject( 2000458 ) ), Add(GetZ(GetObject( 2000458 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 160, GetX( GetObject( 2000459 ) ), GetY( GetObject( 2000459 ) ), Add(GetZ(GetObject( 2000459 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 161, GetX( GetObject( 2000460 ) ), GetY( GetObject( 2000460 ) ), Add(GetZ(GetObject( 2000460 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 162, GetX( GetObject( 2000461 ) ), GetY( GetObject( 2000461 ) ), Add(GetZ(GetObject( 2000461 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 163, GetX( GetObject( 2000462 ) ), GetY( GetObject( 2000462 ) ), Add(GetZ(GetObject( 2000462 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 164, GetX( GetObject( 2000463 ) ), GetY( GetObject( 2000463 ) ), Add(GetZ(GetObject( 2000463 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 165, GetX( GetObject( 2000464 ) ), GetY( GetObject( 2000464 ) ), Add(GetZ(GetObject( 2000464 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 166, GetX( GetObject( 2000465 ) ), GetY( GetObject( 2000465 ) ), Add(GetZ(GetObject( 2000465 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 167, GetX( GetObject( 2000466 ) ), GetY( GetObject( 2000466 ) ), Add(GetZ(GetObject( 2000466 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 168, GetX( GetObject( 2000467 ) ), GetY( GetObject( 2000467 ) ), Add(GetZ(GetObject( 2000467 ) ), 5 ), 15, 255, 100, 150 )
+    CreatePointLight( 169, GetX( GetObject( 2000483 ) ), GetY( GetObject( 2000483 ) ), Add(GetZ(GetObject( 2000483 ) ), 5 ), 15, 255, 100, 150 )
+  )
+)
+
+Script #VFireCity#0#3
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    DeletePointLight( 101 )
+    DeleteParticleSource( 101 )
+    Sleep( 10 )
+    DeletePointLight( 102 )
+    DeleteParticleSource( 102 )
+    Sleep( 10 )
+    DeletePointLight( 103 )
+    DeleteParticleSource( 103 )
+    Sleep( 10 )
+    DeletePointLight( 104 )
+    DeleteParticleSource( 104 )
+    Sleep( 10 )
+    DeletePointLight( 105 )
+    DeleteParticleSource( 105 )
+    Sleep( 10 )
+    DeletePointLight( 106 )
+    DeleteParticleSource( 106 )
+    Sleep( 10 )
+    DeletePointLight( 107 )
+    DeleteParticleSource( 107 )
+    Sleep( 10 )
+    DeletePointLight( 108 )
+    DeleteParticleSource( 108 )
+    Sleep( 10 )
+    DeletePointLight( 109 )
+    DeleteParticleSource( 109 )
+    Sleep( 10 )
+    DeletePointLight( 110 )
+    DeleteParticleSource( 110 )
+    Sleep( 10 )
+    DeletePointLight( 111 )
+    DeleteParticleSource( 111 )
+    Sleep( 10 )
+    DeletePointLight( 112 )
+    DeleteParticleSource( 112 )
+    Sleep( 10 )
+    DeletePointLight( 113 )
+    DeleteParticleSource( 113 )
+    Sleep( 10 )
+    DeletePointLight( 114 )
+    DeleteParticleSource( 114 )
+    Sleep( 10 )
+    DeletePointLight( 115 )
+    DeleteParticleSource( 115 )
+    Sleep( 10 )
+    DeletePointLight( 116 )
+    DeleteParticleSource( 116 )
+    Sleep( 10 )
+    DeletePointLight( 117 )
+    DeleteParticleSource( 117 )
+    Sleep( 10 )
+    DeletePointLight( 118 )
+    DeleteParticleSource( 118 )
+    Sleep( 10 )
+    DeletePointLight( 119 )
+    DeleteParticleSource( 119 )
+    Sleep( 10 )
+    DeletePointLight( 120 )
+    DeleteParticleSource( 120 )
+    Sleep( 10 )
+    DeletePointLight( 121 )
+    DeleteParticleSource( 121 )
+    Sleep( 10 )
+    DeletePointLight( 122 )
+    DeleteParticleSource( 122 )
+    Sleep( 10 )
+    DeletePointLight( 123 )
+    DeleteParticleSource( 123 )
+    Sleep( 10 )
+    DeletePointLight( 124 )
+    DeleteParticleSource( 124 )
+    Sleep( 10 )
+    DeletePointLight( 125 )
+    DeleteParticleSource( 125 )
+    Sleep( 10 )
+    DeletePointLight( 126 )
+    DeleteParticleSource( 126 )
+    Sleep( 10 )
+    DeletePointLight( 127 )
+    Sleep( 10 )
+    DeletePointLight( 128 )
+    Sleep( 10 )
+    DeletePointLight( 129 )
+    Sleep( 10 )
+    DeletePointLight( 130 )
+    Sleep( 10 )
+    DeletePointLight( 131 )
+    Sleep( 10 )
+    DeletePointLight( 132 )
+    Sleep( 10 )
+    DeletePointLight( 133 )
+    Sleep( 10 )
+    DeletePointLight( 134 )
+    Sleep( 10 )
+    DeletePointLight( 135 )
+    Sleep( 10 )
+    DeletePointLight( 136 )
+    Sleep( 10 )
+    DeletePointLight( 137 )
+    Sleep( 10 )
+    DeletePointLight( 138 )
+    Sleep( 10 )
+    DeletePointLight( 139 )
+    Sleep( 10 )
+    DeletePointLight( 140 )
+    Sleep( 10 )
+    DeletePointLight( 141 )
+    Sleep( 10 )
+    DeletePointLight( 142 )
+    Sleep( 10 )
+    DeletePointLight( 143 )
+    Sleep( 10 )
+    DeletePointLight( 144 )
+    Sleep( 10 )
+    DeletePointLight( 145 )
+    Sleep( 10 )
+    DeletePointLight( 146 )
+    Sleep( 10 )
+    DeletePointLight( 147 )
+    Sleep( 10 )
+    DeletePointLight( 148 )
+    Sleep( 10 )
+    DeletePointLight( 149 )
+    Sleep( 10 )
+    DeletePointLight( 150 )
+    Sleep( 10 )
+    DeletePointLight( 151 )
+    Sleep( 10 )
+    DeletePointLight( 152 )
+    Sleep( 10 )
+    DeletePointLight( 153 )
+    Sleep( 10 )
+    DeletePointLight( 154 )
+    Sleep( 10 )
+    DeletePointLight( 155 )
+    Sleep( 10 )
+    DeletePointLight( 156 )
+    Sleep( 10 )
+    DeletePointLight( 157 )
+    Sleep( 10 )
+    DeletePointLight( 158 )
+    Sleep( 10 )
+    DeletePointLight( 159 )
+    Sleep( 10 )
+    DeletePointLight( 160 )
+    Sleep( 10 )
+    DeletePointLight( 161 )
+    Sleep( 10 )
+    DeletePointLight( 162 )
+    Sleep( 10 )
+    DeletePointLight( 163 )
+    Sleep( 10 )
+    DeletePointLight( 164 )
+    Sleep( 10 )
+    DeletePointLight( 165 )
+    Sleep( 10 )
+    DeletePointLight( 166 )
+    Sleep( 10 )
+    DeletePointLight( 167 )
+    Sleep( 10 )
+    DeletePointLight( 168 )
+    Sleep( 10 )
+    DeletePointLight( 169 )
+  )
+)
+
+Script #VCityGates#0#1
+(
+  if
+  (
+    Add( GSGetVar( 0, "q.z35q1.z35q1" ), Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( this2, 1 )
+  )
+)
+
+Script #VCityGates#0#2
+(
+  if
+  (
+    Not( GSGetVar( 0, "q.z35q1.z35q1" ) )
+    Not( Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
+  )
+  then
+  (
+    KillScript(  )
+    SwitchLeverState( this2, 1 )
+  )
+)
+
+Script #KChest#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 6085 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 6085 ) , 0 )
+  )
+)
+
+Script #KChest#2
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 394351 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 394351 ) , 0 )
+  )
+)
+
+Script #KChest#3
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 4044 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveMoney( 0 , 24000 )
+    QuestComplete( 0, "kchest" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 4044 ) , 0 )
+  )
+)
+
+Script #Barell#1
+(
+  if
+  (
+    IsEqual( GetLeverState( GetObject( 155277 ) ) , 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0 , "material.iron[1]" )
+    Sleep( 40 )
+    SwitchLeverState( GetObject( 155277 ) , 0 )
+  )
+)
+
+Script #ESight
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    ForIf( i, GetPlayerUnits( 1 ), IsAlive( i ) ) (
+      CastSpellUnit( "eagle_sight", 0, 0, i )
+    )
+    ForIf( i, GetPlayerUnits( 4 ), IsAlive( i ) ) (
+      CastSpellUnit( "eagle_sight", 0, 0, i )
+    )
+    Sleep( 5000 )
+    #ESight(  )
+  )
+)
+
+Script #IVision
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  )
+    ForIf( i, GetPlayerUnits( 1 ), IsAlive( i ) ) (
+      CastSpellUnit( "infravision", 0, 0, i )
+    )
+    ForIf( i, GetPlayerUnits( 4 ), IsAlive( i ) ) (
+      CastSpellUnit( "infravision", 0, 0, i )
+    )
+    Sleep( 1500 )
+    #IVision(  )
+  )
+)
+
+Script #TPlate
+(
+  if
+  (
+    IsEqual( GetLeverState( TPlateLever ), 1 )
+  )
+  then
+  (
+    KillScript(  )
+    CreateParticleSource( 2001, GetX( OutBP ) , GetY( OutBP ) , GetZ( OutBP ) , 0.1, "Portal" )
+    CreateParticleSource( 2002, GetX( InBP ) , GetY( InBP ) , GetZ( InBP ) , 0.1, "Portal" )
+  )
+)
+
+Script #MainChest
+(
+  if
+  (
+    IsEqual( GetLeverState( z35q2Chest ), 1 )
+  )
+  then
+  (
+    KillScript(  )
+    GiveItem( 0, "platekey01" )
+  )
+)
+
+Script #TPIn
+(
+  if
+  (
+    IsEqual( GetLeverState( TPlateLever ), 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    ForIf( k, Heroes, IsLess( DistanceUnitUnit( k, OutBP ), 1.5 ) ) (
+      SetCP( k, GetX( InBP ), GetY( InBP ), 0 )
+    )
+    Sleep( 150 )
+    Sleep( 75 )
+    #TPIn(  )
+  )
+)
+
+Script #TPOut
+(
+  if
+  (
+    IsEqual( GetLeverState( TPlateLever ), 1 )
+  )
+  then
+  (
+    KillScript(  ) 
+    Sleep( 75 )
+    ForIf( k, Heroes, IsLess( DistanceUnitUnit( k, InBP ), 1.5 ) ) (
+      SetCP( k, GetX( OutBP ), GetY( OutBP ), 0 )
+    )
+    Sleep( 150 )
+    #TPOut(  )
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 )
+  AddObject( Green, GetObject( 1000000 ) )
+  AddObject( Green, GetObject( 1000001 ) )
+  AddObject( Green, GetObject( 1000002 ) )
+  AddObject( Green, GetObject( 1000003 ) )
+  AddObject( Green, GetObject( 1000004 ) )
+  AddObject( Green, GetObject( 1000005 ) )
+  AddObject( Green, GetObject( 1000006 ) )
+  AddObject( Green, GetObject( 1000007 ) )
+  UMFollow( GetObjectByID( "44433380" ), GetObjectByID( "44433379" ) )
+  BarsLeft2 = GetObjectByID( "1003846" )
+  BarsULeft2 = GetObjectByID( "1003864" )
+  BarsURight3 = GetObjectByID( "1003867" )
+  BarsRight3 = GetObjectByID( "1003842" )
+  GearLeft = GetObjectByID( "1000125" )
+  GearULeft = GetObjectByID( "1003869" )
+  GearURight = GetObjectByID( "1003870" )
+  GearRight = GetObjectByID( "1003871" )
+  Firez = GetObjectByID( "1000055360" )
+  Marshal = GetObjectByID( "1001470076" )
+  Sukro = GetObjectByID( "1000064864" )
+  YGLeft = GetObjectByID( "44432400" )
+  YGULeft = GetObjectByID( "44432401" )
+  YGURight = GetObjectByID( "44432402" )
+  YGRight = GetObjectByID( "44432403" )
+  TPlateLever = GetObjectByID( "4371" )
+  z35q2Chest = GetObjectByID( "1003850" )
+  OutBP = GetObjectByID( "1000495" )
+  InBP = GetObjectByID( "1000857" )
+  
+  #Start#0( NULL )
+  #Dialog#0( Firez, "b.Firez.intro_f" )
+  #Dialog#0( Marshal, "b.Marshal.intro_m" )
+  #Dialog#0( Sukro, "b.Sukro.intro_s" )
+  #CycleLever#1( GearLeft, BarsLeft2, GetLeverState( GearLeft ), "gz1n.gater" )
+  #CycleLever#1( GearULeft, BarsULeft2, GetLeverState( GearULeft ), "gz1n.gated" )
+  #CycleLever#1( GearURight, BarsURight3, GetLeverState( GearURight ), "gz1n.gatel" )
+  #CycleLever#1( GearRight, BarsRight3, GetLeverState( GearRight ), "gz1n.gateu" )
+  #VFire#0#1( NULL )
+  #VFire#0#2( NULL )
+  #VFire#0#3( NULL )
+  #VCityGates#0#1( YGLeft, GearLeft, BarsLeft2 )
+  #VCityGates#0#1( YGULeft, GearULeft, BarsULeft2 )
+  #VCityGates#0#1( YGURight, GearURight, BarsURight3 )
+  #VCityGates#0#1( YGRight, GearRight, BarsRight3 )
+  #VCityGates#0#2( YGLeft, GearLeft, BarsLeft2 )
+  #VCityGates#0#2( YGULeft, GearULeft, BarsULeft2 )
+  #VCityGates#0#2( YGURight, GearURight, BarsURight3 )
+  #VCityGates#0#2( YGRight, GearRight, BarsRight3 )
+  #Teleport(  )
+  #ESight(  )
+  #IVision(  )
+  #TPlate(  )
+  #MainChest(  )
+  #TPIn(  )
+  #TPOut(  )
+  ConsoleFloat( GSGetVar( 0, "q.z35q1.z35q1" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35q2.z35q2" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35q3.z35q3" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35q4.z35q4" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35q5.z35q5" ) )
+  ConsoleString( "works good" )
+)
