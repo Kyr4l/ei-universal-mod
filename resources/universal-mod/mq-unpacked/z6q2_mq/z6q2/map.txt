@@ -1,7 +1,7 @@
 ## Mountains
 #zone z6q2 gipat game
 #res
-zone6 zone6-LMP
+zone6 zone6-lmp
 #maps
 7 12 
 zone6map zone6questM
