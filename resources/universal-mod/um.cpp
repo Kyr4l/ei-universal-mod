@@ -26,19 +26,52 @@ static void SendQwertyBacktickPress() {
     SendInput(2, inputs, sizeof(INPUT));
 }
 
+// synthesize a physical press and release of a us qwerty number row key
+// using the appropriate scancode (0x02-0x0b for keys 1-0). this sends two
+// inputs: keydown then keyup, using hardware scancodes so the keyboard layout
+// is interpreted as if it were a physical us qwerty keystroke.
+static void SendQwertyNumberKeyPress(BYTE vkCode) {
+    // map vk codes 48-57 (0-9) to scan codes 0x02-0x0b (1-0)
+    BYTE scanCodeMap[] = {0x0B, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};
+    if (vkCode < 0x30 || vkCode > 0x39) {
+        return;
+    }
+    BYTE scanCode = scanCodeMap[vkCode - 0x30];
+
+    INPUT inputs[2] = {};
+    inputs[0].type = INPUT_KEYBOARD;
+    inputs[0].ki.wScan = scanCode;
+    inputs[0].ki.dwFlags = KEYEVENTF_SCANCODE;
+
+    inputs[1].type = INPUT_KEYBOARD;
+    inputs[1].ki.wScan = scanCode;
+    inputs[1].ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+
+    SendInput(2, inputs, sizeof(INPUT));
+}
+
 // low-level keyboard proc called on each keyboard event. when the
 // hook reports an action and the virtual-key code matches 0xc0
-// (the backtick key), we inject a us qwerty backtick press and
-// return 1 to swallow the original event. otherwise we pass the
-// event along with callnexthookex.
+// (the backtick key), we inject a US QWERTY backtick press and
+// return 1 to swallow the original event. for number row keys (0x30-0x39),
+// we inject the corresponding US QWERTY number key. otherwise we pass the
+// event along with CallNextHookEx.
 static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
-        if (kb && kb->vkCode == 0xC0) {
-            if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
-                SendQwertyBacktickPress();
+        if (kb) {
+            if (kb->vkCode == 0xC0) {
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                    SendQwertyBacktickPress();
+                }
+                return 1; // swallow the original key event
             }
-            return 1; // swallow the original key event
+            if (kb->vkCode >= 0x30 && kb->vkCode <= 0x39) {
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                    SendQwertyNumberKeyPress(kb->vkCode);
+                }
+                return 1; // swallow the original key event
+            }
         }
     }
     return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
@@ -73,10 +106,33 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     if (ul_reason_for_call != DLL_PROCESS_ATTACH) {
         return TRUE;
     }
-    CreateThread(NULL, 0, KeyPopupThread, NULL, 0, NULL);
 
-    char exePath[MAX_PATH];
-    GetModuleFileNameA(NULL, exePath, MAX_PATH);
+    DisableThreadLibraryCalls(hModule);
+
+    HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
+    if (threadHandle) {
+        CloseHandle(threadHandle);
+    }
+
+    char keyboardLayoutName[KL_NAMELENGTH] = {};
+    if (GetKeyboardLayoutNameA(keyboardLayoutName) != 0) {
+        std::string layoutName(keyboardLayoutName);
+        if (layoutName.size() >= 3 && layoutName.compare(layoutName.size() - 3, 3, "40C") == 0) {
+            char layoutMessage[256] = {};
+            sprintf_s(layoutMessage, sizeof(layoutMessage),
+                "Detected keyboard layout: %s.\nThe keyboard input hook will synthesize a US QWERTY backtick on the physical backtick key.",
+                keyboardLayoutName);
+            MessageBoxA(NULL,
+                layoutMessage,
+                "Keyboard Layout Warning",
+                MB_ICONWARNING | MB_OK);
+        }
+    }
+
+    char exePath[MAX_PATH] = {};
+    if (GetModuleFileNameA(NULL, exePath, MAX_PATH) == 0) {
+        return TRUE;
+    }
 
     // compute the directory of the executable by removing the last
     // backslash and filename from the full path
