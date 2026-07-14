@@ -30,6 +30,7 @@ moviesdir="movies"
 hdpackdir="hdlands"
 resddsdir="res-dds"
 xlsxdir="xlsx"
+xlsxdumpdir="xlsx-dump"
 
 # stop execution if rsync/wine/parallel is missing
 function checkCommands {
@@ -160,8 +161,12 @@ function eiDbEditor {
     cd "$xlsxdir" || exit
     echo "Converting XLSX database to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx
+    echo "Dumping database.xlsx to database.md..."
+    python3 ../bin/xlsx2md.py database.xlsx ../"$xlsxdumpdir"/database.md 
     echo "Converting XLSX databaselmp to RES..."
     wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
+    echo "Dumping databaselmp.xlsx to databaselmp.md..."
+    python3 ../bin/xlsx2md.py databaselmp.xlsx ../"$xlsxdumpdir"/databaselmp.md
     
     mv -fv database.res ../"$resdir"/
     mv -fv databaselmp.res ../"$resdir"/
