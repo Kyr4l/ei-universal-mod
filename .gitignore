@@ -2,6 +2,7 @@
 .~lock*
 
 .vscode
+Universal-Mod/um.cfg
 Universal-Mod/mp/*
 Universal-Mod/saves/*
 Universal-Mod/maps/*.bak

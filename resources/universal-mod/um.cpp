@@ -5,9 +5,107 @@
 
 #include <windows.h>
 #include <string>
+#include <cstring>
 
 // global hook handle for the low-level keyboard hook
 static HHOOK g_keyboardHook = NULL;
+static bool g_disableLayoutPopup = true;
+static bool g_disableAsiCheck = false;
+static bool g_disableKeyboardRewrites = false;
+
+static bool IsTrueString(LPCSTR value) {
+    return value && value[0] != '\0' && _stricmp(value, "true") == 0;
+}
+
+static bool GetEnvironmentFlag(LPCSTR name) {
+    char value[16] = {};
+    DWORD result = GetEnvironmentVariableA(name, value, sizeof(value));
+    if (result == 0 || result >= sizeof(value)) {
+        return false;
+    }
+    return IsTrueString(value);
+}
+
+// parse um.cfg file and override default settings
+static void LoadConfigFile(const std::string& dllPath) {
+    std::string configPath = dllPath;
+    size_t lastSlash = configPath.find_last_of('\\');
+    if (lastSlash != std::string::npos) {
+        configPath.resize(lastSlash + 1);
+    }
+    configPath += "um.cfg";
+
+    FILE* file = nullptr;
+    if (fopen_s(&file, configPath.c_str(), "r") != 0 || !file) {
+        // Create um.cfg if it doesn't exist with default settings
+        if (fopen_s(&file, configPath.c_str(), "w") == 0 && file) {
+            fprintf(file, "; Universal Mod Configuration\n");
+            fprintf(file, "; Set to true to enable, false to disable\n\n");
+            fprintf(file, "UM_DISABLE_KEYBOARD_LAYOUT_POPUP=true\n");
+            fprintf(file, "UM_DISABLE_SPELLADDON_ASI_CHECK=false\n");
+            fprintf(file, "UM_DISABLE_KEYBOARD_REWRITES=false\n");
+            fclose(file);
+        }
+        return;
+    }
+
+    char line[256] = {};
+    while (fgets(line, sizeof(line), file)) {
+        // trim leading whitespace
+        char* start = line;
+        while (*start && (*start == ' ' || *start == '\t')) {
+            start++;
+        }
+
+        // skip empty lines and comments
+        if (*start == '\0' || *start == ';' || *start == '#' || *start == '\n') {
+            continue;
+        }
+
+        // find the '=' delimiter
+        char* equals = strchr(start, '=');
+        if (!equals) {
+            continue;
+        }
+
+        // extract key
+        char key[128] = {};
+        size_t keyLen = equals - start;
+        if (keyLen >= sizeof(key)) {
+            continue;
+        }
+        strncpy_s(key, sizeof(key), start, keyLen);
+        key[keyLen] = '\0';
+
+        // trim trailing whitespace from key
+        while (keyLen > 0 && (key[keyLen - 1] == ' ' || key[keyLen - 1] == '\t')) {
+            key[--keyLen] = '\0';
+        }
+
+        // extract value
+        char* value = equals + 1;
+        while (*value && (*value == ' ' || *value == '\t')) {
+            value++;
+        }
+
+        // trim trailing whitespace and newline from value
+        char* valueEnd = value + strlen(value) - 1;
+        while (valueEnd > value && (*valueEnd == ' ' || *valueEnd == '\t' || *valueEnd == '\n' || *valueEnd == '\r')) {
+            *valueEnd-- = '\0';
+        }
+
+        // parse the setting
+        if (_stricmp(key, "UM_DISABLE_KEYBOARD_LAYOUT_POPUP") == 0) {
+            g_disableLayoutPopup = IsTrueString(value);
+        } else if (_stricmp(key, "UM_DISABLE_SPELLADDONX_ASI_CHECK") == 0 || _stricmp(key, "UM_DISABLE_SPELLADDON_ASI_CHECK") == 0) {
+            g_disableAsiCheck = IsTrueString(value);
+        } else if (_stricmp(key, "UM_DISABLE_KEYBOARD_REWRITES") == 0) {
+            g_disableKeyboardRewrites = IsTrueString(value);
+        }
+    }
+
+    fclose(file);
+}
 
 // synthesize a physical press and release of the us qwerty backtick
 // (tilde) key using scancode 0x29. this sends two inputs: keydown
@@ -57,6 +155,10 @@ static void SendQwertyNumberKeyPress(BYTE vkCode) {
 // we inject the corresponding US QWERTY number key. otherwise we pass the
 // event along with CallNextHookEx.
 static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    if (g_disableKeyboardRewrites) {
+        return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
+    }
+
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
         if (kb) {
@@ -109,23 +211,35 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
     DisableThreadLibraryCalls(hModule);
 
+    char dllPath[MAX_PATH] = {};
+    if (GetModuleFileNameA(hModule, dllPath, MAX_PATH) != 0) {
+        LoadConfigFile(dllPath);
+    }
+
+    g_disableLayoutPopup = g_disableLayoutPopup || GetEnvironmentFlag("UM_DISABLE_KEYBOARD_LAYOUT_POPUP");
+    g_disableAsiCheck = g_disableAsiCheck || GetEnvironmentFlag("UM_DISABLE_SPELLADDONX_ASI_CHECK")
+        || GetEnvironmentFlag("UM_DISABLE_SPELLADDON_ASI_CHECK");
+    g_disableKeyboardRewrites = g_disableKeyboardRewrites || GetEnvironmentFlag("UM_DISABLE_KEYBOARD_REWRITES");
+
     HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
     if (threadHandle) {
         CloseHandle(threadHandle);
     }
 
-    char keyboardLayoutName[KL_NAMELENGTH] = {};
-    if (GetKeyboardLayoutNameA(keyboardLayoutName) != 0) {
-        std::string layoutName(keyboardLayoutName);
-        if (layoutName.size() >= 3 && layoutName.compare(layoutName.size() - 3, 3, "40C") == 0) {
-            char layoutMessage[256] = {};
-            sprintf_s(layoutMessage, sizeof(layoutMessage),
-                "Detected keyboard layout: %s.\nThe keyboard input hook will synthesize a US QWERTY backtick on the physical backtick key.",
-                keyboardLayoutName);
-            MessageBoxA(NULL,
-                layoutMessage,
-                "Keyboard Layout Warning",
-                MB_ICONWARNING | MB_OK);
+    if (!g_disableLayoutPopup) {
+        char keyboardLayoutName[KL_NAMELENGTH] = {};
+        if (GetKeyboardLayoutNameA(keyboardLayoutName) != 0) {
+            std::string layoutName(keyboardLayoutName);
+            if (layoutName.size() >= 3 && layoutName.compare(layoutName.size() - 3, 3, "40C") == 0) {
+                char layoutMessage[256] = {};
+                sprintf_s(layoutMessage, sizeof(layoutMessage),
+                    "Detected keyboard layout: %s.\nThe keyboard input hook will synthesize a US QWERTY backtick on the physical backtick key. This warning can be disabled in um.cfg (UM_DISABLE_KEYBOARD_LAYOUT_POPUP).",
+                    keyboardLayoutName);
+                MessageBoxA(NULL,
+                    layoutMessage,
+                    "Keyboard Layout Warning",
+                    MB_ICONWARNING | MB_OK);
+            }
         }
     }
 
@@ -142,14 +256,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         gameDir.resize(lastSlash);
     }
 
-    // build the expected .asi path and verify it exists
-    std::string asiPath = gameDir + "\\SpellAddonX.asi";
-    if (GetFileAttributesA(asiPath.c_str()) == INVALID_FILE_ATTRIBUTES) {
-        MessageBoxA(NULL,
-            "SpellAddonX.asi is missing and required to run the game.",
-            "Missing Required File",
-            MB_ICONERROR | MB_OK);
-        ExitProcess(1);
+    if (!g_disableAsiCheck) {
+        std::string asiPath = gameDir + "\\SpellAddonX.asi";
+        if (GetFileAttributesA(asiPath.c_str()) == INVALID_FILE_ATTRIBUTES) {
+            MessageBoxA(NULL,
+                "SpellAddonX.asi is missing and required to run the game.",
+                "Missing Required File",
+                MB_ICONERROR | MB_OK);
+            ExitProcess(1);
+        }
     }
 
     return TRUE;
