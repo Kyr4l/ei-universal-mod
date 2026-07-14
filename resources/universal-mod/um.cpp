@@ -1,13 +1,14 @@
-// this file provides a small dll that hooks low-level keyboard events
-// and fakes a us qwerty backtick/tilde key press when the physical
-// backtick key (vk code 0xc0) is detected. it also checks for a
-// required .asi file next to the game executable on dll attach.
+// This DLL hooks low-level keyboard events to synthesize US QWERTY key presses
+// for keys that may be affected by non-US keyboard layouts (backtick and number row).
+// It also verifies the presence of a required .asi file on DLL attach.
+//
+// Configuration is managed via um.cfg in the DLL directory and environment variables.
 
 #include <windows.h>
 #include <string>
 #include <cstring>
 
-// global hook handle for the low-level keyboard hook
+// Global state
 static HHOOK g_keyboardHook = NULL;
 static bool g_disableLayoutPopup = true;
 static bool g_disableAsiCheck = false;
