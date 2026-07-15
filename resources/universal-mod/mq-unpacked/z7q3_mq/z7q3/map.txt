@@ -1,7 +1,7 @@
 ## Orc Delta
 #zone z7q3 gipat game
 #res
-zone7 zone7-LMP
+zone7 zone7-lmp
 #maps
 15 10
 zone7map zone7questM
