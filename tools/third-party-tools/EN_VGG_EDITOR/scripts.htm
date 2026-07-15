@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html><head>
+  <title>Scripts - Evil Islands</title>
+</head>
+<body>
+<div class="markdown-body">
+<h1 id="—ÔËÒÓÍ-ÒÍËÔÚÓ‚˚ı-ÙÛÌÍˆËÈ-‰Îˇ-Ë„˚-œÓÍÎˇÚ˚Â-«ÂÏÎË">List of script functions for the game "Evil Islands"</h1>
+<table>
+<thead><tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ActivateTrap</strong> ( <br> Trap: object, Activate: float)</td>
+<td>Command: ActivateTrap - deactivates: Activate - 0 and activates: 
+Activate&lt;&gt;0 the trap: Trap on the game zone. For example, on the game 
+zone of the map: Foothills, you should enter in the console: @ActivateTrap( 
+GetObjectByID( "4515" ) , 1 ) will activate the pyramid of the Ork tribe. 
+This trap-Pyramid attacks only Diplomatic group - 0. It is impossible to 
+reconfigure diplomacy for Trap objects using the command: SetDiplomacy.</td>
+</tr>
+<tr>
+<td><strong>Add</strong> ( <br> A: float, B: float): float</td>
+<td>Function: Add - returns the sum of two Float type numbers: A and B.</td>
+</tr>
+<tr>
+<td><strong>AddLoot</strong> ( <br> nPlayer: float, PartyNameSend: string, PartyNameRecv: string)</td>
+<td>Command: AddLoot - adds items and money from the 'Party' train: 
+PartyNameSend to the train of NOT the current 'Party': PartyNameRecv. Both 'Parties' 
+belong to the 'Player': nPlayer. Do not confuse 'Train' and 'Backpack'. In case 
+if changing the current party will occur on the game zone, then 
+items from the 'Backpack' set always included in the 'Train' set will also 
+be copied to the train of 'Party': PartyNameRecv. When executing the command: 
+RedeployParty 'Party Backpack': PartyNameSend will be zeroed. The 'Backpack' of the new 
+party will also be empty, although items will remain in the backpack info window, but 
+in fact the backpack of the previous and current Parties will be empty. Function: 
+GetLootItemsCount will return value 0.</td>
+</tr>
+<tr>
+<td><strong>AddMob</strong> ( <br> FileNameMob: string)</td>
+<td>Command: AddMob - loads the 'Mob' file with the name FileNameMob from 
+the subdirectory ...\MAPS\. The file name is specified with extension and in quotes.
+The file must have the structure Maps Object (*.mob) from the game project œ«. 
+Affiliation: System.</td>
+</tr>
+<tr>
+<td><strong>AddObject</strong> ( <br> grp: group, UnitMap: object)</td>
+<td>Command: AddObject - adds the object: Unit to the 'Game' group, 
+initializing the global variable: grp. The command: AddObject cannot 
+be used from the console, since in œ« there are no console commands for creating 
+global group variables. Affiliation: Game Groups.</td>
+</tr>
+<tr>
+<td><strong>AddRectToArea</strong> ( <br> idArea: float, x1: float, y1: float, x2: float, y2: float)</td>
+<td>Command: AddRectToArea - adds the belonging of a game zone section to 
+the quest area under the code: idArea. The area is described as a 
+rectangle, where (X1,Y1) and (X2,Y2) are the coordinates of its two 
+opposite corners. (Left-bottom and top-right) (south-west and north-east corner). The sides of the rectangle are always located 
+parallel to the cardinal directions. If the coordinates of the second point are less than 
+the first, there will be no zone. There can be many 
+areas with the same code: idArea on the game zone. For example, the command: QObjArea can 
+set the task for the 'Player' (Player team): to get into the area under the code: idArea - as one of the conditions for completing the quest declared by the 
+command: QStart. In this case, the 'Player' must get into any of the 
+sections of the area with the code: idArea.</td>
+</tr>
+<tr>
+<td><strong>AddRoundToArea</strong> ( <br> idArea: float, x: float, y: float, rad: float)</td>
+<td>Command: AddRoundToArea - adds the belonging of a game zone section to 
+the quest area under the code: idArea. The area section is located at 
+point: (x,y) with radius: rad. There can be many areas with the same code: idArea on the game zone. For example, the command: 
+QObjArea can set the task for the 'Player': to get into the area under the code: 
+idArea as one of the conditions for completing the quest declared by the command: 
+QStart - in this case the 'Player' must get into any of the sections of the 
+area with the code: idArea.</td>
+</tr>
+<tr>
+<td><strong>AddUnitToParty</strong> ( <br> nPlayer: float, 'PartyName::NamePersRes': string, NameUnitRes: string)</td>
+<td>Command: AddUnitToParty - adds to the player: nPlayer, to the specified 
+party: PartyName the localized (voiced) character: NamePersRes 
+from the database: texts.res. Actually, the character: NameUnitRes 
+from the game resource database is added. The current Party can have a Character 
+added without explicitly specifying the Party: AddUnitToParty(nPlayer, NamePersRes : 
+string, NameUnitRes : string). Do not confuse! If you need to work not with 
+the current group or with a newly created one, then you always need to specify the second 
+parameter as two parameters through the delimiter "PartyName::NamePersRes".</td>
+</tr>
+<tr>
+<td><strong>AddUnitToServer</strong> ( <br> NameUnitMap: string, NameUnitRes: string, NameUnitControl: string, x: float, y: float, z: float)</td>
+<td>Command: AddUnitToServer - places the template-object: 
+NameUnitRes on the current map at point (x,y,z) from the game resource 
+database. The object will have the internal name: NameUnitMap and the name displayed 
+in info windows: NameUnitControl. Upper and lower case letters of the internal 
+name: NameUnitMap are not distinguished. The system function for converting 
+the name: (NameUnitMap : string) to code (idUnit : float) represents all 
+lowercase characters of the name as uppercase. It is not 
+recommended to return the code: idUnit from an object added to the map 
+by the command: AddUnitToServer using the function: GetObjectId. The received on 
+the map object by the command: AddUnitToServer will have a code - 10 characters, and 
+the command: GetObjectId works with an error with ten-digit forces.</td>
+</tr>
+<tr>
+<td><strong>AddUnitUnderControl</strong> ( <br> nPlayer: float, Unit: object)</td>
+<td>Command: AddUnitUnderControl - adds to the control panel of player: 
+nPlayer the icon of object: Unit. Does not change diplomacy in groups and does not 
+cause any changes in the attached object: Unit. The player 
+gets the opportunity to select the attached object: Unit in the collection of controlled objects. 
+Apparently the command was intended for the possibility of capturing enemies on the game zone, but was not 
+implemented in the game.</td>
+</tr>
+<tr>
+<td><strong>AlarmPosX</strong> ( <br> nAlarm: float): float</td>
+<td>Function: AlarmPosX - returns the position of the alarm point on the axis: x set by the command: InvokeAlarm, for the variable: nAlarm.</td>
+</tr>
+<tr>
+<td><strong>AlarmPosY</strong> ( <br> nAlarm: float): float</td>
+<td>Function: AlarmPosY - returns the position of the alarm point on the axis: y set by the command: InvokeAlarm, for the variable: nAlarm.</td>
+</tr>
+<tr>
+<td><strong>AlarmTime</strong> ( <br> nAlarm: float): float</td>
+<td>Function: AlarmTime - returns the value of the variable: nAlarm. When 
+activating the variable: nAlarm by the command: InvokeAlarm, it is assigned 
+a starting value. The starting value is the sum of the amount of time 
+of all time intervals, between activations and deactivations of all previous 
+variables: nAlarm from the start of the game. Only one number 
+variable can be active. To the variable: nAlarm after activation, 
+the value of the time counter (1/15 sec) is constantly added. Activating the next number 
+of the variable: nAlarm by the command: InvokeAlarm simultaneously deactivates 
+the previous variable, but does not zero it. The variable number does not necessarily 
+have to be in order and you can reinitialize the same number 
+variable. To reset all values of variables: nAlarm to zero and 
+stop the counter in the global variable, you need to call the command: 
+InvokeAlarm with the first parameter = 0 : InvokeAlarm(0,0,0)</td>
+</tr>
+<tr>
+<td><strong>Any</strong> ( <br> GlobalVariable: object, grp: group, bool: float): float</td>
+<td>Function: Any - Theoretically: Returns true or false, if in 
+the group: grp any unit-object: Unit will match the condition 
+of comparison in the parameter: bool. The procedure works as a loop, going through 
+all objects in the group: grp in turn, setting the variable: Unit 
+an instance - an object from the group: grp. The parameter: grp can be entered 
+as a pointer to any set of groups: Diplomatic group, Game or 
+mixed - by commands: GroupAdd or GroupCross.</td>
+</tr>
+<tr>
+<td><strong>AttachParticles</strong> ( <br> id: float, Object: object)</td>
+<td>Command: AttachParticles - attaches a particle source with 
+identifier: id to the unit: object. The source will move with 
+a constant offset from the unit. This offset is equal to the coordinates( x , y , z ),
+taken in the procedure CreateParticleSource when creating this 
+source. Example: @CreateParticleSource( 1</td>
+</tr>
+<tr>
+<td><strong>AttachParticleSource</strong> ( <br> id: float, idObject: float)</td>
+<td>Command: AttachParticleSource - attaches a particle source with 
+identifier: id to the unit with identifier: idObject. The source will 
+move with a constant offset from the unit. This offset is equal to 
+the coordinates( x , y , z ), taken in the procedure CreateParticleSource when 
+creating this source.</td>
+</tr>
+<tr>
+<td><strong>Attack</strong> ( <br> UnitA: object, UnitB: object)</td>
+<td>Command: Attack - forces the unit: UnitA to attack the unit: UnitB.</td>
+</tr>
+<tr>
+<td><strong>BlockUnit</strong> ( <br> Unit: object, Block: float)</td>
+<td>Command: BlockUnit - sets the control mode by the Player 
+of the character: Unit. The character does not obey the Player: Block - 1, The character 
+obeys the Player: Block - 0. By default: Characters are available for 
+control by the Player at the moment of adding to the party. Setting the command: 
+BlockUnit on enemies is useless, since enemies do not obey the Player.</td>
+</tr>
+<tr>
+<td><strong>Cast</strong> ( <br> Unit: object, x: float, y: float)</td>
+<td>Command: Cast - forces the object: Unit to use an active 
+spell that the object: Unit has at the point: ( x , y ) on the map. 
+The active spell at the object must be intended for a place, not 
+for targets.</td>
+</tr>
+<tr>
+<td><strong>CastSpellPoint</strong> ( <br> constSpell: string, x1: float, y1: float, x2: float, Û: float)</td>
+<td>Command: CastSpellPoint - applies a spell to the terrain of the game 
+zone. Spells: constSpell should be written in quotes, and only those that 
+act on an area (not on a target). The spell construction: constSpell 
+has the same canonical form as in other places of the game, where 
+spells are used. Variables: (x1,y1) indicate coordinates on 
+the map of the game zone from where the visual effect of the spell will start,
+variables: (x2,Û2) indicate coordinates on the map of the game zone, the place 
+where the spell: constSpell will be applied.</td>
+</tr>
+<tr>
+<td><strong>CastSpellUnit</strong> ( <br> constSpell: string, x: float, y: float, Unit: object)</td>
+<td>Command: CastSpellUnit - applies a spell to the object: Unit. 
+Spells: constSpell should be written in quotes. The spell 
+construction: constSpell has the same canonical form as in other 
+places of the game, where spells are used. Variables: (x, y) indicate 
+coordinates on the map of the game zone from where the visual 
+effect of the spell: constSpell will start.</td>
+</tr>
+<tr>
+<td><strong>ConsoleFloat</strong> ( <br> float)</td>
+<td>Command: ConsoleFloat - is intended for debugging the game. Outputs to the console
+a number returned by functions. Synonym #</td>
+</tr>
+<tr>
+<td><strong>ConsoleString</strong> ( <br> string)</td>
+<td>Command: ConsoleString - is intended for debugging the game. Outputs to the console
+text strings returned by functions. Synonym $</td>
+</tr>
+<tr>
+<td><strong>CopyItems</strong> ( <br> nPlayer: float, NameSendRES: string, 'PartyName::NameRecvRES': string)</td>
+<td>Command: CopyItems - copies all equipment (not train and not backpack) 
+of the unit-object: NameSendRES from the current party to the unit-object: NameRecvRES 
+belonging to NOT the current Party. Both Parties belong to the player under 
+number: nPlayer. The names of unit-objects are internal names in 
+parties. In the third parameter, you need to explicitly specify the belonging of the object: 
+NameRecvRES to the Party: PartyName, specify in quotes and with a delimiter two 
+colons: "PartyName::NameRecvRES"</td>
+</tr>
+<tr>
+<td><strong>CopyLoot</strong> ( <br> nPlayer: float, PartyNameSend: string, PartyNameRecv: string)</td>
+<td>Command: CopyLoot - copies the train: PartyNameSend (items and money)
+to the train of NOT the current Party: PartyNameRecv. During this operation 
+preliminarily the train: PartyNameRecv is completely zeroed. Copying 
+occurs between parties belonging to the player under number: nPlayer. Do 
+not confuse train and backpack. In case if changing the current party will 
+occur on the game zone, then items from the Backpack set always 
+included in the Train set will also be copied to the train of the Party: 
+PartyNameRecv. When executing the command: RedeployParty the Backpack of the Party: 
+PartyNameSend will be zeroed. The backpack of the new party will also be empty, although items will remain in the backpack info window, but in fact the backpack of the previous and 
+current Parties will be empty. Function: GetLootItemsCount will return value 
+0.</td>
+</tr>
+<tr>
+<td><strong>CopyStats</strong> ( <br> nPlayer, PartyNameSend: string, PartyNameRecv: string)</td>
+<td>Command: CopyStats - copies all statistics (skills, abilities, 
+parameters) of the unit-object: NameSendRES from the current party to the unit-object: 
+NameRecvRES, which belongs to NOT the current Party. Both Parties 
+belong to the player under number: nPlayer. The names of unit-objects are 
+internal names in parties. In the third parameter, you need to explicitly specify 
+the belonging of the object: NameRecvRES to the Party: PartyName, specify in 
+quotes and with a delimiter two colons: "PartyName::NameRecvRES"</td>
+</tr>
+<tr>
+<td><strong>Crawl</strong> ( <br> Unit: object)</td>
+<td>Command: Crawl - gives the command to the object: Unit to crouch.</td>
+</tr>
+<tr>
+<td><strong>CreateFX</strong> ( <br> x: float, y: float, z: float, Volume: float, rad: float, NameWav: string)</td>
+<td>Command: CreateFX - plays once a sound from a WAV file: 
+NameWav at point: (x,y,z) with hearing radius: rad and volume: Volume.</td>
+</tr>
+<tr>
+<td><strong>CreateFXSource</strong> ( <br> id: float, x: float, y: float, z: float, Volume: float, rad: float, NameWav: string)</td>
+<td>Command: CreateFXSource - sets a looped sound 
+source: NameWav under code: id at point: (X,Y,Z) with hearing radius: 
+rad and volume: Volume. The looped sound can be deleted using 
+the command: DeleteFXSource by its : id.</td>
+</tr>
+<tr>
+<td><strong>CreateLightning</strong> ( <br> id: float, x1: float, y1: float, z1: float, x2: float, y2: float, z2: float, Intensity: float)</td>
+<td>Command: CreateLightning - creates a constantly acting frozen 
+lightning, striking from point: (x1,y1,z1) to (x2,y2,z2) with intensity: 
+Intensity. With a positive value: Intensity point: (x2,y2,z2) - 
+represents a ball - as a result of a lightning strike on an object. With 
+a negative value: Intensity the lightning represents a frozen 
+lightning of natural origin. With the value: Intensity = 0 the lightning 
+represents a type of spell: Barrier of lightning with intensity 
+(thickness of discharges) by default. The intensity value: Intensity 
+different from zero, is graphically represented as the thickness of discharges. It is not 
+advisable to set the value Intensity greater than 20, since this strongly 
+slows down the game on the game zone. If you set the value: Intensity = 
+100, you will get something like the effect of the northern lights. Repeated creation 
+of lightning by the command: CreateLightning with the same code: id does not 
+delete the lightning. Thus, you can create many lightnings on the game zone with 
+the same code: id. The coordinates of points: (x1,y1,z1) and (x2,y2,z2) in 
+the command: CreateLightning are in WCS and do not depend on the surface and 
+relief of the game zone, this should be taken into account when setting the value 
+of coordinates: z1 and z2. Delete all subsets of lightnings with the same code 
+can be done by the command: DeleteLightning.</td>
+</tr>
+<tr>
+<td><strong>CreateParticleSource</strong> ( <br> id: float, x: float, y: float, z: float, R: float, ÒonstParticleSource: string)</td>
+<td>Command: CreateParticleSource - creates a particle source of type: 
+constParticleSource with radius: R and identifier: id at point (x,y,z).
+With a negative radius value, the particle source is flipped vertically. 
+At the moment, the following particle source constants are known 
+(in the procedure they are written in quotes): transform; portalstar; portal; 
+mushroom; nuke; geyser; poisonfog; smoke; fire; lightningblast; 
+fireblast; campfire; fireball; firearrow; teleport."</td>
+</tr>
+<tr>
+<td><strong>CreateParty</strong> ( <br> nPlayer: float, PartyName: string)</td>
+<td>Command: CreateParty - creates a new Party under the name: PartyName 
+(or replaces an existing party with the same name) in the set of parties 
+of the player under number: nPlayer. Lowercase and uppercase letters in the party name: 
+PartyName are different.</td>
+</tr>
+<tr>
+<td><strong>CreatePointLight</strong> ( <br> id: float, x: float, y: float, z: float, rad: float, R: float, G: float, B: float)</td>
+<td>Command: CreatePointLight - creates a light source with 
+identifier: id, radius: rad and color (R,G,B) at point (x,y,z). With 
+the help of this command, you can set lighting from a bonfire or torch 
+at night or slight darkening during the day - dense forest. Positive 
+value: rad - lighting, negative value - darkening. The 
+lighting point by height: z needs to be calculated relative to the World 
+coordinate system (WCS), and not from the surface of the map.</td>
+</tr>
+<tr>
+<td><strong>CreateRandomizedFXSource</strong> ( <br> id: float, x1: float, x2: float, y1: float, y2: float, z1: float, z2: float, Volume: float, rad: float, NameWav: string)</td>
+<td>Command: CreateRandomizedFXSource - sets a looped sound 
+source: NameWav under code: id at point: (X,Y,Z) with hearing radius: 
+rad and volume: Volume. The looped sound can be deleted using 
+the command: DeleteFXSource by its : id.</td>
+</tr>
+<tr>
+<td><strong>DeleteArea</strong> ( <br> idArea: float)</td>
+<td>Command: DeleteArea - deletes all area sections on the map with
+identifier: idArea.</td>
+</tr>
+<tr>
+<td><strong>DeleteFXSource</strong> ( <br> id: float)</td>
+<td>Command: DeleteFXSource - deletes all sound sections on the game zone
+having identifier: id.</td>
+</tr>
+<tr>
+<td><strong>DeleteLightning</strong> ( <br> id: float)</td>
+<td>Command: DeleteLightning - deletes all lightnings on the game zone having
+identifier: id.</td>
+</tr>
+<tr>
+<td><strong>DeleteParticleSource</strong> ( <br> id: float)</td>
+<td>Command: DeleteParticleSource - deletes all particle sources on the game
+zone having identifier: id.</td>
+</tr>
+<tr>
+<td><strong>DeletePointLight</strong> ( <br> id: float)</td>
+<td>Command: DeletePointLight - deletes from the game zone a set of light sources
+with identifier: id.</td>
+</tr>
+<tr>
+<td><strong>DistanceUnitPoint</strong> ( <br> Unit: object, x: float, y: float): float</td>
+<td>Function: DistanceUnitPoint - returns the direct distance between
+the object: Unit and the point on the map: (x,y).</td>
+</tr>
+<tr>
+<td><strong>DistanceUnitUnit</strong> ( <br> UnitA: object, UnitB: object): float</td>
+<td>Function: DistanceUnitUnit - returns the direct distance between
+objects: UnitA and UnitB.</td>
+</tr>
+<tr>
+<td><strong>Div</strong> ( <br> A: float, B: float): float</td>
+<td>Function: Div - returns the result of dividing number: A by B.</td>
+</tr>
+<tr>
+<td><strong>EnableLever</strong> ( <br> Lever: object, Enable: float)</td>
+<td>Command: EnableLever - sets the availability for the player to 
+control the mechanism: Lever. Unavailable: Enable = 0 and available: Enable =
+1. Availability to use the lever is displayed graphically 
+by changing the cursor to a grabbing hand when hovering it over the object: Lever. 
+On the map Foothills you can set access even to a disabled lever from
+the pyramid: @EnableLever(GetObjectByID( "4636" ),1)</td>
+</tr>
+<tr>
+<td><strong>EraseQuestItem</strong> ( <br> nPlayer: float, idQuestItem: float)</td>
+<td>Command: EraseQuestItem - deletes from the train of the player with number: nPlayer the quest item under code: id</td>
+</tr>
+<tr>
+<td><strong>Every</strong> ( <br> GlobalVariable: object, grp: group, bool: float): float</td>
+<td>Function: Every - Theoretically: Returns true or false, if in 
+the group: grp all unit-objects: Unit will match the condition 
+of comparison in the parameter: bool. The procedure works as a loop, going through 
+all objects in the group: grp in turn, setting the variable: Unit 
+an instance - an object from the group: grp. The parameter: grp can be entered 
+as a pointer to any set of groups: Diplomatic group, Game or 
+mixed - by commands: GroupAdd or GroupCross.</td>
+</tr>
+<tr>
+<td><strong>FixItems</strong> ( <br> )</td>
+<td>Command: FixItems - repairs all items in the train, in the backpack, clothes on the character's body and weapons, but only for the current Party.</td>
+</tr>
+<tr>
+<td><strong>FixWorldTime</strong> ( <br> Time: float)</td>
+<td>Command: FixWorldTime - sets a fixed time: Time on the game zone. The clock in œ« does not run.</td>
+</tr>
+<tr>
+<td><strong>Follow</strong> ( <br> UnitA: object, UnitB: object)</td>
+<td>Command: Follow - one-time gives the command to the object: UnitA to follow
+the object: UnitB. After the battle, the command is canceled. Similar properties 
+of behavior are in the command: UMFollow.</td>
+</tr>
+<tr>
+<td><strong>For</strong> ( <br> GlobalVariable: object, grp: group)(Command)</td>
+<td>Command: For - unconditional iteration of object elements in the game 
+group: grp. Each cycle initializes the global variable, 
+setting in it an instance: object from the collection of the group: grp. In the body 
+of the cycle, the entire list of commands: Command is unconditionally executed. The procedure 
+works as a loop, going through all objects in the group: grp 
+in turn, setting the variable: Unit an instance - an object from the group: grp. 
+The parameter: grp can be entered as a pointer to any set of groups: 
+Diplomatic group, Game or mixed - by commands: GroupAdd or 
+GroupCross.</td>
+</tr>
+<tr>
+<td><strong>ForIf</strong> ( <br> GlobalVariable: object, grp: group, condition: float)(Command)</td>
+<td>Command: ForIf - conditional iteration of object elements in the game
+group: grp, matching the comparison in the parameter: bool.
+Each cycle initializes the global variable, 
+setting in it an instance: object from the collection of the group: grp. In the body 
+of the cycle, the entire list of commands: Command is unconditionally executed. The procedure 
+works as a loop, going through all objects in the group: grp 
+in turn, setting the variable: Unit an instance - an object from the group: grp. 
+The parameter: grp can be entered as a pointer to any set of groups: 
+Diplomatic group, Game or mixed - by commands: GroupAdd or 
+GroupCross.</td>
+</tr>
+<tr>
+<td><strong>GetAIClass</strong> ( <br> Unit: object): float</td>
+<td>Function: GetAIClass - returns the class of race groups: AI for the object: 
+Unit. In œ« all objects: Unit belong to races, races are grouped by 
+classes. The value of object belonging to races can be found in the table:
+RaceModels, by classes in the field: AI Class Stay. For a non-existent 
+object on the map, the result is always - (-1) ( minus one ). For example, a lying
+person will have</td>
+</tr>
+<tr>
+<td><strong>GetBSZValue</strong> ( <br> x: float, y: float): float</td>
+<td>Function: GetBSZValue - returns the height of the terrain on the map at the point with
+horizontal coordinates: ( x , y ). The difference from the command: GetZValue
+is that if at point: (ı,Û) there is an unfrozen water body ( lake 
+of lava ), then the height of the water surface ( lava ) is output, and not the bottom. In 
+other cases, the output values coincide with the command: GetZValue.</td>
+</tr>
+<tr>
+<td><strong>GetDiplomacy</strong> ( <br> nDiplomacyGroupA: float, nDiplomacyGroupB: float): float</td>
+<td>Function: GetDiplomacy - returns the type of diplomacy: who is 
+the Diplomatic group of units under number nDiplomacyGroupA for 
+the Diplomatic group: nDiplomacyGroupB, in the set of Diplomatic groups
+on the current game zone. Possible values: 1 - ally ; 0 - neutral ;
+-1 - enemy."</td>
+</tr>
+<tr>
+<td><strong>GetFutureX</strong> ( <br> UnitMap: object, Time: float): float</td>
+<td>Function: GetFutureX - returns the value of the coordinate: ’ of the object: 
+UnitMap predicted through time: Time. Time: Time is measured in 
+units equal to 1/15 of a second at normal game speed. The smaller 
+the time value: Time, the more accurate the result. In scripts, this function 
+is used for realistic display of spell attacks by enemies. 
+Enemies can cast spells, attack in anticipation. In the œ« engine 
+the prediction method can be used in network games on 
+low-bandwidth network channels.</td>
+</tr>
+<tr>
+<td><strong>GetFutureY</strong> ( <br> UnitMap: object, Time: float): float</td>
+<td>Function: GetFutureY - returns the value of the coordinate: y of the object: 
+UnitMap predicted through time: Time. Time: Time is measured in 
+units equal to 1/15 of a second at normal game speed. The smaller 
+the time value: Time, the more accurate the result. In scripts, this function 
+is used for realistic display of spell attacks by enemies. 
+Enemies can cast spells, attack in anticipation. In the œ« engine 
+the prediction method can be used in network games on 
+low-bandwidth network channels.</td>
+</tr>
+<tr>
+<td><strong>GetLeader</strong> ( <br> ): object</td>
+<td>Function: GetLeader - returns the unit object - leader of the team 
+of the current Party. In single player, this will be Zak, and in multiplayer - the acting 
+player character. Apparently, this function lacks the parameter: nPlayer.</td>
+</tr>
+<tr>
+<td><strong>GetLeverState</strong> ( <br> Lever: object): float</td>
+<td>Function: GetLeverState - returns the value: float - 0, if 
+the mechanism is not activated and the value: float - 1, if the mechanism 
+is activated. The command that sets the state of the mechanism: 
+SwitchLeverState. On the map Foothills, you can check the state of the lever from
+the Pyramid: #GetLeverState(GetObjectByID( "4636" )).</td>
+</tr>
+<tr>
+<td><strong>GetLootItemsCount</strong> ( <br> nPlayer: float): float</td>
+<td>Function: GetLootItemsCount - returns the number of successful thefts and 
+the number of taken bonuses (not money, not all items) found, 
+stolen, removed from enemies or corpses on the game zone, including 
+quest items. Actually shows the number of item rows in 
+the "Text info window" of the backpack on the game zone for the current Party, 
+belonging to the player under number: nPlayer. If in single player you kill 
+Atamansha, who has two items: rune "Enhancement" and quest 
+item: "Awl", in the quest "Tools", without previously robbing 
+her, then after picking up the corpse of Atamansha, the function: GetLootItemsCount will return 
+value = 2, since at one time from the corpse of Atamansha, two 
+items will be removed. If you kill two identical boars and pick up two identical 
+items: "Thin skin" from each boar, then after picking up, the function: GetLootItemsCount 
+will also return value=2, even though the items are identical. 
+New entry to the game zone zeros the backpack and "Text info window". If 
+you change the current party on the game zone, then the number of item rows in 
+the "Text info window" will not match the value returned by 
+the function: GetLootItemsCount. In this case, the function: GetLootItemsCount 
+will return a value less than the number of item rows in 
+the "Text info window". Since changing the current Party clears the backpack, but does not 
+clear the "Text info window".</td>
+</tr>
+<tr>
+<td><strong>GetMercsNumber</strong> ( <br> nPlayer: float): float</td>
+<td>Function: GetMercsNumber - returns the number of mercenaries in the current 
+Party of the Player under number: nPlayer, does not include the leader of the current Party.</td>
+</tr>
+<tr>
+<td><strong>GetMoney</strong> ( <br> nPlayer: float): float</td>
+<td>Function: GetMoney - returns the amount of money for the current Party 
+of player number nPlayer. Actually, the command shows the wallet of the current 
+'Parties' of the player: nPlayer on the game zone. The wallet of the current Party on 
+the game zone and in the camp - are always equal. It can be said that the party 
+carries all its money with it.</td>
+</tr>
+<tr>
+<td><strong>GetObject</strong> ( <br> idObject: float): object</td>
+<td>Function: GetObject - returns an instance: object for the object with 
+identifier: idObject. Does not work with ten-digit numbers. If 
+the code: idObject is a ten-digit number, then you should use the function: 
+GetObjectByID.</td>
+</tr>
+<tr>
+<td><strong>GetObjectByID</strong> ( <br> idObject: string): object</td>
+<td>Function: GetObjectByID - returns an instance: object for the object with 
+identifier: idObject, the numeric value: idObject must be 
+enclosed in quotes. Unlike the function: GetObject, the function: 
+GetObjectByID allows a numeric value consisting of ten digits.</td>
+</tr>
+<tr>
+<td><strong>GetObjectByName</strong> ( <br> NameUnitMap: string): object</td>
+<td>Function: GetObjectByName - returns an instance: object for the object with the in-game name: NameUnitMap.</td>
+</tr>
+<tr>
+<td><strong>GetObjectID</strong> ( <br> Object: object): float</td>
+<td>Function: GetObjectID - returns the identifier of the object: idObject. To
+the class Objects belong not only Units, but also items, for example: 
+chests, boxes... Function: GetObjectID - returns correctly only 
+those identifiers of objects that have the code: idObject no more than 10 
+digits, since the system function of œ«, when receiving the code: idObject from 
+the internal name of the object, uses a ten-digit, integer 
+format. You cannot use this function to return the identifier 
+of a unit-object created on the map using the command: AddUnitToServer or
+not assigned in the module of the file: Maps Object (*.mob) the code: idUnit 
+less than 10 digits - in this case, the function: GetObjectID will 
+return rounded values.</td>
+</tr>
+<tr>
+<td><strong>GetPlayer</strong> ( <br> Unit: object): float</td>
+<td>Function: GetPlayer - returns the number of the diplomatic group to which the unit object belongs: Unit.</td>
+</tr>
+<tr>
+<td><strong>GetPlayerUnits</strong> ( <br> nDiplomacyGroup: float): group</td>
+<td>Function: GetPlayerUnits - returns the Diplomatic group of units, 
+consisting in the set of Diplomatic groups under number nDiplomacyGroup.</td>
+</tr>
+<tr>
+<td><strong>GetUnitOfPlayer</strong> ( <br> nPlayer: float, nUnitInCurrentParty: float): object</td>
+<td>Function: GetUnitOfPlayer - returns an instance of a character object from
+the set of the current Party of the player: nPlayer. The object is selected by 
+number: nUnitInCurrentParty in the set of the current Party. The number: 
+nUnitInCurrentParty is assigned to the object by the order of 
+addition to the Party and is sorted (shifted) in case of death or 
+removal of units with a smaller value: nUnitInCurrentParty. The second 
+parameter: nUnitInCurrentParty of the function: GetUnitOfPlayer - is a number, not 
+a code. Do not confuse Party with Diplomatic group or Game group.</td>
+</tr>
+<tr>
+<td><strong>GetWorldTime</strong> ( <br> ): float</td>
+<td>Function: GetWorldTime - returns the current time of in-game days ( in hours ).</td>
+</tr>
+<tr>
+<td><strong>GetX</strong> ( <br> Object: object): float</td>
+<td>Function: GetX - returns the current coordinate: 'x', respectively, 
+for a unit or item (object) on the map relative to the WCS coordinate 
+system. In all functions of œ«, the WCS and LCS coordinate systems by 
+coordinate: 'x' coincide.</td>
+</tr>
+<tr>
+<td><strong>GetY</strong> ( <br> Object: object): float</td>
+<td>Function: GetY - returns the current coordinate: 'y', respectively, 
+for a unit or item (object) on the map relative to the WCS coordinate 
+system. In all functions of œ«, the WCS and LCS coordinate systems by 
+coordinate: 'y' coincide.</td>
+</tr>
+<tr>
+<td><strong>GetZ</strong> ( <br> Object: object): float</td>
+<td>Function: GetZ - returns the current coordinate: 'z', respectively, 
+for a unit or item (object) on the map relative to the WCS coordinate 
+system. The WCS and LCS coordinate systems by coordinate: z practically 
+never coincide. The starting point for coordinate: 'z' in LCS - is 
+a point on the surface of the map, where the object is currently located.</td>
+</tr>
+<tr>
+<td><strong>GetZValue</strong> ( <br> x: float, y: float): float</td>
+<td>Function: GetZValue - returns the height of the solid surface of the map 
+(regardless of the presence of a layer of water or lava above it) at the point with 
+horizontal coordinates( x , y ), but by the command in the console: filter 
+graphics 1, a slightly smaller third coordinate is always output. Function: 
+GetZValue is somewhat different from the function: GetBSZValue.</td>
+</tr>
+<tr>
+<td><strong>GiveDexterity</strong> ( <br> Unit: object, Amount: float)</td>
+<td>Command: GiveDexterity - adds to the unit object: Unit points of 
+dexterity: Amount. Works only on game zones. The function equally 
+affects both enemies and player characters.</td>
+</tr>
+<tr>
+<td><strong>GiveIntelligence</strong> ( <br> Unit: object, Amount: float)</td>
+<td>Command: GiveIntelligence - adds to the unit object: Unit points of 
+intelligence: Amount. Works only on game zones. The function equally 
+affects both enemies and characters in the Player's Party.</td>
+</tr>
+<tr>
+<td><strong>GiveItem</strong> ( <br> nPlayer: float, Item: string)</td>
+<td>Command: GiveItem - places to the player: nPlayer in the Backpack (not only in 
+the train) of the current Party an item (not quest), described by the string Items.
+The item is described by a string of one of the following formats: ". [[ ]]" - 
+for armor or weapon ( the spell description is written in square 
+brackets, and this part of the string is optional ) ; "instruction weapon . " - 
+for a weapon blueprint ; "instruction armor . " - for an armor blueprint ; 
+"instruction quick item . " - for a wand blueprint ; "prototype . " - for 
+a spell base ; "rune . " - for a rune ; "material . [[]] " - for 
+material ( the quantity is written in square brackets, and this part of the string 
+is optional ) ; Examples : "bone spear . dragon green bones" - spear from
+the bone of a green dragon ; "crystal crossbow . 
+diamond[weak{it;d2;d2;m2;m2;m2}]" - diamond crossbow with weakening ; 
+"material . steel[25]" - 25 pieces of steel."</td>
+</tr>
+<tr>
+<td><strong>GiveMoney</strong> ( <br> nPlayer: float, Money: float)</td>
+<td>Command: GiveMoney - adds to the wallet of the object the amount of money: 
+Money. The command: GiveMoney does not work in the shop. Objects 
+belonging to Parties have an individual empty wallet.</td>
+</tr>
+<tr>
+<td><strong>GiveQuestItem</strong> ( <br> nPlayer: float, QuestItem: strin)</td>
+<td>Command: GiveQuestItem - adds a quest item to the backpack 
+of the current Party of the Player. The backpack has four places. Overflow of quest
+items in the backpack does not cause an error, in case of backpack overflow, 
+quest items are added to the train.</td>
+</tr>
+<tr>
+<td><strong>GiveSkill</strong> ( <br> Unit: object, Skill: string, Amount: float)</td>
+<td>Command: GiveSkill - adds the number of points: Amount to the parameter 
+skill: Skill for the object: Unit. The mechanism of adding skill points by the command:
+GiveSkill is divided into three stages: 1- calculating the necessary amount 
+of experience for the current addition of skill points, 2 - adding 
+the calculated amount of experience to the object: Unit (not the Party!). 3 - adding
+the skill at the expense of the added experience, thereby increasing the values 
+of object variables dependent on the amount of experience - these are the parameters: 
+'Health' and 'Stamina' of the object.</td>
+</tr>
+<tr>
+<td><strong>GiveStrength</strong> ( <br> Unit: object, Amount: float)</td>
+<td>Command: GiveStrength - adds to the unit object: Unit points of strength: 
+Amount. Works only on game zones. The function equally 
+affects both enemies and player characters.</td>
+</tr>
+<tr>
+<td><strong>GiveUnitQuestItem</strong> ( <br> Unit: object, QuestItem: string)</td>
+<td>Command: GiveUnitQuestItem - adds a quest item under the name:
+QuestItem to the backpack of the object: Unit (chest). If the object is a member of the 'Party' 
+of the Player, then the quest item is added to the party train.</td>
+</tr>
+<tr>
+<td><strong>GiveUnitSpell</strong> ( <br> Unit: object, sSpell: string)</td>
+<td>Command: GiveUnitSpell - gives the object: Unit a Spell, described 
+by the string Spell. The spell is placed not in the train, but in the set of active 
+spells - if it is full, then nothing happens. In the shop, this 
+procedure does not work, and on the game zone, although the spell is 
+actually given to the player, it does not update the set of spells</td>
+</tr>
+<tr>
+<td><strong>GodMode</strong> ( <br> nPlayer: float, Mode: float)</td>
+<td>Command: GodMode - sets the current party of the player under number: 
+nPlayer the mode: Mode - 0 default value, Mode - 1 the party 
+is invulnerable when running, mana is not spent, Mode - 2 party members 
+are invulnerable, when running mana is not spent and any unit from the party kills 
+the enemy with one hit.</td>
+</tr>
+<tr>
+<td><strong>GroupAdd</strong> ( <br> grpA: group, grpB: group): group</td>
+<td>Function: GroupAdd - returns a group as a set, from objects 
+obtained as a result of comparing two groups of objects, which are present in at least 
+one of the groups: grpA or grpB. Works with any instances 
+of groups: 'Composite', 'Diplomatic' and 'Game'. For 'Game' 
+groups, you can use this function only in scripts at the level of the map 
+module, since the parameters: grpA and grpB should be entered only as 
+global variables.</td>
+</tr>
+<tr>
+<td><strong>GroupCross</strong> ( <br> grpA: group, grpB: group): group</td>
+<td>Function: GroupCross - returns a group as a set from objects 
+of the intersection of groups of objects, which are present both in the group: grpA, and in 
+the group: grpB. Works with any instances of groups: 'Composite', 
+'Diplomatic' and 'Game'. For 'Game' groups, you can use 
+this function only in scripts at the level of the map module, since the parameters:
+grpA and grpB should be entered only as global variables.</td>
+</tr>
+<tr>
+<td><strong>GroupHas</strong> ( <br> grp: group, Unit: object): float</td>
+<td>Function: GroupHas - returns the values: true = 1 - if in the group:
+grp contains the object: Unit. Works with any instances of groups: 
+'Composite', 'Diplomatic' and 'Game'. For 'Game' groups 
+you can use this function only in scripts at the level of the map module,
+since the parameters: grp should be entered only as global 
+variables.</td>
+</tr>
+<tr>
+<td><strong>GroupSee</strong> ( <br> grp: group): group</td>
+<td>Function: GroupSee - eyes of some group, returns a group as 
+a set from objects, visible at the current moment from the eyes of the group: grp. Members 
+of the group::grp can see each other. Accordingly, in this case, units from the group: grp will also enter the 
+group. If units from the group do not see each other and do not see anyone, then the function returns an empty value. 
+Works with any instances of groups: Composite, Diplomatic and 
+Game. For Game groups, you can use this function only in 
+scripts at the level of the map module, since the parameters: grp should be entered 
+only as global variables.</td>
+</tr>
+<tr>
+<td><strong>GroupSize</strong> ( <br> grp: group): float</td>
+<td>Function: GroupSize - returns the number of units in the group: grp. Works
+with any instances of groups: 'Composite', 'Diplomatic' and 
+'Game'. For 'Game' groups, you can use this function only in 
+scripts at the level of the map module, since the parameters: grp should be entered 
+only as global variables.</td>
+</tr>
+<tr>
+<td><strong>GroupSub</strong> ( <br> grpA: group, grpB: group): group</td>
+<td>Function: GroupSub - returns a group as a set from objects, 
+consisting of those units of the group grpA, which are not in grpB. Works with 
+any instances of groups: 'Composite', 'Diplomatic' and 
+'Game'. For 'Game' groups, you can use this function only in 
+scripts at the level of the map module, since the parameters: grpA and grpB should be 
+entered only as global variables.</td>
+</tr>
+<tr>
+<td><strong>GSDelVar</strong> ( <br> nPlayer: float, Var: string)</td>
+<td>Command: GSDelVar - deletes variables with the name: Var for the player number:
+nPlayer. Acts differently for single-player and for
+multiplayer games.</td>
+</tr>
+<tr>
+<td><strong>GSGetVar</strong> ( <br> nPlayer: float, Var: string): float</td>
+<td>Function: GSGetVar - returns the value of the variable with the name: Var for the player
+number: nPlayer. Acts differently for single-player and for
+multiplayer games.</td>
+</tr>
+<tr>
+<td><strong>GSSetVar</strong> ( <br> nPlayer: float, Var: string, nVar: float)</td>
+<td>Command: GSSetVar - sets the value: nVar in the variable with the name: Var
+for the player number: nPlayer. Acts differently for single-player and for
+multiplayer games.</td>
+</tr>
+<tr>
+<td><strong>GSSetVarMax</strong> ( <br> nPlayer: float, Var: string, nVar: float)</td>
+<td>Command: GSSetVarMax - sets the value: nVar only in case, if the specified
+parameter: nVar is greater than the already specified in the variable with the name: Var
+for the player number: nPlayer. Acts differently for single-player and for
+multiplayer games.</td>
+</tr>
+<tr>
+<td><strong>Guard</strong> ( <br> Unit: object, x: float, y: float, rad: float)</td>
+<td>Command: Guard - gives the command to the unit: Unit, to guard the territory with 
+radius: rad with the center at point: (x,y). The unit independently 
+moves around the specified zone, patrolling it.</td>
+</tr>
+<tr>
+<td><strong>HaveItem</strong> ( <br> nPlayer: float, idQuestItem: float): float</td>
+<td>Function: HaveItem - returns true: 1, if the Player under number:
+nPlayer has in the train or in the backpack a quest item under the code: 
+idQuestItem, otherwise false - 0</td>
+</tr>
+<tr>
+<td><strong>HideObject</strong> ( <br> Unit: object, Hide: float)</td>
+<td>Command: HideObject - works only on briefing zones. Object-unit: 
+The value of the parameter: Hide - 1 makes: Unit invisible on the briefing zone, 
+the value of the parameter: Hide - 0 makes the object: Unit visible on the briefing 
+zone.</td>
+</tr>
+<tr>
+<td><strong>HP</strong> ( <br> Unit: object): float</td>
+<td>Function: HP - returns the current value of the parameter: health for 
+the object Unit. This number takes into account the effects of weakening and 
+strengthening spells imposed on the object.</td>
+</tr>
+<tr>
+<td><strong>Idle</strong> ( <br> Unit: object)</td>
+<td>Command: Idle - gives the command to the unit: Unit to do nothing.</td>
+</tr>
+<tr>
+<td><strong>InflictDamage</strong> ( <br> Unit: object, Amount: float)</td>
+<td>Command: InflictDamage - inflicts damage in the amount: Amount 
+without taking into account the armor indicator to the unit-object: Unit. If you destroy the enemy with 
+the help of this command, then the experience for the kill will not go to the current 
+party and group.</td>
+</tr>
+<tr>
+<td><strong>InvokeAlarm</strong> ( <br> nAlarm, x: float, y: float)</td>
+<td>Command: InvokeAlarm - multifunctional command. Activates 
+the variable: nAlarm. Sets the value of the variable: nAlarm equal to 
+the sum of the time of all previous activation and deactivation intervals of these 
+variables from the start of the game. To the variable: nAlarm after activation, 
+the value of the time counter (1/15 sec) is constantly added. Active 
+can be only one number of the variable. Activating the next number 
+of the variable: nAlarm, the command: InvokeAlarm simultaneously deactivates 
+the previous variable, but does not zero it. The number of the next 
+initialized variable does not necessarily have to be in order, you can 
+reinitialize the same number variable or the previous one. To 
+reset all values of variables: nAlarm to zero and stop the counter in 
+the global variable, you need to call the command: InvokeAlarm with the first 
+parameter = 0 : InvokeAlarm(0,0,0). The global variable is not 
+zeroed. Also, this command sets the place on the map at point: 
+(x,y) with the number of the current, initialized variable. This pointer 
+is used in various tasks, is written in the properties of objects, but
+only at the level of the script module. You cannot bind an event to an object from the console. 
+An enemy reacting to an event with this code (preset, 
+initialized in *.mob) approaches this point and goes into Guard mode. If 
+you set the value: nAlarm=0, the alarm is reset, and enemies 
+return to their original place and state.</td>
+</tr>
+<tr>
+<td><strong>IsAlarm</strong> ( <br> nAlarm: float): float</td>
+<td>Function: IsAlarm - returns the value true=1, if
+the variable is initialized, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsAlive</strong> ( <br> Unit: object): float</td>
+<td>Function: IsAlive - returns true=1, if the unit: Unit is alive,
+and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsCameraPlaying</strong> ( <br> ): float</td>
+<td>Function: IsCameraPlaying - returns true=1, if at the current moment
+a camera file is playing ( 'Camera/*.cam' ).</td>
+</tr>
+<tr>
+<td><strong>IsDead</strong> ( <br> Unit: object): float</td>
+<td>Function: IsDead - returns true = 1- if the object: Unit is dead, and 
+false =0 - otherwise. If the object is picked up, if the object does not 
+exist, if you enter the code of an item, for example, the key to the pyramid,
+the function: IsDead will return the value 0.</td>
+</tr>
+<tr>
+<td><strong>IsEnemy</strong> ( <br> Unit: object, nDiplomacyGroup: float): float</td>
+<td>Function: IsEnemy - returns true or false. If the unit object:
+Unit is an enemy for the Diplomatic group number: nDiplomacyGroup</td>
+</tr>
+<tr>
+<td><strong>IsEqual</strong> ( <br> A: float, B: float): float</td>
+<td>Function: IsEqual - returns true = 1, if the number: A equals
+the number: B, and false=1 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsEqualString</strong> ( <br> A: string, B: string): float</td>
+<td>Function: IsEqualString - returns true=1, if the string: A equals
+the string: B taking into account the case, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsGreater</strong> ( <br> A: float, B: float): float</td>
+<td>Function: IsGreater - returns true=1, if the number: A is greater
+than the number: B, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsInArea</strong> ( <br> idArea: float, x: float, y: float): float</td>
+<td>Function: IsInArea - returns true=1, if the point: (x,y) is located
+in one of the areas with identifier: idArea, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsInSquare</strong> ( <br> x: float, y: float, x1: float, y1: float, x2: float, y2: float): float</td>
+<td>Function: IsInSquare - returns true=1, if the point: (x,y) 
+is located in the rectangle: (x1,y1)-(x2, y2), and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsLess</strong> ( <br> A: float, B: float): float</td>
+<td>Function: IsLess - returns true=1, if the number: A is less
+than the number: B, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsNight</strong> ( <br> ): float</td>
+<td>Function: IsNight - returns a value in the range of numbers: 0 to 1 
+depending on the time of day: from 20 to 0 hours - the value from 0.0</td>
+</tr>
+<tr>
+<td><strong>IsPlayerInDanger</strong> ( <br> nPlayer: float): float</td>
+<td>Function: IsPlayerInDanger - returns the value false=0 - if 
+the current Party of the player under number: nPlayer is in safety, 
+or: true=1, if at least one of the party members is in danger. 
+IsPlayerInDanger( 0 ) is NOT equal to NOT( IsPlayerInSafety( 0 ) ).</td>
+</tr>
+<tr>
+<td><strong>IsPlayerInSafety</strong> ( <br> nPlayer: float): float</td>
+<td>Function: IsPlayerInSafety - returns the value false=0 - if 
+the current Party of the player under number: nPlayer is in safety, 
+or: true=1, if at least one of the party members is in danger. 
+IsPlayerInSafety( 0 ) is NOT equal to NOT( IsPlayerInDanger( 0 ) ).</td>
+</tr>
+<tr>
+<td><strong>IsUnitBlocked</strong> ( <br> Unit: object): float</td>
+<td>Function: IsUnitBlocked - returns true=1, if the unit: Unit
+is blocked, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsUnitInWater</strong> ( <br> Unit: object): float</td>
+<td>Function: IsUnitInWater - returns true=1, if the unit: Unit
+is in water, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>IsUnitVisible</strong> ( <br> Unit: object): float</td>
+<td>Function: IsUnitVisible - returns true: 1, if the unit is visible 
+to the player on the game zone, otherwise: 0 (lacks the parameter 
+nPlayer). The command: HideObject does not affect the result returned by this 
+function.</td>
+</tr>
+<tr>
+<td><strong>KillScript</strong> ( <br> )</td>
+<td>Command: KillScript - works only at the level of the map script module!
+Stops the execution of the script, should be called by default at the beginning
+of each script body. Can be not called only in exceptional cases.</td>
+</tr>
+<tr>
+<td><strong>KillUnit</strong> ( <br> Unit: object)</td>
+<td>Command: KillUnit - inflicts maximum damage to the object: Unit. Experience
+for the kill does not go to anyone.</td>
+</tr>
+<tr>
+<td><strong>LeaveToZone</strong> ( <br> nPlayer: float, MapZone: string, nEnterMap: float)</td>
+<td>Command: LeaveToZone - moves the Player: nPlayer (all parties and 
+train) to the zone: MapZone to the place: nEnterMap. Place: nEnterMap - these are 
+pre-planned places on the map where Player Parties 
+can appear. Each portal on the map has its own place number: nEnterMap.
+Numbers and coordinates of nEnterMap are set in 'Res/texts.res/map.txt'.</td>
+</tr>
+<tr>
+<td><strong>Lie</strong> ( <br> Unit: object)</td>
+<td>Command: Lie - changes the movement mode of the object: Unit,
+gives the command: lie down.</td>
+</tr>
+<tr>
+<td><strong>Mana</strong> ( <br> Unit: object): float</td>
+<td>Function: Mana - returns the current value of the parameter:
+stamina for the object: Unit.</td>
+</tr>
+<tr>
+<td><strong>MaxHP</strong> ( <br> Unit: object): float</td>
+<td>Function: MaxHP - returns the maximum possible value of health for
+the object: Unit. This number takes into account the effects of weakening and 
+strengthening spells imposed on the object.</td>
+</tr>
+<tr>
+<td><strong>MaxMana</strong> ( <br> Unit: object): float</td>
+<td>Function: MaxMana - returns the maximum possible value of stamina:
+Mana for the object: Unit.</td>
+</tr>
+<tr>
+<td><strong>MoveParticleSource</strong> ( <br> id: float, x: float, y: float, z: float, Time: float, Remove: float)</td>
+<td>Command: MoveParticleSource - moves the particle source with 
+identifier: id to the point: (x,y,z) in time: Time (measured in 1/15 
+seconds). If the parameter: Remove - is true, then after moving, it deletes 
+the source.</td>
+</tr>
+<tr>
+<td><strong>MovePointLight</strong> ( <br> id: float, x: float, y: float, z: float, Time: float, Remove: float)</td>
+<td>Command: MovePointLight - moves the light source with 
+identifier: id to the point: (x,y,z) in time: Time (measured in 1/15 
+seconds). If the parameter: Remove - is true, then after moving, it deletes 
+the source.</td>
+</tr>
+<tr>
+<td><strong>MoveToObject</strong> ( <br> UnitA: object, UnitB: object)</td>
+<td>Command: MoveToObject - forces the unit: UnitA to move in the current 
+movement mode to the point where at the moment of command execution 
+the unit UnitB was located.</td>
+</tr>
+<tr>
+<td><strong>MoveToPoint</strong> ( <br> Unit: object, x: float, y: float)</td>
+<td>Command: MoveToPoint - gives the command to the unit: Unit to follow to the point: (x,y).</td>
+</tr>
+<tr>
+<td><strong>Mul</strong> ( <br> A: float, B: float): float</td>
+<td>Function: Mul - returns the product of numbers: (A and B)</td>
+</tr>
+<tr>
+<td><strong>Not</strong> ( <br> bool: float): float</td>
+<td>Function: Not - returns the negation of the logical value bool: true=1, if: bool equals zero, and false=0 otherwise.</td>
+</tr>
+<tr>
+<td><strong>PlayAnimation</strong> ( <br> Unit: object, Animation: string)</td>
+<td>Command: PlayAnimation - plays an animation - movement of body 
+parts and accompanying sound effects. Unit - the unit that will 
+play the animation. Where to get anim: First you need to decide on 
+the unit that needs to be set in motion. Then in 
+lmpdatabase\MapObjects\RaceModels.txt find the Name of this unit. Now 
+look at what is in the Mask name column. We need a file with such 
+a name and extension adb, it is located in res\database.res\ . 
+Open this file with notepad and see among the mess of icons some 
+coherent elements - these are the anims of this type of unit. I checked on 
+the example of an orc-shaman: Name = LMP Orc Male Tatoo Mask name = unorma File =
+res\database.res\unorma.adb The anims dug out from there: uattack01..09 - 
+Attack with various weapons. The unit waves an 'axe', draws a 'bowstring', 
+pokes a 'spear'. udeath01..31 - Death. Falls forward / backward / to 
+the side, while running / walking / crawling, with agony / sharply / slowly.
+cidle01..09 - Looking around, shifting from foot to foot. What the character does 
+when standing in place for a long time. ucast01..04 - Spellcasting. Effects 
+like an elemental ball do not appear, only body movement. uhit01..21 - 
+Hit on the unit. Also like death, from any positions. crun01..02 - 
+Running. Tracks appear under the feet. cwalk01..09 - The unit walks, sneaks. 
+There are animations like a wounded gait, tired, lame. ccrawl01 - The unit 
+crawls. ucross01..09 - Transitions between standing / sneaking / lying 
+position of the unit. scross01..09 - One phase of walking / crawling etc. 
+Full step, or one dash to the side. crest - The unit sits down to rest. 
+Besides them, in the 'human' file unhuma.adb I found: (did not check) 
+ubriefing## - Movements during dialogues. uspecial## - Salutes, bows, stands at attention, etc. cspecial## - Some activities 
+like sharpening a sword, sitting on a log, etc. The first letters of the animation are 
+indicators: u - the action will happen once, then the unit will return to 
+the initial state c - the action repeats continuously, the unit does not 
+react to the indication of another animation. If at this time you hit the unit or
+appear in sight (of a hostile), he will not react. If you beat a frozen animation object, it will flinch and then again 
+perform the animation specified by the command. If you kill, it will die as usual and 
+lie down as a corpse. s - similar to u. When entering an incorrect anim, nothing 
+happens. If the unit was moving during the procedure, then 
+it will stop, play the animation and then continue. (In the case of 
+an animation with the letter: 'c' it will stop forever)</td>
+</tr>
+<tr>
+<td><strong>PlayCamera</strong> ( <br> PlayName: string)</td>
+<td>Command: PlayCamera - launches the command of automatic control 
+of the camera view of the game zone. The sequence of camera movement 
+is in the file: PlayName from the game directory: ...\CAMERA\.</td>
+</tr>
+<tr>
+<td><strong>PlayerSee</strong> ( <br> nPlayer: float): group</td>
+<td>Function: PlayerSee - eyes of the party. Returns a combined group of units,
+which the player under number: nPlayer sees, - i.e., all those units that
+are visible to the eyes of the units (members) of the player's party. Units also see each 
+other in the party. NOT Equivalent to calling GroupSee ( GetPlayerUnits ( 
+nDiplomacyGroup ) ).</td>
+</tr>
+<tr>
+<td><strong>PlayFX</strong> ( <br> x: float, y: float, z: float, rad: float, NameWav: string)</td>
+<td>Command: PlayFX - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>PlayMovie</strong> ( <br> PlayName: string)</td>
+<td>Command: PlayMovie - plays a video clip with the name PlayName from the game directory:
+...\MOVIES\. The file name is specified with extension.</td>
+</tr>
+<tr>
+<td><strong>PlayMusic</strong> ( <br> nPlayer: float, PlayName: string)</td>
+<td>Command: PlayMusic - plays a melody with the name PlayName from the subdirectory:
+...\STREAM\. The file name is specified without extension.</td>
+</tr>
+<tr>
+<td><strong>Qfinish</strong> ( <br> )</td>
+<td>Command: QFinish - declares the quest issued in MP 
+by the command: Qstart as completed. At this point, the quest text is displayed in the info window, and at 
+the moment of completion, a dragon appears. If the sequence of commands: 
+Qstart, Qfinish was called in single player, then for the completed quest, 
+all due bonuses and quest items are received. A newly 
+declared quest by the command: QStart with the same name cancels the already 
+completed tasks. For example, if in the quest declaration body there was 
+a command: QObjSeeUnit and the group of players saw this unit, then the newly 
+declared quest will require looking at this unit again.
+Actually is a macro and can be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjArea</strong> ( <br> idArea: float)</td>
+<td>Command: QObjArea - is intended for creating and executing 
+dynamic quests on game zones in MP. As a rule, the area: idArea
+is set under the code - 1. The area is a kind of virtual object on 
+the map including a set of sections on the game zone with the same 
+ID. Actually is a macro and can be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjGetItem</strong> ( <br> id: float)</td>
+<td>Command: QObjGetItem - is intended for creating and executing 
+dynamic quests on game zones in MP. Adds the task: to get 
+a quest item with the code: id. Actually is a macro and can
+be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjKillGroup</strong> ( <br> 'grp': string)</td>
+<td>Command: QObjKillGroup - is intended for creating and executing 
+dynamic quests on game zones in MP. Adds the task: to destroy
+the 'Game' group under the name of the global variable: grp. The game group 
+is created in the game zone module as a global variable and adds to 
+its set unit-objects by the command: AddObject. The parameter: grp - is entered 
+as the name of the global variable. The command: QObjKillGroup cannot be used 
+from the console, since there are no functions returning an instance of the 'Game' 
+group. Is a macro and can be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjKillUnit</strong> ( <br> UnitName: string)</td>
+<td>Command: QObjKillUnit - is intended for creating and executing 
+dynamic quests on game zones in MP. Adds the task: to destroy
+the object with the name: UnitName. Is a macro and can be completely
+replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjSeeObject</strong> ( <br> ObjectName: string)</td>
+<td>Command: QObjSeeObject - is intended for creating and executing 
+dynamic quests on game zones in MP. Adds the task: to see 
+the object (chest, not unit) with the name: objectName. Is a macro and can
+be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjSeeUnit</strong> ( <br> UnitName: string)</td>
+<td>Command: QObjSeeUnit - is intended for creating and executing 
+dynamic quests on game zones in MP. Adds the task: to see 
+the unit-object with the name: UnitName. Is a macro and can
+be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QObjUse</strong> ( <br> Lever: string, State: float)</td>
+<td>Command: QObjUse - is used in the quest description procedure and 
+adds the task - to switch the lever(Lever) to the state(State) Adds 
+the task: to switch the 'lever': Lever to the state: State in the set of tasks 
+declared by the command: Qstart. Is a macro and can
+be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QStart</strong> ( <br> QuestName: string)</td>
+<td>Command: QStart - dynamically, during the game or on the briefing-zone, 
+the command: QStart declares a quest in MP on the œ« game server and opens 
+the current list of objectives. Closes the current list of objectives 
+the command: QFinish. In the body of the Quest Declaration (list of tasks) 
+are commands setting the conditions for completing the Quest. The order 
+of setting tasks must be in the direct sequence of their execution
+and must not be violated, since subtasks in MP are issued 
+sequentially as they are completed. The quest can be declared in 
+single player, but this is meaningless, since the sequence 
+of receiving quests in single player is provided in advance in the table 
+of resources. Is a macro and can be completely replaced by regular commands.</td>
+</tr>
+<tr>
+<td><strong>QuestComplete</strong> ( <br> nPlayer: float, QuestName: string)</td>
+<td>Command: QuestComplete - like the MP command: QFinish declares the quest 
+completed and gives experience for completing the quest, but messages about 
+quest completion are not displayed in the game info window.</td>
+</tr>
+<tr>
+<td><strong>Random</strong> ( <br> Max: float): float</td>
+<td>Function: Random - returns a pseudorandom number in the range from: 0 to: Max.</td>
+</tr>
+<tr>
+<td><strong>RecalcMercBriefings</strong> ( <br> )</td>
+<td>Command: RecalcMercBriefings - in single player recalculates the conditions
+and possibilities of playing dialogues with potential and current companions.</td>
+</tr>
+<tr>
+<td><strong>RedeployParty</strong> ( <br> nPlayer: float)</td>
+<td>Command: RedeployParty - completes the transaction of setting the current party for
+the selected player: nPlayer.</td>
+</tr>
+<tr>
+<td><strong>RemoveObject</strong> ( <br> grp: group, Unit: object)</td>
+<td>Command: RemoveObject - removes the belonging of the object: Unit to 
+the global variable 'Game group': grp. The game group is created in 
+the game zone module as a global variable and adds to its set 
+unit-objects by the command: AddObject. The parameter: grp - is entered as the name 
+of the global variable. The command: RemoveObject cannot be used from 
+the console, since there are no functions returning an instance of the 'Game' group.</td>
+</tr>
+<tr>
+<td><strong>RemoveObjectFromServer</strong> ( <br> Object: object)</td>
+<td>Command: RemoveObjectFromServer - removes any object from the server.
+Identical to RemoveUnitFromControl.</td>
+</tr>
+<tr>
+<td><strong>RemoveParty</strong> ( <br> nPlayer: float, PartyName: string)</td>
+<td>Command: RemoveParty - removes the party by name: PartyName from the set of parties
+of the player under number: nPlayer.</td>
+</tr>
+<tr>
+<td><strong>RemoveQuestItem</strong> ( <br> Unit: object, id: float)</td>
+<td>Command: RemoveQuestItem - removes a quest item from the backpack of the unit.
+Actually acts only on objects with specified quest items
+via GiveUnitQuestItem or in *.mob in the QuestItems field.</td>
+</tr>
+<tr>
+<td><strong>RemoveUnitFromControl</strong> ( <br> nPlayer: float, Unit: object)</td>
+<td>Command: RemoveUnitFromControl - removes the icon of the unit: Unit from the control
+panel of the player: nPlayer on the game zone.</td>
+</tr>
+<tr>
+<td><strong>RemoveUnitFromParty</strong> ( <br> nPlayer: float, NamePersRes: string)</td>
+<td>Command: RemoveUnitFromParty - removes from the current party the character: 
+NamePersRes belonging to the player under number: nPlayer. Is it possible to remove 
+a character not from the current party, using the usual pointer 
+of belonging to the party through a colon.</td>
+</tr>
+<tr>
+<td><strong>RemoveUnitFromServer</strong> ( <br> Unit: object)</td>
+<td>Command: RemoveUnitFromServer - removes any object from the server.
+Equivalent to RemoveObjectFromServer.
+<tr>
+<td><strong>ResetTarget</strong> ( <br> Unit: object)</td>
+<td>Command: ResetTarget - resets all modes: guarding, patrolling
+and aggressiveness. Before compiling the list of patrolling and 
+guarding commands, you should reset with this command. This is the youngest command in 
+œ«. In version 1.0 of the game, it is not present. It appeared in service pack 1.02, 
+so that the famous question: '...why doesn't the Cyclops leave' would no longer 
+bother the developers.</td>
+</tr>
+<tr>
+<td><strong>Rest</strong> ( <br> Unit: object)</td>
+<td>Command: Rest - the unit: Unit rests, if possible, sits on the ground.</td>
+</tr>
+<tr>
+<td><strong>RotateTo</strong> ( <br> Unit: object, x: float, y: float)</td>
+<td>Command: RotateTo - turns the object: Unit to face the direction towards
+the point( X , Y ). Immediately after calling the command: AddUnitToServer the command: 
+RotateTo does not work, you need time for the Unit to appear on the map, but 
+you cannot make a delay with the command: Sleep from the console. The command: Sleep 
+works only at the level of the Map Script Module.</td>
+</tr>
+<tr>
+<td><strong>Run</strong> ( <br> Unit: object)</td>
+<td>Command: Run - switches the unit-object: Unit to 'run' mode</td>
+</tr>
+<tr>
+<td><strong>RunWorldTime</strong> ( <br> Hour: float)</td>
+<td>Command: RunWorldTime - resets the current time: Hour in œ«.</td>
+</tr>
+<tr>
+<td><strong>SendEvent</strong> ( <br> nPlayer: float, event: float)</td>
+<td>Command: SendEvent - debugger command. Sends a number to the game engine.</td>
+</tr>
+<tr>
+<td><strong>SendStringEvent</strong> ( <br> nPlayer: float, event: string)</td>
+<td>Command: SendStringEvent - Sends a string to the game engine. Possible values:
+'say', call form: SendStringEvent( 0, "say [SAY * ] [PERS *]" ) - initiates a conversation
+of a unit that is an NPC with a string displayed in the info window with the name SAY [tosaya]
+and with an audio file being played, having a similar name in Res/database.res/Acks
+in the 4th argument of the string. Example: {1=Acks\Dier\Scenario\Dier.wav##2=100##3=blah-blah##4=s26}
+- the required string, so that Dier when calling @SendStringEvent( 0, "say s26 Magess" )
+said 'Acks\Dier\Scenario\Dier.wav' from 'res/sfx.res...' aloud and filled
+the info window with words from 'res/texts.res/say s26'. In the original game, no one except
+the main hero and companions are NPCs, because their phrases are not reproduced,
+and string files say * are named incorrectly; say_block - acts similarly, but
+blocks the speaker; tutorial - calls the tutorial ( example:
+@SendStringEvent( 0, "tutorial zt1" ) ); briefing - calls the briefing; autosave -
+enables autosave; endofgame - ends the game.</td>
+</tr>
+<tr>
+<td><strong>Sentry</strong> ( <br> Unit: object, x: float, y: float)</td>
+<td>Command: Sentry - gives the command to the unit: Unit to guard the point: (x,y), 
+attacking enemies in the field of view. After destroying the enemy, 
+returns to the specified point.</td>
+</tr>
+<tr>
+<td><strong>SetBackgroudColor</strong> ( <br> R: float, G: float, B: float)</td>
+<td>Command: SetBackGroundColor - sets the background color on the map in 
+mode: (R,G,B). The background is overlapped by sky textures, so the result 
+will be noticeable only on cave maps.</td>
+</tr>
+<tr>
+<td><strong>SetCameraOrientation</strong> ( <br> float)</td>
+<td>Command: SetCameraOrientation - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>SetCameraPosition</strong> ( <br> float, float, float)</td>
+<td>Command: SetCameraPosition - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>SetCP</strong> ( <br> Object: object, x: float, y: float, z: float)</td>
+<td>Command: SetCP - moves the object: object on the map, (not only a unit)
+to the point: (x,y). On the map Foothills, you can move the Lever from the pyramid: 
+@setcp( GetObjectByID( '4636' ), 22 , 140, 0). Recalculates the passability graph.</td>
+</tr>
+<tr>
+<td><strong>SetCPFast</strong> ( <br> Object: object, x: float, y: float, z: float)</td>
+<td>Command: SetCPFast - moves the object: object on the map, (not only 
+a unit) to the point: (x,y). On the map Foothills, you can move the Lever from 
+the pyramid: @setcp( GetObjectByID( '4636' ), 22 , 140, 0). Does not
+recalculate the AI graph.</td>
+</tr>
+<tr>
+<td><strong>SetCurrentParty</strong> ( <br> nPlayer: float, PartyName: string)</td>
+<td>Command: SetCurrentParty - sets the current party: PartyName from
+the set of parties of the player under number: nPlayer.</td>
+</tr>
+<tr>
+<td><strong>SetDiplomacy</strong> ( <br> nDiplomacyGroupA: float, nDiplomacyGroupB: float, Diplomacy: float)</td>
+<td>Command: SetDiplomacy - changes diplomatic relations between 
+groups of objects. Groups: nDiplomacyGroupA and nDiplomacyGroupB 
+are represented by numbers. The Diplomatic group of the 'Party' of the 'Player' always
+belongs to the diplomatic group number = 0. Possible values: 
+Diplomacy: 1 - ally 0 - neutral -1 - enemy.</td>
+</tr>
+<tr>
+<td><strong>SetDirectionToObject</strong> ( <br> nUnit: float)</td>
+<td>Command: SetDirectionToObject - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>SetEnemy</strong> ( <br> Unit: object, nDiplomacyGroup: float)</td>
+<td>Command: SetEnemy - adds to the list of hostile factions of the unit: Unit
+the diplomatic group: nDiplomacyGroup. The action is analogous to that,
+if a representative of the diplomatic group: nDiplomacyGroup attacked
+the unit: Unit.</td>
+</tr>
+<tr>
+<td><strong>SetParticleSourceSize</strong> ( <br> id: float, rad: float)</td>
+<td>Command: SetParticleSourceSize - changes the radius of the particle source
+with identifier: id to: rad.</td>
+</tr>
+<tr>
+<td><strong>SetPlayer</strong> ( <br> Unit: object, nDiplomacyGroup: float)</td>
+<td>Command: SetPlayer - sets the unit: Unit belonging
+to the diplomatic group number: nDiplomacyGroup.</td>
+</tr>
+<tr>
+<td><strong>SetPlayerAggression</strong> ( <br> float, float)</td>
+<td>Command: SetPlayerAggression - does nothing.</td>
+</tr>
+<tr>
+<td><strong>SetScience</strong> ( <br> Object: object, idQuestItem: float, SkillAmount: float,
+boolHands: float, boolLatchkey: float, boolCrowbar: float, boolKey: float)</td>
+<td>Command: SetScience - sets new parameter-conditions for switching
+for the lever: Object. The lever will be switched by a quest item with
+number: idQuestItem, with the skill 'Sleight of hand': SkillAmount,
+with the ability to do it with hands: boolHands, with a lockpick: boolLatchkey,
+with a crowbar: boolCrowbar, with a key: boolKey (1 - opens this way, 0 -
+does not open this way.</td>
+</tr>
+<tr>
+<td><strong>SetSpellAggression</strong> ( <br> Unit: object, Aggression: float)</td>
+<td>Command: SetSpellAggression - does nothing.</td>
+</tr>
+<tr>
+<td><strong>SetSunLight</strong> ( <br> sunlightR: float, sunlightG: 
+float, sunlightB: float, ambientR: float, ambientG: float, ambientB: 
+float, skyR: float, skyG: float, skyB: float)</td>
+<td>Command: SetSunLight - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>SetWaterLevel</strong> ( <br> idWBassein: float, Level: float, delay: float)</td>
+<td>Command: SetWaterLevel - sets the level: Level of water: 
+idWBassein with delay: delay relative to the bottom of the water body. The water level 
+does not affect the passability of wading zones by Characters.</td>
+</tr>
+<tr>
+<td><strong>SetWind</strong> ( <br> x: float, y: float, z: float, force: float)</td>
+<td>Command: SetWind - sets a gust of wind towards the point ( x, y, z )
+with force force.</td>
+</tr>
+<tr>
+<td><strong>ShowBitmap</strong> ( <br> float, Bitmap: string)</td>
+<td>Command: ShowBitmap - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>ShowCredits</strong> ( <br> string)</td>
+<td>Command: ShowCredits - does nothing.</td>
+</tr>
+<tr>
+<td><strong>Sleep</strong> ( <br> Sleep: float)</td>
+<td>Command: Sleep - waits for the number of segments: Sleep
+in the body of the called procedure at the level of the Map Script Module
+(in 1 second there are 15 segments).</td>
+ </tr>
+<tr>
+<td><strong>SleepUntil</strong> ( <br> bool: float)</td>
+<td>Command: SleepUntil - waits for the execution of the script function until
+the condition: bool becomes non-zero.</td>
+</tr>
+<tr>
+<td><strong>SleepUntilIdle</strong> ( <br> Unit: object)</td>
+<td>Command: SleepUntilIdle - waits for the execution of the script function until
+the unit: Unit enters the waiting state (Idle).</td>
+</tr>
+<tr>
+<td><strong>Stand</strong> ( <br> Unit: object)</td>
+<td>Command: Stand - changes the movement mode of the object: Unit to walk.</td>
+</tr>
+<tr>
+<td><strong>StartAnimation</strong> ( <br> Unit: object, PathAnimation: string)</td>
+<td>Command: StartAnimation - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>Sub</strong> ( <br> A: float, B: float): float</td>
+<td>Function: Sub - returns the difference of numbers A and B.</td>
+</tr>
+<tr>
+<td><strong>Sum</strong> ( <br> GlobalVariable: object, grp: group, operation: float): float</td>
+<td>Function: Sum - applies operation to all objects from the group
+and sums the results.</td>
+</tr>
+<tr>
+<td><strong>SwitchLeverState</strong> ( <br> Lever: object, State: float)</td>
+<td>Command: SwitchLeverState - sets the mechanism (lever): Lever to 
+the initial position off: State - 0 and to the position on: State - 
+1. Accordingly, the positions of levers on game 
+zones are visually displayed. Function: GetLeverState - returns the state of the mechanism.</td>
+</tr>
+<tr>
+<td><strong>SwitchLeverStateEx</strong> ( <br> Lever: object, State: float, Delay: float)</td>
+<td>Command: SwitchLeverStateEx - sets the mechanism (lever): Lever to
+the initial position off: State = 0 and to the position on: State =
+1. Accordingly, the positions of levers on game 
+zones are visually displayed. The additional parameter: Delay allows setting the time 
+of delay of the mechanism animation. Function: GetLeverState - returns 
+the state of the mechanism.</td>
+</tr>
+<tr>
+<td><strong>UMAg</strong> ( <br> Unit: object, Ag: float)</td>
+<td>Command: UMAg - gives the command to the unit: Unit to avoid enemies,
+the aggressive state of the object must be reset.</td>
+</tr>
+<tr>
+<td><strong>UMAggression</strong> ( <br> Unit: object)</td>
+<td>Command: UMAggression - gives the command to the unit: Unit
+to attack enemies within sight.</td>
+</tr>
+<tr>
+<td><strong>UMClear</strong> ( <br> Unit: object)</td>
+<td>Command: UMClear - removes all directives of independent
+behavior of the unit: Unit.</td>
+</tr>
+<tr>
+<td><strong>UMCorpseWatcher</strong> ( <br> Unit: object)</td>
+<td>Command: UMCorpseWatcher - adds to the unit: Unit the motivation
+of watching corpses.</td>
+</tr>
+<tr>
+<td><strong>UMFear</strong> ( <br> Unit: object, Fear: float)</td>
+<td>Command: UMFear - sets the behavior 'fear' for the unit: Unit. At 
+this, the unit loses the ability to attack enemies and tries to hide from 
+enemies. Default behavior for neutral beasts. Parameter: Fear - will
+the unit always be afraid of the player. 1 and more - will be, 0 - will not.</td>
+</tr>
+<tr>
+<td><strong>UMFollow</strong> ( <br> UnitA: object, UnitB: object)</td>
+<td>Command: UMFollow - gives the command to the object: UnitA to constantly 
+follow the object: UnitB. After the battle, the command is not canceled. Similar 
+properties of behavior are in the command: Follow.</td>
+</tr>
+<tr>
+<td><strong>UMGuard</strong> ( <br> Unit: object, x: float, y: float, rad: float)</td>
+<td>Command: UMGuard - forces the object: Unit to guard the point (x,y) with
+radius: rad.</td>
+</tr>
+<tr>
+<td><strong>UMGuardEx</strong> ( <br> Unit: object, x: float, y: float, rad: float, Delay: float)</td>
+<td>Command: UMGuardEx - forces the object: Unit to guard the point (x,y) with 
+radius: rad and delay: Delay at random stopping points of the object: 
+Unit.</td>
+</tr>
+<tr>
+<td><strong>UMPatrol</strong> ( <br> Unit: object)</td>
+<td>Command: UMPatrol - The command causes an execution error! To 
+set the patrolling mode, you should apply the command: ResetTarget 
+before compiling the list of patrol commands.</td>
+</tr>
+<tr>
+<td><strong>UMPatrolAddPoint</strong> ( <br> Unit: object, x: float, y: float)</td>
+<td>Command: UMPatrolAddPoint - indicates a new observation point: (x,y) to
+which the object will move when patrolling. For the delay of the object at 
+the observation point and orientation of the object towards the observation, you need 
+to use after the command: UMPatrolAddPoint the command: 
+UMPatrolAddPointLook.</td>
+</tr>
+<tr>
+<td><strong>UMPatrolAddPointLook</strong> ( <br> Unit: object, x: float, y: float, Delay: float)</td>
+<td>Command: UMPatrolAddPointLook - indicates to the object: Unit the point (x,y) to
+which the object: Unit will look and how long: Delay the object 
+will stay in this position.</td>
+</tr>
+<tr>
+<td><strong>UMPatrolClear</strong> ( <br> Unit: object)</td>
+<td>Command: UMPatrolClear - removes all patrolling directives 
+set by the commands: UMPatrolAddPointLook, UMPatrolAddPoint. 
+Similar action of the command: ResetTarget, but ResetTarget resets all
+UM* commands.</td>
+</tr>
+<tr>
+<td><strong>UMPlayer</strong> ( <br> Unit: object)</td>
+<td>Command: UMPlayer - subordinates the unit: Unit to the same rules by which
+player units move. Convenient to use when it is necessary to simulate
+reasonable behavior in Unit. The behavior UMPlayer for mobs is used for briefing
+zones for controlling NPC scripts.</td>
+</tr>
+<tr>
+<td><strong>UMRevenge</strong> ( <br> Unit: object)</td>
+<td>Command: UMRevenge - this command sets the object: Unit a conditional
+fear - such an enemy will avoid battles, running away from everyone it considers
+hostile to itself. To fight with an enemy in such a state, you need to wound
+him or drive him into a dead end.</td>
+</tr>
+<tr>
+<td><strong>UMSentry</strong> ( <br> Unit: object, x: float, y: float)</td>
+<td>Command: UMSentry - sets the mode for the unit: Unit to guard 
+the point: (x,y), attacking enemies in the field of view. After destroying 
+the enemy, the unit returns to the specified point.</td>
+</tr>
+<tr>
+<td><strong>UMStandard</strong> ( <br> Unit: object)</td>
+<td>Command: UMStandard - gives the command to the unit: Unit to attack any 
+nearest enemy in the field of view of the unit: Unit. Standard mode for 
+enemy objects (includes aggression, suspicion and watching corpses).</td>
+</tr>
+<tr>
+<td><strong>UMSuspection</strong> ( <br> Unit: object)</td>
+<td>Command: UMSuspection - adds to the unit Unit the motivation of suspicion
+(reaction to external stimuli). Separately from other motivations - gives
+the command to the unit: Unit to go to any nearest enemy in the field of view
+of the unit: Unit.</td>
+</tr>
+<tr>
+<td><strong>UnitInSquare</strong> ( <br> Unit: object, x1: float, y1: float, x2: float, y2: float): float</td>
+<td>Function: UnitInSquare - returns true=1, if the unit: Unit
+is located in the rectangle: (x1,y1)-(x2, y2).</td>
+</tr>
+<tr>
+<td><strong>UnitSee</strong> ( <br> Unit: object): group</td>
+<td>Function: UnitSee - returns a group as a set from objects, 
+consisting of those units that the unit: Unit sees. The unit does not see 
+itself: GroupSize(UnitSee( GetLeader())).</td>
+</tr>
+<tr>
+<td><strong>WaitEndAnimation</strong> ( <br> )</td>
+<td>Command: WaitEndAnimation - not implemented in the game.exe engine code.</td>
+</tr>
+<tr>
+<td><strong>WaitSegment</strong> ( <br> Wait: float)</td>
+<td>Command: WaitSegment - waits for the segment: Wait
+in the body of the called procedure at the level of the Map Script Module
+(in 1 second there are 15 segments).</td>
+</tr>
+<tr>
+<td><strong>Walk</strong> ( <br> Unit: object)</td>
+<td>Command: Walk - gives the command to the unit: Unit to switch to walk.</td>
+</tr>
+<tr>
+<td><strong>WasLooted</strong> ( <br> Unit: object): float</td>
+<td>Function: WasLooted - returns the value - 0, if the backpack of the object: 
+Unit is empty. The backpack (train) of the object can be robbed or searched from its 
+corpse. Theft of quest items does not affect the value returned by the function.</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+
+</body></html>

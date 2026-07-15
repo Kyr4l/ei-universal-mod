@@ -1,0 +1,6 @@
+1.01:
+Removed one unnecessary message box.
+Fixed the issue with action points being consumed when separated by commas – now everything is written and read as expected with commas.
+Fixed the guard point delete button.
+Improved autosave logic.
+You can now bulk change coordinates for everything that has them.
