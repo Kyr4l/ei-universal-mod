@@ -4,3 +4,12 @@ Fixed the issue with action points being consumed when separated by commas – now
 Fixed the guard point delete button.
 Improved autosave logic.
 You can now bulk change coordinates for everything that has them.
+
+1.02:
+Fixed text drag & drop feature.
+Fixed replacing - now it can be undone and redone.
+Fixed traps' areas and targets fields editing.
+Now if editor load file without traps' targets field it recreates it dynamically.
+You can now bulk change coordinates for really everything that has them, not like before.
+The document has been supplemented with a column containing signatures.
+Errors in the document have been corrected.

@@ -18,4 +18,4 @@ https://habr.com/ru/users/Offensive/
 https://discord.gg/Cyq4bdgxWd
 Discord: vggverygoodgirla
 
-Version: 1.01.
+Version: 1.02.

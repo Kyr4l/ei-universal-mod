@@ -25,30 +25,32 @@
   <strong>Auto-Apply:</strong> When enabled (Settings → Auto Apply), changes are automatically saved when switching to another object or field. You don't need to press Apply (F5) every time.
 </div>
 
+<h2>Object Section (0x0000B000)</h2>
+<p>There are 8 types of objects in the Evil Islands: Course of the Soul, all of which are located in object sections.</p>
 <!-- ==================== OBJECTS ==================== -->
-<h2>1. Objects</h2>
+<h2>1. Objects (0x0000B001)</h2>
 <p>Static objects on the map: buildings, rocks, trees, furniture, etc.</p>
 
 <h3>Common Fields</h3>
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">ID</td><td>DWord</td><td>Unique numeric identifier. Must be unique for all objects on the map. Used in scripts via <code>GetObject()</code> as a number and via <code>GetObjectByID()</code> as a string.</td></tr>
-<tr><td class="field">Type</td><td>DWord</td><td>Object type code. Determines how the engine processes this object.</td></tr>
-<tr><td class="field">ParentID</td><td>DWord</td><td>Parent object ID. Used for inheriting objects from each other — binding objects together.</td></tr>
-<tr><td class="field">Player</td><td>Byte</td><td>Diplomatic group number (0-31). Determines ownership.</td></tr>
-<tr><td class="field">InScript</td><td>Byte</td><td>A complex parameter that affects object dynamics when working with it via script procedures and in edge cases different from basic game situations. It must be set to 1 for correct operation with objects through script procedures; for others it may be 0.</td></tr>
-<tr><td class="field">DropShadow</td><td>Byte</td><td>1 = render shadow under the object. 0 = no shadow.</td></tr>
-<tr><td class="field">Name</td><td>String</td><td>Internal name on the map. Used for readability. Case is ignored by the engine.</td></tr>
-<tr><td class="field">Template</td><td>String</td><td>Model name from 'Res/figures.res' (e.g., 'fence00', 'stwali1').</td></tr>
-<tr><td class="field">Parent</td><td>String</td><td>Internal name of the parent object. Used for readability. Case is ignored by the engine.</td></tr>
-<tr><td class="field">Texture1</td><td>String</td><td>Primary texture name from 'Res/textures.res'.</td></tr>
-<tr><td class="field">Texture2</td><td>String</td><td>Secondary texture name from 'Res/textures.res'.</td></tr>
-<tr><td class="field">QuestInfo</td><td>String</td><td>String with quest information. If the specified condition equals 1, the unit will be highlighted with a quest marker on the map. Can be used even without quests in the database — to highlight needed non-quest units.</td></tr>
-<tr><td class="field">Position</td><td>3Floats</td><td>World coordinates (X, Y, Z) in WCS. Format: <code>x, y, z</code></td></tr>
-<tr><td class="field">Rotation</td><td>Quaternion</td><td>Orientation as a W,X,Y,Z quaternion. Use the XYZ fields in degrees at the bottom right for convenient rotation editing of the entity.</td></tr>
-<tr><td class="field">Complection</td><td>3Floats</td><td>Scale factors (X, Y, Z). 1.0, 1.0, 1.0 = normal size.</td></tr>
-<tr><td class="field">Comments</td><td>String</td><td>Free-form comment. Not used by the engine, only for notes in the editor.</td></tr>
-<tr><td class="field">Parts</td><td>MultiString</td><td>List of sub-object parts. One part per line. Defined in the model's *.mod header file. If empty, all parts of the model are used simultaneously.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">ID</td><td class="field">0x0000B002</td><td>DWord</td><td>Unique numeric identifier. Must be unique for all objects on the map. Used in scripts via <code>GetObject()</code> as a number and via <code>GetObjectByID()</code> as a string.</td></tr>
+<tr><td class="field">Type</td><td class="field">0x0000B003</td><td>DWord</td><td>Object type code. Determines how the engine processes this object.</td></tr>
+<tr><td class="field">ParentID</td><td class="field">0x0000B012</td><td>DWord</td><td>Parent object ID. Used for inheriting objects from each other — binding objects together.</td></tr>
+<tr><td class="field">Player</td><td class="field">0x0000B011</td><td>Byte</td><td>Diplomatic group number (0-31). Determines ownership.</td></tr>
+<tr><td class="field">InScript</td><td class="field">0x0000B013</td><td>Byte</td><td>A complex parameter that affects object dynamics when working with it via script procedures and in edge cases different from basic game situations. It must be set to 1 for correct operation with objects through script procedures; for others it may be 0.</td></tr>
+<tr><td class="field">DropShadow</td><td class="field">0x0000B014</td><td>Byte</td><td>1 = render shadow under the object. 0 = no shadow.</td></tr>
+<tr><td class="field">Name</td><td class="field">0x0000B004</td><td>String</td><td>Internal name on the map. Used for readability. Case is ignored by the engine.</td></tr>
+<tr><td class="field">Template</td><td class="field">0x0000B006</td><td>String</td><td>Model name from 'Res/figures.res' (e.g., 'fence00', 'stwali1').</td></tr>
+<tr><td class="field">Parent</td><td class="field">0x0000B00E</td><td>String</td><td>Internal name of the parent object. Used for readability. Case is ignored by the engine.</td></tr>
+<tr><td class="field">Texture1</td><td class="field">0x0000B007</td><td>String</td><td>Primary texture name from 'Res/textures.res'.</td></tr>
+<tr><td class="field">Texture2</td><td class="field">0x0000B008</td><td>String</td><td>Secondary texture name from 'Res/textures.res'.</td></tr>
+<tr><td class="field">QuestInfo</td><td class="field">0x0000B016</td><td>String</td><td>String with quest information. If the specified condition equals 1, the unit will be highlighted with a quest marker on the map. Can be used even without quests in the database — to highlight needed non-quest units.</td></tr>
+<tr><td class="field">Position</td><td class="field">0x0000B009</td><td>3Floats</td><td>World coordinates (X, Y, Z) in WCS. Format: <code>x, y, z</code></td></tr>
+<tr><td class="field">Rotation</td><td class="field">0x0000B00A</td><td>Quaternion</td><td>Orientation as a W,X,Y,Z quaternion. Use the XYZ fields in degrees at the bottom right for convenient rotation editing of the entity.</td></tr>
+<tr><td class="field">Complection</td><td class="field">0x0000B00C</td><td>3Floats</td><td>Scale factors (X, Y, Z). 1.0, 1.0, 1.0 = normal size.</td></tr>
+<tr><td class="field">Comments</td><td class="field">0x0000B00F</td><td>String</td><td>Free-form comment. Not used by the engine, only for notes in the editor.</td></tr>
+<tr><td class="field">Parts</td><td class="field">0x0000B00D</td><td>MultiString</td><td>List of sub-object parts. One part per line. Defined in the model's *.mod header file. If empty, all parts of the model are used simultaneously.</td></tr>
 </table>
 
 <div class="tip">
@@ -56,20 +58,20 @@
 </div>
 
 <!-- ==================== UNITS ==================== -->
-<h2>2. Units</h2>
+<h2>2. Units  (0xBBBB0000)</h2>
 <p>Living entities: player characters, NPCs, enemies, creatures. Units have all Object fields PLUS additional fields below.</p>
 
 <h3>Unit-Specific Fields</h3>
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">Import</td><td>Byte</td><td>1 = the unit needs to use some of the parameters described below (from "Armors" to "Stats"). 0 = everything is taken from 'Res/database.res/units.udb'.</td></tr>
-<tr><td class="field">Prototype</td><td>String</td><td>Prototype name from 'Res/database.res/units.udb' (e.g., 'Human Hero', 'Rick', 'HareF0', 'PigF0').</td></tr>
-<tr><td class="field">Armors</td><td>MultiString</td><td>Equipped armor items. One item per line. Format: <code>item_name.material[enchantment]</code></td></tr>
-<tr><td class="field">Weapons</td><td>MultiString</td><td>Equipped weapons. Same format as Armors.</td></tr>
-<tr><td class="field">Spells</td><td>MultiString</td><td>Learned spells. Format: <code>prototype{rune;rune;...}</code></td></tr>
-<tr><td class="field">QuickItems</td><td>MultiString</td><td>Quick-use items (wands, scrolls). Same format as Armors.</td></tr>
-<tr><td class="field">QuestItems</td><td>MultiString</td><td>Quest items in inventory. One per line.</td></tr>
-<tr><td class="field">Stats</td><td>Stats</td><td>Character statistics.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">Import</td><td class="field">0xBBBB000A</td><td>Byte</td><td>1 = the unit needs to use some of the parameters described below (from "Armors" to "Stats"). 0 = everything is taken from 'Res/database.res/units.udb'.</td></tr>
+<tr><td class="field">Prototype</td><td class="field">0xBBBB0002</td><td>String</td><td>Prototype name from 'Res/database.res/units.udb' (e.g., 'Human Hero', 'Rick', 'HareF0', 'PigF0').</td></tr>
+<tr><td class="field">Armors</td><td class="field">0xBBBB0009</td><td>MultiString</td><td>Equipped armor items. One item per line. Format: <code>item_name.material[enchantment]</code></td></tr>
+<tr><td class="field">Weapons</td><td class="field">0xBBBB0008</td><td>MultiString</td><td>Equipped weapons. Same format as Armors.</td></tr>
+<tr><td class="field">Spells</td><td class="field">0xBBBB0007</td><td>MultiString</td><td>Learned spells. Format: <code>prototype{rune;rune;...}</code></td></tr>
+<tr><td class="field">QuickItems</td><td class="field">0xBBBB0006</td><td>MultiString</td><td>Quick-use items (wands, scrolls). Same format as Armors.</td></tr>
+<tr><td class="field">QuestItems</td><td class="field">0xBBBB0005</td><td>MultiString</td><td>Quest items in inventory. One per line.</td></tr>
+<tr><td class="field">Stats</td><td class="field">0xBBBB0004</td><td>Stats</td><td>Character statistics.</td></tr>
 </table>
 
 <h3>Logic Slots</h3>
@@ -82,17 +84,17 @@
 </div>
 
 <!-- ==================== LEVERS ==================== -->
-<h2>3. Levers</h2>
+<h2>3. Levers (0xBBAC0000)</h2>
 <p>Interactive mechanisms: doors, switches, gates, trap activation. Have all Object fields PLUS:</p>
 
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">Science</td><td>DWord3</td><td>Opening requirements: quest item ID, skill amount, hand ability. Format: <code>id, skill, flags</code></td></tr>
-<tr><td class="field">CurrState</td><td>Byte</td><td>Current state (0 = off, 1 = on). Use <code>GetLeverState()</code> in scripts.</td></tr>
-<tr><td class="field">TotalStates</td><td>Byte</td><td>Total number of states the lever can have.</td></tr>
-<tr><td class="field">Cycled</td><td>Byte</td><td>1 = the lever can be toggled repeatedly. 0 = single use.</td></tr>
-<tr><td class="field">Door</td><td>Byte</td><td>1 = this lever controls a door. 0 = regular lever. For doors, the character will try to approach from the front or back sides, described mathematically in 'Res/database.res/levers.ldb'.</td></tr>
-<tr><td class="field">CalcGraph</td><td>Byte</td><td>1 = recalculate the AI pathfinding graph when toggled.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">Science</td><td class="field">0xBBAC0006</td><td>DWord3</td><td>Opening requirements: quest item ID, skill amount, hand ability. Format: <code>flags, questitemid, skill</code></td></tr>
+<tr><td class="field">CurrState</td><td class="field">0xBBAC0002</td><td>Byte</td><td>Current state (0 = off, 1 = on). Use <code>GetLeverState()</code> in scripts.</td></tr>
+<tr><td class="field">TotalStates</td><td class="field">0xBBAC0003</td><td>Byte</td><td>Total number of states the lever can have.</td></tr>
+<tr><td class="field">Cycled</td><td class="field">0xBBAC0004</td><td>Byte</td><td>1 = the lever can be toggled repeatedly. 0 = single use.</td></tr>
+<tr><td class="field">Door</td><td class="field">0xBBAC0007</td><td>Byte</td><td>1 = this lever controls a door. 0 = regular lever. For doors, the character will try to approach from the front or back sides, described mathematically in 'Res/database.res/levers.ldb'.</td></tr>
+<tr><td class="field">CalcGraph</td><td class="field">0xBBAC0008</td><td>Byte</td><td>1 = recalculate the AI pathfinding graph when toggled.</td></tr>
 </table>
 
 <div class="warn">
@@ -100,17 +102,17 @@
 </div>
 
 <!-- ==================== TRAPS ==================== -->
-<h2>4. Traps</h2>
+<h2>4. Traps (0xBBAB0000)</h2>
 <p>Damage-dealing or effect-triggering zones. Have all Object fields PLUS:</p>
 
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">TrDiplomacy</td><td>DWord</td><td>Diplomatic group that the trap attacks. -1 or 0xFFFFFFFF = attacks everyone.</td></tr>
-<tr><td class="field">Spell</td><td>String</td><td>Spell or effect applied when triggered. Format: <code>prototype{rune;rune;...}</code></td></tr>
-<tr><td class="field">Reloading</td><td>Byte</td><td>1 = the trap can trigger repeatedly. 0 = single use.</td></tr>
-<tr><td class="field">CastOnce</td><td>Byte</td><td>1 = apply the spell only once, 0 = strike all targets at once.</td></tr>
-<tr><td class="field">Areas</td><td>3FloatsArray</td><td>2D trigger zones. Each line: <code>x, y, area</code>.</td></tr>
-<tr><td class="field">Targets</td><td>2FloatsArray</td><td>Target points, initially prepared for discharging magic traps. Each line: <code>x, y</code>.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">TrDiplomacy</td><td class="field">0xBBAB0001</td><td>DWord</td><td>Diplomatic group that the trap attacks. -1 or 0xFFFFFFFF = attacks everyone.</td></tr>
+<tr><td class="field">Spell</td><td class="field">0xBBAB0002</td><td>String</td><td>Spell or effect applied when triggered. Format: <code>prototype{rune;rune;...}</code></td></tr>
+<tr><td class="field">Reloading</td><td class="field">0xBBAB0005</td><td>Byte</td><td>1 = the trap can trigger repeatedly. 0 = single use.</td></tr>
+<tr><td class="field">CastOnce</td><td class="field">0xBBAC0005</td><td>Byte</td><td>1 = apply the spell only once, 0 = strike all targets at once.</td></tr>
+<tr><td class="field">Areas</td><td class="field">0xBBAB0003</td><td>3FloatsArray</td><td>2D trigger zones. Each line: <code>x, y, area</code>.</td></tr>
+<tr><td class="field">Targets</td><td class="field">0xBBAB0004</td><td>2FloatsArray</td><td>Target points, initially prepared for discharging magic traps. Each line: <code>x, y</code>.</td></tr>
 </table>
 
 <div class="note">
@@ -118,29 +120,29 @@
 </div>
 
 <!-- ==================== TORCHES ==================== -->
-<h2>5. Torches</h2>
+<h2>5. Torches (0xBBBF0000)</h2>
 <p>Light-emitting objects with sound. Have all Object fields PLUS:</p>
 
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">LightPoint</td><td>3Floats</td><td>Offset of the light emission point from the object's position. Format: <code>x, y, z</code></td></tr>
-<tr><td class="field">Power</td><td>Float</td><td>Light intensity. Positive = light, negative = darkness.</td></tr>
-<tr><td class="field">Sound</td><td>String</td><td>Path to the sound file (e.g., <code>nature\fire\small.wav</code>). Empty = no sound.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">LightPoint</td><td class="field">0xBBBF0002</td><td>3Floats</td><td>Offset of the light emission point from the object's position. Format: <code>x, y, z</code></td></tr>
+<tr><td class="field">Power</td><td class="field">0xBBBF0001</td><td>Float</td><td>Light intensity. Positive = light, negative = darkness.</td></tr>
+<tr><td class="field">Sound</td><td class="field">0xBBBF0003</td><td>String</td><td>Path to the sound file (e.g., <code>nature\fire\small.wav</code>). Empty = no sound.</td></tr>
 </table>
 
 <!-- ==================== LIGHTS ==================== -->
-<h2>6. Lights</h2>
+<h2>6. Lights (0x0000AA01)</h2>
 <p>Pure light sources (no physical model). Simpler than Torches.</p>
 
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">ID</td><td>DWord</td><td>Unique identifier.</td></tr>
-<tr><td class="field">Shadow</td><td>Byte</td><td>1 = casts shadows. 0 = no shadows.</td></tr>
-<tr><td class="field">Position</td><td>3Floats</td><td>Light position (absolute). Format: <code>x, y, z</code></td></tr>
-<tr><td class="field">Color</td><td>3Floats</td><td>RGB color (each from 0.0 to 1.0). Format: <code>R, G, B</code></td></tr>
-<tr><td class="field">Radius</td><td>Float</td><td>Light radius. Positive = light, negative = darkness.</td></tr>
-<tr><td class="field">Name</td><td>String</td><td>Internal name.</td></tr>
-<tr><td class="field">Comments</td><td>String</td><td>Editor notes.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">ID</td><td class="field">0x0000AA05</td><td>DWord</td><td>Unique identifier.</td></tr>
+<tr><td class="field">Shadow</td><td class="field">0x0000AA06</td><td>Byte</td><td>1 = casts shadows. 0 = no shadows.</td></tr>
+<tr><td class="field">Position</td><td class="field">0x0000AA04</td><td>3Floats</td><td>Light position (absolute). Format: <code>x, y, z</code></td></tr>
+<tr><td class="field">Color</td><td class="field">0x0000AA07</td><td>3Floats</td><td>RGB color (each from 0.0 to 1.0). Format: <code>R, G, B</code></td></tr>
+<tr><td class="field">Radius</td><td class="field">0x0000AA02</td><td>Float</td><td>Light radius. Positive = light, negative = darkness.</td></tr>
+<tr><td class="field">Name</td><td class="field">0x0000AA03</td><td>String</td><td>Internal name.</td></tr>
+<tr><td class="field">Comments</td><td class="field">0x0000AA08</td><td>String</td><td>Editor notes.</td></tr>
 </table>
 
 <div class="tip">
@@ -148,36 +150,36 @@
 </div>
 
 <!-- ==================== SOUNDS ==================== -->
-<h2>7. Sounds</h2>
+<h2>7. Sounds (0x0000CC01)</h2>
 <p>3D sound sources on the map.</p>
 
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">FileName</td><td>MultiString</td><td>Paths to sound files (one per line). Multiple files = multiple playbacks.</td></tr>
-<tr><td class="field">ID</td><td>DWord</td><td>Unique identifier.</td></tr>
-<tr><td class="field">Position</td><td>3Floats</td><td>Sound source position (absolute). Format: <code>x, y, z</code></td></tr>
-<tr><td class="field">Radius1</td><td>Float</td><td>Inner radius (full volume).</td></tr>
-<tr><td class="field">Radius2</td><td>Float</td><td>Outer radius (volume fades to zero).</td></tr>
-<tr><td class="field">Name</td><td>String</td><td>Internal name.</td></tr>
-<tr><td class="field">Comments</td><td>String</td><td>Editor notes.</td></tr>
-<tr><td class="field">Min</td><td>DWord</td><td>Minimum delay between playbacks (in game ticks, 1/15 sec).</td></tr>
-<tr><td class="field">Max</td><td>DWord</td><td>Maximum delay between playbacks.</td></tr>
-<tr><td class="field">Ambient</td><td>Byte</td><td>1 = ambient sound. 0 = trigger sound.</td></tr>
-<tr><td class="field">Music</td><td>Byte</td><td>1 = music track. 0 = sound effect.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">FileName</td><td class="field">0x0000CC0A</td><td>MultiString</td><td>Paths to sound files (one per line). Multiple files = multiple playbacks.</td></tr>
+<tr><td class="field">ID</td><td class="field">0x0000CC02</td><td>DWord</td><td>Unique identifier.</td></tr>
+<tr><td class="field">Position</td><td class="field">0x0000CC03</td><td>3Floats</td><td>Sound source position (absolute). Format: <code>x, y, z</code></td></tr>
+<tr><td class="field">Radius1</td><td class="field">0x0000CC04</td><td>Float</td><td>Inner radius (full volume).</td></tr>
+<tr><td class="field">Radius2</td><td class="field">0x0000CC0B</td><td>Float</td><td>Outer radius (volume fades to zero).</td></tr>
+<tr><td class="field">Name</td><td class="field">0x0000CC05</td><td>String</td><td>Internal name.</td></tr>
+<tr><td class="field">Comments</td><td class="field">0x0000CC08</td><td>String</td><td>Editor notes.</td></tr>
+<tr><td class="field">Min</td><td class="field">0x0000CC06</td><td>DWord</td><td>Minimum delay between playbacks (in game ticks, 1/15 sec).</td></tr>
+<tr><td class="field">Max</td><td class="field">0x0000CC07</td><td>DWord</td><td>Maximum delay between playbacks.</td></tr>
+<tr><td class="field">Ambient</td><td class="field">0x0000CC0D</td><td>Byte</td><td>1 = ambient sound. 0 = trigger sound.</td></tr>
+<tr><td class="field">Music</td><td class="field">0x0000CC0E</td><td>Byte</td><td>1 = music track. 0 = sound effect.</td></tr>
 </table>
 
 <!-- ==================== PARTICLES ==================== -->
-<h2>8. Particles</h2>
+<h2>8. Particles (0x0000DD01)</h2>
 <p>Visual particle effects (fire, smoke, magic, etc.).</p>
 
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">ID</td><td>DWord</td><td>Unique identifier.</td></tr>
-<tr><td class="field">Position</td><td>3Floats</td><td>Emitter position (absolute). Format: <code>x, y, z</code></td></tr>
-<tr><td class="field">Name</td><td>String</td><td>Internal name.</td></tr>
-<tr><td class="field">Comments</td><td>String</td><td>Editor notes.</td></tr>
-<tr><td class="field">Type</td><td>DWord</td><td>Particle type code.</td></tr>
-<tr><td class="field">Scale</td><td>Float</td><td>Emitter scale factor.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">ID</td><td class="field">0x0000DD02</td><td>DWord</td><td>Unique identifier.</td></tr>
+<tr><td class="field">Position</td><td class="field">0x0000DD03</td><td>3Floats</td><td>Emitter position (absolute). Format: <code>x, y, z</code></td></tr>
+<tr><td class="field">Name</td><td class="field">0x0000DD05</td><td>String</td><td>Internal name.</td></tr>
+<tr><td class="field">Comments</td><td class="field">0x0000DD04</td><td>String</td><td>Editor notes.</td></tr>
+<tr><td class="field">Type</td><td class="field">0x0000DD06</td><td>DWord</td><td>Particle type code.</td></tr>
+<tr><td class="field">Scale</td><td class="field">0x0000DD07</td><td>Float</td><td>Emitter scale factor.</td></tr>
 </table>
 
 <div class="note">
@@ -185,26 +187,26 @@
 </div>
 
 <!-- ==================== LOGICS ==================== -->
-<h2>9. Unit Logics</h2>
+<h2>9. Unit Logics (0xBBBC0000)</h2>
 <p>Each unit has up to <strong>5 logic slots</strong>. Logics define AI behavior: patrol routes, guard points, aggression, and much more.</p>
 
 <h3>Logic Fields</h3>
 <table>
-<tr><th>Field</th><th>Type</th><th>Description</th></tr>
-<tr><td class="field">AlarmCond</td><td>Byte</td><td>Alarm condition code. 0 = if sees an enemy, 1 = if attacked, 2 = if suspicion was triggered.</td></tr>
-<tr><td class="field">CallForHelp</td><td>Float</td><td>Radius for calling allied units for help.</td></tr>
-<tr><td class="field">Cyclic</td><td>Byte</td><td>1 = the last patrol point transitions to the first, 0 = after the last patrol point the transition goes in reverse.</td></tr>
-<tr><td class="field">AggrMode</td><td>Byte</td><td>Aggression mode (0 - absolute aggression, 1 - aggression only as revenge, 2 - absolute fear of enemies, 3 - absolute fear of enemies and the player).</td></tr>
-<tr><td class="field">Active</td><td>Byte</td><td>1 = the unit is always active, 0 = the unit is active only within about 50 meters of the current player party.</td></tr>
-<tr><td class="field">Model</td><td>DWord</td><td>AI behavior model code. 0 = point, 1 = guard, 2 = patrol, 3 = sentry, 4 = player, 5 = alert guard. Point: stands in place and looks in one direction. Guard: guards the specified circle, turning to a random point when standing. Patrol: patrols strictly along the given points, if points don't contain actions — turns randomly at them. Sentry: stands in place and turns to random points. Player: control is passed to player devices or the map script module. Alert guard: does the same as a guard, but at places where alarm was triggered.</td></tr>
-<tr><td class="field">Radius</td><td>Float</td><td>Guard radius.</td></tr>
-<tr><td class="field">Wait</td><td>Float</td><td>Wait time at each guard point (in game ticks).</td></tr>
-<tr><td class="field">Point</td><td>3Floats</td><td>Central point for guarding or sentry duty. Format: <code>x, y, z</code></td></tr>
-<tr><td class="field">Used</td><td>Byte</td><td>1 = this logic slot is in use.</td></tr>
-<tr><td class="field">AlarmNumb</td><td>Byte</td><td>Alarm variable number that this logic responds to.</td></tr>
+<tr><th>Field</th><th>Signature</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field">AlarmCond</td><td class="field">0xBBBC000B</td><td>Byte</td><td>Alarm condition code. 0 = if sees an enemy, 1 = if attacked, 2 = if suspicion was triggered.</td></tr>
+<tr><td class="field">CallForHelp</td><td class="field">0xBBBC000C</td><td>Float</td><td>Radius for calling allied units for help.</td></tr>
+<tr><td class="field">Cyclic</td><td class="field">0xBBBC0002</td><td>Byte</td><td>1 = the last patrol point transitions to the first, 0 = after the last patrol point the transition goes in reverse.</td></tr>
+<tr><td class="field">AggrMode</td><td class="field">0xBBBC000E</td><td>Byte</td><td>Aggression mode (0 - absolute aggression, 1 - aggression only as revenge, 2 - absolute fear of enemies, 3 - absolute fear of enemies and the player).</td></tr>
+<tr><td class="field">Active</td><td class="field">0xBBBC000D</td><td>Byte</td><td>1 = the unit is always active, 0 = the unit is active only within about 50 meters of the current player party.</td></tr>
+<tr><td class="field">Model</td><td class="field">0xBBBC0003</td><td>DWord</td><td>AI behavior model code. 0 = point, 1 = guard, 2 = patrol, 3 = sentry, 4 = player, 5 = alert guard. Point: stands in place and looks in one direction. Guard: guards the specified circle, turning to a random point when standing. Patrol: patrols strictly along the given points, if points don't contain actions — turns randomly at them. Sentry: stands in place and turns to random points. Player: control is passed to player devices or the map script module. Alert guard: does the same as a guard, but at places where alarm was triggered.</td></tr>
+<tr><td class="field">Radius</td><td class="field">0xBBBC0004</td><td>Float</td><td>Guard radius.</td></tr>
+<tr><td class="field">Wait</td><td class="field">0xBBBC000A</td><td>Float</td><td>Wait time at each guard point (in game ticks).</td></tr>
+<tr><td class="field">Point</td><td class="field">0xBBBC0005</td><td>3Floats</td><td>Central point for guarding or sentry duty. Format: <code>x, y, z</code></td></tr>
+<tr><td class="field">Used</td><td class="field">0xBBBC0007</td><td>Byte</td><td>1 = this logic slot is in use.</td></tr>
+<tr><td class="field">AlarmNumb</td><td class="field">0xBBBC0006</td><td>Byte</td><td>Alarm variable number that this logic responds to.</td></tr>
 </table>
 
-<h3>Guard Points</h3>
+<h3>Guard Points (0xBBBD0000)</h3>
 <div class="note">
   Guard points define waypoints for patrol and guard behavior. Each point has:
   <ul>
@@ -213,7 +215,12 @@
   </ul>
 </div>
 
-<h3>Guard Point Actions</h3>
+<table>
+<tr><th>Parameter</th><th>Signature</th><th>Description</th></tr>
+<tr><td><code>x, y, z</code></td><td class="field">0xBBBD0001</td><td>Coordinates of the point where the unit will stand</td></tr>
+</table>
+
+<h3>Guard Point Actions (0xBBBE0000)</h3>
 <p>Each guard point can have multiple actions. Format in the action editor:</p>
 <pre style="background:#111; padding:10px; border-radius:5px;">
 x, y, z; waitTime; speed; flags
@@ -221,11 +228,11 @@ x, y, z; waitTime; speed; flags
 </pre>
 
 <table>
-<tr><th>Parameter</th><th>Description</th></tr>
-<tr><td><code>x y z</code></td><td>Look-at point coordinates (where the unit looks)</td></tr>
-<tr><td><code>waitTime</code></td><td>How long to stay at this action (game ticks, 15 = 1 second)</td></tr>
-<tr><td><code>speed</code></td><td>Movement speed to this point</td></tr>
-<tr><td><code>flags</code></td><td>Behavior flags (bitmask): poorly implemented in the game, 0 - normal behavior, 1 - will rest at the point.</td></tr>
+<tr><th>Parameter</th><th>Signature</th><th>Description</th></tr>
+<tr><td><code>x, y, z</code></td><td class="field">0xBBBE0001</td><td>Look-at point coordinates (where the unit looks)</td></tr>
+<tr><td><code>waitTime</code></td><td class="field">0xBBBE0002</td><td>How long to stay at this action (game ticks, 15 = 1 second)</td></tr>
+<tr><td><code>speed</code></td><td class="field">0xBBBE0003</td><td>Movement speed to this point</td></tr>
+<tr><td><code>flags</code></td><td class="field">0xBBBE0004</td><td>Behavior flags (bitmask): poorly implemented in the game, 0 - normal behavior, 1 - will rest at the point.</td></tr>
 </table>
 
 <div class="warn">
@@ -264,7 +271,7 @@ x, y, z; waitTime; speed; flags
 <tr><td>3Floats (Plot)</td><td><code>10.0, 20.0, 5.0</code></td><td>Position, Color, LightPoint</td></tr>
 <tr><td>4Floats (Quaternion)</td><td><code>1.0, 0.0, 0.0, 0.0</code></td><td>Rotation</td></tr>
 <tr><td>3DWords</td><td><code>0, 5, 1</code></td><td>Science</td></tr>
-<tr><td>MultiString</td><td><code>Multiple lines, elements<br> separated by<br> line breaks</code>e</td><td>Armors, Weapons, Parts</td></tr>
+<tr><td>MultiString</td><td><code>Multiple lines, elements<br> separated by<br> line breaks</code></td><td>Armors, Weapons, Parts</td></tr>
 <tr><td>3FloatsArray (Areas array)</td><td><code>10.0, 20.0, 5.650115<br>0.1, 0.7, 3.45<br>34.17, 0.9, 2.5<br>2.0, 345.345, 98.0</code></td><td>Areas</td></tr>
 <tr><td>2FloatsArray (Points array)</td><td><code>10.0, 20.0<br>3.3, 5.0</code></td><td>Targets</td></tr>
 </table>
