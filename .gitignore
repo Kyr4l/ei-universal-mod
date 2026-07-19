@@ -6,5 +6,6 @@ Universal-Mod/um.cfg
 Universal-Mod/mp/*
 Universal-Mod/saves/*
 Universal-Mod/maps/*.bak
+resources/universal-mod/mob/*.bak
 tools/third-party-tools/ei_maper/options.json
 tools/third-party-tools/ei_maper/workflow.log
