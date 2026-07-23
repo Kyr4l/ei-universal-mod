@@ -13,3 +13,9 @@ Now if editor load file without traps' targets field it recreates it dynamically
 You can now bulk change coordinates for really everything that has them, not like before.
 The document has been supplemented with a column containing signatures.
 Errors in the document have been corrected.
+
+1.03:
+Fixed automatic saving - now its absolutely awesome.
+Fixed objects shifting - now its avaliable always.
+Added menu item for hidding current path.
+Fixed a couple of typos in the script document.
