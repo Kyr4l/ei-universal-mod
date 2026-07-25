@@ -1,4 +1,4 @@
-#zone z3xq1 gipat game
+#zone z3xq2 gipat game
 #res
 zone3xobr zone3xobr-lmp
 #maps
