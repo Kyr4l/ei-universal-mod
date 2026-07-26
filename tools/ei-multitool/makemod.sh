@@ -74,7 +74,7 @@ function makeQuests {
         local langcode="${questlangdir##*/}"
         langcode="${langcode#mq-}"
 
-        echo "${LYELLOW}Processing quest files for language: {$BLUE}$langcode${RESTORE}"
+        echo "${LYELLOW}Processing quest files for language: ${BLUE}$langcode${RESTORE}"
 
         echo "Converting quest INI files to REG"
         find "$questlangdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
