@@ -1,0 +1,10 @@
+Done!
+#show Hero
+#show Marshal
+#CAMERA 11
+#phrase Marshal  1
+<placeholder>
+#phrase Hero  2
+<placeholder>
+#phrase Marshal  3
+<placeholder>

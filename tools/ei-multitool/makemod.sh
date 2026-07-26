@@ -19,7 +19,6 @@ moddir="mods-out"/"$(date +"%y%m%d-%H%M")"
 resdir="res"
 resxdir="res-unpacked"
 resxtextsdir="res-texts"
-luadir="lua"
 inidir="ini"
 mprdir="mpr"
 mobdir="mob"
@@ -45,7 +44,7 @@ function checkCommands {
 # create the mod directory structure
 function directoryCreation {
     echo "${GREEN}CREATED MOD DIRECTORY: $moddir ${RESTORE}"
-    mkdir -vp "$moddir"/{config,"res/lang",maps,stream,hdlands,movies}
+    mkdir -vp "$moddir"/{config,res,maps,stream,hdlands,movies,lang-packs}
 }
 
 function ini2Reg {
@@ -66,23 +65,43 @@ function ini2Reg {
 function makeQuests {
     echo "${YELLOW}===== PROCESSING QUEST FILES ======================================== ${RESTORE}"
     # This function does things that other functions already do, but handling quests is slightly more complicated and requires an RM operation to remain clean, therefore it's separated.
-    echo "Converting quest INI files to REG"
-    find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
+    shopt -s nullglob
 
-    #echo "Removing INI files before packing" 
-    #find "$mqxdir"/ -type f -name "*.ini" -maxdepth 3 -delete -print
+    local questlangdirs=("$mqxdir"/mq-*)
+    for questlangdir in "${questlangdirs[@]}"; do
+        [[ -d "$questlangdir" ]] || continue
 
-    echo "Packing quests"
-    parallel --bar wine bin/eipacker.exe {} ::: "$mqxdir"/* > /dev/null
+        local langcode="${questlangdir##*/}"
+        langcode="${langcode#mq-}"
 
-    echo "Converting REG files back to INI"
-    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/reg2ini.exe {} > /dev/null
+        echo "Processing quest files for language: $langcode"
 
-    echo "Cleaning up REG files"
-    find "$mqxdir"/ -type f -name "*.reg" -maxdepth 3 -delete -print
+        echo "Converting quest INI files to REG"
+        find "$questlangdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
 
-    echo "Moving MQ files to the mod's MAPS directory"
-    mv -v "$mqxdir"/*.mq "$moddir/maps"
+        echo "Packing quests for $langcode"
+        parallel --bar wine bin/eipacker.exe {} ::: "$questlangdir"/* > /dev/null
+
+        echo "Converting REG files back to INI"
+        find "$questlangdir"/ -type f -name "*.reg" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/reg2ini.exe {} > /dev/null
+
+        echo "Cleaning up REG files"
+        find "$questlangdir"/ -type f -name "*.reg" -maxdepth 3 -delete -print
+
+        local langpackdir="$moddir/lang-packs/$langcode"
+        mkdir -vp "$langpackdir/maps"
+
+        if [[ "$langcode" == "eng" ]]; then
+            echo "Moving MQ files for $langcode to the mod's MAPS directory"
+            mv -v "$questlangdir"/*.mq "$moddir/maps"/ 2>/dev/null || true
+            cp -v "$moddir/maps"/*.mq "$langpackdir/maps"/ 2>/dev/null || true
+        else
+            echo "Copying MQ files for $langcode to $langpackdir/maps"
+            cp -v "$questlangdir"/*.mq "$langpackdir/maps"/ 2>/dev/null || true
+        fi
+    done
+
+    shopt -u nullglob
 }
 
 function copyMaps {
@@ -113,14 +132,42 @@ function packTexts {
     echo "${YELLOW}===== PACKING TEXTS & TEXTSLMP ======================================== ${RESTORE}"
 
     for restexts in "$resxtextsdir"/*_res; do
-        local packedtexts="${restexts%_res}.res"
-        wine bin/eipacker.exe /pack "$restexts" && mv -v "$packedtexts" "$moddir"/res/lang/
+        local restextsname="${restexts##*/}"
+        local langcode=""
+        local targetname=""
+
+        case "$restextsname" in
+            texts-*_res)
+                langcode="${restextsname#texts-}"
+                langcode="${langcode%_res}"
+                targetname="texts.res"
+                ;;
+            textslmp-*_res)
+                langcode="${restextsname#textslmp-}"
+                langcode="${langcode%_res}"
+                targetname="textslmp.res"
+                ;;
+            *)
+                continue
+                ;;
+        esac
+
+        wine bin/eipacker.exe /pack "$restexts"
+        local packedfile="${restexts%_res}.res"
+        local langpackdir="$moddir/lang-packs/$langcode"
+        mkdir -vp "$langpackdir/res"
+
+        if [[ -f "$packedfile" ]]; then
+            mv -f "$packedfile" "$langpackdir/res/$targetname"
+        fi
+
+        if [[ "$langcode" == "eng" ]]; then
+            mkdir -p "$moddir/res"
+            cp -f "$langpackdir/res/$targetname" "$moddir/res/$targetname"
+        fi
     done
 
-    cp -v "$moddir"/res/lang/texts-eng.res "$moddir"/res/texts.res
-    cp -v "$moddir"/res/lang/textslmp-eng.res "$moddir"/res/textslmp.res
-
-    echo "Copy the texts-<LANGUAGE>.res and textslmp-<LANGUAGE>.res files from this directory and paste them in the directory above this one, then rename them to texts.res and textslmp.res" > "$moddir"/res/lang/HOWTO-SWITCHLANG.txt
+    echo "Copy the texts.res and textslmp.res files from lang-packs/<LANGUAGE>/res/ into the mod's res/ directory to switch language" > "$moddir/lang-packs/HOWTO-SWITCHLANG.txt"
 }
 
 function dds2Mmp {
@@ -224,12 +271,6 @@ function packRes {
     mv -fv "$resdir"/*.res "$moddir"/res
 }
 
-function addLua {
-    echo "${BLUE}===== ADDING LUA SCRIPTS ======================================== ${RESTORE}"
-    cp -vL "$luadir"/main.lua "$moddir"
-    cp -vrL "$luadir"/lua "$moddir"/lua
-}
-
 function compileDll {
     echo "${YELLOW}===== COMPILING DLL ======================================== ${RESTORE}"
     i686-w64-mingw32-g++ -shared -o "$moddir"/um.dll um.cpp -static -s -O2 -Wall -Wno-unused-parameter -v
@@ -258,7 +299,6 @@ function main {
     packTexts
     packRes
     compileDll
-    #addLua # disabled since 0.7.8
     replaceOldMod
 }
 

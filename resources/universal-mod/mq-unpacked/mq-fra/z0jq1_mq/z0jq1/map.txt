@@ -1,0 +1,16 @@
+#zone z0jq1 jigran game
+#res
+zone0j zone0j-lmp
+#maps
+4 7
+zonezeromap zonezeroquest
+
+## To zone0j
+#exit 1
+bz4mpg 1
+#deploy
+7 136 10 145
+#remove
+2 136 7 145
+#view
+135

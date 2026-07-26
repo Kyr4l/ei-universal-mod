@@ -1,0 +1,14 @@
+Clear the path to the cave
+You must get rid of these ogres guarding the path to the cave!
+#subobj  1
+Eliminate the ogres on the right side of the path
+There are 2 ogres guarding the right hand part of the path, kill them!
+#subobj  2
+Eliminate the ogres on the left side of the path
+Only one ogre is guarding this path, kill him!
+#subobj  3
+Kill the ogre guard
+This ogre is guarding the entrance, you know what to do.
+#subobj  4
+Open the entrance to the cave
+Use the lever next to the entrance to open the entrance.

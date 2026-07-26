@@ -1,0 +1,14 @@
+Wormheads menace
+There is news that the Wormheads have started to leave their dungeons and come up to the surface. Captain Tilvar and a unit of soldiers went to the mines to fight that menace but have not been heard of since. You must find Tilvar and if necessary provide him with assistance.
+#subobj  1
+Finding the passage to the mines
+The passage to the mines is to the north, across the bridge over the river which flows into the lake from the east.
+#subobj  2
+Opening the gates
+To get into the mines you must open the gates.
+#subobj  3
+Finding Captain Tilvar
+Captain Tilvar and his unit have been sent to kill the Wormheads who left the dungeons to go into the open. You must find the Captain.
+#subobj  4
+Killing Wormheads
+The Captain is dead, but his mission still lives: all Wormheads must be killed.

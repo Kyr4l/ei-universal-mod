@@ -1,0 +1,12 @@
+[Easy] Khadagan Patrols (WIP)
+#show Hero
+#show Marshal
+#CAMERA 11
+#phrase Marshal  1
+<placeholder>
+#phrase Hero  2
+<placeholder>
+#phrase Marshal  3
+<placeholder>
+#phrase Marshal  4
+<placeholder>

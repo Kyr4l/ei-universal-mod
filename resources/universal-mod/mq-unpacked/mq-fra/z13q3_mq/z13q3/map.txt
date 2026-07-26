@@ -1,0 +1,21 @@
+## Manufacture
+#zone z13q3 ingos game
+#res
+zone13 zone13-LMP
+#maps
+14 10
+zone13map zone13questM
+#weather
+snow
+#sky
+normal
+
+## To Town and Driads
+#exit 1
+bz2mpg 1
+#deploy
+20 255 30 266
+#remove
+5 255 20 270
+#view
+254.72

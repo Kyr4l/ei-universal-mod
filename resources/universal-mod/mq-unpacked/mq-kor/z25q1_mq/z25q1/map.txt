@@ -1,0 +1,16 @@
+#zone z25q1 ingos game
+#res
+zone25 zone25-lmp
+#maps
+8 6
+zone25map zone25quest
+
+
+#exit 1
+bz1mpg 1
+#deploy
+212 12 219 17
+#remove
+212 3 219 11
+#view
+254.72

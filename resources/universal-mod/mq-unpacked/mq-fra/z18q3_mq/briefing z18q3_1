@@ -1,0 +1,16 @@
+One of the slaves is a traitor...
+#show Hero
+#show Glav
+#CAMERA 3 0 3.5 1.5
+#phrase Glav  1
+My heart is filled with sorrow, sorrow and anger! Our Shelter has always been the last refuge for unfortunate slaves unable to perform merciless labor on the plantations. And now it turns out that one of them is willing to betray that refuge!
+#phrase Glav  2
+This man is a slave not just by his status, but by spirit! He is willing to sell everything he knows about the Last Shelter for a bowl of soup!
+#phrase Hero  3
+Are we going to do battle with the guards, then?
+#phrase Glav  4
+Fortunately enough, not yet. The despicable traitor has a very high opinion of himself and refuses to talk to anybody else but high-ranking officers!
+#phrase Glav  5
+If he is killed before the leaders arrive, our secrets will die with him.
+#phrase Glav  6
+At this moment that dirty hyena stuffs his belly in the soldiers quarters to the south of the plantations. The building is usually full of slavedrivers and guards, but if you manage to sneak in there unnoticed, you can dispatch the traitor with no undue problems. 
