@@ -74,7 +74,7 @@ function makeQuests {
         local langcode="${questlangdir##*/}"
         langcode="${langcode#mq-}"
 
-        echo "Processing quest files for language: $langcode"
+        echo "${LYELLOW}Processing quest files for language: {$BLUE}$langcode${RESTORE}"
 
         echo "Converting quest INI files to REG"
         find "$questlangdir"/ -type f -name "*.ini" -maxdepth 3 -exec realpath -z {} + | parallel --bar -0 wine bin/ini2reg.exe {} > /dev/null
@@ -96,8 +96,8 @@ function makeQuests {
             mv -v "$questlangdir"/*.mq "$moddir/maps"/ 2>/dev/null || true
             cp -v "$moddir/maps"/*.mq "$langpackdir/maps"/ 2>/dev/null || true
         else
-            echo "Copying MQ files for $langcode to $langpackdir/maps"
-            cp -v "$questlangdir"/*.mq "$langpackdir/maps"/ 2>/dev/null || true
+            echo "Moving MQ files for $langcode to $langpackdir/maps"
+            mv -v "$questlangdir"/*.mq "$langpackdir/maps"/ 2>/dev/null || true
         fi
     done
 
