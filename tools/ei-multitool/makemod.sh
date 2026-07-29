@@ -279,7 +279,7 @@ function compileDll {
 function replaceOldMod {
     if [[ "$replaceoldnswr" != "n" ]]; then
         echo "${GREEN}===== COPYING FILES TO MOD RELEASE DIRECTORY ==============================${RESTORE}"
-        rsync --checksum -rv --exclude "saves" --exclude "mp" --exclude "switchlang.bat" --delete "$moddir"/ ../../Universal-Mod
+        rsync --checksum -rv --exclude "saves" --exclude "mp" --exclude "um.cfg" --delete "$moddir"/ ../../Universal-Mod
         echo "FILES MOVED TO MOD RELEASE DIRECTORY"
     fi
 }
