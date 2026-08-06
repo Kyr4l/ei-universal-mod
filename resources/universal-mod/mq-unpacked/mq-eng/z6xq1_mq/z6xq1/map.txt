@@ -3,7 +3,7 @@
 #res
 zone6x zone6x-lmp
 #maps
-7 12 
+8 16
 zone6xmap zone6xquest
 
 
