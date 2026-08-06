@@ -1,0 +1,7 @@
+backobj
+border
+brevno01
+brevno02
+frontobj
+ladder
+mainfigure
