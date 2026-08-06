@@ -55,7 +55,7 @@ Script VTriger#3#6
   then
   (
     KillScript(  ) 
-    AddRoundToArea( 1, 230, 220, 15 ) 
+    AddRoundToArea( 1, 230, 348, 15 ) 
     QStart( "z3xq3" ) 
     QObjArea( 1 ) 
     QObjKillGroup( "BrodGuard" ) 

@@ -3,7 +3,7 @@
 zone3xobr zone3xobr-lmp
 #maps
 11 14
-zone3xobrmap zone3xquest
+zone3xobrmap zone3xobrquest
 
 ## To Foothills
 #exit 1
