@@ -3,7 +3,7 @@
 zone0j zone0j-lmp
 #maps
 4 7
-zonezeromap zonezeroquest
+zone0jmap zonezeroquest
 
 ## To zone0j
 #exit 1
