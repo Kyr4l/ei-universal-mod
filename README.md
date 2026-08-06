@@ -7,23 +7,34 @@ A Multiplayer-Friendly mod for Evil Islands : Curse of the Lost Soul. Inspired b
 This mod features a complete rebalance of the Multiplayer mode. Adds new materials, characters, etc...
 Several bugs and inconsistencies have also been patched or worked around.
 
-The mod includes (but is not limited to) :
+The mod includes (but is not limited to):
 
-- Severely reduced stamina consumption while sprinting
-- No XP loss on death, but 10x higher money loss
-- XP gains aren't divided by the amount of players, instead each non-host player applies a -20% XP reduction (max -60%)
-- Increased XP gain from monsters
-- Reduced perk cost multiplier
-- Reworked healing, potions are more common and cheaper
-- Simplified & rounded stats
-- More Quests/Maps
-- New materials/runes/potions/monsters/blueprints
-- Reworked melee combat
-- Enemies drop materials on death
+- Gameplay
+  - Severely reduced stamina consumption while sprinting
+  - No XP loss on death; monetary loss increased ×10
+  - XP scaling: XP is not split among players
+  - Increased XP from monsters
+  - Reduced perk cost multiplier
+  - Simplified, rounded character stats
+  - Realistic weight management
+
+- Combat & Healing
+  - Reworked melee combat
+  - Reworked healing: potions are more common and cheaper
+  - Most enemies drop items on death
+  - Reworked loot tables
+
+- Content & Economy
+  - More quests and maps
+  - New materials, runes, monsters, and blueprints
+  - New NPCs; merchant inventories rebalanced and expanded
+  - Skill and perk rebalance
+
+- Assets & Localization
+  - HD Lands integration and updated assets
+  - Localization fixes and minor text corrections across dialogs and item names
 
 And more!
-
-This mod also includes HD Lands
 
 *Requires EIStarter & SpellAddon, available in the [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) section*
 *also provided in the `tools/` directory (with pre-configured .ini settings)*
@@ -89,6 +100,8 @@ If we accidentaly used assets that we do not have permission to use, then please
 For every asset that we created, we require from modders using our assets to link Universal Mod in the credits, that includes the mod name, along with the repository link.
 
 ## Disclaimer
+
+This mod was developed using the HD Lands texture pack. Large visual-overhaul mods (for example, "Evil Islands: Rebirth") that modify base game files are __not__ officially supported because they can cause visual inconsistencies and incompatibilities when running additional mods. Universal Mod *may* work with such variants, but full compatibility is not guaranteed.
 
 - We __do not__ own any of the tools used *except* the scripts in __ei-multitool__, the binaries used are community tools.
 - Some files included in `extra-assets/reference-assets` come from the vanilla game, some others come from other mods.
