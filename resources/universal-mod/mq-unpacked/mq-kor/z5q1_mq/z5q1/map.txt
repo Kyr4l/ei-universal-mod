@@ -3,7 +3,7 @@
 zone5 zone51-lmp
 #maps
 8 5
-zone5_1map zone5quest
+zone51map zone5quest
 
 #weather
 none
