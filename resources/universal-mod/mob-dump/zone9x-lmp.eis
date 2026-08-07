@@ -1,0 +1,31 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  RightCrystal : object,
+  LeftCrystal : object,
+  OldKeyTent : object,
+  Hadagans : group,
+  Heroes : group 
+)
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  RightCrystal = GetObjectByID( "2054" ) 
+  LeftCrystal = GetObjectByID( "2055" ) 
+  OldKeyTent = GetObjectByID( "2064" ) 
+)

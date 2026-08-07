@@ -98197,8 +98197,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 221.70550537109375
-        - 129.32965087890625
+        - 220.17945861816406
+        - 139.5267333984375
         - 0.0
       OBJROTATION:
         - 0.7408042550086975
@@ -98223,29 +98223,24 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 221.70550537109375
-          - 129.32965087890625
-          - 6.290958881378174
+          - 220.17945861816406
+          - 139.5267333984375
+          - 7.2789201736450195
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 221.3072509765625
-            - 126.45476531982422
-            - 6.2924370765686035
+            - 219.7812042236328
+            - 136.65184020996094
+            - 7.143496036529541
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 220.32525634765625
-              - 122.61153411865234
+              - 220.18026733398438
+              - 134.03724670410156
               - 6.3018479347229
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 219.7633819580078
-            - 139.92617797851562
-            - 7.3271331787109375
         GUARD_PT:
           GUARD_PT_POSITION:
             - 216.84877014160156
@@ -98399,8 +98394,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 228.219482421875
-        - 129.19683837890625
+        - 223.28158569335938
+        - 139.59829711914062
         - 0.0
       OBJROTATION:
         - 0.7355059385299683
@@ -98425,29 +98420,24 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 228.219482421875
-          - 129.19683837890625
-          - 6.330409049987793
+          - 223.28158569335938
+          - 139.59829711914062
+          - 7.058115005493164
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 228.3463592529297
-            - 126.00802612304688
-            - 6.369919776916504
+            - 223.7297821044922
+            - 136.82318115234375
+            - 6.731159687042236
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 225.51766967773438
-              - 122.13079833984375
+              - 223.0802764892578
+              - 134.0620574951172
               - 6.387807369232178
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
-        GUARD_PT:
-          GUARD_PT_POSITION:
-            - 229.3369598388672
-            - 140.77615356445312
-            - 6.772489547729492
         GUARD_PT:
           GUARD_PT_POSITION:
             - 229.74826049804688
@@ -111226,7 +111216,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 337.66583251953125
               - 307.7335205078125
-              - 7.977941513061523
+              - 7.956246852874756
             ACTION_PT_WAIT_SEG: 240
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -111239,7 +111229,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 331.721923828125
               - 307.7088623046875
-              - 7.667760372161865
+              - 7.531466007232666
             ACTION_PT_WAIT_SEG: 240
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -112186,14 +112176,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 316.9224548339844
-        - 338.06512451171875
+        - 309.9804992675781
+        - 339.59979248046875
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.8391456604003906
         - 0.0
         - 0.0
-        - 0.0
+        - 0.5439067482948303
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -112212,16 +112202,16 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 316.9224548339844
-          - 338.06512451171875
-          - 1778.611083984375
+          - 309.9804992675781
+          - 339.59979248046875
+          - 9.478104591369629
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 314.60498046875
-            - 338.4416809082031
-            - 9.428728103637695
+            - 310.7042541503906
+            - 339.11761474609375
+            - 9.310486793518066
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 312.55865478515625
@@ -112370,8 +112360,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 315.5003662109375
-        - 348.35272216796875
+        - 322.86834716796875
+        - 350.76666259765625
         - 0.0
       OBJROTATION:
         - 1.0
@@ -112392,15 +112382,41 @@ OBJECTDBFILE:
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 8.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 315.5003662109375
-          - 348.35272216796875
-          - 2161.935302734375
+          - 322.86834716796875
+          - 350.76666259765625
+          - 7.210877418518066
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 322.8188781738281
+            - 349.7203674316406
+            - 7.2787275314331055
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 327.7557067871094
+              - 348.9868469238281
+              - 7.390331268310547
+            ACTION_PT_WAIT_SEG: 120
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 308.3147888183594
+            - 349.0504455566406
+            - 8.92781925201416
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 304.7226257324219
+              - 346.88409423828125
+              - 8.921974182128906
+            ACTION_PT_WAIT_SEG: 120
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
@@ -112695,14 +112711,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 318.916748046875
-        - 330.6016540527344
+        - 316.43780517578125
+        - 337.2412109375
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.385100781917572
+        - -0.0
         - 0.0
-        - 0.0
-        - 0.0
+        - -0.9228745102882385
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -112717,15 +112733,54 @@ OBJECTDBFILE:
         UNIT_LOGIC_CYCLIC: 1
         UNIT_LOGIC_AGRESSION_MODE: 0
         UNIT_LOGIC_ALWAYS_ACTIVE: 0
-        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_MODEL: 2
         UNIT_LOGIC_GUARD_R: 8.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 318.916748046875
-          - 330.6016540527344
-          - 4300.3837890625
+          - 316.43780517578125
+          - 337.2412109375
+          - 10.052780151367188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 315.1870422363281
+            - 337.5155029296875
+            - 9.703922271728516
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 312.621337890625
+              - 339.3545227050781
+              - 9.150927543640137
+            ACTION_PT_WAIT_SEG: 240
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 321.59832763671875
+            - 328.3883361816406
+            - 9.617227554321289
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 322.5577392578125
+              - 331.7828369140625
+              - 9.848979949951172
+            ACTION_PT_WAIT_SEG: 120
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 328.0362243652344
+            - 322.3910827636719
+            - 7.71790075302124
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 330.1324462890625
+              - 320.3463134765625
+              - 8.181669235229492
+            ACTION_PT_WAIT_SEG: 120
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 7.0
@@ -112866,14 +112921,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 329.07379150390625
-        - 323.6599426269531
+        - 328.5746765136719
+        - 331.4847412109375
         - 0.0
       OBJROTATION:
-        - 1.0
+        - 0.02268770895898342
         - 0.0
         - 0.0
-        - 0.0
+        - 0.9997426271438599
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -112892,9 +112947,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 8.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 329.07379150390625
-          - 323.6599426269531
-          - 7.672994136810303
+          - 328.5746765136719
+          - 331.4847412109375
+          - 8.167014122009277
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -113989,6 +114044,2684 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 73.90790557861328
           - 295.78277587890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1112
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 299.27337646484375
+        - 290.13531494140625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 299.27337646484375
+          - 290.13531494140625
+          - 9.053529739379883
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1113
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 299.8070373535156
+        - 311.0750427246094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 299.8070373535156
+          - 311.0750427246094
+          - 8.565650939941406
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1114
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 293.9100646972656
+        - 324.6606750488281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.9100646972656
+          - 324.6606750488281
+          - 8.913918495178223
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1115
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 321.1903381347656
+        - 290.4460754394531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 321.1903381347656
+          - 290.4460754394531
+          - 10.825693130493164
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1116
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 285.9409484863281
+        - 268.3527526855469
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 285.9409484863281
+          - 268.3527526855469
+          - 9.153724670410156
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1117
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 303.40203857421875
+        - 268.6555480957031
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 303.40203857421875
+          - 268.6555480957031
+          - 9.848979949951172
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1118
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 320.0636291503906
+        - 263.3854064941406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 320.0636291503906
+          - 263.3854064941406
+          - 10.53392505645752
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1119
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 292.2392578125
+        - 249.2983856201172
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 292.2392578125
+          - 249.2983856201172
+          - 9.235025405883789
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1120
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 314.9954528808594
+        - 246.20193481445312
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 314.9954528808594
+          - 246.20193481445312
+          - 10.173733711242676
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1121
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 330.7200927734375
+        - 240.33480834960938
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 330.7200927734375
+          - 240.33480834960938
+          - 10.937018394470215
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1122
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 302.75457763671875
+        - 236.9056854248047
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 302.75457763671875
+          - 236.9056854248047
+          - 9.704665184020996
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1123
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 342.02447509765625
+        - 226.34747314453125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 342.02447509765625
+          - 226.34747314453125
+          - 8.458471298217773
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1124
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 341.4404602050781
+        - 283.1716003417969
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 341.4404602050781
+          - 283.1716003417969
+          - 8.277758598327637
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1125
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 338.6267395019531
+        - 254.78811645507812
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 338.6267395019531
+          - 254.78811645507812
+          - 10.539413452148438
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Wolf Gray 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1058980111
+        - 1038693102
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1056964608
+        - 257
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 9
+      NID: 1126
+      OBJTYPE: 52
+      OBJNAME: "WolfGreyF2-4677"
+      OBJTEMPLATE: "unanwiwo"
+      PARENTTEMPLATE: "LMP Wolf Gray 2"
+      OBJPRIMTXTR: "Wolf00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 284.5246276855469
+        - 229.64964294433594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 284.5246276855469
+          - 229.64964294433594
+          - 9.875091552734375
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.94781494140625
+          - 249.43312072753906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Orc Fighter 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS:
+        - "stone axe.rock"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1059686992
+        - 1041891958
+        - 1042661473
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 0
+        - 8388608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 2
+      NID: 1127
+      OBJTYPE: 50
+      OBJNAME: "Orc Warrior-4497"
+      OBJTEMPLATE: "unorma"
+      PARENTTEMPLATE: "LMP Orc Fighter 2"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 225.60586547851562
+        - 132.4630126953125
+        - 0.0
+      OBJROTATION:
+        - 0.9999539256095886
+        - 0.0
+        - 0.0
+        - 0.009599052369594574
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 225.60586547851562
+          - 132.4630126953125
+          - 538.8737182617188
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 225.50599670410156
+            - 131.397705078125
+            - 6.418614864349365
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 225.5172882080078
+              - 130.4940948486328
+              - 6.431103706359863
+            ACTION_PT_WAIT_SEG: 3600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Orc Fighter 2"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS:
+        - "stone axe.rock"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 19
+        - 19
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1059686992
+        - 1041891958
+        - 1042661473
+        - 1040191867
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1100480512
+        - 1100480512
+        - 1065353216
+        - 1090519040
+        - 1088421888
+        - 0
+        - 8388608
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 8
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 258237540
+        - 3855
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 2
+      NID: 1128
+      OBJTYPE: 50
+      OBJNAME: "Orc Warrior-4497"
+      OBJTEMPLATE: "unorma"
+      PARENTTEMPLATE: "LMP Orc Fighter 2"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 219.57980346679688
+        - 132.2838592529297
+        - 0.0
+      OBJROTATION:
+        - 0.9999143481254578
+        - 0.0
+        - 0.0
+        - 0.013089490123093128
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 219.57980346679688
+          - 132.2838592529297
+          - 786.7337036132812
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 219.4799346923828
+            - 131.2185516357422
+            - 6.5135579109191895
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 219.49122619628906
+              - 130.31494140625
+              - 6.545277118682861
+            ACTION_PT_WAIT_SEG: 3600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 180.33599853515625
+          - 168.796142578125
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0

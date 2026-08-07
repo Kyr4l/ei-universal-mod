@@ -25762,8 +25762,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 207.95408630371094
-        - 293.6052551269531
+        - 215.34999084472656
+        - 300.2738952636719
         - 0.0
       OBJROTATION:
         - 1.0
@@ -25788,9 +25788,9 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 5.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 207.95408630371094
-          - 293.6052551269531
-          - 0.0
+          - 215.34999084472656
+          - 300.2738952636719
+          - 7.763220310211182
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -75023,7 +75023,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 16.707874298095703
               - 67.72840118408203
-              - 10.717329978942871
+              - 11.334328651428223
             ACTION_PT_WAIT_SEG: 200
             ACTION_PT_TURN_SPEED: 1056964608
             ACTION_PT_FLAGS: 0
@@ -75036,7 +75036,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 24.404844284057617
               - 56.65207290649414
-              - 10.635432243347168
+              - 10.514558792114258
             ACTION_PT_WAIT_SEG: 80
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -75044,7 +75044,7 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 29.402420043945312
               - 61.818634033203125
-              - 11.156487464904785
+              - 10.179296493530273
             ACTION_PT_WAIT_SEG: 80
             ACTION_PT_TURN_SPEED: 1056964608
             ACTION_PT_FLAGS: 99
@@ -75108,3 +75108,3854 @@ OBJECTDBFILE:
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 192
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1813
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 208.89694213867188
+        - 324.9167175292969
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 208.89694213867188
+          - 324.9167175292969
+          - 10.570695877075195
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1814
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 230.30995178222656
+        - 297.6165466308594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 230.30995178222656
+          - 297.6165466308594
+          - 6.720639705657959
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1815
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 231.8576202392578
+        - 224.1239776611328
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 231.8576202392578
+          - 224.1239776611328
+          - 5.056478500366211
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1816
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 246.1888885498047
+        - 179.1728515625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 246.1888885498047
+          - 179.1728515625
+          - 3.4540767669677734
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1817
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 245.69570922851562
+        - 280.1240234375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 245.69570922851562
+          - 280.1240234375
+          - 8.954681396484375
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1818
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 235.52223205566406
+        - 333.14031982421875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 235.52223205566406
+          - 333.14031982421875
+          - 7.854388236999512
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1819
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 240.02320861816406
+        - 308.9477844238281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 240.02320861816406
+          - 308.9477844238281
+          - 8.019991874694824
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Hare Red"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1052638324
+        - 1052638324
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1820
+      OBJTYPE: 52
+      OBJNAME: "HareF0-1599"
+      OBJTEMPLATE: "unanhoha"
+      PARENTTEMPLATE: "LMP Decorative Hare Red"
+      OBJPRIMTXTR: "Hare00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 236.0729522705078
+        - 365.3609924316406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 236.0729522705078
+          - 365.3609924316406
+          - 10.014925003051758
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 207.95408630371094
+          - 293.6052551269531
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1821
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1517"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 226.28489685058594
+        - 152.53640747070312
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 226.28489685058594
+          - 152.53640747070312
+          - 3.7352309226989746
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1822
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1517"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 244.77952575683594
+        - 128.31578063964844
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 244.77952575683594
+          - 128.31578063964844
+          - 8.667405128479004
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1823
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1517"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 244.87399291992188
+        - 114.01074981689453
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 244.87399291992188
+          - 114.01074981689453
+          - 6.647914886474609
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1824
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1517"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 229.7837371826172
+        - 112.6594467163086
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 229.7837371826172
+          - 112.6594467163086
+          - 6.859713077545166
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 213.5176239013672
+          - 149.6876220703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Bat Gipath 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS:
+        - "lightning{ee2,ee2}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 18
+        - 18
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1049135241
+        - 1049135241
+        - 1040746633
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 0
+        - 1090519040
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1825
+      OBJTYPE: 52
+      OBJNAME: "BatRedM5-1505"
+      OBJTEMPLATE: "unanwiba"
+      PARENTTEMPLATE: "LMP Bat Gipath 3"
+      OBJPRIMTXTR: "Bat00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 220.70545959472656
+        - 124.18405151367188
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 220.70545959472656
+          - 124.18405151367188
+          - 7.342747211456299
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 211.3871307373047
+          - 135.3916015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 211.3871307373047
+          - 135.3916015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 211.3871307373047
+          - 135.3916015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 211.3871307373047
+          - 135.3916015625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Deer"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1057870579
+        - 1035740312
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1826
+      OBJTYPE: 52
+      OBJNAME: "DeerF0-1601"
+      OBJTEMPLATE: "unanwide"
+      PARENTTEMPLATE: "LMP Decorative Deer"
+      OBJPRIMTXTR: "Deer00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 233.06451416015625
+        - 207.21047973632812
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 233.06451416015625
+          - 207.21047973632812
+          - 4.833765983581543
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Deer"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1057870579
+        - 1035740312
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1827
+      OBJTYPE: 52
+      OBJNAME: "DeerF0-1601"
+      OBJTEMPLATE: "unanwide"
+      PARENTTEMPLATE: "LMP Decorative Deer"
+      OBJPRIMTXTR: "Deer00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 223.50221252441406
+        - 259.29681396484375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 223.50221252441406
+          - 259.29681396484375
+          - 4.0113725662231445
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Decorative Deer"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 5
+        - 5
+        - 3
+        - 3
+        - 1065353216
+        - 1097859072
+        - 1057870579
+        - 1035740312
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 257
+        - 0
+        - 1084227584
+        - 1084227584
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 5
+        - 1084227584
+        - 1120403456
+        - 0
+        - 1073741824
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 0
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 10
+      NID: 1828
+      OBJTYPE: 52
+      OBJNAME: "DeerF0-1601"
+      OBJTEMPLATE: "unanwide"
+      PARENTTEMPLATE: "LMP Decorative Deer"
+      OBJPRIMTXTR: "Deer00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 227.3394317626953
+        - 346.33831787109375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 3
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 227.3394317626953
+          - 346.33831787109375
+          - 7.787636756896973
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 173.60899353027344
+          - 148.19180297851562
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1829
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 242.7493133544922
+        - 295.49652099609375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.7493133544922
+          - 295.49652099609375
+          - 7.759202480316162
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1830
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 239.5408935546875
+        - 268.84954833984375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 239.5408935546875
+          - 268.84954833984375
+          - 7.4178032875061035
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1831
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 244.94631958007812
+        - 254.2450714111328
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 244.94631958007812
+          - 254.2450714111328
+          - 8.133432388305664
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1832
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 232.52920532226562
+        - 244.187744140625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 232.52920532226562
+          - 244.187744140625
+          - 5.961142063140869
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1833
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 246.2950897216797
+        - 237.23651123046875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 246.2950897216797
+          - 237.23651123046875
+          - 8.769060134887695
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1834
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 242.4883270263672
+        - 221.6112518310547
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 242.4883270263672
+          - 221.6112518310547
+          - 7.255688190460205
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1835
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 241.36009216308594
+        - 191.5413360595703
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 241.36009216308594
+          - 191.5413360595703
+          - 3.455827474594116
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1836
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 68.9287338256836
+        - 127.12783813476562
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 68.9287338256836
+          - 127.12783813476562
+          - 7.104509353637695
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Boar Red 3"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 27
+        - 27
+        - 27
+        - 27
+        - 1065353216
+        - 1097859072
+        - 1054316046
+        - 1033306497
+        - 1045220558
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1060320051
+        - 257
+        - 0
+        - 1104150528
+        - 1104150528
+        - 1065353216
+        - 1091567616
+        - 1090519040
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 9
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 8
+      NID: 1837
+      OBJTYPE: 52
+      OBJNAME: "BoarDarkF5-1516"
+      OBJTEMPLATE: "unanwibo"
+      PARENTTEMPLATE: "LMP Boar Red 3"
+      OBJPRIMTXTR: "Boar00"
+      OBJSECTXTR: "mainMenu00labels"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 36.490638732910156
+        - 133.32147216796875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 36.490638732910156
+          - 133.32147216796875
+          - 8.060966491699219
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 182.58547973632812
+          - 141.2279052734375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0

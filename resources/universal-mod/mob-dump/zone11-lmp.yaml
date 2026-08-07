@@ -2990,7 +2990,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 122.79900360107422
           - 339.2669982910156
-          - 0.0
+          - 256.36822509765625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -3008,7 +3008,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 126.81177520751953
+              - 126.811767578125
               - 337.5258483886719
               - 9.353501319885254
             ACTION_PT_WAIT_SEG: 90
@@ -3178,7 +3178,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 115.27533721923828
           - 342.0148010253906
-          - 0.0
+          - 269.285400390625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -3366,7 +3366,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 94.25468444824219
           - 336.8055114746094
-          - 0.0
+          - 222.6667938232422
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -3564,7 +3564,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 94.67769622802734
           - 341.1619873046875
-          - 0.0
+          - 229.99185180664062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -3755,7 +3755,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 98.37471771240234
           - 341.09637451171875
-          - 0.0
+          - 243.1520538330078
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -3959,7 +3959,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 74.86640167236328
           - 258.55999755859375
-          - 0.0
+          - 244.91873168945312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -3970,7 +3970,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 68.1832504272461
-              - 254.18321228027344
+              - 254.1832275390625
               - 8.919939041137695
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 1084227584
@@ -4134,7 +4134,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 90.49343872070312
           - 304.6327209472656
-          - 0.0
+          - 229.23687744140625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -4309,7 +4309,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 109.04895782470703
           - 258.8358154296875
-          - 0.0
+          - 221.64002990722656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -4484,7 +4484,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 83.48470306396484
           - 259.0379943847656
-          - 0.0
+          - 254.5717315673828
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -4495,16 +4495,16 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 86.69754028320312
-              - 252.63023376464844
-              - 9.036941528320312
+              - 252.63021850585938
+              - 9.03693962097168
             ACTION_PT_WAIT_SEG: 200
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 80.10870361328125
-              - 252.2101593017578
-              - 9.522494316101074
+              - 252.21017456054688
+              - 9.52249813079834
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 1084227584
             ACTION_PT_FLAGS: 0
@@ -4659,7 +4659,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 91.20268249511719
           - 313.6437072753906
-          - 0.0
+          - 263.2898864746094
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -4855,7 +4855,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 76.31083679199219
           - 258.6710510253906
-          - 0.0
+          - 245.5369110107422
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -5043,7 +5043,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 82.57893371582031
           - 259.224365234375
-          - 0.0
+          - 249.75765991210938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -5231,7 +5231,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 132.01699829101562
           - 312.2869873046875
-          - 0.0
+          - 404.16448974609375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -5432,7 +5432,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 140.8833770751953
           - 301.7245788574219
-          - 0.0
+          - 221.10971069335938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -5458,7 +5458,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 125.44625091552734
+            - 125.44625854492188
             - 290.2735290527344
             - 9.281702041625977
           ACTION_PT:
@@ -5641,7 +5641,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 141.7156982421875
           - 301.3608093261719
-          - 0.0
+          - 219.68032836914062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -5667,9 +5667,9 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 126.27857208251953
+            - 126.278564453125
             - 289.9097595214844
-            - 9.255447387695312
+            - 9.255448341369629
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 116.07425689697266
@@ -5850,14 +5850,14 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 107.49718475341797
           - 258.69464111328125
-          - 0.0
+          - 224.31735229492188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
             - 107.56171417236328
-            - 255.97193908691406
-            - 9.09725570678711
+            - 255.97195434570312
+            - 9.097256660461426
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 112.91151428222656
@@ -6025,7 +6025,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 161.83705139160156
           - 307.63653564453125
-          - 0.0
+          - 236.70843505859375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -6208,7 +6208,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 158.1179962158203
           - 311.95001220703125
-          - 0.0
+          - 235.08059692382812
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -6383,7 +6383,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 167.08099365234375
           - 332.72100830078125
-          - 0.0
+          - 219.80450439453125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -6571,7 +6571,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 110.02047729492188
           - 357.50543212890625
-          - 0.0
+          - 294.1597900390625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -6761,7 +6761,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 111.1520004272461
           - 357.0719909667969
-          - 0.0
+          - 292.40899658203125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -6971,7 +6971,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 121.16100311279297
           - 241.13299560546875
-          - 0.0
+          - 222.66348266601562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -6989,9 +6989,9 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 126.36542510986328
+            - 126.36541748046875
             - 228.81512451171875
-            - 8.84624195098877
+            - 8.846243858337402
         GUARD_PT:
           GUARD_PT_POSITION:
             - 141.44580078125
@@ -7176,7 +7176,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 338.246826171875
           - 224.9197235107422
-          - 8.995424270629883
+          - 228.0829315185547
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -7350,7 +7350,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 137.57899475097656
           - 209.27999877929688
-          - 0.0
+          - 217.1869354248047
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -7537,7 +7537,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 158.9929962158203
           - 183.66000366210938
-          - 0.0
+          - 219.1885223388672
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -7711,7 +7711,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 354.66204833984375
           - 242.87734985351562
-          - 8.988737106323242
+          - 230.2310028076172
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -7885,7 +7885,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 147.90499877929688
           - 195.09100341796875
-          - 0.0
+          - 221.4130859375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -8059,7 +8059,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 156.17799377441406
           - 188.1699981689453
-          - 0.0
+          - 213.06600952148438
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -8267,7 +8267,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 350.6329040527344
           - 226.6881103515625
-          - 8.729995727539062
+          - 227.4994354248047
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -8442,7 +8442,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 218.07000732421875
           - 175.781005859375
-          - 0.0
+          - 227.10684204101562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -8647,7 +8647,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 219.47300720214844
           - 175.83900451660156
-          - 0.0
+          - 229.70433044433594
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -8822,7 +8822,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 224.6162109375
           - 145.7111358642578
-          - 8.540101051330566
+          - 224.3609161376953
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -9018,7 +9018,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 229.39413452148438
           - 144.135009765625
-          - 0.0
+          - 203.62583923339844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -9214,7 +9214,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 250.86907958984375
           - 190.13526916503906
-          - 0.0
+          - 221.2250518798828
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -9240,7 +9240,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 254.8351593017578
+            - 254.83514404296875
             - 179.9288787841797
             - 8.752808570861816
         GUARD_PT:
@@ -9427,7 +9427,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 251.73699951171875
           - 189.7050018310547
-          - 0.0
+          - 220.89508056640625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -9453,7 +9453,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 255.7091522216797
+            - 255.70913696289062
             - 179.54388427734375
             - 8.761117935180664
         GUARD_PT:
@@ -9640,7 +9640,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 264.94500732421875
           - 179.56199645996094
-          - 0.0
+          - 218.2862548828125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -9814,7 +9814,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 261.4059143066406
           - 173.14064025878906
-          - 0.0
+          - 217.0729217529297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -10014,7 +10014,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 254.66099548339844
           - 182.6719970703125
-          - 0.0
+          - 218.68429565429688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -10024,7 +10024,7 @@ OBJECTDBFILE:
             - 8.752808570861816
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 264.6977844238281
+              - 264.69781494140625
               - 185.67877197265625
               - 8.752808570861816
             ACTION_PT_WAIT_SEG: 90
@@ -10201,7 +10201,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 229.26100158691406
           - 182.2030029296875
-          - 0.0
+          - 211.92945861816406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -10401,7 +10401,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 233.4641571044922
           - 153.21722412109375
-          - 8.932860374450684
+          - 237.09848022460938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -10593,7 +10593,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 89.09600067138672
           - 178.37600708007812
-          - 0.0
+          - 232.3951873779297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -10789,7 +10789,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 84.29630279541016
           - 171.06399536132812
-          - 0.0
+          - 232.98562622070312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -10989,7 +10989,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 63.10693359375
           - 172.9420166015625
-          - 0.0
+          - 219.95762634277344
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -11023,7 +11023,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 61.14229202270508
+            - 61.14228820800781
             - 145.1679229736328
             - 8.752808570861816
         GUARD_PT:
@@ -11232,7 +11232,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 64.12860107421875
           - 171.1280059814453
-          - 0.0
+          - 225.04029846191406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -11266,7 +11266,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 62.16395950317383
+            - 62.16395568847656
             - 143.35391235351562
             - 8.7528076171875
         GUARD_PT:
@@ -11474,7 +11474,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 55.09014892578125
           - 118.49945068359375
-          - 0.0
+          - 218.33824157714844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -11649,7 +11649,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 68.30010223388672
           - 125.47200012207031
-          - 0.0
+          - 223.1433868408203
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -11668,8 +11668,8 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 62.726043701171875
-              - 124.92693328857422
-              - 8.690635681152344
+              - 124.92694091796875
+              - 8.690637588500977
             ACTION_PT_WAIT_SEG: 60
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -11824,7 +11824,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 70.04901123046875
           - 116.40567779541016
-          - 0.0
+          - 219.339111328125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -11978,7 +11978,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 72.75105285644531
           - 119.57289123535156
-          - 0.0
+          - 219.3750457763672
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -12132,7 +12132,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 73.51398468017578
           - 121.77444458007812
-          - 0.0
+          - 218.8214111328125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -12286,7 +12286,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 227.24807739257812
           - 124.52500915527344
-          - 8.752474784851074
+          - 211.24330139160156
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -12440,7 +12440,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 113.4197998046875
           - 100.08422088623047
-          - 9.305889129638672
+          - 241.1055908203125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -12614,7 +12614,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 69.74250030517578
           - 139.80799865722656
-          - 0.0
+          - 219.63095092773438
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -12788,7 +12788,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 72.16060638427734
           - 140.4580841064453
-          - 0.0
+          - 220.1744384765625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -12820,7 +12820,7 @@ OBJECTDBFILE:
         GUARD_PT:
           GUARD_PT_POSITION:
             - 64.61457824707031
-            - 127.3993148803711
+            - 127.39932250976562
             - 8.79604434967041
           ACTION_PT:
             ACTION_PT_LOOK_PT:
@@ -12833,8 +12833,8 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 69.89745330810547
-              - 126.41828155517578
-              - 8.881571769714355
+              - 126.41827392578125
+              - 8.881570816040039
             ACTION_PT_WAIT_SEG: 60
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -13010,7 +13010,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 72.99689483642578
           - 139.7051544189453
-          - 0.0
+          - 219.2058563232422
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -13042,8 +13042,8 @@ OBJECTDBFILE:
         GUARD_PT:
           GUARD_PT_POSITION:
             - 65.45086669921875
-            - 126.6463851928711
-            - 8.813981056213379
+            - 126.64639282226562
+            - 8.813982009887695
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 70.42373657226562
@@ -13055,8 +13055,8 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 70.7337417602539
-              - 125.66535186767578
-              - 8.814611434936523
+              - 125.66534423828125
+              - 8.814610481262207
             ACTION_PT_WAIT_SEG: 60
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -13232,7 +13232,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 79.5781478881836
           - 142.96060180664062
-          - 0.0
+          - 219.89822387695312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -13407,7 +13407,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 82.76802825927734
           - 131.7720947265625
-          - 0.0
+          - 220.46630859375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -13609,7 +13609,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 82.1031723022461
           - 129.4448699951172
-          - 0.0
+          - 219.06919860839844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -13812,7 +13812,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 120.0102767944336
           - 99.98712921142578
-          - 9.4705228805542
+          - 263.5195617675781
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -14042,7 +14042,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 120.51699829101562
           - 116.66500091552734
-          - 0.0
+          - 221.49266052246094
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -14250,7 +14250,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 106.33140563964844
           - 128.86117553710938
-          - 0.0
+          - 238.20681762695312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -14424,7 +14424,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 119.50328826904297
           - 118.56781005859375
-          - 0.0
+          - 219.49790954589844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -14598,7 +14598,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 129.24099731445312
           - 117.43199920654297
-          - 0.0
+          - 236.52464294433594
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -14773,7 +14773,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 130.02200317382812
           - 143.9040069580078
-          - 0.0
+          - 224.4106903076172
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -14962,7 +14962,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 131.0
           - 144.4409942626953
-          - 0.0
+          - 226.3688201904297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -15152,7 +15152,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 99.03520202636719
           - 149.48500061035156
-          - 0.0
+          - 224.33726501464844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -15352,7 +15352,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 110.43000030517578
           - 160.14100646972656
-          - 0.0
+          - 227.2477264404297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -15552,7 +15552,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 449.5586242675781
           - 300.2877502441406
-          - 9.10046100616455
+          - 232.5306854248047
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -15768,7 +15768,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 447.70953369140625
           - 299.9190979003906
-          - 8.840797424316406
+          - 233.0438690185547
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -66579,8 +66579,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 297.097412109375
-        - 334.0849304199219
+        - 296.7068176269531
+        - 333.13433837890625
         - -1.399999976158142
       OBJROTATION:
         - 0.7826083302497864
@@ -68471,7 +68471,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 474.6654357910156
           - 239.06919860839844
-          - 10.92587947845459
+          - 288.17462158203125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -68738,7 +68738,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 168.01100158691406
           - 322.97698974609375
-          - 0.0
+          - 225.36294555664062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -68892,7 +68892,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 292.17791748046875
           - 76.13737487792969
-          - 0.0
+          - 225.64598083496094
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69046,7 +69046,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 290.30322265625
           - 77.05589294433594
-          - 0.0
+          - 222.71153259277344
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69200,7 +69200,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 301.7540588378906
           - 100.86217498779297
-          - 0.0
+          - 221.07339477539062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69354,7 +69354,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 302.85150146484375
           - 98.07923889160156
-          - 0.0
+          - 218.17584228515625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69509,7 +69509,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 298.3351135253906
           - 98.61575317382812
-          - 0.0
+          - 219.95204162597656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69664,7 +69664,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 295.3389892578125
           - 70.77290344238281
-          - 0.0
+          - 225.7210693359375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69819,7 +69819,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 304.74774169921875
           - 96.48400115966797
-          - 0.0
+          - 216.1138153076172
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -69974,7 +69974,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 293.010986328125
           - 112.85600280761719
-          - 0.0
+          - 237.02125549316406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -70138,7 +70138,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 316.05242919921875
           - 113.17593383789062
-          - 0.0
+          - 232.66244506835938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -70292,7 +70292,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 309.8680419921875
           - 112.3509292602539
-          - 0.0
+          - 230.18692016601562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -70446,7 +70446,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 307.8451232910156
           - 90.68433380126953
-          - 0.0
+          - 223.06971740722656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -70600,7 +70600,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 289.57000732421875
           - 114.16200256347656
-          - 0.0
+          - 241.63616943359375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -70754,7 +70754,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 297.03350830078125
           - 116.70439147949219
-          - 0.0
+          - 239.39990234375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -70908,7 +70908,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 349.49505615234375
           - 84.678466796875
-          - 0.0
+          - 239.275390625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -71062,7 +71062,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 354.3235778808594
           - 85.12523651123047
-          - 0.0
+          - 257.7978210449219
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -71216,7 +71216,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 350.8392028808594
           - 87.0530014038086
-          - 0.0
+          - 257.8498229980469
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -71370,7 +71370,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 355.10699462890625
           - 95.12010192871094
-          - 0.0
+          - 288.6540832519531
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -71525,7 +71525,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 341.06201171875
           - 78.85489654541016
-          - 0.0
+          - 218.8262176513672
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -73919,7 +73919,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 80.47484588623047
           - 268.5187072753906
-          - 0.0
+          - 234.8925323486328
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -74331,7 +74331,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 441.6050109863281
           - 293.093994140625
-          - 0.0
+          - 225.62582397460938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -74519,7 +74519,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 432.0669860839844
           - 254.75799560546875
-          - 0.0
+          - 211.59515380859375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -74720,7 +74720,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 440.917236328125
           - 269.389892578125
-          - 8.710301399230957
+          - 227.23277282714844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -74921,7 +74921,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 448.9757385253906
           - 301.97467041015625
-          - 9.092550277709961
+          - 230.07638549804688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -75137,7 +75137,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 472.86004638671875
           - 242.54287719726562
-          - 10.086091995239258
+          - 270.3547058105469
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -75331,7 +75331,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 119.0510025024414
           - 240.1269989013672
-          - 0.0
+          - 224.72445678710938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -75341,9 +75341,9 @@ OBJECTDBFILE:
             - 9.263656616210938
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 123.92841339111328
+            - 123.92840576171875
             - 228.19224548339844
-            - 9.986021995544434
+            - 9.986023902893066
         GUARD_PT:
           GUARD_PT_POSITION:
             - 141.0262908935547
@@ -75519,7 +75519,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 176.63604736328125
           - 211.88609313964844
-          - 0.0
+          - 197.08482360839844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -75704,7 +75704,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 321.8699951171875
           - 225.9010009765625
-          - 0.0
+          - 220.50189208984375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -75871,7 +75871,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 325.2879943847656
           - 224.21200561523438
-          - 0.0
+          - 220.015869140625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -76025,7 +76025,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 322.35198974609375
           - 230.59300231933594
-          - 0.0
+          - 218.82020568847656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -76179,7 +76179,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 326.8810119628906
           - 226.75900268554688
-          - 0.0
+          - 218.97821044921875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -76333,7 +76333,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 360.5039978027344
           - 223.47000122070312
-          - 0.0
+          - 218.82020568847656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -76487,7 +76487,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 364.1570129394531
           - 220.156005859375
-          - 0.0
+          - 218.82020568847656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -76659,7 +76659,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 367.760986328125
           - 231.26199340820312
-          - 0.0
+          - 218.81942749023438
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -76826,7 +76826,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 363.2140808105469
           - 241.12120056152344
-          - 0.0
+          - 219.81874084472656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -76993,7 +76993,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 362.25799560546875
           - 219.45700073242188
-          - 0.0
+          - 218.82020568847656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -77167,7 +77167,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 377.8609924316406
           - 237.68499755859375
-          - 0.0
+          - 221.6737518310547
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -77321,14 +77321,14 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 410.5299987792969
           - 65.18109893798828
-          - 0.0
+          - 275.8096923828125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
             - 410.4751892089844
-            - 61.10976028442383
-            - 9.08800220489502
+            - 61.10975646972656
+            - 9.088003158569336
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 409.4466857910156
@@ -77488,7 +77488,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 495.5790100097656
           - 79.97119903564453
-          - 0.0
+          - 237.9542236328125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -77705,7 +77705,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 440.3139953613281
           - 71.29309844970703
-          - 0.0
+          - 218.86915588378906
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -78206,7 +78206,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 339.5010070800781
           - 40.05739974975586
-          - 0.0
+          - 229.33522033691406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -78360,7 +78360,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 342.6969909667969
           - 43.20309829711914
-          - 0.0
+          - 249.5262451171875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -78514,7 +78514,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 299.1579895019531
           - 55.19150161743164
-          - 0.0
+          - 218.812255859375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -78668,7 +78668,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 321.7430114746094
           - 63.598201751708984
-          - 0.0
+          - 218.82931518554688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -78822,7 +78822,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 46.9230842590332
           - 190.38052368164062
-          - 0.0
+          - 219.45777893066406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -79069,7 +79069,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 170.894775390625
           - 289.1307678222656
-          - 0.0
+          - 240.5904541015625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -79246,7 +79246,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 173.95689392089844
           - 286.5957336425781
-          - 0.0
+          - 233.03271484375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -79421,7 +79421,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 128.2270050048828
           - 278.6159973144531
-          - 0.0
+          - 221.35682678222656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -79575,7 +79575,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 136.52000427246094
           - 286.08099365234375
-          - 0.0
+          - 233.8695831298828
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -79751,7 +79751,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 124.06127166748047
           - 284.74151611328125
-          - 0.0
+          - 221.56874084472656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -79932,7 +79932,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 178.60699462890625
           - 292.6929931640625
-          - 0.0
+          - 222.9680633544922
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -80128,7 +80128,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 120.6719970703125
           - 347.4800109863281
-          - 0.0
+          - 254.1072540283203
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -80282,7 +80282,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 121.45099639892578
           - 348.7340087890625
-          - 0.0
+          - 260.6897888183594
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -80436,7 +80436,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 122.55699920654297
           - 345.9590148925781
-          - 0.0
+          - 250.7529754638672
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -80591,7 +80591,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 91.69539642333984
           - 316.0929870605469
-          - 0.0
+          - 267.0885314941406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -80787,7 +80787,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 415.4880065917969
           - 108.3290023803711
-          - 0.0
+          - 218.851318359375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -80954,7 +80954,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 397.25201416015625
           - 119.65299987792969
-          - 0.0
+          - 228.15977478027344
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -81108,7 +81108,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 399.2959899902344
           - 120.66600036621094
-          - 0.0
+          - 262.28277587890625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -81262,7 +81262,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 396.2179870605469
           - 124.90499877929688
-          - 0.0
+          - 248.525634765625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -81416,7 +81416,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 403.3590087890625
           - 66.84480285644531
-          - 0.0
+          - 307.61083984375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -81658,7 +81658,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 176.01638793945312
           - 203.6836700439453
-          - 0.0
+          - 216.06834411621094
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -81852,7 +81852,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 169.61114501953125
           - 204.31016540527344
-          - 0.0
+          - 218.53057861328125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -82067,7 +82067,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 149.04653930664062
           - 218.02915954589844
-          - 0.0
+          - 198.46449279785156
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -82255,7 +82255,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 438.843994140625
           - 258.0220031738281
-          - 0.0
+          - 175.77671813964844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -82782,7 +82782,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 441.9710998535156
           - 248.24253845214844
-          - 8.913840293884277
+          - 229.1589813232422
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -82978,7 +82978,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 444.9326477050781
           - 249.75100708007812
-          - 8.756318092346191
+          - 226.65896606445312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -82997,8 +82997,8 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 448.3096008300781
-              - 254.8037567138672
-              - 8.684035301208496
+              - 254.80377197265625
+              - 8.684038162231445
             ACTION_PT_WAIT_SEG: 30
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -83174,7 +83174,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 449.7587890625
           - 260.414306640625
-          - 8.693975448608398
+          - 227.1417694091797
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -83362,7 +83362,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 60.58879852294922
           - 207.78399658203125
-          - 0.0
+          - 278.8490905761719
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -83516,7 +83516,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 63.896820068359375
           - 208.6910400390625
-          - 0.0
+          - 280.422119140625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -83670,7 +83670,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 75.61759948730469
           - 231.45599365234375
-          - 0.0
+          - 258.98504638671875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -83824,7 +83824,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 196.18800354003906
           - 14.019800186157227
-          - 0.0
+          - 227.12969970703125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -83978,7 +83978,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 93.55069732666016
           - 94.24669647216797
-          - 0.0
+          - 240.7872314453125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -84132,7 +84132,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 197.66099548339844
           - 12.702899932861328
-          - 0.0
+          - 221.1746826171875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -84286,7 +84286,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 173.56500244140625
           - 112.18299865722656
-          - 0.0
+          - 222.63967895507812
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -84440,7 +84440,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 472.2749938964844
           - 93.810302734375
-          - 0.0
+          - 217.85084533691406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -84628,7 +84628,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 355.8708190917969
           - 119.35032653808594
-          - 0.0
+          - 254.32925415039062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -84782,7 +84782,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 347.6125183105469
           - 117.52423095703125
-          - 0.0
+          - 239.51133728027344
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -84936,7 +84936,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 354.8089599609375
           - 177.8001251220703
-          - 0.0
+          - 229.92071533203125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -85090,7 +85090,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 421.94256591796875
           - 206.2019500732422
-          - 0.0
+          - 223.5855255126953
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -85244,7 +85244,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 447.6449890136719
           - 202.218994140625
-          - 0.0
+          - 215.1556396484375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -85398,7 +85398,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 450.2699890136719
           - 198.8990020751953
-          - 0.0
+          - 219.86175537109375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -85669,7 +85669,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 74.8656234741211
           - 260.5693359375
-          - 0.0
+          - 242.48719787597656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -86116,7 +86116,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 35.81269836425781
           - 215.65199279785156
-          - 0.0
+          - 224.87271118164062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -86270,7 +86270,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 53.52470016479492
           - 230.64199829101562
-          - 0.0
+          - 234.80563354492188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -86424,7 +86424,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 50.19779968261719
           - 228.32400512695312
-          - 0.0
+          - 228.841552734375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -86627,7 +86627,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 449.76702880859375
           - 251.9539337158203
-          - 8.674649238586426
+          - 230.33810424804688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -86831,7 +86831,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 394.7720031738281
           - 272.87298583984375
-          - 0.0
+          - 219.761962890625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -86985,7 +86985,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 397.6650085449219
           - 273.8500061035156
-          - 0.0
+          - 217.882568359375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -87139,7 +87139,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 414.3030090332031
           - 294.9540100097656
-          - 0.0
+          - 217.20420837402344
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -87293,7 +87293,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 412.9880065917969
           - 316.9460144042969
-          - 0.0
+          - 229.1674041748047
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -87447,7 +87447,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 496.9419860839844
           - 357.8909912109375
-          - 0.0
+          - 237.75393676757812
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -87601,7 +87601,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 495.62542724609375
           - 374.66778564453125
-          - 0.0
+          - 261.3905029296875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -87755,7 +87755,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 439.3489990234375
           - 368.4649963378906
-          - 0.0
+          - 213.79916381835938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -87909,7 +87909,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 442.88299560546875
           - 373.7619934082031
-          - 0.0
+          - 220.957275390625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88063,7 +88063,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 416.4010009765625
           - 335.71600341796875
-          - 0.0
+          - 218.17367553710938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88217,7 +88217,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 435.3599853515625
           - 323.1969909667969
-          - 0.0
+          - 221.32247924804688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88371,7 +88371,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 463.3080139160156
           - 341.62799072265625
-          - 0.0
+          - 220.42332458496094
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88525,7 +88525,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 463.635009765625
           - 370.1000061035156
-          - 0.0
+          - 210.5524139404297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88679,7 +88679,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 466.7408447265625
           - 370.38604736328125
-          - 0.0
+          - 214.9907989501953
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88833,7 +88833,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 487.45001220703125
           - 246.93800354003906
-          - 0.0
+          - 301.31097412109375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -88987,7 +88987,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 489.2359924316406
           - 244.9239959716797
-          - 0.0
+          - 312.6959533691406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -89141,7 +89141,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 487.0270080566406
           - 236.62600708007812
-          - 0.0
+          - 306.5695495605469
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -89295,7 +89295,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 374.989013671875
           - 189.07699584960938
-          - 0.0
+          - 225.89108276367188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -89449,7 +89449,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 364.72601318359375
           - 191.74600219726562
-          - 0.0
+          - 246.81887817382812
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -89603,7 +89603,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 208.13099670410156
           - 24.14430046081543
-          - 0.0
+          - 223.33084106445312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -89757,7 +89757,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 186.89199829101562
           - 38.43579864501953
-          - 0.0
+          - 246.0440673828125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -89911,7 +89911,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 307.25201416015625
           - 206.0989990234375
-          - 0.0
+          - 255.14508056640625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90065,7 +90065,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 306.0429992675781
           - 204.49600219726562
-          - 0.0
+          - 259.2016906738281
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90219,7 +90219,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 293.15399169921875
           - 229.29800415039062
-          - 0.0
+          - 218.4214630126953
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90373,7 +90373,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 337.8819274902344
           - 222.63397216796875
-          - 8.823809623718262
+          - 229.11134338378906
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90527,7 +90527,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 380.1990051269531
           - 236.21400451660156
-          - 0.0
+          - 219.855712890625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90681,7 +90681,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 168.73199462890625
           - 55.59859848022461
-          - 0.0
+          - 233.2190704345703
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90835,7 +90835,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 113.62899780273438
           - 71.69049835205078
-          - 0.0
+          - 218.8662872314453
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -90989,7 +90989,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 197.28656005859375
           - 120.76241302490234
-          - 0.0
+          - 220.58834838867188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -91143,7 +91143,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 244.5665283203125
           - 129.45193481445312
-          - 8.902013778686523
+          - 234.645751953125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -91297,7 +91297,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 256.18499755859375
           - 144.0290069580078
-          - 0.0
+          - 211.03054809570312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -91451,7 +91451,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 436.3080139160156
           - 98.66100311279297
-          - 0.0
+          - 266.86822509765625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -91660,7 +91660,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 431.8680114746094
           - 153.80499267578125
-          - 0.0
+          - 219.1245880126953
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -91814,7 +91814,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 454.8699951171875
           - 156.31199645996094
-          - 0.0
+          - 217.75558471679688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -91968,7 +91968,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 424.0509948730469
           - 128.4040069580078
-          - 0.0
+          - 239.29986572265625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -92169,7 +92169,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 473.1579895019531
           - 131.73300170898438
-          - 0.0
+          - 224.679931640625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -92357,7 +92357,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 460.74200439453125
           - 113.47000122070312
-          - 0.0
+          - 222.06471252441406
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -92512,7 +92512,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 71.908203125
           - 316.6659851074219
-          - 0.0
+          - 219.0866241455078
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -92667,7 +92667,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 59.71139907836914
           - 315.34698486328125
-          - 0.0
+          - 220.52041625976562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -92822,7 +92822,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 66.2437973022461
           - 308.0400085449219
-          - 0.0
+          - 224.90768432617188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -92996,7 +92996,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 225.97720336914062
           - 195.6573486328125
-          - 8.752474784851074
+          - 215.42947387695312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -93150,7 +93150,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 373.9229736328125
           - 187.6318817138672
-          - 0.0
+          - 228.41079711914062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -93304,7 +93304,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 205.88104248046875
           - 22.341064453125
-          - 0.0
+          - 220.0775604248047
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -93458,7 +93458,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 207.98199462890625
           - 10.86212158203125
-          - 0.0
+          - 233.67298889160156
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -93612,7 +93612,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 387.5360107421875
           - 44.087799072265625
-          - 0.0
+          - 232.00428771972656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -93822,7 +93822,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 296.3543395996094
           - 203.61785888671875
-          - 0.0
+          - 264.4140625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -93976,7 +93976,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 479.86578369140625
           - 354.770263671875
-          - 0.0
+          - 222.9705810546875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -94130,7 +94130,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 431.50830078125
           - 348.32220458984375
-          - 0.0
+          - 216.98760986328125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -94284,7 +94284,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 400.25927734375
           - 215.7386474609375
-          - 0.0
+          - 218.9219970703125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -94438,7 +94438,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 344.3196716308594
           - 222.49449157714844
-          - 8.987879753112793
+          - 229.27610778808594
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -94592,7 +94592,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 240.81756591796875
           - 113.53545379638672
-          - 8.945068359375
+          - 231.78793334960938
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -94746,7 +94746,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 376.244873046875
           - 130.69256591796875
-          - 0.0
+          - 256.41058349609375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -94900,7 +94900,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 326.62847900390625
           - 190.97525024414062
-          - 0.0
+          - 266.7055358886719
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95054,7 +95054,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 140.65199279785156
           - 66.63469696044922
-          - 0.0
+          - 216.8248291015625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95208,7 +95208,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 145.57476806640625
           - 240.40391540527344
-          - 0.0
+          - 221.08673095703125
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95362,7 +95362,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 147.87664794921875
           - 261.9032897949219
-          - 0.0
+          - 251.76519775390625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95516,7 +95516,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 86.81210327148438
           - 206.1719970703125
-          - 0.0
+          - 218.8201904296875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95670,7 +95670,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 91.39240264892578
           - 284.83599853515625
-          - 0.0
+          - 237.8755645751953
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95824,7 +95824,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 89.27999877929688
           - 280.31500244140625
-          - 0.0
+          - 250.0533447265625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -95978,7 +95978,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 76.86418914794922
           - 276.22808837890625
-          - 0.0
+          - 221.09312438964844
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -96132,7 +96132,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 63.385765075683594
           - 286.63323974609375
-          - 0.0
+          - 254.0896759033203
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -96286,7 +96286,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 130.4846954345703
           - 284.31243896484375
-          - 0.0
+          - 220.1355743408203
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -96482,7 +96482,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 100.65399932861328
           - 273.3940124511719
-          - 0.0
+          - 260.1771240234375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -96636,7 +96636,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 178.81500244140625
           - 135.31100463867188
-          - 0.0
+          - 242.21258544921875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -96660,7 +96660,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 185.05430603027344
-              - 127.5563735961914
+              - 127.55636596679688
               - 8.752808570861816
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
@@ -96765,7 +96765,7 @@ OBJECTDBFILE:
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 283
-      OBJ_QUEST_INFO: ""
+      OBJ_QUEST_INFO: "z11q2"
       OBJCOMPLECTION:
         - 0.0
         - 0.5
@@ -97906,7 +97906,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 46.75423049926758
           - 130.16226196289062
-          - 0.0
+          - 216.08438110351562
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -98060,7 +98060,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 42.330806732177734
           - 128.67819213867188
-          - 0.0
+          - 218.43484497070312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -98665,7 +98665,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 306.8522644042969
           - 139.39622497558594
-          - 0.0
+          - 220.86834716796875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -98840,7 +98840,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 310.8330078125
           - 141.88800048828125
-          - 0.0
+          - 224.53073120117188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -99036,7 +99036,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 316.9132385253906
           - 140.98805236816406
-          - 0.0
+          - 220.316162109375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -99211,7 +99211,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 321.03900146484375
           - 136.04600524902344
-          - 0.0
+          - 231.45187377929688
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -99404,7 +99404,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 320.3127136230469
           - 131.6737823486328
-          - 0.0
+          - 246.8326873779297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
@@ -99599,7 +99599,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 368.50408935546875
           - 144.9263153076172
-          - 0.0
+          - 226.05093383789062
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -99774,7 +99774,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 356.8917541503906
           - 148.6561279296875
-          - 0.0
+          - 224.4879608154297
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -99949,7 +99949,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 361.4302673339844
           - 147.28466796875
-          - 0.0
+          - 216.87054443359375
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -100104,7 +100104,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 292.70562744140625
           - 98.12799835205078
-          - 0.0
+          - 221.65945434570312
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -100259,7 +100259,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 308.23944091796875
           - 113.7598648071289
-          - 0.0
+          - 233.1096954345703
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -100414,7 +100414,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 280.02679443359375
           - 87.16878509521484
-          - 0.0
+          - 232.54928588867188
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -100569,7 +100569,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 325.0198974609375
           - 60.23603057861328
-          - 0.0
+          - 218.82020568847656
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -100724,7 +100724,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_PT:
           - 348.80035400390625
           - 88.75662994384766
-          - 0.0
+          - 255.76763916015625
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
       UNIT_LOGIC:
@@ -101403,3 +101403,2591 @@ OBJECTDBFILE:
         - 0.0
         - 0.0
         - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 6
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 303.5094299316406
+        - 341.7621765136719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 12
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.5254821777344
+        - 340.8711853027344
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 24
+      OBJTYPE: 54
+      OBJNAME: "Box00-664398"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.9936218261719
+        - 338.9342346191406
+        - 1.000000238418579
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 141
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.09999999403953552
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 33
+      OBJTYPE: 54
+      OBJNAME: "Box00-664398"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 306.0578918457031
+        - 338.3691101074219
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 141
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 44
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 304.4315490722656
+        - 341.27386474609375
+        - 1.2500003576278687
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 46
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 301.7980041503906
+        - 340.1112060546875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 73
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 303.1105651855469
+        - 341.42462158203125
+        - 1.2500003576278687
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 74
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 304.5068664550781
+        - 338.87921142578125
+        - 0.39999982714653015
+      OBJROTATION:
+        - 0.6392722129821777
+        - -0.6487255096435547
+        - -0.13248653709888458
+        - 0.39106762409210205
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 75
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 304.4422302246094
+        - 341.1951904296875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 77
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass01winter-269647"
+      OBJTEMPLATE: "naflbu17"
+      PARENTTEMPLATE: "GipatGrass01winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.2174377441406
+        - 344.28118896484375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 391
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 79
+      OBJTYPE: 54
+      OBJNAME: "Box00-664398"
+      OBJTEMPLATE: "stst82"
+      PARENTTEMPLATE: "Box00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.9045715332031
+        - 339.5027770996094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 141
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 80
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 302.7022399902344
+        - 341.01251220703125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 81
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 302.0819396972656
+        - 340.2679138183594
+        - 1.2500003576278687
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 82
+      OBJTYPE: 54
+      OBJNAME: "Pointer 02-764793"
+      OBJTEMPLATE: "stst147"
+      PARENTTEMPLATE: "Pointer 02"
+      OBJPRIMTXTR: "Bridge00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 295.2130432128906
+        - 333.19085693359375
+        - 0.0
+      OBJROTATION:
+        - 0.9510564804077148
+        - 0.0
+        - 0.0
+        - 0.30901697278022766
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 129
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 83
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-989044"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 295.0339660644531
+        - 333.95208740234375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 409
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.7999999523162842
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 84
+      OBJTYPE: 54
+      OBJNAME: "Target00-725431"
+      OBJTEMPLATE: "stst72"
+      PARENTTEMPLATE: "Target00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.4894714355469
+        - 286.9326171875
+        - -0.15000000596046448
+      OBJROTATION:
+        - 0.9170600771903992
+        - 0.0
+        - 0.0
+        - -0.39874905347824097
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 653
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 85
+      OBJTYPE: 54
+      OBJNAME: "Target00-725431"
+      OBJTEMPLATE: "stst72"
+      PARENTTEMPLATE: "Target00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 279.4855651855469
+        - 289.11529541015625
+        - -0.15000000596046448
+      OBJROTATION:
+        - 0.9170600771903992
+        - 0.0
+        - 0.0
+        - -0.39874905347824097
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 653
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 86
+      OBJTYPE: 54
+      OBJNAME: "WinterLeafTree01-1096"
+      OBJTEMPLATE: "nafltr57"
+      PARENTTEMPLATE: "WinterLeafTree01"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 294.0666809082031
+        - 345.19610595703125
+        - -1.399999976158142
+      OBJROTATION:
+        - 0.9563047885894775
+        - 0.0
+        - 0.0
+        - -0.2923716902732849
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6785
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.28999999165534973
+        - 0.29999998211860657
+        - 1.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 87
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-1084"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 264.6425476074219
+        - 317.2272644042969
+        - -0.24999991059303284
+      OBJROTATION:
+        - -0.12186920642852783
+        - 0.0
+        - 0.0
+        - -0.992546021938324
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6784
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5699999928474426
+        - 0.8399999737739563
+        - 0.9599999785423279
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 88
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-130995"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 290.6416320800781
+        - 320.32763671875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.29999998211860657
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 89
+      OBJTYPE: 54
+      OBJNAME: "Van00-328601"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 290.5408630371094
+        - 321.982177734375
+        - 0.0
+      OBJROTATION:
+        - -0.9945221543312073
+        - 0.0
+        - 0.0
+        - 0.10452862083911896
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 120
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 90
+      OBJTYPE: 54
+      OBJNAME: "CampWell00-182313"
+      OBJTEMPLATE: "stbuho38"
+      PARENTTEMPLATE: "CampWell00"
+      OBJPRIMTXTR: "kanianHouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 285.4267272949219
+        - 320.6265869140625
+        - 0.20000000298023224
+      OBJROTATION:
+        - -0.3987489938735962
+        - 0.0
+        - 0.0
+        - 0.9170600175857544
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 749
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 91
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-130995"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 291.7334899902344
+        - 322.002685546875
+        - 0.8999999761581421
+      OBJROTATION:
+        - 0.997411847114563
+        - -0.017439117655158043
+        - 0.06975115090608597
+        - -0.00030440089176408947
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.19999998807907104
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 92
+      OBJTYPE: 54
+      OBJNAME: "Log01-706"
+      OBJTEMPLATE: "nafltr70"
+      PARENTTEMPLATE: "Log01"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 283.7042541503906
+        - 317.71783447265625
+        - 0.30000001192092896
+      OBJROTATION:
+        - -0.34959903359413147
+        - 0.8440061807632446
+        - -0.3757758140563965
+        - 0.15565159916877747
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 10974
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - 0.07999999821186066
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 93
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-130995"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 289.0707092285156
+        - 322.28900146484375
+        - 1.7000000476837158
+      OBJROTATION:
+        - 0.3997853398323059
+        - 0.6526534557342529
+        - 0.2695836126804352
+        - 0.5844134092330933
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.19999998807907104
+        - 0.5999999642372131
+        - 1.1999999284744263
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 94
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-130995"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 291.4577331542969
+        - 321.33917236328125
+        - 0.8999999761581421
+      OBJROTATION:
+        - 0.997411847114563
+        - -0.017439117655158043
+        - 0.06975115090608597
+        - -0.00030440089176408947
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.22999998927116394
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 95
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-130995"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 287.8932189941406
+        - 321.3822021484375
+        - 0.44999998807907104
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.29999998211860657
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 96
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-298592"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 282.9991149902344
+        - 322.2911071777344
+        - -0.4999999701976776
+      OBJROTATION:
+        - 0.9914450645446777
+        - 0.0
+        - 0.0
+        - 0.13052625954151154
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 360
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.699999988079071
+        - 0.8999999761581421
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 97
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-264561"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 285.9723815917969
+        - 322.24249267578125
+        - -0.8999999761581421
+      OBJROTATION:
+        - 0.9986295700073242
+        - 0.0
+        - 0.0
+        - 0.052335966378450394
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 359
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 1.0
+        - 1.0
+        - 2.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 98
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-817044"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 283.0621032714844
+        - 319.5669860839844
+        - -0.40000003576278687
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 360
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 99
+      OBJTYPE: 54
+      OBJNAME: "FarmColoumn00-1481"
+      OBJTEMPLATE: "stst69"
+      PARENTTEMPLATE: "FarmColoumn00"
+      OBJPRIMTXTR: "kanianHouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.3810119628906
+        - 335.8309020996094
+        - -0.249999538064003
+      OBJROTATION:
+        - -0.41469329595565796
+        - 0.0
+        - 0.0
+        - 0.9099611043930054
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 9308
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.5
+        - 0.0
+    PARTICL:
+      PARTICL_ID: 100
+      PARTICL_POSITION:
+        - 281.8963928222656
+        - 335.3638916015625
+        - 11.115699768066406
+      PARTICL_NAME: "Particles source-760624"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.4000000059604645
+    LIGHT:
+      LIGHT_ID: 101
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 281.8653869628906
+        - 335.3537902832031
+        - 9.452939987182617
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 1.5
+      LIGHT_NAME: "Light-208376"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 102
+      OBJTYPE: 54
+      OBJNAME: "Table00-83"
+      OBJTEMPLATE: "stst99"
+      PARENTTEMPLATE: "Table00"
+      OBJPRIMTXTR: "runnersTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 273.1490173339844
+        - 317.9306335449219
+        - 0.0
+      OBJROTATION:
+        - 0.43051114678382874
+        - 0.0
+        - 0.0
+        - 0.9025853872299194
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 652
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.09999999403953552
+    SOUND:
+      SOUND_ID: 103
+      SOUND_POSITION:
+        - 271.9714660644531
+        - 325.4671936035156
+        - 10.560400009155273
+      SOUND_RANGE: 8
+      SOUND_NAME: "Sound-268772"
+      SOUND_MIN: 1500
+      SOUND_MAX: 3000
+      SOUND_COMMENTS: "none"
+      SOUND_RESNAME:
+        - "nature\Fire\small.wav"
+      SOUND_RANGE2: 12
+      SOUND_AMBIENT: 0
+      SOUND_IS_MUSIC: 0
+    LIGHT:
+      LIGHT_ID: 104
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 273.1938781738281
+        - 326.627197265625
+        - 9.665820121765137
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 1.5
+      LIGHT_NAME: "Light-208376"
+      LIGHT_COMMENTS: "none"
+    TORCH:
+      TORCH_PTLINK:
+        - 0.0
+        - 0.0
+        - 0.10000000149011612
+      TORCH_STRENGHT: 0.20000000298023224
+      TORCH_SOUND: "nature\fire\small.wav"
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 105
+      OBJTYPE: 58
+      OBJNAME: "Fireplace00-765445"
+      OBJTEMPLATE: "stto8"
+      PARENTTEMPLATE: "Fireplace00"
+      OBJPRIMTXTR: "torchBase00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 270.1051940917969
+        - 323.7757873535156
+        - 0.15000000596046448
+      OBJROTATION:
+        - -0.7253742814064026
+        - 0.0
+        - 0.0
+        - 0.6883546113967896
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 294
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "lh1"
+        - "lh2"
+      OBJ_PLAYER: 0
+      NID: 106
+      OBJTYPE: 54
+      OBJNAME: "Leg-40291"
+      OBJTEMPLATE: "stst67"
+      PARENTTEMPLATE: "Leg"
+      OBJPRIMTXTR: "boar00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.9456481933594
+        - 317.8415832519531
+        - 0.7699999809265137
+      OBJROTATION:
+        - 0.5963354110717773
+        - 0.21898187696933746
+        - 0.7184639573097229
+        - 0.28326722979545593
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 657
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.429999977350235
+    OBJECT:
+      OBJBODYPARTS:
+        - "lh1"
+        - "lh2"
+      OBJ_PLAYER: 0
+      NID: 107
+      OBJTYPE: 54
+      OBJNAME: "Leg-40291"
+      OBJTEMPLATE: "stst67"
+      PARENTTEMPLATE: "Leg"
+      OBJPRIMTXTR: "boar00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 270.8351745605469
+        - 323.14202880859375
+        - 0.0
+      OBJROTATION:
+        - 0.601675271987915
+        - 0.09702981263399124
+        - 0.7832590937614441
+        - 0.12279057502746582
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 657
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    PARTICL:
+      PARTICL_ID: 108
+      PARTICL_POSITION:
+        - 273.0704650878906
+        - 326.68267822265625
+        - 10.952500343322754
+      PARTICL_NAME: "Particles source-760624"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 109
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-606812"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.7336730957031
+        - 327.0022888183594
+        - 1.399999737739563
+      OBJROTATION:
+        - 0.9135453104972839
+        - 0.0
+        - 0.0
+        - 0.4067365527153015
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 817
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "meat"
+      OBJ_PLAYER: 0
+      NID: 110
+      OBJTYPE: 54
+      OBJNAME: "ShopperMeat-160386"
+      OBJTEMPLATE: "stbuho18"
+      PARENTTEMPLATE: "ShopperMeat"
+      OBJPRIMTXTR: "shopperTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.2087097167969
+        - 320.6904602050781
+        - 0.04999999701976776
+      OBJROTATION:
+        - -0.7253742814064026
+        - 0.0
+        - 0.0
+        - 0.6883546113967896
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 643
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    SOUND:
+      SOUND_ID: 111
+      SOUND_POSITION:
+        - 282.1638488769531
+        - 335.3437805175781
+        - 10.607999801635742
+      SOUND_RANGE: 8
+      SOUND_NAME: "Sound-268772"
+      SOUND_MIN: 1500
+      SOUND_MAX: 3000
+      SOUND_COMMENTS: "none"
+      SOUND_RESNAME:
+        - "nature\Fire\small.wav"
+      SOUND_RANGE2: 12
+      SOUND_AMBIENT: 0
+      SOUND_IS_MUSIC: 0
+    OBJECT:
+      OBJBODYPARTS:
+        - "bucket"
+      OBJ_PLAYER: 0
+      NID: 112
+      OBJTYPE: 54
+      OBJNAME: "ShopperBucket-177857"
+      OBJTEMPLATE: "stbuho18"
+      PARENTTEMPLATE: "ShopperBucket"
+      OBJPRIMTXTR: "shopperTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 274.0800476074219
+        - 318.5599060058594
+        - 0.0
+      OBJROTATION:
+        - -0.8746197819709778
+        - 0.0
+        - 0.0
+        - -0.4848095774650574
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 644
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 113
+      OBJTYPE: 54
+      OBJNAME: "PotFire00-381521"
+      OBJTEMPLATE: "stst127"
+      PARENTTEMPLATE: "PotFire00"
+      OBJPRIMTXTR: "PotFire00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 273.3627624511719
+        - 317.9664306640625
+        - 0.9000002145767212
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 641
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.19999998807907104
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 114
+      OBJTYPE: 54
+      OBJNAME: "FarmColoumn00-1481"
+      OBJTEMPLATE: "stst69"
+      PARENTTEMPLATE: "FarmColoumn00"
+      OBJPRIMTXTR: "kanianHouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.5550842285156
+        - 327.14971923828125
+        - -0.249999538064003
+      OBJROTATION:
+        - -0.41469329595565796
+        - 0.0
+        - 0.0
+        - 0.9099611043930054
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 9308
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "can"
+      OBJ_PLAYER: 0
+      NID: 115
+      OBJTYPE: 54
+      OBJNAME: "ShopperCan-331606"
+      OBJTEMPLATE: "stbuho18"
+      PARENTTEMPLATE: "ShopperCan"
+      OBJPRIMTXTR: "shopperTent00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 271.5314025878906
+        - 323.4090576171875
+        - 0.05000000819563866
+      OBJROTATION:
+        - -0.31730446219444275
+        - 0.0
+        - 0.0
+        - 0.9483242034912109
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 645
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LIGHT:
+      LIGHT_ID: 116
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 270.6539001464844
+        - 324.22607421875
+        - 9.497590065002441
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 1.5
+      LIGHT_NAME: "Light-208376"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 117
+      OBJTYPE: 54
+      OBJNAME: "KanianFireplace00-498614"
+      OBJTEMPLATE: "stst80"
+      PARENTTEMPLATE: "KanianFireplace00"
+      OBJPRIMTXTR: "kanianFurniture00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 270.1268005371094
+        - 323.7831726074219
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 81
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 118
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-606812"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.5596008300781
+        - 335.6834716796875
+        - 1.399999737739563
+      OBJROTATION:
+        - 0.9135453104972839
+        - 0.0
+        - 0.0
+        - 0.4067365527153015
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 817
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 119
+      OBJTYPE: 54
+      OBJNAME: "WinterLeafTree01-1097"
+      OBJTEMPLATE: "nafltr57"
+      PARENTTEMPLATE: "WinterLeafTree01"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 321.7311706542969
+        - 305.6812438964844
+        - -1.6500000953674316
+      OBJROTATION:
+        - 0.8771661520004272
+        - 0.07012006640434265
+        - 0.07277067750692368
+        - -0.46943268179893494
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6785
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.2800000011920929
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 120
+      OBJTYPE: 54
+      OBJNAME: "WinterLeafTree00-1094"
+      OBJTEMPLATE: "nafltr56"
+      PARENTTEMPLATE: "WinterLeafTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 309.7341003417969
+        - 305.76434326171875
+        - -1.399999976158142
+      OBJROTATION:
+        - 0.9951549172401428
+        - 0.01445887889713049
+        - -0.09252472221851349
+        - -0.02994472160935402
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6852
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6499999761581421
+        - 0.0
+        - 0.7699999809265137
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 121
+      OBJTYPE: 54
+      OBJNAME: "WinterLeafTree00-1094"
+      OBJTEMPLATE: "nafltr56"
+      PARENTTEMPLATE: "WinterLeafTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 300.5448303222656
+        - 315.4488830566406
+        - -1.399999976158142
+      OBJROTATION:
+        - 0.9951549172401428
+        - 0.01445887889713049
+        - -0.09252472221851349
+        - -0.02994472160935402
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6852
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.6499999761581421
+        - 0.0
+        - 0.7699999809265137
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 122
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-829754"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 301.0995178222656
+        - 312.12017822265625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 409
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 123
+      OBJTYPE: 54
+      OBJNAME: "Van00-328601"
+      OBJTEMPLATE: "stst44"
+      PARENTTEMPLATE: "Van00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.8832092285156
+        - 324.23138427734375
+        - -0.19999998807907104
+      OBJROTATION:
+        - -0.5519370436668396
+        - 0.0
+        - 0.0
+        - 0.8338860273361206
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 120
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 124
+      OBJTYPE: 54
+      OBJNAME: "Sack00-632853"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 306.2073059082031
+        - 325.5537109375
+        - 0.7999998331069946
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 125
+      OBJTYPE: 54
+      OBJNAME: "Wheel00-205724"
+      OBJTEMPLATE: "stst45"
+      PARENTTEMPLATE: "Wheel00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 302.5462341308594
+        - 321.52685546875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 654
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 126
+      OBJTYPE: 54
+      OBJNAME: "Sack00-632853"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 306.6550598144531
+        - 324.85943603515625
+        - 0.800000011920929
+      OBJROTATION:
+        - 0.9205048084259033
+        - 0.0
+        - 0.0
+        - 0.39073121547698975
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 127
+      OBJTYPE: 54
+      OBJNAME: "Sack00-632853"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.7906188964844
+        - 323.0677185058594
+        - 0.8499999046325684
+      OBJROTATION:
+        - 0.17364807426929474
+        - 0.0
+        - 0.0
+        - 0.9848077893257141
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 2.0
+    LIGHT:
+      LIGHT_ID: 128
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 282.3049621582031
+        - 309.1697998046875
+        - 9.247599601745605
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 1.5
+      LIGHT_NAME: "Light-208376"
+      LIGHT_COMMENTS: "none"
+    PARTICL:
+      PARTICL_ID: 129
+      PARTICL_POSITION:
+        - 282.3456726074219
+        - 309.1209716796875
+        - 10.952799797058105
+      PARTICL_NAME: "Particles source-760624"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.4000000059604645
+    SOUND:
+      SOUND_ID: 130
+      SOUND_POSITION:
+        - 285.5650939941406
+        - 306.1167907714844
+        - 10.811200141906738
+      SOUND_RANGE: 7
+      SOUND_NAME: "Sound-268772"
+      SOUND_MIN: 1500
+      SOUND_MAX: 3000
+      SOUND_COMMENTS: "none"
+      SOUND_RESNAME:
+        - "nature\Fire\small.wav"
+      SOUND_RANGE2: 12
+      SOUND_AMBIENT: 0
+      SOUND_IS_MUSIC: 0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 131
+      OBJTYPE: 54
+      OBJNAME: "Sign board 00-50641"
+      OBJTEMPLATE: "stsi1"
+      PARENTTEMPLATE: "Sign board 00"
+      OBJPRIMTXTR: "SignBoard00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 273.7248229980469
+        - 313.06549072265625
+        - 2.1000006198883057
+      OBJROTATION:
+        - -0.9304178953170776
+        - 0.0
+        - 0.0
+        - 0.3665013909339905
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 647
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 132
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree000-243335"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 282.6857604980469
+        - 306.73516845703125
+        - -0.10000000894069672
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 359
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.14000000059604645
+        - 0.5
+        - 0.1899999976158142
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 133
+      OBJTYPE: 54
+      OBJNAME: "FarmColoumn00-1481"
+      OBJTEMPLATE: "stst69"
+      PARENTTEMPLATE: "FarmColoumn00"
+      OBJPRIMTXTR: "kanianHouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 288.9250793457031
+        - 302.60711669921875
+        - -0.24999909102916718
+      OBJROTATION:
+        - -0.9135450720787048
+        - 0.0
+        - 0.0
+        - -0.40673667192459106
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 9308
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.5
+        - 0.0
+    LIGHT:
+      LIGHT_ID: 134
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 288.4432678222656
+        - 303.1445007324219
+        - 9.05286979675293
+      LIGHT_COLOR:
+        - 1.0
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 1.5
+      LIGHT_NAME: "Light-208376"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 135
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree000-298592"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.4029846191406
+        - 305.9788818359375
+        - -0.5
+      OBJROTATION:
+        - 0.9914450645446777
+        - 0.0
+        - 0.0
+        - 0.13052625954151154
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 360
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.32999998331069946
+        - 0.8899999856948853
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 136
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 274.1374206542969
+        - 313.8356018066406
+        - 0.15000000596046448
+      OBJROTATION:
+        - 0.6005984544754028
+        - -0.4497525691986084
+        - -0.47774460911750793
+        - 0.45690709352493286
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.29999998211860657
+    PARTICL:
+      PARTICL_ID: 137
+      PARTICL_POSITION:
+        - 288.4375915527344
+        - 303.0480041503906
+        - 10.702799797058105
+      PARTICL_NAME: "Particles source-760624"
+      PARTICL_COMMENTS: "none"
+      PARTICL_TYPE: 8193
+      PARTICL_SCALE: 0.4000000059604645
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 138
+      OBJTYPE: 54
+      OBJNAME: "FarmColoumn00-1481"
+      OBJTEMPLATE: "stst69"
+      PARENTTEMPLATE: "FarmColoumn00"
+      OBJPRIMTXTR: "kanianHouse00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 281.8504943847656
+        - 309.5533142089844
+        - -0.249999538064003
+      OBJROTATION:
+        - -0.41469329595565796
+        - 0.0
+        - 0.0
+        - 0.9099611043930054
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 9308
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 1.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 139
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-346898"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 274.4034729003906
+        - 313.2398681640625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 108
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.19999998807907104
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 140
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-606812"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 282.0290832519531
+        - 309.4058837890625
+        - 1.399999737739563
+      OBJROTATION:
+        - 0.9135453104972839
+        - 0.0
+        - 0.0
+        - 0.4067365527153015
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 817
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "cylinder01"
+      OBJ_PLAYER: 0
+      NID: 141
+      OBJTYPE: 54
+      OBJNAME: "Torch 00-606812"
+      OBJTEMPLATE: "stto2"
+      PARENTTEMPLATE: "Torch 00"
+      OBJPRIMTXTR: "Torch00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 288.7490539550781
+        - 302.75762939453125
+        - 1.4000011682510376
+      OBJROTATION:
+        - -0.3987489938735962
+        - 0.0
+        - 0.0
+        - 0.9170597195625305
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 817
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 142
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass01winter-456534"
+      OBJTEMPLATE: "naflbu17"
+      PARENTTEMPLATE: "GipatGrass01winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 277.8079528808594
+        - 334.9949645996094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 391
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 143
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-819763"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 277.4436340332031
+        - 338.5401306152344
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 392
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 144
+      OBJTYPE: 54
+      OBJNAME: "DryLeafTree01Snow-493865"
+      OBJTEMPLATE: "nafltr69"
+      PARENTTEMPLATE: "DryLeafTree01Snow"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 276.4775695800781
+        - 337.9955749511719
+        - -0.4000000059604645
+      OBJROTATION:
+        - 0.9993916153907776
+        - 1.193326897919178e-05
+        - 0.0348556712269783
+        - 0.0010648935567587614
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 363
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.0
+        - 2.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 145
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-829754"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 264.1221008300781
+        - 325.3121032714844
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 409
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 146
+      OBJTYPE: 54
+      OBJNAME: "Cart00-384697"
+      OBJTEMPLATE: "stst42"
+      PARENTTEMPLATE: "Cart00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 292.0314025878906
+        - 341.6814270019531
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 119
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.8999999761581421
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 147
+      OBJTYPE: 54
+      OBJNAME: "Sack00-632853"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 292.1073913574219
+        - 341.7391662597656
+        - 0.44999995827674866
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 148
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-989044"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 280.6757507324219
+        - 342.18658447265625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 409
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.7999999523162842
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 149
+      OBJTYPE: 54
+      OBJNAME: "Pointer 03-612402"
+      OBJTEMPLATE: "stst148"
+      PARENTTEMPLATE: "Pointer 03"
+      OBJPRIMTXTR: "Bridge00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 275.3338317871094
+        - 333.2589111328125
+        - 0.0
+      OBJROTATION:
+        - 0.38268372416496277
+        - 0.0
+        - 0.0
+        - 0.9238796830177307
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 130
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS:
+        - "sack"
+      OBJ_PLAYER: 0
+      NID: 150
+      OBJTYPE: 54
+      OBJNAME: "Sack00-632853"
+      OBJTEMPLATE: "stst56"
+      PARENTTEMPLATE: "Sack00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 291.9430847167969
+        - 342.4909362792969
+        - 0.44999995827674866
+      OBJROTATION:
+        - 0.3420202136039734
+        - 0.0
+        - 0.0
+        - 0.9396926760673523
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 145
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 151
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-1086"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 312.1363220214844
+        - 328.5069580078125
+        - -0.24999991059303284
+      OBJROTATION:
+        - 0.6560590863227844
+        - 0.0
+        - 0.0
+        - 0.7547096014022827
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6784
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.29999998211860657
+        - 0.19999998807907104
+        - 1.1999999284744263
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 152
+      OBJTYPE: 54
+      OBJNAME: "WinterLeafTree01-1096"
+      OBJTEMPLATE: "nafltr57"
+      PARENTTEMPLATE: "WinterLeafTree01"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 311.7955627441406
+        - 330.65899658203125
+        - -1.399999976158142
+      OBJROTATION:
+        - 0.9563047885894775
+        - 0.0
+        - 0.0
+        - -0.2923716902732849
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6785
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.28999999165534973
+        - 0.29999998211860657
+        - 1.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 153
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-1090"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 311.0272521972656
+        - 340.4604187011719
+        - -0.25
+      OBJROTATION:
+        - 0.39874908328056335
+        - 0.0
+        - 0.0
+        - -0.9170600771903992
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 6784
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.1899999976158142
+        - 0.4899999797344208
+        - 1.5999999046325684
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 154
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass01winter-538425"
+      OBJTEMPLATE: "naflbu17"
+      PARENTTEMPLATE: "GipatGrass01winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 301.4541320800781
+        - 315.4017639160156
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 408
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 155
+      OBJTYPE: 54
+      OBJNAME: "Barrel00-945317"
+      OBJTEMPLATE: "stst83"
+      PARENTTEMPLATE: "Barrel00"
+      OBJPRIMTXTR: "moneySack00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 299.2063903808594
+        - 313.1723937988281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 107
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - -0.29999998211860657
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 156
+      OBJTYPE: 54
+      OBJNAME: "Wheel00-205724"
+      OBJTEMPLATE: "stst45"
+      PARENTTEMPLATE: "Wheel00"
+      OBJPRIMTXTR: "mine00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 299.1318664550781
+        - 313.9317321777344
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 654
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 157
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-829754"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.6184387207031
+        - 315.0838317871094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 409
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+    LIGHT:
+      LIGHT_ID: 158
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 287.6327209472656
+        - 321.4715881347656
+        - 19.252899169921875
+      LIGHT_COLOR:
+        - 0.501960813999176
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 6.599999904632568
+      LIGHT_NAME: "Light-778676"
+      LIGHT_COMMENTS: "none"
+    LIGHT:
+      LIGHT_ID: 159
+      LIGHT_SHADOW: 1
+      LIGHT_POSITION:
+        - 285.0993957519531
+        - 320.01849365234375
+        - 13.252900123596191
+      LIGHT_COLOR:
+        - 0.501960813999176
+        - 1.0
+        - 1.0
+      LIGHT_RANGE: 8.100000381469727
+      LIGHT_NAME: "Light-778676"
+      LIGHT_COMMENTS: "none"
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 160
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-243337"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 306.3922424316406
+        - 336.2388000488281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 359
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.3999999761581421
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 161
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-243336"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 308.3855285644531
+        - 330.3829345703125
+        - -0.10000000149011612
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 359
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 162
+      OBJTYPE: 54
+      OBJNAME: "WinterFirTree00-243335"
+      OBJTEMPLATE: "nafltr59"
+      PARENTTEMPLATE: "WinterFirTree00"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 306.1341247558594
+        - 332.60015869140625
+        - -0.05000000819563866
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 359
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.0
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 163
+      OBJTYPE: 54
+      OBJNAME: "Bush00Snow-75520"
+      OBJTEMPLATE: "naflbu6"
+      PARENTTEMPLATE: "Bush00Snow"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 293.3735046386719
+        - 342.6737365722656
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 797
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 164
+      OBJTYPE: 54
+      OBJNAME: "SquirrelSkin00-464957"
+      OBJTEMPLATE: "stst59"
+      PARENTTEMPLATE: "SquirrelSkin00"
+      OBJPRIMTXTR: "squirrelSkin00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 294.3213195800781
+        - 341.8722229003906
+        - 0.0
+      OBJROTATION:
+        - 0.4458238184452057
+        - 0.13712629675865173
+        - 0.3416830003261566
+        - 0.8159000873565674
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 648
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 165
+      OBJTYPE: 54
+      OBJNAME: "SquirrelSkin00-464957"
+      OBJTEMPLATE: "stst59"
+      PARENTTEMPLATE: "SquirrelSkin00"
+      OBJPRIMTXTR: "squirrelSkin00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 294.9183654785156
+        - 341.3429870605469
+        - 0.0
+      OBJROTATION:
+        - 0.3229052722454071
+        - 0.16453085839748383
+        - 0.4277235269546509
+        - 0.8280803561210632
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 648
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 166
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass01winter-269647"
+      OBJTEMPLATE: "naflbu17"
+      PARENTTEMPLATE: "GipatGrass01winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 270.4312438964844
+        - 331.8981018066406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 391
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    OBJECT:
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 167
+      OBJTYPE: 54
+      OBJNAME: "GipatGrass02winter-829754"
+      OBJTEMPLATE: "naflbu18"
+      PARENTTEMPLATE: "GipatGrass02winter"
+      OBJPRIMTXTR: "tree03"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 263.4754333496094
+        - 325.675048828125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 409
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
