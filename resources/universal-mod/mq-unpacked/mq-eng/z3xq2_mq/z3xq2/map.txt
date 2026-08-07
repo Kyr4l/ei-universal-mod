@@ -11,6 +11,46 @@ bz1mpg 1
 #deploy
 20 258 26 275
 #remove
-0 258 20 275
+2 258 20 275
 #view
 336.9
+
+## To Witch
+#exit 2
+bz1mpg 2
+#deploy
+2 320.5 20 334
+#remove
+2 320.5 20 334
+#view
+271.436
+
+## To Mountains
+#exit 3
+bz1mpg 3
+#deploy
+340 146.5 350 154.5
+#remove
+340 146.5 350 154.5
+#view
+78.575
+
+## To Orc Delta
+#exit 4
+bz1mpg 4
+#deploy
+251 10 259 16
+#remove
+251 2 259 10
+#view
+3.2189
+
+## To Cave
+#exit 5
+bz1mpg 5
+#deploy
+220 376 230 386
+#remove
+220 376 230 386
+#view
+146.022
