@@ -1,0 +1,8 @@
+The Queen is finished!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Congratulations! But did you know that the Will-o'-the-wisps are going to have another queen soon? Ha,  ha, does this mean you shall be forced to pay again to repair your armor!
+#phrase Hero  2
+Oh, never mind that! I know my way to the ravine now, so the new Queen shall not reign for long!
