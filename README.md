@@ -73,7 +73,7 @@ Here is how to set it up with Lutris:
 
 - Open Lutris and right click on your game then open the __Properties__ menu
 - Switch to the __Game options__ tab and select the starter executable (EIStarter.exe)
-- Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__, repeat this action for `binkw32` and `mss32`.
+- Go to the __Runner options__ and add the following __DLL override__: `dinput` as the __Key__ and `n,b` as __Value__.
 - Save and play!
 
 If you use EIStarter 2.0 instead of the old version, you need to install `dotnet8` and `vcrun2022`.
