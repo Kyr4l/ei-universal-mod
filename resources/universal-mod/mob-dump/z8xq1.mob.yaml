@@ -1,0 +1,620 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1000200
+      MAX_ID: 1000399
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 4.484155085839415e-44
+        - 1.064986832886861e-43
+        - 1.5134023414708024e-43
+        - 2.7745709593631378e-43
+      VSS_TITLE: "Quest"
+      VSS_COMMANDS: "QStart(\"z3q2\")\nQObjSeeUnit(\"GetObject(1000324)\")\nQObjKillUnit(\"GetObject(1000324)\")\nQFinish()"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+    VSS_TRIGER:
+      VSS_ID: 2
+      VSS_RECT:
+        - 3.923635700109488e-44
+        - 1.0089348943138683e-43
+        - 3.629363022601276e-43
+        - 4.8905316404936116e-43
+      VSS_TITLE: "No Trap"
+      VSS_COMMANDS: "ActivateTrap(Pyramid,0)"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+  OBJECTSECTION:
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000200
+      OBJTYPE: 60
+      OBJNAME: "OgreChest2"
+      OBJTEMPLATE: "stst84"
+      PARENTTEMPLATE: "OgreChest00"
+      OBJPRIMTXTR: "ogreChest00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 186.89999389648438
+        - 197.6529998779297
+        - 0.0
+      OBJROTATION:
+        - -0.9743703007698059
+        - 0.0
+        - 0.0
+        - -0.22495150566101074
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484955
+      OBJ_QUEST_INFO: "z8q1.2"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.6499999761581421
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000201
+      OBJTYPE: 60
+      OBJNAME: "OgreChest1"
+      OBJTEMPLATE: "stst84"
+      PARENTTEMPLATE: "OgreChest00"
+      OBJPRIMTXTR: "ogreChest00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 139.64999389648438
+        - 267.0690002441406
+        - 0.0
+      OBJROTATION:
+        - -0.9961951375007629
+        - 0.0
+        - 0.0
+        - -0.08715604990720749
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484955
+      OBJ_QUEST_INFO: "z8q1.1"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.6599999666213989
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 1
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 1000202
+      OBJTYPE: 60
+      OBJNAME: "OgreChest3"
+      OBJTEMPLATE: "stst84"
+      PARENTTEMPLATE: "OgreChest00"
+      OBJPRIMTXTR: "ogreChest00"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 276.40399169921875
+        - 290.9930114746094
+        - 0.0
+      OBJROTATION:
+        - -0.9961951375007629
+        - 0.0
+        - 0.0
+        - -0.08715604990720749
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484955
+      OBJ_QUEST_INFO: "z8q1.3"
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 0.6599999666213989
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "OgreGipatF5S"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 70
+        - 70
+        - 18
+        - 18
+        - 1065353216
+        - 1097859072
+        - 1066365442
+        - 1047869121
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1542
+        - 0
+        - 1112801280
+        - 1110704128
+        - 1065353216
+        - 1094713344
+        - 1093664768
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 12
+        - 1099431936
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1073741824
+        - 1065353216
+        - 1073741824
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 593763870
+        - 8995
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000203
+      OBJTYPE: 51
+      OBJNAME: "Ogre3"
+      OBJTEMPLATE: "unmoog1"
+      PARENTTEMPLATE: "OgreGipatF5S"
+      OBJPRIMTXTR: "Ogre00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 282.7149353027344
+        - 292.5027770996094
+        - 0.0
+      OBJROTATION:
+        - 0.9804432988166809
+        - 0.0
+        - 0.0
+        - 0.1968018114566803
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z8q1.3"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.10000000149011612
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: 120.0
+        UNIT_LOGIC_GUARD_PT:
+          - 282.7149353027344
+          - 292.5027770996094
+          - 20.074363708496094
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 284.6610107421875
+          - 302.52398681640625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 284.6610107421875
+          - 302.52398681640625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 284.6610107421875
+          - 302.52398681640625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 284.6610107421875
+          - 302.52398681640625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "OgreGipatF6S"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 19
+        - 19
+        - 1065353216
+        - 1097859072
+        - 1066365442
+        - 1047869121
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1542
+        - 0
+        - 1114898432
+        - 1112539136
+        - 1065353216
+        - 1096810496
+        - 1093664768
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1099431936
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1073741824
+        - 1065353216
+        - 1073741824
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 593765155
+        - 8995
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000205
+      OBJTYPE: 51
+      OBJNAME: "Ogre2"
+      OBJTEMPLATE: "unmoog1"
+      PARENTTEMPLATE: "OgreGipatF6S"
+      OBJPRIMTXTR: "Ogre00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 194.1560516357422
+        - 194.2407989501953
+        - 0.0
+      OBJROTATION:
+        - 0.9943380355834961
+        - 0.0
+        - 0.0
+        - -0.10626348853111267
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z8q1.2"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.30000001192092896
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 47.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 4.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 194.1560516357422
+          - 194.2407989501953
+          - 16.50048065185547
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 193.09988403320312
+          - 191.0922393798828
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 193.09988403320312
+          - 191.0922393798828
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 193.09988403320312
+          - 191.0922393798828
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 193.09988403320312
+          - 191.0922393798828
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "OgreGipatF7S"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 90
+        - 90
+        - 21
+        - 21
+        - 1065353216
+        - 1097859072
+        - 1066365442
+        - 1047869121
+        - 1049135241
+        - 1045220558
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1542
+        - 0
+        - 1116340224
+        - 1114112000
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1099431936
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1073741824
+        - 1065353216
+        - 1073741824
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 593766440
+        - 8995
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 4
+      NID: 1000206
+      OBJTYPE: 51
+      OBJNAME: "Ogre1"
+      OBJTEMPLATE: "unmoog1"
+      PARENTTEMPLATE: "OgreGipatF7S"
+      OBJPRIMTXTR: "Ogre00"
+      OBJSECTXTR: "GoblinAxeBag00"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 134.3045654296875
+        - 266.4020690917969
+        - 0.0
+      OBJROTATION:
+        - 0.9986295104026794
+        - 0.0
+        - 0.0
+        - 0.052336398512125015
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z8q1.1"
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.6000000238418579
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 9.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 9.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 134.3045654296875
+          - 266.4020690917969
+          - 17.16866683959961
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 133.92593383789062
+            - 266.5059509277344
+            - 17.25368309020996
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 134.8460235595703
+              - 262.7672119140625
+              - 16.388731002807617
+            ACTION_PT_WAIT_SEG: 0
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 133.7760009765625
+          - 267.4540100097656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 133.7760009765625
+          - 267.4540100097656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 133.7760009765625
+          - 267.4540100097656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 133.7760009765625
+          - 267.4540100097656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0

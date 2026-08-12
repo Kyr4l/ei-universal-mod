@@ -1,0 +1,6154 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 1000100
+      MAX_ID: 1000199
+  VSS_SECTION:
+    VSS_CUSTOM_SRIPT: ""
+    VSS_BS_CHECK: None
+    VSS_BS_COMMANDS: None
+    VSS_TRIGER:
+      VSS_ID: 1
+      VSS_RECT:
+        - 2.6624670822171524e-44
+        - 8.828180325246348e-44
+        - 1.5414283107572988e-44
+        - 1.4153114489680652e-43
+      VSS_TITLE: "Quest"
+      VSS_COMMANDS: "AddRectToArea(1,0,247,70,320)\nQStart(\"z9q2\")\nQObjArea(1)\nQObjKillGroup(\"Hadagans\")\nQFinish()"
+      VSS_GROUP: "none"
+      VSS_ISSTART: 1
+      VSS_IS_USE_GROUP: 0
+  DIRICTORY_ELEMENTS:
+    FOLDER:
+      DIR_NINST: 1000188
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000188"
+    FOLDER:
+      DIR_NINST: 1000189
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000189"
+    FOLDER:
+      DIR_NINST: 1000190
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000190"
+    FOLDER:
+      DIR_NINST: 1000191
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan Leader 11-1000191"
+    FOLDER:
+      DIR_NINST: 1000192
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000192"
+    FOLDER:
+      DIR_NINST: 1000193
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000193"
+    FOLDER:
+      DIR_NINST: 1000194
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000194"
+    FOLDER:
+      DIR_NINST: 1000195
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000195"
+    FOLDER:
+      DIR_NINST: 1000196
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000196"
+    FOLDER:
+      DIR_NINST: 1000197
+      DIR_PARENT_FOLDER: 4294958528
+      DIR_TYPE: 2
+      DIR_NAME: "LMP Unique Undead Hadagan 8-1000197"
+  OBJECTSECTION:
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000163
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF3-2270"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.4923400878906
+        - 254.8494110107422
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.4923400878906
+          - 254.8494110107422
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.4923400878906
+          - 254.8494110107422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.4923400878906
+          - 254.8494110107422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.4923400878906
+          - 254.8494110107422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.4923400878906
+          - 254.8494110107422
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000164
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF3-2269"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.3572082519531
+        - 256.3711242675781
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.3572082519531
+          - 256.3711242675781
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.3572082519531
+          - 256.3711242675781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.3572082519531
+          - 256.3711242675781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.3572082519531
+          - 256.3711242675781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 305.3572082519531
+          - 256.3711242675781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000165
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1547"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 297.7560119628906
+        - 288.89599609375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 297.7560119628906
+          - 288.89599609375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 299.1416931152344
+            - 289.86260986328125
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 311.00689697265625
+            - 300.6279602050781
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 317.0357360839844
+            - 293.95947265625
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 327.9129638671875
+            - 295.86627197265625
+            - 6.934647560119629
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 297.7560119628906
+          - 288.89599609375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 297.7560119628906
+          - 288.89599609375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 297.7560119628906
+          - 288.89599609375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 297.7560119628906
+          - 288.89599609375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000166
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1545"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 289.9779968261719
+        - 287.68798828125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9779968261719
+          - 287.68798828125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 291.1076965332031
+            - 287.02191162109375
+            - 6.930647373199463
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 299.45916748046875
+            - 283.00921630859375
+            - 6.998619079589844
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9779968261719
+          - 287.68798828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9779968261719
+          - 287.68798828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9779968261719
+          - 287.68798828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9779968261719
+          - 287.68798828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000167
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1543"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 290.99700927734375
+        - 295.1189880371094
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 290.99700927734375
+          - 295.1189880371094
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 290.2686462402344
+            - 293.779296875
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 276.53839111328125
+            - 278.1435241699219
+            - 7.360054016113281
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 273.4794921875
+            - 267.9669494628906
+            - 6.834117412567139
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 279.72125244140625
+            - 263.57037353515625
+            - 7.178586006164551
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 290.99700927734375
+          - 295.1189880371094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 290.99700927734375
+          - 295.1189880371094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 290.99700927734375
+          - 295.1189880371094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 290.99700927734375
+          - 295.1189880371094
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000173
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1546"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 313.39801025390625
+        - 275.0260009765625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 313.39801025390625
+          - 275.0260009765625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 314.8773498535156
+            - 275.88592529296875
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 325.5083312988281
+            - 285.314697265625
+            - 6.453118801116943
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 313.39801025390625
+          - 275.0260009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 313.39801025390625
+          - 275.0260009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 313.39801025390625
+          - 275.0260009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 313.39801025390625
+          - 275.0260009765625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000187
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF3-2273"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 379.06024169921875
+        - 306.7832946777344
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.06024169921875
+          - 306.7832946777344
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.06024169921875
+          - 306.7832946777344
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.06024169921875
+          - 306.7832946777344
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.06024169921875
+          - 306.7832946777344
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.06024169921875
+          - 306.7832946777344
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000188
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000188"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 50.52109909057617
+        - 306.4989929199219
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 50.52109909057617
+          - 306.4989929199219
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 50.52109909057617
+          - 306.4989929199219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 50.52109909057617
+          - 306.4989929199219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 50.52109909057617
+          - 306.4989929199219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 50.52109909057617
+          - 306.4989929199219
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000197
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000197"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 79.64680480957031
+        - 324.9309997558594
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.64680480957031
+          - 324.9309997558594
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.64680480957031
+          - 324.9309997558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.64680480957031
+          - 324.9309997558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.64680480957031
+          - 324.9309997558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 79.64680480957031
+          - 324.9309997558594
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000162
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1544"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 280.51898193359375
+        - 255.6909942626953
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.51898193359375
+          - 255.6909942626953
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 281.14068603515625
+            - 254.0274200439453
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 293.0493469238281
+            - 246.65748596191406
+            - 6.959146499633789
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 300.591796875
+            - 252.23004150390625
+            - 7.158693790435791
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 293.6090087890625
+            - 265.30780029296875
+            - 6.666858196258545
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 308.83697509765625
+            - 281.1603698730469
+            - 6.938741207122803
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.51898193359375
+          - 255.6909942626953
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.51898193359375
+          - 255.6909942626953
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.51898193359375
+          - 255.6909942626953
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 280.51898193359375
+          - 255.6909942626953
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000168
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1540"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 289.9179992675781
+        - 298.6629943847656
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9179992675781
+          - 298.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9179992675781
+          - 298.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9179992675781
+          - 298.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9179992675781
+          - 298.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 289.9179992675781
+          - 298.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 8"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 593781860
+        - 8995
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000169
+      OBJTYPE: 51
+      OBJNAME: "Skeleton Warrior-1539"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 8"
+      OBJPRIMTXTR: "Skeleton01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 292.5419921875
+        - 301.78900146484375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.2000000476837158
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 292.5419921875
+          - 301.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 292.5419921875
+          - 301.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 292.5419921875
+          - 301.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 292.5419921875
+          - 301.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 292.5419921875
+          - 301.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000170
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1541"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 293.96099853515625
+        - 298.79901123046875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 5.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.96099853515625
+          - 298.79901123046875
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.96099853515625
+          - 298.79901123046875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.96099853515625
+          - 298.79901123046875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.96099853515625
+          - 298.79901123046875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 293.96099853515625
+          - 298.79901123046875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000174
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF4-2279"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 331.4102478027344
+        - 263.38507080078125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 331.4102478027344
+          - 263.38507080078125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 331.4102478027344
+          - 263.38507080078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 331.4102478027344
+          - 263.38507080078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 331.4102478027344
+          - 263.38507080078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 331.4102478027344
+          - 263.38507080078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000181
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1548"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 363.81500244140625
+        - 299.5010070800781
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 363.81500244140625
+          - 299.5010070800781
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 362.83355712890625
+            - 300.214111328125
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 353.1929931640625
+            - 305.2347717285156
+            - 6.694707870483398
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 343.31298828125
+            - 299.48406982421875
+            - 7.062862873077393
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 332.93145751953125
+            - 298.28839111328125
+            - 6.9584126472473145
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 363.81500244140625
+          - 299.5010070800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 363.81500244140625
+          - 299.5010070800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 363.81500244140625
+          - 299.5010070800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 363.81500244140625
+          - 299.5010070800781
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000183
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF2-2278"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 357.1917419433594
+        - 264.9996337890625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.1917419433594
+          - 264.9996337890625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.1917419433594
+          - 264.9996337890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.1917419433594
+          - 264.9996337890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.1917419433594
+          - 264.9996337890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.1917419433594
+          - 264.9996337890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000184
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF2-2276"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 378.284912109375
+        - 271.57208251953125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 378.284912109375
+          - 271.57208251953125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 378.284912109375
+          - 271.57208251953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 378.284912109375
+          - 271.57208251953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 378.284912109375
+          - 271.57208251953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 378.284912109375
+          - 271.57208251953125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000185
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF2-2275"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 379.6367492675781
+        - 273.16522216796875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.6367492675781
+          - 273.16522216796875
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.6367492675781
+          - 273.16522216796875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.6367492675781
+          - 273.16522216796875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.6367492675781
+          - 273.16522216796875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 379.6367492675781
+          - 273.16522216796875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000186
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF2-2274"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 381.55267333984375
+        - 275.23272705078125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 381.55267333984375
+          - 275.23272705078125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 381.55267333984375
+          - 275.23272705078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 381.55267333984375
+          - 275.23272705078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 381.55267333984375
+          - 275.23272705078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 381.55267333984375
+          - 275.23272705078125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000189
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000189"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 67.09230041503906
+        - 297.65899658203125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 67.09230041503906
+          - 297.65899658203125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 67.09230041503906
+          - 297.65899658203125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 67.09230041503906
+          - 297.65899658203125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 67.09230041503906
+          - 297.65899658203125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 67.09230041503906
+          - 297.65899658203125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000190
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000190"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 87.14584350585938
+        - 319.4994201660156
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 87.14584350585938
+          - 319.4994201660156
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 87.14584350585938
+          - 319.4994201660156
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 87.14584350585938
+          - 319.4994201660156
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 87.14584350585938
+          - 319.4994201660156
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 87.14584350585938
+          - 319.4994201660156
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000192
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000192"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.46326446533203
+        - 317.17218017578125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.46326446533203
+          - 317.17218017578125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 55.73915100097656
+            - 316.8540344238281
+            - 6.914098739624023
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 56.48474884033203
+              - 315.7635498046875
+              - 6.914098739624023
+            ACTION_PT_WAIT_SEG: 3600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.46326446533203
+          - 317.17218017578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.46326446533203
+          - 317.17218017578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.46326446533203
+          - 317.17218017578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.46326446533203
+          - 317.17218017578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000193
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000193"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 59.70199966430664
+        - 317.4230041503906
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 59.70199966430664
+          - 317.4230041503906
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 59.46668243408203
+            - 317.0032653808594
+            - 6.914098739624023
+          ACTION_PT:
+            ACTION_PT_LOOK_PT:
+              - 59.339622497558594
+              - 315.42657470703125
+              - 6.914098739624023
+            ACTION_PT_WAIT_SEG: 3600
+            ACTION_PT_TURN_SPEED: 0
+            ACTION_PT_FLAGS: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 59.70199966430664
+          - 317.4230041503906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 59.70199966430664
+          - 317.4230041503906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 59.70199966430664
+          - 317.4230041503906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 59.70199966430664
+          - 317.4230041503906
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000194
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000194"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 41.91073989868164
+        - 322.48199462890625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000195
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000195"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 55.822898864746094
+        - 340.6629943847656
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.822898864746094
+          - 340.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.822898864746094
+          - 340.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.822898864746094
+          - 340.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.822898864746094
+          - 340.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 55.822898864746094
+          - 340.6629943847656
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000196
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000196"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 66.43690490722656
+        - 334.5050048828125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 66.43690490722656
+          - 334.5050048828125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 66.43690490722656
+          - 334.5050048828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 66.43690490722656
+          - 334.5050048828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 66.43690490722656
+          - 334.5050048828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 66.43690490722656
+          - 334.5050048828125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000171
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1542"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.37701416015625
+        - 281.78900146484375
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.37701416015625
+          - 281.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.37701416015625
+          - 281.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.37701416015625
+          - 281.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.37701416015625
+          - 281.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 272.37701416015625
+          - 281.78900146484375
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000172
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF3-2271"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 311.1838684082031
+        - 308.40789794921875
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 311.1838684082031
+          - 308.40789794921875
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 311.1838684082031
+          - 308.40789794921875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 311.1838684082031
+          - 308.40789794921875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 311.1838684082031
+          - 308.40789794921875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 311.1838684082031
+          - 308.40789794921875
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000175
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1553"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 337.5830078125
+        - 278.7969970703125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 0
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 337.5830078125
+          - 278.7969970703125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 338.83795166015625
+            - 279.18212890625
+            - 6.993057727813721
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 345.5443420410156
+            - 280.68609619140625
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 356.2691650390625
+            - 273.83465576171875
+            - 6.632185459136963
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 345.9146423339844
+            - 260.40771484375
+            - 6.593662738800049
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 337.5830078125
+          - 278.7969970703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 337.5830078125
+          - 278.7969970703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 337.5830078125
+          - 278.7969970703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 337.5830078125
+          - 278.7969970703125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000176
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1549"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 346.9490051269531
+        - 283.4389953613281
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 346.9490051269531
+          - 283.4389953613281
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 348.18353271484375
+            - 283.8824462890625
+            - 6.914098739624023
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 355.4937438964844
+            - 292.75250244140625
+            - 7.029727935791016
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 346.9490051269531
+          - 283.4389953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 346.9490051269531
+          - 283.4389953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 346.9490051269531
+          - 283.4389953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 346.9490051269531
+          - 283.4389953613281
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000177
+      OBJTYPE: 51
+      OBJNAME: "SkelMineG1"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 347.27398681640625
+        - 290.3110046386719
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 3.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 347.27398681640625
+          - 290.3110046386719
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 347.27398681640625
+          - 290.3110046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 347.27398681640625
+          - 290.3110046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 347.27398681640625
+          - 290.3110046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 347.27398681640625
+          - 290.3110046386719
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000178
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF2-2272"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 339.92144775390625
+        - 301.4264221191406
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 339.92144775390625
+          - 301.4264221191406
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 339.92144775390625
+          - 301.4264221191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 339.92144775390625
+          - 301.4264221191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 339.92144775390625
+          - 301.4264221191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 339.92144775390625
+          - 301.4264221191406
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000179
+      OBJTYPE: 51
+      OBJNAME: "SkelMineG2"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 353.67401123046875
+        - 286.11700439453125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 353.67401123046875
+          - 286.11700439453125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 353.67401123046875
+          - 286.11700439453125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 353.67401123046875
+          - 286.11700439453125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 353.67401123046875
+          - 286.11700439453125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 353.67401123046875
+          - 286.11700439453125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 1065353216
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 174351460
+        - 2570
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000180
+      OBJTYPE: 51
+      OBJNAME: "Skeleton-1550"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 357.7090148925781
+        - 292.2349853515625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 2
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.7090148925781
+          - 292.2349853515625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 356.3126220703125
+            - 290.968994140625
+            - 6.918863296508789
+        GUARD_PT:
+          GUARD_PT_POSITION:
+            - 348.9163513183594
+            - 282.2195129394531
+            - 6.914098739624023
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.7090148925781
+          - 292.2349853515625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.7090148925781
+          - 292.2349853515625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.7090148925781
+          - 292.2349853515625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 357.7090148925781
+          - 292.2349853515625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Skeleton 7"
+      UNIT_ARMORS: None
+      UNIT_WEAPONS: None
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 80
+        - 80
+        - 78
+        - 78
+        - 1065353216
+        - 1097859072
+        - 1061234969
+        - 1044764217
+        - 1049135241
+        - 1040746633
+        - 613232640
+        - 1071225242
+        - 613232640
+        - 1053609165
+        - 1285
+        - 0
+        - 1113063424
+        - 1113063424
+        - 1065353216
+        - 1097859072
+        - 1095761920
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 13
+        - 1091043328
+        - 1120403456
+        - 1091043328
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 1
+      NID: 1000182
+      OBJTYPE: 51
+      OBJNAME: "SkeletonF2-2277"
+      OBJTEMPLATE: "unmosk"
+      PARENTTEMPLATE: "LMP Skeleton 7"
+      OBJPRIMTXTR: "Skeleton00"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 355.4488830566406
+        - 266.5186767578125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 1.0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 7.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 355.4488830566406
+          - 266.5186767578125
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 355.4488830566406
+          - 266.5186767578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 355.4488830566406
+          - 266.5186767578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 355.4488830566406
+          - 266.5186767578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 7.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 355.4488830566406
+          - 266.5186767578125
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan Leader 11"
+      UNIT_ARMORS:
+        - "hadagan highest2 plate.steel"
+        - "hadagan highest2 leggins.steel"
+      UNIT_WEAPONS:
+        - "saber.steel"
+      UNIT_SPELLS:
+        - "acid_fog{r2,a2,fe,ee2,ee2,ee4}"
+        - "acid_column{r2,a2,fe,ee2,ee2,ee4}"
+        - "acid_ray{r2,t2,fe,ee2,ee2,ee4}"
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 120
+        - 120
+        - 171
+        - 171
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 1090519040
+        - 1118044160
+        - 1118044160
+        - 1065353216
+        - 1103626240
+        - 1101529088
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 19
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000191
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan Leader 11-1000191"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan Leader 11"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 57.37480163574219
+        - 326.343994140625
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: "z9xq2"
+      OBJCOMPLECTION:
+        - 0.6000000238418579
+        - 0.8999999761581421
+        - 1.100000023841858
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 15.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.37480163574219
+          - 326.343994140625
+          - 0.0
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.37480163574219
+          - 326.343994140625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.37480163574219
+          - 326.343994140625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.37480163574219
+          - 326.343994140625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 57.37480163574219
+          - 326.343994140625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+    UNIT:
+      UNIT_NEED_IMPORT: 0
+      UNIT_PROTOTYPE: "LMP Unique Undead Hadagan 8"
+      UNIT_ARMORS:
+        - "hadagan highest leggins.bronze"
+        - "hadagan highest shirt.bronze"
+      UNIT_WEAPONS:
+        - "spiked club.bronze"
+      UNIT_SPELLS: None
+      UNIT_QUICK_ITEMS: None
+      UNIT_QUEST_ITEMS: None
+      UNIT_STATS:
+        - 100
+        - 100
+        - 96
+        - 96
+        - 1065353216
+        - 1097859072
+        - 1055846128
+        - 1045220558
+        - 1042536203
+        - 1040191867
+        - 613232640
+        - 1076258406
+        - 613232640
+        - 1053609165
+        - 259
+        - 0
+        - 1114898432
+        - 1114898432
+        - 1065353216
+        - 1099431936
+        - 1097859072
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 14
+        - 1091043328
+        - 1120403456
+        - 0
+        - 1077097267
+        - 0
+        - 0
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 1065353216
+        - 6579300
+        - 0
+      OBJBODYPARTS:
+        - "bd"
+        - "hd"
+        - "hr"
+        - "hp"
+        - "lh1"
+        - "lh2"
+        - "lh3"
+        - "rh1"
+        - "rh2"
+        - "rh3"
+        - "rl1"
+        - "rl2"
+        - "rl3"
+        - "ll1"
+        - "ll2"
+        - "ll3"
+      OBJ_PLAYER: 1
+      NID: 1000100
+      OBJTYPE: 50
+      OBJNAME: "LMP Unique Undead Hadagan 8-1000194"
+      OBJTEMPLATE: "unhuma"
+      PARENTTEMPLATE: "LMP Unique Undead Hadagan 8"
+      OBJPRIMTXTR: "default0"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 42.37004470825195
+        - 336.9522705078125
+        - 0.0
+      OBJROTATION:
+        - 1.0
+        - 0.0
+        - 0.0
+        - 0.0
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 4294967295
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.699999988079071
+        - 0.30000001192092896
+        - 0.699999988079071
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 1
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 42.37004470825195
+          - 336.9522705078125
+          - 6.906764507293701
+        UNIT_LOGIC_USE: 1
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0
+      UNIT_LOGIC:
+        UNIT_LOGIC_ALARM_CONDITION: 0
+        UNIT_LOGIC_HELP: 10.0
+        UNIT_LOGIC_CYCLIC: 1
+        UNIT_LOGIC_AGRESSION_MODE: 0
+        UNIT_LOGIC_ALWAYS_ACTIVE: 0
+        UNIT_LOGIC_MODEL: 3
+        UNIT_LOGIC_GUARD_R: 10.0
+        UNIT_LOGIC_WAIT: -1.0
+        UNIT_LOGIC_GUARD_PT:
+          - 41.91073989868164
+          - 322.48199462890625
+          - 0.0
+        UNIT_LOGIC_USE: 0
+        UNIT_LOGIC_NALARM: 0

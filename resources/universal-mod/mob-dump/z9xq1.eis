@@ -22,8 +22,8 @@ Script VTriger#1#1
   then
   (
     KillScript(  ) 
-    AddRoundToArea( 1, 382, 188, 12 ) 
-    QStart( "z90q1" ) 
+    AddRoundToArea( 1, 415, 220, 12 ) 
+    QStart( "z9xq1" ) 
     QObjArea( 1 ) 
     QObjSeeObject( "GetObject(1000064)" ) 
     QObjUse( "GetObject(1000064)", 1 ) 
