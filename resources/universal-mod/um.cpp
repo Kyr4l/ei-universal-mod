@@ -1,8 +1,7 @@
-// This DLL hooks low-level keyboard events to synthesize US QWERTY key presses
-// for keys that may be affected by non-US keyboard layouts (backtick and number row).
-// It also verifies the presence of a required .asi file on DLL attach.
-//
-// Configuration is managed via um.cfg in the DLL directory and environment variables.
+// This DLL rewrites backtick and number-row input as US QWERTY scan codes,
+// verifies the required SpellAddonX.asi file, and provides optional diagnostics.
+// Logging, crash reporting, keyboard rewrite logging, and unsafe anti-crash
+// behavior are configured through um.cfg beside the DLL or environment variables.
 
 #include <windows.h>
 #include <ctype.h>
@@ -388,6 +387,64 @@ static bool IsUnsafeExceptionToResume(const EXCEPTION_RECORD* record) {
     }
 }
 
+static const char* GetUnsafeExceptionReason(const EXCEPTION_RECORD* record) {
+    if (!record) {
+        return "missing exception record";
+    }
+
+    switch (record->ExceptionCode) {
+    case EXCEPTION_ACCESS_VIOLATION:
+        return "access violation: invalid memory read or write";
+    case EXCEPTION_IN_PAGE_ERROR:
+        return "in-page error: required memory could not be loaded";
+    case EXCEPTION_ILLEGAL_INSTRUCTION:
+        return "illegal instruction: CPU could not execute the instruction";
+    case EXCEPTION_NONCONTINUABLE_EXCEPTION:
+        return "non-continuable exception: Windows forbids resuming execution";
+    case EXCEPTION_STACK_OVERFLOW:
+        return "stack overflow: the thread has exhausted its stack";
+    case EXCEPTION_DATATYPE_MISALIGNMENT:
+        return "datatype misalignment: an improperly aligned memory access occurred";
+    case EXCEPTION_GUARD_PAGE:
+        return "guard-page violation: protected memory was accessed";
+    default:
+        return "exception is classified as unsafe to resume";
+    }
+}
+
+static const char* GetExceptionCaseName(const EXCEPTION_RECORD* record) {
+    if (!record) {
+        return "UNKNOWN_EXCEPTION";
+    }
+
+    switch (record->ExceptionCode) {
+    case EXCEPTION_ACCESS_VIOLATION:
+        return "EXCEPTION_ACCESS_VIOLATION";
+    case EXCEPTION_IN_PAGE_ERROR:
+        return "EXCEPTION_IN_PAGE_ERROR";
+    case EXCEPTION_ILLEGAL_INSTRUCTION:
+        return "EXCEPTION_ILLEGAL_INSTRUCTION";
+    case EXCEPTION_NONCONTINUABLE_EXCEPTION:
+        return "EXCEPTION_NONCONTINUABLE_EXCEPTION";
+    case EXCEPTION_STACK_OVERFLOW:
+        return "EXCEPTION_STACK_OVERFLOW";
+    case EXCEPTION_DATATYPE_MISALIGNMENT:
+        return "EXCEPTION_DATATYPE_MISALIGNMENT";
+    case EXCEPTION_GUARD_PAGE:
+        return "EXCEPTION_GUARD_PAGE";
+    case EXCEPTION_INT_DIVIDE_BY_ZERO:
+        return "EXCEPTION_INT_DIVIDE_BY_ZERO";
+    case EXCEPTION_INT_OVERFLOW:
+        return "EXCEPTION_INT_OVERFLOW";
+    case EXCEPTION_BREAKPOINT:
+        return "EXCEPTION_BREAKPOINT";
+    case EXCEPTION_SINGLE_STEP:
+        return "EXCEPTION_SINGLE_STEP";
+    default:
+        return "UNKNOWN_EXCEPTION";
+    }
+}
+
 static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) {
     if (!g_enableCrashLogging) {
         return EXCEPTION_CONTINUE_SEARCH;
@@ -409,10 +466,6 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     }
 
     LogErrorBlockStart();
-    if (g_enableAntiCrash && !g_forceAntiCrash) {
-        LogLine("ANTICRASH", "Recovery was requested, but this exception is not safe to resume from");
-        LogLine("ANTICRASH", "Normal Windows crash handling will continue to prevent silent process corruption");
-    }
 
     if (!record) {
         LogLine("ERROR", "Unhandled exception had no exception record");
@@ -425,6 +478,12 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
                 record->ExceptionInformation[0] == 0 ? "read" : "write",
                 reinterpret_cast<void*>(static_cast<ULONG_PTR>(record->ExceptionInformation[1])));
         }
+    }
+
+    if (g_enableAntiCrash && !g_forceAntiCrash && IsUnsafeExceptionToResume(record)) {
+        LogLine("ANTICRASH", "Recovery refused: case=%s reason=%s",
+            GetExceptionCaseName(record), GetUnsafeExceptionReason(record));
+        LogLine("ANTICRASH", "Normal Windows crash handling will continue to prevent silent process corruption");
     }
 
     if (context) {
@@ -468,6 +527,7 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     }
 
     if (g_forceAntiCrash) {
+        LogLine("ANTICRASH", "Exception case=%s", GetExceptionCaseName(record));
         if (IsUnsafeExceptionToResume(record)) {
             LogLine("ANTICRASH", "FORCE_UNSAFE_ANTICRASH is forcing continuation after an unsafe exception; the faulting context will be retried");
         } else {
