@@ -1,13 +1,27 @@
-
+# libreoffice lock files
 .~lock*
 
+# vscode env
 .vscode
+
+# um.dll generated files
 Universal-Mod/um.cfg
+Universal-Mod/um.log
+
+# UM saves
 Universal-Mod/mp/*
 Universal-Mod/saves/*
+
+# EI_Plugin.asi GraphGen .BAK files
 Universal-Mod/maps/*.bak
+
+# VGG editor .BAK files
 resources/universal-mod/mob/*.bak
+
+# ei_maper generated files
 tools/third-party-tools/ei_maper/options.json
 tools/third-party-tools/ei_maper/workflow.log
+
+# ZoneView generated files
 tools/third-party-tools/ZoneView_1.4.3/zoneview.ini
 tools/third-party-tools/ZoneView_1.4.3/ZoneView.log
