@@ -12,9 +12,9 @@
 
 // Global state
 static HHOOK g_keyboardHook = NULL;
-static bool g_disableLayoutPopup = true;
-static bool g_disableAsiCheck = false;
-static bool g_disableKeyboardRewrites = false;
+static bool g_enableLayoutPopup = false;
+static bool g_enableAsiCheck = true;
+static bool g_enableKeyboardRewrites = true;
 
 static bool EqualsIgnoreCase(const char* a, const char* b) {
     if (!a || !b) {
@@ -86,9 +86,9 @@ static void LoadConfigFile(const char* dllPath) {
         if (file) {
             fprintf(file, "; Universal Mod Configuration\n");
             fprintf(file, "; Set to true to enable, false to disable\n\n");
-            fprintf(file, "UM_DISABLE_KEYBOARD_LAYOUT_POPUP=true\n");
-            fprintf(file, "UM_DISABLE_SPELLADDON_ASI_CHECK=false\n");
-            fprintf(file, "UM_DISABLE_KEYBOARD_REWRITES=false\n");
+            fprintf(file, "KEYBOARD_LAYOUT_POPUP=false\n");
+            fprintf(file, "SPELLADDON_ASI_CHECK=true\n");
+            fprintf(file, "KEYBOARD_REWRITES=true\n");
             fclose(file);
         }
         return;
@@ -140,12 +140,12 @@ static void LoadConfigFile(const char* dllPath) {
         }
 
         // parse the setting
-        if (EqualsIgnoreCase(key, "UM_DISABLE_KEYBOARD_LAYOUT_POPUP")) {
-            g_disableLayoutPopup = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "UM_DISABLE_SPELLADDONX_ASI_CHECK") || EqualsIgnoreCase(key, "UM_DISABLE_SPELLADDON_ASI_CHECK")) {
-            g_disableAsiCheck = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "UM_DISABLE_KEYBOARD_REWRITES")) {
-            g_disableKeyboardRewrites = IsTrueString(value);
+        if (EqualsIgnoreCase(key, "KEYBOARD_LAYOUT_POPUP")) {
+            g_enableLayoutPopup = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "SPELLADDON_ASI_CHECK")) {
+            g_enableAsiCheck = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "KEYBOARD_REWRITES")) {
+            g_enableKeyboardRewrites = IsTrueString(value);
         }
     }
 
@@ -189,7 +189,7 @@ static void SendQwertyNumberKeyPress(BYTE vkCode) {
 
 // Intercept the backtick and number-row keys and rewrite them as US-QWERTY presses.
 static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-    if (g_disableKeyboardRewrites) {
+    if (!g_enableKeyboardRewrites) {
         return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
     }
 
@@ -245,24 +245,23 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         LoadConfigFile(dllPath);
     }
 
-    g_disableLayoutPopup = g_disableLayoutPopup || GetEnvironmentFlag("UM_DISABLE_KEYBOARD_LAYOUT_POPUP");
-    g_disableAsiCheck = g_disableAsiCheck || GetEnvironmentFlag("UM_DISABLE_SPELLADDONX_ASI_CHECK")
-        || GetEnvironmentFlag("UM_DISABLE_SPELLADDON_ASI_CHECK");
-    g_disableKeyboardRewrites = g_disableKeyboardRewrites || GetEnvironmentFlag("UM_DISABLE_KEYBOARD_REWRITES");
+    g_enableLayoutPopup = g_enableLayoutPopup || GetEnvironmentFlag("KEYBOARD_LAYOUT_POPUP");
+    g_enableAsiCheck = g_enableAsiCheck || GetEnvironmentFlag("SPELLADDON_ASI_CHECK");
+    g_enableKeyboardRewrites = g_enableKeyboardRewrites || GetEnvironmentFlag("KEYBOARD_REWRITES");
 
     HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
     if (threadHandle) {
         CloseHandle(threadHandle);
     }
 
-    if (!g_disableLayoutPopup) {
+    if (g_enableLayoutPopup) {
         char keyboardLayoutName[KL_NAMELENGTH] = {};
         if (GetKeyboardLayoutNameA(keyboardLayoutName) != 0) {
             size_t layoutLen = strlen(keyboardLayoutName);
             if (layoutLen >= 3 && strcmp(keyboardLayoutName + layoutLen - 3, "40C") == 0) {
                 char layoutMessage[256] = {};
                 snprintf(layoutMessage, sizeof(layoutMessage),
-                    "Detected keyboard layout: %s.\nThe keyboard input hook will synthesize a US QWERTY backtick on the physical backtick key. This warning can be disabled in um.cfg (UM_DISABLE_KEYBOARD_LAYOUT_POPUP).",
+                    "Detected keyboard layout: %s.\nThe keyboard input hook will synthesize a US QWERTY backtick on the physical backtick key. This warning can be enabled in um.cfg (KEYBOARD_LAYOUT_POPUP).",
                     keyboardLayoutName);
                 MessageBoxA(NULL,
                     layoutMessage,
@@ -294,7 +293,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         gameDir[lastSlash] = '\0';
     }
 
-    if (!g_disableAsiCheck) {
+    if (g_enableAsiCheck) {
         char asiPath[MAX_PATH] = {};
         snprintf(asiPath, sizeof(asiPath), "%s\\SpellAddonX.asi", gameDir);
         if (GetFileAttributesA(asiPath) == INVALID_FILE_ATTRIBUTES) {
