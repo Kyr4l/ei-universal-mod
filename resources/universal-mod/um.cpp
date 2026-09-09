@@ -20,6 +20,7 @@ static bool g_enableAntiCrash = false;
 static bool g_forceAntiCrash = false;
 static bool g_clearLogOnStart = false;
 static char g_logPath[MAX_PATH] = {};
+static HANDLE g_logClearMutex = NULL;
 static volatile LONG g_crashLogInProgress = 0;
 static volatile LONG g_errorBlockNumber = 0;
 static volatile LONG g_suppressedErrorCount = 0;
@@ -28,6 +29,33 @@ static DWORD g_suppressedExceptionCode = 0;
 static ULONG_PTR g_suppressedExceptionAddress = 0;
 static long g_suppressedSummaryOffset = -1;
 static bool g_keyboardRewriteKeyDown[256] = {};
+static bool g_enableFileIoLogging = false;
+static char g_fileIoLoggingFilter[256] = {};
+
+typedef HANDLE (WINAPI *CreateFileAFunction)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES,
+    DWORD, DWORD, HANDLE);
+typedef HANDLE (WINAPI *CreateFileWFunction)(LPCWSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES,
+    DWORD, DWORD, HANDLE);
+typedef BOOL (WINAPI *ReadFileFunction)(HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED);
+typedef BOOL (WINAPI *WriteFileFunction)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED);
+typedef BOOL (WINAPI *CloseHandleFunction)(HANDLE);
+
+static CreateFileAFunction g_originalCreateFileA = NULL;
+static CreateFileWFunction g_originalCreateFileW = NULL;
+static ReadFileFunction g_originalReadFile = NULL;
+static WriteFileFunction g_originalWriteFile = NULL;
+static CloseHandleFunction g_originalCloseHandle = NULL;
+
+struct TrackedFileHandle {
+    HANDLE handle;
+    char path[MAX_PATH];
+    bool readLogged;
+    bool writeLogged;
+};
+
+static CRITICAL_SECTION g_fileHandleLock;
+static bool g_fileHandleLockInitialized = false;
+static TrackedFileHandle g_fileHandles[256] = {};
 
 static bool EqualsIgnoreCase(const char* a, const char* b) {
     if (!a || !b) {
@@ -96,6 +124,333 @@ static void LogLine(const char* level, const char* format, ...) {
     va_end(arguments);
     fputc('\n', file);
     fclose(file);
+}
+
+static void LogFileIo(const char* format, ...) {
+    if (!g_enableFileIoLogging || !g_enableCrashLogging || g_logPath[0] == '\0') {
+        return;
+    }
+
+    char message[512] = {};
+    va_list arguments;
+    va_start(arguments, format);
+    vsnprintf(message, sizeof(message), format, arguments);
+    va_end(arguments);
+    LogLine("INFO", "%s", message);
+}
+
+static bool CopyAndMarkTrackedFileIo(HANDLE handle, bool write, char* path, size_t pathSize) {
+    if (!g_fileHandleLockInitialized || !path || pathSize == 0) {
+        return false;
+    }
+
+    bool found = false;
+    path[0] = '\0';
+    EnterCriticalSection(&g_fileHandleLock);
+    for (size_t i = 0; i < sizeof(g_fileHandles) / sizeof(g_fileHandles[0]); ++i) {
+        if (g_fileHandles[i].handle == handle) {
+            bool* logged = write ? &g_fileHandles[i].writeLogged : &g_fileHandles[i].readLogged;
+            if (*logged) {
+                break;
+            }
+            strncpy(path, g_fileHandles[i].path, pathSize - 1);
+            path[pathSize - 1] = '\0';
+            *logged = true;
+            found = true;
+            break;
+        }
+    }
+    LeaveCriticalSection(&g_fileHandleLock);
+    return found;
+}
+
+static bool IsIgnoredFileExtension(const char* path) {
+    if (!path || g_fileIoLoggingFilter[0] == '\0') {
+        return false;
+    }
+
+    const char* fileName = strrchr(path, '\\');
+    const char* slash = strrchr(path, '/');
+    if (slash && (!fileName || slash > fileName)) {
+        fileName = slash;
+    }
+    fileName = fileName ? fileName + 1 : path;
+    const char* dot = strrchr(fileName, '.');
+    if (!dot || dot[1] == '\0') {
+        return false;
+    }
+
+    const char* filter = g_fileIoLoggingFilter;
+    while (*filter) {
+        while (*filter == ',' || *filter == ' ' || *filter == '\t') {
+            ++filter;
+        }
+        const char* tokenStart = filter;
+        while (*filter && *filter != ',') {
+            ++filter;
+        }
+        const char* tokenEnd = filter;
+        while (tokenEnd > tokenStart &&
+            (tokenEnd[-1] == ' ' || tokenEnd[-1] == '\t' || tokenEnd[-1] == '"')) {
+            --tokenEnd;
+        }
+        if (tokenStart < tokenEnd && *tokenStart == '.') {
+            ++tokenStart;
+        }
+
+        char extension[32] = {};
+        size_t extensionLength = static_cast<size_t>(tokenEnd - tokenStart);
+        if (extensionLength >= sizeof(extension)) {
+            extensionLength = sizeof(extension) - 1;
+        }
+        memcpy(extension, tokenStart, extensionLength);
+        extension[extensionLength] = '\0';
+        if (EqualsIgnoreCase(dot + 1, extension)) {
+            return true;
+        }
+        if (*filter == ',') {
+            ++filter;
+        }
+    }
+    return false;
+}
+
+static void SetFileIoLoggingFilter(const char* value) {
+    g_fileIoLoggingFilter[0] = '\0';
+    if (!value) {
+        return;
+    }
+
+    while (*value == ' ' || *value == '\t' || *value == '"') {
+        ++value;
+    }
+    strncpy(g_fileIoLoggingFilter, value, sizeof(g_fileIoLoggingFilter) - 1);
+    g_fileIoLoggingFilter[sizeof(g_fileIoLoggingFilter) - 1] = '\0';
+    size_t length = strlen(g_fileIoLoggingFilter);
+    while (length > 0 &&
+        (g_fileIoLoggingFilter[length - 1] == ' ' ||
+         g_fileIoLoggingFilter[length - 1] == '\t' ||
+         g_fileIoLoggingFilter[length - 1] == '"')) {
+        g_fileIoLoggingFilter[--length] = '\0';
+    }
+}
+
+static void TrackFileHandle(HANDLE handle, const char* path) {
+    if (!g_fileHandleLockInitialized || handle == INVALID_HANDLE_VALUE || !path) {
+        return;
+    }
+
+    EnterCriticalSection(&g_fileHandleLock);
+    size_t freeIndex = sizeof(g_fileHandles) / sizeof(g_fileHandles[0]);
+    for (size_t i = 0; i < sizeof(g_fileHandles) / sizeof(g_fileHandles[0]); ++i) {
+        if (g_fileHandles[i].handle == handle) {
+            freeIndex = i;
+            break;
+        }
+        if (freeIndex == sizeof(g_fileHandles) / sizeof(g_fileHandles[0]) &&
+            g_fileHandles[i].handle == NULL) {
+            freeIndex = i;
+        }
+    }
+    if (freeIndex < sizeof(g_fileHandles) / sizeof(g_fileHandles[0])) {
+        g_fileHandles[freeIndex].handle = handle;
+        g_fileHandles[freeIndex].readLogged = false;
+        g_fileHandles[freeIndex].writeLogged = false;
+        strncpy(g_fileHandles[freeIndex].path, path, sizeof(g_fileHandles[freeIndex].path) - 1);
+        g_fileHandles[freeIndex].path[sizeof(g_fileHandles[freeIndex].path) - 1] = '\0';
+    }
+    LeaveCriticalSection(&g_fileHandleLock);
+}
+
+static void UntrackFileHandle(HANDLE handle) {
+    if (!g_fileHandleLockInitialized) {
+        return;
+    }
+
+    EnterCriticalSection(&g_fileHandleLock);
+    for (size_t i = 0; i < sizeof(g_fileHandles) / sizeof(g_fileHandles[0]); ++i) {
+        if (g_fileHandles[i].handle == handle) {
+            g_fileHandles[i].handle = NULL;
+            g_fileHandles[i].path[0] = '\0';
+            break;
+        }
+    }
+    LeaveCriticalSection(&g_fileHandleLock);
+}
+
+static void DescribeDesiredAccess(DWORD desiredAccess, char* description, size_t descriptionSize) {
+    description[0] = '\0';
+    if ((desiredAccess & GENERIC_READ) != 0) {
+        strncat(description, "read", descriptionSize - strlen(description) - 1);
+    }
+    if ((desiredAccess & GENERIC_WRITE) != 0) {
+        if (description[0] != '\0') {
+            strncat(description, "+", descriptionSize - strlen(description) - 1);
+        }
+        strncat(description, "write", descriptionSize - strlen(description) - 1);
+    }
+    if (description[0] == '\0') {
+        strncpy(description, "none", descriptionSize - 1);
+        description[descriptionSize - 1] = '\0';
+    }
+}
+
+static void LogOpenedFile(HANDLE handle, const char* path, DWORD desiredAccess) {
+    if (IsIgnoredFileExtension(path)) {
+        return;
+    }
+    char access[32] = {};
+    DescribeDesiredAccess(desiredAccess, access, sizeof(access));
+    TrackFileHandle(handle, path);
+    LogFileIo("File opened path=%s access=%s handle=%p", path, access, handle);
+}
+
+static void ConvertWidePath(LPCWSTR widePath, char* path, size_t pathSize) {
+    if (!widePath || pathSize == 0) {
+        return;
+    }
+    WideCharToMultiByte(CP_ACP, 0, widePath, -1, path, static_cast<int>(pathSize), NULL, NULL);
+    path[pathSize - 1] = '\0';
+}
+
+static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
+        DWORD shareMode, LPSECURITY_ATTRIBUTES securityAttributes, DWORD creationDisposition,
+        DWORD flagsAndAttributes, HANDLE templateFile) {
+    HANDLE handle = g_originalCreateFileA(fileName, desiredAccess, shareMode,
+        securityAttributes, creationDisposition, flagsAndAttributes, templateFile);
+    if (handle != INVALID_HANDLE_VALUE && fileName) {
+        LogOpenedFile(handle, fileName, desiredAccess);
+    }
+    return handle;
+}
+
+static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
+        DWORD shareMode, LPSECURITY_ATTRIBUTES securityAttributes, DWORD creationDisposition,
+        DWORD flagsAndAttributes, HANDLE templateFile) {
+    HANDLE handle = g_originalCreateFileW(fileName, desiredAccess, shareMode,
+        securityAttributes, creationDisposition, flagsAndAttributes, templateFile);
+    if (handle != INVALID_HANDLE_VALUE && fileName) {
+        char path[MAX_PATH] = {};
+        ConvertWidePath(fileName, path, sizeof(path));
+        LogOpenedFile(handle, path, desiredAccess);
+    }
+    return handle;
+}
+
+static BOOL WINAPI HookedReadFile(HANDLE file, LPVOID buffer, DWORD bytesToRead,
+        LPDWORD bytesRead, LPOVERLAPPED overlapped) {
+    BOOL result = g_originalReadFile(file, buffer, bytesToRead, bytesRead, overlapped);
+    if (result) {
+        char path[MAX_PATH] = {};
+        if (CopyAndMarkTrackedFileIo(file, false, path, sizeof(path))) {
+            LogFileIo("File read path=%s bytes=%lu handle=%p", path,
+                bytesRead ? *bytesRead : 0, file);
+        }
+    }
+    return result;
+}
+
+static BOOL WINAPI HookedWriteFile(HANDLE file, LPCVOID buffer, DWORD bytesToWrite,
+        LPDWORD bytesWritten, LPOVERLAPPED overlapped) {
+    BOOL result = g_originalWriteFile(file, buffer, bytesToWrite, bytesWritten, overlapped);
+    if (result) {
+        char path[MAX_PATH] = {};
+        if (CopyAndMarkTrackedFileIo(file, true, path, sizeof(path))) {
+            LogFileIo("File written path=%s bytes=%lu handle=%p", path,
+                bytesWritten ? *bytesWritten : 0, file);
+        }
+    }
+    return result;
+}
+
+static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
+    BOOL result = g_originalCloseHandle(handle);
+    if (result) {
+        UntrackFileHandle(handle);
+    }
+    return result;
+}
+
+static bool PatchImportedFunction(HMODULE module, const char* functionName,
+        PROC replacement, PROC* original) {
+    if (!module || !functionName || !replacement || !original) {
+        return false;
+    }
+
+    BYTE* base = reinterpret_cast<BYTE*>(module);
+    IMAGE_DOS_HEADER* dosHeader = reinterpret_cast<IMAGE_DOS_HEADER*>(base);
+    if (dosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
+        return false;
+    }
+    IMAGE_NT_HEADERS* ntHeaders = reinterpret_cast<IMAGE_NT_HEADERS*>(base + dosHeader->e_lfanew);
+    if (ntHeaders->Signature != IMAGE_NT_SIGNATURE) {
+        return false;
+    }
+
+    IMAGE_DATA_DIRECTORY importDirectory = ntHeaders->OptionalHeader.DataDirectory[
+        IMAGE_DIRECTORY_ENTRY_IMPORT];
+    if (importDirectory.VirtualAddress == 0) {
+        return false;
+    }
+
+    IMAGE_IMPORT_DESCRIPTOR* imports = reinterpret_cast<IMAGE_IMPORT_DESCRIPTOR*>(
+        base + importDirectory.VirtualAddress);
+    for (; imports->Name != 0; ++imports) {
+        IMAGE_THUNK_DATA* addresses = reinterpret_cast<IMAGE_THUNK_DATA*>(
+            base + imports->FirstThunk);
+        IMAGE_THUNK_DATA* names = imports->OriginalFirstThunk
+            ? reinterpret_cast<IMAGE_THUNK_DATA*>(base + imports->OriginalFirstThunk)
+            : addresses;
+        if (!names) {
+            continue;
+        }
+
+        for (; names->u1.AddressOfData != 0; ++names, ++addresses) {
+            if (IMAGE_SNAP_BY_ORDINAL(names->u1.Ordinal)) {
+                continue;
+            }
+            IMAGE_IMPORT_BY_NAME* importedName = reinterpret_cast<IMAGE_IMPORT_BY_NAME*>(
+                base + names->u1.AddressOfData);
+            if (strcmp(reinterpret_cast<const char*>(importedName->Name), functionName) != 0) {
+                continue;
+            }
+
+            DWORD oldProtection = 0;
+            if (!VirtualProtect(&addresses->u1.Function, sizeof(addresses->u1.Function),
+                    PAGE_READWRITE, &oldProtection)) {
+                return false;
+            }
+            *original = reinterpret_cast<PROC>(addresses->u1.Function);
+            addresses->u1.Function = reinterpret_cast<ULONG_PTR>(replacement);
+            VirtualProtect(&addresses->u1.Function, sizeof(addresses->u1.Function),
+                oldProtection, &oldProtection);
+            FlushInstructionCache(GetCurrentProcess(), &addresses->u1.Function,
+                sizeof(addresses->u1.Function));
+            return true;
+        }
+    }
+    return false;
+}
+
+static void InstallFileIoHooks() {
+    HMODULE process = GetModuleHandleA(NULL);
+    if (!process) {
+        LogLine("WARN", "Could not locate the game executable for file-I/O hooks");
+        return;
+    }
+
+    bool hooked = false;
+    hooked = PatchImportedFunction(process, "CreateFileA",
+        reinterpret_cast<PROC>(HookedCreateFileA), reinterpret_cast<PROC*>(&g_originalCreateFileA)) || hooked;
+    hooked = PatchImportedFunction(process, "CreateFileW",
+        reinterpret_cast<PROC>(HookedCreateFileW), reinterpret_cast<PROC*>(&g_originalCreateFileW)) || hooked;
+    hooked = PatchImportedFunction(process, "ReadFile",
+        reinterpret_cast<PROC>(HookedReadFile), reinterpret_cast<PROC*>(&g_originalReadFile)) || hooked;
+    hooked = PatchImportedFunction(process, "WriteFile",
+        reinterpret_cast<PROC>(HookedWriteFile), reinterpret_cast<PROC*>(&g_originalWriteFile)) || hooked;
+    hooked = PatchImportedFunction(process, "CloseHandle",
+        reinterpret_cast<PROC>(HookedCloseHandle), reinterpret_cast<PROC*>(&g_originalCloseHandle)) || hooked;
+    LogLine(hooked ? "INFO" : "WARN", "File-I/O hooks %s", hooked ? "installed" : "not installed");
 }
 
 static void LogErrorBlockStart() {
@@ -186,6 +541,15 @@ static void PrepareLogFile() {
     }
 
     if (g_clearLogOnStart) {
+        g_logClearMutex = CreateMutexA(NULL, TRUE, "Local\\UniversalModLogClear");
+        if (!g_logClearMutex || GetLastError() == ERROR_ALREADY_EXISTS) {
+            if (g_logClearMutex) {
+                CloseHandle(g_logClearMutex);
+                g_logClearMutex = NULL;
+            }
+            return;
+        }
+
         FILE* file = fopen(g_logPath, "w");
         if (file) {
             fclose(file);
@@ -570,13 +934,23 @@ static void LoadConfigFile(const char* dllPath) {
         file = fopen(configPath, "w");
         if (file) {
             fprintf(file, "; Universal Mod Configuration\n");
-            fprintf(file, "; Set to true to enable, false to disable\n\n");
-            fprintf(file, "SPELLADDON_ASI_CHECK=true\n");
-            fprintf(file, "KEYBOARD_REWRITES=true\n");
-            fprintf(file, "KEYBOARD_REWRITES_LOGGING=false\n");
-            fprintf(file, "LOGGING=false\n");
-            fprintf(file, "CLEAR_LOG_ON_START=false\n");
-            fprintf(file, "ANTICRASH=false\n");
+            fprintf(file, "; Require SpellAddonX.asi beside game.exe; (true/false)\n");
+            fprintf(file, "SPELLADDON_ASI_CHECK=true\n\n");
+            fprintf(file, "; Rewrite backtick and number-row input as US-QWERTY keys; (true/false)\n");
+            fprintf(file, "KEYBOARD_REWRITES=true\n\n");
+            fprintf(file, "; Log keyboard rewrite events; (true/false)\n");
+            fprintf(file, "KEYBOARD_REWRITES_LOGGING=false\n\n");
+            fprintf(file, "; Write diagnostic and crash information to um.log; (true/false)\n");
+            fprintf(file, "LOGGING=false\n\n");
+            fprintf(file, "; Log file opens, reads, and writes as INFO entries; (true/false)\n");
+            fprintf(file, "FILE_IO_LOGGING=false\n\n");
+            fprintf(file, "; Comma-separated file extensions to exclude from file-I/O logging; empty or like mmp,res.\n");
+            fprintf(file, "FILE_IO_LOGGING_FILTER=\"\"\n\n");
+            fprintf(file, "; Clear um.log on the first DLL instance of a launch; (true/false)\n");
+            fprintf(file, "CLEAR_LOG_ON_START=false\n\n");
+            fprintf(file, "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)\n");
+            fprintf(file, "ANTICRASH=false\n\n");
+            fprintf(file, "; Resume even after unsafe exceptions; accepts true or false (not recommended).\n");
             fprintf(file, "FORCE_UNSAFE_ANTICRASH=false\n");
             fclose(file);
         }
@@ -637,6 +1011,10 @@ static void LoadConfigFile(const char* dllPath) {
             g_enableKeyboardRewriteLogging = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "LOGGING")) {
             g_enableCrashLogging = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "FILE_IO_LOGGING")) {
+            g_enableFileIoLogging = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "FILE_IO_LOGGING_FILTER")) {
+            SetFileIoLoggingFilter(value);
         } else if (EqualsIgnoreCase(key, "ANTICRASH")) {
             g_enableAntiCrash = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "FORCE_UNSAFE_ANTICRASH")) {
@@ -652,7 +1030,7 @@ static void LoadConfigFile(const char* dllPath) {
 // Synthesize a US-QWERTY backtick press.
 static void SendQwertyBacktickPress(bool logRewrite) {
     if (g_enableKeyboardRewriteLogging && logRewrite) {
-        LogLine("KBRW", "Rewriting virtual key 0xC0 as US-QWERTY backtick scan code 0x29");
+        LogLine("KBRW", "Rewriting physical scan code 0x29 as US-QWERTY backtick");
     }
 
     INPUT inputs[2] = {};
@@ -704,13 +1082,16 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
         if (kb) {
-            if (kb->vkCode == 0xC0) {
+            if ((kb->flags & LLKHF_INJECTED) != 0) {
+                return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
+            }
+            if (kb->vkCode == 0xC0 || kb->scanCode == 0x29) {
                 if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
-                    bool logRewrite = !g_keyboardRewriteKeyDown[kb->vkCode];
-                    g_keyboardRewriteKeyDown[kb->vkCode] = true;
+                    bool logRewrite = !g_keyboardRewriteKeyDown[0xC0];
+                    g_keyboardRewriteKeyDown[0xC0] = true;
                     SendQwertyBacktickPress(logRewrite);
                 } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
-                    g_keyboardRewriteKeyDown[kb->vkCode] = false;
+                    g_keyboardRewriteKeyDown[0xC0] = false;
                 }
                 return 1; // swallow the original key event
             }
@@ -766,6 +1147,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     g_enableKeyboardRewrites = g_enableKeyboardRewrites || GetEnvironmentFlag("KEYBOARD_REWRITES");
     g_enableKeyboardRewriteLogging = g_enableKeyboardRewriteLogging || GetEnvironmentFlag("KEYBOARD_REWRITES_LOGGING");
     g_enableCrashLogging = g_enableCrashLogging || GetEnvironmentFlag("LOGGING");
+    g_enableFileIoLogging = g_enableFileIoLogging || GetEnvironmentFlag("FILE_IO_LOGGING");
     g_enableAntiCrash = g_enableAntiCrash || GetEnvironmentFlag("ANTICRASH");
     g_forceAntiCrash = g_forceAntiCrash || GetEnvironmentFlag("FORCE_UNSAFE_ANTICRASH");
     g_enableCrashLogging = g_enableCrashLogging || g_forceAntiCrash;
@@ -775,11 +1157,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     }
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s clear_log_on_start=%s anti_crash=%s force_anti_crash=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s force_anti_crash=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
         g_enableCrashLogging ? "enabled" : "disabled",
+        g_enableFileIoLogging ? "enabled" : "disabled",
         g_clearLogOnStart ? "enabled" : "disabled",
         g_enableAntiCrash ? "enabled" : "disabled",
         g_forceAntiCrash ? "enabled" : "disabled");
@@ -791,6 +1174,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
     if (threadHandle) {
         CloseHandle(threadHandle);
+    }
+
+    InitializeCriticalSection(&g_fileHandleLock);
+    g_fileHandleLockInitialized = true;
+    if (g_enableFileIoLogging) {
+        InstallFileIoHooks();
     }
 
     char exePath[MAX_PATH] = {};
