@@ -1,6 +1,6 @@
 // This DLL rewrites backtick and number-row input as US QWERTY scan codes,
 // verifies the required SpellAddonX.asi file, and provides optional diagnostics.
-// Logging, crash reporting, keyboard rewrite logging, and unsafe anti-crash
+// Logging, crash reporting, keyboard rewrite logging, and anti-crash
 // behavior are configured through um.cfg beside the DLL or environment variables.
 
 #include <windows.h>
@@ -1666,8 +1666,6 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     CONTEXT* context = exceptionInfo ? exceptionInfo->ContextRecord : NULL;
 
     LogErrorBlockStart();
-    WriteCrashDump(exceptionInfo);
-    LogTrackedFileHandles();
 
     if (!record) {
         LogLine("FATAL", "Unhandled exception had no exception record");
@@ -1727,6 +1725,16 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     for (USHORT i = 0; i < frameCount; ++i) {
         LogLine("FATAL", "Stack frame=%u address=%p", i, stack[i]);
     }
+
+    // The crash location above is the critical fact to preserve, so it is
+    // logged before anything riskier runs. Writing a minidump loads
+    // dbghelp.dll and walks the whole process's memory/threads, which can
+    // itself hang or crash when the process is already in a bad state (e.g.
+    // heap corruption) - if that ran first, a failure here would silently
+    // mask the real crash location by preventing the log lines above from
+    // ever being written.
+    WriteCrashDump(exceptionInfo);
+    LogTrackedFileHandles();
 
     if (g_enableAntiCrash && record && IsUnsafeExceptionToResume(record)) {
         LogLine("ANTICRASH", "Unsafe exception cannot be resumed safely; normal Windows crash handling will continue");
