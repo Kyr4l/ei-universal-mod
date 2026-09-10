@@ -587,6 +587,150 @@ static bool ReadRegistryString(HKEY root, const char* subKey, const char* valueN
     return value[0] != '\0';
 }
 
+static bool ReadFirstRegistryString(HKEY root, const char* const* subKeys,
+        size_t subKeyCount, const char* const* valueNames, size_t valueNameCount,
+        char* value, DWORD valueSize) {
+    for (size_t keyIndex = 0; keyIndex < subKeyCount; ++keyIndex) {
+        for (size_t valueIndex = 0; valueIndex < valueNameCount; ++valueIndex) {
+            if (ReadRegistryString(root, subKeys[keyIndex], valueNames[valueIndex],
+                    value, valueSize)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static const char* InferGraphicsProvider(const char* description, bool isWine) {
+    if (description) {
+        if (strstr(description, "NVIDIA") || strstr(description, "GeForce")) {
+            return "NVIDIA";
+        }
+        if (strstr(description, "AMD") || strstr(description, "Radeon") ||
+                strstr(description, "ATI")) {
+            return "AMD";
+        }
+        if (strstr(description, "Intel")) {
+            return "Intel";
+        }
+    }
+    return isWine ? "Wine" : "unknown";
+}
+
+typedef unsigned int VulkanUint32;
+typedef int VulkanResult;
+typedef void* VulkanInstance;
+typedef void* VulkanPhysicalDevice;
+typedef VulkanResult (WINAPI *VulkanCreateInstanceFunction)(const void*, const void*, VulkanInstance*);
+typedef VulkanResult (WINAPI *VulkanEnumeratePhysicalDevicesFunction)(VulkanInstance,
+    VulkanUint32*, VulkanPhysicalDevice*);
+typedef void (WINAPI *VulkanGetPhysicalDevicePropertiesFunction)(VulkanPhysicalDevice, void*);
+typedef void (WINAPI *VulkanDestroyInstanceFunction)(VulkanInstance, const void*);
+
+static const char* GetVulkanProvider(VulkanUint32 vendorId) {
+    switch (vendorId) {
+    case 0x10DE:
+        return "NVIDIA";
+    case 0x1002:
+        return "AMD";
+    case 0x8086:
+        return "Intel";
+    default:
+        return "unknown";
+    }
+}
+
+static bool LogVulkanGraphicsInformation() {
+    HMODULE vulkan = LoadLibraryA("vulkan-1.dll");
+    if (!vulkan) {
+        LogLine("SYSINFO", "Vulkan GPU driver information is unavailable");
+        return false;
+    }
+
+    FARPROC createAddress = GetProcAddress(vulkan, "vkCreateInstance");
+    FARPROC enumerateAddress = GetProcAddress(vulkan, "vkEnumeratePhysicalDevices");
+    FARPROC propertiesAddress = GetProcAddress(vulkan, "vkGetPhysicalDeviceProperties");
+    FARPROC destroyAddress = GetProcAddress(vulkan, "vkDestroyInstance");
+    VulkanCreateInstanceFunction createInstance = NULL;
+    VulkanEnumeratePhysicalDevicesFunction enumeratePhysicalDevices = NULL;
+    VulkanGetPhysicalDevicePropertiesFunction getPhysicalDeviceProperties = NULL;
+    VulkanDestroyInstanceFunction destroyInstance = NULL;
+    memcpy(&createInstance, &createAddress, sizeof(createInstance));
+    memcpy(&enumeratePhysicalDevices, &enumerateAddress, sizeof(enumeratePhysicalDevices));
+    memcpy(&getPhysicalDeviceProperties, &propertiesAddress, sizeof(getPhysicalDeviceProperties));
+    memcpy(&destroyInstance, &destroyAddress, sizeof(destroyInstance));
+    if (!createInstance || !enumeratePhysicalDevices || !getPhysicalDeviceProperties ||
+            !destroyInstance) {
+        FreeLibrary(vulkan);
+        LogLine("SYSINFO", "Vulkan GPU driver information functions are unavailable");
+        return false;
+    }
+
+    struct VulkanInstanceCreateInfo {
+        VulkanUint32 structureType;
+        const void* next;
+        VulkanUint32 flags;
+        const void* applicationInfo;
+        VulkanUint32 enabledLayerCount;
+        const char* const* enabledLayerNames;
+        VulkanUint32 enabledExtensionCount;
+        const char* const* enabledExtensionNames;
+    } createInfo = {1, NULL, 0, NULL, 0, NULL, 0, NULL};
+    VulkanInstance instance = NULL;
+    if (createInstance(&createInfo, NULL, &instance) != 0 || !instance) {
+        FreeLibrary(vulkan);
+        LogLine("SYSINFO", "Vulkan instance creation failed");
+        return false;
+    }
+
+    VulkanUint32 deviceCount = 0;
+    if (enumeratePhysicalDevices(instance, &deviceCount, NULL) != 0 || deviceCount == 0) {
+        destroyInstance(instance, NULL);
+        FreeLibrary(vulkan);
+        LogLine("SYSINFO", "Vulkan returned no GPU adapters");
+        return false;
+    }
+    if (deviceCount > 16) {
+        deviceCount = 16;
+    }
+
+    VulkanPhysicalDevice devices[16] = {};
+    if (enumeratePhysicalDevices(instance, &deviceCount, devices) != 0) {
+        destroyInstance(instance, NULL);
+        FreeLibrary(vulkan);
+        LogLine("SYSINFO", "Vulkan GPU enumeration failed");
+        return false;
+    }
+
+    for (VulkanUint32 index = 0; index < deviceCount; ++index) {
+        unsigned char properties[4096] = {};
+        getPhysicalDeviceProperties(devices[index], properties);
+        VulkanUint32 driverVersion = 0;
+        VulkanUint32 vendorId = 0;
+        char deviceName[256] = {};
+        memcpy(&driverVersion, properties + 4, sizeof(driverVersion));
+        memcpy(&vendorId, properties + 8, sizeof(vendorId));
+        memcpy(deviceName, properties + 20, sizeof(deviceName) - 1);
+        if (vendorId == 0x10DE) {
+            LogLine("SYSINFO", "Vulkan GPU index=%lu name=%s vendor=%s driver_version=%lu.%lu.%lu raw=0x%08lX source=Vulkan",
+                index, deviceName[0] != '\0' ? deviceName : "unknown",
+                GetVulkanProvider(vendorId), driverVersion >> 22,
+                (driverVersion >> 14) & 0xFF, driverVersion & 0x3FFF,
+                driverVersion);
+        } else {
+            LogLine("SYSINFO", "Vulkan GPU index=%lu name=%s vendor=%s driver_version=%lu.%lu.%lu raw=0x%08lX source=Vulkan",
+                index, deviceName[0] != '\0' ? deviceName : "unknown",
+                GetVulkanProvider(vendorId), driverVersion >> 22,
+                (driverVersion >> 12) & 0x3FF, driverVersion & 0xFFF,
+                driverVersion);
+        }
+    }
+
+    destroyInstance(instance, NULL);
+    FreeLibrary(vulkan);
+    return deviceCount > 0;
+}
+
 static void LogOperatingSystemInformation() {
     char productName[128] = {};
     char displayVersion[64] = {};
@@ -676,6 +820,7 @@ static void LogHardwareInformation() {
 }
 
 static void LogGraphicsInformation() {
+    bool hasVulkanGpu = LogVulkanGraphicsInformation();
     HKEY videoKey = NULL;
     if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
             "SYSTEM\\CurrentControlSet\\Control\\Video", 0,
@@ -686,6 +831,13 @@ static void LogGraphicsInformation() {
 
     DWORD index = 0;
     DWORD loggedAdapters = 0;
+    HMODULE ntdll = GetModuleHandleA("ntdll.dll");
+    typedef const char* (__cdecl *WineGetVersionFunction)();
+    WineGetVersionFunction wineGetVersion = NULL;
+    FARPROC wineGetVersionAddress = ntdll
+        ? GetProcAddress(ntdll, "wine_get_version") : NULL;
+    memcpy(&wineGetVersion, &wineGetVersionAddress, sizeof(wineGetVersion));
+    bool isWine = wineGetVersion != NULL;
     char adapterKeyName[128] = {};
     while (index < 32) {
         DWORD adapterKeyNameSize = sizeof(adapterKeyName);
@@ -698,28 +850,44 @@ static void LogGraphicsInformation() {
             continue;
         }
 
+        char adapterRootKey[192] = {};
         char settingsKey[192] = {};
-        snprintf(settingsKey, sizeof(settingsKey),
-            "SYSTEM\\CurrentControlSet\\Control\\Video\\%s\\0000", adapterKeyName);
+        snprintf(adapterRootKey, sizeof(adapterRootKey),
+            "SYSTEM\\CurrentControlSet\\Control\\Video\\%s", adapterKeyName);
+        snprintf(settingsKey, sizeof(settingsKey), "%s\\0000", adapterRootKey);
+        const char* adapterKeys[] = {settingsKey, adapterRootKey};
+        const char* descriptionNames[] = {"DriverDesc", "Description"};
+        const char* versionNames[] = {"DriverVersion", "DriverVer"};
+        const char* providerNames[] = {"ProviderName", "Provider", "DriverProvider"};
         char description[256] = {};
         char driverVersion[128] = {};
         char provider[128] = {};
-        bool hasDescription = ReadRegistryString(HKEY_LOCAL_MACHINE, settingsKey,
-            "DriverDesc", description, sizeof(description));
-        bool hasDriverVersion = ReadRegistryString(HKEY_LOCAL_MACHINE, settingsKey,
-            "DriverVersion", driverVersion, sizeof(driverVersion));
-        bool hasProvider = ReadRegistryString(HKEY_LOCAL_MACHINE, settingsKey,
-            "ProviderName", provider, sizeof(provider));
-        if (hasDescription || hasDriverVersion || hasProvider) {
-            LogLine("SYSINFO", "GPU index=%lu name=%s driver_version=%s provider=%s",
+        bool hasDescription = ReadFirstRegistryString(HKEY_LOCAL_MACHINE, adapterKeys,
+            sizeof(adapterKeys) / sizeof(adapterKeys[0]), descriptionNames,
+            sizeof(descriptionNames) / sizeof(descriptionNames[0]), description,
+            sizeof(description));
+        bool hasDriverVersion = ReadFirstRegistryString(HKEY_LOCAL_MACHINE, adapterKeys,
+            sizeof(adapterKeys) / sizeof(adapterKeys[0]), versionNames,
+            sizeof(versionNames) / sizeof(versionNames[0]), driverVersion,
+            sizeof(driverVersion));
+        bool hasProvider = ReadFirstRegistryString(HKEY_LOCAL_MACHINE, adapterKeys,
+            sizeof(adapterKeys) / sizeof(adapterKeys[0]), providerNames,
+            sizeof(providerNames) / sizeof(providerNames[0]), provider,
+            sizeof(provider));
+        if (!hasVulkanGpu && (hasDescription || hasDriverVersion || hasProvider)) {
+            if (!hasProvider) {
+                strncpy(provider, InferGraphicsProvider(description, isWine),
+                    sizeof(provider) - 1);
+            }
+            LogLine("SYSINFO", "GPU index=%lu name=%s driver_version=%s provider=%s driver_source=%s",
                 loggedAdapters++, hasDescription ? description : "unknown",
                 hasDriverVersion ? driverVersion : "unknown",
-                hasProvider ? provider : "unknown");
+                provider, isWine ? "Wine registry" : "Windows registry");
         }
     }
 
     RegCloseKey(videoKey);
-    if (loggedAdapters == 0) {
+    if (loggedAdapters == 0 && !hasVulkanGpu) {
         LogLine("SYSINFO", "No GPU information was found");
     }
 }
