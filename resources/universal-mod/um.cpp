@@ -4,30 +4,32 @@
 // behavior are configured through um.cfg beside the DLL or environment variables.
 
 #include <windows.h>
+#include <dbghelp.h>
+#include <io.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 
-// Global state
+// The DLL is injected into the game process, so these flags and hooks are
+// process-local. Configuration is loaded once during DLL_PROCESS_ATTACH.
 static HHOOK g_keyboardHook = NULL;
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
 static bool g_enableCrashLogging = false;
 static bool g_enableAntiCrash = false;
-static bool g_forceAntiCrash = false;
 static bool g_clearLogOnStart = false;
+static bool g_enableCrashDumps = true;
 static char g_logPath[MAX_PATH] = {};
+static CRITICAL_SECTION g_logLock;
+static bool g_logLockInitialized = false;
+static PVOID g_vectoredExceptionHandler = NULL;
+static volatile LONG g_firstChanceExceptionCount = 0;
 static HANDLE g_logClearMutex = NULL;
 static volatile LONG g_crashLogInProgress = 0;
 static volatile LONG g_errorBlockNumber = 0;
-static volatile LONG g_suppressedErrorCount = 0;
-static bool g_hasSuppressedErrorSignature = false;
-static DWORD g_suppressedExceptionCode = 0;
-static ULONG_PTR g_suppressedExceptionAddress = 0;
-static long g_suppressedSummaryOffset = -1;
 static bool g_keyboardRewriteKeyDown[256] = {};
 static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
@@ -39,6 +41,8 @@ typedef HANDLE (WINAPI *CreateFileWFunction)(LPCWSTR, DWORD, DWORD, LPSECURITY_A
 typedef BOOL (WINAPI *ReadFileFunction)(HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef BOOL (WINAPI *WriteFileFunction)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef BOOL (WINAPI *CloseHandleFunction)(HANDLE);
+typedef BOOL (WINAPI *MiniDumpWriteDumpFunction)(HANDLE, DWORD, HANDLE, DWORD,
+    const MINIDUMP_EXCEPTION_INFORMATION*, const void*, const void*);
 
 static CreateFileAFunction g_originalCreateFileA = NULL;
 static CreateFileWFunction g_originalCreateFileW = NULL;
@@ -49,6 +53,7 @@ static CloseHandleFunction g_originalCloseHandle = NULL;
 struct TrackedFileHandle {
     HANDLE handle;
     char path[MAX_PATH];
+    // Read/write entries are logged once per open handle to avoid flooding um.log.
     bool readLogged;
     bool writeLogged;
 };
@@ -57,6 +62,7 @@ static CRITICAL_SECTION g_fileHandleLock;
 static bool g_fileHandleLockInitialized = false;
 static TrackedFileHandle g_fileHandles[256] = {};
 
+// Compare two narrow strings without regard to ASCII letter case.
 static bool EqualsIgnoreCase(const char* a, const char* b) {
     if (!a || !b) {
         return a == b;
@@ -75,6 +81,7 @@ static bool EqualsIgnoreCase(const char* a, const char* b) {
     return *a == *b;
 }
 
+// Accept only the literal boolean value "true", case-insensitively.
 static bool IsTrueString(LPCSTR value) {
     if (!value || value[0] == '\0') {
         return false;
@@ -94,6 +101,7 @@ static bool IsTrueString(LPCSTR value) {
     return strcmp(lowerValue, "true") == 0;
 }
 
+// Read a boolean override from the process environment.
 static bool GetEnvironmentFlag(LPCSTR name) {
     const char* value = getenv(name);
     if (!value) {
@@ -102,15 +110,20 @@ static bool GetEnvironmentFlag(LPCSTR name) {
     return IsTrueString(value);
 }
 
+// Append one timestamped, serialized diagnostic line and flush it to disk.
 static void LogLine(const char* level, const char* format, ...) {
     if (!g_enableCrashLogging || g_logPath[0] == '\0') {
         return;
     }
 
     FILE* file = fopen(g_logPath, "a");
+// Write file-I/O diagnostics through LogLine when that feature is enabled.
     if (!file) {
         return;
     }
+
+    bool logLockAcquired = !g_logLockInitialized ||
+        TryEnterCriticalSection(&g_logLock) != FALSE;
 
     SYSTEMTIME now = {};
     GetLocalTime(&now);
@@ -123,9 +136,73 @@ static void LogLine(const char* level, const char* format, ...) {
     vfprintf(file, format, arguments);
     va_end(arguments);
     fputc('\n', file);
+    fflush(file);
+    intptr_t fileDescriptor = _fileno(file);
+    if (fileDescriptor >= 0) {
+        intptr_t operatingSystemHandle = _get_osfhandle(static_cast<int>(fileDescriptor));
+        if (operatingSystemHandle != -1) {
+            FlushFileBuffers(reinterpret_cast<HANDLE>(operatingSystemHandle));
+        }
+    }
     fclose(file);
+    if (logLockAcquired && g_logLockInitialized) {
+        LeaveCriticalSection(&g_logLock);
+    }
 }
 
+// Write a standard Windows minidump. The file is portable: WinDbg/Visual
+// Studio open it on Windows, while minidump-aware tools can inspect it on Linux.
+static void WriteCrashDump(EXCEPTION_POINTERS* exceptionInfo) {
+    if (!g_enableCrashDumps || g_logPath[0] == '\0') {
+        return;
+    }
+
+    HMODULE dbghelp = LoadLibraryA("dbghelp.dll");
+    if (!dbghelp) {
+        LogLine("WARN", "Crash dump unavailable: dbghelp.dll could not be loaded");
+        return;
+    }
+    FARPROC writerAddress = GetProcAddress(dbghelp, "MiniDumpWriteDump");
+    MiniDumpWriteDumpFunction writer = NULL;
+    memcpy(&writer, &writerAddress, sizeof(writer));
+    if (!writer) {
+        FreeLibrary(dbghelp);
+        LogLine("WARN", "Crash dump unavailable: MiniDumpWriteDump was not found");
+        return;
+    }
+
+    SYSTEMTIME now = {};
+    GetLocalTime(&now);
+    char dumpPath[MAX_PATH] = {};
+    snprintf(dumpPath, sizeof(dumpPath), "%s.%04u%02u%02u-%02u%02u%02u.dmp",
+        g_logPath, now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute,
+        now.wSecond);
+    HANDLE dumpFile = CreateFileA(dumpPath, GENERIC_WRITE, FILE_SHARE_READ, NULL,
+        CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (dumpFile == INVALID_HANDLE_VALUE) {
+        FreeLibrary(dbghelp);
+        LogLine("WARN", "Crash dump could not be created: %s error=%lu",
+            dumpPath, GetLastError());
+        return;
+    }
+
+    MINIDUMP_EXCEPTION_INFORMATION exceptionData = {};
+    exceptionData.ThreadId = GetCurrentThreadId();
+    exceptionData.ExceptionPointers = exceptionInfo;
+    exceptionData.ClientPointers = FALSE;
+    BOOL written = writer(GetCurrentProcess(), GetCurrentProcessId(), dumpFile,
+        MiniDumpWithIndirectlyReferencedMemory | MiniDumpWithThreadInfo,
+        exceptionInfo ? &exceptionData : NULL, NULL, NULL);
+    CloseHandle(dumpFile);
+    FreeLibrary(dbghelp);
+    if (written) {
+        LogLine("ERROR", "Crash dump written path=%s", dumpPath);
+    } else {
+        LogLine("WARN", "Crash dump writing failed, error=%lu", GetLastError());
+    }
+}
+
+// File-I/O diagnostics use the common logger but can be disabled independently.
 static void LogFileIo(const char* format, ...) {
     if (!g_enableFileIoLogging || !g_enableCrashLogging || g_logPath[0] == '\0') {
         return;
@@ -139,7 +216,10 @@ static void LogFileIo(const char* format, ...) {
     LogLine("INFO", "%s", message);
 }
 
+// Copy a tracked path and atomically mark its read/write direction as logged.
 static bool CopyAndMarkTrackedFileIo(HANDLE handle, bool write, char* path, size_t pathSize) {
+    // Copy the path while locked and mark the direction before releasing the
+    // lock so concurrent reads or writes cannot produce duplicate entries.
     if (!g_fileHandleLockInitialized || !path || pathSize == 0) {
         return false;
     }
@@ -164,7 +244,10 @@ static bool CopyAndMarkTrackedFileIo(HANDLE handle, bool write, char* path, size
     return found;
 }
 
+// Return whether a path's extension appears in the configured ignore list.
 static bool IsIgnoredFileExtension(const char* path) {
+    // The filter contains extension tokens without requiring a leading dot,
+    // for example "mmp,res". Matching is case-insensitive.
     if (!path || g_fileIoLoggingFilter[0] == '\0') {
         return false;
     }
@@ -215,6 +298,7 @@ static bool IsIgnoredFileExtension(const char* path) {
     return false;
 }
 
+// Normalize and store the comma-separated file-I/O extension filter.
 static void SetFileIoLoggingFilter(const char* value) {
     g_fileIoLoggingFilter[0] = '\0';
     if (!value) {
@@ -235,7 +319,10 @@ static void SetFileIoLoggingFilter(const char* value) {
     }
 }
 
+// Add or reset a file handle in the bounded diagnostic tracking table.
 static void TrackFileHandle(HANDLE handle, const char* path) {
+    // The fixed table is intentionally small: it is only a diagnostic aid,
+    // and untracked handles still continue to work normally in the game.
     if (!g_fileHandleLockInitialized || handle == INVALID_HANDLE_VALUE || !path) {
         return;
     }
@@ -262,6 +349,7 @@ static void TrackFileHandle(HANDLE handle, const char* path) {
     LeaveCriticalSection(&g_fileHandleLock);
 }
 
+// Remove a closed handle from the diagnostic tracking table.
 static void UntrackFileHandle(HANDLE handle) {
     if (!g_fileHandleLockInitialized) {
         return;
@@ -278,6 +366,31 @@ static void UntrackFileHandle(HANDLE handle) {
     LeaveCriticalSection(&g_fileHandleLock);
 }
 
+// Snapshot currently tracked paths and log them without holding the table lock.
+static void LogTrackedFileHandles() {
+    if (!g_fileHandleLockInitialized) {
+        return;
+    }
+
+    char paths[256][MAX_PATH] = {};
+    HANDLE handles[256] = {};
+    size_t count = 0;
+    EnterCriticalSection(&g_fileHandleLock);
+    for (size_t i = 0; i < sizeof(g_fileHandles) / sizeof(g_fileHandles[0]); ++i) {
+        if (g_fileHandles[i].handle != NULL && count < 256) {
+            strncpy(paths[count], g_fileHandles[i].path, MAX_PATH - 1);
+            handles[count] = g_fileHandles[i].handle;
+            ++count;
+        }
+    }
+    LeaveCriticalSection(&g_fileHandleLock);
+
+    for (size_t i = 0; i < count; ++i) {
+        LogLine("ANTICRASH", "Open tracked file path=%s handle=%p", paths[i], handles[i]);
+    }
+}
+
+// Convert CreateFile desired-access flags into a compact diagnostic label.
 static void DescribeDesiredAccess(DWORD desiredAccess, char* description, size_t descriptionSize) {
     description[0] = '\0';
     if ((desiredAccess & GENERIC_READ) != 0) {
@@ -295,6 +408,7 @@ static void DescribeDesiredAccess(DWORD desiredAccess, char* description, size_t
     }
 }
 
+// Track and log a successfully opened file unless its extension is filtered.
 static void LogOpenedFile(HANDLE handle, const char* path, DWORD desiredAccess) {
     if (IsIgnoredFileExtension(path)) {
         return;
@@ -305,6 +419,7 @@ static void LogOpenedFile(HANDLE handle, const char* path, DWORD desiredAccess) 
     LogFileIo("File opened path=%s access=%s handle=%p", path, access, handle);
 }
 
+// Convert a Windows wide path to the log's narrow system-code-page format.
 static void ConvertWidePath(LPCWSTR widePath, char* path, size_t pathSize) {
     if (!widePath || pathSize == 0) {
         return;
@@ -313,6 +428,7 @@ static void ConvertWidePath(LPCWSTR widePath, char* path, size_t pathSize) {
     path[pathSize - 1] = '\0';
 }
 
+// Forward CreateFileA and record the resulting handle/path for diagnostics.
 static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
         DWORD shareMode, LPSECURITY_ATTRIBUTES securityAttributes, DWORD creationDisposition,
         DWORD flagsAndAttributes, HANDLE templateFile) {
@@ -324,6 +440,7 @@ static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
     return handle;
 }
 
+// Forward CreateFileW, converting its path before recording it.
 static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
         DWORD shareMode, LPSECURITY_ATTRIBUTES securityAttributes, DWORD creationDisposition,
         DWORD flagsAndAttributes, HANDLE templateFile) {
@@ -337,6 +454,7 @@ static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
     return handle;
 }
 
+// Forward ReadFile and log the first successful read for a tracked handle.
 static BOOL WINAPI HookedReadFile(HANDLE file, LPVOID buffer, DWORD bytesToRead,
         LPDWORD bytesRead, LPOVERLAPPED overlapped) {
     BOOL result = g_originalReadFile(file, buffer, bytesToRead, bytesRead, overlapped);
@@ -350,6 +468,7 @@ static BOOL WINAPI HookedReadFile(HANDLE file, LPVOID buffer, DWORD bytesToRead,
     return result;
 }
 
+// Forward WriteFile and log the first successful write for a tracked handle.
 static BOOL WINAPI HookedWriteFile(HANDLE file, LPCVOID buffer, DWORD bytesToWrite,
         LPDWORD bytesWritten, LPOVERLAPPED overlapped) {
     BOOL result = g_originalWriteFile(file, buffer, bytesToWrite, bytesWritten, overlapped);
@@ -363,6 +482,7 @@ static BOOL WINAPI HookedWriteFile(HANDLE file, LPCVOID buffer, DWORD bytesToWri
     return result;
 }
 
+// Forward CloseHandle and discard any diagnostic state for the closed handle.
 static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
     BOOL result = g_originalCloseHandle(handle);
     if (result) {
@@ -371,8 +491,11 @@ static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
     return result;
 }
 
+// Patch the executable's import address table instead of replacing kernel32
+// exports globally. This limits logging to calls made through game.exe's
+// imported file APIs and leaves other processes untouched.
 static bool PatchImportedFunction(HMODULE module, const char* functionName,
-        PROC replacement, PROC* original) {
+    ULONG_PTR replacement, ULONG_PTR* original) {
     if (!module || !functionName || !replacement || !original) {
         return false;
     }
@@ -420,8 +543,8 @@ static bool PatchImportedFunction(HMODULE module, const char* functionName,
                     PAGE_READWRITE, &oldProtection)) {
                 return false;
             }
-            *original = reinterpret_cast<PROC>(addresses->u1.Function);
-            addresses->u1.Function = reinterpret_cast<ULONG_PTR>(replacement);
+            *original = addresses->u1.Function;
+            addresses->u1.Function = replacement;
             VirtualProtect(&addresses->u1.Function, sizeof(addresses->u1.Function),
                 oldProtection, &oldProtection);
             FlushInstructionCache(GetCurrentProcess(), &addresses->u1.Function,
@@ -432,6 +555,7 @@ static bool PatchImportedFunction(HMODULE module, const char* functionName,
     return false;
 }
 
+// Patch game.exe imports for the file APIs used by the file-I/O logger.
 static void InstallFileIoHooks() {
     HMODULE process = GetModuleHandleA(NULL);
     if (!process) {
@@ -441,100 +565,30 @@ static void InstallFileIoHooks() {
 
     bool hooked = false;
     hooked = PatchImportedFunction(process, "CreateFileA",
-        reinterpret_cast<PROC>(HookedCreateFileA), reinterpret_cast<PROC*>(&g_originalCreateFileA)) || hooked;
+        reinterpret_cast<ULONG_PTR>(HookedCreateFileA), reinterpret_cast<ULONG_PTR*>(&g_originalCreateFileA)) || hooked;
     hooked = PatchImportedFunction(process, "CreateFileW",
-        reinterpret_cast<PROC>(HookedCreateFileW), reinterpret_cast<PROC*>(&g_originalCreateFileW)) || hooked;
+        reinterpret_cast<ULONG_PTR>(HookedCreateFileW), reinterpret_cast<ULONG_PTR*>(&g_originalCreateFileW)) || hooked;
     hooked = PatchImportedFunction(process, "ReadFile",
-        reinterpret_cast<PROC>(HookedReadFile), reinterpret_cast<PROC*>(&g_originalReadFile)) || hooked;
+        reinterpret_cast<ULONG_PTR>(HookedReadFile), reinterpret_cast<ULONG_PTR*>(&g_originalReadFile)) || hooked;
     hooked = PatchImportedFunction(process, "WriteFile",
-        reinterpret_cast<PROC>(HookedWriteFile), reinterpret_cast<PROC*>(&g_originalWriteFile)) || hooked;
+        reinterpret_cast<ULONG_PTR>(HookedWriteFile), reinterpret_cast<ULONG_PTR*>(&g_originalWriteFile)) || hooked;
     hooked = PatchImportedFunction(process, "CloseHandle",
-        reinterpret_cast<PROC>(HookedCloseHandle), reinterpret_cast<PROC*>(&g_originalCloseHandle)) || hooked;
+        reinterpret_cast<ULONG_PTR>(HookedCloseHandle), reinterpret_cast<ULONG_PTR*>(&g_originalCloseHandle)) || hooked;
     LogLine(hooked ? "INFO" : "WARN", "File-I/O hooks %s", hooked ? "installed" : "not installed");
 }
 
+// Start a numbered exception block in the diagnostic log.
 static void LogErrorBlockStart() {
     LONG blockNumber = InterlockedIncrement(&g_errorBlockNumber);
     LogLine("ERROR", "============= ERROR %ld LOG =============", blockNumber);
 }
 
+// Close the current numbered exception block in the diagnostic log.
 static void LogErrorBlockEnd() {
     LogLine("ERROR", "===========================================");
 }
 
-static bool IsSameSuppressedError(const EXCEPTION_RECORD* record, const CONTEXT* context) {
-    (void)context;
-    if (!record || !g_hasSuppressedErrorSignature) {
-        return false;
-    }
-
-    return record->ExceptionCode == g_suppressedExceptionCode &&
-        reinterpret_cast<ULONG_PTR>(record->ExceptionAddress) == g_suppressedExceptionAddress;
-}
-
-static void UpdateSuppressedErrorSummary() {
-    if (g_suppressedSummaryOffset < 0 || g_logPath[0] == '\0') {
-        return;
-    }
-
-    FILE* file = fopen(g_logPath, "r+b");
-    if (!file || fseek(file, g_suppressedSummaryOffset, SEEK_SET) != 0) {
-        if (file) {
-            fclose(file);
-        }
-        return;
-    }
-
-    char summary[256] = {};
-    snprintf(summary, sizeof(summary),
-        "[ANTICRASH] unsafe anticrash was triggered and %ld errors were suppressed to avoid duplication in the logs",
-        g_suppressedErrorCount);
-    char paddedSummary[257] = {};
-    snprintf(paddedSummary, sizeof(paddedSummary), "%-255s\n", summary);
-    fwrite(paddedSummary, 1, 256, file);
-    fclose(file);
-}
-
-static void RecordSuppressedError(const EXCEPTION_RECORD* record, const CONTEXT* context) {
-    if (!IsSameSuppressedError(record, context)) {
-        return;
-    }
-
-    InterlockedIncrement(&g_suppressedErrorCount);
-    UpdateSuppressedErrorSummary();
-}
-
-static void StartSuppressedErrorTracking(const EXCEPTION_RECORD* record, const CONTEXT* context) {
-    (void)context;
-    if (!record || g_hasSuppressedErrorSignature) {
-        return;
-    }
-    g_suppressedExceptionCode = record->ExceptionCode;
-    g_suppressedExceptionAddress = reinterpret_cast<ULONG_PTR>(record->ExceptionAddress);
-    g_hasSuppressedErrorSignature = true;
-
-    FILE* file = fopen(g_logPath, "ab");
-    if (!file) {
-        return;
-    }
-    if (fseek(file, 0, SEEK_END) != 0) {
-        fclose(file);
-        return;
-    }
-    g_suppressedSummaryOffset = ftell(file);
-    if (g_suppressedSummaryOffset < 0) {
-        fclose(file);
-        return;
-    }
-    char summary[256] = {};
-    snprintf(summary, sizeof(summary),
-        "[ANTICRASH] unsafe anticrash was triggered and 0 errors were suppressed to avoid duplication in the logs");
-    char paddedSummary[257] = {};
-    snprintf(paddedSummary, sizeof(paddedSummary), "%-255s\n", summary);
-    fwrite(paddedSummary, 1, 256, file);
-    fclose(file);
-}
-
+// Clear or separate the log at process startup, with a cross-instance mutex.
 static void PrepareLogFile() {
     if (!g_enableCrashLogging || g_logPath[0] == '\0') {
         return;
@@ -565,6 +619,7 @@ static void PrepareLogFile() {
     fclose(file);
 }
 
+// Read one registry string value, accepting normal and expandable strings.
 static bool ReadRegistryString(HKEY root, const char* subKey, const char* valueName,
         char* value, DWORD valueSize) {
     HKEY key = NULL;
@@ -587,6 +642,8 @@ static bool ReadRegistryString(HKEY root, const char* subKey, const char* valueN
     return value[0] != '\0';
 }
 
+// Try several registry locations/value names because Wine and Windows expose
+// adapter metadata under different layouts.
 static bool ReadFirstRegistryString(HKEY root, const char* const* subKeys,
         size_t subKeyCount, const char* const* valueNames, size_t valueNameCount,
         char* value, DWORD valueSize) {
@@ -601,6 +658,7 @@ static bool ReadFirstRegistryString(HKEY root, const char* const* subKeys,
     return false;
 }
 
+// Infer a vendor name from an adapter description when registry data omits it.
 static const char* InferGraphicsProvider(const char* description, bool isWine) {
     if (description) {
         if (strstr(description, "NVIDIA") || strstr(description, "GeForce")) {
@@ -627,6 +685,7 @@ typedef VulkanResult (WINAPI *VulkanEnumeratePhysicalDevicesFunction)(VulkanInst
 typedef void (WINAPI *VulkanGetPhysicalDevicePropertiesFunction)(VulkanPhysicalDevice, void*);
 typedef void (WINAPI *VulkanDestroyInstanceFunction)(VulkanInstance, const void*);
 
+// Map a Vulkan PCI vendor ID to a readable vendor name.
 static const char* GetVulkanProvider(VulkanUint32 vendorId) {
     switch (vendorId) {
     case 0x10DE:
@@ -640,7 +699,11 @@ static const char* GetVulkanProvider(VulkanUint32 vendorId) {
     }
 }
 
+// Enumerate Vulkan physical devices and log their driver metadata.
 static bool LogVulkanGraphicsInformation() {
+    // Vulkan is queried dynamically so the DLL remains loadable on systems
+    // without Vulkan. Its physical-device driverVersion is preferred over
+    // Wine's synthetic Windows registry version.
     HMODULE vulkan = LoadLibraryA("vulkan-1.dll");
     if (!vulkan) {
         LogLine("SYSINFO", "Vulkan GPU driver information is unavailable");
@@ -731,6 +794,7 @@ static bool LogVulkanGraphicsInformation() {
     return deviceCount > 0;
 }
 
+// Log Windows/Wine OS registry metadata for the running process.
 static void LogOperatingSystemInformation() {
     char productName[128] = {};
     char displayVersion[64] = {};
@@ -780,6 +844,7 @@ static void LogOperatingSystemInformation() {
     }
 }
 
+// Log CPU architecture, processor identity, and memory availability.
 static void LogHardwareInformation() {
     SYSTEM_INFO systemInfo = {};
     GetNativeSystemInfo(&systemInfo);
@@ -819,7 +884,10 @@ static void LogHardwareInformation() {
     }
 }
 
+// Prefer Vulkan GPU metadata and fall back to registry adapter metadata.
 static void LogGraphicsInformation() {
+    // Vulkan provides the authoritative report when available. The registry
+    // path below is retained as a fallback for systems without Vulkan.
     bool hasVulkanGpu = LogVulkanGraphicsInformation();
     HKEY videoKey = NULL;
     if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
@@ -892,6 +960,7 @@ static void LogGraphicsInformation() {
     }
 }
 
+// Emit the complete startup system-information section.
 static void LogSystemInformation() {
     LogLine("SYSINFO", "============= SYSTEM INFORMATION =============");
     LogOperatingSystemInformation();
@@ -900,6 +969,7 @@ static void LogSystemInformation() {
     LogLine("SYSINFO", "==============================================");
 }
 
+// Classify exception codes that should not be resumed blindly.
 static bool IsUnsafeExceptionToResume(const EXCEPTION_RECORD* record) {
     if (!record) {
         return true;
@@ -919,6 +989,7 @@ static bool IsUnsafeExceptionToResume(const EXCEPTION_RECORD* record) {
     }
 }
 
+// Return a human-readable explanation for the exception classification above.
 static const char* GetUnsafeExceptionReason(const EXCEPTION_RECORD* record) {
     if (!record) {
         return "missing exception record";
@@ -944,6 +1015,7 @@ static const char* GetUnsafeExceptionReason(const EXCEPTION_RECORD* record) {
     }
 }
 
+// Keep exception names stable in logs instead of exposing only numeric codes.
 static const char* GetExceptionCaseName(const EXCEPTION_RECORD* record) {
     if (!record) {
         return "UNKNOWN_EXCEPTION";
@@ -977,27 +1049,46 @@ static const char* GetExceptionCaseName(const EXCEPTION_RECORD* record) {
     }
 }
 
+// Capture first-chance exceptions before the game or another handler can
+// consume them. This handler only logs and always defers; it never edits CPU
+// state or attempts unsafe recovery. The cap prevents exception loops from
+// flooding the log before the process exits.
+static LONG WINAPI VectoredLoggingHandler(EXCEPTION_POINTERS* exceptionInfo) {
+    EXCEPTION_RECORD* record = exceptionInfo ? exceptionInfo->ExceptionRecord : NULL;
+    if (!record || !IsUnsafeExceptionToResume(record)) {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+
+    LONG count = InterlockedIncrement(&g_firstChanceExceptionCount);
+    if (count <= 32) {
+        LogLine("ANTICRASH", "First-chance exception code=0x%08lX address=%p case=%s count=%ld",
+            record->ExceptionCode, record->ExceptionAddress,
+            GetExceptionCaseName(record), count);
+    } else if (count == 33) {
+        LogLine("ANTICRASH", "Further first-chance exceptions suppressed after 32 entries");
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+// Log the exception, register state, faulting module, stack, and tracked files.
+// This handler deliberately does not modify the faulting context: generic stack
+// surgery cannot safely skip a failed DirectDraw/texture operation.
 static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) {
     if (!g_enableCrashLogging) {
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
     if (InterlockedCompareExchange(&g_crashLogInProgress, 1, 0) != 0) {
-        if (g_forceAntiCrash) {
-            return EXCEPTION_CONTINUE_EXECUTION;
-        }
+// Load documented settings from um.cfg and ignore unknown/malformed entries.
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
     EXCEPTION_RECORD* record = exceptionInfo ? exceptionInfo->ExceptionRecord : NULL;
     CONTEXT* context = exceptionInfo ? exceptionInfo->ContextRecord : NULL;
-    if (g_forceAntiCrash && IsSameSuppressedError(record, context)) {
-        RecordSuppressedError(record, context);
-        InterlockedExchange(&g_crashLogInProgress, 0);
-        return EXCEPTION_CONTINUE_EXECUTION;
-    }
 
     LogErrorBlockStart();
+    WriteCrashDump(exceptionInfo);
+    LogTrackedFileHandles();
 
     if (!record) {
         LogLine("ERROR", "Unhandled exception had no exception record");
@@ -1012,7 +1103,7 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
         }
     }
 
-    if (g_enableAntiCrash && !g_forceAntiCrash && IsUnsafeExceptionToResume(record)) {
+    if (g_enableAntiCrash && IsUnsafeExceptionToResume(record)) {
         LogLine("ANTICRASH", "Recovery refused: case=%s reason=%s",
             GetExceptionCaseName(record), GetUnsafeExceptionReason(record));
         LogLine("ANTICRASH", "Normal Windows crash handling will continue to prevent silent process corruption");
@@ -1058,17 +1149,8 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
         LogLine("ERROR", "Stack frame=%u address=%p", i, stack[i]);
     }
 
-    if (g_forceAntiCrash) {
-        LogLine("ANTICRASH", "Exception case=%s", GetExceptionCaseName(record));
-        if (IsUnsafeExceptionToResume(record)) {
-            LogLine("ANTICRASH", "FORCE_UNSAFE_ANTICRASH is forcing continuation after an unsafe exception; the faulting context will be retried");
-        } else {
-            LogLine("ANTICRASH", "FORCE_UNSAFE_ANTICRASH resumed execution for a continuable exception");
-        }
-        LogErrorBlockEnd();
-        StartSuppressedErrorTracking(record, context);
-        InterlockedExchange(&g_crashLogInProgress, 0);
-        return EXCEPTION_CONTINUE_EXECUTION;
+    if (g_enableAntiCrash && record && IsUnsafeExceptionToResume(record)) {
+        LogLine("ANTICRASH", "Unsafe exception cannot be resumed safely; normal Windows crash handling will continue");
     }
     LogLine("ERROR", "The process will continue with normal Windows crash handling");
     LogErrorBlockEnd();
@@ -1076,7 +1158,8 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
-// Load optional configuration overrides from um.cfg.
+// Load optional configuration overrides from um.cfg. Missing files are created
+// with documented defaults; malformed or unknown lines are ignored.
 static void LoadConfigFile(const char* dllPath) {
     char configPath[MAX_PATH] = {};
     size_t dllPathLen = strlen(dllPath);
@@ -1118,8 +1201,8 @@ static void LoadConfigFile(const char* dllPath) {
             fprintf(file, "CLEAR_LOG_ON_START=false\n\n");
             fprintf(file, "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)\n");
             fprintf(file, "ANTICRASH=false\n\n");
-            fprintf(file, "; Resume even after unsafe exceptions; accepts true or false (not recommended).\n");
-            fprintf(file, "FORCE_UNSAFE_ANTICRASH=false\n");
+            fprintf(file, "; Write portable Windows minidumps beside um.log; (true/false)\n");
+            fprintf(file, "CRASH_DUMPS=true\n\n");
             fclose(file);
         }
         return;
@@ -1185,8 +1268,8 @@ static void LoadConfigFile(const char* dllPath) {
             SetFileIoLoggingFilter(value);
         } else if (EqualsIgnoreCase(key, "ANTICRASH")) {
             g_enableAntiCrash = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "FORCE_UNSAFE_ANTICRASH")) {
-            g_forceAntiCrash = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "CRASH_DUMPS")) {
+            g_enableCrashDumps = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "CLEAR_LOG_ON_START")) {
             g_clearLogOnStart = IsTrueString(value);
         }
@@ -1195,7 +1278,7 @@ static void LoadConfigFile(const char* dllPath) {
     fclose(file);
 }
 
-// Synthesize a US-QWERTY backtick press.
+// Synthesize one US-QWERTY backtick press using scan code 0x29.
 static void SendQwertyBacktickPress(bool logRewrite) {
     if (g_enableKeyboardRewriteLogging && logRewrite) {
         LogLine("KBRW", "Rewriting physical scan code 0x29 as US-QWERTY backtick");
@@ -1215,7 +1298,7 @@ static void SendQwertyBacktickPress(bool logRewrite) {
     }
 }
 
-// Synthesize a US-QWERTY number-row press.
+// Synthesize one US-QWERTY number-row press from a virtual-key code.
 static void SendQwertyNumberKeyPress(BYTE vkCode, bool logRewrite) {
     // map vk codes 48-57 (0-9) to scan codes 0x02-0x0b (1-0)
     BYTE scanCodeMap[] = {0x0B, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A};
@@ -1250,6 +1333,7 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
         if (kb) {
+            // Do not process the synthetic events generated by SendInput above.
             if ((kb->flags & LLKHF_INJECTED) != 0) {
                 return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
             }
@@ -1279,6 +1363,8 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
 }
 
 // Install the low-level keyboard hook and keep it alive with a message loop.
+// WH_KEYBOARD_LL callbacks are delivered to this thread, not to the game thread.
+// Synthetic SendInput events are filtered out by LowLevelKeyboardProc.
 DWORD WINAPI KeyPopupThread(LPVOID lpParameter) {
     HMODULE module = reinterpret_cast<HMODULE>(lpParameter);
     g_keyboardHook = SetWindowsHookExW(WH_KEYBOARD_LL, LowLevelKeyboardProc, module, 0);
@@ -1298,13 +1384,16 @@ DWORD WINAPI KeyPopupThread(LPVOID lpParameter) {
     return 0;
 }
 
-// DLL entry point: initialize the hook and validate the required ASI file.
+// DLL entry point: load configuration, install diagnostics/hooks, then verify
+// the required ASI file before allowing the game to continue.
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
     if (ul_reason_for_call != DLL_PROCESS_ATTACH) {
         return TRUE;
     }
 
     DisableThreadLibraryCalls(hModule);
+    InitializeCriticalSection(&g_logLock);
+    g_logLockInitialized = true;
 
     char dllPath[MAX_PATH] = {};
     if (GetModuleFileNameA(hModule, dllPath, MAX_PATH) != 0) {
@@ -1317,23 +1406,24 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     g_enableCrashLogging = g_enableCrashLogging || GetEnvironmentFlag("LOGGING");
     g_enableFileIoLogging = g_enableFileIoLogging || GetEnvironmentFlag("FILE_IO_LOGGING");
     g_enableAntiCrash = g_enableAntiCrash || GetEnvironmentFlag("ANTICRASH");
-    g_forceAntiCrash = g_forceAntiCrash || GetEnvironmentFlag("FORCE_UNSAFE_ANTICRASH");
-    g_enableCrashLogging = g_enableCrashLogging || g_forceAntiCrash;
     g_clearLogOnStart = g_clearLogOnStart || GetEnvironmentFlag("CLEAR_LOG_ON_START");
-    if (g_enableAntiCrash || g_forceAntiCrash) {
+    if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+    g_vectoredExceptionHandler = AddVectoredExceptionHandler(1, VectoredLoggingHandler);
+    if (!g_vectoredExceptionHandler) {
+        LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
+    }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s force_anti_crash=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
         g_enableCrashLogging ? "enabled" : "disabled",
         g_enableFileIoLogging ? "enabled" : "disabled",
         g_clearLogOnStart ? "enabled" : "disabled",
-        g_enableAntiCrash ? "enabled" : "disabled",
-        g_forceAntiCrash ? "enabled" : "disabled");
+        g_enableAntiCrash ? "enabled" : "disabled");
     if (g_enableAntiCrash) {
         LogLine("ANTICRASH", "Windows critical-error dialogs are suppressed; unsafe exceptions will still use normal crash handling");
     }

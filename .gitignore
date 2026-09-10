@@ -25,3 +25,6 @@ tools/third-party-tools/ei_maper/workflow.log
 # ZoneView generated files
 tools/third-party-tools/ZoneView_1.4.3/zoneview.ini
 tools/third-party-tools/ZoneView_1.4.3/ZoneView.log
+
+# DMP files
+Universal-Mod/*.dmp
