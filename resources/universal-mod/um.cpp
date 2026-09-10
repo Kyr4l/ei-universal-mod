@@ -41,6 +41,8 @@ typedef HANDLE (WINAPI *CreateFileWFunction)(LPCWSTR, DWORD, DWORD, LPSECURITY_A
 typedef BOOL (WINAPI *ReadFileFunction)(HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef BOOL (WINAPI *WriteFileFunction)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef BOOL (WINAPI *CloseHandleFunction)(HANDLE);
+typedef HRESULT (WINAPI *DirectDrawCreateFunction)(const GUID*, void**, IUnknown*);
+typedef HRESULT (WINAPI *DirectDrawCreateExFunction)(const GUID*, void**, const GUID*, IUnknown*);
 typedef BOOL (WINAPI *MiniDumpWriteDumpFunction)(HANDLE, DWORD, HANDLE, DWORD,
     const MINIDUMP_EXCEPTION_INFORMATION*, const void*, const void*);
 
@@ -49,6 +51,8 @@ static CreateFileWFunction g_originalCreateFileW = NULL;
 static ReadFileFunction g_originalReadFile = NULL;
 static WriteFileFunction g_originalWriteFile = NULL;
 static CloseHandleFunction g_originalCloseHandle = NULL;
+static DirectDrawCreateFunction g_originalDirectDrawCreate = NULL;
+static DirectDrawCreateExFunction g_originalDirectDrawCreateEx = NULL;
 
 struct TrackedFileHandle {
     HANDLE handle;
@@ -125,11 +129,34 @@ static void LogLine(const char* level, const char* format, ...) {
     bool logLockAcquired = !g_logLockInitialized ||
         TryEnterCriticalSection(&g_logLock) != FALSE;
 
+    const char* outputLevel = level;
+    const char* category = NULL;
+    if (EqualsIgnoreCase(level, "SYSINFO")) {
+        outputLevel = "SYSINFO";
+    } else if (EqualsIgnoreCase(level, "ANTICRASH")) {
+        outputLevel = "DEBUG";
+        category = "ANTICRASH";
+    }
+
     SYSTEMTIME now = {};
     GetLocalTime(&now);
-    fprintf(file, "%04u-%02u-%02u %02u:%02u:%02u.%03u [%s] pid=%lu tid=%lu ",
+    TIME_ZONE_INFORMATION timeZone = {};
+    DWORD timeZoneId = GetTimeZoneInformation(&timeZone);
+    LONG offsetMinutes = -timeZone.Bias;
+    if (timeZoneId == TIME_ZONE_ID_STANDARD) {
+        offsetMinutes -= timeZone.StandardBias;
+    } else if (timeZoneId == TIME_ZONE_ID_DAYLIGHT) {
+        offsetMinutes -= timeZone.DaylightBias;
+    }
+    char offsetSign = offsetMinutes < 0 ? '-' : '+';
+    int absoluteOffsetMinutes = offsetMinutes < 0 ? -offsetMinutes : offsetMinutes;
+    fprintf(file, "[%04u-%02u-%02uT%02u:%02u:%02u%c%02d%02d] [%s] %s",
         now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute, now.wSecond,
-        now.wMilliseconds, level, GetCurrentProcessId(), GetCurrentThreadId());
+        offsetSign, absoluteOffsetMinutes / 60, absoluteOffsetMinutes % 60,
+        outputLevel, category ? "[" : "");
+    if (category) {
+        fprintf(file, "%s] ", category);
+    }
 
     va_list arguments;
     va_start(arguments, format);
@@ -213,7 +240,7 @@ static void LogFileIo(const char* format, ...) {
     va_start(arguments, format);
     vsnprintf(message, sizeof(message), format, arguments);
     va_end(arguments);
-    LogLine("INFO", "%s", message);
+    LogLine("DEBUG", "[FILEIO] %s", message);
 }
 
 // Copy a tracked path and atomically mark its read/write direction as logged.
@@ -491,6 +518,27 @@ static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
     return result;
 }
 
+// Log DirectDraw initialization results without changing the returned object.
+static HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw,
+        IUnknown* outerUnknown) {
+    HRESULT result = g_originalDirectDrawCreate(guid, directDraw, outerUnknown);
+    LogLine(FAILED(result) ? "ERROR" : "INFO",
+        "DirectDrawCreate result=0x%08lX object=%p", result,
+        directDraw ? *directDraw : NULL);
+    return result;
+}
+
+// Log DirectDrawEx initialization results without changing the returned object.
+static HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDraw,
+        const GUID* interfaceId, IUnknown* outerUnknown) {
+    HRESULT result = g_originalDirectDrawCreateEx(guid, directDraw, interfaceId,
+        outerUnknown);
+    LogLine(FAILED(result) ? "ERROR" : "INFO",
+        "DirectDrawCreateEx result=0x%08lX object=%p", result,
+        directDraw ? *directDraw : NULL);
+    return result;
+}
+
 // Patch the executable's import address table instead of replacing kernel32
 // exports globally. This limits logging to calls made through game.exe's
 // imported file APIs and leaves other processes untouched.
@@ -574,7 +622,12 @@ static void InstallFileIoHooks() {
         reinterpret_cast<ULONG_PTR>(HookedWriteFile), reinterpret_cast<ULONG_PTR*>(&g_originalWriteFile)) || hooked;
     hooked = PatchImportedFunction(process, "CloseHandle",
         reinterpret_cast<ULONG_PTR>(HookedCloseHandle), reinterpret_cast<ULONG_PTR*>(&g_originalCloseHandle)) || hooked;
-    LogLine(hooked ? "INFO" : "WARN", "File-I/O hooks %s", hooked ? "installed" : "not installed");
+    hooked = PatchImportedFunction(process, "DirectDrawCreate",
+        reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreate), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreate)) || hooked;
+    hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
+        reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
+    LogLine(hooked ? "DEBUG" : "WARN", hooked ? "[FILEIO] File-I/O hooks %s" : "File-I/O hooks %s",
+        hooked ? "installed" : "not installed");
 }
 
 // Start a numbered exception block in the diagnostic log.
@@ -1384,14 +1437,10 @@ DWORD WINAPI KeyPopupThread(LPVOID lpParameter) {
     return 0;
 }
 
-// DLL entry point: load configuration, install diagnostics/hooks, then verify
-// the required ASI file before allowing the game to continue.
-BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
-    if (ul_reason_for_call != DLL_PROCESS_ATTACH) {
-        return TRUE;
-    }
-
-    DisableThreadLibraryCalls(hModule);
+// Perform configuration, diagnostics, hooks, and ASI validation after the
+// loader lock is released. Keeping this work out of DllMain avoids deadlocks.
+static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
+    HMODULE hModule = reinterpret_cast<HMODULE>(parameter);
     InitializeCriticalSection(&g_logLock);
     g_logLockInitialized = true;
 
@@ -1475,5 +1524,19 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         }
     }
 
+    return 0;
+}
+
+// DLL entry point: perform only loader-safe setup and defer real initialization.
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
+    if (ul_reason_for_call != DLL_PROCESS_ATTACH) {
+        return TRUE;
+    }
+
+    DisableThreadLibraryCalls(hModule);
+    HANDLE threadHandle = CreateThread(NULL, 0, InitializeDllThread, hModule, 0, NULL);
+    if (threadHandle) {
+        CloseHandle(threadHandle);
+    }
     return TRUE;
 }
