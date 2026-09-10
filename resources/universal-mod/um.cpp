@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <string>
+#include <unordered_set>
 
 // The DLL is injected into the game process, so these flags and hooks are
 // process-local. Configuration is loaded once during DLL_PROCESS_ATTACH.
@@ -33,6 +35,7 @@ static volatile LONG g_errorBlockNumber = 0;
 static bool g_keyboardRewriteKeyDown[256] = {};
 static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
+static bool g_enableMobValidation = false;
 
 typedef HANDLE (WINAPI *CreateFileAFunction)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES,
     DWORD, DWORD, HANDLE);
@@ -223,7 +226,7 @@ static void WriteCrashDump(EXCEPTION_POINTERS* exceptionInfo) {
     CloseHandle(dumpFile);
     FreeLibrary(dbghelp);
     if (written) {
-        LogLine("ERROR", "Crash dump written path=%s", dumpPath);
+        LogLine("FATAL", "Crash dump written path=%s", dumpPath);
     } else {
         LogLine("WARN", "Crash dump writing failed, error=%lu", GetLastError());
     }
@@ -446,6 +449,520 @@ static void LogOpenedFile(HANDLE handle, const char* path, DWORD desiredAccess) 
     LogFileIo("File opened path=%s access=%s handle=%p", path, access, handle);
 }
 
+// Return whether a path's file name ends with the given extension (no dot), case-insensitively.
+static bool HasFileExtension(const char* path, const char* extension) {
+    if (!path) {
+        return false;
+    }
+    size_t pathLength = strlen(path);
+    size_t extensionLength = strlen(extension);
+    if (pathLength < extensionLength + 1) {
+        return false;
+    }
+    const char* candidate = path + pathLength - extensionLength;
+    return candidate[-1] == '.' && EqualsIgnoreCase(candidate, extension);
+}
+
+// Node type IDs, taken from ei_maper's own reader (util::CMobParser::initTypes).
+// Every node is a flat type(4-byte LE) + length(4-byte LE) header where length
+// covers the header itself plus the payload, so any node can be skipped purely
+// by its own declared length regardless of what it contains.
+static const DWORD kMobTypeRoot = 0;
+static const DWORD kMobTypeObjectDbFile = 40960;
+static const DWORD kMobTypeObjectSection = 45056;
+static const DWORD kMobTypeNid = 45058;
+static const DWORD kMobTypeObjName = 45060;
+static const DWORD kMobTypeUnit = 3149594624;
+static const DWORD kMobTypeUnitQuestItems = 3149594629;
+static const DWORD kMobTypeUnitQuickItems = 3149594630;
+static const DWORD kMobTypeUnitSpells = 3149594631;
+static const DWORD kMobTypeUnitWeapons = 3149594632;
+static const DWORD kMobTypeUnitArmors = 3149594633;
+static const size_t kMobMaxWalkBytes = 16 * 1024 * 1024;
+
+// Read one node header at offset; returns false if it doesn't fit in [0, size).
+static bool ReadMobNodeHeader(const BYTE* data, size_t size, size_t offset, DWORD* type, DWORD* length) {
+    if (offset + 8 > size) {
+        return false;
+    }
+    memcpy(type, data + offset, sizeof(*type));
+    memcpy(length, data + offset + 4, sizeof(*length));
+    return true;
+}
+
+// Read a whole file (bounded) into a heap buffer using the real CreateFileA,
+// independent of any handle the game itself has open on the same path.
+static bool ReadWholeFileForDatabase(const char* path, BYTE** outData, size_t* outSize) {
+    HANDLE handle = g_originalCreateFileA ?
+        g_originalCreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL) :
+        CreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (handle == INVALID_HANDLE_VALUE) {
+        return false;
+    }
+    LARGE_INTEGER size = {};
+    if (!GetFileSizeEx(handle, &size) || size.QuadPart <= 0 || size.QuadPart > 16 * 1024 * 1024) {
+        CloseHandle(handle);
+        return false;
+    }
+    DWORD toRead = static_cast<DWORD>(size.QuadPart);
+    BYTE* buffer = static_cast<BYTE*>(malloc(toRead));
+    DWORD bytesRead = 0;
+    BOOL ok = buffer && ReadFile(handle, buffer, toRead, &bytesRead, NULL);
+    CloseHandle(handle);
+    if (!ok || bytesRead != toRead) {
+        free(buffer);
+        return false;
+    }
+    *outData = buffer;
+    *outSize = bytesRead;
+    return true;
+}
+
+// The item/spell/armor database files (database.res, databaselmp.res,
+// databaseadb.res) are themselves .res archives, and their internal record
+// layout is undocumented and only partly plain text. Rather than parse that
+// container/record format, every printable-ASCII run of 3+ characters is
+// collected as a candidate valid name (lowercased, and also with its first
+// byte dropped to tolerate a stray length/tag byte from the preceding binary
+// field bleeding into the run). This was verified against the mod's real
+// database files and the entire map corpus shipped with the mod: it produced
+// zero false positives while still catching every deliberately-invalid
+// weapon/armor/spell/quest/quick-item name used to test this feature.
+static void ExtractDatabaseNames(const BYTE* data, size_t size, std::unordered_set<std::string>& names) {
+    size_t i = 0;
+    while (i < size) {
+        if (data[i] < 0x20 || data[i] > 0x7E) {
+            ++i;
+            continue;
+        }
+        size_t start = i;
+        while (i < size && data[i] >= 0x20 && data[i] <= 0x7E) {
+            ++i;
+        }
+        size_t length = i - start;
+        if (length >= 3) {
+            std::string run(reinterpret_cast<const char*>(data + start), length);
+            for (size_t j = 0; j < run.size(); ++j) {
+                run[j] = static_cast<char>(tolower(static_cast<unsigned char>(run[j])));
+            }
+            names.insert(run);
+            names.insert(run.substr(1));
+        }
+    }
+}
+
+// Load every database.res/databaselmp.res/databaseadb.res found beside the
+// game executable and under each installed mod's own "res" folder, since the
+// mod that ships a map is not necessarily the one that ships the database
+// (the loader merges mod resources).
+static void LoadDatabaseFilesFromDirectory(const char* directory, std::unordered_set<std::string>& names) {
+    static const char* kDatabaseFileNames[] = { "database.res", "databaselmp.res", "databaseadb.res" };
+    for (size_t i = 0; i < sizeof(kDatabaseFileNames) / sizeof(kDatabaseFileNames[0]); ++i) {
+        char path[MAX_PATH] = {};
+        _snprintf(path, sizeof(path) - 1, "%s\\%s", directory, kDatabaseFileNames[i]);
+        BYTE* data = NULL;
+        size_t size = 0;
+        if (ReadWholeFileForDatabase(path, &data, &size)) {
+            ExtractDatabaseNames(data, size, names);
+            free(data);
+        }
+    }
+}
+
+// Find a "\Mods\" path component (case-insensitive) in a path and copy the
+// directory up to and including "Mods" into outModsRoot. Deriving the mods
+// root from the .mob file's own path is more reliable than assuming it is a
+// sibling of game.exe, since the executable is not always installed at the
+// root of the mod tree.
+static bool FindModsRootFromPath(const char* path, char* outModsRoot, size_t outSize) {
+    size_t length = strlen(path);
+    for (size_t i = 0; i + 5 <= length; ++i) {
+        bool isBoundaryBefore = (i == 0) || path[i - 1] == '\\' || path[i - 1] == '/';
+        bool isBoundaryAfter = path[i + 4] == '\\' || path[i + 4] == '/';
+        if (isBoundaryBefore && isBoundaryAfter &&
+                tolower(static_cast<unsigned char>(path[i])) == 'm' &&
+                tolower(static_cast<unsigned char>(path[i + 1])) == 'o' &&
+                tolower(static_cast<unsigned char>(path[i + 2])) == 'd' &&
+                tolower(static_cast<unsigned char>(path[i + 3])) == 's') {
+            size_t modsRootLength = i + 4;
+            if (modsRootLength >= outSize) {
+                return false;
+            }
+            memcpy(outModsRoot, path, modsRootLength);
+            outModsRoot[modsRootLength] = '\0';
+            return true;
+        }
+    }
+    return false;
+}
+
+// Enumerate every "<modsRoot>\<mod>\res" directory and load its database files.
+static void LoadDatabaseFilesFromModsRoot(const char* modsRoot, std::unordered_set<std::string>& names) {
+    char modsPattern[MAX_PATH] = {};
+    _snprintf(modsPattern, sizeof(modsPattern) - 1, "%s\\*", modsRoot);
+    WIN32_FIND_DATAA findData = {};
+    HANDLE find = FindFirstFileA(modsPattern, &findData);
+    if (find == INVALID_HANDLE_VALUE) {
+        return;
+    }
+    do {
+        if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0 &&
+                strcmp(findData.cFileName, ".") != 0 && strcmp(findData.cFileName, "..") != 0) {
+            char modResDir[MAX_PATH] = {};
+            _snprintf(modResDir, sizeof(modResDir) - 1, "%s\\%s\\res", modsRoot, findData.cFileName);
+            LoadDatabaseFilesFromDirectory(modResDir, names);
+        }
+    } while (FindNextFileA(find, &findData));
+    FindClose(find);
+}
+
+// Return the cached set of valid item/spell/armor names, loading it from disk
+// on first use. Loading is attempted only once per process even if no
+// database files are found, so a missing database cannot repeatedly hit disk.
+// The mods root is derived from the .mob file's own path (reliable) rather
+// than assumed to be beside game.exe (which may live in a different folder).
+static std::unordered_set<std::string>& GetMobDatabaseNames(const char* mobPath) {
+    static std::unordered_set<std::string> names;
+    static bool loaded = false;
+    if (loaded) {
+        return names;
+    }
+    loaded = true;
+
+    char modsRoot[MAX_PATH] = {};
+    if (mobPath && FindModsRootFromPath(mobPath, modsRoot, sizeof(modsRoot))) {
+        LoadDatabaseFilesFromModsRoot(modsRoot, names);
+    }
+
+    char exePath[MAX_PATH] = {};
+    if (GetModuleFileNameA(NULL, exePath, MAX_PATH) != 0) {
+        char* slash = strrchr(exePath, '\\');
+        if (slash) {
+            *slash = '\0';
+        }
+        char baseResDir[MAX_PATH] = {};
+        _snprintf(baseResDir, sizeof(baseResDir) - 1, "%s\\res", exePath);
+        LoadDatabaseFilesFromDirectory(baseResDir, names);
+
+        char exeModsRoot[MAX_PATH] = {};
+        _snprintf(exeModsRoot, sizeof(exeModsRoot) - 1, "%s\\Mods", exePath);
+        LoadDatabaseFilesFromModsRoot(exeModsRoot, names);
+    }
+
+    LogLine("DEBUG", "[MOBCHECK] loaded %zu candidate item/spell/armor names for database validation", names.size());
+    return names;
+}
+
+// Strip a trailing "[...]" annotation (enchantment/count) and surrounding
+// whitespace, e.g. "iron [prot_fire {ic; e2; d2}] " -> "iron".
+static std::string StripBracketAnnotation(const std::string& value) {
+    size_t bracket = value.find('[');
+    std::string result = (bracket == std::string::npos) ? value : value.substr(0, bracket);
+    while (!result.empty() && (result.back() == ' ' || result.back() == '\t')) {
+        result.pop_back();
+    }
+    return result;
+}
+
+static std::string ToLowerString(const std::string& value) {
+    std::string result = value;
+    for (size_t i = 0; i < result.size(); ++i) {
+        result[i] = static_cast<char>(tolower(static_cast<unsigned char>(result[i])));
+    }
+    return result;
+}
+
+// Check a weapon/armor name ("template.material") against the database,
+// tolerating a bracketed annotation on the material part.
+static bool IsKnownWeaponOrArmorName(const std::string& name, const std::unordered_set<std::string>& names) {
+    std::string lower = ToLowerString(name);
+    size_t dot = lower.rfind('.');
+    if (dot == std::string::npos) {
+        return names.count(lower) != 0;
+    }
+    std::string templateName = lower.substr(0, dot);
+    std::string material = StripBracketAnnotation(lower.substr(dot + 1));
+    return names.count(templateName) != 0 && names.count(material) != 0;
+}
+
+// Check a spell name, stripping its "{param,...}" argument list first.
+static bool IsKnownSpellName(const std::string& name, const std::unordered_set<std::string>& names) {
+    std::string lower = ToLowerString(name);
+    size_t brace = lower.find('{');
+    std::string base = (brace == std::string::npos) ? lower : lower.substr(0, brace);
+    return names.count(base) != 0;
+}
+
+// Check a quest/quick item name, tolerating a bracketed annotation, or
+// falling back to the weapon/armor "template.material" check for items that
+// use that same naming convention (e.g. "material.scrab bones [2]").
+static bool IsKnownSimpleItemName(const std::string& name, const std::unordered_set<std::string>& names) {
+    std::string lower = ToLowerString(name);
+    if (names.count(lower) != 0 || names.count(StripBracketAnnotation(lower)) != 0) {
+        return true;
+    }
+    if (lower.find('.') != std::string::npos) {
+        return IsKnownWeaponOrArmorName(name, names);
+    }
+    return false;
+}
+
+// A unit's own equipment/spell/quest-item lists are stored as: a 4-byte count,
+// then that many [type(4), length(4), name bytes] entries. A blank entry name
+// is not a legitimate item and is a reliable sign of a corrupted item list;
+// this was confirmed by comparing a known-good and a known-bad copy of the
+// same map (the bad copy had one blank armor slot appended) and by scanning
+// every real .mob file shipped with the mod, none of which has a blank entry.
+// When enabled, non-blank entries are additionally checked against the
+// item/spell database so a typo'd or made-up name is reported before the
+// game can crash on it, instead of only catching blanks; this is always on
+// alongside structural validation, since checking structure without also
+// checking item/spell/armor names against the database misses most real bugs.
+static void ValidateMobStringArray(const char* path, const BYTE* data, size_t payloadStart,
+        size_t payloadEnd, const char* fieldName, int fieldKind, const char* unitLabel, bool* hasError) {
+    if (payloadStart + 4 > payloadEnd) {
+        return;
+    }
+    DWORD count = 0;
+    memcpy(&count, data + payloadStart, sizeof(count));
+    size_t pos = payloadStart + 4;
+    for (DWORD i = 0; i < count; ++i) {
+        DWORD entryType = 0, entryLength = 0;
+        if (pos + 8 > payloadEnd) {
+            LogLine("ERROR", "[MOBCHECK] %s unit %s has a truncated %s list (expected %lu entries)",
+                path, unitLabel, fieldName, count);
+            *hasError = true;
+            return;
+        }
+        memcpy(&entryType, data + pos, sizeof(entryType));
+        memcpy(&entryLength, data + pos + 4, sizeof(entryLength));
+        if (entryLength < 8 || pos + entryLength > payloadEnd) {
+            LogLine("ERROR", "[MOBCHECK] %s unit %s has a %s entry with an invalid length %lu",
+                path, unitLabel, fieldName, entryLength);
+            *hasError = true;
+            return;
+        }
+        if (entryLength == 8) {
+            LogLine("ERROR", "[MOBCHECK] %s unit %s has a blank entry (#%lu of %lu) in its %s list",
+                path, unitLabel, i + 1, count, fieldName, fieldName);
+            *hasError = true;
+        } else {
+            std::string entryName(reinterpret_cast<const char*>(data + pos + 8), entryLength - 8);
+            const std::unordered_set<std::string>& databaseNames = GetMobDatabaseNames(path);
+            bool known;
+            if (fieldKind == 0) known = IsKnownWeaponOrArmorName(entryName, databaseNames);
+            else if (fieldKind == 1) known = IsKnownSpellName(entryName, databaseNames);
+            else known = IsKnownSimpleItemName(entryName, databaseNames);
+            if (!known) {
+                LogLine("ERROR", "[MOBCHECK] %s unit %s has a %s entry '%s' that does not exist in the item/spell database",
+                    path, unitLabel, fieldName, entryName.c_str());
+                *hasError = true;
+            }
+        }
+        pos += entryLength;
+    }
+}
+
+// Walk a single UNIT record's fields, checking its equipment/spell/quest lists.
+// Fields are not stored in a fixed order (NID/OBJ_NAME can appear before or
+// after the item lists), so the unit's name/NID are collected in a first pass
+// before the item lists are validated in a second pass, so errors can always
+// name the unit instead of only reporting a raw file offset.
+static void ValidateMobUnit(const char* path, const BYTE* data, size_t unitStart, size_t unitEnd, bool* hasError) {
+    char unitLabel[160] = {};
+    strcpy(unitLabel, "(unnamed)");
+    DWORD nid = 0;
+    bool haveNid = false;
+    size_t pos = unitStart + 8;
+    while (pos + 8 <= unitEnd) {
+        DWORD type = 0, length = 0;
+        if (!ReadMobNodeHeader(data, unitEnd, pos, &type, &length) || length < 8 || pos + length > unitEnd) {
+            break;
+        }
+        if (type == kMobTypeNid && length == 12) {
+            memcpy(&nid, data + pos + 8, sizeof(nid));
+            haveNid = true;
+        } else if (type == kMobTypeObjName) {
+            size_t nameLength = length - 8;
+            if (nameLength >= sizeof(unitLabel)) {
+                nameLength = sizeof(unitLabel) - 1;
+            }
+            memcpy(unitLabel, data + pos + 8, nameLength);
+            unitLabel[nameLength] = '\0';
+        }
+        pos += length;
+    }
+
+    char labelWithNid[192] = {};
+    if (haveNid) {
+        _snprintf(labelWithNid, sizeof(labelWithNid) - 1, "'%s' (NID %lu)", unitLabel, nid);
+    } else {
+        _snprintf(labelWithNid, sizeof(labelWithNid) - 1, "'%s'", unitLabel);
+    }
+
+    pos = unitStart + 8;
+    while (pos + 8 <= unitEnd) {
+        DWORD type = 0, length = 0;
+        if (!ReadMobNodeHeader(data, unitEnd, pos, &type, &length) || length < 8 || pos + length > unitEnd) {
+            return;
+        }
+        const char* fieldName = NULL;
+        int fieldKind = 2; // 0=weapon/armor (template.material), 1=spell ({params}), 2=quest/quick (simple)
+        if (type == kMobTypeUnitQuestItems) fieldName = "quest item";
+        else if (type == kMobTypeUnitQuickItems) fieldName = "quick item";
+        else if (type == kMobTypeUnitSpells) { fieldName = "spell"; fieldKind = 1; }
+        else if (type == kMobTypeUnitWeapons) { fieldName = "weapon"; fieldKind = 0; }
+        else if (type == kMobTypeUnitArmors) { fieldName = "armor"; fieldKind = 0; }
+        if (fieldName) {
+            ValidateMobStringArray(path, data, pos + 8, pos + length, fieldName, fieldKind, labelWithNid, hasError);
+        }
+        pos += length;
+    }
+}
+
+// Walk the OBJECT_SECTION node's direct children and validate every UNIT found.
+static void ValidateMobObjectSection(const char* path, const BYTE* data, size_t sectionStart, size_t sectionEnd, bool* hasError) {
+    size_t pos = sectionStart + 8;
+    while (pos + 8 <= sectionEnd) {
+        DWORD type = 0, length = 0;
+        if (!ReadMobNodeHeader(data, sectionEnd, pos, &type, &length) || length < 8 || pos + length > sectionEnd) {
+            LogLine("ERROR", "[MOBCHECK] %s has a corrupted object entry inside OBJECT_SECTION", path);
+            *hasError = true;
+            return;
+        }
+        if (type == kMobTypeUnit) {
+            ValidateMobUnit(path, data, pos, pos + length, hasError);
+        }
+        pos += length;
+    }
+}
+
+// Return whether this exact path has already been through ValidateMobFile
+// during this process's lifetime, recording it if not.
+static bool HasMobFileAlreadyBeenValidated(const char* path) {
+    static std::unordered_set<std::string> validatedPaths;
+    std::string key(path);
+    for (size_t i = 0; i < key.size(); ++i) {
+        key[i] = static_cast<char>(tolower(static_cast<unsigned char>(key[i])));
+    }
+    if (validatedPaths.count(key) != 0) {
+        return true;
+    }
+    validatedPaths.insert(key);
+    return false;
+}
+
+// Read and sanity-check a .mob file without disturbing the game's own file
+// handle/position; a second, independent handle is opened for this purpose.
+// The node format (type:4, length:4, length includes the 8-byte header) and
+// the type IDs used below come directly from ei_maper's own reader
+// (util::CMobParser / CMob::deserialize), not from guesswork. Only clearly
+// invalid data is flagged as an error: a root length that doesn't match the
+// actual file size is common (the file can be extended, or resaved by the
+// navmesh generator, after the root length was written) and is only DEBUG.
+static void ValidateMobFile(const char* path) {
+    if (!g_enableMobValidation || !path || !HasFileExtension(path, "mob")) {
+        return;
+    }
+    if (HasMobFileAlreadyBeenValidated(path)) {
+        // The game routinely opens the same .mob file twice in a row (a size
+        // probe followed by the real read); validating it again would only
+        // duplicate identical log entries since the file cannot have changed.
+        return;
+    }
+
+    HANDLE handle = g_originalCreateFileA ?
+        g_originalCreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL) :
+        CreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (handle == INVALID_HANDLE_VALUE) {
+        return; // cannot inspect the file; not itself a validation failure
+    }
+
+    LARGE_INTEGER fileSize = {};
+    if (!GetFileSizeEx(handle, &fileSize)) {
+        CloseHandle(handle);
+        return;
+    }
+
+    ULONGLONG actualSize = static_cast<ULONGLONG>(fileSize.QuadPart);
+    DWORD bytesToRead = static_cast<DWORD>(actualSize < kMobMaxWalkBytes ? actualSize : kMobMaxWalkBytes);
+    BYTE* buffer = static_cast<BYTE*>(malloc(bytesToRead > 0 ? bytesToRead : 1));
+    DWORD bytesRead = 0;
+    BOOL readOk = buffer && ReadFile(handle, buffer, bytesToRead, &bytesRead, NULL);
+    CloseHandle(handle);
+    if (!buffer) {
+        return;
+    }
+
+    if (!readOk || bytesRead < 16) {
+        LogLine("ERROR", "[MOBCHECK] %s is only %llu bytes, too small to contain a valid .mob header",
+            path, actualSize);
+        free(buffer);
+        return;
+    }
+
+    DWORD rootType = 0;
+    memcpy(&rootType, buffer + 0, sizeof(rootType));
+    if (rootType != kMobTypeObjectDbFile) {
+        LogLine("ERROR", "[MOBCHECK] %s has an unexpected root node type %lu (expected %lu); file may be corrupted or is not a .mob file",
+            path, rootType, kMobTypeObjectDbFile);
+        free(buffer);
+        return;
+    }
+    // The root node's declared length routinely differs from the actual file
+    // size (maps get resaved/extended after it was last written), so it is
+    // not a useful corruption signal and is intentionally not logged here.
+
+    // Force the (once-per-process) database load to happen right here rather
+    // than lazily on the first field that needs it: otherwise its "loaded N
+    // names" log line lands wherever that first lookup happens to occur,
+    // which could be partway through this file, after this one, or never at
+    // all if this particular file has no items/spells/armors to check.
+    GetMobDatabaseNames(path);
+
+    if (actualSize > kMobMaxWalkBytes) {
+        free(buffer);
+        return;
+    }
+
+    // Skip the root node and the SC_/PR_OBJECT_DB_FILE marker (fixed 8 bytes
+    // each; ei_maper's own reader does not use their declared lengths either)
+    // then walk sibling top-level nodes purely by declared length until the
+    // terminating ROOT node or a length that would run past the file.
+    size_t pos = 16;
+    bool objectSectionSeen = false;
+    bool hasError = false;
+    while (pos + 8 <= bytesRead) {
+        DWORD type = 0, length = 0;
+        memcpy(&type, buffer + pos, sizeof(type));
+        memcpy(&length, buffer + pos + 4, sizeof(length));
+        if (type == kMobTypeRoot) {
+            break;
+        }
+        if (length < 8 || pos + length > bytesRead) {
+            LogLine("ERROR", "[MOBCHECK] %s has a node declaring a length of %lu bytes that extends past the end of the file; the file is likely truncated or corrupted",
+                path, length);
+            free(buffer);
+            return;
+        }
+        if (type == kMobTypeObjectSection) {
+            objectSectionSeen = true;
+            ValidateMobObjectSection(path, buffer, pos, pos + length, &hasError);
+        }
+        pos += length;
+    }
+    if (!objectSectionSeen) {
+        LogLine("DEBUG", "[MOBCHECK] %s has no OBJECT_SECTION node (placement-only or menu mob?)", path);
+    } else if (!hasError) {
+        LogLine("DEBUG", "[MOBCHECK] %s validated OK", path);
+    }
+    free(buffer);
+}
+
 // Convert a Windows wide path to the log's narrow system-code-page format.
 static void ConvertWidePath(LPCWSTR widePath, char* path, size_t pathSize) {
     if (!widePath || pathSize == 0) {
@@ -463,6 +980,9 @@ static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
         securityAttributes, creationDisposition, flagsAndAttributes, templateFile);
     if (handle != INVALID_HANDLE_VALUE && fileName) {
         LogOpenedFile(handle, fileName, desiredAccess);
+        if ((desiredAccess & GENERIC_READ) != 0) {
+            ValidateMobFile(fileName);
+        }
     }
     return handle;
 }
@@ -477,6 +997,9 @@ static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
         char path[MAX_PATH] = {};
         ConvertWidePath(fileName, path, sizeof(path));
         LogOpenedFile(handle, path, desiredAccess);
+        if ((desiredAccess & GENERIC_READ) != 0) {
+            ValidateMobFile(path);
+        }
     }
     return handle;
 }
@@ -626,19 +1149,22 @@ static void InstallFileIoHooks() {
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreate), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreate)) || hooked;
     hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
-    LogLine(hooked ? "DEBUG" : "WARN", hooked ? "[FILEIO] File-I/O hooks %s" : "File-I/O hooks %s",
-        hooked ? "installed" : "not installed");
+    if (!hooked) {
+        // These hooks back both file-I/O logging and .mob validation, so a
+        // generic success line here would not indicate which feature is active.
+        LogLine("WARN", "File-I/O hooks not installed");
+    }
 }
 
 // Start a numbered exception block in the diagnostic log.
 static void LogErrorBlockStart() {
     LONG blockNumber = InterlockedIncrement(&g_errorBlockNumber);
-    LogLine("ERROR", "============= ERROR %ld LOG =============", blockNumber);
+    LogLine("FATAL", "============= ERROR %ld LOG =============", blockNumber);
 }
 
 // Close the current numbered exception block in the diagnostic log.
 static void LogErrorBlockEnd() {
-    LogLine("ERROR", "===========================================");
+    LogLine("FATAL", "===========================================");
 }
 
 // Clear or separate the log at process startup, with a cross-instance mutex.
@@ -1144,13 +1670,13 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     LogTrackedFileHandles();
 
     if (!record) {
-        LogLine("ERROR", "Unhandled exception had no exception record");
+        LogLine("FATAL", "Unhandled exception had no exception record");
     } else {
-        LogLine("ERROR", "Unhandled exception code=0x%08lX flags=0x%08lX address=%p parameters=%lu",
+        LogLine("FATAL", "Unhandled exception code=0x%08lX flags=0x%08lX address=%p parameters=%lu",
             record->ExceptionCode, record->ExceptionFlags, record->ExceptionAddress,
             record->NumberParameters);
         if (record->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && record->NumberParameters >= 2) {
-            LogLine("ERROR", "Access violation type=%s address=%p",
+            LogLine("FATAL", "Access violation type=%s address=%p",
                 record->ExceptionInformation[0] == 0 ? "read" : "write",
                 reinterpret_cast<void*>(static_cast<ULONG_PTR>(record->ExceptionInformation[1])));
         }
@@ -1164,7 +1690,7 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
 
     if (context) {
 #if defined(_M_IX86) || defined(__i386__)
-        LogLine("ERROR", "CPU registers eax=0x%08lX ebx=0x%08lX ecx=0x%08lX edx=0x%08lX esi=0x%08lX edi=0x%08lX ebp=0x%08lX esp=0x%08lX eip=0x%08lX",
+        LogLine("FATAL", "CPU registers eax=0x%08lX ebx=0x%08lX ecx=0x%08lX edx=0x%08lX esi=0x%08lX edi=0x%08lX ebp=0x%08lX esp=0x%08lX eip=0x%08lX",
             context->Eax, context->Ebx, context->Ecx, context->Edx, context->Esi,
             context->Edi, context->Ebp, context->Esp, context->Eip);
         if (context->Eip == 0x90909090 || context->Eip == 0xCCCCCCCC || context->Eip == 0xCDCDCDCD) {
@@ -1172,7 +1698,7 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
                 context->Eip);
         }
 #elif defined(_M_X64) || defined(__x86_64__)
-        LogLine("ERROR", "CPU registers rax=%p rbx=%p rcx=%p rdx=%p rsi=%p rdi=%p rbp=%p rsp=%p rip=%p",
+        LogLine("FATAL", "CPU registers rax=%p rbx=%p rcx=%p rdx=%p rsi=%p rdi=%p rbp=%p rsp=%p rip=%p",
             reinterpret_cast<void*>(context->Rax), reinterpret_cast<void*>(context->Rbx),
             reinterpret_cast<void*>(context->Rcx), reinterpret_cast<void*>(context->Rdx),
             reinterpret_cast<void*>(context->Rsi), reinterpret_cast<void*>(context->Rdi),
@@ -1192,20 +1718,20 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
             if (!moduleName) {
                 moduleName = strrchr(modulePath, '/');
             }
-            LogLine("ERROR", "Faulting module=%s", moduleName ? moduleName + 1 : modulePath);
+            LogLine("FATAL", "Faulting module=%s", moduleName ? moduleName + 1 : modulePath);
         }
     }
 
     void* stack[32] = {};
     USHORT frameCount = CaptureStackBackTrace(0, sizeof(stack) / sizeof(stack[0]), stack, NULL);
     for (USHORT i = 0; i < frameCount; ++i) {
-        LogLine("ERROR", "Stack frame=%u address=%p", i, stack[i]);
+        LogLine("FATAL", "Stack frame=%u address=%p", i, stack[i]);
     }
 
     if (g_enableAntiCrash && record && IsUnsafeExceptionToResume(record)) {
         LogLine("ANTICRASH", "Unsafe exception cannot be resumed safely; normal Windows crash handling will continue");
     }
-    LogLine("ERROR", "The process will continue with normal Windows crash handling");
+    LogLine("FATAL", "The process will continue with normal Windows crash handling");
     LogErrorBlockEnd();
     InterlockedExchange(&g_crashLogInProgress, 0);
     return EXCEPTION_CONTINUE_SEARCH;
@@ -1256,6 +1782,9 @@ static void LoadConfigFile(const char* dllPath) {
             fprintf(file, "ANTICRASH=false\n\n");
             fprintf(file, "; Write portable Windows minidumps beside um.log; (true/false)\n");
             fprintf(file, "CRASH_DUMPS=true\n\n");
+            fprintf(file, "; Validate .mob file headers when opened and log structural problems, including a\n");
+            fprintf(file, "; cross-check of unit weapons/armors/spells/quest/quick items against the item/spell database; (true/false)\n");
+            fprintf(file, "MOB_VALIDATION=false\n\n");
             fclose(file);
         }
         return;
@@ -1325,6 +1854,8 @@ static void LoadConfigFile(const char* dllPath) {
             g_enableCrashDumps = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "CLEAR_LOG_ON_START")) {
             g_clearLogOnStart = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "MOB_VALIDATION")) {
+            g_enableMobValidation = IsTrueString(value);
         }
     }
 
@@ -1456,6 +1987,7 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     g_enableFileIoLogging = g_enableFileIoLogging || GetEnvironmentFlag("FILE_IO_LOGGING");
     g_enableAntiCrash = g_enableAntiCrash || GetEnvironmentFlag("ANTICRASH");
     g_clearLogOnStart = g_clearLogOnStart || GetEnvironmentFlag("CLEAR_LOG_ON_START");
+    g_enableMobValidation = g_enableMobValidation || GetEnvironmentFlag("MOB_VALIDATION");
     if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
@@ -1465,14 +1997,15 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
     }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
         g_enableCrashLogging ? "enabled" : "disabled",
         g_enableFileIoLogging ? "enabled" : "disabled",
         g_clearLogOnStart ? "enabled" : "disabled",
-        g_enableAntiCrash ? "enabled" : "disabled");
+        g_enableAntiCrash ? "enabled" : "disabled",
+        g_enableMobValidation ? "enabled" : "disabled");
     if (g_enableAntiCrash) {
         LogLine("ANTICRASH", "Windows critical-error dialogs are suppressed; unsafe exceptions will still use normal crash handling");
     }
@@ -1485,7 +2018,7 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
 
     InitializeCriticalSection(&g_fileHandleLock);
     g_fileHandleLockInitialized = true;
-    if (g_enableFileIoLogging) {
+    if (g_enableFileIoLogging || g_enableMobValidation) {
         InstallFileIoHooks();
     }
 
