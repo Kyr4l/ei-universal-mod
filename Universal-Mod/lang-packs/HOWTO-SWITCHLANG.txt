@@ -1,1 +1,1 @@
-Copy the texts.res and textslmp.res files from lang-packs/<LANGUAGE>/res/ into the mod's res/ directory to switch language
+Copy texts.res and textslmp.res from lang-packs/<LANGUAGE>/res/ into mod res/ to switch language
