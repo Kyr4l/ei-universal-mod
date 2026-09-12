@@ -5,11 +5,14 @@
 # Automates compiling, packing, and assembling the Evil Islands Universal Mod.
 #
 # Requirements:
-#   - wine (for legacy Windows CLI tools: eipacker, DBEditor, ini2reg, etc.)
+#   - wine (for legacy Windows CLI tools: DBEditor)
 #   - rsync
 #   - parallel (GNU Parallel)
 #   - i686-w64-mingw32-g++ (MinGW 32-bit cross compiler for um.dll)
 #   - bin/um-mobdump (C++ MOB dumper tool)
+#   - bin/um-inireg (C++ INI/REG converter tool)
+#   - bin/um-ddsmmp (C++ DDS/MMP texture converter tool)
+#   - bin/um-restool (C++ RES archive packer/unpacker tool)
 #
 # Usage:
 #   ./makemod.sh [options]
@@ -19,13 +22,12 @@
 #   --redress               Convert REDRESS textures from DDS to MMP
 #   --textures              Convert world TEXTURES from DDS to MMP
 #   --textures-zones        Convert ZONE TEXTURES from DDS to MMP
-#   --dds-all               Convert all DDS textures (redress, textures, zones)
+#   --dds-all               Enable all DDS texture conversions
 #   --no-mob-dump           Skip dumping MOB files to YAML/EIS
 #   -v, --bump-version      Increment semantic patch version in mod-version.txt
 #   --no-replace            Skip syncing build output to ../../Universal-Mod
 #   --clean-builds          Delete all previous builds in mods-out/ before starting
 #   -j, --jobs <N>          Concurrency level for GNU Parallel (default: $(nproc))
-#   --completion            Output bash autocompletion script
 #   -h, --help              Show this help message
 # ==============================================================================
 
@@ -232,10 +234,34 @@ check_dependencies() {
     fi
 
     if [[ ! -x "bin/um-mobdump" && ! -f "bin/um-mobdump" ]]; then
-        log_warn "bin/um-mobdump not found or not executable. Checking ../um-mobdumper..."
+        log_warn "bin/um-mobdump not found. Checking ../um-mobdumper..."
         if [[ -f "../um-mobdumper/um-mobdump" ]]; then
-            ln -sf "../um-mobdumper/um-mobdump" "bin/um-mobdump"
+            ln -sf "../../um-mobdumper/um-mobdump" "bin/um-mobdump"
             log_ok "Symlinked bin/um-mobdump"
+        fi
+    fi
+
+    if [[ ! -x "bin/um-inireg" && ! -f "bin/um-inireg" ]]; then
+        log_warn "bin/um-inireg not found. Checking ../um-inireg..."
+        if [[ -f "../um-inireg/um-inireg" ]]; then
+            ln -sf "../../um-inireg/um-inireg" "bin/um-inireg"
+            log_ok "Symlinked bin/um-inireg"
+        fi
+    fi
+
+    if [[ ! -x "bin/um-ddsmmp" && ! -f "bin/um-ddsmmp" ]]; then
+        log_warn "bin/um-ddsmmp not found. Checking ../um-ddsmmp..."
+        if [[ -f "../um-ddsmmp/um-ddsmmp" ]]; then
+            ln -sf "../../um-ddsmmp/um-ddsmmp" "bin/um-ddsmmp"
+            log_ok "Symlinked bin/um-ddsmmp"
+        fi
+    fi
+
+    if [[ ! -x "bin/um-restool" && ! -f "bin/um-restool" ]]; then
+        log_warn "bin/um-restool not found. Checking ../um-restool..."
+        if [[ -f "../um-restool/um-restool" ]]; then
+            ln -sf "../../um-restool/um-restool" "bin/um-restool"
+            log_ok "Symlinked bin/um-restool"
         fi
     fi
 }
@@ -289,25 +315,14 @@ convert_ini_to_reg() {
     cp -fv "$INI_DIR"/lightscavejigran.ini "$MOD_DIR/config/" 2>/dev/null || true
     cp -fv "$INI_DIR/SPELLADDON.INI" "$MOD_DIR/" 2>/dev/null || true
 
-    log_info "Converting INI files to REG..."
-    local inis_to_convert=()
-    for name in config autorunpro ai music streamsn smessbase; do
-        if [[ -f "$INI_DIR/$name.ini" ]]; then
-            inis_to_convert+=("$INI_DIR/$name.ini")
-        fi
-    done
+    log_info "Converting INI files to REG directly into mod output..."
+    [[ -f "$INI_DIR/config.ini" ]] && bin/um-inireg -o "$MOD_DIR/config.reg" "$INI_DIR/config.ini"
+    [[ -f "$INI_DIR/autorunpro.ini" ]] && bin/um-inireg -o "$MOD_DIR/autorunpro.reg" "$INI_DIR/autorunpro.ini"
+    [[ -f "$INI_DIR/ai.ini" ]] && bin/um-inireg -o "$MOD_DIR/config/ai.reg" "$INI_DIR/ai.ini"
+    [[ -f "$INI_DIR/music.ini" ]] && bin/um-inireg -o "$MOD_DIR/config/music.reg" "$INI_DIR/music.ini"
+    [[ -f "$INI_DIR/streamsn.ini" ]] && bin/um-inireg -o "$MOD_DIR/config/streamsn.reg" "$INI_DIR/streamsn.ini"
+    [[ -f "$INI_DIR/smessbase.ini" ]] && bin/um-inireg -o "$MOD_DIR/res/smessbase.reg" "$INI_DIR/smessbase.ini"
 
-    if [[ ${#inis_to_convert[@]} -gt 0 ]]; then
-        parallel -j "$PARALLEL_JOBS" --bar wine bin/ini2reg.exe {} ::: "${inis_to_convert[@]}" > /dev/null || true
-    fi
-
-    log_info "Moving converted REG files into mod hierarchy..."
-    [[ -f "$INI_DIR/config.reg" ]] && mv -fv "$INI_DIR/config.reg" "$MOD_DIR/" 2>/dev/null || true
-    [[ -f "$INI_DIR/autorunpro.reg" ]] && mv -fv "$INI_DIR/autorunpro.reg" "$MOD_DIR/" 2>/dev/null || true
-    [[ -f "$INI_DIR/ai.reg" ]] && mv -fv "$INI_DIR/ai.reg" "$MOD_DIR/config/" 2>/dev/null || true
-    [[ -f "$INI_DIR/music.reg" ]] && mv -fv "$INI_DIR/music.reg" "$MOD_DIR/config/" 2>/dev/null || true
-    [[ -f "$INI_DIR/streamsn.reg" ]] && mv -fv "$INI_DIR/streamsn.reg" "$MOD_DIR/config/" 2>/dev/null || true
-    [[ -f "$INI_DIR/smessbase.reg" ]] && mv -fv "$INI_DIR/smessbase.reg" "$MOD_DIR/res/" 2>/dev/null || true
     log_ok "INI & REG files processed"
 }
 
@@ -325,21 +340,17 @@ process_quests() {
 
         log_info "Packaging quests for language: ${BLUE}${lang_code}${RESTORE}"
 
-        # 1. Convert quest INI -> REG
+        # 1. Convert quest INI -> REG in place using native um-inireg
         find "$qdir" -maxdepth 3 -type f -name "*.ini" -print0 | \
-            parallel -0 -j "$PARALLEL_JOBS" --bar wine bin/ini2reg.exe {} > /dev/null || true
+            parallel -0 -j "$PARALLEL_JOBS" bin/um-inireg {} > /dev/null || true
 
-        # 2. Pack quests using eipacker
-        parallel -j "$PARALLEL_JOBS" --bar wine bin/eipacker.exe {} ::: "$qdir"/* > /dev/null || true
+        # 2. Pack quests using native um-restool (automatically strips _mq -> .mq)
+        bin/um-restool --pack -d "$qdir" -o "$qdir" -m
 
-        # 3. Convert REG back to INI to keep source clean
-        find "$qdir" -maxdepth 3 -type f -name "*.reg" -print0 | \
-            parallel -0 -j "$PARALLEL_JOBS" --bar wine bin/reg2ini.exe {} > /dev/null || true
-
-        # 4. Clean up temporary REG files
+        # 3. Clean up temporary REG files (source quest.ini remains untouched)
         find "$qdir" -maxdepth 3 -type f -name "*.reg" -delete 2>/dev/null || true
 
-        # 5. Distribute packed MQ files
+        # 4. Distribute packed MQ files
         mkdir -p "$lang_pack_dir/maps"
         if [[ "$lang_code" == "eng" ]]; then
             log_info "Deploying English MQ files to primary mod maps directory"
@@ -388,10 +399,7 @@ convert_dds_category() {
     local dest_dir="$3"
 
     log_info "Converting $label DDS textures to MMP..."
-    (
-        cd "$src_dir" || exit 1
-        parallel -j "$PARALLEL_JOBS" --bar "wine ../../bin/MMPS.exe {} && mv -f {/.}.mmp ../../$dest_dir" ::: *.dds > /dev/null
-    )
+    bin/um-ddsmmp -d "$src_dir" -o "$dest_dir" -m
     log_ok "Converted $label"
 }
 
@@ -501,15 +509,10 @@ pack_texts_resources() {
         esac
 
         log_info "Packing $restextsname -> $targetname for $langcode"
-        wine bin/eipacker.exe /pack "$restexts"
-
-        local packedfile="${restexts%_res}.res"
         local langpackdir="$MOD_DIR/lang-packs/$langcode/res"
         mkdir -p "$langpackdir"
 
-        if [[ -f "$packedfile" ]]; then
-            mv -f "$packedfile" "$langpackdir/$targetname"
-        fi
+        bin/um-restool --pack "$restexts" -o "$langpackdir/$targetname"
 
         # Primary English language is copied directly to mod root res
         if [[ "$langcode" == "eng" ]]; then
@@ -529,9 +532,10 @@ pack_general_resources() {
 
     for resxin in "$RES_UNPACKED_DIR"/*_res; do
         [[ -d "$resxin" ]] || continue
-        local resout="${resxin%_res}.res"
-        log_info "Packing ${resxin##*/}..."
-        wine bin/eipacker.exe /pack "$resxin" && mv -fv "$resout" "$RES_DIR/"
+        local resname="${resxin##*/}"
+        resname="${resname%_res}.res"
+        log_info "Packing $resname..."
+        bin/um-restool --pack "$resxin" -o "$RES_DIR/$resname"
     done
 
     log_info "Moving all RES archives into $MOD_DIR/res/..."

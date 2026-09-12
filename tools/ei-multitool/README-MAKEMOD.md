@@ -9,8 +9,8 @@ To use it, open a bash terminal in this directy, and run `bash makemod.sh`
 
 ## WARNINGS
 
-- Do not delete directories, the script uses many hardcoded paths to function properly.
-- Resouces must be symlinked instead of being copy pasted, paths mustbe relative and not absolute.
-- `makemod.sh` must be executed from this directory, otherwise it will not function properly.
+- Do not delete directories, the script uses many hardcoded paths.
+- Resouces must be symlinked instead of being copy pasted, paths must be relative and not absolute.
+- `makemod.sh` must be executed from this directory.
 
 ### Developed by Kyr4l
