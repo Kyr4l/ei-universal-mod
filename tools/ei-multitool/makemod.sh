@@ -330,35 +330,47 @@ process_quests() {
     log_step "Processing Quest Files (MQ)"
     shopt -s nullglob
 
-    local quest_dirs=("$MQ_UNPACKED_DIR"/mq-*)
-    for qdir in "${quest_dirs[@]}"; do
-        [[ -d "$qdir" ]] || continue
+    local lang_dirs=("$MQ_UNPACKED_DIR"/mq-*)
+    for lang_dir in "${lang_dirs[@]}"; do
+        [[ -d "$lang_dir" ]] || continue
 
-        local lang_code="${qdir##*/}"
+        local lang_code="${lang_dir##*/}"
         lang_code="${lang_code#mq-}"
         local lang_pack_dir="$MOD_DIR/lang-packs/$lang_code"
 
         log_info "Packaging quests for language: ${BLUE}${lang_code}${RESTORE}"
 
-        # 1. Convert quest INI -> REG in place using native um-inireg
-        find "$qdir" -maxdepth 3 -type f -name "*.ini" -print0 | \
-            parallel -0 -j "$PARALLEL_JOBS" bin/um-inireg {} > /dev/null || true
+        local quest_dirs=("$lang_dir"/*_mq)
+        for qdir in "${quest_dirs[@]}"; do
+            [[ -d "$qdir" ]] || continue
 
-        # 2. Pack quests using native um-restool (automatically strips _mq -> .mq)
-        bin/um-restool --pack -d "$qdir" -o "$qdir" -m
+            # 1. Convert quest INI -> REG in place using native um-inireg
+            find "$qdir" -maxdepth 3 -type f -name "*.ini" -print0 | \
+                parallel -0 -j "$PARALLEL_JOBS" bin/um-inireg {} > /dev/null || true
 
-        # 3. Clean up temporary REG files (source quest.ini remains untouched)
-        find "$qdir" -maxdepth 3 -type f -name "*.reg" -delete 2>/dev/null || true
+            # 2. Pack quest resources without quest.ini; it is the source for quest.reg.
+            local pack_dir
+            local mq_name
+            pack_dir="$(mktemp -d)"
+            mq_name="${qdir##*/}"
+            mq_name="${mq_name%_mq}.mq"
+            rsync -a --exclude='quest.ini' "$qdir/" "$pack_dir/"
+            bin/um-restool --pack "$pack_dir" -o "$qdir/$mq_name"
+            rm -rf "$pack_dir"
 
-        # 4. Distribute packed MQ files
-        mkdir -p "$lang_pack_dir/maps"
-        if [[ "$lang_code" == "eng" ]]; then
-            log_info "Deploying English MQ files to primary mod maps directory"
-            mv -fv "$qdir"/*.mq "$MOD_DIR/maps/" 2>/dev/null || true
-            cp -fv "$MOD_DIR/maps"/*.mq "$lang_pack_dir/maps/" 2>/dev/null || true
-        else
-            mv -fv "$qdir"/*.mq "$lang_pack_dir/maps/" 2>/dev/null || true
-        fi
+            # 3. Clean up temporary REG files (source quest.ini remains untouched)
+            find "$qdir" -maxdepth 3 -type f -name "*.reg" -delete 2>/dev/null || true
+
+            # 4. Distribute the packed MQ file
+            mkdir -p "$lang_pack_dir/maps"
+            if [[ "$lang_code" == "eng" ]]; then
+                log_info "Deploying English MQ file: ${BLUE}${mq_name}${RESTORE}"
+                mv -fv "$qdir/$mq_name" "$MOD_DIR/maps/"
+                cp -fv "$MOD_DIR/maps/$mq_name" "$lang_pack_dir/maps/"
+            else
+                mv -fv "$qdir/$mq_name" "$lang_pack_dir/maps/"
+            fi
+        done
     done
 
     shopt -u nullglob

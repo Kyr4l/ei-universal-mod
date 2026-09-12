@@ -1,6 +1,7 @@
 # Evil Islands Resource Archive Format (.res)
 
 ## Overview
+
 Evil Islands `.res` (Resource) archives are flat, indexed binary archive containers used to package game assets including 3D model meshes (`figures.res`), textures (`textures.res`, `redress.res`), sound effects and voice clips (`sfx-*.res`), gameplay item/spell databases (`database*.res`), mission quests (`.mq`), and localization strings (`texts.res`, `textslmp.res`).
 
 Every `.res` file is identified by the 32-bit magic constant `0x019CE23C` (little-endian: `0x3C, 0xE2, 0x9C, 0x01`).
@@ -10,6 +11,7 @@ Every `.res` file is identified by the 32-bit magic constant `0x019CE23C` (littl
 ## High-Level Archive Architecture
 
 An Evil Islands `.res` archive consists of three consecutive sections:
+
 1. **16-Byte Header**: Magic, entry count, data payload byte length, and names block byte length.
 2. **File Data Payload Block**: Contiguous sequence of raw asset payloads, 16-byte aligned.
 3. **Directory Table (Descriptors + Hash Table)**: Sequence of file descriptor records and collision hash chains.
@@ -47,7 +49,8 @@ The names block begins immediately after the descriptor table:
 $$\text{namesOffset} = \text{tableOffset} + (\text{numFiles} \times 22)$$
 $$\text{totalFileSize} = \text{namesOffset} + \text{namesLength}$$
 
-### File Descriptor Records (22 Bytes per Slot):
+### File Descriptor Records (22 Bytes per Slot)
+
 Each of the `numFiles` slots in the hash table represents one hash bucket and contains a 22-byte file descriptor:
 
 | Field | Type | Size | Description |
@@ -66,6 +69,7 @@ Each of the `numFiles` slots in the hash table represents one hash bucket and co
 ## Hash Function & Collision Resolution
 
 Evil Islands calculates a case-insensitive ASCII sum hash for fast lookup:
+
 ```cpp
 uint32_t CalculateResHash(const std::string& name, uint32_t bucketCount) {
     if (bucketCount == 0) return 0;

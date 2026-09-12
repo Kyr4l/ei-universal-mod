@@ -1,6 +1,7 @@
 # Evil Islands Texture File Format (.mmp)
 
 ## Overview
+
 Evil Islands `.mmp` (Mip-Mapped Picture) files are proprietary texture containers used by the game engine for models, terrain tiles, UI icons, and character redress textures.
 
 Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integers) followed immediately by the texture payload (compressed block data or uncompressed pixel mipmaps).
@@ -39,8 +40,8 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | `DXT1` | 4 | S3TC DXT1 Compressed | `0x8000` / 15 / 1 | `0x7C00` / 10 / 5 | `0x03E0` / 5 / 5 | `0x001F` / 0 / 5 |
 | `DXT3` | 8 | S3TC DXT3 Compressed | `0xF000` / 12 / 4 | `0x0F00` / 8 / 4 | `0x00F0` / 4 / 4 | `0x000F` / 0 / 4 |
-| `QU\0\0`| 16 | Uncompressed RGBA 5551 | `0x8000` / 15 / 1 | `0x7C00` / 10 / 5 | `0x03E0` / 5 / 5 | `0x001F` / 0 / 5 |
-| `PV\0\0`| 16 | Uncompressed RGB 565 | `0x0000` / 0 / 0 | `0xF800` / 11 / 5 | `0x07E0` / 5 / 6 | `0x001F` / 0 / 5 |
+| `QU\0\0` | 16 | Uncompressed RGBA 5551 | `0x8000` / 15 / 1 | `0x7C00` / 10 / 5 | `0x03E0` / 5 / 5 | `0x001F` / 0 / 5 |
+| `PV\0\0` | 16 | Uncompressed RGB 565 | `0x0000` / 0 / 0 | `0xF800` / 11 / 5 | `0x07E0` / 5 / 6 | `0x001F` / 0 / 5 |
 | `PNT3` | 32 | 32-bit BGRA with 16-byte aligned zero RLE | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 |
 
 ---
@@ -49,7 +50,8 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
 
 `PNT3` textures store raw 32-bit BGRA (`B, G, R, A`) pixels with a 16-byte aligned run-length compression for transparent black pixels (`0x00000000`):
 
-### Encoding Logic:
+### Encoding Logic
+
 1. Walk input 32-bit pixels.
 2. If pixel value is non-zero (or alpha > 0):
    - Write the 4-byte BGRA pixel directly to the output stream.
@@ -60,7 +62,8 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
    - Write `uint32_t chunk16` (the number of zero bytes in the run).
    - Advance position by `chunk16`.
 
-### Decoding Logic:
+### Decoding Logic
+
 1. Read 4-byte `uint32_t val`.
 2. If `(out_bytes % 16 == 0)` and `val > 0` and `(val % 16 == 0)` and `(val >> 24 == 0)`:
    - Output `val` zero bytes (`0x00`).
@@ -71,13 +74,15 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
 
 ## DDS $\leftrightarrow$ MMP Conversion Mapping
 
-### DDS $\to$ MMP:
+### DDS $\to$ MMP
+
 - Read 128-byte DirectDraw Surface (DDS) header.
 - Detect format from `ddspf.dwFourCC` (`DXT1`, `DXT3`, `DXT5`) or uncompressed RGB bitmask.
 - Construct the 76-byte MMP header with corresponding channel masks and bit shifts.
 - If `PNT3`, encode the payload using aligned RLE. For all other formats, copy raw payload bytes directly.
 
-### MMP $\to$ DDS:
+### MMP $\to$ DDS
+
 - Read 76-byte MMP header.
 - Construct 128-byte standard DDS header with `DDSD_CAPS`, `DDSD_WIDTH`, `DDSD_HEIGHT`, `DDSD_PIXELFORMAT`, and appropriate `dwFlags` / `dwCaps`.
 - If `PNT3`, decode the RLE stream into full uncompressed 32-bit BGRA buffer. For all other formats, write payload bytes verbatim.

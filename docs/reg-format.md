@@ -1,6 +1,7 @@
 # Evil Islands Registry Database Format (.reg)
 
 ## Overview
+
 Evil Islands `.reg` files are binary key-value database archives used to store engine configuration, game settings, gameplay variables, and quest metadata. Despite sharing the `.reg` extension with Windows Registry files, Evil Islands `.reg` files are **proprietary binary structures** identified by the 32-bit magic constant `0x45AB3EFB` (in byte order: `0xFB, 0x3E, 0xAB, 0x45`).
 
 This document details the file format, data types, hashing algorithm, collision resolution, and the serialization/deserialization logic between plain-text `.ini` and binary `.reg`.
@@ -8,6 +9,7 @@ This document details the file format, data types, hashing algorithm, collision 
 ---
 
 ## File Header Structure
+
 Every `.reg` file begins with a 6-byte header followed by the top-level section hash table:
 
 | Offset | Type | Field Name | Description |
@@ -19,6 +21,7 @@ Every `.reg` file begins with a 6-byte header followed by the top-level section 
 ---
 
 ## Section Table & Hash Table Structure
+
 Each entry in a section or key hash table is exactly 6 bytes (little-endian):
 
 ```cpp
@@ -29,7 +32,9 @@ struct HashEntry {
 ```
 
 ### Hash Algorithm
+
 Evil Islands computes a simple case-insensitive ASCII sum hash:
+
 ```cpp
 uint16_t CalculateEiHash(const std::string& name, uint16_t bucketCount) {
     if (bucketCount == 0) return 0;
@@ -42,6 +47,7 @@ uint16_t CalculateEiHash(const std::string& name, uint16_t bucketCount) {
 ```
 
 ### Hash Table Construction & Collision Resolution
+
 1. Initialize an array of `N` `HashEntry` slots with `nextIndex = 0xFFFF` and `offset = 0`.
 2. For each item (in insertion order):
    - Compute `bucket = CalculateEiHash(name, N)`.
@@ -55,6 +61,7 @@ uint16_t CalculateEiHash(const std::string& name, uint16_t bucketCount) {
 ---
 
 ## Section Record Structure
+
 Each section begins at its recorded file offset:
 
 | Offset | Type | Field Name | Description |
@@ -68,6 +75,7 @@ Each section begins at its recorded file offset:
 ---
 
 ## Key-Value Record Structure & Data Types
+
 Each key starts with a 1-byte type tag, a 2-byte key name length, the key name string, and the value payload:
 
 | Field | Type | Description |
@@ -91,7 +99,9 @@ Each key starts with a 1-byte type tag, a 2-byte key name length, the key name s
 ---
 
 ## Type Inference Rules (INI $\to$ REG)
+
 When converting plain text INI lines `Key=Value` into binary REG:
+
 1. **Integer Detection**: If the value contains only digits (with optional leading `+` or `-`), it is encoded as `TAG_INT32` (or `TAG_ARRAY_INT32` if multiple identical keys exist).
 2. **Float Detection**: If the value contains a decimal point `.` or exponent `e`/`E` and parses as a valid float, it is encoded as `TAG_FLOAT` (or `TAG_ARRAY_FLOAT`).
 3. **String Fallback**: All other values are stored as CP1251 strings (`TAG_STRING` or `TAG_ARRAY_STRING`).

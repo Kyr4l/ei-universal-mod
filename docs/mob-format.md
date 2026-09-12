@@ -1,11 +1,13 @@
 # Evil Islands Map Object File Format (.mob)
 
 ## Overview
+
 Evil Islands `.mob` (Map Object) files contain complete map scene hierarchies: placed units, inventory, armor/weapon equipment, diplomacy tables, levers, light sources, particle emitters, torches, sounds, quest logic triggers, and mission scripts.
 
 ---
 
 ## Binary Node Architecture
+
 Every node in a `.mob` file adheres to an 8-byte header structure:
 
 | Offset | Type | Field Name | Description |
@@ -19,7 +21,9 @@ Every node in a `.mob` file adheres to an 8-byte header structure:
 ---
 
 ## File Layout
+
 A `.mob` file starts with the root container node `OBJECTDBFILE` (`40960` / `0x0000A000`):
+
 1. `OBJECTDBFILE` (Root node, length equals file size)
 2. `SC_OBJECTDBFILE` / `PR_OBJECTDBFILE` (Marker node, length 8)
 3. Sequence of top-level sections:
@@ -45,7 +49,7 @@ A `.mob` file starts with the root container node `OBJECTDBFILE` (`40960` / `0x0
 | **Byte** | `9` | Single 8-bit unsigned integer (`uint8_t`) |
 | **Float** | `12` | Single 32-bit IEEE float (`float`) |
 | **Plot** | `20` | 3D coordinate tuple: 3 floats (`X, Y, Z`) |
-| **Quaternion / Rectangle**| `24` | 4D tuple: 4 floats (`X, Y, Z, W`) |
+| **Quaternion / Rectangle** | `24` | 4D tuple: 4 floats (`X, Y, Z, W`) |
 | **String** | Variable | Raw CP1251 text string (`length - 8` bytes) |
 | **StringArray** | Variable | `uint32_t count` + sequence of `[type(4) + length(4) + string]` |
 | **UnitStats** | `180` | Array of 43 `uint32_t` unit attributes (HP, stamina, speed, etc.) |
@@ -55,6 +59,7 @@ A `.mob` file starts with the root container node `OBJECTDBFILE` (`40960` / `0x0
 ---
 
 ## Script Decryption (`SS_TEXT` Node)
+
 The mission script in Evil Islands (`SS_TEXT`, magic `2899242187` / `0xACD33E2B`) is encrypted using MSVC's Linear Congruential Generator (LCG) XOR cipher:
 
 ```cpp
@@ -80,6 +85,7 @@ std::string DecryptScript(const uint8_t* payload, size_t payloadLen) {
 ---
 
 ## Key Node Magic Dictionary Reference
+
 - `OBJECTDBFILE`: `40960` (`0x0000A000`)
 - `OBJECTSECTION`: `45056` (`0x0000B000`)
 - `UNIT`: `3149594624` (`0xBBBC0000`)

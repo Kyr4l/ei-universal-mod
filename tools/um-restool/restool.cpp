@@ -120,6 +120,17 @@ static inline uint32_t CalculateResHash(const std::string& name, uint32_t bucket
     return sum % bucketCount;
 }
 
+static std::string ToArchivePath(const fs::path& path) {
+    std::string result = path.generic_string();
+    std::replace(result.begin(), result.end(), '/', '\\');
+    return result;
+}
+
+static fs::path FromArchivePath(std::string path) {
+    std::replace(path.begin(), path.end(), '\\', '/');
+    return fs::path(path);
+}
+
 // ============================================================================
 // Archive Entry Representation
 // ============================================================================
@@ -196,7 +207,7 @@ static bool UnpackResArchive(
         totalExtractedBytes += dlen;
 
         if (!dryRun) {
-            fs::path filePath = outDir / fileName;
+            fs::path filePath = outDir / FromArchivePath(fileName);
             if (filePath.has_parent_path()) {
                 std::error_code ec;
                 fs::create_directories(filePath.parent_path(), ec);
@@ -241,7 +252,7 @@ static bool PackResArchive(
             if (!entry.is_regular_file()) continue;
 
             fs::path relPath = fs::relative(entry.path(), inDir);
-            std::string relStr = relPath.generic_string();
+            std::string relStr = ToArchivePath(relPath);
 
             std::ifstream in(entry.path(), std::ios::binary | std::ios::ate);
             if (!in.is_open()) {

@@ -36,6 +36,10 @@ static bool g_keyboardRewriteKeyDown[256] = {};
 static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
 static bool g_enableMobValidation = false;
+static bool g_enableHeapTermination = false;
+
+// Not defined by MinGW's headers; value is stable across Windows versions.
+static const DWORD UM_STATUS_HEAP_CORRUPTION = 0xC0000374L;
 
 typedef HANDLE (WINAPI *CreateFileAFunction)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES,
     DWORD, DWORD, HANDLE);
@@ -1562,6 +1566,7 @@ static bool IsUnsafeExceptionToResume(const EXCEPTION_RECORD* record) {
     case EXCEPTION_STACK_OVERFLOW:
     case EXCEPTION_DATATYPE_MISALIGNMENT:
     case EXCEPTION_GUARD_PAGE:
+    case UM_STATUS_HEAP_CORRUPTION:
         return true;
     default:
         return false;
@@ -1589,6 +1594,8 @@ static const char* GetUnsafeExceptionReason(const EXCEPTION_RECORD* record) {
         return "datatype misalignment: an improperly aligned memory access occurred";
     case EXCEPTION_GUARD_PAGE:
         return "guard-page violation: protected memory was accessed";
+    case UM_STATUS_HEAP_CORRUPTION:
+        return "heap corruption: the process heap manager detected corrupted allocator metadata";
     default:
         return "exception is classified as unsafe to resume";
     }
@@ -1623,6 +1630,8 @@ static const char* GetExceptionCaseName(const EXCEPTION_RECORD* record) {
         return "EXCEPTION_BREAKPOINT";
     case EXCEPTION_SINGLE_STEP:
         return "EXCEPTION_SINGLE_STEP";
+    case UM_STATUS_HEAP_CORRUPTION:
+        return "STATUS_HEAP_CORRUPTION";
     default:
         return "UNKNOWN_EXCEPTION";
     }
@@ -1793,6 +1802,10 @@ static void LoadConfigFile(const char* dllPath) {
             fprintf(file, "; Validate .mob file headers when opened and log structural problems, including a\n");
             fprintf(file, "; cross-check of unit weapons/armors/spells/quest/quick items against the item/spell database; (true/false)\n");
             fprintf(file, "MOB_VALIDATION=false\n\n");
+            fprintf(file, "; Fail fast the instant Windows detects heap corruption instead of letting the\n");
+            fprintf(file, "; process keep running on corrupted memory until an unrelated later crash; the\n");
+            fprintf(file, "; resulting crash log points much closer to the real cause; (true/false)\n");
+            fprintf(file, "HEAP_CORRUPTION_TERMINATION=true\n\n");
             fclose(file);
         }
         return;
@@ -1864,6 +1877,8 @@ static void LoadConfigFile(const char* dllPath) {
             g_clearLogOnStart = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "MOB_VALIDATION")) {
             g_enableMobValidation = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "HEAP_CORRUPTION_TERMINATION")) {
+            g_enableHeapTermination = IsTrueString(value);
         }
     }
 
@@ -1999,13 +2014,23 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
+    g_enableHeapTermination = g_enableHeapTermination || GetEnvironmentFlag("HEAP_CORRUPTION_TERMINATION");
+    if (g_enableHeapTermination) {
+        // Converts heap corruption that the OS heap manager detects during a later,
+        // unrelated alloc/free into an immediate fail-fast crash at that detection
+        // point, instead of letting the process silently keep running on corrupted
+        // metadata until a much later, harder-to-diagnose crash occurs elsewhere.
+        if (!HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0)) {
+            LogLine("WARN", "HeapSetInformation(HeapEnableTerminationOnCorruption) failed, error=%lu", GetLastError());
+        }
+    }
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
     g_vectoredExceptionHandler = AddVectoredExceptionHandler(1, VectoredLoggingHandler);
     if (!g_vectoredExceptionHandler) {
         LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
     }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
@@ -2013,7 +2038,8 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         g_enableFileIoLogging ? "enabled" : "disabled",
         g_clearLogOnStart ? "enabled" : "disabled",
         g_enableAntiCrash ? "enabled" : "disabled",
-        g_enableMobValidation ? "enabled" : "disabled");
+        g_enableMobValidation ? "enabled" : "disabled",
+        g_enableHeapTermination ? "enabled" : "disabled");
     if (g_enableAntiCrash) {
         LogLine("ANTICRASH", "Windows critical-error dialogs are suppressed; unsafe exceptions will still use normal crash handling");
     }
