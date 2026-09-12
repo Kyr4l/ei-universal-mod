@@ -62,10 +62,10 @@ static constexpr uint32_t RES_MAGIC = 0x019CE23Cu; // "3c e2 9c 01"
 #pragma pack(push, 1)
 
 struct ResHeader {
-    uint32_t magic;      // 0x019CE23C
-    uint32_t numFiles;   // Total files in archive
-    uint32_t dataSize;   // Total bytes in contiguous payload section
-    uint32_t dirSize;    // Total bytes in trailing names block
+    uint32_t magic;        // 0x019CE23C
+    uint32_t numFiles;     // Total files in archive
+    uint32_t tableOffset;  // File offset where descriptor/hash table begins (16 + dataSize)
+    uint32_t namesLength;  // Byte size of trailing names block
 };
 
 #pragma pack(pop)
@@ -154,31 +154,32 @@ static bool UnpackResArchive(
         return false;
     }
 
-    uint32_t numFiles = hdr->numFiles;
-    uint32_t dataSize = hdr->dataSize;
-    uint32_t dirSize  = hdr->dirSize;
+    uint32_t numFiles    = hdr->numFiles;
+    uint32_t tableOffset = hdr->tableOffset;
+    uint32_t namesLength = hdr->namesLength;
 
-    if (16 + dataSize > resSize || dirSize > resSize || 16 + dataSize + dirSize > resSize) {
-        err = "Corrupted archive header (data/dir offsets extend beyond file size)";
+    if (tableOffset > resSize || namesLength > resSize || tableOffset + static_cast<size_t>(numFiles) * 22 > resSize) {
+        err = "Corrupted archive header (table/names offsets extend beyond file size)";
         return false;
     }
 
-    size_t descStart = 16 + dataSize;
-    size_t namesStart = resSize - dirSize;
-
+    size_t namesStart = resSize - namesLength;
     fileCount = numFiles;
     totalExtractedBytes = 0;
 
-    size_t pos = descStart;
     for (uint32_t i = 0; i < numFiles; ++i) {
-        if (pos + 6 > namesStart) {
-            err = "Reached unexpected end of file descriptors at index " + std::to_string(i);
-            return false;
-        }
+        size_t pos = tableOffset + static_cast<size_t>(i) * 22;
 
-        uint16_t nameLen = ReadUint16LE(resData + pos);
-        uint32_t nameOff = ReadUint32LE(resData + pos + 2);
-        pos += 6;
+        // int32_t  nextIdx  = ReadInt32LE(resData + pos);
+        uint32_t dlen     = ReadUint32LE(resData + pos + 4);
+        uint32_t doff     = ReadUint32LE(resData + pos + 8);
+        uint32_t time     = ReadUint32LE(resData + pos + 12);
+        uint16_t nameLen  = ReadUint16LE(resData + pos + 16);
+        uint32_t nameOff  = ReadUint32LE(resData + pos + 18);
+
+        if (nameLen == 0) {
+            continue; // Empty hash bucket slot
+        }
 
         if (namesStart + nameOff + nameLen > resSize) {
             err = "Invalid filename offset in names block for file index " + std::to_string(i);
@@ -187,29 +188,7 @@ static bool UnpackResArchive(
 
         std::string fileName(reinterpret_cast<const char*>(resData + namesStart + nameOff), nameLen);
 
-        uint32_t dlen = 0;
-        uint32_t doff = 0;
-        uint32_t time = 0;
-
-        if (numFiles == 1 && pos == namesStart) {
-            // Single-file archive with 6-byte header
-            dlen = dataSize;
-            doff = 16;
-            time = 0;
-        } else if (pos + 16 <= namesStart) {
-            // int32_t nextIdx = ReadInt32LE(resData + pos);
-            dlen = ReadUint32LE(resData + pos + 4);
-            doff = ReadUint32LE(resData + pos + 8);
-            time = ReadUint32LE(resData + pos + 12);
-            pos += 16;
-        } else {
-            // 0-byte file (no data payload)
-            dlen = 0;
-            doff = 0;
-            time = 0;
-        }
-
-        if (dlen > 0 && doff + dlen > resSize) {
+        if (dlen > 0 && (doff + dlen > resSize || doff < 16)) {
             err = "Invalid data payload offset for file: " + fileName;
             return false;
         }
@@ -387,29 +366,29 @@ static bool PackResArchive(
     for (uint32_t i = 0; i < numFiles; ++i) {
         const auto* rec = table[i];
         if (rec) {
-            WriteUint16LE(descBlock, static_cast<uint16_t>(rec->name.size()));
-            WriteUint32LE(descBlock, rec->nameOffset);
             WriteInt32LE(descBlock, nextIndexTable[i]);
             WriteUint32LE(descBlock, rec->dataLength);
             WriteUint32LE(descBlock, rec->dataOffset);
             WriteUint32LE(descBlock, rec->timestamp);
+            WriteUint16LE(descBlock, static_cast<uint16_t>(rec->name.size()));
+            WriteUint32LE(descBlock, rec->nameOffset);
         } else {
             // Empty slot fallback
-            WriteUint16LE(descBlock, 0);
-            WriteUint32LE(descBlock, 0);
             WriteInt32LE(descBlock, -1);
             WriteUint32LE(descBlock, 0);
             WriteUint32LE(descBlock, 0);
+            WriteUint32LE(descBlock, 0);
+            WriteUint16LE(descBlock, 0);
             WriteUint32LE(descBlock, 0);
         }
     }
 
     // 5. Construct final archive
     ResHeader hdr;
-    hdr.magic    = RES_MAGIC;
-    hdr.numFiles = numFiles;
-    hdr.dataSize = static_cast<uint32_t>(dataBlock.size());
-    hdr.dirSize  = static_cast<uint32_t>(namesBlock.size());
+    hdr.magic       = RES_MAGIC;
+    hdr.numFiles    = numFiles;
+    hdr.tableOffset = static_cast<uint32_t>(16 + dataBlock.size());
+    hdr.namesLength = static_cast<uint32_t>(namesBlock.size());
 
     resOut.clear();
     resOut.resize(sizeof(ResHeader));

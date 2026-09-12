@@ -35,30 +35,29 @@ An Evil Islands `.res` archive consists of three consecutive sections:
 | :--- | :--- | :--- | :--- |
 | `0x00` | `uint32_t` | `magic` | Fixed magic constant: `0x019CE23C` (`27058748`) |
 | `0x04` | `uint32_t` | `numFiles` | Total number of files/entries in the archive |
-| `0x08` | `uint32_t` | `dataSize` | Byte size of the contiguous payload data section |
-| `0x0C` | `uint32_t` | `dirSize` | Byte size of the trailing names block |
+| `0x08` | `uint32_t` | `tableOffset` | File offset where the descriptor/hash table begins (`16 + dataSize`) |
+| `0x0C` | `uint32_t` | `namesLength` | Byte length of the trailing names block |
 
 ---
 
 ## Directory & File Descriptor Layout
 
-The directory section starts immediately after the file data section at file offset `16 + dataSize`.
+The descriptor table starts at file offset `tableOffset` (which equals `16 + dataSize`).
+The names block begins immediately after the descriptor table:
+$$\text{namesOffset} = \text{tableOffset} + (\text{numFiles} \times 22)$$
+$$\text{totalFileSize} = \text{namesOffset} + \text{namesLength}$$
 
-### Base Names Offset:
-The names block starts at:
-$$\text{namesOffset} = \text{fileSize} - \text{dirSize}$$
-
-### File Descriptor Records:
-For each file in the archive (from `0` to `numFiles - 1`), the archive stores:
+### File Descriptor Records (22 Bytes per Slot):
+Each of the `numFiles` slots in the hash table represents one hash bucket and contains a 22-byte file descriptor:
 
 | Field | Type | Size | Description |
 | :--- | :--- | :--- | :--- |
-| `nameLen` | `uint16_t` | 2 bytes | Length of the filename in bytes |
-| `nameOffset` | `uint32_t` | 4 bytes | Relative byte offset into the names block (`namesOffset + nameOffset`) |
-| `nextIndex` | `int32_t` | 4 bytes | Hash collision chain index (`-1` / `0xFFFFFFFF` if end of chain) |
+| `nextIndex` | `int32_t` | 4 bytes | Next slot index in collision chain (`-1` / `0xFFFFFFFF` if end of chain) |
 | `dataLength` | `uint32_t` | 4 bytes | Uncompressed size of the file payload in bytes |
 | `dataOffset` | `uint32_t` | 4 bytes | Absolute file offset where the file payload begins |
 | `timestamp` | `uint32_t` | 4 bytes | File modification timestamp (Unix epoch time) |
+| `nameLen` | `uint16_t` | 2 bytes | Length of the filename in bytes (0 if empty bucket slot) |
+| `nameOffset` | `uint32_t` | 4 bytes | Relative byte offset into the names block (`namesOffset + nameOffset`) |
 
 > **Deduplication Note**: When two files in the archive contain identical content, the second file descriptor can share the same `dataOffset` and `dataLength` without duplicating the payload bytes in the data block.
 
