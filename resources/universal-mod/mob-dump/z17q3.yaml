@@ -11,8 +11,8 @@ OBJECTDBFILE:
       VSS_ID: 1
       VSS_RECT:
         - 3.5032461608120427e-44
-        - 9.668959403841238e-44
-        - 1.485376372184306e-43
+        - 9.6689594038412378e-44
+        - 1.4853763721843061e-43
         - 2.7465449900766415e-43
       VSS_TITLE: "z17q3"
       VSS_COMMANDS: "QStart(\"z17q3\")\nQObjKillGroup(\"Ciclopa3\")\nQFinish()"
@@ -100,7 +100,7 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 106.56199645996094
-        - 184.3520050048828
+        - 184.35200500488281
         - 0.0
       OBJROTATION:
         - 0.5519370436668396
@@ -114,7 +114,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.800000011920929
+        - 0.80000001192092896
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 30.0
@@ -126,7 +126,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 106.56199645996094
-          - 184.3520050048828
+          - 184.35200500488281
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -134,20 +134,20 @@ OBJECTDBFILE:
           GUARD_PT_POSITION:
             - 101.71817779541016
             - 184.78456115722656
-            - 6.526475429534912
+            - 6.5264754295349121
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 84.32813262939453
+              - 84.328132629394531
               - 196.17202758789062
-              - 7.350205421447754
+              - 7.3502054214477539
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 81.53157806396484
-              - 176.7129364013672
-              - 6.273020267486572
+              - 81.531578063964844
+              - 176.71293640136719
+              - 6.2730202674865723
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -162,7 +162,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 106.56199645996094
-          - 184.3520050048828
+          - 184.35200500488281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -177,7 +177,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 106.56199645996094
-          - 184.3520050048828
+          - 184.35200500488281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -192,7 +192,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 106.56199645996094
-          - 184.3520050048828
+          - 184.35200500488281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -207,7 +207,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 106.56199645996094
-          - 184.3520050048828
+          - 184.35200500488281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -278,10 +278,10 @@ OBJECTDBFILE:
         - 192.12399291992188
         - 0.0
       OBJROTATION:
-        - 0.7132505178451538
+        - 0.71325051784515381
         - 0.0
         - 0.0
-        - -0.7009091973304749
+        - -0.70090919733047485
       OBJ_USE_IN_SCRIPT: 1
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295
@@ -432,10 +432,10 @@ OBJECTDBFILE:
         - 204.29122924804688
         - 0.0
       OBJROTATION:
-        - 0.9304176568984985
+        - 0.93041765689849854
         - 0.0
         - 0.0
-        - -0.3665013015270233
+        - -0.36650130152702332
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 4294967295

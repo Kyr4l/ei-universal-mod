@@ -355,7 +355,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "goblinaxebag00"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 96.93785095214844
+        - 96.937850952148438
         - 162.68589782714844
         - 0.0
       OBJROTATION:
@@ -370,7 +370,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.699999988079071
+        - 0.69999998807907104
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -381,21 +381,21 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 96.93785095214844
+          - 96.937850952148438
           - 162.68589782714844
           - 1013.4910888671875
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 93.36448669433594
+            - 93.364486694335938
             - 158.71128845214844
-            - 8.779705047607422
+            - 8.7797050476074219
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 91.44918823242188
+              - 91.449188232421875
               - 156.41629028320312
-              - 8.661869049072266
+              - 8.6618690490722656
             ACTION_PT_WAIT_SEG: 100
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -480,11 +480,11 @@ OBJECTDBFILE:
       OBJSECTXTR: ""
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 94.89700317382812
+        - 94.897003173828125
         - 173.06399536132812
-        - -4.349999904632568
+        - -4.3499999046325684
       OBJROTATION:
-        - -0.9941666722297668
+        - -0.99416667222976685
         - 0.0
         - 0.0
         - 0.10785411298274994
@@ -496,3 +496,4 @@ OBJECTDBFILE:
         - 0.0
         - 0.0
         - 0.10000000149011612
+AIGRAPH: "NOT_NOW"

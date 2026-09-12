@@ -68,8 +68,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 44.92499923706055
-        - 103.4375991821289
+        - 44.924999237060547
+        - 103.43759918212891
         - 0.0
       OBJROTATION:
         - 1.0
@@ -109,8 +109,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 88.0009994506836
-          - 295.6940002441406
+          - 88.000999450683594
+          - 295.69400024414062
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -124,8 +124,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 88.0009994506836
-          - 295.6940002441406
+          - 88.000999450683594
+          - 295.69400024414062
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -139,8 +139,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 88.0009994506836
-          - 295.6940002441406
+          - 88.000999450683594
+          - 295.69400024414062
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -154,8 +154,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 88.0009994506836
-          - 295.6940002441406
+          - 88.000999450683594
+          - 295.69400024414062
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -178,7 +178,7 @@ OBJECTDBFILE:
         - 133.72811889648438
         - 0.0
       OBJROTATION:
-        - 0.9745657444000244
+        - 0.97456574440002441
         - 0.0
         - 0.0
         - -0.22410188615322113
@@ -187,8 +187,8 @@ OBJECTDBFILE:
       OBJ_PARENT_ID: 5574
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.6299999952316284
-        - 0.8100000023841858
+        - 0.62999999523162842
+        - 0.81000000238418579
         - 2.0
     OBJECT:
       OBJBODYPARTS:
@@ -203,19 +203,19 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 134.6240997314453
+        - 134.62409973144531
         - 102.9755859375
         - 0.0
       OBJROTATION:
         - 0.061045415699481964
-        - -0.0
         - 0.0
-        - -0.998134970664978
+        - 0.0
+        - -0.99813497066497803
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 5574
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.6299999952316284
-        - 0.8100000023841858
+        - 0.62999999523162842
+        - 0.81000000238418579
         - 2.0
