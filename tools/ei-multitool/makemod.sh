@@ -111,9 +111,9 @@ function copyMaps {
 }
 
 function dumpMobFiles {
-    if [[ "$dumpmobnswr" == "y" ]]; then
+    if [[ "$dumpmobnswr" != "n" ]]; then
         echo "${YELLOW}===== DUMPING MOB FILES FOR GIT ======================================== ${RESTORE}"
-        parallel -j 8 --bar "python3 bin/mob.py {} $mobdumpdir/{/.}.yaml $mobdumpdir/{/.}.eis" ::: $mobdir/* > /dev/null
+        bin/um-mobdump -d "$mobdir" -o "$mobdumpdir" -m
     fi
 }
 
@@ -305,15 +305,23 @@ function main {
 checkCommands
 
 echo "${YELLOW}Welcome to the Evil Islands Auto-Packing script for GNU/Linux!"
-echo "The options in caps are the defaults, options must be written in lowercase. ${RESTORE}"
+echo "The options in caps are the defaults. ${RESTORE}"
 
 read -rp "${LYELLOW}Convert REDRESS from DDS to MMP? [y/N] " redressnswr
 read -rp "Convert TEXTURES from DDS to MMP? [y/N] " texturesnswr
 read -rp "Convert TEXTURES-ZONES from DDS to MMP? [y/N] " textureszonesnswr
-read -rp "Dump MOB files? (only for version tracking with git) [y/N] " dumpmobnswr
+read -rp "Dump MOB files? (only for version tracking with git) [Y/n] " dumpmobnswr
 read -rp "Increment version? [y/N] " writeversionnswr
 read -rp "Replace the older mod files? [Y/n] ${RESTORE}" replaceoldnswr
 echo ""
+
+# Convert answers to lowercase for case-insensitive handling
+redressnswr="${redressnswr,,}"
+texturesnswr="${texturesnswr,,}"
+textureszonesnswr="${textureszonesnswr,,}"
+dumpmobnswr="${dumpmobnswr,,}"
+writeversionnswr="${writeversionnswr,,}"
+replaceoldnswr="${replaceoldnswr,,}"
 
 main
 
