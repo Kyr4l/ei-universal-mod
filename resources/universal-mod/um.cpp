@@ -6,6 +6,7 @@
 #include <windows.h>
 #include <dbghelp.h>
 #include <psapi.h>
+#include <tlhelp32.h>
 #include <io.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -14,18 +15,23 @@
 #include <stdarg.h>
 #include <string>
 #include <unordered_set>
+#include <unordered_map>
 #include <cstdint>
 #include <algorithm>
 
 // The DLL is injected into the game process, so these flags and hooks are
 // process-local. Configuration is loaded once during DLL_PROCESS_ATTACH.
 static HHOOK g_keyboardHook = NULL;
+// Set once in DllMain; needed by ReloadConfiguration() to re-resolve um.cfg's
+// path from a thread other than the one DllMain itself ran on.
+static HMODULE g_dllModule = NULL;
+static BYTE g_reloadConfigKey = VK_F11;
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
-static bool g_enableCrashLogging = false;
-static bool g_enableAntiCrash = false;
-static bool g_clearLogOnStart = false;
+static bool g_enableCrashLogging = true;
+static bool g_enableAntiCrash = true;
+static bool g_clearLogOnStart = true;
 static bool g_enableCrashDumps = true;
 static char g_logPath[MAX_PATH] = {};
 static CRITICAL_SECTION g_logLock;
@@ -40,9 +46,11 @@ static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
 static bool g_enableMobValidation = false;
 static bool g_enableHeapTermination = false;
-static bool g_enableOverlay = false;
-static BYTE g_overlayToggleKey = VK_F7;
+static bool g_enableOverlay = true;
+static BYTE g_overlayToggleKey = VK_F9;
 static volatile LONG g_overlayVisible = 0;
+static BYTE g_overlayLogToggleKey = VK_F10;
+static volatile LONG g_overlayLogVisible = 0;
 static HWND g_overlayWindow = NULL;
 static HWND g_overlayTargetWindow = NULL;
 static ULONGLONG g_overlayStartTickMs = 0;
@@ -76,8 +84,64 @@ static int g_overlayLogRingCount = 0;
 static bool g_overlayLogEnabled = true;
 static int g_overlayLogLineCount = 10;
 static char g_overlayLogPosition[16] = "bottom-left";
+static int g_overlayLogPanelWidth = 900;
+static bool g_overlayLogWrapEnabled = true;
 static char g_overlayLogLevelFilter[128] = "SYSINFO";
 static HWND g_overlayLogWindow = NULL;
+static char g_overlayTransparencyStyle[16] = "alpha";
+// Set once in OverlayThread before either window is created: true unless
+// OVERLAY_BACKGROUND_OPACITY=100, in which case the windows are created
+// WITHOUT WS_EX_LAYERED at all (see CompositeCanvasToWindow) - some Wine/
+// Wayland compositors force a game out of its direct-scanout present path
+// the instant ANY layered/alpha window overlaps it, regardless of the
+// actual alpha values used, causing a large GPU/FPS regression; a fully
+// opaque panel has no need for a layered window in the first place.
+static bool g_overlayWindowsAreLayered = true;
+
+// -- Performance tweaks (opt-in; off by default; independent of each other) --
+static bool g_enablePerformancePriority = false;
+static bool g_enablePerformanceAffinity = false;
+static char g_performancePriorityClass[16] = "high";
+static char g_performanceAffinityMaskHex[32] = {};
+
+// -- Overlay resource/backend diagnostics --
+static bool g_overlayShowResources = true;
+static bool g_overlayShowBackend = true;
+static bool g_overlayShowThreads = true;
+static double g_overlayCpuPercent = 0.0;
+static double g_overlayWorkingSetMb = 0.0;
+static int g_overlayThreadCount = 0;
+static ULONGLONG g_overlayLastCpuSampleTickMs = 0;
+static ULONGLONG g_overlayLastCpuTotalTime100ns = 0;
+static int g_overlayLogicalProcessorCount = 0;
+static char g_directDrawBackendName[128] = "unknown";
+static volatile LONG g_directDrawBackendIdentified = 0;
+
+// Per-thread CPU%% breakdown for the overlay ("what's actually using CPU").
+// Windows has no per-thread memory/RAM concept (memory belongs to the whole
+// process, not individual threads), so only CPU time is tracked per thread.
+struct OverlayThreadSample {
+    DWORD threadId;
+    double cpuPercent;
+    char name[32];
+};
+// Fixed array capacity (OVERLAY_THREAD_COUNT config value is clamped to this).
+static const int OVERLAY_THREAD_DISPLAY_MAX = 32;
+static int g_overlayThreadDisplayCount = 8;
+static OverlayThreadSample g_overlayThreadSamples[OVERLAY_THREAD_DISPLAY_MAX] = {};
+static int g_overlayThreadSampleCount = 0;
+static ULONGLONG g_overlayLastThreadSampleTickMs = 0;
+static std::unordered_map<DWORD, ULONGLONG> g_threadLastCpuTime100ns;
+
+// SetThreadDescription/GetThreadDescription only exist on Windows 10 1607+ and
+// are not declared by this project's older MinGW headers, so both are
+// resolved dynamically; threads that never named themselves (true for every
+// thread this 1990s/2000s-era game engine creates) simply show "(unnamed)".
+typedef HRESULT (WINAPI *SetThreadDescriptionFunction)(HANDLE, PCWSTR);
+typedef HRESULT (WINAPI *GetThreadDescriptionFunction)(HANDLE, PWSTR*);
+static SetThreadDescriptionFunction g_setThreadDescription = NULL;
+static GetThreadDescriptionFunction g_getThreadDescription = NULL;
+static volatile LONG g_threadDescriptionFunctionsResolved = 0;
 
 // Not defined by MinGW's headers; value is stable across Windows versions.
 static const DWORD UM_STATUS_HEAP_CORRUPTION = 0xC0000374L;
@@ -93,6 +157,14 @@ typedef HRESULT (WINAPI *DirectDrawCreateFunction)(const GUID*, void**, IUnknown
 typedef HRESULT (WINAPI *DirectDrawCreateExFunction)(const GUID*, void**, const GUID*, IUnknown*);
 typedef BOOL (WINAPI *MiniDumpWriteDumpFunction)(HANDLE, DWORD, HANDLE, DWORD,
     const MINIDUMP_EXCEPTION_INFORMATION*, const void*, const void*);
+
+// Only used to identify which DirectDraw driver is actually serving the game
+// (native Wine ddraw, a DDraw-to-D3D/Vulkan wrapper such as DXVK, etc.), via
+// the plain DirectDrawEnumerateA export - resolved dynamically below rather
+// than linked, since um.dll never links against ddraw.lib.
+typedef HRESULT (WINAPI *DDEnumCallbackAFunction)(GUID*, LPSTR, LPSTR, LPVOID);
+typedef HRESULT (WINAPI *DirectDrawEnumerateAFunction)(DDEnumCallbackAFunction, LPVOID);
+static const HRESULT UM_DDENUMRET_CANCEL = 1;
 
 // Raw vtable-slot typedefs for the small subset of DirectDraw COM methods
 // used to count presented frames. Slot indices and the ddsCaps byte offset
@@ -122,6 +194,10 @@ static WriteFileFunction g_originalWriteFile = NULL;
 static CloseHandleFunction g_originalCloseHandle = NULL;
 static DirectDrawCreateFunction g_originalDirectDrawCreate = NULL;
 static DirectDrawCreateExFunction g_originalDirectDrawCreateEx = NULL;
+
+// Forward declaration: defined later, but ApplyPerformanceTweaks() (defined
+// earlier, alongside the other config-value Parse* helpers) needs it.
+static void LogLine(const char* level, const char* format, ...);
 
 struct TrackedFileHandle {
     HANDLE handle;
@@ -184,10 +260,10 @@ static bool GetEnvironmentFlag(LPCSTR name) {
 }
 
 // Parse a key name (e.g. "F7", "0x76", "118") into a virtual-key code.
-// Falls back to VK_F7 for empty or unrecognized values.
-static BYTE ParseVirtualKeyName(const char* value) {
+// Falls back to defaultKey for empty or unrecognized values.
+static BYTE ParseVirtualKeyName(const char* value, BYTE defaultKey = VK_F9) {
     if (!value || value[0] == '\0') {
-        return VK_F7;
+        return defaultKey;
     }
 
     if ((value[0] == 'F' || value[0] == 'f') && isdigit(static_cast<unsigned char>(value[1]))) {
@@ -203,7 +279,7 @@ static BYTE ParseVirtualKeyName(const char* value) {
         return static_cast<BYTE>(parsed);
     }
 
-    return VK_F7;
+    return defaultKey;
 }
 
 // Parse a "RRGGBB" (optionally prefixed with '#' or "0x") hex color into a
@@ -350,6 +426,309 @@ static int ParseOverlayLogLineCount(const char* value) {
     return static_cast<int>(parsed);
 }
 
+// Parse OVERLAY_LOG_WIDTH (pixels), clamped to a sane range.
+static int ParseOverlayLogWidth(const char* value) {
+    if (!value || value[0] == '\0') {
+        return 900;
+    }
+    char* end = NULL;
+    long parsed = strtol(value, &end, 10);
+    if (end == value || parsed < 300) {
+        return 900;
+    }
+    if (parsed > 2000) {
+        parsed = 2000;
+    }
+    return static_cast<int>(parsed);
+}
+
+// Parse OVERLAY_THREAD_COUNT, clamped to [1, OVERLAY_THREAD_DISPLAY_MAX].
+static int ParseOverlayThreadCount(const char* value) {
+    if (!value || value[0] == '\0') {
+        return 8;
+    }
+    char* end = NULL;
+    long parsed = strtol(value, &end, 10);
+    if (end == value || parsed < 1) {
+        return 8;
+    }
+    if (parsed > OVERLAY_THREAD_DISPLAY_MAX) {
+        parsed = OVERLAY_THREAD_DISPLAY_MAX;
+    }
+    return static_cast<int>(parsed);
+}
+
+// Map a PERFORMANCE_PRIORITY_CLASS config value to a Win32 priority class.
+// Falls back to NORMAL_PRIORITY_CLASS for empty or unrecognized values.
+static DWORD ParsePriorityClassName(const char* value) {
+    if (!value || value[0] == '\0') {
+        return NORMAL_PRIORITY_CLASS;
+    }
+    if (EqualsIgnoreCase(value, "realtime")) {
+        return REALTIME_PRIORITY_CLASS;
+    }
+    if (EqualsIgnoreCase(value, "high")) {
+        return HIGH_PRIORITY_CLASS;
+    }
+    if (EqualsIgnoreCase(value, "abovenormal")) {
+        return ABOVE_NORMAL_PRIORITY_CLASS;
+    }
+    if (EqualsIgnoreCase(value, "belownormal")) {
+        return BELOW_NORMAL_PRIORITY_CLASS;
+    }
+    if (EqualsIgnoreCase(value, "idle")) {
+        return IDLE_PRIORITY_CLASS;
+    }
+    return NORMAL_PRIORITY_CLASS;
+}
+
+// The inverse of ParsePriorityClassName, used to show the *actual* live
+// priority class on the overlay so the user can confirm the tweak really
+// took effect rather than trusting the enabled flag alone.
+static const char* PriorityClassToName(DWORD priorityClass) {
+    switch (priorityClass) {
+    case REALTIME_PRIORITY_CLASS: return "realtime";
+    case HIGH_PRIORITY_CLASS: return "high";
+    case ABOVE_NORMAL_PRIORITY_CLASS: return "abovenormal";
+    case NORMAL_PRIORITY_CLASS: return "normal";
+    case BELOW_NORMAL_PRIORITY_CLASS: return "belownormal";
+    case IDLE_PRIORITY_CLASS: return "idle";
+    default: return "unknown";
+    }
+}
+
+// Reads the IMAGE_FILE_LARGE_ADDRESS_AWARE bit straight out of the running
+// process's own PE header in memory (no need to reopen game.exe from disk:
+// um.dll runs injected inside it, so its own module base IS game.exe's base).
+// Result never changes at runtime, so it is cached after the first call.
+static bool IsCurrentProcessLargeAddressAware() {
+    static int cachedResult = -1; // -1 = not yet queried, 0 = no, 1 = yes
+    if (cachedResult != -1) {
+        return cachedResult != 0;
+    }
+    cachedResult = 0;
+    BYTE* moduleBase = reinterpret_cast<BYTE*>(GetModuleHandleA(NULL));
+    if (moduleBase) {
+        IMAGE_DOS_HEADER* dosHeader = reinterpret_cast<IMAGE_DOS_HEADER*>(moduleBase);
+        if (dosHeader->e_magic == IMAGE_DOS_SIGNATURE) {
+            IMAGE_NT_HEADERS* ntHeaders =
+                reinterpret_cast<IMAGE_NT_HEADERS*>(moduleBase + dosHeader->e_lfanew);
+            if (ntHeaders->Signature == IMAGE_NT_SIGNATURE &&
+                    (ntHeaders->FileHeader.Characteristics & IMAGE_FILE_LARGE_ADDRESS_AWARE) != 0) {
+                cachedResult = 1;
+            }
+        }
+    }
+    return cachedResult != 0;
+}
+
+// Applies the configured process priority class and/or CPU affinity mask;
+// each is independently opt-in and off by default. Forcing high/realtime
+// priority on a game that isn't designed for it, or pinning it to too few
+// cores, can hurt instead of help - test before leaving either one enabled.
+static void ApplyPerformanceTweaks() {
+    if (g_enablePerformancePriority) {
+        DWORD requestedClass = ParsePriorityClassName(g_performancePriorityClass);
+        if (!SetPriorityClass(GetCurrentProcess(), requestedClass)) {
+            LogLine("WARN", "SetPriorityClass(%s) failed, error=%lu",
+                g_performancePriorityClass, GetLastError());
+        } else {
+            LogLine("INFO", "Priority class applied: %s", g_performancePriorityClass);
+        }
+    }
+    if (g_enablePerformanceAffinity && g_performanceAffinityMaskHex[0] != '\0') {
+        char* end = NULL;
+        unsigned long mask = strtoul(g_performanceAffinityMaskHex, &end, 16);
+        if (end != g_performanceAffinityMaskHex && mask != 0) {
+            if (!SetProcessAffinityMask(GetCurrentProcess(), static_cast<DWORD_PTR>(mask))) {
+                LogLine("WARN", "SetProcessAffinityMask(0x%lX) failed, error=%lu", mask, GetLastError());
+            } else {
+                LogLine("INFO", "CPU affinity mask applied: %s", g_performanceAffinityMaskHex);
+            }
+        } else {
+            LogLine("WARN", "PERFORMANCE_AFFINITY_MASK=\"%s\" is not a valid hex mask; affinity left unchanged",
+                g_performanceAffinityMaskHex);
+        }
+    }
+}
+
+// Resolves SetThreadDescription/GetThreadDescription once (Windows 10 1607+
+// only, may not exist under an older Wine build either); leaves both NULL on
+// failure, and every caller already tolerates that.
+static void EnsureThreadDescriptionFunctionsResolved() {
+    if (InterlockedCompareExchange(&g_threadDescriptionFunctionsResolved, 1, 0) != 0) {
+        return;
+    }
+    HMODULE kernel32Module = GetModuleHandleA("kernel32.dll");
+    if (!kernel32Module) {
+        return;
+    }
+    FARPROC setAddress = GetProcAddress(kernel32Module, "SetThreadDescription");
+    memcpy(&g_setThreadDescription, &setAddress, sizeof(g_setThreadDescription));
+    FARPROC getAddress = GetProcAddress(kernel32Module, "GetThreadDescription");
+    memcpy(&g_getThreadDescription, &getAddress, sizeof(g_getThreadDescription));
+}
+
+// Best-effort: names the calling thread so the overlay's thread breakdown can
+// tell um.dll's own threads apart from the game's (which never name theirs -
+// SetThreadDescription didn't exist when this engine was written).
+static void LabelCurrentThread(const wchar_t* name) {
+    if (g_setThreadDescription) {
+        g_setThreadDescription(GetCurrentThread(), name);
+    }
+}
+
+// Snapshot CPU%, working set, and thread count for the overlay's resource
+// line, plus a per-thread CPU% breakdown (lowest g_overlayThreadDisplayCount
+// thread IDs) so a runaway/busy thread can be spotted. The process-wide CPU% is
+// normalized against every logical processor (matching Task Manager's
+// convention); per-thread CPU% is NOT divided by core count, since a single
+// thread pinned to one core can reach 100% on its own. Windows has no
+// per-thread memory/RAM concept (memory belongs to the process, not
+// individual threads), so only CPU time is tracked per thread.
+static void SampleProcessDiagnostics() {
+    if (g_overlayLogicalProcessorCount <= 0) {
+        SYSTEM_INFO systemInfo = {};
+        GetSystemInfo(&systemInfo);
+        g_overlayLogicalProcessorCount = systemInfo.dwNumberOfProcessors > 0 ?
+            static_cast<int>(systemInfo.dwNumberOfProcessors) : 1;
+    }
+
+    FILETIME creationTime = {}, exitTime = {}, kernelTime = {}, userTime = {};
+    if (GetProcessTimes(GetCurrentProcess(), &creationTime, &exitTime, &kernelTime, &userTime)) {
+        ULARGE_INTEGER kernel100ns = {};
+        kernel100ns.LowPart = kernelTime.dwLowDateTime;
+        kernel100ns.HighPart = kernelTime.dwHighDateTime;
+        ULARGE_INTEGER user100ns = {};
+        user100ns.LowPart = userTime.dwLowDateTime;
+        user100ns.HighPart = userTime.dwHighDateTime;
+        ULONGLONG totalCpu100ns = kernel100ns.QuadPart + user100ns.QuadPart;
+
+        ULONGLONG nowMs = GetTickCount64();
+        if (g_overlayLastCpuSampleTickMs != 0) {
+            ULONGLONG wallElapsedMs = nowMs - g_overlayLastCpuSampleTickMs;
+            if (wallElapsedMs > 0) {
+                ULONGLONG cpuElapsed100ns = totalCpu100ns - g_overlayLastCpuTotalTime100ns;
+                double cpuElapsedMs = static_cast<double>(cpuElapsed100ns) / 10000.0;
+                g_overlayCpuPercent = (cpuElapsedMs / static_cast<double>(wallElapsedMs)) * 100.0 /
+                    g_overlayLogicalProcessorCount;
+            }
+        }
+        g_overlayLastCpuSampleTickMs = nowMs;
+        g_overlayLastCpuTotalTime100ns = totalCpu100ns;
+    }
+
+    PROCESS_MEMORY_COUNTERS memoryCounters = {};
+    memoryCounters.cb = sizeof(memoryCounters);
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &memoryCounters, sizeof(memoryCounters))) {
+        g_overlayWorkingSetMb = static_cast<double>(memoryCounters.WorkingSetSize) / (1024.0 * 1024.0);
+    }
+
+    ULONGLONG nowMs = GetTickCount64();
+    ULONGLONG wallElapsedMs = g_overlayLastThreadSampleTickMs != 0 ? nowMs - g_overlayLastThreadSampleTickMs : 0;
+    g_overlayLastThreadSampleTickMs = nowMs;
+
+    int threadCount = 0;
+    OverlayThreadSample samples[64] = {};
+    int sampleCount = 0;
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    if (snapshot != INVALID_HANDLE_VALUE) {
+        THREADENTRY32 entry = {};
+        entry.dwSize = sizeof(entry);
+        DWORD currentProcessId = GetCurrentProcessId();
+        if (Thread32First(snapshot, &entry)) {
+            do {
+                if (entry.th32OwnerProcessID != currentProcessId) {
+                    continue;
+                }
+                ++threadCount;
+                if (sampleCount >= static_cast<int>(sizeof(samples) / sizeof(samples[0]))) {
+                    continue;
+                }
+                HANDLE threadHandle = OpenThread(THREAD_QUERY_LIMITED_INFORMATION, FALSE, entry.th32ThreadID);
+                if (!threadHandle) {
+                    continue;
+                }
+                FILETIME threadCreation = {}, threadExit = {}, threadKernel = {}, threadUser = {};
+                if (GetThreadTimes(threadHandle, &threadCreation, &threadExit, &threadKernel, &threadUser)) {
+                    ULARGE_INTEGER threadKernel100ns = {};
+                    threadKernel100ns.LowPart = threadKernel.dwLowDateTime;
+                    threadKernel100ns.HighPart = threadKernel.dwHighDateTime;
+                    ULARGE_INTEGER threadUser100ns = {};
+                    threadUser100ns.LowPart = threadUser.dwLowDateTime;
+                    threadUser100ns.HighPart = threadUser.dwHighDateTime;
+                    ULONGLONG threadTotal100ns = threadKernel100ns.QuadPart + threadUser100ns.QuadPart;
+
+                    double threadCpuPercent = 0.0;
+                    auto previousSample = g_threadLastCpuTime100ns.find(entry.th32ThreadID);
+                    if (previousSample != g_threadLastCpuTime100ns.end() && wallElapsedMs > 0) {
+                        ULONGLONG deltaTime100ns = threadTotal100ns - previousSample->second;
+                        double deltaMs = static_cast<double>(deltaTime100ns) / 10000.0;
+                        threadCpuPercent = (deltaMs / static_cast<double>(wallElapsedMs)) * 100.0;
+                    }
+                    g_threadLastCpuTime100ns[entry.th32ThreadID] = threadTotal100ns;
+
+                    OverlayThreadSample& sample = samples[sampleCount];
+                    sample.threadId = entry.th32ThreadID;
+                    sample.cpuPercent = threadCpuPercent;
+                    strncpy(sample.name, "(unnamed)", sizeof(sample.name) - 1);
+                    if (g_getThreadDescription) {
+                        PWSTR description = NULL;
+                        if (SUCCEEDED(g_getThreadDescription(threadHandle, &description)) &&
+                                description && description[0] != L'\0') {
+                            WideCharToMultiByte(CP_ACP, 0, description, -1, sample.name,
+                                static_cast<int>(sizeof(sample.name) - 1), NULL, NULL);
+                        }
+                        if (description) {
+                            LocalFree(description);
+                        }
+                    }
+                    ++sampleCount;
+                }
+                CloseHandle(threadHandle);
+            } while (Thread32Next(snapshot, &entry));
+        }
+        CloseHandle(snapshot);
+    }
+    g_overlayThreadCount = threadCount;
+
+    // Sort by ascending thread ID (lowest/oldest first, typically the main
+    // game thread) rather than by CPU usage, so the displayed list stays in
+    // a stable order instead of reshuffling every sample as CPU%% changes.
+    // A selection sort is fine here - sampleCount is small, capped at 64 above.
+    int keep = sampleCount < g_overlayThreadDisplayCount ? sampleCount : g_overlayThreadDisplayCount;
+    for (int i = 0; i < keep; ++i) {
+        int best = i;
+        for (int j = i + 1; j < sampleCount; ++j) {
+            if (samples[j].threadId < samples[best].threadId) {
+                best = j;
+            }
+        }
+        if (best != i) {
+            // Not std::swap(): its exported symbol name confuses this
+            // toolchain's DLL linker for this particular struct.
+            OverlayThreadSample temp = samples[i];
+            samples[i] = samples[best];
+            samples[best] = temp;
+        }
+        g_overlayThreadSamples[i] = samples[i];
+    }
+    g_overlayThreadSampleCount = keep;
+
+    // Periodically drop stale entries (exited threads) so this map doesn't
+    // grow without bound over a long play session.
+    if (g_threadLastCpuTime100ns.size() > 256) {
+        std::unordered_map<DWORD, ULONGLONG> stillAlive;
+        for (int i = 0; i < sampleCount; ++i) {
+            auto it = g_threadLastCpuTime100ns.find(samples[i].threadId);
+            if (it != g_threadLastCpuTime100ns.end()) {
+                stillAlive[samples[i].threadId] = it->second;
+            }
+        }
+        g_threadLastCpuTime100ns.swap(stillAlive);
+    }
+}
+
 // Return whether a log level (e.g. "SYSINFO") appears in the comma-separated
 // OVERLAY_LOG_LEVEL_FILTER list, so the live log panel can skip mirroring it.
 static bool IsLogLevelFiltered(const char* level) {
@@ -493,9 +872,25 @@ static void WriteCrashDump(EXCEPTION_POINTERS* exceptionInfo) {
 
     SYSTEMTIME now = {};
     GetLocalTime(&now);
+
+    // Same directory as um.log, but its own "um-crashdump-" prefix rather
+    // than being named after um.log itself.
+    char dumpDir[MAX_PATH] = {};
+    size_t logPathLen = strlen(g_logPath);
+    if (logPathLen >= sizeof(dumpDir)) {
+        logPathLen = sizeof(dumpDir) - 1;
+    }
+    memcpy(dumpDir, g_logPath, logPathLen);
+    dumpDir[logPathLen] = '\0';
+    size_t lastSlash = strlen(dumpDir);
+    while (lastSlash > 0 && dumpDir[lastSlash - 1] != '\\' && dumpDir[lastSlash - 1] != '/') {
+        --lastSlash;
+    }
+    dumpDir[lastSlash] = '\0';
+
     char dumpPath[MAX_PATH] = {};
-    snprintf(dumpPath, sizeof(dumpPath), "%s.%04u%02u%02u-%02u%02u%02u.dmp",
-        g_logPath, now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute,
+    snprintf(dumpPath, sizeof(dumpPath), "%sum-crashdump-%04u%02u%02u-%02u%02u%02u.dmp",
+        dumpDir, now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute,
         now.wSecond);
     HANDLE dumpFile = CreateFileA(dumpPath, GENERIC_WRITE, FILE_SHARE_READ, NULL,
         CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1468,6 +1863,41 @@ static HRESULT WINAPI HookedDDCreateSurface(void* self, void* surfaceDesc,
     return result;
 }
 
+// Only the first (primary) enumerated driver is wanted, so cancel right away.
+static HRESULT WINAPI CaptureDirectDrawBackendName(GUID* guid, LPSTR driverDescription,
+        LPSTR driverName, LPVOID context) {
+    (void)guid;
+    (void)context;
+    if (driverDescription && driverDescription[0] != '\0') {
+        strncpy(g_directDrawBackendName, driverDescription, sizeof(g_directDrawBackendName) - 1);
+    } else if (driverName && driverName[0] != '\0') {
+        strncpy(g_directDrawBackendName, driverName, sizeof(g_directDrawBackendName) - 1);
+    }
+    return UM_DDENUMRET_CANCEL;
+}
+
+// Identify which DirectDraw driver is actually rendering (native Wine ddraw,
+// a DDraw-to-D3D/Vulkan wrapper such as DXVK, etc.) via the driver description
+// string DirectDrawEnumerateA reports, resolved dynamically since um.dll never
+// links against ddraw.lib. Runs once per process; the result never changes.
+static void IdentifyDirectDrawBackend() {
+    if (InterlockedCompareExchange(&g_directDrawBackendIdentified, 1, 0) != 0) {
+        return;
+    }
+    HMODULE ddrawModule = GetModuleHandleA("ddraw.dll");
+    DirectDrawEnumerateAFunction enumerate = NULL;
+    if (ddrawModule) {
+        FARPROC enumerateAddress = GetProcAddress(ddrawModule, "DirectDrawEnumerateA");
+        memcpy(&enumerate, &enumerateAddress, sizeof(enumerate));
+    }
+    if (!enumerate) {
+        LogLine("WARN", "DirectDrawEnumerateA unavailable; backend name will read as unknown");
+        return;
+    }
+    enumerate(CaptureDirectDrawBackendName, NULL);
+    LogLine("INFO", "DirectDraw backend identified as \"%s\"", g_directDrawBackendName);
+}
+
 // Patch CreateSurface on a newly created DirectDraw object so the overlay can
 // find and hook the primary surface once the game creates it.
 static void InstallDirectDrawFrameCounterHooks(void* directDrawObject) {
@@ -1490,6 +1920,7 @@ static HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw
         "DirectDrawCreate result=0x%08lX object=%p", result,
         directDraw ? *directDraw : NULL);
     if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
+        IdentifyDirectDrawBackend();
         InstallDirectDrawFrameCounterHooks(*directDraw);
     }
     return result;
@@ -1504,6 +1935,7 @@ static HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDr
         "DirectDrawCreateEx result=0x%08lX object=%p", result,
         directDraw ? *directDraw : NULL);
     if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
+        IdentifyDirectDrawBackend();
         InstallDirectDrawFrameCounterHooks(*directDraw);
     }
     return result;
@@ -2234,21 +2666,25 @@ static void LoadConfigFile(const char* dllPath) {
             fprintf(file, "; Rewrite backtick and number-row input as US-QWERTY keys; (true/false)\n");
             fprintf(file, "KEYBOARD_REWRITES=true\n");
             fprintf(file, "; Log keyboard rewrite events; (true/false)\n");
-            fprintf(file, "KEYBOARD_REWRITES_LOGGING=false\n\n");
+            fprintf(file, "KEYBOARD_REWRITES_LOGGING=false\n");
+            fprintf(file, "; Key that reloads um.cfg and applies it immediately, without restarting the game;\n");
+            fprintf(file, "; some settings (installing hooks, creating the overlay window for the first time)\n");
+            fprintf(file, "; still require a restart; F1-F12, or a 0x.. / decimal virtual-key code.\n");
+            fprintf(file, "RELOAD_CONFIG_KEY=F11\n\n");
 
             fprintf(file, "; -- Logging --\n");
             fprintf(file, "; Write diagnostic and crash information to um.log; (true/false)\n");
-            fprintf(file, "LOGGING=false\n");
+            fprintf(file, "LOGGING=true\n");
             fprintf(file, "; Log file opens, reads, and writes as INFO entries; (true/false)\n");
             fprintf(file, "FILE_IO_LOGGING=false\n");
             fprintf(file, "; Comma-separated file extensions to exclude from file-I/O logging; empty or like mmp,res.\n");
             fprintf(file, "FILE_IO_LOGGING_FILTER=\"\"\n");
             fprintf(file, "; Clear um.log on the first DLL instance of a launch; (true/false)\n");
-            fprintf(file, "CLEAR_LOG_ON_START=false\n\n");
+            fprintf(file, "CLEAR_LOG_ON_START=true\n\n");
 
             fprintf(file, "; -- Crash handling --\n");
             fprintf(file, "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)\n");
-            fprintf(file, "ANTICRASH=false\n");
+            fprintf(file, "ANTICRASH=true\n");
             fprintf(file, "; Write portable Windows minidumps beside um.log; (true/false)\n");
             fprintf(file, "CRASH_DUMPS=true\n");
             fprintf(file, "; Validate .mob file headers when opened and log structural problems, including a\n");
@@ -2259,32 +2695,94 @@ static void LoadConfigFile(const char* dllPath) {
             fprintf(file, "; resulting crash log points much closer to the real cause; (true/false)\n");
             fprintf(file, "HEAP_CORRUPTION_TERMINATION=true\n\n");
 
+            fprintf(file, "; -- Performance --\n");
+            fprintf(file, "; These two settings are independent of each other - enabling one does not\n");
+            fprintf(file, "; enable the other.\n");
+            fprintf(file, ";\n");
+            fprintf(file, "; Apply a custom process priority class below; off by default, since forcing\n");
+            fprintf(file, "; high/realtime priority on a game not designed for it can cause audio/input\n");
+            fprintf(file, "; stutter instead of helping; (true/false)\n");
+            fprintf(file, "PERFORMANCE_PRIORITY_ENABLED=false\n");
+            fprintf(file, "; Priority class to apply when the setting above is enabled; one of idle,\n");
+            fprintf(file, "; belownormal, normal, abovenormal, high, realtime.\n");
+            fprintf(file, "PERFORMANCE_PRIORITY_CLASS=high\n");
+            fprintf(file, "; Apply the CPU affinity mask below; off by default, since restricting the\n");
+            fprintf(file, "; game to too few cores can make performance WORSE, not better - test before\n");
+            fprintf(file, "; leaving this on; (true/false)\n");
+            fprintf(file, "PERFORMANCE_AFFINITY_ENABLED=false\n");
+            fprintf(file, "; Restricts which CPU cores the game is allowed to run on when the setting\n");
+            fprintf(file, "; above is enabled. This does NOT make the game slower or single-threaded by\n");
+            fprintf(file, "; itself - it can help an old, mostly single-threaded game like this one, by\n");
+            fprintf(file, "; stopping Windows/Wine from constantly bouncing its one busy thread between\n");
+            fprintf(file, "; different cores - but restricting to too few cores can backfire.\n");
+            fprintf(file, ";\n");
+            fprintf(file, "; You do not need to understand binary/hex to use this - just copy one of these\n");
+            fprintf(file, "; common values (check Task Manager/Windows or `nproc`/System Monitor on Linux\n");
+            fprintf(file, "; first to see how many cores you actually have, and don't pick too few):\n");
+            fprintf(file, ";   0x3  = cores 1-2\n");
+            fprintf(file, ";   0xF  = cores 1-4\n");
+            fprintf(file, ";   0x3F = cores 1-6\n");
+            fprintf(file, ";   0xFF = cores 1-8\n");
+            fprintf(file, "PERFORMANCE_AFFINITY_MASK=\"\"\n\n");
+
             fprintf(file, "; -- Overlay --\n");
             fprintf(file, "; Enable a toggleable diagnostic overlay drawn on top of the game window; (true/false)\n");
-            fprintf(file, "OVERLAY_ENABLED=false\n");
-            fprintf(file, "; Key that shows/hides the overlay while the game has focus; F1-F12, or a 0x.. / decimal virtual-key code.\n");
-            fprintf(file, "OVERLAY_TOGGLE_KEY=F7\n");
+            fprintf(file, "OVERLAY_ENABLED=true\n");
+            fprintf(file, "; Key that shows/hides the main overlay panel while the game has focus; F1-F12,\n");
+            fprintf(file, "; or a 0x.. / decimal virtual-key code.\n");
+            fprintf(file, "OVERLAY_TOGGLE_KEY=F9\n");
             fprintf(file, "; Corner/edge of the game window the overlay is anchored to; one of\n");
             fprintf(file, "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center.\n");
             fprintf(file, "OVERLAY_POSITION=top-left\n");
             fprintf(file, "; Overlay text color as a hex RRGGBB value (no # needed).\n");
             fprintf(file, "OVERLAY_COLOR=00FF00\n");
-            fprintf(file, "; How often the overlay repaints and samples FPS, in milliseconds (100-5000).\n");
+            fprintf(file, "; How often the overlay repaints and samples FPS/resources, in milliseconds (100-5000).\n");
             fprintf(file, "OVERLAY_REFRESH_MS=500\n");
             fprintf(file, "; Show the FPS sparkline graph (frametime stays as text only); (true/false)\n");
             fprintf(file, "OVERLAY_SHOW_FPS_GRAPH=true\n");
             fprintf(file, "; Comma-separated static FPS reference marks for the graph, ascending; the lowest\n");
             fprintf(file, "; two always show, the rest only appear once the game actually reaches them.\n");
             fprintf(file, "OVERLAY_FPS_MARKS=30,60,75,120,140,165,240\n");
+            fprintf(file, "; Show CPU%%/memory/thread-count usage of game.exe; (true/false)\n");
+            fprintf(file, "OVERLAY_SHOW_RESOURCES=true\n");
+            fprintf(file, "; Show which DirectDraw driver is actually rendering (native, dgVoodoo2, DXVK, etc.); (true/false)\n");
+            fprintf(file, "OVERLAY_SHOW_BACKEND=true\n");
+            fprintf(file, "; Show a per-thread CPU%% breakdown below the FPS graph (lowest %d thread IDs,\n", g_overlayThreadDisplayCount);
+            fprintf(file, "; oldest/main thread first and stable across samples, rather than resorted by\n");
+            fprintf(file, "; CPU%% each tick); thread names are usually \"(unnamed)\" since this game predates\n");
+            fprintf(file, "; thread naming APIs - only um.dll's own threads are named; (true/false)\n");
+            fprintf(file, "OVERLAY_SHOW_THREADS=true\n");
+            fprintf(file, "; How many threads to list (lowest thread IDs first); max %d.\n", OVERLAY_THREAD_DISPLAY_MAX);
+            fprintf(file, "OVERLAY_THREAD_COUNT=%d\n", g_overlayThreadDisplayCount);
             fprintf(file, "; Panel background color as a hex RRGGBB value (no # needed).\n");
             fprintf(file, "OVERLAY_BACKGROUND_COLOR=000000\n");
             fprintf(file, "; Panel background opacity as a percentage (0=fully transparent, 100=solid).\n");
-            fprintf(file, "OVERLAY_BACKGROUND_OPACITY=20\n\n");
+            fprintf(file, "; NOTE: 100 renders the panel WITHOUT a layered window at all (plain BitBlt);\n");
+            fprintf(file, "; any value below 100 re-enables a layered window, which on some Wine/Wayland\n");
+            fprintf(file, "; setups forces the game out of direct-scanout presentation and causes a large\n");
+            fprintf(file, "; GPU/FPS regression - confirmed to happen with BOTH transparency styles below,\n");
+            fprintf(file, "; not just smooth alpha blending; 100 is the only performance-safe value there.\n");
+            fprintf(file, "OVERLAY_BACKGROUND_OPACITY=100\n");
+            fprintf(file, "; How the background opacity above is achieved when below 100; \"alpha\" blends\n");
+            fprintf(file, "; smoothly (some Wine/Wayland setups don't honor this and render fully opaque\n");
+            fprintf(file, "; instead); \"dither\" approximates it with alternating fully-opaque/fully-\n");
+            fprintf(file, "; transparent scanline bands, which still works when smooth per-pixel alpha\n");
+            fprintf(file, "; blending does not; one of alpha, dither.\n");
+            fprintf(file, "OVERLAY_TRANSPARENCY_STYLE=alpha\n\n");
             fprintf(file, "; -- Overlay log panel --\n");
             fprintf(file, "; Show a separate auto-scrolling panel with the last few um.log lines; (true/false)\n");
             fprintf(file, "OVERLAY_LOG_ENABLED=true\n");
+            fprintf(file, "; Key that shows/hides the log panel independently of the main overlay panel;\n");
+            fprintf(file, "; F1-F12, or a 0x.. / decimal virtual-key code.\n");
+            fprintf(file, "OVERLAY_LOG_TOGGLE_KEY=F10\n");
             fprintf(file, "; Number of most recent log lines to display, newest at the bottom (max %d).\n", OVERLAY_LOG_CAPACITY);
             fprintf(file, "OVERLAY_LOG_LINES=10\n");
+            fprintf(file, "; Log panel width in pixels (300-2000); widen this if long lines still get\n");
+            fprintf(file, "; wrapped/clipped too aggressively.\n");
+            fprintf(file, "OVERLAY_LOG_WIDTH=900\n");
+            fprintf(file, "; Wrap log lines that are too long to fit within the panel width onto extra\n");
+            fprintf(file, "; visual rows instead of clipping them; counts against OVERLAY_LOG_LINES above; (true/false)\n");
+            fprintf(file, "OVERLAY_LOG_WRAP=true\n");
             fprintf(file, "; Corner/edge of the game window the log panel is anchored to; one of\n");
             fprintf(file, "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center.\n");
             fprintf(file, "OVERLAY_LOG_POSITION=bottom-left\n");
@@ -2349,6 +2847,8 @@ static void LoadConfigFile(const char* dllPath) {
             g_enableKeyboardRewrites = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "KEYBOARD_REWRITES_LOGGING")) {
             g_enableKeyboardRewriteLogging = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "RELOAD_CONFIG_KEY")) {
+            g_reloadConfigKey = ParseVirtualKeyName(value, VK_F11);
         } else if (EqualsIgnoreCase(key, "LOGGING")) {
             g_enableCrashLogging = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "FILE_IO_LOGGING")) {
@@ -2365,10 +2865,18 @@ static void LoadConfigFile(const char* dllPath) {
             g_enableMobValidation = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "HEAP_CORRUPTION_TERMINATION")) {
             g_enableHeapTermination = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "PERFORMANCE_PRIORITY_ENABLED")) {
+            g_enablePerformancePriority = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "PERFORMANCE_PRIORITY_CLASS")) {
+            SetQuotedConfigString(g_performancePriorityClass, sizeof(g_performancePriorityClass), value);
+        } else if (EqualsIgnoreCase(key, "PERFORMANCE_AFFINITY_ENABLED")) {
+            g_enablePerformanceAffinity = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "PERFORMANCE_AFFINITY_MASK")) {
+            SetQuotedConfigString(g_performanceAffinityMaskHex, sizeof(g_performanceAffinityMaskHex), value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_ENABLED")) {
             g_enableOverlay = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_TOGGLE_KEY")) {
-            g_overlayToggleKey = ParseVirtualKeyName(value);
+            g_overlayToggleKey = ParseVirtualKeyName(value, VK_F9);
         } else if (EqualsIgnoreCase(key, "OVERLAY_POSITION")) {
             ParseOverlayPosition(value, g_overlayPosition, sizeof(g_overlayPosition));
         } else if (EqualsIgnoreCase(key, "OVERLAY_COLOR")) {
@@ -2379,14 +2887,30 @@ static void LoadConfigFile(const char* dllPath) {
             g_overlayShowFpsGraph = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_FPS_MARKS")) {
             ParseFpsMarks(value, g_overlayFpsMarks, &g_overlayFpsMarkCount);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_RESOURCES")) {
+            g_overlayShowResources = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_BACKEND")) {
+            g_overlayShowBackend = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_THREADS")) {
+            g_overlayShowThreads = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_THREAD_COUNT")) {
+            g_overlayThreadDisplayCount = ParseOverlayThreadCount(value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_BACKGROUND_COLOR")) {
             g_overlayBackgroundColor = ParseHexColor(value, RGB(0, 0, 0));
         } else if (EqualsIgnoreCase(key, "OVERLAY_BACKGROUND_OPACITY")) {
             g_overlayBackgroundOpacityPercent = ParseOverlayOpacityPercent(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_TRANSPARENCY_STYLE")) {
+            SetQuotedConfigString(g_overlayTransparencyStyle, sizeof(g_overlayTransparencyStyle), value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_ENABLED")) {
             g_overlayLogEnabled = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_TOGGLE_KEY")) {
+            g_overlayLogToggleKey = ParseVirtualKeyName(value, VK_F10);
         } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_LINES")) {
             g_overlayLogLineCount = ParseOverlayLogLineCount(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_WIDTH")) {
+            g_overlayLogPanelWidth = ParseOverlayLogWidth(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_WRAP")) {
+            g_overlayLogWrapEnabled = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_POSITION")) {
             ParseOverlayPosition(value, g_overlayLogPosition, sizeof(g_overlayLogPosition));
         } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_LEVEL_FILTER")) {
@@ -2395,6 +2919,25 @@ static void LoadConfigFile(const char* dllPath) {
     }
 
     fclose(file);
+}
+
+// Re-reads um.cfg and re-applies whatever can safely take effect while the
+// game is already running (most flags, overlay settings, priority/affinity).
+// A few things - installing IAT/DirectDraw hooks and creating the overlay
+// window - only ever happen once at DLL attach, so toggling those settings
+// on for the first time via reload still needs a game restart to take effect.
+static void ReloadConfiguration() {
+    if (!g_dllModule) {
+        return;
+    }
+    char dllPath[MAX_PATH] = {};
+    if (GetModuleFileNameA(g_dllModule, dllPath, MAX_PATH) == 0) {
+        LogLine("WARN", "Config reload failed: could not resolve um.dll's own path");
+        return;
+    }
+    LoadConfigFile(dllPath);
+    ApplyPerformanceTweaks();
+    LogLine("INFO", "um.cfg reloaded");
 }
 
 // Synthesize one US-QWERTY backtick press using scan code 0x29.
@@ -2444,12 +2987,24 @@ static void SendQwertyNumberKeyPress(BYTE vkCode, bool logRewrite) {
 }
 
 // Intercept the backtick and number-row keys and rewrite them as US-QWERTY presses;
-// also watch for the overlay toggle key independently of the rewrite feature.
+// also watch for the overlay toggle key and the config-reload key, both
+// independently of the rewrite feature.
 static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
         // Do not process the synthetic events generated by SendInput below.
         if (kb && (kb->flags & LLKHF_INJECTED) == 0) {
+            if (kb->vkCode == g_reloadConfigKey) {
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                    if (!g_keyboardRewriteKeyDown[g_reloadConfigKey]) {
+                        g_keyboardRewriteKeyDown[g_reloadConfigKey] = true;
+                        ReloadConfiguration();
+                    }
+                } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
+                    g_keyboardRewriteKeyDown[g_reloadConfigKey] = false;
+                }
+                return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
+            }
             if (g_enableOverlay && kb->vkCode == g_overlayToggleKey) {
                 if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
                     if (!g_keyboardRewriteKeyDown[g_overlayToggleKey]) {
@@ -2458,13 +3013,25 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
                         if (g_overlayWindow) {
                             ShowWindow(g_overlayWindow, g_overlayVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
                         }
-                        if (g_overlayLogWindow) {
-                            ShowWindow(g_overlayLogWindow, g_overlayVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
-                        }
                         LogLine("INFO", "Overlay toggled %s", g_overlayVisible ? "visible" : "hidden");
                     }
                 } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
                     g_keyboardRewriteKeyDown[g_overlayToggleKey] = false;
+                }
+                return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
+            }
+            if (g_enableOverlay && g_overlayLogEnabled && kb->vkCode == g_overlayLogToggleKey) {
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                    if (!g_keyboardRewriteKeyDown[g_overlayLogToggleKey]) {
+                        g_keyboardRewriteKeyDown[g_overlayLogToggleKey] = true;
+                        g_overlayLogVisible = g_overlayLogVisible ? 0 : 1;
+                        if (g_overlayLogWindow) {
+                            ShowWindow(g_overlayLogWindow, g_overlayLogVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
+                        }
+                        LogLine("INFO", "Overlay log panel toggled %s", g_overlayLogVisible ? "visible" : "hidden");
+                    }
+                } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
+                    g_keyboardRewriteKeyDown[g_overlayLogToggleKey] = false;
                 }
                 return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
             }
@@ -2499,6 +3066,7 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
 // WH_KEYBOARD_LL callbacks are delivered to this thread, not to the game thread.
 // Synthetic SendInput events are filtered out by LowLevelKeyboardProc.
 DWORD WINAPI KeyPopupThread(LPVOID lpParameter) {
+    LabelCurrentThread(L"um.dll: KeyPopup");
     HMODULE module = reinterpret_cast<HMODULE>(lpParameter);
     g_keyboardHook = SetWindowsHookExW(WH_KEYBOARD_LL, LowLevelKeyboardProc, module, 0);
     if (!g_keyboardHook) {
@@ -2544,11 +3112,11 @@ static HWND FindGameWindow() {
 static const int OVERLAY_PANEL_WIDTH = 340;
 static const int OVERLAY_PANEL_MARGIN = 12;
 static const int OVERLAY_GRAPH_HEIGHT = 150;
-static const int OVERLAY_TEXT_LINE_COUNT = 2;
 static const int OVERLAY_SECTION_GAP = 10;
-static const int OVERLAY_TEXT_BLOCK_HEIGHT = 8 + OVERLAY_TEXT_LINE_COUNT * 20 + OVERLAY_SECTION_GAP;
-static const int OVERLAY_LOG_PANEL_WIDTH = 700;
-static const int OVERLAY_LOG_LINE_HEIGHT = 14;
+// Matches the main panel's font size/line spacing (16px font, 20px pitch) so
+// the log panel isn't noticeably smaller/harder to read than the rest of the
+// overlay.
+static const int OVERLAY_LOG_LINE_HEIGHT = 20;
 
 // A CPU-side 32bpp ARGB bitmap composited onto its window via
 // UpdateLayeredWindow, so each panel can have its own configurable
@@ -2619,23 +3187,72 @@ static void EnsureAlphaCanvas(AlphaCanvas& canvas, int width, int height) {
 // GDI drawing happens; GDI operations never touch the alpha channel, which is
 // what lets FinalizeCanvasAlpha() later tell "untouched background" pixels
 // apart from "something was drawn here" pixels.
-static void FillCanvasBackground(const AlphaCanvas& canvas, COLORREF color, BYTE alpha) {
+//
+// When ditherStyle is true, alpha is not blended smoothly (per-pixel alpha
+// blending is confirmed unsupported by some Wine/Wayland compositor stacks -
+// see OVERLAY_TRANSPARENCY_STYLE); instead whole horizontal rows are made
+// EITHER fully opaque OR fully transparent (alpha 0 or 255 only, never
+// partial), in a repeating scanline band pattern whose density approximates
+// the configured opacity. Bands (not a per-pixel checkerboard) are used
+// deliberately: a per-pixel pattern was tried first and caused severe
+// slowdowns, almost certainly because the compositor rebuilds an "opaque
+// region" from the alpha channel on every UpdateLayeredWindow call, and a
+// checkerboard turns that into thousands of tiny rectangles instead of a
+// handful of full-width bands.
+static const int OVERLAY_DITHER_BAND_PERIOD = 5;
+
+// True if scanline row y should be fully opaque for the given opacity%, using
+// a repeating OVERLAY_DITHER_BAND_PERIOD-row cycle.
+static bool ShouldDitherRowBeOpaque(int y, int opacityPercent) {
+    if (opacityPercent <= 0) {
+        return false;
+    }
+    if (opacityPercent >= 100) {
+        return true;
+    }
+    int opaqueRowsPerCycle = (opacityPercent * OVERLAY_DITHER_BAND_PERIOD) / 100;
+    if (opaqueRowsPerCycle < 1) {
+        opaqueRowsPerCycle = 1; // any nonzero opacity should show at least a faint band
+    }
+    return (y % OVERLAY_DITHER_BAND_PERIOD) < opaqueRowsPerCycle;
+}
+
+static void FillCanvasBackground(const AlphaCanvas& canvas, COLORREF color, BYTE alpha, bool ditherStyle) {
     if (!canvas.pixels) {
         return;
     }
-    DWORD packed = (static_cast<DWORD>(alpha) << 24) | (static_cast<DWORD>(GetRValue(color)) << 16) |
+    DWORD rgb = (static_cast<DWORD>(GetRValue(color)) << 16) |
         (static_cast<DWORD>(GetGValue(color)) << 8) | static_cast<DWORD>(GetBValue(color));
+    DWORD opaquePacked = 0xFF000000 | rgb;
+    // Alpha=0 with RGB still set to the background color (not zeroed) keeps
+    // the "still matches background" equality check below working the same
+    // way in both dither and smooth-alpha mode.
+    DWORD transparentPacked = rgb;
+    DWORD blendedPacked = (static_cast<DWORD>(alpha) << 24) | rgb;
     DWORD* pixels = static_cast<DWORD*>(canvas.pixels);
-    int count = canvas.width * canvas.height;
-    for (int i = 0; i < count; ++i) {
-        pixels[i] = packed;
+    if (!ditherStyle) {
+        int count = canvas.width * canvas.height;
+        for (int i = 0; i < count; ++i) {
+            pixels[i] = blendedPacked;
+        }
+        return;
+    }
+    int opacityPercent = (static_cast<int>(alpha) * 100) / 255;
+    for (int y = 0; y < canvas.height; ++y) {
+        DWORD rowValue = ShouldDitherRowBeOpaque(y, opacityPercent) ? opaquePacked : transparentPacked;
+        DWORD* row = pixels + static_cast<size_t>(y) * canvas.width;
+        for (int x = 0; x < canvas.width; ++x) {
+            row[x] = rowValue;
+        }
     }
 }
 
 // Any pixel still exactly matching the background fill was never drawn on,
-// so it keeps the configured (premultiplied) alpha; everything else GDI drew
-// becomes fully opaque, since UpdateLayeredWindow requires premultiplied alpha.
-static void FinalizeCanvasAlpha(const AlphaCanvas& canvas, COLORREF color, BYTE alpha) {
+// so it keeps the alpha FillCanvasBackground already gave it; everything
+// else GDI drew becomes fully opaque, since UpdateLayeredWindow requires
+// premultiplied alpha (trivial here: alpha is always 0 or 255 in dither mode,
+// and the smooth-alpha mode premultiplies explicitly below).
+static void FinalizeCanvasAlpha(const AlphaCanvas& canvas, COLORREF color, BYTE alpha, bool ditherStyle) {
     if (!canvas.pixels) {
         return;
     }
@@ -2651,7 +3268,11 @@ static void FinalizeCanvasAlpha(const AlphaCanvas& canvas, COLORREF color, BYTE 
     int count = canvas.width * canvas.height;
     for (int i = 0; i < count; ++i) {
         if ((pixels[i] & 0x00FFFFFF) == backgroundRgb) {
-            pixels[i] = premulBackground;
+            if (!ditherStyle) {
+                pixels[i] = premulBackground;
+            }
+            // In dither mode the pixel already holds its final 0x00000000 or
+            // 0xFF<rgb> value from FillCanvasBackground; nothing more to do.
         } else {
             pixels[i] |= 0xFF000000;
         }
@@ -2661,6 +3282,19 @@ static void FinalizeCanvasAlpha(const AlphaCanvas& canvas, COLORREF color, BYTE 
 // Push the finished canvas to the screen at the given top-left position.
 static void CompositeCanvasToWindow(HWND hwnd, const AlphaCanvas& canvas, int x, int y) {
     if (!hwnd || !canvas.dc) {
+        return;
+    }
+    if (!g_overlayWindowsAreLayered) {
+        // Fully opaque panel: plain BitBlt onto the window's own DC instead
+        // of UpdateLayeredWindow, so the window is never WS_EX_LAYERED at
+        // all (see g_overlayWindowsAreLayered for why that matters here).
+        SetWindowPos(hwnd, NULL, x, y, canvas.width, canvas.height,
+            SWP_NOZORDER | SWP_NOACTIVATE);
+        HDC windowDC = GetDC(hwnd);
+        if (windowDC) {
+            BitBlt(windowDC, 0, 0, canvas.width, canvas.height, canvas.dc, 0, 0, SRCCOPY);
+            ReleaseDC(hwnd, windowDC);
+        }
         return;
     }
     POINT srcPos = {0, 0};
@@ -2683,13 +3317,49 @@ static void CompositeCanvasToWindow(HWND hwnd, const AlphaCanvas& canvas, int x,
     }
 }
 
-// Panel height depends on whether the FPS graph is enabled in um.cfg, so it
-// is computed rather than a fixed constant.
-static int ComputeOverlayPanelHeight() {
-    int height = OVERLAY_TEXT_BLOCK_HEIGHT;
-    if (g_overlayShowFpsGraph) {
-        height += 40 + OVERLAY_GRAPH_HEIGHT;
+// Panel height depends on whether the FPS graph and optional diagnostic lines
+// are enabled in um.cfg, so it is computed rather than a fixed constant.
+// Layout, top to bottom: title/FPS block, FPS graph, then LAA/priority/
+// backend block, then the optional per-thread breakdown.
+static int ComputeOverlayTopLineCount() {
+    int count = 2; // title, FPS/FrameTime (always shown)
+    if (g_overlayShowResources) {
+        ++count;
     }
+    return count;
+}
+
+static int ComputeOverlayBottomLineCount() {
+    int count = 2; // LAA, priority/affinity (always shown)
+    if (g_overlayShowBackend) {
+        ++count;
+    }
+    return count;
+}
+
+// Extra height for the optional per-thread CPU%% breakdown drawn below the
+// FPS graph; 0 when disabled or nothing has been sampled yet.
+static const int OVERLAY_THREAD_LINE_HEIGHT = 16;
+// Room below the graph box for the "-Ns" / "now" time-scale labels.
+static const int OVERLAY_GRAPH_TIME_SCALE_HEIGHT = 16;
+
+static int ComputeOverlayThreadSectionHeight() {
+    if (!g_overlayShowThreads || g_overlayThreadSampleCount <= 0) {
+        return 0;
+    }
+    return OVERLAY_SECTION_GAP + 20 + g_overlayThreadSampleCount * OVERLAY_THREAD_LINE_HEIGHT;
+}
+
+static int ComputeOverlayPanelHeight() {
+    // +20 once for the blank line below the title; the pre-graph offset is
+    // 20 (was 40) to remove a blank line below the FPS/FrameTime line; +20
+    // again for the blank line below the graph's time scale.
+    int height = 8 + ComputeOverlayTopLineCount() * 20 + 20 + OVERLAY_SECTION_GAP;
+    if (g_overlayShowFpsGraph) {
+        height += 20 + OVERLAY_GRAPH_HEIGHT + OVERLAY_GRAPH_TIME_SCALE_HEIGHT + OVERLAY_SECTION_GAP + 20;
+    }
+    height += ComputeOverlayBottomLineCount() * 20;
+    height += ComputeOverlayThreadSectionHeight();
     return height + 10;
 }
 
@@ -2769,7 +3439,8 @@ static void ComputeOverlayRect(const RECT& targetRect, const char* position,
 // in the graph's own unit - FPS or ms).
 static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label,
         const double* history, int historyNext, int historyCount, double maxScale,
-        const double* markValues, const char* const* markLabels, int markCount) {
+        const double* markValues, const char* const* markLabels, int markCount,
+        double timeSpanSeconds) {
     char labelText[48] = {};
     snprintf(labelText, sizeof(labelText), "%s (0-%.0f)", label, maxScale);
     TextOutA(hdc, graphRect.left, graphRect.top - 20, labelText, static_cast<int>(strlen(labelText)));
@@ -2823,6 +3494,13 @@ static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label
     SelectObject(hdc, oldBrush);
     SelectObject(hdc, oldPen);
     DeleteObject(borderPen);
+
+    // Time scale under the graph: oldest sample on the left, newest ("now")
+    // on the right, matching the left-to-right sample order drawn above.
+    char oldestLabel[16] = {};
+    snprintf(oldestLabel, sizeof(oldestLabel), "-%.0fs", timeSpanSeconds);
+    TextOutA(hdc, graphRect.left, graphRect.bottom + 4, oldestLabel, static_cast<int>(strlen(oldestLabel)));
+    TextOutA(hdc, graphRect.right - 24, graphRect.bottom + 4, "now", 3);
 }
 
 // Render the main diagnostic panel (config status, FPS graph) into its alpha
@@ -2834,14 +3512,54 @@ static void RenderOverlayPanel(const RECT& targetRect) {
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
 
-    char lines[OVERLAY_TEXT_LINE_COUNT][160] = {};
-    int lineCount = 0;
-    strncpy(lines[lineCount++], "Universal Mod Overlay (F7 to toggle)", sizeof(lines[0]) - 1);
+    // Top block: title, [resources], FPS/FrameTime.
+    char topLines[4][160] = {};
+    int topLineCount = 0;
+    strncpy(topLines[topLineCount++], "Universal Mod Overlay", sizeof(topLines[0]) - 1);
+    if (g_overlayShowResources) {
+        snprintf(topLines[topLineCount++], sizeof(topLines[0]), "CPU=%.1f%% Mem=%.1fMB Threads=%d",
+            g_overlayCpuPercent, g_overlayWorkingSetMb, g_overlayThreadCount);
+    }
     if (g_overlayFrameCounterActive) {
-        snprintf(lines[lineCount++], sizeof(lines[0]), "FPS=%.1f FrameTime=%.2fms",
+        snprintf(topLines[topLineCount++], sizeof(topLines[0]), "FPS=%.1f FrameTime=%.2fms",
             g_overlayCurrentFps, g_overlayCurrentFrameTimeMs);
     } else {
-        strncpy(lines[lineCount++], "FPS=pending (waiting for primary surface)", sizeof(lines[0]) - 1);
+        strncpy(topLines[topLineCount++], "FPS=pending (waiting for primary surface)", sizeof(topLines[0]) - 1);
+    }
+
+    // Bottom block (drawn after the FPS graph): LAA, priority/affinity,
+    // [backend].
+    char bottomLines[3][160] = {};
+    int bottomLineCount = 0;
+    // Always shown: confirms whether this specific running game.exe was
+    // patched with the LARGE_ADDRESS_AWARE bit (see _cpr/game-exe-laa-patch),
+    // read straight from its own in-memory PE header, not assumed.
+    strncpy(bottomLines[bottomLineCount++], IsCurrentProcessLargeAddressAware() ?
+        "LAA=yes (>2GB address space)" : "LAA=no (capped at 2GB address space)", sizeof(bottomLines[0]) - 1);
+    // Always shown (regardless of PERFORMANCE_PRIORITY_ENABLED) so the actual,
+    // live process state confirms whether a requested tweak really applied,
+    // rather than trusting the enabled flag alone.
+    DWORD_PTR processAffinity = 0, systemAffinity = 0;
+    GetProcessAffinityMask(GetCurrentProcess(), &processAffinity, &systemAffinity);
+    snprintf(bottomLines[bottomLineCount++], sizeof(bottomLines[0]), "Priority=%s Affinity=0x%lX",
+        PriorityClassToName(GetPriorityClass(GetCurrentProcess())), static_cast<unsigned long>(processAffinity));
+    if (g_overlayShowBackend) {
+        snprintf(bottomLines[bottomLineCount++], sizeof(bottomLines[0]), "DirectDraw Backend=%s", g_directDrawBackendName);
+    }
+
+    // Built separately (drawn below the LAA/priority/backend block, at the
+    // very bottom), but still folded into the width measurement below so
+    // long thread names/CPU%% don't get clipped either.
+    char threadSectionLines[OVERLAY_THREAD_DISPLAY_MAX + 1][64] = {};
+    int threadSectionLineCount = 0;
+    if (g_overlayShowThreads && g_overlayThreadSampleCount > 0) {
+        snprintf(threadSectionLines[threadSectionLineCount++], sizeof(threadSectionLines[0]),
+            "Threads (lowest %d TIDs, %d total)", g_overlayThreadSampleCount, g_overlayThreadCount);
+        for (int i = 0; i < g_overlayThreadSampleCount; ++i) {
+            snprintf(threadSectionLines[threadSectionLineCount++], sizeof(threadSectionLines[0]),
+                "TID %lu %s: CPU=%.1f%%", static_cast<unsigned long>(g_overlayThreadSamples[i].threadId),
+                g_overlayThreadSamples[i].name, g_overlayThreadSamples[i].cpuPercent);
+        }
     }
 
     // Measure with a scratch DC (independent of the real canvas, which isn't
@@ -2851,9 +3569,24 @@ static void RenderOverlayPanel(const RECT& targetRect) {
     if (scratchDC) {
         HFONT oldScratchFont = font ? static_cast<HFONT>(SelectObject(scratchDC, font)) : NULL;
         int maxTextWidth = 0;
-        for (int i = 0; i < lineCount; ++i) {
+        for (int i = 0; i < topLineCount; ++i) {
             SIZE textSize = {};
-            if (GetTextExtentPoint32A(scratchDC, lines[i], static_cast<int>(strlen(lines[i])), &textSize) &&
+            if (GetTextExtentPoint32A(scratchDC, topLines[i], static_cast<int>(strlen(topLines[i])), &textSize) &&
+                    textSize.cx > maxTextWidth) {
+                maxTextWidth = textSize.cx;
+            }
+        }
+        for (int i = 0; i < bottomLineCount; ++i) {
+            SIZE textSize = {};
+            if (GetTextExtentPoint32A(scratchDC, bottomLines[i], static_cast<int>(strlen(bottomLines[i])), &textSize) &&
+                    textSize.cx > maxTextWidth) {
+                maxTextWidth = textSize.cx;
+            }
+        }
+        for (int i = 0; i < threadSectionLineCount; ++i) {
+            SIZE textSize = {};
+            if (GetTextExtentPoint32A(scratchDC, threadSectionLines[i],
+                    static_cast<int>(strlen(threadSectionLines[i])), &textSize) &&
                     textSize.cx > maxTextWidth) {
                 maxTextWidth = textSize.cx;
             }
@@ -2873,7 +3606,8 @@ static void RenderOverlayPanel(const RECT& targetRect) {
 
     EnsureAlphaCanvas(g_overlayCanvas, panelWidth, panelHeight);
     BYTE bgAlpha = static_cast<BYTE>((g_overlayBackgroundOpacityPercent * 255) / 100);
-    FillCanvasBackground(g_overlayCanvas, g_overlayBackgroundColor, bgAlpha);
+    bool ditherStyle = EqualsIgnoreCase(g_overlayTransparencyStyle, "dither");
+    FillCanvasBackground(g_overlayCanvas, g_overlayBackgroundColor, bgAlpha, ditherStyle);
 
     HDC hdc = g_overlayCanvas.dc;
     SetBkMode(hdc, TRANSPARENT);
@@ -2893,18 +3627,37 @@ static void RenderOverlayPanel(const RECT& targetRect) {
     }
 
     int y = 8;
-    for (int i = 0; i < lineCount; ++i) {
-        TextOutA(hdc, 8, y, lines[i], static_cast<int>(strlen(lines[i])));
+    for (int i = 0; i < topLineCount; ++i) {
+        TextOutA(hdc, 8, y, topLines[i], static_cast<int>(strlen(topLines[i])));
         y += 20;
+        if (i == 0) {
+            y += 20; // blank line below the title
+        }
     }
     y += OVERLAY_SECTION_GAP;
 
     if (g_overlayShowFpsGraph) {
-        y += 40;
+        y += 20; // was 40; one blank line removed here below FPS/FrameTime
         RECT fpsGraphRect = {8, y, panelWidth - 8, y + OVERLAY_GRAPH_HEIGHT};
-        DrawSparklineGraph(hdc, fpsGraphRect, "FPS", g_overlayFpsHistory,
+        double timeSpanSeconds = static_cast<double>(g_overlayFpsHistoryCount) * g_overlayRefreshMs / 1000.0;
+        DrawSparklineGraph(hdc, fpsGraphRect, "FPS Graph", g_overlayFpsHistory,
             g_overlayFpsHistoryNext, g_overlayFpsHistoryCount, fpsCeiling,
-            g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks);
+            g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks, timeSpanSeconds);
+        y += OVERLAY_GRAPH_HEIGHT + OVERLAY_GRAPH_TIME_SCALE_HEIGHT + OVERLAY_SECTION_GAP;
+        y += 20; // blank line below the graph's time scale
+    }
+
+    for (int i = 0; i < bottomLineCount; ++i) {
+        TextOutA(hdc, 8, y, bottomLines[i], static_cast<int>(strlen(bottomLines[i])));
+        y += 20;
+    }
+
+    if (threadSectionLineCount > 0) {
+        y += OVERLAY_SECTION_GAP; // skip a line before the thread breakdown
+        for (int i = 0; i < threadSectionLineCount; ++i) {
+            TextOutA(hdc, 8, y, threadSectionLines[i], static_cast<int>(strlen(threadSectionLines[i])));
+            y += OVERLAY_THREAD_LINE_HEIGHT;
+        }
     }
 
     if (oldFont) {
@@ -2914,7 +3667,7 @@ static void RenderOverlayPanel(const RECT& targetRect) {
         DeleteObject(font);
     }
 
-    FinalizeCanvasAlpha(g_overlayCanvas, g_overlayBackgroundColor, bgAlpha);
+    FinalizeCanvasAlpha(g_overlayCanvas, g_overlayBackgroundColor, bgAlpha, ditherStyle);
     CompositeCanvasToWindow(g_overlayWindow, g_overlayCanvas, overlayRect.left, overlayRect.top);
 }
 
@@ -2943,29 +3696,32 @@ static void RenderLogPanel(const RECT& targetRect) {
     int lineCount = g_overlayLogLineCount;
     int panelHeight = 8 + lineCount * OVERLAY_LOG_LINE_HEIGHT + 6;
     RECT logRect;
-    ComputeOverlayRect(targetRect, g_overlayLogPosition, OVERLAY_LOG_PANEL_WIDTH, panelHeight, logRect);
+    ComputeOverlayRect(targetRect, g_overlayLogPosition, g_overlayLogPanelWidth, panelHeight, logRect);
 
-    EnsureAlphaCanvas(g_overlayLogCanvas, OVERLAY_LOG_PANEL_WIDTH, panelHeight);
+    EnsureAlphaCanvas(g_overlayLogCanvas, g_overlayLogPanelWidth, panelHeight);
     BYTE bgAlpha = static_cast<BYTE>((g_overlayBackgroundOpacityPercent * 255) / 100);
-    FillCanvasBackground(g_overlayLogCanvas, g_overlayBackgroundColor, bgAlpha);
+    bool ditherStyle = EqualsIgnoreCase(g_overlayTransparencyStyle, "dither");
+    FillCanvasBackground(g_overlayLogCanvas, g_overlayBackgroundColor, bgAlpha, ditherStyle);
 
     HDC hdc = g_overlayLogCanvas.dc;
     SetBkMode(hdc, TRANSPARENT);
     SetTextColor(hdc, g_overlayTextColor);
-    HFONT font = CreateFontA(12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+    HFONT font = CreateFontA(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
     HFONT oldFont = font ? static_cast<HFONT>(SelectObject(hdc, font)) : NULL;
 
+    // Copy every buffered entry (not just `lineCount` of them) so wrapping a
+    // long entry into extra rows still leaves enough source material to
+    // fill the panel; the tail of the resulting row list is taken below.
     char snapshot[OVERLAY_LOG_CAPACITY][sizeof(g_overlayLogRing[0])] = {};
     int snapshotCount = 0;
     if (g_logLockInitialized) {
         EnterCriticalSection(&g_logLock);
     }
     int available = g_overlayLogRingCount;
-    int toShow = available < lineCount ? available : lineCount;
-    for (int i = 0; i < toShow; ++i) {
-        int idx = (g_overlayLogRingNext - toShow + i + OVERLAY_LOG_CAPACITY * 2) % OVERLAY_LOG_CAPACITY;
+    for (int i = 0; i < available; ++i) {
+        int idx = (g_overlayLogRingNext - available + i + OVERLAY_LOG_CAPACITY * 2) % OVERLAY_LOG_CAPACITY;
         snprintf(snapshot[snapshotCount], sizeof(snapshot[0]), "%s", SkipLogTimestamp(g_overlayLogRing[idx]));
         ++snapshotCount;
     }
@@ -2973,9 +3729,60 @@ static void RenderLogPanel(const RECT& targetRect) {
         LeaveCriticalSection(&g_logLock);
     }
 
-    int y = 4 + (lineCount - snapshotCount) * OVERLAY_LOG_LINE_HEIGHT;
-    for (int i = 0; i < snapshotCount; ++i) {
-        TextOutA(hdc, 6, y, snapshot[i], static_cast<int>(strlen(snapshot[i])));
+    // Word-wrap (falling back to a hard break) any entry too wide for the
+    // panel into extra visual rows, oldest first; disabled entries are just
+    // left as a single (possibly clipped) row instead.
+    int maxCharsPerRow = 0;
+    if (g_overlayLogWrapEnabled) {
+        TEXTMETRICA metrics = {};
+        GetTextMetricsA(hdc, &metrics);
+        int charWidth = metrics.tmAveCharWidth > 0 ? metrics.tmAveCharWidth : 8;
+        maxCharsPerRow = (g_overlayLogPanelWidth - 12) / charWidth;
+    }
+
+    static const int OVERLAY_LOG_MAX_VISUAL_ROWS = OVERLAY_LOG_CAPACITY * 4;
+    char rows[OVERLAY_LOG_MAX_VISUAL_ROWS][160] = {};
+    int rowCount = 0;
+    for (int i = 0; i < snapshotCount && rowCount < OVERLAY_LOG_MAX_VISUAL_ROWS; ++i) {
+        const char* text = snapshot[i];
+        size_t textLen = strlen(text);
+        if (maxCharsPerRow <= 0 || static_cast<int>(textLen) <= maxCharsPerRow) {
+            snprintf(rows[rowCount++], sizeof(rows[0]), "%s", text);
+            continue;
+        }
+        size_t pos = 0;
+        while (pos < textLen && rowCount < OVERLAY_LOG_MAX_VISUAL_ROWS) {
+            size_t remaining = textLen - pos;
+            size_t chunkLen = remaining < static_cast<size_t>(maxCharsPerRow) ?
+                remaining : static_cast<size_t>(maxCharsPerRow);
+            size_t breakAt = chunkLen;
+            if (chunkLen == static_cast<size_t>(maxCharsPerRow)) {
+                // Prefer breaking on the last space in this chunk (if any,
+                // and not absurdly early) over splitting a word in half.
+                for (size_t k = chunkLen; k > chunkLen / 3; --k) {
+                    if (text[pos + k - 1] == ' ') {
+                        breakAt = k;
+                        break;
+                    }
+                }
+            }
+            size_t copyLen = breakAt < sizeof(rows[0]) - 1 ? breakAt : sizeof(rows[0]) - 1;
+            memcpy(rows[rowCount], text + pos, copyLen);
+            rows[rowCount][copyLen] = '\0';
+            ++rowCount;
+            pos += breakAt;
+            while (pos < textLen && text[pos] == ' ') {
+                ++pos; // skip the space that was broken on
+            }
+        }
+    }
+
+    int toShow = rowCount < lineCount ? rowCount : lineCount;
+    int startIndex = rowCount - toShow;
+    int y = 4 + (lineCount - toShow) * OVERLAY_LOG_LINE_HEIGHT;
+    for (int i = 0; i < toShow; ++i) {
+        const char* row = rows[startIndex + i];
+        TextOutA(hdc, 6, y, row, static_cast<int>(strlen(row)));
         y += OVERLAY_LOG_LINE_HEIGHT;
     }
 
@@ -2986,7 +3793,7 @@ static void RenderLogPanel(const RECT& targetRect) {
         DeleteObject(font);
     }
 
-    FinalizeCanvasAlpha(g_overlayLogCanvas, g_overlayBackgroundColor, bgAlpha);
+    FinalizeCanvasAlpha(g_overlayLogCanvas, g_overlayBackgroundColor, bgAlpha, ditherStyle);
     CompositeCanvasToWindow(g_overlayLogWindow, g_overlayLogCanvas, logRect.left, logRect.top);
 }
 
@@ -3022,21 +3829,44 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
             }
         }
 
+        if (g_overlayShowResources && (g_overlayVisible || g_overlayLogVisible)) {
+            SampleProcessDiagnostics();
+        }
+
+        RECT targetRect;
+        bool haveTargetRect = g_overlayTargetWindow && GetWindowRect(g_overlayTargetWindow, &targetRect);
         if (g_overlayVisible) {
-            RECT targetRect;
-            if (g_overlayTargetWindow && GetWindowRect(g_overlayTargetWindow, &targetRect)) {
+            if (haveTargetRect) {
                 RenderOverlayPanel(targetRect);
-                if (g_overlayLogEnabled && g_overlayLogWindow) {
-                    RenderLogPanel(targetRect);
-                }
             }
             SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-            if (g_overlayLogWindow) {
-                SetWindowPos(g_overlayLogWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
+        if (g_overlayLogEnabled && g_overlayLogVisible && g_overlayLogWindow) {
+            if (haveTargetRect) {
+                RenderLogPanel(targetRect);
             }
+            SetWindowPos(g_overlayLogWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         }
         return 0;
     }
+    case WM_PAINT: {
+        // Only reached in the non-layered (fully opaque) path; layered
+        // windows are painted exclusively through UpdateLayeredWindow and
+        // don't normally receive WM_PAINT. Re-blit the last rendered canvas
+        // instead of leaving the window blank until the next WM_TIMER tick.
+        PAINTSTRUCT paintStruct;
+        HDC paintDC = BeginPaint(hwnd, &paintStruct);
+        const AlphaCanvas& canvas = (hwnd == g_overlayLogWindow) ? g_overlayLogCanvas : g_overlayCanvas;
+        if (paintDC && canvas.dc) {
+            BitBlt(paintDC, 0, 0, canvas.width, canvas.height, canvas.dc, 0, 0, SRCCOPY);
+        }
+        EndPaint(hwnd, &paintStruct);
+        return 0;
+    }
+    case WM_ERASEBKGND:
+        // WM_PAINT above (or UpdateLayeredWindow) always repaints every
+        // pixel, so a separate erase would only cause flicker.
+        return 1;
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
@@ -3056,6 +3886,7 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
 // Both windows start hidden; toggled together by LowLevelKeyboardProc via
 // the configurable OVERLAY_TOGGLE_KEY.
 static DWORD WINAPI OverlayThread(LPVOID parameter) {
+    LabelCurrentThread(L"um.dll: Overlay");
     HMODULE module = reinterpret_cast<HMODULE>(parameter);
     g_overlayStartTickMs = GetTickCount64();
     g_overlayFpsLastTickMs = g_overlayStartTickMs;
@@ -3078,7 +3909,11 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     RECT initialRect;
     ComputeOverlayRect(targetRect, g_overlayPosition, OVERLAY_PANEL_WIDTH, panelHeight, initialRect);
 
-    DWORD extendedStyle = WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+    g_overlayWindowsAreLayered = g_overlayBackgroundOpacityPercent < 100;
+    DWORD extendedStyle = WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+    if (g_overlayWindowsAreLayered) {
+        extendedStyle |= WS_EX_LAYERED;
+    }
     g_overlayWindow = CreateWindowExA(extendedStyle,
         windowClass.lpszClassName, "Universal Mod Overlay", WS_POPUP,
         initialRect.left, initialRect.top, OVERLAY_PANEL_WIDTH, panelHeight,
@@ -3092,10 +3927,10 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     if (g_overlayLogEnabled) {
         RECT logRect;
         int logPanelHeight = 8 + g_overlayLogLineCount * OVERLAY_LOG_LINE_HEIGHT + 6;
-        ComputeOverlayRect(targetRect, g_overlayLogPosition, OVERLAY_LOG_PANEL_WIDTH, logPanelHeight, logRect);
+        ComputeOverlayRect(targetRect, g_overlayLogPosition, g_overlayLogPanelWidth, logPanelHeight, logRect);
         g_overlayLogWindow = CreateWindowExA(extendedStyle,
             windowClass.lpszClassName, "Universal Mod Overlay Log", WS_POPUP,
-            logRect.left, logRect.top, OVERLAY_LOG_PANEL_WIDTH, logPanelHeight,
+            logRect.left, logRect.top, g_overlayLogPanelWidth, logPanelHeight,
             NULL, NULL, module, NULL);
         if (g_overlayLogWindow) {
             ShowWindow(g_overlayLogWindow, SW_HIDE);
@@ -3105,8 +3940,9 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     }
 
     SetTimer(g_overlayWindow, 1, g_overlayRefreshMs, NULL);
-    LogLine("INFO", "Overlay window created; toggle_key=0x%02X position=%s log_enabled=%s",
-        g_overlayToggleKey, g_overlayPosition, g_overlayLogEnabled ? "true" : "false");
+    LogLine("INFO", "Overlay window created; toggle_key=0x%02X log_toggle_key=0x%02X position=%s log_enabled=%s layered=%s",
+        g_overlayToggleKey, g_overlayLogToggleKey, g_overlayPosition, g_overlayLogEnabled ? "true" : "false",
+        g_overlayWindowsAreLayered ? "true" : "false");
 
     MSG msg;
     while (GetMessageA(&msg, NULL, 0, 0) > 0) {
@@ -3125,6 +3961,8 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
 // Perform configuration, diagnostics, hooks, and ASI validation after the
 // loader lock is released. Keeping this work out of DllMain avoids deadlocks.
 static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
+    EnsureThreadDescriptionFunctionsResolved();
+    LabelCurrentThread(L"um.dll: Init");
     HMODULE hModule = reinterpret_cast<HMODULE>(parameter);
     InitializeCriticalSection(&g_logLock);
     g_logLockInitialized = true;
@@ -3137,6 +3975,9 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     g_enableAsiCheck = g_enableAsiCheck || GetEnvironmentFlag("SPELLADDON_ASI_CHECK");
     g_enableKeyboardRewrites = g_enableKeyboardRewrites || GetEnvironmentFlag("KEYBOARD_REWRITES");
     g_enableKeyboardRewriteLogging = g_enableKeyboardRewriteLogging || GetEnvironmentFlag("KEYBOARD_REWRITES_LOGGING");
+    if (const char* reloadKeyEnv = getenv("RELOAD_CONFIG_KEY")) {
+        g_reloadConfigKey = ParseVirtualKeyName(reloadKeyEnv, VK_F11);
+    }
     g_enableCrashLogging = g_enableCrashLogging || GetEnvironmentFlag("LOGGING");
     g_enableFileIoLogging = g_enableFileIoLogging || GetEnvironmentFlag("FILE_IO_LOGGING");
     g_enableAntiCrash = g_enableAntiCrash || GetEnvironmentFlag("ANTICRASH");
@@ -3144,7 +3985,7 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     g_enableMobValidation = g_enableMobValidation || GetEnvironmentFlag("MOB_VALIDATION");
     g_enableOverlay = g_enableOverlay || GetEnvironmentFlag("OVERLAY_ENABLED");
     if (const char* toggleKeyEnv = getenv("OVERLAY_TOGGLE_KEY")) {
-        g_overlayToggleKey = ParseVirtualKeyName(toggleKeyEnv);
+        g_overlayToggleKey = ParseVirtualKeyName(toggleKeyEnv, VK_F9);
     }
     if (const char* positionEnv = getenv("OVERLAY_POSITION")) {
         ParseOverlayPosition(positionEnv, g_overlayPosition, sizeof(g_overlayPosition));
@@ -3161,17 +4002,41 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     if (const char* fpsMarksEnv = getenv("OVERLAY_FPS_MARKS")) {
         ParseFpsMarks(fpsMarksEnv, g_overlayFpsMarks, &g_overlayFpsMarkCount);
     }
+    if (const char* showResourcesEnv = getenv("OVERLAY_SHOW_RESOURCES")) {
+        g_overlayShowResources = IsTrueString(showResourcesEnv);
+    }
+    if (const char* showBackendEnv = getenv("OVERLAY_SHOW_BACKEND")) {
+        g_overlayShowBackend = IsTrueString(showBackendEnv);
+    }
+    if (const char* showThreadsEnv = getenv("OVERLAY_SHOW_THREADS")) {
+        g_overlayShowThreads = IsTrueString(showThreadsEnv);
+    }
+    if (const char* threadCountEnv = getenv("OVERLAY_THREAD_COUNT")) {
+        g_overlayThreadDisplayCount = ParseOverlayThreadCount(threadCountEnv);
+    }
     if (const char* backgroundColorEnv = getenv("OVERLAY_BACKGROUND_COLOR")) {
         g_overlayBackgroundColor = ParseHexColor(backgroundColorEnv, RGB(0, 0, 0));
     }
     if (const char* backgroundOpacityEnv = getenv("OVERLAY_BACKGROUND_OPACITY")) {
         g_overlayBackgroundOpacityPercent = ParseOverlayOpacityPercent(backgroundOpacityEnv);
     }
+    if (const char* transparencyStyleEnv = getenv("OVERLAY_TRANSPARENCY_STYLE")) {
+        SetQuotedConfigString(g_overlayTransparencyStyle, sizeof(g_overlayTransparencyStyle), transparencyStyleEnv);
+    }
     if (const char* logEnabledEnv = getenv("OVERLAY_LOG_ENABLED")) {
         g_overlayLogEnabled = IsTrueString(logEnabledEnv);
     }
+    if (const char* logToggleKeyEnv = getenv("OVERLAY_LOG_TOGGLE_KEY")) {
+        g_overlayLogToggleKey = ParseVirtualKeyName(logToggleKeyEnv, VK_F10);
+    }
     if (const char* logLinesEnv = getenv("OVERLAY_LOG_LINES")) {
         g_overlayLogLineCount = ParseOverlayLogLineCount(logLinesEnv);
+    }
+    if (const char* logWidthEnv = getenv("OVERLAY_LOG_WIDTH")) {
+        g_overlayLogPanelWidth = ParseOverlayLogWidth(logWidthEnv);
+    }
+    if (const char* logWrapEnv = getenv("OVERLAY_LOG_WRAP")) {
+        g_overlayLogWrapEnabled = IsTrueString(logWrapEnv);
     }
     if (const char* logPositionEnv = getenv("OVERLAY_LOG_POSITION")) {
         ParseOverlayPosition(logPositionEnv, g_overlayLogPosition, sizeof(g_overlayLogPosition));
@@ -3179,6 +4044,15 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     if (const char* logLevelFilterEnv = getenv("OVERLAY_LOG_LEVEL_FILTER")) {
         SetQuotedConfigString(g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), logLevelFilterEnv);
     }
+    g_enablePerformancePriority = g_enablePerformancePriority || GetEnvironmentFlag("PERFORMANCE_PRIORITY_ENABLED");
+    if (const char* priorityClassEnv = getenv("PERFORMANCE_PRIORITY_CLASS")) {
+        SetQuotedConfigString(g_performancePriorityClass, sizeof(g_performancePriorityClass), priorityClassEnv);
+    }
+    g_enablePerformanceAffinity = g_enablePerformanceAffinity || GetEnvironmentFlag("PERFORMANCE_AFFINITY_ENABLED");
+    if (const char* affinityMaskEnv = getenv("PERFORMANCE_AFFINITY_MASK")) {
+        SetQuotedConfigString(g_performanceAffinityMaskHex, sizeof(g_performanceAffinityMaskHex), affinityMaskEnv);
+    }
+    ApplyPerformanceTweaks();
     if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
@@ -3198,7 +4072,7 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
     }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s overlay=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s performance_priority=%s performance_affinity=%s overlay=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
@@ -3208,6 +4082,8 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         g_enableAntiCrash ? "enabled" : "disabled",
         g_enableMobValidation ? "enabled" : "disabled",
         g_enableHeapTermination ? "enabled" : "disabled",
+        g_enablePerformancePriority ? "enabled" : "disabled",
+        g_enablePerformanceAffinity ? "enabled" : "disabled",
         g_enableOverlay ? "enabled" : "disabled");
     if (g_enableAntiCrash) {
         LogLine("ANTICRASH", "Windows critical-error dialogs are suppressed; unsafe exceptions will still use normal crash handling");
@@ -3276,6 +4152,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         return TRUE;
     }
 
+    g_dllModule = hModule;
     DisableThreadLibraryCalls(hModule);
     HANDLE threadHandle = CreateThread(NULL, 0, InitializeDllThread, hModule, 0, NULL);
     if (threadHandle) {
