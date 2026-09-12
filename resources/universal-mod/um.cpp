@@ -64,6 +64,20 @@ static int g_overlayRefreshMs = 500;
 static const int OVERLAY_FPS_MARKS_MAX = 16;
 static double g_overlayFpsMarks[OVERLAY_FPS_MARKS_MAX] = {30.0, 60.0, 75.0, 120.0, 140.0, 165.0, 240.0};
 static int g_overlayFpsMarkCount = 7;
+static COLORREF g_overlayBackgroundColor = RGB(0, 0, 0);
+static int g_overlayBackgroundOpacityPercent = 20;
+
+// Real-time mirror of the last few formatted um.log lines, appended to by
+// LogLine() itself; the overlay's log panel reads this instead of the file.
+static const int OVERLAY_LOG_CAPACITY = 50;
+static char g_overlayLogRing[OVERLAY_LOG_CAPACITY][300] = {};
+static int g_overlayLogRingNext = 0;
+static int g_overlayLogRingCount = 0;
+static bool g_overlayLogEnabled = true;
+static int g_overlayLogLineCount = 10;
+static char g_overlayLogPosition[16] = "bottom-left";
+static char g_overlayLogLevelFilter[128] = "SYSINFO";
+static HWND g_overlayLogWindow = NULL;
 
 // Not defined by MinGW's headers; value is stable across Windows versions.
 static const DWORD UM_STATUS_HEAP_CORRUPTION = 0xC0000374L;
@@ -193,9 +207,8 @@ static BYTE ParseVirtualKeyName(const char* value) {
 }
 
 // Parse a "RRGGBB" (optionally prefixed with '#' or "0x") hex color into a
-// COLORREF. Falls back to green (00FF00) for empty or unrecognized values.
-static COLORREF ParseHexColor(const char* value) {
-    const COLORREF defaultColor = RGB(0, 255, 0);
+// COLORREF. Falls back to defaultColor for empty or unrecognized values.
+static COLORREF ParseHexColor(const char* value, COLORREF defaultColor = RGB(0, 255, 0)) {
     if (!value || value[0] == '\0') {
         return defaultColor;
     }
@@ -303,7 +316,79 @@ static void ParseFpsMarks(const char* value, double* outMarks, int* outCount) {
     *outCount = parsedCount;
 }
 
+// Parse OVERLAY_BACKGROUND_OPACITY as a percentage, clamped to 0-100.
+static int ParseOverlayOpacityPercent(const char* value) {
+    if (!value || value[0] == '\0') {
+        return 20;
+    }
+    char* end = NULL;
+    long parsed = strtol(value, &end, 10);
+    if (end == value) {
+        return 20;
+    }
+    if (parsed < 0) {
+        parsed = 0;
+    } else if (parsed > 100) {
+        parsed = 100;
+    }
+    return static_cast<int>(parsed);
+}
+
+// Parse OVERLAY_LOG_LINES, clamped to [1, OVERLAY_LOG_CAPACITY].
+static int ParseOverlayLogLineCount(const char* value) {
+    if (!value || value[0] == '\0') {
+        return 10;
+    }
+    char* end = NULL;
+    long parsed = strtol(value, &end, 10);
+    if (end == value || parsed < 1) {
+        return 10;
+    }
+    if (parsed > OVERLAY_LOG_CAPACITY) {
+        parsed = OVERLAY_LOG_CAPACITY;
+    }
+    return static_cast<int>(parsed);
+}
+
+// Return whether a log level (e.g. "SYSINFO") appears in the comma-separated
+// OVERLAY_LOG_LEVEL_FILTER list, so the live log panel can skip mirroring it.
+static bool IsLogLevelFiltered(const char* level) {
+    if (!level || g_overlayLogLevelFilter[0] == '\0') {
+        return false;
+    }
+    const char* filter = g_overlayLogLevelFilter;
+    while (*filter) {
+        while (*filter == ',' || *filter == ' ' || *filter == '\t') {
+            ++filter;
+        }
+        const char* tokenStart = filter;
+        while (*filter && *filter != ',') {
+            ++filter;
+        }
+        const char* tokenEnd = filter;
+        while (tokenEnd > tokenStart && (tokenEnd[-1] == ' ' || tokenEnd[-1] == '\t')) {
+            --tokenEnd;
+        }
+        char token[32] = {};
+        size_t tokenLength = static_cast<size_t>(tokenEnd - tokenStart);
+        if (tokenLength >= sizeof(token)) {
+            tokenLength = sizeof(token) - 1;
+        }
+        memcpy(token, tokenStart, tokenLength);
+        token[tokenLength] = '\0';
+        if (token[0] != '\0' && EqualsIgnoreCase(token, level)) {
+            return true;
+        }
+        if (*filter == ',') {
+            ++filter;
+        }
+    }
+    return false;
+}
+
 // Append one timestamped, serialized diagnostic line and flush it to disk.
+// Also mirrors the exact formatted line into a small in-memory ring buffer so
+// the overlay's real-time log panel can display it without re-reading um.log.
 static void LogLine(const char* level, const char* format, ...) {
     if (!g_enableCrashLogging || g_logPath[0] == '\0') {
         return;
@@ -339,18 +424,28 @@ static void LogLine(const char* level, const char* format, ...) {
     }
     char offsetSign = offsetMinutes < 0 ? '-' : '+';
     int absoluteOffsetMinutes = offsetMinutes < 0 ? -offsetMinutes : offsetMinutes;
-    fprintf(file, "[%04u-%02u-%02uT%02u:%02u:%02u%c%02d%02d] [%s] %s",
-        now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute, now.wSecond,
-        offsetSign, absoluteOffsetMinutes / 60, absoluteOffsetMinutes % 60,
-        outputLevel, category ? "[" : "");
+
+    char prefix[96] = {};
     if (category) {
-        fprintf(file, "%s] ", category);
+        snprintf(prefix, sizeof(prefix), "[%04u-%02u-%02uT%02u:%02u:%02u%c%02d%02d] [%s] [%s] ",
+            now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute, now.wSecond,
+            offsetSign, absoluteOffsetMinutes / 60, absoluteOffsetMinutes % 60, outputLevel, category);
+    } else {
+        snprintf(prefix, sizeof(prefix), "[%04u-%02u-%02uT%02u:%02u:%02u%c%02d%02d] [%s] ",
+            now.wYear, now.wMonth, now.wDay, now.wHour, now.wMinute, now.wSecond,
+            offsetSign, absoluteOffsetMinutes / 60, absoluteOffsetMinutes % 60, outputLevel);
     }
 
+    char message[400] = {};
     va_list arguments;
     va_start(arguments, format);
-    vfprintf(file, format, arguments);
+    vsnprintf(message, sizeof(message), format, arguments);
     va_end(arguments);
+
+    char fullLine[sizeof(prefix) + sizeof(message)] = {};
+    snprintf(fullLine, sizeof(fullLine), "%s%s", prefix, message);
+
+    fputs(fullLine, file);
     fputc('\n', file);
     fflush(file);
     intptr_t fileDescriptor = _fileno(file);
@@ -361,6 +456,15 @@ static void LogLine(const char* level, const char* format, ...) {
         }
     }
     fclose(file);
+
+    if (logLockAcquired && !IsLogLevelFiltered(outputLevel)) {
+        snprintf(g_overlayLogRing[g_overlayLogRingNext], sizeof(g_overlayLogRing[0]), "%s", fullLine);
+        g_overlayLogRingNext = (g_overlayLogRingNext + 1) % OVERLAY_LOG_CAPACITY;
+        if (g_overlayLogRingCount < OVERLAY_LOG_CAPACITY) {
+            ++g_overlayLogRingCount;
+        }
+    }
+
     if (logLockAcquired && g_logLockInitialized) {
         LeaveCriticalSection(&g_logLock);
     }
@@ -514,9 +618,11 @@ static bool IsIgnoredFileExtension(const char* path) {
     return false;
 }
 
-// Normalize and store the comma-separated file-I/O extension filter.
-static void SetFileIoLoggingFilter(const char* value) {
-    g_fileIoLoggingFilter[0] = '\0';
+// Strip optional surrounding double quotes/whitespace and store a bounded,
+// comma-separated config string (used for FILE_IO_LOGGING_FILTER and
+// OVERLAY_LOG_LEVEL_FILTER, both documented/written as a quoted value).
+static void SetQuotedConfigString(char* dest, size_t destSize, const char* value) {
+    dest[0] = '\0';
     if (!value) {
         return;
     }
@@ -524,15 +630,18 @@ static void SetFileIoLoggingFilter(const char* value) {
     while (*value == ' ' || *value == '\t' || *value == '"') {
         ++value;
     }
-    strncpy(g_fileIoLoggingFilter, value, sizeof(g_fileIoLoggingFilter) - 1);
-    g_fileIoLoggingFilter[sizeof(g_fileIoLoggingFilter) - 1] = '\0';
-    size_t length = strlen(g_fileIoLoggingFilter);
+    strncpy(dest, value, destSize - 1);
+    dest[destSize - 1] = '\0';
+    size_t length = strlen(dest);
     while (length > 0 &&
-        (g_fileIoLoggingFilter[length - 1] == ' ' ||
-         g_fileIoLoggingFilter[length - 1] == '\t' ||
-         g_fileIoLoggingFilter[length - 1] == '"')) {
-        g_fileIoLoggingFilter[--length] = '\0';
+        (dest[length - 1] == ' ' || dest[length - 1] == '\t' || dest[length - 1] == '"')) {
+        dest[--length] = '\0';
     }
+}
+
+// Normalize and store the comma-separated file-I/O extension filter.
+static void SetFileIoLoggingFilter(const char* value) {
+    SetQuotedConfigString(g_fileIoLoggingFilter, sizeof(g_fileIoLoggingFilter), value);
 }
 
 // Add or reset a file handle in the bounded diagnostic tracking table.
@@ -604,23 +713,6 @@ static void LogTrackedFileHandles() {
     for (size_t i = 0; i < count; ++i) {
         LogLine("ANTICRASH", "Open tracked file path=%s handle=%p", paths[i], handles[i]);
     }
-}
-
-// Count currently tracked open file handles for the diagnostic overlay.
-static size_t CountTrackedFileHandles() {
-    if (!g_fileHandleLockInitialized) {
-        return 0;
-    }
-
-    size_t count = 0;
-    EnterCriticalSection(&g_fileHandleLock);
-    for (size_t i = 0; i < sizeof(g_fileHandles) / sizeof(g_fileHandles[0]); ++i) {
-        if (g_fileHandles[i].handle != NULL) {
-            ++count;
-        }
-    }
-    LeaveCriticalSection(&g_fileHandleLock);
-    return count;
 }
 
 // Convert CreateFile desired-access flags into a compact diagnostic label.
@@ -1279,9 +1371,35 @@ static void* PatchVTableSlot(void* comObject, int slotIndex, void* newFunction,
 // tell a full-frame present apart from small partial updates (HUD, cursor).
 static volatile LONG g_overlayFrameMaxBltArea = 0;
 
+// Some game states (menus, alt-tab) can trigger more than one present-style
+// call (Flip/Blt/BltFast) for what is visually the same single frame, which
+// would otherwise double-count FPS. Real distinct frames can never arrive
+// faster than the display's max refresh; treat anything within 2ms of the
+// last counted frame as a duplicate signal for that same frame, not a new one.
+static LARGE_INTEGER g_overlayPerfFrequency = {};
+static LARGE_INTEGER g_overlayLastCountedFrameTime = {};
+static const double OVERLAY_MIN_FRAME_INTERVAL_MS = 2.0;
+
+static void CountPresentedFrame() {
+    if (g_overlayPerfFrequency.QuadPart == 0) {
+        QueryPerformanceFrequency(&g_overlayPerfFrequency);
+    }
+    LARGE_INTEGER now = {};
+    QueryPerformanceCounter(&now);
+    if (g_overlayLastCountedFrameTime.QuadPart != 0 && g_overlayPerfFrequency.QuadPart != 0) {
+        double elapsedMs = static_cast<double>(now.QuadPart - g_overlayLastCountedFrameTime.QuadPart) *
+            1000.0 / static_cast<double>(g_overlayPerfFrequency.QuadPart);
+        if (elapsedMs < OVERLAY_MIN_FRAME_INTERVAL_MS) {
+            return;
+        }
+    }
+    g_overlayLastCountedFrameTime = now;
+    InterlockedIncrement(&g_overlayFrameCount);
+}
+
 // Count one presented frame for the overlay's FPS/frametime readout.
 static HRESULT WINAPI HookedDDFlip(void* self, void* targetOverride, DWORD flags) {
-    InterlockedIncrement(&g_overlayFrameCount);
+    CountPresentedFrame();
     return g_originalDDFlip(self, targetOverride, flags);
 }
 
@@ -1292,7 +1410,7 @@ static HRESULT WINAPI HookedDDFlip(void* self, void* targetOverride, DWORD flags
 static HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
         LPRECT srcRect, DWORD flags, void* bltFx) {
     if (!destRect) {
-        InterlockedIncrement(&g_overlayFrameCount);
+        CountPresentedFrame();
     } else {
         LONG area = (destRect->right - destRect->left) * (destRect->bottom - destRect->top);
         LONG maxArea = g_overlayFrameMaxBltArea;
@@ -1301,7 +1419,7 @@ static HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
             maxArea = area;
         }
         if (maxArea > 0 && area * 10 >= maxArea * 9) {
-            InterlockedIncrement(&g_overlayFrameCount);
+            CountPresentedFrame();
         }
     }
     return g_originalDDBlt(self, destRect, srcSurface, srcRect, flags, bltFx);
@@ -1312,7 +1430,7 @@ static HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
 static HRESULT WINAPI HookedDDBltFast(void* self, DWORD x, DWORD y, void* srcSurface,
         LPRECT srcRect, DWORD trans) {
     if (x == 0 && y == 0) {
-        InterlockedIncrement(&g_overlayFrameCount);
+        CountPresentedFrame();
     }
     return g_originalDDBltFast(self, x, y, srcSurface, srcRect, trans);
 }
@@ -2157,7 +2275,23 @@ static void LoadConfigFile(const char* dllPath) {
             fprintf(file, "OVERLAY_SHOW_FPS_GRAPH=true\n");
             fprintf(file, "; Comma-separated static FPS reference marks for the graph, ascending; the lowest\n");
             fprintf(file, "; two always show, the rest only appear once the game actually reaches them.\n");
-            fprintf(file, "OVERLAY_FPS_MARKS=30,60,75,120,140,165,240\n\n");
+            fprintf(file, "OVERLAY_FPS_MARKS=30,60,75,120,140,165,240\n");
+            fprintf(file, "; Panel background color as a hex RRGGBB value (no # needed).\n");
+            fprintf(file, "OVERLAY_BACKGROUND_COLOR=000000\n");
+            fprintf(file, "; Panel background opacity as a percentage (0=fully transparent, 100=solid).\n");
+            fprintf(file, "OVERLAY_BACKGROUND_OPACITY=20\n\n");
+            fprintf(file, "; -- Overlay log panel --\n");
+            fprintf(file, "; Show a separate auto-scrolling panel with the last few um.log lines; (true/false)\n");
+            fprintf(file, "OVERLAY_LOG_ENABLED=true\n");
+            fprintf(file, "; Number of most recent log lines to display, newest at the bottom (max %d).\n", OVERLAY_LOG_CAPACITY);
+            fprintf(file, "OVERLAY_LOG_LINES=10\n");
+            fprintf(file, "; Corner/edge of the game window the log panel is anchored to; one of\n");
+            fprintf(file, "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center.\n");
+            fprintf(file, "OVERLAY_LOG_POSITION=bottom-left\n");
+            fprintf(file, "; Comma-separated log levels to hide from the live log panel; matches the [LEVEL]\n");
+            fprintf(file, "; shown in um.log (SYSINFO, INFO, WARN, ERROR, FATAL, DEBUG); case-insensitive,\n");
+            fprintf(file, "; um.log on disk always keeps every level regardless of this filter.\n");
+            fprintf(file, "OVERLAY_LOG_LEVEL_FILTER=\"SYSINFO\"\n\n");
             fclose(file);
         }
         return;
@@ -2245,6 +2379,18 @@ static void LoadConfigFile(const char* dllPath) {
             g_overlayShowFpsGraph = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "OVERLAY_FPS_MARKS")) {
             ParseFpsMarks(value, g_overlayFpsMarks, &g_overlayFpsMarkCount);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_BACKGROUND_COLOR")) {
+            g_overlayBackgroundColor = ParseHexColor(value, RGB(0, 0, 0));
+        } else if (EqualsIgnoreCase(key, "OVERLAY_BACKGROUND_OPACITY")) {
+            g_overlayBackgroundOpacityPercent = ParseOverlayOpacityPercent(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_ENABLED")) {
+            g_overlayLogEnabled = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_LINES")) {
+            g_overlayLogLineCount = ParseOverlayLogLineCount(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_POSITION")) {
+            ParseOverlayPosition(value, g_overlayLogPosition, sizeof(g_overlayLogPosition));
+        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_LEVEL_FILTER")) {
+            SetQuotedConfigString(g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), value);
         }
     }
 
@@ -2311,6 +2457,9 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
                         g_overlayVisible = g_overlayVisible ? 0 : 1;
                         if (g_overlayWindow) {
                             ShowWindow(g_overlayWindow, g_overlayVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
+                        }
+                        if (g_overlayLogWindow) {
+                            ShowWindow(g_overlayLogWindow, g_overlayVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
                         }
                         LogLine("INFO", "Overlay toggled %s", g_overlayVisible ? "visible" : "hidden");
                     }
@@ -2390,20 +2539,156 @@ static HWND FindGameWindow() {
     return result;
 }
 
-// Background color used as the layered-window color key so only the drawn
-// text is visible; diagnostic text must avoid using this exact color.
-static const COLORREF OVERLAY_COLOR_KEY = RGB(1, 1, 1);
+// Initial/minimum panel width; RenderOverlayPanel widens the actual canvas to
+// fit whatever text it measures, so long lines are never clipped.
 static const int OVERLAY_PANEL_WIDTH = 340;
 static const int OVERLAY_PANEL_MARGIN = 12;
 static const int OVERLAY_GRAPH_HEIGHT = 150;
-static const int OVERLAY_TEXT_BLOCK_HEIGHT = 8 + 7 * 20;
+static const int OVERLAY_TEXT_LINE_COUNT = 2;
+static const int OVERLAY_SECTION_GAP = 10;
+static const int OVERLAY_TEXT_BLOCK_HEIGHT = 8 + OVERLAY_TEXT_LINE_COUNT * 20 + OVERLAY_SECTION_GAP;
+static const int OVERLAY_LOG_PANEL_WIDTH = 700;
+static const int OVERLAY_LOG_LINE_HEIGHT = 14;
+
+// A CPU-side 32bpp ARGB bitmap composited onto its window via
+// UpdateLayeredWindow, so each panel can have its own configurable
+// background color/opacity while drawn content stays fully opaque/legible.
+struct AlphaCanvas {
+    HDC dc = NULL;
+    HBITMAP bitmap = NULL;
+    HBITMAP oldBitmap = NULL;
+    void* pixels = NULL;
+    int width = 0;
+    int height = 0;
+};
+
+static AlphaCanvas g_overlayCanvas;
+static AlphaCanvas g_overlayLogCanvas;
+
+static void DestroyAlphaCanvas(AlphaCanvas& canvas) {
+    if (canvas.dc) {
+        SelectObject(canvas.dc, canvas.oldBitmap);
+        DeleteDC(canvas.dc);
+        canvas.dc = NULL;
+    }
+    if (canvas.bitmap) {
+        DeleteObject(canvas.bitmap);
+        canvas.bitmap = NULL;
+    }
+    canvas.pixels = NULL;
+    canvas.width = 0;
+    canvas.height = 0;
+}
+
+// (Re)allocate the canvas's backing DIB only when its size actually changes.
+static void EnsureAlphaCanvas(AlphaCanvas& canvas, int width, int height) {
+    if (canvas.dc && canvas.width == width && canvas.height == height) {
+        return;
+    }
+    DestroyAlphaCanvas(canvas);
+
+    HDC screenDC = GetDC(NULL);
+    canvas.dc = CreateCompatibleDC(screenDC);
+    ReleaseDC(NULL, screenDC);
+    if (!canvas.dc) {
+        LogLine("WARN", "CreateCompatibleDC for overlay canvas failed, error=%lu", GetLastError());
+        return;
+    }
+
+    BITMAPINFO bmi = {};
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biWidth = width;
+    bmi.bmiHeader.biHeight = -height; // negative = top-down DIB
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biBitCount = 32;
+    bmi.bmiHeader.biCompression = BI_RGB;
+
+    canvas.bitmap = CreateDIBSection(canvas.dc, &bmi, DIB_RGB_COLORS, &canvas.pixels, NULL, 0);
+    if (!canvas.bitmap) {
+        LogLine("WARN", "CreateDIBSection for overlay canvas failed, error=%lu", GetLastError());
+        DeleteDC(canvas.dc);
+        canvas.dc = NULL;
+        return;
+    }
+    canvas.oldBitmap = static_cast<HBITMAP>(SelectObject(canvas.dc, canvas.bitmap));
+    canvas.width = width;
+    canvas.height = height;
+}
+
+// Fill every pixel with the panel's background color and alpha, before any
+// GDI drawing happens; GDI operations never touch the alpha channel, which is
+// what lets FinalizeCanvasAlpha() later tell "untouched background" pixels
+// apart from "something was drawn here" pixels.
+static void FillCanvasBackground(const AlphaCanvas& canvas, COLORREF color, BYTE alpha) {
+    if (!canvas.pixels) {
+        return;
+    }
+    DWORD packed = (static_cast<DWORD>(alpha) << 24) | (static_cast<DWORD>(GetRValue(color)) << 16) |
+        (static_cast<DWORD>(GetGValue(color)) << 8) | static_cast<DWORD>(GetBValue(color));
+    DWORD* pixels = static_cast<DWORD*>(canvas.pixels);
+    int count = canvas.width * canvas.height;
+    for (int i = 0; i < count; ++i) {
+        pixels[i] = packed;
+    }
+}
+
+// Any pixel still exactly matching the background fill was never drawn on,
+// so it keeps the configured (premultiplied) alpha; everything else GDI drew
+// becomes fully opaque, since UpdateLayeredWindow requires premultiplied alpha.
+static void FinalizeCanvasAlpha(const AlphaCanvas& canvas, COLORREF color, BYTE alpha) {
+    if (!canvas.pixels) {
+        return;
+    }
+    DWORD backgroundRgb = (static_cast<DWORD>(GetRValue(color)) << 16) |
+        (static_cast<DWORD>(GetGValue(color)) << 8) | static_cast<DWORD>(GetBValue(color));
+    BYTE premulR = static_cast<BYTE>(GetRValue(color) * alpha / 255);
+    BYTE premulG = static_cast<BYTE>(GetGValue(color) * alpha / 255);
+    BYTE premulB = static_cast<BYTE>(GetBValue(color) * alpha / 255);
+    DWORD premulBackground = (static_cast<DWORD>(alpha) << 24) | (static_cast<DWORD>(premulR) << 16) |
+        (static_cast<DWORD>(premulG) << 8) | static_cast<DWORD>(premulB);
+
+    DWORD* pixels = static_cast<DWORD*>(canvas.pixels);
+    int count = canvas.width * canvas.height;
+    for (int i = 0; i < count; ++i) {
+        if ((pixels[i] & 0x00FFFFFF) == backgroundRgb) {
+            pixels[i] = premulBackground;
+        } else {
+            pixels[i] |= 0xFF000000;
+        }
+    }
+}
+
+// Push the finished canvas to the screen at the given top-left position.
+static void CompositeCanvasToWindow(HWND hwnd, const AlphaCanvas& canvas, int x, int y) {
+    if (!hwnd || !canvas.dc) {
+        return;
+    }
+    POINT srcPos = {0, 0};
+    POINT dstPos = {x, y};
+    SIZE size = {canvas.width, canvas.height};
+    BLENDFUNCTION blend = {};
+    blend.BlendOp = AC_SRC_OVER;
+    blend.SourceConstantAlpha = 255;
+    blend.AlphaFormat = AC_SRC_ALPHA;
+    if (!UpdateLayeredWindow(hwnd, NULL, &dstPos, &size, canvas.dc, &srcPos, 0, &blend, ULW_ALPHA)) {
+        // Only the first failure is logged; if per-pixel alpha isn't honored
+        // by the current Wine/compositor stack this would otherwise repeat
+        // every refresh tick and flood um.log.
+        static bool loggedFailure = false;
+        if (!loggedFailure) {
+            loggedFailure = true;
+            LogLine("WARN", "UpdateLayeredWindow failed, error=%lu (background opacity will not apply)",
+                GetLastError());
+        }
+    }
+}
 
 // Panel height depends on whether the FPS graph is enabled in um.cfg, so it
 // is computed rather than a fixed constant.
 static int ComputeOverlayPanelHeight() {
     int height = OVERLAY_TEXT_BLOCK_HEIGHT;
     if (g_overlayShowFpsGraph) {
-        height += 20 + OVERLAY_GRAPH_HEIGHT;
+        height += 40 + OVERLAY_GRAPH_HEIGHT;
     }
     return height + 10;
 }
@@ -2487,7 +2772,7 @@ static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label
         const double* markValues, const char* const* markLabels, int markCount) {
     char labelText[48] = {};
     snprintf(labelText, sizeof(labelText), "%s (0-%.0f)", label, maxScale);
-    TextOutA(hdc, graphRect.left, graphRect.top - 18, labelText, static_cast<int>(strlen(labelText)));
+    TextOutA(hdc, graphRect.left, graphRect.top - 20, labelText, static_cast<int>(strlen(labelText)));
 
     HPEN borderPen = CreatePen(PS_SOLID, 1, g_overlayTextColor);
     HPEN oldPen = static_cast<HPEN>(SelectObject(hdc, borderPen));
@@ -2540,97 +2825,179 @@ static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label
     DeleteObject(borderPen);
 }
 
-// Paint the diagnostic overlay, follow the game window, and handle shutdown.
+// Render the main diagnostic panel (config status, FPS graph) into its alpha
+// canvas and push it to the screen at its configured anchor position.
+static void RenderOverlayPanel(const RECT& targetRect) {
+    int panelHeight = ComputeOverlayPanelHeight();
+
+    HFONT font = CreateFontA(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
+
+    char lines[OVERLAY_TEXT_LINE_COUNT][160] = {};
+    int lineCount = 0;
+    strncpy(lines[lineCount++], "Universal Mod Overlay (F7 to toggle)", sizeof(lines[0]) - 1);
+    if (g_overlayFrameCounterActive) {
+        snprintf(lines[lineCount++], sizeof(lines[0]), "FPS=%.1f FrameTime=%.2fms",
+            g_overlayCurrentFps, g_overlayCurrentFrameTimeMs);
+    } else {
+        strncpy(lines[lineCount++], "FPS=pending (waiting for primary surface)", sizeof(lines[0]) - 1);
+    }
+
+    // Measure with a scratch DC (independent of the real canvas, which isn't
+    // sized yet) so the panel is always wide enough to avoid clipping text.
+    int panelWidth = OVERLAY_PANEL_WIDTH;
+    HDC scratchDC = CreateCompatibleDC(NULL);
+    if (scratchDC) {
+        HFONT oldScratchFont = font ? static_cast<HFONT>(SelectObject(scratchDC, font)) : NULL;
+        int maxTextWidth = 0;
+        for (int i = 0; i < lineCount; ++i) {
+            SIZE textSize = {};
+            if (GetTextExtentPoint32A(scratchDC, lines[i], static_cast<int>(strlen(lines[i])), &textSize) &&
+                    textSize.cx > maxTextWidth) {
+                maxTextWidth = textSize.cx;
+            }
+        }
+        if (oldScratchFont) {
+            SelectObject(scratchDC, oldScratchFont);
+        }
+        DeleteDC(scratchDC);
+        int neededWidth = maxTextWidth + 16;
+        if (neededWidth > panelWidth) {
+            panelWidth = neededWidth;
+        }
+    }
+
+    RECT overlayRect;
+    ComputeOverlayRect(targetRect, g_overlayPosition, panelWidth, panelHeight, overlayRect);
+
+    EnsureAlphaCanvas(g_overlayCanvas, panelWidth, panelHeight);
+    BYTE bgAlpha = static_cast<BYTE>((g_overlayBackgroundOpacityPercent * 255) / 100);
+    FillCanvasBackground(g_overlayCanvas, g_overlayBackgroundColor, bgAlpha);
+
+    HDC hdc = g_overlayCanvas.dc;
+    SetBkMode(hdc, TRANSPARENT);
+    SetTextColor(hdc, g_overlayTextColor);
+    HFONT oldFont = font ? static_cast<HFONT>(SelectObject(hdc, font)) : NULL;
+
+    // Scale and which static marks are shown both grow with the highest FPS
+    // ever reached this session (e.g. a 60 FPS game never reveals the 120 FPS mark).
+    double fpsCeiling = ComputeFpsCeiling(g_overlayFpsPeakEver);
+    int revealedMarks = ComputeRevealedMarkCount(g_overlayFpsPeakEver);
+
+    char fpsMarkLabels[OVERLAY_FPS_MARKS_MAX][8] = {};
+    const char* fpsMarkLabelPtrs[OVERLAY_FPS_MARKS_MAX] = {};
+    for (int i = 0; i < revealedMarks; ++i) {
+        snprintf(fpsMarkLabels[i], sizeof(fpsMarkLabels[i]), "%.0f", g_overlayFpsMarks[i]);
+        fpsMarkLabelPtrs[i] = fpsMarkLabels[i];
+    }
+
+    int y = 8;
+    for (int i = 0; i < lineCount; ++i) {
+        TextOutA(hdc, 8, y, lines[i], static_cast<int>(strlen(lines[i])));
+        y += 20;
+    }
+    y += OVERLAY_SECTION_GAP;
+
+    if (g_overlayShowFpsGraph) {
+        y += 40;
+        RECT fpsGraphRect = {8, y, panelWidth - 8, y + OVERLAY_GRAPH_HEIGHT};
+        DrawSparklineGraph(hdc, fpsGraphRect, "FPS", g_overlayFpsHistory,
+            g_overlayFpsHistoryNext, g_overlayFpsHistoryCount, fpsCeiling,
+            g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks);
+    }
+
+    if (oldFont) {
+        SelectObject(hdc, oldFont);
+    }
+    if (font) {
+        DeleteObject(font);
+    }
+
+    FinalizeCanvasAlpha(g_overlayCanvas, g_overlayBackgroundColor, bgAlpha);
+    CompositeCanvasToWindow(g_overlayWindow, g_overlayCanvas, overlayRect.left, overlayRect.top);
+}
+
+// Render the auto-scrolling log tail panel: newest line pinned to the bottom,
+// older lines pushed upward as new ones arrive, oldest falling off the top.
+
+// Skip the leading "[YYYY-MM-DDTHH:MM:SS+ZZZZ] " timestamp so the overlay's
+// narrow panel has room for the actually useful level/category/message text;
+// um.log on disk keeps the full timestamp regardless.
+static const char* SkipLogTimestamp(const char* line) {
+    if (line[0] != '[') {
+        return line;
+    }
+    const char* closeBracket = strchr(line, ']');
+    if (!closeBracket) {
+        return line;
+    }
+    const char* rest = closeBracket + 1;
+    while (*rest == ' ') {
+        ++rest;
+    }
+    return rest;
+}
+
+static void RenderLogPanel(const RECT& targetRect) {
+    int lineCount = g_overlayLogLineCount;
+    int panelHeight = 8 + lineCount * OVERLAY_LOG_LINE_HEIGHT + 6;
+    RECT logRect;
+    ComputeOverlayRect(targetRect, g_overlayLogPosition, OVERLAY_LOG_PANEL_WIDTH, panelHeight, logRect);
+
+    EnsureAlphaCanvas(g_overlayLogCanvas, OVERLAY_LOG_PANEL_WIDTH, panelHeight);
+    BYTE bgAlpha = static_cast<BYTE>((g_overlayBackgroundOpacityPercent * 255) / 100);
+    FillCanvasBackground(g_overlayLogCanvas, g_overlayBackgroundColor, bgAlpha);
+
+    HDC hdc = g_overlayLogCanvas.dc;
+    SetBkMode(hdc, TRANSPARENT);
+    SetTextColor(hdc, g_overlayTextColor);
+    HFONT font = CreateFontA(12, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+        ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
+    HFONT oldFont = font ? static_cast<HFONT>(SelectObject(hdc, font)) : NULL;
+
+    char snapshot[OVERLAY_LOG_CAPACITY][sizeof(g_overlayLogRing[0])] = {};
+    int snapshotCount = 0;
+    if (g_logLockInitialized) {
+        EnterCriticalSection(&g_logLock);
+    }
+    int available = g_overlayLogRingCount;
+    int toShow = available < lineCount ? available : lineCount;
+    for (int i = 0; i < toShow; ++i) {
+        int idx = (g_overlayLogRingNext - toShow + i + OVERLAY_LOG_CAPACITY * 2) % OVERLAY_LOG_CAPACITY;
+        snprintf(snapshot[snapshotCount], sizeof(snapshot[0]), "%s", SkipLogTimestamp(g_overlayLogRing[idx]));
+        ++snapshotCount;
+    }
+    if (g_logLockInitialized) {
+        LeaveCriticalSection(&g_logLock);
+    }
+
+    int y = 4 + (lineCount - snapshotCount) * OVERLAY_LOG_LINE_HEIGHT;
+    for (int i = 0; i < snapshotCount; ++i) {
+        TextOutA(hdc, 6, y, snapshot[i], static_cast<int>(strlen(snapshot[i])));
+        y += OVERLAY_LOG_LINE_HEIGHT;
+    }
+
+    if (oldFont) {
+        SelectObject(hdc, oldFont);
+    }
+    if (font) {
+        DeleteObject(font);
+    }
+
+    FinalizeCanvasAlpha(g_overlayLogCanvas, g_overlayBackgroundColor, bgAlpha);
+    CompositeCanvasToWindow(g_overlayLogWindow, g_overlayLogCanvas, logRect.left, logRect.top);
+}
+
+// Follow the game window, handle input, and drive both panels' rendering.
 static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
-    case WM_PAINT: {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
-        RECT clientRect;
-        GetClientRect(hwnd, &clientRect);
-        HBRUSH background = CreateSolidBrush(OVERLAY_COLOR_KEY);
-        FillRect(hdc, &clientRect, background);
-        DeleteObject(background);
-
-        SetBkMode(hdc, TRANSPARENT);
-        SetTextColor(hdc, g_overlayTextColor);
-        HFONT font = CreateFontA(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
-            ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-            DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
-        HFONT oldFont = font ? static_cast<HFONT>(SelectObject(hdc, font)) : NULL;
-
-        char lines[7][160] = {};
-        int lineCount = 0;
-        strncpy(lines[lineCount++], "Universal Mod Overlay (F7 to toggle)", sizeof(lines[0]) - 1);
-        if (g_overlayFrameCounterActive) {
-            snprintf(lines[lineCount++], sizeof(lines[0]), "FPS=%.1f FrameTime=%.2fms",
-                g_overlayCurrentFps, g_overlayCurrentFrameTimeMs);
-        } else {
-            strncpy(lines[lineCount++], "FPS=pending (waiting for primary surface)", sizeof(lines[0]) - 1);
-        }
-        snprintf(lines[lineCount++], sizeof(lines[0]), "AntiCrash=%s HeapTerm=%s MobValidation=%s",
-            g_enableAntiCrash ? "on" : "off", g_enableHeapTermination ? "on" : "off",
-            g_enableMobValidation ? "on" : "off");
-        snprintf(lines[lineCount++], sizeof(lines[0]), "Logging=%s FileIoLogging=%s",
-            g_enableCrashLogging ? "on" : "off", g_enableFileIoLogging ? "on" : "off");
-        snprintf(lines[lineCount++], sizeof(lines[0]), "Uptime=%llus",
-            (GetTickCount64() - g_overlayStartTickMs) / 1000);
-        PROCESS_MEMORY_COUNTERS memoryCounters = {};
-        memoryCounters.cb = sizeof(memoryCounters);
-        if (K32GetProcessMemoryInfo(GetCurrentProcess(), &memoryCounters, sizeof(memoryCounters))) {
-            snprintf(lines[lineCount++], sizeof(lines[0]), "Memory=%lu MB",
-                static_cast<unsigned long>(memoryCounters.WorkingSetSize / (1024 * 1024)));
-        }
-        snprintf(lines[lineCount++], sizeof(lines[0]), "TrackedFileHandles=%zu", CountTrackedFileHandles());
-
-        // Two rolling sparkline graphs (FPS, then frametime). Scale and which
-        // static marks are shown both grow with the highest FPS ever reached
-        // this session (e.g. a 60 FPS game never reveals the 120 FPS mark).
-        double fpsCeiling = ComputeFpsCeiling(g_overlayFpsPeakEver);
-        int revealedMarks = ComputeRevealedMarkCount(g_overlayFpsPeakEver);
-
-        char fpsMarkLabels[OVERLAY_FPS_MARKS_MAX][8] = {};
-        const char* fpsMarkLabelPtrs[OVERLAY_FPS_MARKS_MAX] = {};
-        for (int i = 0; i < revealedMarks; ++i) {
-            snprintf(fpsMarkLabels[i], sizeof(fpsMarkLabels[i]), "%.0f", g_overlayFpsMarks[i]);
-            fpsMarkLabelPtrs[i] = fpsMarkLabels[i];
-        }
-
-        int y = 8;
-        for (int i = 0; i < lineCount; ++i) {
-            TextOutA(hdc, 8, y, lines[i], static_cast<int>(strlen(lines[i])));
-            y += 20;
-        }
-
-        if (g_overlayShowFpsGraph) {
-            y += 20;
-            RECT fpsGraphRect = {8, y, clientRect.right - 8, y + OVERLAY_GRAPH_HEIGHT};
-            DrawSparklineGraph(hdc, fpsGraphRect, "FPS", g_overlayFpsHistory,
-                g_overlayFpsHistoryNext, g_overlayFpsHistoryCount, fpsCeiling,
-                g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks);
-        }
-
-        if (oldFont) {
-            SelectObject(hdc, oldFont);
-        }
-        if (font) {
-            DeleteObject(font);
-        }
-        EndPaint(hwnd, &ps);
-        return 0;
-    }
     case WM_TIMER: {
-        int panelHeight = ComputeOverlayPanelHeight();
-        if (g_overlayTargetWindow && IsWindow(g_overlayTargetWindow)) {
-            RECT targetRect;
-            if (GetWindowRect(g_overlayTargetWindow, &targetRect)) {
-                RECT overlayRect;
-                ComputeOverlayRect(targetRect, g_overlayPosition, OVERLAY_PANEL_WIDTH,
-                    panelHeight, overlayRect);
-                SetWindowPos(hwnd, HWND_TOPMOST, overlayRect.left, overlayRect.top,
-                    OVERLAY_PANEL_WIDTH, panelHeight, SWP_NOACTIVATE);
-            }
-        } else {
+        if (g_overlayTargetWindow && !IsWindow(g_overlayTargetWindow)) {
+            g_overlayTargetWindow = NULL;
+        }
+        if (!g_overlayTargetWindow) {
             g_overlayTargetWindow = FindGameWindow();
         }
 
@@ -2656,7 +3023,17 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
         }
 
         if (g_overlayVisible) {
-            InvalidateRect(hwnd, NULL, TRUE);
+            RECT targetRect;
+            if (g_overlayTargetWindow && GetWindowRect(g_overlayTargetWindow, &targetRect)) {
+                RenderOverlayPanel(targetRect);
+                if (g_overlayLogEnabled && g_overlayLogWindow) {
+                    RenderLogPanel(targetRect);
+                }
+            }
+            SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            if (g_overlayLogWindow) {
+                SetWindowPos(g_overlayLogWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            }
         }
         return 0;
     }
@@ -2668,13 +3045,16 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
     }
 }
 
-// Create the click-through, always-on-top diagnostic overlay and run its
-// message loop. A color-keyed layered window is used instead of hooking
-// DirectDraw's surfaces so the overlay itself works regardless of the active
-// render backend (native DDraw, dgVoodoo2, a DDraw-to-D3D9 wrapper, DXVK,
-// etc.); a separate, narrowly-scoped vtable hook on the primary surface's
-// Flip/Blt is used only for the FPS/frametime counter. Starts hidden; toggled
-// by LowLevelKeyboardProc via the configurable OVERLAY_TOGGLE_KEY.
+// Create the click-through, always-on-top diagnostic overlay (plus its
+// optional scrolling log panel) and run their message loop. Each panel is a
+// composited alpha-blended bitmap rather than a color-keyed window, so its
+// own configurable background color/opacity shows behind fully-opaque text;
+// this works regardless of the active render backend (native DDraw,
+// dgVoodoo2, a DDraw-to-D3D9 wrapper, DXVK, etc.) since none of those are
+// touched by this approach. A separate, narrowly-scoped vtable hook on the
+// primary surface's Flip/Blt is used only for the FPS/frametime counter.
+// Both windows start hidden; toggled together by LowLevelKeyboardProc via
+// the configurable OVERLAY_TOGGLE_KEY.
 static DWORD WINAPI OverlayThread(LPVOID parameter) {
     HMODULE module = reinterpret_cast<HMODULE>(parameter);
     g_overlayStartTickMs = GetTickCount64();
@@ -2698,8 +3078,8 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     RECT initialRect;
     ComputeOverlayRect(targetRect, g_overlayPosition, OVERLAY_PANEL_WIDTH, panelHeight, initialRect);
 
-    g_overlayWindow = CreateWindowExA(
-        WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST,
+    DWORD extendedStyle = WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+    g_overlayWindow = CreateWindowExA(extendedStyle,
         windowClass.lpszClassName, "Universal Mod Overlay", WS_POPUP,
         initialRect.left, initialRect.top, OVERLAY_PANEL_WIDTH, panelHeight,
         NULL, NULL, module, NULL);
@@ -2707,12 +3087,26 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
         LogLine("ERROR", "CreateWindowExA for overlay failed, error=%lu", GetLastError());
         return 0;
     }
-
-    SetLayeredWindowAttributes(g_overlayWindow, OVERLAY_COLOR_KEY, 0, LWA_COLORKEY);
-    SetTimer(g_overlayWindow, 1, g_overlayRefreshMs, NULL);
     ShowWindow(g_overlayWindow, SW_HIDE);
-    LogLine("INFO", "Overlay window created; toggle_key=0x%02X position=%s",
-        g_overlayToggleKey, g_overlayPosition);
+
+    if (g_overlayLogEnabled) {
+        RECT logRect;
+        int logPanelHeight = 8 + g_overlayLogLineCount * OVERLAY_LOG_LINE_HEIGHT + 6;
+        ComputeOverlayRect(targetRect, g_overlayLogPosition, OVERLAY_LOG_PANEL_WIDTH, logPanelHeight, logRect);
+        g_overlayLogWindow = CreateWindowExA(extendedStyle,
+            windowClass.lpszClassName, "Universal Mod Overlay Log", WS_POPUP,
+            logRect.left, logRect.top, OVERLAY_LOG_PANEL_WIDTH, logPanelHeight,
+            NULL, NULL, module, NULL);
+        if (g_overlayLogWindow) {
+            ShowWindow(g_overlayLogWindow, SW_HIDE);
+        } else {
+            LogLine("WARN", "CreateWindowExA for overlay log panel failed, error=%lu", GetLastError());
+        }
+    }
+
+    SetTimer(g_overlayWindow, 1, g_overlayRefreshMs, NULL);
+    LogLine("INFO", "Overlay window created; toggle_key=0x%02X position=%s log_enabled=%s",
+        g_overlayToggleKey, g_overlayPosition, g_overlayLogEnabled ? "true" : "false");
 
     MSG msg;
     while (GetMessageA(&msg, NULL, 0, 0) > 0) {
@@ -2720,8 +3114,11 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
         DispatchMessageA(&msg);
     }
 
+    DestroyAlphaCanvas(g_overlayCanvas);
+    DestroyAlphaCanvas(g_overlayLogCanvas);
     UnregisterClassA(windowClass.lpszClassName, module);
     g_overlayWindow = NULL;
+    g_overlayLogWindow = NULL;
     return 0;
 }
 
@@ -2763,6 +3160,24 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     }
     if (const char* fpsMarksEnv = getenv("OVERLAY_FPS_MARKS")) {
         ParseFpsMarks(fpsMarksEnv, g_overlayFpsMarks, &g_overlayFpsMarkCount);
+    }
+    if (const char* backgroundColorEnv = getenv("OVERLAY_BACKGROUND_COLOR")) {
+        g_overlayBackgroundColor = ParseHexColor(backgroundColorEnv, RGB(0, 0, 0));
+    }
+    if (const char* backgroundOpacityEnv = getenv("OVERLAY_BACKGROUND_OPACITY")) {
+        g_overlayBackgroundOpacityPercent = ParseOverlayOpacityPercent(backgroundOpacityEnv);
+    }
+    if (const char* logEnabledEnv = getenv("OVERLAY_LOG_ENABLED")) {
+        g_overlayLogEnabled = IsTrueString(logEnabledEnv);
+    }
+    if (const char* logLinesEnv = getenv("OVERLAY_LOG_LINES")) {
+        g_overlayLogLineCount = ParseOverlayLogLineCount(logLinesEnv);
+    }
+    if (const char* logPositionEnv = getenv("OVERLAY_LOG_POSITION")) {
+        ParseOverlayPosition(logPositionEnv, g_overlayLogPosition, sizeof(g_overlayLogPosition));
+    }
+    if (const char* logLevelFilterEnv = getenv("OVERLAY_LOG_LEVEL_FILTER")) {
+        SetQuotedConfigString(g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), logLevelFilterEnv);
     }
     if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
