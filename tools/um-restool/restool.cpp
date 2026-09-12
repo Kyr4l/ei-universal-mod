@@ -242,6 +242,7 @@ static bool PackResArchive(
     const fs::path& inDir,
     std::vector<uint8_t>& resOut,
     size_t& fileCount,
+    const std::vector<std::string>& excludeNames,
     std::string& err)
 {
     std::vector<ArchiveFile> files;
@@ -250,6 +251,16 @@ static bool PackResArchive(
     try {
         for (const auto& entry : fs::recursive_directory_iterator(inDir)) {
             if (!entry.is_regular_file()) continue;
+
+            std::string fileName = entry.path().filename().string();
+            std::string lowerFileName = fileName;
+            std::transform(lowerFileName.begin(), lowerFileName.end(), lowerFileName.begin(), [](unsigned char c) {
+                return static_cast<char>(std::tolower(c));
+            });
+            bool excluded = std::any_of(excludeNames.begin(), excludeNames.end(), [&](const std::string& name) {
+                return name == lowerFileName;
+            });
+            if (excluded) continue;
 
             fs::path relPath = fs::relative(entry.path(), inDir);
             std::string relStr = ToArchivePath(relPath);
@@ -438,6 +449,7 @@ static ToolResult ProcessTarget(
     ToolAction action,
     bool stripExt,
     const std::string& customExt,
+    const std::vector<std::string>& excludeNames,
     bool dryRun)
 {
     ToolResult res;
@@ -535,7 +547,7 @@ static ToolResult ProcessTarget(
         std::vector<uint8_t> resOut;
         std::string err;
         size_t fCount = 0;
-        if (!PackResArchive(inputPath, resOut, fCount, err)) {
+        if (!PackResArchive(inputPath, resOut, fCount, excludeNames, err)) {
             res.errorMessage = err;
             return res;
         }
@@ -581,6 +593,7 @@ struct CliOptions {
     bool stripExt = true;
     ToolAction action = ToolAction::Auto;
     std::string customExt;
+    std::vector<std::string> excludeNames;
     fs::path inputPath;
     fs::path outputTarget;
 };
@@ -601,6 +614,7 @@ static void PrintHelp() {
               << "  -s, --strip-ext       Strip _res and _mq directory suffixes when packing (default: on)\n"
               << "  --no-strip-ext        Do not strip directory suffixes when packing\n"
               << "  --ext <extension>     Override output archive extension (e.g. .mq, .res)\n"
+              << "  -e, --exclude <name>  Exclude file(s) by exact name when packing (repeatable, or comma-separated)\n"
               << "  --pack                Force pack directory -> archive\n"
               << "  --unpack              Force unpack archive -> directory\n"
               << "  --dry-run             Show what the program would do without writing files\n"
@@ -612,7 +626,8 @@ static void PrintHelp() {
               << "  um-restool ./figures_res                # Packs to ./figures.res\n"
               << "  um-restool ./z3q1_mq                    # Packs to ./z3q1.mq\n"
               << "  um-restool -d ./res_unpacked -o ./res -m # Batch packs all folders in parallel\n"
-              << "  um-restool -d ./mq-eng -m               # Batch packs all *_mq folders to *.mq\n";
+              << "  um-restool -d ./mq-eng -m               # Batch packs all *_mq folders to *.mq\n"
+              << "  um-restool -d ./mq-eng -m -e quest.ini   # Same, but omit quest.ini from every archive\n";
 }
 
 static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
@@ -642,6 +657,23 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
                 opt.customExt = argv[++i];
             } else {
                 std::cerr << "Error: " << arg << " requires an extension argument (e.g. .mq, .res).\n";
+                return false;
+            }
+        } else if (arg == "-e" || arg == "--exclude") {
+            if (i + 1 < argc) {
+                std::string namesArg = argv[++i];
+                std::stringstream ss(namesArg);
+                std::string name;
+                while (std::getline(ss, name, ',')) {
+                    std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c) {
+                        return static_cast<char>(std::tolower(c));
+                    });
+                    if (!name.empty()) {
+                        opt.excludeNames.push_back(name);
+                    }
+                }
+            } else {
+                std::cerr << "Error: " << arg << " requires a file name argument (e.g. quest.ini).\n";
                 return false;
             }
         } else if (arg == "-o" || arg == "--output") {
@@ -711,7 +743,7 @@ int main(int argc, char* argv[]) {
     // Single Target Mode
     if (!opt.isDirMode) {
         auto start = std::chrono::high_resolution_clock::now();
-        ToolResult res = ProcessTarget(opt.inputPath, opt.outputTarget, opt.action, opt.stripExt, opt.customExt, opt.dryRun);
+        ToolResult res = ProcessTarget(opt.inputPath, opt.outputTarget, opt.action, opt.stripExt, opt.customExt, opt.excludeNames, opt.dryRun);
         auto end = std::chrono::high_resolution_clock::now();
         double elapsedMs = std::chrono::duration<double, std::milli>(end - start).count();
 
@@ -783,7 +815,7 @@ int main(int argc, char* argv[]) {
             if (idx >= targetPaths.size()) break;
 
             const fs::path& path = targetPaths[idx];
-            ToolResult res = ProcessTarget(path, opt.outputTarget, opt.action, opt.stripExt, opt.customExt, opt.dryRun);
+            ToolResult res = ProcessTarget(path, opt.outputTarget, opt.action, opt.stripExt, opt.customExt, opt.excludeNames, opt.dryRun);
 
             std::lock_guard<std::mutex> lock(printMutex);
             if (res.success) {

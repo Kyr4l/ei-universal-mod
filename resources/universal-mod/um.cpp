@@ -5,6 +5,7 @@
 
 #include <windows.h>
 #include <dbghelp.h>
+#include <psapi.h>
 #include <io.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -13,6 +14,8 @@
 #include <stdarg.h>
 #include <string>
 #include <unordered_set>
+#include <cstdint>
+#include <algorithm>
 
 // The DLL is injected into the game process, so these flags and hooks are
 // process-local. Configuration is loaded once during DLL_PROCESS_ATTACH.
@@ -37,6 +40,30 @@ static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
 static bool g_enableMobValidation = false;
 static bool g_enableHeapTermination = false;
+static bool g_enableOverlay = false;
+static BYTE g_overlayToggleKey = VK_F7;
+static volatile LONG g_overlayVisible = 0;
+static HWND g_overlayWindow = NULL;
+static HWND g_overlayTargetWindow = NULL;
+static ULONGLONG g_overlayStartTickMs = 0;
+static char g_overlayPosition[16] = "top-left";
+static COLORREF g_overlayTextColor = RGB(0, 255, 0);
+static bool g_overlayShowFpsGraph = true;
+static volatile LONG g_overlayFrameCount = 0;
+static volatile LONG g_overlayFrameCounterActive = 0;
+static LONG g_overlayFpsLastFrameCount = 0;
+static ULONGLONG g_overlayFpsLastTickMs = 0;
+static double g_overlayCurrentFps = 0.0;
+static double g_overlayCurrentFrameTimeMs = 0.0;
+static double g_overlayFpsPeakEver = 0.0;
+static const int OVERLAY_HISTORY_CAPACITY = 64;
+static double g_overlayFpsHistory[OVERLAY_HISTORY_CAPACITY] = {};
+static int g_overlayFpsHistoryNext = 0;
+static int g_overlayFpsHistoryCount = 0;
+static int g_overlayRefreshMs = 500;
+static const int OVERLAY_FPS_MARKS_MAX = 16;
+static double g_overlayFpsMarks[OVERLAY_FPS_MARKS_MAX] = {30.0, 60.0, 75.0, 120.0, 140.0, 165.0, 240.0};
+static int g_overlayFpsMarkCount = 7;
 
 // Not defined by MinGW's headers; value is stable across Windows versions.
 static const DWORD UM_STATUS_HEAP_CORRUPTION = 0xC0000374L;
@@ -52,6 +79,27 @@ typedef HRESULT (WINAPI *DirectDrawCreateFunction)(const GUID*, void**, IUnknown
 typedef HRESULT (WINAPI *DirectDrawCreateExFunction)(const GUID*, void**, const GUID*, IUnknown*);
 typedef BOOL (WINAPI *MiniDumpWriteDumpFunction)(HANDLE, DWORD, HANDLE, DWORD,
     const MINIDUMP_EXCEPTION_INFORMATION*, const void*, const void*);
+
+// Raw vtable-slot typedefs for the small subset of DirectDraw COM methods
+// used to count presented frames. Slot indices and the ddsCaps byte offset
+// are stable across IDirectDraw/IDirectDraw2/IDirectDraw7 and DDSURFACEDESC/
+// DDSURFACEDESC2 (Microsoft only ever appends new members/methods), so this
+// works regardless of which interface version the game actually requests.
+typedef HRESULT (WINAPI *DDCreateSurfaceFunction)(void*, void*, void**, IUnknown*);
+typedef HRESULT (WINAPI *DDFlipFunction)(void*, void*, DWORD);
+typedef HRESULT (WINAPI *DDBltFunction)(void*, LPRECT, void*, LPRECT, DWORD, void*);
+typedef HRESULT (WINAPI *DDBltFastFunction)(void*, DWORD, DWORD, void*, LPRECT, DWORD);
+static const int DD_VTABLE_CREATESURFACE_SLOT = 6;
+static const int DD_VTABLE_BLT_SLOT = 5;
+static const int DD_VTABLE_BLTFAST_SLOT = 7;
+static const int DD_VTABLE_FLIP_SLOT = 11;
+static const size_t DD_SURFACEDESC_DDSCAPS_OFFSET = 0x68;
+static const DWORD DD_DDSCAPS_PRIMARYSURFACE = 0x00000200;
+
+static DDCreateSurfaceFunction g_originalDDCreateSurface = NULL;
+static DDFlipFunction g_originalDDFlip = NULL;
+static DDBltFunction g_originalDDBlt = NULL;
+static DDBltFastFunction g_originalDDBltFast = NULL;
 
 static CreateFileAFunction g_originalCreateFileA = NULL;
 static CreateFileWFunction g_originalCreateFileW = NULL;
@@ -119,6 +167,140 @@ static bool GetEnvironmentFlag(LPCSTR name) {
         return false;
     }
     return IsTrueString(value);
+}
+
+// Parse a key name (e.g. "F7", "0x76", "118") into a virtual-key code.
+// Falls back to VK_F7 for empty or unrecognized values.
+static BYTE ParseVirtualKeyName(const char* value) {
+    if (!value || value[0] == '\0') {
+        return VK_F7;
+    }
+
+    if ((value[0] == 'F' || value[0] == 'f') && isdigit(static_cast<unsigned char>(value[1]))) {
+        int number = atoi(value + 1);
+        if (number >= 1 && number <= 12) {
+            return static_cast<BYTE>(VK_F1 + (number - 1));
+        }
+    }
+
+    char* end = NULL;
+    long parsed = strtol(value, &end, 0);
+    if (end != value && *end == '\0' && parsed >= 0 && parsed <= 255) {
+        return static_cast<BYTE>(parsed);
+    }
+
+    return VK_F7;
+}
+
+// Parse a "RRGGBB" (optionally prefixed with '#' or "0x") hex color into a
+// COLORREF. Falls back to green (00FF00) for empty or unrecognized values.
+static COLORREF ParseHexColor(const char* value) {
+    const COLORREF defaultColor = RGB(0, 255, 0);
+    if (!value || value[0] == '\0') {
+        return defaultColor;
+    }
+
+    if (value[0] == '#') {
+        ++value;
+    } else if ((value[0] == '0') && (value[1] == 'x' || value[1] == 'X')) {
+        value += 2;
+    }
+
+    if (strlen(value) != 6) {
+        return defaultColor;
+    }
+    for (int i = 0; i < 6; ++i) {
+        if (!isxdigit(static_cast<unsigned char>(value[i]))) {
+            return defaultColor;
+        }
+    }
+
+    unsigned long rgb = strtoul(value, NULL, 16);
+    BYTE r = static_cast<BYTE>((rgb >> 16) & 0xFF);
+    BYTE g = static_cast<BYTE>((rgb >> 8) & 0xFF);
+    BYTE b = static_cast<BYTE>(rgb & 0xFF);
+    return RGB(r, g, b);
+}
+
+// Normalize an OVERLAY_POSITION value (e.g. "Top-Right") to lowercase and
+// fall back to "top-left" for empty or unrecognized values.
+static void ParseOverlayPosition(const char* value, char* out, size_t outSize) {
+    static const char* validPositions[] = {
+        "top-left", "top-right", "bottom-left", "bottom-right",
+        "top", "bottom", "left", "right", "center"
+    };
+
+    char lowerValue[32] = {};
+    if (value) {
+        size_t len = strlen(value);
+        if (len >= sizeof(lowerValue)) {
+            len = sizeof(lowerValue) - 1;
+        }
+        for (size_t i = 0; i < len; ++i) {
+            lowerValue[i] = static_cast<char>(tolower(static_cast<unsigned char>(value[i])));
+        }
+        lowerValue[len] = '\0';
+    }
+
+    for (const char* candidate : validPositions) {
+        if (strcmp(lowerValue, candidate) == 0) {
+            strncpy(out, candidate, outSize - 1);
+            out[outSize - 1] = '\0';
+            return;
+        }
+    }
+
+    strncpy(out, "top-left", outSize - 1);
+    out[outSize - 1] = '\0';
+}
+
+// Parse OVERLAY_REFRESH_MS, clamped to a sane range; falls back to 500 for
+// empty/unrecognized values (100ms floor avoids excessive repaint overhead).
+static int ParseOverlayRefreshMs(const char* value) {
+    if (!value || value[0] == '\0') {
+        return 500;
+    }
+    char* end = NULL;
+    long parsed = strtol(value, &end, 10);
+    if (end == value || parsed < 100 || parsed > 5000) {
+        return 500;
+    }
+    return static_cast<int>(parsed);
+}
+
+// Parse a comma-separated list of positive FPS values (e.g. "30,60,75,120")
+// into a sorted-ascending array, capped at OVERLAY_FPS_MARKS_MAX entries.
+// Leaves outMarks/outCount untouched (caller keeps its defaults) on any
+// empty/fully-invalid input.
+static void ParseFpsMarks(const char* value, double* outMarks, int* outCount) {
+    if (!value || value[0] == '\0') {
+        return;
+    }
+
+    double parsedMarks[OVERLAY_FPS_MARKS_MAX] = {};
+    int parsedCount = 0;
+
+    char buffer[256] = {};
+    strncpy(buffer, value, sizeof(buffer) - 1);
+    char* token = strtok(buffer, ",");
+    while (token && parsedCount < OVERLAY_FPS_MARKS_MAX) {
+        char* end = NULL;
+        double parsedValue = strtod(token, &end);
+        if (end != token && parsedValue > 0.0) {
+            parsedMarks[parsedCount++] = parsedValue;
+        }
+        token = strtok(NULL, ",");
+    }
+
+    if (parsedCount == 0) {
+        return;
+    }
+
+    std::sort(parsedMarks, parsedMarks + parsedCount);
+    for (int i = 0; i < parsedCount; ++i) {
+        outMarks[i] = parsedMarks[i];
+    }
+    *outCount = parsedCount;
 }
 
 // Append one timestamped, serialized diagnostic line and flush it to disk.
@@ -422,6 +604,23 @@ static void LogTrackedFileHandles() {
     for (size_t i = 0; i < count; ++i) {
         LogLine("ANTICRASH", "Open tracked file path=%s handle=%p", paths[i], handles[i]);
     }
+}
+
+// Count currently tracked open file handles for the diagnostic overlay.
+static size_t CountTrackedFileHandles() {
+    if (!g_fileHandleLockInitialized) {
+        return 0;
+    }
+
+    size_t count = 0;
+    EnterCriticalSection(&g_fileHandleLock);
+    for (size_t i = 0; i < sizeof(g_fileHandles) / sizeof(g_fileHandles[0]); ++i) {
+        if (g_fileHandles[i].handle != NULL) {
+            ++count;
+        }
+    }
+    LeaveCriticalSection(&g_fileHandleLock);
+    return count;
 }
 
 // Convert CreateFile desired-access flags into a compact diagnostic label.
@@ -1045,6 +1244,126 @@ static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
     return result;
 }
 
+// Overwrite one COM vtable slot process-wide (vtables are normally shared by
+// every instance of a class) and return the previous function pointer, or
+// NULL if the slot already holds newFunction. When alreadyPatched is given,
+// it distinguishes "already patched by an earlier call" (not an error, e.g. a
+// second surface sharing the same vtable) from a real VirtualProtect failure.
+static void* PatchVTableSlot(void* comObject, int slotIndex, void* newFunction,
+        bool* alreadyPatched = NULL) {
+    if (alreadyPatched) {
+        *alreadyPatched = false;
+    }
+    if (!comObject) {
+        return NULL;
+    }
+    void*** selfPtr = reinterpret_cast<void***>(comObject);
+    void** vtable = *selfPtr;
+    if (vtable[slotIndex] == newFunction) {
+        if (alreadyPatched) {
+            *alreadyPatched = true;
+        }
+        return NULL;
+    }
+    void* original = vtable[slotIndex];
+    DWORD oldProtect = 0;
+    if (!VirtualProtect(&vtable[slotIndex], sizeof(void*), PAGE_READWRITE, &oldProtect)) {
+        return NULL;
+    }
+    vtable[slotIndex] = newFunction;
+    VirtualProtect(&vtable[slotIndex], sizeof(void*), oldProtect, &oldProtect);
+    return original;
+}
+
+// Largest Blt destination area seen on the primary surface so far; used to
+// tell a full-frame present apart from small partial updates (HUD, cursor).
+static volatile LONG g_overlayFrameMaxBltArea = 0;
+
+// Count one presented frame for the overlay's FPS/frametime readout.
+static HRESULT WINAPI HookedDDFlip(void* self, void* targetOverride, DWORD flags) {
+    InterlockedIncrement(&g_overlayFrameCount);
+    return g_originalDDFlip(self, targetOverride, flags);
+}
+
+// A NULL destRect conventionally means "blit the entire surface", which is
+// only true for a full-frame present; otherwise only count a Blt as a frame
+// once its area is close to the largest one seen (partial/HUD/cursor blits
+// are typically much smaller than a full-frame redraw).
+static HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
+        LPRECT srcRect, DWORD flags, void* bltFx) {
+    if (!destRect) {
+        InterlockedIncrement(&g_overlayFrameCount);
+    } else {
+        LONG area = (destRect->right - destRect->left) * (destRect->bottom - destRect->top);
+        LONG maxArea = g_overlayFrameMaxBltArea;
+        if (area > maxArea) {
+            InterlockedExchange(&g_overlayFrameMaxBltArea, area);
+            maxArea = area;
+        }
+        if (maxArea > 0 && area * 10 >= maxArea * 9) {
+            InterlockedIncrement(&g_overlayFrameCount);
+        }
+    }
+    return g_originalDDBlt(self, destRect, srcSurface, srcRect, flags, bltFx);
+}
+
+// BltFast has no destination rect, only an origin; a full-frame present
+// conventionally targets (0,0), while sprite/HUD/cursor blits usually don't.
+static HRESULT WINAPI HookedDDBltFast(void* self, DWORD x, DWORD y, void* srcSurface,
+        LPRECT srcRect, DWORD trans) {
+    if (x == 0 && y == 0) {
+        InterlockedIncrement(&g_overlayFrameCount);
+    }
+    return g_originalDDBltFast(self, x, y, srcSurface, srcRect, trans);
+}
+
+// When the game creates its primary (front-buffer) surface, patch that
+// surface's own Flip/Blt/BltFast vtable slots so every present is counted,
+// without touching any other surface (textures, sprites, etc. would over-count).
+static HRESULT WINAPI HookedDDCreateSurface(void* self, void* surfaceDesc,
+        void** lplpDDSurface, IUnknown* outer) {
+    HRESULT result = g_originalDDCreateSurface(self, surfaceDesc, lplpDDSurface, outer);
+    if (SUCCEEDED(result) && lplpDDSurface && *lplpDDSurface && surfaceDesc) {
+        DWORD caps = *reinterpret_cast<DWORD*>(
+            reinterpret_cast<uint8_t*>(surfaceDesc) + DD_SURFACEDESC_DDSCAPS_OFFSET);
+        if ((caps & DD_DDSCAPS_PRIMARYSURFACE) != 0) {
+            void* surface = *lplpDDSurface;
+            void* originalFlip = PatchVTableSlot(surface, DD_VTABLE_FLIP_SLOT,
+                reinterpret_cast<void*>(HookedDDFlip));
+            if (originalFlip) {
+                g_originalDDFlip = reinterpret_cast<DDFlipFunction>(originalFlip);
+            }
+            void* originalBlt = PatchVTableSlot(surface, DD_VTABLE_BLT_SLOT,
+                reinterpret_cast<void*>(HookedDDBlt));
+            if (originalBlt) {
+                g_originalDDBlt = reinterpret_cast<DDBltFunction>(originalBlt);
+            }
+            void* originalBltFast = PatchVTableSlot(surface, DD_VTABLE_BLTFAST_SLOT,
+                reinterpret_cast<void*>(HookedDDBltFast));
+            if (originalBltFast) {
+                g_originalDDBltFast = reinterpret_cast<DDBltFastFunction>(originalBltFast);
+            }
+            InterlockedExchange(&g_overlayFrameCounterActive, 1);
+            LogLine("INFO", "Primary surface Flip/Blt/BltFast hooked for the overlay's FPS counter");
+        }
+    }
+    return result;
+}
+
+// Patch CreateSurface on a newly created DirectDraw object so the overlay can
+// find and hook the primary surface once the game creates it.
+static void InstallDirectDrawFrameCounterHooks(void* directDrawObject) {
+    bool alreadyPatched = false;
+    void* original = PatchVTableSlot(directDrawObject, DD_VTABLE_CREATESURFACE_SLOT,
+        reinterpret_cast<void*>(HookedDDCreateSurface), &alreadyPatched);
+    if (original) {
+        g_originalDDCreateSurface = reinterpret_cast<DDCreateSurfaceFunction>(original);
+        LogLine("INFO", "DirectDraw CreateSurface hooked for the overlay's FPS counter");
+    } else if (!alreadyPatched) {
+        LogLine("WARN", "DirectDraw CreateSurface was not hooked; FPS counter will read n/a");
+    }
+}
+
 // Log DirectDraw initialization results without changing the returned object.
 static HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw,
         IUnknown* outerUnknown) {
@@ -1052,6 +1371,9 @@ static HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw
     LogLine(FAILED(result) ? "ERROR" : "INFO",
         "DirectDrawCreate result=0x%08lX object=%p", result,
         directDraw ? *directDraw : NULL);
+    if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
+        InstallDirectDrawFrameCounterHooks(*directDraw);
+    }
     return result;
 }
 
@@ -1063,8 +1385,12 @@ static HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDr
     LogLine(FAILED(result) ? "ERROR" : "INFO",
         "DirectDrawCreateEx result=0x%08lX object=%p", result,
         directDraw ? *directDraw : NULL);
+    if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
+        InstallDirectDrawFrameCounterHooks(*directDraw);
+    }
     return result;
 }
+
 
 // Patch the executable's import address table instead of replacing kernel32
 // exports globally. This limits logging to calls made through game.exe's
@@ -1154,8 +1480,9 @@ static void InstallFileIoHooks() {
     hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
     if (!hooked) {
-        // These hooks back both file-I/O logging and .mob validation, so a
-        // generic success line here would not indicate which feature is active.
+        // These hooks back file-I/O logging, .mob validation, and the overlay's
+        // FPS counter, so a generic success line here would not indicate which
+        // feature is active.
         LogLine("WARN", "File-I/O hooks not installed");
     }
 }
@@ -1780,32 +2107,57 @@ static void LoadConfigFile(const char* dllPath) {
         // Create um.cfg if it doesn't exist with default settings
         file = fopen(configPath, "w");
         if (file) {
-            fprintf(file, "; Universal Mod Configuration\n");
+            fprintf(file, "; Universal Mod Configuration\n\n");
+
             fprintf(file, "; Require SpellAddonX.asi beside game.exe; (true/false)\n");
             fprintf(file, "SPELLADDON_ASI_CHECK=true\n\n");
+
+            fprintf(file, "; -- Keyboard --\n");
             fprintf(file, "; Rewrite backtick and number-row input as US-QWERTY keys; (true/false)\n");
-            fprintf(file, "KEYBOARD_REWRITES=true\n\n");
+            fprintf(file, "KEYBOARD_REWRITES=true\n");
             fprintf(file, "; Log keyboard rewrite events; (true/false)\n");
             fprintf(file, "KEYBOARD_REWRITES_LOGGING=false\n\n");
+
+            fprintf(file, "; -- Logging --\n");
             fprintf(file, "; Write diagnostic and crash information to um.log; (true/false)\n");
-            fprintf(file, "LOGGING=false\n\n");
+            fprintf(file, "LOGGING=false\n");
             fprintf(file, "; Log file opens, reads, and writes as INFO entries; (true/false)\n");
-            fprintf(file, "FILE_IO_LOGGING=false\n\n");
+            fprintf(file, "FILE_IO_LOGGING=false\n");
             fprintf(file, "; Comma-separated file extensions to exclude from file-I/O logging; empty or like mmp,res.\n");
-            fprintf(file, "FILE_IO_LOGGING_FILTER=\"\"\n\n");
+            fprintf(file, "FILE_IO_LOGGING_FILTER=\"\"\n");
             fprintf(file, "; Clear um.log on the first DLL instance of a launch; (true/false)\n");
             fprintf(file, "CLEAR_LOG_ON_START=false\n\n");
+
+            fprintf(file, "; -- Crash handling --\n");
             fprintf(file, "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)\n");
-            fprintf(file, "ANTICRASH=false\n\n");
+            fprintf(file, "ANTICRASH=false\n");
             fprintf(file, "; Write portable Windows minidumps beside um.log; (true/false)\n");
-            fprintf(file, "CRASH_DUMPS=true\n\n");
+            fprintf(file, "CRASH_DUMPS=true\n");
             fprintf(file, "; Validate .mob file headers when opened and log structural problems, including a\n");
             fprintf(file, "; cross-check of unit weapons/armors/spells/quest/quick items against the item/spell database; (true/false)\n");
-            fprintf(file, "MOB_VALIDATION=false\n\n");
+            fprintf(file, "MOB_VALIDATION=false\n");
             fprintf(file, "; Fail fast the instant Windows detects heap corruption instead of letting the\n");
             fprintf(file, "; process keep running on corrupted memory until an unrelated later crash; the\n");
             fprintf(file, "; resulting crash log points much closer to the real cause; (true/false)\n");
             fprintf(file, "HEAP_CORRUPTION_TERMINATION=true\n\n");
+
+            fprintf(file, "; -- Overlay --\n");
+            fprintf(file, "; Enable a toggleable diagnostic overlay drawn on top of the game window; (true/false)\n");
+            fprintf(file, "OVERLAY_ENABLED=false\n");
+            fprintf(file, "; Key that shows/hides the overlay while the game has focus; F1-F12, or a 0x.. / decimal virtual-key code.\n");
+            fprintf(file, "OVERLAY_TOGGLE_KEY=F7\n");
+            fprintf(file, "; Corner/edge of the game window the overlay is anchored to; one of\n");
+            fprintf(file, "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center.\n");
+            fprintf(file, "OVERLAY_POSITION=top-left\n");
+            fprintf(file, "; Overlay text color as a hex RRGGBB value (no # needed).\n");
+            fprintf(file, "OVERLAY_COLOR=00FF00\n");
+            fprintf(file, "; How often the overlay repaints and samples FPS, in milliseconds (100-5000).\n");
+            fprintf(file, "OVERLAY_REFRESH_MS=500\n");
+            fprintf(file, "; Show the FPS sparkline graph (frametime stays as text only); (true/false)\n");
+            fprintf(file, "OVERLAY_SHOW_FPS_GRAPH=true\n");
+            fprintf(file, "; Comma-separated static FPS reference marks for the graph, ascending; the lowest\n");
+            fprintf(file, "; two always show, the rest only appear once the game actually reaches them.\n");
+            fprintf(file, "OVERLAY_FPS_MARKS=30,60,75,120,140,165,240\n\n");
             fclose(file);
         }
         return;
@@ -1879,6 +2231,20 @@ static void LoadConfigFile(const char* dllPath) {
             g_enableMobValidation = IsTrueString(value);
         } else if (EqualsIgnoreCase(key, "HEAP_CORRUPTION_TERMINATION")) {
             g_enableHeapTermination = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_ENABLED")) {
+            g_enableOverlay = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_TOGGLE_KEY")) {
+            g_overlayToggleKey = ParseVirtualKeyName(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_POSITION")) {
+            ParseOverlayPosition(value, g_overlayPosition, sizeof(g_overlayPosition));
+        } else if (EqualsIgnoreCase(key, "OVERLAY_COLOR")) {
+            g_overlayTextColor = ParseHexColor(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_REFRESH_MS")) {
+            g_overlayRefreshMs = ParseOverlayRefreshMs(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_FPS_GRAPH")) {
+            g_overlayShowFpsGraph = IsTrueString(value);
+        } else if (EqualsIgnoreCase(key, "OVERLAY_FPS_MARKS")) {
+            ParseFpsMarks(value, g_overlayFpsMarks, &g_overlayFpsMarkCount);
         }
     }
 
@@ -1931,38 +2297,49 @@ static void SendQwertyNumberKeyPress(BYTE vkCode, bool logRewrite) {
     }
 }
 
-// Intercept the backtick and number-row keys and rewrite them as US-QWERTY presses.
+// Intercept the backtick and number-row keys and rewrite them as US-QWERTY presses;
+// also watch for the overlay toggle key independently of the rewrite feature.
 static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-    if (!g_enableKeyboardRewrites) {
-        return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
-    }
-
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
-        if (kb) {
-            // Do not process the synthetic events generated by SendInput above.
-            if ((kb->flags & LLKHF_INJECTED) != 0) {
-                return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
-            }
-            if (kb->vkCode == 0xC0 || kb->scanCode == 0x29) {
+        // Do not process the synthetic events generated by SendInput below.
+        if (kb && (kb->flags & LLKHF_INJECTED) == 0) {
+            if (g_enableOverlay && kb->vkCode == g_overlayToggleKey) {
                 if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
-                    bool logRewrite = !g_keyboardRewriteKeyDown[0xC0];
-                    g_keyboardRewriteKeyDown[0xC0] = true;
-                    SendQwertyBacktickPress(logRewrite);
+                    if (!g_keyboardRewriteKeyDown[g_overlayToggleKey]) {
+                        g_keyboardRewriteKeyDown[g_overlayToggleKey] = true;
+                        g_overlayVisible = g_overlayVisible ? 0 : 1;
+                        if (g_overlayWindow) {
+                            ShowWindow(g_overlayWindow, g_overlayVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
+                        }
+                        LogLine("INFO", "Overlay toggled %s", g_overlayVisible ? "visible" : "hidden");
+                    }
                 } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
-                    g_keyboardRewriteKeyDown[0xC0] = false;
+                    g_keyboardRewriteKeyDown[g_overlayToggleKey] = false;
                 }
-                return 1; // swallow the original key event
+                return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
             }
-            if (kb->vkCode >= 0x30 && kb->vkCode <= 0x39) {
-                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
-                    bool logRewrite = !g_keyboardRewriteKeyDown[kb->vkCode];
-                    g_keyboardRewriteKeyDown[kb->vkCode] = true;
-                    SendQwertyNumberKeyPress(kb->vkCode, logRewrite);
-                } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
-                    g_keyboardRewriteKeyDown[kb->vkCode] = false;
+            if (g_enableKeyboardRewrites) {
+                if (kb->vkCode == 0xC0 || kb->scanCode == 0x29) {
+                    if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                        bool logRewrite = !g_keyboardRewriteKeyDown[0xC0];
+                        g_keyboardRewriteKeyDown[0xC0] = true;
+                        SendQwertyBacktickPress(logRewrite);
+                    } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
+                        g_keyboardRewriteKeyDown[0xC0] = false;
+                    }
+                    return 1; // swallow the original key event
                 }
-                return 1; // swallow the original key event
+                if (kb->vkCode >= 0x30 && kb->vkCode <= 0x39) {
+                    if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                        bool logRewrite = !g_keyboardRewriteKeyDown[kb->vkCode];
+                        g_keyboardRewriteKeyDown[kb->vkCode] = true;
+                        SendQwertyNumberKeyPress(kb->vkCode, logRewrite);
+                    } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
+                        g_keyboardRewriteKeyDown[kb->vkCode] = false;
+                    }
+                    return 1; // swallow the original key event
+                }
             }
         }
     }
@@ -1991,6 +2368,363 @@ DWORD WINAPI KeyPopupThread(LPVOID lpParameter) {
     return 0;
 }
 
+// Match the game's own top-level window so the overlay can track its position.
+static BOOL CALLBACK FindGameWindowProc(HWND hwnd, LPARAM lParam) {
+    DWORD windowProcessId = 0;
+    GetWindowThreadProcessId(hwnd, &windowProcessId);
+    if (windowProcessId != GetCurrentProcessId() || !IsWindowVisible(hwnd) ||
+        GetWindow(hwnd, GW_OWNER) != NULL) {
+        return TRUE;
+    }
+    char title[256] = {};
+    if (GetWindowTextA(hwnd, title, sizeof(title)) == 0) {
+        return TRUE;
+    }
+    *reinterpret_cast<HWND*>(lParam) = hwnd;
+    return FALSE;
+}
+
+static HWND FindGameWindow() {
+    HWND result = NULL;
+    EnumWindows(FindGameWindowProc, reinterpret_cast<LPARAM>(&result));
+    return result;
+}
+
+// Background color used as the layered-window color key so only the drawn
+// text is visible; diagnostic text must avoid using this exact color.
+static const COLORREF OVERLAY_COLOR_KEY = RGB(1, 1, 1);
+static const int OVERLAY_PANEL_WIDTH = 340;
+static const int OVERLAY_PANEL_MARGIN = 12;
+static const int OVERLAY_GRAPH_HEIGHT = 150;
+static const int OVERLAY_TEXT_BLOCK_HEIGHT = 8 + 7 * 20;
+
+// Panel height depends on whether the FPS graph is enabled in um.cfg, so it
+// is computed rather than a fixed constant.
+static int ComputeOverlayPanelHeight() {
+    int height = OVERLAY_TEXT_BLOCK_HEIGHT;
+    if (g_overlayShowFpsGraph) {
+        height += 20 + OVERLAY_GRAPH_HEIGHT;
+    }
+    return height + 10;
+}
+
+// Static FPS reference marks, configurable via OVERLAY_FPS_MARKS; the lowest
+// two are always shown, the rest only appear once the game actually reaches
+// them (see ComputeRevealedMarkCount).
+
+// How many of the leading (lowest) marks are relevant given the highest FPS
+// ever observed this session: always at least the first two, more once
+// actually reached.
+static int ComputeRevealedMarkCount(double bestFpsEver) {
+    int revealed = g_overlayFpsMarkCount > 1 ? 2 : g_overlayFpsMarkCount;
+    for (int i = 2; i < g_overlayFpsMarkCount; ++i) {
+        if (bestFpsEver >= g_overlayFpsMarks[i]) {
+            revealed = i + 1;
+        }
+    }
+    return revealed;
+}
+
+// Smallest FPS mark that is >= bestFpsEver, floored at the second-lowest mark
+// and capped at the highest defined mark so the FPS graph's scale grows with
+// real headroom.
+static double ComputeFpsCeiling(double bestFpsEver) {
+    double floorMark = g_overlayFpsMarkCount > 1 ? g_overlayFpsMarks[1] :
+        (g_overlayFpsMarkCount > 0 ? g_overlayFpsMarks[0] : 60.0);
+    if (bestFpsEver <= floorMark) {
+        return floorMark;
+    }
+    for (int i = 0; i < g_overlayFpsMarkCount; ++i) {
+        if (g_overlayFpsMarks[i] >= bestFpsEver) {
+            return g_overlayFpsMarks[i];
+        }
+    }
+    return g_overlayFpsMarkCount > 0 ? g_overlayFpsMarks[g_overlayFpsMarkCount - 1] : floorMark;
+}
+
+// Anchor a fixed-size panel to a corner/edge/center of the target window based
+// on an OVERLAY_POSITION value such as "top-left", "bottom", or "right".
+static void ComputeOverlayRect(const RECT& targetRect, const char* position,
+        int panelWidth, int panelHeight, RECT& outRect) {
+    bool top = strstr(position, "top") != NULL;
+    bool bottom = strstr(position, "bottom") != NULL;
+    bool left = strstr(position, "left") != NULL;
+    bool right = strstr(position, "right") != NULL;
+
+    int targetWidth = targetRect.right - targetRect.left;
+    int targetHeight = targetRect.bottom - targetRect.top;
+
+    int x;
+    if (left) {
+        x = targetRect.left + OVERLAY_PANEL_MARGIN;
+    } else if (right) {
+        x = targetRect.right - OVERLAY_PANEL_MARGIN - panelWidth;
+    } else {
+        x = targetRect.left + (targetWidth - panelWidth) / 2;
+    }
+
+    int y;
+    if (top) {
+        y = targetRect.top + OVERLAY_PANEL_MARGIN;
+    } else if (bottom) {
+        y = targetRect.bottom - OVERLAY_PANEL_MARGIN - panelHeight;
+    } else {
+        y = targetRect.top + (targetHeight - panelHeight) / 2;
+    }
+
+    outRect.left = x;
+    outRect.top = y;
+    outRect.right = x + panelWidth;
+    outRect.bottom = y + panelHeight;
+}
+
+// Draw one bordered, dynamically-scaled rolling sparkline graph (oldest sample
+// on the left, newest on the right) from a circular history buffer, with
+// horizontal reference lines at markValues[0..markCount-1] (already expressed
+// in the graph's own unit - FPS or ms).
+static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label,
+        const double* history, int historyNext, int historyCount, double maxScale,
+        const double* markValues, const char* const* markLabels, int markCount) {
+    char labelText[48] = {};
+    snprintf(labelText, sizeof(labelText), "%s (0-%.0f)", label, maxScale);
+    TextOutA(hdc, graphRect.left, graphRect.top - 18, labelText, static_cast<int>(strlen(labelText)));
+
+    HPEN borderPen = CreatePen(PS_SOLID, 1, g_overlayTextColor);
+    HPEN oldPen = static_cast<HPEN>(SelectObject(hdc, borderPen));
+    HBRUSH nullBrush = static_cast<HBRUSH>(GetStockObject(NULL_BRUSH));
+    HBRUSH oldBrush = static_cast<HBRUSH>(SelectObject(hdc, nullBrush));
+    Rectangle(hdc, graphRect.left, graphRect.top, graphRect.right, graphRect.bottom);
+
+    // One dotted reference line + label per revealed static mark (e.g. 30/60 FPS).
+    HPEN gridPen = CreatePen(PS_DOT, 1, g_overlayTextColor);
+    HPEN oldGridPen = static_cast<HPEN>(SelectObject(hdc, gridPen));
+    int graphHeight = graphRect.bottom - graphRect.top;
+    for (int i = 0; i < markCount; ++i) {
+        double markValue = markValues[i];
+        if (markValue <= 0 || markValue > maxScale) {
+            continue;
+        }
+        int lineY = graphRect.bottom - static_cast<int>((markValue / maxScale) * graphHeight);
+        MoveToEx(hdc, graphRect.left, lineY, NULL);
+        LineTo(hdc, graphRect.right, lineY);
+        TextOutA(hdc, graphRect.left + 2, lineY - 13, markLabels[i], static_cast<int>(strlen(markLabels[i])));
+    }
+    SelectObject(hdc, oldGridPen);
+    DeleteObject(gridPen);
+    TextOutA(hdc, graphRect.left + 2, graphRect.bottom - 15, "0", 1);
+
+    if (historyCount > 1) {
+        int graphWidth = graphRect.right - graphRect.left;
+        POINT points[OVERLAY_HISTORY_CAPACITY];
+        for (int i = 0; i < historyCount; ++i) {
+            int historyIndex = (historyNext - historyCount + i + OVERLAY_HISTORY_CAPACITY * 2) %
+                OVERLAY_HISTORY_CAPACITY;
+            double sample = history[historyIndex];
+            if (sample > maxScale) {
+                sample = maxScale;
+            } else if (sample < 0) {
+                sample = 0;
+            }
+            points[i].x = graphRect.left + (graphWidth * i) / (historyCount - 1);
+            points[i].y = graphRect.bottom - static_cast<int>((sample / maxScale) * graphHeight);
+        }
+        HPEN linePen = CreatePen(PS_SOLID, 2, g_overlayTextColor);
+        HPEN oldLinePen = static_cast<HPEN>(SelectObject(hdc, linePen));
+        Polyline(hdc, points, historyCount);
+        SelectObject(hdc, oldLinePen);
+        DeleteObject(linePen);
+    }
+
+    SelectObject(hdc, oldBrush);
+    SelectObject(hdc, oldPen);
+    DeleteObject(borderPen);
+}
+
+// Paint the diagnostic overlay, follow the game window, and handle shutdown.
+static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    switch (message) {
+    case WM_PAINT: {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hwnd, &ps);
+        RECT clientRect;
+        GetClientRect(hwnd, &clientRect);
+        HBRUSH background = CreateSolidBrush(OVERLAY_COLOR_KEY);
+        FillRect(hdc, &clientRect, background);
+        DeleteObject(background);
+
+        SetBkMode(hdc, TRANSPARENT);
+        SetTextColor(hdc, g_overlayTextColor);
+        HFONT font = CreateFontA(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+            ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+            DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
+        HFONT oldFont = font ? static_cast<HFONT>(SelectObject(hdc, font)) : NULL;
+
+        char lines[7][160] = {};
+        int lineCount = 0;
+        strncpy(lines[lineCount++], "Universal Mod Overlay (F7 to toggle)", sizeof(lines[0]) - 1);
+        if (g_overlayFrameCounterActive) {
+            snprintf(lines[lineCount++], sizeof(lines[0]), "FPS=%.1f FrameTime=%.2fms",
+                g_overlayCurrentFps, g_overlayCurrentFrameTimeMs);
+        } else {
+            strncpy(lines[lineCount++], "FPS=pending (waiting for primary surface)", sizeof(lines[0]) - 1);
+        }
+        snprintf(lines[lineCount++], sizeof(lines[0]), "AntiCrash=%s HeapTerm=%s MobValidation=%s",
+            g_enableAntiCrash ? "on" : "off", g_enableHeapTermination ? "on" : "off",
+            g_enableMobValidation ? "on" : "off");
+        snprintf(lines[lineCount++], sizeof(lines[0]), "Logging=%s FileIoLogging=%s",
+            g_enableCrashLogging ? "on" : "off", g_enableFileIoLogging ? "on" : "off");
+        snprintf(lines[lineCount++], sizeof(lines[0]), "Uptime=%llus",
+            (GetTickCount64() - g_overlayStartTickMs) / 1000);
+        PROCESS_MEMORY_COUNTERS memoryCounters = {};
+        memoryCounters.cb = sizeof(memoryCounters);
+        if (K32GetProcessMemoryInfo(GetCurrentProcess(), &memoryCounters, sizeof(memoryCounters))) {
+            snprintf(lines[lineCount++], sizeof(lines[0]), "Memory=%lu MB",
+                static_cast<unsigned long>(memoryCounters.WorkingSetSize / (1024 * 1024)));
+        }
+        snprintf(lines[lineCount++], sizeof(lines[0]), "TrackedFileHandles=%zu", CountTrackedFileHandles());
+
+        // Two rolling sparkline graphs (FPS, then frametime). Scale and which
+        // static marks are shown both grow with the highest FPS ever reached
+        // this session (e.g. a 60 FPS game never reveals the 120 FPS mark).
+        double fpsCeiling = ComputeFpsCeiling(g_overlayFpsPeakEver);
+        int revealedMarks = ComputeRevealedMarkCount(g_overlayFpsPeakEver);
+
+        char fpsMarkLabels[OVERLAY_FPS_MARKS_MAX][8] = {};
+        const char* fpsMarkLabelPtrs[OVERLAY_FPS_MARKS_MAX] = {};
+        for (int i = 0; i < revealedMarks; ++i) {
+            snprintf(fpsMarkLabels[i], sizeof(fpsMarkLabels[i]), "%.0f", g_overlayFpsMarks[i]);
+            fpsMarkLabelPtrs[i] = fpsMarkLabels[i];
+        }
+
+        int y = 8;
+        for (int i = 0; i < lineCount; ++i) {
+            TextOutA(hdc, 8, y, lines[i], static_cast<int>(strlen(lines[i])));
+            y += 20;
+        }
+
+        if (g_overlayShowFpsGraph) {
+            y += 20;
+            RECT fpsGraphRect = {8, y, clientRect.right - 8, y + OVERLAY_GRAPH_HEIGHT};
+            DrawSparklineGraph(hdc, fpsGraphRect, "FPS", g_overlayFpsHistory,
+                g_overlayFpsHistoryNext, g_overlayFpsHistoryCount, fpsCeiling,
+                g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks);
+        }
+
+        if (oldFont) {
+            SelectObject(hdc, oldFont);
+        }
+        if (font) {
+            DeleteObject(font);
+        }
+        EndPaint(hwnd, &ps);
+        return 0;
+    }
+    case WM_TIMER: {
+        int panelHeight = ComputeOverlayPanelHeight();
+        if (g_overlayTargetWindow && IsWindow(g_overlayTargetWindow)) {
+            RECT targetRect;
+            if (GetWindowRect(g_overlayTargetWindow, &targetRect)) {
+                RECT overlayRect;
+                ComputeOverlayRect(targetRect, g_overlayPosition, OVERLAY_PANEL_WIDTH,
+                    panelHeight, overlayRect);
+                SetWindowPos(hwnd, HWND_TOPMOST, overlayRect.left, overlayRect.top,
+                    OVERLAY_PANEL_WIDTH, panelHeight, SWP_NOACTIVATE);
+            }
+        } else {
+            g_overlayTargetWindow = FindGameWindow();
+        }
+
+        ULONGLONG nowMs = GetTickCount64();
+        ULONGLONG elapsedMs = nowMs - g_overlayFpsLastTickMs;
+        if (g_overlayFrameCounterActive && elapsedMs >= static_cast<ULONGLONG>(g_overlayRefreshMs)) {
+            LONG currentFrames = g_overlayFrameCount;
+            LONG deltaFrames = currentFrames - g_overlayFpsLastFrameCount;
+            g_overlayCurrentFps = deltaFrames * 1000.0 / static_cast<double>(elapsedMs);
+            g_overlayCurrentFrameTimeMs = g_overlayCurrentFps > 0.0 ? 1000.0 / g_overlayCurrentFps : 0.0;
+            g_overlayFpsLastFrameCount = currentFrames;
+            g_overlayFpsLastTickMs = nowMs;
+            if (g_overlayCurrentFps > g_overlayFpsPeakEver) {
+                g_overlayFpsPeakEver = g_overlayCurrentFps;
+            }
+
+            size_t historyCapacity = static_cast<size_t>(OVERLAY_HISTORY_CAPACITY);
+            g_overlayFpsHistory[g_overlayFpsHistoryNext] = g_overlayCurrentFps;
+            g_overlayFpsHistoryNext = static_cast<int>((g_overlayFpsHistoryNext + 1) % historyCapacity);
+            if (g_overlayFpsHistoryCount < static_cast<int>(historyCapacity)) {
+                ++g_overlayFpsHistoryCount;
+            }
+        }
+
+        if (g_overlayVisible) {
+            InvalidateRect(hwnd, NULL, TRUE);
+        }
+        return 0;
+    }
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        return 0;
+    default:
+        return DefWindowProcA(hwnd, message, wParam, lParam);
+    }
+}
+
+// Create the click-through, always-on-top diagnostic overlay and run its
+// message loop. A color-keyed layered window is used instead of hooking
+// DirectDraw's surfaces so the overlay itself works regardless of the active
+// render backend (native DDraw, dgVoodoo2, a DDraw-to-D3D9 wrapper, DXVK,
+// etc.); a separate, narrowly-scoped vtable hook on the primary surface's
+// Flip/Blt is used only for the FPS/frametime counter. Starts hidden; toggled
+// by LowLevelKeyboardProc via the configurable OVERLAY_TOGGLE_KEY.
+static DWORD WINAPI OverlayThread(LPVOID parameter) {
+    HMODULE module = reinterpret_cast<HMODULE>(parameter);
+    g_overlayStartTickMs = GetTickCount64();
+    g_overlayFpsLastTickMs = g_overlayStartTickMs;
+
+    WNDCLASSA windowClass = {};
+    windowClass.lpfnWndProc = OverlayWindowProc;
+    windowClass.hInstance = module;
+    windowClass.lpszClassName = "UMOverlayWindowClass";
+    if (!RegisterClassA(&windowClass)) {
+        LogLine("ERROR", "RegisterClassA for overlay failed, error=%lu", GetLastError());
+        return 0;
+    }
+
+    g_overlayTargetWindow = FindGameWindow();
+    int panelHeight = ComputeOverlayPanelHeight();
+    RECT targetRect = {100, 100, 100 + OVERLAY_PANEL_WIDTH + 200, 100 + panelHeight + 200};
+    if (g_overlayTargetWindow) {
+        GetWindowRect(g_overlayTargetWindow, &targetRect);
+    }
+    RECT initialRect;
+    ComputeOverlayRect(targetRect, g_overlayPosition, OVERLAY_PANEL_WIDTH, panelHeight, initialRect);
+
+    g_overlayWindow = CreateWindowExA(
+        WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST,
+        windowClass.lpszClassName, "Universal Mod Overlay", WS_POPUP,
+        initialRect.left, initialRect.top, OVERLAY_PANEL_WIDTH, panelHeight,
+        NULL, NULL, module, NULL);
+    if (!g_overlayWindow) {
+        LogLine("ERROR", "CreateWindowExA for overlay failed, error=%lu", GetLastError());
+        return 0;
+    }
+
+    SetLayeredWindowAttributes(g_overlayWindow, OVERLAY_COLOR_KEY, 0, LWA_COLORKEY);
+    SetTimer(g_overlayWindow, 1, g_overlayRefreshMs, NULL);
+    ShowWindow(g_overlayWindow, SW_HIDE);
+    LogLine("INFO", "Overlay window created; toggle_key=0x%02X position=%s",
+        g_overlayToggleKey, g_overlayPosition);
+
+    MSG msg;
+    while (GetMessageA(&msg, NULL, 0, 0) > 0) {
+        TranslateMessage(&msg);
+        DispatchMessageA(&msg);
+    }
+
+    UnregisterClassA(windowClass.lpszClassName, module);
+    g_overlayWindow = NULL;
+    return 0;
+}
+
 // Perform configuration, diagnostics, hooks, and ASI validation after the
 // loader lock is released. Keeping this work out of DllMain avoids deadlocks.
 static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
@@ -2011,6 +2745,25 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
     g_enableAntiCrash = g_enableAntiCrash || GetEnvironmentFlag("ANTICRASH");
     g_clearLogOnStart = g_clearLogOnStart || GetEnvironmentFlag("CLEAR_LOG_ON_START");
     g_enableMobValidation = g_enableMobValidation || GetEnvironmentFlag("MOB_VALIDATION");
+    g_enableOverlay = g_enableOverlay || GetEnvironmentFlag("OVERLAY_ENABLED");
+    if (const char* toggleKeyEnv = getenv("OVERLAY_TOGGLE_KEY")) {
+        g_overlayToggleKey = ParseVirtualKeyName(toggleKeyEnv);
+    }
+    if (const char* positionEnv = getenv("OVERLAY_POSITION")) {
+        ParseOverlayPosition(positionEnv, g_overlayPosition, sizeof(g_overlayPosition));
+    }
+    if (const char* colorEnv = getenv("OVERLAY_COLOR")) {
+        g_overlayTextColor = ParseHexColor(colorEnv);
+    }
+    if (const char* refreshEnv = getenv("OVERLAY_REFRESH_MS")) {
+        g_overlayRefreshMs = ParseOverlayRefreshMs(refreshEnv);
+    }
+    if (const char* showFpsGraphEnv = getenv("OVERLAY_SHOW_FPS_GRAPH")) {
+        g_overlayShowFpsGraph = IsTrueString(showFpsGraphEnv);
+    }
+    if (const char* fpsMarksEnv = getenv("OVERLAY_FPS_MARKS")) {
+        ParseFpsMarks(fpsMarksEnv, g_overlayFpsMarks, &g_overlayFpsMarkCount);
+    }
     if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
@@ -2030,7 +2783,7 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
     }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s overlay=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
@@ -2039,7 +2792,8 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         g_clearLogOnStart ? "enabled" : "disabled",
         g_enableAntiCrash ? "enabled" : "disabled",
         g_enableMobValidation ? "enabled" : "disabled",
-        g_enableHeapTermination ? "enabled" : "disabled");
+        g_enableHeapTermination ? "enabled" : "disabled",
+        g_enableOverlay ? "enabled" : "disabled");
     if (g_enableAntiCrash) {
         LogLine("ANTICRASH", "Windows critical-error dialogs are suppressed; unsafe exceptions will still use normal crash handling");
     }
@@ -2050,9 +2804,16 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         CloseHandle(threadHandle);
     }
 
+    if (g_enableOverlay) {
+        HANDLE overlayThreadHandle = CreateThread(NULL, 0, OverlayThread, hModule, 0, NULL);
+        if (overlayThreadHandle) {
+            CloseHandle(overlayThreadHandle);
+        }
+    }
+
     InitializeCriticalSection(&g_fileHandleLock);
     g_fileHandleLockInitialized = true;
-    if (g_enableFileIoLogging || g_enableMobValidation) {
+    if (g_enableFileIoLogging || g_enableMobValidation || g_enableOverlay) {
         InstallFileIoHooks();
     }
 
