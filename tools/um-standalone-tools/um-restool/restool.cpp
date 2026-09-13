@@ -49,7 +49,7 @@
 namespace fs = std::filesystem;
 
 // Program metadata
-static constexpr const char* PROGRAM_VERSION = "0.1";
+static constexpr const char* PROGRAM_VERSION = "1.0";
 static constexpr const char* PROGRAM_NAME = "um-restool";
 
 // Magic constant
@@ -308,7 +308,6 @@ static bool PackResArchive(
         uint32_t dataOffset = 0;
         uint32_t dataLength = 0;
         uint32_t timestamp  = 0;
-        bool isDuplicate    = false;
     };
 
     std::vector<FileRecordMeta> records;
@@ -327,11 +326,9 @@ static bool PackResArchive(
         if (it != payloadCache.end()) {
             meta.dataOffset  = it->second.first;
             meta.dataLength  = it->second.second;
-            meta.isDuplicate = true;
         } else {
             uint32_t off = static_cast<uint32_t>(16 + dataBlock.size());
             meta.dataOffset  = off;
-            meta.isDuplicate = false;
             payloadCache[file.payload] = {off, meta.dataLength};
 
             dataBlock.insert(dataBlock.end(), file.payload.begin(), file.payload.end());
@@ -520,17 +517,16 @@ static ToolResult ProcessTarget(
         std::string targetExt = customExt.empty() ? ".res" : customExt;
         if (targetExt.front() != '.') targetExt = "." + targetExt;
 
-        // Smart suffix stripping matching eipacker conventions
-        if (dirName.size() > 3 && dirName.rfind("_mq") == dirName.size() - 3) {
-            baseStem = dirName.substr(0, dirName.size() - 3);
-            if (customExt.empty()) targetExt = ".mq";
-        } else if (dirName.size() > 4 && dirName.rfind("_res") == dirName.size() - 4) {
-            baseStem = dirName.substr(0, dirName.size() - 4);
-            if (customExt.empty()) targetExt = ".res";
-        }
-
-        if (!stripExt && (dirName.rfind("_mq") == std::string::npos && dirName.rfind("_res") == std::string::npos)) {
-            baseStem = dirName;
+        // Smart suffix stripping matching eipacker conventions (skipped entirely
+        // when --no-strip-ext is set, so the suffix is kept in the output name).
+        if (stripExt) {
+            if (dirName.size() > 3 && dirName.rfind("_mq") == dirName.size() - 3) {
+                baseStem = dirName.substr(0, dirName.size() - 3);
+                if (customExt.empty()) targetExt = ".mq";
+            } else if (dirName.size() > 4 && dirName.rfind("_res") == dirName.size() - 4) {
+                baseStem = dirName.substr(0, dirName.size() - 4);
+                if (customExt.empty()) targetExt = ".res";
+            }
         }
 
         if (outputTarget.empty()) {
@@ -618,7 +614,7 @@ static void PrintHelp() {
               << "  --pack                Force pack directory -> archive\n"
               << "  --unpack              Force unpack archive -> directory\n"
               << "  --dry-run             Show what the program would do without writing files\n"
-              << "  -v, --version         Print program version (" << PROGRAM_VERSION << ")\n"
+              << "  --version             Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help            Print this help message\n\n"
               << "Examples:\n"
               << "  um-restool database.res                 # Unpacks to ./database_res/\n"
@@ -637,7 +633,7 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
         if (arg == "-h" || arg == "--help") {
             opt.showHelp = true;
             return true;
-        } else if (arg == "-v" || arg == "--version") {
+        } else if (arg == "--version") {
             opt.showVersion = true;
             return true;
         } else if (arg == "--dry-run") {
@@ -665,6 +661,10 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
                 std::stringstream ss(namesArg);
                 std::string name;
                 while (std::getline(ss, name, ',')) {
+                    // Trim surrounding whitespace so "a.ini, b.ini" splits cleanly.
+                    size_t start = name.find_first_not_of(" \t");
+                    size_t end = name.find_last_not_of(" \t");
+                    name = (start == std::string::npos) ? "" : name.substr(start, end - start + 1);
                     std::transform(name.begin(), name.end(), name.begin(), [](unsigned char c) {
                         return static_cast<char>(std::tolower(c));
                     });
@@ -737,6 +737,11 @@ int main(int argc, char* argv[]) {
     std::error_code ec;
     if (!fs::exists(opt.inputPath, ec)) {
         std::cerr << "Error: Input path does not exist: " << opt.inputPath.string() << "\n";
+        return 1;
+    }
+
+    if (opt.isDirMode && !fs::is_directory(opt.inputPath, ec)) {
+        std::cerr << "Error: -d/--dir requires a directory, but '" << opt.inputPath.string() << "' is a file.\n";
         return 1;
     }
 

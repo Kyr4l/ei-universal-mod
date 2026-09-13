@@ -49,7 +49,7 @@
 namespace fs = std::filesystem;
 
 // Program metadata
-static constexpr const char* PROGRAM_VERSION = "0.1";
+static constexpr const char* PROGRAM_VERSION = "1.0";
 static constexpr const char* PROGRAM_NAME = "um-inireg";
 static constexpr uint32_t REG_MAGIC = 0x45AB3EFBu; // 'fb 3e ab 45'
 
@@ -815,7 +815,7 @@ static void PrintHelp() {
               << "  --ini2reg             Force INI -> REG conversion mode\n"
               << "  --reg2ini             Force REG -> INI conversion mode\n"
               << "  --dry-run             Show what the program would do without writing files\n"
-              << "  -v, --version         Print program version (" << PROGRAM_VERSION << ")\n"
+              << "  --version             Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help            Print this help message\n\n"
               << "Examples:\n"
               << "  um-multitool inireg config.ini                 # Creates config.reg\n"
@@ -831,7 +831,7 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
         if (arg == "-h" || arg == "--help") {
             opt.showHelp = true;
             return true;
-        } else if (arg == "-v" || arg == "--version") {
+        } else if (arg == "--version") {
             opt.showVersion = true;
             return true;
         } else if (arg == "--dry-run") {
@@ -906,8 +906,14 @@ int RunIniReg(int argc, char* argv[]) {
         return 1;
     }
 
-    if (fs::is_directory(opt.inputPath, ec)) {
-        opt.isDirMode = true;
+    bool isDir = fs::is_directory(opt.inputPath, ec);
+    if (opt.isDirMode && !isDir) {
+        std::cerr << "Error: -d/--dir requires a directory, but '" << opt.inputPath.string() << "' is a file.\n";
+        return 1;
+    }
+    if (!opt.isDirMode && isDir) {
+        std::cerr << "Error: " << opt.inputPath.string() << " is a directory. Use -d/--dir to batch process it.\n";
+        return 1;
     }
 
     // Single File Mode

@@ -34,7 +34,7 @@
 
 namespace fs = std::filesystem;
 
-static constexpr const char* PROGRAM_VERSION = "0.1";
+static constexpr const char* PROGRAM_VERSION = "1.0";
 
 static std::string ToLower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
@@ -54,7 +54,7 @@ static void PrintTopLevelHelp() {
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
               << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n\n"
               << "Options:\n"
-              << "  -v, --version   Print program version (" << PROGRAM_VERSION << ")\n"
+              << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
               << "Run 'um-multitool <subcommand> --help' for subcommand-specific options.\n\n"
               << "Examples:\n"
@@ -70,7 +70,7 @@ static void PrintTopLevelHelp() {
 
 static void PrintTopLevelVersion() {
     std::cout << "um-multitool version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool (each 0.1)\n";
+              << "  bundles: ddsmmp, inireg, mobdump, restool (each 1.0)\n";
 }
 
 enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool };
@@ -187,7 +187,7 @@ int main(int argc, char* argv[]) {
         PrintTopLevelHelp();
         return 0;
     }
-    if (first == "-v" || first == "--version") {
+    if (first == "--version") {
         PrintTopLevelVersion();
         return 0;
     }
@@ -222,6 +222,19 @@ int main(int argc, char* argv[]) {
     if (detected == SubTool::None) {
         std::cerr << "Error: " << detectErr << "\n";
         return 1;
+    }
+
+    // ddsmmp/inireg/mobdump now require an explicit -d for directory input;
+    // inject it here since the user only supplied a bare directory path.
+    if (fs::is_directory(candidate, ec) &&
+        (detected == SubTool::DdsMmp || detected == SubTool::IniReg || detected == SubTool::MobDump)) {
+        std::vector<char*> newArgv;
+        newArgv.push_back(argv[0]);
+        newArgv.push_back(const_cast<char*>("-d"));
+        for (int i = 1; i < argc; ++i) {
+            newArgv.push_back(argv[i]);
+        }
+        return DispatchTo(detected, static_cast<int>(newArgv.size()), newArgv.data());
     }
 
     return DispatchTo(detected, argc, argv);

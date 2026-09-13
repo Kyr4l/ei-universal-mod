@@ -46,7 +46,7 @@
 namespace fs = std::filesystem;
 
 // Program version constant
-static constexpr const char* PROGRAM_VERSION = "0.1";
+static constexpr const char* PROGRAM_VERSION = "1.0";
 static constexpr const char* PROGRAM_NAME = "um-mobdump";
 
 // ============================================================================
@@ -836,7 +836,7 @@ static void PrintHelp() {
               << "  -m, --multi           Process multiple files in parallel across CPU cores\n"
               << "                        (only active when used together with -d / --dir)\n"
               << "  --dry-run             Show what the program would do without writing anything\n"
-              << "  -v, --version         Print program version (" << PROGRAM_VERSION << ")\n"
+              << "  --version             Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help            Print this help message\n\n"
               << "Examples:\n"
               << "  um-mobdump maps/zone1.mob\n"
@@ -852,7 +852,7 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
         if (arg == "-h" || arg == "--help") {
             opt.showHelp = true;
             return true;
-        } else if (arg == "-v" || arg == "--version") {
+        } else if (arg == "--version") {
             opt.showVersion = true;
             return true;
         } else if (arg == "--dry-run") {
@@ -938,9 +938,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Auto-detect directory mode if inputPath is a directory
-    if (fs::is_directory(opt.inputPath, ec)) {
-        opt.isDirMode = true;
+    bool isDir = fs::is_directory(opt.inputPath, ec);
+    if (opt.isDirMode && !isDir) {
+        std::cerr << "Error: -d/--dir requires a directory, but '" << opt.inputPath.string() << "' is a file.\n";
+        return 1;
+    }
+    if (!opt.isDirMode && isDir) {
+        std::cerr << "Error: " << opt.inputPath.string() << " is a directory. Use -d/--dir to batch process it.\n";
+        return 1;
     }
 
     // ========================================================================

@@ -6,8 +6,8 @@
  * A small cross-platform (Windows/Linux) GUI wrapping the four merged
  * Evil Islands modding CLI tools (ddsmmp, inireg, mobdump, restool) exposed
  * by the um-multitool binary built alongside this GUI. Depends on it at
- * runtime: this GUI is just a form builder that spawns it in a visible
- * console window, so detailed progress is shown natively by the CLI tool.
+ * runtime: this GUI spawns it as a hidden subprocess and streams its
+ * stdout/stderr into the log panel below, with no separate console window.
  *
  * Each subtool gets its own tab exposing every CLI flag it supports.
  * ============================================================================
@@ -35,6 +35,10 @@
 #include <sstream>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <mutex>
+#include <thread>
+#include <atomic>
 #include <filesystem>
 
 #ifdef _WIN32
@@ -114,118 +118,176 @@ static std::string FindMultitoolBinary() {
     return exeName; // Fall back to PATH lookup.
 }
 
-// Wraps a single argument in quotes for the target shell: cmd.exe on Windows,
-// POSIX sh (via `sh -c`) on Linux. POSIX also needs `$` and backtick escaped,
-// since those still expand inside double quotes; cmd.exe treats them literally.
+// Wraps a single argument in double quotes for cmd.exe's command-line parsing.
+// Only used on Windows; POSIX spawns via execvp() with a real argv array, so
+// no shell quoting is needed there at all.
+#ifdef _WIN32
 static std::string QuoteArg(const std::string& arg) {
     std::string out = "\"";
     for (char c : arg) {
-#ifdef _WIN32
         if (c == '"' || c == '\\') out.push_back('\\');
-#else
-        if (c == '"' || c == '\\' || c == '$' || c == '`') out.push_back('\\');
-#endif
         out.push_back(c);
     }
     out += "\"";
     return out;
 }
+#endif
 
-#ifndef _WIN32
-// Returns true if `name` is a runnable command on this system.
-static bool CommandExists(const std::string& name) {
-    std::string cmd = "command -v " + name + " >/dev/null 2>&1";
-    return std::system(cmd.c_str()) == 0;
+// Opaque handle to the spawned subprocess plus the read end of its output
+// pipe, used both to poll its lifetime and to drain captured stdout/stderr.
+struct ProcHandle {
+#ifdef _WIN32
+    HANDLE hProcess = nullptr;
+    HANDLE hRead = nullptr;
+#else
+    pid_t pid = -1;
+    int readFd = -1;
+#endif
+};
+
+static bool IsValid(const ProcHandle& h) {
+#ifdef _WIN32
+    return h.hProcess != nullptr;
+#else
+    return h.pid > 0;
+#endif
 }
 
-// Picks the first available terminal emulator on the system.
-static std::string FindTerminalEmulator() {
-    static const char* candidates[] = {
-        "x-terminal-emulator", "xterm", "gnome-terminal",
-        "konsole", "xfce4-terminal", "alacritty", "kitty"
-    };
-    for (const char* c : candidates) {
-        if (CommandExists(c)) return c;
+static std::mutex g_outputMutex;
+static std::string g_pendingOutput;
+static std::atomic<bool> g_readerAlive{false};
+
+// Background thread body: blocks on read()/ReadFile() until the child closes
+// its end of the pipe (process exited), appending each chunk for the UI
+// timer to drain. Never touches FLTK widgets directly (wrong thread).
+static void ReaderThreadFunc(ProcHandle proc) {
+    char buf[4096];
+    while (true) {
+#ifdef _WIN32
+        DWORD n = 0;
+        BOOL ok = ReadFile(proc.hRead, buf, sizeof(buf), &n, nullptr);
+        if (!ok || n == 0) break;
+#else
+        ssize_t n = read(proc.readFd, buf, sizeof(buf));
+        if (n <= 0) break;
+#endif
+        std::lock_guard<std::mutex> lock(g_outputMutex);
+        g_pendingOutput.append(buf, static_cast<size_t>(n));
     }
-    return "";
+    g_readerAlive = false;
 }
-#endif
 
-// Opaque handle to the spawned console process, used to poll its lifetime
-// so the progress bar can reflect whether the job is still running.
+// Checks whether the process has exited without blocking. Returns the exit
+// code via `exitCode` only once `stillRunning` comes back false.
+static void PollProcess(const ProcHandle& h, bool& stillRunning, int& exitCode) {
 #ifdef _WIN32
-using ProcHandle = HANDLE;
-static constexpr ProcHandle kInvalidProc = nullptr;
+    DWORD code = 0;
+    if (!GetExitCodeProcess(h.hProcess, &code) || code != STILL_ACTIVE) {
+        stillRunning = false;
+        exitCode = static_cast<int>(code);
+        return;
+    }
+    stillRunning = true;
 #else
-using ProcHandle = pid_t;
-static constexpr ProcHandle kInvalidProc = -1;
-#endif
-
-static bool IsProcessRunning(ProcHandle h) {
-#ifdef _WIN32
-    if (h == kInvalidProc) return false;
-    return WaitForSingleObject(h, 0) == WAIT_TIMEOUT;
-#else
-    if (h == kInvalidProc) return false;
     int status = 0;
-    pid_t r = waitpid(h, &status, WNOHANG);
-    return r == 0;
-#endif
-}
-
-static void CleanupProcess(ProcHandle h) {
-#ifdef _WIN32
-    if (h != kInvalidProc) CloseHandle(h);
-#else
-    (void)h; // Already reaped by the waitpid() call that detected completion.
-#endif
-}
-
-// Launches `binary subcommand tokens...` in a new, visible console window so
-// the user can watch the real CLI tool's detailed progress output directly.
-// Returns a process handle for lifetime polling, or kInvalidProc on failure.
-static ProcHandle LaunchInConsole(const std::string& binary, const std::string& subcommand,
-                                  const std::vector<std::string>& tokens, std::string& err) {
-    std::ostringstream inner;
-    inner << QuoteArg(binary) << ' ' << subcommand;
-    for (const auto& t : tokens) {
-        inner << ' ' << QuoteArg(t);
+    pid_t r = waitpid(h.pid, &status, WNOHANG);
+    if (r == 0) {
+        stillRunning = true;
+        return;
     }
-    AppendLog("$ " + inner.str() + "\n");
+    stillRunning = false;
+    exitCode = (r > 0 && WIFEXITED(status)) ? WEXITSTATUS(status) : -1;
+#endif
+}
+
+static void CleanupProcess(ProcHandle& h) {
+#ifdef _WIN32
+    if (h.hProcess) CloseHandle(h.hProcess);
+    if (h.hRead) CloseHandle(h.hRead);
+#else
+    if (h.readFd >= 0) close(h.readFd);
+#endif
+    h = ProcHandle{};
+}
+
+// Spawns `binary subcommand tokens...` with its stdout/stderr redirected into
+// a pipe (no visible console on Windows, no shell/terminal on Linux), and
+// starts a background thread that streams the captured output for the GUI's
+// log panel to display. Returns an invalid handle (per IsValid) on failure.
+static ProcHandle LaunchCaptured(const std::string& binary, const std::string& subcommand,
+                                 const std::vector<std::string>& tokens, std::string& err) {
+    ProcHandle proc;
 
 #ifdef _WIN32
-    std::string cmdLine = "cmd /k " + inner.str();
+    SECURITY_ATTRIBUTES sa{sizeof(sa), nullptr, TRUE};
+    HANDLE hReadPipe = nullptr, hWritePipe = nullptr;
+    if (!CreatePipe(&hReadPipe, &hWritePipe, &sa, 0)) {
+        err = "Failed to create output pipe.";
+        return proc;
+    }
+    SetHandleInformation(hReadPipe, HANDLE_FLAG_INHERIT, 0);
+
+    std::string cmdLine = QuoteArg(binary) + " " + subcommand;
+    for (const auto& t : tokens) {
+        cmdLine += " " + QuoteArg(t);
+    }
+
     STARTUPINFOA si{};
     si.cb = sizeof(si);
+    si.dwFlags = STARTF_USESTDHANDLES;
+    si.hStdOutput = hWritePipe;
+    si.hStdError = hWritePipe;
+    si.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+
     PROCESS_INFORMATION pi{};
-    BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, FALSE,
-                              CREATE_NEW_CONSOLE, nullptr, nullptr, &si, &pi);
+    BOOL ok = CreateProcessA(nullptr, cmdLine.data(), nullptr, nullptr, TRUE,
+                             CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi);
+    CloseHandle(hWritePipe);
     if (!ok) {
-        err = "Failed to launch console window.";
-        return kInvalidProc;
+        CloseHandle(hReadPipe);
+        err = "Failed to launch um-multitool.";
+        return proc;
     }
     CloseHandle(pi.hThread);
-    return pi.hProcess;
+    proc.hProcess = pi.hProcess;
+    proc.hRead = hReadPipe;
 #else
-    std::string term = FindTerminalEmulator();
-    if (term.empty()) {
-        err = "No terminal emulator found (tried xterm, gnome-terminal, konsole, ...).";
-        return kInvalidProc;
+    int fds[2];
+    if (pipe(fds) != 0) {
+        err = "Failed to create output pipe.";
+        return proc;
     }
-    std::string innerWithPause = inner.str() +
-        "; echo; echo [Exit code: $?]; printf 'Press Enter to close...'; read _";
 
     pid_t pid = fork();
     if (pid < 0) {
         err = "Failed to fork a new process.";
-        return kInvalidProc;
+        close(fds[0]);
+        close(fds[1]);
+        return proc;
     }
     if (pid == 0) {
-        execlp(term.c_str(), term.c_str(), "-e", "sh", "-c", innerWithPause.c_str(), (char*)nullptr);
+        dup2(fds[1], STDOUT_FILENO);
+        dup2(fds[1], STDERR_FILENO);
+        close(fds[0]);
+        close(fds[1]);
+
+        std::vector<std::string> argStorage{binary, subcommand};
+        argStorage.insert(argStorage.end(), tokens.begin(), tokens.end());
+        std::vector<char*> argv;
+        for (auto& a : argStorage) argv.push_back(const_cast<char*>(a.c_str()));
+        argv.push_back(nullptr);
+
+        execvp(binary.c_str(), argv.data());
         _exit(127);
     }
-    return pid;
+    close(fds[1]);
+    proc.pid = pid;
+    proc.readFd = fds[0];
 #endif
+
+    g_readerAlive = true;
+    std::thread(ReaderThreadFunc, proc).detach();
+    return proc;
 }
 
 // ============================================================================
@@ -235,43 +297,61 @@ static ProcHandle LaunchInConsole(const std::string& binary, const std::string& 
 // Adds a labeled text field with "File" and "Folder" browse buttons feeding
 // into it. When saveDialog is true, the "File" button lets the user type a
 // new (not-yet-existing) destination filename instead of requiring one to pick.
-static Fl_Input* AddBrowsableRow(int y, const char* label, bool saveDialog) {
+// If multiThreadCb is given, it's switched on when a folder is chosen (or a
+// typed/pasted path resolves to one) and off for a single file, since batch
+// jobs benefit from -m while single-file conversions don't.
+static Fl_Input* AddBrowsableRow(int y, const char* label, bool saveDialog,
+                                 Fl_Check_Button* multiThreadCb = nullptr) {
     Fl_Box* box = new Fl_Box(10, y, LABEL_W, ROW_H, label);
     box->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
 
     Fl_Input* input = new Fl_Input(FIELD_X, y, FIELD_W, ROW_H);
 
-    // Bundles the target Fl_Input with the dialog kind for the "File" callback;
-    // intentionally leaked, same lifetime as the widgets themselves.
-    struct FileBrowseCtx { Fl_Input* input; bool saveDialog; };
-    auto* ctx = new FileBrowseCtx{input, saveDialog};
+    // Bundles the target Fl_Input with the dialog kind and the tab's
+    // multi-thread checkbox; intentionally leaked, same lifetime as the widgets.
+    struct BrowseCtx { Fl_Input* input; bool saveDialog; Fl_Check_Button* multiThreadCb; };
+    auto* ctx = new BrowseCtx{input, saveDialog, multiThreadCb};
 
     Fl_Button* fileBtn = new Fl_Button(FIELD_X + FIELD_W + 5, y, BROWSE_W, ROW_H, "File");
     fileBtn->callback([](Fl_Widget*, void* data) {
-        auto* ctx = static_cast<FileBrowseCtx*>(data);
+        auto* ctx = static_cast<BrowseCtx*>(data);
         Fl_Native_File_Chooser chooser;
         chooser.type(ctx->saveDialog ? Fl_Native_File_Chooser::BROWSE_SAVE_FILE
                                       : Fl_Native_File_Chooser::BROWSE_FILE);
         if (chooser.show() == 0 && chooser.filename()) {
             ctx->input->value(chooser.filename());
+            if (ctx->multiThreadCb) ctx->multiThreadCb->value(0);
         }
     }, ctx);
 
     Fl_Button* dirBtn = new Fl_Button(FIELD_X + FIELD_W + BROWSE_W + 10, y, BROWSE_W, ROW_H, "Folder");
     dirBtn->callback([](Fl_Widget*, void* data) {
-        Fl_Input* target = static_cast<Fl_Input*>(data);
+        auto* ctx = static_cast<BrowseCtx*>(data);
         Fl_Native_File_Chooser chooser;
         chooser.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY);
         if (chooser.show() == 0 && chooser.filename()) {
-            target->value(chooser.filename());
+            ctx->input->value(chooser.filename());
+            if (ctx->multiThreadCb) ctx->multiThreadCb->value(1);
         }
-    }, input);
+    }, ctx);
+
+    if (multiThreadCb) {
+        input->callback([](Fl_Widget* w, void* data) {
+            auto* ctx = static_cast<BrowseCtx*>(data);
+            std::string val = static_cast<Fl_Input*>(w)->value();
+            if (val.empty()) return;
+            std::error_code ec;
+            ctx->multiThreadCb->value(fs::is_directory(val, ec) ? 1 : 0);
+        }, ctx);
+    }
 
     return input;
 }
 
 // Appends "-d" immediately followed by inputPath if dirMode is set (matching
 // the CLI parsers' lookahead), otherwise appends inputPath as a bare positional.
+// Only restool actually needs this: its -d means "batch-process every item
+// inside this folder", a genuinely different mode from packing one folder.
 static void AppendDirAndPath(std::vector<std::string>& args, bool dirMode, const std::string& inputPath) {
     if (dirMode) {
         args.push_back("-d");
@@ -288,7 +368,6 @@ static void AppendDirAndPath(std::vector<std::string>& args, bool dirMode, const
 struct DdsMmpTab {
     Fl_Input* inputPath = nullptr;
     Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* dirMode = nullptr;
     Fl_Check_Button* multiThread = nullptr;
     Fl_Check_Button* dryRun = nullptr;
     Fl_Round_Button* modeAuto = nullptr;
@@ -302,22 +381,23 @@ static Fl_Group* BuildDdsMmpTab(int x, int y, int w, int h) {
     Fl_Group* grp = new Fl_Group(x, y, w, h, "DDS <-> MMP");
     grp->user_data(reinterpret_cast<void*>(0));
 
-    int row = y + 15;
-    g_dds.inputPath = AddBrowsableRow(row, "Input:", false);
-    row += ROW_H + ROW_GAP;
-    g_dds.outputPath = AddBrowsableRow(row, "Output:", true);
-    row += ROW_H + ROW_GAP;
+    const int inputY   = y + 15;
+    const int outputY  = inputY + ROW_H + ROW_GAP;
+    const int multiY   = outputY + ROW_H + ROW_GAP;
+    const int dryRunY  = multiY + ROW_H + ROW_GAP;
+    const int modeLblY = dryRunY + ROW_H + ROW_GAP + 5;
 
-    g_dds.dirMode = new Fl_Check_Button(10, row, 220, ROW_H, "Directory mode (-d)");
-    row += ROW_H + ROW_GAP;
-    g_dds.multiThread = new Fl_Check_Button(10, row, 220, ROW_H, "Multi-threaded (-m)");
-    row += ROW_H + ROW_GAP;
-    g_dds.dryRun = new Fl_Check_Button(10, row, 220, ROW_H, "Dry run (--dry-run)");
-    row += ROW_H + ROW_GAP + 5;
+    // Created before the input row so its Folder/File buttons can toggle it.
+    g_dds.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
 
-    Fl_Box* modeLabel = new Fl_Box(10, row, 200, ROW_H, "Conversion direction:");
+    g_dds.inputPath = AddBrowsableRow(inputY, "Input:", false, g_dds.multiThread);
+    g_dds.outputPath = AddBrowsableRow(outputY, "Output:", true);
+
+    g_dds.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
+
+    Fl_Box* modeLabel = new Fl_Box(10, modeLblY, 200, ROW_H, "Conversion direction:");
     modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    row += ROW_H;
+    int row = modeLblY + ROW_H;
     g_dds.modeAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
     g_dds.modeAuto->type(FL_RADIO_BUTTON);
     g_dds.modeAuto->value(1);
@@ -346,7 +426,8 @@ static std::vector<std::string> BuildDdsMmpArgs() {
         args.push_back(out);
     }
 
-    AppendDirAndPath(args, g_dds.dirMode->value(), g_dds.inputPath->value());
+    std::string in = g_dds.inputPath->value();
+    if (!in.empty()) args.push_back(in);
     return args;
 }
 
@@ -357,7 +438,6 @@ static std::vector<std::string> BuildDdsMmpArgs() {
 struct IniRegTab {
     Fl_Input* inputPath = nullptr;
     Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* dirMode = nullptr;
     Fl_Check_Button* multiThread = nullptr;
     Fl_Check_Button* dryRun = nullptr;
     Fl_Round_Button* modeAuto = nullptr;
@@ -371,22 +451,22 @@ static Fl_Group* BuildIniRegTab(int x, int y, int w, int h) {
     Fl_Group* grp = new Fl_Group(x, y, w, h, "INI <-> REG");
     grp->user_data(reinterpret_cast<void*>(1));
 
-    int row = y + 15;
-    g_ini.inputPath = AddBrowsableRow(row, "Input:", false);
-    row += ROW_H + ROW_GAP;
-    g_ini.outputPath = AddBrowsableRow(row, "Output:", true);
-    row += ROW_H + ROW_GAP;
+    const int inputY   = y + 15;
+    const int outputY  = inputY + ROW_H + ROW_GAP;
+    const int multiY   = outputY + ROW_H + ROW_GAP;
+    const int dryRunY  = multiY + ROW_H + ROW_GAP;
+    const int modeLblY = dryRunY + ROW_H + ROW_GAP + 5;
 
-    g_ini.dirMode = new Fl_Check_Button(10, row, 220, ROW_H, "Directory mode (-d)");
-    row += ROW_H + ROW_GAP;
-    g_ini.multiThread = new Fl_Check_Button(10, row, 220, ROW_H, "Multi-threaded (-m)");
-    row += ROW_H + ROW_GAP;
-    g_ini.dryRun = new Fl_Check_Button(10, row, 220, ROW_H, "Dry run (--dry-run)");
-    row += ROW_H + ROW_GAP + 5;
+    g_ini.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
 
-    Fl_Box* modeLabel = new Fl_Box(10, row, 200, ROW_H, "Conversion direction:");
+    g_ini.inputPath = AddBrowsableRow(inputY, "Input:", false, g_ini.multiThread);
+    g_ini.outputPath = AddBrowsableRow(outputY, "Output:", true);
+
+    g_ini.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
+
+    Fl_Box* modeLabel = new Fl_Box(10, modeLblY, 200, ROW_H, "Conversion direction:");
     modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    row += ROW_H;
+    int row = modeLblY + ROW_H;
     g_ini.modeAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
     g_ini.modeAuto->type(FL_RADIO_BUTTON);
     g_ini.modeAuto->value(1);
@@ -415,7 +495,8 @@ static std::vector<std::string> BuildIniRegArgs() {
         args.push_back(out);
     }
 
-    AppendDirAndPath(args, g_ini.dirMode->value(), g_ini.inputPath->value());
+    std::string in = g_ini.inputPath->value();
+    if (!in.empty()) args.push_back(in);
     return args;
 }
 
@@ -426,7 +507,6 @@ static std::vector<std::string> BuildIniRegArgs() {
 struct MobDumpTab {
     Fl_Input* inputPath = nullptr;
     Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* dirMode = nullptr;
     Fl_Check_Button* multiThread = nullptr;
     Fl_Check_Button* dryRun = nullptr;
 };
@@ -437,17 +517,17 @@ static Fl_Group* BuildMobDumpTab(int x, int y, int w, int h) {
     Fl_Group* grp = new Fl_Group(x, y, w, h, "MOB Dump");
     grp->user_data(reinterpret_cast<void*>(2));
 
-    int row = y + 15;
-    g_mob.inputPath = AddBrowsableRow(row, "Input:", false);
-    row += ROW_H + ROW_GAP;
-    g_mob.outputPath = AddBrowsableRow(row, "Output:", false);
-    row += ROW_H + ROW_GAP;
+    const int inputY  = y + 15;
+    const int outputY = inputY + ROW_H + ROW_GAP;
+    const int multiY  = outputY + ROW_H + ROW_GAP;
+    const int dryRunY = multiY + ROW_H + ROW_GAP;
 
-    g_mob.dirMode = new Fl_Check_Button(10, row, 220, ROW_H, "Directory mode (-d)");
-    row += ROW_H + ROW_GAP;
-    g_mob.multiThread = new Fl_Check_Button(10, row, 220, ROW_H, "Multi-threaded (-m)");
-    row += ROW_H + ROW_GAP;
-    g_mob.dryRun = new Fl_Check_Button(10, row, 220, ROW_H, "Dry run (--dry-run)");
+    g_mob.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
+
+    g_mob.inputPath = AddBrowsableRow(inputY, "Input:", false, g_mob.multiThread);
+    g_mob.outputPath = AddBrowsableRow(outputY, "Output:", false);
+
+    g_mob.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
 
     grp->end();
     return grp;
@@ -465,7 +545,8 @@ static std::vector<std::string> BuildMobDumpArgs() {
         args.push_back(out);
     }
 
-    AppendDirAndPath(args, g_mob.dirMode->value(), g_mob.inputPath->value());
+    std::string in = g_mob.inputPath->value();
+    if (!in.empty()) args.push_back(in);
     return args;
 }
 
@@ -493,35 +574,45 @@ static Fl_Group* BuildResToolTab(int x, int y, int w, int h) {
     Fl_Group* grp = new Fl_Group(x, y, w, h, "RES / MQ");
     grp->user_data(reinterpret_cast<void*>(3));
 
-    int row = y + 15;
-    g_res.inputPath = AddBrowsableRow(row, "Input:", false);
-    row += ROW_H + ROW_GAP;
-    g_res.outputPath = AddBrowsableRow(row, "Output:", true);
-    row += ROW_H + ROW_GAP;
+    const int inputY     = y + 15;
+    const int outputY    = inputY + ROW_H + ROW_GAP;
+    const int extY       = outputY + ROW_H + ROW_GAP;
+    const int excludeY   = extY + ROW_H + ROW_GAP;
+    const int checkRow1Y = excludeY + ROW_H + ROW_GAP;
+    const int checkRow2Y = checkRow1Y + ROW_H + ROW_GAP;
+    const int actionLblY = checkRow2Y + ROW_H + ROW_GAP + 5;
 
-    Fl_Box* extLabel = new Fl_Box(10, row, LABEL_W, ROW_H, "Ext override:");
+    // Created before the input row so its Folder/File buttons can toggle it.
+    // Unlike ddsmmp/inireg/mobdump, restool's -d changes meaning rather than
+    // being redundant: it batch-processes every item found inside the given
+    // folder as a separate target, instead of packing that one folder itself.
+    g_res.multiThread = new Fl_Check_Button(240, checkRow1Y, 220, ROW_H, "Multi-threaded (-m)");
+    g_res.dirMode = new Fl_Check_Button(10, checkRow1Y, 220, ROW_H, "Batch mode (-d)");
+    g_res.dirMode->tooltip(
+        "Treats the input folder as a container of MANY archives/folders to\n"
+        "process separately. Not needed to pack a single folder into one\n"
+        "archive - that already happens automatically.");
+
+    g_res.inputPath = AddBrowsableRow(inputY, "Input:", false, g_res.multiThread);
+    g_res.outputPath = AddBrowsableRow(outputY, "Output:", true);
+
+    Fl_Box* extLabel = new Fl_Box(10, extY, LABEL_W, ROW_H, "Ext override:");
     extLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_res.extOverride = new Fl_Input(FIELD_X, row, 150, ROW_H);
+    g_res.extOverride = new Fl_Input(FIELD_X, extY, 150, ROW_H);
     g_res.extOverride->tooltip("Optional. e.g. .mq, .res (--ext)");
-    row += ROW_H + ROW_GAP;
 
-    Fl_Box* exLabel = new Fl_Box(10, row, LABEL_W, ROW_H, "Exclude:");
+    Fl_Box* exLabel = new Fl_Box(10, excludeY, LABEL_W, ROW_H, "Exclude:");
     exLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_res.excludeNames = new Fl_Input(FIELD_X, row, 300, ROW_H);
+    g_res.excludeNames = new Fl_Input(FIELD_X, excludeY, 300, ROW_H);
     g_res.excludeNames->tooltip("Comma-separated file names to omit when packing (-e / --exclude)");
-    row += ROW_H + ROW_GAP;
 
-    g_res.dirMode = new Fl_Check_Button(10, row, 220, ROW_H, "Directory mode (-d)");
-    g_res.multiThread = new Fl_Check_Button(240, row, 220, ROW_H, "Multi-threaded (-m)");
-    row += ROW_H + ROW_GAP;
-    g_res.dryRun = new Fl_Check_Button(10, row, 220, ROW_H, "Dry run (--dry-run)");
-    g_res.stripExt = new Fl_Check_Button(240, row, 260, ROW_H, "Strip _res/_mq suffix (-s)");
+    g_res.dryRun = new Fl_Check_Button(10, checkRow2Y, 220, ROW_H, "Dry run (--dry-run)");
+    g_res.stripExt = new Fl_Check_Button(240, checkRow2Y, 260, ROW_H, "Strip _res/_mq suffix (-s)");
     g_res.stripExt->value(1);
-    row += ROW_H + ROW_GAP + 5;
 
-    Fl_Box* modeLabel = new Fl_Box(10, row, 200, ROW_H, "Action:");
+    Fl_Box* modeLabel = new Fl_Box(10, actionLblY, 200, ROW_H, "Action:");
     modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    row += ROW_H;
+    int row = actionLblY + ROW_H;
     g_res.actionAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
     g_res.actionAuto->type(FL_RADIO_BUTTON);
     g_res.actionAuto->value(1);
@@ -574,15 +665,28 @@ static std::vector<std::string> BuildResToolArgs() {
 static Fl_Tabs* g_tabs = nullptr;
 static Fl_Button* g_runButton = nullptr;
 static Fl_Progress* g_progress = nullptr;
-static ProcHandle g_activeProc = kInvalidProc;
+static ProcHandle g_activeProc;
 static double g_progressPhase = 0.0;
 
-// Polls the spawned console process; while it's alive, advances an
-// indeterminate progress fill, otherwise resets the UI to idle.
+// Drains captured subprocess output into the log panel and, once the process
+// has exited and the reader thread has drained the last of the pipe, resets
+// the UI to idle. While running, advances an indeterminate progress fill.
 static void ProgressTimerCb(void*) {
-    if (!IsProcessRunning(g_activeProc)) {
+    std::string chunk;
+    {
+        std::lock_guard<std::mutex> lock(g_outputMutex);
+        chunk.swap(g_pendingOutput);
+    }
+    if (!chunk.empty()) {
+        AppendLog(chunk);
+    }
+
+    bool stillRunning = true;
+    int exitCode = 0;
+    PollProcess(g_activeProc, stillRunning, exitCode);
+
+    if (!stillRunning && !g_readerAlive.load()) {
         CleanupProcess(g_activeProc);
-        g_activeProc = kInvalidProc;
         if (g_progress) {
             g_progress->value(0.0f);
             g_progress->label("Idle");
@@ -592,8 +696,11 @@ static void ProgressTimerCb(void*) {
             g_runButton->label("Run");
         }
         if (g_statusBox) {
-            g_statusBox->label("Job finished (see console window for details)");
+            g_statusBox->label(exitCode == 0 ? "Job finished successfully" : "Job finished with errors");
         }
+        AppendLog(exitCode == 0
+            ? "\n[Job finished successfully]\n\n"
+            : ("\n[Job finished, exit code " + std::to_string(exitCode) + "]\n\n"));
         return;
     }
 
@@ -601,13 +708,13 @@ static void ProgressTimerCb(void*) {
     if (g_progressPhase > 100.0) g_progressPhase = 0.0;
     if (g_progress) {
         g_progress->value(static_cast<float>(g_progressPhase));
-        g_progress->label("Running... (see console window)");
+        g_progress->label("Running...");
     }
     Fl::repeat_timeout(0.06, ProgressTimerCb, nullptr);
 }
 
 static void OnRunClicked(Fl_Widget*, void*) {
-    if (g_activeProc != kInvalidProc) {
+    if (IsValid(g_activeProc)) {
         return; // A job is already running.
     }
 
@@ -636,9 +743,14 @@ static void OnRunClicked(Fl_Widget*, void*) {
     }
 
     std::string binary = FindMultitoolBinary();
+    std::ostringstream cmdEcho;
+    cmdEcho << "$ um-multitool " << subcommand;
+    for (const auto& t : tokens) cmdEcho << ' ' << t;
+    AppendLog(cmdEcho.str() + "\n");
+
     std::string err;
-    ProcHandle proc = LaunchInConsole(binary, subcommand, tokens, err);
-    if (proc == kInvalidProc) {
+    ProcHandle proc = LaunchCaptured(binary, subcommand, tokens, err);
+    if (!IsValid(proc)) {
         AppendLog("[ERROR] " + err + "\n");
         if (g_statusBox) g_statusBox->label("Failed to launch");
         fl_alert("%s", err.c_str());
@@ -651,7 +763,7 @@ static void OnRunClicked(Fl_Widget*, void*) {
         g_runButton->deactivate();
         g_runButton->label("Running...");
     }
-    if (g_statusBox) g_statusBox->label("Launched in console window");
+    if (g_statusBox) g_statusBox->label("Running...");
     Fl::add_timeout(0.06, ProgressTimerCb, nullptr);
 }
 

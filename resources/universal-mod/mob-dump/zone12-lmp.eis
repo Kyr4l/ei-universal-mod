@@ -1,0 +1,146 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Door1 : object,
+  Door2 : object,
+  Mine3 : object,
+  Mine2 : object,
+  Mine1 : object,
+  Skeleton : object,
+  Archer1 : object,
+  Archer2 : object,
+  Archer3 : object,
+  SCamp : object,
+  SkBonus : object,
+  Skeleton00_head1-6099 : object,
+  TigerWhiteF10-6159 : object,
+  TigerWhiteF8-6310 : object,
+  TigerWhiteF8-6309 : object,
+  TrollBlueF9-6274 : object,
+  TigerWhiteF8-6305 : object,
+  TigerWhiteF8-6304 : object,
+  TigerWhiteF8-6303 : object,
+  TigerWhiteF8-6301 : object,
+  WTigerGate : object,
+  TigerWhiteF8-6295 : object,
+  TigerWhiteF8-6294 : object,
+  TigerWhiteF8-6293 : object,
+  TigerWhiteF8-6292 : object,
+  TigerWhiteF8-6291 : object,
+  TigerWhiteF10-6289 : object,
+  FarmGate00-3823 : object,
+  RampageTigerRun1 : group,
+  AllMonsters : group,
+  RampageTigerRun2 : group,
+  Heroes : group,
+  MineMonsters : group,
+  RampageTigerRun : group,
+  RampageTigerRun3 : group,
+  WTiger1 : group,
+  WTiger2 : group,
+  Archer : group,
+  AllMonsters1 : group,
+  MPF : group 
+)
+
+DeclareScript VTriger#0#6 (  this : object )
+DeclareScript VCheck#0#7 (  this : object )
+DeclareScript VTriger#0#10 (  this : object )
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VTriger#0#6
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    PlayAnimation( Archer3, "uattack2" ) 
+    PlayAnimation( Archer2, "uattack2" ) 
+    PlayAnimation( Archer1, "uattack2" ) 
+    Sleep( 56 ) 
+    VCheck#0#7( this ) 
+  )
+)
+
+Script VCheck#0#7
+(
+  if
+  (
+    GroupSize( GroupCross( GroupSee( Archer ) , Heroes )  ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#6( this ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#10( this ) 
+  )
+)
+
+Script VTriger#0#10
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Door1 = GetObjectByID( "5634" ) 
+  Door2 = GetObjectByID( "5636" ) 
+  Mine3 = GetObjectByID( "5655" ) 
+  Mine2 = GetObjectByID( "5656" ) 
+  Mine1 = GetObjectByID( "5657" ) 
+  Skeleton = GetObjectByID( "5934" ) 
+  Archer1 = GetObjectByID( "5967" ) 
+  Archer2 = GetObjectByID( "5968" ) 
+  Archer3 = GetObjectByID( "5969" ) 
+  SCamp = GetObjectByID( "6086" ) 
+  SkBonus = GetObjectByID( "6095" ) 
+  Skeleton00_head1-6099 = GetObjectByID( "6099" ) 
+  TigerWhiteF10-6159 = GetObjectByID( "6158" ) 
+  TigerWhiteF8-6310 = GetObjectByID( "6269" ) 
+  TigerWhiteF8-6309 = GetObjectByID( "6270" ) 
+  TrollBlueF9-6274 = GetObjectByID( "6274" ) 
+  TigerWhiteF8-6305 = GetObjectByID( "6277" ) 
+  TigerWhiteF8-6304 = GetObjectByID( "6279" ) 
+  TigerWhiteF8-6303 = GetObjectByID( "6280" ) 
+  TigerWhiteF8-6301 = GetObjectByID( "6297" ) 
+  WTigerGate = GetObjectByID( "6318" ) 
+  TigerWhiteF8-6295 = GetObjectByID( "6324" ) 
+  TigerWhiteF8-6294 = GetObjectByID( "6325" ) 
+  TigerWhiteF8-6293 = GetObjectByID( "6326" ) 
+  TigerWhiteF8-6292 = GetObjectByID( "6327" ) 
+  TigerWhiteF8-6291 = GetObjectByID( "6328" ) 
+  TigerWhiteF10-6289 = GetObjectByID( "6329" ) 
+  FarmGate00-3823 = GetObjectByID( "6363" ) 
+  AddObject( Archer, GetObject( 5967 )  ) 
+  AddObject( Archer, GetObject( 5968 )  ) 
+  AddObject( Archer, GetObject( 5969 )  ) 
+  VTriger#0#6( NULL ) 
+)

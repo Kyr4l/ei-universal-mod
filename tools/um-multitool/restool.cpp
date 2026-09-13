@@ -51,7 +51,7 @@
 namespace fs = std::filesystem;
 
 // Program metadata
-static constexpr const char* PROGRAM_VERSION = "0.1";
+static constexpr const char* PROGRAM_VERSION = "1.0";
 static constexpr const char* PROGRAM_NAME = "um-restool";
 
 // Magic constant
@@ -616,7 +616,7 @@ static void PrintHelp() {
               << "  --pack                Force pack directory -> archive\n"
               << "  --unpack              Force unpack archive -> directory\n"
               << "  --dry-run             Show what the program would do without writing files\n"
-              << "  -v, --version         Print program version (" << PROGRAM_VERSION << ")\n"
+              << "  --version             Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help            Print this help message\n\n"
               << "Examples:\n"
               << "  um-multitool restool database.res                 # Unpacks to ./database_res/\n"
@@ -635,7 +635,7 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
         if (arg == "-h" || arg == "--help") {
             opt.showHelp = true;
             return true;
-        } else if (arg == "-v" || arg == "--version") {
+        } else if (arg == "--version") {
             opt.showVersion = true;
             return true;
         } else if (arg == "--dry-run") {
@@ -739,6 +739,11 @@ int RunResTool(int argc, char* argv[]) {
     std::error_code ec;
     if (!fs::exists(opt.inputPath, ec)) {
         std::cerr << "Error: Input path does not exist: " << opt.inputPath.string() << "\n";
+        return 1;
+    }
+
+    if (opt.isDirMode && !fs::is_directory(opt.inputPath, ec)) {
+        std::cerr << "Error: -d/--dir requires a directory, but '" << opt.inputPath.string() << "' is a file.\n";
         return 1;
     }
 
