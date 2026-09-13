@@ -9,10 +9,8 @@
 #   - rsync
 #   - parallel (GNU Parallel)
 #   - i686-w64-mingw32-g++ (MinGW 32-bit cross compiler for um.dll)
-#   - bin/um-mobdump (C++ MOB dumper tool)
-#   - bin/um-inireg (C++ INI/REG converter tool)
-#   - bin/um-ddsmmp (C++ DDS/MMP texture converter tool)
-#   - bin/um-restool (C++ RES archive packer/unpacker tool)
+#   - bin/um-multitool (C++ merged MOB/INI-REG/DDS-MMP/RES CLI tool)
+#     subcommands: mobdump, inireg, ddsmmp, restool
 #
 # Usage:
 #   ./makemod.sh [options]
@@ -233,35 +231,11 @@ check_dependencies() {
         exit 1
     fi
 
-    if [[ ! -x "bin/um-mobdump" && ! -f "bin/um-mobdump" ]]; then
-        log_warn "bin/um-mobdump not found. Checking ../um-mobdumper..."
-        if [[ -f "../um-mobdumper/um-mobdump" ]]; then
-            ln -sf "../../um-mobdumper/um-mobdump" "bin/um-mobdump"
-            log_ok "Symlinked bin/um-mobdump"
-        fi
-    fi
-
-    if [[ ! -x "bin/um-inireg" && ! -f "bin/um-inireg" ]]; then
-        log_warn "bin/um-inireg not found. Checking ../um-inireg..."
-        if [[ -f "../um-inireg/um-inireg" ]]; then
-            ln -sf "../../um-inireg/um-inireg" "bin/um-inireg"
-            log_ok "Symlinked bin/um-inireg"
-        fi
-    fi
-
-    if [[ ! -x "bin/um-ddsmmp" && ! -f "bin/um-ddsmmp" ]]; then
-        log_warn "bin/um-ddsmmp not found. Checking ../um-ddsmmp..."
-        if [[ -f "../um-ddsmmp/um-ddsmmp" ]]; then
-            ln -sf "../../um-ddsmmp/um-ddsmmp" "bin/um-ddsmmp"
-            log_ok "Symlinked bin/um-ddsmmp"
-        fi
-    fi
-
-    if [[ ! -x "bin/um-restool" && ! -f "bin/um-restool" ]]; then
-        log_warn "bin/um-restool not found. Checking ../um-restool..."
-        if [[ -f "../um-restool/um-restool" ]]; then
-            ln -sf "../../um-restool/um-restool" "bin/um-restool"
-            log_ok "Symlinked bin/um-restool"
+    if [[ ! -x "bin/um-multitool" && ! -f "bin/um-multitool" ]]; then
+        log_warn "bin/um-multitool not found. Checking ../um-multitool..."
+        if [[ -f "../um-multitool/um-multitool" ]]; then
+            ln -sf "../../um-multitool/um-multitool" "bin/um-multitool"
+            log_ok "Symlinked bin/um-multitool"
         fi
     fi
 }
@@ -316,12 +290,12 @@ convert_ini_to_reg() {
     cp -fv "$INI_DIR/SPELLADDON.INI" "$MOD_DIR/" 2>/dev/null || true
 
     log_info "Converting INI files to REG directly into mod output..."
-    [[ -f "$INI_DIR/config.ini" ]] && bin/um-inireg -o "$MOD_DIR/config.reg" "$INI_DIR/config.ini"
-    [[ -f "$INI_DIR/autorunpro.ini" ]] && bin/um-inireg -o "$MOD_DIR/autorunpro.reg" "$INI_DIR/autorunpro.ini"
-    [[ -f "$INI_DIR/ai.ini" ]] && bin/um-inireg -o "$MOD_DIR/config/ai.reg" "$INI_DIR/ai.ini"
-    [[ -f "$INI_DIR/music.ini" ]] && bin/um-inireg -o "$MOD_DIR/config/music.reg" "$INI_DIR/music.ini"
-    [[ -f "$INI_DIR/streamsn.ini" ]] && bin/um-inireg -o "$MOD_DIR/config/streamsn.reg" "$INI_DIR/streamsn.ini"
-    [[ -f "$INI_DIR/smessbase.ini" ]] && bin/um-inireg -o "$MOD_DIR/res/smessbase.reg" "$INI_DIR/smessbase.ini"
+    [[ -f "$INI_DIR/config.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/config.reg" "$INI_DIR/config.ini"
+    [[ -f "$INI_DIR/autorunpro.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/autorunpro.reg" "$INI_DIR/autorunpro.ini"
+    [[ -f "$INI_DIR/ai.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/config/ai.reg" "$INI_DIR/ai.ini"
+    [[ -f "$INI_DIR/music.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/config/music.reg" "$INI_DIR/music.ini"
+    [[ -f "$INI_DIR/streamsn.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/config/streamsn.reg" "$INI_DIR/streamsn.ini"
+    [[ -f "$INI_DIR/smessbase.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/res/smessbase.reg" "$INI_DIR/smessbase.ini"
 
     log_ok "INI & REG files processed"
 }
@@ -346,11 +320,11 @@ process_quests() {
 
         # 1. Convert quest INI -> REG in place across every quest at once
         find "$lang_dir" -maxdepth 3 -type f -name "*.ini" -print0 | \
-            parallel -0 -j "$PARALLEL_JOBS" bin/um-inireg {} > /dev/null || true
+            parallel -0 -j "$PARALLEL_JOBS" bin/um-multitool inireg {} > /dev/null || true
 
         # 2. Batch-pack every *_mq folder in this language directory in one parallel call,
         #    omitting quest.ini (only the source for quest.reg, not archive content).
-        bin/um-restool --pack -d "$lang_dir" -o "$lang_dir" -m -e quest.ini
+        bin/um-multitool restool --pack -d "$lang_dir" -o "$lang_dir" -m -e quest.ini
 
         # 3. Clean up temporary REG files (source quest.ini remains untouched)
         find "$lang_dir" -maxdepth 3 -type f -name "*.reg" -delete 2>/dev/null || true
@@ -384,7 +358,7 @@ copy_maps() {
 dump_mob_files() {
     if [[ "$OPT_DUMP_MOB" == true ]]; then
         log_step "Dumping MOB Files for Git Version Tracking"
-        bin/um-mobdump -d "$MOB_DIR" -o "$MOB_DUMP_DIR" -m
+        bin/um-multitool mobdump -d "$MOB_DIR" -o "$MOB_DUMP_DIR" -m
         log_ok "MOB files dumped to $MOB_DUMP_DIR"
     fi
 }
@@ -408,7 +382,7 @@ convert_dds_category() {
     local dest_dir="$3"
 
     log_info "Converting $label DDS textures to MMP..."
-    bin/um-ddsmmp -d "$src_dir" -o "$dest_dir" -m
+    bin/um-multitool ddsmmp -d "$src_dir" -o "$dest_dir" -m
     log_ok "Converted $label"
 }
 
@@ -521,7 +495,7 @@ pack_texts_resources() {
         local langpackdir="$MOD_DIR/lang-packs/$langcode/res"
         mkdir -p "$langpackdir"
 
-        bin/um-restool --pack "$restexts" -o "$langpackdir/$targetname"
+        bin/um-multitool restool --pack "$restexts" -o "$langpackdir/$targetname"
 
         # Primary English language is copied directly to mod root res
         if [[ "$langcode" == "eng" ]]; then
@@ -544,7 +518,7 @@ pack_general_resources() {
         local resname="${resxin##*/}"
         resname="${resname%_res}.res"
         log_info "Packing $resname..."
-        bin/um-restool --pack "$resxin" -o "$RES_DIR/$resname"
+        bin/um-multitool restool --pack "$resxin" -o "$RES_DIR/$resname"
     done
 
     log_info "Moving all RES archives into $MOD_DIR/res/..."
