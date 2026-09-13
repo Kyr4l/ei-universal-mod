@@ -29,5 +29,9 @@ tools/third-party-tools/ZoneView_1.4.3/ZoneView.log
 # DMP files
 Universal-Mod/*.dmp
 
+# Vendored/built FLTK for Windows cross-compilation (fetched by build-fltk-mingw.sh)
+tools/um-multitool/vendor/fltk-mingw/
+tools/um-multitool/vendor/fltk-src/
+
 # Copilot resources
 _cpr
