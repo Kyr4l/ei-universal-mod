@@ -3867,6 +3867,11 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
         // WM_PAINT above (or UpdateLayeredWindow) always repaints every
         // pixel, so a separate erase would only cause flicker.
         return 1;
+    case WM_MOUSEACTIVATE:
+        // Belt-and-suspenders alongside WS_EX_NOACTIVATE: never let a click
+        // on the overlay activate this window, which would steal foreground
+        // focus from the fullscreen game and cause it to minimize.
+        return MA_NOACTIVATE;
     case WM_DESTROY:
         PostQuitMessage(0);
         return 0;
@@ -3910,7 +3915,12 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     ComputeOverlayRect(targetRect, g_overlayPosition, OVERLAY_PANEL_WIDTH, panelHeight, initialRect);
 
     g_overlayWindowsAreLayered = g_overlayBackgroundOpacityPercent < 100;
-    DWORD extendedStyle = WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
+    // WS_EX_NOACTIVATE is the actual fix for "clicking the overlay minimizes
+    // the game": without it, a click can still activate/focus this window
+    // (even though it's a plain WS_POPUP with no visible titlebar), which
+    // steals foreground focus from the fullscreen game and makes it minimize.
+    // WS_EX_TRANSPARENT alone is a mouse-passthrough hint, not a guarantee.
+    DWORD extendedStyle = WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW | WS_EX_TOPMOST | WS_EX_NOACTIVATE;
     if (g_overlayWindowsAreLayered) {
         extendedStyle |= WS_EX_LAYERED;
     }
