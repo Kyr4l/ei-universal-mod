@@ -1,0 +1,10 @@
+The dragons will not attack!
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase Nsheriff  1
+Now the lizards will be unable to tell the dragons to attack our village!
+#phrase Hero  2
+That is quite nice... But what if the dragons decide to attack the village all by themselves, without any orders?
+#phrase Nsheriff  3
+Oh, do not worry about that. The dragons have enough food where they are, so they have no need to go anywhere else!

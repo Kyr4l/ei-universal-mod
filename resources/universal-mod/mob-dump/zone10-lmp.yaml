@@ -1064,13 +1064,13 @@ OBJECTDBFILE:
       - "Player-31"
   WORLD_SET:
     WS_WIND_DIR:
-      - 0.9994449019432068
+      - 0.99944490194320679
       - 0.03331482782959938
       - 0.0
     WS_WIND_STR: 0.15000000596046448
-    WS_TIME: 8.059999465942383
+    WS_TIME: 8.0599994659423828
     WS_AMBIENT: 0.20000000298023224
-    WS_SUN_LIGHT: 0.6000000238418579
+    WS_SUN_LIGHT: 0.60000002384185791
   VSS_SECTION:
     VSS_CUSTOM_SRIPT: ""
     VSS_BS_CHECK: None
@@ -1079,10 +1079,10 @@ OBJECTDBFILE:
       VSS_ID: 1
       VSS_COMMANDS: "IsLess(GetX(this),256)\nIsLess(GetY(this),161.6)\nIsGreater(GetX(this),235)\nIsGreater(GetY(this),130)"
       VSS_RECT:
-        - 6.221765181602188e-43
-        - 6.838336505905107e-43
-        - 2.284116496849452e-43
-        - 3.545285114741787e-43
+        - 6.2217651816021878e-43
+        - 6.8383365059051073e-43
+        - 2.2841164968494518e-43
+        - 3.5452851147417872e-43
       VSS_TITLE: "Reach end of tunnel"
       VSS_ISSTART: 0
     VSS_TRIGER:
@@ -1090,7 +1090,7 @@ OBJECTDBFILE:
       VSS_RECT:
         - 4.105804500471714e-43
         - 4.7223758247746335e-43
-        - 3.461207206882298e-43
+        - 3.4612072068822982e-43
         - 4.7223758247746335e-43
       VSS_TITLE: "For Heroes"
       VSS_COMMANDS: ""
@@ -1100,8 +1100,8 @@ OBJECTDBFILE:
     VSS_TRIGER:
       VSS_ID: 4
       VSS_RECT:
-        - 6.291830104818429e-43
-        - 6.908401429121348e-43
+        - 6.2918301048184286e-43
+        - 6.9084014291213482e-43
         - 1.1210387714598537e-44
         - 1.3732724950383207e-43
       VSS_TITLE: "Q36a C"
@@ -1114,7 +1114,7 @@ OBJECTDBFILE:
       VSS_COMMANDS: "IsEqual(GetLeverState(CRCrypt),1)\nNot(IsEqual(GSGetVar(0,\"cr1\"),1))"
       VSS_RECT:
         - 1.5414283107572988e-44
-        - 7.707141553786494e-44
+        - 7.7071415537864939e-44
         - 9.682972388484486e-43
         - 1.0944141006376821e-42
       VSS_TITLE: "CRChest?"
@@ -1124,7 +1124,7 @@ OBJECTDBFILE:
       VSS_RECT:
         - 1.0789998175301091e-43
         - 1.6955711418330287e-43
-        - 9.865141188846712e-43
+        - 9.8651411888467122e-43
         - 1.1126309806739048e-42
       VSS_TITLE: "Give item"
       VSS_COMMANDS: "GSSetVar(0,\"cr1\",1)\nGSSetVarMax(0,\"q.gz10g.q36ag.17\",2)\nGiveMoney(0,1500)\n//GiveItem(0,\"stone battle axe.malachite[firewall{d2;e2}]\")"
@@ -1135,19 +1135,19 @@ OBJECTDBFILE:
       VSS_ID: 9
       VSS_COMMANDS: "IsEqual(GetLeverState(GCEmpty),1)"
       VSS_RECT:
-        - 4.203895392974451e-45
-        - 6.58610278232664e-44
-        - 4.428103147266422e-43
-        - 5.689271765158757e-43
+        - 4.2038953929744512e-45
+        - 6.5861027823266402e-44
+        - 4.4281031472664219e-43
+        - 5.6892717651587573e-43
       VSS_TITLE: "GC?"
       VSS_ISSTART: 1
     VSS_TRIGER:
       VSS_ID: 10
       VSS_RECT:
-        - 9.949219096706201e-44
+        - 9.9492190967062012e-44
         - 1.6114932339735396e-43
         - 4.4701421011961665e-43
-        - 5.731310719088502e-43
+        - 5.7313107190885018e-43
       VSS_TITLE: "Raise!"
       VSS_COMMANDS: "EraseQuestItem(0,26)\nRemoveObjectFromServer(GCEmpty)\nSetCPFast(GCFull,GetX(GCFull),GetY(GCFull),-0.05)\nSwitchLeverState(GCFull,1)\nSetDiplomacy(0,3,-1)\nSetDiplomacy(1,3,-1)\nSetDiplomacy(2,3,-1)\nSetDiplomacy(3,0,-1)\nSetDiplomacy(3,1,-1)\nSetDiplomacy(3,2,-1)\nGuard(GolemSd,GetX(GolemSd),GetY(GolemSd),5)\nGSSetVarMax(0,\"q.gz10g.q36ag.11\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.12\",1)"
       VSS_GROUP: "none"
@@ -1157,9 +1157,9 @@ OBJECTDBFILE:
       VSS_ID: 12
       VSS_COMMANDS: "IsEqual(GetLeverState(GCFull),0)"
       VSS_RECT:
-        - 4.203895392974451e-45
-        - 6.58610278232664e-44
-        - 5.801375642304743e-43
+        - 4.2038953929744512e-45
+        - 6.5861027823266402e-44
+        - 5.8013756423047427e-43
         - 7.062544260197078e-43
       VSS_TITLE: "GC?"
       VSS_ISSTART: 0
@@ -1167,9 +1167,9 @@ OBJECTDBFILE:
       VSS_ID: 14
       VSS_RECT:
         - 2.9847657290118604e-43
-        - 3.60133705331478e-43
+        - 3.6013370533147799e-43
         - 4.4701421011961665e-43
-        - 5.731310719088502e-43
+        - 5.7313107190885018e-43
       VSS_TITLE: "Wait and Stop"
       VSS_COMMANDS: "Sleep(150)\nSetDiplomacy(0,3,0)\nSetDiplomacy(1,3,0)\nSetDiplomacy(2,3,0)\nSetDiplomacy(3,0,0)\nSetDiplomacy(3,1,0)\nSetDiplomacy(3,2,0)\nIdle(GolemSd)\nGSSetVarMax(0,\"q.gz10g.q36ag.12\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.14\",1)"
       VSS_GROUP: "none"
@@ -1179,7 +1179,7 @@ OBJECTDBFILE:
       VSS_ID: 16
       VSS_RECT:
         - 1.6815581571897805e-44
-        - 7.847271400218976e-44
+        - 7.8472714002189756e-44
         - 1.6675451725465323e-43
         - 2.9287137904388677e-43
       VSS_TITLE: "Kill Victim"
@@ -1191,19 +1191,19 @@ OBJECTDBFILE:
       VSS_ID: 17
       VSS_COMMANDS: "IsEqual(GetLeverState(BCrypt1),1)\nNot(IsEqual(GSGetVar(0,\"cr2\"),1))"
       VSS_RECT:
-        - 1.401298464324817e-45
-        - 6.305843089461677e-44
-        - 8.435816755235399e-43
-        - 9.696985373127734e-43
+        - 1.4012984643248171e-45
+        - 6.3058430894616768e-44
+        - 8.4358167552353988e-43
+        - 9.6969853731277341e-43
       VSS_TITLE: "BChest2"
       VSS_ISSTART: 1
     VSS_TRIGER:
       VSS_ID: 18
       VSS_RECT:
-        - 9.668959403841238e-44
+        - 9.6689594038412378e-44
         - 1.5834672646870433e-43
-        - 8.519894663094888e-43
-        - 9.781063280987223e-43
+        - 8.5198946630948878e-43
+        - 9.7810632809872232e-43
       VSS_TITLE: "Give item"
       VSS_COMMANDS: "GSSetVar(0,\"cr2\",1)\nGSSetVarMax(0,\"q.gz10g.q36ag.8\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.9\",1)\nGiveQuestItem(0,\"GolemCenterKey00\")\n"
       VSS_GROUP: "none"
@@ -1224,7 +1224,7 @@ OBJECTDBFILE:
       VSS_RECT:
         - 4.105804500471714e-43
         - 4.7223758247746335e-43
-        - 8.407790785948902e-45
+        - 8.4077907859489024e-45
         - 1.3452465257518244e-43
       VSS_TITLE: "Q36a.1 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.1\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.2\",1)"
@@ -1236,7 +1236,7 @@ OBJECTDBFILE:
       VSS_COMMANDS: "IsLess(GetX(this),133.5)\nIsLess(GetY(this),137)\nIsGreater(GetX(this),127.5)\nIsGreater(GetY(this),132.3)"
       VSS_RECT:
         - 4.8064537326341226e-43
-        - 5.423025056937042e-43
+        - 5.4230250569370421e-43
         - 1.6955711418330287e-43
         - 2.956739759725364e-43
       VSS_TITLE: "Enter Civ2"
@@ -1244,9 +1244,9 @@ OBJECTDBFILE:
     VSS_TRIGER:
       VSS_ID: 27
       VSS_RECT:
-        - 4.820466717277371e-43
-        - 5.43703804158029e-43
-        - 7.006492321624085e-45
+        - 4.8204667172773707e-43
+        - 5.4370380415802902e-43
+        - 7.0064923216240854e-45
         - 1.3312335411085762e-43
       VSS_TITLE: "Q36a.2 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.2\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.3\",1)"
@@ -1257,18 +1257,18 @@ OBJECTDBFILE:
       VSS_ID: 29
       VSS_COMMANDS: "IsLess(DistanceUnitPoint(this,197.5,113.75),3)"
       VSS_RECT:
-        - 5.493089980153283e-43
+        - 5.4930899801532829e-43
         - 6.1096613044562024e-43
         - 2.0318827732709848e-43
-        - 3.29305139116332e-43
+        - 3.2930513911633201e-43
       VSS_TITLE: "Enter tunnel2"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 31
       VSS_RECT:
-        - 5.605193857299268e-43
-        - 6.221765181602188e-43
-        - 8.407790785948902e-45
+        - 5.6051938572992683e-43
+        - 6.2217651816021878e-43
+        - 8.4077907859489024e-45
         - 1.3452465257518244e-43
       VSS_TITLE: "Q36a.3 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.3\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.4\",1)"
@@ -1280,7 +1280,7 @@ OBJECTDBFILE:
       VSS_COMMANDS: "IsLess(GSGetVar(0,\"q.gz10g.q36ag\"),2)"
       VSS_RECT:
         - 2.6624670822171524e-44
-        - 8.828180325246348e-44
+        - 8.8281803252463475e-44
         - 3.2229864679470793e-44
         - 1.5834672646870433e-43
       VSS_TITLE: "Q36a NC"
@@ -1311,19 +1311,19 @@ OBJECTDBFILE:
       VSS_ID: 38
       VSS_COMMANDS: "IsLess(DistanceUnitUnit(this,BCrypt2),7)"
       VSS_RECT:
-        - 4.035739577255473e-43
-        - 4.652310901558393e-43
-        - 5.156778348715327e-43
-        - 6.417946966607662e-43
+        - 4.0357395772554732e-43
+        - 4.6523109015583927e-43
+        - 5.1567783487153268e-43
+        - 6.4179469666076622e-43
       VSS_TITLE: "Near bonus1"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 40
       VSS_RECT:
-        - 4.077778531185218e-43
-        - 4.694349855488137e-43
-        - 6.880375459834852e-43
-        - 8.141544077727187e-43
+        - 4.0777785311852177e-43
+        - 4.6943498554881372e-43
+        - 6.8803754598348518e-43
+        - 8.1415440777271872e-43
       VSS_TITLE: "Q36a.5 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.5\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.6\",1)"
       VSS_GROUP: "none"
@@ -1333,10 +1333,10 @@ OBJECTDBFILE:
       VSS_ID: 42
       VSS_COMMANDS: "IsEqual(GetLeverState(BCrypt2),1)\nNot(IsEqual(GSGetVar(0,\"cr2a\"),1))"
       VSS_RECT:
-        - 1.401298464324817e-45
-        - 6.305843089461677e-44
-        - 7.090570229483574e-43
-        - 8.35173884737591e-43
+        - 1.4012984643248171e-45
+        - 6.3058430894616768e-44
+        - 7.0905702294835744e-43
+        - 8.3517388473759097e-43
       VSS_TITLE: "Bchest1"
       VSS_ISSTART: 1
     VSS_TRIGER:
@@ -1344,8 +1344,8 @@ OBJECTDBFILE:
       VSS_RECT:
         - 1.0930128021733573e-43
         - 1.7095841264762768e-43
-        - 7.216687091272808e-43
-        - 8.477855709165143e-43
+        - 7.2166870912728079e-43
+        - 8.4778557091651433e-43
       VSS_TITLE: "Give item"
       VSS_COMMANDS: "GSSetVar(0,\"cr2a\",1)\nGSSetVarMax(0,\"q.gz10g.q36ag.6\",2)\nGiveMoney(0,1000)\n//GiveItem(0,\"stone battle axe.malachite[firewall{d2;e2}]\")"
       VSS_GROUP: "none"
@@ -1355,19 +1355,19 @@ OBJECTDBFILE:
       VSS_ID: 46
       VSS_COMMANDS: "IsLess(DistanceUnitUnit(this,DGBonusRoom),7)"
       VSS_RECT:
-        - 4.932570594423356e-43
+        - 4.9325705944233561e-43
         - 5.5491419187262756e-43
         - 5.254869241218064e-43
-        - 6.516037859110399e-43
+        - 6.5160378591103994e-43
       VSS_TITLE: "Near bonus 3"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 48
       VSS_RECT:
-        - 4.862505671207115e-43
-        - 5.479076995510035e-43
-        - 7.090570229483574e-43
-        - 8.35173884737591e-43
+        - 4.8625056712071152e-43
+        - 5.4790769955100347e-43
+        - 7.0905702294835744e-43
+        - 8.3517388473759097e-43
       VSS_TITLE: "Q36a.16 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.7\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.8\",1)\n//GSSetVarMax(0,\"q.gz10g.q36ag.17\",1)"
       VSS_GROUP: "none"
@@ -1377,19 +1377,19 @@ OBJECTDBFILE:
       VSS_ID: 51
       VSS_COMMANDS: "IsLess(DistanceUnitUnit(this,CRCrypt),7)"
       VSS_RECT:
-        - 5.689271765158757e-43
-        - 6.305843089461677e-43
-        - 5.310921179791057e-43
-        - 6.572089797683392e-43
+        - 5.6892717651587573e-43
+        - 6.3058430894616768e-43
+        - 5.3109211797910567e-43
+        - 6.5720897976833921e-43
       VSS_TITLE: "Near bonus 2"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 53
       VSS_RECT:
-        - 5.731310719088502e-43
-        - 6.347882043391421e-43
-        - 6.992479336980837e-43
-        - 8.253647954873173e-43
+        - 5.7313107190885018e-43
+        - 6.3478820433914213e-43
+        - 6.9924793369808372e-43
+        - 8.2536479548731725e-43
       VSS_TITLE: "Q36a.7 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.16\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.17\",1)"
       VSS_GROUP: "none"
@@ -1401,17 +1401,17 @@ OBJECTDBFILE:
       VSS_RECT:
         - 6.4459729358941585e-43
         - 7.062544260197078e-43
-        - 4.90454462513686e-43
-        - 6.165713243029195e-43
+        - 4.9045446251368597e-43
+        - 6.1657132430291951e-43
       VSS_TITLE: "Near Control door"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 57
       VSS_RECT:
-        - 6.473998905180655e-43
-        - 7.090570229483574e-43
-        - 7.04853127555383e-43
-        - 8.309699893446165e-43
+        - 6.4739989051806549e-43
+        - 7.0905702294835744e-43
+        - 7.0485312755538299e-43
+        - 8.3096998934461652e-43
       VSS_TITLE: "Q36a.9 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.9\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.10\",1)"
       VSS_GROUP: "none"
@@ -1421,19 +1421,19 @@ OBJECTDBFILE:
       VSS_ID: 59
       VSS_COMMANDS: "IsLess(DistanceUnitUnit(this,GCEmpty),7)"
       VSS_RECT:
-        - 7.216687091272808e-43
-        - 7.833258415575727e-43
-        - 4.358038224050181e-43
+        - 7.2166870912728079e-43
+        - 7.8332584155757274e-43
+        - 4.3580382240501811e-43
         - 5.6192068419425165e-43
       VSS_TITLE: "Near CP"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 61
       VSS_RECT:
-        - 7.20267410662956e-43
-        - 7.81924543093248e-43
-        - 6.74024561340237e-43
-        - 8.001414231294705e-43
+        - 7.2026741066295597e-43
+        - 7.8192454309324793e-43
+        - 6.7402456134023701e-43
+        - 8.0014142312947055e-43
       VSS_TITLE: "Q36a.10 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.10\",2)\nGSSetVarMax(0,\"q.gz10g.q36ag.11\",1)"
       VSS_GROUP: "none"
@@ -1444,18 +1444,18 @@ OBJECTDBFILE:
       VSS_COMMANDS: "Every(i,Felem,IsDead(i))"
       VSS_RECT:
         - 0.0
-        - 6.165713243029195e-44
+        - 6.1657132430291951e-44
         - 3.0688436368713494e-43
-        - 4.330012254763685e-43
+        - 4.3300122547636847e-43
       VSS_TITLE: "Clear"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 64
       VSS_RECT:
-        - 9.668959403841238e-44
+        - 9.6689594038412378e-44
         - 1.5834672646870433e-43
         - 2.9847657290118604e-43
-        - 4.245934346904196e-43
+        - 4.2459343469041957e-43
       VSS_TITLE: "Q36a.12 C"
       VSS_COMMANDS: "//GSSetVarMax(0,\"q.gz10g.q36ag.12\",2)\n//GSSetVarMax(0,\"q.gz10g.q36ag.13\",1)"
       VSS_GROUP: "none"
@@ -1465,18 +1465,18 @@ OBJECTDBFILE:
       VSS_ID: 66
       VSS_COMMANDS: "IsLess(DistanceUnitUnit(this,Victim),7)"
       VSS_RECT:
-        - 6.992479336980837e-43
-        - 7.609050661283757e-43
-        - 2.704506036146897e-43
-        - 3.965674654039232e-43
+        - 6.9924793369808372e-43
+        - 7.6090506612837567e-43
+        - 2.7045060361468969e-43
+        - 3.9656746540392323e-43
       VSS_TITLE: "Near victim"
       VSS_ISSTART: 0
     VSS_TRIGER:
       VSS_ID: 68
       VSS_RECT:
-        - 7.034518290910582e-43
-        - 7.651089615213501e-43
-        - 9.80908925027372e-45
+        - 7.0345182909105817e-43
+        - 7.6510896152135012e-43
+        - 9.8090892502737195e-45
         - 1.3592595103950726e-43
       VSS_TITLE: "Q36a.14 C"
       VSS_COMMANDS: "GSSetVarMax(0,\"q.gz10g.q36ag.14\",2)\n//GSSetVarMax(0,\"q.gz10g.q36ag.15\",1)"
@@ -1489,7 +1489,7 @@ OBJECTDBFILE:
       VSS_RECT:
         - 1.9478048654114957e-43
         - 2.5643761897144152e-43
-        - 9.052388079538318e-43
+        - 9.0523880795383183e-43
         - 1.0313556697430654e-42
       VSS_TITLE: "CaveGMusic not Set"
       VSS_ISSTART: 1
@@ -1497,8 +1497,8 @@ OBJECTDBFILE:
       VSS_ID: 71
       VSS_RECT:
         - 3.0127916982983567e-43
-        - 3.629363022601276e-43
-        - 9.206530910614048e-43
+        - 3.6293630226012762e-43
+        - 9.2065309106140482e-43
         - 1.0467699528506384e-42
       VSS_TITLE: "Play D4 "
       VSS_COMMANDS: "GSSetVar(0,\"CaveGMusic\",1)\nPlayMusic(0,\"Dungeon\")\n//PlayMusic(0,\"D4\")"
@@ -1510,8 +1510,8 @@ OBJECTDBFILE:
       VSS_COMMANDS: "IsEqual(GSGetVar(0,\"apartyn1\"),1)\nIsDead(GetObjectByName(\"merc1\"))"
       VSS_RECT:
         - 4.3860641933366774e-43
-        - 5.002635517639597e-43
-        - 7.931349308078465e-43
+        - 5.0026355176395969e-43
+        - 7.9313493080784646e-43
         - 9.1925179259708e-43
       VSS_TITLE: "Death of Merc1"
       VSS_ISSTART: 0
@@ -1519,8 +1519,8 @@ OBJECTDBFILE:
       VSS_ID: 74
       VSS_COMMANDS: "IsEqual(GSGetVar(0,\"apartyn3\"),1)\nIsDead(GetObjectByName(\"merc3\"))"
       VSS_RECT:
-        - 4.372051208693429e-43
-        - 4.988622532996349e-43
+        - 4.3720512086934293e-43
+        - 4.9886225329963488e-43
         - 9.360673741689778e-43
         - 1.0621842359582113e-42
       VSS_TITLE: "Death of merc3"
@@ -1528,10 +1528,10 @@ OBJECTDBFILE:
     VSS_TRIGER:
       VSS_ID: 75
       VSS_RECT:
-        - 5.43703804158029e-43
-        - 6.05360936588321e-43
-        - 7.945362292721713e-43
-        - 9.206530910614048e-43
+        - 5.4370380415802902e-43
+        - 6.0536093658832097e-43
+        - 7.9453622927217128e-43
+        - 9.2065309106140482e-43
       VSS_TITLE: "Put token"
       VSS_COMMANDS: "GSSetvarmax(0,\"adeadn1\",1)"
       VSS_GROUP: "none"
@@ -1540,9 +1540,9 @@ OBJECTDBFILE:
     VSS_TRIGER:
       VSS_ID: 77
       VSS_RECT:
-        - 5.366973118364049e-43
-        - 5.983544442666969e-43
-        - 9.598894480624997e-43
+        - 5.3669731183640494e-43
+        - 5.9835444426669689e-43
+        - 9.5988944806249969e-43
         - 1.0860063098517332e-42
       VSS_TITLE: "Put token"
       VSS_COMMANDS: "GSSetVArMAx(0,\"adeadn3\",1)"
@@ -1562,7 +1562,7 @@ OBJECTDBFILE:
     VSS_TRIGER:
       VSS_ID: 80
       VSS_RECT:
-        - 2.550363205071167e-43
+        - 2.5503632050711671e-43
         - 3.1669345293740866e-43
         - 2.2420775429197073e-43
         - 3.5032461608120427e-43
@@ -1576,9 +1576,9 @@ OBJECTDBFILE:
       VSS_COMMANDS: "Every(i,Felem,IsDead(i))"
       VSS_RECT:
         - 1.9337918807682476e-43
-        - 2.550363205071167e-43
-        - 4.344025239406933e-43
-        - 5.605193857299268e-43
+        - 2.5503632050711671e-43
+        - 4.3440252394069329e-43
+        - 5.6051938572992683e-43
       VSS_TITLE: "wait elem dead"
       VSS_ISSTART: 1
     VSS_PATH:
@@ -1800,7 +1800,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 57.08485412597656
+        - 57.084854125976562
         - 138.94163513183594
         - 0.0
       OBJROTATION:
@@ -1826,7 +1826,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 57.08485412597656
+          - 57.084854125976562
           - 138.94163513183594
           - 0.0
         UNIT_LOGIC_USE: 1
@@ -1838,7 +1838,7 @@ OBJECTDBFILE:
             - 1.9492735862731934
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 58.15827941894531
+              - 58.158279418945312
               - 146.1585693359375
               - 1.7933316230773926
             ACTION_PT_WAIT_SEG: 3600
@@ -1854,7 +1854,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 57.08485412597656
+          - 57.084854125976562
           - 138.94163513183594
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -1869,7 +1869,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 57.08485412597656
+          - 57.084854125976562
           - 138.94163513183594
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -1884,7 +1884,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 57.08485412597656
+          - 57.084854125976562
           - 138.94163513183594
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -1899,7 +1899,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 57.08485412597656
+          - 57.084854125976562
           - 138.94163513183594
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -1967,8 +1967,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 98.11286926269531
-        - 46.13264465332031
+        - 98.112869262695312
+        - 46.132644653320312
         - 0.0
       OBJROTATION:
         - 1.0
@@ -1993,19 +1993,19 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.11286926269531
-          - 46.13264465332031
+          - 98.112869262695312
+          - 46.132644653320312
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 98.25525665283203
+            - 98.255256652832031
             - 44.156829833984375
             - 1.9886966943740845
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 90.53426361083984
+              - 90.534263610839844
               - 43.276363372802734
               - 1.9712618589401245
             ACTION_PT_WAIT_SEG: 120
@@ -2014,27 +2014,27 @@ OBJECTDBFILE:
         GUARD_PT:
           GUARD_PT_POSITION:
             - 107.56295013427734
-            - 53.41948318481445
+            - 53.419483184814453
             - 1.9607250690460205
         GUARD_PT:
           GUARD_PT_POSITION:
             - 112.76062774658203
-            - 62.89265060424805
-            - 1.96072518825531
+            - 62.892650604248047
+            - 1.9607251882553101
         GUARD_PT:
           GUARD_PT_POSITION:
             - 118.18399047851562
-            - 73.05215454101562
+            - 73.052154541015625
             - 2.103313684463501
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 128.6001434326172
-            - 83.76587677001953
+            - 128.60014343261719
+            - 83.765876770019531
             - 2.5881571769714355
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 136.2937469482422
-              - 84.9744644165039
+              - 136.29374694824219
+              - 84.974464416503906
               - 2.6896238327026367
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
@@ -2049,8 +2049,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.11286926269531
-          - 46.13264465332031
+          - 98.112869262695312
+          - 46.132644653320312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2064,8 +2064,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.11286926269531
-          - 46.13264465332031
+          - 98.112869262695312
+          - 46.132644653320312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2079,8 +2079,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.11286926269531
-          - 46.13264465332031
+          - 98.112869262695312
+          - 46.132644653320312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2094,8 +2094,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.11286926269531
-          - 46.13264465332031
+          - 98.112869262695312
+          - 46.132644653320312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2197,12 +2197,12 @@ OBJECTDBFILE:
           GUARD_PT_POSITION:
             - 139.84136962890625
             - 56.969215393066406
-            - 2.509728193283081
+            - 2.5097281932830811
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 145.5535888671875
               - 60.312950134277344
-              - 2.509728193283081
+              - 2.5097281932830811
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -2210,17 +2210,17 @@ OBJECTDBFILE:
           GUARD_PT_POSITION:
             - 134.32537841796875
             - 53.406402587890625
-            - 2.304579019546509
+            - 2.3045790195465088
         GUARD_PT:
           GUARD_PT_POSITION:
             - 123.805419921875
-            - 51.59132385253906
+            - 51.591323852539062
             - 2.2744412422180176
         GUARD_PT:
           GUARD_PT_POSITION:
             - 111.01171875
             - 53.659423828125
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 112.23062133789062
@@ -2232,7 +2232,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 102.54591369628906
-              - 47.59459686279297
+              - 47.594596862792969
               - 1.9695087671279907
             ACTION_PT_WAIT_SEG: 60
             ACTION_PT_TURN_SPEED: 0
@@ -2360,7 +2360,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 46.86869812011719
+        - 46.868698120117188
         - 105.33000183105469
         - 0.0
       OBJROTATION:
@@ -2386,19 +2386,19 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 46.86869812011719
+          - 46.868698120117188
           - 105.33000183105469
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 46.35448455810547
-            - 103.4494857788086
+            - 46.354484558105469
+            - 103.44948577880859
             - 2.5046699047088623
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 44.12907791137695
+              - 44.129077911376953
               - 98.27435302734375
               - 2.4312992095947266
             ACTION_PT_WAIT_SEG: 120
@@ -2406,29 +2406,29 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 55.75499725341797
+            - 55.754997253417969
             - 106.42489624023438
             - 2.2744412422180176
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 61.41842269897461
-            - 111.2016372680664
+            - 61.418422698974609
+            - 111.20163726806641
             - 2.2168755531311035
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 67.76736450195312
-            - 119.4862289428711
+            - 67.767364501953125
+            - 119.48622894287109
             - 1.9951399564743042
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 81.66207122802734
+            - 81.662071228027344
             - 127.67811584472656
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 90.26776885986328
-              - 133.7067413330078
-              - 1.96072518825531
+              - 90.267768859863281
+              - 133.70674133300781
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -2442,7 +2442,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 46.86869812011719
+          - 46.868698120117188
           - 105.33000183105469
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2457,7 +2457,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 46.86869812011719
+          - 46.868698120117188
           - 105.33000183105469
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2472,7 +2472,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 46.86869812011719
+          - 46.868698120117188
           - 105.33000183105469
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2487,7 +2487,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 46.86869812011719
+          - 46.868698120117188
           - 105.33000183105469
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2556,7 +2556,7 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 62.522300720214844
-        - 94.95480346679688
+        - 94.954803466796875
         - 0.0
       OBJROTATION:
         - 1.0
@@ -2582,7 +2582,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 62.522300720214844
-          - 94.95480346679688
+          - 94.954803466796875
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -2597,7 +2597,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 62.522300720214844
-          - 94.95480346679688
+          - 94.954803466796875
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2612,7 +2612,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 62.522300720214844
-          - 94.95480346679688
+          - 94.954803466796875
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2627,7 +2627,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 62.522300720214844
-          - 94.95480346679688
+          - 94.954803466796875
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2642,7 +2642,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 62.522300720214844
-          - 94.95480346679688
+          - 94.954803466796875
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2709,8 +2709,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 65.46309661865234
-        - 96.9520034790039
+        - 65.463096618652344
+        - 96.952003479003906
         - 0.0
       OBJROTATION:
         - 1.0
@@ -2735,8 +2735,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 65.46309661865234
-          - 96.9520034790039
+          - 65.463096618652344
+          - 96.952003479003906
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -2750,8 +2750,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 65.46309661865234
-          - 96.9520034790039
+          - 65.463096618652344
+          - 96.952003479003906
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2765,8 +2765,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 65.46309661865234
-          - 96.9520034790039
+          - 65.463096618652344
+          - 96.952003479003906
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2780,8 +2780,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 65.46309661865234
-          - 96.9520034790039
+          - 65.463096618652344
+          - 96.952003479003906
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2795,8 +2795,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 65.46309661865234
-          - 96.9520034790039
+          - 65.463096618652344
+          - 96.952003479003906
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -2863,7 +2863,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 53.86249923706055
+        - 53.862499237060547
         - 150.11900329589844
         - 0.0
       OBJROTATION:
@@ -2889,19 +2889,19 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 53.86249923706055
+          - 53.862499237060547
           - 150.11900329589844
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 55.08008575439453
+            - 55.080085754394531
             - 149.35440063476562
             - 1.6206200122833252
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 60.55962371826172
+            - 60.559623718261719
             - 146.83468627929688
             - 1.9552632570266724
       UNIT_LOGIC:
@@ -2914,7 +2914,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 53.86249923706055
+          - 53.862499237060547
           - 150.11900329589844
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2929,7 +2929,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 53.86249923706055
+          - 53.862499237060547
           - 150.11900329589844
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2944,7 +2944,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 53.86249923706055
+          - 53.862499237060547
           - 150.11900329589844
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -2959,7 +2959,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 53.86249923706055
+          - 53.862499237060547
           - 150.11900329589844
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -3062,50 +3062,50 @@ OBJECTDBFILE:
           GUARD_PT_POSITION:
             - 40.749725341796875
             - 128.23257446289062
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 40.38801956176758
+              - 40.388019561767578
               - 123.56063842773438
-              - 1.96072518825531
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 240
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 41.56626892089844
-            - 135.5356903076172
-            - 1.96072518825531
+            - 41.566268920898438
+            - 135.53569030761719
+            - 1.9607251882553101
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 34.67204284667969
+            - 34.672042846679688
             - 144.88304138183594
             - 2.7450151443481445
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 34.07889938354492
+            - 34.078899383544922
             - 152.44778442382812
-            - 3.294018268585205
+            - 3.2940182685852051
         GUARD_PT:
           GUARD_PT_POSITION:
             - 34.33740234375
-            - 161.9093475341797
-            - 4.313595294952393
+            - 161.90934753417969
+            - 4.3135952949523926
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 43.4709587097168
+            - 43.470958709716797
             - 160.62367248535156
             - 3.294018030166626
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 53.35844421386719
+            - 53.358444213867188
             - 161.7882080078125
             - 2.7450149059295654
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 67.54976654052734
+            - 67.549766540527344
             - 152.45977783203125
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 75.21746826171875
@@ -3270,12 +3270,12 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 64.79829406738281
+            - 64.798294067382812
             - 153.18124389648438
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 78.23600006103516
+              - 78.236000061035156
               - 149.3863525390625
               - 1.9674593210220337
             ACTION_PT_WAIT_SEG: 240
@@ -3289,42 +3289,42 @@ OBJECTDBFILE:
         GUARD_PT:
           GUARD_PT_POSITION:
             - 52.683372497558594
-            - 160.4768829345703
+            - 160.47688293457031
             - 2.7450149059295654
         GUARD_PT:
           GUARD_PT_POSITION:
             - 44.040740966796875
             - 163.25497436523438
-            - 3.294018268585205
+            - 3.2940182685852051
         GUARD_PT:
           GUARD_PT_POSITION:
             - 34.414913177490234
             - 161.59237670898438
-            - 4.313595294952393
+            - 4.3135952949523926
         GUARD_PT:
           GUARD_PT_POSITION:
             - 35.193214416503906
             - 151.75120544433594
-            - 3.294018268585205
+            - 3.2940182685852051
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 38.0090217590332
+            - 38.009021759033203
             - 145.74085998535156
             - 2.7450151443481445
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 37.18947982788086
-            - 139.2151641845703
+            - 37.189479827880859
+            - 139.21516418457031
             - 1.568580150604248
         GUARD_PT:
           GUARD_PT_POSITION:
             - 41.69659423828125
             - 127.71937561035156
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 43.123809814453125
-              - 116.7577896118164
+              - 116.75778961181641
               - 2.0497777462005615
             ACTION_PT_WAIT_SEG: 240
             ACTION_PT_TURN_SPEED: 0
@@ -3452,8 +3452,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 81.23674011230469
-        - 140.2612762451172
+        - 81.236740112304688
+        - 140.26127624511719
         - 0.0
       OBJROTATION:
         - 1.0
@@ -3478,21 +3478,21 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 81.23674011230469
-          - 140.2612762451172
+          - 81.236740112304688
+          - 140.26127624511719
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 82.17928314208984
-            - 139.1770477294922
+            - 82.179283142089844
+            - 139.17704772949219
             - 1.9406518936157227
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 92.8024673461914
+            - 92.802467346191406
             - 126.4796142578125
-            - 1.96072518825531
+            - 1.9607251882553101
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -3503,8 +3503,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 81.23674011230469
-          - 140.2612762451172
+          - 81.236740112304688
+          - 140.26127624511719
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -3518,8 +3518,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 81.23674011230469
-          - 140.2612762451172
+          - 81.236740112304688
+          - 140.26127624511719
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -3533,8 +3533,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 81.23674011230469
-          - 140.2612762451172
+          - 81.236740112304688
+          - 140.26127624511719
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -3548,8 +3548,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 81.23674011230469
-          - 140.2612762451172
+          - 81.236740112304688
+          - 140.26127624511719
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -3616,7 +3616,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 106.6484146118164
+        - 106.64841461181641
         - 132.30227661132812
         - 0.0
       OBJROTATION:
@@ -3642,7 +3642,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 106.6484146118164
+          - 106.64841461181641
           - 132.30227661132812
           - 0.0
         UNIT_LOGIC_USE: 1
@@ -3656,18 +3656,18 @@ OBJECTDBFILE:
             ACTION_PT_LOOK_PT:
               - 100.02085876464844
               - 130.63494873046875
-              - 1.96072518825531
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
             - 127.71973419189453
-            - 135.0235137939453
-            - 1.96072518825531
+            - 135.02351379394531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 134.9463653564453
+              - 134.94636535644531
               - 135.01942443847656
               - 1.333293080329895
             ACTION_PT_WAIT_SEG: 120
@@ -3683,7 +3683,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 106.6484146118164
+          - 106.64841461181641
           - 132.30227661132812
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -3698,7 +3698,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 106.6484146118164
+          - 106.64841461181641
           - 132.30227661132812
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -3713,7 +3713,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 106.6484146118164
+          - 106.64841461181641
           - 132.30227661132812
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -3728,7 +3728,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 106.6484146118164
+          - 106.64841461181641
           - 132.30227661132812
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -3950,8 +3950,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 116.8479995727539
-        - 115.5719985961914
+        - 116.84799957275391
+        - 115.57199859619141
         - 0.0
       OBJROTATION:
         - 1.0
@@ -3976,8 +3976,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 116.8479995727539
-          - 115.5719985961914
+          - 116.84799957275391
+          - 115.57199859619141
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -3991,8 +3991,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 116.8479995727539
-          - 115.5719985961914
+          - 116.84799957275391
+          - 115.57199859619141
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4006,8 +4006,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 116.8479995727539
-          - 115.5719985961914
+          - 116.84799957275391
+          - 115.57199859619141
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4021,8 +4021,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 116.8479995727539
-          - 115.5719985961914
+          - 116.84799957275391
+          - 115.57199859619141
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4036,8 +4036,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 116.8479995727539
-          - 115.5719985961914
+          - 116.84799957275391
+          - 115.57199859619141
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4137,32 +4137,32 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 96.1914291381836
+            - 96.191429138183594
             - 100.02738189697266
-            - 1.96072518825531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 102.94971466064453
               - 103.38311767578125
-              - 1.96072518825531
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 96.43340301513672
-            - 89.62650299072266
-            - 1.96072518825531
+            - 96.433403015136719
+            - 89.626502990722656
+            - 1.9607251882553101
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 95.43396759033203
-            - 77.08722686767578
-            - 2.127941131591797
+            - 95.433967590332031
+            - 77.087226867675781
+            - 2.1279411315917969
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 104.92155456542969
-              - 76.27207946777344
-              - 1.96072518825531
+              - 76.272079467773438
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
@@ -4289,8 +4289,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 98.66690063476562
-        - 76.99079895019531
+        - 98.666900634765625
+        - 76.990798950195312
         - 0.0
       OBJROTATION:
         - 1.0
@@ -4315,38 +4315,38 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.66690063476562
-          - 76.99079895019531
+          - 98.666900634765625
+          - 76.990798950195312
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
             - 100.19927215576172
-            - 76.99130249023438
-            - 1.96072518825531
+            - 76.991302490234375
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 105.8267593383789
-              - 76.13048553466797
-              - 1.96072518825531
+              - 105.82675933837891
+              - 76.130485534667969
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 86.01448059082031
-            - 65.44828796386719
-            - 1.96072518825531
+            - 86.014480590820312
+            - 65.448287963867188
+            - 1.9607251882553101
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 71.25773620605469
-            - 68.34797668457031
-            - 1.96072518825531
+            - 71.257736206054688
+            - 68.347976684570312
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 71.06404876708984
-              - 81.93657684326172
+              - 71.064048767089844
+              - 81.936576843261719
               - 1.9693145751953125
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
@@ -4361,8 +4361,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.66690063476562
-          - 76.99079895019531
+          - 98.666900634765625
+          - 76.990798950195312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4376,8 +4376,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.66690063476562
-          - 76.99079895019531
+          - 98.666900634765625
+          - 76.990798950195312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4391,8 +4391,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.66690063476562
-          - 76.99079895019531
+          - 98.666900634765625
+          - 76.990798950195312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4406,8 +4406,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 98.66690063476562
-          - 76.99079895019531
+          - 98.666900634765625
+          - 76.990798950195312
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4474,8 +4474,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 70.53340148925781
-        - 83.95980072021484
+        - 70.533401489257812
+        - 83.959800720214844
         - 0.0
       OBJROTATION:
         - 1.0
@@ -4500,47 +4500,47 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 70.53340148925781
-          - 83.95980072021484
+          - 70.533401489257812
+          - 83.959800720214844
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 71.74244689941406
-            - 85.10279083251953
+            - 71.742446899414062
+            - 85.102790832519531
             - 1.9607250690460205
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 77.31866455078125
-              - 63.64204788208008
-              - 1.96072518825531
+              - 63.642047882080078
+              - 1.9607251882553101
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 80.92322540283203
-            - 89.9616928100586
+            - 80.923225402832031
+            - 89.961692810058594
             - 1.9607820510864258
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 89.12145233154297
-            - 95.34009552001953
-            - 1.96072518825531
+            - 89.121452331542969
+            - 95.340095520019531
+            - 1.9607251882553101
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 95.87554931640625
-              - 99.36672973632812
-              - 1.892446517944336
+              - 99.366729736328125
+              - 1.8924465179443359
             ACTION_PT_WAIT_SEG: 120
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 83.66168975830078
-            - 84.89297485351562
-            - 2.251833200454712
+            - 83.661689758300781
+            - 84.892974853515625
+            - 2.2518332004547119
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -4551,8 +4551,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 70.53340148925781
-          - 83.95980072021484
+          - 70.533401489257812
+          - 83.959800720214844
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4566,8 +4566,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 70.53340148925781
-          - 83.95980072021484
+          - 70.533401489257812
+          - 83.959800720214844
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4581,8 +4581,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 70.53340148925781
-          - 83.95980072021484
+          - 70.533401489257812
+          - 83.959800720214844
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4596,8 +4596,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 70.53340148925781
-          - 83.95980072021484
+          - 70.533401489257812
+          - 83.959800720214844
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -4831,7 +4831,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "GoblinAxeBag00"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 160.1699981689453
+        - 160.16999816894531
         - 137.54100036621094
         - 0.0
       OBJROTATION:
@@ -4857,7 +4857,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 160.1699981689453
+          - 160.16999816894531
           - 137.54100036621094
           - 0.0
         UNIT_LOGIC_USE: 1
@@ -4865,7 +4865,7 @@ OBJECTDBFILE:
         GUARD_PT:
           GUARD_PT_POSITION:
             - 160.00050354003906
-            - 135.1085662841797
+            - 135.10856628417969
             - 1.333293080329895
           ACTION_PT:
             ACTION_PT_LOOK_PT:
@@ -4885,7 +4885,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 160.1699981689453
+          - 160.16999816894531
           - 137.54100036621094
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -4900,7 +4900,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 160.1699981689453
+          - 160.16999816894531
           - 137.54100036621094
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -4915,7 +4915,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 160.1699981689453
+          - 160.16999816894531
           - 137.54100036621094
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -4930,7 +4930,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 160.1699981689453
+          - 160.16999816894531
           - 137.54100036621094
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -5166,10 +5166,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 170.04440307617188
-        - 148.1687774658203
+        - 148.16877746582031
         - 0.0
       OBJROTATION:
-        - 0.9999619126319885
+        - 0.99996191263198853
         - 0.0
         - 0.0
         - 0.008726535364985466
@@ -5192,19 +5192,19 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 170.04440307617188
-          - 148.1687774658203
+          - 148.16877746582031
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 170.0962677001953
+            - 170.09626770019531
             - 146.56922912597656
             - 1.1676830053329468
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 159.99588012695312
-              - 131.5498504638672
+              - 131.54985046386719
               - 1.333293080329895
             ACTION_PT_WAIT_SEG: 3600
             ACTION_PT_TURN_SPEED: 0
@@ -5220,7 +5220,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 170.04440307617188
-          - 148.1687774658203
+          - 148.16877746582031
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -5235,7 +5235,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 170.04440307617188
-          - 148.1687774658203
+          - 148.16877746582031
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -5250,7 +5250,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 170.04440307617188
-          - 148.1687774658203
+          - 148.16877746582031
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -5265,7 +5265,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 170.04440307617188
-          - 148.1687774658203
+          - 148.16877746582031
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -5370,7 +5370,7 @@ OBJECTDBFILE:
             - 1.333293080329895
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 160.0003204345703
+              - 160.00032043457031
               - 149.33346557617188
               - 1.333293080329895
             ACTION_PT_WAIT_SEG: 3600
@@ -5499,7 +5499,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "GoblinAxeBag00"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 170.3541717529297
+        - 170.35417175292969
         - 126.27394104003906
         - 0.0
       OBJROTATION:
@@ -5525,7 +5525,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 170.3541717529297
+          - 170.35417175292969
           - 126.27394104003906
           - 0.0
         UNIT_LOGIC_USE: 1
@@ -5537,7 +5537,7 @@ OBJECTDBFILE:
             - 1.333293080329895
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 175.3341522216797
+              - 175.33415222167969
               - 124.31401824951172
               - 1.333293080329895
             ACTION_PT_WAIT_SEG: 3600
@@ -5553,7 +5553,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 170.3541717529297
+          - 170.35417175292969
           - 126.27394104003906
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -5568,7 +5568,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 170.3541717529297
+          - 170.35417175292969
           - 126.27394104003906
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -5583,7 +5583,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 170.3541717529297
+          - 170.35417175292969
           - 126.27394104003906
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -5598,7 +5598,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 170.3541717529297
+          - 170.35417175292969
           - 126.27394104003906
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -5699,7 +5699,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 180.0559844970703
+            - 180.05598449707031
             - 146.6859130859375
             - 1.2283378839492798
           ACTION_PT:
@@ -6004,10 +6004,10 @@ OBJECTDBFILE:
         - 103.69200134277344
         - 0.0
       OBJROTATION:
-        - 0.7071067690849304
+        - 0.70710676908493042
         - 0.0
         - 0.0
-        - -0.7071067094802856
+        - -0.70710670948028564
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 5972
@@ -6111,7 +6111,7 @@ OBJECTDBFILE:
             - 1.3255059719085693
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 148.2719268798828
+              - 148.27192687988281
               - 103.65605926513672
               - 1.3255059719085693
             ACTION_PT_WAIT_SEG: 3600
@@ -6130,20 +6130,20 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 42.332942962646484
-        - 154.8910369873047
-        - -0.8499990105628967
+        - 154.89103698730469
+        - -0.84999901056289673
       OBJROTATION:
-        - 0.3610000014305115
+        - 0.36100000143051147
         - -0.2443593442440033
         - 0.10640876740217209
-        - 0.8936594724655151
+        - 0.89365947246551514
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 8790
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
         - 0.0
-        - 0.8999999761581421
+        - 0.89999997615814209
         - 1.5
     LEVER:
       LEVER_SCIENCE_STATS_NEW:
@@ -6167,7 +6167,7 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 161.93899536132812
-        - 95.83550262451172
+        - 95.835502624511719
         - 0.0
       OBJROTATION:
         - 0.9588199257850647
@@ -6204,13 +6204,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 149.41900634765625
-        - 133.3090057373047
+        - 133.30900573730469
         - 0.0
       OBJROTATION:
-        - 0.979924738407135
+        - 0.97992473840713501
         - 0.0
         - 0.0
-        - -0.1993679702281952
+        - -0.19936797022819519
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 15901
@@ -6240,11 +6240,11 @@ OBJECTDBFILE:
       OBJSECTXTR: ""
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 209.1580047607422
+        - 209.15800476074219
         - 143.29100036621094
         - 0.0
       OBJROTATION:
-        - 0.9945217967033386
+        - 0.99452179670333862
         - 0.0
         - 0.0
         - 0.10452845692634583
@@ -6277,11 +6277,11 @@ OBJECTDBFILE:
       OBJSECTXTR: ""
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 168.3560028076172
-        - 50.68009948730469
+        - 168.35600280761719
+        - 50.680099487304688
         - -0.10000000149011612
       OBJROTATION:
-        - 0.8949341773986816
+        - 0.89493417739868164
         - 0.0
         - 0.0
         - 0.4461977481842041
@@ -6318,10 +6318,10 @@ OBJECTDBFILE:
         - 104.14299774169922
         - 0.0
       OBJROTATION:
-        - 0.7071062922477722
+        - 0.70710629224777222
         - 0.0
         - 0.0
-        - -0.7071061134338379
+        - -0.70710611343383789
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 15900
@@ -6344,12 +6344,12 @@ OBJECTDBFILE:
       OBJPOSITION:
         - 137.05303955078125
         - 120.87458038330078
-        - -0.8500000238418579
+        - -0.85000002384185791
       OBJROTATION:
-        - 0.9366722106933594
+        - 0.93667221069335938
         - 0.0
         - 0.0
-        - 0.3502073585987091
+        - 0.35020735859870911
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 5540
@@ -6371,10 +6371,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 173.06040954589844
-        - 74.88062286376953
+        - 74.880622863769531
         - -1.7499995231628418
       OBJROTATION:
-        - 0.9664758443832397
+        - 0.96647584438323975
         - -0.16848433017730713
         - 0.0023150648921728134
         - 0.1937318742275238
@@ -6399,13 +6399,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 179.2301025390625
-        - 68.42803192138672
-        - -0.9500001668930054
+        - 68.428031921386719
+        - -0.95000016689300537
       OBJROTATION:
         - -0.601814866065979
         - 0.0
         - 0.0
-        - 0.7986354231834412
+        - 0.79863542318344116
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 5530
@@ -6427,7 +6427,7 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 183.19696044921875
-        - 78.2260513305664
+        - 78.226051330566406
         - -1.5499998331069946
       OBJROTATION:
         - 1.0
@@ -6455,20 +6455,20 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 176.92349243164062
-        - 74.27314758300781
-        - -0.8999999165534973
+        - 74.273147583007812
+        - -0.89999991655349731
       OBJROTATION:
-        - 0.6626198291778564
+        - 0.66261982917785645
         - 0.0
         - 0.0
-        - 0.7489555478096008
+        - 0.74895554780960083
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 5574
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.6299999952316284
-        - 0.8100000023841858
+        - 0.62999999523162842
+        - 0.81000000238418579
         - 2.0
     OBJECT:
       OBJBODYPARTS: None
@@ -6484,7 +6484,7 @@ OBJECTDBFILE:
       OBJPOSITION:
         - 135.05722045898438
         - 117.81919860839844
-        - -0.8000001311302185
+        - -0.80000013113021851
       OBJROTATION:
         - 1.0
         - 0.0
@@ -6511,13 +6511,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 183.84811401367188
-        - 73.06666564941406
+        - 73.066665649414062
         - -1.399999737739563
       OBJROTATION:
-        - 0.6156613230705261
+        - 0.61566132307052612
         - 0.0
         - 0.0
-        - -0.7880104780197144
+        - -0.78801047801971436
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 5973
@@ -6549,11 +6549,11 @@ OBJECTDBFILE:
       OBJSECTXTR: ""
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 182.0449981689453
-        - 46.1442985534668
+        - 182.04499816894531
+        - 46.144298553466797
         - -0.05000000074505806
       OBJROTATION:
-        - 0.7132502794265747
+        - 0.71325027942657471
         - 0.0
         - 0.0
         - 0.7009090781211853
@@ -6588,12 +6588,12 @@ OBJECTDBFILE:
       OBJPOSITION:
         - 182.16200256347656
         - 46.065399169921875
-        - -2.049999952316284
+        - -2.0499999523162842
       OBJROTATION:
-        - 0.7193397879600525
+        - 0.71933978796005249
         - 0.0
         - 0.0
-        - 0.6946583986282349
+        - 0.69465839862823486
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 463
@@ -6819,8 +6819,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 75.5082015991211
-        - 85.93109893798828
+        - 75.508201599121094
+        - 85.931098937988281
         - 0.0
       OBJROTATION:
         - 1.0
@@ -6845,8 +6845,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 75.5082015991211
-          - 85.93109893798828
+          - 75.508201599121094
+          - 85.931098937988281
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -6860,8 +6860,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 75.5082015991211
-          - 85.93109893798828
+          - 75.508201599121094
+          - 85.931098937988281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -6875,8 +6875,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 75.5082015991211
-          - 85.93109893798828
+          - 75.508201599121094
+          - 85.931098937988281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -6890,8 +6890,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 75.5082015991211
-          - 85.93109893798828
+          - 75.508201599121094
+          - 85.931098937988281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -6905,8 +6905,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 75.5082015991211
-          - 85.93109893798828
+          - 75.508201599121094
+          - 85.931098937988281
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -6923,13 +6923,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 115.70899963378906
-        - 45.29439926147461
+        - 45.294399261474609
         - 0.0
       OBJROTATION:
         - 0.559192955493927
         - 0.0
         - 0.0
-        - 0.829037606716156
+        - 0.82903760671615601
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -6951,10 +6951,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 116.70337677001953
-        - 45.88507843017578
+        - 45.885078430175781
         - 0.0
       OBJROTATION:
-        - 0.972369909286499
+        - 0.97236990928649902
         - 0.0
         - 0.0
         - 0.23344537615776062
@@ -6978,14 +6978,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 117.7813491821289
-        - 45.39616394042969
+        - 117.78134918212891
+        - 45.396163940429688
         - 0.0
       OBJROTATION:
         - -0.7604060173034668
         - 0.0
         - 0.0
-        - -0.649448037147522
+        - -0.64944803714752197
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -6993,7 +6993,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.09999999403953552
+        - 0.099999994039535522
     LIGHT:
       LIGHT_ID: 64
       LIGHT_SHADOW: 1
@@ -7002,8 +7002,8 @@ OBJECTDBFILE:
         - 45.446571350097656
         - 4.401979923248291
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-64"
@@ -7021,13 +7021,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 118.76200103759766
-        - 45.57170104980469
+        - 45.571701049804688
         - 0.0
       OBJROTATION:
-        - -0.848048210144043
+        - -0.84804821014404297
         - 0.0
         - 0.0
-        - -0.5299193859100342
+        - -0.52991938591003418
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7048,14 +7048,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 71.15568542480469
-        - 43.55144119262695
+        - 71.155685424804688
+        - 43.551441192626953
         - 0.0
       OBJROTATION:
-        - 0.7009093761444092
+        - 0.70090937614440918
         - 0.0
         - 0.0
-        - 0.7132506370544434
+        - 0.71325063705444336
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7076,14 +7076,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 72.29570007324219
-        - 43.74653244018555
+        - 72.295700073242188
+        - 43.746532440185547
         - 0.0
       OBJROTATION:
-        - 0.9986295700073242
+        - 0.99862957000732422
         - 0.0
         - 0.0
-        - 0.05233597010374069
+        - 0.052335970103740692
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7104,14 +7104,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 73.12686157226562
+        - 73.126861572265625
         - 42.903785705566406
         - 0.0
       OBJROTATION:
-        - -0.8660255074501038
+        - -0.86602550745010376
         - 0.0
         - 0.0
-        - -0.5000001192092896
+        - -0.50000011920928955
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7119,17 +7119,17 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.09999999403953552
+        - 0.099999994039535522
     LIGHT:
       LIGHT_ID: 69
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 72.01600646972656
+        - 72.016006469726562
         - 43.232357025146484
-        - 4.259950160980225
+        - 4.2599501609802246
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-64"
@@ -7146,11 +7146,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 71.74486541748047
+        - 71.744865417480469
         - 42.71551513671875
         - 0.0
       OBJROTATION:
-        - -0.9304178357124329
+        - -0.93041783571243286
         - 0.0
         - 0.0
         - -0.36650145053863525
@@ -7175,13 +7175,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 115.46385955810547
-        - 75.71485900878906
+        - 75.714859008789062
         - 0.0
       OBJROTATION:
-        - 0.5568599104881287
-        - 0.03830689191818237
-        - -0.06790748983621597
-        - 0.8269391059875488
+        - 0.55685991048812866
+        - 0.038306891918182373
+        - -0.067907489836215973
+        - 0.82693910598754883
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7202,13 +7202,13 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 114.4085922241211
+        - 114.40859222412109
         - 75.17901611328125
         - 0.0
       OBJROTATION:
-        - 0.9712608456611633
+        - 0.97126084566116333
         - -0.046483710408210754
-        - 0.006785150617361069
+        - 0.0067851506173610687
         - 0.2333357036113739
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -7230,14 +7230,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 114.0098648071289
-        - 74.27212524414062
+        - 114.00986480712891
+        - 74.272125244140625
         - 0.0
       OBJROTATION:
-        - -0.7113104462623596
-        - -0.3029928207397461
-        - -0.1443701684474945
-        - -0.6175678968429565
+        - -0.71131044626235962
+        - -0.30299282073974609
+        - -0.14437016844749451
+        - -0.61756789684295654
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7245,17 +7245,17 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.09999999403953552
+        - 0.099999994039535522
     LIGHT:
       LIGHT_ID: 74
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 113.3759536743164
-        - 73.46283721923828
+        - 113.37595367431641
+        - 73.462837219238281
         - 3.8887524604797363
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-65"
@@ -7273,13 +7273,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 113.02259063720703
-        - 75.17689514160156
+        - 75.176895141601562
         - 0.0
       OBJROTATION:
-        - -0.8287546634674072
+        - -0.82875466346740723
         - -0.049789804965257645
         - 0.24935117363929749
-        - -0.4985085427761078
+        - -0.49850854277610779
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7301,13 +7301,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 112.81443786621094
-        - 74.58671569824219
+        - 74.586715698242188
         - 0.0
       OBJROTATION:
         - 0.18136484920978546
         - -0.002560384338721633
-        - -0.06161130592226982
-        - 0.9814806580543518
+        - -0.061611305922269821
+        - 0.98148065805435181
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7329,11 +7329,11 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 112.29009246826172
-        - 74.27568054199219
+        - 74.275680541992188
         - 0.0
       OBJROTATION:
-        - -0.7272611856460571
-        - -0.2829575836658478
+        - -0.72726118564605713
+        - -0.28295758366584778
         - 0.05314800888299942
         - 0.6230582594871521
       OBJ_USE_IN_SCRIPT: 0
@@ -7356,14 +7356,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 50.2106819152832
-        - 55.61743927001953
+        - 50.210681915283203
+        - 55.617439270019531
         - 0.0
       OBJROTATION:
-        - 0.9986295104026794
+        - 0.99862951040267944
         - 0.0
         - 0.0
-        - -0.0523359589278698
+        - -0.052335958927869797
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7384,14 +7384,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 50.56026840209961
+        - 50.560268402099609
         - 56.142547607421875
         - 0.0
       OBJROTATION:
-        - -0.6225146055221558
+        - -0.62251460552215576
         - 0.0
         - 0.0
-        - 0.7826082110404968
+        - 0.78260821104049683
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7408,8 +7408,8 @@ OBJECTDBFILE:
         - 58.969791412353516
         - 5.864220142364502
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-80"
@@ -7427,13 +7427,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 49.052085876464844
-        - 63.26557159423828
+        - 63.265571594238281
         - 0.0
       OBJROTATION:
         - -0.9455188512802124
         - 0.0
         - 0.0
-        - 0.3255682587623596
+        - 0.32556825876235962
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7454,14 +7454,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 48.97769546508789
-        - 64.29032897949219
+        - 48.977695465087891
+        - 64.290328979492188
         - 0.0
       OBJROTATION:
         - 0.24192190170288086
         - 0.0
         - 0.0
-        - -0.9702957272529602
+        - -0.97029572725296021
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7483,13 +7483,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 50.390499114990234
-        - 57.00320053100586
+        - 57.003200531005859
         - 0.0
       OBJROTATION:
         - 0.46174874901771545
         - 0.0
         - 0.0
-        - 0.8870110511779785
+        - 0.88701105117797852
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7511,10 +7511,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 44.883724212646484
-        - 86.29216003417969
+        - 86.292160034179688
         - 0.0
       OBJROTATION:
-        - 0.9399340748786926
+        - 0.93993407487869263
         - -0.25274690985679626
         - 0.027126658707857132
         - -0.22783134877681732
@@ -7542,7 +7542,7 @@ OBJECTDBFILE:
         - 83.67181396484375
         - 0.0
       OBJROTATION:
-        - 0.972369909286499
+        - 0.97236990928649902
         - 0.0
         - 0.0
         - 0.23344537615776062
@@ -7567,13 +7567,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 44.609405517578125
-        - 85.17161560058594
+        - 85.171615600585938
         - 0.0
       OBJROTATION:
-        - -0.7094265222549438
-        - -0.2853263318538666
+        - -0.70942652225494385
+        - -0.28532633185386658
         - -0.16693349182605743
-        - -0.6224431395530701
+        - -0.62244313955307007
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7581,17 +7581,17 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.09999999403953552
+        - 0.099999994039535522
     LIGHT:
       LIGHT_ID: 90
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 47.58692169189453
+        - 47.586921691894531
         - 85.08233642578125
-        - 3.945189952850342
+        - 3.9451899528503418
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 14.800000190734863
       LIGHT_NAME: "Light-64"
@@ -7608,14 +7608,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 43.77892303466797
-        - 84.79739379882812
+        - 43.778923034667969
+        - 84.797393798828125
         - 0.0
       OBJROTATION:
-        - -0.7527714967727661
-        - 0.1492033302783966
+        - -0.75277149677276611
+        - 0.14920333027839661
         - -0.18329274654388428
-        - 0.6143925189971924
+        - 0.61439251899719238
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7636,11 +7636,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 43.89984893798828
-        - 85.82161712646484
+        - 43.899848937988281
+        - 85.821617126464844
         - 0.0
       OBJROTATION:
-        - 0.9848077893257141
+        - 0.98480778932571411
         - 0.0
         - 0.0
         - -0.17364828288555145
@@ -7664,14 +7664,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 50.7205696105957
-        - 84.31983184814453
+        - 50.720569610595703
+        - 84.319831848144531
         - 0.0
       OBJROTATION:
-        - -0.7965595722198486
-        - -0.08764974027872086
+        - -0.79655957221984863
+        - -0.087649740278720856
         - 0.16070117056369781
-        - 0.5761823058128357
+        - 0.57618230581283569
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7692,14 +7692,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 48.25816345214844
+        - 48.258163452148438
         - 112.29048919677734
         - 0.0
       OBJROTATION:
-        - 0.8526403903961182
+        - 0.85264039039611816
         - 0.0
         - 0.0
-        - 0.522498607635498
+        - 0.52249860763549805
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7724,10 +7724,10 @@ OBJECTDBFILE:
         - 109.39897918701172
         - 0.0
       OBJROTATION:
-        - 0.981627345085144
+        - 0.98162734508514404
         - 0.0
         - 0.0
-        - -0.1908089965581894
+        - -0.19080899655818939
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7748,14 +7748,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 50.40947723388672
+        - 50.409477233886719
         - 109.24909210205078
         - 0.0
       OBJROTATION:
-        - -0.5519371032714844
+        - -0.55193710327148438
         - 0.0
         - 0.0
-        - 0.8338859677314758
+        - 0.83388596773147583
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -7763,17 +7763,17 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.09999999403953552
+        - 0.099999994039535522
     LIGHT:
       LIGHT_ID: 97
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
         - 47.796600341796875
         - 107.46600341796875
-        - 4.984889984130859
+        - 4.9848899841308594
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 13.0
       LIGHT_NAME: "Light-64"
@@ -7794,7 +7794,7 @@ OBJECTDBFILE:
         - 110.65949249267578
         - 0.0
       OBJROTATION:
-        - -0.9914451241493225
+        - -0.99144512414932251
         - 0.0
         - 0.0
         - -0.13052628934383392
@@ -7818,11 +7818,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 48.8641471862793
+        - 48.864147186279297
         - 111.56743621826172
         - 0.0
       OBJROTATION:
-        - 0.5735765695571899
+        - 0.57357656955718994
         - 0.0
         - 0.0
         - 0.8191521167755127
@@ -7850,7 +7850,7 @@ OBJECTDBFILE:
         - 115.73824310302734
         - 0.0
       OBJROTATION:
-        - -0.4539906978607178
+        - -0.45399069786071777
         - 0.0
         - 0.0
         - 0.8910069465637207
@@ -7874,11 +7874,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 41.71770095825195
+        - 41.717700958251953
         - 107.92928314208984
         - 0.0
       OBJROTATION:
-        - 0.5735765695571899
+        - 0.57357656955718994
         - 0.0
         - 0.0
         - 0.8191521167755127
@@ -7903,10 +7903,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 50.66961669921875
-        - 103.0287094116211
+        - 103.02870941162109
         - 0.0
       OBJROTATION:
-        - -0.9914451241493225
+        - -0.99144512414932251
         - 0.0
         - 0.0
         - -0.13052628934383392
@@ -7931,13 +7931,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 51.697410583496094
-        - 102.8189468383789
+        - 102.81894683837891
         - 0.0
       OBJROTATION:
         - -0.45879700779914856
         - -0.020793147385120392
         - 0.13570846617221832
-        - 0.8778706789016724
+        - 0.87787067890167236
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -7958,12 +7958,12 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 42.19221496582031
+        - 42.192214965820312
         - 105.75957489013672
         - 0.0
       OBJROTATION:
-        - 0.937218427658081
-        - -0.2844415605068207
+        - 0.93721842765808105
+        - -0.28444156050682068
         - 0.11077592521905899
         - -0.16865426301956177
       OBJ_USE_IN_SCRIPT: 0
@@ -7990,10 +7990,10 @@ OBJECTDBFILE:
         - 159.11007690429688
         - 0.0
       OBJROTATION:
-        - 0.6582849621772766
+        - 0.65828496217727661
         - 0.2425321638584137
-        - -0.07163838297128677
-        - 0.7090186476707458
+        - -0.071638382971286774
+        - 0.70901864767074585
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8018,10 +8018,10 @@ OBJECTDBFILE:
         - 169.53895568847656
         - 0.0
       OBJROTATION:
-        - 0.9986295700073242
+        - 0.99862957000732422
         - 0.0
         - 0.0
-        - 0.05233597010374069
+        - 0.052335970103740692
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8043,10 +8043,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 31.594900131225586
-        - 157.4759979248047
+        - 157.47599792480469
         - 0.0
       OBJROTATION:
-        - -0.8480498790740967
+        - -0.84804987907409668
         - -0.17908920347690582
         - -0.05421830341219902
         - -0.49578121304512024
@@ -8064,10 +8064,10 @@ OBJECTDBFILE:
       LIGHT_POSITION:
         - 28.748682022094727
         - 153.993408203125
-        - 9.22383975982666
+        - 9.2238397598266602
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-64"
@@ -8084,7 +8084,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 29.23832130432129
+        - 29.238321304321289
         - 157.88006591796875
         - 0.0
       OBJROTATION:
@@ -8112,11 +8112,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 36.76533889770508
+        - 36.765338897705078
         - 169.61729431152344
         - 0.0
       OBJROTATION:
-        - -0.9304178357124329
+        - -0.93041783571243286
         - 0.0
         - 0.0
         - -0.36650145053863525
@@ -8140,14 +8140,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 38.83639907836914
-        - 169.3730010986328
+        - 38.836399078369141
+        - 169.37300109863281
         - 0.0
       OBJROTATION:
-        - -0.7740974426269531
+        - -0.77409744262695312
         - -0.017210425809025764
-        - 0.1253616213798523
-        - 0.6202919483184814
+        - 0.12536162137985229
+        - 0.62029194831848145
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8172,10 +8172,10 @@ OBJECTDBFILE:
         - 166.7550048828125
         - 0.0
       OBJROTATION:
-        - -0.5948231220245361
+        - -0.59482312202453613
         - 0.0
         - 0.0
-        - 0.8038570284843445
+        - 0.80385702848434448
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8196,11 +8196,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 28.1351261138916
+        - 28.135126113891602
         - 165.15740966796875
         - 0.0
       OBJROTATION:
-        - -0.9037001132965088
+        - -0.90370011329650879
         - -0.22305144369602203
         - -0.050029125064611435
         - -0.36203882098197937
@@ -8228,10 +8228,10 @@ OBJECTDBFILE:
         - 157.64508056640625
         - 0.0
       OBJROTATION:
-        - -0.8626404404640198
+        - -0.86264044046401978
         - 0.15159566700458527
-        - 0.2260614037513733
-        - -0.4263421297073364
+        - 0.22606140375137329
+        - -0.42634212970733643
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8256,10 +8256,10 @@ OBJECTDBFILE:
         - 168.80299377441406
         - -0.10000002384185791
       OBJROTATION:
-        - 0.5869657397270203
-        - 0.2424025535583496
-        - -0.08095641434192657
-        - -0.7682173252105713
+        - 0.58696573972702026
+        - 0.24240255355834961
+        - -0.080956414341926575
+        - -0.76821732521057129
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8287,7 +8287,7 @@ OBJECTDBFILE:
         - -0.3220086395740509
         - -0.11838129162788391
         - -0.26251938939094543
-        - -0.9018771648406982
+        - -0.90187716484069824
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8295,7 +8295,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.5
         - 0.5
-        - 0.09999999403953552
+        - 0.099999994039535522
     OBJECT:
       OBJBODYPARTS: None
       OBJ_PLAYER: 0
@@ -8308,14 +8308,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 29.54599952697754
+        - 29.545999526977539
         - 156.56900024414062
         - 0.0
       OBJROTATION:
-        - -0.8660255074501038
+        - -0.86602550745010376
         - 0.0
         - 0.0
-        - -0.5000001192092896
+        - -0.50000011920928955
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8340,8 +8340,8 @@ OBJECTDBFILE:
         - 159.09268188476562
         - 0.0
       OBJROTATION:
-        - -0.8458271026611328
-        - 0.07069695740938187
+        - -0.84582710266113281
+        - 0.070696957409381866
         - 0.0064109922386705875
         - -0.5287134051322937
       OBJ_USE_IN_SCRIPT: 0
@@ -8364,14 +8364,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 30.90792465209961
-        - 170.2989044189453
+        - 30.907924652099609
+        - 170.29890441894531
         - 0.0
       OBJROTATION:
-        - -0.754709780216217
+        - -0.75470978021621704
         - 0.0
         - 0.0
-        - -0.6560593247413635
+        - -0.65605932474136353
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8392,14 +8392,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 32.13105392456055
-        - 171.5031280517578
+        - 32.131053924560547
+        - 171.50312805175781
         - 0.0
       OBJROTATION:
-        - -0.6156617403030396
+        - -0.61566174030303955
         - 0.0
         - 0.0
-        - 0.7880109548568726
+        - 0.78801095485687256
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8421,13 +8421,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 28.651098251342773
-        - 164.0918426513672
+        - 164.09184265136719
         - 0.0
       OBJROTATION:
         - 0.7372775673866272
         - 0.0
         - 0.0
-        - -0.6755903363227844
+        - -0.67559033632278442
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8448,14 +8448,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 30.43535614013672
+        - 30.435356140136719
         - 158.24124145507812
         - 0.0
       OBJROTATION:
         - -0.23470254242420197
-        - 0.09687885642051697
+        - 0.096878856420516968
         - -0.21097129583358765
-        - -0.9439398050308228
+        - -0.94393980503082275
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8476,14 +8476,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 26.84430694580078
+        - 26.844306945800781
         - 157.81809997558594
         - 0.0
       OBJROTATION:
-        - -0.9184077382087708
-        - 0.04559411108493805
+        - -0.91840773820877075
+        - 0.045594111084938049
         - 0.060944925993680954
-        - -0.3882482349872589
+        - -0.38824823498725891
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8496,12 +8496,12 @@ OBJECTDBFILE:
       LIGHT_ID: 130
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 34.69318389892578
+        - 34.693183898925781
         - 167.05897521972656
-        - 8.870843887329102
+        - 8.8708438873291016
       LIGHT_COLOR:
-        - 0.6627451181411743
-        - 0.9372549653053284
+        - 0.66274511814117432
+        - 0.93725496530532837
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-64"
@@ -8522,9 +8522,9 @@ OBJECTDBFILE:
         - 151.18775939941406
         - 0.0
       OBJROTATION:
-        - 0.9834694862365723
+        - 0.98346948623657227
         - 0.1073395237326622
-        - 0.005775668658316135
+        - 0.0057756686583161354
         - -0.14572396874427795
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -8546,14 +8546,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 26.26111602783203
+        - 26.261116027832031
         - 148.44552612304688
         - 0.0
       OBJROTATION:
         - -0.23470254242420197
-        - 0.09687885642051697
+        - 0.096878856420516968
         - -0.21097129583358765
-        - -0.9439398050308228
+        - -0.94393980503082275
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8575,12 +8575,12 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 28.093250274658203
-        - 148.1276092529297
+        - 148.12760925292969
         - 0.0
       OBJROTATION:
-        - -0.8790619373321533
+        - -0.87906193733215332
         - 0.12129287421703339
-        - 0.06573913991451263
+        - 0.065739139914512634
         - -0.4563087522983551
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -8602,14 +8602,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 24.16042709350586
+        - 24.160427093505859
         - 150.0279541015625
         - 0.0
       OBJROTATION:
         - 0.9077298641204834
-        - -0.04436630755662918
-        - 0.05541473254561424
-        - -0.4135068356990814
+        - -0.044366307556629181
+        - 0.055414732545614243
+        - -0.41350683569908142
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8634,8 +8634,8 @@ OBJECTDBFILE:
         - 148.72225952148438
         - 0.0
       OBJROTATION:
-        - -0.8458271026611328
-        - 0.07069695740938187
+        - -0.84582710266113281
+        - 0.070696957409381866
         - 0.0064109922386705875
         - -0.5287134051322937
       OBJ_USE_IN_SCRIPT: 0
@@ -8662,10 +8662,10 @@ OBJECTDBFILE:
         - 154.37904357910156
         - 0.0
       OBJROTATION:
-        - 0.6259664297103882
+        - 0.62596642971038818
         - -0.043087102472782135
-        - -0.07547590136528015
-        - -0.7749940156936646
+        - -0.075475901365280151
+        - -0.77499401569366455
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8687,10 +8687,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 25.351999282836914
-        - 152.7779998779297
+        - 152.77799987792969
         - 0.0
       OBJROTATION:
-        - -0.981921911239624
+        - -0.98192191123962402
         - -0.04609169065952301
         - 0.13126406073570251
         - -0.12836240231990814
@@ -8719,9 +8719,9 @@ OBJECTDBFILE:
         - 0.0
       OBJROTATION:
         - 0.38602572679519653
-        - -0.09047055244445801
-        - -0.0891604796051979
-        - -0.913702130317688
+        - -0.090470552444458008
+        - -0.089160479605197906
+        - -0.91370213031768799
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8747,9 +8747,9 @@ OBJECTDBFILE:
         - 0.0
       OBJROTATION:
         - 0.9077298641204834
-        - -0.04436630755662918
-        - 0.05541473254561424
-        - -0.4135068356990814
+        - -0.044366307556629181
+        - 0.055414732545614243
+        - -0.41350683569908142
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8774,10 +8774,10 @@ OBJECTDBFILE:
         - 155.36500549316406
         - 0.0
       OBJROTATION:
-        - 0.5722562074661255
+        - 0.57225620746612549
         - -0.010102197527885437
-        - 0.07026457041501999
-        - -0.8169972896575928
+        - 0.070264570415019989
+        - -0.81699728965759277
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8802,10 +8802,10 @@ OBJECTDBFILE:
         - 152.76998901367188
         - 0.0
       OBJROTATION:
-        - -0.9184077382087708
-        - 0.04559411108493805
+        - -0.91840773820877075
+        - 0.045594111084938049
         - 0.060944925993680954
-        - -0.3882482349872589
+        - -0.38824823498725891
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8830,10 +8830,10 @@ OBJECTDBFILE:
         - 156.12039184570312
         - 0.0
       OBJROTATION:
-        - 0.6398002505302429
-        - -0.07161235064268112
-        - 0.02578328736126423
-        - -0.7647651433944702
+        - 0.63980025053024292
+        - -0.071612350642681122
+        - 0.025783287361264229
+        - -0.76476514339447021
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8858,10 +8858,10 @@ OBJECTDBFILE:
         - 151.86862182617188
         - 0.0
       OBJROTATION:
-        - 0.6582849621772766
+        - 0.65828496217727661
         - 0.2425321638584137
-        - -0.07163838297128677
-        - 0.7090186476707458
+        - -0.071638382971286774
+        - 0.70901864767074585
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8882,14 +8882,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 36.59349822998047
-        - 170.9969940185547
+        - 36.593498229980469
+        - 170.99699401855469
         - 0.0
       OBJROTATION:
-        - -0.5568395853042603
+        - -0.55683958530426025
         - -0.21409590542316437
-        - -0.05741620063781738
-        - 0.8004975318908691
+        - -0.057416200637817383
+        - 0.80049753189086914
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -8911,13 +8911,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 37.545101165771484
-        - 171.7100067138672
+        - 171.71000671386719
         - -0.10000000149011612
       OBJROTATION:
-        - -0.3778745234012604
-        - -0.05166845768690109
-        - 0.2541210651397705
-        - -0.8887996673583984
+        - -0.37787452340126038
+        - -0.051668457686901093
+        - 0.25412106513977051
+        - -0.88879966735839844
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8932,10 +8932,10 @@ OBJECTDBFILE:
       LIGHT_POSITION:
         - 29.711942672729492
         - 140.26138305664062
-        - 4.1267991065979
+        - 4.1267991065979004
       LIGHT_COLOR:
-        - 0.6941176652908325
-        - 0.9215686917304993
+        - 0.69411766529083252
+        - 0.92156869173049927
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-146"
@@ -8952,14 +8952,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 27.52741241455078
+        - 27.527412414550781
         - 139.66763305664062
         - 0.0
       OBJROTATION:
-        - 0.5722562074661255
+        - 0.57225620746612549
         - -0.010102197527885437
-        - 0.07026457041501999
-        - -0.8169972896575928
+        - 0.070264570415019989
+        - -0.81699728965759277
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -8984,10 +8984,10 @@ OBJECTDBFILE:
         - 142.4207763671875
         - 0.0
       OBJROTATION:
-        - 0.5722562074661255
+        - 0.57225620746612549
         - -0.010102197527885437
-        - 0.07026457041501999
-        - -0.8169972896575928
+        - 0.070264570415019989
+        - -0.81699728965759277
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -9008,14 +9008,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 31.39940643310547
-        - 136.1383514404297
+        - 31.399406433105469
+        - 136.13835144042969
         - 0.0
       OBJROTATION:
-        - 0.5759506821632385
-        - -0.303544282913208
-        - -0.0451565757393837
-        - -0.7576959729194641
+        - 0.57595068216323853
+        - -0.30354428291320801
+        - -0.045156575739383698
+        - -0.75769597291946411
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -9040,9 +9040,9 @@ OBJECTDBFILE:
         - 141.49195861816406
         - 0.0
       OBJROTATION:
-        - 0.9445658922195435
+        - 0.94456589221954346
         - 0.30828702449798584
-        - -0.003855212591588497
+        - -0.0038552125915884972
         - -0.11287452280521393
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -9068,10 +9068,10 @@ OBJECTDBFILE:
         - 144.49571228027344
         - 0.0
       OBJROTATION:
-        - 0.5722562074661255
+        - 0.57225620746612549
         - -0.010102197527885437
-        - 0.07026457041501999
-        - -0.8169972896575928
+        - 0.070264570415019989
+        - -0.81699728965759277
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -9096,10 +9096,10 @@ OBJECTDBFILE:
         - 146.49351501464844
         - 0.0
       OBJROTATION:
-        - 0.6259664297103882
+        - 0.62596642971038818
         - -0.043087102472782135
-        - -0.07547590136528015
-        - -0.7749940156936646
+        - -0.075475901365280151
+        - -0.77499401569366455
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9124,7 +9124,7 @@ OBJECTDBFILE:
         - 142.1798095703125
         - 0.0
       OBJROTATION:
-        - 0.8842566609382629
+        - 0.88425666093826294
         - 0.017783530056476593
         - -0.11782349646091461
         - -0.45154625177383423
@@ -9152,10 +9152,10 @@ OBJECTDBFILE:
         - 141.11485290527344
         - 0.0
       OBJROTATION:
-        - 0.6259664297103882
+        - 0.62596642971038818
         - -0.043087102472782135
-        - -0.07547590136528015
-        - -0.7749940156936646
+        - -0.075475901365280151
+        - -0.77499401569366455
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9180,10 +9180,10 @@ OBJECTDBFILE:
         - 143.61947631835938
         - 0.0
       OBJROTATION:
-        - 0.6582849621772766
+        - 0.65828496217727661
         - 0.2425321638584137
-        - -0.07163838297128677
-        - 0.7090186476707458
+        - -0.071638382971286774
+        - 0.70901864767074585
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9208,10 +9208,10 @@ OBJECTDBFILE:
         - 136.81326293945312
         - 0.0
       OBJROTATION:
-        - 0.6244223117828369
-        - -0.08169375360012054
+        - 0.62442231178283691
+        - -0.081693753600120544
         - -0.12142257392406464
-        - 0.7672551274299622
+        - 0.76725512742996216
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9232,14 +9232,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 32.84654998779297
+        - 32.846549987792969
         - 136.52978515625
         - 0.0
       OBJROTATION:
         - -0.17432305216789246
         - -0.11668076366186142
         - 0.02156374603509903
-        - -0.9775136709213257
+        - -0.97751367092132568
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9264,10 +9264,10 @@ OBJECTDBFILE:
         - 137.68264770507812
         - 0.0
       OBJROTATION:
-        - -0.295750230550766
-        - -0.08025164902210236
-        - -0.1272554248571396
-        - -0.943343997001648
+        - -0.29575023055076599
+        - -0.080251649022102356
+        - -0.12725542485713959
+        - -0.94334399700164795
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9288,14 +9288,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 42.36081314086914
+        - 42.360813140869141
         - 144.10980224609375
         - 0.0
       OBJROTATION:
-        - 0.9522411823272705
+        - 0.95224118232727051
         - 0.09400409460067749
-        - -0.07322481274604797
-        - 0.2811422646045685
+        - -0.073224812746047974
+        - 0.28114226460456848
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9316,14 +9316,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 42.83209991455078
+        - 42.832099914550781
         - 144.51699829101562
         - -0.10000000894069672
       OBJROTATION:
-        - 0.8551576137542725
-        - 0.06265858560800552
+        - 0.85515761375427246
+        - 0.062658585608005524
         - -0.2605120837688446
-        - -0.4437510669231415
+        - -0.44375106692314148
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9345,13 +9345,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 43.888465881347656
-        - 145.4151153564453
+        - 145.41511535644531
         - -0.44999998807907104
       OBJROTATION:
-        - 0.8878911137580872
+        - 0.88789111375808716
         - -0.044173743575811386
         - -0.1103491336107254
-        - -0.4444359838962555
+        - -0.44443598389625549
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9373,13 +9373,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 48.093475341796875
-        - 140.9221649169922
+        - 140.92216491699219
         - 0.0
       OBJROTATION:
-        - 0.7995280027389526
+        - 0.79952800273895264
         - -0.016545914113521576
         - 0.16512802243232727
-        - -0.5772489905357361
+        - -0.57724899053573608
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9407,7 +9407,7 @@ OBJECTDBFILE:
         - 0.8986775279045105
         - -0.10432936251163483
         - -0.19552023708820343
-        - -0.3785080015659332
+        - -0.37850800156593323
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9429,10 +9429,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 48.506500244140625
-        - 142.2171173095703
+        - 142.21711730957031
         - -0.25
       OBJROTATION:
-        - 0.8842566609382629
+        - 0.88425666093826294
         - 0.017783530056476593
         - -0.11782349646091461
         - -0.45154625177383423
@@ -9460,10 +9460,10 @@ OBJECTDBFILE:
         - 144.51019287109375
         - 0.0
       OBJROTATION:
-        - -0.3243970572948456
+        - -0.32439705729484558
         - -0.39671364426612854
-        - 0.08235502988100052
-        - -0.8547544479370117
+        - 0.082355029881000519
+        - -0.85475444793701172
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9484,14 +9484,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 48.54882049560547
+        - 48.548820495605469
         - 167.69091796875
         - 0.0
       OBJROTATION:
-        - 0.8550414443016052
+        - 0.85504144430160522
         - 0.010557410307228565
         - -0.11868943274021149
-        - -0.5046868324279785
+        - -0.50468683242797852
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9513,13 +9513,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 49.715110778808594
-        - 168.5497589111328
+        - 168.54975891113281
         - 0.0
       OBJROTATION:
-        - 0.5106091499328613
-        - -0.04735565930604935
+        - 0.51060914993286133
+        - -0.047355659306049347
         - -0.10934383422136307
-        - -0.851517915725708
+        - -0.85151791572570801
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9540,14 +9540,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 49.26128005981445
+        - 49.261280059814453
         - 166.15277099609375
         - 0.0
       OBJROTATION:
-        - 0.9905195832252502
+        - 0.99051958322525024
         - 0.07592705637216568
-        - -0.09183526784181595
-        - 0.06837522983551025
+        - -0.091835267841815948
+        - 0.068375229835510254
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9574,8 +9574,8 @@ OBJECTDBFILE:
       OBJROTATION:
         - 0.16299740970134735
         - -0.08413521945476532
-        - -0.08437953889369965
-        - -0.9794058799743652
+        - -0.084379538893699646
+        - -0.97940587997436523
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9596,14 +9596,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 55.97130584716797
+        - 55.971305847167969
         - 166.88088989257812
         - 0.0
       OBJROTATION:
-        - 0.737257719039917
+        - 0.73725771903991699
         - -0.013317392207682133
         - -0.11841148138046265
-        - -0.6650226712226868
+        - -0.66502267122268677
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9624,14 +9624,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 62.59928512573242
-        - 161.6040802001953
+        - 62.599285125732422
+        - 161.60408020019531
         - -0.15000000596046448
       OBJROTATION:
-        - -0.3468822240829468
-        - 0.06648903340101242
+        - -0.34688222408294678
+        - 0.066489033401012421
         - 0.09888303279876709
-        - 0.9303102493286133
+        - 0.93031024932861328
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9652,14 +9652,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 62.72850036621094
+        - 62.728500366210938
         - 162.74200439453125
         - -0.15000000596046448
       OBJROTATION:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9680,13 +9680,13 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 60.74720764160156
+        - 60.747207641601562
         - 163.05203247070312
         - 0.0
       OBJROTATION:
-        - 0.8857914209365845
-        - -0.09689801931381226
-        - 0.03321045637130737
+        - 0.88579142093658447
+        - -0.096898019313812256
+        - 0.033210456371307373
         - -0.45264047384262085
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -9708,14 +9708,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 49.39384841918945
+        - 49.393848419189453
         - 167.45655822753906
         - 0.0
       OBJROTATION:
         - 0.9390716552734375
-        - 0.0971086397767067
-        - -0.06905470788478851
-        - 0.3224107325077057
+        - 0.097108639776706696
+        - -0.069054707884788513
+        - 0.32241073250770569
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9740,10 +9740,10 @@ OBJECTDBFILE:
         - 140.2196044921875
         - 0.0
       OBJROTATION:
-        - 0.6431171894073486
-        - -0.0665794238448143
-        - -0.05154725909233093
-        - 0.7611244320869446
+        - 0.64311718940734863
+        - -0.066579423844814301
+        - -0.051547259092330933
+        - 0.76112443208694458
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9756,12 +9756,12 @@ OBJECTDBFILE:
       LIGHT_ID: 178
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 45.6882209777832
+        - 45.688220977783203
         - 144.03074645996094
-        - 5.23006010055542
+        - 5.2300601005554199
       LIGHT_COLOR:
-        - 0.6941176652908325
-        - 0.9215686917304993
+        - 0.69411766529083252
+        - 0.92156869173049927
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-178"
@@ -9772,12 +9772,12 @@ OBJECTDBFILE:
       LIGHT_POSITION:
         - 52.160438537597656
         - 168.03836059570312
-        - 8.098709106445312
+        - 8.0987091064453125
       LIGHT_COLOR:
-        - 0.6941176652908325
-        - 0.9215686917304993
+        - 0.69411766529083252
+        - 0.92156869173049927
         - 0.9960784912109375
-      LIGHT_RANGE: 7.800000190734863
+      LIGHT_RANGE: 7.8000001907348633
       LIGHT_NAME: "Light-182"
       LIGHT_COMMENTS: "none"
     OBJECT:
@@ -9792,14 +9792,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 48.51054763793945
+        - 48.510547637939453
         - 169.1373291015625
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6090289950370789
+        - 0.60902899503707886
         - 0.17543761432170868
         - -0.30881381034851074
-        - -0.7091819643974304
+        - -0.70918196439743042
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -9820,14 +9820,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 55.1400260925293
+        - 55.140026092529297
         - 167.41317749023438
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6090289950370789
+        - 0.60902899503707886
         - 0.17543761432170868
         - -0.30881381034851074
-        - -0.7091819643974304
+        - -0.70918196439743042
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -9848,11 +9848,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 57.5167350769043
+        - 57.516735076904297
         - 166.48361206054688
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -9880,7 +9880,7 @@ OBJECTDBFILE:
         - 162.52920532226562
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -9896,12 +9896,12 @@ OBJECTDBFILE:
       LIGHT_ID: 189
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 60.68708419799805
+        - 60.687084197998047
         - 163.34510803222656
         - 5.693079948425293
       LIGHT_COLOR:
-        - 0.6941176652908325
-        - 0.9215686917304993
+        - 0.69411766529083252
+        - 0.92156869173049927
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-189"
@@ -9922,10 +9922,10 @@ OBJECTDBFILE:
         - 154.06924438476562
         - 0.0
       OBJROTATION:
-        - 0.9522411823272705
+        - 0.95224118232727051
         - 0.09400409460067749
-        - -0.07322481274604797
-        - 0.2811422646045685
+        - -0.073224812746047974
+        - 0.28114226460456848
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9950,10 +9950,10 @@ OBJECTDBFILE:
         - 155.35916137695312
         - -0.10000000894069672
       OBJROTATION:
-        - 0.8551576137542725
-        - 0.06265858560800552
+        - 0.85515761375427246
+        - 0.062658585608005524
         - -0.2605120837688446
-        - -0.4437510669231415
+        - -0.44375106692314148
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -9975,13 +9975,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 106.67642211914062
-        - 154.3211212158203
+        - 154.32112121582031
         - -0.44999998807907104
       OBJROTATION:
-        - 0.8878911137580872
+        - 0.88789111375808716
         - -0.044173743575811386
         - -0.1103491336107254
-        - -0.4444359838962555
+        - -0.44443598389625549
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10006,10 +10006,10 @@ OBJECTDBFILE:
         - 154.46963500976562
         - 0.0
       OBJROTATION:
-        - -0.3243970572948456
+        - -0.32439705729484558
         - -0.39671364426612854
-        - 0.08235502988100052
-        - -0.8547544479370117
+        - 0.082355029881000519
+        - -0.85475444793701172
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10023,11 +10023,11 @@ OBJECTDBFILE:
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
         - 105.57340240478516
-        - 153.0253448486328
+        - 153.02534484863281
         - 3.8559000492095947
       LIGHT_COLOR:
-        - 0.6941176652908325
-        - 0.9215686917304993
+        - 0.69411766529083252
+        - 0.92156869173049927
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-196"
@@ -10048,7 +10048,7 @@ OBJECTDBFILE:
         - 153.01976013183594
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -10073,12 +10073,12 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 100.47847747802734
-        - 153.5279083251953
+        - 153.52790832519531
         - -0.10000000149011612
       OBJROTATION:
-        - 0.9654766917228699
-        - 0.1608237326145172
-        - -0.01713549718260765
+        - 0.96547669172286987
+        - 0.16082373261451721
+        - -0.017135497182607651
         - -0.20419694483280182
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -10100,11 +10100,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 99.55182647705078
+        - 99.551826477050781
         - 151.45339965820312
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -10128,14 +10128,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 98.90455627441406
+        - 98.904556274414062
         - 149.91192626953125
         - 0.0
       OBJROTATION:
-        - -0.8911503553390503
+        - -0.89115035533905029
         - -0.11841865628957748
         - 0.13819536566734314
-        - -0.415611207485199
+        - -0.41561120748519897
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10162,8 +10162,8 @@ OBJECTDBFILE:
       OBJROTATION:
         - 0.16299740970134735
         - -0.08413521945476532
-        - -0.08437953889369965
-        - -0.9794058799743652
+        - -0.084379538893699646
+        - -0.97940587997436523
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10184,14 +10184,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 137.0889129638672
+        - 137.08891296386719
         - 123.65013122558594
         - 0.0
       OBJROTATION:
-        - 0.737257719039917
+        - 0.73725771903991699
         - -0.013317392207682133
         - -0.11841148138046265
-        - -0.6650226712226868
+        - -0.66502267122268677
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10216,7 +10216,7 @@ OBJECTDBFILE:
         - 116.85741424560547
         - -0.15000000596046448
       OBJROTATION:
-        - -0.974465548992157
+        - -0.97446554899215698
         - -0.049571238458156586
         - 0.10835746675729752
         - 0.19032002985477448
@@ -10247,7 +10247,7 @@ OBJECTDBFILE:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10272,9 +10272,9 @@ OBJECTDBFILE:
         - 122.4588623046875
         - 0.0
       OBJROTATION:
-        - 0.8857914209365845
-        - -0.09689801931381226
-        - 0.03321045637130737
+        - 0.88579142093658447
+        - -0.096898019313812256
+        - 0.033210456371307373
         - -0.45264047384262085
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -10297,13 +10297,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 135.68775939941406
-        - 123.0011978149414
+        - 123.00119781494141
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6586593985557556
-        - 0.05068255588412285
-        - -0.09358402341604233
-        - -0.7448766231536865
+        - 0.65865939855575562
+        - 0.050682555884122849
+        - -0.093584023416042328
+        - -0.74487662315368652
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -10328,9 +10328,9 @@ OBJECTDBFILE:
         - 120.89269256591797
         - -0.10000000149011612
       OBJROTATION:
-        - 0.9767047166824341
+        - 0.97670471668243408
         - -0.017255110666155815
-        - 0.03471161797642708
+        - 0.034711617976427078
         - -0.21105653047561646
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -10356,7 +10356,7 @@ OBJECTDBFILE:
         - 115.98442077636719
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -10374,10 +10374,10 @@ OBJECTDBFILE:
       LIGHT_POSITION:
         - 135.30258178710938
         - 119.25521087646484
-        - 5.513317584991455
+        - 5.5133175849914551
       LIGHT_COLOR:
-        - 0.6941176652908325
-        - 0.9215686917304993
+        - 0.69411766529083252
+        - 0.92156869173049927
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-189"
@@ -10394,14 +10394,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 137.7476348876953
+        - 137.74763488769531
         - 106.88406372070312
         - -0.15000000596046448
       OBJROTATION:
         - 0.24226918816566467
         - 0.12897345423698425
         - 0.020570598542690277
-        - 0.961379885673523
+        - 0.96137988567352295
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10426,10 +10426,10 @@ OBJECTDBFILE:
         - 101.61333465576172
         - -0.10000000149011612
       OBJROTATION:
-        - -0.09358924627304077
+        - -0.093589246273040771
         - 0.0011804202804341912
         - -0.16172972321510315
-        - -0.9823862314224243
+        - -0.98238623142242432
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -10454,7 +10454,7 @@ OBJECTDBFILE:
         - 102.06830596923828
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -10485,7 +10485,7 @@ OBJECTDBFILE:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10506,11 +10506,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 163.5355682373047
+        - 163.53556823730469
         - 103.00128936767578
         - -0.15000000596046448
       OBJROTATION:
-        - -0.974465548992157
+        - -0.97446554899215698
         - -0.049571238458156586
         - 0.10835746675729752
         - 0.19032002985477448
@@ -10531,7 +10531,7 @@ OBJECTDBFILE:
         - 4.6234517097473145
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-216"
@@ -10549,13 +10549,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 171.3621826171875
-        - 158.7975616455078
+        - 158.79756164550781
         - 0.0
       OBJROTATION:
-        - 0.7360161542892456
-        - -0.06530175358057022
+        - 0.73601615428924561
+        - -0.065301753580570221
         - -0.14290261268615723
-        - -0.6584781408309937
+        - -0.65847814083099365
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -10581,9 +10581,9 @@ OBJECTDBFILE:
         - 0.0
       OBJROTATION:
         - 0.8731226921081543
-        - 0.04885831102728844
-        - -0.07920169085264206
-        - -0.4785385727882385
+        - 0.048858311027288437
+        - -0.079201690852642059
+        - -0.47853857278823853
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10608,10 +10608,10 @@ OBJECTDBFILE:
         - 159.00332641601562
         - 0.0
       OBJROTATION:
-        - -0.9708827137947083
+        - -0.97088271379470825
         - 0.021255353465676308
-        - 0.08341427892446518
-        - 0.2235611379146576
+        - 0.083414278924465179
+        - 0.22356113791465759
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10629,7 +10629,7 @@ OBJECTDBFILE:
         - 8.662139892578125
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-220"
@@ -10646,14 +10646,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 172.4682159423828
+        - 172.46821594238281
         - 159.43963623046875
         - 0.0
       OBJROTATION:
-        - -0.6072250604629517
-        - -0.009526697918772697
-        - -0.06410201638936996
-        - -0.7918848395347595
+        - -0.60722506046295166
+        - -0.0095266979187726974
+        - -0.064102016389369965
+        - -0.79188483953475952
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10679,9 +10679,9 @@ OBJECTDBFILE:
         - 0.0
       OBJROTATION:
         - 0.8731226921081543
-        - 0.04885831102728844
-        - -0.07920169085264206
-        - -0.4785385727882385
+        - 0.048858311027288437
+        - -0.079201690852642059
+        - -0.47853857278823853
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10706,10 +10706,10 @@ OBJECTDBFILE:
         - 149.38015747070312
         - 0.0
       OBJROTATION:
-        - -0.9708827137947083
+        - -0.97088271379470825
         - 0.021255353465676308
-        - 0.08341427892446518
-        - 0.2235611379146576
+        - 0.083414278924465179
+        - 0.22356113791465759
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10727,7 +10727,7 @@ OBJECTDBFILE:
         - 10.158300399780273
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-228"
@@ -10748,10 +10748,10 @@ OBJECTDBFILE:
         - 155.50869750976562
         - 0.0
       OBJROTATION:
-        - 0.7360161542892456
-        - -0.06530175358057022
+        - 0.73601615428924561
+        - -0.065301753580570221
         - -0.14290261268615723
-        - -0.6584781408309937
+        - -0.65847814083099365
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -10776,10 +10776,10 @@ OBJECTDBFILE:
         - 156.1507568359375
         - 0.0
       OBJROTATION:
-        - -0.6072250604629517
-        - -0.009526697918772697
-        - -0.06410201638936996
-        - -0.7918848395347595
+        - -0.60722506046295166
+        - -0.0095266979187726974
+        - -0.064102016389369965
+        - -0.79188483953475952
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10804,10 +10804,10 @@ OBJECTDBFILE:
         - 154.71250915527344
         - 0.0
       OBJROTATION:
-        - 0.8053882122039795
+        - 0.80538821220397949
         - 0.2756345272064209
-        - -0.08052848279476166
-        - 0.518545925617218
+        - -0.080528482794761658
+        - 0.51854592561721802
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -10829,13 +10829,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 136.8017578125
-        - 153.9203643798828
+        - 153.92036437988281
         - 0.0
       OBJROTATION:
-        - -0.6164416670799255
-        - -0.006729317829012871
+        - -0.61644166707992554
+        - -0.0067293178290128708
         - 0.015515937469899654
-        - -0.7872211337089539
+        - -0.78722113370895386
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10856,14 +10856,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 138.4080047607422
-        - 154.0399932861328
+        - 138.40800476074219
+        - 154.03999328613281
         - 0.0
       OBJROTATION:
-        - -0.6145226955413818
+        - -0.61452269554138184
         - -0.23523983359336853
-        - 0.04273151606321335
-        - -0.7517985105514526
+        - 0.042731516063213348
+        - -0.75179851055145264
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10884,7 +10884,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 139.8407745361328
+        - 139.84077453613281
         - 155.39720153808594
         - 0.0
       OBJROTATION:
@@ -10912,14 +10912,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 146.1724395751953
-        - 150.4694366455078
+        - 146.17243957519531
+        - 150.46943664550781
         - 0.0
       OBJROTATION:
-        - -0.6129942536354065
-        - -0.3131539821624756
+        - -0.61299425363540649
+        - -0.31315398216247559
         - 0.022688718512654305
-        - -0.7250245809555054
+        - -0.72502458095550537
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10944,10 +10944,10 @@ OBJECTDBFILE:
         - 114.86571502685547
         - 0.0
       OBJROTATION:
-        - -0.6145226955413818
+        - -0.61452269554138184
         - -0.23523983359336853
-        - 0.04273151606321335
-        - -0.7517985105514526
+        - 0.042731516063213348
+        - -0.75179851055145264
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -10969,13 +10969,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 108.61900329589844
-        - 115.5719985961914
+        - 115.57199859619141
         - 0.0
       OBJROTATION:
-        - 0.05118800699710846
+        - 0.051188006997108459
         - -0.35401788353919983
         - 0.10464821010828018
-        - -0.9279563426971436
+        - -0.92795634269714355
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11003,7 +11003,7 @@ OBJECTDBFILE:
         - 0.32126280665397644
         - -0.13133123517036438
         - 0.15169502794742584
-        - -0.9254915118217468
+        - -0.92549151182174683
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11021,7 +11021,7 @@ OBJECTDBFILE:
         - 3.3332901000976562
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-239"
@@ -11030,12 +11030,12 @@ OBJECTDBFILE:
       LIGHT_ID: 240
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 110.2345199584961
+        - 110.23451995849609
         - 114.35165405273438
-        - 4.23976993560791
+        - 4.2397699356079102
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-240"
@@ -11052,14 +11052,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 72.91695404052734
-        - 42.02898025512695
+        - 72.916954040527344
+        - 42.028980255126953
         - 0.0
       OBJROTATION:
-        - 0.04361940547823906
+        - 0.043619405478239059
         - 0.0
         - 0.0
-        - 0.9990484714508057
+        - 0.99904847145080566
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -11081,10 +11081,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 163.56399536132812
-        - 48.45209884643555
+        - 48.452098846435547
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6737494468688965
+        - 0.67374944686889648
         - 0.12191054224967957
         - -0.10628126561641693
         - -0.7210429310798645
@@ -11115,7 +11115,7 @@ OBJECTDBFILE:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11137,10 +11137,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 162.13150024414062
-        - 48.95195388793945
+        - 48.951953887939453
         - -0.15000000596046448
       OBJROTATION:
-        - -0.974465548992157
+        - -0.97446554899215698
         - -0.049571238458156586
         - 0.10835746675729752
         - 0.19032002985477448
@@ -11165,13 +11165,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 163.20716857910156
-        - 49.98446273803711
+        - 49.984462738037109
         - -0.15000000596046448
       OBJROTATION:
-        - 0.6966833472251892
+        - 0.69668334722518921
         - 0.12156762927770615
-        - -0.04773471876978874
-        - 0.7053919434547424
+        - -0.047734718769788742
+        - 0.70539194345474243
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11193,13 +11193,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 168.92626953125
-        - 55.82795715332031
+        - 55.827957153320312
         - -0.15000000596046448
       OBJROTATION:
         - -0.7555651068687439
         - -0.11566026508808136
         - 0.028659243136644363
-        - -0.6441476941108704
+        - -0.64414769411087036
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11213,11 +11213,11 @@ OBJECTDBFILE:
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
         - 161.48304748535156
-        - 55.63774490356445
-        - 9.456418991088867
+        - 55.637744903564453
+        - 9.4564189910888672
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 16.0
       LIGHT_NAME: "Light-247"
@@ -11238,10 +11238,10 @@ OBJECTDBFILE:
         - 55.473487854003906
         - -0.10000000149011612
       OBJROTATION:
-        - 0.6818515062332153
+        - 0.68185150623321533
         - -0.051683198660612106
-        - -0.04952032119035721
-        - -0.7279791831970215
+        - -0.049520321190357208
+        - -0.72797918319702148
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -11263,11 +11263,11 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 164.84719848632812
-        - 51.58460235595703
-        - 6.549998760223389
+        - 51.584602355957031
+        - 6.5499987602233887
       OBJROTATION:
-        - 0.8062717318534851
-        - 0.09008216112852097
+        - 0.80627173185348511
+        - 0.090082161128520966
         - 0.10475238412618637
         - 0.5751880407333374
       OBJ_USE_IN_SCRIPT: 0
@@ -11290,12 +11290,12 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 167.3112335205078
-        - 54.49418258666992
-        - 6.550000190734863
+        - 167.31123352050781
+        - 54.494182586669922
+        - 6.5500001907348633
       OBJROTATION:
         - 0.33054471015930176
-        - 0.0137074775993824
+        - 0.013707477599382401
         - 0.13747714459896088
         - 0.9336249828338623
       OBJ_USE_IN_SCRIPT: 0
@@ -11319,13 +11319,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 166.02052307128906
-        - 52.89433288574219
-        - 6.550000190734863
+        - 52.894332885742188
+        - 6.5500001907348633
       OBJROTATION:
         - -0.060528531670570374
-        - -0.04109879955649376
+        - -0.041098799556493759
         - 0.13190431892871857
-        - 0.9885606169700623
+        - 0.98856061697006226
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11346,14 +11346,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 164.3976593017578
-        - 50.72398376464844
-        - 6.550000190734863
+        - 164.39765930175781
+        - 50.723983764648438
+        - 6.5500001907348633
       OBJROTATION:
-        - -0.5101557374000549
-        - -0.0973617359995842
-        - 0.09802324324846268
-        - 0.8489151000976562
+        - -0.51015573740005493
+        - -0.097361735999584198
+        - 0.098023243248462677
+        - 0.84891510009765625
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11378,10 +11378,10 @@ OBJECTDBFILE:
         - 102.63558197021484
         - 0.0
       OBJROTATION:
-        - 0.8625099658966064
-        - 0.1290436089038849
-        - 0.04463310167193413
-        - -0.4872726798057556
+        - 0.86250996589660645
+        - 0.12904360890388489
+        - 0.044633101671934128
+        - -0.48727267980575562
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11406,7 +11406,7 @@ OBJECTDBFILE:
         - 100.97240447998047
         - 0.0
       OBJROTATION:
-        - -0.9541916847229004
+        - -0.95419168472290039
         - -0.11275195330381393
         - 0.0037884924095124006
         - 0.27711641788482666
@@ -11430,14 +11430,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 194.1372528076172
+        - 194.13725280761719
         - 101.54434204101562
         - 0.0
       OBJROTATION:
-        - -0.6099790930747986
-        - 0.009305118583142757
-        - -0.06048349663615227
-        - -0.7900531888008118
+        - -0.60997909307479858
+        - 0.0093051185831427574
+        - -0.060483496636152267
+        - -0.79005318880081177
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11462,8 +11462,8 @@ OBJECTDBFILE:
         - 100.90228271484375
         - 0.0
       OBJROTATION:
-        - 0.7338773012161255
-        - -0.08144509792327881
+        - 0.73387730121612549
+        - -0.081445097923278809
         - -0.0755600705742836
         - -0.6701347827911377
       OBJ_USE_IN_SCRIPT: 0
@@ -11490,10 +11490,10 @@ OBJECTDBFILE:
         - 103.86087799072266
         - 0.0
       OBJROTATION:
-        - -0.9521187543869019
-        - 0.02210323140025139
-        - -0.05325841158628464
-        - 0.3002456724643707
+        - -0.95211875438690186
+        - 0.022103231400251389
+        - -0.053258411586284637
+        - 0.30024567246437073
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11514,14 +11514,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 194.6504669189453
+        - 194.65046691894531
         - 104.97187805175781
         - 0.0
       OBJROTATION:
-        - 0.5085383057594299
+        - 0.50853830575942993
         - 0.23810605704784393
         - -0.13012295961380005
-        - 0.8171688914299011
+        - 0.81716889142990112
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11546,10 +11546,10 @@ OBJECTDBFILE:
         - 101.69249725341797
         - 0.0
       OBJROTATION:
-        - 0.5085383057594299
+        - 0.50853830575942993
         - 0.23810605704784393
         - -0.13012295961380005
-        - 0.8171688914299011
+        - 0.81716889142990112
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11574,10 +11574,10 @@ OBJECTDBFILE:
         - 105.11076354980469
         - 0.0
       OBJROTATION:
-        - 0.7132680416107178
+        - 0.71326804161071777
         - -0.020159218460321426
-        - 0.0657641664147377
-        - -0.6975072026252747
+        - 0.065764166414737701
+        - -0.69750720262527466
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -11598,11 +11598,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 193.8347625732422
+        - 193.83476257324219
         - 102.69709777832031
         - 0.0
       OBJROTATION:
-        - 0.9804627895355225
+        - 0.98046278953552246
         - -0.027152638882398605
         - -0.10772817581892014
         - -0.16232407093048096
@@ -11618,12 +11618,12 @@ OBJECTDBFILE:
       LIGHT_ID: 264
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 195.2397918701172
-        - 101.8554458618164
-        - 3.258769989013672
+        - 195.23979187011719
+        - 101.85544586181641
+        - 3.2587699890136719
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-264"
@@ -11644,10 +11644,10 @@ OBJECTDBFILE:
         - 117.68948364257812
         - 0.0
       OBJROTATION:
-        - 0.8625099658966064
-        - 0.1290436089038849
-        - 0.04463310167193413
-        - -0.4872726798057556
+        - 0.86250996589660645
+        - 0.12904360890388489
+        - 0.044633101671934128
+        - -0.48727267980575562
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11672,10 +11672,10 @@ OBJECTDBFILE:
         - 116.59823608398438
         - 0.0
       OBJROTATION:
-        - -0.6099790930747986
-        - 0.009305118583142757
-        - -0.06048349663615227
-        - -0.7900531888008118
+        - -0.60997909307479858
+        - 0.0093051185831427574
+        - -0.060483496636152267
+        - -0.79005318880081177
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11700,8 +11700,8 @@ OBJECTDBFILE:
         - 115.9561767578125
         - 0.0
       OBJROTATION:
-        - 0.7338773012161255
-        - -0.08144509792327881
+        - 0.73387730121612549
+        - -0.081445097923278809
         - -0.0755600705742836
         - -0.6701347827911377
       OBJ_USE_IN_SCRIPT: 0
@@ -11724,14 +11724,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 225.7429962158203
+        - 225.74299621582031
         - 118.99750518798828
         - 0.0
       OBJROTATION:
-        - -0.9521187543869019
-        - 0.02210323140025139
-        - -0.05325841158628464
-        - 0.3002456724643707
+        - -0.95211875438690186
+        - 0.022103231400251389
+        - -0.053258411586284637
+        - 0.30024567246437073
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11756,10 +11756,10 @@ OBJECTDBFILE:
         - 115.99337005615234
         - 0.0
       OBJROTATION:
-        - 0.668172299861908
-        - -0.1287929266691208
+        - 0.66817229986190796
+        - -0.12879292666912079
         - 0.2318369597196579
-        - 0.6951354146003723
+        - 0.69513541460037231
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11784,10 +11784,10 @@ OBJECTDBFILE:
         - 116.74639892578125
         - 0.0
       OBJROTATION:
-        - 0.5085383057594299
+        - 0.50853830575942993
         - 0.23810605704784393
         - -0.13012295961380005
-        - 0.8171688914299011
+        - 0.81716889142990112
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11812,7 +11812,7 @@ OBJECTDBFILE:
         - 117.75099182128906
         - 0.0
       OBJROTATION:
-        - 0.9804627895355225
+        - 0.98046278953552246
         - -0.027152638882398605
         - -0.10772817581892014
         - -0.16232407093048096
@@ -11836,11 +11836,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 220.8012237548828
+        - 220.80122375488281
         - 114.34184265136719
         - 0.0
       OBJROTATION:
-        - -0.9541916847229004
+        - -0.95419168472290039
         - -0.11275195330381393
         - 0.0037884924095124006
         - 0.27711641788482666
@@ -11868,10 +11868,10 @@ OBJECTDBFILE:
         - 117.87901306152344
         - 0.0
       OBJROTATION:
-        - 0.7132680416107178
+        - 0.71326804161071777
         - -0.020159218460321426
-        - 0.0657641664147377
-        - -0.6975072026252747
+        - 0.065764166414737701
+        - -0.69750720262527466
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -11892,11 +11892,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 224.6898651123047
+        - 224.68986511230469
         - 114.56095886230469
         - 0.0
       OBJROTATION:
-        - -0.9143527746200562
+        - -0.91435277462005615
         - 0.17065772414207458
         - 0.3185972273349762
         - 0.18257522583007812
@@ -11924,10 +11924,10 @@ OBJECTDBFILE:
         - 116.26456451416016
         - 0.0
       OBJROTATION:
-        - 0.6448324918746948
-        - 0.02002481371164322
-        - 0.2316233515739441
-        - 0.7281097769737244
+        - 0.64483249187469482
+        - 0.020024813711643219
+        - 0.23162335157394409
+        - 0.72810977697372437
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11945,7 +11945,7 @@ OBJECTDBFILE:
         - 3.179069995880127
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-276"
@@ -11969,7 +11969,7 @@ OBJECTDBFILE:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -11991,13 +11991,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 168.48521423339844
-        - 45.1938591003418
+        - 45.193859100341797
         - -0.15000000596046448
       OBJROTATION:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12022,9 +12022,9 @@ OBJECTDBFILE:
         - 52.161231994628906
         - -0.15000000596046448
       OBJROTATION:
-        - 0.2121504247188568
+        - 0.21215042471885681
         - -0.10624420642852783
-        - -0.07595700025558472
+        - -0.075957000255584717
         - -0.9684719443321228
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -12053,7 +12053,7 @@ OBJECTDBFILE:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12075,11 +12075,11 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 180.28700256347656
-        - 49.15119934082031
+        - 49.151199340820312
         - 0.0
       OBJROTATION:
         - 0.44765231013298035
-        - 0.03507843613624573
+        - 0.035078436136245728
         - 0.06232796236872673
         - 0.8913419246673584
       OBJ_USE_IN_SCRIPT: 0
@@ -12094,12 +12094,12 @@ OBJECTDBFILE:
       LIGHT_ID: 282
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 177.7050018310547
+        - 177.70500183105469
         - 45.782798767089844
         - 3.3332901000976562
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-282"
@@ -12110,7 +12110,7 @@ OBJECTDBFILE:
       LIGHT_POSITION:
         - 48.064701080322266
         - 44.55670166015625
-        - 4.934309959411621
+        - 4.9343099594116211
       LIGHT_COLOR:
         - 1.0
         - 0.0
@@ -12122,13 +12122,13 @@ OBJECTDBFILE:
       LIGHT_ID: 285
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 66.8488998413086
-        - 77.40070343017578
-        - 8.547989845275879
+        - 66.848899841308594
+        - 77.400703430175781
+        - 8.5479898452758789
       LIGHT_COLOR:
         - 1.0
-        - 0.501960813999176
-        - 0.501960813999176
+        - 0.50196081399917603
+        - 0.50196081399917603
       LIGHT_RANGE: 16.0
       LIGHT_NAME: "Light-285"
       LIGHT_COMMENTS: "none"
@@ -12136,13 +12136,13 @@ OBJECTDBFILE:
       LIGHT_ID: 287
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 80.91449737548828
-        - 66.08319854736328
+        - 80.914497375488281
+        - 66.083198547363281
         - 4.3549299240112305
       LIGHT_COLOR:
         - 1.0
-        - 0.501960813999176
-        - 0.501960813999176
+        - 0.50196081399917603
+        - 0.50196081399917603
       LIGHT_RANGE: 16.0
       LIGHT_NAME: "Light-287"
       LIGHT_COMMENTS: "none"
@@ -12150,9 +12150,9 @@ OBJECTDBFILE:
       LIGHT_ID: 288
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 91.52457427978516
-        - 89.25121307373047
-        - 2.200000047683716
+        - 91.524574279785156
+        - 89.251213073730469
+        - 2.2000000476837158
       LIGHT_COLOR:
         - 1.0
         - 0.0
@@ -12166,7 +12166,7 @@ OBJECTDBFILE:
       LIGHT_POSITION:
         - 92.4736328125
         - 108.31609344482422
-        - 4.438930034637451
+        - 4.4389300346374512
       LIGHT_COLOR:
         - 1.0
         - 0.0
@@ -12178,13 +12178,13 @@ OBJECTDBFILE:
       LIGHT_ID: 292
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 85.87979888916016
+        - 85.879798889160156
         - 131.68800354003906
         - 3.9839699268341064
       LIGHT_COLOR:
         - 1.0
-        - 0.501960813999176
-        - 0.501960813999176
+        - 0.50196081399917603
+        - 0.50196081399917603
       LIGHT_RANGE: 16.0
       LIGHT_NAME: "Light-292"
       LIGHT_COMMENTS: "none"
@@ -12192,7 +12192,7 @@ OBJECTDBFILE:
       LIGHT_ID: 294
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 68.63760375976562
+        - 68.637603759765625
         - 140.46800231933594
         - 2.0
       LIGHT_COLOR:
@@ -12206,7 +12206,7 @@ OBJECTDBFILE:
       LIGHT_ID: 295
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 44.14811706542969
+        - 44.148117065429688
         - 154.30287170410156
         - 2.9167494773864746
       LIGHT_COLOR:
@@ -12229,11 +12229,11 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 160.48074340820312
-        - 64.02021789550781
+        - 64.020217895507812
         - -0.10000000149011612
       OBJROTATION:
-        - 0.7189475297927856
-        - -0.0457780547440052
+        - 0.71894752979278564
+        - -0.045778054744005203
         - 0.10962080210447311
         - -0.6848369836807251
       OBJ_USE_IN_SCRIPT: 0
@@ -12256,8 +12256,8 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 161.8660430908203
-        - 66.12117004394531
+        - 161.86604309082031
+        - 66.121170043945312
         - -0.15000000596046448
       OBJROTATION:
         - -0.9690900444984436
@@ -12285,12 +12285,12 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 161.08895874023438
-        - 65.7231216430664
+        - 65.723121643066406
         - -0.15000000596046448
       OBJROTATION:
-        - -0.9591310620307922
+        - -0.95913106203079224
         - -0.08255351334810257
-        - 0.09252431988716125
+        - 0.092524319887161255
         - 0.2543526291847229
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
@@ -12313,13 +12313,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 159.67608642578125
-        - 65.18486022949219
+        - 65.184860229492188
         - -0.15000000596046448
       OBJROTATION:
-        - 0.8691038489341736
+        - 0.86910384893417358
         - -0.13080988824367523
-        - 0.03187692165374756
-        - -0.475955992937088
+        - 0.031876921653747559
+        - -0.47595599293708801
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12333,13 +12333,13 @@ OBJECTDBFILE:
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
         - 161.25941467285156
-        - 64.94799041748047
+        - 64.947990417480469
         - 3.361530065536499
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
-      LIGHT_RANGE: 6.300000190734863
+      LIGHT_RANGE: 6.3000001907348633
       LIGHT_NAME: "Light-300"
       LIGHT_COMMENTS: "none"
     OBJECT:
@@ -12354,14 +12354,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 213.1813201904297
+        - 213.18132019042969
         - 156.81964111328125
         - -0.15000000596046448
       OBJROTATION:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12383,13 +12383,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 213.78529357910156
-        - 155.8189239501953
+        - 155.81892395019531
         - 0.0
       OBJROTATION:
-        - 0.7132680416107178
+        - 0.71326804161071777
         - -0.020159218460321426
-        - 0.0657641664147377
-        - -0.6975072026252747
+        - 0.065764166414737701
+        - -0.69750720262527466
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 289
@@ -12414,7 +12414,7 @@ OBJECTDBFILE:
         - 158.57579040527344
         - 0.0
       OBJROTATION:
-        - 0.9804627895355225
+        - 0.98046278953552246
         - -0.027152638882398605
         - -0.10772817581892014
         - -0.16232407093048096
@@ -12439,10 +12439,10 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 212.68927001953125
-        - 154.1062469482422
+        - 154.10624694824219
         - 0.0
       OBJROTATION:
-        - 0.9804627895355225
+        - 0.98046278953552246
         - -0.027152638882398605
         - -0.10772817581892014
         - -0.16232407093048096
@@ -12467,13 +12467,13 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 212.00399780273438
-        - 159.4720001220703
+        - 159.47200012207031
         - 0.0
       OBJROTATION:
         - 0.16289076209068298
-        - -0.08607692271471024
+        - -0.086076922714710236
         - 0.10599591583013535
-        - 0.9771513342857361
+        - 0.97715133428573608
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12487,11 +12487,11 @@ OBJECTDBFILE:
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
         - 209.20391845703125
-        - 155.0264129638672
+        - 155.02641296386719
         - 10.309700012207031
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-307"
@@ -12512,7 +12512,7 @@ OBJECTDBFILE:
         - 144.32557678222656
         - 0.0
       OBJROTATION:
-        - 0.9804627895355225
+        - 0.98046278953552246
         - -0.027152638882398605
         - -0.10772817581892014
         - -0.16232407093048096
@@ -12540,7 +12540,7 @@ OBJECTDBFILE:
         - 139.97450256347656
         - 0.0
       OBJROTATION:
-        - 0.9804627895355225
+        - 0.98046278953552246
         - -0.027152638882398605
         - -0.10772817581892014
         - -0.16232407093048096
@@ -12571,7 +12571,7 @@ OBJECTDBFILE:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12592,14 +12592,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 202.9986114501953
+        - 202.99861145019531
         - 138.91729736328125
         - -0.15000000596046448
       OBJROTATION:
         - 0.8659176230430603
         - -0.013511091470718384
         - -0.12990280985832214
-        - -0.4828374683856964
+        - -0.48283746838569641
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12624,10 +12624,10 @@ OBJECTDBFILE:
         - 138.54542541503906
         - 0.0
       OBJROTATION:
-        - 0.5085383057594299
+        - 0.50853830575942993
         - 0.23810605704784393
         - -0.13012295961380005
-        - 0.8171688914299011
+        - 0.81716889142990112
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12648,14 +12648,14 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 213.1280059814453
+        - 213.12800598144531
         - 145.38299560546875
         - 0.0
       OBJROTATION:
-        - 0.5085383057594299
+        - 0.50853830575942993
         - 0.23810605704784393
         - -0.13012295961380005
-        - 0.8171688914299011
+        - 0.81716889142990112
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 288
@@ -12668,12 +12668,12 @@ OBJECTDBFILE:
       LIGHT_ID: 315
       LIGHT_SHADOW: 1
       LIGHT_POSITION:
-        - 206.0279998779297
+        - 206.02799987792969
         - 141.39300537109375
-        - 9.68766975402832
+        - 9.6876697540283203
       LIGHT_COLOR:
         - 0.7725490927696228
-        - 0.9450981020927429
+        - 0.94509810209274292
         - 0.9960784912109375
       LIGHT_RANGE: 10.0
       LIGHT_NAME: "Light-315"
@@ -12780,7 +12780,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 170.33241271972656
-              - 124.3974380493164
+              - 124.39743804931641
               - 1.333293080329895
             ACTION_PT_WAIT_SEG: 3600
             ACTION_PT_TURN_SPEED: 0
@@ -13242,7 +13242,7 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 85.65139770507812
+        - 85.651397705078125
         - 89.506103515625
         - 0.0
       OBJROTATION:
@@ -13268,7 +13268,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 85.65139770507812
+          - 85.651397705078125
           - 89.506103515625
           - 0.0
         UNIT_LOGIC_USE: 1
@@ -13283,7 +13283,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 85.65139770507812
+          - 85.651397705078125
           - 89.506103515625
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -13298,7 +13298,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 85.65139770507812
+          - 85.651397705078125
           - 89.506103515625
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -13313,7 +13313,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 85.65139770507812
+          - 85.651397705078125
           - 89.506103515625
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -13328,7 +13328,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_GUARD_R: 10.0
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
-          - 85.65139770507812
+          - 85.651397705078125
           - 89.506103515625
           - 0.0
         UNIT_LOGIC_USE: 0
@@ -13397,7 +13397,7 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 79.30999755859375
-        - 84.55580139160156
+        - 84.555801391601562
         - 0.0
       OBJROTATION:
         - 1.0
@@ -13423,7 +13423,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 79.30999755859375
-          - 84.55580139160156
+          - 84.555801391601562
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -13438,7 +13438,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 79.30999755859375
-          - 84.55580139160156
+          - 84.555801391601562
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -13453,7 +13453,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 79.30999755859375
-          - 84.55580139160156
+          - 84.555801391601562
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -13468,7 +13468,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 79.30999755859375
-          - 84.55580139160156
+          - 84.555801391601562
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -13483,7 +13483,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 79.30999755859375
-          - 84.55580139160156
+          - 84.555801391601562
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -13500,20 +13500,20 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 55.347599029541016
-        - 57.18550109863281
+        - 57.185501098632812
         - 0.0
       OBJROTATION:
-        - 0.8480481505393982
+        - 0.84804815053939819
         - 0.0
         - 0.0
-        - 0.5299192667007446
+        - 0.52991926670074463
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 139
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
         - -0.08999999612569809
-        - 0.5999999642372131
+        - 0.59999996423721313
         - 0.5
     OBJECT:
       OBJBODYPARTS: None
@@ -13527,11 +13527,11 @@ OBJECTDBFILE:
       OBJSECTXTR: "default0"
       OBJCOMMENTS: "none"
       OBJPOSITION:
-        - 56.68763732910156
-        - 60.43745422363281
+        - 56.687637329101562
+        - 60.437454223632812
         - 0.0
       OBJROTATION:
-        - 0.8870105147361755
+        - 0.88701051473617554
         - 0.0
         - 0.0
         - 0.46174854040145874
@@ -13541,7 +13541,7 @@ OBJECTDBFILE:
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
         - -0.14999999105930328
-        - 0.5999999642372131
+        - 0.59999996423721313
         - 0.5
     OBJECT:
       OBJBODYPARTS: None
@@ -13557,18 +13557,18 @@ OBJECTDBFILE:
       OBJPOSITION:
         - 54.863319396972656
         - 59.057518005371094
-        - 2.000000238418579
+        - 2.0000002384185791
       OBJROTATION:
-        - 0.9723321199417114
+        - 0.97233211994171143
         - -0.010182766243815422
-        - -0.008485395461320877
+        - -0.0084853954613208771
         - -0.23322290182113647
       OBJ_USE_IN_SCRIPT: 0
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 12256
       OBJ_QUEST_INFO: ""
       OBJCOMPLECTION:
-        - 0.5099999904632568
+        - 0.50999999046325684
         - 0.5
         - 0.17000000178813934
     OBJECT:
@@ -13596,6 +13596,7 @@ OBJECTDBFILE:
       OBJ_PARENT_ID: 139
       OBJ_QUEST_INFO: "q36a"
       OBJCOMPLECTION:
-        - -0.1899999976158142
-        - -0.1899999976158142
-        - -0.1899999976158142
+        - -0.18999999761581421
+        - -0.18999999761581421
+        - -0.18999999761581421
+AIGRAPH: "NOT_NOW"

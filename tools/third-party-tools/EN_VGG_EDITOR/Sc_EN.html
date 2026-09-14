@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html><head>
+  <title>MOB Scripts Editor - User Guide</title>
+  <style>
+    body { background: #1a1a2e; color: #d0d0e0; font-family: "Segoe UI", sans-serif; padding: 20px; line-height: 1.6; }
+    h1 { color: #00ffd5; text-align: center; font-size: 28px; text-shadow: 0 0 10px #00ffd5; }
+    h2 { color: #80d0ff; border-bottom: 1px solid #333; padding-bottom: 5px; margin-top: 30px; }
+    h3 { color: #b080ff; margin-top: 20px; }
+    table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+    th { background: #16213e; color: #80d0ff; text-align: left; padding: 8px; border: 1px solid #333; }
+    td { padding: 8px; border: 1px solid #2a2a4a; }
+    .key { color: #ffcc66; font-family: Consolas, monospace; background: #222; padding: 2px 6px; border-radius: 3px; }
+    .feature { color: #44ff88; }
+    .note { background: #2a1a3e; border-left: 3px solid #b080ff; padding: 10px; margin: 10px 0; }
+    .warn { background: #3e2a1a; border-left: 3px solid #ff8844; padding: 10px; margin: 10px 0; }
+    .tip { background: #1a3e2a; border-left: 3px solid #44ff88; padding: 10px; margin: 10px 0; }
+    code { background: #222; color: #0f0; padding: 2px 6px; border-radius: 3px; }
+    .section-icon { font-size: 20px; margin-right: 8px; }
+  </style>
+</head>
+<body>
+
+<h1>📘 MOB Scripts Editor - User Guide</h1>
+<p style="text-align:center;">Complete guide to the script editor features for Evil Islands</p>
+
+<!-- ==================== MAIN FEATURES ==================== -->
+<h2><span class="section-icon">📂</span>File Operations</h2>
+
+<h3>Opening and Saving</h3>
+<table>
+<tr><th>Action</th><th>Description</th></tr>
+<tr><td class="feature">Open File</td><td>Supports <code>*.mob</code> (binary MOB files), <code>*.txt</code> (text files) and any other formats. When opening a MOB file, all objects, units, levers, traps, etc. are automatically parsed.</td></tr>
+<tr><td class="feature">Save</td><td>Saves the file in its original format. For MOB files, recalculates all chunk sizes and logic before writing.</td></tr>
+<tr><td class="feature">Save As</td><td>Saves the file under a new name.</td></tr>
+<tr><td class="feature">Save Copy</td><td>Creates a copy of the current file to a specified location (via selection dialog).</td></tr>
+<tr><td class="feature">Drag & Drop</td><td>Drag files directly into the editor window.</td></tr>
+<tr><td class="feature">Command Line Launch</td><td>If a file path is passed as an argument at launch, the editor will automatically open it.</td></tr>
+</table>
+
+<h3>Backup System</h3>
+<table>
+<tr><th>Feature</th><th>Description</th></tr>
+<tr><td class="feature">Backup on Save</td><td>Creates a file with <code>.bak</code> extension in the same folder on every save.</td></tr>
+<tr><td class="feature">Auto-backups</td><td>Automatic backup creation at a configurable interval (default 5 minutes, can be configured, enabled or disabled).</td></tr>
+<tr><td class="feature">Backup Rotation</td><td>Stores up to 10 backups with numbers (<code>.bak1</code>, <code>.bak2</code>, ... <code>.bak10</code>). Old ones are automatically deleted.</td></tr>
+<tr><td class="feature">Interval Configuration</td><td>The autosave interval can be changed via the Settings menu (from 1 minute to 24 hours).</td></tr>
+</table>
+
+<div class="tip">
+  <strong>Tip:</strong> All backup settings are saved in the Windows registry (<code>HKEY_CURRENT_USER\Software\EIScriptEditor</code>) and restored on the next launch.
+</div>
+
+<!-- ==================== EDITING ==================== -->
+<h2><span class="section-icon">✏️</span>Text Editing</h2>
+
+<h3>Basic Operations</h3>
+<table>
+<tr><th>Hotkey</th><th>Action</th></tr>
+<tr><td class="key">Ctrl+Z</td><td>Undo the last action</td></tr>
+<tr><td class="key">Ctrl+Y</td><td>Redo the undone action</td></tr>
+<tr><td class="key">Ctrl+C</td><td>Copy selected text</td></tr>
+<tr><td class="key">Ctrl+X</td><td>Cut selected text</td></tr>
+<tr><td class="key">Ctrl+V</td><td>Paste text from clipboard</td></tr>
+<tr><td class="key">Ctrl+A</td><td>Select all text</td></tr>
+</table>
+
+<h3>Text Selection</h3>
+<table>
+<tr><th>Method</th><th>Description</th></tr>
+<tr><td class="feature">Mouse</td><td>Hold the left button and drag. When going beyond screen boundaries, it automatically scrolls.</td></tr>
+<tr><td class="feature">Shift + Click</td><td>Select from the current caret position to the click location.</td></tr>
+<tr><td class="feature">Shift + Arrows</td><td>Keyboard selection by characters/lines.</td></tr>
+<tr><td class="feature">Double Click</td><td>Select the word under the cursor.</td></tr>
+<tr><td class="feature">Home / End</td><td>Go to the beginning/end of the line (with Shift — select).</td></tr>
+</table>
+
+<h3>Auto-indent</h3>
+<p>When pressing <span class="key">Enter</span>, the editor automatically carries over the indent from the previous line. The feature can be enabled/disabled via the menu.</p>
+
+<!-- ==================== NAVIGATION ==================== -->
+<h2><span class="section-icon">🧭</span>Navigation</h2>
+
+<h3>Sidebar</h3>
+<p>On the left, there is a panel with two modes:</p>
+<table>
+<tr><th>Mode</th><th>Description</th></tr>
+<tr><td class="feature">Lines (Line Numbers)</td><td>Shows line numbers. You can drag the right border to change the width.</td></tr>
+<tr><td class="feature">Funcs (Function List)</td><td>Shows all functions declared via <code>DeclareScript</code> in the current file. Clicking a function moves the caret to its declaration.</td></tr>
+</table>
+
+<div class="tip">
+  <strong>Tip:</strong> The sidebar width can be changed by dragging the right border with the mouse. The setting is remembered.
+</div>
+
+<h3>Find and Replace</h3>
+<table>
+<tr><th>Hotkey</th><th>Action</th></tr>
+<tr><td class="key">Ctrl+F</td><td>Open the find/replace dialog</td></tr>
+<tr><td class="key">Ctrl+R</td><td>Replace the next occurrence</td></tr>
+<tr><td class="key">F3</td><td>Find the next occurrence</td></tr>
+</table>
+
+<p>The search dialog supports:</p>
+<ul>
+  <li>Forward and backward search</li>
+  <li>Case sensitivity (optional)</li>
+  <li>Text replacement mode</li>
+  <li>Navigation through results using <span class="key">Enter</span> and <span class="key">Esc</span></li>
+</ul>
+
+<!-- ==================== SYNTAX HIGHLIGHTING ==================== -->
+<h2><span class="section-icon">🎨</span>Syntax Highlighting</h2>
+
+<p>The editor supports full color scheme customization via the <code>syntax.ini</code> file (in the <code>EN\</code> folder).</p>
+
+<h3>Customizable Categories</h3>
+<table>
+<tr><th>Category</th><th>Description</th></tr>
+<tr><td class="feature">Keywords</td><td>Language keywords (if, else, while, return, etc.)</td></tr>
+<tr><td class="feature">Types</td><td>Data types (float, string, object, group)</td></tr>
+<tr><td class="feature">Functions</td><td>Function names (KillUnit, GetObject, etc.)</td></tr>
+<tr><td class="feature">Identifiers</td><td>Identifiers (variables, script names)</td></tr>
+<tr><td class="feature">Numbers</td><td>Numeric constants</td></tr>
+<tr><td class="feature">Strings</td><td>String constants in quotes</td></tr>
+<tr><td class="feature">Comments</td><td>Comments //</td></tr>
+<tr><td class="feature">Operators</td><td>Operators (+, -, *, /, =, brackets, etc.)</td></tr>
+</table>
+
+<p>For each category, you can configure:</p>
+<ul>
+  <li>Main text color</li>
+  <li>Color when selected</li>
+  <li>Background color</li>
+  <li>Background color when selected</li>
+</ul>
+
+<!-- ==================== AUTOCOMPLETE ==================== -->
+<h2><span class="section-icon">⚡</span>Autocomplete</h2>
+
+<p>When typing a function name, a dropdown list with matching options automatically appears.</p>
+
+<table>
+<tr><th>Key</th><th>Action</th></tr>
+<tr><td class="key">↑ / ↓</td><td>Navigate through the list</td></tr>
+<tr><td class="key">Enter / Tab</td><td>Insert the selected function</td></tr>
+<tr><td class="key">Escape</td><td>Close the list without inserting</td></tr>
+</table>
+
+<div class="note">
+  <strong>How it works:</strong> The list is filtered as you type. For example, when typing <code>Kill</code>, all functions starting with "Kill" will be shown (KillUnit, KillScript, etc.).
+</div>
+
+<!-- ==================== PARAMETER HINTS ==================== -->
+<h2><span class="section-icon">💡</span>Parameter Hints</h2>
+
+<p>When typing an opening bracket <code>(</code> after a function name, a hint with the function signature appears:</p>
+
+<ul>
+  <li>Function name</li>
+  <li>List of parameters with types</li>
+  <li>Function description (if enabled)</li>
+</ul>
+
+<p>Function descriptions are loaded from the <code>scripts.htm</code> file (in the <code>EN\</code> folder). Displaying descriptions can be enabled/disabled via the menu.</p>
+
+<!-- ==================== TOOL WINDOWS ==================== -->
+<h2><span class="section-icon">🛠️</span>Tool Windows</h2>
+
+<h3>Object Editor</h3>
+<p>A powerful editor for working with MOB files. Allows editing all types of objects:</p>
+<ul>
+  <li><strong>Objects</strong> — static objects (buildings, rocks, trees)</li>
+  <li><strong>Units</strong> — units (characters, enemies, NPCs)</li>
+  <li><strong>Levers</strong> — levers and doors</li>
+  <li><strong>Traps</strong> — traps</li>
+  <li><strong>Torches</strong> — torches</li>
+  <li><strong>Lights</strong> — light sources</li>
+  <li><strong>Sounds</strong> — sound sources</li>
+  <li><strong>Particles</strong> — particle sources</li>
+</ul>
+
+<p>Object Editor capabilities:</p>
+<table>
+<tr><th>Feature</th><th>Description</th></tr>
+<tr><td class="feature">Field Editing</td><td>All object fields are available for editing (ID, Name, Position, Rotation, etc.)</td></tr>
+<tr><td class="feature">Unit Logic</td><td>5 logic slots for each unit with AI behavior configuration</td></tr>
+<tr><td class="feature">Guard Points</td><td>Patrol and guard points with actions</td></tr>
+<tr><td class="feature">Sorting</td><td>Sort objects by ID, Name, Type, Player or Position</td></tr>
+<tr><td class="feature">Auto-apply</td><td>Automatic saving of changes when switching between objects</td></tr>
+<tr><td class="feature">List Resize</td><td>The object list width can be changed by dragging</td></tr>
+<tr><td class="feature">Toast Notifications</td><td>Pop-up save notifications</td></tr>
+</table>
+
+<h3>Helper Editor</h3>
+<p>An additional window with tabs for working with various aspects of the MOB file.</p>
+
+<h3>Ranges Window</h3>
+<p>Range editor for MOB files.</p>
+
+<h3>Diplomacy Window</h3>
+<p>A 32×32 diplomacy table for configuring relationships between groups:</p>
+<ul>
+  <li>Left click — toggle state (ally/neutral/enemy)</li>
+  <li>Right click — select cell</li>
+  <li>Alt + click — symmetrically change the reverse cell</li>
+</ul>
+
+<!-- ==================== SETTINGS ==================== -->
+<h2><span class="section-icon">⚙️</span>Settings</h2>
+
+<p>All settings are available via the <strong>Settings</strong> menu and saved in the Windows registry:</p>
+
+<table>
+<tr><th>Setting</th><th>Description</th></tr>
+<tr><td class="feature">Auto-backup interval</td><td>Interval for automatic backup creation (from 1 minute to 24 hours)</td></tr>
+<tr><td class="feature">Scroll speed</td><td>Speed of automatic scrolling when selecting beyond screen boundaries (in milliseconds)</td></tr>
+<tr><td class="feature">File Association</td><td>Associate <code>.mob</code> files with this editor, MobSurgeon, or no association</td></tr>
+<tr><td class="feature">Follow Caret</td><td>Automatic scrolling to follow the caret</td></tr>
+<tr><td class="feature">Auto Indent</td><td>Automatic indent carry-over when pressing Enter</td></tr>
+<tr><td class="feature">Show Descriptions</td><td>Display function descriptions in hints</td></tr>
+</table>
+
+<div class="note">
+  <strong>File Association:</strong> When selecting "Associate with this editor", the editor is registered in the registry as the handler for <code>.mob</code> files. When selecting "Associate with MobSurgeon", the association with MobSurgeon is restored (if it was previously installed).
+</div>
+
+<!-- ==================== HOTKEYS ==================== -->
+<h2><span class="section-icon">⌨️</span>Complete Hotkey List</h2>
+
+<table>
+<tr><th>Key</th><th>Action</th></tr>
+<tr><td class="key">Ctrl+N</td><td>New file</td></tr>
+<tr><td class="key">Ctrl+O</td><td>Open file</td></tr>
+<tr><td class="key">Ctrl+S</td><td>Save file</td></tr>
+<tr><td class="key">F5</td><td>Save / Apply changes (in Object Editor)</td></tr>
+<tr><td class="key">Ctrl+Z</td><td>Undo</td></tr>
+<tr><td class="key">Ctrl+Y</td><td>Redo</td></tr>
+<tr><td class="key">Ctrl+C</td><td>Copy</td></tr>
+<tr><td class="key">Ctrl+X</td><td>Cut</td></tr>
+<tr><td class="key">Ctrl+V</td><td>Paste</td></tr>
+<tr><td class="key">Ctrl+A</td><td>Select all</td></tr>
+<tr><td class="key">Ctrl+F</td><td>Find</td></tr>
+<tr><td class="key">Ctrl+R</td><td>Replace</td></tr>
+<tr><td class="key">Ctrl+K</td><td>Add bookmark</td></tr>
+<tr><td class="key">F2</td><td>Next bookmark</td></tr>
+<tr><td class="key">Shift+F2</td><td>Previous bookmark</td></tr>
+<tr><td class="key">F3</td><td>Find next</td></tr>
+<tr><td class="key">Enter</td><td>New line / Insert from autocomplete</td></tr>
+<tr><td class="key">Tab</td><td>Insert from autocomplete</td></tr>
+<tr><td class="key">Escape</td><td>Close window / Cancel autocomplete</td></tr>
+<tr><td class="key">Home</td><td>To the beginning of the line</td></tr>
+<tr><td class="key">End</td><td>To the end of the line</td></tr>
+<tr><td class="key">Shift + Arrows</td><td>Text selection</td></tr>
+</table>
+
+<!-- ==================== INTERFACE FEATURES ==================== -->
+<h2><span class="section-icon">✨</span>Interface Features</h2>
+
+<ul>
+  <li><strong>Dark theme</strong> — comfortable for the eyes during long work sessions</li>
+  <li><strong>Customizable panel width</strong> — drag borders with the mouse</li>
+  <li><strong>Toast notifications</strong> — unobtrusive pop-up messages</li>
+  <li><strong>High DPI support</strong> — correct display on high-resolution monitors</li>
+</ul>
+
+<!-- ==================== LAUNCH AND INSTALLATION ==================== -->
+<h2><span class="section-icon">🚀</span>Launch and Usage</h2>
+
+<h3>Normal Launch</h3>
+<p>Simply run <code>EIScriptEditor.exe</code> with a double click.</p>
+
+<h3>Launch with File</h3>
+<p>Pass the file path as an argument:</p>
+<pre style="background:#111; padding:10px; border-radius:5px;">
+EIScriptEditor.exe "C:\Games\EI\Maps\mymap.mob"
+</pre>
+
+<h3>Drag & Drop</h3>
+<p>Drag the file directly into the editor window.</p>
+
+<h3>File Association</h3>
+<p>After configuring the association via the Settings menu, double-clicking any <code>.mob</code> file will automatically open it in the editor.</p>
+
+<div class="warn">
+  <strong>Important:</strong> Changing file association may require running the editor as administrator.
+</div>
+
+<!-- ==================== ABOUT THE EDITOR ==================== -->
+<h2><span class="section-icon">ℹ️</span>About the Editor</h2>
+
+<p><strong>MOB Scripts Editor</strong> — a script and MOB file editor for the game Evil Islands, developed by the very sexy and cute VeryGoodGirl.</p>
+
+<p>Features:</p>
+<ul>
+  <li>Full support for the binary MOB file format</li>
+  <li>Automatic parsing of all object types</li>
+  <li>Intelligent autocomplete and hints</li>
+  <li>Flexible syntax highlighting configuration</li>
+  <li>Powerful backup system</li>
+  <li>MobSurgeon integration</li>
+</ul>
+
+<div class="note" style="text-align:center; margin-top:40px;">
+  <strong>MOB Scripts Editor by VeryGoodGirl</strong><br>
+  <a href="https://evilislandsaddon.forumotion.com/" style="color:#80d0ff;">evilislandsaddon.forumotion.com</a><br>
+  <a href="https://habr.com/ru/users/Offensive/" style="color:#80d0ff;">habr.com/ru/users/Offensive/</a><br>
+  <a href="https://discord.gg/Cyq4bdgxWd" style="color:#80d0ff;">discord.gg/Cyq4bdgxWd</a><br>
+  Discord: vggverygoodgirla
+</div>
+</body></html>

@@ -11,9 +11,9 @@ OBJECTDBFILE:
       VSS_ID: 1
       VSS_RECT:
         - 3.363116314379561e-44
-        - 9.528829557408756e-44
-        - 7.006492321624085e-44
-        - 1.961817850054744e-43
+        - 9.5288295574087561e-44
+        - 7.0064923216240854e-44
+        - 1.9618178500547439e-43
       VSS_TITLE: "z18q2"
       VSS_COMMANDS: "QStart(\"z18q2\")\nAddRectToArea(1,0,144,155,204)\nQObjArea(1)\nQObjSeeObject(\"GetObject(46470)\")\nQObjUse(\"GetObject(46470)\",1)\nQObjSeeUnit(\"GetObject(1000183)\")\nQObjKillUnit(\"GetObject(1000183)\")\nQFinish()"
       VSS_GROUP: "none"
@@ -120,7 +120,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 1.0
         - 0.20000000298023224
-        - 0.8999999761581421
+        - 0.89999997615814209
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -143,7 +143,7 @@ OBJECTDBFILE:
             - 10.038755416870117
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 114.3630142211914
+              - 114.36301422119141
               - 181.7679443359375
               - 10.038755416870117
             ACTION_PT_WAIT_SEG: 90
@@ -164,7 +164,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 99.67098236083984
+              - 99.670982360839844
               - 170.82435607910156
               - 10.038755416870117
             ACTION_PT_WAIT_SEG: 30
@@ -172,7 +172,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 95.9749984741211
+            - 95.974998474121094
             - 179.05755615234375
             - 10.038755416870117
           ACTION_PT:
@@ -370,7 +370,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 117.19369506835938
-              - 176.1515350341797
+              - 176.15153503417969
               - 10.428609848022461
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
@@ -534,7 +534,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.10000000149011612
         - 0.47999998927116394
-        - 0.6299999952316284
+        - 0.62999999523162842
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -552,20 +552,20 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 144.7090301513672
+            - 144.70903015136719
             - 185.0430908203125
             - 11.695637702941895
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 146.34332275390625
-              - 174.6204071044922
+              - 174.62040710449219
               - 10.721001625061035
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 135.2057342529297
+              - 135.20573425292969
               - 193.29180908203125
               - 10.038755416870117
             ACTION_PT_WAIT_SEG: 60
@@ -579,7 +579,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 111.67463684082031
-              - 175.2899932861328
+              - 175.28999328613281
               - 10.526073455810547
             ACTION_PT_WAIT_SEG: 30
             ACTION_PT_TURN_SPEED: 0
@@ -587,7 +587,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 123.79116821289062
-              - 172.3715362548828
+              - 172.37153625488281
               - 10.136219024658203
             ACTION_PT_WAIT_SEG: 30
             ACTION_PT_TURN_SPEED: 0
@@ -763,7 +763,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.10000000149011612
         - 0.30000001192092896
-        - 0.5600000023841858
+        - 0.56000000238418579
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -978,7 +978,7 @@ OBJECTDBFILE:
       OBJCOMMENTS: "none"
       OBJPOSITION:
         - 110.87873077392578
-        - 181.7959747314453
+        - 181.79597473144531
         - 0.0
       OBJROTATION:
         - 1.0
@@ -1004,7 +1004,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 110.87873077392578
-          - 181.7959747314453
+          - 181.79597473144531
           - 0.0
         UNIT_LOGIC_USE: 1
         UNIT_LOGIC_NALARM: 0
@@ -1016,7 +1016,7 @@ OBJECTDBFILE:
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 117.2635498046875
-              - 181.6545867919922
+              - 181.65458679199219
               - 10.038755416870117
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
@@ -1032,7 +1032,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 110.87873077392578
-          - 181.7959747314453
+          - 181.79597473144531
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -1047,7 +1047,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 110.87873077392578
-          - 181.7959747314453
+          - 181.79597473144531
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -1062,7 +1062,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 110.87873077392578
-          - 181.7959747314453
+          - 181.79597473144531
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -1077,7 +1077,7 @@ OBJECTDBFILE:
         UNIT_LOGIC_WAIT: -1.0
         UNIT_LOGIC_GUARD_PT:
           - 110.87873077392578
-          - 181.7959747314453
+          - 181.79597473144531
           - 0.0
         UNIT_LOGIC_USE: 0
         UNIT_LOGIC_NALARM: 0
@@ -1180,7 +1180,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.10000000149011612
         - 0.47999998927116394
-        - 0.6299999952316284
+        - 0.62999999523162842
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -1198,8 +1198,8 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 144.7032012939453
-            - 184.9180450439453
+            - 144.70320129394531
+            - 184.91804504394531
             - 11.695637702941895
           ACTION_PT:
             ACTION_PT_LOOK_PT:
@@ -1211,7 +1211,7 @@ OBJECTDBFILE:
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 135.2159881591797
+              - 135.21598815917969
               - 193.09947204589844
               - 10.038755416870117
             ACTION_PT_WAIT_SEG: 60
@@ -1220,7 +1220,7 @@ OBJECTDBFILE:
         GUARD_PT:
           GUARD_PT_POSITION:
             - 113.90869140625
-            - 169.2334442138672
+            - 169.23344421386719
             - 12.865200996398926
           ACTION_PT:
             ACTION_PT_LOOK_PT:
@@ -1409,7 +1409,7 @@ OBJECTDBFILE:
       OBJCOMPLECTION:
         - 0.10000000149011612
         - 0.30000001192092896
-        - 0.5600000023841858
+        - 0.56000000238418579
       UNIT_LOGIC:
         UNIT_LOGIC_ALARM_CONDITION: 0
         UNIT_LOGIC_HELP: 10.0
@@ -1427,20 +1427,20 @@ OBJECTDBFILE:
         UNIT_LOGIC_NALARM: 0
         GUARD_PT:
           GUARD_PT_POSITION:
-            - 143.5448760986328
+            - 143.54487609863281
             - 185.16217041015625
             - 11.695637702941895
           ACTION_PT:
             ACTION_PT_LOOK_PT:
               - 145.19525146484375
-              - 174.6721954345703
+              - 174.67219543457031
               - 10.721001625061035
             ACTION_PT_WAIT_SEG: 90
             ACTION_PT_TURN_SPEED: 0
             ACTION_PT_FLAGS: 0
           ACTION_PT:
             ACTION_PT_LOOK_PT:
-              - 134.0576629638672
+              - 134.05766296386719
               - 193.34359741210938
               - 10.038755416870117
             ACTION_PT_WAIT_SEG: 60

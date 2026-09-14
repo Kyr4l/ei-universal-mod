@@ -1,0 +1,21 @@
+## Far Forest
+#zone z12q3 ingos game
+#res
+zone12 zone12-LMP
+#maps
+10 16
+zone12map zone12questM
+#weather
+snow
+#sky
+normal
+
+## To Town and Driads
+#exit 1
+bz2mpg 1
+#deploy
+22 108 35 122
+#remove
+6 108 22 133
+#view
+295.418

@@ -1,0 +1,10 @@
+Inhibition failed!
+#show Hero
+#show Marshal
+#CAMERA 3 20 3 1.5
+#phrase Marshal  1
+What happened?!
+#phrase Hero  2
+This mission is impossible for me, wild animals are so...
+#phrase Marshal  3
+You're all equally useless! I'll have to take up axe again!

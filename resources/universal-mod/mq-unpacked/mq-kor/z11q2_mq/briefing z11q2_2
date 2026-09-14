@@ -1,0 +1,10 @@
+The treasure is just a fairy tale...
+#show Hero
+#show Huber
+#CAMERA 3 -10 3 1
+#phrase Huber  1
+And were you able to find the treasure?
+#phrase Hero  1
+It looks like the whole thing was just a story. I couldn't locate the treasure.
+#phrase Huber  3
+What a pity! Well, we'll have to look elsewhere for gold.

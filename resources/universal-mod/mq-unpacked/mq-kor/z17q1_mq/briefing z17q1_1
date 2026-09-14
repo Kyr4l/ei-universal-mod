@@ -1,0 +1,12 @@
+Messenger from the city is missing!
+#show Hero
+#show Glav
+#CAMERA 2
+#phrase Hero  1
+I am told you wanted to see me, brother Khatul?
+#phrase Glav  2
+I wanted something else, actually, but you will hear about it in a moment. A few days ago a noble man, a supporter of ours, managed to obtain a very important document in the city. This document describes the movements of the guards.
+#phrase Glav  3
+He sent a messenger to me, but the messenger never arrived. I suspect she is dead now, and I mourn that brave woman... If only to show respect to her memory, I would like to have that document here in the Last Shelter.
+#phrase Glav  4
+The messenger was supposed to come from the south, so mayhap you should check that road first. It is not an order, you understand, but if the document is not found, I will nevertheless be most upset!

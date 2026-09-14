@@ -1,0 +1,38 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  FirTree00-164 : object,
+  BoarCage : object,
+  FirstDoor : object,
+  SecondDoor : object,
+  GoblinCage : object,
+  DPost : object,
+  DShell : object,
+  Heroes : group 
+)
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  FirTree00-164 = GetObjectByID( "349" ) 
+  BoarCage = GetObjectByID( "1169" ) 
+  FirstDoor = GetObjectByID( "1386" ) 
+  SecondDoor = GetObjectByID( "1388" ) 
+  GoblinCage = GetObjectByID( "1410" ) 
+  DPost = GetObjectByID( "1432" ) 
+  DShell = GetObjectByID( "1433" ) 
+)

@@ -1,0 +1,3211 @@
+OBJECTDBFILE:
+  SEC_RANGE:
+    RANGE:
+      MIN_ID: 2000401
+      MAX_ID: 2000600
+  VSS_SECTION:
+  DIRICTORY_ELEMENTS:
+  OBJECTSECTION:
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000401
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 284.33599853515625
+        - 200.28799438476562
+        - 0.0
+      OBJROTATION:
+        - -0.31214785575866699
+        - 0.0
+        - 0.0
+        - -0.95003336668014526
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000402
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 279.24099731445312
+        - 231.5050048828125
+        - 0.0
+      OBJROTATION:
+        - 0.34997671842575073
+        - 0.0
+        - 0.0
+        - -0.93675833940505981
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000403
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 322.04299926757812
+        - 227.70599365234375
+        - 0.0
+      OBJROTATION:
+        - -0.33579859137535095
+        - 0.0
+        - 0.0
+        - -0.94193375110626221
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000404
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 339.54598999023438
+        - 237.30599975585938
+        - 0.0
+      OBJROTATION:
+        - 0.87115252017974854
+        - 0.0
+        - 0.0
+        - -0.49101239442825317
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000405
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 346.1929931640625
+        - 216.50199890136719
+        - 0.0
+      OBJROTATION:
+        - -0.38245603442192078
+        - 0.0
+        - 0.0
+        - -0.92397361993789673
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000406
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 337.25299072265625
+        - 200.12600708007812
+        - 0.0
+      OBJROTATION:
+        - -0.8507731556892395
+        - 0.0
+        - 0.0
+        - -0.52553296089172363
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000407
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 249.64799499511719
+        - 199.19999694824219
+        - 0.0
+      OBJROTATION:
+        - 0.61117631196975708
+        - 0.0
+        - 0.0
+        - -0.79149448871612549
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000408
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 243.0260009765625
+        - 240.67500305175781
+        - 0.0
+      OBJROTATION:
+        - 0.34997671842575073
+        - 0.0
+        - 0.0
+        - -0.93675833940505981
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000409
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 305.80300903320312
+        - 244.06900024414062
+        - 0.0
+      OBJROTATION:
+        - -0.61898809671401978
+        - 0.0
+        - 0.0
+        - -0.78540033102035522
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000410
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.19601440429688
+        - 187.79499816894531
+        - 0.0
+      OBJROTATION:
+        - -0.042440582066774368
+        - 0.0
+        - 0.0
+        - -0.99909895658493042
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000411
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 266.41799926757812
+        - 232.69599914550781
+        - 0.0
+      OBJROTATION:
+        - -0.38245606422424316
+        - 0.0
+        - 0.0
+        - -0.92397361993789673
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000412
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 237.47799682617188
+        - 220.51400756835938
+        - 0.0
+      OBJROTATION:
+        - -0.71678495407104492
+        - 0.0
+        - 0.0
+        - 0.69729417562484741
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000413
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 250.83200073242188
+        - 263.12100219726562
+        - 0.0
+      OBJROTATION:
+        - -0.93821638822555542
+        - 0.0
+        - 0.0
+        - -0.34604910016059875
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000414
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 340.24099731445312
+        - 276.34698486328125
+        - 0.0
+      OBJROTATION:
+        - -0.31214785575866699
+        - 0.0
+        - 0.0
+        - -0.95003336668014526
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000415
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 339.72100830078125
+        - 287.55801391601562
+        - 0.0
+      OBJROTATION:
+        - -0.95635336637496948
+        - 0.0
+        - 0.0
+        - 0.29221242666244507
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000416
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 251.00799560546875
+        - 272.90399169921875
+        - 0.0
+      OBJROTATION:
+        - -0.69429302215576172
+        - 0.0
+        - 0.0
+        - -0.71969228982925415
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000417
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 346.14599609375
+        - 259.8280029296875
+        - 0.0
+      OBJROTATION:
+        - -0.77860349416732788
+        - 0.0
+        - 0.0
+        - -0.62751603126525879
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000418
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 179.353759765625
+        - 255.12835693359375
+        - 0.0
+      OBJROTATION:
+        - -0.9697452187538147
+        - 0.0
+        - 0.0
+        - 0.24411915242671967
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000419
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 154.82447814941406
+        - 244.72749328613281
+        - 0.0
+      OBJROTATION:
+        - -0.6574554443359375
+        - 0.0
+        - 0.0
+        - -0.75349336862564087
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000420
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 165.61666870117188
+        - 194.61418151855469
+        - 0.0
+      OBJROTATION:
+        - 0.25472518801689148
+        - 0.0
+        - 0.0
+        - -0.96701341867446899
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000421
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 317.65426635742188
+        - 294.21994018554688
+        - 0.0
+      OBJROTATION:
+        - -0.017435304820537567
+        - 0.0
+        - 0.0
+        - -0.99984794855117798
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000422
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 214.87911987304688
+        - 197.65670776367188
+        - 0.0
+      OBJROTATION:
+        - -0.7120664119720459
+        - 0.0
+        - 0.0
+        - -0.70211201906204224
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000423
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 268.1123046875
+        - 294.0472412109375
+        - 0.0
+      OBJROTATION:
+        - 0.032557997852563858
+        - 0.0
+        - 0.0
+        - -0.99946969747543335
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000424
+      OBJTYPE: 60
+      OBJNAME: "FirezTower"
+      OBJTEMPLATE: "fireztower00"
+      PARENTTEMPLATE: "FirezTower"
+      OBJPRIMTXTR: "fireztower01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 253.08500671386719
+        - 221.17900085449219
+        - 0.0
+      OBJROTATION:
+        - -0.71224707365036011
+        - 0.0
+        - 0.0
+        - -0.70192867517471313
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken02"
+        - "wall01broken00"
+        - "wall01broken01"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000425
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 252.99000549316406
+        - 228.07400512695312
+        - 0.0
+      OBJROTATION:
+        - 0.0010560312075540423
+        - 0.0
+        - 0.0
+        - 0.99999940395355225
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000426
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 409.12399291992188
+        - 189.58399963378906
+        - 0.0
+      OBJROTATION:
+        - -0.45639747381210327
+        - 0.0
+        - 0.0
+        - 0.88977593183517456
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000427
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 417.45901489257812
+        - 171.15699768066406
+        - 0.0
+      OBJROTATION:
+        - -0.89906227588653564
+        - 0.0
+        - 0.0
+        - -0.43782073259353638
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000428
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 436.87200927734375
+        - 164.72200012207031
+        - 0.0
+      OBJROTATION:
+        - -0.66234397888183594
+        - 0.0
+        - 0.0
+        - 0.74919974803924561
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000429
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 317.2659912109375
+        - 204.70799255371094
+        - 0.0
+      OBJROTATION:
+        - -0.47849705815315247
+        - 0.0
+        - 0.0
+        - 0.87808907032012939
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000430
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 294.62899780273438
+        - 200.66299438476562
+        - 0.0
+      OBJROTATION:
+        - -0.96327501535415649
+        - 0.0
+        - 0.0
+        - 0.26851648092269897
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000431
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 284.95498657226562
+        - 212.77099609375
+        - 0.0
+      OBJROTATION:
+        - 0.0010577000211924314
+        - 0.0
+        - 0.0
+        - 0.99999940395355225
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000432
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 237.24600219726562
+        - 235.48199462890625
+        - 0.0
+      OBJROTATION:
+        - -0.99976146221160889
+        - 0.0
+        - 0.0
+        - 0.021833913400769234
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000433
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 262.81298828125
+        - 239.90299987792969
+        - 0.0
+      OBJROTATION:
+        - -0.69896072149276733
+        - 0.0
+        - 0.0
+        - 0.71515995264053345
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000434
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 242.65899658203125
+        - 188.47000122070312
+        - 0.0
+      OBJROTATION:
+        - -0.85416531562805176
+        - 0.0
+        - 0.0
+        - 0.52000147104263306
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken02"
+        - "wall01broken00"
+        - "wall01broken01"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000435
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 246.25100708007812
+        - 221.59500122070312
+        - 0.0
+      OBJROTATION:
+        - 0.70496833324432373
+        - 0.0
+        - 0.0
+        - -0.70923858880996704
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000436
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 383.12399291992188
+        - 192.87199401855469
+        - 0.0
+      OBJROTATION:
+        - -0.90967845916748047
+        - 0.0
+        - 0.0
+        - -0.41531306505203247
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000437
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 237.38299560546875
+        - 212.51800537109375
+        - 0.0
+      OBJROTATION:
+        - -0.99976146221160889
+        - 0.0
+        - 0.0
+        - 0.021833913400769234
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000438
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 263.88800048828125
+        - 204.92500305175781
+        - 0.0
+      OBJROTATION:
+        - -0.71219563484191895
+        - 0.0
+        - 0.0
+        - -0.70198094844818115
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000439
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 277.95700073242188
+        - 196.3280029296875
+        - 0.0
+      OBJROTATION:
+        - -0.99976146221160889
+        - 0.0
+        - 0.0
+        - 0.021833913400769234
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken02"
+        - "wall01broken00"
+        - "wall01broken01"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000440
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 252.63999938964844
+        - 214.75799560546875
+        - 0.0
+      OBJROTATION:
+        - -0.99999499320983887
+        - 0.0
+        - 0.0
+        - -0.0031438693404197693
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000441
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 251.3800048828125
+        - 259.24899291992188
+        - 0.0
+      OBJROTATION:
+        - -0.017504556104540825
+        - 0.0
+        - 0.0
+        - -0.99984675645828247
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000442
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 251.38099670410156
+        - 275.30801391601562
+        - 0.0
+      OBJROTATION:
+        - 0.0010577000211924314
+        - 0.0
+        - 0.0
+        - 0.99999940395355225
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000443
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 232.95799255371094
+        - 286.9630126953125
+        - 0.0
+      OBJROTATION:
+        - -0.71219545602798462
+        - 0.0
+        - 0.0
+        - -0.70198118686676025
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000444
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 243.12899780273438
+        - 280.78201293945312
+        - 0.0
+      OBJROTATION:
+        - -0.69896072149276733
+        - 0.0
+        - 0.0
+        - 0.71515995264053345
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000445
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 66.537178039550781
+        - 217.41468811035156
+        - 0.0
+      OBJROTATION:
+        - -0.74639010429382324
+        - 0.0
+        - 0.0
+        - -0.66550856828689575
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000446
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 90.797096252441406
+        - 281.18716430664062
+        - 0.0
+      OBJROTATION:
+        - -0.024038782343268394
+        - 0.0
+        - 0.0
+        - 0.99971097707748413
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000447
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.368000030517578
+        - 217.53799438476562
+        - 0.0
+      OBJROTATION:
+        - -0.99976146221160889
+        - 0.0
+        - 0.0
+        - 0.021833913400769234
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000448
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 340.10299682617188
+        - 269.46099853515625
+        - 0.0
+      OBJROTATION:
+        - -0.71219563484191895
+        - 0.0
+        - 0.0
+        - -0.70198094844818115
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000449
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 308.04827880859375
+        - 294.03683471679688
+        - 0.0
+      OBJROTATION:
+        - -0.69896072149276733
+        - 0.0
+        - 0.0
+        - 0.71515995264053345
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000450
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 273.12600708007812
+        - 286.52999877929688
+        - 0.0
+      OBJROTATION:
+        - -0.71219557523727417
+        - 0.0
+        - 0.0
+        - -0.70198100805282593
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000451
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 242.05999755859375
+        - 262.63699340820312
+        - 0.0
+      OBJROTATION:
+        - -0.99959814548492432
+        - 0.0
+        - 0.0
+        - -0.028344796970486641
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000452
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 148.47099304199219
+        - 243.72099304199219
+        - 0.0
+      OBJROTATION:
+        - -0.99976146221160889
+        - 0.0
+        - 0.0
+        - 0.021833913400769234
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000453
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 40.622482299804688
+        - 339.23138427734375
+        - 0.0
+      OBJROTATION:
+        - 0.37334820628166199
+        - 0.0
+        - 0.0
+        - -0.92769110202789307
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000454
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 129.24763488769531
+        - 243.82913208007812
+        - 0.0
+      OBJROTATION:
+        - 0.99954652786254883
+        - 0.0
+        - 0.0
+        - -0.030111184343695641
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000455
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 201.52336120605469
+        - 190.34327697753906
+        - 0.0
+      OBJROTATION:
+        - -0.69913089275360107
+        - 0.0
+        - 0.0
+        - 0.71499365568161011
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000456
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 51.452999114990234
+        - 253.92599487304688
+        - 0.0
+      OBJROTATION:
+        - -0.99976146221160889
+        - 0.0
+        - 0.0
+        - 0.021833913400769234
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000457
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 138.45100402832031
+        - 216.37699890136719
+        - 0.0
+      OBJROTATION:
+        - 0.051034998148679733
+        - 0.0
+        - 0.0
+        - 0.99869698286056519
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000458
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 74.18194580078125
+        - 262.00173950195312
+        - 0.0
+      OBJROTATION:
+        - -0.71661961078643799
+        - 0.0
+        - 0.0
+        - 0.69746416807174683
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000459
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 152.19599914550781
+        - 194.39500427246094
+        - 0.0
+      OBJROTATION:
+        - -0.71661961078643799
+        - 0.0
+        - 0.0
+        - 0.69746416807174683
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000460
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 127.42600250244141
+        - 202.11399841308594
+        - 0.0
+      OBJROTATION:
+        - -0.71661961078643799
+        - 0.0
+        - 0.0
+        - 0.69746416807174683
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000461
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 153.84100341796875
+        - 236.62199401855469
+        - 0.0
+      OBJROTATION:
+        - -0.69896072149276733
+        - 0.0
+        - 0.0
+        - 0.71515995264053345
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000462
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 74.866996765136719
+        - 235.16099548339844
+        - 0.0
+      OBJROTATION:
+        - 0.0010577000211924314
+        - 0.0
+        - 0.0
+        - 0.99999940395355225
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000463
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.782001495361328
+        - 185.96000671386719
+        - 0.0
+      OBJROTATION:
+        - -0.84089964628219604
+        - 0.0
+        - 0.0
+        - 0.5411909818649292
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000464
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 156.67572021484375
+        - 261.97903442382812
+        - 0.0
+      OBJROTATION:
+        - -0.66234397888183594
+        - 0.0
+        - 0.0
+        - 0.74919974803924561
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000465
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 19.58903694152832
+        - 228.48428344726562
+        - 0.0
+      OBJROTATION:
+        - -0.45648512244224548
+        - 0.0
+        - 0.0
+        - 0.88973098993301392
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000466
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 70.725982666015625
+        - 297.16253662109375
+        - 0.0
+      OBJROTATION:
+        - -0.9381982684135437
+        - 0.0
+        - 0.0
+        - -0.34609806537628174
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000467
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 17.986188888549805
+        - 349.28018188476562
+        - 0.0
+      OBJROTATION:
+        - 0.71802282333374023
+        - 0.0
+        - 0.0
+        - 0.69601947069168091
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000468
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 64.835433959960938
+        - 217.32037353515625
+        - 0.0
+      OBJROTATION:
+        - -0.88775140047073364
+        - 0.0
+        - 0.0
+        - -0.46032306551933289
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000469
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 44.616001129150391
+        - 186.78599548339844
+        - -0.125
+      OBJROTATION:
+        - -0.28828561305999756
+        - 0.0
+        - 0.0
+        - -0.95754444599151611
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000470
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 45.878589630126953
+        - 255.3802490234375
+        - 0.0
+      OBJROTATION:
+        - 0.99993085861206055
+        - 0.0
+        - 0.0
+        - 0.01175739336758852
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000471
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 90.169448852539062
+        - 255.00741577148438
+        - 0.0
+      OBJROTATION:
+        - -0.99959778785705566
+        - 0.0
+        - 0.0
+        - -0.02835814468562603
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000472
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 144.75199890136719
+        - 196.718994140625
+        - -0.125
+      OBJROTATION:
+        - -0.42814207077026367
+        - 0.0
+        - 0.0
+        - -0.90371137857437134
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000473
+      OBJTYPE: 60
+      OBJNAME: "Healing03"
+      OBJTEMPLATE: "stst114"
+      PARENTTEMPLATE: "BloodLion00"
+      OBJPRIMTXTR: "jlion01"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 180.86457824707031
+        - 233.17037963867188
+        - 0.0
+      OBJROTATION:
+        - -0.94657284021377563
+        - 0.0
+        - 0.0
+        - -0.32248988747596741
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 237
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.5
+        - 1.0
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000474
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 89.319000244140625
+        - 247.73199462890625
+        - 0.0
+      OBJROTATION:
+        - -0.68371200561523438
+        - 0.0
+        - 0.0
+        - 0.72975200414657593
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000475
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 102.96299743652344
+        - 210.08599853515625
+        - 0.0
+      OBJROTATION:
+        - -0.99983900785446167
+        - 0.0
+        - 0.0
+        - 0.01793999969959259
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000476
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 296.35501098632812
+        - 220.76600646972656
+        - 0.0
+      OBJROTATION:
+        - -0.002836999949067831
+        - 0.0
+        - 0.0
+        - 0.99999600648880005
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000477
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 274.77899169921875
+        - 237.447998046875
+        - 0.0
+      OBJROTATION:
+        - -0.70174002647399902
+        - 0.0
+        - 0.0
+        - 0.71243298053741455
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000478
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 315.65701293945312
+        - 212.57400512695312
+        - 0.0
+      OBJROTATION:
+        - -0.99997502565383911
+        - 0.0
+        - 0.0
+        - -0.0070489998906850815
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000479
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 315.2650146484375
+        - 285.45498657226562
+        - 0.0
+      OBJROTATION:
+        - -0.70710700750350952
+        - 0.0
+        - 0.0
+        - 0.70710700750350952
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000480
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 198.60299682617188
+        - 262.79000854492188
+        - -0.34999999403953552
+      OBJROTATION:
+        - -0.70174002647399902
+        - 0.0
+        - 0.0
+        - 0.71243298053741455
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000481
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 272.32199096679688
+        - 251.28300476074219
+        - 0.0
+      OBJROTATION:
+        - -0.70174002647399902
+        - 0.0
+        - 0.0
+        - 0.71243298053741455
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 0
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS: None
+      OBJ_PLAYER: 0
+      NID: 2000482
+      OBJTYPE: 60
+      OBJNAME: "Pool00-14491"
+      OBJTEMPLATE: "stst101"
+      PARENTTEMPLATE: "Pool00"
+      OBJPRIMTXTR: "jpool01"
+      OBJSECTXTR: "default0"
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 106.80599975585938
+        - 221.38400268554688
+        - 0.0
+      OBJROTATION:
+        - -0.002836999949067831
+        - 0.0
+        - 0.0
+        - 0.99999600648880005
+      OBJ_USE_IN_SCRIPT: 0
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 85484959
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.5
+        - 0.5
+        - 0.5
+    LEVER:
+      LEVER_SCIENCE_STATS_NEW:
+        - 0
+        - 0
+        - 0
+      LEVER_CUR_STATE: 0
+      LEVER_TOTAL_STATE: 2
+      LEVER_IS_CYCLED: 0
+      LEVER_IS_DOOR: 1
+      LEVER_RECALC_GRAPH: 1
+      OBJBODYPARTS:
+        - "wall01broken01"
+        - "kanianwallset00"
+        - "wall00broken00"
+      OBJ_PLAYER: 0
+      NID: 2000483
+      OBJTYPE: 60
+      OBJNAME: "Gallows02"
+      OBJTEMPLATE: "jprops01"
+      PARENTTEMPLATE: "Gallows"
+      OBJPRIMTXTR: "jigranprops02"
+      OBJSECTXTR: ""
+      OBJCOMMENTS: "none"
+      OBJPOSITION:
+        - 93.469337463378906
+        - 189.67654418945312
+        - 0.0
+      OBJROTATION:
+        - -0.99976509809494019
+        - 0.0
+        - 0.0
+        - 0.021672369912266731
+      OBJ_USE_IN_SCRIPT: 1
+      OBJ_IS_SHADOW: 1
+      OBJ_PARENT_ID: 223
+      OBJ_QUEST_INFO: ""
+      OBJCOMPLECTION:
+        - 0.0
+        - 0.0
+        - -0.5

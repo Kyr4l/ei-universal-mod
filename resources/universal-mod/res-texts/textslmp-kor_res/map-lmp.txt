@@ -1,5 +1,5 @@
 ## format:
-## 
+##
 ## #zone zone_name allod_name type // types can be: game, brief, edge
 ## #res
 ## MprFile MobFile                 // files to load
@@ -21,7 +21,7 @@
 ## #remove
 ## x1 y1 x2 y2                     // remove rectangle for this exit
 ## #passtime
-## PassTime                        // for single player only: default pass time 
+## PassTime                        // for single player only: default pass time
 ## #view
 ## Angle                           // camera rotate angle of this entrance
 ## #exit 2
@@ -114,9 +114,9 @@ MPGame1 1
 ## Briefing Jigran LMP
 #zone bz4mpg jigran brief
 #res
-zone31 bz31j-lmp
+zone35x bz35xj-lmp
 #camera
-bz31j-lmp
+bz35xj-lmp
 #figure
 ingm8leanos
 #position
@@ -124,17 +124,18 @@ ingm8leanos
 #sky
 normal
 #restrict
-167 348 30
+225 225 80
 
 ## Exit
 #exit 1
 MPGame1 1
 #deploy
-172 343 177 348
+271 218 281 225
 #remove
-169 315 180 328
+290 226.6 294 233.5
 #deployangle
-180
+270
+#view
+45
 
 ###########################################################################
-

@@ -1,0 +1,12 @@
+The spider queen
+#show Hero
+#show Glav
+#CAMERA 9
+#phrase Glav  1
+Our scouts report that the Khadaganians have captured a spider queen and are breeding huntsman spiders.
+#phrase Hero  1
+As if there aren't already enough of these vermin out there...
+#phrase Glav  2
+There are only a few of us, and if these spiders reinforce the forces of the Khadagan Empire, we won't be able to stop them!
+#phrase Glav  3
+You must stop their plans or we'll be lost!

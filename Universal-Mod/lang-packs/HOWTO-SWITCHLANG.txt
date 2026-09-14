@@ -1,0 +1,1 @@
+Copy texts.res and textslmp.res from lang-packs/<LANGUAGE>/res/ into mod res/ to switch language

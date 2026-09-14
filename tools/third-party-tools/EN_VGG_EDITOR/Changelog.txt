@@ -1,0 +1,21 @@
+1.01:
+Removed one unnecessary message box.
+Fixed the issue with action points being consumed when separated by commas – now everything is written and read as expected with commas.
+Fixed the guard point delete button.
+Improved autosave logic.
+You can now bulk change coordinates for everything that has them.
+
+1.02:
+Fixed text drag & drop feature.
+Fixed replacing - now it can be undone and redone.
+Fixed traps' areas and targets fields editing.
+Now if editor load file without traps' targets field it recreates it dynamically.
+You can now bulk change coordinates for really everything that has them, not like before.
+The document has been supplemented with a column containing signatures.
+Errors in the document have been corrected.
+
+1.03:
+Fixed automatic saving - now its absolutely awesome.
+Fixed objects shifting - now its avaliable always.
+Added menu item for hidding current path.
+Fixed a couple of typos in the script document.

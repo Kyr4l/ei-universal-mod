@@ -1,0 +1,14 @@
+[Medium] Armadillos in Babur's mine
+#show Hero
+#show Merc1
+#CAMERA 9
+#phrase Merc1  1
+Armadillos have invaded Babur's mine. That old miser is furious and offering a decent reward to whoever clears them out.
+#phrase Hero  2
+Armadillos? Since when do those creatures attack mines?
+#phrase Merc1  3
+Since they found a rich vein of gold apparently. Babur wants them all dead. He also forgot a big sack of gold in the western part of the mine.
+#phrase Merc1  4
+If you go deeper, there's also another chest with a gold nugget in the far north-east. Bring everything back.
+#phrase Hero  5
+Very well, I'll take care of it.

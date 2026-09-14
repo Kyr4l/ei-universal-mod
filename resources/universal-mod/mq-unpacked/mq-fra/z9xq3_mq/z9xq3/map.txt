@@ -1,0 +1,67 @@
+## City of the Dead
+#zone z9xq3 gipat game
+#res
+zone9x zone9x-lmp
+#maps
+15 12
+zone9xmap zone9xquest
+
+## To Rift
+#exit 1
+bz1mpg 1
+#deploy
+216 372 226 382
+#remove
+216 372 226 382
+#view
+172.785
+
+## To Orc-Delta north way
+#exit 2
+bz1mpg 2
+#deploy
+2 178 11 187
+#remove
+2 178 11 187
+#view
+298.155
+
+## To Mountains
+#exit 3
+bz1mpg 3
+#deploy
+2 364.5 12 374.5
+#remove
+2 364.5 12 374.5
+#view
+281.534
+
+## To Orc-Delta west
+#exit 4
+bz1mpg 4
+#deploy
+173 2 181 10
+#remove
+173 2 181 10
+#view
+281.534
+
+## To Orc-Delta east
+#exit 5
+bz1mpg 5
+#deploy
+255 2 263 10
+#remove
+255 2 263 10
+#view
+281.534
+
+## To Orc-Delta south way
+#exit 6
+bz1mpg 6
+#deploy
+2 178 11 187
+#remove
+2 178 11 187
+#view
+298.155

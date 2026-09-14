@@ -1,0 +1,20 @@
+#zone z26q1 ingos game
+#res
+zone26 zone26-lmp
+#maps
+4 6
+zone26map zone26quest
+#weather
+none
+#sky
+cave
+
+#exit 1
+bz1mpg 1
+#deploy
+12.5 12 18.5 16
+#remove
+6 7 13 11
+#view
+0.690968
+

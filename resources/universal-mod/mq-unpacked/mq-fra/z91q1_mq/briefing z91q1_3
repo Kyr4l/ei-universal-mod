@@ -1,0 +1,8 @@
+Done!
+#show Hero
+#show Merc1
+#CAMERA 9
+#phrase Merc1  1
+Good! This means we can still reach the Great Mage in an emergency.
+#phrase Merc1  1
+Not good! I barely survived! Ask someone else next time.

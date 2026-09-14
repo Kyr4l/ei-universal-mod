@@ -1,0 +1,14 @@
+Piggy Fivepence
+The Lizards took a piggy called Fivepence from the village and hid it in a cage. That piggy must be returned to the village.
+#subobj  1
+Find the cage
+The cage where the Lizards keep the Piggy is somewhere in the ravines which lead to the north across the lake. Remember that the villagers call Fivepence "Piggy" as a term of endearment - this is in reality an enormous pig.
+#subobj  2
+Open the cage
+To set Fivepence free, you must open the cage.
+#subobj  3
+Approaching Fivepence
+Approach the "Piggy" and he will follow his rescuer.
+#subobj  4
+Lead Fivepence away
+You must make sure that Fivepence reaches the exit from the Middle Mountains alive.
