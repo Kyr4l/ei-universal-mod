@@ -2,7 +2,7 @@
 
 ## How to use
 
-This is a special tool I've made to automate packing the EI assets, it uses WINE, Rsync and GNU Parallel.
+This is a special tool I've made to automate packing the EI assets, it uses Rsync and GNU Parallel.
 This tool can't run on Windows nor be ported to it.
 
 To use it, open a bash terminal in this directy, and run `bash makemod.sh`

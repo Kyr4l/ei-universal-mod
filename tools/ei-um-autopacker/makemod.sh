@@ -5,12 +5,12 @@
 # Automates compiling, packing, and assembling the Evil Islands Universal Mod.
 #
 # Requirements:
-#   - wine (for legacy Windows CLI tools: DBEditor)
 #   - rsync
 #   - parallel (GNU Parallel)
 #   - i686-w64-mingw32-g++ (MinGW 32-bit cross compiler for um.dll)
 #   - bin/um-multitool (C++ merged MOB/INI-REG/DDS-MMP/RES CLI tool)
 #     subcommands: mobdump, inireg, ddsmmp, restool
+#   - bin/um-xlsxdb (C++ XLSX database compiler, replaces legacy wine+DBEditor)
 #
 # Usage:
 #   ./makemod.sh [options]
@@ -29,7 +29,7 @@
 #   -h, --help              Show this help message
 # ==============================================================================
 
-# Note: Do not enable `set -e` as legacy WINE tools and wildcard lookups may return non-zero exit codes
+# Note: Do not enable `set -e` as wildcard lookups may return non-zero exit codes
 
 # ------------------------------------------------------------------------------
 # Terminal Color Codes & UI Helpers
@@ -55,8 +55,6 @@ log_error() { echo -e "${RED}[ERROR]${RESTORE} $*" >&2; }
 # ------------------------------------------------------------------------------
 # Environment & Directory Configuration
 # ------------------------------------------------------------------------------
-export WINEDEBUG=-all
-
 BUILD_TIMESTAMP="$(date +"%y%m%d-%H%M")"
 readonly BUILD_TIMESTAMP
 readonly MOD_DIR="mods-out/$BUILD_TIMESTAMP"
@@ -220,7 +218,7 @@ run_interactive_prompts() {
 # ------------------------------------------------------------------------------
 check_dependencies() {
     local missing=()
-    for cmd in wine rsync parallel i686-w64-mingw32-g++; do
+    for cmd in rsync parallel i686-w64-mingw32-g++; do
         if ! command -v "$cmd" &>/dev/null; then
             missing+=("$cmd")
         fi
@@ -236,6 +234,14 @@ check_dependencies() {
         if [[ -f "../um-multitool/um-multitool" ]]; then
             ln -sf "../../um-multitool/um-multitool" "bin/um-multitool"
             log_ok "Symlinked bin/um-multitool"
+        fi
+    fi
+
+    if [[ ! -x "bin/um-xlsxdb" && ! -f "bin/um-xlsxdb" ]]; then
+        log_warn "bin/um-xlsxdb not found. Checking ../um-standalone-tools/um-xlsxdb..."
+        if [[ -f "../um-standalone-tools/um-xlsxdb/um-xlsxdb" ]]; then
+            ln -sf "../../um-standalone-tools/um-xlsxdb/um-xlsxdb" "bin/um-xlsxdb"
+            log_ok "Symlinked bin/um-xlsxdb"
         fi
     fi
 }
@@ -410,12 +416,12 @@ process_databases() {
         cd "$XLSX_DIR" || exit 1
 
         log_info "Converting XLSX database -> RES..."
-        wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx
+        ../bin/um-xlsxdb database.xlsx
         log_info "Dumping database.xlsx -> Markdown..."
         python3 ../bin/xlsx2md.py database.xlsx "../$XLSX_DUMP_DIR/database.md"
 
         log_info "Converting XLSX databaselmp -> RES..."
-        wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
+        ../bin/um-xlsxdb databaselmp.xlsx
         log_info "Dumping databaselmp.xlsx -> Markdown..."
         python3 ../bin/xlsx2md.py databaselmp.xlsx "../$XLSX_DUMP_DIR/databaselmp.md"
 
