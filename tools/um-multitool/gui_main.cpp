@@ -1,34 +1,31 @@
 /**
  * ============================================================================
- * um-multitool-gui - FLTK front-end for um-multitool
+ * um-multitool-gui - Dear ImGui front-end for um-multitool
  * ============================================================================
  *
- * A small cross-platform (Windows/Linux) GUI wrapping the four merged
- * Evil Islands modding CLI tools (ddsmmp, inireg, mobdump, restool) exposed
- * by the um-multitool binary built alongside this GUI. Depends on it at
- * runtime: this GUI spawns it as a hidden subprocess and streams its
+ * A small cross-platform (Windows/Linux) GUI wrapping the five merged
+ * Evil Islands modding CLI tools (ddsmmp, inireg, mobdump, restool, xlsxdb)
+ * exposed by the um-multitool binary built alongside this GUI. Depends on it
+ * at runtime: this GUI spawns it as a hidden subprocess and streams its
  * stdout/stderr into the log panel below, with no separate console window.
+ *
+ * Toolkit: Dear ImGui (vendor/imgui, vendored as source per its normal
+ * distribution model) rendering through its OpenGL2 (legacy fixed-pipeline)
+ * backend, windowed via GLFW. GLFW auto-selects X11 or Wayland on Linux from
+ * the running session with no code on our end, and provides the Win32 window
+ * on Windows - one codebase for all three targets. OpenGL2 (not OpenGL3) was
+ * chosen specifically because it needs no GL function loader library and has
+ * historically been the more robust legacy-GL path under Wine/older drivers.
  *
  * Each subtool gets its own tab exposing every CLI flag it supports.
  * ============================================================================
  */
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Round_Button.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Progress.H>
-#include <FL/Fl_Text_Display.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Tooltip.H>
+#include <GLFW/glfw3.h>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl2.h"
 
 #include <string>
 #include <vector>
@@ -43,6 +40,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#include <commdlg.h>
+#include <shlobj.h>
 #else
 #include <unistd.h>
 #include <climits>
@@ -52,34 +51,110 @@
 namespace fs = std::filesystem;
 
 // ============================================================================
-// Layout Constants
+// Native File/Folder Dialogs
+// ============================================================================
+//
+// Dear ImGui draws widgets only - it has no file dialog of its own. On
+// Windows we use the standard comdlg32/shell32 APIs (no extra dependency).
+// On Linux there is no single "native" dialog API without pulling in GTK or
+// Qt as a build dependency, so we shell out to whichever desktop file-picker
+// is already on the user's system (zenity or kdialog - present on the vast
+// majority of Linux desktops, and both go through the Wayland portal
+// automatically when running under Wayland). If neither is installed, the
+// path field is still a plain text box the user can type/paste into directly.
+
+#ifndef _WIN32
+static bool RunPickerCommand(const std::string& cmd, std::string& outPath) {
+    FILE* p = popen(cmd.c_str(), "r");
+    if (!p) return false;
+    char buf[4096];
+    std::string result;
+    while (fgets(buf, sizeof(buf), p)) result += buf;
+    int status = pclose(p);
+    if (status != 0) return false;
+    while (!result.empty() && (result.back() == '\n' || result.back() == '\r')) result.pop_back();
+    if (result.empty()) return false;
+    outPath = result;
+    return true;
+}
+
+static bool HasCommand(const char* name) {
+    std::string check = std::string("command -v ") + name + " >/dev/null 2>&1";
+    return std::system(check.c_str()) == 0;
+}
+#endif
+
+// filterName/filterExt are only honored on Windows (e.g. "Spreadsheet", "*.xlsx");
+// pass nullptr for "all files". Linux file pickers are shown unfiltered.
+static bool NativePickFile(bool saveDialog, const char* filterName, const char* filterExt, std::string& outPath) {
+#ifdef _WIN32
+    char buf[MAX_PATH] = "";
+    std::string filter;
+    if (filterName && filterExt) {
+        filter = std::string(filterName) + '\0' + filterExt + '\0' + "All Files" + '\0' + "*.*" + '\0';
+    } else {
+        filter = std::string("All Files") + '\0' + "*.*" + '\0';
+    }
+    OPENFILENAMEA ofn{};
+    ofn.lStructSize = sizeof(ofn);
+    ofn.lpstrFilter = filter.c_str();
+    ofn.lpstrFile = buf;
+    ofn.nMaxFile = sizeof(buf);
+    ofn.Flags = saveDialog ? OFN_OVERWRITEPROMPT : (OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST);
+    BOOL ok = saveDialog ? GetSaveFileNameA(&ofn) : GetOpenFileNameA(&ofn);
+    if (ok) { outPath = buf; return true; }
+    return false;
+#else
+    (void)filterName;
+    (void)filterExt;
+    if (HasCommand("zenity")) {
+        return RunPickerCommand(saveDialog ? "zenity --file-selection --save --confirm-overwrite 2>/dev/null"
+                                            : "zenity --file-selection 2>/dev/null", outPath);
+    }
+    if (HasCommand("kdialog")) {
+        return RunPickerCommand(saveDialog ? "kdialog --getsavefilename 2>/dev/null"
+                                            : "kdialog --getopenfilename 2>/dev/null", outPath);
+    }
+    return false;
+#endif
+}
+
+static bool NativePickFolder(std::string& outPath) {
+#ifdef _WIN32
+    char displayName[MAX_PATH] = "";
+    BROWSEINFOA bi{};
+    bi.pszDisplayName = displayName;
+    bi.lpszTitle = "Select Folder";
+    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+    LPITEMIDLIST pidl = SHBrowseForFolderA(&bi);
+    if (!pidl) return false;
+    char path[MAX_PATH];
+    BOOL ok = SHGetPathFromIDListA(pidl, path);
+    CoTaskMemFree(pidl);
+    if (ok) { outPath = path; return true; }
+    return false;
+#else
+    if (HasCommand("zenity")) {
+        return RunPickerCommand("zenity --file-selection --directory 2>/dev/null", outPath);
+    }
+    if (HasCommand("kdialog")) {
+        return RunPickerCommand("kdialog --getexistingdirectory 2>/dev/null", outPath);
+    }
+    return false;
+#endif
+}
+
+// ============================================================================
+// Subprocess Launch Helpers (unchanged in spirit from the FLTK version: none
+// of this depends on the GUI toolkit, only on the OS process APIs)
 // ============================================================================
 
-static constexpr int WIN_W = 780;
-static constexpr int WIN_H = 700;
-static constexpr int TABS_Y = 30;
-static constexpr int TABS_H = 380;
-static constexpr int ROW_H = 26;
-static constexpr int ROW_GAP = 8;
-static constexpr int LABEL_W = 95;
-static constexpr int FIELD_X = 10 + LABEL_W;
-static constexpr int BROWSE_W = 60;
-static constexpr int FIELD_W = 780 - FIELD_X - 2 * BROWSE_W - 30;
-
-// Accent color for primary actions and progress fill (steel blue).
-static const Fl_Color kAccentColor = fl_rgb_color(41, 98, 163);
-
-// ============================================================================
-// Subprocess Launch Helpers
-// ============================================================================
-
-static Fl_Text_Buffer* g_logBuffer = nullptr;
-static Fl_Box* g_statusBox = nullptr;
+static std::string g_log;
+static bool g_logDirty = false;
 
 static void AppendLog(const std::string& text) {
-    if (g_logBuffer) {
-        g_logBuffer->append(text.c_str());
-    }
+    g_log += text;
+    g_logDirty = true;
 }
 
 // Directory containing the running GUI executable.
@@ -158,8 +233,8 @@ static std::string g_pendingOutput;
 static std::atomic<bool> g_readerAlive{false};
 
 // Background thread body: blocks on read()/ReadFile() until the child closes
-// its end of the pipe (process exited), appending each chunk for the UI
-// timer to drain. Never touches FLTK widgets directly (wrong thread).
+// its end of the pipe (process exited), appending each chunk for the main
+// loop to drain. Never touches ImGui/GL state directly (wrong thread).
 static void ReaderThreadFunc(ProcHandle proc) {
     char buf[4096];
     while (true) {
@@ -212,8 +287,8 @@ static void CleanupProcess(ProcHandle& h) {
 
 // Spawns `binary subcommand tokens...` with its stdout/stderr redirected into
 // a pipe (no visible console on Windows, no shell/terminal on Linux), and
-// starts a background thread that streams the captured output for the GUI's
-// log panel to display. Returns an invalid handle (per IsValid) on failure.
+// starts a background thread that streams the captured output for the log
+// panel to display. Returns an invalid handle (per IsValid) on failure.
 static ProcHandle LaunchCaptured(const std::string& binary, const std::string& subcommand,
                                  const std::vector<std::string>& tokens, std::string& err) {
     ProcHandle proc;
@@ -294,58 +369,44 @@ static ProcHandle LaunchCaptured(const std::string& binary, const std::string& s
 // Shared Widget Helpers
 // ============================================================================
 
-// Adds a labeled text field with "File" and "Folder" browse buttons feeding
-// into it. When saveDialog is true, the "File" button lets the user type a
-// new (not-yet-existing) destination filename instead of requiring one to pick.
-// If multiThreadCb is given, it's switched on when a folder is chosen (or a
-// typed/pasted path resolves to one) and off for a single file, since batch
-// jobs benefit from -m while single-file conversions don't.
-static Fl_Input* AddBrowsableRow(int y, const char* label, bool saveDialog,
-                                 Fl_Check_Button* multiThreadCb = nullptr) {
-    Fl_Box* box = new Fl_Box(10, y, LABEL_W, ROW_H, label);
-    box->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
+// Renders "label: [text input] [File] [Folder?]" for a path field, matching
+// the FLTK version's browsable rows. Writes the picked path straight into
+// `buf` and returns true if the field's value changed this frame (typed or
+// via a picker), so callers can react (e.g. auto-toggle multithread mode).
+static bool PathRow(const char* imguiId, const char* label, char* buf, size_t bufSize,
+                     bool saveDialog, bool showFolderButton,
+                     const char* winFilterName = nullptr, const char* winFilterExt = nullptr) {
+    bool changed = false;
+    ImGui::PushID(imguiId);
 
-    Fl_Input* input = new Fl_Input(FIELD_X, y, FIELD_W, ROW_H);
+    ImGui::AlignTextToFramePadding();
+    ImGui::TextUnformatted(label);
+    ImGui::SameLine(90);
+    float buttonsWidth = showFolderButton ? 170.0f : 80.0f;
+    ImGui::SetNextItemWidth(-buttonsWidth - 10.0f);
+    if (ImGui::InputText("##path", buf, bufSize)) changed = true;
 
-    // Bundles the target Fl_Input with the dialog kind and the tab's
-    // multi-thread checkbox; intentionally leaked, same lifetime as the widgets.
-    struct BrowseCtx { Fl_Input* input; bool saveDialog; Fl_Check_Button* multiThreadCb; };
-    auto* ctx = new BrowseCtx{input, saveDialog, multiThreadCb};
-
-    Fl_Button* fileBtn = new Fl_Button(FIELD_X + FIELD_W + 5, y, BROWSE_W, ROW_H, "File");
-    fileBtn->callback([](Fl_Widget*, void* data) {
-        auto* ctx = static_cast<BrowseCtx*>(data);
-        Fl_Native_File_Chooser chooser;
-        chooser.type(ctx->saveDialog ? Fl_Native_File_Chooser::BROWSE_SAVE_FILE
-                                      : Fl_Native_File_Chooser::BROWSE_FILE);
-        if (chooser.show() == 0 && chooser.filename()) {
-            ctx->input->value(chooser.filename());
-            if (ctx->multiThreadCb) ctx->multiThreadCb->value(0);
+    ImGui::SameLine();
+    if (ImGui::Button("File", ImVec2(75, 0))) {
+        std::string picked;
+        if (NativePickFile(saveDialog, winFilterName, winFilterExt, picked)) {
+            std::snprintf(buf, bufSize, "%s", picked.c_str());
+            changed = true;
         }
-    }, ctx);
-
-    Fl_Button* dirBtn = new Fl_Button(FIELD_X + FIELD_W + BROWSE_W + 10, y, BROWSE_W, ROW_H, "Folder");
-    dirBtn->callback([](Fl_Widget*, void* data) {
-        auto* ctx = static_cast<BrowseCtx*>(data);
-        Fl_Native_File_Chooser chooser;
-        chooser.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY);
-        if (chooser.show() == 0 && chooser.filename()) {
-            ctx->input->value(chooser.filename());
-            if (ctx->multiThreadCb) ctx->multiThreadCb->value(1);
+    }
+    if (showFolderButton) {
+        ImGui::SameLine();
+        if (ImGui::Button("Folder", ImVec2(75, 0))) {
+            std::string picked;
+            if (NativePickFolder(picked)) {
+                std::snprintf(buf, bufSize, "%s", picked.c_str());
+                changed = true;
+            }
         }
-    }, ctx);
-
-    if (multiThreadCb) {
-        input->callback([](Fl_Widget* w, void* data) {
-            auto* ctx = static_cast<BrowseCtx*>(data);
-            std::string val = static_cast<Fl_Input*>(w)->value();
-            if (val.empty()) return;
-            std::error_code ec;
-            ctx->multiThreadCb->value(fs::is_directory(val, ec) ? 1 : 0);
-        }, ctx);
     }
 
-    return input;
+    ImGui::PopID();
+    return changed;
 }
 
 // Appends "-d" immediately followed by inputPath if dirMode is set (matching
@@ -366,68 +427,41 @@ static void AppendDirAndPath(std::vector<std::string>& args, bool dirMode, const
 // ============================================================================
 
 struct DdsMmpTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
-    Fl_Round_Button* modeAuto = nullptr;
-    Fl_Round_Button* modeDdsToMmp = nullptr;
-    Fl_Round_Button* modeMmpToDds = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    bool multiThread = false;
+    bool dryRun = false;
+    int mode = 0; // 0=auto, 1=dds2mmp, 2=mmp2dds
 };
 
 static DdsMmpTab g_dds;
 
-static Fl_Group* BuildDdsMmpTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "DDS <-> MMP");
-    grp->user_data(reinterpret_cast<void*>(0));
+static void DrawDdsMmpTab() {
+    if (PathRow("dds_in", "Input:", g_dds.inputPath, sizeof(g_dds.inputPath), false, true)) {
+        std::error_code ec;
+        g_dds.multiThread = fs::is_directory(g_dds.inputPath, ec);
+    }
+    PathRow("dds_out", "Output:", g_dds.outputPath, sizeof(g_dds.outputPath), true, false);
 
-    const int inputY   = y + 15;
-    const int outputY  = inputY + ROW_H + ROW_GAP;
-    const int multiY   = outputY + ROW_H + ROW_GAP;
-    const int dryRunY  = multiY + ROW_H + ROW_GAP;
-    const int modeLblY = dryRunY + ROW_H + ROW_GAP + 5;
+    ImGui::Checkbox("Multi-threaded (-m)", &g_dds.multiThread);
+    ImGui::Checkbox("Dry run (--dry-run)", &g_dds.dryRun);
 
-    // Created before the input row so its Folder/File buttons can toggle it.
-    g_dds.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
-
-    g_dds.inputPath = AddBrowsableRow(inputY, "Input:", false, g_dds.multiThread);
-    g_dds.outputPath = AddBrowsableRow(outputY, "Output:", true);
-
-    g_dds.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
-
-    Fl_Box* modeLabel = new Fl_Box(10, modeLblY, 200, ROW_H, "Conversion direction:");
-    modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    int row = modeLblY + ROW_H;
-    g_dds.modeAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
-    g_dds.modeAuto->type(FL_RADIO_BUTTON);
-    g_dds.modeAuto->value(1);
-    row += ROW_H;
-    g_dds.modeDdsToMmp = new Fl_Round_Button(20, row, 200, ROW_H, "Force DDS -> MMP");
-    g_dds.modeDdsToMmp->type(FL_RADIO_BUTTON);
-    row += ROW_H;
-    g_dds.modeMmpToDds = new Fl_Round_Button(20, row, 200, ROW_H, "Force MMP -> DDS");
-    g_dds.modeMmpToDds->type(FL_RADIO_BUTTON);
-
-    grp->end();
-    return grp;
+    ImGui::Spacing();
+    ImGui::TextUnformatted("Conversion direction:");
+    ImGui::RadioButton("Auto-detect (default)", &g_dds.mode, 0);
+    ImGui::RadioButton("Force DDS -> MMP", &g_dds.mode, 1);
+    ImGui::RadioButton("Force MMP -> DDS", &g_dds.mode, 2);
 }
 
 static std::vector<std::string> BuildDdsMmpArgs() {
     std::vector<std::string> args;
+    if (g_dds.dryRun) args.push_back("--dry-run");
+    if (g_dds.multiThread) args.push_back("-m");
+    if (g_dds.mode == 1) args.push_back("--dds2mmp");
+    else if (g_dds.mode == 2) args.push_back("--mmp2dds");
 
-    if (g_dds.dryRun->value()) args.push_back("--dry-run");
-    if (g_dds.multiThread->value()) args.push_back("-m");
-    if (g_dds.modeDdsToMmp->value()) args.push_back("--dds2mmp");
-    else if (g_dds.modeMmpToDds->value()) args.push_back("--mmp2dds");
-
-    std::string out = g_dds.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    std::string in = g_dds.inputPath->value();
-    if (!in.empty()) args.push_back(in);
+    if (g_dds.outputPath[0]) { args.push_back("-o"); args.push_back(g_dds.outputPath); }
+    if (g_dds.inputPath[0]) args.push_back(g_dds.inputPath);
     return args;
 }
 
@@ -436,67 +470,41 @@ static std::vector<std::string> BuildDdsMmpArgs() {
 // ============================================================================
 
 struct IniRegTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
-    Fl_Round_Button* modeAuto = nullptr;
-    Fl_Round_Button* modeIniToReg = nullptr;
-    Fl_Round_Button* modeRegToIni = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    bool multiThread = false;
+    bool dryRun = false;
+    int mode = 0; // 0=auto, 1=ini2reg, 2=reg2ini
 };
 
 static IniRegTab g_ini;
 
-static Fl_Group* BuildIniRegTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "INI <-> REG");
-    grp->user_data(reinterpret_cast<void*>(1));
+static void DrawIniRegTab() {
+    if (PathRow("ini_in", "Input:", g_ini.inputPath, sizeof(g_ini.inputPath), false, true)) {
+        std::error_code ec;
+        g_ini.multiThread = fs::is_directory(g_ini.inputPath, ec);
+    }
+    PathRow("ini_out", "Output:", g_ini.outputPath, sizeof(g_ini.outputPath), true, false);
 
-    const int inputY   = y + 15;
-    const int outputY  = inputY + ROW_H + ROW_GAP;
-    const int multiY   = outputY + ROW_H + ROW_GAP;
-    const int dryRunY  = multiY + ROW_H + ROW_GAP;
-    const int modeLblY = dryRunY + ROW_H + ROW_GAP + 5;
+    ImGui::Checkbox("Multi-threaded (-m)", &g_ini.multiThread);
+    ImGui::Checkbox("Dry run (--dry-run)", &g_ini.dryRun);
 
-    g_ini.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
-
-    g_ini.inputPath = AddBrowsableRow(inputY, "Input:", false, g_ini.multiThread);
-    g_ini.outputPath = AddBrowsableRow(outputY, "Output:", true);
-
-    g_ini.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
-
-    Fl_Box* modeLabel = new Fl_Box(10, modeLblY, 200, ROW_H, "Conversion direction:");
-    modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    int row = modeLblY + ROW_H;
-    g_ini.modeAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
-    g_ini.modeAuto->type(FL_RADIO_BUTTON);
-    g_ini.modeAuto->value(1);
-    row += ROW_H;
-    g_ini.modeIniToReg = new Fl_Round_Button(20, row, 200, ROW_H, "Force INI -> REG");
-    g_ini.modeIniToReg->type(FL_RADIO_BUTTON);
-    row += ROW_H;
-    g_ini.modeRegToIni = new Fl_Round_Button(20, row, 200, ROW_H, "Force REG -> INI");
-    g_ini.modeRegToIni->type(FL_RADIO_BUTTON);
-
-    grp->end();
-    return grp;
+    ImGui::Spacing();
+    ImGui::TextUnformatted("Conversion direction:");
+    ImGui::RadioButton("Auto-detect (default)", &g_ini.mode, 0);
+    ImGui::RadioButton("Force INI -> REG", &g_ini.mode, 1);
+    ImGui::RadioButton("Force REG -> INI", &g_ini.mode, 2);
 }
 
 static std::vector<std::string> BuildIniRegArgs() {
     std::vector<std::string> args;
+    if (g_ini.dryRun) args.push_back("--dry-run");
+    if (g_ini.multiThread) args.push_back("-m");
+    if (g_ini.mode == 1) args.push_back("--ini2reg");
+    else if (g_ini.mode == 2) args.push_back("--reg2ini");
 
-    if (g_ini.dryRun->value()) args.push_back("--dry-run");
-    if (g_ini.multiThread->value()) args.push_back("-m");
-    if (g_ini.modeIniToReg->value()) args.push_back("--ini2reg");
-    else if (g_ini.modeRegToIni->value()) args.push_back("--reg2ini");
-
-    std::string out = g_ini.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    std::string in = g_ini.inputPath->value();
-    if (!in.empty()) args.push_back(in);
+    if (g_ini.outputPath[0]) { args.push_back("-o"); args.push_back(g_ini.outputPath); }
+    if (g_ini.inputPath[0]) args.push_back(g_ini.inputPath);
     return args;
 }
 
@@ -505,48 +513,32 @@ static std::vector<std::string> BuildIniRegArgs() {
 // ============================================================================
 
 struct MobDumpTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    bool multiThread = false;
+    bool dryRun = false;
 };
 
 static MobDumpTab g_mob;
 
-static Fl_Group* BuildMobDumpTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "MOB Dump");
-    grp->user_data(reinterpret_cast<void*>(2));
+static void DrawMobDumpTab() {
+    if (PathRow("mob_in", "Input:", g_mob.inputPath, sizeof(g_mob.inputPath), false, true)) {
+        std::error_code ec;
+        g_mob.multiThread = fs::is_directory(g_mob.inputPath, ec);
+    }
+    PathRow("mob_out", "Output:", g_mob.outputPath, sizeof(g_mob.outputPath), false, true);
 
-    const int inputY  = y + 15;
-    const int outputY = inputY + ROW_H + ROW_GAP;
-    const int multiY  = outputY + ROW_H + ROW_GAP;
-    const int dryRunY = multiY + ROW_H + ROW_GAP;
-
-    g_mob.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
-
-    g_mob.inputPath = AddBrowsableRow(inputY, "Input:", false, g_mob.multiThread);
-    g_mob.outputPath = AddBrowsableRow(outputY, "Output:", false);
-
-    g_mob.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
-
-    grp->end();
-    return grp;
+    ImGui::Checkbox("Multi-threaded (-m)", &g_mob.multiThread);
+    ImGui::Checkbox("Dry run (--dry-run)", &g_mob.dryRun);
 }
 
 static std::vector<std::string> BuildMobDumpArgs() {
     std::vector<std::string> args;
+    if (g_mob.dryRun) args.push_back("--dry-run");
+    if (g_mob.multiThread) args.push_back("-m");
 
-    if (g_mob.dryRun->value()) args.push_back("--dry-run");
-    if (g_mob.multiThread->value()) args.push_back("-m");
-
-    std::string out = g_mob.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    std::string in = g_mob.inputPath->value();
-    if (!in.empty()) args.push_back(in);
+    if (g_mob.outputPath[0]) { args.push_back("-o"); args.push_back(g_mob.outputPath); }
+    if (g_mob.inputPath[0]) args.push_back(g_mob.inputPath);
     return args;
 }
 
@@ -555,123 +547,120 @@ static std::vector<std::string> BuildMobDumpArgs() {
 // ============================================================================
 
 struct ResToolTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* dirMode = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
-    Fl_Check_Button* stripExt = nullptr;
-    Fl_Input* extOverride = nullptr;
-    Fl_Input* excludeNames = nullptr;
-    Fl_Round_Button* actionAuto = nullptr;
-    Fl_Round_Button* actionPack = nullptr;
-    Fl_Round_Button* actionUnpack = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    char extOverride[64] = "";
+    char excludeNames[512] = "";
+    bool dirMode = false;
+    bool multiThread = false;
+    bool dryRun = false;
+    bool stripExt = true;
+    int action = 0; // 0=auto, 1=pack, 2=unpack
 };
 
 static ResToolTab g_res;
 
-static Fl_Group* BuildResToolTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "RES / MQ");
-    grp->user_data(reinterpret_cast<void*>(3));
-
-    const int inputY     = y + 15;
-    const int outputY    = inputY + ROW_H + ROW_GAP;
-    const int extY       = outputY + ROW_H + ROW_GAP;
-    const int excludeY   = extY + ROW_H + ROW_GAP;
-    const int checkRow1Y = excludeY + ROW_H + ROW_GAP;
-    const int checkRow2Y = checkRow1Y + ROW_H + ROW_GAP;
-    const int actionLblY = checkRow2Y + ROW_H + ROW_GAP + 5;
-
-    // Created before the input row so its Folder/File buttons can toggle it.
+static void DrawResToolTab() {
     // Unlike ddsmmp/inireg/mobdump, restool's -d changes meaning rather than
     // being redundant: it batch-processes every item found inside the given
     // folder as a separate target, instead of packing that one folder itself.
-    g_res.multiThread = new Fl_Check_Button(240, checkRow1Y, 220, ROW_H, "Multi-threaded (-m)");
-    g_res.dirMode = new Fl_Check_Button(10, checkRow1Y, 220, ROW_H, "Batch mode (-d)");
-    g_res.dirMode->tooltip(
-        "Treats the input folder as a container of MANY archives/folders to\n"
-        "process separately. Not needed to pack a single folder into one\n"
-        "archive - that already happens automatically.");
+    if (PathRow("res_in", "Input:", g_res.inputPath, sizeof(g_res.inputPath), false, true)) {
+        std::error_code ec;
+        g_res.multiThread = fs::is_directory(g_res.inputPath, ec);
+    }
+    PathRow("res_out", "Output:", g_res.outputPath, sizeof(g_res.outputPath), true, false);
 
-    g_res.inputPath = AddBrowsableRow(inputY, "Input:", false, g_res.multiThread);
-    g_res.outputPath = AddBrowsableRow(outputY, "Output:", true);
+    ImGui::SetNextItemWidth(150);
+    ImGui::InputText("Ext override (--ext)", g_res.extOverride, sizeof(g_res.extOverride));
+    ImGui::SetNextItemWidth(300);
+    ImGui::InputText("Exclude (-e, comma-separated)", g_res.excludeNames, sizeof(g_res.excludeNames));
 
-    Fl_Box* extLabel = new Fl_Box(10, extY, LABEL_W, ROW_H, "Ext override:");
-    extLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_res.extOverride = new Fl_Input(FIELD_X, extY, 150, ROW_H);
-    g_res.extOverride->tooltip("Optional. e.g. .mq, .res (--ext)");
+    ImGui::Checkbox("Batch mode (-d)", &g_res.dirMode);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip(
+            "Treats the input folder as a container of MANY archives/folders to\n"
+            "process separately. Not needed to pack a single folder into one\n"
+            "archive - that already happens automatically.");
+    }
+    ImGui::SameLine();
+    ImGui::Checkbox("Multi-threaded (-m)", &g_res.multiThread);
 
-    Fl_Box* exLabel = new Fl_Box(10, excludeY, LABEL_W, ROW_H, "Exclude:");
-    exLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_res.excludeNames = new Fl_Input(FIELD_X, excludeY, 300, ROW_H);
-    g_res.excludeNames->tooltip("Comma-separated file names to omit when packing (-e / --exclude)");
+    ImGui::Checkbox("Dry run (--dry-run)", &g_res.dryRun);
+    ImGui::SameLine();
+    ImGui::Checkbox("Strip _res/_mq suffix (-s)", &g_res.stripExt);
 
-    g_res.dryRun = new Fl_Check_Button(10, checkRow2Y, 220, ROW_H, "Dry run (--dry-run)");
-    g_res.stripExt = new Fl_Check_Button(240, checkRow2Y, 260, ROW_H, "Strip _res/_mq suffix (-s)");
-    g_res.stripExt->value(1);
-
-    Fl_Box* modeLabel = new Fl_Box(10, actionLblY, 200, ROW_H, "Action:");
-    modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    int row = actionLblY + ROW_H;
-    g_res.actionAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
-    g_res.actionAuto->type(FL_RADIO_BUTTON);
-    g_res.actionAuto->value(1);
-    row += ROW_H;
-    g_res.actionPack = new Fl_Round_Button(20, row, 200, ROW_H, "Force Pack (--pack)");
-    g_res.actionPack->type(FL_RADIO_BUTTON);
-    row += ROW_H;
-    g_res.actionUnpack = new Fl_Round_Button(20, row, 200, ROW_H, "Force Unpack (--unpack)");
-    g_res.actionUnpack->type(FL_RADIO_BUTTON);
-
-    grp->end();
-    return grp;
+    ImGui::Spacing();
+    ImGui::TextUnformatted("Action:");
+    ImGui::RadioButton("Auto-detect (default)", &g_res.action, 0);
+    ImGui::RadioButton("Force Pack (--pack)", &g_res.action, 1);
+    ImGui::RadioButton("Force Unpack (--unpack)", &g_res.action, 2);
 }
 
 static std::vector<std::string> BuildResToolArgs() {
     std::vector<std::string> args;
+    if (g_res.dryRun) args.push_back("--dry-run");
+    if (g_res.multiThread) args.push_back("-m");
+    if (!g_res.stripExt) args.push_back("--no-strip-ext");
+    if (g_res.action == 1) args.push_back("--pack");
+    else if (g_res.action == 2) args.push_back("--unpack");
 
-    if (g_res.dryRun->value()) args.push_back("--dry-run");
-    if (g_res.multiThread->value()) args.push_back("-m");
-    if (!g_res.stripExt->value()) args.push_back("--no-strip-ext");
-    if (g_res.actionPack->value()) args.push_back("--pack");
-    else if (g_res.actionUnpack->value()) args.push_back("--unpack");
+    if (g_res.extOverride[0]) { args.push_back("--ext"); args.push_back(g_res.extOverride); }
+    if (g_res.excludeNames[0]) { args.push_back("-e"); args.push_back(g_res.excludeNames); }
+    if (g_res.outputPath[0]) { args.push_back("-o"); args.push_back(g_res.outputPath); }
 
-    std::string ext = g_res.extOverride->value();
-    if (!ext.empty()) {
-        args.push_back("--ext");
-        args.push_back(ext);
-    }
-
-    std::string exclude = g_res.excludeNames->value();
-    if (!exclude.empty()) {
-        args.push_back("-e");
-        args.push_back(exclude);
-    }
-
-    std::string out = g_res.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    AppendDirAndPath(args, g_res.dirMode->value(), g_res.inputPath->value());
+    AppendDirAndPath(args, g_res.dirMode, g_res.inputPath);
     return args;
 }
 
 // ============================================================================
-// Run Button Dispatch
+// XLSX -> RES Database Compiler Tab (xlsxdb)
 // ============================================================================
 
-static Fl_Tabs* g_tabs = nullptr;
-static Fl_Button* g_runButton = nullptr;
-static Fl_Progress* g_progress = nullptr;
+struct XlsxDbTab {
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+};
+
+static XlsxDbTab g_xlsxdb;
+
+static void DrawXlsxDbTab() {
+    PathRow("xlsx_in", "Input:", g_xlsxdb.inputPath, sizeof(g_xlsxdb.inputPath), false, false, "Spreadsheet", "*.xlsx");
+    PathRow("xlsx_out", "Output:", g_xlsxdb.outputPath, sizeof(g_xlsxdb.outputPath), true, false, "RES Archive", "*.res");
+    if (g_xlsxdb.outputPath[0] == '\0') {
+        ImGui::TextDisabled("Optional. Defaults to the input's name with a .res extension.");
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::TextWrapped(
+        "Compiles an Evil Islands gameplay database spreadsheet (database.xlsx or "
+        "databaselmp.xlsx) directly into a packed .res archive, detecting which "
+        "database(s) the workbook contains sheets for. See "
+        "docs/file-formats/database-format.md for the on-disk format.");
+}
+
+static std::vector<std::string> BuildXlsxDbArgs() {
+    std::vector<std::string> args;
+    if (g_xlsxdb.outputPath[0]) { args.push_back("-o"); args.push_back(g_xlsxdb.outputPath); }
+    if (g_xlsxdb.inputPath[0]) args.push_back(g_xlsxdb.inputPath);
+    return args;
+}
+
+// ============================================================================
+// Run Button Dispatch & Main Loop
+// ============================================================================
+
 static ProcHandle g_activeProc;
 static double g_progressPhase = 0.0;
+static std::string g_statusText = "Idle";
+static int g_activeTab = 0;
 
-// Drains captured subprocess output into the log panel and, once the process
-// has exited and the reader thread has drained the last of the pipe, resets
-// the UI to idle. While running, advances an indeterminate progress fill.
-static void ProgressTimerCb(void*) {
+// Drains captured subprocess output into the log and, once the process has
+// exited and the reader thread has drained the last of the pipe, resets the
+// UI to idle. Called once per frame (the main loop already runs at the
+// display's refresh rate, so no separate timer is needed like FLTK's).
+static void PumpActiveProcess() {
     std::string chunk;
     {
         std::lock_guard<std::mutex> lock(g_outputMutex);
@@ -681,64 +670,44 @@ static void ProgressTimerCb(void*) {
         AppendLog(chunk);
     }
 
+    if (!IsValid(g_activeProc)) return;
+
     bool stillRunning = true;
     int exitCode = 0;
     PollProcess(g_activeProc, stillRunning, exitCode);
 
     if (!stillRunning && !g_readerAlive.load()) {
         CleanupProcess(g_activeProc);
-        if (g_progress) {
-            g_progress->value(0.0f);
-            g_progress->label("Idle");
-        }
-        if (g_runButton) {
-            g_runButton->activate();
-            g_runButton->label("Run");
-        }
-        if (g_statusBox) {
-            g_statusBox->label(exitCode == 0 ? "Job finished successfully" : "Job finished with errors");
-        }
+        g_statusText = (exitCode == 0) ? "Job finished successfully" : "Job finished with errors";
         AppendLog(exitCode == 0
             ? "\n[Job finished successfully]\n\n"
             : ("\n[Job finished, exit code " + std::to_string(exitCode) + "]\n\n"));
         return;
     }
 
-    g_progressPhase += 3.0;
+    g_progressPhase += 1.2;
     if (g_progressPhase > 100.0) g_progressPhase = 0.0;
-    if (g_progress) {
-        g_progress->value(static_cast<float>(g_progressPhase));
-        g_progress->label("Running...");
-    }
-    Fl::repeat_timeout(0.06, ProgressTimerCb, nullptr);
 }
 
-static void OnRunClicked(Fl_Widget*, void*) {
-    if (IsValid(g_activeProc)) {
-        return; // A job is already running.
-    }
+struct TabInfo { const char* name; void (*draw)(); std::vector<std::string> (*buildArgs)(); const char* subcommand; const char* activeInput; };
 
-    Fl_Widget* activeTab = g_tabs->value();
-    if (!activeTab) {
-        return;
-    }
-    intptr_t subtool = reinterpret_cast<intptr_t>(activeTab->user_data());
+static void OnRunClicked() {
+    if (IsValid(g_activeProc)) return; // A job is already running.
 
-    // Checked directly against the widget rather than re-parsed from the built
-    // token list, since values of -o/--ext/-e would otherwise look positional too.
-    const Fl_Input* activeInput = nullptr;
+    const char* activeInput = nullptr;
     std::vector<std::string> tokens;
     const char* subcommand = "";
-    switch (subtool) {
+    switch (g_activeTab) {
         case 0: activeInput = g_dds.inputPath; tokens = BuildDdsMmpArgs(); subcommand = "ddsmmp"; break;
         case 1: activeInput = g_ini.inputPath; tokens = BuildIniRegArgs(); subcommand = "inireg"; break;
         case 2: activeInput = g_mob.inputPath; tokens = BuildMobDumpArgs(); subcommand = "mobdump"; break;
         case 3: activeInput = g_res.inputPath; tokens = BuildResToolArgs(); subcommand = "restool"; break;
+        case 4: activeInput = g_xlsxdb.inputPath; tokens = BuildXlsxDbArgs(); subcommand = "xlsxdb"; break;
         default: return;
     }
 
-    if (!activeInput || std::string(activeInput->value()).empty()) {
-        fl_alert("Please specify an input path.");
+    if (!activeInput || activeInput[0] == '\0') {
+        AppendLog("[ERROR] Please specify an input path.\n");
         return;
     }
 
@@ -752,80 +721,126 @@ static void OnRunClicked(Fl_Widget*, void*) {
     ProcHandle proc = LaunchCaptured(binary, subcommand, tokens, err);
     if (!IsValid(proc)) {
         AppendLog("[ERROR] " + err + "\n");
-        if (g_statusBox) g_statusBox->label("Failed to launch");
-        fl_alert("%s", err.c_str());
+        g_statusText = "Failed to launch";
         return;
     }
 
     g_activeProc = proc;
     g_progressPhase = 0.0;
-    if (g_runButton) {
-        g_runButton->deactivate();
-        g_runButton->label("Running...");
+    g_statusText = "Running...";
+}
+
+int main(int, char**) {
+    glfwSetErrorCallback([](int error, const char* description) {
+        std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
+    });
+    if (!glfwInit()) return 1;
+
+    GLFWwindow* window = glfwCreateWindow(800, 700, "um-multitool GUI", nullptr, nullptr);
+    if (!window) {
+        glfwTerminate();
+        return 1;
     }
-    if (g_statusBox) g_statusBox->label("Running...");
-    Fl::add_timeout(0.06, ProgressTimerCb, nullptr);
-}
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // vsync; also paces our polling loop like the old 60ms timer did
 
-static void OnClearLogClicked(Fl_Widget*, void*) {
-    if (g_logBuffer) {
-        g_logBuffer->text("");
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    // Default Dear ImGui look and colors - no theme customization.
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL2_Init();
+
+    const TabInfo tabs[] = {
+        {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
+        {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
+        {"MOB Dump", DrawMobDumpTab, BuildMobDumpArgs, "mobdump", nullptr},
+        {"RES / MQ", DrawResToolTab, BuildResToolArgs, "restool", nullptr},
+        {"XLSX -> RES", DrawXlsxDbTab, BuildXlsxDbArgs, "xlsxdb", nullptr},
+    };
+
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
+            ImGui_ImplGlfw_Sleep(16);
+            continue;
+        }
+
+        PumpActiveProcess();
+
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        int fbW, fbH;
+        glfwGetFramebufferSize(window, &fbW, &fbH);
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(ImVec2(static_cast<float>(fbW) / io.DisplayFramebufferScale.x,
+                                         static_cast<float>(fbH) / io.DisplayFramebufferScale.y));
+        ImGui::Begin("##main", nullptr,
+                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                      ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
+
+        if (ImGui::BeginTabBar("##tabs")) {
+            for (int i = 0; i < static_cast<int>(std::size(tabs)); ++i) {
+                if (ImGui::BeginTabItem(tabs[i].name)) {
+                    g_activeTab = i;
+                    ImGui::Spacing();
+                    tabs[i].draw();
+                    ImGui::EndTabItem();
+                }
+            }
+            ImGui::EndTabBar();
+        }
+
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::Spacing();
+
+        bool running = IsValid(g_activeProc);
+        ImGui::BeginDisabled(running);
+        if (ImGui::Button(running ? "Running..." : "Run", ImVec2(110, 32))) {
+            OnRunClicked();
+        }
+        ImGui::EndDisabled();
+        ImGui::SameLine();
+        if (ImGui::Button("Clear Log", ImVec2(110, 32))) {
+            g_log.clear();
+        }
+        ImGui::SameLine();
+        ImGui::TextUnformatted(g_statusText.c_str());
+
+        float progressFrac = running ? static_cast<float>(g_progressPhase / 100.0) : 0.0f;
+        ImGui::ProgressBar(progressFrac, ImVec2(-1, 0), running ? "Running..." : "Idle");
+
+        ImGui::Spacing();
+        ImGui::BeginChild("##log", ImVec2(0, 0), ImGuiChildFlags_Borders);
+        ImGui::TextUnformatted(g_log.c_str());
+        if (g_logDirty) {
+            ImGui::SetScrollHereY(1.0f);
+            g_logDirty = false;
+        }
+        ImGui::EndChild();
+
+        ImGui::End();
+
+        ImGui::Render();
+        glViewport(0, 0, fbW, fbH);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+
+        glfwSwapBuffers(window);
     }
+
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return 0;
 }
-
-// ============================================================================
-// Application Entry Point
-// ============================================================================
-
-int main(int argc, char** argv) {
-    Fl::scheme("gtk+");
-    Fl::background(240, 240, 240);
-    Fl_Tooltip::size(12);
-
-    Fl_Window* window = new Fl_Window(WIN_W, WIN_H, "um-multitool GUI");
-    window->color(fl_rgb_color(240, 240, 240));
-
-    g_tabs = new Fl_Tabs(10, TABS_Y, WIN_W - 20, TABS_H);
-    g_tabs->selection_color(kAccentColor);
-    BuildDdsMmpTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    BuildIniRegTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    BuildMobDumpTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    BuildResToolTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    g_tabs->end();
-
-    int controlsY = TABS_Y + TABS_H + 12;
-    g_runButton = new Fl_Button(10, controlsY, 110, 32, "@> Run");
-    g_runButton->callback(OnRunClicked);
-    g_runButton->color(kAccentColor);
-    g_runButton->labelcolor(FL_WHITE);
-    g_runButton->labelfont(FL_HELVETICA_BOLD);
-
-    Fl_Button* clearBtn = new Fl_Button(130, controlsY, 110, 32, "Clear Log");
-    clearBtn->callback(OnClearLogClicked);
-
-    g_statusBox = new Fl_Box(250, controlsY, WIN_W - 270, 32, "Idle");
-    g_statusBox->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_statusBox->labelfont(FL_HELVETICA_ITALIC);
-
-    int progressY = controlsY + 40;
-    g_progress = new Fl_Progress(10, progressY, WIN_W - 20, 22, "Idle");
-    g_progress->minimum(0.0f);
-    g_progress->maximum(100.0f);
-    g_progress->color(FL_WHITE);
-    g_progress->selection_color(kAccentColor);
-    g_progress->labelsize(12);
-
-    int logY = progressY + 32;
-    Fl_Text_Display* logDisplay = new Fl_Text_Display(10, logY, WIN_W - 20, WIN_H - logY - 10);
-    g_logBuffer = new Fl_Text_Buffer();
-    logDisplay->buffer(g_logBuffer);
-    logDisplay->textfont(FL_COURIER);
-    logDisplay->textsize(12);
-
-    window->end();
-    window->resizable(logDisplay);
-    window->show(argc, argv);
-
-    return Fl::run();
-}
-

@@ -4,11 +4,12 @@
  * ============================================================================
  *
  * Description:
- *   Single binary merging four standalone tools:
+ *   Single binary merging five standalone tools:
  *     - ddsmmp  (formerly um-ddsmmp):  .dds  <-> .mmp  texture conversion
  *     - inireg  (formerly um-inireg):  .ini  <-> .reg  config conversion
  *     - mobdump (formerly um-mobdump): .mob  ->  .yaml/.eis map dumping
  *     - restool (formerly um-restool): .res/.mq <-> folder pack/unpack
+ *     - xlsxdb  (formerly um-xlsxdb):  .xlsx ->  .res database compiler
  *
  * Dispatch rules:
  *   1. Explicit subcommand: `um-multitool <subcommand> [options] <path>`
@@ -18,7 +19,7 @@
  *      input requires an explicit subcommand.
  *
  * Version:
- *   0.1
+ *   1.1
  * ============================================================================
  */
 
@@ -34,7 +35,7 @@
 
 namespace fs = std::filesystem;
 
-static constexpr const char* PROGRAM_VERSION = "1.0";
+static constexpr const char* PROGRAM_VERSION = "1.1";
 
 static std::string ToLower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
@@ -52,7 +53,8 @@ static void PrintTopLevelHelp() {
               << "  ddsmmp   (alias: dds)   Convert textures between .dds <-> .mmp\n"
               << "  inireg   (alias: ini)   Convert configs between .ini <-> .reg\n"
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
-              << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n\n"
+              << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n"
+              << "  xlsxdb   (alias: db)    Compile .xlsx gameplay databases to .res\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
@@ -61,25 +63,28 @@ static void PrintTopLevelHelp() {
               << "  um-multitool restool database.res\n"
               << "  um-multitool ddsmmp texture.dds\n"
               << "  um-multitool inireg -d ./ini -o ./reg -m\n"
+              << "  um-multitool xlsxdb databaselmp.xlsx\n"
               << "  um-multitool texture.dds                 # auto-detected -> ddsmmp\n\n"
               << "Note: directory-mode auto-detection only succeeds when every file in the\n"
               << "directory belongs to exactly one of ddsmmp/inireg/mobdump; anything mixed,\n"
               << "unrecognized, or restool-shaped (archives / generic asset folders) requires\n"
-              << "the explicit 'restool' subcommand.\n";
+              << "the explicit 'restool' subcommand. xlsxdb only ever operates on a single\n"
+              << ".xlsx file, so it is also excluded from directory auto-detection.\n";
 }
 
 static void PrintTopLevelVersion() {
     std::cout << "um-multitool version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool (each 1.0)\n";
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb (each 1.0)\n";
 }
 
-enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool };
+enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb };
 
 static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "ddsmmp" || tok == "dds")  return SubTool::DdsMmp;
     if (tok == "inireg" || tok == "ini")  return SubTool::IniReg;
     if (tok == "mobdump" || tok == "mob") return SubTool::MobDump;
     if (tok == "restool" || tok == "res") return SubTool::ResTool;
+    if (tok == "xlsxdb" || tok == "db")   return SubTool::XlsxDb;
     return SubTool::None;
 }
 
@@ -89,6 +94,7 @@ static int DispatchTo(SubTool tool, int argc, char* argv[]) {
         case SubTool::IniReg:  return RunIniReg(argc, argv);
         case SubTool::MobDump: return RunMobDump(argc, argv);
         case SubTool::ResTool: return RunResTool(argc, argv);
+        case SubTool::XlsxDb:  return RunXlsxDb(argc, argv);
         default: return 1;
     }
 }
@@ -130,6 +136,7 @@ static SubTool DetectFromExtension(const std::string& ext) {
     if (ext == ".ini" || ext == ".reg") return SubTool::IniReg;
     if (ext == ".mob") return SubTool::MobDump;
     if (ext == ".res" || ext == ".mq") return SubTool::ResTool;
+    if (ext == ".xlsx") return SubTool::XlsxDb;
     return SubTool::None;
 }
 
@@ -171,7 +178,7 @@ static SubTool AutoDetect(const fs::path& path, std::string& errOut) {
     if (tool == SubTool::None) {
         errOut = "Cannot determine which tool to use for '" + path.string() +
                  "' (unrecognized extension '" + ext + "').\n"
-                 "Please specify an explicit subcommand: ddsmmp | inireg | mobdump | restool";
+                 "Please specify an explicit subcommand: ddsmmp | inireg | mobdump | restool | xlsxdb";
     }
     return tool;
 }
