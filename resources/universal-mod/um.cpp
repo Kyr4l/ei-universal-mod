@@ -250,15 +250,6 @@ static bool IsTrueString(LPCSTR value) {
     return strcmp(lowerValue, "true") == 0;
 }
 
-// Read a boolean override from the process environment.
-static bool GetEnvironmentFlag(LPCSTR name) {
-    const char* value = getenv(name);
-    if (!value) {
-        return false;
-    }
-    return IsTrueString(value);
-}
-
 // Parse a key name (e.g. "F7", "0x76", "118") into a virtual-key code.
 // Falls back to defaultKey for empty or unrecognized values.
 static BYTE ParseVirtualKeyName(const char* value, BYTE defaultKey = VK_F9) {
@@ -343,18 +334,29 @@ static void ParseOverlayPosition(const char* value, char* out, size_t outSize) {
     out[outSize - 1] = '\0';
 }
 
-// Parse OVERLAY_REFRESH_MS, clamped to a sane range; falls back to 500 for
-// empty/unrecognized values (100ms floor avoids excessive repaint overhead).
-static int ParseOverlayRefreshMs(const char* value) {
+// Parse an integer clamped to [min, max], falling back to defaultValue only
+// when the text itself is not a number at all; an in-range-but-out-of-bounds
+// value is clamped rather than discarded. Replaces five near-identical
+// clamped-int parsers (refresh interval, opacity, log lines, log width,
+// thread count) that used to each hand-roll this with slightly different
+// (almost certainly unintentional) edge-case behavior - e.g. some of them
+// fell back to defaultValue instead of clamping when a value was merely too
+// small. One consistent rule now applies to all of them.
+static long ParseClampedLong(const char* value, long min, long max, long defaultValue) {
     if (!value || value[0] == '\0') {
-        return 500;
+        return defaultValue;
     }
     char* end = NULL;
     long parsed = strtol(value, &end, 10);
-    if (end == value || parsed < 100 || parsed > 5000) {
-        return 500;
+    if (end == value) {
+        return defaultValue;
     }
-    return static_cast<int>(parsed);
+    if (parsed < min) {
+        parsed = min;
+    } else if (parsed > max) {
+        parsed = max;
+    }
+    return parsed;
 }
 
 // Parse a comma-separated list of positive FPS values (e.g. "30,60,75,120")
@@ -392,71 +394,6 @@ static void ParseFpsMarks(const char* value, double* outMarks, int* outCount) {
     *outCount = parsedCount;
 }
 
-// Parse OVERLAY_BACKGROUND_OPACITY as a percentage, clamped to 0-100.
-static int ParseOverlayOpacityPercent(const char* value) {
-    if (!value || value[0] == '\0') {
-        return 20;
-    }
-    char* end = NULL;
-    long parsed = strtol(value, &end, 10);
-    if (end == value) {
-        return 20;
-    }
-    if (parsed < 0) {
-        parsed = 0;
-    } else if (parsed > 100) {
-        parsed = 100;
-    }
-    return static_cast<int>(parsed);
-}
-
-// Parse OVERLAY_LOG_LINES, clamped to [1, OVERLAY_LOG_CAPACITY].
-static int ParseOverlayLogLineCount(const char* value) {
-    if (!value || value[0] == '\0') {
-        return 10;
-    }
-    char* end = NULL;
-    long parsed = strtol(value, &end, 10);
-    if (end == value || parsed < 1) {
-        return 10;
-    }
-    if (parsed > OVERLAY_LOG_CAPACITY) {
-        parsed = OVERLAY_LOG_CAPACITY;
-    }
-    return static_cast<int>(parsed);
-}
-
-// Parse OVERLAY_LOG_WIDTH (pixels), clamped to a sane range.
-static int ParseOverlayLogWidth(const char* value) {
-    if (!value || value[0] == '\0') {
-        return 900;
-    }
-    char* end = NULL;
-    long parsed = strtol(value, &end, 10);
-    if (end == value || parsed < 300) {
-        return 900;
-    }
-    if (parsed > 2000) {
-        parsed = 2000;
-    }
-    return static_cast<int>(parsed);
-}
-
-// Parse OVERLAY_THREAD_COUNT, clamped to [1, OVERLAY_THREAD_DISPLAY_MAX].
-static int ParseOverlayThreadCount(const char* value) {
-    if (!value || value[0] == '\0') {
-        return 8;
-    }
-    char* end = NULL;
-    long parsed = strtol(value, &end, 10);
-    if (end == value || parsed < 1) {
-        return 8;
-    }
-    if (parsed > OVERLAY_THREAD_DISPLAY_MAX) {
-        parsed = OVERLAY_THREAD_DISPLAY_MAX;
-    }
-    return static_cast<int>(parsed);
-}
 
 // Map a PERFORMANCE_PRIORITY_CLASS config value to a Win32 priority class.
 // Falls back to NORMAL_PRIORITY_CLASS for empty or unrecognized values.
@@ -494,6 +431,362 @@ static const char* PriorityClassToName(DWORD priorityClass) {
     case BELOW_NORMAL_PRIORITY_CLASS: return "belownormal";
     case IDLE_PRIORITY_CLASS: return "idle";
     default: return "unknown";
+    }
+}
+
+// Strip optional surrounding double quotes/whitespace and store a bounded,
+// comma-separated config string (used for FILE_IO_LOGGING_FILTER and
+// OVERLAY_LOG_LEVEL_FILTER, both documented/written as a quoted value).
+static void SetQuotedConfigString(char* dest, size_t destSize, const char* value) {
+    dest[0] = '\0';
+    if (!value) {
+        return;
+    }
+
+    while (*value == ' ' || *value == '\t' || *value == '"') {
+        ++value;
+    }
+    strncpy(dest, value, destSize - 1);
+    dest[destSize - 1] = '\0';
+    size_t length = strlen(dest);
+    while (length > 0 &&
+        (dest[length - 1] == ' ' || dest[length - 1] == '\t' || dest[length - 1] == '"')) {
+        dest[--length] = '\0';
+    }
+}
+
+// ============================================================================
+// Unified Settings Table
+// ============================================================================
+// Every um.cfg / environment-variable setting used to be hand-maintained in
+// three separate places that had to be kept in sync by hand: the default
+// um.cfg template writer, the um.cfg parser, and the environment-variable
+// override pass in InitializeDllThread. All three are now driven by the one
+// declarative table below (kSettings) - adding, renaming, or re-documenting a
+// setting is a one-line change here instead of three separate edits.
+//
+// Note on OVERLAY_THREAD_COUNT: the original default-template writer printed
+// the *current live value* of g_overlayThreadDisplayCount for this one
+// setting (relevant only if um.cfg is deleted mid-session, after this setting
+// was already changed by an earlier load, and then reloaded/regenerated).
+// The table below prints the true fixed default (8) instead, which is more
+// predictable for a file whose entire purpose is to *show the defaults*, so
+// this is a deliberate small behavior simplification, not an oversight.
+
+enum class SettingType { Bool, String, VKey, Color, ClampedInt, Position, FpsMarks };
+
+struct SettingDef {
+    const char* key;
+    SettingType type;
+    void* target;                 // address of the backing global (marks array, for FpsMarks)
+    void* target2;                // FpsMarks only: address of the paired count int
+    bool hasEnvOverride;          // CRASH_DUMPS and FILE_IO_LOGGING_FILTER intentionally have none (matches original)
+    bool boolDefault;             // Bool
+    const char* stringDefault;    // String / FpsMarks (template display text)
+    size_t bufferSize;            // String / Position: size of the buffer at `target`
+    bool quoteInTemplate;         // String only: whether the default template wraps the value in "..."
+    BYTE vkeyDefault;             // VKey
+    COLORREF colorDefault;        // Color
+    long intMin, intMax, intDefault; // ClampedInt
+    const char* positionDefault;  // Position
+    const char* sectionBanner;    // printed verbatim (own "; " prefixes, own trailing \n) before this entry, or nullptr
+    const char* comment;          // printed verbatim (own "; " prefixes, newline-joined, no trailing \n)
+};
+
+static SettingDef BoolSetting(const char* key, bool* target, bool def, bool hasEnv,
+        const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::Bool, target, nullptr, hasEnv,
+        def, nullptr, 0, false, 0, 0, 0, 0, 0, nullptr, section, comment };
+}
+
+static SettingDef StringSetting(const char* key, char* target, size_t bufferSize, const char* def,
+        bool quoteInTemplate, bool hasEnv, const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::String, target, nullptr, hasEnv,
+        false, def, bufferSize, quoteInTemplate, 0, 0, 0, 0, 0, nullptr, section, comment };
+}
+
+static SettingDef VKeySetting(const char* key, BYTE* target, BYTE def, bool hasEnv,
+        const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::VKey, target, nullptr, hasEnv,
+        false, nullptr, 0, false, def, 0, 0, 0, 0, nullptr, section, comment };
+}
+
+static SettingDef ColorSetting(const char* key, COLORREF* target, COLORREF def, bool hasEnv,
+        const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::Color, target, nullptr, hasEnv,
+        false, nullptr, 0, false, 0, def, 0, 0, 0, nullptr, section, comment };
+}
+
+static SettingDef IntSetting(const char* key, int* target, long min, long max, long def, bool hasEnv,
+        const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::ClampedInt, target, nullptr, hasEnv,
+        false, nullptr, 0, false, 0, 0, min, max, def, nullptr, section, comment };
+}
+
+static SettingDef PositionSetting(const char* key, char* target, size_t bufferSize, const char* def,
+        bool hasEnv, const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::Position, target, nullptr, hasEnv,
+        false, nullptr, bufferSize, false, 0, 0, 0, 0, 0, def, section, comment };
+}
+
+static SettingDef FpsMarksSetting(const char* key, double* target, int* countTarget, const char* templateText,
+        bool hasEnv, const char* comment, const char* section = nullptr) {
+    return SettingDef{ key, SettingType::FpsMarks, target, countTarget, hasEnv,
+        false, templateText, 0, false, 0, 0, 0, 0, 0, nullptr, section, comment };
+}
+
+// Declared ahead of the table since a couple of entries' comment text is
+// generated once from a compile-time constant rather than hand-copied.
+static const SettingDef kSettings[] = {
+    BoolSetting("SPELLADDON_ASI_CHECK", &g_enableAsiCheck, true, true,
+        "; Require SpellAddonX.asi beside game.exe; (true/false)"),
+
+    BoolSetting("KEYBOARD_REWRITES", &g_enableKeyboardRewrites, true, true,
+        "; Rewrite backtick and number-row input as US-QWERTY keys; (true/false)",
+        "; -- Keyboard --"),
+    BoolSetting("KEYBOARD_REWRITES_LOGGING", &g_enableKeyboardRewriteLogging, false, true,
+        "; Log keyboard rewrite events; (true/false)"),
+    VKeySetting("RELOAD_CONFIG_KEY", &g_reloadConfigKey, VK_F11, true,
+        "; Key that reloads um.cfg and applies it immediately, without restarting the game;\n"
+        "; some settings (installing hooks, creating the overlay window for the first time)\n"
+        "; still require a restart; F1-F12, or a 0x.. / decimal virtual-key code."),
+
+    BoolSetting("LOGGING", &g_enableCrashLogging, true, true,
+        "; Write diagnostic and crash information to um.log; (true/false)",
+        "; -- Logging --"),
+    BoolSetting("FILE_IO_LOGGING", &g_enableFileIoLogging, false, true,
+        "; Log file opens, reads, and writes as INFO entries; (true/false)"),
+    StringSetting("FILE_IO_LOGGING_FILTER", g_fileIoLoggingFilter, sizeof(g_fileIoLoggingFilter), "", true, false,
+        "; Comma-separated file extensions to exclude from file-I/O logging; empty or like mmp,res."),
+    BoolSetting("CLEAR_LOG_ON_START", &g_clearLogOnStart, true, true,
+        "; Clear um.log on the first DLL instance of a launch; (true/false)"),
+
+    BoolSetting("ANTICRASH", &g_enableAntiCrash, true, true,
+        "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)",
+        "; -- Crash handling --"),
+    BoolSetting("CRASH_DUMPS", &g_enableCrashDumps, true, false,
+        "; Write portable Windows minidumps beside um.log; (true/false)"),
+    BoolSetting("MOB_VALIDATION", &g_enableMobValidation, false, true,
+        "; Validate .mob file headers when opened and log structural problems, including a\n"
+        "; cross-check of unit weapons/armors/spells/quest/quick items against the item/spell database; (true/false)"),
+    BoolSetting("HEAP_CORRUPTION_TERMINATION", &g_enableHeapTermination, true, true,
+        "; Fail fast the instant Windows detects heap corruption instead of letting the\n"
+        "; process keep running on corrupted memory until an unrelated later crash; the\n"
+        "; resulting crash log points much closer to the real cause; (true/false)"),
+
+    BoolSetting("PERFORMANCE_PRIORITY_ENABLED", &g_enablePerformancePriority, false, true,
+        "; Apply a custom process priority class below; off by default, since forcing\n"
+        "; high/realtime priority on a game not designed for it can cause audio/input\n"
+        "; stutter instead of helping; (true/false)",
+        "; -- Performance --\n"
+        "; These two settings are independent of each other - enabling one does not\n"
+        "; enable the other.\n"
+        ";"),
+    StringSetting("PERFORMANCE_PRIORITY_CLASS", g_performancePriorityClass, sizeof(g_performancePriorityClass), "high", false, true,
+        "; Priority class to apply when the setting above is enabled; one of idle,\n"
+        "; belownormal, normal, abovenormal, high, realtime."),
+    BoolSetting("PERFORMANCE_AFFINITY_ENABLED", &g_enablePerformanceAffinity, false, true,
+        "; Apply the CPU affinity mask below; off by default, since restricting the\n"
+        "; game to too few cores can make performance WORSE, not better - test before\n"
+        "; leaving this on; (true/false)"),
+    StringSetting("PERFORMANCE_AFFINITY_MASK", g_performanceAffinityMaskHex, sizeof(g_performanceAffinityMaskHex), "", true, true,
+        "; Restricts which CPU cores the game is allowed to run on when the setting\n"
+        "; above is enabled. This does NOT make the game slower or single-threaded by\n"
+        "; itself - it can help an old, mostly single-threaded game like this one, by\n"
+        "; stopping Windows/Wine from constantly bouncing its one busy thread between\n"
+        "; different cores - but restricting to too few cores can backfire.\n"
+        ";\n"
+        "; You do not need to understand binary/hex to use this - just copy one of these\n"
+        "; common values (check Task Manager/Windows or `nproc`/System Monitor on Linux\n"
+        "; first to see how many cores you actually have, and don't pick too few):\n"
+        ";   0x3  = cores 1-2\n"
+        ";   0xF  = cores 1-4\n"
+        ";   0x3F = cores 1-6\n"
+        ";   0xFF = cores 1-8"),
+
+    BoolSetting("OVERLAY_ENABLED", &g_enableOverlay, true, true,
+        "; Enable a toggleable diagnostic overlay drawn on top of the game window; (true/false)",
+        "; -- Overlay --"),
+    VKeySetting("OVERLAY_TOGGLE_KEY", &g_overlayToggleKey, VK_F9, true,
+        "; Key that shows/hides the main overlay panel while the game has focus; F1-F12,\n"
+        "; or a 0x.. / decimal virtual-key code."),
+    PositionSetting("OVERLAY_POSITION", g_overlayPosition, sizeof(g_overlayPosition), "top-left", true,
+        "; Corner/edge of the game window the overlay is anchored to; one of\n"
+        "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center."),
+    ColorSetting("OVERLAY_COLOR", &g_overlayTextColor, RGB(0, 255, 0), true,
+        "; Overlay text color as a hex RRGGBB value (no # needed)."),
+    IntSetting("OVERLAY_REFRESH_MS", &g_overlayRefreshMs, 100, 5000, 500, true,
+        "; How often the overlay repaints and samples FPS/resources, in milliseconds (100-5000)."),
+    BoolSetting("OVERLAY_SHOW_FPS_GRAPH", &g_overlayShowFpsGraph, true, true,
+        "; Show the FPS sparkline graph (frametime stays as text only); (true/false)"),
+    FpsMarksSetting("OVERLAY_FPS_MARKS", g_overlayFpsMarks, &g_overlayFpsMarkCount, "30,60,75,120,140,165,240", true,
+        "; Comma-separated static FPS reference marks for the graph, ascending; the lowest\n"
+        "; two always show, the rest only appear once the game actually reaches them."),
+    BoolSetting("OVERLAY_SHOW_RESOURCES", &g_overlayShowResources, true, true,
+        "; Show CPU%%/memory/thread-count usage of game.exe; (true/false)"),
+    BoolSetting("OVERLAY_SHOW_BACKEND", &g_overlayShowBackend, true, true,
+        "; Show which DirectDraw driver is actually rendering (native, dgVoodoo2, DXVK, etc.); (true/false)"),
+    BoolSetting("OVERLAY_SHOW_THREADS", &g_overlayShowThreads, true, true,
+        "; Show a per-thread CPU%% breakdown below the FPS graph (lowest 8 thread IDs,\n"
+        "; oldest/main thread first and stable across samples, rather than resorted by\n"
+        "; CPU%% each tick); thread names are usually \"(unnamed)\" since this game predates\n"
+        "; thread naming APIs - only um.dll's own threads are named; (true/false)"),
+    IntSetting("OVERLAY_THREAD_COUNT", &g_overlayThreadDisplayCount, 1, OVERLAY_THREAD_DISPLAY_MAX, 8, true,
+        "; How many threads to list (lowest thread IDs first); max 32."),
+    ColorSetting("OVERLAY_BACKGROUND_COLOR", &g_overlayBackgroundColor, RGB(0, 0, 0), true,
+        "; Panel background color as a hex RRGGBB value (no # needed)."),
+    IntSetting("OVERLAY_BACKGROUND_OPACITY", &g_overlayBackgroundOpacityPercent, 0, 100, 20, true,
+        "; Panel background opacity as a percentage (0=fully transparent, 100=solid).\n"
+        "; NOTE: 100 renders the panel WITHOUT a layered window at all (plain BitBlt);\n"
+        "; any value below 100 re-enables a layered window, which on some Wine/Wayland\n"
+        "; setups forces the game out of direct-scanout presentation and causes a large\n"
+        "; GPU/FPS regression - confirmed to happen with BOTH transparency styles below,\n"
+        "; not just smooth alpha blending; 100 is the only performance-safe value there."),
+    StringSetting("OVERLAY_TRANSPARENCY_STYLE", g_overlayTransparencyStyle, sizeof(g_overlayTransparencyStyle), "alpha", false, true,
+        "; How the background opacity above is achieved when below 100; \"alpha\" blends\n"
+        "; smoothly (some Wine/Wayland setups don't honor this and render fully opaque\n"
+        "; instead); \"dither\" approximates it with alternating fully-opaque/fully-\n"
+        "; transparent scanline bands, which still works when smooth per-pixel alpha\n"
+        "; blending does not; one of alpha, dither."),
+
+    BoolSetting("OVERLAY_LOG_ENABLED", &g_overlayLogEnabled, true, true,
+        "; Show a separate auto-scrolling panel with the last few um.log lines; (true/false)",
+        "; -- Overlay log panel --"),
+    VKeySetting("OVERLAY_LOG_TOGGLE_KEY", &g_overlayLogToggleKey, VK_F10, true,
+        "; Key that shows/hides the log panel independently of the main overlay panel;\n"
+        "; F1-F12, or a 0x.. / decimal virtual-key code."),
+    IntSetting("OVERLAY_LOG_LINES", &g_overlayLogLineCount, 1, OVERLAY_LOG_CAPACITY, 10, true,
+        "; Number of most recent log lines to display, newest at the bottom (max 50)."),
+    IntSetting("OVERLAY_LOG_WIDTH", &g_overlayLogPanelWidth, 300, 2000, 900, true,
+        "; Log panel width in pixels (300-2000); widen this if long lines still get\n"
+        "; wrapped/clipped too aggressively."),
+    BoolSetting("OVERLAY_LOG_WRAP", &g_overlayLogWrapEnabled, true, true,
+        "; Wrap log lines that are too long to fit within the panel width onto extra\n"
+        "; visual rows instead of clipping them; counts against OVERLAY_LOG_LINES above; (true/false)"),
+    PositionSetting("OVERLAY_LOG_POSITION", g_overlayLogPosition, sizeof(g_overlayLogPosition), "bottom-left", true,
+        "; Corner/edge of the game window the log panel is anchored to; one of\n"
+        "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center."),
+    StringSetting("OVERLAY_LOG_LEVEL_FILTER", g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), "SYSINFO", true, true,
+        "; Comma-separated log levels to hide from the live log panel; matches the [LEVEL]\n"
+        "; shown in um.log (SYSINFO, INFO, WARN, ERROR, FATAL, DEBUG); case-insensitive,\n"
+        "; um.log on disk always keeps every level regardless of this filter."),
+};
+static const size_t kSettingCount = sizeof(kSettings) / sizeof(kSettings[0]);
+
+// Applies one already-extracted "KEY=value" pair to its backing global,
+// dispatching on the setting's declared type. Used by both the um.cfg parser
+// and (for everything except Bool - see ApplySettingEnvOverride) the
+// environment-variable override pass, since both contexts want the same
+// "authoritatively set this value" behavior.
+static void ApplySettingValue(const SettingDef& def, const char* value) {
+    switch (def.type) {
+    case SettingType::Bool:
+        *static_cast<bool*>(def.target) = IsTrueString(value);
+        break;
+    case SettingType::String:
+        SetQuotedConfigString(static_cast<char*>(def.target), def.bufferSize, value);
+        break;
+    case SettingType::VKey:
+        *static_cast<BYTE*>(def.target) = ParseVirtualKeyName(value, def.vkeyDefault);
+        break;
+    case SettingType::Color:
+        *static_cast<COLORREF*>(def.target) = ParseHexColor(value, def.colorDefault);
+        break;
+    case SettingType::ClampedInt:
+        *static_cast<int*>(def.target) = static_cast<int>(
+            ParseClampedLong(value, def.intMin, def.intMax, def.intDefault));
+        break;
+    case SettingType::Position:
+        ParseOverlayPosition(value, static_cast<char*>(def.target), def.bufferSize);
+        break;
+    case SettingType::FpsMarks:
+        ParseFpsMarks(value, static_cast<double*>(def.target), static_cast<int*>(def.target2));
+        break;
+    }
+}
+
+// Applies an environment-variable override for one setting, if both the
+// setting allows env overrides and that variable is actually set. Bool
+// settings intentionally preserve their original asymmetric semantics here:
+// an environment variable can only turn a flag ON (OR-merge with whatever
+// um.cfg already set), never force one off, so a stray env var can't
+// silently disable a safety feature the user deliberately enabled in their
+// config file. Every other type fully overwrites, matching the original
+// per-setting env-override code this table replaces.
+static void ApplySettingEnvOverride(const SettingDef& def) {
+    if (!def.hasEnvOverride) {
+        return;
+    }
+    const char* value = getenv(def.key);
+    if (!value) {
+        return;
+    }
+    if (def.type == SettingType::Bool) {
+        *static_cast<bool*>(def.target) = *static_cast<bool*>(def.target) || IsTrueString(value);
+    } else {
+        ApplySettingValue(def, value);
+    }
+}
+
+// Formats one setting's default value for the generated um.cfg template,
+// matching exactly what ApplySettingValue(def, result) would parse back.
+static void FormatSettingDefault(const SettingDef& def, char* out, size_t outSize) {
+    switch (def.type) {
+    case SettingType::Bool:
+        snprintf(out, outSize, "%s", def.boolDefault ? "true" : "false");
+        break;
+    case SettingType::String:
+    case SettingType::FpsMarks:
+        snprintf(out, outSize, "%s", def.stringDefault ? def.stringDefault : "");
+        break;
+    case SettingType::VKey:
+        // Every setting currently defaults to an F-key; hex is a defensive
+        // fallback for any future non-F-key default, not currently reachable.
+        if (def.vkeyDefault >= VK_F1 && def.vkeyDefault <= VK_F12) {
+            snprintf(out, outSize, "F%d", def.vkeyDefault - VK_F1 + 1);
+        } else {
+            snprintf(out, outSize, "0x%02X", def.vkeyDefault);
+        }
+        break;
+    case SettingType::Color:
+        snprintf(out, outSize, "%02X%02X%02X",
+            GetRValue(def.colorDefault), GetGValue(def.colorDefault), GetBValue(def.colorDefault));
+        break;
+    case SettingType::ClampedInt:
+        snprintf(out, outSize, "%ld", def.intDefault);
+        break;
+    case SettingType::Position:
+        snprintf(out, outSize, "%s", def.positionDefault ? def.positionDefault : "");
+        break;
+    }
+}
+
+// Writes a fresh um.cfg populated with every setting's default value and its
+// documentation comment, in table order; section banners and the blank line
+// separating each section are driven by the table too (a blank line is
+// inserted after the last entry of each section, detected by the next
+// entry - or end of table - starting a new section banner).
+static void WriteDefaultConfigFile(FILE* file) {
+    fprintf(file, "; Universal Mod Configuration\n\n");
+    for (size_t i = 0; i < kSettingCount; ++i) {
+        const SettingDef& def = kSettings[i];
+        if (def.sectionBanner) {
+            fprintf(file, "%s\n", def.sectionBanner);
+        }
+        if (def.comment) {
+            fprintf(file, "%s\n", def.comment);
+        }
+        char valueText[512] = {};
+        FormatSettingDefault(def, valueText, sizeof(valueText));
+        if (def.type == SettingType::String && def.quoteInTemplate) {
+            fprintf(file, "%s=\"%s\"\n", def.key, valueText);
+        } else {
+            fprintf(file, "%s=%s\n", def.key, valueText);
+        }
+        bool lastInSection = (i + 1 == kSettingCount) || (kSettings[i + 1].sectionBanner != nullptr);
+        if (lastInSection) {
+            fprintf(file, "\n");
+        }
     }
 }
 
@@ -1013,32 +1306,6 @@ static bool IsIgnoredFileExtension(const char* path) {
     return false;
 }
 
-// Strip optional surrounding double quotes/whitespace and store a bounded,
-// comma-separated config string (used for FILE_IO_LOGGING_FILTER and
-// OVERLAY_LOG_LEVEL_FILTER, both documented/written as a quoted value).
-static void SetQuotedConfigString(char* dest, size_t destSize, const char* value) {
-    dest[0] = '\0';
-    if (!value) {
-        return;
-    }
-
-    while (*value == ' ' || *value == '\t' || *value == '"') {
-        ++value;
-    }
-    strncpy(dest, value, destSize - 1);
-    dest[destSize - 1] = '\0';
-    size_t length = strlen(dest);
-    while (length > 0 &&
-        (dest[length - 1] == ' ' || dest[length - 1] == '\t' || dest[length - 1] == '"')) {
-        dest[--length] = '\0';
-    }
-}
-
-// Normalize and store the comma-separated file-I/O extension filter.
-static void SetFileIoLoggingFilter(const char* value) {
-    SetQuotedConfigString(g_fileIoLoggingFilter, sizeof(g_fileIoLoggingFilter), value);
-}
-
 // Add or reset a file handle in the bounded diagnostic tracking table.
 static void TrackFileHandle(HANDLE handle, const char* path) {
     // The fixed table is intentionally small: it is only a diagnostic aid,
@@ -1211,34 +1478,76 @@ static bool ReadWholeFileForDatabase(const char* path, BYTE** outData, size_t* o
 }
 
 // The item/spell/armor database files (database.res, databaselmp.res,
-// databaseadb.res) are themselves .res archives, and their internal record
-// layout is undocumented and only partly plain text. Rather than parse that
-// container/record format, every printable-ASCII run of 3+ characters is
-// collected as a candidate valid name (lowercased, and also with its first
-// byte dropped to tolerate a stray length/tag byte from the preceding binary
-// field bleeding into the run). This was verified against the mod's real
-// database files and the entire map corpus shipped with the mod: it produced
-// zero false positives while still catching every deliberately-invalid
-// weapon/armor/spell/quest/quick-item name used to test this feature.
+// databaseadb.res) are themselves .res archives holding records in the
+// tagged-value format documented in docs/file-formats/database-format.md:
+// every leaf string is [tag:1][length][cp1251 bytes + null terminator],
+// where `length` is a single even byte giving 2x the payload size, or (when
+// that byte is odd) the low byte of a 4-byte little-endian value giving
+// 2x+1. This walks every byte position as a candidate [tag,length] header,
+// and accepts it only when the payload it implies fits in the buffer and
+// ends with the required null terminator - i.e. it follows the real record
+// framing instead of guessing from byte values alone. The accepted name is
+// the leading printable-ASCII prefix of that payload (most fields are pure
+// ASCII identifiers already, but Lever "Lever Text" fields mix an ASCII
+// prefix with localized Cyrillic text in the same field, so the prefix is
+// taken rather than requiring the whole payload to be ASCII).
+//
+// This replaces an earlier version that scanned for bare printable-ASCII
+// runs (any 3+ character stretch, with a defensive "drop the first
+// character" fallback for when a preceding length/tag byte itself happened
+// to be printable and bled into the run). That version is retired in favor
+// of exact framing now that the format is fully understood; re-verified
+// against every name the old heuristic ever produced for both database.res
+// and databaselmp.res, confirming this version recovers the same real
+// identifiers (usually as a single clean entry rather than several noisy
+// off-by-one variants of one), and the only names it does NOT reproduce are
+// the RES container's own internal member filenames (e.g. "acks.db") and a
+// handful of coincidental byte-value matches inside unrelated binary
+// fields - neither of which is a real item/spell/material identifier a
+// .mob file could legitimately reference.
 static void ExtractDatabaseNames(const BYTE* data, size_t size, std::unordered_set<std::string>& names) {
-    size_t i = 0;
-    while (i < size) {
-        if (data[i] < 0x20 || data[i] > 0x7E) {
-            ++i;
+    static const size_t kMaxPayloadSize = 4096; // no real database field is anywhere near this long
+    if (size < 2) {
+        return;
+    }
+    for (size_t p = 0; p + 1 < size; ++p) {
+        BYTE lengthByte = data[p + 1];
+        size_t rawPayloadSize;
+        size_t payloadStart;
+        if ((lengthByte % 2) == 0) {
+            rawPayloadSize = lengthByte / 2;
+            payloadStart = p + 2;
+        } else {
+            if (p + 5 > size) {
+                continue;
+            }
+            DWORD wideLength = 0;
+            memcpy(&wideLength, data + p + 1, sizeof(wideLength));
+            if ((wideLength % 2) == 0) {
+                continue; // the wide form's low byte must be odd to be plausible at all
+            }
+            rawPayloadSize = (wideLength - 1) / 2;
+            payloadStart = p + 5;
+        }
+        if (rawPayloadSize == 0 || rawPayloadSize > kMaxPayloadSize) {
             continue;
         }
-        size_t start = i;
-        while (i < size && data[i] >= 0x20 && data[i] <= 0x7E) {
-            ++i;
+        size_t payloadEnd = payloadStart + rawPayloadSize;
+        if (payloadEnd > size || data[payloadEnd - 1] != 0x00) {
+            continue;
         }
-        size_t length = i - start;
-        if (length >= 3) {
-            std::string run(reinterpret_cast<const char*>(data + start), length);
-            for (size_t j = 0; j < run.size(); ++j) {
-                run[j] = static_cast<char>(tolower(static_cast<unsigned char>(run[j])));
+
+        size_t j = payloadStart;
+        while (j < payloadEnd - 1 && data[j] >= 0x20 && data[j] <= 0x7E) {
+            ++j;
+        }
+        size_t prefixLength = j - payloadStart;
+        if (prefixLength >= 1) {
+            std::string run(reinterpret_cast<const char*>(data + payloadStart), prefixLength);
+            for (size_t k = 0; k < run.size(); ++k) {
+                run[k] = static_cast<char>(tolower(static_cast<unsigned char>(run[k])));
             }
-            names.insert(run);
-            names.insert(run.substr(1));
+            names.insert(std::move(run));
         }
     }
 }
@@ -2654,142 +2963,11 @@ static void LoadConfigFile(const char* dllPath) {
 
     FILE* file = fopen(configPath, "r");
     if (!file) {
-        // Create um.cfg if it doesn't exist with default settings
+        // Create um.cfg if it doesn't exist, populated with every setting's
+        // default value and documentation from the table above.
         file = fopen(configPath, "w");
         if (file) {
-            fprintf(file, "; Universal Mod Configuration\n\n");
-
-            fprintf(file, "; Require SpellAddonX.asi beside game.exe; (true/false)\n");
-            fprintf(file, "SPELLADDON_ASI_CHECK=true\n\n");
-
-            fprintf(file, "; -- Keyboard --\n");
-            fprintf(file, "; Rewrite backtick and number-row input as US-QWERTY keys; (true/false)\n");
-            fprintf(file, "KEYBOARD_REWRITES=true\n");
-            fprintf(file, "; Log keyboard rewrite events; (true/false)\n");
-            fprintf(file, "KEYBOARD_REWRITES_LOGGING=false\n");
-            fprintf(file, "; Key that reloads um.cfg and applies it immediately, without restarting the game;\n");
-            fprintf(file, "; some settings (installing hooks, creating the overlay window for the first time)\n");
-            fprintf(file, "; still require a restart; F1-F12, or a 0x.. / decimal virtual-key code.\n");
-            fprintf(file, "RELOAD_CONFIG_KEY=F11\n\n");
-
-            fprintf(file, "; -- Logging --\n");
-            fprintf(file, "; Write diagnostic and crash information to um.log; (true/false)\n");
-            fprintf(file, "LOGGING=true\n");
-            fprintf(file, "; Log file opens, reads, and writes as INFO entries; (true/false)\n");
-            fprintf(file, "FILE_IO_LOGGING=false\n");
-            fprintf(file, "; Comma-separated file extensions to exclude from file-I/O logging; empty or like mmp,res.\n");
-            fprintf(file, "FILE_IO_LOGGING_FILTER=\"\"\n");
-            fprintf(file, "; Clear um.log on the first DLL instance of a launch; (true/false)\n");
-            fprintf(file, "CLEAR_LOG_ON_START=true\n\n");
-
-            fprintf(file, "; -- Crash handling --\n");
-            fprintf(file, "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)\n");
-            fprintf(file, "ANTICRASH=true\n");
-            fprintf(file, "; Write portable Windows minidumps beside um.log; (true/false)\n");
-            fprintf(file, "CRASH_DUMPS=true\n");
-            fprintf(file, "; Validate .mob file headers when opened and log structural problems, including a\n");
-            fprintf(file, "; cross-check of unit weapons/armors/spells/quest/quick items against the item/spell database; (true/false)\n");
-            fprintf(file, "MOB_VALIDATION=false\n");
-            fprintf(file, "; Fail fast the instant Windows detects heap corruption instead of letting the\n");
-            fprintf(file, "; process keep running on corrupted memory until an unrelated later crash; the\n");
-            fprintf(file, "; resulting crash log points much closer to the real cause; (true/false)\n");
-            fprintf(file, "HEAP_CORRUPTION_TERMINATION=true\n\n");
-
-            fprintf(file, "; -- Performance --\n");
-            fprintf(file, "; These two settings are independent of each other - enabling one does not\n");
-            fprintf(file, "; enable the other.\n");
-            fprintf(file, ";\n");
-            fprintf(file, "; Apply a custom process priority class below; off by default, since forcing\n");
-            fprintf(file, "; high/realtime priority on a game not designed for it can cause audio/input\n");
-            fprintf(file, "; stutter instead of helping; (true/false)\n");
-            fprintf(file, "PERFORMANCE_PRIORITY_ENABLED=false\n");
-            fprintf(file, "; Priority class to apply when the setting above is enabled; one of idle,\n");
-            fprintf(file, "; belownormal, normal, abovenormal, high, realtime.\n");
-            fprintf(file, "PERFORMANCE_PRIORITY_CLASS=high\n");
-            fprintf(file, "; Apply the CPU affinity mask below; off by default, since restricting the\n");
-            fprintf(file, "; game to too few cores can make performance WORSE, not better - test before\n");
-            fprintf(file, "; leaving this on; (true/false)\n");
-            fprintf(file, "PERFORMANCE_AFFINITY_ENABLED=false\n");
-            fprintf(file, "; Restricts which CPU cores the game is allowed to run on when the setting\n");
-            fprintf(file, "; above is enabled. This does NOT make the game slower or single-threaded by\n");
-            fprintf(file, "; itself - it can help an old, mostly single-threaded game like this one, by\n");
-            fprintf(file, "; stopping Windows/Wine from constantly bouncing its one busy thread between\n");
-            fprintf(file, "; different cores - but restricting to too few cores can backfire.\n");
-            fprintf(file, ";\n");
-            fprintf(file, "; You do not need to understand binary/hex to use this - just copy one of these\n");
-            fprintf(file, "; common values (check Task Manager/Windows or `nproc`/System Monitor on Linux\n");
-            fprintf(file, "; first to see how many cores you actually have, and don't pick too few):\n");
-            fprintf(file, ";   0x3  = cores 1-2\n");
-            fprintf(file, ";   0xF  = cores 1-4\n");
-            fprintf(file, ";   0x3F = cores 1-6\n");
-            fprintf(file, ";   0xFF = cores 1-8\n");
-            fprintf(file, "PERFORMANCE_AFFINITY_MASK=\"\"\n\n");
-
-            fprintf(file, "; -- Overlay --\n");
-            fprintf(file, "; Enable a toggleable diagnostic overlay drawn on top of the game window; (true/false)\n");
-            fprintf(file, "OVERLAY_ENABLED=true\n");
-            fprintf(file, "; Key that shows/hides the main overlay panel while the game has focus; F1-F12,\n");
-            fprintf(file, "; or a 0x.. / decimal virtual-key code.\n");
-            fprintf(file, "OVERLAY_TOGGLE_KEY=F9\n");
-            fprintf(file, "; Corner/edge of the game window the overlay is anchored to; one of\n");
-            fprintf(file, "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center.\n");
-            fprintf(file, "OVERLAY_POSITION=top-left\n");
-            fprintf(file, "; Overlay text color as a hex RRGGBB value (no # needed).\n");
-            fprintf(file, "OVERLAY_COLOR=00FF00\n");
-            fprintf(file, "; How often the overlay repaints and samples FPS/resources, in milliseconds (100-5000).\n");
-            fprintf(file, "OVERLAY_REFRESH_MS=500\n");
-            fprintf(file, "; Show the FPS sparkline graph (frametime stays as text only); (true/false)\n");
-            fprintf(file, "OVERLAY_SHOW_FPS_GRAPH=true\n");
-            fprintf(file, "; Comma-separated static FPS reference marks for the graph, ascending; the lowest\n");
-            fprintf(file, "; two always show, the rest only appear once the game actually reaches them.\n");
-            fprintf(file, "OVERLAY_FPS_MARKS=30,60,75,120,140,165,240\n");
-            fprintf(file, "; Show CPU%%/memory/thread-count usage of game.exe; (true/false)\n");
-            fprintf(file, "OVERLAY_SHOW_RESOURCES=true\n");
-            fprintf(file, "; Show which DirectDraw driver is actually rendering (native, dgVoodoo2, DXVK, etc.); (true/false)\n");
-            fprintf(file, "OVERLAY_SHOW_BACKEND=true\n");
-            fprintf(file, "; Show a per-thread CPU%% breakdown below the FPS graph (lowest %d thread IDs,\n", g_overlayThreadDisplayCount);
-            fprintf(file, "; oldest/main thread first and stable across samples, rather than resorted by\n");
-            fprintf(file, "; CPU%% each tick); thread names are usually \"(unnamed)\" since this game predates\n");
-            fprintf(file, "; thread naming APIs - only um.dll's own threads are named; (true/false)\n");
-            fprintf(file, "OVERLAY_SHOW_THREADS=true\n");
-            fprintf(file, "; How many threads to list (lowest thread IDs first); max %d.\n", OVERLAY_THREAD_DISPLAY_MAX);
-            fprintf(file, "OVERLAY_THREAD_COUNT=%d\n", g_overlayThreadDisplayCount);
-            fprintf(file, "; Panel background color as a hex RRGGBB value (no # needed).\n");
-            fprintf(file, "OVERLAY_BACKGROUND_COLOR=000000\n");
-            fprintf(file, "; Panel background opacity as a percentage (0=fully transparent, 100=solid).\n");
-            fprintf(file, "; NOTE: 100 renders the panel WITHOUT a layered window at all (plain BitBlt);\n");
-            fprintf(file, "; any value below 100 re-enables a layered window, which on some Wine/Wayland\n");
-            fprintf(file, "; setups forces the game out of direct-scanout presentation and causes a large\n");
-            fprintf(file, "; GPU/FPS regression - confirmed to happen with BOTH transparency styles below,\n");
-            fprintf(file, "; not just smooth alpha blending; 100 is the only performance-safe value there.\n");
-            fprintf(file, "OVERLAY_BACKGROUND_OPACITY=100\n");
-            fprintf(file, "; How the background opacity above is achieved when below 100; \"alpha\" blends\n");
-            fprintf(file, "; smoothly (some Wine/Wayland setups don't honor this and render fully opaque\n");
-            fprintf(file, "; instead); \"dither\" approximates it with alternating fully-opaque/fully-\n");
-            fprintf(file, "; transparent scanline bands, which still works when smooth per-pixel alpha\n");
-            fprintf(file, "; blending does not; one of alpha, dither.\n");
-            fprintf(file, "OVERLAY_TRANSPARENCY_STYLE=alpha\n\n");
-            fprintf(file, "; -- Overlay log panel --\n");
-            fprintf(file, "; Show a separate auto-scrolling panel with the last few um.log lines; (true/false)\n");
-            fprintf(file, "OVERLAY_LOG_ENABLED=true\n");
-            fprintf(file, "; Key that shows/hides the log panel independently of the main overlay panel;\n");
-            fprintf(file, "; F1-F12, or a 0x.. / decimal virtual-key code.\n");
-            fprintf(file, "OVERLAY_LOG_TOGGLE_KEY=F10\n");
-            fprintf(file, "; Number of most recent log lines to display, newest at the bottom (max %d).\n", OVERLAY_LOG_CAPACITY);
-            fprintf(file, "OVERLAY_LOG_LINES=10\n");
-            fprintf(file, "; Log panel width in pixels (300-2000); widen this if long lines still get\n");
-            fprintf(file, "; wrapped/clipped too aggressively.\n");
-            fprintf(file, "OVERLAY_LOG_WIDTH=900\n");
-            fprintf(file, "; Wrap log lines that are too long to fit within the panel width onto extra\n");
-            fprintf(file, "; visual rows instead of clipping them; counts against OVERLAY_LOG_LINES above; (true/false)\n");
-            fprintf(file, "OVERLAY_LOG_WRAP=true\n");
-            fprintf(file, "; Corner/edge of the game window the log panel is anchored to; one of\n");
-            fprintf(file, "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center.\n");
-            fprintf(file, "OVERLAY_LOG_POSITION=bottom-left\n");
-            fprintf(file, "; Comma-separated log levels to hide from the live log panel; matches the [LEVEL]\n");
-            fprintf(file, "; shown in um.log (SYSINFO, INFO, WARN, ERROR, FATAL, DEBUG); case-insensitive,\n");
-            fprintf(file, "; um.log on disk always keeps every level regardless of this filter.\n");
-            fprintf(file, "OVERLAY_LOG_LEVEL_FILTER=\"SYSINFO\"\n\n");
+            WriteDefaultConfigFile(file);
             fclose(file);
         }
         return;
@@ -2840,81 +3018,16 @@ static void LoadConfigFile(const char* dllPath) {
             *valueEnd-- = '\0';
         }
 
-        // parse the setting
-        if (EqualsIgnoreCase(key, "SPELLADDON_ASI_CHECK")) {
-            g_enableAsiCheck = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "KEYBOARD_REWRITES")) {
-            g_enableKeyboardRewrites = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "KEYBOARD_REWRITES_LOGGING")) {
-            g_enableKeyboardRewriteLogging = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "RELOAD_CONFIG_KEY")) {
-            g_reloadConfigKey = ParseVirtualKeyName(value, VK_F11);
-        } else if (EqualsIgnoreCase(key, "LOGGING")) {
-            g_enableCrashLogging = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "FILE_IO_LOGGING")) {
-            g_enableFileIoLogging = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "FILE_IO_LOGGING_FILTER")) {
-            SetFileIoLoggingFilter(value);
-        } else if (EqualsIgnoreCase(key, "ANTICRASH")) {
-            g_enableAntiCrash = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "CRASH_DUMPS")) {
-            g_enableCrashDumps = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "CLEAR_LOG_ON_START")) {
-            g_clearLogOnStart = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "MOB_VALIDATION")) {
-            g_enableMobValidation = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "HEAP_CORRUPTION_TERMINATION")) {
-            g_enableHeapTermination = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "PERFORMANCE_PRIORITY_ENABLED")) {
-            g_enablePerformancePriority = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "PERFORMANCE_PRIORITY_CLASS")) {
-            SetQuotedConfigString(g_performancePriorityClass, sizeof(g_performancePriorityClass), value);
-        } else if (EqualsIgnoreCase(key, "PERFORMANCE_AFFINITY_ENABLED")) {
-            g_enablePerformanceAffinity = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "PERFORMANCE_AFFINITY_MASK")) {
-            SetQuotedConfigString(g_performanceAffinityMaskHex, sizeof(g_performanceAffinityMaskHex), value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_ENABLED")) {
-            g_enableOverlay = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_TOGGLE_KEY")) {
-            g_overlayToggleKey = ParseVirtualKeyName(value, VK_F9);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_POSITION")) {
-            ParseOverlayPosition(value, g_overlayPosition, sizeof(g_overlayPosition));
-        } else if (EqualsIgnoreCase(key, "OVERLAY_COLOR")) {
-            g_overlayTextColor = ParseHexColor(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_REFRESH_MS")) {
-            g_overlayRefreshMs = ParseOverlayRefreshMs(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_FPS_GRAPH")) {
-            g_overlayShowFpsGraph = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_FPS_MARKS")) {
-            ParseFpsMarks(value, g_overlayFpsMarks, &g_overlayFpsMarkCount);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_RESOURCES")) {
-            g_overlayShowResources = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_BACKEND")) {
-            g_overlayShowBackend = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_SHOW_THREADS")) {
-            g_overlayShowThreads = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_THREAD_COUNT")) {
-            g_overlayThreadDisplayCount = ParseOverlayThreadCount(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_BACKGROUND_COLOR")) {
-            g_overlayBackgroundColor = ParseHexColor(value, RGB(0, 0, 0));
-        } else if (EqualsIgnoreCase(key, "OVERLAY_BACKGROUND_OPACITY")) {
-            g_overlayBackgroundOpacityPercent = ParseOverlayOpacityPercent(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_TRANSPARENCY_STYLE")) {
-            SetQuotedConfigString(g_overlayTransparencyStyle, sizeof(g_overlayTransparencyStyle), value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_ENABLED")) {
-            g_overlayLogEnabled = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_TOGGLE_KEY")) {
-            g_overlayLogToggleKey = ParseVirtualKeyName(value, VK_F10);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_LINES")) {
-            g_overlayLogLineCount = ParseOverlayLogLineCount(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_WIDTH")) {
-            g_overlayLogPanelWidth = ParseOverlayLogWidth(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_WRAP")) {
-            g_overlayLogWrapEnabled = IsTrueString(value);
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_POSITION")) {
-            ParseOverlayPosition(value, g_overlayLogPosition, sizeof(g_overlayLogPosition));
-        } else if (EqualsIgnoreCase(key, "OVERLAY_LOG_LEVEL_FILTER")) {
-            SetQuotedConfigString(g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), value);
+        bool matched = false;
+        for (size_t i = 0; i < kSettingCount; ++i) {
+            if (EqualsIgnoreCase(key, kSettings[i].key)) {
+                ApplySettingValue(kSettings[i], value);
+                matched = true;
+                break;
+            }
+        }
+        if (!matched) {
+            LogLine("WARN", "Unknown um.cfg setting '%s' ignored (typo?)", key);
         }
     }
 
@@ -3982,91 +4095,17 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         LoadConfigFile(dllPath);
     }
 
-    g_enableAsiCheck = g_enableAsiCheck || GetEnvironmentFlag("SPELLADDON_ASI_CHECK");
-    g_enableKeyboardRewrites = g_enableKeyboardRewrites || GetEnvironmentFlag("KEYBOARD_REWRITES");
-    g_enableKeyboardRewriteLogging = g_enableKeyboardRewriteLogging || GetEnvironmentFlag("KEYBOARD_REWRITES_LOGGING");
-    if (const char* reloadKeyEnv = getenv("RELOAD_CONFIG_KEY")) {
-        g_reloadConfigKey = ParseVirtualKeyName(reloadKeyEnv, VK_F11);
+    // Environment variables override whatever um.cfg set, using each
+    // setting's declared type and (for Bool only) the OR-merge semantics
+    // documented on ApplySettingEnvOverride.
+    for (size_t i = 0; i < kSettingCount; ++i) {
+        ApplySettingEnvOverride(kSettings[i]);
     }
-    g_enableCrashLogging = g_enableCrashLogging || GetEnvironmentFlag("LOGGING");
-    g_enableFileIoLogging = g_enableFileIoLogging || GetEnvironmentFlag("FILE_IO_LOGGING");
-    g_enableAntiCrash = g_enableAntiCrash || GetEnvironmentFlag("ANTICRASH");
-    g_clearLogOnStart = g_clearLogOnStart || GetEnvironmentFlag("CLEAR_LOG_ON_START");
-    g_enableMobValidation = g_enableMobValidation || GetEnvironmentFlag("MOB_VALIDATION");
-    g_enableOverlay = g_enableOverlay || GetEnvironmentFlag("OVERLAY_ENABLED");
-    if (const char* toggleKeyEnv = getenv("OVERLAY_TOGGLE_KEY")) {
-        g_overlayToggleKey = ParseVirtualKeyName(toggleKeyEnv, VK_F9);
-    }
-    if (const char* positionEnv = getenv("OVERLAY_POSITION")) {
-        ParseOverlayPosition(positionEnv, g_overlayPosition, sizeof(g_overlayPosition));
-    }
-    if (const char* colorEnv = getenv("OVERLAY_COLOR")) {
-        g_overlayTextColor = ParseHexColor(colorEnv);
-    }
-    if (const char* refreshEnv = getenv("OVERLAY_REFRESH_MS")) {
-        g_overlayRefreshMs = ParseOverlayRefreshMs(refreshEnv);
-    }
-    if (const char* showFpsGraphEnv = getenv("OVERLAY_SHOW_FPS_GRAPH")) {
-        g_overlayShowFpsGraph = IsTrueString(showFpsGraphEnv);
-    }
-    if (const char* fpsMarksEnv = getenv("OVERLAY_FPS_MARKS")) {
-        ParseFpsMarks(fpsMarksEnv, g_overlayFpsMarks, &g_overlayFpsMarkCount);
-    }
-    if (const char* showResourcesEnv = getenv("OVERLAY_SHOW_RESOURCES")) {
-        g_overlayShowResources = IsTrueString(showResourcesEnv);
-    }
-    if (const char* showBackendEnv = getenv("OVERLAY_SHOW_BACKEND")) {
-        g_overlayShowBackend = IsTrueString(showBackendEnv);
-    }
-    if (const char* showThreadsEnv = getenv("OVERLAY_SHOW_THREADS")) {
-        g_overlayShowThreads = IsTrueString(showThreadsEnv);
-    }
-    if (const char* threadCountEnv = getenv("OVERLAY_THREAD_COUNT")) {
-        g_overlayThreadDisplayCount = ParseOverlayThreadCount(threadCountEnv);
-    }
-    if (const char* backgroundColorEnv = getenv("OVERLAY_BACKGROUND_COLOR")) {
-        g_overlayBackgroundColor = ParseHexColor(backgroundColorEnv, RGB(0, 0, 0));
-    }
-    if (const char* backgroundOpacityEnv = getenv("OVERLAY_BACKGROUND_OPACITY")) {
-        g_overlayBackgroundOpacityPercent = ParseOverlayOpacityPercent(backgroundOpacityEnv);
-    }
-    if (const char* transparencyStyleEnv = getenv("OVERLAY_TRANSPARENCY_STYLE")) {
-        SetQuotedConfigString(g_overlayTransparencyStyle, sizeof(g_overlayTransparencyStyle), transparencyStyleEnv);
-    }
-    if (const char* logEnabledEnv = getenv("OVERLAY_LOG_ENABLED")) {
-        g_overlayLogEnabled = IsTrueString(logEnabledEnv);
-    }
-    if (const char* logToggleKeyEnv = getenv("OVERLAY_LOG_TOGGLE_KEY")) {
-        g_overlayLogToggleKey = ParseVirtualKeyName(logToggleKeyEnv, VK_F10);
-    }
-    if (const char* logLinesEnv = getenv("OVERLAY_LOG_LINES")) {
-        g_overlayLogLineCount = ParseOverlayLogLineCount(logLinesEnv);
-    }
-    if (const char* logWidthEnv = getenv("OVERLAY_LOG_WIDTH")) {
-        g_overlayLogPanelWidth = ParseOverlayLogWidth(logWidthEnv);
-    }
-    if (const char* logWrapEnv = getenv("OVERLAY_LOG_WRAP")) {
-        g_overlayLogWrapEnabled = IsTrueString(logWrapEnv);
-    }
-    if (const char* logPositionEnv = getenv("OVERLAY_LOG_POSITION")) {
-        ParseOverlayPosition(logPositionEnv, g_overlayLogPosition, sizeof(g_overlayLogPosition));
-    }
-    if (const char* logLevelFilterEnv = getenv("OVERLAY_LOG_LEVEL_FILTER")) {
-        SetQuotedConfigString(g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), logLevelFilterEnv);
-    }
-    g_enablePerformancePriority = g_enablePerformancePriority || GetEnvironmentFlag("PERFORMANCE_PRIORITY_ENABLED");
-    if (const char* priorityClassEnv = getenv("PERFORMANCE_PRIORITY_CLASS")) {
-        SetQuotedConfigString(g_performancePriorityClass, sizeof(g_performancePriorityClass), priorityClassEnv);
-    }
-    g_enablePerformanceAffinity = g_enablePerformanceAffinity || GetEnvironmentFlag("PERFORMANCE_AFFINITY_ENABLED");
-    if (const char* affinityMaskEnv = getenv("PERFORMANCE_AFFINITY_MASK")) {
-        SetQuotedConfigString(g_performanceAffinityMaskHex, sizeof(g_performanceAffinityMaskHex), affinityMaskEnv);
-    }
+
     ApplyPerformanceTweaks();
     if (g_enableAntiCrash) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
-    g_enableHeapTermination = g_enableHeapTermination || GetEnvironmentFlag("HEAP_CORRUPTION_TERMINATION");
     if (g_enableHeapTermination) {
         // Converts heap corruption that the OS heap manager detects during a later,
         // unrelated alloc/free into an immediate fail-fast crash at that detection
