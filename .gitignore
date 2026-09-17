@@ -34,5 +34,8 @@ Universal-Mod/*.dmp
 tools/um-multitool/vendor/glfw-mingw/
 tools/um-multitool/vendor/glfw-src/
 
+# um-modelviewer's remembered source paths (local machine-specific, not shared)
+tools/um-standalone-tools/um-modelviewer/um-modelviewer.cfg
+
 # Copilot resources
 _cpr
