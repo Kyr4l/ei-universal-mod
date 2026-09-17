@@ -11,7 +11,9 @@
  * Supported Features:
  *   - Automatic format detection (.res -> unpack, directory -> pack).
  *   - 100% exact binary parity and full compatibility with Evil Islands game engine.
- *   - Intelligent payload deduplication across identical files.
+ *   - Payload deduplication across identical files, matching eipacker.exe's
+ *     "/pack" CLI mode (see the comment in PackResArchive for the earlier,
+ *     mistaken conclusion that dedup itself caused an in-game crash).
  *   - File modification timestamp preservation.
  *   - Multithreaded batch processing for directories (-m / --multi).
  *   - Safe read-only file access (never modifies input files).
@@ -45,6 +47,8 @@
 #include <algorithm>
 #include <unordered_map>
 #include <map>
+#include <sys/stat.h>
+#include <utime.h>
 
 #include "subtools.hpp"
 
@@ -226,9 +230,13 @@ static bool UnpackResArchive(
             out.close();
 
             if (time > 0) {
-                std::error_code ec;
-                auto ftime = fs::file_time_type(std::chrono::seconds(time));
-                fs::last_write_time(filePath, ftime, ec);
+                // Same file_time_type epoch pitfall as the pack side (see
+                // PackResArchive) - go through POSIX utime() with the raw
+                // Unix timestamp instead of constructing a file_time_type.
+                struct utimbuf times{};
+                times.actime = static_cast<time_t>(time);
+                times.modtime = static_cast<time_t>(time);
+                ::utime(filePath.c_str(), &times);
             }
         }
     }
@@ -281,12 +289,17 @@ static bool PackResArchive(
             }
             in.close();
 
+            // NOTE: std::filesystem::file_time_type's clock epoch is NOT
+            // guaranteed to be the Unix epoch in C++17 (clock_cast is a C++20
+            // addition) - using it directly here produced a nonsensical
+            // ~68-years-off timestamp (verified against a real eipacker.exe
+            // pack of the same files, which stores each file's plain Unix
+            // mtime). Read it via POSIX stat() instead, which always reports
+            // real Unix time on every platform this project targets.
             uint32_t mtime = 0;
-            std::error_code ec;
-            auto lwt = fs::last_write_time(entry.path(), ec);
-            if (!ec) {
-                auto s = std::chrono::duration_cast<std::chrono::seconds>(lwt.time_since_epoch()).count();
-                mtime = static_cast<uint32_t>(s);
+            struct stat st{};
+            if (::stat(entry.path().c_str(), &st) == 0) {
+                mtime = static_cast<uint32_t>(st.st_mtime);
             }
 
             files.push_back({relStr, std::move(payload), mtime});
@@ -300,6 +313,39 @@ static bool PackResArchive(
         err = "Source directory is empty (no files to pack)";
         return false;
     }
+
+    // fs::recursive_directory_iterator's order is filesystem-dependent, not
+    // alphabetical - sort explicitly so packing is deterministic and matches
+    // the vanilla tooling's own convention (see database-format.md's note on
+    // DBEditor.exe inserting files in ascending alphabetical order).
+    //
+    // This must compare path COMPONENTS, not the flattened backslash-joined
+    // string: a naive string compare puts "kiel\StealEmp\40.wav" before
+    // "kiel\Steal\42.wav" (because 'E' < '\\' in ASCII at the point they
+    // diverge), whereas the vanilla eipacker.exe - and the natural directory
+    // ordering it matches - sorts "Steal" before "StealEmp" as sibling
+    // directory names, independent of what follows the separator. It must
+    // also be case-INSENSITIVE per component: eipacker.exe orders a sibling
+    // pair like "Attack" and "AttInDef" as "attack" < "attindef" (lowercased),
+    // not by raw byte value, where capital 'I' (0x49) sorts before lowercase
+    // 'a' (0x61) and would wrongly put "AttInDef" first.
+    auto splitComponentsLower = [](const std::string& path) {
+        std::vector<std::string> parts;
+        size_t start = 0;
+        while (true) {
+            size_t sep = path.find('\\', start);
+            std::string part = path.substr(start, sep == std::string::npos ? std::string::npos : sep - start);
+            std::transform(part.begin(), part.end(), part.begin(),
+                           [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            parts.push_back(std::move(part));
+            if (sep == std::string::npos) break;
+            start = sep + 1;
+        }
+        return parts;
+    };
+    std::sort(files.begin(), files.end(), [&](const ArchiveFile& a, const ArchiveFile& b) {
+        return splitComponentsLower(a.relativePath) < splitComponentsLower(b.relativePath);
+    });
 
     fileCount = files.size();
 
@@ -316,21 +362,30 @@ static bool PackResArchive(
     records.reserve(files.size());
 
     std::vector<uint8_t> dataBlock;
+
+    // The vanilla eipacker.exe DOES deduplicate identical-content files
+    // (giving them a shared dataOffset/dataLength) when invoked with its
+    // standard "/pack <path>" CLI flag - the procedure the original modding
+    // community has always used. (An earlier pass here mistakenly concluded
+    // dedup itself was the cause of an in-game crash; that was based on
+    // testing eipacker.exe's bare-argument/drag-and-drop mode, which is a
+    // different, non-deduplicating code path in the same binary - not the
+    // mode that produced the actual known-good reference archives.)
     std::map<std::vector<uint8_t>, std::pair<uint32_t, uint32_t>> payloadCache;
 
     for (auto& file : files) {
         FileRecordMeta meta;
         meta.name = file.relativePath;
-        meta.timestamp = file.timestamp;
+        meta.timestamp = file.timestamp; // eipacker.exe uses each file's own mtime (verified: touching one file to a distinct date changed only its own entry's timestamp)
         meta.dataLength = static_cast<uint32_t>(file.payload.size());
 
         auto it = payloadCache.find(file.payload);
         if (it != payloadCache.end()) {
-            meta.dataOffset  = it->second.first;
-            meta.dataLength  = it->second.second;
+            meta.dataOffset = it->second.first;
+            meta.dataLength = it->second.second;
         } else {
             uint32_t off = static_cast<uint32_t>(16 + dataBlock.size());
-            meta.dataOffset  = off;
+            meta.dataOffset = off;
             payloadCache[file.payload] = {off, meta.dataLength};
 
             dataBlock.insert(dataBlock.end(), file.payload.begin(), file.payload.end());

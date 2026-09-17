@@ -44,6 +44,8 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
 | `PV\0\0` | 16 | Uncompressed RGB 565 | `0x0000` / 0 / 0 | `0xF800` / 11 / 5 | `0x07E0` / 5 / 6 | `0x001F` / 0 / 5 |
 | `PNT3` | 32 | 32-bit BGRA with 16-byte aligned zero RLE | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 |
 
+> **Known gap**: `tools/um-multitool/ddsmmp.cpp` (and this table) don't yet handle two further FourCCs found in the vanilla game's own `textures.res`, discovered while building `um-modelviewer`'s texture loader: `DD\0\0` (16-bit, 4-4-4-4 ARGB — used by a handful of spell-effect/particle textures like `antimagic.mmp`/`astral.mmp`) and the non-ASCII marker `\x88\x88\x00\x00` (uncompressed 32-bit BGRA with no RLE — used by cursor/logo UI bitmaps, not model textures). Both are implemented as read-only decoders in `tools/um-standalone-tools/um-modelviewer/mmp_texture.hpp`; `um-ddsmmp` itself does not convert them to/from DDS.
+
 ---
 
 ## PNT3 Zero Run-Length Encoding Algorithm
