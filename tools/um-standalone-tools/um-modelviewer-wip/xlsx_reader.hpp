@@ -113,7 +113,22 @@ struct CellValue {
     double numVal = 0.0;
 
     bool IsEmpty() const { return !present; }
-    std::string AsString() const { return isString ? strVal : (present ? strVal : std::string()); }
+    // A numeric cell (the normal case for a plain number like a database
+    // index/TTI field) only ever populates numVal, never strVal - returning
+    // strVal for it (as this used to) silently returns "" for every numeric
+    // cell, which every numeric-field caller in db_units.hpp/db_items.hpp
+    // reads via AsString()+stoi/stof, treats as "cell is empty", and quietly
+    // keeps its struct-default value instead of the real one.
+    std::string AsString() const {
+        if (!present) return std::string();
+        if (isString) return strVal;
+        if (numVal == static_cast<double>(static_cast<long long>(numVal))) {
+            return std::to_string(static_cast<long long>(numVal));
+        }
+        std::ostringstream oss;
+        oss << numVal;
+        return oss.str();
+    }
     double AsNumber() const { return numVal; }
 };
 

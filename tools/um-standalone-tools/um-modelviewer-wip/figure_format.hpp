@@ -4,6 +4,7 @@
 // from-scratch byte analysis, verified against real game data, for .anm).
 #pragma once
 
+#include <cmath>
 #include <cstdint>
 #include <cstring>
 #include <map>
@@ -22,6 +23,49 @@ inline Vec3 operator+(const Vec3& a, const Vec3& b) { return {a.x + b.x, a.y + b
 inline Vec3 operator-(const Vec3& a, const Vec3& b) { return {a.x - b.x, a.y - b.y, a.z - b.z}; }
 inline Vec3 operator*(const Vec3& a, float s) { return {a.x * s, a.y * s, a.z * s}; }
 inline Vec3 Lerp(const Vec3& a, const Vec3& b, float t) { return a + (b - a) * t; }
+
+// Hamilton product: composes rotations so that QuatMul(parent, local) applies
+// "local" first, then "parent" - i.e. the standard child-to-world order used
+// when walking a bone hierarchy root-down.
+inline Quat QuatMul(const Quat& a, const Quat& b) {
+    return {
+        a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z,
+        a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
+        a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x,
+        a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w,
+    };
+}
+
+inline Vec3 QuatRotate(const Quat& q, const Vec3& v) {
+    // v' = q * (0,v) * conj(q), expanded without building the intermediate quaternions.
+    Vec3 qv{q.x, q.y, q.z};
+    Vec3 t = (Vec3{qv.y * v.z - qv.z * v.y, qv.z * v.x - qv.x * v.z, qv.x * v.y - qv.y * v.x}) * 2.0f;
+    Vec3 cross{qv.y * t.z - qv.z * t.y, qv.z * t.x - qv.x * t.z, qv.x * t.y - qv.y * t.x};
+    return v + t * q.w + cross;
+}
+
+inline Quat QuatNormalize(const Quat& q) {
+    float len = std::sqrt(q.w * q.w + q.x * q.x + q.y * q.y + q.z * q.z);
+    if (len < 1e-8f) return {1, 0, 0, 0};
+    return {q.w / len, q.x / len, q.y / len, q.z / len};
+}
+
+// Shortest-path spherical linear interpolation (flips sign if that shortens
+// the path, standard for animation keyframes stored as raw quaternions).
+inline Quat QuatSlerp(Quat a, Quat b, float t) {
+    float dot = a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
+    if (dot < 0.0f) { b = {-b.w, -b.x, -b.y, -b.z}; dot = -dot; }
+    if (dot > 0.9995f) {
+        Quat r{a.w + (b.w - a.w) * t, a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t};
+        return QuatNormalize(r);
+    }
+    float theta0 = std::acos(dot);
+    float theta = theta0 * t;
+    float sinTheta0 = std::sin(theta0);
+    float s0 = std::cos(theta) - dot * std::sin(theta) / sinTheta0;
+    float s1 = std::sin(theta) / sinTheta0;
+    return {a.w * s0 + b.w * s1, a.x * s0 + b.x * s1, a.y * s0 + b.y * s1, a.z * s0 + b.z * s1};
+}
 
 // Trilinear blend across the 8 complection corners.
 // Corner order: 0=str0,dex0,tall0  1=str1,dex0,tall0  2=str0,dex1,tall0  3=str1,dex1,tall0

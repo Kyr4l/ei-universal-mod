@@ -46,6 +46,10 @@ static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
 static bool g_enableMobValidation = false;
 static bool g_enableHeapTermination = false;
+static bool g_enableHeapValidateOnMapLoad = false;
+static bool g_heapValidateDryRun = false;
+// GetTickCount() deadline; 0 means "no map load pending" - see MarkMapTransitionWindow.
+static DWORD g_mapTransitionDeadline = 0;
 static bool g_enableOverlay = true;
 static BYTE g_overlayToggleKey = VK_F9;
 static volatile LONG g_overlayVisible = 0;
@@ -153,6 +157,9 @@ typedef HANDLE (WINAPI *CreateFileWFunction)(LPCWSTR, DWORD, DWORD, LPSECURITY_A
 typedef BOOL (WINAPI *ReadFileFunction)(HANDLE, LPVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef BOOL (WINAPI *WriteFileFunction)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED);
 typedef BOOL (WINAPI *CloseHandleFunction)(HANDLE);
+typedef LPVOID (WINAPI *HeapAllocFunction)(HANDLE, DWORD, SIZE_T);
+typedef BOOL (WINAPI *HeapFreeFunction)(HANDLE, DWORD, LPVOID);
+typedef LPVOID (WINAPI *HeapReAllocFunction)(HANDLE, DWORD, LPVOID, SIZE_T);
 typedef HRESULT (WINAPI *DirectDrawCreateFunction)(const GUID*, void**, IUnknown*);
 typedef HRESULT (WINAPI *DirectDrawCreateExFunction)(const GUID*, void**, const GUID*, IUnknown*);
 typedef BOOL (WINAPI *MiniDumpWriteDumpFunction)(HANDLE, DWORD, HANDLE, DWORD,
@@ -192,6 +199,9 @@ static CreateFileWFunction g_originalCreateFileW = NULL;
 static ReadFileFunction g_originalReadFile = NULL;
 static WriteFileFunction g_originalWriteFile = NULL;
 static CloseHandleFunction g_originalCloseHandle = NULL;
+static HeapAllocFunction g_originalHeapAlloc = NULL;
+static HeapFreeFunction g_originalHeapFree = NULL;
+static HeapReAllocFunction g_originalHeapReAlloc = NULL;
 static DirectDrawCreateFunction g_originalDirectDrawCreate = NULL;
 static DirectDrawCreateExFunction g_originalDirectDrawCreateEx = NULL;
 
@@ -573,6 +583,21 @@ static const SettingDef kSettings[] = {
         "; Fail fast the instant Windows detects heap corruption instead of letting the\n"
         "; process keep running on corrupted memory until an unrelated later crash; the\n"
         "; resulting crash log points much closer to the real cause; (true/false)"),
+    BoolSetting("HEAP_VALIDATE_ON_MAP_LOAD", &g_enableHeapValidateOnMapLoad, false, true,
+        "; For 8 seconds after opening any .mob file (the main menu counts - it's a map\n"
+        "; too), validate the heap on every HeapAlloc/HeapFree/HeapReAlloc game.exe makes\n"
+        "; directly, and fail fast with a log entry + dump the moment corruption is found,\n"
+        "; instead of only noticing later at an unrelated crash site. Adds real per-\n"
+        "; allocation overhead during that window, so this is off by default; only\n"
+        "; catches corruption reached through game.exe's OWN direct heap calls, not ones\n"
+        "; routed through msvcrt's malloc/free; (true/false)"),
+    BoolSetting("HEAP_VALIDATE_DRY_RUN", &g_heapValidateDryRun, false, true,
+        "; When HEAP_VALIDATE_ON_MAP_LOAD is also on, keep logging its [HEAPCHECK] map-\n"
+        "; load markers but skip actually installing the HeapAlloc/HeapFree/HeapReAlloc\n"
+        "; hooks, so there is zero added per-allocation overhead. Exists to tell apart\n"
+        "; \"a crash didn't reproduce because this session got lucky\" from \"it didn't\n"
+        "; reproduce because the added overhead changed timing enough to avoid a race\" -\n"
+        "; compare how long it takes to crash with this on vs off; (true/false)"),
 
     BoolSetting("PERFORMANCE_PRIORITY_ENABLED", &g_enablePerformancePriority, false, true,
         "; Apply a custom process priority class below; off by default, since forcing\n"
@@ -1420,6 +1445,36 @@ static bool HasFileExtension(const char* path, const char* extension) {
     return candidate[-1] == '.' && EqualsIgnoreCase(candidate, extension);
 }
 
+// The base game's own "mp\N.mp" per-map counter files (1/2/5/6/7.mp seen so
+// far - the game writes these directly, not um.dll) get rewritten in tight
+// 4-byte bursts during map loads, exactly the window heap-corruption crashes
+// have been reproduced in. Knowing the actual VALUE (not just "4 bytes were
+// written somewhere") is what makes this actionable, so dump it as hex and,
+// since 4 bytes is also plausibly a float, as a float too.
+static bool ShouldDumpFileContents(const char* path) {
+    return path && HasFileExtension(path, "mp") && strstr(path, "\\mp\\") != NULL;
+}
+
+static void LogFileContents(const char* direction, const char* path, const void* buffer, DWORD length) {
+    if (!ShouldDumpFileContents(path) || !buffer || length == 0) {
+        return;
+    }
+    DWORD toShow = length < 32 ? length : 32;
+    char hex[3 * 32 + 1] = {};
+    for (DWORD i = 0; i < toShow; ++i) {
+        snprintf(hex + i * 3, 4, "%02X ", static_cast<const unsigned char*>(buffer)[i]);
+    }
+    if (length == 4) {
+        int32_t asInt = 0;
+        float asFloat = 0.0f;
+        memcpy(&asInt, buffer, 4);
+        memcpy(&asFloat, buffer, 4);
+        LogFileIo("%s contents path=%s bytes=%s(as int32=%d as float=%g)", direction, path, hex, asInt, asFloat);
+    } else {
+        LogFileIo("%s contents path=%s bytes=%s%s", direction, path, hex, length > 32 ? "..." : "");
+    }
+}
+
 // Node type IDs, taken from ei_maper's own reader (util::CMobParser::initTypes).
 // Every node is a flat type(4-byte LE) + length(4-byte LE) header where length
 // covers the header itself plus the payload, so any node can be skipped purely
@@ -1962,6 +2017,33 @@ static void ValidateMobFile(const char* path) {
     free(buffer);
 }
 
+// Opening a .mob file means the engine is loading a new map - the main menu
+// is itself a map (ZoneMainMenuNew.mob) with a fixed camera, like any other.
+// Heap-corruption crashes have been reproduced 4 times in a row, every time
+// within a few seconds of this event (see um.log from 2026-09-18), so treat
+// the time right after as a window worth the extra per-allocation heap
+// validation HookedHeapAlloc/HookedHeapFree/HookedHeapReAlloc do below -
+// normally far too expensive to do on every single allocation for the
+// entire session.
+static void MarkMapTransitionWindow(const char* path) {
+    if (!g_enableHeapValidateOnMapLoad || !HasFileExtension(path, "mob")) {
+        return;
+    }
+    g_mapTransitionDeadline = GetTickCount() + 8000;
+    LogLine("DEBUG", "[HEAPCHECK] Map load detected (%s); validating the heap on every direct "
+        "HeapAlloc/HeapFree/HeapReAlloc for the next 8s", path);
+}
+
+// Wraparound-safe "is GetTickCount() still before the deadline" check - see
+// the classic (LONG)(now - deadline) < 0 pattern for why this is safe across
+// the 32-bit tick counter's ~49-day rollover, unlike a plain "<" compare.
+static bool IsInMapTransitionWindow() {
+    if (!g_enableHeapValidateOnMapLoad || g_mapTransitionDeadline == 0) {
+        return false;
+    }
+    return static_cast<LONG>(GetTickCount() - g_mapTransitionDeadline) < 0;
+}
+
 // Convert a Windows wide path to the log's narrow system-code-page format.
 static void ConvertWidePath(LPCWSTR widePath, char* path, size_t pathSize) {
     if (!widePath || pathSize == 0) {
@@ -1981,6 +2063,7 @@ static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
         LogOpenedFile(handle, fileName, desiredAccess);
         if ((desiredAccess & GENERIC_READ) != 0) {
             ValidateMobFile(fileName);
+            MarkMapTransitionWindow(fileName);
         }
     }
     return handle;
@@ -1998,6 +2081,7 @@ static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
         LogOpenedFile(handle, path, desiredAccess);
         if ((desiredAccess & GENERIC_READ) != 0) {
             ValidateMobFile(path);
+            MarkMapTransitionWindow(path);
         }
     }
     return handle;
@@ -2010,8 +2094,9 @@ static BOOL WINAPI HookedReadFile(HANDLE file, LPVOID buffer, DWORD bytesToRead,
     if (result) {
         char path[MAX_PATH] = {};
         if (CopyAndMarkTrackedFileIo(file, false, path, sizeof(path))) {
-            LogFileIo("File read path=%s bytes=%lu handle=%p", path,
-                bytesRead ? *bytesRead : 0, file);
+            DWORD length = bytesRead ? *bytesRead : 0;
+            LogFileIo("File read path=%s bytes=%lu handle=%p", path, length, file);
+            LogFileContents("File read", path, buffer, length);
         }
     }
     return result;
@@ -2024,8 +2109,9 @@ static BOOL WINAPI HookedWriteFile(HANDLE file, LPCVOID buffer, DWORD bytesToWri
     if (result) {
         char path[MAX_PATH] = {};
         if (CopyAndMarkTrackedFileIo(file, true, path, sizeof(path))) {
-            LogFileIo("File written path=%s bytes=%lu handle=%p", path,
-                bytesWritten ? *bytesWritten : 0, file);
+            DWORD length = bytesWritten ? *bytesWritten : 0;
+            LogFileIo("File written path=%s bytes=%lu handle=%p", path, length, file);
+            LogFileContents("File written", path, buffer, length);
         }
     }
     return result;
@@ -2036,6 +2122,83 @@ static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
     BOOL result = g_originalCloseHandle(handle);
     if (result) {
         UntrackFileHandle(handle);
+    }
+    return result;
+}
+
+// Logs full context for a HeapValidate failure caught by the hooks below,
+// captures a dump of every thread's current state (no real exception needed -
+// MiniDumpWithThreadInfo, already used by WriteCrashDump, inspects each
+// thread live), then terminates immediately: HEAP_CORRUPTION_TERMINATION's
+// own reasoning applies just as much here - once corruption is confirmed,
+// letting the process keep running on it only produces a harder-to-read
+// crash somewhere else later.
+static void ReportHeapCorruptionDetected(const char* function, HANDLE heap, LPVOID pointer, SIZE_T size) {
+    LogLine("FATAL", "============= HEAP CORRUPTION DETECTED =============");
+    LogLine("FATAL", "HeapValidate failed inside %s heap=%p pointer=%p size=%lu, within %ums of a map load",
+        function, heap, pointer, static_cast<unsigned long>(size),
+        8000u - (g_mapTransitionDeadline - GetTickCount()));
+    LogLine("FATAL", "Terminating now instead of continuing on corrupted memory");
+
+    // WriteCrashDump(NULL) only captures each thread's state via
+    // GetThreadContext, which cannot give an accurate register/stack snapshot
+    // for the CURRENTLY EXECUTING thread (this one) - a thread cannot suspend
+    // itself to read its own live registers, so the first real detection this
+    // caught had no usable call stack for the one thread we actually care
+    // about. RtlCaptureContext gives an accurate CONTEXT for THIS thread right
+    // here, right at the HeapAlloc/HeapFree/HeapReAlloc call site; wrapping it
+    // in a synthetic EXCEPTION_RECORD lets it ride through the same
+    // WriteCrashDump() as a real crash, without actually raising/dispatching
+    // a real SEH exception. 0xE0000001 is a made-up code (Microsoft reserves
+    // the 0xE0000000-0xEFFFFFFF range for exactly this - "application-defined
+    // exception") so it reads unambiguously as "our own proactive check", not
+    // a real access violation, in whatever tool opens the dump.
+    CONTEXT context = {};
+    context.ContextFlags = CONTEXT_FULL;
+    RtlCaptureContext(&context);
+    EXCEPTION_RECORD record = {};
+    record.ExceptionCode = 0xE0000001;
+    record.ExceptionAddress = reinterpret_cast<PVOID>(context.Eip);
+    EXCEPTION_POINTERS pointers = { &record, &context };
+    WriteCrashDump(&pointers);
+
+    LogLine("FATAL", "===========================================");
+    TerminateProcess(GetCurrentProcess(), 1);
+}
+
+// These three hooks only see calls game.exe makes directly through its own
+// import table - see HEAP_VALIDATE_ON_MAP_LOAD's comment in kSettings for why
+// that's a real, known gap (msvcrt's malloc/free/realloc call HeapAlloc/
+// HeapFree/HeapReAlloc through msvcrt's OWN imports, invisible here).
+static LPVOID WINAPI HookedHeapAlloc(HANDLE heap, DWORD flags, SIZE_T size) {
+    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
+        ReportHeapCorruptionDetected("HeapAlloc (before)", heap, NULL, size);
+    }
+    LPVOID result = g_originalHeapAlloc(heap, flags, size);
+    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
+        ReportHeapCorruptionDetected("HeapAlloc (after)", heap, result, size);
+    }
+    return result;
+}
+
+static BOOL WINAPI HookedHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
+    if (pointer && IsInMapTransitionWindow() && !HeapValidate(heap, 0, pointer)) {
+        ReportHeapCorruptionDetected("HeapFree (before)", heap, pointer, 0);
+    }
+    BOOL result = g_originalHeapFree(heap, flags, pointer);
+    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
+        ReportHeapCorruptionDetected("HeapFree (after)", heap, pointer, 0);
+    }
+    return result;
+}
+
+static LPVOID WINAPI HookedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer, SIZE_T size) {
+    if (pointer && IsInMapTransitionWindow() && !HeapValidate(heap, 0, pointer)) {
+        ReportHeapCorruptionDetected("HeapReAlloc (before)", heap, pointer, size);
+    }
+    LPVOID result = g_originalHeapReAlloc(heap, flags, pointer, size);
+    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
+        ReportHeapCorruptionDetected("HeapReAlloc (after)", heap, result, size);
     }
     return result;
 }
@@ -2343,6 +2506,42 @@ static void InstallFileIoHooks() {
         // FPS counter, so a generic success line here would not indicate which
         // feature is active.
         LogLine("WARN", "File-I/O hooks not installed");
+    }
+}
+
+// Patch game.exe's own imports of the three heap functions so
+// HEAP_VALIDATE_ON_MAP_LOAD can validate the heap around each direct call
+// during the post-map-load window (see IsInMapTransitionWindow).
+static void InstallHeapHooks() {
+    if (g_heapValidateDryRun) {
+        // The [HEAPCHECK] map-load markers (MarkMapTransitionWindow, called from
+        // the file-I/O hooks regardless of this flag) keep firing either way -
+        // only the expensive part, actually intercepting every heap call, is
+        // skipped, so a session run this way is directly comparable to one
+        // with real validation for "did the added overhead change whether/when
+        // it crashed".
+        LogLine("INFO", "Heap-validation hooks NOT installed (HEAP_VALIDATE_DRY_RUN=true): "
+            "map-load markers still log, but HeapAlloc/HeapFree/HeapReAlloc are untouched");
+        return;
+    }
+    HMODULE process = GetModuleHandleA(NULL);
+    if (!process) {
+        LogLine("WARN", "Could not locate the game executable for heap-validation hooks");
+        return;
+    }
+
+    bool hooked = false;
+    hooked = PatchImportedFunction(process, "HeapAlloc",
+        reinterpret_cast<ULONG_PTR>(HookedHeapAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapAlloc)) || hooked;
+    hooked = PatchImportedFunction(process, "HeapFree",
+        reinterpret_cast<ULONG_PTR>(HookedHeapFree), reinterpret_cast<ULONG_PTR*>(&g_originalHeapFree)) || hooked;
+    hooked = PatchImportedFunction(process, "HeapReAlloc",
+        reinterpret_cast<ULONG_PTR>(HookedHeapReAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapReAlloc)) || hooked;
+    if (hooked) {
+        LogLine("INFO", "Heap-validation hooks installed (active for 8s after each map load)");
+    } else {
+        LogLine("WARN", "Heap-validation hooks not installed: game.exe does not import "
+            "HeapAlloc/HeapFree/HeapReAlloc directly (likely routes allocations through msvcrt instead)");
     }
 }
 
@@ -2955,7 +3154,11 @@ static void LoadConfigFile(const char* dllPath) {
         --lastSlash;
     }
     if (lastSlash > 0) {
-        configPath[lastSlash] = '\0';
+        // Strip the separator itself, not just what follows it - the "\\um.log"/
+        // "\\um.cfg" appended below already supply their own leading separator,
+        // so keeping this one too produced a harmless but confusing doubled
+        // backslash in every logged path (e.g. "Universal-Mod\\um-crashdump-...").
+        configPath[lastSlash - 1] = '\0';
     }
     memcpy(g_logPath, configPath, strlen(configPath) + 1);
     strncat(g_logPath, "\\um.log", sizeof(g_logPath) - strlen(g_logPath) - 1);
@@ -3845,13 +4048,19 @@ static void RenderLogPanel(const RECT& targetRect) {
     // Word-wrap (falling back to a hard break) any entry too wide for the
     // panel into extra visual rows, oldest first; disabled entries are just
     // left as a single (possibly clipped) row instead.
-    int maxCharsPerRow = 0;
-    if (g_overlayLogWrapEnabled) {
-        TEXTMETRICA metrics = {};
-        GetTextMetricsA(hdc, &metrics);
-        int charWidth = metrics.tmAveCharWidth > 0 ? metrics.tmAveCharWidth : 8;
-        maxCharsPerRow = (g_overlayLogPanelWidth - 12) / charWidth;
-    }
+    //
+    // This used to estimate capacity as (panelWidth / tmAveCharWidth) - looks
+    // reasonable, but tmAveCharWidth is a generic-English-prose average, and
+    // "Consolas" isn't actually installed under Wine: GDI silently
+    // substitutes a proportional font (Liberation Sans, measured here), whose
+    // average glyph is noticeably WIDER than the digits/brackets/path
+    // separators that dominate real log lines. That mismatch made every row
+    // wrap ~15-20% earlier than the panel could actually fit, which is
+    // exactly the large black margin in the screenshot. Measuring the real
+    // pixel width via GetTextExtentExPointA (which exists specifically to
+    // answer "how many characters of this string fit in N pixels") is
+    // correct regardless of which font ends up selected.
+    int maxRowWidthPx = g_overlayLogWrapEnabled ? (g_overlayLogPanelWidth - 12) : 0;
 
     static const int OVERLAY_LOG_MAX_VISUAL_ROWS = OVERLAY_LOG_CAPACITY * 4;
     char rows[OVERLAY_LOG_MAX_VISUAL_ROWS][160] = {};
@@ -3859,17 +4068,28 @@ static void RenderLogPanel(const RECT& targetRect) {
     for (int i = 0; i < snapshotCount && rowCount < OVERLAY_LOG_MAX_VISUAL_ROWS; ++i) {
         const char* text = snapshot[i];
         size_t textLen = strlen(text);
-        if (maxCharsPerRow <= 0 || static_cast<int>(textLen) <= maxCharsPerRow) {
+        SIZE fullExtent = {};
+        if (maxRowWidthPx > 0) {
+            GetTextExtentPoint32A(hdc, text, static_cast<int>(textLen), &fullExtent);
+        }
+        if (maxRowWidthPx <= 0 || fullExtent.cx <= maxRowWidthPx) {
             snprintf(rows[rowCount++], sizeof(rows[0]), "%s", text);
             continue;
         }
         size_t pos = 0;
         while (pos < textLen && rowCount < OVERLAY_LOG_MAX_VISUAL_ROWS) {
             size_t remaining = textLen - pos;
-            size_t chunkLen = remaining < static_cast<size_t>(maxCharsPerRow) ?
-                remaining : static_cast<size_t>(maxCharsPerRow);
+            int fitChars = 0;
+            SIZE chunkExtent = {};
+            GetTextExtentExPointA(hdc, text + pos, static_cast<int>(remaining), maxRowWidthPx,
+                &fitChars, NULL, &chunkExtent);
+            // Always make progress, even if a single glyph is wider than the row.
+            size_t chunkLen = fitChars > 0 ? static_cast<size_t>(fitChars) : 1;
+            if (chunkLen > remaining) {
+                chunkLen = remaining;
+            }
             size_t breakAt = chunkLen;
-            if (chunkLen == static_cast<size_t>(maxCharsPerRow)) {
+            if (chunkLen < remaining) {
                 // Prefer breaking on the last space in this chunk (if any,
                 // and not absurdly early) over splitting a word in half.
                 for (size_t k = chunkLen; k > chunkLen / 3; --k) {
@@ -4121,7 +4341,7 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
     }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s performance_priority=%s performance_affinity=%s overlay=%s",
+    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s heap_validate_on_map_load=%s heap_validate_dry_run=%s performance_priority=%s performance_affinity=%s overlay=%s",
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
@@ -4131,6 +4351,8 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         g_enableAntiCrash ? "enabled" : "disabled",
         g_enableMobValidation ? "enabled" : "disabled",
         g_enableHeapTermination ? "enabled" : "disabled",
+        g_enableHeapValidateOnMapLoad ? "enabled" : "disabled",
+        g_heapValidateDryRun ? "enabled" : "disabled",
         g_enablePerformancePriority ? "enabled" : "disabled",
         g_enablePerformanceAffinity ? "enabled" : "disabled",
         g_enableOverlay ? "enabled" : "disabled");
@@ -4153,8 +4375,11 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
 
     InitializeCriticalSection(&g_fileHandleLock);
     g_fileHandleLockInitialized = true;
-    if (g_enableFileIoLogging || g_enableMobValidation || g_enableOverlay) {
+    if (g_enableFileIoLogging || g_enableMobValidation || g_enableOverlay || g_enableHeapValidateOnMapLoad) {
         InstallFileIoHooks();
+    }
+    if (g_enableHeapValidateOnMapLoad) {
+        InstallHeapHooks();
     }
 
     char exePath[MAX_PATH] = {};

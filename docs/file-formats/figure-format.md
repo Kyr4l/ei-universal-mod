@@ -14,7 +14,7 @@ The `figures_res` archive holds every in-game 3D model: units, creatures, weapon
 
 Most figures in the game (56 of the ~70 unique models sampled from a subset of the vanilla `figures_res`) are simple: one `.fig` + one `.bon` pair, no hierarchy, no animation — a single mesh whose shape morphs by body build (strength/dexterity/height) using the 8-corner interpolation described below.
 
-The rest are composite `.mod`+`.bon` rigs (see below) — the full `figures_res` has 42 of these, not just a handful: most (e.g. `goldpile00`, `stwa*`, `jbr*`, `jstatue*`) are multi-piece scenery/architecture that only need the static part-hierarchy assembly, no animation. Only **4** of the 42 (`unmodg3`, `unmohi`, `unmosk2`, `unmosk3` — generic creature skeletons) additionally ship a `.anm` and have playable animation clips. Notably, the base human models used by the large majority of humanoid NPCs in the game (`unhuma`/`unhufe` — "Human Male"/"Human Female" in the Units database) are *also* full composite rigs (`unhuma.mod` alone has 348 body-part/equipment-variant entries), just without their own `.anm` — see "Body-Part-Name Convention for Equipment Variants" below for what most of those entries actually are.
+The rest are composite `.mod`+`.bon` rigs (see below) — the full `figures_res` has 42 of these, not just a handful. Most static-scenery ones (e.g. `goldpile00`, `stwa*`, `jbr*`, `jstatue*`) ship no `.anm` and only need the static part-hierarchy assembly. Every actual creature/unit rig does ship its own `.anm` and has playable animation clips - an earlier draft of this doc undercounted this at "only 4" based on a too-small sample; the real count across vanilla `figures_res` is over 50 (`unhuma`, `unhufe`, `unanwicr`, `unmodg3`, `unmohi`, `unorma`, and every other `un*` creature/unit prefix all have a matching `.anm`). Notably, the base human models used by the large majority of humanoid NPCs in the game (`unhuma`/`unhufe` — "Human Male"/"Human Female" in the Units database) are *also* full composite rigs (`unhuma.mod` alone has 348 body-part/equipment-variant entries) — see "Body-Part-Name Convention for Equipment Variants" below for what most of those entries actually are.
 
 **Primary source**: the `.fig` format below was recovered from the open-source map editor [`ei_maper`](https://github.com/nsgundy/ei_maper)'s own reader (`ei::CFigure::readData`, `figure.cpp`/`figure.h`), which is authoritative — it is a working, shipped parser for this exact format, not a guess. The `.bon`/`.mod` container structure was reverse-engineered from `ei_maper`'s `CObjectList::readAssembly()` (`resourcemanager.cpp`) plus direct byte verification against the vanilla `figures_res` files. The `.anm` format has **no known reference implementation** (`ei_maper` is a static level editor and does not play animations) — it was reverse-engineered from scratch by byte analysis, cross-checked against the bone names found in the corresponding `.mod` hierarchy.
 
@@ -41,20 +41,20 @@ int32   textureNumber      // presumed primary(0)/secondary(1) texture-slot sele
 
 ### Complection Morphing (the 8-corner cube)
 
-Evil Islands units are not rigged with bone weights per vertex. Instead, each unit has three build sliders — **strength**, **dexterity**, and **height/tallness** (`complection.x/y/z`, each in `[0,1]`) — and the `.fig` file stores the mesh's shape at all **8 corners of that unit cube** (str=0/1 × dex=0/1 × tall=0/1). At load/pose time the engine trilinearly interpolates between the 8 corners using the unit's actual complection values to get the final vertex positions. This is why every per-vertex array below is stored as "8 morph variants" rather than one.
+Evil Islands units are not rigged with bone weights per vertex. Instead, each unit has three build sliders — **strength**, **dexterity**, and a third axis whose corner variants are labeled "scaled" in both known reference implementations (`ei_maper`'s `figure.cpp:261` comment reads `x == str, y == dex, z == scale`; the community Blender plugin `ei_figer` names corners 4-7 `b~`/`p~`/`g~`/`c~` for "big/power/growth/common (scaled)") — (`complection.x/y/z`, each in `[0,1]`) — and the `.fig` file stores the mesh's shape at all **8 corners of that unit cube** (str=0/1 × dex=0/1 × scale=0/1). At load/pose time the engine trilinearly interpolates between the 8 corners using the unit's actual complection values to get the final vertex positions. This is why every per-vertex array below is stored as "8 morph variants" rather than one. (Earlier drafts of this doc called the third axis "height/tallness" — that was a guess and is not what either reference implementation calls it.)
 
 The interpolation itself (`ei::calcComplection`, mirrored in `CFigure::calculateConstitution`):
 ```cpp
 // data[0..7] are the 8 morph corners in this fixed order (indices into all "×8" arrays below):
-// 0: str0,dex0   1: str1,dex0   2: str0,dex1   3: str1,dex1   (all at tall=0)
-// 4: str0,dex0   5: str1,dex0   6: str0,dex1   7: str1,dex1   (all at tall=1)
+// 0: str0,dex0   1: str1,dex0   2: str0,dex1   3: str1,dex1   (all at scale=0)
+// 4: str0,dex0   5: str1,dex0   6: str0,dex1   7: str1,dex1   (all at scale=1)
 res0 = lerp(data[0], data[1], dex);
 res1 = lerp(data[2], data[3], dex);
-res2 = lerp(res0,    res1,    str);          // tall=0 result
+res2 = lerp(res0,    res1,    str);          // scale=0 result
 res0 = lerp(data[4], data[5], dex);
 res1 = lerp(data[6], data[7], dex);
-res0 = lerp(res0,    res1,    str);          // tall=1 result
-result = lerp(res2, res0, tall);
+res0 = lerp(res0,    res1,    str);          // scale=1 result
+result = lerp(res2, res0, scale);
 ```
 This same trilinear blend is applied to: the bounding-box center/min/max (below), the per-vertex morph positions, and (for composite models) the `.bon` assembly offset.
 
@@ -104,6 +104,10 @@ Exactly **96 bytes**: 8 × `vec3<float>`, one offset per complection morph corne
 ### Composite form (`.bon` next to a `.mod`)
 
 A full **RES archive** (see `res-format.md` for the container format), with one entry per body part, each entry's payload being the same 96-byte "8 × vec3" structure as the simple form above. Entry names match the part names inside the sibling `.mod` archive exactly (e.g. `hd`, `bd`, `hp`, `rh1`...). Each part's offset is added cumulatively down the hierarchy (a child's effective offset is its own offset plus its parent's, recursively — see `applyAssemblyOffset` in `figure.cpp`), positioning each rigid part relative to its parent bone.
+
+### Resolved: "Oversized Head" Was a Part-Selection Bug, Not a Missing Scale
+
+An earlier version of this viewer appeared to render heads (and other parts) at nonsensical scale, with disconnected floating fragments. This was **not** a missing scale factor anywhere in `.fig`/`.bon` — neither the header, vertex/normal/UV data, nor the `.bon` assembly offset (a pure position delta, not a scale) has any per-part scale field. The actual cause was rendering the wrong part set: composite models bundle every equipment/hair/weapon mesh variant as sibling entries (see "Body-Part-Name Convention for Equipment Variants" below), and an early hardcoded human-specific default-visibility list picked an inconsistent subset of these for non-human models, occasionally including an oversized equipment-fitted variant (e.g. one of `hd.armor01`-`hd.armor16`, plausibly modeled larger to fit under a helmet) instead of, or alongside, the plain base part. Rendering only the bare (non-dotted) canonical hierarchy slots — `hd`, `bd`, `hp`, `hr`\* excluded, `lh1-3`, `rh1-3`, `ll1-3`, `rl1-3`, etc. — produces correct, normally-proportioned geometry; confirmed both structurally (every composite `.mod` sampled has exactly one bare entry per real hierarchy slot) and visually (matches a reference Blender import of `unhuma` showing the same part set with normal head/limb proportions). See `IsEquipmentVariantOrDescendant` in the viewer's `main.cpp` for the generalized (non-hardcoded) selection rule.
 
 ---
 

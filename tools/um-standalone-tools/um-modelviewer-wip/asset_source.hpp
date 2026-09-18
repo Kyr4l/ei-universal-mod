@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -20,10 +21,20 @@ struct AssetSource {
     res::Archive archive; // populated when isArchive
     std::string label; // for UI display
 
+    // Directory sources need this to match a packed .res archive's own
+    // case-insensitive lookup (res::Archive keys everything by ToLower): real
+    // mod/vanilla asset directories are frequently inconsistent about casing
+    // (Windows filesystems don't care), so a straight fs::is_regular_file
+    // check with an assumed-lowercase name silently fails to find files that
+    // genuinely exist on a case-sensitive filesystem like Linux's. Built once
+    // in Load(), keyed by ToLower(filename) -> the real on-disk filename.
+    std::map<std::string, std::string> lowerToReal;
+
     bool Load(const std::string& path, std::string& err) {
         valid = false;
         isArchive = false;
         archive = res::Archive{};
+        lowerToReal.clear();
         fs::path p(path);
         std::error_code ec;
         if (fs::is_directory(p, ec)) {
@@ -31,6 +42,11 @@ struct AssetSource {
             isArchive = false;
             valid = true;
             label = p.filename().string();
+            for (auto& entry : fs::directory_iterator(root, ec)) {
+                if (!entry.is_regular_file()) continue;
+                std::string name = entry.path().filename().string();
+                lowerToReal[res::Archive::ToLower(name)] = name;
+            }
             return true;
         }
         if (fs::is_regular_file(p, ec)) {
@@ -50,8 +66,7 @@ struct AssetSource {
     bool Contains(const std::string& name) const {
         if (!valid) return false;
         if (isArchive) return archive.Contains(name);
-        std::error_code ec;
-        return fs::is_regular_file(root / name, ec);
+        return lowerToReal.find(res::Archive::ToLower(name)) != lowerToReal.end();
     }
 
     bool ReadFile(const std::string& name, std::vector<uint8_t>& out) const {
@@ -62,7 +77,9 @@ struct AssetSource {
             out = *data;
             return true;
         }
-        std::ifstream f(root / name, std::ios::binary);
+        auto it = lowerToReal.find(res::Archive::ToLower(name));
+        if (it == lowerToReal.end()) return false;
+        std::ifstream f(root / it->second, std::ios::binary);
         if (!f.is_open()) return false;
         out.assign(std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>());
         return true;

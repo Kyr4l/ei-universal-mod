@@ -62,6 +62,19 @@ struct Monster {
     std::string name;
     std::string baseRace;         // references RaceModel::name
     float complectionX = 0.5f, complectionY = 0.5f, complectionZ = 0.5f;
+    // Direct skin/hair selectors (confirmed authoritative over RaceModel's own
+    // texture list, which is just the pool of allowed options - not which one
+    // this particular monster actually wears): skinIndex is the literal NN
+    // suffix of "<maskName>skin_NN" (e.g. skinIndex=5 -> "unhumaskin_05");
+    // hairIndex selects "hr.NN", or -1 for no hair (always -1 whenever a helmet
+    // is worn, to avoid the hair and helmet meshes overlapping in-game).
+    int32_t skinIndex = 0;
+    int32_t hairIndex = -1;
+    // References into the Items database (see db_items.hpp) by item Name - what
+    // this monster is actually equipped with by default.
+    std::vector<std::string> equipmentWears; // Armors
+    std::string equipmentWeapon1;            // Weapons, main hand
+    std::string equipmentWeapon2;            // Weapons, off hand / second weapon
 };
 
 struct UnitDatabase {
@@ -70,6 +83,14 @@ struct UnitDatabase {
 
     const RaceModel* FindRaceModel(const std::string& name) const {
         for (auto& r : raceModels) if (r.name == name) return &r;
+        return nullptr;
+    }
+
+    // Looks a RaceModel up by its .mod/.fig basename (e.g. "unhuma") instead of its
+    // display name - used to guess a default skin texture when a figure is loaded
+    // directly by name rather than picked from the unit list.
+    const RaceModel* FindRaceModelByMask(const std::string& maskName) const {
+        for (auto& r : raceModels) if (res::Archive::ToLower(r.maskName) == res::Archive::ToLower(maskName)) return &r;
         return nullptr;
     }
 };
@@ -135,6 +156,16 @@ inline float ReadFloatField(const uint8_t* data, const TagSpan& span) {
     return v;
 }
 
+// For SignedLong/UnsignedLong fields (e.g. Monster's "Graphics Data Skin Index"/
+// "Graphics Data Hair") - a plain little-endian int32, not IEEE-754 like
+// ReadFloatField above.
+inline int32_t ReadIntField(const uint8_t* data, const TagSpan& span) {
+    if (span.contentLen < 4) return 0;
+    int32_t v;
+    std::memcpy(&v, data + span.contentStart, 4);
+    return v;
+}
+
 // StringList: a Field whose content is a concatenation of tag=1 Items, each a
 // plain CP1251 string + NUL (see database-format.md "Tagged-Item List Types").
 inline std::vector<std::string> ReadStringList(const uint8_t* data, const TagSpan& span) {
@@ -187,6 +218,11 @@ inline bool ParseUnitsResBlob(const std::vector<uint8_t>& udb, UnitDatabase& out
                 if (auto it = fields.find(5); it != fields.end()) m.complectionX = ReadFloatField(data, it->second);
                 if (auto it = fields.find(6); it != fields.end()) m.complectionY = ReadFloatField(data, it->second);
                 if (auto it = fields.find(7); it != fields.end()) m.complectionZ = ReadFloatField(data, it->second);
+                if (auto it = fields.find(3); it != fields.end()) m.skinIndex = ReadIntField(data, it->second);
+                if (auto it = fields.find(4); it != fields.end()) m.hairIndex = ReadIntField(data, it->second);
+                if (auto it = fields.find(32); it != fields.end()) m.equipmentWears = ReadStringList(data, it->second);
+                if (auto it = fields.find(33); it != fields.end()) m.equipmentWeapon1 = ReadCp1251String(data, it->second);
+                if (auto it = fields.find(42); it != fields.end()) m.equipmentWeapon2 = ReadCp1251String(data, it->second);
                 if (!m.name.empty()) out.monsters.push_back(std::move(m));
             }
         }
@@ -275,6 +311,11 @@ inline bool LoadUnitsFromXlsx(const std::string& xlsxPath, UnitDatabase& out, st
                 if (auto c = ColFor(cols, 5)) { auto s = ws.Get(row, *c).AsString(); if (!s.empty()) m.complectionX = std::stof(s); }
                 if (auto c = ColFor(cols, 6)) { auto s = ws.Get(row, *c).AsString(); if (!s.empty()) m.complectionY = std::stof(s); }
                 if (auto c = ColFor(cols, 7)) { auto s = ws.Get(row, *c).AsString(); if (!s.empty()) m.complectionZ = std::stof(s); }
+                if (auto c = ColFor(cols, 3)) { auto s = ws.Get(row, *c).AsString(); if (!s.empty()) m.skinIndex = std::stoi(s); }
+                if (auto c = ColFor(cols, 4)) { auto s = ws.Get(row, *c).AsString(); if (!s.empty()) m.hairIndex = std::stoi(s); }
+                if (auto c = ColFor(cols, 32)) m.equipmentWears = SplitCommaList(ws.Get(row, *c).AsString());
+                if (auto c = ColFor(cols, 33)) m.equipmentWeapon1 = ws.Get(row, *c).AsString();
+                if (auto c = ColFor(cols, 42)) m.equipmentWeapon2 = ws.Get(row, *c).AsString();
                 out.monsters.push_back(std::move(m));
             }
         }
