@@ -34,7 +34,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F11;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.0";
+static const char* const UM_VERSION = "1.1";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
@@ -96,9 +96,23 @@ static const double OVERLAY_FRAME_STATS_WINDOW_MS = 10000.0;
 static float g_overlayFrameTimesMs[OVERLAY_FRAME_TIME_CAPACITY] = {};
 static volatile LONG g_overlayFrameTimeNext = 0;
 static volatile LONG g_overlayFrameTimeCount = 0;
-// Last .mob file the game opened (the main menu and the lobby are maps too).
-static char g_currentMapName[64] = {};
-static ULONGLONG g_currentMapOpenedTickMs = 0;
+// What the game is showing, worked out from the map files it opens (the main menu and the lobby
+// are maps too): the terrain (.mpr), the base map (.mob), the quest map (.mob) and the extra
+// script-only maps a script loads with AddMob. Kept by NoteMapFile, read by the overlay.
+struct MapLoadState {
+    char mpr[64];
+    char base[64];
+    char quest[64];
+    char baseWanted[64];        // lower case: the base map the quest's .mq names, if not opened yet
+    char lastExtra[64];
+    int extraCount;
+    ULONGLONG openedTickMs;     // when this map started loading
+    char recentMpr[64];         // the last .mpr opened, in case it comes before its map
+    ULONGLONG recentMprTickMs;
+    bool valid;
+};
+static MapLoadState g_map = {};
+static std::unordered_set<std::string> g_mapExpectedExtras; // lower-case .mob names the loaded scripts AddMob
 static volatile LONG g_currentMapLock = 0;
 static int g_overlayRefreshMs = 500;
 static const int OVERLAY_FPS_MARKS_MAX = 16;
@@ -619,7 +633,8 @@ static const SettingDef kSettings[] = {
     BoolSetting("OVERLAY_SHOW_LAA", &g_overlayShowLaa, true, true,
         "; Show whether game.exe can use more than 2 GB of address space; (true/false)"),
     BoolSetting("OVERLAY_SHOW_MAP", &g_overlayShowMap, true, true,
-        "; Show the current map (last .mob opened) and the session time; (true/false)"),
+        "; Show the current map (terrain, base map, quest map, and how many script maps its\n"
+        "; script loaded) and the session time; (true/false)"),
     BoolSetting("OVERLAY_SHOW_WARNINGS", &g_overlayShowWarnings, true, true,
         "; Show a red badge with the number of warnings/errors logged so far; (true/false)"),
     BoolSetting("OVERLAY_SHOW_THREADS", &g_overlayShowThreads, true, true,
@@ -1938,7 +1953,7 @@ static bool ReadWholeFile(const std::string& path, size_t limitBytes, std::vecto
 }
 
 // The base map's name from a quest archive's map.txt ("#res <mpr> <base mob>"), without extension.
-static bool ReadMqBaseMapName(const std::string& mqPath, std::string* baseName) {
+static bool ReadMqBaseMapName(const std::string& mqPath, std::string* baseName, std::string* mprName = nullptr) {
     std::vector<BYTE> file;
     if (!ReadWholeFile(mqPath, kMqMaxBytes, &file) || file.size() < 16) {
         return false;
@@ -1986,6 +2001,7 @@ static bool ReadMqBaseMapName(const std::string& mqPath, std::string* baseName) 
             if (afterRes) {
                 size_t space = line.find_first_of(" \t");
                 if (space == std::string::npos) return false;
+                if (mprName) *mprName = line.substr(0, space);
                 size_t second = line.find_first_not_of(" \t", space);
                 if (second == std::string::npos) return false;
                 size_t secondEnd = line.find_first_of(" \t", second);
@@ -2005,6 +2021,7 @@ struct MobScriptContext {
     MobScriptDeclarations declarations;
     std::unordered_set<DWORD> objectIds;
     std::unordered_set<std::string> objectNames; // lower-case OBJNAMEs of the map's objects
+    std::vector<std::string> addMobs;            // lower-case file names its script loads with AddMob
 };
 
 // Where the game itself opened each .mob (lower-case file name -> full path). A quest's base
@@ -2065,7 +2082,13 @@ static std::shared_ptr<MobScriptContext> LoadMobContext(const std::string& mobPa
     std::string scriptText;
     ExtractMobScriptAndIds(file.data(), file.size(), &scriptText, &result->objectIds, &result->objectNames);
     if (!scriptText.empty()) {
-        result->declarations = CheckMobScript(scriptText).declarations;
+        MobScriptReport scriptReport = CheckMobScript(scriptText);
+        result->declarations = scriptReport.declarations;
+        for (const std::string& target : scriptReport.addMobs) {
+            std::string name = LowerCaseCopy(target);
+            if (name.size() < 4 || name.compare(name.size() - 4, 4, ".mob") != 0) name += ".mob";
+            result->addMobs.push_back(name);
+        }
     }
     while (InterlockedCompareExchange(&g_mobContextLock, 1, 0) != 0) Sleep(0);
     g_mobContextCache[key] = result;
@@ -3434,45 +3457,131 @@ static void LogQuarantineCrashAnalysis(const CONTEXT* context, const EXCEPTION_R
 #endif
 }
 
-// Opening a .mob file means the engine is loading a new map - the main menu is
-// itself a map (ZoneMainMenuNew.mob) with a fixed camera, like any other. The
-// overlay shows the last one opened.
-static void NoteMapOpened(const char* path) {
+static std::string FileNameOfPath(const char* path) {
     const char* name = strrchr(path, '\\');
     const char* slash = strrchr(path, '/');
     if (slash && (!name || slash > name)) {
         name = slash;
     }
-    name = name ? name + 1 : path;
-    // Tiny spinlock: the overlay thread copies this while a game thread may
-    // be storing a new name; a half-written name would only show up as a
-    // one-off glitch, but a lock is cheap here.
-    while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) {
-        Sleep(0);
+    return name ? name + 1 : path;
+}
+
+static void CopyMapText(char* dest, size_t destSize, const std::string& text) {
+    snprintf(dest, destSize, "%s", text.c_str());
+}
+
+// A map is several files. The quest map (z35q1.mob, with a z35q1.mq archive whose map.txt names the
+// terrain and the base map) is opened next to its base map (zone35x-lmp.mob), and its script can load
+// more script-only maps (z35q1_strongwarriors.mob) with AddMob, so "the last .mob opened" names the
+// wrong thing. A .mob is an extra map when a script already loaded says it AddMobs it; otherwise it
+// starts a new map (or completes the current one, when it is the base map the quest asked for).
+static const ULONGLONG kMapSameLoadMs = 30000;
+
+static void NoteMapFile(const char* path, bool isMob) {
+    const std::string name = FileNameOfPath(path);
+    const std::string lower = LowerCaseCopy(name);
+    const ULONGLONG now = GetTickCount64();
+
+    if (!isMob) {
+        while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) Sleep(0);
+        CopyMapText(g_map.recentMpr, sizeof(g_map.recentMpr), name);
+        g_map.recentMprTickMs = now;
+        if (g_map.valid && g_map.mpr[0] == '\0' && now - g_map.openedTickMs < kMapSameLoadMs) {
+            CopyMapText(g_map.mpr, sizeof(g_map.mpr), name);
+        }
+        InterlockedExchange(&g_currentMapLock, 0);
+        return;
     }
-    snprintf(g_currentMapName, sizeof(g_currentMapName), "%s", name);
-    g_currentMapOpenedTickMs = GetTickCount64();
+
+    // Read outside the lock: this parses the map's script (cached for the next time).
+    std::shared_ptr<MobScriptContext> context = LoadMobContext(path);
+    std::string mqBase, mqMpr;
+    bool isQuest = false;
+    size_t dot = std::string(path).find_last_of('.');
+    if (dot != std::string::npos) {
+        std::string mqPath = std::string(path).substr(0, dot) + ".mq";
+        if (GetFileAttributesA(mqPath.c_str()) != INVALID_FILE_ATTRIBUTES) {
+            isQuest = true;
+            ReadMqBaseMapName(mqPath, &mqBase, &mqMpr);
+        }
+    }
+    if (!mqMpr.empty() && mqMpr.find('.') == std::string::npos) mqMpr += ".mpr";
+    const std::string mqBaseFile = mqBase.empty() ? std::string() : mqBase + ".mob";
+
+    while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) Sleep(0);
+    const bool fresh = g_map.valid && now - g_map.openedTickMs < kMapSameLoadMs;
+    bool startNew = false;
+    if (g_map.valid && g_mapExpectedExtras.count(lower) != 0 &&
+            !EqualsIgnoreCase(name.c_str(), g_map.quest) && !EqualsIgnoreCase(name.c_str(), g_map.base)) {
+        ++g_map.extraCount;
+        CopyMapText(g_map.lastExtra, sizeof(g_map.lastExtra), name);
+    } else if (fresh && (EqualsIgnoreCase(name.c_str(), g_map.quest) || EqualsIgnoreCase(name.c_str(), g_map.base))) {
+        // The same map file read again while it loads: nothing new.
+    } else if (fresh && !isQuest && g_map.baseWanted[0] && lower == g_map.baseWanted) {
+        CopyMapText(g_map.base, sizeof(g_map.base), name); // the quest opened first, its base map follows
+    } else if (fresh && isQuest && g_map.quest[0] == '\0' && g_map.base[0] &&
+            EqualsIgnoreCase(g_map.base, mqBaseFile.c_str())) {
+        CopyMapText(g_map.quest, sizeof(g_map.quest), name); // the base map opened first, its quest follows
+        if (g_map.mpr[0] == '\0' && !mqMpr.empty()) CopyMapText(g_map.mpr, sizeof(g_map.mpr), mqMpr);
+    } else {
+        startNew = true;
+    }
+    if (startNew) {
+        memset(g_map.mpr, 0, sizeof(g_map.mpr));
+        memset(g_map.base, 0, sizeof(g_map.base));
+        memset(g_map.quest, 0, sizeof(g_map.quest));
+        memset(g_map.baseWanted, 0, sizeof(g_map.baseWanted));
+        memset(g_map.lastExtra, 0, sizeof(g_map.lastExtra));
+        g_map.extraCount = 0;
+        g_map.valid = true;
+        g_map.openedTickMs = now;
+        g_mapExpectedExtras.clear();
+        if (isQuest) {
+            CopyMapText(g_map.quest, sizeof(g_map.quest), name);
+            if (!mqMpr.empty()) CopyMapText(g_map.mpr, sizeof(g_map.mpr), mqMpr);
+            if (!mqBaseFile.empty()) CopyMapText(g_map.baseWanted, sizeof(g_map.baseWanted), LowerCaseCopy(mqBaseFile));
+        } else {
+            CopyMapText(g_map.base, sizeof(g_map.base), name);
+            if (g_map.recentMpr[0] && now - g_map.recentMprTickMs < kMapSameLoadMs) {
+                CopyMapText(g_map.mpr, sizeof(g_map.mpr), g_map.recentMpr);
+            }
+        }
+    }
+    if (context) {
+        for (const std::string& added : context->addMobs) g_mapExpectedExtras.insert(added);
+    }
     InterlockedExchange(&g_currentMapLock, 0);
 }
 
-static bool CopyCurrentMap(char* name, size_t nameSize, ULONGLONG* openedTickMs) {
+static bool CopyMapState(MapLoadState* out) {
     while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) {
         Sleep(0);
     }
-    bool have = g_currentMapName[0] != '\0';
-    snprintf(name, nameSize, "%s", g_currentMapName);
-    *openedTickMs = g_currentMapOpenedTickMs;
+    *out = g_map;
     InterlockedExchange(&g_currentMapLock, 0);
-    return have;
+    return out->valid;
 }
 
 static void NoteMapLoad(const char* path) {
-    if (!HasFileExtension(path, "mob")) {
+    const bool isMob = HasFileExtension(path, "mob");
+    if (!isMob && !HasFileExtension(path, "mpr")) {
         return;
     }
-    NoteMapOpened(path);
-    RememberSeenMobPath(path);
-    if (g_heapFreeQuarantineInstalled) {
+    if (!g_enableOverlay || !g_overlayShowMap) {
+        // The overlay is the only user of the map identity; the rest still runs for .mob files.
+        if (isMob) {
+            RememberSeenMobPath(path);
+            if (g_heapFreeQuarantineInstalled) {
+                LogQuarantineStats("Map load");
+            }
+        }
+        return;
+    }
+    if (isMob) {
+        RememberSeenMobPath(path); // before NoteMapFile: it reads the file and the quest's base map
+    }
+    NoteMapFile(path, isMob);
+    if (isMob && g_heapFreeQuarantineInstalled) {
         LogQuarantineStats("Map load");
     }
 }
@@ -5470,15 +5579,37 @@ static void BuildOverlayContent(OverlayContent& content) {
             "Renderer=%s", g_rendererChain[0] ? g_rendererChain : "detecting...");
     }
     if (g_overlayShowMap) {
-        char mapName[64] = {};
-        ULONGLONG openedTickMs = 0;
         char sessionText[16] = {};
         FormatDuration(GetProcessUptimeSeconds(), sessionText, sizeof(sessionText));
-        if (CopyCurrentMap(mapName, sizeof(mapName), &openedTickMs)) {
+        MapLoadState map = {};
+        if (CopyMapState(&map)) {
             char ageText[16] = {};
-            FormatDuration((GetTickCount64() - openedTickMs) / 1000, ageText, sizeof(ageText));
+            FormatDuration((GetTickCount64() - map.openedTickMs) / 1000, ageText, sizeof(ageText));
+            const char* title = map.mpr[0] ? map.mpr : map.quest[0] ? map.quest : map.base;
             AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
-                "Map=%s (%s ago) Session=%s", mapName, ageText, sessionText);
+                "Map=%s (%s ago) Session=%s", title, ageText, sessionText);
+            if (map.base[0] || map.quest[0]) {
+                // Only what is not already the title above.
+                char parts[160] = {};
+                size_t used = 0;
+                auto append = [&](const char* label, const char* value) {
+                    if (!value[0] || (label[0] == 'B' && !map.quest[0] && !map.mpr[0]) ||
+                            (label[0] == 'Q' && !map.mpr[0])) {
+                        return;
+                    }
+                    int wrote = snprintf(parts + used, sizeof(parts) - used, "%s%s=%s", used ? " " : "", label, value);
+                    if (wrote > 0 && static_cast<size_t>(wrote) < sizeof(parts) - used) used += static_cast<size_t>(wrote);
+                };
+                append("Base", map.base);
+                append("Quest", map.quest);
+                if (used) {
+                    AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false, "%s", parts);
+                }
+            }
+            if (map.extraCount > 0) {
+                AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+                    "Script maps=%d (last %s)", map.extraCount, map.lastExtra);
+            }
         } else {
             AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
                 "Map=(none yet) Session=%s", sessionText);
