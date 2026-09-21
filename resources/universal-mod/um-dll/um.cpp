@@ -25,6 +25,7 @@
 #include <algorithm>
 
 #include "mob_script_check.hpp"
+#include "profile_symbols.hpp"
 
 // The DLL is injected into the game process, so these flags and hooks are
 // process-local. Configuration is loaded once during DLL_PROCESS_ATTACH.
@@ -32,7 +33,7 @@ static HHOOK g_keyboardHook = NULL;
 // Set once in DllMain; needed by ReloadConfiguration() to re-resolve um.cfg's
 // path from a thread other than the one DllMain itself ran on.
 static HMODULE g_dllModule = NULL;
-static BYTE g_reloadConfigKey = VK_F11;
+static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
 static const char* const UM_VERSION = "1.1";
 static bool g_enableAsiCheck = true;
@@ -62,6 +63,14 @@ static BYTE g_overlayToggleKey = VK_F9;
 static volatile LONG g_overlayVisible = 0;
 static BYTE g_overlayLogToggleKey = VK_F10;
 static volatile LONG g_overlayLogVisible = 0;
+static BYTE g_profilerKey = VK_F11;
+static char g_profilerPosition[16] = "left";
+static HWND g_profilerWindow = NULL;
+static int g_profilerHz = 250;
+static int g_profilerLineCount = 20;
+static volatile LONG g_profilerVisible = 0;
+static volatile LONG g_profilerRunning = 0;      // the sampler keeps going while this is 1
+static volatile DWORD g_profilerFrameThreadId = 0; // the thread that presents frames: the game's main thread
 static HWND g_overlayWindow = NULL;
 static HWND g_overlayTargetWindow = NULL;
 static ULONGLONG g_overlayStartTickMs = 0;
@@ -557,7 +566,7 @@ static const SettingDef kSettings[] = {
         "; -- Keyboard --"),
     BoolSetting("KEYBOARD_REWRITES_LOGGING", &g_enableKeyboardRewriteLogging, false, true,
         "; Log keyboard rewrite events; (true/false)"),
-    VKeySetting("RELOAD_CONFIG_KEY", &g_reloadConfigKey, VK_F11, true,
+    VKeySetting("RELOAD_CONFIG_KEY", &g_reloadConfigKey, VK_F12, true,
         "; Key that reloads this file without restarting the game (some settings still\n"
         "; need a restart); F1-F12 or a virtual-key code."),
 
@@ -582,18 +591,16 @@ static const SettingDef kSettings[] = {
         "; missing from the database, errors in the mission script, and object IDs a quest\n"
         "; map shares with its base map. Only this mod's own map files are checked; (true/false)"),
     IntSetting("HEAP_ALLOC_PADDING", &g_heapAllocPadding, 0, 256, 64, true,
-        "; Fix for a game bug that crashes it on Wine: the game writes a few bytes past the\n"
-        "; end of some of its objects (its 3D figure objects, for one), which lands on the\n"
-        "; next block's heap header and corrupts the heap. This adds that many spare bytes\n"
-        "; after every allocation to absorb those writes; um.log reports each allocation\n"
-        "; site that overruns. Costs about 64 bytes per live allocation. 0 = off; needs a\n"
-        "; restart to change (0-256 bytes)."),
+        "; Fixes a game bug that crashes it on Wine: the game writes past the end of some of\n"
+        "; its memory blocks and corrupts the heap. This adds spare bytes after every block\n"
+        "; to absorb it (larger blocks get more). Needs a restart; 0 = off (0-256 bytes)."),
     BoolSetting("HEAP_FREE_QUARANTINE", &g_enableHeapFreeQuarantine, false, true,
-        "; TO BE DEPRECATED: not needed with HEAP_ALLOC_PADDING. Keeps recently freed memory\n"
-        "; untouched for a while, so stale pointers keep working. Uses extra memory and\n"
-        "; needs a restart; (true/false)"),
-    IntSetting("HEAP_FREE_QUARANTINE_MB", &g_heapFreeQuarantineMb, 4, 1024, 64, true,
-        "; TO BE DEPRECATED. Amount of freed memory held back, in MB (4-1024)."),
+        "; Diagnostics: tracks every allocation to report in um.log which ones the game\n"
+        "; overruns, and keeps recently freed memory untouched for a while. Slows the game\n"
+        "; down and uses extra memory; needs a restart; (true/false)"),
+    IntSetting("HEAP_FREE_QUARANTINE_MB", &g_heapFreeQuarantineMb, 0, 1024, 64, true,
+        "; TO BE DEPRECATED. Amount of freed memory held back, in MB (0-1024); 0 = hold\n"
+        "; nothing and only track the allocations."),
     IntSetting("HEAP_FREE_QUARANTINE_OBJECTS_MB", &g_heapFreeQuarantineObjectsMb, 0, 512, 128, true,
         "; TO BE DEPRECATED. Extra memory, in MB, kept for small freed objects (blocks that\n"
         "; start with a game vtable); 0 = no extra pool."),
@@ -641,6 +648,20 @@ static const SettingDef kSettings[] = {
         "; Show CPU usage per thread; (true/false)"),
     IntSetting("OVERLAY_THREAD_COUNT", &g_overlayThreadDisplayCount, 1, OVERLAY_THREAD_DISPLAY_MAX, 8, true,
         "; Number of threads to list (1-32)."),
+    VKeySetting("OVERLAY_PROFILER_KEY", &g_profilerKey, VK_F11, true,
+        "; Key that shows/hides the profiler window: where the game's main thread spends\n"
+        "; each frame, as a call tree of game.exe functions. Names are guessed from the\n"
+        "; game's classes, strings and API calls (sub_<address> when unknown); you can name\n"
+        "; functions in um-names.txt, one \"address name\" per line. Sampling only runs\n"
+        "; while it is shown, at a cost of a few percent of one core; F1-F12 or a\n"
+        "; virtual-key code."),
+    PositionSetting("OVERLAY_PROFILER_POSITION", g_profilerPosition, sizeof(g_profilerPosition), "left", true,
+        "; Profiler window position, same choices as OVERLAY_POSITION."),
+    IntSetting("OVERLAY_PROFILER_HZ", &g_profilerHz, 50, 1000, 250, true,
+        "; How many times per second the main thread is sampled (50-1000); more is more\n"
+        "; precise and costs more."),
+    IntSetting("OVERLAY_PROFILER_LINES", &g_profilerLineCount, 6, 40, 20, true,
+        "; Number of lines of the profiler tree (6-40)."),
     ColorSetting("OVERLAY_BACKGROUND_COLOR", &g_overlayBackgroundColor, RGB(0, 0, 0), true,
         "; Background color as hex RRGGBB."),
     IntSetting("OVERLAY_BACKGROUND_OPACITY", &g_overlayBackgroundOpacityPercent, 0, 100, 20, true,
@@ -2541,6 +2562,8 @@ static CRITICAL_SECTION g_quarantineLock;
 // Set only once the hooks are live, and deliberately never cleared by a config
 // reload: blocks already held must keep being recognized as held.
 static bool g_heapFreeQuarantineInstalled = false;
+// False when both windows are 0 MB: the hooks then only track allocations and free everything at once.
+static bool g_quarantineHolds = true;
 // Two pools, each a FIFO with its own limits: 0 = data buffers and everything else (the
 // HEAP_FREE_QUARANTINE_MB window), 1 = small OBJECTS - blocks that start with a game vtable -
 // with a separate window, so a long-lived widget's dangling child stays held for far longer than
@@ -2565,6 +2588,93 @@ static unsigned long g_quarantineCorruptHeaders = 0;
 // is a free of the MIDDLE of an allocation (an array element): on Wine that corrupts the heap, and
 // the crashes seen so far (stale children, zeroed list nodes, damaged headers) fit it.
 static const int kAllocCallerSlots = 3;
+
+// Open-addressing hash table from a 32-bit address to V (linear probing, backward-shift deletion so
+// there are no tombstones), in memory of its own from VirtualAlloc. The hooks run for every game
+// allocation; a std::map costs a tree walk with cache misses and a malloc per operation, which measured
+// at ~3 us per free+alloc with 300,000 live blocks. Callers hold g_quarantineLock.
+template <typename V>
+class PtrTable {
+public:
+    struct Slot { DWORD key; V value; };   // key 0 = empty
+    size_t Size() const { return count_; }
+    size_t Capacity() const { return capacity_; }
+    Slot& At(size_t index) { return slots_[index]; }
+    V* Find(DWORD key) {
+        if (!slots_) return nullptr;
+        for (size_t i = Home(key);; i = (i + 1) & mask_) {
+            if (slots_[i].key == key) return &slots_[i].value;
+            if (slots_[i].key == 0) return nullptr;
+        }
+    }
+    bool Put(DWORD key, const V& value) {
+        if (!slots_ || (count_ + 1) * 8 > capacity_ * 5) {
+            if (!Grow() && (!slots_ || (count_ + 1) * 10 > capacity_ * 9)) return false;
+        }
+        size_t i = Home(key);
+        while (slots_[i].key != 0 && slots_[i].key != key) i = (i + 1) & mask_;
+        if (slots_[i].key == 0) { ++count_; slots_[i].key = key; }
+        slots_[i].value = value;
+        return true;
+    }
+    bool Erase(DWORD key) {
+        if (!slots_) return false;
+        size_t i = Home(key);
+        while (slots_[i].key != key) {
+            if (slots_[i].key == 0) return false;
+            i = (i + 1) & mask_;
+        }
+        EraseAt(i);
+        return true;
+    }
+    void EraseAt(size_t hole) {
+        size_t i = hole, j = hole;
+        for (;;) {
+            slots_[i].key = 0;
+            for (;;) {
+                j = (j + 1) & mask_;
+                if (slots_[j].key == 0) { --count_; return; }
+                const size_t home = Home(slots_[j].key);
+                // The entry at j may move back into the hole at i unless its home lies in (i, j].
+                if (i <= j ? (home <= i || home > j) : (home <= i && home > j)) break;
+            }
+            slots_[i] = slots_[j];
+            i = j;
+        }
+    }
+    void Clear() {
+        if (slots_) memset(slots_, 0, capacity_ * sizeof(Slot));
+        count_ = 0;
+    }
+private:
+    size_t Home(DWORD key) const { return static_cast<size_t>(((key >> 3) * 2654435761u) >> shift_); }
+    bool Grow() {
+        const size_t newCapacity = capacity_ ? capacity_ * 2 : (static_cast<size_t>(1) << 16);
+        Slot* fresh = static_cast<Slot*>(VirtualAlloc(NULL, newCapacity * sizeof(Slot), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE));
+        if (!fresh) return false;
+        Slot* old = slots_;
+        const size_t oldCapacity = capacity_;
+        slots_ = fresh;
+        capacity_ = newCapacity;
+        mask_ = newCapacity - 1;
+        shift_ = 32;
+        for (size_t c = newCapacity; c > 1; c >>= 1) --shift_;
+        for (size_t k = 0; k < oldCapacity; ++k) {
+            if (old[k].key == 0) continue;
+            size_t i = Home(old[k].key);
+            while (slots_[i].key != 0) i = (i + 1) & mask_;
+            slots_[i] = old[k];
+        }
+        if (old) VirtualFree(old, 0, MEM_RELEASE);
+        return true;
+    }
+    Slot* slots_ = nullptr;
+    size_t capacity_ = 0;
+    size_t mask_ = 0;
+    unsigned shift_ = 32;
+    size_t count_ = 0;
+};
+
 struct LiveBlock {
     DWORD size;                          // the size the game asked for (the real block is g_canaryBytes larger)
     HANDLE heap;
@@ -2574,8 +2684,20 @@ struct LiveBlock {
 // Every allocation is made g_canaryBytes larger and the extra bytes are filled with kCanaryFill; the
 // pointer returned to the game is unchanged. A buffer overrun lands in those bytes first, so a change
 // there means "this block was written past its end" - and the block's allocation site is known.
-static const DWORD kMaxCanaryBytes = 256;
-static DWORD g_canaryBytes = 64;         // set from HEAP_ALLOC_PADDING when the hooks are installed
+static const DWORD kMaxCanaryBytes = 512;
+static DWORD g_canaryBytes = 64;         // HEAP_ALLOC_PADDING, for the statistics only: see PaddingFor
+// The padding of a block of this size. The game's figure objects (656 bytes) overrun by 12, but the
+// arrays of pointers of 1 KB and more overrun by 130+ bytes (measured with a 160-byte guard), so those
+// get a proportionally larger one: a quarter of their size, at most 512 bytes.
+static DWORD PaddingFor(SIZE_T size) {
+    if (g_heapAllocPadding <= 0) return 0;
+    DWORD padding = static_cast<DWORD>(g_heapAllocPadding);
+    if (size >= 1024) {
+        const DWORD scaled = size / 4 > 512 ? 512 : static_cast<DWORD>(size / 4);
+        if (scaled > padding) padding = scaled;
+    }
+    return padding;
+}
 static const BYTE kCanaryFill = 0xA5;
 static const unsigned long kOverrunLogLimit = 25;
 static unsigned long g_quarantineOverruns = 0;
@@ -2583,7 +2705,7 @@ static unsigned long g_quarantineOverlaps = 0;
 static std::unordered_set<DWORD> g_reportedOverruns;
 static std::map<DWORD, unsigned long> g_overrunSites;   // allocation site (innermost caller) -> blocks it overran
 static void FormatOverrunSites(char* out, size_t outSize);
-static std::map<DWORD, LiveBlock> g_liveBlocks;
+static PtrTable<LiveBlock> g_liveBlocks;
 static unsigned long g_quarantineInvalidFrees = 0;
 static unsigned long g_quarantineWritesAfterFree = 0;
 static const unsigned long kWriteAfterFreeLogLimit = 25;
@@ -2599,7 +2721,8 @@ static RecentBlock g_recentFreed[kRecentBlocks];
 static unsigned g_recentFreedNext = 0;
 // pointer -> (pool, sequence number). A pool's entries leave strictly in order, so an entry is
 // pool.queue[sequence - pool.frontSequence].
-static std::unordered_map<LPVOID, std::pair<int, unsigned long long>> g_quarantineIndex;
+struct QuarantineIndexEntry { int pool; unsigned long long sequence; };
+static PtrTable<QuarantineIndexEntry> g_quarantineIndex;
 static unsigned long g_quarantineFreesHeld = 0;
 static unsigned long g_quarantineEvictions = 0;
 static unsigned long g_quarantineDoubleFrees = 0;
@@ -2761,7 +2884,7 @@ static void CaptureCallers(DWORD* out, int slots) {
 }
 
 static void CaptureFreeCallers(DWORD* out) {
-    CaptureCallers(out, kQuarantineCallerSlots);
+    CaptureCallers(out, 3); // the slots after those stay 0: a free only needs to say who freed it
 }
 
 static void FormatCallerList(const DWORD* callers, int count, char* out, size_t outSize) {
@@ -2790,8 +2913,8 @@ static bool LooksLikeName(const BYTE* text, size_t available, char* out, size_t 
 }
 
 // The first name a freed object mentions: an inline string in its first 256 bytes, or a string one
-// pointer away (in game.exe's read-only data, or in a live heap block the game allocated). Only
-// memory the DLL already knows is readable is touched - no probing. Lock held (uses g_liveBlocks).
+// pointer away in game.exe's read-only data. Only memory the DLL already knows is readable is
+// touched - no probing. Only done in poison mode.
 static void HarvestLabelLocked(const BYTE* block, SIZE_T size, char* out, size_t outSize) {
     out[0] = '\0';
     SIZE_T scan = size < 256 ? size : 256;
@@ -2806,12 +2929,6 @@ static void HarvestLabelLocked(const BYTE* block, SIZE_T size, char* out, size_t
             if (LooksLikeName(reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(value)), g_imageHigh - value, out, outSize)) return;
             continue;
         }
-        auto owner = g_liveBlocks.upper_bound(value);
-        if (owner == g_liveBlocks.begin()) continue;
-        --owner;
-        DWORD offset = value - owner->first;
-        if (offset >= owner->second.size) continue;
-        if (LooksLikeName(reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(value)), owner->second.size - offset, out, outSize)) return;
     }
 }
 
@@ -2826,10 +2943,10 @@ static RecentLabel g_recentLabels[kRecentLabels];
 static unsigned g_recentLabelNext = 0;
 
 static const QuarantinedBlock* FindHeldBlockLocked(LPVOID pointer) {
-    auto it = g_quarantineIndex.find(pointer);
-    if (it == g_quarantineIndex.end()) return nullptr;
-    const QuarantinePool& pool = g_quarantinePools[it->second.first];
-    unsigned long long position = it->second.second - pool.frontSequence;
+    const QuarantineIndexEntry* entry = g_quarantineIndex.Find(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
+    if (!entry) return nullptr;
+    const QuarantinePool& pool = g_quarantinePools[entry->pool];
+    unsigned long long position = entry->sequence - pool.frontSequence;
     return position < pool.queue.size() ? &pool.queue[static_cast<size_t>(position)] : nullptr;
 }
 
@@ -2864,7 +2981,7 @@ static void LogQuarantineStats(const char* reason) {
     unsigned long overruns = g_quarantineOverruns;
     unsigned long overlaps = g_quarantineOverlaps;
     unsigned long oldest = OldestHeldAgeSecondsLocked();
-    unsigned long liveBlocks = static_cast<unsigned long>(g_liveBlocks.size());
+    unsigned long liveBlocks = static_cast<unsigned long>(g_liveBlocks.Size());
     char overrunSites[160];
     FormatOverrunSites(overrunSites, sizeof(overrunSites));
     LeaveCriticalSection(&g_quarantineLock);
@@ -2949,12 +3066,13 @@ static void ReportWriteAfterFree(const QuarantinedBlock& block, unsigned changed
 
 // True when the guard bytes after a live block were changed (the 16 bytes found are copied out).
 // Unreadable memory counts as intact: a block freed behind the hooks' back must not crash the scan.
-static bool CanaryDamaged(DWORD start, DWORD size, BYTE* found) {
-    if (g_canaryBytes == 0) return false;
+static bool CanaryDamaged(DWORD start, DWORD size, BYTE* found, bool probe = true) {
+    const DWORD padding = PaddingFor(size);
+    if (padding == 0) return false;
     const BYTE* tail = reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(start)) + size;
-    if (IsBadReadPtr(tail, g_canaryBytes)) return false;
+    if (probe && IsBadReadPtr(tail, padding)) return false;
     bool damaged = false;
-    for (DWORD i = 0; i < g_canaryBytes; ++i) {
+    for (DWORD i = 0; i < padding; ++i) {
         found[i] = tail[i];
         if (tail[i] != kCanaryFill) damaged = true;
     }
@@ -2983,21 +3101,32 @@ static void FormatOverrunSites(char* out, size_t outSize) {
 static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found, const char* when) {
     if (!g_reportedOverruns.insert(start).second) return;
     ++g_quarantineOverruns;
-    unsigned long siteCount = ++g_overrunSites[block.callers[0]];
-    bool powerOfTen = siteCount == 10 || siteCount == 100 || siteCount == 1000 || siteCount == 10000;
-    if (siteCount > 3 && !powerOfTen) return;
+    static bool explained = false;
+    if (!explained) {
+        explained = true;
+        LogLine("INFO", "[HEAPFIX] game.exe writes a few bytes past the end of some of its own allocations (a bug of the game, "
+            "on any setup). The padding absorbs it and nothing is damaged; each allocation site is described at DEBUG level.");
+    }
+    const DWORD padding = PaddingFor(block.size);
     int first = -1, last = -1;
-    for (DWORD i = 0; i < g_canaryBytes; ++i) {
+    for (DWORD i = 0; i < padding; ++i) {
         if (found[i] != kCanaryFill) { if (first < 0) first = static_cast<int>(i); last = static_cast<int>(i); }
     }
+    if (first < 0) return;
+    const unsigned long siteCount = ++g_overrunSites[block.callers[0]];
+    const bool usedUp = static_cast<DWORD>(last + 1) >= padding;   // the write may have gone on beyond the padding
+    const bool powerOfTen = siteCount == 10 || siteCount == 100 || siteCount == 1000 || siteCount == 10000;
+    if (siteCount > 3 && !powerOfTen && !usedUp) return;
     char callers[100], written[140];
     FormatCallerList(block.callers, kAllocCallerSlots, callers, sizeof(callers));
-    DWORD shown = g_canaryBytes - static_cast<DWORD>(first) < 24 ? g_canaryBytes - static_cast<DWORD>(first) : 24;
+    DWORD shown = padding - static_cast<DWORD>(first) < 24 ? padding - static_cast<DWORD>(first) : 24;
     DescribeWrittenBytes(found + first, shown, written, sizeof(written));
-    LogLine("WARN", "[QUARANTINE] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written PAST ITS END, "
-        "up to %d bytes beyond it (first at +%d: %s); this allocation site has now overrun %lu block(s)%s",
+    LogLine(usedUp ? "WARN" : "DEBUG", "[HEAPFIX] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written past its end, "
+        "up to %d of its %lu padding bytes (first at +%d: %s); this allocation site has now overrun %lu block(s)%s%s",
         when, static_cast<unsigned long>(start), static_cast<unsigned long>(block.size), (GetTickCount() - block.tickMs) / 1000.0,
-        callers, last + 1, first, written, siteCount, siteCount > 3 ? " (not logging each one any more)" : "");
+        callers, last + 1, static_cast<unsigned long>(padding), first, written, siteCount,
+        usedUp ? "; THE WHOLE PADDING WAS USED, the write may have gone further: raise HEAP_ALLOC_PADDING" : "",
+        siteCount > 3 && !usedUp ? " (not logging each one any more)" : "");
 }
 
 // The heap returned memory that overlaps a block the game still has: something is wrong with the
@@ -3019,24 +3148,27 @@ static void ReportOverlap(DWORD start, DWORD size, const DWORD* callers, DWORD o
 static DWORD WINAPI OverrunWatchThread(LPVOID) {
     for (;;) {
         Sleep(500);
-        DWORD resumeAt = 0;
+        size_t resumeAt = 0;
         for (;;) {
             EnterCriticalSection(&g_quarantineLock);
-            auto it = g_liveBlocks.lower_bound(resumeAt);
-            for (int checked = 0; it != g_liveBlocks.end() && checked < 20000; ++checked) {
+            const size_t capacity = g_liveBlocks.Capacity();
+            const size_t end = resumeAt + 4096 < capacity ? resumeAt + 4096 : capacity;
+            for (size_t i = resumeAt; i < end;) {
+                auto& slot = g_liveBlocks.At(i);
+                if (slot.key == 0) { ++i; continue; }
                 BYTE found[kMaxCanaryBytes];
-                if (CanaryDamaged(it->first, it->second.size, found)) {
-                    const void* pointer = reinterpret_cast<const void*>(static_cast<ULONG_PTR>(it->first));
-                    if (HeapSize(it->second.heap, 0, pointer) == static_cast<SIZE_T>(-1)) {
-                        it = g_liveBlocks.erase(it);
+                if (CanaryDamaged(slot.key, slot.value.size, found)) {
+                    const void* pointer = reinterpret_cast<const void*>(static_cast<ULONG_PTR>(slot.key));
+                    if (HeapSize(slot.value.heap, 0, pointer) == static_cast<SIZE_T>(-1)) {
+                        g_liveBlocks.EraseAt(i); // the entry shifted into this slot has to be looked at too
                         continue;
                     }
-                    ReportOverrun(it->first, it->second, found, "found by the background scan");
+                    ReportOverrun(slot.key, slot.value, found, "found by the background scan");
                 }
-                ++it;
+                ++i;
             }
-            bool done = it == g_liveBlocks.end();
-            resumeAt = done ? 0 : it->first;
+            resumeAt = end;
+            const bool done = resumeAt >= capacity;
             LeaveCriticalSection(&g_quarantineLock);
             if (done) break;
             Sleep(1);
@@ -3057,7 +3189,7 @@ static bool TrimPoolLocked(QuarantinePool& pool) {
             unsigned changed = PoisonChangedDwords(oldest, &firstChange);
             if (changed) ReportWriteAfterFree(oldest, changed, firstChange, "found when the block left the quarantine");
         }
-        g_quarantineIndex.erase(oldest.pointer);
+        g_quarantineIndex.Erase(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(oldest.pointer)));
         pool.bytes -= oldest.size;
         ++g_quarantineEvictions;
         g_originalHeapFree(oldest.heap, oldest.flags, oldest.pointer);
@@ -3070,6 +3202,20 @@ static bool TrimPoolLocked(QuarantinePool& pool) {
 // free was fully handled here (block held back, or a double free swallowed),
 // false when the caller should just forward it to the real HeapFree.
 static bool QuarantineHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
+    if (!g_quarantineHolds) {
+        // Tracking only: look at the block's guard bytes, forget it, and let the real HeapFree free it.
+        EnterCriticalSection(&g_quarantineLock);
+        const DWORD address = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
+        if (LiveBlock* live = g_liveBlocks.Find(address)) {
+            BYTE found[kMaxCanaryBytes];
+            if (CanaryDamaged(address, live->size, found, false)) {
+                ReportOverrun(address, *live, found, "found when the game freed the block");
+            }
+            g_liveBlocks.Erase(address);
+        }
+        LeaveCriticalSection(&g_quarantineLock);
+        return false;
+    }
     bool doubleFree = false;
     unsigned long doubleFreeNumber = 0;
     bool justFilled = false;
@@ -3095,48 +3241,25 @@ static bool QuarantineHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
         doubleFreeNumber = ++g_quarantineDoubleFrees;
         first = *earlier;
     } else {
-        // Is this the start of a block the game allocated, or a pointer into the middle of one?
+        // Is this a block the game allocated since the hooks went in? (Freeing the middle of a block is
+        // no longer looked for: Wine rejects such a free itself, and the search needed an ordered table.)
         const DWORD address = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
-        auto live = g_liveBlocks.find(address);
-        if (live != g_liveBlocks.end()) {
+        LiveBlock* live = g_liveBlocks.Find(address);
+        if (live) {
             trackedStart = true;
-            trackedSize = live->second.size;
+            trackedSize = live->size;
             BYTE found[kMaxCanaryBytes];
-            if (CanaryDamaged(address, live->second.size, found)) {
-                ReportOverrun(address, live->second, found, "found when the game freed the block");
+            if (CanaryDamaged(address, live->size, found, false)) { // a live block: readable, no probing
+                ReportOverrun(address, *live, found, "found when the game freed the block");
             }
-            g_liveBlocks.erase(live);
-        } else {
-            auto after = g_liveBlocks.upper_bound(address);
-            if (after != g_liveBlocks.begin()) {
-                --after;
-                if (address - after->first < after->second.size) {
-                    invalidFree = true;
-                    ownerStart = after->first;
-                    ownerSize = after->second.size;
-                }
-            }
-            if (!invalidFree) {
-                for (int i = 0; i < kRecentBlocks; ++i) {
-                    const RecentBlock& recent = g_recentFreed[i];
-                    if (recent.size && address > recent.start && address - recent.start < recent.size) {
-                        invalidFree = true;
-                        ownerStart = recent.start;
-                        ownerSize = recent.size;
-                        break;
-                    }
-                }
-            }
-        }
-        if (invalidFree) {
-            invalidNumber = ++g_quarantineInvalidFrees;
+            g_liveBlocks.Erase(address);
         }
     }
     if (!invalidFree && !doubleFree) {
         // HeapSize doubles as a validity check: -1 means this is not a live
         // block of this heap, so let the real HeapFree deal with (and report)
         // whatever it is.
-        SIZE_T size = HeapSize(heap, 0, pointer);
+        SIZE_T size = trackedStart ? static_cast<SIZE_T>(trackedSize) + PaddingFor(trackedSize) : HeapSize(heap, 0, pointer);
         if (size == static_cast<SIZE_T>(-1)) {
             LeaveCriticalSection(&g_quarantineLock);
             return false;
@@ -3168,7 +3291,7 @@ static bool QuarantineHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
                     block.vtable = firstDword; // an object of a game class: the vtable says which one
                 }
             }
-            if (block.vtable && size <= kObjectPoolMaxBlockBytes) {
+            if (g_heapFreeQuarantinePoison && block.vtable && size <= kObjectPoolMaxBlockBytes) {
                 HarvestLabelLocked(static_cast<const BYTE*>(pointer), size, block.label, sizeof(block.label));
                 if (block.label[0]) {
                     RecentLabel& recent = g_recentLabels[g_recentLabelNext++ % kRecentLabels];
@@ -3192,7 +3315,7 @@ static bool QuarantineHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
                     RecentBlock{ static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)), trackedSize };
             }
             pool.queue.push_back(block);
-            g_quarantineIndex[pointer] = std::make_pair(poolIndex, pool.nextSequence++);
+            g_quarantineIndex.Put(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)), QuarantineIndexEntry{poolIndex, pool.nextSequence++});
             pool.bytes += size;
             ++g_quarantineFreesHeld;
             if (TrimPoolLocked(g_quarantinePools[0]) | TrimPoolLocked(g_quarantinePools[kObjectPool])) {
@@ -3257,10 +3380,14 @@ static bool QuarantineHolds(LPVOID pointer) {
 // freeing into a destroyed heap later would corrupt memory.
 static void QuarantineForgetHeap(HANDLE heap) {
     EnterCriticalSection(&g_quarantineLock);
-    for (auto it = g_liveBlocks.begin(); it != g_liveBlocks.end();) {
-        it = it->second.heap == heap ? g_liveBlocks.erase(it) : std::next(it);
+    {
+        std::vector<DWORD> doomed;
+        for (size_t i = 0; i < g_liveBlocks.Capacity(); ++i) {
+            if (g_liveBlocks.At(i).key != 0 && g_liveBlocks.At(i).value.heap == heap) doomed.push_back(g_liveBlocks.At(i).key);
+        }
+        for (DWORD key : doomed) g_liveBlocks.Erase(key);
     }
-    g_quarantineIndex.clear();
+    g_quarantineIndex.Clear();
     for (int poolIndex = 0; poolIndex < 2; ++poolIndex) {
         QuarantinePool& pool = g_quarantinePools[poolIndex];
         std::deque<QuarantinedBlock> kept;
@@ -3273,7 +3400,7 @@ static void QuarantineForgetHeap(HANDLE heap) {
         pool.frontSequence = 0;
         pool.nextSequence = 0;
         for (const QuarantinedBlock& block : pool.queue) {
-            g_quarantineIndex[block.pointer] = std::make_pair(poolIndex, pool.nextSequence++);
+            g_quarantineIndex.Put(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(block.pointer)), QuarantineIndexEntry{poolIndex, pool.nextSequence++});
         }
     }
     LeaveCriticalSection(&g_quarantineLock);
@@ -3397,11 +3524,13 @@ static void LogQuarantineCrashAnalysis(const CONTEXT* context, const EXCEPTION_R
     unsigned long oldest = OldestHeldAgeSecondsLocked();
     {
         unsigned long overrunBlocks = 0;
-        for (const auto& entry : g_liveBlocks) {
+        for (size_t i = 0; i < g_liveBlocks.Capacity(); ++i) {
+            const auto& entry = g_liveBlocks.At(i);
+            if (entry.key == 0) continue;
             BYTE found[kMaxCanaryBytes];
-            if (CanaryDamaged(entry.first, entry.second.size, found)) {
+            if (CanaryDamaged(entry.key, entry.value.size, found)) {
                 ++overrunBlocks;
-                ReportOverrun(entry.first, entry.second, found, "found by the crash report");
+                ReportOverrun(entry.key, entry.value, found, "found by the crash report");
             }
         }
         char sites[160];
@@ -3671,7 +3800,44 @@ static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
 // These hooks only see calls game.exe makes directly through its own import
 // table - which is all of them: its static CRT sends every malloc/free/new/
 // delete to HeapAlloc/HeapFree/HeapReAlloc on its private heap.
+// The default mode: only the padding, nothing tracked. Costs an addition per allocation.
+static bool g_heapPaddingOnlyInstalled = false;
+
+// Time spent inside the heap hooks, measured only while the profiler window is shown so the
+// profiler can say what the hooks themselves cost the game's main thread.
+static volatile LONG g_heapHookTicks = 0;   // QueryPerformanceCounter ticks
+static volatile LONG g_heapHookCalls = 0;
+struct HeapHookTimer {
+    LONGLONG start = 0;
+    HeapHookTimer() {
+        if (g_profilerRunning) {
+            LARGE_INTEGER now;
+            QueryPerformanceCounter(&now);
+            start = now.QuadPart;
+        }
+    }
+    ~HeapHookTimer() {
+        if (start) {
+            LARGE_INTEGER now;
+            QueryPerformanceCounter(&now);
+            InterlockedExchangeAdd(&g_heapHookTicks, static_cast<LONG>(now.QuadPart - start));
+            InterlockedIncrement(&g_heapHookCalls);
+        }
+    }
+};
+
+static LPVOID WINAPI PaddedHeapAlloc(HANDLE heap, DWORD flags, SIZE_T size) {
+    HeapHookTimer timer;
+    return g_originalHeapAlloc(heap, flags, size > 0x7FFFFF00 ? size : size + PaddingFor(size));
+}
+
+static LPVOID WINAPI PaddedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer, SIZE_T size) {
+    HeapHookTimer timer;
+    return g_originalHeapReAlloc(heap, flags, pointer, size > 0x7FFFFF00 ? size : size + PaddingFor(size));
+}
+
 static BOOL WINAPI HookedHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
+    HeapHookTimer timer;
     if (g_heapFreeQuarantineInstalled && pointer && QuarantineHeapFree(heap, flags, pointer)) {
         return TRUE;
     }
@@ -3681,45 +3847,37 @@ static BOOL WINAPI HookedHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
 // Every allocation is recorded (start -> size) so a free of the middle of a block can be told from
 // a free of a block's start; see g_liveBlocks.
 static LPVOID WINAPI HookedHeapAlloc(HANDLE heap, DWORD flags, SIZE_T size) {
+    HeapHookTimer timer;
     if (!g_heapFreeQuarantineInstalled || size > 0x7FFFFF00) {
         return g_originalHeapAlloc(heap, flags, size);
     }
     // Asked for a little more, so an overrun of the block lands in guard bytes we can check.
-    LPVOID result = g_originalHeapAlloc(heap, flags, size + g_canaryBytes);
+    const DWORD padding = PaddingFor(size);
+    LPVOID result = g_originalHeapAlloc(heap, flags, size + padding);
     if (!result) return NULL;
     DWORD callers[kAllocCallerSlots] = {};
     CaptureCallers(callers, kAllocCallerSlots);
-    memset(static_cast<BYTE*>(result) + size, kCanaryFill, g_canaryBytes);
+    memset(static_cast<BYTE*>(result) + size, kCanaryFill, padding);
     const DWORD start = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(result));
-    const DWORD end = start + static_cast<DWORD>(size) + g_canaryBytes;
     EnterCriticalSection(&g_quarantineLock);
-    // The heap must never return memory that is still in use.
-    auto same = g_liveBlocks.find(start);
-    if (same != g_liveBlocks.end()) {
-        ReportOverlap(start, static_cast<DWORD>(size), callers, same->first, same->second);
-    } else {
-        auto next = g_liveBlocks.upper_bound(start);
-        if (next != g_liveBlocks.end() && next->first < end) {
-            ReportOverlap(start, static_cast<DWORD>(size), callers, next->first, next->second);
-        } else if (next != g_liveBlocks.begin()) {
-            auto before = std::prev(next);
-            if (before->first + before->second.size + g_canaryBytes > start) {
-                ReportOverlap(start, static_cast<DWORD>(size), callers, before->first, before->second);
-            }
-        }
+    // The heap must never return memory that is still in use (only an exact repeat of a live address is
+    // caught; overlaps in the middle needed an ordered table).
+    if (LiveBlock* same = g_liveBlocks.Find(start)) {
+        ReportOverlap(start, static_cast<DWORD>(size), callers, start, *same);
     }
     LiveBlock block = {};
     block.size = static_cast<DWORD>(size);
     block.heap = heap;
     block.tickMs = GetTickCount();
     memcpy(block.callers, callers, sizeof(callers));
-    g_liveBlocks[start] = block;
+    g_liveBlocks.Put(start, block);
     LeaveCriticalSection(&g_quarantineLock);
     return result;
 }
 
 static LPVOID WINAPI HookedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer, SIZE_T size) {
-    if (g_heapFreeQuarantineInstalled && pointer && QuarantineHolds(pointer)) {
+    HeapHookTimer timer;
+    if (g_heapFreeQuarantineInstalled && g_quarantineHolds && pointer && QuarantineHolds(pointer)) {
         // The game is resizing a block it already freed. Let the real
         // HeapReAlloc move/free it and the block would be freed a second time
         // when the quarantine evicts it, so hand back a fresh copy instead and
@@ -3747,26 +3905,28 @@ static LPVOID WINAPI HookedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer,
     }
     if (pointer) {
         EnterCriticalSection(&g_quarantineLock);
-        auto old = g_liveBlocks.find(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
+        const DWORD oldStart = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
+        LiveBlock* old = g_liveBlocks.Find(oldStart);
         BYTE found[kMaxCanaryBytes];
-        if (old != g_liveBlocks.end() && CanaryDamaged(old->first, old->second.size, found)) {
-            ReportOverrun(old->first, old->second, found, "found when the game resized the block");
+        if (old && CanaryDamaged(oldStart, old->size, found, false)) {
+            ReportOverrun(oldStart, *old, found, "found when the game resized the block");
         }
         LeaveCriticalSection(&g_quarantineLock);
     }
-    LPVOID result = g_originalHeapReAlloc(heap, flags, pointer, size + g_canaryBytes);
+    const DWORD padding = PaddingFor(size);
+    LPVOID result = g_originalHeapReAlloc(heap, flags, pointer, size + padding);
     if (result) {
         DWORD callers[kAllocCallerSlots] = {};
         CaptureCallers(callers, kAllocCallerSlots);
-        memset(static_cast<BYTE*>(result) + size, kCanaryFill, g_canaryBytes);
+        memset(static_cast<BYTE*>(result) + size, kCanaryFill, padding);
         EnterCriticalSection(&g_quarantineLock);
-        if (pointer) g_liveBlocks.erase(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
+        if (pointer) g_liveBlocks.Erase(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
         LiveBlock block = {};
         block.size = static_cast<DWORD>(size);
         block.heap = heap;
         block.tickMs = GetTickCount();
         memcpy(block.callers, callers, sizeof(callers));
-        g_liveBlocks[static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(result))] = block;
+        g_liveBlocks.Put(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(result)), block);
         LeaveCriticalSection(&g_quarantineLock);
     }
     return result;
@@ -3843,6 +4003,7 @@ static void CountPresentedFrame() {
         }
     }
     g_overlayLastCountedFrameTime = now;
+    g_profilerFrameThreadId = GetCurrentThreadId();
     InterlockedIncrement(&g_overlayFrameCount);
 }
 
@@ -4103,17 +4264,31 @@ static void InstallHeapHooks() {
         return;
     }
 
-    InitGameImageRanges();
+    InitGameImageRanges(); // also what the profiler finds game.exe's code by
+    if (!g_enableHeapFreeQuarantine) {
+        // Only the padding: the pointer the game gets is the block's start, so it frees it as always.
+        PatchImportedFunction(process, "HeapAlloc",
+            reinterpret_cast<ULONG_PTR>(PaddedHeapAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapAlloc));
+        PatchImportedFunction(process, "HeapReAlloc",
+            reinterpret_cast<ULONG_PTR>(PaddedHeapReAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapReAlloc));
+        if (!g_originalHeapAlloc || !g_originalHeapReAlloc) {
+            LogLine("WARN", "[HEAPFIX] Not activated: game.exe does not import HeapAlloc/HeapReAlloc directly");
+            return;
+        }
+        g_heapPaddingOnlyInstalled = true;
+        LogLine("INFO", "[HEAPFIX] Active: every allocation the game makes is padded by %d bytes (a quarter of its size, up to "
+            "512 bytes, for blocks of 1 KB or more); nothing is tracked, set HEAP_FREE_QUARANTINE=true for overrun reports",
+            g_heapAllocPadding);
+        return;
+    }
+
     g_canaryBytes = static_cast<DWORD>(g_heapAllocPadding);
+    g_quarantineHolds = g_heapFreeQuarantineMb > 0 || g_heapFreeQuarantineObjectsMb > 0;
     InitializeCriticalSection(&g_quarantineLock);
-    // With HEAP_FREE_QUARANTINE off only the padding is wanted: freed blocks are still held for a
-    // moment (the smallest window, the configuration the padding fix was tested with) but no more.
-    const int windowMb = g_enableHeapFreeQuarantine ? g_heapFreeQuarantineMb : 4;
-    const int objectsMb = g_enableHeapFreeQuarantine ? g_heapFreeQuarantineObjectsMb : 0;
-    g_quarantinePools[0].byteLimit = static_cast<SIZE_T>(windowMb) * 1048576;
-    g_quarantinePools[0].maxBlocks = static_cast<size_t>(windowMb) * kQuarantineBlocksPerMb;
-    g_quarantinePools[kObjectPool].byteLimit = static_cast<SIZE_T>(objectsMb) * 1048576;
-    g_quarantinePools[kObjectPool].maxBlocks = static_cast<size_t>(objectsMb) * kQuarantineBlocksPerMb;
+    g_quarantinePools[0].byteLimit = static_cast<SIZE_T>(g_heapFreeQuarantineMb) * 1048576;
+    g_quarantinePools[0].maxBlocks = static_cast<size_t>(g_heapFreeQuarantineMb) * kQuarantineBlocksPerMb;
+    g_quarantinePools[kObjectPool].byteLimit = static_cast<SIZE_T>(g_heapFreeQuarantineObjectsMb) * 1048576;
+    g_quarantinePools[kObjectPool].maxBlocks = static_cast<size_t>(g_heapFreeQuarantineObjectsMb) * kQuarantineBlocksPerMb;
 
     PatchImportedFunction(process, "HeapAlloc",
         reinterpret_cast<ULONG_PTR>(HookedHeapAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapAlloc));
@@ -4138,9 +4313,15 @@ static void InstallHeapHooks() {
     g_heapFreeQuarantineInstalled = true;
     HANDLE watch = CreateThread(NULL, 0, OverrunWatchThread, NULL, 0, NULL);
     if (watch) CloseHandle(watch);
-    LogLine("DEBUG", "[QUARANTINE] Active: every allocation padded by %d bytes; freed blocks are held back (data window %d MB, "
-        "plus %d MB for small objects) before being really freed; recording who freed each one%s", g_heapAllocPadding,
-        windowMb, objectsMb,
+    char holding[120];
+    if (g_quarantineHolds) {
+        snprintf(holding, sizeof(holding), "freed blocks are held back (data window %d MB, plus %d MB for small objects) before "
+            "being really freed", g_heapFreeQuarantineMb, g_heapFreeQuarantineObjectsMb);
+    } else {
+        snprintf(holding, sizeof(holding), "freed blocks are freed at once (windows set to 0 MB)");
+    }
+    LogLine("DEBUG", "[QUARANTINE] Active: every allocation padded by %d bytes (more for blocks of 1 KB or more) and tracked; %s%s",
+        g_heapAllocPadding, holding,
         g_heapFreeQuarantinePoison ? "; POISON MODE: freed objects get 0xDDDDDDDD as their vtable, the workaround is off for them" : "");
     long mode = ReadGameCrtHeapMode();
     if (mode != 1) {
@@ -4899,6 +5080,21 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
                 }
                 return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
             }
+            if (g_enableOverlay && kb->vkCode == g_profilerKey) {
+                if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
+                    if (!g_keyboardRewriteKeyDown[g_profilerKey]) {
+                        g_keyboardRewriteKeyDown[g_profilerKey] = true;
+                        g_profilerVisible = g_profilerVisible ? 0 : 1;
+                        if (g_profilerWindow) {
+                            ShowWindow(g_profilerWindow, g_profilerVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
+                        }
+                        LogLine("INFO", "Profiler toggled %s", g_profilerVisible ? "on" : "off");
+                    }
+                } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
+                    g_keyboardRewriteKeyDown[g_profilerKey] = false;
+                }
+                return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
+            }
             if (g_enableOverlay && g_overlayLogEnabled && kb->vkCode == g_overlayLogToggleKey) {
                 if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
                     if (!g_keyboardRewriteKeyDown[g_overlayLogToggleKey]) {
@@ -5011,6 +5207,7 @@ struct AlphaCanvas {
 
 static AlphaCanvas g_overlayCanvas;
 static AlphaCanvas g_overlayLogCanvas;
+static AlphaCanvas g_profilerCanvas;
 
 static void DestroyAlphaCanvas(AlphaCanvas& canvas) {
     if (canvas.dc) {
@@ -5170,7 +5367,8 @@ static void DumpCanvasForTest(HWND hwnd, const AlphaCanvas& canvas) {
         return;
     }
     char path[MAX_PATH + 32] = {};
-    snprintf(path, sizeof(path), "%s\\%s", directory, hwnd == g_overlayLogWindow ? "overlay-log.bmp" : "overlay-main.bmp");
+    snprintf(path, sizeof(path), "%s\\%s", directory, hwnd == g_overlayLogWindow ? "overlay-log.bmp" :
+        hwnd == g_profilerWindow ? "overlay-profiler.bmp" : "overlay-main.bmp");
     DIBSECTION section = {};
     if (GetObjectA(canvas.bitmap, sizeof(section), &section) == 0) {
         return;
@@ -5238,6 +5436,428 @@ struct OverlayLine {
     char text[160];
     bool alert; // drawn in the warning color
 };
+
+// ---------------------------------------------------------------------------------------------
+// Main-thread profiler. While the profiler window is shown, a sampler thread stops the
+// game's frame thread ~250 times a second, copies its registers and the top of its stack, lets it
+// go and adds what it was doing to a call tree. game.exe has no symbols and is built with frame
+// pointer omission, so functions are found from the code itself (every target of a direct call and
+// every code pointer in the data sections, when preceded by the padding the compiler leaves between
+// functions) and a call chain is the return-address-looking words on the stack. It is statistical:
+// a function on 20% of the samples costs about 20% of a frame.
+// ---------------------------------------------------------------------------------------------
+static const int kProfileTextWidth = 96;
+static const int kProfileMaxLines = 56;
+static char g_profileLines[kProfileMaxLines][kProfileTextWidth];
+static int g_profileLineCount = 0;
+static volatile LONG g_profileLock = 0;
+static volatile LONG g_profilerThreadAlive = 0;
+static HANDLE g_profilerStopEvent = NULL;
+static std::vector<uint32_t> g_profileFunctions;   // sorted entry addresses of game.exe's functions
+static std::unordered_map<DWORD, std::string> g_profileHints; // what an unnamed function refers to
+static std::unordered_map<DWORD, std::string> g_profileNames;
+
+struct ProfileNode {
+    DWORD function;
+    DWORD count;     // samples with this function on the stack below its parents
+    DWORD self;      // samples where it was the innermost game function
+    int firstChild;
+    int nextSibling;
+};
+static const size_t kProfileMaxNodes = 20000;
+static const DWORD kProfileStackBytes = 8192;
+
+struct ProfileWindow {
+    std::vector<ProfileNode> nodes; // [0] is the root
+    DWORD samples = 0;
+    std::vector<std::pair<std::string, DWORD>> categories; // where the innermost frame was: game.exe or a module
+    std::vector<std::pair<std::string, DWORD>> externals;  // "module!export" of the innermost frame outside game.exe
+    void Reset() {
+        nodes.assign(1, ProfileNode{0, 0, 0, -1, -1});
+        samples = 0;
+        categories.clear();
+        externals.clear();
+    }
+};
+
+// Function entries and the names worked out from the code (see profile_symbols.hpp): classes' virtual
+// methods, constructors, and hints from the strings and Windows APIs a function uses.
+static void BuildProfileFunctionTable() {
+    g_profileFunctions.clear();
+    g_profileNames.clear();
+    g_profileHints.clear();
+    profsym::Image image;
+    image.data = reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(g_imageLow));
+    image.base = g_imageLow;
+    image.size = g_imageHigh - g_imageLow;
+    if (!image.Parse()) return;
+    g_profileFunctions = profsym::FindFunctions(image);
+    profsym::Symbols symbols = profsym::Analyze(image, g_profileFunctions);
+    for (const auto& entry : symbols.names) g_profileNames[entry.first] = entry.second;
+    for (const auto& entry : symbols.hints) g_profileHints[entry.first] = entry.second;
+    LogLine("DEBUG", "[PERF] found %lu functions in game.exe: %lu named from %lu class vtables, %lu with a string or API hint",
+        static_cast<unsigned long>(g_profileFunctions.size()), static_cast<unsigned long>(g_profileNames.size()),
+        static_cast<unsigned long>(symbols.namedVtables), static_cast<unsigned long>(g_profileHints.size()));
+}
+
+// The optional um-names.txt next to um.dll: one "address name" pair per line, '#' starts a comment.
+static void LoadProfileNames() {
+    if (g_knownGameBuild) {
+        g_profileNames[0x457970] = "MainMessageHandler";
+    }
+    char path[MAX_PATH] = {};
+    if (!g_dllModule || GetModuleFileNameA(g_dllModule, path, sizeof(path)) == 0) return;
+    char* slash = strrchr(path, '\\');
+    if (!slash) return;
+    snprintf(slash + 1, sizeof(path) - (slash + 1 - path), "um-names.txt");
+    FILE* file = fopen(path, "r");
+    if (!file) return;
+    char line[256];
+    while (fgets(line, sizeof(line), file)) {
+        char* text = line;
+        while (*text == ' ' || *text == '\t') ++text;
+        if (*text == '#' || *text == '\r' || *text == '\n' || *text == '\0') continue;
+        char* end = NULL;
+        unsigned long address = strtoul(text, &end, 16);
+        if (end == text || address == 0) continue;
+        while (*end == ' ' || *end == '\t') ++end;
+        std::string name = end;
+        size_t comment = name.find('#');
+        if (comment != std::string::npos) name.resize(comment);
+        while (!name.empty() && (name.back() == '\r' || name.back() == '\n' || name.back() == ' ')) name.pop_back();
+        if (!name.empty()) g_profileNames[static_cast<DWORD>(address)] = name;
+    }
+    fclose(file);
+}
+
+// The function a code address belongs to (its entry), 0 when there is none close enough.
+static DWORD ProfileFunctionOf(DWORD address) {
+    auto after = std::upper_bound(g_profileFunctions.begin(), g_profileFunctions.end(), address);
+    if (after == g_profileFunctions.begin()) return 0;
+    DWORD entry = *(after - 1);
+    return address - entry < 0x10000 ? entry : 0;
+}
+
+static std::string ProfileNameOf(DWORD function) {
+    auto known = g_profileNames.find(function);
+    if (known != g_profileNames.end()) return known->second;
+    char text[24];
+    snprintf(text, sizeof(text), "sub_%lX", static_cast<unsigned long>(function));
+    auto hint = g_profileHints.find(function);
+    return hint != g_profileHints.end() ? std::string(text) + " " + hint->second : std::string(text);
+}
+
+// Which module an address is in: "game.exe" or the DLL's file name, and the name of the export it is
+// in or just after (both cached per module).
+struct ProfileModuleInfo {
+    std::string name;
+    profsym::ExportSymbols exports;
+};
+static std::string ProfileModuleOf(DWORD address, std::string* symbol) {
+    static std::unordered_map<DWORD, ProfileModuleInfo> cache; // only the sampler thread calls this
+    symbol->clear();
+    if (address >= g_imageLow && address < g_imageHigh) return "game.exe";
+    MEMORY_BASIC_INFORMATION info = {};
+    if (VirtualQuery(reinterpret_cast<LPCVOID>(address), &info, sizeof(info)) == 0 || !info.AllocationBase) return "other";
+    const DWORD base = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(info.AllocationBase));
+    auto found = cache.find(base);
+    if (found == cache.end()) {
+        ProfileModuleInfo module;
+        module.name = "other";
+        char path[MAX_PATH] = {};
+        if (GetModuleFileNameA(reinterpret_cast<HMODULE>(info.AllocationBase), path, sizeof(path)) != 0) {
+            const char* slash = strrchr(path, '\\');
+            module.name = slash ? slash + 1 : path;
+            const BYTE* header = reinterpret_cast<const BYTE*>(info.AllocationBase);
+            if (!IsBadReadPtr(header, 0x200) && header[0] == 'M' && header[1] == 'Z') {
+                DWORD lfanew = 0;
+                memcpy(&lfanew, header + 0x3c, 4);
+                DWORD imageSize = 0;
+                if (lfanew < 0x1000 && !IsBadReadPtr(header + lfanew, 0x100)) memcpy(&imageSize, header + lfanew + 24 + 56, 4);
+                if (imageSize >= 0x1000 && imageSize < 0x10000000) {
+                    profsym::Image image;
+                    image.data = header;
+                    image.base = base;
+                    image.size = imageSize;
+                    module.exports.Load(image);
+                }
+            }
+        }
+        found = cache.emplace(base, std::move(module)).first;
+    }
+    // "!name+0x10" for an address in or just after an export, else "+0xRVA" (a DLL without exports, or an
+    // internal function of one).
+    const std::string described = found->second.exports.Describe(address - base);
+    if (!described.empty()) {
+        *symbol = "!" + described;
+    } else {
+        char offset[24];
+        snprintf(offset, sizeof(offset), "+0x%lX", static_cast<unsigned long>(address - base));
+        *symbol = offset;
+    }
+    return found->second.name;
+}
+
+// An import thunk or tail jump: what a direct call into another module goes through.
+static bool ProfileIsThunk(DWORD address) {
+    if (address < g_codeLow || address + 2 > g_codeHigh) return false;
+    const BYTE* p = reinterpret_cast<const BYTE*>(address);
+    return p[0] == 0xE9 || (p[0] == 0xFF && p[1] == 0x25);
+}
+
+// The call chain, innermost function first. A word on the stack that looks like a return address may
+// be a leftover in a frame's uninitialised space, so a direct call is only believed when its target is at or
+// just before the address of the frame found so far (the function it must have called), or is a thunk;
+// indirect calls (virtual, through the import table) cannot be checked.
+static int ProfileBuildPath(DWORD eip, const DWORD* stack, DWORD words, DWORD* path, int capacity) {
+    int length = 0;
+    DWORD inner = 0; // where the frame found so far is executing; 0 = the leaf is outside the game
+    if (eip >= g_codeLow && eip < g_codeHigh) {
+        DWORD function = ProfileFunctionOf(eip);
+        if (function) { path[length++] = function; inner = eip; }
+    }
+    for (DWORD i = 0; i < words && length < capacity; ++i) {
+        DWORD value = stack[i];
+        if (value < g_codeLow + 6 || value >= g_codeHigh) continue;
+        DWORD target = 0;
+        if (!LooksLikeReturnAddress(reinterpret_cast<const BYTE*>(value), &target, true)) continue;
+        if (target != 0 && !(target <= inner && inner - target < 0x8000) && !ProfileIsThunk(target)) continue; // stale
+        DWORD function = ProfileFunctionOf(value - 1);
+        if (!function) continue;
+        if (length == 0 || path[length - 1] != function) path[length++] = function;
+        inner = value;
+    }
+    return length;
+}
+
+static void ProfileAddSample(ProfileWindow& window, const DWORD* path, int length, const std::string& category,
+        const std::string& external) {
+    ++window.samples;
+    if (!external.empty() && window.externals.size() < 400) {
+        bool seen = false;
+        for (auto& entry : window.externals) {
+            if (entry.first == external) { ++entry.second; seen = true; break; }
+        }
+        if (!seen) window.externals.push_back(std::make_pair(external, 1u));
+    }
+    bool counted = false;
+    for (auto& entry : window.categories) {
+        if (entry.first == category) { ++entry.second; counted = true; break; }
+    }
+    if (!counted) window.categories.push_back(std::make_pair(category, 1u));
+    int current = 0;
+    ++window.nodes[0].count;
+    for (int i = length - 1; i >= 0; --i) { // outermost first
+        int child = window.nodes[current].firstChild;
+        while (child >= 0 && window.nodes[child].function != path[i]) child = window.nodes[child].nextSibling;
+        if (child < 0) {
+            if (window.nodes.size() >= kProfileMaxNodes) break;
+            window.nodes.push_back(ProfileNode{path[i], 0, 0, -1, window.nodes[current].firstChild});
+            child = static_cast<int>(window.nodes.size()) - 1;
+            window.nodes[current].firstChild = child;
+        }
+        ++window.nodes[child].count;
+        current = child;
+    }
+    ++window.nodes[current].self;
+}
+
+static void ProfileEmit(const ProfileWindow& window, int parent, int depth, double frameMs,
+        std::vector<std::string>& lines, size_t maxLines, DWORD minCount) {
+    std::vector<int> children;
+    for (int child = window.nodes[parent].firstChild; child >= 0; child = window.nodes[child].nextSibling) {
+        if (window.nodes[child].count >= minCount) children.push_back(child);
+    }
+    std::sort(children.begin(), children.end(),
+        [&](int a, int b) { return window.nodes[a].count > window.nodes[b].count; });
+    for (int index : children) {
+        if (lines.size() >= maxLines) return;
+        const ProfileNode& node = window.nodes[index];
+        // A frame that is on nearly every sample and does nothing itself (the loop that calls the
+        // real work) is left out; its children are shown at the same depth.
+        const bool wrapper = node.count * 100 >= window.samples * 97 && node.self * 100 <= window.samples * 3;
+        if (!wrapper) {
+            char text[kProfileTextWidth];
+            const double share = static_cast<double>(node.count) / window.samples;
+            std::string indent(static_cast<size_t>(depth > 10 ? 10 : depth) * 2, ' ');
+            std::string name = ProfileNameOf(node.function);
+            if (name.size() > 46) name.resize(46);
+            if (frameMs > 0.0) {
+                snprintf(text, sizeof(text), "%6.2f %s%s", share * frameMs, indent.c_str(), name.c_str());
+            } else {
+                snprintf(text, sizeof(text), "%5.1f%% %s%s", share * 100.0, indent.c_str(), name.c_str());
+            }
+            if (node.self * 50 >= window.samples) { // 2% or more spent in the function's own code
+                size_t used = strlen(text);
+                snprintf(text + used, sizeof(text) - used, frameMs > 0.0 ? "  (own %.2f)" : "  (own %.1f%%)",
+                    frameMs > 0.0 ? static_cast<double>(node.self) / window.samples * frameMs
+                                  : static_cast<double>(node.self) / window.samples * 100.0);
+            }
+            lines.push_back(text);
+        }
+        ProfileEmit(window, index, wrapper ? depth : depth + 1, frameMs, lines, maxLines, minCount);
+    }
+}
+
+static void PublishProfile(const std::vector<std::string>& lines) {
+    while (InterlockedCompareExchange(&g_profileLock, 1, 0) != 0) Sleep(0);
+    g_profileLineCount = 0;
+    for (const std::string& line : lines) {
+        if (g_profileLineCount >= kProfileMaxLines) break;
+        snprintf(g_profileLines[g_profileLineCount++], kProfileTextWidth, "%s", line.c_str());
+    }
+    InterlockedExchange(&g_profileLock, 0);
+}
+
+static DWORD WINAPI ProfilerThread(LPVOID) {
+    LabelCurrentThread(L"um.dll: Profiler");
+    if (g_codeLow == 0) InitGameImageRanges(); // not done when the heap hooks are off
+    if (g_profileFunctions.empty()) {
+        BuildProfileFunctionTable();
+        LoadProfileNames();
+    }
+    static BYTE stackCopy[kProfileStackBytes];
+    ProfileWindow window;
+    window.Reset();
+    HANDLE thread = NULL;
+    DWORD threadId = 0;
+    ULONGLONG windowStart = GetTickCount64();
+    LONG windowFrames = g_overlayFrameCount;
+    LARGE_INTEGER counterFrequency = {};
+    QueryPerformanceFrequency(&counterFrequency);
+    InterlockedExchange(&g_heapHookTicks, 0);
+    InterlockedExchange(&g_heapHookCalls, 0);
+    int snapshots = 0;
+    const DWORD periodMs = g_profilerHz >= 1000 ? 1 : static_cast<DWORD>(1000 / (g_profilerHz > 0 ? g_profilerHz : 250));
+
+    while (g_profilerRunning) {
+        DWORD wanted = g_profilerFrameThreadId;
+        if (wanted != 0 && wanted != threadId) {
+            if (thread) CloseHandle(thread);
+            thread = OpenThread(THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_QUERY_INFORMATION, FALSE, wanted);
+            threadId = thread ? wanted : 0;
+            window.Reset(); // measure from the moment there is a thread to look at
+            windowStart = GetTickCount64();
+            windowFrames = g_overlayFrameCount;
+            InterlockedExchange(&g_heapHookTicks, 0);
+            InterlockedExchange(&g_heapHookCalls, 0);
+        }
+        if (thread) {
+            // Nothing between SuspendThread and ResumeThread may take a lock the game thread could hold.
+            CONTEXT context = {};
+            context.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
+            SIZE_T copied = 0;
+            bool have = false;
+            if (SuspendThread(thread) != static_cast<DWORD>(-1)) {
+                if (GetThreadContext(thread, &context)) {
+                    SIZE_T got = 0;
+                    ReadProcessMemory(GetCurrentProcess(), reinterpret_cast<LPCVOID>(context.Esp), stackCopy, kProfileStackBytes, &got);
+                    copied = got;
+                    have = true;
+                }
+                ResumeThread(thread);
+            }
+            if (have) {
+                DWORD path[64];
+                int length = ProfileBuildPath(context.Eip, reinterpret_cast<const DWORD*>(stackCopy),
+                    static_cast<DWORD>(copied / 4), path, 64);
+                std::string symbol;
+                std::string module = ProfileModuleOf(context.Eip, &symbol);
+                // Outside the game, also who called in: the innermost game function on the stack.
+                std::string external;
+                if (module != "game.exe") {
+                    external = module + symbol;
+                    if (length > 0) external += " <- " + ProfileNameOf(path[0]);
+                }
+                ProfileAddSample(window, path, length, module, external);
+            }
+        }
+
+        const ULONGLONG now = GetTickCount64();
+        if (now - windowStart >= 2000 && window.samples > 0) {
+            const LONG frames = g_overlayFrameCount - windowFrames;
+            const double frameMs = frames > 0 ? static_cast<double>(now - windowStart) / frames : 0.0;
+            std::vector<std::string> lines;
+            char text[kProfileTextWidth];
+            if (frameMs > 0.0) {
+                snprintf(text, sizeof(text), "%.1f ms/frame (%.0f FPS), %lu samples", frameMs, 1000.0 / frameMs,
+                    static_cast<unsigned long>(window.samples));
+            } else {
+                snprintf(text, sizeof(text), "no frames presented, %lu samples", static_cast<unsigned long>(window.samples));
+            }
+            lines.push_back(text);
+            std::sort(window.categories.begin(), window.categories.end(),
+                [](const std::pair<std::string, DWORD>& a, const std::pair<std::string, DWORD>& b) { return a.second > b.second; });
+            std::string where = "in:";
+            for (size_t i = 0; i < window.categories.size() && i < 4; ++i) {
+                char part[64];
+                snprintf(part, sizeof(part), " %s %.0f%%", window.categories[i].first.c_str(),
+                    window.categories[i].second * 100.0 / window.samples);
+                where += part;
+            }
+            lines.push_back(where);
+            const LONG hookTicks = InterlockedExchange(&g_heapHookTicks, 0);
+            const LONG hookCalls = InterlockedExchange(&g_heapHookCalls, 0);
+            if (hookCalls > 0 && frames > 0 && counterFrequency.QuadPart > 0) {
+                const double hookMs = static_cast<double>(hookTicks) * 1000.0 / counterFrequency.QuadPart / frames;
+                snprintf(text, sizeof(text), "um.dll heap hooks: %.0f calls, %.2f ms per frame (%.0f%%)",
+                    static_cast<double>(hookCalls) / frames, hookMs, frameMs > 0.0 ? hookMs * 100.0 / frameMs : 0.0);
+                lines.push_back(text);
+            }
+            ProfileEmit(window, 0, 0, frameMs, lines, static_cast<size_t>(g_profilerLineCount) + lines.size(),
+                window.samples / 100 > 0 ? window.samples / 100 : 1);
+            if (!window.externals.empty() && frameMs > 0.0) {
+                std::sort(window.externals.begin(), window.externals.end(),
+                    [](const std::pair<std::string, DWORD>& a, const std::pair<std::string, DWORD>& b) { return a.second > b.second; });
+                lines.push_back("outside game.exe (ms per frame):");
+                for (size_t i = 0; i < window.externals.size() && i < 6; ++i) {
+                    if (window.externals[i].second * 100 < window.samples) break; // under 1%
+                    std::string name = window.externals[i].first;
+                    if (name.size() > 70) name.resize(70);
+                    snprintf(text, sizeof(text), "%6.2f  %s", static_cast<double>(window.externals[i].second) / window.samples * frameMs, name.c_str());
+                    lines.push_back(text);
+                }
+            }
+            PublishProfile(lines);
+            if (++snapshots % 15 == 1) {
+                for (const std::string& line : lines) LogLine("DEBUG", "[PERF] %s", line.c_str());
+            }
+            window.Reset();
+            windowStart = now;
+            windowFrames = g_overlayFrameCount;
+            InterlockedExchange(&g_heapHookTicks, 0);
+            InterlockedExchange(&g_heapHookCalls, 0);
+        }
+        WaitForSingleObject(g_profilerStopEvent, periodMs);
+    }
+    if (thread) CloseHandle(thread);
+    InterlockedExchange(&g_profilerThreadAlive, 0);
+    return 0;
+}
+
+// Called from the overlay's timer: the sampler runs only while its window is on screen.
+static void UpdateProfilerState() {
+    const bool wanted = g_profilerVisible;
+    if (wanted && !g_profilerRunning) {
+        if (InterlockedCompareExchange(&g_profilerThreadAlive, 1, 0) != 0) return; // the last one is still ending
+        if (!g_profilerStopEvent) g_profilerStopEvent = CreateEventA(NULL, TRUE, FALSE, NULL);
+        ResetEvent(g_profilerStopEvent);
+        g_profilerRunning = 1;
+        HANDLE handle = CreateThread(NULL, 0, ProfilerThread, NULL, 0, NULL);
+        if (handle) {
+            CloseHandle(handle);
+        } else {
+            g_profilerRunning = 0;
+            InterlockedExchange(&g_profilerThreadAlive, 0);
+        }
+    } else if (!wanted && g_profilerRunning) {
+        g_profilerRunning = 0;
+        if (g_profilerStopEvent) SetEvent(g_profilerStopEvent);
+        while (InterlockedCompareExchange(&g_profileLock, 1, 0) != 0) Sleep(0);
+        g_profileLineCount = 0;
+        InterlockedExchange(&g_profileLock, 0);
+    }
+}
 
 struct OverlayContent {
     OverlayLine top[8];
@@ -5570,6 +6190,11 @@ static void BuildOverlayContent(OverlayContent& content) {
             quarantineDoubleFrees > 0 || quarantineInvalid > 0 || quarantineProblems > 0,
             "double-frees=%lu invalid-frees=%lu heap-problems=%lu overruns-absorbed=%lu",
             quarantineDoubleFrees, quarantineInvalid, quarantineProblems, quarantineOverruns);
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false, "%s", ""); // blank line
+    }
+    if (g_heapPaddingOnlyInstalled) {
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+            "Heap padding=%d bytes (not tracked)", g_heapAllocPadding);
         AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false, "%s", ""); // blank line
     }
     if (g_overlayShowBackend) {
@@ -6082,6 +6707,60 @@ static void RenderLogPanel(const RECT& targetRect) {
     CompositeCanvasToWindow(g_overlayLogWindow, g_overlayLogCanvas, logRect.left, logRect.top);
 }
 
+// The profiler window: the call tree of the main thread, on its own so it can sit beside the main panel.
+static void RenderProfilerPanel(const RECT& targetRect) {
+    static char lines[kProfileMaxLines + 1][kProfileTextWidth];
+    int count = 0;
+    snprintf(lines[count++], kProfileTextWidth, "Main thread profile (ms per frame)");
+    while (InterlockedCompareExchange(&g_profileLock, 1, 0) != 0) Sleep(0);
+    for (int i = 0; i < g_profileLineCount && count <= kProfileMaxLines; ++i) {
+        snprintf(lines[count++], kProfileTextWidth, "%s", g_profileLines[i]);
+    }
+    InterlockedExchange(&g_profileLock, 0);
+    if (count == 1) {
+        snprintf(lines[count++], kProfileTextWidth, "collecting samples...");
+    }
+
+    HFONT font = CreateFontA(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
+        ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+        DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
+    int panelWidth = 320;
+    HDC scratchDC = CreateCompatibleDC(NULL);
+    if (scratchDC) {
+        HFONT oldScratchFont = font ? static_cast<HFONT>(SelectObject(scratchDC, font)) : NULL;
+        for (int i = 0; i < count; ++i) {
+            SIZE textSize = {};
+            if (GetTextExtentPoint32A(scratchDC, lines[i], static_cast<int>(strlen(lines[i])), &textSize) &&
+                    textSize.cx + 16 > panelWidth) {
+                panelWidth = textSize.cx + 16;
+            }
+        }
+        if (oldScratchFont) SelectObject(scratchDC, oldScratchFont);
+        DeleteDC(scratchDC);
+    }
+    const int panelHeight = 8 + count * OVERLAY_THREAD_LINE_HEIGHT + 8;
+    RECT rect;
+    ComputeOverlayRect(targetRect, g_profilerPosition, panelWidth, panelHeight, rect);
+
+    EnsureAlphaCanvas(g_profilerCanvas, panelWidth, panelHeight);
+    BYTE bgAlpha = static_cast<BYTE>((g_overlayBackgroundOpacityPercent * 255) / 100);
+    bool ditherStyle = EqualsIgnoreCase(g_overlayTransparencyStyle, "dither");
+    FillCanvasBackground(g_profilerCanvas, g_overlayBackgroundColor, bgAlpha, ditherStyle);
+    HDC hdc = g_profilerCanvas.dc;
+    SetBkMode(hdc, TRANSPARENT);
+    SetTextColor(hdc, g_overlayTextColor);
+    HFONT oldFont = font ? static_cast<HFONT>(SelectObject(hdc, font)) : NULL;
+    int y = 8;
+    for (int i = 0; i < count; ++i) {
+        TextOutA(hdc, 8, y, lines[i], static_cast<int>(strlen(lines[i])));
+        y += OVERLAY_THREAD_LINE_HEIGHT;
+    }
+    if (oldFont) SelectObject(hdc, oldFont);
+    if (font) DeleteObject(font);
+    FinalizeCanvasAlpha(g_profilerCanvas, g_overlayBackgroundColor, bgAlpha, ditherStyle);
+    CompositeCanvasToWindow(g_profilerWindow, g_profilerCanvas, rect.left, rect.top);
+}
+
 // Follow the game window, handle input, and drive both panels' rendering.
 static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
@@ -6118,6 +6797,7 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
             SampleProcessDiagnostics();
         }
         RefreshRendererChain();
+        UpdateProfilerState();
 
         RECT targetRect;
         bool haveTargetRect = g_overlayTargetWindow && GetWindowRect(g_overlayTargetWindow, &targetRect);
@@ -6133,6 +6813,12 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
             }
             SetWindowPos(g_overlayLogWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         }
+        if (g_profilerVisible && g_profilerWindow) {
+            if (haveTargetRect) {
+                RenderProfilerPanel(targetRect);
+            }
+            SetWindowPos(g_profilerWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
         return 0;
     }
     case WM_PAINT: {
@@ -6142,7 +6828,8 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
         // instead of leaving the window blank until the next WM_TIMER tick.
         PAINTSTRUCT paintStruct;
         HDC paintDC = BeginPaint(hwnd, &paintStruct);
-        const AlphaCanvas& canvas = (hwnd == g_overlayLogWindow) ? g_overlayLogCanvas : g_overlayCanvas;
+        const AlphaCanvas& canvas = (hwnd == g_overlayLogWindow) ? g_overlayLogCanvas :
+            (hwnd == g_profilerWindow) ? g_profilerCanvas : g_overlayCanvas;
         if (paintDC && canvas.dc) {
             BitBlt(paintDC, 0, 0, canvas.width, canvas.height, canvas.dc, 0, 0, SRCCOPY);
         }
@@ -6237,6 +6924,20 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
         }
     }
 
+    {
+        RECT profilerRect;
+        ComputeOverlayRect(targetRect, g_profilerPosition, 320, 60, profilerRect);
+        g_profilerWindow = CreateWindowExA(extendedStyle,
+            windowClass.lpszClassName, "Universal Mod Profiler", WS_POPUP,
+            profilerRect.left, profilerRect.top, 320, 60,
+            NULL, NULL, module, NULL);
+        if (g_profilerWindow) {
+            ShowWindow(g_profilerWindow, SW_HIDE);
+        } else {
+            LogLine("WARN", "CreateWindowExA for the profiler window failed, error=%lu", GetLastError());
+        }
+    }
+
     SetTimer(g_overlayWindow, 1, g_overlayRefreshMs, NULL);
     LogLine("INFO", "Overlay window created; toggle_key=0x%02X log_toggle_key=0x%02X position=%s log_enabled=%s layered=%s",
         g_overlayToggleKey, g_overlayLogToggleKey, g_overlayPosition, g_overlayLogEnabled ? "true" : "false",
@@ -6245,6 +6946,11 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     // Test builds only: injected keystrokes are ignored by the toggle hook (by
     // design), so start visible instead.
     g_overlayVisible = 1;
+    // Injected key presses never reach the keyboard hook either: UM_TEST_PROFILER starts the profiler on.
+    if (GetEnvironmentVariableA("UM_TEST_PROFILER", NULL, 0) != 0) {
+        g_profilerVisible = 1;
+        if (g_profilerWindow) ShowWindow(g_profilerWindow, SW_SHOWNOACTIVATE);
+    }
     ShowWindow(g_overlayWindow, SW_SHOWNOACTIVATE);
     if (g_overlayLogWindow) {
         g_overlayLogVisible = 1;
@@ -6260,9 +6966,11 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
 
     DestroyAlphaCanvas(g_overlayCanvas);
     DestroyAlphaCanvas(g_overlayLogCanvas);
+    DestroyAlphaCanvas(g_profilerCanvas);
     UnregisterClassA(windowClass.lpszClassName, module);
     g_overlayWindow = NULL;
     g_overlayLogWindow = NULL;
+    g_profilerWindow = NULL;
     return 0;
 }
 
