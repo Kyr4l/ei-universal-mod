@@ -48,11 +48,49 @@
 #include <unordered_map>
 #include <map>
 #include <sys/stat.h>
+#ifdef _WIN32
+#include <sys/utime.h>
+#else
 #include <utime.h>
+#endif
 
 #include "subtools.hpp"
 
 namespace fs = std::filesystem;
+
+// Plain Unix mtime get/set for a path. fs::path::c_str() is a wchar_t* on
+// Windows, which stat()/utime() cannot take (and which is the only correct way
+// to reach non-ASCII file names there), so Windows goes through the wide-char
+// 64-bit variants; everything else keeps the POSIX calls.
+static bool GetUnixMtime(const fs::path& path, uint32_t& mtime) {
+#ifdef _WIN32
+    struct _stat64 st{};
+    if (::_wstat64(path.c_str(), &st) != 0) {
+        return false;
+    }
+#else
+    struct stat st{};
+    if (::stat(path.c_str(), &st) != 0) {
+        return false;
+    }
+#endif
+    mtime = static_cast<uint32_t>(st.st_mtime);
+    return true;
+}
+
+static void SetUnixMtime(const fs::path& path, uint32_t unixTime) {
+#ifdef _WIN32
+    struct __utimbuf64 times{};
+    times.actime = static_cast<__time64_t>(unixTime);
+    times.modtime = static_cast<__time64_t>(unixTime);
+    ::_wutime64(path.c_str(), &times);
+#else
+    struct utimbuf times{};
+    times.actime = static_cast<time_t>(unixTime);
+    times.modtime = static_cast<time_t>(unixTime);
+    ::utime(path.c_str(), &times);
+#endif
+}
 
 // Program metadata
 static constexpr const char* PROGRAM_VERSION = "1.0";
@@ -231,12 +269,9 @@ static bool UnpackResArchive(
 
             if (time > 0) {
                 // Same file_time_type epoch pitfall as the pack side (see
-                // PackResArchive) - go through POSIX utime() with the raw
-                // Unix timestamp instead of constructing a file_time_type.
-                struct utimbuf times{};
-                times.actime = static_cast<time_t>(time);
-                times.modtime = static_cast<time_t>(time);
-                ::utime(filePath.c_str(), &times);
+                // PackResArchive) - go through utime() with the raw Unix
+                // timestamp instead of constructing a file_time_type.
+                SetUnixMtime(filePath, static_cast<uint32_t>(time));
             }
         }
     }
@@ -297,10 +332,7 @@ static bool PackResArchive(
             // mtime). Read it via POSIX stat() instead, which always reports
             // real Unix time on every platform this project targets.
             uint32_t mtime = 0;
-            struct stat st{};
-            if (::stat(entry.path().c_str(), &st) == 0) {
-                mtime = static_cast<uint32_t>(st.st_mtime);
-            }
+            GetUnixMtime(entry.path(), mtime);
 
             files.push_back({relStr, std::move(payload), mtime});
         }

@@ -48,7 +48,20 @@ WIN_GUI_FLAGS = -std=c++17 -O3 -Wall -Wextra -isystem $(GLFW_MINGW_PREFIX)/inclu
                 -static -static-libgcc -static-libstdc++
 WIN_GUI_LDFLAGS = -L$(GLFW_MINGW_PREFIX)/lib -lglfw3 -lopengl32 -lgdi32 -lcomdlg32 -lole32 -luuid -mwindows
 
-all: $(TARGET_BIN) $(GUI_TARGET_BIN)
+#   make linux  - the Linux binaries (um-multitool, um-multitool-gui)
+#   make win    - the Windows .exe files, cross-compiled with MinGW
+#   make all    - both (the Windows part is skipped when MinGW is not installed)
+NATIVE_BINS = $(TARGET_BIN) $(GUI_TARGET_BIN)
+WIN_BINS =
+ifneq ($(OS),Windows_NT)
+ifneq ($(shell command -v $(WIN_CXX) 2>/dev/null),)
+WIN_BINS = win
+endif
+endif
+
+all: $(NATIVE_BINS) $(WIN_BINS)
+
+linux: $(NATIVE_BINS)
 
 $(TARGET_BIN): $(SRCS) $(HDRS)
 	$(CXX) $(CXXFLAGS) -o $@ $(SRCS)
@@ -73,4 +86,4 @@ $(GUI_TARGET).exe: $(GUI_SRCS)
 clean:
 	rm -f um-multitool um-multitool.exe um-multitool-gui um-multitool-gui.exe
 
-.PHONY: all clean win
+.PHONY: all linux clean win

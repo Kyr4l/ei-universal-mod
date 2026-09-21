@@ -84,3 +84,32 @@
 | **IsDead** (Unit: object) → float | Checks if unit is dead. |
 | **GetX / GetY / GetZ** (Object: object) → float | Returns world coordinates. |
 | **GetObjectByID** (idObject: string) → object | Gets object by string ID (supports 10-digit IDs). |
+
+---
+
+## Script validation (`MOB_VALIDATION` in um.dll)
+
+With `MOB_VALIDATION=true`, `um.dll` checks each `.mob` file's mission script (the encrypted `SS_TEXT` node, dumped as `.eis` by `um-multitool mobdump`) when the game opens the file, and writes the findings to `um.log` as `[MOBCHECK]` lines. Line numbers count lines of the script text, so they match the dumped `.eis` file. Only maps inside the folder of the mod that contains `um.dll` are checked; other mods' maps and the base game's, which the game also opens, are left alone.
+
+The language is small and regular: `GlobalVars`, `DeclareScript`, `Script`, `WorldScript`, `if ( conditions ) then ( ... ) [else ( ... )]`, nested `Command( args )` calls, `variable = value`, and the `For( var, group ) ( ... )` loop. The command list (name, parameter types, return type) comes from the VGG editor's `syntax.ini`/`scripts.htm` and MobExplorer's `script_refs.txt`, corrected against the shipped maps; see `resources/universal-mod/um-dll/mob_script_functions.hpp`.
+
+| Level in `um.log` | Meaning |
+| :--- | :--- |
+| `ERROR` | The script cannot work: syntax error, wrong argument count for a known command, unknown type, a command that returns nothing used as a value, an undeclared number/string variable. |
+| `WARN` | Suspicious: a wrong argument/condition/assignment type, a script call with the wrong argument count, or an unknown name that looks like a typo of a known command (with a "did you mean" hint). |
+| `DEBUG` | Usually fine: a name that is neither a known command nor a script of this file (it may be defined in another `.mob`). |
+
+**Quest maps.** A quest map (`z12q2.mob`, with its `z12q2.mq` archive) is loaded by the game on top of its zone's base map (`zone12-lmp.mob`), and its script freely uses the base map's variables (in the shipped maps, 23 of 42 quests do). The checker finds the base map from the `#res` line of the quest archive's `map.txt` and resolves names against both files. Object IDs must not repeat between the two: the quest's object silently replaces the base map's object with the same ID, which is reported as a `WARN`.
+
+**Checks against the map itself.** The script's references are also checked against the objects of the map, its base map and every map its script loads with `AddMob(...)` (a script often pulls in extra maps at runtime; in the shipped maps this explains most IDs that are not in the map's own file):
+
+- `GetObject( N )`, `GetObjectByID( "N" )` and `"GetObject(N)"` inside quest commands must name an object ID that exists. One summarised `WARN` per script lists how many IDs are missing and a few examples.
+- An undeclared name used where an object is expected must be the name of an object in the map.
+- The text argument of `GiveItem`, `GiveQuestItem`, `CastSpellUnit` and `CastSpellPoint` must be an item or spell known to the database (`material.iron[1]` and `lightning{a1}` are checked by their parts).
+
+These checks are skipped when a map they depend on cannot be found (a quest whose `.mq` archive or base map is not available, or an `AddMob` target that is missing), so an unavailable map never causes a false warning. Unit names (`AddUnitToServer`) are not checked: no shipped map uses them, so there is no data to validate a rule against.
+
+Two things are implicit in the language and are therefore never reported: a group variable is created by its first use, and an undeclared name where an object is expected refers to a named object placed in the map (possibly in the base map).
+
+The checker is plain C++ (`resources/universal-mod/um-dll/mob_script_check.hpp`) with regression tests in `resources/universal-mod/um-dll/tests/`. It reports no errors on any of the 237 shipped and community maps it was developed against.
+

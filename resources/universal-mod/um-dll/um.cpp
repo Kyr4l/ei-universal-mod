@@ -14,10 +14,17 @@
 #include <string.h>
 #include <stdarg.h>
 #include <string>
+#include <deque>
+#include <map>
+#include <functional>
+#include <memory>
+#include <vector>
 #include <unordered_set>
 #include <unordered_map>
 #include <cstdint>
 #include <algorithm>
+
+#include "mob_script_check.hpp"
 
 // The DLL is injected into the game process, so these flags and hooks are
 // process-local. Configuration is loaded once during DLL_PROCESS_ATTACH.
@@ -26,18 +33,18 @@ static HHOOK g_keyboardHook = NULL;
 // path from a thread other than the one DllMain itself ran on.
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F11;
+// um.dll's own version, shown in the overlay title and logged at startup.
+static const char* const UM_VERSION = "1.0";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
 static bool g_enableCrashLogging = true;
-static bool g_enableAntiCrash = true;
+static bool g_suppressErrorDialogs = true;
 static bool g_clearLogOnStart = true;
 static bool g_enableCrashDumps = true;
 static char g_logPath[MAX_PATH] = {};
 static CRITICAL_SECTION g_logLock;
 static bool g_logLockInitialized = false;
-static PVOID g_vectoredExceptionHandler = NULL;
-static volatile LONG g_firstChanceExceptionCount = 0;
 static HANDLE g_logClearMutex = NULL;
 static volatile LONG g_crashLogInProgress = 0;
 static volatile LONG g_errorBlockNumber = 0;
@@ -45,11 +52,11 @@ static bool g_keyboardRewriteKeyDown[256] = {};
 static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
 static bool g_enableMobValidation = false;
-static bool g_enableHeapTermination = false;
-static bool g_enableHeapValidateOnMapLoad = false;
-static bool g_heapValidateDryRun = false;
-// GetTickCount() deadline; 0 means "no map load pending" - see MarkMapTransitionWindow.
-static DWORD g_mapTransitionDeadline = 0;
+static bool g_enableHeapFreeQuarantine = false;
+static int g_heapFreeQuarantineMb = 64;
+static int g_heapFreeQuarantineObjectsMb = 128;
+static int g_heapAllocPadding = 64;
+static bool g_heapFreeQuarantinePoison = false;
 static bool g_enableOverlay = true;
 static BYTE g_overlayToggleKey = VK_F9;
 static volatile LONG g_overlayVisible = 0;
@@ -72,6 +79,27 @@ static const int OVERLAY_HISTORY_CAPACITY = 64;
 static double g_overlayFpsHistory[OVERLAY_HISTORY_CAPACITY] = {};
 static int g_overlayFpsHistoryNext = 0;
 static int g_overlayFpsHistoryCount = 0;
+static bool g_overlayCompact = false;
+static bool g_overlayShowFrameStats = true;
+static bool g_overlayShowLaa = true;
+static bool g_overlayShowMap = true;
+static bool g_overlayShowWarnings = true;
+// Warning/error lines written to um.log so far (counted in LogLine), for the
+// overlay's badge.
+static volatile LONG g_logWarningCount = 0;
+static volatile LONG g_logErrorCount = 0;
+// Recent per-frame presentation intervals (written by CountPresentedFrame on the
+// game's render thread, read by the overlay thread) for the 1% low / worst
+// frametime readout.
+static const int OVERLAY_FRAME_TIME_CAPACITY = 4096;
+static const double OVERLAY_FRAME_STATS_WINDOW_MS = 10000.0;
+static float g_overlayFrameTimesMs[OVERLAY_FRAME_TIME_CAPACITY] = {};
+static volatile LONG g_overlayFrameTimeNext = 0;
+static volatile LONG g_overlayFrameTimeCount = 0;
+// Last .mob file the game opened (the main menu and the lobby are maps too).
+static char g_currentMapName[64] = {};
+static ULONGLONG g_currentMapOpenedTickMs = 0;
+static volatile LONG g_currentMapLock = 0;
 static int g_overlayRefreshMs = 500;
 static const int OVERLAY_FPS_MARKS_MAX = 16;
 static double g_overlayFpsMarks[OVERLAY_FPS_MARKS_MAX] = {30.0, 60.0, 75.0, 120.0, 140.0, 165.0, 240.0};
@@ -82,7 +110,11 @@ static int g_overlayBackgroundOpacityPercent = 20;
 // Real-time mirror of the last few formatted um.log lines, appended to by
 // LogLine() itself; the overlay's log panel reads this instead of the file.
 static const int OVERLAY_LOG_CAPACITY = 50;
-static char g_overlayLogRing[OVERLAY_LOG_CAPACITY][300] = {};
+// Wide enough for the long findings the validators write (a double-free or [MOBCHECK]
+// line runs 250-400 characters); anything longer is cut when it is stored here, um.log
+// on disk always has the full line.
+static const size_t OVERLAY_LOG_ENTRY_SIZE = 512;
+static char g_overlayLogRing[OVERLAY_LOG_CAPACITY][OVERLAY_LOG_ENTRY_SIZE] = {};
 static int g_overlayLogRingNext = 0;
 static int g_overlayLogRingCount = 0;
 static bool g_overlayLogEnabled = true;
@@ -101,12 +133,6 @@ static char g_overlayTransparencyStyle[16] = "alpha";
 // actual alpha values used, causing a large GPU/FPS regression; a fully
 // opaque panel has no need for a layered window in the first place.
 static bool g_overlayWindowsAreLayered = true;
-
-// -- Performance tweaks (opt-in; off by default; independent of each other) --
-static bool g_enablePerformancePriority = false;
-static bool g_enablePerformanceAffinity = false;
-static char g_performancePriorityClass[16] = "high";
-static char g_performanceAffinityMaskHex[32] = {};
 
 // -- Overlay resource/backend diagnostics --
 static bool g_overlayShowResources = true;
@@ -148,7 +174,6 @@ static GetThreadDescriptionFunction g_getThreadDescription = NULL;
 static volatile LONG g_threadDescriptionFunctionsResolved = 0;
 
 // Not defined by MinGW's headers; value is stable across Windows versions.
-static const DWORD UM_STATUS_HEAP_CORRUPTION = 0xC0000374L;
 
 typedef HANDLE (WINAPI *CreateFileAFunction)(LPCSTR, DWORD, DWORD, LPSECURITY_ATTRIBUTES,
     DWORD, DWORD, HANDLE);
@@ -159,6 +184,7 @@ typedef BOOL (WINAPI *WriteFileFunction)(HANDLE, LPCVOID, DWORD, LPDWORD, LPOVER
 typedef BOOL (WINAPI *CloseHandleFunction)(HANDLE);
 typedef LPVOID (WINAPI *HeapAllocFunction)(HANDLE, DWORD, SIZE_T);
 typedef BOOL (WINAPI *HeapFreeFunction)(HANDLE, DWORD, LPVOID);
+typedef BOOL (WINAPI *HeapDestroyFunction)(HANDLE);
 typedef LPVOID (WINAPI *HeapReAllocFunction)(HANDLE, DWORD, LPVOID, SIZE_T);
 typedef HRESULT (WINAPI *DirectDrawCreateFunction)(const GUID*, void**, IUnknown*);
 typedef HRESULT (WINAPI *DirectDrawCreateExFunction)(const GUID*, void**, const GUID*, IUnknown*);
@@ -201,12 +227,12 @@ static WriteFileFunction g_originalWriteFile = NULL;
 static CloseHandleFunction g_originalCloseHandle = NULL;
 static HeapAllocFunction g_originalHeapAlloc = NULL;
 static HeapFreeFunction g_originalHeapFree = NULL;
+static HeapDestroyFunction g_originalHeapDestroy = NULL;
 static HeapReAllocFunction g_originalHeapReAlloc = NULL;
 static DirectDrawCreateFunction g_originalDirectDrawCreate = NULL;
 static DirectDrawCreateExFunction g_originalDirectDrawCreateEx = NULL;
 
-// Forward declaration: defined later, but ApplyPerformanceTweaks() (defined
-// earlier, alongside the other config-value Parse* helpers) needs it.
+// Forward declaration: defined later, but used by earlier code.
 static void LogLine(const char* level, const char* format, ...);
 
 struct TrackedFileHandle {
@@ -405,45 +431,6 @@ static void ParseFpsMarks(const char* value, double* outMarks, int* outCount) {
 }
 
 
-// Map a PERFORMANCE_PRIORITY_CLASS config value to a Win32 priority class.
-// Falls back to NORMAL_PRIORITY_CLASS for empty or unrecognized values.
-static DWORD ParsePriorityClassName(const char* value) {
-    if (!value || value[0] == '\0') {
-        return NORMAL_PRIORITY_CLASS;
-    }
-    if (EqualsIgnoreCase(value, "realtime")) {
-        return REALTIME_PRIORITY_CLASS;
-    }
-    if (EqualsIgnoreCase(value, "high")) {
-        return HIGH_PRIORITY_CLASS;
-    }
-    if (EqualsIgnoreCase(value, "abovenormal")) {
-        return ABOVE_NORMAL_PRIORITY_CLASS;
-    }
-    if (EqualsIgnoreCase(value, "belownormal")) {
-        return BELOW_NORMAL_PRIORITY_CLASS;
-    }
-    if (EqualsIgnoreCase(value, "idle")) {
-        return IDLE_PRIORITY_CLASS;
-    }
-    return NORMAL_PRIORITY_CLASS;
-}
-
-// The inverse of ParsePriorityClassName, used to show the *actual* live
-// priority class on the overlay so the user can confirm the tweak really
-// took effect rather than trusting the enabled flag alone.
-static const char* PriorityClassToName(DWORD priorityClass) {
-    switch (priorityClass) {
-    case REALTIME_PRIORITY_CLASS: return "realtime";
-    case HIGH_PRIORITY_CLASS: return "high";
-    case ABOVE_NORMAL_PRIORITY_CLASS: return "abovenormal";
-    case NORMAL_PRIORITY_CLASS: return "normal";
-    case BELOW_NORMAL_PRIORITY_CLASS: return "belownormal";
-    case IDLE_PRIORITY_CLASS: return "idle";
-    default: return "unknown";
-    }
-}
-
 // Strip optional surrounding double quotes/whitespace and store a bounded,
 // comma-separated config string (used for FILE_IO_LOGGING_FILTER and
 // OVERLAY_LOG_LEVEL_FILTER, both documented/written as a quoted value).
@@ -557,144 +544,113 @@ static const SettingDef kSettings[] = {
     BoolSetting("KEYBOARD_REWRITES_LOGGING", &g_enableKeyboardRewriteLogging, false, true,
         "; Log keyboard rewrite events; (true/false)"),
     VKeySetting("RELOAD_CONFIG_KEY", &g_reloadConfigKey, VK_F11, true,
-        "; Key that reloads um.cfg and applies it immediately, without restarting the game;\n"
-        "; some settings (installing hooks, creating the overlay window for the first time)\n"
-        "; still require a restart; F1-F12, or a 0x.. / decimal virtual-key code."),
+        "; Key that reloads this file without restarting the game (some settings still\n"
+        "; need a restart); F1-F12 or a virtual-key code."),
 
     BoolSetting("LOGGING", &g_enableCrashLogging, true, true,
         "; Write diagnostic and crash information to um.log; (true/false)",
         "; -- Logging --"),
     BoolSetting("FILE_IO_LOGGING", &g_enableFileIoLogging, false, true,
-        "; Log file opens, reads, and writes as INFO entries; (true/false)"),
+        "; Log file opens, reads and writes; (true/false)"),
     StringSetting("FILE_IO_LOGGING_FILTER", g_fileIoLoggingFilter, sizeof(g_fileIoLoggingFilter), "", true, false,
-        "; Comma-separated file extensions to exclude from file-I/O logging; empty or like mmp,res."),
+        "; File extensions to leave out of file-I/O logging, comma-separated (e.g. mmp,res)."),
     BoolSetting("CLEAR_LOG_ON_START", &g_clearLogOnStart, true, true,
-        "; Clear um.log on the first DLL instance of a launch; (true/false)"),
+        "; Clear um.log when the game starts; (true/false)"),
 
-    BoolSetting("ANTICRASH", &g_enableAntiCrash, true, true,
-        "; Suppress critical-error dialogs; unsafe exceptions still crash normally; (true/false)",
+    BoolSetting("SUPPRESS_ERROR_DIALOGS", &g_suppressErrorDialogs, true, true,
+        "; Suppress Windows critical-error and crash dialogs, so the game just closes on\n"
+        "; a crash (um.log and the dump are still written); (true/false)",
         "; -- Crash handling --"),
     BoolSetting("CRASH_DUMPS", &g_enableCrashDumps, true, false,
-        "; Write portable Windows minidumps beside um.log; (true/false)"),
+        "; Write a minidump (.dmp) next to um.log when the game crashes; (true/false)"),
     BoolSetting("MOB_VALIDATION", &g_enableMobValidation, false, true,
-        "; Validate .mob file headers when opened and log structural problems, including a\n"
-        "; cross-check of unit weapons/armors/spells/quest/quick items against the item/spell database; (true/false)"),
-    BoolSetting("HEAP_CORRUPTION_TERMINATION", &g_enableHeapTermination, true, true,
-        "; Fail fast the instant Windows detects heap corruption instead of letting the\n"
-        "; process keep running on corrupted memory until an unrelated later crash; the\n"
-        "; resulting crash log points much closer to the real cause; (true/false)"),
-    BoolSetting("HEAP_VALIDATE_ON_MAP_LOAD", &g_enableHeapValidateOnMapLoad, false, true,
-        "; For 8 seconds after opening any .mob file (the main menu counts - it's a map\n"
-        "; too), validate the heap on every HeapAlloc/HeapFree/HeapReAlloc game.exe makes\n"
-        "; directly, and fail fast with a log entry + dump the moment corruption is found,\n"
-        "; instead of only noticing later at an unrelated crash site. Adds real per-\n"
-        "; allocation overhead during that window, so this is off by default; only\n"
-        "; catches corruption reached through game.exe's OWN direct heap calls, not ones\n"
-        "; routed through msvcrt's malloc/free; (true/false)"),
-    BoolSetting("HEAP_VALIDATE_DRY_RUN", &g_heapValidateDryRun, false, true,
-        "; When HEAP_VALIDATE_ON_MAP_LOAD is also on, keep logging its [HEAPCHECK] map-\n"
-        "; load markers but skip actually installing the HeapAlloc/HeapFree/HeapReAlloc\n"
-        "; hooks, so there is zero added per-allocation overhead. Exists to tell apart\n"
-        "; \"a crash didn't reproduce because this session got lucky\" from \"it didn't\n"
-        "; reproduce because the added overhead changed timing enough to avoid a race\" -\n"
-        "; compare how long it takes to crash with this on vs off; (true/false)"),
-
-    BoolSetting("PERFORMANCE_PRIORITY_ENABLED", &g_enablePerformancePriority, false, true,
-        "; Apply a custom process priority class below; off by default, since forcing\n"
-        "; high/realtime priority on a game not designed for it can cause audio/input\n"
-        "; stutter instead of helping; (true/false)",
-        "; -- Performance --\n"
-        "; These two settings are independent of each other - enabling one does not\n"
-        "; enable the other.\n"
-        ";"),
-    StringSetting("PERFORMANCE_PRIORITY_CLASS", g_performancePriorityClass, sizeof(g_performancePriorityClass), "high", false, true,
-        "; Priority class to apply when the setting above is enabled; one of idle,\n"
-        "; belownormal, normal, abovenormal, high, realtime."),
-    BoolSetting("PERFORMANCE_AFFINITY_ENABLED", &g_enablePerformanceAffinity, false, true,
-        "; Apply the CPU affinity mask below; off by default, since restricting the\n"
-        "; game to too few cores can make performance WORSE, not better - test before\n"
-        "; leaving this on; (true/false)"),
-    StringSetting("PERFORMANCE_AFFINITY_MASK", g_performanceAffinityMaskHex, sizeof(g_performanceAffinityMaskHex), "", true, true,
-        "; Restricts which CPU cores the game is allowed to run on when the setting\n"
-        "; above is enabled. This does NOT make the game slower or single-threaded by\n"
-        "; itself - it can help an old, mostly single-threaded game like this one, by\n"
-        "; stopping Windows/Wine from constantly bouncing its one busy thread between\n"
-        "; different cores - but restricting to too few cores can backfire.\n"
-        ";\n"
-        "; You do not need to understand binary/hex to use this - just copy one of these\n"
-        "; common values (check Task Manager/Windows or `nproc`/System Monitor on Linux\n"
-        "; first to see how many cores you actually have, and don't pick too few):\n"
-        ";   0x3  = cores 1-2\n"
-        ";   0xF  = cores 1-4\n"
-        ";   0x3F = cores 1-6\n"
-        ";   0xFF = cores 1-8"),
+        "; Check .mob map files when they are opened and log problems: items and spells\n"
+        "; missing from the database, errors in the mission script, and object IDs a quest\n"
+        "; map shares with its base map. Only this mod's own map files are checked; (true/false)"),
+    IntSetting("HEAP_ALLOC_PADDING", &g_heapAllocPadding, 0, 256, 64, true,
+        "; Fix for a game bug that crashes it on Wine: the game writes a few bytes past the\n"
+        "; end of some of its objects (its 3D figure objects, for one), which lands on the\n"
+        "; next block's heap header and corrupts the heap. This adds that many spare bytes\n"
+        "; after every allocation to absorb those writes; um.log reports each allocation\n"
+        "; site that overruns. Costs about 64 bytes per live allocation. 0 = off; needs a\n"
+        "; restart to change (0-256 bytes)."),
+    BoolSetting("HEAP_FREE_QUARANTINE", &g_enableHeapFreeQuarantine, false, true,
+        "; TO BE DEPRECATED: not needed with HEAP_ALLOC_PADDING. Keeps recently freed memory\n"
+        "; untouched for a while, so stale pointers keep working. Uses extra memory and\n"
+        "; needs a restart; (true/false)"),
+    IntSetting("HEAP_FREE_QUARANTINE_MB", &g_heapFreeQuarantineMb, 4, 1024, 64, true,
+        "; TO BE DEPRECATED. Amount of freed memory held back, in MB (4-1024)."),
+    IntSetting("HEAP_FREE_QUARANTINE_OBJECTS_MB", &g_heapFreeQuarantineObjectsMb, 0, 512, 128, true,
+        "; TO BE DEPRECATED. Extra memory, in MB, kept for small freed objects (blocks that\n"
+        "; start with a game vtable); 0 = no extra pool."),
+    BoolSetting("HEAP_FREE_QUARANTINE_POISON", &g_heapFreeQuarantinePoison, false, true,
+        "; TO BE DEPRECATED. Diagnostic mode: stamp the first 1 KB of every freed block with\n"
+        "; 0xDDDDDDDD so a stale use crashes at once, and um.log names the freed block and\n"
+        "; who freed it. Switches the quarantine's protection off, so use it for a test\n"
+        "; session only; (true/false)"),
 
     BoolSetting("OVERLAY_ENABLED", &g_enableOverlay, true, true,
-        "; Enable a toggleable diagnostic overlay drawn on top of the game window; (true/false)",
+        "; Show the diagnostic overlay on top of the game; (true/false)",
         "; -- Overlay --"),
     VKeySetting("OVERLAY_TOGGLE_KEY", &g_overlayToggleKey, VK_F9, true,
-        "; Key that shows/hides the main overlay panel while the game has focus; F1-F12,\n"
-        "; or a 0x.. / decimal virtual-key code."),
+        "; Key that shows/hides the main panel; F1-F12 or a virtual-key code."),
     PositionSetting("OVERLAY_POSITION", g_overlayPosition, sizeof(g_overlayPosition), "top-left", true,
-        "; Corner/edge of the game window the overlay is anchored to; one of\n"
-        "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center."),
+        "; Panel position: top-left, top-right, bottom-left, bottom-right, top, bottom,\n"
+        "; left, right or center."),
     ColorSetting("OVERLAY_COLOR", &g_overlayTextColor, RGB(0, 255, 0), true,
-        "; Overlay text color as a hex RRGGBB value (no # needed)."),
+        "; Text color as hex RRGGBB."),
     IntSetting("OVERLAY_REFRESH_MS", &g_overlayRefreshMs, 100, 5000, 500, true,
-        "; How often the overlay repaints and samples FPS/resources, in milliseconds (100-5000)."),
+        "; Refresh interval in milliseconds (100-5000)."),
+    BoolSetting("OVERLAY_COMPACT", &g_overlayCompact, false, true,
+        "; Compact mode: only the FPS line (and the warning badge) instead of the full\n"
+        "; panel; (true/false)"),
     BoolSetting("OVERLAY_SHOW_FPS_GRAPH", &g_overlayShowFpsGraph, true, true,
-        "; Show the FPS sparkline graph (frametime stays as text only); (true/false)"),
+        "; Show the FPS graph; (true/false)"),
     FpsMarksSetting("OVERLAY_FPS_MARKS", g_overlayFpsMarks, &g_overlayFpsMarkCount, "30,60,75,120,140,165,240", true,
-        "; Comma-separated static FPS reference marks for the graph, ascending; the lowest\n"
-        "; two always show, the rest only appear once the game actually reaches them."),
+        "; FPS reference lines on the graph, comma-separated and ascending; the higher\n"
+        "; ones appear once the game reaches them."),
+    BoolSetting("OVERLAY_SHOW_FRAME_STATS", &g_overlayShowFrameStats, true, true,
+        "; Show the 1% low FPS and worst frametime of the last 10 seconds; (true/false)"),
     BoolSetting("OVERLAY_SHOW_RESOURCES", &g_overlayShowResources, true, true,
-        "; Show CPU%%/memory/thread-count usage of game.exe; (true/false)"),
+        "; Show CPU and memory use of game.exe, and how much of its address space is used; (true/false)"),
     BoolSetting("OVERLAY_SHOW_BACKEND", &g_overlayShowBackend, true, true,
-        "; Show which DirectDraw driver is actually rendering (native, dgVoodoo2, DXVK, etc.); (true/false)"),
+        "; Show the DirectDraw driver name and the full renderer chain (DxWrapper, dgVoodoo,\n"
+        "; D7VK, DXVK, wined3d...); (true/false)"),
+    BoolSetting("OVERLAY_SHOW_LAA", &g_overlayShowLaa, true, true,
+        "; Show whether game.exe can use more than 2 GB of address space; (true/false)"),
+    BoolSetting("OVERLAY_SHOW_MAP", &g_overlayShowMap, true, true,
+        "; Show the current map (last .mob opened) and the session time; (true/false)"),
+    BoolSetting("OVERLAY_SHOW_WARNINGS", &g_overlayShowWarnings, true, true,
+        "; Show a red badge with the number of warnings/errors logged so far; (true/false)"),
     BoolSetting("OVERLAY_SHOW_THREADS", &g_overlayShowThreads, true, true,
-        "; Show a per-thread CPU%% breakdown below the FPS graph (lowest 8 thread IDs,\n"
-        "; oldest/main thread first and stable across samples, rather than resorted by\n"
-        "; CPU%% each tick); thread names are usually \"(unnamed)\" since this game predates\n"
-        "; thread naming APIs - only um.dll's own threads are named; (true/false)"),
+        "; Show CPU usage per thread; (true/false)"),
     IntSetting("OVERLAY_THREAD_COUNT", &g_overlayThreadDisplayCount, 1, OVERLAY_THREAD_DISPLAY_MAX, 8, true,
-        "; How many threads to list (lowest thread IDs first); max 32."),
+        "; Number of threads to list (1-32)."),
     ColorSetting("OVERLAY_BACKGROUND_COLOR", &g_overlayBackgroundColor, RGB(0, 0, 0), true,
-        "; Panel background color as a hex RRGGBB value (no # needed)."),
+        "; Background color as hex RRGGBB."),
     IntSetting("OVERLAY_BACKGROUND_OPACITY", &g_overlayBackgroundOpacityPercent, 0, 100, 20, true,
-        "; Panel background opacity as a percentage (0=fully transparent, 100=solid).\n"
-        "; NOTE: 100 renders the panel WITHOUT a layered window at all (plain BitBlt);\n"
-        "; any value below 100 re-enables a layered window, which on some Wine/Wayland\n"
-        "; setups forces the game out of direct-scanout presentation and causes a large\n"
-        "; GPU/FPS regression - confirmed to happen with BOTH transparency styles below,\n"
-        "; not just smooth alpha blending; 100 is the only performance-safe value there."),
+        "; Background opacity in percent (0-100). Anything below 100 can cost a lot of\n"
+        "; FPS on some Wine/Wayland setups; 100 is the safe choice."),
     StringSetting("OVERLAY_TRANSPARENCY_STYLE", g_overlayTransparencyStyle, sizeof(g_overlayTransparencyStyle), "alpha", false, true,
-        "; How the background opacity above is achieved when below 100; \"alpha\" blends\n"
-        "; smoothly (some Wine/Wayland setups don't honor this and render fully opaque\n"
-        "; instead); \"dither\" approximates it with alternating fully-opaque/fully-\n"
-        "; transparent scanline bands, which still works when smooth per-pixel alpha\n"
-        "; blending does not; one of alpha, dither."),
+        "; How opacity below 100 is drawn: alpha (smooth, not honored everywhere) or\n"
+        "; dither (scanline pattern, works everywhere)."),
 
     BoolSetting("OVERLAY_LOG_ENABLED", &g_overlayLogEnabled, true, true,
-        "; Show a separate auto-scrolling panel with the last few um.log lines; (true/false)",
+        "; Show a panel with the latest um.log lines; (true/false)",
         "; -- Overlay log panel --"),
     VKeySetting("OVERLAY_LOG_TOGGLE_KEY", &g_overlayLogToggleKey, VK_F10, true,
-        "; Key that shows/hides the log panel independently of the main overlay panel;\n"
-        "; F1-F12, or a 0x.. / decimal virtual-key code."),
+        "; Key that shows/hides the log panel; F1-F12 or a virtual-key code."),
     IntSetting("OVERLAY_LOG_LINES", &g_overlayLogLineCount, 1, OVERLAY_LOG_CAPACITY, 10, true,
-        "; Number of most recent log lines to display, newest at the bottom (max 50)."),
+        "; Number of log lines to show, newest at the bottom (1-50)."),
     IntSetting("OVERLAY_LOG_WIDTH", &g_overlayLogPanelWidth, 300, 2000, 900, true,
-        "; Log panel width in pixels (300-2000); widen this if long lines still get\n"
-        "; wrapped/clipped too aggressively."),
+        "; Log panel width in pixels (300-2000)."),
     BoolSetting("OVERLAY_LOG_WRAP", &g_overlayLogWrapEnabled, true, true,
-        "; Wrap log lines that are too long to fit within the panel width onto extra\n"
-        "; visual rows instead of clipping them; counts against OVERLAY_LOG_LINES above; (true/false)"),
+        "; Wrap long lines onto extra rows instead of clipping them; (true/false)"),
     PositionSetting("OVERLAY_LOG_POSITION", g_overlayLogPosition, sizeof(g_overlayLogPosition), "bottom-left", true,
-        "; Corner/edge of the game window the log panel is anchored to; one of\n"
-        "; top-left, top-right, bottom-left, bottom-right, top, bottom, left, right, center."),
+        "; Log panel position, same choices as OVERLAY_POSITION."),
     StringSetting("OVERLAY_LOG_LEVEL_FILTER", g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), "SYSINFO", true, true,
-        "; Comma-separated log levels to hide from the live log panel; matches the [LEVEL]\n"
-        "; shown in um.log (SYSINFO, INFO, WARN, ERROR, FATAL, DEBUG); case-insensitive,\n"
-        "; um.log on disk always keeps every level regardless of this filter."),
+        "; Log levels to hide in the panel, comma-separated (SYSINFO, INFO, WARN, ERROR,\n"
+        "; FATAL, DEBUG); um.log still keeps everything."),
 };
 static const size_t kSettingCount = sizeof(kSettings) / sizeof(kSettings[0]);
 
@@ -838,36 +794,6 @@ static bool IsCurrentProcessLargeAddressAware() {
         }
     }
     return cachedResult != 0;
-}
-
-// Applies the configured process priority class and/or CPU affinity mask;
-// each is independently opt-in and off by default. Forcing high/realtime
-// priority on a game that isn't designed for it, or pinning it to too few
-// cores, can hurt instead of help - test before leaving either one enabled.
-static void ApplyPerformanceTweaks() {
-    if (g_enablePerformancePriority) {
-        DWORD requestedClass = ParsePriorityClassName(g_performancePriorityClass);
-        if (!SetPriorityClass(GetCurrentProcess(), requestedClass)) {
-            LogLine("WARN", "SetPriorityClass(%s) failed, error=%lu",
-                g_performancePriorityClass, GetLastError());
-        } else {
-            LogLine("INFO", "Priority class applied: %s", g_performancePriorityClass);
-        }
-    }
-    if (g_enablePerformanceAffinity && g_performanceAffinityMaskHex[0] != '\0') {
-        char* end = NULL;
-        unsigned long mask = strtoul(g_performanceAffinityMaskHex, &end, 16);
-        if (end != g_performanceAffinityMaskHex && mask != 0) {
-            if (!SetProcessAffinityMask(GetCurrentProcess(), static_cast<DWORD_PTR>(mask))) {
-                LogLine("WARN", "SetProcessAffinityMask(0x%lX) failed, error=%lu", mask, GetLastError());
-            } else {
-                LogLine("INFO", "CPU affinity mask applied: %s", g_performanceAffinityMaskHex);
-            }
-        } else {
-            LogLine("WARN", "PERFORMANCE_AFFINITY_MASK=\"%s\" is not a valid hex mask; affinity left unchanged",
-                g_performanceAffinityMaskHex);
-        }
-    }
 }
 
 // Resolves SetThreadDescription/GetThreadDescription once (Windows 10 1607+
@@ -1087,12 +1013,16 @@ static bool IsLogLevelFiltered(const char* level) {
 // Also mirrors the exact formatted line into a small in-memory ring buffer so
 // the overlay's real-time log panel can display it without re-reading um.log.
 static void LogLine(const char* level, const char* format, ...) {
+    if (EqualsIgnoreCase(level, "WARN")) {
+        InterlockedIncrement(&g_logWarningCount);
+    } else if (EqualsIgnoreCase(level, "ERROR") || EqualsIgnoreCase(level, "FATAL")) {
+        InterlockedIncrement(&g_logErrorCount);
+    }
     if (!g_enableCrashLogging || g_logPath[0] == '\0') {
         return;
     }
 
     FILE* file = fopen(g_logPath, "a");
-// Write file-I/O diagnostics through LogLine when that feature is enabled.
     if (!file) {
         return;
     }
@@ -1104,9 +1034,9 @@ static void LogLine(const char* level, const char* format, ...) {
     const char* category = NULL;
     if (EqualsIgnoreCase(level, "SYSINFO")) {
         outputLevel = "SYSINFO";
-    } else if (EqualsIgnoreCase(level, "ANTICRASH")) {
+    } else if (EqualsIgnoreCase(level, "CRASH")) {
         outputLevel = "DEBUG";
-        category = "ANTICRASH";
+        category = "CRASH";
     }
 
     SYSTEMTIME now = {};
@@ -1133,7 +1063,7 @@ static void LogLine(const char* level, const char* format, ...) {
             offsetSign, absoluteOffsetMinutes / 60, absoluteOffsetMinutes % 60, outputLevel);
     }
 
-    char message[400] = {};
+    char message[800] = {};
     va_list arguments;
     va_start(arguments, format);
     vsnprintf(message, sizeof(message), format, arguments);
@@ -1398,7 +1328,7 @@ static void LogTrackedFileHandles() {
     LeaveCriticalSection(&g_fileHandleLock);
 
     for (size_t i = 0; i < count; ++i) {
-        LogLine("ANTICRASH", "Open tracked file path=%s handle=%p", paths[i], handles[i]);
+        LogLine("CRASH", "Open tracked file path=%s handle=%p", paths[i], handles[i]);
     }
 }
 
@@ -1893,6 +1823,498 @@ static void ValidateMobObjectSection(const char* path, const BYTE* data, size_t 
     }
 }
 
+// ---------------------------------------------------------------------------
+// Mission script checking
+//
+// A .mob carries its mission script in an SS_TEXT node (encrypted; see
+// docs/file-formats/mob-format.md). The game loads a QUEST map (zNqM.mob) on top
+// of its zone's base map (zoneN-lmp.mob) and the quest's script freely uses the
+// base map's variables, so a quest is checked together with its base: the quest's
+// own zNqM.mq archive holds a map.txt whose "#res" line names the zone's base map.
+// Object IDs must not repeat between the two - the quest's copy silently replaces
+// the base map's object - which is reported too.
+// ---------------------------------------------------------------------------
+static const DWORD kMobTypeSsTextOld = 2899242186u; // plain-text script (older files)
+static const DWORD kMobTypeSsText = 2899242187u;    // encrypted script
+static const DWORD kMqMagic = 0x019CE23Cu;
+static const size_t kMqMaxBytes = 8u * 1024 * 1024;
+
+// MSVC LCG XOR cipher over everything after the 4-byte key; NUL bytes are padding.
+static std::string DecryptMobScript(const BYTE* payload, size_t length) {
+    std::string text;
+    if (length < 4) {
+        return text;
+    }
+    DWORD key = 0;
+    memcpy(&key, payload, sizeof(key));
+    text.reserve(length - 4);
+    for (size_t i = 4; i < length; ++i) {
+        key = key * 214013u + 2531011u;
+        BYTE plain = static_cast<BYTE>(payload[i] ^ ((key >> 16) & 0xFF));
+        if (plain != 0) {
+            text.push_back(static_cast<char>(plain));
+        }
+    }
+    return text;
+}
+
+// Pull the mission script text and every object's NID out of a .mob image.
+static void ExtractMobScriptAndIds(const BYTE* data, size_t size, std::string* scriptText,
+        std::unordered_set<DWORD>* objectIds, std::unordered_set<std::string>* objectNames = nullptr) {
+    size_t pos = 16; // past the root node and the marker node, like ValidateMobFile
+    while (pos + 8 <= size) {
+        DWORD type = 0, length = 0;
+        memcpy(&type, data + pos, sizeof(type));
+        memcpy(&length, data + pos + 4, sizeof(length));
+        if (type == kMobTypeRoot || length < 8 || pos + length > size) {
+            break;
+        }
+        if (type == kMobTypeSsText) {
+            *scriptText = DecryptMobScript(data + pos + 8, length - 8);
+        } else if (type == kMobTypeSsTextOld) {
+            scriptText->clear();
+            for (size_t i = 0; i < length - 8; ++i) {
+                if (data[pos + 8 + i] != 0) scriptText->push_back(static_cast<char>(data[pos + 8 + i]));
+            }
+        } else if (type == kMobTypeObjectSection) {
+            size_t sectionEnd = pos + length;
+            size_t child = pos + 8;
+            while (child + 8 <= sectionEnd) {
+                DWORD childType = 0, childLength = 0;
+                memcpy(&childType, data + child, sizeof(childType));
+                memcpy(&childLength, data + child + 4, sizeof(childLength));
+                if (childLength < 8 || child + childLength > sectionEnd) {
+                    break;
+                }
+                size_t field = child + 8;
+                size_t childEnd = child + childLength;
+                while (field + 8 <= childEnd) {
+                    DWORD fieldType = 0, fieldLength = 0;
+                    memcpy(&fieldType, data + field, sizeof(fieldType));
+                    memcpy(&fieldLength, data + field + 4, sizeof(fieldLength));
+                    if (fieldLength < 8 || field + fieldLength > childEnd) {
+                        break;
+                    }
+                    if (fieldType == kMobTypeNid && fieldLength == 12) {
+                        DWORD nid = 0;
+                        memcpy(&nid, data + field + 8, sizeof(nid));
+                        objectIds->insert(nid);
+                    } else if (fieldType == kMobTypeObjName && objectNames) {
+                        std::string objectName(reinterpret_cast<const char*>(data + field + 8), fieldLength - 8);
+                        objectName.resize(strlen(objectName.c_str())); // stop at the terminating NUL
+                        for (size_t i = 0; i < objectName.size(); ++i) {
+                            objectName[i] = static_cast<char>(tolower(static_cast<unsigned char>(objectName[i])));
+                        }
+                        objectNames->insert(objectName);
+                    }
+                    field += fieldLength;
+                }
+                child = childEnd;
+            }
+        }
+        pos += length;
+    }
+}
+
+static bool ReadWholeFile(const std::string& path, size_t limitBytes, std::vector<BYTE>* out) {
+    HANDLE handle = g_originalCreateFileA ?
+        g_originalCreateFileA(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL) :
+        CreateFileA(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+            NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (handle == INVALID_HANDLE_VALUE) {
+        return false;
+    }
+    LARGE_INTEGER size = {};
+    bool ok = GetFileSizeEx(handle, &size) && size.QuadPart > 0 &&
+        static_cast<ULONGLONG>(size.QuadPart) <= limitBytes;
+    if (ok) {
+        out->resize(static_cast<size_t>(size.QuadPart));
+        DWORD read = 0;
+        ok = ReadFile(handle, out->data(), static_cast<DWORD>(out->size()), &read, NULL) && read == out->size();
+    }
+    CloseHandle(handle);
+    return ok;
+}
+
+// The base map's name from a quest archive's map.txt ("#res <mpr> <base mob>"), without extension.
+static bool ReadMqBaseMapName(const std::string& mqPath, std::string* baseName) {
+    std::vector<BYTE> file;
+    if (!ReadWholeFile(mqPath, kMqMaxBytes, &file) || file.size() < 16) {
+        return false;
+    }
+    DWORD magic = 0, count = 0, tableOffset = 0, namesLength = 0;
+    memcpy(&magic, file.data(), 4);
+    memcpy(&count, file.data() + 4, 4);
+    memcpy(&tableOffset, file.data() + 8, 4);
+    memcpy(&namesLength, file.data() + 12, 4);
+    if (magic != kMqMagic || count == 0 || count > 65536) {
+        return false;
+    }
+    // Each descriptor is 22 bytes: next(4) length(4) offset(4) timestamp(4) nameLength(2) nameOffset(4).
+    unsigned long long namesOffset = static_cast<unsigned long long>(tableOffset) + static_cast<unsigned long long>(count) * 22;
+    if (namesOffset + namesLength > file.size()) {
+        return false;
+    }
+    for (DWORD i = 0; i < count; ++i) {
+        const BYTE* descriptor = file.data() + tableOffset + static_cast<size_t>(i) * 22;
+        DWORD dataLength = 0, dataOffset = 0, nameOffset = 0;
+        WORD nameLength = 0;
+        memcpy(&dataLength, descriptor + 4, 4);
+        memcpy(&dataOffset, descriptor + 8, 4);
+        memcpy(&nameLength, descriptor + 16, 2);
+        memcpy(&nameOffset, descriptor + 18, 4);
+        if (nameLength < 7 || static_cast<unsigned long long>(nameOffset) + nameLength > namesLength) {
+            continue;
+        }
+        std::string name(reinterpret_cast<const char*>(file.data() + namesOffset + nameOffset), nameLength);
+        if (!EqualsIgnoreCase(name.substr(name.size() - 7).c_str(), "map.txt")) {
+            continue;
+        }
+        if (static_cast<unsigned long long>(dataOffset) + dataLength > file.size()) {
+            return false;
+        }
+        std::string text(reinterpret_cast<const char*>(file.data() + dataOffset), dataLength);
+        size_t at = 0;
+        bool afterRes = false;
+        while (at < text.size()) {
+            size_t end = text.find('\n', at);
+            std::string line = text.substr(at, end == std::string::npos ? std::string::npos : end - at);
+            at = end == std::string::npos ? text.size() : end + 1;
+            while (!line.empty() && (line.back() == '\r' || line.back() == ' ' || line.back() == '\t')) line.pop_back();
+            if (line.empty()) continue;
+            if (afterRes) {
+                size_t space = line.find_first_of(" \t");
+                if (space == std::string::npos) return false;
+                size_t second = line.find_first_not_of(" \t", space);
+                if (second == std::string::npos) return false;
+                size_t secondEnd = line.find_first_of(" \t", second);
+                *baseName = line.substr(second, secondEnd == std::string::npos ? std::string::npos : secondEnd - second);
+                return !baseName->empty();
+            }
+            if (line.size() >= 4 && EqualsIgnoreCase(line.substr(0, 4).c_str(), "#res")) {
+                afterRes = true;
+            }
+        }
+        return false;
+    }
+    return false;
+}
+
+struct MobScriptContext {
+    MobScriptDeclarations declarations;
+    std::unordered_set<DWORD> objectIds;
+    std::unordered_set<std::string> objectNames; // lower-case OBJNAMEs of the map's objects
+};
+
+// Where the game itself opened each .mob (lower-case file name -> full path). A quest's base
+// map is opened by the game just before the quest, often from a different folder (a mod's
+// quests sit in the mod's maps folder, the zone's base map in the game's own), so this is
+// how it is found when it is not next to the quest.
+static volatile LONG g_seenMobPathsLock = 0;
+static std::unordered_map<std::string, std::string> g_seenMobPaths;
+
+static std::string LowerCaseCopy(const std::string& text) {
+    std::string result = text;
+    for (size_t i = 0; i < result.size(); ++i) result[i] = static_cast<char>(tolower(static_cast<unsigned char>(result[i])));
+    return result;
+}
+
+static void RememberSeenMobPath(const char* path) {
+    std::string full = path;
+    size_t slash = full.find_last_of("\\/");
+    std::string name = LowerCaseCopy(slash == std::string::npos ? full : full.substr(slash + 1));
+    while (InterlockedCompareExchange(&g_seenMobPathsLock, 1, 0) != 0) Sleep(0);
+    g_seenMobPaths[name] = full;
+    InterlockedExchange(&g_seenMobPathsLock, 0);
+}
+
+static std::string FindSeenMobPath(const std::string& mobFileName) {
+    std::string name = LowerCaseCopy(mobFileName);
+    while (InterlockedCompareExchange(&g_seenMobPathsLock, 1, 0) != 0) Sleep(0);
+    auto it = g_seenMobPaths.find(name);
+    std::string result = it != g_seenMobPaths.end() ? it->second : std::string();
+    InterlockedExchange(&g_seenMobPathsLock, 0);
+    return result;
+}
+
+// Base maps are read on demand (whether or not the game opened them yet) and kept.
+static volatile LONG g_mobContextLock = 0;
+static std::unordered_map<std::string, std::shared_ptr<MobScriptContext>> g_mobContextCache;
+
+static std::shared_ptr<MobScriptContext> LoadMobContext(const std::string& mobPath) {
+    std::string key = mobPath;
+    for (size_t i = 0; i < key.size(); ++i) key[i] = static_cast<char>(tolower(static_cast<unsigned char>(key[i])));
+    while (InterlockedCompareExchange(&g_mobContextLock, 1, 0) != 0) Sleep(0);
+    auto cached = g_mobContextCache.find(key);
+    std::shared_ptr<MobScriptContext> result = cached != g_mobContextCache.end() ? cached->second : nullptr;
+    InterlockedExchange(&g_mobContextLock, 0);
+    if (result) {
+        return result;
+    }
+    std::vector<BYTE> file;
+    if (!ReadWholeFile(mobPath, kMobMaxWalkBytes, &file) || file.size() < 16) {
+        return nullptr;
+    }
+    DWORD rootType = 0;
+    memcpy(&rootType, file.data(), sizeof(rootType));
+    if (rootType != kMobTypeObjectDbFile) {
+        return nullptr;
+    }
+    result = std::make_shared<MobScriptContext>();
+    std::string scriptText;
+    ExtractMobScriptAndIds(file.data(), file.size(), &scriptText, &result->objectIds, &result->objectNames);
+    if (!scriptText.empty()) {
+        result->declarations = CheckMobScript(scriptText).declarations;
+    }
+    while (InterlockedCompareExchange(&g_mobContextLock, 1, 0) != 0) Sleep(0);
+    g_mobContextCache[key] = result;
+    InterlockedExchange(&g_mobContextLock, 0);
+    return result;
+}
+
+// Quest maps are named z<zone>q<n> (z12q2, z3xq1, z11d2q1, z0jq1); base maps are zone<N>-lmp
+// and the like. A quest whose archive (and so its base map) cannot be found must not be
+// held to "every object it mentions is in this file".
+static bool LooksLikeQuestMapName(const std::string& fileName) {
+    std::string name = LowerCaseCopy(fileName);
+    size_t dot = name.find_last_of('.');
+    if (dot != std::string::npos) name.resize(dot);
+    if (name.size() < 4 || name[0] != 'z' || name[1] < '0' || name[1] > '9') {
+        return false;
+    }
+    size_t q = name.find_last_of('q');
+    if (q == std::string::npos || q < 2 || q + 1 >= name.size()) {
+        return false;
+    }
+    for (size_t i = q + 1; i < name.size(); ++i) {
+        if (name[i] < '0' || name[i] > '9') return false;
+    }
+    return true;
+}
+
+static std::string MobFileNameOf(const std::string& path) {
+    size_t slash = path.find_last_of("\\/");
+    return slash == std::string::npos ? path : path.substr(slash + 1);
+}
+
+// Is this text argument an item/spell the database knows? Same shape rule as the
+// unit weapon/armor check: drop a spell's "{parameters}" and an item's "[count]",
+// then every dot-separated part must be a database name ("material.iron[1]").
+static bool ScriptDatabaseNameKnown(const std::string& raw, const std::unordered_set<std::string>& names) {
+    std::string text = LowerCaseCopy(raw);
+    if (names.count(text) != 0) {
+        return true;
+    }
+    size_t brace = text.find('{');
+    if (brace != std::string::npos) text.resize(brace);
+    size_t bracket = text.find('[');
+    if (bracket != std::string::npos) text.resize(bracket);
+    size_t start = 0;
+    bool any = false;
+    while (start <= text.size()) {
+        size_t dot = text.find('.', start);
+        std::string part = text.substr(start, dot == std::string::npos ? std::string::npos : dot - start);
+        if (!part.empty()) {
+            any = true;
+            if (names.count(part) == 0) return false;
+        }
+        if (dot == std::string::npos) break;
+        start = dot + 1;
+    }
+    return any;
+}
+
+// What a script refers to inside the map, checked against the map's own objects: the IDs
+// and names of this map, its base map (for a quest) and every map the script loads with
+// AddMob(). Findings are summarised per script, since a stale reference usually repeats.
+// Skipped whenever one of those maps could not be read, so a map that simply is not
+// available never produces a false warning.
+static void ValidateScriptAgainstMap(const char* path, const std::string& fileName, const MobScriptReport& report,
+        const std::unordered_set<DWORD>& ownIds, const std::unordered_set<std::string>& ownNames,
+        const std::shared_ptr<MobScriptContext>& base, bool baseMissing, bool* hasError) {
+    (void)hasError;
+    // --- item / spell names against the database
+    const std::unordered_set<std::string>& databaseNames = GetMobDatabaseNames(path);
+    if (!databaseNames.empty()) {
+        std::unordered_set<std::string> reported;
+        for (const MobScriptDatabaseName& ref : report.databaseNames) {
+            if (ScriptDatabaseNameKnown(ref.text, databaseNames) || !reported.insert(LowerCaseCopy(ref.text)).second) {
+                continue;
+            }
+            LogLine("WARN", "[MOBCHECK] %s script line %d: %s(): '%s' is not %s in the database", fileName.c_str(),
+                ref.line, ref.command.c_str(), ref.text.c_str(), ref.kind == 's' ? "a spell" : "an item");
+        }
+    }
+
+    // --- object IDs and names against the map's objects
+    if (baseMissing || (report.objectIds.empty() && report.objectNames.empty())) {
+        return;
+    }
+    std::unordered_set<DWORD> ids = ownIds;
+    std::unordered_set<std::string> names = ownNames;
+    if (base) {
+        ids.insert(base->objectIds.begin(), base->objectIds.end());
+        names.insert(base->objectNames.begin(), base->objectNames.end());
+    }
+    std::string directory;
+    size_t slash = std::string(path).find_last_of("\\/");
+    if (slash != std::string::npos) directory = std::string(path).substr(0, slash + 1);
+    for (const std::string& target : report.addMobs) {
+        std::string name = target;
+        if (name.size() < 4 || !EqualsIgnoreCase(name.substr(name.size() - 4).c_str(), ".mob")) name += ".mob";
+        std::shared_ptr<MobScriptContext> added = LoadMobContext(directory + name);
+        if (!added) {
+            std::string seen = FindSeenMobPath(name);
+            if (!seen.empty()) added = LoadMobContext(seen);
+        }
+        if (!added) {
+            LogLine("DEBUG", "[MOBCHECK] %s loads '%s' with AddMob, which was not found; object IDs and names "
+                "in its script are not checked", fileName.c_str(), target.c_str());
+            return;
+        }
+        ids.insert(added->objectIds.begin(), added->objectIds.end());
+        names.insert(added->objectNames.begin(), added->objectNames.end());
+    }
+
+    char examples[200] = {};
+    size_t used = 0;
+    int firstLine = 0;
+    int missingIds = 0;
+    std::unordered_set<std::string> seenIds;
+    for (const MobScriptReference& ref : report.objectIds) {
+        unsigned long id = strtoul(ref.text.c_str(), NULL, 10);
+        if (ref.text.size() > 10 || ids.count(static_cast<DWORD>(id)) != 0 || !seenIds.insert(ref.text).second) {
+            continue;
+        }
+        if (missingIds == 0) firstLine = ref.line;
+        if (missingIds < 5) {
+            int wrote = snprintf(examples + used, sizeof(examples) - used, "%s%s", missingIds ? ", " : "", ref.text.c_str());
+            if (wrote > 0 && static_cast<size_t>(wrote) < sizeof(examples) - used) used += static_cast<size_t>(wrote);
+        }
+        ++missingIds;
+    }
+    if (missingIds > 0) {
+        LogLine("WARN", "[MOBCHECK] %s script line %d: refers to %d object ID(s) that no object has in this map, its base "
+            "map or the maps it loads with AddMob (e.g. %s); commands using them get no object", fileName.c_str(),
+            firstLine, missingIds, examples);
+    }
+
+    char nameExamples[200] = {};
+    used = 0;
+    int missingNames = 0;
+    firstLine = 0;
+    for (const MobScriptReference& ref : report.objectNames) {
+        if (names.count(LowerCaseCopy(ref.text)) != 0) {
+            continue;
+        }
+        if (missingNames == 0) firstLine = ref.line;
+        if (missingNames < 5) {
+            int wrote = snprintf(nameExamples + used, sizeof(nameExamples) - used, "%s'%s'", missingNames ? ", " : "", ref.text.c_str());
+            if (wrote > 0 && static_cast<size_t>(wrote) < sizeof(nameExamples) - used) used += static_cast<size_t>(wrote);
+        }
+        ++missingNames;
+    }
+    if (missingNames > 0) {
+        LogLine("WARN", "[MOBCHECK] %s script line %d: uses %d object name(s) that no object is called in this map, its "
+            "base map or the maps it loads with AddMob: %s", fileName.c_str(), firstLine, missingNames, nameExamples);
+    }
+}
+
+// Check the mission script of one .mob image (already validated structurally) and, for a
+// quest map, its object IDs against its base map. Findings are logged; errors set *hasError.
+static void ValidateMobScript(const char* path, const BYTE* data, size_t size, bool* hasError) {
+    try {
+        std::string mobPath = path;
+        std::string fileName = MobFileNameOf(mobPath);
+        std::string scriptText;
+        std::unordered_set<DWORD> objectIds;
+        std::unordered_set<std::string> objectNamesOfThisMap;
+        ExtractMobScriptAndIds(data, size, &scriptText, &objectIds, &objectNamesOfThisMap);
+
+        // A quest map has a sibling .mq archive naming its base map.
+        std::shared_ptr<MobScriptContext> base;
+        std::string baseName;
+        bool baseMissing = false;
+        size_t dot = mobPath.find_last_of('.');
+        if (dot != std::string::npos) {
+            std::string mqPath = mobPath.substr(0, dot) + ".mq";
+            if (GetFileAttributesA(mqPath.c_str()) != INVALID_FILE_ATTRIBUTES && ReadMqBaseMapName(mqPath, &baseName)) {
+                size_t slash = mobPath.find_last_of("\\/");
+                std::string directory = slash == std::string::npos ? std::string() : mobPath.substr(0, slash + 1);
+                base = LoadMobContext(directory + baseName + ".mob");
+                if (!base) {
+                    std::string seen = FindSeenMobPath(baseName + ".mob");
+                    if (!seen.empty()) {
+                        base = LoadMobContext(seen);
+                    }
+                }
+                if (!base) {
+                    baseMissing = true;
+                    LogLine("DEBUG", "[MOBCHECK] %s is a quest map for base map '%s', which was not found next to it or opened by the "
+                        "game before it; variables it takes from the base map cannot be resolved", fileName.c_str(), baseName.c_str());
+                }
+            }
+        }
+
+        if (!base && !baseMissing && LooksLikeQuestMapName(fileName)) {
+            baseMissing = true; // a quest map whose archive (and base map) is not available
+        }
+
+        if (scriptText.empty()) {
+            LogLine("DEBUG", "[MOBCHECK] %s has no mission script", fileName.c_str());
+        } else {
+            MobScriptReport report = CheckMobScript(scriptText, base ? &base->declarations : nullptr, baseMissing);
+            if (report.errors > 0) {
+                *hasError = true;
+            }
+            std::stable_sort(report.issues.begin(), report.issues.end(),
+                [](const MobScriptIssue& x, const MobScriptIssue& y) { return x.line < y.line; });
+            for (const MobScriptIssue& issue : report.issues) {
+                const char* level = issue.severity == 'E' ? "ERROR" : issue.severity == 'W' ? "WARN" : "DEBUG";
+                LogLine(level, "[MOBCHECK] %s script line %d: %s", fileName.c_str(), issue.line, issue.message.c_str());
+            }
+            if (report.suppressed > 0) {
+                LogLine("WARN", "[MOBCHECK] %s script: %d more finding(s) not shown", fileName.c_str(), report.suppressed);
+            }
+            ValidateScriptAgainstMap(path, fileName, report, objectIds, objectNamesOfThisMap, base,
+                baseMissing, hasError);
+            if (report.errors > 0 || report.warnings > 0) {
+                LogLine("INFO", "[MOBCHECK] %s script: %d error(s), %d warning(s) in %d script(s); line numbers count "
+                    "lines of the map's script text (um-multitool mobdump writes it as %s.eis)",
+                    fileName.c_str(), report.errors, report.warnings, report.scriptCount,
+                    fileName.substr(0, fileName.find_last_of('.')).c_str());
+            } else {
+                LogLine("DEBUG", "[MOBCHECK] %s script checked OK (%d script(s)%s%s)", fileName.c_str(), report.scriptCount,
+                    base ? ", with base map " : "", base ? baseName.c_str() : "");
+            }
+        }
+
+        if (base && !objectIds.empty()) {
+            std::vector<DWORD> shared;
+            for (DWORD id : objectIds) {
+                if (base->objectIds.count(id) != 0) shared.push_back(id);
+            }
+            if (!shared.empty()) {
+                std::sort(shared.begin(), shared.end());
+                char examples[160] = {};
+                size_t used = 0;
+                for (size_t i = 0; i < shared.size() && i < 5; ++i) {
+                    int wrote = snprintf(examples + used, sizeof(examples) - used, "%s%lu", i ? ", " : "",
+                        static_cast<unsigned long>(shared[i]));
+                    if (wrote < 0 || static_cast<size_t>(wrote) >= sizeof(examples) - used) break;
+                    used += static_cast<size_t>(wrote);
+                }
+                LogLine("WARN", "[MOBCHECK] %s shares %lu object ID(s) with its base map %s.mob (e.g. %s); the quest map's "
+                    "object replaces the base map's object with the same ID", fileName.c_str(),
+                    static_cast<unsigned long>(shared.size()), baseName.c_str(), examples);
+            }
+        }
+    } catch (...) {
+        LogLine("WARN", "[MOBCHECK] script check of %s failed unexpectedly and was skipped", path);
+    }
+}
+
 // Return whether this exact path has already been through ValidateMobFile
 // during this process's lifetime, recording it if not.
 static bool HasMobFileAlreadyBeenValidated(const char* path) {
@@ -1916,9 +2338,41 @@ static bool HasMobFileAlreadyBeenValidated(const char* path) {
 // invalid data is flagged as an error: a root length that doesn't match the
 // actual file size is common (the file can be extended, or resaved by the
 // navmesh generator, after the root length was written) and is only DEBUG.
+// Lower-case, backslash-separated, absolute form of a path, for comparing folders.
+static std::string NormalizedFullPath(const char* path) {
+    char full[MAX_PATH] = {};
+    DWORD length = GetFullPathNameA(path, sizeof(full), full, NULL);
+    std::string result = (length > 0 && length < sizeof(full)) ? std::string(full) : std::string(path);
+    for (size_t i = 0; i < result.size(); ++i) {
+        result[i] = result[i] == '/' ? '\\' : static_cast<char>(tolower(static_cast<unsigned char>(result[i])));
+    }
+    return result;
+}
+
+// Is this file inside the folder of the mod that owns this um.dll ("...\Mods\Universal-Mod\")?
+// The game opens other mods' maps and the base game's too; only this mod's are validated.
+static bool IsInsideOwnModFolder(const char* path) {
+    static std::string modFolder;
+    if (modFolder.empty()) {
+        char dllPath[MAX_PATH] = {};
+        if (g_dllModule && GetModuleFileNameA(g_dllModule, dllPath, sizeof(dllPath)) != 0) {
+            char* slash = strrchr(dllPath, '\\');
+            if (slash) *slash = '\0';
+            modFolder = NormalizedFullPath(dllPath) + "\\";
+        }
+    }
+    if (modFolder.empty()) {
+        return true; // cannot tell where this DLL lives: better to validate than to silently skip
+    }
+    return NormalizedFullPath(path).compare(0, modFolder.size(), modFolder) == 0;
+}
+
 static void ValidateMobFile(const char* path) {
     if (!g_enableMobValidation || !path || !HasFileExtension(path, "mob")) {
         return;
+    }
+    if (!IsInsideOwnModFolder(path)) {
+        return; // another mod's map (or the base game's) that the game also opens: not this mod's business
     }
     if (HasMobFileAlreadyBeenValidated(path)) {
         // The game routinely opens the same .mob file twice in a row (a size
@@ -2009,6 +2463,7 @@ static void ValidateMobFile(const char* path) {
         }
         pos += length;
     }
+    ValidateMobScript(path, buffer, bytesRead, &hasError);
     if (!objectSectionSeen) {
         LogLine("DEBUG", "[MOBCHECK] %s has no OBJECT_SECTION node (placement-only or menu mob?)", path);
     } else if (!hasError) {
@@ -2017,31 +2472,1009 @@ static void ValidateMobFile(const char* path) {
     free(buffer);
 }
 
-// Opening a .mob file means the engine is loading a new map - the main menu
-// is itself a map (ZoneMainMenuNew.mob) with a fixed camera, like any other.
-// Heap-corruption crashes have been reproduced 4 times in a row, every time
-// within a few seconds of this event (see um.log from 2026-09-18), so treat
-// the time right after as a window worth the extra per-allocation heap
-// validation HookedHeapAlloc/HookedHeapFree/HookedHeapReAlloc do below -
-// normally far too expensive to do on every single allocation for the
-// entire session.
-static void MarkMapTransitionWindow(const char* path) {
-    if (!g_enableHeapValidateOnMapLoad || !HasFileExtension(path, "mob")) {
-        return;
+// ---------------------------------------------------------------------------
+// HEAP_FREE_QUARANTINE
+//
+// Crash dumps from Wine show game.exe destroying a UI screen (0x5f6620) whose
+// child-widget list still holds a pointer to a widget that was already freed:
+// the virtual call through it (0x5ec010) reads a vtable pointer out of freed
+// memory. Windows' heap tends to leave a freed block's contents intact, so
+// the stale pointer still lands on a valid vtable and the bug goes unnoticed;
+// Wine's heap overwrites/reuses the block almost immediately and the process
+// dies. Holding recently freed blocks back - never touching them, never
+// handing them out again - gives Wine the same forgiving behavior, and any
+// write through a stale pointer then corrupts nothing else either.
+//
+// game.exe's static CRT (VC7.1) selects the plain system heap on any NT 5+
+// OS (__heap_select at 0x6f539e), so every malloc/free/new/delete reaches
+// HeapAlloc/HeapFree on its private _crtheap through game.exe's own import
+// table, which is exactly what PatchImportedFunction hooks. (On an OS that
+// reports as Windows 9x it would use its own small-block heap instead, which
+// bypasses HeapFree - ReadGameCrtHeapMode() below is logged so that's visible.)
+// ---------------------------------------------------------------------------
+static const int kQuarantineCallerSlots = 6;
+
+struct QuarantinedBlock {
+    HANDLE heap;
+    LPVOID pointer;
+    SIZE_T size;
+    DWORD flags;
+    DWORD freedTickMs;                      // GetTickCount() when the game freed it
+    DWORD vtable;                           // its first dword if that pointed into game.exe (an object's vtable), else 0
+    DWORD callers[kQuarantineCallerSlots];  // return-address candidates of the free, innermost first (0 = unused)
+    char label[32];                         // a name the freed object mentions (model, mesh, texture...), "" if none found
+};
+
+// Bounds the bookkeeping (a std::deque + std::unordered_set entry per block)
+// when the game frees very many tiny blocks: the oldest are really freed once
+// either the block count or the byte limit is exceeded. The count limit scales
+// with the MB setting, assuming 256-byte blocks on average (measured: ~480 B
+// in this game's map loads), so it only binds when blocks are unusually small.
+static const size_t kQuarantineBlocksPerMb = 4096;
+static const unsigned long kQuarantineDoubleFreeLogLimit = 10;
+static const unsigned long kQuarantineReallocLogLimit = 5;
+
+static CRITICAL_SECTION g_quarantineLock;
+// Set only once the hooks are live, and deliberately never cleared by a config
+// reload: blocks already held must keep being recognized as held.
+static bool g_heapFreeQuarantineInstalled = false;
+// Two pools, each a FIFO with its own limits: 0 = data buffers and everything else (the
+// HEAP_FREE_QUARANTINE_MB window), 1 = small OBJECTS - blocks that start with a game vtable -
+// with a separate window, so a long-lived widget's dangling child stays held for far longer than
+// the megabytes of pixel data freed around it.
+struct QuarantinePool {
+    std::deque<QuarantinedBlock> queue;
+    unsigned long long frontSequence = 0; // sequence number of queue.front()
+    unsigned long long nextSequence = 0;
+    SIZE_T bytes = 0;
+    SIZE_T byteLimit = 0;
+    size_t maxBlocks = 0;
+};
+static QuarantinePool g_quarantinePools[2];
+static const int kObjectPool = 1;
+static const SIZE_T kObjectPoolMaxBlockBytes = 16384;
+// HeapSize above this is not a size: the block's heap header was overwritten.
+static const SIZE_T kMaxSaneBlockBytes = 0x20000000;
+static unsigned long g_quarantineCorruptHeaders = 0;
+
+// Every live allocation game.exe made through its own HeapAlloc since this hook went in (start ->
+// requested size). A HeapFree for a pointer that is not a block's start but lies inside a live block
+// is a free of the MIDDLE of an allocation (an array element): on Wine that corrupts the heap, and
+// the crashes seen so far (stale children, zeroed list nodes, damaged headers) fit it.
+static const int kAllocCallerSlots = 3;
+struct LiveBlock {
+    DWORD size;                          // the size the game asked for (the real block is g_canaryBytes larger)
+    HANDLE heap;
+    DWORD tickMs;                        // GetTickCount() at the allocation
+    DWORD callers[kAllocCallerSlots];    // who allocated it (return-address candidates, innermost first)
+};
+// Every allocation is made g_canaryBytes larger and the extra bytes are filled with kCanaryFill; the
+// pointer returned to the game is unchanged. A buffer overrun lands in those bytes first, so a change
+// there means "this block was written past its end" - and the block's allocation site is known.
+static const DWORD kMaxCanaryBytes = 256;
+static DWORD g_canaryBytes = 64;         // set from HEAP_ALLOC_PADDING when the hooks are installed
+static const BYTE kCanaryFill = 0xA5;
+static const unsigned long kOverrunLogLimit = 25;
+static unsigned long g_quarantineOverruns = 0;
+static unsigned long g_quarantineOverlaps = 0;
+static std::unordered_set<DWORD> g_reportedOverruns;
+static std::map<DWORD, unsigned long> g_overrunSites;   // allocation site (innermost caller) -> blocks it overran
+static void FormatOverrunSites(char* out, size_t outSize);
+static std::map<DWORD, LiveBlock> g_liveBlocks;
+static unsigned long g_quarantineInvalidFrees = 0;
+static unsigned long g_quarantineWritesAfterFree = 0;
+static const unsigned long kWriteAfterFreeLogLimit = 25;
+static const unsigned long kInvalidFreeLogLimit = 20;
+// The last few blocks freed with a trusted (tracked) size, to catch an array's elements being
+// freed after the array's own block was.
+struct RecentBlock {
+    DWORD start;
+    DWORD size;
+};
+static const int kRecentBlocks = 64;
+static RecentBlock g_recentFreed[kRecentBlocks];
+static unsigned g_recentFreedNext = 0;
+// pointer -> (pool, sequence number). A pool's entries leave strictly in order, so an entry is
+// pool.queue[sequence - pool.frontSequence].
+static std::unordered_map<LPVOID, std::pair<int, unsigned long long>> g_quarantineIndex;
+static unsigned long g_quarantineFreesHeld = 0;
+static unsigned long g_quarantineEvictions = 0;
+static unsigned long g_quarantineDoubleFrees = 0;
+static unsigned long g_quarantineReallocRedirects = 0;
+static bool g_quarantineFullLogged = false;
+
+// game.exe's CRT heap mode: 1 = system heap, 2 = V5 small-block heap, 3 = V6
+// small-block heap (__active_heap, 0x7caf0c in the one known OBT-1 game.exe
+// build, which is loaded at its preferred base). Returns -1 when this is not
+// that build or the address isn't readable - the number means nothing then.
+static long ReadGameCrtHeapMode() {
+    const BYTE* base = reinterpret_cast<const BYTE*>(GetModuleHandleA(NULL));
+    if (base != reinterpret_cast<const BYTE*>(0x400000)) {
+        return -1;
     }
-    g_mapTransitionDeadline = GetTickCount() + 8000;
-    LogLine("DEBUG", "[HEAPCHECK] Map load detected (%s); validating the heap on every direct "
-        "HeapAlloc/HeapFree/HeapReAlloc for the next 8s", path);
+    const IMAGE_DOS_HEADER* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(base);
+    const IMAGE_NT_HEADERS* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(base + dos->e_lfanew);
+    if (nt->OptionalHeader.SizeOfImage <= 0x7caf10 - 0x400000) {
+        return -1;
+    }
+    const DWORD* mode = reinterpret_cast<const DWORD*>(0x7caf0c);
+    if (IsBadReadPtr(mode, sizeof(DWORD))) {
+        return -1;
+    }
+    return static_cast<long>(*mode);
 }
 
-// Wraparound-safe "is GetTickCount() still before the deadline" check - see
-// the classic (LONG)(now - deadline) < 0 pattern for why this is safe across
-// the 32-bit tick counter's ~49-day rollover, unlike a plain "<" compare.
-static bool IsInMapTransitionWindow() {
-    if (!g_enableHeapValidateOnMapLoad || g_mapTransitionDeadline == 0) {
+// Does the value found on the stack look like a return address, i.e. does a
+// call instruction end right before it? Recognizes the call encodings MSVC
+// emits (E8 rel32, FF /2 with register/[reg]/[reg+disp8]/[reg+disp32]/[imm32]).
+// On the direct form, the callee is written to *target.
+static bool LooksLikeReturnAddress(const BYTE* address, DWORD* target, bool knownReadable = false) {
+    *target = 0;
+    if (!knownReadable && IsBadReadPtr(address - 6, 6)) {
         return false;
     }
-    return static_cast<LONG>(GetTickCount() - g_mapTransitionDeadline) < 0;
+    if (address[-5] == 0xE8) {
+        *target = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(address) +
+            *reinterpret_cast<const LONG*>(address - 4));
+        return true;
+    }
+    if (address[-2] == 0xFF && ((address[-1] & 0xF8) == 0xD0 || (address[-1] & 0xF8) == 0x10)) {
+        return true;
+    }
+    if (address[-3] == 0xFF && (address[-2] & 0xF8) == 0x50) {
+        return true;
+    }
+    if (address[-6] == 0xFF && (address[-5] == 0x15 || (address[-5] & 0xF8) == 0x90)) {
+        return true;
+    }
+    return false;
+}
+
+// Log the return-address-looking words in game.exe's code found in the next
+// 2 KB of this thread's stack, like a hand-rolled backtrace that copes with
+// the FPO frames game.exe is built with (which RtlCaptureStackBackTrace's
+// frame-pointer walk cannot follow). Innermost first; needs no symbols.
+static void LogCallerCandidates(const char* what) {
+    const BYTE* exe = reinterpret_cast<const BYTE*>(GetModuleHandleA(NULL));
+    if (!exe) {
+        return;
+    }
+    const IMAGE_DOS_HEADER* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(exe);
+    const IMAGE_NT_HEADERS* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(exe + dos->e_lfanew);
+    ULONG_PTR low = reinterpret_cast<ULONG_PTR>(exe);
+    ULONG_PTR high = low + nt->OptionalHeader.SizeOfImage;
+
+    const DWORD* sp = reinterpret_cast<const DWORD*>(__builtin_frame_address(0));
+    const DWORD* stackBase = reinterpret_cast<const DWORD*>(__readfsdword(4));
+    const DWORD* end = sp + 1024 < stackBase ? sp + 1024 : stackBase;
+
+    // LogLine truncates a message at 400 characters, so the chain is written
+    // as several lines of a few candidates each rather than one long one.
+    const int perLine = 5;
+    char text[320] = {};
+    size_t used = 0;
+    int inLine = 0;
+    int found = 0;
+    int lineNumber = 0;
+    for (const DWORD* word = sp; word < end && found < 12; ++word) {
+        ULONG_PTR value = *word;
+        DWORD target = 0;
+        if (value <= low + 6 || value >= high ||
+            !LooksLikeReturnAddress(reinterpret_cast<const BYTE*>(value), &target)) {
+            continue;
+        }
+        int wrote = target
+            ? snprintf(text + used, sizeof(text) - used, " 0x%08lX(call 0x%08lX)",
+                static_cast<unsigned long>(value), static_cast<unsigned long>(target))
+            : snprintf(text + used, sizeof(text) - used, " 0x%08lX(indirect call)",
+                static_cast<unsigned long>(value));
+        if (wrote < 0 || static_cast<size_t>(wrote) >= sizeof(text) - used) {
+            break;
+        }
+        used += static_cast<size_t>(wrote);
+        ++found;
+        if (++inLine == perLine) {
+            LogLine("WARN", "[QUARANTINE] %s - caller candidates %d-%d, innermost first:%s",
+                what, lineNumber * perLine + 1, found, text);
+            ++lineNumber;
+            used = 0;
+            inLine = 0;
+            text[0] = '\0';
+        }
+    }
+    if (inLine > 0) {
+        LogLine("WARN", "[QUARANTINE] %s - caller candidates %d-%d, innermost first:%s",
+            what, lineNumber * perLine + 1, found, text);
+    } else if (found == 0) {
+        LogLine("WARN", "[QUARANTINE] %s - no caller candidates found in game.exe", what);
+    }
+}
+
+// game.exe's own address ranges, for recognising vtable pointers and return addresses without
+// probing memory. Set up when the hooks are installed.
+static DWORD g_imageLow = 0, g_imageHigh = 0, g_codeLow = 0, g_codeHigh = 0;
+// The one known OBT-1 build: its static CRT (its own free/delete frames) lives at 0x6E0000 and
+// above, which is noise in a "who freed this" list.
+static bool g_knownGameBuild = false;
+static const DWORD kKnownBuildCrtStart = 0x6E0000;
+static const DWORD kPoisonMarker = 0xDDDDDDDD;
+static const SIZE_T kPoisonBytes = 1024;
+
+static void InitGameImageRanges() {
+    const BYTE* base = reinterpret_cast<const BYTE*>(GetModuleHandleA(NULL));
+    if (!base) return;
+    const IMAGE_DOS_HEADER* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(base);
+    const IMAGE_NT_HEADERS* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(base + dos->e_lfanew);
+    g_imageLow = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(base));
+    g_imageHigh = g_imageLow + nt->OptionalHeader.SizeOfImage;
+    const IMAGE_SECTION_HEADER* section = IMAGE_FIRST_SECTION(nt);
+    for (WORD i = 0; i < nt->FileHeader.NumberOfSections; ++i, ++section) {
+        if (section->Characteristics & IMAGE_SCN_CNT_CODE) {
+            DWORD low = g_imageLow + section->VirtualAddress;
+            DWORD high = low + section->Misc.VirtualSize;
+            if (g_codeLow == 0 || low < g_codeLow) g_codeLow = low;
+            if (high > g_codeHigh) g_codeHigh = high;
+        }
+    }
+    g_knownGameBuild = ReadGameCrtHeapMode() == 1;
+}
+
+// Where the game freed a block: return-address-looking words in game.exe's code found in the
+// next 768 bytes of this thread's stack, innermost first (the static CRT's own frames left out
+// on the known build). No symbols and no memory probing - a scan this cheap runs on every free.
+static void CaptureCallers(DWORD* out, int slots) {
+    const DWORD* sp = reinterpret_cast<const DWORD*>(__builtin_frame_address(0));
+    const DWORD* stackBase = reinterpret_cast<const DWORD*>(__readfsdword(4));
+    const DWORD* end = sp + 192 < stackBase ? sp + 192 : stackBase;
+    int found = 0;
+    for (const DWORD* word = sp; word < end && found < slots; ++word) {
+        DWORD value = *word;
+        if (value < g_codeLow + 6 || value >= g_codeHigh) continue;
+        if (g_knownGameBuild && value >= kKnownBuildCrtStart) continue;
+        DWORD target = 0;
+        if (!LooksLikeReturnAddress(reinterpret_cast<const BYTE*>(value), &target, true)) continue;
+        out[found++] = value;
+    }
+}
+
+static void CaptureFreeCallers(DWORD* out) {
+    CaptureCallers(out, kQuarantineCallerSlots);
+}
+
+static void FormatCallerList(const DWORD* callers, int count, char* out, size_t outSize) {
+    size_t used = 0;
+    out[0] = '\0';
+    for (int i = 0; i < count && callers[i]; ++i) {
+        int wrote = snprintf(out + used, outSize - used, "%s0x%08lX", i ? " <- " : "", static_cast<unsigned long>(callers[i]));
+        if (wrote < 0 || static_cast<size_t>(wrote) >= outSize - used) break;
+        used += static_cast<size_t>(wrote);
+    }
+    if (out[0] == '\0') snprintf(out, outSize, "(not recorded)");
+}
+
+static void FormatCallers(const DWORD* callers, char* out, size_t outSize) {
+    FormatCallerList(callers, kQuarantineCallerSlots, out, outSize);
+}
+
+// Is this a plausible asset name: 4-31 printable characters ending at a NUL?
+static bool LooksLikeName(const BYTE* text, size_t available, char* out, size_t outSize) {
+    size_t length = 0;
+    while (length < available && length < outSize - 1 && text[length] >= 0x20 && text[length] < 0x7F) ++length;
+    if (length < 4 || length >= available || text[length] != 0) return false;
+    memcpy(out, text, length);
+    out[length] = '\0';
+    return true;
+}
+
+// The first name a freed object mentions: an inline string in its first 256 bytes, or a string one
+// pointer away (in game.exe's read-only data, or in a live heap block the game allocated). Only
+// memory the DLL already knows is readable is touched - no probing. Lock held (uses g_liveBlocks).
+static void HarvestLabelLocked(const BYTE* block, SIZE_T size, char* out, size_t outSize) {
+    out[0] = '\0';
+    SIZE_T scan = size < 256 ? size : 256;
+    for (SIZE_T i = 0; i + 5 < scan; ++i) {
+        if (block[i] >= 0x41 && block[i] < 0x7F && LooksLikeName(block + i, scan - i, out, outSize)) return; // starts with a letter
+    }
+    for (SIZE_T i = 0; i + 4 <= scan; i += 4) {
+        DWORD value = 0;
+        memcpy(&value, block + i, 4);
+        if (value < 0x10000) continue;
+        if (value >= g_imageLow && value < g_imageHigh) {
+            if (LooksLikeName(reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(value)), g_imageHigh - value, out, outSize)) return;
+            continue;
+        }
+        auto owner = g_liveBlocks.upper_bound(value);
+        if (owner == g_liveBlocks.begin()) continue;
+        --owner;
+        DWORD offset = value - owner->first;
+        if (offset >= owner->second.size) continue;
+        if (LooksLikeName(reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(value)), owner->second.size - offset, out, outSize)) return;
+    }
+}
+
+// The last freed objects that carried a name, for the crash report ("what was being torn down").
+struct RecentLabel {
+    DWORD tickMs;
+    DWORD vtable;
+    char label[32];
+};
+static const int kRecentLabels = 24;
+static RecentLabel g_recentLabels[kRecentLabels];
+static unsigned g_recentLabelNext = 0;
+
+static const QuarantinedBlock* FindHeldBlockLocked(LPVOID pointer) {
+    auto it = g_quarantineIndex.find(pointer);
+    if (it == g_quarantineIndex.end()) return nullptr;
+    const QuarantinePool& pool = g_quarantinePools[it->second.first];
+    unsigned long long position = it->second.second - pool.frontSequence;
+    return position < pool.queue.size() ? &pool.queue[static_cast<size_t>(position)] : nullptr;
+}
+
+static unsigned long OldestHeldAgeSecondsLocked() {
+    DWORD oldest = 0;
+    DWORD now = GetTickCount();
+    for (const QuarantinePool& pool : g_quarantinePools) {
+        if (!pool.queue.empty()) {
+            DWORD age = now - pool.queue.front().freedTickMs;
+            if (age > oldest) oldest = age;
+        }
+    }
+    return oldest / 1000;
+}
+
+static size_t HeldBlockCountLocked() {
+    return g_quarantinePools[0].queue.size() + g_quarantinePools[1].queue.size();
+}
+
+static void LogQuarantineStats(const char* reason) {
+    EnterCriticalSection(&g_quarantineLock);
+    size_t blocks = HeldBlockCountLocked();
+    SIZE_T dataBytes = g_quarantinePools[0].bytes, objectBytes = g_quarantinePools[kObjectPool].bytes;
+    size_t objectBlocks = g_quarantinePools[kObjectPool].queue.size();
+    unsigned long held = g_quarantineFreesHeld;
+    unsigned long evicted = g_quarantineEvictions;
+    unsigned long doubleFrees = g_quarantineDoubleFrees;
+    unsigned long redirects = g_quarantineReallocRedirects;
+    unsigned long corrupt = g_quarantineCorruptHeaders;
+    unsigned long invalid = g_quarantineInvalidFrees;
+    unsigned long writes = g_quarantineWritesAfterFree;
+    unsigned long overruns = g_quarantineOverruns;
+    unsigned long overlaps = g_quarantineOverlaps;
+    unsigned long oldest = OldestHeldAgeSecondsLocked();
+    unsigned long liveBlocks = static_cast<unsigned long>(g_liveBlocks.size());
+    char overrunSites[160];
+    FormatOverrunSites(overrunSites, sizeof(overrunSites));
+    LeaveCriticalSection(&g_quarantineLock);
+    LogLine("DEBUG", "[QUARANTINE] %s: holding %lu freed blocks (data %.1f of %.0f MB, %lu objects %.1f of %.0f MB), the oldest freed %lu s ago; "
+        "frees held so far=%lu, really freed after eviction=%lu, double frees ignored=%lu, reallocs of freed blocks redirected=%lu, "
+        "damaged heap headers seen=%lu, invalid frees ignored=%lu, writes to freed blocks=%lu, buffer overruns=%lu (sites: %s), overlapping allocations=%lu, live blocks tracked=%lu (padding %.1f MB)", reason, static_cast<unsigned long>(blocks), dataBytes / 1048576.0,
+        g_quarantinePools[0].byteLimit / 1048576.0, static_cast<unsigned long>(objectBlocks), objectBytes / 1048576.0,
+        g_quarantinePools[kObjectPool].byteLimit / 1048576.0, oldest, held, evicted, doubleFrees, redirects, corrupt, invalid, writes, overruns, overrunSites, overlaps, liveBlocks,
+        liveBlocks * static_cast<double>(g_canaryBytes) / 1048576.0);
+}
+
+// Point-in-time numbers for the overlay; false when the quarantine isn't active.
+static bool GetQuarantineSnapshot(double* heldMb, double* limitMb, double* objectMb, double* objectLimitMb,
+        unsigned long* blocks, unsigned long* doubleFrees, unsigned long* oldestSeconds, unsigned long* invalidFrees,
+        unsigned long* problems, unsigned long* overruns) {
+    if (!g_heapFreeQuarantineInstalled) {
+        return false;
+    }
+    EnterCriticalSection(&g_quarantineLock);
+    *heldMb = g_quarantinePools[0].bytes / 1048576.0;
+    *objectMb = g_quarantinePools[kObjectPool].bytes / 1048576.0;
+    *blocks = static_cast<unsigned long>(HeldBlockCountLocked());
+    *doubleFrees = g_quarantineDoubleFrees;
+    *invalidFrees = g_quarantineInvalidFrees;
+    // Overruns are absorbed by the padding, so they are counted apart from the real problems.
+    *overruns = g_quarantineOverruns;
+    *problems = g_quarantineOverlaps + g_quarantineWritesAfterFree + g_quarantineCorruptHeaders;
+    *oldestSeconds = OldestHeldAgeSecondsLocked();
+    LeaveCriticalSection(&g_quarantineLock);
+    *limitMb = g_quarantinePools[0].byteLimit / 1048576.0;
+    *objectLimitMb = g_quarantinePools[kObjectPool].byteLimit / 1048576.0;
+    return true;
+}
+
+// Poison mode stamps a held block's first kPoisonBytes with 0xDDDDDDDD. If any of it has changed,
+// something wrote into the block AFTER the game freed it: a stale pointer used for writing, or an
+// allocation handed out on top of live memory. Returns the number of changed dwords.
+static unsigned PoisonChangedDwords(const QuarantinedBlock& block, SIZE_T* firstChange) {
+    SIZE_T bytes = (block.size < kPoisonBytes ? block.size : kPoisonBytes) & ~static_cast<SIZE_T>(3);
+    const DWORD* words = static_cast<const DWORD*>(block.pointer);
+    unsigned changed = 0;
+    *firstChange = 0;
+    for (SIZE_T i = 0; i < bytes / sizeof(DWORD); ++i) {
+        if (words[i] != kPoisonMarker) {
+            if (changed == 0) *firstChange = i * sizeof(DWORD);
+            ++changed;
+        }
+    }
+    return changed;
+}
+
+// What was written: readable text if it looks like text (script text, names), else the first bytes in hex.
+static void DescribeWrittenBytes(const BYTE* bytes, SIZE_T available, char* out, size_t outSize) {
+    size_t length = available < 48 ? available : 48;
+    size_t printable = 0;
+    for (size_t i = 0; i < length; ++i) if (bytes[i] >= 0x20 && bytes[i] < 0x7F) ++printable;
+    if (length >= 8 && printable * 10 >= length * 7) {
+        char text[64];
+        for (size_t i = 0; i < length; ++i) text[i] = (bytes[i] >= 0x20 && bytes[i] < 0x7F) ? static_cast<char>(bytes[i]) : '.';
+        text[length] = '\0';
+        snprintf(out, outSize, "text \"%s\"", text);
+    } else {
+        size_t shown = length < 16 ? length : 16;
+        size_t used = snprintf(out, outSize, "bytes");
+        for (size_t i = 0; i < shown && used + 4 < outSize; ++i) used += snprintf(out + used, outSize - used, " %02X", bytes[i]);
+    }
+}
+
+static void ReportWriteAfterFree(const QuarantinedBlock& block, unsigned changed, SIZE_T firstChange, const char* when) {
+    unsigned long number = ++g_quarantineWritesAfterFree;
+    if (number > kWriteAfterFreeLogLimit) return;
+    char callers[160], written[140];
+    FormatCallers(block.callers, callers, sizeof(callers));
+    SIZE_T avail = (block.size < kPoisonBytes ? block.size : kPoisonBytes);
+    DescribeWrittenBytes(static_cast<const BYTE*>(block.pointer) + firstChange, avail - firstChange, written, sizeof(written));
+    LogLine("WARN", "[QUARANTINE] WRITE AFTER FREE #%lu (%s): block %p (%lu bytes, vtable when freed 0x%08lX, freed %.1f s ago by %s) "
+        "was written to while free - %u dwords changed, the first at +0x%lX: %s%s%s", number, when, block.pointer,
+        static_cast<unsigned long>(block.size), static_cast<unsigned long>(block.vtable),
+        (GetTickCount() - block.freedTickMs) / 1000.0, callers, changed, static_cast<unsigned long>(firstChange), written,
+        block.label[0] ? "; the freed object mentioned: " : "", block.label);
+}
+
+// True when the guard bytes after a live block were changed (the 16 bytes found are copied out).
+// Unreadable memory counts as intact: a block freed behind the hooks' back must not crash the scan.
+static bool CanaryDamaged(DWORD start, DWORD size, BYTE* found) {
+    if (g_canaryBytes == 0) return false;
+    const BYTE* tail = reinterpret_cast<const BYTE*>(static_cast<ULONG_PTR>(start)) + size;
+    if (IsBadReadPtr(tail, g_canaryBytes)) return false;
+    bool damaged = false;
+    for (DWORD i = 0; i < g_canaryBytes; ++i) {
+        found[i] = tail[i];
+        if (tail[i] != kCanaryFill) damaged = true;
+    }
+    return damaged;
+}
+
+// The most-overrunning allocation sites, "0x005AA92E x40, ...", for the stats and the crash report.
+static void FormatOverrunSites(char* out, size_t outSize) {
+    std::vector<std::pair<unsigned long, DWORD>> sites;
+    for (const auto& entry : g_overrunSites) sites.push_back({entry.second, entry.first});
+    std::sort(sites.begin(), sites.end(), [](const std::pair<unsigned long, DWORD>& x, const std::pair<unsigned long, DWORD>& y) {
+        return x.first > y.first;
+    });
+    size_t used = 0;
+    out[0] = '\0';
+    for (size_t i = 0; i < sites.size() && i < 6; ++i) {
+        int wrote = snprintf(out + used, outSize - used, "%s0x%08lX x%lu", i ? ", " : "", static_cast<unsigned long>(sites[i].second), sites[i].first);
+        if (wrote < 0 || static_cast<size_t>(wrote) >= outSize - used) break;
+        used += static_cast<size_t>(wrote);
+    }
+    if (out[0] == '\0') snprintf(out, outSize, "none");
+}
+
+// Once per block; logged for the first few blocks of each allocation site (a site that overruns
+// does it for every object it makes). Lock held.
+static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found, const char* when) {
+    if (!g_reportedOverruns.insert(start).second) return;
+    ++g_quarantineOverruns;
+    unsigned long siteCount = ++g_overrunSites[block.callers[0]];
+    bool powerOfTen = siteCount == 10 || siteCount == 100 || siteCount == 1000 || siteCount == 10000;
+    if (siteCount > 3 && !powerOfTen) return;
+    int first = -1, last = -1;
+    for (DWORD i = 0; i < g_canaryBytes; ++i) {
+        if (found[i] != kCanaryFill) { if (first < 0) first = static_cast<int>(i); last = static_cast<int>(i); }
+    }
+    char callers[100], written[140];
+    FormatCallerList(block.callers, kAllocCallerSlots, callers, sizeof(callers));
+    DWORD shown = g_canaryBytes - static_cast<DWORD>(first) < 24 ? g_canaryBytes - static_cast<DWORD>(first) : 24;
+    DescribeWrittenBytes(found + first, shown, written, sizeof(written));
+    LogLine("WARN", "[QUARANTINE] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written PAST ITS END, "
+        "up to %d bytes beyond it (first at +%d: %s); this allocation site has now overrun %lu block(s)%s",
+        when, static_cast<unsigned long>(start), static_cast<unsigned long>(block.size), (GetTickCount() - block.tickMs) / 1000.0,
+        callers, last + 1, first, written, siteCount, siteCount > 3 ? " (not logging each one any more)" : "");
+}
+
+// The heap returned memory that overlaps a block the game still has: something is wrong with the
+// allocator's bookkeeping (a stale free, or damaged headers). Lock held.
+static void ReportOverlap(DWORD start, DWORD size, const DWORD* callers, DWORD otherStart, const LiveBlock& other) {
+    unsigned long number = ++g_quarantineOverlaps;
+    if (number > kOverrunLogLimit) return;
+    char byCallers[100], otherCallers[100];
+    FormatCallerList(callers, kAllocCallerSlots, byCallers, sizeof(byCallers));
+    FormatCallerList(other.callers, kAllocCallerSlots, otherCallers, sizeof(otherCallers));
+    LogLine("WARN", "[QUARANTINE] OVERLAPPING ALLOCATION #%lu: HeapAlloc returned 0x%08lX (%lu bytes, requested by %s) which overlaps the LIVE "
+        "block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) - the heap handed out memory that was still in use", number,
+        static_cast<unsigned long>(start), static_cast<unsigned long>(size), byCallers, static_cast<unsigned long>(otherStart),
+        static_cast<unsigned long>(other.size), (GetTickCount() - other.tickMs) / 1000.0, otherCallers);
+}
+
+// Checks every live block's guard bytes, a chunk at a time so the game is never held up for long.
+// A block the heap no longer knows (freed behind the hooks' back) is dropped instead of reported.
+static DWORD WINAPI OverrunWatchThread(LPVOID) {
+    for (;;) {
+        Sleep(500);
+        DWORD resumeAt = 0;
+        for (;;) {
+            EnterCriticalSection(&g_quarantineLock);
+            auto it = g_liveBlocks.lower_bound(resumeAt);
+            for (int checked = 0; it != g_liveBlocks.end() && checked < 20000; ++checked) {
+                BYTE found[kMaxCanaryBytes];
+                if (CanaryDamaged(it->first, it->second.size, found)) {
+                    const void* pointer = reinterpret_cast<const void*>(static_cast<ULONG_PTR>(it->first));
+                    if (HeapSize(it->second.heap, 0, pointer) == static_cast<SIZE_T>(-1)) {
+                        it = g_liveBlocks.erase(it);
+                        continue;
+                    }
+                    ReportOverrun(it->first, it->second, found, "found by the background scan");
+                }
+                ++it;
+            }
+            bool done = it == g_liveBlocks.end();
+            resumeAt = done ? 0 : it->first;
+            LeaveCriticalSection(&g_quarantineLock);
+            if (done) break;
+            Sleep(1);
+        }
+    }
+    return 0;
+}
+
+// Really free the oldest blocks of a pool until it is back within its limits. Lock held.
+static bool TrimPoolLocked(QuarantinePool& pool) {
+    bool evictedAny = false;
+    while (!pool.queue.empty() && (pool.bytes > pool.byteLimit || pool.queue.size() > pool.maxBlocks)) {
+        QuarantinedBlock oldest = pool.queue.front();
+        pool.queue.pop_front();
+        ++pool.frontSequence;
+        if (g_heapFreeQuarantinePoison && oldest.size >= sizeof(DWORD)) {
+            SIZE_T firstChange = 0;
+            unsigned changed = PoisonChangedDwords(oldest, &firstChange);
+            if (changed) ReportWriteAfterFree(oldest, changed, firstChange, "found when the block left the quarantine");
+        }
+        g_quarantineIndex.erase(oldest.pointer);
+        pool.bytes -= oldest.size;
+        ++g_quarantineEvictions;
+        g_originalHeapFree(oldest.heap, oldest.flags, oldest.pointer);
+        evictedAny = true;
+    }
+    return evictedAny;
+}
+
+// Called for every HeapFree game.exe makes directly. Returns true when the
+// free was fully handled here (block held back, or a double free swallowed),
+// false when the caller should just forward it to the real HeapFree.
+static bool QuarantineHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
+    bool doubleFree = false;
+    unsigned long doubleFreeNumber = 0;
+    bool justFilled = false;
+    bool damagedHeader = false;
+    unsigned long damagedNumber = 0;
+    SIZE_T damagedSize = 0;
+    DWORD around[8] = {}; // the 16 bytes just before the block and its first 16 bytes
+    QuarantinedBlock first = {};
+    bool invalidFree = false;
+    unsigned long invalidNumber = 0;
+    DWORD ownerStart = 0, ownerSize = 0;
+    DWORD trackedSize = 0;
+    bool trackedStart = false;
+
+    // Gathered before taking the lock: it only reads this thread's stack.
+    DWORD callers[kQuarantineCallerSlots] = {};
+    CaptureFreeCallers(callers);
+
+    EnterCriticalSection(&g_quarantineLock);
+    const QuarantinedBlock* earlier = FindHeldBlockLocked(pointer);
+    if (earlier) {
+        doubleFree = true;
+        doubleFreeNumber = ++g_quarantineDoubleFrees;
+        first = *earlier;
+    } else {
+        // Is this the start of a block the game allocated, or a pointer into the middle of one?
+        const DWORD address = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
+        auto live = g_liveBlocks.find(address);
+        if (live != g_liveBlocks.end()) {
+            trackedStart = true;
+            trackedSize = live->second.size;
+            BYTE found[kMaxCanaryBytes];
+            if (CanaryDamaged(address, live->second.size, found)) {
+                ReportOverrun(address, live->second, found, "found when the game freed the block");
+            }
+            g_liveBlocks.erase(live);
+        } else {
+            auto after = g_liveBlocks.upper_bound(address);
+            if (after != g_liveBlocks.begin()) {
+                --after;
+                if (address - after->first < after->second.size) {
+                    invalidFree = true;
+                    ownerStart = after->first;
+                    ownerSize = after->second.size;
+                }
+            }
+            if (!invalidFree) {
+                for (int i = 0; i < kRecentBlocks; ++i) {
+                    const RecentBlock& recent = g_recentFreed[i];
+                    if (recent.size && address > recent.start && address - recent.start < recent.size) {
+                        invalidFree = true;
+                        ownerStart = recent.start;
+                        ownerSize = recent.size;
+                        break;
+                    }
+                }
+            }
+        }
+        if (invalidFree) {
+            invalidNumber = ++g_quarantineInvalidFrees;
+        }
+    }
+    if (!invalidFree && !doubleFree) {
+        // HeapSize doubles as a validity check: -1 means this is not a live
+        // block of this heap, so let the real HeapFree deal with (and report)
+        // whatever it is.
+        SIZE_T size = HeapSize(heap, 0, pointer);
+        if (size == static_cast<SIZE_T>(-1)) {
+            LeaveCriticalSection(&g_quarantineLock);
+            return false;
+        }
+        if (size > kMaxSaneBlockBytes) {
+            // The heap header in front of this block was overwritten (it reads as a negative
+            // or absurd size). Freeing it for real could corrupt the heap further, so it is
+            // kept forever instead - a small leak - and reported: this is where a buffer
+            // overrun from the block before it becomes visible.
+            damagedHeader = true;
+            damagedNumber = ++g_quarantineCorruptHeaders;
+            damagedSize = size;
+            const BYTE* before = static_cast<const BYTE*>(pointer) - 16;
+            if (!IsBadReadPtr(before, 16)) memcpy(around, before, 16);
+            if (!IsBadReadPtr(pointer, 16)) memcpy(around + 4, pointer, 16);
+        } else {
+            QuarantinedBlock block = {};
+            block.heap = heap;
+            block.pointer = pointer;
+            block.size = size;
+            block.flags = flags;
+            block.freedTickMs = GetTickCount();
+            memcpy(block.callers, callers, sizeof(callers));
+            if (size >= sizeof(DWORD)) {
+                // The block is still a live allocation here, so its first dword is readable.
+                DWORD firstDword = 0;
+                memcpy(&firstDword, pointer, sizeof(firstDword));
+                if (firstDword >= g_imageLow && firstDword < g_imageHigh && (firstDword & 3) == 0) {
+                    block.vtable = firstDword; // an object of a game class: the vtable says which one
+                }
+            }
+            if (block.vtable && size <= kObjectPoolMaxBlockBytes) {
+                HarvestLabelLocked(static_cast<const BYTE*>(pointer), size, block.label, sizeof(block.label));
+                if (block.label[0]) {
+                    RecentLabel& recent = g_recentLabels[g_recentLabelNext++ % kRecentLabels];
+                    recent.tickMs = block.freedTickMs;
+                    recent.vtable = block.vtable;
+                    memcpy(recent.label, block.label, sizeof(recent.label));
+                }
+            }
+            if (g_heapFreeQuarantinePoison) {
+                // Any stale read - a vtable, a list node's next pointer, a child pointer - now
+                // returns garbage at once, while this free is still fresh in the window.
+                SIZE_T poisonBytes = (size < kPoisonBytes ? size : kPoisonBytes) & ~static_cast<SIZE_T>(3);
+                DWORD* words = static_cast<DWORD*>(pointer);
+                for (SIZE_T i = 0; i < poisonBytes / sizeof(DWORD); ++i) words[i] = kPoisonMarker;
+            }
+            int poolIndex = (block.vtable && size <= kObjectPoolMaxBlockBytes &&
+                g_quarantinePools[kObjectPool].byteLimit > 0) ? kObjectPool : 0;
+            QuarantinePool& pool = g_quarantinePools[poolIndex];
+            if (trackedStart) {
+                g_recentFreed[g_recentFreedNext++ % kRecentBlocks] =
+                    RecentBlock{ static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)), trackedSize };
+            }
+            pool.queue.push_back(block);
+            g_quarantineIndex[pointer] = std::make_pair(poolIndex, pool.nextSequence++);
+            pool.bytes += size;
+            ++g_quarantineFreesHeld;
+            if (TrimPoolLocked(g_quarantinePools[0]) | TrimPoolLocked(g_quarantinePools[kObjectPool])) {
+                if (!g_quarantineFullLogged) {
+                    g_quarantineFullLogged = true;
+                    justFilled = true;
+                }
+            }
+        }
+    }
+    LeaveCriticalSection(&g_quarantineLock);
+
+    if (invalidFree) {
+        if (invalidNumber <= kInvalidFreeLogLimit) {
+            char freedBy[160];
+            FormatCallers(callers, freedBy, sizeof(freedBy));
+            LogLine("WARN", "[QUARANTINE] INVALID FREE #%lu ignored: %p is INSIDE the block at 0x%08lX (%lu bytes, offset +0x%lX), not the start of "
+                "an allocation - the game freed the middle of a block (an array element?). Freed by: %s",
+                invalidNumber, pointer, static_cast<unsigned long>(ownerStart), static_cast<unsigned long>(ownerSize),
+                static_cast<unsigned long>(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)) - ownerStart), freedBy);
+            if (invalidNumber <= 3) {
+                LogCallerCandidates("invalid free");
+            }
+        }
+        return true;
+    }
+    if (damagedHeader && damagedNumber <= kQuarantineDoubleFreeLogLimit) {
+        char freedBy[160];
+        FormatCallers(callers, freedBy, sizeof(freedBy));
+        LogLine("WARN", "[QUARANTINE] DAMAGED HEAP HEADER #%lu: block %p reports a size of %lu bytes (a wrapped negative), so the 16 bytes "
+            "in front of it were overwritten - most likely by a buffer overrun in the block before it. Not freed (kept). "
+            "Bytes before the block: %08lX %08lX %08lX %08lX; its first bytes: %08lX %08lX %08lX %08lX; freed by: %s",
+            damagedNumber, pointer, static_cast<unsigned long>(damagedSize), around[0], around[1], around[2], around[3],
+            around[4], around[5], around[6], around[7], freedBy);
+        return true;
+    }
+    if (damagedHeader) {
+        return true;
+    }
+    if (doubleFree && doubleFreeNumber <= kQuarantineDoubleFreeLogLimit) {
+        char firstCallers[160];
+        FormatCallers(first.callers, firstCallers, sizeof(firstCallers));
+        LogLine("WARN", "[QUARANTINE] Ignored double free #%lu of block %p (heap=%p size=%lu, vtable when first freed=0x%08lX) - "
+            "it was first freed %.1f s ago by: %s", doubleFreeNumber, pointer, heap, static_cast<unsigned long>(first.size),
+            static_cast<unsigned long>(first.vtable), (GetTickCount() - first.freedTickMs) / 1000.0, firstCallers);
+        LogCallerCandidates("second free");
+    }
+    if (justFilled) {
+        LogQuarantineStats("Quarantine is full, from now on the oldest freed blocks are really freed");
+    }
+    return true;
+}
+
+static bool QuarantineHolds(LPVOID pointer) {
+    EnterCriticalSection(&g_quarantineLock);
+    bool held = FindHeldBlockLocked(pointer) != nullptr;
+    LeaveCriticalSection(&g_quarantineLock);
+    return held;
+}
+
+// Forget every held block of a heap that is about to be destroyed: really
+// freeing into a destroyed heap later would corrupt memory.
+static void QuarantineForgetHeap(HANDLE heap) {
+    EnterCriticalSection(&g_quarantineLock);
+    for (auto it = g_liveBlocks.begin(); it != g_liveBlocks.end();) {
+        it = it->second.heap == heap ? g_liveBlocks.erase(it) : std::next(it);
+    }
+    g_quarantineIndex.clear();
+    for (int poolIndex = 0; poolIndex < 2; ++poolIndex) {
+        QuarantinePool& pool = g_quarantinePools[poolIndex];
+        std::deque<QuarantinedBlock> kept;
+        for (const QuarantinedBlock& block : pool.queue) {
+            if (block.heap == heap) pool.bytes -= block.size;
+            else kept.push_back(block);
+        }
+        pool.queue.swap(kept);
+        // Re-number what is left so the index stays consistent with the queue.
+        pool.frontSequence = 0;
+        pool.nextSequence = 0;
+        for (const QuarantinedBlock& block : pool.queue) {
+            g_quarantineIndex[block.pointer] = std::make_pair(poolIndex, pool.nextSequence++);
+        }
+    }
+    LeaveCriticalSection(&g_quarantineLock);
+}
+
+// For a register that looks like a pointer to a heap object: what is at that address, and what
+// does the game's heap say about it? "FREE" means the game's own heap no longer has an allocated
+// block starting there - the pointer is stale - while "allocated" means something (possibly a
+// different object that reused the address) lives there now. The first dwords show the vtable
+// (which class it is) or zero/garbage if the memory was cleared or reused.
+static void LogHeapPointerProbe(const char* label, DWORD value) {
+    if (value < 0x10000 || value >= 0x7FFF0000 || (value & 7) != 0) return;
+    if (value >= g_imageLow && value < g_imageHigh) return;
+    const void* pointer = reinterpret_cast<const void*>(static_cast<ULONG_PTR>(value));
+    if (IsBadReadPtr(pointer, 16)) return;
+    DWORD dwords[4] = {};
+    memcpy(dwords, pointer, sizeof(dwords));
+    HANDLE heap = NULL;
+    if (g_knownGameBuild) {
+        const HANDLE* crtHeap = reinterpret_cast<const HANDLE*>(0x7caf08); // game.exe's _crtheap
+        if (!IsBadReadPtr(crtHeap, sizeof(HANDLE))) heap = *crtHeap;
+    }
+    const char* state = "game heap not identified";
+    char stateBuffer[80];
+    if (heap) {
+        SIZE_T size = HeapSize(heap, 0, pointer);
+        if (size == static_cast<SIZE_T>(-1)) {
+            state = "NOT an allocated block of the game heap: freed (stale pointer) or not a block start";
+        } else {
+            snprintf(stateBuffer, sizeof(stateBuffer), "an ALLOCATED block of %lu bytes in the game heap", static_cast<unsigned long>(size));
+            state = stateBuffer;
+        }
+    }
+    LogLine("FATAL", "[QUARANTINE] crash: %s = 0x%08lX is %s; first dwords %08lX %08lX %08lX %08lX", label,
+        static_cast<unsigned long>(value), state, dwords[0], dwords[1], dwords[2], dwords[3]);
+}
+
+// Crash report: which freed block, if any, do the crashing thread's registers and stack point
+// into? With HEAP_FREE_QUARANTINE_POISON this names the object whose stale use crashed the game
+// and the code that freed it; without it, "none" says the object is older than the window (or is
+// not a heap block at all). Non-blocking on the lock: the crash may have happened inside it.
+// Only the words right at the stack pointer are looked at: a stack slot deeper down is very
+// often a stale leftover, and with hundreds of MB of freed blocks held one would "hit" one by
+// coincidence. Registers and the fault address are the strong evidence.
+static const DWORD kCrashStackWords = 32;
+
+static void LogQuarantineCrashAnalysis(const CONTEXT* context, const EXCEPTION_RECORD* record) {
+#if defined(_M_IX86) || defined(__i386__)
+    if (!g_heapFreeQuarantineInstalled || !context) {
+        return;
+    }
+    struct Value { const char* label; DWORD value; DWORD stackOffset; };
+    std::vector<Value> values;
+    values.push_back({"EAX", context->Eax, 0});
+    values.push_back({"EBX", context->Ebx, 0});
+    values.push_back({"ECX", context->Ecx, 0});
+    values.push_back({"EDX", context->Edx, 0});
+    values.push_back({"ESI", context->Esi, 0});
+    values.push_back({"EDI", context->Edi, 0});
+    values.push_back({"EBP", context->Ebp, 0});
+    if (record && record->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && record->NumberParameters >= 2) {
+        values.push_back({"fault address", static_cast<DWORD>(record->ExceptionInformation[1]), 0});
+    }
+    const DWORD stackLimit = __readfsdword(8);
+    const DWORD stackBase = __readfsdword(4);
+    if (context->Esp >= stackLimit && context->Esp < stackBase && (context->Esp & 3) == 0) {
+        const DWORD* words = reinterpret_cast<const DWORD*>(context->Esp);
+        for (DWORD i = 0; i < kCrashStackWords && context->Esp + (i + 1) * 4 <= stackBase; ++i) {
+            values.push_back({"stack", words[i], i * 4});
+        }
+    }
+
+    // Registers first: what each heap-looking one points at. Skipped when the crash is not in
+    // game.exe itself (inside ntdll the heap may be damaged and a HeapSize call is unsafe).
+    if (record && reinterpret_cast<DWORD>(record->ExceptionAddress) >= g_imageLow &&
+            reinterpret_cast<DWORD>(record->ExceptionAddress) < g_imageHigh) {
+        for (size_t i = 0; i < 7; ++i) {
+            LogHeapPointerProbe(values[i].label, values[i].value);
+        }
+    }
+
+    bool poisonSeen = false;
+    for (const Value& v : values) {
+        if (v.value >= kPoisonMarker && v.value < kPoisonMarker + 0x400) poisonSeen = true;
+    }
+    if (poisonSeen) {
+        LogLine("FATAL", "[QUARANTINE] crash: a register or the fault address holds the poison marker 0xDDDDDDDD - "
+            "something read memory that was already freed (a stale pointer: object, list node or child)");
+    }
+    if (!TryEnterCriticalSection(&g_quarantineLock)) {
+        LogLine("FATAL", "[QUARANTINE] crash: could not inspect the held blocks (another thread holds the quarantine lock)");
+        return;
+    }
+    int hits = 0;
+    DWORD now = GetTickCount();
+    std::unordered_set<LPVOID> reportedFromStack;
+    for (const QuarantinePool& pool : g_quarantinePools) for (const QuarantinedBlock& block : pool.queue) {
+        DWORD start = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(block.pointer));
+        for (const Value& v : values) {
+            if (v.value < start || v.value - start >= block.size) continue;
+            // A stack word is weak evidence, and one landing in a huge freed buffer (a screen
+            // surface, a texture) is a leftover, not a lead: only small blocks, once each.
+            if (v.stackOffset || strcmp(v.label, "stack") == 0) {
+                if (block.size > 16384 || !reportedFromStack.insert(block.pointer).second) continue;
+            }
+            char callers[160];
+            FormatCallers(block.callers, callers, sizeof(callers));
+            char where[96];
+            if (v.stackOffset || strcmp(v.label, "stack") == 0) snprintf(where, sizeof(where), "stack word ESP+0x%lX (weaker evidence: may be a stale leftover)", static_cast<unsigned long>(v.stackOffset));
+            else snprintf(where, sizeof(where), "%s", v.label);
+            LogLine("FATAL", "[QUARANTINE] crash: %s = 0x%08lX is inside a FREED block that is being held: block %p, %lu bytes, "
+                "offset +0x%lX, vtable when freed 0x%08lX, freed %.1f s ago by: %s%s%s", where, static_cast<unsigned long>(v.value),
+                block.pointer, static_cast<unsigned long>(block.size), static_cast<unsigned long>(v.value - start),
+                static_cast<unsigned long>(block.vtable), (now - block.freedTickMs) / 1000.0, callers,
+                block.label[0] ? "; it mentions the name: " : "", block.label);
+            if (++hits >= 8) break;
+        }
+        if (hits >= 8) break;
+    }
+    size_t held = HeldBlockCountLocked();
+    unsigned long oldest = OldestHeldAgeSecondsLocked();
+    {
+        unsigned long overrunBlocks = 0;
+        for (const auto& entry : g_liveBlocks) {
+            BYTE found[kMaxCanaryBytes];
+            if (CanaryDamaged(entry.first, entry.second.size, found)) {
+                ++overrunBlocks;
+                ReportOverrun(entry.first, entry.second, found, "found by the crash report");
+            }
+        }
+        char sites[160];
+        FormatOverrunSites(sites, sizeof(sites));
+        LogLine("FATAL", "[QUARANTINE] crash: %lu live block(s) have overwritten guard bytes (a buffer was written past its end); "
+            "allocation sites that overran so far: %s; %lu overlapping allocation(s) were seen this session", overrunBlocks, sites,
+            g_quarantineOverlaps);
+    }
+    if (g_heapFreeQuarantinePoison) {
+        // Poison stamped every held block; any that changed since was written to while free.
+        unsigned long found = 0;
+        for (int poolIndex = 0; poolIndex < 2; ++poolIndex) {
+            const std::deque<QuarantinedBlock>& queue = g_quarantinePools[poolIndex].queue;
+            size_t limit = poolIndex == kObjectPool ? queue.size() : (queue.size() < 20000 ? queue.size() : 20000);
+            for (size_t k = 0; k < limit; ++k) {
+                const QuarantinedBlock& block = queue[queue.size() - 1 - k];
+                if (block.size < sizeof(DWORD)) continue;
+                SIZE_T firstChange = 0;
+                unsigned changed = PoisonChangedDwords(block, &firstChange);
+                if (changed && found < 6) ReportWriteAfterFree(block, changed, firstChange, "found by the crash report");
+                if (changed) ++found;
+            }
+        }
+        LogLine("FATAL", "[QUARANTINE] crash: %lu held block(s) among the most recently freed were written to after being freed", found);
+    }
+    {
+        // The named objects freed most recently, newest first: what the game was tearing down.
+        char names[600] = {};
+        size_t used = 0;
+        int listed = 0;
+        for (int i = 0; i < kRecentLabels && listed < 12; ++i) {
+            const RecentLabel& recent = g_recentLabels[(g_recentLabelNext + kRecentLabels - 1 - i) % kRecentLabels];
+            if (!recent.label[0]) continue;
+            int wrote = snprintf(names + used, sizeof(names) - used, "%s'%s' (vtable 0x%08lX, %.1f s ago)", listed ? ", " : "",
+                recent.label, static_cast<unsigned long>(recent.vtable), (now - recent.tickMs) / 1000.0);
+            if (wrote < 0 || static_cast<size_t>(wrote) >= sizeof(names) - used) break;
+            used += static_cast<size_t>(wrote);
+            ++listed;
+        }
+        if (listed) {
+            LogLine("FATAL", "[QUARANTINE] crash: named objects freed most recently, newest first: %s", names);
+        }
+    }
+    LeaveCriticalSection(&g_quarantineLock);
+    if (hits == 0) {
+        LogLine("FATAL", "[QUARANTINE] crash: no register and none of the top %lu stack words point into a block the quarantine "
+            "holds (%lu blocks, the oldest freed %lu s ago). The object involved is older than the window, was never a "
+            "heap block, or this is memory corruption rather than a use-after-free.",
+            static_cast<unsigned long>(kCrashStackWords), static_cast<unsigned long>(held), oldest);
+    }
+#else
+    (void)context; (void)record;
+#endif
+}
+
+// Opening a .mob file means the engine is loading a new map - the main menu is
+// itself a map (ZoneMainMenuNew.mob) with a fixed camera, like any other. The
+// overlay shows the last one opened.
+static void NoteMapOpened(const char* path) {
+    const char* name = strrchr(path, '\\');
+    const char* slash = strrchr(path, '/');
+    if (slash && (!name || slash > name)) {
+        name = slash;
+    }
+    name = name ? name + 1 : path;
+    // Tiny spinlock: the overlay thread copies this while a game thread may
+    // be storing a new name; a half-written name would only show up as a
+    // one-off glitch, but a lock is cheap here.
+    while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) {
+        Sleep(0);
+    }
+    snprintf(g_currentMapName, sizeof(g_currentMapName), "%s", name);
+    g_currentMapOpenedTickMs = GetTickCount64();
+    InterlockedExchange(&g_currentMapLock, 0);
+}
+
+static bool CopyCurrentMap(char* name, size_t nameSize, ULONGLONG* openedTickMs) {
+    while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) {
+        Sleep(0);
+    }
+    bool have = g_currentMapName[0] != '\0';
+    snprintf(name, nameSize, "%s", g_currentMapName);
+    *openedTickMs = g_currentMapOpenedTickMs;
+    InterlockedExchange(&g_currentMapLock, 0);
+    return have;
+}
+
+static void NoteMapLoad(const char* path) {
+    if (!HasFileExtension(path, "mob")) {
+        return;
+    }
+    NoteMapOpened(path);
+    RememberSeenMobPath(path);
+    if (g_heapFreeQuarantineInstalled) {
+        LogQuarantineStats("Map load");
+    }
 }
 
 // Convert a Windows wide path to the log's narrow system-code-page format.
@@ -2063,7 +3496,7 @@ static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
         LogOpenedFile(handle, fileName, desiredAccess);
         if ((desiredAccess & GENERIC_READ) != 0) {
             ValidateMobFile(fileName);
-            MarkMapTransitionWindow(fileName);
+            NoteMapLoad(fileName);
         }
     }
     return handle;
@@ -2081,7 +3514,7 @@ static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
         LogOpenedFile(handle, path, desiredAccess);
         if ((desiredAccess & GENERIC_READ) != 0) {
             ValidateMobFile(path);
-            MarkMapTransitionWindow(path);
+            NoteMapLoad(path);
         }
     }
     return handle;
@@ -2126,81 +3559,115 @@ static BOOL WINAPI HookedCloseHandle(HANDLE handle) {
     return result;
 }
 
-// Logs full context for a HeapValidate failure caught by the hooks below,
-// captures a dump of every thread's current state (no real exception needed -
-// MiniDumpWithThreadInfo, already used by WriteCrashDump, inspects each
-// thread live), then terminates immediately: HEAP_CORRUPTION_TERMINATION's
-// own reasoning applies just as much here - once corruption is confirmed,
-// letting the process keep running on it only produces a harder-to-read
-// crash somewhere else later.
-static void ReportHeapCorruptionDetected(const char* function, HANDLE heap, LPVOID pointer, SIZE_T size) {
-    LogLine("FATAL", "============= HEAP CORRUPTION DETECTED =============");
-    LogLine("FATAL", "HeapValidate failed inside %s heap=%p pointer=%p size=%lu, within %ums of a map load",
-        function, heap, pointer, static_cast<unsigned long>(size),
-        8000u - (g_mapTransitionDeadline - GetTickCount()));
-    LogLine("FATAL", "Terminating now instead of continuing on corrupted memory");
-
-    // WriteCrashDump(NULL) only captures each thread's state via
-    // GetThreadContext, which cannot give an accurate register/stack snapshot
-    // for the CURRENTLY EXECUTING thread (this one) - a thread cannot suspend
-    // itself to read its own live registers, so the first real detection this
-    // caught had no usable call stack for the one thread we actually care
-    // about. RtlCaptureContext gives an accurate CONTEXT for THIS thread right
-    // here, right at the HeapAlloc/HeapFree/HeapReAlloc call site; wrapping it
-    // in a synthetic EXCEPTION_RECORD lets it ride through the same
-    // WriteCrashDump() as a real crash, without actually raising/dispatching
-    // a real SEH exception. 0xE0000001 is a made-up code (Microsoft reserves
-    // the 0xE0000000-0xEFFFFFFF range for exactly this - "application-defined
-    // exception") so it reads unambiguously as "our own proactive check", not
-    // a real access violation, in whatever tool opens the dump.
-    CONTEXT context = {};
-    context.ContextFlags = CONTEXT_FULL;
-    RtlCaptureContext(&context);
-    EXCEPTION_RECORD record = {};
-    record.ExceptionCode = 0xE0000001;
-    record.ExceptionAddress = reinterpret_cast<PVOID>(context.Eip);
-    EXCEPTION_POINTERS pointers = { &record, &context };
-    WriteCrashDump(&pointers);
-
-    LogLine("FATAL", "===========================================");
-    TerminateProcess(GetCurrentProcess(), 1);
-}
-
-// These three hooks only see calls game.exe makes directly through its own
-// import table - see HEAP_VALIDATE_ON_MAP_LOAD's comment in kSettings for why
-// that's a real, known gap (msvcrt's malloc/free/realloc call HeapAlloc/
-// HeapFree/HeapReAlloc through msvcrt's OWN imports, invisible here).
-static LPVOID WINAPI HookedHeapAlloc(HANDLE heap, DWORD flags, SIZE_T size) {
-    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
-        ReportHeapCorruptionDetected("HeapAlloc (before)", heap, NULL, size);
-    }
-    LPVOID result = g_originalHeapAlloc(heap, flags, size);
-    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
-        ReportHeapCorruptionDetected("HeapAlloc (after)", heap, result, size);
-    }
-    return result;
-}
-
+// These hooks only see calls game.exe makes directly through its own import
+// table - which is all of them: its static CRT sends every malloc/free/new/
+// delete to HeapAlloc/HeapFree/HeapReAlloc on its private heap.
 static BOOL WINAPI HookedHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
-    if (pointer && IsInMapTransitionWindow() && !HeapValidate(heap, 0, pointer)) {
-        ReportHeapCorruptionDetected("HeapFree (before)", heap, pointer, 0);
+    if (g_heapFreeQuarantineInstalled && pointer && QuarantineHeapFree(heap, flags, pointer)) {
+        return TRUE;
     }
-    BOOL result = g_originalHeapFree(heap, flags, pointer);
-    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
-        ReportHeapCorruptionDetected("HeapFree (after)", heap, pointer, 0);
+    return g_originalHeapFree(heap, flags, pointer);
+}
+
+// Every allocation is recorded (start -> size) so a free of the middle of a block can be told from
+// a free of a block's start; see g_liveBlocks.
+static LPVOID WINAPI HookedHeapAlloc(HANDLE heap, DWORD flags, SIZE_T size) {
+    if (!g_heapFreeQuarantineInstalled || size > 0x7FFFFF00) {
+        return g_originalHeapAlloc(heap, flags, size);
     }
+    // Asked for a little more, so an overrun of the block lands in guard bytes we can check.
+    LPVOID result = g_originalHeapAlloc(heap, flags, size + g_canaryBytes);
+    if (!result) return NULL;
+    DWORD callers[kAllocCallerSlots] = {};
+    CaptureCallers(callers, kAllocCallerSlots);
+    memset(static_cast<BYTE*>(result) + size, kCanaryFill, g_canaryBytes);
+    const DWORD start = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(result));
+    const DWORD end = start + static_cast<DWORD>(size) + g_canaryBytes;
+    EnterCriticalSection(&g_quarantineLock);
+    // The heap must never return memory that is still in use.
+    auto same = g_liveBlocks.find(start);
+    if (same != g_liveBlocks.end()) {
+        ReportOverlap(start, static_cast<DWORD>(size), callers, same->first, same->second);
+    } else {
+        auto next = g_liveBlocks.upper_bound(start);
+        if (next != g_liveBlocks.end() && next->first < end) {
+            ReportOverlap(start, static_cast<DWORD>(size), callers, next->first, next->second);
+        } else if (next != g_liveBlocks.begin()) {
+            auto before = std::prev(next);
+            if (before->first + before->second.size + g_canaryBytes > start) {
+                ReportOverlap(start, static_cast<DWORD>(size), callers, before->first, before->second);
+            }
+        }
+    }
+    LiveBlock block = {};
+    block.size = static_cast<DWORD>(size);
+    block.heap = heap;
+    block.tickMs = GetTickCount();
+    memcpy(block.callers, callers, sizeof(callers));
+    g_liveBlocks[start] = block;
+    LeaveCriticalSection(&g_quarantineLock);
     return result;
 }
 
 static LPVOID WINAPI HookedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer, SIZE_T size) {
-    if (pointer && IsInMapTransitionWindow() && !HeapValidate(heap, 0, pointer)) {
-        ReportHeapCorruptionDetected("HeapReAlloc (before)", heap, pointer, size);
+    if (g_heapFreeQuarantineInstalled && pointer && QuarantineHolds(pointer)) {
+        // The game is resizing a block it already freed. Let the real
+        // HeapReAlloc move/free it and the block would be freed a second time
+        // when the quarantine evicts it, so hand back a fresh copy instead and
+        // leave the held block alone.
+        if (flags & HEAP_REALLOC_IN_PLACE_ONLY) {
+            return NULL;
+        }
+        SIZE_T oldSize = HeapSize(heap, 0, pointer);
+        LPVOID fresh = HeapAlloc(heap,
+            flags & (HEAP_ZERO_MEMORY | HEAP_NO_SERIALIZE | HEAP_GENERATE_EXCEPTIONS), size);
+        if (fresh && oldSize != static_cast<SIZE_T>(-1)) {
+            memcpy(fresh, pointer, oldSize < size ? oldSize : size);
+        }
+        EnterCriticalSection(&g_quarantineLock);
+        unsigned long number = ++g_quarantineReallocRedirects;
+        LeaveCriticalSection(&g_quarantineLock);
+        if (number <= kQuarantineReallocLogLimit) {
+            LogLine("WARN", "[QUARANTINE] HeapReAlloc of an already-freed block %p (redirect #%lu)", pointer, number);
+            LogCallerCandidates("realloc of a freed block");
+        }
+        return fresh;
     }
-    LPVOID result = g_originalHeapReAlloc(heap, flags, pointer, size);
-    if (IsInMapTransitionWindow() && !HeapValidate(heap, 0, NULL)) {
-        ReportHeapCorruptionDetected("HeapReAlloc (after)", heap, result, size);
+    if (!g_heapFreeQuarantineInstalled || size > 0x7FFFFF00) {
+        return g_originalHeapReAlloc(heap, flags, pointer, size);
+    }
+    if (pointer) {
+        EnterCriticalSection(&g_quarantineLock);
+        auto old = g_liveBlocks.find(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
+        BYTE found[kMaxCanaryBytes];
+        if (old != g_liveBlocks.end() && CanaryDamaged(old->first, old->second.size, found)) {
+            ReportOverrun(old->first, old->second, found, "found when the game resized the block");
+        }
+        LeaveCriticalSection(&g_quarantineLock);
+    }
+    LPVOID result = g_originalHeapReAlloc(heap, flags, pointer, size + g_canaryBytes);
+    if (result) {
+        DWORD callers[kAllocCallerSlots] = {};
+        CaptureCallers(callers, kAllocCallerSlots);
+        memset(static_cast<BYTE*>(result) + size, kCanaryFill, g_canaryBytes);
+        EnterCriticalSection(&g_quarantineLock);
+        if (pointer) g_liveBlocks.erase(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
+        LiveBlock block = {};
+        block.size = static_cast<DWORD>(size);
+        block.heap = heap;
+        block.tickMs = GetTickCount();
+        memcpy(block.callers, callers, sizeof(callers));
+        g_liveBlocks[static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(result))] = block;
+        LeaveCriticalSection(&g_quarantineLock);
     }
     return result;
+}
+
+static BOOL WINAPI HookedHeapDestroy(HANDLE heap) {
+    if (g_heapFreeQuarantineInstalled) {
+        QuarantineForgetHeap(heap);
+    }
+    return g_originalHeapDestroy(heap);
 }
 
 // Overwrite one COM vtable slot process-wide (vtables are normally shared by
@@ -2258,6 +3725,12 @@ static void CountPresentedFrame() {
             1000.0 / static_cast<double>(g_overlayPerfFrequency.QuadPart);
         if (elapsedMs < OVERLAY_MIN_FRAME_INTERVAL_MS) {
             return;
+        }
+        LONG slot = g_overlayFrameTimeNext;
+        g_overlayFrameTimesMs[slot] = static_cast<float>(elapsedMs);
+        g_overlayFrameTimeNext = (slot + 1) % OVERLAY_FRAME_TIME_CAPACITY;
+        if (g_overlayFrameTimeCount < OVERLAY_FRAME_TIME_CAPACITY) {
+            InterlockedIncrement(&g_overlayFrameTimeCount);
         }
     }
     g_overlayLastCountedFrameTime = now;
@@ -2509,39 +3982,62 @@ static void InstallFileIoHooks() {
     }
 }
 
-// Patch game.exe's own imports of the three heap functions so
-// HEAP_VALIDATE_ON_MAP_LOAD can validate the heap around each direct call
-// during the post-map-load window (see IsInMapTransitionWindow).
+// Patch game.exe's own imports of HeapFree/HeapReAlloc/HeapDestroy so
+// HEAP_FREE_QUARANTINE can hold freed blocks back (see QuarantineHeapFree).
 static void InstallHeapHooks() {
-    if (g_heapValidateDryRun) {
-        // The [HEAPCHECK] map-load markers (MarkMapTransitionWindow, called from
-        // the file-I/O hooks regardless of this flag) keep firing either way -
-        // only the expensive part, actually intercepting every heap call, is
-        // skipped, so a session run this way is directly comparable to one
-        // with real validation for "did the added overhead change whether/when
-        // it crashed".
-        LogLine("INFO", "Heap-validation hooks NOT installed (HEAP_VALIDATE_DRY_RUN=true): "
-            "map-load markers still log, but HeapAlloc/HeapFree/HeapReAlloc are untouched");
+    if (!g_enableHeapFreeQuarantine && g_heapAllocPadding == 0) {
         return;
     }
     HMODULE process = GetModuleHandleA(NULL);
     if (!process) {
-        LogLine("WARN", "Could not locate the game executable for heap-validation hooks");
+        LogLine("WARN", "[QUARANTINE] Not activated: could not locate the game executable");
         return;
     }
 
-    bool hooked = false;
-    hooked = PatchImportedFunction(process, "HeapAlloc",
-        reinterpret_cast<ULONG_PTR>(HookedHeapAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapAlloc)) || hooked;
-    hooked = PatchImportedFunction(process, "HeapFree",
-        reinterpret_cast<ULONG_PTR>(HookedHeapFree), reinterpret_cast<ULONG_PTR*>(&g_originalHeapFree)) || hooked;
-    hooked = PatchImportedFunction(process, "HeapReAlloc",
-        reinterpret_cast<ULONG_PTR>(HookedHeapReAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapReAlloc)) || hooked;
-    if (hooked) {
-        LogLine("INFO", "Heap-validation hooks installed (active for 8s after each map load)");
-    } else {
-        LogLine("WARN", "Heap-validation hooks not installed: game.exe does not import "
-            "HeapAlloc/HeapFree/HeapReAlloc directly (likely routes allocations through msvcrt instead)");
+    InitGameImageRanges();
+    g_canaryBytes = static_cast<DWORD>(g_heapAllocPadding);
+    InitializeCriticalSection(&g_quarantineLock);
+    // With HEAP_FREE_QUARANTINE off only the padding is wanted: freed blocks are still held for a
+    // moment (the smallest window, the configuration the padding fix was tested with) but no more.
+    const int windowMb = g_enableHeapFreeQuarantine ? g_heapFreeQuarantineMb : 4;
+    const int objectsMb = g_enableHeapFreeQuarantine ? g_heapFreeQuarantineObjectsMb : 0;
+    g_quarantinePools[0].byteLimit = static_cast<SIZE_T>(windowMb) * 1048576;
+    g_quarantinePools[0].maxBlocks = static_cast<size_t>(windowMb) * kQuarantineBlocksPerMb;
+    g_quarantinePools[kObjectPool].byteLimit = static_cast<SIZE_T>(objectsMb) * 1048576;
+    g_quarantinePools[kObjectPool].maxBlocks = static_cast<size_t>(objectsMb) * kQuarantineBlocksPerMb;
+
+    PatchImportedFunction(process, "HeapAlloc",
+        reinterpret_cast<ULONG_PTR>(HookedHeapAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapAlloc));
+    bool freeHooked = PatchImportedFunction(process, "HeapFree",
+        reinterpret_cast<ULONG_PTR>(HookedHeapFree), reinterpret_cast<ULONG_PTR*>(&g_originalHeapFree));
+    PatchImportedFunction(process, "HeapReAlloc",
+        reinterpret_cast<ULONG_PTR>(HookedHeapReAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapReAlloc));
+    PatchImportedFunction(process, "HeapDestroy",
+        reinterpret_cast<ULONG_PTR>(HookedHeapDestroy), reinterpret_cast<ULONG_PTR*>(&g_originalHeapDestroy));
+
+    if (!freeHooked || !g_originalHeapFree) {
+        LogLine("WARN", "[QUARANTINE] Not activated: game.exe does not import HeapFree directly");
+        return;
+    }
+    if (!g_originalHeapDestroy || !g_originalHeapReAlloc || !g_originalHeapAlloc) {
+        // Never expected (game.exe imports both), but without them a destroyed
+        // heap's held blocks could not be forgotten and a resize of a freed
+        // block could not be redirected - so hold nothing.
+        LogLine("WARN", "[QUARANTINE] Not activated: game.exe does not import HeapAlloc/HeapDestroy/HeapReAlloc");
+        return;
+    }
+    g_heapFreeQuarantineInstalled = true;
+    HANDLE watch = CreateThread(NULL, 0, OverrunWatchThread, NULL, 0, NULL);
+    if (watch) CloseHandle(watch);
+    LogLine("DEBUG", "[QUARANTINE] Active: every allocation padded by %d bytes; freed blocks are held back (data window %d MB, "
+        "plus %d MB for small objects) before being really freed; recording who freed each one%s", g_heapAllocPadding,
+        windowMb, objectsMb,
+        g_heapFreeQuarantinePoison ? "; POISON MODE: freed objects get 0xDDDDDDDD as their vtable, the workaround is off for them" : "");
+    long mode = ReadGameCrtHeapMode();
+    if (mode != 1) {
+        LogLine("WARN", "[QUARANTINE] game.exe CRT heap mode reads %ld (expected 1 = system heap); "
+            "with mode 2/3 its small-block heap frees small blocks WITHOUT calling HeapFree, so those "
+            "are not held back", mode);
     }
 }
 
@@ -2929,63 +4425,54 @@ static void LogGraphicsInformation() {
 }
 
 // Emit the complete startup system-information section.
+// Reports whether heap debug flags from Image File Execution Options (e.g.
+// GlobalFlag=0x20, "free checking") actually reached this process, so a value
+// set in the Wine prefix can be confirmed from inside the running game instead
+// of inferred from behavior. NtGlobalFlag is at PEB+0x68 (32-bit layout, and
+// um.dll is always built 32-bit); the flags the process heap is actually
+// running with are at heap+0x40, where 0x40 = free checking and 0x20 = tail
+// checking (both verified against Wine 11 with a test program).
+static void LogHeapDebugFlags() {
+    const BYTE* peb = reinterpret_cast<const BYTE*>(__readfsdword(0x30));
+    DWORD ntGlobalFlag = peb ? *reinterpret_cast<const DWORD*>(peb + 0x68) : 0;
+
+    DWORD heapFlags = 0;
+    bool haveHeapFlags = false;
+    const BYTE* heap = static_cast<const BYTE*>(GetProcessHeap());
+    if (heap && !IsBadReadPtr(heap + 0x40, sizeof(DWORD))) {
+        heapFlags = *reinterpret_cast<const DWORD*>(heap + 0x40);
+        haveHeapFlags = true;
+    }
+    LogLine("SYSINFO", "Heap debug flags: NtGlobalFlag=0x%08lX (free-check requested=%s, tail-check requested=%s) "
+        "process_heap_flags=0x%08lX (free-checking active=%s, tail-checking active=%s)",
+        ntGlobalFlag, (ntGlobalFlag & 0x20) ? "yes" : "no", (ntGlobalFlag & 0x10) ? "yes" : "no",
+        heapFlags, !haveHeapFlags ? "unknown" : (heapFlags & 0x40) ? "yes" : "no",
+        !haveHeapFlags ? "unknown" : (heapFlags & 0x20) ? "yes" : "no");
+}
+
+static void LogGameCrtHeapMode() {
+    long mode = ReadGameCrtHeapMode();
+    if (mode < 0) {
+        LogLine("SYSINFO", "game.exe CRT heap mode: unknown (not the known game.exe build)");
+        return;
+    }
+    LogLine("SYSINFO", "game.exe CRT heap mode: %ld (%s)", mode,
+        mode == 1 ? "system heap - every malloc/free goes through HeapAlloc/HeapFree" :
+        mode == 2 ? "V5 small-block heap" : mode == 3 ? "V6 small-block heap" :
+        "not initialised yet or unrecognized");
+}
+
 static void LogSystemInformation() {
     LogLine("SYSINFO", "============= SYSTEM INFORMATION =============");
     LogOperatingSystemInformation();
     LogHardwareInformation();
     LogGraphicsInformation();
+    LogHeapDebugFlags();
+    LogGameCrtHeapMode();
     LogLine("SYSINFO", "==============================================");
 }
 
 // Classify exception codes that should not be resumed blindly.
-static bool IsUnsafeExceptionToResume(const EXCEPTION_RECORD* record) {
-    if (!record) {
-        return true;
-    }
-
-    switch (record->ExceptionCode) {
-    case EXCEPTION_ACCESS_VIOLATION:
-    case EXCEPTION_IN_PAGE_ERROR:
-    case EXCEPTION_ILLEGAL_INSTRUCTION:
-    case EXCEPTION_NONCONTINUABLE_EXCEPTION:
-    case EXCEPTION_STACK_OVERFLOW:
-    case EXCEPTION_DATATYPE_MISALIGNMENT:
-    case EXCEPTION_GUARD_PAGE:
-    case UM_STATUS_HEAP_CORRUPTION:
-        return true;
-    default:
-        return false;
-    }
-}
-
-// Return a human-readable explanation for the exception classification above.
-static const char* GetUnsafeExceptionReason(const EXCEPTION_RECORD* record) {
-    if (!record) {
-        return "missing exception record";
-    }
-
-    switch (record->ExceptionCode) {
-    case EXCEPTION_ACCESS_VIOLATION:
-        return "access violation: invalid memory read or write";
-    case EXCEPTION_IN_PAGE_ERROR:
-        return "in-page error: required memory could not be loaded";
-    case EXCEPTION_ILLEGAL_INSTRUCTION:
-        return "illegal instruction: CPU could not execute the instruction";
-    case EXCEPTION_NONCONTINUABLE_EXCEPTION:
-        return "non-continuable exception: Windows forbids resuming execution";
-    case EXCEPTION_STACK_OVERFLOW:
-        return "stack overflow: the thread has exhausted its stack";
-    case EXCEPTION_DATATYPE_MISALIGNMENT:
-        return "datatype misalignment: an improperly aligned memory access occurred";
-    case EXCEPTION_GUARD_PAGE:
-        return "guard-page violation: protected memory was accessed";
-    case UM_STATUS_HEAP_CORRUPTION:
-        return "heap corruption: the process heap manager detected corrupted allocator metadata";
-    default:
-        return "exception is classified as unsafe to resume";
-    }
-}
-
 // Keep exception names stable in logs instead of exposing only numeric codes.
 static const char* GetExceptionCaseName(const EXCEPTION_RECORD* record) {
     if (!record) {
@@ -3015,32 +4502,9 @@ static const char* GetExceptionCaseName(const EXCEPTION_RECORD* record) {
         return "EXCEPTION_BREAKPOINT";
     case EXCEPTION_SINGLE_STEP:
         return "EXCEPTION_SINGLE_STEP";
-    case UM_STATUS_HEAP_CORRUPTION:
-        return "STATUS_HEAP_CORRUPTION";
     default:
         return "UNKNOWN_EXCEPTION";
     }
-}
-
-// Capture first-chance exceptions before the game or another handler can
-// consume them. This handler only logs and always defers; it never edits CPU
-// state or attempts unsafe recovery. The cap prevents exception loops from
-// flooding the log before the process exits.
-static LONG WINAPI VectoredLoggingHandler(EXCEPTION_POINTERS* exceptionInfo) {
-    EXCEPTION_RECORD* record = exceptionInfo ? exceptionInfo->ExceptionRecord : NULL;
-    if (!record || !IsUnsafeExceptionToResume(record)) {
-        return EXCEPTION_CONTINUE_SEARCH;
-    }
-
-    LONG count = InterlockedIncrement(&g_firstChanceExceptionCount);
-    if (count <= 32) {
-        LogLine("ANTICRASH", "First-chance exception code=0x%08lX address=%p case=%s count=%ld",
-            record->ExceptionCode, record->ExceptionAddress,
-            GetExceptionCaseName(record), count);
-    } else if (count == 33) {
-        LogLine("ANTICRASH", "Further first-chance exceptions suppressed after 32 entries");
-    }
-    return EXCEPTION_CONTINUE_SEARCH;
 }
 
 // Log the exception, register state, faulting module, stack, and tracked files.
@@ -3052,7 +4516,6 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     }
 
     if (InterlockedCompareExchange(&g_crashLogInProgress, 1, 0) != 0) {
-// Load documented settings from um.cfg and ignore unknown/malformed entries.
         return EXCEPTION_CONTINUE_SEARCH;
     }
 
@@ -3064,20 +4527,14 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     if (!record) {
         LogLine("FATAL", "Unhandled exception had no exception record");
     } else {
-        LogLine("FATAL", "Unhandled exception code=0x%08lX flags=0x%08lX address=%p parameters=%lu",
+        LogLine("FATAL", "Unhandled exception code=0x%08lX flags=0x%08lX address=%p parameters=%lu case=%s",
             record->ExceptionCode, record->ExceptionFlags, record->ExceptionAddress,
-            record->NumberParameters);
+            record->NumberParameters, GetExceptionCaseName(record));
         if (record->ExceptionCode == EXCEPTION_ACCESS_VIOLATION && record->NumberParameters >= 2) {
             LogLine("FATAL", "Access violation type=%s address=%p",
                 record->ExceptionInformation[0] == 0 ? "read" : "write",
                 reinterpret_cast<void*>(static_cast<ULONG_PTR>(record->ExceptionInformation[1])));
         }
-    }
-
-    if (g_enableAntiCrash && IsUnsafeExceptionToResume(record)) {
-        LogLine("ANTICRASH", "Recovery refused: case=%s reason=%s",
-            GetExceptionCaseName(record), GetUnsafeExceptionReason(record));
-        LogLine("ANTICRASH", "Normal Windows crash handling will continue to prevent silent process corruption");
     }
 
     if (context) {
@@ -3086,7 +4543,7 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
             context->Eax, context->Ebx, context->Ecx, context->Edx, context->Esi,
             context->Edi, context->Ebp, context->Esp, context->Eip);
         if (context->Eip == 0x90909090 || context->Eip == 0xCCCCCCCC || context->Eip == 0xCDCDCDCD) {
-            LogLine("ANTICRASH", "Instruction pointer is a debug fill or NOP-sled sentinel (0x%08lX); original control flow cannot be reconstructed safely",
+            LogLine("CRASH", "Instruction pointer is a debug fill or NOP-sled sentinel (0x%08lX); original control flow cannot be reconstructed safely",
                 context->Eip);
         }
 #elif defined(_M_X64) || defined(__x86_64__)
@@ -3098,6 +4555,8 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
             reinterpret_cast<void*>(context->Rip));
 #endif
     }
+
+    LogQuarantineCrashAnalysis(context, record);
 
     if (record && record->ExceptionAddress) {
         HMODULE module = NULL;
@@ -3130,10 +4589,6 @@ static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo) 
     WriteCrashDump(exceptionInfo);
     LogTrackedFileHandles();
 
-    if (g_enableAntiCrash && record && IsUnsafeExceptionToResume(record)) {
-        LogLine("ANTICRASH", "Unsafe exception cannot be resumed safely; normal Windows crash handling will continue");
-    }
-    LogLine("FATAL", "The process will continue with normal Windows crash handling");
     LogErrorBlockEnd();
     InterlockedExchange(&g_crashLogInProgress, 0);
     return EXCEPTION_CONTINUE_SEARCH;
@@ -3238,7 +4693,7 @@ static void LoadConfigFile(const char* dllPath) {
 }
 
 // Re-reads um.cfg and re-applies whatever can safely take effect while the
-// game is already running (most flags, overlay settings, priority/affinity).
+// game is already running (most flags, overlay settings).
 // A few things - installing IAT/DirectDraw hooks and creating the overlay
 // window - only ever happen once at DLL attach, so toggling those settings
 // on for the first time via reload still needs a game restart to take effect.
@@ -3252,7 +4707,6 @@ static void ReloadConfiguration() {
         return;
     }
     LoadConfigFile(dllPath);
-    ApplyPerformanceTweaks();
     LogLine("INFO", "um.cfg reloaded");
 }
 
@@ -3596,10 +5050,45 @@ static void FinalizeCanvasAlpha(const AlphaCanvas& canvas, COLORREF color, BYTE 
 }
 
 // Push the finished canvas to the screen at the given top-left position.
+#ifdef UM_TEST_DUMP_CANVAS
+// Test builds only (compiled with -DUM_TEST_DUMP_CANVAS, never in the shipped
+// DLL): write the panel's pixels to <UM_TEST_DUMP_CANVAS dir>\\overlay-main.bmp
+// or overlay-log.bmp so a headless run under Wine can be inspected, since a
+// plain popup window can't be captured back out of Wine.
+static void DumpCanvasForTest(HWND hwnd, const AlphaCanvas& canvas) {
+    char directory[MAX_PATH] = {};
+    if (GetEnvironmentVariableA("UM_TEST_DUMP_CANVAS", directory, sizeof(directory)) == 0 || !canvas.pixels) {
+        return;
+    }
+    char path[MAX_PATH + 32] = {};
+    snprintf(path, sizeof(path), "%s\\%s", directory, hwnd == g_overlayLogWindow ? "overlay-log.bmp" : "overlay-main.bmp");
+    DIBSECTION section = {};
+    if (GetObjectA(canvas.bitmap, sizeof(section), &section) == 0) {
+        return;
+    }
+    BITMAPINFOHEADER header = section.dsBmih;
+    DWORD imageBytes = static_cast<DWORD>(canvas.width) * canvas.height * 4;
+    BITMAPFILEHEADER fileHeader = {};
+    fileHeader.bfType = 0x4D42;
+    fileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+    fileHeader.bfSize = fileHeader.bfOffBits + imageBytes;
+    FILE* file = fopen(path, "wb");
+    if (file) {
+        fwrite(&fileHeader, sizeof(fileHeader), 1, file);
+        fwrite(&header, sizeof(header), 1, file);
+        fwrite(canvas.pixels, imageBytes, 1, file);
+        fclose(file);
+    }
+}
+#endif
+
 static void CompositeCanvasToWindow(HWND hwnd, const AlphaCanvas& canvas, int x, int y) {
     if (!hwnd || !canvas.dc) {
         return;
     }
+#ifdef UM_TEST_DUMP_CANVAS
+    DumpCanvasForTest(hwnd, canvas);
+#endif
     if (!g_overlayWindowsAreLayered) {
         // Fully opaque panel: plain BitBlt onto the window's own DC instead
         // of UpdateLayeredWindow, so the window is never WS_EX_LAYERED at
@@ -3633,49 +5122,401 @@ static void CompositeCanvasToWindow(HWND hwnd, const AlphaCanvas& canvas, int x,
     }
 }
 
-// Panel height depends on whether the FPS graph and optional diagnostic lines
-// are enabled in um.cfg, so it is computed rather than a fixed constant.
-// Layout, top to bottom: title/FPS block, FPS graph, then LAA/priority/
-// backend block, then the optional per-thread breakdown.
-static int ComputeOverlayTopLineCount() {
-    int count = 2; // title, FPS/FrameTime (always shown)
+// Text rows of the main panel, built once per repaint and shared by the height
+// computation, the width measurement and the drawing so the three can never
+// disagree about which rows exist.
+struct OverlayLine {
+    char text[160];
+    bool alert; // drawn in the warning color
+};
+
+struct OverlayContent {
+    OverlayLine top[8];
+    int topCount = 0;
+    OverlayLine bottom[10];
+    int bottomCount = 0;
+    bool compact = false;
+    bool hasTitle = false;
+    bool showGraph = false;
+    bool showThreads = false;
+};
+
+static const COLORREF OVERLAY_ALERT_COLOR = RGB(255, 90, 90);
+// Address-space use above this fraction is drawn as an alert: a 32-bit process
+// dies from running out of address space long before it runs out of RAM.
+static const double OVERLAY_ADDRESS_SPACE_ALERT_FRACTION = 0.85;
+
+static void AddOverlayLine(OverlayLine* lines, int* count, int capacity, bool alert,
+        const char* format, ...) {
+    if (*count >= capacity) {
+        return;
+    }
+    va_list arguments;
+    va_start(arguments, format);
+    vsnprintf(lines[*count].text, sizeof(lines[*count].text), format, arguments);
+    va_end(arguments);
+    lines[*count].alert = alert;
+    ++*count;
+}
+
+// 1% low FPS (average of the slowest 1% of frames) and worst frame time over
+// the last OVERLAY_FRAME_STATS_WINDOW_MS; false until enough frames exist.
+static bool ComputeFrameStats(double* onePercentLowFps, double* worstFrameMs, double* windowSeconds) {
+    static float window[OVERLAY_FRAME_TIME_CAPACITY]; // only the overlay thread calls this
+    LONG count = g_overlayFrameTimeCount;
+    LONG next = g_overlayFrameTimeNext;
+    int used = 0;
+    double totalMs = 0.0;
+    double worst = 0.0;
+    for (LONG i = 0; i < count && totalMs < OVERLAY_FRAME_STATS_WINDOW_MS; ++i) {
+        float frameMs = g_overlayFrameTimesMs[(next - 1 - i + OVERLAY_FRAME_TIME_CAPACITY) % OVERLAY_FRAME_TIME_CAPACITY];
+        window[used++] = frameMs;
+        totalMs += frameMs;
+        if (frameMs > worst) {
+            worst = frameMs;
+        }
+    }
+    if (used < 10) {
+        return false;
+    }
+    int slowest = used / 100 > 1 ? used / 100 : 1;
+    std::nth_element(window, window + (slowest - 1), window + used,
+        [](float a, float b) { return a > b; });
+    double sumMs = 0.0;
+    for (int i = 0; i < slowest; ++i) {
+        sumMs += window[i];
+    }
+    *onePercentLowFps = sumMs > 0.0 ? 1000.0 * slowest / sumMs : 0.0;
+    *worstFrameMs = worst;
+    *windowSeconds = totalMs / 1000.0;
+    return true;
+}
+
+static ULONGLONG GetProcessUptimeSeconds() {
+    FILETIME creation = {}, exitTime = {}, kernel = {}, user = {}, now = {};
+    if (!GetProcessTimes(GetCurrentProcess(), &creation, &exitTime, &kernel, &user)) {
+        return 0;
+    }
+    GetSystemTimeAsFileTime(&now);
+    ULONGLONG created = (static_cast<ULONGLONG>(creation.dwHighDateTime) << 32) | creation.dwLowDateTime;
+    ULONGLONG current = (static_cast<ULONGLONG>(now.dwHighDateTime) << 32) | now.dwLowDateTime;
+    return current > created ? (current - created) / 10000000ULL : 0;
+}
+
+// "2m14s" under an hour, "1h05m" beyond.
+static void FormatDuration(ULONGLONG seconds, char* out, size_t outSize) {
+    if (seconds >= 3600) {
+        snprintf(out, outSize, "%luh%02lum", static_cast<unsigned long>(seconds / 3600),
+            static_cast<unsigned long>((seconds % 3600) / 60));
+    } else {
+        snprintf(out, outSize, "%lum%02lus", static_cast<unsigned long>(seconds / 60),
+            static_cast<unsigned long>(seconds % 60));
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Renderer chain
+//
+// "DirectDraw Backend" only reports the name the topmost DirectDraw driver
+// gives itself, which hides everything underneath it (DxWrapper forwarding to
+// dgVoodoo reads as just "dgVoodoo"). The real chain is worked out from which
+// graphics DLLs are loaded, identifying each one by strings inside the file
+// instead of its name, since ddraw.dll can be DxWrapper, dgVoodoo, D7VK or
+// Wine's own depending on the setup.
+// ---------------------------------------------------------------------------
+enum ModuleFingerprint : unsigned {
+    FP_DGVOODOO = 1, FP_DXWRAPPER = 2, FP_DXVK = 4, FP_D7VK = 8, FP_WINE_BUILTIN = 16
+};
+
+struct FingerprintCacheEntry {
+    HMODULE module;
+    unsigned flags;
+};
+static FingerprintCacheEntry g_fingerprintCache[64];
+static int g_fingerprintCacheCount = 0;
+
+static bool BufferContains(const std::vector<char>& data, const char* needle, size_t needleLength) {
+    return std::search(data.begin(), data.end(),
+        std::boyer_moore_horspool_searcher(needle, needle + needleLength)) != data.end();
+}
+
+// dgVoodoo and DxWrapper store their names as UTF-16 in their resources, the
+// others as plain ASCII, so both spellings are searched.
+static bool BufferContainsText(const std::vector<char>& data, const char* text) {
+    size_t length = strlen(text);
+    if (BufferContains(data, text, length)) {
+        return true;
+    }
+    std::vector<char> wide(length * 2, '\0');
+    for (size_t i = 0; i < length; ++i) {
+        wide[i * 2] = text[i];
+    }
+    return BufferContains(data, wide.data(), wide.size());
+}
+
+static unsigned FingerprintModule(HMODULE module, const char* path) {
+    for (int i = 0; i < g_fingerprintCacheCount; ++i) {
+        if (g_fingerprintCache[i].module == module) {
+            return g_fingerprintCache[i].flags;
+        }
+    }
+    unsigned flags = 0;
+    HANDLE file = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
+        OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (file != INVALID_HANDLE_VALUE) {
+        DWORD size = GetFileSize(file, NULL);
+        if (size != INVALID_FILE_SIZE && size > 0 && size <= 48u * 1024 * 1024) {
+            std::vector<char> data(size);
+            DWORD read = 0;
+            if (ReadFile(file, data.data(), size, &read, NULL) && read == size) {
+                if (BufferContainsText(data, "dgVoodoo")) flags |= FP_DGVOODOO;
+                if (BufferContainsText(data, "DxWrapper") || BufferContainsText(data, "dxwrapper")) flags |= FP_DXWRAPPER;
+                if (BufferContainsText(data, "DXVK") || BufferContainsText(data, "dxvk")) flags |= FP_DXVK;
+                if (BufferContainsText(data, "D7VK") || BufferContainsText(data, "d7vk")) flags |= FP_D7VK;
+                if (BufferContains(data, "Wine builtin DLL", 16)) flags |= FP_WINE_BUILTIN;
+            }
+        }
+        CloseHandle(file);
+    }
+    if (g_fingerprintCacheCount < static_cast<int>(sizeof(g_fingerprintCache) / sizeof(g_fingerprintCache[0]))) {
+        g_fingerprintCache[g_fingerprintCacheCount++] = FingerprintCacheEntry{ module, flags };
+    }
+    return flags;
+}
+
+// Human-readable chain such as "DxWrapper > dgVoodoo > DXVK > Vulkan", top of
+// the stack (closest to the game) first; empty when no graphics DLL is loaded
+// yet.
+static void DetectRendererChain(char* out, size_t outSize) {
+    out[0] = '\0';
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+    if (snapshot == INVALID_HANDLE_VALUE) {
+        return;
+    }
+    bool dxWrapper = false, dgVoodoo = false, d7vk = false, wineDdraw = false, nativeDdraw = false;
+    bool dxvk = false, wined3d = false, openGl = false, winevulkan = false;
+    MODULEENTRY32 entry = {};
+    entry.dwSize = sizeof(entry);
+    for (BOOL ok = Module32First(snapshot, &entry); ok; ok = Module32Next(snapshot, &entry)) {
+        const char* name = entry.szModule;
+        HMODULE module = reinterpret_cast<HMODULE>(entry.modBaseAddr);
+        if (EqualsIgnoreCase(name, "ddraw.dll")) {
+            unsigned flags = FingerprintModule(module, entry.szExePath);
+            if (flags & FP_DXWRAPPER) {
+                dxWrapper = true;
+            } else if (flags & FP_DGVOODOO) {
+                dgVoodoo = true;
+            } else if (flags & (FP_D7VK | FP_DXVK)) {
+                d7vk = true;
+            } else if (flags & FP_WINE_BUILTIN) {
+                wineDdraw = true;
+            } else {
+                nativeDdraw = true;
+            }
+        } else if (EqualsIgnoreCase(name, "dxwrapper.dll")) {
+            dxWrapper = true;
+        } else if (EqualsIgnoreCase(name, "d3dimm.dll")) {
+            if (FingerprintModule(module, entry.szExePath) & FP_DGVOODOO) {
+                dgVoodoo = true;
+            }
+        } else if (EqualsIgnoreCase(name, "d3d9.dll") || EqualsIgnoreCase(name, "d3d11.dll") ||
+                   EqualsIgnoreCase(name, "dxgi.dll")) {
+            if (FingerprintModule(module, entry.szExePath) & FP_DXVK) {
+                dxvk = true;
+            }
+        } else if (EqualsIgnoreCase(name, "wined3d.dll")) {
+            wined3d = true;
+        } else if (EqualsIgnoreCase(name, "opengl32.dll")) {
+            openGl = true;
+        } else if (EqualsIgnoreCase(name, "winevulkan.dll")) {
+            winevulkan = true;
+        }
+    }
+    CloseHandle(snapshot);
+
+    // D7VK draws DirectDraw straight to Vulkan. Wine's own ddraw/wined3d/OpenGL can
+    // still be loaded next to it (Wine loads them for other reasons) without ever
+    // being on the game's rendering path, so listing them would be misleading.
+    if (d7vk) {
+        wineDdraw = false;
+        wined3d = false;
+        openGl = false;
+    }
+
+    const char* layers[8] = {};
+    int layerCount = 0;
+    if (dxWrapper) layers[layerCount++] = "DxWrapper";
+    if (dgVoodoo) layers[layerCount++] = "dgVoodoo";
+    if (d7vk) layers[layerCount++] = "D7VK";
+    if (wineDdraw) layers[layerCount++] = "Wine ddraw";
+    if (nativeDdraw) layers[layerCount++] = "unknown ddraw.dll";
+    if (dxvk) layers[layerCount++] = "DXVK";
+    if (wined3d) layers[layerCount++] = "wined3d";
+    if (dxvk || (d7vk && winevulkan)) {
+        layers[layerCount++] = "Vulkan";
+    } else if (wined3d && openGl) {
+        layers[layerCount++] = "OpenGL";
+    }
+    size_t used = 0;
+    for (int i = 0; i < layerCount; ++i) {
+        int wrote = snprintf(out + used, outSize - used, "%s%s", i ? " > " : "", layers[i]);
+        if (wrote < 0 || static_cast<size_t>(wrote) >= outSize - used) {
+            break;
+        }
+        used += static_cast<size_t>(wrote);
+    }
+}
+
+// Re-detected at most every two seconds, from the overlay thread only (so it
+// needs no locking), and logged whenever it changes so um.log records which
+// renderer stack a session actually ran on.
+static char g_rendererChain[192] = "";
+static ULONGLONG g_rendererChainCheckedTickMs = 0;
+
+static void RefreshRendererChain() {
+    ULONGLONG now = GetTickCount64();
+    if (g_rendererChainCheckedTickMs != 0 && now - g_rendererChainCheckedTickMs < 2000) {
+        return;
+    }
+    g_rendererChainCheckedTickMs = now;
+    char chain[sizeof(g_rendererChain)] = {};
+    DetectRendererChain(chain, sizeof(chain));
+    if (chain[0] != '\0' && strcmp(chain, g_rendererChain) != 0) {
+        snprintf(g_rendererChain, sizeof(g_rendererChain), "%s", chain);
+        LogLine("INFO", "Renderer chain: %s", g_rendererChain);
+    }
+}
+
+static void BuildOverlayContent(OverlayContent& content) {
+    const int topCapacity = static_cast<int>(sizeof(content.top) / sizeof(content.top[0]));
+    const int bottomCapacity = static_cast<int>(sizeof(content.bottom) / sizeof(content.bottom[0]));
+    content.compact = g_overlayCompact;
+    content.hasTitle = !content.compact;
+    content.showGraph = !content.compact && g_overlayShowFpsGraph;
+    content.showThreads = !content.compact && g_overlayShowThreads && g_overlayThreadSampleCount > 0;
+
+    if (content.hasTitle) {
+        AddOverlayLine(content.top, &content.topCount, topCapacity, false, "Universal Mod Library v%s", UM_VERSION);
+    }
+
+    LONG warnings = g_logWarningCount;
+    LONG errors = g_logErrorCount;
+    if (g_overlayShowWarnings && (warnings > 0 || errors > 0)) {
+        AddOverlayLine(content.top, &content.topCount, topCapacity, true, "! %ld warning%s, %ld error%s logged",
+            warnings, warnings == 1 ? "" : "s", errors, errors == 1 ? "" : "s");
+    }
+
+    if (!content.compact && g_overlayShowResources) {
+        AddOverlayLine(content.top, &content.topCount, topCapacity, false, "CPU=%.1f%% Mem=%.1fMB",
+            g_overlayCpuPercent, g_overlayWorkingSetMb);
+    }
+
+    if (g_overlayFrameCounterActive) {
+        AddOverlayLine(content.top, &content.topCount, topCapacity, false, "FPS=%.1f FrameTime=%.2fms",
+            g_overlayCurrentFps, g_overlayCurrentFrameTimeMs);
+    } else {
+        AddOverlayLine(content.top, &content.topCount, topCapacity, false, "FPS=pending (waiting for primary surface)");
+    }
+    double onePercentLow = 0.0, worstFrameMs = 0.0, windowSeconds = 0.0;
+    if (!content.compact && g_overlayShowFrameStats && g_overlayFrameCounterActive &&
+            ComputeFrameStats(&onePercentLow, &worstFrameMs, &windowSeconds)) {
+        AddOverlayLine(content.top, &content.topCount, topCapacity, false,
+            "1%% low=%.1f Worst=%.1fms (%.0fs)", onePercentLow, worstFrameMs, windowSeconds);
+    }
+
+    if (content.compact) {
+        return;
+    }
+
+    // Bottom block (drawn after the FPS graph).
+    if (g_overlayShowLaa) {
+        // Confirms whether this specific running game.exe was patched with the
+        // LARGE_ADDRESS_AWARE bit (see _cpr/game-exe-laa-patch), read straight
+        // from its own in-memory PE header, not assumed.
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+            IsCurrentProcessLargeAddressAware() ? "LAA=yes (>2GB address space)" : "LAA=no (capped at 2GB address space)");
+    }
     if (g_overlayShowResources) {
-        ++count;
+        // A 32-bit process runs out of address space long before it runs out
+        // of RAM, so this is the number to watch for out-of-memory crashes.
+        MEMORYSTATUSEX memory = {};
+        memory.dwLength = sizeof(memory);
+        if (GlobalMemoryStatusEx(&memory) && memory.ullTotalVirtual > 0) {
+            double totalGb = memory.ullTotalVirtual / 1073741824.0;
+            double usedGb = (memory.ullTotalVirtual - memory.ullAvailVirtual) / 1073741824.0;
+            AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity,
+                usedGb >= totalGb * OVERLAY_ADDRESS_SPACE_ALERT_FRACTION,
+                "AddrSpace=%.2f/%.2fGB used", usedGb, totalGb);
+        }
     }
-    return count;
-}
-
-static int ComputeOverlayBottomLineCount() {
-    int count = 2; // LAA, priority/affinity (always shown)
+    double quarantineMb = 0.0, quarantineLimitMb = 0.0, objectMb = 0.0, objectLimitMb = 0.0;
+    unsigned long quarantineBlocks = 0, quarantineDoubleFrees = 0, quarantineOldest = 0, quarantineInvalid = 0, quarantineProblems = 0, quarantineOverruns = 0;
+    if (GetQuarantineSnapshot(&quarantineMb, &quarantineLimitMb, &objectMb, &objectLimitMb, &quarantineBlocks,
+            &quarantineDoubleFrees, &quarantineOldest, &quarantineInvalid, &quarantineProblems, &quarantineOverruns)) {
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, g_heapFreeQuarantinePoison,
+            "Quarantine=%.0f/%.0fMB objects=%.0f/%.0fMB held=%luk oldest=%lus%s",
+            quarantineMb, quarantineLimitMb, objectMb, objectLimitMb, quarantineBlocks / 1000, quarantineOldest,
+            g_heapFreeQuarantinePoison ? " POISON" : "");
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity,
+            quarantineDoubleFrees > 0 || quarantineInvalid > 0 || quarantineProblems > 0,
+            "double-frees=%lu invalid-frees=%lu heap-problems=%lu overruns-absorbed=%lu",
+            quarantineDoubleFrees, quarantineInvalid, quarantineProblems, quarantineOverruns);
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false, "%s", ""); // blank line
+    }
     if (g_overlayShowBackend) {
-        ++count;
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+            "DirectDraw Backend=%s", g_directDrawBackendName);
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+            "Renderer=%s", g_rendererChain[0] ? g_rendererChain : "detecting...");
     }
-    return count;
+    if (g_overlayShowMap) {
+        char mapName[64] = {};
+        ULONGLONG openedTickMs = 0;
+        char sessionText[16] = {};
+        FormatDuration(GetProcessUptimeSeconds(), sessionText, sizeof(sessionText));
+        if (CopyCurrentMap(mapName, sizeof(mapName), &openedTickMs)) {
+            char ageText[16] = {};
+            FormatDuration((GetTickCount64() - openedTickMs) / 1000, ageText, sizeof(ageText));
+            AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+                "Map=%s (%s ago) Session=%s", mapName, ageText, sessionText);
+        } else {
+            AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
+                "Map=(none yet) Session=%s", sessionText);
+        }
+    }
 }
 
-// Extra height for the optional per-thread CPU%% breakdown drawn below the
-// FPS graph; 0 when disabled or nothing has been sampled yet.
+// Per-thread CPU%% breakdown rows drawn below the FPS graph, and the graph box
+// and its time scale, use these heights.
 static const int OVERLAY_THREAD_LINE_HEIGHT = 16;
 // Room below the graph box for the "-Ns" / "now" time-scale labels.
 static const int OVERLAY_GRAPH_TIME_SCALE_HEIGHT = 16;
+// Half a text line between the "FPS Graph (0-N)" title and the graph box, so
+// the top FPS mark's label (drawn just above its line, which can sit at the
+// very top edge) doesn't collide with the title.
+static const int OVERLAY_GRAPH_TITLE_GAP = 10;
 
-static int ComputeOverlayThreadSectionHeight() {
-    if (!g_overlayShowThreads || g_overlayThreadSampleCount <= 0) {
-        return 0;
+// Panel height depends on which rows and sections are enabled in um.cfg, so it
+// is computed from the content rather than being a fixed constant. Layout, top
+// to bottom: title/warnings/FPS block, FPS graph, then the LAA/address space/
+// quarantine/backend/map block, then the optional per-thread breakdown.
+static int ComputeOverlayPanelHeight(const OverlayContent& content) {
+    // +20 once for the blank line below the title.
+    int height = 8 + content.topCount * 20 + (content.hasTitle ? 20 : 0);
+    if (content.compact) {
+        return height + 10;
     }
-    return OVERLAY_SECTION_GAP + 20 + g_overlayThreadSampleCount * OVERLAY_THREAD_LINE_HEIGHT;
-}
-
-static int ComputeOverlayPanelHeight() {
-    // +20 once for the blank line below the title; the pre-graph offset is
-    // 20 (was 40) to remove a blank line below the FPS/FrameTime line; +20
-    // again for the blank line below the graph's time scale.
-    int height = 8 + ComputeOverlayTopLineCount() * 20 + 20 + OVERLAY_SECTION_GAP;
-    if (g_overlayShowFpsGraph) {
-        height += 20 + OVERLAY_GRAPH_HEIGHT + OVERLAY_GRAPH_TIME_SCALE_HEIGHT + OVERLAY_SECTION_GAP + 20;
+    height += OVERLAY_SECTION_GAP;
+    if (content.showGraph) {
+        // +20 for the graph title row, +20 again for the blank line below the
+        // graph's time scale.
+        height += 20 + OVERLAY_GRAPH_TITLE_GAP + OVERLAY_GRAPH_HEIGHT + OVERLAY_GRAPH_TIME_SCALE_HEIGHT +
+            OVERLAY_SECTION_GAP + 20;
     }
-    height += ComputeOverlayBottomLineCount() * 20;
-    height += ComputeOverlayThreadSectionHeight();
+    height += content.bottomCount * 20;
+    if (content.showThreads) {
+        height += OVERLAY_SECTION_GAP + 20 + g_overlayThreadSampleCount * OVERLAY_THREAD_LINE_HEIGHT;
+    }
     return height + 10;
 }
 
@@ -3759,7 +5600,7 @@ static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label
         double timeSpanSeconds) {
     char labelText[48] = {};
     snprintf(labelText, sizeof(labelText), "%s (0-%.0f)", label, maxScale);
-    TextOutA(hdc, graphRect.left, graphRect.top - 20, labelText, static_cast<int>(strlen(labelText)));
+    TextOutA(hdc, graphRect.left, graphRect.top - 20 - OVERLAY_GRAPH_TITLE_GAP, labelText, static_cast<int>(strlen(labelText)));
 
     HPEN borderPen = CreatePen(PS_SOLID, 1, g_overlayTextColor);
     HPEN oldPen = static_cast<HPEN>(SelectObject(hdc, borderPen));
@@ -3822,53 +5663,20 @@ static void DrawSparklineGraph(HDC hdc, const RECT& graphRect, const char* label
 // Render the main diagnostic panel (config status, FPS graph) into its alpha
 // canvas and push it to the screen at its configured anchor position.
 static void RenderOverlayPanel(const RECT& targetRect) {
-    int panelHeight = ComputeOverlayPanelHeight();
+    OverlayContent content;
+    BuildOverlayContent(content);
+    int panelHeight = ComputeOverlayPanelHeight(content);
 
     HFONT font = CreateFontA(16, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
         ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Consolas");
 
-    // Top block: title, [resources], FPS/FrameTime.
-    char topLines[4][160] = {};
-    int topLineCount = 0;
-    strncpy(topLines[topLineCount++], "Universal Mod Overlay", sizeof(topLines[0]) - 1);
-    if (g_overlayShowResources) {
-        snprintf(topLines[topLineCount++], sizeof(topLines[0]), "CPU=%.1f%% Mem=%.1fMB Threads=%d",
-            g_overlayCpuPercent, g_overlayWorkingSetMb, g_overlayThreadCount);
-    }
-    if (g_overlayFrameCounterActive) {
-        snprintf(topLines[topLineCount++], sizeof(topLines[0]), "FPS=%.1f FrameTime=%.2fms",
-            g_overlayCurrentFps, g_overlayCurrentFrameTimeMs);
-    } else {
-        strncpy(topLines[topLineCount++], "FPS=pending (waiting for primary surface)", sizeof(topLines[0]) - 1);
-    }
-
-    // Bottom block (drawn after the FPS graph): LAA, priority/affinity,
-    // [backend].
-    char bottomLines[3][160] = {};
-    int bottomLineCount = 0;
-    // Always shown: confirms whether this specific running game.exe was
-    // patched with the LARGE_ADDRESS_AWARE bit (see _cpr/game-exe-laa-patch),
-    // read straight from its own in-memory PE header, not assumed.
-    strncpy(bottomLines[bottomLineCount++], IsCurrentProcessLargeAddressAware() ?
-        "LAA=yes (>2GB address space)" : "LAA=no (capped at 2GB address space)", sizeof(bottomLines[0]) - 1);
-    // Always shown (regardless of PERFORMANCE_PRIORITY_ENABLED) so the actual,
-    // live process state confirms whether a requested tweak really applied,
-    // rather than trusting the enabled flag alone.
-    DWORD_PTR processAffinity = 0, systemAffinity = 0;
-    GetProcessAffinityMask(GetCurrentProcess(), &processAffinity, &systemAffinity);
-    snprintf(bottomLines[bottomLineCount++], sizeof(bottomLines[0]), "Priority=%s Affinity=0x%lX",
-        PriorityClassToName(GetPriorityClass(GetCurrentProcess())), static_cast<unsigned long>(processAffinity));
-    if (g_overlayShowBackend) {
-        snprintf(bottomLines[bottomLineCount++], sizeof(bottomLines[0]), "DirectDraw Backend=%s", g_directDrawBackendName);
-    }
-
-    // Built separately (drawn below the LAA/priority/backend block, at the
-    // very bottom), but still folded into the width measurement below so
-    // long thread names/CPU%% don't get clipped either.
+    // Built separately (drawn below the bottom block, at the very bottom), but
+    // still folded into the width measurement below so long thread names/CPU%%
+    // don't get clipped either.
     char threadSectionLines[OVERLAY_THREAD_DISPLAY_MAX + 1][64] = {};
     int threadSectionLineCount = 0;
-    if (g_overlayShowThreads && g_overlayThreadSampleCount > 0) {
+    if (content.showThreads) {
         snprintf(threadSectionLines[threadSectionLineCount++], sizeof(threadSectionLines[0]),
             "Threads (lowest %d TIDs, %d total)", g_overlayThreadSampleCount, g_overlayThreadCount);
         for (int i = 0; i < g_overlayThreadSampleCount; ++i) {
@@ -3880,21 +5688,23 @@ static void RenderOverlayPanel(const RECT& targetRect) {
 
     // Measure with a scratch DC (independent of the real canvas, which isn't
     // sized yet) so the panel is always wide enough to avoid clipping text.
-    int panelWidth = OVERLAY_PANEL_WIDTH;
+    int panelWidth = content.compact ? 0 : OVERLAY_PANEL_WIDTH;
     HDC scratchDC = CreateCompatibleDC(NULL);
     if (scratchDC) {
         HFONT oldScratchFont = font ? static_cast<HFONT>(SelectObject(scratchDC, font)) : NULL;
         int maxTextWidth = 0;
-        for (int i = 0; i < topLineCount; ++i) {
+        for (int i = 0; i < content.topCount; ++i) {
             SIZE textSize = {};
-            if (GetTextExtentPoint32A(scratchDC, topLines[i], static_cast<int>(strlen(topLines[i])), &textSize) &&
+            if (GetTextExtentPoint32A(scratchDC, content.top[i].text,
+                    static_cast<int>(strlen(content.top[i].text)), &textSize) &&
                     textSize.cx > maxTextWidth) {
                 maxTextWidth = textSize.cx;
             }
         }
-        for (int i = 0; i < bottomLineCount; ++i) {
+        for (int i = 0; i < content.bottomCount; ++i) {
             SIZE textSize = {};
-            if (GetTextExtentPoint32A(scratchDC, bottomLines[i], static_cast<int>(strlen(bottomLines[i])), &textSize) &&
+            if (GetTextExtentPoint32A(scratchDC, content.bottom[i].text,
+                    static_cast<int>(strlen(content.bottom[i].text)), &textSize) &&
                     textSize.cx > maxTextWidth) {
                 maxTextWidth = textSize.cx;
             }
@@ -3943,38 +5753,45 @@ static void RenderOverlayPanel(const RECT& targetRect) {
     }
 
     int y = 8;
-    for (int i = 0; i < topLineCount; ++i) {
-        TextOutA(hdc, 8, y, topLines[i], static_cast<int>(strlen(topLines[i])));
+    for (int i = 0; i < content.topCount; ++i) {
+        SetTextColor(hdc, content.top[i].alert ? OVERLAY_ALERT_COLOR : g_overlayTextColor);
+        TextOutA(hdc, 8, y, content.top[i].text, static_cast<int>(strlen(content.top[i].text)));
         y += 20;
-        if (i == 0) {
+        if (i == 0 && content.hasTitle) {
             y += 20; // blank line below the title
         }
     }
-    y += OVERLAY_SECTION_GAP;
+    SetTextColor(hdc, g_overlayTextColor);
 
-    if (g_overlayShowFpsGraph) {
-        y += 20; // was 40; one blank line removed here below FPS/FrameTime
-        RECT fpsGraphRect = {8, y, panelWidth - 8, y + OVERLAY_GRAPH_HEIGHT};
-        double timeSpanSeconds = static_cast<double>(g_overlayFpsHistoryCount) * g_overlayRefreshMs / 1000.0;
-        DrawSparklineGraph(hdc, fpsGraphRect, "FPS Graph", g_overlayFpsHistory,
-            g_overlayFpsHistoryNext, g_overlayFpsHistoryCount, fpsCeiling,
-            g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks, timeSpanSeconds);
-        y += OVERLAY_GRAPH_HEIGHT + OVERLAY_GRAPH_TIME_SCALE_HEIGHT + OVERLAY_SECTION_GAP;
-        y += 20; // blank line below the graph's time scale
-    }
+    if (!content.compact) {
+        y += OVERLAY_SECTION_GAP;
 
-    for (int i = 0; i < bottomLineCount; ++i) {
-        TextOutA(hdc, 8, y, bottomLines[i], static_cast<int>(strlen(bottomLines[i])));
-        y += 20;
-    }
-
-    if (threadSectionLineCount > 0) {
-        y += OVERLAY_SECTION_GAP; // skip a line before the thread breakdown
-        for (int i = 0; i < threadSectionLineCount; ++i) {
-            TextOutA(hdc, 8, y, threadSectionLines[i], static_cast<int>(strlen(threadSectionLines[i])));
-            y += OVERLAY_THREAD_LINE_HEIGHT;
+        if (content.showGraph) {
+            y += 20 + OVERLAY_GRAPH_TITLE_GAP; // was 40; one blank line removed here below FPS/FrameTime
+            RECT fpsGraphRect = {8, y, panelWidth - 8, y + OVERLAY_GRAPH_HEIGHT};
+            double timeSpanSeconds = static_cast<double>(g_overlayFpsHistoryCount) * g_overlayRefreshMs / 1000.0;
+            DrawSparklineGraph(hdc, fpsGraphRect, "FPS Graph", g_overlayFpsHistory,
+                g_overlayFpsHistoryNext, g_overlayFpsHistoryCount, fpsCeiling,
+                g_overlayFpsMarks, fpsMarkLabelPtrs, revealedMarks, timeSpanSeconds);
+            y += OVERLAY_GRAPH_HEIGHT + OVERLAY_GRAPH_TIME_SCALE_HEIGHT + OVERLAY_SECTION_GAP;
+            y += 20; // blank line below the graph's time scale
         }
-    }
+
+        for (int i = 0; i < content.bottomCount; ++i) {
+            SetTextColor(hdc, content.bottom[i].alert ? OVERLAY_ALERT_COLOR : g_overlayTextColor);
+            TextOutA(hdc, 8, y, content.bottom[i].text, static_cast<int>(strlen(content.bottom[i].text)));
+            y += 20;
+        }
+        SetTextColor(hdc, g_overlayTextColor);
+
+        if (threadSectionLineCount > 0) {
+            y += OVERLAY_SECTION_GAP; // skip a line before the thread breakdown
+            for (int i = 0; i < threadSectionLineCount; ++i) {
+                TextOutA(hdc, 8, y, threadSectionLines[i], static_cast<int>(strlen(threadSectionLines[i])));
+                y += OVERLAY_THREAD_LINE_HEIGHT;
+            }
+        }
+    } // !content.compact
 
     if (oldFont) {
         SelectObject(hdc, oldFont);
@@ -4030,7 +5847,8 @@ static void RenderLogPanel(const RECT& targetRect) {
     // Copy every buffered entry (not just `lineCount` of them) so wrapping a
     // long entry into extra rows still leaves enough source material to
     // fill the panel; the tail of the resulting row list is taken below.
-    char snapshot[OVERLAY_LOG_CAPACITY][sizeof(g_overlayLogRing[0])] = {};
+    // Static (only the overlay thread renders the log panel) so these large buffers stay off its stack.
+    static char snapshot[OVERLAY_LOG_CAPACITY][OVERLAY_LOG_ENTRY_SIZE];
     int snapshotCount = 0;
     if (g_logLockInitialized) {
         EnterCriticalSection(&g_logLock);
@@ -4063,7 +5881,10 @@ static void RenderLogPanel(const RECT& targetRect) {
     int maxRowWidthPx = g_overlayLogWrapEnabled ? (g_overlayLogPanelWidth - 12) : 0;
 
     static const int OVERLAY_LOG_MAX_VISUAL_ROWS = OVERLAY_LOG_CAPACITY * 4;
-    char rows[OVERLAY_LOG_MAX_VISUAL_ROWS][160] = {};
+    // A wrapped row holds however many characters fit the panel width (up to ~400 for the
+    // widest panel with a narrow font), so it must be as large as a stored log entry -
+    // 160 here cut every long row short and silently dropped the text after the cut.
+    static char rows[OVERLAY_LOG_MAX_VISUAL_ROWS][OVERLAY_LOG_ENTRY_SIZE];
     int rowCount = 0;
     for (int i = 0; i < snapshotCount && rowCount < OVERLAY_LOG_MAX_VISUAL_ROWS; ++i) {
         const char* text = snapshot[i];
@@ -4165,6 +5986,7 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
         if (g_overlayShowResources && (g_overlayVisible || g_overlayLogVisible)) {
             SampleProcessDiagnostics();
         }
+        RefreshRendererChain();
 
         RECT targetRect;
         bool haveTargetRect = g_overlayTargetWindow && GetWindowRect(g_overlayTargetWindow, &targetRect);
@@ -4239,7 +6061,9 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     }
 
     g_overlayTargetWindow = FindGameWindow();
-    int panelHeight = ComputeOverlayPanelHeight();
+    OverlayContent initialContent;
+    BuildOverlayContent(initialContent);
+    int panelHeight = ComputeOverlayPanelHeight(initialContent);
     RECT targetRect = {100, 100, 100 + OVERLAY_PANEL_WIDTH + 200, 100 + panelHeight + 200};
     if (g_overlayTargetWindow) {
         GetWindowRect(g_overlayTargetWindow, &targetRect);
@@ -4286,6 +6110,16 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
     LogLine("INFO", "Overlay window created; toggle_key=0x%02X log_toggle_key=0x%02X position=%s log_enabled=%s layered=%s",
         g_overlayToggleKey, g_overlayLogToggleKey, g_overlayPosition, g_overlayLogEnabled ? "true" : "false",
         g_overlayWindowsAreLayered ? "true" : "false");
+#ifdef UM_TEST_DUMP_CANVAS
+    // Test builds only: injected keystrokes are ignored by the toggle hook (by
+    // design), so start visible instead.
+    g_overlayVisible = 1;
+    ShowWindow(g_overlayWindow, SW_SHOWNOACTIVATE);
+    if (g_overlayLogWindow) {
+        g_overlayLogVisible = 1;
+        ShowWindow(g_overlayLogWindow, SW_SHOWNOACTIVATE);
+    }
+#endif
 
     MSG msg;
     while (GetMessageA(&msg, NULL, 0, 0) > 0) {
@@ -4322,43 +6156,24 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
         ApplySettingEnvOverride(kSettings[i]);
     }
 
-    ApplyPerformanceTweaks();
-    if (g_enableAntiCrash) {
+    if (g_suppressErrorDialogs) {
         SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX);
     }
-    if (g_enableHeapTermination) {
-        // Converts heap corruption that the OS heap manager detects during a later,
-        // unrelated alloc/free into an immediate fail-fast crash at that detection
-        // point, instead of letting the process silently keep running on corrupted
-        // metadata until a much later, harder-to-diagnose crash occurs elsewhere.
-        if (!HeapSetInformation(NULL, HeapEnableTerminationOnCorruption, NULL, 0)) {
-            LogLine("WARN", "HeapSetInformation(HeapEnableTerminationOnCorruption) failed, error=%lu", GetLastError());
-        }
-    }
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
-    g_vectoredExceptionHandler = AddVectoredExceptionHandler(1, VectoredLoggingHandler);
-    if (!g_vectoredExceptionHandler) {
-        LogLine("WARN", "AddVectoredExceptionHandler failed, error=%lu", GetLastError());
-    }
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s anti_crash=%s mob_validation=%s heap_corruption_termination=%s heap_validate_on_map_load=%s heap_validate_dry_run=%s performance_priority=%s performance_affinity=%s overlay=%s",
+    LogLine("INFO", "Universal Mod DLL attached; version=%s asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s suppress_error_dialogs=%s mob_validation=%s heap_free_quarantine=%s heap_alloc_padding=%d overlay=%s",
+        UM_VERSION,
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
         g_enableKeyboardRewriteLogging ? "enabled" : "disabled",
         g_enableCrashLogging ? "enabled" : "disabled",
         g_enableFileIoLogging ? "enabled" : "disabled",
         g_clearLogOnStart ? "enabled" : "disabled",
-        g_enableAntiCrash ? "enabled" : "disabled",
+        g_suppressErrorDialogs ? "enabled" : "disabled",
         g_enableMobValidation ? "enabled" : "disabled",
-        g_enableHeapTermination ? "enabled" : "disabled",
-        g_enableHeapValidateOnMapLoad ? "enabled" : "disabled",
-        g_heapValidateDryRun ? "enabled" : "disabled",
-        g_enablePerformancePriority ? "enabled" : "disabled",
-        g_enablePerformanceAffinity ? "enabled" : "disabled",
+        g_enableHeapFreeQuarantine ? "enabled" : "disabled",
+        g_heapAllocPadding,
         g_enableOverlay ? "enabled" : "disabled");
-    if (g_enableAntiCrash) {
-        LogLine("ANTICRASH", "Windows critical-error dialogs are suppressed; unsafe exceptions will still use normal crash handling");
-    }
     LogSystemInformation();
 
     HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
@@ -4375,10 +6190,11 @@ static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
 
     InitializeCriticalSection(&g_fileHandleLock);
     g_fileHandleLockInitialized = true;
-    if (g_enableFileIoLogging || g_enableMobValidation || g_enableOverlay || g_enableHeapValidateOnMapLoad) {
+    const bool heapHooksWanted = g_enableHeapFreeQuarantine || g_heapAllocPadding > 0;
+    if (g_enableFileIoLogging || g_enableMobValidation || g_enableOverlay || heapHooksWanted) {
         InstallFileIoHooks();
     }
-    if (g_enableHeapValidateOnMapLoad) {
+    if (heapHooksWanted) {
         InstallHeapHooks();
     }
 
