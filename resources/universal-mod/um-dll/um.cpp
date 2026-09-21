@@ -68,6 +68,7 @@ static char g_profilerPosition[16] = "left";
 static HWND g_profilerWindow = NULL;
 static int g_profilerHz = 250;
 static int g_profilerLineCount = 20;
+static bool g_profilerEnabled = false;  // OVERLAY_PROFILER_ENABLED
 static volatile LONG g_profilerVisible = 0;
 static volatile LONG g_profilerRunning = 0;      // the sampler keeps going while this is 1
 static volatile DWORD g_profilerFrameThreadId = 0; // the thread that presents frames: the game's main thread
@@ -648,20 +649,6 @@ static const SettingDef kSettings[] = {
         "; Show CPU usage per thread; (true/false)"),
     IntSetting("OVERLAY_THREAD_COUNT", &g_overlayThreadDisplayCount, 1, OVERLAY_THREAD_DISPLAY_MAX, 8, true,
         "; Number of threads to list (1-32)."),
-    VKeySetting("OVERLAY_PROFILER_KEY", &g_profilerKey, VK_F11, true,
-        "; Key that shows/hides the profiler window: where the game's main thread spends\n"
-        "; each frame, as a call tree of game.exe functions. Names are guessed from the\n"
-        "; game's classes, strings and API calls (sub_<address> when unknown); you can name\n"
-        "; functions in um-names.txt, one \"address name\" per line. Sampling only runs\n"
-        "; while it is shown, at a cost of a few percent of one core; F1-F12 or a\n"
-        "; virtual-key code."),
-    PositionSetting("OVERLAY_PROFILER_POSITION", g_profilerPosition, sizeof(g_profilerPosition), "left", true,
-        "; Profiler window position, same choices as OVERLAY_POSITION."),
-    IntSetting("OVERLAY_PROFILER_HZ", &g_profilerHz, 50, 1000, 250, true,
-        "; How many times per second the main thread is sampled (50-1000); more is more\n"
-        "; precise and costs more."),
-    IntSetting("OVERLAY_PROFILER_LINES", &g_profilerLineCount, 6, 40, 20, true,
-        "; Number of lines of the profiler tree (6-40)."),
     ColorSetting("OVERLAY_BACKGROUND_COLOR", &g_overlayBackgroundColor, RGB(0, 0, 0), true,
         "; Background color as hex RRGGBB."),
     IntSetting("OVERLAY_BACKGROUND_OPACITY", &g_overlayBackgroundOpacityPercent, 0, 100, 20, true,
@@ -687,6 +674,24 @@ static const SettingDef kSettings[] = {
     StringSetting("OVERLAY_LOG_LEVEL_FILTER", g_overlayLogLevelFilter, sizeof(g_overlayLogLevelFilter), "SYSINFO", true, true,
         "; Log levels to hide in the panel, comma-separated (SYSINFO, INFO, WARN, ERROR,\n"
         "; FATAL, DEBUG); um.log still keeps everything."),
+    BoolSetting("OVERLAY_PROFILER_ENABLED", &g_profilerEnabled, false, true,
+        "; Enable the profiler window (opened with OVERLAY_PROFILER_KEY below): where the\n"
+        "; game's main thread spends each frame. A tool for finding performance problems,\n"
+        "; so off by default. Needs a restart; (true/false)",
+        "; -- Profiler --"),
+    VKeySetting("OVERLAY_PROFILER_KEY", &g_profilerKey, VK_F11, true,
+        "; Key that shows/hides the profiler window, a call tree of game.exe functions.\n"
+        "; Names are guessed from the game's classes, strings and API calls (sub_<address>\n"
+        "; when unknown); you can name functions in um-names.txt, one \"address name\" per\n"
+        "; line. Sampling only runs while the window is shown, at a cost of a few percent of\n"
+        "; one core; F1-F12 or a virtual-key code."),
+    PositionSetting("OVERLAY_PROFILER_POSITION", g_profilerPosition, sizeof(g_profilerPosition), "left", true,
+        "; Profiler window position, same choices as OVERLAY_POSITION."),
+    IntSetting("OVERLAY_PROFILER_HZ", &g_profilerHz, 50, 1000, 250, true,
+        "; How many times per second the main thread is sampled (50-1000); more is more\n"
+        "; precise and costs more."),
+    IntSetting("OVERLAY_PROFILER_LINES", &g_profilerLineCount, 6, 40, 20, true,
+        "; Number of lines of the profiler tree (6-40)."),
 };
 static const size_t kSettingCount = sizeof(kSettings) / sizeof(kSettings[0]);
 
@@ -3099,6 +3104,7 @@ static void FormatOverrunSites(char* out, size_t outSize) {
 // Once per block; logged for the first few blocks of each allocation site (a site that overruns
 // does it for every object it makes). Lock held.
 static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found, const char* when) {
+    if (g_reportedOverruns.size() >= 200000) g_reportedOverruns.clear(); // bounded: a very long session must not grow it forever
     if (!g_reportedOverruns.insert(start).second) return;
     ++g_quarantineOverruns;
     static bool explained = false;
@@ -3145,7 +3151,14 @@ static void ReportOverlap(DWORD start, DWORD size, const DWORD* callers, DWORD o
 
 // Checks every live block's guard bytes, a chunk at a time so the game is never held up for long.
 // A block the heap no longer knows (freed behind the hooks' back) is dropped instead of reported.
-static DWORD WINAPI OverrunWatchThread(LPVOID) {
+// An exception that leaves a thread of this DLL ends the whole game process, so every thread of the DLL
+// runs inside this guard: the thread just ends.
+#define UM_GUARDED_THREAD(name) \
+    static DWORD WINAPI name##Body(LPVOID); \
+    static DWORD WINAPI name(LPVOID parameter) { try { return name##Body(parameter); } catch (...) { return 0; } } \
+    static DWORD WINAPI name##Body(LPVOID parameter)
+
+UM_GUARDED_THREAD(OverrunWatchThread) {
     for (;;) {
         Sleep(500);
         size_t resumeAt = 0;
@@ -3733,8 +3746,12 @@ static HANDLE WINAPI HookedCreateFileA(LPCSTR fileName, DWORD desiredAccess,
     if (handle != INVALID_HANDLE_VALUE && fileName) {
         LogOpenedFile(handle, fileName, desiredAccess);
         if ((desiredAccess & GENERIC_READ) != 0) {
-            ValidateMobFile(fileName);
-            NoteMapLoad(fileName);
+            try {
+                ValidateMobFile(fileName);
+                NoteMapLoad(fileName);
+            } catch (...) {
+                // An exception thrown here would unwind through the game's own frames and end the process.
+            }
         }
     }
     return handle;
@@ -3751,8 +3768,11 @@ static HANDLE WINAPI HookedCreateFileW(LPCWSTR fileName, DWORD desiredAccess,
         ConvertWidePath(fileName, path, sizeof(path));
         LogOpenedFile(handle, path, desiredAccess);
         if ((desiredAccess & GENERIC_READ) != 0) {
-            ValidateMobFile(path);
-            NoteMapLoad(path);
+            try {
+                ValidateMobFile(path);
+                NoteMapLoad(path);
+            } catch (...) {
+            }
         }
     }
     return handle;
@@ -3838,8 +3858,16 @@ static LPVOID WINAPI PaddedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer,
 
 static BOOL WINAPI HookedHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
     HeapHookTimer timer;
-    if (g_heapFreeQuarantineInstalled && pointer && QuarantineHeapFree(heap, flags, pointer)) {
-        return TRUE;
+    try {
+        if (g_heapFreeQuarantineInstalled && pointer && QuarantineHeapFree(heap, flags, pointer)) {
+            return TRUE;
+        }
+    } catch (...) {
+        // Out of memory in the bookkeeping: let the real free run, and release the lock if this thread holds it.
+        while (g_quarantineLock.RecursionCount > 0 &&
+                g_quarantineLock.OwningThread == reinterpret_cast<HANDLE>(static_cast<ULONG_PTR>(GetCurrentThreadId()))) {
+            LeaveCriticalSection(&g_quarantineLock);
+        }
     }
     return g_originalHeapFree(heap, flags, pointer);
 }
@@ -4007,8 +4035,105 @@ static void CountPresentedFrame() {
     InterlockedIncrement(&g_overlayFrameCount);
 }
 
+// Time spent inside the game's DirectDraw Flip/Blt/BltFast calls, measured only while the profiler window
+// is shown, so the profiler can say what getting the frame to the screen costs the main thread.
+enum { kDdFlip = 0, kDdBlt = 1, kDdBltFast = 2, kDdKinds = 3 };
+static volatile LONG g_ddCalls[kDdKinds];
+static volatile LONG g_ddTicks[kDdKinds];      // QueryPerformanceCounter ticks
+static volatile LONG g_ddPixels[kDdKinds];     // area of the rectangles the game named (0 when it named none)
+static volatile LONG g_ddWholeSurface[kDdKinds]; // calls that named no rectangle at all (the whole surface)
+// What a surface is, worked out once per surface pointer: "1920x1080 32bpp sys" (sys = system memory,
+// vid = video memory, primary/back/tex/3d/plain from its caps). Slot 22 (GetSurfaceDesc) and the byte
+// offsets of DDSURFACEDESC2 (height 8, width 12, pixel format bit count 84, caps 104) are as in the
+// header note above.
+static volatile LONG g_ddInfoLock = 0;
+static std::unordered_map<void*, std::string> g_ddSurfaceText;
+struct DdPairStat { LONGLONG ticks; LONG calls; LONGLONG pixels; };
+static std::map<std::string, DdPairStat> g_ddPairs;      // "BltFast 800x600 32bpp sys -> 1920x1080 32bpp primary"
+
+static std::string DescribeDdSurface(void* surface) {
+    if (!surface) return "(none)";
+    while (InterlockedCompareExchange(&g_ddInfoLock, 1, 0) != 0) Sleep(0);
+    auto found = g_ddSurfaceText.find(surface);
+    std::string text = found != g_ddSurfaceText.end() ? found->second : std::string();
+    InterlockedExchange(&g_ddInfoLock, 0);
+    if (!text.empty()) return text;
+    text = "?";
+    void** vtable = IsBadReadPtr(surface, sizeof(void*)) ? NULL : *reinterpret_cast<void***>(surface);
+    if (vtable && !IsBadReadPtr(vtable + 22, sizeof(void*))) {
+        BYTE desc[128] = {};
+        const DWORD size = 124;
+        memcpy(desc, &size, 4);
+        typedef HRESULT (WINAPI *GetSurfaceDescFunction)(void*, void*);
+        if (SUCCEEDED(reinterpret_cast<GetSurfaceDescFunction>(vtable[22])(surface, desc))) {
+            DWORD flags = 0, height = 0, width = 0, bits = 0, caps = 0;
+            memcpy(&flags, desc + 4, 4); memcpy(&height, desc + 8, 4); memcpy(&width, desc + 12, 4);
+            memcpy(&bits, desc + 84, 4); memcpy(&caps, desc + 104, 4);
+            char part[96];
+            if (flags & 0x1000) snprintf(part, sizeof(part), "%lux%lu %lubpp", width, height, bits);   // DDSD_PIXELFORMAT
+            else snprintf(part, sizeof(part), "%lux%lu", width, height);
+            text = part;
+            if (caps & 0x200) text += " primary";
+            if (caps & 0x4) text += " back";
+            if (caps & 0x800) text += " sys";
+            if (caps & 0x4000) text += " vid";
+            if (caps & 0x1000) text += " tex";
+            if (caps & 0x2000) text += " 3d";
+            if (caps & 0x40) text += " plain";
+        }
+    }
+    while (InterlockedCompareExchange(&g_ddInfoLock, 1, 0) != 0) Sleep(0);
+    if (g_ddSurfaceText.size() < 4096) g_ddSurfaceText[surface] = text;
+    InterlockedExchange(&g_ddInfoLock, 0);
+    return text;
+}
+
+struct DdTimer {
+    int kind;
+    void* destination;
+    void* source;
+    LONGLONG start = 0;
+    LONGLONG pixels = 0;
+    DdTimer(int kindOfCall, const RECT* rect, void* destinationSurface, void* sourceSurface)
+            : kind(kindOfCall), destination(destinationSurface), source(sourceSurface) {
+        if (g_profilerRunning) {
+            LARGE_INTEGER now;
+            QueryPerformanceCounter(&now);
+            start = now.QuadPart;
+            if (rect) pixels = static_cast<LONGLONG>(rect->right - rect->left) * (rect->bottom - rect->top);
+            if (rect) InterlockedExchangeAdd(&g_ddPixels[kind], static_cast<LONG>(pixels));
+            else InterlockedIncrement(&g_ddWholeSurface[kind]);
+        }
+    }
+    ~DdTimer() {
+        if (!start) return;
+        LARGE_INTEGER now;
+        QueryPerformanceCounter(&now);
+        const LONGLONG ticks = now.QuadPart - start;
+        InterlockedExchangeAdd(&g_ddTicks[kind], static_cast<LONG>(ticks));
+        InterlockedIncrement(&g_ddCalls[kind]);
+        bool locked = false;
+        try {
+            static const char* const kinds[kDdKinds] = { "Flip", "Blt", "BltFast" };
+            std::string key = std::string(kinds[kind]) + " " + DescribeDdSurface(source) + " -> " + DescribeDdSurface(destination);
+            while (InterlockedCompareExchange(&g_ddInfoLock, 1, 0) != 0) Sleep(0);
+            locked = true;
+            if (g_ddPairs.size() < 200 || g_ddPairs.count(key)) {
+                DdPairStat& stat = g_ddPairs[key];
+                stat.ticks += ticks;
+                stat.calls += 1;
+                stat.pixels += pixels;
+            }
+        } catch (...) {
+            // A destructor must not throw; the per-surface list is only a diagnostic.
+        }
+        if (locked) InterlockedExchange(&g_ddInfoLock, 0);
+    }
+};
+
 // Count one presented frame for the overlay's FPS/frametime readout.
 static HRESULT WINAPI HookedDDFlip(void* self, void* targetOverride, DWORD flags) {
+    DdTimer timer(kDdFlip, NULL, self, NULL);
     CountPresentedFrame();
     return g_originalDDFlip(self, targetOverride, flags);
 }
@@ -4019,6 +4144,7 @@ static HRESULT WINAPI HookedDDFlip(void* self, void* targetOverride, DWORD flags
 // are typically much smaller than a full-frame redraw).
 static HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
         LPRECT srcRect, DWORD flags, void* bltFx) {
+    DdTimer timer(kDdBlt, destRect, self, srcSurface);
     if (!destRect) {
         CountPresentedFrame();
     } else {
@@ -4039,6 +4165,7 @@ static HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
 // conventionally targets (0,0), while sprite/HUD/cursor blits usually don't.
 static HRESULT WINAPI HookedDDBltFast(void* self, DWORD x, DWORD y, void* srcSurface,
         LPRECT srcRect, DWORD trans) {
+    DdTimer timer(kDdBltFast, srcRect, self, srcSurface);
     if (x == 0 && y == 0) {
         CountPresentedFrame();
     }
@@ -5049,7 +5176,16 @@ static void SendQwertyNumberKeyPress(BYTE vkCode, bool logRewrite) {
 // Intercept the backtick and number-row keys and rewrite them as US-QWERTY presses;
 // also watch for the overlay toggle key and the config-reload key, both
 // independently of the rewrite feature.
+static LRESULT CALLBACK LowLevelKeyboardProcBody(int nCode, WPARAM wParam, LPARAM lParam);
 static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    try {
+        return LowLevelKeyboardProcBody(nCode, wParam, lParam);
+    } catch (...) {
+        return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam);
+    }
+}
+
+static LRESULT CALLBACK LowLevelKeyboardProcBody(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nCode == HC_ACTION) {
         KBDLLHOOKSTRUCT* kb = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
         // Do not process the synthetic events generated by SendInput below.
@@ -5080,7 +5216,7 @@ static LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lP
                 }
                 return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
             }
-            if (g_enableOverlay && kb->vkCode == g_profilerKey) {
+            if (g_enableOverlay && g_profilerEnabled && kb->vkCode == g_profilerKey) {
                 if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
                     if (!g_keyboardRewriteKeyDown[g_profilerKey]) {
                         g_keyboardRewriteKeyDown[g_profilerKey] = true;
@@ -5709,7 +5845,19 @@ static void PublishProfile(const std::vector<std::string>& lines) {
     InterlockedExchange(&g_profileLock, 0);
 }
 
-static DWORD WINAPI ProfilerThread(LPVOID) {
+static DWORD WINAPI ProfilerThreadBody(LPVOID);
+static DWORD WINAPI ProfilerThread(LPVOID parameter) {
+    DWORD result = 0;
+    try {
+        result = ProfilerThreadBody(parameter);
+    } catch (...) {
+        g_profilerRunning = 0;
+        InterlockedExchange(&g_profilerThreadAlive, 0);
+    }
+    return result;
+}
+
+static DWORD WINAPI ProfilerThreadBody(LPVOID) {
     LabelCurrentThread(L"um.dll: Profiler");
     if (g_codeLow == 0) InitGameImageRanges(); // not done when the heap hooks are off
     if (g_profileFunctions.empty()) {
@@ -5727,6 +5875,7 @@ static DWORD WINAPI ProfilerThread(LPVOID) {
     QueryPerformanceFrequency(&counterFrequency);
     InterlockedExchange(&g_heapHookTicks, 0);
     InterlockedExchange(&g_heapHookCalls, 0);
+    for (int k = 0; k < kDdKinds; ++k) { InterlockedExchange(&g_ddCalls[k], 0); InterlockedExchange(&g_ddTicks[k], 0); InterlockedExchange(&g_ddPixels[k], 0); InterlockedExchange(&g_ddWholeSurface[k], 0); }
     int snapshots = 0;
     const DWORD periodMs = g_profilerHz >= 1000 ? 1 : static_cast<DWORD>(1000 / (g_profilerHz > 0 ? g_profilerHz : 250));
 
@@ -5741,6 +5890,7 @@ static DWORD WINAPI ProfilerThread(LPVOID) {
             windowFrames = g_overlayFrameCount;
             InterlockedExchange(&g_heapHookTicks, 0);
             InterlockedExchange(&g_heapHookCalls, 0);
+            for (int k = 0; k < kDdKinds; ++k) { InterlockedExchange(&g_ddCalls[k], 0); InterlockedExchange(&g_ddTicks[k], 0); InterlockedExchange(&g_ddPixels[k], 0); InterlockedExchange(&g_ddWholeSurface[k], 0); }
         }
         if (thread) {
             // Nothing between SuspendThread and ResumeThread may take a lock the game thread could hold.
@@ -5804,6 +5954,43 @@ static DWORD WINAPI ProfilerThread(LPVOID) {
                     static_cast<double>(hookCalls) / frames, hookMs, frameMs > 0.0 ? hookMs * 100.0 / frameMs : 0.0);
                 lines.push_back(text);
             }
+            if (frames > 0 && counterFrequency.QuadPart > 0) {
+                static const char* const kinds[kDdKinds] = { "Flip", "Blt", "BltFast" };
+                std::string dd;
+                for (int k = 0; k < kDdKinds; ++k) {
+                    const LONG calls = InterlockedExchange(&g_ddCalls[k], 0);
+                    const LONG ticks = InterlockedExchange(&g_ddTicks[k], 0);
+                    const LONG pixels = InterlockedExchange(&g_ddPixels[k], 0);
+                    const LONG whole = InterlockedExchange(&g_ddWholeSurface[k], 0);
+                    if (calls <= 0) continue;
+                    char part[110];
+                    snprintf(part, sizeof(part), "%s%s %.1fx %.2f ms", dd.empty() ? "" : " | ", kinds[k],
+                        static_cast<double>(calls) / frames, static_cast<double>(ticks) * 1000.0 / counterFrequency.QuadPart / frames);
+                    dd += part;
+                    if (pixels > 0) {
+                        snprintf(part, sizeof(part), " %.2f Mpx", static_cast<double>(pixels) / frames / 1e6);
+                        dd += part;
+                    }
+                    if (whole > 0) {
+                        snprintf(part, sizeof(part), " (%.1f whole-surface)", static_cast<double>(whole) / frames);
+                        dd += part;
+                    }
+                }
+                if (!dd.empty()) lines.push_back("DirectDraw per frame: " + dd);
+                std::vector<std::pair<std::string, DdPairStat>> pairs;
+                while (InterlockedCompareExchange(&g_ddInfoLock, 1, 0) != 0) Sleep(0);
+                pairs.assign(g_ddPairs.begin(), g_ddPairs.end());
+                g_ddPairs.clear();
+                InterlockedExchange(&g_ddInfoLock, 0);
+                std::sort(pairs.begin(), pairs.end(),
+                    [](const std::pair<std::string, DdPairStat>& a, const std::pair<std::string, DdPairStat>& b) { return a.second.ticks > b.second.ticks; });
+                for (size_t i = 0; i < pairs.size() && i < 5; ++i) {
+                    const double ms = static_cast<double>(pairs[i].second.ticks) * 1000.0 / counterFrequency.QuadPart / frames;
+                    if (ms < 0.05) break;
+                    snprintf(text, sizeof(text), "  %.2f ms %.1fx %s", ms, static_cast<double>(pairs[i].second.calls) / frames, pairs[i].first.c_str());
+                    lines.push_back(text);
+                }
+            }
             ProfileEmit(window, 0, 0, frameMs, lines, static_cast<size_t>(g_profilerLineCount) + lines.size(),
                 window.samples / 100 > 0 ? window.samples / 100 : 1);
             if (!window.externals.empty() && frameMs > 0.0) {
@@ -5827,6 +6014,7 @@ static DWORD WINAPI ProfilerThread(LPVOID) {
             windowFrames = g_overlayFrameCount;
             InterlockedExchange(&g_heapHookTicks, 0);
             InterlockedExchange(&g_heapHookCalls, 0);
+            for (int k = 0; k < kDdKinds; ++k) { InterlockedExchange(&g_ddCalls[k], 0); InterlockedExchange(&g_ddTicks[k], 0); InterlockedExchange(&g_ddPixels[k], 0); InterlockedExchange(&g_ddWholeSurface[k], 0); }
         }
         WaitForSingleObject(g_profilerStopEvent, periodMs);
     }
@@ -5837,7 +6025,7 @@ static DWORD WINAPI ProfilerThread(LPVOID) {
 
 // Called from the overlay's timer: the sampler runs only while its window is on screen.
 static void UpdateProfilerState() {
-    const bool wanted = g_profilerVisible;
+    const bool wanted = g_profilerEnabled && g_profilerVisible;
     if (wanted && !g_profilerRunning) {
         if (InterlockedCompareExchange(&g_profilerThreadAlive, 1, 0) != 0) return; // the last one is still ending
         if (!g_profilerStopEvent) g_profilerStopEvent = CreateEventA(NULL, TRUE, FALSE, NULL);
@@ -6762,7 +6950,16 @@ static void RenderProfilerPanel(const RECT& targetRect) {
 }
 
 // Follow the game window, handle input, and drive both panels' rendering.
+static LRESULT CALLBACK OverlayWindowProcBody(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
+    try {
+        return OverlayWindowProcBody(hwnd, message, wParam, lParam);
+    } catch (...) {
+        return DefWindowProcA(hwnd, message, wParam, lParam); // an exception must not unwind through user32
+    }
+}
+
+static LRESULT CALLBACK OverlayWindowProcBody(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) {
     switch (message) {
     case WM_TIMER: {
         if (g_overlayTargetWindow && !IsWindow(g_overlayTargetWindow)) {
@@ -6813,7 +7010,7 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
             }
             SetWindowPos(g_overlayLogWindow, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         }
-        if (g_profilerVisible && g_profilerWindow) {
+        if (g_profilerEnabled && g_profilerVisible && g_profilerWindow) {
             if (haveTargetRect) {
                 RenderProfilerPanel(targetRect);
             }
@@ -6863,7 +7060,7 @@ static LRESULT CALLBACK OverlayWindowProc(HWND hwnd, UINT message, WPARAM wParam
 // primary surface's Flip/Blt is used only for the FPS/frametime counter.
 // Both windows start hidden; toggled together by LowLevelKeyboardProc via
 // the configurable OVERLAY_TOGGLE_KEY.
-static DWORD WINAPI OverlayThread(LPVOID parameter) {
+UM_GUARDED_THREAD(OverlayThread) {
     LabelCurrentThread(L"um.dll: Overlay");
     HMODULE module = reinterpret_cast<HMODULE>(parameter);
     g_overlayStartTickMs = GetTickCount64();
@@ -6924,7 +7121,7 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
         }
     }
 
-    {
+    if (g_profilerEnabled) {
         RECT profilerRect;
         ComputeOverlayRect(targetRect, g_profilerPosition, 320, 60, profilerRect);
         g_profilerWindow = CreateWindowExA(extendedStyle,
@@ -6976,7 +7173,7 @@ static DWORD WINAPI OverlayThread(LPVOID parameter) {
 
 // Perform configuration, diagnostics, hooks, and ASI validation after the
 // loader lock is released. Keeping this work out of DllMain avoids deadlocks.
-static DWORD WINAPI InitializeDllThread(LPVOID parameter) {
+UM_GUARDED_THREAD(InitializeDllThread) {
     EnsureThreadDescriptionFunctionsResolved();
     LabelCurrentThread(L"um.dll: Init");
     HMODULE hModule = reinterpret_cast<HMODULE>(parameter);

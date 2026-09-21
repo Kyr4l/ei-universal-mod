@@ -33,16 +33,16 @@ struct Image {
         codeLo = codeHi = 0;
         if (!data || size < 0x200) return false;
         uint32_t lfanew = U32Rva(0x3c);
-        if (lfanew + 0x100 > size) return false;
+        if (!Fits(lfanew, 0x100)) return false;
         uint16_t count = U16Rva(lfanew + 6);
         uint16_t optionalSize = U16Rva(lfanew + 20);
         uint32_t table = lfanew + 24 + optionalSize;
-        if (table + count * 40u > size) return false;
+        if (!Fits(table, static_cast<uint64_t>(count) * 40)) return false;
         for (uint16_t i = 0; i < count; ++i) {
             uint32_t at = table + i * 40u;
             uint32_t virtualSize = U32Rva(at + 8), virtualAddress = U32Rva(at + 12), flags = U32Rva(at + 36);
             if (virtualAddress >= size) continue;
-            if (virtualAddress + virtualSize > size) virtualSize = size - virtualAddress;
+            if (static_cast<uint64_t>(virtualAddress) + virtualSize > size) virtualSize = size - virtualAddress;
             Section section = { base + virtualAddress, base + virtualAddress + virtualSize, (flags & 0x20) != 0, (flags & 0x40) != 0 };
             sections.push_back(section);
             if (section.code) {
@@ -52,6 +52,9 @@ struct Image {
         }
         return codeHi > codeLo;
     }
+    // Do [offset, offset + length) lie inside the image? 64-bit arithmetic: the numbers come from headers that
+    // may be damaged, and a 32-bit sum can wrap around and pass a check it should fail.
+    bool Fits(uint64_t offset, uint64_t length) const { return offset + length <= size; }
     bool Has(uint32_t va, uint32_t n = 1) const { return va >= base && va - base + n <= size && va - base + n >= va - base; }
     const uint8_t* At(uint32_t va) const { return data + (va - base); }
     uint32_t U32(uint32_t va) const { uint32_t v; memcpy(&v, At(va), 4); return v; }
@@ -107,22 +110,22 @@ inline std::vector<uint32_t> FindFunctions(const Image& image) {
 inline std::unordered_map<uint32_t, std::string> ImportSlots(const Image& image) {
     std::unordered_map<uint32_t, std::string> slots;
     uint32_t lfanew = image.U32Rva(0x3c);
-    if (lfanew + 0x80 > image.size) return slots;
+    if (!image.Fits(lfanew, 0x80 + 24 + 104)) return slots;
     uint32_t importRva = image.U32Rva(lfanew + 24 + 104);
-    if (importRva == 0 || importRva + 20 > image.size) return slots;
-    for (uint32_t descriptor = importRva; descriptor + 20 <= image.size; descriptor += 20) {
+    if (importRva == 0 || !image.Fits(importRva, 20)) return slots;
+    for (uint64_t descriptor = importRva; image.Fits(descriptor, 20); descriptor += 20) {
         uint32_t originalThunk = image.U32Rva(descriptor), nameRva = image.U32Rva(descriptor + 12), firstThunk = image.U32Rva(descriptor + 16);
         if (nameRva == 0) break;
         uint32_t lookup = originalThunk ? originalThunk : firstThunk;
-        for (uint32_t k = 0; lookup + k * 4 + 4 <= image.size; ++k) {
+        for (uint64_t k = 0; image.Fits(static_cast<uint64_t>(lookup) + k * 4, 4); ++k) {
             uint32_t entry = image.U32Rva(lookup + k * 4);
             if (entry == 0) break;
             if (entry & 0x80000000u) continue;                 // by ordinal
-            if (entry + 4 >= image.size) continue;
+            if (!image.Fits(entry, 6)) continue;
             const char* name = reinterpret_cast<const char*>(image.data + entry + 2);
             size_t length = 0;
-            while (entry + 2 + length < image.size && name[length] && length < 64) ++length;
-            slots[image.base + firstThunk + k * 4] = std::string(name, length);
+            while (length < 64 && image.Fits(static_cast<uint64_t>(entry) + 2 + length, 1) && name[length]) ++length;
+            slots[static_cast<uint32_t>(image.base + firstThunk + k * 4)] = std::string(name, length);
         }
     }
     return slots;
@@ -289,21 +292,21 @@ struct ExportSymbols {
         size = module.size;
         if (!module.data || module.size < 0x200) return false;
         uint32_t lfanew = module.U32Rva(0x3c);
-        if (lfanew + 0x80 > module.size) return false;
+        if (!module.Fits(lfanew, 0x80 + 24 + 96)) return false;
         uint32_t exportRva = module.U32Rva(lfanew + 24 + 96);
-        if (exportRva == 0 || exportRva + 40 > module.size) return false;
+        if (exportRva == 0 || !module.Fits(exportRva, 40)) return false;
         uint32_t names = module.U32Rva(exportRva + 24), functions = module.U32Rva(exportRva + 28);
         uint32_t nameTable = module.U32Rva(exportRva + 32), ordinalTable = module.U32Rva(exportRva + 36);
-        if (names > 20000 || nameTable + names * 4 > module.size || ordinalTable + names * 2 > module.size) return false;
+        if (names > 20000 || !module.Fits(nameTable, static_cast<uint64_t>(names) * 4) || !module.Fits(ordinalTable, static_cast<uint64_t>(names) * 2)) return false;
         for (uint32_t i = 0; i < names; ++i) {
             uint32_t nameRva = module.U32Rva(nameTable + i * 4);
             uint16_t ordinal = module.U16Rva(ordinalTable + i * 2);
-            if (nameRva >= module.size || functions + ordinal * 4u + 4 > module.size) continue;
+            if (nameRva >= module.size || !module.Fits(static_cast<uint64_t>(functions) + ordinal * 4u, 4)) continue;
             uint32_t function = module.U32Rva(functions + ordinal * 4u);
             if (function == 0 || function >= module.size) continue;
             const char* name = reinterpret_cast<const char*>(module.data + nameRva);
             size_t length = 0;
-            while (nameRva + length < module.size && name[length] && length < 64) ++length;
+            while (length < 64 && module.Fits(static_cast<uint64_t>(nameRva) + length, 1) && name[length]) ++length;
             byRva.push_back(std::make_pair(function, std::string(name, length)));
         }
         std::sort(byRva.begin(), byRva.end());
