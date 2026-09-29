@@ -39,3 +39,7 @@ tools/um-standalone-tools/um-modelviewer/um-modelviewer.cfg
 
 # Copilot resources
 _cpr
+
+# um-modelviewer2's sources and window layout (local machine-specific)
+tools/um-standalone-tools/um-modelviewer2/um-modelviewer2.cfg
+tools/um-standalone-tools/um-modelviewer2/um-modelviewer2-imgui.ini
