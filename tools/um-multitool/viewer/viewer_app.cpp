@@ -29,6 +29,7 @@
 
 #include "library.hpp"
 #include "scene.hpp"
+#include "item_texts.hpp"
 #include "ui_items.hpp"
 #include "ui_sources.hpp"
 
@@ -123,6 +124,11 @@ static int RunResolve(const Library& lib, items::Category c, const std::string& 
         std::printf("%s %-26s %s\n", static_cast<int>(i) == r.texture ? "*" : " ", r.textures[i].name.c_str(), r.textures[i].note.c_str());
     }
     for (auto& n : r.notes) std::printf("note: %s\n", n.c_str());
+    if (lib.texts.AnyLoaded()) {
+        texts::ItemText t = texts::Lookup(lib.texts, *it, r.material >= 0 ? r.materials[r.material] : nullptr);
+        if (t.found) std::printf("text     [%s] %s\n         %s\n", t.key.c_str(), t.name.c_str(), t.description.c_str());
+        else std::printf("text     none (looked for \"%s\")\n", t.key.c_str());
+    }
     return 0;
 }
 
@@ -170,7 +176,7 @@ static int RunRender(Library& lib, items::Category c, const std::string& name, c
     Scene scene;
     scene.LoadModel(lib, r.loadable, true);
     auto rot = lib.rotations.find(items::CategoryKey(c)); // the same rotation as the viewer's tab
-    if (rot != lib.rotations.end()) for (int a = 0; a < 3; ++a) scene.rotationDegrees[a] = rot->second[a];
+    scene.SetOrientation(rot != lib.rotations.end() ? &rot->second : nullptr);
     scene.textureName = !texture.empty() ? texture : (r.texture >= 0 ? r.textures[r.texture].name : "");
     int status = 0;
     if (!scene.hasModel) {
@@ -209,8 +215,8 @@ static int RunGif(Library& lib, items::Category c, const std::string& name, cons
     Scene scene;
     scene.LoadModel(lib, r.loadable, true);
     scene.textureName = !texture.empty() ? texture : (r.texture >= 0 ? r.textures[r.texture].name : "");
-    auto rot = lib.rotations.find(items::CategoryKey(c));
-    if (rot != lib.rotations.end()) for (int a = 0; a < 3; ++a) scene.rotationDegrees[a] = rot->second[a];
+    auto rot = lib.rotations.find(items::CategoryKey(c)); // the same rotation as the viewer's tab
+    scene.SetOrientation(rot != lib.rotations.end() ? &rot->second : nullptr);
     std::string message;
     bool ok = ExportGif(lib, scene, out, size, message);
     std::printf("%s\n", message.c_str());
@@ -244,6 +250,25 @@ static bool ExportGif(Library& lib, Scene& scene, const std::string& path, int s
     return true;
 }
 
+// A rotation as angles about the world X, then Y, then Z axis (R = Rz * Ry * Rx), each in 0..359.
+static void OrientationDegrees(const std::array<float, 4>& q, int out[3]) {
+    fig::Quat o{q[0], q[1], q[2], q[3]};
+    fig::Vec3 cx = fig::QuatRotate(o, {1, 0, 0}), cy = fig::QuatRotate(o, {0, 1, 0}), cz = fig::QuatRotate(o, {0, 0, 1}); // R's columns
+    const float k = 180.0f / 3.14159265f;
+    float x, y, z;
+    if (std::fabs(cx.z) < 0.9999f) {
+        y = -std::asin(cx.z);
+        x = std::atan2(cy.z, cz.z);
+        z = std::atan2(cx.y, cx.x);
+    } else { // Y at +-90: fold X into Z
+        y = cx.z < 0 ? 1.5707963f : -1.5707963f;
+        x = 0.0f;
+        z = std::atan2(-cy.x, cy.y);
+    }
+    const float a[3] = {x, y, z};
+    for (int i = 0; i < 3; ++i) out[i] = ((static_cast<int>(std::lround(a[i] * k)) % 360) + 360) % 360;
+}
+
 static void GifDialog(App& app, int maxSize) {
     if (!app.gifOpen) return;
     // Top-left of the viewport, out of the way of the preview (bottom-right).
@@ -255,12 +280,34 @@ static void GifDialog(App& app, int maxSize) {
     ImGui::TextWrapped("A full 360 degree turn of %s, from the current camera angle and zoom.",
                        app.selectedName.empty() ? "the shown item" : app.selectedName.c_str());
     ImGui::Spacing();
+    // Typed; the size is capped by the window, whose back buffer the frames are drawn in.
     ImGui::SetNextItemWidth(220);
-    changed |= ImGui::SliderInt("Size (px)", &g.size, 64, std::max(64, maxSize));
+    changed |= ImGui::InputInt("Size (px)", &g.size, 16, 64);
+    g.size = std::max(16, g.size);
+    ImGui::SameLine();
+    ImGui::TextDisabled("(max %d)", std::max(16, maxSize));
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("The largest square that fits the window; enlarge the window for bigger GIFs");
     ImGui::SetNextItemWidth(220);
-    changed |= ImGui::SliderInt("Frames per second", &g.fps, 5, 50);
+    changed |= ImGui::InputInt("Frames per second", &g.fps, 1, 5);
+    g.fps = std::min(std::max(1, g.fps), 120);
     ImGui::SetNextItemWidth(220);
     changed |= ImGui::SliderFloat("Speed (degrees/s)", &g.degreesPerSecond, 10.0f, 360.0f, "%.0f");
+    // Straight views along the axes, so a spin about X or Y is seen square on. Sets the viewport's camera.
+    ImGui::TextUnformatted("Camera from");
+    struct View { const char* label; float yaw, pitch; const char* tip; };
+    static const View views[] = {{"+X", 0, 0, "From the +X side, looking along X"}, {"-X", 180, 0, "From the -X side, looking along X"},
+                                 {"+Y", 90, 0, "From the +Y side, looking along Y"}, {"-Y", -90, 0, "From the -Y side, looking along Y"},
+                                 {"Top", -90, 90, "From above, looking down Z"}, {"Bottom", -90, -90, "From below, looking up Z"},
+                                 {"Default", 45, 20, "The viewer's usual 3/4 view"}};
+    for (const View& v : views) {
+        ImGui::SameLine();
+        if (ImGui::Button(v.label)) {
+            app.scene.camera.yawDeg = v.yaw;
+            app.scene.camera.pitchDeg = v.pitch;
+            app.scene.options.autoRotate = false;
+        }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", v.tip);
+    }
     ImGui::TextUnformatted("Spin about");
     for (int a = 0; a < 3; ++a) {
         ImGui::SameLine();
@@ -278,7 +325,8 @@ static void GifDialog(App& app, int maxSize) {
             changed = true;
         }
     }
-    g.size = std::min(g.size, std::max(64, maxSize));
+    if (g.size > maxSize)
+        ImGui::TextColored(ImVec4(0.95f, 0.75f, 0.35f, 1), "The window fits %d px: the GIF will be %d x %d", maxSize, maxSize, maxSize);
     int frames = Scene::TurntableFrames(g);
     ImGui::TextDisabled("%d frames, %.1f s per turn", frames, frames / static_cast<float>(std::max(g.fps, 1)));
     if (g.fps > 50 || 100 % g.fps) ImGui::TextDisabled("GIF timing is in 1/100 s: plays at %.1f fps",
@@ -318,7 +366,7 @@ static void GifDialog(App& app, int maxSize) {
 static void ApplyRotation(App& app) {
     if (app.activeTab >= static_cast<int>(items::Category::Count)) return;
     auto it = app.lib.rotations.find(items::CategoryKey(static_cast<items::Category>(app.activeTab)));
-    for (int a = 0; a < 3; ++a) app.scene.rotationDegrees[a] = it == app.lib.rotations.end() ? 0 : it->second[a];
+    app.scene.SetOrientation(it == app.lib.rotations.end() ? nullptr : &it->second);
 }
 
 // --------------------------------------------------------------------------
@@ -355,27 +403,44 @@ static void Toolbar(App& app) {
         std::snprintf(app.gifPath, sizeof(app.gifPath), "%s/%s.gif", dir.c_str(), SafeFileName(app.selectedName).c_str());
     }
     ImGui::EndDisabled();
-    // Rotation of the current tab's models, remembered per tab in um-multitool-viewer.cfg.
+    // Rotation of the current tab's models, remembered per tab in um-multitool-viewer.cfg. Each click
+    // turns the model 45 degrees about the fixed world axis (the grid's X, Y, Z) - whatever turns came
+    // before - so a button always does what it says. Right-click turns the other way.
     if (app.activeTab < static_cast<int>(items::Category::Count)) {
-        std::array<int, 3>& r = app.lib.rotations[items::CategoryKey(static_cast<items::Category>(app.activeTab))];
+        const std::string key = items::CategoryKey(static_cast<items::Category>(app.activeTab));
+        auto found = app.lib.rotations.find(key);
+        const bool rotated = found != app.lib.rotations.end() && std::fabs(std::fabs(found->second[0]) - 1.0f) > 1e-6f;
         static const char* const axes[3] = {"X", "Y", "Z"};
+        // Each button shows the current orientation as turns about X, then Y, then Z (world axes).
+        int deg[3] = {0, 0, 0};
+        if (found != app.lib.rotations.end()) OrientationDegrees(found->second, deg);
         ImGui::SameLine();
         ImGui::TextDisabled(" Rotate");
         for (int a = 0; a < 3; ++a) {
             ImGui::SameLine();
             char label[32];
-            std::snprintf(label, sizeof(label), "%s %d##rot%d", axes[a], r[a], a);
-            if (ImGui::Button(label)) {
-                r[a] = (r[a] + 45) % 360;
+            std::snprintf(label, sizeof(label), "%s %d##rot%d", axes[a], deg[a], a);
+            ImGui::Button(label);
+            int direction = ImGui::IsItemClicked(ImGuiMouseButton_Left) ? 1 : ImGui::IsItemClicked(ImGuiMouseButton_Right) ? -1 : 0;
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Now: X %d, Y %d, Z %d degrees (about the grid's axes, in that order)\n"
+                                  "Click: turn 45 degrees about the grid's %s axis; right-click: the other way", deg[0], deg[1], deg[2], axes[a]);
+            if (direction) {
+                std::array<float, 4> q = found != app.lib.rotations.end() ? found->second : std::array<float, 4>{1, 0, 0, 0};
+                float half = direction * 3.14159265f / 8.0f; // 45 degrees, halved for the quaternion
+                fig::Quat step{std::cos(half), a == 0 ? std::sin(half) : 0.0f, a == 1 ? std::sin(half) : 0.0f, a == 2 ? std::sin(half) : 0.0f};
+                fig::Quat r = fig::QuatNormalize(fig::QuatMul(step, fig::Quat{q[0], q[1], q[2], q[3]})); // world axis: applied last
+                app.lib.rotations[key] = {r.w, r.x, r.y, r.z};
                 app.lib.SaveConfig();
+                found = app.lib.rotations.find(key);
             }
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Turn this tab's models 45 degrees about %s", axes[a]);
         }
         ImGui::SameLine();
-        ImGui::BeginDisabled(!r[0] && !r[1] && !r[2]);
+        ImGui::BeginDisabled(!rotated);
         if (ImGui::Button("Reset##rot")) {
-            r = {0, 0, 0};
+            app.lib.rotations.erase(key);
             app.lib.SaveConfig();
+            found = app.lib.rotations.end();
         }
         ImGui::EndDisabled();
     }

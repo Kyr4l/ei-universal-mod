@@ -15,6 +15,7 @@
 struct Library {
     LayeredAssetSource figures;
     LayeredAssetSource textures;
+    LayeredAssetSource texts;     // item names and descriptions (item_texts.hpp)
     resolve::FigureIndex figureIndex;
     resolve::TextureIndex textureIndex;
 
@@ -24,7 +25,7 @@ struct Library {
     std::string dbError;
 
     std::string configPath = config::Path();
-    std::map<std::string, std::array<int, 3>> rotations; // per tab, see config::Config::rotations
+    std::map<std::string, std::array<float, 4>> rotations; // per tab, see config::Config::rotations
     config::GifSettings gif;
     int version = 0; // bumped whenever a source or the database changes, so derived data is recomputed
 
@@ -57,6 +58,7 @@ struct Library {
         config::Config cfg = config::Load(configPath);
         for (auto& p : cfg.figureLayers) figures.AddLayer(p);
         for (auto& p : cfg.textureLayers) textures.AddLayer(p);
+        for (auto& p : cfg.textLayers) texts.AddLayer(p);
         rotations = cfg.rotations;
         gif = cfg.gif;
         RebuildFigureIndex();
@@ -68,6 +70,7 @@ struct Library {
         config::Config cfg;
         for (auto& l : figures.layers) cfg.figureLayers.push_back(l.path);
         for (auto& l : textures.layers) cfg.textureLayers.push_back(l.path);
+        for (auto& l : texts.layers) cfg.textLayers.push_back(l.path);
         cfg.databasePath = dbPath;
         cfg.rotations = rotations;
         cfg.gif = gif;

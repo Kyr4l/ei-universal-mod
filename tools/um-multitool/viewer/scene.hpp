@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <map>
 #include <string>
@@ -51,8 +52,12 @@ public:
     std::string textureName; // the texture applied to it
     int vertexCount = 0, triangleCount = 0;
     fig::Vec3 boundsMin{}, boundsMax{};
-    // Rotation in degrees about X, Y, Z (in that order, about the world axes) around the model's centre.
-    int rotationDegrees[3] = {0, 0, 0};
+    // The model's orientation around its centre (the tab's rotation, turned 45 degrees at a time about the world axes).
+    fig::Quat orientation;
+
+    void SetOrientation(const std::array<float, 4>* q) {
+        orientation = q ? fig::QuatNormalize(fig::Quat{(*q)[0], (*q)[1], (*q)[2], (*q)[3]}) : fig::Quat{};
+    }
     // A spin on top of that, about one world axis through the centre (0 = X, 1 = Y, 2 = Z): the GIF turn.
     float spinDegrees = 0.0f;
     int spinAxis = 2;
@@ -175,9 +180,10 @@ public:
             fig::Vec3 c = (boundsMin + boundsMax) * 0.5f;
             glTranslatef(c.x, c.y, c.z);
             if (spinDegrees != 0.0f) glRotatef(spinDegrees, spinAxis == 0 ? 1.0f : 0.0f, spinAxis == 1 ? 1.0f : 0.0f, spinAxis == 2 ? 1.0f : 0.0f);
-            glRotatef(static_cast<float>(rotationDegrees[2]), 0, 0, 1);
-            glRotatef(static_cast<float>(rotationDegrees[1]), 0, 1, 0);
-            glRotatef(static_cast<float>(rotationDegrees[0]), 1, 0, 0);
+            fig::Vec3 ax = fig::QuatRotate(orientation, {1, 0, 0}), ay = fig::QuatRotate(orientation, {0, 1, 0}),
+                      az = fig::QuatRotate(orientation, {0, 0, 1});
+            const float m[16] = {ax.x, ax.y, ax.z, 0, ay.x, ay.y, ay.z, 0, az.x, az.y, az.z, 0, 0, 0, 0, 1}; // column-major
+            glMultMatrixf(m);
             glTranslatef(-c.x, -c.y, -c.z);
         }
 
@@ -373,13 +379,7 @@ private:
         for (int i = 0; i < 8; ++i) {
             fig::Vec3 p{(i & 1) ? boundsMax.x : boundsMin.x, (i & 2) ? boundsMax.y : boundsMin.y, (i & 4) ? boundsMax.z : boundsMin.z};
             p = p - c;
-            const float k = 3.14159265f / 180.0f;
-            float cx = std::cos(rotationDegrees[0] * k), sx = std::sin(rotationDegrees[0] * k);
-            float cy = std::cos(rotationDegrees[1] * k), sy = std::sin(rotationDegrees[1] * k);
-            float cz = std::cos(rotationDegrees[2] * k), sz = std::sin(rotationDegrees[2] * k);
-            p = {p.x, cx * p.y - sx * p.z, sx * p.y + cx * p.z};  // X
-            p = {cy * p.x + sy * p.z, p.y, -sy * p.x + cy * p.z}; // Y
-            p = {cz * p.x - sz * p.y, sz * p.x + cz * p.y, p.z};  // Z
+            p = fig::QuatRotate(orientation, p);
             bottom = std::min(bottom, c.z + p.z);
         }
         return bottom;

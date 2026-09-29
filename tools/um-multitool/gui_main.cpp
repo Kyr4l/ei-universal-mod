@@ -31,6 +31,7 @@
 #include "imgui_impl_opengl2.h"
 
 #include "gui.hpp"
+#include "version.hpp"
 #include "viewer/viewer_app.hpp"
 
 #include <string>
@@ -750,6 +751,36 @@ static void SaveScreenshot(const std::string& path, int w, int h) {
     std::fclose(f);
 }
 
+// The built-in font only has basic Latin letters. Item texts can be French (accents), Russian
+// (Cyrillic) or Korean, so system fonts are merged in behind it: ImGui 1.92 loads their glyphs on
+// demand, only for characters the built-in font lacks. Missing fonts are skipped. Only TrueType
+// (glyf) or classic CFF fonts load; the variable "-VF" Noto CJK fonts (CFF2) do not.
+static void AddFallbackFonts(ImGuiIO& io) {
+    io.Fonts->AddFontDefault();
+    static const char* const candidates[] = {
+#ifdef _WIN32
+        "C:\\Windows\\Fonts\\segoeui.ttf", "C:\\Windows\\Fonts\\arial.ttf",   // Latin accents, Cyrillic
+        "C:\\Windows\\Fonts\\malgun.ttf",                                         // Korean
+#else
+        "/usr/share/fonts/truetype/DejaVuSans.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/TTF/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf", "/usr/share/fonts/nanum/NanumGothic.ttf",
+        "/usr/share/fonts/TTF/NanumGothic.ttf", "/usr/share/fonts/truetype/NanumGothic.ttf",
+#endif
+    };
+    bool haveLatin = false;
+    for (const char* path : candidates) {
+        std::error_code ec;
+        if (!fs::is_regular_file(path, ec)) continue;
+        bool korean = std::strstr(path, "algun") || std::strstr(path, "anum");
+        if (!korean && haveLatin) continue; // one Latin/Cyrillic font is enough
+        ImFontConfig config;
+        config.MergeMode = true;
+        // Size 0: take the built-in font's size (1.92 refuses an explicit size when merging into it).
+        if (io.Fonts->AddFontFromFileTTF(path, 0.0f, &config) && !korean) haveLatin = true;
+    }
+}
+
 int RunGui(const GuiOptions& options) {
     glfwSetErrorCallback([](int error, const char* description) {
         std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
@@ -757,7 +788,8 @@ int RunGui(const GuiOptions& options) {
     if (!glfwInit()) return 1;
 
     glfwWindowHint(GLFW_DEPTH_BITS, 24); // the 3D Viewer needs a depth buffer
-    GLFWwindow* window = glfwCreateWindow(1400, 860, "um-multitool", nullptr, nullptr);
+    const std::string title = std::string("um-multitool ") + PROGRAM_VERSION;
+    GLFWwindow* window = glfwCreateWindow(1400, 860, title.c_str(), nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return 1;
@@ -771,6 +803,7 @@ int RunGui(const GuiOptions& options) {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
     // Default Dear ImGui look and colors - no theme customization.
+    AddFallbackFonts(io);
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();

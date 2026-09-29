@@ -27,13 +27,12 @@ struct Mat4 {
 
     // Right-handed look-at, Z-up (matches the engine's own convention where
     // figure geometry stores Z as vertical - see figure-format.md).
-    static Mat4 LookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ) {
+    static Mat4 LookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ,
+                       float upx = 0.0f, float upy = 0.0f, float upz = 1.0f) {
         float fx = centerX - eyeX, fy = centerY - eyeY, fz = centerZ - eyeZ;
         float flen = std::sqrt(fx * fx + fy * fy + fz * fz);
         if (flen > 1e-6f) { fx /= flen; fy /= flen; fz /= flen; }
 
-        // World up is +Z.
-        float upx = 0.0f, upy = 0.0f, upz = 1.0f;
         // s = f x up
         float sx = fy * upz - fz * upy;
         float sy = fz * upx - fx * upz;
@@ -95,6 +94,9 @@ struct OrbitCamera {
     Mat4 ViewMatrix() const {
         float ex, ey, ez;
         EyePosition(ex, ey, ez);
-        return Mat4::LookAt(ex, ey, ez, targetX, targetY, targetZ);
+        // The camera's own up (tilted with the pitch), so looking straight down or up (pitch +-90) works.
+        float yawRad = yawDeg * 3.14159265f / 180.0f, pitchRad = pitchDeg * 3.14159265f / 180.0f;
+        return Mat4::LookAt(ex, ey, ez, targetX, targetY, targetZ, -std::cos(yawRad) * std::sin(pitchRad),
+                            -std::sin(yawRad) * std::sin(pitchRad), std::cos(pitchRad));
     }
 };

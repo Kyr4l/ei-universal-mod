@@ -9,7 +9,8 @@
 //   Weapons     figure initwe<code><TTI>      axe=ax sword=sw dagger=dg spear=sp hammer=hm crossbow=cb bow=bw
 //   Armors      figure initar<code><TTI>      helm=hl plate=pl leggings=lg shirt=sh pants=pt boots=bt gloves=gl
 //     textures  redress.res <race><code>_<TTI 2 digits>.<material code>.<TTI2>, e.g. unhumaax_03.br.0
-//               textures.res <code>_<TTI 2 digits>.<TTI2>, e.g. ax_03.0 (no material)
+//               textures.res <code>_<TTI 2 digits>.<TTI2>, e.g. ax_03.0: the blueprint texture - a blueprint
+//               has no material, so it is greyscale (a tinted grey, unlike the material textures)
 //     The ground figure is the same geometry as the equipped mesh (initweax3 and
 //     unhuma.mod's rh3.axe03 both have 56 vertices / 80 triangles), so the
 //     equipped (redress) textures fit it.
@@ -133,7 +134,7 @@ inline std::string FamilyPrefix(items::Category c, const std::string& code) {
 struct TextureOption {
     std::string name;                        // texture base name, e.g. "unhumaax_03.br.0"
     const items::Material* material = nullptr; // the material it shows, when known
-    std::string note;                        // e.g. "human male, bronze" / "ground texture, no material"
+    std::string note;                        // e.g. "human male, bronze" / "blueprint (greyscale, no material)"
 };
 
 struct Resolution {
@@ -158,7 +159,7 @@ inline std::string RaceLabel(const std::string& prefix) {
     if (prefix == "unhufe") return "human female";
     if (prefix == "unorma") return "orc male";
     if (prefix == "unorfe") return "orc female";
-    return prefix.empty() ? "ground texture, no material" : prefix;
+    return prefix.empty() ? "blueprint (greyscale, no material)" : prefix;
 }
 
 // Weapons/Armors: every texture named <anything><code>_<NN>.<...>, sorted so that the
@@ -218,7 +219,9 @@ inline void CollectPlainTextures(const std::string& base, const std::vector<cons
         std::string n = base + "." + Lower(m->code);
         if (textures.Has(n)) r.textures.push_back({n, m, m->name});
     }
-    if (textures.Has(base)) r.textures.push_back({base, nullptr, "no material"});
+    // Without a material code: for an item made of a material (a wand), its greyscale blueprint texture;
+    // for anything else (a potion, a quest item), simply its texture.
+    if (textures.Has(base)) r.textures.push_back({base, nullptr, materials.empty() ? "no material" : "blueprint (greyscale, no material)"});
     for (const std::string& n : textures.names) { // other variants (e.g. a mod texture with its own code)
         if (n.size() <= base.size() + 1 || n.compare(0, base.size() + 1, base + ".") != 0) continue;
         bool already = std::any_of(r.textures.begin(), r.textures.end(), [&](const TextureOption& o) { return o.name == n; });

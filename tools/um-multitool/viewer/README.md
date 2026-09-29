@@ -10,21 +10,24 @@ The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2):
 - **Figure**: the model. It's worked out from the database, and you can pick another model of the same family by hand, for example for the mod's `scepter`, which has no model yet.
 - **Material**: the materials of the item's class (`M.Type`). The default is the first one in database order that has a texture, so a Metal axe opens in bronze.
 - **Texture**: every texture that fits the item.
-  - Candidates: the item's own class first, human male first, then the other races, then the material-less ground texture from `textures.res`.
+  - Candidates: the item's own class first, human male first, then the other races, then the greyscale blueprint texture from `textures.res` (a blueprint has no material, hence no colour).
   - "all textures": lists everything, for unique items with odd names.
-  - The preview shows the texture itself.
+  - The preview shows the texture itself; **Export PNG** saves it as a PNG, transparency included.
+- **Name and description**: the item's in-game name above its stats and its description below, from the text sources. Weapons, armors and wands follow the picked material (`WEAPON <Blueprint> <Material>`); quest items use `QUESTITEM <Name>`, loot `LITEM <Name>` or `MATERIAL <Name>`. When no text exists, the key looked for is shown.
 - **Sources**: where everything comes from.
   - Figures: `figures.res` or a folder.
   - Textures: `textures.res` and `redress.res`, or a folder of `.mmp` or `.dds` files.
+  - Texts: `texts.res` and `textslmp.res`, or folders of loose text files (e.g. `resources/universal-mod/res-texts/texts-eng_res`). The top source decides the language; the encoding is detected per text: UTF-8, Korean (CP949) or Russian (CP1251).
   - Database: `database.res` or `databaselmp.res`, whichever holds `items.idb`. In Universal-Mod that is `databaselmp.res`.
   - Layers: add the base game first, then mods on top. The top layer wins. Settings are saved in `um-multitool-viewer.cfg` next to the program.
 
 In the viewport, left-drag to orbit, right-drag to pan, and use the wheel to zoom. **Frame** re-centres the model.
 
-**Rotate X / Y / Z** turns the models of the current tab by 45° about that axis, around their centre; **Reset** undoes it. Each tab keeps its own rotation, saved in `um-multitool-viewer.cfg` in degrees (e.g. `ROTATION_WEAPONS=90,0,0`).
+**X / Y / Z** (each labelled with the current angle, as turns about X, then Y, then Z) turn the models of the current tab by 45° about the grid's fixed X, Y or Z axis, around their centre, whatever turns came before (right-click turns the other way); **Reset** undoes them. Each tab keeps its own orientation, saved in `um-multitool-viewer.cfg` as a quaternion w,x,y,z (e.g. `ROTATION_WEAPONS=0.923880,0.382683,0.000000,0.000000`); older files with three angles are converted on load.
 
 **Export GIF...** saves a looping 360° turn of the shown item, from the current camera angle and zoom and with the tab's rotation.
-- Settings: size, frames per second, rotation speed (degrees per second, so one turn lasts 360/speed seconds), the axis the model spins about (X, Y or Z, through its centre), direction, and background.
+- Settings: size (typed, capped by the window in the GUI), frames per second (typed, 1-120), rotation speed (degrees per second, so one turn lasts 360/speed seconds), the axis the model spins about (the grid's X, Y or Z, through its centre), direction, and background.
+- **Camera from** +X / -X / +Y / -Y / Top / Bottom points the camera straight along an axis (Default restores the 3/4 view), so a spin about X or Y is seen square on.
 - **Preview** plays the GIF's exact frames in the viewport, at its size, frame rate and speed. A transparent background shows as a checkerboard.
 - Background: transparent by default, or a colour.
 - The settings are remembered. The ground grid is left out.
@@ -36,9 +39,9 @@ In the viewport, left-drag to orbit, right-drag to pan, and use the wheel to zoo
 
 | Category | Figure | Texture |
 |---|---|---|
-| Weapons | `initwe<code><TTI>`: axe `ax`, sword `sw`, dagger `dg`, spear `sp`, hammer `hm`, crossbow `cb`, bow `bw` | `redress.res` `<race><code>_<TTI:2>.<material code>.<TTI2>`, e.g. `unhumaax_03.br.0`; `textures.res` `<code>_<TTI:2>.<TTI2>` |
+| Weapons | `initwe<code><TTI>`: axe `ax`, sword `sw`, dagger `dg`, spear `sp`, hammer `hm`, crossbow `cb`, bow `bw` | `redress.res` `<race><code>_<TTI:2>.<material code>.<TTI2>`, e.g. `unhumaax_03.br.0`; `textures.res` `<code>_<TTI:2>.<TTI2>`: the blueprint (greyscale) texture |
 | Armors | `initar<code><TTI>`: helm `hl`, plate `pl`, leggings `lg`, shirt `sh`, pants `pt`, boots `bt`, gloves `gl` | same as weapons |
-| Quick Items | `initqi<TTI>` | `qitem<TTI:4>`, plus `.<material code>` for wands |
+| Quick Items | `initqi<TTI>` | `qitem<TTI:4>`, plus `.<material code>` for wands (their plain `qitem<TTI:4>` is the blueprint) |
 | Quest Items | `initqu<TTI>` | `quitem<TTI:4>` |
 | Loot Items | treasure `initlitr<TTI>`, material `initlimt<material ID>` | `litem<TTI:4>`, `material<ID:4>` |
 
@@ -79,5 +82,15 @@ Part of um-multitool: `make linux`, `make win` or `make all` in `tools/um-multit
 | `viewer_app.cpp` | the tab inside um-multitool's window, and the `viewer` command-line modes |
 | `dds_texture.hpp` | DDS decoder (DXT1/3/5, uncompressed) |
 | `gif_writer.hpp` | animated GIF encoder (median-cut palette shared by all frames, LZW) |
+| `png_writer.hpp` | PNG writer for the texture export |
+| `item_texts.hpp`, `cp949_table.hpp` | item names and descriptions, encoding detection and the Korean table |
 
 The figure, RES and MMP readers come from um-modelviewer; the text-encoding table is um-multitool's `cp1251.hpp`. A Units tab can be added later as one more tab over the same `Library` and `Scene`.
+
+## Fonts
+
+The built-in font only has basic Latin letters. For accents, Cyrillic and Korean, um-multitool merges system fonts behind it:
+- **Windows:** Segoe UI or Arial, and Malgun Gothic.
+- **Linux:** DejaVu Sans, and Nanum Gothic.
+
+Without a Korean font, Korean text shows as `?`. The variable "-VF" Noto CJK fonts some Linux distributions ship can't be read.

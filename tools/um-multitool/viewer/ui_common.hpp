@@ -52,8 +52,8 @@ inline bool PickFile(std::string& out) {
 #endif
 }
 
-// "Save as" dialog; `suggested` is the path offered first.
-inline bool PickSaveFile(const std::string& suggested, std::string& out) {
+// "Save as" dialog; `suggested` is the path offered first, `extension` e.g. "gif" or "png".
+inline bool PickSaveFile(const std::string& suggested, std::string& out, const char* extension = "gif") {
 #ifdef _WIN32
     char buf[MAX_PATH] = "";
     std::snprintf(buf, sizeof(buf), "%s", suggested.c_str());
@@ -61,8 +61,16 @@ inline bool PickSaveFile(const std::string& suggested, std::string& out) {
     ofn.lStructSize = sizeof(ofn);
     ofn.lpstrFile = buf;
     ofn.nMaxFile = sizeof(buf);
-    ofn.lpstrFilter = "GIF image\0*.gif\0All files\0*.*\0";
-    ofn.lpstrDefExt = "gif";
+    std::string filter = std::string(extension) + " image";
+    filter += '\0';
+    filter += std::string("*.") + extension;
+    filter += '\0';
+    filter += "All files";
+    filter += '\0';
+    filter += "*.*";
+    filter += '\0';
+    ofn.lpstrFilter = filter.c_str();
+    ofn.lpstrDefExt = extension;
     ofn.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
     if (GetSaveFileNameA(&ofn)) { out = buf; return true; }
     return false;
@@ -71,7 +79,8 @@ inline bool PickSaveFile(const std::string& suggested, std::string& out) {
     for (char c : suggested) quoted += (c == '\'') ? std::string("'\\''") : std::string(1, c);
     quoted += "'";
     if (HasCommand("zenity"))
-        return RunPicker("zenity --file-selection --save --confirm-overwrite --filename=" + quoted + " 2>/dev/null", out);
+        return RunPicker("zenity --file-selection --save --confirm-overwrite --file-filter='*." + std::string(extension) +
+                         "' --filename=" + quoted + " 2>/dev/null", out);
     if (HasCommand("kdialog")) return RunPicker("kdialog --getsavefilename " + quoted + " 2>/dev/null", out);
     return false;
 #endif

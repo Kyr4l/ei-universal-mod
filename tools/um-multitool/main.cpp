@@ -23,7 +23,7 @@
  *      input requires an explicit subcommand.
  *
  * Version:
- *   1.2
+ *   see version.hpp
  * ============================================================================
  */
 
@@ -36,6 +36,7 @@
 #include <cctype>
 
 #include "gui.hpp"
+#include "version.hpp"
 #include "subtools.hpp"
 #include "viewer/viewer_app.hpp"
 
@@ -47,7 +48,7 @@
 
 namespace fs = std::filesystem;
 
-static constexpr const char* PROGRAM_VERSION = "1.2";
+
 
 static std::string ToLower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
@@ -57,7 +58,7 @@ static std::string ToLower(std::string s) {
 }
 
 static void PrintTopLevelHelp() {
-    std::cout << "um-multitool - Evil Islands Modding Toolkit\n\n"
+    std::cout << "um-multitool " << PROGRAM_VERSION << " - Evil Islands Modding Toolkit\n\n"
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool <subcommand> [options] <path>\n"

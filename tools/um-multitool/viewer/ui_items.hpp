@@ -11,6 +11,8 @@
 #include <vector>
 
 #include "item_resolve.hpp"
+#include "item_texts.hpp"
+#include "png_writer.hpp"
 #include "library.hpp"
 #include "scene.hpp"
 #include "ui_common.hpp"
@@ -27,6 +29,9 @@ struct ItemTabState {
     bool allTextures = false;        // the texture picker lists every texture, not only the candidates
     char textureFilter[64] = "";
     bool scrollToSelected = false;
+
+    std::string pngMessage;          // result of the last "Export PNG"
+    bool pngOk = true;
 
     // Resolution of the selected row, recomputed only when its inputs change.
     resolve::Resolution resolution;
@@ -163,7 +168,29 @@ inline void MaterialPicker(const Library& lib, ItemTabState& st) {
     (void)lib;
 }
 
-inline void TexturePicker(const Library& lib, Scene& scene, ItemTabState& st) {
+// Decodes the texture again (the GL copy cannot be read back portably) and saves it where the user picks.
+inline void ExportTexturePng(Library& lib, const std::string& texture, ItemTabState& st) {
+    std::string dir = lib.gif.lastDirectory.empty() ? config::ExeDir() : lib.gif.lastDirectory;
+    std::string path;
+    if (!PickSaveFile(dir + "/" + texture + ".png", path, "png")) return;
+    std::vector<uint8_t> bytes;
+    mmp::Image image;
+    std::string err;
+    if (!lib.textures.ReadTexture(texture, bytes) || !DecodeTextureFile(bytes, image, err)) {
+        st.pngOk = false;
+        st.pngMessage = "Could not read " + texture + (err.empty() ? "" : ": " + err);
+        return;
+    }
+    st.pngOk = png::Write(path, static_cast<int>(image.width), static_cast<int>(image.height), image.rgba);
+    st.pngMessage = st.pngOk ? "Saved " + path : "Could not write " + path;
+    if (st.pngOk) {
+        size_t slash = path.find_last_of("/\\");
+        if (slash != std::string::npos) lib.gif.lastDirectory = path.substr(0, slash);
+        lib.SaveConfig();
+    }
+}
+
+inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
     const auto& r = st.resolution;
     std::string shown = ShownTexture(st);
     ImGui::TextDisabled("Texture");
@@ -214,6 +241,15 @@ inline void TexturePicker(const Library& lib, Scene& scene, ItemTabState& st) {
             ImGui::BeginGroup();
             ImGui::TextDisabled("%s", t.file.c_str());
             ImGui::TextDisabled("%d x %d", t.width, t.height);
+            if (ImGui::Button("Export PNG")) ExportTexturePng(lib, shown, st);
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Save this texture as a PNG image, transparency included");
+            if (!st.pngMessage.empty()) {
+                ImGui::PushStyleColor(ImGuiCol_Text, st.pngOk ? ImVec4(0.5f, 0.85f, 0.5f, 1) : ImVec4(0.95f, 0.45f, 0.4f, 1));
+                ImGui::PushTextWrapPos(ImGui::GetContentRegionMax().x);
+                ImGui::TextUnformatted(st.pngMessage.c_str());
+                ImGui::PopTextWrapPos();
+                ImGui::PopStyleColor();
+            }
             ImGui::EndGroup();
         } else {
             Note(shown + ": " + t.error);
@@ -299,6 +335,22 @@ inline void ItemTab(Library& lib, Scene& scene, items::Category category, ItemTa
     TexturePicker(lib, scene, st);
     for (auto& note : r.notes) Note(note);
 
+    // The item's in-game name and description, above its stats (item_texts.hpp).
+    texts::ItemText text;
+    if (lib.texts.AnyLoaded()) {
+        text = texts::Lookup(lib.texts, item, material);
+        ImGui::Spacing();
+        if (text.found) {
+            ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.86f, 0.55f, 1.0f));
+            ImGui::TextWrapped("%s", text.name.c_str());
+            ImGui::PopStyleColor();
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", text.key.c_str());
+            if (!text.description.empty()) ImGui::TextWrapped("%s", text.description.c_str());
+            ImGui::Spacing();
+        } else if (!text.key.empty()) {
+            ImGui::TextDisabled("No text \"%s\" in the text sources", text.key.c_str());
+        }
+    }
     if (ImGui::BeginTable("##details", 2, ImGuiTableFlags_SizingStretchProp | ImGuiTableFlags_RowBg)) {
         ImGui::TableSetupColumn("k", ImGuiTableColumnFlags_WidthFixed, 130.0f);
         ImGui::TableSetupColumn("v", ImGuiTableColumnFlags_WidthStretch);

@@ -12,6 +12,7 @@ namespace ui {
 struct SourcesState {
     char figurePath[1024] = "";
     char texturePath[1024] = "";
+    char textPath[1024] = "";
     char databasePath[1024] = "";
     std::string message;
 };
@@ -85,6 +86,13 @@ inline void SourcesTab(Library& lib, Scene& scene, SourcesState& st) {
     if (LayerList("tex", lib.textures, st.texturePath, sizeof(st.texturePath), st.message, "(none yet)")) {
         lib.RebuildTextureIndex();
         scene.ClearTextures();
+        lib.SaveConfig();
+    }
+
+    ImGui::SeparatorText("Texts");
+    ImGui::TextDisabled("texts.res and textslmp.res, or a folder of loose text files (item names and descriptions)");
+    if (LayerList("txt", lib.texts, st.textPath, sizeof(st.textPath), st.message, "(none: items show no name or description)")) {
+        ++lib.version;
         lib.SaveConfig();
     }
 
