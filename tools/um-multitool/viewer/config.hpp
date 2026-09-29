@@ -1,5 +1,5 @@
 // Remembers the viewer's sources (figure/texture layers, database) between sessions
-// in um-modelviewer2.cfg beside the executable: "KEY=value" lines, layer keys repeated
+// in um-multitool-viewer.cfg beside the executable: "KEY=value" lines, layer keys repeated
 // in load order (later = higher priority).
 #pragma once
 
@@ -35,7 +35,7 @@ inline std::string ExeDir() {
     return pos == std::string::npos ? "." : p.substr(0, pos);
 }
 
-inline std::string Path() { return ExeDir() + "/um-modelviewer2.cfg"; }
+inline std::string Path() { return ExeDir() + "/um-multitool-viewer.cfg"; }
 
 // GIF export settings (see the viewer's "Export GIF" dialog).
 struct GifSettings {
@@ -95,7 +95,7 @@ inline Config Load(const std::string& path = Path()) {
 inline void Save(const Config& cfg, const std::string& path = Path()) {
     std::ofstream f(path, std::ios::trunc);
     if (!f.is_open()) return;
-    f << "; um-modelviewer2 sources - written by the viewer, safe to delete.\n";
+    f << "; um-multitool 3D Viewer settings - written by the viewer, safe to delete.\n";
     for (auto& p : cfg.figureLayers) f << "FIGURE_LAYER=" << p << "\n";
     for (auto& p : cfg.textureLayers) f << "TEXTURE_LAYER=" << p << "\n";
     if (!cfg.databasePath.empty()) f << "DATABASE=" << cfg.databasePath << "\n";

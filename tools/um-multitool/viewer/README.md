@@ -1,8 +1,8 @@
-# um-modelviewer2
+# 3D Viewer (um-multitool)
 
-Item model viewer for Evil Islands. Pick an item from the game's database and see its ground/inventory model with the right texture.
+The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2): an item model viewer for Evil Islands. Pick an item from the game's database and see its ground/inventory model with the right texture.
 
-## Tabs
+## Tabs (inside the 3D Viewer tab)
 
 - **Weapons, Armors, Quick Items, Quest Items, Loot Items**: the rows of that block of `items.idb`.
   - Search by name, and filter by type.
@@ -17,11 +17,11 @@ Item model viewer for Evil Islands. Pick an item from the game's database and se
   - Figures: `figures.res` or a folder.
   - Textures: `textures.res` and `redress.res`, or a folder of `.mmp` or `.dds` files.
   - Database: `database.res` or `databaselmp.res`, whichever holds `items.idb`. In Universal-Mod that is `databaselmp.res`.
-  - Layers: add the base game first, then mods on top. The top layer wins. Settings are saved in `um-modelviewer2.cfg` next to the program.
+  - Layers: add the base game first, then mods on top. The top layer wins. Settings are saved in `um-multitool-viewer.cfg` next to the program.
 
 In the viewport, left-drag to orbit, right-drag to pan, and use the wheel to zoom. **Frame** re-centres the model.
 
-**Rotate X / Y / Z** turns the models of the current tab by 45° about that axis, around their centre; **Reset** undoes it. Each tab keeps its own rotation, saved in `um-modelviewer2.cfg` in degrees (e.g. `ROTATION_WEAPONS=90,0,0`).
+**Rotate X / Y / Z** turns the models of the current tab by 45° about that axis, around their centre; **Reset** undoes it. Each tab keeps its own rotation, saved in `um-multitool-viewer.cfg` in degrees (e.g. `ROTATION_WEAPONS=90,0,0`).
 
 **Export GIF...** saves a looping 360° turn of the shown item, from the current camera angle and zoom and with the tab's rotation.
 - Settings: size, frames per second, rotation speed (degrees per second, so one turn lasts 360/speed seconds), the axis the model spins about (X, Y or Z, through its centre), direction, and background.
@@ -53,21 +53,19 @@ Item figures don't address their texture directly. Their UVs point into the bott
 ## Command line
 
 ```
-um-modelviewer2 --list <category>                        every item and what it resolves to
-um-modelviewer2 --resolve <category> <item> [--material <name>]
-um-modelviewer2 --render <category> <item> <out.bmp> [--material <name>] [--texture <name>]
-um-modelviewer2 --gif <category> <item> <out.gif> [--material <name>] [--texture <name>]   uses the saved GIF settings
-um-modelviewer2 --open <category> <item> [--screenshot <out.bmp>]
---config <file>                                          another sources file
+um-multitool gui --viewer <category> <item>                                  open the GUI on that item
+um-multitool viewer --list <category>                                         every item and what it resolves to
+um-multitool viewer --resolve <category> <item> [--material <name>]
+um-multitool viewer --render <category> <item> <out.bmp> [--material <name>] [--texture <name>]
+um-multitool viewer --gif <category> <item> <out.gif> [--material <name>] [--texture <name>]   uses the saved GIF settings
+--config <file>                                                               another settings file
 ```
 
-Categories: `weapons`, `armors`, `quick`, `quest`, `loot`.
+Categories: `weapons`, `armors`, `quick`, `quest`, `loot`. `--render` and `--gif` need a display.
 
 ## Building
 
-- `make linux`: needs the distro's GLFW (`pkg-config glfw3`).
-- `make win`: cross-builds the `.exe` with MinGW, using the static GLFW from `../../um-multitool/vendor/glfw-mingw` (built by that tool's `vendor/build-glfw-mingw.sh`).
-- `make all`: builds both.
+Part of um-multitool: `make linux`, `make win` or `make all` in `tools/um-multitool` builds the one `um-multitool` binary, GUI included.
 
 ## Code
 
@@ -78,7 +76,8 @@ Categories: `weapons`, `armors`, `quick`, `quest`, `loot`.
 | `library.hpp` | sources, database and name indexes (no GL) |
 | `scene.hpp` | the OpenGL viewport |
 | `ui_items.hpp`, `ui_sources.hpp` | the tabs |
+| `viewer_app.cpp` | the tab inside um-multitool's window, and the `viewer` command-line modes |
 | `dds_texture.hpp` | DDS decoder (DXT1/3/5, uncompressed) |
 | `gif_writer.hpp` | animated GIF encoder (median-cut palette shared by all frames, LZW) |
 
-The figure, RES and MMP readers come from um-modelviewer. A Units tab can be added later as one more tab over the same `Library` and `Scene`.
+The figure, RES and MMP readers come from um-modelviewer; the text-encoding table is um-multitool's `cp1251.hpp`. A Units tab can be added later as one more tab over the same `Library` and `Scene`.

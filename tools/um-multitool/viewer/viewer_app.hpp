@@ -1,0 +1,27 @@
+// The 3D Viewer: um-multitool's second main tab (formerly um-modelviewer2), and its
+// `um-multitool viewer ...` command-line modes. Everything else lives in viewer_app.cpp.
+#pragma once
+
+#include <string>
+
+namespace viewer {
+
+struct Context;
+
+Context* Create();                 // needs the GL context current (it may load textures)
+void Destroy(Context* ctx);        // likewise
+
+// Inside the ImGui frame, in the 3D Viewer tab's content region.
+void DrawTab(Context* ctx);
+// After ImGui::Render and before drawing ImGui's data: the 3D view into the region DrawTab
+// reserved, and any pending GIF export. Does nothing on frames where DrawTab was not called.
+void RenderGl(Context* ctx, int framebufferWidth, int framebufferHeight, float framebufferScale, float dt);
+
+// Opens the viewer on one item (e.g. "weapons", "axe"); false with a message if not found.
+bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error);
+
+// `um-multitool viewer <args>`: --list, --resolve, --render, --gif (argv[0] is "viewer").
+int RunCli(int argc, char** argv);
+void PrintCliHelp();
+
+} // namespace viewer

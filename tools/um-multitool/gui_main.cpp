@@ -1,13 +1,16 @@
 /**
  * ============================================================================
- * um-multitool-gui - Dear ImGui front-end for um-multitool
+ * um-multitool GUI - Dear ImGui front-end, built into the um-multitool binary
  * ============================================================================
  *
- * A small cross-platform (Windows/Linux) GUI wrapping the five merged
- * Evil Islands modding CLI tools (ddsmmp, inireg, mobdump, restool, xlsxdb)
- * exposed by the um-multitool binary built alongside this GUI. Depends on it
- * at runtime: this GUI spawns it as a hidden subprocess and streams its
- * stdout/stderr into the log panel below, with no separate console window.
+ * Two main tabs:
+ *   - File Processing: the five modding tools (ddsmmp, inireg, mobdump,
+ *     restool, xlsxdb). A run launches this same executable again with the
+ *     subcommand, as a hidden subprocess, and streams its stdout/stderr into
+ *     the log panel below, with no separate console window.
+ *   - 3D Viewer: the item model viewer (viewer/viewer_app.cpp).
+ * Opened when the program is started without arguments from a file manager
+ * (double-click), or with `um-multitool gui` - see main.cpp.
  *
  * Toolkit: Dear ImGui (vendor/imgui, vendored as source per its normal
  * distribution model) rendering through its OpenGL2 (legacy fixed-pipeline)
@@ -17,7 +20,7 @@
  * chosen specifically because it needs no GL function loader library and has
  * historically been the more robust legacy-GL path under Wine/older drivers.
  *
- * Each subtool gets its own tab exposing every CLI flag it supports.
+ * Each subtool gets its own sub-tab exposing every CLI flag it supports.
  * ============================================================================
  */
 
@@ -26,6 +29,9 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
+
+#include "gui.hpp"
+#include "viewer/viewer_app.hpp"
 
 #include <string>
 #include <vector>
@@ -157,40 +163,20 @@ static void AppendLog(const std::string& text) {
     g_logDirty = true;
 }
 
-// Directory containing the running GUI executable.
-static std::string GetExeDir() {
+// The running executable itself: the GUI and the command-line tools are one binary, so a
+// conversion runs this same program again with the subcommand.
+static std::string FindMultitoolBinary() {
 #ifdef _WIN32
     char buf[MAX_PATH];
     DWORD len = GetModuleFileNameA(nullptr, buf, MAX_PATH);
-    std::string p(buf, len);
+    if (len > 0 && len < MAX_PATH) return std::string(buf, len);
+    return "um-multitool.exe";
 #else
     char buf[PATH_MAX];
     ssize_t len = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
-    if (len <= 0) return ".";
-    std::string p(buf, len);
+    if (len > 0) return std::string(buf, static_cast<size_t>(len));
+    return "um-multitool";
 #endif
-    size_t pos = p.find_last_of("/\\");
-    return pos == std::string::npos ? "." : p.substr(0, pos);
-}
-
-// Locates the um-multitool binary built alongside this GUI in the same
-// directory, falling back to a sibling tools/um-multitool/ layout or PATH.
-static std::string FindMultitoolBinary() {
-#ifdef _WIN32
-    const char* exeName = "um-multitool.exe";
-#else
-    const char* exeName = "um-multitool";
-#endif
-    std::string exeDir = GetExeDir();
-    std::error_code ec;
-
-    fs::path sameDir = fs::path(exeDir) / exeName;
-    if (fs::exists(sameDir, ec)) return fs::absolute(sameDir, ec).string();
-
-    fs::path sibling = fs::path(exeDir) / ".." / "um-multitool" / exeName;
-    if (fs::exists(sibling, ec)) return fs::absolute(sibling, ec).string();
-
-    return exeName; // Fall back to PATH lookup.
 }
 
 // Wraps a single argument in double quotes for cmd.exe's command-line parsing.
@@ -730,13 +716,48 @@ static void OnRunClicked() {
     g_statusText = "Running...";
 }
 
-int main(int, char**) {
+static void DrawFileProcessingTab(const TabInfo* tabs, size_t count);
+
+// Saves the window's pixels as a 24-bit BMP (the `gui --screenshot` option, for documentation and tests).
+static void SaveScreenshot(const std::string& path, int w, int h) {
+    std::vector<unsigned char> rgb(static_cast<size_t>(w) * h * 3);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, rgb.data());
+    FILE* f = std::fopen(path.c_str(), "wb");
+    if (!f) return;
+    int rowSize = (w * 3 + 3) & ~3;
+    unsigned dataSize = static_cast<unsigned>(rowSize * h), fileSize = 54 + dataSize, offset = 54, info = 40;
+    unsigned short planes = 1, bpp = 24;
+    unsigned char header[54] = {'B', 'M'};
+    std::memcpy(header + 2, &fileSize, 4);
+    std::memcpy(header + 10, &offset, 4);
+    std::memcpy(header + 14, &info, 4);
+    std::memcpy(header + 18, &w, 4);
+    std::memcpy(header + 22, &h, 4);
+    std::memcpy(header + 26, &planes, 2);
+    std::memcpy(header + 28, &bpp, 2);
+    std::memcpy(header + 34, &dataSize, 4);
+    std::fwrite(header, 1, 54, f);
+    std::vector<unsigned char> row(rowSize, 0);
+    for (int y = 0; y < h; ++y) { // bottom-up, like glReadPixels
+        for (int x = 0; x < w; ++x) {
+            row[x * 3 + 0] = rgb[(y * w + x) * 3 + 2];
+            row[x * 3 + 1] = rgb[(y * w + x) * 3 + 1];
+            row[x * 3 + 2] = rgb[(y * w + x) * 3 + 0];
+        }
+        std::fwrite(row.data(), 1, rowSize, f);
+    }
+    std::fclose(f);
+}
+
+int RunGui(const GuiOptions& options) {
     glfwSetErrorCallback([](int error, const char* description) {
         std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
     });
     if (!glfwInit()) return 1;
 
-    GLFWwindow* window = glfwCreateWindow(800, 700, "um-multitool GUI", nullptr, nullptr);
+    glfwWindowHint(GLFW_DEPTH_BITS, 24); // the 3D Viewer needs a depth buffer
+    GLFWwindow* window = glfwCreateWindow(1400, 860, "um-multitool", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return 1;
@@ -754,6 +775,17 @@ int main(int, char**) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();
 
+    viewer::Context* viewerCtx = viewer::Create();
+    bool viewerRequested = options.openViewer;
+    if (!options.viewerCategory.empty()) {
+        std::string err;
+        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err)) std::fprintf(stderr, "%s\n", err.c_str());
+        viewerRequested = true;
+    }
+    bool viewerActive = false;     // the 3D Viewer tab was shown last frame (its viewport must see through)
+    int frameCount = 0;
+    double lastTime = glfwGetTime();
+
     const TabInfo tabs[] = {
         {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
         {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
@@ -770,6 +802,9 @@ int main(int, char**) {
         }
 
         PumpActiveProcess();
+        double now = glfwGetTime();
+        float dt = static_cast<float>(now - lastTime);
+        lastTime = now;
 
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -780,62 +815,44 @@ int main(int, char**) {
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImVec2(static_cast<float>(fbW) / io.DisplayFramebufferScale.x,
                                          static_cast<float>(fbH) / io.DisplayFramebufferScale.y));
+        if (viewerActive) ImGui::SetNextWindowBgAlpha(0.0f); // the 3D view is drawn underneath ImGui
         ImGui::Begin("##main", nullptr,
                       ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                       ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-        if (ImGui::BeginTabBar("##tabs")) {
-            for (int i = 0; i < static_cast<int>(std::size(tabs)); ++i) {
-                if (ImGui::BeginTabItem(tabs[i].name)) {
-                    g_activeTab = i;
-                    ImGui::Spacing();
-                    tabs[i].draw();
-                    ImGui::EndTabItem();
-                }
+        bool viewerShown = false;
+        if (ImGui::BeginTabBar("##maintabs")) {
+            if (ImGui::BeginTabItem("File Processing")) {
+                DrawFileProcessingTab(tabs, std::size(tabs));
+                ImGui::EndTabItem();
             }
+            if (ImGui::BeginTabItem("3D Viewer", nullptr, viewerRequested ? ImGuiTabItemFlags_SetSelected : 0)) {
+                viewer::DrawTab(viewerCtx);
+                viewerShown = true;
+                ImGui::EndTabItem();
+            }
+            viewerRequested = false;
             ImGui::EndTabBar();
         }
-
-        ImGui::Spacing();
-        ImGui::Separator();
-        ImGui::Spacing();
-
-        bool running = IsValid(g_activeProc);
-        ImGui::BeginDisabled(running);
-        if (ImGui::Button(running ? "Running..." : "Run", ImVec2(110, 32))) {
-            OnRunClicked();
-        }
-        ImGui::EndDisabled();
-        ImGui::SameLine();
-        if (ImGui::Button("Clear Log", ImVec2(110, 32))) {
-            g_log.clear();
-        }
-        ImGui::SameLine();
-        ImGui::TextUnformatted(g_statusText.c_str());
-
-        float progressFrac = running ? static_cast<float>(g_progressPhase / 100.0) : 0.0f;
-        ImGui::ProgressBar(progressFrac, ImVec2(-1, 0), running ? "Running..." : "Idle");
-
-        ImGui::Spacing();
-        ImGui::BeginChild("##log", ImVec2(0, 0), ImGuiChildFlags_Borders);
-        ImGui::TextUnformatted(g_log.c_str());
-        if (g_logDirty) {
-            ImGui::SetScrollHereY(1.0f);
-            g_logDirty = false;
-        }
-        ImGui::EndChild();
-
+        viewerActive = viewerShown;
         ImGui::End();
 
         ImGui::Render();
         glViewport(0, 0, fbW, fbH);
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        const ImVec4 bg = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
+        glClearColor(bg.x, bg.y, bg.z, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        viewer::RenderGl(viewerCtx, fbW, fbH, io.DisplayFramebufferScale.x, dt);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+        if (!options.screenshotPath.empty() && ++frameCount == 8) {
+            SaveScreenshot(options.screenshotPath, fbW, fbH);
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
 
         glfwSwapBuffers(window);
     }
 
+    viewer::Destroy(viewerCtx);
     ImGui_ImplOpenGL2_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -843,4 +860,48 @@ int main(int, char**) {
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;
+}
+
+// The File Processing tab: one sub-tab per tool, the Run button and the log.
+static void DrawFileProcessingTab(const TabInfo* tabs, size_t count) {
+    if (ImGui::BeginTabBar("##tabs")) {
+        for (int i = 0; i < static_cast<int>(count); ++i) {
+            if (ImGui::BeginTabItem(tabs[i].name)) {
+                g_activeTab = i;
+                ImGui::Spacing();
+                tabs[i].draw();
+                ImGui::EndTabItem();
+            }
+        }
+        ImGui::EndTabBar();
+    }
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    bool running = IsValid(g_activeProc);
+    ImGui::BeginDisabled(running);
+    if (ImGui::Button(running ? "Running..." : "Run", ImVec2(110, 32))) {
+        OnRunClicked();
+    }
+    ImGui::EndDisabled();
+    ImGui::SameLine();
+    if (ImGui::Button("Clear Log", ImVec2(110, 32))) {
+        g_log.clear();
+    }
+    ImGui::SameLine();
+    ImGui::TextUnformatted(g_statusText.c_str());
+
+    float progressFrac = running ? static_cast<float>(g_progressPhase / 100.0) : 0.0f;
+    ImGui::ProgressBar(progressFrac, ImVec2(-1, 0), running ? "Running..." : "Idle");
+
+    ImGui::Spacing();
+    ImGui::BeginChild("##log", ImVec2(0, 0), ImGuiChildFlags_Borders);
+    ImGui::TextUnformatted(g_log.c_str());
+    if (g_logDirty) {
+        ImGui::SetScrollHereY(1.0f);
+        g_logDirty = false;
+    }
+    ImGui::EndChild();
 }

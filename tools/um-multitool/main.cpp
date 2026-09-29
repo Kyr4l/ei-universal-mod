@@ -1,15 +1,19 @@
 /**
  * ============================================================================
- * um-multitool - Evil Islands Modding Toolkit (merged CLI)
+ * um-multitool - Evil Islands Modding Toolkit
  * ============================================================================
  *
  * Description:
- *   Single binary merging five standalone tools:
+ *   One binary: a GUI (File Processing and 3D Viewer tabs, gui_main.cpp) and
+ *   the command-line tools. Double-clicked (no terminal) it opens the GUI;
+ *   run from a terminal without arguments it prints the usage; `gui` opens the
+ *   GUI from a terminal. The command-line tools merge five standalone tools:
  *     - ddsmmp  (formerly um-ddsmmp):  .dds  <-> .mmp  texture conversion
  *     - inireg  (formerly um-inireg):  .ini  <-> .reg  config conversion
  *     - mobdump (formerly um-mobdump): .mob  ->  .yaml/.eis map dumping
  *     - restool (formerly um-restool): .res/.mq <-> folder pack/unpack
  *     - xlsxdb  (formerly um-xlsxdb):  .xlsx ->  .res database compiler
+ *   plus `viewer`, the 3D Viewer's command-line modes (viewer/viewer_app.cpp).
  *
  * Dispatch rules:
  *   1. Explicit subcommand: `um-multitool <subcommand> [options] <path>`
@@ -19,7 +23,7 @@
  *      input requires an explicit subcommand.
  *
  * Version:
- *   1.1
+ *   1.2
  * ============================================================================
  */
 
@@ -31,11 +35,19 @@
 #include <algorithm>
 #include <cctype>
 
+#include "gui.hpp"
 #include "subtools.hpp"
+#include "viewer/viewer_app.hpp"
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 namespace fs = std::filesystem;
 
-static constexpr const char* PROGRAM_VERSION = "1.1";
+static constexpr const char* PROGRAM_VERSION = "1.2";
 
 static std::string ToLower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
@@ -45,8 +57,9 @@ static std::string ToLower(std::string s) {
 }
 
 static void PrintTopLevelHelp() {
-    std::cout << "um-multitool - Evil Islands Modding Toolkit (merged CLI)\n\n"
+    std::cout << "um-multitool - Evil Islands Modding Toolkit\n\n"
               << "Usage:\n"
+              << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
               << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
               << "Subcommands:\n"
@@ -54,7 +67,8 @@ static void PrintTopLevelHelp() {
               << "  inireg   (alias: ini)   Convert configs between .ini <-> .reg\n"
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
               << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n"
-              << "  xlsxdb   (alias: db)    Compile .xlsx gameplay databases to .res\n\n"
+              << "  xlsxdb   (alias: db)    Compile .xlsx gameplay databases to .res\n"
+              << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
@@ -74,7 +88,7 @@ static void PrintTopLevelHelp() {
 
 static void PrintTopLevelVersion() {
     std::cout << "um-multitool version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb (each 1.0)\n";
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb (each 1.0), the GUI and the 3D Viewer\n";
 }
 
 enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb };
@@ -183,13 +197,51 @@ static SubTool AutoDetect(const fs::path& path, std::string& errOut) {
     return tool;
 }
 
+// Was the program started from a terminal (as opposed to a file manager / double-click)?
+static bool StartedFromTerminal() {
+#ifdef _WIN32
+    // A console program that is double-clicked gets a console of its own, attached to nothing else;
+    // started from cmd or PowerShell it shares theirs.
+    DWORD processes[2];
+    return GetConsoleProcessList(processes, 2) > 1;
+#else
+    return isatty(STDIN_FILENO) || isatty(STDOUT_FILENO);
+#endif
+}
+
+// `um-multitool gui [--viewer <category> <item>] [--screenshot <file.bmp>]`
+static int StartGui(int argc, char* argv[], int first) {
+    GuiOptions options;
+    for (int i = first; i < argc; ++i) {
+        std::string a = argv[i];
+        if (a == "--viewer" && i + 2 < argc) {
+            options.viewerCategory = argv[i + 1];
+            options.viewerItem = argv[i + 2];
+            i += 2;
+        } else if (a == "--viewer") {
+            options.openViewer = true;
+        } else if (a == "--screenshot" && i + 1 < argc) {
+            options.screenshotPath = argv[++i];
+        }
+    }
+    return RunGui(options);
+}
+
 int main(int argc, char* argv[]) {
     if (argc < 2) {
+        if (!StartedFromTerminal()) {
+#ifdef _WIN32
+            FreeConsole(); // double-clicked: close the console window Windows opened for it
+#endif
+            return StartGui(argc, argv, argc);
+        }
         PrintTopLevelHelp();
         return 1;
     }
 
     std::string first = argv[1];
+    if (first == "gui") return StartGui(argc, argv, 2);
+    if (first == "viewer") return viewer::RunCli(argc - 1, argv + 1);
     if (first == "-h" || first == "--help") {
         PrintTopLevelHelp();
         return 0;

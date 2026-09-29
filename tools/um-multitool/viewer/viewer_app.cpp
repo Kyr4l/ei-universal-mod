@@ -1,33 +1,26 @@
-/**
- * ============================================================================
- * um-modelviewer2 - Evil Islands item model viewer
- * ============================================================================
- *
- * Browses the items database (database.res / databaselmp.res) by category, one
- * tab each - Weapons, Armors, Quick Items, Quest Items, Loot Items - and shows
- * the selected item's ground/inventory figure with the texture the database
- * points at (see item_resolve.hpp for the naming rules). Figures and textures
- * come from layered sources: .res archives or folders of loose files (.mmp or
- * .dds textures), base game first, mods on top.
- *
- * Successor of um-modelviewer (units with equipment): same toolkit - Dear ImGui
- * + GLFW + fixed-function OpenGL 2 - but item-centred and split into modules:
- *   item_db.hpp       items.idb parser (all six blocks)
- *   item_resolve.hpp  database row -> figure + candidate textures (no GL)
- *   library.hpp       sources + database + name indexes (no GL)
- *   scene.hpp         the GL viewport
- *   ui_*.hpp          the tabs
- * A Units tab can be added as one more tab over the same Library and Scene.
- * ============================================================================
- */
+// The 3D Viewer tab of um-multitool (formerly the standalone um-modelviewer2): browses the items
+// database by category and shows each item's ground/inventory figure with the texture the database
+// points at (see item_resolve.hpp), with 45 degree rotation per tab and a GIF turntable export.
+//
+//   item_db.hpp       items.idb parser (all six blocks)
+//   item_resolve.hpp  database row -> figure + candidate textures (no GL)
+//   library.hpp       sources + database + name indexes (no GL)
+//   scene.hpp         the GL viewport; gif_writer.hpp the GIF encoder
+//   ui_*.hpp          the item tabs and the Sources tab
+//
+// The tab lives inside um-multitool's main window: DrawTab lays out a sidebar and a transparent
+// viewport region during the ImGui frame, and RenderGl draws the 3D view into that region after
+// ImGui::Render, underneath ImGui's own drawing.
+
+#include "viewer_app.hpp"
 
 #include <GLFW/glfw3.h>
 
 #include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl2.h"
 
 #include <array>
+#include <cctype>
+#include <cmath>
 #include <cstdio>
 #include <cstring>
 #include <fstream>
@@ -39,7 +32,7 @@
 #include "ui_items.hpp"
 #include "ui_sources.hpp"
 
-static double g_scrollY = 0.0; // raw wheel input for zooming over the bare viewport
+namespace viewer {
 
 struct App {
     Library lib;
@@ -47,22 +40,25 @@ struct App {
     ui::SourcesState sources;
     ui::ItemTabState tabs[static_cast<int>(items::Category::Count)];
     int activeTab = 0;          // 0..4 = item categories, 5 = Sources
-    int startTab = -1;          // set by --open
-    std::string screenshotPath; // --screenshot: save the window after a few frames, then quit
-    int frame = 0;
+    int requestTab = -1;        // select this tab on the next frame
+    float sidebarWidth = 460.0f;
+
+    // The viewport region reserved by DrawTab this frame (ImGui coordinates), used by RenderGl.
+    bool drawnThisFrame = false;
+    ImVec2 viewportMin{0, 0}, viewportMax{0, 0};
 
     // GIF export dialog
     bool gifOpen = false;
-    bool gifPending = false;     // export at the start of the next frame (the capture uses the back buffer)
+    bool gifPending = false;     // export in the next RenderGl (the capture uses the back buffer)
     bool gifPreview = false;     // play the export's frames in the viewport
     double gifPreviewStart = 0.0;
     char gifPath[1024] = "";
     std::string gifMessage;
     bool gifMessageOk = true;
     std::string selectedName;    // the current tab's selected item, for the default file name
-    float sidebarWidth = 480.0f;
-    bool draggingOrbit = false, draggingPan = false;
 };
+
+struct Context { App app; };
 
 // --------------------------------------------------------------------------
 // Command line
@@ -79,24 +75,24 @@ static bool ParseCategory(const std::string& s, items::Category& out) {
     return true;
 }
 
-static void PrintHelp() {
+void PrintCliHelpImpl() {
     std::printf(
-        "um-modelviewer2 - Evil Islands item model viewer\n\n"
+        "um-multitool viewer - the 3D Viewer's command-line modes\n\n"
         "Usage:\n"
-        "  um-modelviewer2                              Open the viewer.\n"
-        "  um-modelviewer2 --list <category>            List the category's items and what they resolve to.\n"
-        "  um-modelviewer2 --resolve <category> <item> [--material <name>]\n"
+        
+        "  um-multitool viewer --list <category>            List the category's items and what they resolve to.\n"
+        "  um-multitool viewer --resolve <category> <item> [--material <name>]\n"
         "                                               Show the figure and every candidate texture of one item.\n"
-        "  um-modelviewer2 --render <category> <item> <out.bmp> [--material <name>] [--texture <name>]\n"
+        "  um-multitool viewer --render <category> <item> <out.bmp> [--material <name>] [--texture <name>]\n"
         "                                               Render one item to a BMP image (needs a display).\n"
-        "  um-modelviewer2 --open <category> <item>     Open the viewer on that item.\n"
-        "  --screenshot <out.bmp>                       With the viewer: save the window after a few frames and quit.\n"
-        "  um-modelviewer2 --gif <category> <item> <out.gif> [--material <name>] [--texture <name>]\n"
+        "  um-multitool gui --viewer <category> <item>    Open the GUI on that item in the 3D Viewer tab.\n"
+        
+        "  um-multitool viewer --gif <category> <item> <out.gif> [--material <name>] [--texture <name>]\n"
         "                                               Export a 360 degree turn as an animated GIF, with the GIF\n"
         "                                               settings of the viewer's export dialog (needs a display).\n"
-        "  --config <file>                              Use another sources file than um-modelviewer2.cfg.\n\n"
+        "  --config <file>                              Use another settings file than um-multitool-viewer.cfg.\n\n"
         "Categories: weapons, armors, quick, quest, loot. The sources (figures, textures, database)\n"
-        "are the ones set in the viewer's Sources tab, saved in um-modelviewer2.cfg.\n");
+        "are the ones set in the viewer's Sources tab, saved in um-multitool-viewer.cfg.\n");
 }
 
 static const items::Item* FindItem(const Library& lib, items::Category c, const std::string& name) {
@@ -224,10 +220,6 @@ static int RunGif(Library& lib, items::Category c, const std::string& name, cons
     return ok ? 0 : 1;
 }
 
-// --------------------------------------------------------------------------
-// Viewer
-// --------------------------------------------------------------------------
-
 static std::string SafeFileName(const std::string& name) {
     std::string out;
     for (char c : name) out += (std::isalnum(static_cast<unsigned char>(c)) || c == '-' || c == '_') ? c : '_';
@@ -256,7 +248,7 @@ static void GifDialog(App& app, int maxSize) {
     if (!app.gifOpen) return;
     // Top-left of the viewport, out of the way of the preview (bottom-right).
     ImGui::SetNextWindowSize(ImVec2(470, 0), ImGuiCond_Appearing);
-    ImGui::SetNextWindowPos(ImVec2(app.sidebarWidth + 10.0f, 44.0f), ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 10.0f, app.viewportMin.y + 36.0f), ImGuiCond_Appearing);
     if (!ImGui::Begin("Export GIF", &app.gifOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
     config::GifSettings& g = app.lib.gif;
     bool changed = false;
@@ -329,12 +321,11 @@ static void ApplyRotation(App& app) {
     for (int a = 0; a < 3; ++a) app.scene.rotationDegrees[a] = it == app.lib.rotations.end() ? 0 : it->second[a];
 }
 
-static void ViewportToolbar(App& app, float x, float y, float w) {
-    ImGui::SetNextWindowPos(ImVec2(x, y));
-    ImGui::SetNextWindowSize(ImVec2(w, 0));
-    ImGui::SetNextWindowBgAlpha(0.55f);
-    ImGui::Begin("##view", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-                 ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize);
+// --------------------------------------------------------------------------
+// The tab
+// --------------------------------------------------------------------------
+
+static void Toolbar(App& app) {
     ViewOptions& o = app.scene.options;
     ImGui::Checkbox("Textured", &o.textured);
     ImGui::SameLine();
@@ -350,6 +341,10 @@ static void ViewportToolbar(App& app, float x, float y, float w) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Item figures address a 256x256 texture atlas, not the texture itself.\n"
                                                   "Keep this on unless a custom figure maps its texture directly.");
     ImGui::SameLine();
+    ImGui::SetNextItemWidth(90);
+    ImGui::ColorEdit3("##bg", o.background, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Background colour");
+    ImGui::SameLine();
     if (ImGui::Button("Frame")) app.scene.Frame();
     ImGui::SameLine();
     ImGui::BeginDisabled(!app.scene.hasModel);
@@ -360,7 +355,7 @@ static void ViewportToolbar(App& app, float x, float y, float w) {
         std::snprintf(app.gifPath, sizeof(app.gifPath), "%s/%s.gif", dir.c_str(), SafeFileName(app.selectedName).c_str());
     }
     ImGui::EndDisabled();
-    // Rotation of the current tab's models, remembered per tab in um-modelviewer2.cfg.
+    // Rotation of the current tab's models, remembered per tab in um-multitool-viewer.cfg.
     if (app.activeTab < static_cast<int>(items::Category::Count)) {
         std::array<int, 3>& r = app.lib.rotations[items::CategoryKey(static_cast<items::Category>(app.activeTab))];
         static const char* const axes[3] = {"X", "Y", "Z"};
@@ -384,25 +379,17 @@ static void ViewportToolbar(App& app, float x, float y, float w) {
         }
         ImGui::EndDisabled();
     }
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(90);
-    ImGui::ColorEdit3("##bg", o.background, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Background colour");
-    ImGui::SameLine();
-    ImGui::TextDisabled("  left-drag orbit, right-drag pan, wheel zoom");
-    ImGui::End();
 }
 
 static void Sidebar(App& app, float height) {
-    ImGui::SetNextWindowPos(ImVec2(0, 0));
-    ImGui::SetNextWindowSize(ImVec2(app.sidebarWidth, height));
+    // The host window is see-through on this tab (so the 3D view shows): give the sidebar its own background.
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_WindowBg));
     ImGui::SetNextWindowSizeConstraints(ImVec2(300, height), ImVec2(900, height));
-    ImGui::Begin("um-modelviewer2", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar);
+    ImGui::BeginChild("##viewerSidebar", ImVec2(app.sidebarWidth, height), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX);
     app.sidebarWidth = ImGui::GetWindowWidth();
-    if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_FittingPolicyScroll)) {
-        // Select the start tab once; read it before the loop, which updates activeTab as it goes.
-        static bool firstFrame = true;
-        const int requested = firstFrame ? app.activeTab : -1;
+    if (ImGui::BeginTabBar("##itemtabs", ImGuiTabBarFlags_FittingPolicyScroll)) {
+        const int requested = app.requestTab;
+        app.requestTab = -1;
         for (int c = 0; c < static_cast<int>(items::Category::Count); ++c) {
             ImGuiTabItemFlags flags = requested == c ? ImGuiTabItemFlags_SetSelected : 0;
             if (ImGui::BeginTabItem(items::CategoryLabel(static_cast<items::Category>(c)), nullptr, flags)) {
@@ -422,202 +409,183 @@ static void Sidebar(App& app, float height) {
             ImGui::EndChild();
             ImGui::EndTabItem();
         }
-        firstFrame = false;
         ImGui::EndTabBar();
     }
-    ImGui::End();
+    ImGui::EndChild();
+    ImGui::PopStyleColor();
 }
 
-static void CameraInput(App& app, float viewportLeft) {
+// Orbit / pan / zoom over the viewport: an invisible button covers it, so ImGui's own hover and
+// capture rules decide when the mouse belongs to the 3D view.
+static void CameraInput(App& app, ImVec2 size) {
+    ImGui::InvisibleButton("##viewport", ImVec2(std::max(size.x, 1.0f), std::max(size.y, 1.0f)),
+                           ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
     ImGuiIO& io = ImGui::GetIO();
-    bool overViewport = io.MousePos.x >= viewportLeft && !io.WantCaptureMouse;
-    if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && overViewport) app.draggingOrbit = true;
-    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right) && overViewport) app.draggingPan = true;
-    if (ImGui::IsMouseReleased(ImGuiMouseButton_Left)) app.draggingOrbit = false;
-    if (ImGui::IsMouseReleased(ImGuiMouseButton_Right)) app.draggingPan = false;
     OrbitCamera& cam = app.scene.camera;
-    if (app.draggingOrbit) cam.Orbit(-io.MouseDelta.x * 0.4f, io.MouseDelta.y * 0.4f);
-    if (app.draggingPan) {
-        float k = cam.distance * 0.0015f; // pan speed follows the zoom, so tiny items stay controllable
-        cam.Pan(-io.MouseDelta.x * k, io.MouseDelta.y * k);
+    if (ImGui::IsItemActive()) {
+        if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) cam.Orbit(-io.MouseDelta.x * 0.4f, io.MouseDelta.y * 0.4f);
+        if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
+            float k = cam.distance * 0.0015f; // pan speed follows the zoom, so tiny items stay controllable
+            cam.Pan(-io.MouseDelta.x * k, io.MouseDelta.y * k);
+        }
     }
-    if (overViewport && g_scrollY != 0.0) {
+    if (ImGui::IsItemHovered() && io.MouseWheel != 0.0f) {
         // Zoom by a ratio, not a fixed step: items range from a ring to a two-metre spear.
-        cam.distance *= std::pow(0.87f, static_cast<float>(g_scrollY));
+        cam.distance *= std::pow(0.87f, io.MouseWheel);
         cam.distance = std::max(0.01f, std::min(cam.distance, 100.0f));
     }
-    g_scrollY = 0.0;
 }
 
-static int RunViewer(App& app) {
-    glfwSetErrorCallback([](int error, const char* description) { std::fprintf(stderr, "GLFW error %d: %s\n", error, description); });
-    if (!glfwInit()) return 1;
-    glfwWindowHint(GLFW_DEPTH_BITS, 24);
-    GLFWwindow* window = glfwCreateWindow(1400, 860, "um-modelviewer2", nullptr, nullptr);
-    if (!window) { glfwTerminate(); return 1; }
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    static std::string iniPath = config::ExeDir() + "/um-modelviewer2-imgui.ini";
-    io.IniFilename = iniPath.c_str();
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL2_Init();
-    glfwSetScrollCallback(window, [](GLFWwindow* w, double dx, double dy) {
-        ImGui_ImplGlfw_ScrollCallback(w, dx, dy);
-        g_scrollY += dy;
-    });
-
-    // Start on the Sources tab until there is something to show.
-    app.activeTab = app.startTab >= 0 ? app.startTab : app.lib.Ready() ? 0 : static_cast<int>(items::Category::Count);
+Context* Create() {
+    Context* ctx = new Context();
+    App& app = ctx->app;
+    app.lib.LoadConfig();
+    app.requestTab = app.lib.Ready() ? 0 : static_cast<int>(items::Category::Count);
     std::snprintf(app.sources.databasePath, sizeof(app.sources.databasePath), "%s", app.lib.dbPath.c_str());
+    return ctx;
+}
 
-    double last = glfwGetTime();
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED)) { ImGui_ImplGlfw_Sleep(16); continue; }
-        double now = glfwGetTime();
-        float dt = static_cast<float>(now - last);
-        last = now;
+void Destroy(Context* ctx) {
+    if (!ctx) return;
+    ctx->app.scene.ClearTextures();
+    delete ctx;
+}
 
-        ImGui_ImplOpenGL2_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error) {
+    App& app = ctx->app;
+    items::Category c;
+    if (!ParseCategory(category, c)) { error = "unknown category '" + category + "'"; return false; }
+    if (!app.lib.dbLoaded) { error = "no items database loaded"; return false; }
+    const items::Item* it = FindItem(app.lib, c, item);
+    if (!it) { error = std::string("no ") + items::CategoryLabel(c) + " named \"" + item + "\""; return false; }
+    app.requestTab = static_cast<int>(c);
+    ui::SelectRow(app.tabs[static_cast<int>(c)], it->row);
+    return true;
+}
 
-        int fbW, fbH;
-        glfwGetFramebufferSize(window, &fbW, &fbH);
-        float scaleX = io.DisplayFramebufferScale.x > 0 ? io.DisplayFramebufferScale.x : 1.0f;
-        float height = static_cast<float>(fbH) / scaleX;
-        Sidebar(app, height);
-        float viewLeft = app.sidebarWidth;
-        ViewportToolbar(app, viewLeft, 0, static_cast<float>(fbW) / scaleX - viewLeft);
-        GifDialog(app, std::min(fbW, fbH));
-        ImGui::Render();
+void DrawTab(Context* ctx) {
+    App& app = ctx->app;
+    ImVec2 avail = ImGui::GetContentRegionAvail();
+    Sidebar(app, avail.y);
+    ImGui::SameLine();
 
-        if (app.gifPending) { // draws into the back buffer, which this frame then paints over
-            app.gifPending = false;
-            ApplyRotation(app);
-            int size = std::min(app.lib.gif.size, std::min(fbW, fbH));
-            app.gifMessageOk = ExportGif(app.lib, app.scene, app.gifPath, size, app.gifMessage);
-            if (app.gifMessageOk) {
-                std::string p = app.gifPath;
-                size_t slash = p.find_last_of("/\\");
-                if (slash != std::string::npos) app.lib.gif.lastDirectory = p.substr(0, slash);
-                app.lib.SaveConfig();
-            }
+    ImGui::BeginChild("##viewerView", ImVec2(0, avail.y), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+    Toolbar(app);
+    ImVec2 min = ImGui::GetCursorScreenPos();
+    ImVec2 size = ImGui::GetContentRegionAvail();
+    CameraInput(app, size);
+    ImGui::EndChild();
+    app.viewportMin = min;
+    app.viewportMax = ImVec2(min.x + size.x, min.y + size.y);
+    app.drawnThisFrame = true;
+
+    ApplyRotation(app);
+    app.selectedName.clear();
+    if (app.activeTab < static_cast<int>(items::Category::Count)) {
+        const ui::ItemTabState& st = app.tabs[app.activeTab];
+        const auto& list = app.lib.db.List(static_cast<items::Category>(app.activeTab));
+        if (app.lib.dbLoaded && st.selected >= 0 && st.selected < static_cast<int>(list.size())) app.selectedName = list[st.selected].name;
+    }
+    ImGuiIO& io = ImGui::GetIO();
+    float scale = io.DisplayFramebufferScale.y > 0 ? io.DisplayFramebufferScale.y : 1.0f;
+    GifDialog(app, static_cast<int>(std::min(io.DisplaySize.x, io.DisplaySize.y) * scale));
+}
+
+void RenderGl(Context* ctx, int fbW, int fbH, float scale, float dt) {
+    App& app = ctx->app;
+    if (!app.drawnThisFrame) { // the tab is not shown
+        app.gifPreview = false;
+        return;
+    }
+    app.drawnThisFrame = false;
+    if (scale <= 0) scale = 1.0f;
+
+    if (app.gifPending) { // draws into the back buffer, which this frame then paints over
+        app.gifPending = false;
+        int size = std::min(app.lib.gif.size, std::min(fbW, fbH));
+        app.gifMessageOk = ExportGif(app.lib, app.scene, app.gifPath, size, app.gifMessage);
+        if (app.gifMessageOk) {
+            std::string p = app.gifPath;
+            size_t slash = p.find_last_of("/\\");
+            if (slash != std::string::npos) app.lib.gif.lastDirectory = p.substr(0, slash);
+            app.lib.SaveConfig();
         }
         glViewport(0, 0, fbW, fbH);
         glClearColor(0, 0, 0, 1);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        int vx = static_cast<int>(viewLeft * scaleX);
-        int vw = std::max(1, fbW - vx);
-        glEnable(GL_SCISSOR_TEST);
-        glScissor(vx, 0, vw, fbH);
-        if (app.gifPreview && !app.gifOpen) app.gifPreview = false; // closing the dialog ends the preview
-        if (app.gifPreview && app.scene.hasModel) {
-            // The export's own frames, in a square the size of the GIF, in the pane's bottom-right corner.
-            const config::GifSettings& g = app.lib.gif;
-            const int margin = static_cast<int>(16 * scaleX);
-            int side = std::max(16, std::min(g.size, std::min(vw, fbH) - 2 * margin));
-            int px = vx + vw - side - margin, py = margin;
-            glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-            glScissor(px, py, side, side);
-            ViewOptions saved = app.scene.options;
-            app.scene.options.grid = false;
-            app.scene.options.autoRotate = false;
-            app.scene.options.checkerboard = g.transparent;
-            if (!g.transparent) {
-                app.scene.options.background[0] = ((g.background >> 16) & 0xFF) / 255.0f;
-                app.scene.options.background[1] = ((g.background >> 8) & 0xFF) / 255.0f;
-                app.scene.options.background[2] = (g.background & 0xFF) / 255.0f;
-            }
-            int frameIndex = static_cast<int>((glfwGetTime() - app.gifPreviewStart) * std::max(g.fps, 1));
-            app.scene.SetTurntableFrame(g, frameIndex);
-            app.scene.Draw(app.lib, px, py, side, side, 0.0f);
-            app.scene.spinDegrees = 0.0f;
-            app.scene.options = saved;
-        } else {
-            app.scene.Draw(app.lib, vx, 0, vw, fbH, dt);
-        }
-        glDisable(GL_SCISSOR_TEST);
-        glViewport(0, 0, fbW, fbH);
-
-        CameraInput(app, viewLeft);
-        ApplyRotation(app);
-        app.selectedName.clear();
-        if (app.activeTab < static_cast<int>(items::Category::Count)) {
-            const ui::ItemTabState& st = app.tabs[app.activeTab];
-            const auto& list = app.lib.db.List(static_cast<items::Category>(app.activeTab));
-            if (app.lib.dbLoaded && st.selected >= 0 && st.selected < static_cast<int>(list.size())) app.selectedName = list[st.selected].name;
-        }
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        if (!app.screenshotPath.empty() && ++app.frame == 8) {
-            std::vector<uint8_t> rgb(static_cast<size_t>(fbW) * fbH * 3);
-            glPixelStorei(GL_PACK_ALIGNMENT, 1);
-            glReadPixels(0, 0, fbW, fbH, GL_RGB, GL_UNSIGNED_BYTE, rgb.data());
-            WriteBmp(app.screenshotPath, fbW, fbH, rgb);
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-        }
-        glfwSwapBuffers(window);
     }
 
-    app.scene.ClearTextures();
-    ImGui_ImplOpenGL2_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    return 0;
+    // The reserved region, in framebuffer pixels (GL counts rows from the bottom).
+    int vx = static_cast<int>(app.viewportMin.x * scale);
+    int vw = std::max(1, static_cast<int>((app.viewportMax.x - app.viewportMin.x) * scale));
+    int vh = std::max(1, static_cast<int>((app.viewportMax.y - app.viewportMin.y) * scale));
+    int vy = std::max(0, fbH - static_cast<int>(app.viewportMax.y * scale));
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(vx, vy, vw, vh);
+
+    if (app.gifPreview && !app.gifOpen) app.gifPreview = false; // closing the dialog ends the preview
+    if (app.gifPreview && app.scene.hasModel) {
+        // The export's own frames, in a square the size of the GIF, in the viewport's bottom-right corner.
+        const config::GifSettings& g = app.lib.gif;
+        const int margin = static_cast<int>(16 * scale);
+        int side = std::max(16, std::min(g.size, std::min(vw, vh) - 2 * margin));
+        int px = vx + vw - side - margin, py = vy + margin;
+        glClearColor(0.07f, 0.07f, 0.08f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glScissor(px, py, side, side);
+        ViewOptions saved = app.scene.options;
+        app.scene.options.grid = false;
+        app.scene.options.autoRotate = false;
+        app.scene.options.checkerboard = g.transparent;
+        if (!g.transparent) {
+            app.scene.options.background[0] = ((g.background >> 16) & 0xFF) / 255.0f;
+            app.scene.options.background[1] = ((g.background >> 8) & 0xFF) / 255.0f;
+            app.scene.options.background[2] = (g.background & 0xFF) / 255.0f;
+        }
+        int frameIndex = static_cast<int>((glfwGetTime() - app.gifPreviewStart) * std::max(g.fps, 1));
+        app.scene.SetTurntableFrame(g, frameIndex);
+        app.scene.Draw(app.lib, px, py, side, side, 0.0f);
+        app.scene.spinDegrees = 0.0f;
+        app.scene.options = saved;
+    } else {
+        app.scene.Draw(app.lib, vx, vy, vw, vh, dt);
+    }
+    glDisable(GL_SCISSOR_TEST);
+    glViewport(0, 0, fbW, fbH);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
-int main(int argc, char** argv) {
-#ifdef _WIN32
-    // A GUI-subsystem program has no console: when started from one (cmd, PowerShell), print into it,
-    // so --list/--resolve/--help show their output there.
-    if (argc > 1 && AttachConsole(ATTACH_PARENT_PROCESS)) {
-        std::freopen("CONOUT$", "w", stdout);
-        std::freopen("CONOUT$", "w", stderr);
-    }
-#endif
-    std::vector<std::string> args(argv + 1, argv + argc);
-    App app;
+void PrintCliHelp() { PrintCliHelpImpl(); }
+
+int RunCli(int argc, char** argv) {
+    std::vector<std::string> args(argv + 1, argv + argc); // argv[0] is "viewer"
+    Library lib;
     std::string material, texture;
     for (size_t i = 0; i < args.size();) { // options that can appear anywhere
-        if ((args[i] == "--config" || args[i] == "--material" || args[i] == "--texture" || args[i] == "--screenshot") &&
-            i + 1 < args.size()) {
-            (args[i] == "--config" ? app.lib.configPath : args[i] == "--material" ? material
-                                   : args[i] == "--texture" ? texture : app.screenshotPath) = args[i + 1];
+        if ((args[i] == "--config" || args[i] == "--material" || args[i] == "--texture") && i + 1 < args.size()) {
+            (args[i] == "--config" ? lib.configPath : args[i] == "--material" ? material : texture) = args[i + 1];
             args.erase(args.begin() + static_cast<long>(i), args.begin() + static_cast<long>(i) + 2);
         } else {
             ++i;
         }
     }
-    if (!args.empty() && (args[0] == "--help" || args[0] == "-h")) { PrintHelp(); return 0; }
-    app.lib.LoadConfig();
-    if (args.empty()) return RunViewer(app);
-
+    if (args.empty() || args[0] == "--help" || args[0] == "-h") { PrintCliHelpImpl(); return args.empty() ? 1 : 0; }
+    lib.LoadConfig();
     items::Category c;
-    if (args.size() < 2 || !ParseCategory(args[1], c)) { PrintHelp(); return 1; }
-    if (!app.lib.dbLoaded) {
-        std::fprintf(stderr, "no items database: %s\n", app.lib.dbError.empty() ? "set one in the Sources tab first" : app.lib.dbError.c_str());
+    if (args.size() < 2 || !ParseCategory(args[1], c)) { PrintCliHelpImpl(); return 1; }
+    if (!lib.dbLoaded) {
+        std::fprintf(stderr, "no items database: %s\n", lib.dbError.empty() ? "set one in the GUI's 3D Viewer > Sources tab first" : lib.dbError.c_str());
         return 1;
     }
-    if (args[0] == "--open" && args.size() >= 3) {
-        const items::Item* it = FindItem(app.lib, c, args[2]);
-        if (!it) { std::fprintf(stderr, "no %s named \"%s\"\n", items::CategoryLabel(c), args[2].c_str()); return 1; }
-        app.startTab = static_cast<int>(c);
-        ui::SelectRow(app.tabs[static_cast<int>(c)], it->row);
-        return RunViewer(app);
-    }
-    if (args[0] == "--gif" && args.size() >= 4) return RunGif(app.lib, c, args[2], args[3], material, texture);
-    if (args[0] == "--list") return RunList(app.lib, c);
-    if (args[0] == "--resolve" && args.size() >= 3) return RunResolve(app.lib, c, args[2], material);
-    if (args[0] == "--render" && args.size() >= 4) return RunRender(app.lib, c, args[2], args[3], material, texture);
-    PrintHelp();
+    if (args[0] == "--gif" && args.size() >= 4) return RunGif(lib, c, args[2], args[3], material, texture);
+    if (args[0] == "--list") return RunList(lib, c);
+    if (args[0] == "--resolve" && args.size() >= 3) return RunResolve(lib, c, args[2], material);
+    if (args[0] == "--render" && args.size() >= 4) return RunRender(lib, c, args[2], args[3], material, texture);
+    PrintCliHelpImpl();
     return 1;
 }
+
+} // namespace viewer
