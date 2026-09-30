@@ -1,6 +1,7 @@
 // Small UI helpers shared by the tabs: native file/folder pickers and a status dot.
 #pragma once
 
+#include <algorithm>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -14,6 +15,15 @@
 #endif
 
 namespace ui {
+
+// Whether a background picture is shown this frame (gui_main.cpp): the panels that paint the plain
+// background then let it show through.
+inline bool& BackgroundShown() { static bool shown = false; return shown; }
+inline ImVec4 PanelBg() {
+    ImVec4 c = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
+    if (BackgroundShown()) c.w = 0.0f;
+    return c;
+}
 
 // Neither GLFW nor Dear ImGui has a file dialog: use the Windows one, or zenity /
 // kdialog on Linux (no GTK/Qt build dependency).
@@ -140,5 +150,36 @@ inline std::string Num(float v, int decimals = 2) {
     std::snprintf(buf, sizeof(buf), "%.*f", decimals, v);
     return buf;
 }
+
+// A side panel beside a 3D view, on the left or the right, with a draggable bar between them.
+// Call Begin, draw the panel or the view as it says (in order), and End.
+struct SplitLayout {
+    static constexpr float kBar = 6.0f;
+    float* width;
+    bool panelRight;
+    float height = 0, total = 0;
+
+    // Returns the widths to give BeginChild: the panel's and the view's (0 = the rest).
+    void Begin(float& panelWidth, float& viewWidth) {
+        ImVec2 avail = ImGui::GetContentRegionAvail();
+        total = avail.x;
+        height = avail.y;
+        *width = std::max(260.0f, std::min(*width, std::max(260.0f, total - 240.0f)));
+        panelWidth = *width;
+        viewWidth = panelRight ? std::max(1.0f, total - *width - kBar) : 0.0f;
+    }
+    // Between the two children.
+    void Bar() {
+        ImGui::SameLine(0.0f, 0.0f);
+        ImGui::InvisibleButton("##splitbar", ImVec2(kBar, std::max(height, 1.0f)));
+        const bool active = ImGui::IsItemActive();
+        if (ImGui::IsItemHovered() || active) ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+        if (active) *width += (panelRight ? -1.0f : 1.0f) * ImGui::GetIO().MouseDelta.x;
+        ImVec2 a = ImGui::GetItemRectMin(), b = ImGui::GetItemRectMax();
+        ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(a.x + 2, a.y), ImVec2(b.x - 2, b.y),
+                                                  ImGui::GetColorU32(active ? ImGuiCol_SeparatorActive : ImGuiCol_Separator));
+        ImGui::SameLine(0.0f, 0.0f);
+    }
+};
 
 } // namespace ui

@@ -6,7 +6,7 @@
 //   item_resolve.hpp  database row -> figure + candidate textures (no GL)
 //   library.hpp       sources + database + name indexes (no GL)
 //   scene.hpp         the GL viewport; gif_writer.hpp the GIF encoder
-//   ui_*.hpp          the item tabs and the Sources tab
+//   ui_*.hpp          the item tabs, and the sources (drawn by the GUI's Settings tab)
 //
 // The tab lives inside um-multitool's main window: DrawTab lays out a sidebar and a transparent
 // viewport region during the ImGui frame, and RenderGl draws the 3D view into that region after
@@ -31,16 +31,16 @@
 #include "scene.hpp"
 #include "item_texts.hpp"
 #include "ui_items.hpp"
-#include "ui_sources.hpp"
 
 namespace viewer {
 
 struct App {
-    Library lib;
+    explicit App(Library& shared) : lib(shared) {}
+    Library& lib;               // the GUI's, shared with the other tabs
     Scene scene;
-    ui::SourcesState sources;
+    int seenTexturesVersion = -1; // lib.texturesVersion the scene's GL textures belong to
     ui::ItemTabState tabs[static_cast<int>(items::Category::Count)];
-    int activeTab = 0;          // 0..4 = item categories, 5 = Sources
+    int activeTab = 0;          // 0..4 = item categories
     int requestTab = -1;        // select this tab on the next frame
     float sidebarWidth = 460.0f;
 
@@ -59,7 +59,10 @@ struct App {
     std::string selectedName;    // the current tab's selected item, for the default file name
 };
 
-struct Context { App app; };
+struct Context {
+    explicit Context(Library& lib) : app(lib) {}
+    App app;
+};
 
 // --------------------------------------------------------------------------
 // Command line
@@ -93,7 +96,7 @@ void PrintCliHelpImpl() {
         "                                               settings of the viewer's export dialog (needs a display).\n"
         "  --config <file>                              Use another settings file than um-multitool-viewer.cfg.\n\n"
         "Categories: weapons, armors, quick, quest, loot. The sources (figures, textures, database)\n"
-        "are the ones set in the viewer's Sources tab, saved in um-multitool-viewer.cfg.\n");
+        "are the ones set in the GUI's Settings tab, saved in um-multitool.cfg.\n");
 }
 
 static const items::Item* FindItem(const Library& lib, items::Category c, const std::string& name) {
@@ -362,7 +365,7 @@ static void GifDialog(App& app, int maxSize) {
     ImGui::End();
 }
 
-// The shown model gets the rotation of the tab it belongs to (the Sources tab keeps the last one).
+// The shown model gets the rotation of the tab it belongs to.
 static void ApplyRotation(App& app) {
     if (app.activeTab >= static_cast<int>(items::Category::Count)) return;
     auto it = app.lib.rotations.find(items::CategoryKey(static_cast<items::Category>(app.activeTab)));
@@ -377,9 +380,9 @@ static void Toolbar(App& app) {
     ViewOptions& o = app.scene.options;
     ImGui::Checkbox("Textured", &o.textured);
     ImGui::SameLine();
-    ImGui::Checkbox("Lighting", &o.lighting);
-    ImGui::SameLine();
     ImGui::Checkbox("Wireframe", &o.wireframe);
+    ImGui::SameLine();
+    ImGui::Checkbox("Lighting", &o.lighting);
     ImGui::SameLine();
     ImGui::Checkbox("Grid", &o.grid);
     ImGui::SameLine();
@@ -446,12 +449,10 @@ static void Toolbar(App& app) {
     }
 }
 
-static void Sidebar(App& app, float height) {
+static void Sidebar(App& app, float width, float height) {
     // The host window is see-through on this tab (so the 3D view shows): give the sidebar its own background.
-    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_WindowBg));
-    ImGui::SetNextWindowSizeConstraints(ImVec2(300, height), ImVec2(900, height));
-    ImGui::BeginChild("##viewerSidebar", ImVec2(app.sidebarWidth, height), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX);
-    app.sidebarWidth = ImGui::GetWindowWidth();
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ui::PanelBg());
+    ImGui::BeginChild("##viewerSidebar", ImVec2(width, height), ImGuiChildFlags_Borders);
     if (ImGui::BeginTabBar("##itemtabs", ImGuiTabBarFlags_FittingPolicyScroll)) {
         const int requested = app.requestTab;
         app.requestTab = -1;
@@ -459,20 +460,12 @@ static void Sidebar(App& app, float height) {
             ImGuiTabItemFlags flags = requested == c ? ImGuiTabItemFlags_SetSelected : 0;
             if (ImGui::BeginTabItem(items::CategoryLabel(static_cast<items::Category>(c)), nullptr, flags)) {
                 app.activeTab = c;
+                if (app.lib.viewerTab != c && requested < 0) { app.lib.viewerTab = c; app.lib.SaveConfig(); } // remembered
                 ImGui::BeginChild("##tab", ImVec2(0, 0));
                 ui::ItemTab(app.lib, app.scene, static_cast<items::Category>(c), app.tabs[c]);
                 ImGui::EndChild();
                 ImGui::EndTabItem();
             }
-        }
-        const int sourcesTab = static_cast<int>(items::Category::Count);
-        ImGuiTabItemFlags flags = requested == sourcesTab ? ImGuiTabItemFlags_SetSelected : 0;
-        if (ImGui::BeginTabItem("Sources", nullptr, flags)) {
-            app.activeTab = sourcesTab;
-            ImGui::BeginChild("##tab", ImVec2(0, 0));
-            ui::SourcesTab(app.lib, app.scene, app.sources);
-            ImGui::EndChild();
-            ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
     }
@@ -480,19 +473,24 @@ static void Sidebar(App& app, float height) {
     ImGui::PopStyleColor();
 }
 
-// Orbit / pan / zoom over the viewport: an invisible button covers it, so ImGui's own hover and
-// capture rules decide when the mouse belongs to the 3D view.
+// Orbit / pan / zoom over the viewport, with the Map Editor's mouse buttons (Settings: the wheel click
+// orbits and the right button drags by default). A drag that starts over the view goes on until its
+// button is let go, like the Map Editor's.
 static void CameraInput(App& app, ImVec2 size) {
-    ImGui::InvisibleButton("##viewport", ImVec2(std::max(size.x, 1.0f), std::max(size.y, 1.0f)),
-                           ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+    ImGui::InvisibleButton("##viewport", ImVec2(std::max(size.x, 1.0f), std::max(size.y, 1.0f)), ImGuiButtonFlags_MouseButtonLeft);
     ImGuiIO& io = ImGui::GetIO();
     OrbitCamera& cam = app.scene.camera;
-    if (ImGui::IsItemActive()) {
-        if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) cam.Orbit(-io.MouseDelta.x * 0.4f, io.MouseDelta.y * 0.4f);
-        if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) {
-            float k = cam.distance * 0.0015f; // pan speed follows the zoom, so tiny items stay controllable
-            cam.Pan(-io.MouseDelta.x * k, io.MouseDelta.y * k);
-        }
+    const bool hovered = ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem);
+    static bool held[5] = {};
+    for (int b = 1; b < 5; ++b) {
+        if (hovered && ImGui::IsMouseClicked(b)) held[b] = true;
+        if (!ImGui::IsMouseDown(b)) held[b] = false;
+    }
+    if (held[app.lib.mapMouseOrbit]) {
+        cam.Orbit(-io.MouseDelta.x * 0.4f, io.MouseDelta.y * 0.4f);
+    } else if (held[app.lib.mapMousePan]) {
+        float k = cam.distance * 0.0015f; // pan speed follows the zoom, so tiny items stay controllable
+        cam.Pan(-io.MouseDelta.x * k, io.MouseDelta.y * k);
     }
     if (ImGui::IsItemHovered() && io.MouseWheel != 0.0f) {
         // Zoom by a ratio, not a fixed step: items range from a ring to a two-metre spear.
@@ -501,12 +499,9 @@ static void CameraInput(App& app, ImVec2 size) {
     }
 }
 
-Context* Create() {
-    Context* ctx = new Context();
-    App& app = ctx->app;
-    app.lib.LoadConfig();
-    app.requestTab = app.lib.Ready() ? 0 : static_cast<int>(items::Category::Count);
-    std::snprintf(app.sources.databasePath, sizeof(app.sources.databasePath), "%s", app.lib.dbPath.c_str());
+Context* Create(Library& lib) {
+    Context* ctx = new Context(lib);
+    if (lib.viewerTab >= 0 && lib.viewerTab < static_cast<int>(items::Category::Count)) ctx->app.requestTab = lib.viewerTab; // as last time
     return ctx;
 }
 
@@ -530,16 +525,21 @@ bool OpenItem(Context* ctx, const std::string& category, const std::string& item
 
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
-    ImVec2 avail = ImGui::GetContentRegionAvail();
-    Sidebar(app, avail.y);
-    ImGui::SameLine();
-
-    ImGui::BeginChild("##viewerView", ImVec2(0, avail.y), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
-    Toolbar(app);
-    ImVec2 min = ImGui::GetCursorScreenPos();
-    ImVec2 size = ImGui::GetContentRegionAvail();
-    CameraInput(app, size);
-    ImGui::EndChild();
+    // The item list and the view, side by side (the list on the right when set in Settings).
+    ui::SplitLayout split{&app.sidebarWidth, app.lib.viewerSidebarRight};
+    float panelWidth, viewWidth;
+    split.Begin(panelWidth, viewWidth);
+    ImVec2 min, size;
+    auto view = [&] {
+        ImGui::BeginChild("##viewerView", ImVec2(viewWidth, split.height), ImGuiChildFlags_None, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
+        Toolbar(app);
+        min = ImGui::GetCursorScreenPos();
+        size = ImGui::GetContentRegionAvail();
+        CameraInput(app, size);
+        ImGui::EndChild();
+    };
+    if (split.panelRight) { view(); split.Bar(); Sidebar(app, panelWidth, split.height); }
+    else { Sidebar(app, panelWidth, split.height); split.Bar(); view(); }
     app.viewportMin = min;
     app.viewportMax = ImVec2(min.x + size.x, min.y + size.y);
     app.drawnThisFrame = true;
@@ -564,6 +564,10 @@ void RenderGl(Context* ctx, int fbW, int fbH, float scale, float dt) {
     }
     app.drawnThisFrame = false;
     if (scale <= 0) scale = 1.0f;
+    if (app.seenTexturesVersion != app.lib.texturesVersion) { // the texture sources changed in Settings
+        app.scene.ClearTextures();
+        app.seenTexturesVersion = app.lib.texturesVersion;
+    }
 
     if (app.gifPending) { // draws into the back buffer, which this frame then paints over
         app.gifPending = false;
@@ -642,7 +646,7 @@ int RunCli(int argc, char** argv) {
     items::Category c;
     if (args.size() < 2 || !ParseCategory(args[1], c)) { PrintCliHelpImpl(); return 1; }
     if (!lib.dbLoaded) {
-        std::fprintf(stderr, "no items database: %s\n", lib.dbError.empty() ? "set one in the GUI's 3D Viewer > Sources tab first" : lib.dbError.c_str());
+        std::fprintf(stderr, "no items database: %s\n", lib.dbError.empty() ? "set one in the GUI's Settings tab first" : lib.dbError.c_str());
         return 1;
     }
     if (args[0] == "--gif" && args.size() >= 4) return RunGif(lib, c, args[2], args[3], material, texture);

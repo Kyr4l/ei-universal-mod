@@ -7,6 +7,7 @@
 #include <cctype>
 #include <cstdint>
 #include <set>
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -172,11 +173,12 @@ inline void MaterialPicker(const Library& lib, ItemTabState& st) {
 inline void ExportTexturePng(Library& lib, const std::string& texture, ItemTabState& st) {
     std::string dir = lib.gif.lastDirectory.empty() ? config::ExeDir() : lib.gif.lastDirectory;
     std::string path;
-    if (!PickSaveFile(dir + "/" + texture + ".png", path, "png")) return;
+    const std::string base = std::filesystem::path(texture).stem().string(); // a picked file: its own name
+    if (!PickSaveFile(dir + "/" + base + ".png", path, "png")) return;
     std::vector<uint8_t> bytes;
     mmp::Image image;
     std::string err;
-    if (!lib.textures.ReadTexture(texture, bytes) || !DecodeTextureFile(bytes, image, err)) {
+    if (!Scene::ReadTextureBytes(lib, texture, bytes) || !DecodeTextureFile(bytes, image, err)) {
         st.pngOk = false;
         st.pngMessage = "Could not read " + texture + (err.empty() ? "" : ": " + err);
         return;
@@ -195,7 +197,7 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
     std::string shown = ShownTexture(st);
     ImGui::TextDisabled("Texture");
     ImGui::SameLine(90);
-    ImGui::SetNextItemWidth(-1);
+    ImGui::SetNextItemWidth(-ImGui::CalcTextSize("Browse...").x - ImGui::GetStyle().FramePadding.x * 2 - ImGui::GetStyle().ItemSpacing.x);
     if (ImGui::BeginCombo("##texture", shown.empty() ? "(none)" : shown.c_str(), ImGuiComboFlags_HeightLargest)) {
         if (!st.allTextures) {
             for (size_t i = 0; i < r.textures.size(); ++i) {
@@ -223,6 +225,10 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
         }
         ImGui::EndCombo();
     }
+    ImGui::SameLine();
+    std::string picked;
+    if (ImGui::Button("Browse...") && ui::PickFile(picked)) st.textureOverride = picked;
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Preview a texture file on this figure (.dds, .mmp, or any picture: .png, .jpg, .bmp, .tga...)");
     ImGui::Checkbox("all textures", &st.allTextures);
     ImGui::SameLine();
     ImGui::BeginDisabled(st.textureOverride.empty());
@@ -259,7 +265,7 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
 
 inline void ItemTab(Library& lib, Scene& scene, items::Category category, ItemTabState& st) {
     if (!lib.dbLoaded) {
-        ImGui::TextWrapped("No items database loaded yet: open the Sources tab and load database.res or databaselmp.res.");
+        ImGui::TextWrapped("No items database loaded yet: set it in the Settings tab (database.res or databaselmp.res).");
         return;
     }
     const std::vector<items::Item>& list = lib.db.List(category);

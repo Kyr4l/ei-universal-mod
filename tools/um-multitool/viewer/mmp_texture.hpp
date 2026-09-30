@@ -32,6 +32,9 @@ struct Image {
     std::vector<uint8_t> rgba; // width*height*4, RGBA8 top-to-bottom
 };
 
+// Whether the bytes start like an .mmp ("MMP" and a NUL).
+inline bool IsMmp(const std::vector<uint8_t>& b) { return b.size() >= 4 && std::memcmp(b.data(), "MMP\0", 4) == 0; }
+
 inline uint32_t ReadU32LE(const uint8_t* p) {
     return static_cast<uint32_t>(p[0]) | (static_cast<uint32_t>(p[1]) << 8) |
            (static_cast<uint32_t>(p[2]) << 16) | (static_cast<uint32_t>(p[3]) << 24);

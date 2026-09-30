@@ -184,11 +184,16 @@ struct LayeredAssetSource {
     }
 
     // A texture by base name, as .mmp or .dds (a loose folder may hold either); `found` gets the file name used.
+    // The layers come first and the extension second: a mod's .dds folder above the game's textures.res
+    // must win over the game's .mmp of the same texture.
     bool ReadTexture(const std::string& baseName, std::vector<uint8_t>& out, std::string* found = nullptr) const {
-        for (const char* ext : {".mmp", ".dds"}) {
-            if (ReadFile(baseName + ext, out)) {
-                if (found) *found = baseName + ext;
-                return true;
+        for (auto it = layers.rbegin(); it != layers.rend(); ++it) {
+            if (!it->ok) continue;
+            for (const char* ext : {".mmp", ".dds"}) {
+                if (it->source.ReadFile(baseName + ext, out)) {
+                    if (found) *found = baseName + ext;
+                    return true;
+                }
             }
         }
         return false;

@@ -1,0 +1,15 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+# um-multitool's menu entry (Linux). `um-multitool install-desktop` installs a copy of this with the
+# binary's absolute path and the icon (assets/logo.png) for the current user; this file is the template.
+Type=Application
+Name=Universal Mod Multitool
+GenericName=Evil Islands Modding Toolkit
+Comment=Evil Islands modding: file conversion, 3D viewer and map editor
+Exec=um-multitool gui
+Icon=um-multitool
+Terminal=false
+Categories=Development;
+Keywords=Evil Islands;Cursed Lands;modding;map editor;mob;mpr;
+StartupWMClass=um-multitool
+StartupNotify=true

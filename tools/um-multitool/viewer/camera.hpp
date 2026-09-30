@@ -2,6 +2,7 @@
 // Matrices are column-major float[16], matching glLoadMatrixf's expected layout.
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <cstring>
 
@@ -89,6 +90,19 @@ struct OrbitCamera {
         x = targetX + distance * std::cos(pitchRad) * std::cos(yawRad);
         y = targetY + distance * std::cos(pitchRad) * std::sin(yawRad);
         z = targetZ + distance * std::sin(pitchRad);
+    }
+
+    // Makes (x, y, z) the point the camera turns around and zooms toward, without moving the camera.
+    void SetPivotKeepingEye(float x, float y, float z) {
+        float ex, ey, ez;
+        EyePosition(ex, ey, ez);
+        float dx = ex - x, dy = ey - y, dz = ez - z;
+        float d = std::sqrt(dx * dx + dy * dy + dz * dz);
+        if (d < 0.05f) return;
+        targetX = x; targetY = y; targetZ = z;
+        distance = d;
+        yawDeg = std::atan2(dy, dx) * 180.0f / 3.14159265f;
+        pitchDeg = std::asin(std::max(-1.0f, std::min(1.0f, dz / d))) * 180.0f / 3.14159265f;
     }
 
     Mat4 ViewMatrix() const {

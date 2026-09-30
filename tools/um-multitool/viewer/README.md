@@ -14,16 +14,18 @@ The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2):
   - "all textures": lists everything, for unique items with odd names.
   - The preview shows the texture itself; **Export PNG** saves it as a PNG, transparency included.
 - **Name and description**: the item's in-game name above its stats and its description below, from the text sources. Weapons, armors and wands follow the picked material (`WEAPON <Blueprint> <Material>`); quest items use `QUESTITEM <Name>`, loot `LITEM <Name>` or `MATERIAL <Name>`. When no text exists, the key looked for is shown.
-- **Sources**: where everything comes from.
+- **Sources** (now in the GUI's **Settings** tab, shared with the Map Editor): where everything comes from.
   - Figures: `figures.res` or a folder.
   - Textures: `textures.res` and `redress.res`, or a folder of `.mmp` or `.dds` files.
   - Texts: `texts.res` and `textslmp.res`, or folders of loose text files (e.g. `resources/universal-mod/res-texts/texts-eng_res`). The top source decides the language; the encoding is detected per text: UTF-8, Korean (CP949) or Russian (CP1251).
   - Database: `database.res` or `databaselmp.res`, whichever holds `items.idb`. In Universal-Mod that is `databaselmp.res`.
-  - Layers: add the base game first, then mods on top. The top layer wins. Settings are saved in `um-multitool-viewer.cfg` next to the program.
+  - Layers: add the base game first, then mods on top. The top layer wins. Settings are saved in `um-multitool.cfg` next to the program (an older `um-multitool-viewer.cfg` is read when that file does not exist yet).
 
-In the viewport, left-drag to orbit, right-drag to pan, and use the wheel to zoom. **Frame** re-centres the model.
+In the viewport the mouse works as in the Map Editor: the wheel click orbits, the right button drags (both set in **Settings → Mouse**), and the wheel zooms. **Frame** re-centres the model. **Browse...** next to the texture previews any picture file on the figure (a game texture .dds/.mmp, or .png, .jpg, .bmp, .tga...). With **Textured** and **Wireframe** both on, the edges are drawn over the texture. The item list can sit on either side of the view (**Settings → Layout**), resized by dragging the bar between them.
 
-**X / Y / Z** (each labelled with the current angle, as turns about X, then Y, then Z) turn the models of the current tab by 45° about the grid's fixed X, Y or Z axis, around their centre, whatever turns came before (right-click turns the other way); **Reset** undoes them. Each tab keeps its own orientation, saved in `um-multitool-viewer.cfg` as a quaternion w,x,y,z (e.g. `ROTATION_WEAPONS=0.923880,0.382683,0.000000,0.000000`); older files with three angles are converted on load.
+**Settings → Background** puts a picture (any picture: .jpg, .png, .bmp, .tga, .gif, .dds, .mmp...) behind the menus: one for every tab, and one per main tab (File Processing, 3D Viewer, Map Editor, Settings) that wins over it. **Opacity** sets how much it shows over the plain background; the pictures fill the window, cropped to its shape.
+
+**X / Y / Z** (each labelled with the current angle, as turns about X, then Y, then Z) turn the models of the current tab by 45° about the grid's fixed X, Y or Z axis, around their centre, whatever turns came before (right-click turns the other way); **Reset** undoes them. Each tab keeps its own orientation, saved in `um-multitool.cfg` as a quaternion w,x,y,z (e.g. `ROTATION_WEAPONS=0.923880,0.382683,0.000000,0.000000`); older files with three angles are converted on load.
 
 **Export GIF...** saves a looping 360° turn of the shown item, from the current camera angle and zoom and with the tab's rotation.
 - Settings: size (typed, capped by the window in the GUI), frames per second (typed, 1-120), rotation speed (degrees per second, so one turn lasts 360/speed seconds), the axis the model spins about (the grid's X, Y or Z, through its centre), direction, and background.
@@ -78,7 +80,8 @@ Part of um-multitool: `make linux`, `make win` or `make all` in `tools/um-multit
 | `item_resolve.hpp` | database row → figure and candidate textures (no GL) |
 | `library.hpp` | sources, database and name indexes (no GL) |
 | `scene.hpp` | the OpenGL viewport |
-| `ui_items.hpp`, `ui_sources.hpp` | the tabs |
+| `ui_items.hpp` | the item tabs |
+| `ui_sources.hpp` | the Settings tab's sources and Map Editor keys (drawn by `gui_main.cpp`) |
 | `viewer_app.cpp` | the tab inside um-multitool's window, and the `viewer` command-line modes |
 | `dds_texture.hpp` | DDS decoder (DXT1/3/5, uncompressed) |
 | `gif_writer.hpp` | animated GIF encoder (median-cut palette shared by all frames, LZW) |

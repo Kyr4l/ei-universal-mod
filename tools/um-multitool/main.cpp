@@ -4,7 +4,7 @@
  * ============================================================================
  *
  * Description:
- *   One binary: a GUI (File Processing and 3D Viewer tabs, gui_main.cpp) and
+ *   One binary: a GUI (File Processing, 3D Viewer, Map Editor and Settings tabs, gui_main.cpp) and
  *   the command-line tools. Double-clicked (no terminal) it opens the GUI;
  *   run from a terminal without arguments it prints the usage; `gui` opens the
  *   GUI from a terminal. The command-line tools merge five standalone tools:
@@ -13,7 +13,8 @@
  *     - mobdump (formerly um-mobdump): .mob  ->  .yaml/.eis map dumping
  *     - restool (formerly um-restool): .res/.mq <-> folder pack/unpack
  *     - xlsxdb  (formerly um-xlsxdb):  .xlsx ->  .res database compiler
- *   plus `viewer`, the 3D Viewer's command-line modes (viewer/viewer_app.cpp).
+ *   plus `viewer`, the 3D Viewer's command-line modes (viewer/viewer_app.cpp), and `map`, the
+ *   Map Editor's map checks (mapedit/map_app.cpp).
  *
  * Dispatch rules:
  *   1. Explicit subcommand: `um-multitool <subcommand> [options] <path>`
@@ -28,6 +29,7 @@
  */
 
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <set>
@@ -39,6 +41,8 @@
 #include "version.hpp"
 #include "subtools.hpp"
 #include "viewer/viewer_app.hpp"
+#include "mapedit/map_app.hpp"
+#include "dllconnect/connector_app.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -58,7 +62,7 @@ static std::string ToLower(std::string s) {
 }
 
 static void PrintTopLevelHelp() {
-    std::cout << "um-multitool " << PROGRAM_VERSION << " - Evil Islands Modding Toolkit\n\n"
+    std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) " << PROGRAM_VERSION << " - Evil Islands Modding Toolkit\n\n"
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
@@ -69,7 +73,10 @@ static void PrintTopLevelHelp() {
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
               << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n"
               << "  xlsxdb   (alias: db)    Compile .xlsx gameplay databases to .res\n"
-              << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n\n"
+              << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
+              << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
+              << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
+              << "  install-desktop         Add um-multitool to the Linux application menu, with its icon (--remove: undo)\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
@@ -88,8 +95,8 @@ static void PrintTopLevelHelp() {
 }
 
 static void PrintTopLevelVersion() {
-    std::cout << "um-multitool version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb (each 1.0), the GUI and the 3D Viewer\n";
+    std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) version " << PROGRAM_VERSION << "\n"
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb (each 1.0), the GUI, the 3D Viewer and the Map Editor\n";
 }
 
 enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb };
@@ -210,7 +217,7 @@ static bool StartedFromTerminal() {
 #endif
 }
 
-// `um-multitool gui [--viewer <category> <item>] [--screenshot <file.bmp>]`
+// `um-multitool gui [--viewer <category> <item>] [--map <file>...] [--settings] [--screenshot <file.bmp>]`
 static int StartGui(int argc, char* argv[], int first) {
     GuiOptions options;
     for (int i = first; i < argc; ++i) {
@@ -221,11 +228,91 @@ static int StartGui(int argc, char* argv[], int first) {
             i += 2;
         } else if (a == "--viewer") {
             options.openViewer = true;
+        } else if (a == "--map") {
+            options.openMap = true;
+            while (i + 1 < argc && argv[i + 1][0] != '-') options.mapFiles.push_back(argv[++i]);
+        } else if (a == "--settings") {
+            options.openSettings = true;
         } else if (a == "--screenshot" && i + 1 < argc) {
             options.screenshotPath = argv[++i];
         }
     }
     return RunGui(options);
+}
+
+// `um-multitool install-desktop [--remove]` (Linux): installs um-multitool.desktop and the icon for the
+// current user (~/.local/share/applications, and the 256-pixel icon in ~/.local/share/icons/hicolor),
+// with this binary's absolute path, so the tool shows in the application menu with its icon (on Wayland,
+// also the window's). Menus find the icon by its theme name and scale it to the size they need.
+static int InstallDesktop(int argc, char* argv[]) {
+#ifdef _WIN32
+    (void)argc; (void)argv;
+    std::cerr << "install-desktop is for Linux desktops; on Windows the .exe carries its icon.\n";
+    return 1;
+#else
+    const bool remove = argc > 2 && std::string(argv[2]) == "--remove";
+    std::error_code ec;
+    const char* dataHome = std::getenv("XDG_DATA_HOME");
+    const char* home = std::getenv("HOME");
+    if ((!dataHome || !*dataHome) && (!home || !*home)) { std::cerr << "Error: HOME is not set\n"; return 1; }
+    const fs::path data = dataHome && *dataHome ? fs::path(dataHome) : fs::path(home) / ".local" / "share";
+    const fs::path desktop = data / "applications" / "um-multitool.desktop";
+    const fs::path hicolor = data / "icons" / "hicolor";
+    // Earlier versions installed every usual size: --remove still removes them all.
+    const int sizes[] = {16, 22, 24, 32, 48, 64, 128, 256, 512};
+    auto iconAt = [&](int size) { return hicolor / (std::to_string(size) + "x" + std::to_string(size)) / "apps" / "um-multitool.png"; };
+    // Tells the desktop to read the menu entries and the icons again: the menu database
+    // (update-desktop-database), the icon cache and KDE's service cache. Each is optional.
+    auto refresh = [&]() {
+        const std::string cmd = "update-desktop-database -q \"" + desktop.parent_path().string() + "\" >/dev/null 2>&1;"
+                                " gtk-update-icon-cache -q -t \"" + hicolor.string() + "\" >/dev/null 2>&1;"
+                                " (kbuildsycoca6 || kbuildsycoca5) >/dev/null 2>&1";
+        if (std::system(cmd.c_str()) != 0) {} // other desktops notice the files by themselves
+    };
+    if (remove) {
+        bool any = fs::remove(desktop, ec);
+        if (any) std::cout << "Removed " << desktop.string() << "\n";
+        for (int size : sizes) if (fs::remove(iconAt(size), ec)) { std::cout << "Removed " << iconAt(size).string() << "\n"; any = true; }
+        if (!any) std::cout << "Nothing to remove.\n";
+        else refresh();
+        return 0;
+    }
+    const fs::path exe = fs::read_symlink("/proc/self/exe", ec);
+    if (ec) { std::cerr << "Error: cannot find this program's path\n"; return 1; }
+    fs::create_directories(desktop.parent_path(), ec);
+    {
+        const fs::path from = exe.parent_path() / "assets" / "logo-256.png";
+        const fs::path to = iconAt(256);
+        fs::create_directories(to.parent_path(), ec);
+        if (!fs::copy_file(from, to, fs::copy_options::overwrite_existing, ec)) {
+            std::cerr << "Error: cannot copy " << from << " to " << to << ": " << ec.message() << "\n";
+            return 1;
+        }
+    }
+    std::ofstream f(desktop, std::ios::trunc);
+    if (!f.is_open()) { std::cerr << "Error: cannot write " << desktop << "\n"; return 1; }
+    // Exec quotes the path (it may hold spaces); Icon is the theme name, found in hicolor.
+    f << "[Desktop Entry]\n"
+         "Type=Application\n"
+         "Name=Universal Mod Multitool\n"
+         "GenericName=Evil Islands Modding Toolkit\n"
+         "Comment=Evil Islands modding: file conversion, 3D viewer and map editor\n"
+         "Exec=\"" << exe.string() << "\" gui\n"
+         "Path=" << exe.parent_path().string() << "\n"
+         "Icon=um-multitool\n"
+         "Terminal=false\n"
+         "Categories=Development;\n"
+         "Keywords=Evil Islands;Cursed Lands;modding;map editor;mob;mpr;\n"
+         "StartupWMClass=um-multitool\n"
+         "StartupNotify=true\n";
+    f.close();
+    refresh();
+    std::cout << "Installed " << desktop << "\n     and the icon in " << hicolor << " (256 pixels)\n"
+              << "Universal Mod Multitool is now in the application menu (it may take a moment to appear).\n"
+
+              << "Undo with: um-multitool install-desktop --remove\n";
+    return 0;
+#endif
 }
 
 int main(int argc, char* argv[]) {
@@ -243,6 +330,9 @@ int main(int argc, char* argv[]) {
     std::string first = argv[1];
     if (first == "gui") return StartGui(argc, argv, 2);
     if (first == "viewer") return viewer::RunCli(argc - 1, argv + 1);
+    if (first == "map") return mapedit::RunCli(argc - 1, argv + 1);
+    if (first == "dll") return dllconnect::RunCli(argc - 1, argv + 1);
+    if (first == "install-desktop") return InstallDesktop(argc, argv);
     if (first == "-h" || first == "--help") {
         PrintTopLevelHelp();
         return 0;

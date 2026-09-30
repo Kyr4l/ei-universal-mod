@@ -4,11 +4,13 @@
 
 #include <string>
 
+struct Library;
+
 namespace viewer {
 
 struct Context;
 
-Context* Create();                 // needs the GL context current (it may load textures)
+Context* Create(Library& lib);     // lib: the GUI's shared sources (outlives the context)
 void Destroy(Context* ctx);        // likewise
 
 // Inside the ImGui frame, in the 3D Viewer tab's content region.

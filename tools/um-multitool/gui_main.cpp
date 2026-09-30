@@ -27,12 +27,19 @@
 #include <GLFW/glfw3.h>
 
 #include "imgui.h"
+#include "imgui_internal.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl2.h"
 
 #include "gui.hpp"
 #include "version.hpp"
+#include "icon_data.hpp"
 #include "viewer/viewer_app.hpp"
+#include "viewer/library.hpp"
+#include "viewer/ui_sources.hpp"
+#include "mapedit/map_app.hpp"
+#include "dllconnect/connector_app.hpp"
+#include "viewer/dds_texture.hpp"
 
 #include <string>
 #include <vector>
@@ -93,6 +100,78 @@ static bool HasCommand(const char* name) {
 
 // filterName/filterExt are only honored on Windows (e.g. "Spreadsheet", "*.xlsx");
 // pass nullptr for "all files". Linux file pickers are shown unfiltered.
+// ---- background picture (Settings > Background) ------------------------------------------------------
+
+// The GL texture of a picture file (.jpg, .png, .bmp, .dds, .mmp...), loaded again when the path changes; 0 when none.
+static GLuint BackgroundTexture(const std::string& path, ImVec2& size) {
+    static std::string loadedPath;
+    static GLuint texture = 0;
+    static ImVec2 loadedSize;
+    if (path != loadedPath) {
+        loadedPath = path;
+        if (texture) { glDeleteTextures(1, &texture); texture = 0; }
+        std::vector<uint8_t> bytes;
+        if (!path.empty()) {
+            std::FILE* f = std::fopen(path.c_str(), "rb");
+            if (f) {
+                std::fseek(f, 0, SEEK_END);
+                const long n = std::ftell(f);
+                std::fseek(f, 0, SEEK_SET);
+                if (n > 0) { bytes.resize(static_cast<size_t>(n)); if (std::fread(bytes.data(), 1, bytes.size(), f) != bytes.size()) bytes.clear(); }
+                std::fclose(f);
+            }
+        }
+        mmp::Image image;
+        std::string err;
+        if (!bytes.empty() && DecodeTextureFile(bytes, image, err)) {
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, image.rgba.data());
+            loadedSize = ImVec2(static_cast<float>(image.width), static_cast<float>(image.height));
+        }
+    }
+    size = loadedSize;
+    return texture;
+}
+
+// The picture over the whole window, covering it (cropped to the window's shape, not stretched), blended
+// over the plain background by `opacity`.
+static void DrawBackground(GLuint texture, ImVec2 size, int fbW, int fbH, float opacity) {
+    if (!texture || fbW <= 0 || fbH <= 0 || size.x <= 0 || size.y <= 0) return;
+    const float win = static_cast<float>(fbW) / fbH, pic = size.x / size.y;
+    float u0 = 0, u1 = 1, v0 = 0, v1 = 1;
+    if (pic > win) { const float keep = win / pic; u0 = (1 - keep) * 0.5f; u1 = u0 + keep; }
+    else { const float keep = pic / win; v0 = (1 - keep) * 0.5f; v1 = v0 + keep; }
+    glViewport(0, 0, fbW, fbH);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, 1, 1, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(1, 1, 1, opacity);
+    glBegin(GL_QUADS);
+    glTexCoord2f(u0, v0); glVertex2f(0, 0);
+    glTexCoord2f(u1, v0); glVertex2f(1, 0);
+    glTexCoord2f(u1, v1); glVertex2f(1, 1);
+    glTexCoord2f(u0, v1); glVertex2f(0, 1);
+    glEnd();
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
+}
+
 static bool NativePickFile(bool saveDialog, const char* filterName, const char* filterExt, std::string& outPath) {
 #ifdef _WIN32
     char buf[MAX_PATH] = "";
@@ -788,19 +867,41 @@ int RunGui(const GuiOptions& options) {
     if (!glfwInit()) return 1;
 
     glfwWindowHint(GLFW_DEPTH_BITS, 24); // the 3D Viewer needs a depth buffer
-    const std::string title = std::string("um-multitool ") + PROGRAM_VERSION;
-    GLFWwindow* window = glfwCreateWindow(1400, 860, title.c_str(), nullptr, nullptr);
+    // The name desktops match against um-multitool.desktop (StartupWMClass / the Wayland app id): that is
+    // where a Wayland desktop takes the window's icon from.
+    glfwWindowHintString(GLFW_WAYLAND_APP_ID, "um-multitool");
+    glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
+    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
+    const std::string title = std::string(PROGRAM_NAME_SHOWN) + " " + PROGRAM_VERSION;
+    // The window as it was last closed (um-multitool.cfg): size, maximized, and position where the
+    // platform allows it (Wayland does not let a program place its window).
+    const config::Config saved = config::Load();
+    const bool wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;
+    // Created at the normal size and maximized once shown: a window that starts maximized gives the
+    // window manager no size to go back to when it is un-maximized (KWin then keeps the full screen).
+    GLFWwindow* window = glfwCreateWindow(std::max(saved.windowW, 640), std::max(saved.windowH, 400), title.c_str(), nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         return 1;
     }
+    if (!wayland && saved.windowX != -100000) glfwSetWindowPos(window, saved.windowX, saved.windowY);
     glfwMakeContextCurrent(window);
+    // The window icon (the battle axe, icon_data.hpp). Wayland has no way to set one from the program.
+    if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+        GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)},
+                              {48, 48, const_cast<unsigned char*>(logo::kIcon48)},
+                              {32, 32, const_cast<unsigned char*>(logo::kIcon32)}};
+        glfwSetWindowIcon(window, 3, icons);
+    }
     glfwSwapInterval(1); // vsync; also paces our polling loop like the old 60ms timer did
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    // Ctrl+Tab is the Map Editor's logic mode key (by default): not ImGui's window switcher.
+    ImGui::GetCurrentContext()->ConfigNavWindowingKeyNext = 0;
+    ImGui::GetCurrentContext()->ConfigNavWindowingKeyPrev = 0;
 
     // Default Dear ImGui look and colors - no theme customization.
     AddFallbackFonts(io);
@@ -808,14 +909,28 @@ int RunGui(const GuiOptions& options) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();
 
-    viewer::Context* viewerCtx = viewer::Create();
-    bool viewerRequested = options.openViewer;
+    // The sources (figures, textures, texts, database) and settings, shared by the 3D Viewer and the
+    // Map Editor and edited in the Settings tab.
+    Library library;
+    library.LoadConfig();
+    ui::SourcesState sourcesState;
+    std::snprintf(sourcesState.databasePath, sizeof(sourcesState.databasePath), "%s", library.dbPath.c_str());
+
+    viewer::Context* viewerCtx = viewer::Create(library);
+    mapedit::Context* mapCtx = mapedit::Create(library);
+    dllconnect::Context* dllCtx = dllconnect::Create(library);
+    // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
+    enum { kFiles, kViewer, kMap, kSettings, kDll, kNone };
+    // The tab asked for on the command line, else the one open when the GUI was last closed.
+    int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer
+                     : (library.guiTab >= kFiles && library.guiTab <= kDll ? library.guiTab : kNone);
     if (!options.viewerCategory.empty()) {
         std::string err;
         if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err)) std::fprintf(stderr, "%s\n", err.c_str());
-        viewerRequested = true;
+        requestedTab = kViewer;
     }
-    bool viewerActive = false;     // the 3D Viewer tab was shown last frame (its viewport must see through)
+    if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles);
+    bool seeThrough = false;       // a 3D tab was shown last frame (its viewport must see through the window)
     int frameCount = 0;
     double lastTime = glfwGetTime();
 
@@ -827,14 +942,40 @@ int RunGui(const GuiOptions& options) {
         {"XLSX -> RES", DrawXlsxDbTab, BuildXlsxDbArgs, "xlsxdb", nullptr},
     };
 
+    int maximizeIn = saved.windowMaximized ? 3 : 0; // frames: after the window is shown (Wayland maps it at the first swap)
+    int normalW = std::max(saved.windowW, 640), normalH = std::max(saved.windowH, 400), normalX = saved.windowX, normalY = saved.windowY;
+    ImVec2 bgSize(0, 0);
+    GLFWwindow* scriptWin = nullptr;   // the script's own window, while it is open
+    ImGuiContext* scriptImgui = nullptr;
+    auto closeScriptWindow = [&]() {
+        if (!scriptWin) return;
+        ImGuiContext* mainImgui = ImGui::GetCurrentContext();
+        glfwMakeContextCurrent(scriptWin);
+        ImGui::SetCurrentContext(scriptImgui);
+        ImGui_ImplOpenGL2_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext(scriptImgui);
+        ImGui::SetCurrentContext(mainImgui);
+        glfwDestroyWindow(scriptWin);
+        scriptWin = nullptr;
+        scriptImgui = nullptr;
+        glfwMakeContextCurrent(window);
+    };
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+        if (maximizeIn > 0) { if (--maximizeIn == 0) glfwMaximizeWindow(window); }
+        // The last normal (not maximized) size and place, kept for the next start.
+        else if (!glfwGetWindowAttrib(window, GLFW_MAXIMIZED) && !glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
+            glfwGetWindowSize(window, &normalW, &normalH);
+            if (!wayland) glfwGetWindowPos(window, &normalX, &normalY);
+        }
         if (glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
             ImGui_ImplGlfw_Sleep(16);
             continue;
         }
 
         PumpActiveProcess();
+        dllconnect::Update(dllCtx);
         double now = glfwGetTime();
         float dt = static_cast<float>(now - lastTime);
         lastTime = now;
@@ -848,26 +989,55 @@ int RunGui(const GuiOptions& options) {
         ImGui::SetNextWindowPos(ImVec2(0, 0));
         ImGui::SetNextWindowSize(ImVec2(static_cast<float>(fbW) / io.DisplayFramebufferScale.x,
                                          static_cast<float>(fbH) / io.DisplayFramebufferScale.y));
-        if (viewerActive) ImGui::SetNextWindowBgAlpha(0.0f); // the 3D view is drawn underneath ImGui
+        // A background picture for the tab shown last frame (Settings > Background): drawn under ImGui like the 3D views.
+        const int bgTab = library.guiTab >= kFiles && library.guiTab <= kDll ? library.guiTab : kFiles;
+        const std::string& bgPath = !library.tabBackground[bgTab].empty() ? library.tabBackground[bgTab] : library.background;
+        const GLuint bgTexture = BackgroundTexture(bgPath, bgSize);
+        ui::BackgroundShown() = bgTexture != 0 && library.backgroundOpacity > 0.0f;
+        if (seeThrough || ui::BackgroundShown()) ImGui::SetNextWindowBgAlpha(0.0f); // drawn underneath ImGui
         ImGui::Begin("##main", nullptr,
                       ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                       ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
 
-        bool viewerShown = false;
+        bool shown3d = false;
+        int shownTab = kNone;
         if (ImGui::BeginTabBar("##maintabs")) {
-            if (ImGui::BeginTabItem("File Processing")) {
+            auto flags = [&](int tab) { return requestedTab == tab ? ImGuiTabItemFlags_SetSelected : 0; };
+            if (ImGui::BeginTabItem("File Processing", nullptr, flags(kFiles))) {
                 DrawFileProcessingTab(tabs, std::size(tabs));
+                shownTab = kFiles;
                 ImGui::EndTabItem();
             }
-            if (ImGui::BeginTabItem("3D Viewer", nullptr, viewerRequested ? ImGuiTabItemFlags_SetSelected : 0)) {
+            if (ImGui::BeginTabItem("3D Viewer", nullptr, flags(kViewer))) {
                 viewer::DrawTab(viewerCtx);
-                viewerShown = true;
+                shown3d = true;
+                shownTab = kViewer;
                 ImGui::EndTabItem();
             }
-            viewerRequested = false;
+            if (ImGui::BeginTabItem("Map Editor", nullptr, flags(kMap))) {
+                mapedit::DrawTab(mapCtx);
+                shown3d = true;
+                shownTab = kMap;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("UM DLL Connector", nullptr, flags(kDll))) {
+                dllconnect::DrawTab(dllCtx);
+                shownTab = kDll;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Settings", nullptr, flags(kSettings))) {
+                ui::SettingsTab(library, sourcesState);
+                shownTab = kSettings;
+                ImGui::EndTabItem();
+            }
+            requestedTab = kNone;
             ImGui::EndTabBar();
         }
-        viewerActive = viewerShown;
+        if (shownTab != kNone && shownTab != library.guiTab) { // remembered for the next start
+            library.guiTab = shownTab;
+            library.SaveConfig();
+        }
+        seeThrough = shown3d;
         ImGui::End();
 
         ImGui::Render();
@@ -875,17 +1045,78 @@ int RunGui(const GuiOptions& options) {
         const ImVec4 bg = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
         glClearColor(bg.x, bg.y, bg.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (ui::BackgroundShown()) DrawBackground(bgTexture, bgSize, fbW, fbH, library.backgroundOpacity);
         viewer::RenderGl(viewerCtx, fbW, fbH, io.DisplayFramebufferScale.x, dt);
+        mapedit::RenderGl(mapCtx, fbW, fbH, io.DisplayFramebufferScale.x);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        if (!options.screenshotPath.empty() && ++frameCount == 8) {
+        if (!options.screenshotPath.empty() && ++frameCount >= 8 && (!mapedit::Busy(mapCtx) || frameCount > 3000)) {
             SaveScreenshot(options.screenshotPath, fbW, fbH);
             glfwSetWindowShouldClose(window, GLFW_TRUE);
         }
 
         glfwSwapBuffers(window);
+
+        // The Map Editor's script in a window of its own: a second OS window (sharing the GL objects)
+        // with its own ImGui context, drawn after the main one each frame.
+        const bool scriptWanted = mapedit::ScriptWindowWanted(mapCtx);
+        ImGuiContext* mainImgui = ImGui::GetCurrentContext();
+        if (scriptWanted && !scriptWin) {
+            const ImGuiStyle style = ImGui::GetStyle();
+            glfwDefaultWindowHints();
+            glfwWindowHintString(GLFW_WAYLAND_APP_ID, "um-multitool");
+            glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
+            glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
+            const std::string scriptTitle = "Script - " + std::string(PROGRAM_NAME_SHOWN);
+            scriptWin = glfwCreateWindow(960, 720, scriptTitle.c_str(), nullptr, window);
+            if (scriptWin) {
+                glfwMakeContextCurrent(scriptWin);
+                glfwSwapInterval(0); // the main window's swap keeps the pace
+                scriptImgui = ImGui::CreateContext();
+                ImGui::SetCurrentContext(scriptImgui);
+                ImGui::GetStyle() = style;
+                ImGui::GetIO().IniFilename = nullptr;
+                AddFallbackFonts(ImGui::GetIO());
+                ImGui_ImplGlfw_InitForOpenGL(scriptWin, true);
+                ImGui_ImplOpenGL2_Init();
+                ImGui::SetCurrentContext(mainImgui);
+                glfwMakeContextCurrent(window);
+            } else {
+                mapedit::CloseScriptWindow(mapCtx);
+            }
+        }
+        if (scriptWin && scriptWanted) {
+            glfwMakeContextCurrent(scriptWin);
+            ImGui::SetCurrentContext(scriptImgui);
+            if (mapedit::TakeScriptWindowFocus(mapCtx)) glfwFocusWindow(scriptWin);
+            ImGui_ImplOpenGL2_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+            mapedit::DrawScriptWindow(mapCtx);
+            ImGui::Render();
+            int sw, sh;
+            glfwGetFramebufferSize(scriptWin, &sw, &sh);
+            glViewport(0, 0, sw, sh);
+            glClearColor(bg.x, bg.y, bg.z, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+            glfwSwapBuffers(scriptWin);
+            ImGui::SetCurrentContext(mainImgui);
+            glfwMakeContextCurrent(window);
+            if (glfwWindowShouldClose(scriptWin)) mapedit::CloseScriptWindow(mapCtx);
+        }
+        if (scriptWin && !mapedit::ScriptWindowWanted(mapCtx)) closeScriptWindow();
     }
+    closeScriptWindow();
 
     viewer::Destroy(viewerCtx);
+    mapedit::Destroy(mapCtx);
+    dllconnect::Destroy(dllCtx);
+    // Remember the window for the next start.
+    library.windowMaximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED) == GLFW_TRUE;
+    library.windowW = normalW;
+    library.windowH = normalH;
+    if (!wayland) { library.windowX = normalX; library.windowY = normalY; }
+    library.SaveConfig();
     ImGui_ImplOpenGL2_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

@@ -5,6 +5,8 @@
 // .mmp decoder's own (mmp_texture.hpp).
 #pragma once
 
+#include "png_reader.hpp"
+#include "../vendor/stb/stb_image.h"
 #include <cstdint>
 #include <cstring>
 #include <string>
@@ -112,8 +114,19 @@ inline bool Decode(const uint8_t* data, size_t size, mmp::Image& out, std::strin
 
 } // namespace dds
 
-// A texture file of either kind, recognised by its content rather than its name.
+// A texture file of any kind (DDS, MMP, PNG), recognised by its content rather than its name.
 inline bool DecodeTextureFile(const std::vector<uint8_t>& bytes, mmp::Image& out, std::string& err) {
     if (bytes.size() >= 4 && std::memcmp(bytes.data(), "DDS ", 4) == 0) return dds::Decode(bytes.data(), bytes.size(), out, err);
+    if (pngread::IsPng(bytes)) return pngread::Decode(bytes, out, err); // a picked preview file
+    if (!mmp::IsMmp(bytes)) { // any other picture (JPEG, BMP, TGA, GIF...): stb_image
+        int w = 0, h = 0, channels = 0;
+        unsigned char* px = stbi_load_from_memory(bytes.data(), static_cast<int>(bytes.size()), &w, &h, &channels, 4);
+        if (!px) { err = std::string("not a picture this reads (") + stbi_failure_reason() + ")"; return false; }
+        out.width = static_cast<uint32_t>(w);
+        out.height = static_cast<uint32_t>(h);
+        out.rgba.assign(px, px + static_cast<size_t>(w) * h * 4);
+        stbi_image_free(px);
+        return true;
+    }
     return mmp::Decode(bytes, out, err);
 }

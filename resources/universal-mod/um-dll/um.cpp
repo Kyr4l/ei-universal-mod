@@ -3,6 +3,7 @@
 // Logging, crash reporting, keyboard rewrite logging, and anti-crash
 // behavior are configured through um.cfg beside the DLL or environment variables.
 
+#include <winsock2.h> // before windows.h (the DLL server, dll_server.hpp)
 #include <windows.h>
 #include <dbghelp.h>
 #include <psapi.h>
@@ -67,6 +68,10 @@ static char g_profilerPosition[16] = "left";
 static HWND g_profilerWindow = NULL;
 static int g_profilerHz = 250;
 static int g_profilerLineCount = 20;
+// The DLL server for um-multitool (dll_server.hpp): off unless DLL_SERVER_ENABLED; needs a restart.
+static bool g_dllServerEnabled = false;
+static bool g_dllServerDebug = false;   // DLL_SERVER_DEBUG: commands that change the game (write, breakpoints)
+static int g_dllServerPort = 18888;
 static bool g_profilerEnabled = false;  // OVERLAY_PROFILER_ENABLED
 static volatile LONG g_profilerVisible = 0;
 static volatile LONG g_profilerRunning = 0;      // the sampler keeps going while this is 1
@@ -257,6 +262,7 @@ static DirectDrawCreateExFunction g_originalDirectDrawCreateEx = NULL;
 
 // Forward declaration: defined later, but used by earlier code.
 static void LogLine(const char* level, const char* format, ...);
+static void DllServerNoteLog(const char* line); // dll_server.hpp: um.log lines for its clients
 
 struct TrackedFileHandle {
     HANDLE handle;
@@ -685,6 +691,18 @@ static const SettingDef kSettings[] = {
         "; precise and costs more."),
     IntSetting("OVERLAY_PROFILER_LINES", &g_profilerLineCount, 6, 40, 20, true,
         "; Number of lines of the profiler tree (6-40)."),
+
+    BoolSetting("DLL_SERVER_ENABLED", &g_dllServerEnabled, false, true,
+        "; Let um-multitool (its UM DLL Connector tab) connect to the running game, to\n"
+        "; show its statistics. Only programs on this computer can connect. Needs a\n"
+        "; restart; (true/false)",
+        "; -- DLL server --"),
+    IntSetting("DLL_SERVER_PORT", &g_dllServerPort, 1024, 65535, 18888, true,
+        "; TCP port the DLL server listens on (1024-65535); the same as in um-multitool."),
+    BoolSetting("DLL_SERVER_DEBUG", &g_dllServerDebug, false, true,
+        "; With the DLL server: also allow the commands that change the running game\n"
+        "; (writing its memory, hardware breakpoints), for debugging it. Reading is\n"
+        "; always allowed. Needs a restart; (true/false)"),
 };
 static const size_t kSettingCount = sizeof(kSettings) / sizeof(kSettings[0]);
 
@@ -1117,6 +1135,7 @@ static void LogLine(const char* level, const char* format, ...) {
         }
     }
     fclose(file);
+    DllServerNoteLog(fullLine);
 
     if (logLockAcquired && !IsLogLevelFiltered(outputLevel)) {
         snprintf(g_overlayLogRing[g_overlayLogRingNext], sizeof(g_overlayLogRing[0]), "%s", fullLine);
@@ -5515,6 +5534,21 @@ static void LoadProfileNames() {
     fclose(file);
 }
 
+// Builds the function table and names once, for the profiler and the DLL server (whichever asks first;
+// the other waits). Read-only afterwards.
+static volatile LONG g_profileSymbolsState = 0; // 0 not built, 1 building, 2 ready
+static void EnsureProfileSymbols() {
+    if (g_profileSymbolsState == 2) return;
+    if (InterlockedCompareExchange(&g_profileSymbolsState, 1, 0) == 0) {
+        if (g_codeLow == 0) InitGameImageRanges(); // not done when the heap hooks are off
+        BuildProfileFunctionTable();
+        LoadProfileNames();
+        InterlockedExchange(&g_profileSymbolsState, 2);
+        return;
+    }
+    while (g_profileSymbolsState != 2) Sleep(10);
+}
+
 // The function a code address belongs to (its entry), 0 when there is none close enough.
 static DWORD ProfileFunctionOf(DWORD address) {
     auto after = std::upper_bound(g_profileFunctions.begin(), g_profileFunctions.end(), address);
@@ -5708,11 +5742,7 @@ static DWORD WINAPI ProfilerThread(LPVOID parameter) {
 
 static DWORD WINAPI ProfilerThreadBody(LPVOID) {
     LabelCurrentThread(L"um.dll: Profiler");
-    if (g_codeLow == 0) InitGameImageRanges(); // not done when the heap hooks are off
-    if (g_profileFunctions.empty()) {
-        BuildProfileFunctionTable();
-        LoadProfileNames();
-    }
+    EnsureProfileSymbols();
     static BYTE stackCopy[kProfileStackBytes];
     ProfileWindow window;
     window.Reset();
@@ -7021,6 +7051,50 @@ UM_GUARDED_THREAD(OverlayThread) {
     return 0;
 }
 
+#include "dll_server.hpp"
+
+static void DllServerNoteLog(const char* line) { dllserver::NoteLog(line); }
+
+// The map the game shows, for the DLL server's MAP command.
+static std::string DllServerMapInfo() {
+    MapLoadState state;
+    CopyMapState(&state);
+    char text[512];
+    snprintf(text, sizeof(text), "terrain=%s base=%s quest=%s script_maps=%d last_script_map=%s",
+        dlldebug::Quote(state.mpr).c_str(), dlldebug::Quote(state.base).c_str(), dlldebug::Quote(state.quest).c_str(),
+        state.extraCount, dlldebug::Quote(state.lastExtra).c_str());
+    return text;
+}
+
+// "sub_4A1F20+0x12 <hint>" (or a known name) for an address in game.exe's code, "" elsewhere.
+static std::string DllServerGameFunction(uint32_t address) {
+    EnsureProfileSymbols();
+    if (address < g_codeLow || address >= g_codeHigh) return "";
+    const DWORD function = ProfileFunctionOf(address);
+    if (!function) return "";
+    std::string name = ProfileNameOf(function);
+    if (address != function) {
+        char offset[16];
+        snprintf(offset, sizeof(offset), "+0x%lX", static_cast<unsigned long>(address - function));
+        const size_t space = name.find(' ');
+        name.insert(space == std::string::npos ? name.size() : space, offset);
+    }
+    return name;
+}
+
+UM_GUARDED_THREAD(DllServerThread) {
+    LabelCurrentThread(L"um.dll: DLL server");
+    static dllserver::Host host;
+    host.version = UM_VERSION;
+    host.debugAllowed = g_dllServerDebug;
+    host.mapInfo = DllServerMapInfo;
+    host.gameFunction = DllServerGameFunction;
+    host.mainThread = []() -> uint32_t { return g_profilerFrameThreadId; };
+    host.log = [](const char* level, const char* message) { LogLine(level, "%s", message); };
+    dllserver::Run(g_dllServerPort, host);
+    return 0;
+}
+
 // Perform configuration, diagnostics, hooks, and ASI validation after the
 // loader lock is released. Keeping this work out of DllMain avoids deadlocks.
 UM_GUARDED_THREAD(InitializeDllThread) {
@@ -7047,7 +7121,7 @@ UM_GUARDED_THREAD(InitializeDllThread) {
     }
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
     PrepareLogFile();
-    LogLine("INFO", "Universal Mod DLL attached; version=%s asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s suppress_error_dialogs=%s mob_validation=%s heap_overrun_reports=%s heap_alloc_padding=%d overlay=%s",
+    LogLine("INFO", "Universal Mod DLL attached; version=%s asi_check=%s keyboard_rewrites=%s keyboard_rewrite_logging=%s logging=%s file_io_logging=%s clear_log_on_start=%s suppress_error_dialogs=%s mob_validation=%s heap_overrun_reports=%s heap_alloc_padding=%d overlay=%s dll_server=%s dll_server_debug=%s",
         UM_VERSION,
         g_enableAsiCheck ? "enabled" : "disabled",
         g_enableKeyboardRewrites ? "enabled" : "disabled",
@@ -7059,7 +7133,9 @@ UM_GUARDED_THREAD(InitializeDllThread) {
         g_enableMobValidation ? "enabled" : "disabled",
         g_enableHeapFreeQuarantine ? "enabled" : "disabled",
         g_heapAllocPadding,
-        g_enableOverlay ? "enabled" : "disabled");
+        g_enableOverlay ? "enabled" : "disabled",
+        g_dllServerEnabled ? "enabled" : "disabled",
+        g_dllServerDebug ? "enabled" : "disabled");
     LogSystemInformation();
 
     HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
@@ -7071,6 +7147,13 @@ UM_GUARDED_THREAD(InitializeDllThread) {
         HANDLE overlayThreadHandle = CreateThread(NULL, 0, OverlayThread, hModule, 0, NULL);
         if (overlayThreadHandle) {
             CloseHandle(overlayThreadHandle);
+        }
+    }
+
+    if (g_dllServerEnabled) {
+        HANDLE serverThreadHandle = CreateThread(NULL, 0, DllServerThread, NULL, 0, NULL);
+        if (serverThreadHandle) {
+            CloseHandle(serverThreadHandle);
         }
     }
 

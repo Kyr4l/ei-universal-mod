@@ -9,6 +9,7 @@
 #include <array>
 #include <cmath>
 #include <map>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -126,13 +127,26 @@ public:
         return 0.5f * std::sqrt(d.x * d.x + d.y * d.y + d.z * d.z);
     }
 
-    // The GL texture for a texture base name, loaded on first use (id 0 = could not load).
+    // A texture's bytes: a file path (a texture picked with Browse: .dds, .mmp or .png) is read from
+    // disk, anything else is a base name in the texture sources.
+    static bool ReadTextureBytes(const Library& lib, const std::string& name, std::vector<uint8_t>& bytes, std::string* found = nullptr) {
+        if (name.find('/') != std::string::npos || name.find('\\') != std::string::npos) {
+            std::ifstream f(name, std::ios::binary);
+            if (!f.is_open()) return false;
+            bytes.assign(std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>());
+            if (found) *found = name;
+            return true;
+        }
+        return lib.textures.ReadTexture(name, bytes, found);
+    }
+
+    // The GL texture for a texture base name (or a picked file's path), loaded on first use (id 0 = could not load).
     const GlTexture& Texture(const Library& lib, const std::string& name) {
         auto it = textures_.find(name);
         if (it != textures_.end()) return it->second;
         GlTexture& t = textures_[name];
         std::vector<uint8_t> bytes;
-        if (!lib.textures.ReadTexture(name, bytes, &t.file)) {
+        if (!ReadTextureBytes(lib, name, bytes, &t.file)) {
             t.error = "not found in the texture sources";
             return t;
         }
@@ -202,9 +216,11 @@ public:
             tex = t.id;
             texWidth = t.width;
         }
-        bool textured = tex != 0 && !options.wireframe;
+        // Wireframe alone: lines only. With a texture: the textured model, then its edges over it.
+        bool textured = tex != 0;
+        const bool wireOver = options.wireframe && textured;
 
-        glPolygonMode(GL_FRONT_AND_BACK, options.wireframe ? GL_LINE : GL_FILL);
+        glPolygonMode(GL_FRONT_AND_BACK, options.wireframe && !wireOver ? GL_LINE : GL_FILL);
         if (textured) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, tex);
@@ -233,7 +249,7 @@ public:
             if (options.wireframe) glColor3f(0.85f, 0.85f, 0.9f);
             else glColor3f(0.72f, 0.70f, 0.64f);
         }
-        if (options.lighting && !options.wireframe) {
+        if (options.lighting && (!options.wireframe || wireOver)) {
             // A headlight from the camera plus ambient: normals only shade, colours come from the texture.
             glEnable(GL_LIGHTING);
             glEnable(GL_LIGHT0);
@@ -260,6 +276,24 @@ public:
             glNormalPointer(GL_FLOAT, 0, p.normals.data());
             if (textured) glTexCoordPointer(2, GL_FLOAT, 0, p.uvs.data());
             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(p.indices.size()), GL_UNSIGNED_SHORT, p.indices.data());
+        }
+        if (wireOver) { // the edges over the textured model
+            glDisable(GL_LIGHTING);
+            glDisable(GL_TEXTURE_2D);
+            glDisable(GL_ALPHA_TEST);
+            glDisable(GL_BLEND);
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+            glColor3f(0.05f, 0.05f, 0.05f);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glEnable(GL_POLYGON_OFFSET_LINE);
+            glPolygonOffset(-1.0f, -1.0f);
+            for (ScenePart& p : parts_) {
+                if (p.indices.empty()) continue;
+                glVertexPointer(3, GL_FLOAT, 0, p.positions.data());
+                glNormalPointer(GL_FLOAT, 0, p.normals.data());
+                glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(p.indices.size()), GL_UNSIGNED_SHORT, p.indices.data());
+            }
+            glDisable(GL_POLYGON_OFFSET_LINE);
         }
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);

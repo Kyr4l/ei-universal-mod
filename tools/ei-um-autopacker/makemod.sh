@@ -529,7 +529,7 @@ compile_mod_dll() {
     # it is compiled, and its headers are found through -I. The tests/ folder is not built here.
     local dll_sources=(um-dll/*.cpp)
     i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um.dll" "${dll_sources[@]}" -I um-dll \
-        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lgdi32
+        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lgdi32 -lws2_32
     log_ok "um.dll built successfully"
 }
 
