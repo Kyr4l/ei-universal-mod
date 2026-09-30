@@ -38,6 +38,8 @@ jobs:
           artifacts: |
             ${{ env.ZIPNAME }}
             tools/eistarter-obt-1.zip
+            tools/um-multitool/um-multitool
+            tools/um-multitool/um-multitool.exe
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: false
           name: Universal Mod Beta ${{ env.VERSION }}
