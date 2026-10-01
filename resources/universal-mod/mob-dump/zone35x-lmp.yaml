@@ -186901,7 +186901,7 @@ OBJECTDBFILE:
       OBJ_PLAYER: 0
       NID: 1003850
       OBJTYPE: 60
-      OBJNAME: "z35q2Chest"
+      OBJNAME: "z35xq2Chest"
       OBJTEMPLATE: "stst43"
       PARENTTEMPLATE: "Chest00"
       OBJPRIMTXTR: "kanianarc00"
@@ -186919,7 +186919,7 @@ OBJECTDBFILE:
       OBJ_USE_IN_SCRIPT: 1
       OBJ_IS_SHADOW: 1
       OBJ_PARENT_ID: 168
-      OBJ_QUEST_INFO: "z35q2"
+      OBJ_QUEST_INFO: "z35xq2"
       OBJCOMPLECTION:
         - 0.0
         - 0.5

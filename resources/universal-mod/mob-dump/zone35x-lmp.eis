@@ -24,7 +24,7 @@ GlobalVars (
   YGURight : object,
   YGRight : object,
   TPlateLever : object,
-  z35q2Chest : object,
+  z35xq2Chest : object,
   OutBP : object,
   InBP : object
 )
@@ -697,7 +697,7 @@ Script #VCityGates#0#1
 (
   if
   (
-    Add( GSGetVar( 0, "q.z35q1.z35q1" ), Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
+    Add( GSGetVar( 0, "q.z35xq1.z35xq1" ), Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
   )
   then
   (
@@ -710,7 +710,7 @@ Script #VCityGates#0#2
 (
   if
   (
-    Not( GSGetVar( 0, "q.z35q1.z35q1" ) )
+    Not( GSGetVar( 0, "q.z35xq1.z35xq1" ) )
     Not( Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
   )
   then
@@ -839,7 +839,7 @@ Script #MainChest
 (
   if
   (
-    IsEqual( GetLeverState( z35q2Chest ), 1 )
+    IsEqual( GetLeverState( z35xq2Chest ), 1 )
   )
   then
   (
@@ -923,7 +923,7 @@ WorldScript
   YGURight = GetObjectByID( "44432402" )
   YGRight = GetObjectByID( "44432403" )
   TPlateLever = GetObjectByID( "4371" )
-  z35q2Chest = GetObjectByID( "1003850" )
+  z35xq2Chest = GetObjectByID( "1003850" )
   OutBP = GetObjectByID( "1000495" )
   InBP = GetObjectByID( "1000857" )
   
@@ -953,8 +953,8 @@ WorldScript
   #MainChest(  )
   #TPIn(  )
   #TPOut(  )
-  ConsoleFloat( GSGetVar( 0, "q.z35q1.z35q1" ) )
-  ConsoleFloat( GSGetVar( 0, "q.z35q2.z35q2" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35xq1.z35xq1" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35xq2.z35xq2" ) )
   ConsoleFloat( GSGetVar( 0, "q.z35q3.z35q3" ) )
   ConsoleFloat( GSGetVar( 0, "q.z35q4.z35q4" ) )
   ConsoleFloat( GSGetVar( 0, "q.z35q5.z35q5" ) )

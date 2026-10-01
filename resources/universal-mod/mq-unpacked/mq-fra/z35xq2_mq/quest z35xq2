@@ -1,0 +1,14 @@
+Confiscated Belongings
+A kind wealthy merchant asked me to recover several belongings of great importance to her friend, which are still being held by the prison guards. To avoid damaging my relations with Lord Firez and the Hadagan army, I must act with stealth and avoid harming the soldiers guarding the prison.
+#subobj  1
+Find the prison
+The prison lies south of the town of Sadrok. According to the merchant's words, a paved road leading from Sadrok climbs straight up the mountain to it.
+#subobj  2
+Find a way inside
+If the gate is locked, then one of the patrols must have the key... and, naturally, so does the prison warden.
+#subobj  3
+Steal the belongings
+The belongings are kept inside a chest. The chest itself is unguarded, but the prison is filled with Hadagan soldiers.
+#subobj  4
+Remain unseen
+Only by staying unseen I may return to the merchant with the belongings she needs.
