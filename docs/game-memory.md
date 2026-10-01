@@ -264,6 +264,10 @@ maintained by the interface (sub_5800C0, from the interface object at 0x0079B5C8
   reference), point x/y/z, flags); sub_54A900 moves the pending order into the current one. Types: 0 stand /
   step, 1 move to a point, 3 attack, 5 cast?, 9 none. A player's click: sub_66FD70 (client side) ->
   sub_5D39E0 (adds the formation offset) -> sub_554740 (move to point: pending type 1, z = 1000000 = ground).
+- Inventory: unit record +0x24C -> the player object (class 0x743104); its +0xE0 is the inventory, a list
+  (class 0x73BE80: +0x04 head node, +0x0C count) of 12-byte nodes {next, previous, item}. Items are objects of
+  class 0x743F5C: +0x0C an ID, +0x18 a code (three granites given with `@GiveItem(0,"material.granite")`:
+  0x00010005, granite being material 5 of the database).
 - game.exe is client/server: CWorldClient / CPlayerClient / CUnitClientSpecific and CWorldServer /
   CUnitServer / CMapObjectServer; the host's server is authoritative (also in single player).
 

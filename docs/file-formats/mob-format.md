@@ -34,7 +34,7 @@ A `.mob` file starts with the root container node `OBJECTDBFILE` (`40960` / `0x0
    - `DIRICTORY` (`57344`) & `DIRICTORY_ELEMENTS` (`61440`): Scene tree folders.
    - `OBJECTSECTION` (`45056`): Map entities (units, levers, torches, particles, sounds, static objects).
    - `SS_TEXT` (`2899242187`): Encrypted mission script (`.eis`).
-   - `AIGRAPH` (`826366246`): AI navmesh and waypoint graphs.
+   - `AIGRAPH` (`826366246`): the zone's navmesh, see [aigraph.md](aigraph.md) (its layout, and how the game builds it).
    - `ROOT` (`0`): File termination node.
 
 ---

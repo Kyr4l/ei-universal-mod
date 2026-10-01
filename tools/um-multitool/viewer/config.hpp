@@ -151,6 +151,7 @@ struct Config {
     int sfxVolume = 100;                      // their volume, 0-100 %
     bool alertPopups = true;                  // a popup when errors are detected
     bool dbAutoLoad = false;                  // File Processing > DB opens DATABASE by itself
+    bool mapRegenNavmesh = false;             // the Map Editor regenerates a zone's AI_GRAPH when saving it
 };
 
 inline Config Load(const std::string& path = Path()) {
@@ -214,6 +215,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "SFX_VOLUME") cfg.sfxVolume = std::max(0, std::min(100, std::atoi(value.c_str())));
         else if (key == "ALERT_POPUPS") cfg.alertPopups = value == "true";
         else if (key == "DB_AUTO_LOAD") cfg.dbAutoLoad = value == "true";
+        else if (key == "MAP_REGEN_NAVMESH") cfg.mapRegenNavmesh = value == "true";
         else if (key == "DLL_TAB") cfg.dllTab = std::atoi(value.c_str());
         else if (key == "BACKGROUND_OPACITY") cfg.backgroundOpacity = static_cast<float>(std::atof(value.c_str()));
         else if (key == "WINDOW_SIZE") std::sscanf(value.c_str(), "%d,%d", &cfg.windowW, &cfg.windowH);
@@ -380,7 +382,7 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; um.dll's DLL server port (DLL_SERVER_PORT in um.cfg), and whether to keep trying to connect; (true/false)\n";
     f << "DLL_PORT=" << cfg.dllPort << "\nDLL_AUTO_CONNECT=" << flag(cfg.dllAutoConnect) << "\nDLL_TAB=" << cfg.dllTab << "\n";
     f << "SFX_ENABLED=" << flag(cfg.sfxEnabled) << "\nSFX_VOLUME=" << cfg.sfxVolume << "\nALERT_POPUPS=" << flag(cfg.alertPopups)
-      << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\n";
+      << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\nMAP_REGEN_NAVMESH=" << flag(cfg.mapRegenNavmesh) << "\n";
 
     section("Map Editor keys");
     f << "; key,modifiers: the key is a key POSITION (GLFW key code, named after the US layout: the key at the\n"

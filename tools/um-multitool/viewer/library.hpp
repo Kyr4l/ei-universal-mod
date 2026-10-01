@@ -57,6 +57,7 @@ struct Library {
     bool sfxEnabled = false, alertPopups = true;   // problem alerts (config.hpp, alerts.hpp)
     int sfxVolume = 100;                           // 0-100 %
     bool dbAutoLoad = false;                       // File Processing > DB opens dbPath by itself
+    bool mapRegenNavmesh = false;                  // Map Editor: regenerate the navmesh (AI_GRAPH) on save
     float backgroundOpacity = 0.35f;
     float mapHour = -1.0f;                         // the Map Editor's time of day (-1: the map's own)
     int windowW = 1400, windowH = 860, windowX = -100000, windowY = -100000; // the GUI window, see config.hpp
@@ -125,7 +126,7 @@ struct Library {
         for (int i = 0; i < 5; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
         dllPort = cfg.dllPort; dllTab = cfg.dllTab; dllAutoConnect = cfg.dllAutoConnect;
-        sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad;
+        sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad; mapRegenNavmesh = cfg.mapRegenNavmesh;
         windowW = cfg.windowW; windowH = cfg.windowH; windowX = cfg.windowX; windowY = cfg.windowY; windowMaximized = cfg.windowMaximized;
         mapMousePan = cfg.mapMousePan;
         RebuildFigureIndex();
@@ -164,7 +165,7 @@ struct Library {
         for (int i = 0; i < 5; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;
         cfg.dllPort = dllPort; cfg.dllTab = dllTab; cfg.dllAutoConnect = dllAutoConnect;
-        cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad;
+        cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad; cfg.mapRegenNavmesh = mapRegenNavmesh;
         cfg.windowW = windowW; cfg.windowH = windowH; cfg.windowX = windowX; cfg.windowY = windowY; cfg.windowMaximized = windowMaximized;
         cfg.mapMousePan = mapMousePan;
         config::Save(cfg, configPath);

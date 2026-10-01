@@ -36,6 +36,7 @@
 #include "checks.hpp"
 #include "lighting.hpp"
 #include "map_scene.hpp"
+#include "navmesh_gen.hpp"
 #include "quest_file.hpp"
 #include "text_codec.hpp"
 #include "script_highlight.hpp"
@@ -124,6 +125,7 @@ struct App {
 
     // Files
     mpr::Map terrain;
+    std::string navCompareNote; // "Navmesh differences": what its build left out
     bool terrainLoaded = false;
     // Terrain editing: the brush (a tile: texture * 64 + tile in it, a rotation in quarter turns; on
     // water, a liquid material, -1 removing the water from the tile), eight quick tiles, what is unsaved.
@@ -2749,9 +2751,48 @@ static bool SaveTerrain(App& app, const std::string& path) {
     return true;
 }
 
+std::vector<navgen::Object> NavObjects(const LayeredAssetSource& figures, const std::vector<const mob::File*>& maps, int* missing);
+
+// Save with "Navmesh" on: the open maps that have a navmesh (AI_GRAPH, the zone's main map) get it built again
+// from the terrain and every open map's objects, as the game builds it (navmesh_gen.hpp). Returns what to say.
+static std::string RegenerateNavmeshes(App& app) {
+    std::vector<mob::File*> targets;
+    for (auto& m : app.mobs) if (m->file.aiGraphBytes) targets.push_back(&m->file);
+    if (targets.empty()) return "";
+    if (app.terrain.sectorsX <= 0) return "navmesh not rebuilt: no terrain open";
+    std::vector<const mob::File*> all;
+    for (auto& m : app.mobs) all.push_back(&m->file);
+    int missing = 0;
+    const std::vector<navgen::Object> objects = NavObjects(app.lib.figures, all, &missing);
+    std::vector<uint8_t> payload;
+    std::string err;
+    if (!navgen::Generate(app.terrain, objects, payload, err)) return "navmesh not rebuilt: " + err;
+    std::string done;
+    for (mob::File* f : targets) {
+        mob::SetAiGraph(*f, payload);
+        done += (done.empty() ? "" : ", ") + f->fileName;
+    }
+    return "navmesh rebuilt in " + done + (missing ? " (" + std::to_string(missing) + " objects without a figure left out)" : "");
+}
+
+// "Navmesh differences": the navmesh built from the open terrain and maps, for the view to compare.
+static void BuildCompareNavmesh(App& app) {
+    app.scene.builtNav.clear();
+    ++app.scene.builtNavStamp;
+    if (app.terrain.sectorsX <= 0) { app.navCompareNote = "No terrain open."; return; }
+    std::vector<const mob::File*> all;
+    for (auto& m : app.mobs) all.push_back(&m->file);
+    int missing = 0;
+    const std::vector<navgen::Object> objects = NavObjects(app.lib.figures, all, &missing);
+    std::string err;
+    if (!navgen::Generate(app.terrain, objects, app.scene.builtNav, err)) { app.navCompareNote = err; return; }
+    app.navCompareNote = missing ? std::to_string(missing) + " objects without a figure left out." : "";
+}
+
 // Ctrl+S / the toolbar's Save: every unsaved change (edited maps, the quest's areas, the Quest tab's text).
 static void SaveQuestChanges(App& app) {
-    std::string saved, failed;
+    std::string saved, failed, navmesh;
+    if (app.lib.mapRegenNavmesh && (AnyMobDirty(app))) navmesh = RegenerateNavmeshes(app);
     for (auto& m : app.mobs) {
         if (!m->Dirty()) continue;
         std::string err;
@@ -2763,6 +2804,7 @@ static void SaveQuestChanges(App& app) {
         else failed += " terrain: " + app.terrainMessage;
     }
     if (!saved.empty() || !failed.empty()) app.filesMessage = (saved.empty() ? "" : "Saved " + saved) + (failed.empty() ? "" : "; could not save" + failed);
+    if (!navmesh.empty()) app.filesMessage += (app.filesMessage.empty() ? "" : "; ") + navmesh;
     if (!saved.empty()) app.questMessage = "Saved " + saved;
     if (app.questDirty) SaveQuestAreas(app);
     if (app.mqTextDirty) SaveQuestText(app);
@@ -4495,13 +4537,20 @@ static void Toolbar(App& app) {
             ImGui::SetNextItemWidth(110);
             ImGui::SliderInt("Navmesh layer", &o.navLayer, 0, mob::kAiLayers - 1);
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("The graph has 8 layers: units use the one of their AI class");
-            if (ImGui::Checkbox("Navmesh differences", &o.navCompare) && o.navCompare) app.scene.BuildWalkGrid();
+            if (ImGui::Checkbox("Navmesh differences", &o.navCompare) && o.navCompare) BuildCompareNavmesh(app);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Where the game's graph (the layer above) and the computed walkability disagree, per 4 x 4 node:\n"
-                                  "orange: the game walks there, this editor finds it blocked;\n"
-                                  "blue: the game cannot walk there, this editor finds it open.\n"
-                                  "Now: %d orange, %d blue (an out-of-date graph shows many).",
-                                  app.scene.navCompareGame, app.scene.navCompareEditor);
+                ImGui::SetTooltip("The map's navmesh (the layer above) against the one built from the terrain and the objects the\n"
+                                  "way the game builds it (what Save does with \"Navmesh\" on), per 4 x 4 node:\n"
+                                  "orange: only the map's navmesh walks there; blue: only the rebuilt one;\n"
+                                  "yellow: both, with other step costs. Anything shown: the map's navmesh is out of date.\n"
+                                  "Now: %d orange, %d blue, %d yellow.%s",
+                                  app.scene.navCompareGame, app.scene.navCompareEditor, app.scene.navCompareCost,
+                                  app.navCompareNote.empty() ? "" : ("\n" + app.navCompareNote).c_str());
+            if (o.navCompare) {
+                ImGui::SameLine();
+                if (ImGui::SmallButton("Rebuild")) BuildCompareNavmesh(app);
+                if (ImGui::IsItemHovered()) ImGui::SetTooltip("Build it again from the maps as they are now (after edits)");
+            }
             ImGui::Checkbox("Script areas", &o.scriptAreas);
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("The areas the maps' scripts declare (AddRoundToArea, AddRectToArea), magenta, labelled with\n"
@@ -4571,6 +4620,13 @@ static void Toolbar(App& app) {
             if (app.mqTextDirty) what += "\n  " + app.mqEntry;
             ImGui::SetTooltip("Unsaved:%s", what.c_str());
         }
+        // Regenerate the zone's navmesh (AI_GRAPH) when saving, as the game builds it (navmesh_gen.hpp).
+        ImGui::SameLine();
+        if (ImGui::Checkbox("Navmesh", &app.lib.mapRegenNavmesh)) app.lib.SaveConfig();
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Regenerate navmeshes on save: the open maps that have a navmesh (AI_GRAPH, the zone's main map)\n"
+                              "get it rebuilt from the terrain and the open maps' objects, the way the game builds it (what\n"
+                              "EI_Plugin's GraphGen makes the game do at load, leaving a .bak). Takes a few seconds on big maps.");
     }
     // Always one item after SameLine, even empty: otherwise the viewport below would start on this line.
     ImGui::SameLine();
@@ -5921,6 +5977,104 @@ void RenderGl(Context* ctx, int fbW, int fbH, float scale) {
 // Command line
 // ------------------------------------------------------------------------------------------------
 
+// The maps' objects as the navmesh generator sees them (navmesh_gen.hpp): every object with a figure but
+// units, each with the boxes of its parts (OBJ_BODYPARTS, or all of them). `missing`: objects whose figure
+// was not found (left out).
+std::vector<navgen::Object> NavObjects(const LayeredAssetSource& figures, const std::vector<const mob::File*>& maps, int* missing) {
+    auto lower = [](std::string v) {
+        for (char& c : v) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        return v;
+    };
+    std::map<std::string, std::unique_ptr<LoadedModel>> models;
+    std::vector<navgen::Object> out;
+    if (missing) *missing = 0;
+    for (const mob::File* f : maps)
+        for (const mob::Object& o : f->objects) {
+            if (!mob::HasFigure(o.kind) || o.kind == mob::Kind::Unit) continue;
+            std::unique_ptr<LoadedModel>& m = models[lower(o.templ)];
+            if (!m) {
+                m = std::make_unique<LoadedModel>();
+                if (!LoadNamedModel(figures, o.templ, *m)) m->ok = false;
+                else m->ok = true;
+            }
+            if (!m->ok) {
+                if (missing) ++*missing;
+                if (std::getenv("NAVGEN_OBJ")) std::printf("no figure: %s at %.1f %.1f\n", o.templ.c_str(), o.position.x, o.position.y);
+                continue;
+            }
+            std::vector<std::string> shown;
+            for (const std::string& p : o.bodyParts) shown.push_back(lower(p));
+            const fig::Vec3 k{o.complection.x, o.complection.y, o.complection.z}; // not clamped: the game extrapolates
+            navgen::Object n;
+            n.position = {o.position.x, o.position.y, o.position.z};
+            n.rotation = fig::QuatNormalize(fig::Quat{o.rotation[0], o.rotation[1], o.rotation[2], o.rotation[3]});
+            for (const fig::ModelPart& part : m->model.parts) {
+                if (!shown.empty() && std::find(shown.begin(), shown.end(), lower(part.name)) == shown.end()) continue;
+                if (part.mesh.morphMin.size() < 8 || part.mesh.morphMax.size() < 8) continue;
+                bool skip = false;
+                navgen::PartBox b;
+                b.kind = navgen::PartKind(part.name, skip);
+                if (skip) continue;
+                // The game places the box at the part's offset plus the figure's centre (0x5B6A80).
+                const fig::Vec3 off = fig::BlendComplection(part.accumulatedOffset, k) + fig::BlendComplection(part.mesh.morphCenter.data(), k);
+                const fig::Vec3 lo = fig::BlendComplection(part.mesh.morphMin.data(), k) + off, hi = fig::BlendComplection(part.mesh.morphMax.data(), k) + off;
+                b.min = {std::min(lo.x, hi.x), std::min(lo.y, hi.y), std::min(lo.z, hi.z)};
+                b.max = {std::max(lo.x, hi.x), std::max(lo.y, hi.y), std::max(lo.z, hi.z)};
+                n.parts.push_back(b);
+            }
+            if (const char* dbg = std::getenv("NAVGEN_OBJ")) { // "x0,y0,x1,y1": the objects there (development)
+                float a = 0, b = 0, c = 0, d = 0;
+                if (std::sscanf(dbg, "%f,%f,%f,%f", &a, &b, &c, &d) == 4 && o.position.x >= a && o.position.y >= b && o.position.x <= c && o.position.y <= d) {
+                    std::printf("%s at %.3f %.3f %.3f rot %.3f %.3f %.3f %.3f compl %.2f %.2f %.2f\n", o.templ.c_str(), o.position.x, o.position.y, o.position.z,
+                                o.rotation[0], o.rotation[1], o.rotation[2], o.rotation[3], o.complection.x, o.complection.y, o.complection.z);
+                    for (const navgen::PartBox& b2 : n.parts)
+                        std::printf("   part %d  %.3f %.3f %.3f .. %.3f %.3f %.3f\n", static_cast<int>(b2.kind), b2.min.x, b2.min.y, b2.min.z, b2.max.x, b2.max.y, b2.max.z);
+                }
+            }
+            if (!n.parts.empty()) out.push_back(std::move(n));
+        }
+    return out;
+}
+
+// Compares two AI_GRAPH payloads (the game's and ours), per layer: representative tiles, costs, walkable
+// nodes, components.
+void CompareNavmesh(const std::vector<uint8_t>& game, const std::vector<uint8_t>& ours) {
+    auto u32 = [](const std::vector<uint8_t>& b, size_t at) { return b[at] | (b[at + 1] << 8) | (b[at + 2] << 16) | (static_cast<uint32_t>(b[at + 3]) << 24); };
+    if (game.size() < 8 || ours.size() < 8) { std::printf("nothing to compare\n"); return; }
+    const uint32_t w = u32(game, 0), h = u32(game, 4);
+    if (w != u32(ours, 0) || h != u32(ours, 4) || game.size() != ours.size()) {
+        std::printf("different grids: game %ux%u (%zu bytes), ours %ux%u (%zu bytes)\n", w, h, game.size(), u32(ours, 0), u32(ours, 4), ours.size());
+        return;
+    }
+    const size_t row = static_cast<size_t>(w) * 19;
+    for (int layer = 0; layer < 8; ++layer) {
+        size_t sameB = 0, sameA = 0, within = 0, walkG = 0, walkO = 0, walkBoth = 0, edges = 0;
+        uint32_t compG = 0, compO = 0;
+        for (uint32_t y = 0; y < h; ++y) {
+            const size_t base = 8 + (static_cast<size_t>(layer) * h + y) * row;
+            for (uint32_t x = 0; x < w; ++x) {
+                sameB += game[base + w * 16 + x] == ours[base + w * 16 + x];
+                compG = std::max<uint32_t>(compG, game[base + w * 17 + x * 2] | (game[base + w * 17 + x * 2 + 1] << 8));
+                compO = std::max<uint32_t>(compO, ours[base + w * 17 + x * 2] | (ours[base + w * 17 + x * 2 + 1] << 8));
+                bool wg = false, wo = false;
+                for (int k = 0; k < 8; ++k) {
+                    const size_t at = base + x * 16 + k * 2;
+                    const int a = game[at] | (game[at + 1] << 8), b = ours[at] | (ours[at + 1] << 8);
+                    ++edges;
+                    sameA += a == b;
+                    within += a == b || (a != 0xFFFF && b != 0xFFFF && std::abs(a - b) <= std::max(2, a / 20));
+                    wg |= a != 0xFFFF;
+                    wo |= b != 0xFFFF;
+                }
+                walkG += wg; walkO += wo; walkBoth += wg && wo;
+            }
+        }
+        const double n = static_cast<double>(w) * h;
+        std::printf("layer %d: rep tiles %5.1f%%  costs exact %5.1f%% / within 5%% %5.1f%%  walkable nodes game %zu ours %zu both %zu  components game %u ours %u\n",
+                    layer, 100.0 * sameB / n, 100.0 * sameA / edges, 100.0 * within / edges, walkG, walkO, walkBoth, compG, compO);
+    }
+}
+
 void PrintCliHelp() {
     std::printf(
         "um-multitool map - the Map Editor's command-line mode\n"
@@ -5931,6 +6085,10 @@ void PrintCliHelp() {
         "        map, and more. Several maps are checked together in the given order, each on top of the\n"
         "        ones before it (a zone, then its quest). Figures, textures and the items database are the\n"
         "        sources of the GUI's Settings tab (um-multitool.cfg). Exit code 1 when errors are found.\n"
+        "  um-multitool map --navmesh <map.mob> [more.mob ...] --mpr <terrain.mpr> [--write <out.mob>] [--config <file>]\n"
+        "        Build the navmesh (AI_GRAPH) the way the game does, from the terrain and the maps' objects (their\n"
+        "        figures from the Settings tab's sources), compare it with the first map's own, and with --write\n"
+        "        save the first map with it.\n"
         "  um-multitool gui --map <file.mpr|file.mob> [...]\n"
         "        Open the GUI's Map Editor on these files.\n");
 }
@@ -5941,16 +6099,52 @@ int RunCli(int argc, char** argv) {
     Library lib;
     std::string terrainPath;
     std::vector<std::string> mobs;
-    bool check = false;
+    bool check = false, navmesh = false;
+    std::string writePath;
     for (size_t i = 0; i < args.size(); ++i) {
         if (args[i] == "--check") check = true;
+        else if (args[i] == "--navmesh") navmesh = true;
+        else if (args[i] == "--write" && i + 1 < args.size()) writePath = args[++i];
         else if (args[i] == "--mpr" && i + 1 < args.size()) terrainPath = args[++i];
         else if (args[i] == "--config" && i + 1 < args.size()) lib.configPath = args[++i];
         else if (EndsWith(args[i], ".mpr")) terrainPath = args[i];
         else mobs.push_back(args[i]);
     }
-    if (!check || mobs.empty()) { PrintCliHelp(); return 1; }
+    if ((!check && !navmesh) || mobs.empty()) { PrintCliHelp(); return 1; }
     lib.LoadConfig();
+    if (navmesh) {
+        std::vector<std::unique_ptr<mob::File>> maps;
+        std::vector<const mob::File*> list;
+        for (const std::string& p : mobs) {
+            maps.push_back(std::make_unique<mob::File>());
+            if (!mob::Load(p, *maps.back())) { std::fprintf(stderr, "cannot read %s\n", p.c_str()); return 1; }
+            list.push_back(maps.back().get());
+        }
+        mpr::Map terrain;
+        std::string err;
+        if (terrainPath.empty() || !mpr::Load(terrainPath, terrain, err)) { std::fprintf(stderr, "terrain needed (--mpr): %s\n", err.c_str()); return 1; }
+        if (!lib.figures.AnyLoaded()) std::printf("note: no figure sources set: objects are left out\n");
+        int missing = 0;
+        const std::vector<navgen::Object> objects = NavObjects(lib.figures, list, &missing);
+        std::printf("%zu objects (%d without a figure)\n", objects.size(), missing);
+        std::vector<uint8_t> payload;
+        if (!navgen::Generate(terrain, objects, payload, err)) { std::fprintf(stderr, "%s\n", err.c_str()); return 1; }
+        const mob::File& first = *maps[0];
+        if (first.aiGraphAt) {
+            const size_t len = static_cast<size_t>(first.aiGraphBytes) - 8;
+            CompareNavmesh(std::vector<uint8_t>(first.bytes.begin() + first.aiGraphAt, first.bytes.begin() + first.aiGraphAt + len), payload);
+        } else {
+            std::printf("%s has no navmesh to compare with\n", first.fileName.c_str());
+        }
+        if (!writePath.empty()) {
+            mob::File out = first;
+            mob::SetAiGraph(out, payload);
+            out.path = writePath;
+            if (!mob::Save(out, err)) { std::fprintf(stderr, "%s\n", err.c_str()); return 1; }
+            std::printf("written: %s\n", writePath.c_str());
+        }
+        return 0;
+    }
 
     std::vector<std::unique_ptr<mob::File>> files;
     checks::Inputs in;

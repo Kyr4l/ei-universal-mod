@@ -36,7 +36,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.3";
+static const char* const UM_VERSION = "1.4";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
@@ -5100,7 +5100,22 @@ static void BuildProfileFunctionTable() {
 // The optional um-names.txt next to um.dll: one "address name" pair per line, '#' starts a comment.
 static void LoadProfileNames() {
     if (g_knownGameBuild) {
-        g_profileNames[0x457970] = "MainMessageHandler";
+        // Identified by hand (docs/game-memory.md: units, orders, weapons, inventory, journal).
+        static const struct { DWORD address; const char* name; } kKnown[] = {
+            {0x457970, "MainMessageHandler"},
+            {0x552300, "CUnitServer::Update"},               // the unit's per-frame update (vtable 6)
+            {0x553610, "CUnitServer::SelectWeapon"},         // (slot 0-3 or -1), vtable 25
+            {0x54A900, "CUnitServer::ApplyPendingOrder"},    // moves the pending order (+0x1B4) into the current one
+            {0x54B390, "CUnitServer::RunPendingOrder"},      // calls ApplyPendingOrder (from Update)
+            {0x554740, "CUnitServer::OrderMoveToPoint"},     // pending order type 1 with the point
+            {0x54B320, "Order::Assign"},                     // copies an order (0x24 bytes)
+            {0x545F40, "Order::Reset"},                      // type 9 = none
+            {0x54B230, "Order::Clear"},
+            {0x5D39E0, "MoveUnitInFormation"},               // a selected unit's point + its formation offset
+            {0x5318B0, "Unit::ItemInWeaponSlot"},
+            {0x5800C0, "Journal::Refresh"},                  // the journal's message indexes (0x7AFEC0...)
+        };
+        for (const auto& k : kKnown) g_profileNames[k.address] = k.name;
     }
     char path[MAX_PATH] = {};
     if (!g_dllModule || GetModuleFileNameA(g_dllModule, path, sizeof(path)) == 0) return;

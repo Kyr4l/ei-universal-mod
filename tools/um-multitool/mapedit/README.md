@@ -28,7 +28,7 @@ The third main tab of `um-multitool`. It shows an `.mpr` terrain with the object
 - **Wireframe** alone draws the edges only; with **Textured** on, the edges are drawn over the textured scene.
 - With **Lighting** on, the sun casts shadows (Layers → **Shadows**): the terrain and the figures (leaves included) shadow the terrain. The sun follows the hour of the bar under the view: from the east at 6, high at noon, from the west at 18; there are no shadows at night.
 - Layers → **Walkability** tints red the ground units cannot walk on, as this editor computes it (2 x 2 unit cells): water deeper than about a knee, ground too steep, and the parts near the ground of objects at least 1.6 units tall (a house's walls, a tree's trunk; not bushes, grass or tree crowns).
-- Layers → **Game navmesh (AI_GRAPH)**: the graph stored in the zone's .mob (a node per 4 x 4 units, 8 layers, one per AI class: **Navmesh layer**), as lines to the neighbours a unit can step to (green cheap, red dear) and red squares where a node can go nowhere. **Navmesh differences** marks the nodes where the game's graph and the computed walkability disagree: orange where the game walks and this editor finds it blocked, blue the other way round (the counts are in its tooltip). An out-of-date graph (a map edited without recomputing it) shows many.
+- Layers → **Game navmesh (AI_GRAPH)**: the graph stored in the zone's .mob (a node per 4 x 4 units, 8 layers, one per AI class: **Navmesh layer**), as lines to the neighbours a unit can step to (green cheap, red dear) and red squares where a node can go nowhere. **Navmesh differences** builds the navmesh from the terrain and the open maps' objects the way the game does ([aigraph.md](../../../docs/file-formats/aigraph.md)) and marks the nodes where the map's own differs: orange where only the map's graph walks, blue where only the rebuilt one does, yellow where both walk with other step costs (the counts are in its tooltip; **Rebuild** after edits). Anything shown means the map's navmesh is out of date. **Navmesh**, next to the toolbar's Save button, rebuilds it on save in the open maps that have one (the zone's main map), so EI_Plugin's GraphGen is no longer needed.
 - Layers → **Script areas**: the areas the loaded maps' scripts declare (`AddRoundToArea`, `AddRectToArea`), magenta outlines on the ground, labelled with their number and the quest objectives that use them (`QObjArea`, with the objective's title from the quest's .mq).
 - Script tab → **Areas**: the same areas, editable: change a circle's x, y, radius or a rectangle's corners and press Enter, or **Place here** then click the map to move the area's centre there; or **Alt + drag** an area in the view. The call in the script is rewritten (one undo step; saved with the map).
 - A selected magic trap shows its activation areas (orange circles with a handle at the centre) and cast points (magenta, joined to the trap), like ei_maper. They are selected like logic points (click, Shift+click, rectangle), moved with **G** (X / Y, typed values) and removed with **Delete**; **Ctrl+click** on the ground adds a cast point, **Ctrl+Shift+click** an activation area. Their radius is edited in the details.
@@ -174,7 +174,9 @@ Click a finding to go to it: the object, or the script line. The same checks run
 
     um-multitool map --check zone17-lmp.mob z17q1.mob [--mpr zone17.mpr]
 
-The exit code is 1 when errors are found.
+The exit code is 1 when errors are found. The navmesh can be built the same way, compared per layer with the first map's own, and written with `--write`:
+
+    um-multitool map --navmesh zone17-lmp.mob z17q1.mob --mpr zone17.mpr [--write out.mob]
 
 ## Script tab
 

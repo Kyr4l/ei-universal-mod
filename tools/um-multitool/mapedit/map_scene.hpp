@@ -53,7 +53,7 @@ struct MapViewOptions {
     bool navmesh = false;   // the game's walkability graph (AI_GRAPH), one node per 4 x 4 units
     int navLayer = 1;       // which of its 8 layers
     bool walkability = false; // the computed walkability grid the patrol simulation uses
-    bool navCompare = false;  // where the game's graph and the computed grid disagree
+    bool navCompare = false;  // where the map's graph and the one this editor builds disagree
     bool scriptAreas = true;  // the areas the scripts declare (AddRoundToArea / AddRectToArea)
     bool textured = true, wireframe = false;
     float background[3] = {0.42f, 0.55f, 0.68f};
@@ -1509,34 +1509,45 @@ public:
         glDisable(GL_BLEND);
     }
 
-    // The game's graph (AI_GRAPH, the shown layer) against the computed grid, per graph node (4 x 4 units =
-    // 2 x 2 computed cells): orange where the game walks and this editor finds it blocked (most of its
-    // cells), blue where the game cannot walk and this editor finds it open.
-    int navCompareGame = 0, navCompareEditor = 0; // the counts of each, for the legend
+    // The map's graph (AI_GRAPH, the shown layer) against the one this editor builds from the terrain and the
+    // objects as the game does (navmesh_gen.hpp; set by the Map Editor in builtNav), per graph node: orange
+    // where only the map's graph walks, blue where only the built one does, yellow where both walk but some
+    // step costs differ. Where they differ, the map's graph is out of date.
+    std::vector<uint8_t> builtNav;   // an AI_GRAPH payload
+    unsigned builtNavStamp = 0;      // bumped with each new builtNav
+    int navCompareGame = 0, navCompareEditor = 0, navCompareCost = 0; // the counts of each, for the legend
     void DrawNavCompare() {
         const mob::File* f = NavmeshFile();
-        if (!f) return;
-        if (walk.w == 0) BuildWalkGrid();
-        if (walk.w == 0) return;
+        if (!f || builtNav.size() < 8) return;
+        const uint32_t bw = builtNav[0] | (builtNav[1] << 8) | (builtNav[2] << 16) | (static_cast<uint32_t>(builtNav[3]) << 24);
+        const uint32_t bh = builtNav[4] | (builtNav[5] << 8) | (builtNav[6] << 16) | (static_cast<uint32_t>(builtNav[7]) << 24);
+        if (static_cast<int>(bw) != f->aiW || static_cast<int>(bh) != f->aiH || builtNav.size() != 8 + static_cast<size_t>(bw) * bh * 19 * mob::kAiLayers) return;
+        auto built = [&](int layer, int x, int y, int d) {
+            const size_t at = 8 + (static_cast<size_t>(layer) * bh + y) * bw * 19 + static_cast<size_t>(x) * 16 + d * 2;
+            return static_cast<uint16_t>(builtNav[at] | (builtNav[at + 1] << 8));
+        };
         const std::string key = f->path + "|" + std::to_string(options.navLayer) + "|" + std::to_string(f->bytes.size()) + "|" +
-                                std::to_string(walkBuilds_);
+                                std::to_string(builtNavStamp);
         if (key != cmpKey_ || !cmpList_) {
             if (cmpList_) glDeleteLists(cmpList_, 1);
             cmpKey_ = key;
             cmpList_ = glGenLists(1);
-            navCompareGame = navCompareEditor = 0;
+            navCompareGame = navCompareEditor = navCompareCost = 0;
             glNewList(cmpList_, GL_COMPILE);
             glBegin(GL_QUADS);
             for (int y = 0; y < f->aiH; ++y)
                 for (int x = 0; x < f->aiW; ++x) {
-                    const bool game = mob::AiWalkable(*f, options.navLayer, x, y);
-                    int blocked = 0;
-                    for (int dy = 0; dy < 2; ++dy)
-                        for (int dx = 0; dx < 2; ++dx) blocked += walk.Blocked(x * 2 + dx, y * 2 + dy) ? 1 : 0;
-                    const bool editor = blocked < 3;
-                    if (game == editor) continue;
-                    if (game) { ++navCompareGame; glColor4f(1.0f, 0.55f, 0.1f, 0.45f); }
-                    else { ++navCompareEditor; glColor4f(0.2f, 0.55f, 1.0f, 0.45f); }
+                    bool game = false, ours = false, costs = false;
+                    for (int d = 0; d < 8; ++d) {
+                        const uint16_t a = mob::AiCost(*f, options.navLayer, x, y, d), b = built(options.navLayer, x, y, d);
+                        game |= a != 0xFFFF;
+                        ours |= b != 0xFFFF;
+                        costs |= a != b;
+                    }
+                    if (game && !ours) { ++navCompareGame; glColor4f(1.0f, 0.55f, 0.1f, 0.5f); }
+                    else if (ours && !game) { ++navCompareEditor; glColor4f(0.2f, 0.55f, 1.0f, 0.5f); }
+                    else if (costs) { ++navCompareCost; glColor4f(0.95f, 0.9f, 0.2f, 0.35f); }
+                    else continue;
                     const float x0 = x * 4.0f + 0.3f, y0 = y * 4.0f + 0.3f, x1 = x0 + 3.4f, y1 = y0 + 3.4f;
                     glVertex3f(x0, y0, Ground(x0, y0) + 0.25f); glVertex3f(x1, y0, Ground(x1, y0) + 0.25f);
                     glVertex3f(x1, y1, Ground(x1, y1) + 0.25f); glVertex3f(x0, y1, Ground(x0, y1) + 0.25f);

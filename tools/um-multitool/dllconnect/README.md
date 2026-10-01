@@ -72,8 +72,9 @@ The files are found in the map folders, the quest folders, or next to the quest 
 - **Script view**: a map file's script (the list marks the files where something waits), highlighted as
   in the Map Editor, with markers in the margin: "<- waiting" on the condition of each running script
   (highlighted: a script stuck there waits for that condition), "running" / "not running" on each
-  `Script` line, "done" / "<- active" on the quest's `QObj` lines. **Go to where it waits** scrolls to it.
-  The engine shows no position inside `WorldScript` or an action list.
+  `Script` line, "done" / "<- active" on the quest's `QObj` lines. **Find waiting** shows the first one (switching to its file).
+  `WorldScript` is marked "runs at map load": it is the map's setup, done a few seconds after loading
+  (the engine keeps no running instance of it).
 The state comes from um.dll's `VARS` and `SCRIPTS` (every 2 seconds while the tab is shown).
 
 **Commands**: um.dll's own commands and everything it answers. `HELP` lists them: memory, threads,

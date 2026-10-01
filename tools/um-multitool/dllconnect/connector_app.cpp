@@ -680,6 +680,9 @@ void ScriptView(Context& c) {
     const bool live = c.link.state == Link::Connected && !c.scriptStates.empty();
     std::vector<int> firstWaiting(sources.size(), -1);
     for (size_t si = 0; si < sources.size(); ++si) {
+        // WorldScript: the map's setup (a short Sleep, then group and object assignments): it runs once when
+        // the map loads and leaves no running instance to follow.
+        if (sources[si].worldScript >= 0) marks[si][sources[si].worldScript] = {"runs at map load", dim};
         for (const quests::Source::Block& b : sources[si].blocks) {
             auto it = c.scriptStates.find(b.name);
             const bool running = live && it != c.scriptStates.end() && it->second.running;
@@ -692,7 +695,6 @@ void ScriptView(Context& c) {
                 marks[si][b.header] = {"not running", dim};
             }
         }
-        if (sources[si].worldScript >= 0) marks[si][sources[si].worldScript] = {"(position unknown)", dim};
     }
     auto var = [&](const std::string& name) { auto it = c.vars.find(name); return it == c.vars.end() ? 0.0f : it->second; };
     for (const quests::Quest& q : c.quests.quests) {
@@ -718,10 +720,17 @@ void ScriptView(Context& c) {
         ImGui::EndCombo();
     }
     ImGui::SameLine();
-    const int si = c.scriptSource;
-    ImGui::BeginDisabled(firstWaiting[si] < 0);
-    if (ImGui::Button("Go to where it waits")) c.scrollToLine = firstWaiting[si];
+    // Find waiting: the shown file's waiting line, else the first file that has one (switching to it).
+    int target = firstWaiting[c.scriptSource] >= 0 ? c.scriptSource : -1;
+    for (size_t i = 0; i < sources.size() && target < 0; ++i) if (firstWaiting[i] >= 0) target = static_cast<int>(i);
+    ImGui::BeginDisabled(target < 0);
+    if (ImGui::Button("Find waiting")) { c.scriptSource = target; c.scrollToLine = firstWaiting[target]; }
     ImGui::EndDisabled();
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+        ImGui::SetTooltip("%s", target >= 0 ? "Shows the condition a running script waits on, or the active quest objective"
+                                : !live ? "Needs the connection to the game (the scripts' state comes from um.dll)"
+                                        : "No script waits and no quest objective is active in the loaded map files");
+    const int si = c.scriptSource;
     ImGui::SameLine();
     ImGui::TextDisabled(live ? "%zu lines" : "%zu lines (not connected: no state)", sources[si].lines.size());
     // The text: line number, marker, highlighted code.

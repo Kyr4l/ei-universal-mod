@@ -487,12 +487,11 @@ inline bool Parse(File& f) {
         else if (t == kSecRange) ReadRanges(d, pos + 8, pos + l, f.secRanges);
         else if (t == kAiGraph) {
             f.aiGraphBytes = l;
-            // [W][H], then 8 layers; each layer the W * H nodes in chunks of 16 (16 x 8 costs of 16 bits,
-            // then 48 bytes more per chunk, not read). Taken only when the size matches that layout.
+            // [W][H], then per layer (8) and node row: the rows' costs (W x 8 u16), representative tiles (W
+            // bytes) and components (W u16). Taken only when the size matches that layout.
             if (l >= 16) {
                 const uint32_t w = U32(d + pos + 8), h = U32(d + pos + 12);
-                const uint64_t chunks = (static_cast<uint64_t>(w) * h + 15) / 16;
-                if (w && h && w <= 4096 && h <= 4096 && 8 + 8 + 8 * chunks * 304 == l) { f.aiGraphAt = pos + 8; f.aiW = static_cast<int>(w); f.aiH = static_cast<int>(h); }
+                if (w && h && w <= 4096 && h <= 4096 && 8 + 8 + 8ull * w * h * 19 == l) { f.aiGraphAt = pos + 8; f.aiW = static_cast<int>(w); f.aiH = static_cast<int>(h); }
             }
         }
         else if (t == 3722304977u) { // DIPLOMATION: DIPLOMATION_FOF (1024 ints), DIPLOMATION_PL_NAMES
@@ -805,21 +804,44 @@ inline bool SetScript(File& f, const std::string& text) {
     return false;
 }
 
-// ---- AI_GRAPH: the game's walkability graph (read only) ---------------------------------------------
-// Decoded from the files (docs/file-formats/mob-format.md): a grid of W x H nodes, one per 4 x 4 world
-// units (node x, y at the centre 4x + 2, 4y + 2), in 8 layers (units use the one of their AI class, as
-// far as we can tell). Each node has the cost of a step in each of 8 directions, 0xFFFF where it cannot
-// go: 0 south, 1 south-west, 2 west, 3 north-west, 4 north, 5 north-east, 6 east, 7 south-east. Straight
-// steps cost about 64, diagonal ones about 90, more on harder ground.
+// ---- AI_GRAPH: the game's walkability graph ---------------------------------------------------------
+// The game builds it (navmesh_gen.hpp does the same): a grid of W x H nodes, one per 4 x 4 world units (node
+// x, y at the centre 4x + 2, 4y + 2), in 8 layers (units use the one of their AI class). Each node has the
+// cost of a step in each of 8 directions, 0xFFFF where it cannot go: 0 south, 1 south-west, 2 west,
+// 3 north-west, 4 north, 5 north-east, 6 east, 7 south-east. Straight steps cost about 64 (layer 0) or 127,
+// diagonal ones about 90 or 180, more on harder ground.
 constexpr int kAiLayers = 8;
 constexpr int kAiDx[8] = {0, -1, -1, -1, 0, 1, 1, 1};
 constexpr int kAiDy[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
 inline uint16_t AiCost(const File& f, int layer, int x, int y, int dir) {
     if (!f.aiGraphAt || x < 0 || y < 0 || x >= f.aiW || y >= f.aiH || layer < 0 || layer >= kAiLayers) return 0xFFFF;
-    const size_t chunks = (static_cast<size_t>(f.aiW) * f.aiH + 15) / 16;
-    const size_t idx = static_cast<size_t>(y) * f.aiW + x;
-    const size_t at = f.aiGraphAt + 8 + static_cast<size_t>(layer) * chunks * 304 + (idx / 16) * 304 + (idx % 16) * 16 + dir * 2;
+    const size_t row = static_cast<size_t>(f.aiW) * 19;
+    const size_t at = f.aiGraphAt + 8 + (static_cast<size_t>(layer) * f.aiH + y) * row + static_cast<size_t>(x) * 16 + dir * 2;
     return at + 2 <= f.bytes.size() ? static_cast<uint16_t>(f.bytes[at] | (f.bytes[at + 1] << 8)) : 0xFFFF;
+}
+// Replaces the map's AI_GRAPH with `payload` (navgen::Generator::Payload), or adds it at the end of the
+// map's top-level nodes when it has none.
+inline bool SetAiGraph(File& f, const std::vector<uint8_t>& payload) {
+    const uint8_t* d = f.bytes.data();
+    size_t pos = 16, at = 0, len = 0;
+    for (; pos + 8 <= f.bytes.size();) {
+        const uint32_t t = U32(d + pos), l = U32(d + pos + 4);
+        if (t == kRoot || l < 8 || pos + l > f.bytes.size()) break;
+        if (t == kAiGraph) { at = pos; len = l; break; }
+        pos += l;
+    }
+    if (!len) at = pos;
+    std::vector<uint8_t> b(f.bytes.begin(), f.bytes.begin() + at);
+    b.resize(at + 8);
+    PutU32(b, at, kAiGraph);
+    PutU32(b, at + 4, static_cast<uint32_t>(payload.size() + 8));
+    b.insert(b.end(), payload.begin(), payload.end());
+    b.insert(b.end(), f.bytes.begin() + at + len, f.bytes.end());
+    const int64_t delta = static_cast<int64_t>(payload.size() + 8) - static_cast<int64_t>(len);
+    if (delta && at < U32(f.bytes.data() + 4)) PutU32(b, 4, static_cast<uint32_t>(U32(b.data() + 4) + delta)); // the root's length
+    f.bytes = std::move(b);
+    Reparse(f);
+    return true;
 }
 inline bool AiWalkable(const File& f, int layer, int x, int y) {
     for (int d = 0; d < 8; ++d) if (AiCost(f, layer, x, y, d) != 0xFFFF) return true;
