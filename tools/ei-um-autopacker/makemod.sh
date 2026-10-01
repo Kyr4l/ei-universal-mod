@@ -318,6 +318,11 @@ process_quests() {
         # 1. Convert quest INI -> REG in place across every quest at once
         find "$lang_dir" -maxdepth 3 -type f -name "*.ini" -print0 | \
             parallel -0 -j "$PARALLEL_JOBS" bin/um-multitool inireg {} > /dev/null || true
+        # The archive stores each file's modification time: a freshly made .reg would give every .mq a
+        # new timestamp (and git a change) at each build. It takes its .ini's time instead.
+        find "$lang_dir" -maxdepth 3 -type f -name "*.ini" -print0 | while IFS= read -r -d '' ini; do
+            [[ -f "${ini%.ini}.reg" ]] && touch -r "$ini" "${ini%.ini}.reg"
+        done
 
         # 2. Batch-pack every *_mq folder in this language directory in one parallel call,
         #    omitting quest.ini (only the source for quest.reg, not archive content).
