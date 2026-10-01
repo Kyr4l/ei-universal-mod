@@ -5574,6 +5574,71 @@ void OpenFiles(Context* ctx, const std::vector<std::string>& paths) {
     SaveSession(app);
 }
 
+// The map the game runs (file names as um.dll reports them: "zone3xobr.mpr", "zone3xobr-lmp.mob",
+// "z3xq1.mob"): the quest of that name when there is one (found in the quest folders), its own map and
+// the base map next to it or in the map folders.
+static const quest::QuestSet* GameQuest(App& app, const std::string& quest) {
+    if (quest.empty()) return nullptr;
+    const std::string stem = Lower(std::filesystem::path(quest).stem().string());
+    RescanQuests(app);
+    for (const quest::QuestSet& set : app.quests)
+        if (Lower(set.shown.name) == stem) return &set;
+    return nullptr;
+}
+
+// A file the game itself opened (its path as um.dll reports it), when no map folder has that name.
+static std::string GamePath(const std::string& name, const std::vector<std::string>& gamePaths) {
+    std::error_code ec;
+    for (const std::string& p : gamePaths)
+        if (Lower(std::filesystem::path(p).filename().string()) == Lower(name) && std::filesystem::is_regular_file(p, ec)) return p;
+    return std::string();
+}
+
+bool ResolveGameMap(Context* ctx, const std::string& terrain, const std::string& base, const std::string& quest,
+                    const std::vector<std::string>& gamePaths, std::string& terrainPath, std::vector<std::string>& mobPaths,
+                    std::string& missing) {
+    App& app = ctx->app;
+    const quest::QuestSet* set = GameQuest(app, quest);
+    const std::string hint = set ? set->shown.path : std::string();
+    auto resolve = [&](const std::string& name) {
+        std::string path = ResolveMapFile(app, name, hint);
+        return path.empty() ? GamePath(name, gamePaths) : path;
+    };
+    mobPaths.clear();
+    missing.clear();
+    terrainPath = terrain.empty() ? std::string() : resolve(terrain);
+    if (!terrain.empty() && terrainPath.empty()) missing += " " + terrain;
+    for (const std::string& name : {base, quest}) {
+        if (name.empty()) continue;
+        const std::string path = resolve(name);
+        if (path.empty()) missing += " " + name;
+        else mobPaths.push_back(path);
+    }
+    return missing.empty();
+}
+
+std::string OpenGameMap(Context* ctx, const std::string& terrain, const std::string& base, const std::string& quest,
+                        const std::vector<std::string>& gamePaths) {
+    App& app = ctx->app;
+    if (BlockedByUnsaved(app)) return app.filesMessage;
+    std::string terrainPath, missing;
+    std::vector<std::string> mobs;
+    ResolveGameMap(ctx, terrain, base, quest, gamePaths, terrainPath, mobs, missing);
+    // A quest found in the quest folders opens as a quest (with its areas), when its files are all there.
+    if (const quest::QuestSet* set = GameQuest(app, quest)) {
+        if (missing.empty()) {
+            OpenQuest(app, *set);
+            return app.filesMessage;
+        }
+    }
+    std::vector<std::string> paths = mobs;
+    if (!terrainPath.empty()) paths.insert(paths.begin(), terrainPath);
+    if (paths.empty()) return "Not found in the map folders:" + missing;
+    OpenFiles(ctx, paths);
+    app.filesMessage = missing.empty() ? "Opened the game's map" : "Opened the game's map; not found in the map folders:" + missing;
+    return app.filesMessage;
+}
+
 bool ScriptWindowWanted(Context* ctx) { return ctx->app.scriptWindow; }
 bool TakeScriptWindowFocus(Context* ctx) { const bool f = ctx->app.focusScriptWindow; ctx->app.focusScriptWindow = false; return f; }
 void CloseScriptWindow(Context* ctx) { ctx->app.scriptWindow = false; }

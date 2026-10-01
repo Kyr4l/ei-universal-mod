@@ -23,6 +23,16 @@ void DrawTab(Context* ctx);
 // After ImGui::Render: the 3D view into the region DrawTab reserved (nothing when it was not drawn).
 void RenderGl(Context* ctx, int framebufferWidth, int framebufferHeight, float framebufferScale);
 
+// The map the game runs (um.dll's MAP: file names): its files' paths (from the map folders, the quest
+// folders and next to the quest), and what was not found; OpenGameMap opens them (the quest when there
+// is one) and says what it did.
+// gamePaths: the files' paths as the game opened them (um.dll's MAP), used for the names no map folder has.
+bool ResolveGameMap(Context* ctx, const std::string& terrain, const std::string& base, const std::string& quest,
+                    const std::vector<std::string>& gamePaths, std::string& terrainPath, std::vector<std::string>& mobPaths,
+                    std::string& missing);
+std::string OpenGameMap(Context* ctx, const std::string& terrain, const std::string& base, const std::string& quest,
+                        const std::vector<std::string>& gamePaths);
+
 // Still loading figures (the GUI's --screenshot waits for it).
 bool Busy(Context* ctx);
 

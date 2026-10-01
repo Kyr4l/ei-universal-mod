@@ -34,6 +34,7 @@
 #include <vector>
 
 #include "dll_debug.hpp"
+#include "dll_game.hpp"
 
 namespace dllserver {
 
@@ -204,6 +205,7 @@ private:
     std::vector<Client> clients_;
     CpuSampler cpu_;
     std::unordered_set<DWORD> bpThreads_; // the threads that have the breakpoints
+    dllgame::UnitScanner scanner_;
 
     std::string Where(uint32_t address) const {
         std::string where = ModuleOffset(address);
@@ -236,6 +238,8 @@ private:
     void Breakpoints(Client& c, const std::vector<std::string>& w);
     void Write(Client& c, const std::vector<std::string>& w, bool typed);
     void SendEvents(Client& c);
+    void Units(Client& c, const std::vector<std::string>& w);
+    void ConsoleCommand(Client& c, const std::vector<std::string>& w);
     void RefreshBreakpointThreads(bool all);
 };
 
@@ -265,6 +269,10 @@ inline void Server::Help(Client& c) {
         "                                      (a data breakpoint reports the instruction AFTER the access; hits never pause the game)",
         "WRITE addr hexbytes                   writes bytes  [debug]",
         "POKE addr type value                  writes a typed value  [debug]",
+        "UNITS [rescan]                        the game's units: id, position, facing (yaw), side, HP, mana, flags, sight, view angle, name (players)",
+        "CAMERA                                the game camera: position, rotation quaternion, the point it aims at",
+        "CONSOLE lines [from] [max]            the in-game console's lines (from index from, default 0), and its input line",
+        "CONSOLE send text                     types the text in the game window and presses Enter; refused while the console is closed  [debug]",
         "BYE                                   closes the connection",
         "[debug]: needs DLL_SERVER_DEBUG=true in um.cfg",
     };
@@ -754,6 +762,56 @@ inline void Server::Write(Client& c, const std::vector<std::string>& w, bool typ
     Ok(c, cmd, "addr=" + Hex(address) + " len=" + std::to_string(bytes.size()) + " old=" + HexBytes(before.data(), had));
 }
 
+// One row per live or dead (not yet looted) unit. The records come from a scan running on its own
+// thread (every 3 s while units are asked for); their values are read now.
+inline void Server::Units(Client& c, const std::vector<std::string>& w) {
+    scanner_.Want();
+    if (w.size() > 1 && w[1] == "rescan") scanner_.Rescan();
+    long long age = -1;
+    const std::vector<uint32_t> records = scanner_.Records(age);
+    int count = 0;
+    for (uint32_t r : records) {
+        dllgame::Unit u;
+        if (!dllgame::ReadUnit(r, u)) continue;
+        char text[320];
+        snprintf(text, sizeof(text), "addr=%s id=%lu x=%.2f y=%.2f z=%.2f yaw=%.3f side=%lu hp=%.2f hpmax=%.2f mp=%.2f mpmax=%.2f flags=0x%lX",
+                 Hex(u.record).c_str(), static_cast<unsigned long>(u.id), u.x, u.y, u.z, u.yaw, static_cast<unsigned long>(u.side),
+                 u.hp, u.hpMax, u.mana, u.manaMax, static_cast<unsigned long>(u.flags));
+        char senses[64];
+        snprintf(senses, sizeof(senses), " sight=%.2f fov=%.1f", u.sight, u.viewAngle);
+        Row(c, "UNITS", std::string(text) + senses + (u.name.empty() ? "" : " name=" + Quote(u.name)));
+        ++count;
+    }
+    Ok(c, "UNITS", "count=" + std::to_string(count) + " scan_age_ms=" + std::to_string(age));
+}
+
+inline void Server::ConsoleCommand(Client& c, const std::vector<std::string>& w) {
+    const std::string sub = w.size() > 1 ? w[1] : "";
+    if (sub == "lines") {
+        int64_t from = 0, max = 500;
+        if (w.size() > 2 && (!ParseNumber(w[2], from) || from < 0)) return Err(c, "CONSOLE", "bad from");
+        if (w.size() > 3 && (!ParseNumber(w[3], max) || max < 1 || max > 5000)) return Err(c, "CONSOLE", "max must be 1-5000");
+        std::vector<std::string> lines;
+        uint32_t count = 0;
+        std::string input;
+        if (!dllgame::ConsoleLines(static_cast<uint32_t>(from), static_cast<uint32_t>(max), lines, count, input))
+            return Err(c, "CONSOLE", "the console was not found");
+        for (size_t i = 0; i < lines.size(); ++i) Row(c, "CONSOLE", "i=" + std::to_string(from + static_cast<int64_t>(i)) + " text=" + Quote(lines[i]));
+        return Ok(c, "CONSOLE", "count=" + std::to_string(count) + " open=" + (dllgame::ConsoleOpen() ? "1" : "0") + " input=" + Quote(input));
+    }
+    if (sub == "send") {
+        if (!host_.debugAllowed) return Err(c, "CONSOLE", "sending needs DLL_SERVER_DEBUG=true in um.cfg");
+        if (w.size() < 3) return Err(c, "CONSOLE", "usage: CONSOLE send text");
+        std::string text = w[2];
+        for (size_t i = 3; i < w.size(); ++i) text += " " + w[i];
+        std::string err;
+        if (!dllgame::ConsoleSend(text, err)) return Err(c, "CONSOLE", err);
+        Log("INFO", "DLL server: console command sent: " + text);
+        return Ok(c, "CONSOLE", "sent=" + Quote(text));
+    }
+    Err(c, "CONSOLE", "usage: CONSOLE lines [from] [max] / CONSOLE send text");
+}
+
 inline bool Server::Handle(Client& c, const std::string& line) {
     std::vector<std::string> w = Split(line);
     if (w.empty()) return true;
@@ -785,6 +843,18 @@ inline bool Server::Handle(Client& c, const std::string& line) {
     else if (cmd == "BP") Breakpoints(c, w);
     else if (cmd == "WRITE") Write(c, w, false);
     else if (cmd == "POKE") Write(c, w, true);
+    else if (cmd == "UNITS") Units(c, w);
+    else if (cmd == "CONSOLE") ConsoleCommand(c, w);
+    else if (cmd == "CAMERA") {
+        dllgame::Camera cam;
+        char text[256];
+        if (!dllgame::ReadCamera(cam)) Err(c, "CAMERA", "the camera could not be read");
+        else {
+            snprintf(text, sizeof(text), "x=%.3f y=%.3f z=%.3f qx=%.4f qy=%.4f qz=%.4f qw=%.4f tx=%.3f ty=%.3f tz=%.3f",
+                     cam.x, cam.y, cam.z, cam.qx, cam.qy, cam.qz, cam.qw, cam.targetX, cam.targetY, cam.targetZ);
+            Ok(c, "CAMERA", text);
+        }
+    }
     else if (cmd == "SUB") {
         const bool on = w.size() > 2 && w[2] == "on";
         if (w.size() > 2 && w[1] == "log") { c.logEvents = on; c.logSeq = g_logSeq; Ok(c, "SUB", std::string("log=") + (on ? "on" : "off")); }

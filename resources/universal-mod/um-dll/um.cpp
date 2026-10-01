@@ -55,8 +55,6 @@ static bool g_enableFileIoLogging = false;
 static char g_fileIoLoggingFilter[256] = {};
 static bool g_enableMobValidation = false;
 static bool g_enableHeapFreeQuarantine = false;
-static int g_heapFreeQuarantineMb = 0;
-static int g_heapFreeQuarantineObjectsMb = 0;
 static int g_heapAllocPadding = 64;
 static bool g_enableOverlay = true;
 static BYTE g_overlayToggleKey = VK_F9;
@@ -603,12 +601,6 @@ static const SettingDef kSettings[] = {
     BoolSetting("HEAP_OVERRUN_REPORTS", &g_enableHeapFreeQuarantine, false, true,
         "; Diagnostics: tracks every allocation and reports in um.log which ones the game\n"
         "; overruns. Slows the game down and uses extra memory; needs a restart; (true/false)"),
-    IntSetting("HEAP_FREE_QUARANTINE_MB", &g_heapFreeQuarantineMb, 0, 1024, 0, true,
-        "; TO BE DEPRECATED. With HEAP_OVERRUN_REPORTS: amount of freed memory kept back\n"
-        "; untouched, in MB (0-1024); 0 = free at once and only track the allocations."),
-    IntSetting("HEAP_FREE_QUARANTINE_OBJECTS_MB", &g_heapFreeQuarantineObjectsMb, 0, 512, 0, true,
-        "; TO BE DEPRECATED. Extra memory, in MB, kept for small freed objects (blocks that\n"
-        "; start with a game vtable); 0 = no extra pool."),
 
     BoolSetting("OVERLAY_ENABLED", &g_enableOverlay, true, true,
         "; Show the diagnostic overlay on top of the game; (true/false)",
@@ -2553,52 +2545,11 @@ static void ValidateMobFile(const char* path) {
 // reports as Windows 9x it would use its own small-block heap instead, which
 // bypasses HeapFree - ReadGameCrtHeapMode() below is logged so that's visible.)
 // ---------------------------------------------------------------------------
-static const int kQuarantineCallerSlots = 6;
-
-struct QuarantinedBlock {
-    HANDLE heap;
-    LPVOID pointer;
-    SIZE_T size;
-    DWORD flags;
-    DWORD freedTickMs;                      // GetTickCount() when the game freed it
-    DWORD vtable;                           // its first dword if that pointed into game.exe (an object's vtable), else 0
-    DWORD callers[kQuarantineCallerSlots];  // return-address candidates of the free, innermost first (0 = unused)
-};
-
-// Bounds the bookkeeping (a std::deque + std::unordered_set entry per block)
-// when the game frees very many tiny blocks: the oldest are really freed once
-// either the block count or the byte limit is exceeded. The count limit scales
-// with the MB setting, assuming 256-byte blocks on average (measured: ~480 B
-// in this game's map loads), so it only binds when blocks are unusually small.
-static const size_t kQuarantineBlocksPerMb = 4096;
-static const unsigned long kQuarantineDoubleFreeLogLimit = 10;
-static const unsigned long kQuarantineReallocLogLimit = 5;
 
 static CRITICAL_SECTION g_quarantineLock;
 // Set only once the hooks are live, and deliberately never cleared by a config
 // reload: blocks already held must keep being recognized as held.
 static bool g_heapFreeQuarantineInstalled = false;
-// False when both windows are 0 MB: the hooks then only track allocations and free everything at once.
-static bool g_quarantineHolds = true;
-// Two pools, each a FIFO with its own limits: 0 = data buffers and everything else (the
-// HEAP_FREE_QUARANTINE_MB window), 1 = small OBJECTS - blocks that start with a game vtable -
-// with a separate window, so a long-lived widget's dangling child stays held for far longer than
-// the megabytes of pixel data freed around it.
-struct QuarantinePool {
-    std::deque<QuarantinedBlock> queue;
-    unsigned long long frontSequence = 0; // sequence number of queue.front()
-    unsigned long long nextSequence = 0;
-    SIZE_T bytes = 0;
-    SIZE_T byteLimit = 0;
-    size_t maxBlocks = 0;
-};
-static QuarantinePool g_quarantinePools[2];
-static const int kObjectPool = 1;
-static const SIZE_T kObjectPoolMaxBlockBytes = 16384;
-// HeapSize above this is not a size: the block's heap header was overwritten.
-static const SIZE_T kMaxSaneBlockBytes = 0x20000000;
-static unsigned long g_quarantineCorruptHeaders = 0;
-
 // Every live allocation game.exe made through its own HeapAlloc since this hook went in (start ->
 // requested size). A HeapFree for a pointer that is not a block's start but lies inside a live block
 // is a free of the MIDDLE of an allocation (an array element): on Wine that corrupts the heap, and
@@ -2722,26 +2673,6 @@ static std::unordered_set<DWORD> g_reportedOverruns;
 static std::map<DWORD, unsigned long> g_overrunSites;   // allocation site (innermost caller) -> blocks it overran
 static void FormatOverrunSites(char* out, size_t outSize);
 static PtrTable<LiveBlock> g_liveBlocks;
-static unsigned long g_quarantineInvalidFrees = 0;
-static const unsigned long kInvalidFreeLogLimit = 20;
-// The last few blocks freed with a trusted (tracked) size, to catch an array's elements being
-// freed after the array's own block was.
-struct RecentBlock {
-    DWORD start;
-    DWORD size;
-};
-static const int kRecentBlocks = 64;
-static RecentBlock g_recentFreed[kRecentBlocks];
-static unsigned g_recentFreedNext = 0;
-// pointer -> (pool, sequence number). A pool's entries leave strictly in order, so an entry is
-// pool.queue[sequence - pool.frontSequence].
-struct QuarantineIndexEntry { int pool; unsigned long long sequence; };
-static PtrTable<QuarantineIndexEntry> g_quarantineIndex;
-static unsigned long g_quarantineFreesHeld = 0;
-static unsigned long g_quarantineEvictions = 0;
-static unsigned long g_quarantineDoubleFrees = 0;
-static unsigned long g_quarantineReallocRedirects = 0;
-static bool g_quarantineFullLogged = false;
 
 // game.exe's CRT heap mode: 1 = system heap, 2 = V5 small-block heap, 3 = V6
 // small-block heap (__active_heap, 0x7caf0c in the one known OBT-1 game.exe
@@ -2790,66 +2721,6 @@ static bool LooksLikeReturnAddress(const BYTE* address, DWORD* target, bool know
     return false;
 }
 
-// Log the return-address-looking words in game.exe's code found in the next
-// 2 KB of this thread's stack, like a hand-rolled backtrace that copes with
-// the FPO frames game.exe is built with (which RtlCaptureStackBackTrace's
-// frame-pointer walk cannot follow). Innermost first; needs no symbols.
-static void LogCallerCandidates(const char* what) {
-    const BYTE* exe = reinterpret_cast<const BYTE*>(GetModuleHandleA(NULL));
-    if (!exe) {
-        return;
-    }
-    const IMAGE_DOS_HEADER* dos = reinterpret_cast<const IMAGE_DOS_HEADER*>(exe);
-    const IMAGE_NT_HEADERS* nt = reinterpret_cast<const IMAGE_NT_HEADERS*>(exe + dos->e_lfanew);
-    ULONG_PTR low = reinterpret_cast<ULONG_PTR>(exe);
-    ULONG_PTR high = low + nt->OptionalHeader.SizeOfImage;
-
-    const DWORD* sp = reinterpret_cast<const DWORD*>(__builtin_frame_address(0));
-    const DWORD* stackBase = reinterpret_cast<const DWORD*>(__readfsdword(4));
-    const DWORD* end = sp + 1024 < stackBase ? sp + 1024 : stackBase;
-
-    // LogLine truncates a message at 400 characters, so the chain is written
-    // as several lines of a few candidates each rather than one long one.
-    const int perLine = 5;
-    char text[320] = {};
-    size_t used = 0;
-    int inLine = 0;
-    int found = 0;
-    int lineNumber = 0;
-    for (const DWORD* word = sp; word < end && found < 12; ++word) {
-        ULONG_PTR value = *word;
-        DWORD target = 0;
-        if (value <= low + 6 || value >= high ||
-            !LooksLikeReturnAddress(reinterpret_cast<const BYTE*>(value), &target)) {
-            continue;
-        }
-        int wrote = target
-            ? snprintf(text + used, sizeof(text) - used, " 0x%08lX(call 0x%08lX)",
-                static_cast<unsigned long>(value), static_cast<unsigned long>(target))
-            : snprintf(text + used, sizeof(text) - used, " 0x%08lX(indirect call)",
-                static_cast<unsigned long>(value));
-        if (wrote < 0 || static_cast<size_t>(wrote) >= sizeof(text) - used) {
-            break;
-        }
-        used += static_cast<size_t>(wrote);
-        ++found;
-        if (++inLine == perLine) {
-            LogLine("WARN", "[QUARANTINE] %s - caller candidates %d-%d, innermost first:%s",
-                what, lineNumber * perLine + 1, found, text);
-            ++lineNumber;
-            used = 0;
-            inLine = 0;
-            text[0] = '\0';
-        }
-    }
-    if (inLine > 0) {
-        LogLine("WARN", "[QUARANTINE] %s - caller candidates %d-%d, innermost first:%s",
-            what, lineNumber * perLine + 1, found, text);
-    } else if (found == 0) {
-        LogLine("WARN", "[QUARANTINE] %s - no caller candidates found in game.exe", what);
-    }
-}
-
 // game.exe's own address ranges, for recognising vtable pointers and return addresses without
 // probing memory. Set up when the hooks are installed.
 static DWORD g_imageLow = 0, g_imageHigh = 0, g_codeLow = 0, g_codeHigh = 0;
@@ -2895,10 +2766,6 @@ static void CaptureCallers(DWORD* out, int slots) {
     }
 }
 
-static void CaptureFreeCallers(DWORD* out) {
-    CaptureCallers(out, 3); // the slots after those stay 0: a free only needs to say who freed it
-}
-
 static void FormatCallerList(const DWORD* callers, int count, char* out, size_t outSize) {
     size_t used = 0;
     out[0] = '\0';
@@ -2910,80 +2777,28 @@ static void FormatCallerList(const DWORD* callers, int count, char* out, size_t 
     if (out[0] == '\0') snprintf(out, outSize, "(not recorded)");
 }
 
-static void FormatCallers(const DWORD* callers, char* out, size_t outSize) {
-    FormatCallerList(callers, kQuarantineCallerSlots, out, outSize);
-}
-
-static const QuarantinedBlock* FindHeldBlockLocked(LPVOID pointer) {
-    const QuarantineIndexEntry* entry = g_quarantineIndex.Find(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)));
-    if (!entry) return nullptr;
-    const QuarantinePool& pool = g_quarantinePools[entry->pool];
-    unsigned long long position = entry->sequence - pool.frontSequence;
-    return position < pool.queue.size() ? &pool.queue[static_cast<size_t>(position)] : nullptr;
-}
-
-static unsigned long OldestHeldAgeSecondsLocked() {
-    DWORD oldest = 0;
-    DWORD now = GetTickCount();
-    for (const QuarantinePool& pool : g_quarantinePools) {
-        if (!pool.queue.empty()) {
-            DWORD age = now - pool.queue.front().freedTickMs;
-            if (age > oldest) oldest = age;
-        }
-    }
-    return oldest / 1000;
-}
-
-static size_t HeldBlockCountLocked() {
-    return g_quarantinePools[0].queue.size() + g_quarantinePools[1].queue.size();
-}
-
 static void LogQuarantineStats(const char* reason) {
     EnterCriticalSection(&g_quarantineLock);
-    size_t blocks = HeldBlockCountLocked();
-    SIZE_T dataBytes = g_quarantinePools[0].bytes, objectBytes = g_quarantinePools[kObjectPool].bytes;
-    size_t objectBlocks = g_quarantinePools[kObjectPool].queue.size();
-    unsigned long held = g_quarantineFreesHeld;
-    unsigned long evicted = g_quarantineEvictions;
-    unsigned long doubleFrees = g_quarantineDoubleFrees;
-    unsigned long redirects = g_quarantineReallocRedirects;
-    unsigned long corrupt = g_quarantineCorruptHeaders;
-    unsigned long invalid = g_quarantineInvalidFrees;
     unsigned long overruns = g_quarantineOverruns;
     unsigned long overlaps = g_quarantineOverlaps;
-    unsigned long oldest = OldestHeldAgeSecondsLocked();
     unsigned long liveBlocks = static_cast<unsigned long>(g_liveBlocks.Size());
     char overrunSites[160];
     FormatOverrunSites(overrunSites, sizeof(overrunSites));
     LeaveCriticalSection(&g_quarantineLock);
-    LogLine("DEBUG", "[QUARANTINE] %s: holding %lu freed blocks (data %.1f of %.0f MB, %lu objects %.1f of %.0f MB), the oldest freed %lu s ago; "
-        "frees held so far=%lu, really freed after eviction=%lu, double frees ignored=%lu, reallocs of freed blocks redirected=%lu, "
-        "damaged heap headers seen=%lu, invalid frees ignored=%lu, buffer overruns=%lu (sites: %s), overlapping allocations=%lu, live blocks tracked=%lu (padding %.1f MB)", reason, static_cast<unsigned long>(blocks), dataBytes / 1048576.0,
-        g_quarantinePools[0].byteLimit / 1048576.0, static_cast<unsigned long>(objectBlocks), objectBytes / 1048576.0,
-        g_quarantinePools[kObjectPool].byteLimit / 1048576.0, oldest, held, evicted, doubleFrees, redirects, corrupt, invalid, overruns, overrunSites, overlaps, liveBlocks,
-        liveBlocks * static_cast<double>(g_canaryBytes) / 1048576.0);
+    LogLine("DEBUG", "[HEAPFIX] %s: buffer overruns=%lu (sites: %s), overlapping allocations=%lu, live blocks tracked=%lu (padding %.1f MB)",
+        reason, overruns, overrunSites, overlaps, liveBlocks, liveBlocks * static_cast<double>(g_canaryBytes) / 1048576.0);
 }
 
-// Point-in-time numbers for the overlay; false when the quarantine isn't active.
-static bool GetQuarantineSnapshot(double* heldMb, double* limitMb, double* objectMb, double* objectLimitMb,
-        unsigned long* blocks, unsigned long* doubleFrees, unsigned long* oldestSeconds, unsigned long* invalidFrees,
-        unsigned long* problems, unsigned long* overruns) {
+// Point-in-time numbers for the overlay; false when the allocation tracking isn't active.
+static bool GetQuarantineSnapshot(unsigned long* problems, unsigned long* overruns) {
     if (!g_heapFreeQuarantineInstalled) {
         return false;
     }
     EnterCriticalSection(&g_quarantineLock);
-    *heldMb = g_quarantinePools[0].bytes / 1048576.0;
-    *objectMb = g_quarantinePools[kObjectPool].bytes / 1048576.0;
-    *blocks = static_cast<unsigned long>(HeldBlockCountLocked());
-    *doubleFrees = g_quarantineDoubleFrees;
-    *invalidFrees = g_quarantineInvalidFrees;
     // Overruns are absorbed by the padding, so they are counted apart from the real problems.
     *overruns = g_quarantineOverruns;
-    *problems = g_quarantineOverlaps + g_quarantineCorruptHeaders;
-    *oldestSeconds = OldestHeldAgeSecondsLocked();
+    *problems = g_quarantineOverlaps;
     LeaveCriticalSection(&g_quarantineLock);
-    *limitMb = g_quarantinePools[0].byteLimit / 1048576.0;
-    *objectLimitMb = g_quarantinePools[kObjectPool].byteLimit / 1048576.0;
     return true;
 }
 
@@ -3078,7 +2893,7 @@ static void ReportOverlap(DWORD start, DWORD size, const DWORD* callers, DWORD o
     char byCallers[100], otherCallers[100];
     FormatCallerList(callers, kAllocCallerSlots, byCallers, sizeof(byCallers));
     FormatCallerList(other.callers, kAllocCallerSlots, otherCallers, sizeof(otherCallers));
-    LogLine("WARN", "[QUARANTINE] OVERLAPPING ALLOCATION #%lu: HeapAlloc returned 0x%08lX (%lu bytes, requested by %s) which overlaps the LIVE "
+    LogLine("WARN", "[HEAPFIX] OVERLAPPING ALLOCATION #%lu: HeapAlloc returned 0x%08lX (%lu bytes, requested by %s) which overlaps the LIVE "
         "block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) - the heap handed out memory that was still in use", number,
         static_cast<unsigned long>(start), static_cast<unsigned long>(size), byCallers, static_cast<unsigned long>(otherStart),
         static_cast<unsigned long>(other.size), (GetTickCount() - other.tickMs) / 1000.0, otherCallers);
@@ -3125,211 +2940,32 @@ UM_GUARDED_THREAD(OverrunWatchThread) {
     return 0;
 }
 
-// Really free the oldest blocks of a pool until it is back within its limits. Lock held.
-static bool TrimPoolLocked(QuarantinePool& pool) {
-    bool evictedAny = false;
-    while (!pool.queue.empty() && (pool.bytes > pool.byteLimit || pool.queue.size() > pool.maxBlocks)) {
-        QuarantinedBlock oldest = pool.queue.front();
-        pool.queue.pop_front();
-        ++pool.frontSequence;
-        g_quarantineIndex.Erase(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(oldest.pointer)));
-        pool.bytes -= oldest.size;
-        ++g_quarantineEvictions;
-        g_originalHeapFree(oldest.heap, oldest.flags, oldest.pointer);
-        evictedAny = true;
-    }
-    return evictedAny;
-}
-
-// Called for every HeapFree game.exe makes directly. Returns true when the
-// free was fully handled here (block held back, or a double free swallowed),
-// false when the caller should just forward it to the real HeapFree.
+// Called for every HeapFree game.exe makes directly: looks at the block's guard bytes, forgets it, and lets
+// the real HeapFree free it (returns false: the caller forwards the free).
 static bool QuarantineHeapFree(HANDLE heap, DWORD flags, LPVOID pointer) {
-    if (!g_quarantineHolds) {
-        // Tracking only: look at the block's guard bytes, forget it, and let the real HeapFree free it.
-        EnterCriticalSection(&g_quarantineLock);
-        const DWORD address = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
-        if (LiveBlock* live = g_liveBlocks.Find(address)) {
-            BYTE found[kMaxCanaryBytes];
-            if (CanaryDamaged(address, live->size, found, false)) {
-                ReportOverrun(address, *live, found, "found when the game freed the block");
-            }
-            g_liveBlocks.Erase(address);
-        }
-        LeaveCriticalSection(&g_quarantineLock);
-        return false;
-    }
-    bool doubleFree = false;
-    unsigned long doubleFreeNumber = 0;
-    bool justFilled = false;
-    bool damagedHeader = false;
-    unsigned long damagedNumber = 0;
-    SIZE_T damagedSize = 0;
-    DWORD around[8] = {}; // the 16 bytes just before the block and its first 16 bytes
-    QuarantinedBlock first = {};
-    bool invalidFree = false;
-    unsigned long invalidNumber = 0;
-    DWORD ownerStart = 0, ownerSize = 0;
-    DWORD trackedSize = 0;
-    bool trackedStart = false;
-
-    // Gathered before taking the lock: it only reads this thread's stack.
-    DWORD callers[kQuarantineCallerSlots] = {};
-    CaptureFreeCallers(callers);
-
+    (void)heap;
+    (void)flags;
     EnterCriticalSection(&g_quarantineLock);
-    const QuarantinedBlock* earlier = FindHeldBlockLocked(pointer);
-    if (earlier) {
-        doubleFree = true;
-        doubleFreeNumber = ++g_quarantineDoubleFrees;
-        first = *earlier;
-    } else {
-        // Is this a block the game allocated since the hooks went in? (Freeing the middle of a block is
-        // no longer looked for: Wine rejects such a free itself, and the search needed an ordered table.)
-        const DWORD address = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
-        LiveBlock* live = g_liveBlocks.Find(address);
-        if (live) {
-            trackedStart = true;
-            trackedSize = live->size;
-            BYTE found[kMaxCanaryBytes];
-            if (CanaryDamaged(address, live->size, found, false)) { // a live block: readable, no probing
-                ReportOverrun(address, *live, found, "found when the game freed the block");
-            }
-            g_liveBlocks.Erase(address);
+    const DWORD address = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer));
+    if (LiveBlock* live = g_liveBlocks.Find(address)) {
+        BYTE found[kMaxCanaryBytes];
+        if (CanaryDamaged(address, live->size, found, false)) {
+            ReportOverrun(address, *live, found, "found when the game freed the block");
         }
-    }
-    if (!invalidFree && !doubleFree) {
-        // HeapSize doubles as a validity check: -1 means this is not a live
-        // block of this heap, so let the real HeapFree deal with (and report)
-        // whatever it is.
-        SIZE_T size = trackedStart ? static_cast<SIZE_T>(trackedSize) + PaddingFor(trackedSize) : HeapSize(heap, 0, pointer);
-        if (size == static_cast<SIZE_T>(-1)) {
-            LeaveCriticalSection(&g_quarantineLock);
-            return false;
-        }
-        if (size > kMaxSaneBlockBytes) {
-            // The heap header in front of this block was overwritten (it reads as a negative
-            // or absurd size). Freeing it for real could corrupt the heap further, so it is
-            // kept forever instead - a small leak - and reported: this is where a buffer
-            // overrun from the block before it becomes visible.
-            damagedHeader = true;
-            damagedNumber = ++g_quarantineCorruptHeaders;
-            damagedSize = size;
-            const BYTE* before = static_cast<const BYTE*>(pointer) - 16;
-            if (!IsBadReadPtr(before, 16)) memcpy(around, before, 16);
-            if (!IsBadReadPtr(pointer, 16)) memcpy(around + 4, pointer, 16);
-        } else {
-            QuarantinedBlock block = {};
-            block.heap = heap;
-            block.pointer = pointer;
-            block.size = size;
-            block.flags = flags;
-            block.freedTickMs = GetTickCount();
-            memcpy(block.callers, callers, sizeof(callers));
-            if (size >= sizeof(DWORD)) {
-                // The block is still a live allocation here, so its first dword is readable.
-                DWORD firstDword = 0;
-                memcpy(&firstDword, pointer, sizeof(firstDword));
-                if (firstDword >= g_imageLow && firstDword < g_imageHigh && (firstDword & 3) == 0) {
-                    block.vtable = firstDword; // an object of a game class: the vtable says which one
-                }
-            }
-            int poolIndex = (block.vtable && size <= kObjectPoolMaxBlockBytes &&
-                g_quarantinePools[kObjectPool].byteLimit > 0) ? kObjectPool : 0;
-            QuarantinePool& pool = g_quarantinePools[poolIndex];
-            if (trackedStart) {
-                g_recentFreed[g_recentFreedNext++ % kRecentBlocks] =
-                    RecentBlock{ static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)), trackedSize };
-            }
-            pool.queue.push_back(block);
-            g_quarantineIndex.Put(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)), QuarantineIndexEntry{poolIndex, pool.nextSequence++});
-            pool.bytes += size;
-            ++g_quarantineFreesHeld;
-            if (TrimPoolLocked(g_quarantinePools[0]) | TrimPoolLocked(g_quarantinePools[kObjectPool])) {
-                if (!g_quarantineFullLogged) {
-                    g_quarantineFullLogged = true;
-                    justFilled = true;
-                }
-            }
-        }
+        g_liveBlocks.Erase(address);
     }
     LeaveCriticalSection(&g_quarantineLock);
-
-    if (invalidFree) {
-        if (invalidNumber <= kInvalidFreeLogLimit) {
-            char freedBy[160];
-            FormatCallers(callers, freedBy, sizeof(freedBy));
-            LogLine("WARN", "[QUARANTINE] INVALID FREE #%lu ignored: %p is INSIDE the block at 0x%08lX (%lu bytes, offset +0x%lX), not the start of "
-                "an allocation - the game freed the middle of a block (an array element?). Freed by: %s",
-                invalidNumber, pointer, static_cast<unsigned long>(ownerStart), static_cast<unsigned long>(ownerSize),
-                static_cast<unsigned long>(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(pointer)) - ownerStart), freedBy);
-            if (invalidNumber <= 3) {
-                LogCallerCandidates("invalid free");
-            }
-        }
-        return true;
-    }
-    if (damagedHeader && damagedNumber <= kQuarantineDoubleFreeLogLimit) {
-        char freedBy[160];
-        FormatCallers(callers, freedBy, sizeof(freedBy));
-        LogLine("WARN", "[QUARANTINE] DAMAGED HEAP HEADER #%lu: block %p reports a size of %lu bytes (a wrapped negative), so the 16 bytes "
-            "in front of it were overwritten - most likely by a buffer overrun in the block before it. Not freed (kept). "
-            "Bytes before the block: %08lX %08lX %08lX %08lX; its first bytes: %08lX %08lX %08lX %08lX; freed by: %s",
-            damagedNumber, pointer, static_cast<unsigned long>(damagedSize), around[0], around[1], around[2], around[3],
-            around[4], around[5], around[6], around[7], freedBy);
-        return true;
-    }
-    if (damagedHeader) {
-        return true;
-    }
-    if (doubleFree && doubleFreeNumber <= kQuarantineDoubleFreeLogLimit) {
-        char firstCallers[160];
-        FormatCallers(first.callers, firstCallers, sizeof(firstCallers));
-        LogLine("WARN", "[QUARANTINE] Ignored double free #%lu of block %p (heap=%p size=%lu, vtable when first freed=0x%08lX) - "
-            "it was first freed %.1f s ago by: %s", doubleFreeNumber, pointer, heap, static_cast<unsigned long>(first.size),
-            static_cast<unsigned long>(first.vtable), (GetTickCount() - first.freedTickMs) / 1000.0, firstCallers);
-        LogCallerCandidates("second free");
-    }
-    if (justFilled) {
-        LogQuarantineStats("Quarantine is full, from now on the oldest freed blocks are really freed");
-    }
-    return true;
+    return false;
 }
 
-static bool QuarantineHolds(LPVOID pointer) {
-    EnterCriticalSection(&g_quarantineLock);
-    bool held = FindHeldBlockLocked(pointer) != nullptr;
-    LeaveCriticalSection(&g_quarantineLock);
-    return held;
-}
-
-// Forget every held block of a heap that is about to be destroyed: really
-// freeing into a destroyed heap later would corrupt memory.
+// Forget every tracked block of a heap that is about to be destroyed.
 static void QuarantineForgetHeap(HANDLE heap) {
     EnterCriticalSection(&g_quarantineLock);
-    {
-        std::vector<DWORD> doomed;
-        for (size_t i = 0; i < g_liveBlocks.Capacity(); ++i) {
-            if (g_liveBlocks.At(i).key != 0 && g_liveBlocks.At(i).value.heap == heap) doomed.push_back(g_liveBlocks.At(i).key);
-        }
-        for (DWORD key : doomed) g_liveBlocks.Erase(key);
+    std::vector<DWORD> doomed;
+    for (size_t i = 0; i < g_liveBlocks.Capacity(); ++i) {
+        if (g_liveBlocks.At(i).key != 0 && g_liveBlocks.At(i).value.heap == heap) doomed.push_back(g_liveBlocks.At(i).key);
     }
-    g_quarantineIndex.Clear();
-    for (int poolIndex = 0; poolIndex < 2; ++poolIndex) {
-        QuarantinePool& pool = g_quarantinePools[poolIndex];
-        std::deque<QuarantinedBlock> kept;
-        for (const QuarantinedBlock& block : pool.queue) {
-            if (block.heap == heap) pool.bytes -= block.size;
-            else kept.push_back(block);
-        }
-        pool.queue.swap(kept);
-        // Re-number what is left so the index stays consistent with the queue.
-        pool.frontSequence = 0;
-        pool.nextSequence = 0;
-        for (const QuarantinedBlock& block : pool.queue) {
-            g_quarantineIndex.Put(static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(block.pointer)), QuarantineIndexEntry{poolIndex, pool.nextSequence++});
-        }
-    }
+    for (DWORD key : doomed) g_liveBlocks.Erase(key);
     LeaveCriticalSection(&g_quarantineLock);
 }
 
@@ -3361,7 +2997,7 @@ static void LogHeapPointerProbe(const char* label, DWORD value) {
             state = stateBuffer;
         }
     }
-    LogLine("FATAL", "[QUARANTINE] crash: %s = 0x%08lX is %s; first dwords %08lX %08lX %08lX %08lX", label,
+    LogLine("FATAL", "[HEAPFIX] crash: %s = 0x%08lX is %s; first dwords %08lX %08lX %08lX %08lX", label,
         static_cast<unsigned long>(value), state, dwords[0], dwords[1], dwords[2], dwords[3]);
 }
 
@@ -3409,36 +3045,9 @@ static void LogQuarantineCrashAnalysis(const CONTEXT* context, const EXCEPTION_R
     }
 
     if (!TryEnterCriticalSection(&g_quarantineLock)) {
-        LogLine("FATAL", "[QUARANTINE] crash: could not inspect the held blocks (another thread holds the quarantine lock)");
+        LogLine("FATAL", "[HEAPFIX] crash: could not check the tracked blocks (another thread holds the lock)");
         return;
     }
-    int hits = 0;
-    DWORD now = GetTickCount();
-    std::unordered_set<LPVOID> reportedFromStack;
-    for (const QuarantinePool& pool : g_quarantinePools) for (const QuarantinedBlock& block : pool.queue) {
-        DWORD start = static_cast<DWORD>(reinterpret_cast<ULONG_PTR>(block.pointer));
-        for (const Value& v : values) {
-            if (v.value < start || v.value - start >= block.size) continue;
-            // A stack word is weak evidence, and one landing in a huge freed buffer (a screen
-            // surface, a texture) is a leftover, not a lead: only small blocks, once each.
-            if (v.stackOffset || strcmp(v.label, "stack") == 0) {
-                if (block.size > 16384 || !reportedFromStack.insert(block.pointer).second) continue;
-            }
-            char callers[160];
-            FormatCallers(block.callers, callers, sizeof(callers));
-            char where[96];
-            if (v.stackOffset || strcmp(v.label, "stack") == 0) snprintf(where, sizeof(where), "stack word ESP+0x%lX (weaker evidence: may be a stale leftover)", static_cast<unsigned long>(v.stackOffset));
-            else snprintf(where, sizeof(where), "%s", v.label);
-            LogLine("FATAL", "[QUARANTINE] crash: %s = 0x%08lX is inside a FREED block that is being held: block %p, %lu bytes, "
-                "offset +0x%lX, vtable when freed 0x%08lX, freed %.1f s ago by: %s", where, static_cast<unsigned long>(v.value),
-                block.pointer, static_cast<unsigned long>(block.size), static_cast<unsigned long>(v.value - start),
-                static_cast<unsigned long>(block.vtable), (now - block.freedTickMs) / 1000.0, callers);
-            if (++hits >= 8) break;
-        }
-        if (hits >= 8) break;
-    }
-    size_t held = HeldBlockCountLocked();
-    unsigned long oldest = OldestHeldAgeSecondsLocked();
     {
         unsigned long overrunBlocks = 0;
         for (size_t i = 0; i < g_liveBlocks.Capacity(); ++i) {
@@ -3452,17 +3061,11 @@ static void LogQuarantineCrashAnalysis(const CONTEXT* context, const EXCEPTION_R
         }
         char sites[160];
         FormatOverrunSites(sites, sizeof(sites));
-        LogLine("FATAL", "[QUARANTINE] crash: %lu live block(s) have overwritten guard bytes (a buffer was written past its end); "
+        LogLine("FATAL", "[HEAPFIX] crash: %lu live block(s) have overwritten guard bytes (a buffer was written past its end); "
             "allocation sites that overran so far: %s; %lu overlapping allocation(s) were seen this session", overrunBlocks, sites,
             g_quarantineOverlaps);
     }
     LeaveCriticalSection(&g_quarantineLock);
-    if (hits == 0) {
-        LogLine("FATAL", "[QUARANTINE] crash: no register and none of the top %lu stack words point into a block the quarantine "
-            "holds (%lu blocks, the oldest freed %lu s ago). The object involved is older than the window, was never a "
-            "heap block, or this is memory corruption rather than a use-after-free.",
-            static_cast<unsigned long>(kCrashStackWords), static_cast<unsigned long>(held), oldest);
-    }
 #else
     (void)context; (void)record;
 #endif
@@ -3573,10 +3176,32 @@ static bool CopyMapState(MapLoadState* out) {
     return out->valid;
 }
 
+// Every .mpr / .mob the game opened: lower-case file name -> its full path (for the DLL server's MAP, so
+// um-multitool can read the very files the game uses). Guarded by g_currentMapLock.
+static std::unordered_map<std::string, std::string> g_mapPaths;
+
+static std::string MapFilePath(const char* name) {
+    std::string out;
+    while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) Sleep(0);
+    auto it = g_mapPaths.find(LowerCaseCopy(name));
+    if (it != g_mapPaths.end()) out = it->second;
+    InterlockedExchange(&g_currentMapLock, 0);
+    return out;
+}
+
 static void NoteMapLoad(const char* path) {
     const bool isMob = HasFileExtension(path, "mob");
     if (!isMob && !HasFileExtension(path, "mpr")) {
         return;
+    }
+    {
+        // A relative path is relative to the game's current directory: kept absolute.
+        char full[MAX_PATH] = {};
+        const DWORD n = GetFullPathNameA(path, sizeof(full), full, NULL);
+        const std::string key = LowerCaseCopy(FileNameOfPath(path));
+        while (InterlockedCompareExchange(&g_currentMapLock, 1, 0) != 0) Sleep(0);
+        g_mapPaths[key] = n > 0 && n < sizeof(full) ? full : path;
+        InterlockedExchange(&g_currentMapLock, 0);
     }
     if (!g_enableOverlay || !g_overlayShowMap) {
         // The overlay is the only user of the map identity; the rest still runs for .mob files.
@@ -3774,29 +3399,6 @@ static LPVOID WINAPI HookedHeapAlloc(HANDLE heap, DWORD flags, SIZE_T size) {
 
 static LPVOID WINAPI HookedHeapReAlloc(HANDLE heap, DWORD flags, LPVOID pointer, SIZE_T size) {
     HeapHookTimer timer;
-    if (g_heapFreeQuarantineInstalled && g_quarantineHolds && pointer && QuarantineHolds(pointer)) {
-        // The game is resizing a block it already freed. Let the real
-        // HeapReAlloc move/free it and the block would be freed a second time
-        // when the quarantine evicts it, so hand back a fresh copy instead and
-        // leave the held block alone.
-        if (flags & HEAP_REALLOC_IN_PLACE_ONLY) {
-            return NULL;
-        }
-        SIZE_T oldSize = HeapSize(heap, 0, pointer);
-        LPVOID fresh = HeapAlloc(heap,
-            flags & (HEAP_ZERO_MEMORY | HEAP_NO_SERIALIZE | HEAP_GENERATE_EXCEPTIONS), size);
-        if (fresh && oldSize != static_cast<SIZE_T>(-1)) {
-            memcpy(fresh, pointer, oldSize < size ? oldSize : size);
-        }
-        EnterCriticalSection(&g_quarantineLock);
-        unsigned long number = ++g_quarantineReallocRedirects;
-        LeaveCriticalSection(&g_quarantineLock);
-        if (number <= kQuarantineReallocLogLimit) {
-            LogLine("WARN", "[QUARANTINE] HeapReAlloc of an already-freed block %p (redirect #%lu)", pointer, number);
-            LogCallerCandidates("realloc of a freed block");
-        }
-        return fresh;
-    }
     if (!g_heapFreeQuarantineInstalled || size > 0x7FFFFF00) {
         return g_originalHeapReAlloc(heap, flags, pointer, size);
     }
@@ -4256,7 +3858,7 @@ static void InstallHeapHooks() {
     }
     HMODULE process = GetModuleHandleA(NULL);
     if (!process) {
-        LogLine("WARN", "[QUARANTINE] Not activated: could not locate the game executable");
+        LogLine("WARN", "[HEAPFIX] Not activated: could not locate the game executable");
         return;
     }
 
@@ -4279,12 +3881,7 @@ static void InstallHeapHooks() {
     }
 
     g_canaryBytes = static_cast<DWORD>(g_heapAllocPadding);
-    g_quarantineHolds = g_heapFreeQuarantineMb > 0 || g_heapFreeQuarantineObjectsMb > 0;
     InitializeCriticalSection(&g_quarantineLock);
-    g_quarantinePools[0].byteLimit = static_cast<SIZE_T>(g_heapFreeQuarantineMb) * 1048576;
-    g_quarantinePools[0].maxBlocks = static_cast<size_t>(g_heapFreeQuarantineMb) * kQuarantineBlocksPerMb;
-    g_quarantinePools[kObjectPool].byteLimit = static_cast<SIZE_T>(g_heapFreeQuarantineObjectsMb) * 1048576;
-    g_quarantinePools[kObjectPool].maxBlocks = static_cast<size_t>(g_heapFreeQuarantineObjectsMb) * kQuarantineBlocksPerMb;
 
     PatchImportedFunction(process, "HeapAlloc",
         reinterpret_cast<ULONG_PTR>(HookedHeapAlloc), reinterpret_cast<ULONG_PTR*>(&g_originalHeapAlloc));
@@ -4296,33 +3893,26 @@ static void InstallHeapHooks() {
         reinterpret_cast<ULONG_PTR>(HookedHeapDestroy), reinterpret_cast<ULONG_PTR*>(&g_originalHeapDestroy));
 
     if (!freeHooked || !g_originalHeapFree) {
-        LogLine("WARN", "[QUARANTINE] Not activated: game.exe does not import HeapFree directly");
+        LogLine("WARN", "[HEAPFIX] Not activated: game.exe does not import HeapFree directly");
         return;
     }
     if (!g_originalHeapDestroy || !g_originalHeapReAlloc || !g_originalHeapAlloc) {
         // Never expected (game.exe imports both), but without them a destroyed
         // heap's held blocks could not be forgotten and a resize of a freed
         // block could not be redirected - so hold nothing.
-        LogLine("WARN", "[QUARANTINE] Not activated: game.exe does not import HeapAlloc/HeapDestroy/HeapReAlloc");
+        LogLine("WARN", "[HEAPFIX] Not activated: game.exe does not import HeapAlloc/HeapDestroy/HeapReAlloc");
         return;
     }
     g_heapFreeQuarantineInstalled = true;
     HANDLE watch = CreateThread(NULL, 0, OverrunWatchThread, NULL, 0, NULL);
     if (watch) CloseHandle(watch);
-    char holding[120];
-    if (g_quarantineHolds) {
-        snprintf(holding, sizeof(holding), "freed blocks are held back (data window %d MB, plus %d MB for small objects) before "
-            "being really freed", g_heapFreeQuarantineMb, g_heapFreeQuarantineObjectsMb);
-    } else {
-        snprintf(holding, sizeof(holding), "freed blocks are freed at once (windows set to 0 MB)");
-    }
-    LogLine("DEBUG", "[QUARANTINE] Active: every allocation padded by %d bytes (more for blocks of 1 KB or more) and tracked; %s",
-        g_heapAllocPadding, holding);
+    LogLine("DEBUG", "[HEAPFIX] Active: every allocation padded by %d bytes (more for blocks of 1 KB or more) and tracked; "
+        "freed blocks are freed at once", g_heapAllocPadding);
     long mode = ReadGameCrtHeapMode();
     if (mode != 1) {
-        LogLine("WARN", "[QUARANTINE] game.exe CRT heap mode reads %ld (expected 1 = system heap); "
+        LogLine("WARN", "[HEAPFIX] game.exe CRT heap mode reads %ld (expected 1 = system heap); "
             "with mode 2/3 its small-block heap frees small blocks WITHOUT calling HeapFree, so those "
-            "are not held back", mode);
+            "are not tracked", mode);
     }
 }
 
@@ -6245,19 +5835,10 @@ static void BuildOverlayContent(OverlayContent& content) {
                 "AddrSpace=%.2f/%.2fGB used", usedGb, totalGb);
         }
     }
-    double quarantineMb = 0.0, quarantineLimitMb = 0.0, objectMb = 0.0, objectLimitMb = 0.0;
-    unsigned long quarantineBlocks = 0, quarantineDoubleFrees = 0, quarantineOldest = 0, quarantineInvalid = 0, quarantineProblems = 0, quarantineOverruns = 0;
-    if (GetQuarantineSnapshot(&quarantineMb, &quarantineLimitMb, &objectMb, &objectLimitMb, &quarantineBlocks,
-            &quarantineDoubleFrees, &quarantineOldest, &quarantineInvalid, &quarantineProblems, &quarantineOverruns)) {
-        if (g_quarantineHolds) {
-            AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false,
-                "Quarantine=%.0f/%.0fMB objects=%.0f/%.0fMB held=%luk oldest=%lus",
-                quarantineMb, quarantineLimitMb, objectMb, objectLimitMb, quarantineBlocks / 1000, quarantineOldest);
-        }
-        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity,
-            quarantineDoubleFrees > 0 || quarantineInvalid > 0 || quarantineProblems > 0,
-            "double-frees=%lu invalid-frees=%lu heap-problems=%lu overruns-absorbed=%lu",
-            quarantineDoubleFrees, quarantineInvalid, quarantineProblems, quarantineOverruns);
+    unsigned long quarantineProblems = 0, quarantineOverruns = 0;
+    if (GetQuarantineSnapshot(&quarantineProblems, &quarantineOverruns)) {
+        AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, quarantineProblems > 0,
+            "heap-problems=%lu overruns-absorbed=%lu", quarantineProblems, quarantineOverruns);
         AddOverlayLine(content.bottom, &content.bottomCount, bottomCapacity, false, "%s", ""); // blank line
     }
     if (g_heapPaddingOnlyInstalled) {
@@ -7055,15 +6636,50 @@ UM_GUARDED_THREAD(OverlayThread) {
 
 static void DllServerNoteLog(const char* line) { dllserver::NoteLog(line); }
 
-// The map the game shows, for the DLL server's MAP command.
+// A Windows path as the host system sees it: under Wine, the Unix path (Wine's own conversion);
+// on Windows, unchanged.
+static std::string HostPath(const std::string& path) {
+    if (path.empty()) return path;
+    typedef char*(CDECL * UnixNameFunction)(LPCWSTR);
+    static UnixNameFunction unixName = reinterpret_cast<UnixNameFunction>(
+        reinterpret_cast<void*>(GetProcAddress(GetModuleHandleA("kernel32.dll"), "wine_get_unix_file_name")));
+    if (!unixName) return path;
+    wchar_t wide[MAX_PATH];
+    if (MultiByteToWideChar(CP_ACP, 0, path.c_str(), -1, wide, MAX_PATH) == 0) return path;
+    char* converted = unixName(wide);
+    if (!converted) return path;
+    std::string out = converted;
+    HeapFree(GetProcessHeap(), 0, converted);
+    return out;
+}
+
+// The map the game shows, for the DLL server's MAP command: the files' names, and their full paths (as
+// the host sees them) when the game opened them.
 static std::string DllServerMapInfo() {
     MapLoadState state;
     CopyMapState(&state);
+    // The names from the game itself; what the opened files say when they cannot be read (the game
+    // does not always open the files again when it goes back to a map).
+    std::string terrain = state.mpr, base = state.base, quest = state.quest;
+    std::string gameTerrain, gameBase, gameQuest;
+    if (dllgame::GameMapNames(gameTerrain, gameBase, gameQuest)) {
+        terrain = gameTerrain;
+        base = gameBase;
+        quest = gameQuest;
+    }
     char text[512];
     snprintf(text, sizeof(text), "terrain=%s base=%s quest=%s script_maps=%d last_script_map=%s",
-        dlldebug::Quote(state.mpr).c_str(), dlldebug::Quote(state.base).c_str(), dlldebug::Quote(state.quest).c_str(),
+        dlldebug::Quote(terrain).c_str(), dlldebug::Quote(base).c_str(), dlldebug::Quote(quest).c_str(),
         state.extraCount, dlldebug::Quote(state.lastExtra).c_str());
-    return text;
+    std::string out = text;
+    const char* keys[] = {"terrain_path", "base_path", "quest_path"};
+    const char* names[] = {terrain.c_str(), base.c_str(), quest.c_str()};
+    for (int i = 0; i < 3; ++i) {
+        if (!names[i][0]) continue;
+        const std::string path = MapFilePath(names[i]);
+        if (!path.empty()) out += std::string(" ") + keys[i] + "=" + dlldebug::Quote(HostPath(path));
+    }
+    return out;
 }
 
 // "sub_4A1F20+0x12 <hint>" (or a known name) for an address in game.exe's code, "" elsewhere.

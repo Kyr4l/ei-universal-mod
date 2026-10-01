@@ -918,7 +918,19 @@ int RunGui(const GuiOptions& options) {
 
     viewer::Context* viewerCtx = viewer::Create(library);
     mapedit::Context* mapCtx = mapedit::Create(library);
-    dllconnect::Context* dllCtx = dllconnect::Create(library);
+    // The connector finds and opens the game's map through the Map Editor (switching to its tab).
+    int requestedFromDll = -1;
+    dllconnect::Hooks dllHooks;
+    dllHooks.resolveMap = [mapCtx](const std::string& t, const std::string& b, const std::string& q, const std::vector<std::string>& gp,
+                                   std::string& tp, std::vector<std::string>& mp, std::string& missing) {
+        return mapedit::ResolveGameMap(mapCtx, t, b, q, gp, tp, mp, missing);
+    };
+    dllHooks.openInMapEditor = [mapCtx, &requestedFromDll](const std::string& t, const std::string& b, const std::string& q,
+                                                          const std::vector<std::string>& gp) {
+        requestedFromDll = 2; // kMap
+        return mapedit::OpenGameMap(mapCtx, t, b, q, gp);
+    };
+    dllconnect::Context* dllCtx = dllconnect::Create(library, dllHooks);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
     enum { kFiles, kViewer, kMap, kSettings, kDll, kNone };
     // The tab asked for on the command line, else the one open when the GUI was last closed.
@@ -1002,6 +1014,7 @@ int RunGui(const GuiOptions& options) {
         bool shown3d = false;
         int shownTab = kNone;
         if (ImGui::BeginTabBar("##maintabs")) {
+            if (requestedFromDll >= 0) { requestedTab = requestedFromDll; requestedFromDll = -1; }
             auto flags = [&](int tab) { return requestedTab == tab ? ImGuiTabItemFlags_SetSelected : 0; };
             if (ImGui::BeginTabItem("File Processing", nullptr, flags(kFiles))) {
                 DrawFileProcessingTab(tabs, std::size(tabs));

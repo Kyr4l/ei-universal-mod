@@ -16,6 +16,7 @@
 #endif
 
 #include "connector_app.hpp"
+#include "radar.hpp"
 
 #include <algorithm>
 #include <atomic>
@@ -26,6 +27,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <deque>
+#include <functional>
 #include <iostream>
 #include <map>
 #include <mutex>
@@ -197,11 +199,34 @@ struct Context {
     double statsTime = 0;                              // when it arrived
     History cpu, workingSet, privateBytes;
     std::deque<std::string> log;                        // connection events and messages (not STATS)
-    char command[512] = "";                             // the Console's command line
+    char command[512] = "";                             // the Commands tab's command line
     std::vector<std::string> history;                   // and the commands sent
     int historyAt = -1;
     bool scrollToEnd = false;
-    explicit Context(Library& l) : lib(l) { wanted = lib.dllAutoConnect; }
+    Hooks hooks;
+    // The commands sent, oldest first, to route their answers (ROW / OK / ERR <WORD>): the tab's own
+    // polling (radar, game console, map) is not shown in the Commands log.
+    struct Pending { std::string word; bool internal; };
+    std::deque<Pending> pending;
+    // Radar.
+    std::vector<RadarUnit> units, incomingUnits;
+    double unitsTime = 0, nextUnitsPoll = 0, nextMapPoll = 0, radarShown = -100, consoleShown = -100;
+    RadarMap map;
+    RadarView view;
+    RadarCamera camera;
+    std::string mapMessage;
+    // The game's console.
+    std::vector<std::string> consoleLines;
+    std::string consoleInput, consoleStatus;
+    int consoleOpen = -1;                       // the game's console: 1 open, 0 closed, -1 not reported
+    unsigned consoleCount = 0;
+    double nextConsolePoll = 0;
+    char consoleCommand[512] = "";
+    std::vector<std::string> consoleHistory;
+    int consoleHistoryAt = -1;
+    bool consoleScroll = false;
+    Context(Library& l, Hooks h) : lib(l), hooks(std::move(h)) { wanted = lib.dllAutoConnect; }
+    ~Context() { map.Drop(); }
 };
 
 namespace {
@@ -211,18 +236,128 @@ void AddLog(Context& c, const std::string& text) {
     while (c.log.size() > 20000) c.log.pop_front();
 }
 
-// "WORD key=value key=value ..." -> the pairs.
+// "WORD key=value key="quoted value" ..." -> the pairs (quoted values unescaped: \" \\ \xHH).
 std::map<std::string, std::string> Pairs(const std::string& line) {
     std::map<std::string, std::string> out;
-    size_t pos = line.find(' ');
-    while (pos != std::string::npos) {
-        const size_t start = pos + 1;
-        pos = line.find(' ', start);
-        const std::string word = line.substr(start, pos == std::string::npos ? std::string::npos : pos - start);
-        const size_t eq = word.find('=');
-        if (eq != std::string::npos) out[word.substr(0, eq)] = word.substr(eq + 1);
+    size_t i = line.find(' ');
+    while (i != std::string::npos && i < line.size()) {
+        while (i < line.size() && line[i] == ' ') ++i;
+        const size_t eq = line.find('=', i);
+        const size_t space = line.find(' ', i);
+        if (eq == std::string::npos || (space != std::string::npos && space < eq)) { i = space; continue; }
+        const std::string key = line.substr(i, eq - i);
+        std::string value;
+        i = eq + 1;
+        if (i < line.size() && line[i] == '"') {
+            for (++i; i < line.size() && line[i] != '"'; ++i) {
+                if (line[i] == '\\' && i + 1 < line.size()) {
+                    ++i;
+                    if (line[i] == 'x' && i + 2 < line.size()) { value += static_cast<char>(std::strtoul(line.substr(i + 1, 2).c_str(), nullptr, 16)); i += 2; }
+                    else value += line[i];
+                } else {
+                    value += line[i];
+                }
+            }
+            ++i;
+        } else {
+            const size_t end = line.find(' ', i);
+            value = line.substr(i, end == std::string::npos ? std::string::npos : end - i);
+            i = end;
+        }
+        out[key] = value;
     }
     return out;
+}
+
+void SendCommand(Context& c, const std::string& command, bool internal) {
+    std::string word = command.substr(0, command.find(' '));
+    for (char& ch : word) ch = static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+    c.link.Send(command);
+    c.pending.push_back({word, internal});
+}
+
+// The map the game runs changed: load its files (found as the Map Editor would) for the radar.
+void LoadGameMap(Context& c, const std::map<std::string, std::string>& kv) {
+    auto get = [&](const char* k) { auto it = kv.find(k); return it == kv.end() ? std::string() : it->second; };
+    const std::string terrain = get("terrain"), base = get("base"), quest = get("quest");
+    std::vector<std::string> gamePaths;
+    for (const char* k : {"terrain_path", "base_path", "quest_path"})
+        if (!get(k).empty()) gamePaths.push_back(get(k));
+    if (terrain == c.map.terrainName && base == c.map.baseName && quest == c.map.questName && gamePaths == c.map.gamePaths) return;
+    c.map.Drop();
+    c.map.gamePaths = gamePaths;
+    c.map.terrainName = terrain;
+    c.map.baseName = base;
+    c.map.questName = quest;
+    c.view.pixelsPerUnit = 0;
+    c.view.followId = 0;
+    if (!c.hooks.resolveMap || terrain.empty()) return;
+    std::string terrainPath, missing;
+    std::vector<std::string> mobs;
+    c.hooks.resolveMap(terrain, base, quest, gamePaths, terrainPath, mobs, missing);
+    c.map.missing = missing;
+    if (!terrainPath.empty()) {
+        mpr::Map m;
+        std::string err;
+        if (mpr::Load(terrainPath, m, err)) c.map.BuildTerrain(m);
+        else c.map.missing += " " + terrain + " (" + err + ")";
+    }
+    for (const std::string& path : mobs) {
+        mob::File f;
+        if (mob::Load(path, f)) c.map.AddMob(f);
+    }
+    AddLog(c, "radar: map " + terrain + (base.empty() ? "" : " + " + base) + (quest.empty() ? "" : " + " + quest) +
+                  (missing.empty() ? "" : " (not found:" + missing + ")"));
+}
+
+// Answers to the tab's own commands.
+void HandleInternal(Context& c, const std::string& word, const std::string& line, bool last) {
+    const auto kv = Pairs(line);
+    auto num = [&](const char* k) { auto it = kv.find(k); return it == kv.end() ? 0.0 : std::atof(it->second.c_str()); };
+    if (word == "UNITS") {
+        if (line.compare(0, 4, "ROW ") == 0) {
+            RadarUnit u;
+            u.id = static_cast<unsigned>(std::strtoul(kv.count("id") ? kv.at("id").c_str() : "0", nullptr, 10));
+            u.side = static_cast<unsigned>(num("side"));
+            u.flags = static_cast<unsigned>(std::strtoul(kv.count("flags") ? kv.at("flags").c_str() : "0", nullptr, 16));
+            u.x = static_cast<float>(num("x")); u.y = static_cast<float>(num("y")); u.z = static_cast<float>(num("z"));
+            u.yaw = static_cast<float>(num("yaw"));
+            u.hp = static_cast<float>(num("hp")); u.hpMax = static_cast<float>(num("hpmax"));
+            u.mana = static_cast<float>(num("mp")); u.manaMax = static_cast<float>(num("mpmax"));
+            if (kv.count("name")) u.name = kv.at("name");
+            u.sight = static_cast<float>(num("sight")); u.viewAngle = static_cast<float>(num("fov"));
+            c.incomingUnits.push_back(u);
+        } else if (last) {
+            if (line.compare(0, 3, "OK ") == 0) { c.units.swap(c.incomingUnits); c.unitsTime = NowSeconds(); }
+            c.incomingUnits.clear();
+        }
+    } else if (word == "CONSOLE") {
+        if (line.compare(0, 4, "ROW ") == 0) {
+            const unsigned i = static_cast<unsigned>(num("i"));
+            if (i < 200000) {
+                if (c.consoleLines.size() <= i) c.consoleLines.resize(i + 1);
+                c.consoleLines[i] = kv.count("text") ? kv.at("text") : "";
+                c.consoleScroll = true;
+            }
+        } else if (line.compare(0, 4, "ERR ") == 0) {
+            c.consoleStatus = line.substr(12);
+        } else if (kv.count("sent")) {
+            c.consoleStatus = "sent: " + kv.at("sent");
+        } else {
+            const unsigned count = static_cast<unsigned>(num("count"));
+            if (count < c.consoleLines.size()) c.consoleLines.resize(count); // cleared in the game
+            c.consoleCount = count;
+            c.consoleInput = kv.count("input") ? kv.at("input") : "";
+            c.consoleOpen = kv.count("open") ? std::atoi(kv.at("open").c_str()) : -1;
+            if (c.consoleStatus.compare(0, 4, "sent") != 0) c.consoleStatus.clear();
+        }
+    } else if (word == "CAMERA" && last) {
+        c.camera.valid = line.compare(0, 3, "OK ") == 0;
+        c.camera.x = static_cast<float>(num("x")); c.camera.y = static_cast<float>(num("y"));
+        c.camera.targetX = static_cast<float>(num("tx")); c.camera.targetY = static_cast<float>(num("ty"));
+    } else if (word == "MAP" && last && line.compare(0, 3, "OK ") == 0) {
+        LoadGameMap(c, kv);
+    }
 }
 
 void Handle(Context& c, const std::string& line) {
@@ -237,6 +372,16 @@ void Handle(Context& c, const std::string& line) {
         return;
     }
     if (word == "HELLO") c.hello = Pairs(line);
+    const bool row = line.compare(0, 4, "ROW ") == 0, ok = line.compare(0, 3, "OK ") == 0 || line == "OK", err = line.compare(0, 4, "ERR ") == 0;
+    if ((row || ok || err) && !c.pending.empty()) {
+        const size_t start = row ? 4 : ok ? 3 : 4;
+        const std::string answered = line.substr(start, line.find(' ', start) - start);
+        if (answered == c.pending.front().word) {
+            const Context::Pending p = c.pending.front();
+            if (ok || err) c.pending.pop_front();
+            if (p.internal) { HandleInternal(c, p.word, line, ok || err); return; }
+        }
+    }
     AddLog(c, "< " + line);
 }
 
@@ -320,7 +465,7 @@ void StatisticsTab(Context& c) {
 }
 
 void Send(Context& c, const std::string& command) {
-    c.link.Send(command);
+    SendCommand(c, command, false);
     AddLog(c, "> " + command);
     if (c.history.empty() || c.history.back() != command) c.history.push_back(command);
     c.historyAt = -1;
@@ -340,7 +485,7 @@ int CommandCallback(ImGuiInputTextCallbackData* data) {
 
 // Commands to um.dll and everything it answers (not the statistics): the protocol and the commands are
 // described in resources/universal-mod/um-dll/dll_server.hpp; HELP lists them.
-void ConsoleTab(Context& c) {
+void CommandsTab(Context& c) {
     const bool connected = c.link.state == Link::Connected;
     ImGui::BeginDisabled(!connected);
     for (const char* quick : {"HELP", "INFO", "MAP", "THREADS", "BP list"}) {
@@ -379,7 +524,83 @@ void ConsoleTab(Context& c) {
 
 } // namespace
 
-Context* Create(Library& lib) { return new Context(lib); }
+// The radar: the units on the map, updated 5 times a second while it is shown.
+void RadarTab(Context& c) {
+    c.radarShown = NowSeconds();
+    const bool connected = c.link.state == Link::Connected;
+    if (!c.map.terrainName.empty()) {
+        ImGui::TextDisabled("%s%s%s", c.map.terrainName.c_str(), c.map.baseName.empty() ? "" : ("  " + c.map.baseName).c_str(),
+                            c.map.questName.empty() ? "" : ("  " + c.map.questName).c_str());
+        ImGui::SameLine();
+        ImGui::BeginDisabled(!c.hooks.openInMapEditor);
+        if (ImGui::SmallButton("Open in the Map Editor")) c.mapMessage = c.hooks.openInMapEditor(c.map.terrainName, c.map.baseName, c.map.questName, c.map.gamePaths);
+        ImGui::EndDisabled();
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Opens these files in the Map Editor tab (the quest, when there is one, as the Map Editor's Quest tab does)");
+        if (!c.map.missing.empty()) {
+            ImGui::SameLine();
+            ImGui::TextColored(ImVec4(0.95f, 0.7f, 0.3f, 1), "not found in the map folders:%s", c.map.missing.c_str());
+        }
+        if (!c.mapMessage.empty()) { ImGui::SameLine(); ImGui::TextDisabled("%s", c.mapMessage.c_str()); }
+    } else if (!connected) {
+        ImGui::TextDisabled("Not connected.");
+        return;
+    }
+    DrawRadar(c.view, c.map, c.units, c.camera, NowSeconds() - c.unitsTime < 2.0);
+}
+
+// The game's own console: its lines, and commands typed into it.
+int GameCommandCallback(ImGuiInputTextCallbackData* data) {
+    Context& c = *static_cast<Context*>(data->UserData);
+    if (data->EventFlag != ImGuiInputTextFlags_CallbackHistory || c.consoleHistory.empty()) return 0;
+    const int n = static_cast<int>(c.consoleHistory.size());
+    if (data->EventKey == ImGuiKey_UpArrow) c.consoleHistoryAt = c.consoleHistoryAt < 0 ? n - 1 : std::max(0, c.consoleHistoryAt - 1);
+    else if (data->EventKey == ImGuiKey_DownArrow) c.consoleHistoryAt = c.consoleHistoryAt < 0 || c.consoleHistoryAt + 1 >= n ? -1 : c.consoleHistoryAt + 1;
+    data->DeleteChars(0, data->BufTextLen);
+    if (c.consoleHistoryAt >= 0) data->InsertChars(0, c.consoleHistory[static_cast<size_t>(c.consoleHistoryAt)].c_str());
+    return 0;
+}
+
+void GameConsoleTab(Context& c) {
+    c.consoleShown = NowSeconds();
+    const bool connected = c.link.state == Link::Connected;
+    if (ImGui::Button("Clear")) { c.consoleLines.clear(); c.consoleCount = 0; } // shows the new lines only
+    ImGui::SameLine();
+    ImGui::TextDisabled("%u line(s) in the game's console%s%s", c.consoleCount, c.consoleInput.empty() ? "" : "; typed there: ",
+                        c.consoleInput.c_str());
+    const float lineHeight = ImGui::GetFrameHeightWithSpacing();
+    ImGui::BeginChild("##gamelog", ImVec2(0, -lineHeight * 2), ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar);
+    const bool atBottom = ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 4; // as last drawn: new lines keep it there
+    ImGuiListClipper clipper;
+    clipper.Begin(static_cast<int>(c.consoleLines.size()));
+    while (clipper.Step())
+        for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) ImGui::TextUnformatted(c.consoleLines[static_cast<size_t>(i)].c_str());
+    if (c.consoleScroll && atBottom) ImGui::SetScrollHereY(1.0f);
+    c.consoleScroll = false;
+    ImGui::EndChild();
+    ImGui::BeginDisabled(!connected || c.consoleOpen == 0);
+    ImGui::SetNextItemWidth(-90);
+    bool send = ImGui::InputTextWithHint("##gamecommand", "a command for the game's console; Enter sends it; Up/Down: the previous ones",
+                                         c.consoleCommand, sizeof(c.consoleCommand),
+                                         ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, GameCommandCallback, &c);
+    if (send) ImGui::SetKeyboardFocusHere(-1);
+    ImGui::SameLine();
+    send |= ImGui::Button("Send", ImVec2(-1, 0));
+    ImGui::EndDisabled();
+    if (send && c.consoleCommand[0]) {
+        std::string text = c.consoleCommand, quoted = "\"";
+        for (char ch : text) quoted += (ch == '"' || ch == '\\') ? std::string("\\") + ch : std::string(1, ch);
+        SendCommand(c, "CONSOLE send " + quoted + "\"", true);
+        if (c.consoleHistory.empty() || c.consoleHistory.back() != text) c.consoleHistory.push_back(text);
+        c.consoleHistoryAt = -1;
+        c.consoleCommand[0] = '\0';
+    }
+    if (c.consoleOpen == 0) ImGui::TextColored(ImVec4(0.95f, 0.7f, 0.3f, 1), "The console is closed in the game: open it there to send commands.");
+    else ImGui::TextDisabled("The command is typed into the game window, then Enter (needs DLL_SERVER_DEBUG=true). @, # and $ run script "
+                             "functions once cheats are on (thingamabob).");
+    if (!c.consoleStatus.empty()) { ImGui::SameLine(); ImGui::TextDisabled("  %s", c.consoleStatus.c_str()); }
+}
+
+Context* Create(Library& lib, Hooks hooks) { return new Context(lib, std::move(hooks)); }
 
 void Destroy(Context* ctx) {
     if (!ctx) return;
@@ -398,8 +619,31 @@ void Update(Context* ctx) {
     }
     // A new connection (seen before its first lines are read): forget the last one's greeting.
     const bool connected = c.link.state == Link::Connected || !lines.empty();
-    if (connected && !c.wasConnected) { AddLog(c, "connected to 127.0.0.1:" + std::to_string(c.lib.dllPort)); c.hello.clear(); }
+    if (connected && !c.wasConnected) {
+        AddLog(c, "connected to 127.0.0.1:" + std::to_string(c.lib.dllPort));
+        c.hello.clear();
+        c.pending.clear();
+        c.consoleLines.clear();
+        c.consoleCount = 0;
+        c.nextUnitsPoll = c.nextMapPoll = c.nextConsolePoll = 0;
+    }
     for (const std::string& line : lines) Handle(c, line);
+    // The tab's own polling: the map every 2 s, the units 5 times a second while the radar is shown, the
+    // console's new lines twice a second while it is shown (one request of a kind at a time).
+    if (c.link.state == Link::Connected) {
+        const double now = NowSeconds();
+        auto waiting = [&](const char* word) { for (const auto& p : c.pending) if (p.internal && p.word == word) return true; return false; };
+        if (now >= c.nextMapPoll && !waiting("MAP")) { SendCommand(c, "MAP", true); c.nextMapPoll = now + 2.0; }
+        if (now - c.radarShown < 1.0 && now >= c.nextUnitsPoll && !waiting("UNITS")) {
+            SendCommand(c, "UNITS", true);
+            if (!waiting("CAMERA")) SendCommand(c, "CAMERA", true);
+            c.nextUnitsPoll = now + 0.1;
+        }
+        if (now - c.consoleShown < 1.0 && now >= c.nextConsolePoll && !waiting("CONSOLE")) {
+            SendCommand(c, "CONSOLE lines " + std::to_string(c.consoleLines.size()), true);
+            c.nextConsolePoll = now + 0.5;
+        }
+    }
     if (!error.empty() && (c.wasConnected || !c.lib.dllAutoConnect)) AddLog(c, error); // retries stay quiet
     if (!connected && c.wasConnected) c.nextAttempt = NowSeconds() + 2.0;
     if (!error.empty()) c.nextAttempt = NowSeconds() + 2.0;
@@ -478,13 +722,15 @@ void DrawTab(Context* ctx) {
 
     ImGui::Spacing();
     if (ImGui::BeginTabBar("##dlltabs")) {
-        static const char* const names[] = {"Statistics", "Console"};
-        for (int i = 0; i < 2; ++i) {
+        static const char* const names[] = {"Statistics", "Radar", "Game console", "Commands"};
+        for (int i = 0; i < 4; ++i) {
             const ImGuiTabItemFlags flags = !c.tabRestored && lib.dllTab == i ? ImGuiTabItemFlags_SetSelected : 0;
             if (!ImGui::BeginTabItem(names[i], nullptr, flags)) continue;
             if (lib.dllTab != i && c.tabRestored) { lib.dllTab = i; lib.SaveConfig(); }
             if (i == 0) StatisticsTab(c);
-            else ConsoleTab(c);
+            else if (i == 1) RadarTab(c);
+            else if (i == 2) GameConsoleTab(c);
+            else CommandsTab(c);
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
