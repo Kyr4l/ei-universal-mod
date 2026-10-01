@@ -36,7 +36,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.2";
+static const char* const UM_VERSION = "1.3";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
@@ -74,6 +74,7 @@ static bool g_profilerEnabled = false;  // OVERLAY_PROFILER_ENABLED
 static volatile LONG g_profilerVisible = 0;
 static volatile LONG g_profilerRunning = 0;      // the sampler keeps going while this is 1
 static volatile DWORD g_profilerFrameThreadId = 0; // the thread that presents frames: the game's main thread
+static void (*volatile g_onMainThreadFrame)() = nullptr; // the DLL server's queued CALLs, run at every frame
 static HWND g_overlayWindow = NULL;
 static HWND g_overlayTargetWindow = NULL;
 static ULONGLONG g_overlayStartTickMs = 0;
@@ -686,15 +687,18 @@ static const SettingDef kSettings[] = {
 
     BoolSetting("DLL_SERVER_ENABLED", &g_dllServerEnabled, false, true,
         "; Let um-multitool (its UM DLL Connector tab) connect to the running game, to\n"
-        "; show its statistics. Only programs on this computer can connect. Needs a\n"
-        "; restart; (true/false)",
+        "; show its statistics. Only programs on this computer can connect, without a\n"
+        "; password: any of them can read the game's memory. Needs a restart; (true/false)",
         "; -- DLL server --"),
     IntSetting("DLL_SERVER_PORT", &g_dllServerPort, 1024, 65535, 18888, true,
         "; TCP port the DLL server listens on (1024-65535); the same as in um-multitool."),
     BoolSetting("DLL_SERVER_DEBUG", &g_dllServerDebug, false, true,
-        "; With the DLL server: also allow the commands that change the running game\n"
-        "; (writing its memory, hardware breakpoints), for debugging it. Reading is\n"
-        "; always allowed. Needs a restart; (true/false)"),
+        "; DEVELOPMENT ONLY - DANGEROUS. With the DLL server: also allow the commands\n"
+        "; that change the running game: writing its memory, hardware breakpoints,\n"
+        "; typing in its console, and CALL, which runs any code inside game.exe. Any\n"
+        "; program on this computer could then take control of the game process (an\n"
+        "; attack vector). Only turn it on in a safe, controlled development setup,\n"
+        "; never on a player's install. Needs a restart; (true/false)"),
 };
 static const size_t kSettingCount = sizeof(kSettings) / sizeof(kSettings[0]);
 
@@ -3483,6 +3487,7 @@ static LARGE_INTEGER g_overlayLastCountedFrameTime = {};
 static const double OVERLAY_MIN_FRAME_INTERVAL_MS = 2.0;
 
 static void CountPresentedFrame() {
+    if (g_onMainThreadFrame) g_onMainThreadFrame();
     if (g_overlayPerfFrequency.QuadPart == 0) {
         QueryPerformanceFrequency(&g_overlayPerfFrequency);
     }
@@ -6704,6 +6709,11 @@ UM_GUARDED_THREAD(DllServerThread) {
     host.mapInfo = DllServerMapInfo;
     host.gameFunction = DllServerGameFunction;
     host.mainThread = []() -> uint32_t { return g_profilerFrameThreadId; };
+    if (g_dllServerDebug) {
+        g_onMainThreadFrame = dllserver::RunQueuedCalls; // CALL (development only)
+        LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on: any program on this computer can write the game's memory and run "
+                        "code in it (CALL). Development only: turn it off in um.cfg outside a controlled development setup.");
+    }
     host.log = [](const char* level, const char* message) { LogLine(level, "%s", message); };
     dllserver::Run(g_dllServerPort, host);
     return 0;

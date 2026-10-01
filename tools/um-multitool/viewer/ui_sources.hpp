@@ -449,10 +449,6 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("How much the picture shows over the plain background (any picture: .jpg, .png, .bmp, .tga, .gif, .dds, .mmp...)");
     }
 
-    ImGui::SeparatorText("Map Editor");
-    if (ImGui::Checkbox("Logic mode shows only the selected unit's logic", &lib.logicSelectedOnly)) lib.SaveConfig();
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Off: every unit of the active map shows its paths, patrol points and radii");
-
     ImGui::Spacing();
     ImGui::SeparatorText("Found");
     ImGui::Text("%zu figures, %zu textures", lib.figureIndex.baseNames.size(), lib.textureIndex.names.size());

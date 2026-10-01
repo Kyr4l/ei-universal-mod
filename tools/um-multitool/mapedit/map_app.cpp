@@ -38,6 +38,8 @@
 #include "map_scene.hpp"
 #include "quest_file.hpp"
 #include "text_codec.hpp"
+#include "script_highlight.hpp"
+#include "../dllconnect/quests.hpp"
 #include "../subtools.hpp"
 
 namespace mapedit {
@@ -138,6 +140,13 @@ struct App {
     std::string terrainPath, terrainError;
     bool terrainDirty = false;               // (re)upload to GL in the next RenderGl
     std::vector<std::unique_ptr<MobEntry>> mobs;
+    // The loaded maps' scripts: their quests (with their .mq texts) and the areas they declare.
+    quests::Model scriptModel;
+    std::string scriptModelKey;
+    // Script tab -> Areas -> "Place here": the next click on the map moves that area there.
+    struct AreaPlace { bool on = false; std::string file; size_t index = 0; } areaPlace;
+    // Alt + drag on a script area in the view: the area followed (scene index), from where, by how much.
+    struct AreaDrag { bool on = false; std::string file; size_t index = 0; int scene = -1; float startX = 0, startY = 0, dx = 0, dy = 0; } areaDrag;
     int activeMob = 0;                       // the map whose objects can be selected (Ctrl+T)
     std::vector<std::string> loadOrder;      // paths of the loaded files, oldest first (U unloads the last)
     std::vector<Library::MapFile> folderFiles; // the map folders' files (Settings), for mapsVersion
@@ -765,6 +774,32 @@ static void OpenPaths(App& app, const std::vector<std::string>& paths) {
 // ------------------------------------------------------------------------------------------------
 // Checks
 // ------------------------------------------------------------------------------------------------
+
+// The scripts' areas and quests, built again when the loaded maps change.
+static void RefreshScriptModel(App& app) {
+    std::string key;
+    for (auto& m : app.mobs) key += m->file.path + "|" + std::to_string(m->file.bytes.size()) + ";";
+    if (key == app.scriptModelKey) return;
+    app.scriptModelKey = key;
+    app.scriptModel.Clear();
+    for (auto& m : app.mobs) {
+        const size_t before = app.scriptModel.quests.size();
+        quests::AddMob(app.scriptModel, m->file);
+        const size_t dot = m->file.path.find_last_of('.');
+        for (size_t i = before; i < app.scriptModel.quests.size(); ++i) {
+            quests::Quest& q = app.scriptModel.quests[i];
+            if (dot == std::string::npos || !quests::LoadTexts(m->file.path.substr(0, dot) + ".mq", q))
+                quests::LoadTexts(app.lib.questFolders, app.lib.questPacks, q);
+        }
+    }
+    app.scene.scriptAreas.clear();
+    for (const auto& [id, shapes] : app.scriptModel.areas)
+        for (const quests::Area& a : shapes) {
+            MapScene::ScriptArea s;
+            s.id = id; s.round = a.round; s.x = a.x; s.y = a.y; s.r = a.r; s.x2 = a.x2; s.y2 = a.y2;
+            app.scene.scriptAreas.push_back(s);
+        }
+}
 
 static void RunChecks(App& app) {
     app.database.Load(app.lib.dbPath);
@@ -2101,78 +2136,11 @@ static void ChecksTab(App& app) {
     }
 }
 
-// ------------------------------------------------------------------------------------------------
-// Script highlighting: comments, strings, numbers, the language's keywords and types, known commands
-// (um.dll's table, mob_script_functions.hpp), the scripts and global variables the file declares.
-// ------------------------------------------------------------------------------------------------
-
-struct ScriptNames {
-    std::unordered_set<std::string> scripts, globals; // lower-case
-};
-
-static ImVec4 TokenColor(const std::string& word, const ScriptNames& names) {
-    static const std::unordered_set<std::string> keywords = {"globalvars", "declarescript", "script", "worldscript", "if", "then", "else"};
-    static const std::unordered_set<std::string> types = {"object", "group", "float", "string"};
-    std::string lower = mobscript::LowerCase(word);
-    if (mobscript::IsNumberText(word)) return ImVec4(0.70f, 0.87f, 0.55f, 1);
-    if (keywords.count(lower)) return ImVec4(0.80f, 0.58f, 0.98f, 1);
-    if (types.count(lower)) return ImVec4(0.55f, 0.75f, 0.95f, 1);
-    if (mobscript::FunctionTable().count(lower)) return ImVec4(0.96f, 0.84f, 0.45f, 1);
-    if (names.scripts.count(lower)) return ImVec4(0.45f, 0.88f, 0.90f, 1);
-    if (names.globals.count(lower)) return ImVec4(0.72f, 0.80f, 1.0f, 1);
-    return ImGui::GetStyleColorVec4(ImGuiCol_Text);
-}
-
-// One line of script, token by token on the same row.
-// Splits one line of script into coloured pieces: fn(begin, end, colour).
-template <typename F> static void EachScriptToken(const char* begin, const char* end, const ScriptNames& names, F fn) {
-    const ImVec4 comment(0.48f, 0.62f, 0.48f, 1), string(0.90f, 0.64f, 0.44f, 1), punct(0.62f, 0.62f, 0.66f, 1);
-    const char* p = begin;
-    while (p < end) {
-        if (p + 1 < end && p[0] == '/' && p[1] == '/') { fn(p, end, comment); break; }
-        if (*p == '"') {
-            const char* q = p + 1;
-            while (q < end && *q != '"') ++q;
-            if (q < end) ++q;
-            fn(p, q, string);
-            p = q;
-        } else if (mobscript::IsWordChar(static_cast<unsigned char>(*p))) {
-            const char* q = p;
-            while (q < end && mobscript::IsWordChar(static_cast<unsigned char>(*q))) ++q;
-            fn(p, q, TokenColor(std::string(p, q), names));
-            p = q;
-        } else {
-            const char* q = p;
-            while (q < end && *q != '"' && !mobscript::IsWordChar(static_cast<unsigned char>(*q)) && !(q + 1 < end && q[0] == '/' && q[1] == '/')) ++q;
-            fn(p, q, punct);
-            p = q;
-        }
-    }
-}
-
-// One line of script, token by token on the same row.
-static void HighlightedLine(const char* begin, const char* end, const ScriptNames& names) {
-    bool first = true;
-    EachScriptToken(begin, end, names, [&](const char* b, const char* e, const ImVec4& color) {
-        if (b >= e) return;
-        if (!first) ImGui::SameLine(0.0f, 0.0f);
-        first = false;
-        ImGui::PushStyleColor(ImGuiCol_Text, color);
-        ImGui::TextUnformatted(b, e);
-        ImGui::PopStyleColor();
-    });
-    if (first) ImGui::TextUnformatted("");
-}
-
-// The names a script declares (its scripts and globals), for the highlighting.
-static ScriptNames NamesOf(const std::string& cp1251) {
-    ScriptNames names;
-    MobScriptReport report = CheckMobScript(cp1251);
-    for (const auto& kv : report.declarations.scripts) names.scripts.insert(kv.first);
-    for (const auto& name : report.declarations.defined) names.scripts.insert(name);
-    for (const auto& kv : report.declarations.globals) names.globals.insert(kv.first);
-    return names;
-}
+// Script highlighting: mapedit/script_highlight.hpp (shared with the UM DLL Connector).
+using scripthl::ScriptNames;
+using scripthl::EachScriptToken;
+using scripthl::HighlightedLine;
+using scripthl::NamesOf;
 
 // ---- script editing ----------------------------------------------------------------------------------
 
@@ -2364,7 +2332,82 @@ static int ScriptEditCallback(ImGuiInputTextCallbackData* d) {
 static void ScriptContent(App& app);
 
 // The Script tab: the script, or a note while it is in its own window.
+// One area call of a map's script rewritten with new numbers (an undo step; the script is saved with the map).
+static void SetAreaCall(App& app, MobEntry& m, const quests::AreaCall& a) {
+    std::string text = m.file.script;
+    if (a.end > text.size() || a.begin >= a.end) return;
+    text.replace(a.begin, a.end - a.begin, quests::FormatAreaCall(a));
+    if (CommitScript(app, m, codec::ToUtf8(std::vector<uint8_t>(text.begin(), text.end()), codec::Encoding::Cp1251)))
+        app.scriptModelKey.clear(); // the areas are read again
+}
+
+// The script area (its file and call) under a ground point: a circle containing it, else a rectangle.
+static bool AreaAt(App& app, float x, float y, std::string& file, size_t& index) {
+    for (auto& m : app.mobs) {
+        const std::vector<quests::AreaCall> calls = quests::AreaCalls(m->file.script);
+        for (size_t i = 0; i < calls.size(); ++i) {
+            const quests::AreaCall& a = calls[i];
+            const bool in = a.round ? std::hypot(x - a.v[0], y - a.v[1]) <= a.v[2]
+                                    : x >= std::min(a.v[0], a.v[2]) && x <= std::max(a.v[0], a.v[2]) && y >= std::min(a.v[1], a.v[3]) && y <= std::max(a.v[1], a.v[3]);
+            if (in) { file = m->file.path; index = i; return true; }
+        }
+    }
+    return false;
+}
+
+static void PlaceArea(App& app, float x, float y) {
+    MobEntry* m = FindMob(app, app.areaPlace.file);
+    if (!m) return;
+    std::vector<quests::AreaCall> calls = quests::AreaCalls(m->file.script);
+    if (app.areaPlace.index >= calls.size()) return;
+    quests::AreaCall a = calls[app.areaPlace.index];
+    if (a.round) { a.v[0] = x; a.v[1] = y; }
+    else {
+        const float w = a.v[2] - a.v[0], h = a.v[3] - a.v[1];
+        a.v[0] = x - w * 0.5f; a.v[1] = y - h * 0.5f; a.v[2] = a.v[0] + w; a.v[3] = a.v[1] + h;
+    }
+    SetAreaCall(app, *m, a);
+}
+
+// The areas the loaded maps' scripts declare, editable: their numbers (Enter applies), or "Place here".
+static void AreasPanel(App& app) {
+    int count = 0;
+    for (auto& m : app.mobs) count += static_cast<int>(quests::AreaCalls(m->file.script).size());
+    if (!ImGui::CollapsingHeader(("Areas (" + std::to_string(count) + ")###areas").c_str())) return;
+    if (count == 0) { ImGui::TextDisabled("No AddRoundToArea / AddRectToArea in the loaded maps' scripts."); return; }
+    ImGui::TextDisabled("The scripts' areas (Layers -> Script areas). Change a number and press Enter, or Place here then click the map:");
+    ImGui::TextDisabled("the call in the script is rewritten (undo with %s; saved with the map).", ui::BindName(app.lib.mapKeys[config::kKeyUndo]).c_str());
+    for (auto& m : app.mobs) {
+        const std::vector<quests::AreaCall> calls = quests::AreaCalls(m->file.script);
+        for (size_t i = 0; i < calls.size(); ++i) {
+            quests::AreaCall a = calls[i];
+            ImGui::PushID((m->file.path + "#" + std::to_string(i)).c_str());
+            ImGui::AlignTextToFramePadding();
+            ImGui::Text("Area %d %s", a.id, a.round ? "(circle)" : "(rectangle)");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", m->file.fileName.c_str());
+            ImGui::SameLine(150);
+            ImGui::SetNextItemWidth(std::max(160.0f, ImGui::GetContentRegionAvail().x - 110));
+            const bool changed = a.round ? ImGui::InputFloat3("##v", a.v, "%.2f", ImGuiInputTextFlags_EnterReturnsTrue)
+                                         : ImGui::InputFloat4("##v", a.v, "%.2f", ImGuiInputTextFlags_EnterReturnsTrue);
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip(a.round ? "x, y, radius" : "x1, y1, x2, y2 (two corners)");
+            if (changed) SetAreaCall(app, *m, a);
+            ImGui::SameLine();
+            const bool placing = app.areaPlace.on && app.areaPlace.file == m->file.path && app.areaPlace.index == i;
+            if (placing) ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.75f, 0.35f, 0.75f, 1));
+            if (ImGui::Button(placing ? "Click the map" : "Place here")) {
+                if (placing) app.areaPlace.on = false;
+                else { app.areaPlace.on = true; app.areaPlace.file = m->file.path; app.areaPlace.index = i; app.scene.options.scriptAreas = true; }
+            }
+            if (placing) ImGui::PopStyleColor();
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Then click the map: the area's centre moves there (Escape cancels)");
+            ImGui::PopID();
+        }
+    }
+    ImGui::Separator();
+}
+
 static void ScriptTab(App& app) {
+    AreasPanel(app);
     if (app.scriptWindow) {
         ImGui::TextWrapped("The script is shown in its own window.");
         if (ImGui::Button("Show it here again")) app.scriptWindow = false;
@@ -4445,10 +4488,32 @@ static void Toolbar(App& app) {
             if (ImGui::IsItemHovered())
                 ImGui::SetTooltip("Where units can walk, as the patrol simulation computes it (red: blocked): water, ground too\n"
                                   "steep, and the objects' parts near the ground. Not the game's own graph (AI_GRAPH).");
+            ImGui::Checkbox("Game navmesh (AI_GRAPH)", &o.navmesh);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("The graph stored in the map (its zone .mob): a node per 4 x 4 units; lines to the neighbours a\n"
+                                  "unit can step to (green cheap, red dear), red squares where it can go nowhere.");
+            ImGui::SetNextItemWidth(110);
+            ImGui::SliderInt("Navmesh layer", &o.navLayer, 0, mob::kAiLayers - 1);
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("The graph has 8 layers: units use the one of their AI class");
+            if (ImGui::Checkbox("Navmesh differences", &o.navCompare) && o.navCompare) app.scene.BuildWalkGrid();
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Where the game's graph (the layer above) and the computed walkability disagree, per 4 x 4 node:\n"
+                                  "orange: the game walks there, this editor finds it blocked;\n"
+                                  "blue: the game cannot walk there, this editor finds it open.\n"
+                                  "Now: %d orange, %d blue (an out-of-date graph shows many).",
+                                  app.scene.navCompareGame, app.scene.navCompareEditor);
+            ImGui::Checkbox("Script areas", &o.scriptAreas);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("The areas the maps' scripts declare (AddRoundToArea, AddRectToArea), magenta, labelled with\n"
+                                  "their number and the quest objectives that use them (QObjArea). %zu in the loaded maps.\nAlt + drag moves one (the script is rewritten).",
+                                  app.scene.scriptAreas.size());
             ImGui::Checkbox("Shadows", &o.shadows);
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("With the lighting on: the sun's shadows of the terrain and the figures, on the terrain");
             if (ImGui::Checkbox("Selected unit's logic", &app.lib.logicAlways)) app.lib.SaveConfig();
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("The selected units' paths, points and radii also show outside logic mode\n(their points are selected and moved in logic mode)");
+            if (ImGui::Checkbox("Logic: selected only", &app.lib.logicSelectedOnly)) app.lib.SaveConfig();
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("In logic mode, only the selected units show their paths, patrol points and radii.\nOff: every unit of the active map shows them.");
             ImGui::EndCombo();
         }
     }
@@ -4934,6 +4999,20 @@ static void Overlays(App& app, ImVec2 min, ImVec2 size) {
         draw->AddRectFilled(ImVec2(at.x - 2, at.y - 1), ImVec2(at.x + ts.x + 2, at.y + ts.y + 1), IM_COL32(0, 0, 0, 150), 3.0f);
         draw->AddText(at, color, text.c_str());
     };
+    // The scripts' areas: their number and the objectives that use them.
+    if (app.scene.options.scriptAreas) {
+        for (const MapScene::ScriptArea& a : app.scene.scriptAreas) {
+            std::string text = "Area " + std::to_string(a.id);
+            for (const quests::Quest& q : app.scriptModel.quests)
+                for (size_t k = 0; k < q.objectives.size(); ++k) {
+                    const quests::Call& c = q.objectives[k].call;
+                    if (c.name == "QObjArea" && !c.args.empty() && std::atoi(c.args[0].c_str()) == a.id)
+                        text += "\n" + q.name + " #" + std::to_string(k + 1) + (q.objectives[k].title.empty() ? "" : ": " + q.objectives[k].title);
+                }
+            const float cx = a.round ? a.x : (a.x + a.x2) * 0.5f, cy = a.round ? a.y : (a.y + a.y2) * 0.5f;
+            label({cx, cy, 0}, 0.5f, IM_COL32(245, 120, 245, 255), text);
+        }
+    }
     // A look point's wait, beside its eye (drawn in the scene).
     auto eye = [&](const mob::Vec3& p, float wait) { label(p, 0.0f, IM_COL32(150, 195, 255, 255), ui::Num(wait / 15.0f, 1) + " s"); };
     if (app.scene.logicMode || app.scene.logicAlways) {
@@ -5357,6 +5436,67 @@ static void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
         return;
     }
 
+    // Alt + drag on a script area: it follows the mouse; the script is rewritten once, on release.
+    if (app.areaDrag.on) {
+        fig::Vec3 g;
+        if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+            if (app.scene.GroundAt(local.x, local.y, g)) {
+                const float ddx = g.x - app.areaDrag.startX - app.areaDrag.dx, ddy = g.y - app.areaDrag.startY - app.areaDrag.dy;
+                app.areaDrag.dx += ddx; app.areaDrag.dy += ddy;
+                if (app.areaDrag.scene >= 0 && app.areaDrag.scene < static_cast<int>(app.scene.scriptAreas.size())) {
+                    MapScene::ScriptArea& s = app.scene.scriptAreas[app.areaDrag.scene];
+                    s.x += ddx; s.y += ddy; s.x2 += ddx; s.y2 += ddy;
+                }
+            }
+        } else {
+            app.areaDrag.on = false;
+            if (MobEntry* m = FindMob(app, app.areaDrag.file)) {
+                std::vector<quests::AreaCall> calls = quests::AreaCalls(m->file.script);
+                if (app.areaDrag.index < calls.size() && (app.areaDrag.dx != 0 || app.areaDrag.dy != 0)) {
+                    quests::AreaCall a = calls[app.areaDrag.index];
+                    a.v[0] += app.areaDrag.dx; a.v[1] += app.areaDrag.dy;
+                    if (!a.round) { a.v[2] += app.areaDrag.dx; a.v[3] += app.areaDrag.dy; }
+                    SetAreaCall(app, *m, a);
+                }
+            }
+            app.scriptModelKey.clear(); // the drawn areas come back from the script
+        }
+        app.hoverGround = hovered && app.scene.GroundAt(local.x, local.y, app.ground);
+        return;
+    }
+    if (io.KeyAlt && app.scene.options.scriptAreas && ImGui::IsItemActivated() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+        fig::Vec3 g;
+        std::string file;
+        size_t index = 0;
+        if (app.scene.GroundAt(local.x, local.y, g) && AreaAt(app, g.x, g.y, file, index)) {
+            app.areaDrag = App::AreaDrag{};
+            app.areaDrag.on = true;
+            app.areaDrag.file = file;
+            app.areaDrag.index = index;
+            app.areaDrag.startX = g.x;
+            app.areaDrag.startY = g.y;
+            // The drawn shape of this call (same id and place).
+            for (size_t i = 0; i < app.scene.scriptAreas.size(); ++i) {
+                const MapScene::ScriptArea& s = app.scene.scriptAreas[i];
+                const std::vector<quests::AreaCall> calls = quests::AreaCalls(FindMob(app, file)->file.script);
+                const quests::AreaCall& a = calls[index];
+                if (s.round == a.round && s.id == a.id && std::fabs(s.x - a.v[0]) < 1e-3f && std::fabs(s.y - a.v[1]) < 1e-3f) { app.areaDrag.scene = static_cast<int>(i); break; }
+            }
+            app.hoverGround = hovered && app.scene.GroundAt(local.x, local.y, app.ground);
+            return;
+        }
+    }
+    // Script tab -> Areas -> Place here: the click puts the area's centre there.
+    if (app.areaPlace.on) {
+        if (ImGui::IsKeyPressed(ImGuiKey_Escape)) app.areaPlace.on = false;
+        else if (ImGui::IsItemActivated() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+            fig::Vec3 g;
+            if (app.scene.GroundAt(local.x, local.y, g)) PlaceArea(app, g.x, g.y);
+            app.areaPlace.on = false;
+            app.hoverGround = hovered && app.scene.GroundAt(local.x, local.y, app.ground);
+            return;
+        }
+    }
     // Left button on an area handle of the open quest: resize or move that area.
     if (ImGui::IsItemActivated() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
         fig::Vec3 g;
@@ -5681,6 +5821,7 @@ bool Busy(Context* ctx) { return ctx->app.scene.modelsPending > 0 || ctx->app.te
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
     if (app.checksDirty || app.checkedVersion != app.lib.version) RunChecks(app);
+    RefreshScriptModel(app);
     RefreshLighting(app);
     ApplyLighting(app);
     app.scene.logicSelectedOnly = app.lib.logicSelectedOnly;

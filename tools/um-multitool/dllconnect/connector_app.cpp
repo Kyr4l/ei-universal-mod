@@ -17,8 +17,11 @@
 
 #include "connector_app.hpp"
 #include "radar.hpp"
+#include "quests.hpp"
+#include "mapedit/script_highlight.hpp"
 
 #include <algorithm>
+#include <set>
 #include <atomic>
 #include <chrono>
 #include <cstdarg>
@@ -225,6 +228,14 @@ struct Context {
     std::vector<std::string> consoleHistory;
     int consoleHistoryAt = -1;
     bool consoleScroll = false;
+    // Quests: the map's quests and scripts (from its files) and the game's state of them (VARS, SCRIPTS).
+    quests::Model quests;
+    std::map<std::string, float> vars, incomingVars;          // "q.z3xq3.z3xq3.4" -> 1
+    struct ScriptState { int map = 0; unsigned refs = 0; bool running = false; };
+    std::map<std::string, ScriptState> scriptStates, incomingScripts;
+    double questsShown = -100, nextQuestPoll = 0, varsTime = 0;
+    int scriptSource = 0, scrollToLine = -1;                  // the script view: the file shown, a line to show
+    std::vector<scripthl::ScriptNames> scriptNames;           // per source, for the highlighting
     Context(Library& l, Hooks h) : lib(l), hooks(std::move(h)) { wanted = lib.dllAutoConnect; }
     ~Context() { map.Drop(); }
 };
@@ -285,6 +296,9 @@ void LoadGameMap(Context& c, const std::map<std::string, std::string>& kv) {
         if (!get(k).empty()) gamePaths.push_back(get(k));
     if (terrain == c.map.terrainName && base == c.map.baseName && quest == c.map.questName && gamePaths == c.map.gamePaths) return;
     c.map.Drop();
+    c.quests.Clear();
+    c.scriptNames.clear();
+    c.scriptSource = 0;
     c.map.gamePaths = gamePaths;
     c.map.terrainName = terrain;
     c.map.baseName = base;
@@ -304,7 +318,17 @@ void LoadGameMap(Context& c, const std::map<std::string, std::string>& kv) {
     }
     for (const std::string& path : mobs) {
         mob::File f;
-        if (mob::Load(path, f)) c.map.AddMob(f);
+        if (!mob::Load(path, f)) continue;
+        c.map.AddMob(f);
+        const size_t before = c.quests.quests.size();
+        quests::AddMob(c.quests, f);
+        // The quests it declares take their texts from the .mq beside it (same name), else from the
+        // Settings' quest folders and language packs.
+        const size_t dot = path.find_last_of('.');
+        for (size_t i = before; i < c.quests.quests.size(); ++i) {
+            quests::Quest& q = c.quests.quests[i];
+            if (dot == std::string::npos || !quests::LoadTexts(path.substr(0, dot) + ".mq", q)) quests::LoadTexts(c.lib.questFolders, c.lib.questPacks, q);
+        }
     }
     AddLog(c, "radar: map " + terrain + (base.empty() ? "" : " + " + base) + (quest.empty() ? "" : " + " + quest) +
                   (missing.empty() ? "" : " (not found:" + missing + ")"));
@@ -350,6 +374,22 @@ void HandleInternal(Context& c, const std::string& word, const std::string& line
             c.consoleInput = kv.count("input") ? kv.at("input") : "";
             c.consoleOpen = kv.count("open") ? std::atoi(kv.at("open").c_str()) : -1;
             if (c.consoleStatus.compare(0, 4, "sent") != 0) c.consoleStatus.clear();
+        }
+    } else if (word == "VARS") {
+        if (line.compare(0, 4, "ROW ") == 0 && kv.count("name")) c.incomingVars[kv.at("name")] = static_cast<float>(num("value"));
+        else if (last) {
+            if (line.compare(0, 3, "OK ") == 0) { c.vars.swap(c.incomingVars); c.varsTime = NowSeconds(); }
+            c.incomingVars.clear();
+        }
+    } else if (word == "SCRIPTS") {
+        if (line.compare(0, 4, "ROW ") == 0 && kv.count("name")) {
+            Context::ScriptState& s = c.incomingScripts[kv.at("name")];
+            s.map = static_cast<int>(num("map"));
+            s.refs = std::max(s.refs, static_cast<unsigned>(num("refs")));
+            s.running = s.running || num("running") > 0;
+        } else if (last) {
+            if (line.compare(0, 3, "OK ") == 0) c.scriptStates.swap(c.incomingScripts);
+            c.incomingScripts.clear();
         }
     } else if (word == "CAMERA" && last) {
         c.camera.valid = line.compare(0, 3, "OK ") == 0;
@@ -560,6 +600,260 @@ int GameCommandCallback(ImGuiInputTextCallbackData* data) {
     return 0;
 }
 
+// ---- Quests ---------------------------------------------------------------------------------------------
+
+// What can be seen now of an objective's condition (from the units um.dll reports and the map files).
+std::string LiveCheck(const Context& c, const quests::Call& call, ImVec4& color) {
+    const ImVec4 good(0.5f, 0.85f, 0.5f, 1), bad(0.95f, 0.75f, 0.35f, 1), grey(0.6f, 0.6f, 0.6f, 1);
+    color = grey;
+    std::vector<const RadarUnit*> heroes;
+    for (const RadarUnit& u : c.units) if (!u.name.empty() && !u.Dead()) heroes.push_back(&u);
+    auto nearest = [&](float x, float y, const RadarUnit** who) {
+        float best = 1e30f;
+        for (const RadarUnit* h : heroes) {
+            const float d = std::hypot(h->x - x, h->y - y);
+            if (d < best) { best = d; if (who) *who = h; }
+        }
+        return best;
+    };
+    auto unitById = [&](unsigned id) -> const RadarUnit* { for (const RadarUnit& u : c.units) if (u.id == id) return &u; return nullptr; };
+    char buf[160];
+    const std::string a0 = call.args.empty() ? "" : call.args[0];
+    if (heroes.empty() && call.name != "QObjGetItem") return "(no player character seen)";
+    if (call.name == "QObjArea") {
+        auto it = c.quests.areas.find(std::atoi(a0.c_str()));
+        if (it == c.quests.areas.end()) return "area not declared in the scripts";
+        float best = 1e30f;
+        for (const quests::Area& a : it->second)
+            for (const RadarUnit* h : heroes) best = std::min(best, a.Distance(h->x, h->y));
+        color = best <= 0 ? good : bad;
+        snprintf(buf, sizeof(buf), best <= 0 ? "a hero is inside" : "nearest hero %.0f away", best);
+        return buf;
+    }
+    if (call.name == "QObjKillGroup") {
+        auto it = c.quests.groups.find(a0);
+        if (it == c.quests.groups.end()) return "group not filled by the scripts";
+        int alive = 0;
+        for (unsigned id : it->second) if (const RadarUnit* u = unitById(id); u && !u->Dead()) ++alive;
+        color = alive == 0 ? good : bad;
+        snprintf(buf, sizeof(buf), "%d of %zu alive", alive, it->second.size());
+        return buf;
+    }
+    if (call.name == "QObjSeeUnit" || call.name == "QObjKillUnit") {
+        const RadarUnit* u = unitById(quests::ObjectId(a0));
+        if (!u || u->Dead()) { color = call.name == "QObjKillUnit" ? good : grey; return u ? "dead" : "not seen (dead and looted, or not loaded)"; }
+        const RadarUnit* who = nullptr;
+        const float d = nearest(u->x, u->y, &who);
+        const bool inSight = who && who->sight > 0 && d <= who->sight;
+        color = call.name == "QObjSeeUnit" && inSight ? good : bad;
+        snprintf(buf, sizeof(buf), "alive, HP %.0f/%.0f, %.0f from %s%s", u->hp, u->hpMax, d, who ? who->name.c_str() : "?",
+                 inSight ? " (within sight range)" : "");
+        return buf;
+    }
+    if (call.name == "QObjSeeObject" || call.name == "QObjUse") {
+        auto it = c.quests.objects.find(quests::ObjectId(a0));
+        if (it == c.quests.objects.end()) return "object not in the map files";
+        const float d = nearest(it->second.x, it->second.y, nullptr);
+        color = call.name == "QObjSeeObject" && d <= 7.0f ? good : bad;
+        snprintf(buf, sizeof(buf), "nearest hero %.0f away%s", d, call.name == "QObjSeeObject" ? " (needs 7)" : "");
+        return buf;
+    }
+    if (call.name == "QObjGetItem") return "(the inventory is not read yet)";
+    return "";
+}
+
+// The map's scripts as text, with where they are: the condition a running script waits on, the quest's
+// objectives done or active. The engine gives no position inside WorldScript or an action list: only which
+// scripts run (they wait on their condition) and the quest variables.
+void ScriptView(Context& c) {
+    auto& sources = c.quests.sources;
+    if (sources.empty()) { ImGui::TextDisabled("No script in the map files."); return; }
+    if (c.scriptNames.size() != sources.size()) {
+        c.scriptNames.clear();
+        for (const quests::Source& s : sources) c.scriptNames.push_back(scripthl::NamesOf(s.cp1251));
+    }
+    c.scriptSource = std::min(c.scriptSource, static_cast<int>(sources.size()) - 1);
+    const ImVec4 waiting(1.0f, 0.86f, 0.4f, 1), done(0.5f, 0.85f, 0.5f, 1), dim(0.55f, 0.55f, 0.55f, 1);
+    // Markers per line of each file, and the lines where something waits.
+    struct Mark { std::string text; ImVec4 color; bool highlight = false; };
+    std::vector<std::map<int, Mark>> marks(sources.size());
+    const bool live = c.link.state == Link::Connected && !c.scriptStates.empty();
+    std::vector<int> firstWaiting(sources.size(), -1);
+    for (size_t si = 0; si < sources.size(); ++si) {
+        for (const quests::Source::Block& b : sources[si].blocks) {
+            auto it = c.scriptStates.find(b.name);
+            const bool running = live && it != c.scriptStates.end() && it->second.running;
+            if (!live) continue;
+            if (running && b.condFirst >= 0) {
+                for (int l = b.condFirst; l <= b.condLast; ++l) marks[si][l] = {l == b.condFirst ? "<- waiting" : "", waiting, true};
+                marks[si][b.header] = {"running", waiting};
+                if (firstWaiting[si] < 0 || b.condFirst < firstWaiting[si]) firstWaiting[si] = b.condFirst;
+            } else {
+                marks[si][b.header] = {"not running", dim};
+            }
+        }
+        if (sources[si].worldScript >= 0) marks[si][sources[si].worldScript] = {"(position unknown)", dim};
+    }
+    auto var = [&](const std::string& name) { auto it = c.vars.find(name); return it == c.vars.end() ? 0.0f : it->second; };
+    for (const quests::Quest& q : c.quests.quests) {
+        if (q.sourceIndex >= sources.size() || c.vars.empty()) continue;
+        for (size_t k = 0; k < q.objectives.size(); ++k) {
+            const int line = q.objectives[k].line;
+            if (line < 0) continue;
+            const float s = var("q." + q.name + "." + q.name + "." + std::to_string(k + 1));
+            if (s >= 2) marks[q.sourceIndex][line] = {"done", done};
+            else if (s >= 1) {
+                marks[q.sourceIndex][line] = {"<- active", waiting, true};
+                if (firstWaiting[q.sourceIndex] < 0) firstWaiting[q.sourceIndex] = line;
+            } else marks[q.sourceIndex][line] = {"-", dim};
+        }
+    }
+    // The file shown, and the buttons.
+    ImGui::SetNextItemWidth(260);
+    if (ImGui::BeginCombo("##scriptfile", sources[c.scriptSource].file.c_str())) {
+        for (size_t i = 0; i < sources.size(); ++i) {
+            const std::string label = sources[i].file + (firstWaiting[i] >= 0 ? "  (something waits)" : "");
+            if (ImGui::Selectable(label.c_str(), c.scriptSource == static_cast<int>(i))) c.scriptSource = static_cast<int>(i);
+        }
+        ImGui::EndCombo();
+    }
+    ImGui::SameLine();
+    const int si = c.scriptSource;
+    ImGui::BeginDisabled(firstWaiting[si] < 0);
+    if (ImGui::Button("Go to where it waits")) c.scrollToLine = firstWaiting[si];
+    ImGui::EndDisabled();
+    ImGui::SameLine();
+    ImGui::TextDisabled(live ? "%zu lines" : "%zu lines (not connected: no state)", sources[si].lines.size());
+    // The text: line number, marker, highlighted code.
+    const quests::Source& src = sources[si];
+    const float lineH = ImGui::GetTextLineHeightWithSpacing();
+    ImGui::BeginChild("##scripttext", ImVec2(0, std::max(200.0f, ImGui::GetContentRegionAvail().y)), ImGuiChildFlags_Borders,
+                      ImGuiWindowFlags_HorizontalScrollbar);
+    if (c.scrollToLine >= 0) { ImGui::SetScrollY(std::max(0.0f, c.scrollToLine * lineH - ImGui::GetWindowHeight() / 3)); c.scrollToLine = -1; }
+    const float numW = ImGui::CalcTextSize("00000").x, markW = ImGui::CalcTextSize("(position unknown) ").x;
+    ImGuiListClipper clipper;
+    clipper.Begin(static_cast<int>(src.lines.size()), lineH);
+    while (clipper.Step())
+        for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; ++i) {
+            const auto mk = marks[si].find(i);
+            const ImVec2 p = ImGui::GetCursorScreenPos();
+            if (mk != marks[si].end() && mk->second.highlight)
+                ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + ImGui::GetContentRegionAvail().x + ImGui::GetScrollMaxX() + 2000, p.y + lineH),
+                                                          ImGui::GetColorU32(ImVec4(0.45f, 0.36f, 0.08f, 0.45f)));
+            ImGui::TextDisabled("%4d", i + 1);
+            ImGui::SameLine(numW + 8);
+            if (mk != marks[si].end()) ImGui::TextColored(mk->second.color, "%s", mk->second.text.c_str());
+            else ImGui::TextUnformatted("");
+            ImGui::SameLine(numW + 8 + markW);
+            const char* b = src.utf8.data() + src.lines[i].first;
+            const char* e = src.utf8.data() + src.lines[i].second;
+            bool first = true;
+            scripthl::EachScriptToken(b, e, c.scriptNames[si], [&](const char* tb, const char* te, const ImVec4& color) {
+                if (tb >= te) return;
+                if (!first) ImGui::SameLine(0.0f, 0.0f);
+                first = false;
+                ImGui::TextColored(color, "%.*s", static_cast<int>(te - tb), tb);
+            });
+            if (first) ImGui::TextUnformatted("");
+        }
+    ImGui::EndChild();
+}
+
+void QuestsTab(Context& c) {
+    c.questsShown = NowSeconds();
+    const ImVec4 doneColor(0.5f, 0.85f, 0.5f, 1), activeColor(1.0f, 0.86f, 0.4f, 1), pendingColor(0.6f, 0.6f, 0.6f, 1);
+    if (c.link.state != Link::Connected) ImGui::TextDisabled("Not connected: the quests below are the map's, without the game's state.");
+    if (c.quests.quests.empty() && c.quests.scripts.empty()) {
+        ImGui::TextWrapped("No quest or script in the map the game runs (or its files were not found: see the Radar tab's message).");
+    }
+    auto var = [&](const std::string& name) { auto it = c.vars.find(name); return it == c.vars.end() ? 0.0f : it->second; };
+    // The variables of this map's quests (the others are listed apart).
+    std::set<std::string> known;
+    for (const quests::Quest& q : c.quests.quests) {
+        const std::string base = "q." + q.name + "." + q.name;
+        known.insert(base);
+        for (size_t k = 1; k <= q.objectives.size(); ++k) known.insert(base + "." + std::to_string(k));
+    }
+    for (const quests::Quest& q : c.quests.quests) {
+        const std::string base = "q." + q.name + "." + q.name;
+        known.insert(base);
+        const float state = var(base);
+        const char* status = state >= 2 ? "completed" : state >= 1 ? "running" : "not received";
+        ImGui::PushID(q.name.c_str());
+        const std::string header = (q.title.empty() ? q.name : q.title) + "  [" + status + "]  (" + q.name + ", " + q.file + ")###q";
+        ImGui::PushStyleColor(ImGuiCol_Text, state >= 2 ? doneColor : state >= 1 ? activeColor : pendingColor);
+        const bool open = ImGui::CollapsingHeader(header.c_str(), state == 1 ? ImGuiTreeNodeFlags_DefaultOpen : 0);
+        ImGui::PopStyleColor();
+        if (open) {
+            if (!q.text.empty()) { ImGui::PushTextWrapPos(); ImGui::TextDisabled("%s", q.text.c_str()); ImGui::PopTextWrapPos(); }
+            if (ImGui::BeginTable("##obj", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingStretchProp)) {
+                ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, 70);
+                ImGui::TableSetupColumn("Objective", ImGuiTableColumnFlags_WidthStretch, 1.0f);
+                ImGui::TableSetupColumn("Task", ImGuiTableColumnFlags_WidthStretch, 1.2f);
+                ImGui::TableSetupColumn("Now", ImGuiTableColumnFlags_WidthStretch, 1.2f);
+                ImGui::TableHeadersRow();
+                for (size_t k = 0; k < q.objectives.size(); ++k) {
+                    const quests::Objective& o = q.objectives[k];
+                    const std::string vn = base + "." + std::to_string(k + 1);
+                    known.insert(vn);
+                    const float s = var(vn);
+                    ImGui::TableNextRow();
+                    ImGui::TableNextColumn();
+                    ImGui::TextColored(s >= 2 ? doneColor : s >= 1 ? activeColor : pendingColor, "%s", s >= 2 ? "done" : s >= 1 ? "active" : "-");
+                    ImGui::TableNextColumn();
+                    ImGui::Text("%zu. %s", k + 1, o.title.empty() ? "(no text in the .mq)" : o.title.c_str());
+                    if (!o.text.empty() && ImGui::IsItemHovered()) {
+                        ImGui::BeginTooltip(); ImGui::PushTextWrapPos(ImGui::GetFontSize() * 30); ImGui::TextUnformatted(o.text.c_str());
+                        ImGui::PopTextWrapPos(); ImGui::EndTooltip();
+                    }
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(quests::Describe(c.quests, o.call).c_str());
+                    ImGui::TableNextColumn();
+                    if (s >= 2) { ImGui::TextDisabled("-"); continue; }
+                    ImVec4 col;
+                    const std::string live = LiveCheck(c, o.call, col);
+                    ImGui::TextColored(col, "%s", live.c_str());
+                }
+                ImGui::EndTable();
+            }
+        }
+        ImGui::PopID();
+    }
+    // Quest variables of other maps (quests received or done before), in the game's memory.
+    std::vector<std::pair<std::string, float>> others;
+    for (const auto& [n, v] : c.vars) if (!known.count(n)) others.push_back({n, v});
+    if (!others.empty() && ImGui::CollapsingHeader(("Other quest variables (" + std::to_string(others.size()) + ")").c_str())) {
+        for (const auto& [n, v] : others) ImGui::Text("%-36s %g", n.c_str(), v);
+    }
+    // The map's scripts.
+    if (!c.quests.scripts.empty() &&
+        ImGui::CollapsingHeader(("Scripts (" + std::to_string(c.quests.scripts.size()) + ")").c_str(), ImGuiTreeNodeFlags_DefaultOpen)) {
+        ImGui::TextDisabled("Running: started and not ended yet (waiting for its condition). From the references the script engine holds.");
+        if (ImGui::BeginTable("##scripts", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingStretchProp)) {
+            ImGui::TableSetupColumn("Script");
+            ImGui::TableSetupColumn("File");
+            ImGui::TableSetupColumn("State");
+            ImGui::TableHeadersRow();
+            for (const auto& [name, file] : c.quests.scripts) {
+                ImGui::TableNextRow();
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(name.c_str());
+                ImGui::TableNextColumn();
+                ImGui::TextDisabled("%s", file.c_str());
+                ImGui::TableNextColumn();
+                auto it = c.scriptStates.find(name);
+                if (c.link.state != Link::Connected || c.scriptStates.empty()) ImGui::TextDisabled("?");
+                else if (it == c.scriptStates.end()) ImGui::TextDisabled("not loaded");
+                else if (it->second.running) ImGui::TextColored(activeColor, "running");
+                else ImGui::TextColored(pendingColor, "ended or not started");
+            }
+            ImGui::EndTable();
+        }
+    }
+    // The scripts as text, with where they wait (last: it takes the rest of the height).
+    if (ImGui::CollapsingHeader("Script view", ImGuiTreeNodeFlags_DefaultOpen)) ScriptView(c);
+}
+
 void GameConsoleTab(Context& c) {
     c.consoleShown = NowSeconds();
     const bool connected = c.link.state == Link::Connected;
@@ -638,6 +932,15 @@ void Update(Context* ctx) {
             SendCommand(c, "UNITS", true);
             if (!waiting("CAMERA")) SendCommand(c, "CAMERA", true);
             c.nextUnitsPoll = now + 0.1;
+        }
+        // Quests: their state every 2 s, the units (for the live checks) twice a second, while shown.
+        if (now - c.questsShown < 1.0) {
+            if (now >= c.nextUnitsPoll && !waiting("UNITS")) { SendCommand(c, "UNITS", true); c.nextUnitsPoll = now + 0.5; }
+            if (now >= c.nextQuestPoll && !waiting("VARS") && !waiting("SCRIPTS")) {
+                SendCommand(c, "VARS q.", true);
+                SendCommand(c, "SCRIPTS", true);
+                c.nextQuestPoll = now + 2.0;
+            }
         }
         if (now - c.consoleShown < 1.0 && now >= c.nextConsolePoll && !waiting("CONSOLE")) {
             SendCommand(c, "CONSOLE lines " + std::to_string(c.consoleLines.size()), true);
@@ -722,15 +1025,17 @@ void DrawTab(Context* ctx) {
 
     ImGui::Spacing();
     if (ImGui::BeginTabBar("##dlltabs")) {
-        static const char* const names[] = {"Statistics", "Radar", "Game console", "Commands"};
-        for (int i = 0; i < 4; ++i) {
+        // New tabs go at the end: DLL_TAB in um-multitool.cfg keeps its numbers.
+        static const char* const names[] = {"Statistics", "Radar", "Game console", "Commands", "Quests"};
+        for (int i = 0; i < 5; ++i) {
             const ImGuiTabItemFlags flags = !c.tabRestored && lib.dllTab == i ? ImGuiTabItemFlags_SetSelected : 0;
             if (!ImGui::BeginTabItem(names[i], nullptr, flags)) continue;
             if (lib.dllTab != i && c.tabRestored) { lib.dllTab = i; lib.SaveConfig(); }
             if (i == 0) StatisticsTab(c);
             else if (i == 1) RadarTab(c);
             else if (i == 2) GameConsoleTab(c);
-            else CommandsTab(c);
+            else if (i == 3) CommandsTab(c);
+            else QuestsTab(c);
             ImGui::EndTabItem();
         }
         ImGui::EndTabBar();

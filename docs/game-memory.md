@@ -209,22 +209,66 @@ With them, the console can call the script functions: `SetCameraPosition`, `SetC
 um.dll's `CONSOLE send` types into the game window instead of calling it. That only works while the
 console is open; where the "console open" flag is stored is not known yet.
 
-## Scripts and quests (first look, z3xq1)
+## Scripts and quests
 
-- The script engine keeps each name as a game string with a map prefix: "!1!VCheck#1#1", "!1!BanditsChest"
-  ("!1!" = map 1). The declarations are entries of about 0xC0 bytes holding the name and small value
-  objects (classes 0x73D2D4, 0x73D304, 0x73D430, 0x73D2E0, 0x73D110).
-- When z3xq1 finished (the chest opened), heap objects of classes 0x73D294 and 0x73FF8C in that area were
-  freed, and the reference counts of the scripts' name strings fell from 2 to 1: running script instances
-  probably hold a reference to their name and are freed by KillScript(). Not confirmed.
-- Seeing the chest (`QObjSeeObject`) changed nothing in the script areas: quest objectives are kept by the
-  quest system. Two values next to the quest name, 0x007AFED0 and 0x007AFED4, rose by 2 at each completed
-  objective (4/5, 6/7, 8/9): perhaps journal entry counters.
-- The quest's texts come from its .mq ("quest z3xq1": the title, then `#subobj N` sections).
+Confirmed on z3xq2 and z3xq3 (every objective, start to end).
+
+**Quests.** A map script declares a quest with `QStart("z3xq3")` then one `QObj*` call per objective
+(sub-objective), and `QFinish()`. The game turns them into a chain of generated scripts, `Su0`, `Su1`...,
+one per objective, each waiting for its condition, then ending itself, starting the next one and setting the
+state variables (the conditions as the game writes them, from templates in game.exe around 0x78B9B5):
+
+| Call | Condition |
+|---|---|
+| `QObjArea(n)` | `any(i, Heroes, IsInArea(n, GetX(i), GetY(i)))`; areas come from `AddRoundToArea(n, x, y, r)` / `AddRectToArea(n, x1, y1, x2, y2)` |
+| `QObjKillGroup(g)` | `Not(any(i, g, IsAlive(i)))`; groups come from `AddObject(g, unit)` |
+| `QObjSeeUnit(u)` | `IsUnitVisible(u)` |
+| `QObjKillUnit(u)` | `Not(IsAlive(u))` |
+| `QObjGetItem(n)` | `HaveItem(0, n)` |
+| `QObjSeeObject(o)` | `any(i, Heroes, IsLess(DistanceUnitUnit(i, o), 7))` |
+| `QObjUse(o, state)` | the lever's state (`GetLeverState`) |
+
+**Quest state** = global script variables (`GSSetVar`): `q.<quest>.<quest>` is 1 while the quest runs and 2
+once completed; `q.<quest>.<quest>.<N>` is objective N: absent or 0 not received, 1 received (active), 2 done.
+A quest's .mq gives the first ones (`quest.reg`: "give quests q.z3xq3.z3xq3 q.z3xq3.z3xq3.1"). Each variable
+is a heap object of class 0x0073BCE8: +0x0C the name (char*), +0x18 the value (float); usually two copies,
+which agree. um.dll's `VARS [prefix]` lists them.
+
+The objective list itself is a global at 0x007AA608 (class 0x73D46C): an array of {type, text argument,
+number argument} (types 0xD7 Area, 0xDB KillGroup, 0xD9 SeeUnit, 0xDA KillUnit, 0xDD GetItem, 0xD8
+SeeObject, 0xDC Use), its count and capacity. The texts are in the .mq: the entry "quest <name>" holds the
+title, the description, then `#subobj N` sections (the objective's title line, then its description).
+
+**Scripts.** The script engine keeps each script's name as a game string with its map's prefix
+("!1!VCheck#3#2"); the declarations are entries of 0xC0 bytes (the name, the argument signature, value
+slots of classes 0x73D430, 0x73D2E0, 0x73D2D4, 0x73D110, 0x73D304). A script that runs (started and waiting
+for its condition) holds one more reference to its name string: 2 or more references = running. Seen with
+z3xq3's `VCheck#3#2` (waiting for the lever): 2 references until the lever was used, then 1. um.dll's
+`SCRIPTS` lists them. Most quest scripts run once (`KillScript()` first) and end at once.
+
+The counters 0x007AFED0 / 0x007AFED4 (they rise by 2 per objective) are the journal's message indexes,
+maintained by the interface (sub_5800C0, from the interface object at 0x0079B5C8): not the quest state.
+(The objects of classes 0x73D294 / 0x73FF8C first suspected to be scripts are scene and model nodes.)
+
+## Stance, weapons and orders
+
+- Stance: unit record +0x268 the stance asked for (writing it changes the stance: the game plays the
+  posture change), +0x264 the stance applied (read only), +0x2B8 the speed of that stance (x 10 = m/s): 0
+  crawl (0.128), 1 sneak (0.160), 2 walk (0.208), 3 run (0.480). Walk <-> run while standing is applied once
+  the unit moves; a unit does not move while its posture changes (about 1.2 s down, 1.6 s up from crawl).
+- Weapons: record +0x26C (and +0x270) the weapon slot in hand, 0-3 or -1 none (the game's weapon N is slot
+  N-1); +0x49C a type that seems to select the animation set (0x19 axe and spear, 0x10 dagger, 0xF bow and no
+  weapon). Read only: selecting is CUnitServer method 25, `0x553610(this = [record+0x240], slot)`.
+- [record+0x240] is the unit's CUnitServer (vtable 0x73EF38; the "senses" object above): its orders.
+  The current order is at +0x190, the pending one at +0x1B4 (0x24 bytes: type, ?, target unit (counted
+  reference), point x/y/z, flags); sub_54A900 moves the pending order into the current one. Types: 0 stand /
+  step, 1 move to a point, 3 attack, 5 cast?, 9 none. A player's click: sub_66FD70 (client side) ->
+  sub_5D39E0 (adds the formation offset) -> sub_554740 (move to point: pending type 1, z = 1000000 = ground).
+- game.exe is client/server: CWorldClient / CPlayerClient / CUnitClientSpecific and CWorldServer /
+  CUnitServer / CMapObjectServer; the host's server is authoritative (also in single player).
 
 ## Not known yet
 
 - The live diplomacy table, in case scripts change it during play.
-- The scripts that are running and their state.
 - A list or global pointer giving all units without a scan.
 - The meaning of each flag bit.

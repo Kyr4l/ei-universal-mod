@@ -35,6 +35,12 @@ struct Unit {
     float x, y, z, yaw; // yaw: the quaternion's angle about Z (the unit faces (sin yaw, -cos yaw))
     float hp, hpMax, mana, manaMax;
     float sight = 0, viewAngle = 0; // current sight range and view angle (degrees); 0 when unknown
+    // Record +0x264 the stance applied, +0x268 the one asked for (writing it changes the stance; +0x264
+    // follows once the posture changed, walk <-> run only once the unit moves): 0 crawl, 1 sneak, 2 walk,
+    // 3 run. +0x26C the weapon slot in hand (0-3, -1 none; read-only: CUnitServer method 25 selects),
+    // +0x49C the weapon's type (animation set?). -1 when unreadable.
+    int stance = -1, stanceWanted = -1, weaponSlot = -1;
+    uint32_t weaponType = 0;
 };
 
 // Reads one unit; false when the record is no longer a live or dead unit (freed, looted, not a unit).
@@ -66,6 +72,17 @@ inline bool ReadUnit(uint32_t record, Unit& u) {
     memcpy(&u.hpMax, s + 0x2C, 4);
     memcpy(&u.mana, s + 0x34, 4);
     memcpy(&u.manaMax, s + 0x38, 4);
+    uint8_t st[0x0C];
+    if (ReadMemory(record + 0x264, st, sizeof(st)) == sizeof(st)) {
+        uint32_t a, w, slot;
+        memcpy(&a, st, 4);
+        memcpy(&w, st + 4, 4);
+        memcpy(&slot, st + 8, 4);
+        u.stance = a <= 3 ? static_cast<int>(a) : -1;
+        u.stanceWanted = w <= 3 ? static_cast<int>(w) : -1;
+        u.weaponSlot = slot <= 3 ? static_cast<int>(slot) : -1;
+    }
+    ReadMemory(record + 0x49C, &u.weaponType, 4);
     uint32_t namePtr;
     memcpy(&namePtr, r + 0x238, 4);
     if (!ReadGameString(namePtr, u.name)) u.name.clear();
@@ -82,8 +99,67 @@ inline bool ReadUnit(uint32_t record, Unit& u) {
     return isfinite(u.x) && isfinite(u.y) && isfinite(u.hp);
 }
 
+// ---- script variables and scripts ----------------------------------------------------------------------
+// The script engine's global variables (GSSetVar / GSGetVar) are heap objects of class kVarClass: +0x0C
+// the name (char*), +0x18 the value (float). Quests keep their state in them: "q.<quest>.<quest>" 1 while
+// the quest runs, 2 once completed; "q.<quest>.<quest>.<N>" for objective N, 1 received (active), 2 done.
+// There are usually two copies of each variable; they agree.
+const uint32_t kVarClass = 0x0073BCE8;
+
+struct GameVar {
+    std::string name;
+    float value = 0;
+};
+
+inline bool ReadGameVar(uint32_t addr, GameVar& v) {
+    uint32_t w[8];
+    if (ReadMemory(addr, w, sizeof(w)) != sizeof(w) || w[0] != kVarClass || w[3] < 0x10000) return false;
+    char name[96];
+    const size_t got = ReadMemory(w[3], name, sizeof(name) - 1);
+    if (got == 0) return false;
+    name[got] = 0;
+    const size_t n = strnlen(name, got);
+    if (n == 0 || n >= got) return false;
+    for (size_t i = 0; i < n; ++i)
+        if (name[i] < 0x20 || name[i] > 0x7E) return false;
+    v.name.assign(name, n);
+    memcpy(&v.value, &w[6], 4);
+    return isfinite(v.value);
+}
+
+// A script's name as the script engine keeps it: a game string "!<map>!<name>" (refcount, length,
+// capacity, then the text). A script that runs (or waits for its condition) holds one more reference
+// to it: references >= 2 = running.
+struct ScriptName {
+    std::string name;
+    int map = 0;
+    uint32_t refs = 0;
+};
+
+inline bool ReadScriptName(uint32_t text, ScriptName& s) {
+    uint32_t h[3];
+    char t[72];
+    if (ReadMemory(text - 12, h, sizeof(h)) != sizeof(h)) return false;
+    const uint32_t refs = h[0], len = h[1], cap = h[2];
+    if (refs == 0 || refs > 10000 || len < 4 || len > 64 || cap < len + 1 || cap > 0x400) return false;
+    if (ReadMemory(text, t, len + 1) != len + 1 || t[len] != 0) return false;
+    if (t[0] != '!' || t[1] < '0' || t[1] > '9') return false;
+    size_t i = 2;
+    while (i < len && t[i] >= '0' && t[i] <= '9') ++i;
+    if (i >= len || t[i] != '!' || i + 1 >= len) return false;
+    for (size_t k = i + 1; k < len; ++k) {
+        const char ch = t[k];
+        if (!(isalnum(static_cast<unsigned char>(ch)) || ch == '#' || ch == '_' || ch == '.')) return false;
+    }
+    s.map = atoi(t + 1);
+    s.name.assign(t + i + 1, len - i - 1);
+    s.refs = refs;
+    return true;
+}
+
 // The unit records, found by a scan of the game's memory on a thread of its own (a scan takes a second
 // or two): it runs while someone asks for units (Want), every few seconds, so that new units appear.
+// The same pass finds the script variables and the scripts' names.
 class UnitScanner {
 public:
     void Want() {
@@ -107,13 +183,27 @@ public:
         return out;
     }
     void Rescan() { InterlockedExchange(&rescan_, 1); }
+    // The script variables' objects and the scripts' name strings found by the last scan.
+    std::vector<uint32_t> Variables(long long& ageMs) { return Copy(vars_, ageMs); }
+    std::vector<uint32_t> ScriptNames(long long& ageMs) { return Copy(scripts_, ageMs); }
 
 private:
     volatile LONG started_ = 0, ready_ = 0, rescan_ = 0;
     volatile ULONGLONG lastWantMs_ = 0;
     CRITICAL_SECTION lock_;
-    std::vector<uint32_t> records_;
+    std::vector<uint32_t> records_, vars_, scripts_;
     ULONGLONG scannedMs_ = 0;
+
+    std::vector<uint32_t> Copy(const std::vector<uint32_t>& from, long long& ageMs) {
+        std::vector<uint32_t> out;
+        ageMs = -1;
+        if (!ready_) return out;
+        EnterCriticalSection(&lock_);
+        out = from;
+        if (scannedMs_) ageMs = static_cast<long long>(GetTickCount64() - scannedMs_);
+        LeaveCriticalSection(&lock_);
+        return out;
+    }
 
     static DWORD WINAPI Thread(LPVOID self) {
         try {
@@ -125,16 +215,19 @@ private:
     void Loop() {
         for (;;) {
             if (GetTickCount64() - lastWantMs_ > 15000) { Sleep(200); continue; } // nobody is looking
-            std::vector<uint32_t> found = Scan();
+            std::vector<uint32_t> vars, scripts;
+            std::vector<uint32_t> found = Scan(vars, scripts);
             EnterCriticalSection(&lock_);
             records_.swap(found);
+            vars_.swap(vars);
+            scripts_.swap(scripts);
             scannedMs_ = GetTickCount64();
             LeaveCriticalSection(&lock_);
             for (int i = 0; i < 30 && !rescan_; ++i) Sleep(100); // every 3 s, or at once when asked
             InterlockedExchange(&rescan_, 0);
         }
     }
-    static std::vector<uint32_t> Scan() {
+    static std::vector<uint32_t> Scan(std::vector<uint32_t>& vars, std::vector<uint32_t>& scripts) {
         std::vector<uint32_t> out;
         std::vector<uint8_t> buf(1 << 20);
         for (const dlldebug::Region& r : dlldebug::Regions(0x10000, dlldebug::HighestAddress(), true)) {
@@ -144,9 +237,17 @@ private:
                 for (size_t i = 0; i + 4 <= got; i += 4) {
                     uint32_t v;
                     memcpy(&v, buf.data() + i, 4);
-                    if (v != kObjectClass) continue;
-                    Unit u;
-                    if (ReadUnit(at + static_cast<uint32_t>(i), u)) out.push_back(at + static_cast<uint32_t>(i));
+                    const uint32_t addr = at + static_cast<uint32_t>(i);
+                    if (v == kObjectClass) {
+                        Unit u;
+                        if (ReadUnit(addr, u)) out.push_back(addr);
+                    } else if (v == kVarClass) {
+                        GameVar gv;
+                        if (ReadGameVar(addr, gv)) vars.push_back(addr);
+                    } else if ((v & 0xFF) == '!' && ((v >> 8) & 0xFF) >= '0' && ((v >> 8) & 0xFF) <= '9') {
+                        ScriptName sn;
+                        if (ReadScriptName(addr, sn)) scripts.push_back(addr);
+                    }
                 }
                 if (got == 0) break;
             }

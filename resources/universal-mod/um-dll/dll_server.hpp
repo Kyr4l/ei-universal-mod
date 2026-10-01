@@ -2,7 +2,13 @@
 // "UM DLL Connector" tab (and `um-multitool dll`) connects to while the game runs. Off unless
 // DLL_SERVER_ENABLED=true in um.cfg. Only this computer can connect (the socket is bound to the loopback
 // address). It reports statistics, and is a debugger for the game (dll_debug.hpp): what reads is always
-// on; what changes the game (WRITE, POKE, breakpoints) needs DLL_SERVER_DEBUG=true as well.
+// on; what changes the game (WRITE, POKE, breakpoints, CONSOLE send, CALL) needs DLL_SERVER_DEBUG=true as well.
+//
+// SECURITY: there is no authentication; any program on this computer can connect. Reading already exposes
+// the game's memory. With DLL_SERVER_DEBUG, a client can write memory and, with CALL, run arbitrary code
+// inside game.exe: that makes the game process an attack vector. DLL_SERVER_DEBUG is for development in a
+// safe, controlled environment only; it is off by default, um.cfg is not shipped (git-ignored, excluded
+// from releases), and um.dll logs a WARN line at start while it is on.
 //
 // The protocol is text, one message per line ('\n'), words separated by spaces, values as key=value (text
 // that may hold spaces is quoted, "...", with \" \\ \xHH escapes). A command is answered by zero or more
@@ -237,8 +243,11 @@ private:
     void WatchCommand(Client& c, const std::vector<std::string>& w);
     void Breakpoints(Client& c, const std::vector<std::string>& w);
     void Write(Client& c, const std::vector<std::string>& w, bool typed);
+    void Call(Client& c, const std::vector<std::string>& w);
     void SendEvents(Client& c);
     void Units(Client& c, const std::vector<std::string>& w);
+    void Vars(Client& c, const std::vector<std::string>& w);
+    void Scripts(Client& c, const std::vector<std::string>& w);
     void ConsoleCommand(Client& c, const std::vector<std::string>& w);
     void RefreshBreakpointThreads(bool all);
 };
@@ -269,7 +278,12 @@ inline void Server::Help(Client& c) {
         "                                      (a data breakpoint reports the instruction AFTER the access; hits never pause the game)",
         "WRITE addr hexbytes                   writes bytes  [debug]",
         "POKE addr type value                  writes a typed value  [debug]",
+        "CALL fn [this=obj] [cc=this|std|cdecl] [arg ...]   calls a game function on the game's main thread at its next",
+        "                                      frame (args: numbers, f:1.5 for a float; up to 6); answers eax  [debug]",
+        "                                      (development only; default cc: this with this=, else std; a wrong call can crash the game)",
         "UNITS [rescan]                        the game's units: id, position, facing (yaw), side, HP, mana, flags, sight, view angle, name (players)",
+        "VARS [prefix]                         the script engine's global variables (quests: q.<quest>.<quest> 1 running 2 done; .<N> objective N 1 active 2 done)",
+        "SCRIPTS [prefix]                      the scripts' names the script engine holds, with their map and references (2 or more = running or waiting)",
         "CAMERA                                the game camera: position, rotation quaternion, the point it aims at",
         "CONSOLE lines [from] [max]            the in-game console's lines (from index from, default 0), and its input line",
         "CONSOLE send text                     types the text in the game window and presses Enter; refused while the console is closed  [debug]",
@@ -737,6 +751,103 @@ inline void Server::Breakpoints(Client& c, const std::vector<std::string>& w) {
     Ok(c, "BP", "slot=" + std::to_string(slot) + " threads=" + std::to_string(bpThreads_.size()));
 }
 
+// ---- CALL: game functions run on the game's main thread (development only, DLL_SERVER_DEBUG) ----------
+// DANGEROUS by design: it runs whatever address a client gives, with its arguments, inside game.exe (see
+// SECURITY at the top of this file). It exists to research the game's functions during development.
+// The server's thread queues one call; the main thread runs it at its next frame (RunQueuedCalls, called
+// by um.dll's frame hook) and the server waits for the result. One call at a time; each is logged.
+enum class CallConv { This, Std, Cdecl };
+struct QueuedCall {
+    uint32_t fn = 0, self = 0, result = 0;
+    CallConv conv = CallConv::Std;
+    std::vector<uint32_t> args;
+    volatile LONG state = 0; // 0 queued, 1 running, 2 done, 3 given up before it ran
+};
+static QueuedCall* volatile g_queuedCall = nullptr;
+
+template <class... A> uint32_t CallThis(uint32_t fn, uint32_t self, A... a) {
+    return reinterpret_cast<uint32_t(__attribute__((thiscall)) *)(uint32_t, A...)>(fn)(self, a...);
+}
+template <class... A> uint32_t CallStd(uint32_t fn, A... a) { return reinterpret_cast<uint32_t(__attribute__((stdcall)) *)(A...)>(fn)(a...); }
+template <class... A> uint32_t CallCdecl(uint32_t fn, A... a) { return reinterpret_cast<uint32_t(__attribute__((cdecl)) *)(A...)>(fn)(a...); }
+template <class F> uint32_t WithArgs(const std::vector<uint32_t>& v, F f) {
+    switch (v.size()) {
+    case 0: return f();
+    case 1: return f(v[0]);
+    case 2: return f(v[0], v[1]);
+    case 3: return f(v[0], v[1], v[2]);
+    case 4: return f(v[0], v[1], v[2], v[3]);
+    case 5: return f(v[0], v[1], v[2], v[3], v[4]);
+    default: return f(v[0], v[1], v[2], v[3], v[4], v[5]);
+    }
+}
+
+// On the game's main thread, at every frame.
+inline void RunQueuedCalls() {
+    QueuedCall* q = g_queuedCall;
+    if (!q || InterlockedCompareExchange(&q->state, 1, 0) != 0) return;
+    switch (q->conv) {
+    case CallConv::This: q->result = WithArgs(q->args, [q](auto... a) { return CallThis(q->fn, q->self, a...); }); break;
+    case CallConv::Std: q->result = WithArgs(q->args, [q](auto... a) { return CallStd(q->fn, a...); }); break;
+    default: q->result = WithArgs(q->args, [q](auto... a) { return CallCdecl(q->fn, a...); }); break;
+    }
+    InterlockedExchange(&q->state, 2);
+}
+
+inline void Server::Call(Client& c, const std::vector<std::string>& w) {
+    if (!host_.debugAllowed) return Err(c, "CALL", "calling needs DLL_SERVER_DEBUG=true in um.cfg");
+    if (!host_.mainThread || !host_.mainThread()) return Err(c, "CALL", "the game's main thread is not known yet (no frame drawn)");
+    auto* q = new QueuedCall;
+    bool convGiven = false, thisGiven = false;
+    if (w.size() < 2 || !ParseAddress(w[1], q->fn) || q->fn < 0x10000) { delete q; return Err(c, "CALL", "usage: CALL fn [this=obj] [cc=this|std|cdecl] [arg ...]"); }
+    for (size_t i = 2; i < w.size(); ++i) {
+        const std::string& a = w[i];
+        if (a.rfind("this=", 0) == 0) {
+            if (!ParseAddress(a.substr(5), q->self)) { delete q; return Err(c, "CALL", "bad this " + a); }
+            thisGiven = true;
+        } else if (a.rfind("cc=", 0) == 0) {
+            const std::string cc = a.substr(3);
+            q->conv = cc == "this" ? CallConv::This : cc == "cdecl" ? CallConv::Cdecl : CallConv::Std;
+            convGiven = true;
+        } else if (a.rfind("f:", 0) == 0) {
+            const float v = strtof(a.c_str() + 2, nullptr);
+            uint32_t bits;
+            memcpy(&bits, &v, 4);
+            q->args.push_back(bits);
+        } else {
+            int64_t v;
+            if (!ParseNumber(a, v)) { delete q; return Err(c, "CALL", "bad argument " + a); }
+            q->args.push_back(static_cast<uint32_t>(v));
+        }
+    }
+    if (!convGiven && thisGiven) q->conv = CallConv::This;
+    if (q->conv == CallConv::This && !thisGiven) { delete q; return Err(c, "CALL", "a thiscall needs this=obj"); }
+    if (q->args.size() > 6) { delete q; return Err(c, "CALL", "6 arguments at most"); }
+    if (InterlockedCompareExchangePointer(reinterpret_cast<void* volatile*>(&g_queuedCall), q, nullptr) != nullptr) {
+        delete q;
+        return Err(c, "CALL", "another call is waiting");
+    }
+    std::string argText;
+    for (uint32_t a : q->args) argText += " " + Hex(a);
+    Log("INFO", "DLL server: CALL " + Hex(q->fn) + (thisGiven ? " this=" + Hex(q->self) : std::string()) + argText);
+    const ULONGLONG start = GetTickCount64();
+    while (q->state != 2 && GetTickCount64() - start < 5000) Sleep(1);
+    // Not run within 5 s (the game shows no frames): give it up, unless it started meanwhile.
+    if (q->state != 2 && InterlockedCompareExchange(&q->state, 3, 0) == 0) {
+        g_queuedCall = nullptr;
+        delete q;
+        return Err(c, "CALL", "the game did not run it within 5 s (no frame drawn: minimized, loading?)");
+    }
+    while (q->state != 2) Sleep(1); // it is running: wait for it to return
+    const uint32_t result = q->result;
+    g_queuedCall = nullptr;
+    delete q;
+    char text[96];
+    snprintf(text, sizeof(text), "result=%s (%ld) ms=%llu", Hex(result).c_str(), static_cast<long>(static_cast<int32_t>(result)),
+             static_cast<unsigned long long>(GetTickCount64() - start));
+    Ok(c, "CALL", text);
+}
+
 inline void Server::Write(Client& c, const std::vector<std::string>& w, bool typed) {
     const char* cmd = typed ? "POKE" : "WRITE";
     if (!host_.debugAllowed) return Err(c, cmd, "writing needs DLL_SERVER_DEBUG=true in um.cfg");
@@ -777,12 +888,58 @@ inline void Server::Units(Client& c, const std::vector<std::string>& w) {
         snprintf(text, sizeof(text), "addr=%s id=%lu x=%.2f y=%.2f z=%.2f yaw=%.3f side=%lu hp=%.2f hpmax=%.2f mp=%.2f mpmax=%.2f flags=0x%lX",
                  Hex(u.record).c_str(), static_cast<unsigned long>(u.id), u.x, u.y, u.z, u.yaw, static_cast<unsigned long>(u.side),
                  u.hp, u.hpMax, u.mana, u.manaMax, static_cast<unsigned long>(u.flags));
-        char senses[64];
-        snprintf(senses, sizeof(senses), " sight=%.2f fov=%.1f", u.sight, u.viewAngle);
+        char senses[160];
+        static const char* const kStances[] = {"crawl", "sneak", "walk", "run"};
+        snprintf(senses, sizeof(senses), " sight=%.2f fov=%.1f stance=%s wanted=%s weapon=%d wtype=0x%lX", u.sight, u.viewAngle,
+                 u.stance >= 0 ? kStances[u.stance] : "?", u.stanceWanted >= 0 ? kStances[u.stanceWanted] : "?", u.weaponSlot,
+                 static_cast<unsigned long>(u.weaponType));
         Row(c, "UNITS", std::string(text) + senses + (u.name.empty() ? "" : " name=" + Quote(u.name)));
         ++count;
     }
     Ok(c, "UNITS", "count=" + std::to_string(count) + " scan_age_ms=" + std::to_string(age));
+}
+
+// The script variables found by the unit scan (same thread, every 3 s while asked), one row per name
+// (copies merged; "values" lists them when they differ).
+inline void Server::Vars(Client& c, const std::vector<std::string>& w) {
+    scanner_.Want();
+    const std::string prefix = w.size() > 1 ? w[1] : "";
+    long long age = -1;
+    std::map<std::string, std::vector<float>> byName;
+    for (uint32_t a : scanner_.Variables(age)) {
+        dllgame::GameVar v;
+        if (dllgame::ReadGameVar(a, v) && v.name.compare(0, prefix.size(), prefix) == 0) byName[v.name].push_back(v.value);
+    }
+    for (const auto& [name, values] : byName) {
+        char text[64];
+        snprintf(text, sizeof(text), " value=%g copies=%zu", values.back(), values.size());
+        std::string row = "name=" + Quote(name) + text;
+        if (std::any_of(values.begin(), values.end(), [&](float x) { return x != values[0]; })) {
+            row += " values=";
+            for (size_t i = 0; i < values.size(); ++i) { char b[24]; snprintf(b, sizeof(b), "%s%g", i ? "," : "", values[i]); row += b; }
+        }
+        Row(c, "VARS", row);
+    }
+    Ok(c, "VARS", "count=" + std::to_string(byName.size()) + " scan_age_ms=" + std::to_string(age));
+}
+
+// The scripts' names held by the script engine: per name and map, the most references of its copies.
+inline void Server::Scripts(Client& c, const std::vector<std::string>& w) {
+    scanner_.Want();
+    const std::string prefix = w.size() > 1 ? w[1] : "";
+    long long age = -1;
+    std::map<std::pair<int, std::string>, std::pair<uint32_t, int>> byName; // -> (most references, copies)
+    for (uint32_t a : scanner_.ScriptNames(age)) {
+        dllgame::ScriptName s;
+        if (!dllgame::ReadScriptName(a, s) || s.name.compare(0, prefix.size(), prefix) != 0) continue;
+        auto& e = byName[{s.map, s.name}];
+        e.first = std::max(e.first, s.refs);
+        ++e.second;
+    }
+    for (const auto& [key, e] : byName)
+        Row(c, "SCRIPTS", "name=" + Quote(key.second) + " map=" + std::to_string(key.first) + " refs=" + std::to_string(e.first) +
+                              " copies=" + std::to_string(e.second) + " running=" + (e.first >= 2 ? "1" : "0"));
+    Ok(c, "SCRIPTS", "count=" + std::to_string(byName.size()) + " scan_age_ms=" + std::to_string(age));
 }
 
 inline void Server::ConsoleCommand(Client& c, const std::vector<std::string>& w) {
@@ -843,7 +1000,10 @@ inline bool Server::Handle(Client& c, const std::string& line) {
     else if (cmd == "BP") Breakpoints(c, w);
     else if (cmd == "WRITE") Write(c, w, false);
     else if (cmd == "POKE") Write(c, w, true);
+    else if (cmd == "CALL") Call(c, w);
     else if (cmd == "UNITS") Units(c, w);
+    else if (cmd == "VARS") Vars(c, w);
+    else if (cmd == "SCRIPTS") Scripts(c, w);
     else if (cmd == "CONSOLE") ConsoleCommand(c, w);
     else if (cmd == "CAMERA") {
         dllgame::Camera cam;

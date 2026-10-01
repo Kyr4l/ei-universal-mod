@@ -9,7 +9,16 @@ Turn the server on in `um.cfg`, next to um.dll, then start the game:
 |---|---|---|
 | `DLL_SERVER_ENABLED` | false | turns the server on |
 | `DLL_SERVER_PORT` | 18888 | the port, the same as in the tab |
-| `DLL_SERVER_DEBUG` | false | allows the commands that change the game: writing memory, breakpoints, `CONSOLE send` |
+| `DLL_SERVER_DEBUG` | false | **development only, dangerous**: allows the commands that change the game: writing memory, breakpoints, `CONSOLE send`, and `CALL` (runs any code in the game) |
+
+**Security.** The server has no password: any program running on the same computer can connect.
+- With the server on, any of them can read the game's memory.
+- With `DLL_SERVER_DEBUG=true`, any of them can also change the game's memory and run any code inside
+  game.exe (`CALL`). The game process then becomes an attack vector for whatever else runs on the
+  computer.
+- Turn `DLL_SERVER_DEBUG` on only in a safe, controlled development environment, and never on a
+  player's install. It is off by default; um.cfg is not shipped with the mod; um.dll writes a WARN
+  line to um.log at start while it is on.
 
 The tab's top bar has the port, Connect / Disconnect, and **Connect automatically**. With it on, the
 tab retries every 2 seconds, so it connects as soon as the game starts. It is off by default.
@@ -48,6 +57,24 @@ The files are found in the map folders, the quest folders, or next to the quest 
 - The command line under them types a command into the game window and presses Enter. Open the
   console in the game first: otherwise the keys reach the game as shortcuts. It needs
   `DLL_SERVER_DEBUG=true`.
+
+**Quests**: the quests of the map the game runs, from its files, with the game's state of them.
+- Each quest declared by the map's scripts (`QStart` and its `QObj*` calls): its title and description
+  (from its .mq: beside the .mob, else the quest folders and language packs of the Settings, English
+  first), running or completed.
+- Its objectives in order: done, active or not received yet (from the game's quest variables), the
+  objective's title (its description on hover), what it asks (the unit, group, area or object it names,
+  with the unit's name from the .mob), and for the active ones what can be seen now: whether the unit is
+  alive, its HP and how far the nearest player is (and if within sight range), how many of a group are
+  alive, how far a player is from an area or an object (7 units for "find").
+- Quest variables of other quests (received or done before).
+- The map's scripts, running (started, waiting for their condition) or not.
+- **Script view**: a map file's script (the list marks the files where something waits), highlighted as
+  in the Map Editor, with markers in the margin: "<- waiting" on the condition of each running script
+  (highlighted: a script stuck there waits for that condition), "running" / "not running" on each
+  `Script` line, "done" / "<- active" on the quest's `QObj` lines. **Go to where it waits** scrolls to it.
+  The engine shows no position inside `WorldScript` or an action list.
+The state comes from um.dll's `VARS` and `SCRIPTS` (every 2 seconds while the tab is shown).
 
 **Commands**: um.dll's own commands and everything it answers. `HELP` lists them: memory, threads,
 breakpoints, `UNITS`, `CONSOLE`... The same commands work from a terminal with

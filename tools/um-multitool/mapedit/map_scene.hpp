@@ -50,9 +50,11 @@ struct MapViewOptions {
     bool terrain = true, water = true, objects = true, units = true, markers = true, exits = true;
     bool dressUnits = true; // units on the default0 placeholder wear their race's skin and their equipment
     bool shadows = true;    // with the lighting on: the sun's shadows on the terrain
-    bool navmesh = false;   // the game's walkability graph (AI_GRAPH): decoded, its place on the map not yet (not offered)
+    bool navmesh = false;   // the game's walkability graph (AI_GRAPH), one node per 4 x 4 units
     int navLayer = 1;       // which of its 8 layers
     bool walkability = false; // the computed walkability grid the patrol simulation uses
+    bool navCompare = false;  // where the game's graph and the computed grid disagree
+    bool scriptAreas = true;  // the areas the scripts declare (AddRoundToArea / AddRectToArea)
     bool textured = true, wireframe = false;
     float background[3] = {0.42f, 0.55f, 0.68f};
 };
@@ -375,6 +377,8 @@ public:
         if (quest && options.exits) DrawExits(lib);
         if (options.navmesh) DrawNavmesh();
         if (options.walkability) DrawWalkability();
+        if (options.navCompare) DrawNavCompare();
+        if (options.scriptAreas) DrawScriptAreas();
         if (logicMode || logicAlways) DrawLogic();
         DrawTraps();
         DrawSelection();
@@ -703,7 +707,9 @@ private:
         const int cx = static_cast<int>(x / walk.cell), cy = static_cast<int>(y / walk.cell);
         if (cx >= 0 && cy >= 0 && cx < walk.w && cy < walk.h) walk.blocked[static_cast<size_t>(cy) * walk.w + cx] = 1;
     }
-    GLuint navList_ = 0;     // the navmesh's display list, and what it was built for
+    GLuint navList_ = 0;
+    GLuint cmpList_ = 0;
+    std::string cmpKey_;     // the navmesh's display list, and what it was built for
     std::string navKey_;
     GLuint shadowTex_ = 0;
     int shadowSize_ = 0;
@@ -1464,6 +1470,94 @@ private:
         glDisable(GL_BLEND);
     }
 
+public:
+    // The areas the scripts declare (set by the Map Editor from the loaded maps' scripts): outlines on the
+    // ground, magenta.
+    struct ScriptArea { int id = 0; bool round = true; float x = 0, y = 0, r = 0, x2 = 0, y2 = 0; };
+    std::vector<ScriptArea> scriptAreas;
+    void DrawScriptAreas() {
+        if (scriptAreas.empty()) return;
+        glDisable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glLineWidth(2.5f);
+        for (const ScriptArea& a : scriptAreas) {
+            std::vector<std::pair<float, float>> pts;
+            if (a.round) {
+                const int n = std::max(32, static_cast<int>(a.r * 2.0f));
+                for (int i = 0; i <= n; ++i) {
+                    const float t = 2.0f * kPi * i / n;
+                    pts.push_back({a.x + std::cos(t) * a.r, a.y + std::sin(t) * a.r});
+                }
+            } else {
+                const float c[5][2] = {{a.x, a.y}, {a.x2, a.y}, {a.x2, a.y2}, {a.x, a.y2}, {a.x, a.y}};
+                for (int k = 0; k < 4; ++k) {
+                    const float len = std::hypot(c[k + 1][0] - c[k][0], c[k + 1][1] - c[k][1]);
+                    const int steps = std::max(1, static_cast<int>(len));
+                    for (int i = 0; i < steps; ++i)
+                        pts.push_back({c[k][0] + (c[k + 1][0] - c[k][0]) * i / steps, c[k][1] + (c[k + 1][1] - c[k][1]) * i / steps});
+                }
+                pts.push_back({c[4][0], c[4][1]});
+            }
+            glColor4f(0.95f, 0.3f, 0.95f, 0.9f);
+            glBegin(GL_LINE_STRIP);
+            for (const auto& p : pts) glVertex3f(p.first, p.second, Ground(p.first, p.second) + 0.35f);
+            glEnd();
+        }
+        glLineWidth(1.0f);
+        glDisable(GL_BLEND);
+    }
+
+    // The game's graph (AI_GRAPH, the shown layer) against the computed grid, per graph node (4 x 4 units =
+    // 2 x 2 computed cells): orange where the game walks and this editor finds it blocked (most of its
+    // cells), blue where the game cannot walk and this editor finds it open.
+    int navCompareGame = 0, navCompareEditor = 0; // the counts of each, for the legend
+    void DrawNavCompare() {
+        const mob::File* f = NavmeshFile();
+        if (!f) return;
+        if (walk.w == 0) BuildWalkGrid();
+        if (walk.w == 0) return;
+        const std::string key = f->path + "|" + std::to_string(options.navLayer) + "|" + std::to_string(f->bytes.size()) + "|" +
+                                std::to_string(walkBuilds_);
+        if (key != cmpKey_ || !cmpList_) {
+            if (cmpList_) glDeleteLists(cmpList_, 1);
+            cmpKey_ = key;
+            cmpList_ = glGenLists(1);
+            navCompareGame = navCompareEditor = 0;
+            glNewList(cmpList_, GL_COMPILE);
+            glBegin(GL_QUADS);
+            for (int y = 0; y < f->aiH; ++y)
+                for (int x = 0; x < f->aiW; ++x) {
+                    const bool game = mob::AiWalkable(*f, options.navLayer, x, y);
+                    int blocked = 0;
+                    for (int dy = 0; dy < 2; ++dy)
+                        for (int dx = 0; dx < 2; ++dx) blocked += walk.Blocked(x * 2 + dx, y * 2 + dy) ? 1 : 0;
+                    const bool editor = blocked < 3;
+                    if (game == editor) continue;
+                    if (game) { ++navCompareGame; glColor4f(1.0f, 0.55f, 0.1f, 0.45f); }
+                    else { ++navCompareEditor; glColor4f(0.2f, 0.55f, 1.0f, 0.45f); }
+                    const float x0 = x * 4.0f + 0.3f, y0 = y * 4.0f + 0.3f, x1 = x0 + 3.4f, y1 = y0 + 3.4f;
+                    glVertex3f(x0, y0, Ground(x0, y0) + 0.25f); glVertex3f(x1, y0, Ground(x1, y0) + 0.25f);
+                    glVertex3f(x1, y1, Ground(x1, y1) + 0.25f); glVertex3f(x0, y1, Ground(x0, y1) + 0.25f);
+                }
+            glEnd();
+            glEndList();
+        }
+        glDisable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glDepthMask(GL_FALSE);
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        glPolygonOffset(-1.0f, -1.0f);
+        glCallList(cmpList_);
+        glDisable(GL_POLYGON_OFFSET_FILL);
+        glDepthMask(GL_TRUE);
+        glDisable(GL_BLEND);
+    }
+
+private:
     // The computed walkability grid: a red square on each blocked cell (built with BuildWalkGrid).
     void DrawWalkability() {
         if (walk.w == 0) BuildWalkGrid();
