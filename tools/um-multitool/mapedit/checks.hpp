@@ -21,6 +21,8 @@
 //   - objects outside the terrain (when an .mpr is loaded)
 #pragma once
 
+#include "db_model.hpp"
+
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -96,14 +98,19 @@ struct DatabaseNames {
         names.clear();
         files.clear();
         if (databasePath.empty()) return;
+        // The other databases beside it, in the same form (.res, or spreadsheets compiled in memory).
         std::set<std::string> paths{databasePath};
         size_t slash = databasePath.find_last_of("/\\");
         std::string dir = slash == std::string::npos ? "" : databasePath.substr(0, slash + 1);
-        for (const char* n : {"database.res", "databaselmp.res", "databaseadb.res"}) paths.insert(dir + n);
+        size_t dot = databasePath.find_last_of('.');
+        std::string ext = dot == std::string::npos || (slash != std::string::npos && dot < slash) ? ".res" : Lower(databasePath.substr(dot));
+        for (const char* n : {"database", "databaselmp", "databaseadb"}) paths.insert(dir + n + ext);
         for (const std::string& p : paths) {
-            std::ifstream f(p, std::ios::binary);
-            if (!f.is_open()) continue;
-            std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+            std::error_code ec;
+            if (!std::filesystem::is_regular_file(p, ec)) continue;
+            std::vector<uint8_t> bytes;
+            std::string err;
+            if (!dbmodel::ReadAsRes(p, bytes, err)) continue;
             ExtractDatabaseNames(bytes, names);
             files.push_back(p);
         }

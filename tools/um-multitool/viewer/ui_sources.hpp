@@ -5,9 +5,11 @@
 #include <GLFW/glfw3.h>
 
 #include <cctype>
+#include <cstring>
 #include <filesystem>
 #include <string>
 
+#include "alerts.hpp"
 #include "library.hpp"
 #include "ui_common.hpp"
 
@@ -21,6 +23,8 @@ struct SourcesState {
     char lightingPath[1024] = "";
     char questPath[1024] = "";
     char questPackPath[1024] = "";
+    char textPackLanguage[32] = "";
+    char textPackPath[1024] = "";
     int capturingKey = -1; // the map key being rebound (waiting for a key press)
     char databasePath[1024] = "";
     std::string message;
@@ -218,6 +222,55 @@ inline bool PathList(const char* id, std::vector<std::string>& paths, char* inpu
     return changed;
 }
 
+// The text language packs: (language, path) rows, and a row to add one.
+inline bool TextPackList(Library& lib, SourcesState& st) {
+    bool changed = false;
+    ImGui::PushID("textpacks");
+    int removeAt = -1;
+    if (ImGui::BeginTable("##packs", 3, ImGuiTableFlags_SizingStretchProp)) {
+        ImGui::TableSetupColumn("lang", ImGuiTableColumnFlags_WidthFixed, 60);
+        ImGui::TableSetupColumn("path", ImGuiTableColumnFlags_WidthStretch);
+        ImGui::TableSetupColumn("x", ImGuiTableColumnFlags_WidthFixed, 24);
+        for (size_t i = 0; i < lib.textPacks.size(); ++i) {
+            ImGui::PushID(static_cast<int>(i));
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            std::error_code ec;
+            StatusDot(std::filesystem::exists(lib.textPacks[i].second, ec), "", "not found");
+            ImGui::SameLine();
+            ImGui::TextUnformatted(lib.textPacks[i].first.c_str());
+            ImGui::TableNextColumn();
+            ImGui::TextUnformatted(lib.textPacks[i].second.c_str());
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", lib.textPacks[i].second.c_str());
+            ImGui::TableNextColumn();
+            if (ImGui::SmallButton("X")) removeAt = static_cast<int>(i);
+            ImGui::PopID();
+        }
+        ImGui::EndTable();
+    }
+    if (removeAt >= 0) { lib.textPacks.erase(lib.textPacks.begin() + removeAt); changed = true; }
+    if (lib.textPacks.empty()) ImGui::TextDisabled("(no language packs)");
+    ImGui::SetNextItemWidth(60);
+    ImGui::InputTextWithHint("##lang", "eng", st.textPackLanguage, sizeof(st.textPackLanguage));
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(-1);
+    ImGui::InputTextWithHint("##path", "path to a folder of text files or a texts*.res", st.textPackPath, sizeof(st.textPackPath));
+    std::string picked;
+    if (ImGui::Button("File...") && PickFile(picked)) std::snprintf(st.textPackPath, sizeof(st.textPackPath), "%s", picked.c_str());
+    ImGui::SameLine();
+    if (ImGui::Button("Folder...") && PickFolder(picked)) std::snprintf(st.textPackPath, sizeof(st.textPackPath), "%s", picked.c_str());
+    ImGui::SameLine();
+    ImGui::BeginDisabled(st.textPackLanguage[0] == '\0' || st.textPackPath[0] == '\0' || std::strchr(st.textPackLanguage, '='));
+    if (ImGui::Button("Add")) {
+        lib.textPacks.push_back({st.textPackLanguage, st.textPackPath});
+        st.textPackPath[0] = '\0'; // the language stays: its next folder is often next
+        changed = true;
+    }
+    ImGui::EndDisabled();
+    ImGui::PopID();
+    return changed;
+}
+
 // One layered source list: highest priority on top, with Up/Down/Remove, and an add row.
 // Returns true when the list changed.
 inline bool LayerList(const char* id, LayeredAssetSource& source, char* path, size_t pathSize, std::string& message,
@@ -295,6 +348,12 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
         ++lib.version;
         lib.SaveConfig();
     }
+    Hint("language packs: the same texts in different languages, for File Processing > Texts (e.g. eng: res-texts/texts-eng_res");
+    Hint("and res-texts/textslmp-eng_res, fra: ...). A language can have several folders or .res archives.");
+    if (TextPackList(lib, st)) {
+        ++lib.textPacksVersion;
+        lib.SaveConfig();
+    }
 
     ImGui::SeparatorText("Maps");
     Hint("folders of .mpr and .mob files (the game's maps folder, then a mod's): the Map Editor lists them");
@@ -322,11 +381,11 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
         lib.SaveConfig();
 
     ImGui::SeparatorText("Database");
-    Hint("database.res or databaselmp.res (whichever holds items.idb)");
+    Hint("database.res or databaselmp.res (whichever holds items.idb), or its spreadsheet (.xlsx, .ods), compiled when loaded");
     StatusDot(lib.dbLoaded, lib.dbLoaded ? lib.dbPath : "", lib.dbError);
     ImGui::SameLine();
     ImGui::SetNextItemWidth(-1);
-    ImGui::InputTextWithHint("##db", "path to database.res / databaselmp.res", st.databasePath, sizeof(st.databasePath));
+    ImGui::InputTextWithHint("##db", "path to databaselmp.res / .xlsx / .ods", st.databasePath, sizeof(st.databasePath));
     std::string picked;
     if (ImGui::Button("File...##db") && PickFile(picked)) std::snprintf(st.databasePath, sizeof(st.databasePath), "%s", picked.c_str());
     ImGui::SameLine();
@@ -415,8 +474,20 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
     }
 }
 
-// The Settings tab's right column: the Map Editor's mouse buttons and keys.
+// The Settings tab's right column: problem alerts, the Map Editor's mouse buttons and keys.
 inline void ControlsPanel(Library& lib, SourcesState& st) {
+    ImGui::SeparatorText("Problem alerts (database, map and script checks, File Processing jobs)");
+    if (ImGui::Checkbox("Popup when errors are detected", &lib.alertPopups)) { alerts::SetPopups(lib.alertPopups); lib.SaveConfig(); }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("With a button to the tab that lists them.");
+    if (ImGui::Checkbox("Sounds (SFX)", &lib.sfxEnabled)) { alerts::SetSound(lib.sfxEnabled); lib.SaveConfig(); }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("A sound when errors or warnings are detected (one for each).");
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Test error")) alerts::PlaySound(alerts::Level::Error);
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Test warning")) alerts::PlaySound(alerts::Level::Warning);
+    ImGui::SetNextItemWidth(220);
+    if (ImGui::SliderInt("Volume##sfx", &lib.sfxVolume, 0, 100, "%d %%")) alerts::SetVolume(lib.sfxVolume);
+    if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
     ImGui::SeparatorText("Mouse (Map Editor and 3D Viewer)");
     // Mouse: the left button always selects (click) and draws selection rectangles (drag).
     {

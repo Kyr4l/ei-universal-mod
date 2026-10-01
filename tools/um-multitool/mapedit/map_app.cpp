@@ -174,6 +174,7 @@ struct App {
     checks::DatabaseNames database;
     std::vector<checks::Finding> findings;
     checks::Summary summary;
+    int newErrors = 0, newWarnings = 0; // more than the checks before found, not reported yet (TakeNewProblems)
     bool checksDirty = true;
     int checkedVersion = -1;
     bool showErrors = true, showWarnings = true, showInfos = true;
@@ -773,7 +774,10 @@ static void RunChecks(App& app) {
     in.figures = &app.lib.figures;
     in.textures = &app.lib.textures;
     in.database = &app.database;
+    const checks::Summary before = app.summary;
     app.findings = checks::Run(in, &app.summary);
+    if (app.summary.errors > before.errors) app.newErrors = app.summary.errors - before.errors;
+    if (app.summary.warnings > before.warnings) app.newWarnings = app.summary.warnings - before.warnings;
     app.checksDirty = false;
     app.checkedVersion = app.lib.version;
 }
@@ -5659,6 +5663,18 @@ void DrawScriptWindow(Context* ctx) {
         SaveQuestChanges(app);
     }
 }
+
+bool TakeNewProblems(Context* ctx, int& errors, int& warnings, int& totalErrors, int& totalWarnings) {
+    App& app = ctx->app;
+    errors = app.newErrors;
+    warnings = app.newWarnings;
+    totalErrors = app.summary.errors;
+    totalWarnings = app.summary.warnings;
+    app.newErrors = app.newWarnings = 0;
+    return errors > 0 || warnings > 0;
+}
+
+void ShowChecks(Context* ctx) { ctx->app.requestTab = SideTab::Checks; }
 
 bool Busy(Context* ctx) { return ctx->app.scene.modelsPending > 0 || ctx->app.terrainDirty; }
 

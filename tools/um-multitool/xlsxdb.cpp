@@ -4,7 +4,7 @@
  * ============================================================================
  *
  * Description:
- *   Converts an Evil Islands gameplay database spreadsheet (.xlsx, in the
+ *   Converts an Evil Islands gameplay database spreadsheet (.xlsx, or .ods, in the
  *   layout produced/consumed by the legacy EIDBEditor tool) directly into a
  *   packed .res archive, replacing `wine DBEditor.exe file.xlsx`.
  *
@@ -53,6 +53,7 @@
 #include "subtools.hpp"
 
 #include "cp1251.hpp"
+#include "db_model.hpp"
 #include "xlsx_reader.hpp"
 
 namespace fs = std::filesystem;
@@ -60,23 +61,7 @@ namespace fs = std::filesystem;
 static constexpr const char* PROGRAM_VERSION = "1.0";
 static constexpr const char* PROGRAM_NAME = "um-xlsxdb";
 
-// ============================================================================
-// Database Schema (field type table)
-// ============================================================================
-
-enum class FieldType {
-    String, SignedLong, UnsignedLong, Float, Byte, Hex, FixedString,
-    BitList, ByteList, FloatList, UnsignedLongList, StringList,
-    MinfixedStringList, AcksUniqueType, TypeList,
-};
-
-struct FieldDef {
-    int fieldId;
-    FieldType type;
-    int typeArg;
-};
-
-#include "db_schema_generated.hpp"
+#include "db_schema.hpp"
 
 // ============================================================================
 // Universal Tagged-Value Encoding Primitive
@@ -135,11 +120,6 @@ static std::vector<uint8_t> PackU32(uint32_t v) {
     return out;
 }
 
-// Fixed 10-byte trailer that DBEditor appends after every generated database
-// blob, independent of content (confirmed identical across both database.xlsx
-// and databaselmp.xlsx outputs and across many edited variants during
-// reverse-engineering; see docs/file-formats/database-format.md).
-static const std::vector<uint8_t> TRAILER = {0, 0, 2, 12, 2, 8, 1, 0, 0, 0};
 
 // ============================================================================
 // XLSX Column Mapping ("FLDx-y" marker row helpers)
@@ -307,7 +287,7 @@ struct FieldResult {
 
 static double CellNum(const xlsxlib::CellValue& v) {
     if (v.IsEmpty()) return 0.0;
-    return v.isString ? std::atof(v.strVal.c_str()) : v.numVal;
+    return v.isString ? SpreadsheetNumber(v.strVal) : v.numVal;
 }
 static std::string CellStr(const xlsxlib::CellValue& v) {
     if (v.IsEmpty()) return std::string();
@@ -474,16 +454,6 @@ static FieldResult EncodeGeneralField(const std::string& dbName, const FieldDef&
     throw std::runtime_error("EncodeGeneralField: unhandled field type");
 }
 
-// DBEditor bug (undocumented): these (DbName, BlockID, FieldID) combinations are declared
-// in dbtypes.txt but DBEditor never actually serializes their value, regardless of content
-// (verified via wine oracle: forcing a non-default value still produces the same output).
-// See docs/file-formats/database-format.md "Known Quirks".
-static bool IsNeverWritten(const std::string& dbName, int blockId, int fieldId) {
-    return dbName == "Items" && blockId == 4 && fieldId == 26; // QuickItems ByteList
-}
-static bool IsAlwaysEmpty(const std::string& dbName, int blockId, int fieldId) {
-    return dbName == "Items" && blockId == 4 && fieldId == 27; // QuickItems Hex
-}
 
 static std::vector<uint8_t> EncodeGeneralBlock(const std::string& dbName, int blockId, const std::string& sheetName,
                                                 xlsxlib::Workbook& wb) {
@@ -520,16 +490,6 @@ struct GeneratedFile {
     std::vector<uint8_t> data;
 };
 
-static const std::map<std::string, std::string> DB_OUTPUT_NAME = {
-    {"Items", "items.idb"}, {"Levers", "levers.ldb"}, {"Perks", "perks.pdb"},
-    {"Prints", "prints.db"}, {"Spells", "spells.sdb"}, {"Units", "units.udb"},
-    {"Acks", "acks.db"},
-};
-
-// Order matches dbfiles.txt (Items, Levers, Perks, Prints, Spells, Units, Acks).
-static const std::vector<std::string> DB_ORDER = {
-    "Items", "Levers", "Perks", "Prints", "Spells", "Units", "Acks",
-};
 
 static bool AnyBlockSheetPresent(xlsxlib::Workbook& wb, const std::string& dbName) {
     for (const auto& [blockId, sheetName] : DBBLOCKS.at(dbName)) {
@@ -653,6 +613,23 @@ static std::vector<uint8_t> PackResArchive(std::vector<GeneratedFile> files) {
 }
 
 // ============================================================================
+// For the DB tab and the other tools (db_model.hpp)
+// ============================================================================
+
+namespace dbmodel {
+std::vector<GeneratedFile> EncodeWorkbook(xlsxlib::Workbook& wb) {
+    std::vector<GeneratedFile> out;
+    for (auto& f : EncodeAllDatabases(wb)) out.push_back({f.name, std::move(f.data)});
+    return out;
+}
+std::vector<uint8_t> PackRes(const std::vector<GeneratedFile>& files) {
+    std::vector<::GeneratedFile> in;
+    for (const auto& f : files) in.push_back({f.name, f.data});
+    return PackResArchive(std::move(in));
+}
+} // namespace dbmodel
+
+// ============================================================================
 // CLI
 // ============================================================================
 
@@ -663,26 +640,37 @@ static void PrintVersion() {
 static void PrintHelp() {
     std::cout << "um-multitool xlsxdb - Evil Islands XLSX Database Compiler\n\n"
               << "Usage:\n"
-              << "  um-multitool xlsxdb [options] <path/to/database.xlsx>\n\n"
+              << "  um-multitool xlsxdb [options] <path/to/database.xlsx | database.ods>\n\n"
               << "Options:\n"
               << "  -o, --output <path>   Set output .res archive path (default: same directory,\n"
               << "                        same base name, .res extension)\n"
+              << "  --check               Only check the spreadsheet for errors and wrong values\n"
+              << "                        (exit code 2 when an error is found), write nothing\n"
+              << "  --no-check            Compile without checking first\n"
               << "  --version             Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help            Print this help message\n\n"
               << "Description:\n"
-              << "  Converts an Evil Islands gameplay database spreadsheet directly into a\n"
+              << "  Converts an Evil Islands gameplay database spreadsheet (.xlsx, or OpenDocument\n"
+              << "  .ods as LibreOffice saves it) directly into a\n"
               << "  packed .res archive. Detects which database family(ies) the workbook\n"
               << "  contains sheets for (Acks dialogue, or Items/Levers/Perks/Prints/Spells/\n"
-              << "  Units gameplay stats) and only emits the corresponding files. See\n"
+              << "  Units gameplay stats) and only emits the corresponding files. Before\n"
+              << "  compiling, it checks the data: values the .res cannot hold, unknown items,\n"
+              << "  spells or materials, duplicate names... Problems are reported as [ERROR] or\n"
+              << "  [WARN] lines but do not stop the compilation. See\n"
               << "  docs/file-formats/database-format.md for the on-disk format.\n\n"
               << "Examples:\n"
               << "  um-multitool xlsxdb database.xlsx        # Writes database.res (acks.db)\n"
-              << "  um-multitool xlsxdb databaselmp.xlsx     # Writes databaselmp.res (6 db files)\n";
+              << "  um-multitool xlsxdb databaselmp.xlsx     # Writes databaselmp.res (6 db files)\n"
+              << "  um-multitool xlsxdb databaselmp.ods      # The same from an OpenDocument spreadsheet\n"
+              << "The reverse (.res -> .xlsx / .ods) is 'um-multitool dbexport'.\n";
 }
 
 struct CliOptions {
     bool showHelp = false;
     bool showVersion = false;
+    bool checkOnly = false;
+    bool noCheck = false;
     fs::path inputPath;
     fs::path outputPath;
 };
@@ -695,6 +683,10 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
         if (arg == "-o" || arg == "--output") {
             if (i + 1 < argc) { opt.outputPath = argv[++i]; }
             else { std::cerr << "Error: " << arg << " requires a path argument.\n"; return false; }
+        } else if (arg == "--check") {
+            opt.checkOnly = true;
+        } else if (arg == "--no-check") {
+            opt.noCheck = true;
         } else if (arg.rfind("--output=", 0) == 0) {
             opt.outputPath = arg.substr(9);
         } else if (arg[0] == '-') {
@@ -731,6 +723,17 @@ int RunXlsxDb(int argc, char* argv[]) {
     fs::path outputPath = opt.outputPath.empty()
         ? fs::path(opt.inputPath).replace_extension(".res")
         : opt.outputPath;
+
+    if (!opt.noCheck) {
+        dbmodel::Book book;
+        std::string err;
+        if (!dbmodel::LoadBook(opt.inputPath.string(), book, err)) {
+            std::cerr << "[ERROR] " << opt.inputPath.string() << ": " << err << "\n";
+            return 1;
+        }
+        const int errors = dbmodel::PrintIssues(dbmodel::CheckBook(book));
+        if (opt.checkOnly) return errors ? 2 : 0;
+    }
 
     try {
         xlsxlib::Workbook wb(opt.inputPath.string());

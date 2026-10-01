@@ -11,6 +11,7 @@ struct GuiOptions {
     bool openMap = false;          // start on the Map Editor tab
     std::vector<std::string> mapFiles; // with openMap: open these (.mpr, .mob) instead of the last session's
     bool openSettings = false;     // start on the Settings tab
+    std::string dbFile;            // start on File Processing > DB with this database (.res, .xlsx, .ods)
     std::string screenshotPath;    // save the window after a few frames, then quit
 };
 

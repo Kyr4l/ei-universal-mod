@@ -33,6 +33,10 @@ bool ResolveGameMap(Context* ctx, const std::string& terrain, const std::string&
 std::string OpenGameMap(Context* ctx, const std::string& terrain, const std::string& base, const std::string& quest,
                         const std::vector<std::string>& gamePaths);
 
+// The map checks (including the scripts') found more errors or warnings than the time before: how many
+// more, and how many in all. Reported once (for the alerts, alerts.hpp).
+bool TakeNewProblems(Context* ctx, int& errors, int& warnings, int& totalErrors, int& totalWarnings);
+void ShowChecks(Context* ctx); // opens the Checks side tab
 // Still loading figures (the GUI's --screenshot waits for it).
 bool Busy(Context* ctx);
 

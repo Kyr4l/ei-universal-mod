@@ -5,6 +5,7 @@
 // which is read when um-multitool.cfg does not exist yet.
 #pragma once
 
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <fstream>
@@ -126,6 +127,10 @@ struct Config {
     std::string lightingChoice;               // the one the Map Editor uses
     std::vector<std::string> questFolders;    // folders of .mq files / unpacked quests (or single ones)
     std::vector<std::string> questPacks;      // language packs: folders holding the same quests in other languages
+    // Text language packs: (language, path) - a folder of text files or a texts*.res; one language can
+    // have several (texts and textslmp). The Texts editor compares them with the reference language.
+    std::vector<std::pair<std::string, std::string>> textPacks;
+    std::string textReference;
     std::string mapQuest;                     // the quest the Map Editor has open
     float mapCameraSpeed = 1.0f;              // the Map Editor's key movement speed (multiplier)
     int guiTab = 0, viewerTab = 0, mapSideTab = 0; // the tabs open when the GUI was closed
@@ -142,6 +147,10 @@ struct Config {
     int dllPort = 18888;                      // the UM DLL Connector: um.dll's DLL server port (DLL_SERVER_PORT)
     bool dllAutoConnect = false;              // keep trying to connect while not connected
     int dllTab = 0;                           // its sub-tab open last time
+    bool sfxEnabled = false;                  // sounds when errors / warnings are detected (alerts.hpp)
+    int sfxVolume = 100;                      // their volume, 0-100 %
+    bool alertPopups = true;                  // a popup when errors are detected
+    bool dbAutoLoad = false;                  // File Processing > DB opens DATABASE by itself
 };
 
 inline Config Load(const std::string& path = Path()) {
@@ -188,6 +197,9 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "MAP_LIGHTING") cfg.lightingOn = value == "true";
         else if (key == "QUEST_LAYER") cfg.questFolders.push_back(value);
         else if (key == "QUEST_PACK") cfg.questPacks.push_back(value);
+        else if (key == "TEXT_PACK" && value.find('=') != std::string::npos)
+            cfg.textPacks.push_back({value.substr(0, value.find('=')), value.substr(value.find('=') + 1)});
+        else if (key == "TEXT_REFERENCE") cfg.textReference = value;
         else if (key == "MAP_QUEST") cfg.mapQuest = value;
         else if (key == "GUI_TAB") cfg.guiTab = std::atoi(value.c_str());
         else if (key == "BACKGROUND") cfg.background = value;
@@ -198,6 +210,10 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "BACKGROUND_DLL") cfg.tabBackground[4] = value;
         else if (key == "DLL_PORT") cfg.dllPort = std::min(std::max(std::atoi(value.c_str()), 1), 65535);
         else if (key == "DLL_AUTO_CONNECT") cfg.dllAutoConnect = value == "true";
+        else if (key == "SFX_ENABLED") cfg.sfxEnabled = value == "true";
+        else if (key == "SFX_VOLUME") cfg.sfxVolume = std::max(0, std::min(100, std::atoi(value.c_str())));
+        else if (key == "ALERT_POPUPS") cfg.alertPopups = value == "true";
+        else if (key == "DB_AUTO_LOAD") cfg.dbAutoLoad = value == "true";
         else if (key == "DLL_TAB") cfg.dllTab = std::atoi(value.c_str());
         else if (key == "BACKGROUND_OPACITY") cfg.backgroundOpacity = static_cast<float>(std::atof(value.c_str()));
         else if (key == "WINDOW_SIZE") std::sscanf(value.c_str(), "%d,%d", &cfg.windowW, &cfg.windowH);
@@ -292,6 +308,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; Quest language packs: folders holding the same quests in different languages; changes that\n"
          "; do not depend on the language go to all of them.\n";
     list("QUEST_PACK", cfg.questPacks);
+    for (const auto& [language, path] : cfg.textPacks) f << "TEXT_PACK=" << language << "=" << path << "\n";
+    if (!cfg.textReference.empty()) f << "TEXT_REFERENCE=" << cfg.textReference << "\n";
     f << "; Lighting: the game's config/lights*.ini files, or folders holding them.\n";
     list("LIGHTING_LAYER", cfg.lightingFiles);
     f << "; Items database: database.res or databaselmp.res (whichever holds items.idb).\n";
@@ -361,6 +379,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     section("UM DLL Connector");
     f << "; um.dll's DLL server port (DLL_SERVER_PORT in um.cfg), and whether to keep trying to connect; (true/false)\n";
     f << "DLL_PORT=" << cfg.dllPort << "\nDLL_AUTO_CONNECT=" << flag(cfg.dllAutoConnect) << "\nDLL_TAB=" << cfg.dllTab << "\n";
+    f << "SFX_ENABLED=" << flag(cfg.sfxEnabled) << "\nSFX_VOLUME=" << cfg.sfxVolume << "\nALERT_POPUPS=" << flag(cfg.alertPopups)
+      << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\n";
 
     section("Map Editor keys");
     f << "; key,modifiers: the key is a key POSITION (GLFW key code, named after the US layout: the key at the\n"

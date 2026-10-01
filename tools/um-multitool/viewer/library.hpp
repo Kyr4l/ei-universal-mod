@@ -3,6 +3,8 @@
 // holds one, shared by its tabs and edited in the Settings tab; the command-line modes make their own.
 #pragma once
 
+#include "db_model.hpp"
+
 #include <fstream>
 #include <map>
 #include <string>
@@ -42,6 +44,9 @@ struct Library {
     bool lightingOn = false;
     std::vector<std::string> questFolders; // .mq files / unpacked quests, or folders of them
     std::vector<std::string> questPacks;   // language packs: the same quests in other languages
+    std::vector<std::pair<std::string, std::string>> textPacks; // text language packs: (language, path), config.hpp
+    std::string textReference;                                  // the Texts editor's reference language
+    int textPacksVersion = 0;                                   // bumped when textPacks change
     std::string mapQuest;                  // the quest the Map Editor has open
     float mapCameraSpeed = 1.0f;           // the Map Editor's key movement speed (multiplier)
     int mapMouseOrbit = 2, mapMousePan = 1; // the Map Editor's mouse buttons, see config.hpp
@@ -49,6 +54,9 @@ struct Library {
     std::string background, tabBackground[5];     // background pictures (config.hpp)
     int dllPort = 18888, dllTab = 0;               // the UM DLL Connector (config.hpp)
     bool dllAutoConnect = false;
+    bool sfxEnabled = false, alertPopups = true;   // problem alerts (config.hpp, alerts.hpp)
+    int sfxVolume = 100;                           // 0-100 %
+    bool dbAutoLoad = false;                       // File Processing > DB opens dbPath by itself
     float backgroundOpacity = 0.35f;
     float mapHour = -1.0f;                         // the Map Editor's time of day (-1: the map's own)
     int windowW = 1400, windowH = 860, windowX = -100000, windowY = -100000; // the GUI window, see config.hpp
@@ -63,13 +71,11 @@ struct Library {
     bool LoadDatabase(const std::string& path) {
         dbPath = path;
         dbError.clear();
-        std::ifstream f(path, std::ios::binary);
-        if (!f.is_open()) {
-            dbError = "cannot open " + path;
+        std::vector<uint8_t> bytes; // a .res, or a spreadsheet compiled in memory
+        if (!dbmodel::ReadAsRes(path, bytes, dbError)) {
             dbLoaded = false;
             return false;
         }
-        std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
         std::string label = path.substr(path.find_last_of("/\\") + 1);
         items::Database loaded;
         if (!items::LoadDatabaseRes(bytes, label, loaded, dbError)) {
@@ -109,6 +115,8 @@ struct Library {
         lightingOn = cfg.lightingOn;
         questFolders = cfg.questFolders;
         questPacks = cfg.questPacks;
+        textPacks = cfg.textPacks;
+        textReference = cfg.textReference;
         mapQuest = cfg.mapQuest;
         mapCameraSpeed = cfg.mapCameraSpeed;
         mapMouseOrbit = cfg.mapMouseOrbit;
@@ -117,6 +125,7 @@ struct Library {
         for (int i = 0; i < 5; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
         dllPort = cfg.dllPort; dllTab = cfg.dllTab; dllAutoConnect = cfg.dllAutoConnect;
+        sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad;
         windowW = cfg.windowW; windowH = cfg.windowH; windowX = cfg.windowX; windowY = cfg.windowY; windowMaximized = cfg.windowMaximized;
         mapMousePan = cfg.mapMousePan;
         RebuildFigureIndex();
@@ -145,6 +154,8 @@ struct Library {
         cfg.lightingOn = lightingOn;
         cfg.questFolders = questFolders;
         cfg.questPacks = questPacks;
+        cfg.textPacks = textPacks;
+        cfg.textReference = textReference;
         cfg.mapQuest = mapQuest;
         cfg.mapCameraSpeed = mapCameraSpeed;
         cfg.mapMouseOrbit = mapMouseOrbit;
@@ -153,6 +164,7 @@ struct Library {
         for (int i = 0; i < 5; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;
         cfg.dllPort = dllPort; cfg.dllTab = dllTab; cfg.dllAutoConnect = dllAutoConnect;
+        cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad;
         cfg.windowW = windowW; cfg.windowH = windowH; cfg.windowX = windowX; cfg.windowY = windowY; cfg.windowMaximized = windowMaximized;
         cfg.mapMousePan = mapMousePan;
         config::Save(cfg, configPath);

@@ -1,4 +1,4 @@
-// Auto-generated from tools/ei-um-autopacker/bin/eidbeditor-144/dbtypes.txt and dbblocks.txt
+// Auto-generated from tools/third-party-tools/EIDBEditor_1.4.4/dbtypes.txt and dbblocks.txt
 // Do not hand-edit; see docs/file-formats/database-format.md for the source schema tables.
 static const std::map<std::string, std::map<int, std::vector<FieldDef>>> DBTYPES = {
     {"Items", {

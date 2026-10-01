@@ -6,6 +6,7 @@ int RunIniReg(int argc, char* argv[]);
 int RunMobDump(int argc, char* argv[]);
 int RunResTool(int argc, char* argv[]);
 int RunXlsxDb(int argc, char* argv[]);
+int RunDbExport(int argc, char* argv[]);
 
 #include <cstdint>
 #include <string>

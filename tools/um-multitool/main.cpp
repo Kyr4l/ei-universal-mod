@@ -65,6 +65,7 @@ static void PrintTopLevelHelp() {
     std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) " << PROGRAM_VERSION << " - Evil Islands Modding Toolkit\n\n"
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
+              << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
               << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
               << "Subcommands:\n"
@@ -72,7 +73,8 @@ static void PrintTopLevelHelp() {
               << "  inireg   (alias: ini)   Convert configs between .ini <-> .reg\n"
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
               << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n"
-              << "  xlsxdb   (alias: db)    Compile .xlsx gameplay databases to .res\n"
+              << "  xlsxdb   (alias: db)    Compile .xlsx / .ods gameplay databases to .res\n"
+              << "  dbexport                Export .res gameplay databases to .xlsx / .ods (the reverse of xlsxdb)\n"
               << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
               << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
               << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
@@ -86,6 +88,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool ddsmmp texture.dds\n"
               << "  um-multitool inireg -d ./ini -o ./reg -m\n"
               << "  um-multitool xlsxdb databaselmp.xlsx\n"
+              << "  um-multitool dbexport databaselmp.res -o databaselmp.ods\n"
               << "  um-multitool texture.dds                 # auto-detected -> ddsmmp\n\n"
               << "Note: directory-mode auto-detection only succeeds when every file in the\n"
               << "directory belongs to exactly one of ddsmmp/inireg/mobdump; anything mixed,\n"
@@ -96,10 +99,10 @@ static void PrintTopLevelHelp() {
 
 static void PrintTopLevelVersion() {
     std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb (each 1.0), the GUI, the 3D Viewer and the Map Editor\n";
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport (each 1.0), the GUI, the 3D Viewer and the Map Editor\n";
 }
 
-enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb };
+enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport };
 
 static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "ddsmmp" || tok == "dds")  return SubTool::DdsMmp;
@@ -107,6 +110,7 @@ static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "mobdump" || tok == "mob") return SubTool::MobDump;
     if (tok == "restool" || tok == "res") return SubTool::ResTool;
     if (tok == "xlsxdb" || tok == "db")   return SubTool::XlsxDb;
+    if (tok == "dbexport")                return SubTool::DbExport;
     return SubTool::None;
 }
 
@@ -117,6 +121,7 @@ static int DispatchTo(SubTool tool, int argc, char* argv[]) {
         case SubTool::MobDump: return RunMobDump(argc, argv);
         case SubTool::ResTool: return RunResTool(argc, argv);
         case SubTool::XlsxDb:  return RunXlsxDb(argc, argv);
+        case SubTool::DbExport: return RunDbExport(argc, argv);
         default: return 1;
     }
 }
@@ -158,7 +163,7 @@ static SubTool DetectFromExtension(const std::string& ext) {
     if (ext == ".ini" || ext == ".reg") return SubTool::IniReg;
     if (ext == ".mob") return SubTool::MobDump;
     if (ext == ".res" || ext == ".mq") return SubTool::ResTool;
-    if (ext == ".xlsx") return SubTool::XlsxDb;
+    if (ext == ".xlsx" || ext == ".ods") return SubTool::XlsxDb;
     return SubTool::None;
 }
 
@@ -217,7 +222,7 @@ static bool StartedFromTerminal() {
 #endif
 }
 
-// `um-multitool gui [--viewer <category> <item>] [--map <file>...] [--settings] [--screenshot <file.bmp>]`
+// `um-multitool gui [--viewer <category> <item>] [--map <file>...] [--db <file>] [--settings] [--screenshot <file.bmp>]`
 static int StartGui(int argc, char* argv[], int first) {
     GuiOptions options;
     for (int i = first; i < argc; ++i) {
@@ -231,6 +236,8 @@ static int StartGui(int argc, char* argv[], int first) {
         } else if (a == "--map") {
             options.openMap = true;
             while (i + 1 < argc && argv[i + 1][0] != '-') options.mapFiles.push_back(argv[++i]);
+        } else if (a == "--db" && i + 1 < argc) {
+            options.dbFile = argv[++i];
         } else if (a == "--settings") {
             options.openSettings = true;
         } else if (a == "--screenshot" && i + 1 < argc) {

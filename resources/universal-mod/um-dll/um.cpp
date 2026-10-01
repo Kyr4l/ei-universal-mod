@@ -2861,7 +2861,7 @@ static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found
     if (!explained) {
         explained = true;
         LogLine("INFO", "[HEAPFIX] game.exe writes a few bytes past the end of some of its own allocations (a bug of the game, "
-            "on any setup). The padding absorbs it and nothing is damaged; each allocation site is described at DEBUG level.");
+            "on any setup). The padding absorbs it and nothing is damaged; each allocation site is reported below as a warning.");
     }
     const DWORD padding = PaddingFor(block.size);
     int first = -1, last = -1;
@@ -2877,7 +2877,7 @@ static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found
     FormatCallerList(block.callers, kAllocCallerSlots, callers, sizeof(callers));
     DWORD shown = padding - static_cast<DWORD>(first) < 24 ? padding - static_cast<DWORD>(first) : 24;
     DescribeWrittenBytes(found + first, shown, written, sizeof(written));
-    LogLine(usedUp ? "WARN" : "DEBUG", "[HEAPFIX] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written past its end, "
+    LogLine("WARN", "[HEAPFIX] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written past its end, "
         "up to %d of its %lu padding bytes (first at +%d: %s); this allocation site has now overrun %lu block(s)%s%s",
         when, static_cast<unsigned long>(start), static_cast<unsigned long>(block.size), (GetTickCount() - block.tickMs) / 1000.0,
         callers, last + 1, static_cast<unsigned long>(padding), first, written, siteCount,
@@ -3670,7 +3670,7 @@ static HRESULT WINAPI HookedDDCreateSurface(void* self, void* surfaceDesc,
                 g_originalDDBltFast = reinterpret_cast<DDBltFastFunction>(originalBltFast);
             }
             InterlockedExchange(&g_overlayFrameCounterActive, 1);
-            LogLine("INFO", "Primary surface Flip/Blt/BltFast hooked for the overlay's FPS counter");
+            LogLine("INFO", "[OVERLAY] Primary surface Flip/Blt/BltFast hooked for the overlay's FPS counter");
         }
     }
     return result;
@@ -3719,7 +3719,7 @@ static void InstallDirectDrawFrameCounterHooks(void* directDrawObject) {
         reinterpret_cast<void*>(HookedDDCreateSurface), &alreadyPatched);
     if (original) {
         g_originalDDCreateSurface = reinterpret_cast<DDCreateSurfaceFunction>(original);
-        LogLine("INFO", "DirectDraw CreateSurface hooked for the overlay's FPS counter");
+        LogLine("INFO", "[OVERLAY] DirectDraw CreateSurface hooked for the overlay's FPS counter");
     } else if (!alreadyPatched) {
         LogLine("WARN", "DirectDraw CreateSurface was not hooked; FPS counter will read n/a");
     }
@@ -3739,14 +3739,12 @@ static HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw
     return result;
 }
 
-// Log DirectDrawEx initialization results without changing the returned object.
+// Hooks the overlay's FPS counter into each DirectDraw object; only a failure is logged.
 static HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDraw,
         const GUID* interfaceId, IUnknown* outerUnknown) {
     HRESULT result = g_originalDirectDrawCreateEx(guid, directDraw, interfaceId,
         outerUnknown);
-    LogLine(FAILED(result) ? "ERROR" : "INFO",
-        "DirectDrawCreateEx result=0x%08lX object=%p", result,
-        directDraw ? *directDraw : NULL);
+    if (FAILED(result)) LogLine("ERROR", "DirectDrawCreateEx failed: result=0x%08lX", result);
     if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
         IdentifyDirectDrawBackend();
         InstallDirectDrawFrameCounterHooks(*directDraw);
@@ -4667,7 +4665,7 @@ static LRESULT CALLBACK LowLevelKeyboardProcBody(int nCode, WPARAM wParam, LPARA
                         if (g_overlayWindow) {
                             ShowWindow(g_overlayWindow, g_overlayVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
                         }
-                        LogLine("INFO", "Overlay toggled %s", g_overlayVisible ? "visible" : "hidden");
+                        LogLine("INFO", "[OVERLAY] Overlay toggled %s", g_overlayVisible ? "visible" : "hidden");
                     }
                 } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
                     g_keyboardRewriteKeyDown[g_overlayToggleKey] = false;
@@ -4697,7 +4695,7 @@ static LRESULT CALLBACK LowLevelKeyboardProcBody(int nCode, WPARAM wParam, LPARA
                         if (g_overlayLogWindow) {
                             ShowWindow(g_overlayLogWindow, g_overlayLogVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
                         }
-                        LogLine("INFO", "Overlay log panel toggled %s", g_overlayLogVisible ? "visible" : "hidden");
+                        LogLine("INFO", "[OVERLAY] Overlay log panel toggled %s", g_overlayLogVisible ? "visible" : "hidden");
                     }
                 } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
                     g_keyboardRewriteKeyDown[g_overlayLogToggleKey] = false;
@@ -4829,7 +4827,7 @@ static void EnsureAlphaCanvas(AlphaCanvas& canvas, int width, int height) {
     canvas.dc = CreateCompatibleDC(screenDC);
     ReleaseDC(NULL, screenDC);
     if (!canvas.dc) {
-        LogLine("WARN", "CreateCompatibleDC for overlay canvas failed, error=%lu", GetLastError());
+        LogLine("WARN", "[OVERLAY] CreateCompatibleDC for overlay canvas failed, error=%lu", GetLastError());
         return;
     }
 
@@ -4843,7 +4841,7 @@ static void EnsureAlphaCanvas(AlphaCanvas& canvas, int width, int height) {
 
     canvas.bitmap = CreateDIBSection(canvas.dc, &bmi, DIB_RGB_COLORS, &canvas.pixels, NULL, 0);
     if (!canvas.bitmap) {
-        LogLine("WARN", "CreateDIBSection for overlay canvas failed, error=%lu", GetLastError());
+        LogLine("WARN", "[OVERLAY] CreateDIBSection for overlay canvas failed, error=%lu", GetLastError());
         DeleteDC(canvas.dc);
         canvas.dc = NULL;
         return;
@@ -6532,7 +6530,7 @@ UM_GUARDED_THREAD(OverlayThread) {
     windowClass.hInstance = module;
     windowClass.lpszClassName = "UMOverlayWindowClass";
     if (!RegisterClassA(&windowClass)) {
-        LogLine("ERROR", "RegisterClassA for overlay failed, error=%lu", GetLastError());
+        LogLine("ERROR", "[OVERLAY] RegisterClassA for overlay failed, error=%lu", GetLastError());
         return 0;
     }
 
@@ -6562,7 +6560,7 @@ UM_GUARDED_THREAD(OverlayThread) {
         initialRect.left, initialRect.top, OVERLAY_PANEL_WIDTH, panelHeight,
         NULL, NULL, module, NULL);
     if (!g_overlayWindow) {
-        LogLine("ERROR", "CreateWindowExA for overlay failed, error=%lu", GetLastError());
+        LogLine("ERROR", "[OVERLAY] CreateWindowExA for overlay failed, error=%lu", GetLastError());
         return 0;
     }
     ShowWindow(g_overlayWindow, SW_HIDE);
@@ -6578,7 +6576,7 @@ UM_GUARDED_THREAD(OverlayThread) {
         if (g_overlayLogWindow) {
             ShowWindow(g_overlayLogWindow, SW_HIDE);
         } else {
-            LogLine("WARN", "CreateWindowExA for overlay log panel failed, error=%lu", GetLastError());
+            LogLine("WARN", "[OVERLAY] CreateWindowExA for overlay log panel failed, error=%lu", GetLastError());
         }
     }
 
@@ -6597,7 +6595,7 @@ UM_GUARDED_THREAD(OverlayThread) {
     }
 
     SetTimer(g_overlayWindow, 1, g_overlayRefreshMs, NULL);
-    LogLine("INFO", "Overlay window created; toggle_key=0x%02X log_toggle_key=0x%02X position=%s log_enabled=%s layered=%s",
+    LogLine("INFO", "[OVERLAY] Overlay window created; toggle_key=0x%02X log_toggle_key=0x%02X position=%s log_enabled=%s layered=%s",
         g_overlayToggleKey, g_overlayLogToggleKey, g_overlayPosition, g_overlayLogEnabled ? "true" : "false",
         g_overlayWindowsAreLayered ? "true" : "false");
 #ifdef UM_TEST_DUMP_CANVAS

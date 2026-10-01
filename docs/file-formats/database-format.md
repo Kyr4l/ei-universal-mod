@@ -4,7 +4,7 @@
 
 Evil Islands stores its gameplay databases — items, spells, perks, units, footprints, lever prototypes, and NPC dialogue ("Acks") — as binary blobs packed inside standard `.res` archives (see [res-format.md](res-format.md) for the outer container). This document covers the **payload format** of those blobs: `items.idb`, `levers.ldb`, `perks.pdb`, `prints.db`, `spells.sdb`, `units.udb`, and `acks.db`.
 
-These files are normally authored as `.xlsx` spreadsheets (`database.xlsx` for Acks dialogue, `databaselmp.xlsx` for the six gameplay-stat databases) and compiled by `um-xlsxdb` (`tools/um-standalone-tools/um-xlsxdb`), which replaces the legacy `wine`-hosted `EIDBEditor` (`tools/ei-um-autopacker/bin/eidbeditor-144/DBEditor.exe`).
+These files are normally authored as `.xlsx` spreadsheets (`database.xlsx` for Acks dialogue, `databaselmp.xlsx` for the six gameplay-stat databases) and compiled by `um-multitool xlsxdb` (formerly the standalone `um-xlsxdb`), which replaces the legacy `wine`-hosted `EIDBEditor` (`tools/ei-um-autopacker/bin/eidbeditor-144/DBEditor.exe`).
 
 Everything below was reverse-engineered from scratch by diffing `um-xlsxdb`'s output against the shipped `Universal-Mod/res/database.res` and `Universal-Mod/res/databaselmp.res`, and by round-tripping controlled edits through the real `DBEditor.exe` under `wine` (a "wine oracle") to observe exactly which bytes changed. The result is **verified byte-for-byte identical** to both release archives — every field type documented here has a matching, checksum-confirmed reference encoder.
 
@@ -151,3 +151,25 @@ Neither quirk affects Acks records — every declared Acks field is always writt
 * The original vanilla `Evil Islands/res/database.res` has small (3–10 byte), *non*-16-aligned gaps between some files — consistent with incremental hand-editing over the file's lifetime, not any fixed alignment rule.
 
 `um-xlsxdb` reproduces `DBEditor.exe`'s exact behavior: **no inter-file padding**, and files inserted into the archive in **ascending alphabetical filename order** (confirmed against both release archives). `um-restool`'s 16-byte-aligned packing remains a perfectly valid choice for archives it builds itself — the game only ever reads via the recorded `dataOffset`/`dataLength` pair, so padding (or its absence) is cosmetic, not a correctness requirement — but it is a different convention from `DBEditor.exe`'s output, so the two tools do not currently produce bit-identical archives from the same input file set. Byte-exact reproduction of a *specific* existing archive (as required here) cannot assume either convention; it must match whatever the original writer did.
+
+## Reverse Conversion, Editing and Checks (um-multitool)
+
+`um-multitool dbexport <file.res> [-o out.xlsx|out.ods]` decodes a compiled database back into a spreadsheet laid out exactly as DBEditor's: one sheet per block (in `DB_ORDER`), column A and row 1 empty, the column titles on row 2 (bold), the `FLDx-y` markers on row 3, the records from row 4, the first three rows frozen, and DBEditor's column widths (`dbheaders.txt`, generated into `db_headers_generated.hpp`). Data no header names gets extra columns at the end (`Unk<field>-<index>`, e.g. Weapons `FLD22-1`, Prints `FLD3-3`).
+
+Details the export reproduces so that a re-compile gives the same bytes:
+
+- Floats are written as the shortest decimal text that reads back as the same float32; NaN and infinities as the texts `nan`, `inf`, `-inf` (LeverPrototypes holds NaN; the compiler's `atof` reads the text back).
+- Hex fields are lower case. Items block 4 field 26 (never written) shows `0`, field 27 (always empty) `0000000000000000`, as in the shipped workbook.
+- A marker in two columns (Prints `FLD3-2`, Monsters `FLD38-0`): the compiler reads the last one, the export writes the value in both.
+- `.ods` (OpenDocument, LibreOffice's format) is read and written as well as `.xlsx`; `xlsxdb` compiles either.
+
+Verified on the shipped workbooks: `databaselmp.xlsx` → `.res` → `.xlsx` / `.ods` gives the same 66,190 cells (771 for `database.xlsx`), and compiling the exported `.xlsx` or `.ods`, or LibreOffice re-saves of them, gives the identical `.res` (`databaselmp.res` SHA-256 `c0f08219…`, `database.res` `0ecdad6a…`).
+
+**Checks.** `xlsxdb` checks the data before compiling (`--check` only checks, exit code 2 on errors; `--no-check` skips them), `dbexport` checks what it exports, and the GUI's File Processing > DB tab checks after every edit. Problems never stop a compilation:
+
+- Errors (what is compiled differs from what the cell shows, or the game misreads it): text in a number field, numbers out of range for the field (byte 0-255, unsigned, 32-bit), characters Windows-1251 cannot hold, a FixedString too long, invalid hex, data in a column without a marker or with a marker of no field of the block, two columns with the same marker but different values, a `,` inside `{ }` or `[ ]` in a comma-separated list (the list is cut there: spell modifiers are separated by `;`), malformed Acks `{key=value##...}` cells.
+- Warnings: decimals in a whole-number field, flags other than 0/1, a record without a name or a duplicate name (in the sheets other sheets refer to by name; the message lists the columns where the two rows differ, or says they are identical), and references to names that do not exist: RaceModels `FLD14-0`..`FLD17-0` → HitLocations, Monsters `FLD1-0` → RaceModels, Perks `FLD10-0` / `FLD11-0` → Perks / Skills codes (or `none`), the item lists (Monsters `FLD29-0`, `FLD32-0`, `FLD33-0`, `FLD42-0`, NPC `FLD9-0`, `FLD10-0`: `item`, `item.material` or `material.material`, then optional `[count]` / `[spell{modifiers}]`) and the spell lists (Monsters `FLD31-0`, NPC `FLD11-0`, QuickItems `FLD25-0`: `code {modifier;modifier}`).
+
+Unknown names get the closest known ones as suggestions ("did you mean 'adamantium'?": edit distance, swapped letters counting as one, up to 1-3 depending on the length). In the DB tab, each suggestion and the mechanical fixes (a space after the `.`, a missing `]` or `}`, `,` inside braces) are quick fixes: a button in the problem list, or right-click on the cell. While typing in a cell, the tab suggests what can come next: item names, `item.material` materials, spell codes and their `{modifiers}` (also inside `[...]` enchantments), the names of referenced sheets, or the values the column already has.
+
+The Settings tab's database (used by the 3D Viewer and the Map Editor's checks) can be a `.res` or a spreadsheet (`.xlsx`, `.ods`), compiled in memory when loaded.

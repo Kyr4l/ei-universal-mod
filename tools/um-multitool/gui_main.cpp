@@ -4,10 +4,12 @@
  * ============================================================================
  *
  * Two main tabs:
- *   - File Processing: the five modding tools (ddsmmp, inireg, mobdump,
- *     restool, xlsxdb). A run launches this same executable again with the
- *     subcommand, as a hidden subprocess, and streams its stdout/stderr into
- *     the log panel below, with no separate console window.
+ *   - File Processing: the DB editor (db_editor.cpp: open, check, edit, save
+ *     and compile the gameplay databases, in-process) and the file tools
+ *     (restool, inireg, ddsmmp, mobdump). A tool run launches this same
+ *     executable again with the subcommand, as a hidden subprocess, and
+ *     streams its stdout/stderr into the log panel below, with no separate
+ *     console window. Problems found anywhere raise alerts (alerts.hpp).
  *   - 3D Viewer: the item model viewer (viewer/viewer_app.cpp).
  * Opened when the program is started without arguments from a file manager
  * (double-click), or with `um-multitool gui` - see main.cpp.
@@ -39,6 +41,9 @@
 #include "viewer/ui_sources.hpp"
 #include "mapedit/map_app.hpp"
 #include "dllconnect/connector_app.hpp"
+#include "alerts.hpp"
+#include "db_editor.hpp"
+#include "text_editor.hpp"
 #include "viewer/dds_texture.hpp"
 
 #include <string>
@@ -679,41 +684,6 @@ static std::vector<std::string> BuildResToolArgs() {
 }
 
 // ============================================================================
-// XLSX -> RES Database Compiler Tab (xlsxdb)
-// ============================================================================
-
-struct XlsxDbTab {
-    char inputPath[1024] = "";
-    char outputPath[1024] = "";
-};
-
-static XlsxDbTab g_xlsxdb;
-
-static void DrawXlsxDbTab() {
-    PathRow("xlsx_in", "Input:", g_xlsxdb.inputPath, sizeof(g_xlsxdb.inputPath), false, false, "Spreadsheet", "*.xlsx");
-    PathRow("xlsx_out", "Output:", g_xlsxdb.outputPath, sizeof(g_xlsxdb.outputPath), true, false, "RES Archive", "*.res");
-    if (g_xlsxdb.outputPath[0] == '\0') {
-        ImGui::TextDisabled("Optional. Defaults to the input's name with a .res extension.");
-    }
-
-    ImGui::Spacing();
-    ImGui::Separator();
-    ImGui::Spacing();
-    ImGui::TextWrapped(
-        "Compiles an Evil Islands gameplay database spreadsheet (database.xlsx or "
-        "databaselmp.xlsx) directly into a packed .res archive, detecting which "
-        "database(s) the workbook contains sheets for. See "
-        "docs/file-formats/database-format.md for the on-disk format.");
-}
-
-static std::vector<std::string> BuildXlsxDbArgs() {
-    std::vector<std::string> args;
-    if (g_xlsxdb.outputPath[0]) { args.push_back("-o"); args.push_back(g_xlsxdb.outputPath); }
-    if (g_xlsxdb.inputPath[0]) args.push_back(g_xlsxdb.inputPath);
-    return args;
-}
-
-// ============================================================================
 // Run Button Dispatch & Main Loop
 // ============================================================================
 
@@ -721,6 +691,13 @@ static ProcHandle g_activeProc;
 static double g_progressPhase = 0.0;
 static std::string g_statusText = "Idle";
 static int g_activeTab = 0;
+static const char* g_activeSubcommand = ""; // the shown File Processing sub-tab's tool ("" for DB)
+constexpr int kDbSubTab = 0; // File Processing's DB sub-tab (see the tabs in RunGui)
+static Library* g_library = nullptr; // for the sub-tabs that need the sources (Texts)
+static void DrawTextsTab() { textedit::DrawTab(*g_library); }
+static int g_requestMainTab = -1, g_requestSubTab = -1; // asked by an alert's button: shown at the next frame
+static int g_jobTab = 0;                                // the File Processing sub-tab the running job came from
+static std::string g_jobOutput;                         // the running job's output (counted for the alerts)
 
 // Drains captured subprocess output into the log and, once the process has
 // exited and the reader thread has drained the last of the pipe, resets the
@@ -734,6 +711,7 @@ static void PumpActiveProcess() {
     }
     if (!chunk.empty()) {
         AppendLog(chunk);
+        g_jobOutput += chunk;
     }
 
     if (!IsValid(g_activeProc)) return;
@@ -748,6 +726,25 @@ static void PumpActiveProcess() {
         AppendLog(exitCode == 0
             ? "\n[Job finished successfully]\n\n"
             : ("\n[Job finished, exit code " + std::to_string(exitCode) + "]\n\n"));
+        // Alerts: the tools mark problems with [ERROR] / [WARN] lines.
+        int errors = 0, warnings = 0;
+        std::string firstError, firstWarning;
+        std::istringstream lines(g_jobOutput);
+        for (std::string line; std::getline(lines, line);) {
+            if (line.rfind("[ERROR]", 0) == 0 || line.rfind("Error:", 0) == 0) { if (!errors++) firstError = line; }
+            else if (line.rfind("[WARN", 0) == 0) { if (!warnings++) firstWarning = line; }
+        }
+        g_jobOutput.clear();
+        if (errors || warnings || exitCode != 0) {
+            const bool error = errors > 0 || exitCode != 0;
+            std::string text = errors || warnings ? "The job finished" + (exitCode ? " with exit code " + std::to_string(exitCode) : std::string()) +
+                                                        ": " + std::to_string(errors) + " error(s), " + std::to_string(warnings) + " warning(s)."
+                                                  : "The job failed (exit code " + std::to_string(exitCode) + ").";
+            if (!(error ? firstError : firstWarning).empty()) text += "\n" + (error ? firstError : firstWarning);
+            const int tab = g_jobTab;
+            alerts::Raise(error ? alerts::Level::Error : alerts::Level::Warning, text, "File Processing log",
+                          [tab] { g_requestMainTab = 0; g_requestSubTab = tab; });
+        }
         return;
     }
 
@@ -763,14 +760,12 @@ static void OnRunClicked() {
     const char* activeInput = nullptr;
     std::vector<std::string> tokens;
     const char* subcommand = "";
-    switch (g_activeTab) {
-        case 0: activeInput = g_dds.inputPath; tokens = BuildDdsMmpArgs(); subcommand = "ddsmmp"; break;
-        case 1: activeInput = g_ini.inputPath; tokens = BuildIniRegArgs(); subcommand = "inireg"; break;
-        case 2: activeInput = g_mob.inputPath; tokens = BuildMobDumpArgs(); subcommand = "mobdump"; break;
-        case 3: activeInput = g_res.inputPath; tokens = BuildResToolArgs(); subcommand = "restool"; break;
-        case 4: activeInput = g_xlsxdb.inputPath; tokens = BuildXlsxDbArgs(); subcommand = "xlsxdb"; break;
-        default: return;
-    }
+    const std::string tool = g_activeSubcommand;
+    if (tool == "ddsmmp") { activeInput = g_dds.inputPath; tokens = BuildDdsMmpArgs(); subcommand = "ddsmmp"; }
+    else if (tool == "inireg") { activeInput = g_ini.inputPath; tokens = BuildIniRegArgs(); subcommand = "inireg"; }
+    else if (tool == "mobdump") { activeInput = g_mob.inputPath; tokens = BuildMobDumpArgs(); subcommand = "mobdump"; }
+    else if (tool == "restool") { activeInput = g_res.inputPath; tokens = BuildResToolArgs(); subcommand = "restool"; }
+    else return;
 
     if (!activeInput || activeInput[0] == '\0') {
         AppendLog("[ERROR] Please specify an input path.\n");
@@ -792,6 +787,8 @@ static void OnRunClicked() {
     }
 
     g_activeProc = proc;
+    g_jobTab = g_activeTab;
+    g_jobOutput.clear();
     g_progressPhase = 0.0;
     g_statusText = "Running...";
 }
@@ -898,6 +895,9 @@ int RunGui(const GuiOptions& options) {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
+    // No imgui.ini: ImGui would write it into the current directory (wherever um-multitool is started
+    // from); the windows are fixed and the settings live in um-multitool.cfg beside the executable.
+    io.IniFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     // Ctrl+Tab is the Map Editor's logic mode key (by default): not ImGui's window switcher.
     ImGui::GetCurrentContext()->ConfigNavWindowingKeyNext = 0;
@@ -913,6 +913,7 @@ int RunGui(const GuiOptions& options) {
     // Map Editor and edited in the Settings tab.
     Library library;
     library.LoadConfig();
+    g_library = &library;
     ui::SourcesState sourcesState;
     std::snprintf(sourcesState.databasePath, sizeof(sourcesState.databasePath), "%s", library.dbPath.c_str());
 
@@ -931,6 +932,17 @@ int RunGui(const GuiOptions& options) {
         return mapedit::OpenGameMap(mapCtx, t, b, q, gp);
     };
     dllconnect::Context* dllCtx = dllconnect::Create(library, dllHooks);
+    alerts::SetSound(library.sfxEnabled);
+    alerts::SetPopups(library.alertPopups);
+    alerts::SetVolume(library.sfxVolume);
+    dbedit::SetHooks({[](bool save, const char* filterName, const char* filterExt, std::string& path) {
+                          return NativePickFile(save, filterName, filterExt, path);
+                      },
+                      [] { g_requestMainTab = 0; g_requestSubTab = kDbSubTab; }, // File Processing > DB
+                      [&library] { return library.dbPath; },
+                      [&library] { return library.dbAutoLoad; },
+                      [&library](bool on) { library.dbAutoLoad = on; library.SaveConfig(); }});
+    if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
     enum { kFiles, kViewer, kMap, kSettings, kDll, kNone };
     // The tab asked for on the command line, else the one open when the GUI was last closed.
@@ -942,16 +954,22 @@ int RunGui(const GuiOptions& options) {
         requestedTab = kViewer;
     }
     if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles);
+    if (!options.dbFile.empty()) {
+        requestedTab = kFiles;
+        g_requestSubTab = kDbSubTab; // DB
+    }
     bool seeThrough = false;       // a 3D tab was shown last frame (its viewport must see through the window)
     int frameCount = 0;
     double lastTime = glfwGetTime();
 
+    // The DB tab first: kDbSubTab.
     const TabInfo tabs[] = {
-        {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
-        {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
-        {"MOB Dump", DrawMobDumpTab, BuildMobDumpArgs, "mobdump", nullptr},
+        {"DB", dbedit::DrawTab, nullptr, nullptr, nullptr},  // in-process: no Run button nor log
+        {"Texts", DrawTextsTab, nullptr, nullptr, nullptr},  // the same
         {"RES / MQ", DrawResToolTab, BuildResToolArgs, "restool", nullptr},
-        {"XLSX -> RES", DrawXlsxDbTab, BuildXlsxDbArgs, "xlsxdb", nullptr},
+        {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
+        {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
+        {"MOB Dump", DrawMobDumpTab, BuildMobDumpArgs, "mobdump", nullptr},
     };
 
     int maximizeIn = saved.windowMaximized ? 3 : 0; // frames: after the window is shown (Wayland maps it at the first swap)
@@ -988,6 +1006,7 @@ int RunGui(const GuiOptions& options) {
 
         PumpActiveProcess();
         dllconnect::Update(dllCtx);
+        dbedit::Update();
         double now = glfwGetTime();
         float dt = static_cast<float>(now - lastTime);
         lastTime = now;
@@ -1015,6 +1034,7 @@ int RunGui(const GuiOptions& options) {
         int shownTab = kNone;
         if (ImGui::BeginTabBar("##maintabs")) {
             if (requestedFromDll >= 0) { requestedTab = requestedFromDll; requestedFromDll = -1; }
+            if (g_requestMainTab >= 0) { requestedTab = g_requestMainTab; g_requestMainTab = -1; }
             auto flags = [&](int tab) { return requestedTab == tab ? ImGuiTabItemFlags_SetSelected : 0; };
             if (ImGui::BeginTabItem("File Processing", nullptr, flags(kFiles))) {
                 DrawFileProcessingTab(tabs, std::size(tabs));
@@ -1051,6 +1071,18 @@ int RunGui(const GuiOptions& options) {
             library.SaveConfig();
         }
         seeThrough = shown3d;
+        // New map or script check problems (the checks run while the Map Editor is shown).
+        {
+            int newErrors = 0, newWarnings = 0, errors = 0, warnings = 0;
+            if (mapedit::TakeNewProblems(mapCtx, newErrors, newWarnings, errors, warnings)) {
+                const std::string text = "Map Editor checks: " + std::to_string(errors) + " error(s), " + std::to_string(warnings) +
+                                         " warning(s) (" + std::to_string(newErrors) + " new error(s), " + std::to_string(newWarnings) +
+                                         " new warning(s)).";
+                alerts::Raise(newErrors ? alerts::Level::Error : alerts::Level::Warning, text, "Map Editor > Checks",
+                              [mapCtx] { g_requestMainTab = 2; mapedit::ShowChecks(mapCtx); });
+            }
+        }
+        alerts::Draw();
         ImGui::End();
 
         ImGui::Render();
@@ -1124,6 +1156,7 @@ int RunGui(const GuiOptions& options) {
     viewer::Destroy(viewerCtx);
     mapedit::Destroy(mapCtx);
     dllconnect::Destroy(dllCtx);
+    alerts::Shutdown();
     // Remember the window for the next start.
     library.windowMaximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED) == GLFW_TRUE;
     library.windowW = normalW;
@@ -1142,9 +1175,12 @@ int RunGui(const GuiOptions& options) {
 // The File Processing tab: one sub-tab per tool, the Run button and the log.
 static void DrawFileProcessingTab(const TabInfo* tabs, size_t count) {
     if (ImGui::BeginTabBar("##tabs")) {
+        const int requested = g_requestSubTab;
+        g_requestSubTab = -1;
         for (int i = 0; i < static_cast<int>(count); ++i) {
-            if (ImGui::BeginTabItem(tabs[i].name)) {
+            if (ImGui::BeginTabItem(tabs[i].name, nullptr, requested == i ? ImGuiTabItemFlags_SetSelected : 0)) {
                 g_activeTab = i;
+                g_activeSubcommand = tabs[i].subcommand ? tabs[i].subcommand : "";
                 ImGui::Spacing();
                 tabs[i].draw();
                 ImGui::EndTabItem();
@@ -1152,6 +1188,7 @@ static void DrawFileProcessingTab(const TabInfo* tabs, size_t count) {
         }
         ImGui::EndTabBar();
     }
+    if (!tabs[g_activeTab].buildArgs) return; // a tab working in-process (DB)
 
     ImGui::Spacing();
     ImGui::Separator();

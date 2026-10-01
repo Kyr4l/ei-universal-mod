@@ -90,4 +90,28 @@ inline std::vector<uint8_t> EncodeCp1251(const std::string& utf8) {
     return out;
 }
 
+// Windows-1251 bytes to UTF-8 (the inverse of EncodeCp1251). The one byte with no character (0x98)
+// becomes U+0098, so it stays a single character.
+inline std::string DecodeCp1251(const uint8_t* bytes, size_t size) {
+    static const std::array<uint32_t, 128> high = [] {
+        std::array<uint32_t, 128> t{};
+        for (size_t i = 0; i < t.size(); ++i) t[i] = 0x80 + static_cast<uint32_t>(i);
+        for (const CpPair& p : NonAsciiTable()) t[p.byte - 0x80] = p.codepoint;
+        return t;
+    }();
+    std::string out;
+    out.reserve(size);
+    for (size_t i = 0; i < size; ++i) {
+        const uint32_t cp = bytes[i] < 0x80 ? bytes[i] : high[bytes[i] - 0x80];
+        if (cp < 0x80) out += static_cast<char>(cp);
+        else if (cp < 0x800) { out += static_cast<char>(0xC0 | (cp >> 6)); out += static_cast<char>(0x80 | (cp & 0x3F)); }
+        else {
+            out += static_cast<char>(0xE0 | (cp >> 12));
+            out += static_cast<char>(0x80 | ((cp >> 6) & 0x3F));
+            out += static_cast<char>(0x80 | (cp & 0x3F));
+        }
+    }
+    return out;
+}
+
 } // namespace cp1251
