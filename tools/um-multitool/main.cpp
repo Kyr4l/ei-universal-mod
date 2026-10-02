@@ -66,6 +66,8 @@ static void PrintTopLevelHelp() {
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
+              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked]  # ... on 3D Viewer > Units (a skin to try, no equipment)\n"
+              << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
               << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
               << "Subcommands:\n"
@@ -238,6 +240,12 @@ static int StartGui(int argc, char* argv[], int first) {
             while (i + 1 < argc && argv[i + 1][0] != '-') options.mapFiles.push_back(argv[++i]);
         } else if (a == "--db" && i + 1 < argc) {
             options.dbFile = argv[++i];
+        } else if (a == "--naked") {
+            options.viewerNaked = true;
+        } else if (a == "--skin" && i + 1 < argc) {
+            options.viewerSkin = argv[++i];
+        } else if (a == "--mp" && i + 1 < argc) {
+            options.mpFolder = argv[++i];
         } else if (a == "--settings") {
             options.openSettings = true;
         } else if (a == "--screenshot" && i + 1 < argc) {

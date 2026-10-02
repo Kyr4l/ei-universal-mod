@@ -4,7 +4,14 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: skeleton (0.1).** The window and the settings work; the network client does not exist yet.
+**Status: 0.2.** It joins a game: it asks the server for its info, then logs in with the key the server
+gives (tested on a hosted lobby). Playing in the game (the messages after the login) comes next.
+
+**Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
+A fresh character is recommended. Its name is the bot's name and can be changed in the window; the clan tag can't.
+The change is saved into the `.mp`, and the original is kept as `.bak`.
+
+`um-bot --connect-test` joins the configured server without the window, prints what happens, and leaves.
 
 ## Settings
 

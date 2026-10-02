@@ -8,7 +8,9 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <functional>
 #include <map>
+#include <set>
 #include <fstream>
 #include <string>
 #include <vector>
@@ -22,6 +24,7 @@
 struct ScenePart {
     std::vector<float> positions, normals, uvs;
     std::vector<uint16_t> indices;
+    std::string texture; // its own texture (a unit's parts: the composed body, a weapon's); "" = the scene's
 };
 
 struct GlTexture {
@@ -66,7 +69,9 @@ public:
     // Loads a figure by name from the figure sources; the camera is re-framed when `frame` is set.
     void LoadModel(const Library& lib, const std::string& name, bool frame) {
         parts_.clear();
+        shownParts.clear();
         hasModel = false;
+        unitModel = false;
         modelName = name;
         modelError.clear();
         vertexCount = triangleCount = 0;
@@ -108,6 +113,61 @@ public:
         if (hasModel && frame) Frame();
     }
 
+    // A unit: a figure with its complection, only the parts `shown` keeps, each with the texture `textureOf`
+    // gives (the Map Editor's dressing rules, dress.hpp). Units map their textures directly (no item atlas).
+    bool unitModel = false;
+    std::set<std::string> shownParts; // the parts drawn (lower case): what Export UV draws
+    void LoadUnit(const Library& lib, const std::string& name, const fig::Vec3& constitution, bool frame,
+                  const std::function<bool(const fig::Model&, const fig::ModelPart&)>& shown,
+                  const std::function<std::string(const fig::Model&, const fig::ModelPart&)>& textureOf) {
+        parts_.clear();
+        shownParts.clear();
+        hasModel = false;
+        unitModel = true;
+        modelName = name;
+        modelError.clear();
+        vertexCount = triangleCount = 0;
+        if (name.empty()) return;
+        LoadedModel loaded;
+        if (!LoadNamedModel(lib.figures, name, loaded)) {
+            modelError = loaded.error;
+            return;
+        }
+        bool first = true;
+        for (const fig::ModelPart& part : loaded.model.parts) {
+            if (!shown(loaded.model, part)) continue;
+            shownParts.insert(LowerName(part.name));
+            ScenePart sp;
+            sp.texture = textureOf(loaded.model, part);
+            const fig::FigureMesh& mesh = part.mesh;
+            const fig::Vec3 offset = fig::BlendComplection(part.accumulatedOffset, constitution);
+            for (size_t i = 0; i < mesh.vertexComponents.size(); ++i) {
+                const fig::VertComponent& vc = mesh.vertexComponents[i];
+                const fig::Vec3 p = mesh.BlendedPosition(i, constitution) + offset;
+                sp.positions.insert(sp.positions.end(), {p.x, p.y, p.z});
+                const fig::Vec3 n = vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1};
+                sp.normals.insert(sp.normals.end(), {n.x, n.y, n.z});
+                const fig::Vec2 uv = vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0};
+                sp.uvs.insert(sp.uvs.end(), {uv.x, uv.y});
+                if (first) { boundsMin = boundsMax = p; first = false; }
+                boundsMin = {std::min(boundsMin.x, p.x), std::min(boundsMin.y, p.y), std::min(boundsMin.z, p.z)};
+                boundsMax = {std::max(boundsMax.x, p.x), std::max(boundsMax.y, p.y), std::max(boundsMax.z, p.z)};
+            }
+            for (uint16_t index : mesh.indices) if (index < mesh.vertexComponents.size()) sp.indices.push_back(index);
+            vertexCount += static_cast<int>(mesh.vertexComponents.size());
+            triangleCount += static_cast<int>(sp.indices.size() / 3);
+            parts_.push_back(std::move(sp));
+        }
+        hasModel = !parts_.empty();
+        if (!hasModel) modelError = name + " has no shown geometry";
+        if (hasModel && frame) { Frame(); camera.yawDeg = 225.0f; camera.pitchDeg = 10.0f; } // from the front (figures face -Y)
+    }
+
+    static std::string LowerName(std::string s) {
+        for (char& c : s) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        return s;
+    }
+
     // Points the camera at the model and backs off far enough to see all of it.
     void Frame() {
         if (!hasModel) return;
@@ -140,18 +200,54 @@ public:
         return lib.textures.ReadTexture(name, bytes, found);
     }
 
+    // "skin|item|item...": the first picture, each next one painted over it by its alpha (sampled at the first
+    // one's size when they differ), as the game redresses a unit. False when the first cannot be read.
+    static bool ComposeTexture(const Library& lib, const std::string& list, mmp::Image& out) {
+        size_t start = 0;
+        bool first = true;
+        while (start <= list.size()) {
+            size_t bar = list.find('|', start);
+            if (bar == std::string::npos) bar = list.size();
+            const std::string name = list.substr(start, bar - start);
+            start = bar + 1;
+            std::vector<uint8_t> bytes;
+            mmp::Image img;
+            std::string err;
+            if (name.empty() || !ReadTextureBytes(lib, name, bytes) || !DecodeTextureFile(bytes, img, err)) {
+                if (first) return false;
+                continue;
+            }
+            if (first) { out = std::move(img); first = false; continue; }
+            for (uint32_t y = 0; y < out.height; ++y)
+                for (uint32_t x = 0; x < out.width; ++x) {
+                    const uint32_t sx = x * img.width / out.width, sy = y * img.height / out.height;
+                    const uint8_t* src = img.rgba.data() + (static_cast<size_t>(sy) * img.width + sx) * 4;
+                    uint8_t* d = out.rgba.data() + (static_cast<size_t>(y) * out.width + x) * 4;
+                    const int a = src[3];
+                    for (int c = 0; c < 3; ++c) d[c] = static_cast<uint8_t>((src[c] * a + d[c] * (255 - a)) / 255);
+                    d[3] = static_cast<uint8_t>(std::max<int>(d[3], a));
+                }
+        }
+        return !first;
+    }
+
     // The GL texture for a texture base name (or a picked file's path), loaded on first use (id 0 = could not load).
     const GlTexture& Texture(const Library& lib, const std::string& name) {
         auto it = textures_.find(name);
         if (it != textures_.end()) return it->second;
         GlTexture& t = textures_[name];
-        std::vector<uint8_t> bytes;
-        if (!ReadTextureBytes(lib, name, bytes, &t.file)) {
-            t.error = "not found in the texture sources";
-            return t;
-        }
         mmp::Image image;
-        if (!DecodeTextureFile(bytes, image, t.error)) return t;
+        if (name.rfind("compose:", 0) == 0) { // a dressed unit's body: the skin, the worn items painted over it
+            if (!ComposeTexture(lib, name.substr(8), image)) { t.error = "its skin was not found"; return t; }
+            t.file = name.substr(8);
+        } else {
+            std::vector<uint8_t> bytes;
+            if (!ReadTextureBytes(lib, name, bytes, &t.file)) {
+                t.error = "not found in the texture sources";
+                return t;
+            }
+            if (!DecodeTextureFile(bytes, image, t.error)) return t;
+        }
         glGenTextures(1, &t.id);
         glBindTexture(GL_TEXTURE_2D, t.id);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -211,7 +307,9 @@ public:
 
         GLuint tex = 0;
         int texWidth = 0;
-        if (options.textured && !textureName.empty()) {
+        if (unitModel && options.textured) { // per-part textures, mapped directly
+            for (const ScenePart& p : parts_) if (!p.texture.empty() && Texture(lib, p.texture).id) { tex = Texture(lib, p.texture).id; break; }
+        } else if (options.textured && !textureName.empty()) {
             const GlTexture& t = Texture(lib, textureName);
             tex = t.id;
             texWidth = t.width;
@@ -233,7 +331,7 @@ public:
             // Undo that here: u = u'/s, v = (v' - (1 - s))/s.
             glMatrixMode(GL_TEXTURE);
             glLoadIdentity();
-            if (options.atlasUvs && texWidth > 0 && texWidth < 256) {
+            if (!unitModel && options.atlasUvs && texWidth > 0 && texWidth < 256) {
                 float slot = texWidth / 256.0f;
                 glScalef(1.0f / slot, 1.0f / slot, 1.0f);
                 glTranslatef(0.0f, -(1.0f - slot), 0.0f);
@@ -272,6 +370,11 @@ public:
         if (textured) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         for (ScenePart& p : parts_) {
             if (p.indices.empty()) continue;
+            if (textured && unitModel) { // each part its own texture; untextured (grey) when it has none
+                const GLuint id = p.texture.empty() ? 0 : Texture(lib, p.texture).id;
+                if (id) { glEnable(GL_TEXTURE_2D); glBindTexture(GL_TEXTURE_2D, id); glColor3f(1, 1, 1); }
+                else { glDisable(GL_TEXTURE_2D); glColor3f(0.72f, 0.70f, 0.64f); }
+            }
             glVertexPointer(3, GL_FLOAT, 0, p.positions.data());
             glNormalPointer(GL_FLOAT, 0, p.normals.data());
             if (textured) glTexCoordPointer(2, GL_FLOAT, 0, p.uvs.data());

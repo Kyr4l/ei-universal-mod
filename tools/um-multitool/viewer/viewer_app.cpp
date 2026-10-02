@@ -28,9 +28,14 @@
 #include <vector>
 
 #include "library.hpp"
+#include "png_writer.hpp"
+#include "uv_map.hpp"
+#include <set>
+#include <map>
 #include "scene.hpp"
 #include "item_texts.hpp"
 #include "ui_items.hpp"
+#include "ui_units.hpp"
 
 namespace viewer {
 
@@ -40,7 +45,8 @@ struct App {
     Scene scene;
     int seenTexturesVersion = -1; // lib.texturesVersion the scene's GL textures belong to
     ui::ItemTabState tabs[static_cast<int>(items::Category::Count)];
-    int activeTab = 0;          // 0..4 = item categories
+    ui::UnitsTabState units;    // the Units tab (index kUnitsTab)
+    int activeTab = 0;          // 0..4 = item categories, kUnitsTab = units
     int requestTab = -1;        // select this tab on the next frame
     float sidebarWidth = 460.0f;
 
@@ -58,6 +64,8 @@ struct App {
     bool gifMessageOk = true;
     std::string selectedName;    // the current tab's selected item, for the default file name
 };
+
+constexpr int kUnitsTab = static_cast<int>(items::Category::Count);
 
 struct Context {
     explicit Context(Library& lib) : app(lib) {}
@@ -94,6 +102,13 @@ void PrintCliHelpImpl() {
         "  um-multitool viewer --gif <category> <item> <out.gif> [--material <name>] [--texture <name>]\n"
         "                                               Export a 360 degree turn as an animated GIF, with the GIF\n"
         "                                               settings of the viewer's export dialog (needs a display).\n"
+        "  um-multitool viewer --uvdump <figure> [out.txt]\n"
+        "                                               Every triangle of a figure (e.g. unhuma): \"part textureNumber\", then per\n"
+        "                                               corner \"u v x y z\" (complection 0.5; figures face -Y, their left is +X).\n"
+        "  um-multitool viewer --uvmap <figure> <out.png> [--texture <name|file>] [--size <pixels>]\n"
+        "                                               Each part's UV region drawn in its own colour over a texture (a skin): the\n"
+        "                                               guide for painting one. Parts: hd head, hr.NN hair, bd body, hp hips,\n"
+        "                                               lh/rh 1-3 arms (3 = hand), ll/rl 1-3 legs (3 = foot).\n"
         "  --config <file>                              Use another settings file than um-multitool-viewer.cfg.\n\n"
         "Categories: weapons, armors, quick, quest, loot. The sources (figures, textures, database)\n"
         "are the ones set in the GUI's Settings tab, saved in um-multitool.cfg.\n");
@@ -367,6 +382,7 @@ static void GifDialog(App& app, int maxSize) {
 
 // The shown model gets the rotation of the tab it belongs to.
 static void ApplyRotation(App& app) {
+    if (app.activeTab == kUnitsTab) { app.scene.SetOrientation(nullptr); return; } // units stand on the grid
     if (app.activeTab >= static_cast<int>(items::Category::Count)) return;
     auto it = app.lib.rotations.find(items::CategoryKey(static_cast<items::Category>(app.activeTab)));
     app.scene.SetOrientation(it == app.lib.rotations.end() ? nullptr : &it->second);
@@ -414,9 +430,12 @@ static void Toolbar(App& app) {
         auto found = app.lib.rotations.find(key);
         const bool rotated = found != app.lib.rotations.end() && std::fabs(std::fabs(found->second[0]) - 1.0f) > 1e-6f;
         static const char* const axes[3] = {"X", "Y", "Z"};
-        // Each button shows the current orientation as turns about X, then Y, then Z (world axes).
+        // Each button shows the turns clicked about its axis (a 3D orientation has several X/Y/Z readings, so
+        // computing them back from it would show turns never clicked); older settings without the clicks: computed.
         int deg[3] = {0, 0, 0};
-        if (found != app.lib.rotations.end()) OrientationDegrees(found->second, deg);
+        auto clicks = app.lib.rotationClicks.find(key);
+        if (clicks != app.lib.rotationClicks.end()) for (int a = 0; a < 3; ++a) deg[a] = clicks->second[a];
+        else if (found != app.lib.rotations.end()) OrientationDegrees(found->second, deg);
         ImGui::SameLine();
         ImGui::TextDisabled(" Rotate");
         for (int a = 0; a < 3; ++a) {
@@ -426,7 +445,7 @@ static void Toolbar(App& app) {
             ImGui::Button(label);
             int direction = ImGui::IsItemClicked(ImGuiMouseButton_Left) ? 1 : ImGui::IsItemClicked(ImGuiMouseButton_Right) ? -1 : 0;
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Now: X %d, Y %d, Z %d degrees (about the grid's axes, in that order)\n"
+                ImGui::SetTooltip("Clicked: X %d, Y %d, Z %d degrees (each turn about the grid's fixed axis, in click order)\n"
                                   "Click: turn 45 degrees about the grid's %s axis; right-click: the other way", deg[0], deg[1], deg[2], axes[a]);
             if (direction) {
                 std::array<float, 4> q = found != app.lib.rotations.end() ? found->second : std::array<float, 4>{1, 0, 0, 0};
@@ -434,6 +453,8 @@ static void Toolbar(App& app) {
                 fig::Quat step{std::cos(half), a == 0 ? std::sin(half) : 0.0f, a == 1 ? std::sin(half) : 0.0f, a == 2 ? std::sin(half) : 0.0f};
                 fig::Quat r = fig::QuatNormalize(fig::QuatMul(step, fig::Quat{q[0], q[1], q[2], q[3]})); // world axis: applied last
                 app.lib.rotations[key] = {r.w, r.x, r.y, r.z};
+                std::array<int, 3>& c = app.lib.rotationClicks.emplace(key, std::array<int, 3>{deg[0], deg[1], deg[2]}).first->second;
+                c[a] = ((c[a] + direction * 45) % 360 + 360) % 360;
                 app.lib.SaveConfig();
                 found = app.lib.rotations.find(key);
             }
@@ -442,6 +463,7 @@ static void Toolbar(App& app) {
         ImGui::BeginDisabled(!rotated);
         if (ImGui::Button("Reset##rot")) {
             app.lib.rotations.erase(key);
+            app.lib.rotationClicks.erase(key);
             app.lib.SaveConfig();
             found = app.lib.rotations.end();
         }
@@ -466,6 +488,15 @@ static void Sidebar(App& app, float width, float height) {
                 ImGui::EndChild();
                 ImGui::EndTabItem();
             }
+        }
+        if (ImGui::BeginTabItem("Units", nullptr, requested == kUnitsTab ? ImGuiTabItemFlags_SetSelected : 0)) {
+            if (app.activeTab != kUnitsTab) app.units.dirty = true; // the item tabs used the scene meanwhile
+            app.activeTab = kUnitsTab;
+            if (app.lib.viewerTab != kUnitsTab && requested < 0) { app.lib.viewerTab = kUnitsTab; app.lib.SaveConfig(); }
+            ImGui::BeginChild("##tab", ImVec2(0, 0));
+            ui::UnitsTab(app.lib, app.scene, app.units);
+            ImGui::EndChild();
+            ImGui::EndTabItem();
         }
         ImGui::EndTabBar();
     }
@@ -501,7 +532,7 @@ static void CameraInput(App& app, ImVec2 size) {
 
 Context* Create(Library& lib) {
     Context* ctx = new Context(lib);
-    if (lib.viewerTab >= 0 && lib.viewerTab < static_cast<int>(items::Category::Count)) ctx->app.requestTab = lib.viewerTab; // as last time
+    if (lib.viewerTab >= 0 && lib.viewerTab <= kUnitsTab) ctx->app.requestTab = lib.viewerTab; // as last time
     return ctx;
 }
 
@@ -511,8 +542,23 @@ void Destroy(Context* ctx) {
     delete ctx;
 }
 
-bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error) {
+bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin, bool naked) {
     App& app = ctx->app;
+    if (ui::units_detail::Lower(category) == "units") {
+        const auto& ms = app.lib.unitsDb.monsters;
+        for (size_t i = 0; i < ms.size(); ++i)
+            if (ui::units_detail::Lower(ms[i].name) == ui::units_detail::Lower(item)) {
+                app.requestTab = kUnitsTab;
+                app.units.selected = static_cast<int>(i);
+                ui::units_detail::ResetFromMonster(app.lib, app.units);
+                app.units.customSkin = skin;
+                if (naked) { app.units.weapons.clear(); app.units.armour.clear(); }
+                app.units.dirty = app.units.frame = true;
+                return true;
+            }
+        error = "no unit named \"" + item + "\"";
+        return false;
+    }
     items::Category c;
     if (!ParseCategory(category, c)) { error = "unknown category '" + category + "'"; return false; }
     if (!app.lib.dbLoaded) { error = "no items database loaded"; return false; }
@@ -550,6 +596,8 @@ void DrawTab(Context* ctx) {
         const ui::ItemTabState& st = app.tabs[app.activeTab];
         const auto& list = app.lib.db.List(static_cast<items::Category>(app.activeTab));
         if (app.lib.dbLoaded && st.selected >= 0 && st.selected < static_cast<int>(list.size())) app.selectedName = list[st.selected].name;
+    } else if (app.activeTab == kUnitsTab && app.units.selected >= 0 && app.units.selected < static_cast<int>(app.lib.unitsDb.monsters.size())) {
+        app.selectedName = app.lib.unitsDb.monsters[static_cast<size_t>(app.units.selected)].name;
     }
     ImGuiIO& io = ImGui::GetIO();
     float scale = io.DisplayFramebufferScale.y > 0 ? io.DisplayFramebufferScale.y : 1.0f;
@@ -629,6 +677,56 @@ void RenderGl(Context* ctx, int fbW, int fbH, float scale, float dt) {
 
 void PrintCliHelp() { PrintCliHelpImpl(); }
 
+// ---- figure UVs (skin painting) ----------------------------------------------------------------------
+// Every triangle's part, texture number, and per corner u v and the 3D position (complection 0.5).
+static int RunUvDump(const Library& lib, const std::string& figure, const std::string& outPath) {
+    LoadedModel m;
+    if (!LoadNamedModel(lib.figures, figure, m)) { std::fprintf(stderr, "%s: %s\n", figure.c_str(), m.error.c_str()); return 1; }
+    std::FILE* f = outPath.empty() ? stdout : std::fopen(outPath.c_str(), "w");
+    if (!f) { std::fprintf(stderr, "cannot write %s\n", outPath.c_str()); return 1; }
+    const fig::Vec3 k{0.5f, 0.5f, 0.5f};
+    for (const fig::ModelPart& p : m.model.parts) {
+        const fig::FigureMesh& mesh = p.mesh;
+        const fig::Vec3 off = fig::BlendComplection(p.accumulatedOffset, k);
+        for (size_t i = 0; i + 2 < mesh.indices.size(); i += 3) {
+            std::fprintf(f, "%s %d", p.name.c_str(), mesh.textureNumber);
+            for (int c = 0; c < 3; ++c) {
+                const uint16_t idx = mesh.indices[i + c];
+                if (idx >= mesh.vertexComponents.size()) { std::fprintf(f, " 0 0 0 0 0"); continue; }
+                const fig::VertComponent& vc = mesh.vertexComponents[idx];
+                const fig::Vec2 uv = vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0};
+                const fig::Vec3 pos = mesh.BlendedPosition(idx, k) + off;
+                std::fprintf(f, " %g %g %g %g %g", uv.x, uv.y, pos.x, pos.y, pos.z);
+            }
+            std::fprintf(f, "\n");
+        }
+    }
+    if (f != stdout) std::fclose(f);
+    return 0;
+}
+
+// The parts' UV regions in colours over a texture (at its size) or on transparency, with a legend printed.
+// Only the body: the bare parts (hd, bd, hp, lh1 ...: 3 letters at most) and the first hair.
+static int RunUvMap(const Library& lib, const std::string& figure, const std::string& outPath, const std::string& texture, int size) {
+    LoadedModel m;
+    if (!LoadNamedModel(lib.figures, figure, m)) { std::fprintf(stderr, "%s: %s\n", figure.c_str(), m.error.c_str()); return 1; }
+    mmp::Image tex;
+    std::vector<uint8_t> bytes;
+    std::string err;
+    const bool haveTex = !texture.empty() && Scene::ReadTextureBytes(lib, texture, bytes) && DecodeTextureFile(bytes, tex, err);
+    if (!texture.empty() && !haveTex) std::fprintf(stderr, "texture %s not read (%s): transparent background\n", texture.c_str(), err.c_str());
+    std::set<std::string> body;
+    for (const fig::ModelPart& p : m.model.parts) {
+        const std::string n = ui::LowerCopy(p.name);
+        if (n.find('.') == std::string::npos ? n.size() <= 3 : n == "hr.00") body.insert(n);
+    }
+    const uvmap::Result r = uvmap::Draw(m.model, body, haveTex ? &tex : nullptr, false, size > 0 ? size : 512);
+    for (size_t i = 0; i < r.legend.size(); ++i) std::printf("%-8s colour %zu\n", r.legend[i].c_str(), i % 12);
+    if (!png::Write(outPath, r.width, r.height, r.rgba)) { std::fprintf(stderr, "cannot write %s\n", outPath.c_str()); return 1; }
+    std::printf("written %s (%dx%d)\n", outPath.c_str(), r.width, r.height);
+    return 0;
+}
+
 int RunCli(int argc, char** argv) {
     std::vector<std::string> args(argv + 1, argv + argc); // argv[0] is "viewer"
     Library lib;
@@ -643,6 +741,12 @@ int RunCli(int argc, char** argv) {
     }
     if (args.empty() || args[0] == "--help" || args[0] == "-h") { PrintCliHelpImpl(); return args.empty() ? 1 : 0; }
     lib.LoadConfig();
+    if (args[0] == "--uvdump" && args.size() >= 2) return RunUvDump(lib, args[1], args.size() >= 3 ? args[2] : "");
+    if (args[0] == "--uvmap" && args.size() >= 3) {
+        int size = 0;
+        for (size_t i = 3; i + 1 < args.size(); ++i) if (args[i] == "--size") size = std::atoi(args[i + 1].c_str());
+        return RunUvMap(lib, args[1], args[2], texture, size);
+    }
     items::Category c;
     if (args.size() < 2 || !ParseCategory(args[1], c)) { PrintCliHelpImpl(); return 1; }
     if (!lib.dbLoaded) {

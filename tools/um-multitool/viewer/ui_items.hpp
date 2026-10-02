@@ -16,6 +16,8 @@
 #include "png_writer.hpp"
 #include "library.hpp"
 #include "scene.hpp"
+#include "uv_map.hpp"
+#include "png_writer.hpp"
 #include "ui_common.hpp"
 
 namespace ui {
@@ -31,7 +33,8 @@ struct ItemTabState {
     char textureFilter[64] = "";
     bool scrollToSelected = false;
 
-    std::string pngMessage;          // result of the last "Export PNG"
+    std::string pngMessage;          // result of the last "Export PNG" / "Export UV"
+    bool uvWithTexture = true;       // "Export UV": over the texture, or on its own
     bool pngOk = true;
 
     // Resolution of the selected row, recomputed only when its inputs change.
@@ -192,6 +195,31 @@ inline void ExportTexturePng(Library& lib, const std::string& texture, ItemTabSt
     }
 }
 
+// "Export UV": the shown figure's UV layout as a PNG, over the texture (at its exact size: pixel-perfect) or alone.
+// Returns the message to show.
+inline std::string ExportUvPng(Library& lib, Scene& scene, const std::string& texture, bool withTexture, bool& ok) {
+    ok = false;
+    LoadedModel loaded;
+    if (scene.modelName.empty() || !LoadNamedModel(lib.figures, scene.modelName, loaded)) return "No figure shown";
+    mmp::Image tex;
+    std::vector<uint8_t> bytes;
+    std::string err;
+    const bool haveTex = !texture.empty() && Scene::ReadTextureBytes(lib, texture, bytes) && DecodeTextureFile(bytes, tex, err);
+    if (!haveTex && withTexture) return "Could not read the texture " + texture + (err.empty() ? "" : ": " + err);
+    if (!withTexture && haveTex) tex.rgba.assign(tex.rgba.size(), 0); // its size, transparent: still on its texels
+    std::string dir = lib.gif.lastDirectory.empty() ? config::ExeDir() : lib.gif.lastDirectory;
+    std::string path;
+    if (!PickSaveFile(dir + "/" + scene.modelName + "_uv.png", path, "png")) return "";
+    const uvmap::Result r = uvmap::Draw(loaded.model, scene.shownParts, haveTex ? &tex : nullptr, !scene.unitModel && scene.options.atlasUvs, 256);
+    ok = png::Write(path, r.width, r.height, r.rgba);
+    if (ok) {
+        const size_t slash = path.find_last_of("/\\");
+        if (slash != std::string::npos) lib.gif.lastDirectory = path.substr(0, slash);
+        lib.SaveConfig();
+    }
+    return ok ? "Saved " + path : "Could not write " + path;
+}
+
 inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
     const auto& r = st.resolution;
     std::string shown = ShownTexture(st);
@@ -249,6 +277,10 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
             ImGui::TextDisabled("%d x %d", t.width, t.height);
             if (ImGui::Button("Export PNG")) ExportTexturePng(lib, shown, st);
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Save this texture as a PNG image, transparency included");
+            if (ImGui::Button("Export UV")) st.pngMessage = ExportUvPng(lib, scene, shown, st.uvWithTexture, st.pngOk);
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Save the figure's UV layout as a PNG, at the texture's size (each line on its texels)");
+            ImGui::SameLine();
+            ImGui::Checkbox("with texture", &st.uvWithTexture);
             if (!st.pngMessage.empty()) {
                 ImGui::PushStyleColor(ImGuiCol_Text, st.pngOk ? ImVec4(0.5f, 0.85f, 0.5f, 1) : ImVec4(0.95f, 0.45f, 0.4f, 1));
                 ImGui::PushTextWrapPos(ImGui::GetContentRegionMax().x);

@@ -4,9 +4,13 @@
 //
 // Skeleton: the settings and the window. The network client (the game's UDP protocol, port 8888) is not
 // written yet: Connect only says so. See README.md for the plan.
+#include "net.hpp" // first: winsock2.h before windows.h
+
 #include <GLFW/glfw3.h>
 
+#include <chrono>
 #include <cstdio>
+#include <thread>
 #include <deque>
 #include <string>
 
@@ -15,14 +19,21 @@
 #include "imgui_impl_opengl2.h"
 
 #include "bot_config.hpp"
+#include "mp_file.hpp"         // um-multitool's .mp reader (../um-multitool)
+#include "viewer/ui_common.hpp" // the file dialog
 
-static const char* const kVersion = "0.1";
+static const char* const kVersion = "0.2";
 
 struct App {
     bot::Config cfg;
     bool dirty = false;               // settings changed since the last save
-    enum class Link { Disconnected, Connecting, Connected } link = Link::Disconnected;
     std::deque<std::string> log;      // newest last
+    net::Client client;
+    size_t clientLogShown = 0;
+    mp::Character character;          // the loaded .mp
+    std::string characterError;
+    std::string characterFor;         // the path it was loaded from
+    bool nameDirty = false;           // the name was changed, not saved yet
     void Log(const std::string& s) {
         log.push_back(s);
         while (log.size() > 200) log.pop_front();
@@ -44,7 +55,8 @@ static void Tip(const char* text) {
 
 static void ConnectionPanel(App& app) {
     bot::Config& c = app.cfg;
-    const bool idle = app.link == App::Link::Disconnected;
+    const bool idle = app.client.state != net::Client::State::AskingInfo && app.client.state != net::Client::State::LoggingIn &&
+                      app.client.state != net::Client::State::Accepted;
     ImGui::BeginDisabled(!idle);
     char host[256];
     std::snprintf(host, sizeof host, "%s", c.host.c_str());
@@ -55,22 +67,89 @@ static void ConnectionPanel(App& app) {
     ImGui::SetNextItemWidth(90);
     if (ImGui::InputInt("Port", &c.port, 0)) { c.port = c.port < 1 ? 1 : c.port > 65535 ? 65535 : c.port; app.dirty = true; }
     Tip("The game's UDP port (8888 by default)");
-    char name[64];
-    std::snprintf(name, sizeof name, "%s", c.name.c_str());
-    ImGui::SetNextItemWidth(200);
-    if (ImGui::InputText("Bot name", name, sizeof name)) { c.name = name; app.dirty = true; }
     ImGui::EndDisabled();
     ImGui::SameLine();
-    if (idle) {
-        if (ImGui::Button("Connect"))
-            app.Log("Connect to " + c.host + ":" + std::to_string(c.port) +
-                    ": not available yet, the game's network protocol is still to be decoded (see README.md).");
+    const bool active = app.client.state == net::Client::State::AskingInfo || app.client.state == net::Client::State::LoggingIn ||
+                        app.client.state == net::Client::State::Accepted;
+    if (!active) {
+        ImGui::BeginDisabled(app.characterFor.empty() || !app.characterError.empty());
+        if (ImGui::Button("Connect")) app.client.Connect(c.host, c.port);
+        ImGui::EndDisabled();
+        Tip("Joins the game: asks the server for its info, then logs in (needs a character)");
     } else if (ImGui::Button("Disconnect")) {
-        app.link = App::Link::Disconnected;
-        app.Log("Disconnected");
+        app.client.Disconnect();
     }
     ImGui::SameLine();
-    ImGui::TextUnformatted(app.link == App::Link::Connected ? "Connected" : app.link == App::Link::Connecting ? "Connecting..." : "Not connected");
+    using S = net::Client::State;
+    const S st = app.client.state;
+    ImGui::TextUnformatted(st == S::Accepted ? "Logged in (the game's messages after the login are not written yet)"
+                           : st == S::AskingInfo || st == S::LoggingIn ? "Connecting..."
+                           : st == S::Rejected || st == S::Failed ? app.client.error.c_str() : "Not connected");
+    if (st == S::Accepted || st == S::LoggingIn)
+        ImGui::TextDisabled("Server: %s (key %08X), client id %u", app.client.info.host.c_str(), app.client.info.key, app.client.clientId);
+
+    // The bot's character
+    char path[1024];
+    std::snprintf(path, sizeof path, "%s", c.character.c_str());
+    ImGui::SetNextItemWidth(-160);
+    if (ImGui::InputTextWithHint("##character", "the bot's character: a .mp file", path, sizeof path, ImGuiInputTextFlags_EnterReturnsTrue)) {
+        c.character = path;
+        app.dirty = true;
+    }
+    Tip("A multiplayer character of the game (its mp folder, e.g. Universal-Mod/mp/8.mp). A fresh character is best:\n"
+        "the bot plays and saves it like a player would.");
+    ImGui::SameLine();
+    std::string picked;
+    if (ImGui::Button("Character...") && ui::PickFile(picked)) { c.character = picked; app.dirty = true; }
+    if (app.characterFor != c.character) { // (re)load it
+        app.characterFor = c.character;
+        app.nameDirty = false;
+        app.characterError.clear();
+        if (!c.character.empty() && !mp::Load(c.character, app.character, app.characterError)) app.Log("Character not read: " + app.characterError);
+    }
+    if (c.character.empty()) ImGui::TextDisabled("Choose the bot's character (.mp). A fresh one is recommended.");
+    else if (!app.characterError.empty()) ImGui::TextColored(ImVec4(1, 0.45f, 0.4f, 1), "%s", app.characterError.c_str());
+    else if (!app.character.members.empty()) {
+        mp::Member& m = app.character.members[0];
+        // The bot's name is its character's: "<name> | <clan tag>"; only the name can be changed here.
+        const size_t bar = m.strings[0].find('|');
+        auto trim = [](std::string v) {
+            while (!v.empty() && v.back() == ' ') v.pop_back();
+            while (!v.empty() && v.front() == ' ') v.erase(0, 1);
+            return v;
+        };
+        std::string name = trim(bar == std::string::npos ? m.strings[0] : m.strings[0].substr(0, bar));
+        const std::string tag = bar == std::string::npos ? "" : trim(m.strings[0].substr(bar + 1));
+        char nb[64];
+        std::snprintf(nb, sizeof nb, "%s", name.c_str());
+        ImGui::BeginDisabled(!idle);
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::InputText("Name", nb, sizeof nb) && nb[0]) { m.strings[0] = tag.empty() ? std::string(nb) : std::string(nb) + " | " + tag; app.nameDirty = true; }
+        ImGui::EndDisabled();
+        Tip("The bot's name in the game: its character's (saved into the .mp file)");
+        ImGui::SameLine();
+        ImGui::TextDisabled("clan tag: %s", tag.empty() ? "(none)" : tag.c_str());
+        if (app.nameDirty) {
+            ImGui::SameLine();
+            if (ImGui::Button("Save name")) {
+                std::string err;
+                const std::string bak = c.character + ".bak";
+                if (FILE* f = std::fopen(bak.c_str(), "rb")) std::fclose(f);
+                else if (FILE* in = std::fopen(c.character.c_str(), "rb")) { // the first save keeps the original
+                    std::vector<char> bytes;
+                    char buf[4096];
+                    size_t n;
+                    while ((n = std::fread(buf, 1, sizeof buf, in)) > 0) bytes.insert(bytes.end(), buf, buf + n);
+                    std::fclose(in);
+                    if (FILE* out = std::fopen(bak.c_str(), "wb")) { std::fwrite(bytes.data(), 1, bytes.size(), out); std::fclose(out); }
+                }
+                if (mp::Save(c.character, app.character, err)) { app.nameDirty = false; app.Log("Saved the name into " + c.character); }
+                else app.Log("Name not saved: " + err);
+            }
+        }
+        ImGui::TextDisabled("%s, experience %.0f, money %u, %zu items", m.strings[4].c_str(), mp::GetF(m.stats, mp::kExpTotal),
+                            mp::Money(app.character), app.character.lists[0].size());
+    }
 }
 
 static void BuildPanel(App& app) {
@@ -127,7 +206,7 @@ static void MovementPanel(App& app) {
 }
 
 static void StatusPanel(App& app) {
-    const bool on = app.link == App::Link::Connected;
+    const bool on = app.client.state == net::Client::State::Accepted;
     ImGui::Text("Health: %s   Mana: %s", on ? "?" : "-", on ? "?" : "-");
     ImGui::Text("Doing: %s", on ? "?" : "nothing (not connected)");
     ImGui::Separator();
@@ -171,9 +250,24 @@ int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
         if (a == "--version") { std::printf("um-bot %s\n", kVersion); return 0; }
+        if (a == "--connect-test") { // without the window: join the configured server, print what happens, leave
+            bot::Config cfg;
+            bot::Load(cfg);
+            net::Client client;
+            client.Connect(cfg.host, cfg.port);
+            const auto start = std::chrono::steady_clock::now();
+            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(5) && client.state != net::Client::State::Failed &&
+                   client.state != net::Client::State::Rejected) {
+                client.Update();
+                std::this_thread::sleep_for(std::chrono::milliseconds(20));
+            }
+            client.Disconnect();
+            for (const std::string& l : client.log) std::printf("%s\n", l.c_str());
+            return client.clientId ? 0 : 1;
+        }
         if (a == "--help" || a == "-h") {
             std::printf("um-bot %s - an Evil Islands companion player (skeleton: settings only, no network yet)\n"
-                        "Usage: um-bot [--version]\nSettings: um-bot.cfg next to the program.\n", kVersion);
+                        "Usage: um-bot [--version | --connect-test]\nSettings: um-bot.cfg next to the program.\n", kVersion);
             return 0;
         }
     }
@@ -191,10 +285,12 @@ int main(int argc, char** argv) {
 
     App app;
     bot::Load(app.cfg);
-    app.Log("um-bot " + std::string(kVersion) + ": the network client is not written yet; the settings are saved for it.");
+    app.Log("um-bot " + std::string(kVersion) + ": it joins a game (handshake and login); playing in it comes next.");
 
     while (!glfwWindowShouldClose(window)) {
-        glfwWaitEventsTimeout(0.1);
+        glfwWaitEventsTimeout(0.05);
+        app.client.Update();
+        for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown]);
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

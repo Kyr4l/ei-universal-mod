@@ -11,8 +11,8 @@ zone6xmap zone6xquest
 #exit 1
 bz1mpg 1
 #deploy
-10 157 15 166
+10 153 20 173
 #remove
-2 151 10 161
+2 143 10 163
 #view
 293.346

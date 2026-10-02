@@ -724,8 +724,19 @@ static void SaveQuestAreas(App& app) {
 
 // Opens a quest instead of the loaded files: its terrain, its zone's base map and its own map (made
 // active), with its lighting file picked, and the camera on where the party is deployed.
-static void OpenQuest(App& app, const quest::QuestSet& set) {
+static void OpenQuest(App& app, const quest::QuestSet& listed) {
     if (BlockedByUnsaved(app)) return;
+    // Read from disk again: the quest list keeps what it read when it was scanned (a saved change of the areas,
+    // or one made outside, would come back otherwise).
+    quest::QuestSet set = listed;
+    for (quest::Quest& c : set.copies) {
+        quest::Quest fresh;
+        if (quest::Load(c.path, fresh)) c = fresh;
+    }
+    {
+        quest::Quest fresh;
+        if (quest::Load(set.shown.path, fresh)) set.shown = fresh;
+    }
     const quest::Quest& q = set.shown;
     std::string missing;
     std::string terrain = q.terrain.empty() ? std::string() : ResolveMapFile(app, q.terrain + ".mpr", q.path);
@@ -1803,7 +1814,10 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
                 const float cur[3] = {o.complection.x, o.complection.y, o.complection.z};
                 if (EditFloats("##comp", 3, cur, v4)) CommitField(app, objectIndex, mob::kObjComplection, F32Payload(v4, 3));
             }
-            Label("Player");
+            Label("Group (diplomacy)");
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("The player group it belongs to (ei_maper's \"Player\"): one of the 32 groups of the\n"
+                                  "Diplomacy tab, which says who is friend, neutral or enemy to whom");
             if (EditU32("##player", static_cast<uint32_t>(std::max(o.player, 0)), u))
                 CommitField(app, objectIndex, mob::kObjPlayer, std::vector<uint8_t>{static_cast<uint8_t>(std::min<uint32_t>(u, 255))});
             Label("Type");
@@ -1846,6 +1860,9 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
             Label("Comments");
             if (EditText("##comments", mob::Utf8(o.comments), text)) CommitText(app, objectIndex, mob::kObjComments, text);
             Label("Quest info");
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("ei_maper's \"Quest\": a quest (e.g. z3xq1) or one of its objectives that this object is part\n"
+                                  "of. The game marks it on the map while that quest or objective is active.");
             if (EditText("##quest", mob::Utf8(o.questInfo), text)) CommitText(app, objectIndex, mob::kObjQuestInfo, text);
         }
         KindFieldRows(app, o, objectIndex);
@@ -6085,10 +6102,10 @@ void PrintCliHelp() {
         "        map, and more. Several maps are checked together in the given order, each on top of the\n"
         "        ones before it (a zone, then its quest). Figures, textures and the items database are the\n"
         "        sources of the GUI's Settings tab (um-multitool.cfg). Exit code 1 when errors are found.\n"
-        "  um-multitool map --navmesh <map.mob> [more.mob ...] --mpr <terrain.mpr> [--write <out.mob>] [--config <file>]\n"
+        "  um-multitool map --navmesh <map.mob> [more.mob ...] --mpr <terrain.mpr> [--write <out.mob> [--force]] [--config <file>]\n"
         "        Build the navmesh (AI_GRAPH) the way the game does, from the terrain and the maps' objects (their\n"
         "        figures from the Settings tab's sources), compare it with the first map's own, and with --write\n"
-        "        save the first map with it.\n"
+        "        save the first map with it (refused when it has no navmesh, e.g. a quest map, unless --force).\n"
         "  um-multitool gui --map <file.mpr|file.mob> [...]\n"
         "        Open the GUI's Map Editor on these files.\n");
 }
@@ -6099,11 +6116,12 @@ int RunCli(int argc, char** argv) {
     Library lib;
     std::string terrainPath;
     std::vector<std::string> mobs;
-    bool check = false, navmesh = false;
+    bool check = false, navmesh = false, force = false;
     std::string writePath;
     for (size_t i = 0; i < args.size(); ++i) {
         if (args[i] == "--check") check = true;
         else if (args[i] == "--navmesh") navmesh = true;
+        else if (args[i] == "--force") force = true;
         else if (args[i] == "--write" && i + 1 < args.size()) writePath = args[++i];
         else if (args[i] == "--mpr" && i + 1 < args.size()) terrainPath = args[++i];
         else if (args[i] == "--config" && i + 1 < args.size()) lib.configPath = args[++i];
@@ -6137,6 +6155,11 @@ int RunCli(int argc, char** argv) {
             std::printf("%s has no navmesh to compare with\n", first.fileName.c_str());
         }
         if (!writePath.empty()) {
+            if (!first.aiGraphBytes && !force) {
+                std::fprintf(stderr, "not written: %s has no navmesh (a quest map?). The zone's main map comes first; --force writes it anyway.\n",
+                             first.fileName.c_str());
+                return 1;
+            }
             mob::File out = first;
             mob::SetAiGraph(out, payload);
             out.path = writePath;

@@ -32,6 +32,7 @@ struct Library {
 
     std::string configPath = config::Path();
     std::map<std::string, std::array<float, 4>> rotations; // per tab, see config::Config::rotations
+    std::map<std::string, std::array<int, 3>> rotationClicks; // per tab: the degrees clicked about X, Y, Z
     config::GifSettings gif;
     std::string mapTerrain;              // the map editor's files, see config::Config
     std::vector<std::string> mapMobs;
@@ -58,6 +59,8 @@ struct Library {
     int sfxVolume = 100;                           // 0-100 %
     bool dbAutoLoad = false;                       // File Processing > DB opens dbPath by itself
     bool mapRegenNavmesh = false;                  // Map Editor: regenerate the navmesh (AI_GRAPH) on save
+    std::string mpFolder;                          // File Processing > MP: the multiplayer characters' folder
+    std::map<std::string, std::string> dbCompileTo; // File Processing > DB: database -> its last "Compile to"
     float backgroundOpacity = 0.35f;
     float mapHour = -1.0f;                         // the Map Editor's time of day (-1: the map's own)
     int windowW = 1400, windowH = 860, windowX = -100000, windowY = -100000; // the GUI window, see config.hpp
@@ -103,6 +106,7 @@ struct Library {
         for (auto& p : cfg.textLayers) texts.AddLayer(p);
         for (auto& p : cfg.mapLayers) maps.AddLayer(p);
         rotations = cfg.rotations;
+        rotationClicks = cfg.rotationClicks;
         gif = cfg.gif;
         mapTerrain = cfg.mapTerrain;
         mapMobs = cfg.mapMobs;
@@ -126,7 +130,7 @@ struct Library {
         for (int i = 0; i < 5; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
         dllPort = cfg.dllPort; dllTab = cfg.dllTab; dllAutoConnect = cfg.dllAutoConnect;
-        sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad; mapRegenNavmesh = cfg.mapRegenNavmesh;
+        sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad; mapRegenNavmesh = cfg.mapRegenNavmesh; mpFolder = cfg.mpFolder; dbCompileTo = cfg.dbCompileTo;
         windowW = cfg.windowW; windowH = cfg.windowH; windowX = cfg.windowX; windowY = cfg.windowY; windowMaximized = cfg.windowMaximized;
         mapMousePan = cfg.mapMousePan;
         RebuildFigureIndex();
@@ -142,6 +146,7 @@ struct Library {
         for (auto& l : maps.layers) cfg.mapLayers.push_back(l.path);
         cfg.databasePath = dbPath;
         cfg.rotations = rotations;
+        cfg.rotationClicks = rotationClicks;
         cfg.gif = gif;
         cfg.mapTerrain = mapTerrain;
         cfg.mapMobs = mapMobs;
@@ -165,7 +170,7 @@ struct Library {
         for (int i = 0; i < 5; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;
         cfg.dllPort = dllPort; cfg.dllTab = dllTab; cfg.dllAutoConnect = dllAutoConnect;
-        cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad; cfg.mapRegenNavmesh = mapRegenNavmesh;
+        cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad; cfg.mapRegenNavmesh = mapRegenNavmesh; cfg.mpFolder = mpFolder; cfg.dbCompileTo = dbCompileTo;
         cfg.windowW = windowW; cfg.windowH = windowH; cfg.windowX = windowX; cfg.windowY = windowY; cfg.windowMaximized = windowMaximized;
         cfg.mapMousePan = mapMousePan;
         config::Save(cfg, configPath);

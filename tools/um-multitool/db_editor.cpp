@@ -182,6 +182,10 @@ void Open(const std::string& path) {
     const std::string ext = Ext(path);
     std::snprintf(g.savePath, sizeof(g.savePath), "%s", (ext == ".xlsx" || ext == ".ods" ? path : Replace(path, ".xlsx")).c_str());
     std::snprintf(g.resPath, sizeof(g.resPath), "%s", (ext == ".res" ? path : Replace(path, ".res")).c_str());
+    if (g.hooks.compileTo) { // where it was compiled to last time
+        const std::string last = g.hooks.compileTo(path);
+        if (!last.empty()) std::snprintf(g.resPath, sizeof(g.resPath), "%s", last.c_str());
+    }
     g.alertedErrors = g.alertedWarnings = 0;
     Recheck();
     size_t records = 0;
@@ -212,6 +216,7 @@ void Compile() {
     if (!dbmodel::CompileBook(g.book, res, &files, err)) { Say("Not compiled: " + err, true); return; }
     std::string data(res.begin(), res.end());
     if (!sheetio::WriteFile(path, data, err)) { Say("Not written: " + err, true); return; }
+    if (g.hooks.setCompileTo && !g.loadedPath.empty()) g.hooks.setCompileTo(g.loadedPath, path); // remembered
     std::string list;
     for (const auto& f : files) list += (list.empty() ? "" : ", ") + f.name;
     Say("Compiled " + path + " (" + list + ", " + std::to_string(res.size()) + " bytes)" +

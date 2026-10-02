@@ -116,6 +116,7 @@ struct Config {
     std::string databasePath;
     // Per tab (key e.g. "WEAPONS"): the shown model's orientation, a unit quaternion (w, x, y, z).
     std::map<std::string, std::array<float, 4>> rotations;
+    std::map<std::string, std::array<int, 3>> rotationClicks; // per tab: the degrees clicked about X, Y, Z (the labels)
     GifSettings gif;
     std::string mapTerrain;                   // the map editor's .mpr
     std::vector<std::string> mapMobs;         // and its .mob files, in load order
@@ -152,6 +153,8 @@ struct Config {
     bool alertPopups = true;                  // a popup when errors are detected
     bool dbAutoLoad = false;                  // File Processing > DB opens DATABASE by itself
     bool mapRegenNavmesh = false;             // the Map Editor regenerates a zone's AI_GRAPH when saving it
+    std::string mpFolder;                     // File Processing > MP: the folder of multiplayer characters (<game>/mp)
+    std::map<std::string, std::string> dbCompileTo; // File Processing > DB: database path -> its last "Compile to"
 };
 
 inline Config Load(const std::string& path = Path()) {
@@ -216,6 +219,11 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "ALERT_POPUPS") cfg.alertPopups = value == "true";
         else if (key == "DB_AUTO_LOAD") cfg.dbAutoLoad = value == "true";
         else if (key == "MAP_REGEN_NAVMESH") cfg.mapRegenNavmesh = value == "true";
+        else if (key == "MP_FOLDER") cfg.mpFolder = value;
+        else if (key == "DB_COMPILE_TO") { // database|res
+            const size_t bar = value.find('|');
+            if (bar != std::string::npos) cfg.dbCompileTo[value.substr(0, bar)] = value.substr(bar + 1);
+        }
         else if (key == "DLL_TAB") cfg.dllTab = std::atoi(value.c_str());
         else if (key == "BACKGROUND_OPACITY") cfg.backgroundOpacity = static_cast<float>(std::atof(value.c_str()));
         else if (key == "WINDOW_SIZE") std::sscanf(value.c_str(), "%d,%d", &cfg.windowW, &cfg.windowH);
@@ -227,6 +235,10 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "MAP_MOUSE_ORBIT") cfg.mapMouseOrbit = std::min(std::max(std::atoi(value.c_str()), 1), 4);
         else if (key == "MAP_MOUSE_PAN") cfg.mapMousePan = std::min(std::max(std::atoi(value.c_str()), 1), 4);
         else if (key == "MAP_CAMERA_SPEED") cfg.mapCameraSpeed = std::min(std::max(static_cast<float>(std::atof(value.c_str())), 0.05f), 20.0f);
+        else if (key.rfind("ROTCLICKS_", 0) == 0) {
+            int v[3] = {0, 0, 0};
+            if (std::sscanf(value.c_str(), "%d,%d,%d", &v[0], &v[1], &v[2]) == 3) cfg.rotationClicks[key.substr(10)] = {v[0], v[1], v[2]};
+        }
         else if (key.rfind("ROTATION_", 0) == 0) {
             float v[4] = {0, 0, 0, 0};
             int n = std::sscanf(value.c_str(), "%f,%f,%f,%f", &v[0], &v[1], &v[2], &v[3]);
@@ -344,6 +356,9 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
         char line[160];
         std::snprintf(line, sizeof(line), "ROTATION_%s=%.6f,%.6f,%.6f,%.6f\n", kv.first.c_str(), q[0], q[1], q[2], q[3]);
         f << line;
+        auto clicks = cfg.rotationClicks.find(kv.first);
+        if (clicks != cfg.rotationClicks.end())
+            f << "ROTCLICKS_" << kv.first << "=" << clicks->second[0] << "," << clicks->second[1] << "," << clicks->second[2] << "\n";
     }
     char background[16];
     std::snprintf(background, sizeof(background), "%06X", cfg.gif.background & 0xFFFFFF);
@@ -382,7 +397,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; um.dll's DLL server port (DLL_SERVER_PORT in um.cfg), and whether to keep trying to connect; (true/false)\n";
     f << "DLL_PORT=" << cfg.dllPort << "\nDLL_AUTO_CONNECT=" << flag(cfg.dllAutoConnect) << "\nDLL_TAB=" << cfg.dllTab << "\n";
     f << "SFX_ENABLED=" << flag(cfg.sfxEnabled) << "\nSFX_VOLUME=" << cfg.sfxVolume << "\nALERT_POPUPS=" << flag(cfg.alertPopups)
-      << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\nMAP_REGEN_NAVMESH=" << flag(cfg.mapRegenNavmesh) << "\n";
+      << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\nMAP_REGEN_NAVMESH=" << flag(cfg.mapRegenNavmesh) << "\nMP_FOLDER=" << cfg.mpFolder << "\n";
+    for (const auto& [db, res] : cfg.dbCompileTo) f << "DB_COMPILE_TO=" << db << "|" << res << "\n";
 
     section("Map Editor keys");
     f << "; key,modifiers: the key is a key POSITION (GLFW key code, named after the US layout: the key at the\n"

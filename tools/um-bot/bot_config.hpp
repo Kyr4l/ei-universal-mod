@@ -24,6 +24,7 @@ struct Config {
     std::string host = "127.0.0.1";
     int port = 8888;
     std::string name = "Companion";
+    std::string character;       // the bot's character: a .mp file of the game's (or a mod's) mp folder
     // Build
     Role role = Role::Ranged;
     int tankiness = 30;          // 0 all damage .. 100 all defence (where skill points and gear go)
@@ -71,6 +72,7 @@ inline void Load(Config& c) {
         if (k == "HOST") c.host = v;
         else if (k == "PORT") c.port = clampi(i, 1, 65535);
         else if (k == "NAME") c.name = v;
+        else if (k == "CHARACTER") c.character = v;
         else if (k == "ROLE") c.role = static_cast<Role>(clampi(i, 0, 3));
         else if (k == "TANKINESS") c.tankiness = clampi(i, 0, 100);
         else if (k == "PRIORITY") c.priority = static_cast<Priority>(clampi(i, 0, 2));
@@ -89,7 +91,7 @@ inline bool Save(const Config& c) {
     std::ofstream o(c.path, std::ios::trunc);
     if (!o) return false;
     o << "# um-bot settings\n"
-      << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\n"
+      << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\nCHARACTER=" << c.character << "\n"
       << "ROLE=" << static_cast<int>(c.role) << "\nTANKINESS=" << c.tankiness << "\n"
       << "PRIORITY=" << static_cast<int>(c.priority) << "\nHEAL_PLAYER_BELOW=" << c.healPlayerBelow
       << "\nHEAL_SELF_BELOW=" << c.healSelfBelow << "\nMANA_RESERVE=" << c.manaReserve << "\nUSE_POTIONS=" << (c.usePotions ? 1 : 0) << "\n"

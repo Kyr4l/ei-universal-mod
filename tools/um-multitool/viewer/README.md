@@ -7,6 +7,15 @@ The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2):
 - **Weapons, Armors, Quick Items, Quest Items, Loot Items**: the rows of that block of `items.idb`.
   - Search by name, and filter by type.
   - Use the arrow keys to walk through the list.
+- **Units**: a unit of the database (its Monsters sheet), dressed like the game and the Map Editor dress it: its race's figure, skin, hair, weapons and armour (the armour's textures painted over the skin, inside out).
+  - Change anything on top:
+    - **Skin**: the race's list, or a **custom skin**: a texture name or any file (.png, .dds, .mmp), with **Reload** to see a skin being painted.
+    - **Hair** (a helm hides it).
+    - **Complection**.
+    - **Weapons**, and each **armour** piece with its material.
+  - **Remove all** shows the bare skin. **Reset to the database's** brings back the unit's own equipment.
+  - **Animation**: the controls are there but disabled until the game's `.anm` files are decoded.
+  - From the command line: `um-multitool gui --viewer units "Human Hero" --skin myskin.png --naked`.
 - **Figure**: the model. It's worked out from the database, and you can pick another model of the same family by hand, for example for the mod's `scepter`, which has no model yet.
 - **Material**: the materials of the item's class (`M.Type`). The default is the first one in database order that has a texture, so a Metal axe opens in bronze.
 - **Texture**: every texture that fits the item.
@@ -63,10 +72,20 @@ um-multitool viewer --list <category>                                         ev
 um-multitool viewer --resolve <category> <item> [--material <name>]
 um-multitool viewer --render <category> <item> <out.bmp> [--material <name>] [--texture <name>]
 um-multitool viewer --gif <category> <item> <out.gif> [--material <name>] [--texture <name>]   uses the saved GIF settings
+um-multitool gui --viewer units <unit> [--skin <file>] [--naked]               a unit, a skin to try on it, without equipment
+um-multitool viewer --uvdump <figure> [out.txt]                               every triangle: part, texture number, per corner u v x y z
+um-multitool viewer --uvmap <figure> <out.png> [--texture <name|file>] [--size <px>]   the parts' UV regions over a skin
 --config <file>                                                               another settings file
 ```
 
-Categories: `weapons`, `armors`, `quick`, `quest`, `loot`. `--render` and `--gif` need a display.
+Categories: `weapons`, `armors`, `quick`, `quest`, `loot` (and `units` for `gui --viewer`). `--render` and `--gif` need a display.
+
+**Painting a skin.** `--uvmap unhuma map.png --texture unhumaskin_00` draws where each body part takes its texels on the 256×256 skin:
+- `hd`: the head, stored upside down. `hr.00`: the hair strip the hair meshes use.
+- `bd`: the body. `hp`: the hips. Both are stored front and back, upside down.
+- `lh`/`rh` 1-3: the arms (3 is the hand). `ll`/`rl` 1-3: the legs (3 is the foot).
+
+`--uvdump` gives the same with each corner's 3D position. Figures face −Y, and their left is +X. Paint, then try the skin on a unit in the Units tab.
 
 ## Building
 

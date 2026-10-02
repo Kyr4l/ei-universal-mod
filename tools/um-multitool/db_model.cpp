@@ -563,6 +563,7 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
     };
     const auto named = kNamed.find(sh.name);
     std::map<std::string, int> nameRow;
+    std::set<int> flaggedFirst; // first rows of duplicated names, already marked
     for (int row : rows) {
         for (const auto& [rc, cell] : sh.cells) {
             if (rc.first != row || Empty(&cell)) continue;
@@ -573,10 +574,13 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
             const sheetio::Cell* c = At(sh, row, it->second.back());
             const std::string name = Empty(c) ? "" : Lower(Trim(c->text));
             if (name.empty()) issue(Issue::Warning, row, it->second.back(), "a record without a name");
-            else if (auto first = nameRow.find(name); first != nameRow.end())
+            else if (auto first = nameRow.find(name); first != nameRow.end()) {
                 issue(Issue::Warning, row, it->second.back(), "'" + Trim(c->text) + "' is also the name of row " + std::to_string(first->second) +
                       ": " + RowDifferences(sh, info, first->second, row, it->second.back()));
-            else nameRow[name] = row;
+                // The first row too (once), so both are marked.
+                if (flaggedFirst.insert(first->second).second)
+                    issue(Issue::Warning, first->second, it->second.back(), "'" + Trim(c->text) + "' is used again in row " + std::to_string(row));
+            } else nameRow[name] = row;
         }
         // Each field's columns.
         for (const auto& [key, cols] : info.columns) {

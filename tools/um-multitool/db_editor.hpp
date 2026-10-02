@@ -16,6 +16,9 @@ struct Hooks {
     std::function<std::string()> settingsDatabase;
     std::function<bool()> autoLoad;
     std::function<void(bool)> setAutoLoad;
+    // The last "Compile to" of a database (by its path; "" = none yet), remembered in the config.
+    std::function<std::string(const std::string& database)> compileTo;
+    std::function<void(const std::string& database, const std::string& res)> setCompileTo;
 };
 
 void SetHooks(Hooks hooks);

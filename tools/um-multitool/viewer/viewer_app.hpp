@@ -20,7 +20,8 @@ void DrawTab(Context* ctx);
 void RenderGl(Context* ctx, int framebufferWidth, int framebufferHeight, float framebufferScale, float dt);
 
 // Opens the viewer on one item (e.g. "weapons", "axe"); false with a message if not found.
-bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error);
+// category "units": a unit (Monsters) by name, with `skin` (a texture file or name) tried on it when given.
+bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin = "", bool naked = false);
 
 // `um-multitool viewer <args>`: --list, --resolve, --render, --gif (argv[0] is "viewer").
 int RunCli(int argc, char** argv);

@@ -44,6 +44,7 @@
 #include "alerts.hpp"
 #include "db_editor.hpp"
 #include "text_editor.hpp"
+#include "mp_editor.hpp"
 #include "viewer/dds_texture.hpp"
 
 #include <string>
@@ -693,8 +694,10 @@ static std::string g_statusText = "Idle";
 static int g_activeTab = 0;
 static const char* g_activeSubcommand = ""; // the shown File Processing sub-tab's tool ("" for DB)
 constexpr int kDbSubTab = 0; // File Processing's DB sub-tab (see the tabs in RunGui)
+constexpr int kMpSubTab = 2; // its MP sub-tab
 static Library* g_library = nullptr; // for the sub-tabs that need the sources (Texts)
 static void DrawTextsTab() { textedit::DrawTab(*g_library); }
+static void DrawMpTab() { mpedit::DrawTab(*g_library); }
 static int g_requestMainTab = -1, g_requestSubTab = -1; // asked by an alert's button: shown at the next frame
 static int g_jobTab = 0;                                // the File Processing sub-tab the running job came from
 static std::string g_jobOutput;                         // the running job's output (counted for the alerts)
@@ -941,7 +944,14 @@ int RunGui(const GuiOptions& options) {
                       [] { g_requestMainTab = 0; g_requestSubTab = kDbSubTab; }, // File Processing > DB
                       [&library] { return library.dbPath; },
                       [&library] { return library.dbAutoLoad; },
-                      [&library](bool on) { library.dbAutoLoad = on; library.SaveConfig(); }});
+                      [&library](bool on) { library.dbAutoLoad = on; library.SaveConfig(); },
+                      [&library](const std::string& db) {
+                          auto it = library.dbCompileTo.find(db);
+                          return it == library.dbCompileTo.end() ? std::string() : it->second;
+                      },
+                      [&library](const std::string& db, const std::string& res) {
+                          if (library.dbCompileTo[db] != res) { library.dbCompileTo[db] = res; library.SaveConfig(); }
+                      }});
     if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
     enum { kFiles, kViewer, kMap, kSettings, kDll, kNone };
@@ -950,13 +960,18 @@ int RunGui(const GuiOptions& options) {
                      : (library.guiTab >= kFiles && library.guiTab <= kDll ? library.guiTab : kNone);
     if (!options.viewerCategory.empty()) {
         std::string err;
-        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err)) std::fprintf(stderr, "%s\n", err.c_str());
+        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked)) std::fprintf(stderr, "%s\n", err.c_str());
         requestedTab = kViewer;
     }
     if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles);
     if (!options.dbFile.empty()) {
         requestedTab = kFiles;
         g_requestSubTab = kDbSubTab; // DB
+    }
+    if (!options.mpFolder.empty()) {
+        mpedit::OpenFolder(*g_library, options.mpFolder);
+        requestedTab = kFiles;
+        g_requestSubTab = kMpSubTab;
     }
     bool seeThrough = false;       // a 3D tab was shown last frame (its viewport must see through the window)
     int frameCount = 0;
@@ -966,6 +981,7 @@ int RunGui(const GuiOptions& options) {
     const TabInfo tabs[] = {
         {"DB", dbedit::DrawTab, nullptr, nullptr, nullptr},  // in-process: no Run button nor log
         {"Texts", DrawTextsTab, nullptr, nullptr, nullptr},  // the same
+        {"MP", DrawMpTab, nullptr, nullptr, nullptr},        // multiplayer characters (in-process)
         {"RES / MQ", DrawResToolTab, BuildResToolArgs, "restool", nullptr},
         {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
         {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
