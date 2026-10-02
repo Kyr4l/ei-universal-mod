@@ -2392,6 +2392,8 @@ void ImFormatStringToTempBuffer(const char** out_buf, const char** out_buf_end, 
 // by making the caller acquire a temp buffer token, with either explicit or destructor release, e.g.
 //  ImGuiTempBufferToken token;
 //  ImFormatStringToTempBuffer(token, ...);
+// um-multitool: UI language hooks (i18n.cpp), see UmTranslateText / UmTranslateFmt.
+extern const char* UmTranslateFmt(const char* fmt);
 void ImFormatStringToTempBufferV(const char** out_buf, const char** out_buf_end, const char* fmt, va_list args)
 {
     ImGuiContext& g = *GImGui;
@@ -2417,6 +2419,7 @@ void ImFormatStringToTempBufferV(const char** out_buf, const char** out_buf_end,
     }
     else
     {
+        fmt = UmTranslateFmt(fmt);
         int buf_len = ImFormatStringV(g.TempBuffer.Data, g.TempBuffer.Size, fmt, args);
         *out_buf = g.TempBuffer.Data;
         if (out_buf_end) { *out_buf_end = g.TempBuffer.Data + buf_len; }

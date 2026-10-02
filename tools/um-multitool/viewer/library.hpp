@@ -52,6 +52,7 @@ struct Library {
     float mapCameraSpeed = 1.0f;           // the Map Editor's key movement speed (multiplier)
     int mapMouseOrbit = 2, mapMousePan = 1; // the Map Editor's mouse buttons, see config.hpp
     int guiTab = 0, viewerTab = 0, mapSideTab = 0; // the tabs open last time
+    std::string language;                          // display language "en" / "ru" (i18n.hpp); empty = not chosen yet
     std::string background, tabBackground[5];     // background pictures (config.hpp)
     int dllPort = 18888, dllTab = 0;               // the UM DLL Connector (config.hpp)
     bool dllAutoConnect = false;
@@ -125,6 +126,7 @@ struct Library {
         mapQuest = cfg.mapQuest;
         mapCameraSpeed = cfg.mapCameraSpeed;
         mapMouseOrbit = cfg.mapMouseOrbit;
+        language = cfg.language;
         guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour;
         background = cfg.background;
         for (int i = 0; i < 5; ++i) tabBackground[i] = cfg.tabBackground[i];
@@ -165,6 +167,7 @@ struct Library {
         cfg.mapQuest = mapQuest;
         cfg.mapCameraSpeed = mapCameraSpeed;
         cfg.mapMouseOrbit = mapMouseOrbit;
+        cfg.language = language;
         cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour;
         cfg.background = background;
         for (int i = 0; i < 5; ++i) cfg.tabBackground[i] = tabBackground[i];

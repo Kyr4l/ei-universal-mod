@@ -135,6 +135,7 @@ struct Config {
     std::string mapQuest;                     // the quest the Map Editor has open
     float mapCameraSpeed = 1.0f;              // the Map Editor's key movement speed (multiplier)
     int guiTab = 0, viewerTab = 0, mapSideTab = 0; // the tabs open when the GUI was closed
+    std::string language;                     // display language, "en" / "ru"; empty = not chosen yet (first start: the GUI asks)
     // Background pictures behind the menus: one for every tab, and one per main tab (which wins)
     std::string background;
     std::string tabBackground[5];                 // File Processing, 3D Viewer, Map Editor, Settings, UM DLL Connector
@@ -173,6 +174,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "TEXT_LAYER") cfg.textLayers.push_back(value);
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
         else if (key == "DATABASE") cfg.databasePath = value;
+        else if (key == "LANGUAGE") cfg.language = value;
         else if (key == "GIF_SIZE") cfg.gif.size = std::atoi(value.c_str());
         else if (key == "GIF_FPS") cfg.gif.fps = std::atoi(value.c_str());
         else if (key == "GIF_SPEED") cfg.gif.degreesPerSecond = static_cast<float>(std::atof(value.c_str()));
@@ -330,6 +332,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     if (!cfg.databasePath.empty()) f << "DATABASE=" << cfg.databasePath << "\n";
 
     section("Layout");
+    f << "; Display language of the GUI: en (English) or ru (Russian). Empty or missing: the GUI asks at start.\n";
+    if (!cfg.language.empty()) f << "LANGUAGE=" << cfg.language << "\n";
     f << "; The tabs open when the GUI was closed: main tab (0 File Processing, 1 3D Viewer, 2 Map Editor, 3 Settings),\n"
          "; the 3D Viewer's item tab and the Map Editor's side tab.\n";
     f << "GUI_TAB=" << cfg.guiTab << "\nVIEWER_TAB=" << cfg.viewerTab << "\nMAP_SIDE_TAB=" << cfg.mapSideTab << "\n";

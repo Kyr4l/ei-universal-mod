@@ -42,6 +42,7 @@
 #include "mapedit/map_app.hpp"
 #include "dllconnect/connector_app.hpp"
 #include "alerts.hpp"
+#include "i18n.hpp"
 #include "db_editor.hpp"
 #include "text_editor.hpp"
 #include "mp_editor.hpp"
@@ -917,6 +918,12 @@ int RunGui(const GuiOptions& options) {
     Library library;
     library.LoadConfig();
     g_library = &library;
+    {
+        i18n::Lang lang = i18n::Lang::English;
+        i18n::FromCode(library.language, lang); // empty / unknown: English, and the first-start popup asks
+        i18n::Set(lang);
+    }
+    bool askLanguage = library.language.empty();
     ui::SourcesState sourcesState;
     std::snprintf(sourcesState.databasePath, sizeof(sourcesState.databasePath), "%s", library.dbPath.c_str());
 
@@ -1099,6 +1106,30 @@ int RunGui(const GuiOptions& options) {
             }
         }
         alerts::Draw();
+        // First start (no LANGUAGE in um-multitool.cfg): ask for the display language. English is the default.
+        if (askLanguage) {
+            ImGui::OpenPopup("Language / Язык##firstLanguage");
+            askLanguage = false;
+        }
+        ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        if (ImGui::BeginPopupModal("Language / Язык##firstLanguage", nullptr,
+                                    ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
+            ImGui::TextUnformatted("Choose the display language.");
+            ImGui::TextUnformatted("Выберите язык интерфейса.");
+            ImGui::TextDisabled("It can be changed later in Settings. / Можно изменить в настройках.");
+            ImGui::Spacing();
+            for (i18n::Lang lang : {i18n::Lang::English, i18n::Lang::Russian}) {
+                if (lang != i18n::Lang::English) ImGui::SameLine();
+                if (ImGui::Button(i18n::NativeName(lang), ImVec2(140, 0))) {
+                    i18n::Set(lang);
+                    library.language = i18n::Code(lang);
+                    library.SaveConfig();
+                    ImGui::CloseCurrentPopup();
+                }
+                if (lang == i18n::Lang::English) ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndPopup();
+        }
         ImGui::End();
 
         ImGui::Render();

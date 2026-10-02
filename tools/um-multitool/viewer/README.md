@@ -32,6 +32,8 @@ The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2):
 
 In the viewport the mouse works as in the Map Editor: the wheel click orbits, the right button drags (both set in **Settings → Mouse**), and the wheel zooms. **Frame** re-centres the model. **Browse...** next to the texture previews any picture file on the figure (a game texture .dds/.mmp, or .png, .jpg, .bmp, .tga...). With **Textured** and **Wireframe** both on, the edges are drawn over the texture. The item list can sit on either side of the view (**Settings → Layout**), resized by dragging the bar between them.
 
+**Settings → Language** sets the display language of the GUI: English or Russian. The first time the program starts it asks for it in a popup (English is the default); the choice is kept as `LANGUAGE=en|ru` in `um-multitool.cfg`. Texts without a Russian translation stay English. The translations are in `i18n_ru.inc`.
+
 **Settings → Background** puts a picture (any picture: .jpg, .png, .bmp, .tga, .gif, .dds, .mmp...) behind the menus: one for every tab, and one per main tab (File Processing, 3D Viewer, Map Editor, Settings) that wins over it. **Opacity** sets how much it shows over the plain background; the pictures fill the window, cropped to its shape.
 
 **X / Y / Z** (each labelled with the current angle, as turns about X, then Y, then Z) turn the models of the current tab by 45° about the grid's fixed X, Y or Z axis, around their centre, whatever turns came before (right-click turns the other way); **Reset** undoes them. Each tab keeps its own orientation, saved in `um-multitool.cfg` as a quaternion w,x,y,z (e.g. `ROTATION_WEAPONS=0.923880,0.382683,0.000000,0.000000`); older files with three angles are converted on load.

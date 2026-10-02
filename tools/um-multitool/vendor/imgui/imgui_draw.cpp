@@ -5758,8 +5758,18 @@ ImVec2 ImFontCalcTextSizeEx(ImFont* font, float size, float max_width, float wra
     return text_size;
 }
 
+// um-multitool: UI language hook (i18n.cpp): swaps a known English text for its translation, at both
+// the measuring and the drawing entry point so layout and drawing agree.
+extern bool UmTranslateText(const char*& text_begin, const char*& text_end);
+
 ImVec2 ImFont::CalcTextSizeA(float size, float max_width, float wrap_width, const char* text_begin, const char* text_end, const char** out_remaining)
 {
+    if (!out_remaining) // with out_remaining the caller indexes the string it passed in: leave it alone
+    {
+        if (!text_end)
+            text_end = text_begin + ImStrlen(text_begin);
+        UmTranslateText(text_begin, text_end);
+    }
     return ImFontCalcTextSizeEx(this, size, max_width, wrap_width, text_begin, text_end, text_end, out_remaining, NULL, ImDrawTextFlags_None);
 }
 
@@ -5811,6 +5821,9 @@ void ImFont::RenderChar(ImDrawList* draw_list, float size, const ImVec2& pos, Im
 // DO NOT CALL DIRECTLY THIS WILL CHANGE WILDLY IN 2026. Use ImDrawList::AddText().
 void ImFont::RenderText(ImDrawList* draw_list, float size, const ImVec2& pos, ImU32 col, const ImVec4& clip_rect, const char* text_begin, const char* text_end, float wrap_width, ImDrawTextFlags flags)
 {
+    if (!text_end)
+        text_end = text_begin + ImStrlen(text_begin);
+    UmTranslateText(text_begin, text_end);
 begin:
     // Align to be pixel perfect
     float x = pos.x;

@@ -10,6 +10,7 @@
 #include <string>
 
 #include "alerts.hpp"
+#include "i18n.hpp"
 #include "library.hpp"
 #include "ui_common.hpp"
 
@@ -472,6 +473,23 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
 
 // The Settings tab's right column: problem alerts, the Map Editor's mouse buttons and keys.
 inline void ControlsPanel(Library& lib, SourcesState& st) {
+    ImGui::SeparatorText("Language");
+    {
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextUnformatted("Display language");
+        ImGui::SameLine(220);
+        ImGui::SetNextItemWidth(260);
+        if (ImGui::BeginCombo("##language", i18n::NativeName(i18n::Current()))) {
+            for (i18n::Lang lang : {i18n::Lang::English, i18n::Lang::Russian}) {
+                if (ImGui::Selectable(i18n::NativeName(lang), i18n::Current() == lang)) {
+                    i18n::Set(lang);
+                    lib.language = i18n::Code(lang);
+                    lib.SaveConfig();
+                }
+            }
+            ImGui::EndCombo();
+        }
+    }
     ImGui::SeparatorText("Problem alerts (database, map and script checks, File Processing jobs)");
     if (ImGui::Checkbox("Popup when errors are detected", &lib.alertPopups)) { alerts::SetPopups(lib.alertPopups); lib.SaveConfig(); }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("With a button to the tab that lists them.");
