@@ -1,8 +1,9 @@
 // The game's network protocol (UDP), as far as it is decoded (_cpr/claude-re/net/README.md): every packet starts
 // with a type byte.
 //   03 u32                get info        -> 05 u32(echo) u32 key, host name\0, game details
-//   04 u32 key u32 cookie u32 0   login   -> 06 u32 client id (accepted) / 07 u32 u8 reason (rejected)
-//   00 ...                updates (a reliable layer carrying the game's messages): not decoded yet
+//   04 u32 key u32 cookie u32 0   login   -> 06 u32 our cookie (accepted) / 07 u32 u8 reason (rejected)
+//   00 u16 seq u16 ack u32 ackbits u16 id u8 len [len] u8 n [n messages]   updates (the game's messages inside);
+//                         an empty one (len 0, n 0) is a keep-alive the server accepts
 //   01 u32 client id      disconnect
 #pragma once
 
@@ -86,6 +87,18 @@ public:
             if (n <= 0) break;
             Handle(buf, n);
         }
+        // In the session: an empty update (keep-alive) every 0.3 s, acknowledging the server's last update.
+        if (state == State::Accepted && Now() - sentAt_ > 0.3) {
+            std::vector<uint8_t> p{0x00};
+            Put16(p, seq_++);
+            Put16(p, ackSeq_);
+            Put32(p, 0);
+            Put16(p, 0);
+            p.push_back(0);
+            p.push_back(0);
+            Send(p);
+            sentAt_ = Now();
+        }
         const double waited = Now() - sentAt_;
         if ((state == State::AskingInfo || state == State::LoggingIn) && waited > 3.0) {
             if (++retries_ > 3) { Fail("no answer from the server"); return; }
@@ -120,6 +133,9 @@ private:
     int retries_ = 0;
 
     static double Now() { return std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count(); }
+    uint16_t seq_ = 1, ackSeq_ = 0;
+    int updates_ = 0;
+    static void Put16(std::vector<uint8_t>& p, uint16_t v) { p.push_back(static_cast<uint8_t>(v)); p.push_back(static_cast<uint8_t>(v >> 8)); }
     static void Put32(std::vector<uint8_t>& p, uint32_t v) { for (int i = 0; i < 4; ++i) p.push_back(static_cast<uint8_t>(v >> (8 * i))); }
     static uint32_t Get32(const uint8_t* b) { uint32_t v; std::memcpy(&v, b, 4); return v; }
     void Log(const std::string& s) { log.push_back(s); }
@@ -164,13 +180,17 @@ private:
             if (n < 5) return;
             clientId = Get32(b + 1);
             state = State::Accepted;
-            Log("accepted, client id " + std::to_string(clientId));
+            Log("accepted (the server echoed our cookie)");
             break;
         case 0x07: // rejected
             state = State::Rejected;
             error = "rejected by the server (reason " + std::to_string(n >= 6 ? b[5] : -1) + ")";
             Log(error);
             Close();
+            break;
+        case 0x00: // the server's update: acknowledged in the next keep-alive (its content is not decoded yet)
+            if (n >= 3) std::memcpy(&ackSeq_, b + 1, 2);
+            if (++updates_ == 1) Log("in the session: the server sends its updates (players, quests); the bot answers with keep-alives");
             break;
         default:
             Log("received a packet of type " + std::to_string(b[0]) + " (" + std::to_string(n) + " bytes): not handled yet");
