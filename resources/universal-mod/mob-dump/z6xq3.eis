@@ -118,7 +118,7 @@ Script VTriger#3#11
   then
   (
     KillScript(  ) 
-    AddRectToArea( 1, 1.5, 143.9, 14.4, 168 ) 
+    AddRectToArea( 1, 2.1, 147.7, 17.8, 168.1 ) 
   )
 )
 
