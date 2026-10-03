@@ -30,7 +30,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.5";
+static const char* const kVersion = "0.7";
 
 
 struct App {
@@ -246,6 +246,16 @@ static void StatusPanel(App& app) {
     const bool on = app.client.state == net::Client::State::Accepted;
     ImGui::Text("Health: %s   Mana: %s", on ? "?" : "-", on ? "?" : "-");
     ImGui::Text("Doing: %s", on ? "?" : "nothing (not connected)");
+    if (on) { // the session, from the server's messages
+        const net::Client& c = app.client;
+        ImGui::Text("Quest: %s%s", c.chosenQuest.empty() ? i18n::Tr("none chosen") : c.chosenQuest.c_str(),
+                    c.chosenQuest.empty() ? "" : c.ZoneOpen() ? i18n::Tr("  (its zone is open)") : i18n::Tr("  (its zone is not open yet)"));
+        static const char* const kStates[] = {"in the quest", "in the lobby", "?", "loading", "connecting"};
+        std::string ps;
+        for (const auto& kv : c.players)
+            ps += (ps.empty() ? "" : ", ") + kv.second.name + " (" + i18n::Tr(kv.second.state <= 4 ? kStates[kv.second.state] : "?") + ")";
+        ImGui::TextWrapped("Players: %s", ps.empty() ? "-" : ps.c_str()); // names as the server has them
+    }
     ImGui::Separator();
     ImGui::BeginChild("log", ImVec2(0, 0), false);
     for (const std::string& s : app.log) ImGui::TextWrapped("%s", s.c_str());
@@ -285,14 +295,19 @@ static void CharacterPanel(App& app) {
     const mp::SkillByte* sk = mp::Skills(n);
     for (int i = 0; i < n; ++i) {
         const int v = sk[i].offset < static_cast<int>(m.stats.size()) ? m.stats[sk[i].offset] : 0;
-        if (v) skills += std::string(skills.empty() ? "" : ", ") + sk[i].name + " " + std::to_string(v);
+        if (v) skills += std::string(skills.empty() ? "" : ", ") + i18n::Tr(sk[i].name) + " " + std::to_string(v);
     }
     ImGui::TextWrapped("Skills: %s", skills.empty() ? "none" : skills.c_str());
-    static const char* const kLevels[] = {"", "Specialist", "Expert", "Master"};
+    // The level names the game gives (its PERK texts): weapons Specialist / Expert / Master, magic schools
+    // Apprentice / Expert / Master, the others Increased / X2 / X3.
+    static const char* const kWeapon[] = {"", "Specialist", "Expert", "Master"};
+    static const char* const kMagic[] = {"", "Apprentice", "Expert", "Master"};
+    static const char* const kOther[] = {"", "Increased", "X2", "X3"};
     std::string perks;
     for (int g = 0; g < mp::kPerkGroups; ++g) {
         const int at = mp::kPerkBase + g, v = at < static_cast<int>(m.stats.size()) ? m.stats[at] : 0;
-        if (v >= 1 && v <= 3) perks += std::string(perks.empty() ? "" : ", ") + mp::PerkGroupName(g) + " (" + kLevels[v] + ")";
+        const char* const* level = g <= 6 ? kWeapon : g <= 14 ? kMagic : kOther;
+        if (v >= 1 && v <= 3) perks += std::string(perks.empty() ? "" : ", ") + i18n::Tr(mp::PerkGroupName(g)) + " (" + i18n::Tr(level[v]) + ")";
     }
     ImGui::TextWrapped("Abilities: %s", perks.empty() ? "none" : perks.c_str());
     // Equipment: the member's lists of object ids, named from the database when it was found
@@ -322,7 +337,7 @@ static void CharacterPanel(App& app) {
         if (l == 3) { ImGui::Text("Spells: %zu", m.lists[3].size()); continue; } // spell names: SpellPrototypes, not read here
         std::string t;
         for (uint32_t id : m.lists[l]) t += std::string(t.empty() ? "" : ", ") + name(id);
-        ImGui::TextWrapped("%s: %s", kLists[l], t.empty() ? "none" : t.c_str());
+        ImGui::TextWrapped("%s: %s", i18n::Tr(kLists[l]), t.empty() ? i18n::Tr("none") : t.c_str());
     }
     ImGui::TextDisabled("Backpack: %zu items%s", app.character.backpack.size(), app.dbLoaded ? "" : " (no database found beside the mp folder: no item names)");
 }

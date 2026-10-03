@@ -69,7 +69,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
               << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
-              << "  um-multitool gui --map <file.mpr|file.mob> [...]  # ... on the Map Editor with these files\n"
+              << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>]  # ... on the Map Editor with these files (looking at that object)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
               << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
               << "Subcommands:\n"
@@ -245,6 +245,8 @@ static int StartGui(int argc, char* argv[], int first) {
             options.dbFile = argv[++i];
         } else if (a == "--naked") {
             options.viewerNaked = true;
+        } else if (a == "--focus" && i + 1 < argc) {
+            options.mapFocus = static_cast<uint32_t>(std::strtoul(argv[++i], nullptr, 10));
         } else if (a == "--clip" && i + 1 < argc) {
             options.viewerClip = argv[++i];
         } else if (a == "--frame" && i + 1 < argc) {

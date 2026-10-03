@@ -61,7 +61,7 @@ money: u32 a, u32 b, amount = a ^ b (a changes on every save)
 | 0x3009 | quest item (keys...) | QuestItems | |
 | 0x3008 | spell container | QuickItems | the spell's object id at +40 of its block |
 
-**Detail block sizes:** 0x3002 66, 0x3004 68, 0x3005 108, 0x3006 56, 0x3007 64, 0x3008 56. A loot item's block
+**Detail block sizes:** 0x3002 66, 0x3004 68, 0x3005 108, 0x3006 56, 0x3007 64, 0x3008 56, 0x3009 56. A loot item's block
 holds its quantity at +48 (the number in the inventory slot's corner) and a number at +52 (1 for materials, 0 for a
 toad leg; the script function HaveItem compares it for quest items). In the game's memory the item object is the
 block shifted by 0x18 (+0x48 quantity, +0x4C that number). Each block starts with

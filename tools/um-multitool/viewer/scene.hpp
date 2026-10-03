@@ -190,59 +190,17 @@ public:
     void PoseAt(const std::string& clipName, float frame) {
         if (!unitModel || !hasModel) return;
         auto ci = clips.find(clipName);
-        const fig::AnimClip* clip = ci != clips.end() ? &ci->second : nullptr;
-        const size_t n = unit_.parts.size();
-        std::vector<fig::Quat> W(n);
-        std::vector<fig::Vec3> P(n);
-        std::vector<int> state(n, 0); // 0 to do, 1 doing, 2 done
-        std::map<std::string, int> byName;
-        for (size_t i = 0; i < n; ++i) byName[LowerName(unit_.parts[i].name)] = static_cast<int>(i);
-        auto sample = [&](const fig::BoneTrack& t, fig::Quat& q, fig::Vec3& pos, bool& hasPos) {
-            const size_t frames = t.rotations.size();
-            if (frames == 0) { q = {}; hasPos = false; return; }
-            float f = std::fmod(std::max(frame, 0.0f), static_cast<float>(frames));
-            const size_t a = static_cast<size_t>(f) % frames, b = (a + 1) % frames;
-            const float k = f - std::floor(f);
-            q = fig::QSlerp(t.rotations[a], t.rotations[b], k);
-            hasPos = a < t.positions.size() && b < t.positions.size();
-            if (hasPos) pos = fig::Lerp(t.positions[a], t.positions[b], k);
-        };
-        std::function<void(size_t)> solve = [&](size_t i) {
-            if (state[i] == 2) return;
-            state[i] = 1;
-            const fig::ModelPart& part = unit_.parts[i];
-            fig::Quat q{};
-            fig::Vec3 trackPos{};
-            bool hasPos = false;
-            const fig::BoneTrack* track = nullptr;
-            if (clip) {
-                auto t = clip->bones.find(LowerName(part.name));
-                if (t != clip->bones.end()) { track = &t->second; sample(*track, q, trackPos, hasPos); }
-            }
-            const fig::Vec3 offset = fig::BlendComplection(part.offset, constitution_);
-            auto parent = part.parentName.empty() ? byName.end() : byName.find(LowerName(part.parentName));
-            if (parent == byName.end() || state[static_cast<size_t>(parent->second)] == 1) { // the root
-                W[i] = q;
-                P[i] = offset;
-                if (track && hasPos && !track->positions.empty()) P[i] = offset + (trackPos - track->positions[0]);
-            } else {
-                const size_t pi = static_cast<size_t>(parent->second);
-                solve(pi);
-                W[i] = fig::QMul(q, W[pi]);
-                P[i] = P[pi] + fig::QRotate(W[pi], offset);
-            }
-            state[i] = 2;
-        };
-        for (size_t i = 0; i < n; ++i) solve(i);
+        const std::vector<fig::PartPose> pose =
+            fig::PoseModel(unit_, ci != clips.end() ? &ci->second : nullptr, frame, constitution_, 0.0f);
         for (size_t s = 0; s < parts_.size() && s < partSource_.size(); ++s) {
             const size_t i = static_cast<size_t>(partSource_[s]);
             const fig::FigureMesh& mesh = unit_.parts[i].mesh;
             ScenePart& sp = parts_[s];
             for (size_t v = 0; v < mesh.vertexComponents.size() && 3 * v + 2 < sp.positions.size(); ++v) {
                 const fig::VertComponent& vc = mesh.vertexComponents[v];
-                const fig::Vec3 p = P[i] + fig::QRotate(W[i], mesh.BlendedPosition(v, constitution_));
+                const fig::Vec3 p = pose[i].p + fig::QRotate(pose[i].w, mesh.BlendedPosition(v, constitution_));
                 sp.positions[3 * v] = p.x; sp.positions[3 * v + 1] = p.y; sp.positions[3 * v + 2] = p.z;
-                const fig::Vec3 nr = fig::QRotate(W[i], vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1});
+                const fig::Vec3 nr = fig::QRotate(pose[i].w, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1});
                 sp.normals[3 * v] = nr.x; sp.normals[3 * v + 1] = nr.y; sp.normals[3 * v + 2] = nr.z;
             }
         }

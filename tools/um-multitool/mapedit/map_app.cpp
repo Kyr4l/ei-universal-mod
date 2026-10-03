@@ -330,6 +330,7 @@ struct App {
     char minimapPath[1024] = "";
     std::string minimapMessage;
     quest::Rect pendingFocusRect;             // focus the camera on it after the next terrain upload
+    uint32_t pendingFocusId = 0;              // gui --map --focus <id>: select that object and look at it once loaded
     float sidebarWidth = 470.0f;
     bool drawnThisFrame = false;
     ImVec2 viewportMin{0, 0}, viewportMax{0, 0};
@@ -751,6 +752,8 @@ static void OpenQuest(App& app, const quest::QuestSet& listed) {
     if (terrain.empty()) missing += " " + q.terrain + ".mpr";
     if (base.empty()) missing += " " + q.baseMap + ".mob";
     if (own.empty()) missing += " " + q.name + ".mob";
+    // The same terrain as now (the quest again, or another quest of the zone): the camera stays where it is.
+    const bool sameTerrain = app.terrainLoaded && !terrain.empty() && Lower(app.terrainPath) == Lower(terrain);
     app.mobs.clear();
     app.loadOrder.clear();
     app.terrainLoaded = false;
@@ -770,7 +773,8 @@ static void OpenQuest(App& app, const quest::QuestSet& listed) {
                                        : "Opened the quest " + q.name + "; not found in the map folders or next to it:" + missing;
     SaveSession(app);
     app.terrainDirty = true;
-    if (!q.exits.empty() && q.exits[0].deploy.set) { app.pendingFocusRect = q.exits[0].deploy; app.framed = true; }
+    if (sameTerrain) app.framed = true;
+    else if (!q.exits.empty() && q.exits[0].deploy.set) { app.pendingFocusRect = q.exits[0].deploy; app.framed = true; }
     else app.framed = false;
 }
 
@@ -4613,7 +4617,11 @@ static void StepSimulation(App& app, float dt) {
                 ++u.look;
             }
         }
-        app.scene.simPoses[u.object] = {u.x, u.y, u.yaw};
+        { // moving: it changed place since the last step (its walk animation plays; else its idle one)
+            auto prev = app.scene.simPoses.find(u.object);
+            const bool moving = prev != app.scene.simPoses.end() && std::hypot(prev->second.x - u.x, prev->second.y - u.y) > 1e-4f;
+            app.scene.simPoses[u.object] = {u.x, u.y, u.yaw, moving};
+        }
     }
 }
 
@@ -4708,6 +4716,13 @@ static void Toolbar(App& app) {
             ImGui::Checkbox("Water", &o.water);
             ImGui::Checkbox("Objects", &o.objects);
             ImGui::Checkbox("Units", &o.units);
+            if (ImGui::Checkbox("Units: idle pose", &o.poseUnits)) app.scene.DropModels();
+            ImGui::SameLine();
+            ImGui::BeginDisabled(!o.poseUnits);
+            ImGui::Checkbox("animated", &o.animateUnits);
+            ImGui::EndDisabled();
+            ImGui::SetItemTooltip("They play their animations at the game's 15 frames a second: idle; walking when they move in the patrol simulation");
+            ImGui::SetItemTooltip("Units (and other animated figures) stand in their idle animation's first frame, as in the game; off: the T-pose");
             ImGui::Checkbox("Markers", &o.markers);
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Lights (yellow), particles (magenta), sounds (cyan) and objects\nwhose figure is missing (red)");
             if (ImGui::Checkbox("Walkability", &o.walkability) && o.walkability) app.scene.BuildWalkGrid();
@@ -5992,8 +6007,9 @@ void Destroy(Context* ctx) {
     delete ctx;
 }
 
-void OpenFiles(Context* ctx, const std::vector<std::string>& paths) {
+void OpenFiles(Context* ctx, const std::vector<std::string>& paths, uint32_t focusId) {
     App& app = ctx->app;
+    app.pendingFocusId = focusId;
     CloseQuest(app);
     app.mobs.clear();
     app.loadOrder.clear();
@@ -6181,6 +6197,7 @@ void RenderGl(Context* ctx, int fbW, int fbH, float scale) {
         }
     }
     app.scene.BuildSomeModels(app.lib, 12);
+    app.scene.AnimateModels(app.lib, ImGui::GetTime()); // units play their idle (or walk) animation
     if (app.minimapPending) { // drawn in the back buffer, which this frame then paints over
         app.minimapPending = false;
         ExportMinimap(app, fbW, fbH);
@@ -6188,6 +6205,19 @@ void RenderGl(Context* ctx, int fbW, int fbH, float scale) {
     if (!app.framed && (app.terrainLoaded || !app.mobs.empty())) {
         app.scene.FrameAll();
         app.framed = true;
+    }
+    if (app.pendingFocusId && app.framed) { // --focus: the object of that ID, close up and selected
+        for (size_t fi = 0; fi < app.mobs.size() && app.pendingFocusId; ++fi)
+            for (size_t oi = 0; oi < app.mobs[fi]->file.objects.size(); ++oi)
+                if (app.mobs[fi]->file.objects[oi].id == app.pendingFocusId) {
+                    app.scene.FocusOn(app.mobs[fi]->file.objects[oi]);
+                    app.scene.camera.distance = 6.0f;
+                    app.scene.camera.pitchDeg = 15.0f; // low: the unit side on
+                    app.scene.Select(static_cast<int>(fi), static_cast<int>(oi));
+                    app.pendingFocusId = 0;
+                    break;
+                }
+        if (app.pendingFocusId) { app.filesMessage = "--focus: no object " + std::to_string(app.pendingFocusId) + " in the open maps"; app.pendingFocusId = 0; }
     }
 
     int vx = static_cast<int>(app.viewportMin.x * scale);
@@ -6325,7 +6355,7 @@ void PrintCliHelp() {
         "        Every map of the folder that has a navmesh, with the terrain of its name (zone3xobr-lmp.mob ->\n"
         "        zone3xobr.mpr, beside it or in the Settings' map folders): says which are out of date; --write-all rebuilds those. Quest maps are skipped (their\n"
         "        objects are not counted: rebuild a zone with its quests by --navmesh when they add obstacles).\n"
-        "  um-multitool gui --map <file.mpr|file.mob> [...]\n"
+        "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <object id>]\n"
         "        Open the GUI's Map Editor on these files.\n");
 }
 

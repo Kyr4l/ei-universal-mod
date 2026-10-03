@@ -998,7 +998,7 @@ int RunGui(const GuiOptions& options) {
         if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame)) std::fprintf(stderr, "%s\n", err.c_str());
         requestedTab = kViewer;
     }
-    if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles);
+    if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles, options.mapFocus);
     if (!options.dbFile.empty()) {
         requestedTab = kFiles;
         g_requestSubTab = kDbSubTab; // DB

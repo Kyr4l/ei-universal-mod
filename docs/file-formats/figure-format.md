@@ -162,7 +162,11 @@ Only present for true composite (`.mod`+`.bon`) rigs. An `.anm` file is a **RES 
    uint32 N                       // the same count again
    vec3<float> positions[N]
    uint32 F, uint32 V             // per-vertex animation: F frames of V vertices (0, 0 for nearly every part)
-   vec3<float> vertices[F * V]    // e.g. bowstrings (`tetiva`)
+   vec3<float> vertices[F * V]    // F = the clip's frames, V = the part's real vertex count (its .fig stores them
+                                  // in blocks of 4: 44 slots, 42 vertices). Used by wing membranes (`r_pereponka` of
+                                  // the dragons unmodg, unmosu) and a few bodies (unmori bd, unmomi rh1/lh1/bd,
+                                  // unmowi bd01-04). Part-local positions or deltas: not settled (some values are
+                                  // near 0, the wings' are large); not applied by the viewers yet.
    ```
    (An earlier reading took the second count and the two trailing words for "N + 1 positions": there are N.)
 

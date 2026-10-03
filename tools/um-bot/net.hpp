@@ -5,12 +5,14 @@
 //   00 u16 seq u16 ack u32 ackbits u16 id u8 len [len] u8 n [n messages]   updates (the game's messages inside);
 //                         an empty one (len 0, n 0) is a keep-alive the server accepts
 //   01 u32 client id      disconnect
-// Game messages inside updates: a flag byte before every 8, then u8 kind, u16 id, payload. The kind is the message
+// Game messages inside updates: a flag byte before every 8, then u8 kind, u16 id, payload (ReadMessages). The kind is the message
 // class (0x4142F0's factories): 1 player record (the server's), 5 JOIN (name\0 unit\0 u32 u8 u32): the server
 // then lists the player, announces "connected" in the chat and shows its face in the lobby.
 #pragma once
 
 #include <algorithm>
+#include <map>
+#include <set>
 #include <chrono>
 #include <cstdint>
 #include <cstring>
@@ -49,6 +51,17 @@ public:
     std::vector<std::string> log;
     bool joined = false;           // the server lists our player
 
+    // The session as the server's messages describe it (_cpr/claude-re/net/README.md: kinds 1, 2, 3, 8, 9, 11).
+    struct Player { std::string name, unit; uint32_t state = 0, unitId = 0; };
+    std::map<uint16_t, Player> players;          // kind 1, by its object id
+    std::map<uint16_t, std::string> quests;      // kind 11: "<quest>.mq"
+    std::map<uint16_t, std::string> questStates; // kind 8: "<quest>_1" (available), "_2" (its zone is open)
+    std::string chosenQuest;                     // kind 9
+    bool ZoneOpen() const {                      // the chosen quest's zone can be entered (the host is in it)
+        for (const auto& kv : questStates) if (kv.second == chosenQuest + "_2") return true;
+        return false;
+    }
+
     // The JOIN message sent once accepted (from the character's .mp): its name (with the clan tag), its unit name
     // and its u32 after the strings. The u32 1 / u8 1 are the host's own record's values (meaning not known yet).
     void SetCharacter(const std::string& name, const std::string& unit, uint32_t id) {
@@ -63,6 +76,9 @@ public:
     }
 
     ~Client() { Close(); }
+
+    // Hands a packet to the client as if the server had sent it (replaying a capture: tests, research).
+    void Feed(const uint8_t* b, int n) { Handle(b, n); }
 
     // Starts: resolves the server, opens a UDP socket, asks for its info.
     bool Connect(const std::string& host, int port) {
@@ -188,6 +204,63 @@ private:
 #endif
         sock_ = kBad;
     }
+    std::set<std::string> seenMessages_; // reliable messages come again until acknowledged: each handled once
+
+    // The reliable messages of a server update: u8 n, then per message (a flag byte before every 8, LSB first:
+    // 1 = with its payload, 0 = the object removed) u8 kind, u16 id, the payload. Kinds holding object references
+    // (4, 12, 13, 15, 16, 17) also use flag bits: reading stops there (the rest of the packet is not read).
+    void ReadMessages(const uint8_t* b, int n) {
+        if (n < 12) return;
+        int o = 11;
+        const int unreliable = b[o++];
+        o += unreliable;
+        if (o >= n) return;
+        const int count = b[o++];
+        uint8_t flags = 0;
+        for (int i = 0; i < count && o < n; ++i) {
+            if (i % 8 == 0) flags = b[o++];
+            const bool payload = (flags >> (i % 8)) & 1;
+            if (o + 3 > n) return;
+            const int kind = b[o];
+            uint16_t id;
+            std::memcpy(&id, b + o + 1, 2);
+            const int start = o;
+            o += 3;
+            auto str = [&]() { std::string v; while (o < n && b[o]) v += static_cast<char>(b[o++]); ++o; return v; };
+            auto u32 = [&]() { uint32_t v = 0; if (o + 4 <= n) std::memcpy(&v, b + o, 4); o += 4; return v; };
+            auto u16 = [&]() { uint16_t v = 0; if (o + 2 <= n) std::memcpy(&v, b + o, 2); o += 2; return v; };
+            std::string text;
+            if (!payload) { // removed
+                if (kind == 1) players.erase(id);
+                else if (kind == 8) questStates.erase(id);
+                else if (kind == 11) quests.erase(id);
+                else if (kind == 9) chosenQuest.clear();
+                continue;
+            }
+            switch (kind) {
+            case 1: { Player p; p.name = str(); p.unit = str(); p.state = u32(); o += 1; p.unitId = u32(); u32(); players[id] = p; break; }
+            case 2: { u32(); text = str(); break; }           // a system line ("Quest accepted: ...")
+            case 3: { const std::string a = str(); text = a + " " + str(); break; } // a chat line (a printed pair)
+            case 5: { str(); str(); u32(); o += 1; u32(); break; }
+            case 6: case 9: text = str(); if (kind == 9) chosenQuest = text; break;
+            case 7: { u32(); text = str(); break; }
+            case 8: questStates[id] = str(); break;
+            case 10: { str(); u32(); u32(); break; }          // a quest variable
+            case 11: { u16(); u32(); quests[id] = str(); break; }
+            case 14: { u32(); u32(); text = str(); break; }
+            default:
+                Log("server message kind " + std::to_string(kind) + ": not read (the rest of this update skipped)");
+                return;
+            }
+            const std::string key(reinterpret_cast<const char*>(b + start), static_cast<size_t>(std::min(o, n) - start));
+            if (!seenMessages_.insert(key).second) continue;
+            if (kind == 2 || kind == 3 || kind == 6) Log("server: " + text);
+            else if (kind == 9) Log("the host chose the quest " + text);
+            else if (kind == 8 && questStates[id] == chosenQuest + "_2") Log("the zone of " + chosenQuest + " is open: the host is in it");
+            else if (kind == 1) Log("player " + players[id].name + ": state " + std::to_string(players[id].state));
+        }
+    }
+
     void Handle(const uint8_t* b, int n) {
         switch (b[0]) {
         case 0x05: // info
@@ -224,6 +297,7 @@ private:
                 joined = true;
                 Log("joined: the server lists \"" + name_ + "\" (chat: connected, face in the lobby)");
             }
+            ReadMessages(b, n);
             break;
         default:
             Log("received a packet of type " + std::to_string(b[0]) + " (" + std::to_string(n) + " bytes): not handled yet");

@@ -5,6 +5,9 @@
 #pragma once
 
 #include <cmath>
+#include <algorithm>
+#include <cctype>
+#include <functional>
 #include <cstdint>
 #include <cstring>
 #include <map>
@@ -426,6 +429,25 @@ struct AnimClip {
     }
 };
 
+// The pose of every part of a model at a frame of a clip (docs/file-formats/figure-format.md): its rotation W and
+// position P, so a vertex v is at P + W * v. W(part) = q(part) * W(parent); a root's P is its track's position (when
+// groundScale > 0: its height scaled by it (GroundScale), on the ground; else relative to the clip's first frame, so
+// the model stays where its rest pose is), any other part's P(parent) + W(parent) * its .bon offset for complection k.
+// Without a clip (or for a part it has no track for): no rotation, the rest pose. `frame` is fractional and wraps.
+struct PartPose { Quat w; Vec3 p; };
+struct Model;
+inline std::vector<PartPose> PoseModel(const Model& m, const AnimClip* clip, float frame, const Vec3& k, float groundScale);
+// How far below the root the model reaches at rest (the hips to the soles), for complection k.
+inline float RestDepth(const Model& m, const Vec3& k);
+// The clips' root height is right for the build they were made on (complection corner 5: their offsets are that
+// corner's, and their planted feet stay at the ground); for build k it scales by the legs: RestDepth(k) /
+// RestDepth(corner 5). PoseModel's groundScale: this to stand on the ground; 0: the root relative to the clip's
+// first frame (the model stays where its rest pose is).
+inline float GroundScale(const Model& m, const Vec3& k) {
+    const float d5 = RestDepth(m, {0, 1, 1});
+    return d5 > 0.01f ? RestDepth(m, k) / d5 : 1.0f;
+}
+
 // u32 N, N quats; u32 N, N vec3; u32 F, u32 V, F*V vec3 (figure-format.md).
 inline bool ParseBoneTrack(const uint8_t* data, size_t size, BoneTrack& out) {
     size_t off = 0;
@@ -492,6 +514,75 @@ inline bool ParseLnk(const uint8_t* data, size_t size, std::string& outSuffix) {
     while (!s.empty() && s.back() == '\0') s.pop_back();
     outSuffix = s;
     return true;
+}
+
+// (declared above, next to AnimClip)
+inline std::vector<PartPose> PoseModel(const Model& m, const AnimClip* clip, float frame, const Vec3& k, float groundScale) {
+    const size_t n = m.parts.size();
+    std::vector<PartPose> pose(n);
+    std::vector<int> state(n, 0); // 0 to do, 1 doing, 2 done
+    std::map<std::string, int> byName;
+    auto lower = [](std::string t) { for (char& c : t) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c))); return t; };
+    for (size_t i = 0; i < n; ++i) byName[lower(m.parts[i].name)] = static_cast<int>(i);
+    std::function<void(size_t)> solve = [&](size_t i) {
+        if (state[i] == 2) return;
+        state[i] = 1;
+        const ModelPart& part = m.parts[i];
+        Quat q{};
+        Vec3 trackPos{}, firstPos{};
+        bool hasPos = false;
+        if (clip) {
+            auto t = clip->bones.find(lower(part.name));
+            if (t != clip->bones.end() && !t->second.rotations.empty()) {
+                const BoneTrack& tr = t->second;
+                const size_t frames = tr.rotations.size();
+                const float f = std::fmod(std::max(frame, 0.0f), static_cast<float>(frames));
+                const size_t a = static_cast<size_t>(f) % frames, b = (a + 1) % frames;
+                const float u = f - std::floor(f);
+                q = QSlerp(tr.rotations[a], tr.rotations[b], u);
+                if (a < tr.positions.size() && b < tr.positions.size()) {
+                    hasPos = true;
+                    trackPos = Lerp(tr.positions[a], tr.positions[b], u);
+                    firstPos = tr.positions[0];
+                }
+            }
+        }
+        const Vec3 offset = BlendComplection(part.offset, k);
+        auto parent = part.parentName.empty() ? byName.end() : byName.find(lower(part.parentName));
+        if (parent == byName.end() || state[static_cast<size_t>(parent->second)] == 1) { // a root
+            pose[i].w = q;
+            if (!hasPos) pose[i].p = offset;
+            else if (groundScale <= 0) pose[i].p = offset + (trackPos - firstPos);
+            else pose[i].p = {trackPos.x, trackPos.y, trackPos.z * groundScale}; // on the ground (GroundScale)
+        } else {
+            const size_t pi = static_cast<size_t>(parent->second);
+            solve(pi);
+            pose[i].w = QMul(q, pose[pi].w);
+            pose[i].p = pose[pi].p + QRotate(pose[pi].w, offset);
+        }
+        state[i] = 2;
+    };
+    for (size_t i = 0; i < n; ++i) solve(i);
+    return pose;
+}
+
+inline float RestDepth(const Model& m, const Vec3& k) {
+    float low = 0;
+    for (const ModelPart& part : m.parts) {
+        const Vec3 offset = BlendComplection(part.accumulatedOffset, k);
+        for (size_t v = 0; v < part.mesh.vertexComponents.size(); ++v) low = std::min(low, part.mesh.BlendedPosition(v, k).z + offset.z);
+    }
+    return -low;
+}
+
+// The idle clip of a figure's animations, for showing a unit at rest the way the game does: "cidle01", else the
+// first "cidle...", else none.
+inline const AnimClip* IdleClip(const std::map<std::string, AnimClip>& clips) {
+    auto it = clips.find("cidle01");
+    if (it != clips.end()) return &it->second;
+    for (const auto& kv : clips)
+        if (kv.first.compare(0, 5, "cidle") == 0) return &kv.second;
+    return nullptr;
 }
 
 } // namespace fig

@@ -3,6 +3,7 @@
 // `um-multitool map ...` command-line mode. Everything lives in map_app.cpp.
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -16,7 +17,7 @@ Context* Create(Library& lib);     // lib: the GUI's shared sources; reopens the
 void Destroy(Context* ctx);        // needs the GL context current
 
 // Opens these files instead of the last session's (.mpr = the terrain, the rest .mob, in load order).
-void OpenFiles(Context* ctx, const std::vector<std::string>& paths);
+void OpenFiles(Context* ctx, const std::vector<std::string>& paths, uint32_t focusId = 0); // focusId: gui --map --focus
 
 // Inside the ImGui frame, in the Map Editor tab's content region.
 void DrawTab(Context* ctx);

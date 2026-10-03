@@ -32,6 +32,7 @@
 #include <cmath>
 #include <functional>
 #include <map>
+#include <memory>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -50,6 +51,8 @@ namespace mapedit {
 struct MapViewOptions {
     bool terrain = true, water = true, objects = true, units = true, markers = true, exits = true;
     bool dressUnits = true; // units on the default0 placeholder wear their race's skin and their equipment
+    bool poseUnits = true;  // figures with animations stand in their idle pose (cidle01, frame 0), not the T-pose
+    bool animateUnits = true; // ... and play it (walking units in the patrol simulation: their walk clip)
     bool shadows = true;    // with the lighting on: the sun's shadows on the terrain
     bool navmesh = false;   // the game's walkability graph (AI_GRAPH), one node per 4 x 4 units
     int navLayer = 1;       // which of its 8 layers
@@ -73,6 +76,19 @@ struct MapModel {
     std::vector<Layer> layers;
     std::string dressed; // what dressed it, for the details
     std::string error;
+    // An animated figure: what built it, so it can be baked again at another frame of its clip (BakeModel).
+    struct AnimSource {
+        std::shared_ptr<const LoadedModel> figure; // shared by every model of that figure (MapScene's cache)
+        std::string clip;                // the clip it plays ("" none: at rest)
+        fig::Vec3 constitution{0.5f, 0.5f, 0.5f};
+        std::vector<std::string> parts;  // OBJ_BODYPARTS (lower case), empty: all
+        dress::Dress dress;              // dressed units
+        std::string texture;             // the others' texture
+        float groundScale = 0;           // fig::GroundScale: stands on the ground (0: not computed / no clip)
+    };
+    std::shared_ptr<AnimSource> anim;
+    int bakedFrame = -1;
+    int frames = 0;                      // of its clip (0: not animated)
 };
 
 struct Ray { fig::Vec3 origin, dir; };
@@ -184,6 +200,7 @@ public:
             for (const MapModel::Layer& l : kv.second.layers) if (l.list) glDeleteLists(l.list, 1);
         }
         models_.clear();
+        figures_.clear();
         for (auto& kv : objectTextures_) if (kv.second) glDeleteTextures(1, &kv.second);
         objectTextures_.clear();
     }
@@ -215,7 +232,7 @@ public:
 
     // The patrol simulation's units: where they are and which way they face (radians about Z), in place of
     // the map's values while it runs.
-    struct SimPose { float x, y, yaw; };
+    struct SimPose { float x, y, yaw; bool moving = false; };
     std::unordered_map<const mob::Object*, SimPose> simPoses;
 
     fig::Vec3 DrawPosition(const mob::Object& o, const MapModel* model) const {
@@ -237,8 +254,28 @@ public:
     }
 
     const MapModel* ModelFor(const mob::Object& o) const {
+        if (Walking(o)) { // its walk variant once built; the idle one meanwhile
+            auto w = models_.find(ModelKey(o) + "|walk");
+            if (w != models_.end() && w->second.ok) return &w->second;
+        }
         auto it = models_.find(ModelKey(o));
         return it == models_.end() ? nullptr : &it->second;
+    }
+    // A unit moving in the patrol simulation (with animations on): drawn with its walk clip.
+    bool Walking(const mob::Object& o) const {
+        if (!options.poseUnits || !options.animateUnits || simPoses.empty()) return false;
+        auto it = simPoses.find(&o);
+        return it != simPoses.end() && it->second.moving;
+    }
+    // Plays the animated models: each at the frame of `seconds` (15 a second), baked again when it changes.
+    // Models of the same look share their geometry, so such units move in step.
+    void AnimateModels(const Library& lib, double seconds) {
+        if (!options.poseUnits || !options.animateUnits) return;
+        for (auto& [key, m] : models_) {
+            if (!m.ok || !m.anim || m.frames <= 1) continue;
+            const int frame = static_cast<int>(seconds * 15.0) % m.frames;
+            if (frame != m.bakedFrame) BakeModel(lib, m, frame);
+        }
     }
 
     // Frames the whole terrain (or the objects when there is none).
@@ -598,6 +635,8 @@ public:
             for (const mob::Object& o : maps_[fi]->objects) {
                 if (!mob::HasFigure(o.kind) || o.templ.empty()) continue;
                 std::string key = ModelKey(o);
+                const bool walking = Walking(o);
+                if (walking && !models_.count(key + "|walk") && budget > 0) { --budget; BuildModel(lib, o, models_[key + "|walk"], true); }
                 auto it = models_.find(key);
                 if (it != models_.end()) continue;
                 if (budget <= 0) { ++modelsPending; continue; }
@@ -617,6 +656,7 @@ private:
     std::vector<const mob::File*> maps_;
     std::vector<bool> visible_;
     std::map<std::string, MapModel> models_;
+    std::map<std::string, std::shared_ptr<const LoadedModel>> figures_; // loaded figures by name (lower case)
     std::map<std::string, GLuint> objectTextures_;
     std::map<std::string, std::vector<std::string>> partNames_; // by lower-case figure name
     bool wirePass_ = false; // drawing the wireframe over the textured scene
@@ -1000,97 +1040,141 @@ private:
         return id;
     }
 
-    void BuildModel(const Library& lib, const mob::Object& o, MapModel& out) {
+    // `walk`: the variant that plays the figure's walk clip (units moving in the patrol simulation).
+    void BuildModel(const Library& lib, const mob::Object& o, MapModel& out, bool walk = false) {
         out.tried = true;
-        LoadedModel loaded;
-        if (!LoadNamedModel(lib.figures, o.templ, loaded)) {
-            out.error = loaded.error.empty() ? "figure not found" : loaded.error;
+        std::shared_ptr<const LoadedModel>& cached = figures_[checksLower(o.templ)];
+        if (!cached) {
+            auto fresh = std::make_shared<LoadedModel>();
+            LoadNamedModel(lib.figures, o.templ, *fresh);
+            cached = fresh;
+        }
+        if (!cached->ok) {
+            out.error = cached->error.empty() ? "figure not found" : cached->error;
             return;
         }
-        std::vector<std::string> parts;
-        for (const std::string& p : o.bodyParts) parts.push_back(checksLower(p));
+        const LoadedModel& loaded = *cached;
+        auto src = std::make_shared<MapModel::AnimSource>();
+        for (const std::string& p : o.bodyParts) src->parts.push_back(checksLower(p));
         std::vector<std::string>& names = partNames_[checksLower(o.templ)];
         names.clear();
         for (const fig::ModelPart& part : loaded.model.parts) names.push_back(part.name);
-        const fig::Vec3 constitution{std::min(std::max(o.complection.x, 0.0f), 1.0f), std::min(std::max(o.complection.y, 0.0f), 1.0f),
-                                     std::min(std::max(o.complection.z, 0.0f), 1.0f)};
-        const dress::Dress dressed = options.dressUnits ? dress::Resolve(lib, o) : dress::Dress{};
-        if (dressed.on) { BuildDressed(lib, loaded.model, dressed, constitution, out); return; }
+        src->constitution = {std::min(std::max(o.complection.x, 0.0f), 1.0f), std::min(std::max(o.complection.y, 0.0f), 1.0f),
+                             std::min(std::max(o.complection.z, 0.0f), 1.0f)};
+        src->figure = cached;
+        // Animated figures (units...): their idle clip (or the walk clip for `walk`); at rest without one.
+        if (options.poseUnits) {
+            const fig::AnimClip* c = walk ? WalkClip(loaded.animClips) : fig::IdleClip(loaded.animClips);
+            for (const auto& kv : loaded.animClips) if (&kv.second == c) src->clip = kv.first;
+        }
+        src->dress = options.dressUnits ? dress::Resolve(lib, o) : dress::Dress{};
+        src->texture = o.primTexture;
+        if (!src->clip.empty()) src->groundScale = fig::GroundScale(loaded.model, src->constitution);
+        out.anim = src;
+        auto ci = loaded.animClips.find(src->clip);
+        out.frames = ci != loaded.animClips.end() ? static_cast<int>(ci->second.FrameCount()) : 0;
+        BakeModel(lib, out, 0);
+        if (out.frames <= 1) out.anim.reset(); // nothing to play: no need to keep the source
+        if (loaded.animClips.empty()) figures_.erase(checksLower(o.templ)); // a figure without animations: not kept
+    }
+
+    // The walk clip: the "cwalk..." one animating the most parts (some only move the legs).
+    static const fig::AnimClip* WalkClip(const std::map<std::string, fig::AnimClip>& clips) {
+        const fig::AnimClip* best = nullptr;
+        for (const auto& kv : clips)
+            if (kv.first.compare(0, 5, "cwalk") == 0 && (!best || kv.second.bones.size() > best->bones.size())) best = &kv.second;
+        return best;
+    }
+
+    // (Re)builds a model's display lists at a frame of its clip (P + W * v per vertex: fig::PoseModel; the hips
+    // where the rest pose has them).
+    void BakeModel(const Library& lib, MapModel& out, int frame) {
+        const MapModel::AnimSource& src = *out.anim;
+        if (out.list) { glDeleteLists(out.list, 1); out.list = 0; }
+        for (const MapModel::Layer& l : out.layers) if (l.list) glDeleteLists(l.list, 1);
+        out.layers.clear();
+        out.triangles.clear();
+        out.bakedFrame = frame;
+        const std::map<std::string, fig::AnimClip>& clips = src.figure->animClips;
+        auto ci = clips.find(src.clip);
+        const fig::Model& model = src.figure->model;
+        const std::vector<fig::PartPose> pose =
+            fig::PoseModel(model, ci != clips.end() ? &ci->second : nullptr, static_cast<float>(frame), src.constitution, src.groundScale);
+        const fig::Vec3& constitution = src.constitution;
         bool first = true;
+        auto grow = [&](const fig::Vec3& p) {
+            out.triangles.push_back(p);
+            if (first) { out.boundsMin = out.boundsMax = p; first = false; }
+            out.boundsMin = {std::min(out.boundsMin.x, p.x), std::min(out.boundsMin.y, p.y), std::min(out.boundsMin.z, p.z)};
+            out.boundsMax = {std::max(out.boundsMax.x, p.x), std::max(out.boundsMax.y, p.y), std::max(out.boundsMax.z, p.z)};
+        };
+        if (src.dress.on) { // a dressed unit: the parts it shows, grouped by texture, the clothing overlays over them
+            const dress::Dress& d = src.dress;
+            struct Vtx { fig::Vec3 p, n; fig::Vec2 uv; };
+            std::map<std::pair<std::string, bool>, std::vector<Vtx>> buckets;
+            for (size_t pi = 0; pi < model.parts.size(); ++pi) {
+                const fig::ModelPart& part = model.parts[pi];
+                if (!dress::PartShown(d, model, part)) continue;
+                const std::string tex = dress::PartTexture(d, model, part);
+                auto ov = d.overlay.find(dress::Lower(part.name));
+                std::vector<Vtx>& base = buckets[{tex, false}];
+                std::vector<Vtx>* over = ov != d.overlay.end() ? &buckets[{ov->second, true}] : nullptr;
+                const fig::FigureMesh& mesh = part.mesh;
+                for (uint16_t index : mesh.indices) {
+                    if (index >= mesh.vertexComponents.size()) continue;
+                    const fig::VertComponent& vc = mesh.vertexComponents[index];
+                    Vtx v{pose[pi].p + fig::QRotate(pose[pi].w, mesh.BlendedPosition(index, constitution)),
+                          fig::QRotate(pose[pi].w, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1}),
+                          vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0}};
+                    base.push_back(v);
+                    if (over) over->push_back(v);
+                    grow(v.p);
+                }
+            }
+            out.ok = !first;
+            if (!out.ok) { out.error = "no geometry"; return; }
+            for (bool overlay : {false, true}) // the skin and meshes first, the clothing over them
+                for (auto& [key, vtx] : buckets) {
+                    if (key.second != overlay || vtx.empty()) continue;
+                    MapModel::Layer layer;
+                    layer.overlay = overlay;
+                    layer.texture = ObjectTexture(lib, key.first);
+                    layer.list = glGenLists(1);
+                    glNewList(layer.list, GL_COMPILE);
+                    glBegin(GL_TRIANGLES);
+                    for (const Vtx& v : vtx) { glTexCoord2f(v.uv.x, v.uv.y); glNormal3f(v.n.x, v.n.y, v.n.z); glVertex3f(v.p.x, v.p.y, v.p.z); }
+                    glEnd();
+                    glEndList();
+                    out.layers.push_back(layer);
+                }
+            out.dressed = d.summary;
+            return;
+        }
         out.list = glGenLists(1);
         glNewList(out.list, GL_COMPILE);
         glBegin(GL_TRIANGLES);
-        for (const fig::ModelPart& part : loaded.model.parts) {
+        for (size_t pi = 0; pi < model.parts.size(); ++pi) {
+            const fig::ModelPart& part = model.parts[pi];
             // OBJ_BODYPARTS lists the parts to show; empty shows them all (ei_maper's CFigure::getVertexData).
-            if (!parts.empty() && std::find(parts.begin(), parts.end(), checksLower(part.name)) == parts.end()) continue;
+            if (!src.parts.empty() && std::find(src.parts.begin(), src.parts.end(), checksLower(part.name)) == src.parts.end()) continue;
             const fig::FigureMesh& mesh = part.mesh;
-            fig::Vec3 offset = fig::BlendComplection(part.accumulatedOffset, constitution);
             for (uint16_t index : mesh.indices) {
                 if (index >= mesh.vertexComponents.size()) continue;
                 const fig::VertComponent& vc = mesh.vertexComponents[index];
-                fig::Vec3 p = mesh.BlendedPosition(index, constitution) + offset;
-                fig::Vec3 n = vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1};
-                fig::Vec2 uv = vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0};
+                const fig::Vec3 p = pose[pi].p + fig::QRotate(pose[pi].w, mesh.BlendedPosition(index, constitution));
+                const fig::Vec3 n = fig::QRotate(pose[pi].w, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1});
+                const fig::Vec2 uv = vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0};
                 glTexCoord2f(uv.x, uv.y);
                 glNormal3f(n.x, n.y, n.z);
                 glVertex3f(p.x, p.y, p.z);
-                out.triangles.push_back(p);
-                if (first) { out.boundsMin = out.boundsMax = p; first = false; }
-                out.boundsMin = {std::min(out.boundsMin.x, p.x), std::min(out.boundsMin.y, p.y), std::min(out.boundsMin.z, p.z)};
-                out.boundsMax = {std::max(out.boundsMax.x, p.x), std::max(out.boundsMax.y, p.y), std::max(out.boundsMax.z, p.z)};
+                grow(p);
             }
         }
         glEnd();
         glEndList();
         out.ok = !first;
         if (!out.ok) { out.error = "no geometry"; glDeleteLists(out.list, 1); out.list = 0; return; }
-        out.texture = ObjectTexture(lib, o.primTexture);
-    }
-
-    // A dressed unit: the parts it shows, grouped by texture into display lists, with the clothing
-    // overlays as blended lists of the same parts.
-    void BuildDressed(const Library& lib, const fig::Model& model, const dress::Dress& d, const fig::Vec3& constitution, MapModel& out) {
-        struct Vtx { fig::Vec3 p, n; fig::Vec2 uv; };
-        std::map<std::pair<std::string, bool>, std::vector<Vtx>> buckets;
-        bool first = true;
-        for (const fig::ModelPart& part : model.parts) {
-            if (!dress::PartShown(d, model, part)) continue;
-            const std::string tex = dress::PartTexture(d, model, part);
-            auto ov = d.overlay.find(dress::Lower(part.name));
-            std::vector<Vtx>& base = buckets[{tex, false}];
-            std::vector<Vtx>* over = ov != d.overlay.end() ? &buckets[{ov->second, true}] : nullptr;
-            const fig::FigureMesh& mesh = part.mesh;
-            const fig::Vec3 offset = fig::BlendComplection(part.accumulatedOffset, constitution);
-            for (uint16_t index : mesh.indices) {
-                if (index >= mesh.vertexComponents.size()) continue;
-                const fig::VertComponent& vc = mesh.vertexComponents[index];
-                Vtx v{mesh.BlendedPosition(index, constitution) + offset, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1},
-                      vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0}};
-                base.push_back(v);
-                if (over) over->push_back(v);
-                out.triangles.push_back(v.p);
-                if (first) { out.boundsMin = out.boundsMax = v.p; first = false; }
-                out.boundsMin = {std::min(out.boundsMin.x, v.p.x), std::min(out.boundsMin.y, v.p.y), std::min(out.boundsMin.z, v.p.z)};
-                out.boundsMax = {std::max(out.boundsMax.x, v.p.x), std::max(out.boundsMax.y, v.p.y), std::max(out.boundsMax.z, v.p.z)};
-            }
-        }
-        out.ok = !first;
-        if (!out.ok) { out.error = "no geometry"; return; }
-        for (bool overlay : {false, true}) // the skin and meshes first, the clothing over them
-            for (auto& [key, vtx] : buckets) {
-                if (key.second != overlay || vtx.empty()) continue;
-                MapModel::Layer layer;
-                layer.overlay = overlay;
-                layer.texture = ObjectTexture(lib, key.first);
-                layer.list = glGenLists(1);
-                glNewList(layer.list, GL_COMPILE);
-                glBegin(GL_TRIANGLES);
-                for (const Vtx& v : vtx) { glTexCoord2f(v.uv.x, v.uv.y); glNormal3f(v.n.x, v.n.y, v.n.z); glVertex3f(v.p.x, v.p.y, v.p.z); }
-                glEnd();
-                glEndList();
-                out.layers.push_back(layer);
-            }
-        out.dressed = d.summary;
+        out.texture = ObjectTexture(lib, src.texture);
     }
 
     static void ApplyObjectTransform(const fig::Vec3& p, const fig::Quat& q) {

@@ -60,6 +60,7 @@ inline int DetailSize(uint32_t kind) {
     case 0x3005: return 108;
     case 0x3006: return 56;
     case 0x3007: return 64;
+    case 0x3009: return 56; // quest items (checked on a single-player save: scenario.sav's party)
     case 0x3008: return 56;
     }
     return -1;
