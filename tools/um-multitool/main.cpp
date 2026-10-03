@@ -80,6 +80,7 @@ static void PrintTopLevelHelp() {
               << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
               << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
               << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
+              << "  completion bash         Print the bash tab-completion script: eval \"$(um-multitool completion bash)\" in ~/.bashrc\n"
               << "  install-desktop         Add um-multitool to the Linux application menu, with its icon (--remove: undo)\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
@@ -330,7 +331,76 @@ static int InstallDesktop(int argc, char* argv[]) {
 #endif
 }
 
+
+// ---- shell completion (bash) ---------------------------------------------------------------------
+// `um-multitool completion bash` prints a script to load with: eval "$(um-multitool completion bash)"
+// (put that line in ~/.bashrc). The script calls `um-multitool __complete <words>` for the candidates; with no
+// candidates bash completes file names as usual. The flags below are those of each subcommand's --help.
+
+struct CompletionEntry { const char* name; const char* flags; };
+static const CompletionEntry kCompletions[] = {
+    {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds -h --help --version"},
+    {"inireg",   "-d --dir -m --multi -o --output --dry-run --ini2reg --reg2ini -h --help --version"},
+    {"mobdump",  "-d --dir -m --multi -o --output --dry-run -h --help --version"},
+    {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version"},
+    {"xlsxdb",   "-o --output --check --no-check -h --help --version"},
+    {"dbexport", "-o --output -h --help"},
+    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --material --texture --size --config --help"},
+    {"map",      "--check --navmesh --mpr --write --force --config --help"},
+    {"dll",      "--port --listen --stats --help"},
+    {"gui",      "--db --viewer --map --mp --skin --naked --settings --screenshot"},
+    {"install-desktop", "--remove"},
+    {"completion", "bash"},
+};
+// Subcommand aliases, to the names above.
+static std::string CompletionName(const std::string& tok) {
+    if (tok == "dds") return "ddsmmp";
+    if (tok == "ini") return "inireg";
+    if (tok == "mob") return "mobdump";
+    if (tok == "res") return "restool";
+    if (tok == "db") return "xlsxdb";
+    return tok;
+}
+
+// words: the command line after the program name, up to and including the word being completed.
+static int PrintCompletions(const std::vector<std::string>& words) {
+    if (words.empty()) return 0;
+    const std::string& cur = words.back();
+    if (words.size() == 1) {
+        if (!cur.empty() && cur[0] == '-') { std::cout << "-h --help --version\n"; return 0; }
+        for (const auto& e : kCompletions) std::cout << e.name << "\n";
+        std::cout << "dds ini mob res db\n";
+        return 0;
+    }
+    const std::string sub = CompletionName(words[0]);
+    const std::string prev = words[words.size() - 2];
+    // Values with a fixed set: the 3D Viewer's item categories.
+    if (sub == "viewer" && words.size() == 3 && (prev == "--list" || prev == "--resolve" || prev == "--render" || prev == "--gif")) {
+        std::cout << "weapons armors quick quest loot\n";
+        return 0;
+    }
+    if (!cur.empty() && cur[0] == '-') {
+        for (const auto& e : kCompletions) if (sub == e.name) std::cout << e.flags << "\n";
+    }
+    return 0;
+}
+
+static const char* kBashCompletion =
+    "_um_multitool() {\n"
+    "    local cur=${COMP_WORDS[COMP_CWORD]}\n"
+    "    COMPREPLY=($(compgen -W \"$(\"${COMP_WORDS[0]}\" __complete \"${COMP_WORDS[@]:1:COMP_CWORD}\" 2>/dev/null)\" -- \"$cur\"))\n"
+    "}\n"
+    "complete -o default -F _um_multitool um-multitool\n";
+
 int main(int argc, char* argv[]) {
+    if (argc >= 2 && std::string(argv[1]) == "__complete") {
+        return PrintCompletions(std::vector<std::string>(argv + 2, argv + argc));
+    }
+    if (argc >= 2 && std::string(argv[1]) == "completion") {
+        if (argc == 3 && std::string(argv[2]) == "bash") { std::cout << kBashCompletion; return 0; }
+        std::cerr << "Usage: eval \"$(um-multitool completion bash)\"   (bash only; add it to ~/.bashrc)\n";
+        return 1;
+    }
     if (argc < 2) {
         if (!StartedFromTerminal()) {
 #ifdef _WIN32
