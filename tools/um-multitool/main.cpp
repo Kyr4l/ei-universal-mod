@@ -81,7 +81,7 @@ static void PrintTopLevelHelp() {
               << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
               << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
               << "  completion bash         Print the bash tab-completion script: eval \"$(um-multitool completion bash)\" in ~/.bashrc\n"
-              << "  install-desktop         Add um-multitool to the Linux application menu, with its icon (--remove: undo)\n\n"
+              << "  install-desktop         Add um-multitool to the Linux application menu, with its icon and bash tab completion (--remove: undo)\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
@@ -256,6 +256,8 @@ static int StartGui(int argc, char* argv[], int first) {
     return RunGui(options);
 }
 
+static const char* BashCompletionScript(); // defined with the completion code below
+
 // `um-multitool install-desktop [--remove]` (Linux): installs um-multitool.desktop and the icon for the
 // current user (~/.local/share/applications, and the 256-pixel icon in ~/.local/share/icons/hicolor),
 // with this binary's absolute path, so the tool shows in the application menu with its icon (on Wayland,
@@ -274,6 +276,9 @@ static int InstallDesktop(int argc, char* argv[]) {
     const fs::path data = dataHome && *dataHome ? fs::path(dataHome) : fs::path(home) / ".local" / "share";
     const fs::path desktop = data / "applications" / "um-multitool.desktop";
     const fs::path hicolor = data / "icons" / "hicolor";
+    // Bash tab completion: bash-completion loads this file by the command's name on the first Tab.
+    // A file of its own, so no existing file (.bashrc) is edited.
+    const fs::path completion = data / "bash-completion" / "completions" / "um-multitool";
     // Earlier versions installed every usual size: --remove still removes them all.
     const int sizes[] = {16, 22, 24, 32, 48, 64, 128, 256, 512};
     auto iconAt = [&](int size) { return hicolor / (std::to_string(size) + "x" + std::to_string(size)) / "apps" / "um-multitool.png"; };
@@ -288,6 +293,7 @@ static int InstallDesktop(int argc, char* argv[]) {
     if (remove) {
         bool any = fs::remove(desktop, ec);
         if (any) std::cout << "Removed " << desktop.string() << "\n";
+        if (fs::remove(completion, ec)) { std::cout << "Removed " << completion.string() << " (bash tab completion)\n"; any = true; }
         for (int size : sizes) if (fs::remove(iconAt(size), ec)) { std::cout << "Removed " << iconAt(size).string() << "\n"; any = true; }
         if (!any) std::cout << "Nothing to remove.\n";
         else refresh();
@@ -324,9 +330,18 @@ static int InstallDesktop(int argc, char* argv[]) {
     f.close();
     refresh();
     std::cout << "Installed " << desktop << "\n     and the icon in " << hicolor << " (256 pixels)\n"
-              << "Universal Mod Multitool is now in the application menu (it may take a moment to appear).\n"
-
-              << "Undo with: um-multitool install-desktop --remove\n";
+              << "Universal Mod Multitool is now in the application menu (it may take a moment to appear).\n";
+    // The completion is optional: a failure here does not undo the menu entry.
+    fs::create_directories(completion.parent_path(), ec);
+    std::ofstream c(completion, std::ios::trunc);
+    if (c.is_open() && (c << BashCompletionScript()) && (c.close(), true)) {
+        std::cout << "Installed " << completion << " (bash tab completion for um-multitool).\n"
+                  << "  It is loaded by the bash-completion package in new shells; no .bashrc is edited. Without that package,\n"
+                  << "  add this line to ~/.bashrc yourself: eval \"$(um-multitool completion bash)\"\n";
+    } else {
+        std::cerr << "Warning: cannot write " << completion << " (bash tab completion not installed)\n";
+    }
+    std::cout << "Undo with: um-multitool install-desktop --remove\n";
     return 0;
 #endif
 }
@@ -391,6 +406,7 @@ static const char* kBashCompletion =
     "    COMPREPLY=($(compgen -W \"$(\"${COMP_WORDS[0]}\" __complete \"${COMP_WORDS[@]:1:COMP_CWORD}\" 2>/dev/null)\" -- \"$cur\"))\n"
     "}\n"
     "complete -o default -F _um_multitool um-multitool\n";
+static const char* BashCompletionScript() { return kBashCompletion; }
 
 int main(int argc, char* argv[]) {
     if (argc >= 2 && std::string(argv[1]) == "__complete") {

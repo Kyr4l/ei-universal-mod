@@ -32,7 +32,7 @@ The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2):
 
 In the viewport the mouse works as in the Map Editor: the wheel click orbits, the right button drags (both set in **Settings → Mouse**), and the wheel zooms. **Frame** re-centres the model. **Browse...** next to the texture previews any picture file on the figure (a game texture .dds/.mmp, or .png, .jpg, .bmp, .tga...). With **Textured** and **Wireframe** both on, the edges are drawn over the texture. The item list can sit on either side of the view (**Settings → Layout**), resized by dragging the bar between them.
 
-Bash tab completion for the command line: add `eval "$(um-multitool completion bash)"` to `~/.bashrc`. It completes subcommands, their flags and the viewer's item categories; anything else completes file names as usual.
+`um-multitool install-desktop` also installs bash tab completion, as its own file `~/.local/share/bash-completion/completions/um-multitool` (loaded by the bash-completion package; no existing file is edited), and `install-desktop --remove` removes it. Without installing, add `eval "$(um-multitool completion bash)"` to `~/.bashrc`. It completes subcommands, their flags and the viewer's item categories; anything else completes file names as usual.
 
 **Settings → Language** sets the display language of the GUI: English or Russian. The first time the program starts it asks for it in a popup (English is the default); the choice is kept as `LANGUAGE=en|ru` in `um-multitool.cfg`. Texts without a Russian translation stay English. The translations are in `i18n_ru.inc`.
 
