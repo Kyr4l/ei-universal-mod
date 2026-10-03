@@ -14,7 +14,9 @@ The **3D Viewer** tab of um-multitool (formerly the standalone um-modelviewer2):
     - **Complection**.
     - **Weapons**, and each **armour** piece with its material.
   - **Remove all** shows the bare skin. **Reset to the database's** brings back the unit's own equipment.
-  - **Animation**: the controls are there but disabled until the game's `.anm` files are decoded.
+  - **Animation**: the figure's clips (its `.anm`), played in place at the game's 15 frames a second: pick one, Play /
+    Pause, speed, or hold a frame. `c...` clips loop (idle, walk, run), `u...` are actions (attacks, casts, hits, deaths),
+    `s...` stance changes. `gui --viewer units <unit> --clip <name> [--frame <n>]` opens on one.
   - From the command line: `um-multitool gui --viewer units "Human Hero" --skin myskin.png --naked`.
 - **Figure**: the model. It's worked out from the database, and you can pick another model of the same family by hand, for example for the mod's `scepter`, which has no model yet.
 - **Material**: the materials of the item's class (`M.Type`). The default is the first one in database order that has a texture, so a Metal axe opens in bronze.
@@ -120,3 +122,11 @@ The built-in font only has basic Latin letters. For accents, Cyrillic and Korean
 - **Linux:** DejaVu Sans, and Nanum Gothic.
 
 Without a Korean font, Korean text shows as `?`. The variable "-VF" Noto CJK fonts some Linux distributions ship can't be read.
+
+## Figures to PNG (logos, icons)
+
+`um-multitool viewer --figure <figure> <out.png> [--texture <name>] [--yaw <deg>] [--pitch <deg>] [--size <px>]
+[--zoom <x>] [--category <c>]` renders any figure, map objects included, on a transparent background from the given
+angle. It draws it twice, on black and on white, and takes each pixel's coverage from the difference, so soft edges
+stay clean. `--category questitems` (or another item tab) stands the figure up like that tab does. um-bot's logo:
+`--figure initqu10 logo.png --texture quitem0010 --category questitems --yaw 315 --pitch 30 --size 1024 --zoom 1.45`.

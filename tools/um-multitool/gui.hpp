@@ -10,6 +10,8 @@ struct GuiOptions {
     std::string viewerItem;
     bool viewerNaked = false;      // with "--viewer units <name>": without its equipment (--naked)
     std::string viewerSkin;        // with "--viewer units <name>": a skin texture file to try on it (--skin)
+    std::string viewerClip;        // with "--viewer units <name>": an animation clip to show (--clip)
+    float viewerFrame = -1.0f;     // ... held at that frame (--frame); -1: playing
     bool openMap = false;          // start on the Map Editor tab
     std::vector<std::string> mapFiles; // with openMap: open these (.mpr, .mob) instead of the last session's
     bool openSettings = false;     // start on the Settings tab

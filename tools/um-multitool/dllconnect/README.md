@@ -66,7 +66,8 @@ The files are found in the map folders, the quest folders, or next to the quest 
   objective's title (its description on hover), what it asks (the unit, group, area or object it names,
   with the unit's name from the .mob), and for the active ones what can be seen now: whether the unit is
   alive, its HP and how far the nearest player is (and if within sight range), how many of a group are
-  alive, how far a player is from an area or an object (7 units for "find").
+  alive, how far a player is from an area or an object (7 units for "find"), and whether a player character
+  holds the item to get (um.dll 1.4.2 or later: its `ITEMS` command).
 - Quest variables of other quests (received or done before).
 - The map's scripts, running (started, waiting for their condition) or not.
 - **Script view**: a map file's script (the list marks the files where something waits), highlighted as
@@ -92,6 +93,7 @@ While a sub-tab is shown, the tab polls um.dll:
 | `MAP` | every 2 s | always |
 | `UNITS`, `CAMERA` | 10 times a second | while the Radar is shown |
 | `CONSOLE lines` | twice a second | while the Game console is shown |
+| `UNITS`, `ITEMS` | twice a second, once a second | while the Quests are shown |
 
 Their answers are routed to the radar and the console, not to the Commands log.
 

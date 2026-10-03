@@ -117,6 +117,8 @@ public:
     // gives (the Map Editor's dressing rules, dress.hpp). Units map their textures directly (no item atlas).
     bool unitModel = false;
     std::set<std::string> shownParts; // the parts drawn (lower case): what Export UV draws
+    // The unit's animation clips (its .anm), and the pose shown: Pose() moves the parts.
+    std::map<std::string, fig::AnimClip> clips;
     void LoadUnit(const Library& lib, const std::string& name, const fig::Vec3& constitution, bool frame,
                   const std::function<bool(const fig::Model&, const fig::ModelPart&)>& shown,
                   const std::function<std::string(const fig::Model&, const fig::ModelPart&)>& textureOf) {
@@ -124,6 +126,9 @@ public:
         shownParts.clear();
         hasModel = false;
         unitModel = true;
+        clips.clear();
+        unit_ = fig::Model{};
+        partSource_.clear();
         modelName = name;
         modelError.clear();
         vertexCount = triangleCount = 0;
@@ -134,8 +139,13 @@ public:
             return;
         }
         bool first = true;
-        for (const fig::ModelPart& part : loaded.model.parts) {
+        unit_ = loaded.model;
+        clips = loaded.animClips;
+        constitution_ = constitution;
+        for (size_t pi = 0; pi < loaded.model.parts.size(); ++pi) {
+            const fig::ModelPart& part = loaded.model.parts[pi];
             if (!shown(loaded.model, part)) continue;
+            partSource_.push_back(static_cast<int>(pi));
             shownParts.insert(LowerName(part.name));
             ScenePart sp;
             sp.texture = textureOf(loaded.model, part);
@@ -161,6 +171,71 @@ public:
         hasModel = !parts_.empty();
         if (!hasModel) modelError = name + " has no shown geometry";
         if (hasModel && frame) { Frame(); camera.yawDeg = 225.0f; camera.pitchDeg = 10.0f; } // from the front (figures face -Y)
+    }
+
+    // Poses the unit at a frame of one of its clips (frame: fractional, interpolated; wraps); an empty or unknown clip
+    // puts it back at rest. The rule (docs/file-formats/figure-format.md): W(part) = q(part) * W(parent), the root at
+    // its track's position (relative to its first frame, so the unit stays where the rest pose framed it), every
+    // other part at P(parent) + W(parent) * its own .bon offset for this complection, its vertices P + W * v.
+    void Pose(const std::string& clipName, float frame) {
+        if (!unitModel || !hasModel) return;
+        auto ci = clips.find(clipName);
+        const fig::AnimClip* clip = ci != clips.end() ? &ci->second : nullptr;
+        const size_t n = unit_.parts.size();
+        std::vector<fig::Quat> W(n);
+        std::vector<fig::Vec3> P(n);
+        std::vector<int> state(n, 0); // 0 to do, 1 doing, 2 done
+        std::map<std::string, int> byName;
+        for (size_t i = 0; i < n; ++i) byName[LowerName(unit_.parts[i].name)] = static_cast<int>(i);
+        auto sample = [&](const fig::BoneTrack& t, fig::Quat& q, fig::Vec3& pos, bool& hasPos) {
+            const size_t frames = t.rotations.size();
+            if (frames == 0) { q = {}; hasPos = false; return; }
+            float f = std::fmod(std::max(frame, 0.0f), static_cast<float>(frames));
+            const size_t a = static_cast<size_t>(f) % frames, b = (a + 1) % frames;
+            const float k = f - std::floor(f);
+            q = fig::QSlerp(t.rotations[a], t.rotations[b], k);
+            hasPos = a < t.positions.size() && b < t.positions.size();
+            if (hasPos) pos = fig::Lerp(t.positions[a], t.positions[b], k);
+        };
+        std::function<void(size_t)> solve = [&](size_t i) {
+            if (state[i] == 2) return;
+            state[i] = 1;
+            const fig::ModelPart& part = unit_.parts[i];
+            fig::Quat q{};
+            fig::Vec3 trackPos{};
+            bool hasPos = false;
+            const fig::BoneTrack* track = nullptr;
+            if (clip) {
+                auto t = clip->bones.find(LowerName(part.name));
+                if (t != clip->bones.end()) { track = &t->second; sample(*track, q, trackPos, hasPos); }
+            }
+            const fig::Vec3 offset = fig::BlendComplection(part.offset, constitution_);
+            auto parent = part.parentName.empty() ? byName.end() : byName.find(LowerName(part.parentName));
+            if (parent == byName.end() || state[static_cast<size_t>(parent->second)] == 1) { // the root
+                W[i] = q;
+                P[i] = offset;
+                if (track && hasPos && !track->positions.empty()) P[i] = offset + (trackPos - track->positions[0]);
+            } else {
+                const size_t pi = static_cast<size_t>(parent->second);
+                solve(pi);
+                W[i] = fig::QMul(q, W[pi]);
+                P[i] = P[pi] + fig::QRotate(W[pi], offset);
+            }
+            state[i] = 2;
+        };
+        for (size_t i = 0; i < n; ++i) solve(i);
+        for (size_t s = 0; s < parts_.size() && s < partSource_.size(); ++s) {
+            const size_t i = static_cast<size_t>(partSource_[s]);
+            const fig::FigureMesh& mesh = unit_.parts[i].mesh;
+            ScenePart& sp = parts_[s];
+            for (size_t v = 0; v < mesh.vertexComponents.size() && 3 * v + 2 < sp.positions.size(); ++v) {
+                const fig::VertComponent& vc = mesh.vertexComponents[v];
+                const fig::Vec3 p = P[i] + fig::QRotate(W[i], mesh.BlendedPosition(v, constitution_));
+                sp.positions[3 * v] = p.x; sp.positions[3 * v + 1] = p.y; sp.positions[3 * v + 2] = p.z;
+                const fig::Vec3 nr = fig::QRotate(W[i], vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1});
+                sp.normals[3 * v] = nr.x; sp.normals[3 * v + 1] = nr.y; sp.normals[3 * v + 2] = nr.z;
+            }
+        }
     }
 
     static std::string LowerName(std::string s) {
@@ -478,6 +553,9 @@ public:
 
 private:
     std::vector<ScenePart> parts_;
+    fig::Model unit_;               // the unit's parts as loaded, for Pose()
+    std::vector<int> partSource_;   // parts_[i] is unit_.parts[partSource_[i]]
+    fig::Vec3 constitution_{0.5f, 0.5f, 0.5f};
     std::map<std::string, GlTexture> textures_;
 
     // Grey and white squares behind the model, to show what the GIF will have transparent.

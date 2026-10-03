@@ -5,8 +5,12 @@
 //   00 u16 seq u16 ack u32 ackbits u16 id u8 len [len] u8 n [n messages]   updates (the game's messages inside);
 //                         an empty one (len 0, n 0) is a keep-alive the server accepts
 //   01 u32 client id      disconnect
+// Game messages inside updates: a flag byte before every 8, then u8 kind, u16 id, payload. The kind is the message
+// class (0x4142F0's factories): 1 player record (the server's), 5 JOIN (name\0 unit\0 u32 u8 u32): the server
+// then lists the player, announces "connected" in the chat and shows its face in the lobby.
 #pragma once
 
+#include <algorithm>
 #include <chrono>
 #include <cstdint>
 #include <cstring>
@@ -43,6 +47,20 @@ public:
     uint32_t clientId = 0;
     std::string error;
     std::vector<std::string> log;
+    bool joined = false;           // the server lists our player
+
+    // The JOIN message sent once accepted (from the character's .mp): its name (with the clan tag), its unit name
+    // and its u32 after the strings. The u32 1 / u8 1 are the host's own record's values (meaning not known yet).
+    void SetCharacter(const std::string& name, const std::string& unit, uint32_t id) {
+        name_ = name;
+        join_.assign(name.begin(), name.end());
+        join_.push_back(0);
+        join_.insert(join_.end(), unit.begin(), unit.end());
+        join_.push_back(0);
+        Put32(join_, 1);
+        join_.push_back(1);
+        Put32(join_, id);
+    }
 
     ~Client() { Close(); }
 
@@ -87,7 +105,8 @@ public:
             if (n <= 0) break;
             Handle(buf, n);
         }
-        // In the session: an empty update (keep-alive) every 0.3 s, acknowledging the server's last update.
+        // In the session: an update every 0.3 s, acknowledging the server's last one; it carries the JOIN until the
+        // server lists us, then it is an empty keep-alive.
         if (state == State::Accepted && Now() - sentAt_ > 0.3) {
             std::vector<uint8_t> p{0x00};
             Put16(p, seq_++);
@@ -95,7 +114,15 @@ public:
             Put32(p, 0);
             Put16(p, 0);
             p.push_back(0);
-            p.push_back(0);
+            if (!joined && !join_.empty()) {
+                p.push_back(1);    // one message
+                p.push_back(0x01); // its flag byte
+                p.push_back(5);    // JOIN
+                Put16(p, 1);
+                p.insert(p.end(), join_.begin(), join_.end());
+            } else {
+                p.push_back(0);
+            }
             Send(p);
             sentAt_ = Now();
         }
@@ -135,6 +162,8 @@ private:
     static double Now() { return std::chrono::duration<double>(std::chrono::steady_clock::now().time_since_epoch()).count(); }
     uint16_t seq_ = 1, ackSeq_ = 0;
     int updates_ = 0;
+    std::string name_;
+    std::vector<uint8_t> join_;
     static void Put16(std::vector<uint8_t>& p, uint16_t v) { p.push_back(static_cast<uint8_t>(v)); p.push_back(static_cast<uint8_t>(v >> 8)); }
     static void Put32(std::vector<uint8_t>& p, uint32_t v) { for (int i = 0; i < 4; ++i) p.push_back(static_cast<uint8_t>(v >> (8 * i))); }
     static uint32_t Get32(const uint8_t* b) { uint32_t v; std::memcpy(&v, b, 4); return v; }
@@ -190,7 +219,11 @@ private:
             break;
         case 0x00: // the server's update: acknowledged in the next keep-alive (its content is not decoded yet)
             if (n >= 3) std::memcpy(&ackSeq_, b + 1, 2);
-            if (++updates_ == 1) Log("in the session: the server sends its updates (players, quests); the bot answers with keep-alives");
+            if (++updates_ == 1) Log("in the session: the server sends its updates (players, quests)");
+            if (!joined && !name_.empty() && std::search(b, b + n, name_.begin(), name_.end()) != b + n) {
+                joined = true;
+                Log("joined: the server lists \"" + name_ + "\" (chat: connected, face in the lobby)");
+            }
             break;
         default:
             Log("received a packet of type " + std::to_string(b[0]) + " (" + std::to_string(n) + " bytes): not handled yet");

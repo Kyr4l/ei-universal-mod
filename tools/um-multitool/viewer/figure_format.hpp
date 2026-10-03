@@ -20,6 +20,28 @@ struct Vec3 { float x = 0, y = 0, z = 0; };
 struct Quat { float w = 1, x = 0, y = 0, z = 0; };
 
 inline Vec3 operator+(const Vec3& a, const Vec3& b) { return {a.x + b.x, a.y + b.y, a.z + b.z}; }
+// Quaternions as the .anm uses them (figure-format.md): a part's rotation chains child first, W = q * W(parent).
+inline Quat QMul(const Quat& a, const Quat& b) {
+    return {a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z, a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y,
+            a.w * b.y - a.x * b.z + a.y * b.w + a.z * b.x, a.w * b.z + a.x * b.y - a.y * b.x + a.z * b.w};
+}
+inline Vec3 QRotate(const Quat& q, const Vec3& v) { // q v q*
+    const Quat p = QMul(QMul(q, Quat{0, v.x, v.y, v.z}), Quat{q.w, -q.x, -q.y, -q.z});
+    return {p.x, p.y, p.z};
+}
+inline Quat QSlerp(Quat a, const Quat& b, float t) { // the short way; nlerp when nearly equal
+    float d = a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
+    if (d < 0) { a = {-a.w, -a.x, -a.y, -a.z}; d = -d; }
+    float ka = 1 - t, kb = t;
+    if (d < 0.9995f) {
+        const float th = std::acos(d), s = std::sin(th);
+        ka = std::sin((1 - t) * th) / s;
+        kb = std::sin(t * th) / s;
+    }
+    Quat r{ka * a.w + kb * b.w, ka * a.x + kb * b.x, ka * a.y + kb * b.y, ka * a.z + kb * b.z};
+    const float n = std::sqrt(r.w * r.w + r.x * r.x + r.y * r.y + r.z * r.z);
+    return n > 0 ? Quat{r.w / n, r.x / n, r.y / n, r.z / n} : Quat{};
+}
 inline Vec3 operator-(const Vec3& a, const Vec3& b) { return {a.x - b.x, a.y - b.y, a.z - b.z}; }
 inline Vec3 operator*(const Vec3& a, float s) { return {a.x * s, a.y * s, a.z * s}; }
 inline Vec3 Lerp(const Vec3& a, const Vec3& b, float t) { return a + (b - a) * t; }
@@ -389,8 +411,10 @@ inline bool LoadCompositeModel(const res::Archive& modArchive, const res::Archiv
 // ----------------------------------------------------------------------------
 
 struct BoneTrack {
-    std::vector<Quat> rotations;   // size N
-    std::vector<Vec3> positions;   // size N+1 (last entry's meaning unconfirmed, see docs)
+    std::vector<Quat> rotations;   // per frame, (w, x, y, z)
+    std::vector<Vec3> positions;   // per frame: the root's position; others: W(parent) * rest offset (docs)
+    uint32_t vertexFrames = 0, vertexCount = 0;
+    std::vector<Vec3> vertices;    // per-vertex animation, vertexFrames * vertexCount (bowstrings); usually empty
 };
 
 struct AnimClip {
@@ -402,10 +426,11 @@ struct AnimClip {
     }
 };
 
+// u32 N, N quats; u32 N, N vec3; u32 F, u32 V, F*V vec3 (figure-format.md).
 inline bool ParseBoneTrack(const uint8_t* data, size_t size, BoneTrack& out) {
     size_t off = 0;
-    uint32_t frameCount;
-    if (!ReadU32(data, size, off, frameCount)) return false;
+    uint32_t frameCount, positionCount;
+    if (!ReadU32(data, size, off, frameCount) || frameCount > 100000) return false;
     out.rotations.resize(frameCount);
     for (auto& q : out.rotations) {
         if (!ReadFloat(data, size, off, q.w)) return false;
@@ -413,11 +438,21 @@ inline bool ParseBoneTrack(const uint8_t* data, size_t size, BoneTrack& out) {
         if (!ReadFloat(data, size, off, q.y)) return false;
         if (!ReadFloat(data, size, off, q.z)) return false;
     }
-    out.positions.resize(static_cast<size_t>(frameCount) + 1);
+    if (!ReadU32(data, size, off, positionCount) || positionCount > 100000) return false;
+    out.positions.resize(positionCount);
     for (auto& p : out.positions) {
         if (!ReadFloat(data, size, off, p.x)) return false;
         if (!ReadFloat(data, size, off, p.y)) return false;
         if (!ReadFloat(data, size, off, p.z)) return false;
+    }
+    if (!ReadU32(data, size, off, out.vertexFrames) || !ReadU32(data, size, off, out.vertexCount)) return true; // older files: none
+    const uint64_t n = static_cast<uint64_t>(out.vertexFrames) * out.vertexCount;
+    if (n * 12 > size - off) { out.vertexFrames = out.vertexCount = 0; return true; }
+    out.vertices.resize(static_cast<size_t>(n));
+    for (auto& v : out.vertices) {
+        ReadFloat(data, size, off, v.x);
+        ReadFloat(data, size, off, v.y);
+        ReadFloat(data, size, off, v.z);
     }
     return true;
 }

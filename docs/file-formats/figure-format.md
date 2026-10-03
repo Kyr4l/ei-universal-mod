@@ -148,19 +148,36 @@ The base human rigs (`unhuma`/`unhufe`) are far larger than the hierarchy above 
 
 ## `.anm` — Skeletal Animation
 
+Which clip the game plays for which action and weapon, how likely, and its event frames (footsteps, hits, arrow
+release) are in the model's `.adb` animation database: see `adb-format.md`.
+
 Only present for true composite (`.mod`+`.bon`) rigs. An `.anm` file is a **RES archive of RES archives**:
 
 1. **Outer RES archive**: one entry per animation clip, named by the clip's logical name (observed in vanilla data: `cidle`, `cwalk`, `crun`, `uattack01`, `uattack02`, `uattack03`, `uhit`, `udeath01`, `udeath02` — `c`-prefixed = continuous/looping locomotion, `u`-prefixed = one-shot action clips).
 2. **Each clip is itself a RES archive**: one entry per bone/part, named identically to the part names in the corresponding `.mod`'s hierarchy (`hd`, `bd`, `hp`, `rh1`...`box03`, `box23`, etc. — all parts get a track, including the otherwise-static hand-attachment sockets).
-3. **Each bone track**:
+3. **Each bone track** (checked on all 22,046 tracks of the 49 vanilla `.anm`: every byte accounted for):
    ```
-   uint32 frameCount              // N
-   quat<float> rotations[N]       // component order (w, x, y, z) — verified unit-length
-   vec3<float> positions[N + 1]   // NOTE: one MORE entry than the rotation track
+   uint32 N                       // frames
+   quat<float> rotations[N]       // (w, x, y, z), unit length
+   uint32 N                       // the same count again
+   vec3<float> positions[N]
+   uint32 F, uint32 V             // per-vertex animation: F frames of V vertices (0, 0 for nearly every part)
+   vec3<float> vertices[F * V]    // e.g. bowstrings (`tetiva`)
    ```
-   The rotation-vs-position count mismatch (`N` vs `N+1`) is consistent across every sampled clip/bone/model (frame counts observed: 11, 25, 27, 66 — always exactly `rotationCount + 1` positions). The purpose of the extra trailing position sample is not confirmed; in at least one sample (`cidle`/`bd`) it does not continue the smooth per-frame motion curve of the preceding samples (its Y/Z components drop to exactly `0.0`), suggesting it may be a distinct terminator/auxiliary value rather than a genuine extra keyframe. A conservative renderer should use `positions[frame]` paired with `rotations[frame]` for `frame in 0..N-1` and can ignore `positions[N]`.
+   (An earlier reading took the second count and the two trailing words for "N + 1 positions": there are N.)
 
-   To pose a bone at a given animation time: pick (or interpolate/slerp between) the surrounding frame(s), combine `rotation` and `position` into a local transform, and concatenate down the hierarchy from the root exactly as for `.bon` assembly offsets — animation replaces the static per-part offset while playing, it does not add to it.
+4. **Posing a part at frame f** (fitted on the data: 0.01 degrees of error on every rigid part of `unhuma`):
+   - its rotation, chained child first (Direct3D's row-vector order): `W(part) = q(part) * W(parent)`, the root's
+     being its own `q`;
+   - its position: the root's (`hp`) is its track's position (the height above the ground and its motion); any other
+     part's is `P(parent) + W(parent) applied to its rest offset`;
+   - the rest offset is the part's `.bon` offset at complection corner 5 (the clips were made on that build), so
+     the game can use the unit's own blended `.bon` offset instead and keep the clip on any build; the track's
+     positions are those offsets already rotated (`W(parent) * offset`, constant length);
+   - a vertex: `P(part) + W(part) applied to the vertex`.
+   - Exceptions: in the run clips, `bd` and `rl1` carry the forward travel in their positions (lengths up to 3.6);
+     the game moves units itself (the stride is in the `.adb`, see `adb-format.md`), so playing in place uses the
+     rest offsets.
 
 ---
 

@@ -505,6 +505,7 @@ struct DdsMmpTab {
     bool multiThread = false;
     bool dryRun = false;
     int mode = 0; // 0=auto, 1=dds2mmp, 2=mmp2dds
+    bool plain32 = false;
 };
 
 static DdsMmpTab g_dds;
@@ -524,6 +525,8 @@ static void DrawDdsMmpTab() {
     ImGui::RadioButton("Auto-detect (default)", &g_dds.mode, 0);
     ImGui::RadioButton("Force DDS -> MMP", &g_dds.mode, 1);
     ImGui::RadioButton("Force MMP -> DDS", &g_dds.mode, 2);
+    ImGui::Checkbox("32-bit as plain ARGB 8888 (--plain32)", &g_dds.plain32);
+    ImGui::SetItemTooltip("DDS -> MMP: write 32-bit textures in the format of the game's cursors and logos instead of PNT3 (packed, first mipmap only)");
 }
 
 static std::vector<std::string> BuildDdsMmpArgs() {
@@ -532,6 +535,7 @@ static std::vector<std::string> BuildDdsMmpArgs() {
     if (g_dds.multiThread) args.push_back("-m");
     if (g_dds.mode == 1) args.push_back("--dds2mmp");
     else if (g_dds.mode == 2) args.push_back("--mmp2dds");
+    if (g_dds.plain32) args.push_back("--plain32");
 
     if (g_dds.outputPath[0]) { args.push_back("-o"); args.push_back(g_dds.outputPath); }
     if (g_dds.inputPath[0]) args.push_back(g_dds.inputPath);
@@ -968,7 +972,7 @@ int RunGui(const GuiOptions& options) {
                      : (library.guiTab >= kFiles && library.guiTab <= kDll ? library.guiTab : kNone);
     if (!options.viewerCategory.empty()) {
         std::string err;
-        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked)) std::fprintf(stderr, "%s\n", err.c_str());
+        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame)) std::fprintf(stderr, "%s\n", err.c_str());
         requestedTab = kViewer;
     }
     if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles);

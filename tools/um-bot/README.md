@@ -4,14 +4,25 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.2.** It joins a game: it asks the server for its info, then logs in with the key the server
-gives (tested on a hosted lobby). Playing in the game (the messages after the login) comes next.
+**Status: 0.4.** It joins a game like a player: it asks the server for its info, logs in with the key the server
+gives, then sends its character (name and unit, from the `.mp`). The host's chat announces it and its face shows
+in the lobby (tested on a hosted lobby). Playing in the game (moving, fighting) comes next.
 
 **Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
-A fresh character is recommended. Its name is the bot's name and can be changed in the window; the clan tag can't.
+A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.
 The change is saved into the `.mp`, and the original is kept as `.bak`.
 
-`um-bot --connect-test` joins the configured server without the window, prints what happens, and leaves.
+The window shows the character read only: its experience, money, attributes, skills, abilities and equipment (item
+names from the mod's database, `<mp folder>/../res/databaselmp.res`). Health and mana are computed by the game.
+
+`um-bot --connect-test` joins the configured server with the configured character, without the window, prints what
+happens, and leaves (exit code 0 when the server listed the bot).
+
+## Installing (Linux)
+
+`um-bot --install-desktop` adds it to the application menu with its icon (the Sacred flower, the quest item
+`driadidol00`); `--install-desktop --remove` takes it out. The icons are made by `assets/make_icons.py` from
+`assets/logo-source.png`; on Windows the .exe carries the icon.
 
 ## Settings
 

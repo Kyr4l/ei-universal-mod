@@ -16,7 +16,8 @@
 //          the quest variables: {name\0, f32} ..., "\0", then the money: 2 u32 whose XOR is the amount
 // Item kinds are the database's sheets: 0x3002 spell (SpellPrototypes), 0x3004 weapon (Weapons, a = material),
 // 0x3005 armour (Armors, a = material), 0x3006 quick item (QuickItems), 0x3008 spell container (QuickItems; the
-// spell's object id at +40 of its block, like a weapon's attached spell), 0x3007 quest item (QuestItems).
+// spell's object id at +40 of its block, like a weapon's attached spell), 0x3007 loot item (LootItems: materials,
+// toad legs...; a = the material of the "material" row; +48 of its block the quantity), 0x3009 quest item (QuestItems).
 #pragma once
 
 #include <cstdint>
@@ -69,7 +70,8 @@ inline const char* KindName(uint32_t kind) {
     case 0x3004: return "Weapon";
     case 0x3005: return "Armour";
     case 0x3006: return "Quick item";
-    case 0x3007: return "Quest item";
+    case 0x3007: return "Loot item";
+    case 0x3009: return "Quest item";
     case 0x3008: return "Spell container";
     }
     return "?";

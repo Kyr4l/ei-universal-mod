@@ -9,7 +9,7 @@
 //   QObjArea(n)          a hero in area n (AddRoundToArea / AddRectToArea)
 //   QObjKillGroup(g)     no unit of group g alive (AddObject(g, unit))
 //   QObjSeeUnit(u)       the unit is visible;  QObjKillUnit(u)  the unit is dead
-//   QObjGetItem(n)       a hero has the item (HaveItem)
+//   QObjGetItem(n)       a hero has the item (HaveItem): n is the QuestItems row's ScriptID
 //   QObjSeeObject(o)     a hero within 7 units of the object
 //   QObjUse(o, state)    the object (a lever) in that state
 // The .mq holds the texts: the entry "quest <q>": the title, the description, then "#subobj N" sections
@@ -344,8 +344,9 @@ inline std::string FormatAreaCall(const AreaCall& a) {
     return s + " )";
 }
 
-// What an objective asks, in words: "Kill unit 2000583 (Seer)".
-inline std::string Describe(const Model& m, const Call& c) {
+// What an objective asks, in words: "Kill unit 2000583 (Seer)". db: names the item of QObjGetItem(n), n being the
+// QuestItems row's ScriptID (checked in the game: platekey01, ScriptID 150).
+inline std::string Describe(const Model& m, const Call& c, const items::Database* db = nullptr) {
     auto object = [&](const std::string& arg) {
         const unsigned id = ObjectId(arg);
         if (!id) return arg;
@@ -357,7 +358,12 @@ inline std::string Describe(const Model& m, const Call& c) {
     if (c.name == "QObjKillGroup") return "Kill group " + a0;
     if (c.name == "QObjSeeUnit") return "See unit " + object(a0);
     if (c.name == "QObjKillUnit") return "Kill unit " + object(a0);
-    if (c.name == "QObjGetItem") return "Get item " + a0;
+    if (c.name == "QObjGetItem") {
+        if (db)
+            for (const items::Item& it : db->List(items::Category::QuestItems))
+                if (it.scriptId != 0 && std::to_string(it.scriptId) == a0) return "Get item " + a0 + " (" + it.name + ")";
+        return "Get item " + a0;
+    }
     if (c.name == "QObjSeeObject") return "Come within 7 of object " + object(a0);
     if (c.name == "QObjUse") return "Use object " + object(a0);
     std::string s = c.name + "(";

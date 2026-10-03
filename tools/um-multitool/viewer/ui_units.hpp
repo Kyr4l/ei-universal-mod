@@ -3,7 +3,8 @@
 // change: the skin (by the race's list, or any texture file, e.g. a new skin being painted), the hair, the
 // complection, the weapons and the armour with their materials.
 //
-// Animations: the controls are here, disabled until the game's .anm files are understood.
+// Animations: the figure's clips (its .anm) played in place, at the game's 15 frames a second
+// (docs/file-formats/figure-format.md for how a clip poses the parts).
 #pragma once
 
 #include <algorithm>
@@ -40,8 +41,8 @@ struct UnitsTabState {
     std::string uvMessage;
     std::vector<int> hairs;       // the hr.NN the figure has
     std::string hairsFor;         // ... for this figure
-    // Animations (disabled until .anm support)
-    int animation = 0;
+    // Animation: the clip shown ("" = at rest), its frame (fractional), playing or not
+    std::string clip;
     float animSpeed = 1.0f, animTime = 0.0f;
     bool animPlaying = false;
 };
@@ -297,22 +298,36 @@ inline void UnitsTab(Library& lib, Scene& scene, UnitsTabState& st) {
     if (remove >= 0) { st.armour.erase(st.armour.begin() + remove); st.dirty = true; }
     if (ImGui::SmallButton("Add armour")) st.armour.push_back({});
 
-    // Animations
+    // Animation
     ImGui::SeparatorText("Animation");
-    ImGui::BeginDisabled(true);
-    static const char* const kNone[] = {"(none)"};
-    ImGui::SetNextItemWidth(-90);
-    ImGui::Combo("Animation", &st.animation, kNone, 1);
-    ImGui::Button(st.animPlaying ? "Pause" : "Play");
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(120);
-    ImGui::SliderFloat("Speed", &st.animSpeed, 0.1f, 3.0f, "%.1fx");
-    ImGui::SetNextItemWidth(-90);
-    ImGui::SliderFloat("Time", &st.animTime, 0.0f, 1.0f);
-    ImGui::EndDisabled();
-    ImGui::TextDisabled("Not available yet: the game's animations (.anm) are not decoded.");
+    if (scene.clips.empty()) {
+        ImGui::TextDisabled("This figure has no animations (.anm).");
+    } else {
+        if (!st.clip.empty() && !scene.clips.count(st.clip)) st.clip.clear();
+        ImGui::SetNextItemWidth(-90);
+        if (ImGui::BeginCombo("Animation", st.clip.empty() ? "(at rest)" : st.clip.c_str(), ImGuiComboFlags_HeightLarge)) {
+            if (ImGui::Selectable("(at rest)", st.clip.empty())) { st.clip.clear(); st.animTime = 0; }
+            for (const auto& kv : scene.clips)
+                if (ImGui::Selectable(kv.first.c_str(), kv.first == st.clip)) { st.clip = kv.first; st.animTime = 0; st.animPlaying = true; }
+            ImGui::EndCombo();
+        }
+        ImGui::SetItemTooltip("c...: loops (idle, walk, run); u...: actions (attacks, casts, hits, deaths); s...: stance changes");
+        const auto ci = scene.clips.find(st.clip);
+        const int frames = ci != scene.clips.end() ? static_cast<int>(ci->second.FrameCount()) : 0;
+        ImGui::BeginDisabled(frames == 0);
+        if (ImGui::Button(st.animPlaying ? "Pause" : "Play")) st.animPlaying = !st.animPlaying;
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(120);
+        ImGui::SliderFloat("Speed", &st.animSpeed, 0.1f, 3.0f, "%.1fx");
+        ImGui::SetNextItemWidth(-90);
+        if (ImGui::SliderFloat("Frame", &st.animTime, 0.0f, static_cast<float>(std::max(frames - 1, 0)), "%.0f")) st.animPlaying = false;
+        ImGui::EndDisabled();
+        if (frames > 0 && st.animPlaying) st.animTime = std::fmod(st.animTime + ImGui::GetIO().DeltaTime * 15.0f * st.animSpeed, static_cast<float>(frames));
+        if (frames > 0) ImGui::TextDisabled("%d frames, %.1f s at the game's 15 frames a second", frames, frames / 15.0f);
+    }
 
     if (st.dirty) Rebuild(lib, scene, st);
+    scene.Pose(st.clip, st.animTime); // every frame: the scene's vertices follow the clip (or go back to rest)
 }
 
 } // namespace ui

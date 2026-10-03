@@ -267,7 +267,14 @@ maintained by the interface (sub_5800C0, from the interface object at 0x0079B5C8
 - Inventory: unit record +0x24C -> the player object (class 0x743104); its +0xE0 is the inventory, a list
   (class 0x73BE80: +0x04 head node, +0x0C count) of 12-byte nodes {next, previous, item}. Items are objects of
   class 0x743F5C: +0x0C an ID, +0x18 a code (three granites given with `@GiveItem(0,"material.granite")`:
-  0x00010005, granite being material 5 of the database).
+  0x00010005, granite being material 5 of the database: the code is the database row << 16 | the material, the
+  same pair a .mp stores). Each unit also has its own array of items: record +0x4A0, count +0x4A4.
+- HaveItem(player, n) (script function 0x7C, case at 0x4B4F2C, then 0x665640): true when the player's list holds an
+  item of kind 0x3009 whose +0x4C is n, or one of the player's units holds an item whose +0x4C is n. um.dll's
+  `ITEMS [raw]` lists both (the Connector's Quests tab uses it for "Get item"). For a quest item, +0x4C is its
+  QuestItems row's ScriptID (checked: `@GiveQuestItem(0,"platekey01")` gave kind 0x3009, row 84, +0x4C 150 = its
+  ScriptID), so `QObjGetItem(150)` asks for platekey01. Kinds: 0x3004 weapon, 0x3007 loot item (LootItems), 0x3009
+  quest item (QuestItems); +0x48 the quantity. Quest items come from `GiveQuestItem`, not `GiveItem`.
 - game.exe is client/server: CWorldClient / CPlayerClient / CUnitClientSpecific and CWorldServer /
   CUnitServer / CMapObjectServer; the host's server is authoritative (also in single player).
 

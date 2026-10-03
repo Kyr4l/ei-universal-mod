@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <algorithm>
+#include <set>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -246,6 +247,7 @@ private:
     void Call(Client& c, const std::vector<std::string>& w);
     void SendEvents(Client& c);
     void Units(Client& c, const std::vector<std::string>& w);
+    void Items(Client& c, const std::vector<std::string>& w);
     void Vars(Client& c, const std::vector<std::string>& w);
     void Scripts(Client& c, const std::vector<std::string>& w);
     void ConsoleCommand(Client& c, const std::vector<std::string>& w);
@@ -282,6 +284,7 @@ inline void Server::Help(Client& c) {
         "                                      frame (args: numbers, f:1.5 for a float; up to 6); answers eax  [debug]",
         "                                      (development only; default cc: this with this=, else std; a wrong call can crash the game)",
         "UNITS [rescan]                        the game's units: id, position, facing (yaw), side, HP, mana, flags, sight, view angle, name (players)",
+        "ITEMS [raw]                           the player characters' items: id, kind, code (row<<16 | material), num (HaveItem's), qty, where; raw: their first 0x60 bytes",
         "VARS [prefix]                         the script engine's global variables (quests: q.<quest>.<quest> 1 running 2 done; .<N> objective N 1 active 2 done)",
         "SCRIPTS [prefix]                      the scripts' names the script engine holds, with their map and references (2 or more = running or waiting)",
         "CAMERA                                the game camera: position, rotation quaternion, the point it aims at",
@@ -873,6 +876,60 @@ inline void Server::Write(Client& c, const std::vector<std::string>& w, bool typ
     Ok(c, cmd, "addr=" + Hex(address) + " len=" + std::to_string(bytes.size()) + " old=" + HexBytes(before.data(), had));
 }
 
+// The player characters' items, the way the script function HaveItem (0x665640) looks for them: the player
+// object (unit record +0x24C) holds a list (head +0xE4; nodes {next, previous, item}) and each unit an array of
+// items (record +0x4A0, count +0x4A4). Items: +0x0C id, +0x10 kind, +0x18 code (database row << 16 | material),
+// +0x48 the quantity (stacks), +0x4C the number HaveItem(0, n) compares (with kind 0x3009 in the player's list, any kind in a unit's array).
+inline void Server::Items(Client& c, const std::vector<std::string>& w) {
+    scanner_.Want();
+    const bool raw = w.size() > 1 && w[1] == "raw";
+    long long age = -1;
+    const std::vector<uint32_t> records = scanner_.Records(age);
+    std::set<uint32_t> players;
+    int count = 0;
+    auto item = [&](uint32_t p, const std::string& where, uint32_t owner) {
+        uint8_t b[0x60];
+        if (p < 0x10000 || ReadMemory(p, b, sizeof(b)) != sizeof(b)) return;
+        uint32_t id, kind, code, num, qty;
+        memcpy(&qty, b + 0x48, 4);
+        memcpy(&id, b + 0x0C, 4);
+        memcpy(&kind, b + 0x10, 4);
+        memcpy(&code, b + 0x18, 4);
+        memcpy(&num, b + 0x4C, 4);
+        char text[200];
+        snprintf(text, sizeof(text), "addr=%s owner=%s where=%s id=%lu kind=0x%lX code=0x%08lX row=%lu material=%lu num=%ld qty=%lu", Hex(p).c_str(),
+                 Hex(owner).c_str(), where.c_str(), static_cast<unsigned long>(id), static_cast<unsigned long>(kind),
+                 static_cast<unsigned long>(code), static_cast<unsigned long>(code >> 16), static_cast<unsigned long>(code & 0xFFFF),
+                 static_cast<long>(static_cast<int32_t>(num)), static_cast<unsigned long>(qty));
+        Row(c, "ITEMS", std::string(text) + (raw ? " raw=" + HexBytes(b, sizeof(b)) : ""));
+        ++count;
+    };
+    for (uint32_t r : records) {
+        dllgame::Unit u;
+        if (!dllgame::ReadUnit(r, u) || u.name.empty()) continue; // the player characters only
+        uint32_t player = 0, arr = 0, n = 0;
+        ReadMemory(r + 0x24C, &player, 4);
+        if (player >= 0x10000 && players.insert(player).second) { // the player's list (once per player)
+            uint32_t node = 0;
+            ReadMemory(player + 0xE4, &node, 4);
+            for (int guard = 0; node >= 0x10000 && guard < 1000; ++guard) {
+                uint32_t nd[3];
+                if (ReadMemory(node, nd, sizeof(nd)) != sizeof(nd)) break;
+                item(nd[2], "player", player);
+                node = nd[0];
+            }
+        }
+        ReadMemory(r + 0x4A0, &arr, 4);
+        ReadMemory(r + 0x4A4, &n, 4);
+        if (arr >= 0x10000 && n > 0 && n < 1000) {
+            std::vector<uint32_t> items(n);
+            if (ReadMemory(arr, items.data(), 4 * n) == 4 * n)
+                for (uint32_t p : items) item(p, "unit", r);
+        }
+    }
+    Ok(c, "ITEMS", "count=" + std::to_string(count) + " players=" + std::to_string(players.size()) + " scan_age_ms=" + std::to_string(age));
+}
+
 // One row per live or dead (not yet looted) unit. The records come from a scan running on its own
 // thread (every 3 s while units are asked for); their values are read now.
 inline void Server::Units(Client& c, const std::vector<std::string>& w) {
@@ -1002,6 +1059,7 @@ inline bool Server::Handle(Client& c, const std::string& line) {
     else if (cmd == "POKE") Write(c, w, true);
     else if (cmd == "CALL") Call(c, w);
     else if (cmd == "UNITS") Units(c, w);
+    else if (cmd == "ITEMS") Items(c, w);
     else if (cmd == "VARS") Vars(c, w);
     else if (cmd == "SCRIPTS") Scripts(c, w);
     else if (cmd == "CONSOLE") ConsoleCommand(c, w);

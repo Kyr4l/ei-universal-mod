@@ -109,6 +109,10 @@ void PrintCliHelpImpl() {
         "                                               Each part's UV region drawn in its own colour over a texture (a skin): the\n"
         "                                               guide for painting one. Parts: hd head, hr.NN hair, bd body, hp hips,\n"
         "                                               lh/rh 1-3 arms (3 = hand), ll/rl 1-3 legs (3 = foot).\n"
+        "  um-multitool viewer --figure <figure> <out.png> [--texture <name>] [--yaw <deg>] [--pitch <deg>] [--size <px>] [--zoom <x>] [--category <c>]\n"
+        "                                               Any figure (a map object too) to a PNG with a transparent background,\n"
+        "                                               from that angle (default yaw 225, pitch 10: the front): logos, icons.\n"
+        "                                               --category: stood up like in that item tab (e.g. questitems).\n"
         "  --config <file>                              Use another settings file than um-multitool-viewer.cfg.\n\n"
         "Categories: weapons, armors, quick, quest, loot. The sources (figures, textures, database)\n"
         "are the ones set in the GUI's Settings tab, saved in um-multitool.cfg.\n");
@@ -217,6 +221,63 @@ static int RunRender(Library& lib, items::Category c, const std::string& name, c
 }
 
 static bool ExportGif(Library& lib, Scene& scene, const std::string& path, int size, std::string& message);
+
+// Any figure (not only the database's items) to a PNG with a transparent background, from a chosen angle: for
+// logos and icons. Drawn twice, on black then on white: the difference gives each pixel's coverage, so the soft
+// edges stay clean.
+static int RunFigure(Library& lib, const std::string& figure, const std::string& out, const std::string& texture,
+                     float yaw, float pitch, int size, float zoom, const std::string& category) {
+    if (!glfwInit()) return 1;
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_DEPTH_BITS, 24);
+    GLFWwindow* window = glfwCreateWindow(size, size, "figure", nullptr, nullptr);
+    if (!window) { glfwTerminate(); return 1; }
+    glfwMakeContextCurrent(window);
+    Scene scene;
+    scene.LoadModel(lib, figure, true);
+    scene.textureName = texture.empty() ? figure : texture;
+    items::Category cat;
+    if (!category.empty() && ParseCategory(category, cat)) { // stood up like in that tab of the viewer
+        auto rot = lib.rotations.find(items::CategoryKey(cat));
+        scene.SetOrientation(rot != lib.rotations.end() ? &rot->second : nullptr);
+    }
+    int status = 0;
+    if (!scene.hasModel) {
+        std::fprintf(stderr, "figure not loaded: %s\n", scene.modelError.empty() ? figure.c_str() : scene.modelError.c_str());
+        status = 1;
+    } else {
+        scene.options.grid = false;
+        scene.camera.yawDeg = yaw;
+        scene.camera.pitchDeg = pitch;
+        scene.camera.distance /= zoom;
+        std::vector<uint8_t> shots[2];
+        for (int pass = 0; pass < 2; ++pass) {
+            const float bg = pass ? 1.0f : 0.0f;
+            scene.options.background[0] = scene.options.background[1] = scene.options.background[2] = bg;
+            scene.Draw(lib, 0, 0, size, size, 0.0f);
+            glFinish();
+            shots[pass].resize(static_cast<size_t>(size) * size * 3);
+            glPixelStorei(GL_PACK_ALIGNMENT, 1);
+            glReadPixels(0, 0, size, size, GL_RGB, GL_UNSIGNED_BYTE, shots[pass].data());
+        }
+        std::vector<uint8_t> rgba(static_cast<size_t>(size) * size * 4);
+        for (int y = 0; y < size; ++y)
+            for (int x = 0; x < size; ++x) {
+                const size_t from = (static_cast<size_t>(size - 1 - y) * size + x) * 3, to = (static_cast<size_t>(y) * size + x) * 4; // top row first
+                int diff = 0;
+                for (int k = 0; k < 3; ++k) diff += shots[1][from + k] - shots[0][from + k];
+                const int a = std::clamp(255 - diff / 3, 0, 255);
+                for (int k = 0; k < 3; ++k) rgba[to + k] = static_cast<uint8_t>(a ? std::min(255, shots[0][from + k] * 255 / a) : 0);
+                rgba[to + 3] = static_cast<uint8_t>(a);
+            }
+        if (!png::Write(out, size, size, rgba)) { std::fprintf(stderr, "cannot write %s\n", out.c_str()); status = 1; }
+        else std::printf("%s (texture %s) -> %s\n", scene.modelName.c_str(), scene.textureName.c_str(), out.c_str());
+    }
+    scene.ClearTextures();
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return status;
+}
 
 static int RunGif(Library& lib, items::Category c, const std::string& name, const std::string& out,
                   const std::string& material, const std::string& texture) {
@@ -542,7 +603,8 @@ void Destroy(Context* ctx) {
     delete ctx;
 }
 
-bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin, bool naked) {
+bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin, bool naked,
+              const std::string& clip, float frame) {
     App& app = ctx->app;
     if (ui::units_detail::Lower(category) == "units") {
         const auto& ms = app.lib.unitsDb.monsters;
@@ -553,6 +615,11 @@ bool OpenItem(Context* ctx, const std::string& category, const std::string& item
                 ui::units_detail::ResetFromMonster(app.lib, app.units);
                 app.units.customSkin = skin;
                 if (naked) { app.units.weapons.clear(); app.units.armour.clear(); }
+                if (!clip.empty()) { // an animation: playing, or held at that frame
+                    app.units.clip = clip;
+                    app.units.animTime = std::max(frame, 0.0f);
+                    app.units.animPlaying = frame < 0;
+                }
                 app.units.dirty = app.units.frame = true;
                 return true;
             }
@@ -746,6 +813,19 @@ int RunCli(int argc, char** argv) {
         int size = 0;
         for (size_t i = 3; i + 1 < args.size(); ++i) if (args[i] == "--size") size = std::atoi(args[i + 1].c_str());
         return RunUvMap(lib, args[1], args[2], texture, size);
+    }
+    if (args[0] == "--figure" && args.size() >= 3) {
+        float yaw = 225.0f, pitch = 10.0f, zoom = 1.0f;
+        int size = 512;
+        std::string category;
+        for (size_t i = 3; i + 1 < args.size(); ++i) {
+            if (args[i] == "--yaw") yaw = static_cast<float>(std::atof(args[i + 1].c_str()));
+            else if (args[i] == "--pitch") pitch = static_cast<float>(std::atof(args[i + 1].c_str()));
+            else if (args[i] == "--size") size = std::max(16, std::atoi(args[i + 1].c_str()));
+            else if (args[i] == "--zoom") zoom = std::max(0.1f, static_cast<float>(std::atof(args[i + 1].c_str())));
+            else if (args[i] == "--category") category = args[i + 1];
+        }
+        return RunFigure(lib, args[1], args[2], texture, yaw, pitch, size, zoom, category);
     }
     items::Category c;
     if (args.size() < 2 || !ParseCategory(args[1], c)) { PrintCliHelpImpl(); return 1; }

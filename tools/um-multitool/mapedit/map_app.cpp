@@ -21,7 +21,9 @@
 #include <fstream>
 #include <cstdio>
 #include <map>
+#include <atomic>
 #include <memory>
+#include <thread>
 #include <queue>
 #include <random>
 #include <set>
@@ -6359,9 +6361,22 @@ int RunCli(int argc, char** argv) {
         for (const auto& e : std::filesystem::directory_iterator(navFolder, ec))
             if (e.is_regular_file() && Lower(e.path().extension().string()) == ".mob") files.push_back(e.path());
         std::sort(files.begin(), files.end());
+        // 1. One by one (the figure sources are not thread-safe): each map, its terrain and its objects.
+        struct Job {
+            std::filesystem::path path;
+            std::unique_ptr<mob::File> map;
+            mpr::Map terrain;
+            std::vector<navgen::Object> objects;
+            int missing = 0;
+            std::string note;                // a problem found before generating
+            std::vector<uint8_t> payload;
+            std::string err;
+            bool ok = false;
+        };
+        std::vector<Job> jobs;
         for (const auto& path : files) {
-            mob::File f;
-            if (!mob::Load(path.string(), f) || !f.aiGraphBytes) continue; // quest maps have no navmesh
+            auto f = std::make_unique<mob::File>();
+            if (!mob::Load(path.string(), *f) || !f->aiGraphBytes) continue; // quest maps have no navmesh
             std::string base = path.stem().string();
             const size_t dash = base.find('-');
             if (dash != std::string::npos) base = base.substr(0, dash); // zone3xobr-lmp -> zone3xobr
@@ -6374,23 +6389,40 @@ int RunCli(int argc, char** argv) {
                 const std::string found = checks::FindInDirectory(dir, base + ".mpr");
                 if (!found.empty()) terrainPath = found;
             }
-            mpr::Map terrain;
+            Job j;
+            j.path = path;
             std::string err;
-            if (!mpr::Load(terrainPath.string(), terrain, err)) {
-                std::printf("%-28s no terrain (%s)\n", path.filename().string().c_str(), terrainPath.filename().string().c_str());
-                ++failed;
-                continue;
+            if (!mpr::Load(terrainPath.string(), j.terrain, err)) j.note = "no terrain (" + terrainPath.filename().string() + ")";
+            else j.objects = NavObjects(lib.figures, {f.get()}, &j.missing);
+            j.map = std::move(f);
+            jobs.push_back(std::move(j));
+        }
+        // 2. The navmeshes on every core (navgen::Generate only reads its inputs).
+        std::atomic<size_t> next{0};
+        auto work = [&]() {
+            for (size_t i; (i = next++) < jobs.size();) {
+                Job& j = jobs[i];
+                if (j.note.empty()) j.ok = navgen::Generate(j.terrain, j.objects, j.payload, j.err);
             }
-            int missing = 0;
-            const std::vector<navgen::Object> objects = NavObjects(lib.figures, {&f}, &missing);
-            std::vector<uint8_t> payload;
-            if (!navgen::Generate(terrain, objects, payload, err)) { std::printf("%-28s %s\n", path.filename().string().c_str(), err.c_str()); ++failed; continue; }
+        };
+        const unsigned threads = std::max(1u, std::min<unsigned>(std::thread::hardware_concurrency(), static_cast<unsigned>(jobs.size())));
+        std::vector<std::thread> pool;
+        for (unsigned t = 1; t < threads; ++t) pool.emplace_back(work);
+        work();
+        for (std::thread& t : pool) t.join();
+        // 3. In order: what each map needs, and the writes.
+        for (Job& j : jobs) {
+            const std::string name = j.path.filename().string();
+            if (!j.note.empty()) { std::printf("%-28s %s\n", name.c_str(), j.note.c_str()); ++failed; continue; }
+            if (!j.ok) { std::printf("%-28s %s\n", name.c_str(), j.err.c_str()); ++failed; continue; }
+            mob::File& f = *j.map;
             const std::vector<uint8_t> old(f.bytes.begin() + f.aiGraphAt, f.bytes.begin() + f.aiGraphAt + f.aiGraphBytes - 8);
-            const bool same = old == payload;
-            std::printf("%-28s %s%s\n", path.filename().string().c_str(), same ? "up to date" : "out of date",
-                        missing ? (" (" + std::to_string(missing) + " objects without a figure)").c_str() : "");
+            const bool same = old == j.payload;
+            std::printf("%-28s %s%s\n", name.c_str(), same ? "up to date" : "out of date",
+                        j.missing ? (" (" + std::to_string(j.missing) + " objects without a figure)").c_str() : "");
             if (!same && writeAll) {
-                mob::SetAiGraph(f, payload);
+                std::string err;
+                mob::SetAiGraph(f, j.payload);
                 if (mob::Save(f, err)) std::printf("%-28s written\n", "");
                 else { std::printf("%-28s not written: %s\n", "", err.c_str()); ++failed; }
             }

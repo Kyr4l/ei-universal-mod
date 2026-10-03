@@ -15,6 +15,9 @@
  *   - Uncompressed 32-bit BGRA with aligned Zero-RLE (FourCC: PNT3, 32 bpp)
  *   - Uncompressed 16-bit RGBA 5551 (FourCC: QU\0\0, 16 bpp)
  *   - Uncompressed 16-bit RGB 565 (FourCC: PV\0\0, 16 bpp)
+ *   - Uncompressed 16-bit ARGB 4444 (FourCC: DD\0\0, 16 bpp: the vanilla spell and particle effects)
+ *   - Uncompressed 32-bit ARGB 8888 (FourCC bytes 88 88 00 00, 32 bpp: the vanilla cursors and logos); a 32-bit
+ *     DDS becomes PNT3 unless --plain32 is given
  *
  * Features:
  *   - Fast single-pass binary conversion in native C++17.
@@ -38,6 +41,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <cstdio>
 #include <cstring>
 #include <cstdint>
 #include <cctype>
@@ -252,6 +256,20 @@ static std::vector<uint8_t> DecodePnt3(const uint8_t* payload, size_t payloadLen
 // Core Conversion Logic: DDS -> MMP
 // ============================================================================
 
+// DDS -> MMP: a 32-bit DDS is written as plain ARGB 8888 (the cursors' format) instead of PNT3 (--plain32).
+static bool g_plain32 = false;
+
+// An MMP format code for messages: its text, or its bytes in hex when it is not text ("88 88 00 00").
+static std::string FourCcText(const char* c) {
+    bool text = true;
+    for (int i = 0; i < 4; ++i) if (c[i] && (c[i] < 32 || c[i] > 126)) text = false;
+    if (text) { std::string s(c, 4); while (!s.empty() && s.back() == '\0') s.pop_back(); return s; }
+    char b[16];
+    std::snprintf(b, sizeof b, "%02X %02X %02X %02X", static_cast<uint8_t>(c[0]), static_cast<uint8_t>(c[1]),
+                  static_cast<uint8_t>(c[2]), static_cast<uint8_t>(c[3]));
+    return b;
+}
+
 static bool ConvertDdsToMmp(
     const uint8_t* ddsData,
     size_t ddsSize,
@@ -310,6 +328,15 @@ static bool ConvertDdsToMmp(
             err = "Unsupported DDS FourCC format: " + std::string(dds->ddspf.dwFourCC, 4);
             return false;
         }
+    } else if (dds->ddspf.dwRGBBitCount == 32 && g_plain32) {
+        // Uncompressed 32-bit BGRA -> plain ARGB 8888 (format code bytes 88 88 00 00), every mipmap
+        mmp.fourcc[0] = static_cast<char>(0x88); mmp.fourcc[1] = static_cast<char>(0x88);
+        mmp.bitDepth   = 32;
+        mmp.alphaMask  = 0xFF000000; mmp.alphaShift = 24; mmp.alphaBits = 8;
+        mmp.redMask    = 0x00FF0000; mmp.redShift   = 16; mmp.redBits   = 8;
+        mmp.greenMask  = 0x0000FF00; mmp.greenShift = 8;  mmp.greenBits = 8;
+        mmp.blueMask   = 0x000000FF; mmp.blueShift  = 0;  mmp.blueBits  = 8;
+        finalPayload.assign(payload, payload + payloadLen);
     } else if (dds->ddspf.dwRGBBitCount == 32) {
         // Uncompressed 32-bit BGRA -> PNT3 with zero RLE (base mipmap only)
         std::memcpy(mmp.fourcc, "PNT3", 4);
@@ -319,7 +346,15 @@ static bool ConvertDdsToMmp(
         finalPayload = EncodePnt3(payload, bytesToEncode);
         mmp.mipsOrDataLen = static_cast<uint32_t>(finalPayload.size());
     } else if (dds->ddspf.dwRGBBitCount == 16) {
-        if (dds->ddspf.dwRBitMask == 0x7C00 && dds->ddspf.dwABitMask == 0x8000) {
+        if (dds->ddspf.dwRBitMask == 0x0F00 && dds->ddspf.dwABitMask == 0xF000) {
+            // ARGB 4444
+            mmp.fourcc[0] = 'D'; mmp.fourcc[1] = 'D'; mmp.fourcc[2] = '\0'; mmp.fourcc[3] = '\0';
+            mmp.bitDepth   = 16;
+            mmp.alphaMask  = 0x0000F000; mmp.alphaShift = 12; mmp.alphaBits = 4;
+            mmp.redMask    = 0x00000F00; mmp.redShift   = 8;  mmp.redBits   = 4;
+            mmp.greenMask  = 0x000000F0; mmp.greenShift = 4;  mmp.greenBits = 4;
+            mmp.blueMask   = 0x0000000F; mmp.blueShift  = 0;  mmp.blueBits  = 4;
+        } else if (dds->ddspf.dwRBitMask == 0x7C00 && dds->ddspf.dwABitMask == 0x8000) {
             // RGBA 5551
             mmp.fourcc[0] = 'Q'; mmp.fourcc[1] = 'U'; mmp.fourcc[2] = '\0'; mmp.fourcc[3] = '\0';
             mmp.bitDepth   = 16;
@@ -423,6 +458,28 @@ static bool ConvertMmpToDds(
         dds.ddspf.dwBBitMask = 0x001F;
         dds.ddspf.dwABitMask = 0x8000;
         finalPayload.assign(payload, payload + payloadLen);
+    } else if (mmp->fourcc[0] == 'D' && mmp->fourcc[1] == 'D') {
+        // ARGB 4444
+        dds.dwFlags |= DDSD_PITCH;
+        dds.dwPitchOrLinearSize = mmp->width * 2;
+        dds.ddspf.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+        dds.ddspf.dwRGBBitCount = 16;
+        dds.ddspf.dwRBitMask = 0x0F00;
+        dds.ddspf.dwGBitMask = 0x00F0;
+        dds.ddspf.dwBBitMask = 0x000F;
+        dds.ddspf.dwABitMask = 0xF000;
+        finalPayload.assign(payload, payload + payloadLen);
+    } else if (static_cast<uint8_t>(mmp->fourcc[0]) == 0x88 && static_cast<uint8_t>(mmp->fourcc[1]) == 0x88) {
+        // ARGB 8888, plain (no PNT3 packing)
+        dds.dwFlags |= DDSD_PITCH;
+        dds.dwPitchOrLinearSize = mmp->width * 4;
+        dds.ddspf.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+        dds.ddspf.dwRGBBitCount = 32;
+        dds.ddspf.dwRBitMask = 0x00FF0000;
+        dds.ddspf.dwGBitMask = 0x0000FF00;
+        dds.ddspf.dwBBitMask = 0x000000FF;
+        dds.ddspf.dwABitMask = 0xFF000000;
+        finalPayload.assign(payload, payload + payloadLen);
     } else if (mmp->fourcc[0] == 'P' && mmp->fourcc[1] == 'V') {
         // RGB 565
         dds.dwFlags |= DDSD_PITCH;
@@ -435,7 +492,7 @@ static bool ConvertMmpToDds(
         dds.ddspf.dwABitMask = 0x0000;
         finalPayload.assign(payload, payload + payloadLen);
     } else {
-        err = "Unknown MMP FourCC format: " + std::string(mmp->fourcc, 4);
+        err = "Unknown MMP FourCC format: " + FourCcText(mmp->fourcc);
         return false;
     }
 
@@ -614,6 +671,8 @@ static void PrintHelp() {
               << "                        (only active when used together with -d / --dir)\n"
               << "  --dds2mmp             Force DDS -> MMP conversion mode\n"
               << "  --mmp2dds             Force MMP -> DDS conversion mode\n"
+              << "  --plain32             DDS -> MMP: write 32-bit textures as plain ARGB 8888 (the format of the\n"
+              << "                        game's cursors and logos) instead of PNT3 (packed, first mipmap only)\n"
               << "  --dry-run             Show what the program would do without writing files\n"
               << "  --version             Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help            Print this help message\n\n"
@@ -638,6 +697,8 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
             opt.dryRun = true;
         } else if (arg == "-m" || arg == "--multi") {
             opt.multiThread = true;
+        } else if (arg == "--plain32") {
+            g_plain32 = true;
         } else if (arg == "--dds2mmp") {
             opt.mode = ConvertMode::DdsToMmp;
         } else if (arg == "--mmp2dds") {

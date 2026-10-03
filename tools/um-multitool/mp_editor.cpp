@@ -81,16 +81,19 @@ const char* KindSheet(uint32_t kind) {
     case 0x3004: return "Weapons";
     case 0x3005: return "Armors";
     case 0x3006: case 0x3008: return "QuickItems";
-    case 0x3007: return "QuestItems";
+    case 0x3007: return "LootItems"; // checked in the game's memory: row 1 "material" (a = the material), 52 "lmp toad 1"
+    case 0x3009: return "QuestItems";
     }
     return nullptr;
 }
-bool HasMaterial(uint32_t kind) { return kind == 0x3004 || kind == 0x3005; }
+// Weapons and armour have a material; so do loot items (only the "material" row uses it: material.granite).
+bool HasMaterial(uint32_t kind) { return kind == 0x3004 || kind == 0x3005 || kind == 0x3007; }
 std::string ObjectName(const mp::Object& o) {
     const char* sheet = KindSheet(o.kind);
     if (!sheet) return "?";
     std::string n = Row(sheet, o.b);
-    if (HasMaterial(o.kind)) n += " (" + Row("Materials", o.a) + ")";
+    if (o.kind == 0x3007) { if (n == "material") n += "." + Row("Materials", o.a); }
+    else if (HasMaterial(o.kind)) n += " (" + Row("Materials", o.a) + ")";
     return n;
 }
 mp::Object* FindObject(uint32_t id) {
@@ -194,9 +197,10 @@ std::vector<Finding> Check() {
                 if (HasMaterial(o.kind) && mats && o.a >= mats->size()) err(what + ": material " + std::to_string(o.a) + " is not in the database");
             }
             if (o.kind == 0x3004 || o.kind == 0x3005) {
-                const float dur = mp::GetF(o.detail, 16), max = mp::GetF(o.detail, 20);
+                const float dur = mp::GetF(o.detail, 8), max = mp::GetF(o.detail, 12);
                 if (dur > max) warn(what + ": durability " + std::to_string(dur) + " is above its max");
                 if (max <= 0) warn(what + ": durability max is 0");
+                if (mp::GetF(o.detail, 16) > mp::GetF(o.detail, 20)) warn(what + ": energy " + std::to_string(mp::GetF(o.detail, 16)) + " is above its max");
             }
             const uint32_t held = HeldSpell(o);
             if (held != 0xFFFFFFFFu && !FindObject(held)) err(what + ": its spell (object " + std::to_string(held) + ") is missing");
@@ -245,7 +249,7 @@ void DuplicateObject(uint32_t id) {
     g.ch.backpack.push_back(copy.id);
 }
 // Another database row (and material): the list record and the block's header; the block's other values
-// (price, durability, protection) stay those of the old item until the game updates them.
+// (durability, energy, protection) stay those of the old item until the game updates them.
 void SetRow(mp::Object& o, uint16_t a, uint16_t b) {
     o.a = a;
     o.b = b;
@@ -433,17 +437,18 @@ bool RowCombo(const char* id, const char* sheet, uint16_t& value) {
 
 void ItemsPanel() {
     ImGui::SeparatorText("Items");
-    ImGui::TextDisabled(g.unsafe ? "Remove, duplicate (into the backpack) or change items. A changed item keeps its old price,\n"
-                                   "durability and protection until the game updates them."
-                                 : "Price and durability can be changed. Tick \"Allow unsafe edits\" to remove, duplicate or change items.");
+    ImGui::TextDisabled(g.unsafe ? "Remove, duplicate (into the backpack) or change items. A changed item keeps its old durability,\n"
+                                   "energy and protection until the game updates them."
+                                 : "Durability and energy can be changed. Tick \"Allow unsafe edits\" to remove, duplicate or change items.");
     uint32_t removeId = 0, dupId = 0;
-    if (ImGui::BeginTable("items", g.unsafe ? 7 : 5, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingStretchProp)) {
+    if (ImGui::BeginTable("items", g.unsafe ? 8 : 6, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingStretchProp)) {
         ImGui::TableSetupColumn("Kind", ImGuiTableColumnFlags_WidthFixed, 90);
         ImGui::TableSetupColumn("Item");
         if (g.unsafe) ImGui::TableSetupColumn("Material");
-        ImGui::TableSetupColumn("Price", ImGuiTableColumnFlags_WidthFixed, 80);
         ImGui::TableSetupColumn("Durability", ImGuiTableColumnFlags_WidthFixed, 80);
         ImGui::TableSetupColumn("Max", ImGuiTableColumnFlags_WidthFixed, 80);
+        ImGui::TableSetupColumn("Energy", ImGuiTableColumnFlags_WidthFixed, 70);
+        ImGui::TableSetupColumn("Energy max", ImGuiTableColumnFlags_WidthFixed, 70);
         if (g.unsafe) ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, 130);
         ImGui::TableHeadersRow();
         for (auto& list : g.ch.lists)
@@ -468,16 +473,15 @@ void ItemsPanel() {
                         if (RowCombo("##mat", "Materials", a)) SetRow(o, a, o.b);
                     }
                 }
-                if (o.kind == 0x3004 || o.kind == 0x3005) { // block: id, a, b, then price, price, durability, max
-                    static const int kAt[3] = {8, 16, 20};
-                    for (int c = 0; c < 3; ++c) {
+                if (o.kind == 0x3004 || o.kind == 0x3005) { // block: id, a, b, then durability, its max, energy, its max
+                    for (int c = 0; c < 4; ++c) {
                         ImGui::TableNextColumn();
                         ImGui::PushID(c);
-                        if (InputFloatField("##v", o.detail, kAt[c], -1) && c == 0) mp::SetF(o.detail, 12, mp::GetF(o.detail, 8)); // the second price follows
+                        InputFloatField("##v", o.detail, 8 + 4 * c, -1);
                         ImGui::PopID();
                     }
                 } else {
-                    for (int c = 0; c < 3; ++c) ImGui::TableNextColumn();
+                    for (int c = 0; c < 4; ++c) ImGui::TableNextColumn();
                 }
                 if (g.unsafe) {
                     ImGui::TableNextColumn();
@@ -499,7 +503,7 @@ void ItemsPanel() {
         static int kindIndex = 0;
         static uint16_t row = 0, material = 0;
         static const uint32_t kKinds[] = {0x3004, 0x3005, 0x3006, 0x3007};
-        static const char* const kNames[] = {"Weapon", "Armour", "Quick item", "Quest item"};
+        static const char* const kNames[] = {"Weapon", "Armour", "Quick item", "Loot item"};
         ImGui::SetNextItemWidth(110);
         ImGui::Combo("##newkind", &kindIndex, kNames, 4);
         const uint32_t kind = kKinds[kindIndex];
@@ -526,7 +530,7 @@ void ItemsPanel() {
         }
         ImGui::EndDisabled();
         if (!tmpl) ImGui::SetItemTooltip("The character has no %s yet: one is needed as a template (its file layout)", kNames[kindIndex]);
-        else ImGui::SetItemTooltip("A copy of the character's %s with this item and material; price, durability and protection\n"
+        else ImGui::SetItemTooltip("A copy of the character's %s with this item and material; durability, energy and protection\n"
                                    "stay the template's until the game updates them. No spell attached.", ObjectName(*tmpl).c_str());
     }
     if (dupId) DuplicateObject(dupId);

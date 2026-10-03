@@ -577,10 +577,13 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
             if (name.empty()) issue(Issue::Warning, row, it->second.back(), "a record without a name");
             else if (auto first = nameRow.find(name); first != nameRow.end()) {
                 issue(Issue::Warning, row, it->second.back(), "'" + Trim(c->text) + "' is also the name of row " + std::to_string(first->second) +
-                      ": " + RowDifferences(sh, info, first->second, row, it->second.back()));
-                // The first row too (once), so both are marked.
+                      ": " + RowDifferences(sh, info, first->second, row, it->second.back()) +
+                      "; the game uses the last row with this name");
+                // The first row too (once), so both are marked. The game keeps the last copy (checked in its memory:
+                // a map by name, each copy replacing the one before).
                 if (flaggedFirst.insert(first->second).second)
-                    issue(Issue::Warning, first->second, it->second.back(), "'" + Trim(c->text) + "' is used again in row " + std::to_string(row));
+                    issue(Issue::Warning, first->second, it->second.back(), "'" + Trim(c->text) + "' is used again in row " + std::to_string(row) +
+                          ": the game ignores this row (it uses the last one)");
             } else nameRow[name] = row;
         }
         // Each field's columns.

@@ -213,6 +213,13 @@ struct Context {
     std::deque<Pending> pending;
     // Radar.
     std::vector<RadarUnit> units, incomingUnits;
+    // The player characters' items (um.dll ITEMS): where ("player": the player's list, "unit": a hero's own),
+    // kind, database row and material, and the number HaveItem compares.
+    struct HeldItem { std::string where; unsigned kind = 0, row = 0, material = 0; long num = 0; };
+    std::vector<HeldItem> items, incomingItems;
+    std::string itemsError;      // um.dll did not answer ITEMS (an older um.dll)
+    bool itemsKnown = false;
+    double nextItemsPoll = 0;
     double unitsTime = 0, nextUnitsPoll = 0, nextMapPoll = 0, radarShown = -100, consoleShown = -100;
     RadarMap map;
     RadarView view;
@@ -354,6 +361,20 @@ void HandleInternal(Context& c, const std::string& word, const std::string& line
         } else if (last) {
             if (line.compare(0, 3, "OK ") == 0) { c.units.swap(c.incomingUnits); c.unitsTime = NowSeconds(); }
             c.incomingUnits.clear();
+        }
+    } else if (word == "ITEMS") {
+        if (line.compare(0, 4, "ROW ") == 0) {
+            Context::HeldItem h;
+            h.where = kv.count("where") ? kv.at("where") : "";
+            h.kind = static_cast<unsigned>(std::strtoul(kv.count("kind") ? kv.at("kind").c_str() : "0", nullptr, 16));
+            h.row = static_cast<unsigned>(num("row"));
+            h.material = static_cast<unsigned>(num("material"));
+            h.num = static_cast<long>(num("num"));
+            c.incomingItems.push_back(h);
+        } else if (last) {
+            if (line.compare(0, 3, "OK ") == 0) { c.items.swap(c.incomingItems); c.itemsKnown = true; c.itemsError.clear(); }
+            else c.itemsError = "um.dll does not read items (update um.dll to 1.4.2 or later)";
+            c.incomingItems.clear();
         }
     } else if (word == "CONSOLE") {
         if (line.compare(0, 4, "ROW ") == 0) {
@@ -658,7 +679,18 @@ std::string LiveCheck(const Context& c, const quests::Call& call, ImVec4& color)
         snprintf(buf, sizeof(buf), "nearest hero %.0f away%s", d, call.name == "QObjSeeObject" ? " (needs 7)" : "");
         return buf;
     }
-    if (call.name == "QObjGetItem") return "(the inventory is not read yet)";
+    if (call.name == "QObjGetItem") {
+        // HaveItem(0, n) (0x665640): a quest item (kind 0x3009) of the player's list, or any item a hero holds,
+        // whose number is n.
+        if (!c.itemsError.empty()) return c.itemsError;
+        if (!c.itemsKnown) return "(reading the inventory)";
+        const long n = std::atol(a0.c_str());
+        for (const Context::HeldItem& h : c.items)
+            if (h.num == n && (h.where == "unit" || h.kind == 0x3009)) { color = good; return "a hero has it"; }
+        color = bad;
+        snprintf(buf, sizeof(buf), "not carried (%zu items read)", c.items.size());
+        return buf;
+    }
     return "";
 }
 
@@ -816,7 +848,7 @@ void QuestsTab(Context& c) {
                         ImGui::PopTextWrapPos(); ImGui::EndTooltip();
                     }
                     ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(quests::Describe(c.quests, o.call).c_str());
+                    ImGui::TextUnformatted(quests::Describe(c.quests, o.call, &c.lib.db).c_str());
                     ImGui::TableNextColumn();
                     if (s >= 2) { ImGui::TextDisabled("-"); continue; }
                     ImVec4 col;
@@ -945,6 +977,7 @@ void Update(Context* ctx) {
         // Quests: their state every 2 s, the units (for the live checks) twice a second, while shown.
         if (now - c.questsShown < 1.0) {
             if (now >= c.nextUnitsPoll && !waiting("UNITS")) { SendCommand(c, "UNITS", true); c.nextUnitsPoll = now + 0.5; }
+            if (now >= c.nextItemsPoll && !waiting("ITEMS") && c.itemsError.empty()) { SendCommand(c, "ITEMS", true); c.nextItemsPoll = now + 1.0; }
             if (now >= c.nextQuestPoll && !waiting("VARS") && !waiting("SCRIPTS")) {
                 SendCommand(c, "VARS q.", true);
                 SendCommand(c, "SCRIPTS", true);

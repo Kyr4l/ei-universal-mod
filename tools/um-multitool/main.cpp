@@ -67,8 +67,9 @@ static void PrintTopLevelHelp() {
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
-              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked]  # ... on 3D Viewer > Units (a skin to try, no equipment)\n"
+              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
+              << "  um-multitool gui --map <file.mpr|file.mob> [...]  # ... on the Map Editor with these files\n"
               << "  um-multitool <subcommand> [options] <path>\n"
               << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
               << "Subcommands:\n"
@@ -244,6 +245,10 @@ static int StartGui(int argc, char* argv[], int first) {
             options.dbFile = argv[++i];
         } else if (a == "--naked") {
             options.viewerNaked = true;
+        } else if (a == "--clip" && i + 1 < argc) {
+            options.viewerClip = argv[++i];
+        } else if (a == "--frame" && i + 1 < argc) {
+            options.viewerFrame = static_cast<float>(std::atof(argv[++i]));
         } else if (a == "--skin" && i + 1 < argc) {
             options.viewerSkin = argv[++i];
         } else if (a == "--mp" && i + 1 < argc) {
@@ -391,13 +396,13 @@ static int InstallDesktop(int argc, char* argv[]) {
 
 struct CompletionEntry { const char* name; const char* flags; };
 static const CompletionEntry kCompletions[] = {
-    {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds -h --help --version"},
+    {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds --plain32 -h --help --version"},
     {"inireg",   "-d --dir -m --multi -o --output --dry-run --ini2reg --reg2ini -h --help --version"},
     {"mobdump",  "-d --dir -m --multi -o --output --dry-run -h --help --version"},
     {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version"},
     {"xlsxdb",   "-o --output --check --no-check -h --help --version"},
     {"dbexport", "-o --output -h --help"},
-    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --material --texture --size --config --help"},
+    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help"},
     {"map",      "--check --navmesh --mpr --write --force --config --help"},
     {"dll",      "--port --listen --stats --help"},
     {"gui",      "--db --viewer --map --mp --skin --naked --settings --screenshot"},

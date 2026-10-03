@@ -36,7 +36,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4.1";
+static const char* const UM_VERSION = "1.4.3";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
