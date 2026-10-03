@@ -30,6 +30,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <vector>
 #include <set>
@@ -258,6 +259,45 @@ static int StartGui(int argc, char* argv[], int first) {
 
 static const char* BashCompletionScript(); // defined with the completion code below
 
+// ~/.bashrc entry for systems without the bash-completion package: a comment line, then the line that
+// loads the completion. Both are found again (by the comment) to be removed.
+static const char* const kBashrcMarker = "# um-multitool: bash tab completion (added by 'um-multitool install-desktop', removed by 'install-desktop --remove')";
+static const char* const kBashrcLine = "command -v um-multitool >/dev/null 2>&1 && eval \"$(um-multitool completion bash)\"";
+
+// Appends the two lines to the file unless the marker is already there. Returns true when it added them.
+static bool BashrcAdd(const fs::path& bashrc) {
+    std::string text;
+    { std::ifstream in(bashrc); if (in) text.assign(std::istreambuf_iterator<char>(in), std::istreambuf_iterator<char>()); }
+    if (text.find(kBashrcMarker) != std::string::npos) return false;
+    std::ofstream out(bashrc, std::ios::app);
+    if (!out.is_open()) return false;
+    if (!text.empty() && text.back() != '\n') out << "\n";
+    out << kBashrcMarker << "\n" << kBashrcLine << "\n";
+    return out.good();
+}
+
+// Removes the marker line and the line after it. Returns true when it did; the rest of the file is kept as is.
+static bool BashrcRemove(const fs::path& bashrc) {
+    std::ifstream in(bashrc);
+    if (!in) return false;
+    std::string line, result;
+    bool removed = false;
+    while (std::getline(in, line)) {
+        if (!removed && line == kBashrcMarker) {
+            removed = true;
+            std::getline(in, line); // the eval line
+            if (line != kBashrcLine) result += line + "\n"; // not ours (edited by hand): keep it
+            continue;
+        }
+        result += line + "\n";
+    }
+    in.close();
+    if (!removed) return false;
+    std::ofstream out(bashrc, std::ios::trunc);
+    out << result;
+    return out.good();
+}
+
 // `um-multitool install-desktop [--remove]` (Linux): installs um-multitool.desktop and the icon for the
 // current user (~/.local/share/applications, and the 256-pixel icon in ~/.local/share/icons/hicolor),
 // with this binary's absolute path, so the tool shows in the application menu with its icon (on Wayland,
@@ -279,6 +319,8 @@ static int InstallDesktop(int argc, char* argv[]) {
     // Bash tab completion: bash-completion loads this file by the command's name on the first Tab.
     // A file of its own, so no existing file (.bashrc) is edited.
     const fs::path completion = data / "bash-completion" / "completions" / "um-multitool";
+    const char* homeDir = std::getenv("HOME");
+    const fs::path bashrc = homeDir && *homeDir ? fs::path(homeDir) / ".bashrc" : fs::path();
     // Earlier versions installed every usual size: --remove still removes them all.
     const int sizes[] = {16, 22, 24, 32, 48, 64, 128, 256, 512};
     auto iconAt = [&](int size) { return hicolor / (std::to_string(size) + "x" + std::to_string(size)) / "apps" / "um-multitool.png"; };
@@ -294,6 +336,7 @@ static int InstallDesktop(int argc, char* argv[]) {
         bool any = fs::remove(desktop, ec);
         if (any) std::cout << "Removed " << desktop.string() << "\n";
         if (fs::remove(completion, ec)) { std::cout << "Removed " << completion.string() << " (bash tab completion)\n"; any = true; }
+        if (!bashrc.empty() && BashrcRemove(bashrc)) { std::cout << "Removed the um-multitool completion lines from " << bashrc.string() << "\n"; any = true; }
         for (int size : sizes) if (fs::remove(iconAt(size), ec)) { std::cout << "Removed " << iconAt(size).string() << "\n"; any = true; }
         if (!any) std::cout << "Nothing to remove.\n";
         else refresh();
@@ -335,9 +378,17 @@ static int InstallDesktop(int argc, char* argv[]) {
     fs::create_directories(completion.parent_path(), ec);
     std::ofstream c(completion, std::ios::trunc);
     if (c.is_open() && (c << BashCompletionScript()) && (c.close(), true)) {
-        std::cout << "Installed " << completion << " (bash tab completion for um-multitool).\n"
-                  << "  It is loaded by the bash-completion package in new shells; no .bashrc is edited. Without that package,\n"
-                  << "  add this line to ~/.bashrc yourself: eval \"$(um-multitool completion bash)\"\n";
+        std::cout << "Installed " << completion << " (bash tab completion for um-multitool).\n";
+        // The bash-completion package is what loads that file. Without it, ~/.bashrc loads the completion instead.
+        if (fs::exists("/usr/share/bash-completion/bash_completion", ec) || fs::exists("/etc/bash_completion", ec)) {
+            std::cout << "  It is loaded by the bash-completion package in new shells; " << (bashrc.empty() ? "" : "~/.bashrc is not edited.") << "\n";
+        } else if (!bashrc.empty() && BashrcAdd(bashrc)) {
+            std::cout << "  The bash-completion package was not found, so these two lines were added to the end of " << bashrc.string() << ":\n"
+                      << "    " << kBashrcMarker << "\n    " << kBashrcLine << "\n"
+                      << "  (--remove takes them out again). Open a new terminal to use the completion.\n";
+        } else {
+            std::cout << "  The bash-completion package was not found: add this line to ~/.bashrc to load it: eval \"$(um-multitool completion bash)\"\n";
+        }
     } else {
         std::cerr << "Warning: cannot write " << completion << " (bash tab completion not installed)\n";
     }
