@@ -205,8 +205,8 @@ inline void DrawRadar(RadarView& view, const RadarMap& map, const std::vector<Ra
         view.followId = 0;
     }
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Whole map: always all of it. Follow: centered on my character (or the unit clicked on) or on the\n"
-                          "camera's aim point; the wheel zooms. Free: the wheel zooms, a drag pans (dragging in any view goes free).");
+        ImGui::SetTooltip("Whole map: all of it. Follow: centred on my character (or the clicked unit) or on the camera's aim; the wheel zooms.\n"
+            "Free: the wheel zooms, a drag pans (a drag in any mode switches to Free).");
     ImGui::SameLine();
     ImGui::BeginDisabled(!cam.valid);
     ImGui::Checkbox("Turn with the camera", &view.rotate);

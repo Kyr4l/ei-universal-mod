@@ -1643,7 +1643,7 @@ static void LogicEditor(App& app, const mob::Object& o, int objectIndex) {
             const float cur[3] = {pt.position.x, pt.position.y, pt.position.z};
             if (EditFloats("##pp", 3, cur, v4, "%.3f", -80)) { pt.position = {v4[0], v4[1], v4[2]}; changed = true; }
             ImGui::SameLine();
-            if (ImGui::SmallButton("+look")) {
+            if (ImGui::SmallButton("+ look")) {
                 pt.looks.push_back({{pt.position.x + 2.0f, pt.position.y, pt.position.z}, 15, 0.0f, 0});
                 changed = true;
             }
@@ -2007,8 +2007,8 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
             if (EditText("##comments", mob::Utf8(o.comments), text)) CommitText(app, objectIndex, mob::kObjComments, text);
             Label("Quest info");
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("ei_maper's \"Quest\": a quest (e.g. z3xq1) or one of its objectives that this object is part\n"
-                                  "of. The game marks it on the map while that quest or objective is active.");
+                ImGui::SetTooltip("ei_maper's \"Quest\": the quest (e.g. z3xq1) or quest objective this object belongs to;\n"
+                    "the game marks it on the map while it is active.");
             if (EditText("##quest", mob::Utf8(o.questInfo), text)) CommitText(app, objectIndex, mob::kObjQuestInfo, text);
         }
         KindFieldRows(app, o, objectIndex);
@@ -2727,8 +2727,8 @@ static void ScriptContent(App& app) {
     ImGui::SameLine();
     if (ImGui::Button("Open in external editor")) OpenScriptExternally(app, entry);
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Opens a copy (.eis, UTF-8) with the system's editor for that type; each save there comes back into\n"
-                          "the map as an undoable change. The map itself is written with %s.", ui::BindName(app.lib.mapKeys[config::kKeySave]).c_str());
+        ImGui::SetTooltip("Opens a copy (.eis, UTF-8) in the system's editor; each save there comes back into\n"
+            "the map as an undoable change. The map itself is written with %s.", ui::BindName(app.lib.mapKeys[config::kKeySave]).c_str());
     if (!app.scriptExtPath.empty() && app.scriptExtMob == f.path) {
         ImGui::SameLine();
         ImGui::TextDisabled("watching %s", app.scriptExtPath.c_str());
@@ -3669,9 +3669,8 @@ static void IdsTab(App& app) {
         }
         ImGui::EndDisabled();
         if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-            ImGui::SetTooltip("PR_OBJECT_DB_FILE: a quest's map, loaded over a zone (ei_maper's \"is Quest Mob?\").\n"
-                              "Off, SC_OBJECT_DB_FILE: a zone's own map. Zone maps carry WORLD_SET (time, ambient, sun, wind)\n"
-                              "and usually MAIN_RANGE; quest maps have no WORLD_SET and use SEC_RANGE.");
+            ImGui::SetTooltip("PR_OBJECT_DB_FILE: a quest map, loaded over a zone (ei_maper's \"is Quest Mob?\"): no WORLD_SET, uses SEC_RANGE.\n"
+                "Off, SC_OBJECT_DB_FILE: a zone's own map, with WORLD_SET (time, ambient, sun, wind), usually MAIN_RANGE.");
         ImGui::SameLine();
         ImGui::TextDisabled(f.hasWorld ? "(has WORLD_SET)" : "(no WORLD_SET)");
     }
@@ -3784,7 +3783,8 @@ static void IdsTab(App& app) {
     }
     ImGui::EndDisabled();
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
-        ImGui::SetTooltip("Gives each selected object the next ID that no loaded map uses (scripts that name the old IDs\nwill not find them: the Checks tab lists such references)");
+        ImGui::SetTooltip("Gives each selected object the next ID no loaded map uses (scripts naming the old IDs\n"
+            "won't find them: the Checks tab lists those).");
 
     ImGui::SeparatorText("Check IDs");
     if (ImGui::Button("Check IDs")) CheckIds(app);
@@ -3973,8 +3973,8 @@ static void TerrainTab(App& app) {
     ImGui::SeparatorText("Tile brush");
     ImGui::Checkbox("Paint tiles in the view", &app.tileBrush);
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Left drag: paint the tile (one undo step per stroke); Alt+click: take the tile under the mouse.\n"
-                          "Keys: 1-8 quick tiles, comma / period turn the tile. Objects are not selected while it is on.");
+        ImGui::SetTooltip("Left drag: paint (one undo step per stroke); Alt+click: pick the tile under the mouse.\n"
+            "Keys 1-8: quick tiles; comma / period: turn the tile. Objects can't be selected meanwhile.");
     ImGui::SameLine();
     int layer = app.brushWater ? 1 : 0;
     ImGui::RadioButton("Land", &layer, 0);
@@ -4420,13 +4420,12 @@ static void MobParamsWindow(App& app) {
 // the next point (back to the first when cyclic, else back along the path). Nothing is written to the map.
 
 static const char* kSimLimits =
-    "Units walk their patrol paths as in the game, with these limits:\n"
-    "- routes: the cheapest way on the game's own tile map (0.5 unit tiles, built from the terrain and the\n"
-    "  objects as the game does, for the navmesh layer of Layers; see Layers > Walkability); units do not\n"
-    "  avoid one another; without a terrain they walk straight\n"
-    "- speed: the unit's walking speed from its stats (15 ticks a second); no running, no animation (figures glide)\n"
-    "- no reactions: no fighting, calling for help, alarms or scripts; guards and sentries stay put\n"
-    "- nothing is written to the map; editing waits until the simulation stops";
+    "Units walk their patrol paths like in the game:\n"
+        "- routes: the shortest way on the game's walkable tiles (Layers > Walkability); units do not avoid\n"
+        "  one another; without a terrain they walk straight\n"
+        "- speed: the unit's walking speed (15 ticks a second); no running\n"
+        "- no fighting, calls for help, alarms or scripts; guards and sentries stay put\n"
+        "- nothing is written to the map; editing waits until the simulation stops";
 
 // A* over the walkability grid (8 directions, diagonals only between free sides), then the corners that
 // are needed: a straight line between two points is kept when every cell it crosses is free. A start or
@@ -4716,13 +4715,13 @@ static void Toolbar(App& app) {
                 ImGui::SetTooltip("Where units can walk, as the game computes it, for the navmesh layer below. Red: blocked; orange: hard ground (water, slopes, obstacles). Patrols route on it.");
             ImGui::Checkbox("Game navmesh (AI_GRAPH)", &o.navmesh);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("The navmesh stored in the zone map: a node per 4 x 4 units, lines to the neighbours a unit can reach (green cheap, red dear), red squares where it can go nowhere.");
+                ImGui::SetTooltip("The zone map's stored navmesh: a node per 4 x 4 units, lines to the neighbours a unit can reach (green cheap, red costly), red squares where it can go nowhere.");
             ImGui::SetNextItemWidth(110);
             if (ImGui::SliderInt("Navmesh layer", &o.navLayer, 0, mob::kAiLayers - 1) && o.walkability) app.scene.BuildWalkGrid();
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("The graph has 8 layers: units use the one of their AI class");
             if (ImGui::Checkbox("Navmesh differences", &o.navCompare) && o.navCompare) BuildCompareNavmesh(app);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("The map's navmesh against the one the game would build now, per 4 x 4 node: orange: only the map's walks there; blue: only the rebuilt one; yellow: both, other costs. Anything shown: the map's navmesh is out of date.\n"
+                ImGui::SetTooltip("The map's navmesh against the one the game would build now, per 4 x 4 node: orange: only the map's walks there; blue: only the rebuilt one; yellow: both, other costs. Anything shown: out of date.\n"
                     "Now: %d orange, %d blue, %d yellow.%s",
                                   app.scene.navCompareGame, app.scene.navCompareEditor, app.scene.navCompareCost,
                                   app.navCompareNote.empty() ? "" : ("\n" + app.navCompareNote).c_str());
@@ -4804,7 +4803,7 @@ static void Toolbar(App& app) {
         ImGui::SameLine();
         if (ImGui::Checkbox("Navmesh", &app.lib.mapRegenNavmesh)) app.lib.SaveConfig();
         if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("Rebuild the navmesh when saving: the open zone map's navmesh (AI_GRAPH) is built again from the terrain and the open maps' objects, as the game builds it. Takes a few seconds on big maps.");
+            ImGui::SetTooltip("Rebuild the navmesh on save: the open zone map's AI_GRAPH is built again from the terrain and the open maps' objects, as the game does. A few seconds on big maps.");
     }
     // Always one item after SameLine, even empty: otherwise the viewport below would start on this line.
     ImGui::SameLine();

@@ -260,7 +260,7 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
     ImGui::Checkbox("all textures", &st.allTextures);
     ImGui::SameLine();
     ImGui::BeginDisabled(st.textureOverride.empty());
-    if (ImGui::SmallButton("back to default")) st.textureOverride.clear();
+    if (ImGui::SmallButton("Reset")) st.textureOverride.clear();
     ImGui::EndDisabled();
 
     if (!shown.empty()) {

@@ -177,7 +177,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "LANGUAGE") cfg.language = value;
         else if (key == "GIF_SIZE") cfg.gif.size = std::atoi(value.c_str());
         else if (key == "GIF_FPS") cfg.gif.fps = std::atoi(value.c_str());
-        else if (key == "GIF_SPEED") cfg.gif.degreesPerSecond = static_cast<float>(std::atof(value.c_str()));
+        else if (key == "GIF_SPEED") cfg.gif.degreesPerSecond = std::max(0.0f, static_cast<float>(std::atof(value.c_str())));
         else if (key == "GIF_REVERSE") cfg.gif.reverse = value == "true";
         else if (key == "GIF_AXIS") cfg.gif.axis = value == "X" ? 0 : value == "Y" ? 1 : 2;
         else if (key == "GIF_BACKGROUND") {

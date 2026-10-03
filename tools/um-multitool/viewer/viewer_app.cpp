@@ -370,7 +370,8 @@ static void GifDialog(App& app, int maxSize) {
     changed |= ImGui::InputInt("Frames per second", &g.fps, 1, 5);
     g.fps = std::min(std::max(1, g.fps), 120);
     ImGui::SetNextItemWidth(220);
-    changed |= ImGui::SliderFloat("Speed (degrees/s)", &g.degreesPerSecond, 10.0f, 360.0f, "%.0f");
+    changed |= ImGui::SliderFloat("Speed (degrees/s)", &g.degreesPerSecond, 0.0f, 360.0f, "%.0f");
+    ImGui::SetItemTooltip("0: no turning. A unit's animation (3D Viewer > Units) plays in the GIF either way; at 0 the GIF is\none run of it (a still image without one).");
     // Straight views along the axes, so a spin about X or Y is seen square on. Sets the viewport's camera.
     ImGui::TextUnformatted("Camera from");
     struct View { const char* label; float yaw, pitch; const char* tip; };
@@ -406,8 +407,10 @@ static void GifDialog(App& app, int maxSize) {
     }
     if (g.size > maxSize)
         ImGui::TextColored(ImVec4(0.95f, 0.75f, 0.35f, 1), "The window fits %d px: the GIF will be %d x %d", maxSize, maxSize, maxSize);
-    int frames = Scene::TurntableFrames(g);
-    ImGui::TextDisabled("%d frames, %.1f s per turn", frames, frames / static_cast<float>(std::max(g.fps, 1)));
+    int frames = app.scene.TurntableFrames(g);
+    ImGui::TextDisabled(g.degreesPerSecond > 0 ? "%d frames, %.1f s per turn" : app.scene.ClipFrames() ? "%d frames, %.1f s: the animation once"
+                                                                                                       : "%d frame, a still image (%.1f s)",
+                        frames, frames / static_cast<float>(std::max(g.fps, 1)));
     if (g.fps > 50 || 100 % g.fps) ImGui::TextDisabled("GIF timing is in 1/100 s: plays at %.1f fps",
                                                       100.0f / std::max(2, static_cast<int>(std::lround(100.0 / g.fps))));
     ImGui::Spacing();

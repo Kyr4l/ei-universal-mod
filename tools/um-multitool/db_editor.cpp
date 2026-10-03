@@ -736,7 +736,7 @@ void IssueList(float height) {
     ImGui::SameLine();
     ImGui::Checkbox("This sheet only", &g.issuesOfSheetOnly);
     ImGui::SameLine();
-    if (ImGui::Button("Re-check")) Recheck();
+    if (ImGui::Button("Check again")) Recheck();
     ImGui::SameLine();
     ImGui::TextDisabled("(checked in %.0f ms; errors: the .res would not hold what the cell shows, or the game misreads it)", g.checkMs);
     if (g.issues.empty()) {
@@ -874,9 +874,9 @@ void DrawTab() {
     if (!g.loaded) {
         ImGui::Spacing();
         ImGui::TextWrapped(
-            "Opens a gameplay database (.res, or its .xlsx / .ods spreadsheet) to check, edit, save and compile it. Red cells: errors (the game would misread them); yellow: warnings (duplicates...).\n"
+            "Opens a gameplay database (.res, .xlsx or .ods) to check, edit, save and compile it. Red cells: errors the game would misread; yellow: warnings (duplicates...).\n"
                 "\n"
-                "Command line: um-multitool dbexport (.res -> spreadsheet), um-multitool xlsxdb (spreadsheet -> .res; --check only checks).");
+                "Command line: um-multitool dbexport (.res -> spreadsheet), um-multitool xlsxdb (spreadsheet -> .res; --check: check only).");
         if (!g.message.empty()) ImGui::TextColored(g.messageIsError ? kErrorColor : ImVec4(0.6f, 0.85f, 0.6f, 1), "%s", g.message.c_str());
         return;
     }
@@ -893,8 +893,8 @@ void DrawTab() {
         Save();
     }
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Ctrl+S. .xlsx or .ods, by the name's extension. The values, titles, column widths and frozen rows are\n"
-                          "written; other formatting of a spreadsheet saved by Excel or LibreOffice is not kept.");
+        ImGui::SetTooltip("Ctrl+S. .xlsx or .ods, by the extension. Values, titles, column widths and frozen rows are written;\n"
+            "other formatting from Excel or LibreOffice is lost.");
     PathField("dbres", "Compile to:", g.resPath, sizeof(g.resPath), true, "RES Archive", "*.res", fieldWidth);
     ImGui::SameLine();
     if (ImGui::Button("Compile .res", ImVec2(110, 0))) Compile();

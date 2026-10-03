@@ -150,17 +150,16 @@ inline void KeyBindings(Library& lib, SourcesState& st) {
         }
         ImGui::EndTable();
     }
-    if (ImGui::Button("Defaults##keys")) {
+    if (ImGui::Button("Reset##keys")) {
         lib.mapKeys = config::DefaultMapKeys();
         lib.SaveConfig();
         st.capturingKey = -1;
     }
     if (ImGui::IsItemHovered())
-        ImGui::SetTooltip("Movement at the W A S D, E (up), Q (down) and Left Shift positions of a US keyboard\n"
-                          "(Z Q S D, E, A on AZERTY): the same hand position on every layout.\n"
-                          "Ctrl+Tab logic mode, Ctrl+T next map, U unload the last file, Ctrl+R reset the camera, Ctrl+L lighting,\n"
-                          "Ctrl+S save, Ctrl+Z / Ctrl+Y undo / redo, G move, R rotate, T scale (then X/Y/Z), Ctrl+F find, Ctrl+A select all, Delete,\n"
-                          "Ctrl+C / Ctrl+V copy / paste, Ctrl+D duplicate (Ctrl+A/C/V/D by letter).");
+        ImGui::SetTooltip("Movement: W A S D, E (up), Q (down), Left Shift, by key position (Z Q S D, E, A on AZERTY).\n"
+            "Ctrl+Tab logic mode, Ctrl+T next map, U unload the last file, Ctrl+R reset the camera, Ctrl+L lighting, Ctrl+S save,\n"
+            "Ctrl+Z / Ctrl+Y undo / redo, G / R / T move / rotate / scale (then X/Y/Z), Ctrl+F find, Delete,\n"
+            "Ctrl+A / C / V / D select all / copy / paste / duplicate (by letter).");
 }
 
 // A grey explanation that wraps at the column's edge.
@@ -325,8 +324,7 @@ inline bool LayerList(const char* id, LayeredAssetSource& source, char* path, si
 }
 
 inline void SourcesTab(Library& lib, SourcesState& st) {
-    ImGui::TextWrapped("Sources are searched top to bottom: add the base game first, then mods on top (a mod's file "
-                       "overrides the game's). Each source is a .res archive or a folder of loose files.");
+    ImGui::TextWrapped("Searched top to bottom: the base game first, then mods on top (a mod's file overrides the game's). Each source: a .res archive or a folder of loose files.");
     ImGui::Spacing();
 
     ImGui::SeparatorText("Figures");

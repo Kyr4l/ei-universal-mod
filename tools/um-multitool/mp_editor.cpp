@@ -486,7 +486,7 @@ void ItemsPanel() {
                 if (g.unsafe) {
                     ImGui::TableNextColumn();
                     if (o.kind != 0x3002) {
-                        if (ImGui::SmallButton("Copy")) dupId = o.id;
+                        if (ImGui::SmallButton("Duplicate")) dupId = o.id;
                         ImGui::SetItemTooltip("A copy into the backpack (with its spell)");
                         ImGui::SameLine();
                     }

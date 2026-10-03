@@ -178,6 +178,16 @@ public:
     // its track's position (relative to its first frame, so the unit stays where the rest pose framed it), every
     // other part at P(parent) + W(parent) * its own .bon offset for this complection, its vertices P + W * v.
     void Pose(const std::string& clipName, float frame) {
+        posedClip_ = clipName;
+        posedFrame_ = frame;
+        PoseAt(clipName, frame);
+    }
+    // The frames of the clip shown (0: none, or at rest).
+    int ClipFrames() const {
+        auto ci = clips.find(posedClip_);
+        return unitModel && ci != clips.end() ? static_cast<int>(ci->second.FrameCount()) : 0;
+    }
+    void PoseAt(const std::string& clipName, float frame) {
         if (!unitModel || !hasModel) return;
         auto ci = clips.find(clipName);
         const fig::AnimClip* clip = ci != clips.end() ? &ci->second : nullptr;
@@ -487,17 +497,25 @@ public:
         glMatrixMode(GL_MODELVIEW);
     }
 
-    // Puts the model at frame `index` of the turn the GIF settings describe.
+    // Puts the model at frame `index` of the GIF the settings describe: turned by the speed, and the animation shown
+    // (a unit's clip) played at the game's 15 frames a second from its start.
     void SetTurntableFrame(const config::GifSettings& g, int index) {
         int count = TurntableFrames(g);
         spinAxis = g.axis;
-        spinDegrees = (g.reverse ? -360.0f : 360.0f) * (index % count) / count;
+        spinDegrees = g.degreesPerSecond > 0 ? (g.reverse ? -360.0f : 360.0f) * (index % count) / count : 0.0f;
+        if (const int clipFrames = ClipFrames())
+            PoseAt(posedClip_, std::fmod((index % count) * 15.0f / std::max(g.fps, 1), static_cast<float>(clipFrames)));
     }
 
-    // Frames per full turn for these settings (at least 2).
-    static int TurntableFrames(const config::GifSettings& g) {
-        float seconds = 360.0f / std::max(g.degreesPerSecond, 1.0f);
-        return std::max(2, static_cast<int>(std::lround(seconds * std::max(g.fps, 1))));
+    // The GIF's frames: a full turn; at speed 0, one run of the animation shown (a single still image without one).
+    int TurntableFrames(const config::GifSettings& g) const {
+        const int fps = std::max(g.fps, 1);
+        if (g.degreesPerSecond <= 0) {
+            const int clipFrames = ClipFrames();
+            return clipFrames ? std::max(1, static_cast<int>(std::lround(clipFrames / 15.0 * fps))) : 1;
+        }
+        const float seconds = 360.0f / g.degreesPerSecond;
+        return std::max(2, static_cast<int>(std::lround(seconds * fps)));
     }
 
     // One full turn about the vertical axis from the current view, `size` x `size` pixels, drawn into
@@ -548,6 +566,7 @@ public:
         camera.yawDeg = savedYaw;
         spinDegrees = 0.0f;
         options = saved;
+        PoseAt(posedClip_, posedFrame_); // back to the pose shown
         return frames;
     }
 
@@ -556,6 +575,8 @@ private:
     fig::Model unit_;               // the unit's parts as loaded, for Pose()
     std::vector<int> partSource_;   // parts_[i] is unit_.parts[partSource_[i]]
     fig::Vec3 constitution_{0.5f, 0.5f, 0.5f};
+    std::string posedClip_;         // the pose Pose() last set (the GIF export plays that clip)
+    float posedFrame_ = 0.0f;
     std::map<std::string, GlTexture> textures_;
 
     // Grey and white squares behind the model, to show what the GIF will have transparent.

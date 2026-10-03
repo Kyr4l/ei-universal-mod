@@ -292,7 +292,7 @@ bool InputMultiline(const char* id, std::string& text, ImVec2 size, ImGuiInputTe
 void DrawTab(Library& lib) {
     if (g.packsVersion != lib.textPacksVersion) Reload(lib);
     if (g.packs.empty()) {
-        ImGui::TextWrapped("No language packs yet: add them in Settings > Texts (a language and its folders or .res files). This tab then compares each language with a reference one: the texts it lacks (to translate), the texts only it has (often fixes for that language, not mistakes) and the texts left identical.");
+        ImGui::TextWrapped("No language packs yet: add them in Settings > Texts. This tab then compares each language with a reference one: the texts it lacks (to translate), those only it has (often its own fixes) and those left identical.");
         return;
     }
     // Pack and reference.

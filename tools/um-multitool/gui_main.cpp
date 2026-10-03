@@ -863,34 +863,57 @@ static void AddFallbackFonts(ImGuiIO& io) {
     }
 }
 
+// GLFW 3.4 added the platform query and the Wayland app id; the Windows XP builds use GLFW 3.3 (the last one
+// that runs on XP), where neither exists (and there is no Wayland).
+#if GLFW_VERSION_MAJOR * 100 + GLFW_VERSION_MINOR >= 304
+static bool OnWayland() { return glfwGetPlatform() == GLFW_PLATFORM_WAYLAND; }
+static void HintAppId(const char* id) { glfwWindowHintString(GLFW_WAYLAND_APP_ID, id); }
+#else
+static bool OnWayland() { return false; }
+static void HintAppId(const char*) {}
+#endif
+
+// Why the window could not open: in the console, and on Windows also in a message box (a double-clicked
+// program's console closes at once, so it would otherwise fail without a word).
+static std::string g_glfwError;
+static void ReportStartFailure(const char* what) {
+    const std::string text = std::string(what) + (g_glfwError.empty() ? "" : ":\n" + g_glfwError);
+    std::fprintf(stderr, "%s\n", text.c_str());
+#ifdef _WIN32
+    MessageBoxA(nullptr, text.c_str(), "um-multitool", MB_OK | MB_ICONERROR);
+#endif
+}
+
 int RunGui(const GuiOptions& options) {
     glfwSetErrorCallback([](int error, const char* description) {
         std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
+        g_glfwError = description ? description : "";
     });
-    if (!glfwInit()) return 1;
+    if (!glfwInit()) { ReportStartFailure("The window system could not start (GLFW)"); return 1; }
 
     glfwWindowHint(GLFW_DEPTH_BITS, 24); // the 3D Viewer needs a depth buffer
     // The name desktops match against um-multitool.desktop (StartupWMClass / the Wayland app id): that is
     // where a Wayland desktop takes the window's icon from.
-    glfwWindowHintString(GLFW_WAYLAND_APP_ID, "um-multitool");
+    HintAppId("um-multitool");
     glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
     glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
     const std::string title = std::string(PROGRAM_NAME_SHOWN) + " " + PROGRAM_VERSION;
     // The window as it was last closed (um-multitool.cfg): size, maximized, and position where the
     // platform allows it (Wayland does not let a program place its window).
     const config::Config saved = config::Load();
-    const bool wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;
+    const bool wayland = OnWayland();
     // Created at the normal size and maximized once shown: a window that starts maximized gives the
     // window manager no size to go back to when it is un-maximized (KWin then keeps the full screen).
     GLFWwindow* window = glfwCreateWindow(std::max(saved.windowW, 640), std::max(saved.windowH, 400), title.c_str(), nullptr, nullptr);
     if (!window) {
+        ReportStartFailure("The window could not be created (OpenGL)");
         glfwTerminate();
         return 1;
     }
     if (!wayland && saved.windowX != -100000) glfwSetWindowPos(window, saved.windowX, saved.windowY);
     glfwMakeContextCurrent(window);
     // The window icon (the battle axe, icon_data.hpp). Wayland has no way to set one from the program.
-    if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+    if (!OnWayland()) {
         GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)},
                               {48, 48, const_cast<unsigned char*>(logo::kIcon48)},
                               {32, 32, const_cast<unsigned char*>(logo::kIcon32)}};
@@ -1164,7 +1187,7 @@ int RunGui(const GuiOptions& options) {
         if (scriptWanted && !scriptWin) {
             const ImGuiStyle style = ImGui::GetStyle();
             glfwDefaultWindowHints();
-            glfwWindowHintString(GLFW_WAYLAND_APP_ID, "um-multitool");
+            HintAppId("um-multitool");
             glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
             glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
             const std::string scriptTitle = "Script - " + std::string(PROGRAM_NAME_SHOWN);

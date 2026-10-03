@@ -34,6 +34,7 @@ Universal-Mod/*.dmp
 tools/um-multitool/vendor/glfw-mingw/
 tools/um-multitool/vendor/glfw-src/
 tools/um-multitool/vendor/glfw-src-xp/
+tools/um-multitool/vendor/glfw-src-xp33/
 tools/um-multitool/vendor/glfw-mingw-xp32/
 tools/um-multitool/vendor/glfw-mingw-xp64/
 

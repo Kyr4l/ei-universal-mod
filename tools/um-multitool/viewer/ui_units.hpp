@@ -230,8 +230,8 @@ inline void UnitsTab(Library& lib, Scene& scene, UnitsTabState& st) {
     std::snprintf(custom, sizeof custom, "%s", st.customSkin.c_str());
     ImGui::SetNextItemWidth(-160);
     if (ImGui::InputTextWithHint("##custom", "custom skin: texture name or file", custom, sizeof custom, ImGuiInputTextFlags_EnterReturnsTrue)) { st.customSkin = custom; st.dirty = true; }
-    ImGui::SetItemTooltip("A texture of the sources (e.g. unhumaskin_05) or any file (.png, .dds, .mmp): shown instead of the skin,\n"
-                          "with the worn items painted over it like the game does. Press Enter to apply.");
+    ImGui::SetItemTooltip("A texture of the sources (e.g. unhumaskin_05) or a .png / .dds / .mmp file: shown instead of the skin,\n"
+        "with the worn items painted over it like in the game. Enter applies it.");
     ImGui::SameLine();
     std::string picked;
     if (ImGui::Button("File...") && PickFile(picked)) { st.customSkin = picked; st.dirty = true; scene.ClearTextures(); }
@@ -266,9 +266,19 @@ inline void UnitsTab(Library& lib, Scene& scene, UnitsTabState& st) {
         }
         ImGui::SetItemTooltip("A helm hides the hair, as in the game");
     }
-    ImGui::SetNextItemWidth(-90);
-    if (ImGui::SliderFloat3("Complection", st.complection, 0.0f, 1.0f, "%.2f")) st.dirty = true;
+    ImGui::SetNextItemWidth(-150);
+    if (ImGui::SliderFloat3("##complection", st.complection, 0.0f, 1.0f, "%.2f")) st.dirty = true;
     ImGui::SetItemTooltip("Body proportions (the figure's morphs); Ctrl+click a value to type it");
+    ImGui::SameLine();
+    ImGui::BeginDisabled(st.complection[0] == 0.5f && st.complection[1] == 0.5f && st.complection[2] == 0.5f);
+    if (ImGui::SmallButton("Reset##complection")) {
+        st.complection[0] = st.complection[1] = st.complection[2] = 0.5f;
+        st.dirty = true;
+    }
+    ImGui::EndDisabled();
+    ImGui::SetItemTooltip("Back to 0.5 / 0.5 / 0.5: the middle of every morph");
+    ImGui::SameLine();
+    ImGui::TextUnformatted("Complection");
 
     // Equipment
     ImGui::SeparatorText("Weapons");
