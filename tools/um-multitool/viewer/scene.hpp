@@ -39,6 +39,7 @@ struct ViewOptions {
     bool textured = true;
     bool lighting = true;
     bool grid = true;
+    bool skeleton = false;     // a unit's bones: lines from each shown part's joint to its parent's
     bool autoRotate = false;
     bool atlasUvs = true;
     bool checkerboard = false; // squares behind the model (the GIF preview's "transparent") // map the figure's atlas UVs back onto the single texture (see Draw)
@@ -126,6 +127,7 @@ public:
         shownParts.clear();
         hasModel = false;
         unitModel = true;
+        pose_.clear();
         clips.clear();
         unit_ = fig::Model{};
         partSource_.clear();
@@ -187,11 +189,13 @@ public:
         auto ci = clips.find(posedClip_);
         return unitModel && ci != clips.end() ? static_cast<int>(ci->second.FrameCount()) : 0;
     }
+    std::vector<fig::PartPose> pose_; // the last pose (for the skeleton)
     void PoseAt(const std::string& clipName, float frame) {
         if (!unitModel || !hasModel) return;
         auto ci = clips.find(clipName);
         const std::vector<fig::PartPose> pose =
             fig::PoseModel(unit_, ci != clips.end() ? &ci->second : nullptr, frame, constitution_, 0.0f);
+        pose_ = pose;
         for (size_t s = 0; s < parts_.size() && s < partSource_.size(); ++s) {
             const size_t i = static_cast<size_t>(partSource_[s]);
             const fig::FigureMesh& mesh = unit_.parts[i].mesh;
@@ -453,6 +457,39 @@ public:
         glMatrixMode(GL_TEXTURE);
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);
+        if (options.skeleton) DrawSkeleton();
+    }
+
+    // The bones over the model (no depth test): each shown part's joint (its pose position: where the .bon offsets
+    // put it), linked to its parent's joint; joints as dots.
+    void DrawSkeleton() {
+        if (!unitModel) return;
+        if (pose_.size() != unit_.parts.size()) pose_ = fig::PoseModel(unit_, nullptr, 0.0f, constitution_, 0.0f); // at rest
+        if (pose_.size() != unit_.parts.size()) return;
+        glDisable(GL_DEPTH_TEST);
+        glLineWidth(2.0f);
+        glPointSize(5.0f);
+        std::vector<bool> shown(unit_.parts.size(), false);
+        for (int i : partSource_) if (i >= 0 && static_cast<size_t>(i) < shown.size()) shown[static_cast<size_t>(i)] = true;
+        glBegin(GL_LINES);
+        glColor3f(1.0f, 0.85f, 0.1f);
+        for (size_t i = 0; i < unit_.parts.size(); ++i) {
+            if (!shown[i] || unit_.parts[i].parentName.empty()) continue;
+            const int parent = unit_.FindPartIndex(unit_.parts[i].parentName);
+            if (parent < 0) continue;
+            const fig::Vec3 a = pose_[static_cast<size_t>(parent)].p, b = pose_[i].p;
+            glVertex3f(a.x, a.y, a.z);
+            glVertex3f(b.x, b.y, b.z);
+        }
+        glEnd();
+        glBegin(GL_POINTS);
+        glColor3f(1.0f, 0.3f, 0.2f);
+        for (size_t i = 0; i < unit_.parts.size(); ++i)
+            if (shown[i]) glVertex3f(pose_[i].p.x, pose_[i].p.y, pose_[i].p.z);
+        glEnd();
+        glLineWidth(1.0f);
+        glPointSize(1.0f);
+        glEnable(GL_DEPTH_TEST);
     }
 
     // Puts the model at frame `index` of the GIF the settings describe: turned by the speed, and the animation shown

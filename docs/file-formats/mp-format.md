@@ -12,7 +12,7 @@ It was reverse-engineered from game.exe (`EIStarter OBT-1/Engine`):
 ## File
 
 ```
-u32 0x114          (same in every file; meaning unknown)
+u32 0x114 (the file kind: 0x114 a character; 0x102 a zone state, 0xDEAD the campaign in a save: sav-format.md)          (same in every file; meaning unknown)
 u32 version        0x74
 u32 checksum       of the decompressed data: u = 0; for each u32 w: x = u ^ w; u = x * ((x & 0xFC) | 3)
 u8  1

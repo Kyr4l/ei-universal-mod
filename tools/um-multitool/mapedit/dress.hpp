@@ -67,7 +67,7 @@ inline WeaponPiece PieceOf(const std::string& lowerName) {
 
 struct Dress {
     bool on = false;
-    std::string skin, secondSkin;                 // textures of the bare parts (texture number 0 / 1)
+    std::string skin, secondSkin;                 // the body's texture (parts of texture number 1) / the second one (number 2: weapon-like parts without an item)
     std::map<std::string, std::string> selected;  // slot -> the variant part shown (lower case)
     std::map<std::string, std::string> texture;   // variant part (lower case) -> its redress texture
     std::map<std::string, std::string> overlay;   // (unused: clothing is composed into the body's texture)
@@ -320,13 +320,22 @@ inline std::string PartTexture(const Dress& d, const fig::Model& model, const fi
     }
     const fig::ModelPart* cur = &part;
     while (cur) {
+        if (Lower(cur->name) == "quiver") { // painted in the bow's (or crossbow's) texture, with the arrows
+            for (const char* g : {"rh3", "lh3"}) {
+                auto sel = d.selected.find(g);
+                if (sel == d.selected.end()) continue;
+                if (sel->second.find(".bwpartb") == std::string::npos && sel->second.find(".crbow") == std::string::npos) continue;
+                auto tex = d.texture.find(sel->second);
+                if (tex != d.texture.end()) return tex->second;
+            }
+        }
         auto it = d.texture.find(Lower(cur->name));
         if (it != d.texture.end()) return it->second;
         if (cur->parentName.empty()) break;
         const int parent = model.FindPartIndex(cur->parentName);
         cur = parent < 0 ? nullptr : &model.parts[static_cast<size_t>(parent)];
     }
-    return part.mesh.textureNumber == 1 && !d.secondSkin.empty() ? d.secondSkin : d.body;
+    return part.mesh.textureNumber == 2 && !d.secondSkin.empty() ? d.secondSkin : d.body;
 }
 
 } // namespace dress

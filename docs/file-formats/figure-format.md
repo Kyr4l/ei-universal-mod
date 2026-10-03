@@ -34,9 +34,9 @@ int32   uvCount            // number of UV coordinate pairs
 int32   indexCount         // number of triangle-list indices (uint16 each)
 int32   vertexComponentCount // number of {normalIdx, vertexIdx, uvIdx} triples
 int32   morphingComponentCount // always == vertBlocks * 4 (see "Unread Trailer" below)
-int32   unknown            // observed 0 in every sampled file
-int32   group              // presumed material/atlas group id; unconfirmed, safe to ignore for single-texture rendering
-int32   textureNumber      // presumed primary(0)/secondary(1) texture-slot selector; unconfirmed
+int32   unknown            // 0 in all 3564 vanilla meshes
+int32   unknown2           // see "Header fields: values" below (render flags: 17..25)
+int32   textureNumber      // see below: the kind of texture the mesh uses (0..8)
 ```
 
 ### Complection Morphing (the 8-corner cube)
@@ -93,6 +93,37 @@ Immediately after the vertex-component array, every `.fig` file (both standalone
 
 ---
 
+### Header fields: values (all 3564 vanilla FIG8 meshes, 2026-10-03)
+
+The two last header words were called `group` and `textureNumber`; their values across the vanilla `figures.res`
+(plain `.fig` files and the meshes inside `.mod` files) group by kind of model:
+
+| `textureNumber` | Count | Used by |
+|---|---|---|
+| 0 | 1 | water (`stwe2.mod:water`) |
+| 1 | 1545 | every unit and creature part, faces |
+| 2 | 477 | armour items shown on the ground (`initarhl*`) |
+| 3 | 6 | plants (`naflli*`, `naflte1`) |
+| 4 | 58 | buildings (`stbuho1`...) |
+| 6 | 6 | wings (`unmowi.mod` body parts) |
+| 7 | 57 | stones, an aquarium (`nast*`, `stst3`) |
+| 8 | 1414 | items and props (`initqi*`, `ingm*`, `co*`) |
+
+Inside the unit models it splits the parts: 1 = drawn with the body's texture (the skin with the worn clothes
+composed over it), 2 = drawn with an item's own texture: weapons, helmets, bow strings, the quiver and the arrows
+(the bow's redress texture holds the quiver and the arrows). So it is not a "primary/secondary texture" switch but the kind of texture (probably which texture set or atlas
+the game loads it from). The word before it takes 17-25 (0x11-0x19): 18 (1231), 22 (902), 21 (722, faces), 19
+(618), 17 (64), 23 (20, eyes, gems), 25 (6, wings), 24 (1, water). Read as bits over 0x10: bit 3 (24, 25) is set
+on the see-through meshes (water, wing membranes): probably the render flags (blending, two-sided...); the
+other bits are not tied to anything yet.
+
+### The older figure format (22 vanilla files, no `FIG8` signature)
+
+`in25arrow`, `efcu0lightsourse`..`efcu5eye`, `initlitr1..6item`, `initqi4item`, `ingm1gipat01..08`, `nask0sky`:
+the file starts with u32 17-23 (the same values as the render flags above) and u32 3-8 (the same as
+`textureNumber`), then the 8-corner bounding data as in `FIG8` (centre, min, max...). The counts and the rest are
+not decoded yet; their `.bon` files are 72 bytes (not 96), all zeros in the samples. The viewer does not read them.
+
 ## `.bon` — Assembly Offsets
 
 `.bon` files come in two shapes, matching whether the model is a simple single-mesh figure or a composite `.mod`:
@@ -100,6 +131,12 @@ Immediately after the vertex-component array, every `.fig` file (both standalone
 ### Simple form (plain `.bon` next to a plain `.fig`)
 
 Exactly **96 bytes**: 8 × `vec3<float>`, one offset per complection morph corner (same 8-corner order as `.fig`'s morph arrays). This offset is trilinearly blended by complection exactly like the mesh data, then added to the figure's own position — but since a single monolithic mesh has no sibling parts to align, this offset is typically near-zero and has no visible effect for these simple figures.
+
+In the vanilla `figures.res` (2026-10-03): 440 plain 96-byte `.bon`, 452 composite ones, and 22 of 72 bytes
+(next to the older figures, see above). The composite ones hold 3124 entries of 96 bytes and 33 of 72. Nothing
+else: a `.bon` holds no rotations and no hierarchy (the hierarchy is the `.mod`'s link table); the parts'
+rotations come from the `.anm`. The skeleton the 3D Viewer draws (Skeleton checkbox) is the parts' joints
+placed by these offsets (and the clip's rotations), each linked to its parent's.
 
 ### Composite form (`.bon` next to a `.mod`)
 
@@ -165,8 +202,12 @@ Only present for true composite (`.mod`+`.bon`) rigs. An `.anm` file is a **RES 
    vec3<float> vertices[F * V]    // F = the clip's frames, V = the part's real vertex count (its .fig stores them
                                   // in blocks of 4: 44 slots, 42 vertices). Used by wing membranes (`r_pereponka` of
                                   // the dragons unmodg, unmosu) and a few bodies (unmori bd, unmomi rh1/lh1/bd,
-                                  // unmowi bd01-04). Part-local positions or deltas: not settled (some values are
-                                  // near 0, the wings' are large); not applied by the viewers yet.
+                                  // unmowi bd01-04). Checked on unmodg's r_pereponka
+                                  // (2026-10-03): whole positions, not deltas (the frames span 0.9 x 3.3 x 3.5,
+                                  // the rest mesh 3.5 x 0.05 x 3.9: the same size), but in another frame: the
+                                  // rest membrane is flat along y, every frame flat along x (a 90-degree turn),
+                                  // and the vertex order does not match the .fig's index for index. Not applied
+                                  // by the viewers yet.
    ```
    (An earlier reading took the second count and the two trailing words for "N + 1 positions": there are N.)
 

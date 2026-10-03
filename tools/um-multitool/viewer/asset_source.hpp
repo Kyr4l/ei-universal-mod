@@ -199,6 +199,18 @@ struct LayeredAssetSource {
         return false;
     }
 
+    // The highest-priority layer holding `name` (-1: none), and reading a layer again after its file changed.
+    int LayerWith(const std::string& name) const {
+        for (int i = static_cast<int>(layers.size()) - 1; i >= 0; --i)
+            if (layers[static_cast<size_t>(i)].ok && layers[static_cast<size_t>(i)].source.Contains(name)) return i;
+        return -1;
+    }
+    bool ReloadLayer(size_t i) {
+        if (i >= layers.size()) return false;
+        layers[i].ok = layers[i].source.Load(layers[i].path, layers[i].error);
+        return layers[i].ok;
+    }
+
     bool AnyLoaded() const {
         for (auto& l : layers) if (l.ok) return true;
         return false;

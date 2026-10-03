@@ -466,6 +466,9 @@ static void Toolbar(App& app) {
     ImGui::SameLine();
     ImGui::Checkbox("Grid", &o.grid);
     ImGui::SameLine();
+    ImGui::Checkbox("Skeleton", &o.skeleton);
+    ImGui::SetItemTooltip("A unit's bones: each part's joint linked to its parent's");
+    ImGui::SameLine();
     ImGui::Checkbox("Turn", &o.autoRotate);
     ImGui::SameLine();
     ImGui::Checkbox("Atlas UVs", &o.atlasUvs);

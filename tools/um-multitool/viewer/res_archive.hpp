@@ -3,6 +3,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cctype>
 #include <cstring>
 #include <map>
 #include <string>
@@ -84,6 +85,55 @@ inline bool ParseArchive(const std::vector<uint8_t>& bytes, Archive& out, std::s
 // else as it was: the entry order, the hash chains, the names, the other payloads (in their original
 // order, 16-byte aligned) and their timestamps. Replaced payloads go after the kept ones and get
 // `timestamp`. Used to save an edited file inside a packed quest (.mq).
+// A new RES archive holding `files` (name -> payload), laid out as um-restool packs one: payloads 16-byte
+// aligned after the header, then the hash table (bucket = sum of the lower-case name's bytes % count, collisions
+// chained into the free slots from the end), then the names.
+inline std::vector<uint8_t> WriteArchive(const std::map<std::string, std::vector<uint8_t>>& files, uint32_t timestamp) {
+    struct Rec { std::string name; uint32_t length = 0, offset = 0, nameOffset = 0; };
+    std::vector<Rec> recs;
+    std::vector<uint8_t> data, names;
+    for (const auto& f : files) {
+        while (data.size() % 16) data.push_back(0);
+        Rec r;
+        r.name = f.first;
+        r.length = static_cast<uint32_t>(f.second.size());
+        r.offset = static_cast<uint32_t>(16 + data.size());
+        r.nameOffset = static_cast<uint32_t>(names.size());
+        data.insert(data.end(), f.second.begin(), f.second.end());
+        names.insert(names.end(), f.first.begin(), f.first.end());
+        recs.push_back(r);
+    }
+    while (data.size() % 16) data.push_back(0);
+    const uint32_t n = static_cast<uint32_t>(recs.size());
+    std::vector<int> slot(n, -1), next(n, -1);
+    for (uint32_t i = 0; i < n; ++i) {
+        uint32_t sum = 0;
+        for (unsigned char c : recs[i].name) sum += static_cast<unsigned char>(std::tolower(c));
+        const uint32_t bucket = sum % n;
+        if (slot[bucket] < 0) { slot[bucket] = static_cast<int>(i); continue; }
+        uint32_t cur = bucket;
+        while (next[cur] >= 0) cur = static_cast<uint32_t>(next[cur]);
+        int free = static_cast<int>(n) - 1;
+        while (free >= 0 && slot[static_cast<size_t>(free)] >= 0) --free;
+        if (free >= 0) { next[cur] = free; slot[static_cast<size_t>(free)] = static_cast<int>(i); }
+    }
+    std::vector<uint8_t> out(16);
+    auto put = [&](const void* p, size_t k) { out.insert(out.end(), static_cast<const uint8_t*>(p), static_cast<const uint8_t*>(p) + k); };
+    out.insert(out.end(), data.begin(), data.end());
+    const uint32_t header[4] = {kResMagic, n, static_cast<uint32_t>(16 + data.size()), static_cast<uint32_t>(names.size())};
+    std::memcpy(out.data(), header, 16);
+    for (uint32_t i = 0; i < n; ++i) {
+        const int32_t nx = next[i];
+        const Rec empty;
+        const Rec& r = slot[i] >= 0 ? recs[static_cast<size_t>(slot[i])] : empty;
+        const uint32_t ts = slot[i] >= 0 ? timestamp : 0;
+        const uint16_t nl = static_cast<uint16_t>(r.name.size());
+        put(&nx, 4); put(&r.length, 4); put(&r.offset, 4); put(&ts, 4); put(&nl, 2); put(&r.nameOffset, 4);
+    }
+    out.insert(out.end(), names.begin(), names.end());
+    return out;
+}
+
 inline bool RewriteArchive(const std::vector<uint8_t>& in, const std::map<std::string, std::vector<uint8_t>>& replace,
                            uint32_t timestamp, std::vector<uint8_t>& out, std::string& err) {
     if (in.size() < 16) { err = "too small"; return false; }

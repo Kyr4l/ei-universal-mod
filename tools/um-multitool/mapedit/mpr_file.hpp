@@ -291,4 +291,41 @@ inline bool Save(Map& m, const std::string& path, const std::vector<int>& sector
     return true;
 }
 
+// A new flat terrain of sx x sy sectors (32 x 32 units each) at `height`, every tile `tile` (packed as stored),
+// with the materials, tile types and texture settings of `model` (an open terrain). `name` is the name inside the
+// archive, which the textures go by (<name>000.mmp...): keep the model's to use its textures. Written to `path`.
+inline bool Create(const Map& model, const std::string& name, int sx, int sy, float height, uint16_t tile,
+                   const std::string& path, Map& out, std::string& err) {
+    if (sx < 1 || sy < 1 || sx > 64 || sy > 64) { err = "1 to 64 sectors each way"; return false; }
+    Map m;
+    m.name = name;
+    m.maxZ = std::max({model.maxZ, height * 2.0f, 1.0f});
+    m.sectorsX = sx; m.sectorsY = sy;
+    m.textureCount = model.textureCount; m.textureSize = model.textureSize;
+    m.tileCount = model.tileCount; m.tileSize = model.tileSize;
+    m.materials = model.materials; m.tileTypes = model.tileTypes; m.animTiles = model.animTiles;
+    m.sectors.resize(static_cast<size_t>(sx) * sy);
+    const uint16_t z = static_cast<uint16_t>(std::lround(std::clamp(height / m.maxZ, 0.0f, 1.0f) * 65535.0f));
+    const uint32_t up = (1000u << 22) | (1000u << 11) | 1000u; // a normal straight up (see Normal)
+    std::map<std::string, std::vector<uint8_t>> files;
+    for (int y = 0; y < sy; ++y)
+        for (int x = 0; x < sx; ++x) {
+            Sector& s = m.sectors[static_cast<size_t>(y) * sx + x];
+            s.present = true; s.water = false; s.type = 1;
+            for (auto& row : s.land) for (Vertex& v : row) { v.z = z; v.packedNormal = up; }
+            for (auto& row : s.landTiles) for (uint16_t& t : row) t = tile;
+            for (auto& row : s.waterMaterial) for (int16_t& w : row) w = -1;
+            files[SectorEntryName(m, x, y)] = WriteSector(s);
+        }
+    files[m.name + ".mp"] = WriteHeader(m);
+    m.archiveBytes = res::WriteArchive(files, static_cast<uint32_t>(std::time(nullptr)));
+    std::ofstream f(path, std::ios::binary | std::ios::trunc);
+    if (!f.is_open()) { err = "cannot write " + path; return false; }
+    f.write(reinterpret_cast<const char*>(m.archiveBytes.data()), static_cast<std::streamsize>(m.archiveBytes.size()));
+    if (!f) { err = "cannot write " + path; return false; }
+    m.path = path;
+    out = std::move(m);
+    return true;
+}
+
 } // namespace mpr

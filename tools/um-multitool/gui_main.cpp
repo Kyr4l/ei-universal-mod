@@ -698,6 +698,49 @@ static int g_activeTab = 0;
 static const char* g_activeSubcommand = ""; // the shown File Processing sub-tab's tool ("" for DB)
 constexpr int kDbSubTab = 0; // File Processing's DB sub-tab (see the tabs in RunGui)
 constexpr int kMpSubTab = 2; // its MP sub-tab
+// The "?" of the main tab bar: every key and mouse control of the tab shown.
+static void KeysHelp(const Library& lib, int tab) { // tab: 0 File Processing, 1 3D Viewer, 2 Map Editor (main()'s order)
+    static const char* const kButtons[] = {"left", "right", "middle", "side 1", "side 2"};
+    auto row = [](const std::string& keys, const char* what) {
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+        ImGui::TextUnformatted(keys.c_str());
+        ImGui::TableNextColumn();
+        ImGui::TextUnformatted(i18n::Tr(what));
+    };
+    auto mouse = [&](int b) { return std::string(i18n::Tr(kButtons[std::min(std::max(b, 0), 4)])) + i18n::Tr(" button drag"); };
+    if (!ImGui::BeginTable("##keys", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) return;
+    if (tab == 2) {
+        for (int k = 0; k < config::kMapKeyCount; ++k) row(ui::BindName(lib.mapKeys[k]), config::MapKeyLabel(k));
+        row(mouse(lib.mapMouseOrbit), "Turn the camera");
+        row(mouse(lib.mapMousePan), "Move the camera");
+        row(i18n::Tr("Wheel"), "Zoom");
+        row(i18n::Tr("Click / Shift+click"), "Select / add to or remove from the selection");
+        row(i18n::Tr("Drag (Shift: add)"), "Select with a box");
+        row("X / Y / Z", "While moving, turning or scaling: only along that axis (Shift: the two others)");
+        row(i18n::Tr("Ctrl (held)"), "While moving, turning or scaling: no rounding");
+        row(i18n::Tr("Enter / left click"), "Apply the move, turn or scale");
+        row(i18n::Tr("Escape / right click"), "Cancel it");
+        row("1 ... 9", "Tile painting: the quick tiles");
+        row(", / .", "Tile painting: turn the brush");
+        row(i18n::Tr("Alt+click"), "Tile painting: pick the tile under the mouse; script areas shown: pick an area");
+        row(i18n::Tr("Ctrl+click"), "Logic mode: add a patrol point to the selected unit; a selected trap: a cast point");
+        row(i18n::Tr("Ctrl+Shift+click"), "A selected trap: an activation area");
+    } else if (tab == 1) {
+        row(mouse(lib.mapMouseOrbit), "Turn the camera");
+        row(mouse(lib.mapMousePan), "Move the camera");
+        row(i18n::Tr("Wheel"), "Zoom");
+        row(i18n::Tr("Up / Down"), "The previous / next row of the list");
+    } else if (tab == 0) {
+        row("Ctrl+S", "Save (DB editor, text editor)");
+        row(i18n::Tr("Escape"), "Close a message");
+    } else {
+        row("-", "No keys in this tab");
+    }
+    ImGui::EndTable();
+    if (tab == 2 || tab == 1) ImGui::TextDisabled("%s", i18n::Tr("The keys and mouse buttons are set in Settings."));
+}
+
 static Library* g_library = nullptr; // for the sub-tabs that need the sources (Texts)
 static void DrawTextsTab() { textedit::DrawTab(*g_library); }
 static void DrawMpTab() { mpedit::DrawTab(*g_library); }
@@ -1083,6 +1126,18 @@ int RunGui(const GuiOptions& options) {
 
         bool shown3d = false;
         int shownTab = kNone;
+        { // the "?" in the top right corner: the keys of the tab shown (drawn first, the tabs never reach it)
+            const ImVec2 back = ImGui::GetCursorPos();
+            const float w = ImGui::GetFrameHeight();
+            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowContentRegionMax().x - w, back.y));
+            if (ImGui::Button("?", ImVec2(w, 0))) ImGui::OpenPopup("##keyshelp");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("The keys and mouse controls of this tab"));
+            if (ImGui::BeginPopup("##keyshelp")) {
+                KeysHelp(library, library.guiTab);
+                ImGui::EndPopup();
+            }
+            ImGui::SetCursorPos(back);
+        }
         if (ImGui::BeginTabBar("##maintabs")) {
             if (requestedFromDll >= 0) { requestedTab = requestedFromDll; requestedFromDll = -1; }
             if (g_requestMainTab >= 0) { requestedTab = g_requestMainTab; g_requestMainTab = -1; }

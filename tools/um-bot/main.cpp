@@ -27,10 +27,14 @@
 
 #include <cstdlib>
 #include <filesystem>
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <set>
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.7";
+static const char* const kVersion = "0.9";
 
 
 struct App {
@@ -59,6 +63,15 @@ static bool EnumCombo(const char* label, E& value, const char* const (&names)[N]
     if (!ImGui::Combo(label, &i, names, static_cast<int>(N))) return false;
     value = static_cast<E>(i);
     return true;
+}
+
+// The character .mp's decompressed content: what the bot uploads when entering a quest.
+static std::vector<uint8_t> MpRaw(const std::string& path) {
+    std::ifstream in(path, std::ios::binary);
+    std::vector<uint8_t> file((std::istreambuf_iterator<char>(in)), {}), raw;
+    std::string err;
+    if (!in || !mp::Unpack(file, raw, err)) raw.clear();
+    return raw;
 }
 
 static void Tip(const char* text) {
@@ -97,7 +110,7 @@ static void ConnectionPanel(App& app) {
         if (ImGui::Button("Connect")) {
             if (!app.character.members.empty()) {
                 const mp::Member& m = app.character.members[0];
-                app.client.SetCharacter(m.strings[0], m.strings[4], m.u0);
+                app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
             }
             app.client.Connect(c.host, c.port);
         }
@@ -200,7 +213,7 @@ static void BuildPanel(App& app) {
         "Mage: spells, heals and buffs first\n"
         "Hybrid: a weapon plus healing spells");
     ImGui::SetNextItemWidth(200);
-    app.dirty |= ImGui::SliderInt("Damage <-> Defence", &c.tankiness, 0, 100, "%d%% defence");
+    app.dirty |= ImGui::SliderInt("Damage <-> Defence", &c.tankiness, 0, 100, i18n::Tr("%d%% defence"));
     Tip("Where its skill points and gear go: 0 all damage, 100 all defence (health, armour)");
 }
 
@@ -213,9 +226,9 @@ static void BehaviourPanel(App& app) {
         "Focus the player's target: attacks what the player attacks, heals below the threshold\n"
         "Guard the player: attacks whatever attacks the player");
     ImGui::SetNextItemWidth(200);
-    app.dirty |= ImGui::SliderInt("Heal the player below", &c.healPlayerBelow, 0, 100, "%d%% health");
+    app.dirty |= ImGui::SliderInt("Heal the player below", &c.healPlayerBelow, 0, 100, i18n::Tr("%d%% health"));
     ImGui::SetNextItemWidth(200);
-    app.dirty |= ImGui::SliderInt("Heal itself below", &c.healSelfBelow, 0, 100, "%d%% health");
+    app.dirty |= ImGui::SliderInt("Heal itself below", &c.healSelfBelow, 0, 100, i18n::Tr("%d%% health"));
     ImGui::SetNextItemWidth(200);
     app.dirty |= ImGui::SliderInt("Mana kept for heals", &c.manaReserve, 0, 100, "%d%%");
     Tip("Mana it does not spend on attacks");
@@ -235,15 +248,70 @@ static void MovementPanel(App& app) {
     app.dirty |= EnumCombo("Pace", c.pace, kPace);
     Tip("Like the player: runs, walks, sneaks and crawls when the player does (it does not spoil a sneak)");
     ImGui::SetNextItemWidth(200);
-    app.dirty |= ImGui::SliderFloat("Follow distance", &c.followDistance, 1.0f, 15.0f, "%.1f units");
+    app.dirty |= ImGui::SliderFloat("Follow distance", &c.followDistance, 1.0f, 15.0f, i18n::Tr("%.1f units"));
     Tip("How far behind the player it stays");
     ImGui::SetNextItemWidth(200);
-    app.dirty |= ImGui::SliderFloat("Leash", &c.leashDistance, 10.0f, 60.0f, "%.0f units");
+    app.dirty |= ImGui::SliderFloat("Leash", &c.leashDistance, 10.0f, 60.0f, i18n::Tr("%.0f units"));
     Tip("Farther than this from the player, it drops what it does and comes back");
+}
+
+// The sonar: what is around the bot, bare (the players' heroes it knows the position of), a sweeping line for style.
+static void Sonar(const net::Client& c, float size, float range) {
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    const ImVec2 p = ImGui::GetCursorScreenPos();
+    const float r = size * 0.5f - 2;
+    const ImVec2 o(p.x + size * 0.5f, p.y + size * 0.5f);
+    const ImU32 green = IM_COL32(60, 220, 90, 255), dim = IM_COL32(60, 220, 90, 70);
+    dl->AddCircleFilled(o, r, IM_COL32(5, 25, 10, 255), 64);
+    for (int k = 1; k <= 3; ++k) dl->AddCircle(o, r * k / 3, dim, 64);
+    dl->AddLine(ImVec2(o.x - r, o.y), ImVec2(o.x + r, o.y), dim);
+    dl->AddLine(ImVec2(o.x, o.y - r), ImVec2(o.x, o.y + r), dim);
+    const float a = static_cast<float>(ImGui::GetTime() * 1.5);
+    for (int k = 0; k < 24; ++k) { // the sweep and its fading trail
+        const float b = a - k * 0.03f;
+        dl->AddLine(o, ImVec2(o.x + std::cos(b) * r, o.y + std::sin(b) * r), IM_COL32(60, 220, 90, 200 - k * 8), 2);
+    }
+    dl->AddCircle(o, r, green, 64, 2);
+    float mx, my;
+    if (c.Where(c.worldUnit, mx, my)) {
+        std::set<uint32_t> heroes;
+        for (const auto& kv : c.players) heroes.insert(kv.second.unitId);
+        for (const auto& kv : c.unitPos) { // the other units in range: small hollow dots
+            float x, y;
+            if (heroes.count(kv.first) || !c.Where(kv.first, x, y)) continue;
+            const float dx = (x - mx) / range, dy = (y - my) / range;
+            if (dx * dx + dy * dy <= 1) dl->AddCircle(ImVec2(o.x + dx * r, o.y - dy * r), 3, green, 12, 1.5f);
+        }
+        for (const auto& kv : c.players) {
+            float x, y;
+            if (kv.second.unitId == c.worldUnit || !c.Where(kv.second.unitId, x, y)) continue;
+            float dx = (x - mx) / range, dy = (y - my) / range;
+            const float d = std::sqrt(dx * dx + dy * dy);
+            if (d > 1) { dx /= d; dy /= d; } // beyond the range: on the edge
+            const ImVec2 q(o.x + dx * r, o.y - dy * r); // north up
+            dl->AddCircleFilled(q, 4, green);
+            dl->AddText(ImVec2(q.x + 6, q.y - 7), green, kv.second.name.c_str());
+        }
+    } else {
+        const char* t = i18n::Tr(c.worldUnit ? "position unknown" : "not in the world");
+        dl->AddText(ImVec2(o.x - ImGui::CalcTextSize(t).x * 0.5f, o.y + r * 0.4f), green, t);
+    }
+    dl->AddCircleFilled(o, 3, IM_COL32(230, 255, 230, 255));
+    ImGui::Dummy(ImVec2(size, size));
 }
 
 static void StatusPanel(App& app) {
     const bool on = app.client.state == net::Client::State::Accepted;
+    app.client.followDistance = app.cfg.followDistance;
+    app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
+    const ImVec2 avail = ImGui::GetContentRegionAvail();
+    const float size = std::clamp(std::min(avail.x * 0.45f, avail.y - 4), 80.0f, 240.0f);
+    float sight = 0; // the edge of the sonar: the character's sight
+    if (!app.character.members.empty()) sight = mp::GetF(app.character.members[0].stats, 0xB4);
+    Sonar(app.client, size, sight > 1 ? sight : 12.0f);
+    ImGui::SameLine();
+    ImGui::BeginGroup();
+    ImGui::PushTextWrapPos(0.0f);
     ImGui::Text("Health: %s   Mana: %s", on ? "?" : "-", on ? "?" : "-");
     ImGui::Text("Doing: %s", on ? "?" : "nothing (not connected)");
     if (on) { // the session, from the server's messages
@@ -256,7 +324,11 @@ static void StatusPanel(App& app) {
             ps += (ps.empty() ? "" : ", ") + kv.second.name + " (" + i18n::Tr(kv.second.state <= 4 ? kStates[kv.second.state] : "?") + ")";
         ImGui::TextWrapped("Players: %s", ps.empty() ? "-" : ps.c_str()); // names as the server has them
     }
-    ImGui::Separator();
+    ImGui::PopTextWrapPos();
+    ImGui::EndGroup();
+}
+
+static void LogPanel(App& app) {
     ImGui::BeginChild("log", ImVec2(0, 0), false);
     for (const std::string& s : app.log) ImGui::TextWrapped("%s", s.c_str());
     if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY()) ImGui::SetScrollHereY(1.0f);
@@ -415,6 +487,8 @@ static void Frame(App& app) {
             else app.Log("Cannot write " + app.cfg.path);
         }
         ImGui::EndDisabled();
+        ImGui::SeparatorText("Log");
+        LogPanel(app);
         ImGui::TableNextColumn();
         ImGui::SeparatorText("Character");
         CharacterPanel(app);
@@ -436,19 +510,58 @@ int main(int argc, char** argv) {
             mp::Character ch;
             std::string err;
             if (!cfg.character.empty() && mp::Load(cfg.character, ch, err) && !ch.members.empty())
-                client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0);
+                client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
             else
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
+            client.followHost = std::getenv("UM_BOT_FOLLOW") != nullptr;
+            client.followDistance = cfg.followDistance;
+            client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read
+            client.fightInSight = std::getenv("UM_BOT_FIGHT") != nullptr;
+            if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();
-            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(8) && client.state != net::Client::State::Failed &&
+            while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
                    client.state != net::Client::State::Rejected) {
                 client.Update();
-                std::this_thread::sleep_for(std::chrono::milliseconds(20));
+                static size_t printed = 0; // the log as it comes, with the time
+                for (; printed < client.log.size(); ++printed)
+                    std::printf("%6.1f %s\n", std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count(), client.log[printed].c_str());
+                std::fflush(stdout);
+                static int attackStep = 0; // research: UM_BOT_ATTACK=1: 12 s in, walk near the nearest monster; 8 s later, attack it
+                static uint32_t target = 0;
+                if (std::getenv("UM_BOT_ATTACK") && client.worldUnit) {
+                    const auto in = std::chrono::steady_clock::now() - start;
+                    float mx = 0, my = 0, tx = 0, ty = 0, d = 0;
+                    client.Where(client.worldUnit, mx, my);
+                    if (attackStep == 0 && in > std::chrono::seconds(12)) {
+                        target = client.NearestOther(d);
+                        if (target && client.Where(target, tx, ty) && d > 7) client.MoveTo(tx + (mx - tx) * 6 / d, ty + (my - ty) * 6 / d);
+                        std::printf("target %X at %.1f (me at %.1f %.1f): walking near\n", target, d, mx, my); std::fflush(stdout);
+                        attackStep = 1;
+                    } else if (attackStep == 1 && in > std::chrono::seconds(22)) {
+                        if (target) client.Attack(target);
+                        client.Where(target, tx, ty);
+                        std::printf("attack %X (me at %.1f %.1f, it at %.1f %.1f)\n", target, mx, my, tx, ty); std::fflush(stdout);
+                        attackStep = 2;
+                    }
+                }
+                static int moves = 0; // research: UM_BOT_MOVE="x,y;x,y;..." once in the world, one every 8 s
+                static auto movedAt = std::chrono::steady_clock::now();
+                if (const char* mv = std::getenv("UM_BOT_MOVE"); mv && client.worldUnit &&
+                    std::chrono::steady_clock::now() - movedAt > std::chrono::seconds(8)) {
+                    const char* q = mv;
+                    for (int k = 0; k < moves && q; ++k) { q = std::strchr(q, ';'); if (q) ++q; }
+                    float x = 0, y = 0;
+                    if (q && std::sscanf(q, "%f,%f", &x, &y) == 2) { client.MoveTo(x, y); std::printf("move to %.1f %.1f\n", x, y); std::fflush(stdout); }
+                    ++moves; movedAt = std::chrono::steady_clock::now();
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
             client.Disconnect();
-            for (const std::string& l : client.log) std::printf("%s\n", l.c_str());
-            return client.joined ? 0 : 1;
+            for (const auto& pl : client.players) std::printf("player %s state %u unit %08X\n", pl.second.name.c_str(), pl.second.state, pl.second.unitId);
+            for (const auto& q : client.questStates) std::printf("quest state %s\n", q.second.c_str());
+            { float x = 0, y = 0; client.Where(client.worldUnit, x, y); std::printf("units known: %zu, me at %.1f %.1f\n", client.unitPos.size(), x, y); }
+            std::printf("world unit: %u\n", client.worldUnit); return client.joined ? 0 : 1;
         }
         if (a == "--install-desktop") return InstallDesktop(i + 1 < argc && std::string(argv[i + 1]) == "--remove");
         if (a == "--help" || a == "-h") {
@@ -499,7 +612,7 @@ int main(int argc, char** argv) {
     App app;
     bot::Load(app.cfg);
     { i18n::Lang l; if (i18n::FromCode(app.cfg.language, l)) i18n::Set(l); }
-    app.Log("um-bot " + std::string(kVersion) + ": it joins the lobby as a player (the host sees it); entering the quest world comes next.");
+    app.Log("um-bot " + std::string(kVersion) + ": it joins the session, enters the chosen quest when the host is in it and follows the host. Fighting comes next.");
 
     while (!glfwWindowShouldClose(window)) {
         glfwWaitEventsTimeout(0.05);
