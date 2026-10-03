@@ -19,6 +19,7 @@
 #include "imgui_impl_opengl2.h"
 
 #include "bot_config.hpp"
+#include "i18n.hpp"           // um-multitool's translations (lang/ru.txt)
 #include "icon_data.hpp"       // the window icon (the Sacred flower)
 #include "mp_file.hpp"         // um-multitool's .mp reader (../um-multitool)
 #include "viewer/item_db.hpp"  // item names (the database beside the character's mp folder)
@@ -29,11 +30,8 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.4";
+static const char* const kVersion = "0.5";
 
-// The shared vendored ImGui calls um-multitool's translation hooks; the bot has no translation: texts stay as they are.
-bool UmTranslateText(const char*&, const char*&) { return false; }
-const char* UmTranslateFmt(const char* fmt) { return fmt; }
 
 struct App {
     bot::Config cfg;
@@ -68,6 +66,15 @@ static void Tip(const char* text) {
 }
 
 static void ConnectionPanel(App& app) {
+    { // the language (um-multitool's table: lang/ru.txt)
+        i18n::Lang cur = i18n::Current();
+        ImGui::SetNextItemWidth(110);
+        if (ImGui::BeginCombo("Language", i18n::NativeName(cur))) {
+            for (i18n::Lang l : {i18n::Lang::English, i18n::Lang::Russian})
+                if (ImGui::Selectable(i18n::NativeName(l), l == cur)) { i18n::Set(l); app.cfg.language = i18n::Code(l); app.dirty = true; }
+            ImGui::EndCombo();
+        }
+    }
     bot::Config& c = app.cfg;
     const bool idle = app.client.state != net::Client::State::AskingInfo && app.client.state != net::Client::State::LoggingIn &&
                       app.client.state != net::Client::State::Accepted;
@@ -454,6 +461,21 @@ int main(int argc, char** argv) {
     glfwSwapInterval(1);
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    { // the built-in font has no Cyrillic: merge a system font (as um-multitool does)
+        ImGuiIO& io = ImGui::GetIO();
+        io.Fonts->AddFontDefault();
+        for (const char* path : {"C:\\Windows\\Fonts\\segoeui.ttf", "C:\\Windows\\Fonts\\arial.ttf",
+                                 "/usr/share/fonts/truetype/DejaVuSans.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                                 "/usr/share/fonts/TTF/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf"}) {
+            if (FILE* f = std::fopen(path, "rb")) {
+                std::fclose(f);
+                ImFontConfig config;
+                config.MergeMode = true;
+                io.Fonts->AddFontFromFileTTF(path, 0.0f, &config);
+                break;
+            }
+        }
+    }
     ImGui::GetIO().IniFilename = nullptr; // no imgui.ini: the layout is fixed
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -461,6 +483,7 @@ int main(int argc, char** argv) {
 
     App app;
     bot::Load(app.cfg);
+    { i18n::Lang l; if (i18n::FromCode(app.cfg.language, l)) i18n::Set(l); }
     app.Log("um-bot " + std::string(kVersion) + ": it joins the lobby as a player (the host sees it); entering the quest world comes next.");
 
     while (!glfwWindowShouldClose(window)) {

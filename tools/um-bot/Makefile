@@ -14,8 +14,8 @@ VENDOR = ../um-multitool/vendor
 IMGUI_DIR = $(VENDOR)/imgui
 IMGUI_SRCS = $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp \
              $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/imgui_impl_glfw.cpp $(IMGUI_DIR)/imgui_impl_opengl2.cpp
-SRCS = main.cpp $(IMGUI_SRCS)
-HDRS = $(wildcard *.hpp) assets/um-bot.ico ../um-multitool/mp_file.hpp ../um-multitool/viewer/item_db.hpp
+SRCS = main.cpp ../um-multitool/i18n.cpp $(IMGUI_SRCS)
+HDRS = $(wildcard *.hpp) assets/um-bot.ico ../um-multitool/mp_file.hpp ../um-multitool/viewer/item_db.hpp ../um-multitool/lang/ru.txt ../um-multitool/i18n.hpp
 
 COMMON_FLAGS = -std=c++17 -O2 -Wall -Wextra -pthread -I. -I../um-multitool -isystem $(IMGUI_DIR)
 LINUX_FLAGS = $(COMMON_FLAGS) $(shell pkg-config --cflags glfw3)
