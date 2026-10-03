@@ -133,6 +133,9 @@ struct App {
     // Terrain editing: the brush (a tile: texture * 64 + tile in it, a rotation in quarter turns; on
     // water, a liquid material, -1 removing the water from the tile), eight quick tiles, what is unsaved.
     bool tileBrush = false, brushWater = false;
+    bool heightBrush = false;         // Terrain > Height brush: raise, lower, smooth, flatten
+    int heightMode = 0;
+    float heightRadius = 4.0f, heightStrength = 3.0f, flattenLevel = 0;
     int brushTile = 0, brushRotation = 0, brushMaterial = 0;
     int quickTiles[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
     std::set<int> terrainEditedSectors;
@@ -3918,6 +3921,87 @@ static bool TerrainBrushInput(App& app, ImVec2 local) {
     return true;
 }
 
+// The height brush: every land vertex within the radius moves (raise / lower by `heightStrength` units a second,
+// smooth toward its neighbours, flatten toward the height under the stroke's start), with a soft falloff. A vertex on
+// a sector's edge exists in both sectors: each copy moves the same. Normals are computed again around the change.
+static void SculptAt(App& app, float gx, float gy, float dt) {
+    mpr::Map& m = app.terrain;
+    if (m.maxZ <= 0) return;
+    const float R = std::max(app.heightRadius, 0.5f), k = 65535.0f / m.maxZ;
+    std::vector<int> touched;
+    for (int sy = std::max(0, static_cast<int>((gy - R) / 32)); sy <= std::min(m.sectorsY - 1, static_cast<int>((gy + R) / 32)); ++sy)
+        for (int sx = std::max(0, static_cast<int>((gx - R) / 32)); sx <= std::min(m.sectorsX - 1, static_cast<int>((gx + R) / 32)); ++sx) {
+            const int si = sy * m.sectorsX + sx;
+            mpr::Sector& s = m.sectors[static_cast<size_t>(si)];
+            if (!s.present) continue;
+            bool changed = false, kept = false;
+            for (const auto& pr : app.stroke.sectors) kept |= pr.first == si;
+            const mpr::Sector before = s;
+            for (int r = 0; r <= 32; ++r)
+                for (int c = 0; c <= 32; ++c) {
+                    const float vx = sx * 32.0f + c, vy = sy * 32.0f + r, d = std::hypot(vx - gx, vy - gy);
+                    if (d > R) continue;
+                    const float t = 1 - d / R, w = t * t * (3 - 2 * t);
+                    const float z = s.land[r][c].z / k;
+                    float target = z;
+                    switch (app.heightMode) {
+                    case 0: target = z + app.heightStrength * dt * w; break;
+                    case 1: target = z - app.heightStrength * dt * w; break;
+                    case 2: { // the average around it (from the whole map: across sector edges)
+                        const float avg = (m.HeightAt(vx - 1, vy) + m.HeightAt(vx + 1, vy) + m.HeightAt(vx, vy - 1) + m.HeightAt(vx, vy + 1)) / 4;
+                        target = z + (avg - z) * std::min(1.0f, app.heightStrength * dt * w);
+                        break;
+                    }
+                    default: target = z + (app.flattenLevel - z) * std::min(1.0f, app.heightStrength * dt * w); break;
+                    }
+                    const uint16_t nz = static_cast<uint16_t>(std::lround(std::clamp(target, 0.0f, m.maxZ) * k));
+                    if (nz != s.land[r][c].z) { s.land[r][c].z = nz; changed = true; }
+                }
+            if (!changed) continue;
+            if (!kept) app.stroke.sectors.push_back({si, before});
+            touched.push_back(si);
+        }
+    for (int si : touched) { // normals from the heights around each vertex
+        mpr::Sector& s = m.sectors[static_cast<size_t>(si)];
+        const int sx = si % m.sectorsX, sy = si / m.sectorsX;
+        for (int r = 0; r <= 32; ++r)
+            for (int c = 0; c <= 32; ++c) {
+                const float vx = sx * 32.0f + c, vy = sy * 32.0f + r;
+                const float dx = (m.HeightAt(vx + 1, vy) - m.HeightAt(vx - 1, vy)) / 2, dy = (m.HeightAt(vx, vy + 1) - m.HeightAt(vx, vy - 1)) / 2;
+                const float len = std::sqrt(dx * dx + dy * dy + 1);
+                const float nx = -dx / len, ny = -dy / len, nz = 1 / len;
+                s.land[r][c].packedNormal = (static_cast<uint32_t>(std::lround(nz * 1000)) << 22) |
+                                            (static_cast<uint32_t>(std::lround(nx * 1000 + 1000)) & 0x7FF) << 11 |
+                                            (static_cast<uint32_t>(std::lround(ny * 1000 + 1000)) & 0x7FF);
+            }
+        app.terrainEditedSectors.insert(si);
+    }
+    if (!touched.empty()) app.terrainRebuild = true;
+}
+
+static bool HeightBrushInput(App& app, ImVec2 local) {
+    if (!app.heightBrush || !app.terrainLoaded) { if (app.painting && !app.tileBrush) app.painting = false; return false; }
+    fig::Vec3 g;
+    const bool onGround = app.scene.GroundAt(local.x, local.y, g);
+    if (ImGui::IsItemActivated() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+        app.painting = true;
+        app.stroke = EditStep{};
+        app.stroke.kind = EditStep::Terrain;
+        app.stroke.file = app.terrainPath;
+        if (onGround) app.flattenLevel = app.terrain.HeightAt(g.x, g.y);
+    }
+    if (!app.painting) return false;
+    if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+        if (onGround) SculptAt(app, g.x, g.y, std::min(ImGui::GetIO().DeltaTime, 0.1f));
+    } else {
+        app.painting = false;
+        static const char* const kNames[] = {"Raise terrain", "Lower terrain", "Smooth terrain", "Flatten terrain"};
+        if (!app.stroke.sectors.empty()) PushUndo(app, std::move(app.stroke), kNames[std::clamp(app.heightMode, 0, 3)]);
+        app.stroke = EditStep{};
+    }
+    return true;
+}
+
 // Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile.
 static void TerrainBrushKeys(App& app) {
     if (!app.tileBrush || ImGui::GetIO().WantTextInput) return;
@@ -4122,8 +4206,23 @@ static void TerrainTab(App& app) {
     }
     if (!app.terrainMessage.empty()) ImGui::TextDisabled("%s", app.terrainMessage.c_str());
 
+    ImGui::SeparatorText("Height brush");
+    if (ImGui::Checkbox("Shape the ground in the view", &app.heightBrush) && app.heightBrush) app.tileBrush = false;
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Left drag on the ground (one undo step per stroke). Objects can't be selected meanwhile.\n"
+                                                  "After shaping, rebuild the navmesh (Tools) so units walk the new ground.");
+    if (app.heightBrush) {
+        static const char* const kModes[] = {"Raise", "Lower", "Smooth", "Flatten"};
+        for (int i = 0; i < 4; ++i) { if (i) ImGui::SameLine(); ImGui::RadioButton(kModes[i], &app.heightMode, i); }
+        ImGui::SetNextItemWidth(160);
+        ImGui::SliderFloat("Radius", &app.heightRadius, 1.0f, 32.0f, "%.1f units");
+        ImGui::SetNextItemWidth(160);
+        ImGui::SliderFloat("Strength", &app.heightStrength, 0.2f, 20.0f, "%.1f");
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Raise / lower: units per second at the centre; smooth / flatten: how fast it gets there");
+        ImGui::TextDisabled("Height range of this terrain: 0 to %.1f", app.terrain.maxZ);
+    }
+
     ImGui::SeparatorText("Tile brush");
-    ImGui::Checkbox("Paint tiles in the view", &app.tileBrush);
+    if (ImGui::Checkbox("Paint tiles in the view", &app.tileBrush) && app.tileBrush) app.heightBrush = false;
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Left drag: paint (one undo step per stroke); Alt+click: pick the tile under the mouse.\n"
             "Keys 1-8: quick tiles; comma / period: turn the tile. Objects can't be selected meanwhile.");
@@ -5509,6 +5608,16 @@ static void Overlays(App& app, ImVec2 min, ImVec2 size) {
         }
     }
     TerrainBrushOutline(app, draw, min, size);
+    if (app.heightBrush && app.terrainLoaded && app.hoverGround) { // the height brush's circle on the ground
+        ImVec2 pts[48];
+        int n = 0;
+        for (int i = 0; i < 48; ++i) {
+            const float a2 = i * 6.2831853f / 48, x = app.ground.x + std::cos(a2) * app.heightRadius, y = app.ground.y + std::sin(a2) * app.heightRadius;
+            float fx, fy;
+            if (app.scene.Project({x, y, app.terrain.HeightAt(x, y) + 0.1f}, fx, fy)) pts[n++] = ImVec2(min.x + fx * size.x, min.y + fy * size.y);
+        }
+        if (n > 2) draw->AddPolyline(pts, n, IM_COL32(255, 210, 90, 220), ImDrawFlags_Closed, 2.0f);
+    }
     draw->PopClipRect();
     if (app.switchListShown) {
         ImGui::SetNextWindowPos(ImVec2(min.x + size.x * 0.5f, min.y + size.y * 0.35f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
@@ -5861,6 +5970,10 @@ static void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
         return;
     }
 
+    if (HeightBrushInput(app, local)) {
+        app.hoverGround = hovered && app.scene.GroundAt(local.x, local.y, app.ground);
+        return;
+    }
     if (TerrainBrushInput(app, local)) {
         app.hoverGround = hovered && app.scene.GroundAt(local.x, local.y, app.ground);
         return;
