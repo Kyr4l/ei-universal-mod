@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <cstring>
 #include <cmath>
+#include <functional>
 #include <map>
 #include <string>
 #include <unordered_map>
@@ -193,83 +194,23 @@ public:
     }
 
     // Where an object is drawn (its z on the ground), and its model once built.
-    // Where units can walk, as the patrol simulation sees it: 2 x 2 unit cells over the terrain, blocked
-    // under deep water, where the ground is too steep, and under the parts near the ground of objects at
-    // least 1.6 units tall (their triangles within 1.3 units of their base: a tree's trunk, not its crown;
-    // a wall's base). Lower things (grass, bushes, flowers) are walked through; plants ("nafl..." figures)
-    // block only at their trunk.
+    // Where units can walk: the game's tile map (navmesh_gen.hpp: 0.5 x 0.5 unit tiles, per AI layer, built
+    // from the terrain and the objects exactly as the game builds it), for the shown navmesh layer. The Map
+    // Editor fills it (walkBuilder); the patrol simulation routes on it with the game's step costs.
     struct WalkGrid {
         int w = 0, h = 0;
-        float cell = 2.0f;
-        std::vector<uint8_t> blocked;
-        bool Blocked(int x, int y) const { return x < 0 || y < 0 || x >= w || y >= h || blocked[static_cast<size_t>(y) * w + x]; }
+        float cell = 0.5f;
+        std::vector<uint8_t> value;   // per tile: 0 blocked, 1 (hardest) .. 15 (easiest), see navgen::Generator
+        std::vector<int> factor;      // a value's step cost factor (1024 = 1), from the generator
+        bool Blocked(int x, int y) const { return x < 0 || y < 0 || x >= w || y >= h || value[static_cast<size_t>(y) * w + x] == 0; }
+        float Cost(int x, int y) const { return factor.empty() ? 1.0f : factor[value[static_cast<size_t>(y) * w + x]] / 1024.0f; }
     } walk;
+    std::function<void(WalkGrid&)> walkBuilder; // set by the Map Editor (it has the objects and figures)
 
     void BuildWalkGrid() {
         walk = WalkGrid{};
         ++walkBuilds_;
-        if (!terrain_) return;
-        walk.w = static_cast<int>(terrain_->Width() / walk.cell);
-        walk.h = static_cast<int>(terrain_->Height() / walk.cell);
-        walk.blocked.assign(static_cast<size_t>(walk.w) * walk.h, 0);
-        for (int y = 0; y < walk.h; ++y)
-            for (int x = 0; x < walk.w; ++x) {
-                const float x0 = x * walk.cell, y0 = y * walk.cell, x1 = x0 + walk.cell, y1 = y0 + walk.cell;
-                const float h[4] = {Ground(x0, y0), Ground(x1, y0), Ground(x0, y1), Ground(x1, y1)};
-                const float steep = *std::max_element(h, h + 4) - *std::min_element(h, h + 4);
-                // Water: only where its surface is well above the ground (a sector's water layer covers all of
-                // it, mostly under the land).
-                bool water = false;
-                if (const mpr::Sector* sct = terrain_->At(static_cast<int>(x0 / 32), static_cast<int>(y0 / 32))) {
-                    const int r = std::min(15, static_cast<int>((y0 - static_cast<int>(y0 / 32) * 32) / 2));
-                    const int c = std::min(15, static_cast<int>((x0 - static_cast<int>(x0 / 32) * 32) / 2));
-                    if (sct->water && sct->waterMaterial[r][c] >= 0) {
-                        const float k = terrain_->maxZ / 65535.0f;
-                        const float surface = sct->waterVerts[r * 2 + 1][c * 2 + 1].z * k;
-                        const float land = sct->land[r * 2 + 1][c * 2 + 1].z * k;
-                        water = surface - land > 0.6f; // deeper than about a knee
-                    }
-                }
-                if (water || steep > 1.8f) walk.blocked[static_cast<size_t>(y) * walk.w + x] = 1;
-            }
-        for (size_t fi = 0; fi < maps_.size(); ++fi) {
-            if (fi < visible_.size() && !visible_[fi]) continue;
-            for (const mob::Object& o : maps_[fi]->objects) {
-                if (!mob::HasFigure(o.kind) || o.kind == mob::Kind::Unit) continue;
-                const MapModel* m = ModelFor(o);
-                // Low things (decals, grass, bushes, flowers: under 1.6 units tall) are walked through.
-                if (!m || !m->ok || m->boundsMax.z - m->boundsMin.z < 1.6f) continue;
-                const fig::Vec3 at = DrawPosition(o, m);
-                // Plants ("nafl..." figures: trees, bushes) block at their trunk only; their low leaves do not.
-                if (checksLower(o.templ).rfind("nafl", 0) == 0) {
-                    for (float dy = -0.8f; dy <= 0.81f; dy += 0.4f)
-                        for (float dx = -0.8f; dx <= 0.81f; dx += 0.4f)
-                            if (dx * dx + dy * dy <= 0.64f) MarkWalk(at.x + dx, at.y + dy);
-                    continue;
-                }
-                const fig::Quat q = Rotation(o);
-                const auto& t = m->triangles;
-                const float low = m->boundsMin.z + 1.3f;
-                for (size_t i = 0; i + 2 < t.size(); i += 3) {
-                    if (t[i].z > low && t[i + 1].z > low && t[i + 2].z > low) continue;
-                    // The part of the triangle below `low` (cut at that height), in the world.
-                    fig::Vec3 poly[4];
-                    int n = 0;
-                    for (int k = 0; k < 3; ++k) {
-                        const fig::Vec3& a = t[i + k];
-                        const fig::Vec3& b = t[i + (k + 1) % 3];
-                        if (a.z <= low) poly[n++] = a;
-                        if ((a.z <= low) != (b.z <= low) && n < 4) {
-                            const float f = (low - a.z) / (b.z - a.z);
-                            poly[n++] = {a.x + (b.x - a.x) * f, a.y + (b.y - a.y) * f, low};
-                        }
-                    }
-                    for (int k = 0; k < n; ++k) poly[k] = at + fig::QuatRotate(q, poly[k]);
-                    for (int k = 0; k < n; ++k) MarkWalk(poly[k].x, poly[k].y);
-                    for (int f = 1; f + 1 < n; ++f) MarkTriangle(poly[0], poly[f], poly[f + 1]);
-                }
-            }
-        }
+        if (terrain_ && walkBuilder) walkBuilder(walk);
     }
 
     // The patrol simulation's units: where they are and which way they face (radians about Z), in place of
@@ -683,30 +624,6 @@ private:
     GLuint walkList_ = 0;    // the walkability overlay's display list, and the grid build it shows
     unsigned walkBuilds_ = 0, walkListBuild_ = 0;
     // The cells whose centre is inside a triangle (seen from above), and those along its edges.
-    void MarkTriangle(const fig::Vec3& a, const fig::Vec3& b, const fig::Vec3& c) {
-        for (const auto& e : {std::make_pair(a, b), std::make_pair(b, c), std::make_pair(c, a)}) {
-            const float len = std::hypot(e.second.x - e.first.x, e.second.y - e.first.y);
-            const int steps = std::min(200, static_cast<int>(len / (walk.cell * 0.5f)) + 1);
-            for (int i = 0; i <= steps; ++i) {
-                const float t = static_cast<float>(i) / steps;
-                MarkWalk(e.first.x + (e.second.x - e.first.x) * t, e.first.y + (e.second.y - e.first.y) * t);
-            }
-        }
-        const int cx0 = static_cast<int>(std::min({a.x, b.x, c.x}) / walk.cell), cx1 = static_cast<int>(std::max({a.x, b.x, c.x}) / walk.cell);
-        const int cy0 = static_cast<int>(std::min({a.y, b.y, c.y}) / walk.cell), cy1 = static_cast<int>(std::max({a.y, b.y, c.y}) / walk.cell);
-        if ((cx1 - cx0 + 1) * (cy1 - cy0 + 1) > 2500) return;
-        for (int cy = cy0; cy <= cy1; ++cy)
-            for (int cx = cx0; cx <= cx1; ++cx) {
-                const float px = (cx + 0.5f) * walk.cell, py = (cy + 0.5f) * walk.cell;
-                auto side = [&](const fig::Vec3& p, const fig::Vec3& q) { return (q.x - p.x) * (py - p.y) - (q.y - p.y) * (px - p.x); };
-                const float s0 = side(a, b), s1 = side(b, c), s2 = side(c, a);
-                if ((s0 >= 0 && s1 >= 0 && s2 >= 0) || (s0 <= 0 && s1 <= 0 && s2 <= 0)) MarkWalk(px, py);
-            }
-    }
-    void MarkWalk(float x, float y) {
-        const int cx = static_cast<int>(x / walk.cell), cy = static_cast<int>(y / walk.cell);
-        if (cx >= 0 && cy >= 0 && cx < walk.w && cy < walk.h) walk.blocked[static_cast<size_t>(cy) * walk.w + cx] = 1;
-    }
     GLuint navList_ = 0;
     GLuint cmpList_ = 0;
     std::string cmpKey_;     // the navmesh's display list, and what it was built for
@@ -1058,6 +975,10 @@ private:
         return !first;
     }
 
+public:
+    // A texture as a GL texture (loaded once): the Map Editor's texture pickers preview with it.
+    GLuint TexturePreview(const Library& lib, const std::string& name) { return ObjectTexture(lib, name); }
+private:
     GLuint ObjectTexture(const Library& lib, const std::string& name) {
         std::string key = checksLower(name);
         auto it = objectTextures_.find(key);
@@ -1578,11 +1499,13 @@ private:
             walkListBuild_ = walkBuilds_;
             walkList_ = glGenLists(1);
             glNewList(walkList_, GL_COMPILE);
-            glColor4f(0.95f, 0.2f, 0.15f, 0.35f);
             glBegin(GL_QUADS);
             for (int y = 0; y < walk.h; ++y)
                 for (int x = 0; x < walk.w; ++x) {
-                    if (!walk.blocked[static_cast<size_t>(y) * walk.w + x]) continue;
+                    const int v = walk.value[static_cast<size_t>(y) * walk.w + x];
+                    if (v >= 7) continue; // easy ground: nothing drawn
+                    if (v == 0) glColor4f(0.95f, 0.2f, 0.15f, 0.40f);  // blocked: red
+                    else glColor4f(0.95f, 0.65f, 0.15f, 0.30f);        // hard (water, slopes, obstacles): orange
                     const float x0 = x * walk.cell, y0 = y * walk.cell, x1 = x0 + walk.cell, y1 = y0 + walk.cell;
                     glVertex3f(x0, y0, Ground(x0, y0) + 0.12f); glVertex3f(x1, y0, Ground(x1, y0) + 0.12f);
                     glVertex3f(x1, y1, Ground(x1, y1) + 0.12f); glVertex3f(x0, y1, Ground(x0, y1) + 0.12f);

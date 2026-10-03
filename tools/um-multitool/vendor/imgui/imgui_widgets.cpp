@@ -319,7 +319,12 @@ void ImGui::TextDisabledV(const char* fmt, va_list args)
 {
     ImGuiContext& g = *GImGui;
     PushStyleColor(ImGuiCol_Text, g.Style.Colors[ImGuiCol_TextDisabled]);
+    // um-multitool: grey descriptions wrap at the panel's edge instead of clipping (not in tables, whose
+    // column sizes are measured on the text)
+    const bool wrap = g.CurrentWindow->DC.TextWrapPos < 0.0f && g.CurrentTable == NULL;
+    if (wrap) PushTextWrapPos(0.0f);
     TextV(fmt, args);
+    if (wrap) PopTextWrapPos();
     PopStyleColor();
 }
 
@@ -3348,8 +3353,10 @@ bool ImGui::SliderScalar(const char* label, ImGuiDataType data_type, void* p_dat
         const bool make_active = (clicked || g.NavActivateId == id);
         if (make_active && clicked)
             SetKeyOwner(ImGuiKey_MouseLeft, id);
-        if (make_active && temp_input_allowed)
-            if ((clicked && g.IO.KeyCtrl) || (g.NavActivateId == id && (g.NavActivateFlags & ImGuiActivateFlags_PreferInput)))
+        // um-multitool: a double-click types the value, like the drag fields (not only Ctrl+click)
+        const bool double_clicked = (hovered && g.IO.MouseClickedCount[0] == 2 && TestKeyOwner(ImGuiKey_MouseLeft, id));
+        if ((make_active || double_clicked) && temp_input_allowed)
+            if ((clicked && g.IO.KeyCtrl) || double_clicked || (g.NavActivateId == id && (g.NavActivateFlags & ImGuiActivateFlags_PreferInput)))
                 temp_input_is_active = true;
 
         // Store initial value (not used by main lib but available as a convenience but some mods e.g. to revert)

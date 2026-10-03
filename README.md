@@ -109,6 +109,21 @@ This mod was developed using the HD Lands texture pack. Large visual-overhaul mo
 
 This repository contains a mix of original code, community-created assets, and files from *Evil Islands* mostly for reference purposes.
 
+## Universal Mod Multitool
+
+__um-multitool__ (`tools/um-multitool`) is the toolkit we use to build this mod, in a single program for Windows and Linux. It runs as a GUI or from the command line.
+
+- __File Processing__: converts textures (`.dds` <-> `.mmp`) and configs (`.ini` <-> `.reg`), packs and unpacks `.res` / `.mq` archives, dumps `.mob` maps, edits the gameplay database (with checks), the language packs and multiplayer characters (`.mp`).
+- __3D Viewer__: browses every item and unit of the database with its model and textures. Units are dressed like in the game, custom skins can be tried on them, and GIFs and UV maps can be exported.
+- __Map Editor__: edits `.mob` maps and `.mpr` terrains, quests and their scripts, checks them like the game does, and rebuilds the navmesh like the game does (no more navmesh regeneration at load time).
+- __UM DLL Connector__: talks to the running game through `um.dll`: stats, quests and scripts live, and a game console.
+
+## Use of AI
+
+A large part of the tools in this repository (um-multitool, um.dll) was written with the help of AI. The code remains reviewed, tested and maintained by humans.
+
+The file formats the tools read and write (`.mp` characters, navmeshes, terrains, maps, databases, textures...) were reverse-engineered with AI, from the game's executable and its files. The results were then compared at the binary level with the game's own files and with the older community tools, to make sure the files we produce are exactly what the game engine expects.
+
 ## Credits
 
 SpellAddon Developers:

@@ -1,11 +1,19 @@
-// See i18n.hpp. The table (i18n_ru.inc) has two kinds of entries:
+// See i18n.hpp. The table (lang/ru.txt: built in, and read again from beside the program at start, so a
+// fix there needs no rebuild) has two kinds of entries:
 //   T(english, russian): the whole text drawn, or a whole printf-style format;
 //   F(english, russian): a fragment of a text a program builds from pieces ("Opened " + n + " sheet(s)"),
 //                        replaced inside any drawn text that is not a T entry.
-// Every T key is the text exactly as it is in the source, escapes included (the .inc is C++).
+// Every T key is the text exactly as it is in the source, escapes included (the file is also C++).
 #include "i18n.hpp"
 
 #include <cstring>
+#include <fstream>
+#include <string>
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 #include <algorithm>
 #include <list>
 #include <string_view>
@@ -20,14 +28,14 @@ struct Entry { const char* en; const char* ru; };
 #define T(en, ru) {en, ru},
 #define F(en, ru)
 const Entry kWhole[] = {
-#include "i18n_ru.inc"
+#include "lang/ru.txt"
     {nullptr, nullptr}};
 #undef T
 #undef F
 #define T(en, ru)
 #define F(en, ru) {en, ru},
 const Entry kFragments[] = {
-#include "i18n_ru.inc"
+#include "lang/ru.txt"
     {nullptr, nullptr}};
 #undef T
 #undef F
@@ -41,11 +49,59 @@ struct Tables {
     std::list<std::string> storage;                  // owns the cache's keys and values
 };
 
+// lang/ru.txt beside the program.
+std::string LanguageFile() {
+    char buf[4096] = {};
+#ifdef _WIN32
+    std::string p(buf, GetModuleFileNameA(nullptr, buf, sizeof buf - 1));
+#else
+    const ssize_t n = readlink("/proc/self/exe", buf, sizeof buf - 1);
+    std::string p(buf, n > 0 ? static_cast<size_t>(n) : 0);
+#endif
+    const size_t slash = p.find_last_of("/\\");
+    return (slash == std::string::npos ? std::string(".") : p.substr(0, slash)) + "/lang/ru.txt";
+}
+// A C string literal at s[i] (i at the opening quote); false when there is none.
+bool ReadLiteral(const std::string& s, size_t& i, std::string& out) {
+    while (i < s.size() && s[i] != '"') ++i;
+    if (i >= s.size()) return false;
+    out.clear();
+    for (++i; i < s.size() && s[i] != '"'; ++i) {
+        if (s[i] == '\\' && i + 1 < s.size()) {
+            ++i;
+            out += s[i] == 'n' ? '\n' : s[i] == 't' ? '\t' : s[i];
+        } else {
+            out += s[i];
+        }
+    }
+    if (i >= s.size()) return false;
+    ++i;
+    return true;
+}
+std::list<std::string>& FileStrings() { static std::list<std::string> s; return s; } // owns the file's texts
+
 Tables& Get() {
     static Tables t = [] {
         Tables x;
         for (const Entry& e : kWhole) if (e.en) x.whole.emplace(e.en, e.ru);
-        for (const Entry& e : kFragments) if (e.en) x.fragments.push_back(e);
+        std::unordered_map<std::string_view, std::string_view> fragments;
+        for (const Entry& e : kFragments) if (e.en) fragments.emplace(e.en, e.ru);
+        // The file beside the program wins over the built-in copy (its fixes need no rebuild).
+        std::ifstream in(LanguageFile());
+        std::string line, en, ru;
+        while (std::getline(in, line)) {
+            if (line.size() < 2 || (line[0] != 'T' && line[0] != 'F') || line[1] != '(') continue;
+            size_t i = 2;
+            if (!ReadLiteral(line, i, en) || !ReadLiteral(line, i, ru)) continue;
+            auto& strings = FileStrings();
+            strings.push_back(en);
+            const std::string_view key(strings.back());
+            strings.push_back(ru);
+            const std::string_view value(strings.back());
+            if (line[0] == 'T') x.whole[key] = value;
+            else fragments[key] = value;
+        }
+        for (const auto& [e, r] : fragments) x.fragments.push_back({e.data(), r.data()});
         std::stable_sort(x.fragments.begin(), x.fragments.end(),
                          [](const Entry& a, const Entry& b) { return std::strlen(a.en) > std::strlen(b.en); });
         return x;

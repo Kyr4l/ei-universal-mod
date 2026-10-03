@@ -25,14 +25,25 @@
 #else
 #define SFX_SECTION ".section .rodata\n"
 #endif
+// Pointer-sized entries, and the C name of the table (32-bit Windows prefixes C symbols with '_').
+#if __SIZEOF_POINTER__ == 8
+#define SFX_PTR ".quad"
+#else
+#define SFX_PTR ".long"
+#endif
+#if defined(_WIN32) && !defined(_WIN64)
+#define SFX_TABLE "_um_sfx_table"
+#else
+#define SFX_TABLE "um_sfx_table"
+#endif
 __asm__(SFX_SECTION
         ".balign 16\n"
         "um_sfx_error:\n.incbin \"sfx/ab-ap-dc.mp3\"\num_sfx_error_end:\n"
         ".balign 16\n"
         "um_sfx_warning:\n.incbin \"sfx/ab-athr.mp3\"\num_sfx_warning_end:\n"
         ".balign 8\n"
-        ".globl um_sfx_table\n"
-        "um_sfx_table:\n.quad um_sfx_error, um_sfx_error_end, um_sfx_warning, um_sfx_warning_end\n"
+        ".globl " SFX_TABLE "\n"
+        SFX_TABLE ":\n" SFX_PTR " um_sfx_error, um_sfx_error_end, um_sfx_warning, um_sfx_warning_end\n"
         ".text\n");
 extern "C" const uint8_t* const um_sfx_table[4];
 

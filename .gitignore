@@ -33,6 +33,9 @@ Universal-Mod/*.dmp
 # Native Linux builds use the distro's libglfw-devel package instead.
 tools/um-multitool/vendor/glfw-mingw/
 tools/um-multitool/vendor/glfw-src/
+tools/um-multitool/vendor/glfw-src-xp/
+tools/um-multitool/vendor/glfw-mingw-xp32/
+tools/um-multitool/vendor/glfw-mingw-xp64/
 
 # um-modelviewer's remembered source paths (local machine-specific, not shared)
 tools/um-standalone-tools/um-modelviewer/um-modelviewer.cfg
@@ -45,3 +48,4 @@ tools/um-multitool/um-multitool-viewer.cfg
 tools/um-multitool/um-multitool.cfg
 tools/um-multitool/um-multitool-res.o
 tools/um-multitool/imgui.ini
+tools/um-multitool/build/

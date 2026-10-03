@@ -148,7 +148,11 @@ struct App {
     // Script tab -> Areas -> "Place here": the next click on the map moves that area there.
     struct AreaPlace { bool on = false; std::string file; size_t index = 0; } areaPlace;
     // Alt + drag on a script area in the view: the area followed (scene index), from where, by how much.
-    struct AreaDrag { bool on = false; std::string file; size_t index = 0; int scene = -1; float startX = 0, startY = 0, dx = 0, dy = 0; } areaDrag;
+    struct AreaDrag {
+        bool on = false; std::string file; size_t index = 0; int scene = -1; float startX = 0, startY = 0, dx = 0, dy = 0;
+        int resize = 0;    // 0 move; 1 a round area's radius; else rect sides: 2 v[0], 4 v[1], 8 v[2], 16 v[3]
+        float v[4] = {};   // the area as it is being resized
+    } areaDrag;
     int activeMob = 0;                       // the map whose objects can be selected (Ctrl+T)
     std::vector<std::string> loadOrder;      // paths of the loaded files, oldest first (U unloads the last)
     std::vector<Library::MapFile> folderFiles; // the map folders' files (Settings), for mapsVersion
@@ -1176,6 +1180,144 @@ static bool EditText(const char* id, const std::string& current, std::string& ou
     return false;
 }
 
+// The names the object fields complete from (rebuilt when the sources change).
+struct NameLists {
+    unsigned figuresFor = ~0u, texturesFor = ~0u, dbFor = ~0u;
+    std::vector<std::string> figures, textures, prototypes, items, materials;
+};
+static NameLists& Names(const Library& lib) {
+    static NameLists n;
+    auto sorted = [](std::vector<std::string> v) { std::sort(v.begin(), v.end()); v.erase(std::unique(v.begin(), v.end()), v.end()); return v; };
+    if (n.figuresFor != static_cast<unsigned>(lib.figuresVersion)) {
+        n.figuresFor = static_cast<unsigned>(lib.figuresVersion);
+        std::vector<std::string> f;
+        for (const std::string& b : lib.figures.ListBaseNames({".mod", ".lnk"})) f.push_back(Lower(b)); // whole figures, not parts
+        n.figures = sorted(f);
+    }
+    if (n.texturesFor != static_cast<unsigned>(lib.texturesVersion)) {
+        n.texturesFor = static_cast<unsigned>(lib.texturesVersion);
+        std::vector<std::string> t;
+        for (const std::string& b : lib.textures.ListBaseNames({".mmp", ".dds"})) t.push_back(Lower(b));
+        n.textures = sorted(t);
+    }
+    if (n.dbFor != static_cast<unsigned>(lib.version)) {
+        n.dbFor = static_cast<unsigned>(lib.version);
+        n.prototypes.clear(); n.items.clear(); n.materials.clear();
+        for (const units::Monster& m : lib.unitsDb.monsters) n.prototypes.push_back(m.name);
+        for (int c = 0; c < static_cast<int>(items::Category::Count); ++c)
+            for (const items::Item& it : lib.db.List(static_cast<items::Category>(c))) n.items.push_back(it.name);
+        for (const items::Material& m : lib.db.materials) n.materials.push_back(m.name);
+        n.prototypes = sorted(n.prototypes); n.items = sorted(n.items); n.materials = sorted(n.materials);
+    }
+    return n;
+}
+
+// EditText with suggestions while typing: names starting with the text first, then containing it. Up / Down
+// pick one, Tab (or Enter on a picked one) or a click takes it; Escape or typing on ignores them. `prefix`: kept
+// before the completed part (e.g. "axe." while completing the material of "axe.bro").
+static bool EditTextSuggest(const char* id, const std::string& current, std::string& out, const std::vector<std::string>& names,
+                            const std::string& prefix = "", float width = -1.0f) {
+    static std::map<ImGuiID, std::string> pending;
+    static ImGuiID openFor = 0;
+    static int highlight = -1;
+    static ImVec2 boxMin, boxMax; // last frame's suggestion box
+    const ImGuiID key = ImGui::GetID(id);
+    auto it = pending.find(key);
+    std::string v = it != pending.end() ? it->second : current;
+    ImGui::SetNextItemWidth(width);
+    ImGui::InputText(id, v.data(), v.capacity() + 1, ImGuiInputTextFlags_CallbackResize, ResizeCallbackStr, &v);
+    const ImVec2 fieldMin = ImGui::GetItemRectMin(), fieldMax = ImGui::GetItemRectMax();
+    const bool active = ImGui::IsItemActive();
+    // The suggestions for what is typed (after the prefix).
+    std::vector<const std::string*> found;
+    const std::string typed = v.size() >= prefix.size() ? Lower(v.substr(prefix.size())) : "";
+    if ((openFor == key || active) && !typed.empty()) {
+        for (int pass = 0; pass < 2 && found.size() < 12; ++pass)
+            for (const std::string& n : names) {
+                const std::string ln = Lower(n);
+                const size_t at = ln.find(typed);
+                if (at == std::string::npos || (pass == 0) != (at == 0) || ln == typed) continue;
+                found.push_back(&n);
+                if (found.size() >= 12) break;
+            }
+    }
+    if (active) {
+        pending[key] = v;
+        if (openFor != key) { openFor = key; highlight = -1; }
+        if (ImGui::IsKeyPressed(ImGuiKey_DownArrow) && !found.empty()) highlight = std::min(highlight + 1, static_cast<int>(found.size()) - 1);
+        if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) highlight = std::max(highlight - 1, -1);
+        if (ImGui::IsKeyPressed(ImGuiKey_Escape)) { openFor = 0; found.clear(); }
+    }
+    bool picked = false;
+    std::string choice;
+    if (openFor == key && !found.empty() && !typed.empty()) { // the box under the field
+        ImGui::SetNextWindowPos(ImVec2(fieldMin.x, fieldMax.y));
+        ImGui::SetNextWindowSizeConstraints(ImVec2(fieldMax.x - fieldMin.x, 0), ImVec2(FLT_MAX, FLT_MAX));
+        ImGui::Begin("##suggest", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                     ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing |
+                     ImGuiWindowFlags_NoNav);
+        ImGui::BringWindowToDisplayFront(ImGui::GetCurrentWindow());
+        for (int i = 0; i < static_cast<int>(found.size()); ++i)
+            if (ImGui::Selectable(found[i]->c_str(), i == highlight)) { picked = true; choice = *found[i]; }
+        boxMin = ImGui::GetWindowPos();
+        boxMax = ImVec2(boxMin.x + ImGui::GetWindowWidth(), boxMin.y + ImGui::GetWindowHeight());
+        ImGui::End();
+    } else if (openFor == key) {
+        boxMin = boxMax = ImVec2(0, 0);
+    }
+    if (picked) { openFor = 0; pending.erase(key); out = prefix + choice; return out != current; }
+    // The box left open by a click that was released elsewhere: the typed text is taken.
+    if (!active && openFor == key && ImGui::IsMouseClicked(0) && !ImGui::IsMouseHoveringRect(boxMin, boxMax, false)) {
+        openFor = 0; pending.erase(key); out = v; return out != current;
+    }
+    if (ImGui::IsItemDeactivated()) {
+        // A click in the box: the box takes it (next frame), not the half-typed text.
+        if (ImGui::IsMouseHoveringRect(boxMin, boxMax, false) && openFor == key) return false;
+        const bool tab = ImGui::IsKeyPressed(ImGuiKey_Tab, false), enter = ImGui::IsKeyPressed(ImGuiKey_Enter, false);
+        openFor = 0;
+        if (!found.empty() && (tab || (enter && highlight >= 0))) v = prefix + *found[highlight >= 0 ? highlight : 0];
+        pending.erase(key);
+        out = v;
+        return out != current;
+    }
+    if (!active && openFor != key) pending.erase(key);
+    return false;
+}
+
+// A texture field: suggestions while typing, and a button opening the full list, each texture previewed on hover.
+static bool EditTexture(App& app, const char* id, const std::string& current, std::string& out) {
+    const std::vector<std::string>& names = Names(app.lib).textures;
+    ImGui::PushID(id);
+    const float button = ImGui::GetFrameHeight(), gap = ImGui::GetStyle().ItemInnerSpacing.x;
+    bool changed = EditTextSuggest("##t", current, out, names, "", ImGui::GetContentRegionAvail().x - button - gap);
+    ImGui::SameLine(0, gap);
+    if (ImGui::ArrowButton("##list", ImGuiDir_Down)) ImGui::OpenPopup("##textures");
+    ImGui::SetItemTooltip("Pick a texture (previewed when hovered)");
+    if (ImGui::BeginPopup("##textures")) {
+        static char filter[64] = "";
+        if (ImGui::IsWindowAppearing()) { filter[0] = 0; ImGui::SetKeyboardFocusHere(); }
+        ImGui::SetNextItemWidth(300);
+        ImGui::InputTextWithHint("##filter", "search", filter, sizeof filter);
+        const std::string f = Lower(filter);
+        ImGui::BeginChild("##list", ImVec2(300, 320));
+        for (const std::string& n : names) {
+            if (!f.empty() && n.find(f) == std::string::npos) continue;
+            if (ImGui::Selectable(n.c_str(), Lower(current) == n)) { out = n; changed = out != current; ImGui::CloseCurrentPopup(); }
+            if (ImGui::IsItemHovered()) {
+                const GLuint tex = app.scene.TexturePreview(app.lib, n);
+                if (tex && ImGui::BeginTooltip()) {
+                    ImGui::Image(static_cast<ImTextureID>(static_cast<intptr_t>(tex)), ImVec2(160, 160));
+                    ImGui::EndTooltip();
+                }
+            }
+        }
+        ImGui::EndChild();
+        ImGui::EndPopup();
+    }
+    ImGui::PopID();
+    return changed;
+}
+
 static bool EditFloats(const char* id, int n, const float* current, float* out, const char* format = "%.3f", float width = -1.0f) {
     static std::map<ImGuiID, std::array<float, 4>> pending;
     const ImGuiID key = ImGui::GetID(id);
@@ -1700,7 +1842,7 @@ static void KindLists(App& app, const mob::Object& o, int objectIndex) {
                 ImGui::PopID();
             }
             if (remove >= 0) { vals.erase(vals.begin() + remove * per, vals.begin() + (remove + 1) * per); changed = true; }
-            if (ImGui::SmallButton("+ add")) {
+            if (ImGui::SmallButton("Add")) {
                 vals.push_back(o.position.x);
                 vals.push_back(o.position.y);
                 if (per == 3) vals.push_back(5.0f);
@@ -1730,7 +1872,7 @@ static void KindLists(App& app, const mob::Object& o, int objectIndex) {
             ImGui::PopID();
         }
         if (remove >= 0) { entries.erase(entries.begin() + remove); changed = true; }
-        if (ImGui::SmallButton("+ add##sound")) { entries.push_back("nature\\sound.wav"); changed = true; }
+        if (ImGui::SmallButton("Add##sound")) { entries.push_back("nature\\sound.wav"); changed = true; }
         if (changed) CommitField(app, objectIndex, mob::kSoundResName, mob::StringArrayPayload(mob::kSoundResName, entries), false);
     }
 }
@@ -1775,13 +1917,13 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
         }
         if (figure) {
             Label("Figure");
-            if (EditText("##templ", o.templ, text)) CommitText(app, objectIndex, mob::kObjTemplate, text);
+            if (EditTextSuggest("##templ", o.templ, text, Names(app.lib).figures)) CommitText(app, objectIndex, mob::kObjTemplate, text);
             Label("Texture");
-            if (EditText("##tex", o.primTexture, text)) CommitText(app, objectIndex, mob::kObjPrimTexture, text);
+            if (EditTexture(app, "##tex", o.primTexture, text)) CommitText(app, objectIndex, mob::kObjPrimTexture, text);
             Label("2nd texture");
-            if (EditText("##tex2", o.secTexture, text)) CommitText(app, objectIndex, mob::kObjSecTexture, text);
+            if (EditTexture(app, "##tex2", o.secTexture, text)) CommitText(app, objectIndex, mob::kObjSecTexture, text);
             Label("Parent template");
-            if (EditText("##parent", mob::Utf8(o.parentTemplate), text)) CommitText(app, objectIndex, mob::kParentTemplate, text);
+            if (EditTextSuggest("##parent", mob::Utf8(o.parentTemplate), text, Names(app.lib).prototypes)) CommitText(app, objectIndex, mob::kParentTemplate, text);
         }
         // Position
         const uint32_t posType = o.kind == mob::Kind::Light ? mob::kLightPosition : o.kind == mob::Kind::Sound ? mob::kSoundPosition
@@ -1820,12 +1962,14 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
                                   "Diplomacy tab, which says who is friend, neutral or enemy to whom");
             if (EditU32("##player", static_cast<uint32_t>(std::max(o.player, 0)), u))
                 CommitField(app, objectIndex, mob::kObjPlayer, std::vector<uint8_t>{static_cast<uint8_t>(std::min<uint32_t>(u, 255))});
-            Label("Type");
+            Label("Engine type");
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("How the engine handles the object (ei_maper's \"Type\"): 50-52 units, 53 plants and scenery, 54 structures, 55 other objects, 58 torches, 59 magic traps, 60 levers, 8193+ particles. Change it only to fix a wrong one.");
             if (EditU32("##type", static_cast<uint32_t>(std::max(o.type, 0)), u)) CommitField(app, objectIndex, mob::kObjType, mob::U32Payload(u));
         }
         if (o.kind == mob::Kind::Unit) {
             Label("Prototype");
-            if (EditText("##proto", mob::Utf8(o.prototype), text)) CommitText(app, objectIndex, mob::kUnitPrototype, text);
+            if (EditTextSuggest("##proto", mob::Utf8(o.prototype), text, Names(app.lib).prototypes)) CommitText(app, objectIndex, mob::kUnitPrototype, text);
             Label("Stats imported");
             bool imported = o.needImport;
             if (ImGui::Checkbox("##needimport", &imported)) CommitField(app, objectIndex, mob::kUnitNeedImport, std::vector<uint8_t>{static_cast<uint8_t>(imported)});
@@ -1871,8 +2015,7 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
         if (model && !model->dressed.empty()) {
             Label("Shown");
             ImGui::TextWrapped("%s", model->dressed.c_str());
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Units on the default0 placeholder are dressed from the database: the prototype's race skin,\n"
-                                                          "hair and equipment (the map's own armor and weapon lists first), with redress textures");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Units on the default0 placeholder are dressed from the database like the game does: skin, hair and equipment (the map's own lists first).");
         }
         ImGui::EndTable();
     }
@@ -1891,13 +2034,20 @@ static void ObjectDetails(App& app, const mob::File& fileIn, int fileIndex, cons
                 ImGui::PushID(static_cast<int>(i));
                 ImGui::SetNextItemWidth(-40);
                 std::string v;
-                if (EditText("##entry", mob::Utf8(entries[i]), v)) { entries[i] = ToCp(v); changed = true; }
+                // item, then ".material": the part after the last dot completes from the materials
+                const std::string cur = mob::Utf8(entries[i]);
+                const size_t dot = cur.rfind('.');
+                const bool spells = l.type == mob::kUnitSpells;
+                const bool material = !spells && dot != std::string::npos;
+                if (EditTextSuggest("##entry", cur, v, material ? Names(app.lib).materials : spells ? std::vector<std::string>() : Names(app.lib).items,
+                                    material ? cur.substr(0, dot + 1) : std::string()))
+                    { entries[i] = ToCp(v); changed = true; }
                 ImGui::SameLine();
                 if (ImGui::SmallButton("X")) removeAt = static_cast<int>(i);
                 ImGui::PopID();
             }
             if (removeAt >= 0) { entries.erase(entries.begin() + removeAt); changed = true; }
-            if (ImGui::SmallButton("+ add")) { entries.push_back(l.type == mob::kUnitSpells ? "spell" : "item"); changed = true; }
+            if (ImGui::SmallButton("Add")) { entries.push_back(l.type == mob::kUnitSpells ? "spell" : "item"); changed = true; }
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Adds an entry to type over (template.material for weapons and armors)");
             if (changed) CommitField(app, objectIndex, l.type, mob::StringArrayPayload(l.type, entries), false);
             ImGui::PopID();
@@ -2366,8 +2516,10 @@ static bool AreaAt(App& app, float x, float y, std::string& file, size_t& index)
         const std::vector<quests::AreaCall> calls = quests::AreaCalls(m->file.script);
         for (size_t i = 0; i < calls.size(); ++i) {
             const quests::AreaCall& a = calls[i];
-            const bool in = a.round ? std::hypot(x - a.v[0], y - a.v[1]) <= a.v[2]
-                                    : x >= std::min(a.v[0], a.v[2]) && x <= std::max(a.v[0], a.v[2]) && y >= std::min(a.v[1], a.v[3]) && y <= std::max(a.v[1], a.v[3]);
+            const float e = std::max(0.4f, app.scene.camera.distance * 0.012f); // the edge can be grabbed from just outside
+            const bool in = a.round ? std::hypot(x - a.v[0], y - a.v[1]) <= a.v[2] + e
+                                    : x >= std::min(a.v[0], a.v[2]) - e && x <= std::max(a.v[0], a.v[2]) + e && y >= std::min(a.v[1], a.v[3]) - e &&
+                                          y <= std::max(a.v[1], a.v[3]) + e;
             if (in) { file = m->file.path; index = i; return true; }
         }
     }
@@ -2711,7 +2863,7 @@ static int ResizeStringCallback(ImGuiInputTextCallbackData* d) {
     return 0;
 }
 
-// Saves the Quest tab's text (to this copy, or every copy when "save to every language" is on).
+// Saves the Quest tab's text (to this copy, or every copy when "Save to every language" is on).
 static void SaveQuestText(App& app) {
     if (!app.openQuest || !app.mqTextDirty) return;
     quest::QuestSet& set = *app.openQuest;
@@ -2884,7 +3036,7 @@ static void QuestTab(App& app) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The file's encoding (detected); it is saved in this encoding");
     if (set.copies.size() > 1) {
         ImGui::SameLine();
-        ImGui::Checkbox("save to every language", &app.mqApplyAll);
+        ImGui::Checkbox("Save to every language", &app.mqApplyAll);
         if (ImGui::IsItemHovered())
             ImGui::SetTooltip("On: every language pack's copy of this file gets this text (map.txt and quest.ini/.reg do not depend on\n"
                               "the language). Off: only the %s copy (for briefings and texts).", set.labels[app.mqCopy].c_str());
@@ -4267,10 +4419,9 @@ static void MobParamsWindow(App& app) {
 
 static const char* kSimLimits =
     "Units walk their patrol paths as in the game, with these limits:\n"
-    "- routes: the shortest way around what blocks them, on a walkability grid computed here (2 x 2 unit cells:\n"
-    "  water, ground too steep, the objects' parts near the ground; see Layers > Walkability), not the game's\n"
-    "  own graph, so a route can differ from the game's; units do not avoid one another; without a terrain\n"
-    "  they walk straight\n"
+    "- routes: the cheapest way on the game's own tile map (0.5 unit tiles, built from the terrain and the\n"
+    "  objects as the game does, for the navmesh layer of Layers; see Layers > Walkability); units do not\n"
+    "  avoid one another; without a terrain they walk straight\n"
     "- speed: the unit's walking speed from its stats (15 ticks a second); no running, no animation (figures glide)\n"
     "- no reactions: no fighting, calling for help, alarms or scripts; guards and sentries stay put\n"
     "- nothing is written to the map; editing waits until the simulation stops";
@@ -4284,7 +4435,7 @@ static std::vector<mob::Vec3> FindRoute(const MapScene::WalkGrid& g, mob::Vec3 f
     auto cellOf = [&](float v, int n) { return std::min(std::max(static_cast<int>(v / g.cell), 0), n - 1); };
     auto nearestFree = [&](int& x, int& y) {
         if (!g.Blocked(x, y)) return true;
-        for (int r = 1; r <= 8; ++r)
+        for (int r = 1; r <= 32; ++r)
             for (int dy = -r; dy <= r; ++dy)
                 for (int dx = -r; dx <= r; ++dx)
                     if ((std::abs(dx) == r || std::abs(dy) == r) && !g.Blocked(x + dx, y + dy)) { x += dx; y += dy; return true; }
@@ -4304,7 +4455,7 @@ static std::vector<mob::Vec3> FindRoute(const MapScene::WalkGrid& g, mob::Vec3 f
     open.push({h(sx, sy), start});
     static const int dxs[8] = {1, -1, 0, 0, 1, 1, -1, -1}, dys[8] = {0, 0, 1, -1, 1, -1, 1, -1};
     int visited = 0;
-    while (!open.empty() && visited < 400000) {
+    while (!open.empty() && visited < 3000000) {
         const int cur = open.top().second;
         open.pop();
         if (closed[static_cast<size_t>(cur)]) continue;
@@ -4317,7 +4468,7 @@ static std::vector<mob::Vec3> FindRoute(const MapScene::WalkGrid& g, mob::Vec3 f
             if (g.Blocked(nx, ny)) continue;
             if (d >= 4 && (g.Blocked(cx + dxs[d], cy) || g.Blocked(cx, cy + dys[d]))) continue; // no cutting corners
             const int ni = ny * g.w + nx;
-            const float nc = cost[static_cast<size_t>(cur)] + (d >= 4 ? 1.4142f : 1.0f);
+            const float nc = cost[static_cast<size_t>(cur)] + (d >= 4 ? 1.4142f : 1.0f) * g.Cost(nx, ny); // the game's step cost
             if (nc < cost[static_cast<size_t>(ni)]) {
                 cost[static_cast<size_t>(ni)] = nc;
                 back[static_cast<size_t>(ni)] = cur;
@@ -4517,6 +4668,21 @@ static void ToolsMenu(App& app) {
         else { app.simObjects = 0; StartSimulation(app); }
     }
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("%s", kSimLimits);
+    // The navmesh again now, even without an edit (Save then writes it).
+    bool hasGraph = false;
+    for (auto& m : app.mobs) hasGraph |= m->file.aiGraphBytes != 0;
+    if (ImGui::Selectable("Rebuild navmesh", false, hasGraph && app.terrain.sectorsX > 0 ? 0 : ImGuiSelectableFlags_Disabled)) {
+        std::vector<std::vector<uint8_t>> before;
+        for (auto& m : app.mobs) before.push_back(m->file.bytes);
+        std::string msg = RegenerateNavmeshes(app);
+        bool changed = false;
+        for (size_t i = 0; i < app.mobs.size(); ++i) changed |= app.mobs[i]->file.bytes != before[i];
+        app.filesMessage = msg + (changed ? ": save to write it" : " (it was already up to date)");
+        if (app.scene.options.navCompare) BuildCompareNavmesh(app);
+    }
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+        ImGui::SetTooltip("Builds the navmesh (AI_GRAPH) of the open zone map again from the terrain and the open maps' objects,\n"
+                          "as the game does, without an edit first. Save writes it. Needs a terrain and a map that has a navmesh.");
     ImGui::Separator();
     const std::string resetLabel = "Clear patrol paths (" + ui::BindName(app.lib.mapKeys[config::kKeyResetPaths]) + ")";
     if (ImGui::Selectable(resetLabel.c_str(), false, selection ? 0 : ImGuiSelectableFlags_Disabled)) ResetLogicPaths(app);
@@ -4545,22 +4711,17 @@ static void Toolbar(App& app) {
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Lights (yellow), particles (magenta), sounds (cyan) and objects\nwhose figure is missing (red)");
             if (ImGui::Checkbox("Walkability", &o.walkability) && o.walkability) app.scene.BuildWalkGrid();
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Where units can walk, as the patrol simulation computes it (red: blocked): water, ground too\n"
-                                  "steep, and the objects' parts near the ground. Not the game's own graph (AI_GRAPH).");
+                ImGui::SetTooltip("Where units can walk, as the game computes it, for the navmesh layer below. Red: blocked; orange: hard ground (water, slopes, obstacles). Patrols route on it.");
             ImGui::Checkbox("Game navmesh (AI_GRAPH)", &o.navmesh);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("The graph stored in the map (its zone .mob): a node per 4 x 4 units; lines to the neighbours a\n"
-                                  "unit can step to (green cheap, red dear), red squares where it can go nowhere.");
+                ImGui::SetTooltip("The navmesh stored in the zone map: a node per 4 x 4 units, lines to the neighbours a unit can reach (green cheap, red dear), red squares where it can go nowhere.");
             ImGui::SetNextItemWidth(110);
-            ImGui::SliderInt("Navmesh layer", &o.navLayer, 0, mob::kAiLayers - 1);
+            if (ImGui::SliderInt("Navmesh layer", &o.navLayer, 0, mob::kAiLayers - 1) && o.walkability) app.scene.BuildWalkGrid();
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("The graph has 8 layers: units use the one of their AI class");
             if (ImGui::Checkbox("Navmesh differences", &o.navCompare) && o.navCompare) BuildCompareNavmesh(app);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("The map's navmesh (the layer above) against the one built from the terrain and the objects the\n"
-                                  "way the game builds it (what Save does with \"Navmesh\" on), per 4 x 4 node:\n"
-                                  "orange: only the map's navmesh walks there; blue: only the rebuilt one;\n"
-                                  "yellow: both, with other step costs. Anything shown: the map's navmesh is out of date.\n"
-                                  "Now: %d orange, %d blue, %d yellow.%s",
+                ImGui::SetTooltip("The map's navmesh against the one the game would build now, per 4 x 4 node: orange: only the map's walks there; blue: only the rebuilt one; yellow: both, other costs. Anything shown: the map's navmesh is out of date.\n"
+                    "Now: %d orange, %d blue, %d yellow.%s",
                                   app.scene.navCompareGame, app.scene.navCompareEditor, app.scene.navCompareCost,
                                   app.navCompareNote.empty() ? "" : ("\n" + app.navCompareNote).c_str());
             if (o.navCompare) {
@@ -4570,8 +4731,8 @@ static void Toolbar(App& app) {
             }
             ImGui::Checkbox("Script areas", &o.scriptAreas);
             if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("The areas the maps' scripts declare (AddRoundToArea, AddRectToArea), magenta, labelled with\n"
-                                  "their number and the quest objectives that use them (QObjArea). %zu in the loaded maps.\nAlt + drag moves one (the script is rewritten).",
+                ImGui::SetTooltip("The areas the scripts declare (magenta), with their number and the quest objectives that use them. %zu loaded.\n"
+                    "Alt + drag inside one moves it; on its edge, resizes it.",
                                   app.scene.scriptAreas.size());
             ImGui::Checkbox("Shadows", &o.shadows);
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("With the lighting on: the sun's shadows of the terrain and the figures, on the terrain");
@@ -4641,9 +4802,7 @@ static void Toolbar(App& app) {
         ImGui::SameLine();
         if (ImGui::Checkbox("Navmesh", &app.lib.mapRegenNavmesh)) app.lib.SaveConfig();
         if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("Regenerate navmeshes on save: the open maps that have a navmesh (AI_GRAPH, the zone's main map)\n"
-                              "get it rebuilt from the terrain and the open maps' objects, the way the game builds it (what\n"
-                              "EI_Plugin's GraphGen makes the game do at load, leaving a .bak). Takes a few seconds on big maps.");
+            ImGui::SetTooltip("Rebuild the navmesh when saving: the open zone map's navmesh (AI_GRAPH) is built again from the terrain and the open maps' objects, as the game builds it. Takes a few seconds on big maps.");
     }
     // Always one item after SameLine, even empty: otherwise the viewport below would start on this line.
     ImGui::SameLine();
@@ -5513,7 +5672,20 @@ static void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
     if (app.areaDrag.on) {
         fig::Vec3 g;
         if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
-            if (app.scene.GroundAt(local.x, local.y, g)) {
+            if (app.areaDrag.resize && app.scene.GroundAt(local.x, local.y, g)) { // resizing: the grabbed edge follows
+                float* v = app.areaDrag.v;
+                const int r = app.areaDrag.resize;
+                if (r == 1) v[2] = std::max(0.5f, std::hypot(g.x - v[0], g.y - v[1]));
+                if (r & 2) v[0] = g.x;
+                if (r & 4) v[1] = g.y;
+                if (r & 8) v[2] = g.x;
+                if (r & 16) v[3] = g.y;
+                if (app.areaDrag.scene >= 0 && app.areaDrag.scene < static_cast<int>(app.scene.scriptAreas.size())) {
+                    MapScene::ScriptArea& sa = app.scene.scriptAreas[app.areaDrag.scene];
+                    if (r == 1) sa.r = v[2];
+                    else { sa.x = v[0]; sa.y = v[1]; sa.x2 = v[2]; sa.y2 = v[3]; }
+                }
+            } else if (app.scene.GroundAt(local.x, local.y, g)) {
                 const float ddx = g.x - app.areaDrag.startX - app.areaDrag.dx, ddy = g.y - app.areaDrag.startY - app.areaDrag.dy;
                 app.areaDrag.dx += ddx; app.areaDrag.dy += ddy;
                 if (app.areaDrag.scene >= 0 && app.areaDrag.scene < static_cast<int>(app.scene.scriptAreas.size())) {
@@ -5525,7 +5697,17 @@ static void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
             app.areaDrag.on = false;
             if (MobEntry* m = FindMob(app, app.areaDrag.file)) {
                 std::vector<quests::AreaCall> calls = quests::AreaCalls(m->file.script);
-                if (app.areaDrag.index < calls.size() && (app.areaDrag.dx != 0 || app.areaDrag.dy != 0)) {
+                if (app.areaDrag.resize && app.areaDrag.index < calls.size()) {
+                    quests::AreaCall a = calls[app.areaDrag.index];
+                    const int n = a.round ? 3 : 4;
+                    bool changed = false;
+                    for (int k = 0; k < n; ++k) {
+                        const float v = std::round(app.areaDrag.v[k] * 10.0f) / 10.0f; // tenths, like the panel
+                        changed |= v != a.v[k];
+                        a.v[k] = v;
+                    }
+                    if (changed) SetAreaCall(app, *m, a);
+                } else if (app.areaDrag.index < calls.size() && (app.areaDrag.dx != 0 || app.areaDrag.dy != 0)) {
                     quests::AreaCall a = calls[app.areaDrag.index];
                     a.v[0] += app.areaDrag.dx; a.v[1] += app.areaDrag.dy;
                     if (!a.round) { a.v[2] += app.areaDrag.dx; a.v[3] += app.areaDrag.dy; }
@@ -5548,6 +5730,20 @@ static void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
             app.areaDrag.index = index;
             app.areaDrag.startX = g.x;
             app.areaDrag.startY = g.y;
+            // Grabbed near its edge: a resize (the rim of a round area; a rect's side or corner).
+            {
+                const quests::AreaCall a = quests::AreaCalls(FindMob(app, file)->file.script)[index];
+                const float tol = std::max(0.4f, app.scene.camera.distance * 0.012f);
+                for (int k = 0; k < 4; ++k) app.areaDrag.v[k] = a.v[k];
+                if (a.round) {
+                    if (std::fabs(std::hypot(g.x - a.v[0], g.y - a.v[1]) - a.v[2]) < tol) app.areaDrag.resize = 1;
+                } else {
+                    if (std::fabs(g.x - a.v[0]) < tol) app.areaDrag.resize |= 2;
+                    if (std::fabs(g.y - a.v[1]) < tol) app.areaDrag.resize |= 4;
+                    if (std::fabs(g.x - a.v[2]) < tol) app.areaDrag.resize |= 8;
+                    if (std::fabs(g.y - a.v[3]) < tol) app.areaDrag.resize |= 16;
+                }
+            }
             // The drawn shape of this call (same id and place).
             for (size_t i = 0; i < app.scene.scriptAreas.size(); ++i) {
                 const MapScene::ScriptArea& s = app.scene.scriptAreas[i];
@@ -5710,7 +5906,7 @@ static void MinimapDialog(App& app) {
     ImGui::InputText("##minipath", app.minimapPath, sizeof(app.minimapPath));
     ImGui::SameLine();
     std::string picked;
-    if (ImGui::Button("Browse...") && ui::PickSaveFile(app.minimapPath, picked, "mmp")) std::snprintf(app.minimapPath, sizeof(app.minimapPath), "%s", picked.c_str());
+    if (ImGui::Button("File...") && ui::PickSaveFile(app.minimapPath, picked, "mmp")) std::snprintf(app.minimapPath, sizeof(app.minimapPath), "%s", picked.c_str());
     ImGui::BeginDisabled(!app.terrainLoaded || app.minimapPath[0] == '\0' || app.scene.modelsPending > 0 ||
                          !(app.minimapMmp || app.minimapDds || app.minimapPng));
     if (ImGui::Button("Export", ImVec2(120, 0))) { app.minimapPending = true; app.minimapMessage = "Exporting..."; }
@@ -5753,6 +5949,24 @@ Context* Create(Library& lib) {
     // As last time: the side tab, and the time of day if one was chosen.
     if (lib.mapSideTab >= 0 && lib.mapSideTab < static_cast<int>(SideTab::Count)) app.requestTab = static_cast<SideTab>(lib.mapSideTab);
     if (lib.mapHour >= 0.0f) { app.hour = lib.mapHour; app.hourSet = true; }
+    // Walkability and the patrol simulation: the game's tile map, for the shown navmesh layer.
+    app.scene.walkBuilder = [&app](MapScene::WalkGrid& w) {
+        if (app.terrain.sectorsX <= 0) return;
+        std::vector<const mob::File*> all;
+        for (auto& m : app.mobs) all.push_back(&m->file);
+        navgen::Generator g;
+        std::string err;
+        if (!navgen::BuildTiles(app.terrain, NavObjects(app.lib.figures, all, nullptr), g, err)) return;
+        const int layer = std::clamp(app.scene.options.navLayer, 0, navgen::kLayers - 1);
+        w.w = g.tw;
+        w.h = g.th;
+        w.cell = 0.5f;
+        w.value.resize(static_cast<size_t>(g.tw) * g.th);
+        for (int y = 0; y < g.th; ++y)
+            for (int x = 0; x < g.tw; ++x) w.value[static_cast<size_t>(y) * g.tw + x] = static_cast<uint8_t>(g.Nibble(x, y, layer));
+        w.factor.assign(g.factor, g.factor + 16);
+        w.factor[0] = 0;
+    };
     std::vector<std::string> paths;
     if (!lib.mapTerrain.empty()) paths.push_back(lib.mapTerrain);
     for (const std::string& m : lib.mapMobs) paths.push_back(m);
@@ -6106,6 +6320,10 @@ void PrintCliHelp() {
         "        Build the navmesh (AI_GRAPH) the way the game does, from the terrain and the maps' objects (their\n"
         "        figures from the Settings tab's sources), compare it with the first map's own, and with --write\n"
         "        save the first map with it (refused when it has no navmesh, e.g. a quest map, unless --force).\n"
+        "  um-multitool map --navmesh-all <folder> [--write-all] [--terrains <folder>]... [--config <file>]\n"
+        "        Every map of the folder that has a navmesh, with the terrain of its name (zone3xobr-lmp.mob ->\n"
+        "        zone3xobr.mpr, beside it or in the Settings' map folders): says which are out of date; --write-all rebuilds those. Quest maps are skipped (their\n"
+        "        objects are not counted: rebuild a zone with its quests by --navmesh when they add obstacles).\n"
         "  um-multitool gui --map <file.mpr|file.mob> [...]\n"
         "        Open the GUI's Map Editor on these files.\n");
 }
@@ -6116,17 +6334,70 @@ int RunCli(int argc, char** argv) {
     Library lib;
     std::string terrainPath;
     std::vector<std::string> mobs;
-    bool check = false, navmesh = false, force = false;
+    bool check = false, navmesh = false, force = false, writeAll = false;
+    std::string navFolder;
+    std::vector<std::string> terrainDirs;
     std::string writePath;
     for (size_t i = 0; i < args.size(); ++i) {
         if (args[i] == "--check") check = true;
         else if (args[i] == "--navmesh") navmesh = true;
         else if (args[i] == "--force") force = true;
+        else if (args[i] == "--navmesh-all" && i + 1 < args.size()) navFolder = args[++i];
+        else if (args[i] == "--write-all") writeAll = true;
+        else if (args[i] == "--terrains" && i + 1 < args.size()) terrainDirs.push_back(args[++i]);
         else if (args[i] == "--write" && i + 1 < args.size()) writePath = args[++i];
         else if (args[i] == "--mpr" && i + 1 < args.size()) terrainPath = args[++i];
         else if (args[i] == "--config" && i + 1 < args.size()) lib.configPath = args[++i];
         else if (EndsWith(args[i], ".mpr")) terrainPath = args[i];
         else mobs.push_back(args[i]);
+    }
+    if (!navFolder.empty()) { // every map of a folder that has a navmesh, with the terrain of the same name
+        lib.LoadConfig();
+        int done = 0, failed = 0;
+        std::vector<std::filesystem::path> files;
+        std::error_code ec;
+        for (const auto& e : std::filesystem::directory_iterator(navFolder, ec))
+            if (e.is_regular_file() && Lower(e.path().extension().string()) == ".mob") files.push_back(e.path());
+        std::sort(files.begin(), files.end());
+        for (const auto& path : files) {
+            mob::File f;
+            if (!mob::Load(path.string(), f) || !f.aiGraphBytes) continue; // quest maps have no navmesh
+            std::string base = path.stem().string();
+            const size_t dash = base.find('-');
+            if (dash != std::string::npos) base = base.substr(0, dash); // zone3xobr-lmp -> zone3xobr
+            std::filesystem::path terrainPath = path.parent_path() / (base + ".mpr");
+            if (!std::filesystem::exists(terrainPath, ec)) // else the Settings' map folders (the base game's ...)
+                for (const Library::MapFile& mf : lib.ListMapFiles())
+                    if (Lower(mf.name) == Lower(base + ".mpr")) { terrainPath = mf.path; break; }
+            for (const std::string& dir : terrainDirs) { // and the folders given by --terrains
+                if (std::filesystem::exists(terrainPath, ec)) break;
+                const std::string found = checks::FindInDirectory(dir, base + ".mpr");
+                if (!found.empty()) terrainPath = found;
+            }
+            mpr::Map terrain;
+            std::string err;
+            if (!mpr::Load(terrainPath.string(), terrain, err)) {
+                std::printf("%-28s no terrain (%s)\n", path.filename().string().c_str(), terrainPath.filename().string().c_str());
+                ++failed;
+                continue;
+            }
+            int missing = 0;
+            const std::vector<navgen::Object> objects = NavObjects(lib.figures, {&f}, &missing);
+            std::vector<uint8_t> payload;
+            if (!navgen::Generate(terrain, objects, payload, err)) { std::printf("%-28s %s\n", path.filename().string().c_str(), err.c_str()); ++failed; continue; }
+            const std::vector<uint8_t> old(f.bytes.begin() + f.aiGraphAt, f.bytes.begin() + f.aiGraphAt + f.aiGraphBytes - 8);
+            const bool same = old == payload;
+            std::printf("%-28s %s%s\n", path.filename().string().c_str(), same ? "up to date" : "out of date",
+                        missing ? (" (" + std::to_string(missing) + " objects without a figure)").c_str() : "");
+            if (!same && writeAll) {
+                mob::SetAiGraph(f, payload);
+                if (mob::Save(f, err)) std::printf("%-28s written\n", "");
+                else { std::printf("%-28s not written: %s\n", "", err.c_str()); ++failed; }
+            }
+            ++done;
+        }
+        std::printf("%d map(s) with a navmesh, %d problem(s)%s\n", done, failed, writeAll ? "" : " (--write-all to rebuild the out-of-date ones)");
+        return failed ? 1 : 0;
     }
     if ((!check && !navmesh) || mobs.empty()) { PrintCliHelp(); return 1; }
     lib.LoadConfig();

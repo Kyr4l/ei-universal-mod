@@ -36,7 +36,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4";
+static const char* const UM_VERSION = "1.4.1";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
@@ -2865,7 +2865,8 @@ static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found
     if (!explained) {
         explained = true;
         LogLine("INFO", "[HEAPFIX] game.exe writes a few bytes past the end of some of its own allocations (a bug of the game, "
-            "on any setup). The padding absorbs it and nothing is damaged; each allocation site is reported below as a warning.");
+            "on any setup). The padding absorbs it and nothing is damaged; each allocation site is reported below (DEBUG while the "
+            "overrun stays in the padding, ERROR when it may have gone past it).");
     }
     const DWORD padding = PaddingFor(block.size);
     int first = -1, last = -1;
@@ -2881,7 +2882,8 @@ static void ReportOverrun(DWORD start, const LiveBlock& block, const BYTE* found
     FormatCallerList(block.callers, kAllocCallerSlots, callers, sizeof(callers));
     DWORD shown = padding - static_cast<DWORD>(first) < 24 ? padding - static_cast<DWORD>(first) : 24;
     DescribeWrittenBytes(found + first, shown, written, sizeof(written));
-    LogLine("WARN", "[HEAPFIX] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written past its end, "
+    // Contained in the padding: harmless (DEBUG). The whole padding used: it may have reached the next block (ERROR).
+    LogLine(usedUp ? "ERROR" : "DEBUG", "[HEAPFIX] BUFFER OVERRUN (%s): block 0x%08lX (%lu bytes, allocated %.1f s ago by %s) was written past its end, "
         "up to %d of its %lu padding bytes (first at +%d: %s); this allocation site has now overrun %lu block(s)%s%s",
         when, static_cast<unsigned long>(start), static_cast<unsigned long>(block.size), (GetTickCount() - block.tickMs) / 1000.0,
         callers, last + 1, static_cast<unsigned long>(padding), first, written, siteCount,

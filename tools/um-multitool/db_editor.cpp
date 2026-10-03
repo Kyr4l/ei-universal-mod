@@ -141,7 +141,8 @@ void Recheck(bool alert = true) {
             }
         }
     }
-    // New problems (more than at the last check): an alert, with the first of them.
+    // New problems (more than at the last check): an alert, with the first of them. Only when a database is
+    // opened (at launch, auto-load) or re-checked by hand: edits update the counts and marks without one.
     if (alert && (g.errors > g.alertedErrors || g.warnings > g.alertedWarnings)) {
         const bool error = g.errors > g.alertedErrors;
         const dbmodel::Issue* first = nullptr;
@@ -229,7 +230,7 @@ void Changed() {
     g.dirty = true;
     ++g.version;
     g.redo.clear();
-    Recheck();
+    Recheck(false); // while editing: the counts and marks update, no popup
 }
 
 void Apply(const Change& c, bool undo) {
@@ -246,7 +247,7 @@ void Apply(const Change& c, bool undo) {
     if (c.row > 0) { g.selRow = c.row; g.selCol = c.col > 0 ? c.col : g.selCol; g.scrollToSelection = true; }
     g.dirty = true;
     ++g.version;
-    Recheck();
+    Recheck(false);
 }
 
 void Undo() {
@@ -873,12 +874,9 @@ void DrawTab() {
     if (!g.loaded) {
         ImGui::Spacing();
         ImGui::TextWrapped(
-            "Opens an Evil Islands gameplay database - a compiled .res (databaselmp.res, database.res) or its "
-            "spreadsheet (.xlsx, or .ods from LibreOffice) - to check it for errors and wrong values, edit it, save "
-            "it as a spreadsheet and compile it to a .res. Problems are highlighted: red cells are errors (the .res "
-            "would not hold what the cell shows, or the game misreads it), yellow ones warnings (unknown items, "
-            "spells or materials, duplicate names...).\n\nCommand line: um-multitool dbexport (.res -> .xlsx / .ods), "
-            "um-multitool xlsxdb (spreadsheet -> .res, checks first; --check only checks).");
+            "Opens a gameplay database (.res, or its .xlsx / .ods spreadsheet) to check, edit, save and compile it. Red cells: errors (the game would misread them); yellow: warnings (duplicates...).\n"
+                "\n"
+                "Command line: um-multitool dbexport (.res -> spreadsheet), um-multitool xlsxdb (spreadsheet -> .res; --check only checks).");
         if (!g.message.empty()) ImGui::TextColored(g.messageIsError ? kErrorColor : ImVec4(0.6f, 0.85f, 0.6f, 1), "%s", g.message.c_str());
         return;
     }

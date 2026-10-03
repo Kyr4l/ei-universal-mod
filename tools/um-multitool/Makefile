@@ -6,6 +6,8 @@
 #   make linux  - um-multitool (native Linux)
 #   make win    - um-multitool.exe, cross-compiled with MinGW
 #   make all    - both (the Windows part is skipped when MinGW is not installed)
+#   make xp     - um-multitool-xp32.exe / -xp64.exe for Windows XP (after vendor/build-glfw-mingw-xp.sh)
+# Builds run on all cores; objects go to build/<variant>/.
 #
 # GUI toolkit: Dear ImGui (vendored as source in vendor/imgui) on GLFW with the
 # OpenGL2 backend - no GL loader needed, the most robust path under Wine. GLFW
@@ -22,7 +24,7 @@ IMGUI_SRCS = $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/img
 SRCS = main.cpp i18n.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp mp_editor.cpp alerts.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
 # um.dll's mission script checker is shared with the Map Editor's checks (not copied).
 UMDLL_DIR = ../../resources/universal-mod/um-dll
-HDRS = $(wildcard *.hpp) i18n_ru.inc $(wildcard viewer/*.hpp) $(wildcard mapedit/*.hpp) $(wildcard dllconnect/*.hpp) $(UMDLL_DIR)/mob_script_check.hpp $(UMDLL_DIR)/mob_script_functions.hpp $(wildcard sfx/*.mp3)
+HDRS = $(wildcard *.hpp) lang/ru.txt $(wildcard viewer/*.hpp) $(wildcard mapedit/*.hpp) $(wildcard dllconnect/*.hpp) $(UMDLL_DIR)/mob_script_check.hpp $(UMDLL_DIR)/mob_script_functions.hpp $(wildcard sfx/*.mp3)
 
 # -I. lets viewer/ share this directory's cp1251.hpp; -isystem keeps -Wextra off vendored code.
 COMMON_FLAGS = -std=c++17 -O2 -Wall -Wextra -pthread -I. -I$(UMDLL_DIR) -isystem $(IMGUI_DIR) -isystem vendor/miniaudio
@@ -43,14 +45,38 @@ WIN_BINS = win
 endif
 endif
 
+# Parallel by default: one object file per source (build/<variant>/), all cores; headers tracked by -MMD.
+MAKEFLAGS += -j$(shell nproc)
+DEPFLAGS = -MMD -MP
+
 all: linux $(WIN_BINS)
 
 linux: $(TARGET)
-
-$(TARGET): $(SRCS) $(HDRS)
-	$(CXX) $(LINUX_FLAGS) -o $@ $(SRCS) $(LINUX_LIBS)
-
 win: $(TARGET).exe
+
+# One object list per variant, and the rule to build them.
+LINUX_OBJS = $(SRCS:%.cpp=build/linux/%.o)
+WIN_OBJS = $(SRCS:%.cpp=build/win/%.o)
+XP32_OBJS = $(SRCS:%.cpp=build/xp32/%.o)
+XP64_OBJS = $(SRCS:%.cpp=build/xp64/%.o)
+
+build/linux/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(LINUX_FLAGS) $(DEPFLAGS) -c $< -o $@
+build/win/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(WIN_CXX) $(WIN_FLAGS) $(DEPFLAGS) -c $< -o $@
+build/xp32/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	i686-w64-mingw32-g++ $(XP_FLAGS) -isystem vendor/glfw-mingw-xp32/include $(DEPFLAGS) -c $< -o $@
+build/xp64/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(WIN_CXX) $(XP_FLAGS) -isystem vendor/glfw-mingw-xp64/include $(DEPFLAGS) -c $< -o $@
+# The sounds are assembled into alerts.cpp (.incbin): -MMD does not see them.
+build/linux/alerts.o build/win/alerts.o build/xp32/alerts.o build/xp64/alerts.o: $(wildcard sfx/*.mp3)
+
+$(TARGET): $(LINUX_OBJS)
+	$(CXX) $(LINUX_FLAGS) -o $@ $^ $(LINUX_LIBS)
 
 # Requires vendor/glfw-mingw to exist first: run vendor/build-glfw-mingw.sh
 # The .exe's icon (assets/um-multitool.ico), compiled into a resource object.
@@ -58,14 +84,33 @@ WIN_RES = um-multitool-res.o
 $(WIN_RES): um-multitool.rc assets/um-multitool.ico
 	x86_64-w64-mingw32-windres $< -O coff -o $@
 
-$(TARGET).exe: $(SRCS) $(HDRS) $(WIN_RES)
+$(TARGET).exe: $(WIN_OBJS) $(WIN_RES)
 	@if [ ! -f "$(GLFW_MINGW_PREFIX)/lib/libglfw3.a" ]; then \
 		echo "Error: $(GLFW_MINGW_PREFIX) not found. Run vendor/build-glfw-mingw.sh first." >&2; \
 		exit 1; \
 	fi
-	$(WIN_CXX) $(WIN_FLAGS) -o $@ $(SRCS) $(WIN_RES) $(WIN_LIBS)
+	$(WIN_CXX) $(WIN_FLAGS) -o $@ $^ $(WIN_LIBS)
+
+# Windows XP variants (make xp): um-multitool-xp32.exe (XP, 32-bit) and um-multitool-xp64.exe (XP x64), with
+# the GLFW built by vendor/build-glfw-mingw-xp.sh (no Vista-only imports). Same code; C++17 runtime static.
+XP_FLAGS = $(COMMON_FLAGS) -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -static -static-libgcc -static-libstdc++ -s
+XP_LIBS = -lglfw3 -lopengl32 -lgdi32 -lcomdlg32 -lole32 -lshell32 -luuid -lws2_32
+xp: $(TARGET)-xp32.exe $(TARGET)-xp64.exe
+
+um-multitool-res32.o: um-multitool.rc assets/um-multitool.ico
+	i686-w64-mingw32-windres $< -O coff -o $@
+
+$(TARGET)-xp32.exe: $(XP32_OBJS) um-multitool-res32.o
+	@if [ ! -f vendor/glfw-mingw-xp32/lib/libglfw3.a ]; then echo "Run vendor/build-glfw-mingw-xp.sh first." >&2; exit 1; fi
+	i686-w64-mingw32-g++ $(XP_FLAGS) -o $@ $^ -Lvendor/glfw-mingw-xp32/lib $(XP_LIBS)
+
+$(TARGET)-xp64.exe: $(XP64_OBJS) $(WIN_RES)
+	@if [ ! -f vendor/glfw-mingw-xp64/lib/libglfw3.a ]; then echo "Run vendor/build-glfw-mingw-xp.sh first." >&2; exit 1; fi
+	$(WIN_CXX) $(XP_FLAGS) -o $@ $^ -Lvendor/glfw-mingw-xp64/lib $(XP_LIBS)
+
+-include $(LINUX_OBJS:.o=.d) $(WIN_OBJS:.o=.d) $(XP32_OBJS:.o=.d) $(XP64_OBJS:.o=.d)
 
 clean:
-	rm -f um-multitool um-multitool.exe $(WIN_RES)
+	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe um-multitool-xp64.exe $(WIN_RES) um-multitool-res32.o
 
-.PHONY: all linux win clean
+.PHONY: all linux win xp clean

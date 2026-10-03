@@ -494,6 +494,41 @@ void ItemsPanel() {
         ImGui::EndTable();
     }
     if (removeId) RemoveObject(removeId);
+    // A new item: the block of an item of the same kind is the template (the game updates its values).
+    if (g.unsafe) {
+        static int kindIndex = 0;
+        static uint16_t row = 0, material = 0;
+        static const uint32_t kKinds[] = {0x3004, 0x3005, 0x3006, 0x3007};
+        static const char* const kNames[] = {"Weapon", "Armour", "Quick item", "Quest item"};
+        ImGui::SetNextItemWidth(110);
+        ImGui::Combo("##newkind", &kindIndex, kNames, 4);
+        const uint32_t kind = kKinds[kindIndex];
+        const mp::Object* tmpl = nullptr;
+        for (const mp::Object& o : g.ch.lists[0]) if (o.kind == kind) { tmpl = &o; break; }
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(200);
+        if (Sheet(KindSheet(kind))) RowCombo("##newrow", KindSheet(kind), row);
+        if (HasMaterial(kind) && Sheet("Materials")) {
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(120);
+            RowCombo("##newmat", "Materials", material);
+        }
+        ImGui::SameLine();
+        ImGui::BeginDisabled(!tmpl || !Sheet(KindSheet(kind)));
+        if (ImGui::Button("Add to the backpack") && tmpl) {
+            mp::Object o = *tmpl;
+            o.id = NewId();
+            SetDetailId(o);
+            SetRow(o, HasMaterial(kind) ? material : o.a, row);
+            if (o.detail.size() >= 44 && (kind == 0x3004 || kind == 0x3005)) { const uint32_t none = 0xFFFFFFFFu; std::memcpy(o.detail.data() + 40, &none, 4); }
+            g.ch.lists[0].push_back(o);
+            g.ch.backpack.push_back(o.id);
+        }
+        ImGui::EndDisabled();
+        if (!tmpl) ImGui::SetItemTooltip("The character has no %s yet: one is needed as a template (its file layout)", kNames[kindIndex]);
+        else ImGui::SetItemTooltip("A copy of the character's %s with this item and material; price, durability and protection\n"
+                                   "stay the template's until the game updates them. No spell attached.", ObjectName(*tmpl).c_str());
+    }
     if (dupId) DuplicateObject(dupId);
 }
 
@@ -564,12 +599,10 @@ void DrawTab(Library& lib) {
         lib.mpFolder = picked; lib.SaveConfig(); Rescan(); g.selected = -1;
     }
     ImGui::SameLine();
-    if (ImGui::Button("Refresh")) { const int s = g.selected; Rescan(); g.selected = s < static_cast<int>(g.files.size()) ? s : -1; }
+    if (ImGui::Button("Rescan")) { const int s = g.selected; Rescan(); g.selected = s < static_cast<int>(g.files.size()) ? s : -1; }
     ImGui::SameLine();
     ImGui::Checkbox("Allow unsafe edits", &g.unsafe);
-    ImGui::SetItemTooltip("Unlocks what can break a character: its unit, prototype, figure and zone, the experience spent,\n"
-                          "the attributes and abilities, the quest variables, removing, copying and changing items,\n"
-                          "and the raw parameters.");
+    ImGui::SetItemTooltip("Unlocks the edits that can break a character: unit, prototype, figure, zone, experience spent, attributes, abilities, quest variables, items and raw values.");
     if (g.sheets.empty()) ImGui::TextDisabled("No database set in Settings: items show as row numbers and are not checked.");
 
     ImGui::BeginChild("list", ImVec2(260, 0), ImGuiChildFlags_Borders | ImGuiChildFlags_ResizeX);

@@ -535,6 +535,7 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
         out.push_back({s, sh.name, row, col, (title.empty() ? "" : "(" + title + ") ") + msg, std::move(fixes)});
     };
     // A problem of one entry of a cell's list (the entry starts at entryPos): its fixes as whole cell texts.
+    // Unresolved references (an unknown race, item, spell...) are errors: the game cannot load what is missing.
     auto problem = [&](int row, int col, const std::string& cellText, size_t entryPos, const Problem& p) {
         std::vector<Issue::Fix> fixes;
         for (const Edit& e : p.fixes) {
@@ -542,7 +543,7 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
             fixed.replace(entryPos + e.pos, e.len, e.text);
             fixes.push_back({e.label, fixed});
         }
-        issue(Issue::Warning, row, col, p.message, std::move(fixes));
+        issue(Issue::Error, row, col, p.message, std::move(fixes));
     };
     // Markers the compiler does not know: their columns are ignored.
     for (const auto& [col, key] : info.markerOf) {
@@ -559,7 +560,7 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
     static const std::map<std::string, int> kNamed = {
         {"Materials", 0}, {"Weapons", 0}, {"Armors", 0}, {"QuickItems", 0}, {"QuestItems", 0}, {"LootItems", 0},
         {"HitLocations", 0}, {"RaceModels", 0}, {"Monsters", 0}, {"NPC", 0},
-        {"SpellPrototypes", 1}, {"SpellModifiers", 1}, {"Perks", 1}, {"Skills", 1},
+        {"SpellPrototypes", 1}, {"SpellModifiers", 1}, {"Perks", 1}, {"Skills", 1}, {"LeverPrototypes", 0},
     };
     const auto named = kNamed.find(sh.name);
     std::map<std::string, int> nameRow;
@@ -722,6 +723,51 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
                     const Problem p = ref.kind == Reference::Items ? CheckItem(e.text, names) : CheckSpell(e.text, names);
                     if (p) problem(row, it->second.back(), c->text, e.pos, p);
                 }
+            }
+        }
+        // Values with a known set (the game reads them by name or index).
+        auto cellOf = [&](int field) -> const sheetio::Cell* {
+            auto it = info.columns.find({field, 0});
+            return it == info.columns.end() ? nullptr : At(sh, row, it->second.back());
+        };
+        auto colOf = [&](int field) { auto it = info.columns.find({field, 0}); return it == info.columns.end() ? 0 : it->second.back(); };
+        if (sh.name == "Skills") { // Base attribute: str, dex or int
+            const sheetio::Cell* c = cellOf(10);
+            const std::string v = Empty(c) ? "" : Lower(Trim(c->text));
+            if (!v.empty() && v != "str" && v != "dex" && v != "int")
+                issue(Issue::Error, row, colOf(10), "'" + c->text + "': the base attribute is str, dex or int");
+        }
+        if (sh.name == "Monsters") { // the skin index picks one of its race's primary textures
+            const sheetio::Cell* race = cellOf(1);
+            const sheetio::Cell* skin = cellOf(3);
+            const sheetio::Sheet* races = nullptr;
+            for (const sheetio::Sheet& other : book) if (other.name == "RaceModels") races = &other;
+            if (!Empty(race) && !Empty(skin) && races) {
+                const SheetInfo ri = Describe(*races);
+                auto nameCol = ri.columns.find({0, 0}), texCol = ri.columns.find({31, 0});
+                if (nameCol != ri.columns.end() && texCol != ri.columns.end()) {
+                    for (int r = 4; r <= races->maxRow; ++r) {
+                        const sheetio::Cell* n = At(*races, r, nameCol->second.back());
+                        if (Empty(n) || Lower(Trim(n->text)) != Lower(Trim(race->text))) continue;
+                        const sheetio::Cell* t = At(*races, r, texCol->second.back());
+                        const std::vector<Entry> textures = Empty(t) ? std::vector<Entry>() : SplitEntries(t->text);
+                        bool whole;
+                        const double idx = CellNumber(skin, whole);
+                        const bool numbered = !textures.empty() && Lower(Trim(textures[0].text)).rfind("skin", 0) == 0;
+                        // Races listing "Skin_NN" textures take any number past the list as <figure>skin_NN (not
+                        // checkable here: no texture sources); the others only have their list.
+                        if (idx < 0 || (idx >= static_cast<double>(textures.size()) && !numbered))
+                            issue(Issue::Error, row, colOf(3), "skin " + DoubleText(idx) + ": the race '" + Trim(race->text) + "' has " +
+                                  std::to_string(textures.size()) + " skin texture(s) (0-" + std::to_string(static_cast<int>(textures.size()) - 1) + ")");
+                        break;
+                    }
+                }
+            }
+            const sheetio::Cell* hair = cellOf(4);
+            if (!Empty(hair)) {
+                bool whole;
+                const double h = CellNumber(hair, whole);
+                if (h < -1 || h > 99) issue(Issue::Error, row, colOf(4), "hair " + DoubleText(h) + ": -1 (none) or a hr.NN of the figure (0-99)");
             }
         }
     }

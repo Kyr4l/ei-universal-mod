@@ -225,7 +225,7 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
     std::string shown = ShownTexture(st);
     ImGui::TextDisabled("Texture");
     ImGui::SameLine(90);
-    ImGui::SetNextItemWidth(-ImGui::CalcTextSize("Browse...").x - ImGui::GetStyle().FramePadding.x * 2 - ImGui::GetStyle().ItemSpacing.x);
+    ImGui::SetNextItemWidth(-ImGui::CalcTextSize("File...").x - ImGui::GetStyle().FramePadding.x * 2 - ImGui::GetStyle().ItemSpacing.x);
     if (ImGui::BeginCombo("##texture", shown.empty() ? "(none)" : shown.c_str(), ImGuiComboFlags_HeightLargest)) {
         if (!st.allTextures) {
             for (size_t i = 0; i < r.textures.size(); ++i) {
@@ -255,7 +255,7 @@ inline void TexturePicker(Library& lib, Scene& scene, ItemTabState& st) {
     }
     ImGui::SameLine();
     std::string picked;
-    if (ImGui::Button("Browse...") && ui::PickFile(picked)) st.textureOverride = picked;
+    if (ImGui::Button("File...") && ui::PickFile(picked)) st.textureOverride = picked;
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Preview a texture file on this figure (.dds, .mmp, or any picture: .png, .jpg, .bmp, .tga...)");
     ImGui::Checkbox("all textures", &st.allTextures);
     ImGui::SameLine();

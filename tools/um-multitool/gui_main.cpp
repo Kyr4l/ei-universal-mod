@@ -469,7 +469,7 @@ static bool PathRow(const char* imguiId, const char* label, char* buf, size_t bu
     }
     if (showFolderButton) {
         ImGui::SameLine();
-        if (ImGui::Button("Folder", ImVec2(75, 0))) {
+        if (ImGui::Button("Folder...", ImVec2(75, 0))) {
             std::string picked;
             if (NativePickFolder(picked)) {
                 std::snprintf(buf, bufSize, "%s", picked.c_str());
@@ -651,9 +651,7 @@ static void DrawResToolTab() {
     ImGui::Checkbox("Batch mode (-d)", &g_res.dirMode);
     if (ImGui::IsItemHovered()) {
         ImGui::SetTooltip(
-            "Treats the input folder as a container of MANY archives/folders to\n"
-            "process separately. Not needed to pack a single folder into one\n"
-            "archive - that already happens automatically.");
+            "Processes each archive or folder inside the input folder separately. Not needed to pack one folder into one archive.");
     }
     ImGui::SameLine();
     ImGui::Checkbox("Multi-threaded (-m)", &g_res.multiThread);
@@ -903,6 +901,9 @@ int RunGui(const GuiOptions& options) {
     // from); the windows are fixed and the settings live in um-multitool.cfg beside the executable.
     io.IniFilename = nullptr;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    // Number fields: a click (without dragging) on a drag field types the value; sliders: a double-click
+    // (vendor/imgui patched, SliderScalar) or Ctrl+click.
+    io.ConfigDragClickToInputText = true;
     // Ctrl+Tab is the Map Editor's logic mode key (by default): not ImGui's window switcher.
     ImGui::GetCurrentContext()->ConfigNavWindowingKeyNext = 0;
     ImGui::GetCurrentContext()->ConfigNavWindowingKeyPrev = 0;
@@ -1118,6 +1119,10 @@ int RunGui(const GuiOptions& options) {
             ImGui::TextUnformatted("Выберите язык интерфейса.");
             ImGui::TextDisabled("It can be changed later in Settings. / Можно изменить в настройках.");
             ImGui::Spacing();
+            // And the problem sounds (off by default), asked once with the language.
+            if (ImGui::Checkbox("Warning and error sounds / Звуки предупреждений и ошибок", &library.sfxEnabled))
+                alerts::SetSound(library.sfxEnabled);
+            ImGui::Spacing();
             for (i18n::Lang lang : {i18n::Lang::English, i18n::Lang::Russian}) {
                 if (lang != i18n::Lang::English) ImGui::SameLine();
                 if (ImGui::Button(i18n::NativeName(lang), ImVec2(140, 0))) {
@@ -1248,7 +1253,7 @@ static void DrawFileProcessingTab(const TabInfo* tabs, size_t count) {
     }
     ImGui::EndDisabled();
     ImGui::SameLine();
-    if (ImGui::Button("Clear Log", ImVec2(110, 32))) {
+    if (ImGui::Button("Clear log", ImVec2(110, 32))) {
         g_log.clear();
     }
     ImGui::SameLine();

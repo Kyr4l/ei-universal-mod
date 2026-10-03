@@ -502,6 +502,14 @@ struct Generator {
     }
 };
 
+// The tile map only (no graph): what units walk on, per layer (Generator::Nibble, factor).
+inline bool BuildTiles(const mpr::Map& terrain, const std::vector<Object>& objects, Generator& g, std::string& err) {
+    if (!g.LoadTerrain(terrain, err)) return false;
+    for (const Object& o : objects) g.AddObject(o);
+    g.ComputeValues();
+    return true;
+}
+
 // The whole generation: terrain, then the objects, then the tile values and the graph.
 inline bool Generate(const mpr::Map& terrain, const std::vector<Object>& objects, std::vector<uint8_t>& payload, std::string& err) {
     Generator g;

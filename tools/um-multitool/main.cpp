@@ -257,6 +257,7 @@ static int StartGui(int argc, char* argv[], int first) {
     return RunGui(options);
 }
 
+#ifndef _WIN32 // the desktop and bash helpers are Linux-only
 static const char* BashCompletionScript(); // defined with the completion code below
 
 // An earlier version added these two lines to ~/.bashrc (a comment, then the line that loads the completion).
@@ -285,6 +286,7 @@ static bool BashrcRemove(const fs::path& bashrc) {
     out << result;
     return out.good();
 }
+#endif
 
 // `um-multitool install-desktop [--remove]` (Linux): installs um-multitool.desktop and the icon for the
 // current user (~/.local/share/applications, and the 256-pixel icon in ~/.local/share/icons/hicolor),
@@ -441,7 +443,9 @@ static const char* kBashCompletion =
     "    COMPREPLY=($(compgen -W \"$(\"${COMP_WORDS[0]}\" __complete \"${COMP_WORDS[@]:1:COMP_CWORD}\" 2>/dev/null)\" -- \"$cur\"))\n"
     "}\n"
     "complete -o default -F _um_multitool um-multitool\n";
+#ifndef _WIN32
 static const char* BashCompletionScript() { return kBashCompletion; }
+#endif
 
 int main(int argc, char* argv[]) {
     if (argc >= 2 && std::string(argv[1]) == "__complete") {

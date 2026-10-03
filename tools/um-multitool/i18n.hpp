@@ -1,7 +1,7 @@
 // The GUI's display language. English is the language of the source: every UI text in the code is
 // English, and for Russian the texts are swapped at drawing time by the hook in vendor/imgui
 // (UmTranslateText for plain text, UmTranslateFmt for printf-style formats) using the table in
-// i18n_ru.inc. A text without an entry in the table stays English. The choice is kept in
+// lang/ru.txt (beside the program: editable without a rebuild). A text without an entry in the table stays English. The choice is kept in
 // um-multitool.cfg (LANGUAGE=en / ru); when it is missing the first-start popup asks for it.
 #pragma once
 

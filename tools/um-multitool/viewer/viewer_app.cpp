@@ -354,7 +354,7 @@ static void GifDialog(App& app, int maxSize) {
     ImGui::InputText("##gifpath", app.gifPath, sizeof(app.gifPath));
     ImGui::SameLine();
     std::string picked;
-    if (ImGui::Button("Browse...") && ui::PickSaveFile(app.gifPath, picked)) std::snprintf(app.gifPath, sizeof(app.gifPath), "%s", picked.c_str());
+    if (ImGui::Button("File...") && ui::PickSaveFile(app.gifPath, picked)) std::snprintf(app.gifPath, sizeof(app.gifPath), "%s", picked.c_str());
     ImGui::BeginDisabled(!app.scene.hasModel);
     if (ImGui::Button(app.gifPreview ? "Stop preview" : "Preview", ImVec2(120, 0))) {
         app.gifPreview = !app.gifPreview;
