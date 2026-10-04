@@ -45,6 +45,7 @@
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+#include <ctime>
 #include <unordered_map>
 #include <map>
 #include <sys/stat.h>
@@ -54,6 +55,7 @@
 #include <utime.h>
 #endif
 
+#include "text_groups.hpp"
 #include "subtools.hpp"
 
 namespace fs = std::filesystem;
@@ -189,6 +191,8 @@ struct ArchiveFile {
 // Unpack Operation: .res -> Directory
 // ============================================================================
 
+static bool g_groupTexts = false; // --grouped-texts: unpack as <TYPE>.umtexts files (texts.res / textslmp.res)
+
 static bool UnpackResArchive(
     const uint8_t* resData,
     size_t resSize,
@@ -276,6 +280,10 @@ static bool UnpackResArchive(
         }
     }
 
+    if (g_groupTexts && !dryRun) { // the loose files just written, grouped by string type
+        int n = 0;
+        if (!textgroups::GroupFolder(outDir, {}, n, err)) return false;
+    }
     return true;
 }
 
@@ -292,8 +300,25 @@ static bool PackResArchive(
 {
     std::vector<ArchiveFile> files;
 
+    // A grouped texts folder (<TYPE>.umtexts files, text_groups.hpp): its entries, not the group files themselves.
+    if (textgroups::IsGrouped(inDir)) {
+        std::vector<std::string> skip;
+        for (const fs::path& e : fs::directory_iterator(inDir)) {
+            std::string low = e.filename().string();
+            std::transform(low.begin(), low.end(), low.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            if (std::find(excludeNames.begin(), excludeNames.end(), low) != excludeNames.end()) skip.push_back(e.filename().string());
+        }
+        const uint32_t now = static_cast<uint32_t>(std::time(nullptr));
+        for (auto& [name, data] : textgroups::LoadFolder(inDir, skip)) {
+            std::string low = name;
+            std::transform(low.begin(), low.end(), low.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+            if (std::find(excludeNames.begin(), excludeNames.end(), low) != excludeNames.end()) continue;
+            files.push_back({name, data, now});
+        }
+    }
+
     // Collect all files recursively
-    try {
+    if (files.empty()) try {
         for (const auto& entry : fs::recursive_directory_iterator(inDir)) {
             if (!entry.is_regular_file()) continue;
 
@@ -699,6 +724,8 @@ static void PrintHelp() {
               << "  -s, --strip-ext       Strip _res and _mq directory suffixes when packing (default: on)\n"
               << "  --no-strip-ext        Do not strip directory suffixes when packing\n"
               << "  --ext <extension>     Override output archive extension (e.g. .mq, .res)\n"
+              << "  --grouped-texts       Unpack texts.res / textslmp.res as <TYPE>.umtexts files (a few files instead of\n"
+              << "                        one per entry); packing a folder of .umtexts files is automatic\n"
               << "  -e, --exclude <name>  Exclude file(s) by exact name when packing (repeatable, or comma-separated)\n"
               << "  --pack                Force pack directory -> archive\n"
               << "  --unpack              Force unpack archive -> directory\n"
@@ -737,6 +764,8 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
             opt.action = ToolAction::Pack;
         } else if (arg == "--unpack") {
             opt.action = ToolAction::Unpack;
+        } else if (arg == "--grouped-texts") {
+            g_groupTexts = true;
         } else if (arg == "--ext") {
             if (i + 1 < argc) {
                 opt.customExt = argv[++i];

@@ -458,12 +458,16 @@ update_version_info() {
     sed -i "s/^Version=.*/Version=$current_version/" "$INI_DIR/config.ini" 2>/dev/null || true
 
     # Update version_name in texts folders
+    # (through um-multitool: the entry may be a loose file or inside STRING.umtexts, the grouped texts format)
+    local versiontmp
+    versiontmp="$(mktemp)"
     for textsres in "$RES_TEXTS_DIR"/texts-*_res; do
-        local stringversionname="$textsres/string version_name"
-        cp -fvL "$VERSION_TEMPLATE" "$stringversionname"
-        sed -i "s/ver\./ver. $current_version/" "$stringversionname"
-        sed -i "s/post-commit\./post-commit. $commit_hash/" "$stringversionname"
+        cp -fL "$VERSION_TEMPLATE" "$versiontmp"
+        sed -i "s/ver\./ver. $current_version/" "$versiontmp"
+        sed -i "s/post-commit\./post-commit. $commit_hash/" "$versiontmp"
+        bin/um-multitool texts --set "$textsres" "string version_name" "$versiontmp"
     done
+    rm -f "$versiontmp"
     log_ok "Version $current_version (commit $commit_hash) written across configs"
 }
 
@@ -497,7 +501,8 @@ pack_texts_resources() {
         local langpackdir="$MOD_DIR/lang-packs/$langcode/res"
         mkdir -p "$langpackdir"
 
-        bin/um-multitool restool --pack "$restexts" -o "$langpackdir/$targetname"
+        # texts --pack reads both layouts: grouped <TYPE>.umtexts files and loose files (one per entry)
+        bin/um-multitool texts --pack "$restexts" -o "$langpackdir/$targetname"
 
         # Primary English language is copied directly to mod root res
         if [[ "$langcode" == "eng" ]]; then

@@ -1,0 +1,299 @@
+# um-texts 1
+=== UNIT Banshee_Fighter1_J1
+Royal banshee
+
+=== UNIT Banshee_Mage1_J1
+Royal banshee mag
+
+=== UNIT BoarDark_J1
+Black boar
+
+=== UNIT Cyclope_33
+Baby armadillo
+
+=== UNIT Deer1J
+Young deer
+
+=== UNIT Deer2J
+Adult deer
+
+=== UNIT DeerC1J
+Sick young deer
+
+=== UNIT DeerC2J
+Sick adult deer
+
+=== UNIT DeerQ1J
+Crazy young deer
+
+=== UNIT DeerQ1Z
+Dead young deer
+
+=== UNIT DeerQ2J
+Crazy adult deer
+
+=== UNIT DeerQ2Z
+Dead adult deer
+
+=== UNIT Dog_J1
+Dog
+
+=== UNIT Dragon1J
+Ancient dragon
+
+=== UNIT Dragon2J
+Ancient dragon
+
+=== UNIT Dragon3J
+Ancient dragon
+
+=== UNIT Fox1_J1
+Young fox
+=== UNIT Fox2_J1
+Adult fox
+
+=== UNIT Fox3_J1
+Old fox
+=== UNIT HCityFemale1
+Baby armadillo
+
+=== UNIT HCityFemale2
+Baby armadillo
+
+=== UNIT HCityMale1
+Baby armadillo
+
+=== UNIT HCityMale2
+Baby armadillo
+
+=== UNIT HHAJ15
+Young khadaganian archer
+
+=== UNIT HHAJ15bad
+Young khadaganian archer-betrayer
+
+=== UNIT HHAJ17
+Khadaganian archer
+
+=== UNIT HHAJ17bad
+Khadaganian archer-betrayer
+
+=== UNIT HHAJ21
+Khadaganian archer
+
+=== UNIT HHAJ21bad
+Khadaganian archer-betrayer
+
+=== UNIT HHAJ25
+Khadaganian archer
+
+=== UNIT HHAJ25bad
+Khadaganian archer-betrayer
+
+=== UNIT HHAJ29
+Khadaganian archer
+
+=== UNIT HHAJ29bad
+Khadaganian archer-betrayer
+
+=== UNIT HHFJ15
+Young khadaganian warrior
+
+=== UNIT HHFJ15bad
+Young khadaganian warrior-betrayer
+
+=== UNIT HHFJ17
+Khadaganian fighter
+
+=== UNIT HHFJ17bad
+Khadaganian fighter-betrayer
+
+=== UNIT HHFJ21
+Khadaganian fighter
+
+=== UNIT HHFJ21bad
+Khadaganian fighter-betrayer
+
+=== UNIT HHFJ25
+Khadaganian fighter
+
+=== UNIT HHFJ25bad
+Khadaganian fighter-betrayer
+
+=== UNIT HHFJ29
+Khadaganian fighter
+
+=== UNIT HHFJ29bad
+Khadaganian fighter-betrayer
+
+=== UNIT HHJ15
+Royal banshee
+
+=== UNIT HHJ15bad
+Royal banshee-betrayer
+
+=== UNIT HHJ25
+Khadaganian 
+
+=== UNIT HHJ29
+Khadaganian 
+
+=== UNIT HHMJ15
+Young khadaganian mage
+
+=== UNIT HHMJ15bad
+Young khadaganian mage-betrayer
+
+=== UNIT HHMJ17
+Khadaganian mage
+
+=== UNIT HHMJ17bad
+-betrayerKhadaganian mage-betrayer
+
+=== UNIT HHMJ21
+Khadaganian mage
+
+=== UNIT HHMJ21bad
+Khadaganian mage-betrayer
+
+=== UNIT HHMJ25
+Khadaganian mage
+
+=== UNIT HHMJ25bad
+Khadaganian mage-betrayer
+
+=== UNIT HHMJ29
+Khadaganian mage
+
+=== UNIT HHMJ29bad
+Khadaganian mage-betrayer
+
+=== UNIT Human_Gangster_M_J1
+Highwayman
+
+=== UNIT Human_Gangster_M_J2
+Highwayman
+
+=== UNIT Human_Gangster_M_J3
+Highwayman leader
+
+=== UNIT Human_Hadagan_Archer_J1
+Khadaganian archer
+
+=== UNIT Human_Hadagan_Fighter_J1
+Khadaganian fighter
+
+=== UNIT Human_Hadagan_Mage_J1
+Khadaganian mage
+
+=== UNIT Human_Hadagan_Recon_J1
+Khadaganian recon
+
+=== UNIT Human_Peasant_F_J1
+Peasant Woman
+
+=== UNIT Human_Peasant_M_J1
+Peasant
+
+=== UNIT KCityFemale1
+Worker
+
+=== UNIT KCityFemale2
+Citizen
+
+=== UNIT KCityMale1
+Worker
+
+=== UNIT KCityMale2
+Citizen
+
+=== UNIT Ogre2_J1
+Ogre
+
+=== UNIT Ogre3_J1
+Massive ogre
+
+=== UNIT Ogre_J1
+Ogre
+
+=== UNIT PrisonGuardA17
+Khadaganian gaoler
+
+=== UNIT PrisonGuardF17
+Khadaganian gaoler
+
+=== UNIT PrisonGuardF18
+Khadaganian gaoler-keykeeper
+
+=== UNIT PrisonGuardM17
+Khadaganian gaoler
+
+=== UNIT PrisonLeaderF29
+Prison wander
+
+=== UNIT PrisonLeaderWifeM25
+Prison mage
+
+=== UNIT Scrab0_J1
+Young armadillo
+
+=== UNIT ScrabField2_J1
+Armadillo
+
+=== UNIT ScrabField3_J1
+Adult armadillo
+
+=== UNIT ScrabField4_J1
+Queen armadillo
+
+=== UNIT ScrabField_J1
+Baby armadillo
+
+=== UNIT Scrab_J1
+Adult armadillo
+
+=== UNIT Shadow_J1
+Shadow
+
+=== UNIT Skeleton_J1
+Armored skeleton
+
+=== UNIT Succub_J1
+Adult harpy
+
+=== UNIT Tiger_J1
+Giant tiger
+
+=== UNIT Toad1_J1
+Little toad
+
+=== UNIT Toad2_J1
+Giant toad
+
+=== UNIT Toad3_J1
+Old giant toad
+
+=== UNIT WolfBrown2_J1
+Brown wolf
+
+=== UNIT WolfBrown_J1
+Brown wolf
+
+=== UNIT Zombie_F2_J1
+Zombie warrior
+=== UNIT Zombie_F_J1
+Zombie warrior
+=== UNIT Zombie_M2_J1
+Zombie warrior
+
+=== UNIT Zombie_M_J1
+Zombie warrior
+
+=== UNIT lmp_Human_Gipath_Fighter_2
+Unexperienced Brigand
+
+=== UNIT lmp_Spider_17
+Spider Queen
+
+=== UNIT lmp_Unique_Undead_Hadagan_Leader_12
+Undead Treasure Hunter

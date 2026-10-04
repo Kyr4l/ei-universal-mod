@@ -1,0 +1,83 @@
+# um-texts 1
+=== briefing intro_4k
+Get to know the artisan
+#show Hero
+#show Stark
+#ANIMATION 5
+#CAMERA 11
+#phrase Stark 1
+So are you the strangers who came through the old portal?
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+Nah, we just spawned here cause it's a multiplayer lobby.
+#phrase Stark 3
+bruh wtf...
+
+=== briefing intro_c
+Greet the merchant
+#show Hero
+#show Shemale
+#ANIMATION 39
+#CAMERA 0
+#phrase Hero 1
+Hello, great woman!
+#CAMERA 11
+#phrase Shemale 2
+Hello.
+
+=== briefing intro_f
+Pay Homage to Lord Firez
+#show Hero
+#show Firez
+#ANIMATION 26
+#CAMERA 0
+#phrase Hero 1
+Greetings, Your Excellency! How may I earn your trust?
+#ANIMATION 57
+#CAMERA 11
+#phrase Firez 2
+Survive your first week.
+#ANIMATION 32
+#CAMERA 10
+#phrase Hero 3
+I want to help Khadagan reclaim its greatness on Jigran and be a part of it.
+#ANIMATION 11
+#CAMERA 11
+#phrase Firez 4
+Excellent. I need the living. I already have enough of the dead.
+
+=== briefing intro_m
+Salute the Marshall
+#show Hero
+#show Marshal
+#ANIMATION 24
+#CAMERA 2
+#phrase Hero 1
+Greetings, noble sir!
+#ANIMATION 15
+#CAMERA 3
+#phrase Marshal 2
+The Empire needs people willing to act, not just talk. If you're looking for action, you'll find it.
+#CAMERA 2
+#phrase Hero 3
+I will try to affirm your hospitality, but now I need to get ready...
+#CAMERA 3
+#phrase Marshal 4
+At ease!
+
+=== briefing intro_s
+Get to know the Master Sukro
+#show Hero
+#show Sukro
+#ANIMATION 5
+#CAMERA 11
+#phrase Sukro 1
+Greetings. I am Master Sukro, an excellent blacksmith. It's always good to see new faces in our town, especially those willing to lend a hand in these difficult times.
+#ANIMATION 15
+#CAMERA 10
+#phrase Hero 2
+And I greet you, noble blacksmith. I hope you will do something for me as well?
+#phrase Sukro 3
+Of course. But since you're not in Hadagan's service under Lord Firez, I'll be selling my craft. The results, however, won't disappoint you!
+

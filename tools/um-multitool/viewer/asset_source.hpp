@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "res_archive.hpp"
+#include "../text_groups.hpp"
 
 namespace fs = std::filesystem;
 
@@ -29,6 +30,7 @@ struct AssetSource {
     // genuinely exist on a case-sensitive filesystem like Linux's. Built once
     // in Load(), keyed by ToLower(filename) -> the real on-disk filename.
     std::map<std::string, std::string> lowerToReal;
+    res::Archive grouped; // a folder's grouped texts (.umtexts files, text_groups.hpp)
 
     bool Load(const std::string& path, std::string& err) {
         valid = false;
@@ -45,7 +47,13 @@ struct AssetSource {
             for (auto& entry : fs::directory_iterator(root, ec)) {
                 if (!entry.is_regular_file()) continue;
                 std::string name = entry.path().filename().string();
+                if (entry.path().extension() == textgroups::kExt) continue;
                 lowerToReal[res::Archive::ToLower(name)] = name;
+            }
+            grouped = res::Archive{}; // grouped texts (.umtexts): their entries, under the loose files
+            for (auto& [name, data] : textgroups::LoadFolder(root)) {
+                if (lowerToReal.count(res::Archive::ToLower(name))) continue;
+                grouped.entries[res::Archive::ToLower(name)] = {name, data};
             }
             return true;
         }
@@ -66,7 +74,7 @@ struct AssetSource {
     bool Contains(const std::string& name) const {
         if (!valid) return false;
         if (isArchive) return archive.Contains(name);
-        return lowerToReal.find(res::Archive::ToLower(name)) != lowerToReal.end();
+        return lowerToReal.find(res::Archive::ToLower(name)) != lowerToReal.end() || grouped.Contains(name);
     }
 
     bool ReadFile(const std::string& name, std::vector<uint8_t>& out) const {
@@ -78,7 +86,12 @@ struct AssetSource {
             return true;
         }
         auto it = lowerToReal.find(res::Archive::ToLower(name));
-        if (it == lowerToReal.end()) return false;
+        if (it == lowerToReal.end()) {
+            const std::vector<uint8_t>* g = grouped.Find(name);
+            if (!g) return false;
+            out = *g;
+            return true;
+        }
         std::ifstream f(root / it->second, std::ios::binary);
         if (!f.is_open()) return false;
         out.assign(std::istreambuf_iterator<char>(f), std::istreambuf_iterator<char>());

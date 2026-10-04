@@ -34,7 +34,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.10";
+static const char* const kVersion = "0.11";
 
 
 struct App {

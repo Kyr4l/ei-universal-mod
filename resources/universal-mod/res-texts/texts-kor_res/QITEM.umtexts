@@ -1,0 +1,30 @@
+# um-texts 1
+=== QITEM Wand_1 Corundum
+강옥 지팡이
+석기 지팡이 중 가장 단단하고 가장 비싸다...
+=== QITEM Wand_1 Jade
+비취 지팡이
+석기 지팡이 중 최고.
+=== QITEM Wand_1 Malachite
+흑요석 지팡이
+최고의 석기 지팡이 중 하나.
+=== QITEM Wand_3 Alloy
+Alloy wand
+<placeholder>
+
+=== QITEM Wand_4 Alloy
+Decorative alloy wand
+<placeholder>
+
+=== QITEM Wand_6 Diamond
+다이아몬드 마법 구슬
+진정한 마법사만이 이 구슬을 사용할 수 있다.
+=== QITEM Wand_7 Diamond
+다이아몬드 마법 부적
+진정한 힘의 부적. 아무나 이 힘을 감당할 수는 없다.
+=== QITEM Wand_8 Diamond
+다이아몬드 마법 반지
+마력을 뿜으며 진정한 힘을 방사하는 반지.
+=== QITEM Wand_9 Diamond
+다이아몬드 마법 지팡이
+순수한 다이아몬드로 만들어진 지팡이. 이보다 더 강한 마법 지팡이는 없다.

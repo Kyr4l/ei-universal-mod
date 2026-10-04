@@ -1,0 +1,41 @@
+# um-texts 1
+=== QUESTITEM DoorKey00
+Prison gates key
+This key opens the prison gates.
+
+=== QUESTITEM KKey01
+Key to the mine gates
+Will open the gates to the mine in the northern area of the mine.
+
+=== QUESTITEM KKey02
+Key to the mine
+This key is needed to enter the eastern part of the mine.
+
+=== QUESTITEM KKey03
+Key from the ravine gate
+With this key, you can enter the ravine in the southeastern area of the city.
+
+=== QUESTITEM KKey04
+Key from the gate to the secret cave
+With this key you can open the entrance to a cave with an artifact.
+
+=== QUESTITEM KKey05
+The Gate Key
+With this key you can open the gate to a cave with a portal.
+
+=== QUESTITEM KKey06
+Key to Neglected Mines
+With this key you can open the gates to the neglected mines.
+
+=== QUESTITEM KKey07
+Key
+Such keys are used for levers in mines.
+
+=== QUESTITEM Ogrestuff
+Ogre's necklace
+Probably the ogre has discovered the loss of his necklace by now...will he figure out how he lost it?
+
+=== QUESTITEM TeleportKey01
+Portal Key
+This key activates the Portal.
+

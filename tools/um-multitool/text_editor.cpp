@@ -10,6 +10,7 @@
 // CP1251 (English and the Russian game), and each file its line ends (CRLF or LF). Texts inside .res
 // archives are read-only here (unpack the archive with RES / MQ to edit them).
 
+#include "text_groups.hpp"
 #include "text_editor.hpp"
 
 #include <algorithm>
@@ -129,13 +130,8 @@ void LoadPack(Pack& p) {
         std::error_code ec;
         s.folder = fs::is_directory(s.path, ec);
         s.ok = false;
-        if (s.folder) {
-            for (const auto& entry : fs::directory_iterator(s.path, ec)) {
-                if (!entry.is_regular_file()) continue;
-                std::ifstream f(entry.path(), std::ios::binary);
-                std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-                AddFile(p, static_cast<int>(i), entry.path().filename().string(), bytes);
-            }
+        if (s.folder) { // loose files and grouped .umtexts files (text_groups.hpp)
+            for (const auto& [name, bytes] : textgroups::LoadFolder(s.path)) AddFile(p, static_cast<int>(i), name, bytes);
             s.ok = true;
         } else if (fs::is_regular_file(s.path, ec)) {
             std::ifstream f(s.path, std::ios::binary);
@@ -257,10 +253,8 @@ void Save(const std::string& key) {
     if (finalNewline) out += crlf ? "\r\n" : "\n";
     int lost = 0;
     const std::vector<uint8_t> bytes = Encode(out, enc == Encoding::Ascii ? Encoding::Cp1251 : enc, lost);
-    std::ofstream f(path, std::ios::binary);
-    if (!f) { Say("Cannot write " + path, true); return; }
-    f.write(reinterpret_cast<const char*>(bytes.data()), static_cast<std::streamsize>(bytes.size()));
-    f.close();
+    std::string err; // into its .umtexts group when the folder is grouped, else a loose file
+    if (!textgroups::SetEntry(fs::path(path).parent_path(), name, bytes, err)) { Say(err, true); return; }
     // Keep the pack in step without reading everything again.
     int source = 0;
     for (size_t i = 0; i < p.sources.size(); ++i)

@@ -1,0 +1,21 @@
+# um-texts 1
+=== MODIFIER a0
+Half Area
+Increase the spell's initial coverage area by half.
+-A+
+
+=== MODIFIER d0
+Half Duration
+Increases the spell's duration by half.
+-D+
+
+=== MODIFIER e0
+Half Effect
+Increases the spell's effect by half.
+-E+
+
+=== MODIFIER r0
+Half Range
+Increases the spell's range by half.
+-R+
+

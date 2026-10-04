@@ -40,6 +40,8 @@
 
 #include "gui.hpp"
 #include "version.hpp"
+#include "text_groups.hpp"
+#include "viewer/res_archive.hpp"
 #include "subtools.hpp"
 #include "viewer/viewer_app.hpp"
 #include "mapedit/map_app.hpp"
@@ -79,6 +81,7 @@ static void PrintTopLevelHelp() {
               << "  inireg   (alias: ini)   Convert configs between .ini <-> .reg\n"
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
               << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n"
+              << "  texts                   texts.res / textslmp.res as a few grouped .umtexts files (pack, unpack, group, set)\n"
               << "  xlsxdb   (alias: db)    Compile .xlsx / .ods gameplay databases to .res\n"
               << "  dbexport                Export .res gameplay databases to .xlsx / .ods (the reverse of xlsxdb)\n"
               << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
@@ -109,7 +112,69 @@ static void PrintTopLevelVersion() {
               << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport (each 1.0), the GUI, the 3D Viewer and the Map Editor\n";
 }
 
-enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport };
+// texts: a texts.res folder as a few <TYPE>.umtexts files (text_groups.hpp).
+static int RunTexts(int argc, char* argv[]) {
+    std::string mode, in, out, setName, setFile;
+    bool loose = false;
+    std::vector<std::string> exclude;
+    for (int i = 1; i < argc; ++i) {
+        const std::string a = argv[i];
+        if (a == "texts") continue;
+        if (a == "--pack" || a == "--unpack" || a == "--group") { mode = a.substr(2); if (i + 1 < argc) in = argv[++i]; }
+        else if (a == "--set" && i + 3 < argc) { mode = "set"; in = argv[++i]; setName = argv[++i]; setFile = argv[++i]; }
+        else if ((a == "-o" || a == "--output") && i + 1 < argc) out = argv[++i];
+        else if ((a == "-e" || a == "--exclude") && i + 1 < argc) exclude.push_back(argv[++i]);
+        else if (a == "--loose") loose = true;
+        else { mode = "help"; }
+    }
+    if (mode.empty() || mode == "help" || in.empty()) {
+        std::cout << "um-multitool texts - texts.res / textslmp.res kept as a few grouped files\n\n"
+                     "  texts --unpack <texts.res> -o <folder> [--loose]   one <TYPE>.umtexts per string type (ARMOR, WEAPON,\n"
+                     "                                                       string...); --loose: one file per entry, as before\n"
+                     "  texts --pack <folder> -o <texts.res> [-e <name>]   from .umtexts files and/or loose files\n"
+                     "  texts --group <folder> [-e <name>]                 turns a folder's loose files into .umtexts files\n"
+                     "  texts --set <folder> <entry name> <file>           sets one entry (in its .umtexts, or loose)\n\n"
+                     "A .umtexts file: \"# um-texts 1\", then per entry a \"=== <name>\" line and its text byte for byte.\n";
+        return mode == "help" ? 0 : 1;
+    }
+    std::string err;
+    if (mode == "unpack") {
+        std::ifstream f(in, std::ios::binary);
+        std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
+        res::Archive a;
+        if (!res::ParseArchive(bytes, a, err)) { std::cerr << in << ": " << err << "\n"; return 1; }
+        if (out.empty()) out = std::filesystem::path(in).stem().string() + "_res";
+        textgroups::Entries es;
+        for (const auto& kv : a.entries) es[kv.second.originalName] = kv.second.data;
+        std::filesystem::create_directories(out);
+        if (loose) { for (const auto& kv : es) if (!textgroups::WriteAll(std::filesystem::path(out) / kv.first, kv.second)) { std::cerr << "cannot write " << kv.first << "\n"; return 1; } }
+        else if (!textgroups::SaveGroups(out, es, err)) { std::cerr << err << "\n"; return 1; }
+        std::cout << es.size() << " entries -> " << out << (loose ? " (loose files)" : " (grouped)") << "\n";
+        return 0;
+    }
+    if (mode == "pack") {
+        const textgroups::Entries es = textgroups::LoadFolder(in, exclude);
+        if (out.empty()) { std::cerr << "texts --pack: -o <texts.res> is needed\n"; return 1; }
+        std::map<std::string, std::vector<uint8_t>> files(es.begin(), es.end());
+        const std::vector<uint8_t> archive = res::WriteArchive(files, static_cast<uint32_t>(std::time(nullptr)));
+        if (!textgroups::WriteAll(out, archive)) { std::cerr << "cannot write " << out << "\n"; return 1; }
+        std::cout << es.size() << " entries -> " << out << "\n";
+        return 0;
+    }
+    if (mode == "group") {
+        int n = 0;
+        if (!textgroups::GroupFolder(in, exclude, n, err)) { std::cerr << err << "\n"; return 1; }
+        std::cout << n << " entries grouped in " << in << "\n";
+        return 0;
+    }
+    std::vector<uint8_t> text;
+    if (!textgroups::ReadAll(setFile, text)) { std::cerr << "cannot read " << setFile << "\n"; return 1; }
+    if (!textgroups::SetEntry(in, setName, text, err)) { std::cerr << err << "\n"; return 1; }
+    std::cout << "set " << setName << " in " << in << "\n";
+    return 0;
+}
+
+enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport, Texts };
 
 static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "ddsmmp" || tok == "dds")  return SubTool::DdsMmp;
@@ -118,6 +183,7 @@ static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "restool" || tok == "res") return SubTool::ResTool;
     if (tok == "xlsxdb" || tok == "db")   return SubTool::XlsxDb;
     if (tok == "dbexport")                return SubTool::DbExport;
+    if (tok == "texts")                   return SubTool::Texts;
     return SubTool::None;
 }
 
@@ -129,6 +195,7 @@ static int DispatchTo(SubTool tool, int argc, char* argv[]) {
         case SubTool::ResTool: return RunResTool(argc, argv);
         case SubTool::XlsxDb:  return RunXlsxDb(argc, argv);
         case SubTool::DbExport: return RunDbExport(argc, argv);
+        case SubTool::Texts: return RunTexts(argc, argv);
         default: return 1;
     }
 }
@@ -403,9 +470,10 @@ static const CompletionEntry kCompletions[] = {
     {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds --plain32 -h --help --version"},
     {"inireg",   "-d --dir -m --multi -o --output --dry-run --ini2reg --reg2ini -h --help --version"},
     {"mobdump",  "-d --dir -m --multi -o --output --dry-run -h --help --version"},
-    {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version"},
+    {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --grouped-texts --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version"},
     {"xlsxdb",   "-o --output --check --no-check -h --help --version"},
     {"dbexport", "-o --output -h --help"},
+    {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help"},
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help"},
     {"map",      "--check --navmesh --mpr --write --force --config --help"},
     {"dll",      "--port --listen --stats --help"},

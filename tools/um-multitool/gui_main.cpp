@@ -632,6 +632,7 @@ struct ResToolTab {
     bool multiThread = false;
     bool dryRun = false;
     bool stripExt = true;
+    bool groupTexts = false;
     int action = 0; // 0=auto, 1=pack, 2=unpack
 };
 
@@ -648,7 +649,9 @@ static void DrawResToolTab() {
     PathRow("res_out", "Output:", g_res.outputPath, sizeof(g_res.outputPath), true, false);
 
     ImGui::SetNextItemWidth(150);
-    ImGui::InputText("Ext override (--ext)", g_res.extOverride, sizeof(g_res.extOverride));
+    ImGui::InputText("Archive extension (--ext)", g_res.extOverride, sizeof(g_res.extOverride));
+    ImGui::SetItemTooltip("Packing: the extension of the archive made (.res or .mq). Empty: from the folder's suffix\n"
+                          "(foo_res -> foo.res, z3q1_mq -> z3q1.mq). Only needed when the folder name does not say.");
     ImGui::SetNextItemWidth(300);
     ImGui::InputText("Exclude (-e, comma-separated)", g_res.excludeNames, sizeof(g_res.excludeNames));
 
@@ -663,6 +666,9 @@ static void DrawResToolTab() {
     ImGui::Checkbox("Dry run (--dry-run)", &g_res.dryRun);
     ImGui::SameLine();
     ImGui::Checkbox("Strip _res/_mq suffix (-s)", &g_res.stripExt);
+    ImGui::Checkbox("Texts: grouped .umtexts files (--grouped-texts)", &g_res.groupTexts);
+    ImGui::SetItemTooltip("Unpacking texts.res / textslmp.res: one <TYPE>.umtexts file per string type (ARMOR, WEAPON...)\n"
+                          "instead of one file per entry. Packing a folder of .umtexts files works without it.");
 
     ImGui::Spacing();
     ImGui::TextUnformatted("Action:");
@@ -676,6 +682,7 @@ static std::vector<std::string> BuildResToolArgs() {
     if (g_res.dryRun) args.push_back("--dry-run");
     if (g_res.multiThread) args.push_back("-m");
     if (!g_res.stripExt) args.push_back("--no-strip-ext");
+    if (g_res.groupTexts) args.push_back("--grouped-texts");
     if (g_res.action == 1) args.push_back("--pack");
     else if (g_res.action == 2) args.push_back("--unpack");
 

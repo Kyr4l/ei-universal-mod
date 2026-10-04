@@ -348,7 +348,18 @@ public:
             Handle(buf, n);
         }
         // In the session: an update every 20 ms (as the game): the ack bits, our stream part, the JOIN after a change.
-        if (state == State::Accepted) Enter();
+        if (state == State::Accepted) { Enter(); RespawnSteps(); }
+        // The view point (0x40 + f32 x, y in map units), as the game's client sends its camera's about twice a second:
+        // the server may send each client what is around it.
+        if (state == State::Accepted && worldUnit && Now() - viewAt_ > 0.5) {
+            float x, y;
+            if (Where(worldUnit, x, y)) {
+                std::vector<uint8_t> m{0x40};
+                uint32_t u; std::memcpy(&u, &x, 4); Put32(m, u); std::memcpy(&u, &y, 4); Put32(m, u);
+                StreamMessage(m);
+            }
+            viewAt_ = Now();
+        }
         if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
         // Fight: the nearest unit (not a player's hero) within sight, attacked again every 3 s while it stays the target;
         // nothing in sight: follow the host as usual.
@@ -507,7 +518,8 @@ private:
     std::vector<uint8_t> tx_; size_t txSent_ = 0;
     std::map<uint16_t, std::vector<uint8_t>> rxChunks_; std::vector<uint8_t> rx_; size_t rxParsed_ = 0;
     enum class Phase { Lobby, Loading, Entering, InWorld } phase_ = Phase::Lobby;
-    double phaseAt_ = 0;
+    double phaseAt_ = 0, respawnAt_ = -1, viewAt_ = 0;
+    int respawnStep_ = 0;
     bool heroJoined_ = false;
     int dumped_ = 0;
     double followAt_ = 0, fightAt_ = 0, attackedAt_ = 0;
@@ -554,23 +566,38 @@ private:
             phase_ = Phase::Loading; phaseAt_ = Now(); SetJoin(3, heroId_);
             Log("the zone of " + chosenQuest + " is open: entering it");
         } else if (phase_ == Phase::Loading && Now() - phaseAt_ > 0.5) {
-            std::vector<uint8_t> up{0x08};
-            up.insert(up.end(), chosenQuest.begin(), chosenQuest.end()); up.push_back(0);
-            const size_t zoneEnd = static_cast<size_t>(std::find(mpRaw_.begin(), mpRaw_.end(), 0) - mpRaw_.begin()) + 1;
-            up.insert(up.end(), mpRaw_.begin() + static_cast<long>(std::min(zoneEnd, mpRaw_.size())), mpRaw_.end());
-            up.push_back(0);
-            uint8_t block[136] = {};
-            const uint32_t version = 100;
-            std::memcpy(block, &version, 4);
-            // The player's profile: its own name (the character's, without the clan tag), not the copied "Tango".
-            const std::string profile = profileName.empty() ? name_.substr(0, name_.find(" | ")) : profileName;
-            std::memcpy(block + 4, profile.data(), std::min<size_t>(profile.size(), 63));
-            std::memcpy(block + 68, "Very top secret", 15); // the game's default password
-            up.insert(up.end(), block, block + 136);
-            StreamMessage(up);
+            StreamMessage(Upload());
             phase_ = Phase::Entering; phaseAt_ = Now();
         }
     }
+    // After a death the game's client enters again (capture 2026-10-04): JOIN 3, the upload (08 + the .mp + the
+    // identity), "09" ready, JOIN 0 with the character's id. The new unit is already known (our kind-1 record).
+    std::vector<uint8_t> Upload() const { // 08 + the .mp content (the quest as its zone) + 00 + the 136-byte identity
+        std::vector<uint8_t> up{0x08};
+        up.insert(up.end(), chosenQuest.begin(), chosenQuest.end()); up.push_back(0);
+        const size_t zoneEnd = static_cast<size_t>(std::find(mpRaw_.begin(), mpRaw_.end(), 0) - mpRaw_.begin()) + 1;
+        up.insert(up.end(), mpRaw_.begin() + static_cast<long>(std::min(zoneEnd, mpRaw_.size())), mpRaw_.end());
+        up.push_back(0);
+        uint8_t block[136] = {};
+        const uint32_t version = 100;
+        std::memcpy(block, &version, 4);
+        // The player's profile: its own name (the character's, without the clan tag), not the copied "Tango".
+        const std::string profile = profileName.empty() ? name_.substr(0, name_.find(" | ")) : profileName;
+        std::memcpy(block + 4, profile.data(), std::min<size_t>(profile.size(), 63));
+        std::memcpy(block + 68, "Very top secret", 15); // the game's default password
+        up.insert(up.end(), block, block + 136);
+        return up;
+    }
+    void Respawned() {
+        SetJoin(3, heroId_);
+        respawnAt_ = Now();
+    }
+    void RespawnSteps() {
+        if (respawnAt_ < 0) return;
+        if (Now() - respawnAt_ > 0.5 && respawnStep_ == 0) { StreamMessage(Upload()); respawnStep_ = 1; }
+        else if (Now() - respawnAt_ > 2.5 && respawnStep_ == 1) { StreamMessage({0x09}); SetJoin(0, worldUnit); respawnStep_ = 0; respawnAt_ = -1; }
+    }
+
     // The server's stream: its first big message is the world snapshot, holding our hero's new unit id.
     void ReadStream() {
         while (rxParsed_ + 8 <= rx_.size()) {
@@ -595,7 +622,7 @@ private:
                 if (mine) {
                     worldUnit = mine; phase_ = Phase::InWorld;
                     StreamMessage({0x09});
-                    SetJoin(0, mine);
+                    SetJoin(0, mine); // the world unit: the host links the party portrait to it (the .mp's id dims it)
                     Log("in the quest world: our hero is unit " + std::to_string(mine));
                 }
             }
@@ -667,11 +694,17 @@ private:
                 if (p.name == name_ && worldUnit && p.state == 0 && p.unitId >= 0x3B9ACA00u && p.unitId <= 0x3B9ACAFFu && p.unitId != worldUnit) {
                     Log("our hero is now unit " + std::to_string(p.unitId) + " (respawned?)");
                     worldUnit = p.unitId; paceSent_ = -1; fightTarget_ = 0; attackedTarget_ = 0;
+                    Respawned(); // as the game's client after a death: the entry again (JOIN 3, upload, ready, JOIN 0)
                 }
                 break;
             }
             case 2: { u32(); text = str(); break; }           // a system line ("Quest accepted: ...")
-            case 3: { const std::string a = str(); text = a + " " + str(); break; } // a chat line (a printed pair)
+            case 3: { // a printed pair; "<address>:<port>" + the quest: the session's quest (when kind 9 was missed)
+                const std::string a = str(), q = str();
+                text = a + " " + q;
+                if (chosenQuest.empty() && a.find(':') != std::string::npos && a.find('.') != std::string::npos && !q.empty()) chosenQuest = q;
+                break;
+            }
             case 5: { str(); str(); u32(); o += 1; u32(); break; }
             case 6: case 9: text = str(); if (kind == 9) chosenQuest = text; break;
             case 7: { u32(); text = str(); break; }
