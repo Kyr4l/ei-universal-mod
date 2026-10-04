@@ -203,10 +203,10 @@ struct Reader {
         return v;
     }
 };
-inline bool Parse(const std::vector<uint8_t>& raw, Character& c, std::string& err) {
-    Reader r{raw};
-    c.zone = r.Str();
-    c.v = r.U32();
+// The party part (as in a .mp after the zone and its word; also inside a save's scenario.sav): the item and spell
+// lists with their details, the backpack, the members.
+inline bool ParseParty(Reader& r, Character& c, std::string& err) {
+    const std::vector<uint8_t>& raw = r.d;
     for (auto& list : c.lists) {
         const uint32_t n = r.U32();
         if (n > 10000) { err = "bad object count"; return false; }
@@ -250,6 +250,14 @@ inline bool Parse(const std::vector<uint8_t>& raw, Character& c, std::string& er
         m.e = r.U32();
         m.s6 = r.Str();
     }
+    if (r.bad) { err = "ends early"; return false; }
+    return true;
+}
+inline bool Parse(const std::vector<uint8_t>& raw, Character& c, std::string& err) {
+    Reader r{raw};
+    c.zone = r.Str();
+    c.v = r.U32();
+    if (!ParseParty(r, c, err)) return false;
     while (!r.bad) {
         std::string name = r.Str();
         if (name.empty()) break;
@@ -259,14 +267,11 @@ inline bool Parse(const std::vector<uint8_t>& raw, Character& c, std::string& er
     c.trailer.assign(raw.begin() + r.p, raw.end());
     return true;
 }
-inline std::vector<uint8_t> Serialize(const Character& c) {
-    std::vector<uint8_t> o;
+inline void SerializeParty(const Character& c, std::vector<uint8_t>& o) {
     auto u32 = [&](uint32_t v) { const uint8_t* b = reinterpret_cast<const uint8_t*>(&v); o.insert(o.end(), b, b + 4); };
     auto u16 = [&](uint16_t v) { o.push_back(static_cast<uint8_t>(v)); o.push_back(static_cast<uint8_t>(v >> 8)); };
     auto f32 = [&](float f) { uint32_t u; std::memcpy(&u, &f, 4); u32(u); };
     auto str = [&](const std::string& s) { o.insert(o.end(), s.begin(), s.end()); o.push_back(0); };
-    str(c.zone);
-    u32(c.v);
     for (const auto& list : c.lists) {
         u32(static_cast<uint32_t>(list.size()));
         for (const Object& x : list) { u32(x.id); u32(x.kind); u16(x.a); u16(x.b); }
@@ -293,6 +298,15 @@ inline std::vector<uint8_t> Serialize(const Character& c) {
         u32(m.e);
         str(m.s6);
     }
+}
+inline std::vector<uint8_t> Serialize(const Character& c) {
+    std::vector<uint8_t> o;
+    auto u32 = [&](uint32_t v) { const uint8_t* b = reinterpret_cast<const uint8_t*>(&v); o.insert(o.end(), b, b + 4); };
+    auto f32 = [&](float f) { uint32_t u; std::memcpy(&u, &f, 4); u32(u); };
+    auto str = [&](const std::string& s) { o.insert(o.end(), s.begin(), s.end()); o.push_back(0); };
+    str(c.zone);
+    u32(c.v);
+    SerializeParty(c, o);
     for (const QuestVar& v : c.vars) { str(v.name); f32(v.value); }
     o.push_back(0);
     o.insert(o.end(), c.trailer.begin(), c.trailer.end());

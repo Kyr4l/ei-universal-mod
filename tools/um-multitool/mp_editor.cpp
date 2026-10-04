@@ -17,6 +17,7 @@
 #include "imgui.h"
 #include "db_model.hpp"
 #include "mp_file.hpp"
+#include "sav_file.hpp"
 #include "viewer/library.hpp"
 #include "viewer/ui_common.hpp"
 
@@ -25,7 +26,7 @@ namespace fs = std::filesystem;
 
 namespace {
 
-struct Entry { std::string path, file, name, zone, error; float exp = 0; };
+struct Entry { std::string path, file, name, zone, error; float exp = 0; bool save = false; }; // save: a saves/saveNN folder
 struct Finding { char level; std::string text; }; // 'E' error, 'W' warning
 
 struct State {
@@ -34,6 +35,10 @@ struct State {
     std::vector<Entry> files;
     int selected = -1;
     mp::Character ch;
+    bool isSave = false;              // the open entry is a save: ch is its scenario.sav party
+    sav::Scenario sav;                // (the rest of scenario.sav)
+    int member = 0;                   // the party member shown (saves: the hero and the mercenaries)
+    int section = 0;                  // saves: which party-like section of scenario.sav (0: the party)
     std::vector<uint8_t> savedBytes; // Serialize(ch) as loaded / last saved (for the unsaved mark)
     std::string message;
     bool unsafe = false;              // "Allow unsafe edits"
@@ -122,6 +127,22 @@ void Rescan() {
     std::error_code ec;
     if (!fs::is_directory(g.folder, ec)) return;
     for (const auto& e : fs::directory_iterator(g.folder, ec)) {
+        if (e.is_directory() && fs::exists(e.path() / "scenario.sav", ec)) { // a single-player save
+            Entry en;
+            en.path = e.path().string();
+            en.file = e.path().filename().string();
+            en.save = true;
+            sav::Scenario sc;
+            if (sav::Load((e.path() / "scenario.sav").string(), sc, en.error)) {
+                const sav::Info info = sav::ReadInfo(en.path);
+                const mp::Member& m0 = sc.sections[0].party.members[0];
+                en.name = info.title.empty() ? (m0.strings[0].empty() ? m0.strings[4] : m0.strings[0]) : info.title;
+                en.zone = info.allod + " " + info.zone;
+                en.exp = mp::GetF(m0.stats, mp::kExpTotal);
+            }
+            g.files.push_back(en);
+            continue;
+        }
         if (!e.is_regular_file()) continue;
         std::string ext = e.path().extension().string();
         std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
@@ -140,23 +161,44 @@ void Rescan() {
     std::sort(g.files.begin(), g.files.end(), [](const Entry& a, const Entry& b) { return a.file < b.file; });
 }
 
+// A save's section (party, quest variables, money) in g.ch, and back.
+void ShowSection(int k) {
+    g.section = k;
+    g.member = 0;
+    g.ch = g.sav.sections[static_cast<size_t>(k)].party;
+}
+void StoreSection(sav::Scenario& s) {
+    s.sections[static_cast<size_t>(g.section)].party = g.ch;
+}
+std::vector<uint8_t> Bytes() { // the open file's content as it would be written
+    if (!g.isSave) return mp::Serialize(g.ch);
+    sav::Scenario s = g.sav;
+    StoreSection(s);
+    return sav::Serialize(s);
+}
 void Open(int i) {
     g.selected = i;
     g.message.clear();
     std::string err;
-    if (!mp::Load(g.files[i].path, g.ch, err)) { g.message = err; g.selected = -1; return; }
-    g.savedBytes = mp::Serialize(g.ch);
+    g.isSave = g.files[i].save;
+    g.member = 0;
+    if (g.isSave) {
+        if (!sav::Load(g.files[i].path + "/scenario.sav", g.sav, err)) { g.message = err; g.selected = -1; return; }
+        ShowSection(0);
+    } else if (!mp::Load(g.files[i].path, g.ch, err)) { g.message = err; g.selected = -1; return; }
+    g.savedBytes = Bytes();
 }
-bool Dirty() { return g.selected >= 0 && mp::Serialize(g.ch) != g.savedBytes; }
+bool Dirty() { return g.selected >= 0 && Bytes() != g.savedBytes; }
 
 void SaveCurrent() {
-    const std::string path = g.files[g.selected].path;
+    const std::string path = g.files[g.selected].path + (g.isSave ? "/scenario.sav" : "");
     std::error_code ec;
     const bool backup = !fs::exists(path + ".bak", ec);
     if (backup) fs::copy_file(path, path + ".bak", ec); // the first save keeps the original
     std::string err;
-    if (!mp::Save(path, g.ch, err)) { g.message = "Not saved: " + err; return; }
-    g.savedBytes = mp::Serialize(g.ch);
+    if (g.isSave) { StoreSection(g.sav); if (!sav::Save(path, g.sav, err)) { g.message = "Not saved: " + err; return; } }
+    else if (!mp::Save(path, g.ch, err)) { g.message = "Not saved: " + err; return; }
+    g.savedBytes = Bytes();
     g.message = "Saved" + std::string(backup ? " (the original is kept as .bak)" : "");
     const int sel = g.selected;
     Rescan();
@@ -169,7 +211,7 @@ std::vector<Finding> Check() {
     auto err = [&](const std::string& t) { out.push_back({'E', t}); };
     auto warn = [&](const std::string& t) { out.push_back({'W', t}); };
     if (g.ch.members.empty()) { err("No character in the file"); return out; }
-    const mp::Member& m = g.ch.members[0];
+    const mp::Member& m = g.ch.members[static_cast<size_t>(std::min<int>(g.member, static_cast<int>(g.ch.members.size()) - 1))];
     if (m.strings[0].empty()) err("The name is empty");
     if (std::count(m.strings[0].begin(), m.strings[0].end(), '|') > 1) warn("The name has more than one '|' (name | clan tag)");
     if (m.strings[0].size() > 31) warn("The name is long (" + std::to_string(m.strings[0].size()) + " characters): the game may cut it");
@@ -216,7 +258,7 @@ uint32_t NewId() {
     return top + 2; // the game numbers objects by 2
 }
 void RemoveRefs(uint32_t id) {
-    mp::Member& m = g.ch.members[0];
+    mp::Member& m = g.ch.members[static_cast<size_t>(std::min<int>(g.member, static_cast<int>(g.ch.members.size()) - 1))];
     for (auto& l : m.lists) l.erase(std::remove(l.begin(), l.end(), id), l.end());
     g.ch.backpack.erase(std::remove(g.ch.backpack.begin(), g.ch.backpack.end(), id), g.ch.backpack.end());
 }
@@ -297,7 +339,31 @@ void Locked() {
 }
 
 void CharacterPanel() {
-    mp::Member& m = g.ch.members[0];
+    if (g.isSave && g.sav.sections.size() > 1) { // other characters kept in the save (spare heroes, NPCs)
+        ImGui::SetNextItemWidth(260);
+        auto name = [](const sav::Section& x) { const mp::Member& mm = x.party.members[0]; return (mm.strings[0].empty() ? mm.strings[4] : mm.strings[0]) + " (" + mm.s1 + (x.party.members.size() > 1 ? ", +" + std::to_string(x.party.members.size() - 1) : "") + ")"; };
+        const std::string shown = (g.section == 0 ? "The party: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(g.section)]);
+        if (ImGui::BeginCombo("Party", shown.c_str())) {
+            for (int k = 0; k < static_cast<int>(g.sav.sections.size()); ++k)
+                if (ImGui::Selectable(((k == 0 ? "The party: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(k)]) + "##s" + std::to_string(k)).c_str(), k == g.section)) {
+                    StoreSection(g.sav); // keep this one's edits
+                    ShowSection(k);
+                }
+            ImGui::EndCombo();
+        }
+        ImGui::SetItemTooltip("A save keeps other characters in the party's format too (a spare hero, an NPC companion), each\n"
+                              "with its own quest variables and money: the party is the one with the Hero.");
+    }
+    if (g.ch.members.size() > 1) { // a save's party
+        ImGui::SetNextItemWidth(260);
+        const auto label = [](const mp::Member& mm) { return mm.strings[0].empty() ? mm.strings[4] + " (" + mm.s1 + ")" : mm.strings[0]; };
+        if (ImGui::BeginCombo("Member", label(g.ch.members[static_cast<size_t>(g.member)]).c_str())) {
+            for (int k = 0; k < static_cast<int>(g.ch.members.size()); ++k)
+                if (ImGui::Selectable((label(g.ch.members[static_cast<size_t>(k)]) + "##m" + std::to_string(k)).c_str(), k == g.member)) g.member = k;
+            ImGui::EndCombo();
+        }
+    }
+    mp::Member& m = g.ch.members[static_cast<size_t>(std::min<int>(g.member, static_cast<int>(g.ch.members.size()) - 1))];
     ImGui::SeparatorText("Character");
     // The game's names are "<name> | <clan tag>".
     std::string& full = m.strings[0];
@@ -329,9 +395,11 @@ void CharacterPanel() {
     InputFloatField("Experience (spent)", m.stats, mp::kExpSpent, 160, !g.unsafe);
     ImGui::SetItemTooltip("Spent on skills and abilities; the game's \"Your experience\" is total - spent");
     ImGui::Text("Free experience: %.0f", mp::GetF(m.stats, mp::kExpTotal) - mp::GetF(m.stats, mp::kExpSpent));
-    uint32_t money = mp::Money(g.ch);
-    ImGui::SetNextItemWidth(160);
-    if (ImGui::InputScalar("Money", ImGuiDataType_U32, &money)) mp::SetMoney(g.ch, money);
+{
+        uint32_t money = mp::Money(g.ch);
+        ImGui::SetNextItemWidth(160);
+        if (ImGui::InputScalar("Money", ImGuiDataType_U32, &money)) mp::SetMoney(g.ch, money);
+    }
 
     ImGui::SeparatorText("Attributes");
     int count = 0;
@@ -398,7 +466,7 @@ void CharacterPanel() {
 }
 
 void EquipmentPanel() {
-    const mp::Member& m = g.ch.members[0];
+    const mp::Member& m = g.ch.members[static_cast<size_t>(std::min<int>(g.member, static_cast<int>(g.ch.members.size()) - 1))];
     ImGui::SeparatorText("Equipment");
     static const char* const kLists[4] = {"Weapons", "Belt", "Armour (worn)", "Spells"};
     for (int l = 0; l < 4; ++l) {
@@ -595,7 +663,8 @@ void DrawTab(Library& lib) {
     if (ImGui::InputText("Characters folder", g.folder, sizeof g.folder, ImGuiInputTextFlags_EnterReturnsTrue)) {
         lib.mpFolder = g.folder; lib.SaveConfig(); Rescan(); g.selected = -1;
     }
-    ImGui::SetItemTooltip("The game's (or a mod's) mp folder, e.g. Universal-Mod/mp");
+    ImGui::SetItemTooltip("The game's (or a mod's) mp folder, e.g. Universal-Mod/mp; or a saves folder (saves/saveNN: the party\n"
+                          "and the quest variables of each single-player save)");
     ImGui::SameLine();
     std::string picked;
     if (ImGui::Button("Folder...") && ui::PickFolder(picked)) {
@@ -640,6 +709,12 @@ void DrawTab(Library& lib) {
     ImGui::TextDisabled("%s%s", g.files[g.selected].file.c_str(), dirty ? " (unsaved)" : "");
     if (!g.message.empty()) { ImGui::SameLine(); ImGui::TextUnformatted(g.message.c_str()); }
     ImGui::TextDisabled("Close the game first, or it may overwrite the file with its own copy.");
+    if (g.isSave) {
+        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.35f, 1), "Save editor (WIP): only scenario.sav's parties, quest variables and money are edited; the zones are kept.");
+        std::error_code ec;
+        if (fs::exists(g.files[g.selected].path + "/mission.sav", ec))
+            ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.4f, 1), "This save was made inside a zone: mission.sav holds its own copy of the party, not edited yet: the game may use that one.");
+    }
     ChecksPanel(found);
     if (ImGui::BeginTable("cols", 2, ImGuiTableFlags_Resizable)) {
         ImGui::TableNextColumn();

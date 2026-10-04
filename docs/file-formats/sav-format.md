@@ -9,7 +9,7 @@ A save is a folder of `.sav` files:
 
 | File | Content |
 |---|---|
-| `info.sav` | 28 bytes, not compressed: u32 0x111, u32 3, u32 ?, the allod (`Ingos\0`), the zone (`bz8k\0`), u32 ? |
+| `info.sav` | not compressed: u32 0x111, u32 3, f32 (a game time?), the allod (`Ingos\0`), the zone (`bz8k\0`), u32 ?, the save's title (newer saves; 28 bytes without it) |
 | `shot.sav` | 98,304 bytes, not compressed: the thumbnail, 256 x 192 pixels of 16 bits (probably RGB565) |
 | `scenario.sav` | the campaign: item stocks, the party and the quest variables |
 | `mission.sav` | the zone being played, in full (its units, the party's units...) |
@@ -35,6 +35,15 @@ sample there are five groups. The four before the party alternate stocks of equi
   `merc6`, `merc9`... for the mercenaries.
 
 A quest item's detail block (kind 0x3009) is 56 bytes.
+
+After the members come the quest variables exactly as in a `.mp` (string name, f32 value, until an empty name: 109
+to 821 in the samples), then a tail of about 260 bytes whose first 8 bytes hold the money as a `.mp`'s last 8 do
+(two u32, money = a XOR b). A scenario.sav can hold SEVERAL sections in the party format: the party (the one whose member has the role
+`Hero`, with its mercenaries) and other stored characters (an XP-Mates save: a spare "Human Hero Hadagan", the NPC
+"Human Hadagan Pretty" with the role `Nalo`). They are found where a `.mp` party section reads and writes back
+exactly; the quest variables follow the last one. All 255 scenario.sav files of the installed mods are written back
+byte for byte. In a save made inside a zone, mission.sav holds the party too (the same format, near its end). um-multitool's MP editor
+opens saves (a saves folder: each saveNN) with these.
 
 ## Zone files and mission.sav
 
@@ -78,5 +87,6 @@ The u32 before the version tells what the file holds: 0x114 a character (`.mp`),
 
 - the 5 KB before the first unit of a zone file;
 - the strings between a unit's names and its position, and the end of a record;
-- the start of `scenario.sav` (before the first item group) and its quest variables;
+- the start of `scenario.sav` (before the first item group); the rest of its tail (after the money: strings such as
+  `zt22`, `q48k` and floats);
 - which stocks the four other item groups are.

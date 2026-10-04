@@ -122,7 +122,12 @@ other bits are not tied to anything yet.
 `in25arrow`, `efcu0lightsourse`..`efcu5eye`, `initlitr1..6item`, `initqi4item`, `ingm1gipat01..08`, `nask0sky`:
 the file starts with u32 17-23 (the same values as the render flags above) and u32 3-8 (the same as
 `textureNumber`), then the 8-corner bounding data as in `FIG8` (centre, min, max...). The counts and the rest are
-not decoded yet; their `.bon` files are 72 bytes (not 96), all zeros in the samples. The viewer does not read them.
+not decoded yet; their `.bon` files are 72 bytes (not 96), all zeros in the samples. The viewer does not read them. Seen in `in25arrow` (874 bytes): after the two words, 8 identical vec3 (a bounding centre per corner),
+then more per-corner data, and the file ends like a `FIG8` body: u16 vertex-component triples and u16 triangle
+indices (values 0-9 for this small mesh). The counts are not in a header: to find (maybe derived from the sizes). game.exe's reader (0x4F7F49, on a .fig in memory): 8 header words (the first compared with `FIG8`) + 2 words, then
+with `FIG8` the 320 bytes of per-corner bounds; with any other first word only 40 bytes (one corner: centre, min,
+max, radius) and a separate branch at 0x4F8689 for the rest: there the vertex data advances 0x40 bytes per block (one corner: 4 points x 16 bytes?) instead of 384: to confirm by parsing a file that way. A brute
+force over layouts by size alone gave thousands of fits (inconclusive).
 
 ## `.bon` — Assembly Offsets
 
