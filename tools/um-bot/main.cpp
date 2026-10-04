@@ -34,7 +34,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.9";
+static const char* const kVersion = "0.10";
 
 
 struct App {
@@ -237,7 +237,7 @@ static void BehaviourPanel(App& app) {
     ImGui::SetNextItemWidth(200);
     app.dirty |= EnumCombo("Engagement", c.engagement, kEngagement);
     Tip("Passive: never starts a fight, only heals and follows\n"
-        "Defensive: fights what attacks the player or itself\n"
+        "Defensive: fights what attacks the player or itself, and the player's target\n"
         "Aggressive: attacks the enemies it sees");
 }
 
@@ -304,6 +304,9 @@ static void StatusPanel(App& app) {
     const bool on = app.client.state == net::Client::State::Accepted;
     app.client.followDistance = app.cfg.followDistance;
     app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
+    app.client.engagement = static_cast<int>(app.cfg.engagement); // Passive / Defensive / Aggressive
+    app.client.fightInSight = app.client.engagement > 0;
+    if (!app.character.members.empty() && mp::GetF(app.character.members[0].stats, 0xB4) > 1) app.client.sight = mp::GetF(app.character.members[0].stats, 0xB4);
     const ImVec2 avail = ImGui::GetContentRegionAvail();
     const float size = std::clamp(std::min(avail.x * 0.45f, avail.y - 4), 80.0f, 240.0f);
     float sight = 0; // the edge of the sonar: the character's sight
@@ -312,8 +315,10 @@ static void StatusPanel(App& app) {
     ImGui::SameLine();
     ImGui::BeginGroup();
     ImGui::PushTextWrapPos(0.0f);
-    ImGui::Text("Health: %s   Mana: %s", on ? "?" : "-", on ? "?" : "-");
-    ImGui::Text("Doing: %s", on ? "?" : "nothing (not connected)");
+    if (on && app.client.worldUnit && app.client.Health(app.client.worldUnit) > 0)
+        ImGui::Text("Health: %d   Mana: %d", app.client.Health(app.client.worldUnit), app.client.Mana(app.client.worldUnit));
+    else ImGui::Text("Health: -   Mana: -");
+    ImGui::Text("Doing: %s", on ? app.client.Doing().c_str() : "nothing (not connected)");
     if (on) { // the session, from the server's messages
         const net::Client& c = app.client;
         ImGui::Text("Quest: %s%s", c.chosenQuest.empty() ? i18n::Tr("none chosen") : c.chosenQuest.c_str(),
@@ -517,6 +522,7 @@ int main(int argc, char** argv) {
             client.followDistance = cfg.followDistance;
             client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read
             client.fightInSight = std::getenv("UM_BOT_FIGHT") != nullptr;
+            client.engagement = client.fightInSight ? (std::getenv("UM_BOT_FIGHT")[0] == '1' ? 2 : std::atoi(std::getenv("UM_BOT_FIGHT"))) : 0;
             if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();

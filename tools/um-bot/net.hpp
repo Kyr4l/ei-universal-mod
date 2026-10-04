@@ -150,7 +150,7 @@ public:
     // Returns the offset after it, 0 when it could not be read.
     struct Field { std::vector<uint8_t> b; size_t at = 0; };
     std::map<std::pair<uint32_t, int>, Field> unitFields_;
-    std::map<uint32_t, int> unitHp_;
+    std::map<uint32_t, int> unitHp_, unitMana_;
     std::map<uint32_t, uint32_t> unitTarget_; // who attacks whom (field 10 mode 3)
     std::map<uint32_t, int> unitAction_; // field 8's action code: 0xFE idle, 0x07 often in a fight
     double hostHurtAt_ = -99;
@@ -188,6 +188,7 @@ public:
             if (sz != kSizes.end()) {
                 for (size_t n : sz->second) {
                     const uint8_t* v = delta(f, n);
+                    if (k == 0 && !bad) commit.push_back([this, id, mana = static_cast<int16_t>(v[6] | v[7] << 8)] { unitMana_[id] = mana; }); // [3] = mana
                     if (k == 0 && !bad) commit.push_back([this, id, hp = static_cast<int16_t>(v[4] | v[5] << 8)] { // [2] = health: 0 = dead
                         auto h = unitHp_.find(id);
                         if (hp <= 0 && h != unitHp_.end() && h->second > 0) { dead_.insert(id); unitPos.erase(id); }
@@ -262,6 +263,14 @@ public:
         StreamMessage(m);
         paceSent_ = mode;
     }
+    // What the bot is doing, for the window.
+    std::string Doing() const {
+        if (!worldUnit) return phase_ == Phase::Lobby ? "waiting in the lobby" : "entering the quest";
+        if (fightTarget_) return "fighting unit " + std::to_string(fightTarget_);
+        return followHost ? "following the host" : "standing";
+    }
+    int Health(uint32_t id) const { const auto it = unitHp_.find(id); return it == unitHp_.end() ? -1 : it->second; }
+    int Mana(uint32_t id) const { const auto it = unitMana_.find(id); return it == unitMana_.end() ? -1 : it->second; }
     bool IsHero(uint32_t id) const { for (const auto& p : players) if (p.second.unitId == id) return true; return false; }
     // The nearest unit that is not a player's hero (0: none known).
     uint32_t NearestOther(float& dist) const {
@@ -278,7 +287,8 @@ public:
         }
         return best;
     }
-    bool fightInSight = false;  // attack the nearest unit in sight (any non-hero: no hostility check yet)
+    bool fightInSight = false;  // fighting at all (Engagement not Passive)
+    int engagement = 1;         // 0 passive, 1 defensive (the units attacking the host or us, the host's target), 2 aggressive (also anything in sight)
     float sight = 13.0f;        // the character's sight (map units)
     bool followHost = true;     // walk after the host's hero, staying about followDistance from it
     float followDistance = 4.0f;
@@ -346,7 +356,7 @@ public:
         if (state == State::Accepted && fightInSight && worldUnit && Now() - fightAt_ > 1) {
             fightAt_ = Now();
             float d = 0;
-            uint32_t t = NearestOther(d);
+            uint32_t t = engagement >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
             if (!(t && d <= sight)) t = 0;
             { // first the units attacking the host or us, then the host's own target
                 float mx, my, best = 1e9f;
