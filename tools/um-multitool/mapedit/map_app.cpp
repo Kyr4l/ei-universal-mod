@@ -2914,6 +2914,8 @@ static std::string MatchEntry(const quest::Quest& copy, const std::string& entry
     return std::string();
 }
 
+static bool g_questCp1250 = false; // the quest texts' 8-bit files read as CP1250 (Polish), chosen in the encoding list
+
 // The file as UTF-8 text with \n lines (quest.reg converted to INI).
 static bool ReadEntryText(const quest::Quest& q, const std::string& entry, std::string& text, codec::Encoding& enc, bool& crlf, std::string& err) {
     std::vector<uint8_t> bytes;
@@ -2924,6 +2926,7 @@ static bool ReadEntryText(const quest::Quest& q, const std::string& entry, std::
         bytes.assign(ini.begin(), ini.end());
     }
     enc = codec::Detect(bytes);
+    if (g_questCp1250 && enc == codec::Encoding::Cp1251) enc = codec::Encoding::Cp1250; // not told apart by the bytes
     std::string t = codec::ToUtf8(bytes, enc);
     crlf = t.find("\r\n") != std::string::npos;
     text.clear();
@@ -3122,8 +3125,14 @@ static void QuestTab(App& app) {
     if (app.mqIsReg) ImGui::TextDisabled("binary quest.reg, shown as INI text (saved back as .reg)");
     ImGui::SetNextItemWidth(170);
     int enc = static_cast<int>(app.mqEncoding);
-    const char* encs[] = {codec::EncodingName(codec::Encoding::Cp1251), codec::EncodingName(codec::Encoding::Utf8), codec::EncodingName(codec::Encoding::Cp949)};
-    if (ImGui::Combo("encoding", &enc, encs, 3)) { app.mqEncoding = static_cast<codec::Encoding>(enc); app.mqTextDirty = true; }
+    const char* encs[] = {codec::EncodingName(codec::Encoding::Cp1251), codec::EncodingName(codec::Encoding::Utf8), codec::EncodingName(codec::Encoding::Cp949),
+                          codec::EncodingName(codec::Encoding::Cp1250)};
+    if (ImGui::Combo("encoding", &enc, encs, 4)) {
+        const codec::Encoding chosen = static_cast<codec::Encoding>(enc);
+        const bool polish = chosen == codec::Encoding::Cp1250, wasPolish = app.mqEncoding == codec::Encoding::Cp1250;
+        if ((polish || wasPolish) && !app.mqTextDirty) { g_questCp1250 = polish; app.mqLoadedFor.clear(); } // read again in it
+        else { app.mqEncoding = chosen; app.mqTextDirty = true; }
+    }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The file's encoding (detected); it is saved in this encoding");
     if (set.copies.size() > 1) {
         ImGui::SameLine();

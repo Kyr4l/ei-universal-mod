@@ -11,6 +11,7 @@
 // archives are read-only here (unpack the archive with RES / MQ to edit them).
 
 #include "text_groups.hpp"
+#include "cp1250.hpp"
 #include "text_editor.hpp"
 
 #include <algorithm>
@@ -36,13 +37,14 @@ namespace {
 const ImVec4 kMissingColor(0.95f, 0.42f, 0.38f, 1), kOnlyHereColor(0.5f, 0.75f, 1.0f, 1), kSameColor(0.6f, 0.6f, 0.6f, 1),
     kOkColor(0.6f, 0.85f, 0.6f, 1);
 
-enum class Encoding { Ascii, Utf8, Cp949, Cp1251 };
+enum class Encoding { Ascii, Utf8, Cp949, Cp1251, Cp1250 };
 
 const char* EncodingName(Encoding e) {
     switch (e) {
     case Encoding::Ascii: return "ASCII";
     case Encoding::Utf8: return "UTF-8";
     case Encoding::Cp949: return "CP949 (Korean)";
+    case Encoding::Cp1250: return "CP1250 (Polish, Central European)";
     default: return "CP1251";
     }
 }
@@ -73,6 +75,9 @@ std::vector<uint8_t> Encode(const std::string& utf8, Encoding e, int& lost) {
         if (e == Encoding::Cp949) {
             auto it = cp949.find(cp);
             if (it != cp949.end()) { out.push_back(static_cast<uint8_t>(it->second >> 8)); out.push_back(static_cast<uint8_t>(it->second)); continue; }
+        } else if (e == Encoding::Cp1250) {
+            const uint8_t b = cp1250::FromCodepoint(cp);
+            if (b != '?') { out.push_back(b); continue; }
         } else {
             const uint8_t b = cp1251::CodepointToByte(cp);
             if (b != '?') { out.push_back(b); continue; }
@@ -102,6 +107,7 @@ struct Pack {
     std::vector<Source> sources;
     std::map<std::string, TextFile> files; // by lower-case key
     Encoding encoding = Encoding::Cp1251;   // what its texts use (the most common non-ASCII one)
+    Encoding forced = Encoding::Ascii;      // Cp1250: read the 8-bit texts as CP1250 (Polish), else detected
     bool crlf = true;
     int overridden = 0;                     // keys found in two of its sources (the later one is kept)
 };
@@ -113,7 +119,8 @@ void AddFile(Pack& p, int source, const std::string& name, const std::vector<uin
     f.name = name;
     f.source = source;
     f.encoding = Detect(bytes);
-    const std::string raw = texts::DecodeToUtf8(bytes);
+    if (p.forced == Encoding::Cp1250 && f.encoding == Encoding::Cp1251) f.encoding = Encoding::Cp1250; // not told apart from CP1251
+    const std::string raw = f.encoding == Encoding::Cp1250 ? cp1250::ToUtf8(bytes) : texts::DecodeToUtf8(bytes);
     f.crlf = raw.find("\r\n") != std::string::npos;
     for (char c : raw) if (c != '\r') f.text += c;
     f.finalNewline = !f.text.empty() && f.text.back() == '\n';
@@ -309,7 +316,7 @@ void DrawTab(Library& lib) {
     ImGui::SameLine();
     if (ImGui::Button("Reload")) { Reload(lib); Say("Read again."); }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Read the packs' files again (after changing them elsewhere)");
-    const Pack& p = g.packs[g.pack];
+    Pack& p = g.packs[g.pack];
     const Pack& r = g.packs[g.reference];
 
     // Every key of the two packs, with its status.
@@ -325,6 +332,15 @@ void DrawTab(Library& lib) {
     }
     ImGui::SameLine();
     ImGui::Text("%s: %zu texts (%s%s)", p.language.c_str(), p.files.size(), EncodingName(p.encoding), p.crlf ? ", CRLF" : "");
+    { // CP1250 cannot be told from CP1251 by its bytes: the pack's language says it (kept per language)
+        static std::map<std::string, bool> polish;
+        bool on = p.forced == Encoding::Cp1250;
+        ImGui::SameLine();
+        if (ImGui::Checkbox("CP1250 (Polish)", &on)) { polish[p.language] = on; p.forced = on ? Encoding::Cp1250 : Encoding::Ascii; LoadPack(p); }
+        else if (polish.count(p.language) && polish[p.language] != on) { p.forced = polish[p.language] ? Encoding::Cp1250 : Encoding::Ascii; LoadPack(p); }
+        ImGui::SetItemTooltip("Reads and writes this language's 8-bit texts as Windows-1250 (Polish, Central European)\n"
+                              "instead of Windows-1251 (Russian): the two cannot be told apart from the bytes.");
+    }
     for (const Source& s : p.sources)
         if (!s.ok) { ImGui::SameLine(); ImGui::TextColored(kMissingColor, "%s: %s", s.path.c_str(), s.error.c_str()); }
     if (p.overridden) { ImGui::SameLine(); ImGui::TextDisabled("(%d key(s) in two of its sources: the later one is used)", p.overridden); }
@@ -368,7 +384,7 @@ void DrawTab(Library& lib) {
             (s == Status::Ok && !g.showOk && g.pack != g.reference))
             continue;
         if (!filter.empty() && k.find(filter) == std::string::npos) {
-            auto a = p.files.find(k), b = r.files.find(k);
+            auto a = static_cast<const Pack&>(p).files.find(k); auto b = r.files.find(k);
             const bool inText = (a != p.files.end() && Lower(a->second.text).find(filter) != std::string::npos) ||
                                 (b != r.files.end() && Lower(b->second.text).find(filter) != std::string::npos);
             if (!inText) continue;

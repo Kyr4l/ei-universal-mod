@@ -9,14 +9,15 @@
 #include <vector>
 
 #include "cp1251.hpp"
+#include "../cp1250.hpp"
 #include "../viewer/item_texts.hpp"
 
 namespace codec {
 
-enum class Encoding { Cp1251, Utf8, Cp949 };
+enum class Encoding { Cp1251, Utf8, Cp949, Cp1250 };
 
 inline const char* EncodingName(Encoding e) {
-    return e == Encoding::Utf8 ? "UTF-8" : e == Encoding::Cp949 ? "CP949 (Korean)" : "CP1251";
+    return e == Encoding::Utf8 ? "UTF-8" : e == Encoding::Cp949 ? "CP949 (Korean)" : e == Encoding::Cp1250 ? "CP1250 (Polish)" : "CP1251";
 }
 
 // Plain ASCII counts as CP1251, the game's own encoding.
@@ -31,6 +32,7 @@ inline Encoding Detect(const std::vector<uint8_t>& b) {
 
 inline std::string ToUtf8(const std::vector<uint8_t>& b, Encoding e) {
     if (e == Encoding::Utf8) return std::string(b.begin(), b.end());
+    if (e == Encoding::Cp1250) return cp1250::ToUtf8(b);
     if (e == Encoding::Cp949 || e == Encoding::Cp1251) return texts::DecodeToUtf8(b);
     return std::string(b.begin(), b.end());
 }
@@ -55,6 +57,10 @@ inline bool FromUtf8(const std::string& text, Encoding e, std::vector<uint8_t>& 
             if (it == cp949Reverse.end()) { err = "a character (U+" + std::to_string(cp) + ") that CP949 cannot hold"; return false; }
             out.push_back(static_cast<uint8_t>(it->second >> 8));
             out.push_back(static_cast<uint8_t>(it->second & 0xFF));
+        } else if (e == Encoding::Cp1250) {
+            const uint8_t b = cp1250::FromCodepoint(cp);
+            if (b == '?') { err = "a character (U+" + std::to_string(cp) + ") that CP1250 cannot hold: save as UTF-8 instead"; return false; }
+            out.push_back(b);
         } else {
             uint8_t b = cp1251::CodepointToByte(cp);
             if (b == '?') { err = "a character (U+" + std::to_string(cp) + ") that CP1251 cannot hold: save as UTF-8 instead"; return false; }
