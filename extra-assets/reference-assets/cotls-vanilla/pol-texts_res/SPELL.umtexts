@@ -1,0 +1,125 @@
+# um-texts 1
+=== SPELL acid_column
+Fontanna z kwasem
+Ten czar dzia³a obszarowo, a nie tylko na jeden cel. Kwas obleje i sparzy wszystkich wokó³ wskazanego miejsca wytrysku.
+
+=== SPELL acid_fog
+Kwaœna mg³a
+To czar obszarowy - zadaje obra¿enia wszystkim, którzy znajd¹ siê w obrêbie kwaœnej mg³y.
+
+=== SPELL acid_ray
+Kwasowy podmuch
+Kwasowy podmuch zawsze trafia we wskazany cel.
+
+=== SPELL antimagic
+Ochrona przed magi¹
+Ten czar ochroni ciê przed magi¹ ka¿dego z trzech ¯ywio³ów.
+
+=== SPELL arrow
+Ognista strza³a
+Ognista strza³a zawsze trafia w swój cel.
+
+=== SPELL clairvoyence
+Jasnowidztwo
+Pozwala widzieæ wrogów wokó³ miejsca, w którym czar jest zogniskowany.
+
+=== SPELL eagle_sight
+Orli wzrok
+Zwiêksza zasiêg wzroku o 1,5 raza. 
+
+=== SPELL enlarge
+Powiêkszenie
+Powiêksza rozmiary wskazanego obiektu.
+
+=== SPELL feeblemind
+Os³abienie umys³u
+Na pewien okres czasu uniemo¿liwia przeciwnikowi rzucanie czarów. Podczas rzucania tego czaru jego cel musi byæ widoczny.
+
+=== SPELL fireball
+Ognista kula
+To czar obszarowy. Ognista kula zadaje obra¿enia wszystkim w pobli¿u jej wybuchu.
+
+=== SPELL firewall
+Œciana ognia
+To czar obszarowy. Œciana ognia bêdzie paliæ ka¿dego, kto znajdzie siê w jej pobli¿u.
+
+=== SPELL fireworks
+Fajerwerki
+Fajerwerki jedynie przyci¹gaj¹ uwagê wroga, który je zobaczy lub us³yszy, i nie wywo³uj¹ wielkiego alarmu.
+
+=== SPELL healing
+Leczenie
+Leczy rany odniesione w walce.
+
+=== SPELL infravision
+Noktowizja
+Pozwala widzieæ w ciemnoœciach.
+
+=== SPELL inv_lit
+Boski piorun
+To czar obszarowy. Piorun razi ka¿dego, kto znajduje siê w pobli¿u miejsca jego trafienia.
+
+=== SPELL invisibility
+Niewidzialnoœæ
+Ten czar podwaja twoj¹ niewidzialnoœæ dla przeciwników.
+
+=== SPELL lightning
+Piorun
+Piorun zawsze trafia w swój cel.
+
+=== SPELL litnwall
+Bariera piorunów
+To czar obszarowy. Bariera piorunów zadaje obra¿enia ka¿demu, kto usi³uje przez ni¹ przejœæ.
+
+=== SPELL prot_acid
+Ochrona przed kwasem
+Osoba chroniona tym czarem jest bardziej odporna na dzia³anie kwasu.
+
+=== SPELL prot_electro
+Ochrona przed piorunem
+Osoba chroniona tym czarem jest bardziej odporna na dzia³anie b³yskawic i piorunów.
+
+=== SPELL prot_fire
+Ochrona przed ogniem
+Osoba chroniona tym czarem jest bardziej odporna na dzia³anie ognia.
+
+=== SPELL regeneration
+Regeneracja
+Zwiêksza tempo odzyskiwania zdrowia.
+
+=== SPELL shrink
+Zmniejszenie
+Zmniejsza wskazany obiekt.
+
+=== SPELL silence
+Cisza
+Podwaja „cichoœæ”. Jeœli trudno by³o ciê us³yszeæ, teraz bêdzie to dwa razy trudniejsze!
+
+=== SPELL slow
+Spowolnienie
+Spowalnia zadawanie ciosów i rzucanie czarów.
+
+=== SPELL speed
+Przyspieszenie
+Przyspiesza zadawanie ciosów i rzucanie czarów.
+
+=== SPELL strength
+Si³a
+Na pewien czas czyni ciê silniejszym, dziêki czemu zadajesz wiêksze obra¿enia.
+
+=== SPELL stun
+Parali¿
+Na pewien okres czasu parali¿uje twojego przeciwnika (musia³eœ go widzieæ, rzucaj¹c czar).
+
+=== SPELL teleport
+Teleportacja
+Sprawia, ¿e znikasz w jednym miejscu i natychmiast pojawiasz siê w drugim (musia³eœ je widzieæ, rzucaj¹c czar).
+
+=== SPELL vision_fog
+Pole widzenia
+Pozwala ci widzieæ oczami wybranej osoby.
+
+=== SPELL weak
+Os³abienie
+Na pewien czas czyni twojego przeciwnika s³abszym, a jego s³absze ciosy zadaj¹ mniej obra¿eñ.
+

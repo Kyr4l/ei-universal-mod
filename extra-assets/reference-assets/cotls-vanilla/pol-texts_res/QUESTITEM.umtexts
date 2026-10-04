@@ -1,0 +1,285 @@
+# um-texts 1
+=== QUESTITEM AmbushKey00
+Klucz do pu³apek
+Figurka, która mo¿e wy³¹czaæ magiczne pu³apki (u¿ywaj na magicznych obeliskach).
+
+=== QUESTITEM Ancientsword
+Zardzewia³y miecz
+Babur nie mo¿e pracowaæ z metalem, nie bêdzie wiêc móg³ tego naprawiæ ani na³adowaæ czarami.
+
+=== QUESTITEM Awl
+Szyd³o
+Stalowe szyd³o - jedno z narzêdzi skradzionych mistrzowi Baburowi.
+
+=== QUESTITEM BillBoard00
+Tablica og³oszeñ
+Tablica og³oszeñ w Ingos.
+
+=== QUESTITEM BrokenGear00
+Przek³adnia do mostu nad w¹wozem
+Czêœæ mostu zwodzonego nad wyschniêtym w¹wozem. Musisz nim przejœæ, by dostaæ siê do Shy-Var.
+
+=== QUESTITEM BrokenToy
+Czêœci amuletu od teleportu
+Z tych szcz¹tków zdolny mag potrafi odczytaæ, gdzie by³ punkt docelowy teleportacji.
+
+=== QUESTITEM CageKey00
+Klucz do klatki
+Otwórz nim klatkê.
+
+=== QUESTITEM CaveGear00
+Mechanizm z mostu w jaskini
+Czêœæ orkowego jaskiniowego mostu zwodzonego. Dziêki temu opuœcisz most w jaskini. 
+
+=== QUESTITEM CaveKey00
+Klucz do przejœcia w jaskini
+Ten klucz otwiera przejœcie w najg³êbszej czêœci jaskini.
+
+=== QUESTITEM CodedHadaganNote
+Notatka z opuszczonego obozu
+Notatka zapisana w dziwnym jêzyku. Wódz Erfar mo¿e znaæ ten jêzyk.
+
+=== QUESTITEM CryptKey00
+Klucz do sarkofagu
+Klucz do sarkofagu, w którym wódz orków chowa swój skarb.
+
+=== QUESTITEM CryptRune00
+Magiczny okruch
+Magiczny okruch, który móg³by zainteresowaæ wiedŸmê Esterê.
+
+=== QUESTITEM DCBook
+Ksiêga z obserwatorium
+Dowiesz siê z niej, jak dostaæ siê do Martwego Miasta.
+
+=== QUESTITEM DeadScientist00
+G³owa naukowca
+Szcz¹tki naukowca, którego duch mo¿e opowiedzieæ ci o m³odym cz³owieku o imieniu Joon.
+
+=== QUESTITEM DocumentBook
+Zapiski zarz¹dcy
+Te dokumenty stanowi¹ dowód na to, ¿e kupiec Karansul jest zamieszany w nielegalne interesy.
+
+=== QUESTITEM DragonAmulet
+Smoczy amulet
+Daje w³adzê nad smokiem, ale tylko nad jednym naraz.
+
+=== QUESTITEM DragonPoison
+Trucizna
+Smocza trucizna potrzebna do wykonania zadania.
+
+=== QUESTITEM DragonShell00
+Du¿a muszla
+Obiekt kultu jaszczurów, symbol pokoju. Jaszczury zachowuj¹ siê mniej agresywnie w pobli¿u muszli.
+
+=== QUESTITEM DragonWand
+[Must be, but needs no translation]
+
+
+=== QUESTITEM DriadArrow00
+Strza³a
+Od tej strza³y zgin¹³ giermek szukaj¹cy ksiê¿niczki.
+
+=== QUESTITEM DriadCageKey00
+Klucz do klatki Leœnych Ludzi
+Otwiera klatkê.
+
+=== QUESTITEM DriadIdol00
+Œwiêty kwiat
+Œwiêty Kwiat Zielonego Klanu leœników. Bêd¹ bardzo wdziêczni temu, kto dostarczy go im z powrotem.
+
+=== QUESTITEM DriadIdol01
+Bia³y kwiat
+Roœlina lecznicza, mo¿na ni¹ wyleczyæ wiele chorób.
+
+=== QUESTITEM DriadLeaf00
+Zielony liœæ
+Ten, kto ma zielony liœæ, mo¿e wy³¹czyæ magiczn¹ pu³apkê.
+
+=== QUESTITEM DumbLever
+Dzwignia od zapory
+Dziêki tej dŸwigni mo¿esz sterowaæ zapor¹ orków.
+
+=== QUESTITEM FakeDocument00
+Bezu¿yteczne papiery
+Do niczego siê nie przydadz¹.
+
+=== QUESTITEM GirlSign
+Dzbanek Airy
+Dzbanek, który nosi ze sob¹ Airy.
+
+=== QUESTITEM GoblinFright00
+Sekretny obiekt goblinów
+G³owa Pierwszego Goblina jest obiektem czci plemienia. Wódz goblinów sporo by da³, aby do niego wróci³a.
+
+=== QUESTITEM GoldNugget00
+Samorodek
+Z³oty samorodek pozostawiony przez górników podczas ich ucieczki z kopalni.
+
+=== QUESTITEM GoldNugget01
+Pieczêæ Imperatora
+Ka¿dy Khadaganin musi przekazaæ tê pieczêæ gwardzistom Imperatora, w przeciwnym razie... czeka go straszliwa œmieræ.
+
+=== QUESTITEM GolemCenterKey00
+Klucz do o³tarza
+Tym kluczem mo¿na wy³¹czyæ mechanicznych zabójców, czyli golemy.
+
+=== QUESTITEM GovenorChest00
+Pud³o z kolekcj¹
+Czêœæ kolekcji rzadkiej broni, skradzionej gubernatorowi Valrasianowi.
+
+=== QUESTITEM HadoganCageKey00
+Klucz do bram Kanionu Œmierci
+Ten klucz otwiera bramy do Kanionu Œmierci.
+
+=== QUESTITEM HadoganCaveKey00
+Klucz do wrót jaskini
+Otwiera wrota do jaskini.
+
+=== QUESTITEM HeroCageKey00
+Klucz do klatki
+Otwiera klatkê, w której trzymany jest Zak.
+
+=== QUESTITEM Instruction4orcs00
+Notatka w jêzyku orków
+Musisz znaæ alfabet orków, aby to odczytaæ.
+
+=== QUESTITEM Journal00
+Notatki
+Przydadz¹ siê póŸniej.
+
+=== QUESTITEM Knife
+D³uto
+To stalowe d³uto jest jednym z narzêdzi skradzionych mistrzowi Baburowi.
+
+=== QUESTITEM LeftCrystal
+Kryszta³
+WiedŸma wykorzystuje takie kryszta³y do czarów.
+
+=== QUESTITEM Letter2orcs00
+List do orków
+Ten list bêdzie dowodem na to, ¿e zabójstwo Wybrañca rzeczywiœcie zosta³o zaplanowane.
+
+=== QUESTITEM LizardClaw00
+Pazur
+Dziêki temu pazurowi wy³¹czysz pu³apkê przy moœcie wiod¹cym do pustelni jaszczura.
+
+=== QUESTITEM ManorKey00
+Klucz do posiad³oœci
+Klucz do bogatej posiad³oœci.
+
+=== QUESTITEM Map00
+Mapa Czerwonog³owego
+Mapa odebrana bandycie którego zw¹ Czerwonog³owy.
+
+=== QUESTITEM MineControlKey00
+Klucz do pu³apek pierwszego krêgu
+Klucz do magicznych pu³apek pierwszego krêgu ochrony bramy.
+
+=== QUESTITEM MineKey00
+Klucz do wrót
+Drogê do opuszczonych sztolni blokuj¹ wrota. Bez klucza nie sposób ich otworzyæ.
+
+=== QUESTITEM MineKey01
+Klucz do kopalni
+To klucz do kopalni.
+
+=== QUESTITEM NecroLabKey00
+Klucz do laboratorium Nekromanty
+Klucz do laboratorium, w którym przechowywane jest cia³o martwego naukowca.
+
+=== QUESTITEM NewGear00
+Mechanizm orków z wysp
+Tym urz¹dzeniem opuœcisz mosty zwodzone wiod¹ce na wysepki orków w delcie rzeki.
+
+=== QUESTITEM Note
+List do kolekcjonera
+Ten list musi trafiæ do antykwariatu Joona.
+
+=== QUESTITEM Ogrekey1
+Klucz do kufra ogra Gyma
+Ten klucz pomo¿e ci otworzyæ skrzyniê Gyma.
+
+=== QUESTITEM Ogrekey2
+Klucz do kufra ogra Utundry
+To klucz otwieraj¹cy skrzyniê Utundry’ego.
+
+=== QUESTITEM Ogrestuff
+Naszyjnik ogra
+Ogr prawdopodobnie odkry³ ju¿ kradzie¿ swego naszyjnika... Czy domyœli siê, jak go straci³?
+
+=== QUESTITEM OldGear00
+Stary mechanizm
+Kawa³ek mechanizmu mostu zwodzonego.
+
+=== QUESTITEM OrcAlphabet
+Elementarz orków
+Bez tego elementarza nie uda ci siê odczytaæ orkowych notatek zapisanych w ich w³asnym alfabecie.
+
+=== QUESTITEM OrcAnnals00
+Zapiski orków
+Pewnie w tych zapiskach jest wiele interesuj¹cych informacji. Powinieneœ pokazaæ je wiedŸmie Esterze.
+
+=== QUESTITEM OrcLicense00
+Surowa skóra z literami
+Orkowy „dokument” mówi¹cy o Niebieskim Kamieniu. Spróbuj pokazaæ go wodzowi.
+
+=== QUESTITEM Palantir
+Magiczna kula
+Tajemnicza magiczna kula, któr¹ orkowie darz¹ czci¹.
+
+=== QUESTITEM PalantirBroken00
+Magiczna kula
+Staro¿ytny magiczny artefakt.
+
+=== QUESTITEM PalantirRick00
+Magiczna kula
+Staro¿ytny magiczny artefakt.
+
+=== QUESTITEM PalantirWork00
+Magiczna kula
+Staro¿ytny magiczny artefakt.
+
+=== QUESTITEM RangerSign00
+Odznaka szpiega
+Oto dowód na to, ¿e szpieg zosta³ pomszczony.
+
+=== QUESTITEM RightCrystal
+Kryszta³
+WiedŸma u¿ywa takich kryszta³ów do czarów.
+
+=== QUESTITEM SackofGold
+Sakwa ze z³otem
+To jest dok³adnie to, na co wygl¹da: wielka, ciê¿ka sakiewka pe³na z³ota.
+
+=== QUESTITEM SquirrelSkin
+Skóry
+Skóry s¹ dobrym towarem, ale ludzie z miasta nie zap³ac¹ za nie przyzwoitej ceny!
+
+=== QUESTITEM TeleportKey00
+Klucz do portalu
+U¿yj tego klucza do aktywacji portalu.
+
+=== QUESTITEM ThiefSack
+Rzecz kolekcjonera
+Czêœæ kolekcji skradzionej z domu kolekcjonera Joona.
+
+=== QUESTITEM Toy
+Amulet
+Ten amulet jest bardzo wa¿nym znaleziskiem!
+
+=== QUESTITEM Vial00
+Fiolka
+Dziwna fiolka.
+
+=== QUESTITEM VoodooWand
+[Must be, but need no translation]
+
+
+=== QUESTITEM White_Wolf_Hide
+G³owa Bia³ego Wilka
+Cenne trofeum myœliwskie. I zarazem dowód na to, ¿e lider stada wilków jest ju¿ martwy.
+
+=== QUESTITEM Wolfskin
+Skóra wilka
+Dobre trofeum!
+

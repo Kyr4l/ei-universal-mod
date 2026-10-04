@@ -1,0 +1,689 @@
+# um-texts 1
+=== WEAPON Axe Adamantium
+Adamantowa siekiera
+To bardzo droga broñ, ale warta swej ceny.
+
+=== WEAPON Axe Bronze
+Siekiera z br¹zu
+Najprostsza siekiera. Tylko nie poczuj siê z ni¹ zbyt pewnie.
+
+=== WEAPON Axe Iron
+¯elazna siekiera
+Lepsza od siekiery z br¹zu, ale przecie¿ s¹ te¿ metale lepsze od ¿elaza.
+
+=== WEAPON Axe Meteoric
+Meteorytowa siekiera
+W rêkach doœwiadczonego wojownika przyniesie wrogom prawdziwe ukojenie...
+
+=== WEAPON Axe Mithrill
+Mitrylowa siekiera
+Lekka, ostra, dobrze wykonana... i droga.
+
+=== WEAPON Axe Steel
+Stalowa siekiera
+Nie przebije ka¿dego pancerza, ale mo¿e byæ niebezpieczna w rêkach doœwiadczonego wojownika.
+
+=== WEAPON Battle_Axe Adamantium
+Adamantowy topór
+Godny topór, za godn¹ cenê, na godnego przeciwnika. 
+
+=== WEAPON Battle_Axe Bronze
+Topór z br¹zu
+Lepszy topór ni¿ siekiera.
+
+=== WEAPON Battle_Axe Iron
+Topór z ¿elaza
+S¹ lepsze materia³y od ¿elaza, oczywiœcie jeœli ciebie na nie staæ...
+
+=== WEAPON Battle_Axe Meteoric
+Meteorytowy topór
+Trudno by³oby ci znaleŸæ pancerz, który wytrzyma cios tego topora, nawet w królewskich zbrojowniach.
+
+=== WEAPON Battle_Axe Mithrill
+Mitrylowy topór
+Naprawdê dobry topór... Cena te¿ w³aœciwa.
+
+=== WEAPON Battle_Axe Steel
+Stalowy topór
+Ten topór jest bez wad! Tylko ¿e twój przeciwnik mo¿e mieæ lepsz¹ zbrojê...
+
+=== WEAPON Bone_Club Burned_Bones
+Koœciana pa³ka (twarda koœæ)
+Dobra rzecz... na samotnego orka.
+
+=== WEAPON Bone_Club Decayed_Bones
+Koœciana pa³ka (cienka koœæ)
+Maczuga to maczuga...
+
+=== WEAPON Bone_Club Dragon_Black_Bones
+Koœciana pa³ka (koœæ niebieskiego smoka)
+A jak siê zmieni za pomoc¹ czaru!
+
+=== WEAPON Bone_Club Dragon_Green_Bones
+Koœciana pa³ka (koœæ zielonego smoka)
+Nikt nie mo¿e zignorowaæ spoliczkowania tak¹ „œlicznotk¹”!
+
+=== WEAPON Bone_Club Dragon_Red_Bones
+Koœciana pa³ka (koœæ czerwonego smoka)
+Zdecydowanie nie mo¿na tego nazywaæ tylko maczug¹...
+
+=== WEAPON Bone_Club Dry_Bones
+Koœciana pa³ka (gruba koœæ)
+Maj¹c coœ takiego, mo¿esz robiæ interesy z goblinem, ale z orkiem raczej nie próbuj...
+
+=== WEAPON Bone_Club Scrab_Bones
+Koœciana pa³ka (skamienia³a koœæ)
+Skamienia³a koœæ to dobry materia³ dla ka¿dego rodzaj broni.
+
+=== WEAPON Bone_Long_Bow Burned_Bones
+D³ugi koœciany ³uk (twarda koœæ)
+Udoskonalona wersja ³uku z koœci wysuszonej.
+
+=== WEAPON Bone_Long_Bow Decayed_Bones
+D³ugi koœciany ³uk (cienka koœæ)
+Odpowiedni i do æwiczeñ, i na ³owy.
+
+=== WEAPON Bone_Long_Bow Dragon_Black_Bones
+D³ugi koœciany ³uk (koœæ niebieskiego smoka)
+Ciekawy materia³, ciekawie spo¿ytkowany!
+
+=== WEAPON Bone_Long_Bow Dragon_Green_Bones
+D³ugi koœciany ³uk (koœæ zielonego smoka)
+Z tym ³ukiem równaæ siê mo¿e bardzo niewiele innych ³uków koœcianych!
+
+=== WEAPON Bone_Long_Bow Dragon_Red_Bones
+D³ugi koœciany ³uk (koœæ czerwonego smoka)
+Jeden z najlepszych ³uków w kategorii ³uków koœcianych d³ugich.
+
+=== WEAPON Bone_Long_Bow Dry_Bones
+D³ugi koœciany ³uk (gruba koœæ)
+Ta broñ nie ma najgorszej opinii, ale s¹ lepsze od niej!
+
+=== WEAPON Bone_Long_Bow Scrab_Bones
+D³ugi koœciany ³uk (skamienia³a koœæ)
+Tak, warto go mieæ pod rêk¹, kiedy wybierasz siê na spacer!
+
+=== WEAPON Bone_Short_Bow Burned_Bones
+Krótki koœciany ³uk (twarda koœæ)
+Strza³y posy³ane z takiego ³uku s¹ niebezpieczne, i to nie tylko dla goblinów!
+
+=== WEAPON Bone_Short_Bow Decayed_Bones
+Krótki koœciany ³uk (cienka koœæ)
+Ta broñ wcale nie jest z³a, ale niektórzy przeciwnicy mog¹ tego nie zauwa¿yæ...
+
+=== WEAPON Bone_Short_Bow Dragon_Black_Bones
+Krótki koœciany ³uk (koœæ niebieskiego smoka)
+Nie sposób znaleŸæ lepszy ³uk koœciany - za wyj¹tkiem takiego samego, magicznego.
+
+=== WEAPON Bone_Short_Bow Dragon_Green_Bones
+Krótki koœciany ³uk (koœæ zielonego smoka)
+To ju¿ inna kategoria, chocia¿...
+
+=== WEAPON Bone_Short_Bow Dragon_Red_Bones
+Krótki koœciany ³uk (koœæ czerwonego smoka)
+Jeden z najlepszych ³uków w kategorii ³uków koœcianych.
+
+=== WEAPON Bone_Short_Bow Dry_Bones
+Krótki koœciany ³uk (gruba koœæ)
+Taki ³uk lepszy ni¿ zwyk³y, ale poszukaj bardziej przyzwoitego materia³u...
+
+=== WEAPON Bone_Short_Bow Scrab_Bones
+Krótki koœciany ³uk (skamienia³a koœæ)
+Nawet pancerniki nie doceni³yby trafienia z takiego ³uku. I nie tylko one...
+
+=== WEAPON Bone_Spear Burned_Bones
+Koœciana w³ócznia (twarda koœæ)
+Ta broñ wcale nie jest taka z³a w walce z goblinami... i to jest w³aœnie to.
+
+=== WEAPON Bone_Spear Decayed_Bones
+Koœciana w³ócznia (twarda koœæ)
+L¿ejsza od w³óczni kamiennej... i to ju¿ wszystkie jej zalety.
+
+=== WEAPON Bone_Spear Dragon_Black_Bones
+Koœciana w³ócznia (twarda koœæ)
+Jedynym sposobem na zwiêkszenie jej skutecznoœci s¹ czary...
+
+=== WEAPON Bone_Spear Dragon_Green_Bones
+Koœciana w³ócznia (twarda koœæ)
+W³ócznia ze smoczej koœci to dobra rzecz. A taka sama magiczna - jeszcze lepsza.
+
+=== WEAPON Bone_Spear Dragon_Red_Bones
+Koœciana w³ócznia (twarda koœæ)
+W³ócznia ze smoczej koœci to ju¿ przyzwoita broñ. Ale mag móg³by ja jeszcze ulepszyæ.
+
+=== WEAPON Bone_Spear Dry_Bones
+Koœciana w³ócznia (twarda koœæ)
+Ostrzejsza ni¿ zwyk³a w³ócznia z koœci, ale czy nie staæ ciê na coœ lepszego?
+
+=== WEAPON Bone_Spear Scrab_Bones
+Koœciana w³ócznia (twarda koœæ)
+To ju¿ coœ!
+
+=== WEAPON Cheat_Dagger Adamantium
+Rytualny adamantoway nó¿
+Ten metal jest tak bardzo drogi, ¿e nikt nie marnowa³by go na podróby!
+
+=== WEAPON Cheat_Dagger Bronze
+Rytualny nó¿ z br¹zu
+No tak... lepiej od razu zacznij szukaj czegoœ innego...
+
+=== WEAPON Cheat_Dagger Iron
+Rytualny stalowy nó¿
+¯elazo czy br¹z – niewielka ró¿nica.
+
+=== WEAPON Cheat_Dagger Meteoric
+Rytualny meteorytowy nó¿
+Czy ¿elazo meteorytowe rzeczywiœcie jest takie tanie, ¿eby zu¿ywaæ je na atrapy?
+
+=== WEAPON Cheat_Dagger Mithrill
+Rytualny mitrylowy nó¿
+Mo¿na zrobiæ lepszy u¿ytek z mitrylu!
+
+=== WEAPON Cheat_Dagger Steel
+Rytualny stalowy nó¿
+Wygl¹da niesamowicie, ale niewiele z niego po¿ytku.
+
+=== WEAPON Crossbow Adamantium
+Kusza adamantowa
+Trzymaj¹c coœ takiego w rêkach, mo¿esz sobie pozwoliæ byæ odrobinê niegrzeczny...
+
+=== WEAPON Crossbow Bronze
+Kusza z br¹zu
+Nie spodziewaj siê zbyt wiele po kuszy z br¹zu.
+
+=== WEAPON Crossbow Iron
+Stalowa kusza
+Jak ka¿da broñ z ¿elaza, tak i ¿elazna kusza jest lepsza od kuszy z br¹zu i gorsza od stalowej.
+
+=== WEAPON Crossbow Meteoric
+Meteorytowa kusza
+Jest tylko jeden sposób na to, jak polepszyæ jej skutecznoœæ... do³o¿yæ dodatkow¹ sprê¿ynê.
+
+=== WEAPON Crossbow Mithrill
+Mitrylowa kusza
+Co za si³a! Co za zasiêg! Bierz bez pytania!
+
+=== WEAPON Crossbow Steel
+Stalowa kusza
+Be³ty pos³ane ze stalowej kuszy przebij¹ nawet dobr¹ zbrojê.
+
+=== WEAPON Crystal_Axe Diamond
+Diamentowa siekiera
+Lepsza od diamentowej broni jest tylko diamentowa broñ wzmocniona magi¹...
+
+=== WEAPON Crystal_Crossbow Diamond
+Diamentowa kusza
+Mo¿liwoœæ dziurawienia wszystkich pancerzy tego œwiata warta jest ceny, jak¹ trzeba zap³aciæ za tê kuszê!
+
+=== WEAPON Crystal_Dagger Diamond
+Diamentowy sztylet
+DŸgniêcie diamentowym sztyletem jest równie zabójcze, co uderzenie pioruna!
+
+=== WEAPON Crystal_Mace Diamond
+Maczuga diamentowa
+Nawet ¿elazo meteorytowe ugnie siê pod ciosem takim buzdyganem.
+
+=== WEAPON Crystal_Short_Bow Diamond
+Krótki ³uk diamentowy
+Taki ³uk powinieneœ trzymaæ tu¿ obok klejnotów koronnych!
+
+=== WEAPON Crystal_Spear Diamond
+W³ócznia diamentowa
+¯adna zbroja nie oprze siê diamentowej w³óczni!
+
+=== WEAPON Crystal_Sword Diamond
+Miecz diamentowy 
+Ca³y diamentowy miecz jest równie skuteczny walce, co piêkny w twoich rêkach...
+
+=== WEAPON Curved_Dagger Adamantium
+Adamantowy szkocki sztylet
+To broñ do powa¿nej walki, a nie jakiejœ karczemnej awantury!
+
+=== WEAPON Curved_Dagger Bronze
+Szkocki sztylet z br¹zu
+Bardziej wiarygodny ni¿ zwyk³y, l¿ejszy ni¿ miecz. Ale spróbuj raczej czegoœ innego...
+
+=== WEAPON Curved_Dagger Iron
+Szkocki sztylet z ¿elaza
+Nienajgorszy ze sztyletów, ale gorszy od stalowego.
+
+=== WEAPON Curved_Dagger Meteoric
+Szkocki sztylet z meteorytu
+Najlepszy! Ale cena, oczywiœcie, odstraszy niejednego...
+
+=== WEAPON Curved_Dagger Mithrill
+Szkocki sztylet mitrylowy
+Lekki, ostry, doskonale wykonany... i drogi.
+
+=== WEAPON Curved_Dagger Steel
+Szkocki sztylet ze stali
+Œwietna broñ w rêkach doœwiadczonego wojownika...
+
+=== WEAPON Dagger Adamantium
+Adamantowy sztylet
+Jeden z najdoskonalszych sztyletów na tym œwiecie.
+
+=== WEAPON Dagger Bronze
+Sztylet z br¹zu
+Najlepszym sposobem na zabicie wroga tym „czymœ”, jest wbicie mu tego w plecy.
+
+=== WEAPON Dagger Iron
+Sztylet ¿elazny
+Przeciêtna broñ... zarówno w przypadku ceny, jak i skutecznoœci.
+
+=== WEAPON Dagger Meteoric
+Sztylet meteorytowy
+Zadaje maksimum mo¿liwych obra¿eñ. Jeœli to za ma³o, poszukaj maga, nie kowala.
+
+=== WEAPON Dagger Mithrill
+Sztylet mitrylowy
+Lekki i ostry sztylet. Kosztowny, ale warty swej ceny.
+
+=== WEAPON Dagger Steel
+Sztylet stalowy
+Stalowy sztylet jest cenn¹ broni¹! Ale stal nie przebije ka¿dego pancerza.
+
+=== WEAPON Hammer Adamantium
+Adamantowy m³ot bojowy
+Egzotyczna broñ. Ma³o kto wejdzie ci w drogê.
+
+=== WEAPON Hammer Bronze
+M³ot bojowy z br¹zu
+Wystarczaj¹co dobry do æwiczeñ, ale nie próbuj z czymœ takim pakowaæ siê w k³opoty.
+
+=== WEAPON Hammer Iron
+¯elazny m³ot bojowy
+W walce „na ¿elazo” bêdzie to broñ wystarczaj¹co dobra...
+
+=== WEAPON Hammer Meteoric
+Meteorytowy m³ot bojowy
+Ta broñ dostarczy twojemu przeciwnikowi niezapomnianych wra¿eñ...
+
+=== WEAPON Hammer Mithrill
+Mitrylowy m³ot bojowy
+Niejeden znalaz³by dla mitrylu lepsze zastosowanie ni¿ roztrzaskiwanie g³ów...
+
+=== WEAPON Hammer Steel
+Stalowy m³ot bojowy
+Wielu potraktowa³oby tê broñ powa¿nie.
+
+=== WEAPON Long_Bow Adamantium
+D³ugi ³uk adamantowy
+Nie ka¿dy wojownik mo¿e nosiæ pancerz zdolny powstrzymaæ strza³ê z takiego ³uku.
+
+=== WEAPON Long_Bow Bronze
+D³ugi ³uk z br¹zu
+Tak, ³uk d³ugi jest lepszy ni¿ krótki. Ale pomyœl jeszcze o lepszym materiale...
+
+=== WEAPON Long_Bow Iron
+D³ugi ³uk ¿elazny 
+Taki ³uk nie jest z³y, pod warunkiem, ¿e zamierzasz strzelaæ komuœ w plecy.
+
+=== WEAPON Long_Bow Meteoric
+D³ugi ³uk meteorytowy
+Czy wci¹¿ szukasz czegoœ lepszego? Zapomnij, to jest najlepsza broñ!
+
+=== WEAPON Long_Bow Mithrill
+D³ugi ³uk mitrylowy
+Strza³a z takiego ³uku jest tylko trochê bardziej groŸna ni¿ róg szar¿uj¹cego nosoro¿ca.
+
+=== WEAPON Long_Bow Steel
+D³ugi ³uk stalowy
+Przeciwnik uzbrojony w taki ³uk to groŸny przeciwnik.
+
+=== WEAPON Long_Crossbow Adamantium
+Ciê¿ka kusza adamantowa
+Dalekonoœna i przera¿aj¹ca broñ strzelecka – jedna z najbardziej zabójczych na œwiecie.
+
+=== WEAPON Long_Crossbow Bronze
+Ciê¿ka kusza z br¹zu
+Dodatkowa sprê¿yna nigdy nikogo nie zabi³a, nawet jeœli jest czêœci¹ kuszy z br¹zu.
+
+=== WEAPON Long_Crossbow Iron
+Ciê¿ka kusza ¿elazna
+Nie jest to mo¿e najlepsza z kusz... ale nie skreœlaj jej od razu.
+
+=== WEAPON Long_Crossbow Meteoric
+Ciê¿ka kusza meteorytowa
+Be³t wystrzelony z takiej kuszy przebije adamantowy pancerz tak, jak stalowa szpilka przebija papier!
+
+=== WEAPON Long_Crossbow Mithrill
+Ciê¿ka kusza mitrylowa
+Wytrzyma³y i sprê¿ysty mitryl jest doskona³ym materia³em na kuszê.
+
+=== WEAPON Long_Crossbow Steel
+Ciê¿ka kusza stalowa
+Dobra broñ!
+
+=== WEAPON Long_Spear Adamantium
+D³uga pika adamantowa
+Bardzo dobra broñ. I bardzo droga...
+
+=== WEAPON Long_Spear Bronze
+D³uga pika z br¹zu
+Lepsza pika z br¹zu ni¿ w³ócznia z br¹zu, ale to s³abe pocieszenie...
+
+=== WEAPON Long_Spear Iron
+D³uga pika ¿elazna
+Nie jest najlepsz¹ pik¹, ale i nie najdro¿sz¹...
+
+=== WEAPON Long_Spear Meteoric
+D³uga pika meteorytowa
+Absolutnie najlepsza w swoim rodzaju!
+
+=== WEAPON Long_Spear Mithrill
+D³uga pika mitrylowa
+Zarówno materia³ , jak i jakoœæ wykonania robi¹ wra¿enie! Cena te¿...
+
+=== WEAPON Long_Spear Steel
+D³uga pika stalowa
+Stalowa pika nie pozwoli przeciwnikowi zbli¿yæ siê do ciebie.
+
+=== WEAPON Long_Sword Adamantium
+D³ugi miecz adamantowy
+Z takim mieczem nawet niezbyt doœwiadczony wojownik wygra walkê!
+
+=== WEAPON Long_Sword Bronze
+D³ugi miecz z br¹zu
+Miecze z br¹zu s¹ dobre, o ile twój przeciwnik zapomni za³o¿yæ zbroi.
+
+=== WEAPON Long_Sword Iron
+D³ugi miecz ¿elazny
+Zadaje wiêcej obra¿eñ ni¿ miecz d³ugi z br¹zu, ale i tak nie przebije ka¿dego pancerza.
+
+=== WEAPON Long_Sword Meteoric
+D³ugi miecz meteorytowy
+¯aden kowal nie wykuje lepszego d³ugiego miecza!
+
+=== WEAPON Long_Sword Mithrill
+D³ugi miecz mitrylowy
+Drogi, ale warty swej ceny!
+
+=== WEAPON Long_Sword Steel
+D³ugi miecz stalowy
+Zabójcza broñ w rêkach wyszkolonego wojownika...
+
+=== WEAPON Mace Adamantium
+Maczuga adamantowa
+Z takim ciê¿kim argumentem nie musisz pytaæ nikogo o zdanie.
+
+=== WEAPON Mace Bronze
+Maczuga z br¹zu
+Niedrogi i przy tym imponuj¹cy! Przynajmniej w kwestii wygl¹du.
+
+=== WEAPON Mace Iron
+Maczuga z ¿elaza
+Nie jest mo¿e taki ³adny jak buzdygan z br¹zu, ale zadaje wiêksze obra¿enia.
+
+=== WEAPON Mace Meteoric
+Maczuga z meteorytu
+Od meteorytowego buzdygana lepszy jest tylko meteorytowa maczuga z kolcami.
+
+=== WEAPON Mace Mithrill
+Maczuga mitrylowa
+To bardzo powa¿na broñ. I wcale nie tania.
+
+=== WEAPON Mace Steel
+Stalowa maczuga
+Ciê¿ar stali sprawia, ¿e ciosy s¹ potê¿ne!
+
+=== WEAPON Saber Adamantium
+Szabla adamantowa
+Z tak¹ szabl¹ wygrasz ciê¿kie pojedynki!
+
+=== WEAPON Saber Bronze
+Szabla z br¹zu
+Choæ jest lepsza od kamiennej, lepiej nie polegaj zbytnio na szabli z br¹zu.
+
+=== WEAPON Saber Iron
+Szabla ¿elazna
+Nie jest z³a, ale dobra te¿ nie...
+
+=== WEAPON Saber Meteoric
+Szabla meteorytowa
+Z tak¹ szabl¹ masz ju¿ po³owê zwyciêstwa.
+
+=== WEAPON Saber Mithrill
+Szabla mitrylowa
+Ta szabla nie jest dla ¿ó³todziobów!
+
+=== WEAPON Saber Steel
+Szabla stalowa
+Doskona³a broñ w rêkach doœwiadczonego szermierza, choæ nie ka¿dy pancerz przebije.
+
+=== WEAPON Short_Bow Adamantium
+Krótki ³uk adamantowy
+Sprê¿ysty adamandyt zmienia ³uk w broñ zag³ady!
+
+=== WEAPON Short_Bow Bronze
+Krótki ³uk z br¹zu
+Metal nadaje ³ukom dodatkowe w³aœciwoœci, ale br¹z nie jest zbyt giêtkim metalem... 
+
+=== WEAPON Short_Bow Iron
+Krótki ³uk ¿elazny
+Odbij strza³ê z takiego ³uku, jeœli potrafisz!
+
+=== WEAPON Short_Bow Meteoric
+Krótki ³uk meteorytowy
+Jeœli zobaczysz tak¹ broñ u przeciwnika, od razu pisz testament.
+
+=== WEAPON Short_Bow Mithrill
+Krótki ³uk mitrylowy
+Nawet dobrze opancerzony przeciwnik potraktuje ciê powa¿nie.
+
+=== WEAPON Short_Bow Steel
+Krótki stalowy ³uk
+Strza³y wystrzeliwane z tego ³uku s¹ szybsze i celniejsze.
+
+=== WEAPON Spear Adamantium
+Adamantowa w³ócznia
+Bardzo dobra broñ. I kosztuje te¿ bardzo du¿o.
+
+=== WEAPON Spear Bronze
+W³ócznia z br¹zu
+Najprostsza metalowa w³ócznia. Nienajgorsza broñ...
+
+=== WEAPON Spear Iron
+¯elazna w³ócznia
+Nie jest to najlepsza broñ, ale za to nie najdro¿sza.
+
+=== WEAPON Spear Meteoric
+Meteorytowa w³ócznia
+Jedynie meteorytowa zbroja mo¿e wytrzymaæ coœ takiego... ale nie musi.
+
+=== WEAPON Spear Mithrill
+Mitrylowa w³ócznia
+Materia³ mówi sam za siebie!
+
+=== WEAPON Spear Steel
+Stalowa w³ócznia
+Wreszcie coœ skutecznego i przy tym niedrogiego.
+
+=== WEAPON Spiked_Club Adamantium
+Adamantowa ciê¿ka maczuga z kolcami
+Taka maczuga roztrzaska ka¿dy czerep.
+
+=== WEAPON Spiked_Club Bronze
+Ciê¿ka maczuga z kolcami z br¹zu
+Br¹z nigdy nie bêdzie materia³em na dob¹ maczugê z kolcami.
+
+=== WEAPON Spiked_Club Iron
+Ciê¿ka maczuga z kolcami z ¿elaza
+Oczywiœcie ¿elazo jest lepsze ni¿ br¹z, ale gorsze od innych metali.
+
+=== WEAPON Spiked_Club Meteoric
+Ciê¿ka maczuga z kolcami z meteorytu
+Kowale zrobili co mogli, reszta nale¿y ju¿ do magów...
+
+=== WEAPON Spiked_Club Mithrill
+Ciê¿ka maczuga z kolcami z mitrylu
+Z takim argumentem w rêkach zawsze bêdziesz mia³ racjê.
+
+=== WEAPON Spiked_Club Steel
+Ciê¿ka maczuga z kolcami ze stali
+Dobra broñ dla kogoœ, kto wybiera siê w niebezpieczn¹ podró¿.
+
+=== WEAPON Spiked_Mace Adamantium
+Adamantowa maczuga z kolcami
+To, co dobre, nie jest tanie.
+
+=== WEAPON Spiked_Mace Bronze
+Ciê¿ka maczuga z br¹zu
+Buzdygan z br¹zu, z kolcami wa¿y wiêcej ni¿ bez kolców.
+
+=== WEAPON Spiked_Mace Iron
+Ciê¿ka maczuga z ¿elaza
+¯elazne kolce s¹ gorsze ni¿ stalowe, ale ten buzdygan i tak jest lepszy od zwyk³ego.
+
+=== WEAPON Spiked_Mace Meteoric
+Maczuga z kolcami z meteorytu
+Po uderzeniu t¹ broni¹ zbroja przeciwnika bêdzie nadawaæ siê ju¿ tylko jako sito!
+
+=== WEAPON Spiked_Mace Mithrill
+Maczuga z kolcami z mitrylu
+Nawet stalowa zbroja nie oprze siê mitrylowym kolcom.
+
+=== WEAPON Spiked_Mace Steel
+Maczuga z kolcami ze stali
+Stalowe kolce nie s¹ najlepsze, ale taki buzdygan i tak jest niewiarygodn¹ broni¹!
+
+=== WEAPON Stone_Axe Granite
+Granitowa siekiera
+Lepsza ni¿ kamienna - mo¿esz ni¹ nawet nar¹baæ drewna... choæ z trudem.
+
+=== WEAPON Stone_Axe Malachite
+Obsydianowa siekiera
+Tak¹ siekier¹ mo¿esz siê nawet goliæ!
+
+=== WEAPON Stone_Axe Rock
+Kamienna siekiera
+Najprostsza siekiera. W³aœciwie to bardziej maczuga...
+
+=== WEAPON Stone_Axe Silicon
+Krzemienna siekiera
+Krzemieñ to krok naprzód w stosunku do kamienia – przynajmniej mo¿e coœ przeci¹æ.
+
+=== WEAPON Stone_Battle_Axe Granite
+Granitowy topór
+Zawsze lepszy ni¿ topór kamienny, choæ niewiele.
+
+=== WEAPON Stone_Battle_Axe Malachite
+Obsydianowy topór
+Widok takiego topora wzbudzi w twoim przeciwniku respekt.
+
+=== WEAPON Stone_Battle_Axe Rock
+Kamienny topór
+To niezupe³nie jest tylko kamieñ uwi¹zany do kija, to jest... po prostu coœ wiêcej.
+
+=== WEAPON Stone_Battle_Axe Silicon
+Krzemienny topór
+Na tej broni mo¿esz polegaæ (pod warunkiem, ¿e przeciwnik nie jest zbyt silny).
+
+=== WEAPON Stone_Battle_hammer Granite
+Ciê¿ki m³ot granitowy
+Wygl¹da odrobinê lepiej ni¿ kamienny, jest te¿ odrobinê bardziej skuteczny i jedynie odrobinê...
+
+=== WEAPON Stone_Battle_hammer Malachite
+Ciê¿ki m³ot obsydianowy
+To dopiero ciê¿ki m³ot! Jedynie metalowe s¹ lepsze.
+
+=== WEAPON Stone_Battle_hammer Rock
+Ciê¿ki m³ot kamienny
+Im ciê¿szy kamieñ, tym wiêksze obra¿enia.
+
+=== WEAPON Stone_Battle_hammer Silicon
+Ciê¿ki m³ot krzemienny
+Ostre krawêdzie krzemienia zadaj¹ przeciwnikom dodatkowe obra¿enia.
+
+=== WEAPON Stone_Dagger Granite
+Granitowy sztylet
+Na pocz¹tek mo¿e siê przydaæ, ale nie polegaj za bardzo na tej broni.
+
+=== WEAPON Stone_Dagger Malachite
+Obsydianowy sztylet
+Dobra broñ k³uta - najlepszy z kamiennych sztyletów.
+
+=== WEAPON Stone_Dagger Rock
+Kamienny sztylet
+Prawie nic nie warta broñ - zarówno pod wzglêdem skutecznoœci, jak ceny.
+
+=== WEAPON Stone_Dagger Silicon
+Krzemienny sztylet
+Porz¹dna broñ k³uta - skuteczna i niezbyt droga.
+
+=== WEAPON Stone_Formatter_drive_C Rock
+Kamienny formater dysku C:
+Prawdê mówi¹c, NIGDY nie ujrzysz takiej broni. Och, naprawdê j¹ widzisz? Wiêc spróbuj zgadn¹æ, co siê zaraz stanie!
+
+=== WEAPON Stone_Hammer Granite
+Granitowy m³ot
+Niez³a broñ dla pocz¹tkuj¹cych.
+
+=== WEAPON Stone_Hammer Malachite
+Obsydianowy m³ot
+Wystarczy, by jednym ciosem roz³upaæ czaszkê goblina.
+
+=== WEAPON Stone_Hammer Rock
+Kamienny m³ot
+Bardzo porêczny m³ot – zarówno dla kowala, jak i w walce.
+
+=== WEAPON Stone_Hammer Silicon
+Krzemienny m³ot
+To jeden ze sposobów na uzbrojenie ¿ó³todzioba.
+
+=== WEAPON Stone_Short_Bow Granite
+£uk (strza³y z granitowym grotem)
+Ma wiele wad, ale to zawsze lepsze ni¿ nic.
+
+=== WEAPON Stone_Short_Bow Malachite
+£uk (strza³y z obsydianowym grotem)
+Za pomoc¹ broni tego kalibru w najlepszym razie uda ci siê przeciwnika zadrasn¹æ.
+
+=== WEAPON Stone_Short_Bow Rock
+£uk (strza³y z kamiennym grotem)
+Nik³a jest szansa, ¿e z tego ³uku w cokolwiek trafisz, ale zawsze mo¿esz sobie postrzelaæ.
+
+=== WEAPON Stone_Short_Bow Silicon
+£uk (strza³y z krzemowym grotem)
+Teraz mo¿esz ju¿ zaryzykowaæ i wyjœæ poza bramy. Mo¿e nawet uda ci siê wróciæ.
+
+=== WEAPON Stone_Spear Granite
+W³ócznia z granitowym grotem
+Granit jest lepszy ni¿ zwyk³y kamieñ... ale gorszy od ka¿dego innego materia³u.
+
+=== WEAPON Stone_Spear Malachite
+W³ócznia z obsydianowym grotem
+No, teraz wygl¹da to jak prawdziwa w³ócznia.
+
+=== WEAPON Stone_Spear Rock
+W³ócznia z kamiennym grotem
+Najtañsza i zarazem najprostsza w³ócznia.
+
+=== WEAPON Stone_Spear Silicon
+W³ócznia z krzemiennym grotem
+Krzemienne groty s¹ bardziej ostre ni¿ kamienne.
+
+=== WEAPON Stone_Sword Granite
+Granitowy miecz
+Zawsze lepszy taki ni¿ ze zwyk³ego kamienia...
+
+=== WEAPON Stone_Sword Malachite
+Obsydianowy miecz
+Jedynie metalowe miecze s¹ lepsze od obsydianowych..
+
+=== WEAPON Stone_Sword Rock
+Kamienny miecz
+Raczej postaraj siê znaleŸæ coœ bardziej powa¿nego.
+
+=== WEAPON Stone_Sword Silicon
+Krzemienny miecz
+Tak, ten miecz zdecydowanie nadaje siê do walki. 
+
+=== WEAPON Unique_Spear Mithrill
+W³ócznia '"Œmiertelny piorun"
+Unikalna broñ. Braciszek Kowal nie zdo³a³by stworzyæ niczego, co mog³oby siê z ni¹ równaæ.
+
+=== WEAPON Unique_Sword Steel
+Staro¿ytny miecz
+Unikalna, staro¿ytna broñ. Obecnie nikt nie potrafi³by roz³o¿yæ jej na czêœci ani zrobiæ podobnej.
+

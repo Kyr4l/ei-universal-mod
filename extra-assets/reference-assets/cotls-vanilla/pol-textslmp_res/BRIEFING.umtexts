@@ -1,0 +1,117 @@
+# um-texts 1
+=== briefing intro_1k
+O rzemieœlniczym dziele
+#show Hero
+#show Smith
+#CAMERA 9
+#phrase Smith  1
+Moja praca wygl¹da jak zawsze: zrobiæ coœ, kupiæ lub sprzedaæ, oraz oczywiœcie zarobiæ trochê pieniêdzy, ha ha…
+#phrase Smith  2
+Ale mam pewne wiadomoœci. Po tym jak Wybranie poprowadzi³ starszego Erfara do œwiat³a, czarownica Estera zaczê³a traktowaæ odrobinê lepiej mieszkañców wioski…
+#phrase Smith  3
+Zawar³a nawet pokój ze mn¹, tak ¿e mamy teraz uk³ad: daje mi swoje czary, a ja je sprzedajê.
+#phrase Smith  4
+Nauczy³a mnie równie¿ jak tworzyæ nowe czary, ale pod warunkiem, ¿e nigdy nie powiem o tym nikomu. Oczywiœcie tego nie zrobiê - czy wydaje ci siê ¿e jestem g³upcem?
+#phrase Smith  5
+Jeœli wszyscy zaczn¹ produkowaæ rzeczy i tworzyæ czary dla siebie, jak zarobiê na ¿ycie? Trzymajmy siê wiêc starych metod: chcesz czegoœ, przychodzisz do mnie. To jedyna metoda!
+
+=== briefing intro_1q
+O ¿yciu w wiosce
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase NSheriff  1
+Zwyk³em myœleæ, ¿e zarz¹dzanie wiosk¹ to ¿adna filozofia - rano wydajesz wszystkie rozkazy, a resztê dnia spêdzasz w jakimœ mi³ym, ch³odnym miejscu...
+#phrase NSheriff  2
+Ale po spróbowaniu tego szybko zmieni³em zdanie. Jeden k³opot za drugim, nigdy siê to nie koñczy. Bandyci, orkowie, gobliny… A teraz jaszczury - czy mamy pokój z nimi czy te¿ one s¹ naszymi wrogami?
+#phrase NSheriff  3
+A teraz nie mamy nawet Wybrañca, musimy wiêc zdaæ siê na siebie!
+#phrase NSheriff  4
+Myœla³em o rzuceniu tej roboty, ale jednak zdecydowa³em siê zostaæ; pomimo wszystkiego ludzie zaufali mi, wiêc jeœli odejdê, bêdzie to jak zdrada. A nie mogê sobie na to pozwoliæ, nieprawda¿?
+
+=== briefing intro_2k
+Witaj
+#show Hero
+#show Shopper
+#CAMERA 3 30 3 1
+#phrase Shopper  1
+Witam drogi kliencie!
+#phrase Shopper  2
+Prowadzê moje interesy w ten sposób: masz pieni¹dze, mo¿esz wejœæ. Mo¿esz równie¿ przyjœæ nawet jeœli nie masz pieniêdzy. Nie ma op³aty za rozgl¹danie siê, ale nie ma równie¿ kredytów. Zarabiasz pieni¹dze, wracasz i kupujesz to, czego potrzebujesz.
+
+=== briefing intro_2q
+O ¿yciu w mieœcie Ingos
+#show Hero
+#show Huber
+#CAMERA 3 30 3 1
+#phrase Huber  1
+O, nowi ludzie w wiosce! Nie zdarza siê to czêsto, prawda? Wydaje mi siê, ¿e jesteœ typem "poszukiwacza przygód", nieprawda¿?
+#phrase Huber  2
+W takim przypadku trafi³eœ we w³aœciwe miejsce! Szybko znajdziesz tu to, czego szukasz, a prawdopodobnie rzeczywistoœæ przeroœnie twoje oczekiwania!
+#phrase Huber  3
+Z drugiej strony przyda³by mi siê przedsiêbiorczy cz³owiek w tym mieœcie, który nie ba³by siê podejmowaæ ryzyka. Mój lojalny asystent kapitan Tilvar zagin¹³ z ca³¹ swoj¹ jednostk¹, a od tego czasu nikt nawet nie przys³a³ nowego okazu do mojej kolekcji!
+#phrase Huber  4
+W chwili obecnej jest dla ciebie równie¿ trochê innych zajêæ, mo¿e nie tak interesuj¹cych… Na przyk³ad bandyci, buntownicy, wrogie potwory… Jednym s³owem nie zanudzisz siê, uwierz mi!
+
+=== briefing intro_3k
+O ¿yciu w Ostatnim schronieniu
+#show Hero
+#show Kuzn
+#CAMERA 3 30 3 1
+#phrase Kuzn  1
+Hmm… Nowa twarz? Œwietnie! W koñcu brat Khatul zapomnia³ o swoich podejrzeniach i zacz¹³ przyjmowaæ nowych ludzi do Kryjówki.
+#phrase Kuzn  2
+Z drugiej strony, bardzo ³atwo jest utraciæ jego zaufanie. Jeœli poprosi ciê o zrobienie czegoœ lub odradzi ci wêdrówkê w jakieœ miejsce, lepiej siê pos³uchaj. W przeciwnym wypadku twoje ¿ycie mo¿e staæ siê trudne!
+#phrase Kuzn  3
+Ale to naprawdê nie jest mój interes. Ja u¿ywam m³ota i szczypiec, a teraz tak¿e czarami. Brat Kehel dawa³ mi je, ale nie ma go ju¿ z nami.
+#phrase Kuzn  4
+Przed d³ugi czas by³ chory, a zmar³ nied³ugo przed twoim przybyciem. Nigdy nie byliœmy przyjació³mi… Zreszt¹ myœlê, ¿e nigdy nie mia³ on ¿adnego przyjaciela!
+#phrase Kuzn  5
+Ale z jakiegoœ powodu brat Kehel przekaza³ mi czary i runy nale¿¹ce do niego!
+
+=== briefing intro_3q
+O ¿yciu w Ostatnim schronieniu
+#show Glav
+#show Hero
+#CAMERA 3 30 3 1.5
+#phrase Glav  1
+Ostatnia Kryjówka jest gotowa przyj¹æ wszystkich przychodz¹cych z otwartym sercem i uczciw¹ dusz¹. Nie pytamy o to kim jesteœ czy sk¹d przychodzisz, jaka by³a twoja przesz³oœæ ani czego oczekujesz w przysz³oœci.
+#phrase Glav  2
+Szczególnie ¿e niektórzy nasi bracia nie pamiêtaj¹ swojej przesz³oœci, tak ¿e nie ma sensu pytaæ ich o to. Dla przyk³adu, brat Blondyn - przyby³ on tutaj po ucieczce z Kanionu Œmierci, a opuœci³ nas poprzez portal wiod¹cy do Ziemi Ja³owej.
+#phrase Glav  3
+Tak, brat Blondyn by³ naprawdê kimœ niezwyk³ym! Nigdy siê nie ba³ otwartej walki z jednostkami stra¿ników, ale tak¿e przygotowywa³ ró¿ne podstêpy dla wrogów…
+#phrase Glav  4
+Ale nie mówmy ju¿ o nim. Jeœli ci¹gle patrzysz w przesz³oœæ, nie dojdziesz daleko!
+
+=== briefing intro_4k
+Jestem mechanicznym s³ug¹
+#show Hero
+#show Golem
+#CAMERA 3 30 8 2
+#phrase Golem  1
+Jestem golemem. Jestem mechanicznym poddanym. S³u¿ê Wielkiemu Magowi.
+#phrase Golem  2
+Jeœli powie mi abym ciê zabi³, zabijê ciê. Jeœli ka¿e mi zgin¹æ dla ciebie, zginê dla ciebie.
+#phrase Golem  3
+Teraz Wielki Mag powiedzia³ mi, abym pracowa³ dla ciebie - wiêc bêdê to robi³.
+#phrase Golem  4
+Jestem golemem. Jestem mechanicznym poddanym. Jestem gotowy do pracy.
+
+=== briefing intro_4q
+Mag Greta wita swych goœci!
+#show Hero
+#show Rick
+#CAMERA 3
+#phrase Rick  1
+Jeszcze niedawno nawet nie marzy³em o zobaczeniu ludzi w mojej jaskini. By³em tak zajêty próbami odnalezienia Joonów, ludzi nale¿¹cych do mojej rasy, ¿e w ogóle nie myœla³em o innych ludziach.
+#phrase Rick  2
+Niestety, z powodu okrutnego ¿artu Fortuny nie rozpozna³em tego, kogo szuka³em, choæ znajdowa³ siê on przy mnie, a jego prawdziwa osobowoœæ zosta³a zamaskowana najprostszym czarem!
+#phrase Rick  3
+Nie rozpozna³em go, wiêc wys³a³em m³odego Joona do Suslanger na praktycznie pewn¹ œmieræ. By³em bardzo zaskoczony kiedy powróci³, a jeszcze bardziej oszo³omiony kiedy odkry³em, kim on naprawdê by³…
+#phrase Rick  4
+Nie zamierzam jednak powtarzaæ tego samego b³êdu. Witam ciê tutaj, kimkolwiek jesteœ, tym bardziej ¿e wielkie niebezpieczeñstwo zagra¿a Gipath, a my potrzebujemy mocnych i lojalnych ludzi do konfrontacji.
+#phrase Rick  5
+Imperium Khadaganiañskie przygotowuje inwazjê na Gipath; wielka armia jest organizowana w pobli¿u portalu Suslanger! Jestem wystarczaj¹co silny aby walczyæ z wrogami tutaj, ale po zakoñczeniu wojny Gipath przekszta³ci siê w wymar³¹ pustyniê.
+#phrase Rick  6
+By³oby znacznie lepiej gdybyœ móg³ os³abiæ armiê w Suslanger, lub nawet kompletnie uniemo¿liwi³ inwazjê.
+

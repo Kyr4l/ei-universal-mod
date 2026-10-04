@@ -1,0 +1,1001 @@
+# um-texts 1
+=== tutor it001_head
+Samouczek
+
+=== tutor it001_head_screen1
+Samouczek (gra)
+
+=== tutor it001_head_screen2
+Samouczek (interfejs)
+
+=== tutor it001_text_screen1
+DROGI GRACZU, 
+
+Aby u³atwiæ ci oswojenie siê z gr¹, do³¹czyliœmy liczne podpowiedzi i samouczki. Bêd¹ one pojawiaæ siê na ekranie podczas twych pierwszych kroków w grze. Dostarcz¹ one szczegó³owych wyjaœnieñ na temat poszczególnych czynnoœci. Podczas gdy podpowiedzi s¹ zazwyczaj bardzo krótkie i zawieraj¹ precyzyjne informacje o konkretnych komendach, samouczek zawiera dok³adne opisy a czasami tak¿e sugestie. D³u¿sze samouczki zajmuj¹ kilka ekranów. ¯eby przemieszczaæ siê miêdzy nimi, u¿ywaj przycisków na dole okna (umieœciliœmy je w ramkach, aby by³y lepiej widoczne). Czytaj samouczki dok³adnie! Im dok³adniej je przestudiujesz, tym ³atwiej bêdzie ci ukoñczyæ grê i dostarczy ona ci znacznie wiêcej zabawy.
+Gry samouczek pojawia siê na ekranie, w³aœciwa gra jest wstrzymywana.
+Wiêkszoœæ elementów ekranu (jak np. pozycje menu, ikony, itp.) maj¹ wyskakuj¹ce podpowiedzi. Umieœæ kursor na elemencie i pozostaw go tam przez chwilê a pojawi siê podpowiedŸ. 
+Jeœli poruszysz myszk¹, podpowiedŸ zniknie. Aby zobaczyæ ostatni¹ podpowiedŸ, naciœnik klawisz <H>.
+Uwaga: opisywane tutaj ustawienia s¹ standardowe. Jeœli zmieni³eœ je, niektóre opisy mog¹ ju¿ byæ nieaktualne - uwa¿aj wiêc przy zmianie jakichkolwiek ustawieñ!
+
+=== tutor it001_text_screen2
+Ka¿dy ekran interfejsu ma swojego w³asnego samouczka. Jeœli chcesz wyœwietliæ ekran samouczka, naciœnij klawisz <H>.
+
+=== tutor it002_head
+Mapa g³ówna
+
+=== tutor it002_head_screen1
+Mapa g³ówna
+
+=== tutor it002_head_screen2
+Strefy gry
+
+=== tutor it002_head_screen3
+Dostêpne strefy
+
+=== tutor it002_head_screen4
+"Baza"
+
+=== tutor it002_text_screen1
+     Znajdujesz siê obecnie w "Mapie g³ównej". Przedstawia ona wyspê, na której znajduje siê postaæ. Pokazuje, które strefy gry s¹ dostêpne (ich granice s¹ oznaczone ¿ó³tymi ramkami). Strefa staje siê dostêpna jeœli twoja postaæ odwiedzi j¹ przynajmniej raz lub otrzyma zadanie do wype³nienia w tej strefie.
+
+     Obecna pozycja postaci oznaczona jest unosz¹c¹ siê w przestrzeni pionow¹ strza³k¹.
+
+     Mo¿esz obracaæ Mapê w dowolnie wybranym kierunku. Jest to kontrolowane za pomoc¹ przycisków po prawej stronie dolnej czêœci ekranu.
+
+     Nazwa wyspy i czas gry wyœwietlone s¹ w górnym lewym rogu ekranu. W dolnym lewym rogu jest przycisk "wejœcie do obozu". Klikaj¹c na nim, zobaczysz, jakie przedmioty zebra³eœ. Mo¿esz tak¿e zmieniæ zbroje i bronie swoich postaci, wzi¹æ nowe przedmioty, itp.
+
+=== tutor it002_text_screen2
+     Poszczególne ekrany Stref Gry pokazuj¹ które zadania musisz ukoñczyæ w ka¿dej strefie i przybli¿one po³o¿enie zadania. Same zadania s¹ wyœwietlane za pomoc¹ specjalnych symboli.
+
+     Jeœli umieœcisz kursor w strefie, jej nazwa pojawi siê w górnym prawym rogu ekranu, a po niej lista wszystkich zadañ, które musisz ukoñczyæ w tej strefie. Kiedy ju¿ to uczynisz, zadanie nie bêdzie wiêcej wyœwietlane na Mapie G³ównej.
+
+     Aby uzyskaæ bardziej szczegó³owe informacje na temat zadania, które musisz wykonaæ w podanej strefie, wystarczy ¿e klikniesz na sam¹ strefê, a pojawi siê "Ekran Zadañ" dla tej strefy. Zobacz te¿ samouczka na ten temat.
+
+     Uwaga: mapy wysp pokazuj¹ tylko pow³okê terenu. Podziemne Strefy Gry s¹ zaznaczone albo jako odrêbne krainy, albo za pomoc¹ przerywanych linii na ziemi.
+
+=== tutor it002_text_screen3
+     Mapa g³ówna pokazuje tylko strefy dostêpne obecnie dla twojej postaci. Mog¹ one byæ zaznaczone ró¿nymi kolorami. Kiedy umieœcisz kursor nad stref¹, kolory zostan¹ zmienione tak aby zonaczyæ wybran¹ strefê.
+
+     Strefy, w których ukoñczy³eœ kluczowe zadanie (innymi s³owy, strefy "odkryte") s¹ zaznaczone ciemniejszym kolorem. Twoje postacie mog¹ omijaæ takie "odkryte" strefy nie bêd¹c zmuszonymi przechodziæ przez nie. Jeœli parê takich "odkrytych" stref jest obok siebie i posiadaj¹ ³¹cz¹ce Strefy Przejœciowe, mo¿esz omin¹æ je wszystkie.
+
+     Uwaga: Nie musisz ukoñczyæ wszystkich zadañ ani zabiæ wszystkich wrogów w danej strefie aby sta³a siê "odkryta".
+
+     Strefy dostêpne, lecz jeszcze nie "odkryte" s¹ zaznaczone jaœniejszym kolorem. Jeœli musisz przejœæ przez tak¹ strefê w celu ukoñczenia bie¿¹cego zadania, twoje postacie bêd¹ musia³y wejœæ do niej i przejœæ j¹ ca³¹ a¿ do wybranego celu. Nie mo¿esz omijaæ "nieodkrytych" stref.
+
+=== tutor it002_text_screen4
+     "Baza" (czy to wioska, czy miasto) jest wyœwietlana na Mapie Wyspy za pomoc¹ specjalnego symbolu (bramy lub budynku). Na ka¿dej wyspie masz dostêpn¹ przynajmniej jedn¹ "bazê". Jeœli strefa, zawieraj¹ca "bazê" jest "odkryta", mo¿esz wejœæ do niej prosto z Mapy G³ównej. Inaczej twoja postaæ bêdzie musia³a dojœæ do bazy.
+
+     Uwaga: kiedy opuœcisz bazê, zawsze przejdziesz do Mapy G³ównej.
+
+=== tutor it003_head
+Strefy Dialogu
+
+=== tutor it003_head_screen1
+G³ówna ("Baza")
+
+=== tutor it003_head_screen2
+Komunikacja z postaciami
+
+=== tutor it003_head_screen3
+Kompani
+
+=== tutor it003_head_screen4
+Dodatek
+
+=== tutor it003_text_screen1
+     Kiedy postaæ jest w Strefie gry, nie mo¿e robiæ pewnych rzeczy, jak na przyk³ad rozmawiaæ z innymi postaciami, kupowaæ, sprzedawaæ ani zamawiaæ przedmiotów ani czarów. Takie akcje mog¹ byæ przeprowadzane tylko w Strefie dialogu.
+
+     Twoja postaæ mo¿e wejœæ do strefy dialogu, lecz nie mo¿esz jej tam rozkazaæ nikogo atakowaæ, kraœæ rzeczy, czy rzucaæ czarów. Takie zachowania s¹ zakazane.
+
+     Jednak¿e, twoja postaæ mo¿e rozmawiaæ z innymi tak d³ugo, jak d³ugo posiadaj¹ oni tytu³ odpowiadaj¹cy konwersacji. Aby sprawdziæ, czy mo¿esz rozmawiaæ, najedŸ kursorem na postaæ. Jeœli jest to mo¿liwe, obok kursora pojawi siê imiê postaci wraz z obrazkiem, przedstawiaj¹cym poruszaj¹ce siê usta. Jeœli w danym momencie postaæ nie ma nic do powiedzenia, nie poka¿e siê ¿aden obrazek. Zobacz nastêpny ekran ¿eby dowiedzieæ siê wiêcej na temat rozmowy w Strefie dialogu.
+     Na ró¿nych wyspach s¹ ró¿ne strefy dialogu. Zale¿nie od okolicznoœci, mog¹ byæ dostêpne lub nie. Jednak¿e, na ka¿dej wyspie jest przynajmniej jedna strefa Dialogu (nazywana "baz¹"), która jest zawsze dostêpna. Postacie mog¹ tam sprzedawaæ, kupowaæ i zamawiaæ przedmioty i zaklêcia. Kiedy ujrzysz na liœcie dostêpnych komend "kup, sprzedaj, zamów", zostan¹ one tam dopóki wszystkie zadanie na wyspie nie zostan¹ ukoñczone.
+
+     Uwaga: w Gipath mo¿esz handlowaæ przedmiotami i czarami w ró¿nych bazach.
+
+=== tutor it003_text_screen2
+     ¯eby dowiedzieæ siê, o czym mo¿esz rozmawiaæ z dan¹ postaci¹, kliknij na niej, a ujrzysz listê. Zaznacz to, o czym chcesz powiedzieæ.
+
+     Uwaga: zale¿nie od tego, co wybierzesz, inne tematy rozmowy mog¹ siê zmieniæ lub znikn¹æ.
+
+     Tematy rozmowy mog¹ byæ bardzo ró¿ne. Podczas rozmowy z postaci¹ mo¿esz otrzymaæ nowe zadania lub porady na ich najlepsze wykonanie. Mo¿esz otrzymaæ nagrodê za ukoñczenie zadania, albo otrzymaæ prezent (niektóre postacie s¹ bardzo hojne!). Innymi s³owy, rozmowa nic nie kosztuje - a wrêcz mo¿e byæ bardzo dochodowa. Tak wiêc nie zapomnij sprawdzaæ czy nie przyby³y nowe tematy rozmów poszczególnym postaciom.
+
+     Uwaga: niektóre postacie mog¹ mieæ na swojej liœcie s³owa "kup, sprzedaj, zamów..." Jeœli na nich klikniesz, przejdziesz natychmiast do Ekranu Sklepu. Zobacz inne samouczki na temat kupna/sprzeda¿y.
+
+=== tutor it003_text_screen3
+     Twoja g³ówna postaæ (chyba mo¿emy ju¿ j¹ nazwaæ bohaterem, czy¿ nie?) nie musi podró¿owaæ samotnie. Na ka¿dej wyspie mo¿e znaleŸæ ludzi, którzy zgodz¹ siê jej towarzyszyæ. Nie bêd¹ chcieli za to pieniêdzy - przy³¹cz¹ siê do jego dru¿yny z w³asnych powodów. £atwo jest stwierdziæ, kto jest zainteresowany przy³¹czeniem - powie ci to podczas waszej pierwszej rozmowy.
+
+     Uwaga: Jeœli jeden z twoich towarzyszy umrze, nie oznacza to, ¿e gra jest skoñczona. Jednak¿e, zapamiêtaj ¿e zadania s¹ tak wymyœlone, ¿e trzeba je rozwi¹zywaæ z pomoc¹ dru¿yny. Wykonywanie ich samotnie bêdzie o wiele trudniejsze, chroñ wiêc cz³onków swojej dru¿yny!
+
+     Mo¿esz zmieniaæ zbroje i broñ swoich kompanów tak samo, jak swojej g³ównej postaci. Bêd¹ oni tak¿e zdobywaæ doœwiadczenie podczas wykonywania zadañ, które przeznaczyæ mo¿na na nowe umiejêtnoœci czy zdolnoœci. S¹ jednak pewne ograniczenia w poczynaniach twoich towarzyszy, na przyk³ad:
+     Ka¿da dru¿yna mo¿e dzia³aæ tylko na swej rodzinnej wyspie. Kiedy bohater zamierza przejœæ na inn¹ wyspê, musi opuœciæ towarzystwo dru¿yny.
+     Dru¿yna nie mo¿e mieæ wiêcej ni¿ trzech cz³onków. Jeœli poprosisz czwart¹ postaæ o przy³¹czenie siê do dru¿yny, zawsze znajdzie ona jak¹œ wymówkê.
+     Mo¿esz pozostawiæ dowolnego cz³onka dru¿yny w dowolnej chwili, jeœli tylko zechcesz. Musisz z nim tylko o tym porozmawiaæ. Nie martw siê, nie urazisz jego uczuæ. W rzeczywistoœci, zawsze mo¿esz po niego wróciæ póŸniej, jeœli zechcesz.
+
+     Uwaga: mo¿esz pozostawiæ towarzysza tylko w tej samej strefie Dialogu, w której siê znajdowa³, gdy do³¹cza³ do twojej dru¿yny.
+
+=== tutor it003_text_screen4
+     Istniej¹ inne strefy Dialogu oprócz baz, które poznasz. W niektórych z nich mo¿esz tylko rozmawiaæ, w innych mo¿esz rekrutowaæ nowych cz³onków dru¿yny (np. towarzystwo dla twojego bohatera).
+     Zapamiêtaj, ¿e sklepy i konstruktorzy przedmiotów i czarów nie bêd¹ dostêpni w tych nowych strefach Dialogu, co tak¿e mo¿e siê wydarzyæ, jeœli ju¿ odegraj¹ swoj¹ rolê w grze.
+
+=== tutor it004_head
+Ekran Zadañ
+
+=== tutor it004_head_screen1
+Ekran Zadañ
+
+=== tutor it004_head_screen2
+Mapa Strefowa
+
+=== tutor it004_head_screen3
+Zadania/cele
+
+=== tutor it004_text_screen1
+     Ekran zadañ podaje szczegó³owe informacje na temat dostêpnych zadañ w bie¿¹cej Strefie gry i ich cele. Pozwoli ci to zaplanowaæ akcje w taki sposób, aby zminimalizowaæ ryzyko.
+
+     Ekran zadañ jest podzielony na kilka sekcji: po lewej stronie jest lista zadañ i ich opisów (np. informacje o zadaniu i jego cele). Po prawej stronie ujrzysz uproszczon¹ mapê Strefy gry z ró¿nymi podpisami. Zobacz w nastêpnym samouczku wiêcej o mapie stref.
+
+     Kiedy jesteœ w Strefie gry, mo¿esz mieæ w tym samym czasie dostêpnych kilka zadañ. Jeœli chcesz ujrzeæ wiêcej szczegó³ów na temat poszczególnych zadañ i ich celów, po prostu wybierz nazwê zadania. Jeœli jest zbyt wiele zadañ, by wyœwietliæ je w jednym oknie, zobaczysz pasek przewijania po prawej stronie listy - u¿yj go do przewijania w dó³ i w górê.
+
+     Aby powróciæ do strefy gry, u¿yj przycisku <V> na dole ekranu lub klawisz <TAB>.
+
+=== tutor it004_text_screen2
+     W górnej prawej czêœci ekranu widaæ uproszczon¹ mapê twojej Strefy gry. Mapa pokazuje Strefy przejœciowe, przybli¿one po³o¿enia zadañ, teren krainy i kilka wa¿niejszych miejsc na danym terenie. Wa¿niejsze punkty s¹ w nastêpuj¹cy sposób:
+
+     Trójk¹ty: to Strefy przejœciowe - zielone s¹ dostêpne, czerwone niedostêpne.
+     Wielki czerwony krzy¿: to miejsce, do którego musisz siê dostaæ w celu ukoñczenia zaznaczonego zadania (wybranego w lewym okienku).
+     Klucze: te pokazuj¹ po³o¿enia kluczy lub kluczowych przedmiotów, które s¹ niezbêdne w zadaniu.
+     Grube i przerywane linie: to s¹ drogi i œcie¿ki.
+     Szerokie i w¹skie paski na wodzie: oznaczaj¹ mosty i brody.
+     Czaszki i skrzy¿owane koœci: te oznaczaj¹ po³o¿enia magicznych pu³apek (czerwone z ogniem, zielone z kwasem, a niebieskie z b³yskawicami).
+
+     Na mapie mog¹ siê równie¿ znajdowaæ inne symbole dla poszczególnych zadañ. Mo¿esz na przyk³ad zobaczyæ obrazki zwierz¹t czy potworów, kufry, torby, itp). Pamiêtaj, ¿e mapy zapewniaj¹ wiele po¿ytecznych informacji, wiêc dobrze im siê przyjrzyj przed wejœciem do Strefy gry.
+
+     W prawym dolnym rogu ekranu zobaczysz okienko tekstowe, zawieraj¹ce opis Strefy gry. Mo¿e to byæ krótki tekst (zazwyczaj), ale zawiera cenne wskazówki i inne podpowiedzi, które mog¹ ci wiele pomóc w wype³nianiu zadania, wiêc nie przegap go!
+
+=== tutor it004_text_screen3
+     Twoja postaæ wiêkszoœæ zadañ otrzyma podczas rozmów z innymi postaciami w strefach dialogu. Jednak¿e, nieliczne zadania mog¹ pojawiæ siê, kiedy przebywa w Strefie gry.
+
+     Niektóre zadania s¹ obowi¹zkowe (musisz je wykonaæ, aby uczyniæ postêp), inne zaœ nie. Nie masz pewnoœci, które jest które (no daj spokój, chyba nie chcesz, ¿eby by³o za ³atwo, co? ;-]). Sam musisz zdecydowaæ, które wykonaæ z nadziej¹, ¿e wybra³eœ dobrze.
+   Twoja postaæ uzyska pewn¹ iloœæ doœwiadczenia za ka¿de zadanie. Jeœli nie by³a sama, zostanie ono podzielone na ca³¹ dru¿ynê. Niektóre zadania zapewni¹ tak¿e nagrody pieniê¿ne. Zobaczysz "wartoœæ" nagrody ka¿dego zadania na koñcu jego opisu.
+
+     Wiêkszoœæ zadañ jest podzielona na kilka pomniejszych etapów. Ka¿dy stanowi czêœæ ca³oœci. Niektóre cele bêd¹ dostêpne ju¿ na samym pocz¹tku, po otrzymaniu zadania. Mo¿esz uznaæ je za pierwsze etapy. Inne cele pojawi¹ siê dopiero po wykonaniu tych poprzednich.
+     Ukoñczone cele bêd¹ zaznaczone jako  <V> na liœcie celów. Te, które z jakichœ powodów nie mog¹ ju¿ byæ wykonane, bêd¹ zaznaczone jako <X>. Wype³nione zadania bêd¹ pokazane na liœcie jako "ukoñczone".
+
+     Uwaga: zadanie mo¿e byæ uznane za wykonane, nawet jeœli nie wype³ni³eœ wszystkich celów. Nie obawiaj siê, jest to normalne. Nie zawsze wymagane jest wype³nienie wszystkich etapów zadania.
+
+=== tutor it005_head
+Ekran zadañ
+
+=== tutor it005_head_screen1
+Ekran zadañ
+
+=== tutor it005_text_screen1
+     Kiedy ju¿ wybierzesz Strefê gry w Mapie g³ównej, zobaczysz ekran zadañ. Górny prawy róg pokazuje uproszczon¹ mapê strefy. Powinieneœ zobaczyæ tam conajmniej jeden trójk¹t.
+    Zielone trójk¹ty wskazuj¹ Strefy przejœciowe. Twoja postaæ mo¿e wejœæ przez nie do Strefy gry. Wybierz jedn¹ z nich klijkaj¹cna niej. Zauwa¿, ¿e stanie siê wiêksza. To oznacza, ¿e jest "wybrana".
+     Czerwone trójk¹ty oznaczaj¹ Strefy przejœciowe niedostêpne dla twojej postaci. Mo¿esz na nich klikn¹æ jeœli chcesz - i tak nic to nieda.
+
+     Jeœli nie widzisz ¿adnych zielonych trójk¹tów na mapie, oznacza to, ¿e gdzieœ pomiêdzy pozycj¹ twojej postaci, a obecn¹ Stref¹ gry, do której zamierzasz wejœæ, istnieje inna, "nieodkryta" strefa gry. Bêdziesz j¹ musia³ odnaleŸæ i przeprowadziæ przez ni¹ swoj¹ postaæ, jeœli chcesz iœæ dalej.
+
+     Aby wejœæ do Strefy gry, u¿yj przycisku <V> na dole ekranu.
+     Aby powróciæ do Mapy g³ównej, u¿yj przycisku <X> na górze ekranu.
+
+=== tutor it006_head
+Ekwipunek
+
+=== tutor it006_head_screen1
+Przedmioty
+
+=== tutor it006_head_screen2
+Zbroje
+
+=== tutor it006_text_screen1
+     Za pomoc¹ tego ekranu mo¿esz wyposa¿yæ swoje postaci w ubrania, broñ, napoje, ró¿d¿ki, itp. Imiona poszczególnych postaci s¹ wyœwietlone w panelu po lewej stronie ekranu. Mo¿esz poruszaæ siê po liœcie u¿ywaj¹c przycisków po lewej i prawej stronie panelu.
+     Pasek na górze ekranu pokazuje jakie przedmioty postaæ zabierze ze sob¹ do Strefy Gry. Cztery miejsca po lewej przeznaczone s¹ na broñ, a te po prawej - na napoje i ró¿d¿ki.
+
+     Dolny pasek pokazuje inwentarz postaci. S¹ to przedmioty, które nie zostan¹ zabrane do Strefy Gry. Jeœli chcesz, aby by³y wyœwietlane tylko poszczególne typy przedmiotów, u¿yj przycisków po lewej i prawej stronie paska. Aby zobaczyæ jakie typy przedmiotów wyœwietli przycisk, po prostu najedŸ kursorem na niego i zaczekaj parê sekund. Wyskakuj¹ca podpowiedŸ pojawi siê z informacj¹.
+
+     Jak zosta³o to wyjaœnione powy¿ej, przedmioty s¹ albo "trzymane" przez postaæ (górny pasek), albo le¿¹ w inwentarzu (dolny pasek). Aby wyposa¿yæ postaæ w przedmiot z inwentarza, kliknij na przedmiot w pasku (dó³) inwentarza, a ten zostanie przeniesiony do paska (góra) aktywnego. Aby wybraæ aktywn¹ broñ do u¿ywania, kliknij prawym przyciskiem na jej obrazku w górnym pasku. Dooko³a niej pojawi siê ramka. Teraz jest gotowa do u¿ycia. ¯eby w³o¿yæ aktywny przedmiot do inwentarza, kliknij na jego rysunku w górnym pasku.
+
+     Uwaga: jeœli wszystkie miejsca w górnym pasku s¹ puste, twoja postaæ wejdzie do Strefy Gry nieuzbrojona - i prawdopodobnie nie pozostanie w jednym kawa³ku!
+
+=== tutor it006_text_screen2
+     Dok³adnie poœrodku ekranu znajduje siê wizerunek twojej postaci, ubranej w zbrojê, któr¹ bêdzie nosi³a w Strefie Gry. Za³o¿enie w³aœciwej zbroi decyduje o sukcesie lub pora¿ce, tak wiêc wybierz odpowiedni¹ do danego zadania. Po lewej i prawej stronie widaæ, co obecnie nosi postaæ. Kiedy najedziesz kursorem na odpowiedni przedmiot, zobaczysz jego nazwê i w³aœciwoœci w prawym panelu ekranu.
+Zbroje podzielone s¹ na lekkie i ciê¿kie. Ciê¿kie zbroje mog¹ byæ zak³adane na zbroje lekkie aby daæ dodatkow¹ ochronê. Lecz nie zapomnij, im bardziej obci¹¿ysz postaæ, tym bêdzie wolniejsza.
+
+     ¯eby wzi¹œæ czêœæ zbroi z inwentarza i za³o¿yæ j¹ na postaæ, po prostu kliknij na ni¹. Pojawi siê natychmiast na wizerunku postaci, a jej ikona poka¿e siê w odpowiednim miejscu.
+     Aby zdj¹æ czêœæ zbroi z postaci, kliknij na jej ikonkê. Zbroja powróci do inwentarza.
+
+     Lewy panel ekranu pokazuje ca³kowit¹ wartoœæ ca³ego ochronnego ekwipunku, noszonego przez postaæ. Teraz postaæ posiada wartoœci ca³kowitego ataku i obrony oraz jak¹œ wartoœæ, oznaczaj¹c¹ ile mo¿e zadaæ obra¿eñ. Te liczby s¹ wyœwietlane poni¿ej wartoœci wszystkich w³aœciwoœci i zale¿¹ od tego, co postaæ nosi na sobie, a tak¿e od jej doœwiadczenia, umiejêtnoœci pos³ugiwania siê dan¹ broni¹ oraz od w³aœciwoœci samej broni.
+
+Aby dowiedzieæ siê wiêcej o w³aœciwoœciach danej broni, umieœæ nad ni¹ kursor i pozostaw go na parê sekund. Pe³ny opis broni wyœwietli siê w prawym panelu ekranu.
+
+=== tutor it007_head
+W³aœciwoœci, umiejêtnoœci, wiedza, czary
+
+=== tutor it007_head_screen1
+Umiejêtnoœci i wiedza
+
+=== tutor it007_head_screen2
+W³aœciwoœci
+
+=== tutor it007_head_screen3
+Umiejêtnoœci
+
+=== tutor it007_head_screen4
+Znane zdolnoœci
+
+=== tutor it007_head_screen5
+Dostêpne zdolnoœci
+
+=== tutor it007_head_screen6
+Czary
+
+=== tutor it007_text_screen1
+     Ten ekran zawiera pewne informacje o twoich postaciach, ³¹cznie z ich umiejêtnoœciami i wiedz¹. Jak by³o to omawiane wczeœniej, ka¿da postaæ zdobywa pewien poziom doœwiadczenia w wyniku ukoñczenia zadania. Tutaj mo¿esz zamieniæ to doœwiadczenie na nowe zdolnoœci i rozwój istniej¹cych umiejêtnoœci. Mo¿esz tak¿e nauczyæ postacie czarów, które bêd¹ mog³y rzucaæ podczas gry.
+
+     Mo¿esz wybraæ postaæ u¿ywaj¹c przycisków po obu stronach jej imienia.
+Poœrodku ekranu s¹ cztery panele. Od lewej bêd¹ to:
+     Panel W³aœciwoœci
+     Panel umiejêtnoœci i znanych zdolnoœci
+     Panel dostêpnych zdolnoœci
+     Panel opisów
+     Zobacz nastêpne ekrany samouczka aby dowiedzieæ siê wiêcej o tych panelach.
+
+     Na dole panelu W³aœciwoœci jest sekcja (ramka) "Twoje Doœwiadczenie". U¿yj przycisków <V> i <X> do zatwierdzenia/anulowania zmian w umiejêtnoœciach i zdolnoœciach, które poczyni³eœ, u¿ywaj¹c innych paneli.
+
+     Uwaga: zmiany, uczynione w innych panelach bêd¹ nieaktywne dopóki nie zatwierdzisz ich w sekcji "Twoje Doœwiadczenie". Jeœli bêdziesz kontynuowaæ bez potwierdzenia, zmiany zostan¹ anulowane gdy tylko przejdziesz do innego ekranu. Tak wiêc nie zapominaj o zatwierdzaniu zmian przed kontynuowaniem.
+
+=== tutor it007_text_screen2
+     Panel W³aœciwoœci pokazuje podstawowe cechy postaci (w ramce). S¹ to: "Si³a", "Zrêcznoœæ" i "Inteligencja" oraz ich pochodne: "Zdrowie", "Wigor", "Dzia³ania" i "Obci¹¿enie". Panel pokazuje tak¿e "Doœwiadczenie", zdobyte przez postaæ.
+
+     Aby dowiedzieæ siê wiêcej na temat ka¿dej w³asnoœci, najedŸ na ni¹ kursorem i przeczytaj tekst, który pojawi siê w panelu Opisu.
+     "Doœwiadczenie" pokazuje ca³kowity poziom doœwiadczenia, który twoja postaæ zdoby³a w czasie gry. Jego czêœæ zosta³a ju¿ zainwestowana w jej umiejêtnoœci i zdolnoœci (np. wydana). Mo¿esz spo¿ytkowaæ pozosta³e doœwiadczenie na dalsze rozwiniêcie umiejêtnoœci postaci lub na zdobycie nowych zdolnoœci. Iloœæ, któr¹ mo¿esz dysponowaæ, jest pokazana w sekcji "Doœwiadczenie".
+
+     Mo¿esz poœwiêciæ dostêpne doœwiadczenie na zdobycie umiejêtnoœci i zdolnoœci, u¿ywaj¹c odpowiednich paneli. Sekcja "Doœwiadczenie" bêdzie pokazywa³a punkty, które wydajesz. ¯eby zatwierdziæ zmiany, kliknij na przycisk <V>, ¿eby anulowaæ - <X>.
+
+=== tutor it007_text_screen3
+     Na górze panelu Umiejêtnoœci i Zdolnoœci mo¿esz zobaczyæ sekcjê "Umiejêtnoœci" (w ramce). Pierwsza liczba po nazwie umiejêtnoœci to jej obecna wartoœæ, druga to koszt zwiêkszenia tej¿e wartoœci o jeden. Jeœli cena jest przyciemniona, oznacza to, ¿e nie zgromadzi³eœ wystarczaj¹cej iloœci doœwiadczenia aby zwiêkszyæ t¹ umiejêtnoœæ.
+     Aby dowiedzieæ siê wiêcej o ka¿dej umiejêtnoœci, najedŸ na ni¹ kursorem i przeczytaj tekst, który pojawi siê w panelu Opisu.
+
+     Aby zwiêkszyæ poziom umiejêtnoœci (przynajmniej czasowo), kliknij na jej ikonê.
+     Aby zatwierdziæ lub anulowaæ zmiany, u¿yj odpowiednich przycisków w sekcji "Twoje Doœwiadczenie".
+
+=== tutor it007_text_screen4
+     Na górze panelu Umiejêtnoœci i Zdolnoœci znajduje siê sekcja "Znane Zdolnoœci" (w ramce). Powinieneœ zobaczyæ liczbê po prawej stronie nazwy zdolnoœci. Tyle bêdzie ciê kosztowa³o rozwiniêcie tej zdolnoœci o jeden poziom wy¿ej. Jeœli cena jest przyciemniona, oznacza to, ¿e brak ci wymaganego doœwiadczenia.
+     Aby dowiedzieæ siê wiêcej o danej zdolnoœci, najedŸ na ni¹ kursorem i przeczytaj tekst, który pojawi siê w panelu Opisu.
+
+     Aby rozwin¹æ zdolnoœæ (przynajmniej czasowo), kliknij na odpowiedni¹ ikonê w sekcji "Znane zdolnoœci".
+     Aby potwierdziæ lub anulowaæ zmiany, u¿yj odpowiednich przycisków w sekcji "Doœwiadczenie".
+
+     Uwaga: ka¿de rozwiniêcie zdolnoœci oznacza zwiêkszenie kosztów rozwijania innych zdolnoœci.
+
+=== tutor it007_text_screen5
+     Panel Dostêpnych zdolnoœci (w ramce) pokazuje listê zdolnoœci, których mo¿e uczyæ siê postaæ. Liczba obok zdolnoœci oznacza koszt jej nauki. Jeœli cena jest przyciemniona, oznacza to, ¿e brak ci wymaganej iloœci punktów doœwiadczenia.
+     Aby dowiedzieæ siê wiêcej o danej zdolnoœci, najedŸ na ni¹ kursorem i przeczytaj tekst, który pojawi siê w panelu Opisu.
+
+     Aby daæ twojej postaci zdolnoœæ (przynajmniej czasowo), kliknij na odpowiedni¹ ikonê w sekcji "Dostêpne zdolnoœci".
+     Aby zatwierdziæ lub anulowaæ zmiany, kliknij na odpowiednie przyciski w sekcji "Doœwiadczenie".
+
+     Uwaga: ka¿da wyuczona zdolnoœæ znacz¹co zwiêksza koszt nauki innych zdolnoœci. To oznacza, ¿e twój bohater nie bêdzie móg³ wyuczyæ siê ich wszystkich. W grze kluczem do sukcesu jest wybór odpowiednich zdolnoœci i niedopuszczenie do tego, aby siê zmarnowa³y.
+
+=== tutor it007_text_screen6
+     Pasek na górze ekranu pokazuje które czary bêd¹ dostêpne dla postaci podczas wykonywania zadañ. Pasek na dole pokazuje zawartoœæ inwentarza.
+     
+     Twój inwentarz zawiera kilka gotowych zaklêæ. Aby przekazaæ jedno z nich postaci, po prostu kliknij na jego ikonie w dolnym pasku.
+     Aby czar wróci³ do inwentarza, kliknij na jego ikonie w górnym pasku.
+
+     Uwaga: jeœli czar jest zbyt skomplikowany jak na wiedzê twojej postaci o danym rodzaju magii (Magii ¯ywio³ów, Magii Sensorycznej, Magii Astralnej), bêdzie przyciemniony i nie bêdzie go mo¿na przekazaæ postaci. To samo wyst¹pi w przypadku gdy postaæ nie mo¿e rzuciæ czaru z powodu braku potrzebnej wytrzyma³oœci.
+
+=== tutor it008_head
+Sklep z przedmiotami
+
+=== tutor it008_head_screen1
+Wymiana przedmiotów
+
+=== tutor it008_text_screen1
+     W sklepie z przedmiotami mo¿esz kupowaæ i sprzedawaæ broñ, zbroje, materia³y, schematy i trofea. Przedmiotów misji nie mo¿na sprzedaæ.
+
+     Pasek na górze ekranu pokazuje rzeczy dostêpne w sklepie, podczas gdy pasek dolny wyœwietla zawartoœæ twojego inwentarza. U¿yj przycisków po obu stronach pasków ¿eby wybraæ dany typ przedmiotów, które chcesz zobaczyæ.
+
+     Œrodek ekranu s³u¿y za "ladê sklepow¹". Jej górna po³owa zawiera przedmioty, które kupujesz, dolna - które sprzedajesz. Lewa dolna sekcja ekranu pokazuje ca³kowit¹ "wartoœæ wymiany". To jest to, co mo¿esz zyskaæ z wymiany (jeœli sprzedajesz) lub co musisz zap³aciæ (jeœli kupujesz).
+
+     ¯eby po³o¿yæ przedmiot na ladzie, kliknij na jego rysunku w odpowiednim pasku (górnym lub dolnym).
+     ¯eby od³o¿yæ przedmiot na jego miejsce, kliknij na nim gdy le¿y na ladzie.
+     ¯eby wybraæ parê przedmiotów tego samego rodzaju, przytrzymaj klawisz SHIFT, kiedy je wybierasz.
+     Aby sfinalizowaæ transakcjê, u¿yj przycisku <V> obok wartoœci wymiany, aby anulowaæ, wciœnij <X>.
+
+=== tutor it009_head
+Konstruktor przedmiotów
+
+=== tutor it009_head_screen0
+Informacje ogólne
+
+=== tutor it009_head_screen1
+Sk³adanie
+
+=== tutor it009_head_screen2
+Rozk³adanie przedmiotów
+
+=== tutor it009_head_screen3
+Magia w przedmiotach
+
+=== tutor it009_text_screen0
+     Sk³adasz przedmioty w konstruktorze. ¯eby z³o¿yæ przedmiot, potrzebny jest schemat i materia³y. Schemat okreœla rodzaj materia³u, który bêdzie potrzebny. Na przyk³ad, nie mo¿esz wykonaæ kamiennej w³óczni, u¿ywaj¹c schematu w³óczni koœcianej.
+
+     Mo¿esz u¿yæ w³asnych schematów i materia³ów albo kupiæ je w sklepie - tak jak inne przedmioty.
+     Jeœli chcesz dowiedzieæ siê czegoœ wiêcej o dowolnej czêœci konstruktora, najedŸ na ni¹ kursorem i przeczytaj opis, który pojawi siê w prawym panelu.
+
+     Dostêpne miejsca s¹ oznaczone migocz¹c¹ ramk¹. Jeœli umieœcisz schemat w pustym konstruktorze, oznacza to, ¿e chcesz z³o¿yæ przedmiot. Jeœli umieœcisz tam przedmiot, znaczy to ¿e chcesz go roz³o¿yæ. Zobacz nastêpne ekrany aby dowiedzieæ siê wiêcej o szczegó³ach sk³adania/rozk³adania przedmiotów.
+
+=== tutor it009_text_screen1
+     Aby z³o¿yæ przedmiot, kliknij na jego schematcie w swoim inwentarzu (dolny pasek) lub w sklepie (górny pasek). Schemat zostanie umieszczony w odpowiednim miejscu.
+     Zaraz po umieszczeniu schematu, miejsca na materia³y zostan¹ podœwietlone migocz¹c¹ ramk¹. Ich iloœæ odpowiada jednostkom materia³u, o których mówi plan. Kliknij na materiale - czy to w inwentarzu, czy w sklepie - a zostanie przeniesiony na jedno z miejsc. Mo¿esz u¿yæ tylko jednego rodzaju materia³u aby stworzyæ przedmiot. Mieszanie ró¿nych materia³ów nie jest dozwolone nawet, jeœli s¹ tego samego typu.
+
+     Uwaga: zanim umieœcisz materia³ w konstruktorze, musisz tam w³o¿yæ schemat. Jeœli umieœcisz schemat w konstruktorze a potem wyjmiesz go (np. powróci do inwentarza lub sklepu), wszystkie materia³y, które umieszcza³eœ w konstruktorze, zostan¹ automatycznie usuniête i powróc¹ sk¹d zosta³y przeniesione.
+
+     Kiedy wszystkie miejsca na materia³y bêd¹ zajête, lewy panel wyœwietli w³aœciwoœci z³o¿onego przedmiotu. W ni¿szej czêœci ekranu ujrzysz cenê przedmiotu. Zawieraæ ona bêdzie cenê wszystkich zakupionych artyku³ów, jeœli takowe by³y.
+
+     Aby z³o¿yæ przedmiot, u¿yj przycisku <V>, aby anulowaæ - <X>.
+
+=== tutor it009_text_screen2
+     Aby roz³o¿yæ przedmiot, kliknij na nim, a pojawi siê w konstruktorze, w specjalnym miejscu, zarezerwowanym dla gotowych przedmiotów. W ni¿szym lewym rogu ekranu ujrzysz ca³kowity koszt rozk³adania.
+
+W celu roz³o¿enia przedmiotu, u¿yj przycisku <V>.
+Aby anulowaæ, u¿yj przycisku <X>.
+
+     Uwaga: jeœli roz³o¿ysz przedmiot i zaraz potem go z³o¿ysz (bez wk³adania planu i materia³ów do inwentarza), i tak bêdziesz musia³ zap³aciæ za sk³adanie i rozk³adanie - oczywiste marnotrawstwo pieniêdzy, wiêc uwa¿aj.
+
+=== tutor it009_text_screen3
+     Mo¿esz zaczarowaæ przedmioty takie jak zbroje czy broñ ¿eby nadaæ im w³aœciwoœci magiczne. ¯eby to uczyniæ, czar musi zawieraæ runê, która na to pozwoli. Takie runy nazywane s¹ "Przedmiot (wyzwalacz)" i "Przedmiot (kontynuacja)". Stan¹ siê dostêpne dla ciebie póŸniej w grze.
+     Gwoli œcis³oœci: nie musisz posiadaæ takiej runy, ¿eby z³o¿yæ ró¿d¿kê, zawieraj¹c¹ czary.
+W konstruktorze jest specjalne miejsce na czary "umieszczalne", po³o¿one poni¿ej miejsca na plany. Miejsce to bêdzie dostêpne po umieszczeniu planu i niezbêdnej iloœci materia³ów w konstruktorze. Aby umieœciæ tam czar z inwentarza, po prostu kliknij na jego obrazku.
+
+     Aby z³o¿yæ przedmiot, u¿yj przycisku <V>, aby anulowaæ - <X>.
+
+     Uwaga: zarówno zaklêcie, jak i przedmiot, który chcesz zaczarowaæ, posiadaj¹ parametr okreœlaj¹cy stopieñ komplikacji. Taka wartoœæ w przedmiocie musi byæ wy¿sza ni¿ w zaklêciu. W koñcu nie ma sensu zaklinaæ prostego przedmiotu czarem zbyt z³o¿onym. Podobnie, nie mo¿esz zaklinaæ przedmiotu, posiadaj¹cego nisk¹ wartoœæ "energii" czarem wymagaj¹cym wysokiego "wigoru".
+
+=== tutor it010_head
+Sklep z czarami
+
+=== tutor it010_head_screen1
+Wymiana czarów
+
+=== tutor it010_text_screen1
+     W sklepie z czarami mo¿esz kupowaæ i sprzedawaæ gotowe czary, klucze i runy. Inne przedmioty nie s¹ tu na sprzeda¿.
+
+     Górny pasek ekranu pokazuje co jest dostêpne w sklepie, a dolny - co masz w inwentarzu. U¿yj przycisków po obu stronach tych pasków aby wybraæ typ przedmiotów, które chcesz zobaczyæ, np. klucze poszczególnych rodzajów magii, runy danego typu, czy gotowe czary.
+
+     Poœrodku ekranu jest "lada sklepowa" Jej górna po³owa jest u¿ywana do czarów i runów, które kupujesz, podczas gdy dolna do sprzedawanych. Ni¿sza lewa sekcja ekranu pokazuje ca³kowit¹ "wartoœæ wymiany". Jest to cena, jak¹ zyskasz (sprzedaj¹c) lub jak¹ bêdziesz musia³ zap³aciæ (kupuj¹c).
+
+     Aby przenieœæ czar lub runê na ladê, kliknij na odpowiedni obrazek w pasku (górnym lub dolnym).
+     Aby czar lub runa powróci³y na swoje miejsce, kliknij na nie gdy le¿¹ na ladzie.
+     Aby przenieœæ kilka czarów lub runów tego samego rodzaju, wciœnij klawisz SHIFT i kliknij na odpowiednim miejscu.
+     Aby sfinalizowaæ transakcjê, u¿yj przycisku <V> obok jej wartoœci. 
+     Aby anulowaæ, u¿yj przycisku <X>.
+
+=== tutor it011_head
+Konstruktor czarów
+
+=== tutor it011_head_screen1
+Informacje ogólne
+
+=== tutor it011_head_screen2
+Sk³adanie czarów
+
+=== tutor it011_head_screen4
+Rozk³adanie czarów
+
+=== tutor it011_head_screen5
+Cechy
+
+=== tutor it011_text_screen1
+     Aby z³o¿yæ czar, potrzebujesz klucza. Klucz czaru determinuje do jakiej szko³y magii nale¿y czar - tak samo jego zasady i wartoœci pocz¹tkowe.
+     Mo¿esz utworzyæ czar, u¿ywaj¹c wy³¹cznie klucza, lub te¿ mo¿esz dodaæ runy, które zmieni¹ w³aœciwoœci czaru.
+     Mo¿esz u¿ywaæ w³asnych kluczy i runów (zak³adaj¹c, oczywiœcie, ¿e je masz) lub te¿ kupiæ je w sklepie jak inne przedmioty.
+
+     Uwaga: nie mo¿esz sk³adaæ czarów, które s¹ za bardzo z³o¿one lub wymagaj¹ zbyt wiele wytrzyma³oœci dla dowolnej z twoich postaci by ich u¿yæ. Maksymalne dostêpne dla ciebie wartoœci wytrzyma³oœci i z³o¿onoœci bêd¹ wyœwietlone w ramce w odrêbnych liniach poni¿ej miejsca z twoim kluczem.
+
+=== tutor it011_text_screen2
+     ¯eby z³o¿yæ czar, kliknij na jego kluczu w swoim inwentarzu (dolny pasek) lub w sklepie (pasek górny). Klucz zostanie umieszczony we w³aœciwym miejscu.
+     Zarezerwowane miejsca zostan¹ wtedy zaznaczone migocz¹c¹ ramk¹. Liczba takich miejsc jest równowa¿na liczbie runów, które s¹ potrzebne do tego zaklêcia. Zmienia siê ona za ka¿dym razem kiedy dodajesz runê w konstruktorze. Aby dodaæ runê, kliknij na jej obrazku w swoim inwentarzu lub w sklepie, a pojawi siê w pierwszym wolnym miejscu.
+     Klucz determinuje jakie runy mog¹ zostaæ u¿yte do danego czaru. Niedostêpne runy bêd¹ przyciemnione.
+
+     Uwaga: nie mo¿esz umieszczaæ runów w konstruktorze dopóki nie zrobisz tego z kluczem. Jeœli zabierzesz klucz z konstruktora i w³o¿ysz spowrotem do inwentarza lub sklepu, wszystkie runy, które dodawa³eœ, tak¿e zostan¹ usuniête i powróc¹ tam, sk¹d zosta³y wziête.
+
+     W³aœciwoœci zaklêcia, które utworzy³eœ, s¹ pokazane w lewym panelu, ³¹cznie z dodatkowymi w³aœciwoœciami, dodanymi dziêki runom, których u¿y³eœ. Ni¿sza czêœæ ekranu pokazuje ca³kowit¹ cenê czaru. Zawiera ona wszystkie zakupione artyku³y.
+
+     Aby z³o¿yæ czar, kliknij na przycisku <V>, aby anulowaæ - <X>.
+
+     Uwaga: jeœli z³o¿ysz czar i zaraz potem go roz³o¿ysz (bez wk³adania do inwentarza), i tak bêdziesz musia³ zap³aciæ za sk³adanie/rozk³adanie, tak wiêc uwa¿aj co robisz!
+
+=== tutor it011_text_screen4
+     Jeœli chcesz roz³o¿yæ czar, kliknij na nim, a zaraz pojawi siê w warsztacie. W dolnym lewym rogu ekranu zobaczysz ca³kowity koszt rozk³adania czaru.
+     Jeœli usuniesz klucz z jego miejsca w warsztacie po tym, jak roz³o¿y³eœ czar, runy w nim zawarte tak¿e zostan¹ usuniête.
+     Kiedy rozk³adasz czar ze sklepu, zak³adamy, ¿e go zakupi³eœ (przepraszamy, kupno to inny rozdzia³), wiêc runy z czaru "przejd¹" do twojego inwentarza.
+
+     Aby roz³o¿yæ czar, u¿yj przycisku <V>.
+     Aby anulowaæ, u¿yj przycisku <X>.
+
+     Uwaga: jeœli rozk³adasz czar i zaraz potem go z³o¿ysz (bez wk³adania klucza i runów do inwentarza), i tak bêdziesz musia³ zap³aciæ za sk³adanie/rozk³adanie, tak wiêc uwa¿aj!
+
+=== tutor it011_text_screen5
+     Z³o¿ony czar sk³ada siê z klucza i co najmniej jednej dodatkowej runy. Taki typ czarów nie mo¿e wymagaæ mniej energii ni¿ podobny czar, zawieraj¹cy tylko klucz. Jednak¿e, runa "Dodatkowy Potencja³" nie mo¿e nigdy zostaæ u¿yta sama. Jest ona po¿yteczna tylko przy z³o¿onych czarach, poniewa¿ rekompensuje utratê energii wymaganej przez dodatkowe runy.
+
+=== tutor it012_head
+Naprawa przedmiotów
+
+=== tutor it012_head_screen1
+Naprawa przedmiotów
+
+=== tutor it012_text_screen1
+     Ka¿dy przedmiot ma swoj¹ "trwa³oœæ". Przedmioty, które s¹ stuprocentowo sprawne, maj¹ maksymaln¹ wartoœæ trwa³oœci, a te nieu¿yteczne (np. znoszone czy porwane), maj¹ zerow¹ trwa³oœæ. W tym ekranie mo¿esz naprawiæ przedmioty i odnowiæ ich trwa³oœæ do najwy¿szej wartoœci.
+
+     Jeœli jesteœ w Strefie gry, a przedmiot jest tak zniszczony, ¿e zaraz stanie siê bezu¿yteczny, zostaniesz ostrze¿ony poprzez specjalny dŸwiêk, który us³yszysz jak tylko spróbujesz u¿yæ takiego przedmiotu (atak w przypadku broni, przyjêcie ciosu w przypadku zbroi). Kiedy us³yszysz opisywany dŸwiêk, lepiej wróæ do bazy i napraw przedmiot zanim stanie siê kompletnie bezu¿yteczny.
+     Aby naprawiæ przedmiot, umieœæ go na stole poœrodku ekranu. W ni¿szym lewym panelu uka¿e siê cena naprawy. Mo¿esz siê na ni¹ zgodziæ (a wiêc na naprawê), u¿ywaj¹c przycisku <V>, lub nie, u¿ywaj¹c przycisku <X>.
+
+     Uwaga: przedmioty, które stan¹ siê bezu¿yteczne, zostan¹ przeniesione do inwentarza i nie bêd¹ dostêpne dla twoich postaci, nawet podczas zadañ. Tak wiêc upewnij siê, czy aby na pewno ca³y ekwipunek twoich postaci jest w dobrym stanie, inaczej bêdzie to wyraŸne utrudnienie.
+
+=== tutor it015_head
+Opcje Gry
+
+=== tutor it015_head_screen1
+Opcje
+
+=== tutor it015_text_screen1
+     U¿yj ekranu Opcji aby ustawiæ parametry gry, najbardziej Ci odpowiadaj¹ce i zasobom twojego systemu. Ka¿da opcja posiada wyskakuj¹ce podpowiedzi, podaj¹ce wiêcej szczegó³ów. ¯eby zobaczyæ podpowiedŸ, umieœæ kursor nad elementem menu i poczekaj parê sekund.
+     Opcje s¹ podzielone na kilka sekcji. Ka¿da z nich tak¿e posiada w³asne podpowiedzi.
+
+     Poni¿sze informacje odnosz¹ siê do wszystkich opcji:
+     Aby zdefiniowaæ (przedefiniowaæ) klawisze, kliknij dwukrotnie na danej opcji. Ca³a linia z opcj¹ zostanie podœwietlona na czerwono. Wciœnij wybrany klawisz, a zostanie on przypisany danej opcji.
+     Aby w³¹czyæ/wy³¹czyæ opcjê, kliknij dwukrotnie na "W³." lub "Wy³.". Opcja zostanie uaktywniona/dezaktywowana.
+     Aby zwiêkszyæ/zmniejszyæ wartoœæ danej opcji, przeci¹gnij suwak ruchomego paska w lewo/prawo. W skrajnej lewej pozycji suwaka wartoœæ wynosi zero. (oznacza to wy³¹czenie danej opcji).
+     Aby zatwierdziæ zmiany, u¿yj przycisku <V>, aby anulowaæ - <X>.
+
+=== tutor it016_head
+LMP
+
+=== tutor it016_head_screen1
+LMP
+
+=== tutor it016_text_screen1
+LMP
+
+=== tutor zt10_head
+Mini-mapa
+
+=== tutor zt10_head_screen1
+Informacje ogólne
+
+=== tutor zt10_head_screen2
+Cechy Mini-mapy
+
+=== tutor zt10_head_screen3
+Przyk³ad
+
+=== tutor zt10_text_screen1
+     Mini-mapa (pokazana tutaj w ramce) zapewnia szybki przegl¹d Strefy Gry. Mo¿esz u¿yæ jej do sprawdzenie obecnego po³o¿enia postaci. Mini-mapa zawsze pokazuje ca³¹ Strefê Gry, niezale¿nie od tego ile terenu zdo³a³eœ odkryæ.
+
+     Trójk¹ty o ró¿nych kolorach wyznaczaj¹ twoje postacie i wszystkich tych, z którymi mog¹ nawi¹zaæ kontakt.
+
+     Zielone trójk¹ty przedstawiaj¹ twoje postacie
+     ¯ó³te trójk¹ty przedstawiaj¹ postacie neutralne
+     Czerwone trójk¹ty przedstawiaj¹ wrogów.
+
+=== tutor zt10_text_screen2
+     Mini-mapê kontrolujesz za pomoc¹ przycisków po prawej stronie (s¹ w ramce). Mo¿esz robiæ zbli¿enia i oddalenia lub te¿ ustawiæ kamerê w standardowym kierunku.
+
+     Aby zbli¿aæ/oddalaæ u¿yj klawiszy <+>/<->.
+     Aby ustawiæ kamerê w kierunku pó³nocnym, u¿yj klawisza <N> lub przycisku <N>.
+     Aby pokazaæ/ukryæ Mini-mapê, u¿yj prawego górnego przycisku w ramce lub klawisza <M>.
+
+     Uwaga: Gdy kamera zwrócona jest na pó³noc, orientacja terenu na ekranie gry jest taka sama jak na Mini-mapie.
+
+=== tutor zt10_text_screen3
+     Teraz musisz dostaæ siê do mostu, który jest przerzucony przez rzekê poœrodku Strefy gry. Zauwa¿, ¿e  mosty i rzeki s¹ tak¿e widoczne na Mini-mapie. Zapewnia ona u¿yteczny podgl¹d terenu, które zamierzasz odwiedziæ. Wystarczy ¿e klikniesz w miejscu na Mini-mapie, a kamera przejdzie to tego miejsca. Pomo¿e ci to dok³adnie i ostro¿nie zaplanowaæ  - b¹dŸ co b¹dŸ, jeœli wiesz, co ciê mo¿e spotkaæ, bêdziesz wiedzieæ jak siê przygotowaæ, jak najlepiej siê poruszaæ, itp.
+     Jeœli chcesz skierowaæ kamerê z powrotem na swoj¹ postaæ, po prostu kliknij dwukrotnie na jego wizerunku.
+
+=== tutor zt11_head
+Okno tekstowe
+
+=== tutor zt11_head_screen1
+Okno tekstowe (czêœæ 1)
+
+=== tutor zt11_head_screen2
+Okno tekstowe (czêœæ 2)
+
+=== tutor zt11_text_screen1
+     Okno tekstowe (pokazane w ramce) posiada dwa tryby: "wiadomoœci" i "trofea". U¿yj przycisków w lewym górnym rogu okna aby przechodziæ miêdzy nimi.
+
+     W trybie "wiadomoœci" okno Tekstowe bêdzie zawiera³o informacje, maj¹ce na celu u³atwienie ci zrozumienia co siê dzieje w grze. Bêd¹ to informacje o otrzymanych i ukoñczonych misjach, zdobytych trofeach, ostrze¿eniach o zu¿yciu przedmiotów oraz linie dialogowe postaci.
+     W trybie "trofea" okno Tekstowe bêdzie pokazywa³o ca³kowit¹ liczbê trofeów, zdobytych w Strefie gry oraz informacje o nich.
+
+=== tutor zt11_text_screen2
+     Jeœli ca³y tekst wiadomoœci lub pe³na lista trofeów nie zmieœci siê w oknie Tekstowym, bêdziesz musia³ u¿yæ paska przewijania, który pojawi siê po prawej stronie.
+
+     Mo¿esz tak¿e obs³ugiwaæ okno Tekstowe za pomoc¹ nastêpuj¹cych klawiszy:
+
+     Otwarcie/zamkniêcie okna w trybie "Wiadomoœci" - klawisz <L>.
+     Otwarcie/zamkniêcie okna w trybie "Trofea" - klawisz <K>.
+
+     Uwaga: aby otworzyæ/zamkn¹æ okno tekstowe, u¿yj przycisku w ramce, w górnym prawym rogu.
+
+=== tutor zt12_head
+Okno informacyjne
+
+=== tutor zt12_head_screen1
+Okno informacyjne
+
+=== tutor zt12_head_screen2
+Tryby okna informacyjnego
+
+=== tutor zt12_text_screen1
+     Okno informacyjne (w ramce) podaje ci szczegó³y o postaciach w grze. Jeœli chcesz dowiedzieæ siê czegoœ o konkretnej postaci, po prostu najedŸ na ni¹ kursorem. Jeœli kursor nie jest usytuowany na ¿adnej postaci, okno Informacyjne poda ci szczegó³y wybranej postaci.
+     Okno informacyjne posiada kilka trybów. Zobacz nastêpne ekrany aby dowiedzieæ siê wiêcej na ich temat.
+
+     Uwaga: aby otworzyæ/zamkn¹æ okno informacyjne, u¿yj przycisku w ramce w górnym lewym rogu. Mo¿esz, oczywiœcie, graæ niezale¿nie od tego czy okno informacyjne jest otwarte.
+
+=== tutor zt12_text_screen2
+     Okno informacyjne (w ramce) podaje ci szczegó³y o postaciach w grze. Jeœli chcesz dowiedzieæ siê czegoœ o konkretnej postaci, po prostu najedŸ na ni¹ kursorem. Jeœli kursor nie jest usytuowany na ¿adnej postaci, okno Informacyjne poda ci szczegó³y o postaci aktualnej.
+     Okno Informacyjne posiada kilka trybów. Zobacz nastêpne ekrany aby dowiedzieæ siê wiêcej na ich temat.
+
+     Uwaga: aby otworzyæ/zamkn¹æ okno informacyjne, u¿yj przycisku w ramce w górnym lewym rogu. Mo¿esz, oczywiœcie, graæ niezale¿nie od tego czy okno Informacyjne jest otwarte.
+
+=== tutor zt13_head
+Poruszanie siê postaci
+
+=== tutor zt13_head_screen1
+Tryby poruszania siê
+
+=== tutor zt13_head_screen2
+Przyk³ad
+
+=== tutor zt13_text_screen1
+     Zale¿nie od sytuacji, mo¿esz wybraæ jeden z dostêpnych trybów poruszania siê postaci. Aby prze³¹czaæ tryby, u¿yj panelu sterowania w dolnej lewej czêœci ekranu, lub klawiatury. Poszczególne tryby poruszania siê i ich opisy s¹ jak nastêpuje:
+
+     Chodzenie: kiedy postaæ chodzi, jej prêdkoœæ jest normalna. "Wigor" jest sta³y, co oznacza, ¿e nie bêdzie siê ani zmniejsza³ ani zwiêksza³ (klawisz <X>).
+     Bieganie: bieg jest szybszy ni¿ chód, jednak ma jedn¹ powa¿n¹ niedogodnoœæ - postaæ czyni przy nim o wiele wiêcej ha³asu ni¿ przy chodzeniu, co mo¿e zakoñczyæ siê zwróceniem na siebie uwagi wrogów, którzy normalnie by nic nie dostrzegli. Podczas biegu "Wigor" maleje, a kiedy osi¹gnie zero, postaæ automatycznie przejdzie do chodu (klawisz <Z>).
+     Skradanie siê: skradaj¹ca siê postaæ prawie nie powoduje ha³asu, przez co wróg mo¿e j¹ wykryæ tylko gdy siê na ni¹ natknie. Naturalnie, skradanie jest bardzo wolne, a "Wigor" pozostaje bez zmian (klawisz <C>).
+     Czo³ganie siê: czo³gaj¹ca siê postaæ jest o wiele mniej widoczna dla wrogów, lecz porusza siê bardzo, bardzo wolno. Tak jak skradanie, czo³ganie nie wp³ywa na "Wigor" (klawisz <V>).
+
+=== tutor zt13_text_screen2
+     Powinieneœ poleciæ swojej postaci czo³gaæ siê - jest to jedyna szansa ominiêcia Ogra niezauwa¿enie. Jeœli nie wybierzesz tego trybu, twoja postaæ z pewnoœci¹ zginie.
+
+=== tutor zt14_head
+Umiejêtnoœæ U¿yj/Kradnij
+
+=== tutor zt14_head_screen1
+Kradzie¿
+
+=== tutor zt14_head_screen2
+Kradzie¿ od Ogra
+
+=== tutor zt14_head_screen3
+U¿ycie
+
+=== tutor zt14_text_screen1
+     Jeœli potrzebujesz czegoœ od wroga, a nie chcesz ryzykowaæ walki z nim, zawsze mo¿esz spróbowaæ go okraœæ.
+     Okradanie przeciwników nie jest takie proste. Po pierwsze, musisz ostro¿nie, po cichutku zajœæ przeciwnika od ty³u i stan¹æ tak blisko niego, jak to tylko mo¿liwe (najlepiej u¿ywaæ wtedy trybu "skradania", inaczej mo¿e ciê us³yszeæ).
+     Kiedy ju¿ jesteœ blisko, kliknij na ikonie "U¿yj/Kradnij" (w ramce), a kursor zmieni swój kszta³t. Umieœæ nowy kursor nad przedmiotem, który chcesz ukraœæ i kliknij ponownie. Kiedy ju¿ ukradniesz co chcia³eœ, musisz odejœæ na bezpieczn¹ odleg³oœæ od przeciwnika niepostrze¿enie (okradzeni ludzie maj¹ tendencjê do zaciek³oœci). Kiedy ju¿ uciekniesz, mo¿esz powróciæ do normalnego trybu poruszania siê.
+
+     Mo¿esz wybraæ polecenie "U¿yj/Kradnij" tak¿e za pomoc¹ klawiatury - naciskaj¹c klawisz <S>.
+
+     Uwaga: nie ka¿da próba kradzie¿y powiedzie siê. Jej rezultat zale¿y od poziomu "U¿yj/Kradnij" postaci i od w³aœciwoœci tego, co chcesz ukraœæ. Im wy¿szy poziom umiejêtnoœci "U¿yj/Kradnij", tym wiêksza szansa na sukces.
+
+=== tutor zt14_text_screen2
+     Kiedy ju¿ twoja postaæ osi¹gnie koniec mostu, zobaczy dwóch Ogrów. Ten po prawej zawsze patrzy w jedn¹ stronê i nigdy za siebie. To oznacza, ¿e ³atwo bêdzie siê do niego zakraœæ i okraœæ go - no, dalej!
+
+=== tutor zt14_text_screen3
+     Bêdziesz móg³ wykorzystaæ swój poziom "U¿yj/Kradnij" w wielu okolicznoœciach: u¿ywaj¹c ró¿nych przedmiotów, jak otwieranie drzwi, prze³¹czanie w³¹czników, otwieranie skrzyñ, itp.
+     Aby u¿yæ przedmiot, kliknij na ikonie "U¿yj/Kradnij" (w ramce), a kursor zmieni swój kszta³t. Teraz umieœæ go na przedmiocie i kliknij ponownie.
+
+     Uwaga: twojej postaci zawsze uda siê u¿yæ przedmiotu. Zale¿y to od jej poziomu "U¿yj/Kradnij".
+
+=== tutor zt15_head
+Ciosy specjalne
+
+=== tutor zt15_head_screen1
+Cios w plecy
+
+=== tutor zt15_head_screen2
+Ciosy precyzyjne
+
+=== tutor zt15_head_screen3
+Celowanie w koñczynê
+
+=== tutor zt15_head_screen4
+Cios w g³owê
+
+=== tutor zt15_text_screen1
+     Twoje ciosy mog¹ zadaæ o wiele wiêksze obra¿enia, jeœli zdo³asz zaskoczyæ przeciwnika znienacka i uderzyæ go. Aby zadaæ cios w plecy, twoja postaæ musi podejœæ blisko do przeciwnika od ty³u, pozostaj¹c niezauwa¿on¹ (najlepiej u¿yæ trybu "skradania", ¿eby przeciwnik ciê nie us³ysza³), a potem zadaæ cios, zanim zorientuje siê co siê dzieje.
+
+     Uwaga: jeœli wróg zauwa¿y twoj¹ zbli¿aj¹c¹ siê postaæ i przejdzie do trybu Agresji, twój cios nie bêdzie liczony jako "cios w plecy", tylko zwyczajnie. Tak wiêc, b¹dŸ cicho!
+
+=== tutor zt15_text_screen2
+     Kiedy polecisz swojej postaci atak, mo¿esz okreœliæ, w któr¹ czêœæ cia³a ma celowaæ. U¿yj nastêpuj¹cych klawiszy na klawiaturze numerycznej:
+
+     4: celowanie w lew¹ rêkê (lew¹ przedni¹ nogê)
+     6: celowanie w praw¹ rêkê (praw¹ przedni¹ nogê)
+     1: celowanie w lew¹ nogê
+     3: celowanie w praw¹ nogê
+     5: celowanie w korpus
+     8: celowanie w g³owê
+
+     Aby zadaæ cios precyzyjny, naciœnij odpowiedni klawisz i najedŸ kursorem na przeciwnika. Twoja postaæ bêdzie celowaæ w zadan¹ czêœæ cia³a dopóki nie wydasz innej komendy lub dopóki "zdrowie" tej czêœci nie osi¹gnie zera. Jeœli przeciwnik jeszcze ¿yje, ciosy nie bêd¹ ju¿ precyzyjnymi.
+
+     Uwaga: niektóre stworzenia w grze nie posiadaj¹ r¹k czy nóg. Jeœli polecisz atakowaæ brakuj¹ce czêœci cia³a, twoja postaæ po prostu zignoruje takie ¿¹danie.
+     Uwaga: wszystkie czêœci cia³a postaci mog¹ byæ ochraniane przez zbrojê o specyficznych w³aœciwoœciach - np. zdolnoœæ przyjmowania obra¿eñ od broni tak, ¿e obra¿enia zadane w takie chronione czêœci cia³a bêd¹ l¿ejsze.
+
+=== tutor zt15_text_screen3
+     Jeœli postaæ straci ramiê, bêdzie walczy³a i rzuca³a czary o wiele wolniej (spróbuj biæ siê tylko jedn¹ rêk¹). Postaæ traci ramiê, kiedy jego "zdrowie" osi¹gnie 0. Mo¿esz ujrzeæ to w oknie Informacyjnym, jeœli jest prze³¹czone w tryb Obra¿eñ.
+     Jeœli twoja postaæ straci nogê, jej ruch bêdzie o wiele wolniejszy. Postaæ traci nogê, gdy jej "zdrowie" spadnie do 0. Mo¿esz ujrzeæ t¹ informacjê w oknie Informacyjnym, jeœli jest prze³¹czone w tryb "Obra¿eñ".
+
+=== tutor zt15_text_screen4
+     Ciosy w g³owê s¹ uwa¿ane za krytyczne. Powoduj¹ trzy razy wiêksze obra¿enia ni¿ inne ciosy. Jednak¿e, szansa trafienia w g³owê jest o wiele mniejsza ni¿ w inne czêœci cia³a.
+
+=== tutor zt16_head
+Poruszanie siê miêdzy strefami
+
+=== tutor zt16_head_screen1
+Strefy przejœciowe
+
+=== tutor zt16_head_screen2
+Cechy
+
+=== tutor zt16_text_screen1
+     Strefy przejœciowe to specjalne miejsca, zaznaczone migocz¹c¹ ¿ó³ci¹. U¿yj ich aby przejœæ z jednej Strefy gry do innej. Poniewa¿ zmiana Strefy gry to wa¿ny krok, bêdziesz poproszony o potwierdzenie, gdy twoja postaæ wejdzie do strefy Przejœciowej.
+
+     Twoja postaæ jest obecnie w pobli¿u wioski. Ukoñczy³eœ zadanie i odnalaz³eœ drogê do ludzkiej osady. Jedyne, co jej pozosta³o, to wejœæ do niej - u¿yæ strefy przejœciowej.
+
+     Uwaga: jeœli kontrolujesz kilkoma postaciami w jednym czasie, musisz wprowadziæ ich wszystkich do strefy przejœciowej, aby zadzia³a³a. Nie mo¿esz przenieœæ do innej strefy gry tylko czêœci swojej dru¿yny. Pamiêtaj, pracuj¹ w zespole, musz¹ zachowywaæ siê jak zespó³. 
+
+=== tutor zt16_text_screen2
+     Ka¿da strefa przejœciowa w danej Strefie gry jest po³¹czona ze stref¹ Przejœciow¹ w innej Strefie gry. Miejsce, w którym opuszczasz dan¹ strefê okreœla do której strefy wchodzisz i w którym jej miejscu.
+
+     Uwaga: nie wszystkie strefy przejœciowe s¹ od razu dostêpne. Mo¿esz nie mieæ dostêpu do niektórych z nich. Strefy, które s¹ w danej chwili niedostêpne, bêd¹ migotaæ na czerwono, zamiast na ¿ó³to.
+
+=== tutor zt17_head
+Pos³ugiwanie siê broni¹
+
+=== tutor zt17_head_screen1
+Wybór broni
+
+=== tutor zt17_text_screen1
+     Twoja postaæ mo¿e u¿ywaæ do czterech ró¿nych broni podczas przebywania w Strefie Gry. Aby wzi¹æ broñ, kliknij na jej obrazku (³atwo j¹ zobaczyæ - broñ bêdzie w ramce).
+
+     Mo¿esz tak¿e wybraæ bronie dziêki odpowiednim klawiszom:
+     U¿ycie broni 1: klawisz <Q>
+     U¿ycie broni 2: klawisz <W>
+     U¿ycie broni 3: klawisz <E>
+     U¿ycie broni 4: klawisz <R>.
+
+=== tutor zt18_head
+Napoje i ró¿d¿ki
+
+=== tutor zt18_head_screen1
+Fiolka z napojem
+
+=== tutor zt18_text_screen1
+     Aby wykorzystaæ znaleziony lub skradziony napój, musisz wpierw przekazaæ go jednej ze swoich postaci w "obozie" (zobacz odpowiednie samouczki w celu poznania szczegó³ów).
+
+     Wtedy napój bêdzie dostêpny postaci i pojawi siê w odpowiedniej ramce. Aby go u¿yæ, po prostu kliknij na jego ikonie, lub u¿yj nastêpuj¹cych klawiszy:
+
+     U¿ycie przedmiotu 1 - klawisz <U>
+     U¿ycie przedmiotu 2 - klawisz <I>
+     U¿ycie przedmiotu 3 - klawisz <O>
+     U¿ycie przedmiotu 4 - klawisz <P>.
+
+=== tutor zt19_head
+Pozycje kamery
+
+=== tutor zt19_head_screen1
+Ustalone pozycje kamery
+
+=== tutor zt19_text_screen1
+     Mo¿esz zapisaæ ustawienia kamery w dowolnym momencie gry. Jeœli naciœniesz jeden z nastêpuj¹cych klawiszy, kamera natychmiast przejdzie do odpowiedniej pozycji. Mo¿e to zaoszczêdziæ wiele czasu.
+
+     Pozycja kamery 1: klawisz F9
+     Pozycja kamery 2: klawisz F10
+     Pozycja kamery 3: klawisz F11
+     Pozycja kamery 4: klawisz F12.
+
+     Oczywiœcie, potrzebujesz najpierw ustaliæ te pozycje. Aby to uczyniæ, wystarczy ¿e naciœniesz  <CTRL> + odpowiednie klawisze (np. F9, F10, F11 lub F12) w dowolnym momencie gry. To spowoduje zapisanie obecnej pozycji kamery. Aby powróciæ do tej pozycji w przysz³oœci, po prostu wciœnij odpowiedni klawisz. 
+Uwaga: pozycja kamery determinuje jej k¹t i odleg³oœæ od postaci.
+
+=== tutor zt1_head
+Informacje pocz¹tkowe
+
+=== tutor zt1_head_screen2
+Kontrola nad postaci¹
+
+=== tutor zt1_text_screen2
+     Twoja postaæ jest teraz w Strefie Gry. Jeœli chcesz, ¿eby gdzieœ posz³a, po prostu kliknij w ¿¹danym miejscu. Jeœli klikniesz dwukrotnie, postaæ pobiegnie.
+
+     W tej chwili masz jedn¹ postaæ, ale póŸniej mo¿esz kontrolowaæ kilka. Samouczek na temat kontroli nad kilkoma postaciami bêdzie dostêpny póŸniej.
+
+     Uwaga: twoja postaæ nie zawsze bêdzie mog³a przejœæ przez dowoln¹ czêœæ Strefy Gry. Jeœli rozka¿esz jej udaæ siê do nieosi¹galnego punktu, pójdzie do najbli¿szego dostêpnego miejsca lub pozostanie tam gdzie jest.
+
+=== tutor zt20_head
+Sterowanie grup¹
+
+=== tutor zt20_head_screen1
+Wybór postaci
+
+=== tutor zt20_head_screen2
+Komenda "Pod¹¿aj"
+
+=== tutor zt20_text_screen1
+     Mo¿esz kontrolowaæ do trzech postaci jednoczeœnie - razem lub indywidualnie. Aby kierowaæ postaciami osobno, musisz wybraæ postaæ(ci) której (którym) chcesz wydawaæ polecenia.
+
+     Aby wybraæ jedn¹ postaæ, kliknij na niej w Strefie Gry lub na jej wizerunku na dole ekranu.
+     Aby wybraæ kilka postaci, zrób to samo, co powy¿ej, tylko przyciskaj¹c klawisz SHIFT.
+
+     Mo¿esz tak¿e wybraæ jedn¹ lub wiêcej postaci, tworz¹c ramkê dooko³a nich za pomoc¹ myszki - trzymaj¹c wciœniêty jej lewy przycisk i poruszaj¹c ni¹. Wszystkie postaci, które znajd¹ siê wewn¹trz ramki, zostan¹ wybrane.
+
+     Mo¿esz wybraæ indywidualne postaci, u¿ywaj¹c nastêpuj¹cych klawiszy:
+
+     Aby wybraæ postaæ 1: klawisz F1
+     Aby wybraæ postaæ 2: klawisz F2
+     Aby wybraæ postaæ 3: klawisz F3
+     Aby wybraæ wszystkie postacie : klawisz F4.
+
+     Uwaga: w momencie, gdy wybierasz postaæ (czy to klikaj¹c na niej podwójnie, czy naciskaj¹c klawisz <ALT>), kamera zacznie natychmiast j¹ œledziæ.
+
+=== tutor zt20_text_screen2
+     Aby u³atwiæ kontrolê nad kilkoma postaciami w tym samym czasie, mo¿esz poleciæ im pod¹¿aæ za sob¹.
+     W tym celu, wybierz postaæ i kliknij w ikonê "Pod¹¿aj". Zobaczysz, ¿e kursor zmieni³ kszta³t. Teraz najedŸ nim na inn¹ postaæ i kliknij ponownie. Wybrana postaæ zacznie pod¹¿aæ za tym, kogo w³aœnie wybra³eœ.
+     Jeœli wyœlesz postaæ w dane miejsce, tryb "Pod¹¿ania" zostanie anulowany.
+
+     Mo¿esz tak¿e zleciæ pod¹¿anie za kimœ, u¿ywaj¹c klawisza <F>.
+
+=== tutor zt21_head
+Cios w plecy
+
+=== tutor zt21_head_screen1
+Zadaj cios w plecy Bia³ego wilka
+
+=== tutor zt21_text_screen1
+     Mo¿esz zadaæ o wiele wiêksze obra¿enia przeciwnikowi, jeœli zdo³asz go zaskoczyæ i uderzyæ od ty³u (nazywamy to ciosem w plecy). Ale cios zostanie uznany za cios w plecy tylko jeœli przeciwnik nie zauwa¿y ciê. Oznacza to, ¿e musisz do niego podejœæ bardzo blisko, pozostaj¹c niezauwa¿onym. W tym celu u¿yj trybu skradania siê.
+
+     Taka technika jest szczególnie przydatna przeciwko przeciwnikom silniejszym od ciebie, jak na przyk³ad bia³y wilk.
+
+=== tutor zt22_head
+Kradzie¿
+
+=== tutor zt22_head_screen1
+Okradanie Wodza i jego ¿ony
+
+=== tutor zt22_text_screen1
+     Kiedy twoim przeciwnikiem jest ktoœ taki, jak Wódz - zdecydowanie silniejszy od twojej postaci - powinieneœ spróbowaæ uzyskaæ od niego przedmioty podstêpem (Wódz nie jest uznawany za zbyt hojnego).
+
+     W tym celu, podkradnij siê do niego i kliknij na ikonê "U¿yj/Kradnij". Zobaczysz, ¿e kursor zmieni³ kszta³t. Kiedy tak siê stanie, kliknij na postaci, któr¹ chcesz okraœæ.
+     Uwaga: aby dokonaæ kradzie¿y, musisz wybraæ pojedyncz¹ postaæ. Ikona "U¿yj/Kradnij" jest niedostêpna jeœli wybierzesz wiêcej ni¿ jedn¹ postaæ.
+
+=== tutor zt23_head
+Poruszanie siê
+
+=== tutor zt23_head_screen1
+Brodzenie
+
+=== tutor zt23_text_screen1
+     Postaci nie umiej¹ p³ywaæ, ale mog¹ brodziæ w p³ytkich wodach lub bagnach. Woda nie mo¿e byæ g³êbsza ni¿ wysokoœæ postaci, inaczej utonie. To oznacza, ¿e cz³owiek mo¿e brodziæ w g³êbszych miejscach ni¿ wilk, a Troll nawet w g³êbszych ni¿ cz³owiek.
+
+     Przyk³ad: twoja postaæ dochodzi do rzeki. Aby kontynuowaæ zadanie, potrzebujesz przedostaæ siê na drugi brzeg. Nie obawiaj siê - sama odnajdzie drogê i przejdzie rzekê w bród.
+
+     Uwaga: kiedy postaæ jest w wodzie, w ¿adnym wypadku nie zmieni pozycji na tak¹, która powodowa³aby zejœcie poni¿ej lustra wody (nasze postaci nie s¹ samobójcami). Po prostu odmówi wykonania polecenia.
+
+=== tutor zt24_head
+Zadania
+
+=== tutor zt24_head_screen1
+Przyjêcie zadania
+
+=== tutor zt24_text_screen1
+     Jesteœ teraz w Strefie gry bez zadania (wciœnij klawisz <Tab>, aby przywo³aæ ekran z zadaniami, i zobaczysz ¿e jest pusty).
+
+     Aby podj¹æ siê zadania, wróæ do wioski i porozmawiaj z jej mieszkañcami.
+     
+     Uwaga: nie ka¿da rozmowa zaprowadzi ciê do oferty nowych zadañ. Jednak¿e, jeœli nie masz zadania do wykonania w Strefie gry, oznacza to definitywnie, ¿e ktoœ w wiosce chce z tob¹ pogadaæ, co doprowadzi do nowego zadania.
+
+=== tutor zt2_head
+Sterowanie kamer¹
+
+=== tutor zt2_head_screen1
+Sterowanie (kamera)
+
+=== tutor zt2_head_screen2
+Ograniczenia
+
+=== tutor zt2_text_screen1
+     Masz pe³n¹ kontrolê nad kamer¹ podczas gry. Mo¿esz obracaæ ni¹, poruszaæ, przybli¿aæ i oddalaæ oraz œledziæ wybran¹ postaæ. Bêdziesz móg³ tak¿e obejrzeæ tereny i przedmioty w strefie gry, niezale¿nie od tego, czy j¹ zwiedzi³eœ, czy nie.
+
+     Aby ruszaæ kamer¹, po prostu przesuñ kursor do krawêdzi ekranu lub u¿yj klawiszy strza³ek.
+     Aby obróciæ kamerê, u¿yj prawego przycisku myszy lub klawisza <CTRL> + strza³ki.
+     Aby zbli¿yæ/oddaliæ, ruszaj myszk¹ lub u¿yj klawiszy PgUp/PgDn.
+     Aby œledziæ postaæ, kliknij na jej obrazku dwukrotnie, na dole ekranu, lub naciœnij klawisz HOME.
+
+     Uwaga: jesteœ w trybie œledzenia jeœli widzisz symbol w górnej czêœci wizerunku postaci. Jeœli poruszysz kamerê, œledzenie zostanie przerwane. Obracanie kamery lub przybli¿anie/oddalanie nie wp³ywa na œledzenie.
+
+=== tutor zt2_text_screen2
+     Nie mo¿esz zrobiæ zbyt wielkiego zbli¿enia czy oddalenia, tak samo, jak nie mo¿esz ustawiæ kamery dok³adnie poziomo lub pionowo. Mo¿esz jednak ujrzeæ bardziej szczegó³owy widok, przyciskaj¹c klawisz PgUp. Pozwoli ci to zwiêkszyæ zbli¿enie. Kiedy puœcisz klawisz, kamera automatycznie powróci do maksymalnej wartoœci zbli¿enia.
+
+=== tutor zt3_head
+Zadania i cele
+
+=== tutor zt3_head_screen1
+Zadania i cele
+
+=== tutor zt3_head_screen2
+Okno tekstowe
+
+=== tutor zt3_head_screen3
+Ekran zadañ
+
+=== tutor zt3_text_screen1
+     Aby poczyniæ postêpy w grze, bêdziesz musia³ ukoñczyæ wiele ró¿nych zadañ - niektóre z nich s¹ obowi¹zkowe, niektóre opcjonalne. Zadania daj¹ twoim postaciom dodatkowe doœwiadczenie oraz inne plusy.
+
+     Kiedy otrzymasz nowe zadanie, us³yszysz dŸwiêk i ujrzysz wiadomoœæ w oknie tekstowym. Szczegó³owe informacje dostêpne bêd¹ w ekranie zadañ - poczytaj o tym na nastêpnych stronach samouczka.
+
+=== tutor zt3_text_screen2
+     Kiedy otrzymasz i ukoñczysz zadanie, w oknie tekstowym uka¿¹ siê wiadomoœci w ramkach. Te wiadomoœci mówi¹ o celach zadania i innych informacjach, które zostan¹ omówione szczegó³owo póŸniej.
+
+     Uwaga: aby otworzyæ/zamkn¹æ okno tekstowe, u¿yj przycisku w ramce w górnym prawym rogu. Mo¿esz tak¿e graæ niezale¿nie od tego, czy okno tekstowe jest otwarte czy nie.
+
+=== tutor zt3_text_screen3
+     Kiedy otrzymasz i ukoñczysz zadanie, w oknie tekstowym uka¿¹ siê wiadomoœci w ramkach. Te wiadomoœci mówi¹ o celach zadania i innych informacjach, które zostan¹ omówione szczegó³owo póŸniej.
+
+     Uwaga: aby otworzyæ/zamkn¹æ okno tekstowe, u¿yj przycisku w ramce w górnym prawym rogu. Mo¿esz tak¿e graæ niezale¿nie od tego, czy okno tekstowe jest otwarte czy nie.
+
+=== tutor zt4_head
+Kontrolowanie prêdkoœci gry
+
+=== tutor zt4_head_screen1
+Prêdkoœæ gry
+
+=== tutor zt4_head_screen2
+Tryb pauzy
+
+=== tutor zt4_text_screen1
+     Ustaw ¿¹dan¹ prêdkoœæ gry u¿ywaj¹c panelu w ramce w dolnej prawej czêœci ekranu. Panel posiada marker, wyznaczaj¹cy obecn¹ prêdkoœæ gry. Panel pokazuje te¿, jak d³ugo ju¿ grasz.
+
+     Mo¿esz wybraæ jedne z trzech trybów: "normalna" prêdkoœæ, "wysoka" prêdkoœæ i "pauza". Tryb wysokiej prêdkoœci sprawia, ¿e wszystkie postaci (i twoje i wrogowie) poruszaj¹ siê szybciej. Normalne jest, oczywiœcie, standardowe ustawienie. Za pomoc¹ "pauzy" mo¿esz przerwaæ grê na chwilê przemyœleñ.
+
+     Mo¿esz tak¿e kontrolowaæ prêdkoœæ gry za pomoc¹ klawiatury: 
+     Wysoka prêdkoœæ: klawisz <+>
+     Normalna prêdkoœæ: klawisz <->
+     Pauza: klawisz  <SPACJI>.
+
+=== tutor zt4_text_screen2
+     Tryb "Pauzy" mo¿e byæ bardzo u¿yteczny w czystko bitewnych sytuacjach. W tym trybie gra zostaje zatrzymana. Mo¿esz nadal operowaæ kamer¹ i wydawaæ polecenia postaciom, ale zostan¹ one wykonane dopiero po anulowaniu pauzy. Powinieneœ u¿ywaæ tego trybu do oszacowywania si³y przeciwnika, ustalenia celów, czy wybrania czarów.
+
+     Aby w³¹czyæ lub wy³¹czyæ pauzê, wciœnij po prostu SPACJÊ. 
+
+=== tutor zt5_head
+Sytuacje podczas walki
+
+=== tutor zt5_head_screen1
+Walka z przeciwnikiem
+
+=== tutor zt5_head_screen2
+IdŸ i przygotuj siê do ataku
+
+=== tutor zt5_text_screen1
+     Czasami, pomimo wszelkich wysi³ków, aby nie dopuœciæ do walki, napotkasz przeciwników, z którymi bêdziesz musia³ stoczyæ walkê. Zasad¹ jest, ¿e dopóki postaæ nie widzi wroga, nie pojawi siê on na ekranie.
+
+     ¯eby zaatakowaæ przeciwnika, najedŸ na niego kursorem i, w momencie gdy kursor zmieni siê w miecz, kliknij. Twoja postaæ rozpocznie walkê i bêdzie walczy³a dopóki przeciwnik nie umrze. Jeœli wróg porusza siê szybko, mo¿e byæ trudno najechaæ na niego kursorem, tak wiêc potrzebne mo¿e byæ w³¹czenie pauzy.
+
+     Uwaga: w momencie, gdy wybierzesz przeciwnika, twoja postaæ natychmiast zacznie walczyæ. Nie ma potrzeby klikania dwukrotnie.
+
+=== tutor zt5_text_screen2
+     Mo¿esz wydaæ postaci komendê "IdŸ i przygotuj siê do ataku". To wprowadzi j¹ w bojowy nastrój i zaatakuje ka¿dego napotkanego wroga.
+
+     Aby wydaæ t¹ komendê, wciœnij i przytrzymaj klawisz <<CTRL>> podczas klikania na ¿¹danym celu. Postaæ pójdzie do danej lokacji i rozpocznie walkê.
+
+     Uwaga: w tym trybie postaæ zaatakuje ka¿dego napotkanego przeciwnika. Jeœli zadecydujesz wys³aæ go zbyt daleko, bêdzie siê broni³ w razie ataku na swojej drodze. Po ataku zatrzyma siê i nie bêdzie szed³ dalej, tak wiêc upewnij siê, ¿e wybierasz cel blisko niego.
+
+=== tutor zt6_head
+Po walce
+
+=== tutor zt6_head_screen1
+Zbieranie trofeów
+
+=== tutor zt6_text_screen1
+     Mo¿esz wyj¹æ z martwego cia³a przeciwnika trofea i u¿yæ lub sprzedaæ je póŸniej. Twoja postaæ mo¿e trochê na to ponarzekaæ, lecz nie przejmuj siê tym.
+
+     Aby przeszukaæ cia³o, po prostu umieœæ nad nim kursor, poczekaj a¿ zmieni kszta³t i kliknij. Wiadomoœæ pojawi siê w ramce w oknie tekstowym, opisuj¹c co w³aœnie podnios³eœ.
+
+     Uwaga: trofea id¹ do inwentarza - to miejsce poza stref¹ gry, gdzie trzymane s¹ wszystkie rzeczy. Nie mo¿esz sprawdziæ trofeów, ani zmieniæ ubrañ czy broni w strefie gry.
+
+=== tutor zt7_head
+Pos³ugiwanie siê magi¹
+
+=== tutor zt7_head_screen1
+Czary uzdrawiaj¹ce
+
+=== tutor zt7_head_screen2
+Czary (czêœæ 1)
+
+=== tutor zt7_head_screen3
+Cechy
+
+=== tutor zt7_head_screen4
+Czary (czêœæ 2)
+
+=== tutor zt7_text_screen1
+     Po walce twoja postaæ zazwyczaj bêdzie mia³a jakieœ obra¿enia. Mo¿esz temu zaradziæ, rzucaj¹c czar uzdrawiaj¹cy.
+
+     Aby rzuciæ czar uzdrawiaj¹cy, najedŸ kursorem na ikonê czaru przy prawej krawêdzi ekranu i kliknij. Kiedy kursor zmieni kszta³t, najedŸ nim na postaæ i kliknij ponownie.
+     
+Zobacz nastêpne strony samouczka, aby dowiedzieæ siê wiêcej na temat u¿ywania magii i rzucania czarów.
+
+=== tutor zt7_text_screen2
+     W grze dostêpnych jest wiele czarów. Poniewa¿ ich rzucanie zabiera energiê, "Wigor" twojej postaci maleje (wskaŸnikiem tego jest niebieski pasek pod wizerunkiem postaci). Aby zregenerowaæ "Wigor", twoja postaæ potrzebuje odpoczynku. Tak wiêc daj jej trochê czasu na spokojne stanie bez walki czy jakiegokolwiek ruchu.
+
+     Aby rzuciæ czar na inn¹ postaæ, najedŸ kursorem na ikonê czaru w prawej sekcji ekranu i kliknij. Kiedy kursor zmieni kszta³t, najedŸ nim na ¿¹dany cel i kliknij ponownie.
+     Aby rzuciæ czar na siebie, po prostu kliknij dwukrotnie na ikonê czaru.
+
+=== tutor zt7_text_screen3
+     Podczas rzucania czarów nie zapomnij o paru podstawowych zasadach.
+
+     Ka¿dy czar ma w³asny zasiêg. Jeœli postaæ otrzymuje polecenie rzucenia czaru na cel poza tym zasiêgiem, spróbuje najpierw podejœæ bli¿ej.
+     Nie spodziewaj siê po czarach natychmiastowego efektu. Ka¿dy czar potrzebuje jakiegoœ czasu na dzia³anie. Czas ten zale¿y od z³o¿onoœci czaru i zdrowia postaci (zdrowsze postacie mog¹ d³u¿ej opieraæ siê czarom). 
+     Niektóre czary dzia³aj¹ przed d³u¿szy czas. Jednak wp³ywy nie kumuluj¹ siê. Oznacza to, ¿e rzucanie wielu czarów tego samego typu na jedn¹ postaæ nic nie zmieni. Docelowa postaæ odczuje efekt tylko najsilniejszego czaru.
+
+=== tutor zt7_text_screen4
+     Mo¿esz tak¿e rzucaæ czary, u¿ywaj¹c klawiatury:
+
+     Aby rzuciæ czar 1: klawisz <1>
+     Aby rzuciæ czar 2: klawisz <2>
+     Aby rzuciæ czar 3: klawisz <3>
+     Aby rzuciæ czar 4: klawisz <4>
+     Aby rzuciæ czar 5: klawisz <5>
+     Aby rzuciæ czar 6: klawisz <6>
+     Aby rzuciæ czar 7: klawisz <7>
+     Aby rzuciæ czar 8: klawisz <8>
+
+     Uwaga: jeœli wciœniesz te klawisze wraz z klawiszem <ALT>, rzucisz czar na siebie.
+
+=== tutor zt8_head
+Zapisywanie i wczytywanie gry
+
+=== tutor zt8_head_screen1
+Zapisywanie i wczytywanie gry
+
+=== tutor zt8_head_screen2
+Autozapis
+
+=== tutor zt8_text_screen1
+     Mo¿esz zapisaæ i wczytywaæ stan gry w dowolnym momencie, u¿ywaj¹c polecenia Szybki Zapis lub  ESC-menu.
+
+     ¯eby u¿yæ funkcji Szybki Zapis, wciœnij klawisz F5. Gra zostanie zapisana jako "SZYBKI ZAPIS".
+     ¯eby u¿yæ funkcji Szybkie Wczytywanie, wciœnij klawisz F8. Gra, zapisana jako "SZYBKI ZAPIS", zostanie wczytana.
+     
+     U¿ywaj¹c funkcji "Zapisz" i "Wczytaj" z Esc-menu, mo¿esz zapisywaæ stan gry pod dowoln¹ nazw¹.
+
+=== tutor zt8_text_screen2
+     Za ka¿dym razem, kiedy wchodzisz do Strefy gry, lub wychodzisz do Mapy g³ównej, gra jest zapisywana automatycznie pod nazw¹ "Autozapis (Wejœcie)" i "Autozapis (Wyjœcie)".
+
+=== tutor zt9_head
+Tryby postaci
+
+=== tutor zt9_head_screen1
+Agresja/Obrona
+
+=== tutor zt9_head_screen2
+Cechy
+
+=== tutor zt9_text_screen1
+     Zale¿nie od sytuacji, mo¿esz wprowadziæ postaæ w dwa tryby.
+     
+     W trybie Agresji postaæ automatycznie zaatakuje ka¿dego napotkanego wroga.
+     W trybie Obrony postaæ nie zaatakuje przeciwnika dopóki nie wydasz jej stosownego polecenia.
+
+     Aby uaktywniæ jeden z tych trybów, u¿yj panelu sterowania w ramce, w lewej dolnej czêœci ekranu, lub klawiatury:
+     Aby prze³¹czyæ pomiêdzy trybami "Agresji"/"Obrony", u¿yj klawisza <A>.
+
+     Uwaga: mo¿esz przypisaæ dowolny z tych trybów ka¿dej postaci osobno.
+
+=== tutor zt9_text_screen2
+     W trybie Obrony postaæ przestaje walczyæ jeœli przeciwnik zginie lub jeœli zostanie mu wydane inne polecenie, jak np. "rzuæ czar", czy "przejdŸ do innej lokacji". Aby wznowiæ walkê, musisz wydaæ polecenie ataku ponownie.
+
+     Mo¿esz w³¹czyæ ten tryb jeœli postaæ potrzebuje odnowiæ poziom Wigoru, podczas gdy obok jest przeciwnik. U walcz¹cej postaci Wigor nie regeneruje siê.
+

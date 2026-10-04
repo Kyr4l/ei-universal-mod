@@ -1,0 +1,1453 @@
+# um-texts 1
+=== quest q0g
+Odnalezienie ludzi
+Nie zdo³asz prze¿yæ samotnie w tym dziwnym i niebezpiecznym œwiecie. Musisz odnaleŸæ ludzk¹ osadê.
+#subobj  1
+Opuœæ ruiny
+Jeœli ruiny s¹ jedynym miejscem, dok¹d mo¿na pójœæ, powinni mieszkaæ tu jacyœ ludzie, lub przynajmniej mieszkali tu kiedyœ. Aby ich znaleŸæ, przede wszystkim opuœæ ruiny i dok³adnie przeszukaj otaczaj¹cy je teren.
+#subobj  2
+IdŸ za uciekaj¹cymi ludŸmi
+Tak, mieszkaj¹ tu ludzie! Jednak uciekaj¹ jak tylko zobacz¹ nieznajomego, wychodz¹cego z ruin… Nie da³byœ rady ich z³apaæ, ale teraz przynajmniej mo¿esz siê domyœliæ gdzie mo¿e byæ ludzka osada. Nie licz jednak na dobr¹ drogê w dziczy: mo¿e siê zdarzyæ, ¿e bêdziesz musia³ iœæ wzd³u¿ rzeki a nawet przekroczyæ j¹ w bród.
+#subobj  3
+IdŸ do wioski
+Wioska le¿y na wschód od brodu, ale miej siê na bacznoœci: w jej pobli¿u mog¹ siê czaiæ niebezpieczne stworzenia.
+
+=== quest q10g
+Kradzie¿ Magicznej Kuli Orków
+Szaman Orków umieœci³ Magiczn¹ Kulê na o³tarzu po³o¿onym na jednej z wysp. Obstawa szamana jest zawsze na tej wyspie. Mo¿na tam dotrzeæ tylko przez zwodzony most. Aby go opuœciæ, trzeba pos³u¿yæ siê mechanizmem Orków - wyspiarzy.
+#subobj  1
+ZnajdŸ o³tarz
+O³tarz znajduje siê na najdalej wysuniêtej na po³udnie wyspie. Po drodze jednak unikaj centralnych i wschodnich wysp - nie trzeba podejmowaæ zbêdnego ryzyka.
+#subobj  2
+WeŸ kulê
+Aby zdobyæ kulê, musisz wpierw pozabijaæ stra¿ników!
+
+=== quest q11g
+Zapiski Orków
+Mo¿esz dowiedzieæ siê o pochodzeniu Magicznej Kuli z zapisków Orków. Szaman ¿yj¹cy na centralnej wyspie mo¿e je posiadaæ.
+#subobj  1
+ZnajdŸ Wieszcza
+Jasnowidz, który prowadzi zapiski, mieszka na wschodnim krañcu centralnej wyspy. Uwa¿aj, gdy¿ jest dobrze strze¿ony!
+#subobj  2
+Zdob¹dŸ zapiski
+Masz dwie mo¿liwoœci: wykraœæ zapiski lub zabiæ jasnowidza i zabraæ je z cia³a.
+
+=== quest q12g
+Z³ota dolina
+Pomiêdzy wzgórzami nieopodal rzeki le¿¹ pozosta³oœci karawany ze z³otem. Mieszkañcy wioski nazywaj¹ to miejsce z³ot¹ dolin¹, lecz wymawiaj¹ tê nazwê ze strachem w g³osie. Szcz¹tki karawany s¹ pilnowane przez bezlitosne ghoule, które bardzo ciê¿ko zabiæ.
+#subobj  1
+Odszukaj zaginion¹ karawanê
+Z³ota Dolina znajduje siê w œrodkowej czêœci rzeki na wschodnim brzegu. Le¿¹ tu resztki karawany, w niedalekiej odleg³oœci od wody. Dwie œcie¿ki prowadz¹ do doliny, na obu mo¿e byæ zastawiona pu³apka. Pamiêtaj, ¿e gule nie widz¹ ale wyczuwaj¹ obecnoœæ ka¿dej ¿ywej istoty w ich pobli¿u, wiêc nie mo¿esz podkraœæ siê do nich od ty³u, nie bêd¹c zauwa¿onym.
+#subobj  2
+Zabierz z³oto
+Z³oto spoczywa w dwóch skrzyniach. Jedn¹ mo¿na otworzyæ dosyæ ³atwo, natomiast druga stanowi problem: aby j¹ otworzyæ, poziom twojej zdolnoœci "U¿yj/Ukradnij" musi byæ dostatecznie wysoki. Jeden worek z³ota wystarczy, aby wype³niæ zadanie, ale jeœli mo¿esz ukraœæ oba, to czemu nie? Niech szczêœcie ci sprzyja!
+#subobj  3
+Uciekaj przed stra¿nikami karawany
+Ten kto ukradnie z³oto nara¿a siê na gniew ghouli, które strzeg¹ Z³otej Doliny. Ci martwi stra¿nicy karawany popêdz¹ a¿ do brzegu rzeki, aby zabiæ z³odzieja.
+
+=== quest q13ag
+Prawdziwy plan Rozbójników
+W przeciwieñstwie do tego, co ci obiecano, adiutant wodza nie by³ nieuzbrojony i na dodatek nie przyszed³ sam. NajwyraŸniej rozbójnicy zaplanowali kolejny atak, którego celem nie by³y gobliny.
+#subobj  1
+Zabij wszystkich wrogów
+Jeœli w powietrzu wisi zdrada, ka¿dy, kto Ÿle ¿yczy Wybranemu, musi zgin¹æ.
+#subobj  2
+Zabij porucznika Herszta
+Porucznik Herszta musi zgin¹æ.
+#subobj  3
+Przeszukaj dobytek Porucznika
+Jest oczywistym, ¿e ktoœ z wioski by³ zamieszany w tê zasadzkê. Jeœli przeszukasz dobytek Porucznika Wodza, byæ mo¿e znajdziesz wskazówki, które pozwol¹ ci zidentyfikowaæ zdrajcê.
+#subobj  4
+Zasadzka na zachodzie
+Porucznik Herszta jest os³aniany przez liczne grupy zasadzkowiczów. Wszyscy musz¹ zgin¹æ.
+#subobj  5
+Zasadzka na po³udniu
+Porucznik Herszta jest os³aniany przez liczne grupy zasadzkowiczów. Wszyscy musz¹ zgin¹æ.
+#subobj  6
+Zasadzka na wschodzie
+Porucznik Herszta jest os³aniany przez liczne grupy zasadzkowiczów. Wszyscy musz¹ zgin¹æ.
+#subobj  7
+Zasadzka na pó³nocy
+Porucznik Herszta jest os³aniany przez liczne grupy zasadzkowiczów. Wszyscy musz¹ zgin¹æ.
+#subobj  8
+Ochroniarze
+Porucznikowi Herszta towarzyszy wielu ochroniarzy. Musz¹ zgin¹æ.
+
+=== quest q13g
+Udaremnij najazd Goblinów
+Gobliny planuj¹ wielki najazd na wioskê. Trwaj¹ jednak przygotowania do po³¹czonego kontrataku ze strony stacjonuj¹cych we wsi ¿o³nierzy i zbójców. Gobliny musz¹ zostaæ zniszczone, a ich plany ataku udaremnione.
+#subobj  1
+Spotkaj siê z Porucznikiem Herszta
+Spotkanie ma siê odbyæ w miejscu, gdzie droga ku rzece opuszcza dolinê pomiêdzy wzgórzami. Powinien byæ sam i nieuzbrojony.
+#subobj  2
+Odszukaj Gobliny
+Gobliny zbieraj¹ siê na skraju bagna, niedaleko wysokiej góry, przypominaj¹cej filar lub z³amany z¹b. Góra jest ostatni¹ na zachód, dalej teren staje siê bardziej równinny.
+#subobj  3
+Zabij Gobliny
+Atak Goblinów musi zostaæ powstrzymany za wszelk¹ cenê.
+
+=== quest q14ag
+Smoczy amulet
+Jaszczury posiadaj¹ amulet, który pozwoli ci na przejêcie kontroli nad smokiem na pewien czas. Amulet bêdzie potrzebny, by kontynuowaæ przygodê.
+#subobj  1
+ZnajdŸ w³aœciciela amuletu
+Jaszczur, który posiada smoczy amulet, zajmuje siê treningiem swych oswojonych ¿ab w pobli¿u starego kamienio³omu. Zaprowadzi ciê tam wschodnia droga. Uwa¿aj na inny punkt orientacyjny, po³amany wóz w pobli¿u wzgórza.
+#subobj  2
+Zabij w³aœciciela amuletu
+Jaszczur nie odda amuletu, a wytrenowane ¿aby uniemo¿liwi¹ jego kradzie¿. Jedynym wyjœciem jest zabicie w³aœciciela.
+#subobj  3
+Zabierz amulet
+Przeszukaj cia³o Jaszczura i zabierz amulet.
+
+=== quest q14g
+Ksiêga ABC Orków
+WiedŸma nie mo¿e przet³umaczyæ wiadomoœci zaadresowanej do zdrajców. Aby to zrobiæ, potrzebuje ksiêgi ABC Orków, któr¹ szaman zwykle ma przy sobie. Aby dojœæ do jego domu najlepiej iœæ piaszczystym terenem przez rzekê i  wyspy
+#subobj  1
+ZnajdŸ dom wieszcza
+Z zachodu na po³udniowy wschód, a¿ do jeziora ograniczaj¹cego piaski, ci¹gnie siê du¿y cypel. W pobli¿u koñca tego cypla le¿y ma³a ja³owa wysepka, do której mo¿na dotrzeæ na piechotê. Znajduje siê na niej chatka i mieszka tam wieszcz, który jest w posiadaniu ksi¹¿ki ABC. Droga wiod¹ca na koniec cypla bêdzie prawdziwie ciê¿ka - jest ona strze¿ona przez Orki, w pobli¿u mieszka równie¿ okrutny Ogr.
+#subobj  2
+Zabij Jasnowidza
+Jest tylko jeden sposób aby byæ pewnym, ¿e jasnowidz nikogo nie zaalarmuje - zabiæ go.
+#subobj  3
+Zabierz ksi¹¿kê ABC
+Ksi¹¿ka ABC Orków jest g³ównym celem wyprawy. Bez niego wiedŸma nie bêdzie w stanie przeczytaæ zapisków.
+
+=== quest q15ag
+Wielka muszla
+Jaszczury maj¹ symbol pokoju - Wielk¹ muszlê. Zgodnie ze zwyczajem, plemiê Jaszczurów, które ma na swym o³tarzu Wielk¹ muszlê, nie zaatakuje ludzi i bêdzie walczyæ tylko w samoobronie. Obecnie Muszla znajduje siê na o³tarzu w Odleg³ych Szczytach. Musisz tam iœæ i zabraæ j¹. Aby tam doœæ, skorzystaj z drogi przebiegaj¹cej z zachodu na wschód przez Œrodkowe Szczyty.
+#subobj  1
+ZnajdŸ o³tarz
+O³tarz znajduje siê niedaleko miejsca, gdzie zaczyna siê droga wiod¹ca do Odleg³ych Szczytów, na pó³noc od czterech ognistych filarów.
+#subobj  2
+Zabierz Wielk¹ Muszlê
+Musisz j¹ zdobyæ. Pamiêtaj jednak, ¿e jak tylko Muszla zostanie zabrana, pokój pomiêdzy Jaszczurami i ludŸmi skoñczy siê.
+
+=== quest q15bg
+Zawarcie pokoju z Jaszczurami
+Aby powstrzymaæ ataki Jaszczurów ze Œrodkowych Szczytów na ludzi, musisz zanieœæ Wielk¹ muszlê na o³tarz. O³tarz znajduje siê na pocz¹tku prze³êczy prowadz¹cej do jeziora, na wschód od miejsca, gdzie le¿y wyschniête koryto rzeki poœród ska³. Przejœcie poœród wzgórz jest strze¿one przez Jaszczury, wiêc droga prowadz¹ca w³aœnie têdy mo¿e okazaæ siê trudna. Dopóki nie wype³nisz tej misji, droga do Obserwatorium bêdzie wyj¹tkowo niebezpieczna.
+#subobj  1
+Dotrzyj do o³tarza
+Najlepiej bêdzie, jeœli postarasz siê iœæ pomiêdzy wzgórzem a wyschniêtym korytem rzecznym: ochronna moc jest tam najs³absza. Po przekroczeniu wzgórz na terytorium Jaszczurów zachowaj szczególn¹ ostro¿noœæ: mo¿e siê zdarzyæ, ¿e bêd¹c tam, bêdziesz musia³ siê czo³gaæ.
+#subobj  2
+Od³ó¿ muszlê na miejsce
+Musisz zwróciæ wielk¹ muszlê na o³tarz. Po tym Jaszczury nie bêd¹ wiêcej atakowaæ ludzi. Jednak gdy ludzie zaatakuj¹ ich pierwsi, wrogoœæ zacznie siê na nowo.
+
+=== quest q16g
+Kamienio³om
+Droga do kamienio³omu jest teraz niebezpieczna. Jeœli bêdziesz w stanie to zmieniæ, Babur wynagrodzi twój trud. Kamienio³om jest na pó³noc od czterech p³on¹cych kolumn.
+#subobj  2
+Odszukaj œwinie
+Stado œwiñ pasie siê w samym w¹wozie niedaleko Cyklopów, na wschód od kamienio³omu.
+#subobj  3
+Wyr¿nij wszystkie œwinie
+Tak d³ugo, jak Cyklopi maj¹ co jeœæ, nigdzie siê nie rusz¹. Pamiêtaj, ¿e œwinie nie s¹ ogrodzone i niektóre z nich mogê b³¹kaæ siê gdzieœ z dala.
+#subobj  4
+Poczekaj, a¿ Cyklopi odejd¹
+Gdy Cyklopi poczuj¹ rosn¹cy g³ód, musz¹ siê ruszyæ w poszukiwaniu jedzenia. Ale to nie nast¹pi natychmiast…
+#subobj  5
+Odszukaj kamienio³om
+Kamienio³om znajdziesz na pó³noc od czterech ognistych filarów. B¹dŸ ostro¿ny i nie zapomnij spojrzeæ na niebo teraz i póŸniej - kr¹¿¹ wieœci o smokach w tamtych stronach.
+#subobj  6
+Zabij Cyklopów
+Nie jest to ³atwe zadanie, ale jeœli ci siê powiedzie, mo¿esz uwa¿aæ proœbê Rzemieœlnika za spe³nion¹.
+
+=== quest q17g
+Zielony kryszta³
+Zielone kryszta³y s¹ niezbêdnymi sk³adnikami do "Czaru Lodu". Kryszta³y znajdziesz g³êboko w w¹wozie, w górach, w których po³o¿one jest Wymar³e Miasto. Szukaj na pó³noc od bram miasta.
+#subobj  1
+Oszukaj Trolla
+Obok wejœcia do w¹wozu mieszka pewien Troll. Zabicie go nie jest rzecz¹ ³atw¹, ale móg³byœ wpierw go wywabiæ, a potem wœlizn¹æ siê do w¹wozu, dok¹d wielki Troll nie zdo³a siê dostaæ.
+#subobj  2
+Odszukaj Kryszta³
+Depozyt kryszta³ów znajduje siê w najdalszym zak¹tku w¹wozu. Uwa¿aj, kiedy bêdziesz przemierza³ w¹wóz: oprócz Trolla mog¹ tam byæ inni wrogowie.
+#subobj  3
+Zabierz Kryszta³
+Musisz zdobyæ Kryszta³ i przynieœæ go wiedŸmie.
+#subobj  4
+Zabierz Zielony Kryszta³
+Estera powiedzia³a, ¿e musi to byæ Zielony Kryszta³. Niebieskie Kryszta³y nie nadaj¹ siê do "lodowego zaklêcia".
+#subobj  5
+Wydostañ siê z w¹wozu
+Opuszczaj¹c w¹wóz nie zapomnij, ¿e wiele niebezpiecznych stworzeñ mo¿e na ciebie czyhaæ!
+
+=== quest q18g
+Przeszukiwanie ruin obserwatorium
+Gdzieœ poœród ruin obserwatorium le¿y klucz do zagadki Wymar³ego Miasta. Obserwatorium jest w pó³nocnej czêœci Œrodkowych Szczytów, gdzie bytuj¹ wojownicze plemiona Harpii i Smoków. Aby wejœæ do obserwatorium u¿yj amuletu przywo³uj¹cego smoka, który zniszczy Harpie. Pamiêtaj, ¿e amulet nie zadzia³a na ka¿dego smoka, tylko na tego, który ¿yje na pó³nocy i trochê na zachód zaraz za jeziorem. Droga do obserwatorium jest bardzo niebezpieczna ze wzglêdu na wojowniczych Jaszczuroludzi. ¯eby zminimalizowaæ ryzyko najlepiej najpierw skoñczyæ zadania "Wielka Muszla" i "Zawarcie pokoju z JaszczuroludŸmi".
+#subobj  1
+Droga nad jezioro
+W¹skie i krête przejœcie pomiêdzy ska³ami prowadzi nad jezioro. Zaczyna siê niedaleko na pó³noc od o³tarza Jaszczurów. Jeœli zwrócisz symbol pokoju - Wielk¹ Muszlê - na o³tarz, Jaszczury zaprzestan¹ ataków na ludzi. W przeciwnym razie bêdziesz musia³ wywalczyæ sobie drogê do przejœcia, a twoje szanse nie bêd¹ du¿e.
+#subobj  2
+ZamroŸ jezioro
+Magia Estery podzia³a³a! Jezioro pokryte jest teraz lodem i mo¿esz przez nie przejœæ!
+#subobj  3
+PrzejdŸ przez jezioro
+Tereny na pó³noc od jeziora s¹ naprawdê niebezpieczne. Znajduj¹ siê tam opanowane przez Harpie ruiny obserwatorium oraz smocza jama!
+#subobj  4
+ZnajdŸ smoka
+Smocza jama znajduje siê w niewielkiej dolinie na pó³noc i trochê na zachód od jeziora.
+#subobj  5
+Zaurocz smoka
+Jeœli do smoka zbli¿y siê osoba z amuletem, ten nie zaatakuje, lecz bêdzie siê jej s³ucha³ potulnie jak domowe zwierz¹tko.
+#subobj  6
+Odszukaj Harpie
+Harpie zamieszkuj¹ ruiny obserwatorium usytuowane na pó³noc i trochê na wschód od jeziora. B¹dŸ ostro¿ny: te stworzenia znaj¹ magiê i s¹ bardzo niebezpieczne!
+#subobj  7
+Wytêp Harpie
+Smok, jak tylko zobaczy harpie, wpada w furiê i rzuca siê na nie. Lepiej wtedy przeczekaæ walkê w bezpiecznym miejscu, w innym razie mo¿na zostaæ trafionym przez magiczne ataki obu stron.
+#subobj  8
+Przeszukaj obserwatorium
+Postaraj siê przeszukaæ ruiny pod k¹tem czegoœ, co mog³oby dostarczyæ jakiœ informacji o Mieœcie Umar³ych. Mo¿e to byæ mapa, ksi¹¿ka lub coœ podobnego.
+
+=== quest q19g
+Niepodwa¿alny dowód
+Dokument ze szczegó³owym planem zabicia Wybrañca zosta³ wys³any do Orków. Dostarczy on niezbitych dowodów na to, który z mieszkañców wioski jest prawdziwym wrogiem.
+#subobj  1
+Odszukaj tajemne miejsce
+Dokument zaadresowany do Orków znajduje siê w tajemnym miejscu u podnó¿a wzgórza, na wschód od miejsca, gdzie zaczyna siê droga z Pagórków prowadz¹ca nad rzekê. Poœpiesz siê - wys³annik Orków wraz ze stra¿nikami równie¿ jest w drodze po ten dokument.
+#subobj  2
+Dogoñ wys³annika Orków
+Ork zdo³a³ zdobyæ dokument, teraz wiezie go do Góry Rady i do wodzów. Góra Rady le¿y niedaleko drogi z Pagórków prowadz¹cej nad rzekê; jest tam œcie¿ka na szczyt góry, oznaczona symbolami Orków.
+#subobj  3
+Zdob¹dŸ dokument
+Aby poznaæ prawdziwe imiê wroga w wiosce musisz zdobyæ dokument zabrany przez wys³annika Orków.
+
+=== quest q1ag
+Zabicie gobliñskiego stra¿nika
+Gobliñski wartownik stale obserwuje wioskê i melduje prze³o¿onym o wszelkich aktywnoœciach. Oznacza to, ¿e ludzie nie mog¹ wyprowadziæ byd³a na pastwisko albo wys³aæ wojsko do walki z Goblinami. Kiedy wartownik zauwa¿y ¿o³nierza, natychmiast ucieknie, wiêc jedynie ktoœ, kto nie przypomina zbrojnego mo¿e podejœæ doœæ blisko, by zabiæ goblina. Kiedy wartownik bêdzie martwy wróæ do wioski. Podnó¿a gór nie s¹ jednak zbyt bezpiecznym miejscem do samotnej wêdrówki, szczególnie dla lekkozbrojnych.
+#subobj  1
+ZnajdŸ Goblina wartownika
+Goblin wartownik obserwuje drogê do Pagórków. Jego posterunek znajduje siê w pobli¿u wioski.
+#subobj  2
+Zabij Goblina wartownika
+Musisz go zabiæ, a nastêpnie wróciæ do wioski.
+
+=== quest q1g
+Zabicie bia³ego wilka
+Bia³y wilk jest silnym i przebieg³ym przywódc¹ stada, które rozszarpuje byd³o mieszkañców wioski. Bez swego przywódcy stado nie bêdzie stanowiæ ju¿ tak du¿ego zagro¿enia.
+#subobj  1
+Odszukaj legowisko Bia³ego Wilka
+Wed³ug Starszego, jama Bia³ego Wilka znajduje siê w w¹wozie na pó³nocny zachód od Podgórza.
+#subobj  2
+Odwróæ uwagê stada
+Niezwykle trudne jest pokonanie Bia³ego Wilka nawet jeden na jednego, a kiedy jeszcze ma za sob¹ ca³e stado, graniczy to z niemo¿liwoœci¹. Jednak¿e móg³byœ spróbowaæ odwróciæ uwagê stada przepêdzaj¹c dziki. Mo¿e wilki pognaj¹ za nimi, zostawiaj¹c na pewien czas swego przywódcê samego.
+#subobj  3
+Zabij Bia³ego Wilka
+Podczas gdy Bia³y Wilk po¿era ³up, móg³byœ siê podkraœæ do niego i wykoñczyæ go jednym ciosem.
+#subobj  4
+WeŸ g³owê Bia³ego Wilka
+G³owa faktycznie mog³aby pos³u¿yæ jako dowód, ¿e wieœniacy maj¹ teraz o jednego wroga mniej.
+
+=== quest q20g
+W³adca Wymar³ego Miasta
+Ktoœ sprawuje kontrolê nad Wymar³ym miastem. Mo¿e to potê¿ny Mag, z którym powinieneœ siê spotkaæ, albo przynajmniej wybadaæ gdzie mieszka. Pamiêtaj, ¿e wejœcie do miasta przez g³ówne bramy jest praktycznie niemo¿liwe - ghoule pilnuj¹ ich lepiej ni¿ dawniej robi³a to stra¿ miejska. Mo¿esz dostaæ siê do miasta przez tajemne przejœcie, ale ¿eby je otworzyæ musisz znaæ has³o.
+#subobj  1
+ZnajdŸ drogê do Miasta Umar³ych
+Jest pewne tajemne przejœcie przez góry; wejœcie znajduje siê na po³udnie od wielkich bram. Pocz¹tek tego tajemnego przejœcia oznaczony jest dwiema wie¿ami, ale aby przejœæ pomiêdzy nimi musisz znaæ has³o, które zapisane jest w ksiêdze z obserwatorium.
+#subobj  2
+PrzejdŸ otwartym przejœciem
+Otwarte przejœcie prowadzi dok³adnie tam dok¹d musisz siê udaæ - do Miasta Umar³ych.
+#subobj  3
+ZnajdŸ Samotn¹ Górê
+Wed³ug otrzymanych - niepe³nych - informacji, Pan Miasta mieszka na szczycie Samotnej Góry, le¿¹cej g³êboko w dolinie. B¹dŸ wyj¹tkowo ostro¿ny szukaj¹c jej - ghoule Miasta Umar³ych nie ¿yj¹ tylko przy wielkich bramach!
+#subobj  4
+WejdŸ na Samotn¹ Górê
+Szczyt Samotnej Góry wydaje siê odpowiednim miejscem na siedzibê Pana Miasta Umar³ych. Aby tam siê dostaæ musisz siê wspi¹æ krêt¹ œcie¿k¹ na sam szczyt.
+
+=== quest q22g
+Podziemne stwory
+Stary smok szanuje stare zwyczaje, wiêc obieca powiedzieæ  ci coœ istotnego w zamian za przys³ugê - wyeliminowanie dzia³aj¹cych mu na nerwy stworów. Aby u³atwiæ ci zadanie, da ci truciznê, która pos³u¿y do zatrucia wody w jednej z podziemnych rzek.
+#subobj  1
+Zabij Matkê Armadillo
+Jeœli pozwolisz wielkiej samicy armadillo ¿yæ, urodzi wiele ma³ych armadillo i Stary Smok nigdy nie zazna ciszy i spokoju. Lepiej zaatakuj j¹, gdy jedno ze Ÿróde³ zostanie zatrute - nie umrze od zatrutej wody, ale bêdzie mocno os³abiona.
+#subobj  2
+Wytêp ma³e Armadillo
+To one irytuj¹ Starego Smoka awanturami i zamieszaniem.
+#subobj  3
+ZnajdŸ najbli¿sze Ÿród³o
+Najbli¿sze Ÿród³o znajduje siê w pó³nocno-wschodnim rogu jaskini. Mo¿esz do niego dotrzeæ id¹c wzd³u¿ wschodniej podziemnej rzeki.
+#subobj  4
+Zatruj najbli¿sze Ÿród³o
+U¿yj smoczej trucizny. Wtedy wiele ma³ych armadillo umrze, a matka armadillo bêdzie w pewnym stopniu os³abiona.
+#subobj  5
+ZnajdŸ œrodkowe Ÿród³o
+Œrodkowe Ÿród³o znajduje siê na zachód od najbli¿szego w jaskini. Dotrzesz do niego id¹c wzd³u¿ œrodkowej podziemnej rzeki.
+#subobj  6
+Zatruj œrodkowe Ÿród³o
+U¿yj smoczej trucizny. Wtedy wiele ma³ych armadillo umrze, a matka armadillo bêdzie w pewnym stopniu os³abiona.
+#subobj  7
+ZnajdŸ najdalsze Ÿród³o
+Najdalsze Ÿród³o znajduje siê po œrodku pó³nocnego krañca jaskini. Dotrzesz do niego id¹c wzd³u¿ najdalszej podziemnej rzeki.
+#subobj  8
+Zatruj najdalsze Ÿród³o
+U¿yj smoczej trucizny. Wtedy wiele ma³ych armadillo umrze, a matka armadillo bêdzie w pewnym stopniu os³abiona.
+
+=== quest q23g
+Ukaranie kapitana zdrajcy
+Kapitan Gort zbuntowa³ siê! Grozi zabiciem Starca i Wybrañca, aby zostaæ jedyn¹ licz¹c¹ siê osob¹ w wiosce. Nie mo¿esz na to pozwoliæ; zdrajca i jego poplecznicy musz¹ zostaæ zniszczeni.
+#subobj  1
+ZnajdŸ Kapitana
+Kapitan uciek³, aby zebraæ pozosta³ych rozbójników i zaatakowaæ wioskê. Najprawdopodobniej, nie uszed³ za daleko. Pewnikiem znajdziesz go na Podgórzu przy drodze do wioski.
+#subobj  2
+Zabij Kapitana
+Zdrajca i jego towarzysz musz¹ zostaæ zg³adzeni!
+
+=== quest q24g
+Magiczna roœlina
+Wioska ma k³opoty - Kapitan zap³aci³ szamanowi orków, aby ten sprowadzi³ na mieszkañców chorobê. Aby uratowaæ wioskê, musisz odnaleŸæ Bia³y Kwiat i przynieœæ go Starcowi.
+#subobj  1
+Odszukaj Kwiat
+Aby znaleŸæ Kwiat powinieneœ ruszyæ drog¹ prowadz¹c¹ z Podgórza na wschód. Na pocz¹tku droga wiedzie przez las, póŸniej, na pó³nocy, zobaczysz wzgórza (po³amany wóz, nale¿¹cy do Babura, le¿y w pobli¿u pierwszego z nich). Pomiêdzy tymi wzgórzami jest rozpadlina i jeœli pójdziesz wzd³u¿ niej kawa³ek na pó³noc znajdziesz Kwiat.
+#subobj  2
+Zerwij Kwiat
+Musisz zerwaæ magiczn¹ roœlinê i zanieœæ j¹ do wioski.
+
+=== quest q25g
+Wywabienie wroga
+Zarówno rzemieœlnik Babur, jak i Starzec Erfar maj¹ swoje powody, aby z³orzeczyæ Wybrañcowi. Ka¿dy  z nich wie, ¿e Wybraniec uda siê ponownie w Œrodkowe Szczyty po kolejn¹ magiczn¹ roœlinê. Jeœli Wybraniec wpadnie w zasadzkê ko³o wyschniêtego koryta rzeki, zdrajc¹ jest Bobur, jeœli zaœ ko³o zniszczonego wozu - bêdzie to sprawka Starca.  
+#subobj  1
+SprawdŸ wyschniête koryto rzeczne
+Wyschniête koryto rzeczne rozci¹ga siê od centralnej czêœci Œrodkowych Szczytów na po³udniowy zachód. Jest tam ma³a zatoka gdzie ³¹czy siê ono z rzek¹. Jeœli zasadzka jest zastawiona w pobli¿u tej zatoki, to Rzemieœlnik Babur jest zdrajc¹.
+#subobj  2
+SprawdŸ po³amany wóz
+Po³amany wóz le¿y opodal wzgórza na skraju drogi wiod¹cej z Podgórza na wschód. Jeœli zasadzka zastawiona jest tam, to zdrajc¹ jest Starszy.
+#subobj  3
+Rozbij pu³apkê
+Teraz ju¿ masz pewnoœæ, ¿e wrogiem w wiosce jest Starszy. Zap³aci on za sw¹ zdradê, ale wrogowie, którzy zasadzili siê w pu³apce musz¹ równie¿ zostaæ zg³adzeni!
+#subobj  4
+Ustal czy rzemieœlnik jest niewinny
+Nie by³o zasadzki w pobli¿u wyschniêtego koryta rzecznego, w zwi¹zku z czym Rzemieœlnik Babur jest niewinny.
+
+=== quest q26g
+Obóz wêdrowców
+Stary Smok zauwa¿y³ obóz jakichœ obcych ludzi na pó³nocny zachód od Wymar³ego Miasta. Byæ mo¿e jest tam Wielki Mag. Musisz znaleŸæ obóz i wywiedzieæ siê wszystkiego o jego mieszkañcach.
+#subobj  1
+Zdob¹dŸ wsparcie Smoka
+Ghoule kontrolowane przez starego smoka zaatakowa³y obóz nieznajomych i przejê³y kontrolê nad obszarem. Teraz jednak Stary Smok odwo³a³ swych stra¿ników, wiêc mo¿esz skierowaæ swe kroki do by³ego obozu.
+#subobj  2
+ZnajdŸ obóz
+Miejsce, do którego zmierzasz, le¿y na pó³nocny zachód od gór otaczaj¹cych Miasto Umar³ych. Jeœli zaczniesz od bram miasta, bêdziesz musia³ przekroczyæ rzekê mostem w górnej czêœci.
+#subobj  3
+Przeszukaj obozowisko
+Obóz jest pusty, ale mog¹ tu byæ pozostawione rzeczy, które powiedz¹ coœ o ludziach, którzy go rozbili. Spróbuj na przyk³ad przeszukaæ ka¿de zw³oki, które napotkasz.
+
+=== quest q29g
+Khadaganianie
+Khadagañski oficer obieca³, ¿e dowódca oddzia³u pomo¿e Wybrañcowi w opuszczeniu Gipath. Nawet jeœli oficer nieco przesadzi³ z uczynnoœci¹ swojego dowódcy, i tak powinieneœ siê z nim spotkaæ. Obóz Khadagañskiej ekspedycji znajduje siê we wschodniej czêœci Odleg³ych Gór.
+#subobj  1
+ZnajdŸ obóz
+W Odleg³ych Szczytach p³yn¹ dwie rzeki: jedna ze œrodkowej czêœci Wielkiego Jeziora z pó³nocy na po³udnie, druga natomiast zaczyna swój bieg w Ÿródle we wschodniej czêœci gór i p³ynie na po³udniowy zachód. Obóz Khadaganianów znajduje siê w niewielkiej odleg³oœci na pó³noc od brzegu drugiej rzeki, w œrodkowej czêœci.
+#subobj  2
+Spotkaj siê z Khadaganianami
+Aby mówiæ z dowódc¹ oddzia³u najpierw musisz porozmawiaæ z jednym z ¿o³nierzy.
+
+=== quest q2g
+Narzêdzia
+Babur nie mo¿e wykonaæ i nie wykona ¿adnej pracy, jeœli nie odzyska narzêdzi zabranych przez "Wolnych Myœliwych" ( nazywa ich zawsze zbójami )
+#subobj  1
+ZnajdŸ Herszta rozbójników
+Obóz rozbójników, w którym mieszka herszt wraz z ¿on¹, znajduje siê pomiêdzy dwiema rzekami. Naj³atwiej jest siê tam dostaæ przez bród w górze rzeki; uwa¿aj jednak na truj¹ce ¿aby których jest wiele przy brzegu.
+#subobj  2
+Zdob¹dŸ d³uto
+Trzeba zabraæ stalowe d³uto Hersztowi i zwróciæ je Rzemieœlnikowi Baburowi. Herszt nie jest taki jaki jest bez powodu: jest bardzo mocnym wojownikiem, wiêc byæ mo¿e rozs¹dniej by³oby nie wdawaæ siê z nim w otwart¹ walkê! Lepiej by³oby podkraœæ siê do niego i wykraœæ mu d³uto z kieszeni.
+#subobj  3
+Zdob¹dŸ szyd³o
+Trzeba zabraæ stalowe szyd³o ¿onie Herszta i zwróciæ je Baburowi. Zwa¿ na me s³owa, mo¿e wygl¹da ona niegroŸnie, ale w rzeczywistoœci para siê magi¹ i mo¿e sprawiæ spory k³opot. Najlepiej by³oby podkraœæ siê do niej i wykraœæ jej szyd³o z kieszeni.
+
+=== quest q30g
+Odnalezienie domu Jaszczura pustelnika
+Jaszczur Pustelnik chce, abyœ przyszed³ i spotka³ siê z nim, skoro wczeœniej pomóg³ ci w ucieczce od Khadaganian. Musisz dotrzymaæ s³owa, ale nie jest ci wiadome, czego ów pustelnik mo¿e sobie ¿yczyæ.
+#subobj  1
+ZnajdŸ most
+Siedziba Jaszczura znajduje siê na pó³nocny zachód od miejsca zwanego Piaski. Droga zablokowana jest przez okr¹g³y kana³ pe³en wody, przeciêty dwoma mostami. Aby unikn¹æ niepotrzebnego niebezpieczeñstwa, by³oby lepiej wkroczyæ na Piaski od strony Miasta Umar³ych.
+#subobj  2
+Unieszkodliw pu³apkê
+Na wyspie utworzonej przez okr¹g³y kana³ znajduje siê wiele filarów. Wyszukana pu³apka! Staro¿ytny Szpon dany ci przez Jaszczura Pustelnika pomo¿e ci przejœæ bezpiecznie.
+#subobj  3
+Spotkaj siê z Jaszczurem Pustelnikiem
+Aby porozmawiaæ z Jaszczurem musisz przejœæ przez pierwszy most i wkroczyæ na drugi.
+
+=== quest q34g
+Woda dla Jaszczurów
+Orki zbudowa³y zaporê, aby odci¹æ strumieñ i skierowaæ jego bieg na swoje terytorium. Musisz podnieœæ zaporê i zablokowaæ kana³.
+#subobj  1
+Grobla
+Aby odnaleŸæ groblê idŸ wschodnim brzegiem rzeki, która zaczyna siê ko³o siedziby Pustelnika, na po³udnie. Grobla znajduje siê nieco w dó³ rzeki od miejsca, gdzie ³¹czy siê z ni¹ ma³e Ÿród³o (na wschodnim brzegu).
+#subobj  2
+Przerwij groblê
+Aby woda mog³a pop³yn¹æ w dó³ rzeki musisz przerwaæ groblê. ¯aden specjalny mechanizm nie jest do tego potrzebny.
+#subobj  3
+ZnajdŸ kamieñ
+Wielki kamieñ, którego Orkowie nie zdo³ali zbyt daleko przenieœæ, sterczy nad kana³em. Znajduje siê niedaleko za tam¹ w górê rzeki. Pchniêcie, kamieñ spada, kana³ jest zablokowany!
+#subobj  5
+Zepchnij kamieñ do kana³u
+ Orkowie nie przesunêli kamienia zbyt daleko od krawêdzi kana³u, lecz zostawili go tam, sk¹d nawet jedna osoba mog³aby go zepchn¹æ.
+
+=== quest q35ag
+Zaginiony skarb Jaszczurów
+Skarby Jaszczurów le¿¹ na najdalej wysuniêtej na po³udnie wyspie na jeziorze. Jaszczury nie lubi¹ rozstawaæ siê ze swymi kosztownoœciami, ale zagarniêcie skarbu mo¿e okazaæ siê ca³kiem op³acalne.
+#subobj  1
+Odszukaj skarb
+Trzy wyspy w po³udniowej czêœci jeziora po³¹czone s¹ mostami. Musisz siê dostaæ do najdalszej z nich.
+#subobj  2
+Zdob¹dŸ skarb
+Skarby nale¿¹ce do Jaszczurów ukryte s¹ w kufrze. Otwórz go i weŸ skarb.
+
+=== quest q35g
+Wdziêcznoœæ Jaszczurów
+Zgodnie z tym, co mówi³ Pustelnik, Jaszczury z chêci¹ powitaj¹ ka¿dego cz³owieka i podziel¹ siê swym skarbem.
+#subobj  1
+IdŸ do Jaszczurów
+Plemiê, które posiada skarb, zamieszkuje piaszczyste brzegi na po³udniu.
+#subobj  2
+Uciekaj od Jaszczurów
+Powitanie, które Jaszczury przed³u¿y³y, przybra³o dosyæ osobliw¹ formê - wygl¹da na to, ¿e chc¹, aby goœcie zostali z nimi, niekoniecznie jednak ¿ywi! Musisz jak najszybciej opuœciæ plemiê, aby uciec przed ich niebezpieczn¹ goœcinnoœci¹. Byæ mo¿e móg³byœ wykorzystaæ nienawiœæ pomiêdzy Jaszczurami a Orkami i zwabiæ pogoñ Jaszczórów na zachodnie tereny zajête przez Orków.
+
+=== quest q36ag
+Przejœcie przez tunel
+Mo¿esz dostaæ siê do w¹wozu poprzez tunel i w ten sposób unikn¹æ walki z morderczymi Jaszczurami.
+#subobj  1
+ZnajdŸ otwór w œcianie
+Tunel zablokowany jest przez obsuniête kamienie, zapewne wskutek trzêsienia ziemi. To samo trzêsienie spowodowa³o równie¿ powstanie otworu w œcianie, stanowi¹cego wejœcie do naturalnej jaskini.
+#subobj  2
+Omiñ obsuniête kamienie
+Mo¿esz obejœæ obsuniête kamienie przez jaskiniê. Potem powróciæ do g³ównego tunelu. 
+#subobj  3
+Uniknij Golemów
+Golemy s¹ mechanicznymi stworami, których zadaniem jest ochrona katakumb przed nieproszonymi goœæmi. Jeœli zostaniesz wykryty przez o¿ywionego Golema twoje ¿ycie znajdzie siê w niebezpieczeñstwie.
+#subobj  4
+Wydostañ siê z tunelu
+Gdy opuœcisz tunel znajdziesz siê w wewnêtrznej czêœci w¹wozu, niedaleko do Magika.
+#subobj  5
+Sarkofag
+Znalaz³eœ sarkofag!
+#subobj  6
+Zabierz zawartoœæ sarkofagu
+W sarkofagu mog¹ znajdowaæ siê ciekawe rzeczy. Nie masz klucza, wiêc musisz mieæ wysoki poziom umiejêtnoœci "U¿yj/Ukradnij", aby zajrzeæ do œrodka.
+#subobj  7
+ZnajdŸ sarkofag z kluczem kontroli
+WeŸ klucz kontroli
+#subobj  8
+WeŸ klucz kontroli
+Klucz do otwarcia sarkofagu jest niepotrzebny, mo¿esz u¿yæ klucza kontroli z o³tarza.
+#subobj  9
+ZnajdŸ pomieszczenie z o³tarzem
+O³tarz kontroluj¹cy Golemy musi byæ gdzieœ w pobli¿u tunelu; z ca³¹ pewnoœci¹ przejœcie do tego pomieszczenia jest ukryte lub zamkniête.
+#subobj  10
+ZnajdŸ o³tarz
+Nie za bardzo wiesz jak o³tarz, który kontroluje Golemy, wygl¹da, ale z ca³¹ pewnoœci¹ bêdziesz wiedzia³, ¿e to on, gdy go zobaczysz.
+#subobj  11
+U¿yj o³tarza
+Nawi¹zuj¹c do znaków na panelu sterowania, o³tarz uruchomi pasywnego Golema, którego zadaniem jest eliminacja ¿ywio³aków w zachodniej czêœci naturalnej jaskini. By u¿yæ o³tarza, bêdziesz potrzebowa³ klucza.
+#subobj  12
+Czekaj…
+Nawet najbardziej bezlitosny Golem potrzebuje trochê czasu, aby uporaæ siê z ¿ywio³akami.
+#subobj  14
+Odszukaj miejsce bitwy
+Miejsce, gdzie golem zwyciê¿y³ ¿ywio³aki, znajduje siê w zachodniej czêœci jaskini na ma³ej wysepce obok ma³ego jeziora lawy.
+#subobj  16
+ZnajdŸ pomieszczenie z sarkofagiem 
+W jednym z pomieszczeñ wykutych w skale, znajduje siê sarkofag pilnowany przez Golema. Wydaje siê ma³o prawdopodobnym, aby Golem pilnowa³ pustego sarkofagu.
+#subobj  17
+Przeszukaj sarkofag
+Powinieneœ zajrzeæ do sarkofagu; nie zapominaj jednak, ¿e golem nigdy nie œpi…
+
+=== quest q36g
+Otwarcie przejœcia do doliny
+Wiesz, ¿e do doliny prowadzi tunel. Mo¿na go otworzyæ u¿ywaj¹c dŸwigni w górskiej prze³êczy na wschód od rzeki. Pamiêtaj, ¿e gdzieœ tam jest te¿ obóz Khadaganian i raczej nic dobrego z tego nie wyniknie jak na nich wpadniesz.
+#subobj  1
+Poszukaj wejœcia do tunelu 
+Wejœcie do tunelu znajduje siê na zachód od w¹wozu, którego dnem p³ynie rzeka.
+#subobj  2
+ZnajdŸ w¹ski kana³ na wschodzie
+Wed³ug dokumentu Khadaganianów dŸwignia, która otwiera wejœcie do tunelu, znajduje siê na koñcu w¹skiego kana³u, który zaczyna siê na wschód od w¹wozu i biegnie na pó³noc.
+#subobj  3
+ZnajdŸ dŸwigniê
+DŸwignia powinna siê znajdowaæ w jednym ze œlepych zau³ków w¹skiego przejœcia.
+#subobj  4
+Prze³¹cz dŸwigniê
+Powinieneœ prze³¹czyæ dŸwigniê i powróciæ do wejœcia do tunelu. Ci, którzy stworzyli ten system, prawdopodobnie zapewnili jakiœ sposób, aby szybko dotrzeæ do otwieranej bramy - byæ mo¿e ta tajemnicza wysepka obok?
+#subobj  5
+WejdŸ do tunelu
+Tunel prowadzi do w¹wozu!
+
+=== quest q37g
+Wejœcie do domu Wielkiego Maga
+Staro¿ytne wrota prowadz¹ce do wnêtrza góry s¹ drzwiami do domu Wielkiego Maga.
+
+=== quest q39g
+Poszukiwanie obozu Orków w Œrodkowych Szczytach
+WiedŸma mia³a ostatnio z³y sen. Jej wnuczka Airy zosta³a porwana przez Gobliny ze Œrodkowych Szczytów, które ¿yj¹ pod protektoratem Orków. Mo¿e powinieneœ sprawdziæ, czy w tym œnie by³o trochê prawdy?
+#subobj  1
+Dostañ siê do obozu Orków
+Obóz Orków i Goblinów le¿y na zachód od Œrodkowych Szczytów. Aby siê tam dostaæ musisz przejœæ przez most nad wyschniêtym korytem rzecznym. Jedno z wejœæ do obozu znajduje siê tu¿ przy moœcie na pó³noc. Wejœcie to jest pilnie strze¿one, wiêc powinieneœ znaleŸæ sposób, aby przejœæ obok stra¿ników.
+#subobj  2
+ZnajdŸ palisadê
+Na œrodku obozu znajduje siê wiêzienie - p³ot ogradzaj¹cy z czterech stron z bram¹ po jednej z nich.
+#subobj  3
+ZnajdŸ dowód, ¿e Airy tu by³a
+Wnuczki WiedŸmy tu nie ma, byæ mo¿e Gobliny zabra³y j¹ w inne miejsce. Poszukaj œladów jej pobytu.
+
+=== quest q3g
+Ukaranie Goblinów
+Gobliny czêsto naje¿d¿aj¹ wioskê. Jednak kiedy zginie siedem lub wiêcej, ich wola walki znacznie os³abnie. Najlepiej znaleŸæ kilka zab³¹kanych goblinów na wschód od bagien w dole rzeki.
+
+=== quest q40ag
+Ogr Utundry
+Shei-Var chce byæ pewien, ¿e demon zostanie pokonany. Aby dowieœæ, ¿e zadanie zosta³o wykonane, musisz przynieœæ zawartoœæ kufra Utundrego - najstarszego z ogrzych braci mieszkaj¹cych w Piaskach. Po spotkaniu z wodzem Shei-Varem, Orkowie zaczn¹ traktowaæ ludzi w neutralny sposób. Misja jednak nie bêdzie ³atwa. Ogrzy bracia wymieniaj¹ miêdzy sob¹  klucze do skrzyñ i trzeba bêdzie za³atwiæ wszystkich trzech.
+#subobj  1
+ZnajdŸ Ogra zwanego Byr
+Byr, pierwszy Ogr, którego musisz pokonaæ, mieszka w okr¹g³ej dolinie na pó³noc od siedziby Shei-Vara. Niedaleko znajduje siê osada Klanu Orków Kharu wrogiego Klanowi Shyvar.
+#subobj  2
+Zabij Byra
+Ogr Byr musi zgin¹æ.
+#subobj  3
+ZnajdŸ kufer Byra
+Byr posiada skrzynie, w której trzyma klucz do kufra Ogra Gyma.
+#subobj  4
+Przeszukaj kufer Byra
+ZnajdŸ Ogra zwanego Byr
+#subobj  5
+ZnajdŸ Ogra zwanego Gym
+Gym, drugi Ogr, którego musisz pokonaæ, mieszka na zachód od wioski Shei-Vara. Aby znaleŸæ jego siedzibê, musisz przejœæ przez groblê Orków i pójœæ kawa³ek na zachód.
+#subobj  6
+Zabij Gyma
+Ogr Gym musi zgin¹æ.
+#subobj  7
+ZnajdŸ kufer nale¿¹cy do Gyma
+Gym posiada kufer, w którym trzyma klucz. Klucz ten pasuje do skrzyni Ogra Utundry.
+#subobj  8
+WeŸ klucz Gyma
+WeŸ klucz do skrzyni Utundry’ego.
+#subobj  9
+ZnajdŸ Ogra zwanego Utundry
+Najstarszy z braci Ogrów, Utundry, mieszka w ma³ej okr¹g³ej dolinie na pó³nocnym brzegu wschodniego jeziora. 
+#subobj  10
+Zabij Utundryego
+Ogr Utundry musi zgin¹æ.
+#subobj  11
+ZnajdŸ skrzyniê nale¿¹c¹ do Utundryego
+Ten kufer jest twoim g³ównym celem.
+#subobj  12
+Przeszukaj skrzyniê nale¿¹c¹ do Utundryego
+Shei-Var chce zawartoœæ kufra nale¿¹cego do Utundry’ego.
+
+=== quest q40g
+Odnalezienie domu Shei-Vara
+Gobliny odda³y Airy wodzowi Orków Shei-Varowi. Mieszka on na wschód od wielkiego jeziora, niedaleko od piaszczystej pustyni. Aby unikn¹æ niebezpieczeñstwa, wejdŸ do Piasków od strony Wymar³ego Miasta. Potem znajdŸ siedzibê Shei-Vara.
+#subobj  1
+ZnajdŸ Orka klucznika
+Aby wkroczyæ na posiad³oœci Klanu Sheivar, wpierw musisz przedostaæ siê przez wyschniêt¹ szczelinê zwodzonym mostem. Znajduje siê on na po³udniowy wschód od przejœcia z Miasta Umar³ych na Piaski. Mechanizm, który opuszcza most pilnowany jest przez Orka, który ¿yje w chatce nieopodal mostu.
+#subobj  2
+Zdob¹dŸ mechanizm
+Móg³byœ zabiæ Orka klucznika, aby zdobyæ mechanizm do mostu, ale mo¿esz równie¿ spróbowaæ mu go wykraœæ.
+#subobj  3
+Opuœæ most
+Opuœæ most przy pomocy mechanizmu; wtedy bêdziesz móg³ ruszyæ dalej.
+#subobj  4
+ZnajdŸ dom Shei-Vara
+Siedziba szefa Shei-Vara mieœci siê niedaleko mostu. Aby j¹ odnaleŸæ idŸ na po³udniowy wschód i wypatruj domów Orków.
+
+=== quest q41g
+Pokonanie Demona
+Shei-Var chce oddaæ Airy jako okup dla pewnego demona. Jeœli demon zostanie zabity, Shei-Var uwolni Airy.
+#subobj  1
+ZnajdŸ Demona
+Demon by³ widziany na po³udnie od wioski Sheivarów, w dolinie otoczonej ³añcuchem górskim, pokrêconym jak spirala. Demon wygl¹da jak cz³owiek, ale nosi zbrojê nieznan¹ na Gipath.
+#subobj  2
+Zabij Demona
+Jeœli demon zostanie zabity, Shei-Var pozwoli Airy wróciæ do domu.
+
+=== quest q42k
+Odnalezienie miasta
+Musisz iœæ do miasta, ¿eby odnaleŸæ dziewczynê w Ingos. Kieruj siê na dwa jeziora po³¹czone rzek¹. Miasto znajdziesz gdzieœ na pó³noc od górnego jeziora.
+#subobj  1
+Wioska drwali
+Aby dostaæ siê do miasta, sk¹d zosta³eœ teleportowany, wpierw rusz na po³udnie i przejdŸ przez wioskê Drwali. S¹ oni wrogo nastawieni do ka¿dego nieznajomego, wiêc masz dwa wyjœcia… Albo przemkniesz siê ukradkiem, albo rozpoczniesz walkê z mieszkañcami. Nastêpnie zwróæ siê na wschód i idŸ wzd³u¿ w¹skiego w¹wozu.
+#subobj  2
+Most i osada myœliwych
+ Na pó³noc od mostu przecinaj¹cego rzekê le¿y osada zamieszkana przez myœliwych; podobnie jak Drwale, myœliwi zaatakuj¹ napotkanego nieznajomego. Aby wejœæ do miasta przejdŸ przez most i zostaw osadê za sob¹.
+#subobj  3
+WejdŸ do miasta
+ Miasto znajduje siê na pó³noc od górnego jeziora. Jest ono otoczone star¹ palisad¹, wiêc mo¿esz dostaæ siê do niego tylko przez wrota we wschodniej œcianie.
+
+=== quest q43k
+Poszukiwanie cia³a zwiadowcy
+Zwiadowca, który poszukiwa³ dziewczyny znikn¹³ bez œladu. Najprawdopodobniej jest ju¿ martwy. Musisz odnaleŸæ jego cia³o. Ostatnio widziano go na drodze do wioski drwali we wschodniej czêœci doliny.
+#subobj  1
+ZnajdŸ wioskê drwali
+ Dolina, w której le¿y wioska Drwali, le¿y na wschód od miasta. Otoczona jest wzgórzami, wiêc mo¿esz siê tam dostaæ tylko od pó³nocy. Pamiêtaj, ¿e prowincje jest o krok od buntu i nieznajomy, szczególnie ten z miasta, nie bêdzie ciep³o witany.
+#subobj  2
+ZnajdŸ cia³o szpicla
+ Cia³o szpicla powinno byæ gdzieœ niedaleko. Drwale raczej nie robili sobie k³opotu, grzebi¹c cia³o.
+#subobj  3
+Przeszukaj zw³oki
+ Wygl¹da na to, ¿e szpicel zosta³ zabity przez porywaczy Ksiê¿niczki. Byæ mo¿e odkryjesz coœ, co pomo¿e ci ich znaleŸæ.
+
+=== quest q44k
+Zabierz skóry na miejsce spotkania
+Myœliwy chce sprzedawaæ swoje trofea bezpoœrednio kupcowi ze stolicy, bez poœrednictwa lokalnego handlarza. Goryle handlarza bêd¹ próbowali przeszkodziæ komukolwiek w dotarciu do namiotu kupca.
+#subobj  1
+Odszukaj miejsce spotkania
+Po opuszczeniu przedmieœæ i dojœciu do posiad³oœci Karansula, skieruj siê na po³udnie a¿ napotkasz wzgórze. Nastêpnie idŸ na wschód wzd³u¿ zbocza, a¿ napotkasz pierwsz¹ dolinê na po³udniu. To jest miejsce spotkania z kupcem. Wejœcie do doliny i miejsce spotkania s¹ strze¿one  przez ludzi Karansula, którzy nie zawahaj¹ siê zaatakowaæ ka¿dego, wkraczaj¹cego do doliny, czy nawet nadchodz¹cego.
+#subobj  2
+Rozwieœ skóry
+ Skóry nale¿¹ce do trapera musz¹ zostaæ rozwieszone na wid³ach przy ognisku. Kupiec weŸmie je póŸniej, gdy ju¿ bêdzie móg³ przyjœæ.
+
+=== quest q45ak
+Zdob¹dŸ Œwiêty Kwiat
+Ka¿dy klan Ludzi Lasu ma swoj¹ œwiêt¹ roœlinê, która kwitnie w lecie i w zimie. Opiekun z Zielonego Klanu zosta³ pojmany przez  wrogi Bia³y Klan. Musisz go uwolniæ, aby dostaæ Œwiêty Kwiat. Jeœli Opiekun zginie, mo¿esz zabraæ kwiat z jego zw³ok.
+#subobj  1
+PrzejdŸ przez jezioro
+ Aby wejœæ na posiad³oœci Bia³ego Klanu musisz dojœæ do zachodniego brzegu górnego jeziora i potem trochê dalej w las. Strze¿ siê miejscowych, zaatakuj¹ ka¿dego z miasta.
+#subobj  2
+ZnajdŸ wiêzienie
+ Bia³y Klan pos³a³ stra¿nika do prowizorycznego wiêzienia zbudowanego z martwych drzew. Brama jest zamkniêta ale mo¿esz j¹ otworzyæ go³ymi rêkami. To jednak nie wystarczy… Bramy strze¿e magiczna pu³apka. Aby j¹ zneutralizowaæ, potrzebowa³ bêdziesz zielonego liœcia, który ma przy sobie Jasnowidz Bia³ego Klanu.
+#subobj  3
+Odszukaj Jasnowidza
+Jasnowidz Bia³ego Klanu mieszka dalej, na zachód od wiêzienia.
+#subobj  4
+Zabierz zielony liœæ
+Jasnowidz ma zielony liœæ, który jest potrzebny do dezaktywacji magicznej pu³apki w wiêzieniu. Musisz go zdobyæ.
+#subobj  5
+Dezaktywuj pu³apkê
+ O³tarz, który kontroluje pu³apkê, wygl¹da jak stary, zmursza³y pieñ. Naprawdê œwietnie ukryty!
+#subobj  6
+PodejdŸ do Stra¿nika
+ Stra¿nik nie jest pewien, czy mo¿e zanieœæ Œwiêty Kwiat swemu Klanowi czy nie. Jeœli otworzysz klatkê, da Kwiat swemu wybawcy. PóŸniej spróbuje uciec.
+#subobj  7
+Palisada
+ Bia³y Klan ma wiele miejsc, gdzie trzymaj¹ swych wrogów w niewoli. Palisada jest jednym z nich.
+#subobj  8
+Otwórz wrota
+ Nie potrzebujesz specjalnego klucza by otworzyæ wrota palisady.
+
+=== quest q45k
+Przynieœ Œwiêty Kwiat z powrotem
+W zamian za zwrot Œwiêtego Kwiatu, wódz Zielonego klanu Ludzi Lasu oka¿e swoj¹ wdziêcznoœæ mówi¹c ci kto jest odpowiedzialny za œmieræ zwiadowcy. Jeœli jednak nie przyniesiesz kwiatu, nic ci nie powie.
+#subobj  1
+Odszukaj Zielony Klan
+Cz³onkowie Zielonego Klanu Ludzi Lasu ¿yj¹ na po³udnie od miasta. Na wschód od rzeki, ³¹cz¹cej Górne i Dolne Jezioro, z pó³nocy na po³udnie ci¹gn¹ siê wzgórza. Zielony Klan Ludzi Lasu zamieszkuje ich po³udniow¹ czêœæ po wschodniej stronie. Nie próbuj ich zraziæ: pomimo Œwiêtego Kwiatu zaatakuj¹ ciê.
+#subobj  2
+Spotkaj siê z wodzem
+ Wrêcz Œwiêty Kwiat wodzowi, a on udzieli ci w zamian cennych informacji.
+
+=== quest q46bk
+WyprowadŸ Starca z siedziby Karansula
+Najpierw musisz wyprowadziæ Starca z siedziby Karansula. Jeœli zginie, i tak powinieneœ iœæ do Zielonego Klanu i opowiedzieæ wszystko wodzowi.
+#subobj  1
+Wydostañ Starszego od Karansula
+ Czcigodny Starszy pod¹¿y za swym wyzwolicielem, lecz jest zbyt os³abiony wiêzieniem aby samemu siê broniæ. ZaprowadŸ go to strefy wymiany ko³o miasta.
+
+=== quest q46k
+Uwolnienie szlachetnego Starca
+Kapitan stra¿y rozpocz¹³ prywatn¹ krucjatê przeciwko Ludziom Lasu i kaza³ swemu szpiegowi porwaæ Szlachetnego Starca. Musisz go uwolniæ.
+#subobj  1
+Odszukaj obóz oddzia³u stra¿ników
+ Po dojœciu do obrze¿y miasta i dotarciu do w³oœci Karansula, idŸ na wschód. Miej siê na bacznoœci… Nie tylko stra¿nicy dzia³aj¹ na tym terenie, równie¿ najemnicy Karansula.
+#subobj  2
+ZnajdŸ Czcigodnego Starszego
+Czcigodny Starszy, z Zielonego Klanu Ludzi Lasu, trzymany jest w niewoli, w klatce w samym œrodku obozu stra¿ników. Klatka jest zamkniêta, a klucz do niej ma dowódca oddzia³u.
+#subobj  3
+ZnajdŸ dowódcê oddzia³u
+ Aby zdobyæ klucz do klatki musisz znaleŸæ Dowódcê oddzia³u - nosi dro¿sz¹ zbrojê i lepsz¹ broñ ni¿ zwykli stra¿nicy. Jeœli nie ma go w obozie, znajdziesz go na patrolu posterunków.
+#subobj  4
+Zdob¹dŸ klucz
+ Nie mo¿esz wypuœciæ Leœnego Cz³owieka z klatki bez klucza, który ma dowódca oddzia³u.
+#subobj  5
+Uwolnij wiêŸnia
+ Aby uwolniæ Czcigodnego Starszego po prostu otwórz drzwi do klatki.
+
+=== quest q47ak
+Zemsta na porywaczu Starca
+Wódz Zielonego Klanu chce, aby szpieg, który porwa³ Szlachetnego Starca zosta³ zabity. Przynieœ wodzowi odznakê szpiega.
+#subobj  1
+Odszukaj obóz wojskowy
+ Aby znaleŸæ obóz wojskowy, gdzie przebywaj¹ szpiedzy, idŸ wpierw z obrze¿y miasta do opuszczonych kopalni, a nastêpnie na wschód. Obóz le¿y w dolinie miêdzy dwoma wzgórzami. Oba wejœcia do doliny s¹ ogrodzone i pilnowane, ale po³udniowe strze¿one jest bardziej czujnie ni¿ pó³nocne.
+#subobj  2
+ZnajdŸ szpiega
+ Spróbuj poszukaæ go w pobli¿u jego baraku, który znajduje siê w zachodniej czêœci obozu obok zbocza. Pamiêtaj, ¿e w po³udniowo-wschodniej czêœci obozu znajduje siê strzelnica, gdzie trenuj¹ ³ucznicy, tak wiêc unikaj jej.
+#subobj  3
+Zabij
+ Szpieguj¹cy porywacz musi zgin¹æ.
+#subobj  4
+Zabierz z cia³a odznakê
+ Aby dowieœæ Wodzowi Zielonego Klanu, ¿e porywacz dosta³ to, na co zas³u¿y³, powinieneœ przynieœæ jego osobist¹ odznakê.
+
+=== quest q47ck
+Szlachetny Starzec
+Musisz sprowadziæ Starca do obozu. Jeœli zginie, porozmawiaj z wodzem i opowiedz, co siê sta³o.
+#subobj  1
+ZaprowadŸ Starszego do Klanu
+ Czcigodny Starszy pod¹¿y za swym wyzwolicielem, lecz jest zbyt os³abiony wiêzieniem aby samemu siê broniæ.
+
+=== quest q48k
+Zdob¹dŸ ksiêgi rachunkowe
+Zarz¹dca warsztatów Karansula posiada ksiêgê rachunkow¹. Jeœli j¹ zdobêdziesz, bêdziesz móg³ wywrzeæ nacisk na handlarzu. Na po³udniowym, wschodnim i pó³nocnym brzegu jeziora znajduj¹ siê kopalnie, tartaki i inne posiad³oœci Karansula. Obszar jest strze¿ony i wszêdzie krêci siê zawsze sporo ludzi - stra¿ników i robotników. Robotnicy nie s¹ uzbrojeni, ale kiedy zobacz¹ obcego, mog¹ wznieciæ alarm.
+#subobj  1
+IdŸ na strze¿one terytorium
+Mo¿esz siê dostaæ na terytorium przedsiêbiorstw Karansula przez posterunek na po³udniowym brzegu jeziora. Stra¿ nie jest tam zbyt silna i nie stawi powa¿nego oporu. Aby dotrzeæ do posterunku znajdŸ most na, wp³ywaj¹cej do jeziora od zachodu, rzece, i przejdŸ z pó³nocnego brzegu na po³udniowy.
+#subobj  2
+ZnajdŸ dokument
+Wed³ug Trapera, mened¿er posiada przy sobie ksiêgi z rachunkami. Ta informacje mo¿e byæ jednak nieprawdziwa i niektóre dokumenty mog¹ byæ gdzieœ w pobli¿u kopalni. Rozejrzyj siê wokó³ kopalni najbli¿ej wyjœcia na po³udniowym brzegu jeziora.
+#subobj  3
+Zabierz dokument
+ Nie wiesz co znajduje siê w tych papierach ale powinieneœ je zabraæ jeœli tylko zdo³a siê je znaleŸæ…
+#subobj  4
+Przekrocz most
+ Most ³¹czy po³udniow¹ czêœæ przemys³owego obszaru z pó³nocn¹ i jest strze¿ony przez najemników Karansula.
+#subobj  5
+ZnajdŸ nadzorcê
+ Nadzorca mieszka w pó³nocnej czêœci przemys³owego obszaru. Powinieneœ j¹ poznaæ po dwóch niskich ceglastych kominach na dachu. Nadzorca i jego ochrona powinni znajdowaæ siê gdzieœ w pobli¿u.
+#subobj  6
+Zdob¹dŸ ksi¹¿kê z rachunkami
+ Musisz znaleŸæ sposób, aby dostaæ ksi¹¿kê, któr¹ Nadzorca nosi przy sobie.
+#subobj  7
+Opuœæ strze¿ony teren
+ Mo¿esz opuœciæ przemys³owy obszar przez posterunek na pó³nocnym brzegu jeziora. Jest tam wprawdzie wielu stra¿ników, ale oczekuj¹ oni k³opotów z zewn¹trz, a nie ze œrodka.
+#subobj  8
+ZnajdŸ maszynê do kruszenia
+ Duma Karasnula - maszyna do kruszenia rudy, zasilany przez wiatrak. Znajduje siê on w pólnocno-wschodniej czêœci przemys³owego obszaru. Jakikolwiek problem z tym mechanizmem spowoduje wielkie zamieszanie wœród robotników.
+#subobj  9
+UszkodŸ maszynê do kruszenia
+ Jeœli maszyna do kruszenia rudy stanie, robotnicy wraz ze stra¿nikami popêdz¹ aby sprawdziæ co jest nie tak. W miêdzyczasie bêdziesz móg³ sobie poradziæ z Nadzorc¹ bez jakichkolwiek zak³óceñ.
+
+=== quest q49k
+Zdob¹dŸ kolekcjê gubernatora
+Z³odziej o przezwisku £ysoñ ukry³ swój ³up nieopodal swojej farmy w okolicy opuszczonej kopalni. Aby go szanta¿owaæ, musisz zdobyæ w³asnoœæ gubernatora.
+#subobj  1
+Odszukaj farmê
+ Farma, na której mieszkaj¹ krewni Baldie, znajduje siê na zachodnim brzegu du¿ego jeziora. Aby tam dotrzeæ, idŸ wpierw na po³udniowy brzeg a nastêpnie na zachód. Zachowaj ostro¿noœæ: nie tylko zetkniesz siê z rodzin¹ kryminalistów ale równie¿ ze œnie¿nymi tygrysami, które s¹ tresowane na farmie.
+#subobj  2
+ZnajdŸ stodo³ê z kryjówk¹
+ Miejsce, gdzie ukryty jest ³up, znajduje siê w stodole, stoj¹cej w pó³nocnej czêœci doliny, gdzie le¿y farma. Kolejnym punktem orientacyjnym s¹ dwa stosy drewna po obu stronach stodo³y.
+#subobj  3
+WeŸ pude³ko z kolekcj¹
+Powinieneœ zabraæ ³up ze stodo³y.
+
+=== quest q4g
+Zdob¹dŸ rzeczy Czerwonog³owego
+Podobno jeden ze zbójców, Czerwonog³owy, spotyka siê z Orkami i utrzymuje z nimi dobre kontakty. Byæ mo¿e w jego rzeczach znajdziesz coœ, co pomo¿e odkryæ kto jeszcze spoœród ludzi z wioski zadaje siê z orkami?
+#subobj  1
+OdnajdŸ Czerwonog³owego
+Czerwonog³owi Rozbójnicy, którzy rozmawiali z Orkami, byli widziani niedaleko obozu Rozbójników, na wschód st¹d nad rzek¹. Tam odnajdziesz drogê, która zaprowadzi ciê do jaskini w górach...
+#subobj  2
+Zabij Czerwonog³owego
+Zdrajca musi zostaæ zg³adzony.
+#subobj  3
+Przeszukaj Czerwonog³owego
+Mo¿e jest coœ godnego uwagi wœród jego szcz¹tków...
+
+=== quest q50ak
+Przejœcie przez labirynt
+Ludzie Lasu z Zielonego Klanu przenieœli swoj¹ siedzibê. Udali siê w rejon górskich dolin w po³udniowej czêœci terenów Karansula. Mo¿na tam dotrzeæ tylko przez labirynt znajduj¹cy siê w górach otaczaj¹cych miasto.
+#subobj  1
+Odszukaj wejœcie do labiryntu
+Bramy do labiryntu znajduj¹ siê na wschód od terenów Zielonego Klanu, na przedmieœciach.
+#subobj  2
+Otwórz wejœcie do labiryntu
+Nie potrzebujesz klucza aby otworzyæ bramy labiryntu.
+#subobj  3
+Odszukaj bramy wyjœciowe
+Wyjœcie z labiryntu jest w jego wschodniej czêœci. B¹dŸ ostro¿ny w labiryncie: jest tam wiele potworów, w³¹czaj¹c magiczne, a te naprawdê trudno trafiæ.
+#subobj  4
+Otwórz bramy wyjœciowe
+Nie potrzebujesz klucza aby otworzyæ bramy wyjœciowe.
+
+=== quest q50bk
+Nowa siedziba Zielonego Klanu
+Zielony Klan Ludzi Lasu przeniós³ siê do górskich dolin w po³udniowej czêœci terenów Karansula. Mo¿na tam dotrzeæ tylko przez labirynt, gdy¿ nie prowadzi tam inna droga. Ludzie opowiadaj¹ wiele strasznych historii o tych dolinach. Ponoæ ¿y³ tu ongiœ wojowniczy Mag i mia³ tu swoje laboratorium, a jego z³¹ i niebezpieczn¹ magiê czuæ w tych stronach po dziœ dzieñ. Mo¿e to dlatego tygrysy i trolle zamieszkuj¹ce doliny s¹ o wiele silniejsze ni¿ te z lasu niedaleko miasta.
+#subobj  1
+OdnajdŸ o³tarz
+Ludzie Lasu rozwi¹zali zagadkê opuszczonego laboratorium i postawili o³tarz, kontroluj¹cy magiczne pu³apki. Jest on po³o¿ony w po³udniowej czêœci doliny. Wygl¹da jak pniak pokryty grzybami. Aby go odnaleŸæ, idŸ wzd³u¿ po³udniowej œciany, zamykaj¹cej labirynt. Pamiêtaj o tygrysach i Trollach, zamieszkuj¹cych te tereny, które s¹ bardzo niebezpieczne. Mo¿e nie powinieneœ z nimi walczyæ, a tylko oszukaæ ich!
+#subobj  2
+U¿yj o³tarza
+O³tarz Ludzi Lasu kontroluje magiczne pu³apki, które mog¹ zatrzymaæ wyg³odnia³e tygrysy z dala od drogi.
+#subobj  3
+Udaj siê do Zielonego klanu
+Nowa siedziba Zielonego Klanu jest po³o¿ona w po³udniowo-wschodniej czêœci górskich dolin. Aby spotkaæ wodza i porozmawiaæ z nim, musisz przebyæ ca³¹ drogê poprzez w¹ski przesmyk, prowadz¹cy na po³udniowy-wschód.
+
+=== quest q50ck
+Powrót do Zielonego Klanu
+Musisz ponownie spotkaæ siê z wodzem Zielonego klanu. Chocia¿ nie jest tego œwiadom, posiada informacje o tym, kto porwa³ ksiê¿niczkê.
+#subobj  1
+Przyb¹dŸ do Zielonego klanu
+Aby dotrzeæ do Zielonego Klanu, idŸ na po³udnie od bram miasta.
+
+=== quest q51k
+Spotkanie z Magiczk¹
+Wszystko wskazuje na to, ¿e to Magiczka Diera porwa³a ksiê¿niczkê. To ona jest wrogiem i musi zostaæ zniszczona.
+#subobj  1
+OdnajdŸ Dierê
+Diera jest na drodze albo do, albo z opuszczonych kopalni.
+#subobj  2
+Zabij Dierê
+Diera zas³uguje na œmieræ!
+
+=== quest q53k
+Zdob¹dŸ wartoœciow¹ rzecz dla gubernatora
+Od gubernatora Valrasiana musisz dostaæ klucz do opuszczonej kopalni. W okolicy starych szybów znajdziesz ukryty z³oty samorodek.
+#subobj  1
+Bramy starych szybów
+Po opuszczeniu szybów górniczych przez ludzi, spowodowane pojawieniem siê tygrysów œnie¿nych, gubernator poleci³ zablokowaæ rozpadlinê, która wiedzie do szybów. Aby je odnaleŸæ, wejdŸ na teren opuszczonych kopalni, przemknij obok zbrojnego obozu na pó³nocy i pójdŸ kawa³ek na wschód. Parów, prowadz¹cy na po³udnie, jest zablokowany bramami.
+#subobj  2
+Otwórz bramy
+Do tego zadania bêdziesz potrzebowaæ specjalnego klucza.
+#subobj  3
+Odszukanie ukrytego miejsca
+Jeden z pracowników powiedzia³, ¿e podczas ucieczki, ich nadzorcy próbowali zmusiæ ich do zabrania ostatnich samorodków, znalezionych w szybach, ale oni zbuntowali siê i porzucili samorodki. Pewnie nadal le¿¹ gdzieœ w po³udniowej czêœci dolin, gdzie by³y prowadzone prace górnicze.
+#subobj  4
+WeŸ samorodek
+Skrzynia i wózek nie znajduj¹ siê tu bez powodu: prawdopodobnie zosta³y pozostawione przez pracowników podczas ucieczki. Powinieneœ dobrze siê im przyjrzeæ i zabraæ samorodek.
+#subobj  5
+Pozosta³oœci poszukiwacza z³ota
+NajwyraŸniej ktoœ drogo zap³aci³ za próby zdobycia pozostawionych skarbów!
+#subobj  6
+Przeszukaj zw³oki
+Mo¿e znajdziesz coœ, z czego zrobisz wiêkszy po¿ytek ni¿ on.
+
+=== quest q54k
+Opuszczone kopalnie
+Diera ukry³a porwan¹ dziewczynkê w opuszczonej kopalni. Aby tam wejœæ, bêdziesz potrzebowaæ klucza.
+#subobj  1
+Dostañ siê do kopalñ
+Opuszczone kopalnie s¹ po³o¿one w pó³nocnej czêœci terenu, po drugiej stronie jeziora. Przejœcie jest zablokowane przez bramy. Aby do nich dotrzeæ, obejdŸ jezioro od wschodu, przejdŸ przez most i udaj siê na pó³noc.
+#subobj  2
+Otwórz bramy
+Aby otworzyæ bramy do kopalni, u¿yj gubernatorskiego klucza. Ostro¿nie: wejœcia do kopalni s¹ chronione przez najemników op³acanych i wyposa¿anych przez Dierê.
+#subobj  3
+ZnajdŸ wejœcie do kopalni 1
+Ta kopalnia jest najbli¿ej bram i naj³atwiej do niej wejœæ. Jednak¿e, jeœli wybierzesz to wejœcie, bêdziesz najd³u¿ej podró¿owaæ przez katakumby.
+#subobj  4
+ZnajdŸ wejœcie do kopalni 2
+To jest po³o¿one na zachód od wejœcia do kopalni 1. Jeœli z niego skorzystasz, twoja podziemna wêdrówka bêdzie poniek¹d krótsza.
+#subobj  5
+ZnajdŸ wejœcie do kopalni 3
+To jest najbardziej na zachód wysuniêta kopalnia i zarazem najtrudniej do niej dotrzeæ. Jednak¿e, jeœli skorzystasz z tego wejœcia, twoja wêdrówka przez katakumby bêdzie ³atwiejsza, choæ te nigdy nie s¹ naprawdê bezpieczne!
+#subobj  6
+WejdŸ do kopalni
+Aby kontynuowaæ poszukiwania Ksiê¿niczki, wejdŸ do kopalni i rozejrzyj siê po katakumbach.
+
+=== quest q55k
+Odnalezienie ksiê¿niczki
+Dziewczyna jest ukryta gdzieœ g³êboko w katakumbach. Musisz j¹ odnaleŸæ i uratowaæ. Pamiêtaj, ¿e blisko wejœcia jaskini znajduj¹ siê posterunki obsadzone najemnikami na us³ugach Diery, a w g³êbinach ¿yj¹ Panowie Podziemia - magiczne istoty pa³aj¹ce nienawiœci¹ do wszystkiego, co pochodzi z powierzchni.
+#subobj  2
+ZnajdŸ by³e miejsce kaŸni
+W pó³nocno-zachodniej czêœci katakumb jest miejsce, które s³u¿y³o kiedyœ jako miejsce kaŸni dla niepokornych górników. Mo¿e to tam jest przetrzymywana dziewczyna?
+#subobj  3
+Odszukaj Dowódcê najemników
+Dowódca najemników Magini Diery jest w podziemnym obozie. Mo¿e ma on coœ, co pomo¿e ci wype³niæ zadanie?
+#subobj  4
+WeŸ rzeczy dowódcy
+Jeœli jest coœ, co mo¿e ci pomóc odnaleŸæ dziewczynê, bêdzie to mia³ Dowódca.
+#subobj  5
+Udaj siê do pó³nocno-wschodniej czêœci katakumb
+W by³ym miejscu kaŸni nie by³o ¿adnej dziewczyny. Mo¿e uda³o jej siê uciec, a teraz kryje siê g³êboko w katakumbach. Podziemne korytarze prowadz¹ na wschód od tamtego miejsca; powinieneœ kontynuowaæ swoje zadanie w pó³nocno-wschodniej czêœci podziemnego labiryntu. Istniej¹ dwie drogi, aby siê tam dostaæ. Pierwsza z nich jest bezpoœrednia, ale problemem s¹ zamkniête drzwi. Druga droga to pó³nocny korytarz. Nie jest to jakaœ bariera nie do pokonania, lecz to o wiele niebezpieczniejsze.
+#subobj  6
+Udaj siê do po³udniowo-wschodniej czêœci katakumb
+Prawdopodobnie dziewczynie uda³o siê dotrzeæ nawet dalej, wiêc rozejrzyj siê za ni¹ w po³udniowo-wschodniej czêœci podziemnego labiryntu. Ale b¹dŸ ostro¿ny: mo¿esz napotkaæ tam Robalog³owych - inteligentne stworzenia, nienawidz¹ce wszystkich mieszkañców na powierzchni oraz umiej¹ce pos³ugiwaæ siê magi¹.
+#subobj  7
+Odszukaj drzwi
+Jeœli to tu ukrywa siê dziewczyna, musi znajdowaæ siê za jednymi z drzwi, blokuj¹cych przejœcia.
+#subobj  8
+Otwórz drzwi
+Aby dowiedzieæ siê czy jest tutaj dziewczyna, musisz otworzyæ drzwi. Nie potrzebujesz do tego klucza.
+#subobj  9
+WejdŸ do kryjówki
+Dziewczyna jest tutaj!
+#subobj  10
+ZnajdŸ Po³udniowo-Wschodni¹ dŸwigniê
+Wrota, które otwieraj¹ drogê do po³udniowo-wschodniej czêœci katakumb, s¹ kontrolowane za pomoc¹ "Po³udniowo-Wschodniej" dŸwigni, umieszczonej w pó³nocno-wschodniej czêœci labiryntu, za jedn¹ z bram. Mo¿esz tam dojœæ drog¹ okrê¿n¹.
+#subobj  11
+Przesuñ Po³udniowo-Wschodni¹ dŸwigniê
+Kiedy "Po³udniowo-Wschodnia" dŸwignia zostanie w³¹czona, droga do po³udniowo-wschodniej czêœci katakumb zostanie otwarta.
+#subobj  12
+ZnajdŸ Po³udniow¹ dŸwigniê
+Ta dŸwignia znajduje siê w po³udniowej czêœci katakumb.
+#subobj  13
+Przesuñ Po³udniow¹ dŸwigniê
+Widocznie nie ma nic w pobli¿u dŸwigni, co mog³oby byæ przez ni¹ kontrolowane. Jednak¿e, jest ona tutaj z jakiejœ przyczyny: mo¿e otwiera przejœcia w innych czêœciach katakumb.
+#subobj  14
+ZnajdŸ Pó³nocno-Wschodni¹ dŸwigniê
+Widocznie nie ma nic w pobli¿u dŸwigni, co mog³oby byæ przez ni¹ kontrolowane. Jednak¿e, jest ona tutaj z jakiejœ przyczyny...
+#subobj  15
+Przesuñ Pó³nocno-Wschodni¹ dŸwigniê
+Mo¿e otwiera przejœcia w innych czêœciach katakumb.
+#subobj  16
+Bingo!
+Po przesuniêciu "Po³udniowej" dŸwigni otworzy³o siê przejœcie i czeka na ciebie tam coœ wcale nie bezu¿ytecznego...
+#subobj  17
+Podnieœ znalezisko
+Cokolwiek to nie jest, bêdzie siê czu³o lepiej w rêkach znalazcy ni¿ w jaskini.
+#subobj  18
+Tak! (Pó³nocno-Wschodnia dŸwignia)
+Po przesuniêciu "Pó³nocno-Wschodniej" dŸwigni otworzy³o siê przejœcie i czeka na ciebie tam coœ wcale nie bezu¿ytecznego...
+#subobj  19
+Podnieœ znalezisko
+Cokolwiek to nie jest, bêdzie siê czu³o lepiej w rêkach znalazcy ni¿ w jaskini.
+#subobj  20
+ZnajdŸ Pó³nocn¹ dŸwigniê
+Droga do pó³nocno-wschodniej czêœci katakumb jest zablokowana wrotami, kontrolowanymi za pomoc¹ dŸwigni. Aby j¹ odnaleŸæ, idŸ na wschód od by³ego miejsca kaŸni.
+#subobj  21
+Przesuñ Pó³nocn¹ dŸwigniê
+Aby przesun¹æ "Pó³nocn¹" dŸwigniê, u¿yj klucza, który mia³ Dowódca najemników.
+
+=== quest q5dg
+Szaman i piramida
+Orkowi ¿yj¹cy u podnó¿a gór czuj¹ siê bezpiecznie, bo chroni ich magiczna piramida, kontrolowana przez szamana. Jeœli zabijesz szamana i wy³¹czysz piramidê, klan stanie siê mniej niebezpieczny.
+#subobj  1
+OdnajdŸ Jasnowidza
+Jasnowidz stoi poœrodku osady i pilnuje prze³¹cznika. Jeœli spróbujesz z nim walki na swój sposób, Orkowie licznie nadbiegn¹ z ka¿dej strony. Jednak¿e, mo¿esz spróbowaæ siê podczo³gaæ do obozowiska tak, aby nie zobaczyli ciê stra¿nicy.
+#subobj  2
+Zabij Jasnowidza
+Najlepszym pomys³em bêdzie podkradniêcie siê blisko Jasnowidza i zadanie szybkiego ciosu w plecy.
+#subobj  3
+Wy³¹cz piramidê
+U¿yj dŸwigni aby wy³¹czyæ piramidê.
+
+=== quest q5g
+Poszukiwanie magicznego przedmiotu
+Orkowie ¿yj¹cy w jaskini na pó³nocny wschód od podnó¿a gór maj¹ w posiadaniu godny zainteresowania magiczny przedmiot. Zgodnie z zabran¹ od opryszka map¹, przedmiot jest ukryty w zamkniêtym sarkofagu. Szaman jaskiniowych Orków posiada klucz. Aby dotrzeæ do jaskini, idŸ drog¹ na pó³nocny wschód od podnó¿a gór i wykiwaj trolla ¿yj¹cego obok wejœcia do jaskini. ¯eby zejœæ do ni¿szej czêœci jaskiñ, potrzebny bêdzie mechanizm steruj¹cy mostem zwodzonym. Jeœli go nie masz, zapytaj Kapitana.
+#subobj  1
+Opuœæ most
+Aby dostaæ siê do wewnêtrznych czêœci jaskini musisz obni¿yæ most zwodzony. Aby to osi¹gn¹æ, potrzebujesz czêœci mostu.
+#subobj  2
+ZnajdŸ klucz do sarkofagu
+Ma go Jasnowidz Orków.
+#subobj  3
+ZnajdŸ sarkofag, zawieraj¹cy odrobinê magii
+Sarkofag, zawieraj¹cy odrobinê magii, musi byæ gdzieœ blisko miejsca gdzie ¿yj¹ Orkowie. Szukaæ tego w dalekich przejœciach? Nie za bardzo produktywne!
+#subobj  4
+WeŸ odrobinê
+Aby wzi¹æ odrobinê, musisz otworzyæ sarkofag za pomoc¹ klucza.
+
+=== quest q60h
+Podró¿ przez Kanion Œmierci
+Khadagañscy ¿o³nierze wpuszczaj¹ wiêŸniów do Kanionu Œmierci i trenuj¹ na nich swoje umiejêtnoœci. Jeœli wiêzieñ dotrze spod bramy po³udniowej  fortecy do bramy pó³nocnej, pozwalaj¹ mu ¿yæ. A¿ do nastêpnej sesji treningowej...
+#subobj  1
+Biegnij do pó³nocnych bram
+Pó³nocna forteca jest po³o¿ona w pó³nocno-wschodniej czêœci kanionu. Prowadzi tam tylko jedna droga i bardzo trudno ukryæ siê przed œcigaj¹cymi.
+#subobj  2
+Otwórz pó³nocne wrota
+Nie potrzebujesz klucza aby otworzyæ pó³nocne wrota - zrobisz to w³asnymi rêkami.
+#subobj  3
+Przekrocz wrota
+Kiedy wiêzieñ przekroczy wrota pó³nocnej fortecy, wype³nia swoje zadanie i mo¿e powróciæ na swoj¹ pozycjê.
+
+=== quest q61h
+Kradzie¿ klucza do klatki
+Kobieta nie ma na tyle si³, aby zabiæ Karhaura. Musi wiêc ukraœæ klucz, zamiast zdobywaæ go si³¹. Ko³o klatki z wiêŸniami trzeba byæ bardzo ostro¿nym; stra¿nicy powa¿nie podchodz¹ do sprawy i zaatakuj¹ ka¿dego, kto siê zbli¿y, bez wzglêdu na szar¿ê.
+#subobj  1
+ZnajdŸ porucznika
+Porucznika Karakhaura zwykle mo¿na znaleŸæ w cytadeli, we wschodnim krañcu fortecy. Cytadela stoi na brzegu rzeki, p³yn¹cej w dole kanionu. Aby siê tam dostaæ, musisz otworzyæ wrota.
+#subobj  2
+Zdob¹dŸ klucze
+Kobieta nie ma doœæ si³y aby zg³adziæ Karhaura szybko i bezszelestnie. Nawet jeœli spróbuje, zacznie on wrzeszczeæ i przybêd¹ stra¿e. Wtedy praktycznie nie bêdzie ju¿ drogi ucieczki. Lepszym pomys³em bêdzie próba kradzie¿y kluczy od porucznika, przy nadziei, ¿e nic nie zauwa¿y.
+#subobj  3
+Otwórz klatkê
+Jeœli ju¿ masz klucze, wróæ i otwórz klatkê wiêŸnia. I nie zapomnij o czujnych stra¿nikach.
+
+=== quest q62h
+Odnalezienie wejœcia jaskini
+Jedynym sposobem, by uciec pogoni stra¿ników jest dotarcie do jaskini. Wejœcie znajduje siê w dalekim koñcu kanionu.
+#subobj  1
+ZnajdŸ oficera na s³u¿bie
+G³ówne wrota po³udniowej czêœci fortecy s¹ zamkniête i aby je otworzyæ, potrzebny jest klucz. Ma go oficer na s³u¿bie; bêdziesz go musia³ odszukaæ (porucznik Karhaur ma dzisiaj byæ na s³u¿bie). Jego posterunek jest niedaleko wrót.
+#subobj  2
+Zdob¹dŸ klucz
+Musisz zabiæ Karhaura aby zdobyæ klucz do wrót.
+#subobj  3
+Otwórz g³ówn¹ bramê
+Aby otworzyæ g³ówne wrota fortecy, u¿yj klucza, który zabra³eœ Karhaurowi. Potem pospiesz siê: otwarte wrota nieuchronnie przyci¹gn¹ uwagê stra¿ników i pogoñ rozpocznie siê natychmiast.
+#subobj  4
+Otwórz klatki
+Stra¿nik bramy jest tak¿e odpowiedzialny za klatki z dzikimi paj¹kami. Naprzeciwko bram znajduje siê dŸwignia, która otwiera wszystkie klatki na raz. Jeœli to zrobisz, uwolnione paj¹ki zaatakuj¹ stra¿ników, a to z pewnoœci¹ zajmie ich na chwilkê.
+#subobj  5
+ZnajdŸ przejœcie do jaskini
+Istnieje w¹skie przejœcie, prowadz¹ce do jaskini, po³o¿onej w pó³nocno-zachodniej czêœci kanionu. Jest ono zagrodzone wrotami, które zazwyczaj s¹ zamkniête na klucz.
+#subobj  6
+OdnajdŸ stra¿nika
+Przejœcie do jaskini jest zamkniête, a klucz posiada stra¿nik.
+#subobj  7
+Zabij stra¿nika
+Stra¿nik musi zostaæ zg³adzony, inaczej podniesie alarm.
+#subobj  8
+WeŸ klucz
+WeŸ z cia³a stra¿nika klucz do przejœcia prowadz¹cego do jaskini.
+#subobj  9
+Otwórz wrota jaskini
+Aby otworzyæ wrota do jaskini, u¿yj klucza, który zabra³eœ z cia³a.
+#subobj  10
+Umknij pogoni
+Rozpocz¹³ siê poœcig!
+
+=== quest q63h
+Wyjœcie z jaskini
+Musisz przedostaæ siê na drug¹ stronê jaskini. Wejœcie jest na zachodzie, wiêc szukaj wyjœcia na wschodzie i uciekaj najdalej jak to mo¿liwe od Kanionu Œmierci.
+#subobj  1
+ZnajdŸ dŸwigniê
+Gdzieœ w po³udniowo-zachodniej czêœci jaskini musi byæ dŸwignia, która obni¿a most zwodzony po drugiej stronie zachodniej rzeki lawy. Mo¿esz tak¿e przekroczyæ t¹ rzekê przez zwyk³y most, lecz to bêdzie o wiele niebezpieczniejsze.
+#subobj  2
+W³¹cz dŸwigniê
+Most zwodzony po drugiej stronie rzeki lawy opadnie i bêdziesz móg³ iœæ dalej, do jaskini.
+#subobj  3
+Odszukaj Zachodni most
+Zachodni most jest po³o¿ony w przybli¿eniu poœrodku zachodniej rzeki lawy.
+#subobj  4
+ZnajdŸ drug¹ dŸwigniê
+Druga dŸwignia, która kontroluje most zwodzony po drugiej stronie wschodniej rzeki lawy jest usytuowana na ma³ej wysepce, niedaleko œwi¹tyni W³adcy Lochów.
+#subobj  5
+W³¹cz drug¹ dŸwigniê
+Most zwodzony po drugiej stronie wschodniej rzeki lawy opadnie, a ty bêdziesz móg³ pod¹¿yæ na wschód.
+#subobj  6
+Odszukaj Wschodni most
+Wschodni most jest po³o¿ony w górze wschodniej rzeki lawy.
+#subobj  7
+Przeszukaj wschodni¹ czêœæ jaskini
+Nawet jeœli nie ma st¹d bezpoœredniej drogi na powierzchniê, powinieneœ siê dobrze przyjrzeæ wschodniej czêœci jaskini, z pó³nocy na po³udnie.
+
+=== quest q64ah
+Zabicie dwóch ³owców niewolników
+Kowal bardzo chcia³by siê zemœciæ na dwóch ³owcach niewolników - Whip-Aga i Lash-Aga. Obecnie nadzoruj¹ oni ch³opów pracuj¹cych na plantacji ko³o miasta Suslanger.
+#subobj  1
+Odszukaj centralne plantacje
+Centralne plantacje s¹ po³o¿one na pó³nocny-wschód od miasta. £atwo je znajdziesz, jeœli pod¹¿ysz dobrze rozwiniêt¹ sieci¹ kana³ów irygacyjnych.
+#subobj  2
+ZnajdŸ Whip-Aga
+Whip-Aga nadzoruje prace na centralnych plantacjach.
+#subobj  3
+Zabij Whip-Aga
+Whip-Aga musi zostaæ zabity.
+#subobj  4
+Odszukaj po³udniowe plantacje
+Po³udniowe plantacje s¹ po³o¿one w dole rzeki, niedaleko od miejsca gdzie wpada do jeziora. Jest tam mniej kana³ów irygacyjnych i nie s¹ one tak du¿e jak centralne.
+#subobj  5
+ZnajdŸ Lash-Aga
+Lash-Aga nadzoruje prace na po³udniowych plantacjach.
+#subobj  6
+Zabij Lash-Aga
+Lash-Aga musi zostaæ zabity.
+
+=== quest q65h
+Kryjówka
+Kosztownoœci skradzione kolekcjonerowi antyków s¹ ukryte w ruinach po³o¿onych na zachodnim brzegu rzeki tam, gdzie wpada ona do jeziora. Musisz znaleŸæ te kosztownoœci i przynieœæ je do Ostatniej Kryjówki.
+#subobj  1
+Nowe baraki stra¿y
+Nowe baraki dla stra¿ników zosta³y wybudowane na zachodnim brzegu gdzie rzeka tworzy pêtlê. Aby dotrzeæ do miejsca, gdzie ukryte s¹ przedmioty kolekcjonera, musisz omin¹æ baraki.
+#subobj  2
+ZnajdŸ rzeczy
+Rzeczy kolekcjonera s¹ ukryte w ruinach na zachodnim brzegu rzeki, niedaleko miejsca gdzie wpada do jeziora.
+#subobj  3
+WeŸ rzeczy kolekcjonera
+Musisz wzi¹æ rzeczy kolekcjonera i przynieœæ je do Ostatniej Kryjówki.
+
+=== quest q66h
+List
+Dom w³aœciciela kolekcji jest w mieœcie, przy ulicy prowadz¹cej od pó³nocnych bram wzd³u¿ brzegu jeziora. To dom zaraz za ober¿¹; poznasz go po dwóch kamiennych pos¹gach przy wejœciu.
+#subobj  1
+WejdŸ do miasta
+Mo¿esz wejœæ do miasta przez pó³nocn¹ bramê w murze. Lepiej uczyñ to w nocy, lub u¿yj czaru niewidzialnoœci aby omin¹æ stra¿e niepostrze¿enie. By³oby bardzo ryzykownym wszczynanie z nimi otwartej walki.
+#subobj  2
+WejdŸ na podwórze
+Dom, którego szukasz, jest po³o¿ony na ulicy, która prowadzi na po³udnie od bram i wzd³u¿ jeziora. Jak inne domy, posiada ma³e ogrodzenie, wiêc bêdziesz musia³ najpierw wejœæ na podwórze.
+#subobj  3
+Upuœæ list
+Po prostu upuœæ list do kolekcjonera w jego domu.
+
+=== quest q67h
+Kolekcjoner antyków
+Spotkanie umówiono w zacisznym miejscu, gdzie kupcy z Ostatniej Kryjówki spotykaj¹ siê, by potajemnie pohandlowaæ. Rozejrzenie siê dooko³a, czy przypadkiem nie ma gdzieœ w pobli¿u jakiejœ zasadzki mo¿e okazaæ siê nieg³upim pomys³em.
+#subobj  1
+Odszukaj miejsce spotkania
+Miejsce spotkania znajduje siê niedaleko na po³udniowy-wschód od wyjœcia z jaskini. Powinieneœ dobrze siê rozejrzeæ aby upewniæ siê, ¿e spotkanie bêdzie bezpieczne.
+#subobj  2
+Upewnij siê, ¿e spotkanie jest bezpieczne
+Niedaleko miejsca spotkania znajduje siê jednostka stra¿y. Nie wiesz czy stra¿nicy podejrzewaj¹ ¿e ktoœ jest w pobli¿u, czy to zwyk³y obchód, ale zabij ich i tak.
+
+=== quest q68h
+Stary nekromanta
+Musisz spotkaæ siê ze starym nekromant¹ Kholaiem i porozmawiaæ z nim. Mo¿e pomóc ci w rozwik³aniu zagadki "znikaj¹cego" Joona. Kholai jednak popad³ w nie³aski i mieszka poza miastem, pod stra¿¹ rzecz jasna.
+#subobj  1
+ZnajdŸ wie¿ê
+Wie¿a Kholai jest po³o¿ona na pó³nocnym wschodzie pustyni i jest pilnowana przez patrole, które maj¹ za zadanie uniemo¿liwiæ komunikacjê miêdzy starym Nekromant¹ i kimkolwiek innym bez zgody Gildii.
+
+=== quest q69h
+Szcz¹tki naukowca
+Musisz wykraœæ zw³oki naukowca z laboratorium w po³udniowej czêœci pustyni. Laboratorium jest usiane magicznymi pu³apkami, na dodatek nieopodal znajduj¹ siê koszary pe³ne stra¿ników.
+#subobj  1
+Odszukaj Komendanta
+Dom Komendanta laboratorium jest po³o¿one w po³udniowej czêœci wioski Nekromanty, otoczone dooko³a murem. Naj³atwiej jest siê tam dostaæ przez pó³nocne wrota: to najnudniejsze i najmniej wygodne posterunki, wiêc zwykle wyznaczaj¹ tam najm³odszych stra¿ników.
+#subobj  2
+WejdŸ do domu Komendanta
+Dom Komendanta laboratorium jest po³o¿ony w po³udniowo-zachodniej czêœci wioski Nekromantów.
+#subobj  3
+Zdob¹dŸ klucz
+Aby dostaæ siê do laboratorium, musisz mieæ klucz. Znajdziesz go w domu Komendanta.
+#subobj  4
+Odszukaj laboratorium
+Laboratorium Nekromanty Taivo znajduje siê we wschodniej czêœci wioski Nekromantów.
+#subobj  5
+Otwórz bramê laboratorium
+Aby otworzyæ bramê laboratorium, potrzebujesz klucz Komendanta.
+#subobj  6
+WeŸ g³owê naukowca
+Cia³o martwego naukowca le¿y na stole laboratoryjnym. Aby przes³uchaæ jego ducha, musisz wzi¹æ g³owê i zanieœæ j¹ do wie¿y Nekromanty Kholai.
+
+=== quest q6g
+Podró¿ do domu wiedŸmy
+WiedŸma nie bardzo przejmuje siê losem nie zapraszanych goœci, wiêc na drodze do jej domu znajdziesz mnóstwo pu³apek. S¹ dwie pó³nocne drogi do jaskini wiedŸmy. Przez wschodni i zachodni w¹wóz. Pu³apki w zachodnim w¹wozie nie s¹ tak zabójcze, ale za to mieszka tam ogromny troll; Troll we wschodnim w¹wozie jest m³odszy i g³upszy,  ale i pu³apki s¹ groŸniejsze.
+#subobj  1
+Omiñ pu³apki
+Pu³apki w zachodnim przejœciu pokrywaj¹ tylko pewne miejsca. Jeœli bêdziesz ostro¿ny, mo¿esz je omin¹æ i dostaæ siê do miejsca, gdzie mo¿na znaleŸæ klucz, który kontroluje wszystkie inne.
+#subobj  2
+ZnajdŸ klucz do pu³apek
+Jakiœ czas temu Rzemieœlnik Babur wykona³ zapasowy klucz dla Estery, kontroluj¹cy wszystkie pu³apki. Musi on byæ gdzieœ na koñcu zachodniego parowu.
+#subobj  3
+Wy³¹cz pu³apki z b³yskawicami
+U¿yj klucza na magicznym obelisku aby wy³¹czyæ pu³apki z b³yskawicami. To uczyni poruszanie siê po tym terenie ³atwiejszym.
+#subobj  4
+Wy³¹cz pu³apki z ogniem.
+U¿yj klucza na magicznym obelisku aby wy³¹czyæ pu³apki z ogniem. To pozwoli ci zbli¿yæ siê do obelisku, który wy³¹cza pu³apki z kwasem.
+#subobj  5
+Wy³¹cz pu³apki z kwasem
+U¿yj klucza na magicznym obelisku aby wy³¹czyæ pu³apki z kwasem. Wtedy przejœcie przez wschodni parów bêdzie wolne od pu³apek.
+#subobj  6
+PrzejdŸ przez Wschodni parów
+Teraz, kiedy pu³apki z kwasem zosta³y wy³¹czone, wschodni parów oferuje ³atw¹ drogê do jaskini WiedŸmy. Lecz nie b¹dŸ nieostro¿ny: na koñcu parowu ¿yje Troll, którego powinieneœ wymin¹æ tak niepostrze¿enie, jak tylko siê da (mo¿e czo³ganie?).
+
+=== quest q70h
+Amulet
+Bêdziesz tego potrzebowaæ, ¿eby siê dowiedzieæ, dok¹d teleportowa³ siê m³ody Joon. Ruiny posiad³oœci nale¿¹cej kiedyœ do naukowca znajduj¹ siê na pó³noc od miasta.
+#subobj  1
+ZnajdŸ ruiny posiad³oœci
+Ruiny posiad³oœci s¹ po³o¿one na pó³noc od miasta. Mo¿esz do nich dotrzeæ przez bramy w po³udniowej œcianie. Lecz pamiêtaj, ¿e po dziwnych zdarzeniach w posiad³oœci jest ona bardzo pilnie strze¿ona.
+#subobj  2
+Przeszukaj ruiny
+Kawa³ki amuletu, u¿ywanego przez m³od¹ Joon, musz¹ byæ gdzieœ tutaj.
+#subobj  3
+Przeszukaj skrzyniê
+A mo¿e, podczas gdy przeprowadzali œledztwo, w³o¿yli wszystko powi¹zane z wydarzeniami w posiad³oœci do tej skrzyni? Powinieneœ dobrze przyjrzeæ siê jej zawartoœci.
+
+=== quest q71h
+Podró¿ na miejsce spotkania
+Miejscem spotkania jest jaskinia w pó³nocnej czêœci gór. Bêdzie tu na ciebie czeka³ cz³owiek, który wie jak znaleŸæ klucz do portalu do Gipath.
+#subobj  1
+WejdŸ do jaskini
+IdŸ wzd³u¿ pó³nocnych pagórków i znajdŸ wejœcie do jaskini - wyznaczone miejsce spotkania.
+
+=== quest q72h
+Portal
+Ten portal to jedyna droga, by opuœciæ Suslanger i powróciæ do Gipath. Jest dobrze strze¿ony i nie bêdzie ³atwo z niego skorzystaæ.
+#subobj  1
+Zniszcz wrogów
+Erfar poinformowa³ stra¿ników ¿e w jaskini znajduje siê zbieg³y wiêzieñ. Czekaj¹ oni przy wejœciu do jaskini; nie oczekuj od nich litoœci. Jedyny sposób, to zniszczyæ ich wszystkich!
+#subobj  2
+PrzejdŸ przez zachodni most
+Unikaj¹c g³ównej bramy (ta droga jest bardzo niebezpieczna!), wejdŸ do miasta przez most na zachodniej rzece. Jest on pilnowany mniej ni¿ g³ówna brama.
+#subobj  3
+PrzejdŸ przez wschodni most
+Aby opuœciæ miasto, skorzystaj z drugiego mostu w po³udniowym rejonie.
+#subobj  4
+Odszukaj stra¿nika kluczy pu³apek
+Stra¿nik, który od czasu do czasu sprawdza o³tarze, posiada klucze do pu³apek. Jeœli ukryjesz siê blisko o³tarza, móg³byœ pochwyciæ go niezauwa¿enie.
+#subobj  5
+WeŸ klucz
+WeŸ klucz z cia³a stra¿nika kluczy
+#subobj  6
+ZnajdŸ o³tarz pierwszego krêgu pu³apek
+Ka¿de zbli¿enie do o³tarza jest zabezpieczone kilkoma krêgami ochronnymi. Niezale¿nie od uzbrojonych stra¿ników, s¹ to magiczne pu³apki, które zniszcz¹ ka¿dego, kto wejdzie na magiczny teren bez pozwolenia. Pu³apki s¹ kontrolowane przez o³tarze, a do ka¿dego z nich potrzeba specjalnego klucza.
+#subobj  7
+Wy³¹cz pierwszy kr¹g pu³apek
+Dopóki nie zostan¹ wy³¹czone pu³apki pierwszego krêgu, nie bêdziesz móg³ podejœæ do o³tarza.
+#subobj  8
+ZnajdŸ stra¿nika kluczy drugiego krêgu pu³apek
+Drugiego stra¿nika kluczy do krêgu pu³apek mo¿na znaleŸæ na przeciwko o³tarza po drugiej stronie magicznego obszaru. Aby go odszukaæ, u¿yj czaru "Jasnowidzenie" lub "Fajerwerki".
+#subobj  9
+WeŸ klucz
+WeŸ klucz z cia³a stra¿nika kluczy
+#subobj  10
+ZnajdŸ o³tarz drugiego krêgu pu³apek
+Pu³apki portalu drugiego krêgu ochrony s¹ po³o¿one na drodze do po³udniowego mostu po drugiej stronie kanionu.
+#subobj  11
+Wy³¹cz drugi kr¹g pu³apek
+Dopóki nie zostan¹ wy³¹czone pu³apki drugiego krêgu, nie bêdziesz móg³ podejœæ blisko do o³tarza.
+#subobj  15
+Namierz Stra¿nika trzeciego krêgu pu³apek
+Po³udniowy most po drugiej stronie kanionu jest pilnowany przez wielk¹ jednostkê stra¿nicz¹. Ale mo¿esz iœæ wzd³u¿ krawêdzi do pó³nocnego mostu niezauwa¿enie. Znajduj¹ siê tam Pu³apki trzeciego krêgu, ale jest w¹skie przejœcie przez teren magiczny - jest ono u¿ywane przez m³odego wojowniczego Maga, który dogl¹da pu³apek. Musisz namierzyæ tego Maga i zapamiêtaæ dok³adnie jego drogê!
+#subobj  16
+PrzejdŸ przez trzeci kr¹g pu³apek
+Nie ma sposobu na wy³¹czenie trzeciego krêgu pu³apek, ale mo¿esz je omin¹æ, jeœli pod¹¿ysz t¹ sam¹ drog¹, co Stra¿nik.
+#subobj  20
+ZnajdŸ Dowódcê stra¿y portalu
+Aby znaleŸæ jego dom, idŸ na wschód od miejsca, gdzie rzeka zawraca na zachód. Dom Dowódcy stoi na wzgórku obok muru, wyznaczaj¹cego krawêdŸ pierwszego krêgu ochrony portalu.
+#subobj  21
+Zdob¹dŸ klucz
+Aby uruchomiæ portal, u¿yj klucza, który ma dowódca stra¿y.
+#subobj  22
+PrzejdŸ kanion
+Aby dostaæ siê do portalu, przekrocz kanion jednym z mostów.
+#subobj  23
+ZnajdŸ wschodni kamieñ kontroli
+Aby uruchomiæ portal, musisz u¿yæ klucza na dwóch kamieniach kontroli - wschodnim i zachodnim. Te s¹ umieszczone niedaleko wejœcia do portalu.
+#subobj  24
+Obróæ wschodni kamieñ kontroli
+Portal nie zadzia³a, dopóki kamieñ nie zostanie obrócony.
+#subobj  25
+ZnajdŸ zachodni kamieñ kontroli
+Aby uruchomiæ portal, musisz u¿yæ klucza na dwóch kamieniach kontroli - wschodnim i zachodnim. Te s¹ umieszczone niedaleko wejœcia do portalu.
+#subobj  26
+Obróæ zachodni kamieñ kontroli
+Portal nie zadzia³a, dopóki kamieñ nie zostanie obrócony.
+#subobj  27
+PrzejdŸ przez portal
+Aby wróciæ do Gipath, po prostu wejdŸ w portal (strefa teleportacji).
+#subobj  34
+Ucieczka przed stra¿¹ miasta
+Stra¿ miejska zosta³a zaalarmowana!
+#subobj  35
+Ucieczka przed stra¿¹ g³ównych bram
+Stra¿ g³ównych bram zosta³a zaalarmowana!
+#subobj  36
+Ucieczka przed stra¿¹ portalu
+Stra¿ portalu zosta³a zaalarmowana!
+#subobj  37
+Ucieczka przed stra¿¹ portalu
+Stra¿ portalu zosta³a zaalarmowana!
+
+=== quest q73g
+Uporaj siê z kl¹tw¹
+To bardzo ³atwa misja. Kl¹twê trzeba wyeliminowaæ... wszelkimi metodami...
+#subobj  1
+Zniszcz Kl¹twê
+Zniszcz Kl¹twê!!!
+
+=== quest q7g
+ZnajdŸ mechanizm Orków - wyspiarzy
+Pewien z³odziej zosta³ zabity w lesie obok Œrodkowych Szczytów. Uda³o mu siê ukraœæ orkom szkatu³kê z nowym mechanizmem. Bez niego nie bêdzie mo¿na opuœciæ mostu prowadz¹cego na wyspy. Kuferek le¿y w lesie, bardzo blisko pocz¹tku drogi do Œrodkowych Szczytów.
+#subobj  1
+ZnajdŸ skrzyniê
+Skrzynia zosta³a porzucona w lesie gdzieœ niedaleko pocz¹tku drogi do Œrodkowych Szczytów. Nastêpny œlad w terenie to wózek, u¿ywany przez Rozbójników do transportu skrzyñ - tak by³o zanim zaczêli ze sob¹ walczyæ...
+#subobj  2
+Zdob¹dŸ mechanizm
+Zamek skrzyni nie jest skomplikowany, mo¿esz otworzyæ go go³ymi rêkami, bez ¿adnych kluczy.
+
+=== quest q8g
+Kradzie¿ "œwiêtego przedmiotu goblinów"
+¯eby zmusiæ gobliñskiego wodza do mówienia i wyjawienia ci tajemnic, trzeba ukraœæ totem nale¿¹cy do klanu - czaszkê Pierwszego Goblina, którego czci.
+#subobj  1
+ZnajdŸ osadê
+Osada plemiona, którym w³ada GoGo znajduje siê na zachodzie, za wzgórzami, pomiêdzy brzegiem rzeki i bagnami.
+#subobj  2
+Ukradnij "œwiêty przedmiot"
+"Œwiêty przedmiot" (g³owa Goblina na kiju) stoi pomiêdzy trzema ogniskami. Jeœli go ukradniesz, przywódca plemiona, GoGo, zrobi wszystko, ¿eby go odzyskaæ.
+
+=== quest q9g
+Przynieœ dokument Orków
+Orkowie dali gobliñskiemu wodzowi GoGo wyprawion¹ skórê z zapisan¹ histori¹ b³êkitnego kamienia, ale kiedy dowiedzieli siê o kradzie¿y totemu, zabrali j¹ z powrotem i umieœcili w kufrze na £ysej Wyspie. Mo¿na siê tam dostaæ tylko przez zwodzony most. ¯eby go opuœciæ, trzeba mieæ mechanizm Orków - Wyspiarzy. Jeœli go nie masz, porozmawiaj z Kapitanem.
+#subobj  1
+Odszukaj "£ys¹ Wyspê"
+S¹dz¹c po nazwie, na wyspie mo¿e nie byæ w ogóle ¿ycia. GoGo mówi, ¿e jest po³o¿ona gdzieœ na po³udniowym wschodzie.
+#subobj  2
+WeŸ "skórê z literkami"
+Zapiski Orków ukryte s¹ w skrzyni. Musisz j¹ otworzyæ i zabraæ "skórê z literami".
+
+=== quest qh1h
+Zachodnia kryjówka
+Nie wiadomo kto i po co zrobi³ tu kryjówkê, ale najwyraŸniej mia³ jakiœ powód.
+#subobj  1
+ZnajdŸ kryjówkê
+Miejsce kryjówki jest po³o¿one na samym koñcu parowu.
+#subobj  2
+Przeszukaj kryjówkê
+Powinieneœ zabraæ wszystko co znajdziesz w kryjówce!
+
+=== quest qh2h
+Wschodnia kryjówka
+Nie wiadomo kto i po co zrobi³ tu kryjówkê, ale najwyraŸniej mia³ jakiœ powód.
+#subobj  1
+ZnajdŸ kryjówkê
+Miejsce kryjówki jest po³o¿one na samym koñcu parowu.
+#subobj  2
+Przeszukaj kryjówkê
+Powinieneœ zabraæ wszystko co znajdziesz w kryjówce!
+
+=== quest qh3h
+zachodni obelisk
+Aby zmniejszyæ zagro¿enie dla Khadagañskich ¿o³nierzy podczas polowañ na ludzi w Kanionie Œmierci, ustawiono tam kilka magicznych obelisków. Ka¿dy, kto ich u¿yje, skorzysta z mocy wielu pomocnych czarów.
+#subobj  1
+ZnajdŸ Zachodni Obelisk
+Ten magiczny Obelisk jest po³o¿ony niedaleko zachodniej œciany kanionu.
+#subobj  2
+U¿yj Obelisku
+Ludziom, którzy budowali magiczne Obeliski, nigdy nie przysz³o do g³owy, ¿e mog¹ byæ u¿ywanie nie tylko przez ¿o³nierzy, ale te¿ przez ofiary!
+
+=== quest qh4h
+wschodni obelisk
+Aby zmniejszyæ zagro¿enie dla Khadagañskich ¿o³nierzy podczas polowañ na ludzi w Kanionie Œmierci, ustawiono tam kilka magicznych obelisków. Ka¿dy, kto ich u¿yje, skorzysta z mocy wielu pomocnych czarów.
+#subobj  1
+ZnajdŸ Wschodni Obelisk
+Ten magiczny Obelisk jest po³o¿ony niedaleko wschodniej œciany kanionu.
+#subobj  2
+U¿yj Obelisku
+Ludziom, którzy budowali magiczne Obeliski, nigdy nie przysz³o do g³owy, ¿e mog¹ byæ u¿ywanie nie tylko przez ¿o³nierzy, ale te¿ przez ofiary!
+
+=== quest qh5h
+Pó³nocno-wschodni obelisk
+Aby zmniejszyæ zagro¿enie dla Khadagañskich ¿o³nierzy podczas polowañ na ludzi w Kanionie Œmierci, ustawiono tam kilka magicznych obelisków. Ka¿dy, kto ich u¿yje, skorzysta z mocy wielu pomocnych czarów.
+#subobj  1
+ZnajdŸ Pó³nocno-Wschodni obelisk
+Ten magiczny Obelisk jest po³o¿ony niedaleko pó³nocno-wschodniej œciany kanionu.
+#subobj  2
+U¿yj obelisku
+Ludziom, którzy budowali magiczne Obeliski, nigdy nie przysz³o do g³owy, ¿e mog¹ byæ u¿ywanie nie tylko przez ¿o³nierzy, ale te¿ przez ofiary!
+
+=== quest qh6h
+M³odzi ¿o³nierze
+M³odzi Khadagañscy ¿o³nierze poluj¹ na ludzi w Kanionie Œmierci, by udowodniæ, ¿e s¹ godni awansu. Jednak mo¿e siê zdarzyæ, ¿e myœliwy stanie siê zwierzyn¹.
+#subobj  1
+OdnajdŸ obozowisko
+M³odzi ¿o³nierze rozbili obóz w ma³ej dolinie we wschodniej czêœci kanionu.
+#subobj  2
+Zabij ¿o³nierzy
+Ci ¿o³nierze zabili wielu wiêŸniów w tym kanionie. Uczciwym bêdzie pomszczenie ich œmierci...
+
+=== quest qk10k
+Wrodzy Ludzie Lasu
+Czarny Klan Ludzi Lasu od dawna ju¿ wojuje z Zielonym Klanem. Wódz zielonego Klanu ucieszy³by siê pewnie, gdyby przeciwnicy stracili swoje skarby...
+#subobj  1
+OdnajdŸ obóz Czarnego klanu
+Obóz Czarnego Klanu znajduje siê z dala od g³ównych dróg, jednak¿e, jeœli ktoœ do niego wkroczy, zauwa¿¹ to natychmiast... to znaczy, jeœli bêd¹ mieli czas aby zauwa¿yæ cokolwiek...
+#subobj  2
+ZnajdŸ kryjówkê
+W obozie Czarnego Klanu jest kryjówka. Osoba z dobr¹ umiejêtnoœci¹ obserwacji z ³atwoœci¹ ja znajdzie.
+#subobj  3
+Przeszukaj kryjówkê
+Ludzie na pewno nie trzymaliby bezu¿ytecznych przedmiotów w ukrytym miejscu...
+
+=== quest qk11k
+Opuszczone siedliszcze
+Siedlisko jest od dawna opuszczone, ale mo¿e ludzie, którzy tu kiedyœ ¿yli, ukryli coœ na czarn¹ godzinê i to nadal tu jest....
+#subobj  1
+Odszukaj ziemiankê
+Ta ziemianka zosta³a porzucona dawno temu, ale mo¿e byli mieszkañcy ukryli coœ w niej na deszczowe dni i nigdy nie zdo³ali po to wróciæ...
+#subobj  2
+Przeszukaj ziemiankê
+To, z czego nie mieli po¿ytku mieszkañcy ziemianki, mo¿e byæ bardzo u¿yteczne dla kogoœ innego.
+
+=== quest qk12k
+ród³a rzeki
+Ludzie rzadko przychodz¹ do Ÿróde³ rzeki, wiêc byæ mo¿e, ¿e znajdziesz tu coœ ciekawego.
+#subobj  1
+Udaj siê do Ÿród³a rzeki
+Aby dotrzeæ do Ÿród³a rzeki, idŸ na pó³noc, w górê strumienia.
+#subobj  2
+Przeszukaj Ÿród³o rzeki
+Mo¿e jest tu gdzieœ w okolicy coœ przydatnego? Postaraj siê znaleŸæ to "coœ".
+
+=== quest qk13k
+Samotna kopalnia
+Ta kopalnia, jak wszystko wokó³, nale¿y do Karansula. Z jakiegoœ powodu jednak nie wydaje siê byæ tak dobrze chroniona jak reszta budynków.
+#subobj  1
+ZnajdŸ samotn¹ kopalniê
+Kopalnia znajduje siê w zamkniêtym parowie, do którego mo¿na siê dostaæ od po³udniowego zachodu.
+#subobj  2
+Przeszukaj kopalniê
+Karansul nie bêdzie têskni³ za tym, czy innym bogactwem...
+
+=== quest qk14k
+Stary rzezimiech
+Stary zbójnik ¿yje w górach i oswaja dzikie zwierzêta. W ca³ym swoim ¿yciu nakrad³ tak wiele, ¿e by³oby nie fair, gdyby teraz ktoœ jego nie okrad³.
+#subobj  1
+Siedziba starego rozbójnika
+Stary Rozbójnik ¿yje w pó³nocnej czêœci parowu.
+#subobj  2
+Przeszukaj siedzibê starego rozbójnika
+Ten stary cz³owiek by³ z³odziejem ca³e ¿ycie. Dlaczegó¿ by nie mia³ poczuæ sam jak to jest byæ okradzionym?
+
+=== quest qk15k
+Kryjówka Maga
+Jeden z miejskich magów ukry³ czêœæ swego dobytku w miejscu niedaleko miasta. Kiedy na prowincji wybuch³y zamieszki, droga do kryjówki okaza³a siê niebezpieczna i mag nie móg³ niczego odzyskaæ.
+#subobj  1
+ZnajdŸ kryjówkê
+Co jest w tym miejscu najlepsze, to nie to, ¿e trudno je znaleŸæ, ale ¿e ludzie, którzy doceniaj¹ zawartoœæ skrzyñ, bardzo rzadko tu przychodz¹!
+#subobj  2
+Przeszukaj kryjówkê
+To, co znajduje siê w tej kryjówce, z trudem mog³oby byæ wykorzystane podczas œnie¿nych zamieci, czy w ciemnych lasach, ale mo¿e byæ przydatne w mieœcie.
+
+=== quest qk16h
+Posiad³oœæ
+Jak mawia z³odziejka Sahilia: "Poka¿ mi bogaty dom, a znajdê w nim kufer. Kufer, który nie bêdzie pusty."
+#subobj  1
+Odszukaj maj¹tek
+Bogaty maj¹tek ziemski nie jest g³ównym celem twojej podró¿y. Lecz jeœli ju¿ taki mijasz, dlaczegó¿ by mu siê nie przyjrzeæ?
+#subobj  2
+ZnajdŸ skrzyniê
+Skrzynia musi gdzieœ tutaj byæ... niepodobna, ¿eby go ukryli gdzieœ dalej...
+#subobj  3
+Otwórz skrzyniê
+Jedyny sposób aby dowiedzieæ siê co jest w œrodku, to otworzyæ to!
+
+=== quest qk17h
+Kryjówka ³owców niewolników
+Plotka g³osi, ¿e ³owcy niewolników wziêli ³apówki za wysy³anie ch³opów do pracy w ogrodach bogatych ludzi. Dobrze by by³o rozejrzeæ siê za kryjówk¹ ³owców, tak na wszelki wypadek.
+#subobj  1
+Plantacja
+Ta plantacja wygl¹da gorzej ni¿ którakolwiek obok. Prawdopodobnie ch³opi spêdzaj¹ wiêcej czasu w domach w mieœcie, ni¿ tutaj w pracy...
+#subobj  2
+ZnajdŸ kryjówkê
+Miejscowy naganiacz niewolników raczej by nie ryzykowa³ zabierania do domu pieniêdzy z przekupstwa. Prawdopodobnie s¹ one ukryte gdzieœ tutaj.
+#subobj  3
+Przeszukaj kryjówkê
+To naprawdê ciekawe ogl¹daæ ile wspó³czesny nadzorca niewolników mo¿e zachowaæ na deszczowe dni, a wszystko to z jego chudej pensyjki!
+
+=== quest qk30h
+Wiejska posiad³oœæ
+Jeden z bogatych mieszkañców miasta ma posiad³oœæ w pó³nocno zachodnich przedmieœciach. Ciekawe co te¿ mo¿na znaleŸæ w jego kufrach?
+#subobj  1
+Odszukaj posiad³oœæ wiejsk¹
+W³asnoœæ, nale¿¹ca do bogatego cz³owieka, znajduje siê w pó³nocno-zachodniej, skrajnej czêœci miasta. W³aœciciela nie ma tam zbyt czêsto, ale zawsze zostawia dom dobrze chroniony.
+#subobj  2
+ZnajdŸ osobê z kluczem
+Aby dostaæ siê do posiad³oœci, musisz mieæ klucz od bram. Ma go jeden ze stra¿ników.
+#subobj  3
+Zdob¹dŸ klucz
+Stra¿nik z kluczami nie jest zbyt czujny i czasem zatrzymuje siê na d³u¿szy okres czasu i gapi siê prosto przed siebie! Najlepszy plan to spróbowaæ mu wykraœæ klucz, zamiast atakowaæ go, ryzykuj¹c zwrócenie uwagi stra¿ników.
+#subobj  4
+Otwórz bramy posiad³oœci
+U¿yj klucza aby otworzyæ bramy. B¹dŸ ostro¿ny: na podwórzu posiad³oœci tak¿e s¹ stra¿e.
+#subobj  5
+Odszukaj skrzyniê
+Skrzynia bogatego cz³owieka jest na podwórzu posiad³oœci.
+#subobj  6
+Przeszukaj skrzyniê
+Ta skrzynia z pewnoœci¹ ma w sobie coœ przydatnego... albo przynajmniej coœ ³adnego i drogiego!
+
+=== quest qk31h
+Harpia
+Stary nekromanta prowadzi³ kiedyœ badania nad harpi¹. Teraz jednak nie chce, by ktokolwiek skorzysta³ z efektów jego eksperymentów. Chce, abyœ zg³adzi³ harpiê i obiecuje hojne wynagrodzenie.
+#subobj  1
+ZnajdŸ harpiê
+Harpia, któr¹ musisz zabiæ, ¿yje w po³udniowo-zachodnim sektorze pustyni Nekromanty. Uwaga... niedaleko jej pieczary mog¹ czaiæ siê inne niebezpieczne stwory!
+#subobj  2
+Zabij harpiê
+Musisz j¹ zniszczyæ. Dobrze bêdzie, jeœli najpierw rozprawisz siê z miejscowymi stworzeniami, a potem dopiero rozpoczniesz walkê z Harpi¹.
+
+=== quest qk32h
+Pieczêæ Imperatora
+Aby zdobyæ sobie zaufanie uciekinierów, musisz zdobyæ z³ot¹ Pieczêæ Imperatora i daæ j¹ Bratu Khatulowi. Zwyczajni Khadaganianie nie mog¹ dotykaæ, braæ ani po¿yczaæ pieczêci pod groŸb¹ straszliwej œmierci. Wiesz o tym, ¿e pos³aniec maj¹cy dostarczyæ pieczêæ zosta³ zabity? I to przez cyklopa bytuj¹cego na Pustyni Nekromanty.
+#subobj  1
+ZnajdŸ pieczarê cyklopa
+Pieczara Cyklopa znajduje siê w pó³nocno-wschodnim sektorze pustyni Nekromanty. S¹ tam liczne Z³e Oczy, które pilnuj¹ terenu, jakby nale¿a³ do nich samych.
+#subobj  2
+Przeszukaj skrzyniê cyklopa
+W pieczarze jest skrzynia, w której Cyklop trzyma swoje skarby. Powinieneœ spróbowaæ j¹ przeszukaæ i zabraæ Sygnet Imperatora. Miej na uwadze, ¿e zabiæ Cyklopa jest potwornie trudno, mo¿e lepiej zaczekaæ, a¿ odwróci siê plecami...
+
+=== quest qk9g
+Skarb Harpii
+Harpie nie mog¹ u¿ywaæ ¿adnych broni czy przedmiotów, ale jak coœ znajd¹, to zanios¹ to do swojego gniazda.
+#subobj  1
+ZnajdŸ skarb harpii
+Harpie zwykle trzymaj¹ rzeczy które znajd¹ blisko swojego siedliska.
+#subobj  2
+Zabierz skarb harpii
+Nie potrzeba ¿adnego klucza aby otworzyæ skrzyniê. Po prawdzie, to w¹tpliwe, ¿eby którakolwiek Harpia zrozumia³a kiedykolwiek do czego s³u¿y klucz!
+

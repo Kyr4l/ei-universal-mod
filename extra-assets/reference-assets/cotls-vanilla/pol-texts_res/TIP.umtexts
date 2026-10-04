@@ -1,0 +1,966 @@
+# um-texts 1
+=== tip 10100
+Otwórz/Zamknij okno informacyjne.
+
+=== tip 10101
+Ogólny widok
+Poka¿ ogólny widok 
+postaci w oknie informacyjnym.
+
+=== tip 10102
+Obra¿enia
+Poka¿ otrzymane obra¿enia przez 
+postaæ w oknie informacyjnym.
+
+=== tip 10103
+W³aœciwoœci
+Poka¿ w³aœciwoœci postaci 
+w oknie informacyjnym.
+
+=== tip 10104
+Czary
+Poka¿ czary rzucone na postaæ 
+w oknie informacyjnym.
+
+=== tip 10200
+Otwórz/Zamknij okno tekstowe.
+
+=== tip 10201
+Wiadomoœci
+Poka¿ wiadomoœci 
+w oknie tekstowym.
+
+=== tip 10202
+Trofea
+Poka¿ informacje o trofeach
+i znalezionych przedmiotach w oknie
+tekstowym
+
+=== tip 10300
+Otwórz/Zamknij Mini-mapê.
+
+=== tip 10301
+Zbli¿enie
+Zwiêksz skalê Mini-mapy.
+
+=== tip 10302
+Oddalenie
+Zmniejsz skalê Mini-mapy.
+
+=== tip 10303
+Standardowy widok kamery
+Obróæ kamerê na pó³noc.
+
+=== tip 10400
+Pauza W³¹czona/Wy³¹czona
+Kiedy pauza jest w³¹czona, mo¿esz wydawaæ rozkazy
+postaciom, zmieniaæ ich broñ i 
+przydzielaæ cele.
+
+=== tip 10401
+Wywo³aj ekran zadañ
+Pokazuje ukoñczone i dostêpne 
+zadania i cele.
+
+=== tip 10402
+Prêdkoœæ normalna
+Przywraca normaln¹ prêdkoœæ gry.
+
+=== tip 10403
+Zwiêkszona prêdkoœæ
+Zwiêksza prêdkoœæ dzia³ania gry.
+
+=== tip 10500
+Tryb Agresywny/Defensywny 
+W trybie "Agresywnym" postaæ 
+bêdzie atakowaæ wszystkich wrogów którzy j¹ zobacz¹.
+W trybie "Defensywnym" bêdzie atakowaæ tylko 
+po wydaniu odpowiedniej komendy.
+
+=== tip 10501
+Czo³ganie
+Kiedy postaæ siê czo³ga, robi 
+o wiele mniej ha³asu ni¿ kiedy chodzi 
+i jest trudniejsza do zauwa¿alna przez wrogów. 
+Postaæ porusza siê bardzo wolno. "Wigor" pozostaje bez zmian.
+
+=== tip 10502
+Skradanie
+Kiedy siê skradasz, postaæ prawie nie wydaje 
+dŸwiêków, a wrogowie maj¹ du¿e problemy z jej wykryciem. 
+Postaæ porusza siê wolno. "Wigor" pozostanie bez zmian.
+
+=== tip 10503
+Chodzenie
+Kiedy postaæ chodzi porusza siê z normaln¹ 
+prêdkoœci¹. "Wigor" pozostanie bez zmian.
+
+=== tip 10504
+Bieg
+Kiedy postaæ biegnie, robi wiêcej ha³asu ni¿ kiedy 
+chodzi, wiêc przyci¹ga uwagê wrogów, którzy 
+inaczej mogliby jej nie zauwa¿yæ. Postaæ porusza siê szybko. "Wigoru" ubywa; 
+kiedy osi¹gnie zero, postaæ automatycznie zacznie iœæ.
+
+=== tip 10510
+Pod¹¿aj
+Postaæ porusza siê w niewielkiej odleg³oœci
+za inn¹ za inna postaci¹.
+
+=== tip 10511
+U¿ycie/Kradzie¿ przedmiotu
+Jeœli umieœcisz kursor w kszta³cie rêki nad ¿yw¹ postaci¹ 
+i klikniesz, mo¿esz kraœæ od niej rzeczy (pod warunkiem, ¿e ma cokolwiek 
+do skradzenia). Jeœli umieœcisz kursor w kszta³cie rêki nad przedmiotem i 
+klikniesz, mo¿esz u¿yæ tego przedmiotu (pod warunkiem, ¿e jest to mo¿liwe).
+
+=== tip 20100
+Broñ/Przedmioty
+Ten tryb pozwoli ci podzieliæ 
+broñ i zbroje pomiêdzy 
+twoje postaci.
+
+=== tip 20101
+Czary/Umiejêtnoœci
+Ten tryb pozwala ci podzieliæ czary pomiêdzy 
+postaci i zdobyæ nowe umiejêtnoœci lub ulepszyæ 
+ju¿ nabyte.
+
+=== tip 20102
+Sklep z przedmiotami 
+Ten tryb pozwala ci kupowaæ i sprzedawaæ przedmioty 
+i sk³adniki (schematy i materia³y).
+
+=== tip 20103
+Konstruktor przedmiotów 
+Ten tryb pozwala ci sk³adaæ nowe 
+przedmioty i rozk³adaæ ju¿ istniej¹ce.
+
+=== tip 20104
+Naprawa
+Ten tryb pozwala ci naprawiæ przedmioty, które 
+sta³y siê mniej pewne z powodu zu¿ycia.
+
+=== tip 20105
+Sklep z czarami
+Ten tryb pozwala ci kupowaæ i sprzedawaæ czary 
+i komponenty (prototypy i runy).
+
+=== tip 20106
+Konstruktor czarów
+Ten tryb pozwala ci sk³adaæ nowe 
+czary i rozk³adaæ ju¿ istniej¹ce.
+
+=== tip 20107
+Wyjœcie
+Wyjœcie z obozu lub sklepu.
+
+=== tip 20200
+Akceptuj
+ZatwierdŸ wszystkie zmiany jakich dokona³eœ na tym ekranie.
+
+=== tip 20201
+Anuluj
+Anuluj wszystkie dzia³ania jakich dokona³eœ na tym ekranie.
+ Jeœli opuœcisz obóz lub sklep bez potwierdzenia 
+zmian, wszystkie zostan¹ automatycznie anulowane.
+
+=== tip 20300
+Poprzednia postaæ
+Pokazuje poprzedni¹ postaæ w dru¿ynie bohatera.
+
+=== tip 20301
+Nastêpna postaæ
+ Pokazuje nastêpn¹ postaæ w dru¿ynie bohatera.
+
+=== tip 20302
+Zwolnij postaæ
+Nie u¿ywaj wybranej postaci.
+Powróci one to swojej dawnej lokacji i 
+bêdziesz móg³ ponownie jej u¿yæ w dowolnym czasie.
+
+=== tip 20303
+Lecz rany 
+Ca³kowicie leczy wszystkie otrzymane przez 
+postaæ obra¿enia. Ciê¿ko ranne koñczyny, które nie mog¹ 
+byæ uzdrowione zwyczajnym czarem lecz¹cym tak¿e zostan¹ wyleczone.
+
+=== tip 20400
+Przewijanie
+Dostêpne przedmioty i czary - przewijanie w prawo. 
+Jeœli naciœniesz klawisz SHIFT, wyœwietlony 
+zostanie ostatni przedmiot z listy.
+
+=== tip 20401
+Przewijanie
+Dostêpne przedmioty i czary - przewijanie w lewo. 
+Jeœli naciœniesz klawisz SHIFT, wyœwietlony 
+zostanie pierwszy przedmiot na liœcie.
+
+=== tip 20500
+Tak
+
+=== tip 20501
+Anuluj
+
+=== tip 21000
+Schemat: broñ
+Pokazuje schemat wykonania broni.
+Uwaga: Postaci nie mog¹
+trzymaæ schematów. Mog¹ byæ u¿yte
+tylko w Konstruktorze przedmiotów.
+
+=== tip 21001
+Schemat: lekka zbroja
+Pokazuje schemat wykonania 
+lekkiej zbroi.
+Uwaga: postaci nie mog¹
+zak³adaæ schematów. Mog¹ ich u¿ywaæ
+tylko w Warsztacie przedmiotów.
+
+=== tip 21002
+Schemat: ciê¿ka zbroja
+Pokazuje schemat wykonania ciê¿kiej zbroi.
+
+=== tip 21003
+Napoje i ró¿d¿ki. 
+Pokazuje zarówno gotowe napoje, ró¿d¿ki i unikatowe 
+przedmioty magiczne, jak i schematy ich wykonania.
+
+=== tip 21004
+Materia³y
+Pokazuje materia³y, potrzebne do 
+wykonania ró¿nych przedmiotów.
+
+=== tip 21005
+Gotowe przedmioty 
+Pokazuje tylko przedmioty gotowe do u¿ycia.
+
+=== tip 21100
+Schematy i materia³y
+Pokazuje tylko materia³y i schematy
+wykonania przedmiotów.
+Uwaga: postaci nie mog¹ trzymaæ
+ani zak³adaæ schematów i materia³ów.
+Mo¿esz u¿ywaæ tych przedmiotów tylko
+w Konstruktorze Przedmiotów.
+
+=== tip 21101
+Klucze i runy
+Pokazuje tylko 
+klucze i runy.
+Uwaga: postaci nie mog¹ trzymaæ 
+kluczy ani runów. Mo¿esz 
+u¿ywaæ tych przedmiotów tylko w 
+Warsztacie Czarów.
+
+=== tip 21102
+Gotowe przedmioty i czary 
+Pokazuje tylko przedmioty i czary gotowe do u¿ycia.
+
+=== tip 21103
+Trofea
+Pokazuje tylko te trofea, które mo¿esz 
+sprzedaæ w sklepie, ale nie u¿ywaæ.
+
+=== tip 21104
+Przedmioty misji
+Pokazuje kluczowe przedmioty, potrzebne
+do ukoñczenia zadañ.
+
+=== tip 21105
+Wszystkie przedmioty 
+Pokazuje wszystkie przedmioty, 
+których mo¿esz u¿ywaæ.
+
+=== tip 21200
+Klucze: Magia ¯ywio³ów 
+Pokazuje wzorce do utworzenia czarów 
+ze szko³y Magii ¯ywio³ów.
+Uwaga: postaci nie mog¹ trzymaæ
+kluczy. Mog¹ byæ u¿ywane
+tylko w Konstruktorze Czarów.
+
+=== tip 21201
+Klucze: Magia Zmys³ów 
+Pokazuje wzorce do utworzenia czarów 
+ze szko³y Magii Zmys³ów.
+Uwaga: postaci nie mog¹ trzymaæ
+kluczy. Mog¹ byæ u¿ywane
+tylko w Konstruktorze Czarów.
+
+=== tip 21202
+Klucze: Magia Astralna 
+Pokazuje wzorce do utworzenia czarów 
+ze szko³y Magii Astralnej.
+Uwaga: postaci nie mog¹ trzymaæ
+kluczy. Mog¹ byæ u¿ywane
+tylko w Konstruktorze Czarów.
+
+=== tip 21203
+Runy: Podstawy
+Pokazuje runy, które pozwalaj¹ ci na 
+ulepszenie czarów.
+Uwaga: Postaci nie mog¹ trzymaæ
+runów. Mog¹ byæ u¿ywane tylko
+w Konstruktorze Czarów.
+
+=== tip 21204
+Runy: Podstawy
+Pokazuje runy, które pozwalaj¹ ci na okreœlenie 
+zasiêgu czarów oraz na zaczarowanie broni i zbroi.
+Uwaga: Postaci nie mog¹ trzymaæ
+runów. Mog¹ byæ u¿ywane tylko
+w Konstruktorze Czarów.
+
+=== tip 21205
+Gotowe czary 
+Pokazuje czary gotowe do u¿ycia.
+
+=== tip 30100
+Zamknij
+ Usuwa podpowiedzi z ekranu.
+
+=== tip 30101
+Poprzedni ekran
+Pokazuje ostatni¹ podpowiedŸ.
+
+=== tip 30102
+Nastêpny ekran
+Pokazuje nastêpn¹ podpowiedŸ.
+
+=== tip 50100
+Tak
+
+=== tip 50101
+Anuluj
+
+=== tip 60100
+Zapisz grê w wybranym miejscu
+
+=== tip 60101
+Wczytaj zapisan¹ grê
+
+=== tip 60102
+Skasuj zapisan¹ grê
+
+=== tip 60103
+Anuluj
+
+=== tip 70100
+Tak
+
+=== tip 70101
+Anuluj
+
+=== tip 70102
+G³ówne opcje gry
+
+=== tip 70103
+Przypisz klawisze
+
+=== tip 80100
+PrzejdŸ do Strefy Gry
+
+=== tip 80101
+Wróæ do mapy globalnej
+
+=== tip 80102
+Wróæ do strefy Gry
+
+=== tip 80110
+Wejœcia do Strefy gry
+Dostêpne wejœcia s¹ zaznaczone na zielono, 
+niedostêpne na czerwono. Wybierz wejœcie, 
+klikaj¹c na nim.
+
+=== tip 80111
+Zadania
+Ukoñczone zadania s¹ zaznaczone za pomoc¹ "V",
+nieudane albo niemo¿liwe do ukoñczenia: "O".
+Mo¿esz tak¿e obejrzeæ niezaznaczone zadania. Kliknij
+na zadaniu, ¿eby zobaczyæ jego cel.
+
+=== tip 80112
+Obszar Zadañ
+Krzy¿yk na mapie okreœla 
+przybli¿one po³o¿enie wybranego 
+zadania.
+Uwaga: W danym zadaniu cel mo¿e siê poruszaæ 
+po strefie Gry lub te¿ mo¿e 
+znajdowaæ siê w ró¿nych miejscach. 
+W takim wypadku, krzy¿yk pokazuje 
+przybli¿one miejsce, gdzie powinieneœ 
+zacz¹æ zadanie, albo gdzie ma 
+byæ ono zakoñczone.
+
+=== tip 80200
+Poprzednia strefa
+Pokazuje poprzedni¹ strefê Gry z
+wszystkimi nieukoñczonymi zadaniami.
+
+=== tip 80201
+Nastêpna strefa
+Pokazuje nastêpn¹ strefê Gry z
+wszystkimi nieukoñczonymi zadaniami.
+
+=== tip 90100
+PrzejdŸ do obozu
+Tutaj mo¿esz daæ swoim postaciom
+nowe ubrania, bronie i rozdzieliæ doœwiadczenie,
+zdobyte podczas zadañ.
+
+=== tip 90101
+Obróæ mapê w lewo.
+
+=== tip 90102
+Obróæ mapê w prawo.
+
+=== tip action_accel
+Wysoka prêdkoœæ gry.
+Czas zostanie przyspieszony.
+Postaci bêd¹ robiæ wszystko szybciej.
+
+=== tip action_camera1
+Ustawieni kamery 1
+Kiedy wciœniesz ten klawisz + CTRL, wszystkie ustawienia 
+kamery zostan¹ zachowane jako ustawienie 1. Ponowne u¿ycie tego 
+klawisza bez CTRL, spowoduje natychmiastowy powrót 
+kamery do ustawieñ 1.
+
+=== tip action_camera2
+Ustawieni kamery 2
+Kiedy wciœniesz ten klawisz + CTRL, wszystkie ustawienia 
+kamery zostan¹ zachowane jako ustawienie 2. Ponowne u¿ycie tego 
+klawisza bez CTRL, spowoduje natychmiastowy powrót 
+kamery do ustawieñ 2.
+
+=== tip action_camera3
+Ustawieni kamery 3
+Kiedy wciœniesz ten klawisz + CTRL, wszystkie ustawienia 
+kamery zostan¹ zachowane jako ustawienie 3. Ponowne u¿ycie tego 
+klawisza bez CTRL, spowoduje natychmiastowy powrót 
+kamery do ustawieñ 3.
+
+=== tip action_camera4
+Ustawieni kamery 4
+Kiedy wciœniesz ten klawisz + CTRL, wszystkie ustawienia 
+kamery zostan¹ zachowane jako ustawienie 4. Ponowne u¿ycie tego 
+klawisza bez CTRL, spowoduje natychmiastowy powrót 
+kamery do ustawieñ 4.
+
+=== tip action_camera_center
+Wypoœrodkowanie
+Skieruj kamerê na wybran¹ postaæ.
+
+=== tip action_camera_down
+Kamera w dó³
+Przemieszcza kamerê w dó³. Jeœli przytrzymasz ten klawisz + CTRL, 
+kamera cofnie siê, ale pozostanie skierowana tak samo.
+
+=== tip action_camera_left
+Kamera w lewo
+Przewija Kamerê w lewo. Jeœli przytrzymasz ten klawisz + CTRL, 
+Kamera przesunie siê w lewo, ale pozostanie skierowana tak samo.
+
+=== tip action_camera_norm
+Kamera na pó³noc
+Ustawia kamerê na "Standardowy" tryb.
+
+=== tip action_camera_right
+Kamera w prawo
+Przewija Kamerê w prawo. Jeœli przytrzymasz ten klawisz + CTRL, 
+Kamera przesunie siê w prawo, ale pozostanie skierowana tak samo.
+
+=== tip action_camera_track
+Œledzenie
+Kamera bêdzie obserwowa³a wybran¹ postaæ. 
+Mo¿esz ustawiæ k¹t i zbli¿enie.
+
+=== tip action_camera_up
+Kamera w górê
+Przemieszcza kamerê w górê. Jeœli przytrzymasz ten klawisz + CTRL, 
+Kamera przesunie siê d przodu, ale pozostanie skierowana tak samo.
+
+=== tip action_camera_zoom_in
+Zbli¿enie
+Kamera przybli¿a wybrany cel.
+
+=== tip action_camera_zoom_out
+Oddalenie
+Kamera oddala wybrany cel.
+
+=== tip action_cancel_target
+Anuluj akcjê
+Aby wykonaæ dan¹ akcjê (rzucenie czaru, kradzie¿, u¿ycie) 
+musisz najpierw wybraæ odpowiedni¹ ikonê a potem 
+wskazaæ kursorem cel. Przypisany klawisz teraz pozwala Ci 
+anulowaæ wybór ikony. Mo¿esz tak¿e 
+u¿yæ klawisza ESC w tym samym celu.
+
+=== tip action_crawl
+Czo³ganie
+Kiedy postaæ siê czo³ga, robi 
+o wiele mniej ha³asu ni¿ kiedy chodzi 
+i jest trudniejsza do zauwa¿alna przez wrogów. 
+Postaæ porusza siê bardzo wolno. "Wigor" pozostaje bez zmian.
+
+=== tip action_cs_body
+Celuj w korpus
+Twoja postaæ bêdzie celowaæ w korpus przeciwnika 
+podczas ataku. Kiedy "zdrowie" korpusu 
+osi¹gnie 0, przeciwnik zginie.
+
+=== tip action_cs_head
+Celuj w g³owê
+Twoja postaæ bêdzie celowaæ w g³owê przeciwnika 
+podczas ataku. Kiedy "zdrowie" g³owy 
+osi¹gnie 0, przeciwnik zginie.
+
+=== tip action_cs_lhand
+Celuj w lew¹ rêkê
+Twoja postaæ bêdzie celowaæ w lew¹ d³oñ przeciwnika 
+podczas ataku. Kiedy "zdrowie" rêki osi¹gnie 0, 
+przeciwnik bêdzie walczy³ i rzuca³ czary o wiele wolniej.
+
+=== tip action_cs_lleg
+Celuj w lew¹ nogê
+Twoja postaæ bêdzie celowaæ w lew¹ nogê przeciwnika 
+podczas ataku. Kiedy "zdrowie" nogi osi¹gnie 0, 
+przeciwnik bêdzie siê poruszaæ o wiele wolniej.
+
+=== tip action_cs_rhand
+Celuj w praw¹ rêkê
+Twoja postaæ bêdzie celowaæ w praw¹ d³oñ przeciwnika 
+podczas ataku. Kiedy "zdrowie" rêki osi¹gnie 0, 
+przeciwnik bêdzie walczy³ i rzuca³ czary o wiele wolniej.
+
+=== tip action_cs_rleg
+Celuj w praw¹ nogê
+Twoja postaæ bêdzie celowaæ w praw¹ nogê przeciwnika 
+podczas ataku. Kiedy "zdrowie" nogi osi¹gnie 0, 
+przeciwnik bêdzie siê poruszaæ o wiele wolniej.
+
+=== tip action_decel
+Normalna prêdkoœæ gry
+Czas p³ynie normalnie.
+
+=== tip action_follow
+Pod¹¿aj
+Wybrana postaæ bêdzie pod¹¿aæ za wyznaczonym 
+celem do momentu wydania jej innego polecenia.
+
+=== tip action_item1
+Napój lub ró¿d¿ka 1
+U¿yj pierwszego napoju lub ró¿d¿ki 
+(liczone od lewej strony).
+
+=== tip action_item2
+Napój lub ró¿d¿ka 2
+U¿yj drugiego napoju lub ró¿d¿ki 
+(liczone od lewej strony).
+
+=== tip action_item3
+Napój lub ró¿d¿ka 3
+U¿yj trzeciego napoju lub ró¿d¿ki 
+(liczone od lewej strony).
+
+=== tip action_item4
+Napój lub ró¿d¿ka 4
+U¿yj czwartego napoju lub ró¿d¿ki 
+(liczone od lewej strony).
+
+=== tip action_obj
+Ekran Zadañ
+Ten ekran zapewnia szczegó³y o 
+dostêpnych zadaniach i ich statusie.
+
+=== tip action_pause
+Tryb Pauzy
+Kiedy gra jest zatrzymana, mo¿esz kontrolowaæ 
+kamerê i dawaæ rozkazy swoim postaciom.
+Zostan¹ one wype³nione, kiedy wy³¹czysz 
+pauzê.
+
+=== tip action_quickload
+Szybkie wczytywanie
+Wczytaj grê, zapisan¹ jako "Szybki Zapis" 
+bez prze³¹czania na Esc-menu.
+
+=== tip action_quicksave
+Szybki zapis
+Gra zostanie zapisana bez prze³¹czania
+ na Esc-menu pod nazw¹ "Szybki Zapis".
+
+=== tip action_run
+Bieg
+Kiedy postaæ biegnie, robi wiêcej ha³asu ni¿ kiedy 
+chodzi, wiêc przyci¹ga uwagê wrogów, którzy 
+inaczej mogliby jej nie zauwa¿yæ. Postaæ porusza siê szybko.  "Wigor" ubywa; 
+kiedy osi¹gnie zero, postaæ automatycznie zacznie iœæ.
+
+=== tip action_select1
+Wybierz postaæ 1
+Zaznacza twoj¹ pierwsz¹ postaæ (ikony 
+postaci s¹ liczone od lewej).
+
+=== tip action_select2
+Wybierz postaæ 2
+Zaznacza twoj¹ drug¹ postaæ (ikony 
+postaci s¹ liczone od lewej).
+
+=== tip action_select3
+Wybierz postaæ 3
+Zaznacza twoj¹ trzeci¹ postaæ (ikony 
+postaci s¹ liczone od lewej).
+
+=== tip action_select_all
+Zaznacz wszystko
+Zaznaczasz wszystkie swoje postaci.
+
+=== tip action_sneak
+Skradanie
+Kiedy siê skradasz, postaæ prawie nie wydaje 
+dŸwiêków, a wrogowie maj¹ du¿e problemy z jej wykryciem. 
+Postaæ porusza siê wolno. "Wigor" pozostanie bez zmian.
+
+=== tip action_spell1
+Czar 1
+Rzuca pierwszy dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell2
+Czar 2
+Rzuca drugi dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell3
+Czar 3
+Rzuca trzeci dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell4
+Czar 4
+Rzuca czwarty dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell5
+Czar 5
+Rzuca pi¹ty dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell6
+Czar 6
+Rzuca szósty dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell7
+Czar 7
+Rzuca siódmy dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_spell8
+Czar 8
+Rzuca ósmy dostêpny czar (Licz¹c 
+od góry do do³u).
+
+=== tip action_swarm
+Tryb Agresywny/Defensywny
+Prze³¹cza tryb zachowania postaci pomiêdzy "agresywnym" i "defensywnym".
+W trybie "Agresywnym" postaæ zaatakuje ka¿dego wroga, który j¹ zauwa¿y³. 
+W trybie "Defensywnym" zaatakuje tylko po wydaniu odpowiedniej 
+komendy.
+
+=== tip action_tutorial_script
+Samouczek
+Ten klawisz wyœwietli samouczek, 
+dotycz¹cy bie¿¹cego zadania lub 
+ekran interfejsu.
+
+=== tip action_use_science
+U¿yj/Kradnij
+Mo¿esz okradaæ wrogów. 
+Mo¿esz tak¿e u¿ywaæ mechanicznych przedmiotów (otwieraæ zamki, 
+u¿ywaæ prze³¹czników, itp.). Powodzenie zale¿eæ bêdzie od
+poziomu umiejêtnoœci "U¿yj/Kradnij".
+
+=== tip action_w_info1
+Widok ogólny
+Okno Informacyjne poka¿e widok ogólny postaci, 
+na której umieœci³eœ kursor. Jeœli kursora nie ma 
+na ¿adnej postaci, okienko wyœwietli informacje  
+o aktywnej postaci.
+
+=== tip action_w_info2
+Obra¿enia
+Okno Informacyjne poka¿e obra¿enia poszczególnych 
+czêœci cia³a postaci, na której zatrzyma³eœ kursor. 
+Jeœli kursora nie ma na ¿adnej postaci, okienko 
+wyœwietli informacje o aktywnej postaci.
+
+=== tip action_w_info3
+W³aœciwoœci
+Okno Informacyjne poka¿e szczegó³y o postaci, 
+na której znajduje siê kursor. Jeœli kursora nie ma 
+na ¿adnej postaci, okienko wyœwietli informacje  
+o aktywnej postaci.
+
+=== tip action_w_info4
+Czary
+Okno Informacyjne wyœwietli czary aktualnie wp³ywaj¹ce 
+na postaæ, na której jest kursor. Jeœli kursora nie ma na 
+¿adnej postaci, okienko wyœwietli informacje 
+o aktywnej postaci.
+
+=== tip action_w_minimap
+Poka¿/ukryj Mini-mapê.
+
+=== tip action_w_text1
+Wiadomoœci
+Okno Tekstowe wyœwietli wiadomoœci, tworzone 
+podczas gry (wszystkie cele, podtytu³y,
+ wiadomoœci o trofeach, itp.)
+
+=== tip action_w_text2
+Trofea
+Okno tekstowe wyœwietli listê wszystkich trofeów 
+zebranych przez postaæ w danej strefie Gry.
+
+=== tip action_walk
+Chodzenie.
+Kiedy postaæ chodzi porusza siê z normaln¹ 
+prêdkoœci¹. "Wigor" pozostanie bez zmian.
+
+=== tip action_weapon1
+Broñ 1
+ Wybiera pierwsz¹ dostêpn¹ broñ (licz¹c 
+ikony broni od lewej).
+
+=== tip action_weapon2
+Broñ 2
+ Wybiera drug¹ dostêpn¹ broñ (licz¹c 
+ikony broni od lewej).
+
+=== tip action_weapon3
+Broñ 3
+ Wybiera trzeci¹ dostêpn¹ broñ (licz¹c 
+ikony broni od lewej).
+
+=== tip action_weapon4
+Broñ 4
+ Wybiera czwart¹ dostêpn¹ broñ (licz¹c 
+ikony broni od lewej).
+
+=== tip option_autosave
+Autozapis
+W³¹cz: Autozapis nast¹pi zawsze 
+gdy zmieniasz strefê 
+Gry lub strefê Dialogu.
+Wy³¹cz: bez Autozapis.
+
+=== tip option_brightness
+Jasnoœæ
+Zmienia jasnoœæ ekranu gry.
+
+=== tip option_camera_reverse_x
+Zmiana obrotu kamery lewo/prawo 
+Podczas obrotu kamery w lewo/prawo, wciœnij 
+prawy przycisk myszy by zmieniæ kierunek 
+obrotu kamery:  
+Wy³¹cz: Kamera bêdzie siê obraca³a 
+w kierunku myszy. 
+
+W³¹cz: Kamera bêdzie siê obraca³a w kierunku 
+przeciwnym do ruchu myszy.
+
+=== tip option_camera_reverse_y
+Odwrotny ruch kamery
+Podczas przesuwania kamery w górê/dó³ za pomoc¹ 
+prawego przycisku myszy, kierunek ruchu 
+kamery mo¿e siê zmieniaæ: 
+Wy³¹cz: Kamera obróci siê zgodnie z ruchem myszy 
+W³¹cz: Kamera obróci siê w kierunku przeciwnym 
+do ruchu myszy.
+
+=== tip option_contrast
+Kontrast
+Zmienia kontrast ekranu gry.
+
+=== tip option_difficulty
+Poziom trudnoœci 
+Jeœli wybrany zosta³ poziom "£atwy", parametry 
+zbroi i ataku wrogów zostan¹ zredukowane. 
+Zapamiêtaj! Poziom trudnoœci mo¿esz 
+zmieniæ w dowolnym momencie gry.
+
+=== tip option_footprints
+Poka¿ œlady stóp
+W³¹cz: poka¿ œlady stóp. Wy³.: nie pokazuj œladów stóp.
+
+=== tip option_gamma
+Korekcja Gamma
+Zmienia korekcjê gamma ekranu gry.
+
+=== tip option_group_actions
+Opcje sterowania
+Ustawienia opcji dla kontroli twoich postaci.
+
+=== tip option_group_camera
+Opcje obs³ugi kamery
+Ustawienia opcji dla obs³ugi kamery
+ (tryb "wolny" lub ustawienia zmienne).
+
+=== tip option_group_cshots
+Opcje walki
+Ustawienia opcji poprzez przypisanie 
+klawiszom precyzyjnych ciosów.
+
+=== tip option_group_game
+Opcje gry
+Ustawienia opcji ogólnych gry.
+
+=== tip option_group_items
+Opcje przedmiotów
+Ustawienia opcji u¿ywania przedmiotów.
+
+=== tip option_group_select
+Opcje wyboru postaci
+Ustawienia opcji wybierania postaci.
+
+=== tip option_group_sens
+Opcje czu³oœci
+Ustawienia czu³oœci myszy i klawiatury.
+
+=== tip option_group_sound
+Opcje dŸwiêku
+Ustawienia opcji dŸwiêku: 
+g³oœnoœæ muzyki, mowy i efektów dŸwiêkowych.
+
+=== tip option_group_spells
+Opcje magii
+Ustawienia opcji u¿ywania czarów.
+
+=== tip option_group_video
+Opcje graficzne
+Ustawienia opcji grafiki gry.
+
+=== tip option_group_windows
+Opcje ekranu
+Ustawienia opcji okien gry.
+
+=== tip option_marks
+Pokazuj krew
+W³¹cz: po œmierci postaci na ziemi 
+pojawi siê ka³u¿a krwi. 
+Wy³¹cz: nie widaæ krwi.
+
+=== tip option_power_kbd
+Czu³oœæ klawiatury
+Zmieñ prêdkoœæ kamery, gdy jest 
+sterowana za pomoc¹ klawiatury.
+
+=== tip option_power_mouse
+Czu³oœæ myszy
+Zmieñ prêdkoœæ kursora lub obrotu kamery oraz 
+inne akcje kontrolowane za pomoc¹ myszy.
+
+=== tip option_reverse_stereo
+Zamieñ prawy i lewy
+kana³ muzyczny. 
+W³¹cz: odwrotne kana³y (prawy 
+zamieniony z lewym). 
+Wy³¹cz: Standardowe ustawienia 
+dŸwiêkowe kana³ów.
+
+=== tip option_rubber_select
+Czu³oœæ wyboru ramk¹
+Okreœla odleg³oœæ na jak¹ trzeba przesun¹æ mysz 
+aby pojawi³a siê ramka wyboru. Pozycja najbardziej na lewo
+wy³¹cza ramkê wyboru.
+
+=== tip option_scroll_border
+Czu³oœæ przewijania
+Okreœla odleg³oœæ pomiêdzy kursorem
+i krawêdziom ekranu przy której rozpoczyna siê przewijanie kamery. 
+Kamera przesuwana jest w kierunku w którym porusza siê kursor.
+
+=== tip option_select_type
+Wybór postaci
+W³¹cz: wybrana postaæ bêdzie wyœwietlana ze specjalnym 
+markerem (trójk¹tem) i podœwietlana. 
+Wy³¹cz: bez markera (wybrane postaci bêd¹ 
+tylko podœwietlane).
+
+=== tip option_shadow_buildings
+Cienie obiektów
+Jeœli system nieznacznie przekracza minimalne 
+wymagania, zalecamy wy³¹czenie cieniowania 
+obiektów (budynków, mostów, itp.)
+
+=== tip option_shadow_flora
+Cienie drzew
+Jeœli system nieznacznie przekracza minimalne 
+wymagania, zalecamy wy³¹czenie cieniowania 
+drzew.
+
+=== tip option_shadow_other
+Wszystkie cienie
+Jeœli system nieznacznie przekracza minimalne 
+wymagania, zalecamy wy³¹czenie cieniowania z dodatkowych 
+Ÿróde³ œwiat³a. Jeœli wy³¹czysz wszystkie cienie, opcje innych 
+cieni nie bêd¹ dostêpne.
+
+=== tip option_shadow_units
+Cienie Postaci
+Jeœli system nieznacznie przekracza minimalne 
+wymagania, zalecamy wy³¹czenie cieniowania postaci.
+
+=== tip option_show_flying_hp
+Wyœwietlanie wskaŸnika obra¿eñ
+Zadawane obra¿enia mog¹ byæ pokazywane 
+jako liczba, wyskakuj¹ca przy twojej postaci. 
+W³¹cz: pokazuj wskaŸnik obra¿eñ. 
+Wy³¹cz: nie pokazuj wskaŸnika obra¿eñ.
+
+=== tip option_show_path
+Poka¿ œcie¿kê
+W³¹cz: wyœwietlana jest droga postaci do wybranego celu. 
+Wy³¹cz: œcie¿ka nie jest wyœwietlana.
+
+=== tip option_show_tutorial
+Ekrany samouczka
+Aby pomóc ci szybko opanowaæ grê, przydatne mog¹ okazaæ siê ekrany samouczka. 
+W³¹cz: pokazuj samouczek 
+Wy³¹cz: nie pokazuj samouczka.
+
+=== tip option_switch_filters
+Autofiltry
+Mo¿esz u¿yæ filtrów inwentarza by wyœwietlaæ tylko 
+przedmioty, nale¿¹ce do danej kategorii. 
+Filtry te mog¹ byæ uaktywnione rêcznie 
+lub automatycznie.
+W³¹cz: Filtry bêd¹ w³¹czane automatycznie za ka¿dym 
+razem, gdy w inwentarzu pojawi siê nowy przedmiot 
+(zale¿nie od typu przedmiotu).
+Wy³¹cz: filtry bêd¹ w³¹czane/wy³¹czane tylko 
+rêcznie.
+
+=== tip option_tooltip_time
+OpóŸnienie podpowiedzi
+Ta opcja ustala czas opóŸnienia dla  
+podpowiedzi, wyskakuj¹cych blisko elementu 
+ekranu, na którym znajduje siê kursor. 
+Zakres wynosi od 0 do 5 sekund.
+
+=== tip option_volume_sfx
+G³oœnoœæ dŸwiêku
+Ustawienia g³oœnoœci efektów dŸwiêkowych.
+
+=== tip option_volume_stream
+G³oœnoœæ muzyki
+Ustawienia g³oœnoœci muzyki.
+
+=== tip option_volume_voice
+G³oœnoœæ mowy
+Ustawienia g³oœnoœci g³osów.
+
