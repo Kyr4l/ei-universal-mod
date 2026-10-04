@@ -34,6 +34,7 @@
 #include "../viewer/library.hpp"
 #include "../viewer/ui_common.hpp"
 #include "tile_blend.hpp"
+#include "script_docs.hpp"
 #include "../viewer/png_writer.hpp"
 #include "../viewer/ui_sources.hpp"
 #include "checks.hpp"
@@ -2438,13 +2439,30 @@ static bool IsNameChar(char c) {
     return (u >= 'A' && u <= 'Z') || (u >= 'a' && u <= 'z') || (u >= '0' && u <= '9') || u == '_' || u == '#' || u >= 0x80;
 }
 
-static std::string Signature(const MobScriptFunction& fn) {
+// "Name(param: type, ...) -> type" (the names from docs/scripting.md where known), the argument `current` in [ ].
+static std::string Signature(const MobScriptFunction& fn, int current = -1) {
     auto type = [](char t) -> const char* {
         switch (t) { case 'f': return "float"; case 's': return "string"; case 'o': return "object"; case 'g': return "group"; case 'v': return "nothing"; default: return "any"; }
     };
+    std::vector<std::string> names;
+    if (const scriptdocs::Doc* d = scriptdocs::Find(fn.name)) {
+        std::string p = d->params, one;
+        for (char ch : p + ",") {
+            if (ch == ',') { while (!one.empty() && one.front() == ' ') one.erase(0, 1); const size_t colon = one.find(':'); names.push_back(colon == std::string::npos ? one : one.substr(0, colon)); one.clear(); }
+            else one += ch;
+        }
+    }
     std::string out = std::string(fn.name) + "(";
-    for (const char* p = fn.params; *p; ++p) out += std::string(p == fn.params ? "" : ", ") + type(*p);
-    return out + ") -> " + type(fn.returns);
+    int i = 0;
+    for (const char* p = fn.params; *p; ++p, ++i) {
+        std::string arg = (i < static_cast<int>(names.size()) && !names[static_cast<size_t>(i)].empty() ? names[static_cast<size_t>(i)] + ": " : std::string()) + type(*p);
+        if (i == current) arg = "[" + arg + "]";
+        out += (i ? ", " : "") + arg;
+    }
+    out += ")";
+    if (fn.returns != 'v') out += std::string(" -> ") + type(fn.returns);
+    if (const scriptdocs::Doc* d = scriptdocs::Find(fn.name)) out += std::string("\n") + d->text;
+    return out;
 }
 
 // What the word before the cursor may become: script commands, the language's words, and the names
@@ -2475,7 +2493,16 @@ static void UpdateCompletion(App& app, const char* buf, int len, int cursor) {
             int b = e;
             while (b > 0 && IsNameChar(buf[b - 1])) --b;
             auto it = mobscript::FunctionTable().find(mobscript::LowerCase(std::string(buf + b, buf + e)));
-            if (it != mobscript::FunctionTable().end()) c.signature = Signature(*it->second);
+            int arg = 0, d2 = 0; // which argument the cursor is in: the commas outside nested calls and strings
+            bool quoted = false;
+            for (int k = i + 1; k < cursor; ++k) {
+                if (buf[k] == '"') quoted = !quoted;
+                else if (quoted) continue;
+                else if (buf[k] == '(') ++d2;
+                else if (buf[k] == ')') --d2;
+                else if (buf[k] == ',' && d2 == 0) ++arg;
+            }
+            if (it != mobscript::FunctionTable().end()) c.signature = Signature(*it->second, arg);
             break;
         }
     }
@@ -2674,7 +2701,16 @@ static void ScriptContent(App& app) {
         ImGui::TextDisabled("line %d%s", app.scriptCursorLine, changed ? "  (not applied)" : "");
         if (!app.scriptMessage.empty()) ImGui::TextDisabled("%s", app.scriptMessage.c_str());
         App::Completion& c = app.completion;
-        ImGui::TextDisabled("%s", c.signature.empty() ? "Tab: complete (or indent), Up/Down: pick, Esc: hide the list" : c.signature.c_str());
+        { // the call around the cursor, else the picked suggestion's signature, else how the list works
+            std::string hint = c.signature;
+            if (!c.items.empty() && c.index < static_cast<int>(c.items.size())) {
+                auto it = mobscript::FunctionTable().find(mobscript::LowerCase(c.items[static_cast<size_t>(c.index)]));
+                if (it != mobscript::FunctionTable().end()) hint = Signature(*it->second);
+            }
+            ImGui::PushTextWrapPos(0.0f);
+            ImGui::TextDisabled("%s", hint.empty() ? "Tab: complete (or indent), Up/Down: pick, Esc: hide the list" : hint.c_str());
+            ImGui::PopTextWrapPos();
+        }
         if (app.scriptEditFocus) { ImGui::SetKeyboardFocusHere(); app.scriptEditFocus = false; }
         const ImGuiID editId = ImGui::GetID("##scriptedit");
         const bool editing = ImGui::GetActiveID() == editId;
