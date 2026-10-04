@@ -36,7 +36,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4.3";
+static const char* const UM_VERSION = "1.4.4";
 static bool g_enableAsiCheck = true;
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
@@ -5116,6 +5116,15 @@ static void LoadProfileNames() {
             {0x5D39E0, "MoveUnitInFormation"},               // a selected unit's point + its formation offset
             {0x5318B0, "Unit::ItemInWeaponSlot"},
             {0x5800C0, "Journal::Refresh"},                  // the journal's message indexes (0x7AFEC0...)
+            // The CRT (MSVC 6 byte patterns): how much time a SIMD replacement could save (PENDING #80).
+            {0x6E7960, "crt memcpy"},
+            {0x6EC360, "crt memmove"},
+            {0x6E9CA0, "crt memset"},
+            {0x6ECC70, "crt strlen"},
+            {0x6F0790, "crt strcmp"},
+            {0x6E9D00, "crt strcpy/strcat"},
+            {0x7005AF, "crt malloc"},
+            {0x7005D8, "crt free"},
         };
         for (const auto& k : kKnown) g_profileNames[k.address] = k.name;
     }
