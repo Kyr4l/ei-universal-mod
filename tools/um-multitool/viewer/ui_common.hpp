@@ -82,7 +82,12 @@ inline bool PickSaveFile(const std::string& suggested, std::string& out, const c
     ofn.lpstrFilter = filter.c_str();
     ofn.lpstrDefExt = extension;
     ofn.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST;
+    for (char* c = buf; *c; ++c) if (*c == '/') *c = '\\'; // Windows refuses to open with a '/' in the offered name (Wine does not)
     if (GetSaveFileNameA(&ofn)) { out = buf; return true; }
+    if (CommDlgExtendedError() == FNERR_INVALIDFILENAME) { // the offered name or its folder is not valid: open empty instead
+        buf[0] = '\0';
+        if (GetSaveFileNameA(&ofn)) { out = buf; return true; }
+    }
     return false;
 #else
     std::string quoted = "'";
