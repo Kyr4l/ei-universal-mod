@@ -1,0 +1,801 @@
+# um-texts 1
+=== INSTR Axe
+Hache en métal
+Facile à faire, facile à utiliser !
+
+=== INSTR Battle_Axe
+Hache de combat en métal
+Elle est plus lourde que la hache standard et plus difficile à manier. Mais elle cause plus de dégâts !
+
+=== INSTR Bone_Club
+Gourdin en os
+La plus simple et la plus ancienne des armes.
+
+=== INSTR Bone_Long_Bow
+Arc long en os
+Une flèche tirée avec cet arc a beaucoup d'effet qu'une flèche tirée avec un arc court.
+
+=== INSTR Bone_Short_Bow
+Arc en os court
+Cet arc est renforcé à l'os, ce qui le rend plus performant qu'un arc ordinaire.
+
+=== INSTR Bone_Spear
+Lance en os
+La pointe de cette lance est plus effilée que le modèle en os.
+
+=== INSTR Cheat_Dagger
+Poignard de rituel
+Il a l'air impressionnant mais ce n'est pas une arme de combat.
+
+=== INSTR Crossbow
+Arbalète
+Elle tire moins vite qu'un arc mais peut percer les armures lourdes.
+
+=== INSTR Crystal_Axe
+Hache en cristal
+La meilleure de toutes les haches.
+
+=== INSTR Crystal_Crossbow
+Arbalète en cristal
+La meilleure de toutes les arbalètes.
+
+=== INSTR Crystal_Dagger
+Dague en cristal
+La meilleure de toutes les dagues.
+
+=== INSTR Crystal_Mace
+Masse en cristal
+L'arme absolue, ou presque !
+
+=== INSTR Crystal_Spear
+Lance en cristal
+Impossible de trouver meilleure lance.
+
+=== INSTR Crystal_Sword
+Epée en cristal
+La meilleure de toutes les épées.
+
+=== INSTR Curved_Dagger
+Coutelas
+Sa forme cause plus de dégâts qu'un poignard droit.
+
+=== INSTR Dagger
+Dague
+Arme simple et rapide. Utilisée par derrière, elle est très efficace.
+
+=== INSTR Gipat_Brigand_Boots
+Bottes de chasse de Gipath
+Ceux qui vont souvent en forêt apprécieront la douceur et le confort de ces bottes
+
+=== INSTR Gipat_Brigand_Gloves
+Gantelets de chasse de Gipath
+Ils sont élégants et en plus ils protègent !
+
+=== INSTR Gipat_Brigand_Helm
+Heaume de chasse de Gipath
+Pareil couvre-chef confère à celui qui le porte la force et la ruse d'un fauve.
+
+=== INSTR Gipat_Brigand_Leggins
+Jambières de chasse de Gipath
+Elles sont peut-être un peu chaudes mais elles protègent si bien !
+
+=== INSTR Gipat_Brigand_Pants
+Culotte de chasse de Gipath
+Cette culotte, qui assure une protection efficace, convient aux longues traversées de forêts.
+
+=== INSTR Gipat_Brigand_Plate
+Cape de chasse de Gipath
+En complément du plastron, il protège vos coudes et vos épaules des coups.
+
+=== INSTR Gipat_Brigand_Prototype
+'Gipat_Brigand_Prototype
+'Gipat_Brigand_Prototype
+
+=== INSTR Gipat_Brigand_Shirt
+Plastron de chasse de Gipath
+Protège efficacement et s'avère plus élégant que le plastron standard.
+
+=== INSTR Gipat_High_Boots
+Bottes cousues de Gipath
+Enfiler une paire de bottes cousues, c'est déjà aller dans la bonne direction.
+
+=== INSTR Gipat_High_Gloves
+Gantelets cousus de Gipath
+Ce type de gantelets cousus protège une plus grande portion de bras que des gantelets simples ou même de chasse.
+
+=== INSTR Gipat_High_Helm
+Heaume cousu de Gipath
+En économisant sur ce genre de protection, on peut très vite perdre la tête !
+
+=== INSTR Gipat_High_Leggins
+Jambières cousues de Gipath
+Elégance et protection, ça se paie, forcément !
+
+=== INSTR Gipat_High_Pants
+Bas-de-chausses cousus de Gipath
+Leur coupe leur permet de protéger bien plus qu'une culotte.
+
+=== INSTR Gipat_High_Plate
+Manteau cousu de Gipath
+L'agencement judicieux du tissu permet de protéger tout le bras.
+
+=== INSTR Gipat_High_Prototype
+'Gipat_High_Prototype
+'Gipat_High_Prototype
+
+=== INSTR Gipat_High_Shirt
+Plastron cousu de Gipath
+Il est plus long à confectionner mais il protège mieux les épaules.
+
+=== INSTR Gipat_Highest_Boots
+Grandes bottes lourdes de Gipath
+Le mieux que l'on puisse faire, vues les circonstances.
+
+=== INSTR Gipat_Highest_Gloves
+Longs gantelets lourds de Gipath
+Protègent quasiment tout le bras.
+
+=== INSTR Gipat_Highest_Helm
+Heaume lourd de Gipath
+Il n'a pas l'air très impressionnant mais il protège mieux que tous les autres heaumes de Gipath.
+
+=== INSTR Gipat_Highest_Leggins
+Jambières lourdes de Gipath
+Si vous les portez au-dessus de bas-de-chausses, vous aurez les jambes les mieux protégées de Gipath.
+
+=== INSTR Gipat_Highest_Pants
+Bas-de-chausses lourds de Gipath
+Protègent de la ceinture aux chevilles.
+
+=== INSTR Gipat_Highest_Plate
+Manteau lourd de Gipath
+Aucune autre armure de Gipath protège mieux les bras et les épaules.
+
+=== INSTR Gipat_Highest_Prototype
+'Gipat_Highest_Prototype
+'Gipat_Highest_Prototype
+
+=== INSTR Gipat_Highest_Shirt
+Chemise lourde de Gipath
+Protège tout le bras et les épaules.
+
+=== INSTR Gipat_Low_Boots
+Bottes légères de Gipath
+Au moins, vous n'aurez pas d'échardes, c'est déjà ça !
+
+=== INSTR Gipat_Low_Gloves
+Gantelets légers de Gipath
+Mieux vaut se protéger les mains avec ça qu'avec rien du tout.
+
+=== INSTR Gipat_Low_Helm
+Heaume léger de Gipath
+Au moins, cela protège la tête des coups de soleil.
+
+=== INSTR Gipat_Low_Leggins
+Jambières légères de Gipath
+Protègent les genoux et les pieds des égratignures mais inefficaces contre les vraies armes.
+
+=== INSTR Gipat_Low_Pants
+Culotte légère de Gipath
+On la porte plus pour être décent que pour se protéger vraiment.
+
+=== INSTR Gipat_Low_Plate
+Chemise légère de Gipath
+Si vous la portez avec votre plastron, elle protégera d'autant plus le buste, le cou et les épaules.
+
+=== INSTR Gipat_Low_Prototype
+'Gipat_Low_Prototype
+'Gipat_Low_Prototype
+
+=== INSTR Gipat_Low_Shirt
+Plastron léger de Gipath
+ Protégera vos épaules, votre poitrine et une partie de votre dos contre le soleil.
+
+=== INSTR Gipat_Medium_Boots
+Bottes simples de Gipath
+En raison de leur coupe, elles protègent mieux que les bottes légères.
+
+=== INSTR Gipat_Medium_Gloves
+Gantelets simples de Gipath
+En raison de leur coupe, ils protègent mieux que les gantelets légers.
+
+=== INSTR Gipat_Medium_Helm
+Heaume simple de Gipath
+En raison de sa coupe, il protège mieux que le heaume léger.
+
+=== INSTR Gipat_Medium_Leggins
+Jambières simples de Gipath
+En raison de leur coupe, elles protègent mieux que les jambières légères.
+
+=== INSTR Gipat_Medium_Pants
+Culotte simple de Gipath
+En raison de sa coupe, elle protège mieux qu'une culotte légère.
+
+=== INSTR Gipat_Medium_Plate
+Cape simple de Gipath
+Elle protège mieux qu'une chemise légère.
+
+=== INSTR Gipat_Medium_Prototype
+'Gipath_Medium_Prototype
+'Gipath_Medium_Prototype
+
+=== INSTR Gipat_Medium_Shirt
+Plastron simple de Gipath
+En raison de sa coupe, il protège mieux qu'un plastron léger.
+
+=== INSTR Hadagan_Brigand_Boots
+Jambières khadaganiennes en cuir
+Protègent bien des crocs de bêtes sauvages mais pas des armes.
+
+=== INSTR Hadagan_Brigand_Gloves
+Gantelets khadaganiens en cuir
+Peu appréciés des mâchoires de loups.
+
+=== INSTR Hadagan_Brigand_Helm
+Heaume khadaganien en cuir
+Si on vous frappe à la tête avec un gourdin, il ne vous servira pas à grand-chose. Mais il peut aider contre les coups obliques.
+
+=== INSTR Hadagan_Brigand_Leggins
+Jambières khadaganiennes hautes en cuir
+Ne vous risquez pas à frapper un tigre qui dort avec elles.
+
+=== INSTR Hadagan_Brigand_Pants
+Chausses khadaganiennes en cuir
+Elles vous protégeront de la piqûre d'une araignée mais pas plus.
+
+=== INSTR Hadagan_Brigand_Plate
+Manteau khadaganien en cuir
+Très pratique pour les longues expéditions.
+
+=== INSTR Hadagan_Brigand_Prototype
+'Hadagan_Brigand_Prototype
+'Hadagan_Brigand_Prototype
+
+=== INSTR Hadagan_Brigand_Shirt
+Plastron bas khadaganien en cuir
+Parfait, du moment que vous ayez un vrai plastron par-dessus.
+
+=== INSTR Hadagan_High2_Boots
+Bottes khadaganiennes en plaques
+Associées aux jambières, elles protégeront vos jambes et vos pieds de tous le coups.
+
+=== INSTR Hadagan_High2_Gloves
+Gantelets khadaganiens en plaques
+Peuvent même résister à un coup d'épée.
+
+=== INSTR Hadagan_High2_Helm
+Heaume khadaganien forgé
+Le pire qu'il puisse arriver à celui qui le porte est un mal de tête.
+
+=== INSTR Hadagan_High2_Leggins
+Jambières hautes khadaganiennes en métal forgé
+Assurent une bonne protection supplémentaire de la jambe.
+
+=== INSTR Hadagan_High2_Pants
+Chausses khadaganiennes en plaques
+Remarquable protection des jambes.
+
+=== INSTR Hadagan_High2_Plate
+Cuirasse khadaganienne forgée
+Celui qui la porte devient une véritable statue de métal.
+
+=== INSTR Hadagan_High2_Prototype
+'Hadagan_High2_Prototype
+'Hadagan_High2_Prototype
+
+=== INSTR Hadagan_High2_Shirt
+Plastron khadaganien léger
+Fiabilité et aisance de mouvement.
+
+=== INSTR Hadagan_High_Boots
+Bottes khadaganiennes épaisses en peau
+Excellentes pour une échauffourée mais inefficaces au combat.
+
+=== INSTR Hadagan_High_Gloves
+Gantelets khadaganiens épais en peau
+Protège un peu le bras contre les armes les moins dangereuses.
+
+=== INSTR Hadagan_High_Helm
+Heaume khadaganien léger
+Un tissu doux recouvre un métal résistant.
+
+=== INSTR Hadagan_High_Leggins
+Chausses khadaganiennes en cotte de mailles
+Leur renfort métallique protège des armes mineures.
+
+=== INSTR Hadagan_High_Pants
+Chausses khadaganiennes en peau épaisse
+Protègent bien des armes mineures.
+
+=== INSTR Hadagan_High_Plate
+Cuirasse khadaganienne légère
+Protège des armes les moins dangereuses.
+
+=== INSTR Hadagan_High_Prototype
+'Hadagan_High_Prototype
+'Hadagan_High_Prototype
+
+=== INSTR Hadagan_High_Shirt
+Armure khadaganienne légère
+Assure une protection correcte.
+
+=== INSTR Hadagan_Highest2_Boots
+Bottes lourdes khadaganiennes
+Pas légères mais efficaces.
+
+=== INSTR Hadagan_Highest2_Gloves
+Gantelets lourds khadaganiens
+Pas très pratiques pour écrire une lettre mais ce n'est pas là leur usage.
+
+=== INSTR Hadagan_Highest2_Helm
+Heaume lourd khadaganien
+On peut le frapper pendant des heures avec un marteau : il résiste !
+
+=== INSTR Hadagan_Highest2_Leggins
+Jambières lourdes khadaganiennes
+Le meilleur type de jambières métalliques.
+
+=== INSTR Hadagan_Highest2_Pants
+Chausses lourdes khadaganiennes
+Confortables et fiables : les meilleures de l'empire.
+
+=== INSTR Hadagan_Highest2_Plate
+Cuirasse lourde khadaganienne
+Une épée peut s'y briser !
+
+=== INSTR Hadagan_Highest2_Prototype
+'Hadagan_Highest2_Prototype
+'Hadagan_Highest2_Prototype
+
+=== INSTR Hadagan_Highest2_Shirt
+Chemise lourde khadaganienne
+Très bonne protection !
+
+=== INSTR Hadagan_Highest_Boots
+Bottes khadaganiennes renforcées
+Bottes renforcées avec des plaques de métal.
+
+=== INSTR Hadagan_Highest_Gloves
+Gantelets khadaganiens renforcés
+Les plaques en métal forgé assurent une bien meilleure protection.
+
+=== INSTR Hadagan_Highest_Helm
+Heaume khadaganien renforcé
+Protège correctement la tête.
+
+=== INSTR Hadagan_Highest_Leggins
+Jambières khadaganiennes renforcées
+Les jambières en cotte de mailles renforcées avec des plaques métalliques vous protégeront des coups de poignard dans le dos !
+
+=== INSTR Hadagan_Highest_Pants
+Chausses khadaganiennes en cotte de mailles renforcée
+Chausses en cotte de mailles renforcée avec plaques métalliques.
+
+=== INSTR Hadagan_Highest_Plate
+Cuirasse khadaganienne renforcée
+Cuirasse en cotte de mailles renforcée avec plaques métalliques.
+
+=== INSTR Hadagan_Highest_Prototype
+'Hadagan_Highest_Prototype
+'Hadagan_Highest_Prototype
+
+=== INSTR Hadagan_Highest_Shirt
+Chemise khadaganienne en cotte de mailles renforcée
+Chemise en cotte de mailles efficacement renforcée avec plaques.
+
+=== INSTR Hadagan_Low_Boots
+Bottes légères
+Bottes ordinaires en toile.
+
+=== INSTR Hadagan_Low_Gloves
+Gantelets légers
+Gantelets en toile, juste bons pour éviter les entorses.
+
+=== INSTR Hadagan_Low_Helm
+Capuche khadaganienne
+Capuche standard. La qualité est en rapport avec le prix.
+
+=== INSTR Hadagan_Low_Leggins
+Haut-de-chausses légers khadaganiens
+La seconde couche de tissu ne peut être considérée comme une protection valable.
+
+=== INSTR Hadagan_Low_Pants
+Chausses légères
+Couvrent la nudité, mais n'ont pas d'autre utilité.
+
+=== INSTR Hadagan_Low_Plate
+haut col léger khadaganien
+Assure une protection supplémentaire aux épaules et aux bras.
+
+=== INSTR Hadagan_Low_Prototype
+'Hadagan_Low_Prototype
+'Hadagan_Low_Prototype
+
+=== INSTR Hadagan_Low_Shirt
+Chemise légère
+Simple chemise sans manche.
+
+=== INSTR Hadagan_Medium_Boots
+Bottes légères khadaganiennes
+Au moins, elles sont étanches.
+
+=== INSTR Hadagan_Medium_Gloves
+Gantelets khadaganiens en toile
+Jolis, mais pas très utiles.
+
+=== INSTR Hadagan_Medium_Helm
+Turban khadaganien
+Les riches comme les pauvres peuvent en porter mais la qualité de l'étoffe diffère.
+
+=== INSTR Hadagan_Medium_Leggins
+Bas-de-chausses hauts khadaganiens
+Vêtement khadaganien typique
+
+=== INSTR Hadagan_Medium_Pants
+Bas-de-chausses khadaganiens
+De simples chausses, car il faut bien porter quelque chose.
+
+=== INSTR Hadagan_Medium_Plate
+Manteau khadaganien
+Plus l'homme est riche, plus son manteau est impressionnant.
+
+=== INSTR Hadagan_Medium_Prototype
+'Hadagan_Medium_Prototype
+'Hadagan_Medium_Prototype
+
+=== INSTR Hadagan_Medium_Shirt
+Chemise longue khadaganienne
+Mieux vaut la porter à la taverne qu'au combat.
+
+=== INSTR Hammer
+Marteau de combat
+Marteau évolué. Inutile à la maison mais pratique au combat.
+
+=== INSTR Jun_High_Boots
+Jambières légères joons
+Quel talent ! Les artisans actuels ne sont plus à la hauteur.
+
+=== INSTR Jun_High_Gloves
+Gantelets joons
+Les artisans actuels n'ont plus le savoir-faire nécessaire.
+
+=== INSTR Jun_High_Helm
+Heaume joon
+Les secrets de ce genre d'artisanat sont désormais perdus.
+
+=== INSTR Jun_High_Leggins
+Jambières montantes joons
+Aujourd'hui, il faudrait des années pour en faire de pareilles.
+
+=== INSTR Jun_High_Pants
+Chausses joons
+Même les meilleurs artisans ne peuvent plus en faire.
+
+=== INSTR Jun_High_Plate
+Cuirasse joon
+Plus un seul artisan n'est capable d'en faire.
+
+=== INSTR Jun_High_Prototype
+'Jun_High_Prototype
+'Jun_High_Prototype
+
+=== INSTR Jun_High_Shirt
+Chemise joon
+L'artisanat actuel est incapable d'en faire autant.
+
+=== INSTR Kania_Brigand_Boots
+Bottes caniennes lourdes
+Les fauves s'y brisent les dents !
+
+=== INSTR Kania_Brigand_Gloves
+Gantelets caniens lourds
+Protègent bien contre les coups de poignard.
+
+=== INSTR Kania_Brigand_Helm
+Heaume canien lourd
+Protège la tête et pas simplement du froid.
+
+=== INSTR Kania_Brigand_Leggins
+Haut-de-chausses caniens lourds
+Assurent une protection valable et permet la liberté des mouvements.
+
+=== INSTR Kania_Brigand_Pants
+Chausses caniennes lourdes
+Bon choix pour un guerrier souhaitant être protégé tout en étant à l'aise dans son armure.
+
+=== INSTR Kania_Brigand_Plate
+Manteau lourd canien
+Si celui qui le porte est poignardé dans le dos, il aura l'occasion de se venger !
+
+=== INSTR Kania_Brigand_Prototype
+'Kania_Brigand_Prototype
+'Kania_Brigand_Prototype
+
+=== INSTR Kania_Brigand_Shirt
+Pourpoint lourd canien
+Un bon compromis entre le confort et la protection.
+
+=== INSTR Kania_High2_Boots
+Bottes militaires caniennes
+Faites pour les longues marches des guerriers.
+
+=== INSTR Kania_High2_Gloves
+Longs gantelets militaires caniens 
+Efficaces contre les armes légères.
+
+=== INSTR Kania_High2_Helm
+Heaume militaire canien
+Est du plus bel effet et protège efficacement.
+
+=== INSTR Kania_High2_Leggins
+Jambières militaires caniennes
+Approuvées par l'Empereur pour ses troupes.
+
+=== INSTR Kania_High2_Pants
+Chausses militaires caniennes en cotte de mailles
+Ce n'est pas n'importe quelle flèche qui les percera !
+
+=== INSTR Kania_High2_Plate
+Cuirasse militaire canienne
+Aucun brigand ne se risquerait à poignarder dans le dos celui qui la porte.
+
+=== INSTR Kania_High2_Prototype
+'Kania_High2_Prototype
+'Kania_High2_Prototype
+
+=== INSTR Kania_High2_Shirt
+Chemise militaire canienne en cotte de mailles
+Chemise standard de l'armée canienne, de bonne qualité.
+
+=== INSTR Kania_High_Boots
+Bottes caniennes de combat légères
+Ne vous attendez pas à ce qu'elles vous protègent efficacement.
+
+=== INSTR Kania_High_Gloves
+Gantelets canien de combat légers
+Assure une protection supplémentaire aux mains.
+
+=== INSTR Kania_High_Helm
+Heaume canien léger en métal
+Bonne protection contre les coups latéraux mais pas contre ceux portés de face.
+
+=== INSTR Kania_High_Leggins
+Jambières caniennes légères en métal
+Les plaques de métal ne protégeront pas des coups portés par derrière.
+
+=== INSTR Kania_High_Pants
+Chausses caniennes en peau épaisse
+Vous protégeront des crocs d'un loup mais pas de ceux d'un tigre.
+
+=== INSTR Kania_High_Plate
+Cuirasse canienne légère
+Assure une protection supplémentaire contre les armes tranchantes.
+
+=== INSTR Kania_High_Prototype
+'Kania_High_Prototype
+'Kania_High_Prototype
+
+=== INSTR Kania_High_Shirt
+Pourpoint canien en peau épaisse
+Vous protégera d'une flèche tirée par un arc court.
+
+=== INSTR Kania_Highest2_Boots
+Bottes militaires caniennes lourdes
+Elles peuvent vous servir à botter des Trolls.
+
+=== INSTR Kania_Highest2_Gloves
+Gantelets militaires caniens lourds
+Avec eux, les mains ne craignent rien.
+
+=== INSTR Kania_Highest2_Helm
+Heaume militaire canien lourd
+Quelle protection !
+
+=== INSTR Kania_Highest2_Leggins
+Jambières militaires caniennes lourdes
+Réservées aux guerriers caniens qui montent en première ligne.
+
+=== INSTR Kania_Highest2_Pants
+Chausses militaires caniennes lourdes
+Vous pourrez vous asseoir sur une grenouille toxique sans vous en apercevoir !
+
+=== INSTR Kania_Highest2_Plate
+Cuirasse militaire canienne lourde
+Presque rien ne peut la percer.
+
+=== INSTR Kania_Highest2_Prototype
+'Kania_Highest2_Prototype
+'Kania_Highest2_Prototype
+
+=== INSTR Kania_Highest2_Shirt
+Chemise canienne lourde en cotte de mailles
+Cette chemise en double maillage fin tient debout quand on la pose par terre.
+
+=== INSTR Kania_Highest_Boots
+Bottes caniennes en cotte de mailles
+Elles ne couvrent pas aussi bien que les bottes légères mais au moins elles protègent ce qu'elles couvrent !
+
+=== INSTR Kania_Highest_Gloves
+Gantelets militaires caniens renforcés
+Les renforts en métal protègent mieux que les gantelets militaires légers.
+
+=== INSTR Kania_Highest_Helm
+Heaume canien ailé
+L'avantage est surtout psychologique : il est vraiment horrible !
+
+=== INSTR Kania_Highest_Leggins
+Jambières caniennes lourdes
+Pas pour danser mais pour se battre !
+
+=== INSTR Kania_Highest_Pants
+Chausses caniennes en cotte de mailles
+Le maillage épais assure une protection supplémentaire.
+
+=== INSTR Kania_Highest_Plate
+Cuirasse canienne lourde
+Avec ses renforts forgés, elle protège mieux qu'une cuirasse légère.
+
+=== INSTR Kania_Highest_Prototype
+'Kania_Highest_Prototype
+'Kania_Highest_Prototype
+
+=== INSTR Kania_Highest_Shirt
+Chemise canienne en cotte de mailles
+Meilleure qu'un pourpoint en cuir, elle amortit les coups.
+
+=== INSTR Kania_Low_Boots
+Bottes caniennes pour fermiers
+Disons qu'elles sont étanches !
+
+=== INSTR Kania_Low_Gloves
+Gantelets caniens pour fermiers
+Bons pour le combat s'il s'agit d'un combat à une foire de village.
+
+=== INSTR Kania_Low_Helm
+Chapeau canien pour fermiers
+Utile pour se protéger du soleil mais ne sert à rien au combat.
+
+=== INSTR Kania_Low_Leggins
+Haut-de-chausses caniens légers
+Chauds, conviennent bien aux pauvres.
+
+=== INSTR Kania_Low_Pants
+Chausses caniennes pour fermiers
+Vous protégeront des crocs d'un loup mais pas de ceux d'un tigre.
+
+=== INSTR Kania_Low_Plate
+Manteau canien léger
+Ne protège pas efficacement des armes mais dissimule la cotte de mailles.
+
+=== INSTR Kania_Low_Prototype
+'Kania_Low_Prototype
+'Kania_Low_Prototype
+
+=== INSTR Kania_Low_Shirt
+Chemise canienne pour fermiers
+Idéale pour travailler mais pas pour combattre.
+
+=== INSTR Kania_Medium_Boots
+Bottes de chasse caniennes
+Excellentes bottes de chasse.
+
+=== INSTR Kania_Medium_Gloves
+Gantelets de chasse caniens
+Semblables à la variante pour fermiers.
+
+=== INSTR Kania_Medium_Helm
+Chapeau de chasse canien
+Effet garanti avec sa plume décorative.
+
+=== INSTR Kania_Medium_Leggins
+Haut-de-chausses caniens de chasse
+Garantis contre les engelures !
+
+=== INSTR Kania_Medium_Pants
+Chausses caniennes de chasse
+Leur coupe les rend confortables pour les longues marches.
+
+=== INSTR Kania_Medium_Plate
+Pourpoint de chasse canien
+Ce n'est pas n'importe quel loup que le percera. Les poignards, c'est une autre affaire !
+
+=== INSTR Kania_Medium_Prototype
+'Kania_Medium_Prototype
+'Kania_Medium_Prototype
+
+=== INSTR Kania_Medium_Shirt
+Pourpoint de chasse canien
+Protège bien les bras grâce aux manches longues.
+
+=== INSTR Long_Bow
+Arc long
+Bonne puissance de flèche et grande vitesse de tir.
+
+=== INSTR Long_Crossbow
+Arbalète lourde
+Plus lente qu'une arbalète standard mais plus puissante.
+
+=== INSTR Long_Spear
+Grande lance
+Face à elle, les ennemis les plus résolus restent à distance !
+
+=== INSTR Long_Sword
+Grande épée
+Une arme avec laquelle il faut compter, surtout si le métal est de qualité.
+
+=== INSTR Mace
+Masse
+Plus efficace mais aussi plus chère que le marteau.
+
+=== INSTR Saber
+Sabre en métal
+Le sabre est d'un maniement plus rapide que la grande épée mais il inflige moins de dégâts.
+
+=== INSTR Short_Bow
+Arc court
+La puissance a été sacrifiée au profit de la vitesse.
+
+=== INSTR Spear
+Lance
+Excellente arme quand elle faite avec du métal de qualité.
+
+=== INSTR Spiked_Club
+Masse lourde à pointes
+Quand on sait s'en servir, cette arme est terrifiante. Et même si on ne sait pas, elle fait toujours son effet dans les rangs ennemis.
+
+=== INSTR Spiked_Mace
+Masse à pointes
+Les pointes rendent cette masse terrifiante.
+
+=== INSTR Stone_Axe
+Hache en pierre
+La hache la plus simple. Elle est peu efficace mais son prix est accessible.
+
+=== INSTR Stone_Battle_Axe
+Hache de combat en pierre
+Plus lourde que la hache en pierre, elle fait plus de dégâts mais elle est moins facile à manier.
+
+=== INSTR Stone_Battle_Hammer
+Marteau lourd en pierre
+Avec ce marteau, vous frapperez peut-être moins vite qu'avec d'autres armes mais chaque coup infligera de sérieux dégâts.
+
+=== INSTR Stone_Dagger
+Dague en pierre
+Arme simple mais tranchante. Il ne faut pas beaucoup de matériau pour la fabriquer.
+
+=== INSTR Stone_Formatter_drive_C
+lecteur C : formater
+En fait, vous ne verrez JAMAIS ce message. Et si jamais vous le voyez, devinez ce que se passera !
+
+=== INSTR Stone_Hammer
+Marteau en pierre
+Utile, aussi bien à la forge qu'au combat.
+
+=== INSTR Stone_Short_Bow
+Arc (flèches avec pointes en pierre)
+La pierre n'est pas le meilleur matériau. Bon pour les novices.
+
+=== INSTR Stone_Spear
+Lance en pierre
+La plus simple de toutes les lances.
+
+=== INSTR Stone_Sword
+Epée en pierre
+Pour ceux qui n'arrivent pas à trouver une épée en métal.
+
+=== INSTR Wand_1
+Baguette magique en pierre
+Ce type de baguette peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
+
+=== INSTR Wand_2
+Baguette magique en os
+Ce type de baguette peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
+
+=== INSTR Wand_3
+Baguette magique en métal
+Ce type de baguette peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
+
+=== INSTR Wand_4
+Baguette magique en métal gravé
+Ce type de baguette peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
+

@@ -1,0 +1,140 @@
+# um-texts 1
+=== tip 40100
+Accept
+
+=== tip 40101
+Back to main menu
+
+=== tip 40200
+Create network character
+Move to the Network Character
+Creation screen
+
+=== tip 40201
+Change the name of the clan
+You can change the name of the clan
+your network character belongs to.
+You cannot, however, change the name of the network 
+character.
+
+=== tip 40202
+Delete network character
+Your network character will be deleted.
+Once deleted you cannot restore
+the network character.
+
+=== tip 40203
+View character
+You can view your network character's
+properties, equipment and the content of
+inventory. Or you can change his clothes, give him 
+weapons and spells and distribute experience.
+
+=== tip 40300
+Next
+Move to the network characters' Equipment,
+Skills and Abilities screen.
+Note: you can move to the Equipment screen 
+only after you enter the character's name and 
+only if the properties' balance 
+equals zero.
+
+=== tip 40301
+Back
+Go back to the Network 
+Character Selection 
+screen.
+
+=== tip 40302
+Cancel
+Cancel all changes to the character's
+properties. All values will be
+reset to the default ones.
+
+=== tip 40400
+Scroll right
+The portraits of available network characters 
+will be scrolled to the right
+
+=== tip 40401
+Scroll left
+The portraits of available network characters 
+will be scrolled to the left
+
+=== tip 40500
+Next
+Return to the Network Character 
+Selection screen; your newly created 
+character will be added.
+
+=== tip 40501
+Back
+Go back to the Network Character Creation
+screen. Note: all changes to equipment,
+skills and abilities will be lost.
+
+=== tip 40502
+Cancel
+Cancel all changes to the character's
+equipment, skills and abilities. All values will be
+reset to the default ones.
+
+=== tip 40600
+Confirm
+
+=== tip 40601
+Refuse
+
+=== tip 40602
+Add address
+Add address to
+Address Book
+
+=== tip 40603
+Delete address
+Delete address 
+from Address Book
+
+=== tip 40610
+To get server information
+Press "refresh" button to retrieve the list 
+of servers started at the moment. 
+Note that your computer must be connected 
+to the Internet.
+
+=== tip 40611
+Add/remove server in the address book 
+For your convenience you can bookmark a server in your address book. 
+These servers will be always in the list (they are marked yellow). 
+Add server to the address book: pressing the "Add/remove" button 
+calls up the window to enter/edit the server address. In case one of the 
+active servers has been selected from the list at the moment, its address 
+will appear in the window. 
+Remove server: choose a server from the address book and press the
+"add/remove" button.
+
+=== tip 40612
+Private server 
+Open server is being registered in the list of active servers available to all 
+players. To start an open server the player must have access to the Internet. 
+A private server is one on a local network, and players are not required 
+to have access to the Internet. 
+Note that players can join a private server from the Internet only if 
+they have its IP address, and if the server is connected to the Internet.
+
+=== tip 40613
+Password 
+Create a password protected server
+
+=== tip 41000
+Confirm
+Confirm swap.
+
+=== tip 41001
+Refuse
+Refuse swap.
+
+=== tip 41003
+Exit
+Exit swap screen.
+

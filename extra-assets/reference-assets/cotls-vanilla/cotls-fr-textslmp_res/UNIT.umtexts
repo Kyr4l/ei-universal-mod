@@ -1,0 +1,517 @@
+# um-texts 1
+=== UNIT GolemHorizontalF20
+Golem
+
+=== UNIT LMP_Unique_Undead_Hadagan_BMZombie_17
+Mage Zombie
+
+=== UNIT lmp_Banshee_Gipath_Fighter_2
+Spectre faible
+
+=== UNIT lmp_Banshee_Gipath_Fighter_4
+Spectre
+
+=== UNIT lmp_Banshee_Gipath_Fighter_6
+Spectre puissant
+
+=== UNIT lmp_Banshee_Gipath_Fighter_8
+Spectre très puissant
+
+=== UNIT lmp_Banshee_Gipath_Mage_2
+Spectre faible
+
+=== UNIT lmp_Banshee_Gipath_Mage_4
+Spectre
+
+=== UNIT lmp_Banshee_Gipath_Mage_6
+Spectre puissant
+
+=== UNIT lmp_Banshee_Gipath_Mage_8
+Spectre très puissant
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_13
+Spectre des sables
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_15
+Spectre des sables puissant
+
+=== UNIT lmp_Banshee_Hadagan_Mage_13
+Spectre des sables
+
+=== UNIT lmp_Banshee_Hadagan_Mage_15
+Spectre des sables puissant
+
+=== UNIT lmp_Bat_Gipath_1
+Petite chauve-souris
+
+=== UNIT lmp_Bat_Gipath_3
+Jeune chauve-souris
+
+=== UNIT lmp_Bat_Gipath_5
+Chauve-souris adulte
+
+=== UNIT lmp_Bat_Gipath_7
+Vieille chauve-souris
+
+=== UNIT lmp_Beholder_Red_Ingos_11
+Spectateur adulte
+
+=== UNIT lmp_Beholder_Red_Ingos_9
+Jeune spectateur
+
+=== UNIT lmp_Boar_Black_5
+Marcassin noir
+
+=== UNIT lmp_Boar_Black_7
+Sanglier noir
+
+=== UNIT lmp_Boar_Red_1
+Marcassin
+
+=== UNIT lmp_Boar_Red_3
+Sanglier
+
+=== UNIT lmp_Cyclops_14
+Enfant cyclope
+
+=== UNIT lmp_Cyclops_16
+Cyclope adolescent
+
+=== UNIT lmp_Decorative_Cow
+Vache
+
+=== UNIT lmp_Decorative_Deer
+Cerf
+
+=== UNIT lmp_Decorative_Hare_Red
+Lièvre
+
+=== UNIT lmp_Decorative_Hare_White
+Lièvre
+
+=== UNIT lmp_Decorative_Horse_Red
+Cheval
+
+=== UNIT lmp_Decorative_Horse_White
+Cheval
+
+=== UNIT lmp_Decorative_Pig
+Cochon
+
+=== UNIT lmp_Dog_Ingos_11
+Chien dressé
+
+=== UNIT lmp_Dog_Ingos_9
+Chien
+
+=== UNIT lmp_Dragonkin_2
+Très jeune Homme-lézard
+
+=== UNIT lmp_Dragonkin_4
+Jeune Homme-lézard
+
+=== UNIT lmp_Dragonkin_6
+Homme-lézard adulte
+
+=== UNIT lmp_Dragonkin_8
+Vieil Homme-lézard
+
+=== UNIT lmp_Driad_Black_Archer_11
+Tireur du Peuple de la forêt (Clan blanc)
+
+=== UNIT lmp_Driad_Black_Archer_9
+Archer du Peuple de la forêt (Clan blanc)
+
+=== UNIT lmp_Driad_Black_Mage_11
+Maître-mage du Peuple de la forêt (Clan blanc)
+
+=== UNIT lmp_Driad_Black_Mage_9
+Mage du Peuple de la forêt (Clan blanc)
+
+=== UNIT lmp_Driad_Blue_Archer_11
+Tireur du Peuple de la forêt (Clan noir)
+
+=== UNIT lmp_Driad_Blue_Archer_9
+Archer du Peuple de la forêt (Clan noir)
+
+=== UNIT lmp_Driad_Blue_Mage_11
+Maître-mage du Peuple de la forêt (Clan noir)
+
+=== UNIT lmp_Driad_Blue_Mage_9
+Mage du Peuple de la forêt (Clan noir)
+
+=== UNIT lmp_Elemental_Ice_10
+Elémental de neige (petit)
+
+=== UNIT lmp_Elemental_Ice_12
+Elémental de neige (grand)
+
+=== UNIT lmp_Goblin_Archer_1
+Jeune Gobelin
+
+=== UNIT lmp_Goblin_Archer_3
+Gobelin
+
+=== UNIT lmp_Goblin_Archer_5
+Expert Gobelin
+
+=== UNIT lmp_Goblin_Archer_7
+Gobelin expérimenté
+
+=== UNIT lmp_Goblin_Fighter_1
+Jeune Gobelin
+
+=== UNIT lmp_Goblin_Fighter_3
+Gobelin
+
+=== UNIT lmp_Goblin_Fighter_5
+Expert Gobelin
+
+=== UNIT lmp_Goblin_Fighter_7
+Gobelin expérimenté
+
+=== UNIT lmp_Human_Gipath_Archer_2
+Femme brigand sans expérience
+
+=== UNIT lmp_Human_Gipath_Archer_4
+Femme brigand
+
+=== UNIT lmp_Human_Gipath_Archer_6
+Tireuse brigand
+
+=== UNIT lmp_Human_Gipath_Archer_8
+Tireuse brigand expérimentée
+
+=== UNIT lmp_Human_Gipath_Fighter_2
+Brigand sans expérience
+
+=== UNIT lmp_Human_Gipath_Fighter_4
+Brigand
+
+=== UNIT lmp_Human_Gipath_Fighter_6
+Brigand expérimenté
+
+=== UNIT lmp_Human_Gipath_Fighter_8
+Brigand très expérimenté
+
+=== UNIT lmp_Human_Gipath_Mage_2
+Sorcière brigand sans expérience
+
+=== UNIT lmp_Human_Gipath_Mage_4
+Sorcière brigand
+
+=== UNIT lmp_Human_Gipath_Mage_6
+Sorcière brigand expérimentée
+
+=== UNIT lmp_Human_Gipath_Mage_8
+Sorcière brigand très expérimentée
+
+=== UNIT lmp_Human_Hadagan_Archer_14
+Archer débutant
+
+=== UNIT lmp_Human_Hadagan_Archer_16
+Archer
+
+=== UNIT lmp_Human_Hadagan_Archer_20
+Archer caporal
+
+=== UNIT lmp_Human_Hadagan_Archer_24
+Archer de la Garde impériale
+
+=== UNIT lmp_Human_Hadagan_Archer_28
+Sergent de la Garde impériale
+
+=== UNIT lmp_Human_Hadagan_Fighter_14
+Soldat débutant
+
+=== UNIT lmp_Human_Hadagan_Fighter_16
+Soldat
+
+=== UNIT lmp_Human_Hadagan_Fighter_20
+Caporal
+
+=== UNIT lmp_Human_Hadagan_Fighter_24
+Deuxième-classe de la Garde impériale
+
+=== UNIT lmp_Human_Hadagan_Fighter_28
+Sergent de la Garde impériale
+
+=== UNIT lmp_Human_Hadagan_Mage_14
+Guerrier-mage débutant
+
+=== UNIT lmp_Human_Hadagan_Mage_16
+Guerrier-mage
+
+=== UNIT lmp_Human_Hadagan_Mage_20
+Caporal guerrier-mage
+
+=== UNIT lmp_Human_Hadagan_Mage_24
+Guerrier-mage de la Garde impériale
+
+=== UNIT lmp_Human_Hadagan_Mage_28
+Sergent de la Garde impériale
+
+=== UNIT lmp_Human_Ingos_Archer_10
+Archer
+
+=== UNIT lmp_Human_Ingos_Archer_12
+Tireur
+
+=== UNIT lmp_Human_Ingos_Fighter_10
+Lutteur
+
+=== UNIT lmp_Human_Ingos_Fighter_12
+Lutteur expérimenté
+
+=== UNIT lmp_Human_Ingos_Mage_10
+Mage
+
+=== UNIT lmp_Human_Ingos_Mage_12
+Mage expérimenté
+
+=== UNIT lmp_Hyena_13
+Jeune hyène
+
+=== UNIT lmp_Hyena_15
+Hyène adulte
+
+=== UNIT lmp_Octopus_10
+Esclave Tentacule
+
+=== UNIT lmp_Octopus_12
+Garde Tentacule
+
+=== UNIT lmp_Ogre_Hadagan_14
+Jeune Ogre des sables
+
+=== UNIT lmp_Ogre_Hadagan_16
+Ogre des sables adulte
+
+=== UNIT lmp_Orc_Archer_2
+Jeune archer Orque
+
+=== UNIT lmp_Orc_Archer_4
+Archer Orque
+
+=== UNIT lmp_Orc_Archer_6
+Archer Orque adulte
+
+=== UNIT lmp_Orc_Archer_8
+Archer Orque expérimenté
+
+=== UNIT lmp_Orc_Fighter_2
+Jeune lutteur Orque
+
+=== UNIT lmp_Orc_Fighter_4
+Lutteur Orque
+
+=== UNIT lmp_Orc_Fighter_6
+Lutteur Orque adulte
+
+=== UNIT lmp_Orc_Fighter_8
+Lutteur Orque expérimenté
+
+=== UNIT lmp_Orc_Mage_2
+Jeune prophète
+
+=== UNIT lmp_Orc_Mage_4
+Prophète
+
+=== UNIT lmp_Orc_Mage_6
+Prophète expérimenté
+
+=== UNIT lmp_Orc_Mage_8
+Vieux prophète
+
+=== UNIT lmp_Shadow_21
+Ombre prophète
+
+=== UNIT lmp_Shadow_25
+Ombre sorcière
+
+=== UNIT lmp_Shadow_29
+Ombre mage
+
+=== UNIT lmp_Skeleton_7
+Squelette ordinaire
+
+=== UNIT lmp_Skeleton_8
+Squelette de soldat
+
+=== UNIT lmp_Spider_13
+Jeune araignée
+
+=== UNIT lmp_Spider_15
+Araignée adulte
+
+=== UNIT lmp_Succubus_Hadagan_13
+Jeune Harpie
+
+=== UNIT lmp_Succubus_Hadagan_15
+Harpie adulte
+
+=== UNIT lmp_Tiger_Red_2
+Jeune tigre
+
+=== UNIT lmp_Tiger_Red_4
+Tigre adulte
+
+=== UNIT lmp_Tiger_Red_6
+Vieux tigre
+
+=== UNIT lmp_Tiger_Red_8
+Tigre puissant
+
+=== UNIT lmp_Tiger_White_11
+Tigre des neiges adulte
+
+=== UNIT lmp_Tiger_White_9
+Jeune tigre des neiges
+
+=== UNIT lmp_Toad_1
+Jeune crapaud venimeux
+
+=== UNIT lmp_Toad_3
+Crapaud venimeux adulte
+
+=== UNIT lmp_Toad_5
+Vieux crapaud venimeux
+
+=== UNIT lmp_Toad_7
+Crapaud venimeux puissant
+
+=== UNIT lmp_Troll_Black_14
+Jeune Troll noir
+
+=== UNIT lmp_Troll_Black_16
+Troll noir adulte
+
+=== UNIT lmp_Troll_Blue_10
+Jeune Troll bleu
+
+=== UNIT lmp_Troll_Blue_12
+Troll bleu adulte
+
+=== UNIT lmp_Unique_Cyclops_Leader_20
+Cyclope puissant
+
+=== UNIT lmp_Unique_Deer_King_13
+Cerf royal
+
+=== UNIT lmp_Unique_Dragon_Plague_Ancient_30
+Seigneur des dragons
+
+=== UNIT lmp_Unique_Dragon_Plague_Soldiers_24
+Dragon esclave
+
+=== UNIT lmp_Unique_Dragon_Plague_Wingmans_26
+Dragon courtisan
+
+=== UNIT lmp_Unique_Dragonkin_Amulet_7
+Gardien de l'amulette des Hommes-lézards
+
+=== UNIT lmp_Unique_Goblin_Gogo
+Chef des Gobelins
+
+=== UNIT lmp_Unique_Human_Aizet-Bek_17
+Aiset-Bek
+
+=== UNIT lmp_Unique_Human_Betrayer_Slave
+Esclave traître
+
+=== UNIT lmp_Unique_Human_Betrayer_Soldiers
+Soldat
+
+=== UNIT lmp_Unique_Human_Captain_15
+Capitaine Tilvar
+
+=== UNIT lmp_Unique_Human_Jun_Scientists_13
+Savant
+
+=== UNIT lmp_Unique_Human_Junophile_Friend_13
+Ami du savant
+
+=== UNIT lmp_Unique_Human_Messanger_20
+Messager
+
+=== UNIT lmp_Unique_Human_Pleshivy_15
+Le chauve
+
+=== UNIT lmp_Unique_Human_Portal_Warlord_32
+Commandant Iriskell
+
+=== UNIT lmp_Unique_Human_Summoner_24
+Maître des ombres
+
+=== UNIT lmp_Unique_Octopus_Magister_15
+Seigneur des Tentacules
+
+=== UNIT lmp_Unique_Orc_Enchanted_Followers_4
+Garde Orque
+
+=== UNIT lmp_Unique_Orc_Enchanted_Shaman_7
+Chef prophète
+
+=== UNIT lmp_Unique_Pig_Boryka_1
+Quatre-sous
+
+=== UNIT lmp_Unique_Tiger_Rampaging_12
+Tigre tueur
+
+=== UNIT lmp_Unique_Toad_Cannibal_5
+Crapaud Ogre
+
+=== UNIT lmp_Unique_Undead_Hadagan_8
+Soldat mort-vivant
+
+=== UNIT lmp_Unique_Undead_Hadagan_Leader_11
+Nécromancien mort-vivant
+
+=== UNIT lmp_Unique_Unicorn_Corrupted_13
+Jeune Licorne noire
+
+=== UNIT lmp_Unique_Willowisp_Mother_11
+Mère des Feux follets
+
+=== UNIT lmp_Willowisp_1
+Faible Feu follet
+
+=== UNIT lmp_Willowisp_3
+Feu follet
+
+=== UNIT lmp_Willowisp_5
+Feu follet chaud
+
+=== UNIT lmp_Willowisp_7
+Feu follet brûlant
+
+=== UNIT lmp_Wolf_Gray_2
+Jeune loup
+
+=== UNIT lmp_Wolf_Gray_4
+Loup adulte
+
+=== UNIT lmp_Wolf_White_5
+Vieux loup
+
+=== UNIT lmp_Wolf_White_7
+Loup puissant
+
+=== UNIT lmp_Zombie_Female_20
+Femme brigand zombie
+
+=== UNIT lmp_Zombie_Female_24
+Femme garde zombie
+
+=== UNIT lmp_Zombie_Female_28
+Femme mercenaire zombie
+
+=== UNIT lmp_Zombie_Male_20
+Zombie soldat
+
+=== UNIT lmp_Zombie_Male_24
+Zombie soldat expérimenté
+
+=== UNIT lmp_Zombie_Male_28
+Zombie soldat vétéran
+

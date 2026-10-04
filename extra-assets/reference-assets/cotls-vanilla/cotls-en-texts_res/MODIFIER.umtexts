@@ -1,0 +1,121 @@
+# um-texts 1
+=== MODIFIER a1
+Extra Area
+Doubles the spell's initial coverage area.
+A+
+
+=== MODIFIER a2
+Ultra Area
+Triples the area covered by the spell.
+A++
+
+=== MODIFIER d1
+Extra Duration
+Doubles the spell's duration.
+D+
+
+=== MODIFIER d2
+Ultra Duration
+Triples the spell's duration.
+D++
+
+=== MODIFIER e1
+Extra Effect
+Doubles the spell's effect.
+E+
+
+=== MODIFIER e2
+Ultra Effect
+Triples the spell's effect.
+E++
+
+=== MODIFIER fe
+Enemy Filter
+The spell will only affect the Magician's enemies.
+:En
+
+=== MODIFIER ff
+Friend Filter
+The spell will only affect the Magician's allies.
+:Fr
+
+=== MODIFIER fg
+Goblin Filter
+The spell will only affect Goblins.
+:Go
+
+=== MODIFIER fh
+Human Filter
+The spell will only affect humans.
+:Hu
+
+=== MODIFIER fl
+Lizard Filter
+The spell will only affect Lizards.
+:Dr
+
+=== MODIFIER fo
+Orc Filter
+The spell will only affect Orcs.
+:Or
+
+=== MODIFIER ic
+Item: Continuous
+You can insert the spell into an object and it will be cast continuously, as long as the object has enough energy.
+Ic
+
+=== MODIFIER im1
+Item: Extra Energy
+Decreases the amount of energy used by the inserted spell.
+P-
+
+=== MODIFIER im2
+Item: Ultra Energy
+Significantly decreases the amount of energy used by the inserted spell.
+P--
+
+=== MODIFIER ir1
+Item: Extra Regeneration
+Speeds up energy regeneration in the object carrying this spell.
+G+
+
+=== MODIFIER ir2
+Item: Ultra Regeneration
+Significantly speeds up energy regeneration in the object carrying this spell.
+G++
+
+=== MODIFIER it
+Item: Trigger
+You can insert the spell into an object. The spell will be triggered when the object is used or struck.
+It
+
+=== MODIFIER m1
+Extra Energy
+Decreases the amount of stamina used when casting the spell.
+M-
+
+=== MODIFIER m2
+Ultra Energy
+Significantly decreases the amount of stamina used when casting the spell.
+M--
+
+=== MODIFIER r1
+Extra Range
+Doubles the spell's range.
+R+
+
+=== MODIFIER r2
+Ultra Range
+Triples the spell's range.
+R++
+
+=== MODIFIER t1
+Extra Targets
+The spell will also affect another target nearby.
+T+
+
+=== MODIFIER t2
+Ultra Targets
+The spell will also affect two other targets nearby.
+T++
+

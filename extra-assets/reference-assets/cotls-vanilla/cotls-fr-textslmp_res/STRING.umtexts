@@ -1,0 +1,314 @@
+# um-texts 1
+=== string disconnect
+Le serveur ne répond pas !
+
+=== string disconnect_msg
+Partie interrompue : le serveur est désactivé ou des erreurs de connexion sont apparues
+
+=== string lmp_allod_name_0
+Gipath
+
+=== string lmp_allod_name_1
+Ingos
+
+=== string lmp_allod_name_2
+Suslanger
+
+=== string lmp_allod_name_3
+Caverne
+
+=== string lmp_camping_abort
+Transfert rapide vers la Base impossible !
+
+=== string lmp_camping_count
+Temps restant jusqu'au transfert rapide vers la Base : % secondes.
+
+=== string lmp_camping_start
+Transfert rapide vers la Base en préparation
+
+=== string lmp_cannot_connect
+Connexion impossible !
+
+=== string lmp_cannot_connect_msg
+Des problèmes de connexion au serveur risquent de survenir.
+
+=== string lmp_connection_0
+Nom du serveur :
+
+=== string lmp_connection_1
+Joueurs :
+
+=== string lmp_connection_10
+Réactualiser
+
+=== string lmp_connection_11
+Ajouter/Supprimer
+
+=== string lmp_connection_12
+Nom
+
+=== string lmp_connection_13
+#
+
+=== string lmp_connection_14
+Ile
+
+=== string lmp_connection_15
+Ping
+
+=== string lmp_connection_16
+Serveur privé
+
+=== string lmp_connection_17
+Mot de passe
+
+=== string lmp_connection_18
+Entrez le mot de passe
+
+=== string lmp_connection_19
+Entrez l'adresse IP du serveur
+
+=== string lmp_connection_2
+Joueurs max :
+
+=== string lmp_connection_20
+Recherche de la liste des serveurs
+
+=== string lmp_connection_21
+Mot de passe requis
+
+=== string lmp_connection_3
+Base :
+
+=== string lmp_connection_4
+Quête :
+
+=== string lmp_connection_5
+IP :
+
+=== string lmp_connection_6
+Ping :
+
+=== string lmp_connection_7
+Nouveau serveur :
+
+=== string lmp_connection_8
+Connexion en cours…
+
+=== string lmp_connection_9
+PK :
+
+=== string lmp_deletepers
+Supprimer personnage
+
+=== string lmp_deletepers_msg
+Le personnage sera supprimé et vous ne pourrez plus le récupérer/ Etes-vous sûr(e) de vouloir continuer ?
+
+=== string lmp_exch_they_offer
+Echanger ?
+
+=== string lmp_exch_we_offer
+Echangé !
+
+=== string lmp_female_voice
+Voix : féminine
+
+=== string lmp_male_voice
+Voix : masculine
+
+=== string lmp_no_pers
+Aucun personnage pour la partie multijoueur !
+
+=== string lmp_no_pers_msg
+Aucun personnage n'est disponible pour la partie multijoueur. Vous devez créer un nouveau personnage avant de commencer la partie.
+
+=== string lmp_pers_delete
+Supprimer
+
+=== string lmp_pers_new
+Nouveau
+
+=== string lmp_pers_redress
+Afficher
+
+=== string lmp_pers_rename
+Changer de clan
+
+=== string lmp_pers_tall
+Hauteur
+
+=== string lmp_pers_tall_desc
+La taille de votre personnage peut varier entre 0 et 100 unités. La taille d'un personnage n'affecte pas ses caractéristiques.
+
+=== string lmp_pk_off
+interdit
+
+=== string lmp_pk_on
+permis
+
+=== string lmp_player_banned
+Le joueur %s n'a pas le droit de rejoindre la partie
+
+=== string lmp_player_connected
+Le joueur %s s'est connecté à la partie
+
+=== string lmp_player_disconnected
+Le joueur %s a quitté la partie
+
+=== string lmp_player_kicked
+Le joueur %s a été expulsé de la partie
+
+=== string lmp_player_lost_connection
+Le joueur %s a perdu sa connexion au serveur
+
+=== string lmp_points_left
+Equilibre
+
+=== string lmp_points_left_desc
+Les caractéristiques du personnage doivent être équilibrées : par exemple, si vous augmentez un paramètre, un autre sera réduit d'autant. Le montant total constituant l'équilibre des caractéristiques doit être égal à zéro. Si ce n'est pas le cas, vous ne pourrez pas valider la création de votre personnage. 
+
+=== string lmp_quest_canceled
+Quête %s annulée
+
+=== string lmp_quest_completed
+Quête %s terminée
+
+=== string lmp_quest_taken
+Quête acceptée : %s
+
+=== string lmp_select_voice
+Sélection des voix
+
+=== string lmp_select_voice_desc
+Vous pouvez choisir l'une des voix de cette liste pour votre personnage réseau. Cliquez sur le nom de la voix pour la sélectionner.
+
+=== string lmp_server_full
+Connexion impossible !
+
+=== string lmp_server_full_msg
+Le serveur ne peut pas prendre en charge plus de joueurs pour le moment.
+
+=== string lmp_status_base
+sur la Base
+
+=== string lmp_status_camp
+échange
+
+=== string lmp_status_connect
+entre
+
+=== string lmp_status_zone
+sur la carte
+
+=== string lmp_trade_canceled
+Le joueur %s a refusé l'échange
+
+=== string lmp_trade_requested
+Le joueur %s vous propose un échange
+
+=== string lmp_voices
+Choix des voix
+
+=== string lmp_wrong_password
+Mot de passe incorrect
+
+=== string lmp_wrong_password_msg
+Connexion impossible. Veuillez entrer le mot de passe correct.
+
+=== string lmp_wrong_protocol
+Connexion impossible !
+
+=== string lmp_wrong_protocol_msg
+Version du protocole de communication incorrecte
+
+=== string lmp_you_are_banned
+Vous avez été déconnecté de la partie.
+
+=== string lmp_you_are_banned_msg
+L'adresse IP de votre ordinateur a été déconnectée de la partie en cours d'exécution sur ce serveur.
+
+=== string lmp_zone_disabled
+Accès à la Zone de jeu interdit
+
+=== string lmp_zone_enabled
+Accès à la Zone de jeu disponible
+
+=== string reserved_02
+Partie mise en pause par le joueur %s
+
+=== string reserved_04
+Veuillez patienter…
+
+=== string reserved_05
+Réservé
+
+=== string reserved_06
+Réservé
+
+=== string reserved_07
+Réservé
+
+=== string reserved_08
+Réservé
+
+=== string reserved_09
+Réservé
+
+=== string reserved_10
+Réservé
+
+=== string reserved_11
+Réservé
+
+=== string reserved_12
+Réservé
+
+=== string reserved_13
+Réservé
+
+=== string reserved_14
+Réservé
+
+=== string reserved_15
+Réservé
+
+=== string reserved_16
+Réservé
+
+=== string reserved_17
+Réservé
+
+=== string reserved_19
+Réservé
+
+=== string reserved_20
+Réservé
+
+=== string reserved_22
+Bonjour,
+Si vous lisez ce message, c'est que vous avez réussi à accéder au fichiers techniques du jeu. Les développeurs tiennent à vous féliciter pour cette action héroïque, mais vous préviennent par la même occasion que vous osez modifier quoi que ce soit avec vos petits doigts boudinés, le jeu, selon toute probabilité, risque de ne plus fonctionner correctement.
+Bon courage,
+Kamikaze,
+Auteur des textes
+
+=== string xch_accept
+Confirmer l'échange
+
+=== string xch_current_money
+Votre argent :
+
+=== string xch_money_offer
+Montant que vous proposez pour un échange :
+
+=== string xch_money_remote
+Montant qui vous est proposé pour un échange :
+
+=== string xch_remote_cancel
+Refuser
+
+=== string xch_remote_header
+Réponse de votre partenaire pour l'échange proposé :
+
+=== string xch_remote_ok
+Accepté
+

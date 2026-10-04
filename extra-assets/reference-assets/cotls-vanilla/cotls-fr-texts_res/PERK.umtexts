@@ -1,0 +1,497 @@
+# um-texts 1
+=== PERK Actions
+Actions
+Les actions déterminent la vitesse avec laquelle un personnage utilise ses armes et celle avec laquelle il jette des sorts.
+
+=== PERK Archery
+Tir à l'arc
+Aptitude à utiliser des armes de longue portée : arcs et arbalètes. Le résultat de l'attaque d'un personnage (les chances qu'il a d'atteindre ses ennemis) est fonction de sa compétence à manier ce type particulier d'arme (Compétence) et de sa Dextérité.
+
+=== PERK Astral
+Magie astrale
+Cette compétence vous permet de créer et d'utiliser des sorts de l'Académie de magie astrale. Ces sorts sont de natures très différentes, par exemple Soins ou Paralysie. Les capacités magiques dépendent de la compétence dans l'école de magie concernée (Compétence) et de l'intelligence du personnage.
+
+=== PERK Awareness
+Conscience
+Conscience
+
+=== PERK Backstab
+Attaque dans le dos
+Compétence spéciale qui permet au personnage de frapper mortellement son ennemi par derrière. Si votre personnage parvient à s'approcher de sa cible par derrière, il la poignardera automatiquement et causera plus de dégâts qu'avec un coup ordinaire.
+
+=== PERK Dexterity
+Dextérité
+La dextérité détermine le "degré d'endurance" d'un personnage (sa capacité à utiliser des sorts difficiles) et ses "Actions" (la vitesse avec laquelle il peut frapper ou jeter des sorts). La dextérité influe aussi sur les paramètres "Attaque" et "Utiliser/Voler".
+
+=== PERK Elemental
+Magie élémentale
+Compétence qui vous permet de créer et d'utiliser des sorts de l'Académie de magie élémentale. Ce sont des sorts très destructeurs, par exemple des boules de feu. Les capacités magiques dépendent de la compétence dans une école particulière de magie (Compétence) et de l'intelligence du personnage.
+
+=== PERK Encumbrance
+Encombrement :
+Détermine le poids porté par votre personnage. Plus il porte d'armes et d'armures et plus celles-ci sont lourdes, plus la charge du personnage sera grande. S'il dépasse la valeur "Charge maximale" (fonction de la Force du personnage), il ne peut plus courir.
+
+=== PERK Experience
+Expérience
+Plus l'expérience d'un personnage est élevée, meilleures sont sa "Santé" et son "Endurance". L'expérience peut également être utilisée pour accroître les compétences et les capacités. L'expérience acquise au cours du jeu sera distribuée de manière équitable entre tous les membres de votre équipe, mais sa valeur changera en fonction de l'intelligence des personnages.
+
+=== PERK Health
+Santé
+La santé détermine le taux de dégâts que votre personnage peut subir. Quand sa valeur atteint 0 ou moins, le personnage meurt.
+
+=== PERK Intelligence
+Intelligence
+L'intelligence détermine la quantité d'expérience que votre personnage peut acquérir en accomplissant ses missions. Plus sa valeur est élevée, plus l'expérience acquise est importante. L'intelligence influe également sur la quantité d'endurance utilisée pour jeter les sorts (plus l'intelligence est élevée, moins il y a d'endurance dépensée). L'intelligence affecte aussi le paramètre "Connaissance de la magie".
+
+=== PERK Mana
+Endurance
+L'endurance détermine les réserves de force d'un personnage. Les personnages ayant plus d'endurance peuvent jeter des sorts plus complexes et plus éprouvants.
+
+=== PERK Melee
+Mêlée
+Compétence pour manier des armes de combat rapproché : poignards, haches, lances, etc. Le résultat d'une attaque de personnage (les chances qu'il a de toucher ses ennemis) est déterminé par sa compétence à manier ce type d'arme (Compétence) et fonction de sa dextérité.
+
+=== PERK Move
+Mouvement
+La vitesse d'un mouvement détermine la rapidité avec laquelle un personnage se déplace.
+
+=== PERK Science
+Utiliser/Voler
+Compétence qui permet au personnage d'ouvrir des serrures, de faire fonctionner des machines qu'il ne connaît pas et de voler des choses. Il est basé sur la Compétence et fonction de la Dextérité. Plus cette compétence est élevée, plus les procédés utilisés par votre personnage sont complexes et plus grandes seront les chances que l'ennemi ne remarque pas sa perte.
+
+=== PERK Sense
+Magie sensorielle
+Compétence qui permet au personnage de créer et d'utiliser les sorts de l'Académie de magie sensorielle. Ce sont essentiellement des sorts d'informations, par exemple le sort Œil d'aigle. Les capacités magiques dépendent de la compétence dans une école particulière de magie (Compétence) et de l'intelligence du personnage.
+
+=== PERK Stealing
+Vol
+L'art du vol
+
+=== PERK Stealth
+Chapardage
+Chapardage
+
+=== PERK Strength
+Force
+La force affecte le paramètre "Santé" des personnages : plus leur force est élevée, plus ils peuvent encaisser de dégâts. Un taux élevé de force vous permet de porter plus de poids, par exemple une plus grosse armure.
+
+=== PERK Tame
+Dressage
+Dressage
+
+=== PERK acid0
+Magie des acides
+La technique spéciale des sorts avec acides est enseignée par l'Académie de magie élémentale. Cette technique vous permet de recourir à des sorts plus complexes.
+
+=== PERK acid1
+Apprenti
+Apprenti en acides
+
+=== PERK acid2
+Expert
+Expert en acides
+
+=== PERK acid3
+Maître
+Maître en acides
+
+=== PERK axe0
+Hache
+Compétence accrue à la hache. Quand un personnage doté de cette capacité utilise une hache, son "Attaque" et sa "Défense" sont plus efficaces.
+
+=== PERK axe1
+Spécialiste
+Spécialiste de la hache
+
+=== PERK axe2
+Expert
+Expert de la hache
+
+=== PERK axe3
+Maître
+Maître de la hache
+
+=== PERK bludgeon0
+Bâton
+Compétence accrue avec les bâtons et les armes similaires. Quand un personnage ayant cette capacité utilise de telles armes, son "Attaque" et sa "Défense" sont plus efficaces.
+
+=== PERK bludgeon1
+Spécialiste
+Spécialiste du bâton
+
+=== PERK bludgeon2
+Expert
+Expert du bâton
+
+=== PERK bludgeon3
+Maître
+Maître du bâton
+
+=== PERK bow0
+Arc
+Compétence accrue à l'arc. Quand un personnage doté de cette capacité utilise un arc, son "Attaque" est plus efficace, mais sa "Défense" n'est pas meilleure.
+
+=== PERK bow1
+Spécialiste
+Spécialiste de l'arc
+
+=== PERK bow2
+Expert
+Expert de l'arc
+
+=== PERK bow3
+Maître
+Maître de l'arc
+
+=== PERK bs0
+Attaque dans le dos
+Si votre personnage s'approche discrètement d'un ennemi et le frappe par derrière, il infligera des dégâts plus importants.
+
+=== PERK bs1
+Augmenté
+Augmenté
+
+=== PERK bs2
+X2
+X2
+
+=== PERK bs3
+X3
+X3
+
+=== PERK dagger0
+Dague
+Compétence accrue à la dague. Quand un personnage possédant cette capacité utilise une dague, son "Attaque" et sa "Défense" sont plus efficaces.
+
+=== PERK dagger1
+Spécialiste
+Spécialiste de la dague
+
+=== PERK dagger2
+Expert
+Expert de la dague
+
+=== PERK dagger3
+Maître
+Maître de la dague
+
+=== PERK dex0
+Dextérité
+Paramètre de dextérité augmenté
+
+=== PERK dex1
+Augmenté
+Augmenté
+
+=== PERK dex2
+X2
+X2
+
+=== PERK dex3
+X3
+X3
+
+=== PERK divination0
+Magie sensorielle
+Compétence accrue pour les sorts de regard de l'Académie de magie sensorielle. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK divination1
+Apprenti
+Apprenti
+
+=== PERK divination2
+Expert
+Expert
+
+=== PERK divination3
+Maître
+Maître
+
+=== PERK domination0
+Magie de contrôle
+Compétence accrue pour les sorts de contrôle de l'Académie de magie astrale. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK domination1
+Apprenti
+Apprenti
+
+=== PERK domination2
+Expert
+Expert
+
+=== PERK domination3
+Maître
+Maître
+
+=== PERK enchantments0
+Magie astrale
+Compétence accrue pour tous les sorts de l'Académie de magie élémentale. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK enchantments1
+Apprenti
+Apprenti astral
+
+=== PERK enchantments2
+Expert
+Expert astral
+
+=== PERK enchantments3
+Maître
+Maître astral
+
+=== PERK fire0
+Magie du feu
+Compétence accrue pour les sorts de feu de l'Académie de magie élémentale. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK fire1
+Apprenti
+Apprenti du feu
+
+=== PERK fire2
+Expert
+Expert du feu
+
+=== PERK fire3
+Maître
+Maître du feu
+
+=== PERK healing0
+Magie de soins
+Compétence accrue pour les sorts de guérison de l'Académie de magie astrale. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK healing1
+Apprenti
+Apprenti
+
+=== PERK healing2
+Expert
+Expert
+
+=== PERK healing3
+Maître
+Maître
+
+=== PERK health0
+Santé
+Paramètre de santé augmenté. 
+
+=== PERK health1
+Augmenté
+Augmenté
+
+=== PERK health2
+X2
+X2
+
+=== PERK health3
+X3
+X3
+
+=== PERK illusion0
+Magie sensorielle
+Compétence accrue pour tous les sorts de l'Académie de magie sensorielle. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK illusion1
+Apprenti
+Apprenti sensoriel
+
+=== PERK illusion2
+Expert
+Expert sensoriel
+
+=== PERK illusion3
+Maître
+Maître sensoriel
+
+=== PERK int0
+Intelligence
+Paramètre d'intelligence augmenté
+
+=== PERK int1
+Augmenté
+Augmenté
+
+=== PERK int2
+X2
+X2
+
+=== PERK int3
+X3
+X3
+
+=== PERK lift0
+Encombrement
+Un personnage entraîné à soulever des poids peut porter une charge plus lourde, par exemple une armure.
+
+=== PERK lift1
+Augmenté
+Augmenté
+
+=== PERK lift2
+X2
+X2
+
+=== PERK lift3
+X3
+X3
+
+=== PERK lightning0
+Magie foudroyante
+Compétence accrue pour les sorts de foudre de l'Académie de magie élémentale. Cette capacité vous permet d'utiliser des sorts plus complexes.
+
+=== PERK lightning1
+Apprenti
+Apprenti de la foudre
+
+=== PERK lightning2
+Expert
+Expert de la foudre
+
+=== PERK lightning3
+Maître
+Maître de la foudre
+
+=== PERK mana0
+Endurance
+Paramètre d'endurance augmenté
+
+=== PERK mana1
+Augmenté
+Augmenté
+
+=== PERK mana2
+X2
+X2
+
+=== PERK mana3
+X3
+X3
+
+=== PERK night0
+Vision nocturne
+Sans cette capacité, l'angle de vision d'un personnage est réduit de moitié la nuit. La vision nocturne lui permet de mieux voir dans l'obscurité (quand cette capacité est à son maximum, la vue du personnage est aussi bonne qu'en plein jour).
+
+=== PERK night1
+Augmenté
+Augmenté
+
+=== PERK night2
+X2
+X2
+
+=== PERK night3
+X3
+X3
+
+=== PERK quickness0
+Actions
+L'augmentation de la vitesse des actions permet au personnage de frapper plus souvent ou de jeter des sorts plus rapides.
+
+=== PERK quickness1
+Augmenté
+Augmenté
+
+=== PERK quickness2
+X2
+X2
+
+=== PERK quickness3
+X3
+X3
+
+=== PERK spear0
+Lance
+Compétence accrue à la lance. Quand un personnage doté de cette compétence utilise une lance, son "Attaque" et sa "Défense" sont plus efficaces.
+
+=== PERK spear1
+Spécialiste
+Spécialiste de la lance
+
+=== PERK spear2
+Expert
+Expert de la lance
+
+=== PERK spear3
+Maître
+Maître de la lance
+
+=== PERK spirit0
+Récupération
+Plus grande récupération d'endurance. Diminue le temps de repos après avoir couru ou jeté un sort.
+
+=== PERK spirit1
+Augmenté
+Augmenté
+
+=== PERK spirit2
+X2
+X2
+
+=== PERK spirit3
+X3
+X3
+
+=== PERK str0
+Force
+Paramètre de "force" augmenté
+
+=== PERK str1
+Augmenté
+Augmenté
+
+=== PERK str2
+X2
+X2
+
+=== PERK str3
+X3
+X3
+
+=== PERK sword0
+Epée
+Compétence accrue à l'épée. Quand un personnage doté de cette capacité utilise une épée, son "Attaque" et sa "Défense" sont plus efficaces.
+
+=== PERK sword1
+Spécialiste
+Spécialiste de l'épée
+
+=== PERK sword2
+Expert
+Expert de l'épée
+
+=== PERK sword3
+Maître
+Maître de l'épée
+
+=== PERK vitality0
+Régénération
+Les personnages ayant une capacité de régénération augmentée peuvent récupérer plus vite leur état de santé.
+
+=== PERK vitality1
+Augmenté
+Augmenté
+
+=== PERK vitality2
+X2
+X2
+
+=== PERK vitality3
+X3
+X3
+
+=== PERK xbow0
+Arbalète
+Compétence accrue à l'arbalète. Quand un personnage doté de cette capacité utilise une arbalète, son "Attaque" et sa "Défense" sont plus efficaces.
+
+=== PERK xbow1
+Spécialiste
+Spécialiste de l'arbalète
+
+=== PERK xbow2
+Expert
+Expert de l'arbalète
+
+=== PERK xbow3
+Maître
+Maître de l'arbalète
+

@@ -1,0 +1,125 @@
+# um-texts 1
+=== SPELL acid_column
+Acid fountain
+This is an area effect spell. A fountain of acid causes damage to everyone around.
+
+=== SPELL acid_fog
+Acid fog
+This spell is directed at a location and not at a specific target. It causes acid damage to everyone inside the fog.
+
+=== SPELL acid_ray
+Acid blast
+A spray of acid which always hits the target.
+
+=== SPELL antimagic
+Protection from magic
+This spell protects you from the Magic of any of the three Elements.
+
+=== SPELL arrow
+Fire arrow
+An arrow of fire which always hits the target.
+
+=== SPELL clairvoyence
+Clairvoyance
+Allows you to see enemies around the point at which the spell is directed.
+
+=== SPELL eagle_sight
+Eagle sight
+Increases the range of your sight by one and a half times.
+
+=== SPELL enlarge
+Enlargement
+Enlarges the size of the object hit by the spell.
+
+=== SPELL feeblemind
+Feeblemind
+Prevents your enemy from casting spells for some time (to cast this spell, the target must be visible).
+
+=== SPELL fireball
+Fireball
+This is an area effect spell. The fireball will cause damage to everyone near the explosion.
+
+=== SPELL firewall
+Fire wall
+This is an area effect spell. A wall of fierce fire damages everyone within its range.
+
+=== SPELL fireworks
+Fireworks
+Will only attract the attention of an enemy who sees or hears it, without raising a general alarm.
+
+=== SPELL healing
+Healing
+Restores health damaged in combat.
+
+=== SPELL infravision
+Night vision
+Enables one to see as well in darkness as in daylight.
+
+=== SPELL inv_lit
+Celestial lightning
+This is an area effect spell. The lightning strike causes damage to everyone who is close by.
+
+=== SPELL invisibility
+Invisibility
+This spell doubles your invisibility to enemies.
+
+=== SPELL lightning
+Lightning
+A lightning strike which always hits the target.
+
+=== SPELL litnwall
+Lightning barrier
+This is an area effect spell. The barrier causes lightning damage to anyone trying to cross it.
+
+=== SPELL prot_acid
+Protection from acid
+The person protected by this spell becomes less vulnerable to acid effects.
+
+=== SPELL prot_electro
+Protection from lightning
+The person protected by this spell becomes less vulnerable to lightning effects.
+
+=== SPELL prot_fire
+Protection from fire
+The person protected by this spell becomes less vulnerable to the effects of fire.
+
+=== SPELL regeneration
+Regeneration
+Increases the speed of health recovery.
+
+=== SPELL shrink
+Shrinking
+This shrinks the target object.
+
+=== SPELL silence
+Silence
+This doubles your "silence" value making it twice harder for the enemy to hear you.
+
+=== SPELL slow
+Deceleration
+Allows you to slow down the speed of blows which are struck and of spell casting.
+
+=== SPELL speed
+Haste
+Allows you to increase the speed of blows which are struck and of spell casting.
+
+=== SPELL strength
+Strengthen
+Allows you to temporarily increase a character's health and the damage he can cause to enemies.
+
+=== SPELL stun
+Paralysis
+Allows to paralyse your enemy for a certain period of time (to cast it, the enemy must be visible to you).
+
+=== SPELL teleport
+Teleportation
+Instant displacement from one point to another (to cast this spell, you must see the destination).
+
+=== SPELL vision_fog
+Field of vision
+Allows you to see what the spell's target is seeing...
+
+=== SPELL weak
+Weaken
+Allows you to temporarily weaken your opponent and lessen the damage he can cause.
+

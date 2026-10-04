@@ -1,0 +1,689 @@
+# um-texts 1
+=== WEAPON Axe Adamantium
+Hache en adamantite
+Cette arme est très chère mais c'est de l'argent bien placé.
+
+=== WEAPON Axe Bronze
+Hache en bronze
+La plus simple des haches métalliques. Ne comptez pas trop dessus.
+
+=== WEAPON Axe Iron
+Hache en fer
+Elle est plus efficace que celle en bronze, mais on peut trouver de meilleurs matériaux.
+
+=== WEAPON Axe Meteoric
+Hache en météorite
+Dans les mains d'un guerrier expérimenté, elle fait des dégâts dans les rangs ennemis.
+
+=== WEAPON Axe Mithrill
+Hache en mithrill
+Légère, tranchante, bien aiguisée... et chère.
+
+=== WEAPON Axe Steel
+Hache en acier
+Elle ne peut pas venir à bout de n'importe quelle armure mais elle reste dangereuse dans les mains d'un bon guerrier.
+
+=== WEAPON Battle_Axe Adamantium
+Hache de combat en adamantite
+Elle vaut bien le prix qu'on y met.
+
+=== WEAPON Battle_Axe Bronze
+Hache de combat en bronze
+Pas beaucoup mieux qu'une hache simple en bronze.
+
+=== WEAPON Battle_Axe Iron
+Hache de combat en fer
+Il existe de meilleurs matériaux, si vous pouvez vous les permettre.
+
+=== WEAPON Battle_Axe Meteoric
+Hache de combat en météorite
+Vous serez bien en peine de trouver une armure qui lui résiste. Elle perce même les coffres de rois.
+
+=== WEAPON Battle_Axe Mithrill
+Hache de combat en mithrill
+Excellente ! le prix est en rapport.
+
+=== WEAPON Battle_Axe Steel
+Hache de combat en acier
+Elle est de qualité mais votre ennemi aura peut-être une armure qui lui résiste.
+
+=== WEAPON Bone_Club Burned_Bones
+Gourdin en os (os dur)
+Parfait pour frapper un orque égaré.
+
+=== WEAPON Bone_Club Decayed_Bones
+Gourdin en os (os fin)
+Un gourdin, ni plus ni moins.
+
+=== WEAPON Bone_Club Dragon_Black_Bones
+Gourdin en os (os de dragon bleu)
+Et si vous le modifiez avec un sort ?
+
+=== WEAPON Bone_Club Dragon_Green_Bones
+Gourdin en os (os de dragon vert)
+Ses coups ne sont pas des caresses.
+
+=== WEAPON Bone_Club Dragon_Red_Bones
+Gourdin en os (os de dragon rouge)
+Là, c'est bien plus qu'un simple gourdin !
+
+=== WEAPON Bone_Club Dry_Bones
+Gourdin en os (os épais)
+Avec ça, vous aurez raison d'un gobelin mais peut-être pas d'un orque.
+
+=== WEAPON Bone_Club Scrab_Bones
+Gourdin en os (en coquille de conque)
+La coquille de conque est un bon matériau pour de nombreuses armes.
+
+=== WEAPON Bone_Long_Bow Burned_Bones
+Arc long en os (os dur)
+Mieux qu'un arc en os sec.
+
+=== WEAPON Bone_Long_Bow Decayed_Bones
+Arc long en os (os fin)
+Bon pour l'entraînement ou la chasse.
+
+=== WEAPON Bone_Long_Bow Dragon_Black_Bones
+Arc long en os (os de dragon bleu)
+Remarquable matériau quand il est bien utilisé.
+
+=== WEAPON Bone_Long_Bow Dragon_Green_Bones
+Arc long en os (os de dragon vert)
+Peu d'autres arcs en os peuvent égaler celui-ci.
+
+=== WEAPON Bone_Long_Bow Dragon_Red_Bones
+Arc long en os (os de dragon rouge)
+Un des meilleurs types de grands arcs en os.
+
+=== WEAPON Bone_Long_Bow Dry_Bones
+Arc long en os (os épais)
+Pas le meilleur choix mais on peut trouver pire.
+
+=== WEAPON Bone_Long_Bow Scrab_Bones
+Arc long en os (coquille de conque)
+Il est bon d'en avoir un avec soi quand on se balade.
+
+=== WEAPON Bone_Short_Bow Burned_Bones
+Arc court en os (os dur)
+Les flèches décochées avec cet arc ne sont pas dangereuses que pour les gobelins.
+
+=== WEAPON Bone_Short_Bow Decayed_Bones
+Arc court en os (os fin)
+Ce n'est pas une mauvaise arme, mais certains ennemis ne la remarqueraient même pas.
+
+=== WEAPON Bone_Short_Bow Dragon_Black_Bones
+Arc court en os (os de dragon bleu)
+Impossible de trouver un meilleur arc, sauf ceux associés à la magie.
+
+=== WEAPON Bone_Short_Bow Dragon_Green_Bones
+Arc court en os (os de dragon vert)
+Le nec plus ultra !
+
+=== WEAPON Bone_Short_Bow Dragon_Red_Bones
+Arc court en os (os de dragon rouge)
+Un des meilleurs types d'arcs en os.
+
+=== WEAPON Bone_Short_Bow Dry_Bones
+Arc court en os (os épais)
+Mieux qu'un arc standard mais essayez de trouver un meilleur matériau.
+
+=== WEAPON Bone_Short_Bow Scrab_Bones
+Arc court en os (coquille de conque)
+Même les tatous n'apprécieraient pas d'être atteints par une flèche tirée par cet arc.
+
+=== WEAPON Bone_Spear Burned_Bones
+Lance en os (os dur)
+Bonne arme contre les gobelins, mais c'est tout.
+
+=== WEAPON Bone_Spear Decayed_Bones
+Lance en os (os fin)
+Plus légère que les lances en pierre, sinon sans grand intérêt.
+
+=== WEAPON Bone_Spear Dragon_Black_Bones
+Lance en os (os de dragon bleu)
+La seule façon d'améliorer une lance en os de dragon bleu est de lui associer un sort puissant.
+
+=== WEAPON Bone_Spear Dragon_Green_Bones
+Lance en os (os de dragon vert)
+Une lance en os de dragon est une bonne chose. La même dotée de pouvoirs magiques, c'est encore mieux.
+
+=== WEAPON Bone_Spear Dragon_Red_Bones
+Lance en os (os de dragon rouge)
+Une lance en os de dragon constitue une arme valable. Mais un mage pourrait la rendre encore meilleure.
+
+=== WEAPON Bone_Spear Dry_Bones
+Lance en os (os épais)
+Elle est plus pointue qu'une lance en os fin, mais pensez tout de même à vous procurer une meilleure arme.
+
+=== WEAPON Bone_Spear Scrab_Bones
+Lance en os (coquille de conque)
+Voilà une arme digne d'intérêt !
+
+=== WEAPON Cheat_Dagger Adamantium
+Poignard rituel en adamantite
+Ce métal est bien trop cher pour le gâcher sur un tel objet !
+
+=== WEAPON Cheat_Dagger Bronze
+Poignard rituel en bronze
+Mieux vaudrait songer à trouver quelque chose de mieux.
+
+=== WEAPON Cheat_Dagger Iron
+Poignard rituel en fer
+Le fer, le bronze : la différence est minime.
+
+=== WEAPON Cheat_Dagger Meteoric
+Poignard rituel en météorite
+Dommage d'utiliser un matériau si noble pour un tel usage.
+
+=== WEAPON Cheat_Dagger Mithrill
+Poignard rituel en mithrill
+On peut trouver meilleur usage au mithrill !
+
+=== WEAPON Cheat_Dagger Steel
+Poignard rituel en acier
+Il a un bel aspect mais son utilité est minime.
+
+=== WEAPON Crossbow Adamantium
+Arbalète en adamantite
+Avec ça en main, vous pouvez vous permettre d'être un peu impoli.
+
+=== WEAPON Crossbow Bronze
+Arbalète en bronze
+Ne vous attendez pas à ce qu'elle fasse des miracles !
+
+=== WEAPON Crossbow Iron
+Arbalète en fer
+Comme pour toutes les armes en métal, c'est mieux que le bronze mais ça ne vaut pas l'acier.
+
+=== WEAPON Crossbow Meteoric
+Arbalète en météorite
+La seule façon de l'améliorer est d'ajouter un ressort de plus.
+
+=== WEAPON Crossbow Mithrill
+Arbalète en mithrill
+Arme robuste de longue portée. Adoptez-la !
+
+=== WEAPON Crossbow Steel
+Arbalète en acier
+Les carreaux tirés avec une arbalète en acier percent les meilleures armures.
+
+=== WEAPON Crystal_Axe Diamond
+Hache en diamant
+La seule chose qui surpasse une hache en diamant est une hache en diamant dotée de magie.
+
+=== WEAPON Crystal_Crossbow Diamond
+Arbalète en diamant
+C'est un peu onéreux mais un carreau tiré pas cette arbalète peut percer n'importe quelle armure.
+
+=== WEAPON Crystal_Dagger Diamond
+Dague en diamant
+Un coup porté avec une dague en diamant équivaut à une décharge d'éclair.
+
+=== WEAPON Crystal_Mace Diamond
+Masse en diamant
+Même une armure en météorite ne résiste pas.
+
+=== WEAPON Crystal_Short_Bow Diamond
+Arc court en diamant
+A placer aux côtés des joyaux de la couronne !
+
+=== WEAPON Crystal_Spear Diamond
+Lance en diamant
+Aucune armure ne résiste à cette lance.
+
+=== WEAPON Crystal_Sword Diamond
+Epée en diamant
+Superbe dans la main et terrible au combat !
+
+=== WEAPON Curved_Dagger Adamantium
+Coutelas en adamantite
+Voilà une arme pour le vrai combat, pas pour les bagarres de tavernes.
+
+=== WEAPON Curved_Dagger Bronze
+Coutelas en bronze
+Plus fiable qu'une dague ordinaire et plus légère qu'une épée, mais on peut vraiment trouver mieux.
+
+=== WEAPON Curved_Dagger Iron
+Coutelas en fer
+Ce n'est pas le plus mauvais coutelas, mais celui en acier est meilleur.
+
+=== WEAPON Curved_Dagger Meteoric
+Coutelas en météorite
+Le fin du fin. Mais il faut vider sa bourse pour l'avoir.
+
+=== WEAPON Curved_Dagger Mithrill
+Coutelas en mithrill
+Légère, tranchante, bien aiguisée... et chère.
+
+=== WEAPON Curved_Dagger Steel
+Coutelas en acier
+Peut faire des merveilles dans les mains d'un guerrier expérimenté.
+
+=== WEAPON Dagger Adamantium
+Dague en adamantite
+Une des meilleures dagues qui existe en ce bas monde.
+
+=== WEAPON Dagger Bronze
+Dague en bronze
+Pour tuer un ennemi avec cette dague, frappez dans le dos.
+
+=== WEAPON Dagger Iron
+Dague en fer
+Modeste, pour le prix comme pour la qualité.
+
+=== WEAPON Dagger Meteoric
+Dague en météorite
+Occasionne un maximum de dégâts. Pour en causer plus, il vous faudrait un mage, pas un forgeron.
+
+=== WEAPON Dagger Mithrill
+Dague en mithrill
+Dague légère et tranchante. Elle vaut son argent.
+
+=== WEAPON Dagger Steel
+Dague en acier
+Une dague en acier est une arme valable mais certaines armures lui résistent.
+
+=== WEAPON Hammer Adamantium
+Marteau de combat en adamantite
+Arme exotique qu'on a rarement l'occasion de voir.
+
+=== WEAPON Hammer Bronze
+Marteau de combat en bronze
+Parfait pour l'entraînement mais ne convient pas au vrai combat.
+
+=== WEAPON Hammer Iron
+Marteau de combat en fer
+Valable dans le cadre d'un combat "fer contre fer".
+
+=== WEAPON Hammer Meteoric
+Marteau de combat en météorite
+Vos ennemis ne risquent pas de l'oublier de si tôt !
+
+=== WEAPON Hammer Mithrill
+Marteau de combat en mithrill
+Cogner des têtes avec du mithrill, c'est un peu dommage.
+
+=== WEAPON Hammer Steel
+Marteau de combat en acier
+Il vaut mieux ne pas le sous-estimer.
+
+=== WEAPON Long_Bow Adamantium
+Arc long en adamantite
+Peu de guerriers portent des armures capables de résister aux flèches de cet arc.
+
+=== WEAPON Long_Bow Bronze
+Arc long en bronze
+Un arc long est meilleur qu'un arc court. Mais songez à trouver un matériau plus valable.
+
+=== WEAPON Long_Bow Iron
+Arc long en fer
+Une bonne arme si vous voulez abattre quelqu'un par derrière.
+
+=== WEAPON Long_Bow Meteoric
+Arc long en météorite
+Vous voulez trouver mieux ? Pas de chance, c'est ce qu'il y a de mieux.
+
+=== WEAPON Long_Bow Mithrill
+Arc long en mithrill
+Une flèche tirée avec cet arc pique bien plus qu'un dard de frelon !
+
+=== WEAPON Long_Bow Steel
+Arc long en acier
+Un ennemi armé de cet arc est à prendre en considération.
+
+=== WEAPON Long_Crossbow Adamantium
+Arbalète lourde en adamantite
+Une arme puissante à longue portée, une des meilleures dans ce monde !
+
+=== WEAPON Long_Crossbow Bronze
+Arbalète lourde en bronze
+Un ressort de plus ne pourrait que l'améliorer.
+
+=== WEAPON Long_Crossbow Iron
+Arbalète lourde en fer
+Pas la plus redoutable des arbalètes, mais ne la sous-estimez pas.
+
+=== WEAPON Long_Crossbow Meteoric
+Arbalète lourde en météorite
+Un carreau tiré avec cette arbalète percera même une armure en adamantite, un peu comme une aiguille en acier perce une feuille de papier.
+
+=== WEAPON Long_Crossbow Mithrill
+Arbalète lourde en mithrill
+La résistance et la flexibilité du mithrill en font un excellent matériau pour une arbalète.
+
+=== WEAPON Long_Crossbow Steel
+Arbalète lourde en acier
+Une très bonne arme.
+
+=== WEAPON Long_Spear Adamantium
+Grande lance en adamantite
+Très bonne arme, au prix très élevé.
+
+=== WEAPON Long_Spear Bronze
+Grande lance en bronze
+Mieux qu'une lance ordinaire en bronze, mais c'est une mince consolation.
+
+=== WEAPON Long_Spear Iron
+Grande lance en fer
+Pas la meilleure des grandes lances mais pas la plus chère non plus.
+
+=== WEAPON Long_Spear Meteoric
+Grande lance en météorite
+Sans contexte possible, la meilleure !
+
+=== WEAPON Long_Spear Mithrill
+Grande lance en mithrill
+La qualité de ce matériau a son prix, rien de plus normal.
+
+=== WEAPON Long_Spear Steel
+Grande lance en acier
+Vos ennemis peuvent trembler !
+
+=== WEAPON Long_Sword Adamantium
+Grande épée en adamantite
+Même un guerrier novice peut être victorieux avec une telle épée.
+
+=== WEAPON Long_Sword Bronze
+Grande épée en bronze
+Parfait si votre ennemi n'a pas une bonne armure.
+
+=== WEAPON Long_Sword Iron
+Grande épée en fer
+Elle est plus efficace que sa variante en bronze mais elle est incapable de percer de nombreuses armures.
+
+=== WEAPON Long_Sword Meteoric
+Grande épée en météorite
+Aucun forgeron ne peut en fabriquer de meilleure.
+
+=== WEAPON Long_Sword Mithrill
+Grande épée en mithrill
+Son prix est justifié.
+
+=== WEAPON Long_Sword Steel
+Grande épée en acier
+Redoutable dans les mains d'un guerrier expérimenté.
+
+=== WEAPON Mace Adamantium
+Masse en adamantite
+Avec un tel poids entre les mains, tout est permis.
+
+=== WEAPON Mace Bronze
+Masse en bronze
+Pas chère, mais son aspect est impressionnant.
+
+=== WEAPON Mace Iron
+Masse en fer
+D'un aspect plus frustre qu'une masse en bronze, mais elle fait plus de dégâts.
+
+=== WEAPON Mace Meteoric
+Masse en météorite
+Seule une masse à pointes en météorite peut surpasser cette arme.
+
+=== WEAPON Mace Mithrill
+Masse en mithrill
+Arme à prendre au sérieux. Le prix est à l'avenant.
+
+=== WEAPON Mace Steel
+Masse en acier
+Le poids de l'acier rend les coups très puissants.
+
+=== WEAPON Saber Adamantium
+Sabre en adamantite
+La victoire est au bout de ce sabre !
+
+=== WEAPON Saber Bronze
+Sabre en bronze
+N'attendez pas des merveilles d'un sabre en bronze même s'il est meilleur que le sabre en pierre.
+
+=== WEAPON Saber Iron
+Sabre en fer
+Correct, mais sans plus.
+
+=== WEAPON Saber Meteoric
+Sabre en météorite
+Cette lame peut vous mener sur le chemin de la victoire.
+
+=== WEAPON Saber Mithrill
+Sabre en mithrill
+Ce n'est pas vraiment une arme de novice !
+
+=== WEAPON Saber Steel
+Sabre en acier
+Arme qui peut faire des dégâts dans les mains d'un guerrier expérimenté mais elle ne peut rien contre certaines armures.
+
+=== WEAPON Short_Bow Adamantium
+Arc court en adamantite
+La propriété flexible de l'adamantine fait de cet arc une arme redoutable.
+
+=== WEAPON Short_Bow Bronze
+Arc court en bronze
+Le métal donne aux arcs un atout supplémentaire mais le bronze n'est pas très flexible.
+
+=== WEAPON Short_Bow Iron
+Arc court en fer
+Essayez de décocher une flèche avec cet arc, ce n'est pas facile.
+
+=== WEAPON Short_Bow Meteoric
+Arc court en météorite
+Si votre ennemi en possède un, rédigez votre testament.
+
+=== WEAPON Short_Bow Mithrill
+Arc court en mithrill
+Peu d'armures lui résistent.
+
+=== WEAPON Short_Bow Steel
+Arc court en acier
+L'acier rend les flèches plus rapides et plus précises.
+
+=== WEAPON Spear Adamantium
+Lance en adamantite
+Excellente arme. Le prix est à l'avenant de la qualité.
+
+=== WEAPON Spear Bronze
+Lance en bronze
+La plus ordinaire des lances en métal.  N'est pas sans intérêt.
+
+=== WEAPON Spear Iron
+Lance en fer
+Pas la meilleure arme, pas la plus chère non plus.
+
+=== WEAPON Spear Meteoric
+Lance en météorite
+Seule une armure en météorite résisterait, et encore, ce n'est pas sûr.
+
+=== WEAPON Spear Mithrill
+Lance en mithrill
+Le matériau parle de lui-même.
+
+=== WEAPON Spear Steel
+Lance en acier
+Voilà quelque chose de valable et de pas trop cher.
+
+=== WEAPON Spiked_Club Adamantium
+Masse lourde à pointes en adamantite
+Capable de briser n'importe quel crâne.
+
+=== WEAPON Spiked_Club Bronze
+Masse lourde à pointes en bronze
+On ne peut pas faire une bonne masse à pointes avec du bronze
+
+=== WEAPON Spiked_Club Iron
+Masse lourde à pointes en fer
+Le fer est meilleur que le bronze mais inférieur aux autres métaux.
+
+=== WEAPON Spiked_Club Meteoric
+Masse lourde à pointes en météorite
+Les forgerons ont fait tout ce qu'ils ont pu. C'est au tour des mages.
+
+=== WEAPON Spiked_Club Mithrill
+Masse lourde à pointes en mihtrill
+Avec un tel objet entre les mains, on vous respectera !
+
+=== WEAPON Spiked_Club Steel
+Masse lourde à pointes en acier
+Bonne arme pour quiconque s'embarque dans un long voyage.
+
+=== WEAPON Spiked_Mace Adamantium
+Masse à pointes en adamantite
+La qualité se paie.
+
+=== WEAPON Spiked_Mace Bronze
+Masse lourde en bronze
+Avec des pointes, elle sera  meilleure.
+
+=== WEAPON Spiked_Mace Iron
+Masse lourde en fer
+Le fer n'est pas le meilleur matériau pour une masse, mais cette arme fait son poids !
+
+=== WEAPON Spiked_Mace Meteoric
+Masse à pointes en météorite
+Après un coup avec cette masse, l'armure de votre ennemi pourra faire office de passoire.
+
+=== WEAPON Spiked_Mace Mithrill
+Masse à pointes en mithrill
+Même les armures en acier ne résistent pas aux masses en mithrill.
+
+=== WEAPON Spiked_Mace Steel
+Masse lourde en acier
+L'acier n'est pas l'idéal pour une masse mais cette arme reste très redoutable.
+
+=== WEAPON Stone_Axe Granite
+Hache en granite
+Mieux qu'en pierre. Vous pourrez peut-être couper du bois, avec un peu de mal.
+
+=== WEAPON Stone_Axe Malachite
+Hache en obsidienne
+Attention à ne pas vous couper avec une telle arme !
+
+=== WEAPON Stone_Axe Rock
+Hache en pierre
+La plus ordinaire des haches, pas beaucoup plus tranchante qu'un gourdin.
+
+=== WEAPON Stone_Axe Silicon
+Hache en silicium
+Le silicium est un progrès : au moins, il permet de couper.
+
+=== WEAPON Stone_Battle_Axe Granite
+Hache de combat en granit
+Légèrement mieux qu'une hache de combat en pierre.
+
+=== WEAPON Stone_Battle_Axe Malachite
+Hache de combat en obsidienne
+Elle forcera le respect de vos adversaires.
+
+=== WEAPON Stone_Battle_Axe Rock
+Hache de combat en pierre
+Arme rudimentaire, à l'efficacité douteuse.
+
+=== WEAPON Stone_Battle_Axe Silicon
+Hache de combat en silicium
+Vous pouvez compter sur elle (du moment que votre ennemi n'est pas trop fort).
+
+=== WEAPON Stone_Battle_hammer Granite
+Marteau lourd en granit
+Légèrement mieux que la version en pierre.
+
+=== WEAPON Stone_Battle_hammer Malachite
+Marteau lourd en obsidienne
+Il est vraiment lourd. Seuls les marteaux en métal sont meilleurs.
+
+=== WEAPON Stone_Battle_hammer Rock
+Marteau lourd en pierre
+Plus la pierre est lourde, plus les dégâts sont grands.
+
+=== WEAPON Stone_Battle_hammer Silicon
+Marteau lourd en silicium
+Les arêtes tranchantes du silicium augmentent son efficacité.
+
+=== WEAPON Stone_Dagger Granite
+Dague en granit
+Peut être utile pour débuter, mais elle montre vite ses limites.
+
+=== WEAPON Stone_Dagger Malachite
+Dague en obsidienne
+Excellente arme tranchante, la meilleure des dagues en pierre.
+
+=== WEAPON Stone_Dagger Rock
+Dague en pierre
+Sans valeur, aussi bien en termes de prix que d'efficacité.
+
+=== WEAPON Stone_Dagger Silicon
+Dague silicium
+Arme honorable : efficace et pas trop chère.
+
+=== WEAPON Stone_Formatter_drive_C Rock
+Rocher de lecteur C : formater
+En fait, vous ne verrez JAMAIS ce message. Et si jamais vous le voyez, devinez ce que se passera !
+
+=== WEAPON Stone_Hammer Granite
+Marteau en granit
+Bon pour les débutants.
+
+=== WEAPON Stone_Hammer Malachite
+Marteau en obsidienne
+Permet de briser du premier coup le crâne d'un gobelin.
+
+=== WEAPON Stone_Hammer Rock
+Marteau en pierre
+Bien pratique, à la forge comme au combat.
+
+=== WEAPON Stone_Hammer Silicon
+Marteau en silicium
+Pour équiper les nouvelles recrues.
+
+=== WEAPON Stone_Short_Bow Granite
+Arc (flèches avec pointes en granit)
+Ses défauts sont nombreux, mais c'est mieux que rien.
+
+=== WEAPON Stone_Short_Bow Malachite
+Arc (flèches avec pointes en obsidienne)
+Occasionne un maximum de dégâts.
+
+=== WEAPON Stone_Short_Bow Rock
+Arc (flèches avec pointes en pierre)
+Vous avez peu de chances d'atteindre votre cible, mais au moins vous avez un arc dans les mains.
+
+=== WEAPON Stone_Short_Bow Silicon
+Arc (flèches avec pointes en silicium)
+Equipé de la sorte, vous pourrez faire face à de nombreux dangers.
+
+=== WEAPON Stone_Spear Granite
+Lance à tête en granite
+Le granit est meilleur que la pierre mais moins bon que tout autre matériau.
+
+=== WEAPON Stone_Spear Malachite
+Lance à tête en obsidienne
+On ne dirait pas vraiment une lance.
+
+=== WEAPON Stone_Spear Rock
+Lance à tête en pierre
+La plus ordinaire et la moins chère des lances.
+
+=== WEAPON Stone_Spear Silicon
+Lance à tête en silicium
+Les têtes en silicium sont plus tranchantes que les autres têtes non métalliques.
+
+=== WEAPON Stone_Sword Granite
+Epée en granite
+Légèrement meilleure que celle en pierre.
+
+=== WEAPON Stone_Sword Malachite
+Epée en obsidienne
+Seules les épées en métal sont meilleures.
+
+=== WEAPON Stone_Sword Rock
+Epée en pierre
+Songez à trouver une arme moins ridicule.
+
+=== WEAPON Stone_Sword Silicon
+Epée en silicium
+Avec elle, on peut vraiment se battre.
+
+=== WEAPON Unique_Spear Mithrill
+Lance "Eclair mortel"
+Arme unique. Frère Forgeron ne peut rien faire de comparable.
+
+=== WEAPON Unique_Sword Steel
+Epée antique
+Arme antique unique en son genre. Personne n'est capable de la démonter ou d'en fabriquer une équivalente.
+

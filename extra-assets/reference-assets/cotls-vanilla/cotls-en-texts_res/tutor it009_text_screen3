@@ -1,7 +1,0 @@
-     You can insert spells into items such as weapons or armor in order to give them "magical" properties. To do this, the spell must contain a rune which allows it to be inserted. These runes are called "Item (trigger)" and "Item (continuous"). They will become available to you later in the game.
-     (You don't need one of these runes to construct a wand with a spell in it.)
-    There's a special slot in the constructor for "insertable" spells, located below the blueprint slot. The slot will be available after you've placed the blueprint and the necessary amount of material in the constructor. To put a spell from your inventory there, just click on the spell's icon.
-
-     To construct the object click on the "V" button, to cancel click on "X".
-
-     Note: both the spell and the item you want to insert it into have "complexity" values. The complexity value of the item must be higher than that of the spell, otherwise the spell and item combination will not work. Similarly, you cannot insert a spell which demands a high "stamina" value into an item with a low "energy" value.

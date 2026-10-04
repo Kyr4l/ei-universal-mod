@@ -1,0 +1,889 @@
+# um-texts 1
+=== INSTR Axe
+Metal axe
+Easy to make, easy to use!
+
+=== INSTR Battle_Axe
+Metal battle axe
+The battle axe is heavier than the simple axe, and it can cause much more damage.
+
+=== INSTR Bone_Club
+Bone club
+The simplest and most ancient weapon.
+
+=== INSTR Bone_Crossbow
+Bone crossbow
+The result of developed technology and handy materials.
+
+=== INSTR Bone_Dagger
+Bone knife
+Better than a stone one!
+=== INSTR Bone_Long_Bow
+Long bone bow
+An arrow shot with such a bow hits much harder than one shot from the short bow.
+
+=== INSTR Bone_Short_Bow
+Short bone bow
+This bow is reinforced with bone, making it better than an ordinary one.
+
+=== INSTR Bone_Spear
+Bone spear
+You can make a bone spearhead sharper than a stone one.
+
+=== INSTR Cheat_Dagger
+Ritual knife
+Looks rather impressive, but it is not a combat weapon.
+
+=== INSTR Crossbow
+Crossbow
+This can't shoot as quickly as a bow, but can pierce heavier armor.
+
+=== INSTR Crystal_Axe
+Crystal axe
+The best possible axe.
+
+=== INSTR Crystal_Crossbow
+Crystal crossbow
+The best possible crossbow.
+
+=== INSTR Crystal_Dagger
+Crystal dagger
+The best possible dagger.
+
+=== INSTR Crystal_Mace
+Crystal mace
+Look at me and die -  that is the crystal mace!
+
+=== INSTR Crystal_Spear
+Crystal spear
+You cannot find a better spear!
+
+=== INSTR Crystal_Sword
+Crystal sword
+The best possible sword.
+
+=== INSTR Curved_Dagger
+Dirk
+Its shape causes more damage than a straight dagger.
+
+=== INSTR Dagger
+Dagger
+A quick, simple weapon. Use it with a backstab and you will have an edge.
+
+=== INSTR Gipat_Brigand_Boots
+Hunting Gipath boots
+People who often walk in forests will surely value the softness and comfort provided by fur footwear.
+
+=== INSTR Gipat_Brigand_Gloves
+Hunting Gipath gauntlets
+Nice decoration and additional protection too!
+
+=== INSTR Gipat_Brigand_Helm
+Hunting Gipath helmet
+Such headgear should give its owner the strength and cunning of wild beasts!
+
+=== INSTR Gipat_Brigand_Leggins
+Hunting Gipath leggings
+Of course, you may feel a bit hot in these, but it is a small price to pay for such good leg protection.
+
+=== INSTR Gipat_Brigand_Pants
+Hunting Gipath shorts
+These shorts provide decent protection and are suitable for long hikes through the forests.
+
+=== INSTR Gipat_Brigand_Plate
+Hunting Gipath cloak
+This supplements the breastplate, it protects your elbows and shoulders from blows.
+
+=== INSTR Gipat_Brigand_Prototype
+Gipat_Brigand_Prototype
+Gipat_Brigand_Prototype
+
+=== INSTR Gipat_Brigand_Shirt
+Hunting Gipath breastplate
+Provides decent protection and looks better than simple breastplate.
+
+=== INSTR Gipat_High_Boots
+Stitched Gipath boots
+A pair of stitched boots is a couple of steps in the right direction.
+
+=== INSTR Gipat_High_Gloves
+Stitched Gipath gauntlets
+Cut and stitched gauntlets protect a much bigger part of your arm than light, simple or even hunting gauntlets.
+
+=== INSTR Gipat_High_Helm
+Stitched Gipath helmet
+If you do not pay for a nicely cut helmet, you can get a nicely cut head!
+
+=== INSTR Gipat_High_Leggins
+Stitched Gipath leggings
+Extra protection and elegance for extra money!
+
+=== INSTR Gipat_High_Pants
+Long stitched Gipath trousers
+Due to their cut, they provide much better protection for the legs than shorts.
+
+=== INSTR Gipat_High_Plate
+Stitched Gipath coat
+Due to efficient use of material, this provides good full-length arm protection.
+
+=== INSTR Gipat_High_Prototype
+Gipat_High_Prototype
+Gipat_High_Prototype
+
+=== INSTR Gipat_High_Shirt
+Stitched Gipath breastplate
+It takes longer to make, but provides better shoulder protection.
+
+=== INSTR Gipat_Highest2_Boots
+Thick boots with Gipath uppers
+Sewing shoes with leather uppers means good craftsmanship.
+=== INSTR Gipat_Highest2_Gloves
+Thick gloves from Gipath
+The complex cut requires a lot of fabrication time.
+=== INSTR Gipat_Highest2_Helm
+Thick helmet from Gipath
+A great helmet worth great money.
+
+
+=== INSTR Gipat_Highest2_Leggins
+Thick leggings from Gipath
+Great cut, but worth a great deal.
+=== INSTR Gipat_Highest2_Pants
+Thick pants from Gipath
+On Gipath, this cut is worth a great deal.
+=== INSTR Gipat_Highest2_Plate
+A thick kurta from Gipath
+A first-rate cut, but costs a lot.
+
+=== INSTR Gipat_Highest2_Shirt
+Thick shirt from Gipath
+Great defense, though expensive.
+
+=== INSTR Gipat_Highest_Boots
+Heavy Gipath high boots
+The best footwear you can hope to make under the circumstances.
+
+=== INSTR Gipat_Highest_Gloves
+Heavy Gipath long gauntlets
+Provide practically full-length arm protection.
+
+=== INSTR Gipat_Highest_Helm
+Heavy Gipath helmet
+Not too impressive to look at, but provides better head protection than any other Gipath helmet.
+
+=== INSTR Gipat_Highest_Leggins
+Heavy Gipath leggings
+If you wear them on top of long trousers, you will have better leg protection than with any other Gipath armor.
+
+=== INSTR Gipat_Highest_Pants
+Heavy Gipath long trousers
+Good protection from the belt down to the ankles.
+
+=== INSTR Gipat_Highest_Plate
+Heavy Gipath coat
+No other Gipath armor can give you better arm and shoulder protection.
+
+=== INSTR Gipat_Highest_Prototype
+Gipat_Highest_Prototype
+Gipat_Highest_Prototype
+
+=== INSTR Gipat_Highest_Shirt
+Heavy Gipath shirt
+Provides full-length arm and shoulder protection.
+
+=== INSTR Gipat_Low_Boots
+Light Gipath boots
+You will be safe from splinters ... Well,  at least that is something, is it not?
+
+=== INSTR Gipat_Low_Gloves
+Light Gipath gauntlets
+Better to have this sort of arm protection than none at all.
+
+=== INSTR Gipat_Low_Helm
+Light Gipath helmet
+One must have some sort of head protection - from the sun if from nothing else.
+
+=== INSTR Gipat_Low_Leggins
+Light Gipath leggings
+Protect your knees and feet from accidental scratches and bruises - but not from serious weapons!
+
+=== INSTR Gipat_Low_Pants
+Light Gipath shorts
+You should wear these more for decency than for serious protection in combat.
+
+=== INSTR Gipat_Low_Plate
+Light Gipath shirt
+Provides additional protection for breast, neck and shoulders if you wear it with your breastplate.
+
+=== INSTR Gipat_Low_Prototype
+Gipat_Low_Prototype
+Gipat_Low_Prototype
+
+=== INSTR Gipat_Low_Shirt
+Light Gipath breastplate
+Will protect your shoulders, chest and part of your back from the sun's rays.
+
+=== INSTR Gipat_Medium_Boots
+Simple Gipath boots
+Due to their cut, they provide better protection than light boots.
+
+=== INSTR Gipat_Medium_Gloves
+Simple Gipath gauntlets
+Due to their cut, they provide better protection than light gauntlets.
+
+=== INSTR Gipat_Medium_Helm
+Simple Gipath helmet
+Due to its cut, it provides better protection than a light helmet.
+
+=== INSTR Gipat_Medium_Leggins
+Simple Gipath leggings
+Due to their cut, they provide better protection than light leggings.
+
+=== INSTR Gipat_Medium_Pants
+Simple Gipath shorts
+Due to their cut, these provide better protection than light shorts.
+
+=== INSTR Gipat_Medium_Plate
+Simple Gipath cloak
+Its cut helps it give better protection than a light shirt.
+
+=== INSTR Gipat_Medium_Prototype
+Gipath_Medium_Prototype
+Gipat_Medium_Prototype
+
+=== INSTR Gipat_Medium_Shirt
+Simple Gipath breastplate
+Due to its cut, this provides better protection than a light breastplate.
+
+=== INSTR Hadagan_Brigand_Boots
+Khadaganian leather leggings
+Good protection from the fangs of beasts, but not from the weapons of enemies.
+
+=== INSTR Hadagan_Brigand_Gloves
+Khadaganian leather gauntlets
+A match for wolves' fangs.
+
+=== INSTR Hadagan_Brigand_Helm
+Khadaganian leather helmet
+If you are struck on the head with a club, this will not help much. But it can protect you from a glancing blow.
+
+=== INSTR Hadagan_Brigand_Leggins
+Khadaganian leather top leggings
+Do not anger sleeping Tigers while wearing these…
+
+=== INSTR Hadagan_Brigand_Pants
+Khadaganian leather trousers
+These will protect you from a spider's bite... But nothing more piercing.
+
+=== INSTR Hadagan_Brigand_Plate
+Khadaganian leather coat
+This one will come in very handy during a long hike.
+
+=== INSTR Hadagan_Brigand_Prototype
+Hadagan_Brigand_Prototype
+Hadagan_Brigand_Prototype
+
+=== INSTR Hadagan_Brigand_Shirt
+Khadaganian leather lower breastplate
+Very nice... Provided you have a real breastplate on top of it!
+
+=== INSTR Hadagan_High1_Boots
+Khadaganian light high boots
+Not bad shoes with uppers. Not good, either.
+
+=== INSTR Hadagan_High1_Gloves
+Khadaganian light gloves
+Good gloves for the recruit.
+
+=== INSTR Hadagan_High1_Pants
+Khadaganian light pants
+In battle they will not last long....
+
+=== INSTR Hadagan_High1_Shirt
+Khadaganian light chainmail
+Too heavy and uncomfortable...
+
+=== INSTR Hadagan_High2_Boots
+Khadaganian laminar boots
+Together with the leggings, these will protect your legs and feet from any blow.
+
+=== INSTR Hadagan_High2_Gloves
+Khadaganian laminar gauntlets
+In these you can fend off even a sword blow.
+
+=== INSTR Hadagan_High2_Helm
+Khadaganian forged helmet
+The worst scenario for the wearer would be a bad headache.
+
+=== INSTR Hadagan_High2_Leggins
+Khadaganian forged top leggings
+Provide excellent additional leg protection.
+
+=== INSTR Hadagan_High2_Pants
+Khadaganian laminar trousers
+Provide excellent leg protection.
+
+=== INSTR Hadagan_High2_Plate
+Khadaganian forged cuirass
+Makes a living and dangerous metal statue out of the owner.
+
+=== INSTR Hadagan_High2_Prototype
+Hadagan_High2_Prototype
+Hadagan_High2_Prototype
+
+=== INSTR Hadagan_High2_Shirt
+Khadaganian light breastplate
+Good protection and freedom of movement!
+
+=== INSTR Hadagan_High_Boots
+Khadaganian thick hide boots
+Excellent in a chance skirmish, but not too reliable in real combat.
+
+=== INSTR Hadagan_High_Gloves
+Khadaganian thick hide gauntlets
+Provide some arm protection from poor weapons.
+
+=== INSTR Hadagan_High_Helm
+Khadaganian light helmet
+Soft cloth hides tough metal...
+
+=== INSTR Hadagan_High_Leggins
+Khadaganian chainmail trousers
+They are reinforced with metal and will protect you from simple weapons.
+
+=== INSTR Hadagan_High_Pants
+Khadaganian thick hide trousers
+Provides good protection from poor weapons.
+
+=== INSTR Hadagan_High_Plate
+Khadaganian light cuirass
+Will protect you from simple weapons..
+
+=== INSTR Hadagan_High_Prototype
+Hadagan_High_Prototype
+Hadagan_High_Prototype
+
+=== INSTR Hadagan_High_Shirt
+Khadaganian light armor
+Provides decent protection.
+
+=== INSTR Hadagan_Highest2_Boots
+Khadaganian heavy boots
+Not too light, but most reliable.
+
+=== INSTR Hadagan_Highest2_Gloves
+Khadaganian heavy gauntlets
+Not suitable for writing letters while wearing these - but that's not what they are for anyway.... 
+
+=== INSTR Hadagan_Highest2_Helm
+Khadaganian heavy helmet
+You could hammer this with something heavy for a long time - with no effect!
+
+=== INSTR Hadagan_Highest2_Leggins
+Khadaganian heavy leggings
+The best of metal leggings!
+
+=== INSTR Hadagan_Highest2_Pants
+Khadaganian heavy trousers
+Comfortable and reliable - the best in Khadagan!
+
+=== INSTR Hadagan_Highest2_Plate
+Khadaganian heavy cuirass
+This would break a sword in two!
+
+=== INSTR Hadagan_Highest2_Prototype
+Hadagan_Highest2_Prototype
+Hadagan_Highest2_Prototype
+
+=== INSTR Hadagan_Highest2_Shirt
+Khadaganian heavy shirt
+Really good protection!
+
+=== INSTR Hadagan_Highest_Boots
+Khadaganian reinforced boots
+Boots, reinforced with forged plates.
+
+=== INSTR Hadagan_Highest_Gloves
+Khadaganian reinforced gauntlets
+Forged metal plates ensure much greater protection.
+
+=== INSTR Hadagan_Highest_Helm
+Khadaganian reinforced helmet
+Decent head protection.
+
+=== INSTR Hadagan_Highest_Leggins
+Khadaganian reinforced leggings
+Chainmail leggings reinforced with metal plates will protect you from the weapons of backstabbers.
+
+=== INSTR Hadagan_Highest_Pants
+Khadaganian reinforced chainmail trousers
+Chainmail trousers reinforced with metal plates.
+
+=== INSTR Hadagan_Highest_Plate
+Khadaganian reinforced cuirass
+Chainmail cuirass reinforced with metal plates.
+
+=== INSTR Hadagan_Highest_Prototype
+Hadagan_Highest_Prototype
+Hadagan_Highest_Prototype
+
+=== INSTR Hadagan_Highest_Shirt
+Khadaganian reinforced chainmail shirt
+A chainmail shirt reinforced with metal plates artfully woven in..
+
+=== INSTR Hadagan_Low_Boots
+Light boots
+Plain and simple cloth boots.
+
+=== INSTR Hadagan_Low_Gloves
+Light gauntlets
+Cloth gauntlets, they will only save your ankle from a sprain. 
+
+=== INSTR Hadagan_Low_Helm
+Khadaganianian hood
+Plain and cheap headgear. The quality is in line with the price.
+
+=== INSTR Hadagan_Low_Leggins
+Khadaganian light top trousers
+The second layer of cloth cannot be considered as serious leg protection.
+
+=== INSTR Hadagan_Low_Pants
+Light trousers
+About the only thing these do is cover your nakedness...
+
+=== INSTR Hadagan_Low_Plate
+Khadaganian light top collar
+Provides some additional shoulder and arm protection.
+
+=== INSTR Hadagan_Low_Prototype
+Hadagan_Low_Prototype
+Hadagan_Low_Prototype
+
+=== INSTR Hadagan_Low_Shirt
+Light shirt
+A simple sleeveless shirt.
+
+=== INSTR Hadagan_Medium2_Boots
+Quilted boots with uppers
+A pair of boots-compared to a pair of sneakers-is a pair of steps ahead.
+
+=== INSTR Hadagan_Medium2_Gloves
+Quilted gloves
+Dissected and sliced naruczi defend a large part of the hand.
+
+=== INSTR Hadagan_Medium2_Helm
+Quilted helmet
+If you don't pay for a well-cut helmet, you can get a badly-cut head!
+
+=== INSTR Hadagan_Medium2_Leggins
+Quilted ponchos
+For extra money - extra durability and elegance!
+
+=== INSTR Hadagan_Medium2_Pants
+Quilted pants
+At the cost of their slicing weapons a large portion of their legs.
+
+=== INSTR Hadagan_Medium2_Plate
+Quilted cape
+At the cost of rationally used material well defends the hands along all their length.
+
+=== INSTR Hadagan_Medium2_Prototype
+Hadagan_Medium2_Prototype
+Hadagan_Medium2_Prototype
+
+=== INSTR Hadagan_Medium2_Shirt
+Quilted breastplate
+Demands more from time to craft, but a good one defends the shoulders.
+
+=== INSTR Hadagan_Medium_Boots
+Light Khadaganian boots
+At least they are waterproof...
+
+=== INSTR Hadagan_Medium_Gloves
+Cloth Khadaganian gauntlets
+Nice - but not particularly useful.
+
+=== INSTR Hadagan_Medium_Helm
+Khadaganian turban
+Both rich and poor can wear one. The material for the rich will be different, however...
+
+=== INSTR Hadagan_Medium_Leggins
+Khadaganian top long trousers
+Typical Khadaganian garment.
+
+=== INSTR Hadagan_Medium_Pants
+Long Khadaganian trousers
+Just pants, really - we all must have some ready for wear...
+
+=== INSTR Hadagan_Medium_Plate
+Khadaganian coat
+The richer the man, the more impressive the coat.
+
+=== INSTR Hadagan_Medium_Prototype
+Hadagan_Medium_Prototype
+Hadagan_Medium_Prototype
+
+=== INSTR Hadagan_Medium_Shirt
+Long Khadaganian shirt
+In this, you would be better off in a tavern than in combat.
+
+=== INSTR Hammer
+Combat hammer
+An advanced hammer, really. Useless at home, but can be very useful in a fight.
+
+=== INSTR Jun_High_Boots
+Joon light leggings
+So much talent! Where are such craftsmen nowadays? 
+
+=== INSTR Jun_High_Gloves
+Joon gauntlets
+Craftsmen just do not make things like that nowadays...
+
+=== INSTR Jun_High_Helm
+Joon helmet
+Ancient secrets of such craftsmanship are now lost to us...
+
+=== INSTR Jun_High_Leggins
+Joon full leggings
+The ability to make such things would be worth half a lifetime to most...
+
+=== INSTR Jun_High_Pants
+Joon trousers
+Even the best of craftsmen are not up to making trousers of such quality!
+
+=== INSTR Jun_High_Plate
+Joon cuirass
+There are no more craftsmen capable of making such things...
+
+=== INSTR Jun_High_Prototype
+Jun_High_Prototype
+Jun_High_Prototype
+
+=== INSTR Jun_High_Shirt
+Joon shirt
+No modern craftsman would even know where to start making this...
+
+=== INSTR Kania_Brigand_Boots
+Heavy Canian boots
+Many a wild beast would break teeth on these!
+
+=== INSTR Kania_Brigand_Gloves
+Heavy Canian gauntlets
+Reliable protection from a knife stab in a chance fight.
+
+=== INSTR Kania_Brigand_Helm
+Heavy Canian helmet
+Protects your head, and not just from cold!
+
+=== INSTR Kania_Brigand_Leggins
+Heavy Canian top trousers
+Provides decent protection and also ensures freedom of movement.
+
+=== INSTR Kania_Brigand_Pants
+Heavy Canian trousers
+A good choice for a warrior who wants to have both protection and freedom of movement.
+
+=== INSTR Kania_Brigand_Plate
+Heavy Canian coat
+If the wearer of this owner is stabbed from the rear, he will still have a chance to get revenge!
+
+=== INSTR Kania_Brigand_Prototype
+Kania_Brigand_Prototype
+Kania_Brigand_Prototype
+
+=== INSTR Kania_Brigand_Shirt
+Heavy Canian jerkin
+A good compromise between comfort and protection.
+
+=== INSTR Kania_High2_Boots
+Canian army boots
+Soldiers walk the roads of war in these - what more can you want?
+
+=== INSTR Kania_High2_Gloves
+Canian army high gauntlets
+These can fend off a light weapon blow!
+
+=== INSTR Kania_High2_Helm
+Canian army helmet
+The wearer looks formidable - and his head is safe.
+
+=== INSTR Kania_High2_Leggins
+Canian army leggings
+Approved by the Emperor as standard Canian army issue.
+
+=== INSTR Kania_High2_Pants
+Canian army chainmail trousers
+Not every arrow would pierce that weave.
+
+=== INSTR Kania_High2_Plate
+Canian army cuirass
+No brigand would try to backstab the wearer of this!
+
+=== INSTR Kania_High2_Prototype
+Kania_High2_Prototype
+Kania_High2_Prototype
+
+=== INSTR Kania_High2_Shirt
+Canian army chainmail shirt
+This is standard Canian army issue - which confirms the quality.
+
+=== INSTR Kania_High_Boots
+Light Canian combat boots
+Do not rely on them too much for protection.
+
+=== INSTR Kania_High_Gloves
+Light Canian combat gauntlets
+Provide some additional hand protection.
+
+=== INSTR Kania_High_Helm
+Light Canian metal helmet
+Good head protection from side blows, but no match for a direct blow to the face.
+
+=== INSTR Kania_High_Leggins
+Light Canian metal leggings
+Metal plates will not protect you from blows from behind.
+
+=== INSTR Kania_High_Pants
+Canian thick hide trousers
+They will protect you from the teeth of the wolf, but not from the fangs of the Tiger.
+
+=== INSTR Kania_High_Plate
+Light Canian cuirass
+Provides additional protection from sharp weapons.
+
+=== INSTR Kania_High_Prototype
+Kania_High_Prototype
+Kania_High_Prototype
+
+=== INSTR Kania_High_Shirt
+Canian thick hide jerkin
+Will protect you from a chance arrow shot from a short bow.
+
+=== INSTR Kania_Highest2_Boots
+Canian heavy army boots
+With these you can kick Trolls and not hurt your toe!
+
+=== INSTR Kania_Highest2_Gloves
+Canian heavy army gauntlets
+You'll not cut your hand in a gauntlet like this!
+
+=== INSTR Kania_Highest2_Helm
+Canian heavy army helmet
+Formidable protection!
+
+=== INSTR Kania_Highest2_Leggins
+Canian heavy army leggings
+Issued to Cania soldiers who stand in the front line of battle.
+
+=== INSTR Kania_Highest2_Pants
+Canian heavy army trousers
+If you sit on a poisonous frog, you wouldn't even notice it.
+
+=== INSTR Kania_Highest2_Plate
+Canian heavy army cuirass
+Hardly anything can cut through this!
+
+=== INSTR Kania_Highest2_Prototype
+Kania_Highest2_Prototype
+Kania_Highest2_Prototype
+
+=== INSTR Kania_Highest2_Shirt
+Canian heavy chainmail shirt
+A double small-weave chainmail shirt would simply remain upright on the ground...
+
+=== INSTR Kania_Highest_Boots
+Canian chainmail boots
+They do not cover as much of the leg as light boots do, but they at least provide better protection for portion they cover!
+
+=== INSTR Kania_Highest_Gloves
+Reinforced Canian combat gauntlets
+The metal inlays provide better arm protection than light combat gauntlets.
+
+=== INSTR Kania_Highest_Helm
+Winged Canian helmet
+This is not just protection, this looks menacing!
+
+=== INSTR Kania_Highest_Leggins
+Heavy Canian leggings
+Not for a dance - for battle!
+
+=== INSTR Kania_Highest_Pants
+Canian chainmail trousers
+Provide additional leg protection due to the thick weave.
+
+=== INSTR Kania_Highest_Plate
+Heavy Canian cuirass
+With the forged onlays, they provide better protection than a light cuirass.
+
+=== INSTR Kania_Highest_Prototype
+Kania_Highest_Prototype
+Kania_Highest_Prototype
+
+=== INSTR Kania_Highest_Shirt
+Canian chainmail shirt
+Better than a leather jerkin; it softens the blows.
+
+=== INSTR Kania_Low_Boots
+Canian boots for farmers
+Well, they are waterproof...
+
+=== INSTR Kania_Low_Gloves
+Canian gauntlets for farmers
+Suitable for fighting - provided, of course, it is fist fighting at a spring fair.
+
+=== INSTR Kania_Low_Helm
+Canian farmer's hat
+Useful to have in hot weather, but hardly in hot combat.
+
+=== INSTR Kania_Low_Leggins
+Canian light top trousers
+They are warm... good for a poor man.
+
+=== INSTR Kania_Low_Pants
+Canian farmer's trousers
+These will protect you from the teeth of the wolf, but not from the fangs of the Tiger.
+
+=== INSTR Kania_Low_Plate
+Canian light coat
+Not very good protection from blows with weapons - but it will hide your chainmail armor.
+
+=== INSTR Kania_Low_Prototype
+Kania_Low_Prototype
+Kania_Low_Prototype
+
+=== INSTR Kania_Low_Shirt
+Canian farmer's shirt
+Good for hard work, but hardly suitable for combat.
+
+=== INSTR Kania_Medium_Boots
+Canian hunting boots
+Good hunting footwear.
+
+=== INSTR Kania_Medium_Gloves
+Canian hunting gauntlets
+Not much different from the farmer's.
+
+=== INSTR Kania_Medium_Helm
+Canian hunting hat
+A feather in your cap is guaranteed - it is stitched there permanently!
+
+=== INSTR Kania_Medium_Leggins
+Canian top hunting trousers
+You will not freeze in these!
+
+=== INSTR Kania_Medium_Pants
+Canian hunting trousers
+Their cut makes them comfortable for long marches.
+
+=== INSTR Kania_Medium_Plate
+Canian hunting jerkin
+Not every wolf could bite through this... but you cannot say the same for knives.
+
+=== INSTR Kania_Medium_Prototype
+Kania_Medium_Prototype
+Kania_Medium_Prototype
+
+=== INSTR Kania_Medium_Shirt
+Canian hunting jerkin
+Provides better arm protection due to its long sleeves.
+
+=== INSTR Long_Bow
+Long bow
+A good ratio of arrow power and speed of shooting.
+
+=== INSTR Long_Crossbow
+Heavy crossbow
+Slower than a regular one, but still more powerful!
+
+=== INSTR Long_Spear
+Long spear
+This will make even the most antagonistic people keep their distance.
+
+=== INSTR Long_Sword
+Long sword
+A serious weapon, especially if you use quality material.
+
+=== INSTR Mace
+Mace
+A step forward compared to hammers - both in terms of efficiency and price.
+
+=== INSTR New_Bow
+Crystal bow
+The best of the bows.
+
+=== INSTR Saber
+Metal sabre
+You can strike with a sabre faster than with a long sword, but it causes less damage to the enemy.
+
+=== INSTR Short_Bow
+Short bow
+In this case, power was sacrificed for speed.
+
+=== INSTR Spear
+Spear
+A good weapon, especially if you use quality material.
+
+=== INSTR Spiked_Club
+Heavy spiked mace
+That is a really scary weapon if you know how to use it!
+
+=== INSTR Spiked_Mace
+Spiked mace
+The spikes make this mace even more awesome.
+
+=== INSTR Stone_Axe
+Stone axe
+The simplest axe, and thus, not very efficient. But the price is quite acceptable.
+
+=== INSTR Stone_Battle_Axe
+Stone battle axe
+The battle axe is heavier than a simple axe, so it causes more damage.
+
+=== INSTR Stone_Battle_Hammer
+Heavy stone hammer
+With this hammer you will not strike quickly, but every blow will cause serious damage to the enemy.
+
+=== INSTR Stone_Battle_Sword
+Combat stone sword
+This is a fearsome weapon in the hands of an experienced warrior.
+
+=== INSTR Stone_Dagger
+Stone dagger
+A simple but worthy piercing weapon. You do not need much material to make it.
+
+=== INSTR Stone_Formatter_drive_C
+Drive C: formatter
+As a matter of fact you will NEVER see this item. Oh, do you really see it??? Well then, try to guess what will happen next!
+
+=== INSTR Stone_Hammer
+Stone hammer
+This will prove useful, both in the smithy and in combat.
+
+=== INSTR Stone_Short_Bow
+Bow (stone head arrows)
+Stone is not the best possible material, but it will have to do for now.
+
+=== INSTR Stone_Spear
+Stone spear
+The simplest possible spear.
+
+=== INSTR Stone_Sword
+Stone sword
+The weapon for those who cannot lay their hands on a metal sword.
+
+=== INSTR Wand_1
+Stone wand
+Such a wand may contain simple spells (no need to have an "object" rune for that).
+
+=== INSTR Wand_2
+Bone wand
+Such wand may contain simple spells (no need to have an "object" rune for that).
+
+=== INSTR Wand_3
+Metal wand
+Such a wand may contain simple spells (no need to have "object" rune for that).
+
+=== INSTR Wand_4
+Carved metal wand
+Such a wand may contain simple spells (no need to have "object" rune for that).
+

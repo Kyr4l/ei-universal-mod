@@ -1,0 +1,996 @@
+# um-texts 1
+=== tip 10100
+Ouvrir/fermer la fenêtre d'information
+
+=== tip 10101
+Vue générale.
+Affiche la vue générale du personnage
+dans la fenêtre d'information.
+
+=== tip 10102
+Dégâts.
+Montre les dégâts causés
+au personnage dans la fenêtre d'information.
+
+=== tip 10103
+Propriétés.
+Montre les biens possédés
+par le personnage dans la fenêtre d'information
+
+=== tip 10104
+Sorts.
+Montre les sorts subis par
+le personnage dans la fenêtre d'information
+
+=== tip 10200
+Ouvrir/fermer la fenêtre de texte
+
+=== tip 10201
+Messages.
+Affiche les messages
+dans la fenêtre de texte.
+
+=== tip 10202
+Trophées.
+Montre les détails des trophées
+et des objets trouvés 
+dans la fenêtre de texte.
+
+=== tip 10300
+Ouvrir/fermer la mini-carte
+
+=== tip 10301
+Zoom.
+Augmente l'échelle de la mini-carte.
+
+=== tip 10302
+Zoom arrière
+Diminue l'échelle de la mini-carte
+
+=== tip 10303
+Vue caméra par défaut.
+Caméra dirigée vers le nord.
+
+=== tip 10400
+Pause activée/désactivée
+Quand elle est activée, vous pouvez
+donner des ordres aux personnages,
+changer leurs armes ou leur assigner des cibles.
+
+=== tip 10401
+Afficher l'écran des quêtes.
+Montre les différentes quêtes
+et les objectifs.
+
+=== tip 10402
+Vitesse normale.
+Règle la vitesse sur le mode normal.
+
+=== tip 10403
+Vitesse élevée.
+Augmente un maximum la vitesse.
+
+=== tip 10500
+Mode Attaque/Défense.
+En mode Attaque, le personnage
+attaque tous les ennemis qui le voient.
+En mode Défense, il attaque
+seulement quand vous lui en donnez l'ordre.
+
+=== tip 10501
+Ramper.
+Quand un personnage rampe,
+il fait moins de bruit qu'en marchant
+et l'ennemi le repère moins bien.
+Sa vitesse est très lente.
+Son taux d'endurance reste stable.
+
+=== tip 10502
+Marcher silencieusement.
+Quand un personnage marche silencieusement,
+il ne fait presque aucun bruit et l'ennemi a du mal à le repérer.
+Son taux d'endurance reste stable.
+
+=== tip 10503
+Marcher.
+Quand un personnage marche,
+sa vitesse est normale
+et son taux d'endurance reste stable.
+
+=== tip 10504
+Courir.
+Quand un personnage court, il fait plus de bruit
+qu'en marchant et attire l'attention de l'ennemi.
+Sa vitesse est élevée et son endurance diminue.
+Quand cette dernière est à zéro, il se met
+automatiquement à marcher.
+
+=== tip 10510
+Suivre.
+Permet de suivre de près
+un personnage sélectionné.
+
+=== tip 10511
+Voler quelque chose à un personnage/Utiliser un objet.
+Si vous placez le curseur en forme de masque sur un personnage vivant
+et que vous cliquez, vous pouvez le voler (s'il possède quelque chose).
+Si vous faites la même chose sur un objet,
+vous pouvez utiliser celui-ci, si c'est possible.
+
+=== tip 20100
+Armes/Objets.
+Ce mode vous permet de distribuer
+des armes ou des objets
+à vos personnages.
+
+=== tip 20101
+Sorts/Compétences
+Ce mode vous permet d'attribuer
+des sorts à vos personnages, d'acquérir de nouvelles
+compétences et d'améliorer ceux que vous possédez.
+
+=== tip 20102
+Echoppe d'objets.
+Ce mode vous permet d'acheter et de vendre des objets
+et des composants (modèles et matériaux).
+
+=== tip 20103
+Concepteur d'objets.
+Ce mode vous permet d'assembler
+ou de désassembler des objets.
+
+=== tip 20104
+Réparation d'objets.
+Ce mode vous permet de réparer
+des objets détériorés ou usés.
+
+=== tip 20105
+Echoppe de sorts.
+Ce mode vous permet d'acheter et de vendre des sorts
+et des composants (modèles et runes).
+
+=== tip 20106
+Concepteur de sorts.
+Ce mode vous permet d'assembler
+ou de désassembler des sorts.
+
+=== tip 20107
+Quitter.
+Quitter le camp ou l'échoppe.
+
+=== tip 20200
+Accepter.
+Confirme les changements effectués sur cet écran.
+
+
+=== tip 20201
+Annuler.
+Annule les actions effectuées sur cet écran.
+Si vous quittez le camp ou l'échoppe sans
+confirmer, toutes les actions seront annulées.
+
+=== tip 20300
+Personnage précédent.
+Montre le personnage précédent dans le groupe du héros.
+
+=== tip 20301
+Personnage suivant.
+Montre le personnage suivant dans le groupe du héros.
+
+=== tip 20302
+Exclure un personnage.
+Le personnage sélectionné quittera votre groupe.
+Il retournera à son ancien emplacement
+et vous pourrez le recruter à nouveau 
+après un certain temps.
+
+=== tip 20303
+Guérison des blessures.
+Guérit totalement les dégâts causés au
+personnage, y compris les membres très endommagés,
+qui ne peuvent pas être guéris par un sort de soins.
+
+=== tip 20400
+Défilement.
+Objets et sorts disponibles, défilement à droite.
+En appuyant sur la touche Maj., vous
+atteindrez la fin de la liste.
+
+=== tip 20401
+Défilement.
+Objets et sorts disponibles, défilement à gauche.
+En appuyant sur la touche Maj., vous
+atteindrez le début de la liste.
+
+=== tip 20500
+Oui
+
+=== tip 20501
+Annuler
+
+=== tip 21000
+Modèles : armes.
+Montre les modèles pour
+fabriquer des armes.
+Remarque : les personnages
+ne peuvent pas posséder de modèles.
+Ils sont réservés au concepteur d'objets.
+
+=== tip 21001
+Modèles : armures légères.
+Montre les modèles pour
+fabriquer des armures légères.
+Remarque : les personnages
+ne peuvent pas porter de modèles.
+Ils sont réservés au concepteur d'objets.
+
+=== tip 21002
+Modèles : armures lourdes.
+Servent à fabriquer des armures lourdes.
+Remarque : les personnages ne peuvent pas porter
+les modèles. Ces derniers ne peuvent être utilisés
+que dans le Concepteur d'objets.
+
+=== tip 21003
+Potions et baguettes magiques.
+Montre des potions prêtes à l'emploi, des baguettes
+et objets magiques, ainsi que leurs modèles.
+
+=== tip 21004
+Matériaux.
+Montre les matériaux pour
+fabriquer les différents objets.
+
+=== tip 21005
+Objets prêts à l'emploi.
+Montre les objets prêts à l'usage.
+
+=== tip 21100
+Modèles et matériaux.
+Ne montre que les modèles et matériaux
+pour fabriquer des objets.
+Remarque : Les personnages ne peuvent
+pas porter ou détenir des modèles ou des
+matériaux. Ils ne peuvent être utilisés
+que dans le concepteur d'objets.
+
+=== tip 21101
+Pierres maîtresses et runes.
+Ne montre que des pierres
+maîtresse et des runes.
+Remarque : les personnages
+ne peuvent pas en détenir.
+Elles sont réservées au
+concepteur d'objets.
+
+=== tip 21102
+Objets et sorts prêts à l'emploi.
+Ne montre que des objets et
+des sorts prêts à l'emploi.
+
+=== tip 21103
+Trophées.
+Ne montre que les trophées inutilisables
+mais que l'on peut vendre dans l'échoppe.
+
+=== tip 21104
+Objets de quête.
+Ne montre que les objets
+nécessaires pour une quête.
+
+=== tip 21105
+Tous les objets détenus.
+Affiche tous les objets en votre possession.
+
+=== tip 21200
+Pierre maîtresse : magie des Eléments.
+Montre les prototypes pour élaborer
+des sorts de l'Académie de magie des Eléments.
+Remarque : Les personnages ne peuvent
+pas en détenir. Ils ne peuvent être
+utilisés que dans le concepteur de sorts.
+
+=== tip 21201
+Pierres maîtresse : magie sensorielle.
+Montre les prototypes pour élaborer
+des sorts de l'Académie de magie sensorielle.
+Remarque : Les personnages ne peuvent
+pas en détenir. Ils ne peuvent être
+utilisés que dans le concepteur de sorts.
+
+=== tip 21202
+Pierre maîtresse : magie astrale.
+Montre les prototypes pour élaborer
+des sorts de l'Académie de magie astrale.
+Remarque : Les personnages ne peuvent
+pas en détenir. Ils ne peuvent être
+utilisés que dans le concepteur de sorts.
+
+=== tip 21203
+Runes : base.
+Montre les runes qui permettent
+d'améliorer les propriétés des sorts.
+Remarque : les personnages ne peuvent
+pas détenir des runes. Elles ne peuvent 
+être utilisées que dans le concepteur de sorts.
+
+=== tip 21204
+Runes : spécial.
+Affiche les runes vous permettant de filtrer les créatures 
+touchées par le sort et d'associer le sort à des armes
+ou des armures.
+Remarque : les personnages ne peuvent
+pas détenir de runes. Elles ne peuvent 
+être utilisées que dans le concepteur de sorts.
+
+=== tip 21205
+Sorts prêts à l'emploi.
+Montre les sorts déjà préparés.
+
+=== tip 30100
+Fermer.
+Enlève les conseils de l'écran.
+
+=== tip 30101
+Ecran précédent.
+Affiche l'écran précédent.
+
+=== tip 30102
+Ecran suivant.
+Affiche l'écran suivant.
+
+=== tip 50100
+Oui
+
+=== tip 50101
+Annuler
+
+=== tip 60100
+Enregistrer la partie dans la case sélectionnée
+
+=== tip 60101
+Charger une partie
+
+=== tip 60102
+Effacer une partie
+
+=== tip 60103
+Annuler
+
+=== tip 70100
+Oui
+
+=== tip 70101
+Annuler
+
+=== tip 70102
+Options générales du jeu
+
+=== tip 70103
+Ré-attribution des touches
+
+=== tip 80100
+Aller à la zone de jeu
+
+=== tip 80101
+Retour à la carte globale
+
+=== tip 80102
+Retour à la zone de jeu
+
+=== tip 80110
+Accès à la zone de jeu.
+Les accès disponibles sont en vert.
+Les autres sont en rouge.
+Cliquez dessus pour entrer.
+
+
+=== tip 80111
+Quêtes.
+Les quêtes achevées sont signalées par un "V".
+Celles restées inachevées ou impossibles à réaliser
+sont signalées par un "X". Pour afficher les
+instructions d'une quête, cliquez dessus.
+
+=== tip 80112
+Zone de quête.
+La croix sur la carte indique
+l'emplacement approximatif de la quête
+sélectionnée.
+Remarque : dans certaines quêtes,
+les cibles peuvent bouger autour
+de la zone de jeu ou se trouver ailleurs.
+En pareil cas, la croix indique l'endroit
+où vous devriez commencer
+votre quête ou l'endroit où
+peut s'achever une quête.
+
+=== tip 80200
+Zone précédente.
+Montre la zone précédente de jeu
+avec les quêtes non achevées.
+
+=== tip 80201
+Zone précédente.
+Montre la zone suivante de jeu
+avec les quêtes non achevées.
+
+=== tip 90100
+Passe en mode "Camp".
+Ici, vous pouvez donner des vêtements
+et des armes à vos personnages. Vous pouvez
+également leur faire partager l'expérience acquise.
+
+=== tip 90101
+Tourner la carte vers la gauche.
+
+=== tip 90102
+Tournez la carte vers la droite.
+
+=== tip action_accel
+Partie en vitesse accélérée.
+Le temps y est accéléré.
+Les personnages agissent plus vite.
+
+
+=== tip action_camera1
+Caméra 1.
+Quand vous appuyez sur cette touche + CTRL,
+les réglages sont sauvegardés sous "Réglages 1".
+Si vous appuyez à nouveau sur la touche mais pas
+sur CTRL, la caméra revient en position "Réglages 1".
+
+=== tip action_camera2
+Caméra 2.
+Quand vous appuyez sur cette touche + CTRL,
+les réglages sont sauvegardés sous "Réglages 2".
+Si vous appuyez à nouveau sur la touche mais pas
+sur CTRL, la caméra revient en position "Réglages 2".
+
+=== tip action_camera3
+Caméra 3.
+Quand vous appuyez sur cette touche + CTRL,
+les réglages sont sauvegardés sous "Réglages 3".
+Si vous appuyez à nouveau sur la touche mais pas
+sur CTRL, la caméra revient en position "Réglages 3".
+
+=== tip action_camera4
+Caméra 4.
+Quand vous appuyez sur cette touche + CTRL,
+les réglages sont sauvegardés sous "Réglages 4".
+Si vous appuyez à nouveau sur la touche mais pas
+sur CTRL, la caméra revient en position "Réglages 4".
+
+=== tip action_camera_center
+Centrer la caméra.
+Centre la caméra sur un personnage sélectionné.
+
+=== tip action_camera_down
+Caméra arrière.
+En appuyant sur cette touche + CTRL,
+la caméra recule mais l'angle reste le même.
+
+
+=== tip action_camera_left
+Caméra à gauche.
+En appuyant sur cette touche + CTRL,
+la caméra  bouge vers la gauche mais l'angle reste le même.
+
+
+=== tip action_camera_norm
+Caméra au nord.
+La caméra revient en mode "standard" nord.
+
+
+=== tip action_camera_right
+Caméra à droite.
+En appuyant sur cette touche + CTRL,
+la caméra se déplace vers la droite mais l'angle reste le même.
+
+
+=== tip action_camera_track
+Poursuite.
+La caméra suit le personnage sélectionné.
+Vous pouvez régler l'angle, la mise au point et le zoom.
+
+=== tip action_camera_up
+Caméra vers l'avant.
+En appuyant sur cette touche + CTRL,
+la caméra avance mais l'angle reste le même.
+
+
+=== tip action_camera_zoom_in
+Zoom.
+La caméra zoome sur la cible choisie.
+
+=== tip action_camera_zoom_out
+Zoom arrière
+Zoom arrière sur la cible choisie.
+
+=== tip action_cancel_target
+Annuler l'action.
+Pour certaines actions (jeter un sort, voler, utiliser),
+sélectionnez l'icône appropriée puis placez
+le curseur sur la cible. Le bouton que vous assignez
+vous permet d'éviter la sélection de l'icône. Vous
+pouvez aussi appuyer sur Echap pour annuler une action.
+
+
+=== tip action_crawl
+Ramper.
+Quand un personnage rampe,
+il fait moins de bruit qu'en marchant
+et l'ennemi le repère moins bien.
+Sa vitesse est très lente.
+Son endurance reste stable.
+
+=== tip action_cs_body
+Vise le corps.
+Votre personnage visera le corps de l'ennemi
+en attaquant. Quand la "santé" du corps
+atteint 0, l'ennemi meurt.
+
+=== tip action_cs_head
+Vise la tête.
+Votre personnage visera la tête de l'ennemi
+en attaquant. Quand la "santé" de la tête
+atteint 0, l'ennemi meurt.
+
+=== tip action_cs_lhand
+Vise la main gauche.
+Votre personnage visera la main gauche de l'ennemi
+en attaquant. Quand la "santé" de la main
+atteint 0, la vitesse d'action de l'ennemi diminue.
+
+=== tip action_cs_lleg
+Vise la jambe gauche.
+Votre personnage visera la jambe gauche de l'ennemi
+en attaquant. Quand la "santé" de la jambe
+atteint 0, l'ennemi bouge plus lentement.
+
+=== tip action_cs_rhand
+Vise la main droite
+Votre personnage visera la main droite de l'ennemi
+en attaquant. Quand la "santé" de la main
+atteint 0, la vitesse d'action de l'ennemi diminue.
+
+=== tip action_cs_rleg
+Vise la jambe droite.
+Votre personnage visera la jambe droite de l'ennemi
+en attaquant. Quand la "santé" de la jambe
+atteint 0, l'ennemi bouge plus lentement.
+
+=== tip action_decel
+Vitesse normale de jeu.
+Le temps s'écoulera de façon normale.
+
+=== tip action_follow
+Suivre.
+Le personnage sélectionné suivra le personnage
+désigné jusqu'à ce que vous donniez un nouvel ordre.
+
+=== tip action_item1
+Potion ou baguette magique 1.
+Utilisez la première potion ou baguette
+(Les icônes se comptent de droite à gauche).
+
+=== tip action_item2
+Potion ou baguette magique 2.
+Utilisez la deuxième potion ou baguette
+(Les icônes se comptent de droite à gauche).
+
+=== tip action_item3
+Potion ou baguette magique 3.
+Utilisez la troisième potion ou baguette
+(Les icônes se comptent de droite à gauche).
+
+=== tip action_item4
+Potion ou baguette magique 4.
+Utilisez la quatrième potion ou baguette
+(Les icônes se comptent de droite à gauche).
+
+=== tip action_obj
+Ecran des quêtes.
+Vous y trouverez des détails sur les
+quêtes disponibles et leurs statuts.
+
+=== tip action_pause
+Mode pause.
+Quand le jeu est en pause, vous pouvez
+contrôler la caméra et donner des ordres
+à vos personnages.
+
+=== tip action_quickload
+Chargement rapide de la partie.
+Chargement de la partie enregistrée en "Sauvegarde rapide"
+sans passer par le menu Echap.
+
+
+=== tip action_quicksave
+Sauvegarde rapide
+La partie sera enregistrée sans passer
+par le menu Echap. Par défaut "Sauvegarde rapide".
+
+
+=== tip action_run
+Courir.
+Quand un personnage court, il fait plus de bruit
+qu'en marchant et attire l'attention de l'ennemi.
+Sa vitesse est élevée et son endurance diminue.
+Quand cette dernière est à zéro, il se met
+automatiquement à marcher.
+
+=== tip action_select1
+Sélection du personnage 1.
+Sélectionne votre 1er personnage
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_select2
+Sélection du personnage 2.
+Sélectionne le deuxième personnage.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_select3
+Sélection du personnage 3.
+Sélectionne votre 3e personnage.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_select_all
+Tout sélectionner.
+Sélectionne tous les personnages.
+
+=== tip action_sneak
+Marcher silencieusement.
+Quand un personnage marche silencieusement,
+il ne fait presque aucun bruit et l'ennemi a du mal à le repérer.
+Son taux d'endurance ne change pas.
+
+=== tip action_spell1
+Sort 1.
+Jette le premier sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell2
+Sort 2.
+Jette le deuxième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell3
+Sort 3.
+Jette le troisième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell4
+Sort 4.
+Jette le quatrième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell5
+Sort 5.
+Jette le cinquième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell6
+Sort 6.
+Jette le sixième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell7
+Sort 7.
+Jette le septième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_spell8
+Sort 8.
+Jette le huitième sort disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_swarm
+Mode Attaque/Défense.
+En mode Attaque, le personnage
+attaque tous les ennemis qui le voient.
+En mode Défense, il attaque
+seulement quand vous lui en donnez l'ordre.
+
+=== tip action_tutorial_script
+Didacticiel.
+Cette touche affiche un didacticiel
+pour la quête d'entraînement ou
+l'écran d'interface.
+
+=== tip action_use_science
+Utiliser/Voler.
+Vous pouvez utiliser des objets mécaniques (ouvrir des serrures,
+actionner des boutons). Votre taux de réussite
+dépend de votre compétence en "Utiliser/Voler".
+Vous pouvez également voler directement aux ennemis vivants.
+
+
+
+=== tip action_w_info1
+Vue générale.
+La fenêtre d'information affiche une vue générale
+du personnage sur lequel est placé le curseur.
+Si le curseur n'est sur personne, vous aurez
+une vue du personnage sélectionné.
+
+
+=== tip action_w_info2
+Dégâts.
+La fenêtre d'information montre les dégâts causés
+aux parties du corps sur lesquels le curseur est placé.
+Si le curseur n'est sur personne, vous aurez
+une vue du personnage sélectionné.
+
+=== tip action_w_info3
+Propriétés.
+La fenêtre d'information affiche les détails des biens
+du personnage sur lequel le curseur est placé.
+Si le curseur n'est sur personne, vous aurez
+une vue du personnage sélectionné.
+
+=== tip action_w_info4
+Sorts.
+La fenêtre d'information affiche les sorts affectant
+le personnage sur lequel le curseur est placé.
+Si le curseur n'est sur personne, vous aurez
+une vue du personnage sélectionné.
+
+=== tip action_w_minimap
+Montrer/masquer la mini-carte
+
+=== tip action_w_text1
+Messages.
+La fenêtre de texte affiche les messages générés
+au cours du jeu (objectifs atteints, sous-titres,
+messages sur les trophées, etc.).
+
+
+=== tip action_w_text2
+Trophées.
+La fenêtre de texte affiche la liste des trophées
+obtenus par le personnage dans la zone actuelle de jeu.
+
+=== tip action_walk
+Marcher.
+Quand un personnage marche,
+sa vitesse est normale
+et son taux d'endurance ne change pas.
+
+=== tip action_weapon1
+Arme 1.
+Sélectionne la première arme disponible
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_weapon2
+Arme 2.
+Sélectionne la deuxième arme disponible
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_weapon3
+Arme 3.
+Sélectionne la troisième arme disponible.
+(Les icônes se comptent de gauche à droite).
+
+=== tip action_weapon4
+Arme 4.
+Sélectionne la quatrième arme disponible
+(Les icônes se comptent de gauche à droite).
+
+=== tip option_autosave
+Sauvegarde automatique.
+Quand elle est activée, elle se fera
+à chaque fois que vous entrez ou sortez
+d'une zone de jeu ou de dialogue.
+
+=== tip option_brightness
+Luminosité.
+Règle la luminosité des images du jeu.
+
+=== tip option_camera_reverse_x
+Rotation de la caméra gauche/droite.
+Quand vous utilisez cette fonction, appuyez
+sur le bouton droit de la souris pour changer
+le sens de la rotation.
+Activée : la caméra pivote
+dans la direction de la souris.
+
+Désactivée : La caméra pivoter dans le sens
+inverse du mouvement de la souris.
+
+=== tip option_camera_reverse_y
+Inverser le mouvement haut/bas de la caméra.
+Quand on fait bouger la caméra vers le haut ou le bas
+tout en maintenant enfoncé le bouton droit de la souris,
+on peut changer le mouvement de la caméra.
+Activé : La caméra se déplace dans le sens
+du mouvement haut/bas de la souris.
+Désactivé : La caméra se déplace dans le sens opposé
+à la direction prise par la souris.
+
+=== tip option_contrast
+Contraste.
+Règle le contraste des images du jeu.
+
+=== tip option_difficulty
+Niveau de difficulté.
+En mode "jeu facile", les paramètres
+de l'armure, de l'attaque et de l'endurance
+de l'ennemi se trouvent diminués.
+Vous pouvez changer le niveau de difficulté
+à tout moment du jeu et pas seulement
+au démarrage d'une partie.
+
+
+=== tip option_footprints
+Afficher les traces de pas.
+Montre ou masque les traces de pas.
+
+=== tip option_gamma
+Correction gamma.
+Règle la correction gamma des images du jeu.
+
+=== tip option_group_actions
+Options de commandes.
+Définit les options de commande des personnages.
+
+=== tip option_group_camera
+Options de commande de la caméra.
+Définit les options de réglage de la caméra
+(mode "libre" ou réglages fixes).
+
+=== tip option_group_cshots
+Options de combat.
+Définit les options de touches raccourcis
+pour les coups de précision.
+
+=== tip option_group_game
+Options de jeu.
+Définit les options générale de jeu.
+
+=== tip option_group_items
+Options d'objets.
+Définit les options d'utilisation des objets.
+
+=== tip option_group_select
+Options de sélection de personnages.
+Définit la sélection des personnages.
+
+=== tip option_group_sens
+Options de sensibilité.
+Règle la sensibilité de la souris et du clavier.
+
+=== tip option_group_sound
+Options de son.
+Définit les options sonores :
+volume musique, voix et effets sonores.
+
+=== tip option_group_spells
+Options de magie.
+Définit les options de sorts.
+
+=== tip option_group_video
+Options graphiques.
+Définit les choix graphiques.
+
+=== tip option_group_windows
+Options d'écran.
+Définit les options des fenêtres du jeu.
+
+=== tip option_marks
+Afficher le sang.
+Quand un personnage meurt,
+une flaque de sang apparaît.
+Désactivé : Le sang n'est pas visible.
+
+=== tip option_power_kbd
+Sensibilité du clavier.
+Règle le vitesse de la caméra
+quand elle est contrôlée par le clavier.
+
+=== tip option_power_mouse
+Sensibilité de la souris.
+Règle la vitesse du curseur, la rotation de
+la caméra et d'autres actions contrôlées par la souris.
+
+
+=== tip option_reverse_stereo
+Inverse les canaux de son
+gauche et droite.
+Activé : canaux inversés
+Désactivé : retour aux
+paramètres sonores par défaut.
+
+=== tip option_rubber_select
+Sélection de trame.
+Définit la distance de déplacement de la souris
+pour commencer la sélection des trames.
+La valeur 0 désactive la sélection.
+
+=== tip option_scroll_border
+Défilement en bordure.
+Définit la distance entre le curseur et
+la bordure de l'écran. La caméra
+se déplace dans la direction du curseur.
+
+=== tip option_select_type
+Sélection de personnages.
+Activé : le personnage sélectionné est
+mis en surbrillance et signalé par un triangle.
+Désactivé : mise en surbrillance sans
+marqueur particulier.
+
+=== tip option_shadow_buildings
+Ombres d'objets.
+Si votre système n'est que légèrement supérieur
+à la configuration requise, il vaut mieux
+désactiver les ombres d'objets.
+
+=== tip option_shadow_flora
+Ombres d'arbres.
+Si votre système n'est que légèrement supérieur
+à la configuration requise, il vaut mieux
+désactiver les ombres d'arbres.
+
+=== tip option_shadow_other
+Toutes les ombres.
+Si votre système n'est que légèrement supérieur à
+la configuration requise, il vaut mieux désactiver
+les ombres des sources lumineuses supplémentaires.
+Les autres commandes d'ombres seront désactivées aussi.
+
+=== tip option_shadow_units
+Ombres de personnages.
+Si votre système n'est que légèrement supérieur
+à la configuration requise, il vaut mieux
+désactiver les ombres de personnages
+
+=== tip option_show_flying_hp
+Afficher l'indicateur de dégâts.
+Les dégâts infligés peuvent s'afficher sous la
+forme d'un nombre quand votre personnage est touché.
+Activé : l'indicateur apparaît.
+Désactivé : l'indicateur n'apparaît pas.
+
+=== tip option_show_path
+Afficher le chemin.
+Montre le chemin que le personnage a
+à parcourir jusqu'à la destination sélectionnée.
+
+=== tip option_show_tutorial
+Ecrans de didacticiel.
+Ils vous aideront à maîtriser rapidement le jeu.
+Activé : affiche les didacticiels.
+Désactivé : n'affiche pas les didacticiels.
+
+=== tip option_switch_filters
+Filtres automatiques.
+Vous pouvez utilisez les filtres de l'inventaire pour
+n'afficher qu'une catégorie d'objets.
+Ces filtres peuvent être activés manuellement
+ou manuellement et automatiquement.
+ACTIVE : Les filtres sont automatiquement activés
+quand un nouvel objet est ajouté à l'inventaire.
+(selon le type d'objet).
+DESACTIVE : L'activation des filtres
+se fait manuellement.
+
+=== tip option_tooltip_time
+Délai des conseils.
+Cette option règle le délai d'apparition
+des conseils qui apparaissent près de l'élément
+d'écran sur lequel vous placez le curseur.
+Ce délai varie entre 0 et 5 secondes.
+
+=== tip option_volume_sfx
+Volume sonore.
+Règle le volume des effets sonores.
+
+=== tip option_volume_stream
+Volume de la musique.
+Règle le volume de la musique.
+
+=== tip option_volume_voice
+Volume des voix.
+Règle le volume des voix.
+

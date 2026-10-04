@@ -1,0 +1,1288 @@
+# um-texts 1
+=== string action_accel
+Augmenter la vitesse du jeu
+
+=== string action_camera1
+Caméra en position 1
+
+=== string action_camera2
+Caméra en position 2
+
+=== string action_camera3
+Caméra en position 3
+
+=== string action_camera4
+Caméra en position 4
+
+=== string action_camera_center
+Centré
+
+=== string action_camera_down
+Caméra vers l'arrière
+
+=== string action_camera_left
+Caméra vers la gauche
+
+=== string action_camera_norm
+Diriger caméra vers le nord
+
+=== string action_camera_right
+Caméra vers la droite
+
+=== string action_camera_track
+Caméra poursuite
+
+=== string action_camera_up
+Caméra vers l'avant
+
+=== string action_camera_zoom_in
+Zoom
+
+=== string action_camera_zoom_out
+Zoom arrière
+
+=== string action_cancel_target
+Annuler l'action
+
+=== string action_crawl
+Ramper
+
+=== string action_cs_body
+Viser le corps
+
+=== string action_cs_head
+Viser la tête
+
+=== string action_cs_lhand
+Viser le bras gauche
+
+=== string action_cs_lleg
+Viser la jambe gauche
+
+=== string action_cs_rhand
+Viser le bras droit
+
+=== string action_cs_rleg
+Viser la jambe droite
+
+=== string action_decel
+Diminuer la vitesse du jeu
+
+=== string action_follow
+Suivre le personnage
+
+=== string action_item1
+Utiliser Objet rapide 1
+
+=== string action_item2
+Utiliser Objet rapide 2
+
+=== string action_item3
+Utiliser Objet rapide 3
+
+=== string action_item4
+Utiliser Objet rapide 4
+
+=== string action_obj
+Voir les quêtes
+
+=== string action_pause
+Pause activée/désactivée
+
+=== string action_quickload
+Chargement rapide
+
+=== string action_quicksave
+Sauvegarde rapide
+
+=== string action_run
+Courir
+
+=== string action_select1
+Sélectionner personnage 1
+
+=== string action_select2
+Sélectionner personnage 2
+
+=== string action_select3
+Sélectionner personnage 3
+
+=== string action_select_all
+Sélectionner tous les personnages
+
+=== string action_sneak
+Marcher silencieusement
+
+=== string action_spell1
+Jeter sort 1
+
+=== string action_spell2
+Jeter sort 2
+
+=== string action_spell3
+Jeter sort 3
+
+=== string action_spell4
+Jeter sort 4
+
+=== string action_spell5
+Jeter sort 5
+
+=== string action_spell6
+Jeter sort 6
+
+=== string action_spell7
+Jeter sort 7
+
+=== string action_spell8
+Jeter sort 8
+
+=== string action_swarm
+Mode Attaque/Défense
+
+=== string action_tutorial_script
+Didacticiel
+
+=== string action_use_science
+Utiliser/Voler
+
+=== string action_w_info1
+Fenêtre d'information : vue générale
+
+=== string action_w_info2
+Fenêtre d'information : coups portés
+
+=== string action_w_info3
+Fenêtre d'information : attributs
+
+=== string action_w_info4
+Fenêtre d'information : effets des sorts
+
+=== string action_w_minimap
+Afficher la mini-carte
+
+=== string action_w_text1
+Fenêtre de texte : messages
+
+=== string action_w_text2
+Fenêtre de texte : objets récupérés
+
+=== string action_walk
+Marcher
+
+=== string action_weapon1
+Sélectionner arme 1
+
+=== string action_weapon2
+Sélectionner arme 2
+
+=== string action_weapon3
+Sélectionner arme 3
+
+=== string action_weapon4
+Sélectionner arme 4
+
+=== string attack
+Attaquer
+
+=== string attack_desc
+Vos chances d'atteindre l'ennemi avec une arme donnée sont indiquées ici. Elles dépendent de la dextérité du personnage, de ses compétences et de ses capacités avec cette arme, ainsi que des caractéristiques de l'arme en elle-même.
+
+=== string brief_complete_quest
+Quête achevée :
+
+=== string brief_get_exp
+Expérience acquise :
+
+=== string brief_get_item
+Objet obtenu :
+
+=== string brief_get_money
+Argent engrangé :
+
+=== string brief_get_quest
+Quête reçue :
+
+=== string brief_get_specials_1
+Augmentée : force
+
+=== string brief_get_specials_2
+Augmentée : compétence magique sensorielle
+
+=== string brief_get_specials_3
+Augmentée : Utiliser/Voler
+
+=== string brief_get_specials_4
+Augmentée : dextérité
+
+=== string brief_lost_item
+Objet donné :
+
+=== string camp_current_exp
+Votre expérience :
+
+=== string camp_current_money
+Votre argent :
+
+=== string camp_damage
+Dégâts :
+
+=== string camp_damage_desc
+Quand on frappe avec cette arme, les dégâts infligés à l'ennemi dépassent la valeur minimum mais n'atteignent pas la valeur maximum du paramètre 'dégâts'. Si l'ennemi est protégé par une armure, le dégât infligé par l'arme décroît en fonction de la valeur du paramètre de l'armure. Si l'armure de l'ennemi dépasse la valeur maximale de dégâts, cette arme devient inefficace.
+
+=== string camp_dismiss
+Exclure
+
+=== string camp_healing
+Prix des soins :
+
+=== string camp_item_constr
+Prix de construction d'objet :
+
+=== string camp_item_deconstr
+Prix de déconstruction d'objet :
+
+=== string camp_item_repair
+Prix de réparation d'objet :
+
+=== string camp_item_trade
+Valeur commerciale :
+
+=== string camp_level_up
+Prix de l'augmentation de la compétence :
+
+=== string camp_repair_all
+Réparer tous les objets
+
+=== string camp_spell_constr
+Prix d'élaboration d'un sort :
+
+=== string camp_spell_deconstr
+Prix de déconstruction d'un sort :
+
+=== string camp_spell_trade
+Valeur commerciale :
+
+=== string cant_use
+Vous ne pouvez pas utiliser cet objet ici.
+
+=== string combat_complete_quest
+Quête achevée :
+
+=== string combat_complete_subobj
+Objectif atteint :
+
+=== string combat_crippled
+Cassé :
+
+=== string combat_failed_quest
+Echec de la quête :
+
+=== string combat_failed_subobj
+Echec de l'objectif :
+
+=== string combat_get_quest
+Quête reçue :
+
+=== string combat_get_subobj
+Objectif reçu :
+
+=== string combat_picked_up
+Vous avez pris :
+
+=== string consider_less1
+Respectable
+
+=== string consider_less10
+Très faible
+
+=== string consider_less11
+Très faible
+
+=== string consider_less12
+Très faible
+
+=== string consider_less13
+Très faible
+
+=== string consider_less14
+Très faible
+
+=== string consider_less15
+Très faible
+
+=== string consider_less16
+Très faible
+
+=== string consider_less17
+Ridicule
+
+=== string consider_less18
+Ridicule
+
+=== string consider_less19
+Ridicule
+
+=== string consider_less2
+Plus faible
+
+=== string consider_less20
+Ridicule
+
+=== string consider_less21
+Ridicule
+
+=== string consider_less22
+Ridicule
+
+=== string consider_less23
+Ridicule
+
+=== string consider_less24
+Ridicule
+
+=== string consider_less25
+Ridicule
+
+=== string consider_less3
+Plus faible
+
+=== string consider_less4
+Plus faible
+
+=== string consider_less5
+Très faible
+
+=== string consider_less6
+Très faible
+
+=== string consider_less7
+Très faible
+
+=== string consider_less8
+Très faible
+
+=== string consider_less9
+Très faible
+
+=== string consider_more0
+Identique
+
+=== string consider_more1
+Plus fort
+
+=== string consider_more10
+Mortel
+
+=== string consider_more11
+Mortel
+
+=== string consider_more12
+Mortel
+
+=== string consider_more13
+Mortel
+
+=== string consider_more14
+Mortel
+
+=== string consider_more15
+Mortel
+
+=== string consider_more16
+Invincible
+
+=== string consider_more17
+Invincible
+
+=== string consider_more18
+Invincible
+
+=== string consider_more19
+Invincible
+
+=== string consider_more2
+Méchant
+
+=== string consider_more20
+Invincible
+
+=== string consider_more21
+Invincible
+
+=== string consider_more22
+Invincible
+
+=== string consider_more23
+Invincible
+
+=== string consider_more24
+Invincible
+
+=== string consider_more25
+Invincible
+
+=== string consider_more3
+Coriace
+
+=== string consider_more4
+Dangereux
+
+=== string consider_more5
+Dangereux
+
+=== string consider_more6
+Très dangereux
+
+=== string consider_more7
+Très dangereux
+
+=== string consider_more8
+Très dangereux
+
+=== string consider_more9
+Très dangereux
+
+=== string damage_0
+Transperçant
+
+=== string damage_1
+Tranchant
+
+=== string damage_2
+Martelant
+
+=== string damage_3
+Feu
+
+=== string damage_4
+Acide
+
+=== string damage_5
+Foudre
+
+=== string damage_6
+Général
+
+=== string defense
+Défense
+
+=== string defense_desc
+Vos chances d'éviter une attaque quand vous utilisez une arme donnée sont indiquées ici. Elles dépendent de la dextérité du personnage, de ses compétences et de sa capacité à manier l'arme, ainsi que des propriétés de l'arme en elle-même.
+
+=== string delete
+Effacer la partie
+
+=== string delete_msg
+Etes-vous sûr de vouloir effacer cette partie ?
+
+=== string difficulty_easy
+Facile
+
+=== string difficulty_hard
+Difficile
+
+=== string dismiss_pers
+Exclure le personnage du groupe
+
+=== string dismiss_pers_msg
+Etes-vous sûr de vouloir exclure ce personnage ?
+
+=== string dmg_0
+Trsp
+
+=== string dmg_1
+Trch
+
+=== string dmg_2
+Mart
+
+=== string dmg_3
+Feu
+
+=== string dmg_4
+Acid
+
+=== string dmg_5
+Foud
+
+=== string dmg_6
+Géné
+
+=== string end_game
+Partie achevée
+
+=== string end_game_msg
+Partie achevée
+
+=== string end_of_game
+Félicitations !
+
+=== string end_of_game_msg
+Vous avez terminé la démo !
+
+=== string failed_0
+Impossible d'apprivoiser
+
+=== string failed_1
+Impossible de changer d'arme
+
+=== string failed_10
+Vous ne pouvez pas jeter de sort ici.
+
+=== string failed_2
+Attaque impossible
+
+=== string failed_3
+Changement de position impossible
+
+=== string failed_4
+Chemin non trouvé
+
+=== string failed_5
+Impossible d'utiliser le sort "transfert de mana"
+
+=== string failed_6
+Sort "transfert de mana" interrompu
+
+=== string failed_7
+Sortilège impossible
+
+=== string failed_8
+Téléportation impossible
+
+=== string failed_9
+Impossible de jeter un sort
+
+=== string format_item1
+%s "%s"
+
+=== string format_item2
+%s "%s" (%d)
+
+=== string format_money
+Argent (%d)
+
+=== string game_over
+Partie terminée
+
+=== string game_over_msg
+Votre personnage principal est mort. Voulez-vous charger à nouveau cette partie ?
+
+=== string game_paused
+En pause !
+
+=== string hl_arm
+Bras
+
+=== string hl_arms
+Les deux bras
+
+=== string hl_arms_desc
+Cela protège les bras du personnage contre les armes et les sorts. Si la santé d'un des bras atteint 0, la vitesse à laquelle le personnage attaque ou lance un sort sera réduite de façon significative.
+
+=== string hl_leg
+Jambe
+
+=== string hl_legs
+Jambes
+
+=== string hl_legs_desc
+Cela protège les jambes du personnage contre les armes et les sorts. Si la santé d'une des jambes atteint 0, la vitesse du personnage sera nettement ralentie.
+
+=== string hl_skull
+Tête
+
+=== string hl_skull_desc
+Cela protège la tête du personnage contre les armes et les sorts. Si la santé de la tête atteint 0, le personnage meurt.
+
+=== string hl_torso
+Corps
+
+=== string hl_torso_desc
+Cela protège le corps du personnage contre les armes et les sorts. Si la santé du corps atteint 0, le personnage meurt.
+
+=== string infoitem_0
+Poids :
+
+=== string infoitem_1
+Equipement :
+
+=== string infoitem_10
+Portée :
+
+=== string infoitem_11
+Zone :
+
+=== string infoitem_12
+Durée :
+
+=== string infoitem_13
+Cibles :
+
+=== string infoitem_14
+Complexité :
+
+=== string infoitem_15
+Dégâts :
+
+=== string infoitem_16
+Compétence :
+
+=== string infoitem_17
+Classe :
+
+=== string infoitem_18
+Académie :
+
+=== string infoitem_19
+Runes :
+
+=== string infoitem_2
+Energie :
+
+=== string infoitem_20
+Actions :
+
+=== string infoitem_21
+Immédiatement
+
+=== string infoitem_22
+Cible
+
+=== string infoitem_23
+Résistance :
+
+=== string infoitem_24
+Vulnérabilité :
+
+=== string infoitem_25
+Armure :
+
+=== string infoitem_26
+m
+
+=== string infoitem_27
+s
+
+=== string infoitem_28
+Constant
+
+=== string infoitem_29
+Dextérité :
+
+=== string infoitem_3
+Longévité :
+
+=== string infoitem_30
+Compétence :
+
+=== string infoitem_31
+Capacité :
+
+=== string infoitem_32
+Arme :
+
+=== string infoitem_33
+Total :
+
+=== string infoitem_34
+Les arcs ne permettent pas de se défendre.
+
+=== string infoitem_35
+Max. Complexité
+
+=== string infoitem_36
+Max. Endurance
+
+=== string infoitem_37
+Type :
+
+=== string infoitem_38
+Changement d'attaque :
+
+=== string infoitem_39
+Changement de défense :
+
+=== string infoitem_4
+Bonus armure :
+
+=== string infoitem_40
+Magie du feu
+
+=== string infoitem_41
+Magie foudroyante
+
+=== string infoitem_42
+Magie de l'acide
+
+=== string infoitem_43
+Magie sensorielle
+
+=== string infoitem_44
+Magie astrale
+
+=== string infoitem_5
+Sort :
+
+=== string infoitem_6
+(CTRL - Vue)
+
+=== string infoitem_7
+Endurance :
+
+=== string infoitem_8
+Effet :
+
+=== string infoitem_9
+Vitesse :
+
+=== string infoskill_0
+Santé :
+
+=== string infoskill_1
+Encombrement :
+
+=== string infoskill_10
+Bonus d'attaque :
+
+=== string infoskill_11
+Connaissance :
+
+=== string infoskill_12
+Vision nocturne :
+
+=== string infoskill_13
+Attribut de bonus
+
+=== string infoskill_14
+Santé :
+
+=== string infoskill_15
+Endurance :
+
+=== string infoskill_16
+Régénération
+
+=== string infoskill_17
+Restauration
+
+=== string infoskill_18
+Coût (expérience)
+
+=== string infoskill_19
+Exigences :
+
+=== string infoskill_2
+Endurance :
+
+=== string infoskill_20
+Basé sur :
+
+=== string infoskill_21
+(pris)
+
+=== string infoskill_22
+Multiplicateur d'attaque dans le dos
+
+=== string infoskill_23
+Points supplémentaires :
+
+=== string infoskill_24
+Points d'endurance :
+
+=== string infoskill_3
+Actions :
+
+=== string infoskill_4
+Expérience :
+
+=== string infoskill_5
+Compétence :
+
+=== string infoskill_6
+Attaque :
+
+=== string infoskill_7
+Dégâts :
+
+=== string infoskill_8
+Connaissance :
+
+=== string infoskill_9
+Utiliser/voler
+
+=== string infounit_0
+Santé :
+
+=== string infounit_1
+Endurance :
+
+=== string infounit_10
+Armure :
+
+=== string infounit_11
+Résistance :
+
+=== string infounit_12
+Vulnérabilité :
+
+=== string infounit_13
+m
+
+=== string infounit_14
+Arme utilisée :
+
+=== string infounit_15
+Actions :
+
+=== string infounit_16
+L'ennemi est :
+
+=== string infounit_17
+Surcharge !
+
+=== string infounit_2
+Vitesse :
+
+=== string infounit_3
+Attaque :
+
+=== string infounit_4
+Défense
+
+=== string infounit_5
+Pouvoir magique
+
+=== string infounit_6
+Vue :
+
+=== string infounit_7
+(poursuite)
+
+=== string infounit_8
+Cible :
+
+=== string infounit_9
+Dégâts :
+
+=== string item_ARMOR_lower
+Armure légère
+
+=== string item_ARMOR_shape_lower
+Modèle d'armure légère
+
+=== string item_ARMOR_shape_upper
+Modèle d'armure lourde
+
+=== string item_ARMOR_upper
+Armure lourde
+
+=== string item_loot
+Objet à vendre
+
+=== string item_material
+Matériau
+
+=== string item_modifier
+Rune
+
+=== string item_potion
+Potion
+
+=== string item_prototype
+Pierre maîtresse
+
+=== string item_quest
+Objet de quête
+
+=== string item_spell
+Sort
+
+=== string item_wand
+Baguette magique
+
+=== string item_wand_shape
+Modèle de baguette magique
+
+=== string item_weapon
+Arme
+
+=== string item_weapon_shape
+Modèle d'arme
+
+=== string key_already_mapped
+La touche est déjà attribuée.
+
+=== string key_already_mapped_msg
+La touche %s a été attribuée à "%s". Voulez-vous la ré-attribuer ?
+
+=== string last_weapon
+Dernière arme
+
+=== string last_weapon_msg
+Voulez-vous vraiment démunir ce personnage de toutes ses armes ?
+
+=== string leave_zone
+Quitter la zone de jeu
+
+=== string leave_zone_msg
+Voulez-vous vraiment quitter la zone de jeu ?
+
+=== string loot_item
+(Cet objet est réservé à la vente. Vous ne pouvez pas l'utiliser.)
+
+=== string magic_skills
+Connaissance des Académies de magie
+
+=== string magic_skills_desc
+Indique le degré maximum de complexité pour un type donné de sort utilisable par le personnage. La quantité de connaissance dépend de la "compétence", de l'"intelligence" et des "capacités" du personnage quant à ce type de sort.
+
+=== string mattype_bone
+Os
+
+=== string mattype_cloth
+Toile
+
+=== string mattype_crystal
+Cristal
+
+=== string mattype_fur
+Fourrure
+
+=== string mattype_hide
+Peau
+
+=== string mattype_leather
+Cuir
+
+=== string mattype_metal
+Métal
+
+=== string mattype_stone
+Pierre
+
+=== string mode_itemconstr
+Concepteur d'objets
+
+=== string mode_itemrepair
+Réparation d'objets
+
+=== string mode_itemtrade
+Echoppe d'objets
+
+=== string mode_spellconstr
+Concepteur de sorts
+
+=== string mode_spells
+Compétences/sorts
+
+=== string mode_spelltrade
+Echoppe de sorts
+
+=== string mode_weapons
+Equipement du personnage
+
+=== string move_0
+(Marche)
+
+=== string move_1
+(Lévitation)
+
+=== string move_2
+(Station debout)
+
+=== string move_3
+(Vol)
+
+=== string no_disc_space
+Espace disque insuffisant.
+
+=== string no_disc_space_msg
+Espace disque insuffisant pour jouer à ce jeu normalement.
+
+=== string no_way
+Nous ne pouvons pas laisser quelqu'un ici.
+
+=== string no_zone
+Pas de fichier.
+
+=== string no_zone_msg
+MOB. Fichier introuvable.
+
+=== string notify_loading
+Chargement de partie…
+
+=== string notify_saving
+Sauvegarde de partie…
+
+=== string obj_0
+Durée de voyage :
+
+=== string obj_1
+jours
+
+=== string obj_2
+heures
+
+=== string obj_completed
+(terminé)
+
+=== string obj_cost_exp
+La réussite augmentera l'expérience de :
+
+=== string obj_cost_money
+Argent promis pour la réussite :
+
+=== string obj_failed
+(échec)
+
+=== string option_autosave
+Sauvegarde automatique
+
+=== string option_brightness
+Luminosité
+
+=== string option_camera_reverse_x
+Mouvement de caméra : gauche-droite
+
+=== string option_camera_reverse_y
+Mouvement de caméra : haut-bas
+
+=== string option_contrast
+Contraste
+
+=== string option_difficulty
+Difficulté
+
+=== string option_footprints
+Afficher les traces de pas
+
+=== string option_gamma
+Gamma
+
+=== string option_group_actions
+Commandes
+
+=== string option_group_camera
+Caméra
+
+=== string option_group_cshots
+Combat
+
+=== string option_group_game
+Jeu
+
+=== string option_group_items
+Objets
+
+=== string option_group_select
+Sélection
+
+=== string option_group_sens
+Sensibilité
+
+=== string option_group_sound
+Son
+
+=== string option_group_spells
+Sorts
+
+=== string option_group_video
+Graphismes
+
+=== string option_group_windows
+Fenêtres
+
+=== string option_marks
+Afficher le sang
+
+=== string option_off
+Désactivé
+
+=== string option_on
+Activé
+
+=== string option_power_kbd
+Sensibilité du clavier :
+
+=== string option_power_mouse
+Sensibilité de la souris :
+
+=== string option_reverse_stereo
+Son stéréo inversé
+
+=== string option_rubber_select
+Sensibilité de la sélection de trames :
+
+=== string option_scroll_border
+Sensibilité du défilement :
+
+=== string option_select_type
+Sélection du  marqueur de personnage :
+
+=== string option_shadow_buildings
+Ombres d'objets
+
+=== string option_shadow_flora
+Ombres d'arbres
+
+=== string option_shadow_other
+Toutes les ombres
+
+=== string option_shadow_units
+Ombres de personnages
+
+=== string option_show_flying_hp
+Afficher les dégâts
+
+=== string option_show_path
+Afficher les chemins
+
+=== string option_show_tutorial
+Affiches les didacticiels
+
+=== string option_switch_filters
+Filtre automatique de l'inventaire
+
+=== string option_tooltip_time
+Délai d'affichage des conseils
+
+=== string option_volume_sfx
+Volume effets sonores
+
+=== string option_volume_stream
+Volume musique
+
+=== string option_volume_voice
+Volume voix
+
+=== string overwrite
+Ecraser
+
+=== string overwrite_msg
+Voulez-vous vraiment écraser cette partie ?
+
+=== string perk_level
+Niveau
+
+=== string perks
+Capacités connues
+
+=== string perks_av
+Capacités disponibles
+
+=== string quit
+Quitter la partie
+
+=== string quit_msg
+Voulez-vous vraiment quitter cette partie ?
+
+=== string reserved_00
+réservé
+
+=== string reserved_01
+réservé
+
+=== string reserved_02
+Partie mise en pause par le joueur %s
+
+=== string reserved_03
+réservé
+
+=== string reserved_04
+Veuillez patienter…
+
+=== string reserved_05
+réservé
+
+=== string reserved_06
+réservé
+
+=== string reserved_07
+réservé
+
+=== string reserved_08
+réservé
+
+=== string reserved_09
+réservé
+
+=== string reserved_10
+Multijoueur
+
+=== string reserved_11
+Non disponible dans la version Démo
+
+=== string reserved_12
+réservé
+
+=== string reserved_13
+réservé
+
+=== string reserved_14
+réservé
+
+=== string reserved_15
+réservé
+
+=== string reserved_16
+réservé
+
+=== string reserved_17
+réservé
+
+=== string reserved_18
+réservé
+
+=== string reserved_19
+réservé
+
+=== string reserved_20
+réservé
+
+=== string save_auto_enter
+Sauvegarde automatique (en entrée)
+
+=== string save_auto_exit
+Sauvegarde automatique (en sortie)
+
+=== string save_camp
+Campement
+
+=== string save_day
+Jour
+
+=== string save_new
+SAUVEGARDE
+
+=== string save_quick
+SAUVEGARDE RAPIDE
+
+=== string school_0
+Magie élémentale
+
+=== string school_1
+Magie sensorielle
+
+=== string school_2
+Magie astrale
+
+=== string show_tutorial_key
+Réafficher le didacticiel 
+
+=== string skills
+Compétences
+
+=== string topic_prefix
+
+
+=== string tutorial
+Didacticiel
+
+=== string version_name
+
+
+
+
+Version 1.06

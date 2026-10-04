@@ -1,0 +1,141 @@
+# um-texts 1
+=== camphelp 1
+Prendre des sorts
+Les héros ne peuvent pas utiliser des objets de l'inventaire pendant les quêtes. Mais ils peuvent emporter avec eux jusqu'à huit sorts. Ils seront utilisables en cours de partie. Si vous trouvez un nouveau sort, prenez-le à l'aide de cet écran. Ensuite, vous pourrez l'utiliser dans une quête.
+
+=== camphelp 10
+Armure légère (mains)
+Vous pouvez protéger vos mains avec des gantelets ou d'autres pièces d'armure. Cela réduira les dégâts causés à votre personnage si on le frappe aux mains. Vous pouvez aussi recouvrir les matériaux fins avec des pièces d'armure lourdes.
+
+=== camphelp 100
+Echoppe d'objets
+La liste déroulante en haut et en bas de l'écran indique les objets disponibles dans l'échoppe et dans votre inventaire. Utilisez les boutons à gauche et à droite des listes pour sélectionner les objets. Le "comptoir de l'échoppe" est au centre de l'écran. En bas et à gauche de l'écran, vous trouverez le prix des objets à vendre et à acheter. Utilisez les boutons à côté du prix pour confirmer ou annuler des transactions (si vous annulez, tous les objets seront rendus).
+
+=== camphelp 101
+Echoppe de sorts
+La liste déroulante en haut et en bas de l'écran indique les sorts disponibles dans l'échoppe et dans votre inventaire. Utilisez les boutons à gauche et à droite des listes pour sélectionner les sorts. Le "comptoir de l'échoppe" est au centre de l'écran. En bas et à gauche de l'écran, vous trouverez le prix des sorts à vendre et à acheter. Utilisez les boutons à côté du prix pour confirmer ou annuler des transactions (si vous annulez, toutes les runes seront rendues).
+
+=== camphelp 102
+Kit d'objets
+Vous pouvez utiliser des objets de votre inventaire et ceux disponibles dans l'échoppe pour construire d'autres objets (le prix des objets achetés est pris en considération). Vous pouvez assembler de nouveaux objets en utilisant les modèles et matériaux appropriés ou désassembler ceux que vous possédez déjà. Consultez le bas de la fenêtre gauche pour des détails sur le prix de l'assemblage/désassemblage. Utilisez les boutons près de la fenêtre pour confirmer ou annuler.
+
+=== camphelp 103
+Kit de sorts
+Vous pouvez utiliser des prototypes et des runes de votre inventaire et ceux disponibles dans l'échoppe pour élaborer des sorts (le prix des objets achetés est pris en considération). Vous pouvez fabriquer des sorts à partir de prototypes et (optionnellement) de runes, ou vous pouvez désassembler les sorts que vous avez déjà. Consultez le bas de la fenêtre de gauche pour en savoir plus sur le prix de l'assemblage/désassemblage. Utilisez les boutons près de la fenêtre pour confirmer ou annuler.
+
+=== camphelp 104
+Réparer un objet
+La fiabilité de tous les objets diminue à l'usage. Quand la valeur de fiabilité atteint zéro, l'objet ne peut plus être utilisé. Pour la restaurer, vous devez réparer l'objet. Consultez le bas de la fenêtre de gauche pour le prix de la réparation de votre objet. Utilisez les boutons près de la fenêtre pour confirmer ou annuler.
+
+=== camphelp 105
+Equiper vos personnages
+Vous pouvez équiper un personnage au choix. Tout équipement retiré d'un personnage se retrouve dans l'inventaire. L'équipement peut être vendu dans l'échoppe, modifié dans le concepteur d'objets, ou utilisé par n'importe lequel de vos personnages.
+
+=== camphelp 106
+Sorts et compétences
+L'expérience reçue par n'importe lequel de vos personnages peut être utilisée pour améliorer les compétences de ce personnage ou acquérir de nouvelles capacités. Vous pouvez également donner des sorts aux personnages ou les stocker dans votre inventaire. Si l'endurance ou les compétences magiques d'un personnage sont insuffisantes pour jeter un sort particulier, vous ne pourrez pas donner le sort à ce personnage.
+
+=== camphelp 107
+Sortie
+Vous pouvez revenir à la Zone d'Instructions. Toutes les marchandises que vous avez payées dans les écrans apparaîtront dans votre inventaire et toutes celles non payées retourneront à l'échoppe
+
+=== camphelp 11
+Acheter des objets
+Quand vous choisissez des objets dans l'échoppe, ils apparaissent sur le comptoir. Les deux rayons du haut contiennent les objets que vous achetez, les deux du bas ceux que vous vendez. En bas à gauche du comptoir, vous trouverez des boutons pour confirmer ou annuler la transaction (achat ou vente).
+
+=== camphelp 12
+Vendre des objets
+Quand vous choisissez des objets dans l'échoppe, ils apparaissent sur le comptoir. Les deux rayons du haut contiennent les objets que vous achetez, les deux du bas ceux que vous vendez. En bas à gauche du comptoir, vous trouverez des boutons pour confirmer ou annuler la transaction (achat ou vente).
+
+=== camphelp 13
+Objets prêts à l'emploi
+Cette section contient les objets prêts à l'emploi. Vous pouvez assembler un nouvel objet en utilisant le modèle et les matériaux appropriés. Une fois assemblé, le nouvel objet apparaîtra dans cette section. Vous pouvez également mettre ici un objet assemblé pour le désassembler.
+
+=== camphelp 14
+Modèle
+Cette section contient les modèles à suivre pour assembler des objets. Après y avoir placé un modèle, vous devez placer la quantité requise de matériaux dans la section "Matériaux". Vous pouvez dès lors assembler un nouvel objet, qui apparaîtra dans la section "Objets prêts à l'emploi". Vous pouvez aussi désassembler les objets que vous possédez. Une fois désassemblé, le modèle de l'objet apparaîtra dans cette section.
+
+=== camphelp 15
+Matériaux
+Cette section contient une unité de matériaux nécessaires pour assembler un objet. Quand vous avez placé la quantité de matériaux requise par le modèle, vous pouvez assembler l'objet. Une fois terminé, il apparaîtra dans la section "Objets prêts à l'emploi". Vous pouvez également désassembler des objets en votre possession. Une fois l'objet désassemblé, les matériaux de l'objet apparaîtront dans la section "Matériaux".
+
+=== camphelp 16
+Sort
+Vous pouvez loger un sort dans vos armes ou votre armure. Le sort doit contenir le "rune d'objet" qui détermine quand ce sort agira. Les objets ont certaines limites qui fixent la quantité d'énergie possédé par les sorts en question. Si plus tard vous désassemblez un objet contenant un sort, le sort vous reviendra et vous pourrez l'utiliser normalement.
+
+=== camphelp 17
+Sorts, prototypes, runes : acheter
+Quand vous choisissez d'acheter des sorts, des prototypes ou des runes dans l'échoppe, ceux-ci se apparaissent sur le comptoir. Les deux rayons du haut contiennent les sorts, prototypes et runes que vous achetez, et les deux du bas ceux que vous vendez. Utilisez les boutons en bas à gauche du comptoir pour confirmer ou annuler la transaction (achat ou vente).
+
+=== camphelp 18
+Sorts, prototypes, runes : vendre
+Quand vous choisissez d'acheter des sorts, des prototypes ou des runes dans le magasin, ceux-ci apparaissent sur le comptoir. Les deux rayons du haut contiennent les sorts, prototypes et runes que vous achetez, et les deux du bas ceux que vous vendez. Utilisez les boutons en bas à gauche du comptoir pour confirmer ou annuler la transaction (achat ou vente).
+
+=== camphelp 19
+Sort prêt à l'emploi
+Cette section contient des sorts prêts à l'emploi. Vous pouvez assembler un nouveau sort en utilisant des prototypes de sorts ou des runes. Vous pouvez aussi désassembler les sorts que vous possédez, ce qui libérera son prototype et ses runes pour un usage ultérieur.
+
+=== camphelp 2
+Prendre des armes
+Les héros ne peuvent pas utiliser des objets de l'inventaire au cours des quêtes. Mais ils peuvent posséder jusqu'à quatre armes différentes, qui seront utilisables durant la partie. Si vous trouvez une nouvelle arme, prenez-la à l'aide de cet écran. Ce n'est qu'ensuite que vous pourrez l'utiliser dans une quête.
+
+=== camphelp 20
+Prototype de sort
+Cette section contient le prototype pour élaborer un sort et déterminer ses propriétés de base. Vous pouvez, si vous le désirez, ajouter une ou plusieurs runes et assembler un sort, qui apparaîtra alors dans la section "Sorts prêts à l'emploi".
+
+=== camphelp 21
+Rune (modificateur)
+Cette section contient la rune qui modifie le sort. Vous pouvez ajouter autant de runes que vous voulez aux sorts que vous élaborez, du moment que le sort final puisse être utilisé par un de vos héros (c'est-à-dire qu'il ne peut pas dépasser la complexité permise et la quantité d'énergie). Votre capacité à utiliser les runes est fonction des prototypes utilisés.
+
+=== camphelp 22
+Inventaire
+Cet écran affiche le contenu de l'inventaire des personnages : les objets et les sorts qui ne sont pas actuellement utilisés par un des personnages. Vous ne pouvez utiliser l'inventaire qu'en dehors de la zone de jeu.
+
+=== camphelp 23
+Objets disponibles
+Cet écran affiche tous les modèles, les matériaux et les objets prêts à l'emploi que vous pouvez à tout moment acheter.
+
+=== camphelp 24
+Sorts disponibles
+Cet écran affiche tous les prototypes de sorts, runes et sorts prêts à l'emploi disponibles.
+
+=== camphelp 25
+Objets à réparer
+Les objets à réparer doit être posés sur la table. En bas à gauche, vous avez des détails sur le prix des réparations. Utilisez les boutons situés à proximité pour confirmer ou annuler la réparation (si vous annulez, tous les objets seront rendus).
+
+=== camphelp 26
+Complexité maximale
+Indique la complexité maximale pour les sorts actuellement disponibles dans le kit. Vous ne pouvez pas élaborer de sorts trop compliqués pour vos personnages.
+
+=== camphelp 27
+Potentiel maximal
+Indique le potentiel maximal (réserve de forces) dont a besoin votre personnage pour utiliser les sorts actuellement disponibles dans le kit.
+
+=== camphelp 3
+Prendre des potions et des baguettes magiques
+Les héros ne peuvent pas utiliser les objets de l'inventaire pendant les quêtes. Mais ils peuvent posséder jusqu'à quatre potions et baguettes magiques différentes, qui seront disponibles au cours du jeu. Si vous trouvez une nouvelles potions dans la zone du jeu, prenez-la à l'aide de cet écran. Ensuite, vous pourrez l'utiliser durant une quête.
+
+=== camphelp 4
+Armure lourde (tête)
+Votre personnage peut porter un heaume ou tout autre couvre-chef pour protéger sa tête. Cela réduira les dégâts causés s'il est frappé à la tête.
+
+=== camphelp 5
+Armure lourde (corps)
+Votre personnage peut revêtir une cuirasse ou tout autre type d'armure lourde pour se protéger le corps et les bras. Cela réduira les dégâts subis quand il est frappé au corps. Une partie de l'armure protège également les bras. Si vous le désirez, votre personnage peut porter une armure plus légère au-dessous.
+
+=== camphelp 6
+Armure lourde (jambes)
+Votre personnage peut porter des jambières ou un autre type d'armure lourde pour se protéger les jambes. Cela réduira les dégâts subis s'il est frappé à cet endroit. Une armure plus légère peut être portée au-dessous.
+
+=== camphelp 7
+Armure légère (corps)
+Votre personnage peut porter une chemise ou tout autre type d'armure légère pour se protéger le corps et les bras. Cela réduira les dégâts subis s'il est frappé au corps. Une partie de l'armure protège également les bras. Une armure lourde peut être portée au-dessus d'une armure légère.
+
+=== camphelp 8
+Armure légère (jambes)
+Votre personnage peut porter des chausses ou tout autre type d'armure légère pour se protéger les jambes. Celui réduira les dégâts subis s'il est frappé à cet endroit. Il peut évidemment porter une armure lourde au-dessus.
+
+=== camphelp 9
+Armure légère (pieds)
+Votre personnage peut porter des bottes ou tout autre type d'armure légère pour se protéger les pieds. Celui réduira les dégâts subis s'il est frappé aux pieds. Vous pouvez, bien sûr, porter une armure plus lourde au-dessus.
+

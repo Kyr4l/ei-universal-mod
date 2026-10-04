@@ -1,0 +1,142 @@
+# um-texts 1
+=== MODIFIER a0
+Half the area of effect
+The spell's original area of effect will increase by half.
+-O+
+
+=== MODIFIER a1
+Increased area of effect
+The spell's original area of effect will double.
+O+
+
+=== MODIFIER a2
+Maximum area of effect
+The spell's original area of effect will increase threefold.
+R++
+
+=== MODIFIER d0
+Half the duration
+The original duration of the spell will increase by half.
+-D+
+
+=== MODIFIER d1
+Longer duration
+The initial duration of the spell will double.
+D+
+
+=== MODIFIER d2
+Maximum duration
+The original duration of the spell will increase three times.
+W++
+
+=== MODIFIER e0
+Half the effect
+The initial effect of the spell will increase by half.
+-E+
+
+=== MODIFIER e1
+Increased effect
+The initial effect of the spell will double.
+E+
+
+=== MODIFIER e2
+Maximum effect
+The initial effect of the spell will increase threefold.
+E++
+
+=== MODIFIER e3
+Power' rune
+The spell's effect is increased to its limit.
+E#
+
+=== MODIFIER fe
+Enemies only
+The spell will only work on enemies.
+:wr
+
+=== MODIFIER ff
+Allies only
+The spell will only work on allies.
+:Pr
+
+=== MODIFIER fg
+Goblins only
+The spell will only work on goblins.
+:Go
+=== MODIFIER fh
+People only
+The spell will only work on humans.
+:ld
+=== MODIFIER fl
+Lizardmen only
+The spell will only work on lizardfolk.
+:Jsz
+=== MODIFIER fo
+Orcs only
+The spell will only work on orcs.
+:Or
+=== MODIFIER ic
+Continuation (item)
+A spell stuck in a przemdiot will be triggered when there is energy for it.
+:ik
+
+=== MODIFIER im1
+Reduced energy expenditure of the item
+The cost of the spell in the item is reduced.
+M-
+
+=== MODIFIER im2
+Minimal energy expenditure of the item
+The cost of the spell in the item is greatly reduced.
+M--
+
+=== MODIFIER ir1
+Item energy regeneration
+Increases the energy regeneration rate of the item with the spell.
+R+
+
+=== MODIFIER ir2
+Fast item energy regeneration
+Significantly increases the energy regeneration rate of the item with the spell.
+R++
+
+=== MODIFIER it
+Triggered Action (Item)
+A spell stuck in an item will take effect when the item is used.
+:Iw
+
+=== MODIFIER m1
+Reduced energy
+The energy required to cast the spell will be reduced.
+E-
+
+=== MODIFIER m2
+Minimal energy
+The energy required to cast the spell will be greatly reduced.
+E--
+
+=== MODIFIER r0
+Half Increased Range
+The original maximum range of casting this spell will increase by half.
+-Z+
+
+=== MODIFIER r1
+Increased Range
+The original maximum range of casting this spell will double.
+Z+
+
+=== MODIFIER r2
+Maximum Range
+The original maximum range of casting this spell will triple.
+Z++
+
+=== MODIFIER t1
+Additional target
+In addition to the selected target, the spell will work on another nearby target.
+C+
+
+=== MODIFIER t2
+Additional targets
+In addition to the selected target, the spell will work on two more nearby targets.
+C++
+

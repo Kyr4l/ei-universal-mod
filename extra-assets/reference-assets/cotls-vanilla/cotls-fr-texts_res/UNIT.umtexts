@@ -1,0 +1,1183 @@
+# um-texts 1
+=== UNIT AncientCurseM25
+Malédiction
+
+=== UNIT BansheeDarkF12
+Spectre noir
+
+=== UNIT BansheeDarkF12Canyon
+Spectre noir
+
+=== UNIT BansheeDarkF14
+Spectre noir puissant
+
+=== UNIT BansheeDarkF16
+Spectre noir très puissant
+
+=== UNIT BansheeDarkM12
+Spectre noir
+
+=== UNIT BansheeDarkM12Canyon
+Spectre noir
+
+=== UNIT BansheeDarkM14
+Spectre noir puissant
+
+=== UNIT BansheeDarkM16
+Spectre noir très puissant
+
+=== UNIT BansheeLightF2
+Spectre faible
+
+=== UNIT BansheeLightF3
+Spectre
+
+=== UNIT BansheeLightF4
+Spectre puissant
+
+=== UNIT BansheeLightM5
+Faible spectre
+
+=== UNIT BansheeLightM6
+Spectre
+
+=== UNIT BansheeLightM7
+Spectre puissant
+
+=== UNIT BansheeTutor
+Spectre
+
+=== UNIT BatDarkM11
+Bébé chauve-souris noire
+
+=== UNIT BatDarkM12
+Jeune chauve-souris noire
+
+=== UNIT BatDarkM14
+Chauve-souris adulte noire
+
+=== UNIT BatDarkM16
+Chauve-souris géante noire
+
+=== UNIT BatLightM10
+Chauve-souris géante
+
+=== UNIT BatLightM7
+ Bébé chauve-souris 
+
+=== UNIT BatLightM8
+Jeune chauve-souris
+
+=== UNIT BatLightM9
+Chauve-souris
+
+=== UNIT BatRedM1
+Bébé chauve-souris
+
+=== UNIT BatRedM3
+Jeune chauve-souris
+
+=== UNIT BatRedM5
+Chauve-souris adulte
+
+=== UNIT BoarDarkF3
+Jeune sanglier noir
+
+=== UNIT BoarDarkF4
+Jeune sanglier noir
+
+=== UNIT BoarDarkF5
+Sanglier noir adulte
+
+=== UNIT BoarDarkF6
+Vieux sanglier noir
+
+=== UNIT BoarRedF1
+Jeune sanglier
+
+=== UNIT BoarRedF2
+Sanglier adulte
+
+=== UNIT BoarRedF3
+Vieux sanglier
+
+=== UNIT BoarTutor
+Sanglier
+
+=== UNIT CowF0
+Vache
+
+=== UNIT CyclopsA16
+Jeune cyclope
+
+=== UNIT CyclopsA18
+Cyclope
+
+=== UNIT CyclopsA20
+Cyclope adulte
+
+=== UNIT DeerF0
+Cerf
+
+=== UNIT DogGreyF6
+Chien
+
+=== UNIT DogGreyF7
+Chien dressé
+
+=== UNIT DogGreyF8
+Vieux chien
+
+=== UNIT DogRedF12
+Jeune chien sauvage
+
+=== UNIT DogRedF14
+Jeune chien sauvage
+
+=== UNIT DogRedF16
+Chien sauvage adulte
+
+=== UNIT DragonBlueM14
+Dragon bleu
+
+=== UNIT DragonBrownM16
+Dragon rouge
+
+=== UNIT DragonGreenM12
+Dragon vert
+
+=== UNIT DragonkinBeastmenF3
+Dompteur d’Hommes-lézards
+
+=== UNIT DragonkinGreenF3
+Homme-lézard de forêt
+
+=== UNIT DragonkinGreenF7
+Homme-lézard guerrier de forêt
+
+=== UNIT DragonkinJunF11
+Homme-lézard guerrier de lac
+
+=== UNIT DragonkinJunF7
+Homme-lézard de lac
+
+=== UNIT DragonkinOrcishF5
+Homme-lézard de montagne
+
+=== UNIT DragonkinOrcishF9
+Homme-lézard guerrier de montagne
+
+=== UNIT DriadDarkA11
+Tireur d'élite du Peuple des forêts (Clan Noir)
+
+=== UNIT DriadDarkA7
+Archer du Peuple des forêts (Clan Noir)
+
+=== UNIT DriadDarkA9
+Archer du Peuple des forêts expérimenté (Clan Noir)
+
+=== UNIT DriadDarkM11
+Ancien mage du Peuple des forêts (Clan Noir)
+
+=== UNIT DriadDarkM7
+Mage du Peuple des forêts (Clan Noir)
+
+=== UNIT DriadDarkM9
+Mage du Peuple des forêts expérimenté (Clan Noir)
+
+=== UNIT DriadGreenA11
+Tireur d'élite du Peuple des forêts (Clan Vert)
+
+=== UNIT DriadGreenA7
+Archer du Peuple des forêts (Clan Vert)
+
+=== UNIT DriadGreenA9
+Archer du Peuple des forêts expérimenté (Clan Vert)
+
+=== UNIT DriadGreenM11
+Ancien mage du Peuple des forêts (Clan Vert)
+
+=== UNIT DriadGreenM7
+Mage du Peuple des forêts (Clan Vert)
+
+=== UNIT DriadGreenM9
+Mage du Peuple des forêts expérimenté (Clan Vert)
+
+=== UNIT DriadSnowA11
+Tireur d'élite du Peuple des forêts (Clan Blanc)
+
+=== UNIT DriadSnowA7
+Archer du Peuple des forêts (Clan Blanc)
+
+=== UNIT DriadSnowA9
+Archer du Peuple des forêts expérimenté (Clan Blanc)
+
+=== UNIT DriadSnowM11
+Ancien mage du Peuple des forêts (Clan Blanc)
+
+=== UNIT DriadSnowM7
+Mage du Peuple des forêts (Clan Blanc)
+
+=== UNIT DriadSnowM9
+Mage du Peuple des forêts expérimenté (Clan Blanc)
+
+=== UNIT DriadSnowQM9
+Geôlier du Peuple des forêts (Clan Blanc)
+
+=== UNIT ElementalEarthF8
+Elémental de terre
+
+=== UNIT ElementalIceF11
+Elémental de neige (intermédiaire)
+
+=== UNIT ElementalIceF15
+Elémental de neige (élevé)
+
+=== UNIT ElementalIceF9
+Elémental de neige (faible)
+
+=== UNIT ElementalLavaF12
+Elémental de lave
+
+=== UNIT EvileyeGreenM13
+Petit spectateur vert
+
+=== UNIT EvileyeGreenM15
+Jeune spectateur vert
+
+=== UNIT EvileyeGreenM17
+Spectateur adulte vert
+
+=== UNIT EvileyeRedM12
+Petit spectateur rouge
+
+=== UNIT EvileyeRedM14
+Jeune spectateur rouge
+
+=== UNIT EvileyeRedM16
+Spectateur adulte rouge
+
+=== UNIT EvileyeSimpleM5
+Bébé spectateur
+
+=== UNIT EvileyeSimpleM6
+Bébé spectateur
+
+=== UNIT EvileyeSimpleM7
+Bébé spectateur
+
+=== UNIT GoblinA1
+Gobelin avec fronde
+
+=== UNIT GoblinA2
+Gobelin expérimenté avec fronde
+
+=== UNIT GoblinA3
+Vieux Gobelin avec fronde
+
+=== UNIT GoblinF1
+Gobelin avec lance
+
+=== UNIT GoblinF2
+Gobelin expérimenté avec lance
+
+=== UNIT GoblinF3
+Vieux Gobelin avec lance
+
+=== UNIT GoblinGogoF3
+Guerrier gobelin
+
+=== UNIT GoblinSentryF1
+Sentinelle gobelin
+
+=== UNIT GoblinTutor
+Gobelin
+
+=== UNIT GolemHorizontalF20
+Golem
+
+=== UNIT GolemVerticalF20
+Golem
+
+=== UNIT HareF0
+Lièvre
+
+=== UNIT HorseRedF0
+Cheval
+
+=== UNIT HorseWhiteF0
+Cheval
+
+=== UNIT Human_Gipath_Brigand_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_A3
+Femme brigand compétente
+
+=== UNIT Human_Gipath_Brigand_Boots_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_Deputy_F1
+Brigand Tête-rouge
+
+=== UNIT Human_Gipath_Brigand_Effect_F3
+Corps
+
+=== UNIT Human_Gipath_Brigand_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_F3
+Brigand compétent
+
+=== UNIT Human_Gipath_Brigand_Gloves_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_HBoots_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_HGloves_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_HHelm_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_HLeggins_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_HPants_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_HPlate_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_HShirt_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_Helm_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_Leader_F4
+Lieutenant du Chef
+
+=== UNIT Human_Gipath_Brigand_Leggins_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_Pants_A1
+Femme brigand
+
+=== UNIT Human_Gipath_Brigand_Plate_F1
+Brigand
+
+=== UNIT Human_Gipath_Brigand_Shirt_F1
+Brigand
+
+=== UNIT Human_Gipath_Expeditor_F12
+Guerrier
+
+=== UNIT Human_Gipath_NPC_Boss_F5
+Chef
+
+=== UNIT Human_Gipath_NPC_Buerocrat_F1
+Officier khadaganien
+
+=== UNIT Human_Gipath_NPC_Daughter_M1
+Airy
+
+=== UNIT Human_Gipath_NPC_Demon_F7
+Démon
+
+=== UNIT Human_Gipath_NPC_Elder_F1
+Erfar
+
+=== UNIT Human_Gipath_NPC_Expeditor_F15
+Leader
+
+=== UNIT Human_Gipath_NPC_Master_F1
+Babur
+
+=== UNIT Human_Gipath_NPC_New_Sheriff_F1
+Rivar le Mastodonte
+
+=== UNIT Human_Gipath_NPC_Warlord_F5
+Capitaine
+
+=== UNIT Human_Gipath_NPC_Wife_M3
+Cheftaine des brigands
+
+=== UNIT Human_Gipath_NPC_Witch_M1
+Estera
+
+=== UNIT Human_Gipath_Runner_Female_F1
+Femme en prières
+
+=== UNIT Human_Gipath_Runner_Male_F1
+Homme en prières
+
+=== UNIT Human_Gipath_Warlord_F2
+Combattant du village
+
+=== UNIT Human_Hadagan_Citizens_A1
+Citoyenne
+
+=== UNIT Human_Hadagan_Citizens_F1
+Citoyen
+
+=== UNIT Human_Hadagan_Guard_Commander_F17
+Caporal
+
+=== UNIT Human_Hadagan_Guard_Commander_F20
+Sergent
+
+=== UNIT Human_Hadagan_Guards_A14
+Femme garde
+
+=== UNIT Human_Hadagan_Guards_A16
+Archer privé expérimenté
+
+=== UNIT Human_Hadagan_Guards_A17
+Vieux soldat
+
+=== UNIT Human_Hadagan_Guards_A20
+Garde impérial
+
+=== UNIT Human_Hadagan_Guards_Boots_M14
+Mage sentinelle
+
+=== UNIT Human_Hadagan_Guards_F14
+Garde
+
+=== UNIT Human_Hadagan_Guards_F16
+Soldat privé expérimenté
+
+=== UNIT Human_Hadagan_Guards_F17
+Vieux soldat
+
+=== UNIT Human_Hadagan_Guards_F20
+Garde impérial
+
+=== UNIT Human_Hadagan_Guards_Gloves_M14
+Mage sentinelle
+
+=== UNIT Human_Hadagan_Guards_HHelm_F17
+Vieux soldat
+
+=== UNIT Human_Hadagan_Guards_HLeggins_F17
+Vieux soldat
+
+=== UNIT Human_Hadagan_Guards_HPlate_F17
+Vieux soldat
+
+=== UNIT Human_Hadagan_Guards_Helm_A14
+Femme garde
+
+=== UNIT Human_Hadagan_Guards_Leggins_F14
+Garde
+
+=== UNIT Human_Hadagan_Guards_M14
+Mage guerrier - sentinelle
+
+=== UNIT Human_Hadagan_Guards_M16
+Mage de combat expérimenté
+
+=== UNIT Human_Hadagan_Guards_M17
+Vieux mage de combat
+
+=== UNIT Human_Hadagan_Guards_M20
+Mage - garde impérial
+
+=== UNIT Human_Hadagan_Guards_Pants_A14
+Femme garde
+
+=== UNIT Human_Hadagan_Guards_Plate_F14
+Garde
+
+=== UNIT Human_Hadagan_Guards_Shirt_F14
+Garde
+
+=== UNIT Human_Hadagan_Mine_KeyKeeper_F14
+Détenteur de la clé des pièges
+
+=== UNIT Human_Hadagan_NPC_Flunkey_F17
+Aiset-Bek
+
+=== UNIT Human_Hadagan_NPC_Junofil_F10
+Collectionneur
+
+=== UNIT Human_Hadagan_NPC_Lieutenant_F15
+Kardaur
+
+=== UNIT Human_Hadagan_NPC_Old_Necro_M20
+Kholai
+
+=== UNIT Human_Hadagan_NPC_Rebel_Boss_F15
+Khatul
+
+=== UNIT Human_Hadagan_NPC_Rebel_Guru_F20
+Frère Aveugle
+
+=== UNIT Human_Hadagan_NPC_Rebel_Necro_M15
+Vieux nécromancien
+
+=== UNIT Human_Hadagan_NPC_Rebel_Smith_F15
+Forgeron
+
+=== UNIT Human_Hadagan_NPC_Rebel_Thief_A15
+Voleuse
+
+=== UNIT Human_Hadagan_NPC_Rebel_Zaku_F1
+Anonyme
+
+=== UNIT Human_Hadagan_NPC_Spirit_M20
+Esprit
+
+=== UNIT Human_Hadagan_Necromancer_Keykeeper_M14
+Nécromancien (détenteur de la clé)
+
+=== UNIT Human_Hadagan_Necromancer_M14
+Nécromancien
+
+=== UNIT Human_Hadagan_Necromancer_M17
+Nécromancien
+
+=== UNIT Human_Hadagan_OverseerBA_F14
+Garde-chiourme Aga-Flagelleur
+
+=== UNIT Human_Hadagan_OverseerFC_F14
+Garde-chiourme Aga-Fouetteur
+
+=== UNIT Human_Hadagan_OverseerSC_F14
+Garde-chiourme Aga-Fouetteur
+
+=== UNIT Human_Hadagan_Overseer_F14
+Garde-chiourme
+
+=== UNIT Human_Hadagan_Peasants_A1
+Paysanne 
+
+=== UNIT Human_Hadagan_Peasants_F1
+Paysan
+
+=== UNIT Human_Hadagan_Portal_KeyKeeper_F14
+Détenteur de la clé du portail
+
+=== UNIT Human_Hadagan_Pretty
+Odalisque de Kardaur
+
+=== UNIT Human_Hadagan_Students_A10
+Jeune archer
+
+=== UNIT Human_Hadagan_Students_F10
+Jeune guerrier
+
+=== UNIT Human_Hadagan_Students_M10
+Jeune mage guerrier
+
+=== UNIT Human_Hadagan_TeacherLC_A14
+Archer instructeur
+
+=== UNIT Human_Hero
+Zak
+
+=== UNIT Human_Hero_Hadagan
+Zak
+
+=== UNIT Human_Kania_Citizen_A7
+Roturière armée
+
+=== UNIT Human_Kania_Citizen_A8
+Roturière armée
+
+=== UNIT Human_Kania_Citizen_F1
+Roturier
+
+=== UNIT Human_Kania_Citizen_F1_Female
+Roturière
+
+=== UNIT Human_Kania_Citizen_F7
+Roturier armé
+
+=== UNIT Human_Kania_Citizen_F8
+Roturier
+
+=== UNIT Human_Kania_Citizen_High_F1
+Employé
+
+=== UNIT Human_Kania_Citizen_High_F1_Female
+Employée
+
+=== UNIT Human_Kania_Detective_F7
+Cadavre du fouineur
+
+=== UNIT Human_Kania_Gang_A10
+Femme brigand
+
+=== UNIT Human_Kania_Gang_A12
+Vieille femme brigand
+
+=== UNIT Human_Kania_Gang_A8
+Jeune femme brigand
+
+=== UNIT Human_Kania_Gang_A9
+Femme brigand
+
+=== UNIT Human_Kania_Gang_F1
+Clôture
+
+=== UNIT Human_Kania_Gang_F10
+Brigand
+
+=== UNIT Human_Kania_Gang_F11
+Meurtrier
+
+=== UNIT Human_Kania_Gang_F12
+Vieux brigand
+
+=== UNIT Human_Kania_Gang_F8
+Jeune brigand
+
+=== UNIT Human_Kania_Gang_F9
+Brigand
+
+=== UNIT Human_Kania_Gang_Leader_F13
+Chef des brigands
+
+=== UNIT Human_Kania_Gang_Spear_F10
+Déserteur, ancien garde
+
+=== UNIT Human_Kania_Goldminer_F7
+Chercheur d’or
+
+=== UNIT Human_Kania_Hunter_F7
+Chasseur
+
+=== UNIT Human_Kania_Huntress_F7
+Femme chasseur
+
+=== UNIT Human_Kania_Miner_F8
+Mineur
+
+=== UNIT Human_Kania_NPC_Bodyguard_F12
+Garde du corps
+
+=== UNIT Human_Kania_NPC_Captain_F14
+Ringlin
+
+=== UNIT Human_Kania_NPC_Governor_F10
+Valrasian
+
+=== UNIT Human_Kania_NPC_Lovkach_A10
+Chafouin
+
+=== UNIT Human_Kania_NPC_Manager_F1
+Contremaître
+
+=== UNIT Human_Kania_NPC_Sorceress_M11
+Diera
+
+=== UNIT Human_Kania_NPC_Thief_A10
+Rinas
+
+=== UNIT Human_Kania_NPC_Trader_F5
+Karansul
+
+=== UNIT Human_Kania_NPC_Trapper_F9
+Trappeur
+
+=== UNIT Human_Kania_Police_A10
+Garde sentinelle
+
+=== UNIT Human_Kania_Police_A8
+Femme garde
+
+=== UNIT Human_Kania_Police_F10
+Garde sentinelle
+
+=== UNIT Human_Kania_Police_F8
+Garde
+
+=== UNIT Human_Kania_Police_Helm_F10
+Garde sentinelle
+
+=== UNIT Human_Kania_Police_KBoots_A8
+Femme garde engagée
+
+=== UNIT Human_Kania_Police_KGloves_A8
+Femme garde engagée
+
+=== UNIT Human_Kania_Police_KHelm_A10
+Femme archer engagée
+
+=== UNIT Human_Kania_Police_KLeggins_F10
+Soldat mercenaire
+
+=== UNIT Human_Kania_Police_KPants_F8
+Garde engagé
+
+=== UNIT Human_Kania_Police_KPlate_F10
+Soldat mercenaire
+
+=== UNIT Human_Kania_Police_KShirt_F8
+Garde engagé
+
+=== UNIT Human_Kania_Police_Karansul_A10
+Femme archer mercenaire
+
+=== UNIT Human_Kania_Police_Karansul_A8
+Femme garde engagée 
+
+=== UNIT Human_Kania_Police_Karansul_F10
+Soldat mercenaire
+
+=== UNIT Human_Kania_Police_Karansul_F8
+Garde engagé
+
+=== UNIT Human_Kania_Police_Leader_F10
+Commandant d’unité
+
+=== UNIT Human_Kania_Police_Leggins_A10
+Femme sentinelle
+
+=== UNIT Human_Kania_Police_Plate_F10
+Homme sentinelle
+
+=== UNIT Human_Kania_Ranger_F9
+Espion
+
+=== UNIT Human_Kania_Sorceress_Bodyguard_F9
+Garde du corps
+
+=== UNIT Human_Kania_Woodcutter_F8
+Bûcheron
+
+=== UNIT Human_Mercenary_Archer
+Naya la Discrète
+
+=== UNIT Human_Mercenary_Bodyguard
+Rint l’Archer
+
+=== UNIT Human_Mercenary_Hadagan_Archer
+Archer khadaganien
+
+=== UNIT Human_Mercenary_Hadagan_Rogue
+Sahilia
+
+=== UNIT Human_Mercenary_Hadagan_Thief
+Fairakh
+
+=== UNIT Human_Mercenary_Hadagan_Warrior
+Harad
+
+=== UNIT Human_Mercenary_Kania_Archer
+Mairana
+
+=== UNIT Human_Mercenary_Kania_Paladin
+Brissen
+
+=== UNIT Human_Mercenary_Kania_Thief
+Rinas
+
+=== UNIT Human_Mercenary_Kania_Warrior
+Soldat canien
+
+=== UNIT Human_Mercenary_Shaivar
+Jeune sorcière
+
+=== UNIT Human_Mercenary_Thief
+Naya
+
+=== UNIT Human_Mercenary_Warrior
+Voyou
+
+=== UNIT HyenaF6
+Hyène
+
+=== UNIT Jun_Female_Deva_M1
+Jeune fille
+
+=== UNIT Jun_Male_Hero
+Jeune homme
+
+=== UNIT MainMenu
+Menu principal
+
+=== UNIT OctopusHadaganM13
+Jeune tentacule noir
+
+=== UNIT OctopusHadaganM14
+Jeune tentacule noir
+
+=== UNIT OctopusHadaganM15
+Tentacule adulte
+
+=== UNIT OctopusHadaganM17
+Grand Prêtre tentacule
+
+=== UNIT OctopusKaniaM11
+Serviteur tentacule
+
+=== UNIT OctopusKaniaM12
+Sentinelle tentacule
+
+=== UNIT OctopusKaniaM15
+Seigneur tentacule
+
+=== UNIT OgreGipatF5
+Jeune Ogre
+
+=== UNIT OgreGipatF5S
+Ogre Byr
+
+=== UNIT OgreGipatF6S
+Ogre Gym
+
+=== UNIT OgreGipatF7
+Ogre adulte
+
+=== UNIT OgreGipatF7S
+Ogre Utundry
+
+=== UNIT OgreGipatF9
+Vieil Ogre
+
+=== UNIT OgreHadaganF13
+Jeune ogre du désert
+
+=== UNIT OgreHadaganF15
+Ogre adulte du désert
+
+=== UNIT OgreHadaganF17
+Vieil Ogre du désert
+
+=== UNIT OgreTutor
+Ogre
+
+=== UNIT OgreTutorStealer
+Ogre rassasié
+
+=== UNIT OrcFemaleA3
+Jeune Orque femelle
+
+=== UNIT OrcFemaleA5
+Orque femelle adulte
+
+=== UNIT OrcFemaleA7
+Vieille Orque femelle
+
+=== UNIT OrcFemaleBowA3
+Jeune Orque femelle
+
+=== UNIT OrcFemaleM3
+Orque apprenti prophète
+
+=== UNIT OrcFemaleM5
+Prophète Orque expérimenté
+
+=== UNIT OrcFemaleM7
+Prophète Orque talentueux
+
+=== UNIT OrcFemaleRuneAM3
+Jeune prophète Orque
+
+=== UNIT OrcFemaleRuneEM3
+Jeune prophète Orque
+
+=== UNIT OrcFemaleRuneMM5
+Prophète Orque
+
+=== UNIT OrcFemaleRuneTM3
+Jeune prophète Orque
+
+=== UNIT OrcFemaleRuneTM5
+Prophète expérimenté
+
+=== UNIT OrcFemaleShaivarA7
+Vieille Orque femelle (Clan de Sheivar)
+
+=== UNIT OrcFemaleShaivarM7
+Prophète compétent (Clan de Sheivar)
+
+=== UNIT OrcFemaleTribeLA5
+Orque femelle adulte (Clan de Kharu)
+
+=== UNIT OrcFemaleTribeLA7
+Vieille Orque femelle (Clan de Kharu)
+
+=== UNIT OrcFemaleTribeLM5
+Prophète expérimenté (Clan de Kharu)
+
+=== UNIT OrcFemaleTribeLM7
+Prophète compétent (Clan de Kharu)
+
+=== UNIT OrcFemaleTribeRA5
+Orque femelle adulte (Clan de Khamsy)
+
+=== UNIT OrcFemaleTribeRA7
+Vieille Orque femelle (Clan de Khamsy)
+
+=== UNIT OrcFemaleTribeRM5
+Prophète expérimenté (Clan de Khamsy)
+
+=== UNIT OrcFemaleTribeRM7
+Prophète compétent (Clan de Khamsy)
+
+=== UNIT OrcMaleF3
+Jeune Orque
+
+=== UNIT OrcMaleF5
+Orque adulte
+
+=== UNIT OrcMaleF7
+Vieil Orque
+
+=== UNIT OrcMaleShaivarF7
+Vieil Orque (Clan de Sheivar)
+
+=== UNIT OrcMaleShaivarKeykeeperF7
+Gardien du pont Orque
+
+=== UNIT OrcMaleTribeLF5
+Orque adulte (Clan de Kharu)
+
+=== UNIT OrcMaleTribeLF7
+Vieil Orque (Clan de Khamsy)
+
+=== UNIT OrcMaleTribeRF5
+Orque adulte (Clan de Khamsy)
+
+=== UNIT OrcMaleTribeRF7
+Vieil Orque (Clan de Khamsy)
+
+=== UNIT PigF0
+Cochon
+
+=== UNIT RatGiantF10
+Rat géant adulte
+
+=== UNIT RatGiantF11
+Vieux rat géant
+
+=== UNIT RatGiantF9
+Jeune rat géant
+
+=== UNIT RatSmallF1
+Rat
+
+=== UNIT Rick
+Grand mage
+
+=== UNIT ScrabBlueF5
+Bébé tatou
+
+=== UNIT ScrabGreyF5
+Bébé tatou
+
+=== UNIT ScrabMotherHealthF20
+Mère tatou
+
+=== UNIT ScrabMotherPoisonedF6
+Mère tatou
+
+=== UNIT ShadowM13
+Ombre de sorcière
+
+=== UNIT ShadowM15
+Ombre de sorcier
+
+=== UNIT ShadowM17
+Ombre de prophète
+
+=== UNIT ShadowM20
+Ombre de mage
+
+=== UNIT SkeletonF2
+Squelette de roturier
+
+=== UNIT SkeletonF3
+Squelette de recrue
+
+=== UNIT SkeletonF4
+Squelette de guerrier
+
+=== UNIT SkeletonWarriorF7
+Vieux squelette de guerrier
+
+=== UNIT SpiderF10
+Jeune araignée
+
+=== UNIT SpiderF13
+Jeune araignée
+
+=== UNIT SpiderF14
+Araignée adulte
+
+=== UNIT SpiderF15
+Ancienne araignée
+
+=== UNIT SpiderF15Canyon
+Araignée fantôme
+
+=== UNIT SuccubBlueM10
+Jeune harpie insensible
+
+=== UNIT SuccubBlueM11
+Jeune harpie insensible
+
+=== UNIT SuccubBlueM17
+Vieille harpie insensible
+
+=== UNIT SuccubGreyM13
+Jeune harpie grise
+
+=== UNIT SuccubGreyM13Canyon
+Jeune harpie grise
+
+=== UNIT SuccubGreyM15
+Harpie adulte grise
+
+=== UNIT SuccubGreyM17
+Vieille harpie grise
+
+=== UNIT SuccubGreyM20
+Vieille harpie grise
+
+=== UNIT SuccubGreyRuneM15
+Harpie adulte grise
+
+=== UNIT SuccubRedM10
+Harpie adulte grise
+
+=== UNIT SuccubRedM11
+Veille harpie rouge
+
+=== UNIT SuccubRedM9
+Jeune harpie rouge
+
+=== UNIT SuccubRedRuneM9
+Jeune harpie rouge
+
+=== UNIT TigerRedF2
+Jeune tigre
+
+=== UNIT TigerRedF4
+Tigre adulte
+
+=== UNIT TigerRedF6
+Vieux tigre
+
+=== UNIT TigerWhiteF10
+Vieux tigre blanc
+
+=== UNIT TigerWhiteF6
+Jeune tigre blanc
+
+=== UNIT TigerWhiteF8
+Tigre adulte blanc
+
+=== UNIT ToadM1
+Jeune crapaud venimeux 
+
+=== UNIT ToadM2
+Crapaud venimeux
+
+=== UNIT ToadM4
+Crapaud adulte venimeux adulte
+
+=== UNIT ToadM6
+Vieux crapaud venimeux
+
+=== UNIT ToadTutor
+Crapaud
+
+=== UNIT TrollBlackSlowF16
+Troll lent noir
+
+=== UNIT TrollBlueF11
+Troll adulte bleu
+
+=== UNIT TrollBlueF12
+Vieux troll bleu
+
+=== UNIT TrollBlueF9
+Jeune troll bleu
+
+=== UNIT TrollGreenF10
+Jeune troll vert
+
+=== UNIT UndeadF13
+Goule
+
+=== UNIT UndeadF15
+Goule affamé
+
+=== UNIT UndeadF17
+Goule furieux
+
+=== UNIT UnicornBlackM15
+Licorne noire
+
+=== UNIT UnicornWhiteM15
+Licorne blanche
+
+=== UNIT WillowispM1
+Feu follet
+
+=== UNIT WillowispM3
+Feu follet chaud
+
+=== UNIT WillowispM5
+Feu follet brûlant
+
+=== UNIT WolfGreyF0
+Loup affamé
+
+=== UNIT WolfGreyF1
+Jeune loup
+
+=== UNIT WolfGreyF2
+Loup adulte
+
+=== UNIT WolfGreyF3
+Vieux loup
+
+=== UNIT WolfTutor
+Loup
+
+=== UNIT WolfTutorWOLoot
+Loup
+
+=== UNIT WolfWhiteF4
+Jeune loup blanc
+
+=== UNIT WolfWhiteF5
+Loup blanc adulte
+
+=== UNIT WolfWhiteF6
+Vieux loup blanc
+
+=== UNIT WolfWhiteQF6
+Louve blanche
+
+=== UNIT ZombieFemaleF10
+Geôlière zombie
+
+=== UNIT ZombieFemaleF12
+Femme brigand zombie
+
+=== UNIT ZombieFemaleF14
+Femme garde zombie
+
+=== UNIT ZombieFemaleF16
+Femme mercenaire zombie
+
+=== UNIT ZombieMaleF10
+Recrue zombie
+
+=== UNIT ZombieMaleF12
+Guerrier zombie
+
+=== UNIT ZombieMaleF14
+Guerrier zombie compétent
+
+=== UNIT ZombieMaleF16
+Vieux guerrier zombie
+

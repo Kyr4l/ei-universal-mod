@@ -1,0 +1,1456 @@
+# um-texts 1
+=== quest q0g
+Reaching people
+You cannot survive in a strange and dangerous world alone. You must find a human settlement.
+#subobj  1
+Leave the ruins
+If the ruins are anything to go by, there should be people living here - or at least they used to. To find them, first of all leave the ruins and explore the surrounding area thoroughly.
+#subobj  2
+Go after the people who flee
+Yes, people do live here! Although they run away as soon as they see a stranger come out of the ruins... You could not catch them, but at least now you can guess where a human settlement may be. But do not rely on a good road in this wilderness: mayhap you must go alongside the river or even ford it.
+#subobj  3
+Go to the village
+The village is located east of the ford, but use caution: mayhap there are dangerous creatures in the vicinity of the human settlement.
+
+=== quest q10g
+Stealing the Magic Orb from the Orcs
+The Orc Seer keeps the Magic Orb on an altar located on one of the islands. The Seer's bodyguards are always on the island. 
+Note: You can reach the islands only by means of the drawbridge. To lower the bridge you must possess the island Orcs' mechanism.
+#subobj  1
+Find the altar
+The altar is located on the southernmost island. On the way there, avoid the central and eastern islands: no need to take unnecessary risks.
+#subobj  2
+Take the orb
+To get the orb you must first kill the guards!
+
+=== quest q11g
+Orc records
+You can learn where the Magic Orb originated from the Orc records. The Seer keeper who lives on the central island may have the records.
+#subobj  1
+Find the Seer keeper
+The seer who keeps the records lives in the eastern end of the central island. But be cautious, he is well guarded!
+#subobj  2
+Get the record
+You must kill the seer and take the record from his corpse.
+
+=== quest q12g
+Golden Valley
+Between the hills near the river lie the remains of a caravan which bore gold. The villagers call this place the Golden Valley, but they utter this beautiful name with superstitious fear. The remains are guarded by cohorts of merciless ghouls who are very difficult to deal with.
+#subobj  1
+Find the perished caravan
+Golden Valley is located in the middle point of the river, on the eastern shore. The remains of the caravan lie there, very close to the water. Two passages lead to the valley, and there may be an ambush waiting in any of them. Remember that ghouls cannot see but can detect the presence of any live being near them, so you can't get close to them from the back without them noticing.
+#subobj  2
+Take the gold
+The gold is in two coffers. One is relatively easy to open, the other is a problem: to open it, your "Use/Steal" skill level must be high enough. One sack of gold would be sufficient to complete the quest, but if you can steal both, why not? Luck be with you!
+#subobj  3
+Escape from the guards of the caravan
+The person who actually steals the gold will anger the ghouls who guard Golden Valley. These dead caravan guards will rush to the bank of the river to kill the thief.
+
+=== quest q13ag
+The Brigands' real plan
+Contrary to the promises made to you, the Chieftain's lieutenant was not unarmed and came with bodyguards. Obviously the brigands planned another target and not the Goblins.
+#subobj  1
+Kill all enemies
+If there is treason in the air, anyone who wishes ill to the Chosen must be killed.
+#subobj  2
+Kill Lieutenant of the Chieftain
+The Lieutenant of the Chieftain must be killed.
+#subobj  3
+Search through the belongings of the Lieutenant of
+It is obvious that someone from the village was involved in that ambush. If you search through the belongings of the Lieutenant of the Chieftain, mayhap you will find some clue as to the identity of the traitor.
+#subobj  4
+Ambush in the west
+The Lieutenant of the Chieftain is covered by several ambush parties. All of them must be destroyed.
+#subobj  5
+Ambush in the south
+The Lieutenant of the Chieftain is covered by several ambush parties. All of them must be destroyed.
+#subobj  6
+Ambush in the east
+The Lieutenant of the Chieftain is covered by several ambush parties. All of them must be destroyed.
+#subobj  7
+Ambush in the north
+The Lieutenant of the Chieftain is covered by several ambush parties. All of them must be destroyed.
+#subobj  8
+Bodyguards
+The Lieutenant of the Chieftain is accompanied by several bodyguards. These must be destroyed.
+
+=== quest q13g
+Prevent a goblin raid
+The Goblins plan a big raid on the village. A joint counterattack, carried out by the village soldiers and the brigands is already in preparation. The Goblins must be destroyed and their plans to attack the village thwarted.
+#subobj  1
+Meet the Lieutenant of the Chieftain
+The meeting is supposed to take place where the road to the river leaves the valley between the hills. He should be alone and unarmed.
+#subobj  2
+Find the Goblins
+The Goblins are gathering at the edge of the swamp not far from a high mountain resembling a pillar or a broken tooth. That mountain is the last one to the west, after it terrain becomes plainer.
+#subobj  3
+Kill the Goblins
+The Goblin raid must be prevented by any means necessary.
+
+=== quest q14ag
+Dragon amulet
+The Lizards have an amulet which enables you to control the dragon for a short time. You will need this amulet to continue your quest.
+#subobj  1
+Find the owner of the amulet
+The Lizard who carries the dragon amulet busies himself with the training of his tame toads near the old quarry. The eastern road will lead you right there. Look out for another landmark, the broken cart near the hill.
+#subobj  2
+Kill the owner of the amulet
+The Lizard won't give the amulet away, and the trained toads will make it impossible to steal it. The only way out is to kill the owner.
+#subobj  3
+Take the amulet
+Search the corpse of the Lizard and take the amulet.
+
+=== quest q14g
+Orc ABC Book
+The witch cannot translate the note addressed to the traitors. To do that she will need the Orcs ABC-book which the Seer carries with him. The best way to reach his home is to go to the "Sands" through the "River and Islands".
+#subobj  1
+Find the home of the seer
+There is a large promontory which goes from west to south-east, far into the lake bordering the sands. Near the end of that promontory is a small barren islet which can be reached by foot. A hut is on that islet and the seer who owns the ABC book lives there. The road to the end of the promontory will indeed be dangerous - it is guarded by Orcs, and a savage Ogre also lives somewhere near.
+#subobj  2
+Kill the Seer
+There is only one way to ensure that the seer does not raise the alarm - kill him.
+#subobj  3
+Take the ABC book
+The Orc ABC book is the main objective of this quest. Without it, the witch cannot read the note.
+
+=== quest q15ag
+Big Shell
+Lizards have a symbol of peace - the Big Shell. According to custom, the Lizard tribe which has the Big Shell on its altar do not attack humans and fight only when attacked. At present, the Big Shell is on the altar in the Remote Mountains. You must go there and get it. To reach this location, take the road which runs from west to east through the Middle Mountains.
+#subobj  1
+Find the altar
+The altar is located not far from where the road to the Remote Mountains begins, north of the four fiery pillars.
+#subobj  2
+Take the Big Shell
+You must get it. But remember, as soon as the Shell is removed, peace between Lizards and humans will end.
+
+=== quest q15bg
+Making peace with the Lizards
+To prevent the Middle Mountain Lizards from attacking humans, you must return the Big Shell to the altar. The altar is near the start of the passage to the lake, east of the location where the dry riverbed starts in the rocks. The passages between the hills leading there are guarded by groups of Lizards, so it will prove difficult by direct route. Note!! Until you have completed this quest, the road to the observatory will prove very dangerous.
+#subobj  1
+Get to the altar
+It is best for you to try to go between the hill and the dry riverbed: the guard force is weakest there. After you are cross the hills on the Lizards' territory, be very careful: mayhap you should crawl while you are there.
+#subobj  2
+Put the shell back in place
+You must return the large shell to the altar. After that Lizards will attack humans no more. But if people attack them first, hostilities will begin anew.
+
+=== quest q16g
+Quarry
+The road to the quarry is now dangerous. If you make it safe Craftsman Babur would make it worth your while. You can find the quarry if you go north from the four pillars with fires.
+#subobj  2
+Find the pigs
+The herd of pigs grazes in the same ravine not far from the Cyclops, to the east of the quarry.
+#subobj  3
+Kill all pigs
+As long as the Cyclops has enough food he will go nowhere. Remember that the pigs are not fenced in, so some may stray far. Make sure that the Cyclops does not notice you! If he does, you will fail Babur's task.
+#subobj  4
+Wait for the Cyclops to go away
+When the Cyclops feels his hunger grow, he must go in search of food. But that will not happen immediately....
+#subobj  5
+Find the quarry
+You can find the quarry north of the four fiery pillars. Be cautious, and do not forget to look to the sky now and again - they say there are dragons in those parts.
+#subobj  6
+Kill the Cyclops
+It is no easy task, but if you succeed, you may consider the request of the Craftsman completed.
+
+=== quest q17g
+Green Crystal
+Green Crystals are necessary for the "Ice Spell". You will find these crystals deep in a ravine, in the mountains where the Dead City is located. Look to the north of the city gates.
+#subobj  1
+Cheat the Troll
+There is a Troll who lives next to the entrance to the ravine. He is not easy to kill, but you could first lure him away, then slip into the ravine where the huge Troll cannot follow.
+#subobj  2
+Find the Crystal deposit
+A deposit of Crystals is located at the farthest end of the ravine. Be careful when you move down the ravine: there may be other enemies there, apart from the Troll!
+#subobj  3
+Take a Crystal
+You must take a Crystal and bring it back to the witch.
+#subobj  4
+Take a Green Crystal
+Estera said it must be Green Crystal. Blue Crystals are not suitable for casting an "ice spell".
+#subobj  5
+Get out of the ravine
+When you are leaving the ravine, do not forget that many dangerous creatures may be waiting for you!
+
+=== quest q18g
+Exploring observatory ruins
+Somewhere among the ruins of the observatory is the key to the mystery of the Dead City. The Observatory is in the northern part of the Middle Mountains, where warring tribes of dragons and harpies live. To enter the observatory, use the amulet to call the dragon who will destroy the Harpies. Remember that the amulet will not work with any dragon, only with the one who lives to the north, a little to the west across the lake. Note: The road to the observatory is very dangerous because of the warlike Lizards. To avoid unnecessary risks you should complete the "Big Shell" and "Making Peace with the Lizards" quests first.
+#subobj  1
+The road to the lake
+A narrow and winding passage in the rocks leads to the lake. It starts a short distance to the north from the altar of the Lizards. If you return the symbol of peace - the Big Shell - to the altar, the Lizards will stop their attacks on humans. Otherwise you must fight your way to the passage, and your chances will not be very good.
+#subobj  2
+Freeze the lake
+The magic of Estera worked! The lake is covered with ice and now you can walk across it!
+#subobj  3
+Traverse the lake
+The areas to the north of the lake are really dangerous. The Harpy-infested ruins of the observatory are there, plus the dragon's lair!
+#subobj  4
+Find the dragon
+The lair of the dragon is in the small valley to the north and a little west of the lake.
+#subobj  5
+Charm the dragon
+If a person with the amulet approaches the dragon, it will not attack but will follow that person like a pet.
+#subobj  6
+Find the Harpies
+Harpies live in the observatory ruins located to the north and a little east of the lake. Use caution: those creatures know magic and are very dangerous!
+#subobj  7
+Exterminate the Harpies
+If the dragon sees harpies he becomes furious and attacks them. T'would be better to go to a safe place during the fighting, or you may be hit by the military magic of both sides.
+#subobj  8
+Search the observatory
+Try to search the ruins for something which could provide information about the Dead City. It may be a map, a book or similar object.
+
+=== quest q19g
+Main evidence
+A paper with a detailed plan to kill the Chosen has been sent to the Orcs. This paper will provide evidence which of the villagers is the real enemy.
+#subobj  1
+Find the secret location
+The paper addressed to the Orcs is in a secret location near the foot of the hill, east of where the road from the Foothills to the river starts. Make haste - an Orc messenger accompanied by guards is also on the way there, to collect the paper.
+#subobj  2
+Catch up with the Orc messenger
+The Orc managed to get the paper and even now takes it to Council Mountain and the chiefs. Council Mountain is located a short distance from the road leading from the Foothills to the river; there is a path to the top of the mountain marked by Orc signs.
+#subobj  3
+Get the paper
+To learn the true name of the enemy in the village you must get the paper taken by the Orc messenger.
+
+=== quest q1ag
+Killing the goblin sentry
+A Goblin sentry watches the village constantly and reports all movements to his tribe. This means that the people cannot take their cattle to pasture or send a force against the Goblins. If the sentry sees a soldier he immediately runs away, so the only one who may get close enough to kill him is one who does not resemble a soldier. When the sentry is dead, return to the village - the Foothills is not a good location to walk alone, especially not if only lightly armed!
+#subobj  1
+Find the Goblin sentry
+The Goblin sentry is watching the road to Foothills. His post is very close to the village.
+#subobj  2
+Kill the Goblin sentry
+You must kill him and then return to the village.
+
+=== quest q1g
+Killing white wolf
+The White Wolf is the strong, cunning leader of a vicious pack that has been slaughtering the cattle of the villagers. Without its leader, the pack will be far less dangerous.
+#subobj  1
+Find the lair of the White Wolf
+According to the Elder, the lair of the White Wolf is in the ravine to the north west of the Foothills.
+#subobj  2
+Distract the pack
+It is difficult enough to defeat the White Wolf even one to one, but if that creature has the whole pack fighting with him, it becomes almost impossible. However, you could try to distract the pack by scaring the boars to make them run. Mayhap the wolves will rush after them leaving their leader alone for a time.
+#subobj  3
+Kill the White Wolf
+While the wolf devours the loot, you could slip up close to him and finish him off with one blow.
+#subobj  4
+Take the head of the White Wolf
+The head would indeed serve as proof that the villagers now have one less enemy to worry about.
+
+=== quest q20g
+Dead City master
+Someone controls the Dead City. Mayhap it is the powerful Magician whom you should try to meet, or perhaps you should at least ascertain where he lives? Remember, it is practically impossible to enter the Dead City through the big gates: ghouls guard them just as closely as city guards did in better times. You can enter the city through a secret passage, but to open that up, you must have the password.
+#subobj  1
+Find a way into the Dead City
+There is a secret passage cut through the mountains; the entrance is to the south of the large gates. The start of the secret passage is marked by two towers, but to pass between them you must know the password written in the book from the observatory.
+#subobj  2
+Pass through the opened passage
+The opened passage leads exactly where you must go: to the Dead City.
+#subobj  3
+Find the Lone Mountain
+According to incomplete information received, the master of the City lives on the top of the Lone Mountain located deep in the valley. Be very careful while you look for it: the Dead City ghouls do not only live near the large gates!
+#subobj  4
+Climb Lone Mountain
+The top of Lone Mountains seems to be a suitable place for the Dead City Master to live. To get there you must walk up the spiral path to the very top of the mountain.
+
+=== quest q22g
+Subterranean creatures
+The Old Dragon respects old traditions, so he will promise to tell you something of interest but in return will ask that you exterminate the armadillos who constantly annoy him. To make your task easier, the dragon will give you poison to use on one of the three underground rivers.
+#subobj  1
+Kill the Armadillo Mother
+If you let the large female armadillo live, she will give birth to many more baby armadillos and the Old Dragon will never have peace and quiet. Better attack her after one of the springs is poisoned - she will not die of the poisoned water but she will be much weakened.
+#subobj  2
+Exterminating small Armadillos
+They are the ones who irritate the Old Dragon with their fussing and messing around.
+#subobj  3
+Find the nearest spring
+The nearest spring is in the north-eastern corner of the cave. You can reach it by walking up the eastern underground river.
+#subobj  4
+Poison the nearest spring
+Use the poison of the dragon. Then several small armadillos will die and the armadillo mother will be somewhat weakened.
+#subobj  5
+Find the middle spring
+The middle spring is to the west of the nearest one in the cave. You can reach it by walking up the middle underground river.
+#subobj  6
+Poison the middle spring
+Use the poison of the dragon. Then several small armadillos will die and the armadillo mother will be somewhat weakened.
+#subobj  7
+Find the farthest spring
+The farthest spring is near the centre of the northern end of the cave. You can reach it by walking up the farthest underground river.
+#subobj  8
+Poison the farthest spring
+Use the poison of the dragon. Then all the small armadillos will die and the armadillo mother will be greatly weakened.
+
+=== quest q23g
+Punishing the treacherous Captain
+Captain Gort rebels! He threatens to kill the Elder and the Chosen to become the sole master of the village! You cannot allow that; the traitor and his accomplices must be destroyed!
+#subobj  1
+Find the Captain
+The Captain escaped to gather the remaining brigands and attack the village. It is unlikely he managed to get too far; you'll probably find him in the Foothills near the road to the village.
+#subobj  2
+Kill the Captain
+The traitor and his henchmen must be destroyed!
+
+=== quest q24g
+Magic plant
+The village is in trouble - the Captain paid the Orc Seer to cast an illness spell on the people. To save the village you must find the White Flower and bring it to the Elder.
+#subobj  1
+Find the Flower
+To find the Flower, you should take the road leading from the Foothills to the east. At first the road goes through the woods, then, to the north, you will see the hills (the broken cart belonging to Babur lies near the first hill). There is a cleft between these hills and if you go a short distance to the north along this cleft, you will find the Flower.
+#subobj  2
+Take the Flower
+You must take the magic plant and bring it in the village.
+
+=== quest q25g
+Getting the enemy in the clear!
+Both Craftsman Babur and Elder Erfar have their own reasons to wish trouble on the Chosen. Each of them knows that the Chosen will again go to the Middle Mountains to obtain another magic plant. If he is ambushed where the dry riverbed joins the river, the traitor is Babur; if the ambush happens near the broken cart, it is the work of the Elder.
+#subobj  1
+Check the dry riverbed
+The dry riverbed stretches from the central part of the Middle Mountains to the south west. There is a small bay where it joins the river. If the ambush lies in wait near that bay, Craftsman Babur is the traitor.
+#subobj  2
+Check the broken cart
+The broken cart lays near a hill at the end of the road leading from the Foothills to the east. If the ambush lies there, the traitor is the Elder.
+#subobj  3
+Destroy the ambush
+Now you know for sure that the enemy in the village is the Elder. He will pay for his treason, but the enemies who lie in ambush must also be wholly exterminated!
+#subobj  4
+Establishing the innocence of the Craftsman
+There was no ambush near the dry riverbed, thus is Craftsman Babur is innocent.
+
+=== quest q26g
+Strangers' camp
+The Old Dragon saw a camp set up by some strange people to the northwest of Dead City; mayhap the Great Magician is among them. You must find that camp and ascertain all you can about these strangers.
+#subobj  1
+Gain the support of the Dragon
+The ghouls controlled by the Old Dragon attacked the camp of the strangers and took control of the area. But now the Old Dragon has called off his guards, so you can now make your way to the former camp.
+#subobj  2
+Find the camp
+The place you need is to the north-west of the mountains surrounding Dead City. If you start from the city gates, you'll have to cross the river by the bridge upstream.
+#subobj  3
+Search the camp site
+The camp is empty but there may be some things left behind which would tell you something about the people who set it up. For example, try searching all the dead bodies you may find.
+
+=== quest q29g
+Khadaganians
+The Khadaganian official promised that the unit commander would help the Chosen to leave Gipath. Even if that official did slightly exaggerate the hospitality and goodwill of his leader, you should meet him anyway. The Khadaganian expedition camp is located in the eastern part of the Remote Mountains.
+#subobj  1
+Find the camp
+There are two rivers in Remote Mountains: one flows out of the central part of the Big Lake from north to south; the other starts from the spring in the eastern part of the mountains and flows to the south-west. The Khadaganian camp is located a short distance to the north from the second river bank, about midstream.
+#subobj  2
+Meet the Khadaganians
+To talk to the head of the unit you must first speak with one of the soldiers.
+
+=== quest q2g
+Tools
+Craftsman Babur cannot and will not do any work until the tools stolen by the "Free Hunters" are returned to him (he always calls them Brigands).
+#subobj  1
+Find the Chieftain of the Brigands
+The camp of the brigands, where the chieftain lives with his wife, is located between the two rivers. The easiest way to reach this camp is by the ford upriver; however, beware the poisonous toads which are plentiful on the river banks.
+#subobj  2
+Get the chisel
+The steel chisel must be taken from the Chieftain and returned to Babur. The Chieftain is not what he is without good reason: he is a very strong fighter, so mayhap 'tis wiser not to enter into open combat against him! T'would be better for you if you slipped up stealthily to him and stole the chisel from his pocket.
+#subobj  3
+Get the bodkin
+The steel bodkin must be taken from the Chieftess and returned to Babur. Mark my words, she may look harmless, but in fact she is very familiar with magic and may cause you undue trouble. 'Twould be best for you to steal up close to her and slip the bodkin from her pocket.
+
+=== quest q30g
+Reaching the hermit lizard's home
+The Hermit Lizard demands that you come and meet him since he helped you escape from the Khadaganians. You must keep your word, but you do not know why he wishes this of you.
+#subobj  1
+Find the bridge
+The abode of the Lizard lies north west of the area called "Sands". The road is blocked by a circular canal full of water, with two bridges across it. To avoid unnecessary danger, t'would be better to enter "Sands" from the "Dead City" side.
+#subobj  2
+Neutralize the trap
+There are several stone pillars on the island formed by the ring canal. An elaborate trap! The Ancient Claw given to you by the Hermit Lizard will help you pass safely.
+#subobj  3
+Meet the Hermit Lizard
+To talk to the Lizard you must go across the first bridge and step on to the second one.
+
+=== quest q34g
+Returning water to Lizards
+The Orcs built a dam to cut off the spring and rerouted it to their territory. You must lift the dam and block the canal.
+#subobj  1
+The dam
+To find the dam go south along the eastern bank of the river which starts near Hermit is home. The dam is located a short distance down the stream after the place where a small spring joins the river (on the eastern side).
+#subobj  2
+Raise the dam
+To enable the water to flow down the river, you must raise the dam using the Lizard's lever.
+#subobj  3
+Find the stone
+A large stone which the Orcs could not move very far away overhangs the canal. It is located a short distance upstream after the dam. A push, the stone falls, the canal is blocked! 
+#subobj  5
+Push the stone into the canal
+The Orcs did not move the stone very far from the edge of the canal, but left it where even a single man could push it down.
+
+=== quest q35ag
+Taking Lizards' treasures
+The treasures of the Lizards lie on the farthest of the three islands located in the southern part of the lake. Lizards do not like to part with their treasures, but it may prove worthwhile for you to try and capture them!
+#subobj  1
+Find the treasure
+The three islands in the southern part of the lake are connected by bridges. You must go to the farthest island.
+#subobj  2
+Get the treasure
+The treasures belonging to the Lizards are hidden in the coffer. Open it and take the treasure.
+
+=== quest q35g
+Grateful Lizards
+According to Hermit, the Lizards would welcome any human and would be happy to part with their treasures.
+#subobj  1
+Come to the Lizards
+The tribe which has the treasure lives on the sand banks down to the south.
+#subobj  2
+Escape from the Lizards
+The welcome the Lizards extended took a somewhat peculiar form - it seems they like their visitors to stay with them, but not necessarily alive! You must leave this tribe as soon as possible to escape their dangerous hospitality. Mayhap you can rekindle a long-standing feud between Lizards and Orcs....lure the Lizards who pursue you to the area farther east inhabited by Orcs. Then the sparks will fly!
+
+=== quest q36ag
+Going through tunnel
+You can reach the ravine through the tunnel and thus avoid a battle with aggressive Killer Lizards.
+#subobj  1
+Find the gap in the wall
+The tunnel is blocked by a landslide which would seem to have been result of an earthquake. But that same earthquake also made a gap in the wall, opening up a way to the natural cave.
+#subobj  2
+Avoid the landslide
+You can avoid the landslide by going through the natural cave. Then return to the main tunnel.
+#subobj  3
+Avoid the Golems
+Golems are mechanical creatures whose task is to protect catacombs from uninvited guests. If you are detected by an active Golem, your life will be in danger.
+#subobj  4
+Go out of the tunnel
+When you leave the tunnel you will find yourself in the inner part of the ravine near the home of the Magician.
+#subobj  5
+Sarcophagus
+You found a sarcophagus!
+#subobj  6
+Take the contents of the sarcophagus
+There may be some useful things inside the sarcophagus. You have no key, so you must have a high enough "Use/Steal" skill level to get a look inside it!
+#subobj  7
+Find the sarcophagus with the control key
+A spare key which controls the Golems has lain inside that sarcophagus since the beginning of time.
+#subobj  8
+Take the control key
+A key to open the sarcophagus is not needed, you can use the control key on the altar.
+#subobj  9
+Find the altar room
+The altar which controls the Golems must be somewhere close to the tunnel; in all probability the passage to that room is hidden or closed.
+#subobj  10
+Find the altar
+You do not know what the control altar looks like, but you will probably know it when you see it.
+#subobj  11
+Use the altar
+According to the signs on the control panel, the altar will activate a passive Golem whose task is to eliminate the elementals in the western part of the natural cave. In order to use the altar you will need the key.
+#subobj  12
+Wait...
+Even a pitiless Golem needs some time to deal with elementals.
+#subobj  14
+Find the battlefield
+The place where the Golem fought the elementals is in the western part of the cave on a small set past the small lava lake.
+#subobj  16
+Find the sarcophagus room
+In one of the rooms cut into the rock is a sarcophagus guarded by a Golem. It seems unlikely that the Golem would guard an empty sarcophagus!
+#subobj  17
+Search the sarcophagus
+You should have a look inside this sarcophagus; but do not forget that Golems never sleep...
+
+=== quest q36g
+Opening passage to valley
+You know that there is a tunnel leading to the valley. You can open it by using the lever in the mountain passage to the east of the river. Remember, the Khadaganian camp is located in this area, and nothing good will come of it should you fall foul of them!
+#subobj  1
+Find the tunnel entrance
+The entrance to the tunnel is to the west of the ravine through the bottom of which the river flows.
+#subobj  2
+Find the narrow gully to the east
+According to the Khadaganian document, the lever which opens the entrance to the tunnel is located at the end of a narrow gully which begins east of the ravine and runs northwards.
+#subobj  3
+Find the lever
+The lever should be in one of the dead ends of the narrow passage.
+#subobj  4
+Switch on the lever
+You should switch the lever on and then return to the tunnel entrance. The people who built the system probably provided some means to get to the opening gates quickly - mayhap that mysterious set nearby?
+#subobj  5
+Enter the tunnel
+The tunnel leads to the ravine!
+
+=== quest q37g
+Entering Great Magician's home
+The ancient gates leading inside the mountain are the doorway to the home of the Great Magician!
+
+=== quest q39g
+Finding Orcs' camp in Middle Mountains
+The witch has had a bad dream. Her granddaughter Airy was captured by the Goblins who live in Middle Mountains under the protection of the Orcs. Mayhap you should ascertain if this dream has any element of truth in it?
+#subobj  1
+Get into the Orc camp
+The Orc and Goblin camp is located to the west of Middle Mountains. To get there you must cross the bridge over the dry riverbed. One of the entrances to the camp is located immediately after the bridge to the north. This entrance is well guarded so you should try to find a way to get past the guards
+#subobj  2
+Find the stockade
+There is a prison in the camp - a set fenced from all four sides with gates on one side.
+#subobj  3
+Find any evidence that Airy was here
+The granddaughter of the Witch is not here, mayhap Goblins took her somewhere else. Look for traces of her presence.
+
+=== quest q3g
+Punishing goblins
+Goblins often raid the village. However, if seven or more are killed their fervour will surely weaken. The best course of action is to find some stray Goblins east of the swamps located down river.
+
+
+=== quest q40ag
+Ogre Utundry
+Shei-Var wishes to ensure that the Demon will be defeated. To prove this has indeed been done, you must bring him the contents of Ogre Utundry's coffer - he is the eldest of the three Ogre brothers who live here in Sands. After you have met with their Chief Sheivar, the Orcs will treat humans in a neutral manner. But the quest is not easy, since the Ogre brothers exchange the keys to their coffers with one another, so you will have to deal with all three!
+#subobj  1
+Find the Ogre called Byr
+Byr, the first Ogre you have to defeat, lives in a round valley north of Shei-Var's home. Close by is the settlement of an Orc Clan Kharu, hostile to Sheivar.
+#subobj  2
+Kill Byr
+Ogre Byr must be killed
+#subobj  3
+Find Byr's coffer
+Byr has a coffer where he keeps a key to the coffer of Ogre Gym.
+#subobj  4
+Search Byr's coffer
+Take the key to Gym's coffer
+#subobj  5
+Find the Ogre called Gym
+Gym, the second Ogre you must defeat, lives to the west of the village of Shei-Var. To find his abode, you must cross the river by the Orc dam and go a short distance to the west.
+#subobj  6
+Kill Gym
+Ogre Gym must be killed.
+#subobj  7
+Find the coffer belonging to Gym
+Gym has a coffer in which he keeps a key. This key fits the coffer of Ogre Utundry.
+#subobj  8
+Take Gym's key
+Take the key to Utundry's coffer
+#subobj  9
+Find the Ogre called Utundry
+The eldest of the Ogre brothers, Utundry, lives in a small round valley in the northern part of the eastern lake shore.
+#subobj  10
+Kill Utundry
+Ogre Utundry must be killed.
+#subobj  11
+Find the coffer belonging to Utundry
+This coffer is your main objective.
+#subobj  12
+Search the coffer belonging to Utundry
+Shei-Var wants the contents of the coffer belonging to Utundry.
+
+=== quest q40g
+Reaching Orc Shei-Var's home
+The Goblins gave Airy to the Orc chief Shei-Var. He lives east of the big lake, not far from the sand desert. To avoid too much danger, you must enter Sands from the Dead City side. Then you will find the settlement of the Sheivar .
+#subobj  1
+Find the Orc keyholder
+To enter the domain of the Sheivar Clan, you must first cross the dry crevice by the drawbridge. This is  located to the south east of the passage from Dead City to Sands. The mechanism which lowers the bridge is kept by the Orc key holder who lives in the lonely hut near the bridge.
+#subobj  2
+Get the mechanism
+You could kill the Orc key holder to obtain the drawbridge mechanism, but you can also try and steal it from him.
+#subobj  3
+Lower the drawbridge
+Use the mechanism to lower the drawbridge; then you will be able to proceed further.
+#subobj  4
+Find Shei-Var's home
+The abode of the chief Shei-Var is not too far from the bridge. To find it, go south east and look for Orc houses.
+
+=== quest q41g
+Defeating Demon
+Shei-Var wishes to give Airy as ransom to a certain demon who is leading the Orcs away. If this Demon is defeated, Shei-Var would free Airy. 
+#subobj  1
+Find the Demon
+The Demon has been seen south of the village of the Sheivars, in a valley encircled by a mountain range twisted like a spiral. The Demon looks like a human but he wears armor unknown on Gipath.
+#subobj  2
+Kill the Demon
+If the Demon is killed, Shei-Var will let Airy return home.
+
+=== quest q42k
+Finding the city
+You must come to the city in order to look for the girl in Ingos. The main landmarks here are the two lakes, upper and lower, connected by the river. You will find the city somewhere to the north of the upper lake.
+#subobj  1
+The village of the Woodcutters
+To get to the city whence you were teleported, first go south and pass through the small village of the Woodcutters. They are hostile towards all strangers, so you have two choices....either slip past the village stealthily or start a fight with the villagers. Afterwards, turn east and go along the narrow ravine.
+#subobj  2
+The bridge and the village of the hunters'
+To the north of the bridge across the river lies a village inhabited by hunters; like the Woodcutters, the hunters will attack any stranger. To enter the city, cross the bridge and leave the village behind.
+#subobj  3
+Come to the city
+The city is located to the north of the upper lake. It is surrounded by an old fortress wall, so you can only enter the city through the gates in the eastern wall.
+
+=== quest q43k
+Finding snoop's body
+The snoop who tried to find the girl has disappeared without trace. He is probably dead. You must find his body. When last seen, he was on the way to the village of the woodcutters located in the eastern part of the valley.
+#subobj  1
+Find the village of the Woodcutters
+The valley wherein the village lies is located to the east of the city. It is surrounded by hills and you can only enter it from the north. Remember that the province is on the brink of mutiny and a stranger, especially one from the city, will not be warmly welcomed.
+#subobj  2
+Find the snoop's body
+The snoop's body is somewhere around here. it is unlikely the Woodcutters bothered to bury him.
+#subobj  3
+Search the corpse
+It seems that the snoop has been killed by the kidnappers of the Princess. Mayhap you will discover something which will help you to find them.
+
+=== quest q44k
+Taking skins to meeting place
+The hunter wishes to sell his trophies directly to the buyer from the capital, thus cutting out the local merchant. The toadies of the merchant will try to prevent anyone from reaching the tent of the buyer.
+#subobj  1
+Find the meeting place
+After you leave the city suburbs and reach Karansul's domain, go south until you reach a hill. Then go east along the hillside until your reach the first valley to the south. That's the meeting place with the buyer. The entrance to the valley and the meeting place are guarded by Karansul's people who do not waste time before attacking anyone entering the valley or even approaching it.
+#subobj  2
+Hang the skins
+The skins belonging to the Trapper must be hung on forks near the fire. The buyer will take them later, when he is free to come here. 
+
+=== quest q45ak
+Getting Sacred Flower
+Each clan of Woodsfolk has its own sacred plant which blossoms winter and summer. The keeper of the Green Clan has been captured by the hostile White clan. You must free him, upon which he will give you the Sacred Flower. If the Keeper dies, you can take the flower from his corpse.
+#subobj  1
+Cross the lake
+To enter the domain of the White Clan you must go to the western shore of the upper lake, then a little further into the woods. Beware of the locals, they will attack anyone from the city.
+#subobj  2
+Find the prison
+The White Clan threw the Keeper into a primitive prison built of dead trees. The gates are closed, but you can open them with your bare hands. But that will not suffice....there is also a magic trap guarding the prison gates. To switch it off you will need a green leaf which the White Clan Seer carries with him.
+#subobj  3
+Find the Seer
+The White Clan Seer lives further to the west of the prison.
+#subobj  4
+Take the green leaf
+The Seer has a green leaf which is needed to switch off the magic trap in the prison. You must get that leaf.
+#subobj  5
+Switch off the trap
+The altar which controls the trap looks like an old stump covered with mushrooms. Well disguised indeed!
+#subobj  6
+Get close to the Keeper
+The Keeper is unsure whether he can bring the Sacred Flower to his Clan or not. If you open the cage gate, he will give the Flower to his rescuer. Then he will try to escape.
+#subobj  7
+Stockade
+The White Clan have several places where they keep their enemies in captivity. The stockade is one of them.
+#subobj  8
+Open the gates
+You do not need a special key to open the stockade gates.
+
+=== quest q45k
+Bringing Sacred Flower back
+To show his gratitude for the return of the Sacred Flower, the Green Clan chief of the Woodsfolk will tell you about the death of the snoop and the names of those responsible. But if you go to him without the flower, he will tell you nothing.
+#subobj  1
+Find the Green Clan
+Members of the Green Clan Woodsfolk live to the south of the city. East of the river which connects the Upper and the Lower lakes is a range of hills running from north to south. The Green Clan Woodsfolk inhabit the southern part of that range, on the eastern side. Do not antagonize these Woodsfolk: despite the Sacred Flower, they will fight viciously if you attack them.
+#subobj  2
+Meet the chief
+Give the Sacred Flower to the chief and he'll give you some valuable information in return.
+
+=== quest q46bk
+Getting the Elder out of Karansul's domain
+First of all you must get the Elder out of Karansul's domain. If he dies, you should still go to the Green Clan and tell your story to the Chief.
+#subobj  1
+Get the Elder out of the of Karansul.
+The Honorable Elder will follow his liberator, but he is too weakened by his imprisonment to defend himself. Bring him to the transfer area near the city.
+
+=== quest q46k
+Releasing Honourable Elder
+The guards' Captain started a punitive expedition against the Woodsfolk and ordered a spy to kidnap their Honourable Elder. You must free him!
+#subobj  1
+Find the camp of the guard unit
+After you have left the city suburbs and reached the domain of Karansul, go east. Use caution....it is not only the guards who operate in those parts but also the mercenaries of Karansul.
+#subobj  2
+Find the Honorable Elder
+The Honorable Elder of the Green Clan Woodsfolk is kept in custody in a cage right in the center of the camp of the guards. The cage is locked and the unit commander has the key.
+#subobj  3
+Find the unit commander
+To get the cage key you must find the Commander of the unit - he wears more expensive armor and carries better weapons than those of ordinary guards. If he is not in the camp, you will find him on his rounds of the posts.
+#subobj  4
+Get the key
+You cannot open the cage and release the Woodsman without the key held by the unit commander.
+#subobj  5
+Release the prisoner
+To release the Honorable Elder, simply open the cage door.
+
+=== quest q47ak
+Avenging the Elder's kidnapper
+The Green Clan chief wishes to have the spy who kidnapped the Honourable Elder killed. Bring the badge of the spy to the Chief as proof.
+#subobj  1
+Find the military camp
+To find the military camp where the spy lives, first go from the city suburbs to the abandoned mines area, then go east. The camp is located in the valley between two hills. Both entrances to the valley are fenced and guarded, but the southern one is guarded more intensively than the northern one.
+#subobj  2
+Find the spy
+Try looking for him near his barrack which is located in the western part of the camp near the hillside. Remember that in the south-eastern area of the camp there is a shooting range where archers train, so you better avoid it.
+#subobj  3
+Kill the spy
+The spying kidnapper must be killed.
+#subobj  4
+Take the badge from the body
+To prove to the Green Clan Chief that the kidnapper got what he deserved, you should bring his personal badge to the Green Clan.
+
+=== quest q47ck
+The Honourable Elder
+You must bring the Elder to the camp. If he dies, you should still go to the Green Clan and tell your story to the Chief.
+#subobj  1
+Bring the Elder to the Clan
+The Honorable Elder will follow his liberator, but is too weakened by imprisonment that he can defend himself.
+
+=== quest q48k
+Getting accounting books
+The foreman of Karansul's workshops carries an accounting book. If you can obtain it, you can then put pressure on the merchant. On the southern, eastern and northern shores of the big lake, there are mines, sawmills and other enterprises owned by Karansul. This area is well guarded and there are always many people around - both guards and common labourers. The workers are not armed, but if they see a stranger they may raise the alarm and call the guards.
+#subobj  1
+Go to the guarded territory
+You can get to the territory where the enterprises of Karansul are located through the post on the southern lake shore. The guard force there is not too strong and will not put up serious resistance. To reach the post, find the bridge across the river which flows into the lake from the west, then cross from the northern bank to the southern.
+#subobj  2
+Find the document
+According to the Trapper, the manager carries accounting books on his person. But this information may be incorrect and some of the documents could be somewhere near a mine. Take a look around the mine closest to the entrance on the southern lake shore.
+#subobj  3
+Take the document
+You do not know what is in these papers, but you should take them if only to find out....
+#subobj  4
+Cross the bridge
+The bridge connects the southern part of the industrial area with the northern one, and is guarded by the mercenaries of Karansul.
+#subobj  5
+Find the home of the Foreman
+The Foreman lives in the northern part of the industrial area. You can identify it by the two low brick chimneys on the roof. The Foreman and his bodyguards must be somewhere in the vicinity.
+#subobj  6
+Get the accounting book
+You must find a way to obtain the book which the Foreman carries on his person.
+#subobj  7
+Leave the guarded territory
+You can leave the industrial area through the post on the northern lake shore. There are many guards at that post but they expect trouble from outside the territory, not from the inside.
+#subobj  8
+Find the mechanical grinder
+The pride of Karansul - a mechanical ore grinder powered by a windmill. It is located somewhere in the north eastern part of the industrial area. Any problem with that mechanism will cause great commotion  amongst the workers.
+#subobj  9
+Break the grinder
+If the mechanical grinder fails, the workers and guards will all rush to see what is wrong. Meanwhile you can deal with the Foreman without any interference.
+
+=== quest q49k
+Taking Governor's collection
+A thief nicknamed Baldie hid his loot near his farm in the abandoned mines area. To blackmail him, you must get the property of the Governor.
+#subobj  1
+Find the farm
+The farm upon which the relatives of Baldie live is located on the western shore of the large lake. To get there, first go to the southern shore, then west. Exercise caution: you will be met not only by the criminal family but also by the snow tigers which are trained on the farm.
+#subobj  2
+Find the barn and the hiding place
+The hiding place of the loot is in the barn located in the northern part of the valley where the farm lies. Another landmark is two stacks of wood which stand on either side of the barn.
+#subobj  3
+Take the box with the collection
+You should take the loot from the barn.
+
+=== quest q4g
+Getting redhead brigand's stuff
+A rumor is afoot that one of the brigands, the Redhead, meets with the Orcs and engages in friendly conversation with them. Perhaps something among his possessions could prove that yet another person in the village also deals with the Orcs?
+#subobj  1
+Find the Redhead
+The redhead Brigand who talked to an Orc has been seen near the camp of the Brigands, in an easterly direction across the river. There you find a road which leads to the cave in the mountains.....
+#subobj  2
+Kill the Redhead
+The traitor must be killed.
+#subobj  3
+Search the Redhead
+Mayhap there is something of interest among his belongings.....
+
+=== quest q50ak
+Going through labyrinth
+The Woodsfolk of the Green Clan have moved home. They have gone to the mountain valleys in the southern part of Karansul's domain. You can only reach it through the labyrinth in the hills surrounding the city.
+#subobj  1
+Find the entrance to the labyrinth
+The gates to the labyrinth are to the east of the new Green Clan area in the city suburbs.
+#subobj  2
+Open the labyrinth entrance
+You do not need a key to open the labyrinth gates.
+#subobj  3
+Find the exit gates
+The exit from the labyrinth is in its eastern sector. Be careful in the labyrinth: there are many creatures there including magic ones and these are difficult to spot.
+#subobj  4
+Open the exit gates
+You do not need a key to open the exit gates.
+
+=== quest q50bk
+Green Clan's new place of residence
+The Green Clan of the Woodsfolk moved to mountain valleys in the southern part of Karansul's domain. You can only get there through the labyrinth in the hills surrounding the city, there is no other road to the mountain valleys. Humans tell many frightening stories about those valleys: a long time ago there was a warrior Magician who had his laboratory there...that dangerous, evil  magic can still be felt in those parts. Mayhap that is the reason why the Tigers and Trolls who live in those valleys are much stronger than the ones who live in the woods near the city.
+#subobj  1
+Find the altar
+The Woodsfolk solved the riddle of the abandoned laboratory and set up an altar which controls the magic traps. The altar is located in the southern part of the valley. It looks like a stump covered with mushrooms. To find it go along the southern wall which encloses the labyrinth. Remember that tigers and Trolls inhabit these parts and are very dangerous. Mayhap you should try to cheat them, not fight them!
+#subobj  2
+Use the altar
+The altar of the Woodsfolk controls the magic trap which can keep hungry tigers away from the road.
+#subobj  3
+Go to the Green Clan
+The new place of residence of the Green Clan is located in the south-eastern part of the mountain valleys. To meet the chief and talk to him, go all the way through the narrow passage leading south-east.
+
+=== quest q50ck
+Coming to the Green Clan
+You must meet the Green Clan chief again; although not aware of it, he does indeed know the answer to the kidnapping of the Princess.
+#subobj  1
+Come to the Green Clan
+To reach the Green Clan, go south from the city gates.
+
+=== quest q51k
+Meeting Magician
+All evidence suggest that it was Magician Diera who kidnapped the Princess. She is an enemy and must be destroyed!
+#subobj  1
+Find Diera
+Diera is either on the way to, or on the way back from, the abandoned mines.
+#subobj  2
+Kill Diera
+Diera deserves death!
+
+=== quest q53k
+Finding something valuable for Governor
+You must obtain the key to the closed mine from Governor Valrasian. Go to the old pits area and find a hiding place containing a gold nugget.
+#subobj  1
+Gates of the old pits
+After the people abandoned the pits because of the snow tigers sudden appearance there, the governor ordered the cleft which leads to the pits to be blocked. To find them, enter the abandoned mines area, slip past the military camp to the north and go a short distance to the east. The ravine leading south is blocked by the gates.
+#subobj  2
+Open the gates
+You will need a special key for this task.
+#subobj  3
+Finding the hiding place
+One of the workers said that during their flight, their supervisors tried to make them carry the last of the nuggets found in the pits, but they revolted and abandoned the nuggets. Surely they still lie somewhere in the southern part of the valleys where the mining occurred.
+#subobj  4
+Take the nugget
+The coffer and the cart are not laying here without a reason: probably they've been abandoned by the workers during the flight. You should have a good look at them and take the nugget.
+#subobj  5
+Remains of a gold digger
+Obviously someone paid dearly for his attempt to reach the abandoned treasures!
+#subobj  6
+Search the remains
+Mayhap you will find something you could put to better use than he did.
+
+=== quest q54k
+Abandoned mines
+Diera hid the kidnapped girl in an abandoned mine. To get there you will need the key.
+#subobj  1
+Reach the mines
+The abandoned mines are located in the northern part of the area, across the lake. The passage is blocked by the gates. To reach these gates, go around the lake from the east, cross the river by the bridge and then go north.
+#subobj  2
+Open the gates
+To open the gates to the mines use the governor's key. Be careful: the entrances to the mines are guarded by the cutthroats hired and equipped by Diera.
+#subobj  3
+Find the entrance to mine 1
+This mine is the closest to the gates and the easiest to enter. However, if you take this entrance you will have the longest journey through the catacombs.
+#subobj  4
+Find the entrance to mine 2
+This one is located to the west of the entrance to mine 1. If you use it, your journey underground will be somewhat shorter.
+#subobj  5
+Find the entrance to mine 3
+This is the westernmost mine and the most difficult to reach. However, if you use this entrance your journey in the catacombs will prove somewhat easier, although the catacombs are never truly safe!
+#subobj  6
+Enter the mine
+To continue your search for the Princess, enter the mine and look in the catacombs.
+
+=== quest q55k
+Finding Princess
+The girl is hidden somewhere deep in the catacombs. You must find and save her. Remember that close to the entrance there are posts manned by the mercenaries in the employ of Diera and in the deeper parts live sinister Lords of the Dungeons - magic beings who have a hatred of anyone who lives on the surface.
+#subobj  2
+Find the former punishment cell
+In the north western part of the catacombs there is a place which used to serve as a punishment cell for offending miners. Perchance that is where the girl is being kept.
+#subobj  3
+Find the mercenaries' Commander
+The Commander of Magician Diera's mercenaries is in the underground camp. Mayhap he has something which would help you in your quest.
+#subobj  4
+Get the Commander's things
+If there is something which could help you to find the girl, the Commander will have it.
+#subobj  5
+Go to the north eastern part of the catacombs
+There was no girl in the former punishment cell. Mayhap she managed to escape and now hides deep in the catacombs. The underground corridors lead east of the former cell; you should continue your quest in the north eastern part of the subterranean labyrinth. There are two ways to get there. The first one is direct but is blocked by a locked door. The second way is to take the northern corridor. There are no insurmountable barriers there but it is much more dangerous.
+#subobj  6
+Go to the south eastern part of the catacombs
+Probably the girl managed to get even further, so look for her in the south eastern part of the subterranean labyrinth. But be careful: you may encounter Wormheads here - the intelligent beings who hate all surface dwellers and know how to use magic.
+#subobj  7
+Find the door
+If that is where the girl is in hiding, she must be behind one of the doors which block the passages.
+#subobj  8
+Open the door
+To find out if the girl is here you have to open the door. You do not need a key to do that.
+#subobj  9
+Enter the shelter
+The girl is here!
+#subobj  10
+Find the "South-East" lever
+The gates which open the way to the south-eastern part of the catacombs are controlled by the "South East" lever located in the north eastern part of the labyrinth behind one of the gates. You can reach it by a roundabout way.
+#subobj  11
+Turn the "South-East" lever
+When the "South-East" lever is switched on, the way to the south eastern part of the catacombs will be open.
+#subobj  12
+Find the "South" lever
+This lever is located in the southern part of the catacombs.
+#subobj  13
+Turn the "South" lever
+Apparently there is nothing near the lever which could be controlled by it. However, the lever is here for a purpose: mayhap it opens passages in some other parts of the catacombs.
+#subobj  14
+Find the "North-East" lever
+Apparently there is nothing near the lever which could be controlled by it. However, the lever is here for a purpose...
+#subobj  15
+Turn the "North-East" lever
+Mayhap it opens passages in some other parts of the catacombs.
+#subobj  16
+Yes! ("South" lever)
+After you turned the "South" lever a passage opened, and something not completely useless awaits you there...
+#subobj  17
+Pick up the find
+Whatever it is, it would feel better in the hands of the finder than in the cave.
+#subobj  18
+Yes! ("North-East" lever)
+When you turned the "North East" lever a passage opened, and something not completely useless awaits you there...
+#subobj  19
+Pick up the find
+Whatever it is, it would feel better in the hands of the finder than in the cave.
+#subobj  20
+Find the "North" lever
+The way to the north east of the catacombs is blocked by the gates controlled by a lever. To find the lever go east of the former punishing cell.
+#subobj  21
+Turn the "North" lever
+To turn the "North" lever, use the key which the mercenaries' Commander had.
+
+=== quest q5dg
+Seer and pyramid
+The Orcs living in the Foothills feel secure because they are protected by a magic pyramid, controlled by a Seer.  If you kill this Seer and switch off the pyramid, this tribe will become far less dangerous.
+#subobj  1
+Find the Seer
+The Seer stands in the middle of the settlement to guard the switch. If you try to fight your way to him, the Orcs will come running in numbers from all around the place. However, you could try to crawl into the encampment so the guards will not see you.
+#subobj  2
+Kill the Seer
+The best course would be to slip up close to the Seer and stab him quickly in the back.
+#subobj  3
+Switch the pyramid off
+Use the lever to switch the pyramid off.
+
+=== quest q5g
+Finding magic bit
+The Orcs who live in the cave in the north-east of the Foothills have a magic object which can be of interest to the witch. According to the map taken from the brigand, the object is hidden in the closed sarcophagus. The Seer of the Cave Orcs has the key. Note: To reach the cave, take the road to the north-east of the Foothills and trick the Troll who lives next to the cave entrance. To get deeper into the cave you must have a drawbridge mechanism. If you do not have it, you could ask the Captain.
+#subobj  1
+Lower the bridge
+To get into the inner parts of the cave you must lower the drawbridge. To achieve that you will need a drawbridge part.
+#subobj  2
+Find the sarcophagus key
+The Orc Seer has it.
+#subobj  3
+Find the sarcophagus containing the magic bit
+The sarcophagus containing the magic bit must be somewhere close to the place where the Orcs live. To look for it in the remote passages? Not very productive!.
+#subobj  4
+Take the bit
+To get the bit you must open the sarcophagus with the key.
+
+=== quest q60h
+Going through Death Canyon
+Khadaganian soldiers release prisoners in Death Canyon and use them to hone their combat skills. If a prisoner can reach the gates of the northern fortress from the main gates of the southern fortress, they let him live. Until the next training session.....
+#subobj  1
+Run to the northern gates
+The northern fortress is located at the north eastern end of the canyon. There is only one way which leads there and it is very difficult to hide from pursuers.
+#subobj  2
+Open the northern gates
+You do not need a key to open the northern gates - just open them with your hands.
+#subobj  3
+Enter the gates
+When the prisoner enters the gates of the northern fortress, he has completed his task and may return to his position.
+
+=== quest q61h
+Stealing cage key
+A woman has not enough strength to kill Kardaur. So she must steal the key, not try and take it by force. One must be very careful near the cage of prisoners: the guards there take their duties very seriously and will attack anyone who comes near, regardless of rank and position.
+#subobj  1
+Find the lieutenant
+Lieutenant Kardaur can usually be found in the citadel at the eastern end of the fortress. The citadel stands on the bluff bank of the river flowing at the bottom of the canyon. To get there you must open the gates.
+#subobj  2
+Get the keys
+A woman does not have the strength to kill Kardaur quickly and silently. Even if she tries, he will scream and the guards will come. Then there will be practically no way to escape them. A better course would be to try and steal the keys from the lieutenant, and hope that he will not notice.
+#subobj  3
+Open the cage
+After you have the keys go back and open the prisoner's cage. And do not forget about the vigilant guards.
+
+=== quest q62h
+Reaching the cave entrance
+The only way to escape the pursuit of the guards is through the cave; the entrance is located at the remote end of the canyon.
+#subobj  1
+Find the duty officer
+The main gates of the southern fortress are locked and to open them you will need the key. The duty officer at the gates has it; you will have to find him (lieutenant Kardaur is going to be on duty). His post is near the gates.
+#subobj  2
+Get the key
+You must kill Kardaur to get the key to the gates.
+#subobj  3
+Open the main gates
+To open the main fortress gates use the key you took from Kardaur. After that make haste: the open gates will inevitably attract the guards' attention and the chase will start immediately.
+#subobj  4
+Open cages
+The gate keeper is also responsible for cages with wild spiders. Next to the gates there is a lever which opens all cages at once. If you do that the released spiders will attack the guards and that will certainly distract them for a while.
+#subobj  5
+Find the passage to the cave
+There is a narrow passage which leads to the cave located at the north western end of the canyon. The passage is blocked by gates which are usually locked.
+#subobj  6
+Find the guard
+The passage to the cave is locked and the guard has the key.
+#subobj  7
+Kill the guard
+The guard must be killed, otherwise he will raise alarm.
+#subobj  8
+Take the key
+Take the key to the passage which leads to the cave from the guard's corpse.
+#subobj  9
+Open the cave gates
+To open the gates to the cave use the key you took from the guard.
+#subobj  10
+Get away from the chase
+The chase is underway!
+
+=== quest q63h
+Cave exit
+You must reach the opposite end of the cave. The entrance is to the west, so look for the eastern exit to get as far away as possible from Death Canyon.
+#subobj  1
+Find the lever
+Somewhere in the south western part of the cave there must be a lever which lowers the drawbridge across the western lava river. You could also cross that river by the ordinary bridge but that would be much more dangerous.
+#subobj  2
+Switch the lever on
+The drawbridge across the western lava river will descend and you will be able to proceed further into the cave.
+#subobj  3
+Find the Western bridge
+The western bridge is located approximately in the middle of the western lava river.
+#subobj  4
+Find the second lever
+The second lever which controls the drawbridge across the eastern lava river is located on a small islet next to the temple of the Lords of the Dungeons.
+#subobj  5
+Switch the second lever on
+The drawbridge across the eastern lava river will descend and you will be able to proceed eastwards.
+#subobj  6
+Find the Eastern bridge
+The eastern bridge is located up the eastern lava river.
+#subobj  7
+Explore the Eastern part of the cave
+Even if there is no direct way out to the surface here, you should have a good look around the eastern part of the cave, from north to south.
+
+=== quest q64ah
+Killing two slavedrivers
+The Blacksmith would very much like to take revenge upon the two cruel slavedrivers called Whip-Aga and Lash-Aga. Currently they are supervising peasants who work plantations near the city of Suslanger.
+#subobj  1
+Find the central plantations
+The central plantations are located north east of the city. You can easily find them if you follow the well developed network of irrigation canals.
+#subobj  2
+Find Whip-Aga
+Whip-Aga supervises the works at the central plantations.
+#subobj  3
+Kill Whip-Aga
+Whip-Aga must be killed.
+#subobj  4
+Find the southern plantations
+The southern plantations are located down the river not far from the place where it flows into the lake. There are fewer irrigation canals here and they are not as large as the central ones.
+#subobj  5
+Find Lash-Aga
+Lash-Aga supervises the works at the southern plantations.
+#subobj  6
+Kill Lash-Aga
+Lash-Aga must be killed.
+
+=== quest q65h
+Hiding place
+The valuables stolen from the antiques collector are hidden close to the ruins located at the western river bank near where the river joins the lake. You must take these valuables and bring them to the Last Shelter.
+#subobj  1
+New guards' barracks
+New barracks for the guards have been built on the western bank where the river makes a loop. To reach the place where the collector's items is hidden you must go past the barracks.
+#subobj  2
+Find the stuff
+The collector's things are hidden in the ruins on the western river bank near the place where it flows into the lake.
+#subobj  3
+Take the collector's things
+You must take the collector's things and bring them to the Last Shelter.
+
+=== quest q66h
+Letter
+The house of the owner of the collection is in the city, in the street leading from the northern gates and along the lake shore. The house you need is the one after the inn; you will know it by the two stone figures which stand near the door.
+#subobj  1
+Enter the city
+You can enter the city through the northern gate in the wall. Better do it at night or use the invisibility spell to get past the guards without attracting their attention. It would be very risky to engage in open combat with them.
+#subobj  2
+Enter the house yard
+The house you need is located in the street which leads south from the gates and along the lake. Like other houses it has a small fence, so you will have to enter the yard first.
+#subobj  3
+Drop the letter
+Just drop the letter to the collector in his house.
+
+=== quest q67h
+Antiques collector
+The meeting is arranged in a secluded place used by city merchants and inhabitants of the Last Shelter for their secret trade. But it may be wise to take a good look around, if only to be safe from ambush.
+#subobj  1
+Find the meeting place
+The meeting place is a short distance to the south east from the cave exit. You should have a good look around to ensure the meeting will be safe.
+#subobj  2
+Make sure the meeting is safe
+There is a guards' unit near the meeting place. You do not know whether the guards suspect that something is afoot, or if it is just a routine check, but kill them anyway.
+
+=== quest q68h
+Old necromancer
+You must meet an old necromancer by the name of Kholai and talk to him; he can help you solve the mystery of the "vanishing" Joon. But Kholai is presently in disgrace and lives in a tower outside the village. Guards are present!
+#subobj  1
+Find the tower
+Kholai's tower is located in the north east of the desert and is guarded by patrols who have orders to prevent all communication between the old Necromancer and anyone else without the Guild's prior approval.
+
+=== quest q69h
+Scientist's remains
+You must steal the corpse of the scientist from the laboratory in the southern part of the desert. The laboratory is well protected by magic traps, plus there are barracks nearby, full of guards.
+#subobj  1
+Find the Commandant
+The house of the laboratory Commandant is located in the southern part of the Necromancers' village, surrounded by a round wall. The easiest way to get there is through the northern gates: that is the most boring and uncomfortable of posts, so they usually assign the youngest guards to it.
+#subobj  2
+Enter the Commandant's house
+The laboratory Commandant's house is located in the south western part of the Necromancers' village.
+#subobj  3
+Get the key
+To get into the laboratory you must have the key; you will find it in the Commandant's house.
+#subobj  4
+Find the laboratory
+Necromancer Taivo's laboratory is located in the eastern part of the Necromancers' village.
+#subobj  5
+Open laboratory's gates
+To open the laboratory gates you will need the Commandant's key.
+#subobj  6
+Take the scientist's head
+The body of the dead scientist lies on the laboratory table. To interrogate his spirit you must take the head and bring it to Necromancer Kholai's tower.
+
+=== quest q6g
+Reaching the witch
+The witch does not care for uninvited guests, so she laid magic traps on the road to her home. There are two northern ways to the witch's cave: through the western ravine and through the eastern one. The traps in the western ravine are not as strong, but a huge Troll lives there; the Troll in the eastern ravine is younger and less intelligent, but the traps there are more lethal.
+#subobj  1
+Get past the traps
+The traps in the western passage only cover particular spots. If you are careful you can bypass them and get to the place where you can find a spare key which controls all the other traps.
+#subobj  2
+Find the traps key
+A while ago Craftsman Babur made a spare key for Estera which controls all the traps. This key must be somewhere at the end of the western ravine.
+#subobj  3
+Switch off the lightning traps
+Use the key on the magic obelisk to switch off the lightning traps. That will make moving around the place much easier.
+#subobj  4
+Switch off the fire traps
+Use the key on the magic obelisk to switch off the fire traps. This will allow you to get close to the obelisk which controls the acid traps.
+#subobj  5
+Switch off the acid traps
+Use the key on the magic obelisk to switch off the acid traps. Then the passage through the eastern ravine will be free.
+#subobj  6
+Pass through the Eastern ravine
+Now that the acid traps have been switched off, the eastern ravine will offer an easier way to the Witch's cave. But do not be careless: a Troll lives at the end of the ravine and you should try to get past him as stealthily as possible (crawl, mayhap?).
+
+=== quest q70h
+Amulet
+You will need this to find out where the young Joon teleported to. The ruins of the mansion belonging to the scientist are located north of the city.
+#subobj  1
+Find the ruins of the mansion
+The mansion's ruins are located north of the city. You can reach them through the gates in the southern  wall. But remember that after the mysterious developments in the mansion all approaches to it are guarded very well.
+#subobj  2
+Search the ruins
+The pieces of the amulet used by the young Joon must be somewhere around here.
+#subobj  3
+Search the coffer
+Mayhap, while they conducted the investigation,  they put everything connected with the events in the mansion into this coffer. You should have a good look at its contents.
+
+=== quest q71h
+Reaching meeting place
+The meeting place is a cave in the northern part of the mountains. A man will wait for you there. He knows how to find the key to open the portal to Gipath. 
+#subobj  1
+Enter the cave
+Go along the northern mountain slopes and find the entrance to the cave - that is the agreed meeting place.
+
+=== quest q72h
+Portal
+The portal is the only way to leave Suslanger and return to Gipath. It is heavily guarded and will not be easy to use.
+#subobj  1
+Destroy your enemies
+Erfar informed the guards that there was an escaped prisoner in the cave. The guards await their prey at the cave entrance; expect no mercy from them. The only way is to destroy them all!
+#subobj  2
+Cross the western bridge
+To avoid the main gates (that route is very dangerous!) go to the city by the bridge across the western river. That bridge is guarded less closely than the main gates.
+#subobj  3
+Cross the southern bridge
+To leave the city take the second bridge in the southern area.
+#subobj  4
+Find the traps key holder
+The Guardian who from time to time checks the control altars keeps the key to the traps. If you hide near the altar you could catch him unawares.
+#subobj  5
+Take the key
+Take the key from the key-holder's corpse.
+#subobj  6
+Find the first circle traps altar
+The approaches to the altar are covered by several circles of protection. Apart from armed guards, there also magic traps which will destroy anyone who steps on the magic-infused area without proper authorization. The traps are controlled by altars, for each of which you have to use a special key.
+#subobj  7
+Switch off the first circle traps
+Until the first circle traps are switched off you will not be able to approach the altar.
+#subobj  8
+Find the second circle traps key holder
+The second circle traps key holder can be found next to the altar on the other side of the magical area. To find him, use a "Clairvoyance" spell...to lure him out, use a "Fireworks" spell.
+#subobj  9
+Take the key
+Take the key from the key-holder's corpse.
+#subobj  10
+Find the second circle traps altar
+The traps of the portal's second protection circle are located on the road to the southern bridge across the canyon.
+#subobj  11
+Switch the second circle traps off
+Until the second circle traps are switched off you cannot get close to the altar.
+#subobj  15
+Spot the third circle traps Guardian
+The southern bridge across the canyon is guarded by a large guards' unit. But you can go along the bluff edge to the northern bridge unnoticed. The third circle traps are located here, but there is a narrow passage through the magical area - it is  used by a young warrior Magician who oversees the traps. You must spot that Magician and remember exactly where he goes!
+#subobj  16
+Take the path through the third circle traps
+There is no way to switch the third circle traps off, but you can get past them if you follow the path used by the Guardian.
+#subobj  20
+Find the Commander of the portal guards
+To find his home, go east from the point where the river turns west. The Commander's house stands on the hillock near the wall which marks the edge of the first circle of the portal's protection.
+#subobj  21
+Get the key
+To activate the portal use the key which the commander of the guards has.
+#subobj  22
+Cross the canyon
+To get to the portal, cross the canyon by one of the bridges.
+#subobj  23
+Find the eastern stone control
+To activate the portal you must use the key on two stone controls - the eastern and the western one. These are located near the entrance to the portal.
+#subobj  24
+Turn the eastern stone control
+Until it is turned, the portal will not work.
+#subobj  25
+Find the western stone control
+To activate the portal you must use the key on two stone controls - the eastern one and the western one. They are located near the entrance to the portal.
+#subobj  26
+Turn the western stone control
+Until it is turned, the portal will not work.
+#subobj  27
+Enter the portal
+To return to Gipath, simply enter the portal (the teleport zone).
+#subobj  34
+Escape from the city guards
+The city guards have been alerted!
+#subobj  35
+Escape from the main gate guards
+The main gate guards have been alerted!
+#subobj  36
+Escape from the portal guards
+The portal guards have been alerted!
+#subobj  37
+Escape from the portal guards
+The portal guards have been alerted!
+
+=== quest q73g
+Deal with the Curse!
+A very easy quest: the Curse must be eliminated! In this case, anything goes... ...
+#subobj  1
+Destroy the Curse
+Destroy the Curse!!!
+
+=== quest q7g
+Finding island Orcs' mechanism
+A brigand was killed in the forest near Middle Mountains. He had managed to steal an Orc coffer containing a new mechanism . Without that mechanism you will not be able to lower the Orc drawbridge leading to the islands. The coffer lies in the forest very close to the beginning of the road to the Middle Mountains.
+#subobj  1
+Find the coffer
+The coffer has been abandoned in the forest somewhere near where the road to the Middle Mountains begins. Another landmark is the cart used by the Brigands to transport the coffer - that was before they started to fight each other....
+#subobj  2
+Get the mechanism
+The lock on the coffer is not difficult, you could open it with your bare hands without any special keys.
+
+=== quest q8g
+Stealing "goblin sacred object"
+To make the Goblin chief talk and reveal the secrets he knows, you must steal the idol belonging to the tribe - the skull of the First Goblin they worship.
+#subobj  1
+Find the settlement
+The settlement of the tribe ruled by GoGo is in the west behind the hills, between the river bank and the swamps.
+#subobj  2
+Steal the "sacred object"
+The "sacred object" (a Goblin head on a pole) stands between the three fires. If you steal i, GoGo, the tribal chief, would indeed do his utmost to get the idol back.
+
+=== quest q9g
+Bringing Orc document
+The Orcs gave the Goblin chief GoGo a "hide with letters" - a record of the story of the blue stone; but when they found out about the loss of the idol they were not amused and took the record back. Now this hide is in the coffer on Bald Island (also called "Barren"). Note: You can only reach the islands by means of the drawbridge. To lower the bridge you must have the mechanism of the Island Orcs (that of the cave Orcs will be of no help to you). If you do not have it, ask the Captain about it.
+
+#subobj  1
+Find "Bald Island"
+Judging by the name, the island should be almost without vegetation. GoGo says it is located somewhere to the south-east.
+#subobj  2
+Take the "Hide with letters"
+The Orc records are hidden in the coffer. You must open it and take the "Hide with letters".
+
+=== quest qh1h
+Western hiding place
+You do not know who set this hiding place up, or why, but they probably had their reasons.
+#subobj  1
+Find the hiding place
+The hiding place is located at the farthest end of the ravine.
+#subobj  2
+Search the hiding place
+You should take everything you find in the hiding place!
+
+=== quest qh2h
+Eastern hiding place
+You do not know who set this hiding place up and for what, but probably they had a reason.
+#subobj  1
+Find the hiding place
+The hiding place is located in the farthest end of the ravine.
+#subobj  2
+Search the hiding place
+You should take everything you find in the hiding place!
+
+=== quest qh3h
+Western magic obelisk
+To lessen the danger to the Khadaganian soldiers of a manhunt in Death Canyon, a number of magic obelisks have been placed at different points in the canyon. Many kinds of useful spells will be cast on anyone who uses them.
+#subobj  1
+Find the Western Obelisk
+This magic Obelisk is located near the western wall of the Canyon.
+#subobj  2
+Use the Obelisk
+It never occurred to the people who put the magic Obelisks in place that they can be used, not only by the soldiers, but by the victims as well!
+
+=== quest qh4h
+Eastern magic obelisk
+To make the manhunt in Death Canyon less dangerous to the Khadaganian soldiers, a number of magic obelisks have been placed at different points in the canyon. All sorts of useful spells are cast on anyone who uses them.
+#subobj  1
+Find the Eastern Obelisk
+This magic Obelisk is located near the eastern wall of the Canyon.
+#subobj  2
+Use the Obelisk
+It never occurred to the people who put the magic Obelisks in place that they can be used, not only by the soldiers, but by the victims as well
+
+=== quest qh5h
+North-eastern magic obelisk
+To make the manhunt in Death Canyon less dangerous to Khadaganian soldiers, a number of magic obelisks have been placed at different points in the canyon. All sorts of useful spells are cast on anyone who uses those obelisks.
+#subobj  1
+Find the North Eastern Obelisk
+This magic Obelisk is located near the north eastern wall of the canyon.
+#subobj  2
+Use the Obelisk
+It never occurred to the people who put the magic Obelisks in place that they can be used, not only by the soldiers, but by the victims as well
+
+=== quest qh6h
+Young soldiers
+Young Khadaganian soldiers hunt helpless prisoners in Death Canyon to show that they are worthy of promotion. However, the hunter may become the hunted!
+#subobj  1
+Find the camp location
+The young soldiers set up camp in a small valley in the eastern part of the canyon.
+#subobj  2
+Kill the soldiers
+These soldiers have killed a lot of prisoners in this canyon. It would be only fair if someone were to avenge their deaths...
+
+=== quest qk10k
+Hostile Woodsfolk
+The Black Clan of Woodsfolk have been at war with the Green Clan for a very long time. The Green Clan chief would be happy should the hostile Woodsfolk lose all their treasures.
+#subobj  1
+Find the Black Clan's camp
+The camp of the Black Clan is located away from the main roads, however, if someone happened to walk right into it, they would notice it immediately... that is, if they have time to notice anything at all...
+#subobj  2
+Find the hiding place
+There is a hiding place in the camp of the Black Clan. A person with good observation skills could find it easily.
+#subobj  3
+Search the hiding place
+People would hardly keep useless things in a hiding place...
+
+=== quest qk11k
+Abandoned dug-out
+This dugout was abandoned a long time ago, but mayhap the people who lived here hid something for a rainy day and it may still be here...
+#subobj  1
+Find the dug-out
+This dugout was abandoned a long time ago, but mayhap the former residents hid something here for a rainy day and never managed to return for it...
+#subobj  2
+Search the dug-out
+What the dug-out residents had no use for, may well prove to be of use to someone else.
+
+=== quest qk12k
+River source
+People rarely come here to the river source, so mayhap you will find something of use to you.
+#subobj  1
+Go to the source of the river
+To reach the source of the river, go north upstream.
+#subobj  2
+Explore the source of the river
+Mayhap there is something useful around here. Try to find that "something".
+
+=== quest qk13k
+Lone mine
+This mine belongs to Karansul as does everything else around here. For some reason t'would seem to be not as well protected as other installations.
+#subobj  1
+Find the lone mine
+The mine is located in a closed ravine which can only be accessed from the south west.
+#subobj  2
+Search the mine
+Karansul will not miss a few riches here and there.....
+
+=== quest qk14k
+Old brigand
+The old brigand lives in the mountains and keeps tame animals. He has stolen so much in his life, t'would only be fair were he the one to be robbed!
+#subobj  1
+The abode of the old Brigand
+The old Brigand lives in the northern part of the ravine.
+#subobj  2
+Search the abode of the old Brigand
+This old man has been a thief all his life. Why should he not feel how it is to be the victim of theft himself?
+
+=== quest qk15k
+Magician's hiding place
+One of the city magicians kept some of his property in a hiding place near the city. When unrest broke out in the provinces, the road to this hiding place became unsafe and the magician could not recover anything.
+#subobj  1
+Find the hiding place of the magician
+The best thing about this place is not that it is difficult to find, but that people who are able to appreciate the value of the contents of a coffer very rarely come here!
+#subobj  2
+Search the hiding place
+The contents of this hiding place would hardly be useful in snow ravines or dark woods, but may prove useful in a city.
+
+=== quest qk16h
+Estate
+As thief Sahilia says, "Show me a rich house and I will find a coffer in that house. And that coffer will not be empty!"
+#subobj  1
+Find the estate
+A rich estate is not the main objective of your journey. But if you happen to walk past one, why not take a look at it?
+#subobj  2
+Find the coffer
+The coffer must be somewhere around here... it is unlikely that they hid it at any distance....
+#subobj  3
+Open the coffer
+The only way to find out what is inside is to open it!
+
+=== quest qk17h
+Slavedriver's hiding place
+There's a rumour that plantation slavedrivers accepted bribes to send peons to work in the gardens of rich people. T'would be rather nice to find the hiding place of one of those slavedrivers, just to inspect it, of course!
+#subobj  1
+Plantation
+This plantation looks worse than any of those nearby. Probably the peons spent more time in the city houses than they did at work here.....
+#subobj  2
+Find the hiding place
+The local slave driver would hardly risk taking his bribe money home. It is probably hidden somewhere around here.
+#subobj  3
+Search the hiding place
+It is indeed interesting to see just how much a modest whip and lash worker can save for a rainy day, and all from his meager wages!
+
+=== quest qk30h
+Country mansion
+One of the rich citizens has a mansion in the north west suburbs. If you take a good look inside his coffers, who knows what you may find?
+#subobj  1
+Find the country mansion
+The property belonging to the rich man is located in the north western edge of the city. The owner is not there very often, but always leaves the house well guarded.
+#subobj  2
+Find the person with the key
+To get inside the mansion you must have the key to the gates. One of the guards has it.
+#subobj  3
+Get the key
+The key holder is not very vigilant and occasionally stops for longish periods of time to stare straight ahead! The best plan would be to try and steal the key, rather than to attack him and risk the unwelcome attention of the guards.
+#subobj  4
+Open the mansion gates
+Use the key to open the gates. Be careful: there are also guards in the mansion courtyard.
+#subobj  5
+Find the coffer
+The rich man's coffer is in the mansion's yard.
+#subobj  6
+Search the coffer
+This coffer surely has something useful inside... or at the very least something nice and expensive!
+
+=== quest qk31h
+Harpy
+The old necromancer experimented with a harpy a long time ago. But now he does not want others to use the results of those experiments. So he wishes the harpy killed and promises a handsome reward for the job.
+#subobj  1
+Find the Harpy
+The Harpy you must kill lives in the south west sector of the desert of the Necromancer. Exercise caution....mayhap other dangerous creatures lurk near her den!
+#subobj  2
+Kill the Harpy
+You must destroy her. T'would help if you deal with other local creatures first before you start your fight with the Harpy.
+
+=== quest qk32h
+Emperor's seal
+To win the trust of the fugitives, you must get the golden Seal of the Emperor and give it to Brother Khatul. Ordinary Khadaganians are forbidden to touch, take or lend it, under penalty of horrible death. You know that a messenger who wished to deliver the seal was killed? And by a Cyclops who lives in the desert of the Necromancer! 
+#subobj  1
+Find the den of the Cyclops
+The den of the Cyclops is located in the north west sector of the desert of the Necromancer. There are numerous Evil Eyes here who guard the territory as if it were their own.
+#subobj  2
+Search the coffer belonging to the Cyclops
+There is a coffer in the den where the Cyclops keeps his treasures. You should try to search it and take the Seal of the Emperor. Bear in mind that it is very difficult to kill the Cyclops, mayhap better to wait until its back is turned....
+
+=== quest qk9g
+Harpies' treasure
+Harpies cannot use objects or weapons, but if they do find something, they will deposit it close to their nests.
+#subobj  1
+Find the treasure belonging to the Harpy
+Harpies usually keep the things they find close to where they live.
+#subobj  2
+Take the treasure belonging to the Harpy.
+No key is needed to open the coffer. In troth, it is doubtful if a Harpy could never understand what a key is for!
+

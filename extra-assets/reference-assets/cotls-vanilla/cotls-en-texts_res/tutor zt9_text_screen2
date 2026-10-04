@@ -1,3 +1,0 @@
-     In Defensive mode the character will stop fighting after the enemy has been killed or after another command has been issued to him, such as "cast a spell" or "move to another location". To resume combat you'll need to issue an attack command again.
-
-     You can use this mode if the character needs to replenish stamina while there's an enemy nearby. A fighting character will not regenerate Stamina.

@@ -1,9 +1,0 @@
-Inverse camera left/right rotation
-When rotating the camera left/right with the 
-right mouse button pressed, the direction 
-of the camera rotation may be changed:  
-Off: The camera will rotate accodingly to 
-the direction of the mouse shifted left or 
-right.
-On: The camera will rotate in the direction 
-opposite to that where mouse moves.

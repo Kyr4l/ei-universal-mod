@@ -1,0 +1,982 @@
+# um-texts 1
+=== tip 10100
+Open/Close Information window.
+
+=== tip 10101
+General view 
+Show character's general 
+view in the Information window.
+
+=== tip 10102
+Hit Locations
+Show damage suffered by the 
+character in the Information window.
+
+=== tip 10103
+Attributes
+Show character's attributes 
+in  the Information window.
+
+=== tip 10104
+Spell effects
+Show spells cast on the character 
+in the Information window.
+
+=== tip 10200
+Open/Close Text window.
+
+=== tip 10201
+Messages
+Show messages 
+in Text window.
+
+=== tip 10202
+Collected items
+Show details on collected 
+items in the Text window.
+
+=== tip 10300
+Open/Close Mini-map
+
+=== tip 10301
+Zoom in 
+Increase Mini-map's scale.
+
+=== tip 10302
+Zoom out 
+Decrease Mini-map's scale.
+
+=== tip 10303
+Default camera view
+Turn camera North.
+
+=== tip 10400
+Pause On/Off
+When pause is on, you can give orders 
+to characters, change their weapons, and 
+assign targets.
+
+=== tip 10401
+Call up Quests screen
+Shows completed and available 
+quests and objectives.
+
+=== tip 10402
+Normal speed
+Set game speed to normal.
+
+=== tip 10403
+Accelerated speed
+Set game speed to high.
+
+=== tip 10500
+Aggressive/Defensive mode
+In "Aggressive" mode the character 
+will attack all enemies who see him. 
+In "Defensive" mode he will only attack 
+after you've issued the command.
+
+=== tip 10501
+Crawl
+When a character crawls, he makes 
+much less noise than when he walks 
+and he is much less visible to enemies.
+His speed is very low. "Stamina" will 
+neither diminish nor increase.
+
+=== tip 10502
+Sneak
+When sneaking, characters make almost no 
+sound and enemies have a very tough time detecting 
+them. Speed is low. "Stamina" will neither 
+diminish nor increase.
+
+=== tip 10503
+Walk
+When a character walks, his speed is 
+normal. "Stamina" will neither diminish 
+nor increase.
+
+=== tip 10504
+Run
+When a character runs, he makes more noise than when 
+he walks, so he attracts the attention of enemies who 
+otherwise couldn't see him. Speed is high. "Stamina" diminishes; 
+when it reaches zero, the character will automatically start 
+walking.
+
+=== tip 10510
+Follow
+Follow a short distance behind 
+the selected character.
+
+=== tip 10511
+Steal something from character/Use an item
+If you place the mask-shaped cursor over a live character 
+and click, you can steal things from him (provided he has anything 
+to steal).If you place the hand-shaped cursor over an item and 
+click, you can use that item (if that's possible).
+
+=== tip 20100
+Equip character
+This screen allows you to distribute 
+weapons and armor among 
+your characters.
+
+=== tip 20101
+Skills/Spells
+This screen allows you to distribute spells among 
+characters and to acquire new skills or improve 
+existing ones.
+
+=== tip 20102
+Item shop 
+This screen allows you to buy and sell items 
+and components (blueprints and materials).
+
+=== tip 20103
+Item constructor 
+This screen allows you to construct new 
+items and deconstruct existing ones.
+
+=== tip 20104
+Repair Items
+This screen allows you to repair items which 
+have become less reliable through wear-and-tear.
+
+=== tip 20105
+Spell shop 
+This screen allows you to buy and sell spells 
+and components (keystones and runes).
+
+=== tip 20106
+Spell constructor
+This mode allows you to construct new 
+spells and deconstruct existing ones.
+
+=== tip 20107
+Exit
+Exit from camp or shop.
+
+=== tip 20200
+Accept
+Confirm all changes you've made in this screen.
+
+=== tip 20201
+Cancel
+Cancel all actions you've made in this screen.
+If you leave camp or shop without confirming 
+your changes, they'll be cancelled automatically.
+
+=== tip 20300
+Previous character
+Shows the previous character in the Hero's party.
+
+=== tip 20301
+Next character
+Shows next character in the Hero's party.
+
+=== tip 20302
+Dismiss character
+The selected character will leave your party.
+He will return to his former location and 
+you will be able to recruit him again later.
+
+=== tip 20303
+Heal wounds 
+Completely heals all damage suffered 
+by the character. Crippled limbs which cannot 
+be repaired by an ordinary healing spell will also be healed.
+
+=== tip 20400
+Scroll
+Available items and spells - scroll to the right. 
+If you press the <SHIFT> key, the list will scroll to 
+the last item.
+
+=== tip 20401
+Scroll
+Available items and spells - scroll to the left. 
+If you press the <SHIFT> key, the list will scroll to 
+the first item.
+
+=== tip 20500
+Yes
+
+=== tip 20501
+Cancel
+
+=== tip 21000
+Blueprints: weapons
+Shows blueprints for making 
+weapons.
+Note: Characters cannot equip
+blueprints. They can only be used
+in the Items constructor.
+
+=== tip 21001
+Blueprints: light armor
+Shows blueprints for making 
+light armor.
+Note: characters cannot equip
+blueprints. They can only
+be used in the Items constructor.
+
+=== tip 21002
+Blueprints: Heavy armor
+Shows blueprints for making heavy armor.
+
+=== tip 21003
+Potions and wands
+Shows ready-made potions, wands and unique 
+magical items as well as the blueprints to make them.
+
+=== tip 21004
+Materials
+Shows materials needed to 
+make different items.
+
+=== tip 21005
+Ready-made items 
+Shows only items ready for use.
+
+=== tip 21100
+Blueprints and materials
+Shows only materials and blueprints
+for making items.
+Note: characters cannot equip
+or wear blueprints or materials.
+You can only use these items
+in the Items constructor.
+
+=== tip 21101
+Keystones and runes
+Shows only keystones 
+and runes.
+Note: characters cannot equip
+keystones or runes. You
+can only use these items in
+the Spells constructor.
+
+=== tip 21102
+Ready-made items and spells
+Shows only items and spells ready for use.
+
+=== tip 21103
+Collected items
+Shows collected items only. These items can
+not be used, but can be sold for money.
+
+=== tip 21104
+Quest items 
+Shows only quest items necessary
+for completing quests.
+
+=== tip 21105
+All items you have
+Shows all items you currently have.
+
+=== tip 21200
+Keystones: Elemental Magic 
+Shows keystones for making spells of 
+the Magic of Elements school.
+Note: characters cannot equip
+keystones. They can only be used
+in the Spells constructor.
+
+=== tip 21201
+Keystones: Sensory Magic
+Shows keystones for making spells of 
+the Sensory Magic school.
+Note: characters cannot equip
+keystones. They can only be used
+in the Spells constructor.
+
+=== tip 21202
+Keystones: Astral Magic
+Shows keystones for making spells of 
+the Astral Magic school.
+Note: characters cannot equip
+keystones. They can only be used
+in the Spells constructor.
+
+=== tip 21203
+Rune: Basic
+Shows runes which allow you to improve 
+spell properties.
+Note: Characters cannot equip
+runes. They can only be used
+in Spells constructor.
+
+=== tip 21204
+Runes: Special
+Shows runes which allow you to limit the range 
+of a spell and insert the spell into weapons or armor.
+Note: characters cannot equip runes. They can 
+only be used in the Spell constructor.
+
+=== tip 21205
+Ready-made spells 
+Shows spells which are ready for use.
+
+=== tip 30100
+Close
+Removes tips from screen.
+
+=== tip 30101
+Previous screen
+Shows previous tips screen.
+
+=== tip 30102
+Next screen
+Shows next tips screen.
+
+=== tip 50100
+Yes
+
+=== tip 50101
+Cancel
+
+=== tip 60100
+Save game to selected slot
+
+=== tip 60101
+Load saved game
+
+=== tip 60102
+Delete saved game
+
+=== tip 60103
+Cancel
+
+=== tip 70100
+Yes
+
+=== tip 70101
+Cancel
+
+=== tip 70102
+General game options
+
+=== tip 70103
+Reassign keys
+
+=== tip 80100
+Go to Game Zone
+
+=== tip 80101
+Return to Global map
+
+=== tip 80102
+Return to Game zone
+
+=== tip 80110
+Entrances to Game zone
+Available entrances are marked in green, 
+unavailable in red. To choose an entrance, 
+click on it.
+
+=== tip 80111
+Quests
+Completed quests are marked with "V",
+failed quests or those which are impossible 
+to complete are marked with "X".
+Unmarked quests are currently incomplete. 
+To get a description on a quest, click on it.
+
+=== tip 80112
+Quest area
+The cross on the map shows 
+the approximate location of the 
+selected quest.
+Note: In certain quests the targets 
+can move around the Game zone or 
+can be located in different places. 
+In such a case the cross is an 
+approximation.
+
+=== tip 80200
+Previous zone.
+Shows previous Game zone
+with all uncompleted quests.
+
+=== tip 80201
+Next zone
+Shows the next Game zone
+with all uncompleted quests.
+
+=== tip 90100
+Go to "Camp"
+Here you can give your characters
+new clothes, weapons and spend experience
+points gained during the quests.
+
+=== tip 90101
+Turn map left
+
+=== tip 90102
+Turn map right
+
+=== tip action_accel
+Accelerated game speed.
+The time will accelerate. 
+Characters and enemies 
+will move and attack faster.
+
+=== tip action_camera1
+Camera 1
+When you press this key + <CTRL> key, all camera settings 
+will be saved as "Settings 1". If you press the key again 
+without the <CTRL> key, the camera will immediately return to the 
+Settings 1 position.
+
+=== tip action_camera2
+Camera 2
+When you press this key + <CTRL> key, camera settings 
+will be saved as "Settings 2". If you press this key again 
+without the <CTRL> key, the camera will immediately return to the 
+Settings 2 position.
+
+=== tip action_camera3
+Camera 3
+When you press this key + <CTRL> key, camera settings 
+will be saved as "Settings 3". If you press this key again 
+without the <CTRL> key, the camera will immediately return to the 
+Settings 3 position.
+
+=== tip action_camera4
+Camera 4
+When you press this key + <CTRL> key, camera settings 
+will be saved as "Settings 4". If you press this key again 
+without the <CTRL> key, the camera will immediately return to the 
+Settings 4 position.
+
+=== tip action_camera_center
+Point camera
+Point camera at the selected character.
+
+=== tip action_camera_down
+Camera back
+Camera scrolls back. If you press this key + <CTRL>, 
+the camera will move back, but remain pointed in the same direction.
+
+=== tip action_camera_left
+Camera left
+Camera scrolls left. If you press this key + <CTRL>, 
+the camera will move left, but remain pointed in the same direction.
+
+=== tip action_camera_norm
+Camera north
+Return camera to pointing North.
+
+=== tip action_camera_right
+Camera right
+Camera scrolls right. If you press this key + <CTRL>, 
+the camera will move right while remaining in the same direction.
+
+=== tip action_camera_track
+Tracking
+Camera will track the selected character. 
+You can also set the angle, focus and zoom features.
+
+=== tip action_camera_up
+Camera forward
+Camera scrolls forward. If you press this key + <CTRL>, 
+camera will move forward while focusing in the same direction.
+
+=== tip action_camera_zoom_in
+Zoom in
+Camera zooms in on the selected target.
+
+=== tip action_camera_zoom_out
+Zoom out
+Camera zooms out from the selected target.
+
+=== tip action_cancel_target
+Cancel action
+To perform certain actions (such as cast a spell, steal, use) 
+you must select the appropriate icon first and then 
+place the cursor on the target. The button you assign 
+now allows you to bypass the icon selection. You can also 
+use the <ESC> key to cancel any action.
+
+=== tip action_crawl
+Crawl
+When a character crawls, he makes much less noise 
+than when he walks and he is much less visible to 
+enemies. His speed is very low. "Stamina" will neither 
+diminish nor increase.
+
+=== tip action_cs_body
+Aim at body
+Your character will aim at the enemy's body 
+when attacking. When the body's "health" 
+reaches 0, the enemy will die.
+
+=== tip action_cs_head
+Aim at head
+Your character will aim at the enemy's head 
+when attacking. When the head's "health" 
+reaches 0, the enemy will die.
+
+=== tip action_cs_lhand
+Aim at left hand
+Your character will aim at the enemy's left hand 
+when attacking. When the hand's "health" reaches 0, 
+the enemy will fight and cast spells much slower.
+
+=== tip action_cs_lleg
+Aim at left leg
+Your character will aim at the enemy's left leg when 
+attacking. When the leg's "health" reaches 0, the enemy 
+will move much slower.
+
+=== tip action_cs_rhand
+Aim at right hand
+Your character will aim at the enemy's right hand when 
+attacking. When the hand's "health" reaches 0, the enemy 
+will fight and cast spells much slower.
+
+=== tip action_cs_rleg
+Aim at right leg
+Your character will aim at the enemy's right leg when 
+attacking. When the leg's "health" reaches 0, the enemy 
+will move much slower.
+
+=== tip action_decel
+Normal game speed
+The time will pass normally.
+
+=== tip action_follow
+Follow
+Selected character will follow the designated 
+character until you give him another command.
+
+=== tip action_item1
+Potion or wand 1
+Use the first potion or wand (item
+icons are counted from right to left).
+
+=== tip action_item2
+Potion or wand 2
+Use the second potion or wand (item 
+icons are counted from right to left).
+
+=== tip action_item3
+Potion or wand 3
+Use the third potion or wand (item 
+icons are counted from right to left).
+
+=== tip action_item4
+Potion or wand 4
+Use the fourth potion or wand (item 
+icons are counted from right to left).
+
+=== tip action_obj
+Quests screen
+This screen provides details on 
+available quests and their status.
+
+=== tip action_pause
+Pause mode
+When the game is paused, you can control 
+the camera and give orders to your characters.
+Orders will be carried out when the game is
+unpaused.
+
+=== tip action_quickload
+Quick load
+Load the game saved as "Quick Save" 
+without switching to the Esc-menu.
+
+=== tip action_quicksave
+Quick save
+The game will be saved without switching
+to the Esc-menu under the default name "Quick Save".
+
+=== tip action_run
+Run
+When a character runs, he makes more noise than 
+when he walks, thereby attracting the attention of 
+enemies who otherwise would not see him. 
+Speed is high. 
+"Stamina" diminishes; when it reaches zero,
+the character will automatically start walking.
+
+=== tip action_select1
+Select character 1
+This will select your first character (character 
+icons are counted from left to right).
+
+=== tip action_select2
+Select character 2
+This will select your second character (character 
+icons are counted from left to right).
+
+=== tip action_select3
+Select character 3
+This will select your third character (character 
+icons are counted from left to right).
+
+=== tip action_select_all
+Select all
+This will select all your characters.
+
+=== tip action_sneak
+Sneak
+When sneaking around, characters make almost no 
+sound. Speed is low. "Stamina" will neither 
+diminish nor increase.
+
+=== tip action_spell1
+Spell 1
+Cast the first available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell2
+Spell 2
+Cast the second available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell3
+Spell 3
+Cast the third available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell4
+Spell 4
+Cast the fourth available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell5
+Spell 5
+Cast the fifth available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell6
+Spell 6
+Cast the sixth available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell7
+Spell 7
+Cast the seventh available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_spell8
+Spell 8
+Cast the eighth available spell (Spell 
+icons are counted from top to bottom).
+
+=== tip action_swarm
+Aggressive/Defensive mode
+This switches a character's mode between "aggressive" and "defensive".
+In "Aggressive" mode the character will attack all enemies who have detected him. 
+In "Defensive" mode he will only attack after you issue the appropriate 
+command.
+
+=== tip action_tutorial_script
+Tutorial
+This key will call up a tutorial for 
+the current training quest or
+interface screen.
+
+=== tip action_use_science
+Use/Steal
+You can use mechanical items (open locks, turn 
+switches etc.) You can also steal something 
+directly from live enemies. Your success rate 
+will depend on your "Use/Steal" skill.
+
+=== tip action_w_info1
+General view
+The Information window will show a general view of the 
+character you've placed the cursor on. If the cursor is 
+not placed on anyone, the Information window will 
+show the currently selected character.
+
+=== tip action_w_info2
+Hit locations
+The Information window will show damage to the body 
+parts of the character you've placed the cursor on. 
+If the cursor is not placed on anyone, the Information 
+window will show the currently selected character.
+
+=== tip action_w_info3
+Attributes
+The Information window will show details on the 
+character you've placed the cursor on. If the cursor 
+is not placed on anyone, the Information window 
+will show the currently selected character.
+
+=== tip action_w_info4
+Spell effects
+The Information window will show the spells currently affecting the 
+character you've placed the cursor on. If the cursor is not
+placed on anyone, the Information window will show the 
+currently selected character.
+
+=== tip action_w_minimap
+Show/Hide Mini-map.
+
+=== tip action_w_text1
+Messages
+The Text window will show messages generated 
+during the game (completion of objectives, sub-titles,
+messages about collected items etc.).
+
+=== tip action_w_text2
+Collected items
+The Text window will show a list of all items 
+picked up by the character in the current Game zone.
+
+=== tip action_walk
+Walk
+When a character walks, his speed is normal. 
+"Stamina" neither diminishes nor increases.
+
+=== tip action_weapon1
+Weapon 1
+Select the first available weapon (weapon 
+icons are counted from left to right).
+
+=== tip action_weapon2
+Weapon 2
+Select the second available weapon (weapon 
+icons are counted from left to right).
+
+=== tip action_weapon3
+Weapon 3
+Select the third available weapon (weapon 
+icons are counted from left to right).
+
+=== tip action_weapon4
+Weapon 4
+Select the fourth available weapon (weapon 
+icons are counted from left to right).
+
+=== tip option_autosave
+Autosave
+On: autosave will be performed 
+each time you enter or exit a 
+Game zone or a Dialog zone.
+Off: no autosave.
+
+=== tip option_brightness
+Brightness
+Adjust the brightness of game images.
+
+=== tip option_camera_reverse_x
+Inverse camera left/right rotation
+When rotating the camera left/right with the 
+right mouse button pressed, the direction 
+of the camera rotation may be changed:  
+Off: The camera will rotate accodingly to 
+the direction of the mouse shifted left or 
+right.
+On: The camera will rotate in the direction 
+opposite to that where mouse moves.
+
+=== tip option_camera_reverse_y
+Inverse camera up/down move
+When moving the camera up/down with the 
+right mouse button pressed, the direction of 
+the camera movement may be changed:
+Off: The camera will turn accordingly to 
+the direction of the mouse shifted up or down.
+On: The camera will turn in the direction 
+opposite to that where mouse moves.
+
+=== tip option_contrast
+Contrast
+Adjust the contrast of game images.
+
+=== tip option_difficulty
+Difficulty level
+
+Novice
+Familiarization mode: enemies weaker, stealth and strategy 
+requirements reduced.
+
+Normal
+Requires high degree of stealth and strategy. Enemy 
+capabilities fully enabled.
+
+Note: You can change difficulty level at any moment during 
+the game using game options menu.
+
+=== tip option_footprints
+Show footprints
+On: show footprints. Off: do not show footprints.
+
+=== tip option_gamma
+Gamma-correction
+Adjust the gamma-correction of game images.
+
+=== tip option_group_actions
+Command options
+Set options for controlling your characters.
+
+=== tip option_group_camera
+Camera management options
+Set options for managing the camera
+("free" mode or fixed settings).
+
+=== tip option_group_cshots
+Combat options
+Set options for assigning hot keys 
+for precision blows.
+
+=== tip option_group_game
+Game options
+Set general game options.
+
+=== tip option_group_items
+Item options
+Set options for using game items.
+
+=== tip option_group_select
+Character selection options
+Set options for selecting characters.
+
+=== tip option_group_sens
+Sensitivity options
+Set keyboard and mouse sensitivity.
+
+=== tip option_group_sound
+Sound options
+Set options for sound management: 
+volume of music, speech, sound effects.
+
+=== tip option_group_spells
+Magic options
+Set options for using spells.
+
+=== tip option_group_video
+Graphics options
+Set the game's graphic options.
+
+=== tip option_group_windows
+Screen management options
+Set options for game windows.
+
+=== tip option_marks
+Show blood
+On: after a character dies, a puddle 
+of blood will appear on the ground. 
+Off: will not show blood.
+
+=== tip option_power_kbd
+Keyboard sensitivity
+Adjust the camera's speed when 
+controlled by the keyboard.
+
+=== tip option_power_mouse
+Mouse sensitivity
+Adjust cursor speed, camera rotation speed 
+and other actions controlled by the mouse.
+
+=== tip option_reverse_stereo
+Reverse the right and 
+the left sound channels
+On: reverse channels (change the 
+left and the right ones). 
+Off: Default sound channels 
+settings
+
+=== tip option_rubber_select
+Frame selection
+Sets the distance you need to move the mouse in order 
+to begin frame selection. Left position disables frame
+selection.
+
+=== tip option_scroll_border
+Scrolling border
+Sets the distance between the cursor and 
+the screen border to start scrolling the camera from. 
+The camera scrolls in the direction the cursor moves.
+
+=== tip option_select_type
+Character selection
+On: the selected character will be shown with a special 
+marker (triangle) and highlighted. 
+Off: no markers will be shown (selected characters will 
+only be highlighted).
+
+=== tip option_shadow_buildings
+Object shadows
+If your system barely exceeds the minimum requirements, 
+we recommend that you turn object shadows 
+(buildings, bridges etc.) off.
+
+=== tip option_shadow_flora
+Tree shadows
+If your system barely exceeds the minimum 
+requirements, we recommend that you turn 
+tree shadows off.
+
+=== tip option_shadow_other
+All shadows
+If your system barely exceeds the minimum requirements, 
+we recommend that you turn off shadows from additional 
+light sources. If you turn off all shadows, other 
+shadow controls will no longer apply.
+
+=== tip option_shadow_units
+Character shadows
+If your system barely exceeds minimum requirements, 
+we recommend that you turn character shadows off.
+
+=== tip option_show_flying_hp
+Show hit results
+You can see the result of every blow in the game: damage inflicted 
+by the characters, method of damage infliction, and experience gained. 
+These results can be seen as strings and numbers flying away 
+from the character after hit.
+On: show hit results. 
+Off: do not show hit results.
+
+=== tip option_show_path
+Show path
+On: show the character's path to the selected destination. 
+Off: do not show path.
+
+=== tip option_show_tutorial
+Tutorial screens
+To help you master the game 
+quickly we have provided 
+a number of tutorial screens.
+On: show tutorial screens.
+Off: do not show tutorial screens.
+
+=== tip option_switch_filters
+Autofilters
+You can use inventory filters to display only 
+those items belonging to a particular category. 
+These filers may be activated only manually 
+or both manually and automatically.
+On: the filters will be switched on automatically 
+every time a new item is put into inventory 
+(according to the item type).
+Off: the filers will be switched on/off only 
+manually.
+
+=== tip option_tooltip_time
+Tips delay
+This option sets the delay time for 
+of the tips popping up near the screen 
+element you placed the cursor over.
+The range is between 0 and 5 seconds.
+
+=== tip option_volume_sfx
+Sound volume
+Sets the volume of sound effects.
+
+=== tip option_volume_stream
+Music volume
+Sets the music volume.
+
+=== tip option_volume_voice
+Speech volume
+Sets the voices volume.
+

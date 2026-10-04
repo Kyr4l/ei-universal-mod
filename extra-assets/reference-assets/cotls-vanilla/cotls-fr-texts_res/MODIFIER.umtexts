@@ -1,0 +1,121 @@
+# um-texts 1
+=== MODIFIER a1
+Double zone
+Double la zone de couverture initiale du sort.
+Z+
+
+=== MODIFIER a2
+Triple zone
+Triple la zone de couverture initiale du sort.
+Z++
+
+=== MODIFIER d1
+Double durée
+Double la durée initiale du sort.
+D+
+
+=== MODIFIER d2
+Triple durée
+Triple la durée initiale du sort.
+D++
+
+=== MODIFIER e1
+Double effet
+Double l'effet initial du sort.
+E+
+
+=== MODIFIER e2
+Triple effet
+Triple l'effet initial du sort.
+E++
+
+=== MODIFIER fe
+Filtre ennemi
+Le sort n'affectera que les ennemis du mage.
+:En
+
+=== MODIFIER ff
+Filtre allié
+Le sort n'affectera que les alliés du mage.
+:Al
+
+=== MODIFIER fg
+Filtre Gobelin
+Le sort n'affectera que les Gobelins.
+:Go
+
+=== MODIFIER fh
+Filtre Humain
+Le sort n'affectera que les humains.
+:Hu
+
+=== MODIFIER fl
+Filtre Homme-lézard
+Le sort n'affectera que les Hommes-lézards.
+:HL
+
+=== MODIFIER fo
+Filtre Orque
+Le sort n'affectera que les Orques.
+:Or
+
+=== MODIFIER ic
+Objet : permanent
+Le sort peut être associé à un objet, et sera permanent, tant que l'objet dispose de suffisamment d'énergie.
+Ic
+
+=== MODIFIER im1
+Objet : énergie réduite
+Diminue la quantité d'énergie requise par le sort associé.
+P-
+
+=== MODIFIER im2
+Objet : énergie minimale
+Diminue considérablement la quantité d'énergie requise par le sort associé.
+P--
+
+=== MODIFIER ir1
+Objet : régénération rapide
+Augmente la vitesse de régénération de l'objet associé au sort.
+G+
+
+=== MODIFIER ir2
+Objet : régénération foudroyante
+Augmente considérablement la vitesse de régénération de l'objet associé au sort.
+G++
+
+=== MODIFIER it
+Objet : déclencheur
+Le sort peut être associé à un objet et sera lancé chaque fois que l'objet est utilisé.
+It
+
+=== MODIFIER m1
+Energie réduite
+Diminue la quantité d'énergie requise pour lancer le sort.
+M-
+
+=== MODIFIER m2
+Energie minimale
+Diminue considérablement la quantité d'énergie requise pour lancer le sort.
+M--
+
+=== MODIFIER r1
+Double portée
+Double la portée initiale du sort.
+P+
+
+=== MODIFIER r2
+Triple portée
+Triple la portée initiale du sort.
+P++
+
+=== MODIFIER t1
+Cible supplémentaire
+Le sort touchera une cible supplémentaire dans les environs.
+C+
+
+=== MODIFIER t2
+Double cible supplémentaire
+Le sort touchera deux cibles supplémentaires dans les environs.
+C++
+

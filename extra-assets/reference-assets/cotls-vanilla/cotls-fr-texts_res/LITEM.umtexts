@@ -1,0 +1,421 @@
+# um-texts 1
+=== LITEM BansheeRobe00
+Cape de spectre
+Selon la légende, cette cape peut vous protéger des fantômes.
+
+=== LITEM BansheeRobe00_2
+Grande cape de spectre
+Selon la légende, elle empêche les autres fantômes de rôder près de chez vous.
+
+=== LITEM BansheeRobe00_3
+Très grande cape de spectre
+Selon la légende, cette cape peut vous protéger des fantômes.
+
+=== LITEM BansheeRobe01
+Cape de spectre noir
+Selon la légende, elle empêche les autres fantômes de rôder près de chez vous.
+
+=== LITEM BansheeRobe01_2
+Cape de spectre noir puissant
+Protège des fantômes, c'est du moins ce que l'on dit.
+
+=== LITEM BansheeRobe01_3
+Cape de spectre noir vétéran
+On dit qu'aucun fantôme n'ose approcher de la maison de celui qui porte cette cape.
+
+=== LITEM BansheeRune00
+Pierre de spectre
+On dit que cette pierre protège les maisons de la mauvaise magie.
+
+=== LITEM BansheeRune00_2
+Pierre de spectre puissant
+On dit que cette pierre protège les maisons de la mauvaise magie.
+
+=== LITEM BansheeRune00_3
+Pierre de spectre très puissant
+On dit que cette pierre peut réellement protéger une maison des influences maléfiques.
+
+=== LITEM BansheeRune01
+Pierre de spectre noir
+Selon la légende, cette pierre protège les maisons de la mauvaise magie.
+
+=== LITEM BansheeRune01_2
+Pierre de spectre noir puissant
+Selon la légende, cette pierre est réellement capable de protéger une maison contre les mauvais sorts.
+
+=== LITEM BansheeRune01_3
+Pierre de spectre noir très puissant
+Selon la légende, cette pierre est réellement capable de protéger une maison contre les mauvais sorts.
+
+=== LITEM BatWings00
+Ailes de petite chauve-souris
+Un homme prévoyant peut toujours en faire bon usage.
+
+=== LITEM BatWings00_2
+Ailes de chauve-souris
+Vous pouvez en tirer quelques pièces à l'échoppe. Tout peut être utile.
+
+=== LITEM BatWings00_3
+Ailes de grande chauve-souris
+Le cuir qu'on en tire a des usages domestiques. Vaut un certain prix.
+
+=== LITEM BatWings01
+Ailes de petite chauve-souris renard
+On en demande toujours mais le prix reste bas.
+
+=== LITEM BatWings01_2
+Ailes de chauve-souris renard
+Vous pouvez les vendre et vous faire un peu d'argent.
+
+=== LITEM BatWings01_3
+Ailes de grande chauve-souris renard
+Le cuir qu'on en tire a des usages domestiques. Vous vaudra quelques pièces.
+
+=== LITEM BatWings02
+Ailes de petite chauve-souris renard noire
+Le cuir qu'on en tire a des usages domestiques. Vous vaudra quelques pièces.
+
+=== LITEM BatWings02_2
+Ailes de chauve-souris renard noire
+On dit que les sorcières en achètent pour leurs potions.
+
+=== LITEM BatWings02_3
+Ailes de grande chauve-souris renard noire
+Les marchands et les sorcières sont toujours preneurs.
+
+=== LITEM BeholderBigEye
+Œil de petit spectateur vert
+Le prix est en rapport avec l'article.
+
+=== LITEM BeholderBigEye_2
+Œil de jeune spectateur vert
+Comme l'œil de spectateur est censé être un porte-bonheur, il se vend toujours bien.
+
+=== LITEM BeholderBigEye_3
+Œil de spectateur vert adulte
+On ne sait s'il porte chance ou malheur mais il se vend bien.
+
+=== LITEM BeholderEyes00
+Œil de petit spectateur rouge
+Ne vaut pas très cher, mais c'est déjà ça.
+
+=== LITEM BeholderEyes00_2
+Œil de jeune spectateur rouge
+Un trophée de valeur ! Vous avez de la chance !
+
+=== LITEM BeholderEyes00_3
+Œil de spectateur rouge adulte
+Ces grands yeux trouvent toujours des amateurs.
+
+=== LITEM BeholderEyes01
+Petit œil de bébé spectateur
+Petit œil : petit rapport.
+
+=== LITEM BeholderEyes01_2
+Œil de bébé spectateur
+Il porte un peu chance, mais si peu ! Ne coûte presque rien.
+
+=== LITEM BeholderEyes01_3
+Gros œil de bébé spectateur
+On dit que l'œil de spectateur porte chance, mais qu'en est-il de leurs petits ?
+
+=== LITEM DogSkin00
+Queue de chiot
+Pour faire un beau collier.
+
+=== LITEM DogSkin00_2
+Queue de chien
+Pour faire un beau collier.
+
+=== LITEM DogSkin00_3
+Grande queue de chien
+Pour faire un beau collier.
+
+=== LITEM DogSkin01
+Queue de chiot
+Pour faire un beau collier.
+
+=== LITEM DogSkin01_2
+Queue de chien
+Pour faire un beau collier.
+
+=== LITEM DogSkin01_3
+Grande queue de chien
+Pour faire un beau collier.
+
+=== LITEM ElementalIce00
+Petit cristal de froid
+Sert à conserver l'eau ou le laid froids dans la cruche
+
+=== LITEM ElementalIce00_2
+Cristal de froid
+Sert à maintenir les caves à température basse en été.
+
+=== LITEM ElementalIce00_3
+Grand cristal de froid
+Sert au transport de la viande et d'autres denrées en été.
+
+=== LITEM ElementalLava00
+Petit cristal de chaleur
+Pour réchauffer la soupe ou le vin.
+
+=== LITEM ElementalLava00_2
+Cristal de chaleur
+Sert à réchauffer le lit des personnes âgées et des malades.
+
+=== LITEM ElementalLava00_3
+Grand cristal de chaleur
+Pour chauffer les maisons en hiver.
+
+=== LITEM GiantRatSkin
+Petite queue de rat
+La soupe de queue de rat est le plat préféré des pauvres.
+
+=== LITEM GiantRatSkin_2
+Queue de rat
+On peut faire une corde solide avec des queues de rat séchées.
+
+=== LITEM GiantRatSkin_3
+Longue queue de rat
+Les longues queues de rat séchées font d'excellents câbles.
+
+=== LITEM Goblin_pike
+Vieille pique de gobelin
+Ne sert strictement à rien. Jetez la tête et brûlez le bois.
+
+=== LITEM Goblin_pike_2
+Pique de gobelin
+Pour faire du bois à brûler.
+
+=== LITEM Goblin_pike_3
+Nouvelle pique de gobelin
+Brûle bien, sinon sans intérêt.
+
+=== LITEM Goblin_sling
+Fronde de gobelin en cuir fin
+Ce type de cuir ne s'utilise plus pour faire des frondes. Mais vous pouvez en faire des bandeaux.
+
+=== LITEM Goblin_sling_2
+Fronde de gobelin en cuir épais
+Ce type de cuir ne s'utilise plus pour faire des frondes. Mais vous pouvez en faire des bandeaux.
+
+=== LITEM Goblin_sling_3
+Fronde de gobelin en cuir dur
+Ce type de cuir ne s'utilise plus pour faire des frondes. Mais vous pouvez en faire des bandeaux.
+
+=== LITEM GrayWolfSkin
+Crocs de louveteau
+Ils ne valent pas lourd mais vous pouvez toujours les vendre.
+
+=== LITEM GrayWolfSkin_2
+Crocs de loup
+On en réclame comme éléments décoratifs.
+
+=== LITEM GrayWolfSkin_3
+Grands crocs de loup
+Plus les crocs sont grands, plus le collier vaudra cher.
+
+=== LITEM HyenaSkin
+Oreilles de petite hyène
+On offre une récompense pour chaque hyène tuée. Les marchands vous achèteront ce trophée.
+
+=== LITEM HyenaSkin_2
+Oreilles de  hyène
+On offre une récompense pour chaque hyène tuée. Les marchands vous achèteront ce trophée.
+
+=== LITEM HyenaSkin_3
+Oreilles de grande hyène
+On offre une récompense pour chaque hyène tuée. Les marchands vous achèteront ce trophée.
+
+=== LITEM Instruction ARMOR
+Prototype de pièce d'armure
+Prototype de pièce d'armure
+
+=== LITEM Instruction Quick Item
+Prototype d'objet
+Prototype d'objet
+
+=== LITEM Instruction Weapon
+Prototype d'armes
+Prototype d'armes
+
+=== LITEM Material
+Matériau
+.
+
+=== LITEM Money
+Argent
+Les pièces d'or ont une valeur partout, dans les sociétés civilisées comme chez les barbares.
+
+=== LITEM Prototype
+Prototype
+Prototype
+
+=== LITEM RatSmall00
+Petite queue de rat
+Séchée et salée, elle est délicieuse avec une choppe de bière.
+
+=== LITEM RatSmall00_2
+Queue de rat
+Séchée et salée, un délice avec une choppe de bière.
+
+=== LITEM RatSmall00_3
+Grande queue de rat
+Séchée et salée, parfaite pour accompagner une choppe de bière.
+
+=== LITEM Rune
+Rune
+Les runes magiques sont utiles aux shamans et aux sorciers.
+
+=== LITEM Rune_2
+Rune complexe
+Rune de grande valeur.
+
+=== LITEM Rune_3
+Rune puissance
+N'importe quel mage paierait cher pour une telle rune.
+
+=== LITEM Shadow00
+Griffe noire de sorcière
+La seule partie physique de l'ombre. Utilisée pour les rituels magiques.
+
+=== LITEM Shadow00_2
+Griffe noire de sorcier
+On dit que lorsque les âmes tourmentées quittent les ombres tuées elles se logent dans ces griffes. Les mages sont toujours prêts à en acheter.
+
+=== LITEM Shadow00_3
+Griffe noire de prophète
+Elément nécessaire de rituels magiques pour jeter certains sorts.
+
+=== LITEM Shadow00_4
+Griffe noire de mage
+On dit qu'elle sert à élaborer les sorts les plus puissants.
+
+=== LITEM SpiderSting
+Dard de jeune araignée
+Broyé, il sert à faire des remèdes et de la peinture.
+
+=== LITEM SpiderSting_2
+Dard d'araignée
+Bon marché, ils sont d'un usage courant, mais on en demande toujours.
+
+=== LITEM SpiderSting_3
+Dard de grande araignée
+Les dards broyés d'araignées sont très demandés par les nobles âgés car ils sont censés faire rajeunir.
+
+=== LITEM SuccubusGreen00
+Tête de jeune harpie
+Avec pareil épouvantail devant sa porte, même un voleur n'oserait pas entrer.
+
+=== LITEM SuccubusGreen00_2
+Tête de harpie
+Placée sur un pieu devant chez vous, cette tête dissuaderait les criminels les plus endurcis.
+
+=== LITEM SuccubusGreen00_3
+Tête de harpie adulte
+On peut se la procurer pour faire une farce mais ce serait une blague à gros budget.
+
+=== LITEM SuccubusGreen00_4
+Tête de vieille harpie
+De nombreux collectionneurs écument les marchés pour trouver un tel trophée.
+
+=== LITEM SuccubusRed00
+Tête de jeune harpie rouge
+Placée sur un pieu à l'entrée d'un village, elle dissuaderait les autres harpies de venir.
+
+=== LITEM SuccubusRed00_2
+Tête de harpie rouge
+Les brigands ne pénètrent jamais dans un village qui arbore à son entrée un pieu surmonté d'une pareille tête !
+
+=== LITEM SuccubusRed00_3
+Tête e harpie rouge adulte
+Si vous voyez cette tête au bout d'un pieux à l'entrée d'un village, tenez-vous à carreau.
+
+=== LITEM ToadLegs00
+Petites pattes de crapaud
+Si les crapauds crachent du poison, leur viande est quant à elle comestible. La demande ne diminue jamais.
+
+=== LITEM ToadLegs00_2
+Pattes de crapaud
+Toujours appréciées dans les repas de famille, elles valent un bon prix.
+
+=== LITEM ToadLegs00_3
+Pattes de crapaud gras
+Ces pattes sont tendres et savoureuses. On les paie le prix fort.
+
+=== LITEM UnicornHorn00
+Corne de jeune licorne noire
+Il est dit que les cornes de licornes décèlent la présence de poisons. Leur demande est constante.
+
+=== LITEM UnicornHorn00_2
+Corne de licorne noire
+Très rare, elle constitue un excellent antidote.
+
+=== LITEM UnicornHorn00_3
+Grande corne de licorne noire
+Sa demande ne diminue jamais.
+
+=== LITEM UnicornHorn01
+Corne de jeune licorne blanche
+Comme elle aide à lutter contre le poison, elle est toujours demandée.
+
+=== LITEM UnicornHorn01_2
+Corne de licorne blanche
+Elle sera toujours très prisée.
+
+=== LITEM UnicornHorn01_3
+Grande corne de licorne blanche
+Les nobles les plus riches y boivent du vin, c'est le fin du fin.
+
+=== LITEM WhiteTigerSkin
+Peau de jeune tigre blanc
+Excellente décoration d'intérieur mais coûte cher.
+
+=== LITEM WhiteTigerSkin_2
+Peau de tigre blanc
+Très précieuse, surtout là où il n'y a pas de tigres.
+
+=== LITEM WhiteTigerSkin_3
+Peau de vieux tigre blanc
+Un riche paierait cher pour pouvoir se vanter de la façon dont il a tué ce tigre.
+
+=== LITEM WhiteWolfSkin
+Crocs de jeune loup blanc
+Un trophée de jeune loup blanc est plus coté que celui d'un vieux loup gris.
+
+=== LITEM WhiteWolfSkin_2
+Crocs de loup blanc
+Un collier constitué de ces crocs vaut plus qu'un collier de crocs ordinaires.
+
+=== LITEM WhiteWolfSkin_3
+Crocs de grand loup blanc
+Les ornements les plus onéreux sont faits avec ces crocs.
+
+=== LITEM Willowisp00
+Petite pierre lumineuse
+Remplace les chandelles et les lampes pour l'éclairage.
+
+=== LITEM Willowisp00_2
+Pierre lumineuse
+Les villageois l'utilisent pour éclairer leurs maisons.
+
+=== LITEM Willowisp00_3
+Grande pierre lumineuse
+Les villageois l'utilisent pour éclairer leurs rues.
+
+=== LITEM Zombie00
+Amulette simple de mauvais augure
+Les humains doivent s'en méfier comme de la peste. Vendez-la.
+
+=== LITEM Zombie00_2
+Amulette de mauvais augure
+Objet très dangereux, débarrassez-vous-en !
+
+=== LITEM Zombie00_3
+Forte amulette de mauvais augure
+Plus vite vous la vendrez, mieux ce sera !
+
+=== LITEM Zombie00_4
+Puissante amulette de mauvais augure
+Il est très dangereux d'avoir ça sur soi. Vendez-la au plus vite.
+

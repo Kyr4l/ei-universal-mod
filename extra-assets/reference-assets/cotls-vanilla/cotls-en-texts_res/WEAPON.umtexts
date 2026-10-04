@@ -1,0 +1,689 @@
+# um-texts 1
+=== WEAPON Axe Adamantium
+Adamantite axe
+This weapon is very expensive - but it is worth it.
+
+=== WEAPON Axe Bronze
+Bronze axe
+The simplest of metal axes. Do not rely on it too much.
+
+=== WEAPON Axe Iron
+Iron axe
+This causes more damage than a bronze one. But there are better materials than iron.
+
+=== WEAPON Axe Meteoric
+Meteorite axe
+In the hands of an experienced fighter, this can really make the enemy suffer...
+
+=== WEAPON Axe Mithrill
+Mithrill axe
+Light, sharp, finely honed... and expensive.
+
+=== WEAPON Axe Steel
+Steel axe
+This won't penetrate all types armor, but it can still be dangerous in the hands of an experienced fighter…
+
+=== WEAPON Battle_Axe Adamantium
+Adamantite battle axe
+This is worth the price and good enough for serious fighting.
+
+=== WEAPON Battle_Axe Bronze
+Bronze battle axe
+This is not much better than a simple bronze axe.
+
+=== WEAPON Battle_Axe Iron
+Iron battle axe
+There are better materials than this - if you can afford them, of course.
+
+=== WEAPON Battle_Axe Meteoric
+Meteorite battle axe
+You would be hard pressed to find armor which would withstand this axe, even in the coffers of kings.
+
+=== WEAPON Battle_Axe Mithrill
+Mithrill battle axe
+Really good... And the price is appropriate.
+
+=== WEAPON Battle_Axe Steel
+Steel battle axe
+This one is not bad at all! Though your opponent may have even better armor...
+
+=== WEAPON Bone_Club Burned_Bones
+Bone club (hard bone)
+A good instrument to use on alone Orc.
+
+=== WEAPON Bone_Club Decayed_Bones
+Bone club (thin bone)
+A club is a club.
+
+=== WEAPON Bone_Club Dragon_Black_Bones
+Bone club (Blue Dragon bone)
+Perfect for charging with a spell!
+
+=== WEAPON Bone_Club Dragon_Green_Bones
+Bone club (Green Dragon bone)
+No one can ignore a tap from this!
+
+=== WEAPON Bone_Club Dragon_Red_Bones
+Bone club (Red Dragon bone)
+Now you definitely cannot call this just a club...
+
+=== WEAPON Bone_Club Dry_Bones
+Bone club (tough bone)
+Using this, you could deal with a Goblin, but do not be so sure with an Orc!
+
+=== WEAPON Bone_Club Scrab_Bones
+Bone club (shell bone)
+Shell bone is a good material for all kinds of weapons.
+
+=== WEAPON Bone_Long_Bow Burned_Bones
+Long bone bow (hard bone)
+An improvement on a dry bone bow.
+
+=== WEAPON Bone_Long_Bow Decayed_Bones
+Long bone bow (thin bone)
+Good enough for training or hunting.
+
+=== WEAPON Bone_Long_Bow Dragon_Black_Bones
+Long bone bow (Blue Dragon bone)
+A remarkable material put to good use!
+
+=== WEAPON Bone_Long_Bow Dragon_Green_Bones
+Long bone bow (Green Dragon bone)
+Few other bone bows can compare with this one!
+
+=== WEAPON Bone_Long_Bow Dragon_Red_Bones
+Long bone bow (Red Dragon bone)
+One of the best kinds of long bone bows.
+
+=== WEAPON Bone_Long_Bow Dry_Bones
+Long bone bow (tough bone)
+Not the worst option, but there are better weapons than this!
+
+=== WEAPON Bone_Long_Bow Scrab_Bones
+Long bone bow (shell bone)
+Not a bad thing to have with you when you go for a walk!
+
+=== WEAPON Bone_Short_Bow Burned_Bones
+Short bone bow (hard bone)
+Arrows shot from this one are dangerous and not just for Goblins!
+
+=== WEAPON Bone_Short_Bow Decayed_Bones
+Short bone bow (thin bone)
+Not a bad weapon, but some enemies will not even notice it....
+
+=== WEAPON Bone_Short_Bow Dragon_Black_Bones
+Short bone bow (Blue Dragon bone)
+Impossible to find a better bone bow - except for the ones infused with magic.
+
+=== WEAPON Bone_Short_Bow Dragon_Green_Bones
+Short bone bow (Green Dragon bone)
+In a different league altogether...
+
+=== WEAPON Bone_Short_Bow Dragon_Red_Bones
+Short bone bow (Red Dragon bone)
+One of the best kinds of bone bows.
+
+=== WEAPON Bone_Short_Bow Dry_Bones
+Short bone bow (tough bone)
+Better than a simple bow, but you should think about trying a more decent material...
+
+=== WEAPON Bone_Short_Bow Scrab_Bones
+Short bone bow (shell bone)
+No one is going to like being hit by arrows shot from this bow.
+
+=== WEAPON Bone_Spear Burned_Bones
+Bone spear (hard bone)
+Not a bad weapon against Goblins... but that's it.
+
+=== WEAPON Bone_Spear Decayed_Bones
+Bone spear (thin bone)
+Much lighter than stone spears -  about all you can say for it.
+
+=== WEAPON Bone_Spear Dragon_Black_Bones
+Bone spear (Blue Dragon bone)
+The only way to better a Dragon bone spear is to infuse it with a powerful spell...
+
+=== WEAPON Bone_Spear Dragon_Green_Bones
+Bone spear (Green Dragon bone)
+A Dragon bone spear is a good thing. A magical one is even better.
+
+=== WEAPON Bone_Spear Dragon_Red_Bones
+Bone spear (Red Dragon bone)
+A spear made of Dragon bone is a decent weapon. A magician could make it better still.
+
+=== WEAPON Bone_Spear Dry_Bones
+Bone spear (tough bone)
+This is sharper than one made of thin bone; but maybe you should get something better?
+
+=== WEAPON Bone_Spear Scrab_Bones
+Bone spear (shell bone)
+Now this is something serious.
+
+=== WEAPON Cheat_Dagger Adamantium
+Ritual adamantite knife
+This metal is far too expensive to waste on trifles like this!
+
+=== WEAPON Cheat_Dagger Bronze
+Ritual bronze knife
+Yes... you should start looking for something more serious as soon as possible...
+
+=== WEAPON Cheat_Dagger Iron
+Ritual iron knife
+Iron, bronze - not much difference really.
+
+=== WEAPON Cheat_Dagger Meteoric
+Ritual meteorite knife
+Is meteorite iron really so cheap you would waste it like this?
+
+=== WEAPON Cheat_Dagger Mithrill
+Ritual mithrill knife
+One could find a better use for mithrill!
+
+=== WEAPON Cheat_Dagger Steel
+Ritual steel knife
+Looks exquisite, but it is not much use.
+
+=== WEAPON Crossbow Adamantium
+Adamantite crossbow
+With this one in your hands, you can afford to be a bit impolite.
+
+=== WEAPON Crossbow Bronze
+Bronze crossbow
+Do not expect too much of a bronze crossbow.
+
+=== WEAPON Crossbow Iron
+Iron crossbow
+Like any other iron item, this crossbow is better than the bronze but worse than the steel.
+
+=== WEAPON Crossbow Meteoric
+Meteorite crossbow
+About the only way to improve on it is to add an extra spring.
+
+=== WEAPON Crossbow Mithrill
+Mithrill crossbow
+A strong and long-range weapon. Go for it!
+
+=== WEAPON Crossbow Steel
+Steel crossbow
+Bolts shot from a steel crossbow pierce even very good armor.
+
+=== WEAPON Crystal_Axe Diamond
+Diamond axe
+The only thing better than a diamond weapon is a diamond weapon infused with magic...
+
+=== WEAPON Crystal_Crossbow Diamond
+Diamond crossbow
+This does not come cheap: but a bolt shot from this crossbow will pierce any kind of armor at all.
+
+=== WEAPON Crystal_Dagger Diamond
+Diamond dagger
+A stab with a diamond dagger is as fatal as a lightning strike!
+
+=== WEAPON Crystal_Mace Diamond
+Diamond mace
+Even meteorite iron will not resist its blows!
+
+=== WEAPON Crystal_Short_Bow Diamond
+Diamond short bow
+You should keep a bow like this next to the crown jewels!
+
+=== WEAPON Crystal_Spear Diamond
+Diamond spear
+No armor will resist a diamond spear!
+
+=== WEAPON Crystal_Sword Diamond
+Diamond sword
+A whole crystal sword is as awesome in combat as it is beautiful in your hand.
+
+=== WEAPON Curved_Dagger Adamantium
+Adamantine dirk
+This one is a weapon for serious combat, not for an alehouse brawl!
+
+=== WEAPON Curved_Dagger Bronze
+Bronze dirk
+More reliable than a simple dagger, lighter than a sword. But try for something better...
+
+=== WEAPON Curved_Dagger Iron
+Iron dirk
+Not the worst possible dirk, but a lot worse than a steel one!
+
+=== WEAPON Curved_Dagger Meteoric
+Meteorite dirk
+The very best! But the price, of course, tends to scare one off...
+
+=== WEAPON Curved_Dagger Mithrill
+Mithrill dirk
+Light, sharp, finely honed... and expensive.
+
+=== WEAPON Curved_Dagger Steel
+Steel dirk
+A serious weapon in the hands of an experienced warrior...
+
+=== WEAPON Dagger Adamantium
+Adamantite dagger
+One of the best daggers available on this world.
+
+=== WEAPON Dagger Bronze
+Bronze dagger
+The best way to kill with this is to stab your enemy in the back.
+
+=== WEAPON Dagger Iron
+Iron dagger
+Modest....both in terms of price and quality.
+
+=== WEAPON Dagger Meteoric
+Meteorite dagger
+Causes maximum damage possible. To achieve more, you would need a magician, not a blacksmith.
+
+=== WEAPON Dagger Mithrill
+Mithrill dagger
+A light and sharp dagger. Expensive, but worth it.
+
+=== WEAPON Dagger Steel
+Steel dagger
+A steel dagger is a worthy weapon! But steel cannot get through all kinds of armor.
+
+=== WEAPON Hammer Adamantium
+Adamantite battle hammer
+An exotic weapon. One does not often come across something like this!
+
+=== WEAPON Hammer Bronze
+Bronze battle hammer
+Good enough for training, but try not to use this if you get into serious trouble!
+
+=== WEAPON Hammer Iron
+Iron battle hammer
+In an "iron on iron" fight, this will be good enough.
+
+=== WEAPON Hammer Meteoric
+Meteorite battle hammer
+Makes an unforgettable impression on your enemies...
+
+=== WEAPON Hammer Mithrill
+Mithrill battle hammer
+One can find better uses for mithrill than simply smashing heads with it...
+
+=== WEAPON Hammer Steel
+Steel battle hammer
+Many would have to take this one seriously!
+
+=== WEAPON Long_Bow Adamantium
+Long adamantite bow
+Not every warrior can wear armor capable of withstanding arrows from this bow.
+
+=== WEAPON Long_Bow Bronze
+Long bronze bow
+A long bow is better than a short one. But think about obtaining better material....
+
+=== WEAPON Long_Bow Iron
+Long iron bow
+Not a bad weapon if you want to shoot somebody in the back.
+
+=== WEAPON Long_Bow Meteoric
+Long meteorite bow
+Would you like something better still? Forget it, this is the best!
+
+=== WEAPON Long_Bow Mithrill
+Long mithrill bow
+An arrow shot from this bow hurts a lot more than the sting of a hornet!
+
+=== WEAPON Long_Bow Steel
+Long steel bow
+An opponent armed with this one is a worthy enemy.
+
+=== WEAPON Long_Crossbow Adamantium
+Heavy adamantite crossbow
+A long-range and powerful weapon - one of the most awesome on this world.
+
+=== WEAPON Long_Crossbow Bronze
+Heavy bronze crossbow
+An extra spring will never hurt, even with a bronze crossbow.
+
+=== WEAPON Long_Crossbow Iron
+Heavy iron crossbow
+Not the most awesome of crossbows... but do not write it off yet.
+
+=== WEAPON Long_Crossbow Meteoric
+Heavy meteorite crossbow
+An arrow shot from this one will cut through adamantite armor like a steel needle cuts through paper!
+
+=== WEAPON Long_Crossbow Mithrill
+Heavy mithrill crossbow
+Tough and flexible mithrill is an excellent material for crossbows.
+
+=== WEAPON Long_Crossbow Steel
+Heavy steel crossbow
+A good weapon!
+
+=== WEAPON Long_Spear Adamantium
+Long adamantite spear
+A very good weapon. And costs very good money.
+
+=== WEAPON Long_Spear Bronze
+Long bronze spear
+Better than a simple bronze spear, but that is small comfort...
+
+=== WEAPON Long_Spear Iron
+Long iron spear
+Not the best of long spears, but not the most expensive either.
+
+=== WEAPON Long_Spear Meteoric
+Long meteorite spear
+Absolutely the best!
+
+=== WEAPON Long_Spear Mithrill
+Long mithrill spear
+The material and the quality are most impressive; certainly worth the price!
+
+=== WEAPON Long_Spear Steel
+Long steel spear
+This one would fend many an opponent off...
+
+=== WEAPON Long_Sword Adamantium
+Adamantite long sword
+Even a less than experienced fighter could win a serious battle with this one!
+
+=== WEAPON Long_Sword Bronze
+Bronze long sword
+A bronze sword is fine if your opponent forgot to get good armor.
+
+=== WEAPON Long_Sword Iron
+Iron long sword
+This causes more damage than a bronze one, but it cannot pierce many types of armor.
+
+=== WEAPON Long_Sword Meteoric
+Meteorite long sword
+No blacksmith could make a better long sword!
+
+=== WEAPON Long_Sword Mithrill
+Mithrill long sword
+Expensive, but worth it!
+
+=== WEAPON Long_Sword Steel
+Steel long sword
+A serious weapon in the hands of an experienced fighter...
+
+=== WEAPON Mace Adamantium
+Adamantite mace
+With a heavy item like this in your hand, you can take on anything.
+
+=== WEAPON Mace Bronze
+Bronze mace
+Inexpensive but impressive. At least in terms of appearance.
+
+=== WEAPON Mace Iron
+Iron mace
+Not as nice looking as a bronze one, but it will cause greater damage.
+
+=== WEAPON Mace Meteoric
+Meteorite mace
+The only thing better than a meteorite mace is a spiked meteorite mace.
+
+=== WEAPON Mace Mithrill
+Mithrill mace
+A most serious weapon. And not cheap either.
+
+=== WEAPON Mace Steel
+Steel mace
+The heaviness of the steel makes the blows extra powerful!
+
+=== WEAPON Saber Adamantium
+Adamantite sabre
+You could win a serious fight with this one!
+
+=== WEAPON Saber Bronze
+Bronze sabre
+Do not rely too much on a bronze blade, although it is a little better than stone.
+
+=== WEAPON Saber Iron
+Iron sabre
+Not bad, but nothing special.
+
+=== WEAPON Saber Meteoric
+Meteorite sabre
+This blade will ensure at least a half victory.
+
+=== WEAPON Saber Mithrill
+Mithrill sabre
+This one is definitely not for beginners!
+
+=== WEAPON Saber Steel
+Steel sabre
+A serious weapon in the hands of an experienced fighter... but it will not pierce every kind of armor!
+
+=== WEAPON Short_Bow Adamantium
+Short adamantite bow
+The springy adamantite makes this short bow an awesome weapon!
+
+=== WEAPON Short_Bow Bronze
+Short bronze bow
+Metal gives bows additional properties - but bronze is not the most flexible of metals...
+
+=== WEAPON Short_Bow Iron
+Short iron bow
+Wave away an arrow shot from this bow, if you can!
+
+=== WEAPON Short_Bow Meteoric
+Short meteorite bow
+If you see that your enemy has this bow, make a will.
+
+=== WEAPON Short_Bow Mithrill
+Short mithrill bow
+Even a very well-protected opponent will have to take the owner of this one seriously.
+
+=== WEAPON Short_Bow Steel
+Short steel bow
+Steel makes arrows quicker and more precise.
+
+=== WEAPON Spear Adamantium
+Adamantite spear
+A very good weapon. And costs very good money.
+
+=== WEAPON Spear Bronze
+Bronze spear
+The simplest metal spear. Not the worst weapon...
+
+=== WEAPON Spear Iron
+Iron spear
+Not the best weapon, but not the most expensive either.
+
+=== WEAPON Spear Meteoric
+Meteorite spear
+Only meteorite armor could withstand this....and that's a big maybe...
+
+=== WEAPON Spear Mithrill
+Mithrill spear
+The material speaks for itself!
+
+=== WEAPON Spear Steel
+Steel spear
+Now this is something efficient, and not too expensive.
+
+=== WEAPON Spiked_Club Adamantium
+Adamantite heavy spiked mace
+This is capable of breaking any skull!
+
+=== WEAPON Spiked_Club Bronze
+Heavy bronze spiked mace
+You can't make a good spiked mace out of bronze...
+
+=== WEAPON Spiked_Club Iron
+Heavy iron spiked mace
+Of course iron is better than bronze but poorer than all the other metals...
+
+=== WEAPON Spiked_Club Meteoric
+Meteorite heavy spiked mace
+The blacksmiths did all they could. Now it is the turn of the magicians.
+
+=== WEAPON Spiked_Club Mithrill
+Mithrill heavy spiked mace
+With an argument like this in your hands, you are well-placed to claim the right to go first...
+
+=== WEAPON Spiked_Club Steel
+Steel heavy spiked mace
+A good weapon for one about to embark on a dangerous voyage.
+
+=== WEAPON Spiked_Mace Adamantium
+Adamantite spiked mace
+Good things do not come cheap.
+
+=== WEAPON Spiked_Mace Bronze
+Heavy bronze mace
+A spiked bronze mace - you can only weight it more.
+
+=== WEAPON Spiked_Mace Iron
+Heavy iron mace
+Iron is not the best material for spikes, but this mace is heavier than a regular one.
+
+=== WEAPON Spiked_Mace Meteoric
+Meteorite spiked mace
+After a blow with this mace, you can use the armor of your opponent as a sieve!
+
+=== WEAPON Spiked_Mace Mithrill
+Mithrill spiked mace
+Even steel armor will not resist mithrill spikes.
+
+=== WEAPON Spiked_Mace Steel
+Heavy steel mace
+Steel doesn't make good spikes, but a mace is a formidable weapon anyway.
+
+=== WEAPON Stone_Axe Granite
+Granite axe
+Better than stone - you could even cut some wood... with difficulty.
+
+=== WEAPON Stone_Axe Malachite
+Obsidian axe
+You might even cut yourself with this axe!
+
+=== WEAPON Stone_Axe Rock
+Stone axe
+The simplest of axes. More of a club than an axe, really...
+
+=== WEAPON Stone_Axe Silicon
+Silicon axe
+Silicon is a step forward - at least you can cut with it.
+
+=== WEAPON Stone_Battle_Axe Granite
+Granite battle axe
+Better than a stone battle axe - but, alas, not much better!
+
+=== WEAPON Stone_Battle_Axe Malachite
+Obsidian battle axe
+This axe will make your opponent respect you.
+
+=== WEAPON Stone_Battle_Axe Rock
+Stone battle axe
+This is not just a stone tied to a stick, but not far off it....
+
+=== WEAPON Stone_Battle_Axe Silicon
+Silicon battle axe
+Now you can really rely on this one (provided your opponent is not too strong).
+
+=== WEAPON Stone_Battle_hammer Granite
+Heavy granite hammer
+Looks a bit better and is a little bit more efficient than a stone one - and only a little bit.....
+
+=== WEAPON Stone_Battle_hammer Malachite
+Heavy obsidian hammer
+This is a heavy one! Only metal hammers are better.
+
+=== WEAPON Stone_Battle_hammer Rock
+Heavy stone hammer
+The heavier the stone, the greater the damage...
+
+=== WEAPON Stone_Battle_hammer Silicon
+Heavy silicon hammer
+The sharp silicon edges cause additional damage to the enemy.
+
+=== WEAPON Stone_Dagger Granite
+Granite dagger
+Could be useful at the start, but do not rely on it too much.
+
+=== WEAPON Stone_Dagger Malachite
+Obsidian dagger
+A good piercing weapon - the best of stone daggers.
+
+=== WEAPON Stone_Dagger Rock
+Stone dagger
+Almost worthless, both in terms of price and efficiency.
+
+=== WEAPON Stone_Dagger Silicon
+Silicon dagger
+Not a bad piercing weapon - efficient and not too expensive.
+
+=== WEAPON Stone_Formatter_drive_C Rock
+Rock drive C: formatter
+As a matter of fact you will NEVER see this item. Oh, do you really see it??? Well then, try to guess what will happen next!
+
+=== WEAPON Stone_Hammer Granite
+Granite hammer
+Good enough for starters.
+
+=== WEAPON Stone_Hammer Malachite
+Obsidian hammer
+Sufficient to break a Goblin's head with the first blow!
+
+=== WEAPON Stone_Hammer Rock
+Stone hammer
+Would come in very handy both in the smithy and in a fight...
+
+=== WEAPON Stone_Hammer Silicon
+Silicon hammer
+One way to equip an inexperienced fighter.
+
+=== WEAPON Stone_Short_Bow Granite
+Bow (granite head arrows)
+The shortcomings are many, but it is still better than nothing.
+
+=== WEAPON Stone_Short_Bow Malachite
+Bow (obsidian head arrows)
+Causes the maximum damage possible with this kind of weapon.
+
+=== WEAPON Stone_Short_Bow Rock
+Bow (stone head arrows)
+Your chances of hitting the target are not great, but this bow can still shoot arrows.
+
+=== WEAPON Stone_Short_Bow Silicon
+Bow (silicon head arrows)
+Now you can risk going beyond the gates, and maybe you will even get back!
+
+=== WEAPON Stone_Spear Granite
+Granite head spear
+Granite is better than stone ... but worse than any other material.
+
+=== WEAPON Stone_Spear Malachite
+Obsidian head spear
+Now this does look like a real spear...
+
+=== WEAPON Stone_Spear Rock
+Stone head spear
+The cheapest, most simple spear.
+
+=== WEAPON Stone_Spear Silicon
+Silicon head spear
+Silicon heads are much sharper than other stone ones...
+
+=== WEAPON Stone_Sword Granite
+Granite sword
+Better than simple stone, but not by much.
+
+=== WEAPON Stone_Sword Malachite
+Obsidian sword
+Only metal swords are better than those made of obsidian.
+
+=== WEAPON Stone_Sword Rock
+Stone sword
+You should try to trade it for something more serious.
+
+=== WEAPON Stone_Sword Silicon
+Silicon sword
+You can definitely do some damage with this sword.
+
+=== WEAPON Unique_Spear Mithrill
+"Lethal Lightning" spear
+A unique weapon. Brother Blacksmith is not up to making anything comparable.
+
+=== WEAPON Unique_Sword Steel
+Ancient sword
+A unique ancient weapon. No one can deconstruct it or make another one like it nowadays.
+

@@ -1,0 +1,117 @@
+# um-texts 1
+=== briefing intro_1k
+About the craftsman's work
+#show Hero
+#show Smith
+#CAMERA 9
+#phrase Smith  1
+My work is the same as it always was: make something, buy or sell or repair - and of course make some money too, he-he...
+#phrase Smith  2
+But I do have some news. After the Chosen exposed Elder Erfar, the witch Estera apparently started to treat the villagers a wee bit more kindly ...
+#phrase Smith  3
+She even made peace with me, so now we have a pact: she gives me her spells and I sell them.
+#phrase Smith  4
+She taught me how to make new spells too, but only on the condition that I never tell anyone. Well, of course not - do you think me a fool?
+#phrase Smith  5
+If they all make their own objects and spells for themselves, how am I ever supposed to earn a living? So we stick to the old ways: if you want something, you come to me. That is the only way!
+
+=== briefing intro_1q
+About life in the village
+#show Hero
+#show Nsheriff
+#CAMERA 9
+#phrase NSheriff  1
+I used to think it easy to run the village - just issue your orders in the morning and spend the rest of the day in some nice, cool place.
+#phrase NSheriff  2
+But after I had a taste of it, I changed my mind very quickly: it is just one trouble after another, and it never ends. Brigands, Orcs, goblins ... and now those lizards - do we have peace with them or are they our enemies too?
+#phrase NSheriff  3
+And now we do not even have the Chosen, we have only got ourselves to turn to!
+#phrase NSheriff  4
+I was thinking about quitting this job, but then I decided to stay: after all, people entrusted me with this responsibility. So if I just go, it would be like betraying them. And I can not afford that, can I?
+
+=== briefing intro_2k
+Welcome
+#show Hero
+#show Shopper
+#CAMERA 3 30 3 1
+#phrase Shopper  1
+Welcome, dear customer!
+#phrase Shopper  2
+I run my business like this: you have money, you are welcome. You have no money, you are also welcome. There is no charge for having a look, but there is no credit either. Earn some money, come back and buy what you want.
+
+=== briefing intro_2q
+About life in the city of Ingos
+#show Hero
+#show Huber
+#CAMERA 3 30 3 1
+#phrase Huber  1
+Oh, new people in town! Does not occur very often, does it? And I even think you are of the so called "adventurer" type, what?
+#phrase Huber  2
+Well, in that case you have come to the right place! You will find what you seek here, and it will probably be more than you expected!
+#phrase Huber  3
+On the other hand, I could also do with an enterprising man in this town, one who would not mind taking risks. My loyal assistant captain Tilvar has gone missing with all his entire unit, and since then I have no one to send in search of a new exhibit for my collection!
+#phrase Huber  4
+But actually, there will be other business for you as well, not so interesting ... Like brigands, rebels, hostile creatures ... In a word, you will not get bored!
+
+=== briefing intro_3k
+About life in the Last Shelter
+#show Hero
+#show Kuzn
+#CAMERA 3 30 3 1
+#phrase Kuzn  1
+Hm ... A new face? Good! Finally Brother Khatul forgot about his suspicions and started to admit new people into the Shelter.
+#phrase Kuzn  2
+On the other hand, it is very easy to lose his trust: if he asks you to do something or advises you not to venture somewhere, better do as he says. Otherwise your life here is going to be difficult!
+#phrase Kuzn  3
+But that is not my business, really. My business is the hammer and the tongs, and now spells, too. Brother Kehel used to give me those, but he is no longer with us.
+#phrase Kuzn  4
+He has been ill for a long time, and died a short time before you came. We never have been friends with him ... I do not think he ever had a single friend in the world!
+#phrase Kuzn  5
+But for some reason brother Kehel bequeathed me the spells and runes he once owned!
+
+=== briefing intro_3q
+About life in the Last Shelter
+#show Glav
+#show Hero
+#CAMERA 3 30 3 1.5
+#phrase Glav  1
+The Last Shelter is ready to take anybody who comes with open heart and  a clear soul. We do not ask who you are or where you are from, what was in your past or what you expect from the future.
+#phrase Glav  2
+Particularly since some of our brethren do not remember their past, so it would be useless to ask. For example, brother Blondie - he came here after he got away from Death Canyon, and he left via the portal leading to the Useless Lands.
+#phrase Glav  3
+Yes, oh brother Blondie was a truly unusual man! He was never afraid of open combat with guards, and would stab enemies in the back with the greatest of pleasure ...
+#phrase Glav  4
+But enough of him. If you live in the past you will not move into the future!
+
+=== briefing intro_4k
+I am a mechanical servant
+#show Hero
+#show Golem
+#CAMERA 3 30 8 2
+#phrase Golem  1
+I am Golem. I am mechanical servant. I serve Great Magician.
+#phrase Golem  2
+If he tells me to kill you, I kill you. If he tells me to die for you, I die for you.
+#phrase Golem  3
+Great Magician told me to work for you - I work for you.
+#phrase Golem  4
+I am Golem. I am mechanical servant. I am ready to work.
+
+=== briefing intro_4q
+Great Mage welcomes his guests!
+#show Hero
+#show Rick
+#CAMERA 3
+#phrase Rick  1
+A very short time ago I never dreamt I would see people in my cave. I have been so preoccupied with trying to find Joons, people of my race, that I did not think about other races at all!
+#phrase Rick  2
+But due to a cruel joke of Fate I did not recognize the one I have been searching for, even though he has been right by my side, and his true identity has been concealed by the simplest spell!
+#phrase Rick  3
+I did not recognize him, so I sent the young Joon to Suslanger, to an almost certain death. And I was very surprised when he returned, and stunned when I found out his true identity…
+#phrase Rick  4
+But I shall not repeat my mistake. I welcome you here, whoever you are, especially since a great danger is threatening Gipath and I need strong and loyal people to confront it.
+#phrase Rick  5
+The Khadaganian Empire is preparing an invasion of Gipath, and a huge army is being put together near the Suslanger portal! I am powerful enough to fight the enemies here, but then Gipath will become a scorched desert.
+#phrase Rick  6
+It would be much better if you could weaken the army in Suslanger, or better still, prevent the invasion altogether.
+

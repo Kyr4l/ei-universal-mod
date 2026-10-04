@@ -1,0 +1,141 @@
+# um-texts 1
+=== camphelp 1
+Taking spells
+Heroes cannot use items from the inventory during quests. But they can take up to eight different spells along with them. These will become available during the game. If you find a new spell, you must first equip it using this screen. Only then will you be able to use it in the Game Zone.
+
+=== camphelp 10
+Light armor (hands)
+You can protect your hands by putting on gauntlets or any other light armor. This will reduce the damage your character will suffer if he is struck on his hands. You can also put on heavier armor over the light material.
+
+=== camphelp 100
+Items shop
+The scrollable lists at the top and bottom of the screen show what items are available in the shop and in your inventory. Use the buttons on the left and right sides of the lists to sort the items. The "shop counter" is located at the center of the screen. In the lower left part of the screen you can see the total cost of transaction. Use the adjacent buttons to confirm or cancel transaction (if you cancel, all items will be returned).
+
+=== camphelp 101
+Spells shop
+The scrollable lists at the top and bottom parts of the screen show what spells are available both in the shop and in your inventory. Use the buttons on the left and right sides of the lists to sort the items. The "shop counter" is located in the middle of the screen. In the lower left part of the screen, you can see the total cost of transaction. Use the adjacent buttons to confirm or cancel transaction (if you cancel, all runes will be returned).
+
+=== camphelp 102
+Items constructor
+You can use items from your inventory and those available in the shop to make other items (the price of the items you buy in the shop will be taken into account). You can either construct new items using the appropriate blueprints and materials or deconstruct the ones you already have. See the lower part of the left window for details about the price of constructing/deconstructing. Use the buttons near the window to confirm or cancel.
+
+=== camphelp 103
+Spells constructor
+You can use keystones and runes from your inventory (and those available in the shop) to make spells. The price of the items you buy in the shop will be taken into account. You can make spells out of keystone and (optionally) runes, or you can deconstruct the spells you already have. See the lower part of the left window for details about the price of constructing/deconstructing. Use the buttons near the window to confirm or cancel.
+
+=== camphelp 104
+Repairing item
+The reliability of all items will diminish after use. When the reliability value reaches zero the item can no longer be used. To restore reliability, you must repair the item. See the lower part of the left window for details about the price of repairing your item. Use the buttons near the window to confirm or cancel.
+
+=== camphelp 105
+Equipping Your Characters
+You can equip any of your characters.  All equipment removed from a character will be placed in your inventory. Equipment may be sold in the item shop, modified in the item constructor, or used by any character in your party.
+
+=== camphelp 106
+Spells and Skills
+Experience received by any of your characters may be used to improve that character's skills or acquire new abilities. You also can give spells to characters, or store them in your inventory.  If a character's stamina or magic skills are insufficient to cast a particular spell, you will not be able to give the spell to that character.
+
+=== camphelp 107
+Exit
+You may return to the Briefing Zone.  All goods you have paid for from all screens will appear in your inventory, and all unpaid goods will be returned to the shop.
+
+=== camphelp 11
+Buying items 
+When you are choosing items to buy in the shop, they will be put on the counter. The two top shelves of the counter hold the items you are buying, while the two bottom shelves hold the items you are selling. At the bottom left corner of the counter there are buttons with which you can confirm or cancel the transaction (buying or selling).
+
+=== camphelp 12
+Selling Items
+When you are choosing things to buy in the shop, they will be put on the counter. The two top shelves of the counter hold the things you are buying, while the two bottom shelves hold the things you are selling. Use the two buttons at the bottom left-hand corner of the counter to confirm or cancel the transaction (whether buying or selling).
+
+=== camphelp 13
+Ready-made items
+This section holds ready-made items. You can construct a new item using the appropriate blueprint and materials. When completed, the newly constructed item will appear in this section. You can also put an constructed item here and deconstruct it.
+
+=== camphelp 14
+Blueprint
+This section holds the blueprints needed for constructing items. After you have placed a blueprint here, you will need to place the required amount of material in the "Materials" section. You can then construct a new item, which will appear in the "Ready-made items" section. You can also deconstruct any item you have. Once deconstructed, the item's blueprint will appear in this section.
+
+=== camphelp 15
+Material
+This sections holds one unit of material needed for constructing an item. When you have placed the correct amount of material required by the blueprint, you can construct the item. Once completed, it will appear in the "Ready-made items" section. You can also deconstruct any item in your possession. Once deconstructed, all the item materials will appear in the "Material" sections.
+
+=== camphelp 16
+Spell
+You can insert a spell into your weapons or armor. The spell must contain the rune of "item", which determines when this particular spell will work. Items have certain limitations which dictate the complexity and the amount of energy the inserted spells will have. If you deconstruct a "spell-loaded" item later, the spell will be returned to you and you can then use it normally.
+
+=== camphelp 17
+Spells, keystones, runes: buying
+When you choose spells, keystones or runes to buy in the shop, they will be put on the counter. The two top shelves of the counter hold the spells, keystones and runes you are buying, while the two bottom shelves hold the ones you are selling. Use the buttons at the lower left-hand corner of the counter to confirm or cancel the transaction (whether buying or selling).
+
+=== camphelp 18
+Spells, keystones, runes: selling
+When you choose spells, keystones or runes to buy in the shop, they will be put on the counter. The two top shelves of the counter hold the spells, keystones and runes you are buying, while the two bottom shelves hold the ones you are selling. Use the buttons at the lower left-hand corner of the counter to confirm or cancel the transaction (whether buying or selling).
+
+=== camphelp 19
+Ready-made spell
+This section holds ready-made spells. You can also construct a new spell using keystone and runes or keystone only. You can also deconstruct any spell you have, after which its keystone and runes will be at your disposal.
+
+=== camphelp 2
+Taking weapons
+Heroes cannot use items from the inventory during quests. However, they can take up to four different weapons with them, which will be available during the game. If you find a new weapon, you must take it using this screen. Only then can you use it in a quest.
+
+=== camphelp 20
+Spell keystone
+This section holds the keystone for making a spell and determines its basic properties. You can optionally add one or more runes and construct a spell, which will then appear in the "Ready-made Spells" section.
+
+=== camphelp 21
+Rune (modifier)
+This section holds the rune which modifies the spell. You can add as many runes as you like to the spells you make, as long as the final spell can be used by one of your heroes (i.e. it may not exceed the permitted complexity and amount of energy). Your ability to use runes is determined by the keystone used.
+
+=== camphelp 22
+Inventory
+This screen shows the content of the characters' inventory - the items and spells not currently taken or put by any character. You can only use inventory outside the game zone.
+
+=== camphelp 23
+Items available
+This screen shows all blueprints, materials and ready-made items you can buy at this time.
+
+=== camphelp 24
+Spells available
+This screen shows all spells keystones, runes and ready spells you can buy at this time.
+
+=== camphelp 25
+Items for repair
+Items to be repaired must be put on the table. At the lower left corner you can find information about the repair price. Use the buttons located next to it to confirm or cancel the repair (if you cancel, all items will be returned).
+
+=== camphelp 26
+Maximum complexity
+Shows the maximum complexity of the spells currently available in the constructor. You cannot make spells which are too complex for any of your characters to use.
+
+=== camphelp 27
+Maximum stamina
+Shows the maximum stamina your characters must have to use the spells currently available in the constructor. You cannot make spells which demand a higher stamina than any of your characters have.
+
+=== camphelp 3
+Taking potions and wands
+Heroes cannot use items from the inventory during quests. However, they can equip up to four different potions and magic wands, which will then be available in the game zone. If you find a new potion in the game zone you must equip it using this screen. Only then will you be able to use it in battle.
+
+=== camphelp 4
+Heavy armor (head)
+Your character can put on a helmet or any other headgear to protect his head. This will reduce the damage suffered if he is struck on the head.
+
+=== camphelp 5
+Heavy armor (body)
+Your character can put on a cuirass or any other heavy armor to protect his body and arms. This will reduce the damage suffered if he is struck on the body. Some armor also protects the arms. Your character may, of course, wear lighter armor under the heavy armor.
+
+=== camphelp 6
+Heavy armor (legs)
+Your character can put on leggings or any other heavy armor to protect his legs. This will reduce the damage suffered if he is struck there. Lighter armor may be worn under the heavier armor.
+
+=== camphelp 7
+Light armor (body)
+Your character can put on a shirt or any other light armor to protect his body and arms. This will reduce damage suffered through a blow to the body. Some of the armor also protects the arms. Heavier armor may of course be worn on top of the lighter items.
+
+=== camphelp 8
+Light armor (legs)
+Your character can put on trousers or any other light armor to protect his legs. This will reduce damage if a strike on the legs occurs. Heavier armor may of course be worn on top of the lighter armor. 
+
+=== camphelp 9
+Light armor (feet)
+Your character can put on boots or any other light armor to protect his feet. This will reduce the damage suffered by a strike on the foot. You can, of course, wear heavier armor on top of the lighter stuff.
+

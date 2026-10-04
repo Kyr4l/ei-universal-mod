@@ -1,0 +1,1002 @@
+# um-texts 1
+=== tutor it001_head
+Didacticiels
+
+=== tutor it001_head_screen1
+Didacticiel (jeu)
+
+=== tutor it001_head_screen2
+Didacticiel (interface)
+
+=== tutor it001_text_screen1
+CHER JOUEUR
+
+Pour vous familiariser avec le jeu, nous vous proposons des didacticiels et des conseils. Ils s'afficheront régulièrement à l'écran au cours de votre première quête d'apprentissage. Ils vous indiquent comment réaliser certaines actions. Si les conseils sont en général courts et donnent des informations détaillées sur certaines actions, les didacticiels sont quant à eux des descriptions en profondeur éventuellement accompagnées de suggestions. Les didacticiels les plus longs comprennent plusieurs écrans. Pour passer d'un écran à l'autre, utilisez les boutons du bas (nous les avons rendus bien visibles). Veuillez lire attentivement les didacticiels. Ils vous aideront à terminer la démo dans les meilleures conditions possibles.
+N'oubliez pas que lorsqu'un didacticiel est à l'écran, le jeu est en pause.
+La plupart des éléments d'écran (tels que les points de menu, les icônes, etc.) sont associés à des conseils qui peuvent s'afficher. Il vous suffit de placer le curseur sur un élément et de l'y laisser. Au bout de quelques secondes, le conseil s'affichera.
+Si vous déplacez la souris, le conseil disparaît. Pour revoir le dernier conseil, appuyez sur la touche <H>.
+Remarque : Les commandes décrites ici sont celles par défaut. Si vous modifiez vos réglages par défaut, certaines descriptions ne seront plus valables. Usez donc modérément des changements de paramètres.
+
+=== tutor it001_text_screen2
+Chaque écran d'interface a ses propres didacticiels. Si vous souhaitez afficher le didacticiel de l'écran, appuyez sur la touche <H>.
+
+=== tutor it002_head
+Carte globale
+
+=== tutor it002_head_screen1
+Carte globale
+
+=== tutor it002_head_screen2
+Zones de jeu
+
+=== tutor it002_head_screen3
+Zones disponibles
+
+=== tutor it002_head_screen4
+"Base"
+
+=== tutor it002_text_screen1
+     Vous vous trouvez actuellement dans la "carte globale". Il s’agit d’une représentation de l’île sur laquelle se trouve votre personnage. Elle indique les zones de jeu disponibles (leurs limites sont désignées par un cadre jaune). Une zone devient "disponible" lorsque votre personnage y pénètre au moins une fois ou s’il se voit confier une quête qui doit l’y mener.
+
+     L’endroit où se trouve votre personnage est indiqué par une flèche verticale "flottante".
+
+     Vous pouvez faire pivoter la carte globale dans la direction de votre choix. Pour ce faire, utilisez les boutons situés en bas à droite de l’écran.
+
+     Le nom de l’île et le temps de jeu apparaissent en haut à gauche de l’écran. Cliquez sur le bouton "entrée du camp" situé en bas à gauche pour afficher les objets que vous avez recueillis ou pour remplacer les armes et armures de vos personnages, ramasser de nouveaux objets, etc.
+
+=== tutor it002_text_screen2
+     Les différents écrans zones de jeu indiquent les quêtes à accomplir dans chaque zone ainsi que l’emplacement approximatif de la quête. Les quêtes proprement dites sont représentées par des symboles spéciaux.
+
+     Lorsque vous placez votre curseur sur une zone, son nom apparaît en haut à droite de l’écran, suivi de la liste de toutes les quêtes à mener dans cette zone. Lorsqu’une quête a été accomplie, elle disparaît de la carte globale.
+
+     Cliquez sur une zone pour obtenir des informations plus détaillées sur les quêtes que vous devez y accomplir ; l’écran des quêtes de cette zone apparaît alors. Pour en savoir plus, reportez-vous au didacticiel.
+
+     Remarque : les cartes des îles ne représentent que les régions situées en surface. Les zones de jeu souterraines sont désignées sous formes de zones distinctes ou délimitées par des pointillés.
+
+=== tutor it002_text_screen3
+     La carte globale n’indique que les zones auxquelles votre personnage a actuellement accès. Ces zones peuvent être identifiées par différentes couleurs. Lorsque vous placez votre curseur sur une zone, les couleurs apparaissent telles qu’elles ont été désignées.
+
+     Les zones dans lesquelles vous avez accompli une quête importante (c’est-à-dire, les zones "explorées") sont désignées par une couleur plus sombre. Vos personnages peuvent contourner ces zones "explorées" sans avoir à les traverser. Si plusieurs zones de ce type sont adjacentes et reliées par des zones de transfert, vous pouvez toutes les contourner.
+
+     Remarque : vous n’êtes pas tenu d’accomplir toutes les quêtes disponibles d’une zone ou de tuer tous les ennemis qui s’y trouvent pour qu’elle devienne une zone "explorée".
+
+     Les zones disponibles n’ayant pas encore été "explorées" sont désignées par une couleur plus claire. Si votre quête exige que vous traversiez une de ces zones, vos personnages devront y entrer et la traverser jusqu'à leur destination. Vous ne pouvez pas contourner les zones "inexplorées".
+
+=== tutor it002_text_screen4
+     Une "base" (qu’il s’agisse d’un village ou d’une ville) est désignée sur la carte de l’île par un symbole spécial (portes ou bâtiment). Vous disposez d’au moins une "base" sur chaque île. Si la zone abritant une "base" a déjà été "explorée", vous pouvez directement entrer dans la base depuis la carte globale. Sinon, votre personnage devra s’y rendre à pied.
+
+     Remarque : lorsque vous quittez une base, vous revenez directement à la carte globale.
+
+=== tutor it003_head
+Zones de dialogue
+
+=== tutor it003_head_screen1
+Principale ("Base")
+
+=== tutor it003_head_screen2
+Communication avec les personnages
+
+=== tutor it003_head_screen3
+Compagnons
+
+=== tutor it003_head_screen4
+Supplément
+
+=== tutor it003_text_screen1
+     Lorsque votre personnage se trouve dans une zone de jeu, il n’a pas accès à certaines actions. Par exemple, il ne peut pas parler avec les autres personnages, ni acheter, vendre ou commander des objets ou des sorts. Ces actions ne sont disponibles que dans la zone de dialogue.
+
+     Votre personnage peut entrer dans la zone de dialogue, mais vous ne pouvez alors pas lui ordonner d’attaquer quelqu’un, de voler des objets ou de jeter des sorts. Ces activités y sont interdites.
+
+     Votre personnage peut cependant parler à d’autres personnages à condition qu’ils aient un sujet de conversation disponible. Pour vous en assurer, placez le curseur sur un personnage. Si celui-ci est "autorisé" à parler, son nom apparaît près du curseur, accompagné d’une icône en forme de bouche animée. Si le personnage n’a rien à dire à ce moment précis, seul son nom apparaît (sans la bouche). Pour de plus amples informations sur les dialogues entre personnages dans la zone de dialogue, reportez-vous à l’écran suivant.
+          Les îles abritent différentes zones de dialogue. En fonction des circonstances, celles-ci ne sont pas toujours disponibles. Cependant, chaque île renferme au moins une zone de dialogue (appelée "base") toujours disponible où votre personnage peut acheter, vendre et commander des objets ou des sorts. Lorsque vous obtenez une liste de sujets disponibles et que figure parmi eux le sujet "acheter, vendre, commander", celui-ci reste disponible jusqu'à ce que toutes les quêtes de l’île aient été accomplies.
+
+    Remarque : à Gipath, vous pouvez échanger des objets et des sorts sur différentes bases.
+
+=== tutor it003_text_screen2
+     Pour savoir quels sujets vous pouvez aborder avec un personnage, cliquez sur celui-ci et une liste apparaîtra. Cliquez ensuite sur le sujet de votre choix.
+
+     Remarque : en fonction du sujet que vous choisissez, d’autres sujets de la liste peuvent changer ou disparaître.
+
+     Les sujets de conversation peuvent être très variés. En parlant avec un personnage, vous pouvez vous voir confier de nouvelles quêtes ou recevoir des conseils pour les accomplir au mieux. Vous pouvez bénéficier d’une récompense pour avoir achevé une quête ou vous faire offrir un cadeau (certains personnages sont très généreux !). En d’autres termes, les conversations peuvent vous rapporter gros. Alors, guettez tous les nouveaux sujets de conversation susceptibles d’apparaître en fonction des différents personnages.
+
+     Remarque : le sujet "acheter, vendre, commander..." peut figurer dans la liste de certains personnages. En cliquant sur ce sujet, vous accéderez directement à l’écran Echoppe. Pour de plus amples informations sur l’achat et la vente, reportez-vous aux autres didacticiels.
+
+=== tutor it003_text_screen3
+     Votre personnage principal (appelons-le le "héros") n’est pas obligé de voyager seul. Dans les zones de dialogue de chaque île, il peut demander à d’autres personnages de l’accompagner au cours de ses quêtes. Ceux-ci ne lui réclameront pas d’argent en échange ; tous rejoindront l’équipe pour des raisons qui leur sont personnelles. Les personnages désireux de rejoindre votre équipe vous en informeront au cours de votre première conversation.
+
+     Remarque : la mort de l’un de vos compagnons ne met pas fin au jeu. Sachez cependant que les quêtes sont conçues pour être menées en équipe. Elles seront plus difficiles à accomplir seul, c’est pourquoi vous devez veiller à bien protéger les membres de votre équipe !
+
+     Comme pour votre personnage principal, vous pouvez changer les armures et les armes de vos compagnons. L’expérience acquise par vos compagnons au cours des quêtes peut être investie dans de nouvelles compétences et capacités. Cependant, les actes de vos compagnons sont limités, par exemple :
+     Chaque équipe de compagnons ne peut intervenir que sur son île d’origine. Lorsque le héros se rend sur une autre île, il doit se séparer de son équipe. 
+     L’équipe ne peut pas être composée de plus de trois personnages. Si vous demandez à un quatrième personnage de se joindre à elle, il déclinera votre offre.
+     Si nécessaire, vous pouvez à tout moment laisser un membre de l’équipe chez lui. Il vous suffit de lui en parler. Ne vous inquiétez pas, il ne s’en offusquera pas. Et cela ne vous empêchera pas de lui redemander de vous accompagner ultérieurement.
+
+     Remarque : un compagnon ne peut rester chez lui que s’il est dans la zone de dialogue où il se trouvait lorsqu’il a rejoint l’équipe.
+
+=== tutor it003_text_screen4
+     Outre les "bases", vous découvrirez d’autres zones de dialogue. Certaines vous permettront uniquement de dialoguer et d’autres d’engager un nouveau membre pour votre équipe (à savoir un compagnon pour votre héros).
+     Sachez cependant que les l’échoppe et les concepteurs d’objets et de sorts ne sont pas accessibles dans ces nouvelles zones de dialogue, lesquelles peuvent aussi ne plus être disponibles une fois qu’elles ont joué leur rôle dans le jeu.
+
+=== tutor it004_head
+Ecran des quêtes
+
+=== tutor it004_head_screen1
+Ecran des quêtes
+
+=== tutor it004_head_screen2
+Carte de la zone
+
+=== tutor it004_head_screen3
+Quêtes/objectifs
+
+=== tutor it004_text_screen1
+     L’écran des quêtes propose des informations détaillées sur les quêtes disponibles dans la zone de jeu ainsi que sur leurs objectifs. Il vous permet de préparer vos actions de façon à minimiser les risques encourus par votre personnage.
+
+     L’écran des quêtes se divise en plusieurs parties : à gauche se trouve la liste des quêtes et des briefings (à savoir les informations relatives à la quête et à ses objectifs) et à droite la carte de la zone de jeu avec différentes légendes. Pour de plus amples informations sur la carte de la zone, reportez-vous à l’écran suivant du didacticiel.
+
+     Plusieurs quêtes peuvent être simultanément disponibles dans une même zone de jeu. Pour en savoir plus sur une quête et ses objectifs, cliquez sur le nom de la quête. Si les quêtes sont trop nombreuses pour apparaître toutes dans la même fenêtre, une barre de défilement s’affiche à droite de la liste - utilisez-la pour faire défiler la liste vers le haut et vers le bas.
+
+     Pour revenir à la zone de jeu, cliquez sur le bouton <V> situé en bas de l’écran ou appuyez sur la touche <TAB>.
+
+=== tutor it004_text_screen2
+     En haut à droite de l’écran se trouve une carte simplifiée de la zone de jeu courante. Elle indique les zones de transfert, l’emplacement approximatif de votre quête, le terrain de la zone et quelques points de repère locaux. Les points importants sont représentés comme suit :
+
+     Triangles : désignent les zones de transfert - les zones disponibles apparaissent en vert et les autres en rouge.
+     Grande croix rouge : c’est là que vous devrez vous rendre pour accomplir la quête sélectionnée (présentée dans la fenêtre de gauche).
+     Clés : indiquent les emplacements des clés ou des éléments-clés que vous devez récupérer au cours de votre quête.
+     Lignes continues et pointillées : correspondent aux routes et chemins.
+     Bandes larges et étroites sur l’eau : indiquent les ponts et les gués.
+     Tête de mort et os croisés : indiquent les emplacements des pièges magiques (en rouge pour les pièges de feu, en vert pour les pièges d’acide et en bleu pour les pièges de foudre).
+
+     Pour certaines quêtes, d’autres symboles peuvent aussi figurer sur la carte, comme des représentations d’animaux, de monstres, de coffres, de sacs, etc. N’oubliez pas que les cartes contiennent beaucoup d’informations utiles, alors étudiez-les bien avant d’entrer dans une zone de jeu.
+
+     En bas à droite de l’écran se trouve une fenêtre de texte contenant une description de la zone de jeu. Ce texte peut être bref (le plus souvent), mais il contient des astuces implicites et autres conseils qui peuvent vous êtes très utiles pour accomplir vos quêtes, c’est pourquoi nous vous conseillons de le lire attentivement.
+
+=== tutor it004_text_screen3
+     Votre personnage se verra confier la plupart de ses quêtes en parlant à d’autres personnages dans les zones de dialogue. Mais de nouvelles quêtes pourront parfois aussi lui être confiées dans la zone de jeu.
+
+     Certaines quêtes sont obligatoires et doivent par conséquent être menées à bien pour progresser dans le jeu. D’autres, en revanche, sont facultatives. Hélas, vous ne savez pas toujours lesquelles sont obligatoires (ce serait trop facile !). Vous êtes donc seul maître de vos décisions, en espérant que vous faites les bons choix.
+   Au cours de chaque quête, votre personnage acquerra un certain niveau d’expérience. S’il ne l’a pas accomplie seul, cette expérience sera créditée à toute l’équipe. Certaines quêtes lui rapporteront aussi de l’argent. La "valeur" de chaque quête apparaît à la fin de sa description.
+
+     La plupart des quêtes sont composées de plusieurs objectifs. Chacun représente une "étape" pour accomplir la quête. Certains objectifs sont disponibles dès le début, au moment où vous recevez la quête. Vous pouvez les considérer comme les premières étapes. D’autres vous sont confiés plus tard, après avoir franchi certaines étapes.
+     Les objectifs atteints sont désignés par un <V> dans la liste des objectifs. Les objectifs qui, pour une raison ou une autre, ne peuvent plus être atteints, sont désignés par un <X>. Les quêtes achevées apparaissent dans la liste accompagnées du mot "accomplie".
+
+     Remarque : une quête peut être considérée comme accomplie alors que vous n’avez pas encore atteint tous les objectifs. Ne vous en faites pas, c’est normal. Vous n’êtes pas toujours tenu d’atteindre tous les objectifs d’une quête.
+
+=== tutor it005_head
+Ecran des quêtes
+
+=== tutor it005_head_screen1
+Ecran des quêtes
+
+=== tutor it005_text_screen1
+     Après avoir choisi une zone de jeu sur la carte globale, l’écran des quêtes apparaît. En haut à droite de l’écran se trouve une carte simplifiée de la zone. Au moins un triangle (voire plus) doit y figurer.
+    Les triangles verts désignent les zones de transfert. Ce sont elles qui permettent à votre personnage d’entrer dans la zone de jeu. Cliquez sur la zone à utiliser pour entrer dans la zone de jeu afin de la sélectionner. Notez qu’elle s’agrandit alors, ce qui indique qu’elle est "sélectionnée" et que vous pouvez y entrer.
+     Les triangles rouges désignent les zones de transfert auxquelles votre personnage n’a pas accès. Vous pouvez cliquer sur ces zones autant de fois que vous voulez, il ne se passera rien.
+
+     L’absence de triangle vert sur la carte de la zone indique qu’il existe une autre zone de jeu "inexplorée" quelque part entre la position de votre personnage et la zone de jeu dans laquelle vous essayez d’entrer. Vous devez la trouver et la traverser pour pouvoir continuer.
+
+     Pour entrer dans une zone de jeu, cliquez sur le bouton <V> situé en bas de l’écran.
+     Pour revenir à la carte globale, cliquez sur le bouton <X> situé en haut de l’écran.
+
+=== tutor it006_head
+Equipement
+
+=== tutor it006_head_screen1
+Objets
+
+=== tutor it006_head_screen2
+Armure
+
+=== tutor it006_text_screen1
+     Cet écran vous permet d’équiper vos personnages en vêtements, armes, potions, baguettes magiques, etc. Les noms des différents personnages apparaissent sur le panneau de gauche. Pour consulter la liste des personnages, utilisez les boutons situés à gauche et à droite du panneau.
+     La barre supérieure de l’écran indique les objets que le personnage emportera dans la zone de jeu. Les quatre fentes de gauche sont réservées aux armes et celles de droite aux potions et aux baguettes magiques.
+
+     La barre inférieure correspond à "l’inventaire" de vos personnages, c’est-à-dire aux objets qu’ils n’emporteront pas dans la zone de jeu. Pour n’afficher que certains types d’objets, utilisez les boutons situés à gauche et à droite de la barre. Pour afficher les types d’objets associés à un bouton, maintenez le curseur sur ce bouton quelques secondes. Un conseil déroulant apparaîtra alors avec les informations appropriées.
+
+     Comme décrit ci-dessus, les objets sont sélectionnés par le personnage (barre supérieure) ou placés dans l’inventaire (barre inférieure). Pour déplacer un objet de votre inventaire vers le personnage, cliquez sur l’objet de votre choix sur la barre d’inventaire (inférieure). Il sera placé sur la barre active (supérieure). Pour sélectionner une arme active à utiliser, cliquez avec le bouton droit de la souris sur sa représentation sur la barre supérieure. Un cadre apparaîtra alors autour d’elle pour indiquer qu’elle peut être utilisée. Pour placer un objet actif dans votre inventaire, cliquez sur sa représentation sur la barre supérieure.
+
+     Remarque : si toutes les fentes de la barre supérieure sont vides, votre personnage entrera dans la zone de jeu sans arme - et n’en ressortira probablement pas indemne !
+
+=== tutor it006_text_screen2
+     Au centre de l’écran se trouve un portrait de votre personnage vêtu de l’armure qu’il portera dans la zone de jeu. L’armure choisie peut déterminer l’issue, heureuse ou malheureuse, d’une quête, c’est pourquoi il est important de l’adapter aux spécificités de la tâche qui vous est confiée. Les fentes situées à gauche et à droite du portrait affichent les armures qu’il porte actuellement. Placez le curseur sur une fente pour afficher le nom et les caractéristiques de l’armure présentée dans le panneau de droite.
+L’armure est divisée en pièces légères et lourdes. Le personnage peut enfiler une armure lourde par-dessus une armure légère pour mieux se protéger. Mais sachez que plus il pèsera lourd, plus il sera lent.
+
+     Cliquez sur l’armure de votre choix dans l’inventaire pour la sélectionner. Elle apparaîtra alors immédiatement sur le portrait du personnage et son icône s’affichera dans la fente qui convient..
+     Pour ôter une armure de votre personnage, cliquez sur la fente contenant l’icône de l’armure. Celle-ci retournera alors dans l’inventaire.
+
+Le panneau situé à gauche de l’écran indique les valeurs de caractéristiques totales de l’ensemble de l’équipement de protection porté par votre personnage. Celui-ci possède maintenant une "valeur" totale d’attaque et de défense et un certain potentiel pour infliger des dégâts. Ces valeurs sont affichées sous la valeur de caractéristique totale et dépendent de ce que porte le personnage ainsi que de son développement, de ses compétences avec l’arme sélectionnée et des caractéristiques de l’arme.
+
+Maintenez le curseur sur une arme quelques secondes pour en savoir plus sur ses caractéristiques. Sa description complète s’affichera dans le panneau de droite.
+
+=== tutor it007_head
+Caractéristiques, compétences, connaissances, sorts
+
+=== tutor it007_head_screen1
+Compétences et connaissances
+
+=== tutor it007_head_screen2
+Caractéristiques
+
+=== tutor it007_head_screen3
+Compétences 
+
+=== tutor it007_head_screen4
+Capacités connues
+
+=== tutor it007_head_screen5
+Capacités disponibles
+
+=== tutor it007_head_screen6
+Sorts
+
+=== tutor it007_text_screen1
+     Cet écran contient des informations sur vos personnages, notamment sur leurs compétences et connaissances. Comme nous l’avons vu précédemment, chaque personnage acquiert une certaine quantité d'expérience au fil de ses quêtes. Vous pouvez ici investir cette expérience en acquérant de nouvelles capacités et en développant des compétences existantes. Vous pouvez aussi attribuer aux personnages des sorts qu’ils utiliseront en cours de jeu.
+
+     Pour sélectionner un personnage, utilisez les boutons situés de part et d’autres de son nom.
+Les quatre panneaux suivants sont disponibles au centre de l’écran (de gauche à droite) :
+     Panneau Caractéristiques
+     Panneau Compétences et capacités connues
+     Panneau Capacités disponibles
+     Panneau Descriptions 
+     Pour de plus amples informations sur ces panneaux, reportez-vous aux écrans suivants du didacticiel.
+
+     En bas du panneau Caractéristiques se trouve la rubrique "Votre Expérience" (encadrée). Utilisez les boutons <V> et <X> pour confirmer/annuler les modifications apportées aux compétences et capacités via les autres panneaux.
+
+     Remarque : les changements apportés dans les autres panneaux ne prennent effet qu’après avoir été confirmés dans la rubrique "Votre Expérience". En l’absence de confirmation, les changements seront annulés dès que vous passerez à un autre écran. Alors, n’oubliez pas de confirmer avant de continuer.
+
+=== tutor it007_text_screen2
+     Le panneau Caractéristiques répertorie les caractéristiques de base (encadrées) d’un personnage, à savoir "Force", "Dextérité" et "Intelligence", ainsi que leurs dérivés, "Santé", "Endurance", "Actions" et "Encombrement". Le panneau indique aussi "l’Expérience" acquise par le personnage.
+
+     Pour en savoir plus sur chaque caractéristique, placez le curseur sur la caractéristique de votre choix et lisez le texte qui apparaît dans le panneau Descriptions.
+     La rubrique "Expérience" indique le niveau d’expérience total acquis par votre personnage pendant le jeu. Une partie de cette expérience a déjà été investie dans ses compétences et capacités (celle-ci n’est donc plus disponible). Vous pouvez utiliser l’expérience restante pour continuer à développer les compétences du personnage et acquérir de nouvelles capacités. Le niveau à votre disposition apparaît à la rubrique "Votre Expérience".
+
+     Vous pouvez investir l’expérience disponible dans des compétences et capacités via les panneaux appropriés. La rubrique "Votre Expérience" indique le niveau d’expérience que vous utilisez. Cliquez sur <V> pour confirmer ou sur <X> pour annuler.
+
+=== tutor it007_text_screen3
+     En haut du panneau Compétences et capacités se trouve la rubrique "Compétences" (encadrée). Le premier chiffre après le nom de la compétence correspond à sa valeur actuelle et le second au prix fixé pour l’augmenter d’une unité. Si le prix est grisé, cela signifie que vous n’avez pas acquis suffisamment d’expérience pour améliorer cette compétence.
+     Pour en savoir plus sur chaque compétence, placez le curseur sur la compétence de votre choix et lisez le texte qui apparaît dans le panneau Descriptions.
+
+     Pour améliorer une compétence (au moins momentanément), cliquez sur son icône.
+     Pour confirmer ou annuler, cliquez sur les boutons appropriés de la rubrique "Votre Expérience".
+
+=== tutor it007_text_screen4
+     En bas du panneau Compétences et capacités se trouve la rubrique "Capacités connues" (encadrée). Le chiffre apparaissant à droite du nom de la capacité correspond au prix à payer pour l’augmenter d’un niveau. Si ce prix est grisé, cela signifie que vous n’avez pas l’expérience nécessaire pour le faire.
+     Pour en savoir plus sur une capacité, placez le curseur sur la capacité de votre choix et lisez le texte qui apparaît dans le panneau Descriptions.
+
+     Pour développer une capacité (au moins momentanément), cliquez sur l’icône appropriée de la rubrique "Capacités connues".
+     Pour confirmer ou annuler, cliquez sur les boutons appropriés de la rubrique "Votre Expérience".
+
+     Remarque : chaque fois que vous développez une capacité, vous augmentez le coût de développement des autres capacités.
+
+=== tutor it007_text_screen5
+     Le panneau Capacités disponibles (encadré) affiche la liste des capacités accessibles à votre personnage. Le chiffre situé près du nom de la capacité correspond au prix à payer pour apprendre à utiliser cette capacité. Si le prix est grisé, cela signifie que vous n’avez pas l’expérience requise pour le faire.
+     Pour en savoir plus sur une capacité, placez le curseur sur la capacité de votre choix et lisez le texte qui apparaît dans le panneau Descriptions.
+
+    Pour conférer une capacité (au moins momentanément) à votre personnage, cliquez sur l’icône correspondante de la rubrique "Capacités disponibles". 
+    Pour confirmer ou annuler, cliquez sur les boutons appropriés de la rubrique "Votre Expérience".
+
+     Remarque : chaque capacité que vous apprenez à utiliser augmente de manière significative le prix d’apprentissage des autres capacités. Ceci signifie que votre personnage ne pourra pas apprendre à utiliser toutes les capacités disponibles. Pour réussir dans le jeu, vous devez choisir les bonnes capacités et ne pas les gâcher. 
+
+=== tutor it007_text_screen6
+     La barre supérieure de l’écran indique les sorts auxquels votre personnage a accès au cours des quêtes. La barre inférieure correspond à votre inventaire.
+     
+     Votre inventaire contient quelques sorts prédéfinis. Pour remettre l’un de ces sorts à votre personnage, cliquez sur son icône sur la barre inférieure.
+     Pour reprendre un sort à votre personnage et le replacer dans votre inventaire, cliquez sur son icône sur la barre supérieure.
+
+     Remarque : lorsque les connaissances magiques (Magie élémentale, Magie sensorielle, Magie astrale) de votre personnage ne sont pas suffisantes pour utiliser un sort complexe, ce dernier est grisé et votre personnage ne peut pas l’utiliser. De même, votre personnage ne peut pas utiliser un sort lorsqu’il ne dispose pas l'endurance nécessaire. 
+
+=== tutor it008_head
+Echoppe des objets 
+
+=== tutor it008_head_screen1
+Echanges d’objets
+
+=== tutor it008_text_screen1
+     Dans l’échoppe des objets, vous pouvez acheter et vendre des armes, des armures, des matériaux, des modèles et des trophées. Les éléments-clés ne sont pas à vendre.
+
+     La barre supérieure de l’écran indique ce qui est disponible dans l’échoppe, tandis que la barre inférieure répertorie le contenu de votre inventaire. Utilisez les boutons situés de part et d’autres des barres pour choisir le type d’objets à afficher.
+
+     Le centre de l’écran fait office de "comptoir". La partie supérieure du comptoir contient les objets que vous achetez et la partie inférieure ceux que vous vendez. En bas à gauche de l’écran se trouve la "valeur commerciale" totale qui correspond au montant que vous pouvez encaisser (si vous vendez) ou que vous devez débourser (si vous achetez).
+
+     Pour placer un objet sur le comptoir de l’échoppe, cliquez sur sa représentation sur la barre qui convient (supérieure ou inférieure).
+     Cliquez sur un objet situé sur le comptoir de l’échoppe pour le remettre sur la barre.
+     Cliquez sur plusieurs objets du même type en appuyant sur la touche MAJ pour les déplacer.
+     Pour mettre fin à l’opération, cliquez sur le bouton <V> près de la valeur de l’opération ou sur le bouton <X> pour annuler.
+
+=== tutor it009_head
+Concepteur d’objets
+
+=== tutor it009_head_screen0
+Généralités
+
+=== tutor it009_head_screen1
+Assemblage
+
+=== tutor it009_head_screen2
+Désassemblage d’objets
+
+=== tutor it009_head_screen3
+Objets dotés de magie
+
+=== tutor it009_text_screen0
+     Les objets sont assemblés dans le concepteur. Pour assembler un objet, vous devez disposer de son modèle et des matériaux adéquats. Le modèle spécifie les matériaux nécessaires. Par exemple, vous ne pouvez pas fabriquer une lance en pierre avec le modèle d’une lance en os.
+
+     Vous pouvez utiliser vos propres modèles et matériaux ou les acheter à l’échoppe - comme lorsque vous achetez d’autres objets.
+     Pour en savoir plus sur une fente du concepteur, placez le curseur sur la fente de votre choix et lisez la description qui apparaît dans le panneau de droite.
+
+     Les fentes disponibles sont désignées par un cadre clignotant. Si vous placez un modèle dans un concepteur vide, cela signifie que vous voulez assembler un objet. Si vous y placez un objet, c’est que vous souhaitez le désassembler. Pour de plus amples informations sur l’assemblage et le désassemblage d’objets, reportez-vous aux écrans suivants.
+
+=== tutor it009_text_screen1
+     Pour construire un objet, cliquez sur son modèle dans votre inventaire (barre inférieure) ou dans l’échoppe (barre supérieure). Le modèle sera alors placé dans la fente appropriée.
+     Une fois le modèle placé dans sa fente, les fentes de matériaux sont mises en surbrillance et entourées d’un cadre clignotant. Le nombre de fentes en surbrillance est égal au nombre d’unités de matériaux mentionnées sur le modèle. Cliquez sur un matériau  - le cas échéant dans votre inventaire ou dans l’échoppe - et il rejoindra une des fentes. Vous ne pouvez utiliser qu’un seul type de matériau pour fabriquer un objet. L’association de matériaux divers n’est pas autorisée, même s’ils appartiennent à la même catégorie.
+
+     Remarque : vous devez d’abord placer un modèle dans le concepteur avant de pouvoir y placer des matériaux. Si vous placez le modèle dans le concepteur, puis l’en retirez (en le replaçant dans votre inventaire ou dans l’échoppe), tous les matériaux placés dans le concepteur sont automatiquement retirés des fentes pour revenir à leur emplacement d’origine.
+
+     Lorsque toutes les fentes de matériaux sont remplies, le panneau de gauche affiche les caractéristiques de l’objet assemblé. En bas de l’écran, vous verrez le prix de l’objet. Ceci comprend le prix des articles que vous avez achetés, le cas échéant.
+
+      Cliquez sur le bouton <V> pour assembler l’objet ou sur <X> pour annuler.
+
+=== tutor it009_text_screen2
+     Cliquez sur un objet pour le désassembler. Il apparaît alors dans l’une des fentes réservées aux objets prédéfinis du concepteur. En bas à gauche de l’écran apparaît le coût total du désassemblage.
+
+Pour désassembler l’objet, cliquez sur le bouton <V>.
+Pour annuler, cliquez sur le bouton <X>.
+
+     Remarque : si vous désassemblez un objet pour le réassembler immédiatement après (sans placer le modèle et les matériaux dans l’inventaire), vous devez payer le prix de l’assemblage et du désassemblage - alors, attention à ne pas gaspiller votre argent inutilement.
+
+=== tutor it009_text_screen3
+     Vous pouvez insérer des sorts dans certains objets comme des armes ou des armures afin de leur attribuer des caractéristiques "magiques". Pour ce faire, le sort doit contenir une rune permettant de l’y insérer. Ces runes s’appellent "Objet (Déclencheur)" et "Objet (Permanent)". Elles sont disponibles en cours de jeu.
+     Remarque : ces runes ne sont pas nécessaires pour assembler une baguette magique associée à un sort.
+Pour les sorts "à insérer", le concepteur comprend une fente spéciale située sous la fente du modèle. Une fois le modèle et les matériaux nécessaires placés dans le concepteur, cette fente sera disponible. Pour y placer un sort de votre inventaire, cliquez sur sa représentation.
+
+     Cliquez sur le bouton <V> pour assembler ou sur <X> pour annuler.
+
+     Remarque : le sort et l’objet dans lequel vous voulez l’insérer sont dotés de valeurs de "complexité". La valeur de complexité de l’objet doit être supérieure à celle du sort. En effet, cela ne rimerait à rien d’insérer un sort complexe dans un objet qui ne permettrait pas de l’utiliser, car trop simple. De même, vous ne pouvez pas insérer un sort nécessitant une valeur de "résistance" élevée dans un objet doté d’une faible valeur "énergétique". 
+
+=== tutor it010_head
+Echoppe des sorts
+
+=== tutor it010_head_screen1
+Echanges de sorts
+
+=== tutor it010_text_screen1
+      Dans l’échoppe des sorts, vous pouvez acheter et vendre des sorts prédéfinis, des pierres maîtresses et des runes. Aucun objet n’est ici en vente.
+
+     La barre supérieure de l’écran indique ce qui est disponible dans l’échoppe et la barre inférieure le contenu de votre inventaire. Utilisez les boutons situés de part et d’autres des barres pour choisir le type d’objets à afficher, comme les pierres maîtresses d’une académie de magie particulière, les runes d’un certain type ou les sorts prédéfinis.
+
+     Au centre de l’écran se trouve le "comptoir". La partie supérieure du comptoir est utilisée pour les sorts et les runes que vous achetez, et la partie inférieure pour celles que vous vendez. En bas à gauche de l’écran se trouve la "valeur commerciale" totale correspondant au montant que vous pouvez encaisser (si vous vendez) ou que vous devez débourser (si vous achetez).
+
+     Pour placer un sort ou une rune sur le comptoir de l’échoppe, cliquez sur sa représentation sur la barre qui convient (du haut ou du bas).
+     Cliquez sur un sort ou une rune situés sur le comptoir de l’échoppe pour les remettre sur leur barre d’origine.
+     Pour déplacer plusieurs sorts ou runes du même type, appuyez sur la touche MAJ et cliquez sur la fente qui convient. 
+     Pour mettre fin à l’opération, cliquez sur le bouton <V> près de la valeur de l’opération.
+     Pour annuler, cliquez sur le bouton <X>.
+
+=== tutor it011_head
+Concepteur de sorts
+
+=== tutor it011_head_screen1
+Généralités
+
+=== tutor it011_head_screen2
+Assemblage de sorts
+
+=== tutor it011_head_screen4
+Désassemblage de sorts
+
+=== tutor it011_head_screen5
+Caractéristiques
+
+=== tutor it011_text_screen1
+     Pour assembler un sort, vous devez disposer de sa pierre maîtresse. Les pierres maîtresses des sorts déterminent à quelle académie de magie appartient le sort, ainsi que son principe et ses caractéristiques initiales.
+     Pour assembler un sort, vous ne pouvez utiliser qu’une pierre maîtresse. Vous pouvez aussi ajouter des runes modifiant les caractéristiques du sort.
+     Vous pouvez utiliser vos propres pierres maîtresses et runes (à condition, bien sûr, que vous en ayez) ou en acheter à l’échoppe comme lorsque vous achetez d’autres objets.
+
+     Remarque : vous ne pouvez pas assembler des sorts trop complexes ou nécessitant trop d'endurance pour vos personnages. La complexité et l'endurance maximales dont vous disposez apparaissent dans un encadré, sur des lignes distinctes, sous la fente de votre pierre maîtresse.
+
+=== tutor it011_text_screen2
+     Pour assembler un sort, cliquez sur sa pierre maîtresse dans votre inventaire (barre inférieure) ou dans l’échoppe (barre supérieure). La pierre maîtresse sera placée dans la fente qui convient.
+     Les fentes réservées seront alors mises en surbrillance et entourées d’un cadre clignotant. Le nombre de fentes en surbrillance est égal au nombre de runes que vous pouvez insérer dans ce sort. Ce nombre change chaque fois que vous ajoutez une rune dans le concepteur. Pour ajouter une rune, cliquez sur sa représentation dans votre inventaire ou dans l’échoppe et elle sera placée dans la prochaine fente disponible.
+     La pierre maîtresse détermine les runes utilisables pour ce sort. Les runes non utilisables sont grisées.
+
+     Remarque : vous ne pouvez pas placer de runes dans le concepteur tant que vous n’y avez pas placé de pierre maîtresse. Si vous retirez la pierre maîtresse du concepteur pour la remettre dans votre inventaire ou dans l’échoppe, toutes les runes que vous avez ajoutées seront également retirées de leurs fentes pour revenir à leur emplacement d’origine.
+
+     Les caractéristiques du sort que vous avez assemblé apparaissent dans le panneau de gauche, avec les éventuelles caractéristiques supplémentaires ajoutées par les runes que vous avez utilisées. La partie inférieure de l’écran indique le prix total du sort. Ceci comprend le prix des éventuels articles que vous avez achetés.
+
+     Cliquez sur le bouton <V> pour assembler l’objet ou sur <X> pour annuler.
+
+     Remarque : si vous assemblez un sort pour le désassembler immédiatement après (sans le placer dans l’inventaire), vous devrez payer le prix de l’assemblage et du désassemblage - alors, veillez à faire les bons choix.
+
+=== tutor it011_text_screen4
+     Pour désassembler un sort, cliquez sur celui-ci et il apparaîtra dans une fente du concepteur. En bas à gauche de l’écran, vous verrez le coût total du désassemblage du sort.
+     Si vous retirez la pierre maîtresse de sa fente du concepteur après avoir désassemblé le sort, les runes qui y étaient contenues seront également retirées.
+     Lorsque vous désassemblez un sort de l’échoppe, nous considérons que vous l’avez acheté (désolé, le vol à l’étalage correspond à un autre chapitre). Les runes du sort rejoignent alors votre inventaire.
+
+     Cliquez sur le bouton <V> pour désassembler un sort.
+     Cliquez sur le bouton <X> pour annuler.
+
+     Remarque : si vous désassemblez un sort pour le réassembler immédiatement après (sans placer la pierre maîtresse et les runes dans votre inventaire), vous devrez payer le prix de l’assemblage et du désassemblage, alors attention !
+
+=== tutor it011_text_screen5
+     Un sort composite est un sort comprenant une pierre maîtresse et plusieurs runes supplémentaires. Ce type de sort ne peut pas nécessiter moins d’énergie qu’un sort similaire qui ne contient que la pierre maîtresse. Ainsi, la rune "Potentiel supplémentaire" ne peut jamais être utilisée seule. Elle n’est utile que pour les sorts composites, car elle compense l’énergie supplémentaire requise par les autres runes.
+
+=== tutor it012_head
+Réparation d’un objet
+
+=== tutor it012_head_screen1
+Réparation d’un objet
+
+=== tutor it012_text_screen1
+     Chaque objet est doté d’une certaine "durabilité". Les objets en bon état de marche sont dotés d’une valeur de durabilité maximale, tandis que ceux qui ne sont plus utilisables (parce qu’ils sont usés par exemple), ont une durabilité nulle. Dans cet écran, vous pouvez réparer des objets et rétablir leur durabilité à leur valeur maximale.
+
+     Si vous vous trouvez dans la zone de jeu et qu’un objet est très endommagé, au point de devenir bientôt inutilisable, vous entendrez un son spécial dès que vous essaierez de l’utiliser (son variable selon qu’il s’agit d’une arme ou d’une armure). Lorsque vous entendez ce son, mieux vaut revenir à la base pour réparer l’objet avant qu’il ne devienne complètement inutilisable.
+     Pour réparer un objet, placez-le sur la table du centre de l’écran. Le panneau situé en bas à gauche indiquera le prix de sa réparation. Pour accepter ce prix et réparer l’objet, cliquez sur le bouton <V>, sinon cliquez sur le bouton <X>.
+
+     Remarque : les objets devenus inutilisables sont placés dans l’inventaire et vos personnages n’y ont plus accès, même pendant les quêtes. Vérifiez donc à l’avance que l’équipement de tous vos personnages est en bon état de marche pour éviter le pire.
+
+=== tutor it015_head
+Commandes de jeu
+
+=== tutor it015_head_screen1
+Options
+
+=== tutor it015_text_screen1
+     Utilisez l'écran Option pour configurer le jeu selon vos préférences et vos ressources système. Chaque option est décrite au moyen d'astuces déroulantes. Pour voir une astuce, placez le curseur sur l'option de menu de votre choix et attendez quelques secondes.
+     Les Options sont divisées en plusieurs sections. Chacun des noms de ces rubriques est accompagné d'une astuce déroulante.
+
+     Les informations ci-dessous s'appliquent à toutes les options :
+     Pour attribuer (réattribuer) des raccourcis clavier, double-cliquez sur l'option de votre choix. La ligne de l'option apparaît en surbrillance rouge. Appuyez sur la touche clavier de votre choix pour lui attribuer cette option.
+     Pour activer/désactiver une option, double-cliquez sur "On" (ou "Off"). L'option sera alors activée ou désactivée.
+     Pour augmenter (diminuer) la valeur d'une option, placez le curseur sur la barre coulissante et faites-la glisser vers la droite pour augmenter la valeur ou vers la gauche pour la diminuer. Placez le curseur tout à gauche de la barre coulissante pour configurer l’option sur zéro (c.-à-d. la désactiver).
+     Pour valider les modifications apportées, cliquez sur le bouton <V> et pour les annuler sur le bouton <X>.
+
+=== tutor it016_head
+LMP
+
+=== tutor it016_head_screen1
+LMP
+
+=== tutor it016_text_screen1
+LMP
+
+=== tutor zt10_head
+Mini-carte
+
+=== tutor zt10_head_screen1
+Généralités
+
+=== tutor zt10_head_screen2
+Caractéristiques de la mini-carte
+
+=== tutor zt10_head_screen3
+Exemple
+
+=== tutor zt10_text_screen1
+     La mini-carte (ici encadrée) vous offre une vue d'ensemble de la zone de jeu. Vous pouvez l'utiliser pour savoir où se trouve votre personnage. Elle affiche toujours la zone de jeu dans son intégralité, quelle que soit la superficie que vous ayez réussi à explorer.
+
+     Les triangles de différentes couleurs représentent votre(vos) personnage(s) ainsi que tous les personnages qu'il(s) peut(peuvent) être amené(s) à rencontrer.
+
+     Les triangles verts représentent vos personnages.
+     Les triangles jaunes représentent les personnages neutres.
+     Les triangles rouges représentent les ennemis.
+
+=== tutor zt10_text_screen2
+     Pour contrôler la mini-carte, utilisez les boutons situés à droite (encadrés). Vous pouvez effectuer un zoom avant ou arrière et orienter la caméra dans une direction par défaut.
+
+    Pour effectuer un zoom avant/arrière, utilisez les touches <+>/<->.
+     Pour orienter la caméra au nord, utilisez la touche <N> ou le bouton <N>.
+     Pour afficher/masquer la mini-carte, utilisez le bouton encadré situé en haut à droite ou la touche <M>.
+
+     Remarque : une fois la caméra dirigée au "Nord", l'orientation du terrain de l'écran de jeu est identique à celle de la mini-carte.
+
+=== tutor zt10_text_screen3
+     Vous devez vous déplacer vers le pont qui enjambe la rivière au centre de la zone de jeu. Notez que les ponts et les rivières sont également représentés sur la mini-carte. Cette mini-carte offre une vue précieuse de la région où vous vous rendez. Cliquez sur une zone de la mini-carte pour orienter la caméra dans sa direction. Vous pourrez ainsi mieux planifier vos actions. Après tout, si vous savez à quoi vous attendre, vous saurez vous préparer et vous déplacer en conséquence.
+     Pour recentrer la caméra sur votre personnage, double-cliquez sur sa représentation.
+
+=== tutor zt11_head
+Fenêtre de texte
+
+=== tutor zt11_head_screen1
+Fenêtre de texte (partie 1)
+
+=== tutor zt11_head_screen2
+Fenêtre de texte (partie 2)
+
+=== tutor zt11_text_screen1
+     La fenêtre de texte (encadrée) propose deux modes : "messages" et "trophées". Pour passer de l'un à l'autre, utilisez les boutons situés en haut à gauche.
+
+     En mode "messages", la fenêtre de texte contient des informations visant à mieux vous faire comprendre ce qui se passe dans le jeu (quêtes et missions confiées et menées à bien, trophées récupérés, avertissements sur l'usure de vos armes et armures et lignes de dialogues des personnages).
+     En mode "trophées", la fenêtre de texte indique le nombre total de trophées récupérés dans la zone de jeu et contient des informations les concernant.
+
+=== tutor zt11_text_screen2
+     Si l’intégralité du texte du message ou la liste exhaustive des trophées n’entrent pas dans la fenêtre de texte, vous devrez utiliser la barre déroulante qui apparaîtra à droite afin de les faire défiler.
+
+     Les touches clavier ci-dessous vous permettent également de contrôler la fenêtre de texte :
+
+     Pour ouvrir/fermer la fenêtre du mode "Messages", utilisez la touche <L>.
+     Pour ouvrir/fermer la fenêtre du mode "Trophées", utilisez la touche <K>.
+
+     Remarque : pour ouvrir/fermer la fenêtre de texte, utilisez le bouton encadré situé en haut à droite.
+
+=== tutor zt12_head
+Fenêtre d'information
+
+=== tutor zt12_head_screen1
+Fenêtre d'information
+
+=== tutor zt12_head_screen2
+Modes de la fenêtre d'information
+
+=== tutor zt12_text_screen1
+     La fenêtre d'information (encadrée) propose une description des personnages du jeu. Placez le curseur sur le personnage de votre choix pour afficher des informations le concernant. A défaut d'être placé sur un personnage précis, la fenêtre d'information vous renseigne sur votre propre personnage (à savoir "le héros").
+     La fenêtre d'information propose plusieurs modes. Chacun de ces modes est détaillé à l'écran suivant.
+
+     Remarque : pour ouvrir/fermer la fenêtre d'information, utilisez le bouton encadré situé en haut à gauche. Vous pouvez continuer à jouer que la fenêtre d'information soit ouverte ou fermée.
+
+=== tutor zt12_text_screen2
+     La fenêtre d'information propose plusieurs modes. Pour passer de l'un à l'autre, utilisez les boutons situés à gauche ou le clavier. Ces différents modes sont les suivants :
+
+     Vue d'ensemble : affiche des généralités sur la vue du personnage (touche <,>).
+     Dégâts : affiche les dégâts infligés aux différentes parties du corps (touche <.>).
+     Caractéristiques : affiche les caractéristiques du personnage (touche </>).
+     Sorts : affiche les sorts jetés contre le personnage et le temps (en secondes) restant avant que l'effet qui y est associé ne se dissipe (touche <'>).
+
+=== tutor zt13_head
+Déplacement du personnage
+
+=== tutor zt13_head_screen1
+Modes de déplacement
+
+=== tutor zt13_head_screen2
+Exemple
+
+=== tutor zt13_text_screen1
+      En fonction de la situation, vous pouvez choisir le mode de déplacement de votre personnage. Pour passer d'un mode de déplacement à l'autre, utilisez le panneau de commandes situé en bas à gauche de l'écran ou le clavier. Les différents modes de déplacement disponibles sont les suivants :
+
+     Marcher : lorsqu'un personnage marche, il se déplace à une allure normale. Son "Endurance" est stable, ce qui signifie qu’elle ne diminue pas et n’augmente pas (touche <X>).
+     Courir : la course permet naturellement de se déplacer plus vite que la marche, mais présente un sérieux inconvénient : un personnage qui court fait plus de bruit qu'un personnage qui marche et peut par conséquent attirer l'attention de ses ennemis au lieu de passer inaperçu. Notez également que la course diminue l'"Endurance" et que lorsqu'elle atteint zéro, votre personnage se met automatiquement à marcher (touche <Z>).
+     Marcher silencieusement : comme vous pouvez l'imaginer, un personnage qui marche silencieusement ne fait quasiment pas de bruit et l'ennemi ne peut le repérer que visuellement. Naturellement, ce mode de déplacement est lent, malgré une "Endurance" constante. Elle n’augmente pas ou ne diminue pas (touche <C>).
+     Ramper : un personnage qui rampe est moins repérable, mais il se déplace aussi très, très lentement. Comme le fait de se faufiler, ce mode de déplacement n'a aucune incidence sur la "Endurance" (touche <V>).
+
+=== tutor zt13_text_screen2
+     Indiquez à votre personnage de ramper. C'est peut-être sa seule chance d'échapper à l'Ogre. A défaut de choisir ce mode, votre personnage est voué à une mort certaine.
+
+=== tutor zt14_head
+Compétence Utiliser/Voler
+
+=== tutor zt14_head_screen1
+Voler
+
+=== tutor zt14_head_screen2
+Voler l'ogre
+
+=== tutor zt14_head_screen3
+Utiliser
+
+=== tutor zt14_text_screen1
+     Pour prendre quelque chose à un ennemi sans risquer de devoir l'affronter, vous pouvez toujours essayer de le lui voler.
+     Voler un ennemi est toujours délicat. Tout d'abord, vous devez discrètement vous en approcher par derrière (pour ce faire, "marchez silencieusement" pour éviter qu'il ne vous entende).
+     Lorsque c'est chose faite, cliquez sur l'icône "Utiliser/Voler" (encadrée). Le curseur se transforme alors. Placez ce nouveau curseur sur l'objet que vous souhaitez voler et cliquez une nouvelle fois. Après avoir volé l’objet, prenez vos distances par rapport à l'ennemi sans vous faire remarquer (le vol suscite souvent beaucoup de rancune), puis déplacez-vous normalement.
+
+     Vous pouvez également sélectionner la compétence "Utiliser/Voler" via la touche <S> de votre clavier.
+
+     Remarque : toutes les tentatives de vol ne portent pas leurs fruits. Les résultats dépendent de la compétence "Utiliser/Voler" de votre personnage et des caractéristiques de l'objet que vous convoitez. Plus la compétence "Utiliser/Voler" de votre personnage est élevée, meilleures sont ses chances de réussite.
+
+=== tutor zt14_text_screen2
+      En arrivant à l’extrémité du pont, votre personnage verra les deux Ogres. Celui de droite regarde toujours dans la même direction et jamais vers l'arrière. Il vous sera donc facile de vous faufiler par derrière et de le voler. A vous de jouer !
+
+=== tutor zt14_text_screen3
+     Vous serez en mesure d'utiliser votre compétence "Utiliser/Voler" dans de nombreuses circonstances à l’aide de divers objets (pour ouvrir des portes, actionner des leviers, ouvrir des coffres, etc.).
+     Pour utiliser un objet, cliquez sur l'icône "Utiliser/Voler" (encadrée). Le curseur se transforme alors. Placez-le sur l'objet et cliquez une nouvelle fois.
+
+
+=== tutor zt15_head
+Coups spéciaux
+
+=== tutor zt15_head_screen1
+Attaque dans le dos
+
+=== tutor zt15_head_screen2
+Coups de précision
+
+=== tutor zt15_head_screen3
+Viser un membre
+
+=== tutor zt15_head_screen4
+Coup sur la tête
+
+=== tutor zt15_text_screen1
+     Vos coups infligeront davantage de dégâts si vous prenez l'ennemi par surprise et que vous le frappez. Pour effectuer une « Attaque dans le dos », votre personnage doit s'approcher de l'ennemi sans se faire remarquer ("Marcher silencieusement" constitue ici le mode de déplacement le plus adapté), puis le frapper avant même qu'il n'ait le temps de réaliser ce qui lui arrive.
+
+     Remarque : si l'ennemi voit votre personnage s'approcher et passe en mode Agressif, votre coup ne sera pas considéré comme une « Attaque dans le dos ». Alors, du calme !
+
+=== tutor zt15_text_screen2
+     Lorsque vous ordonnez à votre personnage d'attaquer l'ennemi, vous pouvez indiquer la partie du corps qu'il doit viser. Utilisez les touches du pavé numérique suivantes pour infliger des coups précis :
+
+     4: viser la main gauche (ou patte avant gauche)
+     6: viser la main droite (ou patte avant droite)
+     1: viser la jambe gauche
+     3: viser la jambe droite
+     5: viser le corps
+     8: viser la tête
+
+     Pour administrer un coup précis, appuyez sur la touche qui convient et placez le curseur sur l'ennemi. Votre personnage visera alors la partie du corps indiquée jusqu'à ce que vous donniez un nouvel ordre ou que le niveau de santé de cette partie du corps ait atteint zéro. Si l'ennemi est toujours en vie, les coups suivants ne seront pas précis.
+
+     Remarque : certaines créatures du jeu n'ont ni bras ni jambes. Si vous donnez l'ordre de viser une partie du corps inexistante, votre personnage l'ignorera.
+     Remarque : les différentes parties du corps des personnages peuvent être protégées par des armures dotées de caractéristiques spécifiques - comme la capacité à absorber les dégâts infligés par les armes ; ainsi les dégâts subis par les parties protégées du corps sont moins lourds.
+
+=== tutor zt15_text_screen3
+     Si votre personnage perd un bras, il attaque et jette des sorts plus lentement (hé, essayez donc de frapper avec un seul bras). Un personnage perd un bras lorsque le niveau de santé de ce bras atteint 0. Ceci apparaît dans la fenêtre d'information lorsqu'elle est en mode "Dégâts".
+     Si votre personnage perd une jambe, il se déplace plus lentement (pas d'échasse à ressort dans le jeu). Un personnage perd une jambe lorsque le niveau de santé de cette jambe atteint 0. Ceci apparaît dans la fenêtre d'information lorsqu'elle est en mode "Dégâts".
+
+=== tutor zt15_text_screen4
+     Les coups sur la tête sont déterminants, car ils provoquent trois fois plus de dégâts que les autres coups. Notez cependant que les chances d'atteindre la tête sont moindres par rapport aux autres parties du corps.
+
+=== tutor zt16_head
+Déplacement entre les zones
+
+=== tutor zt16_head_screen1
+Zones de transfert
+
+=== tutor zt16_head_screen2
+Caractéristiques
+
+=== tutor zt16_text_screen1
+     Les zones de transfert sont des endroits spéciaux qui clignotent en jaune. Utilisez-les pour passer d'une zone de jeu à l'autre. Le changement de zone de jeu étant une étape importante, vous devrez confirmer votre choix chaque fois que votre personnage entrera dans une zone de transfert.
+
+     Votre personnage se trouve actuellement près du village. Vous avez achevé votre quête et trouvé le chemin menant au village humain. Votre personnage doit à présent y entrer, c.-à-d. utiliser une zone de transfert.
+
+     Remarque : si vous contrôlez simultanément plusieurs personnages, vous devez tous les regrouper dans la zone de transfert pour pouvoir l'utiliser. Vous ne pouvez pas laisser certains personnages dans la zone de jeu et en faire sortir d'autres. Souvenez-vous qu'ils évoluent et agissent en équipe. 
+
+=== tutor zt16_text_screen2
+     Chaque zone de transfert d'une zone de jeu spécifique est reliée à la zone de transfert d'une autre zone de jeu. L'endroit où vous quittez une zone de jeu détermine la prochaine zone de jeu dans laquelle vous entrez et votre position dans cette zone.
+
+     Remarque : toutes les zones de transfert ne sont pas immédiatement disponibles. Certaines sont parfois inaccessibles. Les zones actuellement indisponibles clignotent en rouge et non en jaune.
+
+=== tutor zt17_head
+Utilisation des armes
+
+=== tutor zt17_head_screen1
+Choix des armes
+
+=== tutor zt17_text_screen1
+     Votre personnage peut utiliser jusqu'à 4 armes différentes lorsqu'il se trouve dans la zone de jeu. Pour sélectionner une arme, cliquez sur sa représentation (c'est simple, les armes sont encadrées).
+
+     Vous pouvez également choisir votre arsenal via les touches clavier ci-dessous :
+     Utiliser arme 1 : touche <Q>
+     Utiliser arme 2 : touche <W>
+     Utiliser arme 3 : touche <E>
+     Utiliser arme 4 : touche <R>
+
+=== tutor zt18_head
+Potions et baguettes magiques
+
+=== tutor zt18_head_screen1
+Fiole avec potion
+
+=== tutor zt18_text_screen1
+     Pour utiliser une potion ou une baguette magique que vous avez trouvée ou achetée, vous devez tout d'abord la remettre à l’un de vos personnages du "camp" (pour de plus amples informations, reportez-vous à l’écran du didacticiel qui convient).
+
+    Cette potion sera alors disponible pour le personnage et apparaîtra dans l'écran encadré qui convient. Pour l'utiliser, cliquez sur son icône ou utilisez les touches clavier ci-dessous :
+
+     Utiliser objet 1 - touche <P>
+     Utiliser objet 2 - touche <O>
+     Utiliser objet 3 - touche <I>
+     Utiliser objet 4 - touche <U>
+
+=== tutor zt19_head
+Réussite des quêtes
+
+=== tutor zt19_head_screen1
+Fonctionnalités spéciales
+
+=== tutor zt19_text_screen1
+     Pour réussir vos quêtes, n'hésitez pas à utiliser tous les moyens mis à votre disposition par le jeu.
+
+     Pendant les séquences de combat, vous pouvez utiliser l mode "Pause" (en appuyant sur la <Barre d'espace>). En mode Pause, vous pouvez estimer la Santé de vos personnages et de vos ennemis en affichant la fenêtre d'information et leur donner un certain nombre d'ordres, comme attaquer un ennemi précis, lancer des sorts, modifier leurs armes ou les diriger dans une direction donnée. Tous vos ordres seront exécutés dès que le mode Pause est désactivé (en appuyant de nouveau sur la <Barre d'espace>).
+
+     Vous pouvez ordonner à l'un de vos personnages de suivre un autre personnage du jeu. Pour ce faire, cliquez sur l'icône "Suivre" (le curseur change alors de forme), puis placez le curseur sur le personnage à suivre et cliquez de nouveau. Le personnage actuellement sélectionné le suivra jusqu'à nouvel ordre.
+
+     Vous pouvez également activer la caméra "Poursuite". Pour ce faire, double-cliquez sur l'icône du personnage en bas de l'écran. La caméra suivra alors le personnage jusqu'à nouvel ordre.
+
+=== tutor zt1_head
+Informations de départ
+
+=== tutor zt1_head_screen2
+Commandes (personnage)
+
+=== tutor zt1_text_screen2
+     Votre personnage se trouve à présent dans la zone de jeu. Pour le faire marcher jusqu'à un emplacement donné, cliquez sur cet emplacement et pour le faire courir, double-cliquez.
+
+     Pour le moment, vous ne contrôlez qu'un seul personnage, mais plus tard, vous serez peut-être amené à en contrôler plusieurs. Un didacticiel relatif au contrôle de plusieurs personnages vous sera proposé ultérieurement.
+
+     Remarque : votre personnage ne peut pas toujours accéder à l'intégralité de la zone de jeu. Si vous essayez de l'envoyer vers un point auquel il n'a pas accès, il se rendra au point le plus près ou restera sur place.
+
+=== tutor zt20_head
+Commandes de groupe
+
+=== tutor zt20_head_screen1
+Sélection des personnages
+
+=== tutor zt20_head_screen2
+Ordre "Suivre"
+
+=== tutor zt20_text_screen1
+     Vous pouvez gérer jusqu'à trois personnages à la fois pour les contrôler ensemble ou individuellement. Pour contrôler les personnages individuellement, sélectionnez le(s) personnage(s) à qui vous voulez donner des ordres.
+
+     Dans la zone de jeu, cliquez sur le personnage de votre choix ou sur sa représentation en bas de l'écran pour le sélectionner.
+    Pour sélectionner plusieurs personnages, procédez comme indiqué précédemment tout en maintenant la touche MAJ enfoncée.
+
+     Vous pouvez également sélectionner un ou plusieurs personnages en créant un cadre autour d'eux à l'aide de la souris tout en maintenant le bouton gauche (de la souris) enfoncé. Tous les personnages encadrés seront sélectionnés.
+
+     Les touches clavier ci-dessous vous permettent de sélectionner les personnages tous ensemble ou individuellement :
+
+     Sélectionner personnage 1 : touche F1
+     Sélectionner personnage 2 : touche F2
+     Sélectionner personnage 3 : touche F3
+     Sélectionner tous les personnages : touche F4
+
+     Remarque : lorsque vous sélectionnez un personnage (en double-cliquant sur sa représentation ou en appuyant sur la touche <ALT>), la caméra se met immédiatement à le suivre.
+
+=== tutor zt20_text_screen2
+     Pour faciliter le contrôle simultané de plusieurs personnages, faites-les se suivre.
+     Pour ce faire, sélectionnez un personnage, placez le curseur sur l'icône "Suivre" (encadrée) et cliquez. Le curseur se transforme alors. A présent, placez le curseur sur un autre personnage (pas nécessairement le vôtre) et cliquez une nouvelle fois. Le personnage sélectionné se met à suivre celui sur lequel vous venez de cliquer.
+     Lorsque vous envoyez votre personnage vers un endroit précis, le mode "Suivre" est annulé.
+
+     Pour donner l'ordre "Suivre", vous pouvez également utiliser la touche <F>.
+
+=== tutor zt21_head
+Attaque dans le dos
+
+=== tutor zt21_head_screen1
+Attaquer le loup blanc dans le dos
+
+=== tutor zt21_text_screen1
+     Vous infligerez plus de dégâts à votre ennemi en le prenant par surprise et en le frappant par derrière. Mais le coup ne sera considéré comme une attaque dans le dos que si votre ennemi ne vous a pas repéré. Vous devez par conséquent l'approcher sans qu'il s'en aperçoive. Pour ce faire utilisez le mode "Marcher silencieusement".
+
+     Cette technique convient particulièrement aux ennemis plus forts que votre personnage, comme le loup blanc.
+
+=== tutor zt22_head
+Vol
+
+=== tutor zt22_head_screen1
+Vol du chef et de sa femme
+
+=== tutor zt22_text_screen1
+     Lorsque vous affrontez le Chef, personnage plus fort que le vôtre, essayez de lui dérober ce dont vous avez besoin (le Chef n'est pas réputé pour sa générosité).
+
+     Pour ce faire, marchez silencieusement jusqu'à lui et cliquez sur l'icône "Utiliser/Voler". Le curseur se transforme alors, après quoi vous devez cliquer sur le personnage que vous souhaitez voler.     Remarque : pour donner l'ordre "Voler", vous ne devez sélectionner qu'un seul personnage. Si vous en sélectionnez plusieurs, l'icône "Utiliser/Voler" n'est pas disponible.
+
+=== tutor zt23_head
+Se déplacer
+
+=== tutor zt23_head_screen1
+Gué
+
+=== tutor zt23_text_screen1
+     Les personnages ne savent pas nager mais peuvent traverser à gué des eaux peu profondes ou des marais. Le personnage doit toujours avoir pied. Ainsi, un humain est plus apte à traverser des rivières à gué qu'un loup, et un Troll peut s'aventurer encore plus profondément qu'un humain.
+
+     Exemple : votre personnage atteint une rivière. Pour poursuivre sa quête, il doit la traverser. Ne vous inquiétez pas, il trouvera de lui-même un moyen de la traverser à gué.
+
+     Remarque : une fois dans l'eau, le personnage ne change pas de position s’il risque de ne plus avoir pied (nos personnages ne sont pas suicidaires). Le personnage refusera simplement d'exécuter un tel ordre.
+
+=== tutor zt24_head
+Quêtes
+
+=== tutor zt24_head_screen1
+Accepter une quête
+
+=== tutor zt24_text_screen1
+    Vous voici dans la zone de jeu sans quête (appuyez sur la touche <Tab> pour afficher l'écran des quêtes et vous constaterez qu'il est vide).
+
+     Pour vous voir confier une quête, retournez au village et discutez avec les gens qui s'y trouvent.
+     
+     Remarque : ne croyez pas qu'une quête vous sera confiée à la fin de chaque conversation. Cependant, à défaut de quête dans la zone de jeu, cela signifie que quelqu'un au village souhaite vous parler pour vous confier une nouvelle quête.
+
+=== tutor zt2_head
+Commandes de la caméra
+
+=== tutor zt2_head_screen1
+Commandes (caméra)
+
+=== tutor zt2_head_screen2
+Limitations
+
+=== tutor zt2_text_screen1
+     Tout au long du jeu, vous disposez du contrôle intégral de la caméra. Vous pouvez la faire pivoter, la déplacer, effectuer un zoom avant ou arrière et suivre un personnage sélectionné. Vous pourrez voir le terrain et les objets de la zone de jeu, que vous les ayez déjà explorés ou non.
+
+     Pour déplacer la caméra, placez le curseur au bord de l'écran ou utilisez les touches fléchées.
+     Pour faire pivoter la caméra, utilisez le bouton droit de la souris ou appuyez sur <CTRL> + touches fléchées.
+     Pour effectuer un zoom avant ou arrière, utilisez la molette de la souris ou les touches Page Suiv. ou Page Préc.
+     Pour suivre un personnage, double-cliquez sur sa représentation en bas de l'écran ou appuyez sur la touche Origine.
+
+     Remarque : le mode poursuite est indiqué par un symbole qui s’affiche au-dessus de la représentation du personnage. Si vous déplacez la caméra, la poursuite s'arrête. Si vous faites pivoter la caméra ou effectuez un zoom avant ou arrière, cela n'a pas d'incidence.
+
+=== tutor zt2_text_screen2
+     Vous ne pouvez pas effectuer un zoom avant ou arrière de trop loin, de même que vous ne pouvez pas configurer la caméra avec précision à l'horizontale ou à la verticale. Cependant, pour obtenir une vue détaillée, appuyez sur la touche Page Préc. et maintenez-la enfoncée. Vous obtiendrez ainsi un meilleur agrandissement. Lorsque vous relâchez la touche, la caméra revient automatiquement à la valeur de zoom maximale prédéfinie.
+
+=== tutor zt3_head
+Quêtes et objectifs
+
+=== tutor zt3_head_screen1
+Quêtes et objectifs
+
+=== tutor zt3_head_screen2
+Fenêtre de texte
+
+=== tutor zt3_head_screen3
+Ecran des quêtes
+
+=== tutor zt3_text_screen1
+     Pour progresser dans le jeu, vous devez mener à bien différentes quêtes (certaines obligatoires et d'autres facultatives). Ces quêtes permettent à votre personnage d’acquérir de l’expérience et lui confèrent d'autres avantages.
+
+     Chaque nouvelle quête est signalée par un son et un message dans la fenêtre de texte. L'écran des quêtes propose également des informations détaillées - pour de plus amples informations, reportez-vous à l’écran suivant du didacticiel.
+
+=== tutor zt3_text_screen2
+     Après avoir mené à bien une quête, des messages encadrés apparaissent dans la fenêtre de texte. Ces messages décrivent les objectifs de la quête ainsi que d'autres informations décrites ultérieurement.
+
+     Remarque : pour ouvrir/fermer la fenêtre de texte, utilisez le bouton situé en haut à droite. Vous pouvez jouer que la fenêtre de texte soit ouverte ou fermée.
+
+=== tutor zt3_text_screen3
+     Les informations relatives à vos quêtes sont affichées dans l'écran des quêtes. En règle générale, chaque quête se compose de plusieurs missions et objectifs. Certains apparaissent d'emblée et d'autres ne s'affichent qu’une fois les missions précédentes accomplies. Notez qu'il n'est pas toujours nécessaire d'atteindre tous les objectifs pour mener à bien la quête.
+
+     Pour afficher l'écran des quêtes, utilisez la touche <TAB> ou cliquez sur l'icône en forme de parchemin encadré située en bas à droite. Pour revenir à la zone de jeu, cliquez sur le bouton situé en bas de l'écran des quêtes ou utilisez de nouveau la touche <TAB>.
+
+     Remarque : lorsque l’icône parchemin clignote en cours du jeu, cela signifie qu'une nouvelle quête ou qu'un nouvel objectif vous a été confié(e) et l'écran des quêtes contient de nouvelles informations. Ignorez-les à vos risques et périls. 
+
+=== tutor zt4_head
+Commandes de vitesse du jeu
+
+=== tutor zt4_head_screen1
+Vitesse du jeu
+
+=== tutor zt4_head_screen2
+Mode pause
+
+=== tutor zt4_text_screen1
+     Définissez la vitesse de jeu de votre choix en utilisant le panneau encadré situé en bas à droite de l'écran. Ce panneau indique votre vitesse de jeu actuelle et depuis combien de temps vous jouez.
+
+     Vous disposez de trois modes : vitesse "normale", vitesse "maximale" et "pause". En vitesse "maximale", paramètre standard, tous les personnages (les vôtres et les ennemis) se déplacent plus rapidement. En mode "pause", vous pouvez interrompre momentanément le jeu pour réfléchir.
+
+     Vous pouvez également modifier la vitesse du jeu via les touches clavier ci-dessous : 
+     Vitesse maximale : touche <+> du pavé num.
+     Vitesse normale : touche <-> du pavé num.
+     Pause : barre <ESPACE>
+
+=== tutor zt4_text_screen2
+     Le mode "pause" peut s'avérer très utile lors, par exemple, des situations de combat serré car il permet d'interrompre le jeu. Vous continuez de contrôler la caméra et de donner des ordres aux personnages, mais ils n'exécuteront ces ordres qu'après que vous ayez désactivé "pause". Utilisez ce mode pour évaluer la force de vos ennemis, choisir vos cibles et sélectionner des sorts.
+
+     Pour activer ou désactiver le mode "pause", utilisez la barre ESPACE. 
+
+=== tutor zt5_head
+Situations de combat
+
+=== tutor zt5_head_screen1
+Combat contre un ennemi
+
+=== tutor zt5_head_screen2
+Préparation d'une attaque
+
+=== tutor zt5_text_screen1
+     Parfois, même si vous vous efforcez d’éviter le combat, vous serez confronté à des ennemis que votre personnage devra combattre. En général, les ennemis n'apparaissent à l'écran qu'au moment où votre personnage les voit.
+
+     Pour attaquer un ennemi, placez le curseur sur celui-ci et lorsque le curseur se transforme en épée, cliquez. Votre personnage commencera à combattre cet ennemi jusqu'à ce que mort s'en suive. Il vous sera difficile de placer le curseur sur un ennemi se déplaçant rapidement et vous devrez dans ce cas utiliser le mode "Pause".
+
+     Remarque : dès que vous choisissez un ennemi, votre personnage commence à le combattre. Inutile de cliquer deux fois.
+
+=== tutor zt5_text_screen2
+     Vous pouvez ordonner à votre personnage de "Préparer l'attaque" pour le mettre en condition de combat et l'inciter ainsi à attaquer tous les ennemis présents dans son champ de vision.
+
+     Pour donner cet ordre, appuyez sur la touche <<CTRL>> et maintenez-la enfoncée, puis cliquez sur un point de destination. Votre personnage s'y rendra et commencera à combattre.
+
+     Remarque : lorsque vous choisissez ce mode, votre personnage attaque tous les ennemis situés dans son champ de vision. Lorsque vous tentez de l'envoyer vers un emplacement trop éloigné, il se défendra si, en chemin, il est attaqué ; après quoi, il s'arrêtera. Aussi, veillez à choisir un point de destination suffisamment proche.
+
+=== tutor zt6_head
+Après le combat
+
+=== tutor zt6_head_screen1
+Prise de trophées
+
+=== tutor zt6_text_screen1
+     Vous pouvez récupérer des trophées sur les cadavres de vos ennemis pour les vendre ultérieurement. Votre personnage risque de se plaindre, mais ne vous laissez pas intimider.
+
+     Pour fouiller un cadavre, placez-y le curseur, attendez qu'il se transforme et cliquez. Un message encadré s'affichera dans la fenêtre de texte pour décrire ce que vous venez de récupérer.
+
+     Remarque : les trophées sont stockés dans votre "inventaire", zone située hors de la zone de jeu et renfermant tous les effets personnels du héros. Vous ne pouvez pas examiner les trophées, changer de vêtements ou remplacer vos armes dans la zone de jeu.
+
+=== tutor zt7_head
+Utilisation de la magie
+
+=== tutor zt7_head_screen1
+Sort de soins
+
+=== tutor zt7_head_screen2
+Sorts (partie 1)
+
+=== tutor zt7_head_screen3
+Caractéristiques
+
+=== tutor zt7_head_screen4
+Sorts (partie 2)
+
+=== tutor zt7_text_screen1
+     A l'issue du combat, vous constaterez que votre personnage a subi des dégâts. Pour le soignez, jetez-lui un sort de soins.
+
+     Pour jeter un sort de soins, placez le curseur sur l'icône du sort, située à droite de l'écran, et cliquez. Lorsque le curseur se transforme, placez-le sur le personnage et cliquez une nouvelle fois.
+     
+Pour de plus amples informations sur l'utilisation de la magie et des sorts, reportez-vous à l'écran suivant du didacticiel.
+
+=== tutor zt7_text_screen2
+     Plusieurs sorts sont disponibles dans le jeu. Compte tenu de l'énergie qu'ils nécessitent, les sorts diminuent l'"Endurance" de votre personnage (indiquée par une barre bleue sous sa représentation). Pour récupérer de l'"Endurance", votre personnage doit se reposer. Aussi, accordez-lui un peu de temps pour se détendre, sans se déplacer ni combattre.
+
+     Pour jeter un sort sur un autre personnage, placez le curseur sur l'icône du sort située à droite de l'écran et cliquez. Lorsque le curseur se transforme, placez-le sur une cible disponible et cliquez.
+    Pour jeter un sort sur l'un de vos personnages, placez le curseur sur l'icône du sort située à droite de l'écran et cliquez. Lorsque le curseur se transforme, placez-le sur la représentation de votre personnage et cliquez une nouvelle fois.
+     Pour vous jeter un sort, double-cliquez sur l'icône du sort.
+
+=== tutor zt7_text_screen3
+     Lorsque vous utilisez les sorts, souvenez-vous de certaines règles élémentaires.
+
+     Chaque sort a sa propre portée. Si un personnage reçoit l'ordre de jeter un sort sur une cible située hors de sa portée, il tentera dans un premier temps de s'en approcher.
+     L'effet des sorts n'est pas immédiat. Un certain temps est en effet nécessaire pour qu’ils atteignent leurs cibles. Ce laps de temps dépend de la complexité du sort et de la santé du personnage (plus la santé des personnages est bonne, plus ils sont résistants).
+     Certains sorts affectent leurs cibles pendant plus longtemps, mais leurs effets ne peuvent pas être cumulés. En clair, il est inutile de jeter plusieurs fois le même sort sur un même personnage. Le personnage visé subit uniquement l’effet du sort le plus fort.
+
+=== tutor zt7_text_screen4
+     Vous pouvez également jeter des sorts via les touches clavier ci-dessous :
+
+     Jeter sort 1 : touche <1>
+     Jeter sort 2 : touche <2>
+     Jeter sort 3 : touche <3>
+     Jeter sort 4 : touche <4>
+     Jeter sort 5 : touche <5>
+     Jeter sort 6 : touche <6>
+     Jeter sort 7 : touche <7>
+     Jeter sort 8 : touche <8>
+
+     Remarque : appuyez sur ces touches, puis sur la touche <ALT> pour vous jeter les sorts.
+
+=== tutor zt8_head
+Enregistrement et chargement des parties
+
+=== tutor zt8_head_screen1
+Enregistrement et chargement des parties
+
+=== tutor zt8_head_screen2
+Enregistrement automatique
+
+=== tutor zt8_text_screen1
+     Vous pouvez à tout moment enregistrer et charger des parties via la fonction d'enregistrement rapide ou le menu ECHAP.
+
+     Pour un enregistrement rapide, utilisez la touche F5. La partie sera enregistrée sous le nom de "Sauvegarde rapide".
+     Pour un chargement rapide, utilisez la touche F8. La partie enregistrée sous le nom "Sauvegarde rapide" sera chargée.
+     
+     Utilisez les options d'enregistrement et de chargement du menu Echap pour enregistrer des parties sous les noms de votre choix.
+
+=== tutor zt8_text_screen2
+     Chaque fois que vous entrez dans la zone de jeu ou que vous quittez la carte globale, la partie est automatiquement enregistrée sous les noms "Sauvegarde automatique (lorsque vous entrez)" et "Sauvegarde automatique (lorsque vous quittez)".
+
+=== tutor zt9_head
+Mode Personnages
+
+=== tutor zt9_head_screen1
+Agressif/Défensif
+
+=== tutor zt9_head_screen2
+Caractéristiques
+
+=== tutor zt9_text_screen1
+     En fonction de la situation, votre personnage peut adopter l'un des deux modes suivants : Agressif ou Défensif.
+     
+     En mode Agressif, le personnage attaque systématiquement tous les ennemis qu'il rencontre.
+     En mode Défensif, le personnage n'attaque que si vous lui ordonnez d'attaquer un ennemi précis.
+
+     Pour passer d'un mode à l'autre, utilisez le panneau de commandes encadré situé en bas à gauche de l'écran ou le clavier :
+     Pour passer du mode "Agressif" au mode "Défensif", utilisez la touche <A>.
+
+     Remarque : vous pouvez attribuer chacun de ces modes à n'importe quel personnage.
+
+=== tutor zt9_text_screen2
+     En mode Défensif, le personnage arrête de combattre après avoir tué son ennemi ou reçu un nouvel ordre tel que "jeter un sort" ou "rejoindre un autre endroit". Pour reprendre le combat, vous devez réitérer votre ordre de combattre.
+
+     Utilisez ce mode si votre personnage doit récupérer de l'"Endurance" en présence d'un ennemi. Au combat, le personnage ne peut pas récupérer d'"Endurance".
+

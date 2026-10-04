@@ -1,6 +1,0 @@
-     You construct items in the constructor. To construct an item you need its blueprint and some material. The blueprint specifies what material you'll need. For example, you can't make a stone head spear using a bone spear blueprint.
-
-     You can use your own blueprints and materials or buy them in the shop - just like you buy any other items.
-     If you want details on any constructor slot, place the cursor over it and read the description which appears in the right hand panel.
-
-     Available slots are marked with a flickering frame. If you place a blueprint in an empty constructor, you'll be ready for construction. If you place an item there, it means you want to deconstruct it. See the next screens for more details on constructing/deconstructing items.

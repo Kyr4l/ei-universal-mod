@@ -1,0 +1,1301 @@
+# um-texts 1
+=== string action_accel
+Accelerated speed
+
+=== string action_camera1
+Camera position 1
+
+=== string action_camera2
+Camera position 2
+
+=== string action_camera3
+Camera position 3
+
+=== string action_camera4
+Camera position 4
+
+=== string action_camera_center
+Center
+
+=== string action_camera_down
+Camera back
+
+=== string action_camera_left
+Camera left
+
+=== string action_camera_norm
+Point camera North
+
+=== string action_camera_right
+Camera right
+
+=== string action_camera_track
+Tracking camera
+
+=== string action_camera_up
+Camera forward
+
+=== string action_camera_zoom_in
+Zoom in
+
+=== string action_camera_zoom_out
+Zoom out
+
+=== string action_cancel_target
+Cancel action
+
+=== string action_crawl
+Crawl
+
+=== string action_cs_body
+Aim at body
+
+=== string action_cs_head
+Aim at head
+
+=== string action_cs_lhand
+Aim at left arm
+
+=== string action_cs_lleg
+Aim at left leg
+
+=== string action_cs_rhand
+Aim at right arm
+
+=== string action_cs_rleg
+Aim at right leg
+
+=== string action_decel
+Normal speed
+
+=== string action_follow
+Follow character
+
+=== string action_item1
+Use quickitem 1
+
+=== string action_item2
+Use quickitem 2
+
+=== string action_item3
+Use quickitem 3
+
+=== string action_item4
+Use quickitem 4
+
+=== string action_obj
+View quests
+
+=== string action_pause
+Pause on/off
+
+=== string action_quickload
+Quick load
+
+=== string action_quicksave
+Quick save
+
+=== string action_run
+Run
+
+=== string action_select1
+Select character 1
+
+=== string action_select2
+Select character 2
+
+=== string action_select3
+Select character 3
+
+=== string action_select_all
+Select all characters
+
+=== string action_sneak
+Sneak
+
+=== string action_spell1
+Cast spell 1
+
+=== string action_spell2
+Cast spell 2
+
+=== string action_spell3
+Cast spell 3
+
+=== string action_spell4
+Cast spell 4
+
+=== string action_spell5
+Cast spell 5
+
+=== string action_spell6
+Cast spell 6
+
+=== string action_spell7
+Cast spell 7
+
+=== string action_spell8
+Cast spell 8
+
+=== string action_swarm
+Aggressive/Defensive mode
+
+=== string action_tutorial_script
+Tutorial
+
+=== string action_use_science
+Use/Steal
+
+=== string action_w_info1
+Information window: general view
+
+=== string action_w_info2
+Information window: hit locations
+
+=== string action_w_info3
+Information window: attributes
+
+=== string action_w_info4
+Information window: spell effects
+
+=== string action_w_minimap
+Show Mini-map
+
+=== string action_w_text1
+Text window: messages
+
+=== string action_w_text2
+Text window: collected items
+
+=== string action_walk
+Walk
+
+=== string action_weapon1
+Select weapon 1
+
+=== string action_weapon2
+Select weapon 2
+
+=== string action_weapon3
+Select weapon 3
+
+=== string action_weapon4
+Select weapon 4
+
+=== string attack
+Attack
+
+=== string attack_desc
+Your chances of hitting your enemy with a given weapon is shown here. This depends on the character's dexterity, skills and abilities with this weapon, as well as the properties of the weapon itself.
+
+=== string brief_complete_quest
+Quest completed:
+
+=== string brief_get_exp
+Experience gained:
+
+=== string brief_get_item
+Item gained:
+
+=== string brief_get_money
+Money gained:
+
+=== string brief_get_quest
+Quest received:
+
+=== string brief_get_specials_1
+Increased: Strength
+
+=== string brief_get_specials_2
+Increased: Sensory Magic Skill
+
+=== string brief_get_specials_3
+Increased: Use/Steal Skill
+
+=== string brief_get_specials_4
+Increased: Dexterity
+
+=== string brief_lost_item
+Item given:
+
+=== string camp_current_exp
+Your experience:
+
+=== string camp_current_money
+Your money:
+
+=== string camp_damage
+Damage
+
+=== string camp_damage_desc
+When hitting an enemy, this weapon inflicts damage between the minimum and maximum value of the 'damage' parameter. If the enemy is protected by armor, the damage inflicted by the weapon decreases to an amount equal to the armor parameter value. If the enemy's armor exceeds the maximum damage value, this weapon is rendered ineffective.
+
+=== string camp_dismiss
+Dismiss
+
+=== string camp_healing
+Healing price:
+
+=== string camp_item_constr
+Item construction price:
+
+=== string camp_item_deconstr
+Item deconstruction price:
+
+=== string camp_item_repair
+Item repair price:
+
+=== string camp_item_trade
+Deal value:
+
+=== string camp_level_up
+Increase skill price:
+
+=== string camp_repair_all
+Repair all items.
+
+=== string camp_spell_constr
+Spell construction price:
+
+=== string camp_spell_deconstr
+Spell deconstruction price:
+
+=== string camp_spell_trade
+Deal value:
+
+=== string cant_use
+You can't use this item here.
+
+=== string combat_complete_quest
+Quest completed:
+
+=== string combat_complete_subobj
+Objective completed:
+
+=== string combat_crippled
+Broken:
+
+=== string combat_failed_quest
+Quest failed:
+
+=== string combat_failed_subobj
+Objective failed:
+
+=== string combat_get_quest
+Quest received:
+
+=== string combat_get_subobj
+Objective received:
+
+=== string combat_picked_up
+You picked up:
+
+=== string consider_less1
+Respectable
+
+=== string consider_less10
+Very weak
+
+=== string consider_less11
+Very weak
+
+=== string consider_less12
+Very weak
+
+=== string consider_less13
+Very weak
+
+=== string consider_less14
+Very weak
+
+=== string consider_less15
+Very weak
+
+=== string consider_less16
+Very weak
+
+=== string consider_less17
+Feeble
+
+=== string consider_less18
+Feeble
+
+=== string consider_less19
+Feeble
+
+=== string consider_less2
+Weaker
+
+=== string consider_less20
+Feeble
+
+=== string consider_less21
+Feeble
+
+=== string consider_less22
+Feeble
+
+=== string consider_less23
+Feeble
+
+=== string consider_less24
+Feeble
+
+=== string consider_less25
+Feeble
+
+=== string consider_less3
+Weaker
+
+=== string consider_less4
+Weaker
+
+=== string consider_less5
+Very weak
+
+=== string consider_less6
+Very weak
+
+=== string consider_less7
+Very weak
+
+=== string consider_less8
+Very weak
+
+=== string consider_less9
+Very weak
+
+=== string consider_more0
+Equal
+
+=== string consider_more1
+Stronger
+
+=== string consider_more10
+Deadly
+
+=== string consider_more11
+Deadly
+
+=== string consider_more12
+Deadly
+
+=== string consider_more13
+Deadly
+
+=== string consider_more14
+Deadly
+
+=== string consider_more15
+Deadly
+
+=== string consider_more16
+Invincible
+
+=== string consider_more17
+Invincible
+
+=== string consider_more18
+Invincible
+
+=== string consider_more19
+Invincible
+
+=== string consider_more2
+Nasty
+
+=== string consider_more20
+Invincible
+
+=== string consider_more21
+Invincible
+
+=== string consider_more22
+Invincible
+
+=== string consider_more23
+Invincible
+
+=== string consider_more24
+Invincible
+
+=== string consider_more25
+Invincible
+
+=== string consider_more3
+Tough
+
+=== string consider_more4
+Dangerous
+
+=== string consider_more5
+Dangerous
+
+=== string consider_more6
+Very dangerous
+
+=== string consider_more7
+Very dangerous
+
+=== string consider_more8
+Very dangerous
+
+=== string consider_more9
+Very dangerous
+
+=== string damage_0
+Piercing
+
+=== string damage_1
+Slashing
+
+=== string damage_2
+Crushing
+
+=== string damage_3
+Fire
+
+=== string damage_4
+Acid
+
+=== string damage_5
+Lightning
+
+=== string damage_6
+General
+
+=== string defense
+Defense
+
+=== string defense_desc
+Your chances of successfully parrying an attack when using a given weapon is shown here. This depends on the character's dexterity, skills and abilities with this weapon, as well as the properties of the weapon itself.
+
+=== string delete
+Delete game
+
+=== string delete_msg
+Do you really want to delete this saved game?
+
+=== string difficulty_easy
+Novice
+
+=== string difficulty_hard
+Normal
+
+=== string dismiss_pers
+Dismiss character from the group
+
+=== string dismiss_pers_msg
+Do you really want to dismiss this character?
+
+=== string dmg_0
+Pirc
+
+=== string dmg_1
+Slsh
+
+=== string dmg_2
+Crsh
+
+=== string dmg_3
+Fire
+
+=== string dmg_4
+Acid
+
+=== string dmg_5
+Ltng
+
+=== string dmg_6
+Gen
+
+=== string end_game
+Game completed!
+
+=== string end_game_msg
+Game completed!
+
+=== string end_of_game
+Congratulations!
+
+=== string end_of_game_msg
+You have finished the demo!
+
+=== string error_zone_1
+Unable to load map
+
+=== string error_zone_2
+Unable to load map
+
+
+=== string failed_0
+Can't tame
+
+=== string failed_1
+Can't change weapon
+
+=== string failed_10
+You can't cast spells here
+
+=== string failed_2
+Can't attack
+
+=== string failed_3
+Can't change position
+
+=== string failed_4
+Path not found
+
+=== string failed_5
+Spell "Transfer Mana" can't be used
+
+=== string failed_6
+Spell "Transfer Mana" interrupted
+
+=== string failed_7
+Can't charm
+
+=== string failed_8
+Can't teleport
+
+=== string failed_9
+Can't cast spells
+
+=== string format_item1
+%s "%s"
+
+=== string format_item2
+%s "%s" (%d)
+
+=== string format_money
+Money (%d)
+
+=== string game_over
+Game over
+
+=== string game_over_msg
+Your main character is dead! Do you want to load a saved game?
+
+=== string game_paused
+Paused
+
+=== string go_2
+The guards have spotted you!
+
+=== string go_2_msg
+Do you want to load the game?
+
+=== string hl_arm
+Arm
+
+=== string hl_arms
+Arms
+
+=== string hl_arms_desc
+This protects the character's arms from being damaged by weapons or spells.  If either arm's health reaches 0, the character's attacks and spellcasting will be significantly slower.
+
+=== string hl_leg
+Leg
+
+=== string hl_legs
+Legs
+
+=== string hl_legs_desc
+This protects the character's legs from being damaged by weapons or spells. If any leg's health reaches 0, the character will move much slower.
+
+=== string hl_skull
+Head
+
+=== string hl_skull_desc
+This protects the character's head from being damaged by weapons or spells. If the head's health reaches 0, the character will die.
+
+=== string hl_torso
+Body
+
+=== string hl_torso_desc
+This protects the character's body from being damaged by weapons or spells. If the body's health reaches 0, the character will die.
+
+=== string infoitem_0
+Weight:
+
+=== string infoitem_1
+Material:
+
+=== string infoitem_10
+Range:
+
+=== string infoitem_11
+Area:
+
+=== string infoitem_12
+Duration:
+
+=== string infoitem_13
+Targets:
+
+=== string infoitem_14
+Complexity:
+
+=== string infoitem_15
+Damage:
+
+=== string infoitem_16
+Skill:
+
+=== string infoitem_17
+Class:
+
+=== string infoitem_18
+School:
+
+=== string infoitem_19
+Runes:
+
+=== string infoitem_2
+Energy:
+
+=== string infoitem_20
+Actions:
+
+=== string infoitem_21
+Immediately
+
+=== string infoitem_22
+Target
+
+=== string infoitem_23
+Resistance:
+
+=== string infoitem_24
+Vulnerability:
+
+=== string infoitem_25
+Armor:
+
+=== string infoitem_26
+m
+
+=== string infoitem_27
+s
+
+=== string infoitem_28
+Constant
+
+=== string infoitem_29
+Dexterity:
+
+=== string infoitem_3
+Durability:
+
+=== string infoitem_30
+Skill:
+
+=== string infoitem_31
+Ability:
+
+=== string infoitem_32
+Weapon:
+
+=== string infoitem_33
+Total:
+
+=== string infoitem_34
+Bows don't add to Defense.
+
+=== string infoitem_35
+Max. Complexity
+
+=== string infoitem_36
+Max. Stamina
+
+=== string infoitem_37
+Type:
+
+=== string infoitem_38
+Attack change:
+
+=== string infoitem_39
+Defense change:
+
+=== string infoitem_4
+Armor:
+
+=== string infoitem_40
+Fire magic
+
+=== string infoitem_41
+Lightning magic
+
+=== string infoitem_42
+Acid magic
+
+=== string infoitem_43
+Sensory magic
+
+=== string infoitem_44
+Astral magic
+
+=== string infoitem_5
+Spell:
+
+=== string infoitem_6
+(CTRL - view)
+
+=== string infoitem_7
+Stamina
+
+=== string infoitem_8
+Effect:
+
+=== string infoitem_9
+Speed:
+
+=== string infoskill_0
+Health:
+
+=== string infoskill_1
+Encumbrance:
+
+=== string infoskill_10
+Attack bonus:
+
+=== string infoskill_11
+Knowledge:
+
+=== string infoskill_12
+Night vision:
+
+=== string infoskill_13
+Bonus attribute
+
+=== string infoskill_14
+Health:
+
+=== string infoskill_15
+Stamina:
+
+=== string infoskill_16
+Regeneration
+
+=== string infoskill_17
+Restoration
+
+=== string infoskill_18
+Cost (experience):
+
+=== string infoskill_19
+Requires:
+
+=== string infoskill_2
+Stamina:
+
+=== string infoskill_20
+Based on:
+
+=== string infoskill_21
+(taken)
+
+=== string infoskill_22
+Backstab multiplier
+
+=== string infoskill_23
+Additional points:
+
+=== string infoskill_24
+Stamina points:
+
+=== string infoskill_3
+Actions:
+
+=== string infoskill_4
+Experience:
+
+=== string infoskill_5
+Skill:
+
+=== string infoskill_6
+Attack:
+
+=== string infoskill_7
+Damage:
+
+=== string infoskill_8
+Knowledge:
+
+=== string infoskill_9
+Use/Steal
+
+=== string infounit_0
+Health:
+
+=== string infounit_1
+Stamina:
+
+=== string infounit_10
+Armor:
+
+=== string infounit_11
+Resistance:
+
+=== string infounit_12
+Vulnerability:
+
+=== string infounit_13
+m
+
+=== string infounit_14
+Current weapon:
+
+=== string infounit_15
+Actions:
+
+=== string infounit_16
+The enemy is:
+
+=== string infounit_17
+Overload!
+
+=== string infounit_2
+Speed:
+
+=== string infounit_3
+Attack:
+
+=== string infounit_4
+Defense
+
+=== string infounit_5
+Spellcaster
+
+=== string infounit_6
+Sight:
+
+=== string infounit_7
+(tracking)
+
+=== string infounit_8
+To-hit:
+
+=== string infounit_9
+Damage:
+
+=== string item_armor_lower
+Light armor
+
+=== string item_armor_shape_lower
+Light armor blueprint
+
+=== string item_armor_shape_upper
+Heavy armor blueprint
+
+=== string item_armor_upper
+Heavy armor
+
+=== string item_loot
+Item for sale
+
+=== string item_material
+Material
+
+=== string item_modifier
+Rune
+
+=== string item_potion
+Potion
+
+=== string item_prototype
+Keystone
+
+=== string item_quest
+Quest item
+
+=== string item_spell
+Spell
+
+=== string item_wand
+Wand
+
+=== string item_wand_shape
+Wand blueprint
+
+=== string item_weapon
+Weapon
+
+=== string item_weapon_shape
+Weapon blueprint
+
+=== string key_already_mapped
+This key is already assigned!
+
+=== string key_already_mapped_msg
+Key <%s> has been assigned to "%s". Do you want to reassign it?
+
+=== string last_weapon
+Last weapon
+
+=== string last_weapon_msg
+Do you really want to completely deprive this character of weapons?
+
+=== string leave_zone
+Leave Game zone
+
+=== string leave_zone_msg
+Do you really want to leave the Game zone?
+
+=== string loot_item
+(This item is for sale only. You can't use it!)
+
+=== string magic_skills
+Knowledge of magic schools
+
+=== string magic_skills_desc
+Shows the maximum complexity for a given type of spell that the character can use. The amount of knowledge depends on the character's "intelligence", "skill" and "abilities" in this type of spell.
+
+=== string mattype_bone
+Bone
+
+=== string mattype_cloth
+Cloth
+
+=== string mattype_crystal
+Crystal
+
+=== string mattype_fur
+Fur
+
+=== string mattype_hide
+Hide
+
+=== string mattype_leather
+Leather
+
+=== string mattype_metal
+Metal
+
+=== string mattype_stone
+Stone
+
+=== string mode_itemconstr
+Item constructor
+
+=== string mode_itemrepair
+Items repair
+
+=== string mode_itemtrade
+Item shop
+
+=== string mode_spellconstr
+Spell constructor
+
+=== string mode_spells
+Skills/Spells
+
+=== string mode_spelltrade
+Spell shop
+
+=== string mode_weapons
+Equip character
+
+=== string move_0
+(Walks)
+
+=== string move_1
+(Levitates)
+
+=== string move_2
+(Stands)
+
+=== string move_3
+(Flies)
+
+=== string no_disc_space
+Not enough disk space!
+
+=== string no_disc_space_msg
+Not enough free disk space to run this game
+
+=== string no_way
+- We-can't leave anyone here!
+
+=== string no_zone
+No file
+
+=== string no_zone_msg
+MOB. File not found
+
+=== string notify_loading
+Loading game...
+
+=== string notify_saving
+Saving game...
+
+=== string obj_0
+Travel time:
+
+=== string obj_1
+days
+
+=== string obj_2
+hours
+
+=== string obj_completed
+(completed)
+
+=== string obj_cost_exp
+Completion will increase experience by:
+
+=== string obj_cost_money
+Money promised for completing:
+
+=== string obj_failed
+(failed)
+
+=== string option_autosave
+Autosave
+
+=== string option_brightness
+Brightness
+
+=== string option_camera_reverse_x
+Inverse camera left/right rotation
+
+=== string option_camera_reverse_y
+Inverse camera up/down movement
+
+=== string option_contrast
+Contrast
+
+=== string option_difficulty
+Difficulty
+
+=== string option_footprints
+Show footprints
+
+=== string option_gamma
+Gamma
+
+=== string option_group_actions
+Controls
+
+=== string option_group_camera
+Camera
+
+=== string option_group_cshots
+Combat
+
+=== string option_group_game
+Game
+
+=== string option_group_items
+Objects
+
+=== string option_group_select
+Selection
+
+=== string option_group_sens
+Sensitivity
+
+=== string option_group_sound
+Sound
+
+=== string option_group_spells
+Spells
+
+=== string option_group_video
+Graphics
+
+=== string option_group_windows
+Windows
+
+=== string option_marks
+Show blood
+
+=== string option_off
+Off
+
+=== string option_on
+On
+
+=== string option_power_kbd
+Keyboard sensitivity:
+
+=== string option_power_mouse
+Mouse sensitivity:
+
+=== string option_reverse_stereo
+Reverse stereo sound 
+
+=== string option_rubber_select
+Selection frame sensitivity:
+
+=== string option_scroll_border
+Scrolling sensitivity:
+
+=== string option_select_type
+Marker character selection:
+
+=== string option_shadow_buildings
+Object shadows
+
+=== string option_shadow_flora
+Tree shadows
+
+=== string option_shadow_other
+All shadows
+
+=== string option_shadow_units
+Character shadows
+
+=== string option_show_flying_hp
+Show hit result
+
+=== string option_show_path
+Show path
+
+=== string option_show_tutorial
+Show tutorial
+
+=== string option_switch_filters
+Inventory autofilters
+
+=== string option_tooltip_time
+Pop-up tips delay
+
+=== string option_volume_sfx
+Sound effects volume:
+
+=== string option_volume_stream
+Music volume:
+
+=== string option_volume_voice
+Speech volume:
+
+=== string overwrite
+Overwrite
+
+=== string overwrite_msg
+Do you really want to overwrite this game?
+
+=== string perk_level
+Level
+
+=== string perks
+Known Abilities
+
+=== string perks_av
+Available Abilities
+
+=== string quit
+Quit game
+
+=== string quit_msg
+Do you really want to quit this game?
+
+=== string reserved_00
+reserved
+
+=== string reserved_01
+reserved
+
+=== string reserved_02
+Game paused by player %s
+
+=== string reserved_03
+reserved
+
+=== string reserved_04
+Please wait…
+
+=== string reserved_05
+reserved
+
+=== string reserved_06
+reserved
+
+=== string reserved_07
+reserved
+
+=== string reserved_08
+reserved
+
+=== string reserved_09
+reserved
+
+=== string reserved_10
+Multiplayer
+
+=== string reserved_11
+Not available in Demo version
+
+=== string reserved_12
+reserved
+
+=== string reserved_13
+reserved
+
+=== string reserved_14
+reserved
+
+=== string reserved_15
+reserved
+
+=== string reserved_16
+reserved
+
+=== string reserved_17
+reserved
+
+=== string reserved_18
+reserved
+
+=== string reserved_19
+reserved
+
+=== string reserved_20
+reserved
+
+=== string save_auto_enter
+Autosave (when entering)
+
+=== string save_auto_exit
+Autosave (when leaving)
+
+=== string save_camp
+Camp
+
+=== string save_day
+Day
+
+=== string save_new
+SAVEGAME
+
+=== string save_quick
+QUICK SAVE
+
+=== string school_0
+Elemental Magic
+
+=== string school_1
+Sensory Magic
+
+=== string school_2
+Astral Magic
+
+=== string show_tutorial_key
+Show tutorial:
+
+=== string skills
+Skills
+
+=== string topic_prefix
+
+
+=== string tutorial
+Tutorial
+
+=== string version_name
+
+
+
+
+Version 1.2.0 / English Patch 0.0.7
