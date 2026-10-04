@@ -888,7 +888,6 @@ static void SaveScreenshot(const std::string& path, int w, int h) {
 // demand, only for characters the built-in font lacks. Missing fonts are skipped. Only TrueType
 // (glyf) or classic CFF fonts load; the variable "-VF" Noto CJK fonts (CFF2) do not.
 static void AddFallbackFonts(ImGuiIO& io) {
-    io.Fonts->AddFontDefault();
     static const char* const candidates[] = {
 #ifdef _WIN32
         "C:\\Windows\\Fonts\\segoeui.ttf", "C:\\Windows\\Fonts\\arial.ttf",   // Latin accents, Cyrillic
@@ -900,16 +899,21 @@ static void AddFallbackFonts(ImGuiIO& io) {
         "/usr/share/fonts/TTF/NanumGothic.ttf", "/usr/share/fonts/truetype/NanumGothic.ttf",
 #endif
     };
+    // The first Latin/Cyrillic system font is the MAIN font, for every character: merged behind the built-in pixel
+    // font, accented / Polish / Cyrillic letters came out in another size and style than the ASCII ones around them.
     bool haveLatin = false;
     for (const char* path : candidates) {
         std::error_code ec;
-        if (!fs::is_regular_file(path, ec)) continue;
-        bool korean = std::strstr(path, "algun") || std::strstr(path, "anum");
-        if (!korean && haveLatin) continue; // one Latin/Cyrillic font is enough
+        if (haveLatin || !fs::is_regular_file(path, ec) || std::strstr(path, "algun") || std::strstr(path, "anum")) continue;
+        haveLatin = io.Fonts->AddFontFromFileTTF(path, 15.0f) != nullptr;
+    }
+    if (!haveLatin) io.Fonts->AddFontDefault(); // no system font: the built-in one (ASCII only)
+    for (const char* path : candidates) { // Korean merged behind it
+        std::error_code ec;
+        if (!fs::is_regular_file(path, ec) || !(std::strstr(path, "algun") || std::strstr(path, "anum"))) continue;
         ImFontConfig config;
         config.MergeMode = true;
-        // Size 0: take the built-in font's size (1.92 refuses an explicit size when merging into it).
-        if (io.Fonts->AddFontFromFileTTF(path, 0.0f, &config) && !korean) haveLatin = true;
+        io.Fonts->AddFontFromFileTTF(path, 0.0f, &config); // size 0: the main font's (1.92 refuses another when merging)
     }
 }
 
