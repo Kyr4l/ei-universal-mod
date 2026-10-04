@@ -67,7 +67,7 @@ static void PrintTopLevelHelp() {
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
-              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
+              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
               << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>]  # ... on the Map Editor with these files (looking at that object)\n"
               << "  um-multitool gui --settings           # ... on the Settings tab\n"

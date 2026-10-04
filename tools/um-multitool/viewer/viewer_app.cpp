@@ -36,6 +36,7 @@
 #include "item_texts.hpp"
 #include "ui_items.hpp"
 #include "ui_units.hpp"
+#include "ui_objects.hpp"
 
 namespace viewer {
 
@@ -46,6 +47,7 @@ struct App {
     int seenTexturesVersion = -1; // lib.texturesVersion the scene's GL textures belong to
     ui::ItemTabState tabs[static_cast<int>(items::Category::Count)];
     ui::UnitsTabState units;    // the Units tab (index kUnitsTab)
+    objects::TabState objectsTab; // the Objects tab (index kUnitsTab + 1): map objects
     int activeTab = 0;          // 0..4 = item categories, kUnitsTab = units
     int requestTab = -1;        // select this tab on the next frame
     float sidebarWidth = 460.0f;
@@ -565,6 +567,15 @@ static void Sidebar(App& app, float width, float height) {
             ImGui::EndChild();
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Objects", nullptr, requested == kUnitsTab + 1 ? ImGuiTabItemFlags_SetSelected : 0)) {
+            if (app.activeTab != kUnitsTab + 1) { app.objectsTab.dirty = true; app.objectsTab.shown.clear(); } // others used the scene
+            app.activeTab = kUnitsTab + 1;
+            if (app.lib.viewerTab != kUnitsTab + 1 && requested < 0) { app.lib.viewerTab = kUnitsTab + 1; app.lib.SaveConfig(); }
+            ImGui::BeginChild("##tab", ImVec2(0, 0));
+            objects::ObjectsTab(app.lib, app.scene, app.objectsTab);
+            ImGui::EndChild();
+            ImGui::EndTabItem();
+        }
         ImGui::EndTabBar();
     }
     ImGui::EndChild();
@@ -599,7 +610,7 @@ static void CameraInput(App& app, ImVec2 size) {
 
 Context* Create(Library& lib) {
     Context* ctx = new Context(lib);
-    if (lib.viewerTab >= 0 && lib.viewerTab <= kUnitsTab) ctx->app.requestTab = lib.viewerTab; // as last time
+    if (lib.viewerTab >= 0 && lib.viewerTab <= kUnitsTab + 1) ctx->app.requestTab = lib.viewerTab; // as last time
     return ctx;
 }
 
@@ -612,6 +623,13 @@ void Destroy(Context* ctx) {
 bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin, bool naked,
               const std::string& clip, float frame) {
     App& app = ctx->app;
+    if (ui::units_detail::Lower(category) == "objects") { // a map object's figure (skin = a texture, else found)
+        app.requestTab = kUnitsTab + 1;
+        app.objectsTab.figure = item;
+        std::snprintf(app.objectsTab.texture, sizeof(app.objectsTab.texture), "%s", skin.c_str());
+        app.objectsTab.shown.clear();
+        return true;
+    }
     if (ui::units_detail::Lower(category) == "units") {
         const auto& ms = app.lib.unitsDb.monsters;
         for (size_t i = 0; i < ms.size(); ++i)
