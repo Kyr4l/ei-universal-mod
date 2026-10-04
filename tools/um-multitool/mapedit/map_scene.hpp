@@ -52,7 +52,7 @@ struct MapViewOptions {
     bool terrain = true, water = true, objects = true, units = true, markers = true, exits = true;
     bool dressUnits = true; // units on the default0 placeholder wear their race's skin and their equipment
     bool poseUnits = true;  // figures with animations stand in their idle pose (cidle01, frame 0), not the T-pose
-    bool animateUnits = true; // ... and play it (walking units in the patrol simulation: their walk clip)
+    bool animateUnits = false; // ... and play it (walking units in the patrol simulation: their walk clip)
     bool shadows = true;    // with the lighting on: the sun's shadows on the terrain
     bool navmesh = false;   // the game's walkability graph (AI_GRAPH), one node per 4 x 4 units
     int navLayer = 1;       // which of its 8 layers

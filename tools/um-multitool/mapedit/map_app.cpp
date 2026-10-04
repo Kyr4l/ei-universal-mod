@@ -331,6 +331,9 @@ struct App {
     std::string previewWanted, previewShown;   // what to show / what the texture shows
     GLuint previewTex = 0;
     float previewYaw = 30.0f;
+    // figure (lower case) -> the textures map objects of it wear, most used first (read once from the map folders)
+    std::map<std::string, std::vector<std::string>> figureTextures;
+    bool figureTexturesBuilt = false;
 
     // Offset: move the selection along one axis by an exact value
     bool offsetOpen = false;
@@ -617,6 +620,21 @@ static std::vector<ObjectState> CaptureObjects(const mob::File& f, const std::ve
 static void ApplyObjects(mob::File& f, const std::vector<ObjectState>& states) {
     for (const ObjectState& st : states) {
         if (st.index < 0 || st.index >= static_cast<int>(f.objects.size())) continue;
+        { // a unit's AI places (guard place: the guard and help circles; patrol and look points) move with it
+            const mob::Object& o = f.objects[st.index];
+            const float dx = st.position.x - o.position.x, dy = st.position.y - o.position.y;
+            const std::vector<mob::Logic> logics = o.logics; // (SetLogic rewrites the object)
+            if (o.kind == mob::Kind::Unit && (dx != 0 || dy != 0))
+                for (size_t gi = 0; gi < logics.size(); ++gi) {
+                    mob::Logic g = logics[gi];
+                    if (g.guardPlace.x != 0 || g.guardPlace.y != 0) { g.guardPlace.x += dx; g.guardPlace.y += dy; }
+                    for (mob::PatrolPoint& pt : g.patrol) {
+                        pt.position.x += dx; pt.position.y += dy;
+                        for (mob::LookPoint& l : pt.looks) { l.position.x += dx; l.position.y += dy; }
+                    }
+                    mob::SetLogic(f, st.index, static_cast<int>(gi), g);
+                }
+        }
         mob::SetPosition(f, f.objects[st.index], st.position);
         mob::SetComplection(f, f.objects[st.index], st.complection);
         mob::SetRotation(f, f.objects[st.index], st.rotation);
@@ -2178,6 +2196,7 @@ static void ObjectsTab(App& app) {
     { // editing the objects: the same as the keys
         const bool sel = app.scene.selectedFile == app.activeMob && !app.scene.selection.empty();
         if (ImGui::SmallButton("Add...")) { app.newOpen = true; app.newMessage.clear(); }
+        ImGui::SetItemTooltip("%s", ui::BindName(app.lib.mapKeys[config::kKeyNewObject]).c_str());
         ImGui::SameLine();
         ImGui::BeginDisabled(!sel);
         if (ImGui::SmallButton("Duplicate")) Duplicate(app);
@@ -3305,6 +3324,44 @@ static const char* FigureCategory(const std::string& lowerName) {
     return "Other";
 }
 
+// Which textures each figure wears in the maps (every .mob of the map folders, and the loaded ones): textures are
+// not named after their figures (nafltr59 wears tree01..03, stst19 skeleton00).
+static void BuildFigureTextures(App& app) {
+    if (app.figureTexturesBuilt) return;
+    app.figureTexturesBuilt = true;
+    std::map<std::string, std::map<std::string, int>> count;
+    auto add = [&](const mob::File& f) {
+        for (const mob::Object& o : f.objects)
+            if (mob::HasFigure(o.kind) && !o.templ.empty() && !o.primTexture.empty()) ++count[Lower(o.templ)][o.primTexture];
+    };
+    for (const auto& m : app.mobs) add(m->file);
+    for (const Library::MapFile& mf : app.lib.ListMapFiles()) {
+        if (mf.terrain) continue;
+        mob::File f;
+        if (mob::Load(mf.path, f)) add(f);
+    }
+    for (auto& kv : count) {
+        std::vector<std::pair<int, std::string>> v;
+        for (auto& t : kv.second) v.push_back({-t.second, t.first});
+        std::sort(v.begin(), v.end());
+        for (auto& t : v) if (app.lib.textureIndex.Has(t.second)) app.figureTextures[kv.first].push_back(t.second);
+    }
+}
+
+// A texture that fits a figure: the one the loaded maps' objects of that figure use, else one named like it, else like it without its last digits / part suffix, else the
+// first texture starting with its name ("stbuho1" -> stbuho1, stbuho, stbuho1_00...); "" when none.
+static std::string SuitedTexture(const App& app, const std::string& figure) {
+    const std::string low = Lower(figure);
+    const auto worn = app.figureTextures.find(low); // first: what the maps' objects of that figure wear most
+    if (worn != app.figureTextures.end() && !worn->second.empty()) return worn->second.front();
+    std::string base = low;
+    while (!base.empty() && std::isdigit(static_cast<unsigned char>(base.back()))) base.pop_back();
+    for (const std::string& want : {low, base})
+        if (!want.empty() && app.lib.textureIndex.Has(want)) return want;
+    for (const std::string& n : app.lib.textureIndex.names) if (!base.empty() && n.rfind(base, 0) == 0) return n;
+    return "";
+}
+
 // What the preview shows: "o:<figure>|<texture>" or "u:<unit>".
 static std::string PreviewKey(const App& app) {
     if (!app.newPreview) return "";
@@ -3338,11 +3395,11 @@ static void RenderPreview(App& app) {
         } else {
             const std::string v = app.previewWanted.substr(2);
             const size_t bar = v.find('|');
-            sc.LoadModel(app.lib, v.substr(0, bar), true);
+            const std::string figure = v.substr(0, bar);
+            sc.LoadModel(app.lib, figure, true);
             sc.textureName = bar == std::string::npos ? "" : v.substr(bar + 1);
-            if (sc.textureName.empty() && !app.mobs.empty()) { // the pattern's texture, else the figure's own name
-                sc.textureName = v.substr(0, bar);
-            }
+            sc.options.atlasUvs = Lower(figure).rfind("in", 0) == 0; // item figures use the 256 atlas, scenery its texture directly
+            if (sc.textureName.empty()) sc.textureName = SuitedTexture(app, figure);
         }
         app.previewShown = app.previewWanted;
     }
@@ -3367,10 +3424,11 @@ static void RenderPreview(App& app) {
 // the choice applied, placed under the mouse (else the view's centre).
 static void NewObjectWindow(App& app) {
     if (!app.newOpen) return;
-    ImGui::SetNextWindowSize(ImVec2(640, 520), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(ImVec2(640, 560), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 60, app.viewportMin.y + 60), ImGuiCond_Appearing);
     if (!ImGui::Begin("Add object / unit", &app.newOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
     if (app.mobs.empty()) { ImGui::TextDisabled("Load a map first."); ImGui::End(); return; }
+    BuildFigureTextures(app);
     const mob::File& f = app.mobs[app.activeMob]->file;
     if (ImGui::BeginTabBar("##newtabs")) {
         if (ImGui::BeginTabItem("Objects")) { app.newTab = 0; ImGui::EndTabItem(); }
@@ -3428,12 +3486,35 @@ static void NewObjectWindow(App& app) {
         ImGui::Dummy(ImVec2(256, 256));
     }
     if (app.newTab == 0) {
-        ImGui::SetNextItemWidth(200);
-        ImGui::InputTextWithHint("Texture", pattern >= 0 ? f.objects[pattern].primTexture.c_str() : "", app.newTexture, sizeof(app.newTexture));
-        ImGui::SetItemTooltip("Empty: the pattern's. Most objects use the texture named like their figure.");
+        const auto worn = app.figureTextures.find(Lower(app.newFigure));
+        const std::string suited = app.newFigure[0] ? SuitedTexture(app, app.newFigure) : "";
+        ImGui::TextUnformatted("Texture");
+        ImGui::SetNextItemWidth(256);
+        const std::string shown = app.newTexture[0] ? std::string(app.newTexture) : suited.empty() ? "(the pattern's)" : suited + " (found)";
+        if (ImGui::BeginCombo("##texture", shown.c_str(), ImGuiComboFlags_HeightLarge)) {
+            if (ImGui::Selectable("(found automatically)", app.newTexture[0] == '\0')) app.newTexture[0] = '\0';
+            if (worn != app.figureTextures.end() && !worn->second.empty()) ImGui::TextDisabled("Worn by this figure in the maps:");
+            if (worn != app.figureTextures.end())
+                for (const std::string& t : worn->second)
+                    if (ImGui::Selectable(t.c_str(), t == app.newTexture)) std::snprintf(app.newTexture, sizeof(app.newTexture), "%s", t.c_str());
+            ImGui::Separator();
+            static char texFilter[64] = "";
+            ImGui::SetNextItemWidth(-1);
+            ImGui::InputTextWithHint("##texfilter", "filter all the textures", texFilter, sizeof(texFilter));
+            const std::string tf = Lower(texFilter);
+            int listed = 0;
+            for (const std::string& t : app.lib.textureIndex.names) { // every texture of the sources
+                if (!tf.empty() && t.find(tf) == std::string::npos) continue;
+                if (++listed > 1500) { ImGui::TextDisabled("(more: filter to narrow)"); break; }
+                if (ImGui::Selectable((t + "##all").c_str(), t == app.newTexture)) std::snprintf(app.newTexture, sizeof(app.newTexture), "%s", t.c_str());
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::SetItemTooltip("Found automatically, the textures this figure wears in the maps (most used first), then every texture.");
     }
-    ImGui::SetNextItemWidth(200);
-    ImGui::InputTextWithHint("Name", pattern >= 0 ? mob::Utf8(f.objects[pattern].name).c_str() : "", app.newName, sizeof(app.newName));
+    ImGui::TextUnformatted("Name");
+    ImGui::SetNextItemWidth(256);
+    ImGui::InputTextWithHint("##name", pattern >= 0 ? mob::Utf8(f.objects[pattern].name).c_str() : "", app.newName, sizeof(app.newName));
     ImGui::EndGroup();
 
     if (pattern < 0) ImGui::TextDisabled(app.newTab == 1 ? "The active map has no unit to copy the other fields from." : "The active map has no object to copy the other fields from.");
@@ -5151,7 +5232,7 @@ static void Toolbar(App& app) {
             if (ImGui::Checkbox("Units: idle pose", &o.poseUnits)) app.scene.DropModels();
             ImGui::SameLine();
             ImGui::BeginDisabled(!o.poseUnits);
-            ImGui::Checkbox("animated", &o.animateUnits);
+            ImGui::Checkbox("Animated", &o.animateUnits);
             ImGui::EndDisabled();
             ImGui::SetItemTooltip("They play their animations at the game's 15 frames a second: idle; walking when they move in the patrol simulation");
             ImGui::SetItemTooltip("Units (and other animated figures) stand in their idle animation's first frame, as in the game; off: the T-pose");
@@ -5618,6 +5699,7 @@ static void Keys(App& app) {
         if (pressed(config::kKeyPaste)) Paste(app);
         if (pressed(config::kKeyDuplicate)) Duplicate(app);
         if (pressed(config::kKeyResetPaths)) ResetLogicPaths(app);
+        if (pressed(config::kKeyNewObject)) { app.newOpen = true; app.newMessage.clear(); }
     }
     if (pressed(config::kKeyUndo) && app.xf.mode == Transform::None) UndoRedo(app, false);
     if (pressed(config::kKeyRedo) && app.xf.mode == Transform::None) UndoRedo(app, true);

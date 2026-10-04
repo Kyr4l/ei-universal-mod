@@ -64,7 +64,7 @@ enum MapKey {
     kKeyForward, kKeyBack, kKeyLeft, kKeyRight, kKeyUp, kKeyDown, kKeyFast,   // held
     kKeyLogicMode, kKeySwitchMob, kKeyUnloadLast, kKeyResetCamera, kKeyLighting, kKeySave, kKeyUndo, kKeyRedo,
     kKeyMove, kKeyScale, kKeyFind, kKeySelectAll, kKeyRotate,
-    kKeyDelete, kKeyCopy, kKeyPaste, kKeyDuplicate, kKeyResetPaths, // pressed
+    kKeyDelete, kKeyCopy, kKeyPaste, kKeyDuplicate, kKeyResetPaths, kKeyNewObject, // pressed
     kMapKeyCount
 };
 constexpr int kFirstActionKey = kKeyLogicMode;
@@ -82,7 +82,7 @@ inline const char* MapKeyId(int k) {
     static const char* const ids[kMapKeyCount] = {"FORWARD", "BACK", "LEFT", "RIGHT", "UP", "DOWN", "FAST",
                                                   "LOGIC_MODE", "SWITCH_MOB", "UNLOAD_LAST", "RESET_CAMERA", "LIGHTING", "SAVE",
                                                   "UNDO", "REDO", "MOVE", "SCALE", "FIND", "SELECT_ALL", "ROTATE",
-                                                  "DELETE", "COPY", "PASTE", "DUPLICATE", "RESET_PATHS"};
+                                                  "DELETE", "COPY", "PASTE", "DUPLICATE", "RESET_PATHS", "NEW_OBJECT"};
     return ids[k];
 }
 inline const char* MapKeyLabel(int k) {
@@ -94,7 +94,8 @@ inline const char* MapKeyLabel(int k) {
                                                      "Select everything in the active map", "Rotate the selection (then X/Y/Z)",
                                                      "Delete the selection", "Copy the selection", "Paste (at the mouse)",
                                                      "Duplicate the selection (then move it)",
-                                                     "Clear the patrol paths of the selected units"};
+                                                     "Clear the patrol paths of the selected units",
+                                                     "Add an object or a unit (the Add window)"};
     return labels[k];
 }
 inline std::array<KeyBind, kMapKeyCount> DefaultMapKeys() {
@@ -105,7 +106,7 @@ inline std::array<KeyBind, kMapKeyCount> DefaultMapKeys() {
              {'S', kModCtrl | kModLetter}, {'Z', kModCtrl | kModLetter}, {'Y', kModCtrl | kModLetter},
              {71, 0}, {84, 0}, {'F', kModCtrl | kModLetter}, {'A', kModCtrl | kModLetter}, {82, 0},
              {261, 0}, {'C', kModCtrl | kModLetter}, {'V', kModCtrl | kModLetter}, {'D', kModCtrl | kModLetter},
-             {'P', kModCtrl | kModLetter}}};
+             {'P', kModCtrl | kModLetter}, {'N', kModCtrl | kModLetter}}};
 }
 
 struct Config {
