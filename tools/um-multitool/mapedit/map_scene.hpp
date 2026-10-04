@@ -628,6 +628,22 @@ public:
         return false;
     }
 
+    // The objects whose figure cannot be shown (not found or not readable), once their models were tried.
+    struct Missing { int file = 0, object = 0; std::string figure, error; };
+    std::vector<Missing> MissingFigures() const {
+        std::vector<Missing> out;
+        for (size_t fi = 0; fi < maps_.size(); ++fi)
+            for (size_t oi = 0; oi < maps_[fi]->objects.size(); ++oi) {
+                const mob::Object& o = maps_[fi]->objects[oi];
+                if (!mob::HasFigure(o.kind)) continue;
+                if (o.templ.empty()) { out.push_back({static_cast<int>(fi), static_cast<int>(oi), "", "no figure named"}); continue; }
+                const auto it = models_.find(ModelKey(o));
+                if (it != models_.end() && it->second.tried && !it->second.error.empty())
+                    out.push_back({static_cast<int>(fi), static_cast<int>(oi), o.templ, it->second.error});
+            }
+        return out;
+    }
+
     // Builds up to `budget` missing figures; call once per frame.
     void BuildSomeModels(const Library& lib, int budget) {
         modelsPending = 0;

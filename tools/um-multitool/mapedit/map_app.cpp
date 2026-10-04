@@ -39,6 +39,7 @@
 #include "checks.hpp"
 #include "lighting.hpp"
 #include "map_scene.hpp"
+#include "../viewer/scene.hpp"
 #include "navmesh_gen.hpp"
 #include "quest_file.hpp"
 #include "text_codec.hpp"
@@ -314,12 +315,22 @@ struct App {
     // Clipboard of copied objects (whole nodes), and the New object window
     struct Copied { std::vector<uint8_t> node; mob::Vec3 position; };
     std::vector<Copied> clipboard;
+    std::vector<MapScene::Missing> missing; // objects whose figure cannot be shown (#72)
+    int missingCheck = 0;
+    bool missingOpen = false;
     bool newOpen = false;
     char newFigure[128] = "";
     char newName[128] = "";
     char newTexture[128] = "";
     char newFilter[64] = "";
     std::string newMessage;
+    int newTab = 0, newCategory = 0;           // Add object / unit: 0 objects, 1 units; the figure category
+    std::string newUnit;                       // the database unit chosen
+    bool newPreview = true;
+    std::unique_ptr<Scene> preview;            // the 3D preview (the 3D Viewer's renderer), drawn in RenderGl
+    std::string previewWanted, previewShown;   // what to show / what the texture shows
+    GLuint previewTex = 0;
+    float previewYaw = 30.0f;
 
     // Offset: move the selection along one axis by an exact value
     bool offsetOpen = false;
@@ -1048,6 +1059,13 @@ static void FilesTab(App& app) {
     QuestList(app);
     QuestPanel(app);
     FolderList(app);
+    if (!app.missing.empty()) {
+        ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.35f, 1), "%zu object(s) whose figure cannot be shown", app.missing.size());
+        ImGui::SameLine();
+        if (ImGui::SmallButton(app.missingOpen ? "Hide##missing" : "Show##missing")) app.missingOpen = !app.missingOpen;
+        ImGui::SetItemTooltip("Their figure is not in the figure sources (Settings) or cannot be read: the game would not show them either\n"
+                              "if it lacks them too. Marked with a red ? in the view.");
+    }
     ImGui::SeparatorText("Terrain (.mpr)");
     if (app.terrainLoaded) {
         const mpr::Map& m = app.terrain;
@@ -2159,7 +2177,7 @@ static void ObjectsTab(App& app) {
     ImGui::InputTextWithHint("##filter", "filter: name, ID, prototype, figure or texture", app.filter, sizeof(app.filter));
     { // editing the objects: the same as the keys
         const bool sel = app.scene.selectedFile == app.activeMob && !app.scene.selection.empty();
-        if (ImGui::SmallButton("New...")) { app.newOpen = true; app.newMessage.clear(); }
+        if (ImGui::SmallButton("Add...")) { app.newOpen = true; app.newMessage.clear(); }
         ImGui::SameLine();
         ImGui::BeginDisabled(!sel);
         if (ImGui::SmallButton("Duplicate")) Duplicate(app);
@@ -3250,49 +3268,199 @@ static void Duplicate(App& app) {
         StartTransform(app, Transform::Move, ImGui::GetIO().MousePos, app.viewMin, app.viewSize);
 }
 
-// The New object window: a copy of a pattern (the selected object of the active map, else its first world
-// object, like ei_maper's "create by pattern") with the figure, texture and name chosen here.
+// The objects whose figure the editor cannot show: listed; a click selects and shows one.
+static void MissingWindow(App& app) {
+    if (++app.missingCheck % 60 == 1 && app.scene.modelsPending == 0) app.missing = app.scene.MissingFigures();
+    if (!app.missingOpen) return;
+    ImGui::SetNextWindowSize(ImVec2(520, 320), ImGuiCond_Appearing);
+    if (!ImGui::Begin("Figures that cannot be shown", &app.missingOpen)) { ImGui::End(); return; }
+    if (app.missing.empty()) ImGui::TextDisabled("None.");
+    if (ImGui::BeginTable("##miss", 4, ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable)) {
+        ImGui::TableSetupColumn("Map"); ImGui::TableSetupColumn("Object"); ImGui::TableSetupColumn("Figure"); ImGui::TableSetupColumn("Why");
+        ImGui::TableHeadersRow();
+        for (size_t k = 0; k < app.missing.size(); ++k) {
+            const MapScene::Missing& mi = app.missing[k];
+            if (mi.file < 0 || mi.file >= static_cast<int>(app.mobs.size())) continue;
+            const mob::File& f = app.mobs[static_cast<size_t>(mi.file)]->file;
+            if (mi.object >= static_cast<int>(f.objects.size())) continue;
+            ImGui::TableNextRow();
+            ImGui::TableNextColumn();
+            if (ImGui::Selectable((f.fileName + "##mi" + std::to_string(k)).c_str(), false, ImGuiSelectableFlags_SpanAllColumns)) SelectObject(app, mi.file, mi.object, true);
+            ImGui::TableNextColumn(); ImGui::TextUnformatted(checks::Label(f.objects[static_cast<size_t>(mi.object)]).c_str());
+            ImGui::TableNextColumn(); ImGui::TextUnformatted(mi.figure.empty() ? "-" : mi.figure.c_str());
+            ImGui::TableNextColumn(); ImGui::TextUnformatted(mi.error.c_str());
+        }
+        ImGui::EndTable();
+    }
+    ImGui::End();
+}
+
+// Figure categories by name prefix (the vanilla naming: stbuho1 = a building, naflli1 = a plant, initqi... = an item).
+static const char* FigureCategory(const std::string& lowerName) {
+    static const std::pair<const char*, const char*> kPrefixes[] = {
+        {"stbu", "Buildings"}, {"stwa", "Walls & fences"}, {"stbr", "Bridges"}, {"st", "Structures"}, {"jst", "Statues & ruins"},
+        {"j", "Ruins & props"}, {"nafl", "Plants"}, {"natr", "Trees"}, {"nast", "Stones"}, {"na", "Nature"},
+        {"in", "Items & props"}, {"co", "Containers"}, {"un", "Creature figures"}, {"ef", "Effects & markers"}};
+    for (const auto& pr : kPrefixes) if (lowerName.rfind(pr.first, 0) == 0) return pr.second;
+    return "Other";
+}
+
+// What the preview shows: "o:<figure>|<texture>" or "u:<unit>".
+static std::string PreviewKey(const App& app) {
+    if (!app.newPreview) return "";
+    if (app.newTab == 1) return app.newUnit.empty() ? "" : "u:" + app.newUnit;
+    return app.newFigure[0] ? std::string("o:") + app.newFigure + "|" + app.newTexture : "";
+}
+
+// Draws the preview into the back buffer's corner (RenderGl, before the map paints over it) and keeps it as a texture.
+static void RenderPreview(App& app) {
+    if (!app.newOpen || app.previewWanted.empty()) return;
+    const int size = 256;
+    if (!app.preview) app.preview = std::make_unique<Scene>();
+    Scene& sc = *app.preview;
+    if (app.previewShown != app.previewWanted) {
+        if (app.previewWanted.rfind("u:", 0) == 0) {
+            mob::Object o;
+            o.kind = mob::Kind::Unit;
+            o.prototype = ToCp(app.previewWanted.substr(2));
+            o.primTexture = "default0";
+            const units::Monster* m = app.lib.unitsDb.FindMonster(app.previewWanted.substr(2));
+            const units::Race* race = m ? app.lib.unitsDb.FindRace(m->race) : nullptr;
+            o.templ = race ? race->mask : "";
+            dress::Dress d = dress::Resolve(app.lib, o);
+            if (!d.on) sc.LoadModel(app.lib, o.templ, true);
+            else {
+                sc.LoadUnit(app.lib, o.templ, fig::Vec3{0.5f, 0.5f, 0.5f}, true,
+                            [&](const fig::Model& model, const fig::ModelPart& part) { return dress::PartShown(d, model, part); },
+                            [&](const fig::Model& model, const fig::ModelPart& part) { return dress::PartTexture(d, model, part); });
+                sc.textureName = d.skin;
+            }
+        } else {
+            const std::string v = app.previewWanted.substr(2);
+            const size_t bar = v.find('|');
+            sc.LoadModel(app.lib, v.substr(0, bar), true);
+            sc.textureName = bar == std::string::npos ? "" : v.substr(bar + 1);
+            if (sc.textureName.empty() && !app.mobs.empty()) { // the pattern's texture, else the figure's own name
+                sc.textureName = v.substr(0, bar);
+            }
+        }
+        app.previewShown = app.previewWanted;
+    }
+    sc.options.grid = false;
+    sc.camera.yawDeg = app.previewYaw;
+    glDisable(GL_SCISSOR_TEST);
+    sc.Draw(app.lib, 0, 0, size, size, 0.0f);
+    glFinish();
+    std::vector<uint8_t> rgba(static_cast<size_t>(size) * size * 4), flipped(rgba.size());
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, size, size, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+    for (int y = 0; y < size; ++y) std::memcpy(&flipped[static_cast<size_t>(y) * size * 4], &rgba[static_cast<size_t>(size - 1 - y) * size * 4], static_cast<size_t>(size) * 4);
+    if (!app.previewTex) glGenTextures(1, &app.previewTex);
+    glBindTexture(GL_TEXTURE_2D, app.previewTex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, size, size, 0, GL_RGBA, GL_UNSIGNED_BYTE, flipped.data());
+}
+
+// The Add object / unit window: a figure (by category, searchable) or a database unit (dressed as the game does),
+// a 3D preview, then a copy of a pattern of that kind (the selected object, else the active map's first one) with
+// the choice applied, placed under the mouse (else the view's centre).
 static void NewObjectWindow(App& app) {
     if (!app.newOpen) return;
-    ImGui::SetNextWindowSize(ImVec2(420, 480), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(ImVec2(640, 520), ImGuiCond_Appearing);
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 60, app.viewportMin.y + 60), ImGuiCond_Appearing);
-    if (!ImGui::Begin("New object", &app.newOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
-    if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); ImGui::End(); return; }
+    if (!ImGui::Begin("Add object / unit", &app.newOpen, ImGuiWindowFlags_NoCollapse)) { ImGui::End(); return; }
+    if (app.mobs.empty()) { ImGui::TextDisabled("Load a map first."); ImGui::End(); return; }
     const mob::File& f = app.mobs[app.activeMob]->file;
+    if (ImGui::BeginTabBar("##newtabs")) {
+        if (ImGui::BeginTabItem("Objects")) { app.newTab = 0; ImGui::EndTabItem(); }
+        if (ImGui::BeginTabItem("Units")) { app.newTab = 1; ImGui::EndTabItem(); }
+        ImGui::EndTabBar();
+    }
+    const mob::Kind want = app.newTab == 1 ? mob::Kind::Unit : mob::Kind::Object;
     int pattern = -1;
-    if (app.scene.selectedFile == app.activeMob && app.scene.selectedObject >= 0 && mob::HasFigure(f.objects[app.scene.selectedObject].kind))
+    if (app.scene.selectedFile == app.activeMob && app.scene.selectedObject >= 0 && f.objects[app.scene.selectedObject].kind == want)
         pattern = app.scene.selectedObject;
-    for (size_t i = 0; pattern < 0 && i < f.objects.size(); ++i) if (f.objects[i].kind == mob::Kind::Object) pattern = static_cast<int>(i);
-    if (pattern < 0) { ImGui::TextDisabled("The active map has no object to use as a pattern."); ImGui::End(); return; }
-    const mob::Object& p = f.objects[pattern];
-    ImGui::TextWrapped("Pattern: %s (every field is copied from it; select another object to use it instead)", checks::Label(p).c_str());
-    if (app.newFigure[0] == '\0') std::snprintf(app.newFigure, sizeof(app.newFigure), "%s", p.templ.c_str());
-    ImGui::SetNextItemWidth(-90);
-    ImGui::InputText("Figure", app.newFigure, sizeof(app.newFigure));
-    ImGui::SetNextItemWidth(-90);
-    ImGui::InputTextWithHint("Texture", p.primTexture.c_str(), app.newTexture, sizeof(app.newTexture));
-    ImGui::SetNextItemWidth(-90);
-    ImGui::InputTextWithHint("Name", mob::Utf8(p.name).c_str(), app.newName, sizeof(app.newName));
+    for (size_t i = 0; pattern < 0 && i < f.objects.size(); ++i) if (f.objects[i].kind == want) pattern = static_cast<int>(i);
+
+    ImGui::BeginChild("##pick", ImVec2(330, -ImGui::GetFrameHeightWithSpacing() * 2), ImGuiChildFlags_Borders);
     ImGui::SetNextItemWidth(-1);
-    ImGui::InputTextWithHint("##figfilter", "filter the figures", app.newFilter, sizeof(app.newFilter));
+    ImGui::InputTextWithHint("##figfilter", app.newTab == 1 ? "search the units" : "search the figures", app.newFilter, sizeof(app.newFilter));
     const std::string filter = Lower(app.newFilter);
-    if (ImGui::BeginListBox("##figures", ImVec2(-1, 200))) {
-        int shown = 0;
-        for (const std::string& name : app.lib.figureIndex.baseNames) {
-            if (!filter.empty() && Lower(name).find(filter) == std::string::npos) continue;
-            if (++shown > 400) { ImGui::TextDisabled("(more: filter to narrow)"); break; }
-            if (ImGui::Selectable(name.c_str(), name == app.newFigure)) std::snprintf(app.newFigure, sizeof(app.newFigure), "%s", name.c_str());
+    if (app.newTab == 0) {
+        static const char* const kCats[] = {"All", "Buildings", "Walls & fences", "Bridges", "Structures", "Statues & ruins", "Ruins & props", "Plants",
+                                            "Trees", "Stones", "Nature", "Items & props", "Containers", "Creature figures", "Effects & markers", "Other"};
+        ImGui::SetNextItemWidth(-1);
+        ImGui::Combo("##cat", &app.newCategory, kCats, IM_ARRAYSIZE(kCats));
+        if (ImGui::BeginListBox("##figures", ImVec2(-1, -1))) {
+            int shown = 0;
+            for (const std::string& name : app.lib.figureIndex.baseNames) {
+                const std::string low = Lower(name);
+                if (!filter.empty() && low.find(filter) == std::string::npos) continue;
+                if (app.newCategory > 0 && std::string(FigureCategory(low)) != kCats[app.newCategory]) continue;
+                if (++shown > 600) { ImGui::TextDisabled("(more: search to narrow)"); break; }
+                if (ImGui::Selectable(name.c_str(), name == app.newFigure)) { std::snprintf(app.newFigure, sizeof(app.newFigure), "%s", name.c_str()); app.newTexture[0] = '\0'; }
+            }
+            ImGui::EndListBox();
         }
-        ImGui::EndListBox();
+    } else {
+        if (app.lib.unitsDb.monsters.empty()) ImGui::TextDisabled("No database set in Settings: no units to pick.");
+        if (ImGui::BeginListBox("##units", ImVec2(-1, -1))) {
+            int shown = 0;
+            for (const units::Monster& m : app.lib.unitsDb.monsters) {
+                if (!filter.empty() && Lower(m.name).find(filter) == std::string::npos) continue;
+                if (++shown > 800) { ImGui::TextDisabled("(more: search to narrow)"); break; }
+                if (ImGui::Selectable(m.name.c_str(), m.name == app.newUnit)) app.newUnit = m.name;
+            }
+            ImGui::EndListBox();
+        }
     }
-    if (ImGui::Button("Create", ImVec2(120, 0))) {
+    ImGui::EndChild();
+    ImGui::SameLine();
+    ImGui::BeginGroup();
+    ImGui::Checkbox("3D preview", &app.newPreview);
+    app.previewWanted = PreviewKey(app);
+    if (app.newPreview && app.previewTex && !app.previewWanted.empty()) {
+        ImGui::Image(static_cast<ImTextureID>(static_cast<intptr_t>(app.previewTex)), ImVec2(256, 256));
+        ImGui::SetNextItemWidth(256);
+        ImGui::SliderFloat("##yaw", &app.previewYaw, -180.0f, 180.0f, "turn %.0f");
+    } else {
+        ImGui::Dummy(ImVec2(256, 256));
+    }
+    if (app.newTab == 0) {
+        ImGui::SetNextItemWidth(200);
+        ImGui::InputTextWithHint("Texture", pattern >= 0 ? f.objects[pattern].primTexture.c_str() : "", app.newTexture, sizeof(app.newTexture));
+        ImGui::SetItemTooltip("Empty: the pattern's. Most objects use the texture named like their figure.");
+    }
+    ImGui::SetNextItemWidth(200);
+    ImGui::InputTextWithHint("Name", pattern >= 0 ? mob::Utf8(f.objects[pattern].name).c_str() : "", app.newName, sizeof(app.newName));
+    ImGui::EndGroup();
+
+    if (pattern < 0) ImGui::TextDisabled(app.newTab == 1 ? "The active map has no unit to copy the other fields from." : "The active map has no object to copy the other fields from.");
+    else ImGui::TextDisabled("Other fields from: %s (select another %s to use it)", checks::Label(f.objects[pattern]).c_str(), app.newTab == 1 ? "unit" : "object");
+    const bool ready = pattern >= 0 && (app.newTab == 1 ? !app.newUnit.empty() : app.newFigure[0] != '\0');
+    ImGui::BeginDisabled(!ready);
+    if (ImGui::Button("Add", ImVec2(120, 0))) {
+        const mob::Object& p = f.objects[pattern];
         std::vector<uint8_t> node = mob::ObjectNode(f, pattern);
-        mob::NodeReplaceField(node, mob::kObjTemplate, mob::TextPayload(app.newFigure));
-        if (app.newTexture[0]) mob::NodeReplaceField(node, mob::kObjPrimTexture, mob::TextPayload(app.newTexture));
+        std::string what;
+        if (app.newTab == 1) {
+            const units::Monster* m = app.lib.unitsDb.FindMonster(app.newUnit);
+            const units::Race* race = m ? app.lib.unitsDb.FindRace(m->race) : nullptr;
+            mob::NodeReplaceField(node, mob::kUnitPrototype, mob::TextPayload(ToCp(app.newUnit)));
+            if (race && !race->mask.empty()) mob::NodeReplaceField(node, mob::kObjTemplate, mob::TextPayload(race->mask));
+            mob::NodeReplaceField(node, mob::kObjPrimTexture, mob::TextPayload("default0")); // dressed from the database
+            what = app.newUnit;
+        } else {
+            mob::NodeReplaceField(node, mob::kObjTemplate, mob::TextPayload(app.newFigure));
+            if (app.newTexture[0]) mob::NodeReplaceField(node, mob::kObjPrimTexture, mob::TextPayload(app.newTexture));
+            what = app.newFigure;
+        }
         if (app.newName[0]) mob::NodeReplaceField(node, mob::kObjName, mob::TextPayload(ToCp(app.newName)));
-        if (InsertCopies(app, {{node, p.position}}, false, PlacePoint(app))) app.newMessage = std::string("Created ") + app.newFigure;
+        if (InsertCopies(app, {{node, p.position}}, false, PlacePoint(app))) app.newMessage = "Added " + what + " (G to move it)";
     }
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("At the ground under the mouse, else the view's centre; press G to move it");
+    ImGui::EndDisabled();
+    ImGui::SetItemTooltip("At the ground under the mouse, else the view's centre; press G to move it");
     if (!app.newMessage.empty()) { ImGui::SameLine(); ImGui::TextDisabled("%s", app.newMessage.c_str()); }
     ImGui::End();
 }
@@ -4003,6 +4171,13 @@ static bool HeightBrushInput(App& app, ImVec2 local) {
 }
 
 // Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile.
+static void HeightBrushKeys(App& app) { // F: radius, Shift+F: strength (while held, moving the mouse sideways)
+    if (!app.heightBrush || ImGui::GetIO().WantTextInput || !ImGui::IsKeyDown(ImGuiKey_F)) return;
+    const float dx = ImGui::GetIO().MouseDelta.x;
+    if (ImGui::GetIO().KeyShift) app.heightStrength = std::clamp(app.heightStrength * std::pow(1.01f, dx), 0.2f, 20.0f);
+    else app.heightRadius = std::clamp(app.heightRadius * std::pow(1.01f, dx), 1.0f, 32.0f);
+}
+
 static void TerrainBrushKeys(App& app) {
     if (!app.tileBrush || ImGui::GetIO().WantTextInput) return;
     for (int i = 0; i < 8; ++i)
@@ -5044,6 +5219,42 @@ static void Toolbar(App& app) {
         ImGui::SetTooltip("Units' behaviours: patrol paths and points (yellow), look directions (blue), guard radius (orange),\n"
                           "sentry places (green), help radius (purple). Only units can be selected. %s",
                           ui::BindName(app.lib.mapKeys[config::kKeyLogicMode]).c_str());
+    // Blender-like modes: Object (select and edit objects), Tile paint, Sculpt; the active tool's settings follow.
+    ImGui::SameLine();
+    {
+        static const char* const kModes[] = {"Object mode", "Tile paint", "Sculpt"};
+        int mode = app.heightBrush ? 2 : app.tileBrush ? 1 : 0;
+        ImGui::SetNextItemWidth(120);
+        if (ImGui::BeginCombo("##mode", kModes[mode])) {
+            for (int i = 0; i < 3; ++i) {
+                const bool needsTerrain = i > 0 && !app.terrainLoaded;
+                if (ImGui::Selectable(kModes[i], i == mode, needsTerrain ? ImGuiSelectableFlags_Disabled : 0)) {
+                    app.tileBrush = i == 1;
+                    app.heightBrush = i == 2;
+                }
+                if (needsTerrain && ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("Load a terrain (.mpr) first");
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::SetItemTooltip("The editing mode, as in Blender: objects, painting the terrain's tiles, or shaping its ground");
+        if (mode == 1) {
+            ImGui::SameLine();
+            TileImage(app, std::max(app.brushTile, 0), ImGui::GetFrameHeight(), app.brushRotation);
+            ImGui::SameLine();
+            ImGui::TextDisabled("tile %d, turn %d (, .)  %s", app.brushTile, app.brushRotation * 90, app.brushWater ? "water" : "land");
+        } else if (mode == 2) {
+            static const char* const kTools[] = {"Raise", "Lower", "Smooth", "Flatten"};
+            for (int i = 0; i < 4; ++i) { ImGui::SameLine(); ImGui::RadioButton(kTools[i], &app.heightMode, i); }
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(110);
+            ImGui::SliderFloat("##radius", &app.heightRadius, 1.0f, 32.0f, "radius %.1f");
+            ImGui::SetItemTooltip("F + move the mouse left/right");
+            ImGui::SameLine();
+            ImGui::SetNextItemWidth(110);
+            ImGui::SliderFloat("##strength", &app.heightStrength, 0.2f, 20.0f, "strength %.1f");
+            ImGui::SetItemTooltip("Shift+F + move the mouse left/right");
+        }
+    }
     if (app.xf.mode != Transform::None) { // a move or scale in progress: how it works
         ImGui::SameLine();
         const char* axis[8] = {"free", "X", "Y", "X Y", "Z", "X Z", "Y Z", "X Y Z"};
@@ -5085,6 +5296,12 @@ static void Toolbar(App& app) {
 // The bar under the view: lighting (on/off, file, hour), the active map, what is loading and where the
 // mouse points.
 static void BottomBar(App& app) {
+    if (app.heightBrush || app.tileBrush) { // the mode's mouse and keys, as Blender's status bar
+        ImGui::TextColored(ImVec4(1.0f, 0.82f, 0.4f, 1), "%s", app.heightBrush
+            ? "Sculpt: left drag shapes the ground (one undo per stroke)  F radius  Shift+F strength  (Tools > Rebuild navmesh after)"
+            : "Tile paint: left drag paints  Alt+click picks a tile  1-8 quick tiles  , . turn the tile");
+        ImGui::SameLine();
+    }
     if (ImGui::Checkbox("Lighting", &app.lib.lightingOn)) app.lib.SaveConfig();
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Light the map with a lighting file of the Settings tab at the map's time of day. %s",
@@ -5390,7 +5607,7 @@ static void Keys(App& app) {
         else if (pressed(config::kKeyRotate)) { StartTransform(app, Transform::Rotate, io.MousePos, app.viewMin, app.viewSize); transformStarted = true; }
     }
     if (pressed(config::kKeyFind)) { app.findOpen = true; app.findFocus = true; }
-    if (app.xf.mode == Transform::None) TerrainBrushKeys(app);
+    if (app.xf.mode == Transform::None) { TerrainBrushKeys(app); HeightBrushKeys(app); }
     if (pressed(config::kKeySelectAll) && app.xf.mode == Transform::None) { SelectAll(app); app.requestTab = SideTab::Objects; }
     if (app.xf.mode == Transform::None) {
         if (pressed(config::kKeyDelete)) {
@@ -5523,6 +5740,12 @@ static void Overlays(App& app, ImVec2 min, ImVec2 size) {
         draw->AddRectFilled(ImVec2(at.x - 2, at.y - 1), ImVec2(at.x + ts.x + 2, at.y + ts.y + 1), IM_COL32(0, 0, 0, 150), 3.0f);
         draw->AddText(at, color, text.c_str());
     };
+    for (size_t k = 0; k < app.missing.size() && k < 400; ++k) { // objects without a figure shown
+        const MapScene::Missing& mi = app.missing[k];
+        if (mi.file < 0 || mi.file >= static_cast<int>(app.mobs.size())) continue;
+        const auto& objs = app.mobs[static_cast<size_t>(mi.file)]->file.objects;
+        if (mi.object < static_cast<int>(objs.size())) label(objs[static_cast<size_t>(mi.object)].position, 0.5f, IM_COL32(255, 90, 70, 255), "? " + (mi.figure.empty() ? std::string("(no figure)") : mi.figure));
+    }
     // The scripts' areas: their number and the objectives that use them.
     if (app.scene.options.scriptAreas) {
         for (const MapScene::ScriptArea& a : app.scene.scriptAreas) {
@@ -6550,6 +6773,7 @@ void DrawTab(Context* ctx) {
     app.viewportMax = ImVec2(min.x + size.x, min.y + size.y);
     app.drawnThisFrame = true;
     MinimapDialog(app);
+    MissingWindow(app);
     NewTerrainDialog(app);
     FindWindow(app);
     OffsetWindow(app);
@@ -6585,6 +6809,7 @@ void RenderGl(Context* ctx, int fbW, int fbH, float scale) {
             app.pendingFocusRect = quest::Rect{};
         }
     }
+    RenderPreview(app); // the Add window's 3D preview, in the back buffer before the map
     app.scene.BuildSomeModels(app.lib, 12);
     app.scene.AnimateModels(app.lib, ImGui::GetTime()); // units play their idle (or walk) animation
     if (app.minimapPending) { // drawn in the back buffer, which this frame then paints over
