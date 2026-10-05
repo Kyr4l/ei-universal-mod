@@ -37,7 +37,7 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4.4";
+static const char* const UM_VERSION = "1.4.4a";
 static bool g_enableAsiCheck = true;
 static bool g_enableEngine = true;   // UM_ENGINE: load um-engine.dll and install its re-implemented functions
 static bool g_enableKeyboardRewrites = true;
@@ -3849,6 +3849,10 @@ static void InstallEngineFunctions() {
     int installed = 0;
     for (int i = 0; i < count && list; ++i) {
         BYTE* at = reinterpret_cast<BYTE*>(list[i].address);
+        if (IsBadReadPtr(at, 8) || memcmp(at, list[i].expect, 8) != 0) {
+            LogLine("WARN", "um-engine: %s skipped, game.exe has other code at 0x%08lX (another build)", list[i].name, list[i].address);
+            continue;
+        }
         DWORD old = 0;
         if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) {
             LogLine("ERROR", "um-engine: cannot patch %s at 0x%08lX", list[i].name, list[i].address);

@@ -18,11 +18,14 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.1.0";
+static const char* const kEngineVersion = "0.1.2a";
+
+extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 
 static const UmEngineFunction kFunctions[] = {
     // { "FunctionName", 0x00400000, reinterpret_cast<void*>(&NewCode), 0 },
-    { nullptr, 0, nullptr, 0 } // end (kept so the table is never empty)
+    { "strlen", 0x006ECCB0, reinterpret_cast<void*>(&UmStrlen), 0, {0x8B, 0x4C, 0x24, 0x04, 0xF7, 0xC1, 0x03, 0x00} }, // the Russian game.exe (EIStarter/Engine)
+    { nullptr, 0, nullptr, 0, {} } // end (kept so the table is never empty)
 };
 
 static HMODULE g_module = NULL;
