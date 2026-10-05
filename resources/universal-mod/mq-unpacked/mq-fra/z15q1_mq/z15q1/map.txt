@@ -12,11 +12,11 @@ normal
 #exit 1
 bz3mpg 1
 #deploy
-110 317 108 321
+110 317 108 322
 #deployangle			
 45			
 #view
 45
 #remove
-105 317 108 321
+105 317 108 322
 

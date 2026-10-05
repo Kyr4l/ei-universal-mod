@@ -77,7 +77,7 @@ Script VTriger#1#1
   (
     KillScript(  ) 
     QStart( "z12q1" ) 
-    AddRectToArea( 1, 70, 183, 88, 207 ) 
+    AddRectToArea( 1, 70, 184.2, 88.7, 194.6 ) 
     QObjArea( 1 ) 
     QObjSeeObject( "GetObject(1000020)" ) 
     QObjUse( "GetObject(1000020)", 1 ) 

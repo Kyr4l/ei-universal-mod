@@ -6934,7 +6934,7 @@ std::vector<navgen::Object> NavObjects(const LayeredAssetSource& figures, const 
     if (missing) *missing = 0;
     for (const mob::File* f : maps)
         for (const mob::Object& o : f->objects) {
-            if (!mob::HasFigure(o.kind) || o.kind == mob::Kind::Unit) continue;
+            if (!mob::HasModel(o.kind) || o.kind == mob::Kind::Unit) continue;
             std::unique_ptr<LoadedModel>& m = models[lower(o.templ)];
             if (!m) {
                 m = std::make_unique<LoadedModel>();

@@ -9,7 +9,7 @@ zone25map zone25quest
 #exit 1
 bz1mpg 1
 #deploy
-212 12 219 17
+212 11 219 16
 #remove
 212 3 219 11
 #view

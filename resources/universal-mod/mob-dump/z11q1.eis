@@ -32,7 +32,7 @@ Script Triger2
   then
   (
     KillScript(  ) 
-    AddRectToArea( 1, 440, 300, 460, 320 ) 
+    AddRectToArea( 1, 450.1, 313.4, 467.2, 320.2 ) 
   )
 )
 

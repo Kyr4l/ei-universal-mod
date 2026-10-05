@@ -14,6 +14,8 @@ normal
 #exit 2
 bz3mpg 1
 #deploy
-75 174 90 194
+80 180 84 187
+#remove
+73 180 80 187
 #view
 26.6911

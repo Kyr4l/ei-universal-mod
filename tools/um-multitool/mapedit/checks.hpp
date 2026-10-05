@@ -379,7 +379,7 @@ inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
         // --- figures and textures
         for (int oi = 0; oi < static_cast<int>(f.objects.size()); ++oi) {
             const mob::Object& o = f.objects[oi];
-            if (!mob::HasFigure(o.kind)) continue;
+            if (!mob::HasModel(o.kind)) continue;
             if (in.figures && in.figures->AnyLoaded() && !o.templ.empty()) {
                 const std::string t = o.templ;
                 if (!in.figures->Contains(t + ".mod") && !in.figures->Contains(t + ".fig") && !in.figures->Contains(t + ".lnk"))

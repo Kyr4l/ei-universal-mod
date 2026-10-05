@@ -635,7 +635,7 @@ public:
         for (size_t fi = 0; fi < maps_.size(); ++fi)
             for (size_t oi = 0; oi < maps_[fi]->objects.size(); ++oi) {
                 const mob::Object& o = maps_[fi]->objects[oi];
-                if (!mob::HasFigure(o.kind)) continue;
+                if (!mob::HasModel(o.kind)) continue;
                 if (o.templ.empty()) { out.push_back({static_cast<int>(fi), static_cast<int>(oi), "", "no figure named"}); continue; }
                 const auto it = models_.find(ModelKey(o));
                 if (it != models_.end() && it->second.tried && !it->second.error.empty())
@@ -649,7 +649,7 @@ public:
         modelsPending = 0;
         for (size_t fi = 0; fi < maps_.size(); ++fi)
             for (const mob::Object& o : maps_[fi]->objects) {
-                if (!mob::HasFigure(o.kind) || o.templ.empty()) continue;
+                if (!mob::HasModel(o.kind) || o.templ.empty()) continue;
                 std::string key = ModelKey(o);
                 const bool walking = Walking(o);
                 if (walking && !models_.count(key + "|walk") && budget > 0) { --budget; BuildModel(lib, o, models_[key + "|walk"], true); }

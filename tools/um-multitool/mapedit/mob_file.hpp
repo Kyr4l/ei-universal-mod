@@ -126,6 +126,8 @@ inline const char* KindName(Kind k) {
 
 // Lights, particles and sounds have no figure; their position is absolute. The others stand on the
 // ground: their z is added to the terrain height under them.
+// Magic traps stand on the ground like figures but have no 3D model: only areas and cast points.
+inline bool HasModel(Kind k) { return k != Kind::MagicTrap && k != Kind::Light && k != Kind::Particle && k != Kind::Sound; }
 inline bool HasFigure(Kind k) { return k != Kind::Light && k != Kind::Particle && k != Kind::Sound; }
 
 struct Vec3 { float x = 0, y = 0, z = 0; };
