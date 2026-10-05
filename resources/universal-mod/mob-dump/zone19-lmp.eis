@@ -1,0 +1,367 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  HGate9 : object,
+  SCave : object,
+  MCK1 : object,
+  MC1 : object,
+  MCK2 : object,
+  MC2 : object,
+  MCK3 : object,
+  MC3 : object,
+  MCK4 : object,
+  MCK5 : object,
+  MC5 : object,
+  MCK6 : object,
+  MC6 : object,
+  MC4 : object,
+  HGate10 : object,
+  HadoganPrison00-997335 : object,
+  TCP-A : object,
+  TCP-B : object,
+  HGate8 : object,
+  HGate7 : object,
+  HGate6 : object,
+  HGate5 : object,
+  HGate4 : object,
+  HGate3 : object,
+  HGate2 : object,
+  HGate1 : object,
+  Try1 : object,
+  Shadows : group,
+  Heroes : group 
+)
+
+DeclareScript VCheck#0#1 (  this : object )
+DeclareScript VTriger#0#2 (  this : object )
+DeclareScript VCheck#0#4 (  this : object )
+DeclareScript VCheck#0#6 (  this : object )
+DeclareScript VCheck#0#7 (  this : object )
+DeclareScript VTriger#0#8 (  this : object )
+DeclareScript VTriger#0#10 (  this : object )
+DeclareScript VTriger#0#415 (  this : object )
+DeclareScript VCheck#0#12 (  this : object )
+DeclareScript VTriger#0#15 (  this : object )
+DeclareScript RRunway (  id : float )
+DeclareScript CreateRunPoint1 (  id : float,  x : float,  y : float,  z : float,  rad : float,  light : float )
+DeclareScript CreateRunPoint (  id : float,  xbase : float,  ybase : float,  dx : float,  dy : float,  alpha : float,  light : float )
+DeclareScript CreateRunway (  id : float,  xbase : float,  ybase : float,  dx : float,  dy : float )
+DeclareScript Portal1 ()
+DeclareScript Portal2 ()
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script VCheck#0#1
+(
+  if
+  (
+    IsEqual( GetLeverState( TCP-A ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#2( this ) 
+  )
+)
+
+Script VTriger#0#2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVar( 0, "PState", Add( GSGetVar( 0, "PState" ) , 1 )  ) 
+  )
+)
+
+Script VCheck#0#4
+(
+  if
+  (
+    IsEqual( GetLeverState( TCP-B ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#2( this ) 
+  )
+)
+
+Script VCheck#0#6
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "PState" ) , 1 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#8( this ) 
+  )
+)
+
+Script VCheck#0#7
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "PState" ) , 2 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#10( this ) 
+  )
+)
+
+Script VTriger#0#8
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    Portal1(  ) 
+  )
+)
+
+Script VTriger#0#10
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.gz19h.q72h.27", 1 ) 
+    Portal2(  ) 
+    Sleep( 150 ) 
+    VCheck#0#12( this ) 
+  )
+)
+
+Script VTriger#0#415
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    AddRectToArea( 1, 451, 316, 510, 352 ) 
+    AddRectToArea( 1, 396, 313, 451, 349 ) 
+    AddRectToArea( 1, 318, 310, 396, 346 ) 
+    AddRectToArea( 1, 309, 300, 318, 336 ) 
+    AddRectToArea( 1, 260, 309, 309, 347 ) 
+    AddRectToArea( 1, 224, 230, 255, 325 ) 
+    AddRectToArea( 1, 242, 298, 278, 334 ) 
+    AddRoundToArea( 1, 256, 335, 5 ) 
+    AddRoundToArea( 1, 238, 325, 5 ) 
+  )
+)
+
+Script VCheck#0#12
+(
+  if
+  (
+    IsEqual( GSGetVar( 0, "PState" ) , 2 ) 
+    IsLess( GetX( GetUnitOfPlayer( 0, 0 )  ) , 472 ) 
+    IsLess( GetY( GetUnitOfPlayer( 0, 0 )  ) , 63 ) 
+    IsGreater( GetX( GetUnitOfPlayer( 0, 0 )  ) , 440 ) 
+    IsGreater( GetY( GetUnitOfPlayer( 0, 0 )  ) , 61 ) 
+  )
+  then
+  (
+    KillScript(  ) 
+    VTriger#0#15( this ) 
+  )
+)
+
+Script VTriger#0#15
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    GSSetVarMax( 0, "q.gz19h.q72h.27", 2 ) 
+    GSSetVarMax( 0, "q.gz19h.q72h", 2 ) 
+  )
+)
+
+Script RRunway
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    SetParticleSourceSize( id, 0.3 ) 
+    SetParticleSourceSize( Add( id, 1 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 1 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 2 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 2 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 3 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 3 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 4 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 4 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 5 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 5 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 6 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 6 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 7 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 7 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 8 ) , 1 ) 
+    Sleep( 5 ) 
+    SetParticleSourceSize( Add( id, 8 ) , 0.3 ) 
+    SetParticleSourceSize( Add( id, 0 ) , 1 ) 
+    Sleep( 5 ) 
+    RRunway( id ) 
+  )
+)
+
+Script CreateRunPoint1
+(
+  if
+  (
+    IsEqual( light, 1 ) 
+  )
+  then
+  (
+    CreatePointLight( id, x, y, z, 10, 255, 255, 0 ) 
+  )
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    CreateParticleSource( id, x, y, z, rad, "PortalStar" ) 
+  )
+)
+
+Script CreateRunPoint
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    CreateRunPoint1( id, Add( xbase, Mul( dx, alpha )  ) , Add( ybase, Mul( dy, alpha )  ) , Add( 24.7, Mul( 2.4, alpha )  ) , 0.3, light ) 
+  )
+)
+
+Script CreateRunway
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    CreateRunPoint( Add( id, 0 ) , xbase, ybase, dx, dy, -1, 1 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 1 ) , xbase, ybase, dx, dy, -0.75, 0 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 2 ) , xbase, ybase, dx, dy, -0.5, 0 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 3 ) , xbase, ybase, dx, dy, -0.25, 0 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 4 ) , xbase, ybase, dx, dy, 0, 1 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 5 ) , xbase, ybase, dx, dy, 0.25, 0 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 6 ) , xbase, ybase, dx, dy, 0.5, 0 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 7 ) , xbase, ybase, dx, dy, 0.75, 0 ) 
+    Sleep( 2 ) 
+    CreateRunPoint( Add( id, 8 ) , xbase, ybase, dx, dy, 1, 1 ) 
+  )
+)
+
+Script Portal1
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    CreateRunPoint1( 10, 464.3, 68.9, 27, 1, 1 ) 
+    CreateRunPoint1( 11, 448.3, 54.4, 27, 1, 1 ) 
+    CreateRunPoint1( 12, 462.9, 54.1, 27, 1, 1 ) 
+  )
+)
+
+Script Portal2
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+    CreateRunway( 20, 441, 72.4, 5, -5.5 ) 
+    CreateRunway( 30, 447, 78.4, 5, -5.5 ) 
+    CreateParticleSource( 13, 457.6, 60.5, 25, 0.1, "Portal" ) 
+    Sleep( 150 ) 
+    CreatePointLight( 13, 457.6, 60.5, 31, 10, 255, 0, 255 ) 
+    SetParticleSourceSize( 13, 2 ) 
+    RRunway( 20 ) 
+    RRunway( 30 ) 
+  )
+)
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  HGate9 = GetObjectByID( "45066" ) 
+  SCave = GetObjectByID( "45158" ) 
+  MCK1 = GetObjectByID( "45621" ) 
+  MC1 = GetObjectByID( "45622" ) 
+  MCK2 = GetObjectByID( "45624" ) 
+  MC2 = GetObjectByID( "45625" ) 
+  MCK3 = GetObjectByID( "45626" ) 
+  MC3 = GetObjectByID( "45627" ) 
+  MCK4 = GetObjectByID( "45628" ) 
+  MCK5 = GetObjectByID( "45630" ) 
+  MC5 = GetObjectByID( "45631" ) 
+  MCK6 = GetObjectByID( "45632" ) 
+  MC6 = GetObjectByID( "45633" ) 
+  MC4 = GetObjectByID( "45629" ) 
+  HGate10 = GetObjectByID( "636600" ) 
+  HadoganPrison00-997335 = GetObjectByID( "997335" ) 
+  TCP-A = GetObjectByID( "43968" ) 
+  TCP-B = GetObjectByID( "43974" ) 
+  HGate8 = GetObjectByID( "44297" ) 
+  HGate7 = GetObjectByID( "44299" ) 
+  HGate6 = GetObjectByID( "44456" ) 
+  HGate5 = GetObjectByID( "44611" ) 
+  HGate4 = GetObjectByID( "44966" ) 
+  HGate3 = GetObjectByID( "44979" ) 
+  HGate2 = GetObjectByID( "44996" ) 
+  HGate1 = GetObjectByID( "45032" ) 
+)

@@ -63,6 +63,7 @@ struct Library {
     std::string mpFolder;                          // File Processing > MP: the multiplayer characters' folder
     std::map<std::string, std::string> dbCompileTo; // File Processing > DB: database -> its last "Compile to"
     float backgroundOpacity = 0.35f;
+    float markerOpacity = 0.5f;                    // the Map Editor's light, particle and sound cubes
     float mapHour = -1.0f;                         // the Map Editor's time of day (-1: the map's own)
     int windowW = 1400, windowH = 860, windowX = -100000, windowY = -100000; // the GUI window, see config.hpp
     bool windowMaximized = false;
@@ -127,7 +128,7 @@ struct Library {
         mapCameraSpeed = cfg.mapCameraSpeed;
         mapMouseOrbit = cfg.mapMouseOrbit;
         language = cfg.language;
-        guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour;
+        guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour; markerOpacity = cfg.markerOpacity;
         background = cfg.background;
         for (int i = 0; i < 5; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
@@ -168,7 +169,7 @@ struct Library {
         cfg.mapCameraSpeed = mapCameraSpeed;
         cfg.mapMouseOrbit = mapMouseOrbit;
         cfg.language = language;
-        cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour;
+        cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour; cfg.markerOpacity = markerOpacity;
         cfg.background = background;
         for (int i = 0; i < 5; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;

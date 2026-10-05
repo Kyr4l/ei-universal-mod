@@ -141,6 +141,7 @@ struct Config {
     std::string background;
     std::string tabBackground[5];                 // File Processing, 3D Viewer, Map Editor, Settings, UM DLL Connector
     float backgroundOpacity = 0.35f;
+    float markerOpacity = 0.5f;               // the Map Editor's light, particle and sound cubes
     float mapHour = -1.0f;                    // the Map Editor's time of day, -1 = the map's own
     int windowW = 1400, windowH = 860;        // the GUI window as it was closed (size when not maximized)
     int windowX = -100000, windowY = -100000; // its position (-100000: let the desktop place it)
@@ -234,6 +235,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "WINDOW_MAXIMIZED") cfg.windowMaximized = value == "true";
         else if (key == "VIEWER_TAB") cfg.viewerTab = std::atoi(value.c_str());
         else if (key == "MAP_SIDE_TAB") cfg.mapSideTab = std::atoi(value.c_str());
+        else if (key == "MAP_MARKER_OPACITY") cfg.markerOpacity = std::min(std::max(static_cast<float>(std::atof(value.c_str())), 0.0f), 1.0f);
         else if (key == "MAP_HOUR") cfg.mapHour = static_cast<float>(std::atof(value.c_str()));
         else if (key == "MAP_MOUSE_ORBIT") cfg.mapMouseOrbit = std::min(std::max(std::atoi(value.c_str()), 1), 4);
         else if (key == "MAP_MOUSE_PAN") cfg.mapMousePan = std::min(std::max(std::atoi(value.c_str()), 1), 4);
@@ -390,6 +392,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; Lighting on, and the lighting file it uses; (true/false)\n";
     f << "MAP_LIGHTING=" << flag(cfg.lightingOn) << "\n";
     if (!cfg.lightingChoice.empty()) f << "MAP_LIGHTING_INI=" << cfg.lightingChoice << "\n";
+    f << "; How opaque the Map Editor's light, particle and sound cubes are (0 to 1)\n";
+    f << "MAP_MARKER_OPACITY=" << cfg.markerOpacity << "\n";
     f << "; Time of day for lighting, in hours (-1: the map's own time).\n";
     f << "MAP_HOUR=" << cfg.mapHour << "\n";
     f << "; Speed of the movement keys (0.1-5, 1 = normal).\n";

@@ -339,7 +339,7 @@ public:
         if (terrain_ && options.terrain) DrawTerrainBatch(landLists_, false);
         if (options.objects || options.units) DrawObjects(lib);
         if (shadows && options.terrain) DrawShadows();
-        if (options.markers) DrawMarkers();
+        if (options.markers) DrawMarkers(lib.markerOpacity);
         if (terrain_ && options.water) DrawTerrainBatch(waterLists_, true);
         if (wireOver) {
             wirePass_ = true;
@@ -1281,9 +1281,12 @@ private:
     }
 
     // Lights (yellow), particles (magenta), sounds (cyan) and objects without a figure (red), as small cubes.
-    void DrawMarkers() const {
+    // The lights', particles' and sounds' cubes are drawn with `opacity` (Settings), the red ones opaque.
+    void DrawMarkers(float opacity) const {
         glDisable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for (size_t fi = 0; fi < maps_.size(); ++fi) {
             if (fi < visible_.size() && !visible_[fi]) continue;
             for (const mob::Object& o : maps_[fi]->objects) {
@@ -1293,15 +1296,16 @@ private:
                 if (figureless && !(o.kind == mob::Kind::Unit ? options.units : options.objects)) continue;
                 if (!figureless && !options.markers) continue;
                 switch (o.kind) {
-                case mob::Kind::Light: glColor3f(1.0f, 0.9f, 0.3f); break;
-                case mob::Kind::Particle: glColor3f(0.95f, 0.35f, 0.9f); break;
-                case mob::Kind::Sound: glColor3f(0.3f, 0.9f, 0.95f); break;
-                default: glColor3f(0.95f, 0.25f, 0.2f); break;
+                case mob::Kind::Light: glColor4f(1.0f, 0.9f, 0.3f, opacity); break;
+                case mob::Kind::Particle: glColor4f(0.95f, 0.35f, 0.9f, opacity); break;
+                case mob::Kind::Sound: glColor4f(0.3f, 0.9f, 0.95f, opacity); break;
+                default: glColor4f(0.95f, 0.25f, 0.2f, 1.0f); break;
                 }
                 fig::Vec3 p = DrawPosition(o, m);
                 Cube(p, figureless && m && !m->tried ? 0.15f : 0.35f);
             }
         }
+        glDisable(GL_BLEND);
     }
 
     static void Cube(const fig::Vec3& c, float h) {

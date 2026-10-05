@@ -416,6 +416,11 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
     if (ImGui::Checkbox("3D Viewer: item list on the right of the view", &lib.viewerSidebarRight)) lib.SaveConfig();
     if (ImGui::Checkbox("Map Editor: panel on the right of the view", &lib.mapSidebarRight)) lib.SaveConfig();
 
+    if (ImGui::SliderFloat("Map Editor: light, particle and sound opacity", &lib.markerOpacity, 0.0f, 1.0f, "%.2f")) {
+        lib.markerOpacity = std::min(std::max(lib.markerOpacity, 0.0f), 1.0f);
+        lib.SaveConfig();
+    }
+
     ImGui::SeparatorText("Background");
     {
         // A picture behind the menus: for every tab, or per main tab (which wins).
