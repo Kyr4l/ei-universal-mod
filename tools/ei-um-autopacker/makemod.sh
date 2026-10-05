@@ -543,7 +543,7 @@ compile_mod_dll() {
     log_ok "um.dll built successfully"
     log_step "Compiling the engine DLL (um-engine.dll, loaded by um.dll)"
     i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um-engine.dll" um-engine/*.cpp -I um-engine \
-        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter
+        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lws2_32
     log_ok "um-engine.dll built successfully"
 }
 

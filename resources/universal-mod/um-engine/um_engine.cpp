@@ -18,13 +18,18 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.1.2a";
+static const char* const kEngineVersion = "0.1.3";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
+struct sockaddr; struct sockaddr_in; struct GameBuffer; // net_udp.cpp
+extern "C" bool __attribute__((thiscall)) UmNetSendTo(unsigned* self, sockaddr* to, GameBuffer* buffer);
+extern "C" bool __attribute__((thiscall)) UmNetReceiveFrom(unsigned* self, sockaddr_in* from, GameBuffer* buffer);
 
 static const UmEngineFunction kFunctions[] = {
     // { "FunctionName", 0x00400000, reinterpret_cast<void*>(&NewCode), 0 },
     { "strlen", 0x006ECCB0, reinterpret_cast<void*>(&UmStrlen), 0, {0x8B, 0x4C, 0x24, 0x04, 0xF7, 0xC1, 0x03, 0x00} }, // the Russian game.exe (EIStarter/Engine)
+    { "NetSocket::SendTo", 0x00440B90, reinterpret_cast<void*>(&UmNetSendTo), 0, {0x8B, 0x44, 0x24, 0x08, 0x56, 0x57, 0x8B, 0x50} },
+    { "NetSocket::ReceiveFrom", 0x00440BE0, reinterpret_cast<void*>(&UmNetReceiveFrom), 0, {0x53, 0x56, 0x8B, 0x74, 0x24, 0x10, 0x57, 0x8B} },
     { nullptr, 0, nullptr, 0, {} } // end (kept so the table is never empty)
 };
 
