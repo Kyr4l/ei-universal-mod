@@ -28,6 +28,21 @@ inline std::string ToUtf8(const std::vector<uint8_t>& b) {
     }
     return o;
 }
+// Central European text (Polish, Czech...) in a file that is not UTF-8: its 8-bit letters sit inside Latin
+// words ("śnieżnego"), where CP1251 (Russian) would be Cyrillic words with no Latin letter touching them.
+// So: a non-ASCII letter byte touching an ASCII letter, for at least half of those bytes. The shared
+// punctuation of 0x80-0x9F (quotes, dashes) does not count.
+inline bool Looks(const std::vector<uint8_t>& b) {
+    size_t letters = 0, touching = 0;
+    auto ascii = [](uint8_t c) { return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'); };
+    for (size_t i = 0; i < b.size(); ++i) {
+        const uint8_t c = b[i];
+        if (!(c >= 0xA0 || c == 0x8C || c == 0x8F || c == 0x9C || c == 0x9F)) continue;
+        ++letters;
+        if ((i > 0 && ascii(b[i - 1])) || (i + 1 < b.size() && ascii(b[i + 1]))) ++touching;
+    }
+    return touching > 0 && touching * 2 >= letters;
+}
 inline uint8_t FromCodepoint(uint32_t cp) { // '?' when it has none
     if (cp < 0x80) return static_cast<uint8_t>(cp);
     for (int i = 0; i < 128; ++i) if (High()[i] == cp) return static_cast<uint8_t>(0x80 + i);

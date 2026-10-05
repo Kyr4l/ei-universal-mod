@@ -26,6 +26,7 @@ inline Encoding Detect(const std::vector<uint8_t>& b) {
     for (uint8_t c : b) if (c >= 0x80) { ascii = false; break; }
     if (ascii) return Encoding::Cp1251;
     if (texts::IsValidUtf8(b)) return Encoding::Utf8;
+    if (texts::LooksPolish(b)) return Encoding::Cp1250;
     if (texts::LooksKorean(b)) return Encoding::Cp949;
     return Encoding::Cp1251;
 }
@@ -33,7 +34,8 @@ inline Encoding Detect(const std::vector<uint8_t>& b) {
 inline std::string ToUtf8(const std::vector<uint8_t>& b, Encoding e) {
     if (e == Encoding::Utf8) return std::string(b.begin(), b.end());
     if (e == Encoding::Cp1250) return cp1250::ToUtf8(b);
-    if (e == Encoding::Cp949 || e == Encoding::Cp1251) return texts::DecodeToUtf8(b);
+    if (e == Encoding::Cp1251) return texts::DecodeCp1251(b);
+    if (e == Encoding::Cp949) return texts::DecodeToUtf8(b);
     return std::string(b.begin(), b.end());
 }
 

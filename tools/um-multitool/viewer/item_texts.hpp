@@ -11,7 +11,8 @@
 //   MATERIAL <Name>                    material loot
 //
 // The language is whatever the top text source holds; the encoding is detected per text:
-// UTF-8 (the mod's French texts), CP949 (Korean), else CP1251 (the original Russian game).
+// UTF-8 (the mod's French texts), CP949 (Korean), CP1250 (Polish, Central European: a letter with a
+// diacritic inside a Latin word), else CP1251 (the original Russian game).
 #pragma once
 
 #include <cstdint>
@@ -19,6 +20,7 @@
 #include <vector>
 
 #include "asset_source.hpp"
+#include "cp1250.hpp"
 #include "cp1251.hpp"
 #include "cp949_table.hpp"
 #include "item_db.hpp"
@@ -71,8 +73,32 @@ inline bool LooksKorean(const std::vector<uint8_t>& b) {
     return pairs > 0 && hangul * 10 >= pairs * 7;
 }
 
+// Polish / Central European (CP1250) rather than Korean or Russian. CP949 accepts ASCII letters as second
+// bytes, so Polish words ("śnieżnego": 0x9C 'n') can pass LooksKorean; real Korean text has both bytes of each
+// character in the KS X 1001 range (>= 0xA1), so Polish only wins when the text is not like that.
+inline bool LooksPolish(const std::vector<uint8_t>& b) {
+    if (!cp1250::Looks(b)) return false;
+    if (!LooksKorean(b)) return true;
+    for (size_t i = 0; i + 1 < b.size(); ++i)
+        if (b[i] >= 0x80) { if (b[i] < 0xA1 || b[i + 1] < 0xA1) return true; ++i; }
+    return false;
+}
+
+// Windows-1251 bytes as UTF-8, whatever they look like.
+inline std::string DecodeCp1251(const std::vector<uint8_t>& b) {
+    std::string out;
+    static uint32_t table[256] = {0};
+    if (!table['A']) {
+        for (int i = 0; i < 256; ++i) table[i] = static_cast<uint32_t>(i);
+        for (const auto& pair : cp1251::NonAsciiTable()) table[pair.byte] = pair.codepoint;
+    }
+    for (uint8_t c : b) AppendUtf8(out, table[c]);
+    return out;
+}
+
 inline std::string DecodeToUtf8(const std::vector<uint8_t>& b) {
     if (IsValidUtf8(b)) return std::string(b.begin(), b.end());
+    if (LooksPolish(b)) return cp1250::ToUtf8(b);
     std::string out;
     if (LooksKorean(b)) {
         for (size_t i = 0; i < b.size(); ++i) {
@@ -82,13 +108,7 @@ inline std::string DecodeToUtf8(const std::vector<uint8_t>& b) {
         }
         return out;
     }
-    static uint32_t table[256] = {0};
-    if (!table['A']) {
-        for (int i = 0; i < 256; ++i) table[i] = static_cast<uint32_t>(i);
-        for (const auto& pair : cp1251::NonAsciiTable()) table[pair.byte] = pair.codepoint;
-    }
-    for (uint8_t c : b) AppendUtf8(out, table[c]);
-    return out;
+    return DecodeCp1251(b);
 }
 
 // "Bone Short Bow" -> "bone_short_bow"

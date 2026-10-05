@@ -52,6 +52,7 @@ const char* EncodingName(Encoding e) {
 Encoding Detect(const std::vector<uint8_t>& b) {
     if (std::all_of(b.begin(), b.end(), [](uint8_t c) { return c < 0x80; })) return Encoding::Ascii;
     if (texts::IsValidUtf8(b)) return Encoding::Utf8;
+    if (texts::LooksPolish(b)) return Encoding::Cp1250;
     if (texts::LooksKorean(b)) return Encoding::Cp949;
     return Encoding::Cp1251;
 }
@@ -120,7 +121,8 @@ void AddFile(Pack& p, int source, const std::string& name, const std::vector<uin
     f.source = source;
     f.encoding = Detect(bytes);
     if (p.forced == Encoding::Cp1250 && f.encoding == Encoding::Cp1251) f.encoding = Encoding::Cp1250; // not told apart from CP1251
-    const std::string raw = f.encoding == Encoding::Cp1250 ? cp1250::ToUtf8(bytes) : texts::DecodeToUtf8(bytes);
+    const std::string raw = f.encoding == Encoding::Cp1250 ? cp1250::ToUtf8(bytes)
+                                  : f.encoding == Encoding::Cp1251 ? texts::DecodeCp1251(bytes) : texts::DecodeToUtf8(bytes);
     f.crlf = raw.find("\r\n") != std::string::npos;
     for (char c : raw) if (c != '\r') f.text += c;
     f.finalNewline = !f.text.empty() && f.text.back() == '\n';
@@ -332,14 +334,15 @@ void DrawTab(Library& lib) {
     }
     ImGui::SameLine();
     ImGui::Text("%s: %zu texts (%s%s)", p.language.c_str(), p.files.size(), EncodingName(p.encoding), p.crlf ? ", CRLF" : "");
-    { // CP1250 cannot be told from CP1251 by its bytes: the pack's language says it (kept per language)
+    { // CP1250 is detected from Polish words; this forces it for the texts where that does not show (kept per language)
         static std::map<std::string, bool> polish;
         bool on = p.forced == Encoding::Cp1250;
         ImGui::SameLine();
         if (ImGui::Checkbox("CP1250 (Polish)", &on)) { polish[p.language] = on; p.forced = on ? Encoding::Cp1250 : Encoding::Ascii; LoadPack(p); }
         else if (polish.count(p.language) && polish[p.language] != on) { p.forced = polish[p.language] ? Encoding::Cp1250 : Encoding::Ascii; LoadPack(p); }
         ImGui::SetItemTooltip("Reads and writes this language's 8-bit texts as Windows-1250 (Polish, Central European)\n"
-                              "instead of Windows-1251 (Russian): the two cannot be told apart from the bytes.");
+                              "instead of Windows-1251 (Russian). Polish words are recognised by themselves (a letter with a diacritic inside a\n"
+                              "Latin word); tick this for texts where that does not show, e.g. a single letter.");
     }
     for (const Source& s : p.sources)
         if (!s.ok) { ImGui::SameLine(); ImGui::TextColored(kMissingColor, "%s: %s", s.path.c_str(), s.error.c_str()); }
