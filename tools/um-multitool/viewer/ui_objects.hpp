@@ -141,7 +141,7 @@ inline void ObjectsTab(Library& lib, Scene& scene, TabState& st) {
             if (!filter.empty() && low.find(filter) == std::string::npos) continue;
             if (st.category > 0 && std::string(Category(low)) != cats[st.category]) continue;
             if (++shown > 2000) { ImGui::TextDisabled("(more: search to narrow)"); break; }
-            if (ImGui::Selectable(name.c_str(), name == st.figure)) { st.figure = name; st.texture[0] = '\0'; st.dirty = true; }
+            if (ImGui::Selectable(name.c_str(), name == st.figure) || ui::NavMovedHere()) { st.figure = name; st.texture[0] = '\0'; st.dirty = true; }
         }
         ImGui::EndListBox();
     }

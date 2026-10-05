@@ -7,6 +7,7 @@
 #include <string>
 
 #include "imgui.h"
+#include "imgui_internal.h" // NavMovedHere: the nav state
 
 #ifdef _WIN32
 #include <windows.h>
@@ -15,6 +16,13 @@
 #endif
 
 namespace ui {
+
+// The item just submitted got the keyboard/gamepad focus this frame (Up/Down in a list). A list that calls it
+// after each Selectable selects as the arrows move, as the item lists do, instead of needing Enter.
+inline bool NavMovedHere() {
+    ImGuiContext& g = *ImGui::GetCurrentContext();
+    return ImGui::IsItemFocused() && g.NavJustMovedToId != 0 && g.NavJustMovedToId == g.LastItemData.ID;
+}
 
 // Whether a background picture is shown this frame (gui_main.cpp): the panels that paint the plain
 // background then let it show through.

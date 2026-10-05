@@ -25,6 +25,7 @@
 #include "imgui.h"
 
 #include "viewer/item_texts.hpp"
+#include "viewer/ui_common.hpp"
 #include "viewer/library.hpp"
 #include "viewer/res_archive.hpp"
 
@@ -404,7 +405,8 @@ void DrawTab(Library& lib) {
             const ImVec4 color = s == Status::Missing ? kMissingColor : s == Status::OnlyHere ? kOnlyHereColor : s == Status::Same ? kSameColor
                                                                                                                                    : ImGui::GetStyleColorVec4(ImGuiCol_Text);
             ImGui::PushStyleColor(ImGuiCol_Text, color);
-            if (ImGui::Selectable((name + "##" + k).c_str(), g.selected == k)) g.selected = k;
+            // Up/Down select as they move (not only Enter), like the item lists of the 3D Viewer.
+            if (ImGui::Selectable((name + "##" + k).c_str(), g.selected == k) || ui::NavMovedHere()) g.selected = k;
             ImGui::PopStyleColor();
         }
     if (shown.empty()) ImGui::TextDisabled("Nothing to show");

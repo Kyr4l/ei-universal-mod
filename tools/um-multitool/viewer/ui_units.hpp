@@ -190,7 +190,7 @@ inline void UnitsTab(Library& lib, Scene& scene, UnitsTabState& st) {
         const units::Monster& m = lib.unitsDb.monsters[i];
         if (!f.empty() && Lower(m.name + " " + m.race).find(f) == std::string::npos) continue;
         ImGui::PushID(static_cast<int>(i)); // names repeat in the database
-        const bool clicked = ImGui::Selectable(m.name.c_str(), st.selected == static_cast<int>(i));
+        const bool clicked = ImGui::Selectable(m.name.c_str(), st.selected == static_cast<int>(i)) || NavMovedHere(); // Up/Down select too
         ImGui::PopID();
         if (clicked) {
             st.selected = static_cast<int>(i);

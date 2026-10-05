@@ -3761,6 +3761,11 @@ static void FindWindow(App& app) {
                                       ImGuiSelectableFlags_SpanAllColumns | ImGuiSelectableFlags_AllowDoubleClick)) {
                     if (ImGui::GetIO().KeyShift) app.scene.Toggle(app.activeMob, oi);
                     else SelectObject(app, app.activeMob, oi, ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left));
+                } else if (ui::NavMovedHere()) {
+                    SelectObject(app, app.activeMob, oi, false); // Up/Down select (the data shows), without moving the view
+                } else if (ImGui::IsItemFocused() && ImGui::IsKeyPressed(ImGuiKey_F, false) && !ImGui::GetIO().WantTextInput &&
+                           !ImGui::GetIO().KeyCtrl && !ImGui::GetIO().KeyShift && !ImGui::GetIO().KeyAlt) {
+                    SelectObject(app, app.activeMob, oi, true); // F: focus the view on it, as a double click does
                 }
                 ImGui::PopID();
                 ImGui::TableNextColumn();
