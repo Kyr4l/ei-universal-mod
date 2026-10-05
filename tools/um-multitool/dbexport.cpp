@@ -144,14 +144,18 @@ sheetio::Cell Text(const std::string& text) {
 // SpreadsheetNumber - so only the exact bits it gives are written (another NaN would not come back the same).
 sheetio::Cell FloatCell(float f) {
     if (std::isfinite(f)) return Number(FloatText(f));
-    const char* text = std::isnan(f) ? "nan" : f > 0 ? "inf" : "-inf";
-    const float back = static_cast<float>(SpreadsheetNumber(text));
+    std::string text = std::isnan(f) ? "nan" : f > 0 ? "inf" : "-inf";
+    float back = static_cast<float>(SpreadsheetNumber(text));
     if (std::memcmp(&back, &f, 4) != 0) {
+        // Not the plain NaN (the Windows compiler gives 0xFFFFFFFF): the bits spelled out.
         uint32_t bits;
         std::memcpy(&bits, &f, 4);
-        char msg[96];
-        std::snprintf(msg, sizeof(msg), "a NaN float (bits 0x%08X) that the spreadsheet text \"nan\" would not give back", bits);
-        throw std::runtime_error(msg);
+        char buf[24];
+        std::snprintf(buf, sizeof(buf), "nan(0x%08X)", bits);
+        text = buf;
+        back = static_cast<float>(SpreadsheetNumber(text));
+        if (!std::isnan(f) || std::memcmp(&back, &f, 4) != 0)
+            throw std::runtime_error("a float (bits 0x" + std::string(buf + 6, 8) + ") that no spreadsheet text gives back");
     }
     return Text(text);
 }
@@ -291,7 +295,12 @@ std::vector<BlockRows> DecodeDatabase(const std::string& dbName, const std::vect
                         if (!empty) cells[{fd->fieldId, 0}] = c;
                     }
                 } else {
-                    DecodeGeneralField(dbName, *fd, field, cells);
+                    try {
+                        DecodeGeneralField(dbName, *fd, field, cells);
+                    } catch (const std::exception& e) {
+                        throw std::runtime_error(sheetName + " record " + std::to_string(br.rows.size() + 1) + " field " +
+                                                 std::to_string(fd->fieldId) + ": " + e.what());
+                    }
                 }
             }
             // The fields DBEditor never writes (QuickItems' ByteList) or always writes empty (QuickItems'

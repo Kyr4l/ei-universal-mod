@@ -3,6 +3,9 @@
 #pragma once
 
 #include <cctype>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
 #include <cstdlib>
 #include <limits>
 #include <map>
@@ -45,6 +48,14 @@ inline double SpreadsheetNumber(const std::string& text) {
     std::string word;
     for (size_t k = i; k < text.size() && std::isalpha(static_cast<unsigned char>(text[k])); ++k)
         word += static_cast<char>(std::tolower(static_cast<unsigned char>(text[k])));
+    // "nan(0xBITS)": a NaN with exactly these float bits (dbexport writes it for the NaNs that are not the
+    // plain one, e.g. 0xFFFFFFFF, so that the workbook compiles back to the same bytes).
+    if (word == "nan" && text.compare(i + 3, 3, "(0x") == 0) {
+        const uint32_t bits = static_cast<uint32_t>(std::strtoul(text.c_str() + i + 6, nullptr, 16));
+        float f;
+        std::memcpy(&f, &bits, 4);
+        if (std::isnan(f)) return static_cast<double>(f);
+    }
     if (word == "nan" || word.rfind("nan", 0) == 0)
         return negative ? -std::numeric_limits<double>::quiet_NaN() : std::numeric_limits<double>::quiet_NaN();
     if (word == "inf" || word == "infinity")
