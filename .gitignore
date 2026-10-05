@@ -4,9 +4,10 @@
 # vscode env
 .vscode
 
-# um.dll generated files
+# um-dll/um-engine generated files
 Universal-Mod/um.cfg
 Universal-Mod/um.log
+Universal-Mod/um-engine.cfg
 
 # UM saves
 Universal-Mod/mp/*
@@ -38,10 +39,7 @@ tools/um-multitool/vendor/glfw-src-xp33/
 tools/um-multitool/vendor/glfw-mingw-xp32/
 tools/um-multitool/vendor/glfw-mingw-xp64/
 
-# um-modelviewer's remembered source paths (local machine-specific, not shared)
-tools/um-standalone-tools/um-modelviewer/um-modelviewer.cfg
-
-# Copilot resources
+# CoPilot Resources
 _cpr
 
 # um-multitool 3D Viewer settings (local machine-specific)
