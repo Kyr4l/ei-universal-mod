@@ -541,6 +541,10 @@ compile_mod_dll() {
     i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um.dll" "${dll_sources[@]}" -I um-dll \
         -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lgdi32 -lws2_32
     log_ok "um.dll built successfully"
+    log_step "Compiling the engine DLL (um-engine.dll, loaded by um.dll)"
+    i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um-engine.dll" um-engine/*.cpp -I um-engine \
+        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter
+    log_ok "um-engine.dll built successfully"
 }
 
 sync_to_release_directory() {

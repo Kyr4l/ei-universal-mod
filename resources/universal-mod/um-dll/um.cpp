@@ -3,6 +3,7 @@
 // Logging, crash reporting, keyboard rewrite logging, and anti-crash
 // behavior are configured through um.cfg beside the DLL or environment variables.
 
+#include "../um-engine/um_engine.h"
 #include <winsock2.h> // before windows.h (the DLL server, dll_server.hpp)
 #include <windows.h>
 #include <dbghelp.h>
@@ -36,8 +37,9 @@ static HHOOK g_keyboardHook = NULL;
 static HMODULE g_dllModule = NULL;
 static BYTE g_reloadConfigKey = VK_F12;
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4.3a";
+static const char* const UM_VERSION = "1.4.4";
 static bool g_enableAsiCheck = true;
+static bool g_enableEngine = true;   // UM_ENGINE: load um-engine.dll and install its re-implemented functions
 static bool g_enableKeyboardRewrites = true;
 static bool g_enableKeyboardRewriteLogging = false;
 static bool g_enableCrashLogging = true;
@@ -565,6 +567,8 @@ static SettingDef FpsMarksSetting(const char* key, double* target, int* countTar
 static const SettingDef kSettings[] = {
     BoolSetting("SPELLADDON_ASI_CHECK", &g_enableAsiCheck, true, true,
         "; Require SpellAddonX.asi beside game.exe; (true/false)"),
+    BoolSetting("UM_ENGINE", &g_enableEngine, true, true,
+        "; Load um-engine.dll and use its re-implemented game functions (each one switched in um-engine.cfg); (true/false)"),
 
     BoolSetting("KEYBOARD_REWRITES", &g_enableKeyboardRewrites, true, true,
         "; Rewrite backtick and number-row input as US-QWERTY keys; (true/false)",
@@ -3825,6 +3829,41 @@ static bool PatchImportedFunction(HMODULE module, const char* functionName,
 }
 
 // Patch game.exe imports for the file APIs used by the file-I/O logger.
+// um-engine.dll (beside um.dll): each function it lists replaces the game's own with a jump to the new code.
+static void InstallEngineFunctions() {
+    char path[MAX_PATH] = "";
+    if (!g_dllModule || GetModuleFileNameA(g_dllModule, path, sizeof(path)) == 0) return;
+    std::string enginePath = path;
+    const size_t slash = enginePath.find_last_of("\\/");
+    enginePath = (slash == std::string::npos ? std::string() : enginePath.substr(0, slash + 1)) + "um-engine.dll";
+    HMODULE engine = LoadLibraryA(enginePath.c_str());
+    if (!engine) {
+        LogLine("ERROR", "um-engine.dll not found or not loadable (%s); the game's own functions are used", enginePath.c_str());
+        return;
+    }
+    const auto version = reinterpret_cast<UmEngineVersionFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineVersion")));
+    const auto functions = reinterpret_cast<UmEngineFunctionsFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineFunctions")));
+    if (!functions) { LogLine("ERROR", "um-engine.dll has no UmEngineFunctions export"); return; }
+    int count = 0;
+    const UmEngineFunction* list = functions(&count);
+    int installed = 0;
+    for (int i = 0; i < count && list; ++i) {
+        BYTE* at = reinterpret_cast<BYTE*>(list[i].address);
+        DWORD old = 0;
+        if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) {
+            LogLine("ERROR", "um-engine: cannot patch %s at 0x%08lX", list[i].name, list[i].address);
+            continue;
+        }
+        const DWORD relative = reinterpret_cast<DWORD>(list[i].replacement) - (list[i].address + 5);
+        at[0] = 0xE9; // jmp rel32
+        memcpy(at + 1, &relative, 4);
+        VirtualProtect(at, 5, old, &old);
+        FlushInstructionCache(GetCurrentProcess(), at, 5);
+        ++installed;
+    }
+    LogLine("INFO", "um-engine.dll %s: %d of %d function(s) replaced", version ? version() : "?", installed, count);
+}
+
 static void InstallFileIoHooks() {
     HMODULE process = GetModuleHandleA(NULL);
     if (!process) {
@@ -6815,6 +6854,9 @@ UM_GUARDED_THREAD(InitializeDllThread) {
     }
     if (heapHooksWanted) {
         InstallHeapHooks();
+    }
+    if (g_enableEngine) {
+        InstallEngineFunctions();
     }
 
     char exePath[MAX_PATH] = {};
