@@ -515,7 +515,7 @@ static void DrawDdsMmpTab() {
         std::error_code ec;
         g_dds.multiThread = fs::is_directory(g_dds.inputPath, ec);
     }
-    PathRow("dds_out", "Output:", g_dds.outputPath, sizeof(g_dds.outputPath), true, false);
+    PathRow("dds_out", "Output:", g_dds.outputPath, sizeof(g_dds.outputPath), true, true);
 
     ImGui::Checkbox("Multi-threaded (-m)", &g_dds.multiThread);
     ImGui::Checkbox("Dry run (--dry-run)", &g_dds.dryRun);
@@ -561,7 +561,7 @@ static void DrawIniRegTab() {
         std::error_code ec;
         g_ini.multiThread = fs::is_directory(g_ini.inputPath, ec);
     }
-    PathRow("ini_out", "Output:", g_ini.outputPath, sizeof(g_ini.outputPath), true, false);
+    PathRow("ini_out", "Output:", g_ini.outputPath, sizeof(g_ini.outputPath), true, true);
 
     ImGui::Checkbox("Multi-threaded (-m)", &g_ini.multiThread);
     ImGui::Checkbox("Dry run (--dry-run)", &g_ini.dryRun);
@@ -646,7 +646,7 @@ static void DrawResToolTab() {
         std::error_code ec;
         g_res.multiThread = fs::is_directory(g_res.inputPath, ec);
     }
-    PathRow("res_out", "Output:", g_res.outputPath, sizeof(g_res.outputPath), true, false);
+    PathRow("res_out", "Output:", g_res.outputPath, sizeof(g_res.outputPath), true, true);
 
     ImGui::SetNextItemWidth(150);
     ImGui::InputText("Archive extension (--ext)", g_res.extOverride, sizeof(g_res.extOverride));
