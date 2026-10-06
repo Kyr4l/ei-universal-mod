@@ -736,6 +736,42 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
     return true;
 }
 
+// RGBA8 pixels (top-to-bottom) as an uncompressed 32-bit DDS (A8R8G8B8, no mipmaps), for the Texture Editor.
+bool RgbaToDds(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& ddsOut) {
+    if (!width || !height || rgba.size() != static_cast<size_t>(width) * height * 4) return false;
+    DdsHeader h;
+    std::memset(&h, 0, sizeof(h));
+    h.dwMagic = DDS_MAGIC;
+    h.dwSize = 124;
+    h.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PITCH | DDSD_PIXELFORMAT;
+    h.dwHeight = height;
+    h.dwWidth = width;
+    h.dwPitchOrLinearSize = width * 4;
+    h.ddspf.dwSize = 32;
+    h.ddspf.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+    h.ddspf.dwRGBBitCount = 32;
+    h.ddspf.dwRBitMask = 0x00FF0000; h.ddspf.dwGBitMask = 0x0000FF00; h.ddspf.dwBBitMask = 0x000000FF; h.ddspf.dwABitMask = 0xFF000000;
+    h.dwCaps = DDSCAPS_TEXTURE;
+    ddsOut.resize(sizeof(h) + rgba.size());
+    std::memcpy(ddsOut.data(), &h, sizeof(h));
+    uint8_t* d = ddsOut.data() + sizeof(h);
+    for (size_t i = 0; i + 3 < rgba.size(); i += 4) { // RGBA -> BGRA
+        d[i] = rgba[i + 2]; d[i + 1] = rgba[i + 1]; d[i + 2] = rgba[i]; d[i + 3] = rgba[i + 3];
+    }
+    return true;
+}
+
+// The same pixels as an .mmp the game reads: PNT3 (32-bit, base level only), what the vanilla terrain textures use.
+bool RgbaToMmp(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& mmpOut, std::string& err) {
+    std::vector<uint8_t> dds;
+    if (!RgbaToDds(width, height, rgba, dds)) { err = "no picture"; return false; }
+    const bool saved = g_plain32;
+    g_plain32 = false;
+    const bool ok = ConvertDdsToMmp(dds.data(), dds.size(), mmpOut, err);
+    g_plain32 = saved;
+    return ok;
+}
+
 int RunDdsMmp(int argc, char* argv[]) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
