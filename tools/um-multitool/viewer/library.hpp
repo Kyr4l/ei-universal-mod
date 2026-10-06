@@ -53,7 +53,7 @@ struct Library {
     int mapMouseOrbit = 2, mapMousePan = 1; // the Map Editor's mouse buttons, see config.hpp
     int guiTab = 0, viewerTab = 0, mapSideTab = 0; // the tabs open last time
     std::string language;                          // display language "en" / "ru" (i18n.hpp); empty = not chosen yet
-    std::string background, tabBackground[5];     // background pictures (config.hpp)
+    std::string background, tabBackground[6];     // background pictures (config.hpp)
     int dllPort = 18888, dllTab = 0;               // the UM DLL Connector (config.hpp)
     bool dllAutoConnect = false;
     bool sfxEnabled = false, alertPopups = true;   // problem alerts (config.hpp, alerts.hpp)
@@ -130,7 +130,7 @@ struct Library {
         language = cfg.language;
         guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour; markerOpacity = cfg.markerOpacity;
         background = cfg.background;
-        for (int i = 0; i < 5; ++i) tabBackground[i] = cfg.tabBackground[i];
+        for (int i = 0; i < 6; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
         dllPort = cfg.dllPort; dllTab = cfg.dllTab; dllAutoConnect = cfg.dllAutoConnect;
         sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad; mapRegenNavmesh = cfg.mapRegenNavmesh; mpFolder = cfg.mpFolder; dbCompileTo = cfg.dbCompileTo;
@@ -171,7 +171,7 @@ struct Library {
         cfg.language = language;
         cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour; cfg.markerOpacity = markerOpacity;
         cfg.background = background;
-        for (int i = 0; i < 5; ++i) cfg.tabBackground[i] = tabBackground[i];
+        for (int i = 0; i < 6; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;
         cfg.dllPort = dllPort; cfg.dllTab = dllTab; cfg.dllAutoConnect = dllAutoConnect;
         cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad; cfg.mapRegenNavmesh = mapRegenNavmesh; cfg.mpFolder = mpFolder; cfg.dbCompileTo = dbCompileTo;

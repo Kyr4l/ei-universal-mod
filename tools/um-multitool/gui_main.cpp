@@ -41,6 +41,7 @@
 #include "viewer/ui_sources.hpp"
 #include "mapedit/map_app.hpp"
 #include "dllconnect/connector_app.hpp"
+#include "texedit/texture_app.hpp"
 #include "alerts.hpp"
 #include "i18n.hpp"
 #include "db_editor.hpp"
@@ -1043,10 +1044,10 @@ int RunGui(const GuiOptions& options) {
                       }});
     if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
-    enum { kFiles, kViewer, kMap, kSettings, kDll, kNone };
+    enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kNone };
     // The tab asked for on the command line, else the one open when the GUI was last closed.
     int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer
-                     : (library.guiTab >= kFiles && library.guiTab <= kDll ? library.guiTab : kNone);
+                     : (library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kNone);
     if (!options.viewerCategory.empty()) {
         std::string err;
         if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame)) std::fprintf(stderr, "%s\n", err.c_str());
@@ -1126,7 +1127,7 @@ int RunGui(const GuiOptions& options) {
         ImGui::SetNextWindowSize(ImVec2(static_cast<float>(fbW) / io.DisplayFramebufferScale.x,
                                          static_cast<float>(fbH) / io.DisplayFramebufferScale.y));
         // A background picture for the tab shown last frame (Settings > Background): drawn under ImGui like the 3D views.
-        const int bgTab = library.guiTab >= kFiles && library.guiTab <= kDll ? library.guiTab : kFiles;
+        const int bgTab = library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kFiles;
         const std::string& bgPath = !library.tabBackground[bgTab].empty() ? library.tabBackground[bgTab] : library.background;
         const GLuint bgTexture = BackgroundTexture(bgPath, bgSize);
         ui::BackgroundShown() = bgTexture != 0 && library.backgroundOpacity > 0.0f;
@@ -1173,6 +1174,11 @@ int RunGui(const GuiOptions& options) {
             if (ImGui::BeginTabItem("UM DLL Connector", nullptr, flags(kDll))) {
                 dllconnect::DrawTab(dllCtx);
                 shownTab = kDll;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Texture Editor", nullptr, flags(kTex))) {
+                texedit::DrawTab(library);
+                shownTab = kTex;
                 ImGui::EndTabItem();
             }
             if (ImGui::BeginTabItem("Settings", nullptr, flags(kSettings))) {

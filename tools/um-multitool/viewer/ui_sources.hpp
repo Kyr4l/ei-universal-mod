@@ -424,8 +424,8 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
     ImGui::SeparatorText("Background");
     {
         // A picture behind the menus: for every tab, or per main tab (which wins).
-        static const char* const labels[6] = {"All tabs", "File Processing", "3D Viewer", "Map Editor", "Settings", "UM DLL Connector"};
-        for (int i = 0; i < 6; ++i) {
+        static const char* const labels[7] = {"All tabs", "File Processing", "3D Viewer", "Map Editor", "Settings", "UM DLL Connector", "Texture Editor"};
+        for (int i = 0; i < 7; ++i) {
             std::string& path = i == 0 ? lib.background : lib.tabBackground[i - 1];
             ImGui::PushID(i);
             ImGui::AlignTextToFramePadding();

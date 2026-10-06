@@ -139,7 +139,7 @@ struct Config {
     std::string language;                     // display language, "en" / "ru"; empty = not chosen yet (first start: the GUI asks)
     // Background pictures behind the menus: one for every tab, and one per main tab (which wins)
     std::string background;
-    std::string tabBackground[5];                 // File Processing, 3D Viewer, Map Editor, Settings, UM DLL Connector
+    std::string tabBackground[6];                 // File Processing, 3D Viewer, Map Editor, Settings, UM DLL Connector, Texture Editor
     float backgroundOpacity = 0.35f;
     float markerOpacity = 0.5f;               // the Map Editor's light, particle and sound cubes
     float mapHour = -1.0f;                    // the Map Editor's time of day, -1 = the map's own
@@ -216,6 +216,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "BACKGROUND_MAP") cfg.tabBackground[2] = value;
         else if (key == "BACKGROUND_SETTINGS") cfg.tabBackground[3] = value;
         else if (key == "BACKGROUND_DLL") cfg.tabBackground[4] = value;
+        else if (key == "BACKGROUND_TEXTURE") cfg.tabBackground[5] = value;
         else if (key == "DLL_PORT") cfg.dllPort = std::min(std::max(std::atoi(value.c_str()), 1), 65535);
         else if (key == "DLL_AUTO_CONNECT") cfg.dllAutoConnect = value == "true";
         else if (key == "SFX_ENABLED") cfg.sfxEnabled = value == "true";
@@ -347,8 +348,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "; Background pictures (.jpg, .png, .bmp, .tga, .gif, .dds, .mmp...) behind the menus: one for every tab, one per main tab (it wins over the\n"
          "; first), and how much they show (0 to 1).\n";
     if (!cfg.background.empty()) f << "BACKGROUND=" << cfg.background << "\n";
-    static const char* const tabKeys[5] = {"BACKGROUND_FILES", "BACKGROUND_VIEWER", "BACKGROUND_MAP", "BACKGROUND_SETTINGS", "BACKGROUND_DLL"};
-    for (int i = 0; i < 5; ++i) if (!cfg.tabBackground[i].empty()) f << tabKeys[i] << "=" << cfg.tabBackground[i] << "\n";
+    static const char* const tabKeys[6] = {"BACKGROUND_FILES", "BACKGROUND_VIEWER", "BACKGROUND_MAP", "BACKGROUND_SETTINGS", "BACKGROUND_DLL", "BACKGROUND_TEXTURE"};
+    for (int i = 0; i < 6; ++i) if (!cfg.tabBackground[i].empty()) f << tabKeys[i] << "=" << cfg.tabBackground[i] << "\n";
     f << "BACKGROUND_OPACITY=" << cfg.backgroundOpacity << "\n";
     f << "; The 3D Viewer's item list on the right of the view; (true/false)\n";
     f << "VIEWER_SIDEBAR_RIGHT=" << flag(cfg.viewerSidebarRight) << "\n";

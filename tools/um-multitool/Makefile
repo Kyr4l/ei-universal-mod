@@ -21,10 +21,10 @@ WIN_CXX = x86_64-w64-mingw32-g++
 IMGUI_DIR = vendor/imgui
 IMGUI_SRCS = $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp \
              $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/imgui_impl_glfw.cpp $(IMGUI_DIR)/imgui_impl_opengl2.cpp
-SRCS = main.cpp i18n.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp mp_editor.cpp alerts.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
+SRCS = main.cpp i18n.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp mp_editor.cpp alerts.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp texedit/texture_app.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
 # um.dll's mission script checker is shared with the Map Editor's checks (not copied).
 UMDLL_DIR = ../../resources/universal-mod/um-dll
-HDRS = $(wildcard *.hpp) lang/ru.txt $(wildcard viewer/*.hpp) $(wildcard mapedit/*.hpp) $(wildcard dllconnect/*.hpp) $(UMDLL_DIR)/mob_script_check.hpp $(UMDLL_DIR)/mob_script_functions.hpp $(wildcard sfx/*.mp3)
+HDRS = $(wildcard *.hpp) lang/ru.txt $(wildcard viewer/*.hpp) $(wildcard mapedit/*.hpp) $(wildcard dllconnect/*.hpp) $(wildcard texedit/*.hpp) $(UMDLL_DIR)/mob_script_check.hpp $(UMDLL_DIR)/mob_script_functions.hpp $(wildcard sfx/*.mp3)
 
 # -I. lets viewer/ share this directory's cp1251.hpp; -isystem keeps -Wextra off vendored code.
 COMMON_FLAGS = -std=c++17 -O2 -Wall -Wextra -pthread -I. -I$(UMDLL_DIR) -isystem $(IMGUI_DIR) -isystem vendor/miniaudio
