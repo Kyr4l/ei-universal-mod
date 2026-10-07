@@ -3,6 +3,7 @@
 // time so no audio library is needed at build time). Without an audio device, sounds stay silent.
 
 #include "alerts.hpp"
+#include "log.hpp"
 
 #include <chrono>
 #include <cstdint>
@@ -131,6 +132,7 @@ void SetVolume(int percent) { g_volume = (percent < 0 ? 0 : percent > 100 ? 100 
 void PlaySound(Level level) { Play(level == Level::Error ? 0 : 1); }
 
 void Raise(Level level, const std::string& message, const std::string& place, std::function<void()> goTo) {
+    umlog::Write(level == Level::Error ? umlog::Level::Error : umlog::Level::Warning, message + (place.empty() ? "" : " [" + place + "]"));
     if (g_sound) PlaySound(level);
     if (level != Level::Error || !g_popups) return;
     // The same problem raised again while its popup is open: one popup.

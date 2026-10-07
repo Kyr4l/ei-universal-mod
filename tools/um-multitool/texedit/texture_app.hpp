@@ -2,9 +2,18 @@
 // For now only the tab itself; the tools come later.
 #pragma once
 
+#include <functional>
+#include <string>
+
 struct Library;
 
+namespace questmap { struct Input; }
+
 namespace texedit {
+
+// The Map Editor's open map for the quest map generator (terrain pointer valid during the call; false and `err`
+// when there is none).
+void SetMapSource(std::function<bool(questmap::Input&, std::string& err)> source);
 
 // Inside the ImGui frame, in the tab's content region.
 void DrawTab(Library& lib);

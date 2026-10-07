@@ -7,11 +7,14 @@
 #include <cctype>
 #include <cstring>
 #include <filesystem>
+#include <functional>
 #include <string>
 
 #include "alerts.hpp"
 #include "i18n.hpp"
 #include "library.hpp"
+#include "../log.hpp"
+#include "../i18n.hpp"
 #include "ui_common.hpp"
 
 namespace ui {
@@ -274,14 +277,14 @@ inline bool TextPackList(Library& lib, SourcesState& st) {
 // One layered source list: highest priority on top, with Up/Down/Remove, and an add row.
 // Returns true when the list changed.
 inline bool LayerList(const char* id, LayeredAssetSource& source, char* path, size_t pathSize, std::string& message,
-                      const char* hint) {
+                      const char* hint, const std::function<void(size_t)>& rowExtra = {}, float extraWidth = 0.0f) {
     bool changed = false;
     ImGui::PushID(id);
     for (size_t i = source.layers.size(); i-- > 0;) {
         auto& layer = source.layers[i];
         ImGui::PushID(static_cast<int>(i));
         float rowWidth = ImGui::GetContentRegionAvail().x;
-        const float buttons = 118.0f;
+        const float buttons = 118.0f + (rowExtra ? extraWidth + 6.0f : 0.0f);
         StatusDot(layer.ok, layer.source.isArchive ? "RES archive" : "folder", layer.error);
         ImGui::SameLine();
         ImGui::BeginChild("##p", ImVec2(std::max(rowWidth - buttons - ImGui::GetCursorPosX(), 20.0f), ImGui::GetTextLineHeight()),
@@ -291,6 +294,7 @@ inline bool LayerList(const char* id, LayeredAssetSource& source, char* path, si
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", layer.path.c_str());
         ImGui::SameLine();
         ImGui::SetCursorPosX(rowWidth - buttons);
+        if (rowExtra) { rowExtra(i); ImGui::SameLine(); }
         ImGui::BeginDisabled(i + 1 == source.layers.size());
         if (ImGui::SmallButton("Up")) { source.MoveLayerUp(i); changed = true; }
         ImGui::EndDisabled();
@@ -343,7 +347,23 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
 
     ImGui::SeparatorText("Texts");
     Hint("texts.res and textslmp.res, or a folder of loose text files (item names and descriptions)");
-    if (LayerList("txt", lib.texts, st.textPath, sizeof(st.textPath), st.message, "(none: items show no name or description)")) {
+    // Each text source's encoding (#82): the bytes of Polish CP1250 and Russian CP1251 cannot be told apart for sure
+    static const char* const encNames[4] = {"Auto", "CP1251", "CP1250", "CP949"};
+    static const char* const encKeys[4] = {"", "cp1251", "cp1250", "cp949"};
+    auto encodingCombo = [&](size_t i) {
+        const std::string& path = lib.texts.layers[i].path;
+        int cur = 0;
+        auto it = lib.textEncodings.find(path);
+        if (it != lib.textEncodings.end()) for (int k = 1; k < 4; ++k) if (it->second == encKeys[k]) cur = k;
+        ImGui::SetNextItemWidth(84);
+        if (ImGui::Combo("##enc", &cur, encNames, 4)) {
+            if (cur == 0) lib.textEncodings.erase(path); else lib.textEncodings[path] = encKeys[cur];
+            ++lib.version;
+            lib.SaveConfig();
+        }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("How this source's 8-bit texts are read: Auto guesses (Polish CP1250 and Russian CP1251 look alike: choose when it guesses wrong)"));
+    };
+    if (LayerList("txt", lib.texts, st.textPath, sizeof(st.textPath), st.message, "(none: items show no name or description)", encodingCombo, 84.0f)) {
         ++lib.version;
         lib.SaveConfig();
     }
@@ -420,6 +440,13 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
         lib.markerOpacity = std::min(std::max(lib.markerOpacity, 0.0f), 1.0f);
         lib.SaveConfig();
     }
+
+    ImGui::SeparatorText("Log");
+    ImGui::TextDisabled("%s", umlog::FilePath().c_str());
+    if (ImGui::Button("Show the log window")) lib.logWindow = true;
+    ImGui::SameLine();
+    if (ImGui::Checkbox("Also print it to the console", &lib.logVerbose)) { umlog::SetVerbose(lib.logVerbose); lib.SaveConfig(); }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("What failed (file dialogs, files that cannot be read, saves) and what was done; gui --verbose turns this on from the command line"));
 
     ImGui::SeparatorText("Background");
     {

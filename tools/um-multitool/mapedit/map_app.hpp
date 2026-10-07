@@ -9,6 +9,8 @@
 
 struct Library;
 
+namespace questmap { struct Input; }
+
 namespace mapedit {
 
 struct Context;
@@ -18,6 +20,9 @@ void Destroy(Context* ctx);        // needs the GL context current
 
 // Opens these files instead of the last session's (.mpr = the terrain, the rest .mob, in load order).
 void OpenFiles(Context* ctx, const std::vector<std::string>& paths, uint32_t focusId = 0); // focusId: gui --map --focus
+
+// For the Texture Editor's quest map generator: the open terrain and the objects that become icons / forests.
+bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err);
 
 // Inside the ImGui frame, in the Map Editor tab's content region.
 void DrawTab(Context* ctx);

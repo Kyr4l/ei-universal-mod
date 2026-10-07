@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Static GLFW builds for the Windows XP variants of um-multitool (make xp):
 #   vendor/glfw-mingw-xp32  i686   (Windows XP, 32-bit)
-#   vendor/glfw-mingw-xp64  x86_64 (Windows XP x64)
 # GLFW 3.3.10: the last GLFW that supports Windows XP and Vista (3.4 and later require Windows 7: an .exe built
 # with them starts on XP, the command line works, but no window ever shows). 3.3 loads the Vista+ functions it
 # can use (SetProcessDPIAware...) at run time, so it needs no patch. Never installed system-wide.
@@ -39,5 +38,4 @@ build() { # <triplet> <prefix dir>
     cmake --install "$SRC_DIR/build-$triplet"
 }
 build i686-w64-mingw32 "$SCRIPT_DIR/glfw-mingw-xp32"
-build x86_64-w64-mingw32 "$SCRIPT_DIR/glfw-mingw-xp64"
 echo "GLFW $VERSION for the XP builds installed"

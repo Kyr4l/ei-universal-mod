@@ -376,7 +376,7 @@ inline void ItemTab(Library& lib, Scene& scene, items::Category category, ItemTa
     // The item's in-game name and description, above its stats (item_texts.hpp).
     texts::ItemText text;
     if (lib.texts.AnyLoaded()) {
-        text = texts::Lookup(lib.texts, item, material);
+        text = texts::Lookup(lib.texts, item, material, &lib.textEncodings);
         ImGui::Spacing();
         if (text.found) {
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 0.86f, 0.55f, 1.0f));

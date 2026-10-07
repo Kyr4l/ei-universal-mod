@@ -24,6 +24,9 @@
 #include <atomic>
 #include <memory>
 #include <thread>
+#include <atomic>
+#include <chrono>
+#include <mutex>
 #include <queue>
 #include <random>
 #include <set>
@@ -48,6 +51,8 @@
 #include "script_highlight.hpp"
 #include "../dllconnect/quests.hpp"
 #include "../subtools.hpp"
+#include "../log.hpp"
+#include "../texedit/quest_map.hpp"
 
 namespace mapedit {
 
@@ -56,6 +61,17 @@ struct MobEntry {
     bool visible = true;
     std::vector<uint8_t> savedBytes; // the file as on disk: edits patch file.bytes, so dirty = they differ
     bool Dirty() const { return file.loaded && file.bytes != savedBytes; }
+};
+
+// Slow work (the navmesh) runs on a thread while a modal window shows that the editor is working, not hung
+// (#91); `apply` runs on the main thread when it is done. Nothing is edited meanwhile: the modal eats the input.
+struct Job {
+    std::thread thread;
+    std::atomic<bool> done{false};
+    bool running = false;
+    std::string title;
+    std::function<void()> apply;
+    std::chrono::steady_clock::time_point started;
 };
 
 // One undoable edit: the state before it (undo puts it back and keeps the state it replaced for redo).
@@ -336,6 +352,14 @@ struct App {
 
     // Offset: move the selection along one axis by an exact value
     bool offsetOpen = false;
+    std::unique_ptr<struct Job> job;    // the slow work in progress (#91)
+    // Merge from another map (#92): the objects of one loaded .mob copied into the active one, in place
+    bool mergeOpen = false;
+    int mergeSource = -1;
+    bool mergeKinds[8] = {true, false, true, true, false, true, true, true}; // by mob::Kind: objects, units, levers, torches, traps, lights, particles, sounds
+    char mergeFilter[96] = "";
+    float mergeDupDist = 1.0f;   // a source object this close to one of the same figure in the active map is a duplicate
+    bool mergeOnlySelectedArea = false;
     int offsetAxis = 0;
     double offsetValue = 1.0;
     std::string offsetMessage;
@@ -414,6 +438,7 @@ static bool LoadTerrain(App& app, const std::string& path) {
     if (!mpr::Load(path, map, err)) {
         app.terrainError = err;
         app.filesMessage = "Terrain not loaded: " + err;
+        umlog::Write(umlog::Level::Error, "Map Editor: terrain not loaded: " + path + ": " + err);
         return false;
     }
     ForgetTerrainEdits(app);
@@ -438,6 +463,7 @@ static bool AddMob(App& app, const std::string& path) {
     mob::Load(path, entry->file);
     entry->savedBytes = entry->file.bytes;
     if (!entry->file.loaded) app.filesMessage = entry->file.fileName + ": " + entry->file.error;
+    if (!entry->file.loaded) umlog::Write(umlog::Level::Error, "Map Editor: map not loaded: " + path + ": " + entry->file.error);
     app.mobs.push_back(std::move(entry));
     app.loadOrder.push_back(path);
     SyncScene(app);
@@ -2174,7 +2200,7 @@ static void BuildTree(App& app) {
 static void DeleteSelection(App& app);
 static std::filesystem::path ClipboardFile();
 static void CopySelection(App& app);
-static void Paste(App& app);
+static void Paste(App& app, bool atCursor = false);
 static void Duplicate(App& app);
 
 static void ObjectsTab(App& app) {
@@ -2206,6 +2232,9 @@ static void ObjectsTab(App& app) {
         std::error_code ec;
         ImGui::BeginDisabled(app.clipboard.empty() && !std::filesystem::exists(ClipboardFile(), ec));
         if (ImGui::SmallButton("Paste")) Paste(app);
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("%s", i18n::Tr("Where the objects were copied from (Shift + the paste key: at the cursor)"));
+        ImGui::SameLine();
+        if (ImGui::SmallButton("Paste at cursor")) Paste(app, true);
         ImGui::EndDisabled();
         ImGui::SameLine();
         ImGui::BeginDisabled(!sel);
@@ -3016,6 +3045,63 @@ static bool SaveTerrain(App& app, const std::string& path) {
 
 std::vector<navgen::Object> NavObjects(const LayeredAssetSource& figures, const std::vector<const mob::File*>& maps, int* missing);
 
+static void StartJob(App& app, const std::string& title, std::function<void()> work, std::function<void()> apply) {
+    if (app.job && app.job->running) return;
+    auto job = std::make_unique<Job>();
+    job->title = title;
+    job->apply = std::move(apply);
+    job->started = std::chrono::steady_clock::now();
+    job->running = true;
+    Job* raw = job.get();
+    job->thread = std::thread([raw, work = std::move(work)] { work(); raw->done = true; });
+    app.job = std::move(job);
+    umlog::Write(umlog::Level::Info, "Map Editor: " + title + "...");
+}
+
+// Each frame: finishes a done job (its `apply` on the main thread) and draws the progress window of a running one.
+static void PollJob(App& app) {
+    if (!app.job || !app.job->running) return;
+    if (app.job->done) {
+        app.job->thread.join();
+        app.job->running = false;
+        std::function<void()> apply = std::move(app.job->apply);
+        const auto seconds = std::chrono::duration<float>(std::chrono::steady_clock::now() - app.job->started).count();
+        umlog::Write(umlog::Level::Info, "Map Editor: " + app.job->title + " done in " + ui::Num(seconds, 1) + " s");
+        app.job.reset();
+        if (apply) apply();
+        return;
+    }
+    ImGui::OpenPopup("##busyjob");
+    ImGui::SetNextWindowPos(ImVec2((app.viewportMin.x + app.viewportMax.x) * 0.5f, app.viewportMax.y - 60), ImGuiCond_Always, ImVec2(0.5f, 1.0f));
+    ImGui::SetNextWindowSize(ImVec2(420, 0));
+    if (ImGui::BeginPopupModal("##busyjob", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
+        const float seconds = std::chrono::duration<float>(std::chrono::steady_clock::now() - app.job->started).count();
+        ImGui::Text("%s  (%.0f s)", i18n::Tr(app.job->title.c_str()), seconds);
+        // no progress count comes out of the generator: a bar that sweeps
+        const float t = std::fmod(seconds * 0.5f, 1.0f);
+        ImGui::ProgressBar(-1.0f * t, ImVec2(-1, 0), "");
+        ImGui::TextDisabled("%s", i18n::Tr("The editor is working, not stuck: the view comes back when it is done."));
+        ImGui::EndPopup();
+    }
+}
+
+// The navmesh built on a thread from the terrain and the open maps' objects (read only meanwhile, the modal sees
+// to it): `onDone` gets the payload (empty on failure), the error and the objects left out.
+struct NavResult { std::vector<uint8_t> payload; std::string err; int missing = 0; };
+static void StartNavmeshJob(App& app, std::function<void(const NavResult&)> onDone) {
+    auto result = std::make_shared<NavResult>();
+    std::vector<const mob::File*> all;
+    for (auto& m : app.mobs) all.push_back(&m->file);
+    const mpr::Map* terrain = &app.terrain;
+    const LayeredAssetSource* figures = &app.lib.figures;
+    StartJob(app, "Building the navmesh",
+             [result, all, terrain, figures] {
+                 const std::vector<navgen::Object> objects = NavObjects(*figures, all, &result->missing);
+                 if (!navgen::Generate(*terrain, objects, result->payload, result->err)) result->payload.clear();
+             },
+             [result, onDone] { onDone(*result); });
+}
+
 // Save with "Navmesh" on: the open maps that have a navmesh (AI_GRAPH, the zone's main map) get it built again
 // from the terrain and every open map's objects, as the game builds it (navmesh_gen.hpp). Returns what to say.
 static std::string RegenerateNavmeshes(App& app) {
@@ -3043,19 +3129,42 @@ static void BuildCompareNavmesh(App& app) {
     app.scene.builtNav.clear();
     ++app.scene.builtNavStamp;
     if (app.terrain.sectorsX <= 0) { app.navCompareNote = "No terrain open."; return; }
-    std::vector<const mob::File*> all;
-    for (auto& m : app.mobs) all.push_back(&m->file);
-    int missing = 0;
-    const std::vector<navgen::Object> objects = NavObjects(app.lib.figures, all, &missing);
-    std::string err;
-    if (!navgen::Generate(app.terrain, objects, app.scene.builtNav, err)) { app.navCompareNote = err; return; }
-    app.navCompareNote = missing ? std::to_string(missing) + " objects without a figure left out." : "";
+    if (app.job && app.job->running) return;
+    StartNavmeshJob(app, [&app](const NavResult& res) {
+        if (res.payload.empty()) { app.navCompareNote = res.err; return; }
+        app.scene.builtNav = res.payload;
+        ++app.scene.builtNavStamp;
+        app.navCompareNote = res.missing ? std::to_string(res.missing) + " objects without a figure left out." : "";
+    });
 }
 
 // Ctrl+S / the toolbar's Save: every unsaved change (edited maps, the quest's areas, the Quest tab's text).
+static void SaveQuestChangesNow(App& app, const std::string& navmesh);
+// Ctrl+S: with "Navmesh" on and an edited map, the navmesh is built first (on a thread, a progress window
+// meanwhile), then everything is written.
 static void SaveQuestChanges(App& app) {
-    std::string saved, failed, navmesh;
-    if (app.lib.mapRegenNavmesh && (AnyMobDirty(app))) navmesh = RegenerateNavmeshes(app);
+    bool needsNavmesh = app.lib.mapRegenNavmesh && AnyMobDirty(app) && app.terrain.sectorsX > 0;
+    if (needsNavmesh) {
+        bool any = false;
+        for (auto& m : app.mobs) any |= m->file.aiGraphBytes != 0;
+        needsNavmesh = any;
+    }
+    if (!needsNavmesh) { SaveQuestChangesNow(app, app.lib.mapRegenNavmesh && AnyMobDirty(app) ? RegenerateNavmeshes(app) : std::string()); return; }
+    StartNavmeshJob(app, [&app](const NavResult& res) {
+        std::string note;
+        if (res.payload.empty()) note = "navmesh not rebuilt: " + res.err;
+        else {
+            std::string done;
+            for (auto& m : app.mobs)
+                if (m->file.aiGraphBytes) { mob::SetAiGraph(m->file, res.payload); done += (done.empty() ? "" : ", ") + m->file.fileName; }
+            note = "navmesh rebuilt in " + done + (res.missing ? " (" + std::to_string(res.missing) + " objects without a figure left out)" : "");
+        }
+        SaveQuestChangesNow(app, note);
+    });
+}
+
+static void SaveQuestChangesNow(App& app, const std::string& navmesh) {
+    std::string saved, failed;
     for (auto& m : app.mobs) {
         if (!m->Dirty()) continue;
         std::string err;
@@ -3309,10 +3418,13 @@ static bool InsertCopies(App& app, std::vector<App::Copied> items, bool inPlace,
     return true;
 }
 
-static void Paste(App& app) {
+// Pasting puts the objects where they were copied from (ei_maper's way: copies between the .mob files of one map
+// land in place); `atCursor` (Shift, or the second button) puts them under the mouse instead.
+static void Paste(App& app, bool atCursor) {
     ReadClipboardFile(app.clipboard); // the last copy, from this um-multitool or another one
     if (app.clipboard.empty()) { app.questMessage = "Nothing copied"; return; }
-    if (InsertCopies(app, app.clipboard, false, PlacePoint(app))) app.questMessage = "Pasted " + std::to_string(app.clipboard.size()) + " object(s)";
+    if (InsertCopies(app, app.clipboard, !atCursor, PlacePoint(app)))
+        app.questMessage = "Pasted " + std::to_string(app.clipboard.size()) + " object(s)" + (atCursor ? " at the cursor" : " where they were copied from");
 }
 
 // Ctrl+D: copies of the selection where it is, then moving them (like Blender's Shift+D).
@@ -5146,6 +5258,9 @@ static void ToolsMenu(App& app) {
     if (ImGui::Selectable("Randomize...", false, selection ? 0 : ImGuiSelectableFlags_Disabled)) app.randomOpen = true;
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
         ImGui::SetTooltip("Give each selected object a random position, rotation or complection in a range (like ei_maper)");
+    if (ImGui::Selectable("Merge from another map...", false, app.mobs.size() >= 2 ? 0 : ImGuiSelectableFlags_Disabled)) app.mergeOpen = true;
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+        ImGui::SetTooltip("%s", i18n::Tr("Copy the objects of another loaded .mob into the active map, in place: by kind, by name, skipping what the active map already has at the same spot"));
     if (ImGui::Selectable("Minimap...", false, app.terrainLoaded ? 0 : ImGuiSelectableFlags_Disabled)) {
         app.minimapOpen = true;
         if (app.minimapPath[0] == '\0') {
@@ -5180,13 +5295,21 @@ static void ToolsMenu(App& app) {
     bool hasGraph = false;
     for (auto& m : app.mobs) hasGraph |= m->file.aiGraphBytes != 0;
     if (ImGui::Selectable("Rebuild navmesh", false, hasGraph && app.terrain.sectorsX > 0 ? 0 : ImGuiSelectableFlags_Disabled)) {
-        std::vector<std::vector<uint8_t>> before;
-        for (auto& m : app.mobs) before.push_back(m->file.bytes);
-        std::string msg = RegenerateNavmeshes(app);
-        bool changed = false;
-        for (size_t i = 0; i < app.mobs.size(); ++i) changed |= app.mobs[i]->file.bytes != before[i];
-        app.filesMessage = msg + (changed ? ": save to write it" : " (it was already up to date)");
-        if (app.scene.options.navCompare) BuildCompareNavmesh(app);
+        StartNavmeshJob(app, [&app](const NavResult& res) {
+            if (res.payload.empty()) { app.filesMessage = "navmesh not rebuilt: " + res.err; return; }
+            bool changed = false;
+            std::string done;
+            for (auto& m : app.mobs)
+                if (m->file.aiGraphBytes) {
+                    const std::vector<uint8_t> before = m->file.bytes;
+                    mob::SetAiGraph(m->file, res.payload);
+                    changed |= m->file.bytes != before;
+                    done += (done.empty() ? "" : ", ") + m->file.fileName;
+                }
+            app.filesMessage = "navmesh rebuilt in " + done + (res.missing ? " (" + std::to_string(res.missing) + " objects without a figure left out)" : "") +
+                               (changed ? ": save to write it" : " (it was already up to date)");
+            if (app.scene.options.navCompare) BuildCompareNavmesh(app);
+        });
     }
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
         ImGui::SetTooltip("Builds the navmesh (AI_GRAPH) of the open zone map again from the terrain and the open maps' objects,\n"
@@ -5682,7 +5805,7 @@ static void Keys(App& app) {
             else DeleteSelection(app);
         }
         if (pressed(config::kKeyCopy)) CopySelection(app);
-        if (pressed(config::kKeyPaste)) Paste(app);
+        if (pressed(config::kKeyPaste)) Paste(app, ImGui::GetIO().KeyShift);
         if (pressed(config::kKeyDuplicate)) Duplicate(app);
         if (pressed(config::kKeyResetPaths)) ResetLogicPaths(app);
         if (pressed(config::kKeyNewObject)) { app.newOpen = true; app.newMessage.clear(); }
@@ -6571,6 +6694,93 @@ static void NewTerrainDialog(App& app) {
     ImGui::End();
 }
 
+
+// Merge from another map (#92): the use case is an extended terrain whose decorations live in another .mob: pull
+// its objects into the active map without its units and scripts, and without doubling what is already there.
+struct MergeCandidate { int index; bool duplicate; };
+static std::vector<MergeCandidate> MergeCandidates(const App& app, int src) {
+    std::vector<MergeCandidate> out;
+    if (src < 0 || src >= static_cast<int>(app.mobs.size()) || src == app.activeMob) return out;
+    const mob::File& from = app.mobs[static_cast<size_t>(src)]->file;
+    const mob::File& into = app.mobs[app.activeMob]->file;
+    const std::string needle = Lower(app.mergeFilter);
+    // the active map's objects by figure, for the duplicate test
+    std::map<std::string, std::vector<mob::Vec3>> have;
+    for (const mob::Object& o : into.objects) have[Lower(o.templ.empty() ? o.name : o.templ)].push_back(o.position);
+    float ax0 = 0, ay0 = 0, ax1 = 0, ay1 = 0;
+    bool area = false;
+    if (app.mergeOnlySelectedArea && app.scene.selectedFile == app.activeMob && !app.scene.selection.empty()) {
+        area = true;
+        ax0 = ay0 = 1e9f; ax1 = ay1 = -1e9f;
+        for (int oi : app.scene.selection) {
+            const mob::Vec3& p = into.objects[static_cast<size_t>(oi)].position;
+            ax0 = std::min(ax0, p.x); ay0 = std::min(ay0, p.y); ax1 = std::max(ax1, p.x); ay1 = std::max(ay1, p.y);
+        }
+    }
+    for (int oi = 0; oi < static_cast<int>(from.objects.size()); ++oi) {
+        const mob::Object& o = from.objects[static_cast<size_t>(oi)];
+        if (!app.mergeKinds[static_cast<int>(o.kind)]) continue;
+        const std::string key = Lower(o.templ.empty() ? o.name : o.templ);
+        if (!needle.empty() && key.find(needle) == std::string::npos && Lower(o.name).find(needle) == std::string::npos) continue;
+        if (area && (o.position.x < ax0 || o.position.x > ax1 || o.position.y < ay0 || o.position.y > ay1)) continue;
+        bool dup = false;
+        auto it = have.find(key);
+        if (it != have.end())
+            for (const mob::Vec3& p : it->second)
+                if (std::hypot(p.x - o.position.x, p.y - o.position.y) <= app.mergeDupDist) { dup = true; break; }
+        out.push_back({oi, dup});
+    }
+    return out;
+}
+
+static void MergeWindow(App& app) {
+    if (!app.mergeOpen) return;
+    ImGui::SetNextWindowSize(ImVec2(480, 0), ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 20, app.viewportMin.y + 40), ImGuiCond_Appearing);
+    if (!ImGui::Begin("Merge from another map", &app.mergeOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize)) { ImGui::End(); return; }
+    if (app.mobs.size() < 2) { ImGui::TextWrapped("%s", i18n::Tr("Load the map to take the objects from as a second .mob (Files tab); the active map receives them.")); ImGui::End(); return; }
+    ImGui::TextWrapped("%s", i18n::Tr("Copies objects of another loaded .mob into the active map, where they stand. Units and traps are off by default (they carry scripts); objects the active map already has at the same spot are skipped."));
+    ImGui::Text("%s: %s", i18n::Tr("Into"), app.mobs[app.activeMob]->file.fileName.c_str());
+    if (app.mergeSource < 0 || app.mergeSource >= static_cast<int>(app.mobs.size()) || app.mergeSource == app.activeMob) {
+        app.mergeSource = -1;
+        for (int i = 0; i < static_cast<int>(app.mobs.size()); ++i) if (i != app.activeMob) { app.mergeSource = i; break; }
+    }
+    ImGui::SetNextItemWidth(-1);
+    if (ImGui::BeginCombo("##mergesrc", app.mergeSource >= 0 ? app.mobs[static_cast<size_t>(app.mergeSource)]->file.fileName.c_str() : "")) {
+        for (int i = 0; i < static_cast<int>(app.mobs.size()); ++i)
+            if (i != app.activeMob && ImGui::Selectable(app.mobs[static_cast<size_t>(i)]->file.fileName.c_str(), i == app.mergeSource)) app.mergeSource = i;
+        ImGui::EndCombo();
+    }
+    static const char* const kindNames[8] = {"World objects", "Units", "Levers", "Torches", "Magic traps", "Lights", "Particles", "Sounds"};
+    for (int k = 0; k < 8; ++k) {
+        if (k % 4) ImGui::SameLine();
+        ImGui::Checkbox(kindNames[k], &app.mergeKinds[k]);
+    }
+    ImGui::SetNextItemWidth(-1);
+    ImGui::InputTextWithHint("##mergefilter", "only figures or names containing...", app.mergeFilter, sizeof(app.mergeFilter));
+    ImGui::SetNextItemWidth(-1);
+    ImGui::SliderFloat("##mergedup", &app.mergeDupDist, 0.0f, 10.0f, "Duplicate within %.1f units");
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("A source object with the same figure this close to one of the active map is not copied (0: everything is copied)"));
+    ImGui::Checkbox("Only inside the selection's area", &app.mergeOnlySelectedArea);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("The rectangle around the active map's selected objects"));
+    const std::vector<MergeCandidate> cands = MergeCandidates(app, app.mergeSource);
+    size_t dups = 0;
+    for (const MergeCandidate& c : cands) dups += c.duplicate;
+    ImGui::Text("%zu %s, %zu %s", cands.size() - dups, i18n::Tr("object(s) to copy"), dups, i18n::Tr("skipped as duplicates"));
+    ImGui::BeginDisabled(cands.size() == dups);
+    if (ImGui::Button("Merge", ImVec2(120, 0))) {
+        const mob::File& from = app.mobs[static_cast<size_t>(app.mergeSource)]->file;
+        std::vector<App::Copied> items;
+        for (const MergeCandidate& c : cands)
+            if (!c.duplicate) items.push_back({mob::ObjectNode(from, c.index), from.objects[static_cast<size_t>(c.index)].position});
+        if (InsertCopies(app, items, true, {})) app.questMessage = "Merged " + std::to_string(items.size()) + " object(s) from " + from.fileName + " (selected: undo takes them back)";
+    }
+    ImGui::EndDisabled();
+    ImGui::SameLine();
+    ImGui::TextDisabled("%s", i18n::Tr("The copies get new IDs and come selected."));
+    ImGui::End();
+}
+
 static void MinimapDialog(App& app) {
     if (!app.minimapOpen) return;
     ImGui::SetNextWindowSize(ImVec2(460, 0), ImGuiCond_Appearing);
@@ -6801,8 +7011,27 @@ void ShowChecks(Context* ctx) { ctx->app.requestTab = SideTab::Checks; }
 
 bool Busy(Context* ctx) { return ctx->app.scene.modelsPending > 0 || ctx->app.terrainDirty; }
 
+bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err) {
+    const App& app = ctx->app;
+    if (!app.terrainLoaded) { err = "open a terrain (.mpr) in the Map Editor first"; return false; }
+    in.terrain = &app.terrain;
+    in.name = app.terrain.name;
+    for (const auto& m : app.mobs) {
+        if (!m->visible) continue;
+        for (const mob::Object& o : m->file.objects) {
+            if (o.kind != mob::Kind::Object) continue;
+            questmap::Kind k;
+            if (!questmap::Classify(Lower(o.templ), k)) continue;
+            const float w = o.rotation[0], x = o.rotation[1], y = o.rotation[2], z = o.rotation[3]; // quaternion, w first
+            in.markers.push_back({k, o.position.x, o.position.y, std::atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))});
+        }
+    }
+    return true;
+}
+
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
+    PollJob(app);
     if (app.checksDirty || app.checkedVersion != app.lib.version) RunChecks(app);
     RefreshScriptModel(app);
     RefreshLighting(app);
@@ -6842,6 +7071,7 @@ void DrawTab(Context* ctx) {
     app.drawnThisFrame = true;
     MinimapDialog(app);
     MissingWindow(app);
+    MergeWindow(app);
     NewTerrainDialog(app);
     FindWindow(app);
     OffsetWindow(app);

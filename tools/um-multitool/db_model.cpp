@@ -366,6 +366,25 @@ Problem Unknown(const std::string& what, const std::string& word, size_t pos, co
     return p;
 }
 
+// Whether every piece inside the { } of this entry, split at ';' AND ',', is a known modifier: the vanilla
+// database has 7 entries with a ',' between two modifiers ("lightning {e2;e2;t1,fe}"); whether the game reads
+// them is unverified, so they are reported as a warning, not an error (#95).
+bool CommaBetweenModifiers(const std::string& text, const Names& n) {
+    const size_t open = text.find('{'), close = text.find('}', open == std::string::npos ? 0 : open);
+    if (open == std::string::npos || close == std::string::npos) return false;
+    size_t a = open + 1;
+    bool sawComma = false;
+    while (a < close) {
+        size_t b = a;
+        while (b < close && text[b] != ';' && text[b] != ',') ++b;
+        if (b < close && text[b] == ',') sawComma = true;
+        const std::string mod = Trim(text.substr(a, b - a));
+        if (!mod.empty() && !n.modifiers.count(Lower(mod))) return false;
+        a = b + 1;
+    }
+    return sawComma;
+}
+
 // "acid_fog {ee3;ee3;ee2}": a spell code and its modifiers (positions are in text).
 Problem CheckSpell(const std::string& text, const Names& n) {
     const size_t start = text.find_first_not_of(" \t");
@@ -435,6 +454,11 @@ Problem CheckItem(const std::string& text, const Names& n) {
     if (dot == std::string::npos) return Unknown("item", s, start, n.itemNames, "");
     const std::string base = s.substr(0, dot), material = s.substr(dot + 1);
     if (Lower(base) != "material" && !n.itemNames.count(Lower(base))) return Unknown("item", base, start, n.itemNames, whole);
+    // "rune.e1": a rune of a spell modifier, not of a material (the vanilla database's Monsters drop them)
+    if (Lower(base) == "rune" && n.modifiers.count(Lower(Trim(material)))) {
+        if (Trim(material) != material) return {"a space after the '.' in '" + whole + "'", {{start + dot + 1, material.find_first_not_of(" \t"), "", "remove the space"}}};
+        return {};
+    }
     if (!n.materials.count(Lower(material))) {
         const std::string trimmed = Trim(material);
         const size_t spaces = material.find_first_not_of(" \t");
@@ -651,7 +675,10 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
                     if (ch == '{' || ch == '[') ++depth;
                     else if (ch == '}' || ch == ']') --depth;
                     else if (ch == ',' && depth > 0) {
-                        issue(Issue::Error, row, col, "a ',' inside { } or [ ] cuts the entry in two (lists are separated by commas; modifiers use ';')",
+                        const bool vanillaForm = names.spells && CommaBetweenModifiers(text, names);
+                        issue(vanillaForm ? Issue::Warning : Issue::Error, row, col,
+                              vanillaForm ? "a ',' between modifiers inside { }: the vanilla database has this form, whether the game reads it is unverified (';' is the documented separator)"
+                                          : "a ',' inside { } or [ ] cuts the entry in two (lists are separated by commas; modifiers use ';')",
                               {{"',' -> ';' inside { } and [ ]", CommasInBraces(text)}});
                         break;
                     }
@@ -717,10 +744,12 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
                     else if (ch == ',' && depth > 0) cut = true;
                 }
                 if (cut) {
-                    issue(Issue::Error, row, it->second.back(), "'" + c->text + "': a ',' inside { } or [ ] cuts the entry in two "
-                          "(the list is separated by commas; spell modifiers are separated by ';')",
+                    const bool vanillaForm = ref.kind != Reference::Items && CommaBetweenModifiers(c->text, names);
+                    issue(vanillaForm ? Issue::Warning : Issue::Error, row, it->second.back(),
+                          "'" + c->text + (vanillaForm ? "': a ',' between modifiers inside { }: the vanilla database has this form, whether the game reads it is unverified (';' is the documented separator)"
+                                                       : "': a ',' inside { } or [ ] cuts the entry in two (the list is separated by commas; spell modifiers are separated by ';')"),
                           {{"',' -> ';' inside { } and [ ]", CommasInBraces(c->text)}});
-                    continue;
+                    continue; // the vanilla form's modifiers were checked by CommaBetweenModifiers; the list splitter would cut it
                 }
                 for (const Entry& e : SplitEntries(c->text)) {
                     const Problem p = ref.kind == Reference::Items ? CheckItem(e.text, names) : CheckSpell(e.text, names);
@@ -893,6 +922,7 @@ Completion Completer::Complete(const sheetio::Sheet& sh, int col, const std::str
                 const size_t dot = token.rfind('.');
                 if (dot != std::string::npos) {
                     Match(n.materials, token.substr(dot + 1), token.substr(0, dot + 1), out.candidates); // item.material
+                    if (Lower(token.substr(0, dot)) == "rune") Match(n.modifiers, token.substr(dot + 1), token.substr(0, dot + 1), out.candidates); // rune.<modifier>
                 } else {
                     NameMap items = n.itemNames;
                     items.emplace("material", "material");

@@ -42,6 +42,8 @@
 #include "mapedit/map_app.hpp"
 #include "dllconnect/connector_app.hpp"
 #include "texedit/texture_app.hpp"
+#include "log.hpp"
+#include "texedit/quest_map.hpp"
 #include "alerts.hpp"
 #include "i18n.hpp"
 #include "db_editor.hpp"
@@ -197,6 +199,7 @@ static bool NativePickFile(bool saveDialog, const char* filterName, const char* 
     ofn.Flags = saveDialog ? OFN_OVERWRITEPROMPT : (OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST);
     BOOL ok = saveDialog ? GetSaveFileNameA(&ofn) : GetOpenFileNameA(&ofn);
     if (ok) { outPath = buf; return true; }
+    if (const DWORD code = CommDlgExtendedError()) umlog::Write(umlog::Level::Error, "File dialog failed, CommDlgExtendedError " + std::to_string(code));
     return false;
 #else
     (void)filterName;
@@ -209,6 +212,7 @@ static bool NativePickFile(bool saveDialog, const char* filterName, const char* 
         return RunPickerCommand(saveDialog ? "kdialog --getsavefilename 2>/dev/null"
                                             : "kdialog --getopenfilename 2>/dev/null", outPath);
     }
+    umlog::Write(umlog::Level::Error, "File dialog: neither zenity nor kdialog is installed");
     return false;
 #endif
 }
@@ -933,6 +937,7 @@ static void HintAppId(const char*) {}
 static std::string g_glfwError;
 static void ReportStartFailure(const char* what) {
     const std::string text = std::string(what) + (g_glfwError.empty() ? "" : ":\n" + g_glfwError);
+    umlog::Write(umlog::Level::Error, text);
     std::fprintf(stderr, "%s\n", text.c_str());
 #ifdef _WIN32
     MessageBoxA(nullptr, text.c_str(), "um-multitool", MB_OK | MB_ICONERROR);
@@ -999,6 +1004,7 @@ int RunGui(const GuiOptions& options) {
     // The sources (figures, textures, texts, database) and settings, shared by the 3D Viewer and the
     // Map Editor and edited in the Settings tab.
     Library library;
+    if (library.logVerbose) umlog::SetVerbose(true);
     library.LoadConfig();
     g_library = &library;
     {
@@ -1053,6 +1059,7 @@ int RunGui(const GuiOptions& options) {
         if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame)) std::fprintf(stderr, "%s\n", err.c_str());
         requestedTab = kViewer;
     }
+    texedit::SetMapSource([mapCtx](questmap::Input& in, std::string& err) { return mapedit::FillQuestMapInput(mapCtx, in, err); });
     if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles, options.mapFocus);
     if (!options.dbFile.empty()) {
         requestedTab = kFiles;
@@ -1206,6 +1213,7 @@ int RunGui(const GuiOptions& options) {
             }
         }
         alerts::Draw();
+        umlog::DrawWindow(&library.logWindow);
         // First start (no LANGUAGE in um-multitool.cfg): ask for the display language. English is the default.
         if (askLanguage) {
             ImGui::OpenPopup("Language / Язык##firstLanguage");

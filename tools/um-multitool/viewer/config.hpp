@@ -113,6 +113,8 @@ struct Config {
     std::vector<std::string> figureLayers;
     std::vector<std::string> textureLayers;
     std::vector<std::string> textLayers;      // texts.res / textslmp.res / folders of loose texts
+    std::map<std::string, std::string> textEncodings; // a text layer's path -> "cp1251" / "cp1250" / "cp949" (missing: auto) (#82)
+    bool logVerbose = false;                  // the log also to the console (#88)
     std::vector<std::string> mapLayers;       // folders of .mpr / .mob files (the Map Editor's list)
     std::string databasePath;
     // Per tab (key e.g. "WEAPONS"): the shown model's orientation, a unit quaternion (w, x, y, z).
@@ -174,6 +176,8 @@ inline Config Load(const std::string& path = Path()) {
         if (key == "FIGURE_LAYER") cfg.figureLayers.push_back(value);
         else if (key == "TEXTURE_LAYER") cfg.textureLayers.push_back(value);
         else if (key == "TEXT_LAYER") cfg.textLayers.push_back(value);
+        else if (key == "TEXT_ENCODING") { const size_t bar = value.find('|'); if (bar != std::string::npos) cfg.textEncodings[value.substr(bar + 1)] = value.substr(0, bar); }
+        else if (key == "LOG_VERBOSE") cfg.logVerbose = value == "true";
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
         else if (key == "DATABASE") cfg.databasePath = value;
         else if (key == "LANGUAGE") cfg.language = value;
@@ -321,6 +325,10 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     list("TEXTURE_LAYER", cfg.textureLayers);
     f << "; Texts: texts.res, textslmp.res or folders of loose text files (item names and descriptions).\n";
     list("TEXT_LAYER", cfg.textLayers);
+    f << "; A text source read as one encoding (cp1251 / cp1250 / cp949) instead of guessing: <encoding>|<path>\n";
+    for (auto& [path, enc] : cfg.textEncodings) if (!enc.empty() && enc != "auto") f << "TEXT_ENCODING=" << enc << "|" << path << "\n";
+    f << "; The log (um-multitool.log beside the program) also printed to the console; (true/false)\n";
+    f << "LOG_VERBOSE=" << flag(cfg.logVerbose) << "\n";
     f << "; Maps: folders of .mpr and .mob files, listed by the Map Editor.\n";
     list("MAP_LAYER", cfg.mapLayers);
     f << "; Quests: folders of .mq files or unpacked quests, each holding different quests.\n";

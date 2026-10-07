@@ -16,6 +16,7 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -147,13 +148,42 @@ inline std::vector<std::string> KeysFor(const items::Item& item, const items::Ma
     return keys;
 }
 
-inline ItemText Lookup(const LayeredAssetSource& sources, const items::Item& item, const items::Material* material) {
+// CP949 (Korean) bytes as UTF-8, whatever they look like.
+inline std::string DecodeCp949(const std::vector<uint8_t>& b) {
+    std::string out;
+    for (size_t i = 0; i < b.size(); ++i) {
+        if (b[i] < 0x80 || i + 1 >= b.size()) { out += static_cast<char>(b[i]); continue; }
+        const uint32_t cp = Cp949(b[i], b[i + 1]);
+        if (!cp) { out += '?'; ++i; continue; }
+        AppendUtf8(out, cp);
+        ++i;
+    }
+    return out;
+}
+
+// Bytes as UTF-8 by a chosen encoding ("cp1251", "cp1250", "cp949"), else ("auto", "") by what they look like.
+inline std::string DecodeAs(const std::vector<uint8_t>& b, const std::string& encoding) {
+    if (encoding == "cp1251") return DecodeCp1251(b);
+    if (encoding == "cp1250") return cp1250::ToUtf8(b);
+    if (encoding == "cp949") return DecodeCp949(b);
+    return DecodeToUtf8(b);
+}
+
+// `encodings`: a layer's path -> its encoding (#82: the Polish texts a mod ships as CP1250 cannot be told from
+// CP1251 by their bytes), missing = auto.
+inline ItemText Lookup(const LayeredAssetSource& sources, const items::Item& item, const items::Material* material,
+                       const std::map<std::string, std::string>* encodings = nullptr) {
     ItemText t;
     for (const std::string& key : KeysFor(item, material)) {
         t.key = key;
         std::vector<uint8_t> bytes;
         if (!sources.ReadFile(key, bytes)) continue;
-        std::string text = DecodeToUtf8(bytes);
+        std::string encoding;
+        if (encodings) {
+            const int layer = sources.LayerWith(key);
+            if (layer >= 0) { auto e = encodings->find(sources.layers[static_cast<size_t>(layer)].path); if (e != encodings->end()) encoding = e->second; }
+        }
+        std::string text = DecodeAs(bytes, encoding);
         std::string clean;
         for (char c : text) if (c != '\r') clean += c;
         size_t nl = clean.find('\n');

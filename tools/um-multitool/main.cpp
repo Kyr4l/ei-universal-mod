@@ -43,6 +43,7 @@
 #include "text_groups.hpp"
 #include "viewer/res_archive.hpp"
 #include "subtools.hpp"
+#include "log.hpp"
 #include "viewer/viewer_app.hpp"
 #include "mapedit/map_app.hpp"
 #include "dllconnect/connector_app.hpp"
@@ -326,6 +327,8 @@ static int StartGui(int argc, char* argv[], int first) {
             options.mpFolder = argv[++i];
         } else if (a == "--settings") {
             options.openSettings = true;
+        } else if (a == "--verbose") {
+            umlog::SetVerbose(true);
         } else if (a == "--screenshot" && i + 1 < argc) {
             options.screenshotPath = argv[++i];
         }
@@ -477,7 +480,7 @@ static const CompletionEntry kCompletions[] = {
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help"},
     {"map",      "--check --navmesh --mpr --write --force --config --help"},
     {"dll",      "--port --listen --stats --help"},
-    {"gui",      "--db --viewer --map --mp --skin --naked --settings --screenshot"},
+    {"gui",      "--db --viewer --map --mp --skin --naked --settings --screenshot --verbose"},
     {"install-desktop", "--remove"},
     {"completion", "bash"},
 };
