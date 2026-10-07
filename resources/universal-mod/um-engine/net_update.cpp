@@ -129,7 +129,7 @@ extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self) 
 
 // 0x436470 NetConnection::ParseUpdate(uint8_t** cursor): one received update after its type byte. False when
 // a reliable message could not be read (the caller drops the client).
-typedef bool(__attribute__((thiscall)) * ReadMessageFn)(NetConnection*, uint8_t** cursor, uint32_t wrapBase);
+typedef bool(__attribute__((thiscall)) * ReadMessageFn)(NetConnection*, uint8_t** cursor, uint32_t packetSeq);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, uint8_t** cursor) {
     game::ParsingConnection() = self;
     *reinterpret_cast<uint32_t*>(reinterpret_cast<uint8_t*>(self) + 0x44) = 0;
@@ -166,7 +166,8 @@ extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, 
     const uint8_t count = **cursor;
     *cursor += 1;
     for (uint8_t i = 0; i < count; ++i) {
-        if (!reinterpret_cast<ReadMessageFn>(0x00435F30)(self, cursor, self->wrapBase)) {
+        // 0x435F30 ReadMessage(cursor, packetSeq): the unwrapped sequence is the "version" stamped on the objects
+        if (!reinterpret_cast<ReadMessageFn>(0x00435F30)(self, cursor, seq)) {
             game::ParsingConnection() = nullptr;
             return false;
         }

@@ -131,3 +131,72 @@ inline void SentPacketErase(ListHead* list, ListNode* node) {
 typedef void(__attribute__((thiscall)) * PacketAckedFn)(NetConnection*, void* record);
 inline void PacketAcked(NetConnection* c, void* record) { reinterpret_cast<PacketAckedFn>(0x00433FA0)(c, record); }
 }  // namespace game
+
+// ---- the reliable messages: replicated objects (RE: README "Object table") ----
+// The stream reader the message code uses (0x4DA490 makes it): the cursor first, then the flag-bit buffer.
+struct NetReader {
+    uint8_t* cursor;    // +0x00
+    uint32_t unused04;  // +0x04
+    uint32_t bitBuffer; // +0x08 the flag bits of the current group of 8 messages
+    uint8_t bitsLeft;   // +0x0C
+};
+// A replicated object (base vtable 0x73BF4C): intrusive refcount, then the replication header.
+struct NetObject {
+    void** vtable;      // [3] (+0x0C) clone, [5] (+0x14) read(reader), [4] (+0x10) write
+    uint16_t refCount;  // +0x04
+    uint8_t flags06;    // +0x06 bit 0 = shared (held by a smart pointer)
+    uint8_t flags07;    // +0x07 bit 7 = being destroyed
+    uint32_t version;   // +0x08
+    uint16_t id;        // +0x0C
+    uint8_t kind;       // +0x0E
+    uint8_t flags0F;    // +0x0F bit 0
+};
+// MSVC 6 map node: left, parent, right, colour, then the pair {key, {object pointer, version}}
+struct ObjectEntry {
+    void* link[3];      // +0x00
+    uint32_t colour;    // +0x0C
+    uint32_t key;       // +0x10 kind << 16 | id
+    NetObject* object;  // +0x14 a smart pointer (refcounted)
+    uint32_t version;   // +0x18 the sequence of the last update applied (0 = created, not applied yet)
+};
+struct ObjectPair { uint32_t key; NetObject* object; uint32_t version; };
+struct MapHead { ObjectEntry* header; };  // the map object: a pointer to its header node (= end())
+// A "created / updated / removed" callback: ecx = the connection being serviced, edx = the object.
+typedef void(__attribute__((fastcall)) * ObjectCallback)(NetConnection* connection, NetObject* object);
+struct CallbackList { ObjectCallback* begin; ObjectCallback* end; ObjectCallback* capacity; };
+// The NetConnection fields the message reader uses (beyond the ones above)
+inline MapHead* ObjectMap(NetConnection* c) { return reinterpret_cast<MapHead*>(reinterpret_cast<uint8_t*>(c) + 0x1100); }
+inline void* ObjectIdMap(NetConnection* c) { return reinterpret_cast<uint8_t*>(c) + 0x110C; }  // object* -> {id, kind}
+inline CallbackList* CallbacksCreated(NetConnection* c) { return reinterpret_cast<CallbackList*>(reinterpret_cast<uint8_t*>(c) + 0x164); }
+inline CallbackList* CallbacksUpdated(NetConnection* c) { return reinterpret_cast<CallbackList*>(reinterpret_cast<uint8_t*>(c) + 0xD64); }
+inline CallbackList* CallbacksRemoved(NetConnection* c) { return reinterpret_cast<CallbackList*>(reinterpret_cast<uint8_t*>(c) + 0x1964); }
+
+namespace game {
+inline NetConnection* ServicedConnection() { return *reinterpret_cast<NetConnection**>(0x0079B920); }
+typedef void(__attribute__((thiscall)) * ReaderReadFn)(NetReader*, void* dst, uint32_t n);
+inline void ReaderRead(NetReader* r, void* dst, uint32_t n) { reinterpret_cast<ReaderReadFn>(0x00430F60)(r, dst, n); }
+typedef void(__attribute__((thiscall)) * MapFindFn)(MapHead*, ObjectEntry** result, const uint32_t* key);
+inline ObjectEntry* ObjectFind(MapHead* m, uint32_t key) { ObjectEntry* r = nullptr; reinterpret_cast<MapFindFn>(0x0043CE70)(m, &r, &key); return r; }
+inline ObjectEntry* ObjectLowerBound(MapHead* m, uint32_t key) { ObjectEntry* r = nullptr; reinterpret_cast<MapFindFn>(0x00439AA0)(m, &r, &key); return r; }
+typedef ObjectEntry**(__attribute__((thiscall)) * MapInsertFn)(MapHead*, ObjectEntry** result, ObjectEntry* hint, const ObjectPair* pair);
+inline ObjectEntry* ObjectInsert(MapHead* m, ObjectEntry* hint, const ObjectPair& pair) { ObjectEntry* r = nullptr; reinterpret_cast<MapInsertFn>(0x00439A70)(m, &r, hint, &pair); return r; }
+typedef NetObject*(__attribute__((thiscall)) * FactoryFn)(void* registry, uint32_t kind);
+// 0x438930: a new object of that kind from the registry at the serviced connection + 0x2C (NULL = unknown kind)
+inline NetObject* ObjectCreate(uint32_t kind) { return reinterpret_cast<FactoryFn>(0x00438930)(reinterpret_cast<uint8_t*>(ServicedConnection()) + 0x2C, kind); }
+typedef void(__attribute__((thiscall)) * PtrAssignFn)(NetObject** holder, NetObject* object);
+typedef void(__attribute__((thiscall)) * PtrReleaseFn)(NetObject** holder);
+inline void PtrAssign(NetObject** holder, NetObject* object) { reinterpret_cast<PtrAssignFn>(0x00438110)(holder, object); }          // releases the old one
+inline void PtrSet(NetObject** holder, NetObject* object) { reinterpret_cast<PtrAssignFn>(0x00418BE0)(holder, object); }             // no release
+inline void PtrRelease(NetObject** holder) { reinterpret_cast<PtrReleaseFn>(0x00413270)(holder); }
+typedef void(__attribute__((thiscall)) * RegisterIdFn)(NetConnection*, NetObject* object, uint32_t kind, uint32_t key);
+inline void ObjectRegisterId(NetConnection* c, NetObject* o, uint32_t kind, uint32_t key) { reinterpret_cast<RegisterIdFn>(0x004352F0)(c, o, kind, key); }
+typedef void(__attribute__((thiscall)) * UnregisterIdFn)(void* idMap, NetObject** key);
+inline void ObjectUnregisterId(NetConnection* c, NetObject* o) { reinterpret_cast<UnregisterIdFn>(0x0043D2E0)(ObjectIdMap(c), &o); }
+typedef void(__attribute__((thiscall)) * ObjectReadFn)(NetObject*, NetReader*);
+inline void ObjectRead(NetObject* o, NetReader* r) { reinterpret_cast<ObjectReadFn>(o->vtable[5])(o, r); }
+inline void RunCallbacks(CallbackList* lists, uint32_t kind, NetObject* object) {
+    NetConnection* c = ServicedConnection();
+    const CallbackList& l = lists[kind];
+    for (ObjectCallback* f = l.begin; f != l.end; ++f) (*f)(c, object);
+}
+}  // namespace game
