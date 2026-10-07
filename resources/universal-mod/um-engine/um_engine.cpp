@@ -18,18 +18,32 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.1.3";
+static const char* const kEngineVersion = "0.2.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 struct sockaddr; struct sockaddr_in; struct GameBuffer; // net_udp.cpp
 extern "C" bool __attribute__((thiscall)) UmNetSendTo(unsigned* self, sockaddr* to, GameBuffer* buffer);
 extern "C" bool __attribute__((thiscall)) UmNetReceiveFrom(unsigned* self, sockaddr_in* from, GameBuffer* buffer);
+struct NetConnection;
+extern "C" void __attribute__((thiscall)) UmNetWriteAcks(NetConnection* self, unsigned char** cursor);    // net_update.cpp
+extern "C" void __attribute__((thiscall)) UmNetAckOne(NetConnection* self, unsigned short seq);
+extern "C" void __attribute__((thiscall)) UmNetReadAcks(NetConnection* self, unsigned char** cursor);
+extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, unsigned seq);
+extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
+extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 
 static const UmEngineFunction kFunctions[] = {
     // { "FunctionName", 0x00400000, reinterpret_cast<void*>(&NewCode), 0 },
     { "strlen", 0x006ECCB0, reinterpret_cast<void*>(&UmStrlen), 0, {0x8B, 0x4C, 0x24, 0x04, 0xF7, 0xC1, 0x03, 0x00} }, // the Russian game.exe (EIStarter/Engine)
     { "NetSocket::SendTo", 0x00440B90, reinterpret_cast<void*>(&UmNetSendTo), 0, {0x8B, 0x44, 0x24, 0x08, 0x56, 0x57, 0x8B, 0x50} },
     { "NetSocket::ReceiveFrom", 0x00440BE0, reinterpret_cast<void*>(&UmNetReceiveFrom), 0, {0x53, 0x56, 0x8B, 0x74, 0x24, 0x10, 0x57, 0x8B} },
+    // The update packet codec (net_update.cpp): sequence window, acks, stream chunks, the update parser
+    { "NetConnection::WriteAcks", 0x00434C20, reinterpret_cast<void*>(&UmNetWriteAcks), 0, {0x51, 0x8B, 0xD1, 0x53, 0x55, 0x56, 0x66, 0x8B} },
+    { "NetConnection::AckOne", 0x00434CE0, reinterpret_cast<void*>(&UmNetAckOne), 0, {0x8B, 0x81, 0xF8, 0x10, 0x00, 0x00, 0x56, 0x57} },
+    { "NetConnection::ReadAcks", 0x00434D70, reinterpret_cast<void*>(&UmNetReadAcks), 0, {0x53, 0x55, 0x56, 0x8B, 0xF1, 0x8B, 0x4C, 0x24} },
+    { "NetConnection::AcceptSeq", 0x00434E50, reinterpret_cast<void*>(&UmNetAcceptSeq), 0, {0x64, 0xA1, 0x00, 0x00, 0x00, 0x00, 0x6A, 0xFF} },
+    { "NetConnection::DrainChunks", 0x00434AE0, reinterpret_cast<void*>(&UmNetDrainChunks), 0, {0x83, 0xEC, 0x08, 0x53, 0x55, 0x56, 0x8B, 0xF1} },
+    { "NetConnection::ParseUpdate", 0x00436470, reinterpret_cast<void*>(&UmNetParseUpdate), 0, {0x6A, 0xFF, 0x68, 0xDB, 0x22, 0x71, 0x00, 0x64} },
     { nullptr, 0, nullptr, 0, {} } // end (kept so the table is never empty)
 };
 
