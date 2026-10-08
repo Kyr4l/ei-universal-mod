@@ -13,6 +13,7 @@
 #include "alerts.hpp"
 #include "i18n.hpp"
 #include "library.hpp"
+#include "theme.hpp"
 #include "../log.hpp"
 #include "../i18n.hpp"
 #include "ui_common.hpp"
@@ -471,6 +472,32 @@ inline void ControlsPanel(Library& lib, SourcesState& st) {
             }
             ImGui::EndCombo();
         }
+    }
+    ImGui::SeparatorText("Theme");
+    {
+        const theme::Preset* cur = theme::Find(lib.themePreset);
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextUnformatted("Colours");
+        ImGui::SameLine(220);
+        ImGui::SetNextItemWidth(260);
+        if (ImGui::BeginCombo("##theme", cur ? cur->name : lib.themePreset.c_str())) {
+            for (const theme::Preset& p : theme::kPresets)
+                if (ImGui::Selectable(p.name, cur == &p)) { lib.themePreset = p.key; lib.themeAccent = theme::AccentText(p.accent); lib.SaveConfig(); }
+            ImGui::EndCombo();
+        }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("The splash screen's palettes; charcoal and gold is the tool's own. A preset also sets the accent below.");
+        theme::Rgb a{236, 200, 130};
+        theme::ParseAccent(lib.themeAccent, a);
+        float col[3] = {a.r / 255.0f, a.g / 255.0f, a.b / 255.0f};
+        ImGui::AlignTextToFramePadding();
+        ImGui::TextUnformatted("Accent");
+        ImGui::SameLine(220);
+        ImGui::SetNextItemWidth(260);
+        if (ImGui::ColorEdit3("##accent", col, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_PickerHueWheel)) {
+            lib.themeAccent = theme::AccentText({static_cast<int>(col[0] * 255 + 0.5f), static_cast<int>(col[1] * 255 + 0.5f), static_cast<int>(col[2] * 255 + 0.5f)});
+        }
+        if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Buttons, tabs, headers, sliders and highlights take this colour; the background and the text stay the preset's.");
     }
     ImGui::SeparatorText("Alerts");
     if (ImGui::Checkbox("Error popups", &lib.alertPopups)) { alerts::SetPopups(lib.alertPopups); lib.SaveConfig(); }

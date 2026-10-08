@@ -36,6 +36,8 @@
 #include "gui.hpp"
 #include "version.hpp"
 #include "icon_data.hpp"
+#include "splash.hpp"
+#include "viewer/theme.hpp"
 #include "viewer/viewer_app.hpp"
 #include "viewer/library.hpp"
 #include "viewer/ui_sources.hpp"
@@ -893,7 +895,7 @@ static void SaveScreenshot(const std::string& path, int w, int h) {
 // (Cyrillic) or Korean, so system fonts are merged in behind it: ImGui 1.92 loads their glyphs on
 // demand, only for characters the built-in font lacks. Missing fonts are skipped. Only TrueType
 // (glyf) or classic CFF fonts load; the variable "-VF" Noto CJK fonts (CFF2) do not.
-static void AddFallbackFonts(ImGuiIO& io) {
+void AddFallbackFonts(ImGuiIO& io) { // also the splash screen's (splash.cpp)
     static const char* const candidates[] = {
 #ifdef _WIN32
         "C:\\Windows\\Fonts\\segoeui.ttf", "C:\\Windows\\Fonts\\arial.ttf",   // Latin accents, Cyrillic
@@ -966,6 +968,7 @@ int RunGui(const GuiOptions& options) {
     const bool wayland = OnWayland();
     // Created at the normal size and maximized once shown: a window that starts maximized gives the
     // window manager no size to go back to when it is un-maximized (KWin then keeps the full screen).
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // shown once the splash screen is done (splash::End below)
     GLFWwindow* window = glfwCreateWindow(std::max(saved.windowW, 640), std::max(saved.windowH, 400), title.c_str(), nullptr, nullptr);
     if (!window) {
         ReportStartFailure("The window could not be created (OpenGL)");
@@ -982,6 +985,13 @@ int RunGui(const GuiOptions& options) {
         glfwSetWindowIcon(window, 3, icons);
     }
     glfwSwapInterval(1); // vsync; also paces our polling loop like the old 60ms timer did
+    // The splash screen: the first thing on screen, up while everything below loads (splash.hpp).
+    {
+        theme::Rgb accent{236, 200, 130};
+        theme::ParseAccent(saved.themeAccent, accent);
+        splash::Begin(window, config::ExeDir() + "/splash.png", accent.r, accent.g, accent.b);
+    }
+    splash::Step("Starting", 0.04f);
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -997,7 +1007,6 @@ int RunGui(const GuiOptions& options) {
     ImGui::GetCurrentContext()->ConfigNavWindowingKeyNext = 0;
     ImGui::GetCurrentContext()->ConfigNavWindowingKeyPrev = 0;
 
-    // Default Dear ImGui look and colors - no theme customization.
     AddFallbackFonts(io);
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -1007,7 +1016,22 @@ int RunGui(const GuiOptions& options) {
     // Map Editor and edited in the Settings tab.
     Library library;
     if (library.logVerbose) umlog::SetVerbose(true);
+    splash::Step("Reading the settings", 0.08f);
+    library.onLoadProgress = [](const std::string& what, float f) { splash::Step(what, 0.1f + f * 0.55f); };
     library.LoadConfig();
+    library.onLoadProgress = nullptr;
+    splash::Step("Sources loaded", 0.66f);
+    // The colours (Settings > General, viewer/theme.hpp): applied now and again whenever they change.
+    std::string themeApplied;
+    auto applyTheme = [&] {
+        const std::string key = library.themePreset + "|" + library.themeAccent;
+        if (key == themeApplied) return;
+        themeApplied = key;
+        theme::Rgb accent{236, 200, 130};
+        theme::ParseAccent(library.themeAccent, accent);
+        theme::Apply(library.themePreset, accent);
+    };
+    applyTheme();
     glfwSwapInterval(library.vsync ? 1 : 0); // Settings > Performance
     bool vsyncSet = library.vsync;
     if (const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor())) if (mode->refreshRate > 0) library.displayRefresh = mode->refreshRate;
@@ -1021,7 +1045,9 @@ int RunGui(const GuiOptions& options) {
     ui::SourcesState sourcesState;
     std::snprintf(sourcesState.databasePath, sizeof(sourcesState.databasePath), "%s", library.dbPath.c_str());
 
+    splash::Step("3D Viewer", 0.7f);
     viewer::Context* viewerCtx = viewer::Create(library);
+    splash::Step("Map Editor", 0.76f);
     mapedit::Context* mapCtx = mapedit::Create(library);
     // The connector finds and opens the game's map through the Map Editor (switching to its tab).
     int requestedFromDll = -1;
@@ -1053,8 +1079,13 @@ int RunGui(const GuiOptions& options) {
                       [&library](const std::string& db, const std::string& res) {
                           if (library.dbCompileTo[db] != res) { library.dbCompileTo[db] = res; library.SaveConfig(); }
                       }});
+    splash::Step("Database", 0.84f);
+    dbedit::Update(); // the Settings' database, when it opens automatically (else the first frame would)
     if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
     if (!options.textureFile.empty()) texedit::OpenPath(options.textureFile);
+    splash::Step("Ready", 1.0f);
+    splash::End();
+    glfwShowWindow(window);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
     enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kNone };
     // The tab asked for on the command line, else the one open when the GUI was last closed.
@@ -1129,6 +1160,7 @@ int RunGui(const GuiOptions& options) {
         dbedit::Update();
         if (library.vsync != vsyncSet) { vsyncSet = library.vsync; glfwSwapInterval(vsyncSet ? 1 : 0); }
         ImGui::GetStyle().AntiAliasedLines = ImGui::GetStyle().AntiAliasedLinesUseTex = ImGui::GetStyle().AntiAliasedFill = library.uiAntialias;
+        applyTheme();
         double now = glfwGetTime();
         float dt = static_cast<float>(now - lastTime);
         lastTime = now;

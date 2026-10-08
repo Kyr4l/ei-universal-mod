@@ -10,6 +10,7 @@
 #include "db_model.hpp"
 
 #include <fstream>
+#include <functional>
 #include <map>
 #include <string>
 #include <vector>
@@ -35,6 +36,7 @@ struct Library {
     std::string dbError;
 
     std::string configPath = config::Path();
+    std::function<void(const std::string&, float)> onLoadProgress; // LoadConfig: what loads now, 0..1 (the splash)
     std::map<std::string, std::array<float, 4>> rotations; // per tab, see config::Config::rotations
     std::map<std::string, std::array<int, 3>> rotationClicks; // per tab: the degrees clicked about X, Y, Z
     config::GifSettings gif;
@@ -57,6 +59,7 @@ struct Library {
     int mapMouseOrbit = 2, mapMousePan = 1; // the Map Editor's mouse buttons, see config.hpp
     int guiTab = 0, viewerTab = 0, mapSideTab = 0; // the tabs open last time
     std::string language;                          // display language "en" / "ru" (i18n.hpp); empty = not chosen yet
+    std::string themePreset = "charcoal", themeAccent = "236,200,130"; // Settings > General (viewer/theme.hpp)
     std::string background, tabBackground[6];     // background pictures (config.hpp)
     int dllPort = 18888, dllTab = 0;               // the UM DLL Connector (config.hpp)
     bool dllAutoConnect = false;
@@ -117,7 +120,14 @@ struct Library {
         config::Config cfg = config::Load(configPath);
         umlog::Write(umlog::Level::Info, "Config " + configPath + ": " + std::to_string(cfg.figureLayers.size()) + " figure, " + std::to_string(cfg.textureLayers.size()) +
                                          " texture, " + std::to_string(cfg.textLayers.size()) + " text, " + std::to_string(cfg.mapLayers.size()) + " map source(s)");
+        const size_t total = cfg.figureLayers.size() + cfg.textureLayers.size() + cfg.textLayers.size() + cfg.mapLayers.size();
+        size_t done = 0;
         auto add = [&](const char* kind, LayeredAssetSource& src, const std::string& p) {
+            if (onLoadProgress) { // the splash screen's status line and bar
+                const size_t slash = p.find_last_of("/\\");
+                onLoadProgress(std::string("Loading ") + kind + " source: " + (slash == std::string::npos ? p : p.substr(slash + 1)), total ? static_cast<float>(done) / total : 1.0f);
+                ++done;
+            }
             const auto t = std::chrono::steady_clock::now();
             const bool ok = src.AddLayer(p);
             const double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t).count();
@@ -148,6 +158,7 @@ struct Library {
         mapCameraSpeed = cfg.mapCameraSpeed;
         mapMouseOrbit = cfg.mapMouseOrbit;
         language = cfg.language;
+        themePreset = cfg.themePreset; themeAccent = cfg.themeAccent;
         guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour; markerOpacity = cfg.markerOpacity; textEncodings = cfg.textEncodings; logVerbose = cfg.logVerbose; frameRateLimit = cfg.frameRateLimit; idleRedraw = cfg.idleRedraw; vsync = cfg.vsync; uiAntialias = cfg.uiAntialias; showFps = cfg.showFps; mapDrawDistance = cfg.mapDrawDistance; mapLowDetail = cfg.mapLowDetail;
         background = cfg.background;
         for (int i = 0; i < 6; ++i) tabBackground[i] = cfg.tabBackground[i];
@@ -189,7 +200,7 @@ struct Library {
         cfg.mapQuest = mapQuest;
         cfg.mapCameraSpeed = mapCameraSpeed;
         cfg.mapMouseOrbit = mapMouseOrbit;
-        cfg.language = language;
+        cfg.language = language; cfg.themePreset = themePreset; cfg.themeAccent = themeAccent;
         cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour; cfg.markerOpacity = markerOpacity; cfg.textEncodings = textEncodings; cfg.logVerbose = logVerbose; cfg.frameRateLimit = frameRateLimit; cfg.idleRedraw = idleRedraw; cfg.vsync = vsync; cfg.uiAntialias = uiAntialias; cfg.showFps = showFps; cfg.mapDrawDistance = mapDrawDistance; cfg.mapLowDetail = mapLowDetail;
         cfg.background = background;
         for (int i = 0; i < 6; ++i) cfg.tabBackground[i] = tabBackground[i];

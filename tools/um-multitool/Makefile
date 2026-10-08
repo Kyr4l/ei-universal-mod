@@ -21,7 +21,7 @@ WIN_CXX = x86_64-w64-mingw32-g++
 IMGUI_DIR = vendor/imgui
 IMGUI_SRCS = $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp \
              $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/imgui_impl_glfw.cpp $(IMGUI_DIR)/imgui_impl_opengl2.cpp
-SRCS = main.cpp i18n.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp mp_editor.cpp alerts.cpp log.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp texedit/texture_app.cpp texedit/quest_map.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
+SRCS = main.cpp i18n.cpp splash.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp mp_editor.cpp alerts.cpp log.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp texedit/texture_app.cpp texedit/quest_map.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
 # um.dll's mission script checker is shared with the Map Editor's checks (not copied).
 UMDLL_DIR = ../../resources/universal-mod/um-dll
 HDRS = $(wildcard *.hpp) lang/ru.txt $(wildcard viewer/*.hpp) $(wildcard mapedit/*.hpp) $(wildcard dllconnect/*.hpp) $(wildcard texedit/*.hpp) $(UMDLL_DIR)/mob_script_check.hpp $(UMDLL_DIR)/mob_script_functions.hpp $(wildcard sfx/*.mp3)
@@ -70,6 +70,7 @@ build/xp32/%.o: %.cpp
 	i686-w64-mingw32-g++ $(XP_FLAGS) -isystem vendor/glfw-mingw-xp32/include $(DEPFLAGS) -c $< -o $@
 # The sounds are assembled into alerts.cpp (.incbin): -MMD does not see them.
 build/linux/alerts.o build/win/alerts.o build/xp32/alerts.o: $(wildcard sfx/*.mp3)
+build/linux/splash.o build/win/splash.o build/xp32/splash.o: assets/splash.png
 
 $(TARGET): $(LINUX_OBJS)
 	$(CXX) $(LINUX_FLAGS) -o $@ $^ $(LINUX_LIBS)

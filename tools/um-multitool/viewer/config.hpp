@@ -149,6 +149,8 @@ struct Config {
     float mapCameraSpeed = 1.0f;              // the Map Editor's key movement speed (multiplier)
     int guiTab = 0, viewerTab = 0, mapSideTab = 0; // the tabs open when the GUI was closed
     std::string language;                     // display language, "en" / "ru"; empty = not chosen yet (first start: the GUI asks)
+    std::string themePreset = "charcoal";     // viewer/theme.hpp: the colours ("default" = Dear ImGui's own)
+    std::string themeAccent = "236,200,130";  // the accent colour, r,g,b (a preset sets it; Settings can change it by hand)
     // Background pictures behind the menus: one for every tab, and one per main tab (which wins)
     std::string background;
     std::string tabBackground[6];                 // File Processing, 3D Viewer, Map Editor, Settings, UM DLL Connector, Texture Editor
@@ -198,6 +200,8 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
         else if (key == "DATABASE") cfg.databasePath = value;
         else if (key == "LANGUAGE") cfg.language = value;
+        else if (key == "THEME") cfg.themePreset = value;
+        else if (key == "THEME_ACCENT") cfg.themeAccent = value;
         else if (key == "GIF_SIZE") cfg.gif.size = std::atoi(value.c_str());
         else if (key == "GIF_FPS") cfg.gif.fps = std::atoi(value.c_str());
         else if (key == "GIF_SPEED") cfg.gif.degreesPerSecond = std::max(0.0f, static_cast<float>(std::atof(value.c_str())));
@@ -380,6 +384,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     section("Layout");
     f << "; Display language of the GUI: en (English) or ru (Russian). Empty or missing: the GUI asks at start.\n";
     if (!cfg.language.empty()) f << "LANGUAGE=" << cfg.language << "\n";
+    f << "; The GUI's colours: a preset of viewer/theme.hpp (default, charcoal, navy, slate, burgundy, bronze, teal) and the accent as r,g,b\n";
+    f << "THEME=" << cfg.themePreset << "\nTHEME_ACCENT=" << cfg.themeAccent << "\n";
     f << "; The tabs open when the GUI was closed: main tab (0 File Processing, 1 3D Viewer, 2 Map Editor, 3 Settings),\n"
          "; the 3D Viewer's item tab and the Map Editor's side tab.\n";
     f << "GUI_TAB=" << cfg.guiTab << "\nVIEWER_TAB=" << cfg.viewerTab << "\nMAP_SIDE_TAB=" << cfg.mapSideTab << "\n";

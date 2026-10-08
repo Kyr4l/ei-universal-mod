@@ -76,6 +76,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool gui --texture [<file>]   # ... on the Texture Editor (with this picture: .mmp, .dds, .png)\n"
               << "  um-multitool gui --settings           # ... on the Settings tab\n"
               << "  um-multitool gui [...] --screenshot <out.bmp>  # ... then save a picture of the window (BMP) and quit\n"
+              << "  (the GUI opens with a splash screen; a splash.png beside the program replaces its banner, 480 x 300)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
               << "  um-multitool <path> [options]         # auto-detects the right subcommand\n"
               << "  --verbose / -v (any command)          # the log (um-multitool.log beside the program) also on stderr\n\n"
