@@ -5205,3 +5205,40 @@
 2026-10-08 15:00:22 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
 2026-10-08 15:00:22 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/ztq1.mob: 0 objects, a script
 2026-10-08 15:00:22 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+---- um-multitool started 2026-10-08 20:18:53
+2026-10-08 20:18:53 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 0 figure, 0 texture, 0 text, 0 map source(s)
+2026-10-08 20:18:53 info  Sources ready in 0 ms
+---- um-multitool started 2026-10-08 20:37:09
+2026-10-08 20:37:09 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 0 figure, 0 texture, 0 text, 0 map source(s)
+2026-10-08 20:37:09 info  Sources ready in 0 ms
+---- um-multitool started 2026-10-08 20:40:54
+2026-10-08 20:40:54 info  Config /tmp/claude-1000/-mnt-ssd-datastore0-repositories-github-Kyr4l-ei-universal-mod/ee45ff57-f741-4635-bb64-6dd61e611073/scratchpad/chk.cfg: 1 figure, 2 texture, 0 text, 0 map source(s)
+2026-10-08 20:40:54 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 30 ms
+2026-10-08 20:40:54 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/textures.res: 298 file(s), 28 ms
+2026-10-08 20:40:54 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/redress.res: 484 file(s), 23 ms
+2026-10-08 20:40:54 info  Database /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/databaselmp.res: 64 weapons, 192 armors
+2026-10-08 20:40:54 info  Sources ready in 86 ms
+---- um-multitool started 2026-10-08 20:40:59
+2026-10-08 20:40:59 info  Config /tmp/claude-1000/-mnt-ssd-datastore0-repositories-github-Kyr4l-ei-universal-mod/ee45ff57-f741-4635-bb64-6dd61e611073/scratchpad/chk.cfg: 1 figure, 2 texture, 0 text, 0 map source(s)
+2026-10-08 20:40:59 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 27 ms
+2026-10-08 20:40:59 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/textures.res: 298 file(s), 28 ms
+2026-10-08 20:40:59 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/redress.res: 484 file(s), 23 ms
+2026-10-08 20:40:59 info  Database /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/databaselmp.res: 64 weapons, 192 armors
+2026-10-08 20:40:59 info  Sources ready in 83 ms
+---- um-multitool started 2026-10-08 20:40:59
+2026-10-08 20:40:59 info  Config /tmp/claude-1000/-mnt-ssd-datastore0-repositories-github-Kyr4l-ei-universal-mod/ee45ff57-f741-4635-bb64-6dd61e611073/scratchpad/chk.cfg: 1 figure, 2 texture, 0 text, 0 map source(s)
+2026-10-08 20:40:59 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 31 ms
+2026-10-08 20:40:59 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/textures.res: 298 file(s), 26 ms
+2026-10-08 20:40:59 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/redress.res: 484 file(s), 23 ms
+2026-10-08 20:40:59 info  Database /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/databaselmp.res: 64 weapons, 192 armors
+2026-10-08 20:40:59 info  Sources ready in 85 ms
+---- um-multitool started 2026-10-08 20:41:05
+2026-10-08 20:41:05 info  Config /tmp/claude-1000/-mnt-ssd-datastore0-repositories-github-Kyr4l-ei-universal-mod/ee45ff57-f741-4635-bb64-6dd61e611073/scratchpad/chk.cfg: 1 figure, 2 texture, 0 text, 0 map source(s)
+2026-10-08 20:41:05 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 27 ms
+2026-10-08 20:41:05 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/textures.res: 298 file(s), 25 ms
+2026-10-08 20:41:05 info  Texture source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/redress.res: 484 file(s), 20 ms
+2026-10-08 20:41:05 info  Database /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/databaselmp.res: 64 weapons, 192 armors
+2026-10-08 20:41:05 info  Sources ready in 77 ms
+---- um-multitool started 2026-10-08 20:41:43
+2026-10-08 20:41:43 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 0 figure, 0 texture, 0 text, 0 map source(s)
+2026-10-08 20:41:43 info  Sources ready in 0 ms

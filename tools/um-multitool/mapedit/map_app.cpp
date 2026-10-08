@@ -5116,7 +5116,7 @@ static void TilePanel(App& app, bool inShelf = false) {
     if (app.brushWater) { app.materialBrush = false; TilesPanel(app); return; }
     tilemat::Terrain* tm = tilemat::Lookup(m.name);
     if (!tm) { // a custom terrain: a materials file says what its tiles are made of: the tool's materials/ folder
-               // (shipped tables, e.g. zonetest's), then the output folder (tiles borrowed in the editor)
+               // (shipped tables), then the output folder (tiles borrowed in the editor)
         tilemat::Terrain& own = tilemat::Create(m.name);
         if (own.tiles.empty() && !app.sidecarLoaded.count(app.terrainPath)) {
             app.sidecarLoaded.insert(app.terrainPath);

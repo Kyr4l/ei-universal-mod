@@ -45,7 +45,7 @@ struct Vertex {
 struct Sector {
     bool present = false;
     bool water = false;
-    uint8_t type = 1;             // as stored: 3 has water
+    uint8_t type = 0;             // as stored: 3 has water, 0 none (no vanilla sector has any other value)
     Vertex land[33][33];          // [row = y][col = x]
     Vertex waterVerts[33][33];
     uint16_t landTiles[16][16] = {};
@@ -237,7 +237,7 @@ inline std::vector<uint8_t> WriteHeader(const Map& m) {
 inline std::vector<uint8_t> WriteSector(const Sector& s) {
     Writer w;
     w.Put<uint32_t>(0xCF4BF774u);
-    w.Put<uint8_t>(s.type);
+    w.Put<uint8_t>(s.water ? 3 : 0);
     auto verts = [&](const Vertex (&v)[33][33]) {
         for (int row = 0; row < 33; ++row)
             for (int col = 0; col < 33; ++col) {
@@ -311,7 +311,7 @@ inline bool Create(const Map& model, const std::string& name, int sx, int sy, fl
     for (int y = 0; y < sy; ++y)
         for (int x = 0; x < sx; ++x) {
             Sector& s = m.sectors[static_cast<size_t>(y) * sx + x];
-            s.present = true; s.water = false; s.type = 1;
+            s.present = true; s.water = false; s.type = 0;
             for (auto& row : s.land) for (Vertex& v : row) { v.z = z; v.packedNormal = up; }
             for (auto& row : s.landTiles) for (uint16_t& t : row) t = tile;
             for (auto& row : s.waterMaterial) for (int16_t& w : row) w = -1;
