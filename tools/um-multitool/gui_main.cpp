@@ -706,6 +706,7 @@ static std::vector<std::string> BuildResToolArgs() {
 static ProcHandle g_activeProc;
 static double g_progressPhase = 0.0;
 static std::string g_statusText = "Idle";
+static bool g_resting = false; // the main loop is at the resting rate (Settings > Performance), shown by the frame rate
 static int g_activeTab = 0;
 static const char* g_activeSubcommand = ""; // the shown File Processing sub-tab's tool ("" for DB)
 constexpr int kDbSubTab = 0; // File Processing's DB sub-tab (see the tabs in RunGui)
@@ -1252,6 +1253,26 @@ int RunGui(const GuiOptions& options) {
         }
         ImGui::End();
 
+        if (library.showFps) { // Settings > Performance: frames per second, averaged over the last half second
+            static double windowStart = 0.0, shownFps = 0.0, shownMs = 0.0;
+            static int frames = 0;
+            ++frames;
+            if (windowStart == 0.0) { windowStart = now; shownFps = dt > 0 ? 1.0 / dt : 0.0; shownMs = dt * 1000.0; } // this frame's, until the first average
+            if (now - windowStart >= 0.5) {
+                shownFps = frames / (now - windowStart);
+                shownMs = 1000.0 * (now - windowStart) / frames;
+                frames = 0;
+                windowStart = now;
+            }
+            char text[96];
+            std::snprintf(text, sizeof text, "%.0f fps  %.1f ms%s", shownFps, shownMs, g_resting ? "  (resting)" : "");
+            const ImVec2 size = ImGui::CalcTextSize(text);
+            const ImVec2 at(io.DisplaySize.x - size.x - 44.0f, 4.0f); // left of the ? help button
+            ImDrawList* fg = ImGui::GetForegroundDrawList();
+            fg->AddRectFilled(ImVec2(at.x - 5.0f, at.y - 2.0f), ImVec2(at.x + size.x + 5.0f, at.y + size.y + 2.0f), IM_COL32(0, 0, 0, 150), 3.0f);
+            fg->AddText(at, IM_COL32(255, 255, 255, 230), text);
+        }
+
         ImGui::Render();
         glViewport(0, 0, fbW, fbH);
         const ImVec4 bg = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
@@ -1277,9 +1298,14 @@ int RunGui(const GuiOptions& options) {
             for (int k = ImGuiKey_NamedKey_BEGIN; k < ImGuiKey_NamedKey_END && !active; ++k) if (ImGui::IsKeyDown(static_cast<ImGuiKey>(k))) active = true;
             if (active) lastActivity = now;
             double minFrame = library.frameRateLimit > 0 ? 1.0 / std::max(library.frameRateLimit, 25) : 0.0;
-            if (library.idleRedraw && now - lastActivity > 0.5) minFrame = std::max(minFrame, 1.0 / 25.0);
+            g_resting = library.idleRedraw && now - lastActivity > 0.5;
+            if (g_resting) minFrame = std::max(minFrame, 1.0 / 25.0);
             const double spent = glfwGetTime() - now;
-            if (spent < minFrame) ImGui_ImplGlfw_Sleep(static_cast<int>((minFrame - spent) * 1000.0));
+            // Resting: wait for an event rather than sleep, so the first mouse move or key wakes the loop at once.
+            if (spent < minFrame) {
+                if (!active && library.idleRedraw) glfwWaitEventsTimeout(minFrame - spent);
+                else ImGui_ImplGlfw_Sleep(static_cast<int>((minFrame - spent) * 1000.0));
+            }
         }
 
         // The Map Editor's script in a window of its own: a second OS window (sharing the GL objects)

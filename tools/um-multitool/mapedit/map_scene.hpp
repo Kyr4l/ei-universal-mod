@@ -184,9 +184,18 @@ public:
     // After tiles or materials changed: the geometry again, the textures kept.
     void RebuildTerrainGeometry() {
         if (!terrain_) return;
-        for (GLuint l : landLists_) if (l) glDeleteLists(l, 1);
-        for (GLuint l : waterLists_) if (l) glDeleteLists(l, 1);
-        BuildTerrainLists();
+        const mpr::Map& m = *terrain_;
+        if (sectorLists_.size() != static_cast<size_t>(m.sectorsX) * m.sectorsY) { BuildTerrainLists(); return; }
+        const uint64_t mats = MaterialsHash(m);
+        const bool waterColours = mats != materialsHash_; // the water's colours changed: every water list again
+        materialsHash_ = mats;
+        for (int sy = 0; sy < m.sectorsY; ++sy)
+            for (int sx = 0; sx < m.sectorsX; ++sx) {
+                const mpr::Sector* sec = m.At(sx, sy);
+                const SectorLists& sl = sectorLists_[static_cast<size_t>(sy) * m.sectorsX + sx];
+                if ((sec ? SectorHash(*sec) : 0) != sl.hash) BuildSectorLists(sx, sy, true, true);
+                else if (waterColours && sec && sec->water) BuildSectorLists(sx, sy, false, true);
+            }
     }
 
     // ---- objects -------------------------------------------------------------------------------
@@ -205,6 +214,7 @@ public:
         figures_.clear();
         for (auto& kv : objectTextures_) if (kv.second) glDeleteTextures(1, &kv.second);
         objectTextures_.clear();
+        ++modelsEpoch_;
     }
 
     void DropAll() {
@@ -260,8 +270,45 @@ public:
             auto w = models_.find(ModelKey(o) + "|walk");
             if (w != models_.end() && w->second.ok) return &w->second;
         }
+        // Building the key is a few string allocations; thousands of objects several times a frame add up, so
+        // the answer is kept per object until a model is built or dropped or an object's look changes.
+        if (cacheEpoch_ != modelsEpoch_ || cacheIdentity_ != identityHash_) {
+            modelCache_.clear();
+            cacheEpoch_ = modelsEpoch_;
+            cacheIdentity_ = identityHash_;
+        }
+        auto c = modelCache_.find(&o);
+        if (c != modelCache_.end()) return c->second;
         auto it = models_.find(ModelKey(o));
-        return it == models_.end() ? nullptr : &it->second;
+        const MapModel* m = it == models_.end() ? nullptr : &it->second;
+        modelCache_.emplace(&o, m);
+        return m;
+    }
+    // Hashes of the objects' looks (what ModelKey depends on, plus which maps are shown) and of their
+    // positions and rotations. Once a frame, before drawing.
+    void RefreshHashes() {
+        uint64_t id = 1469598103934665603ull, pose = id;
+        auto mix = [](uint64_t& h, uint64_t v) { h ^= v + 0x9e3779b97f4a7c15ull + (h << 6) + (h >> 2); };
+        auto str = [&](uint64_t& h, const std::string& t) { for (unsigned char ch : t) h = (h ^ ch) * 1099511628211ull; mix(h, t.size()); };
+        auto flt = [&](uint64_t& h, float f) { uint32_t u; std::memcpy(&u, &f, 4); mix(h, u); };
+        for (size_t fi = 0; fi < maps_.size(); ++fi) {
+            const bool shown = fi >= visible_.size() || visible_[fi];
+            mix(id, reinterpret_cast<uintptr_t>(maps_[fi])); mix(id, shown);
+            if (!shown) continue;
+            for (const mob::Object& o : maps_[fi]->objects) {
+                mix(id, static_cast<uint64_t>(o.kind)); str(id, o.templ); str(id, o.primTexture);
+                for (const std::string& p : o.bodyParts) str(id, p);
+                flt(id, o.complection.x); flt(id, o.complection.y); flt(id, o.complection.z);
+                if (o.kind == mob::Kind::Unit) {
+                    str(id, o.prototype); str(id, o.parentTemplate);
+                    for (const mob::ItemList& l : o.lists) { mix(id, static_cast<uint64_t>(l.type)); for (const std::string& e : l.entries) str(id, e); }
+                }
+                flt(pose, o.position.x); flt(pose, o.position.y); flt(pose, o.position.z);
+                for (float r : o.rotation) flt(pose, r);
+            }
+        }
+        identityHash_ = id;
+        poseHash_ = pose;
     }
     // A unit moving in the patrol simulation (with animations on): drawn with its walk clip.
     bool Walking(const mob::Object& o) const {
@@ -316,6 +363,7 @@ public:
     // ---- drawing -------------------------------------------------------------------------------
     void Draw(const Library& lib, int x, int y, int width, int height) {
         width_ = width; height_ = height;
+        RefreshHashes();
         glViewport(x, y, width, height);
         const float* bg = light.on ? light.sky : options.background;
         glClearColor(bg[0], bg[1], bg[2], 1.0f);
@@ -338,17 +386,17 @@ public:
         glPolygonMode(GL_FRONT_AND_BACK, options.wireframe && !wireOver ? GL_LINE : GL_FILL);
         SetupSun();
 
-        if (terrain_ && options.terrain) DrawTerrainBatch(landLists_, false);
+        if (terrain_ && options.terrain) DrawTerrainBatch(false);
         if (options.objects || options.units) DrawObjects(lib);
         if (shadows && options.terrain) DrawShadows();
         if (options.markers) DrawMarkers(lib.markerOpacity);
-        if (terrain_ && options.water) DrawTerrainBatch(waterLists_, true);
+        if (terrain_ && options.water) DrawTerrainBatch(true);
         if (wireOver) {
             wirePass_ = true;
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             glEnable(GL_POLYGON_OFFSET_LINE);
             glPolygonOffset(-1.0f, -1.0f);
-            if (terrain_ && options.terrain) DrawTerrainBatch(landLists_, false);
+            if (terrain_ && options.terrain) DrawTerrainBatch(false);
             if (options.objects || options.units) DrawObjects(lib);
             glDisable(GL_POLYGON_OFFSET_LINE);
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -436,11 +484,11 @@ public:
                     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
                     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
                 }
-                DrawTerrainBatch(landLists_, false);
+                DrawTerrainBatch(false);
                 alphaCut_ = 0.05f;
                 if (objects || units) DrawObjects(lib);
                 alphaCut_ = 0.4f;
-                DrawTerrainBatch(waterLists_, true);
+                DrawTerrainBatch(true);
                 glPixelStorei(GL_PACK_ALIGNMENT, 1);
                 glReadPixels(0, 0, pw, ph, GL_RGBA, GL_UNSIGNED_BYTE, tile.data());
                 for (int r = 0; r < ph; ++r) // GL row r is y0 + r: supersampled row py0 + r
@@ -670,7 +718,21 @@ private:
     const mpr::Map* terrain_ = nullptr;
     std::vector<GLuint> terrainTextures_;
     int texturesFound_ = 0, textureSize_ = 512;
-    std::vector<GLuint> landLists_, waterLists_; // one per terrain texture
+    // One set of display lists per sector: the full mesh (8 triangles a tile) and a coarse one (2 a tile) for
+    // sectors far from the camera, land and water, each binding its textures itself. Only the sectors the
+    // current view can see are drawn. `hash` says what the lists were built from (RebuildTerrainGeometry).
+    struct SectorLists { GLuint land = 0, landCoarse = 0, water = 0, waterCoarse = 0; float zMin = 0, zMax = 0; uint64_t hash = 0; };
+    std::vector<SectorLists> sectorLists_;
+    uint64_t materialsHash_ = 0;
+    // What the objects look like (templates, textures, builds, equipment) and where they stand, hashed once a
+    // frame (RefreshHashes): the model cache is dropped when the first changes, the shadow map is rendered
+    // again when either does.
+    uint64_t identityHash_ = 0, poseHash_ = 0;
+    unsigned modelsEpoch_ = 0;                 // bumped whenever a model is built, baked or dropped
+    mutable unsigned cacheEpoch_ = 0;
+    mutable uint64_t cacheIdentity_ = 0;
+    mutable std::unordered_map<const mob::Object*, const MapModel*> modelCache_;
+    uint64_t shadowSignature_ = 0;             // what the shadow map was rendered for
     std::vector<const mob::File*> maps_;
     std::vector<bool> visible_;
     std::map<std::string, MapModel> models_;
@@ -729,10 +791,9 @@ private:
     }
 
     void DropTerrain() {
-        for (GLuint l : landLists_) if (l) glDeleteLists(l, 1);
-        for (GLuint l : waterLists_) if (l) glDeleteLists(l, 1);
-        landLists_.clear();
-        waterLists_.clear();
+        for (SectorLists& sl : sectorLists_) DeleteSectorLists(sl, true, true);
+        sectorLists_.clear();
+        shadowSignature_ = 0;
         for (GLuint t : terrainTextures_) if (t) glDeleteTextures(1, &t);
         terrainTextures_.clear();
         terrain_ = nullptr;
@@ -758,63 +819,205 @@ private:
 
     void BuildTerrainLists() {
         const mpr::Map& m = *terrain_;
+        for (SectorLists& sl : sectorLists_) DeleteSectorLists(sl, true, true);
+        sectorLists_.assign(static_cast<size_t>(m.sectorsX) * m.sectorsY, SectorLists{});
+        materialsHash_ = MaterialsHash(m);
+        for (int sy = 0; sy < m.sectorsY; ++sy)
+            for (int sx = 0; sx < m.sectorsX; ++sx) BuildSectorLists(sx, sy, true, true);
+        shadowSignature_ = 0;
+    }
+
+    static void DeleteSectorLists(SectorLists& sl, bool land, bool water) {
+        if (land) { if (sl.land) glDeleteLists(sl.land, 1); if (sl.landCoarse) glDeleteLists(sl.landCoarse, 1); sl.land = sl.landCoarse = 0; }
+        if (water) { if (sl.water) glDeleteLists(sl.water, 1); if (sl.waterCoarse) glDeleteLists(sl.waterCoarse, 1); sl.water = sl.waterCoarse = 0; }
+    }
+
+    static uint64_t HashBytes(uint64_t h, const void* data, size_t size) {
+        const uint8_t* p = static_cast<const uint8_t*>(data);
+        size_t i = 0;
+        for (; i + 8 <= size; i += 8) { uint64_t w; std::memcpy(&w, p + i, 8); h = (h ^ w) * 0x100000001b3ull; h ^= h >> 29; }
+        for (; i < size; ++i) h = (h ^ p[i]) * 0x100000001b3ull;
+        return h;
+    }
+    // What a sector's lists are built from: its vertices, tiles and water materials.
+    static uint64_t SectorHash(const mpr::Sector& s) {
+        uint64_t h = 0xcbf29ce484222325ull ^ s.type ^ (s.water ? 0x100 : 0);
+        h = HashBytes(h, s.land, sizeof(s.land));
+        h = HashBytes(h, s.landTiles, sizeof(s.landTiles));
+        if (s.water) {
+            h = HashBytes(h, s.waterVerts, sizeof(s.waterVerts));
+            h = HashBytes(h, s.waterTiles, sizeof(s.waterTiles));
+            h = HashBytes(h, s.waterMaterial, sizeof(s.waterMaterial));
+        }
+        return h;
+    }
+    static uint64_t MaterialsHash(const mpr::Map& m) {
+        uint64_t h = 0xcbf29ce484222325ull ^ m.materials.size();
+        for (const mpr::Material& mat : m.materials) h = HashBytes(h, &mat, sizeof(mat));
+        return h;
+    }
+
+    // The lists of one sector: land and/or water, each in a full and a coarse version.
+    void BuildSectorLists(int sx, int sy, bool land, bool water) {
+        const mpr::Map& m = *terrain_;
+        SectorLists& sl = sectorLists_[static_cast<size_t>(sy) * m.sectorsX + sx];
+        DeleteSectorLists(sl, land, water);
+        const mpr::Sector* s = m.At(sx, sy);
+        sl.hash = s ? SectorHash(*s) : 0;
+        if (!s) { sl.zMin = sl.zMax = 0; return; }
         const int textures = std::max(m.textureCount, 1);
-        landLists_.assign(static_cast<size_t>(textures), 0);
-        waterLists_.assign(static_cast<size_t>(textures), 0);
         const float k = m.maxZ / 65535.0f;
-        for (int water = 0; water < 2; ++water) {
-            for (int tex = 0; tex < textures; ++tex) {
+        uint16_t zLo = 65535, zHi = 0;
+        for (int row = 0; row < 33; ++row)
+            for (int col = 0; col < 33; ++col) {
+                zLo = std::min(zLo, s->land[row][col].z); zHi = std::max(zHi, s->land[row][col].z);
+                if (s->water) { zLo = std::min(zLo, s->waterVerts[row][col].z); zHi = std::max(zHi, s->waterVerts[row][col].z); }
+            }
+        sl.zMin = zLo * k; sl.zMax = zHi * k;
+        for (int isWater = 0; isWater < 2; ++isWater) {
+            if (isWater ? (!water || !s->water) : !land) continue;
+            const mpr::Vertex (&verts)[33][33] = isWater ? s->waterVerts : s->land;
+            for (int coarse = 0; coarse < 2; ++coarse) {
                 GLuint list = glGenLists(1);
                 glNewList(list, GL_COMPILE);
-                glBegin(GL_TRIANGLES);
-                for (int sy = 0; sy < m.sectorsY; ++sy)
-                    for (int sx = 0; sx < m.sectorsX; ++sx) {
-                        const mpr::Sector* s = m.At(sx, sy);
-                        if (!s || (water && !s->water)) continue;
-                        for (int row = 0; row < 16; ++row)
-                            for (int col = 0; col < 16; ++col) {
-                                uint16_t packed = water ? s->waterTiles[row][col] : s->landTiles[row][col];
-                                if (water) {
-                                    int mat = s->waterMaterial[row][col];
-                                    if (mat < 0) continue;
-                                    if (mat < static_cast<int>(m.materials.size())) {
-                                        const mpr::Material& wm = m.materials[mat];
-                                        glColor4f(0.55f + wm.r * 0.45f, 0.55f + wm.g * 0.45f, 0.55f + wm.b * 0.45f, std::min(std::max(wm.a, 0.35f), 0.85f));
-                                    } else {
-                                        glColor4f(0.7f, 0.8f, 0.9f, 0.6f);
-                                    }
+                for (int tex = 0; tex < textures; ++tex) {
+                    bool begun = false;
+                    for (int row = 0; row < 16; ++row)
+                        for (int col = 0; col < 16; ++col) {
+                            const uint16_t packed = isWater ? s->waterTiles[row][col] : s->landTiles[row][col];
+                            if (std::min((packed >> 6) & 255, textures - 1) != tex) continue;
+                            if (isWater) {
+                                const int mat = s->waterMaterial[row][col];
+                                if (mat < 0) continue;
+                            }
+                            if (!begun) { // the texture, once per sector and texture (the lists bind their own)
+                                glBindTexture(GL_TEXTURE_2D, tex < static_cast<int>(terrainTextures_.size()) ? terrainTextures_[tex] : 0);
+                                glBegin(GL_TRIANGLES);
+                                begun = true;
+                            }
+                            if (isWater) {
+                                const int mat = s->waterMaterial[row][col];
+                                if (mat < static_cast<int>(m.materials.size())) {
+                                    const mpr::Material& wm = m.materials[mat];
+                                    glColor4f(0.55f + wm.r * 0.45f, 0.55f + wm.g * 0.45f, 0.55f + wm.b * 0.45f, std::min(std::max(wm.a, 0.35f), 0.85f));
+                                } else {
+                                    glColor4f(0.7f, 0.8f, 0.9f, 0.6f);
                                 }
-                                int texture = std::min((packed >> 6) & 255, textures - 1);
-                                if (texture != tex) continue;
-                                int tile = packed & 63, rotation = (packed >> 14) & 3;
-                                const mpr::Vertex (&verts)[33][33] = water ? s->waterVerts : s->land;
-                                float px[3][3], py[3][3], pz[3][3], n[3][3][3], tu[3][3], tv[3][3];
-                                for (int r = 0; r < 3; ++r)
-                                    for (int c = 0; c < 3; ++c) {
-                                        const mpr::Vertex& vx = verts[row * 2 + r][col * 2 + c];
-                                        px[r][c] = sx * 32.0f + col * 2 + c + vx.xOffset / 254.0f;
-                                        py[r][c] = sy * 32.0f + row * 2 + r + vx.yOffset / 254.0f;
-                                        pz[r][c] = vx.z * k;
-                                        mpr::Normal(vx.packedNormal, n[r][c]);
-                                        TileUv(tile, rotation, r, c, tu[r][c], tv[r][c]);
-                                    }
-                                auto vert = [&](int r, int c) {
-                                    glTexCoord2f(tu[r][c], tv[r][c]);
-                                    glNormal3f(n[r][c][0], n[r][c][1], n[r][c][2]);
-                                    glVertex3f(px[r][c], py[r][c], pz[r][c]);
-                                };
+                            }
+                            const int tile = packed & 63, rotation = (packed >> 14) & 3;
+                            float px[3][3], py[3][3], pz[3][3], n[3][3][3], tu[3][3], tv[3][3];
+                            for (int r = 0; r < 3; ++r)
+                                for (int c = 0; c < 3; ++c) {
+                                    const mpr::Vertex& vx = verts[row * 2 + r][col * 2 + c];
+                                    px[r][c] = sx * 32.0f + col * 2 + c + vx.xOffset / 254.0f;
+                                    py[r][c] = sy * 32.0f + row * 2 + r + vx.yOffset / 254.0f;
+                                    pz[r][c] = vx.z * k;
+                                    mpr::Normal(vx.packedNormal, n[r][c]);
+                                    TileUv(tile, rotation, r, c, tu[r][c], tv[r][c]);
+                                }
+                            auto vert = [&](int r, int c) {
+                                glTexCoord2f(tu[r][c], tv[r][c]);
+                                glNormal3f(n[r][c][0], n[r][c][1], n[r][c][2]);
+                                glVertex3f(px[r][c], py[r][c], pz[r][c]);
+                            };
+                            if (coarse) { // two triangles from the tile's corners: far sectors
+                                vert(0, 0); vert(0, 2); vert(2, 2);
+                                vert(0, 0); vert(2, 2); vert(2, 0);
+                            } else {
                                 for (int r = 0; r < 2; ++r)
                                     for (int c = 0; c < 2; ++c) {
                                         vert(r, c); vert(r, c + 1); vert(r + 1, c + 1);
                                         vert(r, c); vert(r + 1, c + 1); vert(r + 1, c);
                                     }
                             }
-                    }
-                glEnd();
+                        }
+                    if (begun) glEnd();
+                }
                 glEndList();
-                (water ? waterLists_ : landLists_)[tex] = list;
+                (isWater ? (coarse ? sl.waterCoarse : sl.water) : (coarse ? sl.landCoarse : sl.land)) = list;
             }
         }
+    }
+
+    // ---- what the view can see ---------------------------------------------------------------------
+    // The six planes of the current projection and modelview (read back from GL, so every pass gets its
+    // own: the camera's, the sun's orthographic box, the minimap's tiles), and the eye for the distance.
+    struct Frustum { float p[6][4]; float eye[3]; bool ortho; };
+    static Frustum CurrentFrustum() {
+        float pr[16], mv[16], c[16];
+        glGetFloatv(GL_PROJECTION_MATRIX, pr);
+        glGetFloatv(GL_MODELVIEW_MATRIX, mv);
+        for (int col = 0; col < 4; ++col)
+            for (int row = 0; row < 4; ++row) {
+                float v = 0;
+                for (int i = 0; i < 4; ++i) v += pr[i * 4 + row] * mv[col * 4 + i];
+                c[col * 4 + row] = v;
+            }
+        Frustum f;
+        auto rowOf = [&](int i, float out[4]) { out[0] = c[i]; out[1] = c[4 + i]; out[2] = c[8 + i]; out[3] = c[12 + i]; };
+        float r0[4], r1[4], r2[4], r3[4];
+        rowOf(0, r0); rowOf(1, r1); rowOf(2, r2); rowOf(3, r3);
+        for (int i = 0; i < 4; ++i) {
+            f.p[0][i] = r3[i] + r0[i]; f.p[1][i] = r3[i] - r0[i];
+            f.p[2][i] = r3[i] + r1[i]; f.p[3][i] = r3[i] - r1[i];
+            f.p[4][i] = r3[i] + r2[i]; f.p[5][i] = r3[i] - r2[i];
+        }
+        for (int i = 0; i < 3; ++i) f.eye[i] = -(mv[i * 4 + 0] * mv[12] + mv[i * 4 + 1] * mv[13] + mv[i * 4 + 2] * mv[14]);
+        f.ortho = pr[15] == 1.0f && pr[11] == 0.0f;
+        return f;
+    }
+    static bool BoxVisible(const Frustum& f, float x0, float y0, float z0, float x1, float y1, float z1) {
+        for (const float* p : f.p) {
+            const float x = p[0] >= 0 ? x1 : x0, y = p[1] >= 0 ? y1 : y0, z = p[2] >= 0 ? z1 : z0;
+            if (p[0] * x + p[1] * y + p[2] * z + p[3] < 0) return false;
+        }
+        return true;
+    }
+    static bool SphereVisible(const Frustum& f, float x, float y, float z, float r) {
+        for (const float* p : f.p) {
+            const float len = std::sqrt(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]);
+            if (p[0] * x + p[1] * y + p[2] * z + p[3] < -r * len) return false;
+        }
+        return true;
+    }
+    // Sectors farther than this from the eye are drawn with the coarse mesh: at that distance a tile is a
+    // few pixels and the heights inside it do not show.
+    float LodDistance() const { return std::max(camera.distance * 2.0f, 128.0f); }
+    // Whether a sector's box reaches the sun's shadow box (where the shadow map has anything to say).
+    bool InSunBox(float x0, float y0, float z0, float x1, float y1, float z1) const {
+        const float* v = shadowView_.m;
+        float lx0 = 1e30f, lx1 = -1e30f, ly0 = 1e30f, ly1 = -1e30f;
+        for (int i = 0; i < 8; ++i) {
+            const float x = i & 1 ? x1 : x0, y = i & 2 ? y1 : y0, z = i & 4 ? z1 : z0;
+            const float lx = v[0] * x + v[4] * y + v[8] * z + v[12], ly = v[1] * x + v[5] * y + v[9] * z + v[13];
+            lx0 = std::min(lx0, lx); lx1 = std::max(lx1, lx); ly0 = std::min(ly0, ly); ly1 = std::max(ly1, ly);
+        }
+        return lx1 >= shadowBox_[0] && lx0 <= shadowBox_[1] && ly1 >= shadowBox_[2] && ly0 <= shadowBox_[3];
+    }
+
+    // Calls the lists of the sectors the current view can see: land or water, the coarse mesh far away
+    // when `lod` (never under an orthographic view), only those under the sun's box when `sunBoxOnly`.
+    void DrawTerrainGeometry(bool water, bool lod, bool sunBoxOnly) const {
+        if (!terrain_) return;
+        const mpr::Map& m = *terrain_;
+        const Frustum f = CurrentFrustum();
+        const float lodDist = LodDistance();
+        for (int sy = 0; sy < m.sectorsY; ++sy)
+            for (int sx = 0; sx < m.sectorsX; ++sx) {
+                const SectorLists& sl = sectorLists_[static_cast<size_t>(sy) * m.sectorsX + sx];
+                const GLuint full = water ? sl.water : sl.land, coarse = water ? sl.waterCoarse : sl.landCoarse;
+                if (!full) continue;
+                const float x0 = sx * 32.0f - 0.5f, y0 = sy * 32.0f - 0.5f, x1 = x0 + 33.0f, y1 = y0 + 33.0f;
+                const float z0 = sl.zMin - 1.0f, z1 = sl.zMax + 1.0f;
+                if (!BoxVisible(f, x0, y0, z0, x1, y1, z1)) continue;
+                if (sunBoxOnly && !InSunBox(x0, y0, z0, x1, y1, z1)) continue;
+                bool coarseMesh = false; // ("far" is a macro in Windows' headers)
+                if (lod && !f.ortho && coarse) {
+                    const float dx = (x0 + x1) * 0.5f - f.eye[0], dy = (y0 + y1) * 0.5f - f.eye[1], dz = (z0 + z1) * 0.5f - f.eye[2];
+                    coarseMesh = dx * dx + dy * dy + dz * dz > lodDist * lodDist;
+                }
+                glCallList(coarseMesh ? coarse : full);
+            }
     }
 
     // ---- shadows (lighting on) -------------------------------------------------------------------
@@ -850,6 +1053,19 @@ private:
         shadowBox_[2] = cy - radius; shadowBox_[3] = cy + radius;
         shadowBox_[4] = std::max(1.0f, -lz - depth); shadowBox_[5] = -lz + depth;
         shadowFar_ = shadowBox_[5];
+        // The map is kept from the last frame while nothing it shows has changed: the sun, the box, what is
+        // drawn, the objects' looks and places, the models built or baked since, the simulation's poses.
+        uint64_t sig = 0xcbf29ce484222325ull;
+        auto mix = [&](uint64_t v) { sig ^= v + 0x9e3779b97f4a7c15ull + (sig << 6) + (sig >> 2); };
+        auto flt = [&](float v) { uint32_t u; std::memcpy(&u, &v, 4); mix(u); };
+        mix(static_cast<uint64_t>(size)); flt(radius); flt(cx); flt(cy); flt(lz);
+        flt(sx); flt(sy); flt(sz);
+        mix(options.terrain); mix(options.objects); mix(options.units); mix(options.dressUnits); mix(options.poseUnits);
+        mix(static_cast<uint64_t>(options.drawDistance * 100)); flt(camera.targetX); flt(camera.targetY);
+        mix(identityHash_); mix(poseHash_); mix(modelsEpoch_);
+        for (const auto& kv : simPoses) { mix(reinterpret_cast<uintptr_t>(kv.first)); flt(kv.second.x); flt(kv.second.y); flt(kv.second.yaw); }
+        if (shadowTex_ && shadowSize_ == size && sig == shadowSignature_) return true;
+        shadowSignature_ = sig;
         glViewport(x, y, size, size);
         glClear(GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
@@ -866,7 +1082,7 @@ private:
         depthPass_ = true;
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
-        if (options.terrain) for (GLuint l : landLists_) if (l) glCallList(l);
+        if (options.terrain) DrawTerrainGeometry(false, false, false);
         if (options.objects || options.units) DrawObjects(lib);
         depthPass_ = false;
         glDisable(GL_POLYGON_OFFSET_FILL);
@@ -889,7 +1105,9 @@ private:
             glBindTexture(GL_TEXTURE_2D, shadowTex_);
             glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, x, y, size, size);
         }
-        return glGetError() == GL_NO_ERROR;
+        const bool ok = glGetError() == GL_NO_ERROR;
+        if (!ok) shadowSignature_ = 0;
+        return ok;
     }
 
     // The terrain again, darkened where the shadow map says the sun is hidden.
@@ -927,7 +1145,7 @@ private:
         const float sun = (light.sun[0] + light.sun[1] + light.sun[2]) / 3.0f;
         const float k = std::min(0.6f, std::max(0.15f, sun * 0.6f));
         glColor4f(k, k, k, 1.0f);
-        for (GLuint l : landLists_) if (l) glCallList(l);
+        DrawTerrainGeometry(false, true, true);
         glDisable(GL_POLYGON_OFFSET_FILL);
         glDepthMask(GL_TRUE);
         glDisable(GL_BLEND);
@@ -952,12 +1170,12 @@ private:
         glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
     }
 
-    void DrawTerrainBatch(const std::vector<GLuint>& lists, bool water) {
+    void DrawTerrainBatch(bool water) {
         if (wirePass_) { // the edges over the textured terrain
             glDisable(GL_LIGHTING);
             glDisable(GL_TEXTURE_2D);
             glColor4f(0.05f, 0.05f, 0.05f, 1.0f);
-            for (GLuint l : lists) if (l) glCallList(l);
+            DrawTerrainGeometry(water, true, false);
             return;
         }
         glEnable(GL_LIGHTING);
@@ -968,16 +1186,12 @@ private:
         } else {
             glColor4f(1, 1, 1, 1);
         }
-        for (size_t i = 0; i < lists.size(); ++i) {
-            GLuint tex = i < terrainTextures_.size() ? terrainTextures_[i] : 0;
-            bool textured = options.textured && tex;
-            if (textured) { glEnable(GL_TEXTURE_2D); glBindTexture(GL_TEXTURE_2D, tex); }
-            else {
-                glDisable(GL_TEXTURE_2D);
-                if (!water) glColor4f(0.55f, 0.6f, 0.45f, 1.0f);
-            }
-            if (lists[i]) glCallList(lists[i]);
+        if (options.textured && texturesFound_ > 0) glEnable(GL_TEXTURE_2D); // the lists bind their textures
+        else {
+            glDisable(GL_TEXTURE_2D);
+            if (!water) glColor4f(0.55f, 0.6f, 0.45f, 1.0f);
         }
+        DrawTerrainGeometry(water, true, false);
         glDisable(GL_TEXTURE_2D);
         if (water) {
             glDisable(GL_BLEND);
@@ -1061,6 +1275,7 @@ private:
     // `walk`: the variant that plays the figure's walk clip (units moving in the patrol simulation).
     void BuildModel(const Library& lib, const mob::Object& o, MapModel& out, bool walk = false) {
         out.tried = true;
+        ++modelsEpoch_;
         std::shared_ptr<const LoadedModel>& cached = figures_[checksLower(o.templ)];
         if (!cached) {
             auto fresh = std::make_shared<LoadedModel>();
@@ -1108,6 +1323,7 @@ private:
     // where the rest pose has them).
     void BakeModel(const Library& lib, MapModel& out, int frame) {
         const MapModel::AnimSource& src = *out.anim;
+        ++modelsEpoch_;
         if (out.list) { glDeleteLists(out.list, 1); out.list = 0; }
         for (const MapModel::Layer& l : out.layers) if (l.list) glDeleteLists(l.list, 1);
         out.layers.clear();
@@ -1210,8 +1426,16 @@ private:
         return dx * dx + dy * dy > options.drawDistance * options.drawDistance;
     }
 
+    // Whether an object's figure can be in the current view (its bounds as a sphere around it).
+    bool ObjectVisible(const Frustum& f, const mob::Object& o, const MapModel* m) const {
+        const fig::Vec3 c = (m->boundsMin + m->boundsMax) * 0.5f, e = (m->boundsMax - m->boundsMin) * 0.5f;
+        const fig::Vec3 p = DrawPosition(o, m) + fig::QuatRotate(Rotation(o), c);
+        return SphereVisible(f, p.x, p.y, p.z, std::sqrt(Dot(e, e)) + 0.5f);
+    }
+
     void DrawObjects(const Library& lib) {
         (void)lib;
+        const Frustum frustum = CurrentFrustum(); // the camera's, or the sun's box in the shadow pass
         if (wirePass_) { // the edges over the textured objects
             glDisable(GL_LIGHTING);
             glDisable(GL_TEXTURE_2D);
@@ -1221,7 +1445,7 @@ private:
                 for (const mob::Object& o : maps_[fi]->objects) {
                     if (!mob::HasFigure(o.kind) || !Shown(o) || TooFar(o)) continue;
                     const MapModel* m = ModelFor(o);
-                    if (!m || !m->ok) continue;
+                    if (!m || !m->ok || !ObjectVisible(frustum, o, m)) continue;
                     glPushMatrix();
                     ApplyObjectTransform(DrawPosition(o, m), Rotation(o));
                     if (m->list) glCallList(m->list);
@@ -1239,7 +1463,7 @@ private:
             for (const mob::Object& o : maps_[fi]->objects) {
                 if (!mob::HasFigure(o.kind) || !Shown(o) || TooFar(o)) continue;
                 const MapModel* m = ModelFor(o);
-                if (!m || !m->ok) continue;
+                if (!m || !m->ok || !ObjectVisible(frustum, o, m)) continue;
                 if (!m->layers.empty()) { // a dressed unit
                     glPushMatrix();
                     ApplyObjectTransform(DrawPosition(o, m), Rotation(o));

@@ -589,11 +589,33 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
     const auto named = kNamed.find(sh.name);
     std::map<std::string, int> nameRow;
     std::set<int> flaggedFirst; // first rows of duplicated names, already marked
-    for (int row : rows) {
-        for (const auto& [rc, cell] : sh.cells) {
-            if (rc.first != row || Empty(&cell)) continue;
-            if (!info.markerOf.count(rc.second)) issue(Issue::Error, row, rc.second, "a value in a column without an FLDx-y marker (row 3): ignored");
+    // Values in columns without a marker, by row: one pass over the cells (not one per row: a sheet has tens
+    // of thousands of cells, and this check was most of a database's check time).
+    std::map<int, std::vector<int>> unmarked;
+    for (const auto& [rc, cell] : sh.cells)
+        if (!Empty(&cell) && !info.markerOf.count(rc.second)) unmarked[rc.first].push_back(rc.second);
+    // Monsters: each race's skin textures by its name, once (RaceModels is a big sheet; describing it per
+    // monster took most of the rest).
+    std::map<std::string, const sheetio::Cell*> raceTextures;
+    bool racesKnown = false;
+    if (sh.name == "Monsters") {
+        const sheetio::Sheet* races = nullptr;
+        for (const sheetio::Sheet& other : book) if (other.name == "RaceModels") races = &other;
+        if (races) {
+            const SheetInfo ri = Describe(*races);
+            auto nameCol = ri.columns.find({0, 0}), texCol = ri.columns.find({31, 0});
+            if (nameCol != ri.columns.end() && texCol != ri.columns.end()) {
+                racesKnown = true;
+                for (int r = 4; r <= races->maxRow; ++r) {
+                    const sheetio::Cell* n = At(*races, r, nameCol->second.back());
+                    if (!Empty(n)) raceTextures.emplace(Lower(Trim(n->text)), At(*races, r, texCol->second.back())); // the first of a name
+                }
+            }
         }
+    }
+    for (int row : rows) {
+        if (auto u = unmarked.find(row); u != unmarked.end())
+            for (int col : u->second) issue(Issue::Error, row, col, "a value in a column without an FLDx-y marker (row 3): ignored");
         // The record's name.
         if (auto it = named == kNamed.end() ? info.columns.end() : info.columns.find({named->second, 0}); it != info.columns.end()) {
             const sheetio::Cell* c = At(sh, row, it->second.back());
@@ -772,27 +794,19 @@ void CheckSheet(const Book& book, const sheetio::Sheet& sh, const Names& names, 
         if (sh.name == "Monsters") { // the skin index picks one of its race's primary textures
             const sheetio::Cell* race = cellOf(1);
             const sheetio::Cell* skin = cellOf(3);
-            const sheetio::Sheet* races = nullptr;
-            for (const sheetio::Sheet& other : book) if (other.name == "RaceModels") races = &other;
-            if (!Empty(race) && !Empty(skin) && races) {
-                const SheetInfo ri = Describe(*races);
-                auto nameCol = ri.columns.find({0, 0}), texCol = ri.columns.find({31, 0});
-                if (nameCol != ri.columns.end() && texCol != ri.columns.end()) {
-                    for (int r = 4; r <= races->maxRow; ++r) {
-                        const sheetio::Cell* n = At(*races, r, nameCol->second.back());
-                        if (Empty(n) || Lower(Trim(n->text)) != Lower(Trim(race->text))) continue;
-                        const sheetio::Cell* t = At(*races, r, texCol->second.back());
-                        const std::vector<Entry> textures = Empty(t) ? std::vector<Entry>() : SplitEntries(t->text);
-                        bool whole;
-                        const double idx = CellNumber(skin, whole);
-                        const bool numbered = !textures.empty() && Lower(Trim(textures[0].text)).rfind("skin", 0) == 0;
-                        // Races listing "Skin_NN" textures take any number past the list as <figure>skin_NN (not
-                        // checkable here: no texture sources); the others only have their list.
-                        if (idx < 0 || (idx >= static_cast<double>(textures.size()) && !numbered))
-                            issue(Issue::Error, row, colOf(3), "skin " + DoubleText(idx) + ": the race '" + Trim(race->text) + "' has " +
-                                  std::to_string(textures.size()) + " skin texture(s) (0-" + std::to_string(static_cast<int>(textures.size()) - 1) + ")");
-                        break;
-                    }
+            if (!Empty(race) && !Empty(skin) && racesKnown) {
+                const auto rt = raceTextures.find(Lower(Trim(race->text)));
+                if (rt != raceTextures.end()) {
+                    const sheetio::Cell* t = rt->second;
+                    const std::vector<Entry> textures = Empty(t) ? std::vector<Entry>() : SplitEntries(t->text);
+                    bool whole;
+                    const double idx = CellNumber(skin, whole);
+                    const bool numbered = !textures.empty() && Lower(Trim(textures[0].text)).rfind("skin", 0) == 0;
+                    // Races listing "Skin_NN" textures take any number past the list as <figure>skin_NN (not
+                    // checkable here: no texture sources); the others only have their list.
+                    if (idx < 0 || (idx >= static_cast<double>(textures.size()) && !numbered))
+                        issue(Issue::Error, row, colOf(3), "skin " + DoubleText(idx) + ": the race '" + Trim(race->text) + "' has " +
+                              std::to_string(textures.size()) + " skin texture(s) (0-" + std::to_string(static_cast<int>(textures.size()) - 1) + ")");
                 }
             }
             const sheetio::Cell* hair = cellOf(4);

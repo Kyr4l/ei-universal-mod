@@ -581,7 +581,7 @@ inline void PerformancePanel(Library& lib) {
     ImGui::Spacing();
     ImGui::SeparatorText("Frames");
     bool capped = lib.frameRateLimit > 0;
-    if (ImGui::Checkbox("Cap the frame rate", &capped)) { lib.frameRateLimit = capped ? std::min(60, lib.displayRefresh) : 0; lib.SaveConfig(); }
+    if (ImGui::Checkbox("Cap FPS", &capped)) { lib.frameRateLimit = capped ? std::min(60, lib.displayRefresh) : 0; lib.SaveConfig(); }
     if (capped) {
         ImGui::SameLine();
         ImGui::SetNextItemWidth(110);
@@ -591,10 +591,12 @@ inline void PerformancePanel(Library& lib) {
         ImGui::SameLine();
         ImGui::TextDisabled("(25 to %d, the display's rate)", lib.displayRefresh);
     }
-    if (ImGui::Checkbox("Wait for the display (vsync)", &lib.vsync)) lib.SaveConfig();
+    if (ImGui::Checkbox("VSync", &lib.vsync)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("On: a frame per display refresh at most, no tearing. Off: the cap alone paces the frames (try off with a cap on a slow GPU driver).");
     if (ImGui::Checkbox("Rest while nothing happens (25 frames per second)", &lib.idleRedraw)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Half a second after the last mouse or key activity, until the next one; jobs, loads and animations keep the full rate.");
+    if (ImGui::Checkbox("Show FPS", &lib.showFps)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Frames per second and milliseconds per frame, averaged over the last half second, in the window's top-right corner; 'resting' while the loop rests.");
 }
 
 // Map Editor keys.

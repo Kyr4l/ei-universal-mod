@@ -119,9 +119,10 @@ struct Config {
     std::map<std::string, std::string> textEncodings; // a text layer's path -> "cp1251" / "cp1250" / "cp949" (missing: auto) (#82)
     bool logVerbose = false;                  // the log also to the console (#88)
     int frameRateLimit = 0;                   // Performance: 0 = no cap, else frames per second at most (25 or more)
-    bool idleRedraw = false;                  // Performance: 25 frames per second while nothing happens
+    bool idleRedraw = true;                   // Performance: 25 frames per second while nothing happens
     bool vsync = true;                        // Performance: wait for the display (off: the cap alone paces)
     bool uiAntialias = true;                  // Performance: anti-aliased lines and shapes in the UI
+    bool showFps = false;                     // Performance: the frame rate in the window's corner
     float mapDrawDistance = 0.0f;             // Performance: the Map Editor draws objects within this many units of the camera's target (0: all)
     bool mapLowDetail = false;                // Performance: the Map Editor without shadows, lighting, dressed and posed units
     std::vector<std::string> mapLayers;       // folders of .mpr / .mob files (the Map Editor's list)
@@ -191,6 +192,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "IDLE_REDRAW") cfg.idleRedraw = value == "true";
         else if (key == "VSYNC") cfg.vsync = value == "true";
         else if (key == "UI_ANTIALIAS") cfg.uiAntialias = value == "true";
+        else if (key == "SHOW_FPS") cfg.showFps = value == "true";
         else if (key == "MAP_DRAW_DISTANCE") cfg.mapDrawDistance = static_cast<float>(std::atof(value.c_str()));
         else if (key == "MAP_LOW_DETAIL") cfg.mapLowDetail = value == "true";
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
@@ -353,6 +355,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "IDLE_REDRAW=" << flag(cfg.idleRedraw) << "\n";
     f << "; Wait for the display's refresh (true/false; off: the cap alone paces the frames)\n";
     f << "VSYNC=" << flag(cfg.vsync) << "\n";
+    f << "; Show the frame rate in the window's top-right corner (true/false)\n";
+    f << "SHOW_FPS=" << flag(cfg.showFps) << "\n";
     f << "; Anti-aliased lines and shapes in the UI (true/false; off: fewer vertices to draw)\n";
     f << "UI_ANTIALIAS=" << flag(cfg.uiAntialias) << "\n";
     f << "; Map Editor: draw the objects within this many units of the camera's target (0: all of them)\n";
