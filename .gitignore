@@ -53,3 +53,4 @@ tools/um-multitool/um-multitool-res32.o
 tools/um-bot/um-bot-res.o
 tools/um-multitool/imgui.ini
 tools/um-multitool/build/
+tools/um-multitool/um-multitool.log
