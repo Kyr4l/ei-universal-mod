@@ -5260,3 +5260,21 @@
 2026-10-08 23:08:06 info  Sources ready in 1251 ms
 2026-10-08 23:08:06 info  Map Editor: terrain ../../Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
 2026-10-08 23:08:06 info  Map Editor: map ../../Universal-Mod/maps/zone7-lmp.mob: 2884 objects, a script
+---- um-multitool started 2026-10-08 23:25:05
+2026-10-08 23:25:05 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 23:25:05 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 2 text, 2 map source(s)
+2026-10-08 23:25:05 info  Figure source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-unpacked/figures_res: 271 file(s), 63 ms
+2026-10-08 23:25:05 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 184 ms
+2026-10-08 23:25:05 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 312 ms
+2026-10-08 23:25:06 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 243 ms
+2026-10-08 23:25:06 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 89 ms
+2026-10-08 23:25:06 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 37 ms
+2026-10-08 23:25:06 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 209 ms
+2026-10-08 23:25:06 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 23:25:06 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 3 ms
+2026-10-08 23:25:06 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 138 ms
+2026-10-08 23:25:06 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 114 file(s), 189 ms
+2026-10-08 23:25:06 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 23:25:06 info  Sources ready in 1571 ms
+2026-10-08 23:25:06 info  Map Editor: terrain ../../Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 23:25:06 info  Map Editor: map ../../Universal-Mod/maps/zone7-lmp.mob: 2884 objects, a script

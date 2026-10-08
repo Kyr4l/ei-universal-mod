@@ -472,10 +472,10 @@ inline void ControlsPanel(Library& lib, SourcesState& st) {
             ImGui::EndCombo();
         }
     }
-    ImGui::SeparatorText("Problem alerts (database, map and script checks, File Processing jobs)");
-    if (ImGui::Checkbox("Popup when errors are detected", &lib.alertPopups)) { alerts::SetPopups(lib.alertPopups); lib.SaveConfig(); }
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("With a button to the tab that lists them.");
-    if (ImGui::Checkbox("Sounds (SFX)", &lib.sfxEnabled)) { alerts::SetSound(lib.sfxEnabled); lib.SaveConfig(); }
+    ImGui::SeparatorText("Alerts");
+    if (ImGui::Checkbox("Error popups", &lib.alertPopups)) { alerts::SetPopups(lib.alertPopups); lib.SaveConfig(); }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Database, map and script checks, File Processing jobs: a popup with a button to the tab that lists them.");
+    if (ImGui::Checkbox("Sound alerts", &lib.sfxEnabled)) { alerts::SetSound(lib.sfxEnabled); lib.SaveConfig(); }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("A sound when errors or warnings are detected (one for each).");
     ImGui::SameLine();
     if (ImGui::SmallButton("Test error")) alerts::PlaySound(alerts::Level::Error);
@@ -484,7 +484,8 @@ inline void ControlsPanel(Library& lib, SourcesState& st) {
     ImGui::SetNextItemWidth(220);
     if (ImGui::SliderInt("Volume##sfx", &lib.sfxVolume, 0, 100, "%d %%")) alerts::SetVolume(lib.sfxVolume);
     if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
-    ImGui::SeparatorText("Mouse (Map Editor and 3D Viewer)");
+    ImGui::SeparatorText("Mouse");
+    ImGui::TextDisabled("Map Editor and 3D Viewer");
     // Mouse: the left button always selects (click) and draws selection rectangles (drag).
     {
         static const char* const buttons[] = {"Left", "Right button", "Middle button (wheel click)", "Side button 4", "Side button 5"};
@@ -514,19 +515,22 @@ inline void ControlsPanel(Library& lib, SourcesState& st) {
 inline void GeneralPanel(Library& lib, SourcesState& st) {
     (void)st;
     ImGui::SeparatorText("Layout");
-    if (ImGui::Checkbox("3D Viewer: item list on the right of the view", &lib.viewerSidebarRight)) lib.SaveConfig();
-    if (ImGui::Checkbox("Map Editor: panel on the right of the view", &lib.mapSidebarRight)) lib.SaveConfig();
+    if (ImGui::Checkbox("3D Viewer: Sidebar right", &lib.viewerSidebarRight)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("The item list on the right of the view (off: on the left)");
+    if (ImGui::Checkbox("Map Editor: Sidebar right", &lib.mapSidebarRight)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("The panel on the right of the view (off: on the left)");
 
-    if (ImGui::SliderFloat("Map Editor: light, particle and sound opacity", &lib.markerOpacity, 0.0f, 1.0f, "%.2f")) {
+    if (ImGui::SliderFloat("Map Editor: Marker opacity", &lib.markerOpacity, 0.0f, 1.0f, "%.2f")) {
         lib.markerOpacity = std::min(std::max(lib.markerOpacity, 0.0f), 1.0f);
         lib.SaveConfig();
     }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("The cubes standing for lights, particles and sounds");
 
     ImGui::SeparatorText("Log");
     ImGui::TextDisabled("%s", umlog::FilePath().c_str());
-    if (ImGui::Button("Show the log window")) lib.logWindow = true;
+    if (ImGui::Button("Open log")) lib.logWindow = true;
     ImGui::SameLine();
-    if (ImGui::Checkbox("Also print it to the console", &lib.logVerbose)) { umlog::SetVerbose(lib.logVerbose); lib.SaveConfig(); }
+    if (ImGui::Checkbox("Log to console", &lib.logVerbose)) { umlog::SetVerbose(lib.logVerbose); lib.SaveConfig(); }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("What failed (file dialogs, files that cannot be read, saves) and what was done; gui --verbose turns this on from the command line"));
 
     ImGui::SeparatorText("Background");
@@ -567,34 +571,34 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
 inline void PerformancePanel(Library& lib) {
     ImGui::TextWrapped("For slow PCs. The options at the top cut the work of every frame (more frames per second); the ones below cap the frames (less CPU and GPU time).");
     ImGui::Spacing();
-    ImGui::SeparatorText("Less work per frame");
-    if (ImGui::Checkbox("Map Editor: low detail", &lib.mapLowDetail)) lib.SaveConfig();
+    ImGui::SeparatorText("Detail");
+    if (ImGui::Checkbox("Map Editor: Low detail", &lib.mapLowDetail)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("No shadows, no lighting, units in the plain figure and the T-pose (no dressing, no posing):\nthe terrain is drawn once instead of twice and every unit is one model.");
     ImGui::SetNextItemWidth(220);
-    if (ImGui::SliderFloat("Map Editor: object draw distance", &lib.mapDrawDistance, 0.0f, 400.0f, lib.mapDrawDistance <= 0 ? "all objects" : "%.0f units")) lib.mapDrawDistance = std::max(lib.mapDrawDistance, 0.0f);
+    if (ImGui::SliderFloat("Map Editor: Draw distance", &lib.mapDrawDistance, 0.0f, 400.0f, lib.mapDrawDistance <= 0 ? "all objects" : "%.0f units")) lib.mapDrawDistance = std::max(lib.mapDrawDistance, 0.0f);
     if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Objects and units farther than this from the camera's target are not drawn (0: all of them). Big maps hold thousands.");
-    if (ImGui::Checkbox("Anti-aliased UI", &lib.uiAntialias)) lib.SaveConfig();
+    if (ImGui::Checkbox("UI anti-aliasing", &lib.uiAntialias)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Off: lines and rounded shapes are drawn plain (fewer vertices)");
     ImGui::BulletText("The DB editor draws only the columns in view; narrow the window or scroll sideways rather than widening it.");
     ImGui::BulletText("3D Viewer: a smaller window = fewer pixels; the Lighting and Textured switches of each view cut work too.");
     ImGui::Spacing();
-    ImGui::SeparatorText("Frames");
+    ImGui::SeparatorText("Frame rate");
     bool capped = lib.frameRateLimit > 0;
     if (ImGui::Checkbox("Cap FPS", &capped)) { lib.frameRateLimit = capped ? std::min(60, lib.displayRefresh) : 0; lib.SaveConfig(); }
     if (capped) {
         ImGui::SameLine();
         ImGui::SetNextItemWidth(110);
         int cap = lib.frameRateLimit;
-        if (ImGui::InputInt("per second", &cap)) lib.frameRateLimit = std::clamp(cap, 25, std::max(25, lib.displayRefresh));
+        if (ImGui::InputInt("FPS", &cap)) lib.frameRateLimit = std::clamp(cap, 25, std::max(25, lib.displayRefresh));
         if (ImGui::IsItemDeactivatedAfterEdit()) { lib.frameRateLimit = std::clamp(lib.frameRateLimit, 25, std::max(25, lib.displayRefresh)); lib.SaveConfig(); }
         ImGui::SameLine();
         ImGui::TextDisabled("(25 to %d, the display's rate)", lib.displayRefresh);
     }
     if (ImGui::Checkbox("VSync", &lib.vsync)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("On: a frame per display refresh at most, no tearing. Off: the cap alone paces the frames (try off with a cap on a slow GPU driver).");
-    if (ImGui::Checkbox("Rest while nothing happens (25 frames per second)", &lib.idleRedraw)) lib.SaveConfig();
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Half a second after the last mouse or key activity, until the next one; jobs, loads and animations keep the full rate.");
+    if (ImGui::Checkbox("Idle at 25 FPS", &lib.idleRedraw)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("25 frames per second from half a second after the last mouse or key activity until the next one; jobs, loads and animations keep the full rate.");
     if (ImGui::Checkbox("Show FPS", &lib.showFps)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Frames per second and milliseconds per frame, averaged over the last half second, in the window's top-right corner; 'resting' while the loop rests.");
 }
