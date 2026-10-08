@@ -6,7 +6,8 @@
 //   - units' weapon/armor/spell/quick/quest item lists: truncated lists, bad entry lengths, blank
 //     entries, names the item/spell database does not know
 //   - the mission script, with the same checker (mob_script_check.hpp, shared with um.dll): syntax,
-//     argument counts and types, undeclared variables, unknown commands...
+//     argument counts and types, undeclared variables, unknown commands, scripts never called (a base
+//     map's scripts count as called when a map loaded after it calls them)...
 //   - item/spell names the script gives to commands, against the database
 //   - object IDs and names the script uses, against the objects of the loaded maps and of the maps
 //     it loads with AddMob
@@ -309,6 +310,10 @@ inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
         out.push_back({sev, file, object, line, cat, msg});
     };
     const DatabaseNames* db = in.database && !in.database->Empty() ? in.database : nullptr;
+    struct Uncalled { int file; std::string name; int line; };
+    std::vector<Uncalled> baseUncalled;                       // a base map's scripts nothing in it calls: a later map may
+    std::vector<std::unordered_set<std::string>> calledBy(in.maps.size()); // per file: the scripts it calls (lower-case)
+    std::vector<bool> hasScriptFile(in.maps.size(), false);
 
     MapContext loadedBefore; // everything the maps before the current one offer
     std::map<uint32_t, std::pair<int, int>> idOwner; // ID -> (file, object) of its first use across loaded maps
@@ -438,6 +443,13 @@ inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
             report = CheckMobScript(f.script, haveBase ? &visible.declarations : nullptr, baseMissing);
             for (const MobScriptIssue& issue : report.issues) add(issue.severity, fi, -1, issue.line, "Script", issue.message);
             if (report.suppressed > 0) add('W', fi, -1, 0, "Script", std::to_string(report.suppressed) + " more script finding(s) not shown");
+            calledBy[static_cast<size_t>(fi)] = report.called;
+            hasScriptFile[static_cast<size_t>(fi)] = true;
+            const bool isQuest = quest.found || LooksLikeQuestMapName(f.fileName);
+            for (const auto& u : report.uncalled) {
+                if (isQuest) add('W', fi, -1, u.second, "Script", "script '" + u.first + "' is declared but never called");
+                else baseUncalled.push_back({fi, u.first, u.second}); // decided once the maps on top are read
+            }
 
             if (db) {
                 std::unordered_set<std::string> reported;
@@ -489,6 +501,21 @@ inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
         if (base) MergeDeclarations(loadedBefore.declarations, base->declarations);
         loadedBefore.ids.insert(own.ids.begin(), own.ids.end());
         loadedBefore.names.insert(own.names.begin(), own.names.end());
+    }
+
+    for (const Uncalled& u : baseUncalled) {
+        const std::string lowered = Lower(u.name);
+        bool called = false, later = false;
+        std::string names;
+        for (size_t k = static_cast<size_t>(u.file) + 1; k < in.maps.size(); ++k) {
+            if (!hasScriptFile[k]) continue;
+            later = true;
+            names += (names.empty() ? "" : ", ") + in.maps[k]->fileName;
+            called |= calledBy[k].count(lowered) != 0;
+        }
+        if (called) continue;
+        if (later) add('W', u.file, -1, u.line, "Script", "script '" + u.name + "' is declared but never called, not here nor by " + names);
+        else add('I', u.file, -1, u.line, "Script", "script '" + u.name + "' is never called in this file (load the zone's quest maps on top of it to see whether one calls it)");
     }
 
     std::stable_sort(out.begin(), out.end(), [](const Finding& a, const Finding& b) {

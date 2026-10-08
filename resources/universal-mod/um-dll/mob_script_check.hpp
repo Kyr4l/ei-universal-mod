@@ -33,6 +33,7 @@
 //      nor a script of this file (scripts may be defined in another .mob).
 #pragma once
 
+#include <algorithm>
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
@@ -80,6 +81,11 @@ struct MobScriptReport {
     int warnings = 0;
     int infos = 0;
     int suppressed = 0;                 // issues beyond the cap (not stored)
+    // Scripts of this file (a DeclareScript or a Script body) that nothing in this file calls, with the
+    // line of the declaration. Another .mob loaded on top (a quest map on its zone's base map) may still
+    // call them, so the caller decides what to say. Empty when the parse stopped early.
+    std::vector<std::pair<std::string, int>> uncalled;
+    std::unordered_set<std::string> called; // lower-case names of every script this file calls (own or base map's)
     MobScriptDeclarations declarations; // what this script declares (for the maps loaded on top of it)
     std::vector<MobScriptReference> objectIds;    // IDs in GetObject(N) / GetObjectByID("N"), also inside strings
     std::vector<MobScriptReference> objectNames;  // undeclared names used where an object is expected
@@ -420,6 +426,7 @@ private:
             }
             name = nameToken.text;
             defined_.insert(LowerCase(name));
+            definedLines_.emplace(LowerCase(name), std::make_pair(name, nameToken.line));
             auto it = declared_.find(LowerCase(name));
             if (it != declared_.end()) {
                 for (const auto& p : it->second.params) scope_[p.first] = p.second;
@@ -740,6 +747,18 @@ private:
             Add(call.second, 'W', "script '%s' is called but has no Script body in this file (declared on line %d)",
                 d.name.c_str(), d.line);
         }
+        // Scripts nothing here calls (WorldScript is the entry point, never called). The game itself calls
+        // #OnBriefingComplete(id, "name") when a briefing ends (game.exe builds the script text
+        // `WorldScript( GSSetVar( %i,"%s",2 ) #OnBriefingComplete( %i, "%s" ) )`): it counts as called.
+        for (const auto& call : scriptCalls_) report_.called.insert(call.first);
+        for (const Unresolved& u : unresolved_) report_.called.insert(LowerCase(u.name));
+        report_.called.insert("#onbriefingcomplete");
+        for (const auto& d : declared_)
+            if (!report_.called.count(d.first)) report_.uncalled.push_back({d.second.name, d.second.line});
+        for (const auto& d : definedLines_)
+            if (!declared_.count(d.first) && !report_.called.count(d.first)) report_.uncalled.push_back({d.second.first, d.second.second});
+        std::sort(report_.uncalled.begin(), report_.uncalled.end(),
+                  [](const std::pair<std::string, int>& a, const std::pair<std::string, int>& b) { return a.second < b.second; });
     }
 
     struct DeclaredScript {
@@ -766,6 +785,7 @@ private:
     std::unordered_map<std::string, char> scope_;
     std::unordered_map<std::string, DeclaredScript> declared_;
     std::unordered_set<std::string> defined_;
+    std::unordered_map<std::string, std::pair<std::string, int>> definedLines_; // lower-case name -> name as written, line of its Script body
     std::vector<std::pair<std::string, int>> scriptCalls_;
     std::vector<Unresolved> unresolved_;
 };

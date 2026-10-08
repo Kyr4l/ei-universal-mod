@@ -36,6 +36,7 @@
 
 #include "../viewer/library.hpp"
 #include "../viewer/ui_common.hpp"
+#include "tile_autoblend.hpp"
 #include "tile_blend.hpp"
 #include "tile_materials.hpp"
 #include "script_docs.hpp"
@@ -160,6 +161,7 @@ struct App {
     bool toolShelf = true, sidebarShown = true; // the Blender-like panels (T / N): the mode's tools in the view, the tabs beside it
     bool materialBrush = false;       // Tile paint by material: the transitions chosen by themselves (tile_materials.hpp)
     int brushMaterialId = -1, materialSeed = 1;
+    bool autoBlendSameKind = false;   // "Blend the hard edges": also between two kinds of one ground (grass/dark - grass/common)
     std::string materialMessage;
     int quickTiles[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
     std::set<int> terrainEditedSectors;
@@ -298,6 +300,10 @@ struct App {
         std::vector<std::string> words; // names written in the text (original case)
     } completion;
     bool scriptEditFocus = false;
+    float scriptViewScrollY = 0.0f;          // the Script tab's scroll in view mode (kept across Edit / Apply / Cancel)
+    int scriptEditGotoLine = -1;             // entering edit mode: the cursor goes to this line (0-based), consumed by the callback
+    int scriptEditScrollLine = -1;           // then the edit box scrolls so that line is at the top (consumed after the box is drawn)
+    int scriptViewGotoLine = -1;             // leaving edit mode: the view scrolls to this line (0-based)
     std::string scriptExtPath, scriptExtMob;
     std::filesystem::file_time_type scriptExtTime{};
 
@@ -2599,6 +2605,13 @@ static int ScriptEditCallback(ImGuiInputTextCallbackData* d) {
         return 0;
     }
     App::Completion& c = app.completion;
+    if (app.scriptEditGotoLine >= 0) { // entering edit mode: the cursor on the line the view showed at its top
+        int pos = 0, line = 0;
+        while (line < app.scriptEditGotoLine && pos < d->BufTextLen) { if (d->Buf[pos] == '\n') ++line; ++pos; }
+        d->CursorPos = d->SelectionStart = d->SelectionEnd = pos;
+        app.scriptEditScrollLine = app.scriptEditGotoLine;
+        app.scriptEditGotoLine = -1;
+    }
     if (c.keepCursor) { // Up / Down went to the list
         d->CursorPos = d->SelectionStart = d->SelectionEnd = std::min(c.cursor, d->BufTextLen);
         c.keepCursor = false;
@@ -2736,10 +2749,16 @@ static void ScriptContent(App& app) {
     // Editing: the whole text, applied as one undoable change (Ctrl+S applies and saves).
     if (app.scriptEditing && app.scriptEditFor != f.path) app.scriptEditing = false;
     if (app.scriptEditing) {
-        if (ImGui::Button("Apply")) ApplyScriptEdit(app);
+        const ImGuiID editId = ImGui::GetID("##scriptedit");
+        char childName[512];
+        std::snprintf(childName, sizeof(childName), "%s/%s_%08X", ImGui::GetCurrentWindow()->Name, "##scriptedit", editId);
+        auto leaveAt = [&]() { // the view then shows the lines the edit box showed
+            if (ImGuiWindow* box = ImGui::FindWindowByName(childName)) app.scriptViewGotoLine = static_cast<int>(box->Scroll.y / ImGui::GetFontSize() + 0.5f);
+        };
+        if (ImGui::Button("Apply")) { leaveAt(); ApplyScriptEdit(app); }
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("Puts the text in the map (undoable); %s also applies it and saves", ui::BindName(app.lib.mapKeys[config::kKeySave]).c_str());
         ImGui::SameLine();
-        if (ImGui::Button("Cancel")) { app.scriptEditing = false; app.scriptMessage.clear(); }
+        if (ImGui::Button("Cancel")) { leaveAt(); app.scriptEditing = false; app.scriptMessage.clear(); }
         ImGui::SameLine();
         const bool changed = mob::Utf8(f.script) != app.scriptEdit;
         ImGui::TextDisabled("line %d%s", app.scriptCursorLine, changed ? "  (not applied)" : "");
@@ -2756,7 +2775,6 @@ static void ScriptContent(App& app) {
             ImGui::PopTextWrapPos();
         }
         if (app.scriptEditFocus) { ImGui::SetKeyboardFocusHere(); app.scriptEditFocus = false; }
-        const ImGuiID editId = ImGui::GetID("##scriptedit");
         const bool editing = ImGui::GetActiveID() == editId;
         // The list takes Up / Down / Enter / Esc from the text while it shows; Tab always (complete or indent).
         const ImGuiID owner = ImGui::GetID("##scriptcompletion");
@@ -2788,10 +2806,14 @@ static void ScriptContent(App& app) {
         ImGui::InputTextMultiline("##scriptedit", app.scriptEdit.data(), app.scriptEdit.capacity() + 1, ImVec2(-1, -1),
                                   ImGuiInputTextFlags_CallbackResize | ImGuiInputTextFlags_CallbackAlways, ScriptEditCallback, &app);
         ImGui::PopStyleColor(6);
-        char childName[512];
-        std::snprintf(childName, sizeof(childName), "%s/%s_%08X", parent->Name, "##scriptedit", editId);
+        const bool boxHovered = ImGui::IsItemHovered();
         ImGuiWindow* box = ImGui::FindWindowByName(childName);
         if (!box) return;
+        (void)parent;
+        if (app.scriptEditScrollLine >= 0) { // the line that was at the top of the view stays at the top
+            ImGui::SetScrollY(box, app.scriptEditScrollLine * ImGui::GetFontSize());
+            app.scriptEditScrollLine = -1;
+        }
         const ImGuiStyle& style = ImGui::GetStyle();
         {
             // The names the text declares, found again at most twice a second while it changes.
@@ -2813,6 +2835,10 @@ static void ScriptContent(App& app) {
             const int lastLine = firstLine + static_cast<int>(box->Size.y / lineH) + 3;
             ImDrawList* dl = box->DrawList;
             dl->PushClipRect(box->InnerClipRect.Min, box->InnerClipRect.Max, true);
+            // The findings of the last check, by line (the applied text's numbering: lines shift while editing).
+            std::unordered_map<int, char> flagged;
+            for (const checks::Finding& fd : app.findings)
+                if (fd.file == app.scriptFile && fd.line > 0) { char& sev = flagged[fd.line]; if (!sev || fd.severity == 'E') sev = fd.severity; }
             const char* text = app.scriptEdit.c_str();
             const char* p = text;
             for (int line = 0; *p && line <= lastLine; ++line) {
@@ -2821,6 +2847,19 @@ static void ScriptContent(App& app) {
                 if (line >= firstLine) {
                     float x = origin.x;
                     const float y = origin.y + line * lineH;
+                    auto flag = flagged.find(line + 1);
+                    if (flag != flagged.end()) { // a tinted band and a bar in the finding's colour, as the view draws them
+                        const ImVec4 col = SeverityColor(flag->second);
+                        const ImVec2 rowMin(box->Pos.x, y), rowMax(box->Pos.x + box->Size.x, y + lineH);
+                        dl->AddRectFilled(rowMin, rowMax, ImGui::GetColorU32(ImVec4(col.x, col.y, col.z, 0.12f)));
+                        dl->AddRectFilled(rowMin, ImVec2(rowMin.x + 3.0f, rowMax.y), ImGui::GetColorU32(col));
+                        if (boxHovered && ImGui::IsMouseHoveringRect(rowMin, rowMax)) {
+                            std::string tip;
+                            for (const checks::Finding& fd : app.findings)
+                                if (fd.file == app.scriptFile && fd.line == line + 1) tip += std::string(1, fd.severity) + ": " + fd.message + "\n";
+                            ImGui::SetTooltip("%s(line numbers of the last check: apply the text to check it again)", tip.c_str());
+                        }
+                    }
                     EachScriptToken(p, (e > p && e[-1] == '\r') ? e - 1 : e, names, [&](const char* b, const char* t, const ImVec4& color) {
                         dl->AddText(ImVec2(x, y), ImGui::GetColorU32(color), b, t);
                         x += ImGui::CalcTextSize(b, t, false).x;
@@ -2856,6 +2895,7 @@ static void ScriptContent(App& app) {
         app.scriptEdit = mob::Utf8(f.script);
         app.scriptEditFocus = true;
         app.scriptMessage.clear();
+        app.scriptEditGotoLine = static_cast<int>(app.scriptViewScrollY / ImGui::GetTextLineHeightWithSpacing() + 0.5f); // stay where the view was
     }
     ImGui::SameLine();
     if (ImGui::Button("Open in external editor")) OpenScriptExternally(app, entry);
@@ -2899,7 +2939,11 @@ static void ScriptContent(App& app) {
     if (app.scrollToLine && app.scriptLine > 0) {
         ImGui::SetScrollY(std::max(0.0f, (app.scriptLine - 6) * lineHeight));
         app.scrollToLine = false;
+    } else if (app.scriptViewGotoLine >= 0) { // back from edit mode: the same lines in view
+        ImGui::SetScrollY(app.scriptViewGotoLine * lineHeight);
+        app.scriptViewGotoLine = -1;
     }
+    app.scriptViewScrollY = ImGui::GetScrollY();
     ImGuiListClipper clipper;
     clipper.Begin(static_cast<int>(lines.size()), lineHeight);
     while (clipper.Step()) {
@@ -4669,6 +4713,33 @@ static void TilePanel(App& app, bool inShelf = false) {
             ImGui::SetNextItemWidth(120);
             ImGui::InputInt("Variation", &app.materialSeed);
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("Another value: other plain tiles and transitions picked where several fit");
+            if (ImGui::Button("Blend the hard edges of the whole terrain")) {
+                EditStep step;
+                step.kind = EditStep::Terrain;
+                step.file = app.terrainPath;
+                mpr::Map& map = app.terrain;
+                const tilemat::AutoBlendResult r = tilemat::BlendHardEdges(*tm, map, static_cast<uint32_t>(app.materialSeed), app.autoBlendSameKind,
+                                                                           [&](int si) { step.sectors.push_back({si, map.sectors[static_cast<size_t>(si)]}); });
+                if (!step.sectors.empty()) {
+                    PushUndo(app, std::move(step), "Blend hard edges");
+                    for (int si : r.sectors) app.terrainEditedSectors.insert(si);
+                    app.terrainRebuild = true;
+                }
+                char msg[256];
+                std::snprintf(msg, sizeof msg, "Hard edges: %d vertices where two plain grounds meet, %d cells by them: %d changed in %d round(s), %d left (no transition for those grounds, or an unknown tile)",
+                              r.hardVertices, r.cells, r.changed, r.rounds, r.left);
+                app.materialMessage = msg;
+                umlog::Write(umlog::Level::Info, std::string("Map Editor: ") + msg);
+            }
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Everywhere plain tiles of two grounds touch although the textures hold a transition for them (hand-painted\n"
+                                  "maps), the cells around get the transition tiles. Cells away from such an edge are not touched; a terrain\n"
+                                  "whose transitions are right comes out unchanged. The rarer ground keeps its cells, the band is laid into\n"
+                                  "the commoner one. One undo step; rebuild the navmesh after if tile types changed.");
+            ImGui::Checkbox("Hard edges between kinds of one ground too", &app.autoBlendSameKind);
+            if (ImGui::IsItemHovered())
+                ImGui::SetTooltip("Also where two kinds of one ground touch (grass/dark beside grass/common). The vanilla maps lay those\n"
+                                  "side by side on purpose, so this re-tiles a lot of a vanilla terrain: off by default.");
             if (!app.materialMessage.empty()) ImGui::TextWrapped("%s", app.materialMessage.c_str());
             ImGui::TextDisabled("Materials and masks of the vanilla tiles: EI-HD-tiles by aspadm");
         }
