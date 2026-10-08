@@ -252,6 +252,10 @@ inline Dress Resolve(const Library& lib, const mob::Object& o) {
             char num[8];
             std::snprintf(num, sizeof(num), "%02d", item->tti);
             for (const std::string& p : *parts) d.selected[p + ":armor"] = p + ".armor" + num;
+            // A helm's mesh is of texture number 2 (the items' class, like a weapon's): it wears the helm's own texture,
+            // alpha-tested, so the visor's opening is see-through (Kania Police Leader F10). The plate and leggings
+            // meshes are of number 1: the body's atlas.
+            if (Lower(item->type) == "helm" && !tex.empty()) d.texture[std::string("hd.armor") + num] = tex;
         }
     }
     std::stable_sort(worn.begin(), worn.end(), [](const auto& a, const auto& b) { return a.first < b.first; });

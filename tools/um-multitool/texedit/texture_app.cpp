@@ -21,6 +21,7 @@
 #include <functional>
 
 #include "subtools.hpp"
+#include "log.hpp"
 #include "texedit/quest_map.hpp"
 #include "viewer/dds_texture.hpp"
 #include "viewer/library.hpp"
@@ -394,6 +395,7 @@ void Save() {
         saved += " + " + fileM.filename().string();
     }
     g.message = ok ? "Saved " + saved : "Could not save " + saved + (err.empty() ? "" : ": " + err);
+    umlog::Write(ok ? umlog::Level::Info : umlog::Level::Error, "Texture Editor: " + g.message);
 }
 
 // ---- quest maps and stamps -----------------------------------------------------------------------

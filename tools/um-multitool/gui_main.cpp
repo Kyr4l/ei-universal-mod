@@ -958,6 +958,7 @@ int RunGui(const GuiOptions& options) {
     glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
     glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
     const std::string title = std::string(PROGRAM_NAME_SHOWN) + " " + PROGRAM_VERSION;
+    umlog::Write(umlog::Level::Info, title + " starting (GUI); log file: " + umlog::FilePath() + (umlog::Verbose() ? "" : "; --verbose prints it here"));
     // The window as it was last closed (um-multitool.cfg): size, maximized, and position where the
     // platform allows it (Wayland does not let a program place its window).
     const config::Config saved = config::Load();

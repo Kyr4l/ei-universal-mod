@@ -453,6 +453,7 @@ static bool LoadTerrain(App& app, const std::string& path) {
         umlog::Write(umlog::Level::Error, "Map Editor: terrain not loaded: " + path + ": " + err);
         return false;
     }
+    umlog::Write(umlog::Level::Info, "Map Editor: terrain " + path + ": " + map.name + ", " + std::to_string(map.sectorsX) + " x " + std::to_string(map.sectorsY) + " sectors");
     ForgetTerrainEdits(app);
     app.terrain = std::move(map);
     if (app.terrainLoaded) app.loadOrder.erase(std::remove(app.loadOrder.begin(), app.loadOrder.end(), app.terrainPath), app.loadOrder.end());
@@ -476,6 +477,7 @@ static bool AddMob(App& app, const std::string& path) {
     entry->savedBytes = entry->file.bytes;
     if (!entry->file.loaded) app.filesMessage = entry->file.fileName + ": " + entry->file.error;
     if (!entry->file.loaded) umlog::Write(umlog::Level::Error, "Map Editor: map not loaded: " + path + ": " + entry->file.error);
+    else umlog::Write(umlog::Level::Info, "Map Editor: map " + path + ": " + std::to_string(entry->file.objects.size()) + " objects" + (entry->file.hasScript ? ", a script" : "") + (entry->file.structure.empty() ? "" : ", " + std::to_string(entry->file.structure.size()) + " structure issue(s)"));
     app.mobs.push_back(std::move(entry));
     app.loadOrder.push_back(path);
     SyncScene(app);

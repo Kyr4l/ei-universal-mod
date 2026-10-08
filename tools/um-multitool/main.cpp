@@ -77,7 +77,8 @@ static void PrintTopLevelHelp() {
               << "  um-multitool gui --settings           # ... on the Settings tab\n"
               << "  um-multitool gui [...] --screenshot <out.bmp>  # ... then save a picture of the window (BMP) and quit\n"
               << "  um-multitool <subcommand> [options] <path>\n"
-              << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
+              << "  um-multitool <path> [options]         # auto-detects the right subcommand\n"
+              << "  --verbose / -v (any command)          # the log (um-multitool.log beside the program) also on stderr\n\n"
               << "Subcommands:\n"
               << "  ddsmmp   (alias: dds)   Convert textures between .dds <-> .mmp\n"
               << "  inireg   (alias: ini)   Convert configs between .ini <-> .reg\n"
@@ -478,16 +479,16 @@ static int InstallDesktop(int argc, char* argv[]) {
 
 struct CompletionEntry { const char* name; const char* flags; };
 static const CompletionEntry kCompletions[] = {
-    {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds --plain32 -h --help --version"},
-    {"inireg",   "-d --dir -m --multi -o --output --dry-run --ini2reg --reg2ini -h --help --version"},
-    {"mobdump",  "-d --dir -m --multi -o --output --dry-run -h --help --version"},
-    {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --grouped-texts --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version"},
-    {"xlsxdb",   "-o --output --check --no-check -h --help --version"},
-    {"dbexport", "-o --output -h --help"},
-    {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help"},
-    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help"},
-    {"map",      "--check --navmesh --mpr --write --force --config --help"},
-    {"dll",      "--port --listen --stats --help"},
+    {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds --plain32 -h --help --version --verbose"},
+    {"inireg",   "-d --dir -m --multi -o --output --dry-run --ini2reg --reg2ini -h --help --version --verbose"},
+    {"mobdump",  "-d --dir -m --multi -o --output --dry-run -h --help --version --verbose"},
+    {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --grouped-texts --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version --verbose"},
+    {"xlsxdb",   "-o --output --check --no-check -h --help --version --verbose"},
+    {"dbexport", "-o --output -h --help --verbose"},
+    {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help --verbose"},
+    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
+    {"map",      "--check --navmesh --mpr --write --force --config --help --verbose"},
+    {"dll",      "--port --listen --stats --help --verbose"},
     {"gui",      "--db --viewer --map --mp --skin --naked --settings --texture --mode --screenshot --verbose"},
     {"install-desktop", "--remove"},
     {"completion", "bash"},
@@ -536,6 +537,18 @@ static const char* BashCompletionScript() { return kBashCompletion; }
 #endif
 
 int main(int argc, char* argv[]) {
+    // --verbose / -v anywhere on the line, for every subcommand: the log (um-multitool.log) also goes to stderr.
+    // Taken out of argv here so the subcommands never see it (the gui command accepts it on its own as well).
+    {
+        int n = 1;
+        for (int i = 1; i < argc; ++i) {
+            const std::string a = argv[i];
+            if (a == "--verbose" || a == "-v") { umlog::SetVerbose(true); continue; }
+            argv[n++] = argv[i];
+        }
+        argc = n;
+        argv[argc] = nullptr;
+    }
     if (argc >= 2 && std::string(argv[1]) == "__complete") {
         return PrintCompletions(std::vector<std::string>(argv + 2, argv + argc));
     }

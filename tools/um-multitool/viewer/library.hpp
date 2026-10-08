@@ -3,6 +3,10 @@
 // holds one, shared by its tabs and edited in the Settings tab; the command-line modes make their own.
 #pragma once
 
+#include <chrono>
+
+#include "../log.hpp"
+
 #include "db_model.hpp"
 
 #include <fstream>
@@ -82,6 +86,7 @@ struct Library {
         std::vector<uint8_t> bytes; // a .res, or a spreadsheet compiled in memory
         if (!dbmodel::ReadAsRes(path, bytes, dbError)) {
             dbLoaded = false;
+            umlog::Write(umlog::Level::Error, "Database " + path + ": " + dbError);
             return false;
         }
         std::string label = path.substr(path.find_last_of("/\\") + 1);
@@ -92,6 +97,7 @@ struct Library {
         }
         db = std::move(loaded);
         dbLoaded = true;
+        umlog::Write(umlog::Level::Info, "Database " + path + ": " + std::to_string(db.List(items::Category::Weapons).size()) + " weapons, " + std::to_string(db.List(items::Category::Armors).size()) + " armors");
         unitsDb = units::Database{};
         {
             res::Archive archive;
@@ -104,11 +110,20 @@ struct Library {
     }
 
     void LoadConfig() {
+        const auto t0 = std::chrono::steady_clock::now();
         config::Config cfg = config::Load(configPath);
-        for (auto& p : cfg.figureLayers) figures.AddLayer(p);
-        for (auto& p : cfg.textureLayers) textures.AddLayer(p);
-        for (auto& p : cfg.textLayers) texts.AddLayer(p);
-        for (auto& p : cfg.mapLayers) maps.AddLayer(p);
+        umlog::Write(umlog::Level::Info, "Config " + configPath + ": " + std::to_string(cfg.figureLayers.size()) + " figure, " + std::to_string(cfg.textureLayers.size()) +
+                                         " texture, " + std::to_string(cfg.textLayers.size()) + " text, " + std::to_string(cfg.mapLayers.size()) + " map source(s)");
+        auto add = [&](const char* kind, LayeredAssetSource& src, const std::string& p) {
+            const auto t = std::chrono::steady_clock::now();
+            const bool ok = src.AddLayer(p);
+            const double ms = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t).count();
+            umlog::Write(ok ? umlog::Level::Info : umlog::Level::Warning, std::string(kind) + " source " + p + (ok ? ": " + std::to_string(src.layers.back().source.isArchive ? src.layers.back().source.archive.entries.size() : src.layers.back().source.lowerToReal.size()) + " file(s), " + std::to_string(static_cast<int>(ms)) + " ms" : ": NOT loaded: " + src.layers.back().error));
+        };
+        for (auto& p : cfg.figureLayers) add("Figure", figures, p);
+        for (auto& p : cfg.textureLayers) add("Texture", textures, p);
+        for (auto& p : cfg.textLayers) add("Text", texts, p);
+        for (auto& p : cfg.mapLayers) add("Map", maps, p);
         rotations = cfg.rotations;
         rotationClicks = cfg.rotationClicks;
         gif = cfg.gif;
@@ -141,6 +156,7 @@ struct Library {
         RebuildFigureIndex();
         RebuildTextureIndex();
         if (!cfg.databasePath.empty()) LoadDatabase(cfg.databasePath);
+        umlog::Write(umlog::Level::Info, "Sources ready in " + std::to_string(static_cast<int>(std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count())) + " ms");
     }
 
     void SaveConfig() const {
