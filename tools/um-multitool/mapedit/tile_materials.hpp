@@ -1,10 +1,12 @@
-// Painting the terrain by MATERIAL (grass, sand, rock...) with the transitions chosen automatically: the vanilla
-// textures hold, for every pair of grounds the artists blended, the transition tiles (a corner, a half, an inner
-// corner, under the four .mpr rotations). tile_materials_generated.hpp says what each tile is made of; here the
-// other way round: the tile for four corner materials.
+// Painting the terrain by MATERIAL (grass, sand, rock...) with the transitions chosen automatically: every tile
+// of the vanilla textures is known by the ground at each of its four corners (tile_materials_generated.hpp): a
+// plain tile has one ground, the transitions the artists blended two (a corner, a half, an inner corner, under
+// the four .mpr rotations), and the tiles they laid where three grounds meet have three. Here the other way
+// round: the tile for four corner materials.
 // Corners are the tile's four vertices: bits 0 NW, 1 NE, 2 SW, 3 SE (north = +y, the .mpr's rows).
 #pragma once
 
+#include <array>
 #include <cstdint>
 #include <cstring>
 #include <fstream>
@@ -22,12 +24,22 @@ struct Material {
     std::vector<int> baseTiles;   // the plain tiles of it (any variant), to paint a full cell with
 };
 
+inline int RotateCw(int pattern) { // NW <- SW, NE <- NW, SE <- NE, SW <- SE
+    const int nw = pattern & 1, ne = (pattern >> 1) & 1, sw = (pattern >> 2) & 1, se = (pattern >> 3) & 1;
+    return sw | (nw << 1) | (se << 2) | (ne << 3);
+}
+inline std::array<int, 4> RotateCornersCw(const std::array<int, 4>& c) { return {c[2], c[0], c[3], c[1]}; }
+
 struct Terrain {
     std::string name;
     std::vector<Material> materials;
-    struct Info { int16_t a = -1, b = -1; int8_t pattern = -1; }; // per tile: material ids (indexes into `materials`), -1 unknown
+    // Per tile: the material id (index into `materials`) at each corner, -1 unknown; for a tile of one or two
+    // materials also the older form a / b / pattern (the corners showing b), which the blending tools use.
+    struct Info { int16_t c[4] = {-1, -1, -1, -1}; int16_t a = -1, b = -1; int8_t pattern = -1; bool known = false; };
     std::vector<Info> tiles;      // by tile index (texture * 64 + tile)
-    std::vector<int> blendTiles;  // the tiles with two materials (pattern >= 0)
+    std::vector<int> blendTiles;  // the tiles with exactly two materials
+    std::vector<int> multiTiles;  // the tiles with three or more
+    std::map<std::array<int, 4>, std::vector<std::pair<int, int>>> bySignature; // corners -> the (tile, rotation) showing them
 
     const Info* At(int tile) const { return tile >= 0 && tile < static_cast<int>(tiles.size()) ? &tiles[static_cast<size_t>(tile)] : nullptr; }
     int MaterialId(const std::string& name) {
@@ -35,25 +47,56 @@ struct Terrain {
         materials.push_back({name, {}});
         return static_cast<int>(materials.size()) - 1;
     }
+    int FindMaterial(const std::string& name) const {
+        for (size_t i = 0; i < materials.size(); ++i) if (materials[i].name == name) return static_cast<int>(i);
+        return -1;
+    }
+    // Registers a tile by its four corner materials (ids), at rotation 0.
+    void SetCorners(int tile, const std::array<int, 4>& c) {
+        if (tile < 0 || c[0] < 0 || c[1] < 0 || c[2] < 0 || c[3] < 0) return;
+        if (tile >= static_cast<int>(tiles.size())) tiles.resize(static_cast<size_t>(tile) + 1);
+        Info& info = tiles[static_cast<size_t>(tile)];
+        if (info.known) return; // the vanilla data first; a sidecar cannot redefine a tile
+        info.known = true;
+        for (int k = 0; k < 4; ++k) info.c[k] = static_cast<int16_t>(c[k]);
+        int distinct[4], n = 0;
+        for (int k = 0; k < 4; ++k) {
+            int i = 0;
+            while (i < n && distinct[i] != c[k]) ++i;
+            if (i == n) distinct[n++] = c[k];
+        }
+        if (n == 1) {
+            info.a = static_cast<int16_t>(c[0]); info.pattern = 0;
+            materials[static_cast<size_t>(c[0])].baseTiles.push_back(tile);
+        } else if (n == 2) {
+            info.a = static_cast<int16_t>(c[0]); info.b = static_cast<int16_t>(distinct[1]);
+            int p = 0;
+            for (int k = 0; k < 4; ++k) if (c[k] == info.b) p |= 1 << k;
+            info.pattern = static_cast<int8_t>(p);
+            blendTiles.push_back(tile);
+        } else {
+            multiTiles.push_back(tile);
+        }
+        std::array<int, 4> r = c;
+        for (int rot = 0; rot < 4; ++rot, r = RotateCornersCw(r)) {
+            std::vector<std::pair<int, int>>& fits = bySignature[r];
+            bool dup = false;
+            for (const auto& f : fits) dup |= f.first == tile; // a symmetric tile fits one signature at two rotations: once
+            if (!dup) fits.push_back({tile, rot});
+        }
+    }
     // Adds a base tile of `material` (a tile copied from another terrain, or one the user names).
     void AddBase(int tile, const std::string& material) {
-        if (tile < 0) return;
-        if (tile >= static_cast<int>(tiles.size())) tiles.resize(static_cast<size_t>(tile) + 1);
         const int id = MaterialId(material);
-        tiles[static_cast<size_t>(tile)] = {static_cast<int16_t>(id), -1, 0};
-        materials[static_cast<size_t>(id)].baseTiles.push_back(tile);
+        SetCorners(tile, {id, id, id, id});
     }
     // Adds a transition tile from `a` to `b`: `pattern` = the corners showing b at rotation 0 (bits 0 NW, 1 NE, 2 SW, 3 SE).
     void AddBlend(int tile, const std::string& a, const std::string& b, int pattern) {
         if (tile < 0 || pattern < 0) return;
-        if (tile >= static_cast<int>(tiles.size())) tiles.resize(static_cast<size_t>(tile) + 1);
         const int ia = MaterialId(a), ib = MaterialId(b);
-        tiles[static_cast<size_t>(tile)] = {static_cast<int16_t>(ia), static_cast<int16_t>(ib), static_cast<int8_t>(pattern)};
-        blendTiles.push_back(tile);
-    }
-    int FindMaterial(const std::string& name) const {
-        for (size_t i = 0; i < materials.size(); ++i) if (materials[i].name == name) return static_cast<int>(i);
-        return -1;
+        std::array<int, 4> c;
+        for (int k = 0; k < 4; ++k) c[k] = (pattern >> k) & 1 ? ib : ia;
+        SetCorners(tile, c);
     }
 };
 
@@ -75,17 +118,15 @@ inline Terrain* Lookup(const std::string& terrainName) {
     t.name = key;
     for (int i = 0; i < kTableCount; ++i) {
         if (key != kTables[i].terrain) continue;
-        int maxTile = 0;
-        for (int e = 0; e < kTables[i].count; ++e) maxTile = std::max(maxTile, static_cast<int>(kTables[i].entries[e].tile));
-        t.tiles.resize(static_cast<size_t>(maxTile) + 1);
         for (int e = 0; e < kTables[i].count; ++e) {
             const Entry& en = kTables[i].entries[e];
-            Terrain::Info& info = t.tiles[en.tile];
-            if (en.pattern < 0) continue; // three or more materials: unknown corners
-            info.a = static_cast<int16_t>(t.MaterialId(Family(kMaterials[en.a])));
-            info.pattern = en.pattern;
-            if (en.b < 0) t.materials[static_cast<size_t>(info.a)].baseTiles.push_back(en.tile);
-            else { info.b = static_cast<int16_t>(t.MaterialId(Family(kMaterials[en.b]))); t.blendTiles.push_back(en.tile); }
+            std::array<int, 4> c;
+            bool ok = true;
+            for (int k = 0; k < 4; ++k) {
+                if (en.c[k] < 0 || en.c[k] >= kMaterialCount) { ok = false; break; }
+                c[k] = t.MaterialId(Family(kMaterials[en.c[k]]));
+            }
+            if (ok) t.SetCorners(en.tile, c);
         }
         break;
     }
@@ -133,19 +174,14 @@ inline std::vector<std::string> KnownTerrains() {
     return names;
 }
 
-inline int RotateCw(int pattern) { // NW <- SW, NE <- NW, SE <- NE, SW <- SE
-    const int nw = pattern & 1, ne = (pattern >> 1) & 1, sw = (pattern >> 2) & 1, se = (pattern >> 3) & 1;
-    return sw | (nw << 1) | (se << 2) | (ne << 3);
-}
-
 // The materials at the four corners of a placed (packed) tile, -1 where unknown.
 inline void Corners(const Terrain& t, uint16_t packed, int out[4]) {
     const int tile = ((packed >> 6) & 0xFF) * 64 + (packed & 63), rotation = (packed >> 14) & 3;
     const Terrain::Info* info = t.At(tile);
-    if (!info || info->pattern < 0) { out[0] = out[1] = out[2] = out[3] = -1; return; }
-    int p = info->pattern;
-    for (int r = 0; r < rotation; ++r) p = RotateCw(p);
-    for (int k = 0; k < 4; ++k) out[k] = (p >> k) & 1 ? info->b : info->a;
+    if (!info || !info->known) { out[0] = out[1] = out[2] = out[3] = -1; return; }
+    std::array<int, 4> c = {info->c[0], info->c[1], info->c[2], info->c[3]};
+    for (int r = 0; r < rotation; ++r) c = RotateCornersCw(c);
+    for (int k = 0; k < 4; ++k) out[k] = c[k];
 }
 
 inline uint32_t Hash(uint32_t x, uint32_t y, uint32_t seed) {
@@ -155,32 +191,20 @@ inline uint32_t Hash(uint32_t x, uint32_t y, uint32_t seed) {
 }
 
 // The tile (texture * 64 + tile) and rotation whose corners are `corners` (material ids, none -1): a base tile
-// when all four are one material, else a transition tile. False when the textures have no such tile.
+// when all four are one material, else the transition (or three-ground tile) showing exactly those corners.
+// False when the textures have no such tile.
 inline bool Solve(const Terrain& t, const int corners[4], uint32_t hash, int& tile, int& rotation) {
     if (corners[0] < 0 || corners[1] < 0 || corners[2] < 0 || corners[3] < 0) return false;
-    const int a = corners[0];
-    int b = -1;
-    for (int k = 1; k < 4; ++k) if (corners[k] != a) { if (b < 0) b = corners[k]; else if (corners[k] != b) return false; }
-    if (b < 0) {
-        const std::vector<int>& bases = t.materials[static_cast<size_t>(a)].baseTiles;
+    if (corners[1] == corners[0] && corners[2] == corners[0] && corners[3] == corners[0]) {
+        const std::vector<int>& bases = t.materials[static_cast<size_t>(corners[0])].baseTiles;
         if (bases.empty()) return false;
         tile = bases[hash % bases.size()];
         rotation = static_cast<int>((hash >> 8) % 4);
         return true;
     }
-    int wanted = 0; // the corners showing b
-    for (int k = 0; k < 4; ++k) if (corners[k] == b) wanted |= 1 << k;
-    std::vector<std::pair<int, int>> fits;
-    for (int candidate : t.blendTiles) {
-        const Terrain::Info& info = t.tiles[static_cast<size_t>(candidate)];
-        int p;
-        if (info.a == a && info.b == b) p = info.pattern;
-        else if (info.a == b && info.b == a) p = ~info.pattern & 15;
-        else continue;
-        for (int r = 0; r < 4; ++r, p = RotateCw(p)) if (p == wanted) fits.push_back({candidate, r});
-    }
-    if (fits.empty()) return false;
-    const auto& pick = fits[hash % fits.size()];
+    const auto it = t.bySignature.find({corners[0], corners[1], corners[2], corners[3]});
+    if (it == t.bySignature.end() || it->second.empty()) return false;
+    const auto& pick = it->second[hash % it->second.size()];
     tile = pick.first;
     rotation = pick.second;
     return true;
@@ -194,6 +218,18 @@ inline bool CanBlend(const Terrain& t, int a, int b) {
         if ((info.a == a && info.b == b) || (info.a == b && info.b == a)) return true;
     }
     return false;
+}
+
+// A ground that blends with both `a` and `b` (a band of it can stand between them where they have no
+// transition of their own, or not the shape needed), the one with most plain tiles; -1 when none.
+inline int Bridge(const Terrain& t, int a, int b) {
+    int best = -1;
+    for (size_t m = 0; m < t.materials.size(); ++m) {
+        const int id = static_cast<int>(m);
+        if (id == a || id == b || t.materials[m].baseTiles.empty() || !CanBlend(t, a, id) || !CanBlend(t, id, b)) continue;
+        if (best < 0 || t.materials[m].baseTiles.size() > t.materials[static_cast<size_t>(best)].baseTiles.size()) best = id;
+    }
+    return best;
 }
 
 } // namespace tilemat

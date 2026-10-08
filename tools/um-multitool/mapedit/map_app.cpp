@@ -37,6 +37,7 @@
 #include "../viewer/library.hpp"
 #include "../viewer/ui_common.hpp"
 #include "tile_autoblend.hpp"
+#include "tile_paint.hpp"
 #include "tile_blend.hpp"
 #include "tile_materials.hpp"
 #include "script_docs.hpp"
@@ -164,6 +165,8 @@ struct App {
     bool autoBlendSameKind = false;   // "Blend the hard edges": also between two kinds of one ground (grass/dark - grass/common)
     int paintTabWanted = -1;          // Tile paint: select the Grounds (0) or Tiles (1) tab at the next frame
     int materialRadius = 1;           // the ground brush: cells around the mouse (1 = one cell; F + mouse)
+    bool materialRepair = true;       // ... three grounds at a cell with no tile for them: the junction moves a vertex
+    bool materialBridge = true;       // ... a ground the brush cannot blend with: a band of a middle ground between them
     char materialSearch[64] = "";     // the grounds' search box
     std::map<std::string, GLuint> borrowThumbs; // "<terrain>/<tile>" -> a thumbnail of another allod's tile (0 = not readable)
     std::string borrowMessage;
@@ -4298,50 +4301,24 @@ static void PushTerrainHeaderUndo(App& app) {
     PushUndo(app, std::move(step), "Terrain parameters");
 }
 
-// Paints a material around (x, y): the cells within the brush's radius become plain tiles of it and the cells
-// around them get the transition tiles their corners then need (tile_materials.hpp). Cells whose corners the
-// textures cannot show (three grounds meeting, a tile of unknown make-up) are left as they are.
+// Paints a material around (x, y) with the brush's radius and the panel's fallbacks (tile_paint.hpp), keeping the
+// sectors as they were in the stroke's undo step.
 static void PaintMaterialAt(App& app, float x, float y) {
     mpr::Map& m = app.terrain;
     tilemat::Terrain* tm = tilemat::Lookup(m.name);
     int si, row, col;
     if (!tm || app.brushMaterialId < 0 || !TileAt(m, x, y, si, row, col)) return;
     const int gx = (si % m.sectorsX) * 16 + col, gy = (si / m.sectorsX) * 16 + row; // the cell under the mouse
-    const int W = m.sectorsX * 16, H = m.sectorsY * 16, R = std::clamp(app.materialRadius, 1, 16) - 1;
-    auto painted = [&](int cx, int cy) { const int dx = cx - gx, dy = cy - gy; return dx * dx + dy * dy <= R * R + R; }; // a disc of cells
-    auto vertexPainted = [&](int vx, int vy) { // a vertex takes the brush's material when a painted cell touches it
-        for (int dy = -1; dy <= 0; ++dy) for (int dx = -1; dx <= 0; ++dx) if (painted(vx + dx, vy + dy)) return true;
-        return false;
-    };
-    bool failed = false;
-    for (int cy = gy - R - 1; cy <= gy + R + 1; ++cy)
-        for (int cx = gx - R - 1; cx <= gx + R + 1; ++cx) {
-            if (cx < 0 || cy < 0 || cx >= W || cy >= H) continue;
-            const int s2 = (cy / 16) * m.sectorsX + cx / 16, r2 = cy % 16, c2 = cx % 16;
-            mpr::Sector& s = m.sectors[static_cast<size_t>(s2)];
-            if (!s.present) continue;
-            int corners[4];
-            tilemat::Corners(*tm, s.landTiles[r2][c2], corners);
-            // corner k of the cell is the vertex (cx + (k & 1), cy + (k < 2))
-            bool touches = false;
-            for (int k = 0; k < 4; ++k)
-                if (vertexPainted(cx + (k & 1), cy + (k < 2 ? 1 : 0))) { corners[k] = app.brushMaterialId; touches = true; }
-            if (!touches) continue;
-            int tile, rot;
-            if (!tilemat::Solve(*tm, corners, tilemat::Hash(static_cast<uint32_t>(cx), static_cast<uint32_t>(cy), static_cast<uint32_t>(app.materialSeed)), tile, rot)) {
-                failed = true;
-                continue;
-            }
-            const uint16_t packed = PackTile(tile, rot);
-            if (s.landTiles[r2][c2] == packed) continue;
-            bool kept = false;
-            for (const auto& pr : app.stroke.sectors) kept |= pr.first == s2;
-            if (!kept) app.stroke.sectors.push_back({s2, s});
-            s.landTiles[r2][c2] = packed;
-            app.terrainEditedSectors.insert(s2);
-            app.terrainRebuild = true;
-        }
-    app.materialMessage = failed ? "Some cells were left: the textures have no transition for the grounds meeting there (or the tile there is of unknown make-up)" : "";
+    tilemat::PaintResult r;
+    tilemat::PaintGround(*tm, m, gx, gy, app.materialRadius, app.brushMaterialId, static_cast<uint32_t>(app.materialSeed), app.materialRepair, app.materialBridge, r,
+                         [&](int s2) {
+                             bool kept = false;
+                             for (const auto& pr : app.stroke.sectors) kept |= pr.first == s2;
+                             if (!kept) app.stroke.sectors.push_back({s2, m.sectors[static_cast<size_t>(s2)]});
+                         });
+    for (int s2 : r.sectors) app.terrainEditedSectors.insert(s2);
+    if (r.changed) app.terrainRebuild = true;
+    app.materialMessage = r.Message();
 }
 
 // Paints the brush's tile on the tile at (x, y), keeping the sector as it was in the stroke's undo step.
@@ -4910,6 +4887,14 @@ static void GroundsPanel(App& app, tilemat::Terrain& tm) {
     ImGui::SetNextItemWidth(150);
     ImGui::InputInt("Variation", &app.materialSeed);
     ImGui::SetItemTooltip("Another value: other plain tiles and transitions picked where several fit");
+    ImGui::Checkbox("Fix corners the textures lack", &app.materialRepair);
+    ImGui::SetItemTooltip("A cell by the brush the textures have no tile for (three grounds meeting, a concave notch...; the artists'\n"
+                          "own junction tiles are used first): one of its corners that is not painted takes whichever ground gives the\n"
+                          "four cells around it a tile each, the way the artists filled such spots. Off: the cell is left as it is.");
+    ImGui::Checkbox("Bridge with a middle ground", &app.materialBridge);
+    ImGui::SetItemTooltip("Where the brush meets a ground the textures cannot blend it with (no transition at all, or not the shape a\n"
+                          "cell needs), a band one vertex wide of a ground that blends with both is laid all round the brush, like\n"
+                          "zone 7's light stone rims around grass on watered rock. Off: the cell is left as it is.");
     ImGui::SetNextItemWidth(-1);
     ImGui::InputTextWithHint("##groundsearch", "search a ground (grass, rock, sand...)", app.materialSearch, sizeof app.materialSearch);
     const float cell = 44.0f;
