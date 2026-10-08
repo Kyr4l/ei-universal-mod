@@ -13,6 +13,7 @@
 #include "mp_file.hpp" // the .mp compression (um-multitool)
 
 #include <algorithm>
+#include <deque>
 #include <functional>
 #include <map>
 #include <set>
@@ -76,7 +77,7 @@ public:
     void SetCharacter(const std::string& name, const std::string& unit, uint32_t id, const std::vector<uint8_t>& mpRaw = {}) {
         name_ = name; unit_ = unit; heroId_ = id; mpRaw_ = mpRaw;
         phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = false;
-        tx_.clear(); txSent_ = 0; rxChunks_.clear(); rx_.clear(); rxParsed_ = 0; got_.clear();
+        tx_.clear(); txOffset_ = 0; unacked_.clear(); resend_.clear(); rxChunks_.clear(); rx_.clear(); rxParsed_ = 0; rxBase_ = 0; got_.clear(); seenMessages_.clear();
         SetJoin(1, 0xFFFFFFFFu); // as the game: first without a hero, then with it
     }
     // Orders our hero (stream message 0x30, read by the server's 0x66FFF0, the same path as a click on the ground):
@@ -454,11 +455,19 @@ public:
             Put16(p, seq_++);
             Put16(p, ackSeq_);
             Put32(p, bits);
-            const size_t chunk = std::min<size_t>(204, tx_.size() - txSent_);
-            Put16(p, static_cast<uint16_t>(txSent_));
-            p.push_back(static_cast<uint8_t>(chunk));
-            p.insert(p.end(), tx_.begin() + static_cast<long>(txSent_), tx_.begin() + static_cast<long>(txSent_ + chunk));
-            txSent_ += chunk;
+            Chunk c;
+            if (!resend_.empty()) { c = std::move(resend_.front()); resend_.pop_front(); } // a lost chunk first, at its old offset
+            else {
+                const size_t n = std::min<size_t>(204, tx_.size());
+                c.offset = txOffset_;
+                c.bytes.assign(tx_.begin(), tx_.begin() + static_cast<long>(n));
+                tx_.erase(tx_.begin(), tx_.begin() + static_cast<long>(n));
+                txOffset_ = static_cast<uint16_t>(txOffset_ + n);
+            }
+            Put16(p, c.offset);
+            p.push_back(static_cast<uint8_t>(c.bytes.size()));
+            p.insert(p.end(), c.bytes.begin(), c.bytes.end());
+            if (!c.bytes.empty()) unacked_[static_cast<uint16_t>(seq_ - 1)] = std::move(c);
             if (joinSends_ > 0 && !join_.empty()) {
                 --joinSends_;
                 p.push_back(1);    // one message
@@ -515,8 +524,16 @@ private:
     int joinSends_ = 0;                        // the JOIN goes 4 times after each change
     std::set<uint16_t> got_;                   // the server's packets received (the ack bits)
     // The update's stream part (_cpr/claude-re/net/README.md): out = our messages, in = the server's
-    std::vector<uint8_t> tx_; size_t txSent_ = 0;
-    std::map<uint16_t, std::vector<uint8_t>> rxChunks_; std::vector<uint8_t> rx_; size_t rxParsed_ = 0;
+    // Outgoing: tx_ holds the bytes not cut into a chunk yet (txOffset_ = the stream offset of tx_[0]); a chunk goes in
+    // one update and is kept in unacked_ by that update's sequence until the server's ack bits cover it; an update
+    // more than 32 behind the server's last ack without its bit was lost: its chunk is queued again (resend_), as the
+    // game resends its own (the server waits for the missing offset otherwise: nothing after it is read).
+    struct Chunk { uint16_t offset; std::vector<uint8_t> bytes; };
+    std::vector<uint8_t> tx_; uint16_t txOffset_ = 0;
+    std::map<uint16_t, Chunk> unacked_;
+    std::deque<Chunk> resend_;
+    // Incoming: rx_ holds the stream from rxBase_ on (the parsed prefix is dropped), rxParsed_ counts from rx_[0].
+    std::map<uint16_t, std::vector<uint8_t>> rxChunks_; std::vector<uint8_t> rx_; size_t rxParsed_ = 0; uint32_t rxBase_ = 0;
     enum class Phase { Lobby, Loading, Entering, InWorld } phase_ = Phase::Lobby;
     double phaseAt_ = 0, respawnAt_ = -1, viewAt_ = 0;
     int respawnStep_ = 0;
@@ -628,11 +645,16 @@ private:
             }
             rxParsed_ += 4 + clen;
         }
+        if (rxParsed_ > 65536) { // the parsed bytes are not needed again: drop them (rxBase_ keeps the stream offsets right)
+            rx_.erase(rx_.begin(), rx_.begin() + static_cast<long>(rxParsed_));
+            rxBase_ += static_cast<uint32_t>(rxParsed_);
+            rxParsed_ = 0;
+        }
     }
     static void Put16(std::vector<uint8_t>& p, uint16_t v) { p.push_back(static_cast<uint8_t>(v)); p.push_back(static_cast<uint8_t>(v >> 8)); }
     static void Put32(std::vector<uint8_t>& p, uint32_t v) { for (int i = 0; i < 4; ++i) p.push_back(static_cast<uint8_t>(v >> (8 * i))); }
     static uint32_t Get32(const uint8_t* b) { uint32_t v; std::memcpy(&v, b, 4); return v; }
-    void Log(const std::string& s) { log.push_back(s); }
+    void Log(const std::string& s) { log.push_back(s); if (log.size() > 2000) log.erase(log.begin(), log.begin() + 500); }
     bool Fail(const std::string& why) { error = why; state = State::Failed; Log("failed: " + why); Close(); return false; }
     void Send(const std::vector<uint8_t>& p) {
         sendto(sock_, reinterpret_cast<const char*>(p.data()), static_cast<int>(p.size()), 0, reinterpret_cast<const sockaddr*>(&server_), sizeof server_);
@@ -719,6 +741,7 @@ private:
                 return;
             }
             const std::string key(reinterpret_cast<const char*>(b + start), static_cast<size_t>(std::min(o, n) - start));
+            if (seenMessages_.size() > 4000) seenMessages_.clear(); // a long session: forget the old ones (a repeat is only logged twice)
             if (!seenMessages_.insert(key).second) continue;
             if (kind == 2 || kind == 3 || kind == 6) Log("server: " + text);
             else if (kind == 9) Log("the host chose the quest " + text);
@@ -757,6 +780,18 @@ private:
             Close();
             break;
         case 0x00: // the server's update: acknowledged in the next keep-alive (its content is not decoded yet)
+            if (n >= 9) { // what the server acknowledged of ours: u16 ack, u32 bits (bit i = ack - 1 - i)
+                uint16_t ack; uint32_t bits; std::memcpy(&ack, b + 3, 2); std::memcpy(&bits, b + 5, 4);
+                for (auto it = unacked_.begin(); it != unacked_.end();) {
+                    const uint16_t back = static_cast<uint16_t>(ack - it->first);
+                    const bool acked = back == 0 || (back >= 1 && back <= 32 && (bits & (1u << (back - 1))));
+                    if (acked) it = unacked_.erase(it);
+                    else if (back > 32 && back < 0x8000) { // too old for the window and never acked: lost
+                        if (std::getenv("UM_BOT_RXLOG")) std::fprintf(stderr, "resend chunk at %u (%zu bytes) of update %u\n", it->second.offset, it->second.bytes.size(), it->first);
+                        resend_.push_back(std::move(it->second)); it = unacked_.erase(it);
+                    } else ++it;
+                }
+            }
             if (n >= 3) {
                 uint16_t sq; std::memcpy(&sq, b + 1, 2);
                 if (got_.empty() || static_cast<uint16_t>(sq - ackSeq_) < 0x8000) ackSeq_ = sq;
@@ -772,7 +807,7 @@ private:
                 for (bool grew = true; grew;) {
                     grew = false;
                     for (auto it = rxChunks_.begin(); it != rxChunks_.end();) {
-                        const uint16_t have = static_cast<uint16_t>(static_cast<uint16_t>(rx_.size()) - it->first);
+                        const uint16_t have = static_cast<uint16_t>(static_cast<uint16_t>(rxBase_ + rx_.size()) - it->first);
                         if (have < 0x8000 && have < it->second.size()) {
                             rx_.insert(rx_.end(), it->second.begin() + have, it->second.end());
                             grew = true;

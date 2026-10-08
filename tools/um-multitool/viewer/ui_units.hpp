@@ -29,6 +29,7 @@ struct UnitsTabState {
     int selected = -1;            // in lib.unitsDb.monsters
     bool dirty = true;            // rebuild the scene's model
     bool frame = true;            // and frame it
+    float yawOverride = -1000.0f; // gui --viewer units --yaw: the camera's yaw after the next rebuild (-1000: none)
     // Overrides of the monster's own values
     int skin = -1;                // index in the race's primary textures; -1: the monster's
     std::string customSkin;       // a texture name or a file: wins over `skin`
@@ -167,9 +168,20 @@ inline void Rebuild(const Library& lib, Scene& scene, UnitsTabState& st) {
     else if (st.hair >= 0) { char num[16]; std::snprintf(num, sizeof num, "%02d", st.hair); d.selected["hr"] = std::string("hr.") + num; }
     st.summary = d.summary;
     const fig::Vec3 k{st.complection[0], st.complection[1], st.complection[2]};
+    const bool dump = std::getenv("UM_DRESS_DEBUG") != nullptr; // research: every part, shown or not, and its texture
+    if (dump) {
+        std::fprintf(stderr, "dress %s: %s\n  body %s\n", m.name.c_str(), d.summary.c_str(), d.body.c_str());
+        for (const auto& kv : d.selected) std::fprintf(stderr, "  selected %s = %s\n", kv.first.c_str(), kv.second.c_str());
+        for (const auto& kv : d.texture) std::fprintf(stderr, "  texture %s = %s\n", kv.first.c_str(), kv.second.c_str());
+    }
     scene.LoadUnit(lib, o.templ, k, frame,
-                   [&](const fig::Model& model, const fig::ModelPart& part) { return dress::PartShown(d, model, part); },
+                   [&](const fig::Model& model, const fig::ModelPart& part) {
+                       const bool shown = dress::PartShown(d, model, part);
+                       if (dump) std::fprintf(stderr, "  part %-24s %s  tex#%d group %d  %s\n", part.name.c_str(), shown ? "SHOWN " : "hidden", part.mesh.textureNumber, part.mesh.group, shown ? dress::PartTexture(d, model, part).c_str() : "");
+                       return shown;
+                   },
                    [&](const fig::Model& model, const fig::ModelPart& part) { return dress::PartTexture(d, model, part); });
+    if (st.yawOverride > -999.0f) { scene.camera.yawDeg = st.yawOverride; st.yawOverride = -1000.0f; }
     scene.textureName = skin;
 }
 

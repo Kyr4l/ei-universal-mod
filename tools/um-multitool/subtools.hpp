@@ -18,4 +18,6 @@ bool IniRegRegToText(const std::vector<uint8_t>& reg, std::string& iniOut, std::
 
 // ddsmmp.cpp: RGBA8 pixels (top-to-bottom) as a 32-bit DDS / a PNT3 .mmp (the Texture Editor's Save).
 bool RgbaToDds(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& ddsOut);
-bool RgbaToMmp(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& mmpOut, std::string& err);
+bool RgbaToDds16(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& ddsOut); // A1R5G5B5
+enum class MmpFormat { Pnt3, Argb1555 }; // 32-bit zero-RLE (terrain textures) / 16-bit "QU" (the quest maps)
+bool RgbaToMmp(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& mmpOut, std::string& err, MmpFormat format = MmpFormat::Pnt3);

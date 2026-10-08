@@ -22,7 +22,7 @@ void RenderGl(Context* ctx, int framebufferWidth, int framebufferHeight, float f
 // Opens the viewer on one item (e.g. "weapons", "axe"); false with a message if not found.
 // category "units": a unit (Monsters) by name, with `skin` (a texture file or name) tried on it when given.
 bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin = "", bool naked = false,
-              const std::string& clip = "", float frame = -1.0f);
+              const std::string& clip = "", float frame = -1.0f, float yaw = -1000.0f);
 
 // `um-multitool viewer <args>`: --list, --resolve, --render, --gif (argv[0] is "viewer").
 int RunCli(int argc, char** argv);

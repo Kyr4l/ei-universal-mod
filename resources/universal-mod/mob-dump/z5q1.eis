@@ -110,7 +110,6 @@ WorldScript
   AddObject( Scrabs, GetObject( 39 )  )
   AddObject( Scrabs, GetObject( 40 )  )
   AddObject( Scrabs, GetObject( 41 )  )
-  AddObject( Scrabs, GetObject( 42 )  )
   AddObject( Scrabs, GetObject( 15 )  )
   AddObject( Scrabs, GetObject( 1000324  )  )
   Scrabmother = GetObjectByID( "1000324" )

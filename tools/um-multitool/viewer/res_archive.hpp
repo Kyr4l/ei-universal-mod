@@ -66,7 +66,7 @@ inline bool ParseArchive(const uint8_t* data, size_t size, Archive& out, std::st
         std::memcpy(&nameOffset, data + pos + 18, 4);
         if (nameLen == 0) continue;
         if (namesStart + nameOffset + nameLen > size) continue;
-        if (dataOffset + dataLength > size) continue;
+        if (static_cast<size_t>(dataOffset) + dataLength > size) continue; // summed as size_t: two u32 could wrap past the check
 
         std::string name(reinterpret_cast<const char*>(data + namesStart + nameOffset), nameLen);
         Archive::Entry entry;

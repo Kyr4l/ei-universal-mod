@@ -15,6 +15,9 @@ namespace texedit {
 // when there is none).
 void SetMapSource(std::function<bool(questmap::Input&, std::string& err)> source);
 
+// Opens a picture (.mmp, .dds, .png, .jpg, .bmp, .tga) in the editor (the "--texture <file>" option).
+void OpenPath(const std::string& path);
+
 // Inside the ImGui frame, in the tab's content region.
 void DrawTab(Library& lib);
 

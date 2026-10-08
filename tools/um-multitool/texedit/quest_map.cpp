@@ -198,7 +198,7 @@ float ValueNoise(float x, float y, int period, int seed) {
 }
 
 const char* KindName(Kind k) {
-    static const char* const names[kKindCount] = {"House", "Goblin house", "Goblin houses", "Tent", "Shop tent", "Tower", "Wooden bridge", "Stone bridge", "Wall", "Forest"};
+    static const char* const names[kKindCount] = {"House", "Goblin house", "Goblin houses", "Tent", "Shop tent", "Tower", "Wooden bridge", "Stone bridge", "Wall", "Forest", "Exit"};
     return names[static_cast<int>(k)];
 }
 
@@ -229,8 +229,12 @@ bool Classify(const std::string& f, Kind& out) {
 
 const std::vector<std::string>& IconsFor(Kind k) {
     static const std::vector<std::string> none;
-    static const std::vector<std::string> house{"house-small", "house-medium", "house-large", "house-walled", "house-big-roof", "house-long"},
-        goblin{"goblin-house-single"}, goblins{"goblin-house-double"}, tent{"tent-small", "tent-large"}, shop{"shop-awning"}, tower{"tower-small", "house-tower"};
+    // The sprites by number (texedit/quest-icons/NNN.png, cut from the base game's and Lost in Astral's quest maps by
+    // _cpr/claude-re/questmap/harvest4.py; quest-icons.tsv says which map each came from): paper-coloured, grey stone and
+    // teal-roofed houses, green goblin huts, tents, awning shops, towers.
+    static const std::vector<std::string> house{"248", "250", "251", "252", "254", "255", "256", "257", "258", "277", "280", "281", "288", "290", "187", "188", "192", "194", "196", "197", "199"},
+        goblin{"028", "031"}, goblins{"029"}, tent{"021", "022", "024"}, shop{"108", "110", "111", "112"}, tower{"282", "283", "038"},
+        exit{"026"};
     switch (k) {
     case Kind::House: return house;
     case Kind::GoblinHouse: return goblin;
@@ -238,6 +242,7 @@ const std::vector<std::string>& IconsFor(Kind k) {
     case Kind::Tent: return tent;
     case Kind::Shop: return shop;
     case Kind::Tower: return tower;
+    case Kind::Exit: return exit;
     default: return none;
     }
 }
@@ -395,8 +400,8 @@ bool Generate(const Input& in, const Options& opt, mmp::Image& out, std::string&
         std::vector<Cluster> clusters;
         const mmp::Image* stone[2] = {nullptr, nullptr};
         for (const NamedIcon& n : Icons()) {
-            if (n.name == "bridge-stone") stone[0] = &n.image;
-            if (n.name == "bridge-stone-vertical") stone[1] = &n.image;
+            if (n.name == "224") stone[0] = &n.image; // the grey stone bridge, across / along
+            if (n.name == "226") stone[1] = &n.image;
         }
         for (const Marker& k : in.markers) {
             if (k.kind != Kind::BridgeWood && k.kind != Kind::BridgeStone) continue;
@@ -448,10 +453,11 @@ bool Generate(const Input& in, const Options& opt, mmp::Image& out, std::string&
         for (int k = 0; k < kKindCount; ++k)
             for (const std::string& name : IconsFor(static_cast<Kind>(k)))
                 for (const NamedIcon& n : Icons()) if (n.name == name) imgs[k].push_back(&n);
-        static const int kCell[kKindCount] = {26, 44, 44, 24, 24, 24, 20, 20, 8, 8};
+        static const int kCell[kKindCount] = {26, 44, 44, 24, 24, 24, 20, 20, 8, 8, 8};
         const int tw8 = W / 8 + 2;
         std::vector<std::vector<uint8_t>> taken(kKindCount, std::vector<uint8_t>(static_cast<size_t>(tw8) * (H / 8 + 2), 0));
         for (const Marker& k : in.markers) {
+            if (k.kind == Kind::Exit && !opt.exits) continue;
             const int cx = ox + static_cast<int>(k.x * scale), cy = oy + static_cast<int>(k.y * scale);
             if (cx < 0 || cy < 0 || cx >= W || cy >= H) continue;
             if (k.kind == Kind::Wall) {

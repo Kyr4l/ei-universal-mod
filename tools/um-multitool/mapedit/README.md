@@ -126,14 +126,21 @@ Besides the common fields, the details edit what each kind stores (as ei_maper s
 
 **Quest MOB** switches the map between a zone's own map (`SC_OBJECT_DB_FILE`, with `WORLD_SET`) and a quest's map loaded over a zone (`PR_OBJECT_DB_FILE`), like ei_maper's "is Quest Mob?". The tab says whether the map has a `WORLD_SET`.
 
-## Terrain tab
+## Terrain editing (Tile paint, Sculpt, Water paint)
 
-Edits the loaded `.mpr` like ei_maper's tile brush and tile parameters:
+The **mode** selector in the toolbar works like Blender's: **Object mode** selects and edits objects, **Tile paint**, **Sculpt** and **Water paint** edit the loaded `.mpr`. The mode's settings sit next to the selector; **T** opens the tool shelf in the view with the mode's tools (the Terrain tab holds the same), **N** hides the sidebar; the status line at the bottom lists the mode's mouse and keys.
 
-- **Paint tiles in the view**: a left drag paints the brush's tile on the land (or, with **Water**, on the water layer with the chosen liquid material; "no water" removes it from the tile). Each stroke is one undo step. **Alt+click** takes the tile under the mouse. **1**-**8** take a quick tile, **comma** / **period** turn the tile; an outline shows the tile the brush is over. Objects are not selected while painting.
-- The terrain's textures are shown as their 8 x 8 tiles: click one to paint with it. Right-click a quick tile slot to keep the brush's tile there.
-- The brush's tile type (grass, ground, stone, sand, road, water...), the materials (terrain or water, colour and opacity, self-illumination, wave, warp speed; add or remove) and the animated tiles (first tile, phases) are edited here; they are saved in the terrain's header.
-- **Save terrain** (or Ctrl+S with the maps) writes the edited sectors and the header back into the `.mpr`, every other file inside it kept as it was; **Save terrain as...** writes it to another file. An edited terrain cannot be unloaded until it is saved or undone.
+- **Tile paint by ground** (vanilla terrains): tick *By material*, pick a ground (grass, sand, rock... each a thumbnail) and paint: the cell takes a plain tile of that ground and the eight cells around it get the transition tiles the textures hold for the two grounds (corner, half, inner corner, turned as needed). Where three grounds meet, or the textures have no transition between two, the cell is left as it is and the shelf says so. *Variation* picks other tiles where several fit; Alt+click picks the ground under the mouse. What every vanilla tile is made of comes from [EI-HD-tiles](https://github.com/aspadm/EI-HD-tiles) by aspadm (non-commercial); the corner patterns were measured on the vanilla textures (`mapedit/tile_materials_generated.hpp`). A custom terrain with its own textures has no such data: paint by tile.
+- **Tile paint by tile**: a left drag paints the brush's tile; the terrain's textures are shown as their 8 x 8 tiles (click one), comma / period turn it, keys 1-8 are quick tiles (right-click a slot to keep the brush's tile there), Alt+click picks the tile under the mouse. **Blend two tiles** makes a transition tile of your own (A fading into B through an edge, corner or inner-corner mask) into a free tile of the textures, written as a loose `.mmp` in an output folder (never into an archive).
+- **Sculpt**: raise, lower, smooth or flatten the ground under a round brush (radius with F, strength with Shift+F), one undo step per stroke; rebuild the navmesh after (Tools).
+- **Water paint**: the water tile and liquid material ("no water" removes the water from the tile).
+- The brush's tile type (grass, ground, stone, sand, road, water...), the materials (terrain or water, colour and opacity, self-illumination, wave, warp speed; add or remove) and the animated tiles are in the Terrain tab, each change one undo step.
+- **Save terrain** (or Ctrl+S with the maps) writes the edited sectors and the header back into the `.mpr`, every other file inside it kept as it was; **Save terrain as...** writes it to another file.
+- **Tools → New terrain...**: a new `.mpr` of 1 to 64 sectors each way, flat at a chosen height or with its heights from a picture (black = 0, white = the height), with the open terrain's textures and materials (or copies under its own name).
+- Both dialogs show a small 3D preview (an isometric relief seen from the south-west) of the terrain they will make; the crop rectangle is also outlined in yellow on the terrain in the view, where it is dragged: its corners and edge handles resize it, its inside moves it, by whole sectors.
+- **Tools → Crop terrain...**: a rectangle of the open terrain's sectors as a new `.mpr`, and each open map as `<map>-crop.mob` beside it with only the objects inside the rectangle, moved (their patrol and look points too) so the rectangle's corner is the origin: a lobby or base zone from a big zone. Rebuild the navmesh after.
+
+`um-multitool gui --map <file.mpr> --mode paint|ground|sculpt|water` opens the editor in that mode.
 
 ## Diplomacy tab
 

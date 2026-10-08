@@ -19,11 +19,11 @@ float ValueNoise(float x, float y, int period, int seed);
 
 // What an object becomes on a quest map. Worked out from the game's own maps: goblin houses are stbuho4 / stbuho9;
 // the kanian / stone bridges (stbr11 / 12 / 13 / 18 / 19) are the grey bar, every other bridge the red one.
-enum class Kind { House, GoblinHouse, GoblinHouses, Tent, Shop, Tower, BridgeWood, BridgeStone, Wall, Tree };
+enum class Kind { House, GoblinHouse, GoblinHouses, Tent, Shop, Tower, BridgeWood, BridgeStone, Wall, Tree, Exit };
 const char* KindName(Kind k);
 // The icons (by name in Icons()) an object kind is drawn with; one is picked by position, so a village is not all one house.
 const std::vector<std::string>& IconsFor(Kind k);
-constexpr int kKindCount = 10;
+constexpr int kKindCount = 11;
 
 // What an object of the map becomes on a quest map, by its figure name (lower case): false = nothing.
 bool Classify(const std::string& lowerFigure, Kind& out);
@@ -47,6 +47,7 @@ struct Options {
     float roughness = 0.5f;          // of the torn edge
     Frame frame = Frame::Torn;
     bool relief = true, water = true, forests = false, icons = true, bridges = true;
+    bool exits = true;               // the Exit markers (the quest's exit areas, given by the Map Editor)
     int iconScale = 0;               // pixels per icon pixel (0: by the picture's size; the game's textures are 256 wide)
 };
 

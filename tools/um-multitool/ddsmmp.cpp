@@ -761,10 +761,38 @@ bool RgbaToDds(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba
     return true;
 }
 
-// The same pixels as an .mmp the game reads: PNT3 (32-bit, base level only), what the vanilla terrain textures use.
-bool RgbaToMmp(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& mmpOut, std::string& err) {
+// The same pixels as a 16-bit A1R5G5B5 DDS (the game's quest maps, "QU" in an .mmp): alpha 1 from 128 up.
+bool RgbaToDds16(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& ddsOut) {
+    if (!width || !height || rgba.size() != static_cast<size_t>(width) * height * 4) return false;
+    DdsHeader h;
+    std::memset(&h, 0, sizeof(h));
+    h.dwMagic = DDS_MAGIC;
+    h.dwSize = 124;
+    h.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_PITCH | DDSD_PIXELFORMAT;
+    h.dwHeight = height;
+    h.dwWidth = width;
+    h.dwPitchOrLinearSize = width * 2;
+    h.ddspf.dwSize = 32;
+    h.ddspf.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+    h.ddspf.dwRGBBitCount = 16;
+    h.ddspf.dwRBitMask = 0x7C00; h.ddspf.dwGBitMask = 0x03E0; h.ddspf.dwBBitMask = 0x001F; h.ddspf.dwABitMask = 0x8000;
+    h.dwCaps = DDSCAPS_TEXTURE;
+    ddsOut.resize(sizeof(h) + static_cast<size_t>(width) * height * 2);
+    std::memcpy(ddsOut.data(), &h, sizeof(h));
+    uint8_t* d = ddsOut.data() + sizeof(h);
+    for (size_t i = 0; i + 3 < rgba.size(); i += 4, d += 2) {
+        const uint16_t v = rgba[i + 3] < 128 ? 0 : static_cast<uint16_t>(0x8000 | ((rgba[i] >> 3) << 10) | ((rgba[i + 1] >> 3) << 5) | (rgba[i + 2] >> 3)); // transparent: all zero, as the vanilla
+        d[0] = static_cast<uint8_t>(v & 0xFF); d[1] = static_cast<uint8_t>(v >> 8);
+    }
+    return true;
+}
+
+// The same pixels as an .mmp the game reads: PNT3 (32-bit, base level only, what the vanilla terrain textures use)
+// or 16-bit A1R5G5B5 ("QU", the vanilla quest maps).
+bool RgbaToMmp(uint32_t width, uint32_t height, const std::vector<uint8_t>& rgba, std::vector<uint8_t>& mmpOut, std::string& err, MmpFormat format) {
     std::vector<uint8_t> dds;
-    if (!RgbaToDds(width, height, rgba, dds)) { err = "no picture"; return false; }
+    const bool made = format == MmpFormat::Argb1555 ? RgbaToDds16(width, height, rgba, dds) : RgbaToDds(width, height, rgba, dds);
+    if (!made) { err = "no picture"; return false; }
     const bool saved = g_plain32;
     g_plain32 = false;
     const bool ok = ConvertDdsToMmp(dds.data(), dds.size(), mmpOut, err);

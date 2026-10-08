@@ -72,6 +72,12 @@ struct Dress {
     std::map<std::string, std::string> texture;   // variant part (lower case) -> its redress texture
     std::map<std::string, std::string> overlay;   // (unused: clothing is composed into the body's texture)
     std::string body;                             // the body's texture: "compose:" skin, then the worn items' textures
+    // Each worn armor item: its texture, whether it is a helm and its TTI, in the order they are painted. The body
+    // is ONE atlas (the skin, every item painted over it: a leggings texture paints the belt on the body, a shirt
+    // the sleeves) except that a helm's texture goes only on the helm's own mesh: its feather spilled over the face
+    // (LMP Hadagan Mage 20) and every helm (TTI 1-16) has a mesh.
+    struct Worn { std::string texture; bool helm; int tti; };
+    std::vector<Worn> worn;
     std::set<std::string> bare;                   // OBJ_BODYPARTS (lower case); empty: all bare parts
     std::string summary;                          // what was applied, for the details
 };
@@ -92,8 +98,10 @@ inline const Slot* WeaponSlot(const std::string& type) {
 
 inline const std::vector<std::string>* ArmorParts(const std::string& type) {
     static const std::map<std::string, std::vector<std::string>> table = {
-        {"helm", {"hd"}}, {"plate", {"bd", "lh1", "lh2", "rh1", "rh2"}}, {"shirt", {"bd"}}, {"gloves", {"lh3", "rh3"}},
-        {"pants", {"hp", "ll1", "ll2", "rl1", "rl2"}}, {"leggings", {"hp", "ll1", "ll2", "rl1", "rl2"}}, {"boots", {"ll3", "rl3"}},
+        // The figure's armor meshes: hd 01-16 (helms), bd / arms / hp / legs / feet 01-15 (plates and leggings), hands 01-08
+        // (the plates with gauntlets). Gloves and boots (TTI up to 17) have no mesh of their own: textures only.
+        {"helm", {"hd"}}, {"plate", {"bd", "lh1", "lh2", "rh1", "rh2", "lh3", "rh3"}}, {"shirt", {"bd", "lh1", "lh2", "rh1", "rh2"}}, {"gloves", {"lh3", "rh3"}}, // a shirt's texture paints the sleeves too
+        {"pants", {"hp", "ll1", "ll2", "rl1", "rl2"}}, {"leggings", {"hp", "ll1", "ll2", "rl1", "rl2", "ll3", "rl3"}}, {"boots", {"ll3", "rl3"}},
     };
     auto it = table.find(Lower(type));
     return it == table.end() ? nullptr : &it->second;
@@ -222,6 +230,7 @@ inline Dress Resolve(const Library& lib, const mob::Object& o) {
     // (inside out: pants, boots, leggings, shirt, plate, gloves, helm). The body and the armor meshes all
     // use it; their UVs point into that one picture.
     std::vector<std::pair<int, std::string>> worn;
+    std::vector<std::pair<int, Dress::Worn>> wornItems;
     auto rank = [](const std::string& type) {
         static const char* const order[] = {"pants", "boots", "leggings", "shirt", "plate", "gloves", "helm"};
         for (int i = 0; i < 7; ++i) if (Lower(type) == order[i]) return i;
@@ -235,7 +244,10 @@ inline Dress Resolve(const Library& lib, const mob::Object& o) {
         std::string tex;
         if (const char* code = detail::ArmorCode(item->type))
             if (const items::Material* material = detail::FindMaterial(lib, mat)) tex = detail::Redress(lib, mask, code, item->tti, item->tti2, Lower(material->code));
-        if (!tex.empty()) worn.push_back({rank(item->type), tex});
+        if (!tex.empty()) {
+            worn.push_back({rank(item->type), tex});
+            wornItems.push_back({rank(item->type), Dress::Worn{tex, Lower(item->type) == "helm", item->tti}});
+        }
         if (!detail::TextureOnly(item->type)) {
             char num[8];
             std::snprintf(num, sizeof(num), "%02d", item->tti);
@@ -243,6 +255,8 @@ inline Dress Resolve(const Library& lib, const mob::Object& o) {
         }
     }
     std::stable_sort(worn.begin(), worn.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    std::stable_sort(wornItems.begin(), wornItems.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+    for (auto& w : wornItems) d.worn.push_back(std::move(w.second));
     d.body = "compose:" + d.skin;
     for (const auto& w : worn) d.body += "|" + w.second;
     if (!HasTextureNamed(lib, d.skin)) d.summary += " (not found)";
@@ -277,6 +291,8 @@ inline bool PartShown(const Dress& d, const fig::Model& model, const fig::ModelP
             if (!ranged) return false;
         } else if (name == "baserh3" || name == "baselh3") {
             if (!selectedFor(name.substr(4)).empty()) return false; // a weapon replaces the empty hand
+        } else if (name.rfind("base", 0) == 0 && name.find('.') == std::string::npos) {
+            return false; // basesword03, baseaxe01, basearrow00...: the weapon's blunt ("bash") mesh under its variant: never worn
         } else if (name.find('.') != std::string::npos) {
             const std::string group = Group(name);
             if (group == "hr" && helm) return false;
@@ -335,7 +351,16 @@ inline std::string PartTexture(const Dress& d, const fig::Model& model, const fi
         const int parent = model.FindPartIndex(cur->parentName);
         cur = parent < 0 ? nullptr : &model.parts[static_cast<size_t>(parent)];
     }
-    return part.mesh.textureNumber == 2 && !d.secondSkin.empty() ? d.secondSkin : d.body;
+    if (part.mesh.textureNumber == 2 && !d.secondSkin.empty()) return d.secondSkin;
+    // The body's parts: the one atlas, without the helm's texture unless this is the helm's mesh.
+    const std::string name = Lower(part.name);
+    const size_t dot = name.find('.');
+    const bool helmMesh = dot != std::string::npos && name.compare(0, dot, "hd") == 0 && name.compare(dot, 6, ".armor") == 0;
+    const int variant = helmMesh ? std::atoi(name.c_str() + dot + 6) : -1;
+    std::string tex = "compose:" + d.skin;
+    for (const Dress::Worn& w : d.worn)
+        if (!w.helm || (helmMesh && variant == w.tti)) tex += "|" + w.texture;
+    return tex;
 }
 
 } // namespace dress

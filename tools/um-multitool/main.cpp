@@ -72,7 +72,8 @@ static void PrintTopLevelHelp() {
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
               << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
-              << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>]  # ... on the Map Editor with these files (looking at that object)\n"
+              << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>] [--mode object|paint|ground|sculpt|water]  # ... on the Map Editor with these files (looking at that object, in that editing mode)\n"
+              << "  um-multitool gui --texture [<file>]   # ... on the Texture Editor (with this picture: .mmp, .dds, .png)\n"
               << "  um-multitool gui --settings           # ... on the Settings tab\n"
               << "  um-multitool gui [...] --screenshot <out.bmp>  # ... then save a picture of the window (BMP) and quit\n"
               << "  um-multitool <subcommand> [options] <path>\n"
@@ -315,16 +316,23 @@ static int StartGui(int argc, char* argv[], int first) {
             options.dbFile = argv[++i];
         } else if (a == "--naked") {
             options.viewerNaked = true;
+        } else if (a == "--mode" && i + 1 < argc) {
+            options.mapMode = argv[++i];
         } else if (a == "--focus" && i + 1 < argc) {
             options.mapFocus = static_cast<uint32_t>(std::strtoul(argv[++i], nullptr, 10));
         } else if (a == "--clip" && i + 1 < argc) {
             options.viewerClip = argv[++i];
+        } else if (a == "--yaw" && i + 1 < argc) {
+            options.viewerYaw = static_cast<float>(std::atof(argv[++i]));
         } else if (a == "--frame" && i + 1 < argc) {
             options.viewerFrame = static_cast<float>(std::atof(argv[++i]));
         } else if (a == "--skin" && i + 1 < argc) {
             options.viewerSkin = argv[++i];
         } else if (a == "--mp" && i + 1 < argc) {
             options.mpFolder = argv[++i];
+        } else if (a == "--texture") {
+            options.openTexture = true;
+            if (i + 1 < argc && argv[i + 1][0] != '-') options.textureFile = argv[++i];
         } else if (a == "--settings") {
             options.openSettings = true;
         } else if (a == "--verbose") {
@@ -480,7 +488,7 @@ static const CompletionEntry kCompletions[] = {
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help"},
     {"map",      "--check --navmesh --mpr --write --force --config --help"},
     {"dll",      "--port --listen --stats --help"},
-    {"gui",      "--db --viewer --map --mp --skin --naked --settings --screenshot --verbose"},
+    {"gui",      "--db --viewer --map --mp --skin --naked --settings --texture --mode --screenshot --verbose"},
     {"install-desktop", "--remove"},
     {"completion", "bash"},
 };

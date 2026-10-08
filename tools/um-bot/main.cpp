@@ -34,7 +34,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.1";
+static const char* const kVersion = "0.1.2";
 
 
 struct App {
@@ -623,6 +623,7 @@ int main(int argc, char** argv) {
     while (!glfwWindowShouldClose(window)) {
         glfwWaitEventsTimeout(0.05);
         app.client.Update();
+        if (app.clientLogShown > app.client.log.size()) app.clientLogShown = 0; // the client trims its log
         for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown]);
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();

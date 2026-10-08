@@ -1133,8 +1133,9 @@ private:
                 if (!dress::PartShown(d, model, part)) continue;
                 const std::string tex = dress::PartTexture(d, model, part);
                 auto ov = d.overlay.find(dress::Lower(part.name));
-                std::vector<Vtx>& base = buckets[{tex, false}];
-                std::vector<Vtx>* over = ov != d.overlay.end() ? &buckets[{ov->second, true}] : nullptr;
+                const bool seeThrough = (part.mesh.group & 8) != 0; // a visor, a veil: blended like an overlay, after the solid parts
+                std::vector<Vtx>& base = buckets[{tex, seeThrough}];
+                std::vector<Vtx>* over = ov != d.overlay.end() && !seeThrough ? &buckets[{ov->second, true}] : nullptr;
                 const fig::FigureMesh& mesh = part.mesh;
                 for (uint16_t index : mesh.indices) {
                     if (index >= mesh.vertexComponents.size()) continue;

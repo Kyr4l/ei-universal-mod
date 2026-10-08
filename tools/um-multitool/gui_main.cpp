@@ -1049,18 +1049,20 @@ int RunGui(const GuiOptions& options) {
                           if (library.dbCompileTo[db] != res) { library.dbCompileTo[db] = res; library.SaveConfig(); }
                       }});
     if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
+    if (!options.textureFile.empty()) texedit::OpenPath(options.textureFile);
     // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
     enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kNone };
     // The tab asked for on the command line, else the one open when the GUI was last closed.
-    int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer
+    int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer : options.openTexture ? kTex
                      : (library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kNone);
     if (!options.viewerCategory.empty()) {
         std::string err;
-        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame)) std::fprintf(stderr, "%s\n", err.c_str());
+        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame, options.viewerYaw)) std::fprintf(stderr, "%s\n", err.c_str());
         requestedTab = kViewer;
     }
     texedit::SetMapSource([mapCtx](questmap::Input& in, std::string& err) { return mapedit::FillQuestMapInput(mapCtx, in, err); });
     if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles, options.mapFocus);
+    if (!options.mapMode.empty()) mapedit::SetMode(mapCtx, options.mapMode);
     if (!options.dbFile.empty()) {
         requestedTab = kFiles;
         g_requestSubTab = kDbSubTab; // DB
@@ -1178,14 +1180,14 @@ int RunGui(const GuiOptions& options) {
                 shownTab = kMap;
                 ImGui::EndTabItem();
             }
-            if (ImGui::BeginTabItem("UM DLL Connector", nullptr, flags(kDll))) {
-                dllconnect::DrawTab(dllCtx);
-                shownTab = kDll;
-                ImGui::EndTabItem();
-            }
             if (ImGui::BeginTabItem("Texture Editor", nullptr, flags(kTex))) {
                 texedit::DrawTab(library);
                 shownTab = kTex;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("UM DLL Connector", nullptr, flags(kDll))) {
+                dllconnect::DrawTab(dllCtx);
+                shownTab = kDll;
                 ImGui::EndTabItem();
             }
             if (ImGui::BeginTabItem("Settings", nullptr, flags(kSettings))) {

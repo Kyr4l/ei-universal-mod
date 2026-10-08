@@ -621,7 +621,7 @@ void Destroy(Context* ctx) {
 }
 
 bool OpenItem(Context* ctx, const std::string& category, const std::string& item, std::string& error, const std::string& skin, bool naked,
-              const std::string& clip, float frame) {
+              const std::string& clip, float frame, float yaw) {
     App& app = ctx->app;
     if (ui::units_detail::Lower(category) == "objects") { // a map object's figure (skin = a texture, else found)
         app.requestTab = kUnitsTab + 1;
@@ -637,6 +637,7 @@ bool OpenItem(Context* ctx, const std::string& category, const std::string& item
                 app.requestTab = kUnitsTab;
                 app.units.selected = static_cast<int>(i);
                 ui::units_detail::ResetFromMonster(app.lib, app.units);
+                app.units.yawOverride = yaw;
                 app.units.customSkin = skin;
                 if (naked) { app.units.weapons.clear(); app.units.armour.clear(); }
                 if (!clip.empty()) { // an animation: playing, or held at that frame

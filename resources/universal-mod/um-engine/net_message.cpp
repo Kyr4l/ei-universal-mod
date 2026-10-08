@@ -24,7 +24,10 @@ static ObjectEntry* NewEntry(NetConnection* self, uint32_t key, uint32_t version
 
 // 0x435F30 NetConnection::ReadMessage(reader, packetSeq): one reliable message. False = the payload could not be
 // read (no factory for that kind): the caller drops the client.
+// `self` is the LINK (one per peer: its object table +0x1100, id map +0x110C, 0x4352F0's `this`); the callback
+// lists, like the factory, live on the serviced connection [0x79B920] (the asm reads all three from there).
 extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, NetReader* reader, uint32_t packetSeq) {
+    NetConnection* owner = game::ServicedConnection();
     if (reader->bitsLeft == 0) {
         reader->bitBuffer = *reader->cursor++;
         reader->bitsLeft = 8;
@@ -50,7 +53,7 @@ extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, 
         } else if (entry->version < packetSeq) {
             if (entry->object) {
                 game::ObjectUnregisterId(self, entry->object);
-                game::RunCallbacks(CallbacksRemoved(self), kind, entry->object);
+                game::RunCallbacks(CallbacksRemoved(owner), kind, entry->object);
             }
             if (entry->object) {
                 game::PtrRelease(&entry->object);
@@ -73,10 +76,10 @@ extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, 
         game::ObjectRegisterId(self, object, kind, key);
         game::ObjectRead(object, reader);
         entry->version = packetSeq;
-        const CallbackList& l = CallbacksCreated(self)[kind];
+        const CallbackList& l = CallbacksCreated(owner)[kind];
         UmEngineLog("  read ok: held=%p refs=%u flags=%02X %02X; created callbacks: %d", static_cast<void*>(entry->object), entry->object ? entry->object->refCount : 0u,
                     entry->object ? entry->object->flags06 : 0u, entry->object ? entry->object->flags07 : 0u, static_cast<int>(l.end - l.begin));
-        game::RunCallbacks(CallbacksCreated(self), kind, object);
+        game::RunCallbacks(CallbacksCreated(owner), kind, object);
         return true;
     }
     if (entry->version < packetSeq) {  // updated (or created when the entry had no object yet)
@@ -95,7 +98,7 @@ extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, 
         }
         NetObject* object = entry->object;
         game::ObjectRead(object, reader);
-        game::RunCallbacks(entry->version == 0 ? CallbacksCreated(self) : CallbacksUpdated(self), kind, object);
+        game::RunCallbacks(entry->version == 0 ? CallbacksCreated(owner) : CallbacksUpdated(owner), kind, object);
         entry->version = packetSeq;
         return true;
     }

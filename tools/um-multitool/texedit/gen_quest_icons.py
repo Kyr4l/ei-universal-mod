@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Turns texedit/quest-icons/*.png (sprites cut out of the base game's quest map textures, pixel for pixel) into
+"""Turns texedit/quest-icons/*.png (NNN.png: sprites cut out of the base game's and Lost in Astral's quest map textures by
+_cpr/claude-re/questmap/harvest4.py, pixel for pixel, numbered by first map and position; roll-*.png: the scroll ends) into
 texedit/quest_icons_generated.hpp, which the Texture Editor compiles in. Run from tools/um-multitool:
     python3 texedit/gen_quest_icons.py
 To add a sprite: cut it out in the Texture Editor (Stamp from the selection), put the PNG in quest-icons/, run this."""

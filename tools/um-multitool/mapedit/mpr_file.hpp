@@ -328,4 +328,49 @@ inline bool Create(const Map& model, const std::string& name, int sx, int sy, fl
     return true;
 }
 
+// The normals of a sector's land vertices from the heights around them (across sector edges).
+inline void ComputeNormals(Map& m, int si) {
+    if (si < 0 || si >= static_cast<int>(m.sectors.size())) return;
+    Sector& s = m.sectors[static_cast<size_t>(si)];
+    const int sx = si % m.sectorsX, sy = si / m.sectorsX;
+    for (int r = 0; r <= 32; ++r)
+        for (int c = 0; c <= 32; ++c) {
+            const float vx = sx * 32.0f + c, vy = sy * 32.0f + r;
+            const float dx = (m.HeightAt(vx + 1, vy) - m.HeightAt(vx - 1, vy)) / 2, dy = (m.HeightAt(vx, vy + 1) - m.HeightAt(vx, vy - 1)) / 2;
+            const float len = std::sqrt(dx * dx + dy * dy + 1);
+            const float nx = -dx / len, ny = -dy / len, nz = 1 / len;
+            s.land[r][c].packedNormal = (static_cast<uint32_t>(std::lround(nz * 1000)) << 22) |
+                                        (static_cast<uint32_t>(std::lround(nx * 1000 + 1000)) & 0x7FF) << 11 |
+                                        (static_cast<uint32_t>(std::lround(ny * 1000 + 1000)) & 0x7FF);
+        }
+}
+
+// A smaller copy of a terrain: the sectors of the rectangle (x0, y0, w, h) only, written as a new .mpr at `path`
+// with the same name inside (it keeps using the same textures). The caller shifts the objects by (-x0 * 32, -y0 * 32).
+inline bool Crop(const Map& src, int x0, int y0, int w, int h, const std::string& path, Map& out, std::string& err) {
+    if (x0 < 0 || y0 < 0 || w < 1 || h < 1 || x0 + w > src.sectorsX || y0 + h > src.sectorsY) { err = "the rectangle must lie inside the terrain"; return false; }
+    Map m;
+    m.name = src.name;
+    m.maxZ = src.maxZ;
+    m.sectorsX = w; m.sectorsY = h;
+    m.textureCount = src.textureCount; m.textureSize = src.textureSize;
+    m.tileCount = src.tileCount; m.tileSize = src.tileSize;
+    m.materials = src.materials; m.tileTypes = src.tileTypes; m.animTiles = src.animTiles;
+    m.sectors.resize(static_cast<size_t>(w) * h);
+    std::map<std::string, std::vector<uint8_t>> files;
+    for (int y = 0; y < h; ++y)
+        for (int x = 0; x < w; ++x) {
+            Sector& s = m.sectors[static_cast<size_t>(y) * w + x];
+            s = src.sectors[static_cast<size_t>(y0 + y) * src.sectorsX + (x0 + x)];
+            if (s.present) files[SectorEntryName(m, x, y)] = WriteSector(s);
+        }
+    files[m.name + ".mp"] = WriteHeader(m);
+    m.archiveBytes = res::WriteArchive(files, static_cast<uint32_t>(std::time(nullptr)));
+    std::ofstream f(path, std::ios::binary | std::ios::trunc);
+    if (!f.is_open() || !f.write(reinterpret_cast<const char*>(m.archiveBytes.data()), static_cast<std::streamsize>(m.archiveBytes.size()))) { err = "cannot write " + path; return false; }
+    m.path = path;
+    out = std::move(m);
+    return true;
+}
+
 } // namespace mpr

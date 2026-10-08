@@ -191,6 +191,12 @@ inline bool ParseFig(const uint8_t* data, size_t size, FigureMesh& out) {
         if (!ReadFloat(data, size, off, out.morphRadius[i])) return false;
     }
 
+    // The counts come from the file: refuse what the bytes left cannot hold before allocating for them (a damaged
+    // header must not ask for gigabytes). Vertex block 384 B, normal block 64 B, uv 8 B, index 2 B, component 6 B.
+    if (vertBlocks < 0 || normalBlocks < 0 || uvCount < 0 || indexCount < 0 || vertexComponentCount < 0 || morphingComponentCount < 0) return false;
+    const size_t left = size - off;
+    if (static_cast<size_t>(vertBlocks) * 384 + static_cast<size_t>(normalBlocks) * 64 + static_cast<size_t>(uvCount) * 8 +
+        static_cast<size_t>(indexCount) * 2 + static_cast<size_t>(vertexComponentCount) * 6 > left) return false;
     // Vertices: for block, for axis{x,y,z}, for morph[8], for point[4]: float
     size_t vertCount = static_cast<size_t>(vertBlocks) * 4;
     for (int c = 0; c < 8; ++c) out.morphVertex[c].assign(vertCount, Vec3{});

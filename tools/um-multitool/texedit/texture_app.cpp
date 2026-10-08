@@ -78,7 +78,8 @@ struct Editor {
     int panelTab = 0;
     std::function<bool(questmap::Input&, std::string&)> mapSource;
     // save
-    int format = 0; // PNG, DDS, MMP
+    int format = 0; // PNG, DDS, MMP PNT3, MMP 16-bit (quest maps)
+    bool opaqueCopy = false; // also <name>m: the same picture with every pixel opaque (the game's quest maps come in pairs)
     char outDir[512] = "texture-output";
     char outName[128] = "texture";
 };
@@ -165,7 +166,9 @@ void OpenBytes(const std::vector<uint8_t>& bytes, const std::string& name) {
     g.message = "Opened " + name + " (" + std::to_string(g.img.width) + " x " + std::to_string(g.img.height) + ")";
 }
 
-void OpenPath(const std::string& path) {
+void OpenPicture(const std::string& path) {
+    std::error_code ec;
+    if (!fs::is_regular_file(path, ec)) { g.message = "Cannot read " + path; return; } // a folder's stream throws on read
     std::ifstream f(path, std::ios::binary);
     if (!f) { g.message = "Cannot read " + path; return; }
     std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
@@ -358,24 +361,39 @@ void Save() {
     CommitAdjust();
     mmp::Image baked = g.img; // the placed sprites go into the file, the picture here keeps them movable
     for (const Editor::Placed& pl : g.placed) if (pl.stamp >= 0 && pl.stamp < static_cast<int>(g.stamps.size())) BakeSprite(baked, pl);
-    static const char* const ext[3] = {".png", ".dds", ".mmp"};
+    static const char* const ext[4] = {".png", ".dds", ".mmp", ".mmp"};
     std::error_code ec;
     fs::create_directories(g.outDir, ec);
     if (ec) { g.message = std::string("Cannot create the output folder: ") + ec.message(); return; }
     std::string base = g.outName[0] ? g.outName : "texture";
-    const fs::path file = fs::path(g.outDir) / (base + ext[g.format]);
-    bool ok = false;
     std::string err;
-    if (g.format == 0) ok = png::Write(file.string(), static_cast<int>(baked.width), static_cast<int>(baked.height), baked.rgba);
-    else {
-        std::vector<uint8_t> bytes;
-        ok = g.format == 1 ? RgbaToDds(baked.width, baked.height, baked.rgba, bytes) : RgbaToMmp(baked.width, baked.height, baked.rgba, bytes, err);
-        if (ok) {
-            std::ofstream f(file, std::ios::binary);
-            ok = static_cast<bool>(f.write(reinterpret_cast<const char*>(bytes.data()), static_cast<std::streamsize>(bytes.size())));
+    auto write = [&](const fs::path& file, const mmp::Image& img) {
+        bool ok = false;
+        if (g.format == 0) ok = png::Write(file.string(), static_cast<int>(img.width), static_cast<int>(img.height), img.rgba);
+        else {
+            std::vector<uint8_t> bytes;
+            ok = g.format == 1 ? RgbaToDds(img.width, img.height, img.rgba, bytes)
+               : RgbaToMmp(img.width, img.height, img.rgba, bytes, err, g.format == 3 ? MmpFormat::Argb1555 : MmpFormat::Pnt3);
+            if (ok) {
+                std::ofstream f(file, std::ios::binary);
+                ok = static_cast<bool>(f.write(reinterpret_cast<const char*>(bytes.data()), static_cast<std::streamsize>(bytes.size())));
+            }
         }
+        return ok;
+    };
+    const fs::path file = fs::path(g.outDir) / (base + ext[g.format]);
+    bool ok = write(file, baked);
+    std::string saved = file.string();
+    if (ok && g.opaqueCopy) { // the "m" picture: alpha on everywhere, the transparent pixels black (as the vanilla questm)
+        for (size_t i = 0; i + 3 < baked.rgba.size(); i += 4) {
+            if (baked.rgba[i + 3] == 0) baked.rgba[i] = baked.rgba[i + 1] = baked.rgba[i + 2] = 0;
+            baked.rgba[i + 3] = 255;
+        }
+        const fs::path fileM = fs::path(g.outDir) / (base + "m" + ext[g.format]);
+        ok = write(fileM, baked);
+        saved += " + " + fileM.filename().string();
     }
-    g.message = ok ? "Saved " + file.string() : "Could not save " + file.string() + (err.empty() ? "" : ": " + err);
+    g.message = ok ? "Saved " + saved : "Could not save " + saved + (err.empty() ? "" : ": " + err);
 }
 
 // ---- quest maps and stamps -----------------------------------------------------------------------
@@ -526,6 +544,7 @@ void NewParchment() {
     mmp::Image paper;
     questmap::Parchment(paper, g.qWidth, g.qHeight, g.quest.seed, g.quest.roughness, g.quest.frame);
     Adopt(std::move(paper), "questmap");
+    g.format = 3; g.opaqueCopy = true; // the game's quest map format and its "m" pair
     g.placed.clear();
     g.selected = -1;
     g.message = "A new parchment: " + std::to_string(g.qWidth) + " x " + std::to_string(g.qHeight);
@@ -544,6 +563,7 @@ void GenerateFromMap() {
     std::vector<questmap::PlacedIcon> icons;
     if (!questmap::Generate(in, opt, out, err, &icons)) { g.message = "Quest map: " + err; return; }
     Adopt(std::move(out), in.name.empty() ? "questmap" : in.name + "quest");
+    g.format = 3; g.opaqueCopy = true; // the game's quest map format and its "m" pair
     g.placed.clear();
     g.selected = -1;
     for (const questmap::PlacedIcon& ic : icons) { // the icons as movable sprites
@@ -692,13 +712,13 @@ void DrawOpenSection(Library& lib) {
     char buf[1024];
     std::snprintf(buf, sizeof(buf), "%s", g.path.c_str());
     ImGui::SetNextItemWidth(-116);
-    if (ImGui::InputTextWithHint("##texpath", "a .mmp, .dds, .png... file", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) { g.path = buf; OpenPath(g.path); }
+    if (ImGui::InputTextWithHint("##texpath", "a .mmp, .dds, .png... file", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) { g.path = buf; OpenPicture(g.path); }
     else g.path = buf;
     ImGui::SameLine();
     std::string picked;
-    if (ImGui::Button("File...") && ui::PickFile(picked)) { g.path = picked; OpenPath(picked); }
+    if (ImGui::Button("File...") && ui::PickFile(picked)) { g.path = picked; OpenPicture(picked); }
     ImGui::SameLine();
-    if (ImGui::Button("Open")) OpenPath(g.path);
+    if (ImGui::Button("Open")) OpenPicture(g.path);
     if (ImGui::CollapsingHeader("Game textures")) {
         ImGui::SetNextItemWidth(-1);
         ImGui::InputTextWithHint("##texfilter", "search the game's textures", g.filter, sizeof(g.filter));
@@ -765,6 +785,9 @@ void DrawQuestTab() {
     ImGui::SameLine();
     ImGui::Checkbox("Icons", &g.quest.icons);
     ImGui::Checkbox("Forests", &g.quest.forests);
+    ImGui::SameLine();
+    ImGui::Checkbox("Exits", &g.quest.exits);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("A marker on each exit area of the quest open in the Map Editor (the #remove rectangle of map.txt, else the #deploy one)"));
     ImGui::Spacing();
     ImGui::BeginDisabled(!g.mapSource);
     if (ImGui::Button("Generate from the open map", ImVec2(-1, 0))) GenerateFromMap();
@@ -904,9 +927,12 @@ void DrawAdjustTab() {
 
 void DrawSaveTab() {
     if (!Loaded()) { ImGui::TextDisabled("%s", i18n::Tr("Open a texture, make a parchment (Quest map tab) or generate a quest map from the map open in the Map Editor.")); return; }
-    static const char* const formats[] = {"PNG", "DDS (32-bit)", "MMP (the game's)"};
+    static const char* const formats[] = {"PNG", "DDS (32-bit)", "MMP 32-bit (terrain textures)", "MMP 16-bit (quest maps)"};
     ImGui::SetNextItemWidth(-1);
-    ImGui::Combo("##fmt", &g.format, formats, 3);
+    ImGui::Combo("##fmt", &g.format, formats, 4);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("The game's quest maps are 16-bit (A1R5G5B5, 'QU'): one bit of transparency, as the torn edge needs"));
+    ImGui::Checkbox("Also the opaque copy (<name>m)", &g.opaqueCopy);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("The game's quest maps come in pairs: zone7quest (transparent outside the sheet) and zone7questm (the same picture, every pixel opaque, black outside). Saves both."));
     ImGui::SetNextItemWidth(-1);
     ImGui::InputTextWithHint("##outname", "file name", g.outName, sizeof(g.outName));
     ImGui::SetNextItemWidth(-90);
@@ -920,6 +946,8 @@ void DrawSaveTab() {
 }
 
 } // namespace
+
+void OpenPath(const std::string& path) { OpenPicture(path); }
 
 void SetMapSource(std::function<bool(questmap::Input&, std::string&)> source) { g.mapSource = std::move(source); }
 

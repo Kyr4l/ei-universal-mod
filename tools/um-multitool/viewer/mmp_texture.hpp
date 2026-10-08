@@ -164,6 +164,7 @@ inline bool Decode(const uint8_t* data, size_t size, Image& out, std::string& er
     Header hdr;
     std::memcpy(&hdr, data, sizeof(Header));
     if (std::memcmp(hdr.magic, "MMP\0", 4) != 0) { err = "bad MMP magic"; return false; }
+    if (hdr.width == 0 || hdr.height == 0 || hdr.width > 16384 || hdr.height > 16384) { err = "bad MMP size"; return false; } // a damaged header must not ask for gigabytes
 
     out.width = hdr.width;
     out.height = hdr.height;

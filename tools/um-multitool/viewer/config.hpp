@@ -65,6 +65,7 @@ enum MapKey {
     kKeyLogicMode, kKeySwitchMob, kKeyUnloadLast, kKeyResetCamera, kKeyLighting, kKeySave, kKeyUndo, kKeyRedo,
     kKeyMove, kKeyScale, kKeyFind, kKeySelectAll, kKeyRotate,
     kKeyDelete, kKeyCopy, kKeyPaste, kKeyDuplicate, kKeyResetPaths, kKeyNewObject, // pressed
+    kKeyToolShelf, kKeySidebar, // the Blender-like panels: the tool shelf in the view (terrain modes), the sidebar
     kMapKeyCount
 };
 constexpr int kFirstActionKey = kKeyLogicMode;
@@ -82,7 +83,7 @@ inline const char* MapKeyId(int k) {
     static const char* const ids[kMapKeyCount] = {"FORWARD", "BACK", "LEFT", "RIGHT", "UP", "DOWN", "FAST",
                                                   "LOGIC_MODE", "SWITCH_MOB", "UNLOAD_LAST", "RESET_CAMERA", "LIGHTING", "SAVE",
                                                   "UNDO", "REDO", "MOVE", "SCALE", "FIND", "SELECT_ALL", "ROTATE",
-                                                  "DELETE", "COPY", "PASTE", "DUPLICATE", "RESET_PATHS", "NEW_OBJECT"};
+                                                  "DELETE", "COPY", "PASTE", "DUPLICATE", "RESET_PATHS", "NEW_OBJECT", "TOOL_SHELF", "SIDEBAR"};
     return ids[k];
 }
 inline const char* MapKeyLabel(int k) {
@@ -95,7 +96,8 @@ inline const char* MapKeyLabel(int k) {
                                                      "Delete the selection", "Copy the selection", "Paste (at the mouse)",
                                                      "Duplicate the selection (then move it)",
                                                      "Clear the patrol paths of the selected units",
-                                                     "Add an object or a unit (the Add window)"};
+                                                     "Add an object or a unit (the Add window)",
+                                                     "Tool shelf in the view on/off (Tile paint and Sculpt modes)", "Sidebar on/off"};
     return labels[k];
 }
 inline std::array<KeyBind, kMapKeyCount> DefaultMapKeys() {
@@ -106,7 +108,8 @@ inline std::array<KeyBind, kMapKeyCount> DefaultMapKeys() {
              {'S', kModCtrl | kModLetter}, {'Z', kModCtrl | kModLetter}, {'Y', kModCtrl | kModLetter},
              {71, 0}, {84, 0}, {'F', kModCtrl | kModLetter}, {'A', kModCtrl | kModLetter}, {82, 0},
              {261, 0}, {'C', kModCtrl | kModLetter}, {'V', kModCtrl | kModLetter}, {'D', kModCtrl | kModLetter},
-             {'P', kModCtrl | kModLetter}, {'N', kModCtrl | kModLetter}}};
+             {'P', kModCtrl | kModLetter}, {'N', kModCtrl | kModLetter},
+             {84, 0}, {78, 0}}}; // T (the scale key too: scale is Object mode's, the shelf the terrain modes'), N
 }
 
 struct Config {

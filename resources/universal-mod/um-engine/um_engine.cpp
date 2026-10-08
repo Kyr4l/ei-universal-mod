@@ -20,7 +20,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.3.1";
+static const char* const kEngineVersion = "0.3.2";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 struct sockaddr; struct sockaddr_in; struct GameBuffer; // net_udp.cpp

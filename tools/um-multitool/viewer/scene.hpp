@@ -25,6 +25,7 @@ struct ScenePart {
     std::vector<float> positions, normals, uvs;
     std::vector<uint16_t> indices;
     std::string texture; // its own texture (a unit's parts: the composed body, a weapon's); "" = the scene's
+    bool seeThrough = false; // the part's render flag bit 3 (a helm's visor, a veil): drawn blended, after the others
 };
 
 struct GlTexture {
@@ -151,6 +152,7 @@ public:
             shownParts.insert(LowerName(part.name));
             ScenePart sp;
             sp.texture = textureOf(loaded.model, part);
+            sp.seeThrough = (part.mesh.group & 8) != 0;
             const fig::FigureMesh& mesh = part.mesh;
             const fig::Vec3 offset = fig::BlendComplection(part.accumulatedOffset, constitution);
             for (size_t i = 0; i < mesh.vertexComponents.size(); ++i) {
@@ -415,17 +417,21 @@ public:
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
         if (textured) glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        for (ScenePart& p : parts_) {
-            if (p.indices.empty()) continue;
-            if (textured && unitModel) { // each part its own texture; untextured (grey) when it has none
-                const GLuint id = p.texture.empty() ? 0 : Texture(lib, p.texture).id;
-                if (id) { glEnable(GL_TEXTURE_2D); glBindTexture(GL_TEXTURE_2D, id); glColor3f(1, 1, 1); }
-                else { glDisable(GL_TEXTURE_2D); glColor3f(0.72f, 0.70f, 0.64f); }
+        for (int pass = 0; pass < 2; ++pass) { // the solid parts, then the see-through ones blended over them
+            if (pass) { glEnable(GL_BLEND); glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glDepthMask(GL_FALSE); }
+            for (ScenePart& p : parts_) {
+                if (p.indices.empty() || p.seeThrough != (pass == 1)) continue;
+                if (textured && unitModel) { // each part its own texture; untextured (grey) when it has none
+                    const GLuint id = p.texture.empty() ? 0 : Texture(lib, p.texture).id;
+                    if (id) { glEnable(GL_TEXTURE_2D); glBindTexture(GL_TEXTURE_2D, id); glColor3f(1, 1, 1); }
+                    else { glDisable(GL_TEXTURE_2D); glColor3f(0.72f, 0.70f, 0.64f); }
+                }
+                glVertexPointer(3, GL_FLOAT, 0, p.positions.data());
+                glNormalPointer(GL_FLOAT, 0, p.normals.data());
+                if (textured) glTexCoordPointer(2, GL_FLOAT, 0, p.uvs.data());
+                glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(p.indices.size()), GL_UNSIGNED_SHORT, p.indices.data());
             }
-            glVertexPointer(3, GL_FLOAT, 0, p.positions.data());
-            glNormalPointer(GL_FLOAT, 0, p.normals.data());
-            if (textured) glTexCoordPointer(2, GL_FLOAT, 0, p.uvs.data());
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(p.indices.size()), GL_UNSIGNED_SHORT, p.indices.data());
+            if (pass) { glDisable(GL_BLEND); glDepthMask(GL_TRUE); }
         }
         if (wireOver) { // the edges over the textured model
             glDisable(GL_LIGHTING);
