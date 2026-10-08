@@ -1,0 +1,10 @@
+[Essai] Terrain d'essai des unites
+#show Hero
+#show Marshal
+#CAMERA 11
+#phrase Marshal  1
+Il existe un lieu ou une creature de chaque sorte des quatre allods se tient immobile. Va les regarder aussi longtemps que tu veux.
+#phrase Hero  2
+Et que dois-je rapporter ?
+#phrase Marshal  3
+Rien. Personne ne les a jamais toutes comptees. Sors par n'importe quel cote quand tu as fini.

@@ -1,0 +1,378 @@
+# tile	a	b	pattern: what the tiles of zonetest's textures are made of (atlases 0-1 zone7, 2-3 zone13, 4-5 zone19, 6-7 zonezero)
+0	rock/watered		0
+1	grass/dark		0
+2	grass/dark		0
+3	grass/common		0
+4	grass/common		0
+5	sand/watered		0
+6	grass/dark	grass/common	1
+7	grass/dark	grass/common	1
+8	grass/dark	grass/common	1
+9	water/emerald		0
+10	water/emerald		0
+11	water/emerald		0
+12	water/emerald		0
+13	water/emerald		0
+14	water/emerald		0
+15	water/emerald		0
+16	water/emerald		0
+17	water/emerald		0
+18	water/emerald		0
+19	water/emerald		0
+20	water/emerald		0
+21	water/emerald		0
+22	water/emerald		0
+23	water/emerald		0
+24	water/emerald		0
+25	water/emerald		0
+26	water/emerald		0
+27	water/emerald		0
+28	water/emerald		0
+29	water/emerald		0
+30	water/emerald		0
+31	water/emerald		0
+32	water/emerald		0
+33	water/emerald		0
+34	water/emerald		0
+35	water/emerald		0
+36	water/emerald		0
+37	water/emerald		0
+38	water/emerald		0
+39	water/emerald		0
+40	water/emerald		0
+41	grass/common	grass/dark	4
+42	grass/common		0
+43	grass/dark	grass/common	1
+44	grass/dark		0
+45	grass/dark	grass/common	1
+46	stone/light	rock/watered	12
+47	stone/light	rock/watered	12
+48	grass/common	grass/irregular	4
+49	grass/common	grass/irregular	4
+50	grass/dark	stone/light	12
+51	grass/dark	stone/light	12
+52	grass/dark	stone/gray	4
+53	grass/dark	stone/gray	4
+54	grass/common	stone/gray	4
+55	grass/common	stone/gray	4
+56	grass/faded		0
+57	sand/common		0
+58	rock/watered	stone/light	1
+59	rock/watered	stone/light	1
+60	grass/common	stone/light	12
+61	grass/common	stone/light	12
+62	grass/common	grass/irregular	12
+63	grass/common	grass/irregular	12
+64	swamp		0
+65	swamp		0
+66	swamp		0
+67	swamp		0
+68	swamp		0
+69	swamp		0
+70	swamp		0
+71	swamp		0
+72	grass/common	grass/fresh	4
+73	grass/common	grass/fresh	4
+74	grass/common	grass/fresh	4
+75	grass/common	grass/faded	4
+76	grass/faded	ground/brown	1
+77	sand/watered	rock/watered	1
+78	rock/watered	sand/watered	4
+79	grass/common	grass/faded	12
+80	grass/common	grass/faded	12
+81	grass/common	grass/irregular	4
+86	grass/common	grass/irregular	1
+87	grass/common	grass/irregular	1
+88	stone/light	rock/watered	4
+89	stone/light	rock/light	12
+91	rock/light		0
+92	rock/light		0
+94	grass/faded	ground/brown	3
+95	rock/light	rock/watered	3
+96	stone/light	grass/common	1
+97	rock/light	stone/light	1
+100	sand/watered	sand/gravel	1
+101	sand/common	sand/watered	12
+103	grass/common		0
+104	stone/light	grass/dark	1
+106	rock/watered	rock/light	4
+107	rock/light	rock/watered	1
+108	grass/faded	grass/common	1
+109	grass/faded	grass/common	1
+110	sand/gravel	sand/watered	12
+113	rock/watered	sand/watered	12
+114	rock/watered	sand/watered	12
+115	sand/watered	sand/common	1
+116	grass/irregular	grass/common	1
+117	grass/common	grass/fresh	12
+118	grass/common	grass/fresh	12
+119	ground/brown	grass/common	4
+120	grass/common	grass/common	4
+121	grass/common	grass/common	4
+122	grass/common	ground/brown	3
+123	grass/common	ground/brown	3
+124	grass/irregular		0
+125	sand/common	sand/gravel	12
+126	stone/light	sand/common	3
+127	stone/light	ground/brown	3
+128	snow/common		0
+129	snow/common		0
+130	snow/common		0
+131	snow/common		0
+132	snow/common		0
+133	snow/dark		0
+134	snow/dark		0
+135	ground/light		0
+136	ground/light		0
+137	snow/common		0
+138	snow/common		0
+139	snow/common		0
+140	snow/common		0
+141	snow/common		0
+142	ground/trampled	ground/trampled	4
+143	snow/common	stone/light	4
+144	snow/common	stone/light	4
+145	snow/common	stone/light	4
+146	snow/common	stone/light	4
+147	snow/common	stone/light	4
+148	snow/common	stone/light	4
+149	snow/common	stone/light	4
+150	snow/common	stone/light	4
+152	snow/dark	snow/common	3
+153	snow/dark	snow/common	3
+154	snow/dark	snow/common	3
+155	snow/dark	snow/common	3
+156	snow/dark	snow/common	3
+157	snow/dark	snow/common	3
+158	snow/dark	snow/common	3
+159	snow/dark	snow/common	3
+160	snow/dark	snow/common	3
+161	snow/common	snow/dark	4
+162	snow/common	snow/dark	4
+163	snow/common	snow/dark	4
+164	snow/common	snow/dark	4
+165	snow/common	snow/dark	4
+166	snow/common	snow/dark	4
+167	snow/common	snow/dark	4
+168	snow/common	snow/dark	4
+169	snow/common	snow/dark	4
+170	snow/common	stone/gray	12
+171	snow/common	stone/gray	12
+172	snow/common	stone/gray	12
+173	snow/common	stone/gray	12
+174	snow/common	stone/gray	12
+175	snow/common	stone/gray	12
+176	snow/common	stone/gray	12
+177	snow/common	stone/gray	12
+178	snow/common		0
+179	snow/common		0
+180	snow/common		0
+181	snow/common		0
+182	snow/common		0
+183	snow/common		0
+184	snow/common		0
+185	snow/common		0
+186	stone/gray		0
+187	stone/gray		0
+188	sand/common		0
+189	paving/square		0
+190	ground/trampled	snow/common	1
+192	snow/dark	snow/common	1
+193	snow/dark		0
+194	snow/dark	snow/common	1
+195	snow/dark	snow/common	1
+196	snow/dark	snow/common	1
+197	snow/dark	snow/common	1
+198	snow/dark		0
+199	snow/dark	snow/common	1
+200	snow/common		0
+201	snow/common		0
+202	snow/common		0
+203	snow/common		0
+204	snow/common		0
+205	snow/common		0
+206	snow/common		0
+207	snow/common		0
+208	water/still		0
+209	water/still		0
+210	water/still		0
+211	water/still		0
+212	water/still		0
+213	water/still		0
+214	water/still		0
+215	water/still		0
+216	water/still		0
+217	water/still		0
+218	water/still		0
+219	water/still		0
+220	water/still		0
+221	water/still		0
+222	water/still		0
+223	water/still		0
+224	water/still		0
+225	water/still		0
+226	water/still		0
+227	water/still		0
+228	water/still		0
+229	water/still		0
+230	water/still		0
+231	water/still		0
+232	water/still		0
+233	water/still		0
+234	water/still		0
+235	water/still		0
+236	water/still		0
+237	water/still		0
+238	water/still		0
+239	water/still		0
+240	snow/common	slabs/square	1
+241	snow/common	slabs/square	1
+242	snow/common	slabs/square	1
+243	snow/common	slabs/square	1
+244	snow/common	slabs/square	1
+245	snow/common	slabs/square	1
+246	snow/common	slabs/square	1
+247	snow/common	stone/gray	12
+248	snow/common	stone/gray	12
+249	snow/common	stone/gray	12
+250	snow/common	stone/gray	12
+251	snow/common	stone/gray	12
+252	snow/common	stone/gray	12
+253	snow/common	stone/gray	12
+256	sand/common		0
+257	stone/orange		0
+258	stone/orange		0
+259	sand/dark		0
+260	sand/gravel		0
+261	sand/gravel		0
+262	sand/light		0
+263	sand/grass		0
+264	sand/grass		0
+265	rock/lime		0
+266	rock/lime		0
+267	water/still		0
+268	water/still		0
+269	water/still		0
+270	water/still		0
+271	water/still		0
+272	water/still		0
+273	water/still		0
+274	water/still		0
+275	water/still		0
+276	water/still		0
+277	water/still		0
+278	water/still		0
+279	water/still		0
+280	water/still		0
+281	water/still		0
+282	water/still		0
+283	water/still		0
+284	water/still		0
+285	water/still		0
+286	water/still		0
+287	water/still		0
+288	water/still		0
+289	water/still		0
+290	water/still		0
+291	water/still		0
+292	water/still		0
+293	water/still		0
+294	water/still		0
+295	water/still		0
+296	water/still		0
+297	water/still		0
+298	water/still		0
+299	stone/beige		0
+300	stone/desert		0
+301	stone/desert		0
+302	sand/light		0
+303	sand/light	sand/common	3
+304	sand/common	sand/light	12
+305	sand/common	sand/light	12
+306	sand/light		0
+307	sand/light	sand/common	3
+308	sand/common	sand/light	12
+309	sand/common	sand/light	12
+310	sand/light	sand/common	3
+311	sand/common	sand/light	4
+312	sand/common	sand/light	4
+313	sand/common		0
+314	sand/common	sand/light	4
+315	sand/common		0
+316	sand/common	sand/light	4
+317	sand/common	sand/light	4
+318	sand/common	sand/light	4
+319	sand/common	sand/light	4
+320	sand/common	sand/gravel	12
+321	sand/gravel		0
+322	sand/gravel	sand/common	3
+323	sand/gravel	sand/common	3
+324	sand/gravel		0
+325	sand/common	sand/gravel	12
+326	sand/gravel		0
+327	sand/gravel	sand/common	3
+328	sand/gravel		0
+329	rock/lime	sand/common	3
+330	rock/lime	sand/common	3
+331	rock/lime	sand/common	3
+333	rock/lime	sand/common	3
+334	rock/lime	sand/common	3
+335	rock/lime	sand/common	3
+336	rock/lime	sand/common	3
+337	rock/lime	sand/common	3
+338	sand/dark	sand/common	3
+339	sand/dark	sand/common	3
+340	sand/dark	sand/common	3
+341	sand/dark	sand/common	3
+342	sand/dark	sand/common	3
+343	sand/dark	sand/common	3
+344	sand/dark		0
+345	sand/dark	sand/common	3
+346	sand/dark	sand/common	3
+347	sand/grass	sand/common	3
+348	sand/grass	sand/common	3
+349	sand/grass	sand/common	3
+350	sand/grass	sand/common	3
+351	sand/grass	sand/common	3
+352	sand/grass	sand/common	3
+353	sand/grass	sand/common	3
+354	sand/grass	sand/common	3
+355	sand/grass	sand/common	3
+356	sand/light		0
+357	sand/light	sand/common	1
+358	sand/light	sand/common	1
+359	sand/light	sand/common	1
+360	sand/light	sand/common	1
+361	sand/light	sand/common	1
+362	sand/light	sand/common	1
+363	sand/light	sand/common	1
+364	sand/light	sand/common	1
+365	stone/desert	stone/orange	12
+366	stone/desert	stone/orange	12
+367	stone/desert	stone/orange	12
+368	stone/desert	stone/orange	12
+369	stone/desert	stone/orange	12
+370	stone/desert	stone/orange	12
+371	stone/desert	stone/orange	12
+372	stone/desert	stone/orange	12
+373	stone/desert	stone/orange	12
+374	sand/common		0
+375	sand/common	sand/gravel	4
+376	sand/common	sand/gravel	4
+377	sand/common		0
+378	sand/common	sand/common	1
+379	sand/common		0
+380	sand/common		0
+381	sand/common	sand/gravel	4
+382	sand/common	sand/gravel	4
+383	sand/dark	sand/common	1
+392	jigran/ground		0
+393	jigran/ground		0
+394	jigran/ground		0
+395	jigran/ground		0
+396	jigran/ground		0
+397	jigran/ground		0
+398	jigran/ground		0
+399	jigran/ground		0
+482	jigran/stone		0
+483	jigran/stone		0

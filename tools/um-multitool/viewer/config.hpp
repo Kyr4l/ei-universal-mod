@@ -109,7 +109,7 @@ inline std::array<KeyBind, kMapKeyCount> DefaultMapKeys() {
              {71, 0}, {84, 0}, {'F', kModCtrl | kModLetter}, {'A', kModCtrl | kModLetter}, {82, 0},
              {261, 0}, {'C', kModCtrl | kModLetter}, {'V', kModCtrl | kModLetter}, {'D', kModCtrl | kModLetter},
              {'P', kModCtrl | kModLetter}, {'N', kModCtrl | kModLetter},
-             {84, 0}, {78, 0}}}; // T (the scale key too: scale is Object mode's, the shelf the terrain modes'), N
+             {66, 0}, {78, 0}}}; // B (the tool shelf; T is the scale key), N
 }
 
 struct Config {
@@ -118,6 +118,12 @@ struct Config {
     std::vector<std::string> textLayers;      // texts.res / textslmp.res / folders of loose texts
     std::map<std::string, std::string> textEncodings; // a text layer's path -> "cp1251" / "cp1250" / "cp949" (missing: auto) (#82)
     bool logVerbose = false;                  // the log also to the console (#88)
+    int frameRateLimit = 0;                   // Performance: 0 = no cap, else frames per second at most (25 or more)
+    bool idleRedraw = false;                  // Performance: 25 frames per second while nothing happens
+    bool vsync = true;                        // Performance: wait for the display (off: the cap alone paces)
+    bool uiAntialias = true;                  // Performance: anti-aliased lines and shapes in the UI
+    float mapDrawDistance = 0.0f;             // Performance: the Map Editor draws objects within this many units of the camera's target (0: all)
+    bool mapLowDetail = false;                // Performance: the Map Editor without shadows, lighting, dressed and posed units
     std::vector<std::string> mapLayers;       // folders of .mpr / .mob files (the Map Editor's list)
     std::string databasePath;
     // Per tab (key e.g. "WEAPONS"): the shown model's orientation, a unit quaternion (w, x, y, z).
@@ -181,6 +187,12 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "TEXT_LAYER") cfg.textLayers.push_back(value);
         else if (key == "TEXT_ENCODING") { const size_t bar = value.find('|'); if (bar != std::string::npos) cfg.textEncodings[value.substr(bar + 1)] = value.substr(0, bar); }
         else if (key == "LOG_VERBOSE") cfg.logVerbose = value == "true";
+        else if (key == "FRAME_RATE_LIMIT") cfg.frameRateLimit = std::atoi(value.c_str());
+        else if (key == "IDLE_REDRAW") cfg.idleRedraw = value == "true";
+        else if (key == "VSYNC") cfg.vsync = value == "true";
+        else if (key == "UI_ANTIALIAS") cfg.uiAntialias = value == "true";
+        else if (key == "MAP_DRAW_DISTANCE") cfg.mapDrawDistance = static_cast<float>(std::atof(value.c_str()));
+        else if (key == "MAP_LOW_DETAIL") cfg.mapLowDetail = value == "true";
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
         else if (key == "DATABASE") cfg.databasePath = value;
         else if (key == "LANGUAGE") cfg.language = value;
@@ -280,6 +292,8 @@ inline Config Load(const std::string& path = Path()) {
         if (cfg.mapKeys[k] == KeyBind{key, kModCtrl}) cfg.mapKeys[k] = KeyBind{key, kModCtrl | kModLetter};
     // Scale moved from S (which is "back") to T.
     if (cfg.mapKeys[kKeyScale] == KeyBind{83, 0}) cfg.mapKeys[kKeyScale] = KeyBind{84, 0};
+    // The tool shelf moved from T (the scale key) to B.
+    if (cfg.mapKeys[kKeyToolShelf] == KeyBind{84, 0}) cfg.mapKeys[kKeyToolShelf] = KeyBind{66, 0};
     // The speed's default went from 1.5 to 1: a file still holding the old default follows.
     if (cfg.mapCameraSpeed == 1.5f) cfg.mapCameraSpeed = 1.0f;
     // Up and Down swapped defaults (E up, Q down): older files that kept the old defaults follow.
@@ -332,6 +346,19 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     for (auto& [path, enc] : cfg.textEncodings) if (!enc.empty() && enc != "auto") f << "TEXT_ENCODING=" << enc << "|" << path << "\n";
     f << "; The log (um-multitool.log beside the program) also printed to the console; (true/false)\n";
     f << "LOG_VERBOSE=" << flag(cfg.logVerbose) << "\n";
+    f << "; -- Performance (Settings > Performance) --\n";
+    f << "; At most this many frames per second (0: no cap; 25 or more). Lower = less CPU and GPU work.\n";
+    f << "FRAME_RATE_LIMIT=" << cfg.frameRateLimit << "\n";
+    f << "; 25 frames per second while the mouse and keyboard are quiet (true/false)\n";
+    f << "IDLE_REDRAW=" << flag(cfg.idleRedraw) << "\n";
+    f << "; Wait for the display's refresh (true/false; off: the cap alone paces the frames)\n";
+    f << "VSYNC=" << flag(cfg.vsync) << "\n";
+    f << "; Anti-aliased lines and shapes in the UI (true/false; off: fewer vertices to draw)\n";
+    f << "UI_ANTIALIAS=" << flag(cfg.uiAntialias) << "\n";
+    f << "; Map Editor: draw the objects within this many units of the camera's target (0: all of them)\n";
+    f << "MAP_DRAW_DISTANCE=" << cfg.mapDrawDistance << "\n";
+    f << "; Map Editor: no shadows, lighting, dressed or posed units (true/false)\n";
+    f << "MAP_LOW_DETAIL=" << flag(cfg.mapLowDetail) << "\n";
     f << "; Maps: folders of .mpr and .mob files, listed by the Map Editor.\n";
     list("MAP_LAYER", cfg.mapLayers);
     f << "; Quests: folders of .mq files or unpacked quests, each holding different quests.\n";

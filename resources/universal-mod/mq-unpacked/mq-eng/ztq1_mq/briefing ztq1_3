@@ -1,0 +1,8 @@
+Counted?
+#show Hero
+#show Marshal
+#CAMERA 11
+#phrase Marshal  1
+Did you count them all?
+#phrase Hero  2
+No. Nobody can.

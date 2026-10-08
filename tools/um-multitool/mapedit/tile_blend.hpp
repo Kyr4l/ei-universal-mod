@@ -70,9 +70,11 @@ inline Texture Inspect(const std::vector<uint8_t>& mmp) {
     return t;
 }
 
-// The tile (0..63, 8 x 8 per texture) at full size, as RGBA (size x size, size = width / 8).
+// The tile (0..63, 8 x 8 per texture) at full size, as RGBA (size x size, size = width / 8). The game counts
+// the tile rows from the BOTTOM of the picture (tile 0 is the bottom-left one; the texture's first block row is
+// the top), as the terrain's UVs show (map_app TileUvs).
 inline std::vector<uint8_t> ReadTile(const std::vector<uint8_t>& mmp, const Texture& t, int tile) {
-    const int size = t.width / 8, x0 = (tile % 8) * size, y0 = (tile / 8) * size, bw = t.width / 4;
+    const int size = t.width / 8, x0 = (tile % 8) * size, y0 = (7 - tile / 8) * size, bw = t.width / 4;
     std::vector<uint8_t> rgba(static_cast<size_t>(size) * size * 4);
     for (int by = 0; by < size / 4; ++by)
         for (int bx = 0; bx < size / 4; ++bx) {
@@ -90,7 +92,7 @@ inline void WriteTile(std::vector<uint8_t>& mmp, const Texture& t, int tile, std
     int size = t.width / 8;
     for (int level = 0; level < t.mips && size >= 1; ++level) {
         const int lw = std::max(1, t.width >> level), bw = std::max(1, lw / 4);
-        const int x0 = (tile % 8) * size, y0 = (tile / 8) * size;
+        const int x0 = (tile % 8) * size, y0 = (7 - tile / 8) * size; // rows from the bottom, as ReadTile
         for (int by = 0; by < std::max(1, size / 4); ++by)
             for (int bx = 0; bx < std::max(1, size / 4); ++bx) {
                 uint8_t px[16][4];

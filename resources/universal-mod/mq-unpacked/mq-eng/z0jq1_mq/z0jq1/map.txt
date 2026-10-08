@@ -9,8 +9,8 @@ zone0jmap zonezeroquest
 #exit 1
 bz4mpg 1
 #deploy
-7 136 10 145
+7 137 10 145
 #remove
-2 137 7 144
+2 138 7 144
 #view
 135

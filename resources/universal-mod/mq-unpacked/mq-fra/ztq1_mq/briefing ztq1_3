@@ -1,0 +1,8 @@
+Comptees ?
+#show Hero
+#show Marshal
+#CAMERA 11
+#phrase Marshal  1
+Les as-tu toutes comptees ?
+#phrase Hero  2
+Non. Personne ne le peut.

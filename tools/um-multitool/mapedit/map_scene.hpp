@@ -54,6 +54,7 @@ struct MapViewOptions {
     bool poseUnits = true;  // figures with animations stand in their idle pose (cidle01, frame 0), not the T-pose
     bool animateUnits = false; // ... and play it (walking units in the patrol simulation: their walk clip)
     bool shadows = true;    // with the lighting on: the sun's shadows on the terrain
+    float drawDistance = 0; // objects farther than this from the camera's target are not drawn (0: all)
     bool navmesh = false;   // the game's walkability graph (AI_GRAPH), one node per 4 x 4 units
     int navLayer = 1;       // which of its 8 layers
     bool walkability = false; // the computed walkability grid the patrol simulation uses
@@ -122,6 +123,7 @@ public:
     void ClearSelection() { selectedFile = selectedObject = -1; selection.clear(); logicPoints.clear(); }
     void Select(int file, int object) { selectedFile = file; selectedObject = object; selection.assign(1, object); logicPoints.clear(); }
     bool IsLogicPointSelected(const LogicPointRef& r) const { return std::find(logicPoints.begin(), logicPoints.end(), r) != logicPoints.end(); }
+    bool FileVisible(int file) const { return file < 0 || file >= static_cast<int>(visible_.size()) || visible_[static_cast<size_t>(file)]; }
     bool IsSelected(int file, int object) const {
         return file == selectedFile && std::find(selection.begin(), selection.end(), object) != selection.end();
     }
@@ -1201,6 +1203,13 @@ private:
         glMultMatrixf(m);
     }
 
+    // Settings > Performance: objects beyond the draw distance from the camera's target are skipped.
+    bool TooFar(const mob::Object& o) const {
+        if (options.drawDistance <= 0) return false;
+        const float dx = o.position.x - camera.targetX, dy = o.position.y - camera.targetY;
+        return dx * dx + dy * dy > options.drawDistance * options.drawDistance;
+    }
+
     void DrawObjects(const Library& lib) {
         (void)lib;
         if (wirePass_) { // the edges over the textured objects
@@ -1210,7 +1219,7 @@ private:
             for (size_t fi = 0; fi < maps_.size(); ++fi) {
                 if (fi < visible_.size() && !visible_[fi]) continue;
                 for (const mob::Object& o : maps_[fi]->objects) {
-                    if (!mob::HasFigure(o.kind) || !Shown(o)) continue;
+                    if (!mob::HasFigure(o.kind) || !Shown(o) || TooFar(o)) continue;
                     const MapModel* m = ModelFor(o);
                     if (!m || !m->ok) continue;
                     glPushMatrix();
@@ -1228,7 +1237,7 @@ private:
         for (size_t fi = 0; fi < maps_.size(); ++fi) {
             if (fi < visible_.size() && !visible_[fi]) continue;
             for (const mob::Object& o : maps_[fi]->objects) {
-                if (!mob::HasFigure(o.kind) || !Shown(o)) continue;
+                if (!mob::HasFigure(o.kind) || !Shown(o) || TooFar(o)) continue;
                 const MapModel* m = ModelFor(o);
                 if (!m || !m->ok) continue;
                 if (!m->layers.empty()) { // a dressed unit

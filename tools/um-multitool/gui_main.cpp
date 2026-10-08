@@ -1007,6 +1007,9 @@ int RunGui(const GuiOptions& options) {
     Library library;
     if (library.logVerbose) umlog::SetVerbose(true);
     library.LoadConfig();
+    glfwSwapInterval(library.vsync ? 1 : 0); // Settings > Performance
+    bool vsyncSet = library.vsync;
+    if (const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor())) if (mode->refreshRate > 0) library.displayRefresh = mode->refreshRate;
     g_library = &library;
     {
         i18n::Lang lang = i18n::Lang::English;
@@ -1123,6 +1126,8 @@ int RunGui(const GuiOptions& options) {
         PumpActiveProcess();
         dllconnect::Update(dllCtx);
         dbedit::Update();
+        if (library.vsync != vsyncSet) { vsyncSet = library.vsync; glfwSwapInterval(vsyncSet ? 1 : 0); }
+        ImGui::GetStyle().AntiAliasedLines = ImGui::GetStyle().AntiAliasedLinesUseTex = ImGui::GetStyle().AntiAliasedFill = library.uiAntialias;
         double now = glfwGetTime();
         float dt = static_cast<float>(now - lastTime);
         lastTime = now;
@@ -1262,6 +1267,20 @@ int RunGui(const GuiOptions& options) {
         }
 
         glfwSwapBuffers(window);
+
+        // Settings > Performance: a frame rate cap, and resting while the mouse and keyboard are quiet.
+        if (library.frameRateLimit > 0 || library.idleRedraw) {
+            static double lastActivity = 0.0;
+            bool active = ImGui::IsAnyMouseDown() || io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f || io.MouseWheel != 0.0f ||
+                          io.InputQueueCharacters.Size > 0 || ImGui::IsAnyItemActive() || mapedit::Busy(mapCtx) || IsValid(g_activeProc) ||
+                          !options.screenshotPath.empty();
+            for (int k = ImGuiKey_NamedKey_BEGIN; k < ImGuiKey_NamedKey_END && !active; ++k) if (ImGui::IsKeyDown(static_cast<ImGuiKey>(k))) active = true;
+            if (active) lastActivity = now;
+            double minFrame = library.frameRateLimit > 0 ? 1.0 / std::max(library.frameRateLimit, 25) : 0.0;
+            if (library.idleRedraw && now - lastActivity > 0.5) minFrame = std::max(minFrame, 1.0 / 25.0);
+            const double spent = glfwGetTime() - now;
+            if (spent < minFrame) ImGui_ImplGlfw_Sleep(static_cast<int>((minFrame - spent) * 1000.0));
+        }
 
         // The Map Editor's script in a window of its own: a second OS window (sharing the GL objects)
         // with its own ImGui context, drawn after the main one each frame.

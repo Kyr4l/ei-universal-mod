@@ -1,0 +1,24 @@
+GlobalVars
+(
+  NULL : object,
+  Heroes : group
+)
+
+DeclareScript Welcome ( this : object )
+
+Script Welcome
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript( )
+    GSSetVarMax( 0, "q.ztq1.ztq1", 1 )
+  )
+)
+
+WorldScript
+(
+  Welcome( NULL )
+)

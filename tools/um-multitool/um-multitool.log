@@ -4572,3 +4572,636 @@
 2026-10-08 13:22:01 info  Map Editor: Hard edges: 6 vertices where two plain grounds meet, 23 cells by them: 0 changed in 1 round(s), 6 left (no transition for those grounds, or an unknown tile)
 2026-10-08 13:22:06 info  Map Editor: Hard edges: 6 vertices where two plain grounds meet, 23 cells by them: 0 changed in 1 round(s), 6 left (no transition for those grounds, or an unknown tile)
 2026-10-08 13:22:49 info  Map Editor: Hard edges: 47 vertices where two plain grounds meet, 101 cells by them: 38 changed in 2 round(s), 16 left (no transition for those grounds, or an unknown tile)
+---- um-multitool started 2026-10-08 13:49:43
+2026-10-08 13:49:43 info  Universal Mod Multitool 1.11.6 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 13:49:43 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 13:49:43 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 122 ms
+2026-10-08 13:49:43 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 13:49:43 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 199 ms
+2026-10-08 13:49:44 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 153 ms
+2026-10-08 13:49:44 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 13:49:44 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 13:49:44 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 124 ms
+2026-10-08 13:49:44 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 2 ms
+2026-10-08 13:49:44 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 13:49:44 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 13:49:44 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 13:49:44 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 73 ms
+2026-10-08 13:49:44 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 92 ms
+2026-10-08 13:49:44 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 13:49:44 info  Sources ready in 926 ms
+2026-10-08 13:49:44 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zone11.mpr: zone11, 16 x 12 sectors
+2026-10-08 13:49:44 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zone11-lmp.mob: 2410 objects, a script
+2026-10-08 13:49:44 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/z11q2.mob: 1 objects, a script
+2026-10-08 13:49:44 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+---- um-multitool started 2026-10-08 13:54:01
+2026-10-08 13:54:01 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 13:54:01 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 13:54:01 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 122 ms
+2026-10-08 13:54:01 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 13:54:01 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 208 ms
+2026-10-08 13:54:01 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 152 ms
+2026-10-08 13:54:01 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 13:54:01 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 13:54:02 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 123 ms
+2026-10-08 13:54:02 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 13:54:02 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 13:54:02 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 13:54:02 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 13:54:02 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 71 ms
+2026-10-08 13:54:02 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 92 ms
+2026-10-08 13:54:02 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 13:54:02 info  Sources ready in 926 ms
+2026-10-08 13:54:02 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 13:54:02 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 13:54:45 info  Map Editor: Texture 8 added (64 free tiles): /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/blended-textures/zone7008.mmp. Save the terrain to keep it. NOT verified: whether the game accepts more than 8 textures per terrain (no vanilla terrain has more): try the saved terrain in the game first.
+---- um-multitool started 2026-10-08 13:57:21
+2026-10-08 13:57:21 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 13:57:21 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 13:57:21 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 124 ms
+2026-10-08 13:57:21 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 13:57:21 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 209 ms
+2026-10-08 13:57:22 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 152 ms
+2026-10-08 13:57:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 48 ms
+2026-10-08 13:57:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 13:57:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 124 ms
+2026-10-08 13:57:22 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 13:57:22 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 13:57:22 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 13:57:22 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 13:57:22 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 65 ms
+2026-10-08 13:57:22 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 91 ms
+2026-10-08 13:57:22 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 13:57:22 info  Sources ready in 926 ms
+2026-10-08 13:57:22 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 13:57:22 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 13:57:35 info  Map Editor: Texture 8 added (64 free tiles): /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/blended-textures/zone7008.mmp. Save the terrain to keep it. NOT verified: whether the game accepts more than 8 textures per terrain (no vanilla terrain has more): try the saved terrain in the game first.
+2026-10-08 13:58:09 info  Map Editor: ground/common from basegipat: 64 tile(s) copied into free tiles (11 transition tile(s) left out: only 64 tiles were free), textures written to /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/blended-textures (pack them into the mod's textures archive for the game); save the terrain to keep the tile types
+---- um-multitool started 2026-10-08 14:11:49
+2026-10-08 14:11:49 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:11:49 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:11:50 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 142 ms
+2026-10-08 14:11:50 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 14:11:50 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 247 ms
+2026-10-08 14:11:50 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 187 ms
+2026-10-08 14:11:50 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 49 ms
+2026-10-08 14:11:50 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:11:50 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 126 ms
+2026-10-08 14:11:50 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:11:50 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:11:50 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:11:50 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:11:50 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 65 ms
+2026-10-08 14:11:50 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 92 ms
+2026-10-08 14:11:51 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:11:51 info  Sources ready in 1020 ms
+2026-10-08 14:11:51 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 14:13:42 info  Map Editor: Hard edges: 1 vertices where two plain grounds meet, 4 cells by them: 1 changed in 2 round(s), 0 left (no transition for those grounds, or an unknown tile)
+2026-10-08 14:13:56 info  Map Editor: Hard edges: 0 vertices where two plain grounds meet, 0 cells by them: 0 changed in 1 round(s), 0 left (no transition for those grounds, or an unknown tile)
+2026-10-08 14:13:58 info  Map Editor: Hard edges: 0 vertices where two plain grounds meet, 0 cells by them: 0 changed in 1 round(s), 0 left (no transition for those grounds, or an unknown tile)
+---- um-multitool started 2026-10-08 14:14:01
+2026-10-08 14:14:01 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:14:01 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:14:02 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 132 ms
+2026-10-08 14:14:02 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:14:02 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 236 ms
+2026-10-08 14:14:02 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 177 ms
+2026-10-08 14:14:02 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 14:14:02 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:14:02 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 126 ms
+2026-10-08 14:14:02 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:14:02 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:14:02 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:14:02 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:14:02 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 70 ms
+2026-10-08 14:14:02 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 94 ms
+2026-10-08 14:14:02 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:14:02 info  Sources ready in 992 ms
+2026-10-08 14:14:02 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 14:14:17 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zone0j.mpr: zonezero, 4 x 7 sectors
+2026-10-08 14:14:17 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zone0j-lmp.mob: 815 objects, a script
+2026-10-08 14:14:17 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/z0jq1.mob: 21 objects, a script
+---- um-multitool started 2026-10-08 14:14:37
+2026-10-08 14:14:37 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:14:37 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:14:37 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 138 ms
+2026-10-08 14:14:37 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:14:37 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 242 ms
+2026-10-08 14:14:37 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 186 ms
+2026-10-08 14:14:37 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 14:14:38 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:14:38 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 125 ms
+2026-10-08 14:14:38 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:14:38 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:14:38 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:14:38 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:14:38 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 67 ms
+2026-10-08 14:14:38 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 92 ms
+2026-10-08 14:14:38 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:14:38 info  Sources ready in 1009 ms
+2026-10-08 14:14:38 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zone0j.mpr: zonezero, 4 x 7 sectors
+2026-10-08 14:14:38 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zone0j-lmp.mob: 815 objects, a script
+2026-10-08 14:14:38 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/z0jq1.mob: 21 objects, a script
+---- um-multitool started 2026-10-08 14:20:19
+2026-10-08 14:20:19 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:20:19 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 151 ms
+2026-10-08 14:20:19 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 28 ms
+2026-10-08 14:20:19 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 276 ms
+2026-10-08 14:20:19 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 195 ms
+2026-10-08 14:20:19 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 46 ms
+2026-10-08 14:20:19 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 21 ms
+2026-10-08 14:20:19 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 123 ms
+2026-10-08 14:20:19 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:20:19 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:20:19 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:19 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:19 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 64 ms
+2026-10-08 14:20:20 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 89 ms
+2026-10-08 14:20:20 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:20:20 info  Sources ready in 1060 ms
+---- um-multitool started 2026-10-08 14:20:20
+2026-10-08 14:20:20 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:20:20 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 135 ms
+2026-10-08 14:20:20 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 14:20:20 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 248 ms
+2026-10-08 14:20:20 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 171 ms
+2026-10-08 14:20:20 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 14:20:20 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 21 ms
+2026-10-08 14:20:20 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 124 ms
+2026-10-08 14:20:20 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:20:20 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:20:20 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:20 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:20 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 65 ms
+2026-10-08 14:20:21 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 89 ms
+2026-10-08 14:20:21 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:20:21 info  Sources ready in 989 ms
+---- um-multitool started 2026-10-08 14:20:51
+2026-10-08 14:20:51 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:20:51 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 142 ms
+2026-10-08 14:20:51 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:20:51 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 247 ms
+2026-10-08 14:20:51 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 168 ms
+2026-10-08 14:20:51 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 49 ms
+2026-10-08 14:20:51 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:20:52 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 126 ms
+2026-10-08 14:20:52 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:20:52 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:20:52 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:52 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:52 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 67 ms
+2026-10-08 14:20:52 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 92 ms
+2026-10-08 14:20:52 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:20:52 info  Sources ready in 1006 ms
+---- um-multitool started 2026-10-08 14:20:53
+2026-10-08 14:20:53 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:20:53 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 129 ms
+2026-10-08 14:20:53 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:20:53 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 246 ms
+2026-10-08 14:20:53 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 172 ms
+2026-10-08 14:20:53 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 50 ms
+2026-10-08 14:20:53 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:20:54 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 126 ms
+2026-10-08 14:20:54 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:20:54 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:20:54 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:54 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:20:54 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 67 ms
+2026-10-08 14:20:54 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 92 ms
+2026-10-08 14:20:54 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:20:54 info  Sources ready in 999 ms
+---- um-multitool started 2026-10-08 14:21:47
+2026-10-08 14:21:47 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:21:47 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 123 ms
+2026-10-08 14:21:47 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:21:47 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 205 ms
+2026-10-08 14:21:47 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 151 ms
+2026-10-08 14:21:47 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 14:21:47 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 21 ms
+2026-10-08 14:21:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 123 ms
+2026-10-08 14:21:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:21:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:21:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:21:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:21:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 64 ms
+2026-10-08 14:21:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 88 ms
+2026-10-08 14:21:48 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:21:48 info  Sources ready in 915 ms
+---- um-multitool started 2026-10-08 14:21:49
+2026-10-08 14:21:49 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:21:49 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 126 ms
+2026-10-08 14:21:49 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:21:49 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 207 ms
+2026-10-08 14:21:49 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 152 ms
+2026-10-08 14:21:49 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 163 file(s), 47 ms
+2026-10-08 14:21:49 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:21:50 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 123 ms
+2026-10-08 14:21:50 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:21:50 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:21:50 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:21:50 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:21:50 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 41 file(s), 65 ms
+2026-10-08 14:21:50 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 111 file(s), 89 ms
+2026-10-08 14:21:50 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:21:50 info  Sources ready in 922 ms
+---- um-multitool started 2026-10-08 14:22:33
+2026-10-08 14:22:33 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:22:33 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:22:33 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 130 ms
+2026-10-08 14:22:33 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:22:33 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 214 ms
+2026-10-08 14:22:33 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 150 ms
+2026-10-08 14:22:33 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 50 ms
+2026-10-08 14:22:33 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:22:34 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 122 ms
+2026-10-08 14:22:34 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:22:34 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:22:34 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:22:34 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:22:34 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 65 ms
+2026-10-08 14:22:34 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 91 ms
+2026-10-08 14:22:34 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:22:34 info  Sources ready in 936 ms
+2026-10-08 14:22:34 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zone0j.mpr: zonezero, 4 x 7 sectors
+2026-10-08 14:22:34 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zone0j-lmp.mob: 815 objects, a script
+2026-10-08 14:22:34 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/z0jq1.mob: 21 objects, a script
+2026-10-08 14:22:34 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:22:34 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 578 objects, a script
+---- um-multitool started 2026-10-08 14:22:37
+2026-10-08 14:22:37 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:22:37 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:22:37 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 125 ms
+2026-10-08 14:22:37 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 14:22:37 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 207 ms
+2026-10-08 14:22:37 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 152 ms
+2026-10-08 14:22:37 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 50 ms
+2026-10-08 14:22:37 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:22:37 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 123 ms
+2026-10-08 14:22:37 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:22:37 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:22:37 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:22:37 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:22:37 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 65 ms
+2026-10-08 14:22:38 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 91 ms
+2026-10-08 14:22:38 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:22:38 info  Sources ready in 927 ms
+2026-10-08 14:22:38 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:22:38 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 578 objects, a script
+2026-10-08 14:22:38 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+---- um-multitool started 2026-10-08 14:24:22
+2026-10-08 14:24:22 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:24:23 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 127 ms
+2026-10-08 14:24:23 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:24:23 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 208 ms
+2026-10-08 14:24:23 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 155 ms
+2026-10-08 14:24:23 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 51 ms
+2026-10-08 14:24:23 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:24:23 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 127 ms
+2026-10-08 14:24:23 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:24:23 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:24:23 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:24:23 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:24:23 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 65 ms
+2026-10-08 14:24:23 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 92 ms
+2026-10-08 14:24:23 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:24:23 info  Sources ready in 940 ms
+---- um-multitool started 2026-10-08 14:25:48
+2026-10-08 14:25:48 info  Universal Mod Multitool 1.11.7 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:25:48 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:25:48 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 122 ms
+2026-10-08 14:25:48 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:25:48 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 207 ms
+2026-10-08 14:25:48 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 151 ms
+2026-10-08 14:25:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 50 ms
+2026-10-08 14:25:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:25:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 124 ms
+2026-10-08 14:25:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:25:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:25:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:25:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:25:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 66 ms
+2026-10-08 14:25:49 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 95 ms
+2026-10-08 14:25:49 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:25:49 info  Sources ready in 928 ms
+2026-10-08 14:25:49 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+---- um-multitool started 2026-10-08 14:30:40
+2026-10-08 14:30:40 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:30:40 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:30:40 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 185 ms
+2026-10-08 14:30:40 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 32 ms
+2026-10-08 14:30:40 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 300 ms
+2026-10-08 14:30:41 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 201 ms
+2026-10-08 14:30:41 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 162 ms
+2026-10-08 14:30:41 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 130 ms
+2026-10-08 14:30:41 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 421 ms
+2026-10-08 14:30:41 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 3 ms
+2026-10-08 14:30:41 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:30:41 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:30:41 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 1 ms
+2026-10-08 14:30:42 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 170 ms
+2026-10-08 14:30:42 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 244 ms
+2026-10-08 14:30:42 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:30:42 info  Sources ready in 1923 ms
+2026-10-08 14:30:42 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+---- um-multitool started 2026-10-08 14:31:57
+2026-10-08 14:31:57 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:31:57 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:31:57 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 122 ms
+2026-10-08 14:31:57 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 14:31:58 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 205 ms
+2026-10-08 14:31:58 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 142 ms
+2026-10-08 14:31:58 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 51 ms
+2026-10-08 14:31:58 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:31:58 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 124 ms
+2026-10-08 14:31:58 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:31:58 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:31:58 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:31:58 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:31:58 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 74 ms
+2026-10-08 14:31:58 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 93 ms
+2026-10-08 14:31:58 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:31:58 info  Sources ready in 923 ms
+2026-10-08 14:31:58 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+---- um-multitool started 2026-10-08 14:35:28
+2026-10-08 14:35:28 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:35:28 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:35:28 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 122 ms
+2026-10-08 14:35:28 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 14:35:28 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 204 ms
+2026-10-08 14:35:28 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 149 ms
+2026-10-08 14:35:29 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 51 ms
+2026-10-08 14:35:29 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:35:29 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 125 ms
+2026-10-08 14:35:29 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:35:29 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:35:29 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:35:29 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:35:29 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 66 ms
+2026-10-08 14:35:29 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 92 ms
+2026-10-08 14:35:29 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:35:29 info  Sources ready in 919 ms
+2026-10-08 14:35:29 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:35:29 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+---- um-multitool started 2026-10-08 14:38:47
+2026-10-08 14:38:47 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:38:47 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:38:47 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 125 ms
+2026-10-08 14:38:47 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 25 ms
+2026-10-08 14:38:47 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 204 ms
+2026-10-08 14:38:48 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 152 ms
+2026-10-08 14:38:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 50 ms
+2026-10-08 14:38:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:38:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 123 ms
+2026-10-08 14:38:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:38:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:38:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:38:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:38:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 66 ms
+2026-10-08 14:38:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 93 ms
+2026-10-08 14:38:48 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:38:48 info  Sources ready in 927 ms
+2026-10-08 14:38:48 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/maps/zone7.mpr: zone7, 15 x 10 sectors
+2026-10-08 14:38:53 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:38:53 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 578 objects, a script
+2026-10-08 14:38:53 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/ztq1.mob: 0 objects, a script
+---- um-multitool started 2026-10-08 14:42:47
+2026-10-08 14:42:47 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:42:47 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 188 ms
+2026-10-08 14:42:47 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 32 ms
+2026-10-08 14:42:47 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 305 ms
+2026-10-08 14:42:47 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 196 ms
+2026-10-08 14:42:47 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 171 ms
+2026-10-08 14:42:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 133 ms
+2026-10-08 14:42:48 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 427 ms
+2026-10-08 14:42:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 3 ms
+2026-10-08 14:42:48 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:42:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 1 ms
+2026-10-08 14:42:48 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 2 ms
+2026-10-08 14:42:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 157 ms
+2026-10-08 14:42:48 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 224 ms
+2026-10-08 14:42:48 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:42:49 info  Sources ready in 1921 ms
+---- um-multitool started 2026-10-08 14:42:50
+2026-10-08 14:42:50 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:42:50 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 168 ms
+2026-10-08 14:42:50 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:42:50 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 280 ms
+2026-10-08 14:42:50 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 196 ms
+2026-10-08 14:42:50 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 53 ms
+2026-10-08 14:42:50 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:42:51 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 129 ms
+2026-10-08 14:42:51 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:42:51 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:42:51 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:42:51 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:42:51 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 68 ms
+2026-10-08 14:42:51 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 96 ms
+2026-10-08 14:42:51 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:42:51 info  Sources ready in 1107 ms
+---- um-multitool started 2026-10-08 14:43:11
+2026-10-08 14:43:11 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:43:11 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:43:11 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 154 ms
+2026-10-08 14:43:11 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 32 ms
+2026-10-08 14:43:11 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 218 ms
+2026-10-08 14:43:12 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 178 ms
+2026-10-08 14:43:12 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 52 ms
+2026-10-08 14:43:12 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 23 ms
+2026-10-08 14:43:12 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 133 ms
+2026-10-08 14:43:12 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:43:12 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:43:12 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:43:12 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:43:12 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 80 ms
+2026-10-08 14:43:12 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 100 ms
+2026-10-08 14:43:12 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:43:12 info  Sources ready in 1044 ms
+2026-10-08 14:43:12 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:43:12 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 554 objects, a script
+2026-10-08 14:43:12 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/ztq1.mob: 0 objects, a script
+2026-10-08 14:43:12 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:43:12 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 554 objects, a script
+---- um-multitool started 2026-10-08 14:44:32
+2026-10-08 14:44:32 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:44:32 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:44:32 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 133 ms
+2026-10-08 14:44:32 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:44:32 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 218 ms
+2026-10-08 14:44:32 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 165 ms
+2026-10-08 14:44:32 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 53 ms
+2026-10-08 14:44:32 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 23 ms
+2026-10-08 14:44:32 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 131 ms
+2026-10-08 14:44:32 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 2 ms
+2026-10-08 14:44:32 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:44:32 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:44:32 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:44:32 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 73 ms
+2026-10-08 14:44:33 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 99 ms
+2026-10-08 14:44:33 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:44:33 info  Sources ready in 993 ms
+2026-10-08 14:44:33 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:44:33 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 554 objects, a script
+2026-10-08 14:45:19 WARN  Map Editor checks: 0 error(s), 1 warning(s) (0 new error(s), 1 new warning(s)). [Map Editor > Checks]
+---- um-multitool started 2026-10-08 14:47:21
+2026-10-08 14:47:21 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:47:21 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:47:21 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 127 ms
+2026-10-08 14:47:21 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 24 ms
+2026-10-08 14:47:21 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 219 ms
+2026-10-08 14:47:22 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 169 ms
+2026-10-08 14:47:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 52 ms
+2026-10-08 14:47:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 23 ms
+2026-10-08 14:47:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 129 ms
+2026-10-08 14:47:22 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 2 ms
+2026-10-08 14:47:22 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:47:22 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:47:22 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:47:22 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 71 ms
+2026-10-08 14:47:22 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 99 ms
+2026-10-08 14:47:22 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:47:22 info  Sources ready in 990 ms
+2026-10-08 14:47:22 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:47:22 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 554 objects, a script
+---- um-multitool started 2026-10-08 14:47:29
+2026-10-08 14:47:29 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:47:29 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 128 ms
+2026-10-08 14:47:29 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:47:29 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 230 ms
+2026-10-08 14:47:30 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 185 ms
+2026-10-08 14:47:30 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 53 ms
+2026-10-08 14:47:30 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 23 ms
+2026-10-08 14:47:30 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 130 ms
+2026-10-08 14:47:30 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 2 ms
+2026-10-08 14:47:30 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:47:30 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:47:30 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:47:30 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 71 ms
+2026-10-08 14:47:30 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 99 ms
+2026-10-08 14:47:30 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:47:30 info  Sources ready in 1019 ms
+---- um-multitool started 2026-10-08 14:47:31
+2026-10-08 14:47:31 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:47:31 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 152 ms
+2026-10-08 14:47:31 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 28 ms
+2026-10-08 14:47:31 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 242 ms
+2026-10-08 14:47:32 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 176 ms
+2026-10-08 14:47:32 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 53 ms
+2026-10-08 14:47:32 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:47:32 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 130 ms
+2026-10-08 14:47:32 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 2 ms
+2026-10-08 14:47:32 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:47:32 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:47:32 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:47:32 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 71 ms
+2026-10-08 14:47:32 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 100 ms
+2026-10-08 14:47:32 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:47:32 info  Sources ready in 1052 ms
+---- um-multitool started 2026-10-08 14:50:10
+2026-10-08 14:50:10 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:50:10 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:50:11 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 188 ms
+2026-10-08 14:50:11 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 33 ms
+2026-10-08 14:50:11 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 322 ms
+2026-10-08 14:50:11 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 215 ms
+2026-10-08 14:50:11 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 171 ms
+2026-10-08 14:50:11 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 163 ms
+2026-10-08 14:50:12 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 427 ms
+2026-10-08 14:50:12 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 3 ms
+2026-10-08 14:50:12 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:50:12 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 1 ms
+2026-10-08 14:50:12 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 1 ms
+2026-10-08 14:50:12 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 162 ms
+2026-10-08 14:50:12 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 245 ms
+2026-10-08 14:50:12 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:50:12 info  Sources ready in 2006 ms
+2026-10-08 14:50:12 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:50:12 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+---- um-multitool started 2026-10-08 14:52:20
+2026-10-08 14:52:20 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:52:20 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:52:20 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 161 ms
+2026-10-08 14:52:20 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 30 ms
+2026-10-08 14:52:21 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 294 ms
+2026-10-08 14:52:21 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 223 ms
+2026-10-08 14:52:21 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 56 ms
+2026-10-08 14:52:21 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 24 ms
+2026-10-08 14:52:21 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 130 ms
+2026-10-08 14:52:21 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 2 ms
+2026-10-08 14:52:21 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:52:21 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 1 ms
+2026-10-08 14:52:21 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 1 ms
+2026-10-08 14:52:21 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 77 ms
+2026-10-08 14:52:21 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 99 ms
+2026-10-08 14:52:21 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:52:21 info  Sources ready in 1167 ms
+2026-10-08 14:52:21 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:52:21 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+2026-10-08 14:52:21 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:52:21 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+---- um-multitool started 2026-10-08 14:53:23
+2026-10-08 14:53:23 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:53:23 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:53:23 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 159 ms
+2026-10-08 14:53:23 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 29 ms
+2026-10-08 14:53:23 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 264 ms
+2026-10-08 14:53:23 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 193 ms
+2026-10-08 14:53:23 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 51 ms
+2026-10-08 14:53:23 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 22 ms
+2026-10-08 14:53:24 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 127 ms
+2026-10-08 14:53:24 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:53:24 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:53:24 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:53:24 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:53:24 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 67 ms
+2026-10-08 14:53:24 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 92 ms
+2026-10-08 14:53:24 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:53:24 info  Sources ready in 1077 ms
+2026-10-08 14:53:24 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:53:24 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+2026-10-08 14:54:52 info  Map Editor: Building the navmesh...
+2026-10-08 14:54:53 info  Map Editor: Building the navmesh done in 1.0 s
+---- um-multitool started 2026-10-08 14:55:52
+2026-10-08 14:55:52 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 14:55:52 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 14:55:52 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 148 ms
+2026-10-08 14:55:52 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 26 ms
+2026-10-08 14:55:52 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 259 ms
+2026-10-08 14:55:52 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 195 ms
+2026-10-08 14:55:52 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 52 ms
+2026-10-08 14:55:52 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 23 ms
+2026-10-08 14:55:53 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 127 ms
+2026-10-08 14:55:53 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 1 ms
+2026-10-08 14:55:53 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 14:55:53 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 0 ms
+2026-10-08 14:55:53 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 0 ms
+2026-10-08 14:55:53 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 69 ms
+2026-10-08 14:55:53 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 101 ms
+2026-10-08 14:55:53 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 14:55:53 info  Sources ready in 1070 ms
+2026-10-08 14:55:53 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:55:53 info  Map Editor: map /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+2026-10-08 14:55:58 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 14:55:58 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+2026-10-08 14:55:58 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/ztq1.mob: 0 objects, a script
+---- um-multitool started 2026-10-08 15:00:20
+2026-10-08 15:00:20 info  Universal Mod Multitool 1.11.8 starting (GUI); log file: /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.log; --verbose prints it here
+2026-10-08 15:00:20 info  Config /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/tools/um-multitool/um-multitool.cfg: 2 figure, 5 texture, 4 text, 2 map source(s)
+2026-10-08 15:00:20 info  Figure source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/figures.res: 2294 file(s), 179 ms
+2026-10-08 15:00:20 info  Figure source /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/res/figures.res: 271 file(s), 27 ms
+2026-10-08 15:00:21 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textures.res: 1786 file(s), 281 ms
+2026-10-08 15:00:21 info  Texture source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/redress.res: 1947 file(s), 197 ms
+2026-10-08 15:00:21 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures-zones_res_dds: 173 file(s), 136 ms
+2026-10-08 15:00:21 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/textures_res_dds: 298 file(s), 102 ms
+2026-10-08 15:00:22 info  Texture source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-dds/redress_res_dds: 484 file(s), 394 ms
+2026-10-08 15:00:22 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/texts.res: 3170 file(s), 3 ms
+2026-10-08 15:00:22 info  Text source /mnt/ssd-datastore0/Games/evil-islands/drive_c/Evil Islands/res/textslmp.res: 397 file(s), 0 ms
+2026-10-08 15:00:22 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/textslmp-eng_res: 0 file(s), 1 ms
+2026-10-08 15:00:22 info  Text source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/res-texts/texts-eng_res: 0 file(s), 1 ms
+2026-10-08 15:00:22 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr: 42 file(s), 131 ms
+2026-10-08 15:00:22 info  Map source /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob: 113 file(s), 174 ms
+2026-10-08 15:00:22 info  Database /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/xlsx/databaselmp.xlsx: 64 weapons, 192 armors
+2026-10-08 15:00:22 info  Sources ready in 1707 ms
+2026-10-08 15:00:22 info  Map Editor: terrain /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors
+2026-10-08 15:00:22 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/zonetest-lmp.mob: 453 objects, a script
+2026-10-08 15:00:22 info  Map Editor: map /home/kyral/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mob/ztq1.mob: 0 objects, a script
+2026-10-08 15:00:22 info  Map Editor: terrain /mnt/ssd-datastore0/repositories/github/Kyr4l/ei-universal-mod/resources/universal-mod/mpr/zonetest.mpr: zonetest, 7 x 7 sectors

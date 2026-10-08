@@ -432,54 +432,6 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Read the same file again, after editing it elsewhere");
     if (!lib.dbLoaded && !lib.dbError.empty()) Note(lib.dbError);
 
-    ImGui::SeparatorText("Layout");
-    if (ImGui::Checkbox("3D Viewer: item list on the right of the view", &lib.viewerSidebarRight)) lib.SaveConfig();
-    if (ImGui::Checkbox("Map Editor: panel on the right of the view", &lib.mapSidebarRight)) lib.SaveConfig();
-
-    if (ImGui::SliderFloat("Map Editor: light, particle and sound opacity", &lib.markerOpacity, 0.0f, 1.0f, "%.2f")) {
-        lib.markerOpacity = std::min(std::max(lib.markerOpacity, 0.0f), 1.0f);
-        lib.SaveConfig();
-    }
-
-    ImGui::SeparatorText("Log");
-    ImGui::TextDisabled("%s", umlog::FilePath().c_str());
-    if (ImGui::Button("Show the log window")) lib.logWindow = true;
-    ImGui::SameLine();
-    if (ImGui::Checkbox("Also print it to the console", &lib.logVerbose)) { umlog::SetVerbose(lib.logVerbose); lib.SaveConfig(); }
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("What failed (file dialogs, files that cannot be read, saves) and what was done; gui --verbose turns this on from the command line"));
-
-    ImGui::SeparatorText("Background");
-    {
-        // A picture behind the menus: for every tab, or per main tab (which wins).
-        static const char* const labels[7] = {"All tabs", "File Processing", "3D Viewer", "Map Editor", "Settings", "UM DLL Connector", "Texture Editor"};
-        for (int i = 0; i < 7; ++i) {
-            std::string& path = i == 0 ? lib.background : lib.tabBackground[i - 1];
-            ImGui::PushID(i);
-            ImGui::AlignTextToFramePadding();
-            ImGui::TextUnformatted(labels[i]);
-            ImGui::SameLine(140);
-            char buf[1024];
-            std::snprintf(buf, sizeof(buf), "%s", path.c_str());
-            ImGui::SetNextItemWidth(-110);
-            if (ImGui::InputTextWithHint("##bg", i == 0 ? "none" : "the one for all tabs", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
-                path = buf;
-                lib.SaveConfig();
-            }
-            ImGui::SameLine();
-            std::string picked;
-            if (ImGui::Button("File...") && PickFile(picked)) { path = picked; lib.SaveConfig(); }
-            ImGui::SameLine();
-            ImGui::BeginDisabled(path.empty());
-            if (ImGui::Button("X")) { path.clear(); lib.SaveConfig(); }
-            ImGui::EndDisabled();
-            ImGui::PopID();
-        }
-        ImGui::SetNextItemWidth(200);
-        if (ImGui::SliderFloat("Opacity##bg", &lib.backgroundOpacity, 0.0f, 1.0f, "%.2f")) lib.backgroundOpacity = std::min(std::max(lib.backgroundOpacity, 0.0f), 1.0f);
-        if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("How much the picture shows over the plain background (any picture: .jpg, .png, .bmp, .tga, .gif, .dds, .mmp...)");
-    }
-
     ImGui::Spacing();
     ImGui::SeparatorText("Found");
     ImGui::Text("%zu figures, %zu textures", lib.figureIndex.baseNames.size(), lib.textureIndex.names.size());
@@ -501,7 +453,7 @@ inline void SourcesTab(Library& lib, SourcesState& st) {
     }
 }
 
-// The Settings tab's right column: problem alerts, the Map Editor's mouse buttons and keys.
+// Language, problem alerts and the mouse buttons (Settings > General).
 inline void ControlsPanel(Library& lib, SourcesState& st) {
     ImGui::SeparatorText("Language");
     {
@@ -555,25 +507,134 @@ inline void ControlsPanel(Library& lib, SourcesState& st) {
         if (lib.mapMouseOrbit == lib.mapMousePan) Note("Orbit and drag use the same button: that button orbits.");
         Hint("The left button selects: click, Shift+click to add or remove, drag for a rectangle.");
     }
+
+}
+
+// General: layout, log, background.
+inline void GeneralPanel(Library& lib, SourcesState& st) {
+    (void)st;
+    ImGui::SeparatorText("Layout");
+    if (ImGui::Checkbox("3D Viewer: item list on the right of the view", &lib.viewerSidebarRight)) lib.SaveConfig();
+    if (ImGui::Checkbox("Map Editor: panel on the right of the view", &lib.mapSidebarRight)) lib.SaveConfig();
+
+    if (ImGui::SliderFloat("Map Editor: light, particle and sound opacity", &lib.markerOpacity, 0.0f, 1.0f, "%.2f")) {
+        lib.markerOpacity = std::min(std::max(lib.markerOpacity, 0.0f), 1.0f);
+        lib.SaveConfig();
+    }
+
+    ImGui::SeparatorText("Log");
+    ImGui::TextDisabled("%s", umlog::FilePath().c_str());
+    if (ImGui::Button("Show the log window")) lib.logWindow = true;
+    ImGui::SameLine();
+    if (ImGui::Checkbox("Also print it to the console", &lib.logVerbose)) { umlog::SetVerbose(lib.logVerbose); lib.SaveConfig(); }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("What failed (file dialogs, files that cannot be read, saves) and what was done; gui --verbose turns this on from the command line"));
+
+    ImGui::SeparatorText("Background");
+    {
+        // A picture behind the menus: for every tab, or per main tab (which wins).
+        static const char* const labels[7] = {"All tabs", "File Processing", "3D Viewer", "Map Editor", "Settings", "UM DLL Connector", "Texture Editor"};
+        for (int i = 0; i < 7; ++i) {
+            std::string& path = i == 0 ? lib.background : lib.tabBackground[i - 1];
+            ImGui::PushID(i);
+            ImGui::AlignTextToFramePadding();
+            ImGui::TextUnformatted(labels[i]);
+            ImGui::SameLine(140);
+            char buf[1024];
+            std::snprintf(buf, sizeof(buf), "%s", path.c_str());
+            ImGui::SetNextItemWidth(-110);
+            if (ImGui::InputTextWithHint("##bg", i == 0 ? "none" : "the one for all tabs", buf, sizeof(buf), ImGuiInputTextFlags_EnterReturnsTrue)) {
+                path = buf;
+                lib.SaveConfig();
+            }
+            ImGui::SameLine();
+            std::string picked;
+            if (ImGui::Button("File...") && PickFile(picked)) { path = picked; lib.SaveConfig(); }
+            ImGui::SameLine();
+            ImGui::BeginDisabled(path.empty());
+            if (ImGui::Button("X")) { path.clear(); lib.SaveConfig(); }
+            ImGui::EndDisabled();
+            ImGui::PopID();
+        }
+        ImGui::SetNextItemWidth(200);
+        if (ImGui::SliderFloat("Opacity##bg", &lib.backgroundOpacity, 0.0f, 1.0f, "%.2f")) lib.backgroundOpacity = std::min(std::max(lib.backgroundOpacity, 0.0f), 1.0f);
+        if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("How much the picture shows over the plain background (any picture: .jpg, .png, .bmp, .tga, .gif, .dds, .mmp...)");
+    }
+
+}
+
+// Performance: for weak PCs (software OpenGL, old Windows): less work per frame, and a cap on the frames.
+inline void PerformancePanel(Library& lib) {
+    ImGui::TextWrapped("For slow PCs. The options at the top cut the work of every frame (more frames per second); the ones below cap the frames (less CPU and GPU time).");
+    ImGui::Spacing();
+    ImGui::SeparatorText("Less work per frame");
+    if (ImGui::Checkbox("Map Editor: low detail", &lib.mapLowDetail)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("No shadows, no lighting, units in the plain figure and the T-pose (no dressing, no posing):\nthe terrain is drawn once instead of twice and every unit is one model.");
+    ImGui::SetNextItemWidth(220);
+    if (ImGui::SliderFloat("Map Editor: object draw distance", &lib.mapDrawDistance, 0.0f, 400.0f, lib.mapDrawDistance <= 0 ? "all objects" : "%.0f units")) lib.mapDrawDistance = std::max(lib.mapDrawDistance, 0.0f);
+    if (ImGui::IsItemDeactivatedAfterEdit()) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Objects and units farther than this from the camera's target are not drawn (0: all of them). Big maps hold thousands.");
+    if (ImGui::Checkbox("Anti-aliased UI", &lib.uiAntialias)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Off: lines and rounded shapes are drawn plain (fewer vertices)");
+    ImGui::BulletText("The DB editor draws only the columns in view; narrow the window or scroll sideways rather than widening it.");
+    ImGui::BulletText("3D Viewer: a smaller window = fewer pixels; the Lighting and Textured switches of each view cut work too.");
+    ImGui::Spacing();
+    ImGui::SeparatorText("Frames");
+    bool capped = lib.frameRateLimit > 0;
+    if (ImGui::Checkbox("Cap the frame rate", &capped)) { lib.frameRateLimit = capped ? std::min(60, lib.displayRefresh) : 0; lib.SaveConfig(); }
+    if (capped) {
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(110);
+        int cap = lib.frameRateLimit;
+        if (ImGui::InputInt("per second", &cap)) lib.frameRateLimit = std::clamp(cap, 25, std::max(25, lib.displayRefresh));
+        if (ImGui::IsItemDeactivatedAfterEdit()) { lib.frameRateLimit = std::clamp(lib.frameRateLimit, 25, std::max(25, lib.displayRefresh)); lib.SaveConfig(); }
+        ImGui::SameLine();
+        ImGui::TextDisabled("(25 to %d, the display's rate)", lib.displayRefresh);
+    }
+    if (ImGui::Checkbox("Wait for the display (vsync)", &lib.vsync)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("On: a frame per display refresh at most, no tearing. Off: the cap alone paces the frames (try off with a cap on a slow GPU driver).");
+    if (ImGui::Checkbox("Rest while nothing happens (25 frames per second)", &lib.idleRedraw)) lib.SaveConfig();
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Half a second after the last mouse or key activity, until the next one; jobs, loads and animations keep the full rate.");
+}
+
+// Map Editor keys.
+inline void KeysPanel(Library& lib, SourcesState& st) {
     ImGui::Spacing();
     ImGui::SeparatorText("Map Editor keys");
     Hint("By key position: the defaults are the US layout's, shown with your layout's letters.");
     KeyBindings(lib, st);
-
 }
 
-// The whole Settings tab: sources and options on the left, mouse and keys on the right, each column
-// scrolling on its own.
+// The whole Settings tab: General / Sources / Performance / Keys.
 inline void SettingsTab(Library& lib, SourcesState& st) {
-    const float gap = ImGui::GetStyle().ItemSpacing.x;
-    const float half = (ImGui::GetContentRegionAvail().x - gap) * 0.5f;
-    ImGui::BeginChild("##settingsLeft", ImVec2(half, 0));
-    SourcesTab(lib, st);
-    ImGui::EndChild();
-    ImGui::SameLine();
-    ImGui::BeginChild("##settingsRight", ImVec2(0, 0));
-    ControlsPanel(lib, st);
-    ImGui::EndChild();
+    if (!ImGui::BeginTabBar("##settingsTabs")) return;
+    if (ImGui::BeginTabItem("General")) {
+        ImGui::BeginChild("##settingsGeneral");
+        ControlsPanel(lib, st);
+        ImGui::Spacing();
+        GeneralPanel(lib, st);
+        ImGui::EndChild();
+        ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Sources")) {
+        ImGui::BeginChild("##settingsSources");
+        SourcesTab(lib, st);
+        ImGui::EndChild();
+        ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Performance")) {
+        ImGui::BeginChild("##settingsPerf");
+        PerformancePanel(lib);
+        ImGui::EndChild();
+        ImGui::EndTabItem();
+    }
+    if (ImGui::BeginTabItem("Keys")) {
+        ImGui::BeginChild("##settingsKeys");
+        KeysPanel(lib, st);
+        ImGui::EndChild();
+        ImGui::EndTabItem();
+    }
+    ImGui::EndTabBar();
 }
 
 } // namespace ui

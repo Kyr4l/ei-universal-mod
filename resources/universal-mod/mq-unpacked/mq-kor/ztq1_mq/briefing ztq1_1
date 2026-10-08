@@ -1,0 +1,10 @@
+[Test] Unit test ground
+#show Hero
+#show Marshal
+#CAMERA 11
+#phrase Marshal  1
+There is a place where one of every creature of the four allods stands still. Go and look at them as long as you like.
+#phrase Hero  2
+And what do I bring back?
+#phrase Marshal  3
+Nothing. Nobody has ever counted them all. Leave by any side when you are done.

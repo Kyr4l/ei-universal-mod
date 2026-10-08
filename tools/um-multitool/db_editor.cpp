@@ -623,9 +623,10 @@ void SheetTable(float height) {
             ImGui::Text("%d", row);
             if (i == scrollIndex && g.selCol < kFirstCol) ImGui::SetScrollHereY(0.5f);
             for (int c = kFirstCol; c <= lastCol; ++c) {
-                ImGui::TableSetColumnIndex(1 + c - kFirstCol);
-                ImGui::PushID(c);
                 const bool selected = row == g.selRow && c == g.selCol;
+                // A column scrolled out of view draws nothing (wide sheets: hundreds of cells per row otherwise)
+                if (!ImGui::TableSetColumnIndex(1 + c - kFirstCol) && !(selected && g.editing)) continue;
+                ImGui::PushID(c);
                 auto ci = cellIssue.find({row, c});
                 if (ci != cellIssue.end())
                     ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg, ImGui::GetColorU32(ci->second == 0 ? ImVec4(0.75f, 0.18f, 0.15f, 0.8f)

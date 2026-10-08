@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <cstring>
+#include <fstream>
 #include <map>
 #include <string>
 #include <vector>
@@ -41,6 +42,18 @@ struct Terrain {
         const int id = MaterialId(material);
         tiles[static_cast<size_t>(tile)] = {static_cast<int16_t>(id), -1, 0};
         materials[static_cast<size_t>(id)].baseTiles.push_back(tile);
+    }
+    // Adds a transition tile from `a` to `b`: `pattern` = the corners showing b at rotation 0 (bits 0 NW, 1 NE, 2 SW, 3 SE).
+    void AddBlend(int tile, const std::string& a, const std::string& b, int pattern) {
+        if (tile < 0 || pattern < 0) return;
+        if (tile >= static_cast<int>(tiles.size())) tiles.resize(static_cast<size_t>(tile) + 1);
+        const int ia = MaterialId(a), ib = MaterialId(b);
+        tiles[static_cast<size_t>(tile)] = {static_cast<int16_t>(ia), static_cast<int16_t>(ib), static_cast<int8_t>(pattern)};
+        blendTiles.push_back(tile);
+    }
+    int FindMaterial(const std::string& name) const {
+        for (size_t i = 0; i < materials.size(); ++i) if (materials[i].name == name) return static_cast<int>(i);
+        return -1;
     }
 };
 
@@ -77,6 +90,40 @@ inline Terrain* Lookup(const std::string& terrainName) {
         break;
     }
     return t.tiles.empty() ? nullptr : &t;
+}
+
+// The table of a terrain the vanilla data does not know (a custom one), empty until a sidecar fills it.
+inline Terrain& Create(const std::string& terrainName) {
+    static std::map<std::string, Terrain> own;
+    std::string key = terrainName;
+    for (char& c : key) c = static_cast<char>(tolower(static_cast<unsigned char>(c)));
+    Terrain& t = own[key];
+    t.name = key;
+    return t;
+}
+
+// The sidecar of a terrain's BORROWED tiles (<folder>/<terrain>-materials.tsv, written by the Map Editor when it
+// copies another allod's material into free tiles): one line per tile, "tile<TAB>a<TAB>b<TAB>pattern" (b empty
+// for a plain tile). Merged into the table so the next session still knows what those tiles are made of.
+inline int LoadSidecar(Terrain& t, const std::string& path) {
+    std::ifstream in(path);
+    int n = 0;
+    std::string line;
+    while (std::getline(in, line)) {
+        if (line.empty() || line[0] == '#') continue;
+        std::vector<std::string> f;
+        size_t at = 0;
+        while (true) { const size_t tab = line.find('\t', at); f.push_back(line.substr(at, tab == std::string::npos ? std::string::npos : tab - at)); if (tab == std::string::npos) break; at = tab + 1; }
+        if (f.size() < 4) continue;
+        const int tile = std::atoi(f[0].c_str());
+        if (f[2].empty()) t.AddBase(tile, f[1]); else t.AddBlend(tile, f[1], f[2], std::atoi(f[3].c_str()));
+        ++n;
+    }
+    return n;
+}
+inline void AppendSidecar(const std::string& path, int tile, const std::string& a, const std::string& b, int pattern) {
+    std::ofstream out(path, std::ios::app);
+    out << tile << '\t' << a << '\t' << b << '\t' << pattern << '\n';
 }
 
 // Every terrain the table knows (for borrowing another allod's materials).

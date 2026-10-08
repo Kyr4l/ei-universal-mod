@@ -162,6 +162,12 @@ struct App {
     bool materialBrush = false;       // Tile paint by material: the transitions chosen by themselves (tile_materials.hpp)
     int brushMaterialId = -1, materialSeed = 1;
     bool autoBlendSameKind = false;   // "Blend the hard edges": also between two kinds of one ground (grass/dark - grass/common)
+    int paintTabWanted = -1;          // Tile paint: select the Grounds (0) or Tiles (1) tab at the next frame
+    int materialRadius = 1;           // the ground brush: cells around the mouse (1 = one cell; F + mouse)
+    char materialSearch[64] = "";     // the grounds' search box
+    std::map<std::string, GLuint> borrowThumbs; // "<terrain>/<tile>" -> a thumbnail of another allod's tile (0 = not readable)
+    std::string borrowMessage;
+    std::set<std::string> sidecarLoaded; // terrains whose borrowed-materials sidecar was merged this session
     std::string materialMessage;
     int quickTiles[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
     std::set<int> terrainEditedSectors;
@@ -265,6 +271,7 @@ struct App {
 
     // Diplomacy tab
     bool dipSymmetric = true;
+    int dipSelected = -1;             // Diplomacy: the selected group (its units are marked in the view)
 
     // Object parameters: apply an edit to every selected object (else the one shown)
     bool editAll = true;
@@ -385,6 +392,12 @@ struct App {
     int newTerrainSize[2] = {4, 4};
     float newTerrainHeight = 10.0f;
     bool newTerrainOwnTextures = false;
+    // the picture's tweaks (#106): levels, gamma, blur, invert, the lowest height
+    bool newTerrainInvert = false;
+    float newTerrainBlack = 0.0f, newTerrainWhite = 1.0f, newTerrainGamma = 1.0f, newTerrainBase = 0.0f;
+    int newTerrainBlur = 0;
+    GLuint newTerrainPreviewTex = 0;
+    std::string newTerrainPreviewKey;
     char newTerrainImage[512] = "";   // New terrain: heights from a picture (its brightness: black = 0, white = Ground height)
     bool cropOpen = false;            // Tools > Crop terrain
     int cropRect[4] = {0, 0, 4, 4};   // x, y, width, height in sectors
@@ -3970,8 +3983,17 @@ static void DiplomacyTab(App& app) {
     ImGui::SameLine();
     ImGui::TextColored(ImVec4(0.9f, 0.3f, 0.25f, 1), "enemy");
     ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-    ImGui::TextWrapped("Click a cell: next value; right-click: previous. A row is a group, its cells its attitude towards the column's group.");
+    ImGui::TextWrapped("Click a number or a cell: selects that group (its units are marked in the view). Double-click a cell: next value; right-click: previous. A row is a group, its cells its attitude towards the column's group.");
     ImGui::PopStyleColor();
+    if (app.dipSelected >= 0) {
+        int count = 0;
+        for (const mob::Object& o : f.objects) if (o.kind == mob::Kind::Unit && o.player == app.dipSelected) ++count;
+        ImGui::Text("Selected: group %d", app.dipSelected);
+        ImGui::SameLine();
+        ImGui::TextDisabled("(%d unit%s of this map; marked in the view)", count, count == 1 ? "" : "s");
+        ImGui::SameLine();
+        if (ImGui::SmallButton("Clear")) app.dipSelected = -1;
+    }
     const float cell = std::max(10.0f, std::min(22.0f, (ImGui::GetContentRegionAvail().x - 30.0f) / 32.0f));
     ImDrawList* draw = ImGui::GetWindowDrawList();
     ImVec2 origin = ImGui::GetCursorScreenPos();
@@ -3979,10 +4001,12 @@ static void DiplomacyTab(App& app) {
     ImGui::InvisibleButton("##dipgrid", ImVec2(head + cell * 32, head + cell * 32), ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
     const bool hovered = ImGui::IsItemHovered();
     ImVec2 mouse = ImGui::GetIO().MousePos;
-    int hr = -1, hc = -1;
+    int hr = -1, hc = -1, headRow = -1, headCol = -1; // the cell under the mouse, or the row / column number under it
     if (hovered) {
         int c = static_cast<int>((mouse.x - origin.x - head) / cell), r = static_cast<int>((mouse.y - origin.y - head) / cell);
         if (c >= 0 && c < 32 && r >= 0 && r < 32 && mouse.x >= origin.x + head && mouse.y >= origin.y + head) { hr = r; hc = c; }
+        else if (mouse.x < origin.x + head && r >= 0 && r < 32 && mouse.y >= origin.y + head) headRow = r;
+        else if (mouse.y < origin.y + head && c >= 0 && c < 32 && mouse.x >= origin.x + head) headCol = c;
     }
     auto name = [&](int i) {
         return i < static_cast<int>(f.diplomacyNames.size()) && !f.diplomacyNames[i].empty() ? mob::Utf8(f.diplomacyNames[i]) : "group " + std::to_string(i);
@@ -3990,7 +4014,7 @@ static void DiplomacyTab(App& app) {
     for (int i = 0; i < 32; ++i) {
         char n[8];
         std::snprintf(n, sizeof(n), "%d", i);
-        ImU32 col = (i == hr || i == hc) ? IM_COL32(255, 225, 130, 255) : IM_COL32(170, 170, 175, 255);
+        ImU32 col = i == app.dipSelected ? IM_COL32(255, 120, 255, 255) : (i == hr || i == hc || i == headRow || i == headCol) ? IM_COL32(255, 225, 130, 255) : IM_COL32(170, 170, 175, 255);
         // Column numbers: every other one when two digits do not fit a cell.
         if (i < 10 || ImGui::CalcTextSize(n).x + 2 <= cell || i % 2 == 0) draw->AddText(ImVec2(origin.x + head + i * cell + 1, origin.y + 6), col, n);
         draw->AddText(ImVec2(origin.x + 2, origin.y + head + i * cell + (cell - ImGui::GetFontSize()) * 0.5f), col, n);
@@ -4004,12 +4028,20 @@ static void DiplomacyTab(App& app) {
             draw->AddRectFilled(a, ImVec2(a.x + cell - 1, a.y + cell - 1), col);
             if (r == hr && c == hc) draw->AddRect(a, ImVec2(a.x + cell - 1, a.y + cell - 1), IM_COL32(255, 255, 255, 255));
         }
+    if (app.dipSelected >= 0) { // the selected group's row and column
+        const float g = app.dipSelected * cell;
+        draw->AddRect(ImVec2(origin.x + head - 1, origin.y + head + g - 1), ImVec2(origin.x + head + cell * 32, origin.y + head + g + cell), IM_COL32(255, 120, 255, 220), 0, 0, 2.0f);
+        draw->AddRect(ImVec2(origin.x + head + g - 1, origin.y + head - 1), ImVec2(origin.x + head + g + cell, origin.y + head + cell * 32), IM_COL32(255, 120, 255, 220), 0, 0, 2.0f);
+    }
+    if ((headRow >= 0 || headCol >= 0) && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) app.dipSelected = headRow >= 0 ? headRow : headCol;
+    if (headRow >= 0 || headCol >= 0) ImGui::SetTooltip("%s: click to select the group", name(headRow >= 0 ? headRow : headCol).c_str());
     if (hr >= 0) {
         static const char* values[] = {"friend", "neutral", "enemy"};
         const int v = f.diplomacy[static_cast<size_t>(hr) * 32 + hc];
         ImGui::SetTooltip("%s -> %s: %s%s", name(hr).c_str(), name(hc).c_str(), v >= 0 && v <= 2 ? values[v] : std::to_string(v).c_str(),
                           hr == hc ? " (a group with itself: not editable)" : "");
-        const bool left = ImGui::IsMouseClicked(ImGuiMouseButton_Left), right = ImGui::IsMouseClicked(ImGuiMouseButton_Right);
+        if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) app.dipSelected = hr; // a click selects the row's group
+        const bool left = ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left), right = ImGui::IsMouseClicked(ImGuiMouseButton_Right);
         if ((left || right) && hr != hc) {
             EditStep step;
             step.kind = EditStep::Diplomacy;
@@ -4266,30 +4298,35 @@ static void PushTerrainHeaderUndo(App& app) {
     PushUndo(app, std::move(step), "Terrain parameters");
 }
 
-// Paints a material on the cell at (x, y): the cell becomes a plain tile of it and the eight cells around it get
-// the transition tiles their corners now need (tile_materials.hpp). Cells whose corners the textures cannot show
-// (three grounds meeting, a tile of unknown make-up) are left as they are.
+// Paints a material around (x, y): the cells within the brush's radius become plain tiles of it and the cells
+// around them get the transition tiles their corners then need (tile_materials.hpp). Cells whose corners the
+// textures cannot show (three grounds meeting, a tile of unknown make-up) are left as they are.
 static void PaintMaterialAt(App& app, float x, float y) {
     mpr::Map& m = app.terrain;
     tilemat::Terrain* tm = tilemat::Lookup(m.name);
     int si, row, col;
     if (!tm || app.brushMaterialId < 0 || !TileAt(m, x, y, si, row, col)) return;
-    const int gx = (si % m.sectorsX) * 16 + col, gy = (si / m.sectorsX) * 16 + row; // the cell in the whole map
+    const int gx = (si % m.sectorsX) * 16 + col, gy = (si / m.sectorsX) * 16 + row; // the cell under the mouse
+    const int W = m.sectorsX * 16, H = m.sectorsY * 16, R = std::clamp(app.materialRadius, 1, 16) - 1;
+    auto painted = [&](int cx, int cy) { const int dx = cx - gx, dy = cy - gy; return dx * dx + dy * dy <= R * R + R; }; // a disc of cells
+    auto vertexPainted = [&](int vx, int vy) { // a vertex takes the brush's material when a painted cell touches it
+        for (int dy = -1; dy <= 0; ++dy) for (int dx = -1; dx <= 0; ++dx) if (painted(vx + dx, vy + dy)) return true;
+        return false;
+    };
     bool failed = false;
-    for (int dy = -1; dy <= 1; ++dy)
-        for (int dx = -1; dx <= 1; ++dx) {
-            const int cx = gx + dx, cy = gy + dy;
-            if (cx < 0 || cy < 0 || cx >= m.sectorsX * 16 || cy >= m.sectorsY * 16) continue;
+    for (int cy = gy - R - 1; cy <= gy + R + 1; ++cy)
+        for (int cx = gx - R - 1; cx <= gx + R + 1; ++cx) {
+            if (cx < 0 || cy < 0 || cx >= W || cy >= H) continue;
             const int s2 = (cy / 16) * m.sectorsX + cx / 16, r2 = cy % 16, c2 = cx % 16;
             mpr::Sector& s = m.sectors[static_cast<size_t>(s2)];
             if (!s.present) continue;
             int corners[4];
             tilemat::Corners(*tm, s.landTiles[r2][c2], corners);
-            // corner k of the cell is the vertex (cx + (k & 1), cy + (k < 2)); the painted cell's four vertices take the material
-            for (int k = 0; k < 4; ++k) {
-                const int vx = cx + (k & 1), vy = cy + (k < 2 ? 1 : 0);
-                if (vx >= gx && vx <= gx + 1 && vy >= gy && vy <= gy + 1) corners[k] = app.brushMaterialId;
-            }
+            // corner k of the cell is the vertex (cx + (k & 1), cy + (k < 2))
+            bool touches = false;
+            for (int k = 0; k < 4; ++k)
+                if (vertexPainted(cx + (k & 1), cy + (k < 2 ? 1 : 0))) { corners[k] = app.brushMaterialId; touches = true; }
+            if (!touches) continue;
             int tile, rot;
             if (!tilemat::Solve(*tm, corners, tilemat::Hash(static_cast<uint32_t>(cx), static_cast<uint32_t>(cy), static_cast<uint32_t>(app.materialSeed)), tile, rot)) {
                 failed = true;
@@ -4448,8 +4485,15 @@ static bool HeightBrushInput(App& app, ImVec2 local) {
 
 // Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile.
 static void HeightBrushKeys(App& app) { // F: radius, Shift+F: strength (while held, moving the mouse sideways)
-    if (!app.heightBrush || ImGui::GetIO().WantTextInput || !ImGui::IsKeyDown(ImGuiKey_F)) return;
+    static float groundRadius = 1.0f; // the ground brush's radius, in cells, before rounding
+    if (ImGui::GetIO().WantTextInput || !ImGui::IsKeyDown(ImGuiKey_F)) { groundRadius = static_cast<float>(app.materialRadius); return; }
     const float dx = ImGui::GetIO().MouseDelta.x;
+    if (app.tileBrush && app.materialBrush && !app.brushWater) {
+        groundRadius = std::clamp(groundRadius * std::pow(1.02f, dx), 1.0f, 16.0f);
+        app.materialRadius = static_cast<int>(std::lround(groundRadius));
+        return;
+    }
+    if (!app.heightBrush) return;
     if (ImGui::GetIO().KeyShift) app.heightStrength = std::clamp(app.heightStrength * std::pow(1.01f, dx), 0.2f, 20.0f);
     else app.heightRadius = std::clamp(app.heightRadius * std::pow(1.01f, dx), 1.0f, 32.0f);
 }
@@ -4468,6 +4512,18 @@ static void TerrainBrushOutline(App& app, ImDrawList* draw, ImVec2 min, ImVec2 s
     int si, row, col;
     if (!TileAt(app.terrain, app.ground.x, app.ground.y, si, row, col)) return;
     const float x0 = (si % app.terrain.sectorsX) * 32.0f + col * 2.0f, y0 = (si / app.terrain.sectorsX) * 32.0f + row * 2.0f;
+    if (app.materialBrush && !app.brushWater && app.materialRadius > 1) { // the ground brush's disc of cells
+        ImVec2 pts[48];
+        int n = 0;
+        const float r = (app.materialRadius - 0.5f) * 2.0f;
+        for (int i = 0; i < 48; ++i) {
+            const float a2 = i * 6.2831853f / 48, x = x0 + 1.0f + std::cos(a2) * r, y = y0 + 1.0f + std::sin(a2) * r;
+            float fx, fy;
+            if (app.scene.Project({x, y, app.scene.Ground(x, y) + 0.05f}, fx, fy)) pts[n++] = ImVec2(min.x + fx * size.x, min.y + fy * size.y);
+        }
+        if (n > 2) draw->AddPolyline(pts, n, IM_COL32(255, 230, 120, 255), ImDrawFlags_Closed, 2.0f);
+        return;
+    }
     ImVec2 pts[4];
     const float cx[4] = {0, 2, 2, 0}, cy[4] = {0, 0, 2, 2};
     for (int i = 0; i < 4; ++i) {
@@ -4536,6 +4592,8 @@ static void MarkUsedTiles(const mpr::Map& m, std::vector<bool>& used) {
     for (const auto& a : m.animTiles) for (int k = 0; k < a.second; ++k) if (a.first + k < static_cast<int>(used.size())) used[static_cast<size_t>(a.first + k)] = true;
 }
 
+static const std::string& BlendFolder(App& app);
+
 // Tile painting > Blend two tiles: the brush's tile (A) fading into tile B through a soft, slightly noisy mask,
 // written into a free tile of the terrain's textures (in the texture source they come from), then painted with.
 static void BlendPanel(App& app) {
@@ -4570,10 +4628,8 @@ static void BlendPanel(App& app) {
                           "(zone6x uses zone6's) may use it.", free.size());
     ImGui::SameLine();
     ImGui::TextDisabled("texture %d, tile %d", app.blendSlot / 64, app.blendSlot % 64);
-    if (app.blendFolder.empty() && !app.terrainPath.empty())
-        app.blendFolder = (std::filesystem::path(app.terrainPath).parent_path() / "blended-textures").string();
     char folder[512];
-    std::snprintf(folder, sizeof folder, "%s", app.blendFolder.c_str());
+    std::snprintf(folder, sizeof folder, "%s", BlendFolder(app).c_str());
     ImGui::SetNextItemWidth(-1);
     if (ImGui::InputText("##blendfolder", folder, sizeof folder)) app.blendFolder = folder;
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("The output folder of the blended textures (loose .mmp files)");
@@ -4635,12 +4691,10 @@ static void BlendPanel(App& app) {
 // The Sculpt mode's tools (the Terrain tab and the tool shelf).
 static void SculptPanel(App& app, bool inShelf = false) {
     ImGui::SeparatorText("Sculpt");
-    if (!inShelf) { // the shelf is only shown in the mode: the mode selector switches it
-        if (ImGui::Checkbox("Shape the ground in the view", &app.heightBrush) && app.heightBrush) app.tileBrush = false;
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Left drag on the ground (one undo step per stroke). Objects can't be selected meanwhile.\n"
-                                                      "After shaping, rebuild the navmesh (Tools) so units walk the new ground.");
-    }
-    if (app.heightBrush) {
+    if (!inShelf && !app.heightBrush)
+        ImGui::TextDisabled("Choose Sculpt in the mode selector above the view to shape the ground (left drag; %s shows these tools in the view).",
+                            ui::BindName(app.lib.mapKeys[config::kKeyToolShelf]).c_str());
+    {
         static const char* const kModes[] = {"Raise", "Lower", "Smooth", "Flatten"};
         for (int i = 0; i < 4; ++i) { if (i) ImGui::SameLine(); ImGui::RadioButton(kModes[i], &app.heightMode, i); }
         ImGui::SetNextItemWidth(160);
@@ -4653,100 +4707,314 @@ static void SculptPanel(App& app, bool inShelf = false) {
 
 }
 
-// The Tile paint mode's tools: ground or tile, the brush, the quick tiles, the blend tool, the palette.
-static void TilePanel(App& app, bool inShelf = false) {
+// The output folder of textures the editor writes (blended and borrowed tiles): loose .mmp files beside the
+// terrain, never an archive (the game's own textures.res!); pack them into the mod's textures archive for the game.
+static const std::string& BlendFolder(App& app) {
+    if (app.blendFolder.empty() && !app.terrainPath.empty())
+        app.blendFolder = (std::filesystem::path(app.terrainPath).parent_path() / "blended-textures").string();
+    return app.blendFolder;
+}
+
+static std::string TexName(const std::string& terrain, int index) { // the game's atlas names: <terrain>000 .. 255
+    char buf[16];
+    std::snprintf(buf, sizeof buf, "%03d", index);
+    return terrain + buf;
+}
+
+static int GuessTileType(const std::string& material) { // kTileTypeNames: the footsteps / walking kind of a borrowed tile
+    const std::string kind = material.substr(0, material.find('/'));
+    if (kind == "grass") return 0;
+    if (kind == "ground") return 1;
+    if (kind == "stone" || kind == "paving" || kind == "slabs") return 2;
+    if (kind == "sand") return 3;
+    if (kind == "rock" || kind == "rubble") return 4;
+    if (kind == "water") return 6;
+    if (kind == "snow") return 9;
+    if (kind == "ice") return 10;
+    if (kind == "lava") return 13;
+    if (kind == "swamp") return 14;
+    return 8;
+}
+
+// A thumbnail of a tile of ANOTHER terrain's textures (decoded once, kept for the session; 0 when not readable).
+static GLuint BorrowThumb(App& app, const std::string& terrain, int tile) {
+    const std::string key = terrain + "/" + std::to_string(tile);
+    auto it = app.borrowThumbs.find(key);
+    if (it != app.borrowThumbs.end()) return it->second;
+    GLuint id = 0;
+    std::vector<uint8_t> bytes;
+    mmp::Image image;
+    std::string err;
+    if (app.lib.textures.ReadTexture(TexName(terrain, tile / 64), bytes) && mmp::Decode(bytes, image, err) && image.width >= 8 && image.width == image.height) {
+        const int cell = static_cast<int>(image.width) / 8, t = tile % 64, cx = t % 8, cy = 7 - t / 8;
+        std::vector<uint8_t> rgba(static_cast<size_t>(cell) * cell * 4);
+        for (int y = 0; y < cell; ++y)
+            std::memcpy(&rgba[static_cast<size_t>(y) * cell * 4], &image.rgba[(static_cast<size_t>(cy * cell + y) * image.width + static_cast<size_t>(cx * cell)) * 4], static_cast<size_t>(cell) * 4);
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D, id);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, cell, cell, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+    }
+    app.borrowThumbs[key] = id;
+    return id;
+}
+
+// Another allod's ground brought into this terrain: its plain tiles, and its transitions to the grounds this
+// terrain already has, copied into free tiles of this terrain's textures (loose .mmp files in the output folder,
+// as the Blend tool writes them) and listed in <folder>/<terrain>-materials.tsv so the next session knows them.
+static void BorrowMaterial(App& app, const std::string& srcTerrain, int srcMaterial) {
     mpr::Map& m = app.terrain;
-    ImGui::SeparatorText(app.brushWater ? "Water paint" : "Tile paint");
-    if (!inShelf) { // the shelf is only shown in the mode: the mode selector switches it
-        if (ImGui::Checkbox("Paint tiles in the view", &app.tileBrush) && app.tileBrush) app.heightBrush = false;
-        if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("Left drag: paint (one undo step per stroke); Alt+click: pick the tile under the mouse.\n"
-                "Keys 1-8: quick tiles; comma / period: turn the tile. Objects can't be selected meanwhile.");
-        ImGui::SameLine();
+    tilemat::Terrain* src = tilemat::Lookup(srcTerrain);
+    tilemat::Terrain* dst = tilemat::Lookup(m.name);
+    app.borrowMessage.clear();
+    if (!src || !dst || srcMaterial < 0 || srcMaterial >= static_cast<int>(src->materials.size())) { app.borrowMessage = "No material data for these textures"; return; }
+    const std::string name = src->materials[static_cast<size_t>(srcMaterial)].name;
+    const int have = dst->FindMaterial(name);
+    if (have >= 0 && !dst->materials[static_cast<size_t>(have)].baseTiles.empty()) { app.brushMaterialId = have; return; }
+    struct Copy { int srcTile; std::string a, b; int pattern; };
+    std::vector<Copy> copies;
+    const std::vector<int>& bases = src->materials[static_cast<size_t>(srcMaterial)].baseTiles;
+    for (size_t i = 0; i < bases.size() && i < 4; ++i) copies.push_back({bases[i], name, "", 0}); // up to 4 plain variants
+    const size_t baseCount = copies.size();
+    for (int t : src->blendTiles) { // its transitions to grounds this terrain has
+        const tilemat::Terrain::Info& info = src->tiles[static_cast<size_t>(t)];
+        const int other = info.a == srcMaterial ? info.b : info.b == srcMaterial ? info.a : -1;
+        if (other < 0) continue;
+        const std::string otherName = src->materials[static_cast<size_t>(other)].name;
+        const int od = dst->FindMaterial(otherName);
+        if (od < 0 || dst->materials[static_cast<size_t>(od)].baseTiles.empty()) continue;
+        copies.push_back({t, src->materials[static_cast<size_t>(info.a)].name, src->materials[static_cast<size_t>(info.b)].name, info.pattern});
     }
-    int layer = app.brushWater ? 1 : 0;
-    ImGui::RadioButton("Land", &layer, 0);
-    ImGui::SameLine();
-    ImGui::RadioButton("Water", &layer, 1);
-    app.brushWater = layer == 1;
-    if (app.brushWater) {
-        ImGui::SetNextItemWidth(-1);
-        const std::string label = app.brushMaterial < 0 ? std::string("no water (removes it from the tile)") : "material " + std::to_string(app.brushMaterial);
-        if (ImGui::BeginCombo("##brushmat", label.c_str())) {
-            if (ImGui::Selectable("no water (removes it from the tile)", app.brushMaterial < 0)) app.brushMaterial = -1;
-            for (size_t i = 0; i < m.materials.size(); ++i) {
-                const mpr::Material& mt = m.materials[i];
-                const std::string l = "material " + std::to_string(i) + (mt.type == 3 ? " (water)" : " (terrain)");
-                if (ImGui::Selectable(l.c_str(), static_cast<int>(i) == app.brushMaterial)) app.brushMaterial = static_cast<int>(i);
-            }
-            ImGui::EndCombo();
+    const std::vector<int> free = FreeTiles(app);
+    if (baseCount > free.size()) { app.borrowMessage = "Needs " + std::to_string(baseCount) + " free tiles for the plain tiles, this terrain has " + std::to_string(free.size()) + ": add a texture first"; return; }
+    std::string trimmed;
+    if (copies.size() > free.size()) { // the transitions that fit (the plain tiles always come)
+        trimmed = " (" + std::to_string(copies.size() - free.size()) + " transition tile(s) left out: only " + std::to_string(free.size()) + " tiles were free)";
+        copies.resize(free.size());
+    }
+    const std::string& folder = BlendFolder(app);
+    if (folder.empty()) { app.borrowMessage = "No output folder"; return; }
+    std::map<int, std::vector<uint8_t>> srcTex, dstTex; // by texture index
+    std::map<int, std::string> dstFound;
+    auto texOf = [&](const std::string& terrain, int tile, std::map<int, std::vector<uint8_t>>& into, std::string* found) -> std::vector<uint8_t>* {
+        const int i = tile / 64;
+        auto it = into.find(i);
+        if (it != into.end()) return &it->second;
+        std::vector<uint8_t> bytes;
+        if (!app.lib.textures.ReadTexture(TexName(terrain, i), bytes, found)) return nullptr;
+        return &(into[i] = std::move(bytes));
+    };
+    std::vector<std::pair<int, Copy>> placed; // free slot, what
+    for (size_t i = 0; i < copies.size(); ++i) {
+        const int slot = free[i];
+        std::string found;
+        std::vector<uint8_t>* ts = texOf(srcTerrain, copies[i].srcTile, srcTex, nullptr);
+        std::vector<uint8_t>* td = texOf(m.name, slot, dstTex, &found);
+        if (!ts || !td) { app.borrowMessage = "The textures of " + (ts ? m.name : srcTerrain) + " were not found in the texture sources"; return; }
+        if (!found.empty()) dstFound[slot / 64] = found;
+        const blend::Texture is = blend::Inspect(*ts), id = blend::Inspect(*td);
+        if (!is.ok || !id.ok || is.width != id.width) { app.borrowMessage = "Only DXT1 terrain textures of one size can be copied (" + srcTerrain + " and " + m.name + " differ)"; return; }
+        blend::WriteTile(*td, id, slot % 64, blend::ReadTile(*ts, is, copies[i].srcTile % 64));
+        placed.push_back({slot, copies[i]});
+    }
+    std::error_code ec;
+    std::filesystem::create_directories(folder, ec);
+    for (auto& kv : dstTex) {
+        auto fn = dstFound.find(kv.first);
+        const std::string out = (std::filesystem::path(folder) / (fn != dstFound.end() ? fn->second : TexName(m.name, kv.first) + ".mmp")).string();
+        std::ofstream f(out, std::ios::binary | std::ios::trunc);
+        f.write(reinterpret_cast<const char*>(kv.second.data()), static_cast<std::streamsize>(kv.second.size()));
+        if (!f) { app.borrowMessage = "Cannot write " + out; return; }
+    }
+    int layer = -1;
+    for (size_t li = 0; li < app.lib.textures.layers.size(); ++li) if (app.lib.textures.layers[li].path == folder) layer = static_cast<int>(li);
+    if (layer < 0) { app.lib.textures.AddLayer(folder); layer = static_cast<int>(app.lib.textures.layers.size()) - 1; }
+    app.lib.textures.ReloadLayer(static_cast<size_t>(layer));
+    app.lib.RebuildTextureIndex();
+    PushTerrainHeaderUndo(app);
+    const std::string sidecar = (std::filesystem::path(folder) / (m.name + "-materials.tsv")).string();
+    for (const auto& pc : placed) {
+        if (pc.second.b.empty()) dst->AddBase(pc.first, pc.second.a); else dst->AddBlend(pc.first, pc.second.a, pc.second.b, pc.second.pattern);
+        tilemat::AppendSidecar(sidecar, pc.first, pc.second.a, pc.second.b, pc.second.pattern);
+        if (pc.first < static_cast<int>(m.tileTypes.size())) m.tileTypes[static_cast<size_t>(pc.first)] = GuessTileType(pc.second.b.empty() ? pc.second.a : pc.second.b);
+    }
+    app.terrainHeaderEdited = true;
+    app.terrainDirty = true; // the textures again
+    app.brushMaterialId = dst->FindMaterial(name);
+    app.borrowMessage = name + " from " + srcTerrain + ": " + std::to_string(placed.size()) + " tile(s) copied into free tiles" + trimmed + ", textures written to " + folder +
+                        " (pack them into the mod's textures archive for the game); save the terrain to keep the tile types";
+    umlog::Write(umlog::Level::Info, "Map Editor: " + app.borrowMessage);
+}
+
+// A new texture (atlas) for the terrain: 64 free tiles, flat grey, the size and format of texture 0, written as a
+// loose .mmp into the output folder; the terrain's header counts it (save the terrain). The game's limit on
+// the number of atlases is NOT known: the vanilla terrains have 8 at most; a terrain with more must be tried in
+// the game before being relied on.
+static void AddTerrainTexture(App& app) {
+    mpr::Map& m = app.terrain;
+    app.borrowMessage.clear();
+    std::vector<uint8_t> t0;
+    std::string found;
+    if (!app.lib.textures.ReadTexture(TexName(m.name, 0), t0, &found)) { app.borrowMessage = "The terrain's textures were not found in the texture sources"; return; }
+    const blend::Texture info = blend::Inspect(t0);
+    if (!info.ok) { app.borrowMessage = "Only DXT1 terrain textures can be copied"; return; }
+    const std::string& folder = BlendFolder(app);
+    if (folder.empty()) { app.borrowMessage = "No output folder"; return; }
+    const int size = info.width / 8;
+    const std::vector<uint8_t> flat(static_cast<size_t>(size) * size * 4, 110);
+    for (int t = 0; t < 64; ++t) blend::WriteTile(t0, info, t, flat);
+    const int index = m.textureCount;
+    const std::string ext = found.size() > 4 ? found.substr(found.size() - 4) : std::string(".mmp");
+    std::error_code ec;
+    std::filesystem::create_directories(folder, ec);
+    const std::string out = (std::filesystem::path(folder) / (TexName(m.name, index) + ext)).string();
+    {
+        std::ofstream f(out, std::ios::binary | std::ios::trunc);
+        f.write(reinterpret_cast<const char*>(t0.data()), static_cast<std::streamsize>(t0.size()));
+        if (!f) { app.borrowMessage = "Cannot write " + out; return; }
+    }
+    int layer = -1;
+    for (size_t li = 0; li < app.lib.textures.layers.size(); ++li) if (app.lib.textures.layers[li].path == folder) layer = static_cast<int>(li);
+    if (layer < 0) { app.lib.textures.AddLayer(folder); layer = static_cast<int>(app.lib.textures.layers.size()) - 1; }
+    app.lib.textures.ReloadLayer(static_cast<size_t>(layer));
+    app.lib.RebuildTextureIndex();
+    PushTerrainHeaderUndo(app);
+    m.textureCount = index + 1;
+    m.tileTypes.resize(static_cast<size_t>(m.textureCount) * 64, 8);
+    app.terrainHeaderEdited = true;
+    app.terrainDirty = true;
+    app.borrowMessage = "Texture " + std::to_string(index) + " added (64 free tiles): " + out + ". Save the terrain to keep it. NOT verified: whether the game "
+                        "accepts more than 8 textures per terrain (no vanilla terrain has more): try the saved terrain in the game first.";
+    umlog::Write(umlog::Level::Info, "Map Editor: " + app.borrowMessage);
+}
+
+static bool MatchesSearch(const std::string& name, const char* search) {
+    if (!*search) return true;
+    std::string a = Lower(name), b = Lower(search);
+    return a.find(b) != std::string::npos;
+}
+
+// The Grounds tab: paint by material (the transitions chosen by themselves), this terrain's grounds and every
+// other allod's, the brush's size, the whole-terrain blend.
+static void GroundsPanel(App& app, tilemat::Terrain& tm) {
+    mpr::Map& m = app.terrain;
+    if (!app.sidecarLoaded.count(app.terrainPath)) { // borrowed tiles of earlier sessions
+        app.sidecarLoaded.insert(app.terrainPath);
+        const std::string& folder = BlendFolder(app);
+        if (!folder.empty()) tilemat::LoadSidecar(tm, (std::filesystem::path(folder) / (m.name + "-materials.tsv")).string());
+    }
+    ImGui::SetNextItemWidth(150);
+    ImGui::SliderInt("Brush", &app.materialRadius, 1, 16, "%d cells");
+    ImGui::SetItemTooltip("The cells painted around the mouse; F + move the mouse sideways changes it in the view");
+    ImGui::SetNextItemWidth(150);
+    ImGui::InputInt("Variation", &app.materialSeed);
+    ImGui::SetItemTooltip("Another value: other plain tiles and transitions picked where several fit");
+    ImGui::SetNextItemWidth(-1);
+    ImGui::InputTextWithHint("##groundsearch", "search a ground (grass, rock, sand...)", app.materialSearch, sizeof app.materialSearch);
+    const float cell = 44.0f;
+    const int perRow = std::max(1, static_cast<int>(ImGui::GetContentRegionAvail().x / (cell + 6)));
+    ImGui::TextDisabled("This terrain's grounds");
+    int shown = 0;
+    for (size_t i = 0; i < tm.materials.size(); ++i) {
+        const tilemat::Material& mat = tm.materials[i];
+        if (mat.baseTiles.empty() || !MatchesSearch(mat.name, app.materialSearch)) continue; // only blended, never plain: cannot be painted
+        if (shown++ % perRow) ImGui::SameLine();
+        ImGui::PushID(static_cast<int>(i));
+        const ImVec2 p = ImGui::GetCursorScreenPos();
+        TileImage(app, mat.baseTiles[0], cell);
+        ImGui::SetCursorScreenPos(p);
+        if (ImGui::InvisibleButton("##mat", ImVec2(cell, cell))) app.brushMaterialId = static_cast<int>(i);
+        if (ImGui::IsItemHovered()) {
+            const bool blends = app.brushMaterialId >= 0 && tilemat::CanBlend(tm, app.brushMaterialId, static_cast<int>(i));
+            ImGui::SetTooltip("%s (%zu plain tiles)%s", mat.name.c_str(), mat.baseTiles.size(), blends || app.brushMaterialId < 0 ? "" : "\nno transition to the chosen ground in these textures");
         }
+        const bool chosen = static_cast<int>(i) == app.brushMaterialId;
+        ImGui::GetWindowDrawList()->AddRect(p, ImVec2(p.x + cell, p.y + cell), chosen ? IM_COL32(255, 220, 120, 255) : IM_COL32(70, 70, 70, 255), 0, 0, chosen ? 3.0f : 1.0f);
+        ImGui::PopID();
     }
-    if (tilemat::Terrain* tm = tilemat::Lookup(m.name)) { // paint by material: the simple way
-        if (ImGui::Checkbox("By material (transitions chosen by themselves)", &app.materialBrush) && app.materialBrush) { app.tileBrush = true; app.heightBrush = false; app.brushWater = false; }
+    if (!shown) ImGui::TextDisabled("(no ground matches)");
+    if (app.brushMaterialId >= 0 && app.brushMaterialId < static_cast<int>(tm.materials.size())) ImGui::Text("Ground: %s", tm.materials[static_cast<size_t>(app.brushMaterialId)].name.c_str());
+    else ImGui::TextDisabled("Pick a ground, then paint in the view");
+        if (ImGui::Button("Blend the hard edges of the whole terrain")) {
+            EditStep step;
+            step.kind = EditStep::Terrain;
+            step.file = app.terrainPath;
+            mpr::Map& map = app.terrain;
+            const tilemat::AutoBlendResult r = tilemat::BlendHardEdges(tm, map, static_cast<uint32_t>(app.materialSeed), app.autoBlendSameKind,
+                                                                       [&](int si) { step.sectors.push_back({si, map.sectors[static_cast<size_t>(si)]}); });
+            if (!step.sectors.empty()) {
+                PushUndo(app, std::move(step), "Blend hard edges");
+                for (int si : r.sectors) app.terrainEditedSectors.insert(si);
+                app.terrainRebuild = true;
+            }
+            char msg[256];
+            std::snprintf(msg, sizeof msg, "Hard edges: %d vertices where two plain grounds meet, %d cells by them: %d changed in %d round(s), %d left (no transition for those grounds, or an unknown tile)",
+                          r.hardVertices, r.cells, r.changed, r.rounds, r.left);
+            app.materialMessage = msg;
+            umlog::Write(umlog::Level::Info, std::string("Map Editor: ") + msg);
+        }
         if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("Pick a ground below and paint: the cell takes a plain tile of it and the cells around it the transition\n"
-                              "tiles the vanilla textures hold for these two grounds (corner, half, inner corner, turned as needed).\n"
-                              "Where three grounds meet, or no transition exists, the cell is left as it is.");
-        if (app.materialBrush) {
-            const float cell = 40.0f;
-            const int perRow = std::max(1, static_cast<int>(ImGui::GetContentRegionAvail().x / (cell + 6)));
-            int shown = 0;
-            for (size_t i = 0; i < tm->materials.size(); ++i) {
-                const tilemat::Material& mat = tm->materials[i];
-                if (mat.baseTiles.empty()) continue; // only blended, never plain: cannot be painted
-                if (shown++ % perRow) ImGui::SameLine();
-                ImGui::PushID(static_cast<int>(i));
+            ImGui::SetTooltip("Everywhere plain tiles of two grounds touch although the textures hold a transition for them (hand-painted\n"
+                              "maps), the cells around get the transition tiles. Cells away from such an edge are not touched; a terrain\n"
+                              "whose transitions are right comes out unchanged. The rarer ground keeps its cells, the band is laid into\n"
+                              "the commoner one. One undo step; rebuild the navmesh after if tile types changed.");
+        ImGui::Checkbox("Hard edges between kinds of one ground too", &app.autoBlendSameKind);
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("Also where two kinds of one ground touch (grass/dark beside grass/common). The vanilla maps lay those\n"
+                              "side by side on purpose, so this re-tiles a lot of a vanilla terrain: off by default.");
+    if (!app.materialMessage.empty()) ImGui::TextWrapped("%s", app.materialMessage.c_str());
+    // Other allods' grounds: copied into free tiles of this terrain's textures on a click.
+    if (ImGui::CollapsingHeader("Other allods' grounds")) {
+        ImGui::TextWrapped("A click copies the ground's tiles (and its transitions to the grounds above) into free tiles of this terrain's "
+                           "textures, written as loose .mmp files into the output folder; %zu tiles are free.", FreeTiles(app).size());
+        char folder[512];
+        std::snprintf(folder, sizeof folder, "%s", BlendFolder(app).c_str());
+        ImGui::SetNextItemWidth(-1);
+        if (ImGui::InputText("##borrowfolder", folder, sizeof folder)) app.blendFolder = folder;
+        ImGui::SetItemTooltip("The output folder of the written textures (never an archive); pack it into the mod's textures archive for the game");
+        if (ImGui::Button("Add a texture (64 free tiles)")) AddTerrainTexture(app);
+        ImGui::SetItemTooltip("A new atlas for this terrain, flat grey, written into the output folder; the header counts it (save the terrain).\n"
+                              "The vanilla terrains have 8 textures at most and most are full: whether the game accepts a 9th is NOT\n"
+                              "verified. Try the saved terrain in the game before painting much with borrowed grounds.");
+        if (!app.borrowMessage.empty()) ImGui::TextWrapped("%s", app.borrowMessage.c_str());
+        for (const std::string& terrain : tilemat::KnownTerrains()) {
+            if (terrain == tm.name) continue;
+            tilemat::Terrain* other = tilemat::Lookup(terrain);
+            if (!other) continue;
+            std::vector<int> offer;
+            for (size_t i = 0; i < other->materials.size(); ++i) {
+                const tilemat::Material& mat = other->materials[i];
+                if (mat.baseTiles.empty() || !MatchesSearch(mat.name, app.materialSearch)) continue;
+                const int have = tm.FindMaterial(mat.name);
+                if (have >= 0 && !tm.materials[static_cast<size_t>(have)].baseTiles.empty()) continue; // this terrain has it
+                offer.push_back(static_cast<int>(i));
+            }
+            if (offer.empty()) continue;
+            if (!ImGui::TreeNode(terrain.c_str(), "%s (%zu)", terrain.c_str(), offer.size())) continue;
+            int n = 0;
+            for (int i : offer) {
+                const tilemat::Material& mat = other->materials[static_cast<size_t>(i)];
+                if (n++ % perRow) ImGui::SameLine();
+                ImGui::PushID(i);
                 const ImVec2 p = ImGui::GetCursorScreenPos();
-                TileImage(app, mat.baseTiles[0], cell);
+                const GLuint thumb = BorrowThumb(app, terrain, mat.baseTiles[0]);
+                if (thumb) ImGui::Image(static_cast<ImTextureID>(static_cast<intptr_t>(thumb)), ImVec2(cell, cell));
+                else { ImGui::Dummy(ImVec2(cell, cell)); ImGui::GetWindowDrawList()->AddRect(p, ImVec2(p.x + cell, p.y + cell), IM_COL32(120, 120, 120, 255)); }
                 ImGui::SetCursorScreenPos(p);
-                if (ImGui::InvisibleButton("##mat", ImVec2(cell, cell))) app.brushMaterialId = static_cast<int>(i);
-                if (ImGui::IsItemHovered()) {
-                    const bool blends = app.brushMaterialId >= 0 && tilemat::CanBlend(*tm, app.brushMaterialId, static_cast<int>(i));
-                    ImGui::SetTooltip("%s (%zu plain tiles)%s", mat.name.c_str(), mat.baseTiles.size(), blends || app.brushMaterialId < 0 ? "" : "\nno transition to the chosen ground in these textures");
-                }
-                ImGui::GetWindowDrawList()->AddRect(p, ImVec2(p.x + cell, p.y + cell), static_cast<int>(i) == app.brushMaterialId ? IM_COL32(255, 220, 120, 255) : IM_COL32(70, 70, 70, 255), 0, 0, static_cast<int>(i) == app.brushMaterialId ? 2.0f : 1.0f);
+                if (ImGui::InvisibleButton("##borrow", ImVec2(cell, cell))) BorrowMaterial(app, terrain, i);
+                if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s from %s (%zu plain tiles)%s", mat.name.c_str(), terrain.c_str(), mat.baseTiles.size(), thumb ? "" : "\n(textures not found in the texture sources)");
+                ImGui::GetWindowDrawList()->AddRect(p, ImVec2(p.x + cell, p.y + cell), IM_COL32(70, 70, 70, 255));
                 ImGui::PopID();
             }
-            if (app.brushMaterialId >= 0 && app.brushMaterialId < static_cast<int>(tm->materials.size())) ImGui::Text("Ground: %s", tm->materials[static_cast<size_t>(app.brushMaterialId)].name.c_str());
-            else ImGui::TextDisabled("Pick a ground");
-            ImGui::SetNextItemWidth(120);
-            ImGui::InputInt("Variation", &app.materialSeed);
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Another value: other plain tiles and transitions picked where several fit");
-            if (ImGui::Button("Blend the hard edges of the whole terrain")) {
-                EditStep step;
-                step.kind = EditStep::Terrain;
-                step.file = app.terrainPath;
-                mpr::Map& map = app.terrain;
-                const tilemat::AutoBlendResult r = tilemat::BlendHardEdges(*tm, map, static_cast<uint32_t>(app.materialSeed), app.autoBlendSameKind,
-                                                                           [&](int si) { step.sectors.push_back({si, map.sectors[static_cast<size_t>(si)]}); });
-                if (!step.sectors.empty()) {
-                    PushUndo(app, std::move(step), "Blend hard edges");
-                    for (int si : r.sectors) app.terrainEditedSectors.insert(si);
-                    app.terrainRebuild = true;
-                }
-                char msg[256];
-                std::snprintf(msg, sizeof msg, "Hard edges: %d vertices where two plain grounds meet, %d cells by them: %d changed in %d round(s), %d left (no transition for those grounds, or an unknown tile)",
-                              r.hardVertices, r.cells, r.changed, r.rounds, r.left);
-                app.materialMessage = msg;
-                umlog::Write(umlog::Level::Info, std::string("Map Editor: ") + msg);
-            }
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Everywhere plain tiles of two grounds touch although the textures hold a transition for them (hand-painted\n"
-                                  "maps), the cells around get the transition tiles. Cells away from such an edge are not touched; a terrain\n"
-                                  "whose transitions are right comes out unchanged. The rarer ground keeps its cells, the band is laid into\n"
-                                  "the commoner one. One undo step; rebuild the navmesh after if tile types changed.");
-            ImGui::Checkbox("Hard edges between kinds of one ground too", &app.autoBlendSameKind);
-            if (ImGui::IsItemHovered())
-                ImGui::SetTooltip("Also where two kinds of one ground touch (grass/dark beside grass/common). The vanilla maps lay those\n"
-                                  "side by side on purpose, so this re-tiles a lot of a vanilla terrain: off by default.");
-            if (!app.materialMessage.empty()) ImGui::TextWrapped("%s", app.materialMessage.c_str());
-            ImGui::TextDisabled("Materials and masks of the vanilla tiles: EI-HD-tiles by aspadm");
+            ImGui::TreePop();
         }
-    } else {
-        app.materialBrush = false;
-        ImGui::TextDisabled("No material data for these textures (vanilla terrains only): paint by tile.");
     }
+}
+
+// The Tiles tab: one tile at a time (the expert's way), the quick tiles, the blend tool, the palette.
+static void TilesPanel(App& app) {
+    mpr::Map& m = app.terrain;
     TileImage(app, app.brushTile, 48, app.brushRotation);
     ImGui::SameLine();
     ImGui::BeginGroup();
@@ -4813,11 +5081,76 @@ static void TilePanel(App& app, bool inShelf = false) {
             const int tile = t * 64 + (7 - cy) * 8 + cx;
             const int type = tile < static_cast<int>(m.tileTypes.size()) ? m.tileTypes[static_cast<size_t>(tile)] : -1;
             ImGui::SetTooltip("tile %d (%s)", tile % 64, type >= 0 && type < 16 ? kTileTypeNames[type] : "?");
-            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) { app.brushTile = tile; app.tileBrush = true; app.materialBrush = false; }
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) app.brushTile = tile;
         }
         ImGui::TreePop();
     }
 
+}
+
+// The Tile paint mode's tools: the Grounds tab (paint by material) and the Tiles tab; water paints by tile.
+static void TilePanel(App& app, bool inShelf = false) {
+    mpr::Map& m = app.terrain;
+    ImGui::SeparatorText(app.brushWater ? "Water paint" : "Tile paint");
+    if (!inShelf && !app.tileBrush)
+        ImGui::TextDisabled("Choose Tile paint or Water paint in the mode selector above the view to paint (%s shows these tools in the view).",
+                            ui::BindName(app.lib.mapKeys[config::kKeyToolShelf]).c_str());
+    int layer = app.brushWater ? 1 : 0;
+    ImGui::RadioButton("Land", &layer, 0);
+    ImGui::SameLine();
+    ImGui::RadioButton("Water", &layer, 1);
+    app.brushWater = layer == 1;
+    if (app.brushWater) {
+        ImGui::SetNextItemWidth(-1);
+        const std::string label = app.brushMaterial < 0 ? std::string("no water (removes it from the tile)") : "material " + std::to_string(app.brushMaterial);
+        if (ImGui::BeginCombo("##brushmat", label.c_str())) {
+            if (ImGui::Selectable("no water (removes it from the tile)", app.brushMaterial < 0)) app.brushMaterial = -1;
+            for (size_t i = 0; i < m.materials.size(); ++i) {
+                const mpr::Material& mt = m.materials[i];
+                const std::string l = "material " + std::to_string(i) + (mt.type == 3 ? " (water)" : " (terrain)");
+                if (ImGui::Selectable(l.c_str(), static_cast<int>(i) == app.brushMaterial)) app.brushMaterial = static_cast<int>(i);
+            }
+            ImGui::EndCombo();
+        }
+    }
+    if (app.brushWater) { app.materialBrush = false; TilesPanel(app); return; }
+    tilemat::Terrain* tm = tilemat::Lookup(m.name);
+    if (!tm) { // a custom terrain: a materials file says what its tiles are made of: the tool's materials/ folder
+               // (shipped tables, e.g. zonetest's), then the output folder (tiles borrowed in the editor)
+        tilemat::Terrain& own = tilemat::Create(m.name);
+        if (own.tiles.empty() && !app.sidecarLoaded.count(app.terrainPath)) {
+            app.sidecarLoaded.insert(app.terrainPath);
+            const std::string shipped = (std::filesystem::path(umlog::FilePath()).parent_path() / "materials" / (m.name + "-materials.tsv")).string();
+            tilemat::LoadSidecar(own, shipped);
+            const std::string& folder = BlendFolder(app);
+            if (!folder.empty()) tilemat::LoadSidecar(own, (std::filesystem::path(folder) / (m.name + "-materials.tsv")).string());
+        }
+        if (!own.tiles.empty()) tm = &own;
+    }
+    if (!tm) {
+        app.materialBrush = false;
+        ImGui::TextDisabled("No material data for these textures (vanilla terrains, or a <terrain>-materials.tsv sidecar in the output folder): paint by tile.");
+        TilesPanel(app);
+        return;
+    }
+    if (ImGui::BeginTabBar("##painttabs")) {
+        const int want = app.paintTabWanted;
+        app.paintTabWanted = -1;
+        if (ImGui::BeginTabItem("Grounds", nullptr, want == 0 ? ImGuiTabItemFlags_SetSelected : 0)) {
+            app.materialBrush = true;
+            GroundsPanel(app, *tm);
+            ImGui::EndTabItem();
+        }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Paint a ground: the cells take its plain tiles and the cells around them the transition tiles the\n"
+                                                      "textures hold for the two grounds (corner, half, inner corner, turned as needed)");
+        if (ImGui::BeginTabItem("Tiles", nullptr, want == 1 ? ImGuiTabItemFlags_SetSelected : 0)) {
+            app.materialBrush = false;
+            TilesPanel(app);
+            ImGui::EndTabItem();
+        }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Paint one tile at a time, turned as you like");
+        ImGui::EndTabBar();
+    }
 }
 
 static void TerrainTab(App& app) {
@@ -5682,12 +6015,25 @@ static void Toolbar(App& app) {
 // The bar under the view: lighting (on/off, file, hour), the active map, what is loading and where the
 // mouse points.
 static void BottomBar(App& app) {
+    { // Settings > Performance, applied every frame
+        MapViewOptions& o = app.scene.options;
+        o.drawDistance = app.lib.mapDrawDistance;
+        static int lowDetailSeen = -1;
+        if (lowDetailSeen != static_cast<int>(app.lib.mapLowDetail)) {
+            lowDetailSeen = app.lib.mapLowDetail;
+            const bool low = app.lib.mapLowDetail;
+            o.shadows = !low; o.dressUnits = !low; o.poseUnits = !low;
+            if (low) app.lib.lightingOn = false;
+            app.scene.DropModels();
+        }
+    }
     if (app.heightBrush || app.tileBrush) { // the mode's mouse and keys, as Blender's status bar
-        ImGui::TextColored(ImVec4(1.0f, 0.82f, 0.4f, 1), "%s", app.heightBrush
-            ? "Sculpt: left drag shapes the ground (one undo per stroke)  F radius  Shift+F strength  T tool shelf  (Tools > Rebuild navmesh after)"
-            : app.materialBrush ? "Tile paint by ground: left drag paints (the transitions around follow)  Alt+click picks the ground under the mouse  T tool shelf"
-            : app.brushWater ? "Water paint: left drag paints the water tile and material  Alt+click picks  1-8 quick tiles  , . turn the tile  T tool shelf"
-            : "Tile paint: left drag paints  Alt+click picks a tile  1-8 quick tiles  , . turn the tile  T tool shelf");
+        ImGui::TextColored(ImVec4(1.0f, 0.82f, 0.4f, 1), app.heightBrush
+            ? "Sculpt: left drag shapes the ground (one undo per stroke)  F radius  Shift+F strength  %s tool shelf  (Tools > Rebuild navmesh after)"
+            : app.materialBrush ? "Tile paint by ground: left drag paints (the transitions around follow)  Alt+click picks the ground under the mouse  %s tool shelf"
+            : app.brushWater ? "Water paint: left drag paints the water tile and material  Alt+click picks  1-8 quick tiles  , . turn the tile  %s tool shelf"
+            : "Tile paint: left drag paints  Alt+click picks a tile  1-8 quick tiles  , . turn the tile  %s tool shelf",
+            ui::BindName(app.lib.mapKeys[config::kKeyToolShelf]).c_str());
         ImGui::SameLine();
     }
     if (ImGui::Checkbox("Lighting", &app.lib.lightingOn)) app.lib.SaveConfig();
@@ -6336,6 +6682,19 @@ static void Overlays(App& app, ImVec2 min, ImVec2 size) {
         }
     }
     TerrainBrushOutline(app, draw, min, size);
+    if (app.dipSelected >= 0) { // Diplomacy: the selected group's units, a magenta ring each
+        for (size_t fi = 0; fi < app.mobs.size(); ++fi) {
+            if (!app.scene.FileVisible(static_cast<int>(fi))) continue;
+            for (const mob::Object& o : app.mobs[fi]->file.objects) {
+                if (o.kind != mob::Kind::Unit || o.player != app.dipSelected) continue;
+                float fx, fy;
+                if (!app.scene.Project({o.position.x, o.position.y, app.scene.Ground(o.position.x, o.position.y) + 1.0f}, fx, fy)) continue;
+                const ImVec2 c(min.x + fx * size.x, min.y + fy * size.y);
+                draw->AddCircle(c, 9.0f, IM_COL32(255, 120, 255, 230), 16, 2.5f);
+                draw->AddCircle(c, 3.0f, IM_COL32(255, 120, 255, 230), 8, 2.0f);
+            }
+        }
+    }
     if (app.heightBrush && app.terrainLoaded && app.hoverGround) { // the height brush's circle on the ground
         ImVec2 pts[48];
         int n = 0;
@@ -7020,6 +7379,91 @@ static void CropDialog(App& app) {
     ImGui::End();
 }
 
+// The picture a new terrain takes its heights from (#59, #106): grey, blurred, with the levels / gamma / invert
+// tweaks applied, sampled anywhere in 0..1 x 0..1 (v = 0 is the picture's bottom = the map's south).
+struct HeightPicture {
+    int width = 0, height = 0;
+    std::vector<float> grey; // 0..1, after the blur
+    std::string key;         // path + blur it was made for
+    bool ok = false;
+    float Raw(float u, float v) const {
+        const int px = std::clamp(static_cast<int>(u * width), 0, width - 1), py = std::clamp(static_cast<int>((1.0f - v) * height), 0, height - 1);
+        return grey[static_cast<size_t>(py) * width + px];
+    }
+    // the tweaks: levels, gamma, invert, then base..top
+    float Height(const App& app, float u, float v) const {
+        float g = Raw(u, v);
+        const float lo = std::min(app.newTerrainBlack, app.newTerrainWhite - 0.001f);
+        g = std::clamp((g - lo) / std::max(app.newTerrainWhite - lo, 0.001f), 0.0f, 1.0f);
+        g = std::pow(g, std::max(app.newTerrainGamma, 0.05f));
+        if (app.newTerrainInvert) g = 1.0f - g;
+        return app.newTerrainBase + g * std::max(app.newTerrainHeight - app.newTerrainBase, 0.0f);
+    }
+};
+
+static HeightPicture& LoadHeightPicture(App& app) {
+    static HeightPicture pic;
+    const std::string key = std::string(app.newTerrainImage) + "|" + std::to_string(app.newTerrainBlur);
+    if (pic.key == key) return pic;
+    pic = HeightPicture{};
+    pic.key = key;
+    std::error_code fec;
+    if (!app.newTerrainImage[0] || !std::filesystem::is_regular_file(app.newTerrainImage, fec)) return pic; // a half-typed path can name a folder: reading one throws
+    std::ifstream f(app.newTerrainImage, std::ios::binary);
+    std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+    mmp::Image img;
+    std::string ierr;
+    if (bytes.empty() || !DecodeTextureFile(bytes, img, ierr) || !img.width || !img.height) return pic;
+    pic.width = static_cast<int>(img.width); pic.height = static_cast<int>(img.height);
+    pic.grey.resize(static_cast<size_t>(pic.width) * pic.height);
+    for (size_t i = 0; i < pic.grey.size(); ++i) pic.grey[i] = (img.rgba[i * 4] * 0.299f + img.rgba[i * 4 + 1] * 0.587f + img.rgba[i * 4 + 2] * 0.114f) / 255.0f;
+    const int r = std::clamp(app.newTerrainBlur, 0, 64);
+    if (r > 0) { // a box blur, rows then columns
+        std::vector<float> tmp(pic.grey.size());
+        for (int y = 0; y < pic.height; ++y)
+            for (int x = 0; x < pic.width; ++x) {
+                float sum = 0; int n = 0;
+                for (int k = -r; k <= r; ++k) { const int xx = x + k; if (xx >= 0 && xx < pic.width) { sum += pic.grey[static_cast<size_t>(y) * pic.width + xx]; ++n; } }
+                tmp[static_cast<size_t>(y) * pic.width + x] = sum / n;
+            }
+        for (int y = 0; y < pic.height; ++y)
+            for (int x = 0; x < pic.width; ++x) {
+                float sum = 0; int n = 0;
+                for (int k = -r; k <= r; ++k) { const int yy = y + k; if (yy >= 0 && yy < pic.height) { sum += tmp[static_cast<size_t>(yy) * pic.width + x]; ++n; } }
+                pic.grey[static_cast<size_t>(y) * pic.width + x] = sum / n;
+            }
+    }
+    pic.ok = true;
+    return pic;
+}
+
+// The tweaked picture as a grey preview texture (remade when the picture or a tweak changes).
+static GLuint HeightPicturePreview(App& app, const HeightPicture& pic) {
+    char key[256];
+    std::snprintf(key, sizeof key, "%s|%d|%.3f|%.3f|%.3f|%.2f|%.2f", pic.key.c_str(), app.newTerrainInvert, app.newTerrainBlack, app.newTerrainWhite, app.newTerrainGamma, app.newTerrainBase, app.newTerrainHeight);
+    if (app.newTerrainPreviewKey == key && app.newTerrainPreviewTex) return app.newTerrainPreviewTex;
+    app.newTerrainPreviewKey = key;
+    if (!pic.ok) return 0;
+    const int P = 128;
+    std::vector<uint8_t> rgba(static_cast<size_t>(P) * P * 4);
+    const float top = std::max(app.newTerrainHeight, 0.001f);
+    for (int y = 0; y < P; ++y)
+        for (int x = 0; x < P; ++x) {
+            const float h = pic.Height(app, (x + 0.5f) / P, 1.0f - (y + 0.5f) / P);
+            const uint8_t g = static_cast<uint8_t>(std::clamp(h / top, 0.0f, 1.0f) * 255.0f);
+            uint8_t* o = &rgba[(static_cast<size_t>(y) * P + x) * 4];
+            o[0] = o[1] = o[2] = g; o[3] = 255;
+        }
+    if (!app.newTerrainPreviewTex) {
+        glGenTextures(1, &app.newTerrainPreviewTex);
+        glBindTexture(GL_TEXTURE_2D, app.newTerrainPreviewTex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    } else glBindTexture(GL_TEXTURE_2D, app.newTerrainPreviewTex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, P, P, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
+    return app.newTerrainPreviewTex;
+}
+
 static void NewTerrainDialog(App& app) {
     if (!app.newTerrainOpen) return;
     ImGui::SetNextWindowPos(ImVec2(app.viewportMin.x + 20, app.viewportMin.y + 40), ImGuiCond_Appearing);
@@ -7034,27 +7478,17 @@ static void NewTerrainDialog(App& app) {
     ImGui::TextDisabled("= %d x %d units", app.newTerrainSize[0] * 32, app.newTerrainSize[1] * 32);
     ImGui::SetNextItemWidth(160);
     ImGui::DragFloat("Ground height", &app.newTerrainHeight, 0.1f, 0.0f, 200.0f, "%.1f");
-    { // the terrain to be made, as a small relief: flat, or the picture's heights
-        static std::string previewFor; static mmp::Image previewImg; static bool previewOk = false;
-        if (previewFor != app.newTerrainImage) {
-            previewFor = app.newTerrainImage; previewOk = false; previewImg = mmp::Image{};
-            std::error_code fec;
-            if (app.newTerrainImage[0] && std::filesystem::is_regular_file(app.newTerrainImage, fec)) { // a half-typed path can name a folder: reading one throws
-                std::ifstream f(app.newTerrainImage, std::ios::binary);
-                std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-                std::string ierr;
-                previewOk = !bytes.empty() && DecodeTextureFile(bytes, previewImg, ierr) && previewImg.width && previewImg.height;
-            }
-        }
+    { // the terrain to be made: the tweaked picture, and a small relief (flat, or the picture's heights)
+        const HeightPicture& pic = LoadHeightPicture(app);
         const float top = std::max(app.newTerrainHeight, 1.0f);
-        ReliefPreview([&](float u, float v) {
-            if (!previewOk) return app.newTerrainHeight;
-            const int px = std::clamp(static_cast<int>(u * previewImg.width), 0, static_cast<int>(previewImg.width) - 1), py = std::clamp(static_cast<int>((1 - v) * previewImg.height), 0, static_cast<int>(previewImg.height) - 1);
-            const uint8_t* p = &previewImg.rgba[(static_cast<size_t>(py) * previewImg.width + px) * 4];
-            return (p[0] * 0.299f + p[1] * 0.587f + p[2] * 0.114f) / 255.0f * app.newTerrainHeight;
-        }, top * 2, 220);
+        if (pic.ok) {
+            const GLuint tex = HeightPicturePreview(app, pic);
+            if (tex) { ImGui::Image(static_cast<ImTextureID>(static_cast<intptr_t>(tex)), ImVec2(220, 220)); ImGui::SetItemTooltip("The picture as the heights see it: black = the lowest height, white = the ground height"); ImGui::SameLine(); }
+        }
+        ReliefPreview([&](float u, float v) { return pic.ok ? pic.Height(app, u, v) : app.newTerrainHeight; }, top * 2, 220);
         ImGui::SameLine();
-        ImGui::TextWrapped("%s", previewOk ? "The picture's heights, seen from the south-west (black = 0, white = the ground height)." : app.newTerrainImage[0] ? "The picture could not be read." : "A flat terrain at the ground height; give a picture below for relief.");
+        ImGui::TextWrapped("%s", pic.ok ? "Left: the tweaked picture. Right: its heights, seen from the south-west (black = the lowest height, white = the ground height)."
+                                        : app.newTerrainImage[0] ? "The picture could not be read." : "A flat terrain, seen from the south-west. Give a picture below for heights from its shades.");
     }
     ImGui::SetNextItemWidth(-80);
     ImGui::InputTextWithHint("##heightimage", "heights from a picture (optional): .png, .dds, .mmp...", app.newTerrainImage, sizeof(app.newTerrainImage));
@@ -7062,6 +7496,34 @@ static void NewTerrainDialog(App& app) {
     ImGui::SameLine();
     std::string pickedImage;
     if (ImGui::Button("Picture...") && ui::PickFile(pickedImage)) std::snprintf(app.newTerrainImage, sizeof(app.newTerrainImage), "%s", pickedImage.c_str());
+    if (app.newTerrainImage[0]) { // the picture's tweaks (#106)
+        const HeightPicture& pic = LoadHeightPicture(app);
+        if (pic.ok) {
+            ImGui::TextDisabled("%d x %d px", pic.width, pic.height);
+            ImGui::SameLine();
+            if (ImGui::SmallButton("Sectors from the picture")) { app.newTerrainSize[0] = std::clamp((pic.width + 16) / 32, 1, 64); app.newTerrainSize[1] = std::clamp((pic.height + 16) / 32, 1, 64); }
+            ImGui::SetItemTooltip("One pixel = one unit (a 32 px square = one sector)");
+        }
+        ImGui::SetNextItemWidth(160);
+        ImGui::DragFloat("Lowest height", &app.newTerrainBase, 0.1f, 0.0f, 200.0f, "%.1f");
+        ImGui::SetItemTooltip("Black gives this height, white the ground height above");
+        ImGui::SetNextItemWidth(160);
+        ImGui::SliderFloat("Black point", &app.newTerrainBlack, 0.0f, 1.0f, "%.2f");
+        ImGui::SetItemTooltip("Shades at or below it are the lowest height (levels)");
+        ImGui::SetNextItemWidth(160);
+        ImGui::SliderFloat("White point", &app.newTerrainWhite, 0.0f, 1.0f, "%.2f");
+        ImGui::SetItemTooltip("Shades at or above it are the ground height (levels)");
+        ImGui::SetNextItemWidth(160);
+        ImGui::SliderFloat("Gamma", &app.newTerrainGamma, 0.2f, 4.0f, "%.2f");
+        ImGui::SetItemTooltip("Below 1: the lows rise (softer valleys); above 1: only the brightest rise (sharper peaks)");
+        ImGui::SetNextItemWidth(160);
+        ImGui::SliderInt("Blur", &app.newTerrainBlur, 0, 16, "%d px");
+        ImGui::SetItemTooltip("Smooths the picture before sampling: rounder hills, fewer steps");
+        ImGui::SameLine();
+        ImGui::Checkbox("Invert", &app.newTerrainInvert);
+        ImGui::SameLine();
+        if (ImGui::SmallButton("Reset tweaks")) { app.newTerrainInvert = false; app.newTerrainBlack = 0; app.newTerrainWhite = 1; app.newTerrainGamma = 1; app.newTerrainBase = 0; app.newTerrainBlur = 0; }
+    }
     const uint16_t tile = PackTile(std::max(app.brushTile, 0), app.brushRotation);
     ImGui::Text("Tile: texture %d, tile %d (the tile brush's)", (tile >> 6) & 0xFF, tile & 63);
     ImGui::Checkbox("Its own textures", &app.newTerrainOwnTextures);
@@ -7087,28 +7549,18 @@ static void NewTerrainDialog(App& app) {
             app.newTerrainMessage = "Not created: " + err;
         else {
             std::string copied;
-            if (app.newTerrainImage[0]) { // the heights from the picture, white = the ground height
-                std::error_code fec;
-                std::vector<uint8_t> bytes;
-                if (std::filesystem::is_regular_file(app.newTerrainImage, fec)) {
-                    std::ifstream f(app.newTerrainImage, std::ios::binary);
-                    bytes.assign((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-                }
-                mmp::Image img;
-                std::string ierr;
-                if (bytes.empty() || !DecodeTextureFile(bytes, img, ierr) || img.width == 0 || img.height == 0) app.newTerrainMessage = "The picture could not be read: " + ierr + "; ";
+            if (app.newTerrainImage[0]) { // the heights from the picture, as the preview showed them
+                const HeightPicture& pic = LoadHeightPicture(app);
+                if (!pic.ok) app.newTerrainMessage = "The picture could not be read; ";
                 else {
                     const float k = 65535.0f / made.maxZ, W = made.sectorsX * 32.0f, H = made.sectorsY * 32.0f;
                     for (size_t si = 0; si < made.sectors.size(); ++si) {
-                        mpr::Sector& s = made.sectors[si];
+                        mpr::Sector& sec = made.sectors[si];
                         const int sx = static_cast<int>(si) % made.sectorsX, sy = static_cast<int>(si) / made.sectorsX;
                         for (int r = 0; r <= 32; ++r)
                             for (int c = 0; c <= 32; ++c) {
-                                const float u = (sx * 32.0f + c) / W, v = 1.0f - (sy * 32.0f + r) / H; // the picture's top = the map's far side (+y)
-                                const int px = std::clamp(static_cast<int>(u * img.width), 0, static_cast<int>(img.width) - 1), py = std::clamp(static_cast<int>(v * img.height), 0, static_cast<int>(img.height) - 1);
-                                const uint8_t* p = &img.rgba[(static_cast<size_t>(py) * img.width + px) * 4];
-                                const float grey = (p[0] * 0.299f + p[1] * 0.587f + p[2] * 0.114f) / 255.0f;
-                                s.land[r][c].z = static_cast<uint16_t>(std::lround(std::clamp(grey * app.newTerrainHeight, 0.0f, made.maxZ) * k));
+                                const float u = (sx * 32.0f + c) / W, v = (sy * 32.0f + r) / H; // the picture's top = the map's far side (+y)
+                                sec.land[r][c].z = static_cast<uint16_t>(std::lround(std::clamp(pic.Height(app, u, v), 0.0f, made.maxZ) * k));
                             }
                     }
                     for (size_t si = 0; si < made.sectors.size(); ++si) mpr::ComputeNormals(made, static_cast<int>(si));
@@ -7458,6 +7910,7 @@ void SetMode(Context* ctx, const std::string& mode) {
     app.heightBrush = mode == "sculpt";
     app.brushWater = mode == "water";
     app.materialBrush = mode == "ground";
+    app.paintTabWanted = mode == "ground" ? 0 : mode == "paint" ? 1 : -1;
     if (app.materialBrush && app.brushMaterialId < 0)
         if (tilemat::Terrain* tm = tilemat::Lookup(app.terrain.name))
             for (size_t i = 0; i < tm->materials.size(); ++i) if (!tm->materials[i].baseTiles.empty()) { app.brushMaterialId = static_cast<int>(i); break; }
