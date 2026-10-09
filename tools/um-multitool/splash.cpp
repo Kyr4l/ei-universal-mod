@@ -51,7 +51,8 @@ GLFWwindow* g_main = nullptr;
 GLFWwindow* g_win = nullptr;
 ImGuiContext* g_ctx = nullptr;
 GLuint g_banner = 0;
-int g_w = 480, g_h = 300;
+int g_w = 480, g_h = 300;   // the window, in pixels
+float g_u = 1.0f;           // the window's scale: the banner (2x pixels) shown at half size times the monitor's content scale
 std::string g_text;
 float g_fraction = 0;
 bool g_darkBand = false; // the banner's band is dark: light text, a dark trough
@@ -59,7 +60,7 @@ ImU32 g_accent = IM_COL32(70, 120, 200, 255);
 ImFont* g_bold = nullptr;   // the version's face: a bold system font next to the GUI's, when there is one
 std::chrono::steady_clock::time_point g_shownAt;
 constexpr double kMinSeconds = 1.2;  // the splash stays at least this long: a flash reads as a glitch
-constexpr int kBand = 44;            // the bottom band holds the status line and the bar (the banner leaves it quiet)
+constexpr int kBand = 44;            // the bottom band holds the status line and the bar (the banner leaves it quiet), in base units
 
 // The banner's pixels: the file beside the executable when there is one, else the embedded one.
 bool LoadBanner(const std::string& overridePath, std::vector<uint8_t>& rgba, int& w, int& h) {
@@ -95,18 +96,19 @@ void Draw() {
     if (g_banner) ImGui::GetWindowDrawList()->AddImage(static_cast<ImTextureID>(static_cast<intptr_t>(g_banner)), ImVec2(0, 0), ImVec2(static_cast<float>(g_w), static_cast<float>(g_h)));
     else ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(0, 0), ImVec2(static_cast<float>(g_w), static_cast<float>(g_h)), IM_COL32(40, 50, 70, 255));
     ImDrawList* dl = ImGui::GetWindowDrawList();
-    const float top = static_cast<float>(g_h - kBand);
+    const float u = g_u;
+    const float top = static_cast<float>(g_h) - kBand * u;
     { // the version, bottom right above the band (the banner leaves the place), from version.hpp
         const std::string v = PROGRAM_VERSION; // the number alone, bold, in the accent: as the banner previews show it
         ImFont* f = g_bold ? g_bold : ImGui::GetFont();
-        const float size = 17.0f;
+        const float size = 17.0f * u;
         const ImVec2 tw = f->CalcTextSizeA(size, FLT_MAX, 0.0f, v.c_str());
-        const ImVec2 at(static_cast<float>(g_w) - 14.0f - tw.x, top - 46.0f);
+        const ImVec2 at(static_cast<float>(g_w) - 14.0f * u - tw.x, top - 46.0f * u);
         dl->AddText(f, size, at, g_darkBand ? g_accent : IM_COL32(40, 50, 80, 255), v.c_str());
     }
     // The band: the status line, the bar in the 2005 way (a flat blue fill in a sunken trough).
-    dl->AddText(ImVec2(12.0f, top + 7.0f), g_darkBand ? IM_COL32(205, 210, 220, 255) : IM_COL32(60, 60, 60, 255), g_text.c_str());
-    const float bx0 = 12.0f, bx1 = static_cast<float>(g_w) - 12.0f, by0 = static_cast<float>(g_h) - 17.0f, by1 = static_cast<float>(g_h) - 8.0f;
+    dl->AddText(ImGui::GetFont(), 15.0f * u, ImVec2(12.0f * u, top + 7.0f * u), g_darkBand ? IM_COL32(205, 210, 220, 255) : IM_COL32(60, 60, 60, 255), g_text.c_str());
+    const float bx0 = 12.0f * u, bx1 = static_cast<float>(g_w) - 12.0f * u, by0 = static_cast<float>(g_h) - 17.0f * u, by1 = static_cast<float>(g_h) - 8.0f * u;
     dl->AddRectFilled(ImVec2(bx0, by0), ImVec2(bx1, by1), g_darkBand ? IM_COL32(16, 18, 24, 255) : IM_COL32(250, 250, 250, 255));
     dl->AddRect(ImVec2(bx0, by0), ImVec2(bx1, by1), g_darkBand ? IM_COL32(110, 120, 140, 255) : IM_COL32(140, 140, 140, 255));
     const float fill = bx0 + 1.0f + (bx1 - bx0 - 2.0f) * (g_fraction < 0 ? 0 : g_fraction > 1 ? 1 : g_fraction);
@@ -133,12 +135,24 @@ void Begin(GLFWwindow* mainWindow, const std::string& overridePath, int accentR,
     std::vector<uint8_t> rgba;
     int w = 0, h = 0;
     const bool haveBanner = LoadBanner(overridePath, rgba, w, h);
+    // The banner holds twice the pixels of the window at 100 %; on a scaled display the window grows with it
+    // (a 200 % display shows every pixel of the banner).
+    // Where windows are in pixels (X11, Windows) the window is made that much bigger. On Wayland the window is in
+    // logical points and the compositor scales it (GLFW only knows whole scales there: 2.00 for a 1.2 display),
+    // so it stays 480 x 300 and the backend draws it at the framebuffer's density.
+    float scaleX = 1.0f, scaleY = 1.0f;
+    bool logicalPoints = false;
+#if GLFW_VERSION_MAJOR * 100 + GLFW_VERSION_MINOR >= 304
+    logicalPoints = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;
+#endif
+    if (!logicalPoints) if (GLFWmonitor* monitor = glfwGetPrimaryMonitor()) glfwGetMonitorContentScale(monitor, &scaleX, &scaleY);
+    g_u = scaleX > 0.5f ? scaleX : 1.0f;
     if (haveBanner) {
-        g_w = w; g_h = h;
+        g_w = static_cast<int>(w / 2 * g_u + 0.5f); g_h = static_cast<int>(h / 2 * g_u + 0.5f);
         long sum = 0; int n = 0; // the band's brightness, sampled along its left edge
-        for (int y = h - kBand + 2; y < h - 2; ++y) for (int x = 2; x < 8; ++x) { const uint8_t* p = &rgba[(static_cast<size_t>(y) * w + x) * 4]; sum += p[0] + p[1] + p[2]; ++n; }
+        for (int y = h - kBand * 2 + 4; y < h - 4; ++y) for (int x = 4; x < 16; ++x) { const uint8_t* p = &rgba[(static_cast<size_t>(y) * w + x) * 4]; sum += p[0] + p[1] + p[2]; ++n; }
         g_darkBand = n > 0 && sum / n < 384;
-    }
+    } else { g_w = static_cast<int>(480 * g_u); g_h = static_cast<int>(300 * g_u); }
     glfwDefaultWindowHints();
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -162,6 +176,7 @@ void Begin(GLFWwindow* mainWindow, const std::string& overridePath, int accentR,
     ImGui::SetCurrentContext(g_ctx);
     ImGui::GetIO().IniFilename = nullptr;
     AddFallbackFonts(ImGui::GetIO());
+    ImGui::GetIO().FontGlobalScale = 1.0f; // the status line is drawn at 15 px times the scale by itself
     {
         static const char* const bold[] = {
 #ifdef _WIN32
@@ -173,7 +188,7 @@ void Begin(GLFWwindow* mainWindow, const std::string& overridePath, int accentR,
         };
         for (const char* path : bold) {
             if (g_bold) break;
-            if (std::ifstream(path, std::ios::binary)) g_bold = ImGui::GetIO().Fonts->AddFontFromFileTTF(path, 17.0f);
+            if (std::ifstream(path, std::ios::binary)) g_bold = ImGui::GetIO().Fonts->AddFontFromFileTTF(path, 17.0f * g_u);
         }
     }
     ImGui_ImplGlfw_InitForOpenGL(g_win, true);
@@ -181,8 +196,9 @@ void Begin(GLFWwindow* mainWindow, const std::string& overridePath, int accentR,
     if (haveBanner) {
         glGenTextures(1, &g_banner);
         glBindTexture(GL_TEXTURE_2D, g_banner);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, 0x8191 /* GL_GENERATE_MIPMAP, GL 1.4 */, GL_TRUE); // a 2x banner shown at 1x: averaged, not dropped
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba.data());
     }
     ImGui::SetCurrentContext(previousCtx);
