@@ -719,9 +719,12 @@ private:
     std::vector<GLuint> terrainTextures_;
     int texturesFound_ = 0, textureSize_ = 512;
     // One set of display lists per sector: the full mesh (8 triangles a tile) and a coarse one (2 a tile) for
-    // sectors far from the camera, land and water, each binding its textures itself. Only the sectors the
-    // current view can see are drawn. `hash` says what the lists were built from (RebuildTerrainGeometry).
-    struct SectorLists { GLuint land = 0, landCoarse = 0, water = 0, waterCoarse = 0; float zMin = 0, zMax = 0; uint64_t hash = 0; };
+    // sectors far from the camera, land and water. A mesh is one list of geometry per texture it uses, the
+    // texture bound by the caller (the textured pass alone: the shadow pass has its shadow map bound and a
+    // list binding the atlas would replace it). Only the sectors the current view can see are drawn.
+    // `hash` says what the lists were built from (RebuildTerrainGeometry).
+    struct TerrainMesh { std::vector<std::pair<int, GLuint>> parts; }; // (texture, list of its triangles)
+    struct SectorLists { TerrainMesh land, landCoarse, water, waterCoarse; float zMin = 0, zMax = 0; uint64_t hash = 0; };
     std::vector<SectorLists> sectorLists_;
     uint64_t materialsHash_ = 0;
     // What the objects look like (templates, textures, builds, equipment) and where they stand, hashed once a
@@ -827,9 +830,13 @@ private:
         shadowSignature_ = 0;
     }
 
+    static void DeleteMesh(TerrainMesh& mesh) {
+        for (const auto& part : mesh.parts) glDeleteLists(part.second, 1);
+        mesh.parts.clear();
+    }
     static void DeleteSectorLists(SectorLists& sl, bool land, bool water) {
-        if (land) { if (sl.land) glDeleteLists(sl.land, 1); if (sl.landCoarse) glDeleteLists(sl.landCoarse, 1); sl.land = sl.landCoarse = 0; }
-        if (water) { if (sl.water) glDeleteLists(sl.water, 1); if (sl.waterCoarse) glDeleteLists(sl.waterCoarse, 1); sl.water = sl.waterCoarse = 0; }
+        if (land) { DeleteMesh(sl.land); DeleteMesh(sl.landCoarse); }
+        if (water) { DeleteMesh(sl.water); DeleteMesh(sl.waterCoarse); }
     }
 
     static uint64_t HashBytes(uint64_t h, const void* data, size_t size) {
@@ -878,10 +885,9 @@ private:
             if (isWater ? (!water || !s->water) : !land) continue;
             const mpr::Vertex (&verts)[33][33] = isWater ? s->waterVerts : s->land;
             for (int coarse = 0; coarse < 2; ++coarse) {
-                GLuint list = glGenLists(1);
-                glNewList(list, GL_COMPILE);
+                TerrainMesh& mesh = isWater ? (coarse ? sl.waterCoarse : sl.water) : (coarse ? sl.landCoarse : sl.land);
                 for (int tex = 0; tex < textures; ++tex) {
-                    bool begun = false;
+                    GLuint list = 0;
                     for (int row = 0; row < 16; ++row)
                         for (int col = 0; col < 16; ++col) {
                             const uint16_t packed = isWater ? s->waterTiles[row][col] : s->landTiles[row][col];
@@ -890,10 +896,10 @@ private:
                                 const int mat = s->waterMaterial[row][col];
                                 if (mat < 0) continue;
                             }
-                            if (!begun) { // the texture, once per sector and texture (the lists bind their own)
-                                glBindTexture(GL_TEXTURE_2D, tex < static_cast<int>(terrainTextures_.size()) ? terrainTextures_[tex] : 0);
+                            if (!list) { // a list for the texture's first tile in the sector
+                                list = glGenLists(1);
+                                glNewList(list, GL_COMPILE);
                                 glBegin(GL_TRIANGLES);
-                                begun = true;
                             }
                             if (isWater) {
                                 const int mat = s->waterMaterial[row][col];
@@ -931,10 +937,12 @@ private:
                                     }
                             }
                         }
-                    if (begun) glEnd();
+                    if (list) {
+                        glEnd();
+                        glEndList();
+                        mesh.parts.emplace_back(tex, list);
+                    }
                 }
-                glEndList();
-                (isWater ? (coarse ? sl.waterCoarse : sl.water) : (coarse ? sl.landCoarse : sl.land)) = list;
             }
         }
     }
@@ -996,8 +1004,9 @@ private:
     }
 
     // Calls the lists of the sectors the current view can see: land or water, the coarse mesh far away
-    // when `lod` (never under an orthographic view), only those under the sun's box when `sunBoxOnly`.
-    void DrawTerrainGeometry(bool water, bool lod, bool sunBoxOnly) const {
+    // when `lod` (never under an orthographic view), only those under the sun's box when `sunBoxOnly`,
+    // binding each list's terrain texture when `bindTextures` (else the bound texture is left alone).
+    void DrawTerrainGeometry(bool water, bool lod, bool sunBoxOnly, bool bindTextures = false) const {
         if (!terrain_) return;
         const mpr::Map& m = *terrain_;
         const Frustum f = CurrentFrustum();
@@ -1005,18 +1014,22 @@ private:
         for (int sy = 0; sy < m.sectorsY; ++sy)
             for (int sx = 0; sx < m.sectorsX; ++sx) {
                 const SectorLists& sl = sectorLists_[static_cast<size_t>(sy) * m.sectorsX + sx];
-                const GLuint full = water ? sl.water : sl.land, coarse = water ? sl.waterCoarse : sl.landCoarse;
-                if (!full) continue;
+                const TerrainMesh& full = water ? sl.water : sl.land;
+                const TerrainMesh& coarse = water ? sl.waterCoarse : sl.landCoarse;
+                if (full.parts.empty()) continue;
                 const float x0 = sx * 32.0f - 0.5f, y0 = sy * 32.0f - 0.5f, x1 = x0 + 33.0f, y1 = y0 + 33.0f;
                 const float z0 = sl.zMin - 1.0f, z1 = sl.zMax + 1.0f;
                 if (!BoxVisible(f, x0, y0, z0, x1, y1, z1)) continue;
                 if (sunBoxOnly && !InSunBox(x0, y0, z0, x1, y1, z1)) continue;
                 bool coarseMesh = false; // ("far" is a macro in Windows' headers)
-                if (lod && !f.ortho && coarse) {
+                if (lod && !f.ortho && !coarse.parts.empty()) {
                     const float dx = (x0 + x1) * 0.5f - f.eye[0], dy = (y0 + y1) * 0.5f - f.eye[1], dz = (z0 + z1) * 0.5f - f.eye[2];
                     coarseMesh = dx * dx + dy * dy + dz * dz > lodDist * lodDist;
                 }
-                glCallList(coarseMesh ? coarse : full);
+                for (const auto& part : (coarseMesh ? coarse : full).parts) {
+                    if (bindTextures) glBindTexture(GL_TEXTURE_2D, TerrainTexture(part.first));
+                    glCallList(part.second);
+                }
             }
     }
 
@@ -1186,12 +1199,13 @@ private:
         } else {
             glColor4f(1, 1, 1, 1);
         }
-        if (options.textured && texturesFound_ > 0) glEnable(GL_TEXTURE_2D); // the lists bind their textures
+        const bool textured = options.textured && texturesFound_ > 0;
+        if (textured) glEnable(GL_TEXTURE_2D);
         else {
             glDisable(GL_TEXTURE_2D);
             if (!water) glColor4f(0.55f, 0.6f, 0.45f, 1.0f);
         }
-        DrawTerrainGeometry(water, true, false);
+        DrawTerrainGeometry(water, true, false, textured);
         glDisable(GL_TEXTURE_2D);
         if (water) {
             glDisable(GL_BLEND);
