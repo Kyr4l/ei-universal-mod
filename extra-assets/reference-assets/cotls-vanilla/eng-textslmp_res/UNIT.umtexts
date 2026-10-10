@@ -1,0 +1,517 @@
+# um-texts 1
+=== UNIT GolemHorizontalF20
+Golem
+
+=== UNIT LMP_Unique_Undead_Hadagan_BMZombie_17
+Zombie Magician
+
+=== UNIT lmp_Banshee_Gipath_Fighter_2
+Weak banshee
+
+=== UNIT lmp_Banshee_Gipath_Fighter_4
+Banshee
+
+=== UNIT lmp_Banshee_Gipath_Fighter_6
+Strong banshee
+
+=== UNIT lmp_Banshee_Gipath_Fighter_8
+Very strong banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_2
+Weak banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_4
+Banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_6
+Strong banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_8
+Very strong banshee
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_13
+Sand banshee
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_15
+Strong sand banshee
+
+=== UNIT lmp_Banshee_Hadagan_Mage_13
+Sand banshee
+
+=== UNIT lmp_Banshee_Hadagan_Mage_15
+Strong sand banshee
+
+=== UNIT lmp_Bat_Gipath_1
+Bat cub
+
+=== UNIT lmp_Bat_Gipath_3
+Young bat
+
+=== UNIT lmp_Bat_Gipath_5
+Adult bat
+
+=== UNIT lmp_Bat_Gipath_7
+Old bat
+
+=== UNIT lmp_Beholder_Red_Ingos_11
+Adult evileye
+
+=== UNIT lmp_Beholder_Red_Ingos_9
+Young evileye
+
+=== UNIT lmp_Boar_Black_5
+Young black boar
+
+=== UNIT lmp_Boar_Black_7
+Adult black boar
+
+=== UNIT lmp_Boar_Red_1
+Young boar
+
+=== UNIT lmp_Boar_Red_3
+Adult boar
+
+=== UNIT lmp_Cyclops_14
+Baby Cyclops
+
+=== UNIT lmp_Cyclops_16
+Teenage Cyclops
+
+=== UNIT lmp_Decorative_Cow
+Cow
+
+=== UNIT lmp_Decorative_Deer
+Deer
+
+=== UNIT lmp_Decorative_Hare_Red
+Hare
+
+=== UNIT lmp_Decorative_Hare_White
+Hare
+
+=== UNIT lmp_Decorative_Horse_Red
+Horse
+
+=== UNIT lmp_Decorative_Horse_White
+Horse
+
+=== UNIT lmp_Decorative_Pig
+Pig
+
+=== UNIT lmp_Dog_Ingos_11
+Trained dog
+
+=== UNIT lmp_Dog_Ingos_9
+Dog
+
+=== UNIT lmp_Dragonkin_2
+Very young lizard
+
+=== UNIT lmp_Dragonkin_4
+Young lizard
+
+=== UNIT lmp_Dragonkin_6
+Adult lizard
+
+=== UNIT lmp_Dragonkin_8
+Old lizard
+
+=== UNIT lmp_Driad_Black_Archer_11
+Woodsfolk marksman (White Clan)
+
+=== UNIT lmp_Driad_Black_Archer_9
+Woodsfolk archer (White Clan)
+
+=== UNIT lmp_Driad_Black_Mage_11
+Woodsfolk master magician (White Clan)
+
+=== UNIT lmp_Driad_Black_Mage_9
+Woodsfolk mage (White Clan)
+
+=== UNIT lmp_Driad_Blue_Archer_11
+Woodsfolk marksman (Black Clan)
+
+=== UNIT lmp_Driad_Blue_Archer_9
+Woodsfolk archer (Black Clan)
+
+=== UNIT lmp_Driad_Blue_Mage_11
+Woodsfolk master mage (Black Clan)
+
+=== UNIT lmp_Driad_Blue_Mage_9
+Woodsfolk Magician (Black Clan)
+
+=== UNIT lmp_Elemental_Ice_10
+Snow elemental (little)
+
+=== UNIT lmp_Elemental_Ice_12
+Snow elemental (big)
+
+=== UNIT lmp_Goblin_Archer_1
+Young Goblin
+
+=== UNIT lmp_Goblin_Archer_3
+Goblin
+
+=== UNIT lmp_Goblin_Archer_5
+Expert Goblin
+
+=== UNIT lmp_Goblin_Archer_7
+Experienced Goblin
+
+=== UNIT lmp_Goblin_Fighter_1
+Young Goblin
+
+=== UNIT lmp_Goblin_Fighter_3
+Goblin
+
+=== UNIT lmp_Goblin_Fighter_5
+Expert Goblin
+
+=== UNIT lmp_Goblin_Fighter_7
+Experienced Goblin
+
+=== UNIT lmp_Human_Gipath_Archer_2
+Inexperienced female Brigand
+
+=== UNIT lmp_Human_Gipath_Archer_4
+Female Brigand
+
+=== UNIT lmp_Human_Gipath_Archer_6
+Brigand markswoman
+
+=== UNIT lmp_Human_Gipath_Archer_8
+Brigand experienced markswoman
+
+=== UNIT lmp_Human_Gipath_Fighter_2
+Inexperienced Brigand
+
+=== UNIT lmp_Human_Gipath_Fighter_4
+Brigand
+
+=== UNIT lmp_Human_Gipath_Fighter_6
+Experienced Brigand
+
+=== UNIT lmp_Human_Gipath_Fighter_8
+Very experienced Brigand
+
+=== UNIT lmp_Human_Gipath_Mage_2
+Unexperienced Brigand witch
+
+=== UNIT lmp_Human_Gipath_Mage_4
+Brigand witch
+
+=== UNIT lmp_Human_Gipath_Mage_6
+Experienced Brigand witch
+
+=== UNIT lmp_Human_Gipath_Mage_8
+Very experienced Brigand witch
+
+=== UNIT lmp_Human_Hadagan_Archer_14
+Rookie archer
+
+=== UNIT lmp_Human_Hadagan_Archer_16
+Archer
+
+=== UNIT lmp_Human_Hadagan_Archer_20
+Corporal archer
+
+=== UNIT lmp_Human_Hadagan_Archer_24
+Imperial Guards archer
+
+=== UNIT lmp_Human_Hadagan_Archer_28
+Imperial Guards sergeant
+
+=== UNIT lmp_Human_Hadagan_Fighter_14
+Rookie soldier
+
+=== UNIT lmp_Human_Hadagan_Fighter_16
+Soldier
+
+=== UNIT lmp_Human_Hadagan_Fighter_20
+Corporal
+
+=== UNIT lmp_Human_Hadagan_Fighter_24
+Imperial Guards private
+
+=== UNIT lmp_Human_Hadagan_Fighter_28
+Imperial Guards sergeant
+
+=== UNIT lmp_Human_Hadagan_Mage_14
+Rookie warrior magician
+
+=== UNIT lmp_Human_Hadagan_Mage_16
+Warrior magician
+
+=== UNIT lmp_Human_Hadagan_Mage_20
+Warrior magician - corporal
+
+=== UNIT lmp_Human_Hadagan_Mage_24
+Imperial guards warrior magician
+
+=== UNIT lmp_Human_Hadagan_Mage_28
+Imperial guards sergeant
+
+=== UNIT lmp_Human_Ingos_Archer_10
+Archer
+
+=== UNIT lmp_Human_Ingos_Archer_12
+Marksman
+
+=== UNIT lmp_Human_Ingos_Fighter_10
+Fighter
+
+=== UNIT lmp_Human_Ingos_Fighter_12
+Experienced fighter
+
+=== UNIT lmp_Human_Ingos_Mage_10
+Magician
+
+=== UNIT lmp_Human_Ingos_Mage_12
+Experienced magician
+
+=== UNIT lmp_Hyena_13
+Young hyena
+
+=== UNIT lmp_Hyena_15
+Adult hyena
+
+=== UNIT lmp_Octopus_10
+Wormhead servant
+
+=== UNIT lmp_Octopus_12
+Wormhead guard
+
+=== UNIT lmp_Ogre_Hadagan_14
+Young sand ogre
+
+=== UNIT lmp_Ogre_Hadagan_16
+Adult Sand Ogre
+
+=== UNIT lmp_Orc_Archer_2
+Young Orc archer
+
+=== UNIT lmp_Orc_Archer_4
+Orc archer
+
+=== UNIT lmp_Orc_Archer_6
+Adult Orc archer
+
+=== UNIT lmp_Orc_Archer_8
+Experienced Orc archer
+
+=== UNIT lmp_Orc_Fighter_2
+Young Orc fighter
+
+=== UNIT lmp_Orc_Fighter_4
+Orc fighter
+
+=== UNIT lmp_Orc_Fighter_6
+Adult Orc fighter
+
+=== UNIT lmp_Orc_Fighter_8
+Experienced Orc fighter
+
+=== UNIT lmp_Orc_Mage_2
+Young seer
+
+=== UNIT lmp_Orc_Mage_4
+Seer
+
+=== UNIT lmp_Orc_Mage_6
+Experienced seer
+
+=== UNIT lmp_Orc_Mage_8
+Old seer
+
+=== UNIT lmp_Shadow_21
+Seer shadow
+
+=== UNIT lmp_Shadow_25
+Witch shadow
+
+=== UNIT lmp_Shadow_29
+Magician shadow
+
+=== UNIT lmp_Skeleton_7
+Commoner's skeleton
+
+=== UNIT lmp_Skeleton_8
+Soldier's skeleton
+
+=== UNIT lmp_Spider_13
+Young spider
+
+=== UNIT lmp_Spider_15
+Adult spider
+
+=== UNIT lmp_Succubus_Hadagan_13
+Young Harpy
+
+=== UNIT lmp_Succubus_Hadagan_15
+Adult Harpy
+
+=== UNIT lmp_Tiger_Red_2
+Young tiger
+
+=== UNIT lmp_Tiger_Red_4
+Adult tiger
+
+=== UNIT lmp_Tiger_Red_6
+Old tiger
+
+=== UNIT lmp_Tiger_Red_8
+Strong tiger
+
+=== UNIT lmp_Tiger_White_11
+Adult snow tiger
+
+=== UNIT lmp_Tiger_White_9
+Young snow tiger
+
+=== UNIT lmp_Toad_1
+Young poisonous toad
+
+=== UNIT lmp_Toad_3
+Adult poisonous toad
+
+=== UNIT lmp_Toad_5
+Old poisonous toad
+
+=== UNIT lmp_Toad_7
+Strong poisonous toad
+
+=== UNIT lmp_Troll_Black_14
+Young black Troll
+
+=== UNIT lmp_Troll_Black_16
+Adult black Troll
+
+=== UNIT lmp_Troll_Blue_10
+Young Blue Troll
+
+=== UNIT lmp_Troll_Blue_12
+Adult blue Troll
+
+=== UNIT lmp_Unique_Cyclops_Leader_20
+Strong Cyclops
+
+=== UNIT lmp_Unique_Deer_King_13
+Royal deer
+
+=== UNIT lmp_Unique_Dragon_Plague_Ancient_30
+Dragon Lord
+
+=== UNIT lmp_Unique_Dragon_Plague_Soldiers_24
+Servant Dragon
+
+=== UNIT lmp_Unique_Dragon_Plague_Wingmans_26
+Courtier Dragon
+
+=== UNIT lmp_Unique_Dragonkin_Amulet_7
+Lizard amulet keeper
+
+=== UNIT lmp_Unique_Goblin_Gogo
+Goblin Chief
+
+=== UNIT lmp_Unique_Human_Aizet-Bek_17
+Aiset-Bek
+
+=== UNIT lmp_Unique_Human_Betrayer_Slave
+Traitor slave
+
+=== UNIT lmp_Unique_Human_Betrayer_Soldiers
+Soldier
+
+=== UNIT lmp_Unique_Human_Captain_15
+Captain Tilvar
+
+=== UNIT lmp_Unique_Human_Jun_Scientists_13
+Scientist
+
+=== UNIT lmp_Unique_Human_Junophile_Friend_13
+Scientist's friend
+
+=== UNIT lmp_Unique_Human_Messanger_20
+Messenger
+
+=== UNIT lmp_Unique_Human_Pleshivy_15
+Baldie
+
+=== UNIT lmp_Unique_Human_Portal_Warlord_32
+Commander Iriskell
+
+=== UNIT lmp_Unique_Human_Summoner_24
+Master of Shadows
+
+=== UNIT lmp_Unique_Octopus_Magister_15
+Wormhead Lord
+
+=== UNIT lmp_Unique_Orc_Enchanted_Followers_4
+Orc guard
+
+=== UNIT lmp_Unique_Orc_Enchanted_Shaman_7
+Seer Chief
+
+=== UNIT lmp_Unique_Pig_Boryka_1
+Fivepence
+
+=== UNIT lmp_Unique_Tiger_Rampaging_12
+Killer tiger
+
+=== UNIT lmp_Unique_Toad_Cannibal_5
+Ogre toad
+
+=== UNIT lmp_Unique_Undead_Hadagan_8
+Undead soldier
+
+=== UNIT lmp_Unique_Undead_Hadagan_Leader_11
+Undead Necromancer
+
+=== UNIT lmp_Unique_Unicorn_Corrupted_13
+Young black unicorn
+
+=== UNIT lmp_Unique_Willowisp_Mother_11
+Will-o'-the-wisp mother
+
+=== UNIT lmp_Willowisp_1
+Weak Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_3
+Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_5
+Hot Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_7
+Burning Will-o'-the-wisp
+
+=== UNIT lmp_Wolf_Gray_2
+Young wolf
+
+=== UNIT lmp_Wolf_Gray_4
+Adult wolf
+
+=== UNIT lmp_Wolf_White_5
+Old wolf
+
+=== UNIT lmp_Wolf_White_7
+Strong wolf
+
+=== UNIT lmp_Zombie_Female_20
+Female Brigand zombie
+
+=== UNIT lmp_Zombie_Female_24
+Female guard zombie
+
+=== UNIT lmp_Zombie_Female_28
+Female mercenary zombie
+
+=== UNIT lmp_Zombie_Male_20
+Soldier zombie
+
+=== UNIT lmp_Zombie_Male_24
+Experienced soldier zombie
+
+=== UNIT lmp_Zombie_Male_28
+Veteran soldier zombie
+

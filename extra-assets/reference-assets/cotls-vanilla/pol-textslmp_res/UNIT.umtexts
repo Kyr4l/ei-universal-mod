@@ -1,0 +1,517 @@
+# um-texts 1
+=== UNIT GolemHorizontalF20
+Golem
+
+=== UNIT LMP_Unique_Undead_Hadagan_BMZombie_17
+Mag zombie
+
+=== UNIT lmp_Banshee_Gipath_Fighter_2
+S³abe banshee
+
+=== UNIT lmp_Banshee_Gipath_Fighter_4
+Banshee
+
+=== UNIT lmp_Banshee_Gipath_Fighter_6
+Silne banshee
+
+=== UNIT lmp_Banshee_Gipath_Fighter_8
+Bardzo silne banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_2
+S³abe banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_4
+Banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_6
+Silne banshee
+
+=== UNIT lmp_Banshee_Gipath_Mage_8
+Bardzo silne banshee
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_13
+Piaskowe banshee
+
+=== UNIT lmp_Banshee_Hadagan_Fighter_15
+Silne piaskowe banshee
+
+=== UNIT lmp_Banshee_Hadagan_Mage_13
+Piaskowe banshee
+
+=== UNIT lmp_Banshee_Hadagan_Mage_15
+Silne piaskowe banshee
+
+=== UNIT lmp_Bat_Gipath_1
+Szczeniê nietoperza
+
+=== UNIT lmp_Bat_Gipath_3
+M³ody nietoperz
+
+=== UNIT lmp_Bat_Gipath_5
+Doros³y nietoperz
+
+=== UNIT lmp_Bat_Gipath_7
+Stary nietoperz
+
+=== UNIT lmp_Beholder_Red_Ingos_11
+Doros³e z³e oko
+
+=== UNIT lmp_Beholder_Red_Ingos_9
+M³ode z³eoko
+
+=== UNIT lmp_Boar_Black_5
+M³ody czarny dzik
+
+=== UNIT lmp_Boar_Black_7
+Doros³y czarny dzik
+
+=== UNIT lmp_Boar_Red_1
+M³ody dzik
+
+=== UNIT lmp_Boar_Red_3
+Doros³y dzik
+
+=== UNIT lmp_Cyclops_14
+Dziecko cyklopów
+
+=== UNIT lmp_Cyclops_16
+Nastoletni cyklop
+
+=== UNIT lmp_Decorative_Cow
+Krowa
+
+=== UNIT lmp_Decorative_Deer
+Jeleñ
+
+=== UNIT lmp_Decorative_Hare_Red
+Królik
+
+=== UNIT lmp_Decorative_Hare_White
+Królik
+
+=== UNIT lmp_Decorative_Horse_Red
+Koñ
+
+=== UNIT lmp_Decorative_Horse_White
+Koñ
+
+=== UNIT lmp_Decorative_Pig
+Œwinia
+
+=== UNIT lmp_Dog_Ingos_11
+Tresowany pies
+
+=== UNIT lmp_Dog_Ingos_9
+Pies
+
+=== UNIT lmp_Dragonkin_2
+Bardzo m³ody jaszczur
+
+=== UNIT lmp_Dragonkin_4
+M³ody jaszczur
+
+=== UNIT lmp_Dragonkin_6
+Doros³y jaszczur
+
+=== UNIT lmp_Dragonkin_8
+Stary jaszczur
+
+=== UNIT lmp_Driad_Black_Archer_11
+Strzelec leœnych ludzi (Bia³y klan)
+
+=== UNIT lmp_Driad_Black_Archer_9
+£ucznik leœnych ludzi (Bia³y klan)
+
+=== UNIT lmp_Driad_Black_Mage_11
+Mistrz magii leœnych ludzi (Bia³y klan)
+
+=== UNIT lmp_Driad_Black_Mage_9
+Mag leœnych ludzi (Bia³y klan)
+
+=== UNIT lmp_Driad_Blue_Archer_11
+Strzelec leœnych ludzi (Czarny klan)
+
+=== UNIT lmp_Driad_Blue_Archer_9
+£ucznik leœnych ludzi (Czarny klan)
+
+=== UNIT lmp_Driad_Blue_Mage_11
+Mistrz magii leœnych ludzi (Czarny klan)
+
+=== UNIT lmp_Driad_Blue_Mage_9
+Mag leœnych ludzi (Czarny klan)
+
+=== UNIT lmp_Elemental_Ice_10
+¯ywio³ œniegu (ma³y)
+
+=== UNIT lmp_Elemental_Ice_12
+¯ywio³ œniegu (wielki)
+
+=== UNIT lmp_Goblin_Archer_1
+M³ody goblin
+
+=== UNIT lmp_Goblin_Archer_3
+Goblin
+
+=== UNIT lmp_Goblin_Archer_5
+Goblin ekspert
+
+=== UNIT lmp_Goblin_Archer_7
+Doœwiadczony goblin
+
+=== UNIT lmp_Goblin_Fighter_1
+M³ody goblin
+
+=== UNIT lmp_Goblin_Fighter_3
+Goblin
+
+=== UNIT lmp_Goblin_Fighter_5
+Goblin ekspert
+
+=== UNIT lmp_Goblin_Fighter_7
+Doœwiadczony goblin
+
+=== UNIT lmp_Human_Gipath_Archer_2
+Niedoœwiadczona rozbójniczka
+
+=== UNIT lmp_Human_Gipath_Archer_4
+Rozbójniczka
+
+=== UNIT lmp_Human_Gipath_Archer_6
+Strzelec rozbójników
+
+=== UNIT lmp_Human_Gipath_Archer_8
+Doœwiadczony strzelec rozbójników
+
+=== UNIT lmp_Human_Gipath_Fighter_2
+Niedoœwiadczony rozbójnik
+
+=== UNIT lmp_Human_Gipath_Fighter_4
+Rozbójnik
+
+=== UNIT lmp_Human_Gipath_Fighter_6
+Doœwiadczony rozbójnik
+
+=== UNIT lmp_Human_Gipath_Fighter_8
+Bardzo doœwiadczony rozbójnik
+
+=== UNIT lmp_Human_Gipath_Mage_2
+Niedoœwiadczona wiedŸma rozbójników
+
+=== UNIT lmp_Human_Gipath_Mage_4
+WiedŸma rozbójników
+
+=== UNIT lmp_Human_Gipath_Mage_6
+Doœwiadczona wiedŸma rozbójników
+
+=== UNIT lmp_Human_Gipath_Mage_8
+Bardzo doœwiadczona wiedŸma rozbójników
+
+=== UNIT lmp_Human_Hadagan_Archer_14
+Pocz¹tkuj¹cy ³ucznik
+
+=== UNIT lmp_Human_Hadagan_Archer_16
+£ucznik
+
+=== UNIT lmp_Human_Hadagan_Archer_20
+Kapral ³ucznik
+
+=== UNIT lmp_Human_Hadagan_Archer_24
+Cesarski ³ucznik
+
+=== UNIT lmp_Human_Hadagan_Archer_28
+Cesarski sier¿ant
+
+=== UNIT lmp_Human_Hadagan_Fighter_14
+Pocz¹tkuj¹cy ¿o³nierz
+
+=== UNIT lmp_Human_Hadagan_Fighter_16
+¯o³nierz
+
+=== UNIT lmp_Human_Hadagan_Fighter_20
+Kapral
+
+=== UNIT lmp_Human_Hadagan_Fighter_24
+Cesarki szeregowiec
+
+=== UNIT lmp_Human_Hadagan_Fighter_28
+Cesarski sier¿ant
+
+=== UNIT lmp_Human_Hadagan_Mage_14
+Pocz¹tkuj¹cy wiedŸmin
+
+=== UNIT lmp_Human_Hadagan_Mage_16
+WiedŸmin
+
+=== UNIT lmp_Human_Hadagan_Mage_20
+WiedŸmin kapral
+
+=== UNIT lmp_Human_Hadagan_Mage_24
+Cesarski wiedŸmin
+
+=== UNIT lmp_Human_Hadagan_Mage_28
+Cesarski sier¿ant
+
+=== UNIT lmp_Human_Ingos_Archer_10
+£ucznik
+
+=== UNIT lmp_Human_Ingos_Archer_12
+Strzelec
+
+=== UNIT lmp_Human_Ingos_Fighter_10
+Wojownik
+
+=== UNIT lmp_Human_Ingos_Fighter_12
+Doœwiadczony wojownik
+
+=== UNIT lmp_Human_Ingos_Mage_10
+Mag
+
+=== UNIT lmp_Human_Ingos_Mage_12
+Doœwiadczony mag
+
+=== UNIT lmp_Hyena_13
+M³oda hiena
+
+=== UNIT lmp_Hyena_15
+Doros³a hiena
+
+=== UNIT lmp_Octopus_10
+S³uga robalog³owych
+
+=== UNIT lmp_Octopus_12
+Stra¿nik robalogowych
+
+=== UNIT lmp_Ogre_Hadagan_14
+M³ody piaskowy ogr
+
+=== UNIT lmp_Ogre_Hadagan_16
+Doros³y piaskowy ogr
+
+=== UNIT lmp_Orc_Archer_2
+M³ody ork ³ucznik
+
+=== UNIT lmp_Orc_Archer_4
+Ork ³ucznik
+
+=== UNIT lmp_Orc_Archer_6
+Doros³y ork ³ucznik
+
+=== UNIT lmp_Orc_Archer_8
+Doœwiadczony ork ³ucznik
+
+=== UNIT lmp_Orc_Fighter_2
+M³ody ork wojownik
+
+=== UNIT lmp_Orc_Fighter_4
+Ork wojownik
+
+=== UNIT lmp_Orc_Fighter_6
+Doros³y ork wojownik
+
+=== UNIT lmp_Orc_Fighter_8
+Doœwiadczony ork wojownik
+
+=== UNIT lmp_Orc_Mage_2
+M³ody jasnowidz
+
+=== UNIT lmp_Orc_Mage_4
+Jasnowidz
+
+=== UNIT lmp_Orc_Mage_6
+Doœwiadczony jasnowidz
+
+=== UNIT lmp_Orc_Mage_8
+Stary jasnowidz
+
+=== UNIT lmp_Shadow_21
+Cieñ jasnowidza
+
+=== UNIT lmp_Shadow_25
+Cieñ wiedŸmy
+
+=== UNIT lmp_Shadow_29
+Cieñ magika
+
+=== UNIT lmp_Skeleton_7
+Szkielet
+
+=== UNIT lmp_Skeleton_8
+Szkielet ¿o³nierza
+
+=== UNIT lmp_Spider_13
+M³ody paj¹k
+
+=== UNIT lmp_Spider_15
+Doros³y paj¹k
+
+=== UNIT lmp_Succubus_Hadagan_13
+M³oda harpia
+
+=== UNIT lmp_Succubus_Hadagan_15
+Doros³a harpia
+
+=== UNIT lmp_Tiger_Red_2
+M³ody tygrys
+
+=== UNIT lmp_Tiger_Red_4
+Doros³y tygrys
+
+=== UNIT lmp_Tiger_Red_6
+Stary tygrys
+
+=== UNIT lmp_Tiger_Red_8
+Silny tygrys
+
+=== UNIT lmp_Tiger_White_11
+Doros³y œnie¿ny tygrys
+
+=== UNIT lmp_Tiger_White_9
+M³ody œnie¿ny tygrys
+
+=== UNIT lmp_Toad_1
+M³oda truj¹ca ¿aba
+
+=== UNIT lmp_Toad_3
+Doros³a truj¹ca ¿aba
+
+=== UNIT lmp_Toad_5
+Stara truj¹ca ¿aba
+
+=== UNIT lmp_Toad_7
+Silna truj¹ca ¿aba
+
+=== UNIT lmp_Troll_Black_14
+M³ody czarny trol
+
+=== UNIT lmp_Troll_Black_16
+Doros³y czarny trol
+
+=== UNIT lmp_Troll_Blue_10
+M³ody niebieski trol
+
+=== UNIT lmp_Troll_Blue_12
+Doros³y niebieski trol
+
+=== UNIT lmp_Unique_Cyclops_Leader_20
+Silny cyklop
+
+=== UNIT lmp_Unique_Deer_King_13
+Jeleñ królewski
+
+=== UNIT lmp_Unique_Dragon_Plague_Ancient_30
+Smoczy pan
+
+=== UNIT lmp_Unique_Dragon_Plague_Soldiers_24
+Smoczy s³uga
+
+=== UNIT lmp_Unique_Dragon_Plague_Wingmans_26
+Smoczy kurier
+
+=== UNIT lmp_Unique_Dragonkin_Amulet_7
+Stra¿nik amuletu jaszczurów
+
+=== UNIT lmp_Unique_Goblin_Gogo
+Wódz goblinów
+
+=== UNIT lmp_Unique_Human_Aizet-Bek_17
+Aiset-Bek
+
+=== UNIT lmp_Unique_Human_Betrayer_Slave
+S³uga zdrajcy
+
+=== UNIT lmp_Unique_Human_Betrayer_Soldiers
+¯o³nierz
+
+=== UNIT lmp_Unique_Human_Captain_15
+Kapitan Tilvar
+
+=== UNIT lmp_Unique_Human_Jun_Scientists_13
+Naukowiec
+
+=== UNIT lmp_Unique_Human_Junophile_Friend_13
+Przyjaciel naukowców
+
+=== UNIT lmp_Unique_Human_Messanger_20
+Pos³aniec
+
+=== UNIT lmp_Unique_Human_Pleshivy_15
+Baldie
+
+=== UNIT lmp_Unique_Human_Portal_Warlord_32
+Dowódca Iriskell
+
+=== UNIT lmp_Unique_Human_Summoner_24
+Mistrza Cieni
+
+=== UNIT lmp_Unique_Octopus_Magister_15
+Pan robalog³owych
+
+=== UNIT lmp_Unique_Orc_Enchanted_Followers_4
+Stra¿ orków
+
+=== UNIT lmp_Unique_Orc_Enchanted_Shaman_7
+Wódz jasnowidzów
+
+=== UNIT lmp_Unique_Pig_Boryka_1
+Fivepence
+
+=== UNIT lmp_Unique_Tiger_Rampaging_12
+Zabójczy tygrys
+
+=== UNIT lmp_Unique_Toad_Cannibal_5
+Ogrza ropucha
+
+=== UNIT lmp_Unique_Undead_Hadagan_8
+Nieumar³y ¿o³nierz
+
+=== UNIT lmp_Unique_Undead_Hadagan_Leader_11
+Nieumar³y nekromanta
+
+=== UNIT lmp_Unique_Unicorn_Corrupted_13
+M³ody czarny jednoro¿ec
+
+=== UNIT lmp_Unique_Willowisp_Mother_11
+Matka 'Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_1
+S³aby Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_3
+Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_5
+Gor¹cy Will-o'-the-wisp
+
+=== UNIT lmp_Willowisp_7
+P³on¹cy Will-o'-the-wisp
+
+=== UNIT lmp_Wolf_Gray_2
+M³ody wilk
+
+=== UNIT lmp_Wolf_Gray_4
+Doros³y wilk
+
+=== UNIT lmp_Wolf_White_5
+Stary wilk
+
+=== UNIT lmp_Wolf_White_7
+Silny wilk
+
+=== UNIT lmp_Zombie_Female_20
+Rozbójniczka zombie
+
+=== UNIT lmp_Zombie_Female_24
+Stra¿niczka zombie
+
+=== UNIT lmp_Zombie_Female_28
+Najemniczka zombie
+
+=== UNIT lmp_Zombie_Male_20
+¯o³nierz zombie
+
+=== UNIT lmp_Zombie_Male_24
+Doœwiadczony ¿o³nierz zombie
+
+=== UNIT lmp_Zombie_Male_28
+Weteran ¿o³nierz zombie
+

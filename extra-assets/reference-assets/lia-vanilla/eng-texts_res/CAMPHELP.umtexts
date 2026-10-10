@@ -1,0 +1,141 @@
+# um-texts 1
+=== camphelp 1
+Taken: spell
+Heroes cannot use equipment while on missions. They can, however, take with them up to eight spells that will be available during the game. When you come across a new spell, you must first take it using this screen. Only then will you be able to use it.
+
+=== camphelp 10
+Light armor (hands)
+You can protect your hands by putting gloves or any other light armor on them. This will reduce the damage your hero takes when he is hit in the hands. You can put heavier armor on top of lighter armor.
+
+=== camphelp 100
+Item store
+At the top and bottom of the screen you will find scrolling windows. They contain the items available in the store and those in your pocket. "Shop counter" is located in the middle of the screen, and in the bottom left corner of the screen you will find the prices of goods to buy or sell. Click on the buttons next to the prices of the goods to make transactions or cancel them (in this case, the goods will be returned to the store).
+
+=== camphelp 101
+Spell Shop
+At the top and bottom of the screen you will find scrolling windows. They contain the spells that are available in the store and those that are in your pocket. The "store counter" is located in the middle of the screen, and in its lower left corner you will find the prices of the spells to buy or sell. Click on the buttons next to the charm prices to make transactions or cancel them (in this case, all runes will be returned to the store),
+
+=== camphelp 102
+Item constructor
+You can use items from your inventory and from the store to create new items. You can do this in two ways. Either by using the appropriate diagrams and parts of goods or by recovering parts from your equipment. The price details of the operation can be found at the bottom of the left window. The buttons next to the window are used to confirm/cancel operations.
+
+=== camphelp 103
+Spell constructor
+With the help of prototypes and runes from your inventory (and those from the store) you can create new spells. You can do this in two ways. Either by using the appropriate prototypes and (optionally) runes, or by disassembling the spells you have. The price details of the operation can be found at the bottom of the left window. The buttons next to the window are used to confirm/cancel operations.
+
+=== camphelp 104
+Repairing items
+With time and successive adventures, items wear out. When their durability is reduced to zero, you can no longer use them. In order not to throw them away right away, you can repair them. You will find the repair costs in the lower left of the window. The buttons are for confirming/cancelling repairs.
+
+=== camphelp 105
+Equipping your characters
+You can dress and equip all your wards. Items taken from your character will be transferred to your inventory. Items can be sold in the store, converted in the constructor or given to any other character in your team.
+
+=== camphelp 106
+Spells and skills
+You can use the experience your characters gain to strengthen your people's knowledge or to teach them new things. You can also give them spells or hide them in your inventory. If a character is not advanced enough to cast a spell, you will not be able to give them one.
+
+=== camphelp 107
+Exit
+You can return to the Check-in area. All the goods you paid for will appear in your inventory, while the goods you didn't pay for will be returned to the store. 
+
+=== camphelp 11
+Buying items
+When you select items to buy, they will be lined up on the store counter. Its two upper shelves contain the items you want to purchase, while the two lower shelves contain the items you want to sell. In the lower left corner, you will find buttons that you can use to confirm or cancel a transaction.
+
+=== camphelp 12
+Selling items
+When you select goods to sell, they will be lined up on the store counter. Its two upper shelves contain the items you want to purchase, while the two lower shelves contain the items you want to sell. In the lower left corner, you will find buttons that you can use to confirm or cancel a transaction.
+
+=== camphelp 13
+Ready-made items
+This section contains items that are ready to use. You can create new items if you have the appropriate schematics and resources. When you do this, a new part of your inventory will appear in this section. You can also place a ready item here and disassemble it. 
+
+=== camphelp 14
+Schema
+This section contains the schematics needed to create new items. When you place a schematic here, you will still need to enter the appropriate amount of materials in the "Materials" section. Then you will be able to create a new item, which will appear in the "Finished items" section. You can also disassemble items that you have - then, in this section, you will find the schematic of the disassembled item.
+
+=== camphelp 15
+Material
+This section contains the materials needed to create new items. When you have placed the appropriate amount of material here, i.e. according to the scheme requirements, you will be able to create a new item, which will appear in the "Finished Items" section. You can also disassemble the items you have - then, in this section, you will find the component materials of the disassembled item.
+
+=== camphelp 16
+Spell
+You can combine spells with weapons with armor. The spell must have an "item" rune that determines when the spell can take effect. Parts of the equipment have certain restrictions that determine the strength and the way the implemented spell works. You can also disintegrate the "enchanted" item - then you can use the spell in the traditional way.
+
+=== camphelp 17
+Spells, Schemes, Runes: Buying
+When you select spells, runes or prototypes to buy, they will be lined up on the store counter. Its two upper shelves contain the spells, runes or prototypes you wish to purchase, while on the two lower shelves you will find those you wish to sell. In the lower left corner, you will find buttons that you can use to confirm or cancel the transaction.
+
+=== camphelp 18
+Spells, Schemes, Runes: Selling
+When you select spells, runes or prototypes to buy, they will be lined up on the store counter. Its two upper shelves contain the spells, runes or prototypes you wish to purchase, while on the two lower shelves you will find those you wish to sell. In the lower left corner, you will find buttons that you can use to confirm or cancel the transaction.
+
+=== camphelp 19
+Ready-made Spells
+This section contains ready-made spells. You can create new spells using prototype spells and runes. You can also disintegrate the spells you have, in which case the prototypes and runes will be recovered. 
+
+=== camphelp 2
+Taken: Weapons
+Heroes cannot use equipment while on missions. They can, however, take up to four weapons with them that will be available during the game. When you come across a new item, you must first pick it up using this screen. Only then will you be able to use it. 
+
+=== camphelp 20
+Spell Diagrams
+This section contains spell prototypes - essential for creating spells and determining their basic values. You can add one or two more runes. The finished charm will be found in the "Finished Spells" section.
+
+=== camphelp 21
+Runes (modification)
+This section contains runes that modify the resulting spells. You can add any number of runes to the spell you create, but the spell can only be used by one of your characters. How many runes you can use is determined by the prototypes.
+
+=== camphelp 22
+Inventory
+This screen shows the contents of a character's inventory - items and spells not currently used by any character. You can only use the inventory screen outside of the game screen. 
+
+=== camphelp 23
+Available items
+This screen shows all the schematics, materials, and finished items you can purchase at this time.
+
+=== camphelp 24
+Available Spells
+This screen shows all the prototypes, runes, and finished spells you can purchase at this time.
+
+=== camphelp 25
+Items to be repaired
+Items that need repairing must be placed on the table. In the lower left corner of the screen you will find information about the repair costs. Use the buttons next to them to confirm/cancel the operation. 
+
+=== camphelp 26
+Maximum complexity
+Shows the maximum complexity of the spells available in the set. You cannot create spells that are too complex for any of your characters.
+
+=== camphelp 27
+Maximum Potential
+Shows a character's maximum magic potential needed to cast the spells available in the set. You cannot create spells that are too complex for any of your characters.
+
+=== camphelp 3
+Taken: Drinks and wands
+Heroes are not allowed to use their equipment during missions. They can, however, take with them up to four drinks and wands that will be available during the game. When you come across a new drink, you must first take it using this screen. Only then will you be able to use it. 
+
+=== camphelp 4
+Heavy armor (head)
+Your hero can wear a helmet or any other covering on his head. This will reduce the damage when hitting this part of the body.
+
+=== camphelp 5
+Heavy armor (torso)
+Your hero can wear armor or any other heavy armor that could cover his body and arms. This will reduce the damage when hitting this part of the body. You can, of course, put lighter armor under heavy armor.
+
+=== camphelp 6
+Heavy Armor (Legs)
+Your hero can put leggings or any other heavy armor on his legs. This will reduce the damage when hitting this part of the body. You can, of course, put lighter armor under heavy armor.
+
+=== camphelp 7
+Light armor (torso)
+Your character can put on a shirt or any other light armor that would cover his arms and body. This will reduce the damage when hitting this part of the body. You can, of course, put lighter armor under heavy armor.
+
+=== camphelp 8
+Light armor (legs)
+Your hero can put pants or any other light protection on his legs. This will reduce the damage when hitting this part of the body. You can, of course, put lighter armor under heavy armor.
+
+=== camphelp 9
+Light armor (foot)
+Your character can put on boots or any other light armor that would protect his feet. This will reduce the damage if this part of the body is hit. You can, of course, put lighter armor under heavy armor.
+

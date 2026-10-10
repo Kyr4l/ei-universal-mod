@@ -1,0 +1,17 @@
+# ripgrep / VS Code search: skip the big trees that are not source (43 GB, 78 000 files in the workspace otherwise).
+# .gitignore already hides _cpr and the build folders; these are tracked or untracked-but-not-ignored.
+tools/ei-um-autopacker/mods-out/
+extra-assets/reference-assets/
+extra-assets/unmade-maps/
+tools/third-party-tools/
+tools/um-multitool/vendor/
+tools/um-multitool/build/
+Universal-Mod/res/
+Universal-Mod/hdlands/
+Universal-Mod/maps/
+Universal-Mod/movies/
+Universal-Mod/stream/
+resources/universal-mod/res-unpacked/
+resources/universal-mod/res-dds/
+resources/universal-mod/mq-unpacked/
+_cpr/

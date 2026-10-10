@@ -1,14 +1,22 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 /**
  * ============================================================================
- * um-multitool - Evil Islands Modding Toolkit (merged CLI)
+ * um-multitool - Evil Islands Modding Toolkit
  * ============================================================================
  *
  * Description:
- *   Single binary merging four standalone tools:
+ *   One binary: a GUI (File Processing, 3D Viewer, Map Editor and Settings tabs, gui_main.cpp) and
+ *   the command-line tools. Double-clicked (no terminal) it opens the GUI;
+ *   run from a terminal without arguments it prints the usage; `gui` opens the
+ *   GUI from a terminal. The command-line tools merge five standalone tools:
  *     - ddsmmp  (formerly um-ddsmmp):  .dds  <-> .mmp  texture conversion
  *     - inireg  (formerly um-inireg):  .ini  <-> .reg  config conversion
  *     - mobdump (formerly um-mobdump): .mob  ->  .yaml/.eis map dumping
  *     - restool (formerly um-restool): .res/.mq <-> folder pack/unpack
+ *     - xlsxdb  (formerly um-xlsxdb):  .xlsx ->  .res database compiler
+ *   plus `viewer`, the 3D Viewer's command-line modes (viewer/viewer_app.cpp), and `map`, the
+ *   Map Editor's map checks (mapedit/map_app.cpp).
  *
  * Dispatch rules:
  *   1. Explicit subcommand: `um-multitool <subcommand> [options] <path>`
@@ -18,11 +26,13 @@
  *      input requires an explicit subcommand.
  *
  * Version:
- *   0.1
+ *   see version.hpp
  * ============================================================================
  */
 
 #include <iostream>
+#include <fstream>
+#include <iterator>
 #include <string>
 #include <vector>
 #include <set>
@@ -30,11 +40,25 @@
 #include <algorithm>
 #include <cctype>
 
+#include "gui.hpp"
+#include "version.hpp"
+#include "text_groups.hpp"
+#include "viewer/res_archive.hpp"
 #include "subtools.hpp"
+#include "log.hpp"
+#include "viewer/viewer_app.hpp"
+#include "mapedit/map_app.hpp"
+#include "dllconnect/connector_app.hpp"
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
 namespace fs = std::filesystem;
 
-static constexpr const char* PROGRAM_VERSION = "1.0";
+
 
 static std::string ToLower(std::string s) {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) {
@@ -44,15 +68,33 @@ static std::string ToLower(std::string s) {
 }
 
 static void PrintTopLevelHelp() {
-    std::cout << "um-multitool - Evil Islands Modding Toolkit (merged CLI)\n\n"
+    std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) " << PROGRAM_VERSION << " - Evil Islands Modding Toolkit\n\n"
               << "Usage:\n"
+              << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
+              << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
+              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
+              << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
+              << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>] [--mode object|paint|ground|sculpt|water]  # ... on the Map Editor with these files (looking at that object, in that editing mode)\n"
+              << "  um-multitool gui --texture [<file>]   # ... on the Texture Editor (with this picture: .mmp, .dds, .png)\n"
+              << "  um-multitool gui --settings           # ... on the Settings tab\n"
+              << "  um-multitool gui [...] --screenshot <out.bmp>  # ... then save a picture of the window (BMP) and quit\n"
+              << "  (the GUI opens with a splash screen; a splash.png beside the program replaces its banner, 480 x 300)\n"
               << "  um-multitool <subcommand> [options] <path>\n"
-              << "  um-multitool <path> [options]         # auto-detects the right subcommand\n\n"
+              << "  um-multitool <path> [options]         # auto-detects the right subcommand\n"
+              << "  --verbose / -v (any command)          # the log (um-multitool.log beside the program) also on stderr\n\n"
               << "Subcommands:\n"
               << "  ddsmmp   (alias: dds)   Convert textures between .dds <-> .mmp\n"
               << "  inireg   (alias: ini)   Convert configs between .ini <-> .reg\n"
               << "  mobdump  (alias: mob)   Dump .mob map files to .yaml / .eis\n"
-              << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n\n"
+              << "  restool  (alias: res)   Pack/unpack .res / .mq archives\n"
+              << "  texts                   texts.res / textslmp.res as a few grouped .umtexts files (pack, unpack, group, set)\n"
+              << "  xlsxdb   (alias: db)    Compile .xlsx / .ods gameplay databases to .res\n"
+              << "  dbexport                Export .res gameplay databases to .xlsx / .ods (the reverse of xlsxdb)\n"
+              << "  viewer                  3D Viewer from the command line: list items, render, export GIFs\n"
+              << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
+              << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
+              << "  completion bash         Print the bash tab-completion script: eval \"$(um-multitool completion bash)\" in ~/.bashrc\n"
+              << "  install-desktop         Add um-multitool to the Linux application menu, with its icon and bash tab completion (--remove: undo)\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
@@ -61,25 +103,97 @@ static void PrintTopLevelHelp() {
               << "  um-multitool restool database.res\n"
               << "  um-multitool ddsmmp texture.dds\n"
               << "  um-multitool inireg -d ./ini -o ./reg -m\n"
+              << "  um-multitool xlsxdb databaselmp.xlsx\n"
+              << "  um-multitool dbexport databaselmp.res -o databaselmp.ods\n"
               << "  um-multitool texture.dds                 # auto-detected -> ddsmmp\n\n"
               << "Note: directory-mode auto-detection only succeeds when every file in the\n"
               << "directory belongs to exactly one of ddsmmp/inireg/mobdump; anything mixed,\n"
               << "unrecognized, or restool-shaped (archives / generic asset folders) requires\n"
-              << "the explicit 'restool' subcommand.\n";
+              << "the explicit 'restool' subcommand. xlsxdb only ever operates on a single\n"
+              << ".xlsx file, so it is also excluded from directory auto-detection.\n";
 }
 
 static void PrintTopLevelVersion() {
-    std::cout << "um-multitool version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool (each 1.0)\n";
+    std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) version " << PROGRAM_VERSION << "\n"
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport (each 1.0), the GUI, the 3D Viewer and the Map Editor\n"
+              << "Copyright (C) 2026 Kyr4l\n"
+              << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\n"
+              << "This is free software: you are free to change and redistribute it.\n"
+              << "There is NO WARRANTY, to the extent permitted by law.\n";
 }
 
-enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool };
+// texts: a texts.res folder as a few <TYPE>.umtexts files (text_groups.hpp).
+static int RunTexts(int argc, char* argv[]) {
+    std::string mode, in, out, setName, setFile;
+    bool loose = false;
+    std::vector<std::string> exclude;
+    for (int i = 1; i < argc; ++i) {
+        const std::string a = argv[i];
+        if (a == "texts") continue;
+        if (a == "--pack" || a == "--unpack" || a == "--group") { mode = a.substr(2); if (i + 1 < argc) in = argv[++i]; }
+        else if (a == "--set" && i + 3 < argc) { mode = "set"; in = argv[++i]; setName = argv[++i]; setFile = argv[++i]; }
+        else if ((a == "-o" || a == "--output") && i + 1 < argc) out = argv[++i];
+        else if ((a == "-e" || a == "--exclude") && i + 1 < argc) exclude.push_back(argv[++i]);
+        else if (a == "--loose") loose = true;
+        else { mode = "help"; }
+    }
+    if (mode.empty() || mode == "help" || in.empty()) {
+        std::cout << "um-multitool texts - texts.res / textslmp.res kept as a few grouped files\n\n"
+                     "  texts --unpack <texts.res> -o <folder> [--loose]   one <TYPE>.umtexts per string type (ARMOR, WEAPON,\n"
+                     "                                                       string...); --loose: one file per entry, as before\n"
+                     "  texts --pack <folder> -o <texts.res> [-e <name>]   from .umtexts files and/or loose files\n"
+                     "  texts --group <folder> [-e <name>]                 turns a folder's loose files into .umtexts files\n"
+                     "  texts --set <folder> <entry name> <file>           sets one entry (in its .umtexts, or loose)\n\n"
+                     "A .umtexts file: \"# um-texts 1\", then per entry a \"=== <name>\" line and its text byte for byte.\n";
+        return mode == "help" ? 0 : 1;
+    }
+    std::string err;
+    if (mode == "unpack") {
+        std::ifstream f(in, std::ios::binary);
+        std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), {});
+        res::Archive a;
+        if (!res::ParseArchive(bytes, a, err)) { std::cerr << in << ": " << err << "\n"; return 1; }
+        if (out.empty()) out = std::filesystem::path(in).stem().string() + "_res";
+        textgroups::Entries es;
+        for (const auto& kv : a.entries) es[kv.second.originalName] = kv.second.data;
+        std::filesystem::create_directories(out);
+        if (loose) { for (const auto& kv : es) if (!textgroups::WriteAll(std::filesystem::path(out) / kv.first, kv.second)) { std::cerr << "cannot write " << kv.first << "\n"; return 1; } }
+        else if (!textgroups::SaveGroups(out, es, err)) { std::cerr << err << "\n"; return 1; }
+        std::cout << es.size() << " entries -> " << out << (loose ? " (loose files)" : " (grouped)") << "\n";
+        return 0;
+    }
+    if (mode == "pack") {
+        const textgroups::Entries es = textgroups::LoadFolder(in, exclude);
+        if (out.empty()) { std::cerr << "texts --pack: -o <texts.res> is needed\n"; return 1; }
+        std::map<std::string, std::vector<uint8_t>> files(es.begin(), es.end());
+        const std::vector<uint8_t> archive = res::WriteArchive(files, static_cast<uint32_t>(std::time(nullptr)));
+        if (!textgroups::WriteAll(out, archive)) { std::cerr << "cannot write " << out << "\n"; return 1; }
+        std::cout << es.size() << " entries -> " << out << "\n";
+        return 0;
+    }
+    if (mode == "group") {
+        int n = 0;
+        if (!textgroups::GroupFolder(in, exclude, n, err)) { std::cerr << err << "\n"; return 1; }
+        std::cout << n << " entries grouped in " << in << "\n";
+        return 0;
+    }
+    std::vector<uint8_t> text;
+    if (!textgroups::ReadAll(setFile, text)) { std::cerr << "cannot read " << setFile << "\n"; return 1; }
+    if (!textgroups::SetEntry(in, setName, text, err)) { std::cerr << err << "\n"; return 1; }
+    std::cout << "set " << setName << " in " << in << "\n";
+    return 0;
+}
+
+enum class SubTool { None, DdsMmp, IniReg, MobDump, ResTool, XlsxDb, DbExport, Texts };
 
 static SubTool MatchSubcommand(const std::string& tok) {
     if (tok == "ddsmmp" || tok == "dds")  return SubTool::DdsMmp;
     if (tok == "inireg" || tok == "ini")  return SubTool::IniReg;
     if (tok == "mobdump" || tok == "mob") return SubTool::MobDump;
     if (tok == "restool" || tok == "res") return SubTool::ResTool;
+    if (tok == "xlsxdb" || tok == "db")   return SubTool::XlsxDb;
+    if (tok == "dbexport")                return SubTool::DbExport;
+    if (tok == "texts")                   return SubTool::Texts;
     return SubTool::None;
 }
 
@@ -89,6 +203,9 @@ static int DispatchTo(SubTool tool, int argc, char* argv[]) {
         case SubTool::IniReg:  return RunIniReg(argc, argv);
         case SubTool::MobDump: return RunMobDump(argc, argv);
         case SubTool::ResTool: return RunResTool(argc, argv);
+        case SubTool::XlsxDb:  return RunXlsxDb(argc, argv);
+        case SubTool::DbExport: return RunDbExport(argc, argv);
+        case SubTool::Texts: return RunTexts(argc, argv);
         default: return 1;
     }
 }
@@ -130,6 +247,7 @@ static SubTool DetectFromExtension(const std::string& ext) {
     if (ext == ".ini" || ext == ".reg") return SubTool::IniReg;
     if (ext == ".mob") return SubTool::MobDump;
     if (ext == ".res" || ext == ".mq") return SubTool::ResTool;
+    if (ext == ".xlsx" || ext == ".ods") return SubTool::XlsxDb;
     return SubTool::None;
 }
 
@@ -171,18 +289,298 @@ static SubTool AutoDetect(const fs::path& path, std::string& errOut) {
     if (tool == SubTool::None) {
         errOut = "Cannot determine which tool to use for '" + path.string() +
                  "' (unrecognized extension '" + ext + "').\n"
-                 "Please specify an explicit subcommand: ddsmmp | inireg | mobdump | restool";
+                 "Please specify an explicit subcommand: ddsmmp | inireg | mobdump | restool | xlsxdb";
     }
     return tool;
 }
 
+// Was the program started from a terminal (as opposed to a file manager / double-click)?
+static bool StartedFromTerminal() {
+#ifdef _WIN32
+    // A console program that is double-clicked gets a console of its own, attached to nothing else;
+    // started from cmd or PowerShell it shares theirs.
+    DWORD processes[2];
+    return GetConsoleProcessList(processes, 2) > 1;
+#else
+    return isatty(STDIN_FILENO) || isatty(STDOUT_FILENO);
+#endif
+}
+
+// `um-multitool gui [--viewer <category> <item>] [--map <file>...] [--db <file>] [--settings] [--screenshot <file.bmp>]`
+static int StartGui(int argc, char* argv[], int first) {
+    GuiOptions options;
+    for (int i = first; i < argc; ++i) {
+        std::string a = argv[i];
+        if (a == "--viewer" && i + 2 < argc) {
+            options.viewerCategory = argv[i + 1];
+            options.viewerItem = argv[i + 2];
+            i += 2;
+        } else if (a == "--viewer") {
+            options.openViewer = true;
+        } else if (a == "--map") {
+            options.openMap = true;
+            while (i + 1 < argc && argv[i + 1][0] != '-') options.mapFiles.push_back(argv[++i]);
+        } else if (a == "--db" && i + 1 < argc) {
+            options.dbFile = argv[++i];
+        } else if (a == "--naked") {
+            options.viewerNaked = true;
+        } else if (a == "--mode" && i + 1 < argc) {
+            options.mapMode = argv[++i];
+        } else if (a == "--focus" && i + 1 < argc) {
+            options.mapFocus = static_cast<uint32_t>(std::strtoul(argv[++i], nullptr, 10));
+        } else if (a == "--clip" && i + 1 < argc) {
+            options.viewerClip = argv[++i];
+        } else if (a == "--yaw" && i + 1 < argc) {
+            options.viewerYaw = static_cast<float>(std::atof(argv[++i]));
+        } else if (a == "--frame" && i + 1 < argc) {
+            options.viewerFrame = static_cast<float>(std::atof(argv[++i]));
+        } else if (a == "--skin" && i + 1 < argc) {
+            options.viewerSkin = argv[++i];
+        } else if (a == "--mp" && i + 1 < argc) {
+            options.mpFolder = argv[++i];
+        } else if (a == "--texture") {
+            options.openTexture = true;
+            if (i + 1 < argc && argv[i + 1][0] != '-') options.textureFile = argv[++i];
+        } else if (a == "--settings") {
+            options.openSettings = true;
+        } else if (a == "--verbose") {
+            umlog::SetVerbose(true);
+        } else if (a == "--screenshot" && i + 1 < argc) {
+            options.screenshotPath = argv[++i];
+        }
+    }
+    return RunGui(options);
+}
+
+#ifndef _WIN32 // the desktop and bash helpers are Linux-only
+static const char* BashCompletionScript(); // defined with the completion code below
+
+// An earlier version added these two lines to ~/.bashrc (a comment, then the line that loads the completion).
+// Nothing adds them any more; --remove still takes them out of a .bashrc that has them.
+static const char* const kBashrcMarker = "# um-multitool: bash tab completion (added by 'um-multitool install-desktop', removed by 'install-desktop --remove')";
+static const char* const kBashrcLine = "command -v um-multitool >/dev/null 2>&1 && eval \"$(um-multitool completion bash)\"";
+
+// Removes the marker line and the line after it. Returns true when it did; the rest of the file is kept as is.
+static bool BashrcRemove(const fs::path& bashrc) {
+    std::ifstream in(bashrc);
+    if (!in) return false;
+    std::string line, result;
+    bool removed = false;
+    while (std::getline(in, line)) {
+        if (!removed && line == kBashrcMarker) {
+            removed = true;
+            std::getline(in, line); // the eval line
+            if (line != kBashrcLine) result += line + "\n"; // not ours (edited by hand): keep it
+            continue;
+        }
+        result += line + "\n";
+    }
+    in.close();
+    if (!removed) return false;
+    std::ofstream out(bashrc, std::ios::trunc);
+    out << result;
+    return out.good();
+}
+#endif
+
+// `um-multitool install-desktop [--remove]` (Linux): installs um-multitool.desktop and the icon for the
+// current user (~/.local/share/applications, and the 256-pixel icon in ~/.local/share/icons/hicolor),
+// with this binary's absolute path, so the tool shows in the application menu with its icon (on Wayland,
+// also the window's). Menus find the icon by its theme name and scale it to the size they need.
+static int InstallDesktop(int argc, char* argv[]) {
+#ifdef _WIN32
+    (void)argc; (void)argv;
+    std::cerr << "install-desktop is for Linux desktops; on Windows the .exe carries its icon.\n";
+    return 1;
+#else
+    const bool remove = argc > 2 && std::string(argv[2]) == "--remove";
+    std::error_code ec;
+    const char* dataHome = std::getenv("XDG_DATA_HOME");
+    const char* home = std::getenv("HOME");
+    if ((!dataHome || !*dataHome) && (!home || !*home)) { std::cerr << "Error: HOME is not set\n"; return 1; }
+    const fs::path data = dataHome && *dataHome ? fs::path(dataHome) : fs::path(home) / ".local" / "share";
+    const fs::path desktop = data / "applications" / "um-multitool.desktop";
+    const fs::path hicolor = data / "icons" / "hicolor";
+    // Bash tab completion: bash-completion loads this file by the command's name on the first Tab.
+    // A file of its own, so no existing file (.bashrc) is edited.
+    const fs::path completion = data / "bash-completion" / "completions" / "um-multitool";
+    const char* homeDir = std::getenv("HOME");
+    const fs::path bashrc = homeDir && *homeDir ? fs::path(homeDir) / ".bashrc" : fs::path();
+    // Earlier versions installed every usual size: --remove still removes them all.
+    const int sizes[] = {16, 22, 24, 32, 48, 64, 128, 256, 512};
+    auto iconAt = [&](int size) { return hicolor / (std::to_string(size) + "x" + std::to_string(size)) / "apps" / "um-multitool.png"; };
+    // Tells the desktop to read the menu entries and the icons again: the menu database
+    // (update-desktop-database), the icon cache and KDE's service cache. Each is optional.
+    auto refresh = [&]() {
+        const std::string cmd = "update-desktop-database -q \"" + desktop.parent_path().string() + "\" >/dev/null 2>&1;"
+                                " gtk-update-icon-cache -q -t \"" + hicolor.string() + "\" >/dev/null 2>&1;"
+                                " (kbuildsycoca6 || kbuildsycoca5) >/dev/null 2>&1";
+        if (std::system(cmd.c_str()) != 0) {} // other desktops notice the files by themselves
+    };
+    if (remove) {
+        bool any = fs::remove(desktop, ec);
+        if (any) std::cout << "Removed " << desktop.string() << "\n";
+        if (fs::remove(completion, ec)) { std::cout << "Removed " << completion.string() << " (bash tab completion)\n"; any = true; }
+        if (!bashrc.empty() && BashrcRemove(bashrc)) { std::cout << "Removed the um-multitool completion lines from " << bashrc.string() << "\n"; any = true; }
+        for (int size : sizes) if (fs::remove(iconAt(size), ec)) { std::cout << "Removed " << iconAt(size).string() << "\n"; any = true; }
+        if (!any) std::cout << "Nothing to remove.\n";
+        else refresh();
+        return 0;
+    }
+    const fs::path exe = fs::read_symlink("/proc/self/exe", ec);
+    if (ec) { std::cerr << "Error: cannot find this program's path\n"; return 1; }
+    fs::create_directories(desktop.parent_path(), ec);
+    {
+        const fs::path from = exe.parent_path() / "assets" / "logo-256.png";
+        const fs::path to = iconAt(256);
+        fs::create_directories(to.parent_path(), ec);
+        if (!fs::copy_file(from, to, fs::copy_options::overwrite_existing, ec)) {
+            std::cerr << "Error: cannot copy " << from << " to " << to << ": " << ec.message() << "\n";
+            return 1;
+        }
+    }
+    std::ofstream f(desktop, std::ios::trunc);
+    if (!f.is_open()) { std::cerr << "Error: cannot write " << desktop << "\n"; return 1; }
+    // Exec quotes the path (it may hold spaces); Icon is the theme name, found in hicolor.
+    f << "[Desktop Entry]\n"
+         "Type=Application\n"
+         "Name=Universal Mod Multitool\n"
+         "GenericName=Evil Islands Modding Toolkit\n"
+         "Comment=Evil Islands modding: file conversion, 3D viewer and map editor\n"
+         "Exec=\"" << exe.string() << "\" gui\n"
+         "Path=" << exe.parent_path().string() << "\n"
+         "Icon=um-multitool\n"
+         "Terminal=false\n"
+         "Categories=Development;\n"
+         "Keywords=Evil Islands;Cursed Lands;modding;map editor;mob;mpr;\n"
+         "StartupWMClass=um-multitool\n"
+         "StartupNotify=true\n";
+    f.close();
+    refresh();
+    std::cout << "Installed " << desktop << "\n     and the icon in " << hicolor << " (256 pixels)\n"
+              << "Universal Mod Multitool is now in the application menu (it may take a moment to appear).\n";
+    // The completion is optional: a failure here does not undo the menu entry.
+    fs::create_directories(completion.parent_path(), ec);
+    std::ofstream c(completion, std::ios::trunc);
+    if (c.is_open() && (c << BashCompletionScript()) && (c.close(), true)) {
+        std::cout << "Installed " << completion << " (bash tab completion for um-multitool).\n";
+        // The bash-completion package is what loads that file; no existing file (.bashrc) is edited.
+        if (fs::exists("/usr/share/bash-completion/bash_completion", ec) || fs::exists("/etc/bash_completion", ec)) {
+            std::cout << "  It is loaded by the bash-completion package in new shells.\n";
+        } else {
+            std::cout << "  The bash-completion package was not found: install it for the completion to load (new shells).\n";
+        }
+    } else {
+        std::cerr << "Warning: cannot write " << completion << " (bash tab completion not installed)\n";
+    }
+    std::cout << "Undo with: um-multitool install-desktop --remove\n";
+    return 0;
+#endif
+}
+
+
+// ---- shell completion (bash) ---------------------------------------------------------------------
+// `um-multitool completion bash` prints a script to load with: eval "$(um-multitool completion bash)"
+// (put that line in ~/.bashrc). The script calls `um-multitool __complete <words>` for the candidates; with no
+// candidates bash completes file names as usual. The flags below are those of each subcommand's --help.
+
+struct CompletionEntry { const char* name; const char* flags; };
+static const CompletionEntry kCompletions[] = {
+    {"ddsmmp",   "-d --dir -m --multi -o --output --dry-run --dds2mmp --mmp2dds --plain32 -h --help --version --verbose"},
+    {"inireg",   "-d --dir -m --multi -o --output --dry-run --ini2reg --reg2ini -h --help --version --verbose"},
+    {"mobdump",  "-d --dir -m --multi -o --output --dry-run -h --help --version --verbose"},
+    {"restool",  "-d --dir -m --multi -o --output --dry-run --pack --unpack --grouped-texts --ext -e --exclude -s --strip --no-strip --strip-ext --no-strip-ext -h --help --version --verbose"},
+    {"xlsxdb",   "-o --output --check --no-check -h --help --version --verbose"},
+    {"dbexport", "-o --output -h --help --verbose"},
+    {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help --verbose"},
+    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
+    {"map",      "--check --navmesh --mpr --write --force --config --help --verbose"},
+    {"dll",      "--port --listen --stats --help --verbose"},
+    {"gui",      "--db --viewer --map --mp --skin --naked --settings --texture --mode --screenshot --verbose"},
+    {"install-desktop", "--remove"},
+    {"completion", "bash"},
+};
+// Subcommand aliases, to the names above.
+static std::string CompletionName(const std::string& tok) {
+    if (tok == "dds") return "ddsmmp";
+    if (tok == "ini") return "inireg";
+    if (tok == "mob") return "mobdump";
+    if (tok == "res") return "restool";
+    if (tok == "db") return "xlsxdb";
+    return tok;
+}
+
+// words: the command line after the program name, up to and including the word being completed.
+static int PrintCompletions(const std::vector<std::string>& words) {
+    if (words.empty()) return 0;
+    const std::string& cur = words.back();
+    if (words.size() == 1) {
+        if (!cur.empty() && cur[0] == '-') { std::cout << "-h --help --version\n"; return 0; }
+        for (const auto& e : kCompletions) std::cout << e.name << "\n";
+        std::cout << "dds ini mob res db\n";
+        return 0;
+    }
+    const std::string sub = CompletionName(words[0]);
+    const std::string prev = words[words.size() - 2];
+    // Values with a fixed set: the 3D Viewer's item categories.
+    if (sub == "viewer" && words.size() == 3 && (prev == "--list" || prev == "--resolve" || prev == "--render" || prev == "--gif")) {
+        std::cout << "weapons armors quick quest loot\n";
+        return 0;
+    }
+    if (!cur.empty() && cur[0] == '-') {
+        for (const auto& e : kCompletions) if (sub == e.name) std::cout << e.flags << "\n";
+    }
+    return 0;
+}
+
+static const char* kBashCompletion =
+    "_um_multitool() {\n"
+    "    local cur=${COMP_WORDS[COMP_CWORD]}\n"
+    "    COMPREPLY=($(compgen -W \"$(\"${COMP_WORDS[0]}\" __complete \"${COMP_WORDS[@]:1:COMP_CWORD}\" 2>/dev/null)\" -- \"$cur\"))\n"
+    "}\n"
+    "complete -o default -F _um_multitool um-multitool\n";
+#ifndef _WIN32
+static const char* BashCompletionScript() { return kBashCompletion; }
+#endif
+
 int main(int argc, char* argv[]) {
+    // --verbose / -v anywhere on the line, for every subcommand: the log (um-multitool.log) also goes to stderr.
+    // Taken out of argv here so the subcommands never see it (the gui command accepts it on its own as well).
+    {
+        int n = 1;
+        for (int i = 1; i < argc; ++i) {
+            const std::string a = argv[i];
+            if (a == "--verbose" || a == "-v") { umlog::SetVerbose(true); continue; }
+            argv[n++] = argv[i];
+        }
+        argc = n;
+        argv[argc] = nullptr;
+    }
+    if (argc >= 2 && std::string(argv[1]) == "__complete") {
+        return PrintCompletions(std::vector<std::string>(argv + 2, argv + argc));
+    }
+    if (argc >= 2 && std::string(argv[1]) == "completion") {
+        if (argc == 3 && std::string(argv[2]) == "bash") { std::cout << kBashCompletion; return 0; }
+        std::cerr << "Usage: eval \"$(um-multitool completion bash)\"   (bash only; add it to ~/.bashrc)\n";
+        return 1;
+    }
     if (argc < 2) {
+        if (!StartedFromTerminal()) {
+#ifdef _WIN32
+            FreeConsole(); // double-clicked: close the console window Windows opened for it
+#endif
+            return StartGui(argc, argv, argc);
+        }
         PrintTopLevelHelp();
         return 1;
     }
 
     std::string first = argv[1];
+    if (first == "gui") return StartGui(argc, argv, 2);
+    if (first == "viewer") return viewer::RunCli(argc - 1, argv + 1);
+    if (first == "map") return mapedit::RunCli(argc - 1, argv + 1);
+    if (first == "dll") return dllconnect::RunCli(argc - 1, argv + 1);
+    if (first == "install-desktop") return InstallDesktop(argc, argv);
     if (first == "-h" || first == "--help") {
         PrintTopLevelHelp();
         return 0;

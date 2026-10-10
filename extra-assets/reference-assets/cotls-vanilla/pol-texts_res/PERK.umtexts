@@ -1,0 +1,497 @@
+# um-texts 1
+=== PERK Actions
+Dzia³ania
+Parametr decyduje jak zwinnie bohater walczy i jak szybko mo¿e rzucaæ czary.
+
+=== PERK Archery
+£ucznik
+Umiejêtnoœæ pos³ugiwania siê broni¹ strzeleck¹ - ³ukami i kuszami. Celnoœæ (szansa trafienia celu) jest zale¿na od umiejêtnoœci pos³ugiwania siê danym typem broni (Umiejêtnoœæ) i od Zrêcznoœci.
+
+=== PERK Astral
+Magia Astralna
+Umiejêtnoœæ tworzenia i rzucania czarów ze szko³y Magii Astralnej. S¹ one bardzo ró¿nej natury, np. Leczenie czy Parali¿. Magiczne zdolnoœci zale¿¹ od umiejêtnoœci pos³ugiwania siê magi¹ tej szko³y (Umiejêtnoœæ) oraz od Inteligencji.
+
+=== PERK Awareness
+Czu³oœæ
+Czujnoœæ
+
+=== PERK Backstab
+Cios w plecy
+Specjalna umiejêtnoœæ zadawania zabójczego ciosu od ty³u. Jeœli bohaterowi uda siê zajœæ przeciwnika od ty³u, automatycznie wykona zasztyletowanie, zadaj¹c o wiele wiêcej obra¿eñ ni¿ w przypadku zwyk³ego ciosu.
+
+=== PERK Dexterity
+Zrêcznoœæ
+Zrêcznoœæ decyduje o „Wigorze” (zdolnoœæ biegania na d³ugie dystanse i rzucania trudnych czarów) oraz „Dzia³ania” (szybkoœæ zadawania ciosów i rzucania czarów). Wp³ywa te¿ na „Atak” oraz „U¿ywanie/Okradanie”
+
+=== PERK Elemental
+Magia Elementarna
+Umiejêtnoœæ tworzenia i rzucania czarów ze szko³y Magii ¯ywio³ów. S¹ to najbardziej niszczycielskie czary, np. Kula Ognia. Magiczne zdolnoœci zale¿¹ od umiejêtnoœci pos³ugiwania siê magi¹ tej szko³y (Umiejêtnoœæ) oraz od Inteligencji.
+
+=== PERK Encumbrance
+Obci¹¿enie:
+Obci¹¿enie decyduje o tym, jak wielki ciê¿ar bohater mo¿e dŸwigaæ. Im wiêcej nosi broni i pancerzy, im ciê¿sze one s¹, tym wiêksze jest jego Obci¹¿enie. Jeœli przekroczy „Dopuszczalne Obci¹¿enie” (okreœlone przez Si³ê bohatera), nie bêdzie móg³ biegaæ.
+
+=== PERK Experience
+Doœwiadczenie
+Im wiêksze bohater ma Doœwiadczenie, tym lepsze ma „Zdrowie” i „Wigor”. Ponadto Doœwiadczenie pozwala rozwijaæ Umiejêtnoœci i Zdolnoœci. Doœwiadczenie gromadzone podczas gry jest rozdzielane po równo miêdzy wszystkich cz³onków twojej dru¿yny, ale jego wartoœæ dla ka¿dego mo¿e byæ inna, gdy¿ zale¿y od Inteligencji bohatera.
+
+=== PERK Health
+Zdrowie
+Zdrowie decyduje o tym, ile obra¿eñ mo¿e znieœæ bohater. Kiedy doznaje obra¿eñ, wówczas traci Zdrowie. Kiedy punkty Zdrowia spadn¹ do zera lub ni¿ej, bohater umiera.
+
+=== PERK Intelligence
+Inteligencja
+Inteligencja decyduje o tym, ile doœwiadczenia otrzymuje bohater za wykonywanie zadañ. Im wy¿sza Inteligencja, tym wiêcej dostanie doœwiadczenia. Inteligencja ma wp³yw na wartoœæ Wigoru wykorzystywanego podczas rzucania czarów (im wiêksza Inteligencja, tym mniej traci siê Wigoru) oraz na „Znajomoœæ Magii”.
+
+=== PERK Mana
+Wigor
+Wigor okreœla rezerwy si³ bohatera. Bohater z wiêkszym Wigorem mo¿e d³u¿ej biegaæ lub rzucaæ bardziej z³o¿one i wyczerpuj¹ce czary.
+
+=== PERK Melee
+Broñ kontaktowa
+Umiejêtnoœæ pos³ugiwania siê broni¹ do walki kontaktowej, np. no¿ami, toporami, w³óczniami. Celnoœæ (szansa trafienia przeciwnika) zale¿y od umiejêtnoœci pos³ugiwania siê dan¹ broni¹ (Umiejêtnoœæ) i od Zrêcznoœci.
+
+=== PERK Move
+Ruchliwoœæ
+Prêdkoœæ ruchu decyduje o tym, jak szybko bohater mo¿e siê poruszaæ.
+
+=== PERK Science
+U¿yj/Kradnij
+Umiejêtnoœæ otwierania zamków, obs³ugi nieznanych mechanizmów oraz okradania. Bazuje na Umiejêtnoœci i zale¿y od Zrêcznoœci. Im wiêksz¹ bohater ma tê umiejêtnoœæ, tym bardziej skomplikowane urz¹dzenia potrafi obs³ugiwaæ i tym wiêksz¹ ma szansê na to, ¿e okradany wróg nic nie zauwa¿y.
+
+=== PERK Sense
+Magia Zmys³ów
+Umiejêtnoœæ tworzenia i rzucania czarów ze szko³y Magii Zmys³ów. S¹ to g³ównie czary typu poznawczego, np.: Wzrok Or³a. Magiczne zdolnoœci zale¿¹ od umiejêtnoœci pos³ugiwania siê magi¹ tej szko³y (Umiejêtnoœæ) oraz od Inteligencji.
+
+=== PERK Stealing
+Kradzie¿
+Sztuka Kradzie¿y
+
+=== PERK Stealth
+Skradanie
+Skradanie siê
+
+=== PERK Strength
+Si³a
+Si³a ma wp³yw na stan „Zdrowia” - im wiêksza Si³a, tym wiêcej obra¿eñ mo¿na znieœæ. Bohater o du¿ej Sile mo¿e te¿ dŸwigaæ wiêksze ciê¿ary, np.: nosiæ ciê¿sze pancerze.
+
+=== PERK Tame
+Oswajanie
+Oswajanie
+
+=== PERK acid0
+Magia Kwasu
+Rozwiniêta umiejêtnoœæ rzucania kwasowych czarów ze szko³y Magii ¯ywio³ów. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK acid1
+Adept
+Adept Magii Kwasowej.
+
+=== PERK acid2
+Ekspert
+Ekspert Magii Kwasowej.
+
+=== PERK acid3
+Mistrz
+Mistrz Magii Kwasowej.
+
+=== PERK axe0
+Rêbacz
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê toporami. Kiedy bohater z t¹ zdolnoœci¹ walczy toporem, jego „Atak” i „Obrona” s¹ bardziej skuteczne.
+
+=== PERK axe1
+Specjalista
+Specjalista topornik
+
+=== PERK axe2
+Ekspert
+Ekspert topornik
+
+=== PERK axe3
+Mistrz
+Mistrz topornik
+
+=== PERK bludgeon0
+M³otnik
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê broni¹ obuchow¹. Kiedy bohater z t¹ zdolnoœci¹ walczy m³otem, maczug¹ lub pa³k¹, jego „Atak” i „Obrona” s¹ bardziej skuteczne.
+
+=== PERK bludgeon1
+Specjalista
+Specjalista m³otnik
+
+=== PERK bludgeon2
+Ekspert
+Ekspert m³otnik
+
+=== PERK bludgeon3
+Mistrz
+Mistrz m³otnik
+
+=== PERK bow0
+£ucznik
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê ³ukami. Kiedy bohater z t¹ zdolnoœci¹ strzela z ³uku, jego „Atak” jest bardziej skuteczny. „Obrona” pozostaje bez zmian.
+
+=== PERK bow1
+Specjalista
+Specjalista ³ucznik
+
+=== PERK bow2
+Ekspert
+Ekspert ³ucznik
+
+=== PERK bow3
+Mistrz
+Mistrz ³ucznik
+
+=== PERK bs0
+Cios w plecy
+Kiedy bohater cichaczem podejdzie do wroga i zaatakuje go od ty³u, wtedy zada mu wiêksze obra¿enia.
+
+=== PERK bs1
+Rozwiniêta
+Rozwiniêta
+
+=== PERK bs2
+X2
+X2
+
+=== PERK bs3
+X3
+X3
+
+=== PERK dagger0
+No¿ownik
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê sztyletami. Kiedy bohater z t¹ zdolnoœci¹ walczy sztyletem, jego „Atak” i „Obrona” s¹ bardziej skuteczne.
+
+=== PERK dagger1
+Specjalista
+Specjalista no¿ownik
+
+=== PERK dagger2
+Ekspert
+Ekspert no¿ownik
+
+=== PERK dagger3
+Mistrz
+Mistrz no¿ownik
+
+=== PERK dex0
+Zrêcznoœæ
+Zwiêkszona Zrêcznoœæ
+
+=== PERK dex1
+Zwiêkszona
+Zwiêkszona
+
+=== PERK dex2
+X2
+X2
+
+=== PERK dex3
+X3
+X3
+
+=== PERK divination0
+Magia Zmys³ów
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê czarami jasnowidzenia ze szko³y Magii Zmys³ów. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK divination1
+Adept
+Adept
+
+=== PERK divination2
+Ekspert
+Ekspert
+
+=== PERK divination3
+Mistrz
+Mistrz
+
+=== PERK domination0
+Magia Kontroli
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê czarami kontroluj¹cymi ze szko³y Magii Astralnej. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK domination1
+Adept
+Adept
+
+=== PERK domination2
+Ekspert
+Ekspert
+
+=== PERK domination3
+Mistrz
+Mistrz
+
+=== PERK enchantments0
+Magia Astralna
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê wszystkimi czarami ze szko³y Magii Astralnej. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK enchantments1
+Adept
+Adept
+
+=== PERK enchantments2
+Ekspert
+Ekspert
+
+=== PERK enchantments3
+Mistrz
+Mistrz
+
+=== PERK fire0
+Magia Ognia
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê czarami ognistymi ze szko³y Magii ¯ywio³ów. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK fire1
+Adept
+Adept ognia
+
+=== PERK fire2
+Ekspert
+Ekspert ognia
+
+=== PERK fire3
+Mistrz
+Mistrz ognia
+
+=== PERK healing0
+Magia Lecznicza
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê czarami lecz¹cymi ze szko³y Magii Astralnej. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK healing1
+Adept
+Adept
+
+=== PERK healing2
+Ekspert
+Ekspert
+
+=== PERK healing3
+Mistrz
+Mistrz
+
+=== PERK health0
+Zdrowie
+Zwiêkszone Zdrowie
+
+=== PERK health1
+Zwiêkszone
+Zwiêkszone
+
+=== PERK health2
+X2
+X2
+
+=== PERK health3
+X3
+X3
+
+=== PERK illusion0
+Magia Zmys³ów
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê wszystkimi czarami ze szko³y Magii Zmys³ów. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK illusion1
+Adept
+Adept
+
+=== PERK illusion2
+Ekspert
+Ekspert
+
+=== PERK illusion3
+Mistrz
+Mistrz
+
+=== PERK int0
+Inteligencja
+Zwiêkszona Inteligencja
+
+=== PERK int1
+Zwiêkszona
+Zwiêkszona
+
+=== PERK int2
+X2
+X2
+
+=== PERK int3
+X3
+X3
+
+=== PERK lift0
+Obci¹¿enie:
+Bohater wyæwiczony w podnoszeniu ciê¿arów mo¿e nosiæ wiêkszy ³adunek i zak³adaæ ciê¿sze pancerze.
+
+=== PERK lift1
+Zwiêkszone
+Zwiêkszone
+
+=== PERK lift2
+X2
+X2
+
+=== PERK lift3
+X3
+X3
+
+=== PERK lightning0
+Magia Piorunów
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê czarami b³yskawicowymi ze szko³y Magii ¯ywio³ów. Dziêki tej zdolnoœci mo¿na rzucaæ bardziej z³o¿one czary.
+
+=== PERK lightning1
+Adept
+Adept b³yskawic
+
+=== PERK lightning2
+Ekspert
+Ekspert b³yskawic
+
+=== PERK lightning3
+Mistrz
+Mistrz b³yskawic
+
+=== PERK mana0
+Wigor
+Zwiêkszony Wigor
+
+=== PERK mana1
+Zwiêkszony
+Zwiêkszony
+
+=== PERK mana2
+X2
+X2
+
+=== PERK mana3
+X3
+X3
+
+=== PERK night0
+Noktowizja
+Postaæ bez tej zdolnoœci, noc¹ ma o po³owê mniejszy zasiêg widzenia. Maksymalnie rozwiniêta Noktowizja pozwala widzieæ w nocy tak samo jak za dnia. 
+
+=== PERK night1
+Zwiêkszona
+Zwiêkszona
+
+=== PERK night2
+X2
+X2
+
+=== PERK night3
+X3
+X3
+
+=== PERK quickness0
+Dzia³ania
+Zwiêkszona szybkoœæ dzia³ania pozwala czêœciej zadawaæ ciosy i szybciej rzucaæ czary.
+
+=== PERK quickness1
+Zwiêkszone
+Zwiêkszone
+
+=== PERK quickness2
+X2
+X2
+
+=== PERK quickness3
+X3
+X3
+
+=== PERK spear0
+W³ócznie
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê w³óczniami. Kiedy bohater z t¹ zdolnoœci¹ walczy w³óczni¹, jego „Atak” i „Obrona” s¹ bardziej skuteczne.
+
+=== PERK spear1
+Specjalista
+Specjalista w³ócznik
+
+=== PERK spear2
+Ekspert
+Ekspert w³ócznik
+
+=== PERK spear3
+Mistrz
+Mistrz w³ócznik
+
+=== PERK spirit0
+Odnowa
+Zwiêkszone tempo odzyskiwania Wigoru. Skraca czas odpoczynku potrzebnego po d³ugim biegu czy rzucaniu wyczerpuj¹cych czarów.
+
+=== PERK spirit1
+Przyspieszona
+Przyspieszona
+
+=== PERK spirit2
+X2
+X2
+
+=== PERK spirit3
+X3
+X3
+
+=== PERK str0
+Si³a
+Zwiêkszona Si³a
+
+=== PERK str1
+Zwiêkszona
+Zwiêkszona
+
+=== PERK str2
+X2
+X2
+
+=== PERK str3
+X3
+X3
+
+=== PERK sword0
+Miecz
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê mieczami. Kiedy bohater z t¹ zdolnoœci¹ walczy mieczem, jego „Atak” i „Obrona” s¹ bardziej skuteczne.
+
+=== PERK sword1
+Specjalista
+Specjalista miecznik
+
+=== PERK sword2
+Ekspert
+Ekspert miecznik
+
+=== PERK sword3
+Mistrz
+Mistrz miecznik
+
+=== PERK vitality0
+Regeneracja
+Bohaterowie posiadaj¹cy zdolnoœæ Przyspieszonej Regeneracji szybciej odzyskuj¹ Zdrowie.
+
+=== PERK vitality1
+Przyspieszona
+Przyspieszona
+
+=== PERK vitality2
+X2
+X2
+
+=== PERK vitality3
+X3
+X3
+
+=== PERK xbow0
+Kusza
+Rozwiniêta umiejêtnoœæ pos³ugiwania siê kuszami. Kiedy bohater z t¹ zdolnoœci¹ u¿ywa kuszy, jego „Atak” jest bardziej skuteczny. „Obrona” pozostaje bez zmian.
+
+=== PERK xbow1
+Specjalista
+Specjalista kusznik
+
+=== PERK xbow2
+Ekspert
+Ekspert kusznik
+
+=== PERK xbow3
+Mistrz
+Mistrz kusznik
+

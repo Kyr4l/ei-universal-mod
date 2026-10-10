@@ -62,7 +62,7 @@ Each of the `numFiles` slots in the hash table represents one hash bucket and co
 | `nameLen` | `uint16_t` | 2 bytes | Length of the filename in bytes (0 if empty bucket slot) |
 | `nameOffset` | `uint32_t` | 4 bytes | Relative byte offset into the names block (`namesOffset + nameOffset`) |
 
-> **Deduplication Note**: When two files in the archive contain identical content, the second file descriptor can share the same `dataOffset` and `dataLength` without duplicating the payload bytes in the data block.
+> **Deduplication Note**: when two files in the archive contain identical content, the second file descriptor shares the same `dataOffset` and `dataLength` without duplicating the payload bytes in the data block. Confirmed against the vanilla `eipacker.exe` when invoked with its standard `/pack <path>` CLI flag (the procedure the modding community has always used) - it deduplicates identical-content files exactly this way, and `um-restool` matches it (see `PackResArchive` in `tools/um-multitool/restool.cpp`). Note that the *same* `eipacker.exe` binary has a second, non-deduplicating code path when invoked via a bare directory argument (its drag-and-drop-equivalent mode) instead of `/pack`; that mode was mistaken for the "real" reference behavior partway through this investigation, which is worth flagging in case anyone reproduces this format from scratch again - always reverse-engineer against `/pack` mode specifically, since that is the mode real mod archives are actually built with.
 
 ---
 
@@ -101,14 +101,17 @@ uint32_t CalculateResHash(const std::string& name, uint32_t bucketCount) {
 
 ## Packing Algorithm (Folder $\to$ `.res`)
 
-1. Enumerate all files in the source directory.
-2. For each file:
-   - Read file content and record modification timestamp.
-   - If payload already exists in payload cache (deduplication), point `dataOffset` to the existing payload offset.
-   - Otherwise, append payload to contiguous data buffer at current offset (padded to 16-byte boundary).
-3. Build the names block by concatenating all relative filename strings and recording their respective offsets.
-4. Construct file descriptors and collision hash chains.
-5. Write 16-byte header: `0x019CE23C`, `numFiles`, `dataSize`, `dirSize`.
-6. Write file data block.
-7. Write file descriptors block.
-8. Write names block.
+1. Enumerate all files in the source directory, recursively.
+2. **Sort them** before doing anything else - insertion order determines both the data block's byte layout and, on any hash collision, which file lands in which bucket (see "Hash Function & Collision Resolution" above), so getting this wrong produces a *different but still internally valid* archive that nonetheless silently corrupts whatever the engine's own lookup does. Confirmed (by packing the same directory with the vanilla `eipacker.exe`'s `/pack` flag under Wine, byte-for-byte) to be:
+   - **Path-component-wise**, not a flattened-string compare: `"kiel\Steal\42.wav"` must sort before `"kiel\StealEmp\40.wav"` (as sibling directory names "Steal" < "StealEmp"), which a naive full-string compare gets backwards - at the point they diverge, `'E'` (0x45) is less than `'\\'` (0x5C), so a flat compare wrongly ends up putting `StealEmp` first.
+   - **Case-insensitive** per component: `"Attack"` sorts before `"AttInDef"` as `"attack"` < `"attindef"`, not by raw byte value (capital `'I'` = 0x49 is less than lowercase `'a'` = 0x61, so a case-sensitive compare also gets this backwards).
+3. For each file, in that sorted order:
+   - Read file content and record its modification timestamp as a **plain Unix epoch second count** (confirmed by touching one file to a distinct date under Wine and observing only its own descriptor's timestamp change - not, e.g., a single shared "time of packing" value, and not any Windows FILETIME-style encoding). C++17's `std::filesystem::file_time_type` is **not safe** for this: its clock epoch is not guaranteed to be the Unix epoch until C++20's `clock_cast`, and using it directly produces a nonsensically offset value; read it via POSIX `stat()`/write it back via `utime()` instead.
+   - If payload already exists in payload cache (deduplication - see the note in "Directory & File Descriptor Layout" above; this is genuinely active in `eipacker.exe`'s standard `/pack` mode, not merely theoretically permitted by the format), point `dataOffset`/`dataLength` to the existing payload's.
+   - Otherwise, append payload to the contiguous data buffer at the current offset (padded to a 16-byte boundary).
+4. Build the names block by concatenating all relative filename strings (in the same sorted order) and recording their respective offsets.
+5. Construct file descriptors and collision hash chains.
+6. Write 16-byte header: `0x019CE23C`, `numFiles`, `dataSize`, `dirSize`.
+7. Write file data block.
+8. Write file descriptors block.
+9. Write names block.

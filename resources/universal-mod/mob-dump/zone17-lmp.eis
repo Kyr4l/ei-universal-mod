@@ -1,0 +1,83 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  NecroKeyDoor : object,
+  NecroLabDoor : object,
+  HadoganGate00-359c : object,
+  HadoganGate01-45256b : object,
+  HadoganGate00-359b : object,
+  HadoganGate01-45256a : object,
+  HadoganGate00-14483i : object,
+  HadoganGate00-359d : object,
+  Vivary00-362g : object,
+  HadoganGate00-14483dd : object,
+  HadoganGate00-14483cd : object,
+  HadoganGate00-14483b : object,
+  HadoganGate00-14483a : object,
+  HadoganGate00-14483h : object,
+  HadoganGate00-359a : object,
+  HadoganGate00-14483d : object,
+  Vivary00-362f : object,
+  Vivary00-362c : object,
+  Vivary00-362a : object,
+  Vivary00-362d : object,
+  HadoganGate00-14483c : object,
+  Vivary00-362b : object,
+  HadoganGate00-14483g : object,
+  Vivary00-362e : object,
+  HadoganGate00-14483f : object,
+  Headless-46306b : object,
+  DeadS : object,
+  Headless-46306 : object,
+  HadoganCaveDoor00-47470 : object,
+  Heroes : group,
+  Ciclopa3 : group 
+)
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  NecroKeyDoor = GetObjectByID( "45069" ) 
+  NecroLabDoor = GetObjectByID( "45103" ) 
+  HadoganGate00-359c = GetObjectByID( "45245" ) 
+  HadoganGate01-45256b = GetObjectByID( "45256" ) 
+  HadoganGate00-359b = GetObjectByID( "45283" ) 
+  HadoganGate01-45256a = GetObjectByID( "45285" ) 
+  HadoganGate00-14483i = GetObjectByID( "45356" ) 
+  HadoganGate00-359d = GetObjectByID( "359" ) 
+  Vivary00-362g = GetObjectByID( "362" ) 
+  HadoganGate00-14483dd = GetObjectByID( "370" ) 
+  HadoganGate00-14483cd = GetObjectByID( "371" ) 
+  HadoganGate00-14483b = GetObjectByID( "436" ) 
+  HadoganGate00-14483a = GetObjectByID( "573" ) 
+  HadoganGate00-14483h = GetObjectByID( "45678" ) 
+  HadoganGate00-359a = GetObjectByID( "45750" ) 
+  HadoganGate00-14483d = GetObjectByID( "45823" ) 
+  Vivary00-362f = GetObjectByID( "45898" ) 
+  Vivary00-362c = GetObjectByID( "45908" ) 
+  Vivary00-362a = GetObjectByID( "45912" ) 
+  Vivary00-362d = GetObjectByID( "45914" ) 
+  HadoganGate00-14483c = GetObjectByID( "45824" ) 
+  Vivary00-362b = GetObjectByID( "45917" ) 
+  HadoganGate00-14483g = GetObjectByID( "45930" ) 
+  Vivary00-362e = GetObjectByID( "45919" ) 
+  HadoganGate00-14483f = GetObjectByID( "45953" ) 
+  Headless-46306b = GetObjectByID( "46306" ) 
+  DeadS = GetObjectByID( "47217" ) 
+  Headless-46306 = GetObjectByID( "47219" ) 
+  HadoganCaveDoor00-47470 = GetObjectByID( "47470" ) 
+)

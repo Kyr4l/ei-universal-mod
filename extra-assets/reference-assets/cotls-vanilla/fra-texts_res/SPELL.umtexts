@@ -1,0 +1,125 @@
+# um-texts 1
+=== SPELL acid_column
+Fontaine d'acide
+Ce sort agit sur un lieu et non une cible spécifique. Une fontaine d'acide occasionne des dégâts chez tous ceux qui se trouvent à proximité.
+
+=== SPELL acid_fog
+Brouillard d'acide
+Ce sort agit sur un lieu et non une cible spécifique. Tous ceux présents dans le brouillard sont touchés.
+
+=== SPELL acid_ray
+Caillot d'acide
+Ce caillot d'acide atteint toujours sa cible.
+
+=== SPELL antimagic
+Protection contre la magie
+Ce sort vous protège de la magie basée sur n'importe lequel des trois Eléments.
+
+=== SPELL arrow
+Flèche de feu
+Cette flèche de feu atteint toujours sa cible.
+
+=== SPELL clairvoyence
+Clairvoyance
+Vous permet de voir les ennemis présents à l'endroit où sera jeté le sort.
+
+=== SPELL eagle_sight
+Œil d'aigle
+Augmente votre vue dans une proportion de 1,5.
+
+=== SPELL enlarge
+Agrandissement
+Augmente la taille de l'objet touché par le sort.
+
+=== SPELL feeblemind
+Démence
+Empêche votre ennemi de jeter des sorts pendant un certain temps (pour jeter un sort, la cible doit être visible).
+
+=== SPELL fireball
+Boule de feu
+Ce sort agit sur un lieu et non une cible spécifique. Tous ceux présents à proximité seront atteints par l'explosion.
+
+=== SPELL firewall
+Mur de feu
+Ce sort agit sur un lieu et non une cible spécifique. Tous ceux présents à proximité seront plus ou moins brûlés.
+
+=== SPELL fireworks
+Feux d'artifice
+Vous attirerez l'attention de l'ennemi sans déclencher une alerte générale.
+
+=== SPELL healing
+Soins
+Restaure la santé perdue au combat.
+
+=== SPELL infravision
+Vision nocturne
+Vous permet de voir de nuit comme en plein jour.
+
+=== SPELL inv_lit
+Foudre céleste
+Ce sort agit sur un lieu et non une cible spécifique. La foudre touche tous ceux présents près de l'endroit où elle s'abat.
+
+=== SPELL invisibility
+Invisibilité
+Ce sort vous rend deux fois plus invisible pour vos ennemis.
+
+=== SPELL lightning
+Foudre
+La foudre atteint toujours sa cible.
+
+=== SPELL litnwall
+Barrière de foudre
+Ce sort agit sur un lieu et non une cible spécifique. Tous ceux qui essaient de franchir cette barrière seront atteints.
+
+=== SPELL prot_acid
+Protection contre l'acide
+Une personne protégée par ce sort est moins vulnérable aux effets de l'acide.
+
+=== SPELL prot_electro
+Protection contre la foudre
+Une personne protégée par ce sort est moins vulnérable aux effets de la foudre.
+
+=== SPELL prot_fire
+Protection contre le feu
+Une personne protégée par ce sort est moins vulnérable aux effets du feu.
+
+=== SPELL regeneration
+Régénération
+Augmente la vitesse de rétablissement.
+
+=== SPELL shrink
+Rétrécissement
+Rétrécit l'objet-cible.
+
+=== SPELL silence
+Silence
+Cela double votre taux de "silence". Si votre ennemi avait auparavant du mal à vous entendre, il ne vous entendra désormais quasiment plus.
+
+=== SPELL slow
+Décélération
+Vous permet de ralentir la vitesse des coups reçus et des sorts.
+
+=== SPELL speed
+Accélération
+Vous permet d'augmenter  la vitesse des coups reçus et des sorts.
+
+=== SPELL strength
+Renforcer
+Vous permet d'augmenter temporairement la force d'un personnage et les dégâts qu'il peut causer aux ennemis.
+
+=== SPELL stun
+Paralysie
+Vous permet de paralyser votre ennemi pendant un certain temps (pour jeter ce sort, vous devez voir l'ennemi).
+
+=== SPELL teleport
+Téléportation
+Déplacement instantané d'un point de l'espace à un autre (pour jeter ce sort, vous devez voir le point de destination).
+
+=== SPELL vision_fog
+Champ de vision
+Vous permet de voir ce que voit la cible du sort.
+
+=== SPELL weak
+Affaiblir
+Vous permet d'affaiblir momentanément votre ennemi et de diminuer les dégâts qu'il peut causer.
+

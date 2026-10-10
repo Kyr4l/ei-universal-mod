@@ -1,8 +1,0 @@
-Harpies' treasure
-Harpies cannot use objects or weapons, but if they do find something, they will deposit it close to their nests.
-#subobj  1
-Find the treasure belonging to the Harpy
-Harpies usually keep the things they find close to where they live.
-#subobj  2
-Take the treasure belonging to the Harpy.
-No key is needed to open the coffer. In troth, it is doubtful if a Harpy could never understand what a key is for!

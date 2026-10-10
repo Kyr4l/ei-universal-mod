@@ -1,0 +1,1000 @@
+# um-texts 1
+=== tutor it001_head
+Tutorials
+
+=== tutor it001_head_screen1
+Tutorial (gameplay)
+
+=== tutor it001_head_screen2
+Tutorial (interface)
+
+=== tutor it001_text_screen1
+Welcome to Evil Islands!
+
+This is the tutorial system.  It will appear on the screen from time to time during the 'introductory' quest. 
+
+Some of the longer tutorials will include several screens. To move from screen to screen, use the buttons at the bottom. Please be sure to read the tutorials carefully. A great deal of very useful information is in the tutorials.
+
+Keep in mind that while the tutorials are up on the screen, gameplay is "paused".
+
+Most screen elements (such as menus, icons, etc) have pop-up tips. Placing the cursor over an element for a few seconds will cause the tip will appear.
+
+To see the last tutorial screen again, just press the <H> key.
+
+Note: the controls described here are default controls. If you change your default settings, some descriptions may no longer be accurate.
+
+=== tutor it001_text_screen2
+Each interface screen has its own tutorials. If you wish to display the screen's tutorial press the <H> key.
+
+=== tutor it002_head
+Global map
+
+=== tutor it002_head_screen1
+Global map
+
+=== tutor it002_head_screen2
+Game zones
+
+=== tutor it002_head_screen3
+Available zones
+
+=== tutor it002_head_screen4
+"Base"
+
+=== tutor it002_text_screen1
+     You are currently in the "Global map". This is an overview of the island your character is on. It shows what Game zones are available (their borders are marked with a yellow frame). A zone becomes "available" if your character visits it at least once, or if he receives a quest to complete there.
+
+     Your character's current position is indicated with a "floating" vertical arrow.
+
+     You can rotate the Global Map in any direction you wish. The buttons at the bottom right of the screen control this.
+
+     The name of the island and the game time are shown in the upper-left corner of the screen. In the lower-left corner there's a "camp entrance" button. Click on this to see what items you have obtained, or to change your characters' weapons and armor, take on new items etc.
+
+=== tutor it002_text_screen2
+     The different Game zone screens show what quests you need to complete in each zone, and the approximate location of the quest. The quests themselves are displayed with special symbols.
+
+     If you place your cursor on a zone, its name will appear in the upper-right corner of the screen, followed by a list of all quests which are still active in that zone. 
+
+     To get more detailed information on the quests you need to complete in a given zone  just click on the zone itself. A "Quests Screen" for the zone will appear.
+
+     Note: an island's map shows only surface areas. The subterranean Game zones are marked either as separate areas or with dotted lines on the ground.
+
+=== tutor it002_text_screen3
+     The Global map shows only the zones currently available to your character, and differentiated by colors. 
+
+     Zones in which you have completed a key quest ("explored" zones) are marked with a darker color. Your characters can bypass skip through these "explored" zones by simply clicking on the destination zone. If several such "explored" zones are adjacent and have connecting Transfer areas, you can bypass them all.
+
+     Note: you are not required to complete all available quests within a zone or kill all enemies there in order to make it an "explored" zone.
+
+     Zones which are available but not yet "explored" are marked with a lighter color. If you must pass through such a zone in order to complete your current quest, your characters will actually have to enter it and walk all the way through to their destination. You cannot bypass "unexplored" zones.
+
+=== tutor it002_text_screen4
+     A "base" (whether it be a village or a city) is displayed on the Island Map with a special symbol (either with gates or a building). You have at least one "base" available on every island. If the zone containing a "base" is "explored", you can enter the base directly from the Global Map. Otherwise your character will have to walk to the base.
+
+     Note: when you leave a base you always go right to the Global Map.
+
+=== tutor it003_head
+Dialog zones
+
+=== tutor it003_head_screen1
+Main ("Base")
+
+=== tutor it003_head_screen2
+Communicating with characters
+
+=== tutor it003_head_screen3
+Companions
+
+=== tutor it003_head_screen4
+Additional
+
+=== tutor it003_text_screen1
+    There are two different types of areas in the game, Game Zones and Dialog zones.  Game zones are where most of the action happens.  Dialog zones are where quests are typically received.
+
+    Your character can only talk to and transact with other characters in the Dialog zones.  Your characters can only do battle in Game zones.
+
+    To try to initiate a conversation in a Dialog zone, just place the cursor over a character. If the character has something to say, then his/her name will appear next to the cursor, along with a picture of moving lips. If the character has nothing to say at that particular time, only the name will appear - no lips. See the next screen for more on talking to characters in the Dialog zone.
+
+     There are several Dialog zones on the various islands which will become available to you. On each island there is at least one Dialog zone (called "base") which is always available. Here your character can buy, sell and order items or spells. The option "buy, sell, order" will appear on the character who will handle these tasks for you.
+
+     Note: in Gipath you can trade items and spells on different bases.
+
+=== tutor it003_text_screen2
+     To find out what topics you can discuss with a character, click on him/her and you'll see a list. Click on the topic you want to use for your conversation.
+
+     Note: depending on which topic you choose, other topics in the list may change or disappear altogether.
+
+     Conversation topics can give you a new quest, advice, or even a gift. They're typically informative, or rewarding, so seek out talkative characters whenever possible.
+
+     Note: some characters may have the "buy, sell, order..." topic in their list. If you click on it you'll go right to the Shop Screen. See the other tutorials for more on buying/selling.
+
+=== tutor it003_text_screen3
+     Your main character (or hero) doesn't have to travel alone. On every island he can find people in some Dialog zones who will agree to accompany him on his quests. They won't demand any money for this - they join his team for their own reasons. It's easy to determine who is interested in joining - they'll tell you so during your first conversation.
+
+     Note: If one of your companions dies, it doesn't mean the game is over. However, keep in mind that many game quests are designed to be completed by a strong team. Doing them alone will be much more difficult, so keep your team alive!
+
+     You can change your companions' armor and weapons just as you do for your main character. Your companions will also gain experience during adventures, and you'll be able to invest this experience in new skills and abilities. However, when the hero moves on to another island he must leave his team behind.
+     The team cannot have more than three characters in it. If you ask a fourth character to join the team, he'll find some reason to refuse.
+     You can dismiss a team member you wish, in the zone in which you found him/her. You can take him back late if the situation calls for it.
+
+=== tutor it003_text_screen4
+     There are other Dialog zones besides "bases", which you will discover. In some of these you can only talk, in others you can take on another team member.
+     Keep in mind, however, that the shop and item and spell constructors will not be available in these new Dialog zones, which may also become unavailable once they have played their role in the game.
+
+=== tutor it004_head
+Quests screen
+
+=== tutor it004_head_screen1
+Quests screen
+
+=== tutor it004_head_screen2
+Zone Map
+
+=== tutor it004_head_screen3
+Quests/objectives
+
+=== tutor it004_text_screen1
+     The Quests screen gives detailed information about what quests are available in the current Game zone. It may provide hints, as well.
+
+     The Quests screen is divided into several sections: on the left side is a list of quests and briefings. On the right side you'll see a simple map of the Game zone with various captions. See the next tutorial screen for more on the Zone Map.
+
+     When you're in a Game zone, you can have several quests available at the same time. If you want more details on a particular quest and its objectives, just click on the quest name.
+
+     To get back to the Game zone press the "V" button at the bottom of the screen, or the <TAB> key.
+
+=== tutor it004_text_screen2
+     In the upper-right area of the screen there's a simplified map of your current Game zone. The map shows the Transfer areas, the approximate location of your quest, the area terrain and some of the local landmarks. Important points are marked as follows:
+
+* Triangles: these are Transfer areas - the green ones are available for use, the red ones are unavailable.
+* Large red cross: here's where you'll need to get to in order to complete the selected quests (shown in the left window).
+* Keys: these show the locations of the keys or quest items you need to accumulate in your quest.
+* Solid and dotted lines: these are roads and footpaths.
+* Broad and narrow strips across water: these indicate bridges and fords.
+* Skull and crossbones: these show the locations of magic traps (red indicates a fire trap, green an acid trap and blue a lightning trap).
+
+     The map may also show other symbols for particular quests. You may, for example, see pictures of animals or monsters, coffers, sacks etc). Remember, maps provide lots of useful information, so be sure to take a good look at them before you enter the Game zone.
+
+     At the bottom right of the screen you'll see a text window containing a description of the Game zone. This text may be short (normally), but it contains some implied hints and other tips which can be a big help to you in carrying out your quests.
+
+=== tutor it004_text_screen3
+     Your character will receive most of his quests while talking to other characters in the Dialog zones.  Occasionally, however, new quests may appear while he's in the Game zone.
+
+     Some quests must be done in order for the game to advance, while others are optional. You character will gain a certain amount of experience in each quest. If he was not alone, the experience will be credited to the whole team. Some quests will also bring monetary rewards. You'll see the "value" of each quest at the end of its description.
+
+     Most quests are divided into several objectives. Each represents a "stage" of completion. Some objectives will be available immediately at the start when you receive the quest. You can consider these the first stages. Other objectives will then appear after you've complete the previous stages.
+     Completed objectives are marked with a "V" on the objectives list. Objectives which for some reason can no longer be completed will be marked with an "X". Completed quests will be shown on the list with the word "completed".
+
+     Note: a quest might be marked as completed although you have yet to complete all objectives. It's not always required that you complete all objectives within a quest.
+
+=== tutor it005_head
+Quests screen
+
+=== tutor it005_head_screen1
+Quests screen
+
+=== tutor it005_text_screen1
+     Once you've chosen a Game zone in the Global Map, you'll see a Quest screen. The upper-right area shows a simplified map of the zone. You should see at least one triangle here, and possibly more.
+     The green triangles indicate Transfer areas. Your character can enter the Game zone through these. Select the one you want to use to enter the Game zone by clicking on it. Notice that it gets bigger. This means it is "selected" and you can enter now.
+     The red triangles mark Transfer areas that are unavailable to your character. 
+
+     If you see no green triangles on the zone map it means there is another "unexplored" game zone lying somewhere between your character's current position and the present Game zone you're trying to enter. You'll need to find it and get your character through it in order to continue.
+
+     To enter a Game zone press the "V" button at the bottom of the screen.
+     To return to the Global Map press the "X" button at the top of the screen.
+
+=== tutor it006_head
+Equipment
+
+=== tutor it006_head_screen1
+Items
+
+=== tutor it006_head_screen2
+Armor
+
+=== tutor it006_text_screen1
+     This is the screen you will use to equip your characters with clothes, weapons, potions, wands, etc. The name of the different characters are displayed on a panel on the left side of the screen. You can "flip" through the list of characters using the buttons to the left and right of the name panel.
+     The bar at the top of the screen shows what items the character will take with him into the Game zone. The four slots on the left are for weapons, while those on the right are for potions and wands.
+
+     The bottom bar shows your characters' "inventory". These are the items they will not be taking into the Game zone. If you want only certain types of items displayed, use the buttons to the left and right of the bar. To see what types of items a button will display, just place the cursor over it and leave it there for a few seconds. A pop-up tip will appear with the information.
+
+     As explained above, items are either "held" actively by the character (top bar) or put in inventory (bottom bar). To move items from your inventory to the character, just click on the item in the inventory (bottom) bar and it will move to the active (top) bar. To select an active weapon for use, simply right-click on its picture in the top bar. A frame will appear around it. Now it's ready to use. To put an active item into your inventory, click on the item's picture in the top bar.
+
+     Note: If all slots in the upper bar are empty, your character will go into the Game zone unarmed - and probably not make it out in one piece! Also, this is the only screen from which you can equip your character.
+
+=== tutor it006_text_screen2
+     Right in the center of the screen is a portrait of your character dressed in the armor he will wear in the Game zone. Wearing the right armor plays a key role in the success or failure of your quest. The slots to the left and right of the portrait show the pieces he is currently wearing. If you place the cursor over a slot you'll see the name and properties of the armor piece displayed in the right screen panel.
+
+    Armor is divided into light and heavy category. Heavy armor can be put on top of light armor to give additional protection. Be advised that the more you weigh your character down, the slower he will be.
+
+     Click on armor in the inventory bar to put it on your character. It will appear immediately on the character's portrait and its icon will show up in the appropriate slot.
+     To take a piece of armor off your character, click on the slot containing the piece's icon. The armor will return to inventory.
+
+     The left screen panel shows the details for all the protective gear your character is wearing. Your character now has a total attack and defense "value", and a certain amount of potential to inflict damage. These amounts are displayed below the total property value and depend on what the character is wearing, as well as his skills with the selected weapon and the weapon's details.
+
+    To learn more about the properties of a given weapon, place the cursor over the weapon and let it remain there a few seconds. A full description of the weapon will show up in the right screen panel.
+
+=== tutor it007_head
+Attributes, skills, abilities, spells
+
+=== tutor it007_head_screen1
+Skills and abilities
+
+=== tutor it007_head_screen2
+Attributes
+
+=== tutor it007_head_screen3
+Skills
+
+=== tutor it007_head_screen4
+Known abilities
+
+=== tutor it007_head_screen5
+Available abilities
+
+=== tutor it007_head_screen6
+Spells
+
+=== tutor it007_text_screen1
+     This screen gives certain information about your characters, including their skills and abilities. Each character gains a certain amount of experience in the course of completing quests. Here you can 'spend' that experience to acquire new abilities and develop existing skills. You can also issue spells to characters here, which they can cast during the game.
+
+     You can select which character you're working on by using the buttons on either side of his/her name.
+There are four panels in the middle of the screen. These are, from left to right:
+     Attributes panel
+     Skills and known abilities panel
+     Available abilities panel
+     Descriptions panel
+     See the next tutorial screens for more information on these panels.
+
+     At the bottom of the Attributes panel there's the "Your Experience" section (framed). Use the "V" and "X" buttons to confirm/cancel any changes in skills and abilities you've made using the other panels.
+
+     Note: the changes you make in other panels do not become active until you confirm them in the "Your Experience" section. If you proceed without confirming, the changes will be cancelled as soon as you switch to another screen.
+
+=== tutor it007_text_screen2
+     The Attributes panel shows a character's basic attributes (framed). These are : "Strength", "Dexterity" and "Intelligence", and their derivatives: "Health", "Stamina", "Actions" and "Encumbrance". The panel also shows the "Experience" the character has gained.
+
+     To learn more about each attribute, place the cursor over it and read the text which appears in the Descriptions panel.
+     "Experience" shows the total amount of experience your character has built up during the game. Part of that experience has already been invested in his skills and abilities (i.e. it's spent). You can use the remaining experience to develop the character's skills even further and to acquire new abilities. The amount at your disposal is shown in the "Your Experience" section.
+
+     You can invest available experience into skills and abilities using the appropriate panels. The "Your Experience" section will show the amount of experience you are spending. To confirm, click the "V" button, to cancel click "X".
+
+=== tutor it007_text_screen3
+     At the top of the Skills and Abilities panel you can see the "Skills" section (framed). The first number after the skill's name is its current value, the second number is the price of increasing it by one unit.
+
+     To learn more about each skill, place the cursor over it and read the text which appears in the Descriptions panel.
+
+     To increase a skill click on the corresponding button.
+     To confirm or cancel your changes, click on the appropriate buttons in the "Your Experience" section.
+
+=== tutor it007_text_screen4
+     At the bottom of the Skills and Abilities panel is the "Known Abilities" section (framed). You should see a number to the right of the ability name. This is what it will cost you to develop the ability one level higher
+     To learn more about an ability, place the cursor over it and read the text which appears in the Descriptions panel.
+
+     To develop an ability, click on the appropriate icon in the "Known Abilities" section.
+     To confirm or cancel, click on the appropriate buttons in the "Your Experience" section.
+
+     Note: each time you develop an ability, you increase the cost of developing other abilities.
+
+=== tutor it007_text_screen5
+     The Available Abilities panel (framed) shows a list of abilities your character can learn. The number next to the ability name is the cost of learning this ability. If the price is dimmed it means you lack the required experience to do so.
+     To learn more about an ability, place the cursor over it and read the text that appears in the Descriptions panel.
+
+     To give your character an ability, click on the button with its price in the "Available Abilities" section.
+     To confirm or cancel, click on the appropriate buttons in the "Your Experience" section.
+
+     Note: each ability you learn significantly increases the price of learning other abilities. This means your character will not be able to learn all available abilities. A key to success in the game is selecting the right abilities.
+
+=== tutor it007_text_screen6
+     The bar at the top of the screen shows which spells are available to your character during quests. The bar at the bottom shows your inventory.
+     
+     Your inventory contains some ready-made spells. To hand one of these spells over to your character, click on its icon in the bottom bar.
+     To take a spell from your character and return it to your inventory click on the spell's icon in the top bar.
+
+     Note: if a spell is too complex for your character's knowledge of this particular school of magic (Elemental Magic, Sensory Magic, Astral Magic) the spell will be dimmed and you will be unable to hand it to your character. The same applies when your character cannot use a spell because he lacks the stamina to do so.
+
+=== tutor it008_head
+Item shop 
+
+=== tutor it008_head_screen1
+Item trade
+
+=== tutor it008_text_screen1
+     In the item shop you can buy and sell weapons, armor, materials, blueprints and collected items. Quest items can not be bought or sold.
+
+     The bar at the top of the screen shows what's available in the shop, while the bottom bar shows what you have in your inventory. Use the buttons on either side of the bars to choose the type of objects you wish displayed.
+
+     The middle of the screen is used as the "shop counter". The top half of the counter contains the items you are buying, the bottom half contains items you are selling. The lower-left section of the screen shows the total "deal value". This is the amount you can get from the deal (if you're selling) or must pay (if you're buying).
+
+     To put an item on the shop counter click on its picture in the appropriate bar (top or bottom).
+     To put the item back onto the bar click on it while it's on the shop counter.
+     To move several items of the same kind press the <SHIFT> key when you click on an item.
+     To complete the deal click the "V" button next to the deal value, or click "X" to cancel.
+
+=== tutor it009_head
+Item constructor
+
+=== tutor it009_head_screen0
+General information
+
+=== tutor it009_head_screen1
+Item construction
+
+=== tutor it009_head_screen2
+Item deconstruction
+
+=== tutor it009_head_screen3
+Magic in items
+
+=== tutor it009_text_screen0
+     You construct items in the constructor. To construct an item you need its blueprint and some material. The blueprint specifies what material you'll need. For example, you can't make a stone head spear using a bone spear blueprint.
+
+     You can use your own blueprints and materials or buy them in the shop - just like you buy any other items.
+     If you want details on any constructor slot, place the cursor over it and read the description which appears in the right hand panel.
+
+     Available slots are marked with a flickering frame. If you place a blueprint in an empty constructor, you'll be ready for construction. If you place an item there, it means you want to deconstruct it. See the next screens for more details on constructing/deconstructing items.
+
+=== tutor it009_text_screen1
+     To construct an item click on its blueprint in your inventory (bottom bar) or in the shop (top bar). The blueprint will be placed into the appropriate slot.
+     As soon as you've placed the blueprint into its slot, the material slots will be highlighted with a flickering frame. The number of highlighted slots is equal to the number of material units the blueprint says you'll need. Click on a material  - either in your inventory if it's there, or in the shop - and it will go to one of the slots. You can only use one kind of material to make an item. Mixing different materials is not allowed, even if they are of the same general type.
+
+     Note: you must first place a blueprint in the constructor before you can place material there. If you place the blueprint in the constructor and then take it out again (i.e. you return it to your inventory or to the shop), all material you have placed in the constructor will be automatically removed from the slots and returned to where it came from.
+
+     When all material slots are filled, the left panel will show the properties of the item in construction. In the lower part of the screen you'll see the item's price. This includes the price of the articles you bought, if any.
+
+     To construct the item click on the "V" button, to cancel click on "X".
+
+=== tutor it009_text_screen2
+     To deconstruct an item, click on it and it will appear in one of the constructor's slots reserved for ready-made items. In the lower-left corner of the screen you'll see the total cost of deconstructing it.
+
+To deconstruct the item click on the "V" button
+To cancel click on the "X" button
+
+     Note: if you deconstruct an item and then construct it immediately afterwards you'll still be charged for constructing and deconstructing - a serious waste of money, so be careful.
+
+=== tutor it009_text_screen3
+     You can insert spells into items such as weapons or armor in order to give them "magical" properties. To do this, the spell must contain a rune which allows it to be inserted. These runes are called "Item (trigger)" and "Item (continuous"). They will become available to you later in the game.
+     (You don't need one of these runes to construct a wand with a spell in it.)
+    There's a special slot in the constructor for "insertable" spells, located below the blueprint slot. The slot will be available after you've placed the blueprint and the necessary amount of material in the constructor. To put a spell from your inventory there, just click on the spell's icon.
+
+     To construct the object click on the "V" button, to cancel click on "X".
+
+     Note: both the spell and the item you want to insert it into have "complexity" values. The complexity value of the item must be higher than that of the spell, otherwise the spell and item combination will not work. Similarly, you cannot insert a spell which demands a high "stamina" value into an item with a low "energy" value.
+
+=== tutor it010_head
+Spell shop
+
+=== tutor it010_head_screen1
+Spell trade
+
+=== tutor it010_text_screen1
+     In the spell shop you can buy and sell ready-made spells, keystones and runes. Items are not for sale here.
+
+     The top screen bar shows what's available in the shop, the bottom bar shows what you have in your inventory. Use the buttons on either side of the bars to choose the type of objects you wish displayed, such as keystones of a particular magic school, runes of a certain type or ready-made spells.
+
+     In the middle of the screen is the "shop counter". The top half is used for the spells and runes you are buying, while the bottom half is for the ones you are selling. The lower-left section of the screen shows the total "deal value". This is the amount you can get (if you're selling) or the amount you must pay (if you're buying).
+
+     To move a spell or rune onto the shop counter click on its picture in the appropriate bar (top or bottom).
+     To put the spell or rune back to its original bar click on it while it's on the shop counter.
+     To move several spells or runes of the same kind press the <SHIFT> key and click on the appropriate slot.
+     To complete the deal click on the "V" button next to the deal value. 
+     To cancel, click the "X" button.
+
+=== tutor it011_head
+Spell constructor
+
+=== tutor it011_head_screen1
+General information
+
+=== tutor it011_head_screen2
+Constructing spells
+
+=== tutor it011_head_screen4
+Deconstructing spells
+
+=== tutor it011_head_screen5
+Features
+
+=== tutor it011_text_screen1
+     To construct a spell, you'll need its keystone. Spell keystones determine what school of magic the spell belongs to, as well as its principle and initial properties.
+     You can construct a spell using only a keystone, or you can add runes which change the spell's properties.
+     You can use your own keystones and runes (assuming, of course, you have them) or you can buy them in the shop just like you buy any other item.
+
+     Note: You cannot construct spells that are too complex or demand too much stamina for any of your characters to use them. The maximum complexity and stamina you have available will be shown framed in separate lines below the slot your keystone is in.
+
+=== tutor it011_text_screen2
+     To construct a spell click on its keystone in your inventory (bottom bar) or in the shop (top bar). The keystone will be placed into the appropriate slot.
+     The slots reserved will then be highlighted with a flickering frame. The number of highlighted slots is equal to the number of runes you can insert into this spell. This number changes each time you add a rune to the constructor. To add a rune click on its picture in either your inventory or in the shop and it will go to the next available slot.
+     The keystone determines what runes can be used for this spell. Runes which cannot be used will be dimmed.
+
+     Note: you can't place any runes into the constructor until you've placed a keystone. If you take the keystone out of the constructor and put it back into your inventory or shop, all runes you've added will also be removed from their slots and returned to where they came from.
+
+     The properties of the spell you have constructed are shown in the left panel, including any additional properties added by the runes you have used. The lower part of the screen shows the total price of the spell. This includes the price of any articles you bought.
+
+     To construct the item click on the "V" button, to cancel click on "X".
+
+     Note: if you construct a spell and then deconstruct it immediately afterwards you'll still be charged for the constructing and deconstructing cost. Caveat Emptor!
+
+=== tutor it011_text_screen4
+     If you want to deconstruct a spell, click on it and it will appear in a constructor's slot. In the lower-left corner of the screen you'll see the total cost of deconstructing the spell.
+     If you remove the keystone from its slot in the constructor after you've deconstructed the spell, the runes contained in it will also be removed.
+     When you deconstruct a spell from the shop, we assume you have purchased it (sorry, shoplifting is another chapter), so the runes from the spell will go into your inventory.
+
+     To deconstruct a spell click on the "V" button
+     To cancel click the "X" button
+
+     Note: if you deconstruct a spell and then construct it immediately afterwards you'll still be charged for constructing and deconstructing.
+
+=== tutor it011_text_screen5
+     A composite spell is one made up of a keystone and more than one additional rune. This type of spell cannot require less energy than a similar spell which contains only the keystone. Thus, the rune "Extra Energy" can never be used alone. It's only useful for composite spells as it compensates for the increased energy needed by the additional runes.
+
+=== tutor it012_head
+Items repair
+
+=== tutor it012_head_screen1
+Item repair
+
+=== tutor it012_text_screen1
+     Each item has a certain "durability". Items that are in full working order have a Maximum durability value, while items that are no longer usable (due to wear and tear, for example), have zero durability. In this screen you can repair items and restore their durability to the Maximum value.
+
+     If you're in the Game zone and an item is damaged so badly that it is about to become unusable, you'll be warned by a special sound which you'll hear as soon as you try using the item (strike in the case of a weapon, or receive blows if it's a piece of armor). When you hear this sound you need to base and repair the item before it becomes completely unusable.
+     To repair an item place it on the table in the middle of the screen. The lower-left panel will show the price to repair it. You can accept the cost and repair the item by clicking the "V" button, or cancel with the "X" button.
+
+     Note: items which become unusable will be moved into inventory and will be inaccessible for your characters. So maintain all your characters' equipment in good working order or you'll be at a distinct disadvantage.
+
+=== tutor it015_head
+Game controls
+
+=== tutor it015_head_screen1
+Options
+
+=== tutor it015_text_screen1
+     Use the Options screen to set up the game according to your preferences and to match it to your system's resources. Each option has pop-up tips to explain it in more detail. To see the tip, place the cursor over the menu item and wait for a few seconds.
+     The Options are divided into several sections. Each of the section names also has its own pop-up tip.
+
+     The following information applies to all options:
+     To assign (reassign) hot keys double-click on the option you want to assign. The option line will highlight in red. Press a key on your keyboard and it will be assigned to this option.
+     To switch an option on/off double-click on "On" (or "Off"). The option will be activated/deactivated.
+     To increase (decrease) an option's value place the cursor over the sliding bar and drag it to the right to increase the value or to the left to decrease it. Put the sliding control all the way to the left and the option is zero (i.e. you have turned this option off).
+     To confirm the changes you made click on the "V" button, to cancel click on "X".
+
+=== tutor it016_head
+LMP
+
+=== tutor it016_head_screen1
+LMP
+
+=== tutor it016_text_screen1
+LMP
+
+=== tutor zt10_head
+Mini-map
+
+=== tutor zt10_head_screen1
+General information
+
+=== tutor zt10_head_screen2
+Features
+
+=== tutor zt10_head_screen3
+Example
+
+=== tutor zt10_text_screen1
+     The Mini-map (shown here in a highlighted frame) provides a quick overview of the Game zone. You can use it to see your character's current location. The Mini-map always shows the entire Game zone, regardless of how much terrain you've managed to explore.
+
+     Different colored triangles indicate your character(s) and all those they might come into contact with.
+
+     Green triangles represent your characters
+     Yellow triangles represent neutral characters
+     Red triangles represent enemies.
+
+=== tutor zt10_text_screen2
+     To control the Mini-map use the buttons to the right (they're framed). You can zoom in and out or set the camera to a default direction.
+
+     To zoom in/out use the <+>/<-> keys
+     To set the camera facing North use the <N> key or the "N" button.
+     To show/hide the Mini-map use the framed upper-right button or the <M> key.
+
+     Note:  When the camera is set to "North", the terrain's orientation on the game screen is the same as in the Mini-map.
+
+=== tutor zt10_text_screen3
+     You now need to move to the bridge which crosses the river in the center of the Game zone.  Click on the area in the Mini-map and the camera will move to that point, providing you with useful scouting information.
+     If you want to point the camera back on your character, just double-click on his picture.
+
+=== tutor zt11_head
+Text window
+
+=== tutor zt11_head_screen1
+Text window (part 1)
+
+=== tutor zt11_head_screen2
+Text window (part 2)
+
+=== tutor zt11_text_screen1
+     The Text window (currently highlighted) has two modes: "messages" and "collected items". To switch between them use the buttons in the window's upper-left corner.
+
+     In "messages" mode the Text window will contain information designed to give you a better understanding about what is happening in the game. This includes information about received and completed quests and missions, the items you've picked up, warnings about wear-and-tear on your weapons and armor and the characters' dialog lines.
+     In "collected items" mode the Text window will show the total number of items you've picked up in the Game zone and give you information about them.
+
+=== tutor zt11_text_screen2
+     You can control the Text window with the scroll bar, or with the following keyboard keys:
+
+     To open/close the window in "Messages" mode use the <L> key
+     To open/close the window in "Collected items" mode use the <K> key.
+
+     To open/close the Text window use the (currently highlighted) triangle button at the top of the window.
+
+=== tutor zt12_head
+Information window
+
+=== tutor zt12_head_screen1
+Information window
+
+=== tutor zt12_head_screen2
+Modes
+
+=== tutor zt12_text_screen1
+     The Information window (currently highlighted) gives you details about the game characters. If you want details on any character, just place the cursor over him/her. The Information window defaults to giving details on your own character (a.k.a. "the Hero").
+     The Information window has several modes. See the next screen for more on each one.
+
+     Note: To open/close the Information window use the (currently highlighted) triangle button at the upper-left.
+
+=== tutor zt12_text_screen2
+     The Information window has several modes. To switch between them use the buttons at its left edge, or use the keyboard. Here are the modes and a description:
+
+     General view: shows general information about the character's view (<,> key)
+     Hit locations: shows what damage has been inflicted on his/her different body parts (<.> key)
+     Attributes: shows the character's attributes (</> key)
+     Spell effects: shows what spells are currently affecting the character and the time (in seconds) remaining before the effect wears off (<'> key)
+
+=== tutor zt13_head
+Character's movement
+
+=== tutor zt13_head_screen1
+Movement modes
+
+=== tutor zt13_head_screen2
+Example
+
+=== tutor zt13_text_screen1
+     Depending on the situation you can choose one of several movement modes for your character. To switch between modes use the control panel in the lower-left part of the screen, or use the keyboard. Here are the different movement modes, along with a description of each:
+
+     Walk: when a character walks, his speed is normal. "Stamina" stays constant (<X> key).
+     Run: running is faster than walking, but makes a lot of noise. He might end up attracting the attention of enemies who otherwise wouldn't see him. Also, when running, his "Stamina" diminishes; when it reaches zero, the character automatically starts walking (<Z> key).
+     Sneak: as you can imagine, a sneaking character makes almost no sound at all.  Naturally, sneaking around is slow, though "Stamina" remains constant  (<C> key).
+     Crawl: a crawling character is much less visible to enemies but moves very, very slowly. Like sneaking, a crawling character maintains his "Stamina" level (<V> key.)
+
+=== tutor zt13_text_screen2
+     You should try to crawl past this ogre - this might be his only chance to get past the ogre alive. If you don't choose this mode your character will almost certainly meet an untimely demise from that tree trunk the ogre's using as a club.
+
+=== tutor zt14_head
+Use/Steal skill
+
+=== tutor zt14_head_screen1
+Steal
+
+=== tutor zt14_head_screen2
+Steal from Ogre
+
+=== tutor zt14_head_screen3
+Use
+
+=== tutor zt14_text_screen1
+     If you need to get something from an enemy but don't want to risk fighting him, you can always try stealing it.
+     Stealing from an enemy is a bit tricky. First off, you need to quietly approach him from behind and get as close to him as possible (its best to use the "sneak" mode, otherwise he could hear you coming).
+     Once you've gotten close, click on the "Use/Steal" icon (it's currently highlighted) and the cursor will change shape. Place the new cursor over the item you want to steal and click again. When you've stolen what you wanted, you'll need to get a safe distance away from the enemy without him noticing (people tend to get a bit rancorous when they've been stolen from). Once you've gotten away you may move about normally.
+
+     You can also select the "Use/Steal" skill with the <S> key on your keyboard.
+
+     Note: not every attempt at stealing will be successful. Your result depends on your character's "Use/Steal" skill and on the properties of what you're trying to steal. The higher the "Use/Steal" skill your character has, the better your chances of success.
+
+=== tutor zt14_text_screen2
+     Once your character reaches the end of the bridge he'll see two Ogres. The one on the right (the full one) is feeling particularly inattentive right now. This means it'll be easy to sneak up from behind and steal from him - go for it!
+
+=== tutor zt14_text_screen3
+     You'll be able to apply your "Use/Steal" skill in many different circumstances when using different objects/items, such as opening doors, turning levers, lifting coffer lids etc.
+     To use an item place the cursor over the item (the cursor will change shape), and then click.
+     Note: your character cannot use every item or object successfully, depending on his Use/Steal skill.
+
+=== tutor zt15_head
+Special blows
+
+=== tutor zt15_head_screen1
+Backstab
+
+=== tutor zt15_head_screen2
+Precision blows
+
+=== tutor zt15_head_screen3
+Aim at limb
+
+=== tutor zt15_head_screen4
+Head blow
+
+=== tutor zt15_text_screen1
+     Your blows will cause much greater damage if you can catch your enemy unawares and strike him. To perform a "backstab" your character must get close to the enemy from the behind without him noticing (its best to use the "Sneak" mode so the enemy won't hear you), and then strike him before he realizes what's happening.
+
+     If your enemy notices you approaching and switches to Aggressive mode, your blow will not be counted as a "backstab". So be sneaky!
+
+=== tutor zt15_text_screen2
+     When you order your character to attack an enemy you can specify what body part he should aim at. Use the following keypad keys for precise blows:
+
+     <4>: aim at left hand (left fore leg)
+     <6>: aim at right hand (right fore leg)
+     <1>: aim at left leg
+     <3>: aim at right leg
+     <5>: aim at body
+     <8>: aim at head
+
+     To land a precise blow, hold the appropriate key down, and place the cursor over the enemy. Your character will aim right at the specified body part until you issue a different command or until the health of this body part reaches 0. If the enemy is still alive, additional blows will not be precise ones.
+
+    Some of the beings in the game have no arms or legs. If you issue a command to aim at a nonexistent body part your character will just ignore it.
+
+    All characters' body parts can be protected by armor which has specific "armor" properties - so the damage inflicted on such protected body parts reduced.
+
+=== tutor zt15_text_screen3
+     If your character loses an arm, he will attack and cast spells much more slowly. A character loses an arm when the arm's health reaches 0. You can see this in the Information window if it's switched to "Hit locations" mode.
+
+     If your character has lost a leg, his/her movement will be much slower. A character loses a leg when the leg's health falls to 0. You can see this in the Information window if it's switched to "Hit locations" mode.
+
+=== tutor zt15_text_screen4
+     Head blows are considered critical. They cause three times more damage than other blows. However, the chances of striking the head are much lower than other body parts.
+
+=== tutor zt16_head
+Movement between zones
+
+=== tutor zt16_head_screen1
+Transfer areas
+
+=== tutor zt16_head_screen2
+Features
+
+=== tutor zt16_text_screen1
+     Transfer areas are special places and are marked in clouds of yellow particles in the Game zone (and yellow blocks on the mini-map). Use them to move from one Game zone to another. Since changing Game zones is an important step, you'll be asked to confirm when your character enters a Transfer area.
+
+     Your character is near the village right now. You've completed the quest and found the way to a human settlement. The only thing left for him to do is enter it - i.e. use a Transfer area.
+
+     If you are controlling several characters at the same time, your must get them all into the Transfer area to be able to use it. You cannot leave some of the characters in the Game zone and move others out of it.
+
+=== tutor zt16_text_screen2
+     Each Transfer area in a particular Game zone is connected with a Transfer area in another Game zone. 
+
+     Not all Transfer areas are immediately available. You may be unable access some of them. Areas which are currently unavailable will be clouds of red particles, rather than yellow.
+
+=== tutor zt17_head
+Using weapons
+
+=== tutor zt17_head_screen1
+Choosing weapons
+
+=== tutor zt17_text_screen1
+     Your character may use up to 4 different weapons while in the Game zone. To ready a weapon, click on its picture (its easy to see - the weapons are framed).
+
+     You can also choose weapons via the following keyboard keys:
+     Use weapon 1: <Q> key.
+     Use weapon 2: <W> key.
+     Use weapon 3: <E> key.
+     Use weapon 4: <R> key.
+
+=== tutor zt18_head
+Potions and wands
+
+=== tutor zt18_head_screen1
+Phial with potion
+
+=== tutor zt18_text_screen1
+     To use a potion or a wand you bought or found you must first hand it over to one of your characters in "camp".
+
+     The potion will then be available to the character and will appear in the appropriate framed screen. To use it, just click on its icon or use the following keyboard keys:
+
+     Use item 1 - <P> key.
+     Use item 2 - <O> key.
+     Use item 3 - <I> key.
+     Use item 4 - <U> key.
+
+=== tutor zt19_head
+Completing quests
+
+=== tutor zt19_head_screen1
+Special features
+
+=== tutor zt19_text_screen1
+     To complete quests successfully, use all opportunities provided in the game.
+
+     During combat you can use "Pause" mode (press <SPACE> bar). In the pause mode you can assess your characters'  and enemies' health using data displayed in Information window, and order your characters to attack particular enemies, cast spells, change weapons or set them off in a particular direction. All your orders will be carried out as soon as the pause mode is switched off (press <SPACE> bar again).
+
+     You can order one of your characters to follow another game character. To do that, click on "Follow" icon (the cursor will change shape), then place it over the character to be followed and click again. Your currently selected character will follow him until you issue another command.
+
+     You can switch on "Camera tracking" mode. To do that, double-click on the character's icon in the lower part of the screen. The camera will start tracking this character until you use any other camera control command.
+
+=== tutor zt1_head
+Initial information
+
+=== tutor zt1_head_screen2
+Controls (character)
+
+=== tutor zt1_text_screen2
+     Your character is now in a Game zone. If you want him to walk somewhere just click on the point and he will go there. If you double-click on the point, he will run there.
+
+     Note: your character cannot always travel through all parts of the Game zone. If you try sending him to a point he can't reach he'll either go to the nearest accessible point or simply remain where he was.
+
+=== tutor zt20_head
+Group controls
+
+=== tutor zt20_head_screen1
+Selecting characters
+
+=== tutor zt20_head_screen2
+"Follow" command
+
+=== tutor zt20_text_screen1
+     You can control up to three characters at the same time. You can control them together or each of them individually. To control characters individually you must select the character(s) to whom you wish to give commands.
+
+     To select one character click on him/her in the Game zone or on his/her picture at the bottom of the screen.
+     To select several characters do the same as above while holding down the <SHIFT> key.
+     You can also select one or more characters by making a frame around them with the mouse while keeping the left button pressed. All characters within the frame will be selected.
+     You can select individual characters or all characters using the keyboard as follows:
+
+     To select character 1: <F1> key.
+     To select character 2: <F2> key.
+     To select character 3: <F3> key.
+     To select all characters: <F4> key.
+
+     Note: the moment you select a character (whether you do it by double-clicking on his/her picture or by pressing the <ALT> key) the camera will start tracking that character immediately.
+
+=== tutor zt20_text_screen2
+     To make it easier to control several characters at the same time, you should make them follow one another.
+     To do this, select a character then place the cursor over the "Follow" icon (it's framed), and click. You'll see that the cursor changes its shape. Now place the cursor on another character (the target doesn't have to be under your control) and click again. The selected character will start following the one you just clicked on.
+     If you send your character to a particular place, the "Follow" mode will be cancelled.
+
+     You can also issue the "Follow" command using the <F> key.
+
+=== tutor zt21_head
+Backstab
+
+=== tutor zt21_head_screen1
+Backstabbing the white wolf
+
+=== tutor zt21_text_screen1
+     You can inflict much greater damage on your enemy if you catch him by surprise and strike him from behind (we call this a "backstab"). But the hit will be counted as a "backstab" only if the enemy didn’t notice you. This means you must get close to him without being noticed. Use the Sneak mode for this.
+
+     This technique is especially suitable for enemies stronger than your character, such as the white wolf.
+
+=== tutor zt22_head
+Stealing
+
+=== tutor zt22_head_screen1
+Stealing from the Chieftain and his wife
+
+=== tutor zt22_text_screen1
+     When your opponent is someone like the Chieftain, who is definitely stronger than your character, you should try to obtain things from him secretly (the Chieftan is not famous for his generosity).
+
+    To do this, sneak up on him and click on the "Use/Steal" icon. You'll see the cursor change shape. When it does, click on the character you want to steal from.
+     Note: to issue the "steal" command, you must select a single character. If you select more than one the  "Use/Steal" icon is unavailable.
+
+=== tutor zt23_head
+Moving
+
+=== tutor zt23_head_screen1
+Ford
+
+=== tutor zt23_text_screen1
+     Characters can't swim, but they can ford through shallow waters or swamps. The water cannot be deeper than the character's height or he will drown. This means a human can ford through deeper rivers than a wolf, and a Troll can cross even deeper waters than a human.
+
+     Example: your character reaches a river. To continue with the quest you need to get him to a place on the other river bank. Don't worry - he'll  find a way there by himself and ford through the river.
+
+     Note: while a character is in the water he/she won't change position in any way that would make his/her head go under. The character will simply refuse to comply with any such command.
+
+=== tutor zt24_head
+Quests
+
+=== tutor zt24_head_screen1
+Take quest
+
+=== tutor zt24_text_screen1
+     You are now in the Game zone without a quest (press the <TAB> key to call up quests screen and you'll see it's empty).
+
+     To get a quest, return to the village and talk to the people there.
+     
+     Note: Not every conversation will lead to your receiving new quests. However if you don't have a quest to perform anywhere in the Game zones, that definitely means that somebody in the village wants to talk to you, and this talk will result in a new quest.
+
+=== tutor zt2_head
+Camera controls
+
+=== tutor zt2_head_screen1
+Controls (camera)
+
+=== tutor zt2_head_screen2
+Limited
+
+=== tutor zt2_text_screen1
+     You have full control over of the camera throughout the game. You can turn it, move it, zoom in and out and follow a selected character. You'll also be able to see terrain and objects throughout the Game zone regardless of whether you've already explored them or not.
+
+     To move the camera simply move the cursor to the screen edge or use the arrow keys.
+     To turn the camera use the right mouse button or use the <CTRL> + arrow keys.
+     To zoom in/out move the mouse wheel or use the <PgUp>/<PgDn> keys.
+     To track a character double-click on the character's picture at the bottom of the screen, or press the <HOME> key.
+
+     Note: you're in the tracking mode when you see a symbol on top of the character's picture. If you manually move the camera, tracking stops.
+
+=== tutor zt2_text_screen2
+     You cannot zoom too far in or out, nor can you set the camera exactly horizontal or vertical. You can, however, get a very detailed view of something by pressing and holding down the <PgUp> key. This will let you zoom in further. When you release the key the camera will automatically return to the usual Maximum zoom value.
+
+=== tutor zt3_head
+Quests and objectives
+
+=== tutor zt3_head_screen1
+Quests and objectives
+
+=== tutor zt3_head_screen2
+Text window
+
+=== tutor zt3_head_screen3
+Quests screen
+
+=== tutor zt3_text_screen1
+     To progress in the game you'll have to complete many different quests - some are necessary and some are optional. These quests give your character additional experience and other benefits.
+
+     When you receive a new quest you'll hear a sound and see a message in the Text window. Detailed information will also be available in the Quests screen - see the next tutorial screen for more on this.
+
+=== tutor zt3_text_screen2
+     When you receive and complete a quest, messages appear in the Text window (currently highlighted). These messages describe the objectives of the quest and other information.
+
+     To open/close the Text window use the triangle button (currently highlighted) at the top of the text window.
+
+=== tutor zt3_text_screen3
+     Information about your quests is shown in the "Quests Screen". Typically, each quest includes several missions and objectives. Some of these will be shown immediately, while others will appear only after you complete previous missions. It's not always necessary to complete all objectives in order to complete the quest successfully.
+
+     To call up the Quests screen use the <TAB> key or click on the (currently highlighted) scroll icon in the lower-right corner. To return to the Game zone screen click on the button at the bottom of the Quests screen or press the <TAB> key again.
+
+     Note: if the scroll icon is flickering during the game it means you have received a new quest or objective, and the Quests screen has new information for you to read. Ignore at your peril.
+
+=== tutor zt4_head
+Game speed controls
+
+=== tutor zt4_head_screen1
+Game speed
+
+=== tutor zt4_head_screen2
+Pause mode
+
+=== tutor zt4_text_screen1
+     Set your desired game speed using the highlighted panel in the lower-right corner of the screen. The panel has a marker indicating your current game speed. The panel also indicates how long you've been playing.
+
+     You can choose one of three modes: "normal" speed, "accelerated" speed and "pause". Accelerated speed mode makes all characters (both yours and enemies) move quicker. Normal is, of course, the standard setting. With "pause" you can interrupt the game for a while to think about what's going on.
+
+     You can also set the game speed via the keyboard: 
+     Accelerated speed: <+> key.
+     Normal speed: <-> key.
+     Pause: <SPACE> bar.
+
+=== tutor zt4_text_screen2
+     "Pause" mode can be very useful in, for example, tight combat situations. In this mode, game time stops. You can still control the camera and issue orders to characters, but they will be carried out only after you cancel the "pause" mode. You should use this mode to assess enemies' strength, determine your targets or choose spells.
+
+     To switch "pause" mode on or off, just use the <SPACE> bar.
+
+=== tutor zt5_head
+Combat situations
+
+=== tutor zt5_head_screen1
+Combat with an enemy
+
+=== tutor zt5_head_screen2
+Move and attack
+
+=== tutor zt5_text_screen1
+     Occasionally, despite your efforts to avoid combat, you will encounter enemies your character must fight. Enemies do not appear on the screen until your character can see them.
+
+     To attack an enemy place the cursor on him and, when the cursor changes into a sword, click. Your character will start fighting this enemy and will continue until the enemy dies. If the enemy is moving quickly it can be difficult to place the cursor on him, so you should use "pause" mode (<SPACE> bar).
+
+=== tutor zt5_text_screen2
+     You can issue your character the "Go and prepare to attack" command. This puts him in a fighting mode and he'll attack all enemies he sees.
+
+     To issue this command, press and hold the <CTRL> key then click on a destination point. He will move towards this location, fighting any enemies he sees on the way.
+
+     Note: in this mode your character will attack all enemies he sees near his location. If you try to send him to a location too far off, he'll defend himself if attacked on the way. After that, however, he will stop and wait for further instruction.
+
+=== tutor zt6_head
+After combat
+
+=== tutor zt6_head_screen1
+Taking trophies
+
+=== tutor zt6_text_screen1
+     You can pick up items (treasure) from your enemy's corpse and use or sell them later.
+
+     To search a dead body simply place the cursor over it, wait for the cursor to change shape and click. A message will appear framed in the Text window describing what you've just picked up.
+
+     Note: Collected items go to your "inventory". You can only manage your inventory in camp or in Shop screens. You can't examine items or change clothes or weapons while your characters are in the Game zone.
+
+=== tutor zt7_head
+Using magic
+
+=== tutor zt7_head_screen1
+Healing spell
+
+=== tutor zt7_head_screen2
+Spells (part1)
+
+=== tutor zt7_head_screen3
+Features
+
+=== tutor zt7_head_screen4
+Spells (part2)
+
+=== tutor zt7_text_screen1
+     You can wounds sustained in combat by casting a healing spell.
+
+     This is done by clicking on the spell's icon at the right screen edge (currently highlighted), and then clicking on the character.
+     
+See the next screen for more about using magic and casting spells.
+
+=== tutor zt7_text_screen2
+     There are many different spells available in this game. Because it takes energy to cast spells, it diminishes your character's "Stamina"  (this is indicated by the blue bar under the character's picture). To replenish "Stamina" your character needs to rest, (standing still and not moving or fighting.)
+
+     To cast a spell on any character, click on the spell's icon on the right edge of the screen, and then click on the character, or the character's portrait, if the target is one of your characters.
+     To cast a spell on yourself simply double-click on the spell's icon.
+
+=== tutor zt7_text_screen3
+     When casting spells, don't forget about some basic rules.
+
+     Each spell has a range. If a character receives a command to cast a spell on a target out of that range, he'll try to get closer first.
+     Don't expect spells to have an immediate effect. Each spell takes a certain time to affect the target. The time depends on the spell's complexity and the character's health (it is difficult to cast spell with crippled arm). 
+     Some spells affect targets for longer periods of time. But the effects are not cumulative. Casting multiple spells of the same type at the same character will have no additional effect; the targeted character will only be effected by the strongest spell cast.
+
+=== tutor zt7_text_screen4
+     You can also cast spells via the keyboard:
+
+     To cast spell 1: <1> key.
+     To cast spell 2: <2> key.
+     To cast spell 3: <3> key.
+     To cast spell 4: <4> key.
+     To cast spell 5: <5> key.
+     To cast spell 6: <6> key.
+     To cast spell 7: <7> key.
+     To cast spell 8: <8> key.
+
+     Note: If you hold down the <ALT> key while pressing the spell key, you will cast the spells on yourself or on your nearest enemy (for various damage-dealing spells).
+
+=== tutor zt8_head
+Saving and loading games
+
+=== tutor zt8_head_screen1
+Saving and loading games
+
+=== tutor zt8_head_screen2
+Autosave
+
+=== tutor zt8_text_screen1
+     You can save and load games at any time, using either the Quicksave feature or the Esc-menu.
+
+     For Quicksave use the <F5> key. The game will be saved as "QUICK SAVE".
+     For Quickload use the <F8> key. The game saved as "QUICK SAVE" will be loaded.
+     
+     Using the "Save" and "Load" options in the Esc-menu, you can save games under any names you like.
+
+=== tutor zt8_text_screen2
+     Every time you enter the Game zone or exit to the Global Map the game is saved automatically under the names "Autosave (when entering)" and "Autosave (when leaving)".  You can change whether or not the game Autosaves in the Options menu.
+
+=== tutor zt9_head
+Character modes
+
+=== tutor zt9_head_screen1
+Aggressive/Defensive
+
+=== tutor zt9_head_screen2
+Features
+
+=== tutor zt9_text_screen1
+     Depending on the situation, you can put your character in one of two modes.
+     
+     In Aggressive mode the character will automatically attack all enemies he sees.
+     In Defensive mode the character will not attack any enemies until you issue the command to attack a particular one.
+
+     To switch to one of these modes, use the (currently highlighted) control panel at the lower-left of the screen, or use the <A> key.
+
+     Note: you can assign any of these modes to any individual character.
+
+=== tutor zt9_text_screen2
+     In Defensive mode the character will stop fighting after the enemy has been killed or after another command has been issued to him, such as "cast a spell" or "move to another location". To resume combat you'll need to issue an attack command again.
+
+     You can use this mode if the character needs to replenish stamina while there's an enemy nearby. A fighting character will not regenerate Stamina.
+

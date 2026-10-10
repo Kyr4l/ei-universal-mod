@@ -1,0 +1,15 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+# um-bot's menu entry (Linux). `um-bot --install-desktop` installs a copy of this with the binary's absolute path
+# and the icon (assets/logo-256.png) for the current user; this file is the template.
+Type=Application
+Name=um-bot
+GenericName=Evil Islands companion player
+Comment=A bot that joins your Evil Islands multiplayer game and plays at your side
+Exec=um-bot
+Icon=um-bot
+Terminal=false
+Categories=Game;
+Keywords=Evil Islands;Cursed Lands;bot;multiplayer;
+StartupWMClass=um-bot
+StartupNotify=true

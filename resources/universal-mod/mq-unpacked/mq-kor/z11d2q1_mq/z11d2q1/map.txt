@@ -13,8 +13,8 @@ cave
 #exit 1
 bz1mpg 1
 #deploy
-75 11 84 12
+75 10 83 12
 #remove
-75 3 84 10
+75 3 83 10
 #view
 349.289

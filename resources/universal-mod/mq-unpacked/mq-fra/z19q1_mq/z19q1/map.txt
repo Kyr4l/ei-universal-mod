@@ -14,6 +14,8 @@ normal
 #exit 1
 bz4mpg 1
 #deploy
-2 428 14 437
+12 428 14 435
+#remove
+2 428 12 437
 #view
 254.724

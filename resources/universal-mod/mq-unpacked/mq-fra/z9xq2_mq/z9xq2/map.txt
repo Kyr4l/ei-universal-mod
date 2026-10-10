@@ -10,9 +10,9 @@ zone9xmap zone9xquest
 #exit 1
 bz1mpg 1
 #deploy
-216 372 226 382
+216 370 226 373
 #remove
-216 372 226 382
+216 373 226 382
 #view
 172.785
 
@@ -20,9 +20,9 @@ bz1mpg 1
 #exit 2
 bz1mpg 2
 #deploy
-2 178 11 187
+8 181 11 186
 #remove
-2 178 11 187
+2 181 8 186
 #view
 298.155
 
@@ -30,9 +30,9 @@ bz1mpg 2
 #exit 3
 bz1mpg 3
 #deploy
-2 364.5 12 374.5
+5 364 11 366
 #remove
-2 364.5 12 374.5
+2 366 8 372
 #view
 281.534
 
@@ -40,9 +40,9 @@ bz1mpg 3
 #exit 4
 bz1mpg 4
 #deploy
-173 2 181 10
+174 8 180 10
 #remove
-173 2 181 10
+174 2 180 8
 #view
 281.534
 
@@ -50,18 +50,10 @@ bz1mpg 4
 #exit 5
 bz1mpg 5
 #deploy
-255 2 263 10
+259 7 265 9
 #remove
-255 2 263 10
+258 2 264 7
 #view
 281.534
 
-## To Orc-Delta south way
-#exit 6
-bz1mpg 6
-#deploy
-2 178 11 187
-#remove
-2 178 11 187
-#view
-298.155
+

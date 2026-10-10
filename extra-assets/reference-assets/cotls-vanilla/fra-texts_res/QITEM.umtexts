@@ -1,0 +1,165 @@
+# um-texts 1
+=== QITEM Danger_Sensor
+Cristal
+Très appréciable mais dommage qu'il n'y ait personne pour vous apprendre son utilisation...
+
+=== QITEM Large_Potion_1
+Potion de soins - grande fiole
+Rétablit presque immédiatement la santé d'un personnage.
+
+=== QITEM Large_Potion_2
+Potion de force - grande fiole
+Augmente la force d'un personnage pendant un laps de temps assez long.
+
+=== QITEM Large_Potion_3
+Potion d'accélération - grande fiole
+Augmente sensiblement la vitesse d'un personnage.
+
+=== QITEM Potion_1
+Potion de soins - fiole moyenne
+Rétablit en partie la santé d'un personnage.
+
+=== QITEM Potion_2
+Potion de force - fiole moyenne
+Augmente la force d'un personnage
+
+=== QITEM Potion_3
+Potion d'accélération - fiole moyenne
+Augmente la vitesse d'un personnage.
+
+=== QITEM Potion_Enlarge
+Elixir d'agrandissement
+Augmente la taille de ceux qui le boivent.
+
+=== QITEM Potion_Shrink
+Elixir de rétrécissement
+Diminue la taille de ceux qui le boivent.
+
+=== QITEM Small_Potion_1
+Potion de soins - petite fiole
+Rétablit une petite partie de la santé d'un personnage.
+
+=== QITEM Small_Potion_2
+Potion de force - petite fiole
+Augmente la force d'un personnage pendant un laps de temps assez court.
+
+=== QITEM Small_Potion_3
+Potion d'accélération - petite fiole
+Augmente légèrement la vitesse d'un personnage.
+
+=== QITEM Spell_Container
+Quelque chose de magique
+Une bien étrange chose ! Et il n'y a personne pour vous indiquer ce à quoi ça peut servir...
+
+=== QITEM Tiny_Potion_1
+Potion de soins - très petite fiole
+Rétablit une toute petite partie de la santé d'un personnage.
+
+=== QITEM Tiny_Potion_2
+Potion de force - très petite fiole
+Augmente la force d'un personnage pendant un laps de temps très court.
+
+=== QITEM Tiny_Potion_3
+Potion d'accélération - très petite fiole
+Augmente très légèrement la vitesse d'un personnage.
+
+=== QITEM Wand_1 Granite
+Baguette magique en granit
+Un peu meilleure que celle en pierre mais moins bonne que les autres.
+
+=== QITEM Wand_1 Malachite
+Baguette magique en obsidienne
+La meilleure des baguettes magiques minérales.
+
+=== QITEM Wand_1 Rock
+Baguette magique en pierre
+La plus simple et la plus faible de toutes.
+
+=== QITEM Wand_1 Silicon
+Baguette magique en silicium
+Bonne baguette magique minérale.
+
+=== QITEM Wand_2 Burned_bones
+Baguette magique en os dur
+Bon choix pour un mage expérimenté.
+
+=== QITEM Wand_2 Decayed_bones
+Baguette magique en os fin
+Baguette magique standard en os.
+
+=== QITEM Wand_2 Dragon_Black_Bones
+Baguette magique en os de dragon bleu
+Les os de dragon vous permettent d'atteindre un niveau élevé de magie.
+
+=== QITEM Wand_2 Dragon_Green_Bones
+Baguette magique en os de dragon vert
+Les os de dragon vous permettent d'atteindre un niveau élevé de magie.
+
+=== QITEM Wand_2 Dragon_Red_Bones
+Baguette magique en os de dragon rouge
+Les os de dragon vous permettent d'atteindre un niveau élevé de magie.
+
+=== QITEM Wand_2 Dry_bones
+Baguette magique en os épais
+Bonne baguette magique.
+
+=== QITEM Wand_2 Scrab_bones
+Baguette magique en coquille de conque
+Bon matériau et bons résultats.
+
+=== QITEM Wand_3 Adamantium
+Baguette magique en adamantite
+Avec elle, vous pouvez jeter des sorts très puissants.
+
+=== QITEM Wand_3 Bronze
+Baguette magique en bronze
+La plus simple des baguettes métalliques. Un mage expérimenté mérite mieux.
+
+=== QITEM Wand_3 Iron
+Baguette magique en fer
+Meilleure que celle en bronze mais moins bonne que les autres baguettes métalliques.
+
+=== QITEM Wand_3 Meteoric
+Baguette magique en météorite
+Seul un mage expérimenté peut tirer parti de tout son potentiel.
+
+=== QITEM Wand_3 Mithrill
+Baguette magique en mithrill
+Le mithrill est résistant et léger. De plus il se prête magnifiquement à la magie.
+
+=== QITEM Wand_3 Steel
+Baguette magique en acier
+L'acier ne fait pas seulement de bonnes armes.
+
+=== QITEM Wand_4 Adamantium
+Baguette magique décorative en adamantite
+Elle jette des sorts avec la même facilité que l'arbalète en adamantite tire ses carreaux.
+
+=== QITEM Wand_4 Bronze
+Baguette magique décorative en bronze
+Choisissez un métal plus valable pour une baguette magique décorative.
+
+=== QITEM Wand_4 Iron
+Baguette magique décorative en fer
+Elle fonctionne, mais un grand mage n'en voudrait pas.
+
+=== QITEM Wand_4 Meteoric
+Baguette magique décorative en météorite
+La meilleure de toutes les baguettes magiques.
+
+=== QITEM Wand_4 Mithrill
+Baguette magique décorative en mithrill
+Beaucoup de mages rêvent d'en avoir une !
+
+=== QITEM Wand_4 Steel
+Baguette magique décorative en acier
+Pas un mauvais choix.
+
+=== QITEM Wand_5 Dragon_Green_Bones
+Corne de dragon vert
+Corne magique de dragon utilisée par les hommes-lézards.
+
+=== QITEM Wand_6 Rock
+Poupée de gobelin
+Poupée magique en pierre utilisée par les gobelins.
+

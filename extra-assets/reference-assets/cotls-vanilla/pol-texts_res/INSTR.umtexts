@@ -1,0 +1,801 @@
+# um-texts 1
+=== INSTR Axe
+Topór metalowy
+£atwo zrobiæ, ³atwo u¿ywaæ!
+
+=== INSTR Battle_Axe
+Bojowy topór metalowy
+Topór wojenny jest ciê¿szy i trudniejszy w u¿yciu od zwyk³ej siekiery. Czyni za to znacznie wiêksze zniszczenie!
+
+=== INSTR Bone_Club
+Koœciana pa³ka
+Najprostsza i najstarsza z broni.
+
+=== INSTR Bone_Long_Bow
+D³ugi ³uk
+Strza³a, wyrzucona z niego, jest znacznie twardsza od tej, która zosta³a wystrzelona z krótkiego ³uku.
+
+=== INSTR Bone_Short_Bow
+Krótki ³uk
+Ten ³uk zosta³ wzmocniony koœci¹, co czyni go znacznie lepszym od zwyk³ego ³uku.
+
+=== INSTR Bone_Spear
+Koœciane ostrze
+Ostrze koœcianej w³óczni jest znacznie ostrzejsze od zwyk³ego ostrza.
+
+=== INSTR Cheat_Dagger
+Nó¿ rytualny
+Wygl¹da ma³o groŸnie, lecz ten orê¿ nie zosta³ stworzony z myœl¹ o walce.
+
+=== INSTR Crossbow
+Kusza
+Nie strzela tak szybko jak ³uk, lecz jej si³a jest znacznie wiêksza.
+
+=== INSTR Crystal_Axe
+Kryszta³owa siekiera
+Najlepsza siekiera.
+
+=== INSTR Crystal_Crossbow
+Kryszta³owa kusza
+Najlepsza kusza.
+
+=== INSTR Crystal_Dagger
+Kryszta³owy sztylet
+Najlepszy sztylet.
+
+=== INSTR Crystal_Mace
+Kryszta³owa maczuga
+Patrzaj na mnie i giñ - oto kryszta³owa bu³awa!
+
+=== INSTR Crystal_Spear
+Kryszta³owa w³ócznia
+Nie znajdziesz lepszej w³óczni!
+
+=== INSTR Crystal_Sword
+Kryszta³owy miecz
+Najlepszy miecz.
+
+=== INSTR Curved_Dagger
+Szkocki sztylet
+Dziêki kszta³towi, jest bardziej efektywny ani¿eli zwyk³y sztylet.
+
+=== INSTR Dagger
+Sztylet
+Szybka, prosta broñ. Do wbijania w plecy.
+
+=== INSTR Gipat_Brigand_Boots
+Buty myœliwskie z Gipath
+Ka¿dy, kto wêdruje po tych lasach, doceni z pewnoœci¹ komfort, jaki daj¹ futrzane buty. 
+
+=== INSTR Gipat_Brigand_Gloves
+Rêkawice myœliwskie z Gipath
+£adnie wygl¹daj¹ i nieŸle chroni¹...
+
+=== INSTR Gipat_Brigand_Helm
+He³m myœliwski z Gipath
+Ten he³m da swemu w³aœcicielowi szybkoœæ i zwinnoœæ najdzikszej z bestii!
+
+=== INSTR Gipat_Brigand_Leggins
+Legginsy myœliwskie z Gipath
+Mo¿e byæ Ci w nich nieco gor¹co, ale to niewiele, zwa¿ywszy na doskona³¹ os³onê.
+
+=== INSTR Gipat_Brigand_Pants
+Krótkie spodnie myœliwskie z Gipath
+S¹ wygodne i daj¹ niezgorsz¹ os³onê podczas wêdrówek po lesie.
+
+=== INSTR Gipat_Brigand_Plate
+P³aszcz myœliwski z Gipath
+Brakuje tylko napierœnika, doskonale chroni Twoje ramiona i ³okcie.
+
+=== INSTR Gipat_Brigand_Prototype
+Gipat_Brigand_Prototype
+Gipat_Brigand_Prototype
+
+=== INSTR Gipat_Brigand_Shirt
+Napierœnik myœliwski z Gipath
+NieŸle chroni i wygl¹da lepiej od zwyk³ego napierœnika.
+
+=== INSTR Gipat_High_Boots
+Szyte buty z Gipath
+Takie buty to krok w odpowiedni¹ stronê.
+
+=== INSTR Gipat_High_Gloves
+Szyte rêkawice z Gipath
+Takie rêkawice lepiej chroni¹ Twoje ramiona ani¿eli lekkie, proste czy nawet ³owcze rêkawice.
+
+=== INSTR Gipat_High_Helm
+Szyty he³m z Gipath
+Jeœli nie zap³acisz za piêknie skrojony he³m, ktoœ piêknie skroi Ci g³owê!
+
+=== INSTR Gipat_High_Leggins
+Szyte legginsy z Gipath
+Super os³ona i doskona³y wygl¹d za super cenê!
+
+=== INSTR Gipat_High_Pants
+D³ugie szyte spodnie z Gipath
+Zapewniaj¹ znacznie lepsz¹ os³onê od szortów.
+
+=== INSTR Gipat_High_Plate
+Szyty ¿akiet z Gipath
+Z racji efektywnego wykorzystania materia³u, ten p³aszcz chroni ramiona na ca³ej d³ugoœci.
+
+=== INSTR Gipat_High_Prototype
+Gipat_High_Prototype
+Gipat_High_Prototype
+
+=== INSTR Gipat_High_Shirt
+Szyty napierœnik z Gipath
+Produkcja trwa d³ugo, lecz ochrona jest lepsza. 
+
+=== INSTR Gipat_Highest_Boots
+Ciê¿kie wysokie buty z Gipath
+Najlepsze obuwie, jakie mo¿esz mieæ w tych warunkach. 
+
+=== INSTR Gipat_Highest_Gloves
+Ciê¿kie d³ugie rêkawice z Gipath
+Chroni¹ rêce na ca³ej d³ugoœci.
+
+=== INSTR Gipat_Highest_Helm
+Ciê¿ki he³m z Gipath
+Nie wygl¹da najlepiej, lecz mimo to chroni lepiej ani¿eli jakikolwiek inny he³m z Gipath.
+
+=== INSTR Gipat_Highest_Leggins
+Ciê¿kie legginsy z Gipath
+Jeœli za³o¿ysz ja na d³ugie spodnie, zyskasz najlepsz¹ mo¿liw¹ os³onê.
+
+=== INSTR Gipat_Highest_Pants
+Ciê¿kie d³ugie spodnie z Gipath
+Dobra os³ona od pasa do kostek. 
+
+=== INSTR Gipat_Highest_Plate
+Ciê¿ki p³aszcz z Gipath
+¯adna inna rzecz na Gitpath nie os³oni tak dobrze Twoich pleców i ramion. 
+
+=== INSTR Gipat_Highest_Prototype
+Gipat_Highest_Prototype
+Gipat_Highest_Prototype
+
+=== INSTR Gipat_Highest_Shirt
+Ciê¿ka koszula z Gipath
+Chroni rêce i ramiona na ca³ej d³ugoœci.
+
+=== INSTR Gipat_Low_Boots
+Lekkie buty z Gipath
+Nie bêd¹ gnêbiæ Ciê odciski... A to ju¿ coœ, prawda?
+
+=== INSTR Gipat_Low_Gloves
+Lekkie rêkawice z Gipath
+Lepsza taka os³ona niŸli ¿adna.
+
+=== INSTR Gipat_Low_Helm
+Lekki he³m z Gipath
+Ochrona g³owy jest niezbêdna - nawet przed s³oñcem...
+
+=== INSTR Gipat_Low_Leggins
+Lekkie legginsy z Gipath
+Ochroni¹ Twoje kolana i stopy przed zadrapaniami, jednak¿e nie przed broni¹!
+
+=== INSTR Gipat_Low_Pants
+Lekkie krótkie spodnie z Gipath
+Powinieneœ w nich chodziæ, ¿eby unikn¹æ zgorszenia. Nie myœl jednak, ¿e zdadz¹ siê na coœ w walce.
+
+=== INSTR Gipat_Low_Plate
+Lekka koszula z Gipath
+W³o¿ona wraz z napierœnikiem, zapewnia pewn¹ os³onê ramion, piersi i szyi.
+
+=== INSTR Gipat_Low_Prototype
+Gipat_Low_Prototype
+Gipat_Low_Prototype
+
+=== INSTR Gipat_Low_Shirt
+Lekki napierœnik z Gipath
+Os³oni Twoje ramiona, klatkê piersiow¹ i czêœæ pleców przed s³oñcem.
+
+=== INSTR Gipat_Medium_Boots
+Proste buty z Gipath
+Z racji kroju, chroni¹ lepiej niŸli lekkie buty.
+
+=== INSTR Gipat_Medium_Gloves
+Proste rêkawice z Gipath
+Z racji kroju, chroni¹ lepiej niŸli lekkie rêkawice.
+
+=== INSTR Gipat_Medium_Helm
+Prosty he³m z Gipath
+Z racji kroju, chroni lepiej niŸli lekki he³m.
+
+=== INSTR Gipat_Medium_Leggins
+Proste legginsy z Gipath
+Z racji kroju, chroni¹ lepiej niŸli lekkie legginsy.
+
+=== INSTR Gipat_Medium_Pants
+Proste krótkie spodnie z Gipath
+Z racji kroju, chroni¹ lepiej niŸli lekkie szorty.
+
+=== INSTR Gipat_Medium_Plate
+Prosty p³aszcz z Gipath
+Z racji kroju, chroni lepiej niŸli lekka koszula.
+
+=== INSTR Gipat_Medium_Prototype
+Gipath_Medium_Prototype
+Gipat_Medium_Prototype
+
+=== INSTR Gipat_Medium_Shirt
+Prosty napierœnik z Gipath
+Z racji kroju, chroni lepiej niŸli lekki napierœnik.
+
+=== INSTR Hadagan_Brigand_Boots
+Khadagañskie skórzane legginsy
+Dobrze chroni¹ przed pazurami bestii, lecz nie przed broni¹.
+
+=== INSTR Hadagan_Brigand_Gloves
+Khadagañskie skórzane rêkawice
+W sam raz na pazury wilka.
+
+=== INSTR Hadagan_Brigand_Helm
+Khadagañski skórzany he³m
+Nie zda siê na wiele. Mo¿e jednak pomóc, gdy ktoœ bêdzie chcia³ uderzyæ Ciê w twarz.
+
+=== INSTR Hadagan_Brigand_Leggins
+Khadagañskie wierzchnie legginsy
+Maj¹c je na sobie, nie myœl o kopaniu œpi¹cych tygrysów...
+
+=== INSTR Hadagan_Brigand_Pants
+Khadagañskie skórzane spodnie
+Uchroni¹ Ciê przed uk¹szeniem paj¹ka.. Ale przed niczym innym... Bardziej penetruj¹cym.
+
+=== INSTR Hadagan_Brigand_Plate
+Khadagañski skórzany ¿akiet
+Bêdzie niezast¹piony podczas d³ugiej wyprawy.
+
+=== INSTR Hadagan_Brigand_Prototype
+Hadagan_Brigand_Prototype
+Hadagan_Brigand_Prototype
+
+=== INSTR Hadagan_Brigand_Shirt
+Khadagañski spodni napierœnik
+Bardzo ³adny... O ile na górze bêdziesz mia³ prawdziwy napierœnik.
+
+=== INSTR Hadagan_High2_Boots
+Khadagañskie buty laminowane
+Wraz z legginsami, ochroni¹ Twoje nogi przed ka¿dym niemal ciosem.
+
+=== INSTR Hadagan_High2_Gloves
+Khadagañskie rêkawice laminowane
+Maj¹c je na rêkach, bêdziesz móg³ z ³atwoœci¹ zatrzymaæ uderzenie miecza.
+
+=== INSTR Hadagan_High2_Helm
+Khadagañski kuty he³m
+Najgorszym scenariuszem dla w³aœciciela tego he³mu by³by zapewne ból g³owy.
+
+=== INSTR Hadagan_High2_Leggins
+Khadagañskie wierzchnie kute legginsy
+Daj¹ œwietn¹ dodatkow¹ os³onê nóg.
+
+=== INSTR Hadagan_High2_Pants
+Khadagañskie spodnie laminowane
+Zapewniaj¹ doskona³¹ ochronê nóg.
+
+=== INSTR Hadagan_High2_Plate
+Khadagañski kuty kirys
+Czyni ze swego w³aœciciela ¿yj¹cy i niebezpieczny pos¹g.
+
+=== INSTR Hadagan_High2_Prototype
+Hadagan_High2_Prototype
+Hadagan_High2_Prototype
+
+=== INSTR Hadagan_High2_Shirt
+Khadagañski lekki napierœnik
+Mo¿na na niej polegaæ. Nie krêpuje ruchów.
+
+=== INSTR Hadagan_High_Boots
+Khadagañskie buty z utwardzonej skóry
+Doskona³e w szybkiej potyczce, lecz nie polegaj na nich podczas wiêkszej bitwy..
+
+=== INSTR Hadagan_High_Gloves
+Khadagañskie rêkawice z utwardzonej skóry
+Zapewniaj¹ pewn¹ os³onê ramion przed s³abszymi broniami.
+
+=== INSTR Hadagan_High_Helm
+Khadagañski lekki he³m
+Delikatna tkanina okrywa mocny metal.
+
+=== INSTR Hadagan_High_Leggins
+Khadagañskie kolcze spodnie
+S¹ wzmocnione metalem, dziêki czemu lepiej chroni¹ przed s³abszym orê¿em.
+
+=== INSTR Hadagan_High_Pants
+Khadagañskie spodnie z utwardzonej skóry
+Niezgorzej chroni¹ od s³abszej broni.
+
+=== INSTR Hadagan_High_Plate
+Khadagañski lekki kirys
+S³abszy orê¿ nie bêdzie Ci ju¿ straszny...
+
+=== INSTR Hadagan_High_Prototype
+Hadagan_High_Prototype
+Hadagan_High_Prototype
+
+=== INSTR Hadagan_High_Shirt
+Khadagañska lekka zbroja
+Zapewnia niezgorsz¹ ochronê.
+
+=== INSTR Hadagan_Highest2_Boots
+Khadagañskie ciê¿kie buty
+Niezbyt lekkie, lecz z wszech miar mo¿na na nich polegaæ.
+
+=== INSTR Hadagan_Highest2_Gloves
+Khadagañskie ciê¿kie rêkawice
+Trudno by³oby napisaæ w nich list... Jednak¿e nie w tym celu je nabywasz.
+
+=== INSTR Hadagan_Highest2_Helm
+Khadagañski ciê¿ki he³m
+Móg³byœ t³uc w niego bardzo d³ugo jakimœ ciê¿kim m³otem - nie przynios³oby to ¿adnego efektu!
+
+=== INSTR Hadagan_Highest2_Leggins
+Khadagañskie ciê¿kie legginsy
+Najlepsze z metalowych legginsów!
+
+=== INSTR Hadagan_Highest2_Pants
+Khadagañskie ciê¿kie spodnie
+Wygodne i trwa³e - najlepsze w Khadaganie!
+
+=== INSTR Hadagan_Highest2_Plate
+Khadagañski ciê¿ki kirys
+Miecz prze³amie siê na tym na kawa³ki!
+
+=== INSTR Hadagan_Highest2_Prototype
+Hadagan_Highest2_Prototype
+Hadagan_Highest2_Prototype
+
+=== INSTR Hadagan_Highest2_Shirt
+Khadagañska ciê¿ka koszula
+Œwietna ochrona!
+
+=== INSTR Hadagan_Highest_Boots
+Khadagañskie wzmocnione buty
+Buty, wzmacniane kut¹ stal¹.
+
+=== INSTR Hadagan_Highest_Gloves
+Khadagañskie wzmocnione rêkawice
+Wk³adki z kutego metalu czyni¹ je bardziej efektywnymi.
+
+=== INSTR Hadagan_Highest_Helm
+Khadagañski wzmocniony he³m
+Zacna os³ona g³owy.
+
+=== INSTR Hadagan_Highest_Leggins
+Khadagañskie wzmocnione legginsy
+Kolcze legginsy uchroni¹ Ciê przed broni¹ tych, którzy zwykli zachodziæ przeciwnika od ty³u.
+
+=== INSTR Hadagan_Highest_Pants
+Khadagañskie wzmocnione kolcze spodnie
+Kolcze spodnie z wk³adkami z metalu.
+
+=== INSTR Hadagan_Highest_Plate
+Khadagañski wzmocniony kirys
+Kolczy ko³nierz wspomagany metalem.
+
+=== INSTR Hadagan_Highest_Prototype
+Hadagan_Highest_Prototype
+Hadagan_Highest_Prototype
+
+=== INSTR Hadagan_Highest_Shirt
+Khadagañska wzmocniona kolcza koszula
+Kolcza koszula, piêknie udekorowana stalowymi p³ytami.
+
+=== INSTR Hadagan_Low_Boots
+Lekkie buty
+Proste buty p³ócienne.
+
+=== INSTR Hadagan_Low_Gloves
+Lekkie rêkawice
+P³ócienne rêkawice, nie poranisz w nich r¹k.
+
+=== INSTR Hadagan_Low_Helm
+Kaptur Khadagañski
+Proste i tanie nakrycie g³owy. Jakoœæ idzie w parze z cen¹.
+
+=== INSTR Hadagan_Low_Leggins
+Khadagañskie wierzchnie lekkie spodnie
+Druga warstwa materia³u nie daje nogom efektywnej os³ony.
+
+=== INSTR Hadagan_Low_Pants
+Lekkie spodnie
+Mog¹, co najwy¿ej, przykryæ Twoj¹ nagoœæ.
+
+=== INSTR Hadagan_Low_Plate
+Khadagañski wierzchni lekki ko³nierz
+Daje dodatkow¹ os³onê dla ramion i r¹k.
+
+=== INSTR Hadagan_Low_Prototype
+Hadagan_Low_Prototype
+Hadagan_Low_Prototype
+
+=== INSTR Hadagan_Low_Shirt
+Lekka koszula
+Prosta koszula bez rêkawów.
+
+=== INSTR Hadagan_Medium_Boots
+Khadagañskie lekkie buty
+Przynajmniej s¹ nieprzemakalne.
+
+=== INSTR Hadagan_Medium_Gloves
+Khadagañskie tkane rêkawice
+£adne, lecz niekoniecznie przydatne.
+
+=== INSTR Hadagan_Medium_Helm
+Khadagañski turban
+Chodz¹ w nich tak biedni jak i bogaci. Dla bogaczy przewidziano jednak lepszy materia³...
+
+=== INSTR Hadagan_Medium_Leggins
+Khadagañskie wierzchnie d³ugie spodnie
+Typowe khadagiañskie odzienie.
+
+=== INSTR Hadagan_Medium_Pants
+Khadagañskie d³ugie spodnie
+Zwyk³e spodnie, naprawdê - ka¿dy ma takie.
+
+=== INSTR Hadagan_Medium_Plate
+¯akiet Khadagañski
+Im bogatszy w³aœciciel, tym zacniejszy p³aszcz.
+
+=== INSTR Hadagan_Medium_Prototype
+Hadagan_Medium_Prototype
+Hadagan_Medium_Prototype
+
+=== INSTR Hadagan_Medium_Shirt
+Khadagañska d³uga koszula
+Bardziej nadaje siê do wieczoru w tawernie, ani¿eli do podró¿y...
+
+=== INSTR Hammer
+M³ot bojowy
+W istocie jest to zaawansowana wersja m³ota. Nie ma z niego po¿ytku w domu, ale w boju zawsze.
+
+=== INSTR Jun_High_Boots
+Lekkie legginsy Joonów
+Co za dzie³o! Ach, gdzie¿ s¹ dziœ tamci rzemieœlnicy...
+
+=== INSTR Jun_High_Gloves
+Rêkawice Joonów
+¯aden rzemieœlnik nie wykona dziœ czegoœ takiego...
+
+=== INSTR Jun_High_Helm
+He³m Joonów
+Staro¿ytne sekrety takiego rzemios³a s¹ ju¿ dla nas stracone...
+
+=== INSTR Jun_High_Leggins
+Pe³ne legginsy Joonów
+Umiejêtnoœæ tworzenia takich rzeczy by³aby warta co najmniej po³owy ¿ycia...
+
+=== INSTR Jun_High_Pants
+Spodnie Joonów
+Nawet najlepszy rzemieœlnik nie pozna siê na tym!
+
+=== INSTR Jun_High_Plate
+Kirys Joonów
+Nie ma ju¿ rzemieœlników zdolnych zrobiæ coœ takiego...
+
+=== INSTR Jun_High_Prototype
+Jun_High_Prototype
+Jun_High_Prototype
+
+=== INSTR Jun_High_Shirt
+Koszula Joonów
+¯aden wspó³czesny rzemieœlnik nie wiedzia³by nawet, od czego zacz¹æ...
+
+=== INSTR Kania_Brigand_Boots
+Caniañskie ciê¿kie buty
+Wiele dzikich bestii po³amie sobie zêby na tych butach.
+
+=== INSTR Kania_Brigand_Gloves
+Caniañskie ciê¿kie rêkawice
+Solidna ochrona przed pchniêciami no¿a w przypadkowej walce.
+
+=== INSTR Kania_Brigand_Helm
+Caniañski ciê¿ki he³m
+Ochrania ci g³owê i to nie tylko przed zimnem.
+
+=== INSTR Kania_Brigand_Leggins
+Caniañskie wierzchnie ciê¿kie spodnie
+Zapewniaj¹ przyzwoit¹ ochronê, jak równie¿ swobodê ruchu.
+
+=== INSTR Kania_Brigand_Pants
+Caniañskie ciê¿kie spodnie
+Dobry wybór dla wojownika, który chce pogodziæ ochronê ze swobod¹ ruchu.
+
+=== INSTR Kania_Brigand_Plate
+Caniañski ciê¿ki ¿akiet
+Jeœli nosz¹c ten p³aszcz otrzymasz cios w plecy, bêdziesz mia³ jeszcze szansê oddaæ.
+
+=== INSTR Kania_Brigand_Prototype
+Kania_Brigand_Prototype
+Kania_Brigand_Prototype
+
+=== INSTR Kania_Brigand_Shirt
+Caniañska ciê¿ka kamizelka
+Prawdziwy kompromis miêdzy wygod¹ a ochron¹.
+
+=== INSTR Kania_High2_Boots
+Caniañskie wojskowe buty
+¯o³nierze wydeptali w nich ca³e drogi podczas wojny - czego chcieæ wiêcej?
+
+=== INSTR Kania_High2_Gloves
+Caniañskie wojskowe d³ugie rêkawice
+W nich mo¿esz odepchn¹æ uderzenie zadane lekk¹ broni¹.
+
+=== INSTR Kania_High2_Helm
+Caniañski wojskowy he³m
+Kto nosi ten he³m, wygl¹da groŸnie - i przy okazji ma bezpieczn¹ g³owê.
+
+=== INSTR Kania_High2_Leggins
+Caniañskie wojskowe legginsy
+Zatwierdzone przez Imperatora jako czêœæ standardowego munduru canijskiej armii.
+
+=== INSTR Kania_High2_Pants
+Caniañskie kolcze spodnie
+Rzadko która strza³a przebije tak¹ plecionkê.
+
+=== INSTR Kania_High2_Plate
+Caniañski wojskowy kirys
+¯aden bandyta nie spróbuje zasztyletowaæ osoby, która nosi coœ takiego!
+
+=== INSTR Kania_High2_Prototype
+Kania_High2_Prototype
+Kania_High2_Prototype
+
+=== INSTR Kania_High2_Shirt
+Caniañska kolcza koszula
+Standardowe wyposa¿enie canijskiej armii, która potwierdza jego przydatnoœæ.
+
+=== INSTR Kania_High_Boots
+Caniañskie lekkie buty bojowe
+Nie polegaj na nich zbytnio, jako na ochronie.
+
+=== INSTR Kania_High_Gloves
+Caniañskie lekkie rêkawice bojowe
+Zapewniaj¹ dodatkow¹ ochronê r¹k.
+
+=== INSTR Kania_High_Helm
+Caniañski lekki metalowy he³m
+Dobrze chroni g³owê przed bocznymi ciosami, ale nie daje szans przy bezpoœrednim trafieniu w twarz.
+
+=== INSTR Kania_High_Leggins
+Caniañskie lekkie metalowe legginsy
+Metalowe p³yty nie ochroni¹ ciê przed ciosami w plecy.
+
+=== INSTR Kania_High_Pants
+Caniañskie spodnie z utwardzonej skóry
+Ochroni¹ ciê przed zêbami wilka, lecz nie k³ami tygrysa.
+
+=== INSTR Kania_High_Plate
+Caniañski lekki kirys
+Zapewnia dodatkow¹ ochronê przed broni¹ tn¹c¹. 
+
+=== INSTR Kania_High_Prototype
+Kania_High_Prototype
+Kania_High_Prototype
+
+=== INSTR Kania_High_Shirt
+Caniañska kamizelka z utwardzonej skóry
+Ochroni ciê przed zb³¹kan¹ strza³¹ z ³uku krótkiego.
+
+=== INSTR Kania_Highest2_Boots
+Caniañskie ciê¿kie buty wojskowe
+W takich butach mo¿esz skopaæ trollom ty³ki!
+
+=== INSTR Kania_Highest2_Gloves
+Caniañskie ciê¿kie rêkawice wojskowe
+Nie stracisz rêki, nosz¹c takie rêkawice!
+
+=== INSTR Kania_Highest2_Helm
+Caniañski ciê¿ki he³m wojskowy
+Niesamowita ochrona!
+
+=== INSTR Kania_Highest2_Leggins
+Caniañskie ciê¿kie legginsy wojskowe
+Szyte specjalnie dla canijskich ¿o³nierzy walcz¹cych w pierwszej linii frontu.
+
+=== INSTR Kania_Highest2_Pants
+Caniañskie ciê¿kie spodnie wojskowe
+W takich spodniach mo¿esz usi¹œæ na jadowitej ¿abie i nawet tego nie zauwa¿yæ.
+
+=== INSTR Kania_Highest2_Plate
+Caniañski ciê¿ki kirys wojskowy
+Przez ten ciê¿ki kirys ma³o co siê przebije!
+
+=== INSTR Kania_Highest2_Prototype
+Kania_Highest2_Prototype
+Kania_Highest2_Prototype
+
+=== INSTR Kania_Highest2_Shirt
+Caniañska ciê¿ka kolcza koszula
+Gdy zdejmiesz tê podwójnie gêsto tkan¹ kolczugê, mo¿esz postawiæ j¹ na ziemi bez ¿adnego oparcia...
+
+=== INSTR Kania_Highest_Boots
+Caniañskie kolcze buty
+Choæ nie kryj¹ takiej powierzchni nogi jak lekkie buty, to przynajmniej zapewniaj¹ ochronê w tej czêœci, któr¹ kryj¹!
+
+=== INSTR Kania_Highest_Gloves
+Caniañskie wzmocnione rêkawice bitewne
+Metalowy wierzch zapewnia lepsz¹ ochronê ni¿ lekkie rêkawice bojowe.
+
+=== INSTR Kania_Highest_Helm
+Caniañski skrzydlaty he³m
+Taki he³m nie tylko chroni g³owê, ale tak¿e podnosi morale: wygl¹da tak dumnie...
+
+=== INSTR Kania_Highest_Leggins
+Caniañskie ciê¿kie legginsy
+Nie do tañca, lecz do walki!
+
+=== INSTR Kania_Highest_Pants
+Caniañskie kolcze spodnie
+Takie spodnie zapewniaj¹ nogom lepsz¹ ochronê, dziêki gêstej plecionce.
+
+=== INSTR Kania_Highest_Plate
+Caniañski ciê¿ki kirys
+Kuty wierzch tego kirysu zapewnia lepsz¹ ochronê ni¿ sam lekki kirys.
+
+=== INSTR Kania_Highest_Prototype
+Kania_Highest_Prototype
+Kania_Highest_Prototype
+
+=== INSTR Kania_Highest_Shirt
+Caniañska kolcza koszula
+Zawsze to lepsze ni¿ skórzana kurtka; ³agodzi nieco si³ê uderzeñ.
+
+=== INSTR Kania_Low_Boots
+Caniañskie buty dla rolników
+No có¿... s¹ wodoodporne...
+
+=== INSTR Kania_Low_Gloves
+Caniañskie rêkawice dla rolników
+Dobre do walki - pod warunkiem, ¿e bêdzie to do¿ynkowa walka na piêœci.
+
+=== INSTR Kania_Low_Helm
+Caniañski kapelusz dla rolników
+Dobry w gor¹czce lata, ale nie w gor¹czce walki.
+
+=== INSTR Kania_Low_Leggins
+Caniañskie wierzchnie lekkie spodnie
+S¹ ciep³e... dobre dla biednych.
+
+=== INSTR Kania_Low_Pants
+Caniañskie spodnie dla rolników
+Ochroni¹ ciê przed zêbami wilka, ale nie przed k³ami tygrysa.
+
+=== INSTR Kania_Low_Plate
+Caniañski lekki ¿akiet
+Niezbyt dobrze ochrania przed ciosami, ale dobrze os³ania ukryt¹ pod spodem kolczugê.
+
+=== INSTR Kania_Low_Prototype
+Kania_Low_Prototype
+Kania_Low_Prototype
+
+=== INSTR Kania_Low_Shirt
+Caniañska koszula dla rolników
+Dobra w znoju, lecz nie w boju...
+
+=== INSTR Kania_Medium_Boots
+Caniañskie buty myœliwskie
+Porz¹dne buty myœliwskie.
+
+=== INSTR Kania_Medium_Gloves
+Caniañskie rêkawice myœliwskie
+Niewielka ró¿nica w stosunku do farmerskich.
+
+=== INSTR Kania_Medium_Helm
+Caniañski kapelusz myœliwski
+Piórko w kapeluszu gwarantowane - przytwierdzone na amen!
+
+=== INSTR Kania_Medium_Leggins
+Caniañskie wierzchnie spodnie myœliwskie
+W takich portach nie zamarzniesz!
+
+=== INSTR Kania_Medium_Pants
+Caniañskie spodnie myœliwskie
+Ich krój zapewnia wygodê podczas d³ugich marszów.
+
+=== INSTR Kania_Medium_Plate
+Caniañska kamizelka myœliwska
+Rzadko który wilk przebije siê przez tê kurtkê... ale nie mo¿esz powiedzieæ tego samego o no¿ach.
+
+=== INSTR Kania_Medium_Prototype
+Kania_Medium_Prototype
+Kania_Medium_Prototype
+
+=== INSTR Kania_Medium_Shirt
+Caniañska kamizelka myœliwska
+Zapewnia lepsz¹ ochronê ramion, dziêki d³ugim rêkawom.
+
+=== INSTR Long_Bow
+D³ugi ³uk
+Dobra si³a ognia i szybkostrzelnoœæ!
+
+=== INSTR Long_Crossbow
+Ciê¿ka kusza
+Strzela wolniej ni¿ zwyk³a, ale za to z jak¹ si³¹!
+
+=== INSTR Long_Spear
+D³uga w³ócznia
+Taka pika utrzyma na dystans nawet najwiêkszych nacha³ów.
+
+=== INSTR Long_Sword
+D³ugi miecz
+Powa¿na broñ, zw³aszcza jeœli wykonana z dobrego materia³u.
+
+=== INSTR Mace
+Maczuga
+To krok naprzód w stosunku do m³otów - tak pod wzglêdem skutecznoœci, jak i ceny
+
+=== INSTR Saber
+Metalowa szabla
+Szabla jest szybsza ni¿ miecz, ale zadaje mniejsze obra¿enia.
+
+=== INSTR Short_Bow
+Krótki ³uk
+W tym wypadku zrezygnowano z si³y na korzyœæ szybkoœci.
+
+=== INSTR Spear
+W³ócznia
+Porz¹dna broñ, zw³aszcza jeœli wykonana z dobrego materia³u.
+
+=== INSTR Spiked_Club
+Ciê¿ka maczuga z kolcami
+To naprawdê straszna broñ, jeœli wiesz, jak siê ni¹ pos³ugiwaæ. A nawet jeœli nie wiesz, to i tak przysporzysz swoim wrogom k³opotów...
+
+=== INSTR Spiked_Mace
+Maczuga z kolcami
+Kolce czyni¹ z tego buzdyganu jeszcze wspanialsz¹ broñ!
+
+=== INSTR Stone_Axe
+Kamienny topór
+Najprostsza siekiera, wiêc i niezbyt skuteczna. Ale cena jest jak najbardziej przystêpna...
+
+=== INSTR Stone_Battle_Axe
+Kamienny topór bojowy
+Topór jest ciê¿szy ni¿ zwyk³a siekiera, wiêc zadaje wiêksze obra¿enia, ale te¿ trudniej nim w³adaæ.
+
+=== INSTR Stone_Battle_Hammer
+Ciê¿ki kamienny m³ot
+Tym m³otem raczej nie uderzysz tak szybko jak inn¹ broni¹, ale za to twój przeciwnik odniesie naprawdê powa¿ne obra¿enia.
+
+=== INSTR Stone_Dagger
+Kamienny sztylet
+Prosta, acz skuteczna broñ k³uta. Nie potrzebujesz wiele materia³u, aby go zrobiæ.
+
+=== INSTR Stone_Formatter_drive_C
+Formatuje dysk C:
+Prawdê mówi¹c, NIGDY nie ujrzysz tej broni. Och, naprawdê j¹ widzisz? Wiêc zgadnij, co zaraz siê stanie!
+
+=== INSTR Stone_Hammer
+Kamienny m³ot
+M³ot kamienny udowodni³ swoj¹ przydatnoœæ zarówno w kowalstwie, jak i w boju.
+
+=== INSTR Stone_Short_Bow
+£uk (strza³y z kamiennymi grotami)
+Kamieñ nie jest najlepszym dostêpnym materia³em, ale zadowoli tylko nowicjuszy.
+
+=== INSTR Stone_Spear
+Kamienna w³ócznia
+Mo¿liwie najprostsza w³ócznia.
+
+=== INSTR Stone_Sword
+Kamienny miecz
+To broñ dla tych, którzy nie mog¹ dotykaæ siê metalowych mieczy.
+
+=== INSTR Wand_1
+Kamienna ró¿d¿ka
+Taka ró¿d¿ka mo¿e zawieraæ proste czary (nie ma potrzeby k³aœæ na ni¹ runu „obiekt”).
+
+=== INSTR Wand_2
+Koœciana ró¿d¿ka
+Taka ró¿d¿ka mo¿e zawieraæ proste czary (nie ma potrzeby k³aœæ na ni¹ runu „obiekt”).
+
+=== INSTR Wand_3
+Metalowa ró¿d¿ka
+Taka ró¿d¿ka mo¿e zawieraæ proste czary (nie ma potrzeby k³aœæ na ni¹ runu „obiekt”).
+
+=== INSTR Wand_4
+RzeŸbiona metalowa ró¿d¿ka
+Taka ró¿d¿ka mo¿e zawieraæ proste czary (nie ma potrzeby k³aœæ na ni¹ runu „obiekt”).
+

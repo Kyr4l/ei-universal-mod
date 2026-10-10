@@ -1,34 +1,59 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 /**
  * ============================================================================
- * um-multitool-gui - FLTK front-end for um-multitool
+ * um-multitool GUI - Dear ImGui front-end, built into the um-multitool binary
  * ============================================================================
  *
- * A small cross-platform (Windows/Linux) GUI wrapping the four merged
- * Evil Islands modding CLI tools (ddsmmp, inireg, mobdump, restool) exposed
- * by the um-multitool binary built alongside this GUI. Depends on it at
- * runtime: this GUI spawns it as a hidden subprocess and streams its
- * stdout/stderr into the log panel below, with no separate console window.
+ * Two main tabs:
+ *   - File Processing: the DB editor (db_editor.cpp: open, check, edit, save
+ *     and compile the gameplay databases, in-process) and the file tools
+ *     (restool, inireg, ddsmmp, mobdump). A tool run launches this same
+ *     executable again with the subcommand, as a hidden subprocess, and
+ *     streams its stdout/stderr into the log panel below, with no separate
+ *     console window. Problems found anywhere raise alerts (alerts.hpp).
+ *   - 3D Viewer: the item model viewer (viewer/viewer_app.cpp).
+ * Opened when the program is started without arguments from a file manager
+ * (double-click), or with `um-multitool gui` - see main.cpp.
  *
- * Each subtool gets its own tab exposing every CLI flag it supports.
+ * Toolkit: Dear ImGui (vendor/imgui, vendored as source per its normal
+ * distribution model) rendering through its OpenGL2 (legacy fixed-pipeline)
+ * backend, windowed via GLFW. GLFW auto-selects X11 or Wayland on Linux from
+ * the running session with no code on our end, and provides the Win32 window
+ * on Windows - one codebase for all three targets. OpenGL2 (not OpenGL3) was
+ * chosen specifically because it needs no GL function loader library and has
+ * historically been the more robust legacy-GL path under Wine/older drivers.
+ *
+ * Each subtool gets its own sub-tab exposing every CLI flag it supports.
  * ============================================================================
  */
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Round_Button.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Progress.H>
-#include <FL/Fl_Text_Display.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/Fl_Native_File_Chooser.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Tooltip.H>
+#include <GLFW/glfw3.h>
+
+#include "imgui.h"
+#include "imgui_internal.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl2.h"
+
+#include "gui.hpp"
+#include "version.hpp"
+#include "icon_data.hpp"
+#include "splash.hpp"
+#include "viewer/theme.hpp"
+#include "viewer/viewer_app.hpp"
+#include "viewer/library.hpp"
+#include "viewer/ui_sources.hpp"
+#include "mapedit/map_app.hpp"
+#include "dllconnect/connector_app.hpp"
+#include "texedit/texture_app.hpp"
+#include "log.hpp"
+#include "texedit/quest_map.hpp"
+#include "alerts.hpp"
+#include "i18n.hpp"
+#include "db_editor.hpp"
+#include "text_editor.hpp"
+#include "mp_editor.hpp"
+#include "viewer/dds_texture.hpp"
 
 #include <string>
 #include <vector>
@@ -43,6 +68,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#include <commdlg.h>
+#include <shlobj.h>
 #else
 #include <unistd.h>
 #include <climits>
@@ -52,70 +79,200 @@
 namespace fs = std::filesystem;
 
 // ============================================================================
-// Layout Constants
+// Native File/Folder Dialogs
 // ============================================================================
+//
+// Dear ImGui draws widgets only - it has no file dialog of its own. On
+// Windows we use the standard comdlg32/shell32 APIs (no extra dependency).
+// On Linux there is no single "native" dialog API without pulling in GTK or
+// Qt as a build dependency, so we shell out to whichever desktop file-picker
+// is already on the user's system (zenity or kdialog - present on the vast
+// majority of Linux desktops, and both go through the Wayland portal
+// automatically when running under Wayland). If neither is installed, the
+// path field is still a plain text box the user can type/paste into directly.
 
-static constexpr int WIN_W = 780;
-static constexpr int WIN_H = 700;
-static constexpr int TABS_Y = 30;
-static constexpr int TABS_H = 380;
-static constexpr int ROW_H = 26;
-static constexpr int ROW_GAP = 8;
-static constexpr int LABEL_W = 95;
-static constexpr int FIELD_X = 10 + LABEL_W;
-static constexpr int BROWSE_W = 60;
-static constexpr int FIELD_W = 780 - FIELD_X - 2 * BROWSE_W - 30;
-
-// Accent color for primary actions and progress fill (steel blue).
-static const Fl_Color kAccentColor = fl_rgb_color(41, 98, 163);
-
-// ============================================================================
-// Subprocess Launch Helpers
-// ============================================================================
-
-static Fl_Text_Buffer* g_logBuffer = nullptr;
-static Fl_Box* g_statusBox = nullptr;
-
-static void AppendLog(const std::string& text) {
-    if (g_logBuffer) {
-        g_logBuffer->append(text.c_str());
-    }
+#ifndef _WIN32
+static bool RunPickerCommand(const std::string& cmd, std::string& outPath) {
+    FILE* p = popen(cmd.c_str(), "r");
+    if (!p) return false;
+    char buf[4096];
+    std::string result;
+    while (fgets(buf, sizeof(buf), p)) result += buf;
+    int status = pclose(p);
+    if (status != 0) return false;
+    while (!result.empty() && (result.back() == '\n' || result.back() == '\r')) result.pop_back();
+    if (result.empty()) return false;
+    outPath = result;
+    return true;
 }
 
-// Directory containing the running GUI executable.
-static std::string GetExeDir() {
+static bool HasCommand(const char* name) {
+    std::string check = std::string("command -v ") + name + " >/dev/null 2>&1";
+    return std::system(check.c_str()) == 0;
+}
+#endif
+
+// filterName/filterExt are only honored on Windows (e.g. "Spreadsheet", "*.xlsx");
+// pass nullptr for "all files". Linux file pickers are shown unfiltered.
+// ---- background picture (Settings > Background) ------------------------------------------------------
+
+// The GL texture of a picture file (.jpg, .png, .bmp, .dds, .mmp...), loaded again when the path changes; 0 when none.
+static GLuint BackgroundTexture(const std::string& path, ImVec2& size) {
+    static std::string loadedPath;
+    static GLuint texture = 0;
+    static ImVec2 loadedSize;
+    if (path != loadedPath) {
+        loadedPath = path;
+        if (texture) { glDeleteTextures(1, &texture); texture = 0; }
+        std::vector<uint8_t> bytes;
+        if (!path.empty()) {
+            std::FILE* f = std::fopen(path.c_str(), "rb");
+            if (f) {
+                std::fseek(f, 0, SEEK_END);
+                const long n = std::ftell(f);
+                std::fseek(f, 0, SEEK_SET);
+                if (n > 0) { bytes.resize(static_cast<size_t>(n)); if (std::fread(bytes.data(), 1, bytes.size(), f) != bytes.size()) bytes.clear(); }
+                std::fclose(f);
+            }
+        }
+        mmp::Image image;
+        std::string err;
+        if (!bytes.empty() && DecodeTextureFile(bytes, image, err)) {
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0, GL_RGBA,
+                         GL_UNSIGNED_BYTE, image.rgba.data());
+            loadedSize = ImVec2(static_cast<float>(image.width), static_cast<float>(image.height));
+        }
+    }
+    size = loadedSize;
+    return texture;
+}
+
+// The picture over the whole window, covering it (cropped to the window's shape, not stretched), blended
+// over the plain background by `opacity`.
+static void DrawBackground(GLuint texture, ImVec2 size, int fbW, int fbH, float opacity) {
+    if (!texture || fbW <= 0 || fbH <= 0 || size.x <= 0 || size.y <= 0) return;
+    const float win = static_cast<float>(fbW) / fbH, pic = size.x / size.y;
+    float u0 = 0, u1 = 1, v0 = 0, v1 = 1;
+    if (pic > win) { const float keep = win / pic; u0 = (1 - keep) * 0.5f; u1 = u0 + keep; }
+    else { const float keep = pic / win; v0 = (1 - keep) * 0.5f; v1 = v0 + keep; }
+    glViewport(0, 0, fbW, fbH);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, 1, 1, 0, -1, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f(1, 1, 1, opacity);
+    glBegin(GL_QUADS);
+    glTexCoord2f(u0, v0); glVertex2f(0, 0);
+    glTexCoord2f(u1, v0); glVertex2f(1, 0);
+    glTexCoord2f(u1, v1); glVertex2f(1, 1);
+    glTexCoord2f(u0, v1); glVertex2f(0, 1);
+    glEnd();
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
+}
+
+static bool NativePickFile(bool saveDialog, const char* filterName, const char* filterExt, std::string& outPath) {
+#ifdef _WIN32
+    char buf[MAX_PATH] = "";
+    std::string filter;
+    if (filterName && filterExt) {
+        filter = std::string(filterName) + '\0' + filterExt + '\0' + "All Files" + '\0' + "*.*" + '\0';
+    } else {
+        filter = std::string("All Files") + '\0' + "*.*" + '\0';
+    }
+    OPENFILENAMEA ofn{};
+    ofn.lStructSize = sizeof(ofn);
+    ofn.lpstrFilter = filter.c_str();
+    ofn.lpstrFile = buf;
+    ofn.nMaxFile = sizeof(buf);
+    ofn.Flags = saveDialog ? OFN_OVERWRITEPROMPT : (OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST);
+    BOOL ok = saveDialog ? GetSaveFileNameA(&ofn) : GetOpenFileNameA(&ofn);
+    if (ok) { outPath = buf; return true; }
+    if (const DWORD code = CommDlgExtendedError()) umlog::Write(umlog::Level::Error, "File dialog failed, CommDlgExtendedError " + std::to_string(code));
+    return false;
+#else
+    (void)filterName;
+    (void)filterExt;
+    if (HasCommand("zenity")) {
+        return RunPickerCommand(saveDialog ? "zenity --file-selection --save --confirm-overwrite 2>/dev/null"
+                                            : "zenity --file-selection 2>/dev/null", outPath);
+    }
+    if (HasCommand("kdialog")) {
+        return RunPickerCommand(saveDialog ? "kdialog --getsavefilename 2>/dev/null"
+                                            : "kdialog --getopenfilename 2>/dev/null", outPath);
+    }
+    umlog::Write(umlog::Level::Error, "File dialog: neither zenity nor kdialog is installed");
+    return false;
+#endif
+}
+
+static bool NativePickFolder(std::string& outPath) {
+#ifdef _WIN32
+    char displayName[MAX_PATH] = "";
+    BROWSEINFOA bi{};
+    bi.pszDisplayName = displayName;
+    bi.lpszTitle = "Select Folder";
+    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+    LPITEMIDLIST pidl = SHBrowseForFolderA(&bi);
+    if (!pidl) return false;
+    char path[MAX_PATH];
+    BOOL ok = SHGetPathFromIDListA(pidl, path);
+    CoTaskMemFree(pidl);
+    if (ok) { outPath = path; return true; }
+    return false;
+#else
+    if (HasCommand("zenity")) {
+        return RunPickerCommand("zenity --file-selection --directory 2>/dev/null", outPath);
+    }
+    if (HasCommand("kdialog")) {
+        return RunPickerCommand("kdialog --getexistingdirectory 2>/dev/null", outPath);
+    }
+    return false;
+#endif
+}
+
+// ============================================================================
+// Subprocess Launch Helpers (unchanged in spirit from the FLTK version: none
+// of this depends on the GUI toolkit, only on the OS process APIs)
+// ============================================================================
+
+static std::string g_log;
+static bool g_logDirty = false;
+
+static void AppendLog(const std::string& text) {
+    g_log += text;
+    g_logDirty = true;
+}
+
+// The running executable itself: the GUI and the command-line tools are one binary, so a
+// conversion runs this same program again with the subcommand.
+static std::string FindMultitoolBinary() {
 #ifdef _WIN32
     char buf[MAX_PATH];
     DWORD len = GetModuleFileNameA(nullptr, buf, MAX_PATH);
-    std::string p(buf, len);
+    if (len > 0 && len < MAX_PATH) return std::string(buf, len);
+    return "um-multitool.exe";
 #else
     char buf[PATH_MAX];
     ssize_t len = readlink("/proc/self/exe", buf, sizeof(buf) - 1);
-    if (len <= 0) return ".";
-    std::string p(buf, len);
+    if (len > 0) return std::string(buf, static_cast<size_t>(len));
+    return "um-multitool";
 #endif
-    size_t pos = p.find_last_of("/\\");
-    return pos == std::string::npos ? "." : p.substr(0, pos);
-}
-
-// Locates the um-multitool binary built alongside this GUI in the same
-// directory, falling back to a sibling tools/um-multitool/ layout or PATH.
-static std::string FindMultitoolBinary() {
-#ifdef _WIN32
-    const char* exeName = "um-multitool.exe";
-#else
-    const char* exeName = "um-multitool";
-#endif
-    std::string exeDir = GetExeDir();
-    std::error_code ec;
-
-    fs::path sameDir = fs::path(exeDir) / exeName;
-    if (fs::exists(sameDir, ec)) return fs::absolute(sameDir, ec).string();
-
-    fs::path sibling = fs::path(exeDir) / ".." / "um-multitool" / exeName;
-    if (fs::exists(sibling, ec)) return fs::absolute(sibling, ec).string();
-
-    return exeName; // Fall back to PATH lookup.
 }
 
 // Wraps a single argument in double quotes for cmd.exe's command-line parsing.
@@ -158,8 +315,8 @@ static std::string g_pendingOutput;
 static std::atomic<bool> g_readerAlive{false};
 
 // Background thread body: blocks on read()/ReadFile() until the child closes
-// its end of the pipe (process exited), appending each chunk for the UI
-// timer to drain. Never touches FLTK widgets directly (wrong thread).
+// its end of the pipe (process exited), appending each chunk for the main
+// loop to drain. Never touches ImGui/GL state directly (wrong thread).
 static void ReaderThreadFunc(ProcHandle proc) {
     char buf[4096];
     while (true) {
@@ -212,8 +369,8 @@ static void CleanupProcess(ProcHandle& h) {
 
 // Spawns `binary subcommand tokens...` with its stdout/stderr redirected into
 // a pipe (no visible console on Windows, no shell/terminal on Linux), and
-// starts a background thread that streams the captured output for the GUI's
-// log panel to display. Returns an invalid handle (per IsValid) on failure.
+// starts a background thread that streams the captured output for the log
+// panel to display. Returns an invalid handle (per IsValid) on failure.
 static ProcHandle LaunchCaptured(const std::string& binary, const std::string& subcommand,
                                  const std::vector<std::string>& tokens, std::string& err) {
     ProcHandle proc;
@@ -294,58 +451,44 @@ static ProcHandle LaunchCaptured(const std::string& binary, const std::string& s
 // Shared Widget Helpers
 // ============================================================================
 
-// Adds a labeled text field with "File" and "Folder" browse buttons feeding
-// into it. When saveDialog is true, the "File" button lets the user type a
-// new (not-yet-existing) destination filename instead of requiring one to pick.
-// If multiThreadCb is given, it's switched on when a folder is chosen (or a
-// typed/pasted path resolves to one) and off for a single file, since batch
-// jobs benefit from -m while single-file conversions don't.
-static Fl_Input* AddBrowsableRow(int y, const char* label, bool saveDialog,
-                                 Fl_Check_Button* multiThreadCb = nullptr) {
-    Fl_Box* box = new Fl_Box(10, y, LABEL_W, ROW_H, label);
-    box->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
+// Renders "label: [text input] [File] [Folder?]" for a path field, matching
+// the FLTK version's browsable rows. Writes the picked path straight into
+// `buf` and returns true if the field's value changed this frame (typed or
+// via a picker), so callers can react (e.g. auto-toggle multithread mode).
+static bool PathRow(const char* imguiId, const char* label, char* buf, size_t bufSize,
+                     bool saveDialog, bool showFolderButton,
+                     const char* winFilterName = nullptr, const char* winFilterExt = nullptr) {
+    bool changed = false;
+    ImGui::PushID(imguiId);
 
-    Fl_Input* input = new Fl_Input(FIELD_X, y, FIELD_W, ROW_H);
+    ImGui::AlignTextToFramePadding();
+    ImGui::TextUnformatted(label);
+    ImGui::SameLine(90);
+    float buttonsWidth = showFolderButton ? 170.0f : 80.0f;
+    ImGui::SetNextItemWidth(-buttonsWidth - 10.0f);
+    if (ImGui::InputText("##path", buf, bufSize)) changed = true;
 
-    // Bundles the target Fl_Input with the dialog kind and the tab's
-    // multi-thread checkbox; intentionally leaked, same lifetime as the widgets.
-    struct BrowseCtx { Fl_Input* input; bool saveDialog; Fl_Check_Button* multiThreadCb; };
-    auto* ctx = new BrowseCtx{input, saveDialog, multiThreadCb};
-
-    Fl_Button* fileBtn = new Fl_Button(FIELD_X + FIELD_W + 5, y, BROWSE_W, ROW_H, "File");
-    fileBtn->callback([](Fl_Widget*, void* data) {
-        auto* ctx = static_cast<BrowseCtx*>(data);
-        Fl_Native_File_Chooser chooser;
-        chooser.type(ctx->saveDialog ? Fl_Native_File_Chooser::BROWSE_SAVE_FILE
-                                      : Fl_Native_File_Chooser::BROWSE_FILE);
-        if (chooser.show() == 0 && chooser.filename()) {
-            ctx->input->value(chooser.filename());
-            if (ctx->multiThreadCb) ctx->multiThreadCb->value(0);
+    ImGui::SameLine();
+    if (ImGui::Button("File", ImVec2(75, 0))) {
+        std::string picked;
+        if (NativePickFile(saveDialog, winFilterName, winFilterExt, picked)) {
+            std::snprintf(buf, bufSize, "%s", picked.c_str());
+            changed = true;
         }
-    }, ctx);
-
-    Fl_Button* dirBtn = new Fl_Button(FIELD_X + FIELD_W + BROWSE_W + 10, y, BROWSE_W, ROW_H, "Folder");
-    dirBtn->callback([](Fl_Widget*, void* data) {
-        auto* ctx = static_cast<BrowseCtx*>(data);
-        Fl_Native_File_Chooser chooser;
-        chooser.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY);
-        if (chooser.show() == 0 && chooser.filename()) {
-            ctx->input->value(chooser.filename());
-            if (ctx->multiThreadCb) ctx->multiThreadCb->value(1);
+    }
+    if (showFolderButton) {
+        ImGui::SameLine();
+        if (ImGui::Button("Folder...", ImVec2(75, 0))) {
+            std::string picked;
+            if (NativePickFolder(picked)) {
+                std::snprintf(buf, bufSize, "%s", picked.c_str());
+                changed = true;
+            }
         }
-    }, ctx);
-
-    if (multiThreadCb) {
-        input->callback([](Fl_Widget* w, void* data) {
-            auto* ctx = static_cast<BrowseCtx*>(data);
-            std::string val = static_cast<Fl_Input*>(w)->value();
-            if (val.empty()) return;
-            std::error_code ec;
-            ctx->multiThreadCb->value(fs::is_directory(val, ec) ? 1 : 0);
-        }, ctx);
     }
 
-    return input;
+    ImGui::PopID();
+    return changed;
 }
 
 // Appends "-d" immediately followed by inputPath if dirMode is set (matching
@@ -366,68 +509,45 @@ static void AppendDirAndPath(std::vector<std::string>& args, bool dirMode, const
 // ============================================================================
 
 struct DdsMmpTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
-    Fl_Round_Button* modeAuto = nullptr;
-    Fl_Round_Button* modeDdsToMmp = nullptr;
-    Fl_Round_Button* modeMmpToDds = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    bool multiThread = false;
+    bool dryRun = false;
+    int mode = 0; // 0=auto, 1=dds2mmp, 2=mmp2dds
+    bool plain32 = false;
 };
 
 static DdsMmpTab g_dds;
 
-static Fl_Group* BuildDdsMmpTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "DDS <-> MMP");
-    grp->user_data(reinterpret_cast<void*>(0));
+static void DrawDdsMmpTab() {
+    if (PathRow("dds_in", "Input:", g_dds.inputPath, sizeof(g_dds.inputPath), false, true)) {
+        std::error_code ec;
+        g_dds.multiThread = fs::is_directory(g_dds.inputPath, ec);
+    }
+    PathRow("dds_out", "Output:", g_dds.outputPath, sizeof(g_dds.outputPath), true, true);
 
-    const int inputY   = y + 15;
-    const int outputY  = inputY + ROW_H + ROW_GAP;
-    const int multiY   = outputY + ROW_H + ROW_GAP;
-    const int dryRunY  = multiY + ROW_H + ROW_GAP;
-    const int modeLblY = dryRunY + ROW_H + ROW_GAP + 5;
+    ImGui::Checkbox("Multi-threaded (-m)", &g_dds.multiThread);
+    ImGui::Checkbox("Dry run (--dry-run)", &g_dds.dryRun);
 
-    // Created before the input row so its Folder/File buttons can toggle it.
-    g_dds.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
-
-    g_dds.inputPath = AddBrowsableRow(inputY, "Input:", false, g_dds.multiThread);
-    g_dds.outputPath = AddBrowsableRow(outputY, "Output:", true);
-
-    g_dds.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
-
-    Fl_Box* modeLabel = new Fl_Box(10, modeLblY, 200, ROW_H, "Conversion direction:");
-    modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    int row = modeLblY + ROW_H;
-    g_dds.modeAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
-    g_dds.modeAuto->type(FL_RADIO_BUTTON);
-    g_dds.modeAuto->value(1);
-    row += ROW_H;
-    g_dds.modeDdsToMmp = new Fl_Round_Button(20, row, 200, ROW_H, "Force DDS -> MMP");
-    g_dds.modeDdsToMmp->type(FL_RADIO_BUTTON);
-    row += ROW_H;
-    g_dds.modeMmpToDds = new Fl_Round_Button(20, row, 200, ROW_H, "Force MMP -> DDS");
-    g_dds.modeMmpToDds->type(FL_RADIO_BUTTON);
-
-    grp->end();
-    return grp;
+    ImGui::Spacing();
+    ImGui::TextUnformatted("Conversion direction:");
+    ImGui::RadioButton("Auto-detect (default)", &g_dds.mode, 0);
+    ImGui::RadioButton("Force DDS -> MMP", &g_dds.mode, 1);
+    ImGui::RadioButton("Force MMP -> DDS", &g_dds.mode, 2);
+    ImGui::Checkbox("32-bit as plain ARGB 8888 (--plain32)", &g_dds.plain32);
+    ImGui::SetItemTooltip("DDS -> MMP: write 32-bit textures in the format of the game's cursors and logos instead of PNT3 (packed, first mipmap only)");
 }
 
 static std::vector<std::string> BuildDdsMmpArgs() {
     std::vector<std::string> args;
+    if (g_dds.dryRun) args.push_back("--dry-run");
+    if (g_dds.multiThread) args.push_back("-m");
+    if (g_dds.mode == 1) args.push_back("--dds2mmp");
+    else if (g_dds.mode == 2) args.push_back("--mmp2dds");
+    if (g_dds.plain32) args.push_back("--plain32");
 
-    if (g_dds.dryRun->value()) args.push_back("--dry-run");
-    if (g_dds.multiThread->value()) args.push_back("-m");
-    if (g_dds.modeDdsToMmp->value()) args.push_back("--dds2mmp");
-    else if (g_dds.modeMmpToDds->value()) args.push_back("--mmp2dds");
-
-    std::string out = g_dds.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    std::string in = g_dds.inputPath->value();
-    if (!in.empty()) args.push_back(in);
+    if (g_dds.outputPath[0]) { args.push_back("-o"); args.push_back(g_dds.outputPath); }
+    if (g_dds.inputPath[0]) args.push_back(g_dds.inputPath);
     return args;
 }
 
@@ -436,67 +556,41 @@ static std::vector<std::string> BuildDdsMmpArgs() {
 // ============================================================================
 
 struct IniRegTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
-    Fl_Round_Button* modeAuto = nullptr;
-    Fl_Round_Button* modeIniToReg = nullptr;
-    Fl_Round_Button* modeRegToIni = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    bool multiThread = false;
+    bool dryRun = false;
+    int mode = 0; // 0=auto, 1=ini2reg, 2=reg2ini
 };
 
 static IniRegTab g_ini;
 
-static Fl_Group* BuildIniRegTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "INI <-> REG");
-    grp->user_data(reinterpret_cast<void*>(1));
+static void DrawIniRegTab() {
+    if (PathRow("ini_in", "Input:", g_ini.inputPath, sizeof(g_ini.inputPath), false, true)) {
+        std::error_code ec;
+        g_ini.multiThread = fs::is_directory(g_ini.inputPath, ec);
+    }
+    PathRow("ini_out", "Output:", g_ini.outputPath, sizeof(g_ini.outputPath), true, true);
 
-    const int inputY   = y + 15;
-    const int outputY  = inputY + ROW_H + ROW_GAP;
-    const int multiY   = outputY + ROW_H + ROW_GAP;
-    const int dryRunY  = multiY + ROW_H + ROW_GAP;
-    const int modeLblY = dryRunY + ROW_H + ROW_GAP + 5;
+    ImGui::Checkbox("Multi-threaded (-m)", &g_ini.multiThread);
+    ImGui::Checkbox("Dry run (--dry-run)", &g_ini.dryRun);
 
-    g_ini.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
-
-    g_ini.inputPath = AddBrowsableRow(inputY, "Input:", false, g_ini.multiThread);
-    g_ini.outputPath = AddBrowsableRow(outputY, "Output:", true);
-
-    g_ini.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
-
-    Fl_Box* modeLabel = new Fl_Box(10, modeLblY, 200, ROW_H, "Conversion direction:");
-    modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    int row = modeLblY + ROW_H;
-    g_ini.modeAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
-    g_ini.modeAuto->type(FL_RADIO_BUTTON);
-    g_ini.modeAuto->value(1);
-    row += ROW_H;
-    g_ini.modeIniToReg = new Fl_Round_Button(20, row, 200, ROW_H, "Force INI -> REG");
-    g_ini.modeIniToReg->type(FL_RADIO_BUTTON);
-    row += ROW_H;
-    g_ini.modeRegToIni = new Fl_Round_Button(20, row, 200, ROW_H, "Force REG -> INI");
-    g_ini.modeRegToIni->type(FL_RADIO_BUTTON);
-
-    grp->end();
-    return grp;
+    ImGui::Spacing();
+    ImGui::TextUnformatted("Conversion direction:");
+    ImGui::RadioButton("Auto-detect (default)", &g_ini.mode, 0);
+    ImGui::RadioButton("Force INI -> REG", &g_ini.mode, 1);
+    ImGui::RadioButton("Force REG -> INI", &g_ini.mode, 2);
 }
 
 static std::vector<std::string> BuildIniRegArgs() {
     std::vector<std::string> args;
+    if (g_ini.dryRun) args.push_back("--dry-run");
+    if (g_ini.multiThread) args.push_back("-m");
+    if (g_ini.mode == 1) args.push_back("--ini2reg");
+    else if (g_ini.mode == 2) args.push_back("--reg2ini");
 
-    if (g_ini.dryRun->value()) args.push_back("--dry-run");
-    if (g_ini.multiThread->value()) args.push_back("-m");
-    if (g_ini.modeIniToReg->value()) args.push_back("--ini2reg");
-    else if (g_ini.modeRegToIni->value()) args.push_back("--reg2ini");
-
-    std::string out = g_ini.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    std::string in = g_ini.inputPath->value();
-    if (!in.empty()) args.push_back(in);
+    if (g_ini.outputPath[0]) { args.push_back("-o"); args.push_back(g_ini.outputPath); }
+    if (g_ini.inputPath[0]) args.push_back(g_ini.inputPath);
     return args;
 }
 
@@ -505,48 +599,32 @@ static std::vector<std::string> BuildIniRegArgs() {
 // ============================================================================
 
 struct MobDumpTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    bool multiThread = false;
+    bool dryRun = false;
 };
 
 static MobDumpTab g_mob;
 
-static Fl_Group* BuildMobDumpTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "MOB Dump");
-    grp->user_data(reinterpret_cast<void*>(2));
+static void DrawMobDumpTab() {
+    if (PathRow("mob_in", "Input:", g_mob.inputPath, sizeof(g_mob.inputPath), false, true)) {
+        std::error_code ec;
+        g_mob.multiThread = fs::is_directory(g_mob.inputPath, ec);
+    }
+    PathRow("mob_out", "Output:", g_mob.outputPath, sizeof(g_mob.outputPath), false, true);
 
-    const int inputY  = y + 15;
-    const int outputY = inputY + ROW_H + ROW_GAP;
-    const int multiY  = outputY + ROW_H + ROW_GAP;
-    const int dryRunY = multiY + ROW_H + ROW_GAP;
-
-    g_mob.multiThread = new Fl_Check_Button(10, multiY, 220, ROW_H, "Multi-threaded (-m)");
-
-    g_mob.inputPath = AddBrowsableRow(inputY, "Input:", false, g_mob.multiThread);
-    g_mob.outputPath = AddBrowsableRow(outputY, "Output:", false);
-
-    g_mob.dryRun = new Fl_Check_Button(10, dryRunY, 220, ROW_H, "Dry run (--dry-run)");
-
-    grp->end();
-    return grp;
+    ImGui::Checkbox("Multi-threaded (-m)", &g_mob.multiThread);
+    ImGui::Checkbox("Dry run (--dry-run)", &g_mob.dryRun);
 }
 
 static std::vector<std::string> BuildMobDumpArgs() {
     std::vector<std::string> args;
+    if (g_mob.dryRun) args.push_back("--dry-run");
+    if (g_mob.multiThread) args.push_back("-m");
 
-    if (g_mob.dryRun->value()) args.push_back("--dry-run");
-    if (g_mob.multiThread->value()) args.push_back("-m");
-
-    std::string out = g_mob.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    std::string in = g_mob.inputPath->value();
-    if (!in.empty()) args.push_back(in);
+    if (g_mob.outputPath[0]) { args.push_back("-o"); args.push_back(g_mob.outputPath); }
+    if (g_mob.inputPath[0]) args.push_back(g_mob.inputPath);
     return args;
 }
 
@@ -555,123 +633,144 @@ static std::vector<std::string> BuildMobDumpArgs() {
 // ============================================================================
 
 struct ResToolTab {
-    Fl_Input* inputPath = nullptr;
-    Fl_Input* outputPath = nullptr;
-    Fl_Check_Button* dirMode = nullptr;
-    Fl_Check_Button* multiThread = nullptr;
-    Fl_Check_Button* dryRun = nullptr;
-    Fl_Check_Button* stripExt = nullptr;
-    Fl_Input* extOverride = nullptr;
-    Fl_Input* excludeNames = nullptr;
-    Fl_Round_Button* actionAuto = nullptr;
-    Fl_Round_Button* actionPack = nullptr;
-    Fl_Round_Button* actionUnpack = nullptr;
+    char inputPath[1024] = "";
+    char outputPath[1024] = "";
+    char extOverride[64] = "";
+    char excludeNames[512] = "";
+    bool dirMode = false;
+    bool multiThread = false;
+    bool dryRun = false;
+    bool stripExt = true;
+    bool groupTexts = false;
+    int action = 0; // 0=auto, 1=pack, 2=unpack
 };
 
 static ResToolTab g_res;
 
-static Fl_Group* BuildResToolTab(int x, int y, int w, int h) {
-    Fl_Group* grp = new Fl_Group(x, y, w, h, "RES / MQ");
-    grp->user_data(reinterpret_cast<void*>(3));
-
-    const int inputY     = y + 15;
-    const int outputY    = inputY + ROW_H + ROW_GAP;
-    const int extY       = outputY + ROW_H + ROW_GAP;
-    const int excludeY   = extY + ROW_H + ROW_GAP;
-    const int checkRow1Y = excludeY + ROW_H + ROW_GAP;
-    const int checkRow2Y = checkRow1Y + ROW_H + ROW_GAP;
-    const int actionLblY = checkRow2Y + ROW_H + ROW_GAP + 5;
-
-    // Created before the input row so its Folder/File buttons can toggle it.
+static void DrawResToolTab() {
     // Unlike ddsmmp/inireg/mobdump, restool's -d changes meaning rather than
     // being redundant: it batch-processes every item found inside the given
     // folder as a separate target, instead of packing that one folder itself.
-    g_res.multiThread = new Fl_Check_Button(240, checkRow1Y, 220, ROW_H, "Multi-threaded (-m)");
-    g_res.dirMode = new Fl_Check_Button(10, checkRow1Y, 220, ROW_H, "Batch mode (-d)");
-    g_res.dirMode->tooltip(
-        "Treats the input folder as a container of MANY archives/folders to\n"
-        "process separately. Not needed to pack a single folder into one\n"
-        "archive - that already happens automatically.");
+    if (PathRow("res_in", "Input:", g_res.inputPath, sizeof(g_res.inputPath), false, true)) {
+        std::error_code ec;
+        g_res.multiThread = fs::is_directory(g_res.inputPath, ec);
+    }
+    PathRow("res_out", "Output:", g_res.outputPath, sizeof(g_res.outputPath), true, true);
 
-    g_res.inputPath = AddBrowsableRow(inputY, "Input:", false, g_res.multiThread);
-    g_res.outputPath = AddBrowsableRow(outputY, "Output:", true);
+    ImGui::SetNextItemWidth(150);
+    ImGui::InputText("Archive extension (--ext)", g_res.extOverride, sizeof(g_res.extOverride));
+    ImGui::SetItemTooltip("Packing: the extension of the archive made (.res or .mq). Empty: from the folder's suffix\n"
+                          "(foo_res -> foo.res, z3q1_mq -> z3q1.mq). Only needed when the folder name does not say.");
+    ImGui::SetNextItemWidth(300);
+    ImGui::InputText("Exclude (-e, comma-separated)", g_res.excludeNames, sizeof(g_res.excludeNames));
 
-    Fl_Box* extLabel = new Fl_Box(10, extY, LABEL_W, ROW_H, "Ext override:");
-    extLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_res.extOverride = new Fl_Input(FIELD_X, extY, 150, ROW_H);
-    g_res.extOverride->tooltip("Optional. e.g. .mq, .res (--ext)");
+    ImGui::Checkbox("Batch mode (-d)", &g_res.dirMode);
+    if (ImGui::IsItemHovered()) {
+        ImGui::SetTooltip(
+            "Processes each archive or folder inside the input folder separately. Not needed to pack one folder into one archive.");
+    }
+    ImGui::SameLine();
+    ImGui::Checkbox("Multi-threaded (-m)", &g_res.multiThread);
 
-    Fl_Box* exLabel = new Fl_Box(10, excludeY, LABEL_W, ROW_H, "Exclude:");
-    exLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_res.excludeNames = new Fl_Input(FIELD_X, excludeY, 300, ROW_H);
-    g_res.excludeNames->tooltip("Comma-separated file names to omit when packing (-e / --exclude)");
+    ImGui::Checkbox("Dry run (--dry-run)", &g_res.dryRun);
+    ImGui::SameLine();
+    ImGui::Checkbox("Strip _res/_mq suffix (-s)", &g_res.stripExt);
+    ImGui::Checkbox("Texts: grouped .umtexts files (--grouped-texts)", &g_res.groupTexts);
+    ImGui::SetItemTooltip("Unpacking texts.res / textslmp.res: one <TYPE>.umtexts file per string type (ARMOR, WEAPON...)\n"
+                          "instead of one file per entry. Packing a folder of .umtexts files works without it.");
 
-    g_res.dryRun = new Fl_Check_Button(10, checkRow2Y, 220, ROW_H, "Dry run (--dry-run)");
-    g_res.stripExt = new Fl_Check_Button(240, checkRow2Y, 260, ROW_H, "Strip _res/_mq suffix (-s)");
-    g_res.stripExt->value(1);
-
-    Fl_Box* modeLabel = new Fl_Box(10, actionLblY, 200, ROW_H, "Action:");
-    modeLabel->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    int row = actionLblY + ROW_H;
-    g_res.actionAuto = new Fl_Round_Button(20, row, 200, ROW_H, "Auto-detect (default)");
-    g_res.actionAuto->type(FL_RADIO_BUTTON);
-    g_res.actionAuto->value(1);
-    row += ROW_H;
-    g_res.actionPack = new Fl_Round_Button(20, row, 200, ROW_H, "Force Pack (--pack)");
-    g_res.actionPack->type(FL_RADIO_BUTTON);
-    row += ROW_H;
-    g_res.actionUnpack = new Fl_Round_Button(20, row, 200, ROW_H, "Force Unpack (--unpack)");
-    g_res.actionUnpack->type(FL_RADIO_BUTTON);
-
-    grp->end();
-    return grp;
+    ImGui::Spacing();
+    ImGui::TextUnformatted("Action:");
+    ImGui::RadioButton("Auto-detect (default)", &g_res.action, 0);
+    ImGui::RadioButton("Force Pack (--pack)", &g_res.action, 1);
+    ImGui::RadioButton("Force Unpack (--unpack)", &g_res.action, 2);
 }
 
 static std::vector<std::string> BuildResToolArgs() {
     std::vector<std::string> args;
+    if (g_res.dryRun) args.push_back("--dry-run");
+    if (g_res.multiThread) args.push_back("-m");
+    if (!g_res.stripExt) args.push_back("--no-strip-ext");
+    if (g_res.groupTexts) args.push_back("--grouped-texts");
+    if (g_res.action == 1) args.push_back("--pack");
+    else if (g_res.action == 2) args.push_back("--unpack");
 
-    if (g_res.dryRun->value()) args.push_back("--dry-run");
-    if (g_res.multiThread->value()) args.push_back("-m");
-    if (!g_res.stripExt->value()) args.push_back("--no-strip-ext");
-    if (g_res.actionPack->value()) args.push_back("--pack");
-    else if (g_res.actionUnpack->value()) args.push_back("--unpack");
+    if (g_res.extOverride[0]) { args.push_back("--ext"); args.push_back(g_res.extOverride); }
+    if (g_res.excludeNames[0]) { args.push_back("-e"); args.push_back(g_res.excludeNames); }
+    if (g_res.outputPath[0]) { args.push_back("-o"); args.push_back(g_res.outputPath); }
 
-    std::string ext = g_res.extOverride->value();
-    if (!ext.empty()) {
-        args.push_back("--ext");
-        args.push_back(ext);
-    }
-
-    std::string exclude = g_res.excludeNames->value();
-    if (!exclude.empty()) {
-        args.push_back("-e");
-        args.push_back(exclude);
-    }
-
-    std::string out = g_res.outputPath->value();
-    if (!out.empty()) {
-        args.push_back("-o");
-        args.push_back(out);
-    }
-
-    AppendDirAndPath(args, g_res.dirMode->value(), g_res.inputPath->value());
+    AppendDirAndPath(args, g_res.dirMode, g_res.inputPath);
     return args;
 }
 
 // ============================================================================
-// Run Button Dispatch
+// Run Button Dispatch & Main Loop
 // ============================================================================
 
-static Fl_Tabs* g_tabs = nullptr;
-static Fl_Button* g_runButton = nullptr;
-static Fl_Progress* g_progress = nullptr;
 static ProcHandle g_activeProc;
 static double g_progressPhase = 0.0;
+static std::string g_statusText = "Idle";
+static bool g_resting = false; // the main loop is at the resting rate (Settings > Performance), shown by the frame rate
+static int g_activeTab = 0;
+static const char* g_activeSubcommand = ""; // the shown File Processing sub-tab's tool ("" for DB)
+constexpr int kDbSubTab = 0; // File Processing's DB sub-tab (see the tabs in RunGui)
+constexpr int kMpSubTab = 2; // its MP sub-tab
+// The "?" of the main tab bar: every key and mouse control of the tab shown.
+static void KeysHelp(const Library& lib, int tab) { // tab: 0 File Processing, 1 3D Viewer, 2 Map Editor (main()'s order)
+    static const char* const kButtons[] = {"left", "right", "middle", "side 1", "side 2"};
+    auto row = [](const std::string& keys, const char* what) {
+        ImGui::TableNextRow();
+        ImGui::TableNextColumn();
+        ImGui::TextUnformatted(keys.c_str());
+        ImGui::TableNextColumn();
+        ImGui::TextUnformatted(i18n::Tr(what));
+    };
+    auto mouse = [&](int b) { return std::string(i18n::Tr(kButtons[std::min(std::max(b, 0), 4)])) + i18n::Tr(" button drag"); };
+    if (!ImGui::BeginTable("##keys", 2, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg)) return;
+    if (tab == 2) {
+        for (int k = 0; k < config::kMapKeyCount; ++k) row(ui::BindName(lib.mapKeys[k]), config::MapKeyLabel(k));
+        row(mouse(lib.mapMouseOrbit), "Turn the camera");
+        row(mouse(lib.mapMousePan), "Move the camera");
+        row(i18n::Tr("Wheel"), "Zoom");
+        row(i18n::Tr("Click / Shift+click"), "Select / add to or remove from the selection");
+        row(i18n::Tr("Drag (Shift: add)"), "Select with a box");
+        row("X / Y / Z", "While moving, turning or scaling: only along that axis (Shift: the two others)");
+        row(i18n::Tr("Ctrl (held)"), "While moving, turning or scaling: no rounding");
+        row(i18n::Tr("Enter / left click"), "Apply the move, turn or scale");
+        row(i18n::Tr("Escape / right click"), "Cancel it");
+        row("1 ... 8", "Tile painting: the quick tiles");
+        row(i18n::Tr("Space"), "Tile painting: every tile, at the mouse (a click takes one)");
+        row(std::string("R  , / .  ") + i18n::Tr("Ctrl+wheel"), "Tile painting: turn the brush");
+        row(i18n::Tr("Alt+click"), "Tile painting: pick the tile under the mouse; script areas shown: pick an area");
+        row(i18n::Tr("Ctrl+click"), "Logic mode: add a patrol point to the selected unit; a selected trap: a cast point");
+        row(i18n::Tr("Ctrl+Shift+click"), "A selected trap: an activation area");
+    } else if (tab == 1) {
+        row(mouse(lib.mapMouseOrbit), "Turn the camera");
+        row(mouse(lib.mapMousePan), "Move the camera");
+        row(i18n::Tr("Wheel"), "Zoom");
+        row(i18n::Tr("Up / Down"), "The previous / next row of the list");
+    } else if (tab == 0) {
+        row("Ctrl+S", "Save (DB editor, text editor)");
+        row(i18n::Tr("Escape"), "Close a message");
+    } else {
+        row("-", "No keys in this tab");
+    }
+    ImGui::EndTable();
+    if (tab == 2 || tab == 1) ImGui::TextDisabled("%s", i18n::Tr("The keys and mouse buttons are set in Settings."));
+}
 
-// Drains captured subprocess output into the log panel and, once the process
-// has exited and the reader thread has drained the last of the pipe, resets
-// the UI to idle. While running, advances an indeterminate progress fill.
-static void ProgressTimerCb(void*) {
+static Library* g_library = nullptr; // for the sub-tabs that need the sources (Texts)
+static void DrawTextsTab() { textedit::DrawTab(*g_library); }
+static void DrawMpTab() { mpedit::DrawTab(*g_library); }
+static int g_requestMainTab = -1, g_requestSubTab = -1; // asked by an alert's button: shown at the next frame
+static int g_jobTab = 0;                                // the File Processing sub-tab the running job came from
+static std::string g_jobOutput;                         // the running job's output (counted for the alerts)
+
+// Drains captured subprocess output into the log and, once the process has
+// exited and the reader thread has drained the last of the pipe, resets the
+// UI to idle. Called once per frame (the main loop already runs at the
+// display's refresh rate, so no separate timer is needed like FLTK's).
+static void PumpActiveProcess() {
     std::string chunk;
     {
         std::lock_guard<std::mutex> lock(g_outputMutex);
@@ -679,7 +778,10 @@ static void ProgressTimerCb(void*) {
     }
     if (!chunk.empty()) {
         AppendLog(chunk);
+        g_jobOutput += chunk;
     }
+
+    if (!IsValid(g_activeProc)) return;
 
     bool stillRunning = true;
     int exitCode = 0;
@@ -687,58 +789,53 @@ static void ProgressTimerCb(void*) {
 
     if (!stillRunning && !g_readerAlive.load()) {
         CleanupProcess(g_activeProc);
-        if (g_progress) {
-            g_progress->value(0.0f);
-            g_progress->label("Idle");
-        }
-        if (g_runButton) {
-            g_runButton->activate();
-            g_runButton->label("Run");
-        }
-        if (g_statusBox) {
-            g_statusBox->label(exitCode == 0 ? "Job finished successfully" : "Job finished with errors");
-        }
+        g_statusText = (exitCode == 0) ? "Job finished successfully" : "Job finished with errors";
         AppendLog(exitCode == 0
             ? "\n[Job finished successfully]\n\n"
             : ("\n[Job finished, exit code " + std::to_string(exitCode) + "]\n\n"));
+        // Alerts: the tools mark problems with [ERROR] / [WARN] lines.
+        int errors = 0, warnings = 0;
+        std::string firstError, firstWarning;
+        std::istringstream lines(g_jobOutput);
+        for (std::string line; std::getline(lines, line);) {
+            if (line.rfind("[ERROR]", 0) == 0 || line.rfind("Error:", 0) == 0) { if (!errors++) firstError = line; }
+            else if (line.rfind("[WARN", 0) == 0) { if (!warnings++) firstWarning = line; }
+        }
+        g_jobOutput.clear();
+        if (errors || warnings || exitCode != 0) {
+            const bool error = errors > 0 || exitCode != 0;
+            std::string text = errors || warnings ? "The job finished" + (exitCode ? " with exit code " + std::to_string(exitCode) : std::string()) +
+                                                        ": " + std::to_string(errors) + " error(s), " + std::to_string(warnings) + " warning(s)."
+                                                  : "The job failed (exit code " + std::to_string(exitCode) + ").";
+            if (!(error ? firstError : firstWarning).empty()) text += "\n" + (error ? firstError : firstWarning);
+            const int tab = g_jobTab;
+            alerts::Raise(error ? alerts::Level::Error : alerts::Level::Warning, text, "File Processing log",
+                          [tab] { g_requestMainTab = 0; g_requestSubTab = tab; });
+        }
         return;
     }
 
-    g_progressPhase += 3.0;
+    g_progressPhase += 1.2;
     if (g_progressPhase > 100.0) g_progressPhase = 0.0;
-    if (g_progress) {
-        g_progress->value(static_cast<float>(g_progressPhase));
-        g_progress->label("Running...");
-    }
-    Fl::repeat_timeout(0.06, ProgressTimerCb, nullptr);
 }
 
-static void OnRunClicked(Fl_Widget*, void*) {
-    if (IsValid(g_activeProc)) {
-        return; // A job is already running.
-    }
+struct TabInfo { const char* name; void (*draw)(); std::vector<std::string> (*buildArgs)(); const char* subcommand; const char* activeInput; };
 
-    Fl_Widget* activeTab = g_tabs->value();
-    if (!activeTab) {
-        return;
-    }
-    intptr_t subtool = reinterpret_cast<intptr_t>(activeTab->user_data());
+static void OnRunClicked() {
+    if (IsValid(g_activeProc)) return; // A job is already running.
 
-    // Checked directly against the widget rather than re-parsed from the built
-    // token list, since values of -o/--ext/-e would otherwise look positional too.
-    const Fl_Input* activeInput = nullptr;
+    const char* activeInput = nullptr;
     std::vector<std::string> tokens;
     const char* subcommand = "";
-    switch (subtool) {
-        case 0: activeInput = g_dds.inputPath; tokens = BuildDdsMmpArgs(); subcommand = "ddsmmp"; break;
-        case 1: activeInput = g_ini.inputPath; tokens = BuildIniRegArgs(); subcommand = "inireg"; break;
-        case 2: activeInput = g_mob.inputPath; tokens = BuildMobDumpArgs(); subcommand = "mobdump"; break;
-        case 3: activeInput = g_res.inputPath; tokens = BuildResToolArgs(); subcommand = "restool"; break;
-        default: return;
-    }
+    const std::string tool = g_activeSubcommand;
+    if (tool == "ddsmmp") { activeInput = g_dds.inputPath; tokens = BuildDdsMmpArgs(); subcommand = "ddsmmp"; }
+    else if (tool == "inireg") { activeInput = g_ini.inputPath; tokens = BuildIniRegArgs(); subcommand = "inireg"; }
+    else if (tool == "mobdump") { activeInput = g_mob.inputPath; tokens = BuildMobDumpArgs(); subcommand = "mobdump"; }
+    else if (tool == "restool") { activeInput = g_res.inputPath; tokens = BuildResToolArgs(); subcommand = "restool"; }
+    else return;
 
-    if (!activeInput || std::string(activeInput->value()).empty()) {
-        fl_alert("Please specify an input path.");
+    if (!activeInput || activeInput[0] == '\0') {
+        AppendLog("[ERROR] Please specify an input path.\n");
         return;
     }
 
@@ -752,80 +849,619 @@ static void OnRunClicked(Fl_Widget*, void*) {
     ProcHandle proc = LaunchCaptured(binary, subcommand, tokens, err);
     if (!IsValid(proc)) {
         AppendLog("[ERROR] " + err + "\n");
-        if (g_statusBox) g_statusBox->label("Failed to launch");
-        fl_alert("%s", err.c_str());
+        g_statusText = "Failed to launch";
         return;
     }
 
     g_activeProc = proc;
+    g_jobTab = g_activeTab;
+    g_jobOutput.clear();
     g_progressPhase = 0.0;
-    if (g_runButton) {
-        g_runButton->deactivate();
-        g_runButton->label("Running...");
+    g_statusText = "Running...";
+}
+
+static void DrawFileProcessingTab(const TabInfo* tabs, size_t count);
+
+// Saves the window's pixels as a 24-bit BMP (the `gui --screenshot` option, for documentation and tests).
+static void SaveScreenshot(const std::string& path, int w, int h) {
+    std::vector<unsigned char> rgb(static_cast<size_t>(w) * h * 3);
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, rgb.data());
+    FILE* f = std::fopen(path.c_str(), "wb");
+    if (!f) return;
+    int rowSize = (w * 3 + 3) & ~3;
+    unsigned dataSize = static_cast<unsigned>(rowSize * h), fileSize = 54 + dataSize, offset = 54, info = 40;
+    unsigned short planes = 1, bpp = 24;
+    unsigned char header[54] = {'B', 'M'};
+    std::memcpy(header + 2, &fileSize, 4);
+    std::memcpy(header + 10, &offset, 4);
+    std::memcpy(header + 14, &info, 4);
+    std::memcpy(header + 18, &w, 4);
+    std::memcpy(header + 22, &h, 4);
+    std::memcpy(header + 26, &planes, 2);
+    std::memcpy(header + 28, &bpp, 2);
+    std::memcpy(header + 34, &dataSize, 4);
+    std::fwrite(header, 1, 54, f);
+    std::vector<unsigned char> row(rowSize, 0);
+    for (int y = 0; y < h; ++y) { // bottom-up, like glReadPixels
+        for (int x = 0; x < w; ++x) {
+            row[x * 3 + 0] = rgb[(y * w + x) * 3 + 2];
+            row[x * 3 + 1] = rgb[(y * w + x) * 3 + 1];
+            row[x * 3 + 2] = rgb[(y * w + x) * 3 + 0];
+        }
+        std::fwrite(row.data(), 1, rowSize, f);
     }
-    if (g_statusBox) g_statusBox->label("Running...");
-    Fl::add_timeout(0.06, ProgressTimerCb, nullptr);
+    std::fclose(f);
 }
 
-static void OnClearLogClicked(Fl_Widget*, void*) {
-    if (g_logBuffer) {
-        g_logBuffer->text("");
+// The built-in font only has basic Latin letters. Item texts can be French (accents), Russian
+// (Cyrillic) or Korean, so system fonts are merged in behind it: ImGui 1.92 loads their glyphs on
+// demand, only for characters the built-in font lacks. Missing fonts are skipped. Only TrueType
+// (glyf) or classic CFF fonts load; the variable "-VF" Noto CJK fonts (CFF2) do not.
+void AddFallbackFonts(ImGuiIO& io) { // also the splash screen's (splash.cpp)
+    static const char* const candidates[] = {
+#ifdef _WIN32
+        "C:\\Windows\\Fonts\\segoeui.ttf", "C:\\Windows\\Fonts\\arial.ttf",   // Latin accents, Cyrillic
+        "C:\\Windows\\Fonts\\malgun.ttf",                                         // Korean
+#else
+        "/usr/share/fonts/truetype/DejaVuSans.ttf", "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/TTF/DejaVuSans.ttf", "/usr/share/fonts/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/nanum/NanumGothic.ttf", "/usr/share/fonts/nanum/NanumGothic.ttf",
+        "/usr/share/fonts/TTF/NanumGothic.ttf", "/usr/share/fonts/truetype/NanumGothic.ttf",
+#endif
+    };
+    // The first Latin/Cyrillic system font is the MAIN font, for every character: merged behind the built-in pixel
+    // font, accented / Polish / Cyrillic letters came out in another size and style than the ASCII ones around them.
+    bool haveLatin = false;
+    for (const char* path : candidates) {
+        std::error_code ec;
+        if (haveLatin || !fs::is_regular_file(path, ec) || std::strstr(path, "algun") || std::strstr(path, "anum")) continue;
+        haveLatin = io.Fonts->AddFontFromFileTTF(path, 15.0f) != nullptr;
+    }
+    if (!haveLatin) io.Fonts->AddFontDefault(); // no system font: the built-in one (ASCII only)
+    for (const char* path : candidates) { // Korean merged behind it
+        std::error_code ec;
+        if (!fs::is_regular_file(path, ec) || !(std::strstr(path, "algun") || std::strstr(path, "anum"))) continue;
+        ImFontConfig config;
+        config.MergeMode = true;
+        io.Fonts->AddFontFromFileTTF(path, 0.0f, &config); // size 0: the main font's (1.92 refuses another when merging)
     }
 }
 
-// ============================================================================
-// Application Entry Point
-// ============================================================================
+// GLFW 3.4 added the platform query and the Wayland app id; the Windows XP builds use GLFW 3.3 (the last one
+// that runs on XP), where neither exists (and there is no Wayland).
+#if GLFW_VERSION_MAJOR * 100 + GLFW_VERSION_MINOR >= 304
+static bool OnWayland() { return glfwGetPlatform() == GLFW_PLATFORM_WAYLAND; }
+static void HintAppId(const char* id) { glfwWindowHintString(GLFW_WAYLAND_APP_ID, id); }
+#else
+static bool OnWayland() { return false; }
+static void HintAppId(const char*) {}
+#endif
 
-int main(int argc, char** argv) {
-    Fl::scheme("gtk+");
-    Fl::background(240, 240, 240);
-    Fl_Tooltip::size(12);
-
-    Fl_Window* window = new Fl_Window(WIN_W, WIN_H, "um-multitool GUI");
-    window->color(fl_rgb_color(240, 240, 240));
-
-    g_tabs = new Fl_Tabs(10, TABS_Y, WIN_W - 20, TABS_H);
-    g_tabs->selection_color(kAccentColor);
-    BuildDdsMmpTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    BuildIniRegTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    BuildMobDumpTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    BuildResToolTab(10, TABS_Y + 25, WIN_W - 20, TABS_H - 25);
-    g_tabs->end();
-
-    int controlsY = TABS_Y + TABS_H + 12;
-    g_runButton = new Fl_Button(10, controlsY, 110, 32, "@> Run");
-    g_runButton->callback(OnRunClicked);
-    g_runButton->color(kAccentColor);
-    g_runButton->labelcolor(FL_WHITE);
-    g_runButton->labelfont(FL_HELVETICA_BOLD);
-
-    Fl_Button* clearBtn = new Fl_Button(130, controlsY, 110, 32, "Clear Log");
-    clearBtn->callback(OnClearLogClicked);
-
-    g_statusBox = new Fl_Box(250, controlsY, WIN_W - 270, 32, "Idle");
-    g_statusBox->align(FL_ALIGN_INSIDE | FL_ALIGN_LEFT);
-    g_statusBox->labelfont(FL_HELVETICA_ITALIC);
-
-    int progressY = controlsY + 40;
-    g_progress = new Fl_Progress(10, progressY, WIN_W - 20, 22, "Idle");
-    g_progress->minimum(0.0f);
-    g_progress->maximum(100.0f);
-    g_progress->color(FL_WHITE);
-    g_progress->selection_color(kAccentColor);
-    g_progress->labelsize(12);
-
-    int logY = progressY + 32;
-    Fl_Text_Display* logDisplay = new Fl_Text_Display(10, logY, WIN_W - 20, WIN_H - logY - 10);
-    g_logBuffer = new Fl_Text_Buffer();
-    logDisplay->buffer(g_logBuffer);
-    logDisplay->textfont(FL_COURIER);
-    logDisplay->textsize(12);
-
-    window->end();
-    window->resizable(logDisplay);
-    window->show(argc, argv);
-
-    return Fl::run();
+// Why the window could not open: in the console, and on Windows also in a message box (a double-clicked
+// program's console closes at once, so it would otherwise fail without a word).
+static std::string g_glfwError;
+static void ReportStartFailure(const char* what) {
+    const std::string text = std::string(what) + (g_glfwError.empty() ? "" : ":\n" + g_glfwError);
+    umlog::Write(umlog::Level::Error, text);
+    std::fprintf(stderr, "%s\n", text.c_str());
+#ifdef _WIN32
+    MessageBoxA(nullptr, text.c_str(), "um-multitool", MB_OK | MB_ICONERROR);
+#endif
 }
 
+int RunGui(const GuiOptions& options) {
+    glfwSetErrorCallback([](int error, const char* description) {
+        std::fprintf(stderr, "GLFW error %d: %s\n", error, description);
+        g_glfwError = description ? description : "";
+    });
+    if (!glfwInit()) { ReportStartFailure("The window system could not start (GLFW)"); return 1; }
+
+    glfwWindowHint(GLFW_DEPTH_BITS, 24); // the 3D Viewer needs a depth buffer
+    // The name desktops match against um-multitool.desktop (StartupWMClass / the Wayland app id): that is
+    // where a Wayland desktop takes the window's icon from.
+    HintAppId("um-multitool");
+    glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
+    glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
+    const std::string title = std::string(PROGRAM_NAME_SHOWN) + " " + PROGRAM_VERSION;
+    umlog::Write(umlog::Level::Info, title + " starting (GUI); log file: " + umlog::FilePath() + (umlog::Verbose() ? "" : "; --verbose prints it here"));
+    // The window as it was last closed (um-multitool.cfg): size, maximized, and position where the
+    // platform allows it (Wayland does not let a program place its window).
+    const config::Config saved = config::Load();
+    const bool wayland = OnWayland();
+    // Created at the normal size and maximized once shown: a window that starts maximized gives the
+    // window manager no size to go back to when it is un-maximized (KWin then keeps the full screen).
+    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // shown once the splash screen is done (splash::End below)
+    GLFWwindow* window = glfwCreateWindow(std::max(saved.windowW, 640), std::max(saved.windowH, 400), title.c_str(), nullptr, nullptr);
+    if (!window) {
+        ReportStartFailure("The window could not be created (OpenGL)");
+        glfwTerminate();
+        return 1;
+    }
+    if (!wayland && saved.windowX != -100000) glfwSetWindowPos(window, saved.windowX, saved.windowY);
+    glfwMakeContextCurrent(window);
+    // The window icon (the battle axe, icon_data.hpp). Wayland has no way to set one from the program.
+    if (!OnWayland()) {
+        GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)},
+                              {48, 48, const_cast<unsigned char*>(logo::kIcon48)},
+                              {32, 32, const_cast<unsigned char*>(logo::kIcon32)}};
+        glfwSetWindowIcon(window, 3, icons);
+    }
+    glfwSwapInterval(1); // vsync; also paces our polling loop like the old 60ms timer did
+    // The splash screen: the first thing on screen, up while everything below loads (splash.hpp).
+    {
+        theme::Rgb accent{236, 200, 130};
+        theme::ParseAccent(saved.themeAccent, accent);
+        splash::Begin(window, config::ExeDir() + "/splash.png", accent.r, accent.g, accent.b);
+    }
+    splash::Step("Starting", 0.04f);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    // No imgui.ini: ImGui would write it into the current directory (wherever um-multitool is started
+    // from); the windows are fixed and the settings live in um-multitool.cfg beside the executable.
+    io.IniFilename = nullptr;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    // Number fields: a click (without dragging) on a drag field types the value; sliders: a double-click
+    // (vendor/imgui patched, SliderScalar) or Ctrl+click.
+    io.ConfigDragClickToInputText = true;
+    // Ctrl+Tab is the Map Editor's logic mode key (by default): not ImGui's window switcher.
+    ImGui::GetCurrentContext()->ConfigNavWindowingKeyNext = 0;
+    ImGui::GetCurrentContext()->ConfigNavWindowingKeyPrev = 0;
+
+    AddFallbackFonts(io);
+
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL2_Init();
+
+    // The sources (figures, textures, texts, database) and settings, shared by the 3D Viewer and the
+    // Map Editor and edited in the Settings tab.
+    Library library;
+    if (library.logVerbose) umlog::SetVerbose(true);
+    splash::Step("Reading the settings", 0.08f);
+    library.onLoadProgress = [](const std::string& what, float f) { splash::Step(what, 0.1f + f * 0.55f); };
+    library.LoadConfig();
+    library.onLoadProgress = nullptr;
+    splash::Step("Sources loaded", 0.66f);
+    // The colours (Settings > General, viewer/theme.hpp): applied now and again whenever they change.
+    std::string themeApplied;
+    auto applyTheme = [&] {
+        const std::string key = library.themePreset + "|" + library.themeAccent;
+        if (key == themeApplied) return;
+        themeApplied = key;
+        theme::Rgb accent{236, 200, 130};
+        theme::ParseAccent(library.themeAccent, accent);
+        theme::Apply(library.themePreset, accent);
+    };
+    applyTheme();
+    glfwSwapInterval(library.vsync ? 1 : 0); // Settings > Performance
+    bool vsyncSet = library.vsync;
+    if (const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor())) if (mode->refreshRate > 0) library.displayRefresh = mode->refreshRate;
+    g_library = &library;
+    {
+        i18n::Lang lang = i18n::Lang::English;
+        i18n::FromCode(library.language, lang); // empty / unknown: English, and the first-start popup asks
+        i18n::Set(lang);
+    }
+    bool askLanguage = library.language.empty();
+    ui::SourcesState sourcesState;
+    std::snprintf(sourcesState.databasePath, sizeof(sourcesState.databasePath), "%s", library.dbPath.c_str());
+
+    splash::Step("3D Viewer", 0.7f);
+    viewer::Context* viewerCtx = viewer::Create(library);
+    splash::Step("Map Editor", 0.76f);
+    mapedit::Context* mapCtx = mapedit::Create(library);
+    // The connector finds and opens the game's map through the Map Editor (switching to its tab).
+    int requestedFromDll = -1;
+    dllconnect::Hooks dllHooks;
+    dllHooks.resolveMap = [mapCtx](const std::string& t, const std::string& b, const std::string& q, const std::vector<std::string>& gp,
+                                   std::string& tp, std::vector<std::string>& mp, std::string& missing) {
+        return mapedit::ResolveGameMap(mapCtx, t, b, q, gp, tp, mp, missing);
+    };
+    dllHooks.openInMapEditor = [mapCtx, &requestedFromDll](const std::string& t, const std::string& b, const std::string& q,
+                                                          const std::vector<std::string>& gp) {
+        requestedFromDll = 2; // kMap
+        return mapedit::OpenGameMap(mapCtx, t, b, q, gp);
+    };
+    dllconnect::Context* dllCtx = dllconnect::Create(library, dllHooks);
+    alerts::SetSound(library.sfxEnabled);
+    alerts::SetPopups(library.alertPopups);
+    alerts::SetVolume(library.sfxVolume);
+    dbedit::SetHooks({[](bool save, const char* filterName, const char* filterExt, std::string& path) {
+                          return NativePickFile(save, filterName, filterExt, path);
+                      },
+                      [] { g_requestMainTab = 0; g_requestSubTab = kDbSubTab; }, // File Processing > DB
+                      [&library] { return library.dbPath; },
+                      [&library] { return library.dbAutoLoad; },
+                      [&library](bool on) { library.dbAutoLoad = on; library.SaveConfig(); },
+                      [&library](const std::string& db) {
+                          auto it = library.dbCompileTo.find(db);
+                          return it == library.dbCompileTo.end() ? std::string() : it->second;
+                      },
+                      [&library](const std::string& db, const std::string& res) {
+                          if (library.dbCompileTo[db] != res) { library.dbCompileTo[db] = res; library.SaveConfig(); }
+                      },
+                      [&library] { return library.databaseChecks; }});
+    splash::Step("Database", 0.84f);
+    dbedit::Update(); // the Settings' database, when it opens automatically (else the first frame would)
+    if (!options.dbFile.empty()) dbedit::OpenFile(options.dbFile);
+    if (!options.textureFile.empty()) texedit::OpenPath(options.textureFile);
+    splash::Step("Ready", 1.0f);
+    splash::End();
+    glfwShowWindow(window);
+    // Saved in the config as numbers (GUI_TAB, BACKGROUND_*): new tabs are added at the end, whatever their place.
+    enum { kFiles, kViewer, kMap, kSettings, kDll, kTex, kNone };
+    // The tab asked for on the command line, else the one open when the GUI was last closed.
+    int requestedTab = options.openSettings ? kSettings : options.openMap ? kMap : options.openViewer ? kViewer : options.openTexture ? kTex
+                     : (library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kNone);
+    if (!options.viewerCategory.empty()) {
+        std::string err;
+        if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame, options.viewerYaw)) std::fprintf(stderr, "%s\n", err.c_str());
+        requestedTab = kViewer;
+    }
+    texedit::SetMapSource([mapCtx](questmap::Input& in, std::string& err) { return mapedit::FillQuestMapInput(mapCtx, in, err); });
+    if (!options.mapFiles.empty()) mapedit::OpenFiles(mapCtx, options.mapFiles, options.mapFocus);
+    if (!options.mapMode.empty()) mapedit::SetMode(mapCtx, options.mapMode);
+    if (!options.dbFile.empty()) {
+        requestedTab = kFiles;
+        g_requestSubTab = kDbSubTab; // DB
+    }
+    if (!options.mpFolder.empty()) {
+        mpedit::OpenFolder(*g_library, options.mpFolder);
+        requestedTab = kFiles;
+        g_requestSubTab = kMpSubTab;
+    }
+    bool seeThrough = false;       // a 3D tab was shown last frame (its viewport must see through the window)
+    int frameCount = 0;
+    double lastTime = glfwGetTime();
+
+    // The DB tab first: kDbSubTab.
+    const TabInfo tabs[] = {
+        {"DB", dbedit::DrawTab, nullptr, nullptr, nullptr},  // in-process: no Run button nor log
+        {"Texts", DrawTextsTab, nullptr, nullptr, nullptr},  // the same
+        {"MP / Saves (WIP)", DrawMpTab, nullptr, nullptr, nullptr},        // multiplayer characters (in-process)
+        {"RES / MQ", DrawResToolTab, BuildResToolArgs, "restool", nullptr},
+        {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
+        {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
+        {"MOB Dump", DrawMobDumpTab, BuildMobDumpArgs, "mobdump", nullptr},
+    };
+
+    int maximizeIn = saved.windowMaximized ? 3 : 0; // frames: after the window is shown (Wayland maps it at the first swap)
+    int normalW = std::max(saved.windowW, 640), normalH = std::max(saved.windowH, 400), normalX = saved.windowX, normalY = saved.windowY;
+    ImVec2 bgSize(0, 0);
+    GLFWwindow* scriptWin = nullptr;   // the script's own window, while it is open
+    ImGuiContext* scriptImgui = nullptr;
+    auto closeScriptWindow = [&]() {
+        if (!scriptWin) return;
+        ImGuiContext* mainImgui = ImGui::GetCurrentContext();
+        glfwMakeContextCurrent(scriptWin);
+        ImGui::SetCurrentContext(scriptImgui);
+        ImGui_ImplOpenGL2_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext(scriptImgui);
+        ImGui::SetCurrentContext(mainImgui);
+        glfwDestroyWindow(scriptWin);
+        scriptWin = nullptr;
+        scriptImgui = nullptr;
+        glfwMakeContextCurrent(window);
+    };
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+        if (maximizeIn > 0) { if (--maximizeIn == 0) glfwMaximizeWindow(window); }
+        // The last normal (not maximized) size and place, kept for the next start.
+        else if (!glfwGetWindowAttrib(window, GLFW_MAXIMIZED) && !glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
+            glfwGetWindowSize(window, &normalW, &normalH);
+            if (!wayland) glfwGetWindowPos(window, &normalX, &normalY);
+        }
+        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED)) {
+            ImGui_ImplGlfw_Sleep(16);
+            continue;
+        }
+
+        PumpActiveProcess();
+        dllconnect::Update(dllCtx);
+        dbedit::Update();
+        if (library.vsync != vsyncSet) { vsyncSet = library.vsync; glfwSwapInterval(vsyncSet ? 1 : 0); }
+        ImGui::GetStyle().AntiAliasedLines = ImGui::GetStyle().AntiAliasedLinesUseTex = ImGui::GetStyle().AntiAliasedFill = library.uiAntialias;
+        applyTheme();
+        double now = glfwGetTime();
+        float dt = static_cast<float>(now - lastTime);
+        lastTime = now;
+
+        ImGui_ImplOpenGL2_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        int fbW, fbH;
+        glfwGetFramebufferSize(window, &fbW, &fbH);
+        ImGui::SetNextWindowPos(ImVec2(0, 0));
+        ImGui::SetNextWindowSize(ImVec2(static_cast<float>(fbW) / io.DisplayFramebufferScale.x,
+                                         static_cast<float>(fbH) / io.DisplayFramebufferScale.y));
+        // A background picture for the tab shown last frame (Settings > Background): drawn under ImGui like the 3D views.
+        const int bgTab = library.guiTab >= kFiles && library.guiTab <= kTex ? library.guiTab : kFiles;
+        const std::string& bgPath = !library.tabBackground[bgTab].empty() ? library.tabBackground[bgTab] : library.background;
+        const GLuint bgTexture = BackgroundTexture(bgPath, bgSize);
+        ui::BackgroundShown() = bgTexture != 0 && library.backgroundOpacity > 0.0f;
+        if (seeThrough || ui::BackgroundShown()) ImGui::SetNextWindowBgAlpha(0.0f); // drawn underneath ImGui
+        ImGui::Begin("##main", nullptr,
+                      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                      ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus);
+
+        bool shown3d = false;
+        int shownTab = kNone;
+        { // the "?" in the top right corner: the keys of the tab shown (drawn first, the tabs never reach it)
+            const ImVec2 back = ImGui::GetCursorPos();
+            const float w = ImGui::GetFrameHeight();
+            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowContentRegionMax().x - w, back.y));
+            if (ImGui::Button("?", ImVec2(w, 0))) ImGui::OpenPopup("##keyshelp");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("The keys and mouse controls of this tab"));
+            if (ImGui::BeginPopup("##keyshelp")) {
+                KeysHelp(library, library.guiTab);
+                ImGui::Separator(); // the GPL's notice for interactive programs
+                ImGui::TextDisabled("%s %s - Copyright (C) 2026 Kyr4l", PROGRAM_NAME_SHOWN, PROGRAM_VERSION);
+                ImGui::TextDisabled("%s", i18n::Tr("Free software under the GNU GPL, version 3 or later, with NO WARRANTY (README: License)."));
+                ImGui::EndPopup();
+            }
+            ImGui::SetCursorPos(back);
+        }
+        if (ImGui::BeginTabBar("##maintabs")) {
+            if (requestedFromDll >= 0) { requestedTab = requestedFromDll; requestedFromDll = -1; }
+            if (g_requestMainTab >= 0) { requestedTab = g_requestMainTab; g_requestMainTab = -1; }
+            auto flags = [&](int tab) { return requestedTab == tab ? ImGuiTabItemFlags_SetSelected : 0; };
+            if (ImGui::BeginTabItem("File Processing", nullptr, flags(kFiles))) {
+                DrawFileProcessingTab(tabs, std::size(tabs));
+                shownTab = kFiles;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("3D Viewer", nullptr, flags(kViewer))) {
+                viewer::DrawTab(viewerCtx);
+                shown3d = true;
+                shownTab = kViewer;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Map Editor", nullptr, flags(kMap))) {
+                mapedit::DrawTab(mapCtx);
+                shown3d = true;
+                shownTab = kMap;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Texture Editor", nullptr, flags(kTex))) {
+                texedit::DrawTab(library);
+                shownTab = kTex;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("UM DLL Connector", nullptr, flags(kDll))) {
+                dllconnect::DrawTab(dllCtx);
+                shownTab = kDll;
+                ImGui::EndTabItem();
+            }
+            if (ImGui::BeginTabItem("Settings", nullptr, flags(kSettings))) {
+                ui::SettingsTab(library, sourcesState);
+                shownTab = kSettings;
+                ImGui::EndTabItem();
+            }
+            requestedTab = kNone;
+            ImGui::EndTabBar();
+        }
+        if (shownTab != kNone && shownTab != library.guiTab) { // remembered for the next start
+            library.guiTab = shownTab;
+            library.SaveConfig();
+        }
+        seeThrough = shown3d;
+        // New map or script check problems (the checks run while the Map Editor is shown).
+        {
+            int newErrors = 0, newWarnings = 0, errors = 0, warnings = 0;
+            if (mapedit::TakeNewProblems(mapCtx, newErrors, newWarnings, errors, warnings)) {
+                const std::string text = "Map Editor checks: " + std::to_string(errors) + " error(s), " + std::to_string(warnings) +
+                                         " warning(s) (" + std::to_string(newErrors) + " new error(s), " + std::to_string(newWarnings) +
+                                         " new warning(s)).";
+                alerts::Raise(newErrors ? alerts::Level::Error : alerts::Level::Warning, text, "Map Editor > Checks",
+                              [mapCtx] { g_requestMainTab = 2; mapedit::ShowChecks(mapCtx); });
+            }
+        }
+        alerts::Draw();
+        umlog::DrawWindow(&library.logWindow);
+        // First start (no LANGUAGE in um-multitool.cfg): ask for the display language. English is the default.
+        if (askLanguage) {
+            ImGui::OpenPopup("Language / Язык##firstLanguage");
+            askLanguage = false;
+        }
+        ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+        if (ImGui::BeginPopupModal("Language / Язык##firstLanguage", nullptr,
+                                    ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove)) {
+            ImGui::TextUnformatted("Choose the display language.");
+            ImGui::TextUnformatted("Выберите язык интерфейса.");
+            ImGui::TextDisabled("It can be changed later in Settings. / Можно изменить в настройках.");
+            ImGui::Spacing();
+            // And the problem sounds (off by default), asked once with the language.
+            if (ImGui::Checkbox("Warning and error sounds / Звуки предупреждений и ошибок", &library.sfxEnabled))
+                alerts::SetSound(library.sfxEnabled);
+            ImGui::Spacing();
+            for (i18n::Lang lang : {i18n::Lang::English, i18n::Lang::Russian}) {
+                if (lang != i18n::Lang::English) ImGui::SameLine();
+                if (ImGui::Button(i18n::NativeName(lang), ImVec2(140, 0))) {
+                    i18n::Set(lang);
+                    library.language = i18n::Code(lang);
+                    library.SaveConfig();
+                    ImGui::CloseCurrentPopup();
+                }
+                if (lang == i18n::Lang::English) ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndPopup();
+        }
+        ImGui::End();
+
+        if (library.showFps) { // Settings > Performance: frames per second, averaged over the last half second
+            static double windowStart = 0.0, shownFps = 0.0, shownMs = 0.0;
+            static int frames = 0;
+            ++frames;
+            if (windowStart == 0.0) { windowStart = now; shownFps = dt > 0 ? 1.0 / dt : 0.0; shownMs = dt * 1000.0; } // this frame's, until the first average
+            if (now - windowStart >= 0.5) {
+                shownFps = frames / (now - windowStart);
+                shownMs = 1000.0 * (now - windowStart) / frames;
+                frames = 0;
+                windowStart = now;
+            }
+            char text[96];
+            std::snprintf(text, sizeof text, "%.0f fps  %.1f ms%s", shownFps, shownMs, g_resting ? "  (resting)" : "");
+            const ImVec2 size = ImGui::CalcTextSize(text);
+            const ImVec2 at(io.DisplaySize.x - size.x - 44.0f, 4.0f); // left of the ? help button
+            ImDrawList* fg = ImGui::GetForegroundDrawList();
+            fg->AddRectFilled(ImVec2(at.x - 5.0f, at.y - 2.0f), ImVec2(at.x + size.x + 5.0f, at.y + size.y + 2.0f), IM_COL32(0, 0, 0, 150), 3.0f);
+            fg->AddText(at, IM_COL32(255, 255, 255, 230), text);
+        }
+
+        ImGui::Render();
+        glViewport(0, 0, fbW, fbH);
+        const ImVec4 bg = ImGui::GetStyleColorVec4(ImGuiCol_WindowBg);
+        glClearColor(bg.x, bg.y, bg.z, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        if (ui::BackgroundShown()) DrawBackground(bgTexture, bgSize, fbW, fbH, library.backgroundOpacity);
+        viewer::RenderGl(viewerCtx, fbW, fbH, io.DisplayFramebufferScale.x, dt);
+        mapedit::RenderGl(mapCtx, fbW, fbH, io.DisplayFramebufferScale.x);
+        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+        if (!options.screenshotPath.empty() && ++frameCount >= 8 && (!mapedit::Busy(mapCtx) || frameCount > 3000)) {
+            SaveScreenshot(options.screenshotPath, fbW, fbH);
+            glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+
+        glfwSwapBuffers(window);
+
+        // Settings > Performance: a frame rate cap, and resting while the mouse and keyboard are quiet.
+        if (library.frameRateLimit > 0 || library.idleRedraw) {
+            static double lastActivity = 0.0;
+            bool active = ImGui::IsAnyMouseDown() || io.MouseDelta.x != 0.0f || io.MouseDelta.y != 0.0f || io.MouseWheel != 0.0f ||
+                          io.InputQueueCharacters.Size > 0 || ImGui::IsAnyItemActive() || mapedit::Busy(mapCtx) || IsValid(g_activeProc) ||
+                          !options.screenshotPath.empty();
+            for (int k = ImGuiKey_NamedKey_BEGIN; k < ImGuiKey_NamedKey_END && !active; ++k) if (ImGui::IsKeyDown(static_cast<ImGuiKey>(k))) active = true;
+            if (active) lastActivity = now;
+            double minFrame = library.frameRateLimit > 0 ? 1.0 / std::max(library.frameRateLimit, 25) : 0.0;
+            g_resting = library.idleRedraw && now - lastActivity > 0.5;
+            if (g_resting) minFrame = std::max(minFrame, 1.0 / 25.0);
+            const double spent = glfwGetTime() - now;
+            // Resting: wait for an event rather than sleep, so the first mouse move or key wakes the loop at once.
+            if (spent < minFrame) {
+                if (!active && library.idleRedraw) glfwWaitEventsTimeout(minFrame - spent);
+                else ImGui_ImplGlfw_Sleep(static_cast<int>((minFrame - spent) * 1000.0));
+            }
+        }
+
+        // The Map Editor's script in a window of its own: a second OS window (sharing the GL objects)
+        // with its own ImGui context, drawn after the main one each frame.
+        const bool scriptWanted = mapedit::ScriptWindowWanted(mapCtx);
+        ImGuiContext* mainImgui = ImGui::GetCurrentContext();
+        if (scriptWanted && !scriptWin) {
+            const ImGuiStyle style = ImGui::GetStyle();
+            glfwDefaultWindowHints();
+            HintAppId("um-multitool");
+            glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-multitool");
+            glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-multitool");
+            const std::string scriptTitle = "Script - " + std::string(PROGRAM_NAME_SHOWN);
+            scriptWin = glfwCreateWindow(960, 720, scriptTitle.c_str(), nullptr, window);
+            if (scriptWin) {
+                glfwMakeContextCurrent(scriptWin);
+                glfwSwapInterval(0); // the main window's swap keeps the pace
+                scriptImgui = ImGui::CreateContext();
+                ImGui::SetCurrentContext(scriptImgui);
+                ImGui::GetStyle() = style;
+                ImGui::GetIO().IniFilename = nullptr;
+                AddFallbackFonts(ImGui::GetIO());
+                ImGui_ImplGlfw_InitForOpenGL(scriptWin, true);
+                ImGui_ImplOpenGL2_Init();
+                ImGui::SetCurrentContext(mainImgui);
+                glfwMakeContextCurrent(window);
+            } else {
+                mapedit::CloseScriptWindow(mapCtx);
+            }
+        }
+        if (scriptWin && scriptWanted) {
+            glfwMakeContextCurrent(scriptWin);
+            ImGui::SetCurrentContext(scriptImgui);
+            if (mapedit::TakeScriptWindowFocus(mapCtx)) glfwFocusWindow(scriptWin);
+            ImGui_ImplOpenGL2_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+            mapedit::DrawScriptWindow(mapCtx);
+            ImGui::Render();
+            int sw, sh;
+            glfwGetFramebufferSize(scriptWin, &sw, &sh);
+            glViewport(0, 0, sw, sh);
+            glClearColor(bg.x, bg.y, bg.z, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+            glfwSwapBuffers(scriptWin);
+            ImGui::SetCurrentContext(mainImgui);
+            glfwMakeContextCurrent(window);
+            if (glfwWindowShouldClose(scriptWin)) mapedit::CloseScriptWindow(mapCtx);
+        }
+        if (scriptWin && !mapedit::ScriptWindowWanted(mapCtx)) closeScriptWindow();
+    }
+    closeScriptWindow();
+
+    viewer::Destroy(viewerCtx);
+    mapedit::Destroy(mapCtx);
+    dllconnect::Destroy(dllCtx);
+    alerts::Shutdown();
+    // Remember the window for the next start.
+    library.windowMaximized = glfwGetWindowAttrib(window, GLFW_MAXIMIZED) == GLFW_TRUE;
+    library.windowW = normalW;
+    library.windowH = normalH;
+    if (!wayland) { library.windowX = normalX; library.windowY = normalY; }
+    library.SaveConfig();
+    ImGui_ImplOpenGL2_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return 0;
+}
+
+// The File Processing tab: one sub-tab per tool, the Run button and the log.
+static void DrawFileProcessingTab(const TabInfo* tabs, size_t count) {
+    if (ImGui::BeginTabBar("##tabs")) {
+        const int requested = g_requestSubTab;
+        g_requestSubTab = -1;
+        for (int i = 0; i < static_cast<int>(count); ++i) {
+            if (ImGui::BeginTabItem(tabs[i].name, nullptr, requested == i ? ImGuiTabItemFlags_SetSelected : 0)) {
+                g_activeTab = i;
+                g_activeSubcommand = tabs[i].subcommand ? tabs[i].subcommand : "";
+                ImGui::Spacing();
+                tabs[i].draw();
+                ImGui::EndTabItem();
+            }
+        }
+        ImGui::EndTabBar();
+    }
+    if (!tabs[g_activeTab].buildArgs) return; // a tab working in-process (DB)
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    bool running = IsValid(g_activeProc);
+    ImGui::BeginDisabled(running);
+    if (ImGui::Button(running ? "Running..." : "Run", ImVec2(110, 32))) {
+        OnRunClicked();
+    }
+    ImGui::EndDisabled();
+    ImGui::SameLine();
+    if (ImGui::Button("Clear log", ImVec2(110, 32))) {
+        g_log.clear();
+    }
+    ImGui::SameLine();
+    ImGui::TextUnformatted(g_statusText.c_str());
+
+    float progressFrac = running ? static_cast<float>(g_progressPhase / 100.0) : 0.0f;
+    ImGui::ProgressBar(progressFrac, ImVec2(-1, 0), running ? "Running..." : "Idle");
+
+    ImGui::Spacing();
+    ImGui::BeginChild("##log", ImVec2(0, 0), ImGuiChildFlags_Borders);
+    ImGui::TextUnformatted(g_log.c_str());
+    if (g_logDirty) {
+        ImGui::SetScrollHereY(1.0f);
+        g_logDirty = false;
+    }
+    ImGui::EndChild();
+}

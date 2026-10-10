@@ -1,0 +1,135 @@
+# um-texts 1
+=== tip 40100
+Akceptacja
+
+=== tip 40101
+Powrót do menu g³ównego
+
+=== tip 40200
+Tworzenie postaci sieciowe
+Przenosi do Ekranu tworzenia 
+postaci sieciowych
+
+=== tip 40201
+Zmiana nazwy klanu
+Mo¿esz mieniæ nazwê klanu do którego 
+nale¿y Twoja postaæ sieciowa.
+Nie mo¿esz jednak zmieniæ imienia postaci sieciowej.
+
+=== tip 40202
+Usuniêcie postaci sieciowej
+Twoja postaæ sieciowa zostanie usuniêta.
+Po usuniêciu nie bêdziesz móg³ odzyskaæ postaci.
+
+=== tip 40203
+Wyœwietl postaæ
+Mo¿esz wyœwietliæ w³aœciwoœci, wyposa¿enie i
+zawartoœæ inwentarza Twojej postaci
+sieciowej. Mo¿esz tak¿e zmieniæ jej ubiór, 
+broñ i czary oraz rozdysponowaæ doœwiadczenie.
+
+=== tip 40300
+Dalej
+Przejœcie do ekranu wyposa¿enia, umiejêtnoœci 
+i zdolnoœci postaci sieciowej.
+Uwaga: mo¿esz przejœæ do ekranu wyposa¿enia 
+tylko po nadaniu postaci imienia i tylko jeœli bilans
+w³aœciwoœæ postaci równa siê zero.
+
+=== tip 40301
+Wstecz
+Powrót do ekranu tworzenia
+postacie sieciowych.
+
+=== tip 40302
+Anuluj
+Anuluje wszystkie zmiany w³aœciwoœci postaci.
+Zostan¹ przywrócone wartoœci pocz¹tkowe.
+
+=== tip 40400
+Przewiñ w prawo
+Przewiniêcie listy portretów postaci sieciowych 
+w prawo
+
+=== tip 40401
+Przewiñ w lewo
+Przewiniêcie listy portretów postaci sieciowych 
+w lewo
+
+=== tip 40500
+Dalej
+Przejœcie do ekranu tworzenia postaci 
+sieciowych. Nowo utworzona postaæ zostanie zapisana.
+
+=== tip 40501
+Wstecz
+Powrót do ekranu tworzenia postaci sieciowych.
+Uwaga: wszystkie zmiany w wyposa¿eniu,
+umiejêtnoœciach i zdolnoœciach zostan¹ stracone.
+
+=== tip 40502
+Anuluj
+Anuluje zmiany w wyposa¿eniu, umiejêtnoœciach 
+i zdolnoœciach. 
+Zostan¹ przywrócone wartoœci pocz¹tkowe.
+
+=== tip 40600
+Potwierdzenie
+
+=== tip 40601
+Odmowa
+
+=== tip 40602
+Dodaj adres
+Dodaje adres do 
+Ksi¹¿ki adresowej
+
+=== tip 40603
+Usuñ adres
+Usuwa adres 
+z Ksi¹¿ki adresowej
+
+=== tip 40610
+Aby uzyskaæ informacje o serwerach
+Wciœnij przycisk "Odœwie¿" aby uzyskaæ listê
+aktualnie uruchomionych serwerów. 
+Zwróæ uwagê ¿e komputer musi byæ po³¹czony 
+z Internetem.
+
+=== tip 40611
+Dodaj/usuñ serwer z Ksi¹¿ki adresowej
+Mo¿esz zapisaæ serwer w swojej Ksi¹¿ce adresowej. 
+Serwery takie bêd¹ zawsze znajdowaæ siê na  liœcie  
+(¿ó³te oznaczenie).
+Dodawanie serwera do Ksi¹¿ki adresowej: Wciœniêcie klawisza 
+"Dodaj/usuñ" wywo³uje okno wprowadzenie/edycji adresu serwera .
+Jeœli na liœcie zosta³ wybrany jakiœ serwer jego adres pojawi
+siê w oknie. 
+Usuwanie serwera: wybierz serwer z Ksi¹¿ki  adresowej i wciœnij 
+przycisk "Dodaj/usuñ".
+
+=== tip 40612
+Serwer prywatny
+Ogólno dostêpne serwery s¹ rejestrowane na liœcie serwerów dostêpnych 
+dla wszystkich graczy. Aby uruchomiæ taki serwer musisz mieæ dostêp do Internetu. 
+Serwery prywatne wystêpuj¹ w sieci lokalnej a gracze nie musz¹ mieæ dostêpu
+do Internetu. 
+Uwaga! Gracze z Internetu mog¹ dostaæ siê na serwer prywatny tylko jeœli 
+znaj¹ jego adres IP a serwer jest po³¹czony z Internetem.
+
+=== tip 40613
+Has³o 
+Tworzy has³o dostêpu do serwera
+
+=== tip 41000
+PotwierdŸ
+ZatwierdŸ wymianê.
+
+=== tip 41001
+Odmów
+Odmów wymiany.
+
+=== tip 41003
+Wyjœcie
+WyjdŸ z ekranu wymiany.
+

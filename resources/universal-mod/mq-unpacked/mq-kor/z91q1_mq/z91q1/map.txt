@@ -12,6 +12,8 @@ cave
 #exit 1
 bz1mpg 1
 #deploy
+133 21 140 28
+#remove
 120 5 133 25
 #view
 300

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 /**
  * ============================================================================
  * um-inireg - High-Performance Evil Islands INI <-> REG Converter
@@ -873,6 +875,18 @@ static bool ParseCommandLine(int argc, char* argv[], CliOptions& opt) {
     }
 
     return true;
+}
+
+// In-memory conversions for the Map Editor's quest tab (declared in subtools.hpp).
+bool IniRegTextToReg(const std::string& iniText, std::vector<uint8_t>& regOut) {
+    IniDocument doc;
+    if (!ParseIniText(iniText, doc)) return false;
+    regOut = ConvertIniToReg(doc);
+    return true;
+}
+
+bool IniRegRegToText(const std::vector<uint8_t>& reg, std::string& iniOut, std::string& err) {
+    return ConvertRegToIni(reg.data(), reg.size(), iniOut, err);
 }
 
 int RunIniReg(int argc, char* argv[]) {

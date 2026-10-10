@@ -5,12 +5,11 @@
 # Automates compiling, packing, and assembling the Evil Islands Universal Mod.
 #
 # Requirements:
-#   - wine (for legacy Windows CLI tools: DBEditor)
 #   - rsync
 #   - parallel (GNU Parallel)
 #   - i686-w64-mingw32-g++ (MinGW 32-bit cross compiler for um.dll)
-#   - bin/um-multitool (C++ merged MOB/INI-REG/DDS-MMP/RES CLI tool)
-#     subcommands: mobdump, inireg, ddsmmp, restool
+#   - bin/um-multitool (C++ merged MOB/INI-REG/DDS-MMP/RES/XLSXDB CLI tool)
+#     subcommands: mobdump, inireg, ddsmmp, restool, xlsxdb (replaces legacy wine+DBEditor)
 #
 # Usage:
 #   ./makemod.sh [options]
@@ -29,7 +28,7 @@
 #   -h, --help              Show this help message
 # ==============================================================================
 
-# Note: Do not enable `set -e` as legacy WINE tools and wildcard lookups may return non-zero exit codes
+# Note: Do not enable `set -e` as wildcard lookups may return non-zero exit codes
 
 # ------------------------------------------------------------------------------
 # Terminal Color Codes & UI Helpers
@@ -55,8 +54,6 @@ log_error() { echo -e "${RED}[ERROR]${RESTORE} $*" >&2; }
 # ------------------------------------------------------------------------------
 # Environment & Directory Configuration
 # ------------------------------------------------------------------------------
-export WINEDEBUG=-all
-
 BUILD_TIMESTAMP="$(date +"%y%m%d-%H%M")"
 readonly BUILD_TIMESTAMP
 readonly MOD_DIR="mods-out/$BUILD_TIMESTAMP"
@@ -220,7 +217,7 @@ run_interactive_prompts() {
 # ------------------------------------------------------------------------------
 check_dependencies() {
     local missing=()
-    for cmd in wine rsync parallel i686-w64-mingw32-g++; do
+    for cmd in rsync parallel i686-w64-mingw32-g++; do
         if ! command -v "$cmd" &>/dev/null; then
             missing+=("$cmd")
         fi
@@ -321,6 +318,11 @@ process_quests() {
         # 1. Convert quest INI -> REG in place across every quest at once
         find "$lang_dir" -maxdepth 3 -type f -name "*.ini" -print0 | \
             parallel -0 -j "$PARALLEL_JOBS" bin/um-multitool inireg {} > /dev/null || true
+        # The archive stores each file's modification time: a freshly made .reg would give every .mq a
+        # new timestamp (and git a change) at each build. It takes its .ini's time instead.
+        find "$lang_dir" -maxdepth 3 -type f -name "*.ini" -print0 | while IFS= read -r -d '' ini; do
+            [[ -f "${ini%.ini}.reg" ]] && touch -r "$ini" "${ini%.ini}.reg"
+        done
 
         # 2. Batch-pack every *_mq folder in this language directory in one parallel call,
         #    omitting quest.ini (only the source for quest.reg, not archive content).
@@ -410,12 +412,12 @@ process_databases() {
         cd "$XLSX_DIR" || exit 1
 
         log_info "Converting XLSX database -> RES..."
-        wine start /wait ../bin/eidbeditor-144/DBEditor.exe database.xlsx
+        ../bin/um-multitool xlsxdb database.xlsx
         log_info "Dumping database.xlsx -> Markdown..."
         python3 ../bin/xlsx2md.py database.xlsx "../$XLSX_DUMP_DIR/database.md"
 
         log_info "Converting XLSX databaselmp -> RES..."
-        wine start /wait ../bin/eidbeditor-144/DBEditor.exe databaselmp.xlsx
+        ../bin/um-multitool xlsxdb databaselmp.xlsx
         log_info "Dumping databaselmp.xlsx -> Markdown..."
         python3 ../bin/xlsx2md.py databaselmp.xlsx "../$XLSX_DUMP_DIR/databaselmp.md"
 
@@ -456,12 +458,16 @@ update_version_info() {
     sed -i "s/^Version=.*/Version=$current_version/" "$INI_DIR/config.ini" 2>/dev/null || true
 
     # Update version_name in texts folders
+    # (through um-multitool: the entry may be a loose file or inside STRING.umtexts, the grouped texts format)
+    local versiontmp
+    versiontmp="$(mktemp)"
     for textsres in "$RES_TEXTS_DIR"/texts-*_res; do
-        local stringversionname="$textsres/string version_name"
-        cp -fvL "$VERSION_TEMPLATE" "$stringversionname"
-        sed -i "s/ver\./ver. $current_version/" "$stringversionname"
-        sed -i "s/post-commit\./post-commit. $commit_hash/" "$stringversionname"
+        cp -fL "$VERSION_TEMPLATE" "$versiontmp"
+        sed -i "s/ver\./ver. $current_version/" "$versiontmp"
+        sed -i "s/post-commit\./post-commit. $commit_hash/" "$versiontmp"
+        bin/um-multitool texts --set "$textsres" "string version_name" "$versiontmp"
     done
+    rm -f "$versiontmp"
     log_ok "Version $current_version (commit $commit_hash) written across configs"
 }
 
@@ -495,7 +501,8 @@ pack_texts_resources() {
         local langpackdir="$MOD_DIR/lang-packs/$langcode/res"
         mkdir -p "$langpackdir"
 
-        bin/um-multitool restool --pack "$restexts" -o "$langpackdir/$targetname"
+        # texts --pack reads both layouts: grouped <TYPE>.umtexts files and loose files (one per entry)
+        bin/um-multitool texts --pack "$restexts" -o "$langpackdir/$targetname"
 
         # Primary English language is copied directly to mod root res
         if [[ "$langcode" == "eng" ]]; then
@@ -528,9 +535,16 @@ pack_general_resources() {
 
 compile_mod_dll() {
     log_step "Compiling Universal Mod DLL (um.dll)"
-    i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um.dll" um.cpp \
-        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lgdi32
+    # The DLL's sources live in um-dll/ (a link to resources/universal-mod/um-dll): every .cpp in
+    # it is compiled, and its headers are found through -I. The tests/ folder is not built here.
+    local dll_sources=(um-dll/*.cpp)
+    i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um.dll" "${dll_sources[@]}" -I um-dll \
+        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lgdi32 -lws2_32
     log_ok "um.dll built successfully"
+    log_step "Compiling the engine DLL (um-engine.dll, loaded by um.dll)"
+    i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um-engine.dll" um-engine/*.cpp -I um-engine \
+        -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lws2_32
+    log_ok "um-engine.dll built successfully"
 }
 
 sync_to_release_directory() {

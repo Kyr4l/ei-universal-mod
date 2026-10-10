@@ -1,0 +1,314 @@
+# um-texts 1
+=== string disconnect
+Serwer nie odpowiada!
+
+=== string disconnect_msg
+Gra przerwana: serwer zosta³ wy³¹czny lub wyst¹pi³y problemy z po³¹czeniem
+
+=== string lmp_allod_name_0
+Gipath
+
+=== string lmp_allod_name_1
+Ingos
+
+=== string lmp_allod_name_2
+Suslanger
+
+=== string lmp_allod_name_3
+Jaskinia
+
+=== string lmp_camping_abort
+Nie mo¿na w tej chwili wykonaæ szybkiego przeniesienia do Bazy!
+
+=== string lmp_camping_count
+Czas pozosta³y do szybkiego przeniesienia do Bazy: % sekund.
+
+=== string lmp_camping_start
+Przygotowanie do szybkiego przeniesienia do Bazy
+
+=== string lmp_cannot_connect
+Nie mo¿na ustanowiæ po³¹czenia!
+
+=== string lmp_cannot_connect_msg
+Mog¹ wyst¹piæ problemy zwi¹zane z po³¹czeniem z serwerem.
+
+=== string lmp_connection_0
+Nazwa serwera:
+
+=== string lmp_connection_1
+Gracze:
+
+=== string lmp_connection_10
+Odœwie¿
+
+=== string lmp_connection_11
+Dodaj/Usuñ
+
+=== string lmp_connection_12
+Imiê
+
+=== string lmp_connection_13
+#
+
+=== string lmp_connection_14
+Wyspa
+
+=== string lmp_connection_15
+Ping
+
+=== string lmp_connection_16
+Serwer prywatny
+
+=== string lmp_connection_17
+Has³o
+
+=== string lmp_connection_18
+WprowadŸ has³o
+
+=== string lmp_connection_19
+Podaj adres IP serwera
+
+=== string lmp_connection_2
+Maksymalna iloœæ graczy:
+
+=== string lmp_connection_20
+Pobieranie listy serwerów
+
+=== string lmp_connection_21
+Wymagane has³o
+
+=== string lmp_connection_3
+Baza:
+
+=== string lmp_connection_4
+Zadanie:
+
+=== string lmp_connection_5
+IP:
+
+=== string lmp_connection_6
+Ping:
+
+=== string lmp_connection_7
+Nowy serwer:
+
+=== string lmp_connection_8
+£¹czenie…
+
+=== string lmp_connection_9
+PK:
+
+=== string lmp_deletepers
+Usuñ postaæ
+
+=== string lmp_deletepers_msg
+Postaæ zostanie usuniêta i nie bêdzie mo¿na jej odzyskaæ. Czy chcesz kontynuowaæ?
+
+=== string lmp_exch_they_offer
+Wymieniæ?
+
+=== string lmp_exch_we_offer
+Wymiana!
+
+=== string lmp_female_voice
+G³os: kobiecy
+
+=== string lmp_male_voice
+G³os: mêski
+
+=== string lmp_no_pers
+Brak postaci dla gry wieloosobowej!
+
+=== string lmp_no_pers_msg
+Nie masz postaci do gry wieloosobowej. Aby rozpocz¹æ rozgrywkê musisz stworzyæ now¹ postaæ.
+
+=== string lmp_pers_delete
+Usuñ
+
+=== string lmp_pers_new
+Nowy
+
+=== string lmp_pers_redress
+Wyœwietl
+
+=== string lmp_pers_rename
+Zmieñ klan
+
+=== string lmp_pers_tall
+Wysokoœæ
+
+=== string lmp_pers_tall_desc
+Postaæ mo¿e mieæ dowolny wzrost pomiêdzy 0 a 100 jednostek. Wzrost niema wp³ywu na w³aœciwoœci postaci.
+
+=== string lmp_pk_off
+zabroniony
+
+=== string lmp_pk_on
+dozwolony
+
+=== string lmp_player_banned
+Gracz %s nie ma prawa do³¹czyæ do gry
+
+=== string lmp_player_connected
+Gracz %s do³¹czy³ do gry
+
+=== string lmp_player_disconnected
+Gracz %s opuœci³ grê
+
+=== string lmp_player_kicked
+Gracz %s zosta³ wyrzucony z gry
+
+=== string lmp_player_lost_connection
+Gracz %s straci³ po³¹czenie z serwerem
+
+=== string lmp_points_left
+Bilans
+
+=== string lmp_points_left_desc
+W³aœciwoœci postaci musz¹ byæ zbilansowane: tzn. Jeœli zwiêkszysz jeden z parametrów, inny zostanie odpowiednio zmniejszony. Ca³kowity bilans w³aœciwoœci musi wynosiæ zero. W przeciwnym wypadku ukoñczenie tworzenia postacie sieciowej bêdzie niemo¿liwe. 
+
+=== string lmp_quest_canceled
+Zadanie %s przerwane
+
+=== string lmp_quest_completed
+Zadanie %s zakoñczone
+
+=== string lmp_quest_taken
+Zaakceptowane zadanie: %s
+
+=== string lmp_select_voice
+Wybór g³osu
+
+=== string lmp_select_voice_desc
+Mo¿esz wybraæ dowolny g³os z listy dla swej postaci sieciowej. Kliknij na nazwie g³osy by go wybraæ.
+
+=== string lmp_server_full
+Nie mo¿na ustanowiæ po³¹czenia!
+
+=== string lmp_server_full_msg
+Serwer nie mo¿e przyj¹æ w tej chwili nowych graczy
+
+=== string lmp_status_base
+W bazie
+
+=== string lmp_status_camp
+Handel
+
+=== string lmp_status_connect
+Wejœcia
+
+=== string lmp_status_zone
+Na mapie
+
+=== string lmp_trade_canceled
+Gracz %s odmówi³ wymian
+
+=== string lmp_trade_requested
+Gracz %s oferuje wymianê
+
+=== string lmp_voices
+Wybierz g³os
+
+=== string lmp_wrong_password
+Niew³aœciwe has³o
+
+=== string lmp_wrong_password_msg
+Po³¹czenie niemo¿liwe. Wpisz poprawne has³o.
+
+=== string lmp_wrong_protocol
+Nie mo¿na ustanowiæ po³¹czenia!
+
+=== string lmp_wrong_protocol_msg
+Z³a wersja protoko³u komunikacyjnego
+
+=== string lmp_you_are_banned
+Zosta³eœ od³¹czony od gry
+
+=== string lmp_you_are_banned_msg
+Twój adres IP zosta³ od³¹czony od aktualnie toczonej na tym serwerze rozgrywki.
+
+=== string lmp_zone_disabled
+Dostêp do Strefy gry jest zabroniony
+
+=== string lmp_zone_enabled
+Dostêp do Strefy gry otwarty
+
+=== string reserved_02
+Gra zatrzymana przez gracza: %s
+
+=== string reserved_04
+Zaczekaj...
+
+=== string reserved_05
+Zarezerwowane
+
+=== string reserved_06
+Zarezerwowane
+
+=== string reserved_07
+Zarezerwowane
+
+=== string reserved_08
+Zarezerwowane
+
+=== string reserved_09
+Zarezerwowane
+
+=== string reserved_10
+Zarezerwowane
+
+=== string reserved_11
+Zarezerwowane
+
+=== string reserved_12
+Zarezerwowane
+
+=== string reserved_13
+Zarezerwowane
+
+=== string reserved_14
+Zarezerwowane
+
+=== string reserved_15
+Zarezerwowane
+
+=== string reserved_16
+Zarezerwowane
+
+=== string reserved_17
+Zarezerwowane
+
+=== string reserved_19
+Zarezerwowane
+
+=== string reserved_20
+Reserved
+
+=== string reserved_22
+Drogi przyjacielu,
+Jeœli widzisz ten komunikat oznacza to ¿e gmera³eœ w plikach gry. Twórcy gry gratuluj¹ Ci bohaterskich osi¹gniêæ, musz¹ jednak przestrzec Ciê ¿e jeœli zmieni³eœ cokolwiek swymi obleœnymi ³apkami, wedle wszelkiego prawdopodobieñstwa, gra bêdzie dzia³a³a niestabilnie b¹dŸ nie uruchomi siê wcale.
+Wszystkiego najlepszego,
+Kamikaze,
+Edytorzy tekstów gry.
+
+=== string xch_accept
+PotwierdŸ wymianê
+
+=== string xch_current_money
+Pieni¹dze:
+
+=== string xch_money_offer
+Wartoœæ wymiany oferowana przez Ciebie:
+
+=== string xch_money_remote
+Wartoœæ wymiany oferowana Tobie:
+
+=== string xch_remote_cancel
+Odmowa
+
+=== string xch_remote_header
+OdpowiedŸ na oferowan¹ wymianê:
+
+=== string xch_remote_ok
+Zgoda
+

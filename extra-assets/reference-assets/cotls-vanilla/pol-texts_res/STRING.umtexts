@@ -1,0 +1,1285 @@
+# um-texts 1
+=== string action_accel
+Zwiêksz prêdkoœæ gry
+
+=== string action_camera1
+Pozycja kamery 1
+
+=== string action_camera2
+Pozycja kamery 2
+
+=== string action_camera3
+Pozycja kamery 3
+
+=== string action_camera4
+Pozycja kamery 4
+
+=== string action_camera_center
+Centruj
+
+=== string action_camera_down
+Kamera w dó³
+
+=== string action_camera_left
+Kamera w lewo
+
+=== string action_camera_norm
+Ustaw kamerê na pó³noc
+
+=== string action_camera_right
+Kamera w prawo
+
+=== string action_camera_track
+Kamera œledz¹ca
+
+=== string action_camera_up
+Kamera w górê
+
+=== string action_camera_zoom_in
+Zbli¿enie
+
+=== string action_camera_zoom_out
+Oddalenie
+
+=== string action_cancel_target
+Anuluj dzia³anie
+
+=== string action_crawl
+Czo³ganie
+
+=== string action_cs_body
+Celuj w korpus
+
+=== string action_cs_head
+Celuj w g³owê
+
+=== string action_cs_lhand
+Celuj w lew¹ rêkê
+
+=== string action_cs_lleg
+Celuj w lew¹ nogê
+
+=== string action_cs_rhand
+Celuj w praw¹ rêkê
+
+=== string action_cs_rleg
+Celuj w praw¹ nogê
+
+=== string action_decel
+Zmniejsz prêdkoœæ gry
+
+=== string action_follow
+Pod¹¿aj za postaci¹
+
+=== string action_item1
+Szybki wybór przedmiotu 1
+
+=== string action_item2
+Szybki wybór przedmiotu 2
+
+=== string action_item3
+Szybki wybór przedmiotu 3
+
+=== string action_item4
+Szybki wybór przedmiotu 4
+
+=== string action_obj
+Ekran zadañ
+
+=== string action_pause
+Pauza w³¹czona/wy³¹czona
+
+=== string action_quickload
+Szybkie wczytanie
+
+=== string action_quicksave
+Szybkie zapisanie
+
+=== string action_run
+Bieganie
+
+=== string action_select1
+Wybierz postaæ 1
+
+=== string action_select2
+Wybierz postaæ 2
+
+=== string action_select3
+Wybierz postaæ 3
+
+=== string action_select_all
+Wybierz wszystkie postaci
+
+=== string action_sneak
+Skradanie
+
+=== string action_spell1
+Rzuæ czar 1
+
+=== string action_spell2
+Rzuæ czar 2
+
+=== string action_spell3
+Rzuæ czar 3
+
+=== string action_spell4
+Rzuæ czar 4
+
+=== string action_spell5
+Rzuæ czar 5
+
+=== string action_spell6
+Rzuæ czar 6
+
+=== string action_spell7
+Rzuæ czar 7
+
+=== string action_spell8
+Rzuæ czar 8
+
+=== string action_swarm
+Agresywny/Defensywny tryb
+
+=== string action_tutorial_script
+Samouczek
+
+=== string action_use_science
+U¿yj/kradnij
+
+=== string action_w_info1
+Okno informacyjne: widok ogólny 
+
+=== string action_w_info2
+Okno informacyjne: obra¿enia
+
+=== string action_w_info3
+Okno informacyjne: w³aœciwoœci
+
+=== string action_w_info4
+Okno informacyjne: czary
+
+=== string action_w_minimap
+Poka¿ mini-mapê
+
+=== string action_w_text1
+Okno tekstowe: wiadomoœci
+
+=== string action_w_text2
+Okno tekstowe: trofea
+
+=== string action_walk
+IdŸ
+
+=== string action_weapon1
+Wybierz broñ 1
+
+=== string action_weapon2
+Wybierz broñ 2
+
+=== string action_weapon3
+Wybierz broñ 3
+
+=== string action_weapon4
+Wybierz broñ 4
+
+=== string attack
+Atakuj
+
+=== string attack_desc
+Szanse na trafienie wroga dan¹ broni¹. Zale¿¹ one od zrêcznoœci, umiejêtnoœci i zdolnoœci postaci, jak równie¿ w³aœciwoœci samej broni.
+
+=== string brief_complete_quest
+Ukoñczone zadanie:
+
+=== string brief_get_exp
+Zdobyte doœwiadczenie:
+
+=== string brief_get_item
+Zdobyty przedmiot:
+
+=== string brief_get_money
+Zdobyte pieni¹dze:
+
+=== string brief_get_quest
+Otrzymane zadanie:
+
+=== string brief_get_specials_1
+Zwiêkszona: Si³a
+
+=== string brief_get_specials_2
+Zwiêkszona: Zdolnoœæ Magii Zmys³ów
+
+=== string brief_get_specials_3
+Zwiêkszona umiejêtnoœæ U¿yj/Kradnij
+
+=== string brief_get_specials_4
+Zwiêkszona: Zrêcznoœæ
+
+=== string brief_lost_item
+Utracony przedmiot:
+
+=== string camp_current_exp
+Doœwiadczenie:
+
+=== string camp_current_money
+Pieni¹dze:
+
+=== string camp_damage
+Obra¿enia
+
+=== string camp_damage_desc
+Kiedy trafiasz przeciwnika broñ zadaje obra¿enia wiêksze od wartoœci minimalnej, ale nie osi¹ga maksymalnej wartoœci parametru 'obra¿eñ'. Jeœli wróg jest chroniony przez pancerz, obra¿enia zadane broni¹ zmniejszaj¹ siê o wartoœæ parametru zbroi. Jeœli pancerz wroga przekracza wartoœæ maksymalnych obra¿eñ, broñ jest nieskuteczna.
+
+=== string camp_dismiss
+Zwolnij
+
+=== string camp_healing
+Cena uzdrowienia:
+
+=== string camp_item_constr
+Cena z³o¿enia przedmiotu:
+
+=== string camp_item_deconstr
+Cena roz³o¿enia przedmiotu:
+
+=== string camp_item_repair
+Cena naprawy przedmiotu:
+
+=== string camp_item_trade
+Wartoœæ umowy:
+
+=== string camp_level_up
+Cena zwiêkszenia zdolnoœci:
+
+=== string camp_repair_all
+Napraw wszystkie przedmioty.
+
+=== string camp_spell_constr
+Cena z³o¿enia zaklêcia:
+
+=== string camp_spell_deconstr
+Cena roz³o¿enia zaklêcia:
+
+=== string camp_spell_trade
+Wartoœæ umowy:
+
+=== string cant_use
+Tutaj nie mo¿esz u¿yæ tego przedmiotu.
+
+=== string combat_complete_quest
+Zadanie zakoñczone:
+
+=== string combat_complete_subobj
+Cel osi¹gniêty:
+
+=== string combat_crippled
+Uszkodzony:
+
+=== string combat_failed_quest
+Niedostêpne zadanie:
+
+=== string combat_failed_subobj
+Niedostêpny cel:
+
+=== string combat_get_quest
+Otrzymane zadanie:
+
+=== string combat_get_subobj
+Otrzymany cel:
+
+=== string combat_picked_up
+Podnios³eœ:
+
+=== string consider_less1
+Szanowany
+
+=== string consider_less10
+Bardzo s³aby
+
+=== string consider_less11
+Bardzo s³aby
+
+=== string consider_less12
+Bardzo s³aby
+
+=== string consider_less13
+Bardzo s³aby
+
+=== string consider_less14
+Bardzo s³aby
+
+=== string consider_less15
+Bardzo s³aby
+
+=== string consider_less16
+Bardzo s³aby
+
+=== string consider_less17
+S³aby
+
+=== string consider_less18
+S³aby
+
+=== string consider_less19
+S³aby
+
+=== string consider_less2
+S³abszy
+
+=== string consider_less20
+S³aby
+
+=== string consider_less21
+S³aby
+
+=== string consider_less22
+S³aby
+
+=== string consider_less23
+S³aby
+
+=== string consider_less24
+S³aby
+
+=== string consider_less25
+S³aby
+
+=== string consider_less3
+S³abszy
+
+=== string consider_less4
+S³abszy
+
+=== string consider_less5
+Bardzo s³aby
+
+=== string consider_less6
+Bardzo s³aby
+
+=== string consider_less7
+Bardzo s³aby
+
+=== string consider_less8
+Bardzo s³aby
+
+=== string consider_less9
+Bardzo s³aby
+
+=== string consider_more0
+Równy
+
+=== string consider_more1
+Silniejszy
+
+=== string consider_more10
+Œmiertelny
+
+=== string consider_more11
+Œmiertelny
+
+=== string consider_more12
+Œmiertelny
+
+=== string consider_more13
+Œmiertelny
+
+=== string consider_more14
+Œmiertelny
+
+=== string consider_more15
+Œmiertelny
+
+=== string consider_more16
+Niezwyciê¿ony
+
+=== string consider_more17
+Niezwyciê¿ony
+
+=== string consider_more18
+Niezwyciê¿ony
+
+=== string consider_more19
+Niezwyciê¿ony
+
+=== string consider_more2
+Wstrêtny
+
+=== string consider_more20
+Niezwyciê¿ony
+
+=== string consider_more21
+Niezwyciê¿ony
+
+=== string consider_more22
+Niezwyciê¿ony
+
+=== string consider_more23
+Niezwyciê¿ony
+
+=== string consider_more24
+Niezwyciê¿ony
+
+=== string consider_more25
+Niezwyciê¿ony
+
+=== string consider_more3
+Mocny
+
+=== string consider_more4
+Niebezpieczny
+
+=== string consider_more5
+Niebezpieczny
+
+=== string consider_more6
+Bardzo niebezpieczny
+
+=== string consider_more7
+Bardzo niebezpieczny
+
+=== string consider_more8
+Bardzo niebezpieczny
+
+=== string consider_more9
+Bardzo niebezpieczny
+
+=== string damage_0
+K³ute
+
+=== string damage_1
+Ciête
+
+=== string damage_2
+Obuchowe
+
+=== string damage_3
+Ogieñ
+
+=== string damage_4
+Kwas
+
+=== string damage_5
+B³yskawica
+
+=== string damage_6
+Ogó³em
+
+=== string defense
+Obrona
+
+=== string defense_desc
+Szanse na unikniêcie ataku korzystaj¹c z danej broni. Zale¿¹ one od zrêcznoœci, umiejêtnoœci i zdolnoœci postaci, jak równie¿ w³aœciwoœci samej broni.
+
+=== string delete
+Skasuj grê
+
+=== string delete_msg
+Czy naprawdê chcesz skasowaæ tê grê?
+
+=== string difficulty_easy
+£atwy
+
+=== string difficulty_hard
+Trudny
+
+=== string dismiss_pers
+Zwolnij postaæ z grupy
+
+=== string dismiss_pers_msg
+Czy naprawdê chcesz zwolniæ t¹ postaæ?
+
+=== string dmg_0
+K³ute
+
+=== string dmg_1
+Ciête
+
+=== string dmg_2
+Obuchowe
+
+=== string dmg_3
+Ogieñ
+
+=== string dmg_4
+Kwas
+
+=== string dmg_5
+B³yskawica
+
+=== string dmg_6
+Ogó³em
+
+=== string end_game
+Gra ukoñczona!
+
+=== string end_game_msg
+Gra ukoñczona!
+
+=== string end_of_game
+Gratulacje!
+
+=== string end_of_game_msg
+Ukoñczy³eœ demo!
+
+=== string failed_0
+Nie mo¿e poskromiæ
+
+=== string failed_1
+Nie mo¿e zmieniæ broni
+
+=== string failed_10
+Tutaj nie mo¿esz rzucaæ czarów
+
+=== string failed_2
+Nie mo¿e atakowaæ
+
+=== string failed_3
+Nie mo¿e zmieniæ pozycji
+
+=== string failed_4
+Œcie¿ka nie znaleziona
+
+=== string failed_5
+Zaklêcie "Transfer many" nie mo¿e zostaæ u¿yte
+
+=== string failed_6
+Zaklêcie "Transfer many" przerwane
+
+=== string failed_7
+Nie mo¿e oczarowaæ 
+
+=== string failed_8
+Nie mo¿e teleportowaæ
+
+=== string failed_9
+Nie mo¿e rzucaæ czarów
+
+=== string format_item1
+%s "%s"
+
+=== string format_item2
+%s "%s" (%d)
+
+=== string format_money
+Pieni¹dze (%d)
+
+=== string game_over
+Koniec gry
+
+=== string game_over_msg
+Twoja g³ówna postaæ nie ¿yje! Czy chcesz wczytaæ grê?
+
+=== string game_paused
+Pauza w³¹czona!
+
+=== string hl_arm
+Rêka
+
+=== string hl_arms
+Rêce
+
+=== string hl_arms_desc
+Ochrona r¹k postaci przed obra¿eniami, zadanymi broni¹ lub czarami. Jeœli parametr "Zdrowie" którejkolwiek z r¹k spadnie do 0, postaæ bêdzie walczyæ i rzucaæ czary znacznie wolniej.
+
+=== string hl_leg
+Noga
+
+=== string hl_legs
+Nogi
+
+=== string hl_legs_desc
+Ochrona nóg postaci przed obra¿eniami, zadanymi broni¹ lub czarami. Jeœli parametr "Zdrowie" którejkolwiek z nóg spadnie do 0, postaæ bêdzie siê poruszaæ o wiele wolniej.
+
+=== string hl_skull
+G³owa
+
+=== string hl_skull_desc
+Ochrona g³owy postaci przed obra¿eniami, zadanymi broni¹ lub czarami. Jeœli parametr "Zdrowie" g³owy spadnie do 0, postaæ umrze.
+
+=== string hl_torso
+Tu³ów
+
+=== string hl_torso_desc
+Ochrona korpusu postaci przed obra¿eniami, zadanymi broni¹ lub czarami. Jeœli parametr "Zdrowie" korpusu spadnie do 0, postaæ umrze.
+
+=== string infoitem_0
+Waga:
+
+=== string infoitem_1
+Materia³:
+
+=== string infoitem_10
+Zasiêg:
+
+=== string infoitem_11
+Obszar:
+
+=== string infoitem_12
+Trwanie:
+
+=== string infoitem_13
+Cele:
+
+=== string infoitem_14
+Z³o¿onoœæ:
+
+=== string infoitem_15
+Obra¿enia:
+
+=== string infoitem_16
+Zdolnoœæ:
+
+=== string infoitem_17
+Klasa:
+
+=== string infoitem_18
+Szko³a:
+
+=== string infoitem_19
+Runy:
+
+=== string infoitem_2
+Energia:
+
+=== string infoitem_20
+Dzia³ania:
+
+=== string infoitem_21
+Natychmiast
+
+=== string infoitem_22
+Cel
+
+=== string infoitem_23
+Odpornoœæ:
+
+=== string infoitem_24
+Wra¿liwoœæ:
+
+=== string infoitem_25
+Zbroja:
+
+=== string infoitem_26
+m
+
+=== string infoitem_27
+s
+
+=== string infoitem_28
+Sta³y
+
+=== string infoitem_29
+Zrêcznoœæ:
+
+=== string infoitem_3
+Trwa³oœæ:
+
+=== string infoitem_30
+Umiejêtnoœæ:
+
+=== string infoitem_31
+Zdolnoœæ:
+
+=== string infoitem_32
+Broñ:
+
+=== string infoitem_33
+Ogó³em:
+
+=== string infoitem_34
+£uki nie zwiêkszaj¹ obrony.
+
+=== string infoitem_35
+Maks. Z³o¿onoœæ
+
+=== string infoitem_36
+Maks. Wigor
+
+=== string infoitem_37
+Typ:
+
+=== string infoitem_38
+Zmiana ataku:
+
+=== string infoitem_39
+Zmiana obrony:
+
+=== string infoitem_4
+Premia zbroi:
+
+=== string infoitem_40
+Magia Ognia
+
+=== string infoitem_41
+Magia B³yskawic
+
+=== string infoitem_42
+Magia Kwasu
+
+=== string infoitem_43
+Magia Zmys³ów
+
+=== string infoitem_44
+Magia Astralna
+
+=== string infoitem_5
+Czar:
+
+=== string infoitem_6
+(CTRL - wyœwietl)
+
+=== string infoitem_7
+Wigor
+
+=== string infoitem_8
+Efekt:
+
+=== string infoitem_9
+Szybkoœæ:
+
+=== string infoskill_0
+Zdrowie:
+
+=== string infoskill_1
+Obci¹¿enie:
+
+=== string infoskill_10
+Premia ataku:
+
+=== string infoskill_11
+Wiedza:
+
+=== string infoskill_12
+Noktowizja:
+
+=== string infoskill_13
+Premia w³aœciwoœci:
+
+=== string infoskill_14
+Zdrowie:
+
+=== string infoskill_15
+Wigor:
+
+=== string infoskill_16
+Regeneracja
+
+=== string infoskill_17
+Przywrócenie
+
+=== string infoskill_18
+Koszt (doœw.):
+
+=== string infoskill_19
+Wymaga:
+
+=== string infoskill_2
+Wigor:
+
+=== string infoskill_20
+Oparty na:
+
+=== string infoskill_21
+(zabrano)
+
+=== string infoskill_22
+Mno¿nik ciosu  z zaskoczenia
+
+=== string infoskill_23
+Dodatkowe punkty:
+
+=== string infoskill_24
+Punkty wigoru:
+
+=== string infoskill_3
+Dzia³ania:
+
+=== string infoskill_4
+Doœwiadczenie:
+
+=== string infoskill_5
+Umiejêtnoœæ:
+
+=== string infoskill_6
+Atak:
+
+=== string infoskill_7
+Obra¿enia:
+
+=== string infoskill_8
+Wiedza:
+
+=== string infoskill_9
+U¿yj/Kradnij
+
+=== string infounit_0
+Zdrowie:
+
+=== string infounit_1
+Wigor:
+
+=== string infounit_10
+Zbroja:
+
+=== string infounit_11
+Odpornoœæ:
+
+=== string infounit_12
+Wra¿liwoœæ:
+
+=== string infounit_13
+m
+
+=== string infounit_14
+Aktywna broñ:
+
+=== string infounit_15
+Dzia³ania:
+
+=== string infounit_16
+Wróg jest:
+
+=== string infounit_17
+Przeci¹¿enie!
+
+=== string infounit_2
+Szybkoœæ:
+
+=== string infounit_3
+Atak:
+
+=== string infounit_4
+Obrona
+
+=== string infounit_5
+W³ada magi¹
+
+=== string infounit_6
+Widok:
+
+=== string infounit_7
+(tropienie)
+
+=== string infounit_8
+Do-trafienia:
+
+=== string infounit_9
+Obra¿enia:
+
+=== string item_armor_lower
+Lekka zbroja
+
+=== string item_armor_shape_lower
+Schemat lekkiej zbroi
+
+=== string item_armor_shape_upper
+Schemat ciê¿kiej zbroi
+
+=== string item_armor_upper
+Ciê¿ka zbroja
+
+=== string item_loot
+Przedmiot na sprzeda¿
+
+=== string item_material
+Materia³
+
+=== string item_modifier
+Run
+
+=== string item_potion
+Napój
+
+=== string item_prototype
+Klucz
+
+=== string item_quest
+Przedmiot misji
+
+=== string item_spell
+Czar
+
+=== string item_wand
+Ró¿d¿ka
+
+=== string item_wand_shape
+Schemat ró¿d¿ki
+
+=== string item_weapon
+Broñ
+
+=== string item_weapon_shape
+Schemat broni
+
+=== string key_already_mapped
+Ten klawisz ju¿ jest przypisany!
+
+=== string key_already_mapped_msg
+Klawisz %s zosta³ przypisany do "%s". Czy chcesz go zmieniæ?
+
+=== string last_weapon
+Ostatnia broñ
+
+=== string last_weapon_msg
+Czy naprawdê chcesz ca³kowicie pozbawiæ t¹ postaæ broni?
+
+=== string leave_zone
+Opuœæ strefê Gry
+
+=== string leave_zone_msg
+Czy naprawdê chcesz opuœciæ strefê Gry?
+
+=== string loot_item
+(Ten przedmiot jest tylko na sprzeda¿. Nie mo¿esz go u¿yæ!)
+
+=== string magic_skills
+Wiedza szkó³ magii
+
+=== string magic_skills_desc
+Poka¿ maksymalny poziom z³o¿enia czarów, których postaæ mo¿e u¿ywaæ, wybranego typu. Suma wiedzy zale¿y od "inteligencji", "umiejêtnoœci" i "zdolnoœci" postaci w tym typie czarów.
+
+=== string mattype_bone
+Koœæ
+
+=== string mattype_cloth
+Sukno
+
+=== string mattype_crystal
+Kryszta³
+
+=== string mattype_fur
+Futro
+
+=== string mattype_hide
+Skóra
+
+=== string mattype_leather
+Skóra
+
+=== string mattype_metal
+Metal
+
+=== string mattype_stone
+Kamieñ
+
+=== string mode_itemconstr
+Konstruktor przedmiotów
+
+=== string mode_itemrepair
+Naprawa przedmiotów
+
+=== string mode_itemtrade
+Sklep z przedmiotami
+
+=== string mode_spellconstr
+Konstruktor czarów
+
+=== string mode_spells
+Umiejêtnoœci/Czary
+
+=== string mode_spelltrade
+Sklep z czarami
+
+=== string mode_weapons
+Wyposa¿enie
+
+=== string move_0
+(Idzie)
+
+=== string move_1
+(Lewituje)
+
+=== string move_2
+(Stoi)
+
+=== string move_3
+(Leci)
+
+=== string no_disc_space
+Nie wystarczaj¹ca iloœæ wolnego miejsca na dysku!
+
+=== string no_disc_space_msg
+Nie wystarczaj¹ca iloœæ wolnego miejsca na dysku do normalnego uruchomienia gry!
+
+=== string no_way
+- Tutaj nie mo¿emy nikogo zostawiæ!
+
+=== string no_zone
+Brak pliku
+
+=== string no_zone_msg
+Plik MOB. nie zosta³ znaleziony
+
+=== string notify_loading
+Wczytywanie gry...
+
+=== string notify_saving
+Zapisywanie gry...
+
+=== string obj_0
+Czas podró¿y:
+
+=== string obj_1
+dni
+
+=== string obj_2
+godziny
+
+=== string obj_completed
+(ukoñczone)
+
+=== string obj_cost_exp
+Ukoñczenie podniesie doœwiadczenie o:
+
+=== string obj_cost_money
+Pieni¹dze obiecane za ukoñczenie:
+
+=== string obj_failed
+(nieudane)
+
+=== string option_autosave
+Autozapis
+
+=== string option_brightness
+Jasnoœæ
+
+=== string option_camera_reverse_x
+Prze³¹cz obracanie kamery w lewo/prawo
+
+=== string option_camera_reverse_y
+Prze³¹cz ruch kamery w górê/dó³
+
+=== string option_contrast
+Kontrast
+
+=== string option_difficulty
+Poziom trudnoœci
+
+=== string option_footprints
+Pokazuj œlady stóp
+
+=== string option_gamma
+Gamma
+
+=== string option_group_actions
+Sterowanie
+
+=== string option_group_camera
+Kamera
+
+=== string option_group_cshots
+Walka
+
+=== string option_group_game
+Gra
+
+=== string option_group_items
+Obiekty
+
+=== string option_group_select
+Wybór
+
+=== string option_group_sens
+Czu³oœæ
+
+=== string option_group_sound
+DŸwiêk
+
+=== string option_group_spells
+Czary
+
+=== string option_group_video
+Grafika
+
+=== string option_group_windows
+Okna
+
+=== string option_marks
+Pokazuj krew
+
+=== string option_off
+Wy³¹cz
+
+=== string option_on
+W³¹cz
+
+=== string option_power_kbd
+Czu³oœæ klawiatury:
+
+=== string option_power_mouse
+Czu³oœæ myszy:
+
+=== string option_reverse_stereo
+Zamieñ kana³y stereo
+
+=== string option_rubber_select
+Czu³oœæ wyboru ramk¹
+
+=== string option_scroll_border
+Czu³oœæ przewijania:
+
+=== string option_select_type
+Wybór znacznika postaci:
+
+=== string option_shadow_buildings
+Cienie obiektów
+
+=== string option_shadow_flora
+Cienie drzew
+
+=== string option_shadow_other
+Wszystkie cienie
+
+=== string option_shadow_units
+Cienie postaci
+
+=== string option_show_flying_hp
+Poka¿ efekt trafienia
+
+=== string option_show_path
+Poka¿ œcie¿kê
+
+=== string option_show_tutorial
+Poka¿ samouczek
+
+=== string option_switch_filters
+Autofiltry inwentarza
+
+=== string option_tooltip_time
+OpóŸnienie pokazywania podpowiedzi
+
+=== string option_volume_sfx
+G³oœnoœæ efektów dŸwiêkowych:
+
+=== string option_volume_stream
+G³oœnoœæ muzyki:
+
+=== string option_volume_voice
+G³oœnoœæ mowy:
+
+=== string overwrite
+Zast¹p
+
+=== string overwrite_msg
+Czy chcesz zast¹piæ grê?
+
+=== string perk_level
+Poziom
+
+=== string perks
+Znane zdolnoœci
+
+=== string perks_av
+Dostêpne zdolnoœci
+
+=== string quit
+WyjdŸ z gry
+
+=== string quit_msg
+Czy naprawdê chcesz wyjœæ gry?
+
+=== string reserved_00
+zarezerwowane
+
+=== string reserved_01
+zarezerwowane
+
+=== string reserved_02
+Gra wstrzymana przez gracza %s
+
+=== string reserved_03
+zarezerwowane
+
+=== string reserved_04
+Proszê czekaæ...
+
+=== string reserved_05
+zarezerwowane
+
+=== string reserved_06
+zarezerwowane
+
+=== string reserved_07
+zarezerwowane
+
+=== string reserved_08
+zarezerwowane
+
+=== string reserved_09
+zarezerwowane
+
+=== string reserved_10
+zarezerwowane
+
+=== string reserved_11
+zarezerwowane
+
+=== string reserved_12
+zarezerwowane
+
+=== string reserved_13
+zarezerwowane
+
+=== string reserved_14
+zarezerwowane
+
+=== string reserved_15
+zarezerwowane
+
+=== string reserved_16
+zarezerwowane
+
+=== string reserved_17
+zarezerwowane
+
+=== string reserved_18
+zarezerwowane
+
+=== string reserved_19
+zarezerwowane
+
+=== string reserved_20
+zarezerwowane
+
+=== string save_auto_enter
+Autozapis (Wejœcie)
+
+=== string save_auto_exit
+Autozapis (Wyjœcie)
+
+=== string save_camp
+Obóz
+
+=== string save_day
+Dzieñ
+
+=== string save_new
+ZAPISZ GRÊ
+
+=== string save_quick
+SZYBKI ZAPIS
+
+=== string school_0
+Magia Elementarna
+
+=== string school_1
+Magia Zmys³ów
+
+=== string school_2
+Magia Astralna
+
+=== string show_tutorial_key
+Poka¿ samouczek:
+
+=== string skills
+Zdolnoœci
+
+=== string topic_prefix
+-
+
+=== string tutorial
+Samouczek
+
+=== string version_name
+Wersja 1.06
+

@@ -1,0 +1,589 @@
+# um-texts 1
+=== ARMOR Gipat_Brigand_Boots Hyena_Hide
+Bottes en peau de hyène
+Bon matériau, mais coupe simpliste.
+
+=== ARMOR Gipat_Brigand_Boots Wolf_Hide
+Bottes en peau de loup
+Protection minimale, mais elles vous tiendront chaud.
+
+=== ARMOR Gipat_Brigand_Boots Wolf_Hide_White
+Bottes en peau de loup blanc
+Discrètes, et elles vous garderons au chaud.
+
+=== ARMOR Gipat_Brigand_Gloves Hyena_Hide
+Hyena hide gauntlets
+Firm grip with excellent protection.
+
+=== ARMOR Gipat_Brigand_Gloves Wolf_Hide
+Wolf's fur gauntlets
+Simple and lightly protective.
+
+=== ARMOR Gipat_Brigand_Gloves Wolf_Hide_White
+White wolf fur gauntlets
+Soft yet durable protection for your hands.
+
+=== ARMOR Gipat_Brigand_Helm Hyena_Hide
+"Hyena's head" helmet
+Stronger and more stylish than a regular helmet.
+
+=== ARMOR Gipat_Brigand_Helm Wolf_Hide
+"Wolf's head" helmet
+Provides minimal defense.
+
+=== ARMOR Gipat_Brigand_Helm Wolf_Hide_White
+"White Wolf's head" helmet
+Stronger and more stylish than a fur hat.
+
+=== ARMOR Gipat_Brigand_Leggins Hyena_Hide
+Jambières de Gipath en peau de hyène
+Bonne protection, même en condition difficile.
+
+=== ARMOR Gipat_Brigand_Leggins Wolf_Hide
+Jambières de Gipath en peau de loup
+Offre une protection simpliste.
+
+=== ARMOR Gipat_Brigand_Leggins Wolf_Hide_White
+Jambières de Gipath en peau de loup blanc
+Protège efficacement les jambes contre le froid.
+
+=== ARMOR Gipat_Brigand_Pants Hyena_Hide
+Chausses de Gipath en peau de hyène
+Protège efficacement dans le désert.
+
+=== ARMOR Gipat_Brigand_Pants Wolf_Hide
+Chausses de Gipath en peau de loup
+Protection basique contre le froid, et les faibles coups.
+
+=== ARMOR Gipat_Brigand_Pants Wolf_Hide_White
+Chausses de Gipath en peau de loup blanc
+Protège du froid, et en combat.
+
+=== ARMOR Gipat_Brigand_Plate Hyena_Hide
+Veste de chasse de Gipath en peau de hyène
+Très bon camouflage, protègera bien dans le désert.
+
+=== ARMOR Gipat_Brigand_Plate Wolf_Hide
+Veste de chasse de Gipath en peau de loup
+Elle vous camouflera, mais protègera peu.
+
+=== ARMOR Gipat_Brigand_Plate Wolf_Hide_White
+Veste de chasse de Gipath en peau de loup blanc
+Se fond dans les environnements neigeux.
+
+=== ARMOR Gipat_Brigand_Shirt Hyena_Hide
+Plastron de Gipath en peau de hyène
+Résistant et abordable, parfait pour le désert.
+
+=== ARMOR Gipat_Brigand_Shirt Wolf_Hide
+Plastron de Gipath en peau de loup
+Simple, chaud, mais protège peu.
+
+=== ARMOR Gipat_Brigand_Shirt Wolf_Hide_White
+Plastron de Gipath en peau de loup blanc
+Résistant et chaud, pour les conditions difficiles.
+
+=== ARMOR Gipat_High_Boots Black
+Gipath stitched boots of tempered leather
+Durable boots crafted from tempered leather, ideal for challenging environments.
+
+=== ARMOR Gipat_High_Gloves Black
+Gipath stitched gauntlets of tempered leather
+Resilient gloves, protects your wrists while maintaining dexterity.
+
+=== ARMOR Gipat_High_Helm Black
+Gipath stitched helmet of tempered leather
+Reliable helmet designed to withstand heavy impacts and enhance safety.
+
+=== ARMOR Gipat_High_Leggins Black
+Gipath stitched leggings of tempered leather
+Leggings crafted from tempered leather, offering solid protection and comfort.
+
+=== ARMOR Gipat_High_Pants Black
+Gipath long stitched trousers of tempered leather
+Durable pants made from tempered leather, providing excellent leg coverage.
+
+=== ARMOR Gipat_High_Plate Black
+Gipath stitched coat of tempered leather
+Heavy plate armor offers maximum protection without sacrificing mobility.
+
+=== ARMOR Gipat_High_Shirt Black
+Gipath stitched breastplate of tempered leather
+Sturdy shirt offering substantial protection while allowing ease of movement.
+
+=== ARMOR Gipat_Highest_Boots Black
+Gipath heavy boots of tempered leather
+Premium boots designed for the most challenging adventures.
+
+=== ARMOR Gipat_Highest_Gloves Black
+Gipath heavy gauntlets of tempered leather
+Heavy gauntlets providing optimal hand protection and flexibility.
+
+=== ARMOR Gipat_Highest_Helm Black
+Gipath heavy helmet of tempered leather
+Heavy helmet built for maximum protection in battle scenarios.
+
+=== ARMOR Gipat_Highest_Leggins Black
+Gipath heavy leggings of tempered leather
+Leggings providing superior protection, suitable for demanding environments.
+
+=== ARMOR Gipat_Highest_Pants Black
+Gipath heavy long trousers of tempered leather
+Durable trousers offering excellent leg protection for elite fighters.
+
+=== ARMOR Gipat_Highest_Plate Black
+Gipath heavy coat of tempered leather
+Heavy coat providing maximum durability for intense combat situations.
+
+=== ARMOR Gipat_Highest_Shirt Black
+Gipath heavy shirt of tempered leather
+Robust shirt ensuring top-tier protection while allowing movement.
+
+=== ARMOR Gipat_Low_Boots Black
+Gipath light boots of tempered leather
+Comfortable boots designed for travel with solid foot protection.
+
+=== ARMOR Gipat_Low_Gloves Black
+Gipath light gauntlets of tempered leather
+Light gauntlets offering decent protection while allowing flexibility.
+
+=== ARMOR Gipat_Low_Helm Black
+Gipath light helmet of tempered leather
+Light helmet providing sufficient protection without impeding movement.
+
+=== ARMOR Gipat_Low_Leggins Black
+Gipath light leggings of tempered leather
+Flexible leggings ideal for light combat and movement.
+
+=== ARMOR Gipat_Low_Pants Black
+Gipath light trousers of tempered leather
+Light trousers designed for mobility with decent leg protection.
+
+=== ARMOR Gipat_Low_Plate Black
+Gipath light shirt of tempered leather
+Flexible coat offering decent protection while allowing mobility.
+
+=== ARMOR Gipat_Low_Shirt Black
+Gipath light breastplate of tempered leather
+Light shirt providing agility and reliable protection in combat.
+
+=== ARMOR Gipat_Medium_Boots Black
+Gipath simple boots of tempered leather
+Reliable boots that combine comfort with essential durability.
+
+=== ARMOR Gipat_Medium_Gloves Black
+Gipath simple gauntlets of tempered leather
+Sturdy gloves that ensure hand protection and grip for combat.
+
+=== ARMOR Gipat_Medium_Helm Black
+Gipath simple helmet of tempered leather
+Balanced helmet that offers good protection while maintaining comfort.
+
+=== ARMOR Gipat_Medium_Leggins Black
+Gipath simple leggings of tempered leather
+Sturdy leggings that balance comfort and durability for extended wear.
+
+=== ARMOR Gipat_Medium_Pants Black
+Gipath simple shorts of tempered leather
+Dependable trousers, they provide a good leg protection.
+
+=== ARMOR Gipat_Medium_Plate Black
+Gipath simple coat of tempered leather
+Solid coat providing protection from foes and elements alike.
+
+=== ARMOR Gipat_Medium_Shirt Black
+Gipath simple breastplate of tempered leather
+Reliable medium armor shirt combining comfort and solid defense.
+
+=== ARMOR Hadagan_Brigand_Boots Black
+Khadaganian tempered leather leggings
+Reinforced boots offering strong protection and comfort for rough terrains.
+
+=== ARMOR Hadagan_Brigand_Gloves Black
+Khadaganian tempered leather gauntlets
+Gauntlets providing effective hand protection while maintaining control.
+
+=== ARMOR Hadagan_Brigand_Helm Black
+Khadaganian tempered leather helmet
+Comfortable helmet designed for enhanced head protection during battles.
+
+=== ARMOR Hadagan_Brigand_Leggins Black
+Khadaganian tempered leather top leggings
+Crafted leggings for robust leg protection in tough conditions.
+
+=== ARMOR Hadagan_Brigand_Pants Black
+Khadaganian tempered leather trousers
+Robust trousers providing freedom of movement and solid protection.
+
+=== ARMOR Hadagan_Brigand_Plate Black
+Khadaganian tempered leather coat
+Solid coat ensuring protection from both elements and foes alike.
+
+=== ARMOR Hadagan_Brigand_Shirt Black
+Khadaganian lower breastplate of tempered leather
+Flexible jerkin designed for solid protection without restricting movement.
+
+=== ARMOR Hadagan_High2_Boots Alloy
+Khadaganian alloy laminar boots
+<placeholder>
+
+=== ARMOR Hadagan_High2_Gloves Alloy
+Khadaganian alloy laminar gauntlets
+<placeholder>
+
+=== ARMOR Hadagan_High2_Helm Alloy
+Khadaganian forged alloy helmet
+<placeholder>
+
+=== ARMOR Hadagan_High2_Leggins Alloy
+Khadaganian forged alloy top leggings
+<placeholder>
+
+=== ARMOR Hadagan_High2_Pants Alloy
+Khadaganian alloy laminar trousers
+<placeholder>
+
+=== ARMOR Hadagan_High2_Plate Alloy
+Khadaganian forged alloy cuirass
+<placeholder>
+
+=== ARMOR Hadagan_High2_Shirt Alloy
+Khadaganian light alloy body armor
+<placeholder>
+
+=== ARMOR Hadagan_High_Boots Blue_Lizard
+Bottes khadaganiennes en peau de lézard bleu
+Bonne protection pour vos pieds, et fonctionelles !
+
+=== ARMOR Hadagan_High_Boots Green_Lizard
+Bottes khadaganiennes en peau de lézard vert
+Protection minimale des pieds, peu fiables en terrain difficile.
+
+=== ARMOR Hadagan_High_Gloves Blue_Lizard
+Gantelets khadaganiens en peau de lézard bleu
+Protection acceptable, moyennement résistants.
+
+=== ARMOR Hadagan_High_Gloves Green_Lizard
+Gantelets khadaganiens en peau de lézard vert
+Protection basique, pas très résistants.
+
+=== ARMOR Hadagan_High_Helm Alloy
+Khadaganian light alloy helmet
+<placeholder>
+
+=== ARMOR Hadagan_High_Leggins Alloy
+Khadaganian alloy chainmail trousers
+<placeholder>
+
+=== ARMOR Hadagan_High_Pants Blue_Lizard
+Chausses khadaganiennes en peau de lézard bleu
+Bonne coupe, mais ne comptez pas dessus en plein combat !
+
+=== ARMOR Hadagan_High_Pants Green_Lizard
+Chausses khadaganiennes en peau de lézard vert
+Peu chères, mais ne protègent que peu.
+
+=== ARMOR Hadagan_High_Plate Alloy
+Khadaganian light alloy cuirass
+<placeholder>
+
+=== ARMOR Hadagan_High_Shirt Blue_Lizard
+Armure khadaganienne en peau de lézard bleu
+Apporte une protection modérée, moyennement fiable.
+
+=== ARMOR Hadagan_High_Shirt Green_Lizard
+Armure khadaganienne en peau de lézard vert
+Offre une protection minimale.
+
+=== ARMOR Hadagan_Highest2_Helm Alloy
+Khadaganian heavy alloy helmet
+<placeholder>
+
+=== ARMOR Hadagan_Highest2_Leggins Alloy
+Khadaganian heavy alloy leggings
+<placeholder>
+
+=== ARMOR Hadagan_Highest2_Plate Alloy
+Khadaganian heavy alloy cuirass
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Boots Alloy
+Khadaganian alloy reinforced boots
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Gloves Alloy
+Khadaganian alloy reinforced gauntlets
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Helm Alloy
+Khadaganian alloy reinforced helmet
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Leggins Alloy
+Khadaganian alloy reinforced leggings
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Pants Alloy
+Khadaganian reinforced alloy chainmail trousers
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Plate Alloy
+Khadaganian alloy reinforced cuirass
+<placeholder>
+
+=== ARMOR Hadagan_Highest_Shirt Alloy
+Khadaganian reinforced alloy chainmail
+<placeholder>
+
+=== ARMOR Hadagan_Low_Boots Jute
+Bandelettes en jute
+A peine plus que qu'un bandage autour de vos pieds.
+
+=== ARMOR Hadagan_Low_Gloves Jute
+Gantelets en jute
+Fins et parfaitement inadaptés au combat.
+
+=== ARMOR Hadagan_Low_Helm Jute
+Capuche en jute
+Fragile et inconfortable, mais ca couvrera votre tête.
+
+=== ARMOR Hadagan_Low_Leggins Black
+Haut-de-chausses légers en cuir trempé
+Ces haut-de-chausses légers sont bien adaptés aux voyages, mais aussi au combat!
+
+=== ARMOR Hadagan_Low_Pants Jute
+Pantalon déchiré en jute
+Ils couvriront vos jambes, mais pas pour très longtemps...
+
+=== ARMOR Hadagan_Low_Plate Jute
+Haut col léger en jute
+Appeler ça une armure est une exagération...
+
+=== ARMOR Hadagan_Low_Shirt Jute
+Chemise légère en jute
+Elle vous protègera du soleil, mais c'est tout.
+
+=== ARMOR Hadagan_Medium_Boots Jute
+Bottes de voyage khadaganiennes en jute
+Un bon artisan ne rend pas cette paire de bottes moins médiocre.
+
+=== ARMOR Hadagan_Medium_Gloves Jute
+Gantelets khadaganiens en jute
+La jute n'offre aucune protection lors d'un combat.
+
+=== ARMOR Hadagan_Medium_Helm Jute
+Bandeau khadaganien en jute
+Juste assez pour vous protéger du soleil. Et encore...
+
+=== ARMOR Hadagan_Medium_Leggins Jute
+Pantalon khadaganien long en jute
+Difficile de trouver moins cher et durable que ca.
+
+=== ARMOR Hadagan_Medium_Pants Jute
+Pantalon khadaganien long en jute
+Bon pour se fondre dans la masse avec les autres pauvres.
+
+=== ARMOR Hadagan_Medium_Plate Jute
+Manteau khadaganien en jute
+Difficile à dire si c'est fait pour le style ou les récoltes...
+
+=== ARMOR Hadagan_Medium_Shirt Jute
+Chemise khadaganienne longue en jute
+Assez longue pour vous couvrir, mais son intéret s'arrête ici.
+
+=== ARMOR Kania_Brigand_Boots Black
+Bottes caniennes lourdes en cuir trempé
+Des bottes résistantes, concues pour l'agilité tout en apportant une bonne protection des pieds.
+
+=== ARMOR Kania_Brigand_Gloves Black
+Gantelets caniens lourds en cuir trempé
+Des gantelets durables assurant une bonne protection pour le combat.
+
+=== ARMOR Kania_Brigand_Helm Black
+Heaume canien lourd en cuir trempé
+Un heaume confortable offrant une protection efficate pour la tête.
+
+=== ARMOR Kania_Brigand_Leggins Black
+Haut-de-chausses caniens lourds en cuir trempé
+Haut-de-chausses souples procurant une bonne protection, tout en gardant une liberté de mouvement.
+
+=== ARMOR Kania_Brigand_Pants Black
+Chausses caniennes lourdes en cuir trempé
+Des chausses lourdes qui combinent flexibilité et défense en combat.
+
+=== ARMOR Kania_Brigand_Plate Black
+Manteau canien en cuir trempé
+Un manteau robuste combinant confort et défense.
+
+=== ARMOR Kania_Brigand_Shirt Black
+Pourpoint canien lourd en cuir trempé
+Un pourpoint résistant, concu pour être fiable et durable.
+
+=== ARMOR Kania_High2_Boots Alloy
+Canian army alloy boots
+<placeholder>
+
+=== ARMOR Kania_High2_Gloves Alloy
+Canian army alloy high gauntlets
+<placeholder>
+
+=== ARMOR Kania_High2_Helm Alloy
+Canian army alloy helmet
+<placeholder>
+
+=== ARMOR Kania_High2_Leggins Alloy
+Canian army alloy leggings
+<placeholder>
+
+=== ARMOR Kania_High2_Pants Alloy
+Cania army leggings
+<placeholder>
+
+=== ARMOR Kania_High2_Plate Alloy
+Canian army alloy cuirass
+<placeholder>
+
+=== ARMOR Kania_High2_Shirt Alloy
+Canian army alloy chainmail
+<placeholder>
+
+=== ARMOR Kania_High_Boots Blue_Lizard
+Bottes caniennes légères en peau de lézard bleu
+Légères et fiables. À condition de ne pas prendre trop de risque...
+
+=== ARMOR Kania_High_Boots Green_Lizard
+Bottes caniennes légères en peau de lézard vert
+Peu fiable, évitez de trop les utiliser.
+
+=== ARMOR Kania_High_Gloves Blue_Lizard
+Gantelets caniens en peau de lézard bleu
+Apporte une protection acceptable, plutôt utile.
+
+=== ARMOR Kania_High_Gloves Green_Lizard
+Gantelets caniens légers en peau de lézard vert
+Une protection très basique, de faible épaisseur
+
+=== ARMOR Kania_High_Helm Alloy
+Canian light alloy helmet
+<placeholder>
+
+=== ARMOR Kania_High_Leggins Alloy
+Canian light alloy leggings
+<placeholder>
+
+=== ARMOR Kania_High_Pants Blue_Lizard
+Chausses caniennes en peau de lézard bleu
+Coupe basique, mais apporte une protection correcte.
+
+=== ARMOR Kania_High_Pants Green_Lizard
+Chausses caniennes en peau de lézard vert
+N'arrête que les coups les plus faibles.
+
+=== ARMOR Kania_High_Plate Alloy
+Canian light alloy cuirass
+<placeholder>
+
+=== ARMOR Kania_High_Shirt Blue_Lizard
+Pourpoint canien en peau de lézard bleu
+Léger et adapté pour la chasse, ainsi que les bagarres.
+
+=== ARMOR Kania_High_Shirt Green_Lizard
+Pourpoint canien en peau de lézard vert
+Bon pour la chasse, mais pas pour le combat.
+
+=== ARMOR Kania_Highest2_Helm Alloy
+Canian army heavy alloy  helmet
+<placeholder>
+
+=== ARMOR Kania_Highest2_Leggins Alloy
+Canian army heavy alloy leggings
+<placeholder>
+
+=== ARMOR Kania_Highest2_Plate Alloy
+Canian army heavy alloy cuirass
+<placeholder>
+
+=== ARMOR Kania_Highest_Boots Alloy
+Canian combat alloy boots
+<placeholder>
+
+=== ARMOR Kania_Highest_Gloves Alloy
+Canian alloy combat gauntlets
+<placeholder>
+
+=== ARMOR Kania_Highest_Helm Alloy
+Canian alloy winged helmet
+<placeholder>
+
+=== ARMOR Kania_Highest_Leggins Alloy
+Canian heavy alloy leggings
+<placeholder>
+
+=== ARMOR Kania_Highest_Pants Alloy
+Canian alloy chainmail trousers
+<placeholder>
+
+=== ARMOR Kania_Highest_Plate Alloy
+Canian heavy alloy cuirass
+<placeholder>
+
+=== ARMOR Kania_Highest_Shirt Alloy
+Canian alloy chainmail shirt
+<placeholder>
+
+=== ARMOR Kania_Low_Boots Jute
+Bottes caniennes en jute
+Elles tomberons en lambeaux avant que vous ayez le temps de revenir !
+
+=== ARMOR Kania_Low_Gloves Jute
+Gantelets caniens en jute
+Toujours mieux que des mains nues...
+
+=== ARMOR Kania_Low_Helm Black
+Chapeau en cuir trempé pour fermiers
+Un chapeau léger apportant une bonne protection, tout en restant confortable.
+
+=== ARMOR Kania_Low_Leggins Black
+Haut-de-chausses légers caniens en cuir trempé
+Léger et concu pour la mobilité, avec une bonne protection.
+
+=== ARMOR Kania_Low_Pants Jute
+Pantalon canien en jute
+Mieux que rien, mais pas de beaucoup.
+
+=== ARMOR Kania_Low_Plate Black
+Manteau canien léger en cuir trempé
+Un manteau souple offrant une solide protection, sans gêner les mouvements.
+
+=== ARMOR Kania_Low_Shirt Jute
+Chemise canienne en jute
+Tient a peine en un seul morceau, juste assez pour ne pas vous laisser nu.
+
+=== ARMOR Kania_Medium_Boots Jute
+Bottes de chasse caniennes en jute
+Peu recommandé pour de la chasse ou n'importe quelle sortie en extérieur.
+
+=== ARMOR Kania_Medium_Gloves Jute
+Gantelets de chasse caniens en jute
+Ils ressemblent à de l'équipement de chasse, mais ils sont plus adaptés à du nettoyage.
+
+=== ARMOR Kania_Medium_Helm Jute
+Chapeau de chasse canien en jute
+Un chapeau pour vous protéger du soleil, et c'est tout ce qu'il fera.
+
+=== ARMOR Kania_Medium_Leggins Jute
+Pantalon canien de chasse en jute
+Une meilleure couture ne rend pas le matériau moins mauvais.
+
+=== ARMOR Kania_Medium_Pants Jute
+Chausses de chasse caniennes en jute
+Vous survivrez a une ballade avec, si les coutures tiennent...
+
+=== ARMOR Kania_Medium_Plate Jute
+Pourpoint canien de chasse en jute
+Une tentative désespérée de donner un air pratique à un matériau médiocre.
+
+=== ARMOR Kania_Medium_Shirt Jute
+Chemise de chasse canienne en jute
+Des longues manches, sans fioriture.
+

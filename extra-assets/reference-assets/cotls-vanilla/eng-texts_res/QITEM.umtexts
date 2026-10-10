@@ -1,0 +1,165 @@
+# um-texts 1
+=== QITEM Danger_Sensor
+Crystal
+A good thing! Pity there's no one who could teach you how to use it, though...
+
+=== QITEM Large_Potion_1
+Healing potion - big vial
+Restores a character's health almost completely.
+
+=== QITEM Large_Potion_2
+Strength potion - big vial
+Increases a character's strength for a long period of time.
+
+=== QITEM Large_Potion_3
+Haste potion - big vial
+Significantly increases a character's speed.
+
+=== QITEM Potion_1
+Healing potion - medium vial
+Partially restores a character's health.
+
+=== QITEM Potion_2
+Strength potion - medium vial
+Increases a character's strength.
+
+=== QITEM Potion_3
+Haste potion - medium vial
+Increases a character's speed.
+
+=== QITEM Potion_Enlarge
+Enlargement elixir
+Increases the size of those who drink it.
+
+=== QITEM Potion_Shrink
+Shrinking elixir
+Decreases the size of those who drink it.
+
+=== QITEM Small_Potion_1
+Healing potion - small vial
+Restores a small fraction of a character's health.
+
+=== QITEM Small_Potion_2
+Strength potion - small vial
+Increases a character's strength for a short period of time.
+
+=== QITEM Small_Potion_3
+Haste potion - small vial
+Increases a character's speed by a small measure.
+
+=== QITEM Spell_Container
+Something magical
+A strange thing indeed... and there's no one who could even give a hint as to what it is for...
+
+=== QITEM Tiny_Potion_1
+Healing potion - very small vial
+Restores a very small fraction of a character's health.
+
+=== QITEM Tiny_Potion_2
+Strength potion - very small vial
+Increases a character's strength for a very limited period of time.
+
+=== QITEM Tiny_Potion_3
+Haste potion - very small vial
+Increases a character's speed by a very small measure.
+
+=== QITEM Wand_1 Granite
+Granite wand
+A bit better than stone but worse than all others.
+
+=== QITEM Wand_1 Malachite
+Obsidian wand
+The best of stone wands.
+
+=== QITEM Wand_1 Rock
+Stone wand
+The simplest and weakest of wands.
+
+=== QITEM Wand_1 Silicon
+Silicon wand
+A decent stone wand.
+
+=== QITEM Wand_2 Burned_bones
+Hard bone wand
+A good choice for a trained magician.
+
+=== QITEM Wand_2 Decayed_bones
+Thin bone wand
+A simple bone wand.
+
+=== QITEM Wand_2 Dragon_Black_Bones
+Blue Dragon bone wand
+Dragon bones enable one to use a very high level of magic.
+
+=== QITEM Wand_2 Dragon_Green_Bones
+Green Dragon bone wand
+Dragon bones enable one to use a very high level of magic.
+
+=== QITEM Wand_2 Dragon_Red_Bones
+Red Dragon bone wand
+Dragon bones enable one to use a very high level of magic.
+
+=== QITEM Wand_2 Dry_bones
+Tough bone wand
+A decent bone wand.
+
+=== QITEM Wand_2 Scrab_bones
+Shell bone wand
+Good material - gives good effect.
+
+=== QITEM Wand_3 Adamantium
+Adamantite wand
+You can cast very powerful spells with this wand.
+
+=== QITEM Wand_3 Bronze
+Bronze wand
+The simplest of metal wands. An experienced magician deserves something better.
+
+=== QITEM Wand_3 Iron
+Iron wand
+Better than bronze, but worse than any other metal wand.
+
+=== QITEM Wand_3 Meteoric
+Meteorite wand
+Only an experienced magician can fully use its potential!
+
+=== QITEM Wand_3 Mithrill
+Mithrill wand
+Mithrill is light and strong and also absorbs magic wonderfully.
+
+=== QITEM Wand_3 Steel
+Steel wand
+Steel doesn't just make good weapons.
+
+=== QITEM Wand_4 Adamantium
+Decorative adamantite wand
+This one will shoot magic just as well as the adamantite crossbow shoots arrows.
+
+=== QITEM Wand_4 Bronze
+Decorative bronze wand
+You could choose a more serious material for a decorative wand!
+
+=== QITEM Wand_4 Iron
+Decorative iron wand
+It will work, but not well enough for a master magician.
+
+=== QITEM Wand_4 Meteoric
+Decorative meteorite wand
+The best of all possible magic wands.
+
+=== QITEM Wand_4 Mithrill
+Decorative mithrill wand
+Many magicians in this world dream about having one!
+
+=== QITEM Wand_4 Steel
+Decorative steel wand
+Not a bad choice!
+
+=== QITEM Wand_5 Dragon_Green_Bones
+Green Dragon horn
+A magical Dragon horn used by Lizards.
+
+=== QITEM Wand_6 Rock
+Goblin doll
+A magical stone doll used by Goblins.
+

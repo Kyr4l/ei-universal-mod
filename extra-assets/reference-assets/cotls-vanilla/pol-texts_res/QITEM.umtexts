@@ -1,0 +1,165 @@
+# um-texts 1
+=== QITEM Danger_Sensor
+Kryszta³
+Dobra rzecz! Niestety, nie znajdziesz nikogo, kto móg³by ciê nauczyæ, jak siê tym pos³ugiwaæ...
+
+=== QITEM Large_Potion_1
+Napój Leczniczy - du¿a porcja
+Prawie ca³kowicie przywraca bohaterowi Zdrowie.
+
+=== QITEM Large_Potion_2
+Napój Si³y - du¿a porcja
+Zwiêksza si³ê bohatera na d³ugi czas.
+
+=== QITEM Large_Potion_3
+Napój Szybkoœci - du¿a porcja
+WyraŸnie zwiêksza szybkoœæ bohatera.
+
+=== QITEM Potion_1
+Napój Leczniczy - œrednia porcja
+Czêœciowo przywraca bohaterowi zdrowie .
+
+=== QITEM Potion_2
+Napój Si³y - œrednia porcja
+Zwiêksza si³ê bohatera.
+
+=== QITEM Potion_3
+Napój Szybkoœci - œrednia porcja
+Zwiêksza szybkoœæ bohatera.
+
+=== QITEM Potion_Enlarge
+Eliksir powiêkszenia
+Ten eliksir powiêksza rozmiary osoby, która go wypi³a.
+
+=== QITEM Potion_Shrink
+Eliksir zmniejszenia
+Ten eliksir zmniejsza rozmiary osoby, która go wypi³a.
+
+=== QITEM Small_Potion_1
+Napój Leczniczy - ma³a porcja
+Przywraca bohaterowi odrobinê zdrowia.
+
+=== QITEM Small_Potion_2
+Napój Si³y - ma³a porcja
+Na krótki czas zwiêksza si³ê bohatera.
+
+=== QITEM Small_Potion_3
+Napój Szybkoœci - ma³a porcja
+Odrobinê zwiêksza szybkoœæ bohatera.
+
+=== QITEM Spell_Container
+Coœ magicznego
+Zaprawdê dziwna to rzecz... i nikt pojêcia nawet nie ma, do czego mog³aby s³u¿yæ...
+
+=== QITEM Tiny_Potion_1
+Napój Leczniczy - bardzo ma³a porcja
+Przywraca bohaterowi bardzo niewielk¹ odrobinê zdrowia.
+
+=== QITEM Tiny_Potion_2
+Napój Si³y - bardzo ma³a porcja
+Na bardzo krótk¹ chwilê zwiêksza si³ê bohatera.
+
+=== QITEM Tiny_Potion_3
+Napój Szybkoœci - bardzo ma³a porcja
+Zwiêksza szybkoœæ bohatera o u³amek.
+
+=== QITEM Wand_1 Granite
+Granitowa ró¿d¿ka
+Nieco lepsza ni¿ kamienna, ale gorsza od wszystkich pozosta³ych.
+
+=== QITEM Wand_1 Malachite
+Obsydianowa ró¿d¿ka
+Najlepsza z kamiennych ró¿d¿ek.
+
+=== QITEM Wand_1 Rock
+Kamienna ró¿d¿ka
+Najprostsza i najmarniejsza z ró¿d¿ek.
+
+=== QITEM Wand_1 Silicon
+Krzemienna ró¿d¿ka
+Przyzwoita ró¿d¿ka kamienna.
+
+=== QITEM Wand_2 Burned_bones
+Twarda koœciana ró¿d¿ka 
+Dobry wybór dla dobrego maga.
+
+=== QITEM Wand_2 Decayed_bones
+Cienka koœciana ró¿d¿ka
+Prosta koœciana ró¿d¿ka.
+
+=== QITEM Wand_2 Dragon_Black_Bones
+Ró¿d¿ka z koœci niebieskiego smoka
+Smocze koœci pozwalaj¹ korzystaæ z wysoko poziomowej magii.
+
+=== QITEM Wand_2 Dragon_Green_Bones
+Ró¿d¿ka z koœci zielonego smoka
+Smocze koœci pozwalaj¹ korzystaæ z wysoko poziomowej magii.
+
+=== QITEM Wand_2 Dragon_Red_Bones
+Ró¿d¿ka z koœci czerwonego smoka
+Smocze koœci pozwalaj¹ u¿ywaæ wysoko poziomowej magii.
+
+=== QITEM Wand_2 Dry_bones
+Gruba koœciana ró¿d¿ka
+Przyzwoita koœciana ró¿d¿ka.
+
+=== QITEM Wand_2 Scrab_bones
+Ró¿d¿ka ze skamienia³ej koœci
+Dobry materia³ przynosi dobre efekty.
+
+=== QITEM Wand_3 Adamantium
+adamantowa ró¿d¿ka
+Dziêki tej ró¿d¿ce mo¿esz rzucaæ bardzo silne czary.
+
+=== QITEM Wand_3 Bronze
+Ró¿d¿ka z br¹zu
+Najprostsza z metalowych ró¿d¿ek. Doœwiadczony mag pos³uguje siê czymœ lepszym.
+
+=== QITEM Wand_3 Iron
+¯elazna ró¿d¿ka
+Lepsza taka ni¿ z br¹zu, ale i tak gorsza od metalowych.
+
+=== QITEM Wand_3 Meteoric
+Meteorytowa ró¿d¿ka
+Jedynie doœwiadczony mag potrafi³by w pe³ni wykorzystaæ potencja³ tej ró¿d¿ki.
+
+=== QITEM Wand_3 Mithrill
+Mitrylowa ró¿d¿ka
+Mitryl jest lekki i wytrzyma³y, a na dodatek cudownie absorbuje magiê.
+
+=== QITEM Wand_3 Steel
+Stalowa ró¿d¿ka
+Ze stali robi siê nie tylko dobr¹ broñ.
+
+=== QITEM Wand_4 Adamantium
+Ozdobna adamantowa ró¿d¿ka
+Ta ró¿d¿ka strzela magi¹ równie skutecznie jak adamantowa kusza be³tami.
+
+=== QITEM Wand_4 Bronze
+Ozdobna ró¿d¿ka z br¹zu
+Wybierz bardziej powa¿ny materia³ na ozdobn¹ ró¿d¿kê.
+
+=== QITEM Wand_4 Iron
+Ozdobna ¿elazna ró¿d¿ka
+To dzia³a, ale niewystarczaj¹co dobrze dla mistrza magii.
+
+=== QITEM Wand_4 Meteoric
+Ozdobna meteorytowa ró¿d¿ka
+Najlepsza z najlepszych!
+
+=== QITEM Wand_4 Mithrill
+Ozdobna mitrylowa ró¿d¿ka
+Wielu magów na tym œwiecie nawet o czymœ takim nie marzy³o!
+
+=== QITEM Wand_4 Steel
+Ozdobna stalowa ró¿d¿ka
+Niez³y wybór!
+
+=== QITEM Wand_5 Dragon_Green_Bones
+Róg zielonego smoka
+Magiczny róg smoka u¿ywany przez jaszczury.
+
+=== QITEM Wand_6 Rock
+Lalka goblinów
+Magiczna, kamienna lalka goblinów.
+

@@ -4,9 +4,10 @@
 # vscode env
 .vscode
 
-# um.dll generated files
+# um-dll/um-engine generated files
 Universal-Mod/um.cfg
 Universal-Mod/um.log
+Universal-Mod/um-engine.cfg
 
 # UM saves
 Universal-Mod/mp/*
@@ -29,9 +30,27 @@ tools/third-party-tools/ZoneView_1.4.3/ZoneView.log
 # DMP files
 Universal-Mod/*.dmp
 
-# Vendored/built FLTK for Windows cross-compilation (fetched by build-fltk-mingw.sh)
-tools/um-multitool/vendor/fltk-mingw/
-tools/um-multitool/vendor/fltk-src/
+# um.dll profiler dump
+Universal-Mod/um-profile.txt
 
-# Copilot resources
+# Vendored/built GLFW for Windows cross-compilation (fetched by build-glfw-mingw.sh)
+# Native Linux builds use the distro's libglfw-devel package instead.
+tools/um-multitool/vendor/glfw-mingw/
+tools/um-multitool/vendor/glfw-src/
+tools/um-multitool/vendor/glfw-src-xp/
+tools/um-multitool/vendor/glfw-src-xp33/
+tools/um-multitool/vendor/glfw-mingw-xp32/
+tools/um-multitool/vendor/glfw-mingw-xp64/
+
+# CoPilot Resources
 _cpr
+
+# um-multitool 3D Viewer settings (local machine-specific)
+tools/um-multitool/um-multitool-viewer.cfg
+tools/um-multitool/um-multitool.cfg
+tools/um-multitool/um-multitool-res.o
+tools/um-multitool/um-multitool-res32.o
+tools/um-bot/um-bot-res.o
+tools/um-multitool/imgui.ini
+tools/um-multitool/build/
+tools/um-multitool/um-multitool.log

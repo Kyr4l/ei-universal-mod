@@ -14,7 +14,7 @@ normal
 #exit 1
 bz2mpg 1
 #deploy
-15 120 26 137
+15 123 21 132
 #remove
 5 120 15 135
 #view

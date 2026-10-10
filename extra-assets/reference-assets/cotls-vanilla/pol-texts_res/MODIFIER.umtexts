@@ -1,0 +1,121 @@
+# um-texts 1
+=== MODIFIER a1
+Dodatkowy obszar
+Dwukrotnie zwiêksza pocz¹tkowy obszar dzia³ania czaru.
+O+
+
+=== MODIFIER a2
+Maksymalny obszar
+Trzykrotnie zwiêksza pocz¹tkowy obszar dzia³ania czaru.
+O++
+
+=== MODIFIER d1
+Dodatkowy czas trwania
+Dwukrotnie zwiêksza czas trwania czaru.
+D+
+
+=== MODIFIER d2
+Maksymalny czas trwania
+Trzykrotnie zwiêksza czas trwania czaru.
+D++
+
+=== MODIFIER e1
+Dodatkowy efekt
+Dwukrotnie zwiêksza si³ê czaru.
+E+
+
+=== MODIFIER e2
+Maksymalny efekt
+Trzykrotnie zwiêksza si³ê czaru.
+E++
+
+=== MODIFIER fe
+Tylko wrogowie
+Czar zadzia³a tylko na wrogów magika.
+:Wr
+
+=== MODIFIER ff
+Tylko przyjaciele
+Czar zadzia³a tylko na przyjació³ magika.
+:Pr
+
+=== MODIFIER fg
+Tylko gobliny
+Czar zadzia³a tylko na gobliny.
+:Go
+
+=== MODIFIER fh
+Tylko ludzie
+Czar zadzia³a tylko na ludzi.
+:Lu
+
+=== MODIFIER fl
+Tylko jaszczury
+Czar zadzia³a tylko na jaszczury.
+:Ja
+
+=== MODIFIER fo
+Tylko orki
+Czar zadzia³a tylko na orki.
+:Or
+
+=== MODIFIER ic
+Przedmiot: Kontynuacja
+Mo¿esz umieœciæ czar w przedmiocie, bêdzie on rzucany nieprzerwanie, tak d³ugo jak obiekt bêdzie posiada³ wystarczaj¹c¹ iloœæ energii.
+Ik
+
+=== MODIFIER im1
+Przedmiot: Dodatkowa energia
+Zmniejsza iloœæ energii zu¿ywanej przez w³o¿ony czar.
+P-
+
+=== MODIFIER im2
+Przedmiot: Maksymalna energia
+Znacznie zmniejsza iloœæ energii zu¿ywanej przez w³o¿ony czar.
+P--
+
+=== MODIFIER ir1
+Przedmiot: Zwiêkszona regeneracja
+Zwiêksza regeneracjê energii obiektu w którym znajduje siê czar.
+R+
+
+=== MODIFIER ir2
+Przedmiot: Maksymalna regeneracja
+Znacznie zwiêksza regeneracjê energii obiektu w którym znajduje siê czar.
+R++
+
+=== MODIFIER it
+Przedmiot: Wyzwalacz
+Mo¿esz umieœciæ czar w przedmiocie. Czar zostanie wyzwolony automatycznie gdy u¿yjesz obiektu.
+Iw
+
+=== MODIFIER m1
+Dodatkowa energia
+Zmniejsza iloœæ energii zu¿ywanej podczas rzucania czaru.
+E-
+
+=== MODIFIER m2
+Maksymalna energia
+Znacznie zmniejsza iloœæ energii zu¿ywanej podczas rzucania czaru.
+E--
+
+=== MODIFIER r1
+Dodatkowy zasiêg
+Dwukrotnie zwiêksza zasiêg dzia³ania czaru.
+Z+
+
+=== MODIFIER r2
+Maksymalny zasiêg
+Trzykrotnie zwiêksza zasiêg dzia³ania czaru.
+Z++
+
+=== MODIFIER t1
+Dodatkowy cel
+Czar zadzia³a na dodatkowy cel znajduj¹cy siê w pobli¿u.
+C+
+
+=== MODIFIER t2
+Dodatkowe cele
+Czar zadzia³a na dwa dodatkowe cele znajduj¹ce siê w pobli¿u.
+C++
+

@@ -1,8 +1,0 @@
-     To construct an item click on its blueprint in your inventory (bottom bar) or in the shop (top bar). The blueprint will be placed into the appropriate slot.
-     As soon as you've placed the blueprint into its slot, the material slots will be highlighted with a flickering frame. The number of highlighted slots is equal to the number of material units the blueprint says you'll need. Click on a material  - either in your inventory if it's there, or in the shop - and it will go to one of the slots. You can only use one kind of material to make an item. Mixing different materials is not allowed, even if they are of the same general type.
-
-     Note: you must first place a blueprint in the constructor before you can place material there. If you place the blueprint in the constructor and then take it out again (i.e. you return it to your inventory or to the shop), all material you have placed in the constructor will be automatically removed from the slots and returned to where it came from.
-
-     When all material slots are filled, the left panel will show the properties of the item in construction. In the lower part of the screen you'll see the item's price. This includes the price of the articles you bought, if any.
-
-     To construct the item click on the "V" button, to cancel click on "X".

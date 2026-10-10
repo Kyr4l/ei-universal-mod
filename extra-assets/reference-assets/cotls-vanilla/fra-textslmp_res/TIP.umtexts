@@ -1,0 +1,140 @@
+# um-texts 1
+=== tip 40100
+Accepter
+
+=== tip 40101
+Revenir au menu principal
+
+=== tip 40200
+Créer un personnage réseau
+Accéder au personnage réseau
+Ecran de création
+
+=== tip 40201
+Modifier le nom du clan
+Vous pouvez modifier le nom du clan dans
+lequel votre personnage réseau se trouve.
+En revanche, vous ne pouvez pas modifier 
+le nom du personnage réseau.
+
+=== tip 40202
+Supprimer le personnage réseau
+Votre personnage réseau sera supprimé.
+Il sera alors impossible de le
+récupérer.
+
+=== tip 40203
+Afficher le personnage
+Vous pouvez afficher les caractéristiques
+de votre personnage réseau, son équipement
+et le contenu de son inventaire. Vous pouvez aussi
+modifier son habillement, ses armes, ses sorts et répartir son expérience.
+
+=== tip 40300
+Suivant
+Passer aux écrans d'équipement, de compétences
+et de capacité du personnage réseau.
+Remarque : vous ne pouvez accéder à ces 
+écran qu'après avoir entré le nom du personnage
+et seulement si l'équilibre de ses caractéristiques
+est égal à zéro.
+
+=== tip 40301
+Précédent
+Revenir à l'écran de
+sélection du personnage
+réseau.
+
+=== tip 40302
+Annuler
+Annuler toutes les modifications des
+caractéristiques du personnage. Tous
+les paramètres retrouveront leur valeur par défaut.
+
+=== tip 40400
+Défilement à droite
+Faire défiler vers la droite les portraits 
+des personnages réseau disponibles.
+
+=== tip 40401
+Défilement à gauche
+Faire défiler vers la gauche les portraits 
+des personnages réseau disponibles.
+
+=== tip 40500
+Suivant
+Revenir à l'écran de sélection des 
+personnages réseau. Le personnage que 
+vous avez créé sera ajouté.
+
+=== tip 40501
+Précédent
+Revenir à l'écran de création des
+personnages réseau. Remarque : toutes les
+modifications effectuées seront perdues.
+
+=== tip 40502
+Annuler
+Annuler toutes les modifications effectuées
+pour le personnage. Tous les paramètres
+retrouveront leur valeur par défaut.
+
+=== tip 40600
+Confirmer
+
+=== tip 40601
+Refuser
+
+=== tip 40602
+Ajouter adresse
+Ajouter une adresse dans le
+Carnet d'adresses.
+
+=== tip 40603
+Supprimer adresse
+Supprimer une adresse
+du Carnet d'adresses.
+
+=== tip 40610
+Informations sur le serveur
+Appuyez sur le bouton "Réactualiser" pour obtenir
+la liste des serveurs disponibles. 
+Attention ! Votre ordinateur doit disposer d'une
+connexion à Internet.
+
+=== tip 40611
+Ajouter/Supprimer un serveur dans le carnet d'adresses
+Vous pouvez ajouter des signets correspondant aux serveur dans votre Carnet d'adresses. 
+Ces serveurs se trouveront alors toujours dans la liste (marqués en jaune). 
+Ajouter un serveur dans le Carnet d'adresses : lorsque vous appuyez sur le bouton "Ajouter/Supprimer", une fenêtre permettant
+d'entrer ou de modifier l'adresse du serveur s'affiche. Si l'un des 
+serveurs actifs était sélectionné dans la liste, son adresse 
+apparaît dans la fenêtre. 
+Supprimer un serveur : sélectionnez un serveur dans le carnet d'adresses et appuyez
+sur le bouton "Ajouter/Supprimer".
+
+=== tip 40612
+Serveur privé 
+Un serveur ouvert peut être enregistré dans la liste des serveurs disponibles
+pour tous les joueurs. Pour démarrer un serveur ouvert, le joueur doit disposer d'un accès à Internet. 
+L'adresse d'un serveur privé est visualisée dans un réseau local, et les joueurs
+ne doivent pas forcément disposer d'un accès à Internet. 
+Attention ! Les joueurs ne peuvent accéder à un serveur privé par Internet que s'ils
+disposent de son adresse IP, et si le serveur dispose d'un accès à Internet.
+
+=== tip 40613
+Mot de passe 
+Créer un serveur protégé par un mot de passe.
+
+=== tip 41000
+Confirmer
+Confirmer un échange.
+
+=== tip 41001
+Refuser
+Refuser un échange.
+
+=== tip 41003
+Quitter
+Quitter l'écran d'échange.
+

@@ -16,15 +16,15 @@ GlobalVars (
   GearULeft : object,
   GearURight : object,
   GearRight : object,
-  Firez : object,
-  Marshal : object,
-  Sukro : object,
+//  Firez : object,
+//  Marshal : object,
+//  Sukro : object,
   YGLeft : object,
   YGULeft : object,
   YGURight : object,
   YGRight : object,
   TPlateLever : object,
-  z35q2Chest : object,
+  z35xq2Chest : object,
   OutBP : object,
   InBP : object
 )
@@ -33,7 +33,6 @@ DeclareScript #Start#0 (  this : object )
 DeclareScript #Dialog#0 (  this : object, dialog : string )
 DeclareScript #CycleLever#0 ( this : object, state : float )
 DeclareScript #CycleLever#1 ( this1 : object, this2 : object, state : float, gate : string )
-DeclareScript #Teleport (  )
 DeclareScript #VFire#0#1 (  this : object )
 DeclareScript #VFire#0#2 (  this : object )
 DeclareScript #VFire#0#3 (  this : object )
@@ -44,10 +43,6 @@ DeclareScript #VFireCity#0#2 (  this : object )
 DeclareScript #VFireCity#0#3 (  this : object )
 DeclareScript #VCityGates#0#1 (  this1 : object, this2 : object, this3 : object )
 DeclareScript #VCityGates#0#2 (  this1 : object, this2 : object, this3 : object )
-DeclareScript #KChest#1 (  this : object )
-DeclareScript #KChest#2 (  this : object )
-DeclareScript #KChest#3 (  this : object )
-DeclareScript #Barell#1 (  this : object )
 DeclareScript #ESight (  )
 DeclareScript #IVision (  )
 DeclareScript #TPlate (  )
@@ -697,7 +692,7 @@ Script #VCityGates#0#1
 (
   if
   (
-    Add( GSGetVar( 0, "q.z35q1.z35q1" ), Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
+    Add( GSGetVar( 0, "q.z35xq1.z35xq1" ), Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
   )
   then
   (
@@ -710,76 +705,13 @@ Script #VCityGates#0#2
 (
   if
   (
-    Not( GSGetVar( 0, "q.z35q1.z35q1" ) )
+    Not( GSGetVar( 0, "q.z35xq1.z35xq1" ) )
     Not( Any( i, GetPlayerUnits( 0 ), IsLess( DistanceUnitUnit( i, this3 ), 7.5 ) ) )
   )
   then
   (
     KillScript(  )
     SwitchLeverState( this2, 1 )
-  )
-)
-
-Script #KChest#1
-(
-  if
-  (
-    IsEqual( GetLeverState( GetObject( 6085 ) ) , 1 )
-  )
-  then
-  (
-    KillScript(  )
-    GiveMoney( 0 , 24000 )
-    QuestComplete( 0, "kchest" )
-    Sleep( 40 )
-    SwitchLeverState( GetObject( 6085 ) , 0 )
-  )
-)
-
-Script #KChest#2
-(
-  if
-  (
-    IsEqual( GetLeverState( GetObject( 394351 ) ) , 1 )
-  )
-  then
-  (
-    KillScript(  )
-    GiveMoney( 0 , 24000 )
-    QuestComplete( 0, "kchest" )
-    Sleep( 40 )
-    SwitchLeverState( GetObject( 394351 ) , 0 )
-  )
-)
-
-Script #KChest#3
-(
-  if
-  (
-    IsEqual( GetLeverState( GetObject( 4044 ) ) , 1 )
-  )
-  then
-  (
-    KillScript(  )
-    GiveMoney( 0 , 24000 )
-    QuestComplete( 0, "kchest" )
-    Sleep( 40 )
-    SwitchLeverState( GetObject( 4044 ) , 0 )
-  )
-)
-
-Script #Barell#1
-(
-  if
-  (
-    IsEqual( GetLeverState( GetObject( 155277 ) ) , 1 )
-  )
-  then
-  (
-    KillScript(  )
-    GiveItem( 0 , "material.iron[1]" )
-    Sleep( 40 )
-    SwitchLeverState( GetObject( 155277 ) , 0 )
   )
 )
 
@@ -839,7 +771,7 @@ Script #MainChest
 (
   if
   (
-    IsEqual( GetLeverState( z35q2Chest ), 1 )
+    IsEqual( GetLeverState( z35xq2Chest ), 1 )
   )
   then
   (
@@ -898,7 +830,7 @@ Script #OnBriefingComplete
 WorldScript
 (
   Sleep( 2 )
-  AddObject( Green, GetObject( 1000000 ) )
+//  AddObject( Green, GetObject( 1000000 ) )
   AddObject( Green, GetObject( 1000001 ) )
   AddObject( Green, GetObject( 1000002 ) )
   AddObject( Green, GetObject( 1000003 ) )
@@ -915,22 +847,22 @@ WorldScript
   GearULeft = GetObjectByID( "1003869" )
   GearURight = GetObjectByID( "1003870" )
   GearRight = GetObjectByID( "1003871" )
-  Firez = GetObjectByID( "1000055360" )
-  Marshal = GetObjectByID( "1001470076" )
-  Sukro = GetObjectByID( "1000064864" )
+//  Firez = GetObjectByID( "1000055360" )
+//  Marshal = GetObjectByID( "1001470076" )
+//  Sukro = GetObjectByID( "1000064864" )
   YGLeft = GetObjectByID( "44432400" )
   YGULeft = GetObjectByID( "44432401" )
   YGURight = GetObjectByID( "44432402" )
   YGRight = GetObjectByID( "44432403" )
   TPlateLever = GetObjectByID( "4371" )
-  z35q2Chest = GetObjectByID( "1003850" )
+  z35xq2Chest = GetObjectByID( "1003850" )
   OutBP = GetObjectByID( "1000495" )
   InBP = GetObjectByID( "1000857" )
   
   #Start#0( NULL )
-  #Dialog#0( Firez, "b.Firez.intro_f" )
-  #Dialog#0( Marshal, "b.Marshal.intro_m" )
-  #Dialog#0( Sukro, "b.Sukro.intro_s" )
+//  #Dialog#0( Firez, "b.Firez.intro_f" )
+//  #Dialog#0( Marshal, "b.Marshal.intro_m" )
+//  #Dialog#0( Sukro, "b.Sukro.intro_s" )
   #CycleLever#1( GearLeft, BarsLeft2, GetLeverState( GearLeft ), "gz1n.gater" )
   #CycleLever#1( GearULeft, BarsULeft2, GetLeverState( GearULeft ), "gz1n.gated" )
   #CycleLever#1( GearURight, BarsURight3, GetLeverState( GearURight ), "gz1n.gatel" )
@@ -946,15 +878,14 @@ WorldScript
   #VCityGates#0#2( YGULeft, GearULeft, BarsULeft2 )
   #VCityGates#0#2( YGURight, GearURight, BarsURight3 )
   #VCityGates#0#2( YGRight, GearRight, BarsRight3 )
-  #Teleport(  )
   #ESight(  )
   #IVision(  )
   #TPlate(  )
   #MainChest(  )
   #TPIn(  )
   #TPOut(  )
-  ConsoleFloat( GSGetVar( 0, "q.z35q1.z35q1" ) )
-  ConsoleFloat( GSGetVar( 0, "q.z35q2.z35q2" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35xq1.z35xq1" ) )
+  ConsoleFloat( GSGetVar( 0, "q.z35xq2.z35xq2" ) )
   ConsoleFloat( GSGetVar( 0, "q.z35q3.z35q3" ) )
   ConsoleFloat( GSGetVar( 0, "q.z35q4.z35q4" ) )
   ConsoleFloat( GSGetVar( 0, "q.z35q5.z35q5" ) )

@@ -1,0 +1,64 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  DPrison : object,
+  BigMachine : object,
+  TigerW1 : object,
+  TigerW2 : object,
+  TigerW3 : object,
+  ShopperTent : object,
+  Skin2 : object,
+  Skin1 : object,
+  Skin4 : object,
+  CaveDoor : object,
+  CaveCave : object,
+  FarmGate00-4059 : object,
+  FarmGate004058 : object,
+  ArmyTent1 : object,
+  ArmyTent3 : object,
+  ArmyTent2 : object,
+  BoltTower : object,
+  Headquaters : object,
+  KBridge : object,
+  Heroes : group,
+  BlackUni : group,
+  MonstersK : group 
+)
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  DPrison = GetObjectByID( "4216" ) 
+  BigMachine = GetObjectByID( "4217" ) 
+  TigerW1 = GetObjectByID( "4218" ) 
+  TigerW2 = GetObjectByID( "4219" ) 
+  TigerW3 = GetObjectByID( "4220" ) 
+  ShopperTent = GetObjectByID( "4276" ) 
+  Skin2 = GetObjectByID( "4277" ) 
+  Skin1 = GetObjectByID( "4278" ) 
+  Skin4 = GetObjectByID( "4280" ) 
+  CaveDoor = GetObjectByID( "4285" ) 
+  CaveCave = GetObjectByID( "4312" ) 
+  FarmGate00-4059 = GetObjectByID( "4451" ) 
+  FarmGate004058 = GetObjectByID( "4548" ) 
+  ArmyTent1 = GetObjectByID( "2667" ) 
+  ArmyTent3 = GetObjectByID( "2668" ) 
+  ArmyTent2 = GetObjectByID( "2669" ) 
+  BoltTower = GetObjectByID( "2675" ) 
+  Headquaters = GetObjectByID( "2703" ) 
+  KBridge = GetObjectByID( "2711" ) 
+)

@@ -1,0 +1,74 @@
+GlobalVars (
+  NULL : object,
+  VSS#i#val : object,
+  i : object,
+  Table00 : object,
+  HadoganGate14483f : object,
+  HadoganGate14483e : object,
+  HadoganHouse01 : object,
+  HadoganGate00-14483d : object,
+  Aizet-BekGate : object,
+  BrokenHouse00 : object,
+  WaterLock00-23122f : object,
+  WaterLock00-23122e : object,
+  WaterLock00-23122d : object,
+  WaterLock00-23122c : object,
+  WaterLock00-23122b : object,
+  WaterLock00-23122a : object,
+  GateOhrana2 : object,
+  HadoganGate00-14483b : object,
+  ManorGates : object,
+  Ohrana18 : object,
+  DgunistHouse : object,
+  Ohrana1 : group,
+  JunScientifics : group,
+  SW : group,
+  Supervisor1 : group,
+  Heroes : group,
+  OhranaJunHouse : group,
+  Supervisor2 : group,
+  Pursuit : group,
+  Banshee14 : group,
+  Spider15 : group,
+  Tablers : group,
+  Ohrana2 : group,
+  Police : group 
+)
+
+DeclareScript #OnBriefingComplete (  nPlayer : float,  szComplete : string )
+
+Script #OnBriefingComplete
+(
+  if
+  (
+  )
+  then
+  (
+    KillScript(  ) 
+  )
+)
+
+WorldScript
+(
+  Sleep( 2 ) 
+  Table00 = GetObjectByID( "360616" ) 
+  HadoganGate14483f = GetObjectByID( "46296" ) 
+  HadoganGate14483e = GetObjectByID( "46307" ) 
+  HadoganHouse01 = GetObjectByID( "46440" ) 
+  HadoganGate00-14483d = GetObjectByID( "46461" ) 
+  Aizet-BekGate = GetObjectByID( "46470" ) 
+  BrokenHouse00 = GetObjectByID( "47119" ) 
+  WaterLock00-23122f = GetObjectByID( "23122" ) 
+  WaterLock00-23122e = GetObjectByID( "23123" ) 
+  WaterLock00-23122d = GetObjectByID( "23124" ) 
+  WaterLock00-23122c = GetObjectByID( "23125" ) 
+  WaterLock00-23122b = GetObjectByID( "23126" ) 
+  WaterLock00-23122a = GetObjectByID( "23127" ) 
+  GateOhrana2 = GetObjectByID( "46662" ) 
+  HadoganGate00-14483b = GetObjectByID( "47035" ) 
+  ManorGates = GetObjectByID( "150158" ) 
+  Ohrana18 = GetObjectByID( "150240" ) 
+  DgunistHouse = GetObjectByID( "47541" ) 
+  AddObject( Ohrana1, GetObject( 150240 )  ) 
+  AddObject( OhranaJunHouse, GetObject( 150240 )  ) 
+)

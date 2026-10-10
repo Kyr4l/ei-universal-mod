@@ -1,9 +1,0 @@
-Leave Sahilia in the Shelter
-#show Hero 
-#show Merc10
-#ANIMATION 9
-#phrase Hero  1
-I go on a dangerous mission where sheer force and battle magic will decide the outcome, not stealth and dexterity. This time you had better stay here.
-#ANIMATION 70
-#phrase Merc10  2
-I will not argue with you but I am sure you will be back here for my help very soon!

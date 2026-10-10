@@ -1,0 +1,497 @@
+# um-texts 1
+=== PERK Actions
+Actions
+Actions determine both how swiftly a character can use his weapons and how quickly he can cast spells.
+
+=== PERK Archery
+Archery
+The skill of using projectile weapons - bows and cross-bows. The outcome of a character's attack (the chances that he strikes enemies) is determined by his skill with this particular type of weapon (Skill) and affected by his Dexterity.
+
+=== PERK Astral
+Astral Magic
+This skill allows you to create and use spells of the Astral Magic school. These are very different in nature - e.g. Healing or Paralysis. Magic abilities depend on skill in the particular magic school (Skill) and the character's Intelligence.
+
+=== PERK Awareness
+Awareness
+Awareness
+
+=== PERK Backstab
+Backstab
+A special skill which allows the character to make a lethal backstab at an enemy. If your character manages to get near the target from behind, he will automatically perform a backstab and cause much more damage than with common strikes.
+
+=== PERK Dexterity
+Dexterity
+Dexterity determines a character's "Stamina" (the ability to use difficult spells) and "Actions" (how quickly the character can hit or cast spells). Dexterity also affects "Attack" and "Use/Steal" parameters.
+
+=== PERK Elemental
+Elemental Magic
+A skill which allows you to create and use spells of the Elemental Magic school. Most destructive spells are in this category - e.g. Fireball. Magic abilities depend on the skill in a particular magic school (Skill) and the character's Intelligence.
+
+=== PERK Encumbrance
+Encumbrance:
+The Encumbrance determines how much weight your character carries. The more armor and weapons he has and the heavier they are, the higher the character's encumbrance. If it exceeds the "Encumbrance" value (determined by the character's Strength), he cannot run.
+
+=== PERK Experience
+Experience
+The higher the character's Experience is, the better his "Health" and "Stamina". Also, Experience can be used to increase Skills and Abilities. Experience gained during the game will be distributed equally among all members of your team, but its value will change according to the characters' Intelligence.
+
+=== PERK Health
+Health
+Health determines how much damage your character can sustain. When damaged, the character's Health diminishes. When Health reaches 0 or less, the character dies.
+
+=== PERK Intelligence
+Intelligence
+Intelligence determines the amount of experience your character can gain. The higher this value, the more experience is gained. Also, Intelligence affects the amount of Stamina used while casting spells (the higher the Intelligence, the less Stamina is spent). Intelligence also affects the "Knowledge of Magic" parameter.
+
+=== PERK Mana
+Stamina
+Stamina determines a character's strength reserves. Characters with more stamina can cast more complex and difficult spells.
+
+=== PERK Melee
+Melee
+The skill in using close combat weapons - knives, axes, spears etc. The outcome of a character's attack (the chances that he hits enemies) is determined by his skill with this particular type of weapon (Skill) and affected by his Dexterity.
+
+=== PERK Move
+Movement
+Movement speed determines how quickly a character can move.
+
+=== PERK Science
+Use/Steal
+A skill which allows the character to open locks, operate unfamiliar machinery and also steal things. It is based on Skill and affected by Dexterity. The higher this skill, the more complex devices your character can use, and the higher the chances that the enemy will not notice his loss.
+
+=== PERK Sense
+Sensory Magic
+A skill which allows the character to create and use spells of the Sensory Magic school. These are mainly informational spells - e.g. Eagle Sight. Magic abilities depend on the skill in a particular magic school (Skill) and the character's Intelligence.
+
+=== PERK Stealing
+Stealing
+Art of Thievery
+
+=== PERK Stealth
+Stealth
+Stealth
+
+=== PERK Strength
+Strength
+Strength affects characters' "Health" parameter - the higher their Strength, the more damage they can sustain. A High Strength value allows you to carry more weight, i.e. you can wear heavier armor.
+
+=== PERK Tame
+Taming
+Taming
+
+=== PERK acid0
+Magic of Acid
+Improved skill with acid spells of the Elemental Magic school. This ability allows you to use more complex spells.
+
+=== PERK acid1
+Apprentice
+Acid apprentice
+
+=== PERK acid2
+Expert
+Acid expert
+
+=== PERK acid3
+Master
+Acid master
+
+=== PERK axe0
+Axe
+Improved axe skill. When a character with this ability uses an axe, he receives a bonus to "Attack" and "Defense".
+
+=== PERK axe1
+Specialist
+Axe specialist
+
+=== PERK axe2
+Expert
+Axe expert
+
+=== PERK axe3
+Master
+Axe master
+
+=== PERK bludgeon0
+Bludgeon
+Improved skill with bludgeoning weapons. When a character with this ability uses such weapons, he receives a bonus to "Attack" and "Defense".
+
+=== PERK bludgeon1
+Specialist
+Bludgeon specialist
+
+=== PERK bludgeon2
+Expert
+Bludgeon expert
+
+=== PERK bludgeon3
+Master
+Bludgeon master
+
+=== PERK bow0
+Bow
+Improved archery skill. When a character with this ability uses a bow, his "Attack" receives a bonus. This skill does not provide a "Defense" bonus.
+
+=== PERK bow1
+Specialist
+Bow specialist
+
+=== PERK bow2
+Expert
+Bow expert
+
+=== PERK bow3
+Master
+Bow master
+
+=== PERK bs0
+Backstab
+If your character stealthily approaches an enemy and strikes him from behind, he inflicts much greater damage.
+
+=== PERK bs1
+Increased
+Increased
+
+=== PERK bs2
+X2
+X2
+
+=== PERK bs3
+X3
+X3
+
+=== PERK dagger0
+Dagger
+Improved dagger skill. When a character with this ability uses a dagger, his "Attack" and "Defense" receive a bonus.
+
+=== PERK dagger1
+Specialist
+Dagger specialist
+
+=== PERK dagger2
+Expert
+Dagger expert
+
+=== PERK dagger3
+Master
+Dagger master
+
+=== PERK dex0
+Dexterity
+Increased "Dexterity" parameter
+
+=== PERK dex1
+Increased
+Increased
+
+=== PERK dex2
+X2
+X2
+
+=== PERK dex3
+X3
+X3
+
+=== PERK divination0
+Sensory Magic
+Improved skill with looking spells of the Sensory Magic school. This ability allows you to use more complex spells.
+
+=== PERK divination1
+Apprentice
+Apprentice
+
+=== PERK divination2
+Expert
+Expert
+
+=== PERK divination3
+Master
+Master
+
+=== PERK domination0
+Magic of Control
+Improved skill with control spells of the Magic of Astral school. This ability allows you to use more complex spells.
+
+=== PERK domination1
+Apprentice
+Apprentice
+
+=== PERK domination2
+Expert
+Expert
+
+=== PERK domination3
+Master
+Master
+
+=== PERK enchantments0
+Astral Magic
+Improved skill with all spells of the Magic of Astral school. This ability allows you to use more complex spells.
+
+=== PERK enchantments1
+Apprentice
+Astral apprentice
+
+=== PERK enchantments2
+Expert
+Astral expert
+
+=== PERK enchantments3
+Master
+Astral master
+
+=== PERK fire0
+Magic of Fire
+Improved skill with fire spells of the Elemental Magic school. This ability allows you to use more complex spells.
+
+=== PERK fire1
+Apprentice
+Fire apprentice
+
+=== PERK fire2
+Expert
+Fire expert
+
+=== PERK fire3
+Master
+Fire master
+
+=== PERK healing0
+Magic of Healing
+Improved skill with healing spells of the Magic of Astral school. This ability allows you to use more complex spells.
+
+=== PERK healing1
+Apprentice
+Apprentice
+
+=== PERK healing2
+Expert
+Expert
+
+=== PERK healing3
+Master
+Master
+
+=== PERK health0
+Health
+Improved "Health" parameter.
+
+=== PERK health1
+Increased
+Increased
+
+=== PERK health2
+X2
+X2
+
+=== PERK health3
+X3
+X3
+
+=== PERK illusion0
+Sensory Magic
+Improved skill with all spells of the Sensory Magic school. This ability allows you to use more complex spells.
+
+=== PERK illusion1
+Apprentice
+Sensory apprentice
+
+=== PERK illusion2
+Expert
+Sensory expert
+
+=== PERK illusion3
+Master
+Sensory master
+
+=== PERK int0
+Intelligence
+Increased "Intelligence" parameter
+
+=== PERK int1
+Increased
+Increased
+
+=== PERK int2
+X2
+X2
+
+=== PERK int3
+X3
+X3
+
+=== PERK lift0
+Encumbrance
+A character who is trained in weightlifting can carry a heavier load, including heavier armor.
+
+=== PERK lift1
+Increased
+Increased
+
+=== PERK lift2
+X2
+X2
+
+=== PERK lift3
+X3
+X3
+
+=== PERK lightning0
+Magic of Lightning
+Improved skill with lightning spells of the Elemental Magic school. This ability allows you to use more complex spells.
+
+=== PERK lightning1
+Apprentice
+Lightning apprentice
+
+=== PERK lightning2
+Expert
+Lightning expert
+
+=== PERK lightning3
+Master
+Lightning master
+
+=== PERK mana0
+Stamina
+Improved "Stamina" parameter.
+
+=== PERK mana1
+Increased
+Increased
+
+=== PERK mana2
+X2
+X2
+
+=== PERK mana3
+X3
+X3
+
+=== PERK night0
+Night vision
+Without this ability the character's vision radius is reduced by half at night. With Night Vision at max, the character's night vision is as good as his daytime vision.
+
+=== PERK night1
+Increased
+Increased
+
+=== PERK night2
+X2
+X2
+
+=== PERK night3
+X3
+X3
+
+=== PERK quickness0
+Actions
+Increased actions speed allows the character to strike more often or cast spells quicker.
+
+=== PERK quickness1
+Increased
+Increased
+
+=== PERK quickness2
+X2
+X2
+
+=== PERK quickness3
+X3
+X3
+
+=== PERK spear0
+Spear
+Improved spear skill. When a character who has this ability uses a spear, his "Attack" and "Defense" are more efficient.
+
+=== PERK spear1
+Specialist
+Spear specialist
+
+=== PERK spear2
+Expert
+Spear expert
+
+=== PERK spear3
+Master
+Spear master
+
+=== PERK spirit0
+Recovery
+Increased Stamina recovery. Decreases the resting time needed after running or casting spells.
+
+=== PERK spirit1
+Increased
+Increased
+
+=== PERK spirit2
+X2
+X2
+
+=== PERK spirit3
+X3
+X3
+
+=== PERK str0
+Strength
+Increased "Strength" parameter
+
+=== PERK str1
+Increased
+Increased
+
+=== PERK str2
+X2
+X2
+
+=== PERK str3
+X3
+X3
+
+=== PERK sword0
+Sword
+Improved sword skill. When a character with this ability uses a sword, his "Attack" and "Defense" are improved.
+
+=== PERK sword1
+Specialist
+Sword specialist
+
+=== PERK sword2
+Expert
+Sword expert
+
+=== PERK sword3
+Master
+Sword master
+
+=== PERK vitality0
+Regeneration
+Characters with Increased regeneration ability can restore their health more quickly.
+
+=== PERK vitality1
+Increased
+Increased
+
+=== PERK vitality2
+X2
+X2
+
+=== PERK vitality3
+X3
+X3
+
+=== PERK xbow0
+Crossbow
+Improved crossbow skill. When a character who has this ability uses a crossbow, his "Attack" is more efficient. This skill does not provide a "Defense" bonus.
+
+=== PERK xbow1
+Specialist
+Crossbow specialist
+
+=== PERK xbow2
+Expert
+Crossbow expert
+
+=== PERK xbow3
+Master
+Crossbow master
+

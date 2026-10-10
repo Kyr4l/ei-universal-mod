@@ -1,0 +1,1474 @@
+# um-texts 1
+=== quest fq10
+A sip of freedom
+An unyielding warrior for goblin freedom, Go-Go has been taken captive in an orc camp. Only by freeing him will the goblins have a chance to free themselves from the yoke!
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq11
+Quickfoot
+One of the robbers who attacked a Free Hunter in the Dead City was chopped in half and a skeleton came to life. Apparently, when he was alive, the owner of the skeleton thought with something other than his head, and so now the lower part of his skeleton remains alive...
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq12
+Exactly!
+The island orcs secretly feed a giant ogre. If you don't feed it, it gets angry and becomes deadly. However, if he can eat, he will eat as much as he is given. I wonder how he'll react to four more.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq13
+The Hall of the Great
+On the upper level of the lizardfolk tomb is the hall where the lizardfolk buried the greatest of their chiefs. You might want to take a look around.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq14
+Find the technical drawing of the secret weapon
+It should be located in the lab. 
+#subobj 1
+Find another entrance
+The door is locked from the inside, so you need to look for another entrance.
+#subobj 2
+Find the key
+The door to the lab is locked - you need to find the key located somewhere nearby.
+#subobj 3
+Enter the lab
+You need to unlock the door with the key and open it.
+#subobj 4
+Take the technical drawing
+He is located somewhere here.
+#subobj 5
+Charge the golems
+If you took one away, no enemy would be afraid!
+#subobj 6
+Unload the golems
+Now they'll never fight again.
+
+=== quest fq15
+Herd animals
+Animals should not be kept in captivity. He who sets them free will gain the gratitude of animal advocates.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq16
+Obstacle
+Not every gate can be opened, not every obstacle can be removed from the way. But a reward awaits the one who finds a way to reach the destination.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq17
+Tree of life
+A solitary tree grows near a well in a war camp. Whoever waters it will grow an amazing plant, according to the forest people.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq18
+Country house
+Forest folk want to get acquainted with strange spotted animals that give tasty milk. One such animal is in an enclosure in a hamlet south of the Karansula domain.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq19
+Wandering in the dark
+A combination of levers and gates in a cave block the way to a chest. Only the possessor of a special key will be able to guess the riddle.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq2
+Underground passage
+You can get to the mansion only through the underground passage. Time to travel it.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq3
+Harvest
+In a basket in the middle of the plantation, almost all of the harvested fruit from over several days was collected.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq4
+A trunk on the sand
+There is a big chest lying on the sand. In such a chest you can hide a lot of money...
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq5
+Chest of the Dead
+For some unfathomable reason, the chest only opens if all zombies are destroyed.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq6
+The riddle of the robocalls
+The levers near the temple of robocalls are enchanted. Only a clever and lucky person will be able to guess their riddle.
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq8
+The great mushroom
+In a clearing near the goblin camp in the Middle Peaks, the largest mushrooms on Gipath grow. However, only one is edible...
+#subobj 1
+Zuch
+Aga!
+
+=== quest fq9
+The treasures of the expedition
+Behind the bars in the ruined camp of the Khadagan expedition lies a bag of treasures.
+#subobj 1
+Zuch
+Aga!
+
+=== quest q02h
+Escape
+Something strange is happening in the slave enclosure, and while the guards are busy you can try to escape.
+#subobj 1
+Get out of the enclosure
+Apparently one section of the fence isn't as durable as the others - you could try to destroy it.
+#subobj 2
+Get away from the monster!
+You need to hide while the monster has gotten away from its target for a while.
+#subobj 3
+Get the plan of the underground passage
+There is not even the slightest chance of getting through the main gate. However, according to Kiel, there is another way out - through the old underground passage. Unfortunately she doesn't know how to get there, but the plans of this place should be at one of the officers. 
+#subobj 4
+Get to the underground passage
+It turns out that a hidden underground passage is hidden under a seemingly ordinary house in the west of the fortress. It's high time to use it!
+
+=== quest q03h
+Catacombs
+Going through the old catacombs is the only way to get out of the fortress. These corridors have not been used for a long time, and dangerous creatures may have nested here!
+#subobj 1
+Use the elevator
+The elevator was previously used for smuggling heavy goods from the fortress to the outside and back. It is most likely still in operation.
+#subobj 2
+Search the trunk 
+It is possible that some of the stolen goods were forgotten or not carried away in time. Even the old stuff left here may be useful now.
+#subobj 3
+Leave the catacombs!
+The guards must have figured out by now that someone stole the map of this passage to use it. Better not stop here...
+
+=== quest q10g
+Peace with the lizards
+Hermit the Lizardman asks you to place the Great Shell on the Altar of the Lizardmen in Distant Peaks in order to reconcile them with the humans who have been raiding the Lizardmen's territory a lot lately. In return, Hermit agreed to tell how to find the Chosen One.
+#subobj 1
+Come to the altar
+The lizard area is located to the west of the Ogle Peaks. The altar, on the other hand, is in the very center of it, and is well protected.
+#subobj 2
+Place the Great Shell on the Altar
+After the Shell is placed on the Altar, there will be peace in the Distant Peaks.
+=== quest q10j
+Ragout with mushrooms
+The storming of the Khadagan fortress would go much easier if you fed the enemy soldiers with a special meal, so that instead of fighting they would have something else on their mind and in another part of their body. To prepare the debilitating ragout Uncle Council needs a large pumpkin and venomous mushrooms.
+#subobj 1
+Find a pumpkin
+A suitable pumpkin can be found in one of the shelves not far from the Khadagan fortress.
+#subobj 2
+Take the pumpkin
+The right pumpkin for the ragout is the only ripe one from this field. It's impossible to mistake it for another.
+#subobj 3
+Find the mushrooms
+The venom in the mushrooms should not have worked immediately, otherwise too few guards will be poisoned. Suitable mushrooms only grow by the river, more south of Uncle Zaciesz's tent.
+#subobj 4
+Go mushroom picking
+Mushrooms are only venomous when eaten, collecting them should not be dangerous.
+=== quest q10k
+Gifts to the capital
+'Highwaymen' are ready to welcome new people into their camp, but first you have to earn it - by robbing a caravan of gifts to the capital.
+#subobj 1
+Come to the stopping place of the caravan
+The caravan to the capital stopped briefly at the Karansula Property, where people who buy furs and game usually stop.
+#subobj 2
+Dealt with the ambush
+There are armed people hiding nearby - so someone else has taken an interest in this caravan! You need to destroy the ambush without attracting the attention of the caravan security.
+#subobj 3
+Steal the gifts
+The most valuable gifts to the capital lie in a chest on one of the carts.
+=== quest q11g
+The Great Mage
+Hermit the lizard told us that the Chosen One headed for the cave of the Great Mage of Gipath before he disappeared. The Chosen One went there through some sort of tunnel, but now you can also go on the surface - through a ravine in the east of the Distant Peaks.
+#subobj 1
+Go to the ravine
+The path to the Great Mage's cave goes through a long and winding gorge in the mountains. The entrance to the gorge is in the east of Distant Peaks.
+#subobj 2
+Go through the gorge
+The road from the gorge will exit to the lake in the center of Distant Peaks. You may encounter dangerous creatures in the mountains along the way to the exit.
+#subobj 3
+Enter the cave of the Great Mage
+The entrance to the cave where the Great Mage Gipath lives is just north of the lake.
+=== quest q11h
+Missing goods
+A caravan of goods that should go to Aunt Zara's store has stopped along the way for some unknown reason. The town guard has already set out to look for it, but since not all the goods from it are legal you have to outrun them!
+#subobj 1
+Find the caravan
+The caravan should have passed from east to west south of the fortress walls.
+#subobj 2
+Kill the wild animals
+Apparently the caravan was attacked by wild animals. In order to take what survives you need to kill them.
+#subobj 3
+Search the trunk
+All the illegal goods are lying in a large chest. If you manage to take them the guards will not suspect anything and will return the rest of the goods intact and whole to Aunt Zara.
+
+=== quest q11j
+Secret cooking mission
+After everything that has happened near uncle Radha's tent he cannot meet with the Khadagan guard as he is already suspected of working for Cania. Therefore, the feeding of the Khadagan guard with poisoned ragout will fall to someone else.
+#subobj 1
+Infiltrate the city
+There are only two breaches in the city walls - the western and eastern. The western one is further away from the dining hall, and the eastern one is better guarded.
+#subobj 2
+Get to the dining hall
+The dining hall of the city guard is located in the eastern part of the city and is full of hungry and angry soldiers. It's better not to bump into them.
+#subobj 3
+Put the cauldron
+A cauldron of ragout needs to be placed somewhere prominent in the dining hall. Enjoy it, and may it come out the bottom for them....
+=== quest q11k
+Ice Elementals
+Ice Elementals have appeared in an abandoned part of a mine. The reason for their appearance has to be found, and in order to do so, you need samples of these elements.
+#subobj 1
+Enter the abandoned tunnels
+The entrance to the abandoned mines is located in the center of the Mines zone, and is protected by a gate.
+#subobj 2
+Take the samples
+In order to find the cause of the elementals' revelation, you need to destroy several of them and take their samples.
+=== quest q12g
+Free hunters
+The free hunters have spread out in the foothills. The search for the magic bullet is best started at their camp, especially since they themselves have requested a visit.
+#subobj 1
+Sneak past the New Village
+The entire southeastern part is controlled by the New Village guard. It's not worth prematurely setting up a fight with its inhabitants.
+#subobj 2
+Reach the camp
+The Free Hunter camp is located in the north of the area. It can only be reached by a bridge.
+#subobj 3
+Kill the goblins
+People have paid goblins to stand in the way of the camp. You need to clear the way.
+=== quest q12h
+The blackmailers' den
+As it turned out from the ante-mortem note, Aunt Zara's caravan was attacked not by animals but by blackmailers. What's more, the blackmailers are holding one of the caravan's pursuers captive and, with his help, will probably want to put even more pressure on Aunt Zara. The gang of blackmailers must be killed and the herdsman must be rescued and brought safely to Aunt Zara.
+#subobj 1
+Find the blackmailers' house
+The note says that the pursuer will first be taken to one of the houses in town. You need to get through to it and find out where it is being kept. It is better to act quietly.
+#subobj 2
+Eavesdrop the conversation
+By eavesdropping on the guards' conversation, you can find out where the herder is kept. Very important to keep out of sight.
+#subobj 3
+Kill the blackmailer's assistant
+Do not let a single blackmailer go alive!
+#subobj 4
+Free the chaser
+The pursuer is being held somewhere in the southwest outside the city area, and he is definitely protected. He needs to be recaptured.
+#subobj 5
+Bring the herder to Aunt Zara
+Now all that's left is to get the herder to the Hideout's villa and hand him over to Aunt Zara. But be aware of the city patrols...
+
+=== quest q12j
+Assault
+Now that the majority of the Khadagan guard is in an unfit state to fight, it is time to storm. It is time to return the fortress to its eternal owners!
+#subobj 1
+Come to the meeting place
+The Baron's troop is gathering to the east of the fortress.
+#subobj 2
+Recapture the city
+You must retake the city from the Khadagan soldiers. Dar-Ugorn must return to the power of Cania!
+=== quest q12k
+A gift for the governor
+Governor Valrasian mentioned that it would be good to give him an arrow of the Blue Clan's forest people magician as a gift. You have to try to get this arrow - displeasing the governor will not lead to anything good.
+#subobj 1
+Go into the lands of the Blue clan
+The forest people of the Blue clan live in the southwest of the mine zone.
+#subobj 2
+Find the Mage of the Forest People
+There are many forest people of the Blue clan shooters, but the mage, holder of the necessary arrow, is only one.
+#subobj 3
+Take the arrow
+The forest people mage uses spells and does not shoot from a tube. It is not worth hoping that he will fire it at someone and then it can be taken away. Therefore, you need to steal it or take it from a corpse.
+=== quest q13Oh
+Prison
+In one of the cells of this prison sits Aliya, Fieruza's fiancée. She must be found, freed, and helped to escape while her friends the thieves hold back the guards on the surface.
+#subobj 1
+Enter the judgment room
+The judgment room is located between the tortue room and death row.
+#subobj 2
+Take the key
+The key to the cells is stored in the judge's chest, but the judge himself has apparently gone somewhere.
+#subobj 3
+Find Aliya
+Aliya has been imprisoned in one of the farthest cells. The cell can only be opened with the judge's key.
+#subobj 4
+Leave the prison
+There's no more for you to do here...
+#subobj 5
+Stay unnoticed
+The guards are very cautious and will raise the alarm as soon as they notice that the bars of at least one of the cells are not closed.
+
+=== quest q13g
+An unfortunate hunt
+According to the chief, the people of the New Village put so much pressure on the camp of the highwaymen that they practically ruined their hunting opportunity. At the same time, the villagers themselves are hunting in the area, and it has always belonged to the robbers. The chief asked that the people be dissuaded from the hunting grounds of the Free Hunters.
+#subobj 1
+Go to the western foothills
+People from the New Village hunt in the western foothills areas.
+#subobj 2
+Find a hunter camp
+The best place to camp is in the northwestern foothills, at the base of the mountains.
+#subobj 3
+Drive the hunters away
+These hunters are not warriors. Even if some of them show resistance, most will most likely run away.
+#subobj 4
+Take the loot
+If beaten hunters are left extra and without loot, next time they'll think twice about hunting in this area. Besides, the robbers won't be harmed by the hunters' loot.
+
+=== quest q13h
+Beloved
+Fieruza's fiancée, Aliya, was caught stealing and thrown into a cell in a small fortress in the necromancer desert. She is soon moved to a larger prison which is much better protected. Fieruz has asked all his friends and help to free his bride while it's still happening. 
+#subobj 1
+Kill the guard
+The gate of the fortress is protected by a sentry. He must be carefully removed or he will raise the alarm.
+#subobj 2
+Open the gates
+The rest of the participants are waiting for the opening of the passage to get inside the fortress.
+#subobj 3
+Break through to the prison
+There are still a few guards in the fortress, so it falls to you to run past the fight. The entrance to the prison opens with a lever.
+#subobj 4
+Run!
+Apparently reinforcements are about to arrive for the guards. It's high time to take your legs!
+
+=== quest q13j
+Map of the area
+In order to carry out a further war campaign, specific information is again necessary. This time you need to get it from the khadagans themselves - by scouring their headquarters.
+#subobj 1
+Find HQ
+The temporary headquarters of the Khadagan forces is located in the southeast of the Two Rivers area.
+#subobj 2
+Get the maps
+The Khadagans are not yet aware of the fall of Dar-Leanos and are not expecting an incursion.
+=== quest q13k
+Investigation
+Trickster told that Geraldine has been acting suspiciously lately. She disappears somewhere without notice and doesn't answer questions. The only way to explain such strange behavior is to follow her.
+#subobj 1
+Follow Geraldine
+Geraldine is heading somewhere to the west, better not to lose sight of her.
+#subobj 2
+Stay out of sight
+Stay out of the leader's sight. Coming up from behind would be considered treason and then your last chance to find the magic artifact will be lost.
+=== quest q14g
+Babur's Return
+The Village Blacksmith, Babur Tightfist, should know a lot about magical items. He may have heard of the Magic Bullet, too. In addition, the Highwaymen need a new blacksmith, as the old one is no good at all. You have to persuade or force the smith to come to the village of the Free Hunters.
+#subobj 1
+Get to the Village
+The village is the largest accommodation of the people, very well protected. Passing over dead bodies will not work, you must act quietly.
+#subobj 2
+Offer Babur to join the Free Hunters
+If you drop Babur a note with a contract to work for the Free Hunters he will most likely swallow the money it offers and come to the camp himself.
+#subobj 3
+Cause a scandal after which Babur will be banished from the Village
+If you were to drop a note to the Village Elder that Babur is working for the Highwaymen, a scandal will ensue, and Babur will most likely be banished from the Village. Then he will come to the highwaymen.
+=== quest q14h
+Revenge
+The murderers of Fieruz, Aliya's fiancé, live in a mansion northwest of the city area. Aliya has asked for help in getting revenge for Fieruz. Although experienced warriors live in the villa, Aliya hopes to attack them suddenly.
+#subobj 1
+Reach the meeting place
+The gathering place for all the avengers is located on the road to the villa. Aliya along with the rest of the campaigners will already be waiting there.
+#subobj 2
+Sneak up to the mansion
+Get to the mansion as quickly and quietly as possible - this is the only way to find its inhabitants unprepared.
+#subobj 3
+Kill the villa's inhabitants
+The hour of payment has come! None of the people involved in Fieruz's death should survive.
+#subobj 4
+Take the valuables
+It's better to let the investigation find that the purpose of the robbery was theft, not revenge. Besides, dead people don't need money anyway.
+#subobj 5
+Aliya must survive
+
+=== quest q14j
+Dangerous neighbors
+Uncle Rada told us that there is a circuit with very strange inhabitants in the area of Dwurzecz. There are rumors that these creatures are defending something valuable.
+#subobj 1
+Investigate the strange perimeter
+The puzzling place is located west of the former Khadagan headquarters. The area is inhabited by dangerous creatures and caution should be taken along the way.
+=== quest q14k
+Sentry
+A sly one wants to help an old mage. He knows that there is a guard who has let the mage through to the mine on more than one occasion. You have to meet the sentry, so leave him a note near the guard room.
+#subobj 1
+Go to the guard post
+The guard post is located next to the gate to the mine.
+#subobj 2
+Leave a note
+You can put the letter to the sentry in the chest next to the post.
+=== quest q15g
+Ambush
+The Highwaymen are planning to teach the people of New Village a lesson. Ataman has asked to take part in the venture, as there are very few good warriors left among the highwaymen.
+#subobj 1
+Come to the bridge
+The attack on the caravan is to take place as the troop crosses the bridge, which will block the Village warriors' way and they will not be able to help those in need.
+#subobj 2
+Kill them all
+The troop from the Village should be killed, otherwise the robbers will find themselves in a no-win situation.
+
+=== quest q15h
+The last hiding place
+After the raid on the villa where Fieruza's murderers lived, Rindeil refused to patronize all the participants of the plot. Now a new refuge must be found. Fortunately, Aliya knows one pretty safe place.
+#subobj 1
+Follow Aliya and protect her
+Aliya is ready to show you the way to the hideout, but you must stay close to her and keep wild animals away.
+#subobj 2
+Br-r...
+Gr-r...
+#subobj 3
+Go around the watchtower
+The only road into the western part of the desert passes near the Khadagan guardhouse. Do not show your face to them!
+#subobj 4
+Find the Last Hideout
+The new hideout is somewhere in the caves, the entrance to which lies at the edge of the western part of the desert. Aliya will show you the way.
+#subobj 5
+Aliya must survive
+
+=== quest q15j
+Assault of the isthmus of Doukhov
+The area of Dwurzeczama is of great strategic importance. The Khadagans have not yet had time to regroup and renew their forces after the loss of Dar-Ugorn, so you can try to build on the success and take the isthmus.
+#subobj 1
+Reach the bridge
+The collection point for the troop to undertake the task has been determined to the east of the southern bridge.
+#subobj 2
+Eliminate the sentry
+If the soldier guarding the bridge notices enemies he will raise the alarm - and will come to fight in an inconvenient position.
+#subobj 3
+Destroy the protection of the isthmus
+The isthmus will only be under the control of the Canii forces when all the Khadagan defenders have dropped dead.
+=== quest q15k
+Permission in the mine
+During his last visit to a mine, an old mage lost a document confirming that he was there. This paper could serve as the magician's excuse.
+#subobj 1
+Take the key
+There are plenty of doors in the cave that can only be opened with a special key, which can be found in the security room in the northwest of the mine. Along the way, it's best not to bump into the mine guards - they'll attack anyone who doesn't have permission.
+#subobj 2
+Come to the eastern part
+Most likely, the mage lost the document while traveling in the eastern part of the mine, which has long been abandoned.
+#subobj 3
+Enter the forbidden part
+Apparently the mage's permit got lost in the most dangerous part of the cave.
+#subobj 4
+Find the paper
+A temporary permit to enter the mine fell out of the mage's pocket near a large puddle in the eastern part of the mine.
+
+=== quest q16ag
+The Magic Needle
+In order to make new and good armor for Babur the Magic Needle is essential. A man wearing the armor made with it is almost completely immune to damage.
+#subobj 1
+Get to the tomb
+The entrance to the lizard tomb is located in the riverbed.
+#subobj 2
+Find the key
+To get to the next rooms you need a key which lies in the sarcophagus to the east of the underground.
+#subobj 3
+Go to the next rooms
+The way to the lizard smith's tomb is not yet available, so you may need to explore other rooms.
+#subobj 4
+Flood the tomb
+If you remove the valve from the spring, water from the underground springs will flood the traps guarding the tomb with the Magic Needle.
+#subobj 5
+Take the needle
+The Magic Needle lies in one of the sarcophagi in the tomb to the east of the underworld.
+=== quest q16g
+The Magic Needle
+In order to make new and good armor for Babur the Magic Needle is essential. A man wearing the armor made with it is almost completely immune to damage.
+#subobj 1
+Get to the tomb
+The entrance to the lizard tomb is located in the riverbed.
+#subobj 2
+Find the key
+To get to the next rooms you need a key which lies in the sarcophagus to the east of the underground.
+#subobj 3
+Go to the next rooms
+The way to the lizard smith's tomb is not yet available, so you may need to explore other rooms.
+#subobj 4
+Flood the tomb
+If you remove the valve from the spring, water from the underground springs will flood the traps guarding the tomb with the Magic Needle.
+#subobj 5
+Take the needle
+The Magic Needle lies in one of the sarcophagi in the tomb to the east of the underworld.
+=== quest q16h
+The Emperor's Ring
+Suspicious residents of the Last Hideout, to test Kira's loyalty, have given a commission: bring back the Imperial sigil.
+#subobj 1
+Find the chest with the signet ring
+According to the inhabitants of the Last Hideout, the ring rests in a chest in the desert northwest.
+#subobj 2
+Br-r...
+Gr-r...
+#subobj 3
+Catch the ring thief!
+Some treasure hunter has already managed to search the trunk and take the ring! You have to catch up with him!
+#subobj 4
+Take the ring from the thief's body
+The ring remained in the pocket of the not-so-happy robber. Now he won't be able to resist taking it from him.
+
+=== quest q16j
+Ancient amulet
+Dartas said he saw a trinket that could help open the entrance to a cave in the valley of the Two Rivers. This amulet was found by the headman of a village not far from Dar-Leanos. Now this village has been inhabited by harpies, and the cause of this most likely lies in the amulet.
+#subobj 1
+Come to the village
+The destroyed village where the starosta, the finder of the old amulet, lived is located west of the city.
+#subobj 2
+Take the amulet
+Most likely the old amulet lies in the old man's trunk.
+=== quest q16k
+Crime scene
+To understand how Brissen died, you have to search the crime scene.
+#subobj 1
+Find the crime scene
+Knight Brissen was killed near a lumberjack settlement near the town of Ingos.
+#subobj 2
+Gather the clues
+Circumstantial evidence found can help in the investigation.
+=== quest q17Oh
+Healing herbs
+Sahilla has lost a lot of strength during her journey through the desert, and the wounds she sustained during her battles with wild animals have gone untreated for a long time. She needs immediate treatment, and that with the most effective remedies.
+#subobj 1
+Find the necromancer's storeroom
+The storehouse with herbs, grasses and other medicines is located in the east of the Necromancer's Desert.
+#subobj 2
+Get the key
+The entrance to the warehouse is locked, but one of the guards should have the key.
+#subobj 3
+Get the herbs
+The healing herbs are in one of the containers in the warehouse. You need to take them from there.
+
+=== quest q17g
+A trip to the witch
+Babur claims that the only person he knows who is knowledgeable about magical matters on Gipath is the Witch Esther. She will certainly be able to answer all your questions, but first you have to get to her cave, a path to which traps defend!
+#subobj 1
+Take the spare magic key
+The key to the traps is located in the northern part of the area that divides the valley into two parts, but a fire trap is set up on the way to the key.
+#subobj 2
+Turn off the trapdoor
+To get to the next obelisk you need to disable the western traps. The altar controlling them is right next to it.
+#subobj 3
+Disable lightning traps
+The lightning traps are located in the southeast of this location, and you disable them with the western obelisk,
+#subobj 4 
+East traps only
+The altar is located in the southeast of the valley. Care must be taken!
+#subobj 5 
+Visit the Witch
+Now that the traps in the eastern part of the valley are turned off you can go to the Witch. Although Trolls may get in the way...
+
+=== quest q17h
+Missing in the desert
+According to Aliya, she was taken to prison together with her good friend Sahilla, but Sahilla managed to escape. Now she is wandering somewhere in the desert because she couldn't reach the Last Sanctuary. Aliya asked to know what happened to her best friend.
+#subobj 1
+Find Sahilla
+Aliya's friend who managed to escape from prison is located in the north of the desert. At least probably, because she hasn't been found in the south.
+#subobj 2
+Search the northern part of the desert
+There is a small and fairly safe ravine in the north. It is possible that Sahilla decided to wait there for some time.
+#subobj 3
+Search the north-eastern part of the desert
+There are several ogres living in the northeastern part of the desert, and the guards prefer to avoid this area. Therefore, it is possible that Sahilla is hiding somewhere there.
+#subobj 4
+Escort Sahilla to the Last Sanctuary
+Sahilla is very weak and will not be able to travel alone. You need to guide her through the area.
+#subobj 5
+Sahilla must survive
+
+=== quest q17j
+The end of slavery
+Firez, fearing the arrival of Canian, decides to lead his Joon slaves from the mountain prison to his castle. Capturing the escorts is a real chance to free Kira's family.
+#subobj 1
+Capture the escort
+The escort will be moving from the mountain prison to the city. Your best bet is to intercept it at an intersection in the center of the area.
+#subobj 2
+Free the slaves
+You need to defeat all the guards. The Joons are unarmed and will not be able to help their saviors.
+#subobj 3
+Escort the Joons to safety
+The Two Rivers area is now under Canian control, so that's where you need to repatriate the rescued Joons.
+#subobj 4
+All the Joons must survive
+=== quest q17k
+Meeting with Hys
+Hys has requested a meeting to present evidence of his innocence. He fears for his life and claims he has been threatened, so he set the meeting place in the woods - outside the city limits.
+#subobj 1
+Come to the meeting place
+Hys proposed to meet in a clearing south of town.
+#subobj 2
+Deal with the ambush
+It's treason! Someone set up an ambush!
+#subobj 3
+Find Hys
+You need to explain why there was an ambush at the meeting place with Hys.
+=== quest q18g
+A gift for Airy
+Airy, the lovely granddaughter of a witch dreams of trying on a necklace worn by the clairvoyant of the cave orcs. It's hard to deny the joy of giving her such a gift, so you have to get this necklace.
+#subobj 1
+Get to the orc camp
+The only free tunnel in the cave leads to the orc camp.
+#subobj 2
+Get the necklace
+Killing the clairvoyant won't be easy. It would be much quieter to steal the necklace.
+#subobj 3
+Leave the cave
+The clairvoyant will soon notice the theft and raise the alarm. It's better to get a little further away from here before that happens.
+=== quest q18h
+Explorers
+The Khadagans have tried to explore caves many times before, and this time they want to explore the caves where the Last Hideout is located. One of the researchers has just been spotted at the cave!
+#subobj 1
+Catch up with the scout
+You must catch up with the scout researcher before he can tell the others about his find!
+#subobj 2
+Return to the cave
+Apparently the scout has already managed to report back to his group about what he found, and now a whole group of researchers and their bodyguards are marching to the Last Hideout. With a crowd like that, it's better not to argue.
+#subobj 3
+Destroy the enemy squad
+The explorers heading for the caves were expecting to encounter at worst a few oversized rats, but in no case a squad of Last Hideout inhabitants ready to fight!
+#subobj 4
+Kill the scout
+Although the khadagans already know about the cave, you need to teach the scout a lesson.
+
+=== quest q18j
+The Treasure of the Joons
+The wise man Tui-Len managed to open a secret cave in the valley of the Two Rivers. In this place, the Joons hid the armor of one of their heroes, and enchanted the tomb with an ancient amulet. Now the spell has been lifted, and the armor can be taken.
+#subobj 1
+Take the key
+The door to the armory room is locked. You need to find the key with which you can open the door.
+#subobj 2
+Use the key
+To open the door you need to turn on the altar in the northwest room.
+#subobj 3
+Take the treasure
+The items lie in the sarcophagus in the eastern room.
+=== quest q18k
+Traitor
+There is a traitor in the Animal Lord camp, no doubt about it. He could be found by telling everyone that a cache of money was found in the forest. Whoever comes to the cache is the traitor.
+#subobj 1
+Enter the ravine
+The entrance to the ravine is next to the road to the Green Clan headquarters.
+#subobj 2
+Find the cache
+The traitor's cache is hidden at the end of the ravine southwest of the Karansula Estate.
+#subobj 3
+Take the money
+The animal lords will be very grateful to whoever returns their money to them!
+=== quest q19g
+The Dead City
+Witch Esther, Aira's grandmother, has gone to the Dead City, supposedly in search of a talking dragon. She must be found, after all, she is the only one who can tell the story of the Magic Bullet.
+#subobj 1
+Enter the city
+There is a tireless guard of dead men guarding the gates of the Dead City. However, there is a hidden passage through a cleft to the south in the mountains that is protected by the element of earth. It is slow and can be tricked by hailing it a little further from the ravine.
+#subobj 2
+Go to the top
+The lone mountain in the middle of the Dead City is the most noteworthy place. It's best to start your search from there.
+#subobj 3
+Go to the top
+Even if the witch isn't at the top of the mountain, you can view the area from there and try to spot her.
+=== quest q19h
+Dirty work
+The Khadagans know about the cave and have lost the squad that was heading to it. A new, much stronger squad will be sent, unless it turns out that the previous squad was slaughtered by the robocallers.
+#subobj 1
+Find the robocalls
+To take the bodies of the robocallers you must first find the robocallers themselves. The Khadagans are afraid of these subterranean creatures for a reason: killing a robocall is not easy. But it is possible to find some already dead.
+#subobj 2
+Find the bodies of the robocalls
+The corpses of the robocalls should be where the murderer left them.
+#subobj 3
+Pick up the corpses
+This task is not the most enjoyable, but if you don't complete it, the Last Hideout will be in jeopardy.
+=== quest q19j
+Petty
+Tai-Ilara asked to bring her things that were left in the prison. Hard to say no to such a beauty...
+#subobj 1
+Get to the prison
+The prison is located high in the mountains in the south of Khadaganian territory. The road is collapsed, but you can get to the prison through a portal at the base of the hill.
+#subobj 2
+Take the trunk
+Tai-Ilara's personal items are hidden in a chest not far from the house she was under guard.
+=== quest q19k
+Material for the key
+To produce a key, the Clever Man needs a magical material that can only be obtained from the most remote ravines in the mountains.
+#subobj 1
+Enter the ravine
+To enter the gorge you must go through the gates in the southeast of the town area.
+#subobj 2
+Cross the ravine
+Suitable material can only be found at the very end of the ravine.
+#subobj 3
+Get the material
+The Trickster was wrong - the material does not have magical properties, but as evidence, the sample should be taken anyway.
+=== quest q1g
+Stop
+The expedition's camp where you have to bring the documents is located northeast of the teleportation point, behind the pass where the ruined Canian fortress is located.
+#subobj 1
+Reach the bridge
+Plenty of dangers await the traveler in this wild place. The shattered camp of the first expedition is a stark reminder.
+#subobj 2
+Go to the pass
+Beyond the pass is a place called Distant Peaks. This is where the new expedition camp should be located.
+=== quest q1h
+A secret refuge
+In an unknown and dangerous world, you can't survive alone. You must find the mansion Kiel spoke of, where you may find a safe haven.
+#subobj 1
+Get into town
+The nearest bridge, straight into town, is guarded. Fortunately, the guards are not very attentive and there is a chance to slip through unnoticed.
+#subobj 2
+Avoid the encounter with the soldiers
+The Portal area is patrolled by groups of warriors. It's best not to get in their way.
+#subobj 3
+Get to the Hideout
+The Hideout Villa, as Kiel called him, is located in the north of the town. You'd better be on your guard along the way.
+=== quest q1j
+Zombie attack
+The Canian city of Dar-Leanos has been attacked by the undead. The defenders of the city may not be able to cope with the threat, they need help.
+#subobj 1
+Destroy the undead army
+Those who have risen from the dead will stop at nothing. They must be slaughtered one by one.
+=== quest q1k
+The city of Ingos
+Since the exact location of the magic artifact is unknown, it is necessary to take care of shelter and the possibility of replenishing supplies, repairing weapons and armor. The best place for this is a town, which is located nearby.
+#subobj 1
+Reach the bridge
+The town of Ingos is located on the eastern shore of the lake. You need to cross the river to get to the town.
+#subobj 2
+Enter the town
+Apparently, the province is not very well controlled by the authorities. The road to the town can be dangerous!
+
+=== quest q1r
+A new land
+The only chance to save yourself is to leave this land, and now is a good opportunity to do so! All you have to do is get to the secret camp, and there they will help you.
+#subobj 1
+Get across the river
+On the way to the camp there is an old cemetery, you need to be careful there.
+#subobj 2
+Reach the camp
+It's not far to help!
+#subobj 3
+Open the chest
+The camp has been attacked by harpies. Everything has been burned and no one is left alive. Nevertheless, it's worth trying to search what's left. The most important thing is to stay out of the harpies' sight...
+#subobj 4
+Activate the Portal
+The most important item found - the key to the Portal. It will help you leave this land.
+#subobj 5
+Go through the Portal
+Now the guards are everywhere looking for the fugitive, so you better not delay!
+
+=== quest q20g
+Swamp Flower
+In order for the witch to return home faster and be able to help you in your search for the Magic Ball, you need to bring her the Swamp Flower, which has magical properties.
+#subobj 1
+Get to the middle of the swamp
+The flower needed by the witch can only grow in the most desolate place.
+#subobj 2
+Pick a flower
+Don't forget that it has magical properties, so there may be surprises...
+=== quest q20h
+The old deal
+One of the explorers has invaded the cave and attacked its inhabitants. Several of the robocallers have already been killed, and the others are asking for revenge on the necromancer.
+#subobj 1
+Find the necromancer
+The necromancer researcher entered the cave through the west entrance.
+#subobj 2
+Kill the necromancer
+This mage should be killed.
+
+=== quest q20j
+A monstrous pact
+Firez's army is very strong and attacking his stronghold with only Canian troops is too risky. Tui-Len knows a way to subjugate wild monsters. If you can capture a few strong monsters for help, you can attack the last refuge of the enemy.
+#subobj 1
+Subdue the cyclops
+The participation of a cyclops in battle on the Canian side can decide the outcome of a battle. In order to subjugate a cyclops, you must approach it with the amulet.
+#subobj 2
+Subjugate your dragon
+A dragon can provide invaluable service and tip the balance of victory in Canian's favour. To subdue a dragon, approach it with an amulet.
+=== quest q20k
+The secret gate
+The magical artifact that the great mage Tka-Rick spoke of should be found in a cave beyond the Ice Desert. At least that's what Jam-Akara is sure of.
+#subobj 1
+Go to the cave entrance
+The cave entrance is located in the west of the Ice Desert.
+#subobj 2
+Open the entrance!
+To open the entrance you need to use the key that the Clever Man made.
+=== quest q21Oh
+Secret stashes
+A favor for a favor. Sahilla has agreed to help get Khadagan conscription papers so you can enlist in the army, but in return she asks you to return at least one of the two bags of stolen goods she hid in the desert.
+#subobj 1
+Go to the ravine
+One of Sahilla's caches is hidden in a ravine in the southwest.
+#subobj 2
+Get to the islet
+The second cache is located on a small island in the south.
+#subobj 3
+Kill the ogre!
+The passage to the ravine is blocked by an ogre! To get Sahilla's stuff you have to get rid of it.
+#subobj 4
+Kill the troll!
+A Black Troll has settled in the middle of the island. It's impossible to get around it, so you have to kill it.
+#subobj 5
+Get the things from the cache
+The cache at the very end of the ravine is only a few steps away!
+#subobj 6
+Get stuff from the cache
+The cache is on the north side of the island, and the way to it is open!
+
+=== quest q21g
+The Great Exit
+Although Esther doesn't want help, she must be escorted at least through Dead City territory.
+#subobj 1
+Approach the courtyard
+Old age is no match for Esther - she wants to exit through the main gates with a bang, even though they're the most heavily protected.
+#subobj 2
+Wait for Esther to cast her spell
+Esther has prepared a surprise. You need to protect her for a while.
+#subobj 3
+Kill the rest of the undead
+Now all that's left to do is kill what's left of the skeletons that Esther treated with her spell, and you can move on.
+#subobj 4
+Leave the area
+The witch must be escorted to the edge of the area, she will walk the rest of the way on her own.
+#subobj 5
+Esther must survive
+Without the witch, the search for the Magic Bullet is doomed to failure.
+
+=== quest q21h
+The old necromancer
+In the town of Suslanger lives a necromancer who is trying to prop up Zara's beloved trader as master of the necromancer's guild. If you spoil his experiments, you could gain the trader's gratitude. Material, to be sure.
+#subobj 1
+Find Kehel's Mansion
+The old necromancer's house is located in the northern part of town.
+#subobj 2
+Revive a corpse with Zara's spell
+You can use Zara's scroll to revive a corpse on which the necromancer wanted to perform experiments. As such experiments are forbidden in the city, he will be severely punished.
+
+=== quest q21j
+The Last Assault
+Now that the Canian army is strong enough, an opportunity has arisen to restore order to the world once and for all. To do this you must defeat Firez's army and take over his castle.
+#subobj 1
+Destroy the undead army
+Firez has turned the entire population of the city into undead and put them into battle. Firez's army must be defeated!
+#subobj 2
+Get to the palace tower
+Firez has taken cover in the tower of his palace! There are still many enemies left in the city, getting further may prove difficult.
+=== quest q21k
+Lost in the Astral
+It turns out that the magical artifact that Tka-Rick felt was a Portal to another land. Not one to return empty handed, one must at least find out where this Portal leads.
+#subobj 1
+Find the key to the gate
+To get to the room with the Portal, you need the key.
+#subobj 2
+Take the key to the Portal
+The teleport key should be in one of the Portal service rooms. Without it, it cannot be activated.
+#subobj 3
+Turn on the Portal
+The item that manages the Portal is located not far from the Portal itself.
+#subobj 4
+Enter the Portal
+You can only find out what is on the other side of the Portal by walking through it.
+=== quest q22Oh
+Announcement
+To find out about the events that took place in the shattered scientist's mansion and to figure out where the red-skinned young man went, you have to try to get the necromancer's report.
+#subobj 1
+Get to the Citadel
+The Citadel is the most protected place in the entire city of necromancers. It is located in the heart of the accommodation.
+#subobj 2
+Get an ad
+The announcement of the Curse's assault on the scholars' property lies in a trunk at the extreme north end of the citadel.
+=== quest q22g
+The Magic Ball
+The great mage Tka-Rick needs the Magic Ball in order to find Jygran. The orb was recently taken by island orcs from the Witch Esther, and now it must be retrieved again by breaking through their islands and troops. However, to get to the islands you have to leave the bridge, and you can only do that with a certain mechanism.
+#subobj 1
+Climb to the top of the Council
+Fortunately, island orcs sometimes go ashore on the Council Mountain to make important decisions. Then they dutifully take the bridge mechanism with them.
+#subobj 2
+Get the mechanism
+Without the mechanism, you will not be able to get to the orc islands and also find the Magic Ball.
+#subobj 3
+Find the Magic Ball
+The orcs have placed the Magic Ball on its old pedestal on one of the southern islands.
+#subobj 4
+Take the sphere
+The artifact is well protected, so taking it quietly is unlikely to succeed.
+=== quest q22h
+Priest of Silence
+The Khadagans captured their priest during a recent raid into a robalogl's cave. He now sits in one of the cells in the necromancer's fortress, where he will be tortured and experiments will be performed on him.
+#subobj 1
+Find the robber's cell
+There are three entrances to the fortress. The eastern one is the least defended, but the cell where they keep the priest is the furthest from it, which is near the northwest wall of the fortress.
+#subobj 2
+Free the robber
+You don't need a key or a lock pick to lift the cell's bars.
+#subobj 3
+Escort the robber to the cave
+A worm-head who has never been to the surface before will not be able to find his way to the underground on his own.
+#subobj 4
+Priest of Silence must survive
+=== quest q22j
+Firez
+Firez must pay for all his crimes. But first the traps he hid behind must be disabled.
+#subobj 1
+Disable the first obelisk
+#subobj 2
+Disable the second obelisk
+#subobj 3
+Switch off third obelisk
+#subobj 4
+Switch off fourth obelisk
+#subobj 5
+Kill Firez
+The trap has been disabled! Now Firez is within reach, but he's still a dangerous opponent. It is possible that the teleportation bridges in the corners of the throne room and the magical lion statues will help you deal with him. The fate of Jygran rests in your hands!
+=== quest q23g
+The Dagger of the Chosen One
+The Village Elder has taken the weapon of the Chosen One, a bronze dagger, from Babur. This item is close to Babur as a memento of his only friend. If this dagger is returned to him, the smith will produce a key with which to open the gate in the Middle Peaks.
+#subobj 1
+Cross the bridges
+The only way to the sacred place where the Chosen One appeared is north of the swamp camp across two bridges.
+#subobj 2
+Go to the sacred ruins
+The ruins are located on a high cliff in the west of this area. The passage to this location is well guarded.
+#subobj 3
+Take the dagger
+The Chosen One's dagger lies along with his other belongings, kept in a chest in the Sacred Ruins.
+=== quest q23h
+Northern fortress
+To join the ranks of the Khadagan army you must come to the northern fortress - the place where recruits are gathered and trained.
+#subobj 1
+Reach the fortress
+The road to the fortress is protected by soldiers, but thanks to the documents that Sahilli's friend made, the guards will not be hostile.
+=== quest q24g
+Dinner with the ogre
+The island orcs who took Babur captive during an arrogant assault on the Free Hunters' camp have decided to give him as a gift to a nearby ogre tribe. Apparently the gifts find their way into the bellies of those involved rather quickly, and aside from Babur, no one will be able to make out the key to the gate in the Middle Peaks.
+#subobj 1
+Come to the village of the ogres
+Ogres live on a peninsula in the east of the area.
+#subobj 2
+Get the first key
+To open the lattice in the den you need two keys. One of them rests in the trunk of the ogre chief, whose hut is located on a high hill in the camp.
+#subobj 3
+Get the second key
+The other key is kept by the ogre elder, who lives in the north of the peninsula.
+#subobj 4
+Free the craftsman
+Babur along with other potential ogre snacks is kept in a small pit in the middle of the camp.
+#subobj 5
+Escort Babur away
+There are plenty of dangers to encounter on the way to camp.
+#subobj 6
+Babur must survive
+You know why...
+=== quest q24h
+Canyon of Death
+To prove your devotion to the Khadagan Empire in the person of Sergeant Zairak, you must search the three gorges in the canyon and kill anyone you find there.
+#subobj 1
+Search the northern gorge
+This gorge is the closest on the way from the North fortress to the South fortress.
+#subobj 2
+Murder the slaves
+The sergeant said that the slaves who hid in the ravine are murderers and thieves. They must be killed.
+#subobj 3
+Search the south ravine
+The south gorge is the largest in the canyon. It's a great place to hide.
+#subobj 4
+Kill all the slaves
+According to Sergeant Zairak, there are many lives of innocent people on the account of those who hid here.
+#subobj 5
+Search the western ravine
+The western ravine is the closest to the southern fortress. It is unlikely that anyone is hiding there, but check it out.
+
+=== quest q25g
+Judgment Day
+The Ataman of the Free Hunters has come up with a new idea. If all goes well, the people of the Village will leave the Foothills and will no longer venture further than the Free Hunters want them to.
+#subobj 1
+Infiltrate the New Village
+There are three gates in the New Village. You can get through any of them, but the western one is the most convenient.
+#subobj 2
+Turn on the pyramid
+The orcs who lived in the Foothills gave away the key to the Magic Pyramid. If you set the obelisk with this key, the Magic Pyramid will work again, and will start shooting lightning at people again!
+#subobj 3
+Get out of the range of the pyramid
+The Magic Pyramid can fry anyone with lightning, as long as it's a human. Besides, there's no telling what effect it will show against humans, after all it's been out of action for so long...
+#subobj 4
+Wait
+While the Magic Pyramid is working it's better to stay away from it.
+#subobj 5
+Finish the job
+It is possible that one of the humans survived and the pyramid has already unloaded. A combined force of Orcs and Free Hunters have gathered near the eastern gate and are planning an attack. You must help them!
+=== quest q26g
+Abandoned Observatory
+To find out how to fix the Magic Ball you need to find the Magic Book in the Ruined Ancient Observatory.
+#subobj 1
+Get to the caravan
+The road to the valley where the observatory is located goes through a ravine, which starts north of the forest lizard's home.
+#subobj 2
+Open the first gate
+With the key Babur made, you can open the gate that closes the way in the mountains.
+#subobj 3
+Open the second gate
+The second gate is located at the end of the caravan. On the way to the gate, you will encounter mystical mountain lizards. They are much more dangerous than their forest and lake counterparts. It is better to avoid confrontations with them.
+#subobj 4
+Go to the observatory
+The observatory is located in the eastern valley.
+#subobj 5
+Search the observatory
+In the chest in the observatory there should be a book that describes how to restore energy in magical items.
+=== quest q27g
+Underground spring
+In a book found in an observatory, it is written that one way to renew the power of a magical item is to wash it in water from an underground spring. The channels through which the underground waters flow are often in contact with deposits of magical stones and magical metals, which means that these waters are also filled with magic.
+#subobj 1
+Go to the further part of the cave
+The underground waters flow in the far part of the cave, and the way there leads through the orc camp.
+#subobj 2
+Wash the sphere in the western spring
+It is possible that the channels of this spring pass through deposits of magic stones and have magical power.
+#subobj 3
+Wash the sphere in the middle spring
+It is possible that the channels of this spring pass through deposits of magical metals and possess magical power.
+#subobj 4
+Wash the sphere in the eastern spring
+The sphere should be washed in all springs, because only in this way you can be sure that its power has been renewed.
+=== quest q28g
+The way through the tunnel
+There is no doubt that the tunnel leads to the dwelling of the Great Magician of these lands, but it is well known that this passage is protected by merciless and fearless mechanical murderers - golems. The way will be unsafe, but the risk is justified!
+#subobj 1 
+Make your way through the cave
+The golems have closed all the tunnels, but a breach has appeared in one of the walls with a passage to the cave, probably as a result of the earthquake. You can try to bypass the tunnel with the cave.
+#subobj 2 
+Find the switch
+Judging by everything, golems are operated and controlled in this room. There is definitely something in the chamber to the south that can help with this.
+#subobj 3 
+Use the obelisk
+In the southern part of the large room protected by golems, there is an obelisk that will help you gain partial control of the golems.
+#subobj 4 
+Use the altar
+The Golems protecting the Altar in the southeast have been given a new command. This is a great opportunity to get to the altar and use the key to gain full control over the golems!
+#subobj 5
+Leave the tunnel
+Now the golems are no longer dangerous. The way is clear!
+=== quest q2g
+Khadagan camp
+In order to fabricate an expedition report, you need a crest paper on which similar records are written. Such paper should be found in the Khadagan camp.
+#subobj 1
+Find the ogre's hut
+The ogre who took the keys to the chest with the crest paper lives north of the orc fortress.
+#subobj 2
+Steal the key from the ogre
+A sleepy ogre keeps a key on him. You could try looking in his pockets...
+#subobj 3
+Reach the khadagan camp
+The destroyed expedition camp is located to the east of the ogre's hut.
+#subobj 4
+Take the paper
+The coat of arms paper lies in a trunk near the tent in the center of the camp.
+=== quest q2h
+Slave censuses
+Rindeil cannot give shelter to a wanted man. However, if you steal the slave roster located next to the Portal during the Curse attack, it can make the tasks of Khadagan law enforcement officers more difficult.
+#subobj 1
+Get to the villa
+Until the case is taken up by the investigating magistrates, the slave rosters are kept in the chief warden's mansion.
+#subobj 2
+Bypass the villa's security
+The villa is well guarded, and you'd better not run into a guard.
+#subobj 3
+Steal the censuses
+The slave censuses are on a table near the house.
+#subobj 4
+Free yourself from witnesses
+The officials have noticed the theft! You need to get free from them.
+
+=== quest q2j
+Death in the countryside
+As it turned out, not only the city succumbed to the attack of the undead - the undead have taken over the entire area. First of all, you need to free the nearest village from the spawn of necromancy.
+#subobj 1
+Come to the village
+The village which was attacked by the undead is located in the east of the area.
+#subobj 2
+Kill all the undead
+The inhabitants are afraid to go out on the street, so you can destroy every creature you come across.
+=== quest q2k
+A magical laboratory
+The mage who could answer questions about the artiefact - His - has taken up residence in his laboratory and has not appeared in town for a long time. You can try to pay the mage a visit; apparently the lab is not far from the city.
+#subobj 1
+Find the entrance to the lab
+His magic lab is located slightly east of town. You may encounter wild animals along the way.
+#subobj 2
+Disable the trap
+Apparently the lab's host is not very hospitable - there's a magic trap set up at the entrance!
+#subobj 3
+Kill the guardian tigers
+In addition to magical defenses, the lab is also protected by specially trained tigers.
+#subobj 4
+Enter the lab
+The way is clear! It's time to get your questions answered.
+
+=== quest q3ag
+The old mine
+According to tradition an orc becomes a warrior only when he receives an axe from the hands of a chief. The material for the axe the pretender should get in the mines of the Dead City...
+#subobj 1
+Find the entrance to the mine
+The location of the mine is to the southeast of the orc fortress.
+#subobj 2
+Find the entrance to the old mine
+The old mine is located just to the east of the mine. Don't forget that abandoned mines are home to undead.
+#subobj 3
+Get to the north tunnel
+Only in the north tunnel can you get the right weapon material.
+#subobj 4
+Take the stone
+The miners in the ore mine have done a good job at this location. The material is already mined, now you just need to pick it up.
+=== quest q3g
+The old mine
+According to tradition an orc becomes a warrior only when he receives an axe from the hands of a chief. The Praetor should gather the material for the axe in the mines of the Dead City.
+#subobj 1
+Find the entrance to the mine
+The location of the mine is south-east of the orc fortress.
+#subobj 2
+Go to the old mine
+The old mine is located just to the east of the mine. Don't forget that abandoned mines are home to undead.
+#subobj 3
+Get to the north tunnel.
+Only in the north tunnel can you get the right material for weapons.
+#subobj 4
+Get the materials
+The miners in the ore mine have worked well in this area. The material is already mined, you just need to carry it out.
+=== quest q3h
+Masking
+To get Rindeil's permission to stay at his estate, Kir must disguise his person. The guards should not find out that Rindeil is hiding an escaped slave.
+#subobj 1
+Go to the trader's house
+The trader's house is located in the south of the city. The city guard is looking for fugitives as before, so caution won't hurt.
+#subobj 2
+Get the key
+To get into the house you need a key. You can search for it in the merchant's pockets while Fieruz distracts him.
+#subobj 3
+Give the key to Fieruz
+Give the keys back to Fieruz and you can proceed directly to the case.
+#subobj 4
+Wait for Fieruz
+While Fieruz is taking care of the case inside the house, you need to keep an eye on the outside. No one should go near the house!
+#subobj 5
+Go back to the mansion
+Job done! Now you better get far away from here before the trader returns.
+=== quest q3j
+The candy trader
+According to Stark's craftsman, the Baron has an informant who could tell him the cause of this undead activity. If he could be spoken to, it is possible that this cause could be removed as well.
+#subobj 1
+Find the spy
+A Canian spy masquerades as a sweet seller and lives north of the city.
+#subobj 2
+Knock out enemy customers
+A couple of Khadagan soldiers have decided to treat you to some sweets. But why stand in line?
+=== quest q3k
+Sacred Flower
+Grey Leaf, the leader of the Green Forest People clan can help you find Knight Brissen, but first you need to find a way to meet him. If one were to steal the Sacred Flower from the forest peopleWhite clan, then Grey Leaf can be summoned for a negotiation.
+#subobj 1
+Go to the territory of the White clan
+The forest people of the White clan live in the northwest of the Ingos City area.
+#subobj 2
+Acquire Evergreen Leaf
+The dwelling area of the White clan forest people is protected by magic traps. The traps will affect anyone who isn't a forest man or who doesn't possess the Evergreen Leaf. Such a leaf is in the possession of one of the forest people's magicians outside the protected area.
+#subobj 3
+Disable the trap
+The sacred flower is protected by additional traps, but you can disable it on the woodmen's altar with the help of the Evergreen leaf. This will also deactivate all other traps.
+#subobj 4
+Take the flower
+In the eastern part of the forest people's area, there is a sacred place for the forest people of the White clan. The flower is located right there.
+
+=== quest q4g
+Samples from Gipath
+In the packet of orders for the expedition, it says that you must give the messenger stone samples from the Dead City mines. If traces of precious stones are found in these ores, a new expedition will be sent to Gipath. This must not happen, so the samples must be obtained in another mine, where there must be no precious stones.
+#subobj 1
+Find mine
+The mine from which you can extract poor ore samples for your command pack is located in the west of Distant Peaks.
+#subobj 2
+Take the samples
+There are definitely no gemstones in the samples from this mine.
+
+=== quest q4h
+Fruit orchard
+Coconut palms and oranges grow in this garden, and several slaves and guards protect it all.
+
+
+=== quest q4j
+The lonely necromancer
+The cause of the undead activity in Canian territory is an old necromancer. He has managed to create a very powerful spell that does not allow the undead to rest peacefully in their graves.
+#subobj 1
+Get to the Island of Death
+You can only get to the island by taking the bridge to the west of the area.
+#subobj 2
+Get to the necromancer's house
+The necromancer lives in his hut, surrounded by dead animals. He never leaves his hiding place.
+#subobj 3
+Set fire to the hut
+To expel the Necromancer and take him prisoner you must start a fire.
+#subobj 4
+Escort the prisoner away
+Only with the help of the necromancer can you remove the cause of undead activity.
+=== quest q4k
+Sver's locker
+Grey Leaf will understand that a friend is standing in front of him and will only agree to help him if he is shown the item he ordered from Sver Trapper. Sver has hidden this item in one of his lockers.
+#subobj 1
+Find a locker
+Sver hid the item in an empty stump not far from the military camp in Karansula Property.
+#subobj 2
+Take the item
+Sver's cache is not protected in any way, you just need to take the item.
+
+=== quest q5g
+Messenger
+Now that the expedition report has been fabricated and the fake ore samples from the Dead City have been captured, you need to meet the messenger.
+#subobj 1
+Go to the city road
+Much of the way to the transfer site passes along the road leading to the Dead City.
+#subobj 2
+Find an established location
+The material transfer site is a neglected cottage in the southwest of the area.
+#subobj 3
+Leave a report and samples
+You don't know when the messenger from Suslanger will arrive, so it's better to leave everything you need in a chest in the ruined house.
+=== quest q5h
+A sample from another world
+Rindeil needs to find out where the meteorite samples from the Useless Lands are stored. Most likely the commander of the city guard should know about it.
+#subobj 1
+Find the commander of the guard
+The commander, as always, can be found in the headquarters. One of the entrances is well protected, but there are chances of getting through the other.
+#subobj 2
+Eavesdrop on the conversation
+It's risky when there are guards all around, but it's possible that during the conversation the guard commander will talk about the resting place of the meteorite samples.
+=== quest q5j
+The magic tincture
+The necromancer from the Isle of Death said that the spell that revives the undead in the entire area can only be lifted with special herbs. Such herbs are probably on the island, in the tomb of one of the old heroes.
+#subobj 1
+Make your way to the eastern island
+The hero's tomb where the herbs are hidden is on the eastern island. You can only get there by crossing the ford between the islands.
+#subobj 2
+Go to the tomb.
+A great hero was buried on a high hill. The place is abandoned now, but the hill is claimed by dragons.
+#subobj 3
+Take the herbs
+The best way to do this: stand over the tomb, open it, find the bottle, grab it, and while still holding it, pull your hand back. It should work, although it sounds complicated.
+#subobj 4
+Destroy the hero
+The tincture bottle was well sealed and the herbs could not save its owner from a terrible fate. Now you have to appease this unfortunate man for all time....
+=== quest q5k
+Negotiations
+In order to meet with Gray Leaf - the leader of the Green clan - you must make a sign using the Sacred Flower, which the forest people use when they need to hold talks with other clans.
+#subobj 1
+Reach the meeting area
+The forest people of all clans use a well-defined place to hold talks.
+#subobj 2
+Summon the forest people
+To broadcast a signal, place a Sacred Flower on an old trunk.
+
+=== quest q6g
+Urk-Tar
+The orc chieftain and his two young warriors went hunting a long time ago and have not returned yet. You have to find them, most likely the orcs got into trouble.
+#subobj 1
+Find the orc troop
+Urk-Tar should have led the hunters to the east, to an area rich in game.
+#subobj 2
+Drive away the harpy
+Apparently, the harpy living in this area has set a flock of bats on the troop. The orcs won't be able to get through on their own, they need help.
+#subobj 3
+Kill the bats
+The way to the ward is blocked by bats that the harpy has bitten. The way should be cleared!
+#subobj 4
+Escort the leader to the fortress
+Urk-Tar has been wounded. He will now need an escort to reach the tribe.
+#subobj 5
+Urk-Tar must survive
+The death of the chief will mean the end of the tribe.
+
+=== quest q6h
+Letter to the blackmailer
+Aunt Zara wants to make an arrangement with her blackmailer regarding a ransom for his silence. You need to carry the note with her offer to the discussed location north of the plantation.
+#subobj 1
+Leave the city area
+Now that the chaos following the appearance of the Curse near the Portal has subsided to some extent, the guards have removed protection from the bridges so it is now perfectly safe to exit the city.
+#subobj 2
+Get to the agreed place
+Lots of dangerous wildlife lives outside the city area, and the caretakers on the plantations are doubly dangerous.
+#subobj 3
+Free yourself from the spies
+The place turned out to be watched. The spies are not expected to survive.
+#subobj 4
+Return the letter
+The letter needs to be put in the urn. The blackmailer will take it later.
+
+
+=== quest q6j
+The peace of the dead
+Now that the magic herbs are in your possession, you can finally free the area around Dar-Leanos from the threat of the dead. To do so, you need to pour the herbal liqueur on the Altar in the middle of the Main Cemetery.
+#subobj 1
+Go to the main cemetery
+The cemetery - the home of the undead - is located in the mountain ring south of the city.
+#subobj 2
+Oil the altar (with liquor!)
+To appease the undead, douse the altar in the center of the graveyard with a tincture of Magic Herbs. Further the herbs will do their job.
+=== quest q6k
+The Green Clan
+Gray Leaf talked about the location of the new Green Clan headquarters and said he was ready to answer questions there.
+#subobj 1
+Open the gates
+The road to the Green clan passes through a mountain gorge, the entrance to which is closed by a gate.
+#subobj 2
+Go to the Green clan headquarters
+The new headquarters of the Green clan is located at the end of the ravine.
+
+=== quest q7g
+Goblin traitors
+While all the warriors were out of the camp area, there was an invasion of goblins, who had always seemed friendly before. The goblins have taken the chief's wife captive. Urk-Tar is wounded and cannot rescue her himself, but if he could be helped he should be grateful.
+#subobj 1
+Go to the goblin camp
+The goblin camp is located in the east of the Middle Peaks. This place is surrounded by high hills and well protected...
+#subobj 2
+Find the chief's wife
+Most likely Urk-Tar's wife is kept in the middle of the camp.
+#subobj 3
+Rescue Urk-Tar's wife
+You need to escort the chief's wife to the Distant Peaks. The rest of the way should be familiar to her, and she will reach the fortress on her own.
+#subobj 4
+The chief's wife must survive
+Most likely Urk-Tar will not forgive the death of his wife.
+
+=== quest q7h
+Black market
+Fieruz, who could help steal the meteorite, has made his way to the Black Market, a secret trading place. Without his help, it is impossible to get meteorite samples. Fieruz must be found.
+#subobj 1
+Leave the city
+The only way out of town, straight to the northern plantations, is almost unguarded.
+#subobj 2
+Walk across the north bridge
+The northern bridge is almost unguarded, but the wild animals behind it pose a serious threat.
+#subobj 3
+Walk on the west bridge
+The western bridge is guarded on both sides - a Khadagan war post is located nearby.
+#subobj 4
+Go to the black market
+On the way to the Black Market you can meet even more adult and strong animals than in the Portal area.
+=== quest q7j
+Duel
+Arrogant Dartas should be punished and a duel is the only way to teach him a lesson.
+#subobj 1
+Come to the place of the duel
+Duels are forbidden in times of war, so the meeting place is in a remote area, far from the city. Dartas has chosen the Isle of Death, near the harbor. Have your weapons at the ready.
+#subobj 2
+Spank Dartas!
+You can't kill the Baron's son, but a good beating will obviously do him good. But not in the face, the wounds from this illegal duel shouldn't be noticed.
+=== quest q7k
+Poisoned water
+One of Karansula's manufactures dumps harmful waste into the neighboring water basin and as a result, the forest animals living nearby have started to contract various diseases. The pollution of the river must be stopped, otherwise all the animals will become extinct.
+#subobj 1
+Go to the manufactory area
+To get to Karansula area you need to bypass the northern or southern security post. The northern one is very well protected, so it is better to go through the southern one.
+#subobj 2
+Take the powder
+Karansul told that the mountain work uses a special powder that can smash the whole mountain. And since it can smash rocks, it can handle one manmade mountain too.
+#subobj 3
+Blow up the manufactory!
+To end the garbage dump, you need to destroy its source of creation, that is - blow up the manufactory into the air.
+
+=== quest q8g
+Great Lizard Shell
+Before attacking the Human Camp, you must confront the Lizard People. For this you need to take the Great Shell, a symbol of peace between humans and lizardmen.
+#subobj 1
+Come to the altar
+The altar on which the Great Shell rests is located in the center of the Lizardmen's forest area. As long as the peace symbol is in place the lizardmen are not threatened.
+#subobj 2
+Steal the Shell
+As soon as the peace symbol is gone from the altar, the lizards will become hostile towards humans.
+
+=== quest q8h
+Blue metal
+In order to acquire another rare specimen of the giant predatory bug, Rindeil needs a meteorite sample which is now in the possession of the Khadagan army and held in one of their camps.
+#subobj 1
+Get behind the gates
+The new barracks are located further south of the Black Market. Although the gates are hardly protected, be vigilant.
+#subobj 2
+Open the chest
+The meteorite samples are in a chest, but only an experienced thief will be able to open it.
+#subobj 3
+Come back alive!
+Now you need to hide until the theft is detected and a chase is initiated.
+
+=== quest q8j
+A new alloy
+In the mountains of Jygran, there is a metal ore from which a new alloy with great properties can be made.
+#subobj 1
+Take the ore
+Suitable ore can be found in the mountains to the west of the city walls.
+#subobj 2
+Find the forge
+The forge can be found to the west of the place behind the river. Traveling there should not be dangerous.
+#subobj 3
+Smelting alloy
+The forge is free and still operational, you can use it to smelt new alloy.
+=== quest q8k
+Free accommodation
+According to the Grey Leaf, a mage who can help in the search for the artifact has taken up residence in the lodging to the west of the mine area. The mage very rarely leaves his haven, so it is advisable to go to his camp.
+#subobj 1
+Come to the Free People
+To get to the accommodation, go through the canyon in the center of the mine area and then turn west.
+#subobj 2
+Kill the tigers
+The accommodation is under attack by snow tigers! You need to help the residents.
+=== quest q9g
+A sudden attack
+After the lizards became hostile to humans, a skirmish should have happened between them. Now it is necessary to attack the human camp while they are weakened.
+#subobj 1
+Come to the meeting place
+Orc warriors have already taken position not far from the human camp. At first you need to conduct a diversion in the camp, reducing the number of defenders. A frontal attack will most likely fail, the camp is still well protected.
+#subobj 2
+Knock people out of the camp
+This camp was built by orcs and it should belong to them!
+=== quest q9h
+Blackmailer
+The man blackmailing Aunt Zara has set a place and time to bring the amount of money he demands.
+#subobj 1
+Find the designated place
+You need to hang the money for the blackmailer's silence on one of the palm trees on the plantation north of town.
+#subobj 2
+Leave a message
+Instead of leaving the money to some stranger, you could appropriate it and force him to give up the blackmail...
+#subobj 3
+Find the blackmailer
+Now you have to wait for the blackmailer to come to the agreed place.
+#subobj 4
+Kill the blackmailer
+To make sure he never deals with extortion again.
+
+=== quest q9j
+Secret report
+The Baron wants a report to be delivered to him on the state of the enemy's forces, which the spy should have prepared. Surveillance is set up behind the spy's house, so the report is hidden elsewhere.
+#subobj 1
+Find the report
+The spy was afraid of the cover-up and hid all the documents where no one would think to look for them - in the cemetery, in the northern part of the neighborhood.
+#subobj 2
+Get the report
+The report is hidden in a jug in the cemetery.
+#subobj 3
+Get rid of the witnesses
+The Khadagan soldiers who set up the ambush should die.
+=== quest q9k
+Magic ingredients
+Hys asks you to bring him some ingredients from his lab that he needs for his spells. It is possible that after this he will agree to help.
+#subobj 1
+Go to the lab
+This time there should be no problems with the lab - the traps are off and the guardian tigers are gone.
+#subobj 2
+Destroy the 'tail'
+Unknown people have organized a ruse, you need to get away from them.
+#subobj 3
+Get the ingredients
+Everything you need lies in a box next to the lab.

@@ -1,0 +1,314 @@
+# um-texts 1
+=== string disconnect
+Server is not responding!
+
+=== string disconnect_msg
+Game interrupted: either the server is switched off or you are experiencing connection problems
+
+=== string lmp_allod_name_0
+Gipath
+
+=== string lmp_allod_name_1
+Ingos
+
+=== string lmp_allod_name_2
+Suslanger
+
+=== string lmp_allod_name_3
+Cave
+
+=== string lmp_camping_abort
+It is currently not possible to do a quick transfer to base!
+
+=== string lmp_camping_count
+Time remaining until quick transfer to base: % seconds.
+
+=== string lmp_camping_start
+You are now preparing for a quick transfer to Base
+
+=== string lmp_cannot_connect
+Cannot establish connection!
+
+=== string lmp_cannot_connect_msg
+You may have some problems with the server connection.
+
+=== string lmp_connection_0
+Server name:
+
+=== string lmp_connection_1
+Players:
+
+=== string lmp_connection_10
+Refresh
+
+=== string lmp_connection_11
+Add/Remove
+
+=== string lmp_connection_12
+Name
+
+=== string lmp_connection_13
+#
+
+=== string lmp_connection_14
+Island
+
+=== string lmp_connection_15
+Ping
+
+=== string lmp_connection_16
+Private Server
+
+=== string lmp_connection_17
+Password
+
+=== string lmp_connection_18
+Enter password
+
+=== string lmp_connection_19
+Enter Server IP address
+
+=== string lmp_connection_2
+Max Players:
+
+=== string lmp_connection_20
+Retrieving Server list
+
+=== string lmp_connection_21
+Password required
+
+=== string lmp_connection_3
+Base:
+
+=== string lmp_connection_4
+Quest:
+
+=== string lmp_connection_5
+IP:
+
+=== string lmp_connection_6
+Ping:
+
+=== string lmp_connection_7
+New server:
+
+=== string lmp_connection_8
+Connecting…
+
+=== string lmp_connection_9
+PK:
+
+=== string lmp_deletepers
+Delete character
+
+=== string lmp_deletepers_msg
+The character will be deleted and you will not be able to restore. Are you sure you want to proceed?
+
+=== string lmp_exch_they_offer
+Swap?
+
+=== string lmp_exch_we_offer
+Swap!
+
+=== string lmp_female_voice
+Voice: female
+
+=== string lmp_male_voice
+Voice: male
+
+=== string lmp_no_pers
+No characters for multiplayer game!
+
+=== string lmp_no_pers_msg
+You have no characters to play a multiplayer game. To play the game, you must create a new character.
+
+=== string lmp_pers_delete
+Delete
+
+=== string lmp_pers_new
+New
+
+=== string lmp_pers_redress
+View
+
+=== string lmp_pers_rename
+Change clan
+
+=== string lmp_pers_tall
+Height
+
+=== string lmp_pers_tall_desc
+Your character can have any height between 0 and 100 units. A characters' height does not affect its properties.
+
+=== string lmp_pk_off
+forbidden
+
+=== string lmp_pk_on
+allowed
+
+=== string lmp_player_banned
+Player %s is forbidden to join the game
+
+=== string lmp_player_connected
+Player %s connected to the game
+
+=== string lmp_player_disconnected
+Player %s left the game
+
+=== string lmp_player_kicked
+Player %s has been expelled from the game
+
+=== string lmp_player_lost_connection
+Player %s lost connection with the server
+
+=== string lmp_points_left
+Balance
+
+=== string lmp_points_left_desc
+Characters' properties must be balanced: e.g. if you increase one parameter, another will be reduced accordingly. The total balance of properties must be zero. Otherwise you will be unable to complete your character creation. 
+
+=== string lmp_quest_canceled
+Quest %s cancelled
+
+=== string lmp_quest_completed
+Quest %s completed
+
+=== string lmp_quest_taken
+Quest accepted: %s
+
+=== string lmp_select_voice
+Voice selection
+
+=== string lmp_select_voice_desc
+For your network character you may choose any voice from the list. Click on the voice's name to select it.
+
+=== string lmp_server_full
+Unable to establish connection!
+
+=== string lmp_server_full_msg
+The server cannot accept any more players at this moment
+
+=== string lmp_status_base
+On Base
+
+=== string lmp_status_camp
+Trading
+
+=== string lmp_status_connect
+Enters
+
+=== string lmp_status_zone
+On map
+
+=== string lmp_trade_canceled
+Player %s refused to swap
+
+=== string lmp_trade_requested
+Player %s is offering you a swap
+
+=== string lmp_voices
+Select voice
+
+=== string lmp_wrong_password
+Incorrect password
+
+=== string lmp_wrong_password_msg
+Connection is impossible. Please type correct password.
+
+=== string lmp_wrong_protocol
+Unable to establish connection!
+
+=== string lmp_wrong_protocol_msg
+Wrong communication protocol version
+
+=== string lmp_you_are_banned
+You've been disconnected from the game.
+
+=== string lmp_you_are_banned_msg
+Your computer's IP address has been disconnected from the game currently being played on this server.
+
+=== string lmp_zone_disabled
+Access to Game Zone is forbidden
+
+=== string lmp_zone_enabled
+Access to  Game Zone is open
+
+=== string reserved_02
+Game paused by player %s
+
+=== string reserved_04
+Please wait…
+
+=== string reserved_05
+Reserved
+
+=== string reserved_06
+Reserved
+
+=== string reserved_07
+Reserved
+
+=== string reserved_08
+Reserved
+
+=== string reserved_09
+Reserved
+
+=== string reserved_10
+Reserved
+
+=== string reserved_11
+Reserved
+
+=== string reserved_12
+Reserved
+
+=== string reserved_13
+Reserved
+
+=== string reserved_14
+Reserved
+
+=== string reserved_15
+Reserved
+
+=== string reserved_16
+Reserved
+
+=== string reserved_17
+Reserved
+
+=== string reserved_19
+Reserved
+
+=== string reserved_20
+Reserved
+
+=== string reserved_22
+Dear friend,
+If you're reading this message you've managed to get into the game's technical files. The developers congratulate you on your heroic achievement but feel they must also warn you that if you dare to change anything with your naughty little hands, the game will, in all probability, start malfunctioning or may stop running altogether.
+All the best to you,
+Kamikaze,
+Ingame Texts Editor
+
+=== string xch_accept
+Confirm swap
+
+=== string xch_current_money
+Your money:
+
+=== string xch_money_offer
+Amount you offered for a swap:
+
+=== string xch_money_remote
+Amount you are offered for a swap:
+
+=== string xch_remote_cancel
+Do not agree
+
+=== string xch_remote_header
+Your partner's response to proposed swap:
+
+=== string xch_remote_ok
+Agreed
+

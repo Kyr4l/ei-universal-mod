@@ -16,7 +16,7 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
 | `0x04` | `uint32_t` | `width` | Texture width in pixels |
 | `0x08` | `uint32_t` | `height` | Texture height in pixels |
 | `0x0C` | `uint32_t` | `mipsOrDataLen` | For `PNT3`: compressed payload size in bytes.<br>For DXT/16-bit: mipmap level count. |
-| `0x10` | `char[4]` | `fourcc` | Pixel format FourCC identifier (`DXT1`, `DXT3`, `PNT3`, `QU\0\0`, `PV\0\0`) |
+| `0x10` | `char[4]` | `fourcc` | Pixel format FourCC identifier (`DXT1`, `DXT3`, `PNT3`, `QU\0\0`, `PV\0\0`, `DD\0\0`, bytes `88 88 00 00`) |
 | `0x14` | `uint32_t` | `bitDepth` | Bits per pixel (4 for DXT1, 8 for DXT3, 16 for 16-bit, 32 for PNT3) |
 | `0x18` | `uint32_t` | `alphaMask` | Alpha channel bitmask |
 | `0x1C` | `uint32_t` | `alphaShift` | Alpha bit shift offset |
@@ -42,7 +42,11 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
 | `DXT3` | 8 | S3TC DXT3 Compressed | `0xF000` / 12 / 4 | `0x0F00` / 8 / 4 | `0x00F0` / 4 / 4 | `0x000F` / 0 / 4 |
 | `QU\0\0` | 16 | Uncompressed RGBA 5551 | `0x8000` / 15 / 1 | `0x7C00` / 10 / 5 | `0x03E0` / 5 / 5 | `0x001F` / 0 / 5 |
 | `PV\0\0` | 16 | Uncompressed RGB 565 | `0x0000` / 0 / 0 | `0xF800` / 11 / 5 | `0x07E0` / 5 / 6 | `0x001F` / 0 / 5 |
+| `DD\0\0` | 16 | Uncompressed ARGB 4444 (vanilla textures.res: the 39 spell and particle effects) | `0xF000` / 12 / 4 | `0x0F00` / 8 / 4 | `0x00F0` / 4 / 4 | `0x000F` / 0 / 4 |
+| bytes `88 88 00 00` | 32 | Uncompressed ARGB 8888, not packed (vanilla textures.res: the 70 cursors and logos, 1 mipmap) | `0xFF000000` / 24 / 8 | `0x00FF0000` / 16 / 8 | `0x0000FF00` / 8 / 8 | `0x000000FF` / 0 / 8 |
 | `PNT3` | 32 | 32-bit BGRA with 16-byte aligned zero RLE | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 | `0x0000` / 0 / 0 |
+
+> **Known gap**: `tools/um-multitool/ddsmmp.cpp` (and this table) don't yet handle two further FourCCs found in the vanilla game's own `textures.res`, discovered while building `um-modelviewer`'s texture loader: `DD\0\0` (16-bit, 4-4-4-4 ARGB — used by a handful of spell-effect/particle textures like `antimagic.mmp`/`astral.mmp`) and the non-ASCII marker `\x88\x88\x00\x00` (uncompressed 32-bit BGRA with no RLE — used by cursor/logo UI bitmaps, not model textures). Both are implemented as read-only decoders in `tools/um-standalone-tools/um-modelviewer/mmp_texture.hpp`; `um-ddsmmp` itself does not convert them to/from DDS.
 
 ---
 

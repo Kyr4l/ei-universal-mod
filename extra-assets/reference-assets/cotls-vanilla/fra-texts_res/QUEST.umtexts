@@ -1,0 +1,1453 @@
+# um-texts 1
+=== quest q0g
+Rejoindre des humains
+Vous ne survivrez pas seul dans ce monde étrange et mystérieux. Vous devez trouver un campement humain.
+#subobj  1
+Quitter les ruines
+Puisqu’il y a des ruines, il doit y avoir des gens qui y vivent - ou qui y ont vécu. Pour les trouver, commencez par quitter les ruines et explorez minutieusement les environs.
+#subobj  2
+Poursuivre les fuyards
+Oui, il y a bien des gens qui vivent ici ! Même s'ils s'enfuient dès qu'ils voient un étranger sortir des ruines... Vous ne pourrez pas les attraper, mais à présent vous devinerez au moins où découvrir un village humain. Cependant, n’espérez pas trouver une route digne de ce nom dans cette contrée sauvage : vous devrez probablement longer la rivière ou même la traverser à gué.
+#subobj  3
+Aller au village
+Le village se trouve à l'est du gué, mais soyez prudent : des créatures dangereuses rôdent peut-être dans les parages.
+
+=== quest q10g
+Voler la Sphère Magique des Orques
+Le Prophète Orque détient la Sphère Magique sur un autel situé sur l’une des îles. Ses gardes du corps ne quittent jamais l’île. Remarque : seul le pont-levis vous permet d’atteindre les îles. Pour l’abaisser, vous devez disposer du mécanisme des Orques insulaires.
+#subobj  1
+Trouver l'autel
+L'autel se trouve sur l'île la plus au sud. En vous y rendant, évitez les îles du centre et de l'est : ne prenez pas de risques inutiles.
+#subobj  2
+S’emparer de la sphère
+Pour vous emparer de la sphère, vous devez d'abord tuer les gardes !
+
+=== quest q11g
+Archives des Orques
+L’origine de la Sphère Magique réside dans les archives des Orques. Le Prophète qui vit sur l’île centrale détient peut-être ces archives.
+#subobj  1
+Trouver le Prophète
+Le prophète qui détient les documents vit à l'extrémité est de l'île centrale. Mais soyez prudent, il est bien gardé !
+#subobj  2
+S’emparer du document
+Vous devez tuer le prophète et voler le document sur son cadavre.
+
+=== quest q12g
+²Vallée de l’or
+Entre les collines, près de la rivière, se trouvent les vestiges d’une caravane qui transportait de l’or. Les villageois appellent cet endroit la Vallée de l’or, mais ce joli mot suscite en eux une peur superstitieuse. Les vestiges sont gardés par des cohortes de goules impitoyables dont il est difficile de venir à bout.
+#subobj  1
+Trouver les vestiges de la caravane
+La Vallée de l’Or se situe au centre de la rivière, sur la rive est. C'est là que se trouvent les vestiges de la caravane, tout près de l'eau. Deux passages mènent à la vallée, mais gare aux embuscades ! Les goules ne voient pas mais peuvent détecter la présence de n'importe quel être vivant ; vous ne pourrez donc pas les surprendre par derrière.
+#subobj  2
+S’emparer de l’argent
+L’or est réparti dans deux coffres. L’un est relativement facile à ouvrir, mais l’autre nécessite un niveau de compétence « Utiliser/Voler » suffisamment élevé. Un seul sac d’or vous suffira pour accomplir la quête, mais si vous parvenez à voler les deux, tant mieux. Bonne chance !
+#subobj  3
+Echapper aux gardes de la caravane
+Celui qui volera l’or déchaînera la colère des goules qui gardent la Vallée de l’Or. Ceux-ci se précipiteront alors sur les berges de la rivière pour tuer le voleur.
+
+=== quest q13ag
+Le vrai plan des Brigands
+Contrairement aux promesses qui vous ont été faites, le lieutenant du Chef était armé et accompagné de gardes du corps. De toute évidence, les brigands visaient une autre cible que les Gobelins.
+#subobj  1
+Tuer tous les ennemis
+S’il y a de la trahison dans l’air, tous ceux qui souhaitent du mal à l’Elu doivent mourir.
+#subobj  2
+Tuer le Lieutenant du Chef
+Le Lieutenant du Chef doit mourir.
+#subobj  3
+Fouiller les affaires du Lieutenant du Chef
+De toute évidence, un villageois est impliqué dans cette embuscade. En fouillant les affaires du Lieutenant du Chef, vous trouverez peut-être des indices sur l’identité du traître.
+#subobj  4
+Embuscade à l’ouest
+Plusieurs embuscades ont été tendues pour assurer la protection du Lieutenant du Chef. Tous ces ennemis doivent être éliminés.
+#subobj  5
+Embuscade au sud
+Plusieurs embuscades ont été tendues pour assurer la protection du Lieutenant du Chef. Tous ces ennemis doivent être éliminés.
+#subobj  6
+Embuscade à l’est
+Plusieurs embuscades ont été tendues pour assurer la protection du Lieutenant du Chef. Tous ces ennemis doivent être éliminés.
+#subobj  7
+Embuscade au nord
+Plusieurs embuscades ont été tendues pour assurer la protection du Lieutenant du Chef. Tous ces ennemis doivent être éliminés.
+#subobj  8
+Gardes du corps
+Le Lieutenant du Chef est accompagné de plusieurs gardes du corps. Ceux-ci doivent être éliminés.
+
+=== quest q13g
+Empêcher un raid des Gobelins
+Les Gobelins envisagent de lancer un vaste raid sur le village. Une contre-attaque, menée conjointement par les soldats du village et les brigands, est déjà en préparation. Les Gobelins doivent être anéantis et leurs plans visant à attaquer le village déjoués.
+#subobj  1
+Rencontrer le Lieutenant du Chef
+Le rendez-vous est censé avoir lieu à l’endroit où la route menant à la rivière quitte la vallée entourée de collines. Il devrait être seul et désarmé.
+#subobj  2
+Trouver les Gobelins
+Les Gobelins se rassemblent au bord du marais, non loin de la haute montagne en forme de colonne ou de dent cassée. Cette montagne est la dernière de l’ouest, après quoi le terrain est plus plat.
+#subobj  3
+Tuer les Gobelins
+Vous devez impérativement empêcher les Gobelins d’attaquer.
+
+=== quest q14ag
+Amulette du dragon
+Les Hommes-lézards possèdent une amulette qui devrait vous permettre de prendre brièvement le contrôle du dragon. Cette amulette vous est nécessaire pour poursuivre votre quête.
+#subobj  1
+Trouver le propriétaire de l’amulette
+L’Homme-lézard qui détient l’amulette du dragon dresse ses crapauds apprivoisés près de la vieille carrière. La route de l’est vous y mènera directement. La charrette cassée située près de la colline vous permettra de vous repérer.
+#subobj  2
+Tuer le propriétaire de l’amulette
+L’Homme-lézard ne vous laissera pas partir avec l’amulette, et les crapauds dressés vous empêcheront de la voler. Vous n’avez qu’une seule solution : tuer le propriétaire.
+#subobj  3
+Prendre l’amulette
+Fouillez le cadavre de l’Homme-lézard et emparez-vous de l’amulette.
+
+=== quest q14g
+Abécédaire des Orques
+A défaut de pouvoir consulter l’abécédaire des Orques détenu par le Prophète, la sorcière est incapable de déchiffrer le mot adressé aux traîtres. Le meilleur moyen d’y parvenir consiste à se rendre dans le « Désert » en traversant « la Rivière et les Iles ».
+#subobj  1
+Trouver la maison du prophète
+Un grand promontoire s’étire dans l a direction ouest/sud-est, jusqu’au lac bordant le désert. A l’extrémité de ce promontoire se trouve un petit îlot désertique accessible à pied. Celui-ci abrite une cabane où vit le prophète qui connaît l’abécédaire. La route menant à l’extrémité du promontoire est dangereuse : elle est gardée par des Orques, et un Ogre barbare vit dans les parages.
+#subobj  2
+Tuer le prophète
+Pour vous assurer que le prophète ne donnera pas l’alerte, vous n’avez qu’une seule solution : le tuer.
+#subobj  3
+S’emparer de l’abécédaire
+L’abécédaire des Orques est le principal objectif de cette quête. Sans lui, la sorcière ne pourra pas déchiffrer le mot.
+
+=== quest q15ag
+Grande conque
+Les Hommes-lézards possèdent un symbole de la paix : la Grande conque. Selon la coutume, la tribu des Hommes-lézards possédant la Grande conque sur son autel ne s’en prend aux humains que si ceux-ci l’attaquent. Pour le moment, la Grande conque se trouve sur un autel des Montagnes lointaines. Allez la chercher. Pour ce faire, prenez la route d’ouest en est via les Montagnes centrales.
+#subobj  1
+Trouver l’autel
+L’autel se trouve non loin du point de départ de la route des Montagnes lointaines, au nord des quatre piliers ardents.
+#subobj  2
+S’emparer de la Grande conque
+Vous devez vous la procurer. Mais n’oubliez pas que le vol de la Conque marquera la fin de la trêve entre les Hommes-lézards et les humains.
+
+=== quest q15bg
+Faire la paix avec les Hommes-lézards
+Pour éviter que les Hommes-lézards des Montagnes centrales n’attaquent les humains, vous devez rapporter la Grande conque sur l’autel. Ce dernier se trouve près de l’entrée du passage menant au lac, à l’est de l’endroit où le lit asséché de la rivière rencontre les rochers. Les passages entre les collines qui y mènent sont gardés par des Hommes-lézards, et par conséquent, un itinéraire direct est déconseillé. Remarque ! ! A défaut de mener à bien cette quête, la route menant à l’observatoire sera très dangereuse.
+#subobj  1
+Rejoindre l’autel
+Essayez de passer entre la colline et le lit asséché de la rivière : les gardes y sont moins nombreux. Après avoir franchi les collines, sur le territoire des Hommes-lézards, soyez très prudent : vous devrez peut-être vous déplacer en rampant.
+#subobj  2
+Remettre la conque en place
+Vous devez rapporter la Grande conque à l’autel, après quoi, les Hommes-lézards ne s’en prendront plus aux humains. Mais si des humains les attaquent en premier, les hostilités reprendront.
+
+=== quest q16g
+Carrière
+La route menant à la carrière est dangereuse. Si vous parvenez à la sécuriser, l’Artisan Babur vous en sera reconnaissant. La carrière se trouve au nord des quatre piliers ardents.
+#subobj  2
+Trouver les cochons
+Le troupeau de cochons vit dans le même ravin, non loin du Cyclope, à l’est de la carrière.
+#subobj  3
+Tuer tous les cochons
+Tant que le Cyclope sera repu, il ne bougera pas. N’oubliez pas que les cochons sont ici en liberté et que certains peuvent s’égarer. Ne vous faites surtout pas repérer par le cyclope, cela marquerait l'échec de la mission que Babur vous a confié. 
+#subobj  4
+Attendre le départ du Cyclope
+Lorsque le Cyclope commence à avoir faim, il doit se mettre en quête de nourriture. Mais ce n’est pas pour tout de suite....
+#subobj  5
+Trouver la carrière
+Vous trouverez la carrière au nord des quatre piliers ardents. Soyez prudent, et n’oubliez pas de scruter régulièrement le ciel - on dit que des dragons rôdent dans ces contrées.
+#subobj  6
+Tuer le Cyclope
+Cette tâche n’est pas facile, mais si vous réussissez, vous pourrez considérer que la requête de l’Artisan a été satisfaite.
+
+=== quest q17g
+Cristal Vert
+Les Cristaux Verts sont nécessaires au « Sort de Glace ». Ces cristaux reposent au fond d’un ravin, dans les montagnes abritant la Cité des Morts. Explorez le nord des portes de la ville.
+#subobj  1
+Duper le Troll
+Un Troll vit près de l’entrée du ravin. Il ne sera pas facile à tuer, mais vous pourrez le leurrer, puis vous glisser dans le ravin, à un endroit où l’immense Troll ne pourra pas vous suivre.
+#subobj  2
+Trouver le gisement de Cristaux
+L’extrémité du ravin abrite un gisement de Cristaux. Soyez prudent en y descendant : outre les Trolls, vous pourrez y croiser d’autres ennemis !
+#subobj  3
+S’emparer d’un Cristal
+Vous devez vous emparer d’un Cristal et le rapporter à la sorcière.
+#subobj  4
+S’emparer d’un Cristal Vert
+Estera a demandé un Cristal Vert. Les Cristaux Bleus ne permettent pas de jeter un « sort de glace ».
+#subobj  5
+Sortir du ravin
+En quittant le ravin, méfiez-vous des nombreuses créatures dangereuses qui rôdent dans les parages !
+
+=== quest q18g
+Explorer les ruines de l’observatoire
+La clé du mystère de la Cité des Morts se trouve quelque part dans les ruines de l’observatoire. Ce dernier est situé au nord des Montagnes centrales, là où vivent les tribus guerrières des dragons et des harpies. Souvenez-vous que l’amulette est inefficace contre les dragons, à l’exception de celui qui vit au nord, légèrement à l’ouest, de l’autre côté du lac. Remarque : la route menant à l’observatoire est très dangereuse compte tenu de la présence de redoutables Hommes-lézards. Pour limiter les risques, vous devez préalablement mener à bien les quêtes de la « Grande conque » et de la « Paix avec les Hommes-lézards ».
+#subobj  1
+La route du lac
+Un passage étroit et sinueux, situé dans les rochers, mène au lac. Il part du nord de l’autel des Hommes-lézards. Si vous rapportez le symbole de paix (la Grande conque) à l’autel, les Hommes-lézards n’attaqueront plus les humains. Sinon, vous devrez vous battre pour franchir le passage et vos chances de réussite seront assez minces.
+#subobj  2
+Geler le lac
+La magie d’Estera a fonctionné ! Le lac est maintenant recouvert de glace et vous pouvez le traverser à pied !
+#subobj  3
+Traverser le lac
+Le nord du lac est une région très dangereuse qui abrite notamment les ruines de l’observatoire. Non seulement elles sont infestées de Harpies, mais c’est aussi le repaire du dragon !
+#subobj  4
+Trouver le dragon
+Le repaire du dragon s’étire sur la petite vallée située au nord et à l’ouest du lac.
+#subobj  5
+Charmer le dragon
+Si une personne munie de l’amulette s’approche du dragon, celui-ci ne l’attaquera pas, mais la suivra comme un petit chien.
+#subobj  6
+Trouver les Harpies
+Les Harpies vivent dans les ruines de l’observatoire, au nord et à l’est du lac. Soyez prudent : ces créatures connaissent la magie et sont très dangereuses !
+#subobj  7
+Exterminer les Harpies
+A la vue de harpies, le dragon devient fou de rage et les attaque. Mettez-vous mettre à l’abri pendant le combat ou vous risquez d’être touché par les pouvoirs magiques militaires des deux camps.
+#subobj  8
+Fouiller l’observatoire
+Essayez de fouiller les ruines pour y trouver des informations sur la Cité des Morts. Il peut s’agir d’une carte, d’un livre ou de tout autre document similaire.
+
+=== quest q19g
+Preuve principale
+Le plan détaillé visant à éliminer l’Elu a été envoyé aux Orques. Ce plan démasquera l’ennemi qui se cache parmi les villageois.
+#subobj  1
+Trouver l’emplacement secret
+Le document adressé aux Orques se trouve dans un endroit secret au pied de la colline, à l’est de l’endroit d’où part la route séparant les Contreforts de la rivière. Dépêchez-vous : un messager Orque accompagné de gardes s’y rend également pour s’emparer du document.
+#subobj  2
+Rattraper le messager Orque
+L’Orque a réussi à s’emparer du document et se dirige actuellement vers la Montagne du conseil pour le remettre aux chefs. Cette montagne se trouve non loin de la route séparant les Contreforts de la rivière ; au sommet de la montagne, un chemin est indiqué par des panneaux des Orques.
+#subobj  3
+S’emparer du document
+Pour connaître l’identité de l’ennemi du village, vous devez récupérer le document dont s’est emparé le messager orque.
+
+=== quest q1ag
+Tuer la sentinelle gobelin
+Une sentinelle gobelin surveille en permanence le village et informe sa tribu de toutes les allées et venues empêchant ainsi les villageois d’emmener leurs animaux aux champs ou l’envoi d’une force pour combattre les Gobelins. Si elle voit un soldat, la sentinelle s’enfuit immédiatement et la meilleure façon de l’approcher consiste donc à ne pas avoir l’air d’un soldat. Une fois la sentinelle éliminée, regagnez le village. Les Contreforts sont très dangereux !
+#subobj  1
+Trouver la sentinelle gobelin
+La sentinelle gobelin surveille la route menant aux Contreforts. Son poste est tout près du village.
+#subobj  2
+Tuer la sentinelle gobelin
+Vous devez la tuer, puis retourner au village.
+
+=== quest q1g
+Tuer le Loup Blanc
+Le Loup Blanc est le redoutable chef d’une meute féroce qui a massacré le bétail des villageois. Privée de son chef, cette meute serait bien moins dangereuse.
+#subobj  1
+Trouver le repaire du Loup Blanc
+D’après le Doyen, le repaire du Loup Blanc se trouve dans le ravin, au nord-ouest des Contreforts.
+#subobj  2
+Détourner l’attention de la meute
+Seul, le Loup Blanc est déjà un redoutable adversaire, mais s’il est accompagné de toute sa meute, il est quasiment invincible. Essayez cependant de détourner l’attention de la meute en effrayant les sangliers pour les faire courir. Les loups se mettront peut-être alors à leur poursuite abandonnant leur chef un moment.
+#subobj  3
+Tuer le Loup Blanc
+Pendant que le loup dévore le butin, glissez-vous jusqu’à lui et essayez de le tuer en le frappant d’un grand coup.
+#subobj  4
+S’emparer de la tête du Loup Blanc
+La tête peut en effet prouver que les villageois ont désormais un ennemi de moins.
+
+=== quest q20g
+Maître de la Cité des Morts
+Quelqu’un contrôle la Cité des Morts. Il s’agit peut-être du puissant Magicien que vous devriez essayer de rencontrer, ou du moins dont vous devriez vérifier l’existence. Souvenez-vous de ceci : il est pratiquement impossible de pénétrer dans la Cité des Morts par les grandes portes. Les goules montent la garde tout comme les gardes de la cité le faisaient en des temps meilleurs. Pour accéder à la cité, vous pouvez emprunter un passage secret à condition de connaître le mot de passe.
+#subobj  1
+Trouver comment entrer dans la Cité des Morts
+Un passage secret traverse les montagnes. Son entrée, située au sud des grandes portes, est indiquée par deux tours, mais pour les franchir, vous devez connaître le mot de passe inscrit dans le livre de l’observatoire.
+#subobj  2
+Franchir le passage ouvert
+Le passage ouvert mène exactement là où vous devez vous rendre : à la Cité des Morts.
+#subobj  3
+Trouver le Mont solitaire
+D’après des informations incomplètes, le maître de la Cité vit au sommet du Mont solitaire, au fond de la vallée. Redoublez de prudence lors de vos recherches : les goules de la Cité des Morts ne rôdent pas seulement près des grandes portes !
+#subobj  4
+Escalader le Mont solitaire
+Le sommet du Mont solitaire a tout d’un lieu de résidence idéal pour le Maître de la Cité des Morts. Pour vous y rendre, empruntez le chemin en spirale menant au sommet de la montagne.
+
+=== quest q22g
+Créatures souterraines
+Le Vieux Dragon respecte les anciennes traditions. Aussi, il vous promettra de vous révéler de précieuses informations à condition que vous éliminiez les tatous qui l’exaspèrent. Pour vous faciliter la tâche, il vous remettra un poison à utiliser dans l’une des trois rivières souterraines.
+#subobj  1
+Tuer la mère tatou
+Si vous ne tuez pas la grande femelle tatou, elle donnera naissance à beaucoup d’autres bébés tatous et le Vieux Dragon ne connaîtra jamais la paix et le repos. Mieux vaut l’attaquer après avoir empoisonné une des sources - l’eau empoisonnée ne la tuera pas, mais elle sera très affaiblie.
+#subobj  2
+Exterminer les petits tatous
+Ce sont eux qui agacent le Vieux Dragon avec leurs histoires et leur chahut.
+#subobj  3
+Trouver la source la plus proche
+La source la plus proche se trouve au nord-est de la grotte. Pour y accéder, vous devez remonter la rivière souterraine à pied.
+#subobj  4
+Empoisonner la source la plus proche
+Utilisez le poison du dragon. Ainsi, plusieurs petits tatous mourront et leur mère sera très affaiblie.
+#subobj  5
+Trouver la source centrale
+La source centrale se trouve à l’ouest de la source la plus proche, dans la grotte. Pour y accéder, vous devez remonter la rivière souterraine centrale à pied.
+#subobj  6
+Empoisonner la source centrale
+Utilisez le poison du dragon. Ainsi, plusieurs petits tatous mourront et leur mère sera très affaiblie.
+#subobj  7
+Trouver la source la plus éloignée
+La source la plus éloignée se trouve près du centre de l’extrémité nord de la grotte. Pour y accéder, vous devez remonter la rivière souterraine la plus éloignée à pied.
+#subobj  8
+Empoisonner la source la plus éloignée
+Utilisez le poison du dragon. Ainsi, plusieurs petits tatous mourront et leur mère sera très affaiblie.
+
+=== quest q23g
+Punir le Capitaine traître
+Le Capitaine Gort se rebelle ! Il menace de tuer le Doyen et l’Elu pour devenir le seul maître du village ! C’est inacceptable ; le traître et ses complices doivent mourir !
+#subobj  1
+Trouver le Capitaine
+Le Capitaine s’est échappé pour rassembler le reste des brigands et attaquer le village. Il n’a pas dû aller bien loin ; vous le trouverez probablement dans les Contreforts, près de la route menant au Village.
+#subobj  2
+Tuer le Capitaine
+Le traître et ses acolytes doivent être éliminés !
+
+=== quest q24g
+Plante magique
+La situation est critique au village. Le Capitaine a payé le Prophète Orque pour jeter un sort de maladie sur le peuple. Pour sauver le village, vous devez trouver la Fleur Blanche et l’apporter au Doyen.
+#subobj  1
+Trouver la Fleur
+Pour trouver la Fleur, vous devez emprunter la route qui relie les Contreforts à l’est. Celle-ci traverse d’abord la forêt, puis, au nord, vous verrez les collines (la charrette cassée appartenant à Babur se trouve près de la première colline). En franchissant la crevasse formée entre ces collines sur une courte distance en direction du nord, vous trouverez la Fleur.
+#subobj  2
+S’emparer de la Fleur
+Vous devez vous emparer de la plante magique et l’apporter au village.
+
+=== quest q25g
+Démasquer l’ennemi !
+L’Artisan Babur et le Doyen Erfar ont tous deux des raisons d’en vouloir à l’Elu. Ils savent que celui-ci va retourner dans les Montagnes centrales pour se procurer la plante magique. S’il se fait piéger à l’endroit où le lit asséché rejoint la rivière, Babur sera le traître, si cela se produit près de la charrette cassée, le Doyen sera le traître.
+#subobj  1
+Vérifier le lit de la rivière asséché
+Le lit asséché de la rivière s’étire entre le milieu des Montagnes centrales et le sud-ouest. Il rejoint la rivière dans une petite baie. Si une embuscade a été tendue près de cette baie, c’est que l’Artisan Babur est le traître.
+#subobj  2
+Examiner la charrette cassée
+La charrette cassée se trouve près d’une colline, à l’extrémité de la route entre les Contreforts et l’est. Si une embuscade y a été tendue, c’est que le Doyen est le traître.
+#subobj  3
+Eliminer les ennemis
+Vous savez à présent que l’ennemi du village est le Doyen. Il va payer pour sa trahison, mais tous les ennemis qui ont participé à l’embuscade doivent aussi être éliminés !
+#subobj  4
+Prouver l’innocence de l’Artisan
+Il n’y a pas eu d’embuscade près du lit asséché de la rivière, ce qui prouve que l’Artisan Babur est innocent.
+
+=== quest q26g
+Camp des étrangers
+Le Vieux Dragon a vu d’étranges personnes monter un camp au nord-ouest de la Cité des Morts ; le Grand mage en fait peut-être partie. Vous devez trouver ce camp et vous informer sur ces étrangers.
+#subobj  1
+Gagner le soutien du Dragon
+Menés par le Vieux Dragon, les goules ont attaqué le camp des étrangers et pris le contrôle de la région. Mais le Vieux Dragon a rappelé ses gardes, ce qui vous permet de vous rendre à l’ancien camp.
+#subobj  2
+Trouver le camp
+L’endroit où vous devez vous rendre se trouve au nord-ouest des montagnes qui entourent la Cité des Morts. En partant des portes de la cité, vous devrez franchir la rivière par le pont situé en amont.
+#subobj  3
+Fouiller le camp
+Le camp est vide, mais vous y trouverez peut-être des indices sur ses anciens occupants. Tâchez par exemple de fouiller tous les cadavres que vous trouverez.
+
+=== quest q29g
+Khadaganiens
+L’officiel khadaganien a promis que le commandant de l’unité aiderait l’Elu à quitter Gipath. Même si cet officier a légèrement exagéré l’hospitalité et la bonne volonté de son chef, vous devriez quand même le rencontrer. Le camp de l’expédition khadaganienne se trouve à l’est des Montagnes lointaines.
+#subobj  1
+Trouver le camp
+Deux rivières traversent les Montagnes lointaines : l’une coule depuis la partie centrale du Grand Lac, du nord au sud, et l’autre part de la source située à l’est des montagnes pour se diriger vers le sud-ouest. Le camp khadaganien se situe au nord, non loin des berges de la deuxième rivière, à mi-chemin.
+#subobj  2
+Rencontrer les Khadaganiens
+Avant de vous entretenir avec le chef de l’unité, vous devez rencontrer l’un de ses soldats.
+
+=== quest q2g
+Outils
+L’Artisan Babur ne peut pas et ne travaillera pas avant que les outils dérobés par les « Chasseurs Libres » ne lui soient restitués (il les considère toujours comme des Brigands).
+#subobj  1
+Trouver le chef des Brigands
+Le camp des brigands où vivent le chef et son épouse se trouve entre les deux rivières. Pour vous y rendre, le plus simple est d’emprunter le gué situé en amont ; mais méfiez-vous des crapauds venimeux qui abondent sur les berges de la rivière.
+#subobj  2
+S’emparer du ciseau
+Le ciseau en acier doit être dérobé au Chef et restitué à Babur. Il n’est pas chef sans raison : c’est un excellent combattant. Evitez donc de le combattre directement ! L’idéal serait de vous faufiler discrètement jusqu'à lui pour voler le ciseau dans sa poche.
+#subobj  3
+S’emparer du poinçon
+Le poinçon en acier doit être dérobé à la Cheftaine et restitué à Babur. Ne vous fiez pas à son air inoffensif, car c’est une excellente magicienne qui peut vous causer beaucoup de tort. L’idéal serait de vous faufiler discrètement jusqu'à elle pour voler le poinçon dans sa poche.
+
+=== quest q30g
+Atteindre la maison de l’Homme-lézard Ermite
+L’Homme-lézard Ermite exige que vous veniez à sa rencontre, car il vous a aidé à échapper aux Khadaganiens. Vous devez tenir votre promesse, mais vous ne savez pas qu’il attend de toi.
+#subobj  1
+Trouver le pont
+La demeure de l’Homme-lézard se trouve au nord-ouest de la région appelée le « Désert ». La route est bloquée par un canal circulaire rempli d’eau et enjambé par deux ponts. Pour éviter tout danger inutile, essayez d’entrer dans le « Désert » du côté de la « Cité des Morts ».
+#subobj  2
+Neutraliser le piège
+L’île formée par le canal circulaire abrite plusieurs colonnes de pierres. Un piège élaboré ! La Griffe Ancienne que vous a remis l’Homme-lézard ermite vous aidera à passer en toute sécurité.
+#subobj  3
+Rencontrer l’Homme-lézard ermite
+Pour parler à l’Homme-lézard, vous devez franchir le premier pont et marcher jusqu’au second.
+
+=== quest q34g
+Rendre l’eau aux Hommes-lézards
+Les Orques ont construit un barrage pour détourner la source vers leur territoire. Vous devez dois lever le barrage et bloquer le canal.
+#subobj  1
+Le barrage
+Pour trouver le barrage, dirigez-vous vers le sud en longeant la berge est de la rivière qui commence près de chez l’Ermite. Le barrage se trouve un peu plus loin en aval après l’endroit où un petit ruisseau se jette dans la rivière (à l’est).
+#subobj  2
+Lever le barrage
+Pour permettre à l’eau de s’écouler le long de la rivière, vous devez lever le barrage à l'aide du levier du Lézard.
+#subobj  3
+Trouver la pierre
+Une grande pierre que les Orques seraient incapables de déplacer très loin surplombe le canal. Située en amont du barrage, il vous suffit de pousser la pierre pour la faire basculer et bloquer le canal ! 
+#subobj  5
+Pousser la pierre dans le canal
+Les Orques n’ont pas déplacé la pierre très loin des berges du canal, mais ils l’ont laissée à un endroit où même un homme seul pourrait la faire basculer.
+
+=== quest q35ag
+Prendre les trésors des Hommes-lézards
+Les trésors des Hommes-lézards reposent sur la plus éloignée des trois îles situées au sud du lac. Les Hommes-lézards n’aiment guère partager leurs richesses, mais il pourrait vous être utile d’essayer de les dérober !
+#subobj  1
+Trouver le trésor
+Les trois îles situées au sud du lac sont reliées par des ponts. Vous devez vous rendre sur l’île la plus éloignée.
+#subobj  2
+S’emparer du trésor
+Le trésor des Hommes-lézards est caché dans le coffre. Ouvrez-le et emparez-vous du trésor.
+
+=== quest q35g
+Hommes-lézards reconnaissants
+Selon l’Ermite, les Hommes-lézards seraient prêts à accueillir des humains pour partager leurs trésors avec eux.
+#subobj  1
+Rencontrer les Hommes-lézards
+La tribu qui détient le trésor vit sur les bancs de sable, au sud.
+#subobj  2
+Echapper aux Hommes-lézards
+Les Hommes-lézards sont des hôtes très étranges - ils semblent aimer la compagnie des visiteurs, mais pas nécessairement en vie ! Quittez cette tribu au plus vite ! Vous pourrez peut-être ranimer une vieille querelle entre les Hommes-lézards et les Orques.... et attirer les Hommes-lézards qui vous poursuivent jusqu'à la région la plus éloignée habitée par les Orques. Ensuite, la guerre éclatera !
+
+=== quest q36ag
+Traverser le tunnel
+Vous pouvez emprunter le tunnel pour vous rendre au ravin, évitant ainsi de vous battre contre les redoutables Hommes-lézards Tueurs.
+#subobj  1
+Trouver la faille dans le mur
+Suite à un tremblement de terre, un éboulement a bloqué le tunnel. Et ce même tremblement de terre a aussi fissuré le mur pour former un passage jusqu'à la grotte naturelle.
+#subobj  2
+Contourner l’éboulement
+Vous pouvez contourner l’éboulement par la grotte naturelle, avant de revenir au tunnel principal.
+#subobj  3
+Eviter les Golems
+Les Golems sont des créatures mécaniques dont la mission consiste à protéger les catacombes des intrus. Veillez à ne pas vous faire repérer par un Golem actif ou vous serez en danger.
+#subobj  4
+Sortir du tunnel
+En quittant le tunnel, vous vous retrouverez à l’intérieur du ravin, près de la maison du Magicien.
+#subobj  5
+Sarcophage
+Vous avez trouvé un sarcophage !
+#subobj  6
+S’emparer du contenu du sarcophage
+Le sarcophage peut contenir des objets utiles. N’ayant pas la clé, vous devez disposer d’un niveau de compétence « Utiliser/Voler » suffisamment élevé pour voir ce qu’il renferme !
+#subobj  7
+Trouver le sarcophage avec la clé de contrôle
+Le sarcophage renferme depuis la nuit des temps un double de la clé permettant de contrôler les Golems.
+#subobj  8
+Prendre la clé de contrôle
+Aucune clé n’est nécessaire pour ouvrir le sarcophage ; vous pouvez utiliser la clé de contrôle sur l’autel.
+#subobj  9
+Trouver la salle de l’autel
+L’autel qui contrôle les Golems doit se trouver quelque part près du tunnel ; selon toute vraisemblance, le passage menant à cette salle est caché ou fermé.
+#subobj  10
+Trouver l’autel
+Vous ne savez pas à quoi ressemble l’autel de contrôle, mais vous le reconnaîtrez probablement lorsque vous le verrez.
+#subobj  11
+Utiliser l’autel
+D’après les signes affichés sur le panneau de contrôle, l’autel activera un Golem passif chargé d’éliminer les élémentaux de la partie ouest de la grotte naturelle. Pour utiliser l’autel, vous aurez besoin de la clé.
+#subobj  12
+Attendez...
+Aussi impitoyable qu’il soit, un Golem a besoin d’un peu de temps pour braver les élémentaux.
+#subobj  14
+Trouver le champ de bataille
+L’endroit où le Golem a combattu les élémentaux se trouve à l’ouest de la grotte, après le petit lac de lave.
+#subobj  16
+Trouver la salle du sarcophage
+Une des salles renferme un sarcophage taillé dans la roche et gardé par un Golem. Il est peu probable que le Golem monte la garde sur un sarcophage vide !
+#subobj  17
+Fouiller le sarcophage
+Vous devriez jeter un coup d’œil à l’intérieur du sarcophage ; mais n’oubliez pas que les Golems ne dorment jamais...
+
+=== quest q36g
+Ouvrir le passage menant à la vallée
+Vous connaissez l’existence d’un tunnel menant à la vallée. Pour y accéder, actionnez le levier du passage montagneux situé à l’est de la rivière. N’oubliez pas que le camp khadaganien se trouve dans les environs et que vous devez faire en sorte de l’éviter !
+#subobj  1
+Trouver l’entrée du tunnel
+L’entrée du tunnel se trouve à l’ouest du ravin au fond duquel coule la rivière.
+#subobj  2
+Trouver l’étroit petit ravin à l’est
+D’après le document khadaganien, le levier ouvrant l’entrée du tunnel se trouve à l’extrémité d’un petit ravin très étroit qui se forme à l’est du ravin et s’étire vers le nord.
+#subobj  3
+Trouver le levier
+Le levier devrait se trouver dans l’une des impasses du passage étroit.
+#subobj  4
+Activer le levier
+Vous devez activer le levier, puis revenir à l’entrée du tunnel. Les créateurs de ce système ont sûrement prévu un moyen d’ouvrir les portes rapidement - peut-être s’agit-il de cette chose étrange située à proximité ?
+#subobj  5
+Entrer dans le tunnel
+Le tunnel mène au ravin !
+
+=== quest q37g
+Entrer dans la demeure du Grand mage
+Les anciennes portes menant au cœur de la montagne délimitent la demeure du Grand mage !
+
+=== quest q39g
+Trouver le camp Orque dans les Montagnes centrales
+La sorcière a fait un mauvais rêve. Airy, sa petite fille, était prisonnière des Gobelins vivant dans les Montagnes centrales sous la protection des Orques. Vous devriez peut-être vérifier si ce mauvais rêve est ou non fondé ?
+#subobj  1
+Se rendre au camp des Orques
+Le camp des Orques et des Gobelins se situe à l’ouest des Montagnes centrales. Pour vous y rendre, vous devez traverser le pont qui enjambe le lit asséché de la rivière. L’une des entrées du camp se trouve juste après le pont, au nord. Cette entrée étant bien gardée, mieux vaut essayer de contourner les gardes.
+#subobj  2
+Trouver la palissade
+Le camp abrite une prison dont les quatre murs sont clôturés ; les portes sont concentrées sur un seul mur.
+#subobj  3
+Trouver des preuves de la présence d’Airy
+La petite-fille de la Sorcière n’est pas là. Les Gobelins l’ont peut-être emmenée. Recherchez des indices de sa présence.
+
+=== quest q3g
+Punir les Gobelins
+Les Gobelins déferlent souvent sur le village. Cependant la mort d’au moins sept d’entre eux pourra considérablement les affaiblir. L’idéal consiste à trouver quelques Gobelins égarés à l’est des marais situés en aval de la rivière.
+
+=== quest q40ag
+Ogre Utundry
+Shei-Var veut être sûr que le Démon sera vaincu. Pour lui prouver que c’est effectivement le cas, vous devez lui apporter le contenu du coffre de l’Ogre Utundry ; il s’agit de l’aîné des trois frères Ogres vivant dans le Désert. Une fois que vous aurez rencontré leur Chef Shei-Var, les Orques afficheront une neutralité face aux humains. Mais la quête n’est pas si simple, car les frères Ogres s’échangent les clés de leurs coffres et vous devrez pas conséquent vous occuper des trois !
+#subobj  1
+Trouver l’Ogre Byr
+Byr, le premier Ogre que vous devez vaincre, vit dans une vallée circulaire au nord de la maison de Shei-Var. Non loin se trouve le campement du clan des Orques Kharu, hostiles à Shei-Var.
+#subobj  2
+Tuer Byr
+L’Ogre Byr doit mourir.
+#subobj  3
+Trouver le coffre de Byr
+Le coffre de Byr contient la clé de celui de l’Ogre Gym.
+#subobj  4
+Fouiller le coffre de Byr
+Prenez la clé du coffre de Gym.
+#subobj  5
+Trouver l’Ogre Gym
+Gym, le deuxième Ogre que vous devez vaincre, vit à l’ouest du village de Shei-Var. Pour trouver sa demeure, vous devez franchir la rivière par le barrage des Orques et poursuivre un peu vers l’ouest.
+#subobj  6
+Tuer Gym
+L’Ogre Gym doit mourir.
+#subobj  7
+Trouver le coffre appartenant à Gym
+Le coffre de Gym contient la clé de celui de l’Ogre Utundry.
+#subobj  8
+Prenez la clé de Gym
+Prenez la clé du coffre d’Utundry
+#subobj  9
+Trouver l’Ogre Utundry
+Le plus âgé des frères Ogres, Utundry, vit dans une petite vallée circulaire au nord des berges est du lac.
+#subobj  10
+Tuer Utundry
+L’Ogre Utundry doit mourir.
+#subobj  11
+Trouver le coffre appartenant à Utundry
+Ce coffre est votre principal objectif.
+#subobj  12
+Fouiller le coffre appartenant à Utundry
+Shei-Var veut se procurer le contenu du coffre appartenant à Utundry.
+
+=== quest q40g
+Atteindre la demeure de Shei-Var
+Les Gobelins ont remis Airy au chef Orque Shei-Var. Il vit à l’est du grand lac, non loin du désert. Pour minimiser le danger, vous devez vous enfoncer dans le Désert depuis la Cité des Morts. Vous trouverez alors le campement de Shei-Var.
+#subobj  1
+Trouver l’Orque détenteur de la clé
+Pour accéder au domaine du clan de Shei-Var, vous devez d’abord traverser la crevasse asséchée par le pont-levis. Celui-ci se trouve au sud-est du passage reliant la Cité des Morts au Désert. Le mécanisme qui abaisse le pont est gardé par l’Orque détenteur de la clé qui vit dans une cabane isolée près du pont.
+#subobj  2
+S’emparer du mécanisme
+Vous pourriez tuer l’Orque détenteur de la clé pour vous procurer le mécanisme du pont-levis, mais pourquoi ne pas essayer de la lui voler ?
+#subobj  3
+Abaisser le pont-levis
+Utilisez le mécanisme pour abaisser le pont-levis ; ensuite, vous pourrez continuer.
+#subobj  4
+Trouver la maison de Shei-Var
+La demeure du chef Shei-Var se situe non loin du pont. Pour la trouver, dirigez-vous vers le sud-est et recherchez des maisons d’Orques.
+
+=== quest q41g
+Vaincre le démon
+Shei-Var souhaite remettre Airy comme rançon à un certain démon qui repousse les Orques. Si ce Démon est vaincu, Shei-Var libérera Airy. 
+#subobj  1
+Trouver le Démon
+Le Démon a été vu au sud du village de Shei-var, dans la vallée encerclée par une chaîne de montagnes en spirale. Il ressemble à un humain mais porte une armure inconnue à Gipath.
+#subobj  2
+Tuer le Démon
+Si le Démon est tué, Shei-Var libérera Airy.
+
+=== quest q42k
+Trouver la ville
+Vous devez vous rendre en ville pour chercher la jeune fille d’Ingos. La région se caractérise par deux lacs, l’un supérieur et l’autre inférieur, reliés par la rivière. La ville doit se trouver quelque part au nord du lac supérieur.
+#subobj  1
+Le village des Bûcherons
+Pour vous rendre à la ville d’où vous avez été téléporté, dirigez-vous d’abord vers le sud, puis traversez le petit village des Bûcherons. Ils n’apprécient guère les étrangers ; vous avez donc deux solutions.... traverser discrètement le village ou affronter ses résidents. Dirigez-vous ensuite vers l’est et longez le ravin étroit.
+#subobj  2
+Le pont et le village des chasseurs
+Au nord du pont, de l’autre côté de la rivière, se trouve un village de chasseurs ; comme les Bûcherons, les chasseurs attaquent tous les étrangers. Pour entrer dans la ville, franchissez le pont et quittez le village.
+#subobj  3
+Arrivée en ville
+La ville se trouve au nord du lac supérieur. Elle est entourée d’une vieille muraille de forteresse, c’est pourquoi vous ne pouvez y entrer que par les portes du mur de l’est.
+
+=== quest q43k
+Trouver le cadavre du fouineur
+Le fouineur qui a essayé de trouver la jeune fille a disparu sans laisser de traces. Il est sans doute mort. Vous devez retrouver son cadavre. Il a été vu pour la dernière fois alors qu’il se rendait au village des bûcherons, à l’est de la vallée.
+#subobj  1
+Trouver le village des Bûcherons
+La vallée qui abrite le village se trouve à l’est de la ville. Elle est encerclée de collines et n’est accessible que par le nord. N’oubliez pas que la province est au bord de la révolte et que les étrangers, notamment les citadins, ne sont pas les bienvenus.
+#subobj  2
+Trouver le corps du fouineur
+Le corps du fouineur se trouve quelque part dans les environs. Il est peu probable que les Bûcherons aient pris la peine de l’enterrer.
+#subobj  3
+Fouiller le cadavre
+Il semble que le fouineur ait été tué par ceux qui ont enlevé la Princesse. Vous trouverez peut-être quelque chose qui vous aidera à les trouver.
+
+=== quest q44k
+Apporter les peaux au point de rendez-vous
+Le chasseur souhaite directement vendre ses trophées à l’acheteur de la capitale. Les comparses du marchand vont tenter d’empêcher quiconque d’atteindre la tente de l’acheteur.
+#subobj  1
+Trouver le lieu de rendez-vous
+Après avoir quitté les faubourgs de la ville et rejoint le domaine de Karansul, dirigez-vous vers le sud jusqu'à une colline. Poursuivez ensuite vers l’est le long du coteau jusqu'à la première vallée au sud. C’est là que vous avez rendez-vous avec l’acheteur. L’entrée de la vallée et le lieu de rendez-vous sont gardés par des hommes de Karansul qui n’hésitent pas à attaquer quiconque entre dans la vallée ou même qui s’en approche.
+#subobj  2
+Suspendre les peaux
+Les peaux appartenant au Trappeur doivent être suspendues sur des fourches près du feu. L’acheteur les emportera plus tard, lorsqu’il pourra venir ici. 
+
+=== quest q45ak
+Se procurer la Fleur Sacrée
+Chaque clan du Peuple des forêts a sa propre plante sacrée qui fleurit en hiver et en été. Le gardien du Clan Vert a été capturé par l’hostile Clan Blanc. Vous devez le libérer pour qu’il vous remette la Fleur Sacrée. S’il venait à mourir, emparez-vous de la fleur sur son cadavre.
+#subobj  1
+Traverser le lac
+Pour entrer sur le domaine du Clan Blanc, vous devez vous rendre sur la rive ouest du lac supérieur, puis vous enfoncer dans les bois. Attention : la population locale attaque tous les gens de la ville.
+#subobj  2
+Trouver la prison
+Le Clan Blanc a jeté le Gardien dans une prison primitive faite d’arbres morts. Les portes sont fermées, mais vous pourrez les ouvrir à la main. Néanmoins, cela ne suffira pas.... car un piège magique a été placé sur les portes de la prison. Pour le neutraliser, vous aurez besoin d’une feuille verte que le Prophète du Clan Blanc porte sur lui.
+#subobj  3
+Trouver le Prophète
+Le Prophète du Clan Blanc vit un peu plus loin à l’ouest de la prison.
+#subobj  4
+S’emparer de la feuille verte
+Le Prophète possède une feuille verte nécessaire pour neutraliser le piège magique de la prison. Vous devez vous en emparer.
+#subobj  5
+Neutraliser le piège
+L’autel qui contrôle le piège ressemble à une vieille souche couverte de champignons. Bon déguisement !
+#subobj  6
+S’approcher du Gardien
+Le Gardien n’est pas sûr de pouvoir apporter la Fleur Sacrée à son Clan. Si vous ouvrez la porte de la cage, il donnera la Fleur à son sauveur, puis tentera de s’enfuir.
+#subobj  7
+Palissade
+Le Clan Blanc emprisonne ses ennemis dans différents endroits, dont la palissade.
+#subobj  8
+Ouvrir les portes
+Aucune clé spéciale n’est nécessaire pour ouvrir les portes de la palissade.
+
+=== quest q45k
+Rendre la Fleur Sacrée
+En signe de gratitude pour lui avoir rapporté la Fleur Sacrée, le chef du Clan Vert du Peuple des forêts vous en dira plus sur la mort du fouineur et sur les noms des responsables. Mais si vous allez le voir sans la fleur, il gardera le silence.
+#subobj  1
+Trouver le Clan Vert
+Les membres du Clan Vert du Peuple des forêts vivent au sud de la ville. A l’est de la rivière qui relie les lacs Supérieur et Inférieur se trouve une chaîne de collines s’étirant du nord au sud. Le Clan Vert du Peuple des forêts vit au sud de cette chaîne, sur la façade est. Ne vous mettez pas ces gens à dos : malgré la Fleur Sacrée, ils se battront violemment si vous les attaquez.
+#subobj  2
+Rencontrer le chef
+Remettez la Fleur Sacrée au chef, en échange de quoi il vous révélera de précieuses informations.
+
+=== quest q46bk
+Emmener le Doyen hors du domaine de Karansul
+Vous devez d’abord faire sortir le Doyen du domaine de Karansul. S’il venait à mourir, vous iriez quand même voir le Clan Vert pour raconter à son Chef ce qui s’est passé.
+#subobj  1
+Emmener le Doyen hors de Karansul.
+L’Honorable Doyen suivra son sauveur, mais il est trop affaibli par son emprisonnement pour se défendre. Emmenez-le dans la zone de transfert, près de la ville.
+
+=== quest q46k
+Libérer l’Honorable Doyen
+Le Capitaine des gardes a lancé une expédition punitive contre le Peuple des forêts et a ordonné à un espion d’enlever leur Honorable Doyen. Vous devez le libérer !
+#subobj  1
+Trouver le camp de l’unité de gardes
+Après avoir quitté les faubourgs de la ville et atteint le domaine de Karansul, dirigez-vous vers l’est. Soyez prudent.... Outre les gardes, cette région est aussi fréquentée par les mercenaires de Karansul.
+#subobj  2
+Trouver l’Honorable Doyen
+L’Honorable Doyen du Clan Vert du Peuple des forêts est retenu prisonnier dans une cage située en plein cœur du camp des gardes. La cage est verrouillée et le commandant de l’unité en a la clé.
+#subobj  3
+Trouver le commandant de l’unité
+Pour vous emparer de la clé de la cage, vous devez trouver le Commandant de l’unité. Il porte une plus belle armure et de meilleures armes que les gardes ordinaires. S’il n’est pas au camp, vous le trouverez en train de faire sa ronde entre les différents postes.
+#subobj  4
+S’emparer de la clé
+Vous ne pouvez pas ouvrir la cage et libérer le Chasseur sans la clé du commandant de l’unité.
+#subobj  5
+Libérer le prisonnier
+Pour libérer l’Honorable Doyen, ouvrez simplement la porte de la cage.
+
+=== quest q47ak
+Se venger du ravisseur du Doyen
+Le chef du Clan Vert souhaite connaître l’espion qui a enlevé l’Honorable Doyen. Apportez-lui son badge comme preuve.
+#subobj  1
+Trouver le camp militaire
+Pour trouver le camp militaire où vit l’espion, quittez les faubourgs de la ville pour vous rendre dans la région des mines abandonnées, puis dirigez-vous vers l’est. Le camp est niché entre deux collines de la vallée. Les deux entrées de la vallée sont clôturées et gardées, mais l’entrée sud est mieux gardée que celle du nord.
+#subobj  2
+Trouver l’espion
+Cherchez-le près de sa caserne, à l’ouest du camp, non loin du coteau. N’oubliez pas qu’au sud-est du camp se trouve le champ de tir des archers, alors tâchez de l’éviter.
+#subobj  3
+Tuer l'espion
+Le ravisseur espion doit mourir.
+#subobj  4
+S’emparer du badge sur le cadavre
+Pour prouver au Chef du Clan Vert que le ravisseur n’a eu que ce qu’il méritait, vous pouvez aller remettre son badge personnel au Clan Vert.
+
+=== quest q47ck
+L’Honorable Doyen
+Vous devez conduire le Doyen au camp. S’il venait à mourir, vous iriez quand même voir le Clan Vert pour raconter à son chef ce qui s’est passé.
+#subobj  1
+Emmener le Doyen au Clan
+L’Honorable Doyen suivra son sauveur, mais il est trop affaibli par son emprisonnement pour pouvoir se défendre.
+
+=== quest q48k
+Obtenir les livres comptables
+Le contremaître des ateliers de Karansul transporte un livre comptable. Si vous parvenez à le récupérer, vous pourrez faire pression sur le marchand. Les berges sud, est et nord du grand lac abritent des mines, des scieries et autres entreprises appartenant à Karansul. Cette région est bien gardée et toujours très fréquentée à la fois par les gardes et les employés. Ces derniers ne sont pas armés, mais en voyant un étranger, ils peuvent donner l’alerte et appeler les gardes.
+#subobj  1
+Se rendre sur le territoire gardé
+Pour vous rendre sur le territoire des entreprises de Karansul, vous pouvez passer par le poste situé sur la rive sud du lac. Les gardes qui y sont postés ne devraient pas vous poser trop de problèmes. Pour atteindre le poste, trouvez le pont qui enjambe la rivière se jetant dans le lac depuis l’ouest, puis passez de la rive nord à la rive sud.
+#subobj  2
+Trouver le document
+D’après le Trappeur, le contremaître transporte les livres comptables sur lui. Mais cette information n’est pas confirmée et certains documents se trouvent peut-être quelque part près d’une mine. Jetez un coup d’œil autour de la mine la plus proche de l’entrée sur la rive sud du lac.
+#subobj  3
+Prendre le document
+Vous ne savez pas ce que contiennent ces documents, mais vous devriez les prendre, on ne sait jamais....
+#subobj  4
+Traverser le pont
+Le pont relie la partie sud de la zone industrielle à la partie nord et est gardé par des mercenaires de Karansul.
+#subobj  5
+Trouver la maison du contremaître
+Le contremaître vit dans la partie nord de la zone industrielle. Le toit de sa maison est surmonté de deux petites cheminées en briques. Le contremaître et ses gardes du corps doivent se trouver quelque part dans les parages.
+#subobj  6
+Récupérer le livre comptable
+Vous devez trouver un moyen de vous procurer le livre que le contremaître transporte sur lui.
+#subobj  7
+Quitter le territoire gardé
+Vous pouvez quitter la zone industrielle par le poste situé au nord du lac. De nombreux gardes y sont postés, mais leur attention se concentre sur une éventuelle menace venant de l’extérieur du territoire et non de l’intérieur.
+#subobj  8
+Trouver la broyeuse mécanique
+La fierté de Karansul - une broyeuse de minerais mécanique alimentée par un moulin à vent. Elle se trouve quelque part au nord-est de la zone industrielle. A la moindre défaillance, les employés s’arrêtent de travailler.
+#subobj  9
+Panne de la broyeuse
+En cas de panne de la broyeuse mécanique, les employés et les gardes accourront pour voir ce qui ne va pas. Pendant ce temps, vous pourrez facilement vous occuper du contremaître.
+
+=== quest q49k
+S’emparer de la collection du Gouverneur
+Un voleur surnommé Le Chauve a caché son butin près de sa ferme, dans la région des mines abandonnées. Pour le faire chanter, vous devez vous rendre à la propriété du Gouverneur.
+#subobj  1
+Trouver la ferme
+La famille du Chauve vit dans une ferme située sur la rive ouest du grand lac. Pour vous y rendre, dirigez-vous d’abord vers le rivage sud, puis ouest. Attention : outre la famille du criminel, vous vous heurterez également aux tigres des neiges domptés à la ferme.
+#subobj  2
+Trouver la grange et la cachette
+Le butin est caché dans une grange, située au nord de la vallée abritant la ferme. Vous remarquerez deux tas de bois de chaque côté de la grange.
+#subobj  3
+Prendre la boîte renfermant la collection
+Emparez-vous du butin de la grange.
+
+=== quest q4g
+S’emparer des affaires du brigand Tête-Rouge
+D’après la rumeur, un des brigands, Tête-Rouge, rencontre les Orques et discute chaleureusement avec eux. Il détient peut-être quelque chose susceptible de prouver qu’un autre villageois traite également avec les Orques !
+#subobj  1
+Trouver Tête-Rouge
+Le brigand Tête-Rouge qui a parlé à l’Orque a été repéré près du camp des Brigands, en direction de l’est de l’autre côté de la rivière. Vous y trouverez une route menant à la grotte des montagnes.....
+#subobj  2
+Tuer Tête-Rouge
+Le traître doit mourir.
+#subobj  3
+Fouiller Tête-Rouge
+Il y a peut-être quelque chose d’intéressant parmi ses affaires.....
+
+=== quest q50ak
+Emprunter le labyrinthe
+Les membres du Clan Vert du Peuple des forêts se sont installés dans les vallées montagneuses, au sud du domaine de Karansul. Pour vous y rendre, vous devez emprunter le labyrinthe situé dans les collines qui entourent la ville.
+#subobj  1
+Trouver l’entrée du labyrinthe
+Les portes du labyrinthe se trouvent à l’ouest de la nouvelle zone du Clan Vert, dans les faubourgs de la ville.
+#subobj  2
+Ouvrir l’entrée du labyrinthe
+Vous n’avez pas besoin de clé pour ouvrir les portes du labyrinthe.
+#subobj  3
+Trouver les portes de sortie
+La sortie du labyrinthe se trouve dans le secteur est. Soyez prudent dans le labyrinthe : les créatures y sont nombreuses, y compris les créatures magiques difficiles à repérer.
+#subobj  4
+Ouvrir les portes de sortie
+Vous n’avez pas besoin de clé pour ouvrir les portes.
+
+=== quest q50bk
+Nouveau lieu de résidence du Clan Vert
+Le Clan Vert du Peuple des forêts s’est installé dans les vallées montagneuses, au sud du domaine de Karansul. Pour vous y rendre, vous devez emprunter le labyrinthe situé dans les collines qui entourent la ville, car il s’agit du seul moyen d’accès aux vallées montagneuses. Les humains racontent beaucoup d’histoires effrayantes sur ces vallées : jadis, un Magicien guerrier y avait son laboratoire... La région est encore empreinte de cette redoutable magie. C’est peut-être la raison pour laquelle les Tigres et les Trolls qui peuplent ces vallées sont beaucoup plus forts que ceux qui vivent dans les bois proches de la ville.
+#subobj  1
+Trouver l’autel
+Le Peuple des forêts a résolu l’énigme du laboratoire abandonné et dressé un autel contrôlant les pièges magiques. Situé au sud de la vallée, cet autel ressemble à une souche couverte de champignons. Pour le trouver, longez le mur du sud qui entoure le labyrinthe. N’oubliez pas que cette région abrite de redoutables tigres et Trolls. Essayez de les duper, plutôt que de les combattre !
+#subobj  2
+Utiliser l’autel
+L’autel du Peuple des forêts contrôle le piège magique qui repousse les tigres affamés de la route.
+#subobj  3
+Aller au Clan Vert
+Le nouveau lieu de résidence du Clan Vert se trouve au sud-est des vallées montagneuses. Pour rencontrer le chef et lui parler, traversez intégralement le couloir étroit en direction du sud-est.
+
+=== quest q50ck
+Visite au Clan Vert
+Vous devez retourner voir le chef du Clan Vert ; sans le savoir, il connaît la réponse à l’enlèvement de la Princesse.
+#subobj  1
+Venir au Clan Vert
+Pour atteindre le Clan Vert, dirigez-vous vers le sud depuis les portes de la ville.
+
+=== quest q51k
+Rencontrer la Magicienne
+Tout porte à croire que c’est la Magicienne Diera qui a enlevé la Princesse. C’est une ennemie qui doit être anéantie !
+#subobj  1
+Trouver Diera
+Diera doit être sur le chemin aller ou retour des mines abandonnées.
+#subobj  2
+Tuer Diera
+Diera mérite de mourir !
+
+=== quest q53k
+Trouver un objet précieux pour le Gouverneur
+Vous devez vous procurer la clé de la mine fermée auprès du Gouverneur Valrasian. Dirigez-vous vers la région des vieux puits et trouvez une cachette contenant une pépite d’or.
+#subobj  1
+Portes des vieux puits
+Après que les employés aient quitté les puits pour échapper à l’apparition soudaine de tigres des neiges, le gouverneur a ordonné leur fermeture. Pour les trouver, introduisez-vous dans la région des mines abandonnées, franchissez le camp militaire au nord et continuez légèrement vers l’est. Le ravin menant au sud est fermé par des portes.
+#subobj  2
+Ouvrir les portes
+Vous aurez besoin d’une clé spéciale pour cette tâche.
+#subobj  3
+Trouver la cachette
+L’un des employés a déclaré qu’au cours de leur trajet, leurs superviseurs ont essayé de leur faire porter les dernières pépites des puits, mais ils se sont révoltés et les ont abandonnées. Elles doivent certainement se trouver quelque part au sud des vallées, là où les opérations minières ont eu lieu.
+#subobj  4
+Prendre la pépite
+Le coffre et la charrette ne sont pas là sans raison : ils ont dû être abandonnés par les employés. Vous devriez aller y jeter un coup d’œil et rapporter la pépite.
+#subobj  5
+Restes d’un vieux mineur d’or
+De toute évidence, quelqu’un a payé de sa vie pour avoir tenté d’atteindre les trésors abandonnés !
+#subobj  6
+Fouiller les restes
+Vous trouverez peut-être sur lui quelque chose dont vous ferez meilleur usage que lui. 
+
+=== quest q54k
+Mines abandonnées
+Diera a caché la jeune fille qu’elle a enlevée dans une mine abandonnée. Pour vous y rendre, vous aurez besoin de la clé.
+#subobj  1
+Atteindre les mines
+Les mines abandonnées sont situées au nord de la zone, de l’autre côté du lac. Le passage est bloqué par les portes. Pour atteindre ces portes, contournez le lac par l’est, empruntez le pont pour traverser la rivière et dirigez-vous vers le nord.
+#subobj  2
+Ouvrir les portes
+Pour ouvrir les portes des mines, utilisez la clé du gouverneur. Attention : les entrées des mines sont gardées par des assassins engagés et armés par Diera.
+#subobj  3
+Trouver l’entrée de la mine 1
+Cette mine est la plus proche des portes et la plus facile d’accès. Cependant, si vous empruntez cette entrée, vous parcourrez un plus long chemin dans les catacombes.
+#subobj  4
+Trouver l’entrée de la mine 2
+Celle-ci se trouve à l’ouest de l’entrée de la mine 1. Si vous l’empruntez, votre trajet sous terre sera un peu plus court.
+#subobj  5
+Trouver l’entrée de la mine 3
+Voici la mine la plus à l’ouest et aussi la plus difficile à atteindre. Cependant, si vous empruntez cette entrée, votre trajet dans les catacombes s’avérera plus facile, même si les catacombes ne sont jamais complètement sûres !
+#subobj  6
+Entrer dans la mine
+Pour continuer à chercher la Princesse, pénétrez dans la mine et explorez les catacombes.
+
+=== quest q55k
+Retrouver la Princesse
+La jeune fille est cachée quelque part dans les catacombes. Vous devez la trouver et la sauver. N’oubliez pas qu’à l’entrée, des postes sont gardés par des mercenaires au service de Diera et que les profondeurs sont peuplées des sinistres Seigneurs des Donjons - des êtres magiques qui haïssent ceux qui vivent à la surface.
+#subobj  2
+Trouver l’ancienne cellule de châtiments
+La partie nord-ouest des catacombes abrite un lieu qui faisait autrefois office de cellule de châtiments pour les mineurs récalcitrants. C’est peut-être là que la jeune fille est retenue.
+#subobj  3
+Trouver le Commandant des mercenaires
+Le Commandant des mercenaires de la Magicienne Diera se trouve au camp souterrain. Il détient peut-être quelque chose susceptible de vous aider dans votre quête.
+#subobj  4
+Récupérer les affaires du Commandant
+S’il existe quelque chose susceptible de vous aider à retrouver la jeune fille, cette chose est entre les mains du Commandant.
+#subobj  5
+Aller au nord-est des catacombes
+Il n’y avait personne dans l’ancienne cellule de châtiments. La jeune fille a peut-être réussi à s’enfuir pour se réfugier au cœur des catacombes. Les couloirs souterrains mènent à l’est de l’ancienne cellule ; vous devez continuer votre quête vers le nord-est du labyrinthe souterrain. On peut y accéder de deux manières. La première est directe mais est bloquée par une porte verrouillée. La seconde consiste à emprunter le couloir nord. Malgré l’absence de barrières insurmontables, cet endroit demeure extrêmement dangereux.
+#subobj  6
+Aller au sud-est des catacombes
+La jeune fille a dû réussir à aller plus loin et vous devez donc la chercher dans la partie sud-est du labyrinthe souterrain. Attention : vous pourrez des Tentacules, ces êtres intelligents détestant les habitants de la surface et adeptes de magie.
+#subobj  7
+Trouver la porte
+Si la jeune fille se trouve ici, elle doit se cacher derrière l’une des portes bloquant les passages.
+#subobj  8
+Ouvrir la porte
+Pour savoir si la jeune fille se trouve ici, vous devez ouvrir la porte. Pour ce faire, vous n’avez pas besoin de clé.
+#subobj  9
+Entrer dans l’abri
+La jeune fille est ici !
+#subobj  10
+Trouver le levier « Sud-Est »
+Les portes permettant d’accéder à la partie sud-est des catacombes sont contrôlées par le levier « Sud-Est » situé au nord-est du labyrinthe, derrière l’une des portes. Un croisement permet d’y accéder.
+#subobj  11
+Actionner le levier « Sud-Est »
+Une fois le levier « Sud-Est » actionné, l’accès à la partie sud-est des catacombes sera ouvert.
+#subobj  12
+Trouver le levier « Sud »
+Ce levier se trouve dans la partie sud des catacombes.
+#subobj  13
+Actionner le levier « Sud »
+Visiblement, rien près du levier ne permet de l’actionner. Cependant, il n’est pas là pour rien : il ouvre peut-être des passages donnant sur d’autres endroits des catacombes.
+#subobj  14
+Trouver le levier « Nord-Est »
+Visiblement, rien dans les parages ne semble contrôlé par le levier. Pourtant, il n’est pas là pour rien...
+#subobj  15
+Actionner le levier « Nord-Est »
+Il ouvre peut-être des passages donnant sur d’autres endroits des catacombes.
+#subobj  16
+Oui ! (levier « Sud »)
+Une fois le levier « Sud » actionné, un passage s’ouvre et quelque chose de totalement inhabituel vous y attend...
+#subobj  17
+Prendre la trouvaille
+Quelle qu’elle soit, cette chose est mieux entre les mains de la personne qui l’a trouvée que dans la grotte.
+#subobj  18
+Oui ! (levier « Nord-Est »)
+Une fois le levier « Nord-Est » actionné, un passage s’ouvre et quelque chose de totalement inhabituel vous y attend...
+#subobj  19
+Prendre la trouvaille
+Quelle qu’elle soit, cette chose est mieux entre les mains de la personne qui l’a trouvée que dans la grotte.
+#subobj  20
+Trouver le levier « Nord »
+L’accès au nord-est des catacombes est bloqué par des portes contrôlées par un levier. Pour trouver ce levier, dirigez-vous à l’est de l’ancienne cellule de châtiments.
+#subobj  21
+Actionner le levier « Nord »
+Pour actionner le levier « Nord », utilisez la clé que détenait le Commandant des mercenaires.
+
+=== quest q5dg
+Prophète et pyramide
+Les Orques qui vivent dans les Contreforts se sentent en sécurité grâce à la protection d’une pyramide magique contrôlée par un Prophète. Si vous tuez ce Prophète et désactivez la pyramide, cette tribu sera bien moins dangereuse.
+#subobj  1
+Trouver le Prophète
+Le Prophète se trouve au milieu du campement pour garder le levier. Si vous essayez de l’approcher, les Orques déferleront de toutes parts. Mais vous pouvez tenter vous faufiler glisser dans le camp à l’insu des gardes.
+#subobj  2
+Tuer le Prophète
+L’idéal serait de vous glisser jusqu’au Prophète et de l’assommer rapidement par derrière.
+#subobj  3
+Désactiver la pyramide
+Utilisez le levier pour désactiver la pyramide.
+
+=== quest q5g
+Trouver l’objet magique
+Les Orques qui vivent dans la grotte située au nord-est des Contreforts possèdent un objet magique susceptible d’intéresser la sorcière. D’après la carte dérobée au brigand, cet objet est caché dans le sarcophage fermé. Le Prophète des Orques des grottes en a la clé. Remarque : pour atteindre la grotte, empruntez la route située au nord-est des Contreforts et leurrez le Troll vivant près de l’entrée de la grotte. Pour vous enfoncer dans la grotte, vous devez disposer d’un mécanisme de pont-levis. Si vous n’en avez pas, adressez-vous au Capitaine.
+#subobj  1
+Abaisser le pont
+Pour accéder aux parties intérieures de la grotte, vous devez abaisser le pont-levis. Pour ce faire, vous aurez besoin d’une pièce du pont-levis.
+#subobj  2
+Trouver la clé du sarcophage
+Le Prophète Orque l’a en sa possession.
+#subobj  3
+Trouver le sarcophage contenant la pièce magique
+Le sarcophage contenant la pièce magique doit se trouver près de l’endroit où vivent les Orques. Inutile de le chercher dans les lointains passages !.
+#subobj  4
+Prendre la pièce
+Pour récupérer la pièce, vous devez ouvrir le sarcophage à l’aide de la clé.
+
+=== quest q60h
+Traverser le Canyon de la Mort
+Les soldats khadaganiens libèrent des prisonniers dans le Canyon de la Mort avant de les traquer pour aiguiser leurs talents au combat. Tout prisonnier parvenant à rejoindre les portes de la forteresse nord depuis les portes principales de la forteresse sud est épargné. Jusqu'à la séance d’entraînement suivante.....
+#subobj  1
+Courir vers les portes nord
+La forteresse nord se trouve au nord-est du canyon. C’est l’unique moyen de s’y rendre et il est très difficile d’échapper aux poursuivants.
+#subobj  2
+Ouvrir les portes nord
+Vous n’avez pas besoin de clé pour ouvrir les portes nord ; ouvrez-les avec les mains.
+#subobj  3
+Franchir les portes
+Lorsque le prisonnier franchit les portes de la forteresse nord, il a mené à bien sa tâche et peut regagner son poste.
+
+=== quest q61h
+Voler la clé de la cage
+Une femme n’est pas assez forte pour tuer Kardaur. Elle doit donc voler la clé sans avoir recours à la force. La prudence est de mise près de la cage des prisonniers : les gardes prennent leur travail très au sérieux et n’hésitent pas à attaquer quiconque s’en approche, quels que soient son grade et sa position.
+#subobj  1
+Trouver le lieutenant
+Le Lieutenant Kardaur se trouve parfois dans la citadelle, à l’extrémité est de la forteresse. Cette citadelle se dresse sur la partie escarpée de la rivière qui coule au fond du canyon. Pour vous y rendre, vous devez ouvrir les portes.
+#subobj  2
+Se procurer les clés
+Une femme n’est pas assez forte pour tuer Kardaur rapidement et en silence. Même si elle essaie, il criera et les gardes accourront. Il n’y aura alors pratiquement aucun moyen de leur échapper. L’idéal serait de dérober les clés du lieutenant et d’espérer qu’il ne s’en aperçoit pas.
+#subobj  3
+Ouvrir la cage
+Après avoir récupéré les clés, retournez ouvrir la cellule du prisonnier. Et méfiez-vous des gardes.
+
+=== quest q62h
+Atteindre l’entrée de la grotte
+La seule façon d’éviter les gardes est de passer par la grotte dont l’entrée se trouve à l’extrémité du canyon.
+#subobj  1
+Trouver l’officier de garde
+Les portes principales de la forteresse sud sont verrouillées et vous aurez besoin d’une clé pour les ouvrir. L’officier de garde a cette clé et vous allez devoir le trouver (le lieutenant Kardaur sera de garde). Son poste se trouve près des portes.
+#subobj  2
+Se procurer la clé
+Vous devez tuer Kardaur pour vous emparer de la clé des portes.
+#subobj  3
+Ouvrir les portes principales
+Pour ouvrir les portes principales de la forteresse, utilisez la clé que vous avez prise à Kardaur. Ensuite, dépêchez-vous, l’ouverture des portes attirera inévitablement l’attention des gardes qui lanceront immédiatement la poursuite.
+#subobj  4
+Ouvrir les cages
+Le gardien des portes est aussi responsable des cages renfermant les araignées sauvages. Le levier situé près des portes permet d’ouvrir simultanément toutes les cages. Ainsi, les araignées attaqueront les gardes, faisant diversion pendant un moment.
+#subobj  5
+Trouver le passage menant à la grotte
+Un passage étroit mène à la grotte située au nord-ouest du canyon. Ce passage est fermé par des portes généralement verrouillées.
+#subobj  6
+Trouver le garde
+Le passage menant à la grotte est verrouillé et le garde en détient la clé.
+#subobj  7
+Tuer le garde
+Le garde doit être tué pour éviter qu’il ne donne l’alerte.
+#subobj  8
+Prendre la clé
+Prenez la clé sur le cadavre du garde pour accéder au passage menant à la grotte.
+#subobj  9
+Ouvrir les portes de la grotte
+Pour ouvrir les portes menant à la grotte, utilisez la clé que vous avez dérobée au garde.
+#subobj  10
+Echapper à la poursuite
+La poursuite est lancée !
+
+=== quest q63h
+Sortie de la grotte
+Vous devez atteindre l’autre extrémité de la grotte. L’entrée se trouve à l’ouest, alors recherchez la sortie est pour vous éloigner le plus possible du Canyon de la Mort.
+#subobj  1
+Trouver le levier
+Il doit y avoir un levier permettant d’abaisser le pont-levis enjambant la rivière de lave de l'ouest quelque part dans la partie sud-est. Vous pourriez franchir cette rivière par le pont ordinaire, mais ce serait bien trop dangereux.
+#subobj  2
+Actionner le levier
+Le pont-levis enjambant la rivière de lave ouest s’abaissera et vous pourrez vous enfoncer dans la grotte.
+#subobj  3
+Trouver le pont ouest
+Le pont ouest se trouve approximativement au milieu de la rivière de lave ouest.
+#subobj  4
+Trouver le deuxième levier
+Le deuxième levier contrôlant le pont-levis enjambant la rivière de lave est se trouve sur une petite île près du temple des Seigneurs des Donjons.
+#subobj  5
+Actionner le deuxième levier
+Le pont-levis enjambant la rivière de lave est s’abaissera et vous pourrez continuer vers l’est.
+#subobj  6
+Trouver le pont est
+Le pont est se trouve en amont de la rivière de lave est.
+#subobj  7
+Explorer la partie est de la grotte
+Malgré l’absence de sortie directe vers la surface, veillez à bien explorer la partie est de la grotte, du nord au sud.
+
+=== quest q64ah
+Tuer deux gardes-chiourmes
+Le Forgeron aimerait beaucoup se venger des deux cruels gardes-chiourmes surnommés Aga-Fouetteur et Aga-Flagelleur. Ils supervisent actuellement les paysans qui travaillent dans les plantations proches de la ville de Suslanger.
+#subobj  1
+Trouver les plantations centrales
+Les plantations centrales se trouvent au nord-est de la ville. Vous pouvez aisément les trouver en suivant l’excellent réseau de canaux d’irrigation.
+#subobj  2
+Trouver Aga-Flagelleur
+Aga-Flagelleur supervise les travaux des plantations centrales.
+#subobj  3
+Tuer Aga-Flagelleur
+Aga-Flagelleur doit mourir.
+#subobj  4
+Trouver les plantations sud
+Les plantations sud sont situées en aval de la rivière, près de l’endroit où elle se jette dans le lac. Les canaux d'irrigation sont ici moins nombreux et moins grands que ceux du centre.
+#subobj  5
+Trouver Aga-Flagelleur
+Aga-Flagelleur supervise les travaux des plantations sud.
+#subobj  6
+Tuer Aga-Flagelleur
+Aga-Flagelleur doit mourir.
+
+=== quest q65h
+Cachette
+Les objets de valeur volés au collectionneur d’antiquités sont cachés près des ruines situées sur la berge ouest de la rivière, non loin de l’endroit où la rivière se jette dans le lac. Vous devez récupérer ces objets et les apporter au Dernier sanctuaire.
+#subobj  1
+Nouvelles casernes des gardes
+De nouvelles casernes destinées aux gardes ont été construites sur la rive ouest, là où la rivière décrit une boucle. Pour atteindre l’endroit où les objets du collectionneur sont cachés, vous devez dépasser les casernes.
+#subobj  2
+Trouver les objets
+Les objets du collectionneur sont cachés dans les ruines situées sur la berge ouest de la rivière, non loin de l’endroit où elle se jette dans le lac.
+#subobj  3
+Prendre les objets du collectionneur
+Vous devez vous emparer des objets du collectionneur et les apporter au Dernier sanctuaire.
+
+=== quest q66h
+Lettre
+La maison du propriétaire de la collection se trouve en ville, dans la rue partant des portes nord et longeant les rives du lac. La maison en question est celle située après l’auberge ; vous la reconnaîtrez aux deux statues de pierre érigées près de la porte.
+#subobj  1
+Entrer dans la ville
+Pour pénétrer dans la ville, vous pouvez emprunter la porte nord. Allez-y de nuit ou utilisez le sort d’invisibilité pour ne pas attirer l’attention des gardes. Il serait très dangereux de les combattre.
+#subobj  2
+Entrer dans la cour de la maison
+La maison que vous cherchez se trouve dans la rue menant au sud des portes et longeant le lac. Comme les autres maisons, elle possède une petite clôture et vous devrez d’abord entrer dans la cour.
+#subobj  3
+Déposer la lettre
+Déposez juste la lettre chez le collectionneur.
+
+=== quest q67h
+Collectionneur d’antiquités
+Rendez-vous a été pris dans un endroit tranquille où les marchands de la ville et les habitants du Dernier sanctuaire se rencontrent secrètement pour commercer. Mais mieux vaut bien surveiller les environs pour éviter d’être pris en embuscade.
+#subobj  1
+Trouver le point de rendez-vous
+Le point de rendez-vous se trouve non loin, au sud-est de la sortie de la grotte. Regardez bien autour de vous pour vous assurer que l’endroit est sûr.
+#subobj  2
+Vérifier que le point de rendez-vous est sûr
+Une unité de gardes est postée près du point de rendez-vous. Vous ne savez pas si les gardes soupçonnent quelque chose ou s’il s’agit d’un simple contrôle de routine. Quoi qu’il en soit, tuez-les.
+
+=== quest q68h
+Vieux nécromancien
+Vous devez aller parler à un vieux nécromancien du nom de Kholai ; il pourra vous aider à résoudre le mystère du Joon « disparu ». Mais Kholai a été banni et il vit actuellement dans une tour en-dehors du village. Et des gardes le surveillent !
+#subobj  1
+Trouver la tour
+La tour de Kholai se trouve au nord-est du désert. Des patrouilles y ont ordre d’empêcher le vieux Nécromancien de communiquer avec quiconque sans l’autorisation préalable de la Guilde.
+
+=== quest q69h
+Restes du savant
+Vous devez voler le cadavre du savant dans le laboratoire situé au sud du désert. Ce laboratoire est protégé par des pièges magiques, et une caserne pleine de gardes se trouve juste à côté.
+#subobj  1
+Trouver le Commandant
+La maison du Commandant du laboratoire, située au sud du village des Nécromanciens, est entourée d’un mur. La meilleure façon d’y accéder consiste à emprunter les portes nord : ce poste, le plus ennuyeux et le plus inconfortable, est généralement attribué aux plus jeunes gardes.
+#subobj  2
+Entrer dans la maison du Commandant
+La maison du Commandant du laboratoire se trouve au sud-ouest du village des Nécromanciens.
+#subobj  3
+Se procurer la clé
+Pour entrer dans le laboratoire, vous devez en posséder la clé située dans la maison du Commandant.
+#subobj  4
+Trouver le laboratoire
+Le laboratoire du Nécromancien Taivo se trouve à l’est du village des Nécromanciens.
+#subobj  5
+Ouvrir les portes du laboratoire
+Pour ouvrir les portes du laboratoire, vous aurez besoin de la clé du Commandant.
+#subobj  6
+Prendre la tête du savant
+Le cadavre du savant gît sur la table du laboratoire. Pour interroger son esprit, vous devez prendre la tête et l’apporter à la tour du Nécromancien Kholai.
+
+=== quest q6g
+Aller trouver la sorcière
+Pour éviter les intrus, la sorcière a posé des pièges magiques sur la route qui mène à chez elle. Au nord, deux voies permettent d’accéder à la grotte de la sorcière : par le ravin de l’ouest et par le ravin de l’est. Les pièges du ravin de l’ouest sont moins dangereux, malgré la présence d’un gigantesque Troll ; le Troll du ravin de l’est est plus jeune et moins intelligent, mais les pièges y sont plus redoutables.
+#subobj  1
+Franchir les pièges
+Les pièges du passage ouest ne couvrent que certaines zones. En jouant de prudence, vous devriez pouvoir les contourner et accéder à l’endroit où se trouve un double de la clé permettant de contrôler tous les autres pièges.
+#subobj  2
+Trouver la clé des pièges
+L’Artisan Babur a récemment fait un double de la clé contrôlant tous les pièges pour Estera. Cette clé doit se trouver quelque part au bout du ravin ouest.
+#subobj  3
+Désactiver les pièges de foudre
+Utilisez la clé de l’obélisque magique pour désactiver les pièges de foudre et faciliter l’exploration des lieux.
+#subobj  4
+Désactiver les pièges de feu
+Utilisez la clé de l’obélisque magique pour désactiver les pièges de feu et vous permettre de vous approcher de l’obélisque contrôlant les pièges d’acide.
+#subobj  5
+Désactiver les pièges d’acide
+Utilisez la clé de l’obélisque magique pour désactiver les pièges d’acide et ouvrir le passage traversant le ravin est.
+#subobj  6
+Franchir le ravin est
+Maintenant que les pièges d’acide ont été désactivés, le ravin est va vous permettre d’accéder plus facilement à la grotte de la Sorcière. Mais soyez prudent : un Troll a élu domicile au bout du ravin, essayez de vous faufiler le plus discrètement possible (en rampant, peut-être ?).
+
+=== quest q70h
+Amulette
+Vous aurez besoin de cette amulette pour savoir où le jeune Joon a été téléporté. Les ruines du manoir appartenant au savant se trouvent au nord de la ville.
+#subobj  1
+Trouver les ruines du manoir
+Les ruines du manoir se trouvent au nord de la ville. Les portes sud permettent d’y accéder. Mais n’oubliez pas qu’à la suite des mystérieux agissements qui s’y sont déroulés, il a été placé sous haute surveillance.
+#subobj  2
+Fouiller les ruines
+Les morceaux de l’amulette utilisés par le jeune Joon doivent se trouver quelque part par là.
+#subobj  3
+Fouiller le coffre
+Il est possible qu’au cours de leur enquête, ils aient rassemblé tous les événements liés au manoir dans ce coffre. Jetez-y un coup d’œil.
+
+=== quest q71h
+Se rendre au lieu de rendez-vous
+Le rendez-vous aura lieu dans une grotte au nord des montagnes. Un homme vous y attendra. Il sait où se trouve la clé du portail menant à Gipath. 
+#subobj  1
+Entrer dans la grotte
+Dirigez-vous vers les pentes montagneuses du nord et trouvez l’entrée de la grotte correspondant au point de rendez-vous.
+
+=== quest q72h
+Portail
+Le portail est le seul moyen de quitter Suslanger pour retourner à Gipath. Il est très bien gardé et difficile à utiliser.
+#subobj  1
+Anéantir vos ennemis
+Erfar a informé les gardes de la présence d’un prisonnier évadé dans la grotte. Ils attendent leur proie à l’entrée de la grotte, alors n’attendez aucune pitié de leur part. La seule solution consiste à tous les éliminer !
+#subobj  2
+Traverser le pont ouest
+Pour éviter les portes principales (trop dangereuses), rejoignez la ville par le pont enjambant la rivière ouest. Ce pont est moins gardé que les portes principales.
+#subobj  3
+Traverser le pont sud
+Pour quitter la ville, empruntez le deuxième pont au sud.
+#subobj  4
+Trouver le détenteur de la clé des pièges
+Le garde qui vérifie parfois les autels de contrôle détient la clé des pièges. Cachez-vous près de l’autel pour le surprendre.
+#subobj  5
+Prendre la clé
+Dérobez la clé sur le cadavre de son détenteur.
+#subobj  6
+Trouver l’autel des pièges du premier cercle
+Les abords de l’autel sont recouverts de plusieurs cercles de protection. Outre les gardes armés, des pièges magiques anéantiront quiconque franchira la zone magique sans y avoir été autorisé. Ces pièges sont contrôlés par les autels et pour chacun d’entre eux, vous devez utiliser une clé spéciale.
+#subobj  7
+Désactiver les pièges du premier cercle
+Vous ne pourrez pas vous approcher de l’autel avant d’avoir désactivé les pièges du premier cercle.
+#subobj  8
+Trouver qui détient la clé des pièges du 2è cercle
+Le détenteur de la clé du deuxième cercle se trouve près de l’autel, de l’autre côté de la zone magique. Pour le trouver, utilisez un sort de « Clairvoyance » et attirez-le à l’aide du sort « Feux d’artifice ».
+#subobj  9
+Prendre la clé
+Prenez la clé sur son cadavre.
+#subobj  10
+Trouver l’autel des pièges du deuxième cercle
+Les pièges du deuxième cercle de protection du portail se trouvent sur la route menant au pont sud qui enjambe le canyon.
+#subobj  11
+Désactiver les pièges du deuxième cercle
+Vous ne pourrez pas vous approcher de l’autel avant d’avoir désactivé les pièges du deuxième cercle.
+#subobj  15
+Trouver le gardien des cercles du troisième cercle
+Le pont sud enjambant le canyon est gardé par une importante unité de gardes. Mais vous pouvez escalader la façade abrupte sans vous faire remarquer. Les pièges du troisième cercle s’y trouvent mais un passage étroit traverse la zone magique. Un jeune Mage guerrier l’utilise pour surveiller les pièges. Vous devez localiser ce Mage et vous souvenir exactement de l’endroit où il va !
+#subobj  16
+Accéder aux pièges du troisième cercle
+Il est impossible de désactiver les pièges du troisième cercle, mais vous pouvez les éviter en suivant le chemin utilisé par le Gardien.
+#subobj  20
+Trouver le Commandant des gardes du portail
+Pour trouver sa demeure, dirigez-vous vers l’est depuis l’endroit où la rivière décrit une courbe vers l’ouest. La maison du Commandant se dresse sur une petite colline près du mur délimitant le premier cercle de la protection du portail.
+#subobj  21
+Se procurer la clé
+Pour activer le portail, utilisez la clé que détient le commandant des gardes.
+#subobj  22
+Franchir le canyon
+Pour atteindre le portail, empruntez l’un des ponts enjambant le canyon.
+#subobj  23
+Trouver la commande en pierre est
+Pour activer le portail, utilisez la clé sur deux commandes en pierre : la commande est et la commande ouest. Elles se trouvent près de l’entrée du portail.
+#subobj  24
+Activer la commande en pierre est
+Le portail ne fonctionnera qu’après avoir été activé.
+#subobj  25
+Trouver la commande en pierre ouest
+Pour activer le portail, utilisez la clé sur deux commandes en pierre : la commande est et la commande ouest. Elles se trouvent près de l’entrée du portail.
+#subobj  26
+Activer la commande en pierre ouest
+Le portail ne fonctionnera qu’après avoir été activé.
+#subobj  27
+Franchir le portail
+Pour revenir à Gipath, entrez dans le portail (la zone de téléportation).
+#subobj  34
+Echapper aux gardes de la ville
+Les gardes de la ville ont été alertés !
+#subobj  35
+Echapper aux gardes des portes principales
+Les gardes des portes principales ont été alertés !
+#subobj  36
+Echapper aux gardes du portail
+Les gardes du portail ont été alertés !
+#subobj  37
+Echapper aux gardes du portail
+Les gardes du portail ont été alertés !
+
+=== quest q73g
+Vaincre la Malédiction !
+Cette quête est très facile : la Malédiction doit être vaincue ! Ensuite, tout ira bien... ...
+#subobj  1
+Anéantir la Malédiction
+Anéantissez la Malédiction !!!
+
+=== quest q7g
+Trouver le mécanisme des Orques insulaires
+Un brigand a été tué dans la forêt près des Montagnes centrales. Il avait volé aux Orques un coffre contenant un nouveau mécanisme. Sans ce mécanisme, il vous sera impossible d’abaisser le pont-levis des Orques pour rejoindre les îles. Le coffre se trouve dans la forêt, tout près du point de départ de la route des Montagnes centrales.
+#subobj  1
+Trouver le coffre
+Le coffre a été abandonné dans la forêt, près de l’endroit où part la route des Montagnes centrales. Vous remarquerez aussi une charrette utilisée par les Brigands pour transporter le coffre... avant qu’ils ne s’entre-tuent....
+#subobj  2
+Se procurer le mécanisme
+Le verrou qui ferme le coffre n’est pas difficile et vous pourrez aisément l’ouvrir à mains nues, sans clé spéciale.
+
+=== quest q8g
+Voler « l’objet sacré des Gobelins »
+Pour faire parler le chef des Gobelins et l’inciter à révéler ses secrets, vous devez voler l’idole de la tribu : le crâne du Premier Gobelin qu’ils vénèrent.
+#subobj  1
+Trouver le camp
+Le camp de la tribu dirigée par GoGo se trouve à l’ouest des collines, entre la rive et les marais.
+#subobj  2
+Voler « l’objet sacré »
+« L’objet sacré » (une tête de Gobelin sur un pieu) se trouve entre les trois feux. Si vous le dérobez, GoGo, le chef de la tribu, mettra tout en oeuvre pour récupérer sa précieuse idole.
+
+=== quest q9g
+Apporter le document des Orques
+Les Orques ont donné à GoGo, le chef des Gobelins, une « peau avec des lettres », une sorte de parchemin retraçant l’histoire de la pierre bleue. Mais contrariés par la disparition de l’idole, ils ont repris le parchemin. Celui-ci se trouve à présent dans le coffre sur l’Ile Dépouillée (que l’on appelle aussi l’Ile « aride »). Remarque : seul le pont-levis permet d’accéder aux îles. Pour l’abaisser, vous devez disposer du mécanisme des Orques insulaires (celui des Orques des grottes ne vous sera d’aucune utilité). Si vous ne l’avez pas, adressez-vous au Capitaine.
+#subobj  1
+Trouver « l’île dépouillée »
+A en juger par son nom, l’île doit être quasiment dénuée de végétation. Selon GoGo, elle serait située quelque part au sud-est.
+#subobj  2
+S’emparer de la « peau avec des lettres »
+Les archives des Orques sont cachées dans le coffre. Vous devez l’ouvrir et prendre la « peau avec des lettres ».
+
+=== quest qh1h
+Cachette de l’ouest
+Vous ne savez pas qui a créé cette cachette, ni pourquoi, mais ils avaient probablement leurs raisons.
+#subobj  1
+Trouver la cachette
+La cachette se trouve à l’extrémité du ravin.
+#subobj  2
+Fouiller la cachette
+Prenez tout ce que vous pouvez dans la cachette !
+
+=== quest qh2h
+Cachette de l’est
+Vous ne savez pas qui a créé cette cachette, ni pourquoi, mais ils avaient probablement leurs raisons.
+#subobj  1
+Trouver la cachette
+La cachette se trouve à l’extrémité du ravin.
+#subobj  2
+Fouiller la cachette
+Prenez tout ce que vous pouvez dans la cachette !
+
+=== quest qh3h
+Obélisque magique de l’ouest
+Pour rendre la chasse à l'homme dans le Canyon de la Mort moins dangereuse pour les soldats khadaganiens, des obélisques magiques ont été éparpillés dans le canyon. Différents types de sorts utiles seront jetés contre quiconque les utilisera.
+#subobj  1
+Trouver l’obélisque ouest
+Cet obélisque magique se trouve près du mur ouest du Canyon.
+#subobj  2
+Utiliser l’obélisque
+Il n’est pas venu à l’esprit des créateurs de ces obélisques magiques qu’ils pouvaient être utilisés non seulement par les soldats, mais aussi par les victimes !
+
+=== quest qh4h
+Obélisque magique de l’est
+Pour rendre la chasse à l'homme dans le Canyon de la Mort moins dangereuse pour les soldats khadaganiens, des obélisques magiques ont été éparpillés dans le canyon. Différents types de sorts utiles seront jetés contre quiconque les utilisera.
+#subobj  1
+Trouver l’obélisque est
+Cet obélisque magique se trouve près du mur ouest du canyon.
+#subobj  2
+Utiliser l’obélisque
+Il n’est pas venu à l’esprit des créateurs de ces obélisques magiques qu’ils pouvaient être utilisés non seulement par les soldats, mais aussi par les victimes !
+
+=== quest qh5h
+Obélisque magique du nord-est
+Pour rendre la chasse à l'homme dans le Canyon de la Mort moins dangereuse pour les soldats khadaganiens, des obélisques magiques ont été éparpillés dans le canyon. Différents types de sorts utiles sont jetés contre quiconque utilisera ces obélisques.
+#subobj  1
+Trouver l’obélisque nord-est
+Cet obélisque magique se trouve près du mur nord-est du canyon.
+#subobj  2
+Utiliser l’obélisque
+Il n’est pas venu à l’esprit des créateurs de ces obélisques magiques qu’ils pouvaient être utilisés non seulement par les soldats, mais aussi par les victimes !
+
+=== quest qh6h
+Jeunes soldats
+De jeunes soldats khadaganiens traquent des prisonniers sans défense dans le Canyon de la Mort pour tenter d’obtenir une promotion. Mais le chasseur peut se transformer en proie !
+#subobj  1
+Trouver le camp
+Les jeunes soldats ont établi un camp dans une petite vallée située à l’est du canyon.
+#subobj  2
+Tuer les soldats
+Ces soldats ont tué bon nombre de prisonniers dans ce canyon. Il serait juste que quelqu’un les venge...
+
+=== quest qk10k
+Membres hostiles du Peuple des forêts
+Le Clan Noir du Peuple des forêts est depuis très longtemps en guerre contre le Clan Vert. Le chef du Clan Vert serait ravi de voir ses ennemis perdre leurs trésors.
+#subobj  1
+Trouve le camp du Clan Noir
+Le camp du Clan Noir se trouve hors des sentiers battus, mais si quelqu’un venait à y pénétrer, il se ferait immédiatement repérer... enfin, à condition d’en avoir le temps...
+#subobj  2
+Trouver la cachette
+Voici la cachette du camp du Clan Noir. Une personne suffisamment observatrice pourrait aisément la trouver.
+#subobj  3
+Fouiller la cachette
+On ne garde généralement pas de choses inutiles dans une cachette...
+
+=== quest qk11k
+Abri abandonné
+Cet abri est abandonné depuis longtemps, mais ceux qui y vivaient ont peut-être caché quelque chose qui s’y trouve encore...
+#subobj  1
+Trouver l’abri
+Il y a bien longtemps que cet abri a été abandonné, mais peut-être que ses précédents occupants y ont caché quelque chose pour les mauvais jours et n’ont pas réussi à revenir la chercher...
+#subobj  2
+Fouiller l’abri
+Ce dont les anciens occupants de cet abri n’avaient pas besoin pourra se révéler utile à quelqu’un d’autre.
+
+=== quest qk12k
+Source de la rivière
+Peu de gens viennent ici, à la source de la rivière, alors vous y trouverez peut-être quelque chose d'utile.
+#subobj  1
+Atteindre la source de la rivière
+Pour atteindre la source de la rivière, dirigez-vous vers le nord, en amont.
+#subobj  2
+Explorer la source de la rivière
+Cet endroit cache peut-être autre chose d’intéressant. Essayez de trouver cette « chose ».
+
+=== quest qk13k
+Mine isolée
+Cette mine appartient à Karansul, comme tout le reste dans la région. Curieusement, elle semble moins protégée que les autres installations.
+#subobj  1
+Trouver la mine isolée
+La mine se trouve dans un ravin fermé, uniquement accessible depuis le sud-ouest.
+#subobj  2
+Fouiller la mine
+Karansul peut bien se séparer de quelques richesses de ci, de là.....
+
+=== quest qk14k
+Vieux brigand
+Le vieux brigand vit dans la montagne, entouré d'animaux apprivoisés. Il a tant volé dans sa vie qu'il ne serait que justice de le voler à son tour !
+#subobj  1
+La maison du vieux Brigand
+Le vieux Brigand habite au nord du ravin.
+#subobj  2
+Fouiller la maison du vieux Brigand
+Ce vieil homme a passé sa vie à voler. Alors pourquoi ne se ferait-il pas voler à son tour ?
+
+=== quest qk15k
+Cachette de magicien
+Un des magiciens de la ville a placé une partie de ses biens dans une cachette toute proche. Lorsque les troubles ont éclaté dans les provinces, la route menant à cette cachette est devenue dangereuse et le magicien n'a rien pu y récupérer.
+#subobj  1
+Trouver la cachette du Mage
+Non seulement cette cachette est difficile à atteindre, mais parmi ceux que son contenu intéresserait, ils sont rares à s’y aventurer.
+#subobj  2
+Fouiller la cachette
+Le contenu de cette cachette ne serait guère utile dans les ravins enneigés ou les bois sombres, mais se révélerait précieux dans une ville.
+
+=== quest qk16h
+Propriété
+Comme dit la voleuse Sahilia, « Montre-moi une belle maison et j'y trouverai un coffre. Et ce coffre ne sera pas vide ! »
+#subobj  1
+Trouver la propriété
+Le principal objectif de votre voyage n’est pas de trouver une riche propriété. Mais si vous veniez à en trouver une, pourquoi ne pas en profiter ?
+#subobj  2
+Trouver le coffre
+Le coffre doit se trouver quelque part par ici... il est peu probable qu’ils l’aient caché plus loin....
+#subobj  3
+Ouvrir le coffre
+La seule solution pour savoir ce qu’il renferme est de l’ouvrir !
+
+=== quest qk17h
+Cachette d'un garde-chiourme
+D'après la rumeur, des gardes-chiourmes de la plantation auraient accepté des pots-de-vin pour envoyer des paysans travailler les jardins des gens riches. L'idéal serait de trouver la cachette d'un de ces gardes-chiourmes, juste pour y jeter un coup d’œil, bien sûr !
+#subobj  1
+Plantation
+Cette plantation semble pire que les autres. Les paysans qui y travaillaient devaient passer plus de temps en ville qu’ici.....
+#subobj  2
+Trouver la cachette
+Le garde-chiourme local ne risquerait sans doute pas de rapporter ses pots-de-vin à la maison. Ils sont certainement cachés quelque part dans le coin.
+#subobj  3
+Fouiller la cachette
+Il est intéressant de voir combien un modeste employé peut épargner pour les mauvais jours à partir de ses maigres revenus !
+
+=== quest qk30h
+Maison de campagne
+Un riche citoyen possède une maison dans les faubourgs du nord-ouest. En allant fouiller ses coffres, qui sait ce que vous y trouverez ?
+#subobj  1
+Trouver le manoir
+La propriété appartenant à l’homme riche se trouve au nord-ouest de la ville. Il n’y est que très rarement, mais la demeure est toujours bien gardée.
+#subobj  2
+Trouver le détenteur de la clé
+Pour vous introduire dans le manoir, vous devez vous procurer la clé des portes que détient l’un des gardes.
+#subobj  3
+Se procurer la clé
+Le détenteur de la clé n’est pas très vigilant et passe de longs moments à rêvasser ! La meilleure solution consiste à essayer de lui dérober la clé plutôt que de l’attaquer au risque d’attirer l’attention des gardes.
+#subobj  4
+Ouvrir les portes du manoir
+Utilisez la clé pour ouvrir les portes. Attention : des gardes sont également postés dans la cour du manoir.
+#subobj  5
+Trouver le coffre
+Le coffre de l’homme riche se trouve dans la cour du manoir.
+#subobj  6
+Fouiller le coffre
+Ce coffre doit certainement contenir quelque chose d’intéressant... ou du moins quelque chose de beau et de cher !
+
+=== quest qk31h
+Harpie
+Le vieux nécromancien a autrefois fait des expériences sur une harpie. Mais aujourd’hui, il refuse que d'autres utilisent les résultats de ces expériences. Il promet donc une belle récompense à celui qui tuera la harpie.
+#subobj  1
+Trouver la Harpie
+La Harpie que vous devez tuer vit au sud-ouest du désert du Nécromancien. Redoublez de prudence... de dangereuses créatures rôdent peut-être aux abords de son repaire !
+#subobj  2
+Tuer la Harpie
+Vous devez l’anéantir. Essayez d’éliminer les autres créatures avant de vous en prendre à la Harpie.
+
+=== quest qk32h
+Chevalière de l’Empereur
+Pour gagner la confiance des fugitifs, vous devez vous procurer la Chevalière en or de l'Empereur et la remettre au Frère Khatul. Les Khadaganiens ordinaires n'ont pas le droit de la toucher, de s’en emparer ou de la prêter, sous peine d'être condamnés à une mort horrible. Savez-vous que le messager qui devait livrer la chevalière a été tué ? Et ce, par un Cyclope qui vit dans le désert des Nécromanciens ! 
+#subobj  1
+Trouver le repaire du Cyclope
+Le repaire du Cyclope se trouve au nord-ouest du désert du Nécromancien. De nombreux Spectateurs gardent le territoire comme s’il leur appartenait.
+#subobj  2
+Fouiller le coffre appartenant au Cyclope
+Le repaire abrite un coffre renfermant tous les trésors du Cyclope. Essayez de le trouver et prenez la Chevalière de l’Empereur. N’oubliez pas qu’il est très difficile de venir à bout du Cyclope et mieux vaut attendre qu’il ait le dos tourné....
+
+=== quest qk9g
+Trésor des harpies
+Les harpies sont incapables d’utiliser des objets ou des armes, mais si elles viennent à trouver quelque chose, elles le déposent près de leurs nids.
+#subobj  1
+Trouver le trésor appartenant à la Harpie
+Les Harpies cachent généralement ce qu’elles trouvent près de chez elles.
+#subobj  2
+Prendre le trésor appartenant à la Harpie
+Vous n’avez pas besoin de clé pour ouvrir le coffre. En fait, il est peu probable que les Harpies sachent à quoi sert une clé !
+

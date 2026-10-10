@@ -1,0 +1,141 @@
+# um-texts 1
+=== camphelp 1
+Wziêto: czar
+Bohaterowie nie mog¹ korzystaæ z ekwipunku podczas wykonywania misji. Mog¹, jednak¿e, zabieraæ ze sob¹ do oœmiu zaklêæ, które bêd¹ dostêpne podczas gry. Gdy natkniesz siê na nowe zaklêcie, musisz wpierw je zabraæ, u¿ywaj¹c tego ekranu. Tylko wtedy bêdziesz móg³ go u¿ywaæ.
+
+=== camphelp 10
+Lekka zbroja (rêce)
+Mo¿esz chroniæ rêce, wk³adaj¹c na nie rêkawice lub jakikolwiek inny lekki pancerz. Zmniejszy to obra¿enia, jakie odniesie Twój bohater, gdy zostanie trafiony w rêce. Na l¿ejszy pancerz mo¿esz w³o¿yæ ciê¿sz¹ zbrojê.
+
+=== camphelp 100
+Sklep z przedmiotami
+Na górze oraz na dole ekranu znajdziesz przewijane okna. Umieszczono w nich przedmioty dostêpne w sklepie oraz te, które znajduj¹ siê w Twojej kieszeni. "Lada sklepowa" znajduje siê na œrodku ekranu, zaœ w jego dolnym lewym rogu znajdziesz ceny towarów przeznaczonych do kupna lub sprzeda¿y. Klikaj na przyciskach obok cen towarów, ¿eby dokonywaæ transakcji lub je anulowaæ (w tym przypadku, towary zostan¹ zwrócone do sklepu).
+
+=== camphelp 101
+Sklep z czarami
+Na górze oraz na dole ekranu znajdziesz przewijane okna. Umieszczono w nich zaklêcia dostêpne w sklepie oraz te, które znajduj¹ siê w Twojej kieszeni. "Lada sklepowa" znajduje siê na œrodku ekranu, zaœ w jego dolnym lewym rogu znajdziesz ceny czarów przeznaczonych do kupna lub sprzeda¿y. Klikaj na przyciskach obok cen uroków, ¿eby dokonywaæ transakcji lub je anulowaæ (w tym przypadku, wszystkie runy zostan¹ zwrócone do sklepu),
+
+=== camphelp 102
+Konstruktor przedmiotów
+Za pomoc¹ przedmiotów z Twojego ekwipunku oraz tych ze sklepu mo¿esz tworzyæ nowe. Mo¿esz to robiæ na dwa sposoby. Albo korzystaj¹c z odpowiednich schematów i czêœci towarów albo odzyskuj¹c czêœci z posiadanego sprzêtu. Szczegó³y cenowe operacji znajdziesz w dolnej czêœci lewego okna. Przyciski obok okna s³u¿¹ do potwierdzania/anulowania operacji.
+
+=== camphelp 103
+Konstruktor czarów
+Za pomoc¹ prototypów oraz run z Twojego ekwipunku (oraz tych ze sklepu) mo¿esz tworzyæ nowe zaklêcia. Mo¿esz to robiæ na dwa sposoby. Albo korzystaj¹c z odpowiednich prototypów i (opcjonalnie) run albo rozk³adaj¹c posiadane zaklêcia. Szczegó³y cenowe operacji znajdziesz w dolnej czêœci lewego okna. Przyciski obok okna s³u¿¹ do potwierdzania/anulowania operacji.
+
+=== camphelp 104
+Naprawa przedmiotów
+Wraz z czasem i kolejnymi przygodami, przedmioty ulegaj¹ zu¿yciu. Kiedy ich wytrzyma³oœæ spadnie do zera, nie bêdziesz móg³ wiêcej z nich korzystaæ. ¯eby nie wyrzucaæ ich od razu na œmietnik, mo¿esz je naprawiaæ. Koszty naprawy znajdziesz w dolnej czêœci okna po lewej. Przyciski s³u¿¹ do potwierdzenia/anulowania naprawy.
+
+=== camphelp 105
+Wyposa¿anie Twoich postaci
+Mo¿esz ubieraæ i uzbrajaæ wszystkich Twoich podopiecznych. Rzecz zabrana postaci zostanie przeniesiona do Twojego ekwipunku. Przedmioty mo¿na sprzedaæ w sklepie, przerobiæ je w konstruktorze lub przekazaæ jakiejkolwiek innej postaci z Twojej ekipy.
+
+=== camphelp 106
+Zaklêcia i umiejêtnoœci
+Zdobywane przez Twoje postaci doœwiadczenie mo¿esz wykorzystywaæ to ugruntowywania wiedzy Twoich ludzi lub do uczenia ich nowych rzeczy. Mo¿esz tak¿e rozdawaæ im zaklêcia lub chowaæ je do swojego ekwipunku. Jeœli postaæ nie bêdzie wystarczaj¹co rozwiniêta, aby móc rzuciæ jakieœ zaklêcie, nie bêdziesz móg³ jej tego¿ przekazaæ.
+
+=== camphelp 107
+Wyjœcie
+Mo¿esz powróciæ do Strefy Odprawy. Wszystkie op³acone dobra pojawi¹ siê w Twoim ekwipunku, zaœ towary, za które nie zap³aci³eœ zostan¹ zwrócone do sklepu. 
+
+=== camphelp 11
+Kupowanie przedmiotów
+Gdy bêdziesz wybiera³ towary do zakupu, zostan¹ one wy³o¿one na ladê sklepow¹. Jej dwie górne pó³ki zawieraj¹ rzeczy, które chcesz nabyæ, zaœ na dwóch dolnych pó³kach znajdziesz przedmioty, które chcesz sprzedaæ. W lewym dolnym rogu znajdziesz przyciski, za pomoc¹ których mo¿esz potwierdziæ lub anulowaæ transakcjê.
+
+=== camphelp 12
+Sprzeda¿ przedmiotów
+Gdy bêdziesz wybiera³ towary do sprzeda¿y, zostan¹ one wy³o¿one na ladê sklepow¹. Jej dwie górne pó³ki zawieraj¹ rzeczy, które chcesz nabyæ, zaœ na dwóch dolnych pó³kach znajdziesz przedmioty, które chcesz sprzedaæ. W lewym dolnym rogu znajdziesz przyciski, za pomoc¹ których mo¿esz potwierdziæ lub anulowaæ transakcjê.
+
+=== camphelp 13
+Gotowe przedmioty
+Ta sekcja zawiera rzeczy gotowe do u¿ycia. Mo¿esz tworzyæ nowe przedmioty, jeœli bêdziesz posiada³ odpowiednie schematy i surowce. Gdy tego dokonasz, nowa czêœæ ekwipunku pojawi siê w tej sekcji. Mo¿esz tu tak¿e umieœciæ gotowy przedmiot i rozmontowaæ go. 
+
+=== camphelp 14
+Schemat
+Ta sekcja zawiera schematy niezbêdne do tworzenia nowych przedmiotów. Gdy umieœcisz tu schemat, bêdziesz musia³ jeszcze wprowadziæ odpowiedni¹ iloœæ materia³ów do sekcji "Materia³y". Wtedy bêdziesz móg³ stworzyæ nowy przedmiot, który pojawi siê w sekcji "Gotowe przedmioty". Mo¿esz tak¿e rozmontowaæ posiadane przedmioty - wtedy, w tej sekcji znajdziesz schemat rozmontowanej rzeczy.
+
+=== camphelp 15
+Materia³
+Ta sekcja zawiera materia³y niezbêdne do tworzenia nowych przedmiotów. Gdy umieœcisz tu odpowiedni¹ iloœæ materia³u, tj. zgodn¹ z wymogami schematu, bêdziesz móg³ stworzyæ nowy przedmiot, który pojawi siê w sekcji "Gotowe przedmioty". Mo¿esz tak¿e rozmontowaæ posiadane przedmioty - wtedy, w tej sekcji znajdziesz materia³y sk³adowe rozmontowanej rzeczy.
+
+=== camphelp 16
+Czar
+Mo¿esz ³¹czyæ zaklêcia z broni¹ z zbroj¹. Czar musi posiadaæ runê "przedmiotu", która determinuje kiedy dany czar bêdzie móg³ zadzia³aæ. Czêœci ekwipunku maj¹ pewne ograniczenia, które determinuj¹ si³ê i sposób dzia³ania zaimplementowanego zaklêcia. Mo¿esz te¿ zdezintegrowaæ "zaklêty" przedmiot - wtedy bêdziesz móg³ korzystaæ z czaru w tradycyjny sposób.
+
+=== camphelp 17
+Czary, schematy, runy: kupowanie
+Gdy bêdziesz wybiera³ zaklêcia, runy lub prototypy do zakupu, zostan¹ one wy³o¿one na ladê sklepow¹. Jej dwie górne pó³ki zawieraj¹ zaklêcia, runy lub prototypy, które chcesz nabyæ, zaœ na dwóch dolnych pó³kach znajdziesz te, które chcesz sprzedaæ. W lewym dolnym rogu znajdziesz przyciski, za pomoc¹ których mo¿esz potwierdziæ lub anulowaæ transakcjê.
+
+=== camphelp 18
+Czary, schematy, runy: sprzedawanie
+Gdy bêdziesz wybiera³ zaklêcia, runy lub prototypy do zakupu, zostan¹ one wy³o¿one na ladê sklepow¹. Jej dwie górne pó³ki zawieraj¹ zaklêcia, runy lub prototypy, które chcesz nabyæ, zaœ na dwóch dolnych pó³kach znajdziesz te, które chcesz sprzedaæ. W lewym dolnym rogu znajdziesz przyciski, za pomoc¹ których mo¿esz potwierdziæ lub anulowaæ transakcjê.
+
+=== camphelp 19
+Gotowe czary
+Ta sekcja zawiera gotowe zaklêcia. Mo¿esz tworzyæ nowe zaklêcia u¿ywaj¹c czarów prototypowych oraz run. Mo¿esz tak¿e dezintegrowaæ posiadane uroki - wówczas prototypy oraz runy zostan¹ odzyskane. 
+
+=== camphelp 2
+Wziêto: bronie
+Bohaterowie nie mog¹ korzystaæ z ekwipunku podczas wykonywania misji. Mog¹, jednak¿e, zabieraæ ze sob¹ do czterech broni, które bêd¹ dostêpne podczas gry. Gdy natkniesz siê na nowy przedmiot, musisz wpierw go zabraæ, u¿ywaj¹c tego ekranu. Tylko wtedy bêdziesz móg³ go u¿ywaæ. 
+
+=== camphelp 20
+Schematy czarów
+Ta sekcja zawiera prototypy zaklêæ - niezbêdne do tworzenia czarów oraz determinuj¹ce ich podstawowe wartoœci. Mo¿esz dodaæ jeszcze jedn¹ lub dwie runy. Gotowy urok znajdzie siê w sekcji "Gotowych Zaklêæ".
+
+=== camphelp 21
+Run (modyfikacja)
+Ta sekcja zawiera runy modyfikuj¹ce powstaj¹ce zaklêcia. Do tworzonego zaklêcia mo¿esz dodawaæ dowoln¹ iloœæ run, przy czym czar mo¿e byæ u¿ywany tylko przez jednego z Twoich bohaterów. To, z ilu run mo¿esz korzystaæ, determinuj¹ prototypy.
+
+=== camphelp 22
+Inwentarz
+Ten ekran pokazuje zawartoœæ ekwipunku postaci - przedmioty i zaklêcia nie u¿ywane chwilowo przez ¿adn¹ postaæ. Z ekranu ekwipunku mo¿esz korzystaæ jedynie poza ekranem gry. 
+
+=== camphelp 23
+Dostêpne przedmioty
+Ten ekran pokazuje wszystkie schematy, materia³y oraz gotowe przedmioty, jakie w tym momencie mo¿esz nabyæ.
+
+=== camphelp 24
+Dostêpne czary
+Ten ekran pokazuje wszystkie prototypy, runy oraz gotowe zaklêcia, jakie mo¿esz w tym momencie nabyæ.
+
+=== camphelp 25
+Przedmioty do naprawy
+Wymagaj¹ce naprawy przedmioty musz¹ zostaæ wy³o¿one na stó³. W lewym dolnym rogu ekranu znajdziesz informacje dotycz¹ce kosztów naprawy. Za pomoc¹ przycisków obok potwierdzasz/anulujesz operacjê. 
+
+=== camphelp 26
+Maksymalna z³o¿onoœæ
+Pokazuje maksymaln¹ z³o¿onoœæ dostêpnych w zestawie zaklêæ. Nie mo¿esz tworzyæ czarów, które by³yby zbyt skomplikowane dla którejkolwiek z Twoich postaci.
+
+=== camphelp 27
+Maksymalny potencja³
+Pokazuje maksymalny potencja³ magiczny danej postaci, niezbêdny do rzucania dostêpnych w zestawie zaklêæ. Nie mo¿esz tworzyæ czarów, które by³yby zbyt skomplikowane dla którejkolwiek z Twoich postaci.
+
+=== camphelp 3
+Wziêto: napoje i ró¿d¿ki
+Bohaterowie nie mog¹ korzystaæ z ekwipunku podczas wykonywania misji. Mog¹, jednak¿e, zabieraæ ze sob¹ do czterech napojów i ró¿d¿ek, które bêd¹ dostêpne podczas gry. Gdy natkniesz siê na nowy napój, musisz wpierw go zabraæ, u¿ywaj¹c tego ekranu. Tylko wtedy bêdziesz móg³ go u¿ywaæ. 
+
+=== camphelp 4
+Ciê¿ka zbroja (g³owa)
+Twój bohater mo¿e za³o¿yæ na g³owê he³m lub jakiekolwiek inne nakrycie. Zmniejszy to obra¿enia w przypadku uderzenia w t¹ czêœæ cia³a.
+
+=== camphelp 5
+Ciê¿ka zbroja (tu³ów)
+Twój bohater mo¿e za³o¿yæ pancerz lub jak¹kolwiek inn¹ ciê¿k¹ zbrojê, która mog³aby przykryæ jego korpus oraz ramiona. Zmniejszy to obra¿enia w przypadku uderzenia w t¹ czêœæ cia³a. Mo¿esz, oczywiœcie, w³o¿yæ l¿ejsz¹ zbrojê pod ciê¿ki pancerz.
+
+=== camphelp 6
+Ciê¿ka zbroja (nogi)
+Twój bohater mo¿e w³o¿yæ legginsy lub jakikolwiek inny ciê¿ki pancerz na nogi. Zmniejszy to obra¿enia w przypadku uderzenia w t¹ czêœæ cia³a. Mo¿esz, oczywiœcie, w³o¿yæ l¿ejsz¹ zbrojê pod ciê¿ki pancerz.
+
+=== camphelp 7
+Lekka zbroja (tu³ów)
+Twój bohater mo¿e w³o¿yæ koszulê lub jak¹kolwiek inn¹ lekk¹ zbrojê, która przykry³aby jego ramiona i korpus. Zmniejszy to obra¿enia w przypadku uderzenia w t¹ czêœæ cia³a. Mo¿esz, oczywiœcie, w³o¿yæ l¿ejsz¹ zbrojê pod ciê¿ki pancerz.
+
+=== camphelp 8
+Lekka zbroja (nogi)
+Twój bohater mo¿e w³o¿yæ spodnie lub jak¹kolwiek inn¹ lekk¹ ochronê na nogi. Zmniejszy to obra¿enia w przypadku uderzenia w t¹ czêœæ cia³a. Mo¿esz, oczywiœcie, w³o¿yæ l¿ejsz¹ zbrojê pod ciê¿ki pancerz.
+
+=== camphelp 9
+Lekka zbroja (stopa)
+Twój bohater mo¿e w³o¿yæ buty lub jak¹kolwiek inn¹ lekk¹ zbrojê, która chroni³aby jego stopy. Zmniejszy to obra¿enia w przypadku uderzenia w t¹ czêœæ cia³a. Mo¿esz, oczywiœcie, w³o¿yæ l¿ejsz¹ zbrojê pod ciê¿ki pancerz.
+

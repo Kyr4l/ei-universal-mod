@@ -9,9 +9,9 @@ zone8xmap zone8xquest
 #exit 1
 bz1mpg 1
 #deploy
-9 232 14 238
+7 232 12 238
 #remove
-2 238 14 247.4
+2 238 12 247.4
 #view
 230.386
 
@@ -19,9 +19,9 @@ bz1mpg 1
 #exit 2
 bz1mpg 2
 #deploy
-171 375 178 382
+168 373 176 376
 #remove
-171 375 178 382
+168 376 176 383
 #view
 192.876
 
@@ -29,8 +29,8 @@ bz1mpg 2
 #exit 3
 bz1mpg 3
 #deploy
-255 375 263 382
+254 372 264 376
 #remove
-255 375 263 382
+254 376 264 383
 #view
 192.876
