@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Everything the viewer and the map editor read from disk, without any GL: the layered figure,
 // texture and text sources, the items database, and the name indexes built from them. The GUI
 // holds one, shared by its tabs and edited in the Settings tab; the command-line modes make their own.

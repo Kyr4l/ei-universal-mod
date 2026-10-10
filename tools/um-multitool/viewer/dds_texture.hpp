@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // DirectDraw Surface (.dds) decoder -> RGBA8, for loose texture folders that hold
 // DDS files instead of the game's own .mmp. Top mip level only. Supports what the
 // game's textures convert to: DXT1, DXT3, DXT5, and uncompressed 16/24/32-bit

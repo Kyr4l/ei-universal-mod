@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Auto-generated from tools/third-party-tools/EIDBEditor_1.4.4/dbtypes.txt and dbblocks.txt
 // Do not hand-edit; see docs/file-formats/database-format.md for the source schema tables.
 static const std::map<std::string, std::map<int, std::vector<FieldDef>>> DBTYPES = {

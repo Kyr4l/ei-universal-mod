@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Texts sub-tab: see text_editor.hpp.
 //
 // A text is one file named by its key ("WEAPON Stone_Sword Malachite", "zone z3q3"...): its first line

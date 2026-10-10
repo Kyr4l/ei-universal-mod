@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Texture Editor tab: open a game texture (from the texture sources or a file), look at it (zoom, pan, a
 // 3 x 3 tiled preview to judge seams), select an area (rectangle or magic wand), change it (recolor, pattern
 // fill, flip / rotate / offset) with undo, and save it as PNG / DDS / MMP into an output folder.

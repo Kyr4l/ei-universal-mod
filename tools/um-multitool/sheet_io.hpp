@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 /**
  * sheet_io.hpp - Writing simple spreadsheets as .xlsx (Office Open XML) or .ods (OpenDocument)
  *

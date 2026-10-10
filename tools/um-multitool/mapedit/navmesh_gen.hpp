@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The game's navmesh (AI_GRAPH) generator, as game.exe builds it (reverse-engineered from the game:
 // CAIMap::Load 0x5B43C0, the per-tile passability 0x5B8FA0 / 0x5B8BA0, objects 0x5B6A80, the graph
 // 0x5AFDA0 .. 0x5B0050; EI_Plugin's GraphGen only makes the game build it and saves the result).

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The File Processing tab's "Texts" sub-tab: the text language packs of Settings > Texts (the same
 // texts - item names and descriptions, zones, units... - in each language), compared with a reference
 // language, and edited. Everything lives in text_editor.cpp.

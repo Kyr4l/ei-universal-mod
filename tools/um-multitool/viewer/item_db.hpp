@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The "Items" gameplay database (items.idb) read straight from a database RES
 // archive: database.res or databaselmp.res, whichever holds items.idb. All six
 // blocks are read: Materials, Weapons, Armors, QuickItems, QuestItems, LootItems.

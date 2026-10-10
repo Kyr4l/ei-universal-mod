@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The UM DLL Connector's radar: the game's units (um.dll's UNITS) on a flat top view of the zone, drawn
 // with ImGui (no 3D). The map files the game runs (um.dll's MAP) are loaded here too: the terrain for the
 // picture, the .mob files for the units' names and the diplomacy table that colors them.

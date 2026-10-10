@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Map Editor tab: shows an .mpr terrain with the objects of one or more .mob files loaded on top
 // of each other (a zone, then a quest or an AddMob map), lists and describes the objects, shows the
 // mission scripts, and runs the map checks (checks.hpp) - the ones um.dll logs when the game opens a
@@ -2811,7 +2813,13 @@ struct Node {
     bool flowIn = false;               // on the spine (top) / reached by a branch
 };
 
-struct Wire { ImVec2 a, b; ImU32 color; bool flow; };
+struct Wire {
+    ImVec2 a, b;
+    ImU32 color;
+    bool flow;         // down a spine
+    bool call = false; // from a script call to the called script's entry node (across frames)
+    int from = -1, to = -1;
+};
 struct Frame { std::string name, lower, subtitle; ImVec2 min, max; int line = 0; };
 
 struct Graph {
@@ -2853,7 +2861,6 @@ public:
 
     Graph Build() {
         const i18n::Verbatim verbatim; // the script's words are measured as they are
-        float y = 0;
         // Who calls each script, for the frames' subtitles.
         std::unordered_map<std::string, std::vector<std::string>> calledBy;
         for (const scriptast::Script& s : prog_.scripts) {
@@ -2864,43 +2871,112 @@ public:
                 if (std::find(v.begin(), v.end(), s.name) == v.end()) v.push_back(s.name);
             }
         }
+        // The frames in columns by call depth, like a node tree read left to right: WorldScript (the game runs
+        // it when the map loads), the scripts the game starts itself ("#...": events, dialogs, objects) and the
+        // ones nothing calls first; then the scripts they call, and so on. In a column, the scripts are in the
+        // order of the calls coming to them (fewer crossing wires).
+        std::unordered_map<std::string, std::vector<std::string>> callees;
+        std::unordered_map<std::string, const scriptast::Script*> byLower;
         for (const scriptast::Script& s : prog_.scripts) {
-            script_ = mobscript::LowerCase(s.name);
-            const size_t first = g_.nodes.size();
-            Node entry;
-            entry.kind = Node::Entry;
-            entry.title = s.world ? "WorldScript" : "Script " + s.name;
-            entry.line = s.line;
-            for (const scriptast::Typed& t : s.params) entry.rows.push_back({t.name, t.type, '?', false});
-            entry.size = NodeSize(entry);
-            const float left = 0;
-            const float inW = ChainInputsWidth(s.body);
-            entry.pos = ImVec2(left + inW, y + F * 2.2f); // room for the frame's label
-            const int e = Add(entry);
-            float bottom = entry.pos.y + entry.size.y;
-            if (!s.body.empty()) bottom = Chain(s.body, left, bottom + gapY, e, -1);
-            Frame fr;
-            fr.name = entry.title;
-            fr.lower = script_;
-            fr.line = s.line;
-            auto cb = calledBy.find(script_);
-            if (cb != calledBy.end()) {
-                fr.subtitle = "called by: ";
-                for (size_t i = 0; i < cb->second.size(); ++i) fr.subtitle += (i ? ", " : "") + cb->second[i];
+            const std::string l = mobscript::LowerCase(s.name);
+            byLower[l] = &s;
+            Calls(s.body, callees[l]);
+        }
+        std::unordered_map<std::string, int> depth;
+        std::vector<std::string> todo;
+        for (const scriptast::Script& s : prog_.scripts) {
+            const std::string l = mobscript::LowerCase(s.name);
+            if (s.world || (!s.name.empty() && s.name[0] == '#') || !calledBy.count(l)) { depth[l] = 0; todo.push_back(l); }
+        }
+        for (size_t i = 0; i < todo.size(); ++i)
+            for (const std::string& c : callees[todo[i]])
+                if (byLower.count(c) && !depth.count(c)) { depth[c] = depth[todo[i]] + 1; todo.push_back(c); }
+        int deepest = 0;
+        for (const scriptast::Script& s : prog_.scripts) {
+            const std::string l = mobscript::LowerCase(s.name);
+            if (!depth.count(l)) depth[l] = 0; // only in a loop of calls nothing outside reaches
+            deepest = std::max(deepest, depth[l]);
+        }
+        std::vector<std::vector<const scriptast::Script*>> columns(static_cast<size_t>(deepest) + 1);
+        for (const scriptast::Script& s : prog_.scripts) if (s.world) columns[0].push_back(&s);
+        for (const scriptast::Script& s : prog_.scripts) if (!s.world) columns[static_cast<size_t>(depth[mobscript::LowerCase(s.name)])].push_back(&s);
+        std::unordered_map<std::string, int> entryOf; // lower-case script name -> its entry node
+        float colX = 0;
+        for (size_t col = 0; col < columns.size(); ++col) {
+            if (col > 0) { // by the height of the first call coming from the columns on the left
+                std::unordered_map<std::string, float> callY;
+                for (const Node& n : g_.nodes)
+                    if (n.kind == Node::ScriptCall) {
+                        auto it = callY.find(n.target);
+                        if (it == callY.end() || n.pos.y < it->second) callY[n.target] = n.pos.y;
+                    }
+                std::stable_sort(columns[col].begin(), columns[col].end(), [&](const scriptast::Script* a, const scriptast::Script* b) {
+                    auto ka = callY.find(mobscript::LowerCase(a->name)), kb = callY.find(mobscript::LowerCase(b->name));
+                    return (ka == callY.end() ? 1e30f : ka->second) < (kb == callY.end() ? 1e30f : kb->second);
+                });
             }
-            fr.min = ImVec2(1e9f, y);
-            fr.max = ImVec2(-1e9f, bottom);
-            for (size_t i = first; i < g_.nodes.size(); ++i) {
-                fr.min.x = std::min(fr.min.x, g_.nodes[i].pos.x);
-                fr.max.x = std::max(fr.max.x, g_.nodes[i].pos.x + g_.nodes[i].size.x);
-                fr.max.y = std::max(fr.max.y, g_.nodes[i].pos.y + g_.nodes[i].size.y);
+            float y = 0, right = colX;
+            for (const scriptast::Script* sp : columns[col]) {
+                const scriptast::Script& s = *sp;
+                const float left = colX;
+                script_ = mobscript::LowerCase(s.name);
+                const size_t first = g_.nodes.size();
+                Node entry;
+                entry.kind = Node::Entry;
+                entry.title = s.world ? "WorldScript" : "Script " + s.name;
+                entry.line = s.line;
+                for (const scriptast::Typed& t : s.params) entry.rows.push_back({t.name, t.type, '?', false});
+                // How it starts: the game (WorldScript; "#..." scripts are the game's events, dialogs and objects'),
+                // the scripts that call it (wired in), or nothing.
+                const bool called = calledBy.count(script_) != 0;
+                entry.flowIn = called;
+                if (s.world) entry.rows.push_back({"run by the game when the map loads", std::string(), 'n', false});
+                else if (!s.name.empty() && s.name[0] == '#') entry.rows.push_back({"started by the game (event, dialog or object)", std::string(), 'n', false});
+                else if (!called) entry.rows.push_back({"called by no script", std::string(), 'w', false});
+                entry.size = NodeSize(entry);
+                const float inW = ChainInputsWidth(s.body);
+                entry.pos = ImVec2(left + inW, y + F * 2.2f); // room for the frame's label
+                const int e = Add(entry);
+                entryOf[script_] = e;
+                float bottom = entry.pos.y + entry.size.y;
+                if (!s.body.empty()) bottom = Chain(s.body, left, bottom + gapY, e, -1);
+                Frame fr;
+                fr.name = entry.title;
+                fr.lower = script_;
+                fr.line = s.line;
+                auto cb = calledBy.find(script_);
+                if (cb != calledBy.end()) {
+                    fr.subtitle = "called by: ";
+                    for (size_t i = 0; i < cb->second.size(); ++i) fr.subtitle += (i ? ", " : "") + cb->second[i];
+                }
+                fr.min = ImVec2(1e9f, y);
+                fr.max = ImVec2(-1e9f, bottom);
+                for (size_t i = first; i < g_.nodes.size(); ++i) {
+                    fr.min.x = std::min(fr.min.x, g_.nodes[i].pos.x);
+                    fr.max.x = std::max(fr.max.x, g_.nodes[i].pos.x + g_.nodes[i].size.x);
+                    fr.max.y = std::max(fr.max.y, g_.nodes[i].pos.y + g_.nodes[i].size.y);
+                }
+                fr.min.x -= F;
+                fr.max.x += F;
+                fr.max.y += F;
+                fr.max.x = std::max(fr.max.x, fr.min.x + ImGui::CalcTextSize((fr.name + "    " + fr.subtitle).c_str()).x + 2 * F);
+                g_.frames.push_back(fr);
+                right = std::max(right, fr.max.x);
+                y = fr.max.y + F * 2.5f;
             }
-            fr.min.x -= F;
-            fr.max.x += F;
-            fr.max.y += F;
-            fr.max.x = std::max(fr.max.x, fr.min.x + ImGui::CalcTextSize((fr.name + "    " + fr.subtitle).c_str()).x + 2 * F);
-            g_.frames.push_back(fr);
-            y = fr.max.y + F * 2.5f;
+            colX = right + F * 6;
+        }
+        // Every script call wired to the called script's entry node.
+        for (size_t i = 0; i < g_.nodes.size(); ++i) {
+            const Node& n = g_.nodes[i];
+            if (n.kind != Node::ScriptCall) continue;
+            auto to = entryOf.find(n.target);
+            if (to == entryOf.end()) continue;
+            Wire w{CallSocket(n), FlowIn(g_.nodes[static_cast<size_t>(to->second)]), IM_COL32(230, 150, 60, 150), false};
+            w.call = true;
+            w.from = static_cast<int>(i);
+            w.to = to->second;
+            g_.wires.push_back(w);
         }
         g_.min = ImVec2(1e9f, 1e9f);
         g_.max = ImVec2(-1e9f, -1e9f);
@@ -2970,6 +3046,7 @@ private:
         return ImVec2(n.pos.x + n.size.x, n.pos.y + headerH + rowH * (static_cast<float>(n.rows.size() + b) + 0.5f));
     }
     ImVec2 FlowIn(const Node& n) const { return ImVec2(n.pos.x, n.pos.y + headerH * 0.5f); }
+    ImVec2 CallSocket(const Node& n) const { return ImVec2(n.pos.x + n.size.x, n.pos.y + headerH * 0.5f); }
 
     // A node for a call (the arguments as rows: a literal or a variable written in, a call wired in).
     Node CallNode(const Expr& e) const {
@@ -3311,9 +3388,23 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
             }
         }
     }
+    // the node under the mouse, found before the wires: the calls to and from it are drawn brighter
+    const Node* hover = nullptr;
+    if (hovered)
+        for (const Node& n : g.nodes)
+            if (ImGui::IsMouseHoveringRect(S(n.pos), S(ImVec2(n.pos.x + n.size.x, n.pos.y + n.size.y)))) hover = &n;
+    const int hoverIndex = hover ? static_cast<int>(hover - g.nodes.data()) : -1;
     // wires
     for (const Wire& w : g.wires) {
         const ImVec2 a = S(w.a), b = S(w.b);
+        if (w.call) { // a script call to its script's entry: out to the right, round, in from the left
+            const float d = std::max(F * 4 * z, std::fabs(b.x - a.x) * 0.5f + std::fabs(b.y - a.y) * 0.15f);
+            if (!visible(ImVec2(std::min(a.x, b.x) - d, std::min(a.y, b.y)), ImVec2(std::max(a.x, b.x) + d, std::max(a.y, b.y)))) continue;
+            const bool lit = w.from == hoverIndex || w.to == hoverIndex;
+            dl->AddBezierCubic(a, ImVec2(a.x + d, a.y), ImVec2(b.x - d, b.y), b, lit ? IM_COL32(255, 175, 80, 255) : w.color,
+                               std::max(1.0f, (lit ? 3.0f : 1.8f) * z));
+            continue;
+        }
         if (!visible(ImVec2(std::min(a.x, b.x), std::min(a.y, b.y)), ImVec2(std::max(a.x, b.x), std::max(a.y, b.y)))) continue;
         if (w.flow) { // down the spine
             const float d = std::max(4.0f, (b.y - a.y) * 0.5f);
@@ -3324,7 +3415,6 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
         }
     }
     // nodes
-    const Node* hover = nullptr;
     const float r = std::max(2.0f, F * 0.28f * z), round = 4 * z;
     const double now = ImGui::GetTime();
     if (app.nodeFlashLine && app.nodeFlashUntil < now) { app.nodeFlashUntil = now + 2.0; }
@@ -3340,13 +3430,17 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
         const bool flash = app.nodeFlashLine == n.line && app.nodeFlashUntil > now;
         const ImU32 border = flash ? IM_COL32(255, 220, 120, 255) : sev != severity.end() ? ImGui::GetColorU32(SeverityColor(sev->second)) : IM_COL32(20, 20, 20, 255);
         dl->AddRect(a, b, border, round, 0, sev != severity.end() || flash ? std::max(1.5f, 2.5f * z) : 1.0f);
-        if (hovered && ImGui::IsMouseHoveringRect(a, b)) hover = &n;
-        if (n.flowIn && n.kind != Node::Entry) { // where the flow comes in: a small diamond left of the header
+        if (n.flowIn) { // where the flow (or a call) comes in: a small diamond left of the header
             const ImVec2 p(a.x, a.y + hh * 0.5f);
             const float d = r * 1.1f;
             dl->AddQuadFilled(ImVec2(p.x - d, p.y), ImVec2(p.x, p.y - d), ImVec2(p.x + d, p.y), ImVec2(p.x, p.y + d), IM_COL32(230, 230, 230, 230));
         }
         if (n.out) dl->AddCircleFilled(ImVec2(b.x, a.y + hh * 0.5f), r, ImGui::GetColorU32(TypeColor(n.outType)));
+        if (n.kind == Node::ScriptCall) { // where the call leaves for the called script
+            const ImVec2 p(b.x, a.y + hh * 0.5f);
+            const float d = r * 1.2f;
+            dl->AddQuadFilled(ImVec2(p.x - d, p.y), ImVec2(p.x, p.y - d), ImVec2(p.x + d, p.y), ImVec2(p.x, p.y + d), IM_COL32(240, 160, 70, 255));
+        }
         if (!text) continue;
         dl->AddText(font, fs, ImVec2(a.x + c.pad * z, a.y + (hh - fs) * 0.5f), IM_COL32(235, 235, 235, 255), n.title.c_str());
         for (size_t i = 0; i < n.rows.size(); ++i) {
@@ -3356,7 +3450,9 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
                 dl->AddCircleFilled(ImVec2(a.x, cy), r, ImGui::GetColorU32(TypeColor(row.type)));
             const std::string label = row.wired || row.value.empty() ? row.label : (row.label.empty() ? row.value : row.label + ": ");
             const ImVec2 tp(a.x + c.pad * z + (comment ? 0 : r), cy - fs * 0.5f);
-            dl->AddText(font, fs, tp, comment ? IM_COL32(150, 190, 140, 255) : n.kind == Node::Entry ? IM_COL32(180, 180, 190, 255) : IM_COL32(200, 200, 200, 255), label.c_str());
+            const ImU32 tc = comment ? IM_COL32(150, 190, 140, 255) : row.type == 'w' ? IM_COL32(240, 200, 90, 255) : row.type == 'n' ? IM_COL32(150, 150, 160, 255)
+                           : n.kind == Node::Entry ? IM_COL32(180, 180, 190, 255) : IM_COL32(200, 200, 200, 255);
+            dl->AddText(font, fs, tp, tc, label.c_str());
             if (!row.wired && !row.value.empty() && !row.label.empty()) {
                 const float lw = font->CalcTextSizeA(fs, FLT_MAX, 0, label.c_str()).x;
                 const ImVec4 vc = row.value[0] == '"' ? ImVec4(0.90f, 0.64f, 0.44f, 1) : scripthl::TokenColor(row.value, names);
@@ -3381,6 +3477,11 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
         auto fn = mobscript::FunctionTable().find(mobscript::LowerCase(hover->title));
         if (hover->kind == Node::Command || hover->kind == Node::Function) tip = fn != mobscript::FunctionTable().end() ? Signature(*fn->second) : hover->title + i18n::Tr(": neither a known command nor a script of this map");
         else if (hover->kind == Node::ScriptCall) tip = "script " + hover->title + i18n::Tr(": click to go to it");
+        else if (hover->kind == Node::Entry) {
+            tip = hover->title;
+            for (const Row& row : hover->rows) if (row.type == 'n' || row.type == 'w') tip += "\n" + row.label;
+            if (hover->flowIn) tip += std::string("\n") + i18n::Tr("The orange wires come from the calls to it.");
+        }
         else if (hover->kind == Node::Comment) for (const Row& row : hover->rows) tip += (tip.empty() ? "// " : " ") + row.label;
         else tip = hover->title;
         for (const Row& row : hover->rows) // values shortened in the node: whole here

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 #pragma once
 
 // Entry points for each merged subtool (originally standalone main() functions).

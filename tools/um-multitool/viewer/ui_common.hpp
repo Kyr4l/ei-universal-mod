@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Small UI helpers shared by the tabs: native file/folder pickers and a status dot.
 #pragma once
 

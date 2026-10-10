@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The splash screen (splash.hpp): its own GLFW window and its own Dear ImGui context, so it can be drawn before
 // the main window's context exists and torn down without touching it. The banner PNG is embedded in the
 // executable the way the alert sounds are (alerts.cpp: .incbin, so no generated source to keep in sync).

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The 3D viewport: holds the loaded figure as flat GL arrays, the textures in GL,
 // an orbit camera that frames the figure, and draws it with fixed-function
 // OpenGL 2 (no GL loader needed; the most robust path under Wine and old drivers).

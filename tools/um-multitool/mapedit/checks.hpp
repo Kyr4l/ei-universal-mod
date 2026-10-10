@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The map checks: everything um.dll's MOB_VALIDATION reports when the game opens a map (so a problem
 // is found while editing instead of in um.log), plus what only an editor can see.
 //

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Auto-blend of a whole terrain: finds the HARD EDGES (a vertex where plain tiles of two different grounds meet
 // although the textures hold transition tiles for that pair: hand-painted maps have them) and gives the cells
 // around each of them the vanilla transition tiles their corners need (tile_materials.hpp). Two grounds with no

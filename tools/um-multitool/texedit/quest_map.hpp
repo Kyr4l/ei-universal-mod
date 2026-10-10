@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Quest maps: the parchment pictures of the game's info panel (zone<N>quest.dds). A generator that paints one from
 // the open map (water, hills, forests, ink icons for houses, towers, gates, bridges, walls and gold) on a procedural
 // parchment, and the ink icons themselves (drawn here, resolution independent) for the Texture Editor's stamp tool.

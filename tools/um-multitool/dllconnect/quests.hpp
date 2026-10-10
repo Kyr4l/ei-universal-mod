@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The quests and scripts of the map the game runs, for the UM DLL Connector's Quests tab: read from the
 // map files (the .mob scripts, the quest's .mq texts), with the game's state from um.dll (VARS, SCRIPTS).
 //

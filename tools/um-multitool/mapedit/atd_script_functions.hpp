@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later (the code); the command descriptions are the EI ATD modder's
+// (from their scripts.htm) and remain theirs. Copyright (C) 2026 Kyr4l
 // EI ATD's script commands, for Settings > Checks > EI ATD script commands: the signatures (as in
 // mob_script_functions.hpp), the parameter names and the descriptions (Russian) of the EI ATD modder's
 // scripts.htm, which differ from the original game's (CastSpellUnit / CastSpellPoint take the caster last,

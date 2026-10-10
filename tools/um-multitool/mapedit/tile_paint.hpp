@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Painting a ground with the brush: the cells under it become plain tiles of the ground, the cells around get
 // the tiles their corners then need (tile_materials.hpp): the transitions, and where three grounds meet the
 // artists' three-ground tiles. Where the textures have no tile for a cell's corners, two fallbacks, each an

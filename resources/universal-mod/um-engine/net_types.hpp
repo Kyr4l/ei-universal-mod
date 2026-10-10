@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The game's multiplayer transport objects, as game.exe lays them out (the Russian EIStarter build).
 // Every struct here mirrors memory the game owns: um-engine code reads and writes these objects in place,
 // so the offsets must stay exact (static_asserts below). RE notes: _cpr/claude-re/net/engine/README.md.

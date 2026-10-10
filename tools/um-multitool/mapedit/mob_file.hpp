@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Reads a .mob map file (docs/file-formats/mob-format.md) into what the map editor shows and
 // checks: every placed object (world objects, units, levers, torches, magic traps, lights,
 // particles, sounds) with its position, rotation and figure, the mission script, and the

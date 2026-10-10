@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // File Processing > MP: the multiplayer characters (<game>/mp/N.mp, mp_file.hpp), listed and edited.
 #pragma once
 

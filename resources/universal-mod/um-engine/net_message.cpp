@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The reliable messages of an update: each one creates, updates or removes a replicated object of the
 // connection's object table (RE: _cpr/claude-re/net/engine/README.md, "Object table").
 #include <winsock2.h>

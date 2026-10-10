@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Evil Islands script command signatures, used by the MOB script checker
 // (mob_script_check.hpp). One row per command: name, return type, parameter
 // types.

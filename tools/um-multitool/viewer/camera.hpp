@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Minimal orbit camera + 4x4 matrix math for the fixed-function OpenGL2 renderer.
 // Matrices are column-major float[16], matching glLoadMatrixf's expected layout.
 #pragma once

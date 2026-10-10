@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The gameplay databases as spreadsheets, in memory: what the DB tab edits, and what the xlsxdb / dbexport
 // commands convert. A "book" is the workbook's sheets (sheetio::Sheet: DBEditor's layout, titles in row
 // 2, FLDx-y markers in row 3, records from row 4, from column B).

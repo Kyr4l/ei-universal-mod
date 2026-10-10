@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The script commands the checks, the highlighting and the script editor's completion know: the built-in
 // list (the original game's), then EI ATD's when Settings > Checks > EI ATD script commands is on
 // (mapedit/atd_script_functions.hpp), then script_commands.txt beside um-multitool: commands added to them,

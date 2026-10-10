@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The splash screen: the first thing on screen when the GUI starts. A small undecorated window with the banner
 // (assets/splash.png, embedded; a splash.png beside the executable replaces it), a status line and a progress
 // bar, shown while the sources, the editors and the database load; the main window stays hidden until End().

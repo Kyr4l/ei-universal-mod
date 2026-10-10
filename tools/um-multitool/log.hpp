@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The program's log (#88): what failed and what was done, as a file beside the executable (um-multitool.log),
 // a window in the GUI (Settings > Log) and, with `gui --verbose`, the console too. Every tab writes here when
 // something fails (a file dialog, a file that cannot be read, a save), so Windows users can report what happened.

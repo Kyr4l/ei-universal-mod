@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The game's lighting files (config/lights<region>.ini, e.g. lightsgipat.ini, lightscavegipat.ini):
 // the sun, ambient and sky colours for each hour of the day,
 //

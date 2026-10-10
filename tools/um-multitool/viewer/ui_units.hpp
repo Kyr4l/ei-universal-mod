@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // 3D Viewer > Units: a unit of the database (Monsters), dressed as the game and the Map Editor dress it
 // (mapedit/dress.hpp: its race's figure, skin, hair, weapons and armour), with every part of that open to
 // change: the skin (by the race's list, or any texture file, e.g. a new skin being painted), the hair, the

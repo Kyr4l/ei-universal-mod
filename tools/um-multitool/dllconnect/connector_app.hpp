@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The UM DLL Connector: um-multitool's tab that connects to um.dll's DLL server inside the running game
 // (127.0.0.1, DLL_SERVER_PORT in um.cfg, 18888 by default) and shows what it reports. The protocol is
 // described in resources/universal-mod/um-dll/dll_server.hpp. Everything lives in connector_app.cpp.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The File Processing tab's "DB" sub-tab: opens a gameplay database (.res, .xlsx or .ods), shows its
 // sheets as editable tables with the problems the checks find (db_model.hpp) highlighted, and saves it
 // as a spreadsheet or compiles it to a .res. Everything lives in db_editor.cpp.

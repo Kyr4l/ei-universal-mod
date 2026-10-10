@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // In-memory Evil Islands .res archive reader.
 // See docs/file-formats/res-format.md for the on-disk layout this decodes.
 #pragma once

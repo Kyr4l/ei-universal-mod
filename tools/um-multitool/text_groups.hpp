@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Grouped texts: a texts.res / textslmp.res folder kept as a few <TYPE>.umtexts files instead of one file per entry.
 // The type is the entry name's first word in capitals (ARMOR, WEAPON, QUESTITEM, string, pers...), the kind of string the game
 // reads. A .umtexts file:

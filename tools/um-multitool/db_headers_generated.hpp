@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Auto-generated from tools/third-party-tools/EIDBEditor_1.4.4/dbheaders.txt (titles trimmed).
 // Do not hand-edit. The spreadsheet columns DBEditor lays out for each block, in order: the field, its
 // index in a list (or the sub-field of a TypeList), the column width (0: default), the title and description.

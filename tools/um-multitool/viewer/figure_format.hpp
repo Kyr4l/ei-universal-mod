@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Parser for Evil Islands .fig / .bon / .mod / .anm / .lnk model files.
 // See docs/file-formats/figure-format.md for the full byte-level specification
 // this implements (recovered from ei_maper's CFigure::readData for .fig, and

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Dressing a map unit the way the game does: its prototype's monster record (units.udb) gives the race's
 // figure and skin, the hair, and the default equipment; the unit's own armor and weapon lists in the map
 // replace that equipment when it has any. Each item ("blueprint.material", items.idb) picks a numbered

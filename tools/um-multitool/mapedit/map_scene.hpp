@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The map editor's 3D view: the terrain of an .mpr (textured tiles, translucent water) and the
 // objects of the loaded .mob files (their figures, or a marker for lights, particles, sounds and
 // objects whose figure is missing). Fixed-function OpenGL 2 like the 3D Viewer; the terrain and

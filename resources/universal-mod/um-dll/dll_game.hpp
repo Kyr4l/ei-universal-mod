@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // What the DLL server knows of game.exe's own data (found with the server's debugger, see
 // docs/game-memory.md): its units and its console. Reads only, through ReadMemory (a bad pointer fails
 // instead of faulting), except ConsoleSend which types into the game window.

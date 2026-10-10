@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The GUI's colours: a theme is an accent, a background and a text colour; every Dear ImGui colour is derived
 // from them. The presets are the splash screen's palettes (charcoal and gold is the splash's own and the
 // default); Settings > General picks one or sets the accent by hand (THEME, THEME_ACCENT in the config).

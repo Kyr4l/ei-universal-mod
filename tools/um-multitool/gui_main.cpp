@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 /**
  * ============================================================================
  * um-multitool GUI - Dear ImGui front-end, built into the um-multitool binary
@@ -736,8 +738,9 @@ static void KeysHelp(const Library& lib, int tab) { // tab: 0 File Processing, 1
         row(i18n::Tr("Ctrl (held)"), "While moving, turning or scaling: no rounding");
         row(i18n::Tr("Enter / left click"), "Apply the move, turn or scale");
         row(i18n::Tr("Escape / right click"), "Cancel it");
-        row("1 ... 9", "Tile painting: the quick tiles");
-        row(", / .", "Tile painting: turn the brush");
+        row("1 ... 8", "Tile painting: the quick tiles");
+        row(i18n::Tr("Space"), "Tile painting: every tile, at the mouse (a click takes one)");
+        row(std::string("R  , / .  ") + i18n::Tr("Ctrl+wheel"), "Tile painting: turn the brush");
         row(i18n::Tr("Alt+click"), "Tile painting: pick the tile under the mouse; script areas shown: pick an area");
         row(i18n::Tr("Ctrl+click"), "Logic mode: add a patrol point to the selected unit; a selected trap: a cast point");
         row(i18n::Tr("Ctrl+Shift+click"), "A selected trap: an activation area");
@@ -1195,6 +1198,9 @@ int RunGui(const GuiOptions& options) {
             if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("The keys and mouse controls of this tab"));
             if (ImGui::BeginPopup("##keyshelp")) {
                 KeysHelp(library, library.guiTab);
+                ImGui::Separator(); // the GPL's notice for interactive programs
+                ImGui::TextDisabled("%s %s - Copyright (C) 2026 Kyr4l", PROGRAM_NAME_SHOWN, PROGRAM_VERSION);
+                ImGui::TextDisabled("%s", i18n::Tr("Free software under the GNU GPL, version 3 or later, with NO WARRANTY (README: License)."));
                 ImGui::EndPopup();
             }
             ImGui::SetCursorPos(back);

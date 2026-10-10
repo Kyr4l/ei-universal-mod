@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Map objects (any figure: buildings, plants, props) for the 3D Viewer's Objects tab and the Map Editor's Add window:
 // figure categories by name prefix, and which textures each figure wears in the maps (textures are not named after
 // their figures: nafltr59 wears tree01..03, stst19 skeleton00), read once from every .mob of the map folders.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // File Processing > MP: the multiplayer characters of a folder (<game>/mp), and one of them edited: name and clan
 // tag, experience, money, attributes, skills, abilities, items (with their database names), equipment and quest
 // variables, with checks like the DB tab's. See mp_file.hpp for the format.

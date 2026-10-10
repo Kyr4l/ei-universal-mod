@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The 3D Viewer tab of um-multitool (formerly the standalone um-modelviewer2): browses the items
 // database by category and shows each item's ground/inventory figure with the texture the database
 // points at (see item_resolve.hpp), with 45 degree rotation per tab and a GIF turntable export.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // A figure's UV layout as a picture: each part's triangles filled in its own colour and outlined, over a texture
 // (or on transparency), at the texture's exact size so the lines fall on its texels (painting guides).
 // Item figures address a 256x256 atlas (see Scene::Draw): with `atlas`, their UVs are mapped back onto the texture

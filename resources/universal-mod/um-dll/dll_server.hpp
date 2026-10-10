@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The DLL server: a TCP server on 127.0.0.1 (DLL_SERVER_PORT, 18888 by default) that um-multitool's
 // "UM DLL Connector" tab (and `um-multitool dll`) connects to while the game runs. Off unless
 // DLL_SERVER_ENABLED=true in um.cfg. Only this computer can connect (the socket is bound to the loopback

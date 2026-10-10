@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Reads a PNG into RGBA8 (for previewing a picked texture file): 8-bit grey, grey+alpha, RGB, RGBA and
 // palette images (with tRNS transparency), 16-bit ones reduced to 8 bits, not interlaced. The pixel
 // data is zlib: its 2-byte header is skipped and the rest inflated with inflate.hpp.

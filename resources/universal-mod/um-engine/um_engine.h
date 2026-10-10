@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The interface between um.dll and um-engine.dll (shared by both).
 #pragma once
 

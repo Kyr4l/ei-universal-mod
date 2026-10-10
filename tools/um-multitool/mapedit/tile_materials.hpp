@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Painting the terrain by MATERIAL (grass, sand, rock...) with the transitions chosen automatically: every tile
 // of the vanilla textures is known by the ground at each of its four corners (tile_materials_generated.hpp): a
 // plain tile has one ground, the transitions the artists blended two (a corner, a half, an inner corner, under

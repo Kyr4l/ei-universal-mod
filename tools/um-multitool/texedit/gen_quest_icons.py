@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Kyr4l
 """Turns texedit/quest-icons/*.png (NNN.png: sprites cut out of the base game's and Lost in Astral's quest map textures by
 _cpr/claude-re/questmap/harvest4.py, pixel for pixel, numbered by first map and position; roll-*.png: the scroll ends) into
 texedit/quest_icons_generated.hpp, which the Texture Editor compiles in. Run from tools/um-multitool:

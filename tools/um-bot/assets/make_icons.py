@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Kyr4l
 # um-bot's icons, all from assets/logo-source.png (the Sacred flower, quest item driadidol00: figure initqu10,
 # texture quitem0010, rendered with
 #   um-multitool viewer --figure initqu10 logo-source.png --texture quitem0010 --category questitems \

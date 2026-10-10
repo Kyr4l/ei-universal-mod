@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Animated GIF writer (GIF89a, looping): RGBA frames in, one file out. No GL here.
 //
 // One palette for the whole animation, so colours do not flicker from frame to frame:

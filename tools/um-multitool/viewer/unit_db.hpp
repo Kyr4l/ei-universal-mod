@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The "Units" gameplay database (units.udb), read from the same database RES archive as items.idb:
 // the race models (which figure, which skin textures) and the monsters (a unit prototype's race, skin,
 // hair and default equipment). The map editor dresses units with it, as the game does.

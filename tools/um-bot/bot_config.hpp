@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // um-bot's settings: how the bot builds and plays, and where it connects. Saved as key=value lines in
 // um-bot.cfg next to the program.
 #pragma once

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Problem alerts shared by every tab: when a tab detects new errors or warnings (database checks, map
 // and script checks, a File Processing job), it raises an alert here. An error opens a popup with a
 // button to the tab that lists it; both can play a sound (sfx/, built into the binary):

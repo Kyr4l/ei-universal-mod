@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Single-player saves (<game or mod>/saves/saveNN/, docs/file-formats/sav-format.md): the campaign file
 // scenario.sav holds the party exactly as a .mp does (items, spells, backpack, members) and then the quest
 // variables, after the merchants' and the camp's stocks, then a tail whose first 8 bytes hold the money as a .mp's

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // um-bot: a companion player for Evil Islands multiplayer. It is meant to join a game like a normal
 // player (its own network client, no game copy) and play alongside a human: follow, heal, fight their
 // targets, by the settings of this window.
@@ -34,7 +36,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.2";
+static const char* const kVersion = "0.1.2a";
 
 
 struct App {
@@ -507,7 +509,11 @@ static void Frame(App& app) {
 int main(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
-        if (a == "--version") { std::printf("um-bot %s\n", kVersion); return 0; }
+        if (a == "--version") {
+            std::printf("um-bot %s\nCopyright (C) 2026 Kyr4l\nLicense GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\n"
+                        "This is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n", kVersion);
+            return 0;
+        }
         if (a == "--connect-test") { // without the window: join the configured server, print what happens, leave
             bot::Config cfg;
             bot::Load(cfg);

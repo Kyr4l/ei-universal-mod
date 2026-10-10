@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The game's network protocol (UDP), as far as it is decoded (_cpr/claude-re/net/README.md): every packet starts
 // with a type byte.
 //   03 u32                get info        -> 05 u32(echo) u32 key, host name\0, game details

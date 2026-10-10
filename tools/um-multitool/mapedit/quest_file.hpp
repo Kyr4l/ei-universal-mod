@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Quests: a .mq archive (RES format) or its unpacked folder (<name>_mq/<name>/map.txt), holding a
 // map.txt that tells the game what to load and where the party enters and leaves:
 //

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The DLL server's debugger (dll_server.hpp holds the connection and the command list): reading, searching
 // and writing game.exe's memory, its modules, memory regions, threads and their stacks, and hardware
 // breakpoints. Everything runs inside the game, on the server's thread (the breakpoints' handler on the

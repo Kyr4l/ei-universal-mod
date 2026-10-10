@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The GUI's display language. English is the language of the source: every UI text in the code is
 // English, and for Russian the texts are swapped at drawing time by the hook in vendor/imgui
 // (UmTranslateText for plain text, UmTranslateFmt for printf-style formats) using the table in

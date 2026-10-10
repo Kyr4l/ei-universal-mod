@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Names for the functions of a game without symbols, worked out from the loaded image alone.
 // Pure C++17 (no Windows API), so it can be tested on a plain copy of the executable laid out by RVA.
 //

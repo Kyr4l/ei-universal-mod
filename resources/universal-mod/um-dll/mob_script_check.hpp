@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Static checker for the Evil Islands mission script language (the text stored
 // encrypted in a .mob's SS_TEXT node, and dumped as .eis by um-multitool).
 //

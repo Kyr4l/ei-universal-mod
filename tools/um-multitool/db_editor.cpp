@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The DB sub-tab: a small spreadsheet editor for the gameplay databases. See db_editor.hpp.
 //
 // The database is a dbmodel::Book (sheets of cells, as DBEditor lays them out: titles on row 2, FLDx-y

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Minimal PNG writer (RGBA, 8 bits per channel) for the texture "Export PNG" button. The image
 // data is stored with uncompressed deflate blocks: textures are small (<= 256x256), so the file
 // is at most a few hundred KB and no compressor is needed. No GL here.

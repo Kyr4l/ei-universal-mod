@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Script highlighting, shared by the Map Editor's script view and the UM DLL Connector's: comments,
 // strings, numbers, the language's keywords and types, known commands (um.dll's table,
 // mob_script_functions.hpp), the scripts and global variables the file declares.

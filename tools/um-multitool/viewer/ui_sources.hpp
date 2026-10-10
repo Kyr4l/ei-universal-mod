@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Settings tab's sources: where figures, textures, texts and the items database come from, for
 // every tab of the GUI (3D Viewer, Map Editor). Views watch lib.figuresVersion / texturesVersion.
 #pragma once

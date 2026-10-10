@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // This DLL rewrites backtick and number-row input as US QWERTY scan codes,
 // verifies the required SpellAddonX.asi file, and provides optional diagnostics.
 // Logging, crash reporting, keyboard rewrite logging, and anti-crash

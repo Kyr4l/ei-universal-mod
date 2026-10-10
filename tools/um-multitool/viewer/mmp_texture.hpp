@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Evil Islands .mmp texture decoder -> raw RGBA8 pixels.
 // Header layout and FourCC formats per tools/um-multitool/ddsmmp.cpp / docs/file-formats/mmp-format.md.
 // DXT1/DXT3 are software-decompressed here (rather than uploaded as GL compressed

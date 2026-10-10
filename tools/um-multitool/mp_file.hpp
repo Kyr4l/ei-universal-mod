@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Multiplayer character files (<game>/mp/N.mp), reverse-engineered from game.exe (load 0x662DD0 -> reader
 // 0x579830 -> decompressor 0x430960; save 0x662AC0 -> writer 0x661C10, members 0x65FDE0, stats 0x528800).
 //

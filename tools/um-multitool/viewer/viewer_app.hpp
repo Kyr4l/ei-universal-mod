@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The 3D Viewer: um-multitool's second main tab (formerly um-modelviewer2), and its
 // `um-multitool viewer ...` command-line modes. Everything else lives in viewer_app.cpp.
 #pragma once

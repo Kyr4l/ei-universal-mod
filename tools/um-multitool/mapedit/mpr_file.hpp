@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Reads a .mpr terrain (a RES archive) the way ei_maper does (landscape.cpp, sector.cpp, tile.cpp):
 //
 //   <map>.mp          header: signature 0xCE4AF672, max height, sectors in X and Y, texture count,

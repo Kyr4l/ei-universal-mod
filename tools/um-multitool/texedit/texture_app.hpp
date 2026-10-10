@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Texture Editor: um-multitool's main tab for the game's textures (see _cpr/PENDING.md #73 / #93).
 // For now only the tab itself; the tools come later.
 #pragma once

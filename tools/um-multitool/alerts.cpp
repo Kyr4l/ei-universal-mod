@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Problem alerts: see alerts.hpp. The sounds are decoded and played by miniaudio (vendor/miniaudio,
 // public domain / MIT-0: MP3 decoding, and PulseAudio/ALSA on Linux, WASAPI on Windows, loaded at run
 // time so no audio library is needed at build time). Without an audio device, sounds stay silent.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Map Editor: um-multitool's third main tab (read-only for now: an .mpr terrain, several .mob
 // files on top of each other, their objects and scripts, and the map checks), and the
 // `um-multitool map ...` command-line mode. Everything lives in map_app.cpp.

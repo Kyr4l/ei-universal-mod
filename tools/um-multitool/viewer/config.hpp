@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Remembers the GUI's settings between sessions in um-multitool.cfg beside the executable: the
 // sources (figure/texture/text layers, database) shared by the 3D Viewer and the Map Editor, the
 // viewer's rotations and GIF settings, and the map editor's files. "KEY=value" lines, layer keys

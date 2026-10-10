@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // In-game names and descriptions of items, from the game's text archives (texts.res,
 // textslmp.res) or folders of loose text files (e.g. resources/universal-mod/res-texts/...).
 //

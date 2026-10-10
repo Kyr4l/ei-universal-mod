@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The transport's update packets (type 0): sequence numbers, acknowledgements and the byte stream chunks,
 // re-implemented from game.exe (RE: _cpr/claude-re/net/engine/README.md, "Update packet codec").
 // Wire format of an update: u8 0, u16 seq, u16 ack, u32 ackBits, u16 chunkOffset, u8 chunkLen, chunk bytes,

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Windows-1250 (Central European: Polish, Czech...) <-> Unicode, for texts written in it.
 #pragma once
 #include <cstdint>

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The game's CRT string functions (MSVC 6, statically linked into game.exe).
 #include <cstddef>
 

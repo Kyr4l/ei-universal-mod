@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // CP949 (Korean, Unified Hangul Code) double-byte -> Unicode, generated from Python's cp949 codec.
 // Index: (lead - 0x81) * 190 + (trail - 0x41), lead 0x81..0xFE, trail 0x41..0xFE; 0 = not a character.
 // 17048 characters. Do not edit by hand.

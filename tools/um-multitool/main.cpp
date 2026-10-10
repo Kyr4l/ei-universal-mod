@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 /**
  * ============================================================================
  * um-multitool - Evil Islands Modding Toolkit
@@ -113,7 +115,11 @@ static void PrintTopLevelHelp() {
 
 static void PrintTopLevelVersion() {
     std::cout << PROGRAM_NAME_SHOWN << " (um-multitool) version " << PROGRAM_VERSION << "\n"
-              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport (each 1.0), the GUI, the 3D Viewer and the Map Editor\n";
+              << "  bundles: ddsmmp, inireg, mobdump, restool, xlsxdb, dbexport (each 1.0), the GUI, the 3D Viewer and the Map Editor\n"
+              << "Copyright (C) 2026 Kyr4l\n"
+              << "License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.\n"
+              << "This is free software: you are free to change and redistribute it.\n"
+              << "There is NO WARRANTY, to the extent permitted by law.\n";
 }
 
 // texts: a texts.res folder as a few <TYPE>.umtexts files (text_groups.hpp).

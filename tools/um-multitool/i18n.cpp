@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // See i18n.hpp. The table (lang/ru.txt: built in, and read again from beside the program at start, so a
 // fix there needs no rebuild) has two kinds of entries:
 //   T(english, russian): the whole text drawn, or a whole printf-style format;

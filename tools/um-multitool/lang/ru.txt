@@ -1665,3 +1665,7 @@ T("Zoom in to read the nodes (mouse wheel)", "Приблизьте, чтобы �
 F("Shown up to line ", "Показано до строки ")
 F(", where the script cannot be read: ", ", где скрипт не читается: ")
 F(" (the text view and the Checks tab tell more).", " (подробнее в тексте и на вкладке «Проверки»).")
+T("Ctrl+wheel", "Ctrl+колесо")
+T("Tile painting: every tile, at the mouse (a click takes one)", "Рисование тайлами: все тайлы у мыши (щелчок берёт один)")
+T("Free software under the GNU GPL, version 3 or later, with NO WARRANTY (README: License).", "Свободная программа под GNU GPL версии 3 или более поздней, БЕЗ ГАРАНТИЙ (README: License).")
+T("The orange wires come from the calls to it.", "Оранжевые провода идут от вызовов этого скрипта.")

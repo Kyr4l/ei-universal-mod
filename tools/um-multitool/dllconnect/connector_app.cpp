@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The UM DLL Connector tab (see connector_app.hpp). A background thread holds the TCP connection to
 // um.dll and hands the lines it receives to the GUI thread; the GUI parses them and draws the sub-tabs.
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The look follows measurements of the game's own quest maps (zone7quest and the others, see _cpr/PENDING.md #93):
 // the map fills the whole 256-pixel width with the frame cutting into it; the paper is a saturated ochre with a
 // strong mottle; the cliffs are thin dark-orange outlines; water is a flat grey-green with a dark olive shore line;

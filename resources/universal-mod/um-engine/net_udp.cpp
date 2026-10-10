@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The game's UDP socket layer (multiplayer, docs: PENDING #78): the two methods of its socket object that send and
 // receive one datagram. Both are __thiscall: ECX = the socket object (its first field is the SOCKET), then
 // (address, buffer) on the stack, popped by the callee (ret 8).

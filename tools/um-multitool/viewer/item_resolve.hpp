@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Turns an Items database row into what the game shows for it: a figure (the
 // ground/inventory model) and the textures that fit it. Pure logic, no GL, so the
 // same code backs the GUI and the --resolve command line.

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The Evil Islands gameplay databases' schema, shared by the compiler (xlsxdb.cpp: spreadsheet -> .res)
 // and the exporter (dbexport.cpp: .res -> spreadsheet). See docs/file-formats/database-format.md.
 #pragma once

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Loads a named figure (simple .fig/.bon pair or composite .mod/.bon/.anm set)
 // from an AssetSource (loose directory or RES archive).
 #pragma once

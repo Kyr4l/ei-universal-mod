@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // The item tabs (Weapons, Armors, Quick Items, Quest Items, Loot Items): one generic
 // tab - a filterable list of the category's database rows, and for the selected row
 // its figure, material, texture and stats - plus per-category details.

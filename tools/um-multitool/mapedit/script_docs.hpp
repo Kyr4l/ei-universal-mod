@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Generated from docs/scripting.md (the script functions: parameter names and descriptions) - regenerate it if the doc changes.
 #pragma once
 

@@ -1,3 +1,5 @@
+// Not under the GPL: these pixels are a render of the game's own model and texture (Evil Islands, Nival
+// Interactive), like the images in assets/; see the README's License section.
 // The window icon: the battle axe in its alloy texture (assets/logo.png), as RGBA pixels, top row first.
 // Generated from the logo; regenerate rather than edit.
 #pragma once

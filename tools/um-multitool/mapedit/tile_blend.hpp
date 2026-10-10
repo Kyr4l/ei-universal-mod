@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Blended terrain tiles: a new tile painted from two others through a soft mask (an edge, a corner), written into
 // a free tile of the terrain's own textures (<map>000.mmp .. 007: DXT1, 8 x 8 tiles, mipmaps). The game cannot
 // blend tiles itself; this is how the community tools give a natural look between two grounds.

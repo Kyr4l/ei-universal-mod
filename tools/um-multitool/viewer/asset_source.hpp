@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Unifies "a loose directory of files" and "a RES archive" behind one
 // interface, so the viewer can load figures/textures from either a packed
 // .res or an unpacked res-unpacked-style folder without caring which.

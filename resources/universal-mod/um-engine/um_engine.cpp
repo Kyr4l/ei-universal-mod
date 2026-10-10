@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // um-engine.dll: re-implementations of game.exe functions (PENDING #80). Loaded by um.dll (um.cfg UM_ENGINE=true),
 // which asks for the list of replacements and redirects each game function to its new code with a jump.
 //

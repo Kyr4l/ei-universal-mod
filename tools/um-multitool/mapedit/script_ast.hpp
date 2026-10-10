@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // A mission script as a tree, for the Script tab's visual view: its globals, its scripts and their
 // statements (if / then / else, loops, calls, assignments, comments), each with its line. The grammar is
 // the checker's (mob_script_check.hpp); this parser keeps the structure instead of checking it, and stops

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Kyr4l
 // Quest texts (briefings, map.txt, quest.ini) are edited as UTF-8 and saved back in the encoding the
 // file had: UTF-8 (the mod's French texts), CP949 (Korean) or CP1251 (the game's own, Russian and
 // English). Detection is the one the 3D Viewer uses for item texts (item_texts.hpp).
