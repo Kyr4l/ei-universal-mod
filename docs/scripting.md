@@ -91,7 +91,7 @@
 
 With `MOB_VALIDATION=true`, `um.dll` checks each `.mob` file's mission script (the encrypted `SS_TEXT` node, dumped as `.eis` by `um-multitool mobdump`) when the game opens the file, and writes the findings to `um.log` as `[MOBCHECK]` lines. Line numbers count lines of the script text, so they match the dumped `.eis` file. Only maps inside the folder of the mod that contains `um.dll` are checked; other mods' maps and the base game's, which the game also opens, are left alone.
 
-The language is small and regular: `GlobalVars`, `DeclareScript`, `Script`, `WorldScript`, `if ( conditions ) then ( ... ) [else ( ... )]`, nested `Command( args )` calls, `variable = value`, and the `For( var, group ) ( ... )` loop. The command list (name, parameter types, return type) comes from the VGG editor's `syntax.ini`/`scripts.htm` and MobExplorer's `script_refs.txt`, corrected against the shipped maps; see `resources/universal-mod/um-dll/mob_script_functions.hpp`.
+The language is small and regular: `GlobalVars`, `DeclareScript`, `Script`, `WorldScript`, `if ( conditions ) then ( ... ) [else ( ... )]`, nested `Command( args )` calls, `variable = value`, and the `For( var, group ) ( ... )` loop. The command list (name, parameter types, return type) comes from the VGG editor's `syntax.ini`/`scripts.htm` and MobExplorer's `script_refs.txt`, corrected against the shipped maps; see `resources/universal-mod/um-dll/mob_script_functions.hpp`. In um-multitool, `script_commands.txt` beside the program adds or changes commands for a game whose executable differs (see `tools/um-multitool/mapedit/README.md`, Checks).
 
 | Level in `um.log` | Meaning |
 | :--- | :--- |

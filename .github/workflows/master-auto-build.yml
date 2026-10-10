@@ -44,6 +44,7 @@ jobs:
             tools/um-multitool/um-multitool
             tools/um-multitool/um-multitool.exe
             tools/um-multitool/um-multitool-xp32.exe
+            Universal-Mod/um.dll
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: true
           name: Universal Mod ${{ env.VERSION }}

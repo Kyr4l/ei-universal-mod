@@ -173,6 +173,8 @@ struct App {
     std::set<std::string> sidecarLoaded; // terrains whose borrowed-materials sidecar was merged this session
     std::string materialMessage;
     int quickTiles[8] = {-1, -1, -1, -1, -1, -1, -1, -1};
+    bool tilePickerOpen = false;             // Space over the view in Tile paint: TilePicker opens at the mouse
+    ImVec2 tilePickerPos{};                  // and stays there
     std::set<int> terrainEditedSectors;
     bool terrainHeaderEdited = false, terrainRebuild = false;
     bool painting = false;
@@ -337,6 +339,8 @@ struct App {
 
     // Windows: the script in its own window, the undo history, the MOB parameters
     bool scriptWindow = false, historyOpen = false, mobParamsOpen = false;
+    std::string unloadAsk;                   // a file to unload that has unsaved changes: UnloadDialog asks what to do with them
+    bool checkedScripts = true, checkedDatabase = true; // Settings > Checks when the checks last ran (a change runs them again)
     bool focusScriptWindow = false;
 
     // Save active MOB as...
@@ -564,12 +568,8 @@ static void ForgetTerrainEdits(App& app) {
         v->erase(std::remove_if(v->begin(), v->end(), [](const EditStep& e) { return e.kind == EditStep::Terrain; }), v->end());
 }
 
+// Unloads the terrain, its unsaved edits dropped (RequestUnload asks first).
 static void UnloadTerrain(App& app) {
-    if (TerrainUnsaved(app)) {
-        app.filesMessage = "The terrain has unsaved changes: save them first (" + ui::BindName(app.lib.mapKeys[config::kKeySave]) + ") or undo them";
-        app.questMessage = app.filesMessage;
-        return;
-    }
     ForgetTerrainEdits(app);
     app.loadOrder.erase(std::remove(app.loadOrder.begin(), app.loadOrder.end(), app.terrainPath), app.loadOrder.end());
     app.terrainLoaded = false;
@@ -578,10 +578,14 @@ static void UnloadTerrain(App& app) {
     app.checksDirty = true;
 }
 
+// Unloads a map, its unsaved edits and their undo steps dropped (RequestUnload asks first).
 static void RemoveMob(App& app, int index) {
     if (index < 0 || index >= static_cast<int>(app.mobs.size())) return;
-    if (BlockedByUnsaved(app, app.mobs[index].get())) return;
     const std::string path = app.mobs[index]->file.path;
+    for (auto* v : {&app.undoSteps, &app.redoSteps})
+        v->erase(std::remove_if(v->begin(), v->end(), [&](const EditStep& e) { return e.kind != EditStep::Terrain && e.kind != EditStep::Areas && e.file == path; }), v->end());
+    if (app.scriptEditFor == path) app.scriptEditing = false;
+    if (app.scriptExtMob == path) app.scriptExtPath.clear();
     app.loadOrder.erase(std::remove(app.loadOrder.begin(), app.loadOrder.end(), path), app.loadOrder.end());
     app.mobs.erase(app.mobs.begin() + index);
     if (app.activeMob > index || app.activeMob >= static_cast<int>(app.mobs.size())) app.activeMob = std::max(0, app.activeMob - 1);
@@ -589,24 +593,35 @@ static void RemoveMob(App& app, int index) {
     SyncScene(app);
 }
 
-// The U key: unloads whichever file was loaded last, terrain or map.
-static void UnloadLast(App& app) {
-    if (app.loadOrder.empty()) return;
-    const std::string path = app.loadOrder.back();
+// Unloads a file, the terrain or a map (its path): at once when it has no unsaved changes, else after
+// UnloadDialog asks whether to save them, drop them, or keep the file.
+static void UnloadFile(App& app, const std::string& path) {
     if (app.terrainLoaded && path == app.terrainPath) {
         UnloadTerrain(app);
         app.filesMessage = "Unloaded the terrain " + path;
     } else {
         for (size_t i = 0; i < app.mobs.size(); ++i)
-            if (app.mobs[i]->file.path == path) {
-                if (BlockedByUnsaved(app, app.mobs[i].get())) return;
-                RemoveMob(app, static_cast<int>(i));
-                break;
-            }
+            if (app.mobs[i]->file.path == path) { RemoveMob(app, static_cast<int>(i)); break; }
         app.filesMessage = "Unloaded " + path;
-        app.loadOrder.erase(std::remove(app.loadOrder.begin(), app.loadOrder.end(), path), app.loadOrder.end());
     }
+    app.loadOrder.erase(std::remove(app.loadOrder.begin(), app.loadOrder.end(), path), app.loadOrder.end());
     SaveSession(app);
+}
+
+static bool FileUnsaved(const App& app, const std::string& path) {
+    if (app.terrainLoaded && path == app.terrainPath) return TerrainUnsaved(app);
+    for (const auto& m : app.mobs) if (m->file.path == path) return m->Dirty();
+    return false;
+}
+
+static void RequestUnload(App& app, const std::string& path) {
+    if (FileUnsaved(app, path)) app.unloadAsk = path;
+    else UnloadFile(app, path);
+}
+
+// The U key: unloads whichever file was loaded last, terrain or map.
+static void UnloadLast(App& app) {
+    if (!app.loadOrder.empty()) RequestUnload(app, app.loadOrder.back());
 }
 
 // A map file named in a quest: from the map folders of Settings, else next to the quest.
@@ -936,6 +951,8 @@ static void RunChecks(App& app) {
     in.figures = &app.lib.figures;
     in.textures = &app.lib.textures;
     in.database = &app.database;
+    in.scriptChecks = app.checkedScripts = app.lib.scriptChecks;
+    in.databaseChecks = app.checkedDatabase = app.lib.databaseChecks;
     const checks::Summary before = app.summary;
     app.findings = checks::Run(in, &app.summary);
     if (app.summary.errors > before.errors) app.newErrors = app.summary.errors - before.errors;
@@ -1158,10 +1175,7 @@ static void FilesTab(App& app) {
             ui::Note("Terrain textures " + m.name + "000.mmp... are missing from the texture sources (Settings): add the textures.res that "
                      "has them (a mod's may be textures-zones.res).");
         for (const std::string& w : m.warnings) ui::Note(w);
-        if (ImGui::SmallButton("Unload##mpr")) {
-            UnloadTerrain(app);
-            SaveSession(app);
-        }
+        if (ImGui::SmallButton("Unload##mpr")) RequestUnload(app, app.terrainPath);
     } else {
         ImGui::TextDisabled("(none: objects stand at height 0)");
     }
@@ -1220,10 +1234,7 @@ static void FilesTab(App& app) {
         SyncScene(app);
         SaveSession(app);
     }
-    if (removeAt >= 0) {
-        RemoveMob(app, removeAt);
-        SaveSession(app);
-    }
+    if (removeAt >= 0) RequestUnload(app, app.mobs[removeAt]->file.path);
     if (app.mobs.empty()) ImGui::TextDisabled("(none yet)");
     ImGui::SetNextItemWidth(-1);
     ImGui::InputTextWithHint("##mob", "any other .mob: its path", app.mobInput, sizeof(app.mobInput));
@@ -2602,7 +2613,7 @@ static void UpdateCompletion(App& app, const char* buf, int len, int cursor) {
     };
     static const char* const language[] = {"GlobalVars", "DeclareScript", "Script", "WorldScript", "if", "then", "else", "object", "group", "float", "string"};
     for (const char* w : language) consider(w);
-    for (const MobScriptFunction& fn : kMobScriptFunctions) consider(fn.name);
+    for (const MobScriptFunction* fn : mobscript::FunctionList()) consider(fn->name);
     for (const std::string& w : c.words) if (mobscript::LowerCase(w) != lp) consider(w);
     auto byLength = [](const std::string& a, const std::string& b) { return a.size() != b.size() ? a.size() < b.size() : a < b; };
     std::sort(starts.begin(), starts.end(), byLength);
@@ -2886,7 +2897,8 @@ static void ScriptContent(App& app) {
             dl->PopClipRect();
         }
         if (!editing || c.items.empty()) return;
-        // The list under the cursor.
+        // The list under the cursor (measured and written as the script's text: not translated).
+        const i18n::Verbatim verbatim;
         const float x = ImGui::CalcTextSize(c.lineBeforeCursor.c_str()).x - ImGui::CalcTextSize(c.prefix.c_str()).x;
         ImVec2 at(box->Pos.x + style.FramePadding.x - box->Scroll.x + x, box->Pos.y + style.FramePadding.y - box->Scroll.y + (c.line + 1) * ImGui::GetFontSize() + 2);
         ImGui::SetNextWindowPos(at);
@@ -3255,6 +3267,51 @@ static void SaveQuestChangesNow(App& app, const std::string& navmesh) {
     if (!saved.empty()) app.questMessage = "Saved " + saved;
     if (app.questDirty) SaveQuestAreas(app);
     if (app.mqTextDirty) SaveQuestText(app);
+}
+
+// Unloading a file with unsaved changes (RequestUnload): save them, drop them, or keep the file loaded.
+static void UnloadDialog(App& app) {
+    if (app.unloadAsk.empty()) return;
+    if (!FileUnsaved(app, app.unloadAsk)) { app.unloadAsk.clear(); return; } // saved or undone meanwhile, or gone
+    const bool terrain = app.terrainLoaded && app.unloadAsk == app.terrainPath;
+    ImGui::OpenPopup("Unsaved changes##unload");
+    ImGui::SetNextWindowPos(ImVec2((app.viewportMin.x + app.viewportMax.x) * 0.5f, (app.viewportMin.y + app.viewportMax.y) * 0.5f), ImGuiCond_Always,
+                            ImVec2(0.5f, 0.5f)); // over the view (its size is known from its second frame on)
+    if (!ImGui::BeginPopupModal("Unsaved changes##unload", nullptr, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings)) return;
+    const std::string path = app.unloadAsk;
+    ImGui::Text("%s has unsaved changes.", std::filesystem::path(path).filename().string().c_str());
+    ImGui::TextDisabled("%s", path.c_str());
+    bool close = false;
+    if (ImGui::Button("Save and unload")) {
+        std::string err;
+        bool saved = false;
+        if (terrain) {
+            saved = SaveTerrain(app, path);
+            err = app.terrainMessage;
+        } else if (MobEntry* m = FindMob(app, path)) {
+            saved = mob::Save(m->file, err);
+            if (saved) m->savedBytes = m->file.bytes;
+        }
+        if (saved) UnloadFile(app, path);
+        else app.filesMessage = "Not saved, still loaded: " + err;
+        close = true;
+    }
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("Writes this file as it is, then unloads it (%s saves every changed file, and also rebuilds the navmesh when Navmesh is on)",
+                          ui::BindName(app.lib.mapKeys[config::kKeySave]).c_str());
+    ImGui::SameLine();
+    if (ImGui::Button("Discard changes and unload")) {
+        UnloadFile(app, path);
+        close = true;
+    }
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("Unloads it as it is on disk: the changes since the last save, and their undo steps, are lost");
+    ImGui::SameLine();
+    if (ImGui::Button("Cancel") || ImGui::IsKeyPressed(ImGuiKey_Escape, false)) close = true;
+    if (close) {
+        app.unloadAsk.clear();
+        ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
 }
 
 static void QuestTab(App& app) {
@@ -4346,6 +4403,14 @@ static void PaintAt(App& app, float x, float y) {
     app.terrainRebuild = true;
 }
 
+// The brush takes a tile (the palette, the tiles at the mouse, Alt+click); a tile not among the quick
+// tiles goes in the first empty one, so the keys 1-8 bring back the tiles used without setting them up.
+static void PickTile(App& app, int tile) {
+    app.brushTile = tile;
+    if (std::find(std::begin(app.quickTiles), std::end(app.quickTiles), tile) != std::end(app.quickTiles)) return;
+    for (int& q : app.quickTiles) if (q < 0) { q = tile; return; }
+}
+
 // The brush in the view: a left drag paints (one undo step per stroke), Alt+click takes the tile under
 // the mouse. True when it took the mouse.
 static bool TerrainBrushInput(App& app, ImVec2 local) {
@@ -4360,7 +4425,7 @@ static bool TerrainBrushInput(App& app, ImVec2 local) {
                 const mpr::Sector& s = app.terrain.sectors[static_cast<size_t>(si)];
                 const bool water = app.brushWater && s.water && s.waterMaterial[row][col] >= 0;
                 const uint16_t packed = water ? s.waterTiles[row][col] : s.landTiles[row][col];
-                app.brushTile = ((packed >> 6) & 255) * 64 + (packed & 63);
+                PickTile(app, ((packed >> 6) & 255) * 64 + (packed & 63));
                 app.brushRotation = (packed >> 14) & 3;
                 if (water) app.brushMaterial = s.waterMaterial[row][col];
                 if (app.materialBrush && !water) { // the material under the mouse (a plain tile's; a transition's first ground)
@@ -4460,7 +4525,7 @@ static bool HeightBrushInput(App& app, ImVec2 local) {
     return true;
 }
 
-// Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile.
+// Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile, Space shows the tiles at the mouse.
 static void HeightBrushKeys(App& app) { // F: radius, Shift+F: strength (while held, moving the mouse sideways)
     static float groundRadius = 1.0f; // the ground brush's radius, in cells, before rounding
     if (ImGui::GetIO().WantTextInput || !ImGui::IsKeyDown(ImGuiKey_F)) { groundRadius = static_cast<float>(app.materialRadius); return; }
@@ -4477,6 +4542,12 @@ static void HeightBrushKeys(App& app) { // F: radius, Shift+F: strength (while h
 
 static void TerrainBrushKeys(App& app) {
     if (!app.tileBrush || ImGui::GetIO().WantTextInput) return;
+    if (app.viewHovered && !app.materialBrush) {
+        // Space is the picker's (TilePicker) while the mouse is over the view: owned, the keyboard navigation does
+        // not also press the last clicked button of the sidebar with it.
+        ImGui::SetKeyOwner(ImGuiKey_Space, ImGui::GetID("##tilepickerkey"));
+        if (ImGui::IsKeyPressed(ImGuiKey_Space, false)) app.tilePickerOpen = true;
+    }
     for (int i = 0; i < 8; ++i)
         if (ImGui::IsKeyPressed(static_cast<ImGuiKey>(ImGuiKey_1 + i), false) && app.quickTiles[i] >= 0) app.brushTile = app.quickTiles[i];
     if (ImGui::IsKeyPressed(ImGuiKey_Comma, false)) app.brushRotation = (app.brushRotation + 3) % 4;
@@ -5025,7 +5096,7 @@ static void TilesPanel(App& app) {
     }
     ImGui::EndGroup();
     // Quick tiles: click takes one, right-click keeps the brush's tile in it.
-    ImGui::TextDisabled("Quick tiles (keys 1-8; right-click keeps the brush's tile):");
+    ImGui::TextDisabled("Quick tiles (keys 1-8; the tiles picked fill them; right-click keeps the brush's tile):");
     for (int i = 0; i < 8; ++i) {
         if (i) ImGui::SameLine();
         ImGui::PushID(i);
@@ -5066,11 +5137,70 @@ static void TilesPanel(App& app) {
             const int tile = t * 64 + (7 - cy) * 8 + cx;
             const int type = tile < static_cast<int>(m.tileTypes.size()) ? m.tileTypes[static_cast<size_t>(tile)] : -1;
             ImGui::SetTooltip("tile %d (%s)", tile % 64, type >= 0 && type < 16 ? kTileTypeNames[type] : "?");
-            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) app.brushTile = tile;
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) PickTile(app, tile);
         }
         ImGui::TreePop();
     }
 
+}
+
+// Space over the view in Tile paint: every tile of the terrain's textures around the mouse; a click takes
+// one and closes it (so does Space again, Esc, or a click beside it). The mouse stays where it paints.
+static void TilePicker(App& app) {
+    const bool open = app.tilePickerOpen;
+    app.tilePickerOpen = false;
+    if (!app.tileBrush || !app.terrainLoaded) return;
+    const mpr::Map& m = app.terrain;
+    const int count = m.textureCount;
+    if (count <= 0) return;
+    const ImGuiStyle& style = ImGui::GetStyle();
+    const float cell = 22.0f, side = cell * 8, gap = style.ItemSpacing.x;
+    const int cols = std::min(count, 4), rows = (count + cols - 1) / cols;
+    if (open) {
+        const ImVec2 size(cols * side + (cols - 1) * gap + style.WindowPadding.x * 2,
+                          rows * (side + ImGui::GetFrameHeight()) + (rows - 1) * gap + style.WindowPadding.y * 2 + ImGui::GetFrameHeight());
+        const ImVec2 mouse = ImGui::GetIO().MousePos, display = ImGui::GetIO().DisplaySize;
+        ImVec2 at(mouse.x - size.x / 2, mouse.y - size.y / 2); // centred on the mouse, inside the program's window
+        at.x = std::clamp(at.x, 0.0f, std::max(0.0f, display.x - size.x));
+        at.y = std::clamp(at.y, 0.0f, std::max(0.0f, display.y - size.y));
+        app.tilePickerPos = at;
+        ImGui::OpenPopup("##tilepicker");
+    }
+    ImGui::SetNextWindowPos(app.tilePickerPos); // every frame: else a popup sized on its first frame is placed again on its second
+    if (!ImGui::BeginPopup("##tilepicker", ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings)) return;
+    ImGui::TextDisabled("Click a tile (turn: R , . Ctrl+wheel in the view)");
+    bool picked = false;
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    for (int t = 0; t < count; ++t) {
+        if (t % cols) ImGui::SameLine();
+        ImGui::BeginGroup();
+        ImGui::TextDisabled("Texture %d", t);
+        const GLuint tex = app.scene.TerrainTexture(t);
+        const ImVec2 p = ImGui::GetCursorScreenPos();
+        if (!tex) {
+            ImGui::Dummy(ImVec2(side, side));
+            dl->AddText(ImVec2(p.x + 4, p.y + 4), ImGui::GetColorU32(ImGuiCol_TextDisabled), "(not found)");
+            ImGui::EndGroup();
+            continue;
+        }
+        ImGui::Image(static_cast<ImTextureID>(static_cast<intptr_t>(tex)), ImVec2(side, side));
+        if (app.brushTile / 64 == t) { // the brush's tile (the texture's rows run bottom to top)
+            const int bt = app.brushTile % 64, cx = bt % 8, cy = 7 - bt / 8;
+            dl->AddRect(ImVec2(p.x + cx * cell, p.y + cy * cell), ImVec2(p.x + (cx + 1) * cell, p.y + (cy + 1) * cell), IM_COL32(255, 220, 120, 255), 0, 0, 2.0f);
+        }
+        if (ImGui::IsItemHovered()) {
+            const ImVec2 mp = ImGui::GetIO().MousePos;
+            const int cx = std::clamp(static_cast<int>((mp.x - p.x) / cell), 0, 7), cy = std::clamp(static_cast<int>((mp.y - p.y) / cell), 0, 7);
+            const int tile = t * 64 + (7 - cy) * 8 + cx;
+            dl->AddRect(ImVec2(p.x + cx * cell, p.y + cy * cell), ImVec2(p.x + (cx + 1) * cell, p.y + (cy + 1) * cell), IM_COL32(255, 255, 255, 220));
+            const int type = tile < static_cast<int>(m.tileTypes.size()) ? m.tileTypes[static_cast<size_t>(tile)] : -1;
+            ImGui::SetTooltip("tile %d (%s)", tile % 64, type >= 0 && type < 16 ? kTileTypeNames[type] : "?");
+            if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) { PickTile(app, tile); picked = true; }
+        }
+        ImGui::EndGroup();
+    }
+    if (picked || (!open && (ImGui::IsKeyPressed(ImGuiKey_Space, false) || ImGui::IsKeyPressed(ImGuiKey_Escape, false)))) ImGui::CloseCurrentPopup();
+    ImGui::EndPopup();
 }
 
 // The Tile paint mode's tools: the Grounds tab (paint by material) and the Tiles tab; water paints by tile.
@@ -5945,7 +6075,7 @@ static void Toolbar(App& app) {
             ImGui::SameLine();
             TileImage(app, std::max(app.brushTile, 0), ImGui::GetFrameHeight(), app.brushRotation);
             ImGui::SameLine();
-            ImGui::TextDisabled("tile %d, turn %d (, .)  %s", app.brushTile, app.brushRotation * 90, app.brushWater ? "water" : "land");
+            ImGui::TextDisabled("tile %d, turn %d (R , . Ctrl+wheel; Space: tiles)  %s", app.brushTile, app.brushRotation * 90, app.brushWater ? "water" : "land");
         } else if (mode == 2) {
             static const char* const kTools[] = {"Raise", "Lower", "Smooth", "Flatten"};
             for (int i = 0; i < 4; ++i) { ImGui::SameLine(); ImGui::RadioButton(kTools[i], &app.heightMode, i); }
@@ -6016,8 +6146,8 @@ static void BottomBar(App& app) {
         ImGui::TextColored(ImVec4(1.0f, 0.82f, 0.4f, 1), app.heightBrush
             ? "Sculpt: left drag shapes the ground (one undo per stroke)  F radius  Shift+F strength  %s tool shelf  (Tools > Rebuild navmesh after)"
             : app.materialBrush ? "Tile paint by ground: left drag paints (the transitions around follow)  Alt+click picks the ground under the mouse  %s tool shelf"
-            : app.brushWater ? "Water paint: left drag paints the water tile and material  Alt+click picks  1-8 quick tiles  , . turn the tile  %s tool shelf"
-            : "Tile paint: left drag paints  Alt+click picks a tile  1-8 quick tiles  , . turn the tile  %s tool shelf",
+            : app.brushWater ? "Water paint: left drag paints the water tile and material  Space tiles at the mouse  Alt+click picks  1-8 quick tiles  R , . Ctrl+wheel turn  %s tool shelf"
+            : "Tile paint: left drag paints  Space tiles at the mouse  Alt+click picks a tile  1-8 quick tiles  R , . Ctrl+wheel turn  %s tool shelf",
             ui::BindName(app.lib.mapKeys[config::kKeyToolShelf]).c_str());
         ImGui::SameLine();
     }
@@ -6329,6 +6459,7 @@ static void Keys(App& app) {
     }
     if (pressed(config::kKeyFind)) { app.findOpen = true; app.findFocus = true; }
     if (app.xf.mode == Transform::None) { TerrainBrushKeys(app); HeightBrushKeys(app); }
+    if (app.xf.mode == Transform::None && app.tileBrush && pressed(config::kKeyRotate)) app.brushRotation = (app.brushRotation + 1) % 4; // R: turn the tile
     if (pressed(config::kKeySelectAll) && app.xf.mode == Transform::None) { SelectAll(app); app.requestTab = SideTab::Objects; }
     if (app.xf.mode == Transform::None) {
         if (pressed(config::kKeyDelete)) {
@@ -7013,7 +7144,9 @@ static void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
             MoveTarget(app, std::sin(yaw) * mx - std::cos(yaw) * my, -std::cos(yaw) * mx - std::sin(yaw) * my, 0.0f);
         }
     }
-    if (hovered && io.MouseWheel != 0.0f) {
+    if (hovered && io.MouseWheel != 0.0f && io.KeyCtrl && app.tileBrush && !app.materialBrush) { // Ctrl + wheel turns the tile
+        app.brushRotation = (app.brushRotation + (io.MouseWheel > 0 ? 1 : 3)) % 4;
+    } else if (hovered && io.MouseWheel != 0.0f) {
         cam.distance *= std::pow(0.85f, io.MouseWheel);
         cam.distance = std::max(1.5f, std::min(cam.distance, 3000.0f));
     }
@@ -7930,7 +8063,9 @@ bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err) {
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
     PollJob(app);
-    if (app.checksDirty || app.checkedVersion != app.lib.version) RunChecks(app);
+    if (app.checksDirty || app.checkedVersion != app.lib.version || app.checkedScripts != app.lib.scriptChecks ||
+        app.checkedDatabase != app.lib.databaseChecks)
+        RunChecks(app);
     RefreshScriptModel(app);
     RefreshLighting(app);
     ApplyLighting(app);
@@ -7978,6 +8113,8 @@ void DrawTab(Context* ctx) {
     OffsetWindow(app);
     RandomizeWindow(app);
     SaveAsWindow(app);
+    UnloadDialog(app);
+    TilePicker(app);
     HistoryWindow(app);
     MobParamsWindow(app);
     SimulationWindow(app);
@@ -8332,7 +8469,11 @@ int RunCli(int argc, char** argv) {
     in.figures = &lib.figures;
     in.textures = &lib.textures;
     in.database = &db;
-    if (db.Empty()) std::printf("note: no items database set in the GUI's Settings tab: item, spell and prototype names are not checked\n");
+    in.scriptChecks = lib.scriptChecks;
+    in.databaseChecks = lib.databaseChecks;
+    if (!lib.scriptChecks) std::printf("note: script checks are off (Settings > Checks)\n");
+    if (!lib.databaseChecks) std::printf("note: database checks are off (Settings > Checks)\n");
+    else if (db.Empty()) std::printf("note: no items database set in the GUI's Settings tab: item, spell and prototype names are not checked\n");
     if (!lib.figures.AnyLoaded()) std::printf("note: no figure sources set: figures are not checked\n");
     if (!lib.textures.AnyLoaded()) std::printf("note: no texture sources set: textures are not checked\n");
 

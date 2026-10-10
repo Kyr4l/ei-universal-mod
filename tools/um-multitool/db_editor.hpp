@@ -19,6 +19,8 @@ struct Hooks {
     // The last "Compile to" of a database (by its path; "" = none yet), remembered in the config.
     std::function<std::string(const std::string& database)> compileTo;
     std::function<void(const std::string& database, const std::string& res)> setCompileTo;
+    // Settings > Checks > Database checks (missing: on). Off, the database is not checked.
+    std::function<bool()> checksOn;
 };
 
 void SetHooks(Hooks hooks);

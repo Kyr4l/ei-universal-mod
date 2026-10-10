@@ -41,6 +41,7 @@ const Entry kFragments[] = {
 #undef F
 
 Lang g_lang = Lang::English;
+int g_verbatim = 0; // above 0: drawn texts stay as they are (Verbatim, UmVerbatim)
 
 struct Tables {
     std::unordered_map<std::string_view, std::string_view> whole;
@@ -154,6 +155,9 @@ const char* Tr(const char* english) {
     return it == t.whole.end() ? english : it->second.data(); // the table's values are NUL-terminated literals
 }
 
+Verbatim::Verbatim() { ++g_verbatim; }
+Verbatim::~Verbatim() { --g_verbatim; }
+
 } // namespace i18n
 
 // ---- hooks called from vendor/imgui -------------------------------------------------------------
@@ -162,7 +166,7 @@ const char* Tr(const char* english) {
 // until the language changes or the cache is cleared (a frame later at the earliest).
 bool UmTranslateText(const char*& begin, const char*& end) {
     using namespace i18n;
-    if (g_lang == Lang::English || end - begin < 2) return false;
+    if (g_lang == Lang::English || g_verbatim > 0 || end - begin < 2) return false;
     Tables& t = Get();
     const std::string_view text(begin, static_cast<size_t>(end - begin));
     auto it = t.whole.find(text);
@@ -186,6 +190,8 @@ bool UmTranslateText(const char*& begin, const char*& end) {
     end = begin + c->second->size();
     return true;
 }
+
+void UmVerbatim(int delta) { i18n::g_verbatim += delta; }
 
 const char* UmTranslateFmt(const char* fmt) {
     if (i18n::Current() == i18n::Lang::English) return fmt;

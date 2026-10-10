@@ -13,6 +13,7 @@
 #include "text_groups.hpp"
 #include "cp1250.hpp"
 #include "text_editor.hpp"
+#include "i18n.hpp"
 
 #include <algorithm>
 #include <cstring>
@@ -406,7 +407,9 @@ void DrawTab(Library& lib) {
                                                                                                                                    : ImGui::GetStyleColorVec4(ImGuiCol_Text);
             ImGui::PushStyleColor(ImGuiCol_Text, color);
             // Up/Down select as they move (not only Enter), like the item lists of the 3D Viewer.
-            if (ImGui::Selectable((name + "##" + k).c_str(), g.selected == k) || ui::NavMovedHere()) g.selected = k;
+            bool picked;
+            { const i18n::Verbatim verbatim; picked = ImGui::Selectable((name + "##" + k).c_str(), g.selected == k); } // the text's name as it is
+            if (picked || ui::NavMovedHere()) g.selected = k;
             ImGui::PopStyleColor();
         }
     if (shown.empty()) ImGui::TextDisabled("Nothing to show");

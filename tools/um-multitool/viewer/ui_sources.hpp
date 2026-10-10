@@ -560,6 +560,18 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
     if (ImGui::Checkbox("Log to console", &lib.logVerbose)) { umlog::SetVerbose(lib.logVerbose); lib.SaveConfig(); }
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("What failed (file dialogs, files that cannot be read, saves) and what was done; gui --verbose turns this on from the command line"));
 
+    ImGui::SeparatorText("Checks");
+    ImGui::TextDisabled("For games and mods with their own script commands or database: what is not checked is not reported.");
+    if (ImGui::Checkbox("Script checks", &lib.scriptChecks)) lib.SaveConfig();
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("Map Editor: the maps' scripts are checked (syntax, commands and their arguments, variables, scripts never called,\n"
+                          "the objects they name). Off: none of it is reported. A game whose commands differ can also list them\n"
+                          "in script_commands.txt beside um-multitool and keep the checks.");
+    if (ImGui::Checkbox("Database checks", &lib.databaseChecks)) lib.SaveConfig();
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("The DB editor checks the database (errors and warnings, alerts), and the Map Editor checks the maps'\n"
+                          "item, spell and prototype names against it. Off: neither (a database compiles as it is).");
+
     ImGui::SeparatorText("Background");
     {
         // A picture behind the menus: for every tab, or per main tab (which wins).

@@ -5,6 +5,7 @@
 // cells and rows with problems stay highlighted; new problems raise an alert (alerts.hpp).
 
 #include "db_editor.hpp"
+#include "i18n.hpp"
 
 #include <algorithm>
 #include <cctype>
@@ -49,6 +50,7 @@ struct State {
     dbmodel::Book book;
     std::string loadedPath;
     bool loaded = false, dirty = false;
+    bool checkedOn = true; // the database checks were on when it was last checked
     int sheet = 0;
     int version = 0; // bumped by every change (the shown rows are recomputed)
 
@@ -115,9 +117,13 @@ void GoToIssue(const dbmodel::Issue& is);
 
 // ---- checks -----------------------------------------------------------------------------------------
 
+bool ChecksOn() { return !g.hooks.checksOn || g.hooks.checksOn(); }
+
 void Recheck(bool alert = true) {
     const auto t0 = std::chrono::steady_clock::now();
-    g.issues = dbmodel::CheckBook(g.book);
+    g.checkedOn = ChecksOn();
+    if (g.checkedOn) g.issues = dbmodel::CheckBook(g.book);
+    else g.issues.clear(); // Settings > Checks: off
     g.checkMs = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
     g.cellIssue.assign(g.book.size(), {});
     g.rowIssue.assign(g.book.size(), {});
@@ -682,7 +688,12 @@ void SheetTable(float height) {
                     // One line in the cell: the first line of a multi-line text.
                     std::string shown;
                     if (cell && cell->text.find('\n') != std::string::npos) { shown = cell->text.substr(0, cell->text.find('\n')) + " ..."; text = shown.c_str(); }
-                    if (ImGui::Selectable(text[0] ? text : "##empty", selected, ImGuiSelectableFlags_AllowDoubleClick)) {
+                    bool clicked;
+                    { // the cell's value as it is: a name such as "Sword" is also a UI text the language hook would swap
+                        const i18n::Verbatim verbatim;
+                        clicked = ImGui::Selectable(text[0] ? text : "##empty", selected, ImGuiSelectableFlags_AllowDoubleClick);
+                    }
+                    if (clicked) {
                         g.selRow = row;
                         g.selCol = c;
                         if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) BeginEdit(sh, row, c);
@@ -704,7 +715,7 @@ void SheetTable(float height) {
                     if (ImGui::IsItemHovered() && (ci != cellIssue.end() || (cell && cell->text.size() > 12))) {
                         ImGui::BeginTooltip();
                         ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35);
-                        if (cell) ImGui::TextUnformatted(cell->text.c_str());
+                        if (cell) { const i18n::Verbatim verbatim; ImGui::TextUnformatted(cell->text.c_str()); }
                         for (const dbmodel::Issue& is : g.issues) {
                             if (is.row != row || is.col != c || is.sheet != sh.name) continue;
                             ImGui::TextColored(is.severity == dbmodel::Issue::Error ? kErrorColor : kWarningColor, "%s", is.message.c_str());
@@ -740,6 +751,10 @@ void IssueList(float height) {
     if (ImGui::Button("Check again")) Recheck();
     ImGui::SameLine();
     ImGui::TextDisabled("(checked in %.0f ms; errors: the .res would not hold what the cell shows, or the game misreads it)", g.checkMs);
+    if (!g.checkedOn) {
+        ImGui::TextDisabled("The database checks are off (Settings > General > Checks).");
+        return;
+    }
     if (g.issues.empty()) {
         ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "No problem found.");
         return;
@@ -851,7 +866,10 @@ void OpenFile(const std::string& path) {
     RequestOpen(path);
 }
 
-void Update() { AutoLoad(); }
+void Update() {
+    AutoLoad();
+    if (g.loaded && g.checkedOn != ChecksOn()) Recheck(false); // Settings > Checks changed
+}
 
 void DrawTab() {
     const float fieldWidth = std::max(200.0f, ImGui::GetContentRegionAvail().x - 110 - 260);

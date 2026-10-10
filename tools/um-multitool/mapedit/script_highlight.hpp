@@ -9,6 +9,7 @@
 #include "imgui.h"
 
 #include "checks.hpp"
+#include "i18n.hpp"
 
 namespace scripthl {
 
@@ -30,9 +31,10 @@ inline ImVec4 TokenColor(const std::string& word, const ScriptNames& names) {
     return ImGui::GetStyleColorVec4(ImGuiCol_Text);
 }
 
-// One line of script, token by token on the same row.
-// Splits one line of script into coloured pieces: fn(begin, end, colour).
+// Splits one line of script into coloured pieces: fn(begin, end, colour). What fn draws or measures is
+// the script's own text: never translated by the UI language (a script's "Script Quest" stays as it is).
 template <typename F> inline void EachScriptToken(const char* begin, const char* end, const ScriptNames& names, F fn) {
+    const i18n::Verbatim verbatim;
     const ImVec4 comment(0.48f, 0.62f, 0.48f, 1), string(0.90f, 0.64f, 0.44f, 1), punct(0.62f, 0.62f, 0.66f, 1);
     const char* p = begin;
     while (p < end) {

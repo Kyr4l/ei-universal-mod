@@ -4719,6 +4719,9 @@ static ImVec2 InputTextLineIndexGetPosOffset(ImGuiContext& g, ImGuiInputTextStat
     return offset;
 }
 
+// um-multitool: UI language hook (i18n.cpp): texts measured or drawn while the count is above 0 are not translated.
+extern void UmVerbatim(int delta);
+
 // Edit a string of text
 // - buf_size account for the zero-terminator, so a buf_size of 6 can hold "Hello" but not "Hello!".
 //   This is so we can easily call InputText() on static arrays using ARRAYSIZE() and to match
@@ -4908,7 +4911,11 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         // Find initial scroll position for right alignment
         state->Scroll = ImVec2(0.0f, 0.0f);
         if (flags & ImGuiInputTextFlags_ElideLeft)
+        {
+            UmVerbatim(+1);
             state->Scroll.x += ImMax(0.0f, CalcTextSize(buf).x - frame_size.x + style.FramePadding.x * 2.0f);
+            UmVerbatim(-1);
+        }
 
         // Recycle existing cursor/selection/undo stack but clamp position
         // Note a single mouse click will override the cursor/position immediately by calling stb_textedit_click handler.
@@ -5526,6 +5533,11 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
         if (is_password && !is_displaying_hint)
             PushPasswordFont();
     }
+    // um-multitool: the text typed in the box is measured and drawn as it is (the UI language hook,
+    // i18n.cpp, would swap words of it that are also UI texts); the hint stays translated.
+    const bool um_verbatim = !is_displaying_hint;
+    if (um_verbatim)
+        UmVerbatim(+1);
     if (is_displaying_hint)
     {
         buf_display = hint;
@@ -5683,6 +5695,8 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             line_index->get_line_begin(buf_display, line_visible_n0),
             line_index->get_line_end(buf_display, line_visible_n1 - 1),
             wrap_width, ImDrawTextFlags_WrapKeepBlanks | ImDrawTextFlags_CpuFineClip);
+    if (um_verbatim)
+        UmVerbatim(-1);
 
     // Render blinking cursor
     if (render_cursor)

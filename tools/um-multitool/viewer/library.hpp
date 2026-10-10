@@ -74,6 +74,7 @@ struct Library {
     bool logVerbose = false, logWindow = false;      // #88
     int frameRateLimit = 0; bool idleRedraw = true;   // Settings > Performance (#104)
     bool vsync = true, uiAntialias = true, mapLowDetail = false, showFps = false; float mapDrawDistance = 0.0f;
+    bool scriptChecks = true, databaseChecks = true; // Settings > Checks
     int displayRefresh = 60;                           // the primary display's refresh rate (set by the GUI)
     float markerOpacity = 0.5f;                    // the Map Editor's light, particle and sound cubes
     float mapHour = -1.0f;                         // the Map Editor's time of day (-1: the map's own)
@@ -159,7 +160,7 @@ struct Library {
         mapMouseOrbit = cfg.mapMouseOrbit;
         language = cfg.language;
         themePreset = cfg.themePreset; themeAccent = cfg.themeAccent;
-        guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour; markerOpacity = cfg.markerOpacity; textEncodings = cfg.textEncodings; logVerbose = cfg.logVerbose; frameRateLimit = cfg.frameRateLimit; idleRedraw = cfg.idleRedraw; vsync = cfg.vsync; uiAntialias = cfg.uiAntialias; showFps = cfg.showFps; mapDrawDistance = cfg.mapDrawDistance; mapLowDetail = cfg.mapLowDetail;
+        guiTab = cfg.guiTab; viewerTab = cfg.viewerTab; mapSideTab = cfg.mapSideTab; mapHour = cfg.mapHour; markerOpacity = cfg.markerOpacity; textEncodings = cfg.textEncodings; logVerbose = cfg.logVerbose; frameRateLimit = cfg.frameRateLimit; idleRedraw = cfg.idleRedraw; vsync = cfg.vsync; uiAntialias = cfg.uiAntialias; showFps = cfg.showFps; mapDrawDistance = cfg.mapDrawDistance; mapLowDetail = cfg.mapLowDetail; scriptChecks = cfg.scriptChecks; databaseChecks = cfg.databaseChecks;
         background = cfg.background;
         for (int i = 0; i < 6; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
@@ -201,7 +202,7 @@ struct Library {
         cfg.mapCameraSpeed = mapCameraSpeed;
         cfg.mapMouseOrbit = mapMouseOrbit;
         cfg.language = language; cfg.themePreset = themePreset; cfg.themeAccent = themeAccent;
-        cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour; cfg.markerOpacity = markerOpacity; cfg.textEncodings = textEncodings; cfg.logVerbose = logVerbose; cfg.frameRateLimit = frameRateLimit; cfg.idleRedraw = idleRedraw; cfg.vsync = vsync; cfg.uiAntialias = uiAntialias; cfg.showFps = showFps; cfg.mapDrawDistance = mapDrawDistance; cfg.mapLowDetail = mapLowDetail;
+        cfg.guiTab = guiTab; cfg.viewerTab = viewerTab; cfg.mapSideTab = mapSideTab; cfg.mapHour = mapHour; cfg.markerOpacity = markerOpacity; cfg.textEncodings = textEncodings; cfg.logVerbose = logVerbose; cfg.frameRateLimit = frameRateLimit; cfg.idleRedraw = idleRedraw; cfg.vsync = vsync; cfg.uiAntialias = uiAntialias; cfg.showFps = showFps; cfg.mapDrawDistance = mapDrawDistance; cfg.mapLowDetail = mapLowDetail; cfg.scriptChecks = scriptChecks; cfg.databaseChecks = databaseChecks;
         cfg.background = background;
         for (int i = 0; i < 6; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;

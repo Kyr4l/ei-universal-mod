@@ -23,4 +23,13 @@ bool FromCode(const std::string& code, Lang& out);
 // is English). For texts that are built or compared in code rather than drawn straight away.
 const char* Tr(const char* english);
 
+// While one lives, drawn texts are not translated: for data shown as it is (a script, a file's text)
+// whose words may also be UI texts ("Script", "Unit", "Move"). Text boxes do this for what is typed in them.
+struct Verbatim {
+    Verbatim();
+    ~Verbatim();
+    Verbatim(const Verbatim&) = delete;
+    Verbatim& operator=(const Verbatim&) = delete;
+};
+
 } // namespace i18n

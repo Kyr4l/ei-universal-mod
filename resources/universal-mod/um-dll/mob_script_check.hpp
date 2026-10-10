@@ -37,6 +37,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
+#include <deque>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -153,14 +154,48 @@ inline char TypeFromName(const std::string& lowered) {
     return 0;
 }
 
-// Lookup of command signatures by lower-case name, built once.
-inline const std::unordered_map<std::string, const MobScriptFunction*>& FunctionTable() {
-    static const std::unordered_map<std::string, const MobScriptFunction*> table = [] {
-        std::unordered_map<std::string, const MobScriptFunction*> t;
-        for (const MobScriptFunction& f : kMobScriptFunctions) t[LowerCase(f.name)] = &f;
-        return t;
+// The known commands: the built-in table (mob_script_functions.hpp), in its order, then those a program
+// added with AddFunction. A command added again under a known name replaces it in place.
+struct FunctionRegistry {
+    std::vector<const MobScriptFunction*> list;
+    std::unordered_map<std::string, size_t> index; // lower-case name -> position in list
+    std::unordered_map<std::string, const MobScriptFunction*> table; // lower-case name -> signature
+    std::deque<MobScriptFunction> added;
+    std::deque<std::string> texts; // the added names and parameter strings
+};
+
+inline FunctionRegistry& Functions() {
+    static FunctionRegistry r = [] {
+        FunctionRegistry f;
+        for (const MobScriptFunction& fn : kMobScriptFunctions) {
+            f.index[LowerCase(fn.name)] = f.list.size();
+            f.table[LowerCase(fn.name)] = &fn;
+            f.list.push_back(&fn);
+        }
+        return f;
     }();
-    return table;
+    return r;
+}
+
+// Lookup of command signatures by lower-case name.
+inline const std::unordered_map<std::string, const MobScriptFunction*>& FunctionTable() { return Functions().table; }
+// Every command, the built-in ones first, in the table's order.
+inline const std::vector<const MobScriptFunction*>& FunctionList() { return Functions().list; }
+
+// Adds a command, or changes a known one: for a game whose commands differ from the original's (a mod's
+// executable). `returns` and `params` as in mob_script_functions.hpp.
+inline void AddFunction(const std::string& name, char returns, const std::string& params) {
+    FunctionRegistry& r = Functions();
+    r.texts.push_back(name);
+    const char* storedName = r.texts.back().c_str();
+    r.texts.push_back(params);
+    r.added.push_back(MobScriptFunction{storedName, returns, r.texts.back().c_str()});
+    const MobScriptFunction* fn = &r.added.back();
+    const std::string lowered = LowerCase(name);
+    auto it = r.index.find(lowered);
+    if (it != r.index.end()) r.list[it->second] = fn;
+    else { r.index[lowered] = r.list.size(); r.list.push_back(fn); }
+    r.table[lowered] = fn;
 }
 
 // Small edit distance for "did you mean" suggestions on names of realistic length.
@@ -712,9 +747,9 @@ private:
             std::string suggestion;
             int best = 3;
             if (u.name.size() >= 4) {
-                for (const MobScriptFunction& f : kMobScriptFunctions) {
-                    int d = EditDistance(lowered, LowerCase(f.name));
-                    if (d < best) { best = d; suggestion = f.name; }
+                for (const MobScriptFunction* f : FunctionList()) {
+                    int d = EditDistance(lowered, LowerCase(f->name));
+                    if (d < best) { best = d; suggestion = f->name; }
                 }
                 for (const auto& d : declared_) {
                     int dist = EditDistance(lowered, d.first);

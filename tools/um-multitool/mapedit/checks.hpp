@@ -25,6 +25,7 @@
 #include "db_model.hpp"
 
 #include <algorithm>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <map>
@@ -293,6 +294,10 @@ struct Inputs {
     const LayeredAssetSource* figures = nullptr;
     const LayeredAssetSource* textures = nullptr;
     const DatabaseNames* database = nullptr;
+    // Settings > Checks: off, the script's findings (and the objects it names) are not reported, or nothing
+    // is checked against the database - for games with their own commands or databases.
+    bool scriptChecks = true;
+    bool databaseChecks = true;
 };
 
 struct Summary { int errors = 0, warnings = 0, infos = 0; };
@@ -307,9 +312,10 @@ inline std::string Label(const mob::Object& o) {
 inline std::vector<Finding> Run(const Inputs& in, Summary* summary = nullptr) {
     std::vector<Finding> out;
     auto add = [&](char sev, int file, int object, int line, const char* cat, const std::string& msg) {
+        if (!in.scriptChecks && (std::strcmp(cat, "Script") == 0 || std::strcmp(cat, "References") == 0)) return;
         out.push_back({sev, file, object, line, cat, msg});
     };
-    const DatabaseNames* db = in.database && !in.database->Empty() ? in.database : nullptr;
+    const DatabaseNames* db = in.databaseChecks && in.database && !in.database->Empty() ? in.database : nullptr;
     struct Uncalled { int file; std::string name; int line; };
     std::vector<Uncalled> baseUncalled;                       // a base map's scripts nothing in it calls: a later map may
     std::vector<std::unordered_set<std::string>> calledBy(in.maps.size()); // per file: the scripts it calls (lower-case)

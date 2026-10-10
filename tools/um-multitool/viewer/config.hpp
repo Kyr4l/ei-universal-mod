@@ -125,6 +125,8 @@ struct Config {
     bool showFps = false;                     // Performance: the frame rate in the window's corner
     float mapDrawDistance = 0.0f;             // Performance: the Map Editor draws objects within this many units of the camera's target (0: all)
     bool mapLowDetail = false;                // Performance: the Map Editor without shadows, lighting, dressed and posed units
+    bool scriptChecks = true;                 // Checks: the maps' scripts checked (off: games with their own commands)
+    bool databaseChecks = true;               // Checks: the database's own checks and the maps' names against it
     std::vector<std::string> mapLayers;       // folders of .mpr / .mob files (the Map Editor's list)
     std::string databasePath;
     // Per tab (key e.g. "WEAPONS"): the shown model's orientation, a unit quaternion (w, x, y, z).
@@ -197,6 +199,8 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "SHOW_FPS") cfg.showFps = value == "true";
         else if (key == "MAP_DRAW_DISTANCE") cfg.mapDrawDistance = static_cast<float>(std::atof(value.c_str()));
         else if (key == "MAP_LOW_DETAIL") cfg.mapLowDetail = value == "true";
+        else if (key == "SCRIPT_CHECKS") cfg.scriptChecks = value != "false";
+        else if (key == "DATABASE_CHECKS") cfg.databaseChecks = value != "false";
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
         else if (key == "DATABASE") cfg.databasePath = value;
         else if (key == "LANGUAGE") cfg.language = value;
@@ -367,6 +371,12 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "MAP_DRAW_DISTANCE=" << cfg.mapDrawDistance << "\n";
     f << "; Map Editor: no shadows, lighting, dressed or posed units (true/false)\n";
     f << "MAP_LOW_DETAIL=" << flag(cfg.mapLowDetail) << "\n";
+    f << "; -- Checks (Settings > Checks) --\n";
+    f << "; The maps' scripts are checked: syntax, commands, arguments, the objects they name (true/false;\n";
+    f << "; false for a game with its own commands, see also script_commands.txt beside the program)\n";
+    f << "SCRIPT_CHECKS=" << flag(cfg.scriptChecks) << "\n";
+    f << "; The database is checked, and the maps' item, spell and prototype names against it (true/false)\n";
+    f << "DATABASE_CHECKS=" << flag(cfg.databaseChecks) << "\n";
     f << "; Maps: folders of .mpr and .mob files, listed by the Map Editor.\n";
     list("MAP_LAYER", cfg.mapLayers);
     f << "; Quests: folders of .mq files or unpacked quests, each holding different quests.\n";
