@@ -567,6 +567,11 @@ inline void GeneralPanel(Library& lib, SourcesState& st) {
         ImGui::SetTooltip("Map Editor: the maps' scripts are checked (syntax, commands and their arguments, variables, scripts never called,\n"
                           "the objects they name). Off: none of it is reported. A game whose commands differ can also list them\n"
                           "in script_commands.txt beside um-multitool and keep the checks.");
+    if (ImGui::Checkbox("EI ATD script commands", &lib.atdScripts)) { scriptcmds::Apply(lib.atdScripts); lib.SaveConfig(); }
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("The scripts are EI ATD's: its script commands (with SpellAddon's) replace the original game's in the checks,\n"
+                          "the highlighting and the script editor (CastSpellUnit / CastSpellPoint take the caster last, KillUnit sets the\n"
+                          "weather...), with the ATD modder's descriptions. Off: the original game's commands.");
     if (ImGui::Checkbox("Database checks", &lib.databaseChecks)) lib.SaveConfig();
     if (ImGui::IsItemHovered())
         ImGui::SetTooltip("The DB editor checks the database (errors and warnings, alerts), and the Map Editor checks the maps'\n"

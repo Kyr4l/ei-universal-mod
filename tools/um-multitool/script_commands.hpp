@@ -1,6 +1,7 @@
-// script_commands.txt beside um-multitool: script commands added to the built-in list, or changing one of
-// it, for a game whose commands differ from the original's (a mod's executable, e.g. EI ATD). Read once at
-// start; the script checks, the highlighting and the script editor's completion then know them.
+// The script commands the checks, the highlighting and the script editor's completion know: the built-in
+// list (the original game's), then EI ATD's when Settings > Checks > EI ATD script commands is on
+// (mapedit/atd_script_functions.hpp), then script_commands.txt beside um-multitool: commands added to them,
+// or changing one of them, for a game whose commands differ (a mod's executable).
 //
 //   ; a comment
 //   CastSpellUnit v sffoo      name, return type, parameter types (as in mob_script_functions.hpp)
@@ -8,11 +9,13 @@
 #pragma once
 
 #include <fstream>
+#include <iterator>
 #include <sstream>
 #include <string>
 
 #include "log.hpp"
 #include "mob_script_check.hpp"
+#include "mapedit/atd_script_functions.hpp"
 #include "viewer/config.hpp"
 
 namespace scriptcmds {
@@ -47,8 +50,8 @@ inline std::string Template() {
         "; e.g. if your game's CastSpellUnit takes one more object (the caster) after the target:\n"
         ";   CastSpellUnit v sffoo\n"
         ";\n";
-    for (const MobScriptFunction* f : mobscript::FunctionList())
-        t += std::string("; ") + f->name + " " + f->returns + " " + (f->params[0] ? f->params : "-") + "\n";
+    for (const MobScriptFunction& f : kMobScriptFunctions) // the original's, whatever is applied now
+        t += std::string("; ") + f.name + " " + f.returns + " " + (f.params[0] ? f.params : "-") + "\n";
     return t;
 }
 
@@ -79,13 +82,52 @@ inline int Load() {
                                                     ": expected \"Name returns parameters\" (e.g. CastSpellUnit v sffoo), skipped");
             continue;
         }
-        const bool known = mobscript::FunctionTable().count(mobscript::LowerCase(name)) != 0;
+        auto old = mobscript::FunctionTable().find(mobscript::LowerCase(name));
+        const bool known = old != mobscript::FunctionTable().end();
+        if (known && params != old->second->params)
+            mobscript::AddAlternative(name, old->second->params, "it fits " + std::string(old->second->name) + mobscript::ParamTypes(old->second->params) +
+                                                                    ", which script_commands.txt changed");
         mobscript::AddFunction(name, returns[0], params);
         umlog::Write(umlog::Level::Info, "script_commands.txt: " + name + (known ? " changed" : " added") + " (" + returns + " " +
                                              (params.empty() ? "-" : params) + ")");
         ++taken;
     }
     return taken;
+}
+
+inline bool& AtdOn() { static bool on = false; return on; }
+inline bool AtdActive() { return AtdOn(); }
+
+// EI ATD's entry for a command (its parameter names and description), when those commands are on.
+inline const AtdScriptFunction* AtdDoc(const std::string& name) {
+    if (!AtdOn()) return nullptr;
+    const std::string lowered = mobscript::LowerCase(name);
+    for (const AtdScriptFunction& f : kAtdScriptFunctions)
+        if (mobscript::LowerCase(f.name) == lowered) return &f;
+    return nullptr;
+}
+
+// Sets the known commands again: the built-in ones, EI ATD's over them when `atd`, then script_commands.txt.
+// At start and whenever the Settings' option changes.
+inline void Apply(bool atd) {
+    mobscript::ResetFunctions();
+    AtdOn() = atd;
+    // The commands whose arguments differ between the two games: a call in the other game's form is told so.
+    for (const AtdScriptFunction& f : kAtdScriptFunctions) {
+        auto original = mobscript::FunctionTable().find(mobscript::LowerCase(f.name));
+        if (original == mobscript::FunctionTable().end() || std::string(original->second->params) == f.params) continue;
+        if (atd)
+            mobscript::AddAlternative(f.name, original->second->params, "it fits the original game's " + std::string(f.name) +
+                                          mobscript::ParamTypes(original->second->params) + ", which EI ATD changed");
+        else
+            mobscript::AddAlternative(f.name, f.params, "it fits EI ATD's " + std::string(f.name) + mobscript::ParamTypes(f.params) +
+                                          ": for a map made for EI ATD, turn on Settings > General > Checks > EI ATD script commands");
+    }
+    if (atd) {
+        for (const AtdScriptFunction& f : kAtdScriptFunctions) mobscript::AddFunction(f.name, f.returns, f.params);
+        umlog::Write(umlog::Level::Info, "Script commands: EI ATD's (" + std::to_string(std::size(kAtdScriptFunctions)) + ")");
+    }
+    Load();
 }
 
 } // namespace scriptcmds

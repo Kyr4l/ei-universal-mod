@@ -44,7 +44,6 @@
 #include "viewer/res_archive.hpp"
 #include "subtools.hpp"
 #include "log.hpp"
-#include "script_commands.hpp"
 #include "viewer/viewer_app.hpp"
 #include "mapedit/map_app.hpp"
 #include "dllconnect/connector_app.hpp"
@@ -559,7 +558,6 @@ int main(int argc, char* argv[]) {
         std::cerr << "Usage: eval \"$(um-multitool completion bash)\"   (bash only; add it to ~/.bashrc)\n";
         return 1;
     }
-    scriptcmds::Load(); // script_commands.txt: the commands of a game that differs from the original
     if (argc < 2) {
         if (!StartedFromTerminal()) {
 #ifdef _WIN32

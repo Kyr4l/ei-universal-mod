@@ -162,18 +162,24 @@ struct FunctionRegistry {
     std::unordered_map<std::string, const MobScriptFunction*> table; // lower-case name -> signature
     std::deque<MobScriptFunction> added;
     std::deque<std::string> texts; // the added names and parameter strings
+    // Other forms of a command (another game's), with why a call in that form is wrong here: when a call
+    // fits one of them instead, the finding says so ("the original game's form, which EI ATD does not take").
+    struct Alternative { std::string params, why; };
+    std::unordered_map<std::string, std::vector<Alternative>> alternatives; // lower-case name -> forms
 };
 
+inline FunctionRegistry BuiltInFunctions() {
+    FunctionRegistry f;
+    for (const MobScriptFunction& fn : kMobScriptFunctions) {
+        f.index[LowerCase(fn.name)] = f.list.size();
+        f.table[LowerCase(fn.name)] = &fn;
+        f.list.push_back(&fn);
+    }
+    return f;
+}
+
 inline FunctionRegistry& Functions() {
-    static FunctionRegistry r = [] {
-        FunctionRegistry f;
-        for (const MobScriptFunction& fn : kMobScriptFunctions) {
-            f.index[LowerCase(fn.name)] = f.list.size();
-            f.table[LowerCase(fn.name)] = &fn;
-            f.list.push_back(&fn);
-        }
-        return f;
-    }();
+    static FunctionRegistry r = BuiltInFunctions();
     return r;
 }
 
@@ -181,6 +187,25 @@ inline FunctionRegistry& Functions() {
 inline const std::unordered_map<std::string, const MobScriptFunction*>& FunctionTable() { return Functions().table; }
 // Every command, the built-in ones first, in the table's order.
 inline const std::vector<const MobScriptFunction*>& FunctionList() { return Functions().list; }
+
+// Another form of a command (parameter letters as in the table) and what to tell when a call has that form.
+inline void AddAlternative(const std::string& name, const std::string& params, const std::string& why) {
+    Functions().alternatives[LowerCase(name)].push_back({params, why});
+}
+
+// "(string, number, number, object)" for parameter letters.
+inline std::string ParamTypes(const char* params) {
+    std::string out = "(";
+    auto one = [](char t) -> const char* {
+        switch (t) { case 'f': return "number"; case 's': return "string"; case 'o': return "object"; case 'g': return "group"; default: return "any"; }
+    };
+    if (params[0] == '*') return std::string("(") + one(params[1]) + ", " + one(params[1]) + ", ...)";
+    for (const char* p = params; *p; ++p) out += std::string(p == params ? "" : ", ") + one(*p);
+    return out + ")";
+}
+
+// Back to the built-in table alone (the added commands are dropped).
+inline void ResetFunctions() { Functions() = BuiltInFunctions(); }
 
 // Adds a command, or changes a known one: for a game whose commands differ from the original's (a mod's
 // executable). `returns` and `params` as in mob_script_functions.hpp.
@@ -258,7 +283,7 @@ private:
             ++report_.suppressed;
             return;
         }
-        char buffer[400];
+        char buffer[700];
         va_list arguments;
         va_start(arguments, format);
         vsnprintf(buffer, sizeof(buffer), format, arguments);
@@ -696,18 +721,37 @@ private:
             bool variadic = params[0] == '*';
             size_t wanted = variadic ? 2 : strlen(params);
             bool countOk = variadic ? args.size() >= wanted : args.size() == wanted;
+            // Another game's form of the command that this call fits (count, and types when `types`): why it is wrong.
+            auto otherForm = [&](bool types) -> std::string {
+                auto alt = Functions().alternatives.find(lowered);
+                if (alt == Functions().alternatives.end()) return std::string();
+                for (const FunctionRegistry::Alternative& a : alt->second) {
+                    const bool v = !a.params.empty() && a.params[0] == '*';
+                    if (v ? args.size() < 2 : args.size() != a.params.size()) continue;
+                    bool fits = true;
+                    for (size_t i = 0; types && i < args.size(); ++i) {
+                        const char want = v ? a.params[1] : a.params[i], got = args[i].second;
+                        if (want != '?' && got != '?' && got != 0 && got != 'v' && got != want) fits = false;
+                    }
+                    if (fits) return "; " + a.why;
+                }
+                return std::string();
+            };
             if (!countOk) {
-                Add(name.line, 'E', "%s() takes %s%u argument%s but %u %s given", function->name,
+                Add(name.line, 'E', "%s() takes %s%u argument%s but %u %s given: %s%s%s", function->name,
                     variadic ? "at least " : "", static_cast<unsigned>(wanted), wanted == 1 ? "" : "s",
-                    static_cast<unsigned>(args.size()), args.size() == 1 ? "was" : "were");
+                    static_cast<unsigned>(args.size()), args.size() == 1 ? "was" : "were", function->name,
+                    ParamTypes(params).c_str(), otherForm(false).c_str());
             } else {
+                std::string why = otherForm(true); // told once, with the first wrong argument
                 for (size_t i = 0; i < args.size(); ++i) {
                     char want = variadic ? params[1] : params[i];
                     char got = args[i].second;
                     if (want == '?' || got == '?' || got == 0 || got == want) continue;
                     if (got == 'v') continue; // already reported as "does not return a value"
-                    Add(args[i].first, 'W', "argument %u of %s() is %s, expected %s",
-                        static_cast<unsigned>(i + 1), function->name, TypeName(got), TypeName(want));
+                    Add(args[i].first, 'W', "argument %u of %s() is %s, expected %s%s",
+                        static_cast<unsigned>(i + 1), function->name, TypeName(got), TypeName(want), why.c_str());
+                    why.clear();
                 }
             }
             return function->returns;

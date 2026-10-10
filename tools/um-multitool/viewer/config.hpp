@@ -127,6 +127,7 @@ struct Config {
     bool mapLowDetail = false;                // Performance: the Map Editor without shadows, lighting, dressed and posed units
     bool scriptChecks = true;                 // Checks: the maps' scripts checked (off: games with their own commands)
     bool databaseChecks = true;               // Checks: the database's own checks and the maps' names against it
+    bool atdScripts = false;                  // Checks: EI ATD's script commands over the original's (mapedit/atd_script_functions.hpp)
     std::vector<std::string> mapLayers;       // folders of .mpr / .mob files (the Map Editor's list)
     std::string databasePath;
     // Per tab (key e.g. "WEAPONS"): the shown model's orientation, a unit quaternion (w, x, y, z).
@@ -201,6 +202,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "MAP_LOW_DETAIL") cfg.mapLowDetail = value == "true";
         else if (key == "SCRIPT_CHECKS") cfg.scriptChecks = value != "false";
         else if (key == "DATABASE_CHECKS") cfg.databaseChecks = value != "false";
+        else if (key == "ATD_SCRIPTS") cfg.atdScripts = value == "true";
         else if (key == "MAP_LAYER") cfg.mapLayers.push_back(value);
         else if (key == "DATABASE") cfg.databasePath = value;
         else if (key == "LANGUAGE") cfg.language = value;
@@ -377,6 +379,8 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
     f << "SCRIPT_CHECKS=" << flag(cfg.scriptChecks) << "\n";
     f << "; The database is checked, and the maps' item, spell and prototype names against it (true/false)\n";
     f << "DATABASE_CHECKS=" << flag(cfg.databaseChecks) << "\n";
+    f << "; The scripts are EI ATD's: its script commands (with SpellAddon's) replace the original game's (true/false)\n";
+    f << "ATD_SCRIPTS=" << flag(cfg.atdScripts) << "\n";
     f << "; Maps: folders of .mpr and .mob files, listed by the Map Editor.\n";
     list("MAP_LAYER", cfg.mapLayers);
     f << "; Quests: folders of .mq files or unpacked quests, each holding different quests.\n";

@@ -30,6 +30,7 @@
 #include <queue>
 #include <random>
 #include <set>
+#include <sstream>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -52,6 +53,7 @@
 #include "quest_file.hpp"
 #include "text_codec.hpp"
 #include "script_highlight.hpp"
+#include "script_ast.hpp"
 #include "../dllconnect/quests.hpp"
 #include "../subtools.hpp"
 #include "../log.hpp"
@@ -142,6 +144,9 @@ enum class SideTab { Files, Objects, Checks, Script, Quest, Diplomacy, Ids, Terr
 // The Objects tab's tree (like ei_maper's): kind > group (prototype or template) > objects.
 struct ObjectGroup { std::string label; std::vector<int> objects; };
 struct ObjectCategory { mob::Kind kind; std::vector<ObjectGroup> groups; int count = 0; };
+
+// The Script tab's node view of one map: where it is panned and zoomed (ScriptNodes).
+namespace nodegraph { struct View { ImVec2 pan{0, 0}; float zoom = 1.0f; bool placed = false; }; }
 
 struct App {
     explicit App(Library& shared) : lib(shared) {}
@@ -340,7 +345,14 @@ struct App {
     // Windows: the script in its own window, the undo history, the MOB parameters
     bool scriptWindow = false, historyOpen = false, mobParamsOpen = false;
     std::string unloadAsk;                   // a file to unload that has unsaved changes: UnloadDialog asks what to do with them
-    bool checkedScripts = true, checkedDatabase = true; // Settings > Checks when the checks last ran (a change runs them again)
+    // The Script tab's Nodes mode (ScriptNodes): on, each map's pan and zoom, the script frame to go to,
+    // the line the Checks tab asked for (its node flashes).
+    bool scriptVisual = false;
+    std::map<std::string, nodegraph::View> nodeViews;
+    std::string nodeGoto;
+    int nodeFlashLine = 0;
+    double nodeFlashUntil = 0;
+    bool checkedScripts = true, checkedDatabase = true, checkedAtd = false; // Settings > Checks when the checks last ran (a change runs them again)
     bool focusScriptWindow = false;
 
     // Save active MOB as...
@@ -953,6 +965,7 @@ static void RunChecks(App& app) {
     in.database = &app.database;
     in.scriptChecks = app.checkedScripts = app.lib.scriptChecks;
     in.databaseChecks = app.checkedDatabase = app.lib.databaseChecks;
+    app.checkedAtd = app.lib.atdScripts;
     const checks::Summary before = app.summary;
     app.findings = checks::Run(in, &app.summary);
     if (app.summary.errors > before.errors) app.newErrors = app.summary.errors - before.errors;
@@ -2516,19 +2529,29 @@ static bool IsNameChar(char c) {
     return (u >= 'A' && u <= 'Z') || (u >= 'a' && u <= 'z') || (u >= '0' && u <= '9') || u == '_' || u == '#' || u >= 0x80;
 }
 
-// "Name(param: type, ...) -> type" (the names from docs/scripting.md where known), the argument `current` in [ ].
-static std::string Signature(const MobScriptFunction& fn, int current = -1) {
-    auto type = [](char t) -> const char* {
-        switch (t) { case 'f': return "float"; case 's': return "string"; case 'o': return "object"; case 'g': return "group"; case 'v': return "nothing"; default: return "any"; }
-    };
+// A command's argument names (docs/scripting.md's, or EI ATD's when its commands are on; "" where unknown).
+static std::vector<std::string> ParamNames(const MobScriptFunction& fn) {
     std::vector<std::string> names;
-    if (const scriptdocs::Doc* d = scriptdocs::Find(fn.name)) {
-        std::string p = d->params, one;
+    const AtdScriptFunction* atd = scriptcmds::AtdDoc(fn.name);
+    const scriptdocs::Doc* doc = atd ? nullptr : scriptdocs::Find(fn.name);
+    if (atd || doc) {
+        std::string p = atd ? atd->paramNames : doc->params, one;
         for (char ch : p + ",") {
             if (ch == ',') { while (!one.empty() && one.front() == ' ') one.erase(0, 1); const size_t colon = one.find(':'); names.push_back(colon == std::string::npos ? one : one.substr(0, colon)); one.clear(); }
             else one += ch;
         }
     }
+    return names;
+}
+
+// "Name(param: type, ...) -> type" (the names from docs/scripting.md where known), the argument `current` in [ ].
+static std::string Signature(const MobScriptFunction& fn, int current = -1) {
+    auto type = [](char t) -> const char* {
+        switch (t) { case 'f': return "float"; case 's': return "string"; case 'o': return "object"; case 'g': return "group"; case 'v': return "nothing"; default: return "any"; }
+    };
+    const std::vector<std::string> names = ParamNames(fn);
+    const AtdScriptFunction* atd = scriptcmds::AtdDoc(fn.name); // EI ATD's description, when its commands are on
+    const scriptdocs::Doc* doc = atd ? nullptr : scriptdocs::Find(fn.name);
     std::string out = std::string(fn.name) + "(";
     int i = 0;
     for (const char* p = fn.params; *p; ++p, ++i) {
@@ -2538,7 +2561,8 @@ static std::string Signature(const MobScriptFunction& fn, int current = -1) {
     }
     out += ")";
     if (fn.returns != 'v') out += std::string(" -> ") + type(fn.returns);
-    if (const scriptdocs::Doc* d = scriptdocs::Find(fn.name)) out += std::string("\n") + d->text;
+    if (atd && atd->text[0]) out += std::string("\n") + atd->text;
+    else if (doc) out += std::string("\n") + doc->text;
     return out;
 }
 
@@ -2754,6 +2778,626 @@ static void ScriptTab(App& app) {
 }
 
 
+// ---- the script as nodes ---------------------------------------------------------------------------
+// The Script tab's Nodes mode (view only), like Blender's node editor: each script a frame holding its
+// entry node; its statements flow down a spine, if / for each send their branches to the chains on their
+// right, and a command's arguments come in from the left, through wires from the commands that compute
+// them (a number, a string or a variable is written in its socket). Laid out once per text, in canvas units
+// of the UI font's size; drawn panned and zoomed.
+namespace nodegraph {
+
+using scriptast::Expr;
+using scriptast::Stmt;
+
+struct Row {
+    std::string label, value;
+    char type = '?';
+    bool wired = false;
+    std::string full; // a shortened value, whole
+    Row() = default;
+    Row(std::string l, std::string v, char t, bool w) : label(std::move(l)), value(std::move(v)), type(t), wired(w) {}
+};
+
+struct Node {
+    enum Kind { Entry, Command, Function, ScriptCall, Control, Assign, Comment } kind = Command;
+    std::string title, script; // script: the frame it is in (lower-case)
+    std::string target;        // ScriptCall: the called script (lower-case)
+    int line = 0;
+    ImVec2 pos, size;
+    std::vector<Row> rows;             // inputs (left sockets), or the entry's parameters / a comment's lines
+    std::vector<std::string> branches; // right sockets: then / else / body
+    bool out = false;                  // a value goes out (right of the header)
+    char outType = '?';
+    bool flowIn = false;               // on the spine (top) / reached by a branch
+};
+
+struct Wire { ImVec2 a, b; ImU32 color; bool flow; };
+struct Frame { std::string name, lower, subtitle; ImVec2 min, max; int line = 0; };
+
+struct Graph {
+    std::vector<Node> nodes;
+    std::vector<Wire> wires;
+    std::vector<Frame> frames;
+    ImVec2 min{0, 0}, max{0, 0};
+};
+
+inline ImVec4 TypeColor(char t) {
+    switch (t) {
+    case 'f': return ImVec4(0.63f, 0.63f, 0.63f, 1);
+    case 's': return ImVec4(0.44f, 0.70f, 1.00f, 1);
+    case 'o': return ImVec4(0.93f, 0.62f, 0.36f, 1);
+    case 'g': return ImVec4(0.39f, 0.78f, 0.39f, 1);
+    default: return ImVec4(0.65f, 0.55f, 0.85f, 1);
+    }
+}
+
+inline ImVec4 HeaderColor(Node::Kind k) {
+    switch (k) {
+    case Node::Entry: return ImVec4(0.45f, 0.20f, 0.20f, 1);
+    case Node::Command: return ImVec4(0.16f, 0.38f, 0.40f, 1);
+    case Node::Function: return ImVec4(0.20f, 0.30f, 0.52f, 1);
+    case Node::ScriptCall: return ImVec4(0.50f, 0.33f, 0.12f, 1);
+    case Node::Control: return ImVec4(0.38f, 0.26f, 0.50f, 1);
+    case Node::Assign: return ImVec4(0.45f, 0.22f, 0.30f, 1);
+    default: return ImVec4(0.24f, 0.30f, 0.22f, 1);
+    }
+}
+
+class Builder {
+public:
+    Builder(const scriptast::Program& p, const ScriptNames& names) : prog_(p), names_(names) {
+        F = ImGui::GetFontSize();
+        headerH = F * 1.5f; rowH = F * 1.35f; pad = F * 0.5f; gapX = F * 2.2f; gapY = F * 0.9f;
+        for (const scriptast::Script& s : p.scripts) if (!s.world) scripts_[mobscript::LowerCase(s.name)] = &s;
+    }
+
+    Graph Build() {
+        const i18n::Verbatim verbatim; // the script's words are measured as they are
+        float y = 0;
+        // Who calls each script, for the frames' subtitles.
+        std::unordered_map<std::string, std::vector<std::string>> calledBy;
+        for (const scriptast::Script& s : prog_.scripts) {
+            std::vector<std::string> calls;
+            Calls(s.body, calls);
+            for (const std::string& c : calls) {
+                auto& v = calledBy[c];
+                if (std::find(v.begin(), v.end(), s.name) == v.end()) v.push_back(s.name);
+            }
+        }
+        for (const scriptast::Script& s : prog_.scripts) {
+            script_ = mobscript::LowerCase(s.name);
+            const size_t first = g_.nodes.size();
+            Node entry;
+            entry.kind = Node::Entry;
+            entry.title = s.world ? "WorldScript" : "Script " + s.name;
+            entry.line = s.line;
+            for (const scriptast::Typed& t : s.params) entry.rows.push_back({t.name, t.type, '?', false});
+            entry.size = NodeSize(entry);
+            const float left = 0;
+            const float inW = ChainInputsWidth(s.body);
+            entry.pos = ImVec2(left + inW, y + F * 2.2f); // room for the frame's label
+            const int e = Add(entry);
+            float bottom = entry.pos.y + entry.size.y;
+            if (!s.body.empty()) bottom = Chain(s.body, left, bottom + gapY, e, -1);
+            Frame fr;
+            fr.name = entry.title;
+            fr.lower = script_;
+            fr.line = s.line;
+            auto cb = calledBy.find(script_);
+            if (cb != calledBy.end()) {
+                fr.subtitle = "called by: ";
+                for (size_t i = 0; i < cb->second.size(); ++i) fr.subtitle += (i ? ", " : "") + cb->second[i];
+            }
+            fr.min = ImVec2(1e9f, y);
+            fr.max = ImVec2(-1e9f, bottom);
+            for (size_t i = first; i < g_.nodes.size(); ++i) {
+                fr.min.x = std::min(fr.min.x, g_.nodes[i].pos.x);
+                fr.max.x = std::max(fr.max.x, g_.nodes[i].pos.x + g_.nodes[i].size.x);
+                fr.max.y = std::max(fr.max.y, g_.nodes[i].pos.y + g_.nodes[i].size.y);
+            }
+            fr.min.x -= F;
+            fr.max.x += F;
+            fr.max.y += F;
+            fr.max.x = std::max(fr.max.x, fr.min.x + ImGui::CalcTextSize((fr.name + "    " + fr.subtitle).c_str()).x + 2 * F);
+            g_.frames.push_back(fr);
+            y = fr.max.y + F * 2.5f;
+        }
+        g_.min = ImVec2(1e9f, 1e9f);
+        g_.max = ImVec2(-1e9f, -1e9f);
+        for (const Frame& f : g_.frames) {
+            g_.min = ImVec2(std::min(g_.min.x, f.min.x), std::min(g_.min.y, f.min.y));
+            g_.max = ImVec2(std::max(g_.max.x, f.max.x), std::max(g_.max.y, f.max.y));
+        }
+        if (g_.frames.empty()) g_.min = g_.max = ImVec2(0, 0);
+        return std::move(g_);
+    }
+
+    float headerH = 0, rowH = 0, pad = 0, F = 0;
+
+private:
+    const scriptast::Program& prog_;
+    const ScriptNames& names_;
+    std::unordered_map<std::string, const scriptast::Script*> scripts_;
+    std::string script_;
+    Graph g_;
+    float gapX = 0, gapY = 0;
+
+    void Calls(const std::vector<Stmt>& v, std::vector<std::string>& out) {
+        std::function<void(const Expr&)> expr = [&](const Expr& e) {
+            if (e.kind == Expr::Call && scripts_.count(mobscript::LowerCase(e.text))) {
+                const std::string n = mobscript::LowerCase(e.text);
+                if (std::find(out.begin(), out.end(), n) == out.end()) out.push_back(n);
+            }
+            for (const Expr& a : e.args) expr(a);
+        };
+        for (const Stmt& s : v) {
+            for (const Expr& e : s.conditions) expr(e);
+            expr(s.expr);
+            Calls(s.then, out);
+            Calls(s.otherwise, out);
+            Calls(s.body, out);
+        }
+    }
+
+    int Add(Node n) {
+        n.script = script_;
+        g_.nodes.push_back(std::move(n));
+        return static_cast<int>(g_.nodes.size()) - 1;
+    }
+
+    static std::string Short(const std::string& v) {
+        if (v.size() <= 28) return v;
+        size_t cut = 25;
+        while (cut > 0 && (static_cast<unsigned char>(v[cut]) & 0xC0) == 0x80) --cut; // not inside a UTF-8 character
+        return v.substr(0, cut) + "...";
+    }
+
+    ImVec2 NodeSize(const Node& n) const {
+        float w = ImGui::CalcTextSize(n.title.c_str()).x + 2 * pad + (n.out ? F : 0);
+        for (const Row& r : n.rows) {
+            const std::string t = r.value.empty() || r.wired ? r.label : (r.label.empty() ? r.value : r.label + ": " + r.value);
+            w = std::max(w, ImGui::CalcTextSize(t.c_str()).x + 2 * pad + F * 0.6f);
+        }
+        for (const std::string& b : n.branches) w = std::max(w, ImGui::CalcTextSize(b.c_str()).x + 2 * pad + F);
+        w = std::max(w, F * 7.0f);
+        const size_t rows = n.rows.size() + n.branches.size();
+        return ImVec2(w, headerH + rowH * static_cast<float>(rows) + (rows ? pad * 0.5f : 0));
+    }
+
+    ImVec2 InSocket(const Node& n, size_t row) const { return ImVec2(n.pos.x, n.pos.y + headerH + rowH * (static_cast<float>(row) + 0.5f)); }
+    ImVec2 OutSocket(const Node& n) const { return ImVec2(n.pos.x + n.size.x, n.pos.y + headerH * 0.5f); }
+    ImVec2 BranchSocket(const Node& n, size_t b) const {
+        return ImVec2(n.pos.x + n.size.x, n.pos.y + headerH + rowH * (static_cast<float>(n.rows.size() + b) + 0.5f));
+    }
+    ImVec2 FlowIn(const Node& n) const { return ImVec2(n.pos.x, n.pos.y + headerH * 0.5f); }
+
+    // A node for a call (the arguments as rows: a literal or a variable written in, a call wired in).
+    Node CallNode(const Expr& e) const {
+        Node n;
+        n.title = e.text;
+        n.line = e.line;
+        const std::string lower = mobscript::LowerCase(e.text);
+        auto fn = mobscript::FunctionTable().find(lower);
+        std::vector<std::string> pnames;
+        const char* params = "";
+        if (fn != mobscript::FunctionTable().end()) {
+            pnames = ParamNames(*fn->second);
+            params = fn->second->params;
+            n.kind = fn->second->returns == 'v' ? Node::Command : Node::Function;
+            n.out = fn->second->returns != 'v';
+            n.outType = fn->second->returns;
+        } else if (scripts_.count(lower)) {
+            n.kind = Node::ScriptCall;
+            n.target = lower;
+            const scriptast::Script* s = scripts_.at(lower);
+            for (const scriptast::Typed& t : s->params) pnames.push_back(t.name);
+        } else {
+            n.kind = Node::Function;
+        }
+        const size_t np = std::strlen(params);
+        for (size_t i = 0; i < e.args.size(); ++i) {
+            const Expr& a = e.args[i];
+            Row r;
+            r.label = i < pnames.size() ? pnames[i] : std::string();
+            r.type = params[0] == '*' ? params[1] : i < np ? params[i] : '?';
+            r.wired = a.kind == Expr::Call;
+            if (!r.wired) {
+                const std::string v = a.kind == Expr::String ? "\"" + a.text + "\"" : a.text;
+                r.value = Short(v);
+                if (r.value != v) r.full = v;
+            }
+            if (r.wired && r.label.empty()) r.label = a.text;
+            n.rows.push_back(r);
+        }
+        n.size = NodeSize(n);
+        return n;
+    }
+
+    // The width the calls feeding these arguments take on the left (0: none).
+    float ArgsWidth(const std::vector<Expr>& args) const {
+        float w = 0;
+        for (const Expr& a : args)
+            if (a.kind == Expr::Call) w = std::max(w, SubtreeWidth(a));
+        return w > 0 ? w + gapX : 0;
+    }
+    float SubtreeWidth(const Expr& e) const { return CallNode(e).size.x + ArgsWidth(e.args); }
+
+    // The calls feeding node `to`'s arguments, right of them at `right`, from `top` down; their height.
+    float Feed(const std::vector<Expr>& args, int to, float right, float top) {
+        float y = top;
+        for (size_t i = 0; i < args.size(); ++i) {
+            if (args[i].kind != Expr::Call) continue;
+            const float h = PlaceExpr(args[i], right, y, to, i);
+            y += h + gapY * 0.6f;
+        }
+        return y > top ? y - top - gapY * 0.6f : 0;
+    }
+
+    // A call computing a value, its right edge at `right`, wired into row `row` of node `to`; its subtree's height.
+    float PlaceExpr(const Expr& e, float right, float top, int to, size_t row) {
+        Node n = CallNode(e);
+        n.pos = ImVec2(right - n.size.x, top);
+        const int idx = Add(n);
+        const Node& made = g_.nodes[static_cast<size_t>(idx)];
+        const ImVec2 a = OutSocket(made), b = InSocket(g_.nodes[static_cast<size_t>(to)], row);
+        g_.wires.push_back({a, b, ImGui::GetColorU32(TypeColor(made.outType == '?' ? g_.nodes[static_cast<size_t>(to)].rows[row].type : made.outType)), false});
+        const float fed = Feed(e.args, idx, made.pos.x - gapX, top);
+        return std::max(made.size.y, fed);
+    }
+
+    // A statement's own node (not placed yet), and the expressions feeding its rows.
+    Node StmtNode(const Stmt& s, std::vector<const Expr*>& feeds) const {
+        Node n;
+        n.line = s.line;
+        n.flowIn = true;
+        switch (s.kind) {
+        case Stmt::Call:
+            n = CallNode(s.expr);
+            n.flowIn = true;
+            for (const Expr& a : s.expr.args) feeds.push_back(&a);
+            break;
+        case Stmt::Assign: {
+            n.kind = Node::Assign;
+            n.title = "Set " + s.target;
+            Row r{"value", std::string(), '?', s.expr.kind == Expr::Call};
+            if (!r.wired) r.value = Short(s.expr.kind == Expr::String ? "\"" + s.expr.text + "\"" : s.expr.text);
+            n.rows.push_back(r);
+            feeds.push_back(&s.expr);
+            break;
+        }
+        case Stmt::If:
+            n.kind = Node::Control;
+            n.title = s.conditions.size() > 1 ? "If (all of)" : "If";
+            for (size_t i = 0; i < s.conditions.size(); ++i) {
+                const Expr& c = s.conditions[i];
+                Row r{s.conditions.size() > 1 ? "condition " + std::to_string(i + 1) : "condition", std::string(), 'f', c.kind == Expr::Call};
+                if (!r.wired) r.value = Short(c.text);
+                n.rows.push_back(r);
+                feeds.push_back(&c);
+            }
+            if (s.conditions.empty()) n.rows.push_back({"(always)", std::string(), '?', false});
+            n.branches.push_back("then");
+            if (s.hasElse) n.branches.push_back("else");
+            break;
+        case Stmt::Loop: {
+            n.kind = Node::Control;
+            n.title = mobscript::LowerCase(s.expr.text) == "forif" ? "For each (where)" : "For each";
+            static const char* const labels[] = {"each", "in", "where"};
+            for (size_t i = 0; i < s.expr.args.size(); ++i) {
+                const Expr& a = s.expr.args[i];
+                Row r{i < 3 ? labels[i] : "", std::string(), i == 1 ? 'g' : i == 0 ? 'o' : 'f', a.kind == Expr::Call};
+                if (!r.wired) r.value = Short(a.text);
+                n.rows.push_back(r);
+                feeds.push_back(&a);
+            }
+            n.branches.push_back("body");
+            break;
+        }
+        case Stmt::Comment: {
+            n.kind = Node::Comment;
+            n.title = "//";
+            n.flowIn = false;
+            // the comment's text in rows of at most ~40 characters
+            std::string line, word;
+            std::istringstream in(s.target);
+            while (in >> word) {
+                if (!line.empty() && line.size() + word.size() > 40) { n.rows.push_back({line, std::string(), '?', false}); line.clear(); }
+                line += (line.empty() ? "" : " ") + word;
+            }
+            if (!line.empty() || n.rows.empty()) n.rows.push_back({line, std::string(), '?', false});
+            break;
+        }
+        }
+        n.size = NodeSize(n);
+        return n;
+    }
+
+    float StmtInputsWidth(const Stmt& s) const {
+        std::vector<const Expr*> feeds;
+        StmtNode(s, feeds);
+        float w = 0;
+        for (const Expr* e : feeds) if (e->kind == Expr::Call) w = std::max(w, SubtreeWidth(*e));
+        return w > 0 ? w + gapX : 0;
+    }
+    float ChainInputsWidth(const std::vector<Stmt>& v) const {
+        float w = 0;
+        for (const Stmt& s : v) w = std::max(w, StmtInputsWidth(s));
+        return w;
+    }
+
+    // Statements down a column whose inputs start at `left`, from `y`: the first one is reached from node
+    // `prev` (down its spine) or, when `branchOf` >= 0, from branch `branch` of node `branchOf`. The bottom.
+    float Chain(const std::vector<Stmt>& v, float left, float y, int prev, int branchOf, size_t branch = 0) {
+        const float x = left + ChainInputsWidth(v);
+        float bottom = y;
+        for (const Stmt& s : v) {
+            std::vector<const Expr*> feeds;
+            Node n = StmtNode(s, feeds);
+            n.pos = ImVec2(x, y);
+            const int idx = Add(n);
+            const Node& made = g_.nodes[static_cast<size_t>(idx)];
+            // reached from the previous statement, or from the branch that starts this column
+            const ImU32 flow = IM_COL32(230, 230, 230, 200);
+            if (made.kind != Node::Comment) {
+                if (prev >= 0) {
+                    const Node& p = g_.nodes[static_cast<size_t>(prev)];
+                    g_.wires.push_back({ImVec2(p.pos.x + F, p.pos.y + p.size.y), ImVec2(made.pos.x + F, made.pos.y), flow, true});
+                } else if (branchOf >= 0) {
+                    g_.wires.push_back({BranchSocket(g_.nodes[static_cast<size_t>(branchOf)], branch), FlowIn(made), flow, false});
+                }
+                prev = idx;
+                branchOf = -1;
+            }
+            // the calls feeding its rows, on the left
+            float fed = 0, fy = y;
+            for (size_t i = 0; i < feeds.size(); ++i) {
+                if (feeds[i]->kind != Expr::Call) continue;
+                const float h = PlaceExpr(*feeds[i], x - gapX, fy, idx, i);
+                fy += h + gapY * 0.6f;
+                fed = fy - y - gapY * 0.6f;
+            }
+            float rowBottom = y + std::max(g_.nodes[static_cast<size_t>(idx)].size.y, fed);
+            // the branches, in a column on its right
+            const Node& placed = g_.nodes[static_cast<size_t>(idx)];
+            const float bx = placed.pos.x + placed.size.x + gapX;
+            if (s.kind == Stmt::If) {
+                float by = Chain(s.then, bx, y, -1, idx, 0);
+                if (s.hasElse) by = Chain(s.otherwise, bx, by + gapY, -1, idx, 1);
+                rowBottom = std::max(rowBottom, by);
+            } else if (s.kind == Stmt::Loop) {
+                rowBottom = std::max(rowBottom, Chain(s.body, bx, y, -1, idx, 0));
+            }
+            bottom = rowBottom;
+            y = rowBottom + gapY;
+        }
+        return bottom;
+    }
+};
+
+} // namespace nodegraph
+
+static void EditScriptAt(App& app, const mob::File& f, int line) {
+    app.scriptEditing = true;
+    app.scriptEditFor = f.path;
+    app.scriptEdit = mob::Utf8(f.script);
+    app.scriptEditFocus = true;
+    app.scriptMessage.clear();
+    app.scriptEditGotoLine = std::max(0, line - 1);
+}
+
+static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, const ScriptNames& names) {
+    using namespace nodegraph;
+    // The tree and its graph, built again when the text, the commands (EI ATD's) or the font size change.
+    struct Cache { const mob::File* file = nullptr; size_t hash = 0; bool atd = false; float font = 0; scriptast::Program prog; Graph g; float headerH = 0, rowH = 0, pad = 0; };
+    static Cache c;
+    const size_t hash = std::hash<std::string>{}(utf8);
+    if (c.file != &f || c.hash != hash || c.atd != scriptcmds::AtdActive() || c.font != ImGui::GetFontSize()) {
+        c.file = &f;
+        c.hash = hash;
+        c.atd = scriptcmds::AtdActive();
+        c.font = ImGui::GetFontSize();
+        c.prog = scriptast::Parse(utf8);
+        Builder b(c.prog, names);
+        c.g = b.Build();
+        c.headerH = b.headerH;
+        c.rowH = b.rowH;
+        c.pad = b.pad;
+    }
+    const Graph& g = c.g;
+    const float F = c.font;
+    View& view = app.nodeViews[f.path];
+
+    std::unordered_map<int, char> severity;
+    for (const checks::Finding& fd : app.findings)
+        if (fd.file == app.scriptFile && fd.line > 0) { char& s = severity[fd.line]; if (!s || fd.severity == 'E') s = fd.severity; }
+
+    if (c.prog.errorLine)
+        ui::Note("Shown up to line " + std::to_string(c.prog.errorLine) + ", where the script cannot be read: " + c.prog.error +
+                 " (the text view and the Checks tab tell more).");
+    // The toolbar: go to a script, frame everything, the zoom.
+    ImVec2 focus(-1, -1); // a canvas point to bring to the view's top left (or its centre: focusCentre)
+    bool focusCentre = false;
+    if (ImGui::SmallButton("Frame all")) {
+        view.zoom = 1.0f;
+        view.placed = false;
+    }
+    ImGui::SameLine();
+    if (ImGui::SmallButton("100%")) { view.zoom = 1.0f; }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(std::max(120.0f, ImGui::GetContentRegionAvail().x));
+    const std::string gotoLabel = std::to_string(g.frames.size()) + " " + i18n::Tr("scripts: go to...");
+    if (ImGui::BeginCombo("##nodegoto", gotoLabel.c_str(), ImGuiComboFlags_HeightLarge)) {
+        const i18n::Verbatim verbatim;
+        for (size_t i = 0; i < g.frames.size(); ++i) {
+            ImGui::PushID(static_cast<int>(i));
+            if (ImGui::Selectable(g.frames[i].name.c_str())) focus = g.frames[i].min;
+            ImGui::PopID();
+        }
+        ImGui::EndCombo();
+    }
+    if (app.nodeGoto.size()) { // a script call was clicked last frame
+        for (const Frame& fr : g.frames) if (fr.lower == app.nodeGoto) focus = fr.min;
+        app.nodeGoto.clear();
+    }
+    if (app.scrollToLine && app.scriptLine > 0) { // the Checks tab's line: its node in the middle
+        const Node* best = nullptr;
+        for (const Node& n : g.nodes) if (n.line >= app.scriptLine && (!best || n.line < best->line)) best = &n;
+        if (best) { focus = ImVec2(best->pos.x + best->size.x / 2, best->pos.y + best->size.y / 2); focusCentre = true; app.nodeFlashLine = best->line; }
+        app.scrollToLine = false;
+    }
+
+    // The canvas: any button drags it, the wheel zooms where the mouse is.
+    const ImVec2 origin = ImGui::GetCursorScreenPos();
+    const ImVec2 size(std::max(50.0f, ImGui::GetContentRegionAvail().x), std::max(50.0f, ImGui::GetContentRegionAvail().y));
+    ImGui::InvisibleButton("##nodecanvas", size, ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight | ImGuiButtonFlags_MouseButtonMiddle);
+    const bool hovered = ImGui::IsItemHovered(), active = ImGui::IsItemActive();
+    ImGuiIO& io = ImGui::GetIO();
+    if (!view.placed) { // the whole width of the graph in view (not smaller than half size), its top at the top
+        const float w = g.max.x - g.min.x;
+        view.zoom = w > 0 ? std::clamp((size.x - 2 * F) / w, 0.5f, 1.0f) : 1.0f;
+        view.pan = ImVec2(F - g.min.x * view.zoom, F - g.min.y * view.zoom);
+        view.placed = true;
+    }
+    if (focus.x > -1e8f && focus.x != -1) {
+        view.pan = focusCentre ? ImVec2(size.x / 2 - focus.x * view.zoom, size.y / 2 - focus.y * view.zoom)
+                               : ImVec2(F - focus.x * view.zoom, F - focus.y * view.zoom);
+    }
+    static bool dragged = false;
+    if (ImGui::IsItemActivated()) dragged = false;
+    if (active && (io.MouseDelta.x != 0 || io.MouseDelta.y != 0) &&
+        (ImGui::IsMouseDragging(ImGuiMouseButton_Left, 2) || ImGui::IsMouseDragging(ImGuiMouseButton_Right, 2) || ImGui::IsMouseDragging(ImGuiMouseButton_Middle, 2))) {
+        view.pan = ImVec2(view.pan.x + io.MouseDelta.x, view.pan.y + io.MouseDelta.y);
+        dragged = true;
+    }
+    if (hovered && io.MouseWheel != 0) {
+        const float z = std::clamp(view.zoom * std::pow(1.15f, io.MouseWheel), 0.15f, 2.5f);
+        const ImVec2 m(io.MousePos.x - origin.x, io.MousePos.y - origin.y);
+        const ImVec2 at((m.x - view.pan.x) / view.zoom, (m.y - view.pan.y) / view.zoom);
+        view.zoom = z;
+        view.pan = ImVec2(m.x - at.x * z, m.y - at.y * z);
+    }
+    if (hovered && ImGui::IsKeyPressed(ImGuiKey_Home, false)) view.placed = false;
+    const float z = view.zoom;
+    auto S = [&](ImVec2 p) { return ImVec2(origin.x + view.pan.x + p.x * z, origin.y + view.pan.y + p.y * z); };
+
+    ImDrawList* dl = ImGui::GetWindowDrawList();
+    dl->PushClipRect(origin, ImVec2(origin.x + size.x, origin.y + size.y), true);
+    dl->AddRectFilled(origin, ImVec2(origin.x + size.x, origin.y + size.y), IM_COL32(29, 29, 29, 255));
+    { // the grid
+        const float step = F * 2 * z;
+        if (step > 6) {
+            const float sx = std::fmod(view.pan.x, step), sy = std::fmod(view.pan.y, step);
+            for (float x = sx; x < size.x; x += step) dl->AddLine(ImVec2(origin.x + x, origin.y), ImVec2(origin.x + x, origin.y + size.y), IM_COL32(40, 40, 40, 255));
+            for (float y = sy; y < size.y; y += step) dl->AddLine(ImVec2(origin.x, origin.y + y), ImVec2(origin.x + size.x, origin.y + y), IM_COL32(40, 40, 40, 255));
+        }
+    }
+    const i18n::Verbatim verbatim; // everything drawn below is the script's own words
+    ImFont* font = ImGui::GetFont();
+    const float fs = F * z;
+    const bool text = fs >= 5.5f;
+    const ImRect clip(origin, ImVec2(origin.x + size.x, origin.y + size.y));
+    auto visible = [&](ImVec2 a, ImVec2 b) { return b.x >= clip.Min.x && a.x <= clip.Max.x && b.y >= clip.Min.y && a.y <= clip.Max.y; };
+    // frames
+    for (const Frame& fr : g.frames) {
+        const ImVec2 a = S(fr.min), b = S(fr.max);
+        if (!visible(a, b)) continue;
+        dl->AddRectFilled(a, b, IM_COL32(60, 60, 70, 90), 4 * z);
+        dl->AddRect(a, b, IM_COL32(90, 90, 105, 160), 4 * z);
+        if (text) {
+            dl->AddText(font, fs * 1.15f, ImVec2(a.x + F * 0.6f * z, a.y + F * 0.4f * z), IM_COL32(220, 200, 230, 255), fr.name.c_str());
+            if (!fr.subtitle.empty()) {
+                const float tw = font->CalcTextSizeA(fs * 1.15f, FLT_MAX, 0, fr.name.c_str()).x;
+                dl->AddText(font, fs, ImVec2(a.x + F * 0.6f * z + tw + F * z, a.y + F * 0.55f * z), IM_COL32(150, 150, 160, 255), fr.subtitle.c_str());
+            }
+        }
+    }
+    // wires
+    for (const Wire& w : g.wires) {
+        const ImVec2 a = S(w.a), b = S(w.b);
+        if (!visible(ImVec2(std::min(a.x, b.x), std::min(a.y, b.y)), ImVec2(std::max(a.x, b.x), std::max(a.y, b.y)))) continue;
+        if (w.flow) { // down the spine
+            const float d = std::max(4.0f, (b.y - a.y) * 0.5f);
+            dl->AddBezierCubic(a, ImVec2(a.x, a.y + d), ImVec2(b.x, b.y - d), b, w.color, std::max(1.0f, 2.0f * z));
+        } else {
+            const float d = std::max(F * z, std::fabs(b.x - a.x) * 0.5f);
+            dl->AddBezierCubic(a, ImVec2(a.x + d, a.y), ImVec2(b.x - d, b.y), b, w.color, std::max(1.0f, 1.6f * z));
+        }
+    }
+    // nodes
+    const Node* hover = nullptr;
+    const float r = std::max(2.0f, F * 0.28f * z), round = 4 * z;
+    const double now = ImGui::GetTime();
+    if (app.nodeFlashLine && app.nodeFlashUntil < now) { app.nodeFlashUntil = now + 2.0; }
+    for (const Node& n : g.nodes) {
+        const ImVec2 a = S(n.pos), b = S(ImVec2(n.pos.x + n.size.x, n.pos.y + n.size.y));
+        if (!visible(ImVec2(a.x - r, a.y), ImVec2(b.x + r, b.y))) continue;
+        const bool comment = n.kind == Node::Comment;
+        dl->AddRectFilled(a, b, comment ? IM_COL32(38, 46, 36, 235) : IM_COL32(48, 48, 48, 240), round);
+        const ImVec4 hc = HeaderColor(n.kind);
+        const float hh = c.headerH * z;
+        dl->AddRectFilled(a, ImVec2(b.x, a.y + hh), ImGui::GetColorU32(hc), round, ImDrawFlags_RoundCornersTop);
+        auto sev = severity.find(n.line);
+        const bool flash = app.nodeFlashLine == n.line && app.nodeFlashUntil > now;
+        const ImU32 border = flash ? IM_COL32(255, 220, 120, 255) : sev != severity.end() ? ImGui::GetColorU32(SeverityColor(sev->second)) : IM_COL32(20, 20, 20, 255);
+        dl->AddRect(a, b, border, round, 0, sev != severity.end() || flash ? std::max(1.5f, 2.5f * z) : 1.0f);
+        if (hovered && ImGui::IsMouseHoveringRect(a, b)) hover = &n;
+        if (n.flowIn && n.kind != Node::Entry) { // where the flow comes in: a small diamond left of the header
+            const ImVec2 p(a.x, a.y + hh * 0.5f);
+            const float d = r * 1.1f;
+            dl->AddQuadFilled(ImVec2(p.x - d, p.y), ImVec2(p.x, p.y - d), ImVec2(p.x + d, p.y), ImVec2(p.x, p.y + d), IM_COL32(230, 230, 230, 230));
+        }
+        if (n.out) dl->AddCircleFilled(ImVec2(b.x, a.y + hh * 0.5f), r, ImGui::GetColorU32(TypeColor(n.outType)));
+        if (!text) continue;
+        dl->AddText(font, fs, ImVec2(a.x + c.pad * z, a.y + (hh - fs) * 0.5f), IM_COL32(235, 235, 235, 255), n.title.c_str());
+        for (size_t i = 0; i < n.rows.size(); ++i) {
+            const Row& row = n.rows[i];
+            const float cy = a.y + hh + c.rowH * z * (static_cast<float>(i) + 0.5f);
+            if (n.kind != Node::Entry && !comment && !(n.kind == Node::Control && row.label == "(always)"))
+                dl->AddCircleFilled(ImVec2(a.x, cy), r, ImGui::GetColorU32(TypeColor(row.type)));
+            const std::string label = row.wired || row.value.empty() ? row.label : (row.label.empty() ? row.value : row.label + ": ");
+            const ImVec2 tp(a.x + c.pad * z + (comment ? 0 : r), cy - fs * 0.5f);
+            dl->AddText(font, fs, tp, comment ? IM_COL32(150, 190, 140, 255) : n.kind == Node::Entry ? IM_COL32(180, 180, 190, 255) : IM_COL32(200, 200, 200, 255), label.c_str());
+            if (!row.wired && !row.value.empty() && !row.label.empty()) {
+                const float lw = font->CalcTextSizeA(fs, FLT_MAX, 0, label.c_str()).x;
+                const ImVec4 vc = row.value[0] == '"' ? ImVec4(0.90f, 0.64f, 0.44f, 1) : scripthl::TokenColor(row.value, names);
+                dl->AddText(font, fs, ImVec2(tp.x + lw, tp.y), ImGui::GetColorU32(vc), row.value.c_str());
+            }
+        }
+        for (size_t k = 0; k < n.branches.size(); ++k) {
+            const float cy = a.y + hh + c.rowH * z * (static_cast<float>(n.rows.size() + k) + 0.5f);
+            const float tw = font->CalcTextSizeA(fs, FLT_MAX, 0, n.branches[k].c_str()).x;
+            dl->AddText(font, fs, ImVec2(b.x - c.pad * z - r - tw, cy - fs * 0.5f), IM_COL32(220, 220, 220, 255), n.branches[k].c_str());
+            const float d = r * 1.1f;
+            dl->AddQuadFilled(ImVec2(b.x - d, cy), ImVec2(b.x, cy - d), ImVec2(b.x + d, cy), ImVec2(b.x, cy + d), IM_COL32(230, 230, 230, 230));
+        }
+    }
+    if (hover) dl->AddRect(S(hover->pos), S(ImVec2(hover->pos.x + hover->size.x, hover->pos.y + hover->size.y)), IM_COL32(255, 255, 255, 220), round, 0, 1.5f);
+    dl->PopClipRect();
+    if (text == false && hovered) ImGui::SetTooltip("%s", i18n::Tr("Zoom in to read the nodes (mouse wheel)"));
+
+    // The node under the mouse: what it is and the findings of its line; a script call goes to its frame.
+    if (hover) {
+        std::string tip;
+        auto fn = mobscript::FunctionTable().find(mobscript::LowerCase(hover->title));
+        if (hover->kind == Node::Command || hover->kind == Node::Function) tip = fn != mobscript::FunctionTable().end() ? Signature(*fn->second) : hover->title + i18n::Tr(": neither a known command nor a script of this map");
+        else if (hover->kind == Node::ScriptCall) tip = "script " + hover->title + i18n::Tr(": click to go to it");
+        else if (hover->kind == Node::Comment) for (const Row& row : hover->rows) tip += (tip.empty() ? "// " : " ") + row.label;
+        else tip = hover->title;
+        for (const Row& row : hover->rows) // values shortened in the node: whole here
+            if (!row.full.empty()) tip += "\n" + (row.label.empty() ? std::string() : row.label + ": ") + row.full;
+        for (const checks::Finding& fd : app.findings)
+            if (fd.file == app.scriptFile && fd.line == hover->line) tip += "\n" + std::string(1, fd.severity) + ": " + fd.message;
+        tip += "\n" + std::string(i18n::Tr("Line ")) + std::to_string(hover->line) + i18n::Tr(". Double-click: edit the text here.");
+        ImGui::BeginTooltip();
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 32);
+        ImGui::TextUnformatted(tip.c_str());
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+        if (ImGui::IsMouseReleased(ImGuiMouseButton_Left) && !dragged && hover->kind == Node::ScriptCall) app.nodeGoto = hover->target;
+        if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) EditScriptAt(app, f, hover->line);
+    }
+}
+
 static void ScriptContent(App& app) {
     if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); return; }
     app.scriptFile = std::min(std::max(app.scriptFile, 0), static_cast<int>(app.mobs.size()) - 1);
@@ -2936,6 +3580,14 @@ static void ScriptContent(App& app) {
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("Click to copy the path");
         if (ImGui::IsItemClicked()) ImGui::SetClipboardText(app.scriptExtPath.c_str());
     }
+    if (ImGui::RadioButton("Text", !app.scriptVisual)) app.scriptVisual = false;
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Nodes", app.scriptVisual)) app.scriptVisual = true;
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("The script as nodes, like Blender's node editor: each script a frame, its statements down a line, if / for each\n"
+                          "branching to the right, a command's arguments wired in from the commands computing them.\n"
+                          "Drag: move the view, wheel: zoom, Home: everything. Hover a node: what it takes and its line's findings;\n"
+                          "click a script call: go to that script; double-click: edit the text there. More room: Open in a window.");
     if (!app.scriptMessage.empty()) ImGui::TextDisabled("%s", app.scriptMessage.c_str());
     if (f.script.empty()) { ImGui::TextDisabled("The script is empty."); return; }
     // Lines as the checker counts them (every '\n').
@@ -2961,6 +3613,7 @@ static void ScriptContent(App& app) {
             }
         }
     }
+    if (app.scriptVisual) { ScriptNodes(app, f, text, names); return; }
     ImGui::TextDisabled("%zu lines - the same numbering as the checks and um-multitool mobdump's .eis", lines.size());
     ImGui::BeginChild("##script", ImVec2(0, 0), ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar);
     const float lineHeight = ImGui::GetTextLineHeightWithSpacing();
@@ -8064,7 +8717,7 @@ void DrawTab(Context* ctx) {
     App& app = ctx->app;
     PollJob(app);
     if (app.checksDirty || app.checkedVersion != app.lib.version || app.checkedScripts != app.lib.scriptChecks ||
-        app.checkedDatabase != app.lib.databaseChecks)
+        app.checkedDatabase != app.lib.databaseChecks || app.checkedAtd != app.lib.atdScripts)
         RunChecks(app);
     RefreshScriptModel(app);
     RefreshLighting(app);
