@@ -13,7 +13,7 @@ struct GuiOptions {
     bool viewerNaked = false;      // with "--viewer units <name>": without its equipment (--naked)
     std::string viewerSkin;        // with "--viewer units <name>": a skin texture file to try on it (--skin)
     uint32_t mapFocus = 0;         // with "--map": an object ID to select and look at (--focus)
-    std::string mapMode;           // with "--map": the editing mode to start in: object, paint, ground (by material), sculpt, water (--mode)
+    std::string mapMode;           // with "--map": the editing mode to start in: object, paint, ground (by material), sculpt, water; or the Script tab as script (text) / nodes (--mode)
     std::string viewerClip;        // with "--viewer units <name>": an animation clip to show (--clip)
     float viewerFrame = -1.0f;     // ... held at that frame (--frame); -1: playing
     float viewerYaw = -1000.0f;    // with "--viewer units": the camera's yaw in degrees (--yaw; 225 = from the front, 45 = the back)

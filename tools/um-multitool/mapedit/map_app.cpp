@@ -2822,11 +2822,89 @@ struct Wire {
 };
 struct Frame { std::string name, lower, subtitle; ImVec2 min, max; int line = 0; };
 
+// A wire's box in canvas units, the curve's reach included (the same distances as where it is drawn).
+inline void WireBounds(const Wire& w, float F, ImVec2& lo, ImVec2& hi) {
+    lo = ImVec2(std::min(w.a.x, w.b.x), std::min(w.a.y, w.b.y));
+    hi = ImVec2(std::max(w.a.x, w.b.x), std::max(w.a.y, w.b.y));
+    const float dx = std::fabs(w.b.x - w.a.x), dy = std::fabs(w.b.y - w.a.y);
+    const float d = w.call ? std::max(F * 4, dx * 0.5f + dy * 0.15f) : std::max(F, dx * 0.5f);
+    lo.x -= d; hi.x += d;
+    if (w.flow) { lo.y -= std::max(4.0f, dy * 0.5f); hi.y += std::max(4.0f, dy * 0.5f); }
+}
+
 struct Graph {
     std::vector<Node> nodes;
     std::vector<Wire> wires;
     std::vector<Frame> frames;
     ImVec2 min{0, 0}, max{0, 0};
+
+    // The nodes and wires by place, so that a frame touches the ones in view (a 30000-line script has tens of
+    // thousands of each): a grid of cells over the graph, each holding the indices of what overlaps it. A wire
+    // reaching over many cells (most calls to other scripts) is kept in `longWires` and tested every time.
+    float cell = 1;
+    int cols = 1, rows = 1;
+    std::vector<std::vector<int>> nodeCells, wireCells;
+    std::vector<int> longWires;
+
+    int CellX(float x) const { return std::clamp(static_cast<int>(std::floor((x - min.x) / cell)), 0, cols - 1); }
+    int CellY(float y) const { return std::clamp(static_cast<int>(std::floor((y - min.y) / cell)), 0, rows - 1); }
+
+    void BuildIndex(float F) {
+        const float w = std::max(max.x - min.x, 1.0f), h = std::max(max.y - min.y, 1.0f);
+        cell = std::max(F * 30, std::sqrt(w * h / 20000.0f)); // at most about 20000 cells
+        cols = static_cast<int>(w / cell) + 1;
+        rows = static_cast<int>(h / cell) + 1;
+        nodeCells.assign(static_cast<size_t>(cols) * rows, {});
+        wireCells.assign(static_cast<size_t>(cols) * rows, {});
+        longWires.clear();
+        for (size_t i = 0; i < nodes.size(); ++i) {
+            const Node& n = nodes[i];
+            for (int y = CellY(n.pos.y); y <= CellY(n.pos.y + n.size.y); ++y)
+                for (int x = CellX(n.pos.x - F); x <= CellX(n.pos.x + n.size.x + F); ++x) nodeCells[static_cast<size_t>(y) * cols + x].push_back(static_cast<int>(i));
+        }
+        for (size_t i = 0; i < wires.size(); ++i) {
+            ImVec2 lo, hi;
+            WireBounds(wires[i], F, lo, hi);
+            const int x0 = CellX(lo.x), x1 = CellX(hi.x), y0 = CellY(lo.y), y1 = CellY(hi.y);
+            if ((x1 - x0 + 1) * (y1 - y0 + 1) > 12) { longWires.push_back(static_cast<int>(i)); continue; }
+            for (int y = y0; y <= y1; ++y)
+                for (int x = x0; x <= x1; ++x) wireCells[static_cast<size_t>(y) * cols + x].push_back(static_cast<int>(i));
+        }
+    }
+
+    // The nodes and wires that may be in the canvas rectangle [lo, hi], once each, in order.
+    void Query(ImVec2 lo, ImVec2 hi, float F, std::vector<int>& outNodes, std::vector<int>& outWires) const {
+        outNodes.clear();
+        outWires.clear();
+        if (hi.x < min.x - cell || lo.x > max.x + cell || hi.y < min.y - cell || lo.y > max.y + cell) return;
+        const int x0 = CellX(lo.x), x1 = CellX(hi.x), y0 = CellY(lo.y), y1 = CellY(hi.y);
+        for (int y = y0; y <= y1; ++y)
+            for (int x = x0; x <= x1; ++x) {
+                const size_t c = static_cast<size_t>(y) * cols + x;
+                outNodes.insert(outNodes.end(), nodeCells[c].begin(), nodeCells[c].end());
+                outWires.insert(outWires.end(), wireCells[c].begin(), wireCells[c].end());
+            }
+        for (int i : longWires) {
+            ImVec2 wl, wh;
+            WireBounds(wires[static_cast<size_t>(i)], F, wl, wh);
+            if (wh.x >= lo.x && wl.x <= hi.x && wh.y >= lo.y && wl.y <= hi.y) outWires.push_back(i);
+        }
+        for (std::vector<int>* v : {&outNodes, &outWires}) {
+            std::sort(v->begin(), v->end());
+            v->erase(std::unique(v->begin(), v->end()), v->end());
+        }
+    }
+
+    // The last (topmost) node containing the canvas point, or -1.
+    int NodeAt(ImVec2 p) const {
+        if (p.x < min.x - cell || p.x > max.x + cell || p.y < min.y - cell || p.y > max.y + cell) return -1;
+        int best = -1;
+        for (int i : nodeCells[static_cast<size_t>(CellY(p.y)) * cols + CellX(p.x)]) {
+            const Node& n = nodes[static_cast<size_t>(i)];
+            if (p.x >= n.pos.x && p.x <= n.pos.x + n.size.x && p.y >= n.pos.y && p.y <= n.pos.y + n.size.y) best = std::max(best, i);
+        }
+        return best;
+    }
 };
 
 inline ImVec4 TypeColor(char t) {
@@ -2850,6 +2928,59 @@ inline ImVec4 HeaderColor(Node::Kind k) {
     default: return ImVec4(0.24f, 0.30f, 0.22f, 1);
     }
 }
+
+// A cubic Bezier drawn only where it is seen: subdivided until flat, pieces whose control points lie outside
+// `clip` dropped, so that a curve hundreds of thousands of pixels long costs the vertices of its visible part
+// (ImDrawList::AddBezierCubic tessellates all of it, which put 240000 vertices in one frame).
+class BezierInView {
+public:
+    BezierInView(ImDrawList* dl, ImRect clip, ImU32 color, float thickness) : dl_(dl), clip_(clip), color_(color), thickness_(thickness) {
+        clip_.Expand(thickness + 1);
+    }
+    void Draw(ImVec2 p0, ImVec2 p1, ImVec2 p2, ImVec2 p3) {
+        points_.clear();
+        Split(p0, p1, p2, p3, 0);
+        Flush();
+    }
+
+private:
+    ImDrawList* dl_;
+    ImRect clip_;
+    ImU32 color_;
+    float thickness_;
+    std::vector<ImVec2>& points_ = Scratch(); // one buffer for all the wires of a frame
+    static std::vector<ImVec2>& Scratch() { static std::vector<ImVec2> v; return v; }
+
+    void Flush() {
+        if (points_.size() >= 2) dl_->AddPolyline(points_.data(), static_cast<int>(points_.size()), color_, ImDrawFlags_None, thickness_);
+        points_.clear();
+    }
+    void Split(ImVec2 p0, ImVec2 p1, ImVec2 p2, ImVec2 p3, int depth) {
+        const float lox = std::min(std::min(p0.x, p1.x), std::min(p2.x, p3.x)), hix = std::max(std::max(p0.x, p1.x), std::max(p2.x, p3.x));
+        const float loy = std::min(std::min(p0.y, p1.y), std::min(p2.y, p3.y)), hiy = std::max(std::max(p0.y, p1.y), std::max(p2.y, p3.y));
+        if (hix < clip_.Min.x || lox > clip_.Max.x || hiy < clip_.Min.y || loy > clip_.Max.y) { Flush(); return; } // not seen (the curve stays in its control points' box)
+        // flat enough: the control points within 0.5 px of the chord and between its ends (not out beyond them, as
+        // with a call to a script on the left at the same height: all four on a line, the curve still loops out)
+        const float cx = p3.x - p0.x, cy = p3.y - p0.y, len = std::sqrt(cx * cx + cy * cy);
+        bool flat;
+        if (len < 1.0f) flat = (hix - lox) + (hiy - loy) < 2.0f;
+        else {
+            const float d1 = std::fabs((p1.x - p0.x) * cy - (p1.y - p0.y) * cx), d2 = std::fabs((p2.x - p0.x) * cy - (p2.y - p0.y) * cx);
+            const float t1 = ((p1.x - p0.x) * cx + (p1.y - p0.y) * cy) / len, t2 = ((p2.x - p0.x) * cx + (p2.y - p0.y) * cy) / len;
+            flat = d1 + d2 < 0.5f * len && t1 >= -0.5f && t1 <= len + 0.5f && t2 >= -0.5f && t2 <= len + 0.5f;
+        }
+        if (flat || depth >= 20) {
+            if (points_.empty()) points_.push_back(p0);
+            points_.push_back(p3);
+            return;
+        }
+        const ImVec2 p01((p0.x + p1.x) * 0.5f, (p0.y + p1.y) * 0.5f), p12((p1.x + p2.x) * 0.5f, (p1.y + p2.y) * 0.5f), p23((p2.x + p3.x) * 0.5f, (p2.y + p3.y) * 0.5f);
+        const ImVec2 a((p01.x + p12.x) * 0.5f, (p01.y + p12.y) * 0.5f), b((p12.x + p23.x) * 0.5f, (p12.y + p23.y) * 0.5f);
+        const ImVec2 m((a.x + b.x) * 0.5f, (a.y + b.y) * 0.5f);
+        Split(p0, p01, a, m, depth + 1);
+        Split(m, b, p23, p3, depth + 1);
+    }
+};
 
 class Builder {
 public:
@@ -2985,6 +3116,7 @@ public:
             g_.max = ImVec2(std::max(g_.max.x, f.max.x), std::max(g_.max.y, f.max.y));
         }
         if (g_.frames.empty()) g_.min = g_.max = ImVec2(0, 0);
+        g_.BuildIndex(F);
         return std::move(g_);
     }
 
@@ -3262,12 +3394,11 @@ static void EditScriptAt(App& app, const mob::File& f, int line) {
     app.scriptEditGotoLine = std::max(0, line - 1);
 }
 
-static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, const ScriptNames& names) {
+static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, size_t hash, const ScriptNames& names) {
     using namespace nodegraph;
     // The tree and its graph, built again when the text, the commands (EI ATD's) or the font size change.
     struct Cache { const mob::File* file = nullptr; size_t hash = 0; bool atd = false; float font = 0; scriptast::Program prog; Graph g; float headerH = 0, rowH = 0, pad = 0; };
     static Cache c;
-    const size_t hash = std::hash<std::string>{}(utf8);
     if (c.file != &f || c.hash != hash || c.atd != scriptcmds::AtdActive() || c.font != ImGui::GetFontSize()) {
         c.file = &f;
         c.hash = hash;
@@ -3374,6 +3505,14 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
     const bool text = fs >= 5.5f;
     const ImRect clip(origin, ImVec2(origin.x + size.x, origin.y + size.y));
     auto visible = [&](ImVec2 a, ImVec2 b) { return b.x >= clip.Min.x && a.x <= clip.Max.x && b.y >= clip.Min.y && a.y <= clip.Max.y; };
+    // What is in view, from the grid: the work of a frame follows the window, not the script's size.
+    static std::vector<int> inNodes, inWires;
+    g.Query(ImVec2((0 - view.pan.x) / z, (0 - view.pan.y) / z), ImVec2((size.x - view.pan.x) / z, (size.y - view.pan.y) / z), F, inNodes, inWires);
+    // Zoomed out, the detail goes: the text of the rows (below ~8 px), the rounded corners and the curves (every
+    // curve is dozens of segments, each a few vertices), the lines' anti-aliasing: tens of thousands of vertices.
+    const bool rowText = fs >= 8.0f, simple = z < 0.3f;
+    const ImDrawListFlags dlFlags = dl->Flags;
+    if (simple) dl->Flags &= ~ImDrawListFlags_AntiAliasedLines;
     // frames
     for (const Frame& fr : g.frames) {
         const ImVec2 a = S(fr.min), b = S(fr.max);
@@ -3390,52 +3529,59 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
     }
     // the node under the mouse, found before the wires: the calls to and from it are drawn brighter
     const Node* hover = nullptr;
-    if (hovered)
-        for (const Node& n : g.nodes)
-            if (ImGui::IsMouseHoveringRect(S(n.pos), S(ImVec2(n.pos.x + n.size.x, n.pos.y + n.size.y)))) hover = &n;
+    if (hovered) {
+        const int at = g.NodeAt(ImVec2((io.MousePos.x - origin.x - view.pan.x) / z, (io.MousePos.y - origin.y - view.pan.y) / z));
+        if (at >= 0) hover = &g.nodes[static_cast<size_t>(at)];
+    }
     const int hoverIndex = hover ? static_cast<int>(hover - g.nodes.data()) : -1;
     // wires
-    for (const Wire& w : g.wires) {
+    for (int wi : inWires) {
+        const Wire& w = g.wires[static_cast<size_t>(wi)];
         const ImVec2 a = S(w.a), b = S(w.b);
         if (w.call) { // a script call to its script's entry: out to the right, round, in from the left
             const float d = std::max(F * 4 * z, std::fabs(b.x - a.x) * 0.5f + std::fabs(b.y - a.y) * 0.15f);
             if (!visible(ImVec2(std::min(a.x, b.x) - d, std::min(a.y, b.y)), ImVec2(std::max(a.x, b.x) + d, std::max(a.y, b.y)))) continue;
             const bool lit = w.from == hoverIndex || w.to == hoverIndex;
-            dl->AddBezierCubic(a, ImVec2(a.x + d, a.y), ImVec2(b.x - d, b.y), b, lit ? IM_COL32(255, 175, 80, 255) : w.color,
-                               std::max(1.0f, (lit ? 3.0f : 1.8f) * z));
+            BezierInView(dl, clip, lit ? IM_COL32(255, 175, 80, 255) : w.color, std::max(1.0f, (lit ? 3.0f : 1.8f) * z))
+                .Draw(a, ImVec2(a.x + d, a.y), ImVec2(b.x - d, b.y), b);
             continue;
         }
         if (!visible(ImVec2(std::min(a.x, b.x), std::min(a.y, b.y)), ImVec2(std::max(a.x, b.x), std::max(a.y, b.y)))) continue;
+        if (std::fabs(b.x - a.x) + std::fabs(b.y - a.y) < 2.0f) continue; // under two pixels
+        if (simple) { dl->AddLine(a, b, w.color, 1.0f); continue; }
         if (w.flow) { // down the spine
             const float d = std::max(4.0f, (b.y - a.y) * 0.5f);
-            dl->AddBezierCubic(a, ImVec2(a.x, a.y + d), ImVec2(b.x, b.y - d), b, w.color, std::max(1.0f, 2.0f * z));
+            BezierInView(dl, clip, w.color, std::max(1.0f, 2.0f * z)).Draw(a, ImVec2(a.x, a.y + d), ImVec2(b.x, b.y - d), b);
         } else {
             const float d = std::max(F * z, std::fabs(b.x - a.x) * 0.5f);
-            dl->AddBezierCubic(a, ImVec2(a.x + d, a.y), ImVec2(b.x - d, b.y), b, w.color, std::max(1.0f, 1.6f * z));
+            BezierInView(dl, clip, w.color, std::max(1.0f, 1.6f * z)).Draw(a, ImVec2(a.x + d, a.y), ImVec2(b.x - d, b.y), b);
         }
     }
     // nodes
     const float r = std::max(2.0f, F * 0.28f * z), round = 4 * z;
     const double now = ImGui::GetTime();
     if (app.nodeFlashLine && app.nodeFlashUntil < now) { app.nodeFlashUntil = now + 2.0; }
-    for (const Node& n : g.nodes) {
+    const float corner = round >= 2.0f ? round : 0.0f; // too small to see: square (a rounded corner is a dozen vertices)
+    for (int ni : inNodes) {
+        const Node& n = g.nodes[static_cast<size_t>(ni)];
         const ImVec2 a = S(n.pos), b = S(ImVec2(n.pos.x + n.size.x, n.pos.y + n.size.y));
         if (!visible(ImVec2(a.x - r, a.y), ImVec2(b.x + r, b.y))) continue;
         const bool comment = n.kind == Node::Comment;
-        dl->AddRectFilled(a, b, comment ? IM_COL32(38, 46, 36, 235) : IM_COL32(48, 48, 48, 240), round);
         const ImVec4 hc = HeaderColor(n.kind);
+        if (b.x - a.x < 3.0f) { dl->AddRectFilled(a, b, ImGui::GetColorU32(hc)); continue; } // a speck: its colour
+        dl->AddRectFilled(a, b, comment ? IM_COL32(38, 46, 36, 235) : IM_COL32(48, 48, 48, 240), corner);
         const float hh = c.headerH * z;
-        dl->AddRectFilled(a, ImVec2(b.x, a.y + hh), ImGui::GetColorU32(hc), round, ImDrawFlags_RoundCornersTop);
+        dl->AddRectFilled(a, ImVec2(b.x, a.y + hh), ImGui::GetColorU32(hc), corner, ImDrawFlags_RoundCornersTop);
         auto sev = severity.find(n.line);
         const bool flash = app.nodeFlashLine == n.line && app.nodeFlashUntil > now;
         const ImU32 border = flash ? IM_COL32(255, 220, 120, 255) : sev != severity.end() ? ImGui::GetColorU32(SeverityColor(sev->second)) : IM_COL32(20, 20, 20, 255);
-        dl->AddRect(a, b, border, round, 0, sev != severity.end() || flash ? std::max(1.5f, 2.5f * z) : 1.0f);
+        dl->AddRect(a, b, border, corner, 0, sev != severity.end() || flash ? std::max(1.5f, 2.5f * z) : 1.0f);
         if (n.flowIn) { // where the flow (or a call) comes in: a small diamond left of the header
             const ImVec2 p(a.x, a.y + hh * 0.5f);
             const float d = r * 1.1f;
             dl->AddQuadFilled(ImVec2(p.x - d, p.y), ImVec2(p.x, p.y - d), ImVec2(p.x + d, p.y), ImVec2(p.x, p.y + d), IM_COL32(230, 230, 230, 230));
         }
-        if (n.out) dl->AddCircleFilled(ImVec2(b.x, a.y + hh * 0.5f), r, ImGui::GetColorU32(TypeColor(n.outType)));
+        if (n.out) dl->AddCircleFilled(ImVec2(b.x, a.y + hh * 0.5f), r, ImGui::GetColorU32(TypeColor(n.outType)), r < 4 ? 6 : 0);
         if (n.kind == Node::ScriptCall) { // where the call leaves for the called script
             const ImVec2 p(b.x, a.y + hh * 0.5f);
             const float d = r * 1.2f;
@@ -3443,6 +3589,7 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
         }
         if (!text) continue;
         dl->AddText(font, fs, ImVec2(a.x + c.pad * z, a.y + (hh - fs) * 0.5f), IM_COL32(235, 235, 235, 255), n.title.c_str());
+        if (!rowText) continue;
         for (size_t i = 0; i < n.rows.size(); ++i) {
             const Row& row = n.rows[i];
             const float cy = a.y + hh + c.rowH * z * (static_cast<float>(i) + 0.5f);
@@ -3467,7 +3614,8 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, c
             dl->AddQuadFilled(ImVec2(b.x - d, cy), ImVec2(b.x, cy - d), ImVec2(b.x + d, cy), ImVec2(b.x, cy + d), IM_COL32(230, 230, 230, 230));
         }
     }
-    if (hover) dl->AddRect(S(hover->pos), S(ImVec2(hover->pos.x + hover->size.x, hover->pos.y + hover->size.y)), IM_COL32(255, 255, 255, 220), round, 0, 1.5f);
+    if (hover) dl->AddRect(S(hover->pos), S(ImVec2(hover->pos.x + hover->size.x, hover->pos.y + hover->size.y)), IM_COL32(255, 255, 255, 220), corner, 0, 1.5f);
+    dl->Flags = dlFlags;
     dl->PopClipRect();
     if (text == false && hovered) ImGui::SetTooltip("%s", i18n::Tr("Zoom in to read the nodes (mouse wheel)"));
 
@@ -3714,7 +3862,7 @@ static void ScriptContent(App& app) {
             }
         }
     }
-    if (app.scriptVisual) { ScriptNodes(app, f, text, names); return; }
+    if (app.scriptVisual) { ScriptNodes(app, f, text, cachedHash, names); return; }
     ImGui::TextDisabled("%zu lines - the same numbering as the checks and um-multitool mobdump's .eis", lines.size());
     ImGui::BeginChild("##script", ImVec2(0, 0), ImGuiChildFlags_Borders, ImGuiWindowFlags_HorizontalScrollbar);
     const float lineHeight = ImGui::GetTextLineHeightWithSpacing();
@@ -8778,6 +8926,11 @@ void ShowChecks(Context* ctx) { ctx->app.requestTab = SideTab::Checks; }
 
 void SetMode(Context* ctx, const std::string& mode) {
     App& app = ctx->app;
+    if (mode == "script" || mode == "nodes") { // the Script tab, as text or as nodes
+        app.requestTab = SideTab::Script;
+        app.scriptVisual = mode == "nodes";
+        return;
+    }
     app.tileBrush = mode == "paint" || mode == "ground" || mode == "water";
     app.heightBrush = mode == "sculpt";
     app.brushWater = mode == "water";

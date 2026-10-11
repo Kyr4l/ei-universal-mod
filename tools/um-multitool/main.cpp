@@ -74,7 +74,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
               << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
-              << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>] [--mode object|paint|ground|sculpt|water]  # ... on the Map Editor with these files (looking at that object, in that editing mode)\n"
+              << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>] [--mode object|paint|ground|sculpt|water|script|nodes]  # ... on the Map Editor with these files (looking at that object, in that editing mode)\n"
               << "  um-multitool gui --texture [<file>]   # ... on the Texture Editor (with this picture: .mmp, .dds, .png)\n"
               << "  um-multitool gui --settings           # ... on the Settings tab\n"
               << "  um-multitool gui [...] --screenshot <out.bmp>  # ... then save a picture of the window (BMP) and quit\n"

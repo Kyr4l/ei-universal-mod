@@ -121,7 +121,10 @@
 // Your renderer backend will need to support it (most example renderer backends support both 16/32-bit indices).
 // Another way to allow large meshes while keeping 16-bit indices is to handle ImDrawCmd::VtxOffset in your renderer.
 // Read about ImGuiBackendFlags_RendererHasVtxOffset for details.
-//#define ImDrawIdx unsigned int
+// um-multitool: 32 bits. 16-bit indices abort in ImGui::Render once a window's draw list holds 65536 vertices
+// (the OpenGL2 backend has no ImGuiBackendFlags_RendererHasVtxOffset): the script node view did that, zoomed out
+// over thousands of nodes. The backend picks GL_UNSIGNED_INT from sizeof(ImDrawIdx) by itself.
+#define ImDrawIdx unsigned int
 
 //---- Override ImDrawCallback signature (will need to modify renderer backends accordingly)
 //struct ImDrawList;
