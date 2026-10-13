@@ -6137,7 +6137,7 @@ static void TilePanel(App& app, bool inShelf = false) {
         tilemat::Terrain& own = tilemat::Create(m.name);
         if (own.tiles.empty() && !app.sidecarLoaded.count(app.terrainPath)) {
             app.sidecarLoaded.insert(app.terrainPath);
-            const std::string shipped = (std::filesystem::path(umlog::FilePath()).parent_path() / "materials" / (m.name + "-materials.tsv")).string();
+            const std::string shipped = (std::filesystem::path(config::ExeDir()) / "materials" / (m.name + "-materials.tsv")).string();
             tilemat::LoadSidecar(own, shipped);
             const std::string& folder = BlendFolder(app);
             if (!folder.empty()) tilemat::LoadSidecar(own, (std::filesystem::path(folder) / (m.name + "-materials.tsv")).string());
@@ -6791,7 +6791,7 @@ static void ToolsMenu(App& app) {
     if (ImGui::Selectable("Minimap...", false, app.terrainLoaded ? 0 : ImGuiSelectableFlags_Disabled)) {
         app.minimapOpen = true;
         if (app.minimapPath[0] == '\0') {
-            std::string dir = app.lib.gif.lastDirectory.empty() ? config::ExeDir() : app.lib.gif.lastDirectory;
+            std::string dir = app.lib.gif.lastDirectory.empty() ? config::DefaultSaveDir() : app.lib.gif.lastDirectory;
             // Named after the .mpr file (zone6x.mpr -> zone6xmap), not the name inside it (which may be zone6).
             std::string stem = std::filesystem::path(app.terrainPath).stem().string();
             for (char& ch : stem) ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));

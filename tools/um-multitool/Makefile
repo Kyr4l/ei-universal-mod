@@ -7,6 +7,9 @@
 #   make win    - um-multitool.exe, cross-compiled with MinGW
 #   make all    - both (the Windows part is skipped when MinGW is not installed)
 #   make xp     - um-multitool-xp32.exe for Windows XP (32-bit runs on XP x64 too; after vendor/build-glfw-mingw-xp.sh)
+#   make appimage - um-multitool-x86_64.AppImage: one portable file for Linux desktops (GLFW and the C++
+#                 runtime bundled; build-appimage.sh fetches appimagetool once into vendor/). Part of
+#                 `make all` once appimagetool is there.
 # Builds run on all cores; objects go to build/<variant>/.
 #
 # GUI toolkit: Dear ImGui (vendored as source in vendor/imgui) on GLFW with the
@@ -49,10 +52,18 @@ endif
 MAKEFLAGS += -j$(shell nproc)
 DEPFLAGS = -MMD -MP
 
-all: linux $(WIN_BINS)
+APPIMAGE = $(TARGET)-x86_64.AppImage
+APPIMAGETOOL = vendor/appimagetool
+APPIMAGE_BIN =
+ifneq ($(wildcard $(APPIMAGETOOL)),)
+APPIMAGE_BIN = appimage
+endif
+
+all: linux $(WIN_BINS) $(APPIMAGE_BIN)
 
 linux: $(TARGET)
 win: $(TARGET).exe
+appimage: $(APPIMAGE)
 
 # One object list per variant, and the rule to build them.
 LINUX_OBJS = $(SRCS:%.cpp=build/linux/%.o)
@@ -74,6 +85,24 @@ build/linux/splash.o build/win/splash.o build/xp32/splash.o: assets/splash.png
 
 $(TARGET): $(LINUX_OBJS)
 	$(CXX) $(LINUX_FLAGS) -o $@ $^ $(LINUX_LIBS)
+
+# The AppImage's binary: the same objects, linked with libstdc++ static (the user's distribution may have
+# an older one; libgcc_s stays shared, every system has it and the static one wants glibc 2.35), an rpath to the bundled GLFW (AppDir/usr/lib), and the few glibc symbols that
+# got new versions after 2.34 bound to their old ones through glibc_compat.c (--wrap), so it runs on
+# distributions since 2021. The rest of the AppDir (the files read beside the binary, the menu entry, the
+# icon) is assembled by build-appimage.sh.
+APPIMAGE_WRAPS = asinf acosf log10f sqrtf atan2f hypotf fmodf fmod __isoc23_strtol __isoc23_strtoul __isoc23_sscanf arc4random
+APPIMAGE_LINK_FLAGS = -static-libstdc++ -Wl,-rpath,'$$ORIGIN/../lib' $(addprefix -Wl$(comma)--wrap=,$(APPIMAGE_WRAPS))
+comma = ,
+build/appimage/glibc_compat.o: glibc_compat.c
+	@mkdir -p $(dir $@)
+	$(CC) -std=gnu99 -O2 -Wall -c $< -o $@
+build/appimage/$(TARGET): $(LINUX_OBJS) build/appimage/glibc_compat.o
+	@mkdir -p $(dir $@)
+	$(CXX) $(LINUX_FLAGS) $(APPIMAGE_LINK_FLAGS) -o $@ $^ $(LINUX_LIBS)
+
+$(APPIMAGE): build/appimage/$(TARGET) build-appimage.sh um-multitool.desktop assets/logo-256.png lang/ru.txt $(wildcard materials/*.tsv)
+	./build-appimage.sh $< $@
 
 # Requires vendor/glfw-mingw to exist first: run vendor/build-glfw-mingw.sh
 # The .exe's icon (assets/um-multitool.ico), compiled into a resource object.
@@ -104,6 +133,6 @@ $(TARGET)-xp32.exe: $(XP32_OBJS) um-multitool-res32.o
 -include $(LINUX_OBJS:.o=.d) $(WIN_OBJS:.o=.d) $(XP32_OBJS:.o=.d)
 
 clean:
-	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe $(WIN_RES) um-multitool-res32.o
+	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe $(APPIMAGE) $(WIN_RES) um-multitool-res32.o
 
-.PHONY: all linux win xp clean
+.PHONY: all linux win xp appimage clean

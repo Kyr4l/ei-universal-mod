@@ -176,7 +176,7 @@ inline void MaterialPicker(const Library& lib, ItemTabState& st) {
 
 // Decodes the texture again (the GL copy cannot be read back portably) and saves it where the user picks.
 inline void ExportTexturePng(Library& lib, const std::string& texture, ItemTabState& st) {
-    std::string dir = lib.gif.lastDirectory.empty() ? config::ExeDir() : lib.gif.lastDirectory;
+    std::string dir = lib.gif.lastDirectory.empty() ? config::DefaultSaveDir() : lib.gif.lastDirectory;
     std::string path;
     const std::string base = std::filesystem::path(texture).stem().string(); // a picked file: its own name
     if (!PickSaveFile(dir + "/" + base + ".png", path, "png")) return;
@@ -209,7 +209,7 @@ inline std::string ExportUvPng(Library& lib, Scene& scene, const std::string& te
     const bool haveTex = !texture.empty() && Scene::ReadTextureBytes(lib, texture, bytes) && DecodeTextureFile(bytes, tex, err);
     if (!haveTex && withTexture) return "Could not read the texture " + texture + (err.empty() ? "" : ": " + err);
     if (!withTexture && haveTex) tex.rgba.assign(tex.rgba.size(), 0); // its size, transparent: still on its texels
-    std::string dir = lib.gif.lastDirectory.empty() ? config::ExeDir() : lib.gif.lastDirectory;
+    std::string dir = lib.gif.lastDirectory.empty() ? config::DefaultSaveDir() : lib.gif.lastDirectory;
     std::string path;
     if (!PickSaveFile(dir + "/" + scene.modelName + "_uv.png", path, "png")) return "";
     const uvmap::Result r = uvmap::Draw(loaded.model, scene.shownParts, haveTex ? &tex : nullptr, !scene.unitModel && scene.options.atlasUvs, 256);

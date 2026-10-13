@@ -94,7 +94,8 @@ static void PrintTopLevelHelp() {
               << "  map                     Check .mob maps like the Map Editor (and um.dll) do\n"
               << "  dll                     Commands to um.dll inside the running game (its DLL server): memory, threads, breakpoints\n"
               << "  completion bash         Print the bash tab-completion script: eval \"$(um-multitool completion bash)\" in ~/.bashrc\n"
-              << "  install-desktop         Add um-multitool to the Linux application menu, with its icon and bash tab completion (--remove: undo)\n\n"
+              << "  install-desktop         Add um-multitool to the Linux application menu, with its icon and bash tab completion;\n"
+              << "                          from the AppImage, also the um-multitool command in ~/.local/bin (--remove: undo)\n\n"
               << "Options:\n"
               << "  --version       Print program version (" << PROGRAM_VERSION << ")\n"
               << "  -h, --help      Print this help message\n\n"
@@ -387,6 +388,9 @@ static bool BashrcRemove(const fs::path& bashrc) {
 // current user (~/.local/share/applications, and the 256-pixel icon in ~/.local/share/icons/hicolor),
 // with this binary's absolute path, so the tool shows in the application menu with its icon (on Wayland,
 // also the window's). Menus find the icon by its theme name and scale it to the size they need.
+// From the AppImage the menu entry runs the .AppImage file itself ($APPIMAGE, set by its runtime: the
+// mounted binary is gone once it exits), and ~/.local/bin/um-multitool is linked to it so the command and
+// the tab completion work from a terminal too.
 static int InstallDesktop(int argc, char* argv[]) {
 #ifdef _WIN32
     (void)argc; (void)argv;
@@ -406,6 +410,16 @@ static int InstallDesktop(int argc, char* argv[]) {
     const fs::path completion = data / "bash-completion" / "completions" / "um-multitool";
     const char* homeDir = std::getenv("HOME");
     const fs::path bashrc = homeDir && *homeDir ? fs::path(homeDir) / ".bashrc" : fs::path();
+    // The AppImage case: the menu entry and the command link point at the .AppImage file.
+    const char* appimageEnv = std::getenv("APPIMAGE");
+    const fs::path appimage = appimageEnv && *appimageEnv ? fs::path(appimageEnv) : fs::path();
+    const fs::path binLink = homeDir && *homeDir ? fs::path(homeDir) / ".local" / "bin" / "um-multitool" : fs::path();
+    // Only a link made by install-desktop is removed: a symlink to an .AppImage (or to this AppImage).
+    auto isOurLink = [&]() {
+        if (binLink.empty() || !fs::is_symlink(binLink, ec)) return false;
+        const fs::path target = fs::read_symlink(binLink, ec);
+        return !ec && (target == appimage || target.extension() == ".AppImage");
+    };
     // Earlier versions installed every usual size: --remove still removes them all.
     const int sizes[] = {16, 22, 24, 32, 48, 64, 128, 256, 512};
     auto iconAt = [&](int size) { return hicolor / (std::to_string(size) + "x" + std::to_string(size)) / "apps" / "um-multitool.png"; };
@@ -422,6 +436,7 @@ static int InstallDesktop(int argc, char* argv[]) {
         if (any) std::cout << "Removed " << desktop.string() << "\n";
         if (fs::remove(completion, ec)) { std::cout << "Removed " << completion.string() << " (bash tab completion)\n"; any = true; }
         if (!bashrc.empty() && BashrcRemove(bashrc)) { std::cout << "Removed the um-multitool completion lines from " << bashrc.string() << "\n"; any = true; }
+        if (isOurLink() && fs::remove(binLink, ec)) { std::cout << "Removed " << binLink.string() << " (the um-multitool command, a link to the AppImage)\n"; any = true; }
         for (int size : sizes) if (fs::remove(iconAt(size), ec)) { std::cout << "Removed " << iconAt(size).string() << "\n"; any = true; }
         if (!any) std::cout << "Nothing to remove.\n";
         else refresh();
@@ -429,6 +444,7 @@ static int InstallDesktop(int argc, char* argv[]) {
     }
     const fs::path exe = fs::read_symlink("/proc/self/exe", ec);
     if (ec) { std::cerr << "Error: cannot find this program's path\n"; return 1; }
+    const fs::path launch = appimage.empty() ? exe : fs::absolute(appimage, ec);
     fs::create_directories(desktop.parent_path(), ec);
     {
         const fs::path from = exe.parent_path() / "assets" / "logo-256.png";
@@ -447,8 +463,8 @@ static int InstallDesktop(int argc, char* argv[]) {
          "Name=Universal Mod Multitool\n"
          "GenericName=Evil Islands Modding Toolkit\n"
          "Comment=Evil Islands modding: file conversion, 3D viewer and map editor\n"
-         "Exec=\"" << exe.string() << "\" gui\n"
-         "Path=" << exe.parent_path().string() << "\n"
+         "Exec=\"" << launch.string() << "\" gui\n"
+         "Path=" << launch.parent_path().string() << "\n"
          "Icon=um-multitool\n"
          "Terminal=false\n"
          "Categories=Development;\n"
@@ -459,6 +475,21 @@ static int InstallDesktop(int argc, char* argv[]) {
     refresh();
     std::cout << "Installed " << desktop << "\n     and the icon in " << hicolor << " (256 pixels)\n"
               << "Universal Mod Multitool is now in the application menu (it may take a moment to appear).\n";
+    if (!appimage.empty()) {
+        std::cout << "  It runs " << launch.string() << ": keep the AppImage there (run install-desktop again after moving it).\n";
+        // The command: a link to the AppImage in ~/.local/bin (on the PATH of most distributions).
+        if (!binLink.empty()) {
+            fs::create_directories(binLink.parent_path(), ec);
+            if (isOurLink()) fs::remove(binLink, ec);
+            if (fs::exists(fs::symlink_status(binLink, ec))) {
+                std::cout << "  " << binLink.string() << " exists already and is not a link to an AppImage: left as is.\n";
+            } else {
+                fs::create_symlink(launch, binLink, ec);
+                if (ec) std::cerr << "Warning: cannot create " << binLink.string() << ": " << ec.message() << "\n";
+                else std::cout << "Linked " << binLink.string() << " to the AppImage: the um-multitool command works in new shells (if ~/.local/bin is on the PATH).\n";
+            }
+        }
+    }
     // The completion is optional: a failure here does not undo the menu entry.
     fs::create_directories(completion.parent_path(), ec);
     std::ofstream c(completion, std::ios::trunc);

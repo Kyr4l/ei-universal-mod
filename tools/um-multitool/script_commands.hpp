@@ -22,7 +22,7 @@
 
 namespace scriptcmds {
 
-inline std::string FilePath() { return config::ExeDir() + "/script_commands.txt"; }
+inline std::string FilePath() { return config::UserDir() + "/script_commands.txt"; }
 
 // A signature's letters: return type v f s o g ?, parameters f s o g ? (a leading * = any number of the next).
 inline bool ValidTypes(char returns, const std::string& params) {

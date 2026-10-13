@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// Remembers the GUI's settings between sessions in um-multitool.cfg beside the executable: the
+// Remembers the GUI's settings between sessions in um-multitool.cfg beside the executable (in an
+// AppImage: ~/.config/um-multitool, see UserDir): the
 // sources (figure/texture/text layers, database) shared by the 3D Viewer and the Map Editor, the
 // viewer's rotations and GIF settings, and the map editor's files. "KEY=value" lines, layer keys
 // repeated in load order (later = higher priority). Older versions wrote um-multitool-viewer.cfg,
@@ -10,6 +11,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <filesystem>
 #include <fstream>
 #include <map>
 #include <cstdio>
@@ -41,8 +43,34 @@ inline std::string ExeDir() {
     return pos == std::string::npos ? "." : p.substr(0, pos);
 }
 
-inline std::string Path() { return ExeDir() + "/um-multitool.cfg"; }
-inline std::string LegacyPath() { return ExeDir() + "/um-multitool-viewer.cfg"; }
+// True when running from an AppImage: its runtime sets APPIMAGE to the .AppImage file's path, and the
+// executable then sits in a read-only mount (so nothing can be written beside it).
+inline bool InAppImage() {
+    const char* a = std::getenv("APPIMAGE");
+    return a && *a;
+}
+inline std::string HomeDir() {
+    const char* h = std::getenv("HOME");
+    return h && *h ? h : ".";
+}
+
+// Where um-multitool's own files go (um-multitool.cfg, um-multitool.log, script_commands.txt): beside the
+// executable, like always, except in an AppImage: $XDG_CONFIG_HOME/um-multitool (~/.config/um-multitool),
+// created on first use.
+inline std::string UserDir() {
+    if (!InAppImage()) return ExeDir();
+    const char* xdg = std::getenv("XDG_CONFIG_HOME");
+    const std::string dir = (xdg && *xdg ? std::string(xdg) : HomeDir() + "/.config") + "/um-multitool";
+    std::error_code ec;
+    std::filesystem::create_directories(dir, ec);
+    return dir;
+}
+
+// Where exports go when no folder was chosen yet: beside the executable, or the home folder in an AppImage.
+inline std::string DefaultSaveDir() { return InAppImage() ? HomeDir() : ExeDir(); }
+
+inline std::string Path() { return UserDir() + "/um-multitool.cfg"; }
+inline std::string LegacyPath() { return UserDir() + "/um-multitool-viewer.cfg"; }
 
 // GIF export settings (see the viewer's "Export GIF" dialog).
 struct GifSettings {

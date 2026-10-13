@@ -118,6 +118,8 @@ __um-multitool__ (`tools/um-multitool`) is the toolkit we use to build this mod,
 - __Map Editor__: edits `.mob` maps and `.mpr` terrains, quests and their scripts, checks them like the game does, and rebuilds the navmesh like the game does (no more navmesh regeneration at load time).
 - __UM DLL Connector__: talks to the running game through `um.dll`: stats, quests and scripts live, and a game console.
 
+Releases ship `um-multitool.exe` (Windows), `um-multitool-xp32.exe` (Windows XP), `um-multitool` (Linux, needs the distribution's GLFW) and `um-multitool-x86_64.AppImage` (Linux, GLFW bundled: make it executable, then double-click it or run it from a terminal with the usual arguments). On Linux, `um-multitool install-desktop` adds the tool to the application menu with its icon and bash tab completion; from the AppImage it also links the `um-multitool` command into `~/.local/bin`. The AppImage keeps its settings and log in `~/.config/um-multitool`; the plain binary keeps them beside itself.
+
 ## Use of AI
 
 A large part of the tools in this repository (um-multitool, um.dll) was written with the help of AI. The code remains reviewed, tested and maintained by humans.

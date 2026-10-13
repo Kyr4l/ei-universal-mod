@@ -30,7 +30,7 @@ std::string Stamp() {
 
 } // namespace
 
-std::string FilePath() { return config::ExeDir() + "/um-multitool.log"; }
+std::string FilePath() { return config::UserDir() + "/um-multitool.log"; }
 
 void Write(Level level, const std::string& text) {
     const char* tag = level == Level::Error ? "ERROR" : level == Level::Warning ? "WARN " : "info ";

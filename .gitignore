@@ -41,6 +41,9 @@ tools/um-multitool/vendor/glfw-src-xp/
 tools/um-multitool/vendor/glfw-src-xp33/
 tools/um-multitool/vendor/glfw-mingw-xp32/
 tools/um-multitool/vendor/glfw-mingw-xp64/
+# appimagetool, fetched by tools/um-multitool/build-appimage.sh (make appimage)
+tools/um-multitool/vendor/appimagetool
+tools/um-multitool/vendor/appimage-runtime-x86_64
 
 # CoPilot Resources
 _cpr
