@@ -320,13 +320,16 @@ public:
     }
     // Plays the animated models: each at the frame of `seconds` (15 a second), baked again when it changes.
     // Models of the same look share their geometry, so such units move in step.
-    void AnimateModels(const Library& lib, double seconds) {
-        if (!options.poseUnits || !options.animateUnits) return;
+    // Returns whether a model changed its frame (the view must be drawn again).
+    bool AnimateModels(const Library& lib, double seconds) {
+        if (!options.poseUnits || !options.animateUnits) return false;
+        bool changed = false;
         for (auto& [key, m] : models_) {
             if (!m.ok || !m.anim || m.frames <= 1) continue;
             const int frame = static_cast<int>(seconds * 15.0) % m.frames;
-            if (frame != m.bakedFrame) BakeModel(lib, m, frame);
+            if (frame != m.bakedFrame) { BakeModel(lib, m, frame); changed = true; }
         }
+        return changed;
     }
 
     // Frames the whole terrain (or the objects when there is none).

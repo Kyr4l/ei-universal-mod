@@ -30,7 +30,9 @@ bool FillQuestMapInput(Context* ctx, questmap::Input& in, std::string& err);
 // Inside the ImGui frame, in the Map Editor tab's content region.
 void DrawTab(Context* ctx);
 // After ImGui::Render: the 3D view into the region DrawTab reserved (nothing when it was not drawn).
-void RenderGl(Context* ctx, int framebufferWidth, int framebufferHeight, float framebufferScale);
+// resting: the main loop is at its resting rate (no input for a while): the view is drawn again only when
+// something changed, else the last frame is shown again.
+void RenderGl(Context* ctx, int framebufferWidth, int framebufferHeight, float framebufferScale, bool resting = false);
 
 // The map the game runs (um.dll's MAP: file names): its files' paths (from the map folders, the quest
 // folders and next to the quest), and what was not found; OpenGameMap opens them (the quest when there

@@ -965,4 +965,32 @@ std::vector<Issue> CheckBook(const Book& book) {
     return out;
 }
 
+std::vector<Issue> CheckSheets(const Book& book, const std::vector<std::string>& sheets) {
+    const Names names(book);
+    std::vector<Issue> out;
+    for (const sheetio::Sheet& sh : book)
+        if (std::find(sheets.begin(), sheets.end(), sh.name) != sheets.end()) CheckSheet(book, sh, names, out);
+    return out;
+}
+
+std::vector<std::string> SheetsReading(const Book& book, const std::string& sheet) {
+    std::vector<std::string> out{sheet};
+    auto add = [&](const std::string& s) { if (std::find(out.begin(), out.end(), s) == out.end()) out.push_back(s); };
+    // Names (the item sheets and Materials; SpellPrototypes and SpellModifiers): read by every sheet with an
+    // Items / Spells reference. RaceModels: the Monsters skin check too (a Name reference already).
+    static const char* const kItemSources[] = {"Weapons", "Armors", "QuickItems", "QuestItems", "LootItems", "Materials"};
+    static const char* const kSpellSources[] = {"SpellPrototypes", "SpellModifiers"};
+    bool items = false, spells = false;
+    for (const char* s : kItemSources) if (sheet == s) items = true;
+    for (const char* s : kSpellSources) if (sheet == s) spells = true;
+    for (const Reference& ref : kReferences) {
+        if (ref.kind == Reference::Name ? sheet == ref.targetSheet : (ref.kind == Reference::Items ? items : spells)) add(ref.sheet);
+    }
+    // Keep the sheets the book has, in the book's order (after `sheet`).
+    std::vector<std::string> inBook{sheet};
+    for (const sheetio::Sheet& sh : book)
+        if (sh.name != sheet && std::find(out.begin(), out.end(), sh.name) != out.end()) inBook.push_back(sh.name);
+    return inBook;
+}
+
 } // namespace dbmodel

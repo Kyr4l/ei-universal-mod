@@ -1319,7 +1319,7 @@ int RunGui(const GuiOptions& options) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (ui::BackgroundShown()) DrawBackground(bgTexture, bgSize, fbW, fbH, library.backgroundOpacity);
         viewer::RenderGl(viewerCtx, fbW, fbH, io.DisplayFramebufferScale.x, dt);
-        mapedit::RenderGl(mapCtx, fbW, fbH, io.DisplayFramebufferScale.x);
+        mapedit::RenderGl(mapCtx, fbW, fbH, io.DisplayFramebufferScale.x, g_resting);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
         if (!options.screenshotPath.empty() && ++frameCount >= 8 && (!mapedit::Busy(mapCtx) || frameCount > 3000)) {
             SaveScreenshot(options.screenshotPath, fbW, fbH);

@@ -36,12 +36,14 @@ namespace {
 constexpr int kFirstRow = 4, kFirstCol = 2; // records start at B4
 const ImVec4 kErrorColor(0.95f, 0.42f, 0.38f, 1), kWarningColor(0.95f, 0.78f, 0.35f, 1);
 
-// One undo step: a cell's value before and after, or a whole sheet before and after (row changes).
+// One undo step: a cell's value before and after, or one row inserted / deleted (its cells kept: a
+// whole-sheet copy per row action grew to hundreds of MB over a long session).
 struct Change {
+    enum Kind { Cell, RowInserted, RowDeleted } kind = Cell;
     int sheet = 0;
     int row = 0, col = 0;
-    std::optional<sheetio::Cell> before, after;
-    std::optional<sheetio::Sheet> sheetBefore, sheetAfter;
+    std::optional<sheetio::Cell> before, after;             // Cell
+    std::vector<std::pair<int, sheetio::Cell>> rowCells;     // RowInserted / RowDeleted: the row's cells by column
 };
 
 struct State {
@@ -65,6 +67,9 @@ struct State {
     std::vector<std::pair<int, int>> sheetCounts;              // per sheet: errors, warnings
     double checkMs = 0;
     bool showErrors = true, showWarnings = true, issuesOfSheetOnly = false;
+    std::vector<int> shownIssues; // the issue list as filtered (rebuilt when the key below changes)
+    int shownVersion = -1, shownSheet = -1;
+    bool shownErrors = false, shownWarnings = false, shownOfSheet = false;
 
     // The table
     int selRow = -1, selCol = -1;
@@ -121,11 +126,27 @@ void GoToIssue(const dbmodel::Issue& is);
 
 bool ChecksOn() { return !g.hooks.checksOn || g.hooks.checksOn(); }
 
-void Recheck(bool alert = true) {
+// Runs the checks: the whole book, or (changedSheet >= 0, after an edit) only that sheet and the sheets
+// whose checks read it (dbmodel::SheetsReading); the other sheets keep their issues.
+void Recheck(bool alert = true, int changedSheet = -1) {
     const auto t0 = std::chrono::steady_clock::now();
+    const bool wasOn = g.checkedOn;
     g.checkedOn = ChecksOn();
-    if (g.checkedOn) g.issues = dbmodel::CheckBook(g.book);
-    else g.issues.clear(); // Settings > Checks: off
+    if (!g.checkedOn) {
+        g.issues.clear(); // Settings > Checks: off
+    } else if (changedSheet < 0 || !wasOn || changedSheet >= static_cast<int>(g.book.size())) {
+        g.issues = dbmodel::CheckBook(g.book);
+    } else {
+        const std::vector<std::string> again = dbmodel::SheetsReading(g.book, g.book[changedSheet].name);
+        std::vector<dbmodel::Issue> fresh = dbmodel::CheckSheets(g.book, again);
+        std::vector<dbmodel::Issue> merged; // in the book's sheet order, as CheckBook lists them
+        merged.reserve(g.issues.size() + fresh.size());
+        for (const sheetio::Sheet& sh : g.book) {
+            const bool redone = std::find(again.begin(), again.end(), sh.name) != again.end();
+            for (dbmodel::Issue& is : redone ? fresh : g.issues) if (is.sheet == sh.name) merged.push_back(std::move(is));
+        }
+        g.issues = std::move(merged);
+    }
     g.checkMs = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
     g.cellIssue.assign(g.book.size(), {});
     g.rowIssue.assign(g.book.size(), {});
@@ -234,28 +255,52 @@ void Compile() {
 
 // ---- changes -------------------------------------------------------------------------------------------
 
-void Changed() {
+void ShiftRows(sheetio::Sheet& sh, int from, int delta);
+
+// After a change in sheet `sheet`: the counts and marks update (that sheet and the sheets reading it are
+// re-checked), no popup.
+void Changed(int sheet) {
     g.dirty = true;
     ++g.version;
     g.redo.clear();
-    Recheck(false); // while editing: the counts and marks update, no popup
+    Recheck(false, sheet);
+}
+
+// Puts row `row` (its cells) into the sheet, moving the rows from it on down.
+void InsertRow(sheetio::Sheet& sh, int row, const std::vector<std::pair<int, sheetio::Cell>>& cells) {
+    ShiftRows(sh, row, 1);
+    for (const auto& [col, cell] : cells) sh.Set(row, col, cell);
+    sh.maxRow = std::max(sh.maxRow, row);
+}
+
+// Takes row `row` out of the sheet (its cells returned), moving the rows below it up.
+std::vector<std::pair<int, sheetio::Cell>> RemoveRow(sheetio::Sheet& sh, int row) {
+    std::vector<std::pair<int, sheetio::Cell>> cells;
+    for (auto it = sh.cells.begin(); it != sh.cells.end();) {
+        if (it->first.first == row) { cells.push_back({it->first.second, std::move(it->second)}); it = sh.cells.erase(it); }
+        else ++it;
+    }
+    ShiftRows(sh, row + 1, -1);
+    return cells;
 }
 
 void Apply(const Change& c, bool undo) {
     if (c.sheet < 0 || c.sheet >= static_cast<int>(g.book.size())) return;
     sheetio::Sheet& sh = g.book[c.sheet];
-    if (c.sheetBefore) {
-        sh = undo ? *c.sheetBefore : *c.sheetAfter;
-    } else {
+    if (c.kind == Change::Cell) {
         const auto& v = undo ? c.before : c.after;
         if (v) sh.Set(c.row, c.col, *v);
         else sh.cells.erase({c.row, c.col});
+    } else if ((c.kind == Change::RowInserted) == undo) {
+        RemoveRow(sh, c.row); // undoing an insertion, or redoing a deletion
+    } else {
+        InsertRow(sh, c.row, c.rowCells); // undoing a deletion, or redoing an insertion
     }
     g.sheet = c.sheet;
     if (c.row > 0) { g.selRow = c.row; g.selCol = c.col > 0 ? c.col : g.selCol; g.scrollToSelection = true; }
     g.dirty = true;
     ++g.version;
-    Recheck(false);
+    Recheck(false, c.sheet);
 }
 
 void Undo() {
@@ -276,8 +321,7 @@ void Redo() {
 
 void PushUndo(Change c) {
     g.undo.push_back(std::move(c));
-    // Whole-sheet steps are large: keep the last 200 steps.
-    if (g.undo.size() > 200) g.undo.erase(g.undo.begin());
+    if (g.undo.size() > 1000) g.undo.erase(g.undo.begin()); // a step is one cell or one row
 }
 
 // The typed text into a cell: a number in a number field when it reads as one, else text; nothing
@@ -316,7 +360,7 @@ void SetCell(int row, int col, const std::string& typed) {
     if (after) sh.Set(row, col, *after);
     else sh.cells.erase({row, col});
     PushUndo(std::move(ch));
-    Changed();
+    Changed(g.sheet);
 }
 
 // Moves every row from `from` on by `delta` rows (inserting or removing rows).
@@ -341,26 +385,23 @@ void RowAction(int kind) {
     sheetio::Sheet& sh = g.book[g.sheet];
     Change ch;
     ch.sheet = g.sheet;
-    ch.sheetBefore = sh;
     const int r = g.selRow;
     if (kind == 0) {
-        ShiftRows(sh, r, 1);
-        sh.maxRow = std::max(sh.maxRow, r);
+        ch.kind = Change::RowInserted;
+        InsertRow(sh, r, {});
     } else if (kind == 1) {
-        std::vector<std::pair<int, sheetio::Cell>> copy;
-        for (const auto& [rc, cell] : sh.cells) if (rc.first == r) copy.push_back({rc.second, cell});
-        ShiftRows(sh, r + 1, 1);
-        for (auto& [col, cell] : copy) sh.Set(r + 1, col, cell);
+        ch.kind = Change::RowInserted;
+        for (const auto& [rc, cell] : sh.cells) if (rc.first == r) ch.rowCells.push_back({rc.second, cell});
+        InsertRow(sh, r + 1, ch.rowCells);
         g.selRow = r + 1;
     } else {
-        for (auto it = sh.cells.begin(); it != sh.cells.end();) it = it->first.first == r ? sh.cells.erase(it) : std::next(it);
-        ShiftRows(sh, r + 1, -1);
+        ch.kind = Change::RowDeleted;
+        ch.rowCells = RemoveRow(sh, r);
     }
-    ch.sheetAfter = sh;
     ch.row = g.selRow;
     PushUndo(std::move(ch));
     g.scrollToSelection = true;
-    Changed();
+    Changed(g.sheet);
 }
 
 // ---- drawing ---------------------------------------------------------------------------------------
@@ -771,12 +812,27 @@ void IssueList(float height) {
     ImGui::TableSetupColumn("Quick fix", ImGuiTableColumnFlags_WidthFixed, 260);
     ImGui::TableHeadersRow();
     const std::string sheetName = g.book[g.sheet].name;
+    // The shown issues, filtered once per change (the list is drawn through a clipper: only the visible rows).
+    if (g.shownVersion != g.version || g.shownSheet != g.sheet || g.shownErrors != g.showErrors || g.shownWarnings != g.showWarnings ||
+        g.shownOfSheet != g.issuesOfSheetOnly) {
+        g.shownIssues.clear();
+        for (size_t i = 0; i < g.issues.size(); ++i) {
+            const dbmodel::Issue& is = g.issues[i];
+            const bool error = is.severity == dbmodel::Issue::Error;
+            if ((error && !g.showErrors) || (!error && !g.showWarnings)) continue;
+            if (g.issuesOfSheetOnly && is.sheet != sheetName) continue;
+            g.shownIssues.push_back(static_cast<int>(i));
+        }
+        g.shownVersion = g.version; g.shownSheet = g.sheet; g.shownErrors = g.showErrors; g.shownWarnings = g.showWarnings;
+        g.shownOfSheet = g.issuesOfSheetOnly;
+    }
     std::optional<std::pair<dbmodel::Issue, std::string>> fix; // applied after the table
-    for (size_t i = 0; i < g.issues.size(); ++i) {
+    ImGuiListClipper clipper;
+    clipper.Begin(static_cast<int>(g.shownIssues.size()));
+    while (clipper.Step()) for (int n = clipper.DisplayStart; n < clipper.DisplayEnd; ++n) {
+        const size_t i = static_cast<size_t>(g.shownIssues[n]);
         const dbmodel::Issue& is = g.issues[i];
         const bool error = is.severity == dbmodel::Issue::Error;
-        if ((error && !g.showErrors) || (!error && !g.showWarnings)) continue;
-        if (g.issuesOfSheetOnly && is.sheet != sheetName) continue;
         ImGui::TableNextRow();
         ImGui::TableNextColumn();
         ImGui::PushID(static_cast<int>(i));
