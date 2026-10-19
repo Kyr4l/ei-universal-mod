@@ -84,7 +84,7 @@ public:
     // uploaded when entering a quest). The JOIN: name\0 unit\0 u32 state, u8 0, u32 hero id.
     void SetCharacter(const std::string& name, const std::string& unit, uint32_t id, const std::vector<uint8_t>& mpRaw = {}) {
         name_ = name; unit_ = unit; heroId_ = id; mpRaw_ = mpRaw;
-        phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = false;
+        phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = false; reconnect = false; leavingAt_ = 0;
         tx_.clear(); txOffset_ = 0; unacked_.clear(); resend_.clear(); rxChunks_.clear(); rx_.clear(); rxParsed_ = 0; rxBase_ = 0; got_.clear(); seenMessages_.clear();
         SetJoin(1, 0xFFFFFFFFu); // as the game: first without a hero, then with it
     }
@@ -528,7 +528,7 @@ public:
             Handle(buf, n);
         }
         // In the session: an update every 20 ms (as the game): the ack bits, our stream part, the JOIN after a change.
-        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); }
+        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); LeaveSteps(); }
         // The view point (0x40 + f32 x, y in map units), as the game's client sends its camera's about twice a second:
         // the server may send each client what is around it.
         if (state == State::Accepted && worldUnit && Now() - viewAt_ > 0.5) {
@@ -714,6 +714,20 @@ public:
         Close();
         state = State::Idle;
     }
+    void SendRaw(const std::vector<uint8_t>& m) { StreamMessage(m); } // research
+    // Leaves the world for good (the host left, or we are asked to): the leave message 0x04 + u32 0 makes the server move what we carried into the party and answer with
+    // the party (0x83: the final save, taken by the owner of the file); the connection is closed 2 s later and `reconnect` is set: the lobby is entered again with a
+    // fresh handshake (a JOIN 3 after the leave message gets no snapshot: checked live 2026-10-20).
+    void LeaveWorld() {
+        if (state != State::Accepted || !worldUnit || leavingAt_ > 0) return;
+        Log("leaving the world (the final save), then reconnecting");
+        std::vector<uint8_t> leave{0x04}; Put32(leave, 0); StreamMessage(leave);
+        leavingAt_ = Now();
+    }
+    bool reconnect = false;     // set after LeaveWorld: the owner connects again
+    void LeaveSteps() {
+        if (leavingAt_ > 0 && Now() - leavingAt_ > 2) { leavingAt_ = 0; Disconnect(); worldUnit = 0; reconnect = true; }
+    }
     void GoToLobby() { LeaveZone(); }   // leave the quest zone, stay in the session
     // Stream message 0x06 (server OnMsg_ChangeMapByName 0x670E00): a map name and an entry dword; the hero goes to that map (research: how a real client leaves a quest).
     void ChangeMapByName(const std::string& map, uint32_t entry = 0) {
@@ -746,6 +760,7 @@ private:
     std::vector<uint8_t> join_;
     std::string worldQuest_;
     int hpLogged_ = -1, mpLogged_ = -1;
+    double leavingAt_ = 0;
     double hostGoneAt_ = 0, joinWatchAt_ = 0; int joinRetries_ = 0;
     int joinSends_ = 0;                        // the JOIN goes 4 times after each change
     std::set<uint16_t> got_;                   // the server's packets received (the ack bits)
@@ -853,7 +868,7 @@ private:
         for (const auto& kv : players) if (IsHost(kv.second) && kv.second.unitId != worldUnit && kv.second.name != name_ && kv.second.state == 0 && kv.second.unitId) hostIn = true;
         if (hostIn) { hostGoneAt_ = 0; return; }
         if (hostGoneAt_ == 0) hostGoneAt_ = Now();
-        else if (Now() - hostGoneAt_ > 3) { Log("the host left the zone: leaving it too"); LeaveZone(); }
+        else if (Now() - hostGoneAt_ > 3) { Log("the host left the zone: leaving it too"); LeaveWorld(); }
     }
     // Join race: the server did not list us (another client left just before, or the first packets were lost): ask again, then give up.
     void WatchJoin() {

@@ -615,12 +615,21 @@ int main(int argc, char** argv) {
                         client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u)\n", spell, who, tg); std::fflush(stdout); used = true;
                     }
                 }
+                if (const char* lw = std::getenv("UM_BOT_LEAVEWORLD"); lw && client.worldUnit && std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > std::atof(lw)) client.LeaveWorld(); // research: leave the world for good (final save) at that time
                 static bool leftZone = false, reentered = false; // research: UM_BOT_LEAVE="secs[,rejoin secs]": leave the zone, optionally enter it again later
                 if (const char* lv = std::getenv("UM_BOT_LEAVE")) {
                     double a = 0, b = -1; std::sscanf(lv, "%lf,%lf", &a, &b);
                     const double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
                     if (!leftZone && client.worldUnit && t > a) { client.GoToLobby(); leftZone = true; client.autoEnter = false; std::printf("left the zone\n"); std::fflush(stdout); }
                     if (leftZone && !reentered && b >= 0 && t > b) { client.autoEnter = true; reentered = true; std::printf("entering again\n"); std::fflush(stdout); }
+                }
+                static bool rawSent = false; // research: UM_BOT_RAW="secs,hex bytes": send one stream message (e.g. "20,04000000" = the leave message 0x04 with a u32 0)
+                if (const char* rw = std::getenv("UM_BOT_RAW"); rw && !rawSent && client.worldUnit) {
+                    double a = 0; char hex[256] = ""; std::sscanf(rw, "%lf,%255s", &a, hex);
+                    if (std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) {
+                        std::vector<uint8_t> m; for (size_t k = 0; hex[k] && hex[k + 1]; k += 2) m.push_back(static_cast<uint8_t>(std::strtoul(std::string(hex + k, 2).c_str(), nullptr, 16)));
+                        client.SendRaw(m); rawSent = true; std::printf("sent raw stream message %s\n", hex); std::fflush(stdout);
+                    }
                 }
                 static bool mapSent = false; // research: UM_BOT_MAP="secs,name,entry": send a ChangeMapByName at that time
                 if (const char* mp_ = std::getenv("UM_BOT_MAP"); mp_ && !mapSent && client.worldUnit) {
@@ -708,6 +717,10 @@ int main(int argc, char** argv) {
                 else app.keepConnected = false;
             }
         } else if (app.client.state == net::Client::State::Accepted && app.client.worldUnit) app.retries = 0;
+        if (app.keepConnected && app.client.reconnect && app.client.state == net::Client::State::Idle) { // after leaving the world: back into the session
+            if (app.retryAt == 0) app.retryAt = glfwGetTime() + 3;
+            else if (glfwGetTime() > app.retryAt) { app.retryAt = 0; app.client.reconnect = false; app.Log("connecting again after leaving the world"); StartConnection(app); }
+        }
         if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {
             mp::Character updated;
             const std::string said = SaveProgress(app.client, app.characterFor, &updated);
