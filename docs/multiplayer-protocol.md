@@ -239,10 +239,10 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x52 | 0x668AA0 | **unknown** | |
 | 0x60 | 0x668C50 | a list (ids) | a resync list of unit ids seen once (0x12A0 0x1320 0x3B9ACA0D 0x3B9ACA10) |
 | 0x70-0x72 | 0x669760.. | **unknown** | |
-| 0x80 | 0x669A30 | **unknown** | |
+| 0x80 | 0x669A30 | the player's party: a length (2 bytes = size × 2; 4 bytes = size × 2 + 1 from 15000) + the character in the .mp's unpacked layout (zone name, u32, party, variables) | sent at the start of the session and every 900-1800 ticks (`SendMsg80_Party` 0x66EF80); um-bot writes it back into the character's .mp (checked 2026-10-20: it parses and re-serializes identically) |
 | 0x81 | 0x669850 | str; when it starts with "q." -> 0x5F7FC0 / 0x565380 | quest-related (can embed a 0x40 record) |
 | 0x82 | 0x669960 | **unknown** | |
-| 0x83 | 0x669C90 | **unknown** | |
+| 0x83 | 0x669C90 | the same party blob as 0x80 | sent when the player leaves the world (`World::PlayerOut` 0x590A40, after the picked-up items are moved into the party): the final save |
 
 ### The 0x41 unit update (decoded, um-bot UnitUpdate / unit41.py)
 

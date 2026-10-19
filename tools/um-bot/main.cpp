@@ -36,7 +36,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.3";
+static const char* const kVersion = "0.1.4";
 
 
 struct App {
@@ -76,6 +76,35 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
     std::string err;
     if (!in || !mp::Unpack(file, raw, err)) raw.clear();
     return raw;
+}
+
+// The party the server sent (its 0x80 / 0x83 messages): checked with the .mp reader (must parse and write back the same), then written into the
+// character's file. The first save keeps the original as .bak. Returns a message for the log ("" when nothing was saved).
+static std::string SaveProgress(net::Client& client, const std::string& path, mp::Character* current = nullptr) {
+    std::string said;
+    while (!client.partyIn.empty()) {
+        net::Client::PartyBlob pb = std::move(client.partyIn.front());
+        client.partyIn.erase(client.partyIn.begin());
+        mp::Character fresh, base;
+        std::string err;
+        if (!mp::Parse(pb.bytes, fresh, err) || mp::Serialize(fresh) != pb.bytes || fresh.members.empty()) continue; // not a party
+        if (!mp::Load(path, base, err)) continue;                                    // the file must still be a character we understand
+        if (mp::Serialize(base) == pb.bytes) continue;                               // nothing new
+        fresh.head = base.head; fresh.version = base.version;
+        const std::string bak = path + ".bak";
+        if (FILE* f = std::fopen(bak.c_str(), "rb")) std::fclose(f);
+        else if (FILE* in = std::fopen(path.c_str(), "rb")) {
+            std::vector<char> bytes; char buf[4096]; size_t n;
+            while ((n = std::fread(buf, 1, sizeof buf, in)) > 0) bytes.insert(bytes.end(), buf, buf + n);
+            std::fclose(in);
+            if (FILE* out = std::fopen(bak.c_str(), "wb")) { std::fwrite(bytes.data(), 1, bytes.size(), out); std::fclose(out); }
+        }
+        if (mp::Save(path, fresh, err)) {
+            said = std::string("saved the character's progress (") + (pb.op == 0x83 ? "on leaving" : "periodic") + ", " + std::to_string(pb.bytes.size()) + " bytes) into " + path;
+            if (current) *current = fresh;
+        } else said = "progress not saved: " + err;
+    }
+    return said;
 }
 
 static void Tip(const char* text) {
@@ -242,6 +271,8 @@ static void BehaviourPanel(App& app) {
     app.dirty |= ImGui::SliderInt("Mana kept for heals", &c.manaReserve, 0, 100, "%d%%");
     Tip("Mana it does not spend on attacks");
     app.dirty |= ImGui::Checkbox("Use potions", &c.usePotions);
+    app.dirty |= ImGui::Checkbox("Save progress", &c.saveProgress);
+    Tip("Writes the experience and items the server reports back into the character's .mp (the original is kept as .bak the first time)");
     static const char* const kEngagement[] = {"Passive", "Defensive", "Aggressive"};
     ImGui::SetNextItemWidth(200);
     app.dirty |= EnumCombo("Engagement", c.engagement, kEngagement);
@@ -548,6 +579,7 @@ int main(int argc, char** argv) {
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
                    client.state != net::Client::State::Rejected) {
                 client.Update();
+                if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 static size_t printed = 0; // the log as it comes, with the time
                 for (; printed < client.log.size(); ++printed)
                     std::printf("%6.1f %s\n", std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count(), client.log[printed].c_str());
@@ -676,6 +708,11 @@ int main(int argc, char** argv) {
                 else app.keepConnected = false;
             }
         } else if (app.client.state == net::Client::State::Accepted && app.client.worldUnit) app.retries = 0;
+        if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {
+            mp::Character updated;
+            const std::string said = SaveProgress(app.client, app.characterFor, &updated);
+            if (!said.empty()) { app.Log(said); if (!updated.members.empty()) app.character = updated; }
+        } else if (!app.cfg.saveProgress) app.client.partyIn.clear();
         if (app.clientLogShown > app.client.log.size()) app.clientLogShown = 0; // the client trims its log
         for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown]);
         ImGui_ImplOpenGL2_NewFrame();

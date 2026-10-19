@@ -107,7 +107,33 @@ public:
         return true;
     }
     // A unit coming into view: 40, u32 id, u32 0x34, ..., "f5 0d" + 2 bytes, f32 x, y, z (map units).
+    // The party the server sends: 0x80 (at the start and every 900-1800 ticks) and 0x83 (when the player leaves the world, with the items picked up)
+    // + a length (2 bytes = size * 2, or 4 bytes = size * 2 + 1 from 15000) + the character in the .mp's unpacked format (zone name, u32, party, variables).
+    // Candidates found by shape; the owner of the file validates them (mp::Parse and write back the same).
+    struct PartyBlob { uint8_t op; std::vector<uint8_t> bytes; double at; };
+    std::vector<PartyBlob> partyIn;              // not taken yet (takePartyIn)
+    size_t partyBlobs = 0;                       // how many were received
+    void ReadParty(const std::vector<uint8_t>& m) {
+        for (size_t o = 0; o + 6 < m.size(); ++o) {
+            if (m[o] != 0x80 && m[o] != 0x83) continue;
+            uint32_t len = 0; size_t hdr = 0;
+            const uint16_t v16 = static_cast<uint16_t>(m[o + 1] | (m[o + 2] << 8));
+            if (!(v16 & 1)) { len = v16 >> 1; hdr = 3; }
+            else if (o + 5 < m.size()) { uint32_t v32; std::memcpy(&v32, &m[o + 1], 4); len = v32 >> 1; hdr = 5; }
+            if (len < 60 || o + hdr + len > m.size()) continue;
+            const uint8_t* b = &m[o + hdr];
+            size_t z = 0; while (z < 40 && z < len && b[z]) ++z;           // the zone name: printable, then 0
+            if (z == 0 || z >= 40 || b[z] != 0) continue;
+            bool text = true; for (size_t k = 0; k < z; ++k) if (b[k] < 0x20 || b[k] > 0x7E) text = false;
+            if (!text) continue;
+            partyIn.push_back({m[o], std::vector<uint8_t>(b, b + len), Now()});
+            if (partyIn.size() > 8) partyIn.erase(partyIn.begin());
+            ++partyBlobs;
+            o += hdr + len - 1;
+        }
+    }
     void ReadUnits(const std::vector<uint8_t>& m) {
+        ReadParty(m);
         for (size_t o = 0; o + 20 < m.size(); ++o) if (m[o] == 0x40) if (const size_t e = Creation(m, o)) o = e - 1; // creations first: exact
         // Experience shares (server message 0x18 = CPlayerServer::SendMsg18, sent by CWorldServer::GiveExperience 0x5911C0 on a kill in a session): u32 hero id,
         // f32 the hero's share. In a multiplayer session a kill's experience is split among ALL players' first heroes by sqrt(exp total + accumulator), whoever struck

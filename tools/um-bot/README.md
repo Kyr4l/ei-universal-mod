@@ -41,6 +41,8 @@ The settings are saved in `um-bot.cfg` next to the program.
   - the mana it keeps for heals;
   - potions;
   - engagement: Passive, Defensive or Aggressive.
+- **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
+  every 15-60 s and when leaving the world) back into the bot's `.mp`. The first save keeps the original as `.bak`.
 - **Movement**:
   - the pace: like the player (runs, walks, sneaks and crawls when they do), always run, or always walk;
   - how far behind the player it follows;

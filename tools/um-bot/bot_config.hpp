@@ -28,6 +28,7 @@ struct Config {
     std::string name = "Companion";
     std::string language = "en";  // the window's language: en, ru
     std::string character;       // the bot's character: a .mp file of the game's (or a mod's) mp folder
+    bool saveProgress = true;    // write the party the server sends (experience, items) back into the character's .mp
     // Build
     Role role = Role::Ranged;
     int tankiness = 30;          // 0 all damage .. 100 all defence (where skill points and gear go)
@@ -76,6 +77,7 @@ inline void Load(Config& c) {
         else if (k == "PORT") c.port = clampi(i, 1, 65535);
         else if (k == "NAME") c.name = v;
         else if (k == "CHARACTER") c.character = v;
+        else if (k == "SAVE_PROGRESS") c.saveProgress = i != 0;
         else if (k == "LANGUAGE") c.language = v;
         else if (k == "ROLE") c.role = static_cast<Role>(clampi(i, 0, 3));
         else if (k == "TANKINESS") c.tankiness = clampi(i, 0, 100);
@@ -95,7 +97,7 @@ inline bool Save(const Config& c) {
     std::ofstream o(c.path, std::ios::trunc);
     if (!o) return false;
     o << "# um-bot settings\n"
-      << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\nCHARACTER=" << c.character << "\nLANGUAGE=" << c.language << "\n"
+      << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\nCHARACTER=" << c.character << "\nSAVE_PROGRESS=" << (c.saveProgress ? 1 : 0) << "\nLANGUAGE=" << c.language << "\n"
       << "ROLE=" << static_cast<int>(c.role) << "\nTANKINESS=" << c.tankiness << "\n"
       << "PRIORITY=" << static_cast<int>(c.priority) << "\nHEAL_PLAYER_BELOW=" << c.healPlayerBelow
       << "\nHEAL_SELF_BELOW=" << c.healSelfBelow << "\nMANA_RESERVE=" << c.manaReserve << "\nUSE_POTIONS=" << (c.usePotions ? 1 : 0) << "\n"
