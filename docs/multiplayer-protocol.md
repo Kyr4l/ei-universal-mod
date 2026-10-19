@@ -126,7 +126,7 @@ read); 0x4355B0 writes a `ref`.
 | kind | object | payload (write order) | sent by | handled by |
 |---|---|---|---|---|
 | 1 | player record | str name ("Name \| CLAN"), str unit ("Human Hadagan NPC Rebel Smith -1" = the character's model line), u32 state, u8, u32 unit id, u32 | server (one per player, id = slot; the host is id 1) | client 0x41E430.. (the player list, the faces) |
-| 2 | system line | u32 code, str text | server | client (chat: "Quest accepted: ...", "Player X connected to the game") |
+| 2 | system line | u32 code, str text | server | client (chat: "Quest accepted: ...", "Player X connected to the game"; a player's typed chat line arrives here as `^1Name^7: text`, which um-bot reads for its chat commands) |
 | 3 | address line | str address ("172.16.0.200:8000"), str map | server, when the host enters a quest | client 0x41E5D0 -> 0x5F82F0 -> 0x5E2A30: a coloured chat line, nothing else (the "8000" port is never opened: **unknown** meaning) |
 | 4 | | ref, no other payload | | client |
 | 5 | JOIN | str name, str unit, u32 state (+0x28), u8 (+0x24), u32 unit id (+0x2C) | client (its own object, id 1 at client+0x2600; re-sent on channel 1 when a field changes and the version +8 is bumped) | server 0x41ADB0 (create: makes the kind-1 record, "lmp_player_connected" in chat), 0x41AD80 (update: copies state and unit id into the record), 0x41B0C0 (remove: "lmp_player_disconnected") |

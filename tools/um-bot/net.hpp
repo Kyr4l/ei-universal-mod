@@ -14,6 +14,7 @@
 
 #include "mp_file.hpp" // the .mp compression (um-multitool)
 
+#include <cctype>
 #include <algorithm>
 #include <deque>
 #include <functional>
@@ -397,11 +398,39 @@ public:
         StreamMessage(m);
         paceSent_ = mode;
     }
+    // A chat line from another player ("^1Name^7: bot stay"): commands for the bot, after "bot" or its first name.
+    // stay | wait | hold: stand where it is; follow | come: follow the host again; passive | defensive | aggressive: the engagement.
+    void ChatCommand(const std::string& line) {
+        std::string t;
+        for (size_t i = 0; i < line.size(); ++i) { if (line[i] == '^' && i + 1 < line.size() && std::isdigit(static_cast<unsigned char>(line[i + 1]))) { ++i; continue; } t += line[i]; }
+        const size_t colon = t.find(": ");
+        if (colon == std::string::npos) return;
+        const std::string speaker = t.substr(0, colon);
+        if (speaker == name_ || name_.empty()) return;
+        std::string msg = t.substr(colon + 2);
+        for (char& c : msg) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        std::string first = name_.substr(0, name_.find_first_of(" |"));
+        for (char& c : first) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+        for (const std::string& who : {std::string("bot"), first}) {
+            if (who.empty() || msg.compare(0, who.size(), who) != 0 || msg.size() <= who.size() || !(msg[who.size()] == ' ' || msg[who.size()] == ',' || msg[who.size()] == ':')) continue;
+            std::string cmd = msg.substr(who.size() + 1);
+            while (!cmd.empty() && (cmd.front() == ' ' || cmd.front() == ',')) cmd.erase(cmd.begin());
+            while (!cmd.empty() && (cmd.back() == ' ' || cmd.back() == '.' || cmd.back() == '!')) cmd.pop_back();
+            if (cmd == "stay" || cmd == "wait" || cmd == "hold") { chatStay_ = true; Log("chat command: stay"); }
+            else if (cmd == "follow" || cmd == "come") { chatStay_ = false; Log("chat command: follow"); }
+            else if (cmd == "passive") { chatEngagement_ = 0; Log("chat command: passive"); }
+            else if (cmd == "defensive") { chatEngagement_ = 1; Log("chat command: defensive"); }
+            else if (cmd == "aggressive" || cmd == "attack") { chatEngagement_ = 2; Log("chat command: aggressive"); }
+            else if (cmd == "reset") { chatStay_ = false; chatEngagement_ = -1; Log("chat command: back to the settings"); }
+            else Log("chat command not understood: " + cmd);
+            return;
+        }
+    }
     // What the bot is doing, for the window.
     std::string Doing() const {
         if (!worldUnit) return phase_ == Phase::Lobby ? "waiting in the lobby" : "entering the quest";
         if (fightTarget_) return "fighting unit " + std::to_string(fightTarget_);
-        return followHost ? "following the host" : "standing";
+        return followHost && !chatStay_ ? "following the host" : "standing";
     }
     int Health(uint32_t id) const { const auto it = unitHp_.find(id); return it == unitHp_.end() ? -1 : it->second; }
     int Mana(uint32_t id) const { const auto it = unitMana_.find(id); return it == unitMana_.end() ? -1 : it->second; }
@@ -434,6 +463,7 @@ public:
     bool fightInSight = false;  // fighting at all (Engagement not Passive)
     int engagement = 1;         // 0 passive, 1 defensive (the units attacking the host or us, the host's target), 2 aggressive (also anything in sight)
     float sight = 13.0f;        // the character's sight (map units)
+    bool chatStay_ = false; int chatEngagement_ = -1; // set by the host's chat commands ("bot stay", "bot follow", "bot passive|defensive|aggressive")
     bool followHost = true;     // walk after the host's hero, staying about followDistance from it
     float followDistance = 4.0f;
     // The host's hero: the first other player in the quest world (the host is listed first).
@@ -538,10 +568,10 @@ public:
         // Fight: the nearest unit (not a player's hero) within sight, attacked again every 3 s while it stays the target;
         // nothing in sight: follow the host as usual.
         bool fighting = false;
-        if (state == State::Accepted && fightInSight && worldUnit && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
+        if (state == State::Accepted && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
             fightAt_ = Now();
             float d = 0;
-            uint32_t t = engagement >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
+            uint32_t t = (chatEngagement_ >= 0 ? chatEngagement_ : engagement) >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
             if (!(t && d <= sight)) t = 0;
             { // first the units attacking the host or us, then the host's own target
                 float mx, my, best = 1e9f;
@@ -612,7 +642,7 @@ public:
         }
         if (fightTarget_ && !unitPos.count(fightTarget_)) fightTarget_ = 0;
         if (fightTarget_) fighting = true;
-        if (!fighting && state == State::Accepted && followHost && worldUnit && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away
+        if (!fighting && state == State::Accepted && followHost && !chatStay_ && worldUnit && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away
             followAt_ = Now();
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy)) {
@@ -969,7 +999,7 @@ private:
             const std::string key(reinterpret_cast<const char*>(b + start), static_cast<size_t>(std::min(o, n) - start));
             if (seenMessages_.size() > 4000) seenMessages_.clear(); // a long session: forget the old ones (a repeat is only logged twice)
             if (!seenMessages_.insert(key).second) continue;
-            if (kind == 2 || kind == 3 || kind == 6) Log("server: " + text);
+            if (kind == 2 || kind == 3 || kind == 6) { Log("server: " + text); if (kind == 2) ChatCommand(text); }
             else if (kind == 9) Log("the host chose the quest " + text);
             else if (kind == 8 && questStates[id] == chosenQuest + "_2") Log("the zone of " + chosenQuest + " is open: the host is in it");
             else if (kind == 1) Log("player " + players[id].name + ": state " + std::to_string(players[id].state));

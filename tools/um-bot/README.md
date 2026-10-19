@@ -9,7 +9,7 @@ enters the quest the host chose, follows the host at the host's pace, fights hos
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
 progress (experience, items) into its `.mp` from the server's party messages. Not done: healing the host and casting
-spells (the spell database is not read), looting its own corpse, chat commands, several bots at once.
+spells (the spell database is not read), looting its own corpse, several bots at once.
 
 **Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
 A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.
@@ -44,6 +44,9 @@ The settings are saved in `um-bot.cfg` next to the program.
   - the mana it keeps for heals;
   - potions;
   - engagement: Passive, Defensive or Aggressive.
+- **Chat commands**: say them in the game's chat, after "bot" or the bot's first name (`bot stay`, `Kevina, follow`):
+  `stay` / `wait` / `hold` (stand where it is), `follow` / `come`, `passive` / `defensive` / `aggressive` (the
+  engagement), `reset` (back to the settings).
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
   every 15-60 s and when leaving the world) back into the bot's `.mp`. The first save keeps the original as `.bak`.
 - **Movement**:
