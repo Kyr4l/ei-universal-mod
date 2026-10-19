@@ -106,7 +106,6 @@ public:
         x = p.x + dx * k; y = p.y + dy * k;
         return true;
     }
-    // A unit coming into view: 40, u32 id, u32 0x34, ..., "f5 0d" + 2 bytes, f32 x, y, z (map units).
     // The party the server sends: 0x80 (at the start and every 900-1800 ticks) and 0x83 (when the player leaves the world, with the items picked up)
     // + a length (2 bytes = size * 2, or 4 bytes = size * 2 + 1 from 15000) + the character in the .mp's unpacked format (zone name, u32, party, variables).
     // Candidates found by shape; the owner of the file validates them (mp::Parse and write back the same).
@@ -510,11 +509,16 @@ public:
         if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
         // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
         // The answer is read from our own health 2.5 s later; two drinks without a rise = no potion left (or none that heals).
+        if (state == State::Accepted && worldUnit) { // the health as it changes (research: the effect of a potion over time)
+            const int hpNow = Health(worldUnit);
+            const int mpNow = Mana(worldUnit);
+            if ((hpNow != hpLogged_ && hpNow > 0) || mpNow != mpLogged_) { if (std::getenv("UM_BOT_HPLOG")) Log("health " + std::to_string(hpNow) + " mana " + std::to_string(mpNow)); hpLogged_ = hpNow; mpLogged_ = mpNow; }
+        }
         if (state == State::Accepted && worldUnit && usePotions && potionsLeft_) {
             const int hp = Health(worldUnit); const auto mxIt = unitHpMax_.find(worldUnit); const int mx = mxIt == unitHpMax_.end() ? 0 : mxIt->second;
-            if (drinkAt_ > 0 && Now() - drinkAt_ > 2.5) {
-                if (hp < drinkHp_ + 2) { if (++potionFails_ >= 2) { potionsLeft_ = false; Log("no potion raised the health twice: not drinking any more"); } }
-                else potionFails_ = 0;
+            if (drinkAt_ > 0 && hp > drinkHp_) { potionFails_ = 0; drinkAt_ = 0; Log("the potion healed (" + std::to_string(drinkHp_) + " -> " + std::to_string(hp) + ")"); } // checked live: +6 within 0.2 s
+            else if (drinkAt_ > 0 && Now() - drinkAt_ > 2.5) {
+                if (++potionFails_ >= 2) { potionsLeft_ = false; Log("no potion raised the health twice: not drinking any more (the belt is empty)"); }
                 drinkAt_ = 0;
             }
             if (drinkAt_ == 0 && mx > 0 && hp > 0 && hp * 100 < healSelfBelow * mx && Now() - healAt_ > 4) {
@@ -706,6 +710,7 @@ private:
     std::vector<uint8_t> mpRaw_;
     std::vector<uint8_t> join_;
     std::string worldQuest_;
+    int hpLogged_ = -1, mpLogged_ = -1;
     double hostGoneAt_ = 0, joinWatchAt_ = 0; int joinRetries_ = 0;
     int joinSends_ = 0;                        // the JOIN goes 4 times after each change
     std::set<uint16_t> got_;                   // the server's packets received (the ack bits)
