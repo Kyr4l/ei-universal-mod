@@ -81,9 +81,10 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
 // The party the server sent (its 0x80 / 0x83 messages): checked with the .mp reader (must parse and write back the same), then written into the
 // character's file. The first save keeps the original as .bak. Returns a message for the log ("" when nothing was saved).
 static std::string SaveProgress(net::Client& client, const std::string& path, mp::Character* current = nullptr) {
-    std::string said;
+    std::string said; bool final = false;
     while (!client.partyIn.empty()) {
         net::Client::PartyBlob pb = std::move(client.partyIn.front());
+        if (pb.op == 0x83) final = true;
         client.partyIn.erase(client.partyIn.begin());
         mp::Character fresh, base;
         std::string err;
@@ -100,7 +101,7 @@ static std::string SaveProgress(net::Client& client, const std::string& path, mp
             if (FILE* out = std::fopen(bak.c_str(), "wb")) { std::fwrite(bytes.data(), 1, bytes.size(), out); std::fclose(out); }
         }
         if (mp::Save(path, fresh, err)) {
-            said = std::string("saved the character's progress (") + (pb.op == 0x83 ? "on leaving" : "periodic") + ", " + std::to_string(pb.bytes.size()) + " bytes) into " + path;
+            said = std::string("saved the character's progress (") + (final ? "on leaving" : "periodic") + ", " + std::to_string(pb.bytes.size()) + " bytes) into " + path;
             if (current) *current = fresh;
         } else said = "progress not saved: " + err;
     }
@@ -155,7 +156,8 @@ static void ConnectionPanel(App& app) {
         Tip("Joins the game: asks the server for its info, then logs in (needs a character)");
     } else if (ImGui::Button("Disconnect")) {
         app.keepConnected = false;
-        app.client.Disconnect();
+        if (app.client.worldUnit) app.client.LeaveWorld(); // the final save first; it disconnects 2 s later
+        else app.client.Disconnect();
     }
     ImGui::SameLine();
     using S = net::Client::State;
@@ -648,6 +650,14 @@ int main(int argc, char** argv) {
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
+            if (client.state == net::Client::State::Accepted && client.worldUnit && !std::getenv("UM_BOT_NOLEAVE")) { // leave the world properly: the final save
+                client.LeaveWorld();
+                for (int i = 0; i < 60 && client.state == net::Client::State::Accepted; ++i) {
+                    client.Update();
+                    if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
+                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                }
+            }
             client.Disconnect();
             for (const auto& pl : client.players) std::printf("player #%u %s state %u unit %08X flag %u tail %u\n", pl.first, pl.second.name.c_str(), pl.second.state, pl.second.unitId, pl.second.flag, pl.second.tail);
             for (const auto& q : client.questStates) std::printf("quest state %s\n", q.second.c_str());
@@ -740,6 +750,14 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
+    }
+    if (app.client.state == net::Client::State::Accepted && app.client.worldUnit) { // closing the window in a world: leave it properly (the final save)
+        app.client.LeaveWorld();
+        for (int i = 0; i < 60 && app.client.state == net::Client::State::Accepted; ++i) {
+            app.client.Update();
+            if (app.cfg.saveProgress && !app.characterFor.empty()) SaveProgress(app.client, app.characterFor);
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
     }
     if (app.dirty) bot::Save(app.cfg); // keep what was set
     ImGui_ImplOpenGL2_Shutdown();
