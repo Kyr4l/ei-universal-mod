@@ -62,14 +62,19 @@ public:
     bool joined = false;           // the server lists our player
 
     // The session as the server's messages describe it (_cpr/claude-re/net/README.md: kinds 1, 2, 3, 8, 9, 11).
-    struct Player { std::string name, unit; uint32_t state = 0, unitId = 0; };
+    struct Player { std::string name, unit; uint32_t state = 0, unitId = 0, tail = 0; uint8_t flag = 0; };
     std::map<uint16_t, Player> players;          // kind 1, by its object id
     std::map<uint16_t, std::string> quests;      // kind 11: "<quest>.mq"
     std::map<uint16_t, std::string> questStates; // kind 8: "<quest>_1" (available), "_2" (its zone is open)
     std::string chosenQuest;                     // kind 9
+    // The host's own record has the flag byte 1 (clients' records 0 and a tail dword: checked with the host and two bots, 2026-10-20); a server without it: any other player.
+    bool IsHost(const Player& p) const {
+        for (const auto& kv : players) if (kv.second.flag == 1) return p.flag == 1;
+        return p.name != name_;
+    }
     bool ZoneOpen() const {                      // the chosen quest's zone can be entered (the host is in it)
         for (const auto& kv : questStates) if (kv.second == chosenQuest + "_2") return true;
-        if (!chosenQuest.empty()) for (const auto& kv : players) if (kv.second.name != name_ && kv.second.state == 0) return true; // the host is in it
+        if (!chosenQuest.empty()) for (const auto& kv : players) if (IsHost(kv.second) && kv.second.state == 0) return true; // the host is in it
         return false;
     }
 
@@ -468,7 +473,7 @@ public:
     float followDistance = 4.0f;
     // The host's hero: the first other player in the quest world (the host is listed first).
     uint32_t HostUnit() const {
-        for (const auto& kv : players) if (kv.second.unitId != worldUnit && kv.second.state == 0 && kv.second.unitId) return kv.second.unitId;
+        for (const auto& kv : players) if (IsHost(kv.second) && kv.second.unitId != worldUnit && kv.second.state == 0 && kv.second.unitId) return kv.second.unitId;
         return 0;
     }
     std::string profileName;    // the player profile sent when entering (empty: the character's name)
@@ -845,7 +850,7 @@ private:
     void WatchHost() {
         if (phase_ != Phase::InWorld || !leaveWithHost) { hostGoneAt_ = 0; return; }
         bool hostIn = false;
-        for (const auto& kv : players) if (kv.second.unitId != worldUnit && kv.second.name != name_ && kv.second.state == 0 && kv.second.unitId) hostIn = true;
+        for (const auto& kv : players) if (IsHost(kv.second) && kv.second.unitId != worldUnit && kv.second.name != name_ && kv.second.state == 0 && kv.second.unitId) hostIn = true;
         if (hostIn) { hostGoneAt_ = 0; return; }
         if (hostGoneAt_ == 0) hostGoneAt_ = Now();
         else if (Now() - hostGoneAt_ > 3) { Log("the host left the zone: leaving it too"); LeaveZone(); }
@@ -967,7 +972,7 @@ private:
             }
             switch (kind) {
             case 1: {
-                Player p; p.name = str(); p.unit = str(); p.state = u32(); o += 1; p.unitId = u32(); u32(); players[id] = p;
+                Player p; p.name = str(); p.unit = str(); p.state = u32(); p.flag = o < n ? b[o] : 0; o += 1; p.unitId = u32(); p.tail = u32(); players[id] = p;
                 // Our hero again after a death (respawned): a new unit id in our record.
                 if (p.name == name_ && worldUnit && p.state == 0 && p.unitId >= 0x3B9ACA00u && p.unitId <= 0x3B9ACAFFu && p.unitId != worldUnit) {
                     Log("our hero is now unit " + std::to_string(p.unitId) + " (respawned?)");

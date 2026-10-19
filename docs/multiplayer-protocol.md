@@ -125,7 +125,7 @@ read); 0x4355B0 writes a `ref`.
 
 | kind | object | payload (write order) | sent by | handled by |
 |---|---|---|---|---|
-| 1 | player record | str name ("Name \| CLAN"), str unit ("Human Hadagan NPC Rebel Smith -1" = the character's model line), u32 state, u8, u32 unit id, u32 | server (one per player, id = slot; the host is id 1) | client 0x41E430.. (the player list, the faces) |
+| 1 | player record | str name ("Name \| CLAN"), str unit ("Human Hadagan NPC Rebel Smith -1" = the character's model line), u32 state, u8 host flag, u32 unit id, u32 tail | server (one per player, id = slot; the host's record has the flag 1 and tail 0, clients' flag 0 and a tail (the unit id's low byte + 1?); checked 2026-10-20 with a host and two bots: the host is not always slot 1 in a client's view) | client 0x41E430.. (the player list, the faces) |
 | 2 | system line | u32 code, str text | server | client (chat: "Quest accepted: ...", "Player X connected to the game"; a player's typed chat line arrives here as `^1Name^7: text`, which um-bot reads for its chat commands) |
 | 3 | address line | str address ("172.16.0.200:8000"), str map | server, when the host enters a quest | client 0x41E5D0 -> 0x5F82F0 -> 0x5E2A30: a coloured chat line, nothing else (the "8000" port is never opened: **unknown** meaning) |
 | 4 | | ref, no other payload | | client |
