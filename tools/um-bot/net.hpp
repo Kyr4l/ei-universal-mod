@@ -226,6 +226,7 @@ public:
     struct Field { std::vector<uint8_t> b; size_t at = 0; };
     std::map<std::pair<uint32_t, int>, Field> unitFields_;
     std::map<uint32_t, int> unitHp_, unitMana_, unitHpMax_, unitManaMax_;
+    std::map<uint32_t, int> unitPace_;   // id -> pace (section 6)
     std::map<uint32_t, uint32_t> unitTarget_; // who attacks whom (field 10 mode 3)
     std::map<uint32_t, int> unitAction_; // field 8's action code: 0xFE idle, 0x07 often in a fight
     double hostHurtAt_ = -99;
@@ -267,6 +268,8 @@ public:
                     ++elem;
                     const uint8_t* v = delta(f, n);
                     // field 11 (CUnit::WriteNetState chunk 0xB): u32 mask of the sides this unit is hostile to (+0x248 & +0x244), u8 side (+0x250), u32 owner id
+                    // section 6 (CUnit::ReadNetState): u32 +0x264, u32 +0x268 = the unit's pace / attack mode (SetAttackMode: 0 crawl, 1 sneak, 2 walk, 3 run), u32 +0x26C
+                    if (k == 6 && !bad && elem == 1) { uint32_t pc; std::memcpy(&pc, v, 4); commit.push_back([this, id, pc] { unitPace_[id] = static_cast<int>(pc); }); }
                     if (k == 11 && !bad && elem == 0) { uint32_t mask; std::memcpy(&mask, v, 4); commit.push_back([this, id, mask] { unitEnemies_[id] = mask; }); }
                     if (k == 11 && !bad && elem == 1) commit.push_back([this, id, side = v[0]] { unitSide_[id] = side; });
                     // section 0 (24 bytes), as 16-bit elements: [1] HP, [2] HP max, [3] mana, [4] mana max (the test hero: 38 / 38, 57 / 57; the host 1569 / 1569, 1255 / 1255).
@@ -358,6 +361,9 @@ public:
     // The hero's pace (stream message 0x35, server 0x6709D0 -> 0x555270: the unit's +0x268): u32 unit id, u8 mode
     // 0 crawl, 1 sneak, 2 walk, 3 run (um.dll's names).
     int pace = 3;
+    bool matchPace = false;     // follow the host's pace (read from its section 6) instead of always running
+    float leash = 25.0f;        // past this distance from the host the fight is dropped and the bot walks back
+    int priority = 0;           // 0 heal the player first, 1 focus the player's target, 2 guard the player (only fights what is near the player)
     void SetPace(int mode) {
         if (!worldUnit) return;
         std::vector<uint8_t> m{0x35};
@@ -386,6 +392,7 @@ public:
             const auto ig = ignored_.find(kv.first);
             if (hero || dead_.count(kv.first) || (ig != ignored_.end() && ig->second > Now()) || !Where(kv.first, x, y)) continue;
             if (!(unitEnemies_.count(kv.first) && Hostile(kv.first))) continue; // only known enemies (#67): NPCs, animals and unknown units are left alone
+            { float hx, hy; if (Where(HostUnit(), hx, hy) && std::hypot(x - hx, y - hy) > (priority == 2 ? 10.0f : leash)) continue; } // guard: only what is near the player; else inside the leash
             const float d = std::hypot(x - mx, y - my);
             if (d < dist) { dist = d; best = kv.first; }
         }
@@ -396,6 +403,7 @@ public:
     int healSelfBelow = 35;     // % of its own health (the settings' Heal itself below)
     bool usePotions = true;
     int potionSlot = 0;         // the belt slot (weapon-slot index) of the healing potion
+    bool leashed_ = false;
     double holdUntil_ = 0;      // no new orders before this time (a potion is being drunk)
     bool potionsLeft_ = true; int potionFails_ = 0; double healAt_ = 0, drinkAt_ = 0; int drinkHp_ = 0;
     bool fightInSight = false;  // fighting at all (Engagement not Passive)
@@ -471,6 +479,7 @@ public:
             }
             viewAt_ = Now();
         }
+        if (matchPace) { const auto hp = unitPace_.find(HostUnit()); if (hp != unitPace_.end() && hp->second >= 0 && hp->second <= 3) pace = hp->second; }
         if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
         // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
         // The answer is read from our own health 2.5 s later; two drinks without a rise = no potion left (or none that heals).
@@ -486,10 +495,19 @@ public:
                 UseQuickSlot(potionSlot, worldUnit); healAt_ = Now(); drinkAt_ = Now(); drinkHp_ = hp; holdUntil_ = Now() + 2.5; // no other order meanwhile: a move / attack would cancel the queued cast
             }
         }
+        // Leash: past `leash` units from the host the fight is dropped and the bot walks back (the follow below) until it is near the host again.
+        if (state == State::Accepted && worldUnit) {
+            float hx, hy, mx, my;
+            if (Where(HostUnit(), hx, hy) && Where(worldUnit, mx, my)) {
+                const float dh = std::hypot(hx - mx, hy - my);
+                if (!leashed_ && dh > leash) { leashed_ = true; fightTarget_ = 0; Log("beyond the leash (" + std::to_string(static_cast<int>(dh)) + " units): back to the host"); }
+                else if (leashed_ && dh < followDistance * 2 + 1) { leashed_ = false; Log("back near the host"); }
+            }
+        }
         // Fight: the nearest unit (not a player's hero) within sight, attacked again every 3 s while it stays the target;
         // nothing in sight: follow the host as usual.
         bool fighting = false;
-        if (state == State::Accepted && fightInSight && worldUnit && Now() - fightAt_ > 1 && Now() >= holdUntil_) {
+        if (state == State::Accepted && fightInSight && worldUnit && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
             fightAt_ = Now();
             float d = 0;
             uint32_t t = engagement >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
@@ -504,7 +522,7 @@ public:
                         const bool hostsTarget = kv.first == host;
                         const uint32_t u = hostsTarget ? kv.second : kv.first;
                         if (!(onUs || hostsTarget) || IsHero(u) || dead_.count(u) || !Where(u, x, y)) continue;
-                        const float e = std::hypot(x - mx, y - my) + (hostsTarget ? 5.0f : 0.0f);
+                        const float e = std::hypot(x - mx, y - my) + (hostsTarget ? (priority == 1 ? -5.0f : 5.0f) : 0.0f); // focus: the player's target first
                         if (e < best && e < sight * 3) { best = e; t = u; d = std::hypot(x - mx, y - my); }
                     }
             }

@@ -307,6 +307,8 @@ static void StatusPanel(App& app) {
     app.client.followDistance = app.cfg.followDistance;
     app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
     app.client.engagement = static_cast<int>(app.cfg.engagement); // Passive / Defensive / Aggressive
+    app.client.healSelfBelow = app.cfg.healSelfBelow; app.client.usePotions = app.cfg.usePotions;
+    app.client.leash = app.cfg.leashDistance; app.client.priority = static_cast<int>(app.cfg.priority); app.client.matchPace = app.cfg.pace == bot::Pace::MatchPlayer;
     app.client.fightInSight = app.client.engagement > 0;
     if (!app.character.members.empty() && mp::GetF(app.character.members[0].stats, 0xB4) > 1) app.client.sight = mp::GetF(app.character.members[0].stats, 0xB4);
     const ImVec2 avail = ImGui::GetContentRegionAvail();
@@ -525,10 +527,11 @@ int main(int argc, char** argv) {
             else
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
             client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
+            client.leash = cfg.leashDistance; client.priority = static_cast<int>(cfg.priority); client.matchPace = cfg.pace == bot::Pace::MatchPlayer;
             if (const char* hb = std::getenv("UM_BOT_HEAL")) client.healSelfBelow = std::atoi(hb); // research: heal below this % (default the setting)
             client.followHost = std::getenv("UM_BOT_FOLLOW") != nullptr;
             client.followDistance = cfg.followDistance;
-            client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read
+            client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read (client.matchPace)
             client.fightInSight = std::getenv("UM_BOT_FIGHT") != nullptr;
             client.engagement = client.fightInSight ? (std::getenv("UM_BOT_FIGHT")[0] == '1' ? 2 : std::atoi(std::getenv("UM_BOT_FIGHT"))) : 0;
             if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
