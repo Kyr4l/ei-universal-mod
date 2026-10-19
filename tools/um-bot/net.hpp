@@ -417,6 +417,7 @@ public:
         return 0;
     }
     std::string profileName;    // the player profile sent when entering (empty: the character's name)
+    bool leaveWithHost = true;  // leave the quest zone when the host does
     bool autoEnter = true;      // enter the chosen quest when its zone opens
     uint32_t worldUnit = 0;     // our hero's unit in the quest world (0: not in it)
 
@@ -467,7 +468,7 @@ public:
             Handle(buf, n);
         }
         // In the session: an update every 20 ms (as the game): the ack bits, our stream part, the JOIN after a change.
-        if (state == State::Accepted) { Enter(); RespawnSteps(); }
+        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); }
         // The view point (0x40 + f32 x, y in map units), as the game's client sends its camera's about twice a second:
         // the server may send each client what is around it.
         if (state == State::Accepted && worldUnit && Now() - viewAt_ > 0.5) {
@@ -648,6 +649,15 @@ public:
         Close();
         state = State::Idle;
     }
+    void GoToLobby() { LeaveZone(); }   // leave the quest zone, stay in the session
+    // Stream message 0x06 (server OnMsg_ChangeMapByName 0x670E00): a map name and an entry dword; the hero goes to that map (research: how a real client leaves a quest).
+    void ChangeMapByName(const std::string& map, uint32_t entry = 0) {
+        std::vector<uint8_t> m{0x06};
+        m.insert(m.end(), map.begin(), map.end()); m.push_back(0);
+        Put32(m, entry);
+        StreamMessage(m);
+    }
+    void ChangeMapById(uint32_t id) { std::vector<uint8_t> m{0x03}; Put32(m, id); StreamMessage(m); } // stream message 0x03 (OnMsg_ChangeMapById 0x670C20)
 
 private:
 #ifdef _WIN32
@@ -669,6 +679,8 @@ private:
     uint32_t heroId_ = 0;
     std::vector<uint8_t> mpRaw_;
     std::vector<uint8_t> join_;
+    std::string worldQuest_;
+    double hostGoneAt_ = 0, joinWatchAt_ = 0; int joinRetries_ = 0;
     int joinSends_ = 0;                        // the JOIN goes 4 times after each change
     std::set<uint16_t> got_;                   // the server's packets received (the ack bits)
     // The update's stream part (_cpr/claude-re/net/README.md): out = our messages, in = the server's
@@ -729,6 +741,8 @@ private:
         if (phase_ == Phase::Lobby && !heroJoined_ && joinSends_ == 0) { heroJoined_ = true; SetJoin(1, heroId_); return; }
         if (phase_ == Phase::Lobby && autoEnter && joined && ZoneOpen() && !mpRaw_.empty()) {
             phase_ = Phase::Loading; phaseAt_ = Now(); SetJoin(3, heroId_);
+            if (worldQuest_ != chosenQuest) ClearWorld(); // another quest = another world
+            worldQuest_ = chosenQuest;
             Log("the zone of " + chosenQuest + " is open: entering it");
         } else if (phase_ == Phase::Loading && Now() - phaseAt_ > 0.5) {
             StreamMessage(Upload());
@@ -752,6 +766,39 @@ private:
         std::memcpy(block + 68, "Very top secret", 15); // the game's default password
         up.insert(up.end(), block, block + 136);
         return up;
+    }
+    // Leaves the quest zone but stays in the session (the lobby): JOIN state 1 with the character's id, as a real client does when it goes back (the notes: the
+    // players must leave the zone before the host can). The next quest is entered again by Enter() when its zone is open and autoEnter is set.
+    void LeaveZone() {
+        if (phase_ != Phase::InWorld && phase_ != Phase::Entering) return;
+        Log("leaving the quest zone (back to the lobby)");
+        phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = true;
+        fightTarget_ = 0; leashed_ = false; paceSent_ = -1; hostGoneAt_ = 0; // the world state stays: re-entering the same quest resends no creations (the host's world is the same); a new quest clears it in Enter()
+        SetJoin(1, heroId_);
+    }
+    void ClearWorld() {
+        unitPos.clear(); unitInfo_.clear(); unitFields_.clear(); dead_.clear(); unitTarget_.clear(); unitAction_.clear();
+        unitHp_.clear(); unitMana_.clear(); unitHpMax_.clear(); unitManaMax_.clear(); unitSide_.clear(); unitEnemies_.clear(); unitPace_.clear();
+    }
+    // The host left the quest zone (no other player is in it for a while): follow it back to the lobby.
+    void WatchHost() {
+        if (phase_ != Phase::InWorld || !leaveWithHost) { hostGoneAt_ = 0; return; }
+        bool hostIn = false;
+        for (const auto& kv : players) if (kv.second.unitId != worldUnit && kv.second.name != name_ && kv.second.state == 0 && kv.second.unitId) hostIn = true;
+        if (hostIn) { hostGoneAt_ = 0; return; }
+        if (hostGoneAt_ == 0) hostGoneAt_ = Now();
+        else if (Now() - hostGoneAt_ > 3) { Log("the host left the zone: leaving it too"); LeaveZone(); }
+    }
+    // Join race: the server did not list us (another client left just before, or the first packets were lost): ask again, then give up.
+    void WatchJoin() {
+        if (joined || state != State::Accepted) { joinWatchAt_ = 0; return; }
+        if (joinWatchAt_ == 0) { joinWatchAt_ = Now(); return; }
+        if (Now() - joinWatchAt_ > 6) {
+            joinWatchAt_ = Now();
+            if (++joinRetries_ > 3) { Fail("the server never listed us (join race): reconnect"); return; }
+            Log("not listed yet: sending the JOIN again (" + std::to_string(joinRetries_) + ")");
+            heroJoined_ = false; SetJoin(1, 0xFFFFFFFFu);
+        }
     }
     void Respawned() {
         SetJoin(3, heroId_);

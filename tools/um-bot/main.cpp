@@ -45,6 +45,8 @@ struct App {
     std::deque<std::string> log;      // newest last
     net::Client client;
     size_t clientLogShown = 0;
+    bool keepConnected = false;       // the user pressed Connect: reconnect after a failure
+    double retryAt = 0; int retries = 0;
     mp::Character character;          // the loaded .mp
     std::string characterError;
     std::string characterFor;         // the path it was loaded from
@@ -80,6 +82,13 @@ static void Tip(const char* text) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", text);
 }
 
+static void StartConnection(App& app) {
+    if (!app.character.members.empty()) {
+        const mp::Member& m = app.character.members[0];
+        app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
+    }
+    app.client.Connect(app.cfg.host, app.cfg.port);
+}
 static void ConnectionPanel(App& app) {
     { // the language (um-multitool's table: lang/ru.txt)
         i18n::Lang cur = i18n::Current();
@@ -110,15 +119,13 @@ static void ConnectionPanel(App& app) {
     if (!active) {
         ImGui::BeginDisabled(app.characterFor.empty() || !app.characterError.empty());
         if (ImGui::Button("Connect")) {
-            if (!app.character.members.empty()) {
-                const mp::Member& m = app.character.members[0];
-                app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
-            }
-            app.client.Connect(c.host, c.port);
+            app.keepConnected = true; app.retries = 0;
+            StartConnection(app);
         }
         ImGui::EndDisabled();
         Tip("Joins the game: asks the server for its info, then logs in (needs a character)");
     } else if (ImGui::Button("Disconnect")) {
+        app.keepConnected = false;
         app.client.Disconnect();
     }
     ImGui::SameLine();
@@ -576,6 +583,18 @@ int main(int argc, char** argv) {
                         client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u)\n", spell, who, tg); std::fflush(stdout); used = true;
                     }
                 }
+                static bool leftZone = false, reentered = false; // research: UM_BOT_LEAVE="secs[,rejoin secs]": leave the zone, optionally enter it again later
+                if (const char* lv = std::getenv("UM_BOT_LEAVE")) {
+                    double a = 0, b = -1; std::sscanf(lv, "%lf,%lf", &a, &b);
+                    const double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+                    if (!leftZone && client.worldUnit && t > a) { client.GoToLobby(); leftZone = true; client.autoEnter = false; std::printf("left the zone\n"); std::fflush(stdout); }
+                    if (leftZone && !reentered && b >= 0 && t > b) { client.autoEnter = true; reentered = true; std::printf("entering again\n"); std::fflush(stdout); }
+                }
+                static bool mapSent = false; // research: UM_BOT_MAP="secs,name,entry": send a ChangeMapByName at that time
+                if (const char* mp_ = std::getenv("UM_BOT_MAP"); mp_ && !mapSent && client.worldUnit) {
+                    double a = 0; char nm[64] = ""; unsigned en = 0; std::sscanf(mp_, "%lf,%63[^,],%u", &a, nm, &en);
+                    if (std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) { client.ChangeMapByName(nm, en); mapSent = true; std::printf("sent ChangeMapByName %s %u\n", nm, en); std::fflush(stdout); }
+                }
                 static int moves = 0; // research: UM_BOT_MOVE="x,y;x,y;..." once in the world, one every 8 s
                 static auto movedAt = std::chrono::steady_clock::now();
                 if (const char* mv = std::getenv("UM_BOT_MOVE"); mv && client.worldUnit &&
@@ -648,6 +667,15 @@ int main(int argc, char** argv) {
     while (!glfwWindowShouldClose(window)) {
         glfwWaitEventsTimeout(0.05);
         app.client.Update();
+        // The connection dropped without the user asking (a join race, a lost server): connect again a few times.
+        if (app.keepConnected && app.client.state == net::Client::State::Failed) {
+            if (app.retryAt == 0) app.retryAt = glfwGetTime() + 5;
+            else if (glfwGetTime() > app.retryAt) {
+                app.retryAt = 0;
+                if (++app.retries <= 5) { app.Log("connection lost: connecting again (" + std::to_string(app.retries) + ")"); StartConnection(app); }
+                else app.keepConnected = false;
+            }
+        } else if (app.client.state == net::Client::State::Accepted && app.client.worldUnit) app.retries = 0;
         if (app.clientLogShown > app.client.log.size()) app.clientLogShown = 0; // the client trims its log
         for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown]);
         ImGui_ImplOpenGL2_NewFrame();
