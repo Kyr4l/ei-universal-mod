@@ -108,16 +108,20 @@ public:
     }
     // A unit coming into view: 40, u32 id, u32 0x34, ..., "f5 0d" + 2 bytes, f32 x, y, z (map units).
     void ReadUnits(const std::vector<uint8_t>& m) {
-        for (size_t i = 0; i + 9 <= m.size(); ++i) {
-            if (m[i] != 0x40) continue; // also inside 0x81 messages; the word after the id is 0x34 or 0
-            uint32_t id; std::memcpy(&id, &m[i + 1], 4);
-            if (id < 0x100 || id >= 0x01000000 || dead_.count(id)) continue;
-            for (size_t k = i + 9; k + 16 <= m.size() && k < i + 220; ++k) {
-                if (m[k] != 0xF5 || m[k + 1] != 0x0D) continue;
-                float x, y; std::memcpy(&x, &m[k + 4], 4); std::memcpy(&y, &m[k + 8], 4);
-                if (x > 0 && y > 0 && x < 2048 && y < 2048) unitPos[id] = {x, y, x, y, Now()};
-                break;
-            }
+        for (size_t o = 0; o + 20 < m.size(); ++o) if (m[o] == 0x40) if (const size_t e = Creation(m, o)) o = e - 1; // creations first: exact
+        // Experience shares (server message 0x18 = CPlayerServer::SendMsg18, sent by CWorldServer::GiveExperience 0x5911C0 on a kill in a session): u32 hero id,
+        // f32 the hero's share. In a multiplayer session a kill's experience is split among ALL players' first heroes by sqrt(exp total + accumulator), whoever struck
+        // the blow: a 500 exp bot next to a 74 million exp host gets 0.26 % (0.0129 of 5.0 per boar).
+        for (size_t o = 0; o + 9 <= m.size(); ++o) {
+            if (m[o] != 0x18) continue;
+            uint32_t id; std::memcpy(&id, &m[o + 1], 4);
+            if (id < 0x3B9ACA00u || id > 0x3B9ACAFFu) continue;
+            float v; std::memcpy(&v, &m[o + 5], 4);
+            const uint8_t nx = o + 9 < m.size() ? m[o + 9] : 0x41;
+            if (!(v >= 0 && v < 1e7f) || !(o + 9 >= m.size() || nx == 0x18 || nx == 0x41 || nx == 0x42 || nx == 0x43 || nx == 0x40 || nx == 0x60 || nx == 0x81 || nx == 0x0B)) continue;
+            expShare_[id] += v;
+            if (id == worldUnit) { expGained += v; Log("experience share +" + std::to_string(v) + " (total " + std::to_string(expGained) + ")"); }
+            o += 8;
         }
         // Our hero's record (message 05, right after the snapshot): our name, then "91" + f32 x, y: the arrival point.
         if (worldUnit && !unitPos.count(worldUnit) && !m.empty() && m[0] == 0x05 && !name_.empty()) {
@@ -132,7 +136,7 @@ public:
         // Sub-messages of other kinds (their lengths unknown) sit between them: every 0x41 / 0x42 is tried where it
         // decodes cleanly (ends at the message's end or at another known sub-message).
         for (size_t o = 0; o + 5 <= m.size(); ++o) {
-            if (m[o] == 0x42 && o + 5 <= m.size() && (o + 5 == m.size() || m[o + 5] == 0x41 || m[o + 5] == 0x42)) {
+            if ((m[o] == 0x42 || m[o] == 0x43) && o + 5 <= m.size() && (o + 5 == m.size() || m[o + 5] == 0x41 || m[o + 5] == 0x42 || m[o + 5] == 0x43 || m[o + 5] == 0x60)) { // 0x42 / 0x43 u32 id: the unit leaves the view / its body is gone
                 uint32_t id; std::memcpy(&id, &m[o + 1], 4);
                 if (unitPos.count(id)) { unitPos.erase(id); o += 4; }
                 continue;
@@ -151,13 +155,82 @@ public:
     // 3 bytes (the step count = 2nd * 256 + 3rd), 3 u16, 4 f32 (the destination x2 in the 2nd and 3rd), then the steps
     // (u16 each: bits 0-1 / 2-3 = x / y -1, 0, +1 from the last, 3 = an absolute u16 follows: cells of half a unit).
     // Returns the offset after it, 0 when it could not be read.
+    // A unit's creation (stream message 0x40, client handler 0x667EC0 = WorldClient::OnUnitCreated), decoded 2026-10-19:
+    //   u32 id, u32 kind (0x32 a player's hero, 0x34 a monster / NPC), u32 prototype row (the figure's DB row), u32 flags (0x8000 ..),
+    //   3 x f32 complexion (the morph), CString (empty), CString figure ("unhuma"), CString texture, CString label, u16 n + n CStrings (the figure's
+    //   part names), CString name (a hero's; empty for monsters), u32 (the prototype row again for monsters), then a full 0x41 body from its mask
+    //   (CMapObject::UnpackNetState against empty fields): the unit's whole state, position included.
+    struct UnitInfo { uint32_t kind = 0, proto = 0, flags = 0; std::string figure, texture, label, name; float morph[3] = {0, 0, 0}; };
+    std::map<uint32_t, double> expShare_; // hero id -> the experience shares seen (0x18 messages)
+    double expGained = 0;                 // our hero's experience shares so far
+    std::map<uint32_t, UnitInfo> unitInfo_;
+    std::map<uint32_t, uint32_t> unitEnemies_; // id -> bit mask of the sides it is hostile to
+    std::map<uint32_t, int> unitSide_;         // id -> the .mob's player / side number
+    // Is this unit hostile to our hero (its enemy mask has our side's bit)? Unknown (not created yet): false.
+    bool Hostile(uint32_t id) const {
+        const auto e = unitEnemies_.find(id);
+        const auto me = unitSide_.find(worldUnit);
+        const int mySide = me == unitSide_.end() ? 0 : me->second;
+        return e != unitEnemies_.end() && (e->second >> mySide & 1);
+    }
+    // Returns the offset after the record, 0 when m[o..] does not decode as one (the caller then moves on).
+    size_t Creation(const std::vector<uint8_t>& m, size_t o) {
+        size_t p = o + 1;
+        auto u32 = [&](uint32_t& v) { if (p + 4 > m.size()) return false; std::memcpy(&v, &m[p], 4); p += 4; return true; };
+        auto cstr = [&](std::string& s) { s.clear(); while (p < m.size() && m[p]) { if (m[p] < 0x20 || s.size() > 200) return false; s += static_cast<char>(m[p++]); } if (p >= m.size()) return false; ++p; return true; };
+        UnitInfo u; uint32_t id = 0, tail = 0; std::string skip, part;
+        if (!u32(id) || !u32(u.kind) || !u32(u.proto) || !u32(u.flags)) return 0;
+        const bool player = id >= 0x3B9ACA00u && id <= 0x3B9ACAFFu;
+        if (u.kind < 0x32 || u.kind > 0x34 || u.proto > 4096 || (!player && (id < 2 || id >= 0x01000000))) return 0;
+        if (p + 12 > m.size()) return 0;
+        for (float& f : u.morph) { std::memcpy(&f, &m[p], 4); p += 4; if (!(f >= -8 && f <= 8)) return 0; }
+        if (!cstr(skip) || !cstr(u.figure) || !cstr(u.texture) || !cstr(u.label)) return 0;
+        if (u.figure.empty() || p + 2 > m.size()) return 0;
+        const int n = m[p] | m[p + 1] << 8; p += 2;
+        if (n > 64) return 0;
+        for (int i = 0; i < n; ++i) if (!cstr(part)) return 0;
+        if (!cstr(u.name) || !u32(tail)) return 0;
+        // the body: UnitUpdate wants "41 id mask ..."
+        std::vector<uint8_t> b{0x41}; b.insert(b.end(), m.begin() + o + 1, m.begin() + o + 5); b.insert(b.end(), m.begin() + p, m.end());
+        auto plausibleNext = [&](size_t q) { const uint8_t nx = q < m.size() ? m[q] : 0x41; return q >= m.size() || nx == 0x40 || nx == 0x41 || nx == 0x42 || nx == 0x43 || nx == 0x60 || nx == 0x81 || nx == 0x0B || nx == 0x18 || nx == 0x0E || nx == 0x04; };
+        dryRun_ = true; const size_t e0 = UnitUpdate(b, 0); dryRun_ = false;
+        if (!e0 || !plausibleNext(p + (e0 - 5))) {
+            // The body did not decode (a stationary monster's order section, seen 2026-10-19, is shaped differently than the walking ones). Recover what is needed
+            // without it: the next record's header marks the end; the tail is section 11 (hostility mask, side) when it is the last section; the position sits right
+            // after the mask (section 0 unchanged, section 2's first bits, then f32 x, f32 y).
+            size_t q = p + 20; bool found = false;
+            auto validId = [&](size_t at) { if (at + 5 > m.size()) return false; uint32_t v; std::memcpy(&v, &m[at + 1], 4); return (v >= 2 && v < 0x01000000u) || (v >= 0x3B9ACA00u && v <= 0x3B9ACAFFu); };
+            for (; q <= m.size() && q < p + 400; ++q) { // the first place after which another sub-message starts and before which section 11 sits as the record's tail
+                if (m[q - 6] == 0 || (m[q - 6] & 0x0F) != 0x08 || m[q - 1] > 31) continue;
+                const bool atEnd = q == m.size();
+                const bool next = !atEnd && (((m[q] == 0x40 || m[q] == 0x41 || m[q] == 0x42 || m[q] == 0x43) && validId(q)) || m[q] == 0x60 || m[q] == 0x81);
+                if (atEnd || next) { found = true; break; }
+            }
+            if (!found) return 0;
+            if (q < p + 20 || q - p > 400) return 0;
+            const int mask = m[p] | m[p + 1] << 8;
+            if (!(mask & 0x800) || (mask & 0x3000) || (mask & 1) == 0 || m[q - 6] == 0 || (m[q - 6] & 0x0F) != 0x08) return 0;
+            const uint8_t side = m[q - 1]; uint32_t enemies; std::memcpy(&enemies, &m[q - 5], 4);
+            if (side > 31) return 0;
+            unitInfo_[id] = u; unitSide_[id] = side; unitEnemies_[id] = enemies;
+            if (u.flags & 0x80000u) { dead_.insert(id); unitPos.erase(id); }
+            else if (m[p + 2] == 0x01 && (mask & 4) && p + 12 < m.size()) { float x, y; std::memcpy(&x, &m[p + 4], 4); std::memcpy(&y, &m[p + 8], 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) unitPos[id] = {x, y, x, y, Now()}; }
+            return q;
+        }
+        const size_t e = UnitUpdate(b, 0);
+        if (!e) return 0;
+        unitInfo_[id] = u;
+        if (u.flags & 0x80000u) { dead_.insert(id); unitPos.erase(id); } // flags bit 0x80000: a body (the game's own record flag)
+        return p + (e - 5);
+    }
     struct Field { std::vector<uint8_t> b; size_t at = 0; };
     std::map<std::pair<uint32_t, int>, Field> unitFields_;
-    std::map<uint32_t, int> unitHp_, unitMana_;
+    std::map<uint32_t, int> unitHp_, unitMana_, unitHpMax_, unitManaMax_;
     std::map<uint32_t, uint32_t> unitTarget_; // who attacks whom (field 10 mode 3)
     std::map<uint32_t, int> unitAction_; // field 8's action code: 0xFE idle, 0x07 often in a fight
     double hostHurtAt_ = -99;
     std::set<uint32_t> dead_;
+    bool dryRun_ = false;   // UnitUpdate decodes and reports its end without storing anything
     size_t UnitUpdate(const std::vector<uint8_t>& m, size_t o) {
         std::map<int, Field> work;               // the fields as they would become: kept only if the update reads cleanly
         std::vector<std::function<void()>> commit; // and its effects
@@ -189,25 +262,31 @@ public:
             bitMask = 0x80;
             const auto sz = kSizes.find(k);
             if (sz != kSizes.end()) {
+                int elem = -1;
                 for (size_t n : sz->second) {
+                    ++elem;
                     const uint8_t* v = delta(f, n);
-                    if (k == 0 && !bad) commit.push_back([this, id, mana = static_cast<int16_t>(v[6] | v[7] << 8)] { unitMana_[id] = mana; }); // [3] = mana
-                    if (k == 0 && !bad) commit.push_back([this, id, hp = static_cast<int16_t>(v[4] | v[5] << 8)] { // [2] = health: 0 = dead
-                        auto h = unitHp_.find(id);
-                        if (hp <= 0 && h != unitHp_.end() && h->second > 0) { dead_.insert(id); unitPos.erase(id); }
-                        if (h != unitHp_.end() && hp < h->second && id == HostUnit()) hostHurtAt_ = Now();
-                        if (h != unitHp_.end() && hp < h->second && id == worldUnit) selfHurtAt_ = Now();
-                        unitHp_[id] = hp;
-                    });
-                    if (false) {
-                        int16_t hp = 0;
-                        auto h = unitHp_.find(id);
-                        if (hp <= 0 && h != unitHp_.end() && h->second > 0) { dead_.insert(id); unitPos.erase(id); }
-                        if (h != unitHp_.end() && hp < h->second && id == HostUnit()) hostHurtAt_ = Now(); // the host takes damage
-                        if (h != unitHp_.end() && hp < h->second && id == worldUnit) selfHurtAt_ = Now();
-                        unitHp_[id] = hp;
+                    // field 11 (CUnit::WriteNetState chunk 0xB): u32 mask of the sides this unit is hostile to (+0x248 & +0x244), u8 side (+0x250), u32 owner id
+                    if (k == 11 && !bad && elem == 0) { uint32_t mask; std::memcpy(&mask, v, 4); commit.push_back([this, id, mask] { unitEnemies_[id] = mask; }); }
+                    if (k == 11 && !bad && elem == 1) commit.push_back([this, id, side = v[0]] { unitSide_[id] = side; });
+                    // section 0 (24 bytes), as 16-bit elements: [1] HP, [2] HP max, [3] mana, [4] mana max (the test hero: 38 / 38, 57 / 57; the host 1569 / 1569, 1255 / 1255).
+                    // (Up to 0.1.2 the HP was read from [2]: the maximum, which never falls.)
+                    if (k == 0 && !bad) {
+                        auto s16 = [&](int o) { return static_cast<int16_t>(v[o] | v[o + 1] << 8); };
+                        commit.push_back([this, id, hp = s16(2), hpMax = s16(4), mana = s16(6), manaMax = s16(8)] {
+                            unitMana_[id] = mana; unitManaMax_[id] = manaMax; unitHpMax_[id] = hpMax;
+                            auto h = unitHp_.find(id);
+                            if (hp <= 0 && h != unitHp_.end() && h->second > 0) { dead_.insert(id); unitPos.erase(id); }
+                            if (h != unitHp_.end() && hp < h->second && id == HostUnit()) hostHurtAt_ = Now();
+                            if (h != unitHp_.end() && hp < h->second && id == worldUnit) selfHurtAt_ = Now();
+                            unitHp_[id] = hp;
+                        });
                     }
-                    if (k == 8 && n == 1 && sz->second.size() == 4 && !bad && f.at == 2) commit.push_back([this, id, a = v[0]] { unitAction_[id] = a; }); // the action code
+                    if (k == 8 && n == 1 && sz->second.size() == 4 && !bad && f.at == 2) commit.push_back([this, id, a = v[0]] { // the action code: 0xFE idle, 0x07 fight, 0xFF dead (seen when the host kills a monster)
+                        unitAction_[id] = a;
+                        if (a == 0xFF && id < 0x01000000u) { dead_.insert(id); unitPos.erase(id); }
+                    });
+                    if (k == 2 && !bad && n == 12) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) commit.push_back([this, id, x, y] { unitPos[id] = {x, y, x, y, Now()}; }); }
                     if (k == 1 && !bad) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 2048 && y < 2048) commit.push_back([this, id, x, y] { unitPos[id] = {x, y, x, y, Now()}; }); }
                 }
             } else if (k == 3) {
@@ -244,6 +323,7 @@ public:
         }
         if (bad) return 0;
         if (p > m.size()) return 0;
+        if (dryRun_) return p;
         for (auto& kv : work) unitFields_[{id, kv.first}] = std::move(kv.second);
         for (auto& c : commit) c();
         return p;
@@ -255,6 +335,26 @@ public:
         Put32(m, 1); Put32(m, worldUnit); Put32(m, a); Put32(m, target); Put32(m, c);
         StreamMessage(m);
     }
+    // Cast orders (client senders CPlayerClient::SendMsg33 0x66AC70 / SendMsg32 0x66ACD0 / SendMsg33_UseWeapon 0x66AD40; server handlers 0x670820 / 0x6708D0,
+    // AiLogicPlayer::CastOn / CastAt -> CUnitServer::QueueCastOn / QueueCastAt), decoded 2026-10-19:
+    //   0x33  u32 spell, u32 caster unit id, u32 target object id, u8 flag (shift / queue)      cast on a target
+    //   0x32  u32 spell, u32 caster unit id, f32 x, y, z, u8 flag                                cast at a point
+    // The spell is the spell object's id from the party data (the .mp's spell list); a quick item (potion 5 / scroll 8 on the belt) is `slot | 0x80000000`.
+    void CastOn(uint32_t spell, uint32_t target, bool queue = false) {
+        if (!worldUnit) return;
+        std::vector<uint8_t> m{0x33};
+        Put32(m, spell); Put32(m, worldUnit); Put32(m, target); m.push_back(queue ? 1 : 0);
+        StreamMessage(m);
+    }
+    void CastAt(uint32_t spell, float x, float y, float z = 0, bool queue = false) {
+        if (!worldUnit) return;
+        std::vector<uint8_t> m{0x32};
+        Put32(m, spell); Put32(m, worldUnit);
+        for (float f : {x, y, z}) { uint32_t v; std::memcpy(&v, &f, 4); Put32(m, v); }
+        m.push_back(queue ? 1 : 0);
+        StreamMessage(m);
+    }
+    void UseQuickSlot(int slot, uint32_t target) { CastOn(0x80000000u | static_cast<uint32_t>(slot), target); }
     // The hero's pace (stream message 0x35, server 0x6709D0 -> 0x555270: the unit's +0x268): u32 unit id, u8 mode
     // 0 crawl, 1 sneak, 2 walk, 3 run (um.dll's names).
     int pace = 3;
@@ -285,11 +385,19 @@ public:
             float x, y;
             const auto ig = ignored_.find(kv.first);
             if (hero || dead_.count(kv.first) || (ig != ignored_.end() && ig->second > Now()) || !Where(kv.first, x, y)) continue;
+            if (!(unitEnemies_.count(kv.first) && Hostile(kv.first))) continue; // only known enemies (#67): NPCs, animals and unknown units are left alone
             const float d = std::hypot(x - mx, y - my);
             if (d < dist) { dist = d; best = kv.first; }
         }
         return best;
     }
+    static constexpr float kAttackReach = 3.0f; // how close to a unit before ordering the attack (see the fight loop)
+    int engageTries_ = 0;
+    int healSelfBelow = 35;     // % of its own health (the settings' Heal itself below)
+    bool usePotions = true;
+    int potionSlot = 0;         // the belt slot (weapon-slot index) of the healing potion
+    double holdUntil_ = 0;      // no new orders before this time (a potion is being drunk)
+    bool potionsLeft_ = true; int potionFails_ = 0; double healAt_ = 0, drinkAt_ = 0; int drinkHp_ = 0;
     bool fightInSight = false;  // fighting at all (Engagement not Passive)
     int engagement = 1;         // 0 passive, 1 defensive (the units attacking the host or us, the host's target), 2 aggressive (also anything in sight)
     float sight = 13.0f;        // the character's sight (map units)
@@ -364,10 +472,24 @@ public:
             viewAt_ = Now();
         }
         if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
+        // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
+        // The answer is read from our own health 2.5 s later; two drinks without a rise = no potion left (or none that heals).
+        if (state == State::Accepted && worldUnit && usePotions && potionsLeft_) {
+            const int hp = Health(worldUnit); const auto mxIt = unitHpMax_.find(worldUnit); const int mx = mxIt == unitHpMax_.end() ? 0 : mxIt->second;
+            if (drinkAt_ > 0 && Now() - drinkAt_ > 2.5) {
+                if (hp < drinkHp_ + 2) { if (++potionFails_ >= 2) { potionsLeft_ = false; Log("no potion raised the health twice: not drinking any more"); } }
+                else potionFails_ = 0;
+                drinkAt_ = 0;
+            }
+            if (drinkAt_ == 0 && mx > 0 && hp > 0 && hp * 100 < healSelfBelow * mx && Now() - healAt_ > 4) {
+                Log("health " + std::to_string(hp) + " / " + std::to_string(mx) + ": drinking the potion in quick slot " + std::to_string(potionSlot));
+                UseQuickSlot(potionSlot, worldUnit); healAt_ = Now(); drinkAt_ = Now(); drinkHp_ = hp; holdUntil_ = Now() + 2.5; // no other order meanwhile: a move / attack would cancel the queued cast
+            }
+        }
         // Fight: the nearest unit (not a player's hero) within sight, attacked again every 3 s while it stays the target;
         // nothing in sight: follow the host as usual.
         bool fighting = false;
-        if (state == State::Accepted && fightInSight && worldUnit && Now() - fightAt_ > 1) {
+        if (state == State::Accepted && fightInSight && worldUnit && Now() - fightAt_ > 1 && Now() >= holdUntil_) {
             fightAt_ = Now();
             float d = 0;
             uint32_t t = engagement >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
@@ -411,22 +533,28 @@ public:
             }
             if (t) {
                 fighting = true;
-                if (t != fightTarget_) { fightTarget_ = t; targetSince_ = Now(); Log("attacking unit " + std::to_string(t)); }
+                if (t != fightTarget_) { fightTarget_ = t; targetSince_ = Now(); engageTries_ = 0; attackedAt_ = 0; Log("attacking unit " + std::to_string(t)); }
                 float x, y, mx, my;
                 const auto th = unitHp_.find(t);
                 if (th != unitHp_.end() && th->second != targetHp_) { targetHp_ = th->second; targetSince_ = Now(); } // it is being hurt: progress
-                if (Now() - targetSince_ > 20) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; } // no result: leave it a while
-                else if (d > sight * 0.9f && Where(t, x, y) && Where(worldUnit, mx, my)) { // out of our sight: closer first
-                    if (Now() - attackedAt_ > 4) { Log("closer to " + std::to_string(t) + " at " + std::to_string(d)); MoveTo(x + (mx - x) * sight * 0.5f / d, y + (my - y) * sight * 0.5f / d); attackedAt_ = Now(); attackedTarget_ = 0; }
-                } else {
-                    // Once per target; again only when our hero stands idle (action code 0xFE) for 2 s: a new order would
-                    // restart the attack.
-                    const auto me = unitAction_.find(worldUnit);
-                    const bool idle = me == unitAction_.end() || me->second == 0xFE;
-                    if (!idle) idleSince_ = Now();
-                    if (attackedTarget_ != t || (idle && Now() - idleSince_ > 4 && Now() - targetSince_ > 4)) {
-                        Log(std::string(attackedTarget_ != t ? "attack " : "attack again (idle 4 s) ") + std::to_string(t) + " at " + std::to_string(d));
-                        Attack(t); attackedAt_ = Now(); attackedTarget_ = t; idleSince_ = Now();
+                if (Now() - targetSince_ > 25) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("no result on unit " + std::to_string(t) + ": leaving it for 30 s"); }
+                else if (Where(t, x, y) && Where(worldUnit, mx, my)) {
+                    d = std::hypot(x - mx, y - my);
+                    // The server refuses an attack order on a unit our hero has not seen (WorldServer::OrderOnTarget 0x5D3C30: AiMemory::IsFriendOrKnown 0x5CB7F0
+                    // must find it in the hero's known list): found 2026-10-19 by ordering from 9, 8, 7, 5 units (refused) and ~3 (accepted). So: walk up to
+                    // kAttackReach, order the attack, and take "our own update says: attacking this unit" as the answer (unitTarget_, field 10 mode 3).
+                    const auto tg = unitTarget_.find(worldUnit);
+                    const bool engaged = tg != unitTarget_.end() && tg->second == t;
+                    if (engaged) { idleSince_ = Now(); engageTries_ = 0; }
+                    else if (d > kAttackReach + 0.7f) {
+                        if (Now() - attackedAt_ > 1.2) { MoveTo(x + (mx - x) * kAttackReach / d, y + (my - y) * kAttackReach / d); attackedAt_ = Now(); attackedTarget_ = 0; }
+                    } else if (Now() - attackedAt_ > 1.5) {
+                        if (++engageTries_ > 6) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_ - 1) + " times: leaving it for 30 s"); }
+                        else {
+                            Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_) + ")");
+                            Attack(t); attackedAt_ = Now(); attackedTarget_ = t;
+                            if (engageTries_ > 2 && d > 1.5f) MoveTo(x + (mx - x) * 1.0f / d, y + (my - y) * 1.0f / d); // still refused: one step closer
+                        }
                     }
                 }
             } else {
@@ -435,7 +563,7 @@ public:
         }
         if (fightTarget_ && !unitPos.count(fightTarget_)) fightTarget_ = 0;
         if (fightTarget_) fighting = true;
-        if (!fighting && state == State::Accepted && followHost && worldUnit && Now() - followAt_ > 2) { // walk to the host when it is away
+        if (!fighting && state == State::Accepted && followHost && worldUnit && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away
             followAt_ = Now();
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy)) {

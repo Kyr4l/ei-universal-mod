@@ -36,7 +36,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.2a";
+static const char* const kVersion = "0.1.3";
 
 
 struct App {
@@ -524,12 +524,15 @@ int main(int argc, char** argv) {
                 client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
             else
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
+            client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
+            if (const char* hb = std::getenv("UM_BOT_HEAL")) client.healSelfBelow = std::atoi(hb); // research: heal below this % (default the setting)
             client.followHost = std::getenv("UM_BOT_FOLLOW") != nullptr;
             client.followDistance = cfg.followDistance;
             client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read
             client.fightInSight = std::getenv("UM_BOT_FIGHT") != nullptr;
             client.engagement = client.fightInSight ? (std::getenv("UM_BOT_FIGHT")[0] == '1' ? 2 : std::atoi(std::getenv("UM_BOT_FIGHT"))) : 0;
             if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
+            if (const char* sg = std::getenv("UM_BOT_SIGHT")) client.sight = static_cast<float>(std::atof(sg)); // research: pretend a longer sight so it fights from farther
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
@@ -539,22 +542,35 @@ int main(int argc, char** argv) {
                 for (; printed < client.log.size(); ++printed)
                     std::printf("%6.1f %s\n", std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count(), client.log[printed].c_str());
                 std::fflush(stdout);
-                static int attackStep = 0; // research: UM_BOT_ATTACK=1: 12 s in, walk near the nearest monster; 8 s later, attack it
-                static uint32_t target = 0;
-                if (std::getenv("UM_BOT_ATTACK") && client.worldUnit) {
+                static int attackStep = 0; // research: UM_BOT_ATTACK=<d> (1 = 6): 12 s in, walk to d units from the nearest hostile monster; 8 s later attack it, then every 4 s again, d - 1 closer each time
+                static uint32_t target = 0; static float approach = 6;
+                if (const char* ev = std::getenv("UM_BOT_ATTACK"); ev && client.worldUnit) {
                     const auto in = std::chrono::steady_clock::now() - start;
                     float mx = 0, my = 0, tx = 0, ty = 0, d = 0;
                     client.Where(client.worldUnit, mx, my);
                     if (attackStep == 0 && in > std::chrono::seconds(12)) {
+                        approach = std::atof(ev) > 1 ? static_cast<float>(std::atof(ev)) : 6.0f;
                         target = client.NearestOther(d);
-                        if (target && client.Where(target, tx, ty) && d > 7) client.MoveTo(tx + (mx - tx) * 6 / d, ty + (my - ty) * 6 / d);
-                        std::printf("target %X at %.1f (me at %.1f %.1f): walking near\n", target, d, mx, my); std::fflush(stdout);
+                        if (target && client.Where(target, tx, ty) && d > approach + 1) client.MoveTo(tx + (mx - tx) * approach / d, ty + (my - ty) * approach / d);
+                        std::printf("target %X at %.1f (me at %.1f %.1f): walking to %.1f of it\n", target, d, mx, my, approach); std::fflush(stdout);
                         attackStep = 1;
-                    } else if (attackStep == 1 && in > std::chrono::seconds(22)) {
+                    } else if (attackStep >= 1 && attackStep <= 6 && in > std::chrono::seconds(22 + 4 * (attackStep - 1))) {
                         if (target) client.Attack(target);
                         client.Where(target, tx, ty);
-                        std::printf("attack %X (me at %.1f %.1f, it at %.1f %.1f)\n", target, mx, my, tx, ty); std::fflush(stdout);
-                        attackStep = 2;
+                        const float dd = std::hypot(tx - mx, ty - my);
+                        std::printf("attack %X try %d (me at %.1f %.1f, it at %.1f %.1f, %.1f apart)\n", target, attackStep, mx, my, tx, ty, dd); std::fflush(stdout);
+                        if (target && dd > 1.5f) client.MoveTo(tx + (mx - tx) * std::max(0.5f, dd - 1.5f) / dd, ty + (my - ty) * std::max(0.5f, dd - 1.5f) / dd);
+                        ++attackStep;
+                    }
+                }
+                static bool used = false; // research: UM_BOT_USE="slot,seconds" uses a quick slot (belt) on ourselves; UM_BOT_CASTON="spell,seconds,self|host" casts a spell object id
+                if (!used && client.worldUnit) {
+                    const double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+                    int slot = 0, spell = 0; double at = 0; char who[16] = "self";
+                    if (const char* u = std::getenv("UM_BOT_USE"); u && std::sscanf(u, "%d,%lf", &slot, &at) == 2 && t > at) { client.UseQuickSlot(slot, client.worldUnit); std::printf("use quick slot %d on ourselves\n", slot); std::fflush(stdout); used = true; }
+                    if (const char* c = std::getenv("UM_BOT_CASTON"); c && std::sscanf(c, "%d,%lf,%15s", &spell, &at, who) >= 2 && t > at) {
+                        const uint32_t tg = std::string(who) == "host" ? client.HostUnit() : client.worldUnit;
+                        client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u)\n", spell, who, tg); std::fflush(stdout); used = true;
                     }
                 }
                 static int moves = 0; // research: UM_BOT_MOVE="x,y;x,y;..." once in the world, one every 8 s

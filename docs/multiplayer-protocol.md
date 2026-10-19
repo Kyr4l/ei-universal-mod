@@ -201,9 +201,9 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x10 | 0x66FAC0 | **unknown** | |
 | 0x30 | 0x66FFF0 -> 0x5D39E0 | u32 n, n x u32 unit id, u32 flags (0), f32 x, f32 y, f32 z (0) | MOVE to a point (a ground click) for the listed units |
 | 0x31 | 0x670190 -> 0x5D3C30 (order 4) | u32 n, n x u32 unit id, u32 0, u32 target unit id, u32 0 | ATTACK (confirmed: the bot gained EXP). Also used on objects near a body (loot?) |
-| 0x32 | 0x6708D0 | **unknown** | an order (cast?) |
-| 0x33 | 0x670820 -> 0x5D3D90 | **unknown** | an order |
-| 0x34 | 0x670960 -> 0x5D3D20 | **unknown** | an order |
+| 0x32 | 0x6708D0 | **decoded**: u32 spell, u32 caster unit id, f32 x, f32 y, f32 z, u8 flag (21 bytes) | cast at a point (`CPlayerServer::OnMsg_CastAt` -> `AiLogicPlayer::CastAt` -> `CUnitServer::QueueCastAt`). Client sender `CPlayerClient::SendMsg32` 0x66ACD0 |
+| 0x33 | 0x670820 -> 0x5D3D20 | **decoded**: u32 spell, u32 caster unit id, u32 target object id, u8 flag (13 bytes) | cast on a target (`OnMsg_CastOn` -> `AiLogicPlayer::CastOn` -> `CUnitServer::QueueCastOn`). Client sender `SendMsg33` 0x66AC70. The spell is NOT an object id: without bit 31 it is an index into the hero's quick-item array (`CUnit::GetItemSpell`); with bit 31 (`slot \| 0x80000000`, `SendMsg33_UseWeapon` 0x66AD40) it is a weapon-slot index and the item there (`CItemQuick` subtype 5 / 8) is used at once: its attached spell is cast with `CWorldServer::CastSpellMulti` and a charge is consumed |
+| 0x34 | 0x670960 | u32 unit id, u8 value | `CUnitServer::SetOwnerField270` (the unit's +0x270; sent by `SendMsg34` from key handlers) |
 | 0x35 | 0x6709D0 | works as the pace / walk-run switch (um-bot) | |
 | 0x36 | 0x670310 | u32 1, u32 own unit, u32 0, u32 ?, u32 -1, u32 body unit id, f32 x, f32 y (as captured) | pick up / loot order |
 | 0x37 | 0x670810 | none | no-op |
@@ -231,7 +231,7 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x11 | | str | an error text ("Wrong Client Version. Req. version 1.0") |
 | 0x12 | 0x667E20 | **unknown** | |
 | 0x13 | 0x667E60 | **unknown** | |
-| 0x40 | 0x667EC0 | u32 id, u32 0x34 or 0, u32, u32 0x8000; 12 raw bytes (complection, e.g. 0.5 0.5 0.2); str figure ("unanwibo"), str texture ("boar02"), more strings; ... "f5 0d" + 2 bytes; f32 x, y, z (map units); then the unit's full state (**unknown** layout: the baseline of the 0x41 deltas; 0x5167E0 / 0x5169A0) | a unit appears (creation) |
+| 0x40 | 0x667EC0 | **decoded: see "Unit creation" below**: u32 id, u32 kind, u32 prototype, u32 flags, the complexion, figure / texture / label strings, the part names, the name, then the unit's whole state as a delta coded 0x41 body | a unit appears (creation) |
 | 0x41 | 0x6687B0 -> unit vmethod +0xC4 (0x52EF90, base 0x50EC30) | u32 unit id, then the delta-coded fields below | unit update |
 | 0x42 | 0x668850 | 47 bytes, zero in captures | **unknown** |
 | 0x50 | 0x668940 | **unknown** | |
@@ -290,14 +290,75 @@ to the client. A real client then re-enters: JOIN 3, 08 upload, 09, JOIN 0.
 Ids: world unit ids of players start at 0x3B9ACA0D (1 000 000 013); monsters and NPCs have small ids
 (0x11A5, 0x12A0, 0x1320...). um.dll's UNITS ids are the game's internal ones, not these.
 
+### Unit creation (0x40) and the net-state sections (decoded 2026-10-19, checked against um.dll's UNITS on a live host)
+
+Server -> client 0x40 (client handler 0x667EC0, `WorldClient::OnUnitCreated`), in a stream message after the world snapshot and whenever a unit comes into view:
+
+```
+u32 id            players' heroes 0x3B9ACA0D.. (1 000 000 013..), monsters / NPCs the same ids um.dll's UNITS lists (4517 = 0x11A5 ...)
+u32 kind          0x32 a player's hero, 0x33 / 0x34 monsters and animals (units; other kinds are objects: 0x3C torches / levers, shaped differently)
+u32 prototype     the unit's row in the units DB (97 = a human hero, 146 = boar, 267 = hare)
+u32 flags         the object record's flags: 0x8000 resting, 0x2 active, 0x80000 a BODY (dead), 0x20000000 / 0x8000 other
+f32 x3            the complexion (morph): 0.5 0.5 0.2
+CString           empty
+CString figure    "unhuma", "unanwibo"
+CString texture   "", "boar02"
+CString label     "", "mainMenu00labels", "default0"
+u16 n, n x CString  the figure's part names (hd bd hp lh1 ...)
+CString name      a hero's name, empty for monsters
+u32               the prototype row again (monsters) / a small number (heroes)
+then CMapObject::UnpackNetState / CUnit::ReadNetState: u16 mask of the sections present, each section delta coded against the empty state
+```
+
+The sections (CMapObject::ReadNetState 0x50EC30, CUnit::ReadNetState 0x52EF90; the writer is CUnit::WriteNetState 0x52EC70, called when the server packs a 0x41 update too). The mask bit N = section N:
+
+| section | size / content |
+|---|---|
+| 0 | 24 bytes: u16 ?, u16 hp max?, **i16 HP**, **i16 mana**, i16 mana max ... (hero HP 1569 / mana 1255 at creation; monsters send zeros here: their HP is not in the stream) |
+| 1 | 12 bytes: the complexion again |
+| 2 | u8 flag, **f32 x, y, z** (z is not sent: 0 means "on the ground"), 16 bytes rotation quaternion |
+| 3 | u8 n, then n x 5 raw bytes: the effects (spells) on the unit |
+| 4 | 264 bytes: the large stats block (exp total at +4 as an integer: 500 for the test bot; level at +8; attributes at +0xC) |
+| 5 | 11 x u32: equipment / item ids |
+| 6 | 3 x u32 (+0x264, +0x268, +0x26C) |
+| 7 | 1 byte: four packed fields (stance, ...) |
+| 8 | u8, **u8 action code (0xFE idle, 0x07 fighting, 0xFF dead)**, u32 tick, u8 |
+| 9 | a CString |
+| 10 | the order / walk (ReadUnitOrder 0x5C7FC0): u8 mode (0 none, 1 move, 2 move to a point, 3 attack), u8 hi, u8 lo (steps = hi * 256 + lo), Vec2Q64 (2 x u16), a float range (u16), 4 x u32 (in mode 3 the 2nd is the target's id), then the steps: u16 codes (bits 0-1 / 2-3 = x / y -1, 0, +1 from the last cell, 3 = an absolute u16 follows; bits 4-5, 6-15 a speed class and a value) |
+| 11 | **u32 mask of the sides this unit is hostile to**, **u8 side**, u32 owner id (-1 none). Monsters: mask 0x01 (hostile to side 0 = the players), side 7; hares: mask 0 (they do not attack), side 14; heroes: mask 0x3FFE, side 0 |
+| 12 | 20 bytes |
+| 13 | 4 bytes |
+
+Delta coding (`DeltaReader::Read` 0x47E000): every value is read from the byte stream with its bits taken from the same stream: a bit byte is fetched when the 8 bits of the last one are used (low bit first); a 1 bit = unchanged against the previous state, else per dword a 1 bit (unchanged) or 0 + 4 raw bytes, the remainder raw. The bits restart with a new byte at each section (checked: 99 of 99 creation records end exactly at the next sub-message with that rule, 5 of 64 without).
+The order section of some stationary monsters is shaped differently than the walking ones (a creation of a boar in mode 0 did not decode with the section's own rules); um-bot then takes the position, the hostility mask and the side from the record's start and tail (the next record's header marks the end).
+
+Other server -> client sub-messages seen in a quest world (lengths known):
+
+| type | payload |
+|---|---|
+| 0x41 | u32 id, then the u16 mask and the sections above (delta coded against the unit's previous state): the unit update |
+| 0x42, 0x43 | u32 id: the unit leaves the view / its body is gone |
+| 0x81 | CString name, f32 value: a named game value ("gtime" = the day time; "q.<quest>..." quest values) |
+| 0x60 | u8, u32 -1, u32 n, n x u32 ids: a resync list of the units the server sees as known |
+| 0x04 | u32 id, u32 tick, u8 1: an event on a unit (seen with a hit / a death) |
+| 0x0B | u32 id, u32 code (0x29, 0x2F, 0x31 ...): a unit event |
+| 0x18 | u32 hero id, f32 **experience share** (`CPlayerServer::SendMsg18`, sent by `CWorldServer::GiveExperience` 0x5911C0 once per player's first hero on every kill in a session) |
+| 0x0E | a path / move confirmation: f32 x, f32 y, u32 unit id, then a walk record (length not decoded) |
+
+Killing a monster: the monster's section 8 action goes 0xFF (and its header flags get 0x80000 when it is created again), then 0x43 removes it. An attack order (client 0x31) is **refused** by the server unless the target is in the attacking hero's known list: `WorldServer::OrderOnTarget` 0x5D3C30 returns without an order unless `AiMemory::IsFriendOrKnown` (0x5CB7F0: same side, same player, or the target is in the unit's seen list) holds; the list is filled by the vision update (`AiMemory::ForceSee` 0x5CBC80, `CAIMap` vision). Measured: orders from 9, 8, 7 and 5 map units were refused, one from about 3 was accepted, and so was any order on a monster that had attacked the hero first. The order is accepted when the hero's own 0x41 update then shows section 10 mode 3 with the target id. Orders on a body or a dead unit never start (what the old "attack again" loop did).
+
+**Experience in a multiplayer session** (`CUnitServer::TakeHit` 0x553F40 -> `GiveExperience`): when a unit dies and its killer belongs to a player, in a session (`Lobby_IsAlive`) the kill's experience (the victim prototype's +0x54) is not given to the killer alone: every player's first hero gets `xp * sqrt(exp_i) / sum_j sqrt(exp_j)` (the weight is sqrt of the stats object's exp total + its accumulator, +0x1E4 / +0x8E0), whoever struck the blow, and each share is announced with a 0x18 message. Outside a session the xp is split equally among the killer's own heroes (message 0x15). Measured on the test rig: 5.0 per boar, host (74.7 million exp) 4.9871, bot (500 exp) 0.0129 = 0.26 %, exactly sqrt(500) / (sqrt(500) + sqrt(74.7 million)). Control run (same day): with the 500 exp character "Useless Chud" as host the same kills split 2.5000 / 2.5000 (two boars: bot +5.0005, host +4.9995), so the host's experience is what changes the bot's share, not the bot's missing database (the amount, 5.0, comes from the victim's prototype row on the server). So the "0 EXP after a kill" is the game's own rule, not a handshake problem: a bot next to a much stronger host levels almost never; next to a host of about its own exp it gets about half.
+
+Client orders, completed from the handlers (2026-10-19; `CPlayerServer::OnMsg_*` / `WorldServer::On*` table at 0x66CB24): 0x30 move (`OnMoveOrder`), 0x31 attack (`OnAttackOrder`), 0x32 / 0x33 cast (above), 0x34 `SetOwnerField270` (u32 unit, u8), 0x35 `SetAttackMode` (u32 unit, u8: the same message um-bot uses as "pace"; it also changes the unit's +0x268), 0x36 interaction order (`OnLootOrder`: loot, talk, use on), 0x38 `OnMsg_Unit4`, 0x39 `SetLeader` (2 unit ids), 0x3A `OnMsg_MoveTo` (count, unit ids, target Vec3, flag: a move with formation offsets), 0x3B (u32 unit, u8): `CUnit::SetField438` (net section 13), 0x40 view point, 0x50 party upload.
+The server's unit order kinds (`CUnitServer` +0x190 current / +0x1B4 queued): 1 move, 2 move to a point, 3 attack, 4 cast at, 5 cast on / use, 6 interaction (talk 0x18A95, skills), 9 none, 10 use a consumable quick item (subtype 2, `CompleteOrder`). Server -> client 0x0B (u32 unit id, u32 code) is `CPlayerServer::SendMsg0B`, sent by about 20 order handlers (an order acknowledged or refused; code 0x13 = a cast refused, 0x30 = a body hit by a player, 0x0F ...).
+Verified on the live rig: um-bot's `0x33` with `0x80000000 | 0` makes the server run `QueueCastOn` -> `ValidateQueuedOrder` -> `CastSpellMulti` -> `CastSpell` once (breakpoints); the healing effect of the bot's belt potion was NOT observed (the bot's health did not rise after two attempts while being attacked). Open: which id the real client sends for the belt potion (a real UI click sent a `0x33` once, its payload was not captured).
+
 ## 5. Open questions (what a complete client or server still needs)
 
 - The payloads of the **unknown** sub-message types in both tables (0x01, 0x02, 0x03-0x07, 0x10, 0x32-0x34,
   0x38-0x3B, 0x50 client-side; 0x02-0x04, 0x06, 0x07, 0x0A, 0x0F, 0x12, 0x13, 0x42, 0x50-0x52, 0x70-0x72,
   0x80, 0x82, 0x83 server-side): the handlers are listed above; each is a decompile away.
-- The unit's full-state serializer (0x40 creation) and the meaning of 0x41's fields 2, 3, 5-9, 11, 13 and the
-  stats block (field 4): with them a client knows health, mana, side and position of every unit without
-  heuristics (PENDING #42, #43, #66, #67).
+- Left of the unit state: the order section of stationary monsters (see above), the stats block's fields (section 4: attributes, skills), sections 5, 6, 12, 13's meaning, a monster's HP (not in the stream: only the hero's is), 
 - The world snapshot's layout (0x00 first message) and the tick (0x00 later): the game time, the day.
 - Reliable kinds 4, 12, 14, 17; the kind-16 hero blob's serializer (vtable +0x28 of the member class).
 - The resend timing (0x4346D0 / 0x433F20), the login's u32 12500 and 20 zero bytes, the master server 0xFF.

@@ -12,6 +12,8 @@ in the lobby (tested on a hosted lobby). Playing in the game (moving, fighting) 
 A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.
 The change is saved into the `.mp`, and the original is kept as `.bak`.
 
+**Experience:** in a multiplayer session the game splits every kill's experience among all the players by the square root of their experience totals, whoever struck the blow. A bot with a few hundred experience next to a host with millions gets a fraction of a percent; next to a host of about its own level it gets about half. Pick the bot's character accordingly.
+
 The window shows the character read only: its experience, money, attributes, skills, abilities and equipment (item
 names from the mod's database, `<mp folder>/../res/databaselmp.res`). Health and mana are computed by the game.
 
