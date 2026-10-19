@@ -9,7 +9,7 @@ enters the quest the host chose, follows the host at the host's pace, fights hos
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
 progress (experience, items) into its `.mp` from the server's party messages. Not done: healing the host and casting
-spells (the spell database is not read), looting its own corpse, several bots at once.
+spells (the spell database is not read), looting its own corpse, several bots in one window.
 
 **Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
 A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.
@@ -19,6 +19,8 @@ The change is saved into the `.mp`, and the original is kept as `.bak`.
 
 The window shows the character read only: its experience, money, attributes, skills, abilities and equipment (item
 names from the mod's database, `<mp folder>/../res/databaselmp.res`). Health and mana are computed by the game.
+
+**Several bots:** run one um-bot per character, each from its own folder (its own `um-bot.cfg` and character). Two bots joined the same quest at once in the tests.
 
 `um-bot --connect-test` joins the configured server with the configured character, without the window, prints what
 happens, and leaves (exit code 0 when the server listed the bot).

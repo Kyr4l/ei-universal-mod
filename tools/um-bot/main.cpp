@@ -640,7 +640,7 @@ int main(int argc, char** argv) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
             client.Disconnect();
-            for (const auto& pl : client.players) std::printf("player %s state %u unit %08X\n", pl.second.name.c_str(), pl.second.state, pl.second.unitId);
+            for (const auto& pl : client.players) std::printf("player #%u %s state %u unit %08X\n", pl.first, pl.second.name.c_str(), pl.second.state, pl.second.unitId);
             for (const auto& q : client.questStates) std::printf("quest state %s\n", q.second.c_str());
             { float x = 0, y = 0; client.Where(client.worldUnit, x, y); std::printf("units known: %zu, me at %.1f %.1f\n", client.unitPos.size(), x, y); }
             std::printf("world unit: %u, state %d %s\n", client.worldUnit, static_cast<int>(client.state), client.error.c_str()); return client.joined ? 0 : 1;
