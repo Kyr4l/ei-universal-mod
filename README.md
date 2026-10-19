@@ -120,6 +120,10 @@ __um-multitool__ (`tools/um-multitool`) is the toolkit we use to build this mod,
 
 Releases ship `um-multitool.exe` (Windows), `um-multitool-xp32.exe` (Windows XP), `um-multitool` (Linux, needs the distribution's GLFW) and `um-multitool-x86_64.AppImage` (Linux, GLFW bundled: make it executable, then double-click it or run it from a terminal with the usual arguments). On Linux, `um-multitool install-desktop` adds the tool to the application menu with its icon and bash tab completion; from the AppImage it also links the `um-multitool` command into `~/.local/bin`. The AppImage keeps its settings and log in `~/.config/um-multitool`; the plain binary keeps them beside itself.
 
+## Universal Mod Bot
+
+__um-bot__ (`tools/um-bot`) is a companion player for multiplayer: a small program with its own network client (no game copy, no second game instance) that joins your hosted game like another player, with a multiplayer character (`.mp`) of its own. It enters the quest you chose, follows you at the pace you move (run, walk, sneak, crawl), fights the monsters that attack you or that you attack, drinks its healing potion when hurt, comes back when it strays past its leash, goes back to the lobby when you do, and writes the experience and items it earned back into its `.mp`. Hosting needs nothing installed beyond the game. The protocol it speaks is documented in `docs/multiplayer-protocol.md`. Healing the host and casting spells are not done yet.
+
 ## Use of AI
 
 A large part of the tools in this repository (um-multitool, um.dll) was written with the help of AI. The code remains reviewed, tested and maintained by humans.

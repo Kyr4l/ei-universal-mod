@@ -4,9 +4,12 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.4.** It joins a game like a player: it asks the server for its info, logs in with the key the server
-gives, then sends its character (name and unit, from the `.mp`). The host's chat announces it and its face shows
-in the lobby (tested on a hosted lobby). Playing in the game (moving, fighting) comes next.
+**Status: 0.1.4.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
+the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
+a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
+progress (experience, items) into its `.mp` from the server's party messages. Not done: healing the host and casting
+spells (the spell database is not read), looting its own corpse, chat commands, several bots at once.
 
 **Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
 A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.
