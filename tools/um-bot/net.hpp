@@ -169,6 +169,7 @@ public:
         for (size_t o = 0; o + 5 <= m.size(); ++o) {
             if ((m[o] == 0x42 || m[o] == 0x43) && o + 5 <= m.size() && (o + 5 == m.size() || m[o + 5] == 0x41 || m[o + 5] == 0x42 || m[o + 5] == 0x43 || m[o + 5] == 0x60)) { // 0x42 / 0x43 u32 id: the unit leaves the view / its body is gone
                 uint32_t id; std::memcpy(&id, &m[o + 1], 4);
+                if (id == corpse_.id && id != worldUnit) { Log("our body is gone: looted"); corpse_.id = 0; }
                 if (unitPos.count(id)) { unitPos.erase(id); o += 4; }
                 continue;
             }
@@ -244,14 +245,14 @@ public:
             const uint8_t side = m[q - 1]; uint32_t enemies; std::memcpy(&enemies, &m[q - 5], 4);
             if (side > 31) return 0;
             unitInfo_[id] = u; unitSide_[id] = side; unitEnemies_[id] = enemies;
-            if (u.flags & 0x80000u) { dead_.insert(id); unitPos.erase(id); }
+            if (u.flags & 0x80000u) { MarkDead(id); }
             else if (m[p + 2] == 0x01 && (mask & 4) && p + 12 < m.size()) { float x, y; std::memcpy(&x, &m[p + 4], 4); std::memcpy(&y, &m[p + 8], 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) unitPos[id] = {x, y, x, y, Now()}; }
             return q;
         }
         const size_t e = UnitUpdate(b, 0);
         if (!e) return 0;
         unitInfo_[id] = u;
-        if (u.flags & 0x80000u) { dead_.insert(id); unitPos.erase(id); } // flags bit 0x80000: a body (the game's own record flag)
+        if (u.flags & 0x80000u) { MarkDead(id); } // flags bit 0x80000: a body (the game's own record flag)
         return p + (e - 5);
     }
     struct Field { std::vector<uint8_t> b; size_t at = 0; };
@@ -310,7 +311,7 @@ public:
                         commit.push_back([this, id, hp = s16(2), hpMax = s16(4), mana = s16(6), manaMax = s16(8)] {
                             unitMana_[id] = mana; unitManaMax_[id] = manaMax; unitHpMax_[id] = hpMax;
                             auto h = unitHp_.find(id);
-                            if (hp <= 0 && h != unitHp_.end() && h->second > 0) { dead_.insert(id); unitPos.erase(id); }
+                            if (hp <= 0 && h != unitHp_.end() && h->second > 0) { MarkDead(id); }
                             if (h != unitHp_.end() && hp < h->second && id == HostUnit()) hostHurtAt_ = Now();
                             if (h != unitHp_.end() && hp < h->second && id == worldUnit) selfHurtAt_ = Now();
                             unitHp_[id] = hp;
@@ -318,7 +319,7 @@ public:
                     }
                     if (k == 8 && n == 1 && sz->second.size() == 4 && !bad && f.at == 2) commit.push_back([this, id, a = v[0]] { // the action code: 0xFE idle, 0x07 fight, 0xFF dead (seen when the host kills a monster)
                         unitAction_[id] = a;
-                        if (a == 0xFF && id < 0x01000000u) { dead_.insert(id); unitPos.erase(id); }
+                        if (a == 0xFF && id < 0x01000000u) { MarkDead(id); }
                     });
                     if (k == 2 && !bad && n == 12) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) commit.push_back([this, id, x, y] { unitPos[id] = {x, y, x, y, Now()}; }); }
                     if (k == 1 && !bad) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 2048 && y < 2048) commit.push_back([this, id, x, y] { unitPos[id] = {x, y, x, y, Now()}; }); }
@@ -553,7 +554,7 @@ public:
             Handle(buf, n);
         }
         // In the session: an update every 20 ms (as the game): the ack bits, our stream part, the JOIN after a change.
-        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); WatchDeath(); LeaveSteps(); }
+        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); WatchEntry(); WatchDeath(); LeaveSteps(); LootSteps(); }
         // The view point (0x40 + f32 x, y in map units), as the game's client sends its camera's about twice a second:
         // the server may send each client what is around it.
         if (state == State::Accepted && worldUnit && Now() - viewAt_ > 0.5) {
@@ -768,6 +769,7 @@ public:
         state = State::Idle;
     }
     void SendRaw(const std::vector<uint8_t>& m) { StreamMessage(m); } // research
+    void LootBody(uint32_t body) { Loot(body); }       // research: the loot order on a body
     void SetMpRaw(const std::vector<uint8_t>& raw) { mpRaw_ = raw; } // the character's content changed (items from a swap): what the next quest entry uploads
     // Leaves the world for good (the host left, or we are asked to): the leave message 0x04 + u32 0 makes the server move what we carried into the party and answer with
     // the party (0x83: the final save, taken by the owner of the file); the connection is closed 2 s later and `reconnect` is set: the lobby is entered again with a
@@ -938,6 +940,31 @@ private:
         else if (Now() - hostGoneAt_ > 3) { Log("the host left the zone: leaving it too"); LeaveWorld(); }
     }
     // Join race: the server did not list us (another client left just before, or the first packets were lost): ask again, then give up.
+    // Our body: where our hero died and which unit it was (looted for what the death took: players lose their inventory and some money to the body, recoverable by looting it).
+    struct Corpse { uint32_t id = 0; float x = 0, y = 0; int tries = 0; double at = 0; };
+    Corpse corpse_;
+    void MarkDead(uint32_t id) {
+        if (id == worldUnit && !corpse_.id) { float x = 0, y = 0; if (Where(id, x, y)) { corpse_.id = id; corpse_.x = x; corpse_.y = y; corpse_.tries = 0; corpse_.at = 0; Log("our body lies at " + std::to_string(static_cast<int>(x)) + " " + std::to_string(static_cast<int>(y))); } }
+        dead_.insert(id); unitPos.erase(id);
+    }
+    // Loots a body: the interaction order 0x36: u32 1 unit, the unit, u32 0, u32 0x18a95 (the loot interaction), u32 -1, the body's unit id. The server walks the unit to the body and moves
+    // everything into our party at once (CUnitServer::ExecuteInteraction 0x54F000 -> CWorldServer::LootUnit), then the body is removed.
+    void Loot(uint32_t body) {
+        if (!worldUnit) return;
+        std::vector<uint8_t> m{0x36};
+        Put32(m, 1); Put32(m, worldUnit); Put32(m, 0); Put32(m, 0x18A95); Put32(m, 0xFFFFFFFFu); Put32(m, body);
+        StreamMessage(m);
+    }
+    // After the next entry: when the body is within 70 units of the host the bot goes to loot it, up to three tries 25 s apart.
+    void LootSteps() {
+        if (!corpse_.id || !worldUnit || !Alive() || phase_ != Phase::InWorld || worldUnit == corpse_.id) return;
+        if (Now() - corpse_.at < 25) return;
+        float hx, hy;
+        if (!Where(HostUnit(), hx, hy) || std::hypot(hx - corpse_.x, hy - corpse_.y) > 70) return; // the body is not far from the host (it walks there by itself: the server paths the order)
+        if (++corpse_.tries > 3) { Log("our body could not be looted: giving up"); corpse_.id = 0; return; }
+        corpse_.at = Now(); holdUntil_ = Now() + 3;
+        Log("looting our body (" + std::to_string(corpse_.id) + ")"); Loot(corpse_.id);
+    }
     // Our hero died: the server sent no respawn in 140 s (live, 2026-10-20: the player's record keeps its unit, nothing else changes); entering the world anew (a fresh
     // connection) gives a new, living hero (checked: every run after a death started with full health). After `deadGrace` seconds dead: leave and reconnect.
     double deadGrace = 45, deadAt_ = 0;
@@ -948,6 +975,11 @@ private:
         if (!dead) { deadAt_ = 0; return; }
         if (deadAt_ == 0) { deadAt_ = Now(); Log("our hero is dead"); }
         else if (Now() - deadAt_ > deadGrace) { deadAt_ = 0; Log("still dead after " + std::to_string(static_cast<int>(deadGrace)) + " s: entering the world anew"); LeaveWorld(); }
+    }
+    // Entering the quest took too long (a ghost of an earlier session of the same name in the host's world: the snapshot never came): log out and connect again.
+    void WatchEntry() {
+        if ((phase_ != Phase::Loading && phase_ != Phase::Entering) || worldUnit) return;
+        if (Now() - phaseAt_ > 15) { Log("entering the quest took more than 15 s: connecting again"); Disconnect(); reconnect = true; }
     }
     void WatchJoin() {
         if (joined || state != State::Accepted) { joinWatchAt_ = 0; return; }

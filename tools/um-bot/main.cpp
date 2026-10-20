@@ -38,7 +38,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.9";
+static const char* const kVersion = "0.1.10";
 
 
 struct App {
@@ -213,6 +213,7 @@ static std::string SaveProgress(net::Client& client, const std::string& path, mp
         if (mp::Save(path, fresh, err)) {
             said = std::string("saved the character's progress (") + (final ? "on leaving" : "periodic") + ", " + std::to_string(pb.bytes.size()) + " bytes) into " + path;
             if (current) *current = fresh;
+            client.SetMpRaw(pb.bytes); // what the next entry uploads is what the server holds now (a death took the inventory to the body: uploading the old one would duplicate it)
         } else said = "progress not saved: " + err;
     }
     return said;
@@ -786,6 +787,10 @@ int main(int argc, char** argv) {
                     const double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
                     if (!leftZone && client.worldUnit && t > a) { client.GoToLobby(); leftZone = true; client.autoEnter = false; std::printf("left the zone\n"); std::fflush(stdout); }
                     if (leftZone && !reentered && b >= 0 && t > b) { client.autoEnter = true; reentered = true; std::printf("entering again\n"); std::fflush(stdout); }
+                }
+                if (const char* lt = std::getenv("UM_BOT_LOOT"); lt && client.worldUnit) { // research: UM_BOT_LOOT="secs,bodyUnitId": loot that body at that time (once)
+                    static bool looted = false; double a = 0; unsigned body = 0; std::sscanf(lt, "%lf,%u", &a, &body);
+                    if (!looted && std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) { client.LootBody(body); looted = true; std::printf("looting body %u\n", body); std::fflush(stdout); }
                 }
                 static bool rawSent = false; // research: UM_BOT_RAW="secs,hex bytes": send one stream message (e.g. "20,04000000" = the leave message 0x04 with a u32 0)
                 if (const char* rw = std::getenv("UM_BOT_RAW"); rw && !rawSent && client.worldUnit) {
