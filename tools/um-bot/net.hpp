@@ -460,7 +460,7 @@ public:
     bool IsHero(uint32_t id) const { for (const auto& p : players) if (p.second.unitId == id) return true; return false; }
     // The nearest unit that is not a player's hero (0: none known).
     uint32_t NearestOther(float& dist) const {
-        float mx, my; uint32_t best = 0; dist = 1e9f;
+        float mx, my, bestScore = 1e9f; uint32_t best = 0; dist = 1e9f;
         if (!Where(worldUnit, mx, my)) return 0;
         for (const auto& kv : unitPos) {
             bool hero = false;
@@ -471,7 +471,15 @@ public:
             if (!(unitEnemies_.count(kv.first) && Hostile(kv.first))) continue; // only known enemies (#67): NPCs, animals and unknown units are left alone
             { float hx, hy; if (Where(HostUnit(), hx, hy) && std::hypot(x - hx, y - hy) > (priority == 2 ? 10.0f : leash)) continue; } // guard: only what is near the player; else inside the leash
             const float d = std::hypot(x - mx, y - my);
-            if (d < dist) { dist = d; best = kv.first; }
+            // A hit monster calls its friends within 7 units (the game's CallForHelpRadius): a lone one is chosen before one in a pack (each neighbour counts as 5 units of distance).
+            int pack = 0;
+            for (const auto& o : unitPos) {
+                float ox, oy;
+                if (o.first == kv.first || dead_.count(o.first) || !unitEnemies_.count(o.first) || !Hostile(o.first) || !Where(o.first, ox, oy)) continue;
+                if (std::hypot(ox - x, oy - y) <= 7.0f) ++pack;
+            }
+            const float score = d + 5.0f * static_cast<float>(pack);
+            if (score < bestScore) { bestScore = score; dist = d; best = kv.first; }
         }
         return best;
     }
