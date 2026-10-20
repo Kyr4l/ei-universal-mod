@@ -438,6 +438,20 @@ public:
         return followHost && !chatStay_ ? "following the host" : "standing";
     }
     bool Alive() const { if (!worldUnit || dead_.count(worldUnit)) return false; const auto it = unitHp_.find(worldUnit); return it == unitHp_.end() || it->second > 0; }
+    // Casts the Healing spell (spell items index healSpellSlot) on a target. The first order of a series only switches the hero's stance (checked live: ExecuteCombatOrder
+    // drops it); so it is sent again 1.2 s later when the mana has not been spent. The cast costs ~44 mana of 57 (learned from the mana drop: spellCost_).
+    void CastHealSpell(uint32_t target) {
+        CastOn(static_cast<uint32_t>(healSpellSlot), target);
+        spellOrderAt_ = Now(); spellTarget_ = target; spellManaAtCast_ = Mana(worldUnit); spellResends_ = 1;
+    }
+    void SpellSteps() {
+        if (spellOrderAt_ <= 0) return;
+        const int mana = Mana(worldUnit);
+        if (mana >= 0 && spellManaAtCast_ - mana >= 8) { spellCost_ = std::max(spellCost_, static_cast<int>(spellManaAtCast_) - mana); spellOrderAt_ = 0; return; } // paid: the cast started
+        if (spellResends_ > 0 && Now() - spellOrderAt_ > 1.2) { --spellResends_; CastOn(static_cast<uint32_t>(healSpellSlot), spellTarget_); spellOrderAt_ = Now(); holdUntil_ = Now() + 2.5; }
+        else if (Now() - spellOrderAt_ > 5) spellOrderAt_ = 0;
+    }
+    double spellOrderAt_ = 0, spellManaAtCast_ = 0; uint32_t spellTarget_ = 0; int spellResends_ = 0, spellCost_ = 0;
     int Health(uint32_t id) const { const auto it = unitHp_.find(id); return it == unitHp_.end() ? -1 : it->second; }
     int Mana(uint32_t id) const { const auto it = unitMana_.find(id); return it == unitMana_.end() ? -1 : it->second; }
     bool IsHero(uint32_t id) const { for (const auto& p : players) if (p.second.unitId == id) return true; return false; }
@@ -466,7 +480,7 @@ public:
     bool leashed_ = false;
     double holdUntil_ = 0;      // no new orders before this time (a potion is being drunk)
     // The Healing spell's object id from the character's spell list (0: none / no database); the host's heal threshold in % (0: off).
-    int healSpellSlot = -1; int healHostBelow = 0;   // EXPERIMENTAL: the belt index of a spell container holding Healing (-1: none). The server accepts the order (QueueCastOn, CanAffordSpell run) but never reached CastOrderSpell in the tests, so the main window leaves it off.
+    int healSpellSlot = -1; int healHostBelow = 0;   // the index in the hero's spell items of a spell container holding Healing (-1: none): the spell id of a 0x33 cast order. Verified live: CastOrderSpell and CastSpellMulti run.
     bool drinkSpell_ = false; int spellFails_ = 0, hostHealFails_ = 0, hostHealHp_ = 0; double hostHealAt_ = 0, hostHealCastAt_ = 0, hostHealPause_ = 0;
     bool potionsLeft_ = true; int potionFails_ = 0; double healAt_ = 0, drinkAt_ = 0; int drinkHp_ = 0;
     bool fightInSight = false;  // fighting at all (Engagement not Passive)
@@ -546,6 +560,7 @@ public:
         }
         if (matchPace) { const auto hp = unitPace_.find(HostUnit()); if (hp != unitPace_.end() && hp->second >= 0 && hp->second <= 3) pace = hp->second; }
         if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
+        SpellSteps();
         // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
         // The answer is read from our own health 2.5 s later; two drinks without a rise = no potion left (or none that heals).
         if (state == State::Accepted && worldUnit) { // the health as it changes (research: the effect of a potion over time)
@@ -559,16 +574,16 @@ public:
                 Log(std::string(drinkSpell_ ? "the Healing spell" : "the potion") + " healed (" + std::to_string(drinkHp_) + " -> " + std::to_string(hp) + ")");
                 if (drinkSpell_) spellFails_ = 0; else potionFails_ = 0;
                 drinkAt_ = 0;
-            } else if (drinkAt_ > 0 && Now() - drinkAt_ > (drinkSpell_ ? 2.5 : 1.0)) { // the potion works within 0.2 s; a spell has a cast time
-                if (drinkSpell_) { if (++spellFails_ >= 3) Log("the Healing spell raised the health 3 times in a row: not casting it on itself any more"); }
+            } else if (drinkAt_ > 0 && Now() - drinkAt_ > (drinkSpell_ ? 4.5 : 1.0)) { // the potion works within 0.2 s; a spell has a cast time (~1.6 s, after the stance switch)
+                if (drinkSpell_) { if (++spellFails_ >= 4) Log("the Healing spell raised the health 4 times in a row: not casting it on itself any more"); }
                 else { potionsLeft_ = false; healAt_ = 0; Log("the potion raised nothing: the belt is empty, not drinking any more"); }
                 drinkAt_ = 0;
             }
-            const bool canPotion = usePotions && potionsLeft_, canSpell = healSpellSlot >= 0 && spellFails_ < 3 && Mana(worldUnit) > 0;
+            const bool canPotion = usePotions && potionsLeft_, canSpell = healSpellSlot >= 0 && spellFails_ < 4 && Mana(worldUnit) >= spellCost_;
             if (drinkAt_ == 0 && mx > 0 && hp > 0 && hp * 100 < healSelfBelow * mx && Now() - healAt_ > 4 && (canPotion || canSpell)) {
                 drinkSpell_ = !canPotion;
                 Log("health " + std::to_string(hp) + " / " + std::to_string(mx) + (drinkSpell_ ? ": casting Healing on itself" : ": drinking the potion in quick slot " + std::to_string(potionSlot)));
-                if (drinkSpell_) CastOn(static_cast<uint32_t>(healSpellSlot), worldUnit); else UseQuickSlot(potionSlot, worldUnit);
+                if (drinkSpell_) CastHealSpell(worldUnit); else UseQuickSlot(potionSlot, worldUnit);
                 healAt_ = Now(); drinkAt_ = Now(); drinkHp_ = hp; holdUntil_ = Now() + 2.5; // no other order meanwhile: a move / attack would cancel the queued cast
             }
         }
@@ -583,7 +598,7 @@ public:
                 Where(host, hx, hy) && Where(worldUnit, mx2, my2) && std::hypot(hx - mx2, hy - my2) < 15) {
                 const bool bySpell = healSpellSlot >= 0;
                 Log("the host's health " + std::to_string(hp) + " / " + std::to_string(mx) + (bySpell ? ": casting Healing on it" : ": using the potion in quick slot " + std::to_string(potionSlot) + " on it"));
-                if (bySpell) CastOn(static_cast<uint32_t>(healSpellSlot), host); else UseQuickSlot(potionSlot, host); hostHealAt_ = hostHealCastAt_ = Now(); hostHealHp_ = hp; holdUntil_ = Now() + 1.5;
+                if (bySpell) CastHealSpell(host); else UseQuickSlot(potionSlot, host); hostHealAt_ = hostHealCastAt_ = Now(); hostHealHp_ = hp; holdUntil_ = Now() + 1.5;
             }
         }
         // Leash: past `leash` units from the host the fight is dropped and the bot walks back (the follow below) until it is near the host again.

@@ -36,7 +36,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.6";
+static const char* const kVersion = "0.1.7";
 
 
 struct App {
@@ -106,14 +106,18 @@ static int FindHealPotionSlot(const mp::Character& ch, const items::Database& db
     }
     return -1;
 }
-// The belt slot of a spell container (QuickItems "scroll" row 1) when the character knows the Healing spell (its spell list refers to SpellPrototypes rows, code name "healing").
+// The index in the hero's spell items (the .mp's 4th list: spell containers) of a container holding the Healing spell: the container's block holds its spell object's id at +40,
+// the spell object (the party's spell list) refers to a SpellPrototypes row whose code name is "healing". A cast order's spell id (no bit 31) is this index. -1: none.
 static int FindHealSpellSlot(const mp::Character& ch, const items::Database& db) {
     if (ch.members.empty()) return -1;
-    bool knows = false;
-    for (const mp::Object& o : ch.lists[1]) if (o.kind == 0x3002 && o.b < db.spells.size() && Lower(db.spells[o.b].code) == "healing") knows = true;
-    if (!knows) return -1;
-    const auto& belt = ch.members[0].lists[1];
-    for (size_t i = 0; i < belt.size(); ++i) { const mp::Object* o = FindObject(ch, belt[i]); if (o && o->kind == 0x3008) return static_cast<int>(i); }
+    const auto& slots = ch.members[0].lists[3];
+    for (size_t i = 0; i < slots.size(); ++i) {
+        const mp::Object* c = FindObject(ch, slots[i]);
+        if (!c || c->kind != 0x3008 || c->detail.size() < 44) continue;
+        uint32_t spellId; std::memcpy(&spellId, &c->detail[40], 4);
+        const mp::Object* sp = FindObject(ch, spellId);
+        if (sp && sp->kind == 0x3002 && sp->b < db.spells.size() && Lower(db.spells[sp->b].code) == "healing") return static_cast<int>(i);
+    }
     return -1;
 }
 
@@ -170,7 +174,7 @@ static void EnsureDb(App& app) { // (re)load the database when the choice or the
 }
 static void SetHealing(App& app) { // the healing potion's belt slot (from the database), and the heal-the-host setting
     EnsureDb(app);
-    if (app.dbLoaded) { const int slot = FindHealPotionSlot(app.character, app.db); if (slot >= 0) app.client.potionSlot = slot; }
+    if (app.dbLoaded) { const int slot = FindHealPotionSlot(app.character, app.db); if (slot >= 0) app.client.potionSlot = slot; app.client.healSpellSlot = FindHealSpellSlot(app.character, app.db); }
     app.client.healHostBelow = app.cfg.healPlayerBelow;
 }
 static void StartConnection(App& app) {
@@ -630,7 +634,7 @@ int main(int argc, char** argv) {
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
             client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
             { items::Database db; const std::string dbf = LoadDb(cfg, db); // the healing potion's slot, and (experimental) the Healing spell's
-              if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; if (std::getenv("UM_BOT_SPELLS")) client.healSpellSlot = FindHealSpellSlot(ch, db); }
+              if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; client.healSpellSlot = FindHealSpellSlot(ch, db); }
               client.healHostBelow = cfg.healPlayerBelow;
               std::printf("database: %s, healing potion slot %d, Healing spell slot %d\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot); }
             if (std::getenv("UM_BOT_NOSPELL")) client.healSpellSlot = -1; // research: potion only
@@ -687,7 +691,10 @@ int main(int argc, char** argv) {
                     if (const char* u = std::getenv("UM_BOT_USE"); u && std::sscanf(u, "%d,%lf", &slot, &at) == 2 && t > at) { client.UseQuickSlot(slot, client.worldUnit); std::printf("use quick slot %d on ourselves\n", slot); std::fflush(stdout); used = true; }
                     if (const char* c = std::getenv("UM_BOT_CASTON"); c && std::sscanf(c, "%d,%lf,%15s", &spell, &at, who) >= 2 && t > at) {
                         const uint32_t tg = std::string(who) == "host" ? client.HostUnit() : client.worldUnit;
-                        client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u)\n", spell, who, tg); std::fflush(stdout); used = true;
+                        static int casts = 0; static double lastCast = -1e9; // UM_BOT_CASTN=<n> (default 1) orders, 2 s apart: the first one only switches the hero's stance
+                        const int total = std::getenv("UM_BOT_CASTN") ? std::atoi(std::getenv("UM_BOT_CASTN")) : 1;
+                        if (t - lastCast >= 2) { client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u) #%d\n", spell, who, tg, ++casts); std::fflush(stdout); lastCast = t; }
+                        if (casts >= total) used = true;
                     }
                 }
                 if (const char* lw = std::getenv("UM_BOT_LEAVEWORLD"); lw && client.worldUnit && std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > std::atof(lw)) client.LeaveWorld(); // research: leave the world for good (final save) at that time
