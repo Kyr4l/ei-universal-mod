@@ -425,7 +425,7 @@ struct BoneTrack {
     std::vector<Quat> rotations;   // per frame, (w, x, y, z)
     std::vector<Vec3> positions;   // per frame: the root's position; others: W(parent) * rest offset (docs)
     uint32_t vertexFrames = 0, vertexCount = 0;
-    std::vector<Vec3> vertices;    // per-vertex animation, vertexFrames * vertexCount (bowstrings); usually empty
+    std::vector<Vec3> vertices;    // per-vertex animation, vertexFrames * vertexCount: deltas added to the rest vertices (wing membranes); usually empty
 };
 
 struct AnimClip {
@@ -572,6 +572,24 @@ inline std::vector<PartPose> PoseModel(const Model& m, const AnimClip* clip, flo
     };
     for (size_t i = 0; i < n; ++i) solve(i);
     return pose;
+}
+
+// A part's per-vertex animation track in a clip, or null (wing membranes and a few bodies have one).
+inline const BoneTrack* MorphTrack(const AnimClip* clip, const ModelPart& part) {
+    if (!clip) return nullptr;
+    std::string name = part.name;
+    for (char& c : name) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    auto t = clip->bones.find(name);
+    return t != clip->bones.end() && t->second.vertexFrames && t->second.vertexCount ? &t->second : nullptr;
+}
+
+// The delta the track moves vertex `vertex` by at `frame` (lerped, wrapping): the engine adds it to the part's rest
+// vertex (CFigure::SubmitMorphedVertices), before the part's rotation. No track or no such vertex: zero.
+inline Vec3 MorphDelta(const BoneTrack* t, float frame, uint32_t vertex) {
+    if (!t || vertex >= t->vertexCount) return {};
+    const float f = std::fmod(std::max(frame, 0.0f), static_cast<float>(t->vertexFrames));
+    const size_t a = static_cast<size_t>(f) % t->vertexFrames, b = (a + 1) % t->vertexFrames;
+    return Lerp(t->vertices[a * t->vertexCount + vertex], t->vertices[b * t->vertexCount + vertex], f - std::floor(f));
 }
 
 inline float RestDepth(const Model& m, const Vec3& k) {

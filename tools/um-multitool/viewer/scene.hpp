@@ -204,9 +204,10 @@ public:
             const size_t i = static_cast<size_t>(partSource_[s]);
             const fig::FigureMesh& mesh = unit_.parts[i].mesh;
             ScenePart& sp = parts_[s];
+            const fig::BoneTrack* morph = ci != clips.end() ? fig::MorphTrack(&ci->second, unit_.parts[i]) : nullptr;
             for (size_t v = 0; v < mesh.vertexComponents.size() && 3 * v + 2 < sp.positions.size(); ++v) {
                 const fig::VertComponent& vc = mesh.vertexComponents[v];
-                const fig::Vec3 p = pose[i].p + fig::QRotate(pose[i].w, mesh.BlendedPosition(v, constitution_));
+                const fig::Vec3 p = pose[i].p + fig::QRotate(pose[i].w, mesh.BlendedPosition(v, constitution_) + fig::MorphDelta(morph, frame, vc.vertexIndex));
                 sp.positions[3 * v] = p.x; sp.positions[3 * v + 1] = p.y; sp.positions[3 * v + 2] = p.z;
                 const fig::Vec3 nr = fig::QRotate(pose[i].w, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1});
                 sp.normals[3 * v] = nr.x; sp.normals[3 * v + 1] = nr.y; sp.normals[3 * v + 2] = nr.z;

@@ -1374,10 +1374,11 @@ private:
                 std::vector<Vtx>& base = buckets[{tex, seeThrough}];
                 std::vector<Vtx>* over = ov != d.overlay.end() && !seeThrough ? &buckets[{ov->second, true}] : nullptr;
                 const fig::FigureMesh& mesh = part.mesh;
+                const fig::BoneTrack* morph = fig::MorphTrack(ci != clips.end() ? &ci->second : nullptr, part);
                 for (uint16_t index : mesh.indices) {
                     if (index >= mesh.vertexComponents.size()) continue;
                     const fig::VertComponent& vc = mesh.vertexComponents[index];
-                    Vtx v{pose[pi].p + fig::QRotate(pose[pi].w, mesh.BlendedPosition(index, constitution)),
+                    Vtx v{pose[pi].p + fig::QRotate(pose[pi].w, mesh.BlendedPosition(index, constitution) + fig::MorphDelta(morph, static_cast<float>(frame), vc.vertexIndex)),
                           fig::QRotate(pose[pi].w, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1}),
                           vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0}};
                     base.push_back(v);
@@ -1412,10 +1413,11 @@ private:
             // OBJ_BODYPARTS lists the parts to show; empty shows them all (ei_maper's CFigure::getVertexData).
             if (!src.parts.empty() && std::find(src.parts.begin(), src.parts.end(), checksLower(part.name)) == src.parts.end()) continue;
             const fig::FigureMesh& mesh = part.mesh;
+            const fig::BoneTrack* morph = fig::MorphTrack(ci != clips.end() ? &ci->second : nullptr, part);
             for (uint16_t index : mesh.indices) {
                 if (index >= mesh.vertexComponents.size()) continue;
                 const fig::VertComponent& vc = mesh.vertexComponents[index];
-                const fig::Vec3 p = pose[pi].p + fig::QRotate(pose[pi].w, mesh.BlendedPosition(index, constitution));
+                const fig::Vec3 p = pose[pi].p + fig::QRotate(pose[pi].w, mesh.BlendedPosition(index, constitution) + fig::MorphDelta(morph, static_cast<float>(frame), vc.vertexIndex));
                 const fig::Vec3 n = fig::QRotate(pose[pi].w, vc.normalIndex < mesh.normals.size() ? mesh.normals[vc.normalIndex] : fig::Vec3{0, 0, 1});
                 const fig::Vec2 uv = vc.uvIndex < mesh.uvs.size() ? mesh.uvs[vc.uvIndex] : fig::Vec2{0, 0};
                 glTexCoord2f(uv.x, uv.y);
