@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.18";
+static const char* const kVersion = "0.1.19";
 
 
 struct App {
@@ -285,8 +285,9 @@ static std::string DoSelling(mp::Character& ch, const items::Database& db, const
 
 // Items received in a finished swap (the partner's item blobs: u32 id, u32 kind, u16 a, u16 b, 4 bytes, the detail's tail) added to the character's items and backpack, the
 // file saved and the new content handed to the client for the next quest entry. Returns what to log.
-static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vector<uint8_t>>& blobs, const std::string& path, net::Client& client) {
-    int added = 0;
+static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vector<uint8_t>>& blobs, uint32_t money, const std::string& path, net::Client& client) {
+    int added = 0; uint32_t moneyGot = 0;
+    if (money) { mp::SetMoney(ch, mp::Money(ch) + money); moneyGot += money; ++added; } // the partner's offered amount
     uint32_t next = 1;
     for (const auto& list : ch.lists) for (const mp::Object& o : list) next = std::max(next, o.id + 1);
     for (const auto& blob : blobs) {
@@ -300,6 +301,10 @@ static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vec
         std::memcpy(o.detail.data(), &o.id, 4); std::memcpy(o.detail.data() + 4, &o.a, 2); std::memcpy(o.detail.data() + 6, &o.b, 2);
         o.detail.insert(o.detail.end(), blob.begin() + 16, blob.end());
         if (static_cast<int>(o.detail.size()) != size) continue;
+        if (o.kind == 0x3007 && o.b == 0 && o.detail.size() >= 48) { // the loot item of row 0 is money: the amount (the count) goes into the purse, as the game's exchange adds it to the party's money
+            uint32_t amount; std::memcpy(&amount, &o.detail[44], 4);
+            mp::SetMoney(ch, mp::Money(ch) + amount); moneyGot += amount; ++added; continue;
+        }
         ch.lists[0].push_back(o); ch.backpack.push_back(o.id); ++added;
     }
     if (!added) return "";
@@ -307,7 +312,7 @@ static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vec
     const std::vector<uint8_t> raw = mp::Serialize(ch);
     if (!path.empty() && !mp::Save(path, ch, err)) return "swap: " + std::to_string(added) + " items received, but the character was not saved: " + err;
     client.SetMpRaw(raw);
-    return "swap: " + std::to_string(added) + " items added to the character";
+    return "swap: " + std::to_string(added) + " items added to the character" + (moneyGot ? ", money +" + std::to_string(moneyGot) : std::string());
 }
 
 // The party the server sent (its 0x80 / 0x83 messages): checked with the .mp reader (must parse and write back the same), then written into the
@@ -868,8 +873,8 @@ int main(int argc, char** argv) {
                     if (!ch.members.empty()) client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
                     client.Connect(cfg.host, cfg.port); std::printf("connecting again\n"); std::fflush(stdout);
                 }
-                if (!client.swapReceived.empty() && !ch.members.empty()) {
-                    const std::string said = AddSwappedItems(ch, client.TakeSwapped(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str());
+                if ((!client.swapReceived.empty() || client.swapMoney) && !ch.members.empty()) {
+                    const std::string said = AddSwappedItems(ch, client.TakeSwapped(), client.TakeSwapMoney(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str());
                     if (!said.empty() && cfg.shop && !dbf.empty()) { const std::string sold = DoSelling(ch, shopDb, cfg, client, std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u, cfg.character); if (!sold.empty()) std::printf("%s\n", sold.c_str()); }
                 }
                 if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
@@ -1039,8 +1044,8 @@ int main(int argc, char** argv) {
                 app.shopped = true; app.client.holdEntry = false;
             } else if (glfwGetTime() - app.shopWaitFrom > 8) { app.shopped = true; app.client.holdEntry = false; } // no quest list: go without
         }
-        if (!app.client.swapReceived.empty() && !app.character.members.empty()) {
-            const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.characterFor, app.client); if (!said.empty()) app.Log(said);
+        if ((!app.client.swapReceived.empty() || app.client.swapMoney) && !app.character.members.empty()) {
+            const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.client.TakeSwapMoney(), app.characterFor, app.client); if (!said.empty()) app.Log(said);
             if (!said.empty() && app.cfg.shop && app.dbLoaded) { const std::string sold = DoSelling(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!sold.empty()) app.Log(sold); } // the loot it was given is sold at once
         }
         if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {

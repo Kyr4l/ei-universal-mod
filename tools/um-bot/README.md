@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.18.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.19.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
@@ -74,7 +74,7 @@ The settings are saved in `um-bot.cfg` next to the program.
 - **Chat report** ("Report in chat"): at the camp it says in the game's chat what it did: `trained (2392 exp): Archery 1 -> 38, Strength1`, `made the spell Healing (200)`,
   `bought: stone short bow (silicon) for 240, ...`, `sold loot for N`, `repaired N item(s) for N`, `bought 2 healing potions`, `money left: N`.
 - **Swaps** ("Accept swaps"): a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
-  sells) and gives nothing.
+  sells) and the money offered (checked: 500 -> 520 for an offer of 20), and gives nothing.
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
   every 15-60 s and when leaving the world) back into the bot's `.mp`. The first save keeps the original as `.bak`.
 - **Movement**:

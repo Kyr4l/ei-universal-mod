@@ -167,7 +167,7 @@ A swap starts when a player clicks another player's head in the lobby (the click
 
 | kind | object | payload | notes |
 |---|---|---|---|
-| 15 | swap record (`ObjListMessage`) | u32 n, n member refs (kind 16: the items offered), u32 +0x18, u8 +0x1c (**confirmed**), u32 +0x20 (**the partner's nonce this side confirmed**), u32 +0x24 (**this record's nonce**, 1, raised by 1 on every change of the offer), ref +0x28, ref +0x2c (kind 1 + player slot) | the clicker creates one (+0x28 = itself, +0x2c = the clicked); the server forwards it to the partner with the chat line "Player X is offering you a swap" |
+| 15 | swap record (`ObjListMessage`) | u32 n, n member refs (kind 16: the items offered), u32 +0x18 (**the money offered**: verified 2026-10-20, the host typed 20 in "Amount you offered for a swap" and the field read 20; the exchange moves it to the partner's purse), u8 +0x1c (**confirmed**), u32 +0x20 (**the partner's nonce this side confirmed**), u32 +0x24 (**this record's nonce**, 1, raised by 1 on every change of the offer), ref +0x28, ref +0x2c (kind 1 + player slot) | the clicker creates one (+0x28 = itself, +0x2c = the clicked); the server forwards it to the partner with the chat line "Player X is offering you a swap" |
 | 16 | offered item | u16 length (72), the item: u32 id (-1), u32 kind (0x3007 ...), u16 a, u16 b, 4 bytes, the .mp detail's tail (56 bytes: floats, then the **count offered** (a stack: 1 of 5), ...) | one per item the partner puts on the counter; `Detail size + 8` bytes |
 | 17 | pair (`ObjPairMessage`) | ref, ref (the two kind-15 records), u8 **confirmed**, u32, u32 | the server creates it when the partner answers with the mirrored record (the same two refs, swapped); the clients open the swap screen |
 

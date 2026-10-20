@@ -521,6 +521,8 @@ public:
     std::string profileName;    // the player profile sent when entering (empty: the character's name)
     bool acceptSwaps = true;    // answer a player's swap request (click on our head in the lobby) with the mirrored record
     std::vector<std::vector<uint8_t>> swapReceived; // items received by finished swaps, for the owner of the character file to add (taken with TakeSwapped)
+    uint32_t swapMoney = 0; // money received by finished swaps, for the owner of the character file to add (taken with TakeSwapMoney)
+    uint32_t TakeSwapMoney() { const uint32_t m = swapMoney; swapMoney = 0; return m; }
     std::vector<std::vector<uint8_t>> TakeSwapped() { auto v = std::move(swapReceived); swapReceived.clear(); return v; }
     std::map<uint16_t, std::vector<uint8_t>> swapItems; // kind-16 objects: the items a partner offers (by id)
     std::map<uint16_t, std::pair<uint16_t, uint16_t>> swapRecords; // kind-15 records seen: id -> (requester slot, partner slot)
@@ -856,7 +858,7 @@ private:
     std::vector<uint8_t> pairOut_; int pairSends_ = 0, pairRemoveSends_ = 0;
     struct ChatOut { uint16_t id; std::vector<uint8_t> data; int sends; };
     std::deque<ChatOut> chatOut_; uint16_t chatId_ = 100;
-    std::vector<uint16_t> peerOffer_; uint16_t peerOfferId_ = 0;
+    std::vector<uint16_t> peerOffer_; uint16_t peerOfferId_ = 0; uint32_t peerMoney_ = 0;
     uint16_t MySlot() const { uint16_t slot = 0; for (const auto& kv : players) if (kv.second.name == name_) slot = kv.first; return slot; } // the newest record with our name (an older ghost of the same name may exist)
     std::string worldQuest_;
     int pktDumped_ = 0;
@@ -1184,6 +1186,7 @@ private:
                 std::vector<uint16_t> offered;
                 for (uint32_t k = 0; k < members; ++k) { uint16_t rid; std::memcpy(&rid, b + o + 4 + 3 * k + 1, 2); offered.push_back(rid); }
                 const size_t q = o + 4 + 3 * members;
+                const uint32_t peerMoney = Get32(b + q); // +0x18: the money the partner offers (the exchange screen's "amount you are offered")
                 const uint8_t peerConfirmed = b[q + 4]; const uint32_t peerSaw = Get32(b + q + 5), peerNonce = Get32(b + q + 9);
                 uint16_t who[2] = {0, 0};
                 for (int r = 0; r < 2; ++r) std::memcpy(&who[r], b + q + 13 + 3 * r + 1, 2);
@@ -1194,7 +1197,7 @@ private:
                     const uint16_t other = who[0] == me ? who[1] : who[0];
                     const bool fresh = pairOut_.empty();
                     if (fresh) Log("swap offered by player slot " + std::to_string(other) + (acceptSwaps ? ": accepting" : ""));
-                    peerOffer_ = offered; peerOfferId_ = id;
+                    peerOffer_ = offered; peerOfferId_ = id; if (peerMoney != peerMoney_) { peerMoney_ = peerMoney; Log("the partner offers money: " + std::to_string(peerMoney)); }
                     if (acceptSwaps) {
                         if (fresh) AnswerSwap(who[0], who[1]);
                         // the handshake: once the partner's record is seen, confirm it: byte +0x1c = 1 and +0x20 = the partner's nonce; the server pairs when both sides did so crosswise
@@ -1220,7 +1223,9 @@ private:
                 Log("swap pair " + std::to_string(id) + ": confirmed " + std::to_string(confirmed) + " (" + std::to_string(a) + ", " + std::to_string(c) + ")");
                 if (confirmed && !pairOut_.empty()) { // both sides agreed: the items offered to us are ours (the clients apply the swap themselves: the server only pairs them)
                     for (uint16_t rid : peerOffer_) { const auto it = swapItems.find(rid); if (it != swapItems.end()) swapReceived.push_back(it->second); }
-                    Log("swap done: received " + std::to_string(swapReceived.size()) + " items");
+                    swapMoney += peerMoney_;
+                    Log("swap done: received " + std::to_string(swapReceived.size()) + " items and " + std::to_string(peerMoney_) + " money");
+                    peerMoney_ = 0;
                     peerOffer_.clear(); pairOut_.clear(); pairSends_ = 0; pairRemoveSends_ = 4; // our record is withdrawn (removed on the server): the swap is over
                 }
                 break;
