@@ -8,8 +8,10 @@ heals them and fights their targets. It levels up and keeps its own inventory li
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
-progress (experience, items) into its `.mp` from the server's party messages. Not done: healing the host and casting
-spells (the spell database is not read), looting its own corpse, several bots in one window.
+progress (experience, items) into its `.mp` from the server's party messages. When its hero stays dead for 45 s it
+leaves the world and enters it again with a new hero. Not done: casting the Healing spell (the order reaches the
+server's cast queue but the cast never starts; the character also needs the Healing spell on its belt and the magic
+skill), looting its own corpse, several bots in one window.
 
 **Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
 A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.
@@ -49,6 +51,10 @@ The settings are saved in `um-bot.cfg` next to the program.
 - **Chat commands**: say them in the game's chat, after "bot" or the bot's first name (`bot stay`, `Kevina, follow`):
   `stay` / `wait` / `hold` (stand where it is), `follow` / `come`, `passive` / `defensive` / `aggressive` (the
   engagement), `reset` (back to the settings).
+- **Database**: the game's or the mod's `databaselmp.res` / `database.res` (the "Database..." button; empty: it looks in
+  the `res` folder next to the `mp` folder). It gives the item names and tells the bot which belt potion heals.
+  The bot drinks that potion when its health falls below the setting, and uses it on the host when the host's health
+  falls below "Heal the player below" (the second is not verified live yet: the host was never hurt in the tests).
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
   every 15-60 s and when leaving the world) back into the bot's `.mp`. The first save keeps the original as `.bak`.
 - **Movement**:

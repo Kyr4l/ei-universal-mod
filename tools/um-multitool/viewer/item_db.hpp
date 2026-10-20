@@ -204,6 +204,8 @@ struct Database {
     std::vector<Material> materials;
     std::array<std::vector<Item>, static_cast<size_t>(Category::Count)> items;
     std::string sourceLabel;
+    struct SpellProto { std::string name, code; };   // SpellPrototypes (spells.sdb block 1), by row: field 0 the name, field 1 the code name ("healing")
+    std::vector<SpellProto> spells;
 
     const std::vector<Item>& List(Category c) const { return items[static_cast<size_t>(c)]; }
 
@@ -297,6 +299,23 @@ inline bool ParseItemsIdb(const std::vector<uint8_t>& idb, Database& out, std::s
     return true;
 }
 
+// spells.sdb: block 1 = SpellPrototypes; a spell object of a character (.mp) refers to a row of it.
+inline void ParseSpellsSdb(const std::vector<uint8_t>& sdb, Database& out) {
+    const uint8_t* data = sdb.data();
+    size_t off = 0;
+    Span file;
+    if (!ReadTag(data, sdb.size(), off, file)) return;
+    for (const Span& block : Children(data, file)) {
+        if (block.tag != 1) continue;
+        for (const Span& record : Children(data, block)) {
+            Fields f;
+            f.data = data;
+            for (const Span& field : Children(data, record)) f.byId[field.tag] = field;
+            out.spells.push_back({f.String(0), f.String(1)});
+        }
+    }
+}
+
 // database.res and databaselmp.res are both RES archives; either works as long as it holds items.idb
 // (the vanilla game has it in both, Universal-Mod only in databaselmp.res).
 inline bool LoadDatabaseRes(const std::vector<uint8_t>& resBytes, const std::string& label, Database& out, std::string& err) {
@@ -310,6 +329,7 @@ inline bool LoadDatabaseRes(const std::vector<uint8_t>& resBytes, const std::str
     }
     Database db;
     if (!ParseItemsIdb(*idb, db, err)) return false;
+    if (const std::vector<uint8_t>* sdb = archive.Find("spells.sdb")) ParseSpellsSdb(*sdb, db);
     db.sourceLabel = label;
     out = std::move(db);
     return true;

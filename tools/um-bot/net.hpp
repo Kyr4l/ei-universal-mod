@@ -437,6 +437,7 @@ public:
         if (fightTarget_) return "fighting unit " + std::to_string(fightTarget_);
         return followHost && !chatStay_ ? "following the host" : "standing";
     }
+    bool Alive() const { if (!worldUnit || dead_.count(worldUnit)) return false; const auto it = unitHp_.find(worldUnit); return it == unitHp_.end() || it->second > 0; }
     int Health(uint32_t id) const { const auto it = unitHp_.find(id); return it == unitHp_.end() ? -1 : it->second; }
     int Mana(uint32_t id) const { const auto it = unitMana_.find(id); return it == unitMana_.end() ? -1 : it->second; }
     bool IsHero(uint32_t id) const { for (const auto& p : players) if (p.second.unitId == id) return true; return false; }
@@ -464,6 +465,9 @@ public:
     int potionSlot = 0;         // the belt slot (weapon-slot index) of the healing potion
     bool leashed_ = false;
     double holdUntil_ = 0;      // no new orders before this time (a potion is being drunk)
+    // The Healing spell's object id from the character's spell list (0: none / no database); the host's heal threshold in % (0: off).
+    int healSpellSlot = -1; int healHostBelow = 0;   // EXPERIMENTAL: the belt index of a spell container holding Healing (-1: none). The server accepts the order (QueueCastOn, CanAffordSpell run) but never reached CastOrderSpell in the tests, so the main window leaves it off.
+    bool drinkSpell_ = false; int spellFails_ = 0, hostHealFails_ = 0, hostHealHp_ = 0; double hostHealAt_ = 0, hostHealCastAt_ = 0, hostHealPause_ = 0;
     bool potionsLeft_ = true; int potionFails_ = 0; double healAt_ = 0, drinkAt_ = 0; int drinkHp_ = 0;
     bool fightInSight = false;  // fighting at all (Engagement not Passive)
     int engagement = 1;         // 0 passive, 1 defensive (the units attacking the host or us, the host's target), 2 aggressive (also anything in sight)
@@ -528,7 +532,7 @@ public:
             Handle(buf, n);
         }
         // In the session: an update every 20 ms (as the game): the ack bits, our stream part, the JOIN after a change.
-        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); LeaveSteps(); }
+        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); WatchDeath(); LeaveSteps(); }
         // The view point (0x40 + f32 x, y in map units), as the game's client sends its camera's about twice a second:
         // the server may send each client what is around it.
         if (state == State::Accepted && worldUnit && Now() - viewAt_ > 0.5) {
@@ -549,20 +553,41 @@ public:
             const int mpNow = Mana(worldUnit);
             if ((hpNow != hpLogged_ && hpNow > 0) || mpNow != mpLogged_) { if (std::getenv("UM_BOT_HPLOG")) Log("health " + std::to_string(hpNow) + " mana " + std::to_string(mpNow)); hpLogged_ = hpNow; mpLogged_ = mpNow; }
         }
-        if (state == State::Accepted && worldUnit && usePotions && potionsLeft_) {
+        if (state == State::Accepted && worldUnit && (usePotions || healSpellSlot >= 0)) {
             const int hp = Health(worldUnit); const auto mxIt = unitHpMax_.find(worldUnit); const int mx = mxIt == unitHpMax_.end() ? 0 : mxIt->second;
-            if (drinkAt_ > 0 && hp > drinkHp_) { potionFails_ = 0; drinkAt_ = 0; Log("the potion healed (" + std::to_string(drinkHp_) + " -> " + std::to_string(hp) + ")"); } // checked live: +6 within 0.2 s
-            else if (drinkAt_ > 0 && Now() - drinkAt_ > 2.5) {
-                if (++potionFails_ >= 2) { potionsLeft_ = false; Log("no potion raised the health twice: not drinking any more (the belt is empty)"); }
+            if (drinkAt_ > 0 && hp > drinkHp_) { // the answer: our health rose (checked live: the potion +6 within 0.2 s)
+                Log(std::string(drinkSpell_ ? "the Healing spell" : "the potion") + " healed (" + std::to_string(drinkHp_) + " -> " + std::to_string(hp) + ")");
+                if (drinkSpell_) spellFails_ = 0; else potionFails_ = 0;
+                drinkAt_ = 0;
+            } else if (drinkAt_ > 0 && Now() - drinkAt_ > (drinkSpell_ ? 2.5 : 1.0)) { // the potion works within 0.2 s; a spell has a cast time
+                if (drinkSpell_) { if (++spellFails_ >= 3) Log("the Healing spell raised the health 3 times in a row: not casting it on itself any more"); }
+                else { potionsLeft_ = false; healAt_ = 0; Log("the potion raised nothing: the belt is empty, not drinking any more"); }
                 drinkAt_ = 0;
             }
-            if (drinkAt_ == 0 && mx > 0 && hp > 0 && hp * 100 < healSelfBelow * mx && Now() - healAt_ > 4) {
-                Log("health " + std::to_string(hp) + " / " + std::to_string(mx) + ": drinking the potion in quick slot " + std::to_string(potionSlot));
-                UseQuickSlot(potionSlot, worldUnit); healAt_ = Now(); drinkAt_ = Now(); drinkHp_ = hp; holdUntil_ = Now() + 2.5; // no other order meanwhile: a move / attack would cancel the queued cast
+            const bool canPotion = usePotions && potionsLeft_, canSpell = healSpellSlot >= 0 && spellFails_ < 3 && Mana(worldUnit) > 0;
+            if (drinkAt_ == 0 && mx > 0 && hp > 0 && hp * 100 < healSelfBelow * mx && Now() - healAt_ > 4 && (canPotion || canSpell)) {
+                drinkSpell_ = !canPotion;
+                Log("health " + std::to_string(hp) + " / " + std::to_string(mx) + (drinkSpell_ ? ": casting Healing on itself" : ": drinking the potion in quick slot " + std::to_string(potionSlot)));
+                if (drinkSpell_) CastOn(static_cast<uint32_t>(healSpellSlot), worldUnit); else UseQuickSlot(potionSlot, worldUnit);
+                healAt_ = Now(); drinkAt_ = Now(); drinkHp_ = hp; holdUntil_ = Now() + 2.5; // no other order meanwhile: a move / attack would cancel the queued cast
+            }
+        }
+        // Heal the host: the belt potion (or the Healing spell) used on it when its health falls below healHostBelow % (and it is near enough); the answer is its health 3 s later.
+        if (state == State::Accepted && worldUnit && (healSpellSlot >= 0 || (usePotions && potionsLeft_)) && healHostBelow > 0 && Health(worldUnit) > 0) {
+            const uint32_t host = HostUnit();
+            const int hp = Health(host); const auto mxIt = unitHpMax_.find(host); const int mx = mxIt == unitHpMax_.end() ? 0 : mxIt->second;
+            if (hostHealAt_ > 0 && hp > hostHealHp_) { Log("healed the host (" + std::to_string(hostHealHp_) + " -> " + std::to_string(hp) + ")"); hostHealFails_ = 0; hostHealAt_ = 0; }
+            else if (hostHealAt_ > 0 && Now() - hostHealAt_ > 3) { if (++hostHealFails_ >= 3) { Log("three casts on the host raised nothing: pausing 30 s"); hostHealPause_ = Now() + 30; hostHealFails_ = 0; } hostHealAt_ = 0; }
+            float hx, hy, mx2, my2;
+            if (hostHealAt_ == 0 && host && mx > 0 && hp > 0 && hp * 100 < healHostBelow * mx && Now() > hostHealPause_ && Now() - hostHealCastAt_ > 4 &&
+                Where(host, hx, hy) && Where(worldUnit, mx2, my2) && std::hypot(hx - mx2, hy - my2) < 15) {
+                const bool bySpell = healSpellSlot >= 0;
+                Log("the host's health " + std::to_string(hp) + " / " + std::to_string(mx) + (bySpell ? ": casting Healing on it" : ": using the potion in quick slot " + std::to_string(potionSlot) + " on it"));
+                if (bySpell) CastOn(static_cast<uint32_t>(healSpellSlot), host); else UseQuickSlot(potionSlot, host); hostHealAt_ = hostHealCastAt_ = Now(); hostHealHp_ = hp; holdUntil_ = Now() + 1.5;
             }
         }
         // Leash: past `leash` units from the host the fight is dropped and the bot walks back (the follow below) until it is near the host again.
-        if (state == State::Accepted && worldUnit) {
+        if (state == State::Accepted && worldUnit && Alive()) {
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy) && Where(worldUnit, mx, my)) {
                 const float dh = std::hypot(hx - mx, hy - my);
@@ -573,7 +598,7 @@ public:
         // Fight: the nearest unit (not a player's hero) within sight, attacked again every 3 s while it stays the target;
         // nothing in sight: follow the host as usual.
         bool fighting = false;
-        if (state == State::Accepted && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
+        if (state == State::Accepted && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Alive() && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
             fightAt_ = Now();
             float d = 0;
             uint32_t t = (chatEngagement_ >= 0 ? chatEngagement_ : engagement) >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
@@ -647,7 +672,7 @@ public:
         }
         if (fightTarget_ && !unitPos.count(fightTarget_)) fightTarget_ = 0;
         if (fightTarget_) fighting = true;
-        if (!fighting && state == State::Accepted && followHost && !chatStay_ && worldUnit && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away
+        if (!fighting && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away
             followAt_ = Now();
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy)) {
@@ -871,6 +896,17 @@ private:
         else if (Now() - hostGoneAt_ > 3) { Log("the host left the zone: leaving it too"); LeaveWorld(); }
     }
     // Join race: the server did not list us (another client left just before, or the first packets were lost): ask again, then give up.
+    // Our hero died: the server sent no respawn in 140 s (live, 2026-10-20: the player's record keeps its unit, nothing else changes); entering the world anew (a fresh
+    // connection) gives a new, living hero (checked: every run after a death started with full health). After `deadGrace` seconds dead: leave and reconnect.
+    double deadGrace = 45, deadAt_ = 0;
+    void WatchDeath() {
+        if (phase_ != Phase::InWorld || !worldUnit || leavingAt_ > 0) { deadAt_ = 0; return; }
+        const auto hp = unitHp_.find(worldUnit);
+        const bool dead = dead_.count(worldUnit) || (hp != unitHp_.end() && hp->second <= 0);
+        if (!dead) { deadAt_ = 0; return; }
+        if (deadAt_ == 0) { deadAt_ = Now(); Log("our hero is dead"); }
+        else if (Now() - deadAt_ > deadGrace) { deadAt_ = 0; Log("still dead after " + std::to_string(static_cast<int>(deadGrace)) + " s: entering the world anew"); LeaveWorld(); }
+    }
     void WatchJoin() {
         if (joined || state != State::Accepted) { joinWatchAt_ = 0; return; }
         if (joinWatchAt_ == 0) { joinWatchAt_ = Now(); return; }

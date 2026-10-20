@@ -36,7 +36,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.5";
+static const char* const kVersion = "0.1.6";
 
 
 struct App {
@@ -52,7 +52,8 @@ struct App {
     std::string characterFor;         // the path it was loaded from
     bool nameDirty = false;           // the name was changed, not saved yet
     items::Database db;               // for the equipment's names (<mp folder>/../res/databaselmp.res)
-    std::string dbFor;                // the character it was looked for
+    std::string dbFor;                // the database choice + character it was looked for
+    std::string dbPath;               // the file it was loaded from ("" = none found)
     bool dbLoaded = false;
     void Log(const std::string& s) {
         log.push_back(s);
@@ -67,6 +68,53 @@ static bool EnumCombo(const char* label, E& value, const char* const (&names)[N]
     if (!ImGui::Combo(label, &i, names, static_cast<int>(N))) return false;
     value = static_cast<E>(i);
     return true;
+}
+
+// The database (item and spell names): the chosen file, else <mp folder>/../res/databaselmp.res or database.res. Returns the file it loaded ("" if none).
+static std::string LoadDb(const bot::Config& cfg, items::Database& db) {
+    std::vector<std::string> tries;
+    if (!cfg.database.empty()) tries.push_back(cfg.database);
+    else {
+        std::string dir = cfg.character;
+        const size_t slash = dir.find_last_of("/\\");
+        dir = slash == std::string::npos ? "." : dir.substr(0, slash);
+        for (const char* rel : {"/../res/databaselmp.res", "/../res/database.res"}) tries.push_back(dir + rel);
+    }
+    for (const std::string& path : tries) {
+        std::ifstream f(path, std::ios::binary);
+        if (!f) continue;
+        std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+        std::string err;
+        if (items::LoadDatabaseRes(bytes, path.substr(path.find_last_of("/\\") == std::string::npos ? 0 : path.find_last_of("/\\") + 1), db, err)) return path;
+    }
+    return "";
+}
+static std::string Lower(std::string v) { for (char& c : v) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c))); return v; }
+static const mp::Object* FindObject(const mp::Character& ch, uint32_t id) {
+    for (const auto& list : ch.lists) for (const mp::Object& o : list) if (o.id == id) return &o;
+    return nullptr;
+}
+// The belt slot of the healing potion (a QuickItems row whose spell starts with "healing"): the database says which potion heals; -1 when none / no database.
+static int FindHealPotionSlot(const mp::Character& ch, const items::Database& db) {
+    if (ch.members.empty()) return -1;
+    const auto& belt = ch.members[0].lists[1];
+    for (size_t i = 0; i < belt.size(); ++i) {
+        const mp::Object* o = FindObject(ch, belt[i]);
+        if (!o || o->kind != 0x3006) continue;
+        const auto& q = db.List(items::Category::QuickItems);
+        if (o->b < q.size() && Lower(q[o->b].spell).rfind("healing", 0) == 0) return static_cast<int>(i);
+    }
+    return -1;
+}
+// The belt slot of a spell container (QuickItems "scroll" row 1) when the character knows the Healing spell (its spell list refers to SpellPrototypes rows, code name "healing").
+static int FindHealSpellSlot(const mp::Character& ch, const items::Database& db) {
+    if (ch.members.empty()) return -1;
+    bool knows = false;
+    for (const mp::Object& o : ch.lists[1]) if (o.kind == 0x3002 && o.b < db.spells.size() && Lower(db.spells[o.b].code) == "healing") knows = true;
+    if (!knows) return -1;
+    const auto& belt = ch.members[0].lists[1];
+    for (size_t i = 0; i < belt.size(); ++i) { const mp::Object* o = FindObject(ch, belt[i]); if (o && o->kind == 0x3008) return static_cast<int>(i); }
+    return -1;
 }
 
 // The character .mp's decompressed content: what the bot uploads when entering a quest.
@@ -112,7 +160,21 @@ static void Tip(const char* text) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", text);
 }
 
+static void EnsureDb(App& app) { // (re)load the database when the choice or the character changed
+    const std::string key = app.cfg.database + "|" + app.cfg.character;
+    if (app.dbFor == key) return;
+    app.dbFor = key;
+    app.db = items::Database{};
+    app.dbPath = LoadDb(app.cfg, app.db);
+    app.dbLoaded = !app.dbPath.empty();
+}
+static void SetHealing(App& app) { // the healing potion's belt slot (from the database), and the heal-the-host setting
+    EnsureDb(app);
+    if (app.dbLoaded) { const int slot = FindHealPotionSlot(app.character, app.db); if (slot >= 0) app.client.potionSlot = slot; }
+    app.client.healHostBelow = app.cfg.healPlayerBelow;
+}
 static void StartConnection(App& app) {
+    SetHealing(app);
     if (!app.character.members.empty()) {
         const mp::Member& m = app.character.members[0];
         app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
@@ -181,6 +243,19 @@ static void ConnectionPanel(App& app) {
     ImGui::SameLine();
     std::string picked;
     if (ImGui::Button("Character...") && ui::PickFile(picked)) { c.character = picked; app.dirty = true; }
+    EnsureDb(app);
+    { // the database: names of the items and spells (the Healing spell needs it)
+        char dbp[1024];
+        std::snprintf(dbp, sizeof dbp, "%s", c.database.c_str());
+        ImGui::SetNextItemWidth(-160);
+        if (ImGui::InputTextWithHint("##database", app.dbLoaded ? app.dbPath.c_str() : "the database: databaselmp.res (or database.res)", dbp, sizeof dbp, ImGuiInputTextFlags_EnterReturnsTrue)) { c.database = dbp; app.dirty = true; }
+        Tip("The game's (or the mod's) database.res / databaselmp.res: item names, and which belt potion heals (the bot drinks that one).\n"
+            "Empty: it looks in the res folder next to the mp folder.");
+        ImGui::SameLine();
+        std::string dbPicked;
+        if (ImGui::Button("Database...") && ui::PickFile(dbPicked)) { c.database = dbPicked; app.dirty = true; }
+        if (!app.dbLoaded) ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "%s", i18n::Tr("No database found: no item names, and the bot cannot tell which belt potion heals. Choose database.res or databaselmp.res."));
+    }
     if (app.characterFor != c.character) { // (re)load it
         app.characterFor = c.character;
         app.nameDirty = false;
@@ -348,6 +423,7 @@ static void StatusPanel(App& app) {
     app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
     app.client.engagement = static_cast<int>(app.cfg.engagement); // Passive / Defensive / Aggressive
     app.client.healSelfBelow = app.cfg.healSelfBelow; app.client.usePotions = app.cfg.usePotions;
+    SetHealing(app);
     app.client.leash = app.cfg.leashDistance; app.client.priority = static_cast<int>(app.cfg.priority); app.client.matchPace = app.cfg.pace == bot::Pace::MatchPlayer;
     app.client.fightInSight = app.client.engagement > 0;
     if (!app.character.members.empty() && mp::GetF(app.character.members[0].stats, 0xB4) > 1) app.client.sight = mp::GetF(app.character.members[0].stats, 0xB4);
@@ -388,20 +464,6 @@ static void LogPanel(App& app) {
 static void CharacterPanel(App& app) {
     if (app.character.members.empty()) { ImGui::TextDisabled("No character loaded."); return; }
     const mp::Member& m = app.character.members[0];
-    if (app.dbFor != app.cfg.character) { // the mod's database: <mp folder>/../res/databaselmp.res
-        app.dbFor = app.cfg.character;
-        app.dbLoaded = false;
-        std::string dir = app.cfg.character;
-        const size_t slash = dir.find_last_of("/\\");
-        dir = slash == std::string::npos ? "." : dir.substr(0, slash);
-        for (const char* rel : {"/../res/databaselmp.res", "/../res/database.res"}) {
-            std::ifstream f(dir + rel, std::ios::binary);
-            if (!f) continue;
-            std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-            std::string err;
-            if (items::LoadDatabaseRes(bytes, rel + 8, app.db, err)) { app.dbLoaded = true; break; }
-        }
-    }
     const float total = mp::GetF(m.stats, mp::kExpTotal), spent = mp::GetF(m.stats, mp::kExpSpent);
     ImGui::Text("%s", m.strings[0].c_str());
     ImGui::TextDisabled("%s", m.strings[4].c_str());
@@ -567,6 +629,12 @@ int main(int argc, char** argv) {
             else
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
             client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
+            { items::Database db; const std::string dbf = LoadDb(cfg, db); // the healing potion's slot, and (experimental) the Healing spell's
+              if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; if (std::getenv("UM_BOT_SPELLS")) client.healSpellSlot = FindHealSpellSlot(ch, db); }
+              client.healHostBelow = cfg.healPlayerBelow;
+              std::printf("database: %s, healing potion slot %d, Healing spell slot %d\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot); }
+            if (std::getenv("UM_BOT_NOSPELL")) client.healSpellSlot = -1; // research: potion only
+            if (std::getenv("UM_BOT_NOPOTION")) client.usePotions = false; // research: spell only
             client.leash = cfg.leashDistance; client.priority = static_cast<int>(cfg.priority); client.matchPace = cfg.pace == bot::Pace::MatchPlayer;
             if (const char* hb = std::getenv("UM_BOT_HEAL")) client.healSelfBelow = std::atoi(hb); // research: heal below this % (default the setting)
             client.followHost = std::getenv("UM_BOT_FOLLOW") != nullptr;
@@ -581,6 +649,11 @@ int main(int argc, char** argv) {
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
                    client.state != net::Client::State::Rejected) {
                 client.Update();
+                if (client.reconnect && client.state == net::Client::State::Idle) { // as the window does after leaving the world
+                    client.reconnect = false;
+                    if (!ch.members.empty()) client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
+                    client.Connect(cfg.host, cfg.port); std::printf("connecting again\n"); std::fflush(stdout);
+                }
                 if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 static size_t printed = 0; // the log as it comes, with the time
                 for (; printed < client.log.size(); ++printed)
@@ -650,6 +723,7 @@ int main(int argc, char** argv) {
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
+            std::printf("loop ended: state %d %s\n", static_cast<int>(client.state), client.error.c_str());
             if (client.state == net::Client::State::Accepted && client.worldUnit && !std::getenv("UM_BOT_NOLEAVE")) { // leave the world properly: the final save
                 client.LeaveWorld();
                 for (int i = 0; i < 60 && client.state == net::Client::State::Accepted; ++i) {
