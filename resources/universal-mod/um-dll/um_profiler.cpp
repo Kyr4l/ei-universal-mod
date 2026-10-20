@@ -460,6 +460,11 @@ static DWORD WINAPI ProfilerThreadBody(LPVOID) {
                     snprintf(text, sizeof(text), "Staging per frame: %.1f shadow textures, %.1f interface pictures (copied on the CPU: the game's own are never GPU sources)", frames > 0 ? static_cast<double>(sh) / frames : 0.0, frames > 0 ? static_cast<double>(ui) / frames : 0.0);
                     lines.push_back(text);
                 }
+                if (g_uiQuadBlit) {
+                    const LONG drawn = InterlockedExchange(&g_uiQuadDrawn, 0), fell = InterlockedExchange(&g_uiQuadFallback, 0);
+                    snprintf(text, sizeof(text), "UI quads per frame: %.1f interface pictures drawn as quads, %.1f blitted the normal way", frames > 0 ? static_cast<double>(drawn) / frames : 0.0, frames > 0 ? static_cast<double>(fell) / frames : 0.0);
+                    lines.push_back(text);
+                }
                 std::vector<std::pair<std::string, DdPairStat>> pairs;
                 while (InterlockedCompareExchange(&g_ddInfoLock, 1, 0) != 0) Sleep(0);
                 pairs.assign(g_ddPairs.begin(), g_ddPairs.end());

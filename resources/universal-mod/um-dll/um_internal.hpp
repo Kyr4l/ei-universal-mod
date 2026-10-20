@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4.10";
+static const char* const UM_VERSION = "1.4.11";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 
@@ -361,6 +361,7 @@ extern BYTE g_profilerKey;
 extern BYTE g_profilerDumpKey;
 extern bool g_uiBlitCache;
 extern bool g_shadowLockCache;
+extern bool g_uiQuadBlit;
 extern int g_profilerAutoDumpSeconds;
 extern char g_profilerPosition[16];
 extern HWND g_profilerWindow;
@@ -484,6 +485,10 @@ extern volatile LONG g_ddInfoLock;
 extern std::map<std::string, DdPairStat> g_ddPairs;
 extern volatile LONG g_uiStaged;
 extern volatile LONG g_shadowStaged;
+extern volatile LONG g_uiQuadDrawn;
+extern volatile LONG g_uiQuadFallback;
+bool UiQuadCursorSave(void* destination, LPRECT destRect, void* source, LPRECT srcRect);
+bool UiQuadBlt(void* destination, LPRECT destRect, void* source, LPRECT srcRect, DWORD flags, void* bltFx);
 extern char g_profileLines[kProfileMaxLines][kProfileTextWidth];
 extern int g_profileLineCount;
 extern volatile LONG g_profileLock;

@@ -161,13 +161,356 @@ static HRESULT WINAPI HookedD3DLoad(void* device, void* dest, void* destPoint, v
     return g_originalD3DLoad(device, dest, destPoint, source, sourceRect, flags);
 }
 
+static void* g_quadDevice = NULL; // the game's IDirect3DDevice7 (the UI quad blit draws on it)
+static ULONG (WINAPI *g_originalDeviceRelease)(void*) = NULL;
+// The device's last Release destroys it: the quad blit must not use its pointer after that.
+static ULONG WINAPI HookedDeviceRelease(void* self) {
+    const ULONG left = g_originalDeviceRelease(self);
+    if (left == 0 && self == g_quadDevice) { g_quadDevice = NULL; LogLine("INFO", "UI quad blit: the game's D3D device was released"); }
+    return left;
+}
 static HRESULT WINAPI HookedD3DCreateDevice(void* d3d, const IID* iid, void* target, void** device) {
     const HRESULT result = g_originalD3DCreateDevice(d3d, iid, target, device);
+    if (SUCCEEDED(result) && device && *device && g_uiQuadBlit) {
+        g_quadDevice = *device; // the UI quad blit draws on it
+        bool already = false;
+        void* original = PatchVTableSlot(*device, 2 /* IUnknown::Release */, reinterpret_cast<void*>(HookedDeviceRelease), &already);
+        if (original) g_originalDeviceRelease = reinterpret_cast<ULONG (WINAPI*)(void*)>(original);
+    }
     if (SUCCEEDED(result) && device && *device && !g_originalD3DLoad) {
         void* original = PatchVTableSlot(*device, D3DDEVICE7_VTABLE_LOAD_SLOT, reinterpret_cast<void*>(HookedD3DLoad));
         if (original) { g_originalD3DLoad = reinterpret_cast<D3DLoadFunction>(original); LogLine("INFO", "IDirect3DDevice7::Load hooked (the shadow lock cache)"); }
     }
     return result;
+}
+
+
+// ---- the UI quad blit (#80) -------------------------------------------------------------------------
+// A Blt of a system-memory interface picture onto the 3D frame (the render target) makes D7VK read the whole frame
+// back from the GPU (the CPU waits until the GPU has finished it), do the blit on the CPU in Wine's own surface and
+// upload the whole frame again: 16 MB of copies and a stall per frame (measured: the copies are 2.5 ms of the main
+// thread's ~11 ms per frame, the stall is the rest of the 42 ms the one Blt takes in the profiler). Here the picture
+// becomes a texture (kept, and rewritten only when its pixels change) and is drawn with the game's own D3D7 device as
+// one pre-transformed quad, with the colour key as texel alpha: nothing is read back.
+// Only the plain case is handled: a copy (or a source colour key override) of the same size onto the device's render
+// target, from a 16 or 32 bit RGB system-memory surface. Everything else is blitted the normal way.
+volatile LONG g_uiQuadDrawn = 0;
+volatile LONG g_uiQuadFallback = 0;
+
+struct QuadSource {
+    void* texture = NULL;
+    DWORD width = 0, height = 0, texWidth = 0, texHeight = 0, bits = 0;
+    DWORD rMask = 0, gMask = 0, bMask = 0;
+    bool keyed = false;
+    DWORD key = 0;
+    bool broken = false;
+    std::vector<BYTE> shadow; // the source's pixels as last converted
+};
+static std::unordered_map<void*, QuadSource> g_quadSources; // game thread only
+
+typedef HRESULT (WINAPI *DevNoArgFn)(void*);
+typedef HRESULT (WINAPI *DevGetPtrFn)(void*, void**);
+typedef HRESULT (WINAPI *DevViewportFn)(void*, void*);
+typedef HRESULT (WINAPI *DevSetRSFn)(void*, DWORD, DWORD);
+typedef HRESULT (WINAPI *DevGetRSFn)(void*, DWORD, DWORD*);
+typedef HRESULT (WINAPI *DevDrawFn)(void*, DWORD, DWORD, void*, DWORD, DWORD);
+typedef HRESULT (WINAPI *DevGetTexFn)(void*, DWORD, void**);
+typedef HRESULT (WINAPI *DevSetTexFn)(void*, DWORD, void*);
+typedef HRESULT (WINAPI *DevSetTssFn)(void*, DWORD, DWORD, DWORD);
+typedef HRESULT (WINAPI *DevGetTssFn)(void*, DWORD, DWORD, DWORD*);
+typedef ULONG (WINAPI *ReleaseFn)(void*);
+enum { kDevBeginScene = 5, kDevEndScene = 6, kDevGetRenderTarget = 9, kDevSetViewport = 13, kDevGetViewport = 15, kDevSetRS = 20, kDevGetRS = 21,
+       kDevDrawPrimitive = 25, kDevGetTexture = 34, kDevSetTexture = 35, kDevGetTss = 36, kDevSetTss = 37 };
+
+static DWORD NextPow2(DWORD v) { DWORD p = 1; while (p < v) p <<= 1; return p; }
+
+static void QuadNoteFallback(const char* why) {
+    InterlockedIncrement(&g_uiQuadFallback);
+    static int said = 0;
+    if (said < 12) { ++said; LogLine("INFO", "UI quad blit: a Blt went the normal way (%s)", why); }
+}
+
+// The picture of `source` as an ARGB texture (made on the first use, rewritten when its pixels changed); NULL when it cannot be.
+static QuadSource* QuadSourceFor(void* source, bool keyed, DWORD key) {
+    QuadSource& q = g_quadSources[source];
+    if (q.broken) return NULL;
+    BYTE desc[128];
+    if (!DdSurfaceDesc(source, desc)) { q.broken = true; return NULL; }
+    DWORD caps = 0, width = 0, height = 0, bits = 0, pfFlags = 0, rMask = 0, gMask = 0, bMask = 0;
+    memcpy(&caps, desc + 104, 4); memcpy(&height, desc + 8, 4); memcpy(&width, desc + 12, 4); memcpy(&bits, desc + 84, 4);
+    memcpy(&pfFlags, desc + 76, 4); memcpy(&rMask, desc + 88, 4); memcpy(&gMask, desc + 92, 4); memcpy(&bMask, desc + 96, 4);
+    if (!(caps & 0x800) || (caps & 0x1000) || !(pfFlags & 0x40) || (bits != 16 && bits != 32) || width == 0 || height == 0 || width > 4096 || height > 4096) {
+        q.broken = true;
+        LogLine("INFO", "UI quad blit: a %lux%lu %lubpp picture (caps 0x%lX, pixel flags 0x%lX) is not handled: its Blts go the normal way", width, height, bits, caps, pfFlags);
+        return NULL;
+    }
+    if (q.texture && (q.width != width || q.height != height || q.bits != bits || q.rMask != rMask || q.gMask != gMask || q.bMask != bMask)) {
+        reinterpret_cast<ReleaseFn>((*reinterpret_cast<void***>(q.texture))[2])(q.texture); // the pointer was reused by another picture
+        q.texture = NULL;
+        q.shadow.clear();
+    }
+    bool everything = false;
+    if (!q.texture) {
+        if (!g_directDrawObject || !g_originalDDCreateSurface) return NULL;
+        q.width = width; q.height = height; q.bits = bits; q.rMask = rMask; q.gMask = gMask; q.bMask = bMask;
+        q.texWidth = NextPow2(width); q.texHeight = NextPow2(height);
+        BYTE make[128];
+        memset(make, 0, 128);
+        const DWORD size = 124, flags = 0x1 | 0x2 | 0x4 | 0x1000; // DDSD_CAPS | HEIGHT | WIDTH | PIXELFORMAT
+        memcpy(make, &size, 4); memcpy(make + 4, &flags, 4);
+        memcpy(make + 8, &q.texHeight, 4); memcpy(make + 12, &q.texWidth, 4);
+        const DWORD pfSize = 32, pf = 0x40 | 0x1, bpp = 32, rm = 0x00FF0000, gm = 0x0000FF00, bm = 0x000000FF, am = 0xFF000000; // DDPF_RGB | ALPHAPIXELS: ARGB8888
+        memcpy(make + 72, &pfSize, 4); memcpy(make + 76, &pf, 4); memcpy(make + 84, &bpp, 4);
+        memcpy(make + 88, &rm, 4); memcpy(make + 92, &gm, 4); memcpy(make + 96, &bm, 4); memcpy(make + 100, &am, 4);
+        const DWORD texCaps = 0x1000, texCaps2 = 0x10; // DDSCAPS_TEXTURE, DDSCAPS2_TEXTUREMANAGE
+        memcpy(make + 104, &texCaps, 4); memcpy(make + 108, &texCaps2, 4);
+        void* made = NULL;
+        if (FAILED(g_originalDDCreateSurface(g_directDrawObject, make, &made, NULL)) || !made) {
+            q.broken = true;
+            LogLine("WARN", "UI quad blit: no %lux%lu texture for a %lux%lu picture: its Blts go the normal way", q.texWidth, q.texHeight, width, height);
+            return NULL;
+        }
+        q.texture = made;
+        q.shadow.clear();
+        LogLine("INFO", "UI quad blit: a %lux%lu %lubpp picture gets a %lux%lu texture", width, height, bits, q.texWidth, q.texHeight);
+        everything = true;
+    }
+    if (q.keyed != keyed || q.key != key) { q.keyed = keyed; q.key = key; everything = true; }
+    // the source's pixels, compared with the last ones converted
+    BYTE src[128];
+    memset(src, 0, 128);
+    const DWORD size = 124;
+    memcpy(src, &size, 4);
+    if (FAILED(g_originalDDLock(source, NULL, src, 0x11, NULL))) return NULL; // DDLOCK_WAIT | READONLY
+    BYTE* pixels = NULL; LONG pitch = 0;
+    memcpy(&pixels, src + 36, 4); memcpy(&pitch, src + 16, 4);
+    const DWORD bytes = bits / 8, rowBytes = width * bytes;
+    bool ok = pixels && pitch > 0 && static_cast<DWORD>(pitch) >= rowBytes;
+    if (ok) {
+        if (q.shadow.size() != static_cast<size_t>(rowBytes) * height) { q.shadow.assign(static_cast<size_t>(rowBytes) * height, 0); everything = true; }
+        long first = -1, last = -1;
+        for (DWORD y = 0; y < height; ++y) {
+            BYTE* mine = &q.shadow[static_cast<size_t>(y) * rowBytes];
+            if (everything || memcmp(mine, pixels + static_cast<size_t>(pitch) * y, rowBytes) != 0) {
+                memcpy(mine, pixels + static_cast<size_t>(pitch) * y, rowBytes);
+                if (first < 0) first = static_cast<long>(y);
+                last = static_cast<long>(y);
+            }
+        }
+        if (first >= 0) { // the changed rows (between the first and the last that changed) go into the texture
+            BYTE dst[128];
+            memset(dst, 0, 128);
+            memcpy(dst, &size, 4);
+            if (FAILED(g_originalDDLock(q.texture, NULL, dst, 0x21, NULL))) ok = false; // DDLOCK_WAIT | WRITEONLY
+            else {
+                BYTE* out = NULL; LONG outPitch = 0;
+                memcpy(&out, dst + 36, 4); memcpy(&outPitch, dst + 16, 4);
+                if (!out || outPitch <= 0) ok = false;
+                else for (long y = first; y <= last; ++y) {
+                    const BYTE* in = &q.shadow[static_cast<size_t>(y) * rowBytes];
+                    DWORD* row = reinterpret_cast<DWORD*>(out + static_cast<size_t>(outPitch) * y);
+                    if (bits == 32) {
+                        const DWORD keyRgb = key & 0x00FFFFFF;
+                        for (DWORD x = 0; x < width; ++x) {
+                            DWORD v; memcpy(&v, in + 4 * x, 4);
+                            row[x] = (v & 0x00FFFFFF) | ((keyed && (v & 0x00FFFFFF) == keyRgb) ? 0u : 0xFF000000u);
+                        }
+                    } else { // 16 bits: widen each channel to 8 bits through the masks
+                        auto widen = [](DWORD v, DWORD mask) -> DWORD {
+                            if (!mask) return 0;
+                            int shift = 0; DWORD m = mask; while (!(m & 1)) { m >>= 1; ++shift; }
+                            const DWORD field = (v & mask) >> shift;
+                            return m == 0xFF ? field : (field * 255 + m / 2) / m;
+                        };
+                        for (DWORD x = 0; x < width; ++x) {
+                            WORD v; memcpy(&v, in + 2 * x, 2);
+                            const bool transparent = keyed && v == static_cast<WORD>(key);
+                            row[x] = transparent ? 0u : (0xFF000000u | (widen(v, rMask) << 16) | (widen(v, gMask) << 8) | widen(v, bMask));
+                        }
+                    }
+                }
+                g_originalDDUnlock(q.texture, NULL);
+            }
+        }
+    }
+    g_originalDDUnlock(source, NULL);
+    if (!ok) { QuadNoteFallback("the picture could not be converted"); return NULL; }
+    return &q;
+}
+
+
+// ---- the software cursor's background (part of the UI quad blit) -----------------------------------------
+// The game draws its mouse cursor in software (CSoftCursor::Draw 0x5E54A0): each frame it Blts the 32x32 pixels under
+// the cursor from the frame into a small system-memory surface (a read-back of the whole frame for D7VK: a GPU
+// stall and 8 MB of copies), mixes the cursor into them with an AND mask (background & mask | cursor pixels, so the
+// cursor's transparent pixels keep the background) and Blts that composite back onto the frame. Here the "read" fills
+// the small surface with a marker colour instead (no frame access), the composite then holds the marker where the
+// cursor is transparent, and its quad is drawn with the marker as the colour key: the same picture.
+static const DWORD kCursorMarker = 0x00FA01FB;     // R 0xFA, G 0x01, B 0xFB
+static bool CursorSizeKnown(DWORD* width, DWORD* height) {
+    const DWORD* w = reinterpret_cast<const DWORD*>(0x7C7C90);
+    const DWORD* h = reinterpret_cast<const DWORD*>(0x7C7C94);
+    if (IsBadReadPtr(w, 4) || IsBadReadPtr(h, 4)) return false;
+    if (*w < 8 || *w > 64 || *h < 8 || *h > 64) return false;
+    *width = *w; *height = *h;
+    return true;
+}
+
+static bool IsRenderTargetSurface(void* surface) {
+    void** device = *reinterpret_cast<void***>(g_quadDevice);
+    void* target = NULL;
+    if (FAILED(reinterpret_cast<DevGetPtrFn>(device[kDevGetRenderTarget])(g_quadDevice, &target)) || !target) return false;
+    reinterpret_cast<ReleaseFn>((*reinterpret_cast<void***>(target))[2])(target);
+    return target == surface;
+}
+
+// `Blt(destination small system surface <- the frame)`: fills it with the marker instead of reading the frame.
+bool UiQuadCursorSave(void* destination, LPRECT destRect, void* source, LPRECT srcRect) {
+    if (!g_uiQuadBlit || !g_quadDevice || !destination || !source || !srcRect || !g_originalDDLock || !g_originalDDUnlock) return false;
+    DWORD cw = 0, ch = 0;
+    if (!CursorSizeKnown(&cw, &ch)) return false;
+    if (srcRect->right - srcRect->left != static_cast<LONG>(cw) || srcRect->bottom - srcRect->top != static_cast<LONG>(ch)) return false;
+    if (destRect && (destRect->right - destRect->left != static_cast<LONG>(cw) || destRect->bottom - destRect->top != static_cast<LONG>(ch))) return false;
+    BYTE dd[128];
+    if (!DdSurfaceDesc(destination, dd)) return false;
+    DWORD caps = 0, w = 0, h = 0, bits = 0, pfFlags = 0, rMask = 0, gMask = 0, bMask = 0;
+    memcpy(&caps, dd + 104, 4); memcpy(&h, dd + 8, 4); memcpy(&w, dd + 12, 4); memcpy(&bits, dd + 84, 4);
+    memcpy(&pfFlags, dd + 76, 4); memcpy(&rMask, dd + 88, 4); memcpy(&gMask, dd + 92, 4); memcpy(&bMask, dd + 96, 4);
+    if (!(caps & 0x800) || (caps & 0x1000) || w != cw || h != ch || !(pfFlags & 0x40) || (bits != 16 && bits != 32)) return false;
+    if (!IsRenderTargetSurface(source)) return false;
+    DWORD marker = kCursorMarker;
+    if (bits == 16) {
+        auto pack = [](DWORD channel8, DWORD mask) -> DWORD {
+            if (!mask) return 0;
+            int shift = 0; DWORD m = mask; while (!(m & 1)) { m >>= 1; ++shift; }
+            return ((channel8 * m + 127) / 255) << shift;
+        };
+        marker = pack(0xFA, rMask) | pack(0x01, gMask) | pack(0xFB, bMask);
+    }
+    BYTE desc[128];
+    memset(desc, 0, 128);
+    const DWORD size = 124;
+    memcpy(desc, &size, 4);
+    if (FAILED(g_originalDDLock(destination, NULL, desc, 0x21, NULL))) return false;
+    BYTE* pixels = NULL; LONG pitch = 0;
+    memcpy(&pixels, desc + 36, 4); memcpy(&pitch, desc + 16, 4);
+    const bool ok = pixels && pitch > 0;
+    if (ok) for (DWORD y = 0; y < h; ++y) {
+        BYTE* row = pixels + static_cast<size_t>(pitch) * y;
+        if (bits == 32) for (DWORD x = 0; x < w; ++x) memcpy(row + 4 * x, &marker, 4);
+        else for (DWORD x = 0; x < w; ++x) { const WORD m16 = static_cast<WORD>(marker); memcpy(row + 2 * x, &m16, 2); }
+    }
+    g_originalDDUnlock(destination, NULL);
+    if (ok) InterlockedIncrement(&g_uiQuadDrawn);
+    return ok;
+}
+
+bool UiQuadBlt(void* destination, LPRECT destRect, void* source, LPRECT srcRect, DWORD flags, void* bltFx) {
+    if (!g_quadDevice || !destination || !destRect || !source || !g_originalDDLock || !g_originalDDUnlock) return false;
+    const DWORD kWait = 0x01000000, kAsync = 0x200, kKeyOverride = 0x10000;
+    if (flags & ~(kWait | kAsync | kKeyOverride)) return false;
+    bool keyed = (flags & kKeyOverride) != 0;
+    if (keyed && !bltFx) return false;
+    void** device = *reinterpret_cast<void***>(g_quadDevice);
+    // only onto the device's current render target
+    void* target = NULL;
+    if (FAILED(reinterpret_cast<DevGetPtrFn>(device[kDevGetRenderTarget])(g_quadDevice, &target)) || !target) return false;
+    reinterpret_cast<ReleaseFn>((*reinterpret_cast<void***>(target))[2])(target);
+    if (target != destination) return false;
+    BYTE dstDesc[128];
+    if (!DdSurfaceDesc(destination, dstDesc)) return false;
+    DWORD frameW = 0, frameH = 0;
+    memcpy(&frameH, dstDesc + 8, 4); memcpy(&frameW, dstDesc + 12, 4);
+    if (!frameW || !frameH) return false;
+    BYTE srcDesc[128];
+    if (!DdSurfaceDesc(source, srcDesc)) return false;
+    DWORD srcW = 0, srcH = 0;
+    memcpy(&srcH, srcDesc + 8, 4); memcpy(&srcW, srcDesc + 12, 4);
+    RECT from = {0, 0, static_cast<LONG>(srcW), static_cast<LONG>(srcH)};
+    if (srcRect) from = *srcRect;
+    if (from.left < 0 || from.top < 0 || from.right > static_cast<LONG>(srcW) || from.bottom > static_cast<LONG>(srcH) || from.right <= from.left || from.bottom <= from.top) return false;
+    if (destRect->right - destRect->left != from.right - from.left || destRect->bottom - destRect->top != from.bottom - from.top) { QuadNoteFallback("stretched"); return false; }
+    DWORD key = 0;
+    if (keyed) memcpy(&key, static_cast<BYTE*>(bltFx) + 92, 4); // DDBLTFX.ddckSrcColorKey.dwColorSpaceLowValue
+    DWORD cursorW = 0, cursorH = 0;
+    if (!keyed && CursorSizeKnown(&cursorW, &cursorH) && from.right - from.left == static_cast<LONG>(cursorW) && from.bottom - from.top == static_cast<LONG>(cursorH)) {
+        // the software cursor's composite: its transparent pixels hold the marker (UiQuadCursorSave)
+        BYTE pf[128];
+        DWORD bitsHere = 0, rM = 0, gM = 0, bM = 0;
+        memcpy(&bitsHere, srcDesc + 84, 4); memcpy(&rM, srcDesc + 88, 4); memcpy(&gM, srcDesc + 92, 4); memcpy(&bM, srcDesc + 96, 4);
+        (void)pf;
+        keyed = true;
+        if (bitsHere == 32) key = kCursorMarker;
+        else {
+            auto pack = [](DWORD channel8, DWORD mask) -> DWORD {
+                if (!mask) return 0;
+                int shift = 0; DWORD m = mask; while (!(m & 1)) { m >>= 1; ++shift; }
+                return ((channel8 * m + 127) / 255) << shift;
+            };
+            key = pack(0xFA, rM) | pack(0x01, gM) | pack(0xFB, bM);
+        }
+    }
+    QuadSource* q = QuadSourceFor(source, keyed, key);
+    if (!q) { InterlockedIncrement(&g_uiQuadFallback); return false; }
+
+    // the device's states we change, kept to be put back
+    static const DWORD kRenderStates[] = {7, 14, 15, 19, 20, 22, 24, 25, 27, 28, 29, 41, 52, 136, 137}; // ZENABLE ZWRITE ALPHATEST SRC DEST CULL ALPHAREF ALPHAFUNC ALPHABLEND FOG SPECULAR COLORKEY STENCIL CLIPPING LIGHTING
+    static const DWORD kRenderValues[] = {0, 0, 0, 2, 1, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0};          // off, SRCBLEND ONE not used (blend is off), CULL_NONE, ALPHAFUNC GREATER
+    static const DWORD kStage0[] = {1, 2, 4, 5, 11, 12, 16, 17, 18, 24};                           // COLOROP COLORARG1 ALPHAOP ALPHAARG1 TEXCOORDINDEX ADDRESS MAGFILTER MINFILTER MIPFILTER TEXTURETRANSFORMFLAGS
+    static const DWORD kStage0Values[] = {2, 2, 2, 2, 0, 3, 1, 1, 1, 0};                           // SELECTARG1 TEXTURE, SELECTARG1 TEXTURE, index 0, CLAMP, POINT, POINT, NONE, no transform
+    DWORD savedRs[sizeof(kRenderStates) / sizeof(DWORD)], savedStage0[sizeof(kStage0) / sizeof(DWORD)], savedStage1ColorOp = 1, savedStage1AlphaOp = 1;
+    BYTE savedViewport[28];
+    void* savedTexture = NULL;
+    const DevGetRSFn getRs = reinterpret_cast<DevGetRSFn>(device[kDevGetRS]);
+    const DevSetRSFn setRs = reinterpret_cast<DevSetRSFn>(device[kDevSetRS]);
+    const DevGetTssFn getTss = reinterpret_cast<DevGetTssFn>(device[kDevGetTss]);
+    const DevSetTssFn setTss = reinterpret_cast<DevSetTssFn>(device[kDevSetTss]);
+    bool saved = true;
+    for (size_t i = 0; i < sizeof(kRenderStates) / sizeof(DWORD); ++i) if (FAILED(getRs(g_quadDevice, kRenderStates[i], &savedRs[i]))) saved = false;
+    for (size_t i = 0; i < sizeof(kStage0) / sizeof(DWORD); ++i) if (FAILED(getTss(g_quadDevice, 0, kStage0[i], &savedStage0[i]))) saved = false;
+    if (FAILED(getTss(g_quadDevice, 1, 1, &savedStage1ColorOp)) || FAILED(getTss(g_quadDevice, 1, 4, &savedStage1AlphaOp))) saved = false;
+    if (FAILED(reinterpret_cast<DevViewportFn>(device[kDevGetViewport])(g_quadDevice, savedViewport))) saved = false;
+    reinterpret_cast<DevGetTexFn>(device[kDevGetTexture])(g_quadDevice, 0, &savedTexture);
+    if (!saved) { if (savedTexture) reinterpret_cast<ReleaseFn>((*reinterpret_cast<void***>(savedTexture))[2])(savedTexture); QuadNoteFallback("the device's state could not be read"); return false; }
+
+    const bool beganScene = SUCCEEDED(reinterpret_cast<DevNoArgFn>(device[kDevBeginScene])(g_quadDevice));
+    BYTE viewport[28];
+    memset(viewport, 0, 28);
+    const DWORD vpX = 0, vpY = 0; const float zMin = 0.0f, zMax = 1.0f;
+    memcpy(viewport, &vpX, 4); memcpy(viewport + 4, &vpY, 4); memcpy(viewport + 8, &frameW, 4); memcpy(viewport + 12, &frameH, 4);
+    memcpy(viewport + 16, &zMin, 4); memcpy(viewport + 20, &zMax, 4);
+    reinterpret_cast<DevViewportFn>(device[kDevSetViewport])(g_quadDevice, viewport);
+    for (size_t i = 0; i < sizeof(kRenderStates) / sizeof(DWORD); ++i) setRs(g_quadDevice, kRenderStates[i], kRenderValues[i]);
+    setRs(g_quadDevice, 15, keyed ? 1 : 0); // ALPHATESTENABLE: the colour key is the texels with alpha 0
+    for (size_t i = 0; i < sizeof(kStage0) / sizeof(DWORD); ++i) setTss(g_quadDevice, 0, kStage0[i], kStage0Values[i]);
+    setTss(g_quadDevice, 1, 1, 1); // stage 1 off (COLOROP DISABLE)
+    setTss(g_quadDevice, 1, 4, 1); // ALPHAOP DISABLE
+    reinterpret_cast<DevSetTexFn>(device[kDevSetTexture])(g_quadDevice, 0, q->texture);
+
+    struct Vertex { float x, y, z, rhw, u, v; } quad[4];
+    const float shift = 0.5f; // pre-transformed positions are pixel centres: the corners sit half a pixel before them
+    const float l = static_cast<float>(destRect->left) - shift, t = static_cast<float>(destRect->top) - shift;
+    const float r = static_cast<float>(destRect->right) - shift, b = static_cast<float>(destRect->bottom) - shift;
+    const float u0 = static_cast<float>(from.left) / q->texWidth, u1 = static_cast<float>(from.right) / q->texWidth;
+    const float v0 = static_cast<float>(from.top) / q->texHeight, v1 = static_cast<float>(from.bottom) / q->texHeight;
+    quad[0] = {l, t, 0.0f, 1.0f, u0, v0};
+    quad[1] = {r, t, 0.0f, 1.0f, u1, v0};
+    quad[2] = {l, b, 0.0f, 1.0f, u0, v1};
+    quad[3] = {r, b, 0.0f, 1.0f, u1, v1};
+    const HRESULT drawn = reinterpret_cast<DevDrawFn>(device[kDevDrawPrimitive])(g_quadDevice, 5 /* D3DPT_TRIANGLESTRIP */, 0x4 | 0x100 /* D3DFVF_XYZRHW | D3DFVF_TEX1 */, quad, 4, 0);
+
+    // put everything back
+    reinterpret_cast<DevSetTexFn>(device[kDevSetTexture])(g_quadDevice, 0, savedTexture);
+    if (savedTexture) reinterpret_cast<ReleaseFn>((*reinterpret_cast<void***>(savedTexture))[2])(savedTexture);
+    setTss(g_quadDevice, 1, 1, savedStage1ColorOp);
+    setTss(g_quadDevice, 1, 4, savedStage1AlphaOp);
+    for (size_t i = 0; i < sizeof(kStage0) / sizeof(DWORD); ++i) setTss(g_quadDevice, 0, kStage0[i], savedStage0[i]);
+    for (size_t i = 0; i < sizeof(kRenderStates) / sizeof(DWORD); ++i) setRs(g_quadDevice, kRenderStates[i], savedRs[i]);
+    reinterpret_cast<DevViewportFn>(device[kDevSetViewport])(g_quadDevice, savedViewport);
+    if (beganScene) reinterpret_cast<DevNoArgFn>(device[kDevEndScene])(g_quadDevice);
+    if (FAILED(drawn)) { QuadNoteFallback("the draw failed"); return false; }
+    InterlockedIncrement(&g_uiQuadDrawn);
+    return true;
 }
 
 // IDirectDraw::QueryInterface: the IDirect3D7 interface it hands out gets its CreateDevice hooked.
@@ -300,7 +643,7 @@ HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw,
     LogLine(FAILED(result) ? "ERROR" : "INFO",
         "DirectDrawCreate result=0x%08lX object=%p", result,
         directDraw ? *directDraw : NULL);
-    if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
+    if ((g_enableOverlay || g_uiQuadBlit) && SUCCEEDED(result) && directDraw && *directDraw) {
         IdentifyDirectDrawBackend();
         InstallDirectDrawFrameCounterHooks(*directDraw);
     }
@@ -313,7 +656,7 @@ HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDraw,
     HRESULT result = g_originalDirectDrawCreateEx(guid, directDraw, interfaceId,
         outerUnknown);
     if (FAILED(result)) LogLine("ERROR", "DirectDrawCreateEx failed: result=0x%08lX", result);
-    if (g_enableOverlay && SUCCEEDED(result) && directDraw && *directDraw) {
+    if ((g_enableOverlay || g_uiQuadBlit) && SUCCEEDED(result) && directDraw && *directDraw) {
         IdentifyDirectDrawBackend();
         InstallDirectDrawFrameCounterHooks(*directDraw);
     }

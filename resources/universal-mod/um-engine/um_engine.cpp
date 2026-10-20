@@ -22,9 +22,10 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.3.2";
+static const char* const kEngineVersion = "0.3.3";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
+extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
 struct sockaddr; struct sockaddr_in; struct GameBuffer; // net_udp.cpp
 extern "C" bool __attribute__((thiscall)) UmNetSendTo(unsigned* self, sockaddr* to, GameBuffer* buffer);
 extern "C" bool __attribute__((thiscall)) UmNetReceiveFrom(unsigned* self, sockaddr_in* from, GameBuffer* buffer);
@@ -43,6 +44,8 @@ static const UmEngineFunction kFunctions[] = {
     { "strlen", 0x006ECCB0, reinterpret_cast<void*>(&UmStrlen), 0, {0x8B, 0x4C, 0x24, 0x04, 0xF7, 0xC1, 0x03, 0x00} }, // the Russian game.exe (EIStarter/Engine)
     { "NetSocket::SendTo", 0x00440B90, reinterpret_cast<void*>(&UmNetSendTo), 0, {0x8B, 0x44, 0x24, 0x08, 0x56, 0x57, 0x8B, 0x50} },
     { "NetSocket::ReceiveFrom", 0x00440BE0, reinterpret_cast<void*>(&UmNetReceiveFrom), 0, {0x53, 0x56, 0x8B, 0x74, 0x24, 0x10, 0x57, 0x8B} },
+    // The CRT's math (crt_math.cpp): the distance function, 22 % of the main thread's CPU time in the lobby
+    { "_hypot", 0x006FD026, reinterpret_cast<void*>(&UmHypot), -1, {0xDD, 0x44, 0x24, 0x0C, 0x6A, 0x18, 0x51, 0x51} },
     // The update packet codec (net_update.cpp): sequence window, acks, stream chunks, the update parser
     { "NetConnection::WriteAcks", 0x00434C20, reinterpret_cast<void*>(&UmNetWriteAcks), -1, {0x51, 0x8B, 0xD1, 0x53, 0x55, 0x56, 0x66, 0x8B} },
     { "NetConnection::AckOne", 0x00434CE0, reinterpret_cast<void*>(&UmNetAckOne), -1, {0x8B, 0x81, 0xF8, 0x10, 0x00, 0x00, 0x56, 0x57} },

@@ -38,6 +38,7 @@ BYTE g_overlayLogToggleKey = VK_F10;
 volatile LONG g_overlayLogVisible = 0;
 BYTE g_profilerKey = VK_F11;
 BYTE g_profilerDumpKey = VK_SCROLL; // OVERLAY_PROFILER_DUMP_KEY: the tree to um-profile.txt
+bool g_uiQuadBlit = false;          // UI_QUAD_BLIT (#80): the interface panels drawn as textured quads instead of Blts onto the frame
 bool g_uiBlitCache = false;         // UI_BLIT_CACHE (#80): the interface panels uploaded only when they change
 bool g_shadowLockCache = false;     // SHADOW_LOCK_CACHE (#80): the units' shadow textures re-uploaded only when they change
 // UM_PROFILE_AUTODUMP=<seconds> in the environment (unattended runs, no um.cfg change): the profiler runs from the

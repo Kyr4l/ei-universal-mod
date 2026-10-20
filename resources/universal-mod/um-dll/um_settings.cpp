@@ -201,6 +201,11 @@ const SettingDef kSettings[] = {
         "; copies, so the game's own pictures are never GPU sources and its drawing into them\n"
         "; never waits for the GPU (D7VK makes it wait 1-4 ms otherwise). Experimental; (true/false)",
         "; -- Performance (see the profiler) --"),
+    BoolSetting("UI_QUAD_BLIT", &g_uiQuadBlit, false, true,
+        "; The interface panels the game blits onto the frame are drawn as textured quads on\n"
+        "; the 3D device instead. A Blt onto the frame makes D7VK read the whole 1920x1080 frame\n"
+        "; back from the GPU, blit on the CPU and upload it again, every frame (the CPU waits\n"
+        "; for the GPU and copies 16 MB); a quad costs nothing of that. Experimental; (true/false)"),
     BoolSetting("SHADOW_LOCK_CACHE", &g_shadowLockCache, false, true,
         "; The game redraws every unit's shadow into a small texture each frame and uploads\n"
         "; it; the upload goes through a pair of staging textures, so the game's drawing into\n"
