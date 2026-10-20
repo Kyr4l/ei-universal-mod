@@ -757,6 +757,7 @@ public:
                 std::vector<Out> out;
                 static const std::vector<uint8_t> none;
                 if (joinSends_ > 0 && !join_.empty()) { --joinSends_; out.push_back({5, 1, &join_, 0}); }
+                for (ChatOut& c : chatOut_) if (c.sends > 0) { --c.sends; out.push_back({6, c.id, &c.data, 0}); break; } // one chat line per packet (kind 6: the text)
                 if (pairSends_ > 0 && !pairOut_.empty()) { --pairSends_; out.push_back({15, 1, &pairOut_, 2}); }
                 else if (pairRemoveSends_ > 0) { --pairRemoveSends_; out.push_back({15, 1, &none, 0}); } // flag bit 0 = the object is removed
                 p.push_back(static_cast<uint8_t>(out.size()));
@@ -792,6 +793,14 @@ public:
     }
     void SendRaw(const std::vector<uint8_t>& m) { StreamMessage(m); } // research
     void LootBody(uint32_t body) { Loot(body); }       // research: the loot order on a body
+    // Says a line in the session's chat (kind 6, a new object per line; the server prints it as "Name: text"). Sent a few times, as the lobby objects are.
+    void Say(const std::string& text) {
+        if (text.empty()) return;
+        ChatOut c{chatId_++, std::vector<uint8_t>(text.begin(), text.end()), 2};
+        c.data.push_back(0);
+        chatOut_.push_back(std::move(c));
+        while (chatOut_.size() > 40) chatOut_.pop_front();
+    }
     void SetMpRaw(const std::vector<uint8_t>& raw) { mpRaw_ = raw; } // the character's content changed (items from a swap): what the next quest entry uploads
     // Leaves the world for good (the host left, or we are asked to): the leave message 0x04 + u32 0 makes the server move what we carried into the party and answer with
     // the party (0x83: the final save, taken by the owner of the file); the connection is closed 2 s later and `reconnect` is set: the lobby is entered again with a
@@ -839,6 +848,8 @@ private:
     // Swap (trade) requests: the lobby's kind-15 record {18 bytes, ref requester (kind 1 + slot id), ref partner}: a player clicking another player's head creates one (checked live
     // 2026-10-20: the server forwards it to the partner with the chat line "Player X is offering you a swap"); answering with the mirrored record (requester = us, partner = them) pairs them.
     std::vector<uint8_t> pairOut_; int pairSends_ = 0, pairRemoveSends_ = 0;
+    struct ChatOut { uint16_t id; std::vector<uint8_t> data; int sends; };
+    std::deque<ChatOut> chatOut_; uint16_t chatId_ = 100;
     std::vector<uint16_t> peerOffer_; uint16_t peerOfferId_ = 0;
     uint16_t MySlot() const { uint16_t slot = 0; for (const auto& kv : players) if (kv.second.name == name_) slot = kv.first; return slot; } // the newest record with our name (an older ghost of the same name may exist)
     std::string worldQuest_;

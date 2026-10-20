@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.14";
+static const char* const kVersion = "0.1.15";
 
 
 struct App {
@@ -193,6 +193,20 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
     if (plan.buy.empty() && plan.sell.empty() && plan.repair.empty() && plan.potionAdd == 0) return "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell";
     std::string text = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): " + shop::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += "\n  " + n;
+    if (cfg.announce) { // the useful part, in the chat: what it bought (with the price), what it sold, repairs, potions, what is left
+        std::string bought; long soldFor = 0, repairFor = 0;
+        for (const std::string& n : plan.notes) {
+            const size_t colon = n.find(": ");
+            if (colon != std::string::npos && (n.compare(0, 6, "weapon") == 0 || n.compare(0, 5, "armor") == 0 || n.compare(0, 6, "wished") == 0)) bought += (bought.empty() ? "" : ", ") + n.substr(colon + 2);
+            else if (n.compare(0, 9, "sell loot") == 0) soldFor += std::atol(n.substr(n.rfind(" for ") + 5).c_str());
+            else if (n.compare(0, 6, "repair") == 0) repairFor += std::atol(n.substr(n.rfind(" for ") + 5).c_str());
+        }
+        if (!bought.empty()) client.Say("bought: " + bought);
+        if (soldFor > 0) client.Say("sold loot for " + std::to_string(soldFor));
+        if (!plan.repair.empty()) client.Say("repaired " + std::to_string(plan.repair.size()) + " item(s) for " + std::to_string(repairFor));
+        if (plan.potionAdd > 0) client.Say("bought " + std::to_string(plan.potionAdd) + " healing potions");
+        if (!bought.empty() || soldFor > 0 || !plan.repair.empty()) client.Say("money left: " + std::to_string(plan.money));
+    }
     std::string err;
     if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
     client.SetMpRaw(mp::Serialize(ch));
@@ -204,6 +218,10 @@ static std::string DoSpells(mp::Character& ch, const items::Database& db, const 
     const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock, cfg.role == bot::Role::Mage || cfg.role == bot::Role::Hybrid);
     std::string text = spells::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += (text.empty() ? "" : "\n") + n;
+    if (cfg.announce) {
+        for (const spells::Buy& b : plan.buys) client.Say("made the spell " + db.spells[static_cast<size_t>(b.row)].name + " (" + std::to_string(static_cast<long>(b.cost)) + ")");
+        if (!plan.equips.empty()) client.Say("equipped a spell");
+    }
     if (plan.buys.empty() && plan.equips.empty()) return text;
     std::string err;
     if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
@@ -240,6 +258,7 @@ static std::string DoGrowth(mp::Character& ch, const items::Database& db, const 
     const growth::Plan plan = growth::MakePlan(db, ch, pf);
     if (plan.buys.empty()) return "";
     std::string text = growth::Apply(db, ch, plan);
+    if (cfg.announce) { std::string said; for (const std::string& l : plan.lines) said += (said.empty() ? "" : ", ") + l; client.Say("trained (" + std::to_string(plan.cost) + " exp): " + said); }
     std::string err;
     if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
     client.SetMpRaw(mp::Serialize(ch));
@@ -504,6 +523,8 @@ static void BuildPanel(App& app) {
         "what its role and the Damage <-> Defence slider call for, within its money and what it can carry. It needs the database (see below).");
     app.dirty |= ImGui::Checkbox("Accept swaps", &c.acceptSwaps);
     Tip("A player can click the bot's head in the lobby to offer a swap: the bot takes what is offered (loot it sells for money) and gives nothing. Off: it ignores swap requests.");
+    app.dirty |= ImGui::Checkbox("Report in chat", &c.announce);
+    Tip("Says in the game's chat what it did at the camp: what it bought and for how much, what it sold, repairs, training and spells.");
     app.dirty |= ImGui::Checkbox("Spend experience", &c.grow);
     Tip("Before entering a quest it spends its free experience in the camp like a player: skill points and abilities for the role and the Damage <-> Defence slider, at the game's\n"
         "prices (a melee build raises Melee and the wielded weapon's ability, a ranged one Archery, a mage the magic skills). It needs the database (see below).");
