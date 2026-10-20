@@ -41,11 +41,22 @@ cast, 0x10-0x17 with bit 0x40 in +23 the stance changes (`scross`), 0x24-0xE7 cr
 hit, 0x04-0xC4 with +23 4-0x13 the special and briefing actions. The low bits look like variants (e.g. armed / unarmed
 walks).
 
-## Files that do not fit (vanilla `database.res`, 54 `.adb`)
+## Files that do not fit (vanilla `databaseadb.res`, 54 `.adb`)
 
-Four files are not `44 + records × 88` bytes: `unmoco3.adb`, `unmoco4.adb` (296 bytes, 3 records), `inmm1.adb`
-(80, 1), `unmozozo.adb` (716, 8): their records are shorter or the header differs; not decoded. In the other 50,
-the last frame + 1 equals the `.anm` clip's frame count for 936 of 941 clips.
+The game does not parse an `.adb`: it keeps the file's bytes mapped and reads them as 88-byte records from +44 (count
+at +4; `CObject3D::PickAnimDbEntryByMask` 0x5190C0, `AnimDb_FindEntryByName` 0x512F60). Four files are not
+`44 + records x 88` bytes (decoded 2026-10-20 from their bytes and the clip frame counts):
+
+| File | Size | Records | Layout |
+|---|---|---|---|
+| `unmoco3.adb`, `unmoco4.adb` | 296 | 3 | the old record of 84 bytes: the same fields without the probability (+28): +24 flags, +28 the last frame, +32 the locomotion float |
+| `unmozozo.adb` (`Zombie00`) | 716 | 8 | the same 84-byte record (`cwalk` has 0.614 at +32 where a walk's distance goes) |
+| `inmm1.adb` (`MainColumn`) | 80 | 1 | a record of 36 bytes: name, index, key, flags, last frame; the header's name field has stray bytes after the name |
+
+The game reads these with the 88-byte stride, so from the second record on it sees shifted fields (the clip names
+come out cut, the keys wrong): these four are old files the engine cannot use properly; check before editing them
+that no unit of the mod uses their models. In the other 50, the last frame + 1 equals the `.anm` clip's frame
+count for 936 of 941 clips.
 
 ## How the game chooses a clip (read from game.exe 2026-10-20)
 
@@ -98,5 +109,4 @@ A unit playing a hit reaction (kind 8) is known to the server for the clip's dur
 (`CUnitServer::CurrentAnimIsHitReaction`).
 
 What stays unknown: the +68 / +72 words (they exist exactly on the first clip of a group, `cidle01`, `uhit01`,
-`udeath01`; the selection, duration and event code read so far never touches them), and the layout of the four odd
-files.
+`udeath01`; the selection, duration and event code read so far never touches them). 
