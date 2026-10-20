@@ -500,6 +500,8 @@ public:
     std::vector<std::vector<uint8_t>> TakeSwapped() { auto v = std::move(swapReceived); swapReceived.clear(); return v; }
     std::map<uint16_t, std::vector<uint8_t>> swapItems; // kind-16 objects: the items a partner offers (by id)
     std::map<uint16_t, std::pair<uint16_t, uint16_t>> swapRecords; // kind-15 records seen: id -> (requester slot, partner slot)
+    std::vector<std::string> QuestFiles() const { std::vector<std::string> v; for (const auto& kv : quests) v.push_back(kv.second); return v; } // the session's quest list (kind 11): the loaded allod's quests
+    bool holdEntry = false;      // wait before entering the quest (the shop visit comes first)
     bool leaveWithHost = true;  // leave the quest zone when the host does
     bool autoEnter = true;      // enter the chosen quest when its zone opens
     uint32_t worldUnit = 0;     // our hero's unit in the quest world (0: not in it)
@@ -885,7 +887,7 @@ private:
     // snapshot (our new hero id), "09" (ready: the server spawns the hero), JOIN 0 with that id.
     void Enter() {
         if (phase_ == Phase::Lobby && !heroJoined_ && joinSends_ == 0) { heroJoined_ = true; SetJoin(1, heroId_); return; }
-        if (phase_ == Phase::Lobby && autoEnter && joined && ZoneOpen() && !mpRaw_.empty()) {
+        if (phase_ == Phase::Lobby && autoEnter && joined && !holdEntry && ZoneOpen() && !mpRaw_.empty()) {
             phase_ = Phase::Loading; phaseAt_ = Now(); SetJoin(3, heroId_);
             if (worldQuest_ != chosenQuest) ClearWorld(); // another quest = another world
             worldQuest_ = chosenQuest;

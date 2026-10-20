@@ -7,6 +7,7 @@
 // Skeleton: the settings and the window. The network client (the game's UDP protocol, port 8888) is not
 // written yet: Connect only says so. See README.md for the plan.
 #include "net.hpp" // first: winsock2.h before windows.h
+#include "shop.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -32,11 +33,12 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <random>
 #include <set>
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.8";
+static const char* const kVersion = "0.1.9";
 
 
 struct App {
@@ -45,6 +47,7 @@ struct App {
     std::deque<std::string> log;      // newest last
     net::Client client;
     size_t clientLogShown = 0;
+    unsigned shopSeed = 1; bool shopped = false; double shopWaitFrom = 0; // the camp's shop: one stock draw per session, visited once before the quest
     bool keepConnected = false;       // the user pressed Connect: reconnect after a failure
     double retryAt = 0; int retries = 0;
     mp::Character character;          // the loaded .mp
@@ -130,6 +133,34 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
     return raw;
 }
 
+// The camp's shop before a quest: which allod the session is on (its quest list / the chosen quest), what the shop of that allod draws this session, what to buy and sell for the
+// role and the gear target, applied to the character, saved, and handed to the client for the quest entry. Returns what to log ("" when nothing to do).
+static std::string DoShopping(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, const std::string& path, std::string* allodOut = nullptr) {
+    std::mt19937 rng(seed); // one draw per session: the stock stays the same for every visit of the shop in it
+    std::string mapsDir;
+    { std::string dir = cfg.character; const size_t slash = dir.find_last_of("/\\"); if (slash != std::string::npos) mapsDir = dir.substr(0, slash) + "/../maps"; }
+    std::string allod = client.chosenQuest.empty() ? "" : shop::AllodOfQuest(client.chosenQuest, mapsDir);
+    if (allod.empty() || allod == "final") { // the quest list of the session: the allod most of its quests belong to
+        std::map<std::string, int> votes;
+        for (const std::string& q : client.QuestFiles()) { const std::string a = shop::AllodOfQuest(q, mapsDir); if (!a.empty() && a != "final") ++votes[a]; }
+        int best = 0; for (const auto& kv : votes) if (kv.second > best) { best = kv.second; allod = kv.first; }
+    }
+    if (allodOut) *allodOut = allod;
+    const int shopNo = shop::ShopOfAllod(allod);
+    if (!shopNo || ch.members.empty() || db.materials.empty()) return "";
+    shop::Prefs pf;
+    pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
+    const std::vector<shop::Offer> stock = shop::Stock(db, shopNo, rng);
+    const shop::Plan plan = shop::MakePlan(db, ch, pf, stock);
+    if (plan.buy.empty() && plan.sell.empty() && plan.potionAdd == 0) return "shop " + std::to_string(shopNo) + " (" + allod + "): nothing to buy or sell";
+    std::string text = "shop " + std::to_string(shopNo) + " (" + allod + "): " + shop::Apply(db, ch, plan);
+    for (const std::string& n : plan.notes) text += "\n  " + n;
+    std::string err;
+    if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
+    client.SetMpRaw(mp::Serialize(ch));
+    return text;
+}
+
 // Items received in a finished swap (the partner's item blobs: u32 id, u32 kind, u16 a, u16 b, 4 bytes, the detail's tail) added to the character's items and backpack, the
 // file saved and the new content handed to the client for the next quest entry. Returns what to log.
 static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vector<uint8_t>>& blobs, const std::string& path, net::Client& client) {
@@ -206,6 +237,8 @@ static void SetHealing(App& app) { // the healing potion's belt slot (from the d
 }
 static void StartConnection(App& app) {
     SetHealing(app);
+    app.shopped = false; app.shopWaitFrom = 0; app.shopSeed = std::random_device{}() | 1u;
+    app.client.holdEntry = app.cfg.shop; // the quest is entered after the shop visit
     if (!app.character.members.empty()) {
         const mp::Member& m = app.character.members[0];
         app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
@@ -361,6 +394,17 @@ static void BuildPanel(App& app) {
     ImGui::SetNextItemWidth(200);
     app.dirty |= ImGui::SliderInt("Damage <-> Defence", &c.tankiness, 0, 100, i18n::Tr("%d%% defence"));
     Tip("Where its skill points and gear go: 0 all damage, 100 all defence (health, armour)");
+    app.dirty |= ImGui::Checkbox("Shop before quests", &c.shop);
+    Tip("Before entering a quest it visits the camp's shop of the allod (Gipath, Ingos, Suslanger or Jigran: found from the quests of the session): sells loot and old gear, buys and wears\n"
+        "what its role and the Damage <-> Defence slider call for, within its money and what it can carry. It needs the database (see below).");
+    char gt[512];
+    std::snprintf(gt, sizeof gt, "%s", c.gearTarget.c_str());
+    ImGui::SetNextItemWidth(-130);
+    if (ImGui::InputTextWithHint("##geartarget", "auto: built from the role", gt, sizeof gt)) { c.gearTarget = gt; app.dirty = true; }
+    ImGui::SameLine(); ImGui::TextUnformatted("Gear target");
+    Tip("Gear it builds first and keeps, separated by ';': an item name, optionally with a material after ':'\n"
+        "e.g.  bone long bow:dragon red bones; gipat highest plate\n"
+        "While the shop does not offer it (its materials are drawn anew every session) the bot saves the money. Empty: auto, from the role.");
 }
 
 static void BehaviourPanel(App& app) {
@@ -660,7 +704,8 @@ int main(int argc, char** argv) {
             else
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
             client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
-            { items::Database db; const std::string dbf = LoadDb(cfg, db); // the healing potion's slot, and (experimental) the Healing spell's
+            items::Database shopDb; const std::string dbf = LoadDb(cfg, shopDb); bool shopped = false; // the shop visit (before the quest) needs the database
+            { items::Database& db = shopDb; // the healing potion's slot, and the Healing spell's
               if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; client.healSpellSlot = FindHealSpellSlot(ch, db); }
               client.healHostBelow = cfg.healPlayerBelow;
               std::printf("database: %s, healing potion slot %d, Healing spell slot %d\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot); }
@@ -675,17 +720,26 @@ int main(int argc, char** argv) {
             client.engagement = client.fightInSight ? (std::getenv("UM_BOT_FIGHT")[0] == '1' ? 2 : std::atoi(std::getenv("UM_BOT_FIGHT"))) : 0;
             if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
             if (const char* sg = std::getenv("UM_BOT_SIGHT")) client.sight = static_cast<float>(std::atof(sg)); // research: pretend a longer sight so it fights from farther
+            client.holdEntry = cfg.shop && !std::getenv("UM_BOT_NOSHOP");
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
                    client.state != net::Client::State::Rejected) {
                 client.Update();
+                if (client.holdEntry && !shopped && client.joined && (!client.chosenQuest.empty() || !client.quests.empty())) { // the shop visit
+                    const unsigned seed = std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u;
+                    if (!dbf.empty() && !ch.members.empty()) { const std::string said = DoShopping(ch, shopDb, cfg, client, seed, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
+                    shopped = true; client.holdEntry = false;
+                }
                 if (client.reconnect && client.state == net::Client::State::Idle) { // as the window does after leaving the world
                     client.reconnect = false;
                     if (!ch.members.empty()) client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
                     client.Connect(cfg.host, cfg.port); std::printf("connecting again\n"); std::fflush(stdout);
                 }
-                if (!client.swapReceived.empty() && !ch.members.empty()) { const std::string said = AddSwappedItems(ch, client.TakeSwapped(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str()); }
+                if (!client.swapReceived.empty() && !ch.members.empty()) {
+                    const std::string said = AddSwappedItems(ch, client.TakeSwapped(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str());
+                    if (!said.empty() && cfg.shop && !dbf.empty()) { const std::string sold = DoShopping(ch, shopDb, cfg, client, std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u, cfg.character); if (!sold.empty()) std::printf("%s\n", sold.c_str()); }
+                }
                 if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 static size_t printed = 0; // the log as it comes, with the time
                 for (; printed < client.log.size(); ++printed)
@@ -840,7 +894,17 @@ int main(int argc, char** argv) {
             if (app.retryAt == 0) app.retryAt = glfwGetTime() + 3;
             else if (glfwGetTime() > app.retryAt) { app.retryAt = 0; app.client.reconnect = false; app.Log("connecting again after leaving the world"); StartConnection(app); }
         }
-        if (!app.client.swapReceived.empty() && !app.character.members.empty()) { const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.characterFor, app.client); if (!said.empty()) app.Log(said); }
+        if (app.cfg.shop && !app.shopped && app.client.state == net::Client::State::Accepted && app.client.joined && !app.character.members.empty()) { // the shop visit
+            if (app.shopWaitFrom == 0) app.shopWaitFrom = glfwGetTime();
+            if (app.client.chosenQuest.size() || !app.client.quests.empty()) {
+                if (app.dbLoaded) { const std::string said = DoShopping(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!said.empty()) app.Log(said); }
+                app.shopped = true; app.client.holdEntry = false;
+            } else if (glfwGetTime() - app.shopWaitFrom > 8) { app.shopped = true; app.client.holdEntry = false; } // no quest list: go without
+        }
+        if (!app.client.swapReceived.empty() && !app.character.members.empty()) {
+            const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.characterFor, app.client); if (!said.empty()) app.Log(said);
+            if (!said.empty() && app.cfg.shop && app.dbLoaded) { const std::string sold = DoShopping(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!sold.empty()) app.Log(sold); } // the loot it was given is sold at once
+        }
         if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {
             mp::Character updated;
             const std::string said = SaveProgress(app.client, app.characterFor, &updated);

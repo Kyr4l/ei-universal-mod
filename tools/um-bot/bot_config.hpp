@@ -33,6 +33,8 @@ struct Config {
     // Build
     Role role = Role::Ranged;
     int tankiness = 30;          // 0 all damage .. 100 all defence (where skill points and gear go)
+    std::string gearTarget;      // the gear the bot builds in priority ("bone long bow:dragon red bones; gipat highest plate"), empty = auto (from the role and the slider)
+    bool shop = true;            // buy, sell and equip at the camp's shop before a quest
     // Behaviour
     Priority priority = Priority::HealPlayer;
     int healPlayerBelow = 50;    // % of the player's health
@@ -82,6 +84,8 @@ inline void Load(Config& c) {
         else if (k == "SAVE_PROGRESS") c.saveProgress = i != 0;
         else if (k == "LANGUAGE") c.language = v;
         else if (k == "ROLE") c.role = static_cast<Role>(clampi(i, 0, 3));
+        else if (k == "GEAR_TARGET") c.gearTarget = v;
+        else if (k == "SHOP") c.shop = i != 0;
         else if (k == "TANKINESS") c.tankiness = clampi(i, 0, 100);
         else if (k == "PRIORITY") c.priority = static_cast<Priority>(clampi(i, 0, 2));
         else if (k == "HEAL_PLAYER_BELOW") c.healPlayerBelow = clampi(i, 0, 100);
@@ -100,7 +104,7 @@ inline bool Save(const Config& c) {
     if (!o) return false;
     o << "# um-bot settings\n"
       << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\nCHARACTER=" << c.character << "\nDATABASE=" << c.database << "\nSAVE_PROGRESS=" << (c.saveProgress ? 1 : 0) << "\nLANGUAGE=" << c.language << "\n"
-      << "ROLE=" << static_cast<int>(c.role) << "\nTANKINESS=" << c.tankiness << "\n"
+      << "ROLE=" << static_cast<int>(c.role) << "\nTANKINESS=" << c.tankiness << "\nGEAR_TARGET=" << c.gearTarget << "\nSHOP=" << (c.shop ? 1 : 0) << "\n"
       << "PRIORITY=" << static_cast<int>(c.priority) << "\nHEAL_PLAYER_BELOW=" << c.healPlayerBelow
       << "\nHEAL_SELF_BELOW=" << c.healSelfBelow << "\nMANA_RESERVE=" << c.manaReserve << "\nUSE_POTIONS=" << (c.usePotions ? 1 : 0) << "\n"
       << "ENGAGEMENT=" << static_cast<int>(c.engagement) << "\n"

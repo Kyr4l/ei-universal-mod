@@ -55,6 +55,16 @@ The settings are saved in `um-bot.cfg` next to the program.
   falls below "Heal the player below" (not verified live: the host was never hurt in the tests). The Healing spell is
   used first when the character has a spell container with it in its spell items, enough Astral Magic and mana
   (verified on itself: 5 -> 38 health in 0.8 s).
+- **Shop and gear**: before a quest the bot visits the camp's shop of the allod the session is on (Gipath = shop 1 Babur,
+  Ingos 3, Suslanger 4, Jigran 5; found from the session's quest list). It draws the stock the way the game does (every
+  weapon and armor prototype of that shop, one material each, potions in quantities of 20-50), sells the loot it was
+  given and the gear it replaces (price x 0.5, minus the wear), and buys and wears what its role and the Damage <-> Defence
+  slider call for, never above its money or its lift capacity. "Gear target" lists the gear it builds first and keeps
+  (`bone long bow:dragon red bones; gipat highest plate`); the shop's materials are drawn anew every session, so it saves
+  the money for a wished item the shop does not show yet. Items are built with the game's own arithmetic (checked against
+  the live shop item for item) and the server accepts them byte for byte.
+- **Swaps**: a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
+  sells) and gives nothing.
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
   every 15-60 s and when leaving the world) back into the bot's `.mp`. The first save keeps the original as `.bak`.
 - **Movement**:

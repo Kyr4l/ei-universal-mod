@@ -166,6 +166,10 @@ struct Material {
     std::string code;   // 2-letter texture code, e.g. "br" (NOT unique: "dragon red bones" is "br" too)
     int id = 0;         // field 3: the number in material<NNNN>.mmp and initlimt<N>
     float price = 0, weight = 0, damage = 0;
+    int ni[16] = {};               // the same fields as integers (7: the integer added to the item's +0x40)
+    float n[16] = {};              // the numeric fields 0..15 as floats (4 price, 5 weight, 6 durability add, 7 / 8 factors, 10 damage ...): what the game's item constructor applies to a prototype
+    std::vector<float> list11;     // field 11: 7 floats, the armor absorb factors per body part
+    uint32_t shopMask = 0;         // field 13: bit k = "Shop k+1" sells it (the camp's shops: 1 Babur / Gipath, 3 Ingos, 4 Suslanger, 5 Jigran; 2 is the singleplayer witch)
 };
 
 // One row of Weapons/Armors/QuickItems/QuestItems/LootItems. The first 16
@@ -198,6 +202,11 @@ struct Item {
     std::vector<std::string> zones;                               // 22
     // LootItems
     int lootField21 = 0, lootField22 = 0, lootField23 = 0;
+    // Raw numbers for the constructor formulas (weapons / armors): fields 7..13 and 23..25 as floats, the lists 21 / 22 (armor: s, 7 absorb factors, flags), the shop mask (field 14)
+    float n[32] = {};
+    int ni[32] = {};               // the same fields as integers (11: an integer, 13: the price factor K)
+    std::vector<float> list21, list22;
+    uint32_t shopMask = 0;
 };
 
 struct Database {
@@ -242,6 +251,9 @@ inline bool ParseItemsIdb(const std::vector<uint8_t>& idb, Database& out, std::s
                 m.price = f.Float(4);
                 m.weight = f.Float(5);
                 m.damage = f.Float(10);
+                for (int k = 0; k < 16; ++k) { m.n[k] = f.Float(static_cast<uint8_t>(k)); m.ni[k] = f.Int(static_cast<uint8_t>(k)); }
+                m.list11 = f.Floats(11);
+                m.shopMask = static_cast<uint32_t>(f.Int(13));
                 if (!m.name.empty()) out.materials.push_back(std::move(m));
                 continue;
             }
@@ -253,6 +265,9 @@ inline bool ParseItemsIdb(const std::vector<uint8_t>& idb, Database& out, std::s
             it.type = f.String(1);
             it.typeId = f.Int(2);
             it.materialType = f.String(3);
+            for (int k = 0; k < 32; ++k) { it.n[k] = f.Float(static_cast<uint8_t>(k)); it.ni[k] = f.Int(static_cast<uint8_t>(k)); }
+            it.list21 = f.Floats(21); it.list22 = f.Floats(22);
+            it.shopMask = static_cast<uint32_t>(f.Int(14));
             it.tti = f.Int(5);
             it.tti2 = f.Int(6);
             it.price = f.Float(7);
