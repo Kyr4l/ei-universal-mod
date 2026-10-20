@@ -36,7 +36,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.7";
+static const char* const kVersion = "0.1.8";
 
 
 struct App {
@@ -128,6 +128,33 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
     std::string err;
     if (!in || !mp::Unpack(file, raw, err)) raw.clear();
     return raw;
+}
+
+// Items received in a finished swap (the partner's item blobs: u32 id, u32 kind, u16 a, u16 b, 4 bytes, the detail's tail) added to the character's items and backpack, the
+// file saved and the new content handed to the client for the next quest entry. Returns what to log.
+static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vector<uint8_t>>& blobs, const std::string& path, net::Client& client) {
+    int added = 0;
+    uint32_t next = 1;
+    for (const auto& list : ch.lists) for (const mp::Object& o : list) next = std::max(next, o.id + 1);
+    for (const auto& blob : blobs) {
+        if (blob.size() < 16) continue;
+        mp::Object o;
+        std::memcpy(&o.kind, &blob[4], 4); std::memcpy(&o.a, &blob[8], 2); std::memcpy(&o.b, &blob[10], 2);
+        const int size = mp::DetailSize(o.kind);
+        if (size < 0 || static_cast<int>(blob.size()) != size + 8) continue; // not an item shape we know
+        o.id = next++;
+        o.detail.resize(8); // the detail: the object's id, a, b, then the blob's tail (the blob has 4 extra bytes after b that the .mp does not)
+        std::memcpy(o.detail.data(), &o.id, 4); std::memcpy(o.detail.data() + 4, &o.a, 2); std::memcpy(o.detail.data() + 6, &o.b, 2);
+        o.detail.insert(o.detail.end(), blob.begin() + 16, blob.end());
+        if (static_cast<int>(o.detail.size()) != size) continue;
+        ch.lists[0].push_back(o); ch.backpack.push_back(o.id); ++added;
+    }
+    if (!added) return "";
+    std::string err;
+    const std::vector<uint8_t> raw = mp::Serialize(ch);
+    if (!path.empty() && !mp::Save(path, ch, err)) return "swap: " + std::to_string(added) + " items received, but the character was not saved: " + err;
+    client.SetMpRaw(raw);
+    return "swap: " + std::to_string(added) + " items added to the character";
 }
 
 // The party the server sent (its 0x80 / 0x83 messages): checked with the .mp reader (must parse and write back the same), then written into the
@@ -658,6 +685,7 @@ int main(int argc, char** argv) {
                     if (!ch.members.empty()) client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
                     client.Connect(cfg.host, cfg.port); std::printf("connecting again\n"); std::fflush(stdout);
                 }
+                if (!client.swapReceived.empty() && !ch.members.empty()) { const std::string said = AddSwappedItems(ch, client.TakeSwapped(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 static size_t printed = 0; // the log as it comes, with the time
                 for (; printed < client.log.size(); ++printed)
@@ -812,6 +840,7 @@ int main(int argc, char** argv) {
             if (app.retryAt == 0) app.retryAt = glfwGetTime() + 3;
             else if (glfwGetTime() > app.retryAt) { app.retryAt = 0; app.client.reconnect = false; app.Log("connecting again after leaving the world"); StartConnection(app); }
         }
+        if (!app.client.swapReceived.empty() && !app.character.members.empty()) { const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.characterFor, app.client); if (!said.empty()) app.Log(said); }
         if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {
             mp::Character updated;
             const std::string said = SaveProgress(app.client, app.characterFor, &updated);

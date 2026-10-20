@@ -155,6 +155,28 @@ number (section 4).
 Chat line keys printed by 0x5F8C90 (table 0x5F8DC8): 0 lmp_player_connected, 1 lmp_player_disconnected,
 2 kicked, 3 banned, 4 lost connection.
 
+### The bit buffer, and swaps (trades) between players (decoded 2026-10-20, live with a host and um-bot)
+
+The flag byte after a packet's message count is a **bit buffer** read bit by bit, a new byte being read from the stream whenever a bit is needed and none is left: every message takes
+one flag bit (1 = a payload follows, 0 = the object is removed), and **every object ref inside a payload takes one more bit**, in reading order (`NetPeer::ReadObjectRef`
+0x435820: the bit is read before the ref's kind byte and u16 id). A ref's bit 0 = the id is in the sender's own namespace (an object it created), 1 = the id is one the receiver
+assigned (e.g. a client referring to a player record the server created: slot ids as the kind-1 messages gave them). A ref written with the wrong bit resolves to a new, blank object
+(the "Player  is offering you a swap" line with an empty name).
+
+A swap starts when a player clicks another player's head in the lobby (the clicked head then shows "Swap?" for the other, "Swap!" for the clicker):
+
+| kind | object | payload | notes |
+|---|---|---|---|
+| 15 | swap record (`ObjListMessage`) | u32 n, n member refs (kind 16: the items offered), u32 +0x18, u8 +0x1c (**confirmed**), u32 +0x20 (**the partner's nonce this side confirmed**), u32 +0x24 (**this record's nonce**, 1, raised by 1 on every change of the offer), ref +0x28, ref +0x2c (kind 1 + player slot) | the clicker creates one (+0x28 = itself, +0x2c = the clicked); the server forwards it to the partner with the chat line "Player X is offering you a swap" |
+| 16 | offered item | u16 length (72), the item: u32 id (-1), u32 kind (0x3007 ...), u16 a, u16 b, 4 bytes, the .mp detail's tail (56 bytes: floats, then the **count offered** (a stack: 1 of 5), ...) | one per item the partner puts on the counter; `Detail size + 8` bytes |
+| 17 | pair (`ObjPairMessage`) | ref, ref (the two kind-15 records), u8 **confirmed**, u32, u32 | the server creates it when the partner answers with the mirrored record (the same two refs, swapped); the clients open the swap screen |
+
+Answering = clicking the sender's head: send your own kind-15 record with the refs swapped (bits 1,1 for refs to server-made players). Agreeing: set byte +0x1c = 1 and +0x20 = the partner's current +0x24
+(redo it whenever the partner's nonce changes: it changes with every item added or removed). The server (`LobbyServer::ConfirmPlayerPair` 0x41B970) marks the pair message confirmed (kind 17, byte = 1,
+nonces copied) when both records have +0x1c set and +0x20 equal to the other's +0x24. Both clients then move the offered items between their parties themselves (`CUIScreen740D18::Update` 0x62C930,
+`Party_MoveAllItems`): the server never moves items, and it trusts the party a client uploads (0x50 / 0x08). The record is withdrawn afterwards (flag bit 0 for kind 15 id 1). um-bot does all of this
+(`Client::ReadMessages` cases 15 / 16 / 17, `AnswerSwap`) and adds the received items to its character (`AddSwappedItems`).
+
 ### A session, from the lobby's point of view
 
 1. Join: login, then JOIN (kind 5, state 1, unit id -1 then 0x3B9AF5CE). The server answers with the quests

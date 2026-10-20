@@ -495,6 +495,11 @@ public:
         return 0;
     }
     std::string profileName;    // the player profile sent when entering (empty: the character's name)
+    bool acceptSwaps = true;    // answer a player's swap request (click on our head in the lobby) with the mirrored record
+    std::vector<std::vector<uint8_t>> swapReceived; // items received by finished swaps, for the owner of the character file to add (taken with TakeSwapped)
+    std::vector<std::vector<uint8_t>> TakeSwapped() { auto v = std::move(swapReceived); swapReceived.clear(); return v; }
+    std::map<uint16_t, std::vector<uint8_t>> swapItems; // kind-16 objects: the items a partner offers (by id)
+    std::map<uint16_t, std::pair<uint16_t, uint16_t>> swapRecords; // kind-15 records seen: id -> (requester slot, partner slot)
     bool leaveWithHost = true;  // leave the quest zone when the host does
     bool autoEnter = true;      // enter the chosen quest when its zone opens
     uint32_t worldUnit = 0;     // our hero's unit in the quest world (0: not in it)
@@ -722,15 +727,21 @@ public:
             p.push_back(static_cast<uint8_t>(c.bytes.size()));
             p.insert(p.end(), c.bytes.begin(), c.bytes.end());
             if (!c.bytes.empty()) unacked_[static_cast<uint16_t>(seq_ - 1)] = std::move(c);
-            if (joinSends_ > 0 && !join_.empty()) {
-                --joinSends_;
-                p.push_back(1);    // one message
-                p.push_back(0x01); // its flag byte
-                p.push_back(5);    // JOIN
-                Put16(p, 1);
-                p.insert(p.end(), join_.begin(), join_.end());
-            } else {
-                p.push_back(0);
+            {   // the reliable objects: the JOIN (kind 5) and our swap record (kind 15), each sent a few times after a change
+                struct Out { uint8_t kind; uint16_t id; const std::vector<uint8_t>* data; int refs; };
+                std::vector<Out> out;
+                static const std::vector<uint8_t> none;
+                if (joinSends_ > 0 && !join_.empty()) { --joinSends_; out.push_back({5, 1, &join_, 0}); }
+                if (pairSends_ > 0 && !pairOut_.empty()) { --pairSends_; out.push_back({15, 1, &pairOut_, 2}); }
+                else if (pairRemoveSends_ > 0) { --pairRemoveSends_; out.push_back({15, 1, &none, 0}); } // flag bit 0 = the object is removed
+                p.push_back(static_cast<uint8_t>(out.size()));
+                if (!out.empty()) { // the bit buffer, read bit by bit in the order of the messages: each message's flag bit (1 = it has a payload), then one bit per object ref inside its payload
+                    // (1 = the ref is an id in the RECEIVER's namespace, e.g. a player record the server created; 0 = the sender's own object)
+                    unsigned bits = 0; int nb = 0;
+                    for (const Out& m : out) { if (!m.data->empty()) bits |= 1u << nb; ++nb; for (int r = 0; r < m.refs; ++r) bits |= 1u << nb++; }
+                    p.push_back(static_cast<uint8_t>(bits & 0xFF)); // (at most 8 bits are ever used here)
+                }
+                for (const Out& m : out) { p.push_back(m.kind); Put16(p, m.id); p.insert(p.end(), m.data->begin(), m.data->end()); }
             }
             Send(p);
             sentAt_ = Now();
@@ -755,6 +766,7 @@ public:
         state = State::Idle;
     }
     void SendRaw(const std::vector<uint8_t>& m) { StreamMessage(m); } // research
+    void SetMpRaw(const std::vector<uint8_t>& raw) { mpRaw_ = raw; } // the character's content changed (items from a swap): what the next quest entry uploads
     // Leaves the world for good (the host left, or we are asked to): the leave message 0x04 + u32 0 makes the server move what we carried into the party and answer with
     // the party (0x83: the final save, taken by the owner of the file); the connection is closed 2 s later and `reconnect` is set: the lobby is entered again with a
     // fresh handshake (a JOIN 3 after the leave message gets no snapshot: checked live 2026-10-20).
@@ -798,6 +810,11 @@ private:
     uint32_t heroId_ = 0;
     std::vector<uint8_t> mpRaw_;
     std::vector<uint8_t> join_;
+    // Swap (trade) requests: the lobby's kind-15 record {18 bytes, ref requester (kind 1 + slot id), ref partner}: a player clicking another player's head creates one (checked live
+    // 2026-10-20: the server forwards it to the partner with the chat line "Player X is offering you a swap"); answering with the mirrored record (requester = us, partner = them) pairs them.
+    std::vector<uint8_t> pairOut_; int pairSends_ = 0, pairRemoveSends_ = 0;
+    std::vector<uint16_t> peerOffer_; uint16_t peerOfferId_ = 0;
+    uint16_t MySlot() const { uint16_t slot = 0; for (const auto& kv : players) if (kv.second.name == name_) slot = kv.first; return slot; } // the newest record with our name (an older ghost of the same name may exist)
     std::string worldQuest_;
     int pktDumped_ = 0;
     int hpLogged_ = -1, mpLogged_ = -1;
@@ -829,6 +846,13 @@ private:
     int targetHp_ = 0;
     std::map<uint32_t, double> ignored_; // targets left alone until then
     float followX_ = -99, followY_ = -99;
+    void AnswerSwap(uint16_t a, uint16_t b) { // the mirrored record (what clicking their head does): the same refs, swapped (the server pairs records whose refs are swapped)
+        pairOut_.assign(13, 0); Put32(pairOut_, 1);
+        const bool same = std::getenv("UM_BOT_SWAPSAME") != nullptr; // research: answer with the refs in the same order
+        const uint16_t first = same ? a : b, second = same ? b : a;
+        for (uint16_t slot : {first, second}) { pairOut_.push_back(1); Put16(pairOut_, slot); }
+        pairSends_ = 4;
+    }
     void SetJoin(uint32_t st, uint32_t hero) {
         join_.assign(name_.begin(), name_.end()); join_.push_back(0);
         join_.insert(join_.end(), unit_.begin(), unit_.end()); join_.push_back(0);
@@ -1016,10 +1040,12 @@ private:
         o += unreliable;
         if (o >= n) return;
         const int count = b[o++];
-        uint8_t flags = 0;
+        uint8_t flags = 0; int bitsLeft = 0;
+        // The bit buffer: a byte is read from the stream whenever a bit is needed and none is left; each message takes a flag bit (1 = a payload follows), and each object ref
+        // inside a payload one more bit (so the next message's flag bit is not simply bit i).
+        auto nextBit = [&]() { if (bitsLeft == 0) { flags = o < n ? b[o++] : 0; bitsLeft = 8; } const bool v = flags & 1; flags >>= 1; --bitsLeft; return v; };
         for (int i = 0; i < count && o < n; ++i) {
-            if (i % 8 == 0) flags = b[o++];
-            const bool payload = (flags >> (i % 8)) & 1;
+            const bool payload = nextBit();
             if (o + 3 > n) return;
             const int kind = b[o];
             uint16_t id;
@@ -1045,6 +1071,55 @@ private:
                     Log("our hero is now unit " + std::to_string(p.unitId) + " (respawned?)");
                     worldUnit = p.unitId; paceSent_ = -1; fightTarget_ = 0; attackedTarget_ = 0;
                     Respawned(); // as the game's client after a death: the entry again (JOIN 3, upload, ready, JOIN 0)
+                }
+                break;
+            }
+            case 15: { // a swap record: u32 count + that many member refs (kind 16 = an offered item), u32 +0x18, u8 +0x1c (confirmed), u32 +0x20 (the partner's nonce we saw), u32 +0x24 (this record's nonce), then two refs
+                if (o + 4 > n) return;
+                const uint32_t members = Get32(b + o);
+                if (members > 32 || o + 4 + 3 * static_cast<size_t>(members) + 13 + 6 > static_cast<size_t>(n)) { Log("swap record: " + std::to_string(members) + " member refs do not fit"); return; }
+                for (uint32_t k = 0; k < members + 2; ++k) nextBit(); // the refs' bits
+                std::vector<uint16_t> offered;
+                for (uint32_t k = 0; k < members; ++k) { uint16_t rid; std::memcpy(&rid, b + o + 4 + 3 * k + 1, 2); offered.push_back(rid); }
+                const size_t q = o + 4 + 3 * members;
+                const uint8_t peerConfirmed = b[q + 4]; const uint32_t peerSaw = Get32(b + q + 5), peerNonce = Get32(b + q + 9);
+                uint16_t who[2] = {0, 0};
+                for (int r = 0; r < 2; ++r) std::memcpy(&who[r], b + q + 13 + 3 * r + 1, 2);
+                o = q + 19;
+                swapRecords[id] = {who[0], who[1]};
+                const uint16_t me = MySlot();
+                if (me && (who[0] == me) != (who[1] == me)) { // a record naming us and one other player: their request / update
+                    const uint16_t other = who[0] == me ? who[1] : who[0];
+                    const bool fresh = pairOut_.empty();
+                    if (fresh) Log("swap offered by player slot " + std::to_string(other) + (acceptSwaps ? ": accepting" : ""));
+                    peerOffer_ = offered; peerOfferId_ = id;
+                    if (acceptSwaps) {
+                        if (fresh) AnswerSwap(who[0], who[1]);
+                        // the handshake: once the partner's record is seen, confirm it: byte +0x1c = 1 and +0x20 = the partner's nonce; the server pairs when both sides did so crosswise
+                        if (!pairOut_.empty() && (pairOut_[8] == 0 || Get32(pairOut_.data() + 9) != peerNonce)) {
+                            pairOut_[8] = 1; std::memcpy(pairOut_.data() + 9, &peerNonce, 4); pairSends_ = 4;
+                            Log("confirming the swap (partner nonce " + std::to_string(peerNonce) + ", it confirmed " + std::to_string(peerConfirmed) + ", saw " + std::to_string(peerSaw) + ", offering " + std::to_string(members) + " items)");
+                        }
+                    }
+                } else Log("swap record " + std::to_string(who[0]) + " / " + std::to_string(who[1]) + " (we are slot " + std::to_string(me) + ")");
+                break;
+            }
+            case 16: { // an offered item: u16 length + the item (u32 id -1, u32 kind, u16 a, u16 b, 4 bytes, the detail's tail): checked live 2026-10-20 with a stack of loot
+                const uint16_t len = u16();
+                if (o + static_cast<int>(len) > n) return;
+                swapItems[id] = std::vector<uint8_t>(b + o, b + o + len); o += len;
+                Log("swap item " + std::to_string(id) + ": " + std::to_string(len) + " bytes");
+                break;
+            }
+            case 17: { // the pair the server made of two swap records: ref, ref, u8 confirmed (+0x1c), u32, u32 (checked live 2026-10-20)
+                nextBit(); nextBit();
+                o += 6; // the two refs (kind 15 + slot)
+                const uint8_t confirmed = o < n ? b[o] : 0; o += 1; const uint32_t a = u32(), c = u32();
+                Log("swap pair " + std::to_string(id) + ": confirmed " + std::to_string(confirmed) + " (" + std::to_string(a) + ", " + std::to_string(c) + ")");
+                if (confirmed && !pairOut_.empty()) { // both sides agreed: the items offered to us are ours (the clients apply the swap themselves: the server only pairs them)
+                    for (uint16_t rid : peerOffer_) { const auto it = swapItems.find(rid); if (it != swapItems.end()) swapReceived.push_back(it->second); }
+                    Log("swap done: received " + std::to_string(swapReceived.size()) + " items");
+                    peerOffer_.clear(); pairOut_.clear(); pairSends_ = 0; pairRemoveSends_ = 4; // our record is withdrawn (removed on the server): the swap is over
                 }
                 break;
             }
