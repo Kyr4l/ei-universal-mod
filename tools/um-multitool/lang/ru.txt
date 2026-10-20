@@ -1424,6 +1424,8 @@ T("Mana it does not spend on attacks", "Мана, которую он не тр�
 T("Use potions", "Пить зелья")
 T("Save progress", "Сохранять прогресс")
 T("Shop before quests", "Магазин перед заданиями")
+T("Spend experience", "Тратить опыт")
+T("Before entering a quest it spends its free experience in the camp like a player: skill points and abilities for the role and the Damage <-> Defence slider, at the game's\nprices (a melee build raises Melee and the wielded weapon's ability, a ranged one Archery, a mage the magic skills). It needs the database (see below).", "Перед заданием тратит свободный опыт в лагере, как игрок: очки навыков и способности под роль и ползунок «Урон <-> Защита», по ценам игры\n(ближний бой развивает ближний бой и способность используемого оружия, стрелок - стрельбу из лука, маг - магические навыки). Нужна база данных (см. ниже).")
 T("Gear target", "Целевая экипировка")
 T("auto: built from the role", "авто: по роли")
 T("Before entering a quest it visits the camp's shop of the allod (Gipath, Ingos, Suslanger or Jigran: found from the quests of the session): sells loot and old gear, buys and wears\nwhat its role and the Damage <-> Defence slider call for, within its money and what it can carry. It needs the database (see below).", "Перед заданием заходит в лагерный магазин аллода (Гипат, Ингос, Суслангер или Джигран: определяется по заданиям сессии): продаёт добычу и старое снаряжение, покупает и надевает то, что нужно его роли и ползунку «Урон <-> Защита», в пределах денег и грузоподъёмности. Нужна база данных (см. ниже).")

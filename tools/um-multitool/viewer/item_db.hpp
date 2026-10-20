@@ -11,6 +11,7 @@
 #pragma once
 
 #include <array>
+#include <cmath>
 #include <cstdint>
 #include <cstring>
 #include <map>
@@ -215,6 +216,10 @@ struct Database {
     std::string sourceLabel;
     struct SpellProto { std::string name, code; };   // SpellPrototypes (spells.sdb block 1), by row: field 0 the name, field 1 the code name ("healing")
     std::vector<SpellProto> spells;
+    // Perks (perks.pdb block 2), in the game's order (3 levels per ability group). The fields: the camp's experience cost number (18), the bonus in percent / points (19), the
+    // skill needed (11 name, 12 index, 14 level), the attribute minima (15..17), the perk needed first (10), enabled (22), the exclusion group (23).
+    struct Perk { std::string name, key, prereq, skill; int skillIndex = INT32_MAX, skillLevel = 0, costNum = 0, bonus = 0, group = 0; float attrMin[3] = {0, 0, 0}; bool enabled = false; };
+    std::vector<Perk> perks;
 
     const std::vector<Item>& List(Category c) const { return items[static_cast<size_t>(c)]; }
 
@@ -331,6 +336,29 @@ inline void ParseSpellsSdb(const std::vector<uint8_t>& sdb, Database& out) {
     }
 }
 
+inline void ParsePerksPdb(const std::vector<uint8_t>& pdb, Database& out) {
+    const uint8_t* data = pdb.data();
+    size_t off = 0;
+    Span file;
+    if (!ReadTag(data, pdb.size(), off, file)) return;
+    for (const Span& block : Children(data, file)) {
+        if (block.tag != 2) continue;
+        for (const Span& record : Children(data, block)) {
+            Fields f;
+            f.data = data;
+            for (const Span& field : Children(data, record)) f.byId[field.tag] = field;
+            Database::Perk p;
+            p.name = f.String(0); p.key = f.String(1); p.prereq = f.String(10); p.skill = f.String(11);
+            p.skillIndex = f.Has(12) ? f.Int(12) : INT32_MAX; p.skillLevel = f.Int(14);
+            for (int k = 0; k < 3; ++k) { const uint8_t id = static_cast<uint8_t>(15 + k); const int32_t i = f.Int(id); const float x = f.Float(id); p.attrMin[k] = i != 0 && std::fabs(x) < 1e-20f ? static_cast<float>(i) : x; } // the game keeps floats
+            p.costNum = f.Int(18); p.bonus = f.Int(19); p.group = f.Int(23);
+            const auto en = f.byId.find(22);
+            p.enabled = en != f.byId.end() && en->second.length >= 1 && data[en->second.start] != 0;
+            out.perks.push_back(std::move(p));
+        }
+    }
+}
+
 // database.res and databaselmp.res are both RES archives; either works as long as it holds items.idb
 // (the vanilla game has it in both, Universal-Mod only in databaselmp.res).
 inline bool LoadDatabaseRes(const std::vector<uint8_t>& resBytes, const std::string& label, Database& out, std::string& err) {
@@ -345,6 +373,7 @@ inline bool LoadDatabaseRes(const std::vector<uint8_t>& resBytes, const std::str
     Database db;
     if (!ParseItemsIdb(*idb, db, err)) return false;
     if (const std::vector<uint8_t>* sdb = archive.Find("spells.sdb")) ParseSpellsSdb(*sdb, db);
+    if (const std::vector<uint8_t>* pdb = archive.Find("perks.pdb")) ParsePerksPdb(*pdb, db);
     db.sourceLabel = label;
     out = std::move(db);
     return true;

@@ -278,6 +278,25 @@ maintained by the interface (sub_5800C0, from the interface object at 0x0079B5C8
 - game.exe is client/server: CWorldClient / CPlayerClient / CUnitClientSpecific and CWorldServer /
   CUnitServer / CMapObjectServer; the host's server is authoritative (also in single player).
 
+## Experience: levels, skills and abilities (the camp's skills window)
+
+Everything is client side, on the party's unit parameters (the .mp `stats`): the camp changes the bytes and `+8` (experience spent) and the server takes them over at the next join.
+Verified live (2026-10-20) against the game's own cost functions, and against the saved characters (a character's spent experience = its skills + its abilities at their prices).
+
+- Experience total `stats+4`, spent `stats+8`; the free points of the window = (int)(total - spent) (`CCampSkillsWin::OnLButtonUp` 0x626920). The level is `round(log(total / 200) / log(1.61))`
+  (`CUnitServer::GetLevel` 0x556760; the constants are the float table at 0x7C5430: 200 at +0x58, 1.61 at +0x5C, 1.95 at +0x54, 5 at +0x50, 50 at +0x4C).
+- A skill (bytes at `stats+0x6CB`: melee, archery, backstab, elemental, sense, astral; `+0x6C8` the "science" row) rises by 1 for `trunc(50 * (1.61^((v+1)/5) - 1.61^(v/5)))`
+  (0x527FF0), at most to 100.
+- An ability ("perk", byte `stats+0x6D3+group`, level 0..3; 26 groups x 3 levels = the 78 rows of perks.pdb block 2): the next level costs
+  `base = trunc(50 * (1.61^(c/5) - 1.61^(c'/5)))` (c = the row's cost number, db field 18; c' = the previous level's, 0 for level 1), times `1.95^N` (N = all ability levels the character owns,
+  the sum of the 36 bytes `stats+0x6D3..0x6F6`), then rounded to one significant digit, or two when the leading digit is below 4 (below 100 it is rounded up) (`Perk_ComputeCost` 0x528050).
+- It can be learned (`UnitStats_CanLearnPerk` 0x5260A0) when the row is enabled (db field 22; in databaselmp.res the magic schools' rows are off), the attribute minima (fields 15..17) are met, the skill
+  it names (fields 11 / 12 / 14) is high enough, exactly the previous level is owned (the row names it in field 10), and no other group already owned has the same exclusion number (field 23).
+- Row fields: 18 cost number, 19 bonus (percent; points for the attribute groups 23..25), 20 / 21 unused here. Groups: 0..6 sword, axe, dagger, spear, bludgeon, bow, crossbow; 7..14 fire, lightning, acid,
+  illusion, divination, enchantments, healing, domination; 15 night vision, 16 health, 17 mana, 18 vitality, 19 spirit, 20 quickness, 21 lift, 22 backstab, 23 strength, 24 dexterity, 25 intelligence.
+- The cached values `UnitStats_Recompute` (0x524CD0) rebuilds from the base values and the abilities: `+0x10 / +0x18 / +0x20` = base `+0xC / +0x14 / +0x1C` + the attribute abilities' bonus;
+  `+0x54` (max encumbrance) = (1 + lift%) * strength * 12; `+0x2C` = dexterity * 0.2 + 10; `+0x30` (actions) = (1 + quickness%) * `+0x5C` * `+0x2C`. The game rebuilds them when the unit is created.
+
 ## Not known yet
 
 - The live diplomacy table, in case scripts change it during play.
