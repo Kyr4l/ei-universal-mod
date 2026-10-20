@@ -312,6 +312,13 @@ to the client. A real client then re-enters: JOIN 3, 08 upload, 09, JOIN 0.
 Ids: world unit ids of players start at 0x3B9ACA0D (1 000 000 013); monsters and NPCs have small ids
 (0x11A5, 0x12A0, 0x1320...). um.dll's UNITS ids are the game's internal ones, not these.
 
+### Death, respawn and looting the body (verified live 2026-10-20)
+
+- A dead hero stays a body unit (record flag 0x80000, negative health) for as long as the player stays connected. Leaving the world (0x04, or a reconnect) removes the body: a body of an earlier connection cannot be looted.
+- On death the party loses the belt potions, the items in the backpack and about 75 % of the money; worn weapons and armor and the **equipped spells (the member's list 4) stay** (checked: a character with an equipped Healing spell had it, with its container, after the death). A carried (unequipped) spell container is lost with the backpack.
+- Respawn on the same connection: the client sends JOIN 3 and the upload (08). The server runs `WorldServer::Respawn` (0x66F4C0: the penalty, a reserved copy of the hero with id + 1 000 000, the player out and in, a party 0x83 / 0x80) and answers with a world snapshot that holds only the reserved id (1 001 000 0xx). A second JOIN 3 + upload gets the real new hero: a snapshot with its id (1 000 000 0xx, the next free one), then 09 and JOIN 0 with it. The new hero stands at the arrival point; the host's portrait and minimap show it. (Entering with the stale hero id of the character file in the JOIN, or never answering the first snapshot's id, leaves the portrait without health bar.)
+- Looting a body: message 0x36 as above, with the hero and the body in the same connection: the hero walks to the body and `ExecuteInteraction` (kind 6, 0x18A95) calls `CWorldServer::LootUnit`, then the body is removed. Seen working in the bot (the log "our body is gone: looted"); a body that lies behind rocks or trees is not reachable and stays. The host loots a body by clicking it (a body can clip into the ground and be hard to see but stays clickable).
+
 ### Unit creation (0x40) and the net-state sections (decoded 2026-10-19, checked against um.dll's UNITS on a live host)
 
 Server -> client 0x40 (client handler 0x667EC0, `WorldClient::OnUnitCreated`), in a stream message after the world snapshot and whenever a unit comes into view:

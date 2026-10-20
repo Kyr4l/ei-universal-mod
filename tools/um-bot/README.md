@@ -4,12 +4,11 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.17.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.18.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
-progress (experience, items) into its `.mp` from the server's party messages. When its hero stays dead for 45 s it
-leaves the world and enters it again with a new hero. Not done: looting its own corpse, several bots in one window.
+progress (experience, items) into its `.mp` from the server's party messages. When its hero dies it asks the server for a new one on the same connection (6 s later; the new hero appears at the arrival point and the host shows it normally), then walks to its body and loots it when no known enemy is within 20 units of it (three tries per hero, up to 5 minutes); if the respawn fails it leaves the world and enters again after 45 s. Not done: several bots in one window.
 
 **Its character:** the bot needs a multiplayer character file (`.mp`, from the game's or the mod's `mp` folder).
 A fresh character is recommended. Its name and clan tag are the bot's ("Kevina | BOT") and both can be changed in the window.

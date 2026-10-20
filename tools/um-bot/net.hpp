@@ -148,7 +148,7 @@ public:
         for (size_t o = 0; o + 9 <= m.size(); ++o) {
             if (m[o] != 0x18) continue;
             uint32_t id; std::memcpy(&id, &m[o + 1], 4);
-            if (id < 0x3B9ACA00u || id > 0x3B9ACAFFu) continue;
+            if (!IsPlayerId(id)) continue;
             float v; std::memcpy(&v, &m[o + 5], 4);
             const uint8_t nx = o + 9 < m.size() ? m[o + 9] : 0x41;
             if (!(v >= 0 && v < 1e7f) || !(o + 9 >= m.size() || nx == 0x18 || nx == 0x41 || nx == 0x42 || nx == 0x43 || nx == 0x40 || nx == 0x60 || nx == 0x81 || nx == 0x0B)) continue;
@@ -177,7 +177,7 @@ public:
             }
             if (m[o] != 0x41 || o + 7 > m.size()) continue;
             uint32_t id; std::memcpy(&id, &m[o + 1], 4);
-            if (!((id >= 0x100 && id < 0x01000000) || (id >= 0x3B9ACA00u && id <= 0x3B9ACAFFu))) continue;
+            if (!((id >= 0x100 && id < 0x01000000) || IsPlayerId(id))) continue;
             const size_t e = UnitUpdate(m, o);
             if (e) o = e - 1;
         }
@@ -214,7 +214,7 @@ public:
         auto cstr = [&](std::string& s) { s.clear(); while (p < m.size() && m[p]) { if (m[p] < 0x20 || s.size() > 200) return false; s += static_cast<char>(m[p++]); } if (p >= m.size()) return false; ++p; return true; };
         UnitInfo u; uint32_t id = 0, tail = 0; std::string skip, part;
         if (!u32(id) || !u32(u.kind) || !u32(u.proto) || !u32(u.flags)) return 0;
-        const bool player = id >= 0x3B9ACA00u && id <= 0x3B9ACAFFu;
+        const bool player = IsPlayerId(id);
         if (u.kind < 0x32 || u.kind > 0x34 || u.proto > 4096 || (!player && (id < 2 || id >= 0x01000000))) return 0;
         if (p + 12 > m.size()) return 0;
         for (float& f : u.morph) { std::memcpy(&f, &m[p], 4); p += 4; if (!(f >= -8 && f <= 8)) return 0; }
@@ -233,7 +233,7 @@ public:
             // without it: the next record's header marks the end; the tail is section 11 (hostility mask, side) when it is the last section; the position sits right
             // after the mask (section 0 unchanged, section 2's first bits, then f32 x, f32 y).
             size_t q = p + 20; bool found = false;
-            auto validId = [&](size_t at) { if (at + 5 > m.size()) return false; uint32_t v; std::memcpy(&v, &m[at + 1], 4); return (v >= 2 && v < 0x01000000u) || (v >= 0x3B9ACA00u && v <= 0x3B9ACAFFu); };
+            auto validId = [&](size_t at) { if (at + 5 > m.size()) return false; uint32_t v; std::memcpy(&v, &m[at + 1], 4); return (v >= 2 && v < 0x01000000u) || IsPlayerId(v); };
             for (; q <= m.size() && q < p + 400; ++q) { // the first place after which another sub-message starts and before which section 11 sits as the record's tail
                 if (m[q - 6] == 0 || (m[q - 6] & 0x0F) != 0x08 || m[q - 1] > 31) continue;
                 const bool atEnd = q == m.size();
@@ -992,7 +992,11 @@ private:
     void Loot(uint32_t body) {
         if (!worldUnit) return;
         std::vector<uint8_t> m{0x36};
-        Put32(m, 1); Put32(m, worldUnit); Put32(m, 0); Put32(m, 0x18A95); Put32(m, 0xFFFFFFFFu); Put32(m, body);
+        const int fmt = std::getenv("UM_BOT_LOOTFMT") ? std::atoi(std::getenv("UM_BOT_LOOTFMT")) : 0; // research: the order of the four fields after the unit list
+        Put32(m, 1); Put32(m, worldUnit);
+        if (fmt == 1) { Put32(m, 0); Put32(m, body); Put32(m, 0xFFFFFFFFu); Put32(m, 0x18A95); }
+        else if (fmt == 2) { Put32(m, 0x18A95); Put32(m, body); Put32(m, 0xFFFFFFFFu); Put32(m, 0); }
+        else { Put32(m, 0); Put32(m, 0x18A95); Put32(m, 0xFFFFFFFFu); Put32(m, body); }
         StreamMessage(m);
     }
     // After the next entry: when the body is within 70 units of the host the bot goes to loot it, up to three tries 25 s apart.
@@ -1013,14 +1017,15 @@ private:
     }
     // Our hero died: the server sent no respawn in 140 s (live, 2026-10-20: the player's record keeps its unit, nothing else changes); entering the world anew (a fresh
     // connection) gives a new, living hero (checked: every run after a death started with full health). After `deadGrace` seconds dead: leave and reconnect.
-    double deadGrace = 45, deadAt_ = 0;
+    double deadGrace = 45, deadAt_ = 0; bool respawnTried_ = false; uint32_t lastWorldUnit_ = 0; int respawnPhase_ = 0;
     void WatchDeath() {
         if (phase_ != Phase::InWorld || !worldUnit || leavingAt_ > 0) { deadAt_ = 0; return; }
         if (partyOutAt_ > 0 && !dead_.count(worldUnit)) { partyOutAt_ = 0; Log("the server took our hero out of the world (its final party came): counted as dead"); MarkDead(worldUnit); }
         const auto hp = unitHp_.find(worldUnit);
         const bool dead = dead_.count(worldUnit) || (hp != unitHp_.end() && hp->second <= 0);
         if (!dead) { deadAt_ = 0; return; }
-        if (deadAt_ == 0) { deadAt_ = Now(); Log("our hero is dead"); }
+        if (deadAt_ == 0) { deadAt_ = Now(); respawnTried_ = false; partyOutAt_ = 0; Log("our hero is dead"); }
+        else if (!respawnTried_ && Now() - deadAt_ > 6 && !std::getenv("UM_BOT_NORESPAWN")) { respawnTried_ = true; RequestRespawn(); }
         else if (Now() - deadAt_ > deadGrace) { deadAt_ = 0; Log("still dead after " + std::to_string(static_cast<int>(deadGrace)) + " s: entering the world anew"); LeaveWorld(); }
     }
     // Entering the quest took too long (a ghost of an earlier session of the same name in the host's world: the snapshot never came): log out and connect again.
@@ -1040,7 +1045,16 @@ private:
     }
     void Respawned() {
         SetJoin(3, heroId_);
-        respawnAt_ = Now();
+        respawnAt_ = Now(); respawnStep_ = 0;
+    }
+    // A dead hero in the session: enter again on the same connection, as the game's client does (JOIN 3, the upload, then the snapshot with the new hero, 09, JOIN 0). The server answers the
+    // upload with its respawn (WorldServer::Respawn 0x66F4C0: a new hero, id + 1000000, the body stays where it fell) and a fresh world snapshot (found live 2026-10-20).
+    void RequestRespawn() {
+        Log("asking for a new hero: entering again on this connection (JOIN 3, the upload)");
+        const uint32_t old = worldUnit; lastWorldUnit_ = old; respawnPhase_ = 1;
+        worldUnit = 0; phase_ = Phase::Loading; phaseAt_ = Now(); worldSince_ = Now();
+        const int mode = std::getenv("UM_BOT_RESPJOIN") ? std::atoi(std::getenv("UM_BOT_RESPJOIN")) : 1; // research: which hero id the JOIN carries: 0 = none, 1 = the dead hero's unit
+        SetJoin(3, mode == 1 ? old : heroId_);
     }
     void RespawnSteps() {
         if (respawnAt_ < 0) return;
@@ -1067,10 +1081,15 @@ private:
                     uint32_t v; std::memcpy(&v, snap.data() + k, 4);
                     bool other = false;
                     for (const auto& kv : players) if (kv.second.unitId == v) other = true;
-                    if (v >= 0x3B9ACA00u && v <= 0x3B9ACAFFu && !other) mine = std::max(mine, v);
+                    if (IsPlayerId(v) && !other && v != lastWorldUnit_) { const bool baseNew = v < 1001000000u, baseMine = mine && mine < 1001000000u; if (!mine || (baseNew && !baseMine) || (baseNew == baseMine && v > mine)) mine = v; } // the new hero has an id of the base group (1 000 000 0xx); the 1 001 000 0xx one in the snapshot is the respawn's reserved copy
                 }
-                if (mine) {
+                if (mine && respawnPhase_ == 1 && mine >= 1001000000u) { // the server's first answer to a death: only the respawn's reserved copy (id + 1 000 000): enter once more, as the game's client does, for the real new hero
+                    respawnPhase_ = 2; phase_ = Phase::Loading; phaseAt_ = Now(); SetJoin(3, lastWorldUnit_);
+                    Log("the server's respawn answered (reserved unit " + std::to_string(mine) + "): entering once more");
+                } else if (mine) {
+                    respawnPhase_ = 0; partyOutAt_ = 0; corpse_.tries = 0; corpse_.at = 0; // a new hero: the body gets its tries again
                     worldUnit = mine; phase_ = Phase::InWorld;
+                    dead_.erase(mine); unitHp_.erase(mine); // a respawned hero is created as a copy of the body: its first record may still carry the body flag
                     StreamMessage({0x09});
                     SetJoin(0, mine); // the world unit: the host links the party portrait to it (the .mp's id dims it)
                     Log("in the quest world: our hero is unit " + std::to_string(mine)); worldSince_ = Now();
@@ -1084,6 +1103,8 @@ private:
             rxParsed_ = 0;
         }
     }
+    // A player's hero id: 1 000 000 013 and up; a respawned hero gets the old id + 1 000 000 (WorldServer::Respawn), so a range, not 0x3B9ACAxx only.
+    static bool IsPlayerId(uint32_t v) { return v >= 1000000000u && v < 1000000000u + 0x00800000u && (v % 1000000u) < 4096u; } // 1e9 + 13 + k * 1e6 (floats and other values inside the range are rare)
     static void Put16(std::vector<uint8_t>& p, uint16_t v) { p.push_back(static_cast<uint8_t>(v)); p.push_back(static_cast<uint8_t>(v >> 8)); }
     static void Put32(std::vector<uint8_t>& p, uint32_t v) { for (int i = 0; i < 4; ++i) p.push_back(static_cast<uint8_t>(v >> (8 * i))); }
     static uint32_t Get32(const uint8_t* b) { uint32_t v; std::memcpy(&v, b, 4); return v; }
@@ -1148,7 +1169,7 @@ private:
             case 1: {
                 Player p; p.name = str(); p.unit = str(); p.state = u32(); p.flag = o < n ? b[o] : 0; o += 1; p.unitId = u32(); p.tail = u32(); players[id] = p;
                 // Our hero again after a death (respawned): a new unit id in our record.
-                if (p.name == name_ && worldUnit && p.state == 0 && p.unitId >= 0x3B9ACA00u && p.unitId <= 0x3B9ACAFFu && p.unitId != worldUnit) {
+                if (p.name == name_ && worldUnit && p.state == 0 && IsPlayerId(p.unitId) && p.unitId != worldUnit) {
                     Log("our hero is now unit " + std::to_string(p.unitId) + " (respawned?)");
                     worldUnit = p.unitId; paceSent_ = -1; fightTarget_ = 0; attackedTarget_ = 0;
                     Respawned(); // as the game's client after a death: the entry again (JOIN 3, upload, ready, JOIN 0)
