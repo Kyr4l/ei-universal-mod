@@ -41,6 +41,8 @@ um.dll finds them by scanning the heap for 0x0073EA8C (on its own thread, every 
 | +0x280, +0x288 | its current path: an array of waypoints {x × 2, y × 2, direction x, direction y, ?, cell x, cell y}, and their count |
 | +0x238 | a player's character: its name (a game string, e.g. "HALAL MAN \| TEST"); empty for the map's units |
 | +0x250 | side: the .mob's "player" number (u32) |
+| +0x254, +0x255 | the animation (read from game.exe 2026-10-20, not yet seen live): the `.adb` index (record +16, see file-formats/adb-format.md) of the clip playing and of the one queued after it, signed bytes: -1 none, -2 the default idle set. The server's order code writes them (queues `{clip, duration}` per action) and the client plays them (`CUnitClientSpecific::SetAnimation` 0x5352B0: CAnimationSystem2::SetAnimation / QueueAnimation) |
+| +0x258 | the world time the clip started (the client seeks to now - this) |
 | +0x2E4, +0x2E8 | the walking direction, as a unit vector |
 
 Facing: θ = 2·atan2(z, w), and the unit faces (sin θ, −cos θ), because figures face their local −Y.
