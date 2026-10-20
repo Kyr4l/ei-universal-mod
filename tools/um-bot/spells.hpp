@@ -168,6 +168,28 @@ inline int SkillByteNeeded(const items::Database& db, const mp::Member& m, int r
     return -1;
 }
 
+// A spell the bot casts at an enemy: an instant elemental damage spell aimed at a unit.
+inline bool IsUnitAttack(const items::Database& db, int row) {
+    if (row < 0 || static_cast<size_t>(row) >= db.spells.size()) return false;
+    const items::Database::SpellProto& P = db.spells[static_cast<size_t>(row)];
+    return P.ni[4] == 0 && P.ni[11] == 0x75 && P.ni[19] <= 2 && P.ni[13] <= 1 && P.n[10] >= 4.0f;
+}
+
+// The attack spell a mage (or hybrid) makes: of the single-target elemental spells the shop offers (group 0, target kind 'u' = a unit; the area spells 't' are cast on a point, which the bot does not do), the one with the best damage for its mana that the
+// character can use once its skill is raised to `maxSkill`, at a price within `budget`. -1: none.
+inline int PickAttack(const items::Database& db, const mp::Member& m, const std::vector<StockSpell>& stock, long budget) {
+    int best = -1; float bestScore = 0;
+    for (const StockSpell& st : stock) {
+        const items::Database::SpellProto& P = db.spells[static_cast<size_t>(st.row)];
+        if (st.count < 1 || !IsUnitAttack(db, st.row) || P.n[3] > static_cast<float>(budget)) continue;
+        const int byte = SkillByteNeeded(db, m, st.row);
+        if (byte < 0 || byte > 60) continue;
+        const float score = P.n[10] * (1.0f + P.n[9] / 20.0f) * (1.0f + 0.05f * static_cast<float>(P.ni[6])) / std::max(1.0f, P.n[5]) - 0.002f * static_cast<float>(byte);
+        if (score > bestScore) { bestScore = score; best = st.row; }
+    }
+    return best;
+}
+
 struct Buy { int row = 0; std::vector<int> runes; float cost = 0; };
 struct Plan { std::vector<Buy> buys; std::vector<uint32_t> equips; long money = 0; std::vector<std::string> notes; }; // equips: spell containers carried but not worn
 
@@ -184,8 +206,9 @@ inline std::vector<std::pair<uint32_t, int>> SpareContainers(const mp::Character
     return out;
 }
 
-// Which spells the bot makes: the Healing spell when it has none and can use it (its companion job), from the blueprint the shop offers, within the money (the blueprint's price).
-inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const std::vector<StockSpell>& stock) {
+// Which spells the bot makes: the Healing spell when it has none and can use it (its companion job), worn from its items or from the blueprint the shop offers; then, for a mage or hybrid,
+// an attack spell (PickAttack), within the money (the blueprint's price).
+inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const std::vector<StockSpell>& stock, bool wantAttack = false) {
     Plan plan;
     if (ch.members.empty()) return plan;
     const mp::Member& me = ch.members[0];
@@ -193,26 +216,41 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const s
     const int heal = RowOfCode(db, "healing");
     const std::vector<int> owned = OwnedRows(ch);
     plan.money = money;
-    if (heal < 0 || std::find(owned.begin(), owned.end(), heal) != owned.end()) return plan;
-    for (const auto& spare : SpareContainers(ch)) { // one it carries: wear it (as a player drags it into the spell slots) when it is usable
-        if (spare.second != heal) continue;
-        for (const mp::Object& c : ch.lists[0]) {
-            if (c.id != spare.first) continue;
-            uint32_t spellId; std::memcpy(&spellId, c.detail.data() + 40, 4);
-            for (const mp::Object& sp : ch.lists[1]) {
-                if (sp.id != spellId || sp.detail.size() < 66) continue;
-                float mana; uint32_t need; std::memcpy(&mana, sp.detail.data() + 34, 4); std::memcpy(&need, sp.detail.data() + 62, 4);
-                if (CanCast(db, me, mana, static_cast<int>(need), db.spells[static_cast<size_t>(heal)].ni[19])) { plan.equips.push_back(spare.first); return plan; }
+    auto has = [&](int row) { return std::find(owned.begin(), owned.end(), row) != owned.end(); };
+    auto spare = [&](int row) -> uint32_t { // a carried container with a usable spell of `row`
+        for (const auto& sp : SpareContainers(ch)) {
+            if (sp.second != row) continue;
+            for (const mp::Object& c : ch.lists[0]) {
+                if (c.id != sp.first) continue;
+                uint32_t spellId; std::memcpy(&spellId, c.detail.data() + 40, 4);
+                for (const mp::Object& o : ch.lists[1]) {
+                    if (o.id != spellId || o.detail.size() < 66) continue;
+                    float mana; uint32_t need; std::memcpy(&mana, o.detail.data() + 34, 4); std::memcpy(&need, o.detail.data() + 62, 4);
+                    if (CanCast(db, me, mana, static_cast<int>(need), db.spells[static_cast<size_t>(row)].ni[19])) return sp.first;
+                }
             }
         }
+        return 0;
+    };
+    auto make = [&](int row, const char* what, long budget) {
+        if (const uint32_t id = spare(row)) { plan.equips.push_back(id); return; }
+        const auto it = std::find_if(stock.begin(), stock.end(), [&](const StockSpell& s) { return s.row == row && s.count > 0; });
+        if (it == stock.end()) { plan.notes.push_back(std::string("the shop has no ") + what + " blueprint"); return; }
+        const Built b = Build(db, row, {}, 1, 2);
+        if (!CanCast(db, me, b.mana, b.required, b.school)) { plan.notes.push_back(std::string(what) + ": not usable yet (magic skill " + std::to_string(static_cast<int>(MagicSkill(db, me, b.school))) + " of " + std::to_string(b.required) + ", mana " + std::to_string(static_cast<int>(MaxMana(db, me))) + ")"); return; }
+        if (static_cast<long>(b.price) > budget) { plan.notes.push_back(std::string(what) + ": " + std::to_string(static_cast<long>(b.price)) + " needed, " + std::to_string(budget) + " to spend"); return; }
+        plan.buys.push_back({row, {}, b.price});
+        plan.money -= static_cast<long>(b.price);
+    };
+    if (heal >= 0 && !has(heal)) make(heal, "Healing", plan.money);
+    if (wantAttack) {
+        bool haveAttack = false;
+        for (int r : owned) if (IsUnitAttack(db, r)) haveAttack = true;
+        if (!haveAttack) {
+            const int row = PickAttack(db, me, stock, plan.money / 3 + (money - plan.money) * 0); // at most a third of what is left
+            if (row >= 0) make(row, db.spells[static_cast<size_t>(row)].name.c_str(), plan.money / 3);
+        }
     }
-    const auto it = std::find_if(stock.begin(), stock.end(), [&](const StockSpell& s) { return s.row == heal && s.count > 0; });
-    if (it == stock.end()) { plan.notes.push_back("the shop has no Healing blueprint"); return plan; }
-    const Built b = Build(db, heal, {}, 1, 2);
-    if (!CanCast(db, me, b.mana, b.required, b.school)) { plan.notes.push_back("Healing: not usable yet (magic skill " + std::to_string(static_cast<int>(MagicSkill(db, me, b.school))) + " of " + std::to_string(b.required) + ", mana " + std::to_string(static_cast<int>(MaxMana(db, me))) + ")"); return plan; }
-    if (money < static_cast<long>(b.price)) { plan.notes.push_back("Healing: " + std::to_string(static_cast<long>(b.price)) + " needed, " + std::to_string(money) + " in the purse"); return plan; }
-    plan.buys.push_back({heal, {}, b.price});
-    plan.money = money - static_cast<long>(b.price);
     return plan;
 }
 

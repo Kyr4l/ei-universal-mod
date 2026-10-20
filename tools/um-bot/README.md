@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.13.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.14.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
@@ -69,6 +69,9 @@ The settings are saved in `um-bot.cfg` next to the program.
   Health, Strength, Quickness, Lift and the like, chosen by worth per experience point, with the Damage <-> Defence slider weighing health. "Spend experience" turns it off.
 - **Spells**: if it has no usable Healing spell, it wears one it carries, or buys the shop's Healing blueprint and makes the spell the way the camp's constructor does (spell object and container item, exactly
   the game's values, checked against saved characters and a live cast). It only takes a spell it can use: the magic skill, and the mana (cost x 25 / Intelligence against its maximum) - "Spend experience" raises the skill the spell needs first.
+- **Mage / Hybrid**: they also make an attack spell (an instant elemental spell aimed at a unit: Fire Arrow, Lightning Arc, Acid Ray; at most a third of the money, and only one the character can use) and cast it at the
+  enemy it has walked up to, when it has the mana for it besides the share kept for heals; if three casts in a row cost no mana it goes back to its weapon. Casting at enemies is checked only partly (the orders are
+  accepted and cost mana; the damage was not measured).
 - **Swaps** ("Accept swaps"): a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
   sells) and gives nothing.
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent

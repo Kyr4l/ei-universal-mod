@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.13";
+static const char* const kVersion = "0.1.14";
 
 
 struct App {
@@ -126,6 +126,34 @@ static int FindHealSpellSlot(const mp::Character& ch, const items::Database& db)
     return -1;
 }
 
+// The index in the hero's spell items of the first attack spell (a SpellPrototypes row of group 0), with its mana cost for this hero (cost x 25 / Intelligence); -1: none.
+static int FindAttackSpellSlot(const mp::Character& ch, const items::Database& db, int* manaOut) {
+    if (ch.members.empty()) return -1;
+    const auto& slots = ch.members[0].lists[3];
+    for (size_t i = 0; i < slots.size(); ++i) {
+        const mp::Object* c = FindObject(ch, slots[i]);
+        if (!c || c->kind != 0x3008 || c->detail.size() < 44) continue;
+        uint32_t spellId; std::memcpy(&spellId, &c->detail[40], 4);
+        const mp::Object* sp = FindObject(ch, spellId);
+        if (!sp || sp->kind != 0x3002 || !spells::IsUnitAttack(db, static_cast<int>(sp->b)) || sp->detail.size() < 66) continue;
+        float mana; uint32_t need; std::memcpy(&mana, &sp->detail[34], 4); std::memcpy(&need, &sp->detail[62], 4);
+        const mp::Member& me = ch.members[0];
+        if (!spells::CanCast(db, me, mana, static_cast<int>(need), db.spells[sp->b].ni[19])) continue;
+        const float intel = mp::GetF(me.stats, 0x20);
+        if (manaOut) *manaOut = static_cast<int>(mana * 25.0f / (intel > 0 ? intel : 25.0f)) + 1;
+        return static_cast<int>(i);
+    }
+    return -1;
+}
+
+// The spells the client casts: the Healing spell (all roles) and, for a mage or hybrid, an attack spell it can use.
+static void SetSpellSlots(net::Client& client, const mp::Character& ch, const items::Database& db, const bot::Config& cfg) {
+    client.healSpellSlot = FindHealSpellSlot(ch, db);
+    client.attackSpellSlot = -1; client.attackSpellMana = 0;
+    if (cfg.role == bot::Role::Mage || cfg.role == bot::Role::Hybrid) client.attackSpellSlot = FindAttackSpellSlot(ch, db, &client.attackSpellMana);
+    client.manaReservePct = cfg.manaReserve;
+}
+
 // The character .mp's decompressed content: what the bot uploads when entering a quest.
 static std::vector<uint8_t> MpRaw(const std::string& path) {
     std::ifstream in(path, std::ios::binary);
@@ -172,8 +200,8 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
 }
 
 // The spell constructor: the Healing spell for the bot's job as a companion (blueprint from the shop, made at once like the camp's constructor does with no runes).
-static std::string DoSpells(mp::Character& ch, const items::Database& db, net::Client& client, const ShopCtx& ctx, const std::string& path) {
-    const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock);
+static std::string DoSpells(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
+    const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock, cfg.role == bot::Role::Mage || cfg.role == bot::Role::Hybrid);
     std::string text = spells::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += (text.empty() ? "" : "\n") + n;
     if (plan.buys.empty() && plan.equips.empty()) return text;
@@ -188,12 +216,26 @@ static std::string DoGrowth(mp::Character& ch, const items::Database& db, const 
     if (ch.members.empty() || db.perks.empty()) return "";
     growth::Prefs pf;
     pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness;
-    const int heal = spells::RowOfCode(db, "healing"); // the skill the Healing spell needs, when the shop offers it and the bot has none
-    if (heal >= 0 && cfg.shop && std::any_of(ctx.spellStock.begin(), ctx.spellStock.end(), [&](const spells::StockSpell& s) { return s.row == heal; })) {
+    if (cfg.shop && !ch.members.empty()) { // the skills the spells it is about to make need (Healing; for a mage or hybrid an attack spell too), when the shop offers them
+        const int heal = spells::RowOfCode(db, "healing");
         const std::vector<int> owned = spells::OwnedRows(ch);
-        const int byte = std::find(owned.begin(), owned.end(), heal) == owned.end() ? spells::SkillByteNeeded(db, ch.members[0], heal) : -1;
-        const int school = db.spells[static_cast<size_t>(heal)].ni[19];
-        if (byte > 0) pf.minSkill[school <= 2 ? growth::kElemental : school <= 4 ? growth::kSense : growth::kAstral] = byte;
+        long money = static_cast<long>(mp::Money(ch));
+        auto want = [&](int row) {
+            const int byte = spells::SkillByteNeeded(db, ch.members[0], row);
+            const int school = db.spells[static_cast<size_t>(row)].ni[19];
+            const int skill = school <= 2 ? growth::kElemental : school <= 4 ? growth::kSense : growth::kAstral;
+            if (byte > 0) pf.minSkill[skill] = std::max(pf.minSkill[skill], byte);
+        };
+        if (heal >= 0 && std::find(owned.begin(), owned.end(), heal) == owned.end() && std::any_of(ctx.spellStock.begin(), ctx.spellStock.end(), [&](const spells::StockSpell& s) { return s.row == heal; })) {
+            want(heal);
+            money -= static_cast<long>(spells::Build(db, heal, {}, 1, 2).price);
+        }
+        if (pf.role >= 2) {
+            const int row = spells::PickAttack(db, ch.members[0], ctx.spellStock, money / 3);
+            bool haveAttack = false;
+            for (int r : owned) if (spells::IsUnitAttack(db, r)) haveAttack = true;
+            if (row >= 0 && !haveAttack) want(row);
+        }
     }
     const growth::Plan plan = growth::MakePlan(db, ch, pf);
     if (plan.buys.empty()) return "";
@@ -211,8 +253,8 @@ static std::string DoCamp(mp::Character& ch, const items::Database& db, const bo
     const bool haveShop = MakeShopCtx(ch, db, cfg, client, seed, ctx);
     auto add = [&](const std::string& t) { if (!t.empty()) text += (text.empty() ? "" : "\n") + t; };
     if (cfg.grow) add(DoGrowth(ch, db, cfg, client, ctx, path));
-    if (cfg.shop && haveShop) { add(DoSpells(ch, db, client, ctx, path)); add(DoShopping(ch, db, cfg, client, ctx, path)); }
-    client.healSpellSlot = FindHealSpellSlot(ch, db); // a spell made now can be cast in the quest
+    if (cfg.shop && haveShop) { add(DoSpells(ch, db, cfg, client, ctx, path)); add(DoShopping(ch, db, cfg, client, ctx, path)); }
+    SetSpellSlots(client, ch, db, cfg); // a spell made now can be cast in the quest
     return text;
 }
 
@@ -294,7 +336,7 @@ static void EnsureDb(App& app) { // (re)load the database when the choice or the
 }
 static void SetHealing(App& app) { // the healing potion's belt slot (from the database), and the heal-the-host setting
     EnsureDb(app);
-    if (app.dbLoaded) { const int slot = FindHealPotionSlot(app.character, app.db); if (slot >= 0) app.client.potionSlot = slot; app.client.healSpellSlot = FindHealSpellSlot(app.character, app.db); }
+    if (app.dbLoaded) { const int slot = FindHealPotionSlot(app.character, app.db); if (slot >= 0) app.client.potionSlot = slot; SetSpellSlots(app.client, app.character, app.db, app.cfg); }
     app.client.healHostBelow = app.cfg.healPlayerBelow;
 }
 static void StartConnection(App& app) {
@@ -774,7 +816,7 @@ int main(int argc, char** argv) {
             client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
             items::Database shopDb; const std::string dbf = LoadDb(cfg, shopDb); bool shopped = false; // the shop visit (before the quest) needs the database
             { items::Database& db = shopDb; // the healing potion's slot, and the Healing spell's
-              if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; client.healSpellSlot = FindHealSpellSlot(ch, db); }
+              if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; SetSpellSlots(client, ch, db, cfg); }
               client.healHostBelow = cfg.healPlayerBelow;
               std::printf("database: %s, healing potion slot %d, Healing spell slot %d\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot); }
             if (std::getenv("UM_BOT_NOSPELL")) client.healSpellSlot = -1; // research: potion only
@@ -817,7 +859,9 @@ int main(int argc, char** argv) {
                 static int attackStep = 0; // research: UM_BOT_ATTACK=<d> (1 = 6): 12 s in, walk to d units from the nearest hostile monster; 8 s later attack it, then every 4 s again, d - 1 closer each time
                 static uint32_t target = 0; static float approach = 6;
                 if (const char* ev = std::getenv("UM_BOT_ATTACK"); ev && client.worldUnit) {
-                    const auto in = std::chrono::steady_clock::now() - start;
+                    static auto worldAt = std::chrono::steady_clock::now(); static bool worldSeen = false;
+                    if (!worldSeen) { worldAt = std::chrono::steady_clock::now(); worldSeen = true; }
+                    const auto in = std::chrono::steady_clock::now() - worldAt; // the times count from the hero's arrival in the world
                     float mx = 0, my = 0, tx = 0, ty = 0, d = 0;
                     client.Where(client.worldUnit, mx, my);
                     if (attackStep == 0 && in > std::chrono::seconds(12)) {
@@ -827,7 +871,7 @@ int main(int argc, char** argv) {
                         std::printf("target %X at %.1f (me at %.1f %.1f): walking to %.1f of it\n", target, d, mx, my, approach); std::fflush(stdout);
                         attackStep = 1;
                     } else if (attackStep >= 1 && attackStep <= 6 && in > std::chrono::seconds(22 + 4 * (attackStep - 1))) {
-                        if (target) client.Attack(target);
+                        if (target) { if (std::getenv("UM_BOT_ATTACKSPELL") && client.attackSpellSlot >= 0) client.CastAttackSpell(target); else client.Attack(target); } // UM_BOT_ATTACKSPELL=1: the attack spell instead of a weapon attack
                         client.Where(target, tx, ty);
                         const float dd = std::hypot(tx - mx, ty - my);
                         std::printf("attack %X try %d (me at %.1f %.1f, it at %.1f %.1f, %.1f apart)\n", target, attackStep, mx, my, tx, ty, dd); std::fflush(stdout);
@@ -841,7 +885,7 @@ int main(int argc, char** argv) {
                     int slot = 0, spell = 0; double at = 0; char who[16] = "self";
                     if (const char* u = std::getenv("UM_BOT_USE"); u && std::sscanf(u, "%d,%lf", &slot, &at) == 2 && t > at) { client.UseQuickSlot(slot, client.worldUnit); std::printf("use quick slot %d on ourselves\n", slot); std::fflush(stdout); used = true; }
                     if (const char* c = std::getenv("UM_BOT_CASTON"); c && std::sscanf(c, "%d,%lf,%15s", &spell, &at, who) >= 2 && t > at) {
-                        const uint32_t tg = std::string(who) == "host" ? client.HostUnit() : client.worldUnit;
+                        const uint32_t tg = std::string(who) == "host" ? client.HostUnit() : (who[0] >= '0' && who[0] <= '9') ? static_cast<uint32_t>(std::atoi(who)) : client.worldUnit; // a number: that unit
                         static int casts = 0; static double lastCast = -1e9; // UM_BOT_CASTN=<n> (default 1) orders, 2 s apart: the first one only switches the hero's stance
                         const int total = std::getenv("UM_BOT_CASTN") ? std::atoi(std::getenv("UM_BOT_CASTN")) : 1;
                         if (t - lastCast >= 2) { client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u) #%d\n", spell, who, tg, ++casts); std::fflush(stdout); lastCast = t; }
