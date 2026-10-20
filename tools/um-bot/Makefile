@@ -52,4 +52,10 @@ $(TARGET).exe: $(SRCS) $(HDRS) $(WIN_RES)
 clean:
 	rm -f $(TARGET) $(TARGET).exe $(WIN_RES)
 
-.PHONY: all linux win clean
+# make test: offline checks of the rules against what was verified in the game (needs Universal-Mod/res and Universal-Mod/mp)
+test: tests/um_bot_tests
+	cd $(CURDIR) && ./tests/um_bot_tests ../..
+tests/um_bot_tests: tests/um_bot_tests.cpp $(HDRS)
+	$(CXX) -std=c++17 -O1 -Wall -Wextra -I. -I../um-multitool -o $@ $<
+
+.PHONY: all linux win clean test

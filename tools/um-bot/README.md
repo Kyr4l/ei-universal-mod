@@ -91,6 +91,10 @@ The settings are saved in `um-bot.cfg` next to the program.
 3. **Probe client**: joins, stays connected, moves.
 4. **The bot**: the decision loop over the settings above, and its state shown in the Status panel.
 
+## Tests
+
+`make test` (in `tools/um-bot`) checks offline the rules that were verified in the running game: the skill and ability prices, the spell constructor against the saved characters in `Universal-Mod/mp`, the compressed upload, the shop stock, the mana formula and the settings. 44 checks.
+
 ## Building
 
 ```
