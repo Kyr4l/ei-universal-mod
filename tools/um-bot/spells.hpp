@@ -207,13 +207,12 @@ inline Equipped EquippedSpell(const mp::Character& ch, int row) {
     return e;
 }
 
-// The strongest version of a spell (more of an "effect" rune: the Healing spell's heal grows with each) the character can use, within a price: tries every mix of up to four runes of the
-// effect kind the blueprint allows. It must be castable (skill, mana) at least twice from a full pool; `ignoreSkill` asks what it could be with more skill (what the skill is raised for).
+// The strongest version of a spell (more of an "effect" rune: the Healing spell's heal grows with each) the character can use, within a price: tries every mix of up to six runes (effect and mana kinds the blueprint allows). It must be castable (skill, mana) at least twice from a full pool; `ignoreSkill` asks what it could be with more skill (what the skill is raised for).
 struct Upgrade { std::vector<int> runes; Built built; float price = 0; bool ok = false; };
 inline Upgrade BestVersion(const items::Database& db, const mp::Member& me, int row, const std::vector<StockRune>& runes, float budget, bool ignoreSkill) {
     Upgrade best;
     std::vector<StockRune> eff;
-    for (const StockRune& r : runes) if (r.count > 0 && db.runes[static_cast<size_t>(r.row)].code[0] == 'e' && RuneAllowed(db, row, r.row)) eff.push_back(r);
+    for (const StockRune& r : runes) { const char k = db.runes[static_cast<size_t>(r.row)].code[0]; if (r.count > 0 && (k == 'e' || k == 'm') && RuneAllowed(db, row, r.row)) eff.push_back(r); } // effect runes, and mana runes (they take mana off what the effect runes add; the cost never drops below the blueprint's)
     const float intelligence = mp::GetF(me.stats, 0x20), pool = MaxMana(db, me);
     std::vector<int> pick;
     std::function<void(size_t, int)> rec = [&](size_t from, int left) {
@@ -225,7 +224,9 @@ inline Upgrade BestVersion(const items::Database& db, const mp::Member& me, int 
             float effect, bestEffect = 0;
             std::memcpy(&effect, b.object.data() + 10, 4);
             if (best.ok) std::memcpy(&bestEffect, best.built.object.data() + 10, 4);
-            if (!best.ok || effect > bestEffect + 0.01f || (std::fabs(effect - bestEffect) <= 0.01f && price < best.price)) { best.ok = true; best.runes = pick; best.built = b; best.price = price; }
+            float bestMana = 0; if (best.ok) bestMana = best.built.mana;
+            const bool same = std::fabs(effect - bestEffect) <= 0.01f;
+            if (!best.ok || effect > bestEffect + 0.01f || (same && b.mana < bestMana - 0.01f) || (same && std::fabs(b.mana - bestMana) <= 0.01f && price < best.price)) { best.ok = true; best.runes = pick; best.built = b; best.price = price; }
         }
         if (left == 0) return;
         for (size_t i = from; i < eff.size(); ++i) {
@@ -234,7 +235,7 @@ inline Upgrade BestVersion(const items::Database& db, const mp::Member& me, int 
             pick.push_back(eff[i].row); rec(i, left - 1); pick.pop_back();
         }
     };
-    rec(0, 4);
+    rec(0, 6);
     return best;
 }
 

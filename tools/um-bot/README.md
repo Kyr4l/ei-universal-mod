@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.20.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.21.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
@@ -69,7 +69,7 @@ The settings are saved in `um-bot.cfg` next to the program.
 - **Spells**: if it has no usable Healing spell, it wears one it carries, or buys the shop's Healing blueprint and makes the spell the way the camp's constructor does (spell object and container item, exactly
   the game's values, checked against saved characters and a live cast). It only takes a spell it can use: the magic skill, and the mana (cost x 25 / Intelligence against its maximum) - "Spend experience" raises the skill the spell needs first.
 - **Healing upgrade**: when it has the Healing spell it also looks at making a stronger one: the same blueprint with "effect" runes (each adds to the heal and to the mana cost and the skill needed), the best mix of up to
-  four runes it can use (castable at least twice from a full mana pool, within half of its money, at least 25 % stronger than the worn one). The old spell is replaced, and "Spend experience" raises the Astral skill the better spell needs.
+  six runes (effect runes, and mana runes that take back the mana the effect runes add) it can use (castable at least twice from a full mana pool, within half of its money, at least 25 % stronger than the worn one). The old spell is replaced, and "Spend experience" raises the Astral skill the better spell needs.
 - **Swaps** ("Accept swaps"): a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
   sells) and the money offered (checked: 500 -> 520 for an offer of 20), and gives nothing.
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
