@@ -118,6 +118,7 @@ public:
     struct PartyBlob { uint8_t op; std::vector<uint8_t> bytes; double at; };
     std::vector<PartyBlob> partyIn;              // not taken yet (takePartyIn)
     size_t partyBlobs = 0;                       // how many were received
+    double partyOutAt_ = 0, worldSince_ = 0;                      // when a final party came while we were in the world and not leaving
     void ReadParty(const std::vector<uint8_t>& m) {
         for (size_t o = 0; o + 6 < m.size(); ++o) {
             if (m[o] != 0x80 && m[o] != 0x83) continue;
@@ -131,6 +132,7 @@ public:
             if (z == 0 || z >= 40 || b[z] != 0) continue;
             bool text = true; for (size_t k = 0; k < z; ++k) if (b[k] < 0x20 || b[k] > 0x7E) text = false;
             if (!text) continue;
+            if (m[o] == 0x83 && phase_ == Phase::InWorld && worldUnit && leavingAt_ == 0 && Now() - worldSince_ > 8) partyOutAt_ = Now(); // the final party arrives without us leaving: the server took our hero out of the world (a death that left no health update)
             partyIn.push_back({m[o], std::vector<uint8_t>(b, b + len), Now()});
             if (partyIn.size() > 8) partyIn.erase(partyIn.begin());
             ++partyBlobs;
@@ -927,7 +929,7 @@ private:
     void Enter() {
         if (phase_ == Phase::Lobby && !heroJoined_ && joinSends_ == 0) { heroJoined_ = true; SetJoin(1, heroId_); return; }
         if (phase_ == Phase::Lobby && autoEnter && joined && !holdEntry && ZoneOpen() && !mpRaw_.empty()) {
-            phase_ = Phase::Loading; phaseAt_ = Now(); SetJoin(3, heroId_);
+            phase_ = Phase::Loading; phaseAt_ = Now(); worldSince_ = Now(); SetJoin(3, heroId_);
             if (worldQuest_ != chosenQuest) ClearWorld(); // another quest = another world
             worldQuest_ = chosenQuest;
             Log("the zone of " + chosenQuest + " is open: entering it");
@@ -979,10 +981,10 @@ private:
     }
     // Join race: the server did not list us (another client left just before, or the first packets were lost): ask again, then give up.
     // Our body: where our hero died and which unit it was (looted for what the death took: players lose their inventory and some money to the body, recoverable by looting it).
-    struct Corpse { uint32_t id = 0; float x = 0, y = 0; int tries = 0; double at = 0; };
+    struct Corpse { uint32_t id = 0; float x = 0, y = 0; int tries = 0; double at = 0, since = 0; };
     Corpse corpse_;
     void MarkDead(uint32_t id) {
-        if (id == worldUnit && !corpse_.id) { float x = 0, y = 0; if (Where(id, x, y)) { corpse_.id = id; corpse_.x = x; corpse_.y = y; corpse_.tries = 0; corpse_.at = 0; Log("our body lies at " + std::to_string(static_cast<int>(x)) + " " + std::to_string(static_cast<int>(y))); } }
+        if (id == worldUnit && !corpse_.id) { float x = 0, y = 0; if (Where(id, x, y)) { corpse_.id = id; corpse_.x = x; corpse_.y = y; corpse_.tries = 0; corpse_.at = 0; corpse_.since = 0; Log("our body lies at " + std::to_string(static_cast<int>(x)) + " " + std::to_string(static_cast<int>(y))); } }
         dead_.insert(id); unitPos.erase(id);
     }
     // Loots a body: the interaction order 0x36: u32 1 unit, the unit, u32 0, u32 0x18a95 (the loot interaction), u32 -1, the body's unit id. The server walks the unit to the body and moves
@@ -999,6 +1001,12 @@ private:
         if (Now() - corpse_.at < 25) return;
         float hx, hy;
         if (!Where(HostUnit(), hx, hy) || std::hypot(hx - corpse_.x, hy - corpse_.y) > 70) return; // the body is not far from the host (it walks there by itself: the server paths the order)
+        if (!corpse_.since) corpse_.since = Now();
+        if (Now() - corpse_.since > 300) { Log("our body could not be looted in 5 minutes: giving up"); corpse_.id = 0; return; }
+        for (const auto& kv : unitPos) { // monsters at the body killed us once: wait until none is known near it (the hero would walk into them)
+            if (kv.first == worldUnit || dead_.count(kv.first) || IsHero(kv.first) || !unitEnemies_.count(kv.first) || !Hostile(kv.first)) continue;
+            float x, y; if (Where(kv.first, x, y) && std::hypot(x - corpse_.x, y - corpse_.y) < 20) { corpse_.at = Now() - 20; return; } // look again in 5 s
+        }
         if (++corpse_.tries > 3) { Log("our body could not be looted: giving up"); corpse_.id = 0; return; }
         corpse_.at = Now(); holdUntil_ = Now() + 3;
         Log("looting our body (" + std::to_string(corpse_.id) + ")"); Loot(corpse_.id);
@@ -1008,6 +1016,7 @@ private:
     double deadGrace = 45, deadAt_ = 0;
     void WatchDeath() {
         if (phase_ != Phase::InWorld || !worldUnit || leavingAt_ > 0) { deadAt_ = 0; return; }
+        if (partyOutAt_ > 0 && !dead_.count(worldUnit)) { partyOutAt_ = 0; Log("the server took our hero out of the world (its final party came): counted as dead"); MarkDead(worldUnit); }
         const auto hp = unitHp_.find(worldUnit);
         const bool dead = dead_.count(worldUnit) || (hp != unitHp_.end() && hp->second <= 0);
         if (!dead) { deadAt_ = 0; return; }
@@ -1064,7 +1073,7 @@ private:
                     worldUnit = mine; phase_ = Phase::InWorld;
                     StreamMessage({0x09});
                     SetJoin(0, mine); // the world unit: the host links the party portrait to it (the .mp's id dims it)
-                    Log("in the quest world: our hero is unit " + std::to_string(mine));
+                    Log("in the quest world: our hero is unit " + std::to_string(mine)); worldSince_ = Now();
                 }
             }
             rxParsed_ += 4 + clen;

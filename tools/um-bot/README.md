@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.16.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.17.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
