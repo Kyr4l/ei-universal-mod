@@ -196,6 +196,7 @@ struct Plan {
     std::vector<Offer> buy;                 // what to buy (the item bought replaces `replaces`, when set, in the same slot)
     std::vector<uint32_t> replaces;         // object id of the item each purchase replaces (0: none), parallel to buy
     std::vector<uint32_t> sell;             // object ids sold (the replaced gear and the loot)
+    std::vector<uint32_t> repair;           // worn gear repaired (its condition back to the maximum)
     int potionRow = -1, potionAdd = 0;      // more of a potion the character already carries
     long money = 0;                         // money after the plan
     std::vector<std::string> notes;
@@ -218,7 +219,7 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
         return false;
     };
     auto sellValue = [&](const mp::Object& o) { // the camp: price x 0.5, minus the repair price of the wear (price x wear x 0.2)
-        const float price = DF(o, 32), cur = DF(o, 16), max = DF(o, 20);
+        const float price = DF(o, 32), cur = DF(o, 8), max = DF(o, 12);   // the condition: item +0x20 / +0x24 (the camp's repair sets +0x20 = +0x24)
         const float wear = max > 0 ? 1.0f - cur / max : 0.0f;
         const uint32_t count = o.kind == 0x3007 || o.kind == 0x3006 ? std::max<uint32_t>(1, DU(o, 44)) : 1;
         return std::max(0.0f, price * kSell - price * wear * kRepair) * static_cast<float>(count);
@@ -329,6 +330,23 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
             }
         }
     }
+    // 6. Repairs of what it still wears: price x 0.2 x the wear (CCampScreen::GetItemPrice mode 8, at least 1), the condition set back to the maximum.
+    {
+        std::vector<uint32_t> worn;
+        for (uint32_t id : me.lists[0]) worn.push_back(id);
+        for (uint32_t id : me.lists[2]) worn.push_back(id);
+        for (uint32_t id : worn) {
+            if (std::find(plan.sell.begin(), plan.sell.end(), id) != plan.sell.end()) continue;
+            const mp::Object* o = FindObject(ch, id);
+            if (!o || (o->kind != 0x3004 && o->kind != 0x3005) || o->detail.size() < 36) continue;
+            const float cur = DF(*o, 8), max = DF(*o, 12);
+            if (max <= 0 || cur >= max) continue;
+            const long cost = std::max(1L, static_cast<long>(DF(*o, 32) * kRepair * (1.0f - cur / max)));
+            if (money < cost) continue;
+            money -= cost; plan.repair.push_back(id);
+            plan.notes.push_back("repair id " + std::to_string(id) + " for " + std::to_string(cost));
+        }
+    }
     plan.money = money;
     return plan;
 }
@@ -357,8 +375,9 @@ inline std::string Apply(const items::Database& db, mp::Character& ch, const Pla
         const float unit = DF(o, 28) / static_cast<float>(have), w = unit * static_cast<float>(now);
         std::memcpy(o.detail.data() + 28, &w, 4);
     }
+    for (uint32_t id : plan.repair) for (mp::Object& o : ch.lists[0]) if (o.id == id && o.detail.size() >= 16) std::memcpy(o.detail.data() + 8, o.detail.data() + 12, 4);
     mp::SetMoney(ch, static_cast<uint32_t>(std::max(0L, plan.money)));
-    std::string text = std::to_string(plan.buy.size()) + " bought, " + std::to_string(plan.sell.size()) + " sold, money " + std::to_string(plan.money);
+    std::string text = std::to_string(plan.buy.size()) + " bought, " + std::to_string(plan.sell.size()) + " sold, " + std::to_string(plan.repair.size()) + " repaired, money " + std::to_string(plan.money);
     return text;
 }
 

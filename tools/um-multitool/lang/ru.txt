@@ -1424,6 +1424,8 @@ T("Mana it does not spend on attacks", "Мана, которую он не тр�
 T("Use potions", "Пить зелья")
 T("Save progress", "Сохранять прогресс")
 T("Shop before quests", "Магазин перед заданиями")
+T("Accept swaps", "Принимать обмен")
+T("A player can click the bot's head in the lobby to offer a swap: the bot takes what is offered (loot it sells for money) and gives nothing. Off: it ignores swap requests.", "Игрок может нажать на голову бота в лобби и предложить обмен: бот берёт то, что предлагают (добычу он продаёт за деньги), и ничего не отдаёт. Выключено: бот игнорирует запросы на обмен.")
 T("Spend experience", "Тратить опыт")
 T("Before entering a quest it spends its free experience in the camp like a player: skill points and abilities for the role and the Damage <-> Defence slider, at the game's\nprices (a melee build raises Melee and the wielded weapon's ability, a ranged one Archery, a mage the magic skills). It needs the database (see below).", "Перед заданием тратит свободный опыт в лагере, как игрок: очки навыков и способности под роль и ползунок «Урон <-> Защита», по ценам игры\n(ближний бой развивает ближний бой и способность используемого оружия, стрелок - стрельбу из лука, маг - магические навыки). Нужна база данных (см. ниже).")
 T("Gear target", "Целевая экипировка")

@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.12.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.13.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
@@ -59,7 +59,8 @@ The settings are saved in `um-bot.cfg` next to the program.
   Ingos 3, Suslanger 4, Jigran 5; found from the session's quest list). It draws the stock the way the game does (every
   weapon and armor prototype of that shop, one material each, potions in quantities of 20-50), sells the loot it was
   given and the gear it replaces (price x 0.5, minus the wear), and buys and wears what its role and the Damage <-> Defence
-  slider call for, never above its money or its lift capacity. "Gear target" lists the gear it builds first and keeps
+  slider call for, never above its money or its lift capacity, and repairs what it still wears (price x 0.2 x the wear, the camp's own rule; all four multiplayer shops use the same
+  price table: buy 1.0, sell 0.5, repair 0.2). "Gear target" lists the gear it builds first and keeps
   (`bone long bow:dragon red bones; gipat highest plate`); the shop's materials are drawn anew every session, so it saves
   the money for a wished item the shop does not show yet. Items are built with the game's own arithmetic (checked against
   the live shop item for item) and the server accepts them byte for byte.
@@ -68,7 +69,7 @@ The settings are saved in `um-bot.cfg` next to the program.
   Health, Strength, Quickness, Lift and the like, chosen by worth per experience point, with the Damage <-> Defence slider weighing health. "Spend experience" turns it off.
 - **Spells**: if it has no usable Healing spell, it wears one it carries, or buys the shop's Healing blueprint and makes the spell the way the camp's constructor does (spell object and container item, exactly
   the game's values, checked against saved characters and a live cast). It only takes a spell it can use: the magic skill, and the mana (cost x 25 / Intelligence against its maximum) - "Spend experience" raises the skill the spell needs first.
-- **Swaps**: a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
+- **Swaps** ("Accept swaps"): a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
   sells) and gives nothing.
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent
   every 15-60 s and when leaving the world) back into the bot's `.mp`. The first save keeps the original as `.bak`.

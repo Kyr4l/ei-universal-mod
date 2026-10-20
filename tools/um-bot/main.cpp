@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.12";
+static const char* const kVersion = "0.1.13";
 
 
 struct App {
@@ -162,7 +162,7 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
     shop::Prefs pf;
     pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
     const shop::Plan plan = shop::MakePlan(db, ch, pf, ctx.stock);
-    if (plan.buy.empty() && plan.sell.empty() && plan.potionAdd == 0) return "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell";
+    if (plan.buy.empty() && plan.sell.empty() && plan.repair.empty() && plan.potionAdd == 0) return "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell";
     std::string text = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): " + shop::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += "\n  " + n;
     std::string err;
@@ -301,6 +301,7 @@ static void StartConnection(App& app) {
     SetHealing(app);
     app.shopped = false; app.shopWaitFrom = 0; app.shopSeed = std::random_device{}() | 1u;
     app.client.holdEntry = app.cfg.shop || app.cfg.grow; // the quest is entered after the camp visit
+    app.client.acceptSwaps = app.cfg.acceptSwaps;
     if (!app.character.members.empty()) {
         const mp::Member& m = app.character.members[0];
         app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
@@ -459,6 +460,8 @@ static void BuildPanel(App& app) {
     app.dirty |= ImGui::Checkbox("Shop before quests", &c.shop);
     Tip("Before entering a quest it visits the camp's shop of the allod (Gipath, Ingos, Suslanger or Jigran: found from the quests of the session): sells loot and old gear, buys and wears\n"
         "what its role and the Damage <-> Defence slider call for, within its money and what it can carry. It needs the database (see below).");
+    app.dirty |= ImGui::Checkbox("Accept swaps", &c.acceptSwaps);
+    Tip("A player can click the bot's head in the lobby to offer a swap: the bot takes what is offered (loot it sells for money) and gives nothing. Off: it ignores swap requests.");
     app.dirty |= ImGui::Checkbox("Spend experience", &c.grow);
     Tip("Before entering a quest it spends its free experience in the camp like a player: skill points and abilities for the role and the Damage <-> Defence slider, at the game's\n"
         "prices (a melee build raises Melee and the wielded weapon's ability, a ranged one Archery, a mage the magic skills). It needs the database (see below).");
@@ -786,6 +789,7 @@ int main(int argc, char** argv) {
             if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
             if (const char* sg = std::getenv("UM_BOT_SIGHT")) client.sight = static_cast<float>(std::atof(sg)); // research: pretend a longer sight so it fights from farther
             client.holdEntry = (cfg.shop || cfg.grow) && !std::getenv("UM_BOT_NOSHOP");
+            client.acceptSwaps = cfg.acceptSwaps;
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
