@@ -9,6 +9,7 @@
 #include "net.hpp" // first: winsock2.h before windows.h
 #include "growth.hpp"
 #include "shop.hpp"
+#include "spells.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -39,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.11";
+static const char* const kVersion = "0.1.12";
 
 
 struct App {
@@ -134,10 +135,11 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
     return raw;
 }
 
-// The camp's shop before a quest: which allod the session is on (its quest list / the chosen quest), what the shop of that allod draws this session, what to buy and sell for the
-// role and the gear target, applied to the character, saved, and handed to the client for the quest entry. Returns what to log ("" when nothing to do).
-static std::string DoShopping(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, const std::string& path, std::string* allodOut = nullptr) {
-    std::mt19937 rng(seed); // one draw per session: the stock stays the same for every visit of the shop in it
+// What the camp's shop of the session's allod offers: which allod the quests of the session belong to (its quest list / the chosen quest), the shop number, and this session's draw of items
+// and spell blueprints (one draw per session: the stock stays the same for every visit of the shop in it).
+struct ShopCtx { int shopNo = 0; std::string allod; std::vector<shop::Offer> stock; std::vector<spells::StockSpell> spellStock; };
+static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, ShopCtx& ctx) {
+    std::mt19937 rng(seed);
     std::string mapsDir;
     { std::string dir = cfg.character; const size_t slash = dir.find_last_of("/\\"); if (slash != std::string::npos) mapsDir = dir.substr(0, slash) + "/../maps"; }
     std::string allod = client.chosenQuest.empty() ? "" : shop::AllodOfQuest(client.chosenQuest, mapsDir);
@@ -146,15 +148,22 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
         for (const std::string& q : client.QuestFiles()) { const std::string a = shop::AllodOfQuest(q, mapsDir); if (!a.empty() && a != "final") ++votes[a]; }
         int best = 0; for (const auto& kv : votes) if (kv.second > best) { best = kv.second; allod = kv.first; }
     }
-    if (allodOut) *allodOut = allod;
-    const int shopNo = shop::ShopOfAllod(allod);
-    if (!shopNo || ch.members.empty() || db.materials.empty()) return "";
+    ctx.allod = allod;
+    ctx.shopNo = shop::ShopOfAllod(allod);
+    if (!ctx.shopNo || ch.members.empty() || db.materials.empty()) return false;
+    ctx.stock = shop::Stock(db, ctx.shopNo, rng);
+    ctx.spellStock = spells::Stock(db, ctx.shopNo, rng);
+    return true;
+}
+
+// The camp's shop before a quest: what to buy and sell for the role and the gear target, applied to the character, saved, and handed to the client for the quest entry.
+// Returns what to log ("" when nothing to do).
+static std::string DoShopping(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
     shop::Prefs pf;
     pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
-    const std::vector<shop::Offer> stock = shop::Stock(db, shopNo, rng);
-    const shop::Plan plan = shop::MakePlan(db, ch, pf, stock);
-    if (plan.buy.empty() && plan.sell.empty() && plan.potionAdd == 0) return "shop " + std::to_string(shopNo) + " (" + allod + "): nothing to buy or sell";
-    std::string text = "shop " + std::to_string(shopNo) + " (" + allod + "): " + shop::Apply(db, ch, plan);
+    const shop::Plan plan = shop::MakePlan(db, ch, pf, ctx.stock);
+    if (plan.buy.empty() && plan.sell.empty() && plan.potionAdd == 0) return "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell";
+    std::string text = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): " + shop::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += "\n  " + n;
     std::string err;
     if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
@@ -162,11 +171,30 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
     return text;
 }
 
+// The spell constructor: the Healing spell for the bot's job as a companion (blueprint from the shop, made at once like the camp's constructor does with no runes).
+static std::string DoSpells(mp::Character& ch, const items::Database& db, net::Client& client, const ShopCtx& ctx, const std::string& path) {
+    const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock);
+    std::string text = spells::Apply(db, ch, plan);
+    for (const std::string& n : plan.notes) text += (text.empty() ? "" : "\n") + n;
+    if (plan.buys.empty() && plan.equips.empty()) return text;
+    std::string err;
+    if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
+    client.SetMpRaw(mp::Serialize(ch));
+    return text;
+}
+
 // The camp's skills window before a quest: the free experience spent on skills and abilities for the role (growth.hpp), applied to the character, saved and handed to the client.
-static std::string DoGrowth(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const std::string& path) {
+static std::string DoGrowth(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
     if (ch.members.empty() || db.perks.empty()) return "";
     growth::Prefs pf;
     pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness;
+    const int heal = spells::RowOfCode(db, "healing"); // the skill the Healing spell needs, when the shop offers it and the bot has none
+    if (heal >= 0 && cfg.shop && std::any_of(ctx.spellStock.begin(), ctx.spellStock.end(), [&](const spells::StockSpell& s) { return s.row == heal; })) {
+        const std::vector<int> owned = spells::OwnedRows(ch);
+        const int byte = std::find(owned.begin(), owned.end(), heal) == owned.end() ? spells::SkillByteNeeded(db, ch.members[0], heal) : -1;
+        const int school = db.spells[static_cast<size_t>(heal)].ni[19];
+        if (byte > 0) pf.minSkill[school <= 2 ? growth::kElemental : school <= 4 ? growth::kSense : growth::kAstral] = byte;
+    }
     const growth::Plan plan = growth::MakePlan(db, ch, pf);
     if (plan.buys.empty()) return "";
     std::string text = growth::Apply(db, ch, plan);
@@ -179,9 +207,19 @@ static std::string DoGrowth(mp::Character& ch, const items::Database& db, const 
 // Everything the camp offers before a quest, in the order a player does it: experience first (the abilities weigh in the weapon choice), then the shop.
 static std::string DoCamp(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, const std::string& path) {
     std::string text;
-    if (cfg.grow) text = DoGrowth(ch, db, cfg, client, path);
-    if (cfg.shop) { const std::string shopped = DoShopping(ch, db, cfg, client, seed, path); if (!shopped.empty()) text += (text.empty() ? "" : "\n") + shopped; }
+    ShopCtx ctx;
+    const bool haveShop = MakeShopCtx(ch, db, cfg, client, seed, ctx);
+    auto add = [&](const std::string& t) { if (!t.empty()) text += (text.empty() ? "" : "\n") + t; };
+    if (cfg.grow) add(DoGrowth(ch, db, cfg, client, ctx, path));
+    if (cfg.shop && haveShop) { add(DoSpells(ch, db, client, ctx, path)); add(DoShopping(ch, db, cfg, client, ctx, path)); }
+    client.healSpellSlot = FindHealSpellSlot(ch, db); // a spell made now can be cast in the quest
     return text;
+}
+
+// The swap's loot sold at once (the shop only, in this session's stock).
+static std::string DoSelling(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, const std::string& path) {
+    ShopCtx ctx;
+    return MakeShopCtx(ch, db, cfg, client, seed, ctx) ? DoShopping(ch, db, cfg, client, ctx, path) : std::string();
 }
 
 // Items received in a finished swap (the partner's item blobs: u32 id, u32 kind, u16 a, u16 b, 4 bytes, the detail's tail) added to the character's items and backpack, the
@@ -765,7 +803,7 @@ int main(int argc, char** argv) {
                 }
                 if (!client.swapReceived.empty() && !ch.members.empty()) {
                     const std::string said = AddSwappedItems(ch, client.TakeSwapped(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str());
-                    if (!said.empty() && cfg.shop && !dbf.empty()) { const std::string sold = DoShopping(ch, shopDb, cfg, client, std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u, cfg.character); if (!sold.empty()) std::printf("%s\n", sold.c_str()); }
+                    if (!said.empty() && cfg.shop && !dbf.empty()) { const std::string sold = DoSelling(ch, shopDb, cfg, client, std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u, cfg.character); if (!sold.empty()) std::printf("%s\n", sold.c_str()); }
                 }
                 if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 static size_t printed = 0; // the log as it comes, with the time
@@ -934,7 +972,7 @@ int main(int argc, char** argv) {
         }
         if (!app.client.swapReceived.empty() && !app.character.members.empty()) {
             const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.characterFor, app.client); if (!said.empty()) app.Log(said);
-            if (!said.empty() && app.cfg.shop && app.dbLoaded) { const std::string sold = DoShopping(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!sold.empty()) app.Log(sold); } // the loot it was given is sold at once
+            if (!said.empty() && app.cfg.shop && app.dbLoaded) { const std::string sold = DoSelling(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!sold.empty()) app.Log(sold); } // the loot it was given is sold at once
         }
         if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {
             mp::Character updated;

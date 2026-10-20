@@ -49,6 +49,7 @@ inline int PerkCost(const items::Database& db, size_t index, int abilitiesOwned)
 struct Prefs {
     int role = 1;           // 0 melee, 1 ranged, 2 mage, 3 hybrid
     int tankiness = 30;     // 0 all damage .. 100 all defence
+    int minSkill[kSkills] = {}; // skill bytes to reach first (what a spell it is about to make needs), 0 = none
 };
 
 struct Buy { bool perk = false; int index = 0; int to = 0; int cost = 0; }; // a skill raised to `to` (cost: the whole raise) / a perk bought (index: the table's)
@@ -146,6 +147,15 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
     std::vector<int> skill(kSkills);
     for (int s = 0; s < kSkills; ++s) skill[static_cast<size_t>(s)] = Level(me, kSkillBase + s);
     std::vector<int> skillFrom = skill;
+    for (int s = 0; s < kSkills; ++s) { // the skills a spell needs come first, when the experience reaches all the way
+        long cost = 0;
+        for (int v = skill[static_cast<size_t>(s)]; v < pf.minSkill[s] && v < kSkillCap; ++v) cost += SkillCost(v);
+        if (pf.minSkill[s] <= skill[static_cast<size_t>(s)] || cost > left) continue;
+        left -= cost; plan.cost += cost;
+        skill[static_cast<size_t>(s)] = pf.minSkill[s];
+        me.stats[static_cast<size_t>(kSkillBase + s)] = static_cast<uint8_t>(pf.minSkill[s]);
+        plan.buys.push_back({false, s, pf.minSkill[s], static_cast<int>(cost)});
+    }
     int owned = AbilitiesOwned(me);
     for (int guard = 0; guard < 2000; ++guard) {
         float bestRatio = 0; int bestSkill = -1; long bestCost = 0; size_t bestPerk = db.perks.size();

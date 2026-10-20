@@ -297,6 +297,21 @@ Verified live (2026-10-20) against the game's own cost functions, and against th
 - The cached values `UnitStats_Recompute` (0x524CD0) rebuilds from the base values and the abilities: `+0x10 / +0x18 / +0x20` = base `+0xC / +0x14 / +0x1C` + the attribute abilities' bonus;
   `+0x54` (max encumbrance) = (1 + lift%) * strength * 12; `+0x2C` = dexterity * 0.2 + 10; `+0x30` (actions) = (1 + quickness%) * `+0x5C` * `+0x2C`. The game rebuilds them when the unit is created.
 
+## Spells: blueprints, runes, the constructor (camp tab "spell trade" / "spell constructor")
+
+Verified 2026-10-20 against the shop (live dump), every spell object of the saved characters (24 of 33 byte-identical; the others come from an older database) and a live cast.
+
+- The shops sell **blueprints** ("Prototype" loot items, `+0x54` = SpellPrototypes row) and **runes** ("Rune" loot items, `+0x54` = runes row): every spell / rune whose "Shop N" bit is set, blueprints 1..3 of each, runes 20..47.
+  Price = the blueprint's field 3 / the rune's field 2 (CItemLoot slot 16 0x6A5470 returns it in st0; the stored price 1.0 of the item is unused), times the camp's spell coefficient (buy 1.0, sell 0.5).
+- The constructor (`CSpellConstructor` 0x684xxx) turns one blueprint + up to 8 runes into a **spell container** item (kind 0x3008, the "wand": 56 bytes of detail, `+0x40` = the spell object's id, price field = the spell's price + 2) holding a **spell object**
+  (kind 0x3002, 66 bytes). The spell goes into the member's list 4 (spell slots); the 0x33 cast order's spell id is the index there. A container carried in the items but not worn is not castable.
+- Object layout (`CSpell::Write` 0x68B920): u32 id, u8 row, u8 0x10, u32 duration (S+0x20), f32 effect (+0x24), f32 area radius (+0x28), f32 +0x30, f32 range (+0x34), i32 targets (+0x38), u32 flags (+0x3C: 0x10000000 'u' / 0x20000000 't' target kind),
+  f32 mana (+0x40), i32 rune count + 1 (+0x44), f32 price (+0x48), i32 field 14 (+0x4C), 8 bytes rune rows + 1, u32 0, u32 required skill level (+0x50). Start values = the proto's fields 13, 10, 9, 7, 8, 12, 11, 5, 6, 3, 14, 21.
+- `CSpellContainer::Finalize` 0x68BF60 applies each rune by the first letter of its code: a area += v * proto f9 (then radius = sqrt(area / pi)), d duration += trunc(proto f13 * v), e effect += v * proto f10, f? / i? flag bits, m mana += v * proto f5,
+  r range += v * proto f8, t targets += trunc(proto f12 * v); every rune also: count + 1, required level += rune level (field 6), mana += rune field 4, price += rune price; the final mana = max(proto mana, mana). A rune of kind r/t/a/e/d needs the blueprint's field 20 flag of that kind.
+- Usable (`CanDropItem` 0x6100E0, `CanCastSpell` 0x54B950): magic skill >= required level, and trunc(mana * 25 / Intelligence) <= trunc(max mana). Magic skill = Intelligence - 25 + the school's skill byte (0x6CE elemental for schools 0..2, 0x6CF sense 3..4, 0x6D0 astral 5..7)
+  + the school ability's bonus; school = proto field 19. Max mana = (dexterity / 25) * 30 * 1.1^(log(exp / 50) / log(1.61)) * (1 + mana ability%) (live: 86.53 for exp 4000, dexterity 30); max health the same with strength / 25 and `+0x10`.
+
 ## Not known yet
 
 - The live diplomacy table, in case scripts change it during play.

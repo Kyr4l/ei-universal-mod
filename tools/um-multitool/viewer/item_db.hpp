@@ -214,8 +214,14 @@ struct Database {
     std::vector<Material> materials;
     std::array<std::vector<Item>, static_cast<size_t>(Category::Count)> items;
     std::string sourceLabel;
-    struct SpellProto { std::string name, code; };   // SpellPrototypes (spells.sdb block 1), by row: field 0 the name, field 1 the code name ("healing")
+    // SpellPrototypes (spells.sdb block 1), by row: field 0 the name, field 1 the code name ("healing"); n / ni: the numeric fields 3..27 by tag as floats / integers,
+    // shopMask: field 22 (bit k = Shop k+1), runeKinds: field 20's five flags (range, targets, area, effect, duration runes allowed)
+    struct SpellProto { std::string name, code; float n[32] = {}; int ni[32] = {}; uint32_t shopMask = 0; uint8_t runeKinds[5] = {}; };
     std::vector<SpellProto> spells;
+    // Runes (spells.sdb block 2), by row: field 0 the name, 1 the two-letter code (first letter = kind of change: r range, t targets, a area, e effect, d duration, m mana, f filter, i item), 2 the price,
+    // 3 the kind 0..7, 4 the mana added, 5 the value, 6 the skill level it adds, 8 the shop mask
+    struct Rune { std::string name; char code[3] = {0, 0, 0}; float price = 0, mana = 0, value = 0; int kind = 0, level = 0; uint32_t shopMask = 0; };
+    std::vector<Rune> runes;
     // Perks (perks.pdb block 2), in the game's order (3 levels per ability group). The fields: the camp's experience cost number (18), the bonus in percent / points (19), the
     // skill needed (11 name, 12 index, 14 level), the attribute minima (15..17), the perk needed first (10), enabled (22), the exclusion group (23).
     struct Perk { std::string name, key, prereq, skill; int skillIndex = INT32_MAX, skillLevel = 0, costNum = 0, bonus = 0, group = 0; float attrMin[3] = {0, 0, 0}; bool enabled = false; };
@@ -326,12 +332,27 @@ inline void ParseSpellsSdb(const std::vector<uint8_t>& sdb, Database& out) {
     Span file;
     if (!ReadTag(data, sdb.size(), off, file)) return;
     for (const Span& block : Children(data, file)) {
-        if (block.tag != 1) continue;
+        if (block.tag != 1 && block.tag != 2) continue;
         for (const Span& record : Children(data, block)) {
             Fields f;
             f.data = data;
             for (const Span& field : Children(data, record)) f.byId[field.tag] = field;
-            out.spells.push_back({f.String(0), f.String(1)});
+            if (block.tag == 2) {
+                Database::Rune r;
+                r.name = f.String(0);
+                const int code = f.Int(1);
+                r.code[0] = static_cast<char>(code & 0xFF); r.code[1] = static_cast<char>((code >> 8) & 0xFF);
+                r.price = f.Float(2); r.kind = f.Int(3); r.mana = f.Float(4); r.value = f.Float(5); r.level = f.Int(6); r.shopMask = static_cast<uint32_t>(f.Int(8));
+                out.runes.push_back(std::move(r));
+                continue;
+            }
+            Database::SpellProto sp;
+            sp.name = f.String(0); sp.code = f.String(1);
+            for (int k = 3; k < 28; ++k) { sp.n[k] = f.Float(static_cast<uint8_t>(k)); sp.ni[k] = f.Int(static_cast<uint8_t>(k)); }
+            sp.shopMask = static_cast<uint32_t>(f.Int(22));
+            const auto kinds = f.byId.find(20);
+            if (kinds != f.byId.end()) for (size_t k = 0; k < 5 && k < kinds->second.length; ++k) sp.runeKinds[k] = data[kinds->second.start + k];
+            out.spells.push_back(std::move(sp));
         }
     }
 }
