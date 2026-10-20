@@ -83,7 +83,7 @@ public:
     // The character: its name (with the clan tag), unit name, hero id (the .mp's u32) and the .mp's content (what is
     // uploaded when entering a quest). The JOIN: name\0 unit\0 u32 state, u8 0, u32 hero id.
     void SetCharacter(const std::string& name, const std::string& unit, uint32_t id, const std::vector<uint8_t>& mpRaw = {}) {
-        name_ = name; unit_ = unit; heroId_ = id; mpRaw_ = mpRaw;
+        name_ = name; unit_ = unit; heroId_ = 0; (void)id; mpRaw_ = mpRaw; // the hero id the file keeps (its last session's) is not sent in the JOIN: the server did not answer a first entry with a stale id (a 15 s stall)
         phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = false; reconnect = false; leavingAt_ = 0;
         tx_.clear(); txOffset_ = 0; unacked_.clear(); resend_.clear(); rxChunks_.clear(); rx_.clear(); rxParsed_ = 0; rxBase_ = 0; got_.clear(); seenMessages_.clear();
         SetJoin(1, 0xFFFFFFFFu); // as the game: first without a hero, then with it
@@ -732,17 +732,30 @@ public:
                 }
             }
         }
-        if (state == State::Accepted && Now() - sentAt_ > 0.02) {
+        if (state == State::Accepted && Now() - sentAt_ > (std::getenv("UM_BOT_TXGAP") ? std::atof(std::getenv("UM_BOT_TXGAP")) : 0.02)) {
             uint32_t bits = 0;
             for (int i = 0; i < 32; ++i) if (got_.count(static_cast<uint16_t>(ackSeq_ - i))) bits |= 1u << i;
             std::vector<uint8_t> p{0x00};
             Put16(p, seq_++);
             Put16(p, ackSeq_);
             Put32(p, bits);
+            // The reliable objects (the JOIN, our swap record, chat lines) go in the same packet; a packet longer than the game's 228 bytes is not taken by the server (the stall of the first quest entry of a big
+            // character: the chunks that carried a JOIN were too long), so the chunk is cut to what is left.
+            struct Out { uint8_t kind; uint16_t id; const std::vector<uint8_t>* data; int refs; };
+            std::vector<Out> out;
+            static const std::vector<uint8_t> none;
+            if (joinSends_ > 0 && !join_.empty()) { --joinSends_; out.push_back({5, 1, &join_, 0}); }
+            for (ChatOut& c : chatOut_) if (c.sends > 0) { --c.sends; out.push_back({6, c.id, &c.data, 0}); break; } // one chat line per packet (kind 6: the text)
+            if (pairSends_ > 0 && !pairOut_.empty()) { --pairSends_; out.push_back({15, 1, &pairOut_, 2}); }
+            else if (pairRemoveSends_ > 0) { --pairRemoveSends_; out.push_back({15, 1, &none, 0}); } // flag bit 0 = the object is removed
+            size_t objBytes = 2;
+            for (const Out& m : out) objBytes += 3 + m.data->size();
+            const size_t room = 228 > 14 + objBytes + 8 ? 228 - 14 - objBytes : 8;
             Chunk c;
-            if (!resend_.empty()) { c = std::move(resend_.front()); resend_.pop_front(); } // a lost chunk first, at its old offset
+            if (!resend_.empty() && (out.empty() || resend_.front().bytes.size() <= room)) { c = std::move(resend_.front()); resend_.pop_front(); } // a lost chunk first, at its old offset
+            else if (!resend_.empty()) c.offset = txOffset_; // too long next to the objects: this packet carries only the objects
             else {
-                const size_t n = std::min<size_t>(204, tx_.size());
+                const size_t n = std::min<size_t>(std::min<size_t>(std::getenv("UM_BOT_CHUNK") ? static_cast<size_t>(std::atoi(std::getenv("UM_BOT_CHUNK"))) : 204, room), tx_.size());
                 c.offset = txOffset_;
                 c.bytes.assign(tx_.begin(), tx_.begin() + static_cast<long>(n));
                 tx_.erase(tx_.begin(), tx_.begin() + static_cast<long>(n));
@@ -752,23 +765,14 @@ public:
             p.push_back(static_cast<uint8_t>(c.bytes.size()));
             p.insert(p.end(), c.bytes.begin(), c.bytes.end());
             if (!c.bytes.empty()) unacked_[static_cast<uint16_t>(seq_ - 1)] = std::move(c);
-            {   // the reliable objects: the JOIN (kind 5) and our swap record (kind 15), each sent a few times after a change
-                struct Out { uint8_t kind; uint16_t id; const std::vector<uint8_t>* data; int refs; };
-                std::vector<Out> out;
-                static const std::vector<uint8_t> none;
-                if (joinSends_ > 0 && !join_.empty()) { --joinSends_; out.push_back({5, 1, &join_, 0}); }
-                for (ChatOut& c : chatOut_) if (c.sends > 0) { --c.sends; out.push_back({6, c.id, &c.data, 0}); break; } // one chat line per packet (kind 6: the text)
-                if (pairSends_ > 0 && !pairOut_.empty()) { --pairSends_; out.push_back({15, 1, &pairOut_, 2}); }
-                else if (pairRemoveSends_ > 0) { --pairRemoveSends_; out.push_back({15, 1, &none, 0}); } // flag bit 0 = the object is removed
-                p.push_back(static_cast<uint8_t>(out.size()));
-                if (!out.empty()) { // the bit buffer, read bit by bit in the order of the messages: each message's flag bit (1 = it has a payload), then one bit per object ref inside its payload
-                    // (1 = the ref is an id in the RECEIVER's namespace, e.g. a player record the server created; 0 = the sender's own object)
-                    unsigned bits = 0; int nb = 0;
-                    for (const Out& m : out) { if (!m.data->empty()) bits |= 1u << nb; ++nb; for (int r = 0; r < m.refs; ++r) bits |= 1u << nb++; }
-                    p.push_back(static_cast<uint8_t>(bits & 0xFF)); // (at most 8 bits are ever used here)
-                }
-                for (const Out& m : out) { p.push_back(m.kind); Put16(p, m.id); p.insert(p.end(), m.data->begin(), m.data->end()); }
+            p.push_back(static_cast<uint8_t>(out.size()));
+            if (!out.empty()) { // the bit buffer, read bit by bit in the order of the messages: each message's flag bit (1 = it has a payload), then one bit per object ref inside its payload
+                // (1 = the ref is an id in the RECEIVER's namespace, e.g. a player record the server created; 0 = the sender's own object)
+                unsigned bits = 0; int nb = 0;
+                for (const Out& m : out) { if (!m.data->empty()) bits |= 1u << nb; ++nb; for (int r = 0; r < m.refs; ++r) bits |= 1u << nb++; }
+                p.push_back(static_cast<uint8_t>(bits & 0xFF)); // (at most 8 bits are ever used here)
             }
+            for (const Out& m : out) { p.push_back(m.kind); Put16(p, m.id); p.insert(p.end(), m.data->begin(), m.data->end()); }
             Send(p);
             sentAt_ = Now();
         }
@@ -898,7 +902,7 @@ private:
     }
     // A stream message: u32 4 + compressed length, u32 length, the data (literal-only compression).
     void StreamMessage(const std::vector<uint8_t>& data) {
-        const std::vector<uint8_t> packed = mp::Pack(data, 0, 0);
+        const std::vector<uint8_t> packed = std::getenv("UM_BOT_NOLZ") ? mp::Pack(data, 0, 0) : mp::PackLz(data, 0, 0); // real compression: a big character no longer expands to over 4 KB
         const std::vector<uint8_t> bits(packed.begin() + 17, packed.end());
         Put32(tx_, static_cast<uint32_t>(4 + bits.size())); Put32(tx_, static_cast<uint32_t>(data.size()));
         tx_.insert(tx_.end(), bits.begin(), bits.end());
@@ -927,7 +931,7 @@ private:
             if (worldQuest_ != chosenQuest) ClearWorld(); // another quest = another world
             worldQuest_ = chosenQuest;
             Log("the zone of " + chosenQuest + " is open: entering it");
-        } else if (phase_ == Phase::Loading && Now() - phaseAt_ > 0.5) {
+        } else if (phase_ == Phase::Loading && Now() - phaseAt_ > (std::getenv("UM_BOT_ENTRYDELAY") ? std::atof(std::getenv("UM_BOT_ENTRYDELAY")) : 0.5)) {
             StreamMessage(Upload());
             phase_ = Phase::Entering; phaseAt_ = Now();
         }
@@ -937,8 +941,9 @@ private:
     std::vector<uint8_t> Upload() const { // 08 + the .mp content (the quest as its zone) + 00 + the 136-byte identity
         std::vector<uint8_t> up{0x08};
         up.insert(up.end(), chosenQuest.begin(), chosenQuest.end()); up.push_back(0);
-        const size_t zoneEnd = static_cast<size_t>(std::find(mpRaw_.begin(), mpRaw_.end(), 0) - mpRaw_.begin()) + 1;
-        up.insert(up.end(), mpRaw_.begin() + static_cast<long>(std::min(zoneEnd, mpRaw_.size())), mpRaw_.end());
+        const std::vector<uint8_t>& raw = mpRaw_;
+        const size_t zoneEnd = static_cast<size_t>(std::find(raw.begin(), raw.end(), 0) - raw.begin()) + 1;
+        up.insert(up.end(), raw.begin() + static_cast<long>(std::min(zoneEnd, raw.size())), raw.end());
         up.push_back(0);
         uint8_t block[136] = {};
         const uint32_t version = 100;
@@ -1012,7 +1017,7 @@ private:
     // Entering the quest took too long (a ghost of an earlier session of the same name in the host's world: the snapshot never came): log out and connect again.
     void WatchEntry() {
         if ((phase_ != Phase::Loading && phase_ != Phase::Entering) || worldUnit) return;
-        if (Now() - phaseAt_ > 15) { Log("entering the quest took more than 15 s: connecting again"); Disconnect(); reconnect = true; }
+        if (Now() - phaseAt_ > (std::getenv("UM_BOT_ENTRYWAIT") ? std::atof(std::getenv("UM_BOT_ENTRYWAIT")) : 15.0)) { Log("entering the quest took more than 15 s: connecting again"); Disconnect(); reconnect = true; }
     }
     void WatchJoin() {
         if (joined || state != State::Accepted) { joinWatchAt_ = 0; return; }
