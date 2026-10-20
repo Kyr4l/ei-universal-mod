@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.19";
+static const char* const kVersion = "0.1.20";
 
 
 struct App {
@@ -126,32 +126,9 @@ static int FindHealSpellSlot(const mp::Character& ch, const items::Database& db)
     return -1;
 }
 
-// The index in the hero's spell items of the first attack spell (a SpellPrototypes row of group 0), with its mana cost for this hero (cost x 25 / Intelligence); -1: none.
-static int FindAttackSpellSlot(const mp::Character& ch, const items::Database& db, int* manaOut) {
-    if (ch.members.empty()) return -1;
-    const auto& slots = ch.members[0].lists[3];
-    for (size_t i = 0; i < slots.size(); ++i) {
-        const mp::Object* c = FindObject(ch, slots[i]);
-        if (!c || c->kind != 0x3008 || c->detail.size() < 44) continue;
-        uint32_t spellId; std::memcpy(&spellId, &c->detail[40], 4);
-        const mp::Object* sp = FindObject(ch, spellId);
-        if (!sp || sp->kind != 0x3002 || !spells::IsUnitAttack(db, static_cast<int>(sp->b)) || sp->detail.size() < 66) continue;
-        float mana; uint32_t need; std::memcpy(&mana, &sp->detail[34], 4); std::memcpy(&need, &sp->detail[62], 4);
-        const mp::Member& me = ch.members[0];
-        if (!spells::CanCast(db, me, mana, static_cast<int>(need), db.spells[sp->b].ni[19])) continue;
-        const float intel = mp::GetF(me.stats, 0x20);
-        if (manaOut) *manaOut = static_cast<int>(mana * 25.0f / (intel > 0 ? intel : 25.0f)) + 1;
-        return static_cast<int>(i);
-    }
-    return -1;
-}
-
-// The spells the client casts: the Healing spell (all roles) and, for a mage or hybrid, an attack spell it can use.
-static void SetSpellSlots(net::Client& client, const mp::Character& ch, const items::Database& db, const bot::Config& cfg) {
+// The spells the client casts: the Healing spell.
+static void SetSpellSlots(net::Client& client, const mp::Character& ch, const items::Database& db, const bot::Config&) {
     client.healSpellSlot = FindHealSpellSlot(ch, db);
-    client.attackSpellSlot = -1; client.attackSpellMana = 0;
-    if (cfg.role == bot::Role::Mage || cfg.role == bot::Role::Hybrid) client.attackSpellSlot = FindAttackSpellSlot(ch, db, &client.attackSpellMana);
-    client.manaReservePct = cfg.manaReserve;
 }
 
 // The character .mp's decompressed content: what the bot uploads when entering a quest.
@@ -165,7 +142,7 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
 
 // What the camp's shop of the session's allod offers: which allod the quests of the session belong to (its quest list / the chosen quest), the shop number, and this session's draw of items
 // and spell blueprints (one draw per session: the stock stays the same for every visit of the shop in it).
-struct ShopCtx { int shopNo = 0; std::string allod; std::vector<shop::Offer> stock; std::vector<spells::StockSpell> spellStock; };
+struct ShopCtx { int shopNo = 0; std::string allod; std::vector<shop::Offer> stock; std::vector<spells::StockSpell> spellStock; std::vector<spells::StockRune> runeStock; };
 static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, ShopCtx& ctx) {
     std::mt19937 rng(seed);
     std::string mapsDir;
@@ -181,6 +158,7 @@ static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, cons
     if (!ctx.shopNo || ch.members.empty() || db.materials.empty()) return false;
     ctx.stock = shop::Stock(db, ctx.shopNo, rng);
     ctx.spellStock = spells::Stock(db, ctx.shopNo, rng);
+    ctx.runeStock = spells::RuneStock(db, ctx.shopNo, rng);
     return true;
 }
 
@@ -188,7 +166,7 @@ static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, cons
 // Returns what to log ("" when nothing to do).
 static std::string DoShopping(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
     shop::Prefs pf;
-    pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
+    pf.role = bot::RoleKind(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
     const shop::Plan plan = shop::MakePlan(db, ch, pf, ctx.stock);
     if (plan.buy.empty() && plan.sell.empty() && plan.repair.empty() && plan.potionAdd == 0) return "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell";
     std::string text = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): " + shop::Apply(db, ch, plan);
@@ -215,11 +193,11 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
 
 // The spell constructor: the Healing spell for the bot's job as a companion (blueprint from the shop, made at once like the camp's constructor does with no runes).
 static std::string DoSpells(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
-    const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock, cfg.role == bot::Role::Mage || cfg.role == bot::Role::Hybrid);
+    const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock, ctx.runeStock);
     std::string text = spells::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += (text.empty() ? "" : "\n") + n;
     if (cfg.announce) {
-        for (const spells::Buy& b : plan.buys) client.Say("made the spell " + db.spells[static_cast<size_t>(b.row)].name + " (" + std::to_string(static_cast<long>(b.cost)) + ")");
+        for (const spells::Buy& b : plan.buys) client.Say((plan.replaced.empty() ? "made the spell " : "made a stronger ") + db.spells[static_cast<size_t>(b.row)].name + (b.runes.empty() ? std::string() : " with " + std::to_string(b.runes.size()) + " rune(s)") + " (" + std::to_string(static_cast<long>(b.cost)) + ")");
         if (!plan.equips.empty()) client.Say("equipped a spell");
     }
     if (plan.buys.empty() && plan.equips.empty()) return text;
@@ -233,26 +211,24 @@ static std::string DoSpells(mp::Character& ch, const items::Database& db, const 
 static std::string DoGrowth(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
     if (ch.members.empty() || db.perks.empty()) return "";
     growth::Prefs pf;
-    pf.role = static_cast<int>(cfg.role); pf.tankiness = cfg.tankiness;
-    if (cfg.shop && !ch.members.empty()) { // the skills the spells it is about to make need (Healing; for a mage or hybrid an attack spell too), when the shop offers them
+    pf.role = bot::RoleKind(cfg.role); pf.tankiness = cfg.tankiness;
+    if (cfg.shop && !ch.members.empty()) { // the skill the Healing spell needs (and the stronger one it would make), when the shop offers the blueprint
         const int heal = spells::RowOfCode(db, "healing");
         const std::vector<int> owned = spells::OwnedRows(ch);
-        long money = static_cast<long>(mp::Money(ch));
-        auto want = [&](int row) {
-            const int byte = spells::SkillByteNeeded(db, ch.members[0], row);
-            const int school = db.spells[static_cast<size_t>(row)].ni[19];
+        const mp::Member& me = ch.members[0];
+        const bool haveBlueprint = heal >= 0 && std::any_of(ctx.spellStock.begin(), ctx.spellStock.end(), [&](const spells::StockSpell& s) { return s.row == heal && s.count > 0; });
+        if (haveBlueprint) {
+            const int school = db.spells[static_cast<size_t>(heal)].ni[19];
             const int skill = school <= 2 ? growth::kElemental : school <= 4 ? growth::kSense : growth::kAstral;
+            int byte = -1;
+            if (std::find(owned.begin(), owned.end(), heal) == owned.end()) byte = spells::SkillByteNeeded(db, me, heal);
+            else { // owned: what its runes would need, as far as the money and the mana pool allow
+                const spells::Equipped cur = spells::EquippedSpell(ch, heal);
+                const spells::Upgrade up = spells::BestVersion(db, me, heal, ctx.runeStock, static_cast<float>(mp::Money(ch)) * 0.5f, true);
+                float effect = 0; if (up.ok && !up.runes.empty()) std::memcpy(&effect, up.built.object.data() + 10, 4);
+                if (cur.container && effect >= cur.effect * 1.25f) byte = spells::SkillByteForBuilt(db, me, up.built);
+            }
             if (byte > 0) pf.minSkill[skill] = std::max(pf.minSkill[skill], byte);
-        };
-        if (heal >= 0 && std::find(owned.begin(), owned.end(), heal) == owned.end() && std::any_of(ctx.spellStock.begin(), ctx.spellStock.end(), [&](const spells::StockSpell& s) { return s.row == heal; })) {
-            want(heal);
-            money -= static_cast<long>(spells::Build(db, heal, {}, 1, 2).price);
-        }
-        if (pf.role >= 2) {
-            const int row = spells::PickAttack(db, ch.members[0], ctx.spellStock, money / 3);
-            bool haveAttack = false;
-            for (int r : owned) if (spells::IsUnitAttack(db, r)) haveAttack = true;
-            if (row >= 0 && !haveAttack) want(row);
         }
     }
     const growth::Plan plan = growth::MakePlan(db, ch, pf);
@@ -512,14 +488,14 @@ static void ConnectionPanel(App& app) {
 
 static void BuildPanel(App& app) {
     bot::Config& c = app.cfg;
-    static const char* const kRoles[] = {"Melee", "Ranged", "Mage", "Hybrid"};
+    static const char* const kRoles[] = {"Fighter", "Tank", "Archer"};
     ImGui::SetNextItemWidth(200);
-    app.dirty |= EnumCombo("Role", c.role, kRoles);
+    if (EnumCombo("Build", c.role, kRoles)) { app.dirty = true; c.tankiness = c.role == bot::Role::Tank ? 80 : 30; } // each build has its own default of the slider
     Tip("What the bot builds and plays:\n"
-        "Melee: weapons and armour, in front of the player\n"
-        "Ranged: bows and crossbows, behind the player\n"
-        "Mage: spells, heals and buffs first\n"
-        "Hybrid: a weapon plus healing spells");
+        "Fighter: a melee weapon, damage first\n"
+        "Tank: a melee weapon, armour and health first\n"
+        "Archer: bows and crossbows\n"
+        "All of them keep a Healing spell, made stronger with runes when the money and the skill allow.");
     ImGui::SetNextItemWidth(200);
     app.dirty |= ImGui::SliderInt("Damage <-> Defence", &c.tankiness, 0, 100, i18n::Tr("%d%% defence"));
     Tip("Where its skill points and gear go: 0 all damage, 100 all defence (health, armour)");
@@ -897,7 +873,7 @@ int main(int argc, char** argv) {
                         std::printf("target %X at %.1f (me at %.1f %.1f): walking to %.1f of it\n", target, d, mx, my, approach); std::fflush(stdout);
                         attackStep = 1;
                     } else if (attackStep >= 1 && attackStep <= 6 && in > std::chrono::seconds(22 + 4 * (attackStep - 1))) {
-                        if (target) { if (std::getenv("UM_BOT_ATTACKSPELL") && client.attackSpellSlot >= 0) client.CastAttackSpell(target); else client.Attack(target); } // UM_BOT_ATTACKSPELL=1: the attack spell instead of a weapon attack
+                        if (target) client.Attack(target);
                         client.Where(target, tx, ty);
                         const float dd = std::hypot(tx - mx, ty - my);
                         std::printf("attack %X try %d (me at %.1f %.1f, it at %.1f %.1f, %.1f apart)\n", target, attackStep, mx, my, tx, ty, dd); std::fflush(stdout);

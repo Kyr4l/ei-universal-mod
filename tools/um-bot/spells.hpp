@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstring>
+#include <functional>
 #include <random>
 #include <string>
 #include <vector>
@@ -168,30 +169,77 @@ inline int SkillByteNeeded(const items::Database& db, const mp::Member& m, int r
     return -1;
 }
 
-// A spell the bot casts at an enemy: an instant elemental damage spell aimed at a unit.
-inline bool IsUnitAttack(const items::Database& db, int row) {
-    if (row < 0 || static_cast<size_t>(row) >= db.spells.size()) return false;
-    const items::Database::SpellProto& P = db.spells[static_cast<size_t>(row)];
-    return P.ni[4] == 0 && P.ni[11] == 0x75 && P.ni[19] <= 2 && P.ni[13] <= 1 && P.n[10] >= 4.0f;
+// The school's skill byte a built spell needs (-1: its mana can never be enough).
+inline int SkillByteForBuilt(const items::Database& db, const mp::Member& m, const Built& b) {
+    mp::Member t = m;
+    const int skillAt = b.school <= 2 ? 0x6CE : b.school <= 4 ? 0x6CF : 0x6D0;
+    for (int byte = m.stats[static_cast<size_t>(skillAt)]; byte <= 100; ++byte) {
+        t.stats[static_cast<size_t>(skillAt)] = static_cast<uint8_t>(byte);
+        if (CanCast(db, t, b.mana, b.required, b.school)) return byte;
+    }
+    return -1;
 }
 
-// The attack spell a mage (or hybrid) makes: of the single-target elemental spells the shop offers (group 0, target kind 'u' = a unit; the area spells 't' are cast on a point, which the bot does not do), the one with the best damage for its mana that the
-// character can use once its skill is raised to `maxSkill`, at a price within `budget`. -1: none.
-inline int PickAttack(const items::Database& db, const mp::Member& m, const std::vector<StockSpell>& stock, long budget) {
-    int best = -1; float bestScore = 0;
-    for (const StockSpell& st : stock) {
-        const items::Database::SpellProto& P = db.spells[static_cast<size_t>(st.row)];
-        if (st.count < 1 || !IsUnitAttack(db, st.row) || P.n[3] > static_cast<float>(budget)) continue;
-        const int byte = SkillByteNeeded(db, m, st.row);
-        if (byte < 0 || byte > 60) continue;
-        const float score = P.n[10] * (1.0f + P.n[9] / 20.0f) * (1.0f + 0.05f * static_cast<float>(P.ni[6])) / std::max(1.0f, P.n[5]) - 0.002f * static_cast<float>(byte);
-        if (score > bestScore) { bestScore = score; best = st.row; }
-    }
+struct StockRune { int row = 0, count = 0; };   // a rune the shop offers (20..50 of each in the live shop)
+inline std::vector<StockRune> RuneStock(const items::Database& db, int shopNo, std::mt19937& rng) {
+    std::vector<StockRune> out;
+    for (size_t i = 0; i < db.runes.size(); ++i)
+        if (db.runes[i].shopMask >> (shopNo - 1) & 1) out.push_back({static_cast<int>(i), 20 + static_cast<int>(rng() % 31)});
+    return out;
+}
+
+// The worn spell of a row: its container, its spell object, its effect and mana (read from the object).
+struct Equipped { uint32_t container = 0, spell = 0; float effect = 0, mana = 0; int required = 0; };
+inline Equipped EquippedSpell(const mp::Character& ch, int row) {
+    Equipped e;
+    if (ch.members.empty()) return e;
+    for (uint32_t id : ch.members[0].lists[3])
+        for (const mp::Object& c : ch.lists[0]) {
+            if (c.id != id || c.kind != 0x3008 || c.detail.size() < 44) continue;
+            uint32_t spellId; std::memcpy(&spellId, c.detail.data() + 40, 4);
+            for (const mp::Object& sp : ch.lists[1]) {
+                if (sp.id != spellId || sp.kind != 0x3002 || static_cast<int>(sp.b) != row || sp.detail.size() < 66) continue;
+                uint32_t need; std::memcpy(&e.effect, sp.detail.data() + 10, 4); std::memcpy(&e.mana, sp.detail.data() + 34, 4); std::memcpy(&need, sp.detail.data() + 62, 4);
+                e.container = id; e.spell = spellId; e.required = static_cast<int>(need);
+                return e;
+            }
+        }
+    return e;
+}
+
+// The strongest version of a spell (more of an "effect" rune: the Healing spell's heal grows with each) the character can use, within a price: tries every mix of up to four runes of the
+// effect kind the blueprint allows. It must be castable (skill, mana) at least twice from a full pool; `ignoreSkill` asks what it could be with more skill (what the skill is raised for).
+struct Upgrade { std::vector<int> runes; Built built; float price = 0; bool ok = false; };
+inline Upgrade BestVersion(const items::Database& db, const mp::Member& me, int row, const std::vector<StockRune>& runes, float budget, bool ignoreSkill) {
+    Upgrade best;
+    std::vector<StockRune> eff;
+    for (const StockRune& r : runes) if (r.count > 0 && db.runes[static_cast<size_t>(r.row)].code[0] == 'e' && RuneAllowed(db, row, r.row)) eff.push_back(r);
+    const float intelligence = mp::GetF(me.stats, 0x20), pool = MaxMana(db, me);
+    std::vector<int> pick;
+    std::function<void(size_t, int)> rec = [&](size_t from, int left) {
+        const Built b = Build(db, row, pick, 1, 2);
+        const float scaled = b.mana * 25.0f / (intelligence > 0 ? intelligence : 25.0f);
+        float price = b.price;
+        const bool fits = price <= budget && scaled * 2 <= pool && (ignoreSkill || CanCast(db, me, b.mana, b.required, b.school));
+        if (fits) {
+            float effect, bestEffect = 0;
+            std::memcpy(&effect, b.object.data() + 10, 4);
+            if (best.ok) std::memcpy(&bestEffect, best.built.object.data() + 10, 4);
+            if (!best.ok || effect > bestEffect + 0.01f || (std::fabs(effect - bestEffect) <= 0.01f && price < best.price)) { best.ok = true; best.runes = pick; best.built = b; best.price = price; }
+        }
+        if (left == 0) return;
+        for (size_t i = from; i < eff.size(); ++i) {
+            const int used = static_cast<int>(std::count(pick.begin(), pick.end(), eff[i].row));
+            if (used >= eff[i].count) continue;
+            pick.push_back(eff[i].row); rec(i, left - 1); pick.pop_back();
+        }
+    };
+    rec(0, 4);
     return best;
 }
 
 struct Buy { int row = 0; std::vector<int> runes; float cost = 0; };
-struct Plan { std::vector<Buy> buys; std::vector<uint32_t> equips; long money = 0; std::vector<std::string> notes; }; // equips: spell containers carried but not worn
+struct Plan { std::vector<Buy> buys; std::vector<uint32_t> equips; std::vector<std::pair<uint32_t, uint32_t>> replaced; long money = 0; std::vector<std::string> notes; }; // equips: spell containers carried but not worn; replaced: (container, spell) of a spell the new one replaces
 
 // The spell containers the character carries without wearing them (in its items, not in the member's list 4), with the spell row each holds.
 inline std::vector<std::pair<uint32_t, int>> SpareContainers(const mp::Character& ch) {
@@ -208,7 +256,7 @@ inline std::vector<std::pair<uint32_t, int>> SpareContainers(const mp::Character
 
 // Which spells the bot makes: the Healing spell when it has none and can use it (its companion job), worn from its items or from the blueprint the shop offers; then, for a mage or hybrid,
 // an attack spell (PickAttack), within the money (the blueprint's price).
-inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const std::vector<StockSpell>& stock, bool wantAttack = false) {
+inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const std::vector<StockSpell>& stock, const std::vector<StockRune>& runes = {}) {
     Plan plan;
     if (ch.members.empty()) return plan;
     const mp::Member& me = ch.members[0];
@@ -243,13 +291,21 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const s
         plan.money -= static_cast<long>(b.price);
     };
     if (heal >= 0 && !has(heal)) make(heal, "Healing", plan.money);
-    if (wantAttack) {
-        bool haveAttack = false;
-        for (int r : owned) if (IsUnitAttack(db, r)) haveAttack = true;
-        if (!haveAttack) {
-            const int row = PickAttack(db, me, stock, plan.money / 3 + (money - plan.money) * 0); // at most a third of what is left
-            if (row >= 0) make(row, db.spells[static_cast<size_t>(row)].name.c_str(), plan.money / 3);
+    // A stronger Healing spell: the blueprint again and runes, when the worn one can be beaten by a quarter within half of what is left (the old one is replaced).
+    if (heal >= 0 && has(heal) && !runes.empty() && std::any_of(stock.begin(), stock.end(), [&](const StockSpell& s) { return s.row == heal && s.count > 0; })) {
+        const Equipped cur = EquippedSpell(ch, heal);
+        const Built base = Build(db, heal, {}, 1, 2);
+        const Upgrade up = BestVersion(db, me, heal, runes, std::max(0.0f, static_cast<float>(plan.money) * 0.5f), false);
+        if (cur.container && up.ok && !up.runes.empty()) {
+            float effect; std::memcpy(&effect, up.built.object.data() + 10, 4);
+            if (effect >= cur.effect * 1.25f && static_cast<long>(up.price) <= plan.money) {
+                plan.buys.push_back({heal, up.runes, up.price});
+                plan.replaced.push_back({cur.container, cur.spell});
+                plan.money -= static_cast<long>(up.price);
+                plan.notes.push_back("Healing: effect " + std::to_string(static_cast<int>(cur.effect)) + " -> " + std::to_string(static_cast<int>(effect)) + " with " + std::to_string(up.runes.size()) + " rune(s)");
+            }
         }
+        (void)base;
     }
     return plan;
 }
@@ -258,6 +314,11 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const s
 inline std::string Apply(const items::Database& db, mp::Character& ch, const Plan& plan) {
     if (ch.members.empty() || (plan.buys.empty() && plan.equips.empty())) return "";
     mp::Member& me = ch.members[0];
+    for (const auto& old : plan.replaced) { // the spell a stronger one replaces: its container and spell object go
+        me.lists[3].erase(std::remove(me.lists[3].begin(), me.lists[3].end(), old.first), me.lists[3].end());
+        ch.lists[0].erase(std::remove_if(ch.lists[0].begin(), ch.lists[0].end(), [&](const mp::Object& o) { return o.id == old.first; }), ch.lists[0].end());
+        ch.lists[1].erase(std::remove_if(ch.lists[1].begin(), ch.lists[1].end(), [&](const mp::Object& o) { return o.id == old.second; }), ch.lists[1].end());
+    }
     for (uint32_t id : plan.equips) {
         ch.backpack.erase(std::remove(ch.backpack.begin(), ch.backpack.end(), id), ch.backpack.end());
         me.lists[3].push_back(id);

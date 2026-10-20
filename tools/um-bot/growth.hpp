@@ -47,7 +47,7 @@ inline int PerkCost(const items::Database& db, size_t index, int abilitiesOwned)
 }
 
 struct Prefs {
-    int role = 1;           // 0 melee, 1 ranged, 2 mage, 3 hybrid
+    int role = 1;           // 0 melee (Fighter, Tank), 1 ranged (Archer)
     int tankiness = 30;     // 0 all damage .. 100 all defence
     int minSkill[kSkills] = {}; // skill bytes to reach first (what a spell it is about to make needs), 0 = none
 };
@@ -99,7 +99,7 @@ inline int WeaponGroupOf(const items::Database& db, const mp::Character& ch, int
             if (o.b < L.size()) {
                 const int g = L[o.b].typeId;
                 const bool ranged = g >= 5;
-                if (ranged == (role == 1) || role == 3) return g;
+                if (ranged == (role == 1)) return g;
             }
         }
     }
@@ -118,31 +118,25 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
     const int group = WeaponGroupOf(db, ch, pf.role);
     const int weaponSkill = group >= 5 ? kArchery : kMelee;
     const float tank = 0.5f + pf.tankiness / 100.0f; // health matters more for a defensive build
-    const bool mage = pf.role == 2, hybrid = pf.role == 3;
-
-    // Worth of a skill point at 0, by skill (primary skills of the role; the magic school the Healing spell belongs to).
+    // Worth of a skill point at 0, by skill: the weapon's skill first; the Astral skill a little, for the Healing spell every build keeps (and its runes).
     float skillWeight[kSkills] = {};
-    if (pf.role == 0 || hybrid) skillWeight[kMelee] = hybrid ? 0.8f : 1.0f;
-    if (pf.role == 1) skillWeight[kArchery] = 1.0f;
-    if (mage || hybrid) skillWeight[kAstral] = mage ? 1.0f : 0.5f;
-    if (mage) skillWeight[kElemental] = 0.4f;
-    if (pf.role == 0) skillWeight[weaponSkill == kMelee ? kMelee : kArchery] = 1.0f;
-    if (pf.role == 1) skillWeight[kMelee] = 0.0f;
+    skillWeight[weaponSkill] = 1.0f;
+    skillWeight[kAstral] = 0.35f;
 
     // Worth per unit of ability bonus, by ability group (0..25: sword .. intelligence).
     float abilityWeight[26] = {};
-    abilityWeight[group] = mage ? 0.15f : 1.0f;                   // the wielded weapon's (damage bonus in percent)
+    abilityWeight[group] = 1.0f;                                  // the wielded weapon's (damage bonus in percent)
     abilityWeight[16] = 0.45f * tank;                             // health (percent of max health)
-    abilityWeight[17] = mage || hybrid ? 0.4f : 0.05f;            // mana
+    abilityWeight[17] = 0.25f;                                    // mana: the Healing spell's pool
     abilityWeight[18] = 0.2f * tank;                              // vitality: health regeneration
-    abilityWeight[19] = mage || hybrid ? 0.25f : 0.03f;           // spirit: mana regeneration
+    abilityWeight[19] = 0.1f;                                     // spirit: mana regeneration
     abilityWeight[20] = 0.5f;                                     // quickness: actions
     abilityWeight[21] = 0.25f;                                    // lift: carrying capacity (heavier armor)
     abilityWeight[15] = 0.04f;                                    // night vision
     abilityWeight[23] = 6.0f;                                     // strength points: health and capacity
-    abilityWeight[24] = pf.role == 1 ? 5.0f : 3.0f;               // dexterity points: speed, ranged accuracy
-    abilityWeight[25] = mage ? 6.0f : 1.0f;                       // intelligence points: magic skill
-    if (mage || hybrid) for (int g = 7; g <= 14; ++g) abilityWeight[g] = g == 13 ? 0.9f : 0.15f; // the magic schools' abilities (Healing), where the database enables them
+    abilityWeight[24] = pf.role == 1 ? 5.0f : 3.0f;               // dexterity points: speed, ranged accuracy, the mana pool
+    abilityWeight[25] = 2.5f;                                     // intelligence points: magic skill, and every spell costs less (25 / Intelligence)
+    abilityWeight[13] = 0.5f;                                     // the Healing ability, where the database enables it
 
     std::vector<int> skill(kSkills);
     for (int s = 0; s < kSkills; ++s) skill[static_cast<size_t>(s)] = Level(me, kSkillBase + s);

@@ -447,34 +447,14 @@ public:
         CastOn(static_cast<uint32_t>(healSpellSlot), target);
         spellSlot_ = healSpellSlot; spellOrderAt_ = Now(); spellTarget_ = target; spellManaAtCast_ = Mana(worldUnit); spellResends_ = 1;
     }
-    // An attack spell (spell items index attackSpellSlot) on an enemy: the same order and the same stance quirk as the heal.
-    void CastAttackSpell(uint32_t target) {
-        if (attackCastUnpaid_ && ++attackFailStreak_ == 3) Log("the attack spell cost no mana 3 casts in a row: using the weapon instead");
-        attackCastUnpaid_ = true;
-        Log("casting the attack spell on unit " + std::to_string(target) + " (mana " + std::to_string(Mana(worldUnit)) + ")");
-        CastOn(static_cast<uint32_t>(attackSpellSlot), target);
-        spellSlot_ = attackSpellSlot; spellOrderAt_ = Now(); spellTarget_ = target; spellManaAtCast_ = Mana(worldUnit); spellResends_ = 1;
-    }
-    // Enough mana for an attack spell and the share kept for heals (the setting, of the maximum).
-    bool CanAttackBySpell() const {
-        if (attackSpellSlot < 0 || !worldUnit || attackFailStreak_ >= 3) return false;
-        const auto mx = unitManaMax_.find(worldUnit);
-        const int reserve = mx == unitManaMax_.end() ? 0 : mx->second * manaReservePct / 100;
-        return Mana(worldUnit) >= attackSpellMana + reserve;
-    }
     void SpellSteps() {
         if (spellOrderAt_ <= 0) return;
         const int mana = Mana(worldUnit);
-        const bool attack = spellSlot_ == attackSpellSlot && attackSpellSlot >= 0 && attackSpellSlot != healSpellSlot;
-        if (mana >= 0 && spellManaAtCast_ - mana >= (attack ? std::max(3, attackSpellMana / 2) : 8)) { // paid: the cast started
-            if (attack) { attackCastUnpaid_ = false; attackFailStreak_ = 0; engageTries_ = 0; targetSince_ = Now(); attackedAt_ = Now(); idleSince_ = Now(); Log("cast the attack spell on unit " + std::to_string(spellTarget_)); }
-            else spellCost_ = std::max(spellCost_, static_cast<int>(spellManaAtCast_) - mana);
-            spellOrderAt_ = 0; return;
-        }
-        if (spellResends_ > 0 && Now() - spellOrderAt_ > 1.2) { --spellResends_; CastOn(static_cast<uint32_t>(spellSlot_), spellTarget_); spellOrderAt_ = Now(); holdUntil_ = Now() + (attack ? 0.5 : 2.5); }
+        if (mana >= 0 && spellManaAtCast_ - mana >= 8) { spellCost_ = std::max(spellCost_, static_cast<int>(spellManaAtCast_) - mana); spellOrderAt_ = 0; return; } // paid: the cast started
+        if (spellResends_ > 0 && Now() - spellOrderAt_ > 1.2) { --spellResends_; CastOn(static_cast<uint32_t>(spellSlot_), spellTarget_); spellOrderAt_ = Now(); holdUntil_ = Now() + 2.5; }
         else if (Now() - spellOrderAt_ > 5) spellOrderAt_ = 0;
     }
-    double spellOrderAt_ = 0, spellManaAtCast_ = 0; uint32_t spellTarget_ = 0; int spellResends_ = 0, spellCost_ = 0, spellSlot_ = -1, attackFailStreak_ = 0; bool attackCastUnpaid_ = false;
+    double spellOrderAt_ = 0, spellManaAtCast_ = 0; uint32_t spellTarget_ = 0; int spellResends_ = 0, spellCost_ = 0, spellSlot_ = -1;
     int Health(uint32_t id) const { const auto it = unitHp_.find(id); return it == unitHp_.end() ? -1 : it->second; }
     int Mana(uint32_t id) const { const auto it = unitMana_.find(id); return it == unitMana_.end() ? -1 : it->second; }
     bool IsHero(uint32_t id) const { for (const auto& p : players) if (p.second.unitId == id) return true; return false; }
@@ -503,7 +483,6 @@ public:
     bool leashed_ = false;
     double holdUntil_ = 0;      // no new orders before this time (a potion is being drunk)
     // The Healing spell's object id from the character's spell list (0: none / no database); the host's heal threshold in % (0: off).
-    int attackSpellSlot = -1, attackSpellMana = 0, manaReservePct = 20; // an attack spell of a mage: its spell items index, its mana cost for this hero (cost x 25 / Intelligence), % of mana kept for heals
     int healSpellSlot = -1; int healHostBelow = 0;   // the index in the hero's spell items of a spell container holding Healing (-1: none): the spell id of a 0x33 cast order. Verified live: CastOrderSpell and CastSpellMulti run.
     bool drinkSpell_ = false; int spellFails_ = 0, hostHealFails_ = 0, hostHealHp_ = 0; double hostHealAt_ = 0, hostHealCastAt_ = 0, hostHealPause_ = 0;
     bool potionsLeft_ = true; int potionFails_ = 0; double healAt_ = 0, drinkAt_ = 0; int drinkHp_ = 0;
@@ -709,7 +688,7 @@ public:
                         if (++engageTries_ > 6) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_ - 1) + " times: leaving it for 30 s"); }
                         else {
                             Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_) + ")");
-                            if (CanAttackBySpell()) CastAttackSpell(t); else Attack(t);
+                            Attack(t);
                             attackedAt_ = Now(); attackedTarget_ = t;
                             if (engageTries_ > 2 && d > 1.5f) MoveTo(x + (mx - x) * 1.0f / d, y + (my - y) * 1.0f / d); // still refused: one step closer
                         }

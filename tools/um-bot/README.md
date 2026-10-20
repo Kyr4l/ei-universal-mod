@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.19.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.20.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
 the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
@@ -37,7 +37,7 @@ The settings are saved in `um-bot.cfg` next to the program.
 - **Connection**: the server (the hosting player's computer), its UDP port (8888 by default) and the bot's
   name.
 - **Build**:
-  - the role: Melee, Ranged, Mage or Hybrid;
+  - the build: Fighter (melee, damage first), Tank (melee, armour and health first) or Archer; there is no mage build, but every build keeps a Healing spell (see Spells);
   - a Damage ↔ Defence slider, which decides where its skill points and gear go.
 - **Behaviour**:
   - the priority: keep the player alive, focus the player's target, or guard the player;
@@ -64,15 +64,12 @@ The settings are saved in `um-bot.cfg` next to the program.
   the money for a wished item the shop does not show yet. Items are built with the game's own arithmetic (checked against
   the live shop item for item) and the server accepts them byte for byte.
 - **Experience**: before a quest (before the shop) it spends its free experience like a player in the camp's skills window, at the game's own prices (the skill and ability costs were
-  checked against the running game and against saved characters): skill points for the role (Melee, Archery, the Astral / Elemental magic), the ability of the weapon it wields, and
+  checked against the running game and against saved characters): skill points for the build (Melee or Archery, and some Astral Magic for the Healing spell), the ability of the weapon it wields, and
   Health, Strength, Quickness, Lift and the like, chosen by worth per experience point, with the Damage <-> Defence slider weighing health. "Spend experience" turns it off.
 - **Spells**: if it has no usable Healing spell, it wears one it carries, or buys the shop's Healing blueprint and makes the spell the way the camp's constructor does (spell object and container item, exactly
   the game's values, checked against saved characters and a live cast). It only takes a spell it can use: the magic skill, and the mana (cost x 25 / Intelligence against its maximum) - "Spend experience" raises the skill the spell needs first.
-- **Mage / Hybrid**: they also make an attack spell (an instant elemental spell aimed at a unit: Fire Arrow, Lightning Arc, Acid Ray; at most a third of the money, and only one the character can use) and cast it at the
-  enemy it has walked up to, when it has the mana for it besides the share kept for heals; if three casts in a row cost no mana it goes back to its weapon. Casting at enemies is checked only partly (the orders are
-  accepted and cost mana; the damage was not measured).
-- **Chat report** ("Report in chat"): at the camp it says in the game's chat what it did: `trained (2392 exp): Archery 1 -> 38, Strength1`, `made the spell Healing (200)`,
-  `bought: stone short bow (silicon) for 240, ...`, `sold loot for N`, `repaired N item(s) for N`, `bought 2 healing potions`, `money left: N`.
+- **Healing upgrade**: when it has the Healing spell it also looks at making a stronger one: the same blueprint with "effect" runes (each adds to the heal and to the mana cost and the skill needed), the best mix of up to
+  four runes it can use (castable at least twice from a full mana pool, within half of its money, at least 25 % stronger than the worn one). The old spell is replaced, and "Spend experience" raises the Astral skill the better spell needs.
 - **Swaps** ("Accept swaps"): a player can click the bot's head in the lobby to swap; it accepts, takes the offered items (the loot it
   sells) and the money offered (checked: 500 -> 520 for an offer of 20), and gives nothing.
 - **Progress**: "Save progress" writes the character the server reports (experience, items, quest variables; sent

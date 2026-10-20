@@ -153,7 +153,7 @@ inline std::vector<Offer> Stock(const items::Database& db, int shopNo, std::mt19
 // What the bot wants to wear: its class (the settings' role and Damage <-> Defence slider) or, when the user names gear, exactly that (priority), kept while possible.
 struct GearWish { std::string name, material; };   // "bone long bow" / "bone long bow:dragon red bones" (empty material: any the shop offers)
 struct Prefs {
-    int role = 1;             // 0 melee, 1 ranged, 2 mage, 3 hybrid (the settings' Role)
+    int role = 1;             // 0 melee (Fighter, Tank), 1 ranged (Archer)
     int tankiness = 30;       // 0 all damage .. 100 all defence: the share of the money that goes into armor
     std::vector<GearWish> wishes;
     float weightLimit = 0.95f; // never carry more than this part of the lift capacity
@@ -288,7 +288,7 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
     (void)armorBudget; (void)weaponBudget;
     auto ability = [&](int group) { const size_t at = mp::kPerkBase + static_cast<size_t>(group); return at < me.stats.size() ? static_cast<int>(me.stats[at]) : 0; };
     auto allowed = [&](int typeId) {
-        switch (pf.role) { case 0: return typeId <= 4; case 1: return typeId == 5; case 2: return typeId == 2 || typeId == 5; default: return true; }
+        return pf.role == 1 ? typeId >= 5 : typeId <= 4;
     };
     if (!weaponDone) {
         float bestScore = weapon ? WeaponScore(DF(*weapon, 56), DF(*weapon, 60)) * (1 + 0.35f * ability(WeaponGroup(db.List(items::Category::Weapons)[weapon->b].typeId))) : 0.0f;
