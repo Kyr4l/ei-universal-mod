@@ -799,6 +799,7 @@ private:
     std::vector<uint8_t> mpRaw_;
     std::vector<uint8_t> join_;
     std::string worldQuest_;
+    int pktDumped_ = 0;
     int hpLogged_ = -1, mpLogged_ = -1;
     double leavingAt_ = 0;
     double hostGoneAt_ = 0, joinWatchAt_ = 0; int joinRetries_ = 0;
@@ -1078,6 +1079,10 @@ private:
     }
 
     void Handle(const uint8_t* b, int n) {
+        if (const char* dir = std::getenv("UM_BOT_PKT")) { // research: every received UDP packet as a file
+            char path[512]; std::snprintf(path, sizeof path, "%s/%05d.bin", dir, pktDumped_++);
+            if (FILE* f = std::fopen(path, "wb")) { std::fwrite(b, 1, static_cast<size_t>(n), f); std::fclose(f); }
+        }
         switch (b[0]) {
         case 0x05: // info
             if (n < 9 || state != State::AskingInfo) return;
