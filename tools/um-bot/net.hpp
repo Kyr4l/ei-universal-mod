@@ -139,13 +139,20 @@ public:
     // Updates sometimes decode to impossible positions (seen: x = 9345.8 on a map 400 wide: the bot then thought the host was thousands of units away and ran off after it).
     // A report outside the map, or a jump of more than 60 units within 3 s, is dropped (three in a row are believed: a real teleport).
     std::map<uint32_t, int> badPos_;
+    struct Jump { float x = 0, y = 0; int count = 0; };
+    std::map<uint32_t, Jump> jumpSeen_;
     void SetPos(uint32_t id, float x, float y, float tx, float ty) {
         if (!(tx > 0 && tx < 1024 && ty > 0 && ty < 1024)) { tx = x; ty = y; } // a destination outside the map is no destination
         const auto prev = unitPos.find(id);
-        const bool inside = x > 0 && x < 1024 && y > 0 && y < 1024;
+        const bool inside = x > 4 && x < 1024 && y > 4 && y < 1024; // (the garbage also lands near the corner: (0.9, 0.5) made the bot run to the origin)
         const bool jump = prev != unitPos.end() && Now() - prev->second.at < 3.0 && std::hypot(x - prev->second.x, y - prev->second.y) > 60.0f;
         if (!inside) { if (++badPos_[id] % 50 == 1) Log("ignored an impossible position of unit " + std::to_string(id) + ": (" + std::to_string(x) + "," + std::to_string(y) + ")"); return; } // never believed
-        if (jump && ++badPos_[id] < 3) return; // a real teleport shows three times in a row
+        if (jump) { // a real teleport shows up as three reports that agree with each other; decoding garbage varies from report to report
+            Jump& j = jumpSeen_[id];
+            if (j.count > 0 && std::hypot(x - j.x, y - j.y) < 3.0f) ++j.count; else { j.x = x; j.y = y; j.count = 1; }
+            if (j.count < 3) return;
+        }
+        jumpSeen_.erase(id);
         badPos_[id] = 0;
         Pos np{x, y, tx, ty, Now(), kWalkSpeed};
         const auto it = unitPos.find(id);
@@ -723,7 +730,7 @@ public:
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy) && Where(worldUnit, mx, my)) {
                 const float dh = std::hypot(hx - mx, hy - my);
-                if (!leashed_ && dh > leash) { leashed_ = true; fightTarget_ = 0; Log("beyond the leash (" + std::to_string(static_cast<int>(dh)) + " units): back to the host"); }
+                if (!leashed_ && dh > leash && !(Now() < lootUntil_ && Now() - selfHurtAt_ > 3)) { leashed_ = true; fightTarget_ = 0; Log("beyond the leash (" + std::to_string(static_cast<int>(dh)) + " units): back to the host"); }
                 else if (leashed_ && dh < followDistance * 2 + 1) { leashed_ = false; Log("back near the host"); }
             }
         }
@@ -760,7 +767,7 @@ public:
         }
         const bool attacking = ownTarget != 0 && !leashed_;
         if (attacking) fighting = true;
-        if (state == State::Accepted && !attacking && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Alive() && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
+        if (state == State::Accepted && !attacking && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Alive() && Now() - fightAt_ > 1 && Now() >= holdUntil_ && (Now() >= lootUntil_ || underAttack) && !leashed_) {
             fightAt_ = Now();
             float d = 0;
             uint32_t t = (chatEngagement_ >= 0 ? chatEngagement_ : engagement) >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
@@ -848,7 +855,7 @@ public:
                 if (hostTrail_.empty() || std::hypot(hx - hostTrail_.back().first, hy - hostTrail_.back().second) > 1.5f) { hostTrail_.emplace_back(hx, hy); if (hostTrail_.size() > 120) hostTrail_.pop_front(); }
             }
         }
-        if (!fighting && (!underAttack || leashed_) && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away (not while something bites us: the game's logic answers; the leash still pulls back)
+        if (!fighting && (!underAttack || leashed_) && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_ && (Now() >= lootUntil_ || underAttack)) { // walk to the host when it is away (not while something bites us: the game's logic answers; the leash still pulls back)
             followAt_ = Now();
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy)) {
@@ -1026,6 +1033,7 @@ private:
     bool heroJoined_ = false;
     int dumped_ = 0;
     double followAt_ = 0, fightAt_ = 0, attackedAt_ = 0;
+    double lootUntil_ = 0;      // a trip to the body is under way until then: no leash, no follow (unless something attacks us)
     int paceSent_ = -1; int hostPaceValue_ = -1; bool paceSeen_ = false;
     uint32_t fightTarget_ = 0;
     double diagAt_ = 0, stateLogAt_ = 0; int diagMode_ = -1; float diagX_ = 0, diagY_ = 0;
@@ -1193,8 +1201,9 @@ private:
             float x, y; if (Where(kv.first, x, y) && std::hypot(x - corpse_.x, y - corpse_.y) < 20) { corpse_.at = Now() - 20; return; } // look again in 5 s
         }
         if (++corpse_.tries > 3) { Log("our body could not be looted: giving up"); corpse_.id = 0; return; }
-        corpse_.at = Now(); holdUntil_ = Now() + 3;
-        Log("looting our body (" + std::to_string(corpse_.id) + ")"); Loot(corpse_.id);
+        float mx = 0, my = 0; const float trip = Where(worldUnit, mx, my) ? std::hypot(mx - corpse_.x, my - corpse_.y) : 30.0f;
+        corpse_.at = Now(); holdUntil_ = lootUntil_ = Now() + std::min(60.0f, trip / 3.0f + 6.0f); // the server walks the hero to the body: the follow and the leash must not pull it back (they did, 2 s later, three times)
+        Log("looting our body (" + std::to_string(corpse_.id) + "), " + std::to_string(static_cast<int>(trip)) + " units away"); Loot(corpse_.id);
     }
     // Our hero died: the server sent no respawn in 140 s (live, 2026-10-20: the player's record keeps its unit, nothing else changes); entering the world anew (a fresh
     // connection) gives a new, living hero (checked: every run after a death started with full health). After `deadGrace` seconds dead: leave and reconnect.
