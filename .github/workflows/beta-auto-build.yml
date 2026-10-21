@@ -43,6 +43,8 @@ jobs:
             tools/um-multitool/um-multitool-xp32.exe
             tools/um-multitool/um-multitool-x86_64.AppImage
             Universal-Mod/um.dll
+            tools/um-bot/um-bot
+            tools/um-bot/um-bot.exe
           token: ${{ secrets.GITHUB_TOKEN }}
           makeLatest: false
           name: Universal Mod Beta ${{ env.VERSION }}
