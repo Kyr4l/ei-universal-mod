@@ -60,6 +60,9 @@ struct App {
     double phaseStart = 0, windowSeen = 0;
     std::string status, failure;
     bool showInfo = false;
+    // The keyboard selection, as in OBT-1 (Tab moves it): 0 Play, 1 mod chooser, 2 Options, 3 Readme, 4 Website, 5 Uninstall, 6 Exit, 7 Lang, 8 (i).
+    int focus = 0;
+    static constexpr int kFocusCount = 9;
     std::string message;                // a message popup
     std::ofstream log;
     void Log(const std::string& line) {
@@ -220,29 +223,28 @@ static std::string FormatInfo(const Texts& tx, const ModInfo& m) {
 static ImTextureID Tid(const Texture& t) { return static_cast<ImTextureID>(t.id); }
 
 // One of the six menu buttons: its image (pressed / hovered / normal) at the original position, or a plain button without a skin.
-static bool MenuButton(App& app, const char* mask, const char* fallback, ImVec2 pos, bool enabled = true) {
+static bool MenuButton(App& app, const char* mask, const char* fallback, ImVec2 pos, int index, bool enabled = true) {
     const Texture& normal = app.skin.Image(mask);
     ImDrawList* dl = ImGui::GetBackgroundDrawList();
+    const bool focused = app.focus == index;
     if (!normal) {
         ImGui::SetCursorPos(pos);
         ImGui::BeginDisabled(!enabled);
+        if (focused) ImGui::PushStyleColor(ImGuiCol_Button, ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered));
         const bool hit = ImGui::Button(fallback, ImVec2(130, 34));
+        if (focused) ImGui::PopStyleColor();
         ImGui::EndDisabled();
+        if (ImGui::IsItemActivated()) app.focus = index;
         return hit;
     }
     const ImVec2 size(static_cast<float>(normal.w - 1), static_cast<float>(normal.h - 1));
     ImGui::SetCursorPos(pos);
     ImGui::InvisibleButton((std::string("##") + mask).c_str(), size);
     const bool hovered = ImGui::IsItemHovered(), down = ImGui::IsItemActive();
+    if (ImGui::IsItemActivated()) app.focus = index; // a click selects the button, like in OBT-1
     const Texture* shown = &normal;
-    static bool otherHovered = false;          // last frame: is the mouse on one of the other buttons?
-    static bool anyHoverThisFrame = false;
-    if (std::string(mask) != "pl" && hovered) anyHoverThisFrame = true;
-    if (std::string(mask) == "ex") { otherHovered = anyHoverThisFrame; anyHoverThisFrame = false; } // Exit is the last button of the frame
-    // Play is the default button (Enter starts the game): it wears its highlighted picture until the mouse is on another button.
-    const bool preselected = std::string(mask) == "pl" && enabled && !otherHovered && !down;
-    if (preselected) { const Texture& h = app.skin.Image("pl_h"); if (h) shown = &h; }
-    else if (down) { const Texture& d = app.skin.Image(std::string(mask) + "_d"); if (d) shown = &d; }
+    // Pressed or keyboard-selected: the _d picture (what OBT-1 shows for a focused button); the mouse over it: _h.
+    if (down || focused) { const Texture& d = app.skin.Image(std::string(mask) + "_d"); if (d) shown = &d; }
     else if (hovered) { const Texture& h = app.skin.Image(std::string(mask) + "_h"); if (h) shown = &h; }
     const ImVec2 origin = ImGui::GetWindowPos();
     dl->AddImage(Tid(*shown), ImVec2(origin.x + pos.x, origin.y + pos.y), ImVec2(origin.x + pos.x + static_cast<float>(shown->w), origin.y + pos.y + static_cast<float>(shown->h)));
@@ -311,12 +313,29 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     ImGui::BeginDisabled(modal);
     bool play = false, opt = false, readme = false, web = false, uninstall = false, exit = false;
-    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle && !app.UpdateInstalling());
-    opt = MenuButton(app, "op", "Options", ImVec2(237, 126));
-    readme = MenuButton(app, "re", "Readme", ImVec2(237, 161));
-    web = MenuButton(app, "we", "Web", ImVec2(237, 196));
-    uninstall = MenuButton(app, "un", "Uninstall", ImVec2(237, 231));
-    exit = MenuButton(app, "ex", "Exit", ImVec2(237, 266));
+    // Keyboard: Tab / Shift+Tab move the selection, Up / Down too through the menu (or change the mod when the chooser is selected), Enter / Space press it.
+    const bool popupOpen = ImGui::IsPopupOpen("", ImGuiPopupFlags_AnyPopupId | ImGuiPopupFlags_AnyPopupLevel);
+    const bool kb = !modal && !popupOpen;
+    bool kbActivate = false;
+    if (kb) {
+        auto vertical = [&](int dir) { static const int order[] = {0, 2, 3, 4, 5, 6}; int at = -1; for (int i = 0; i < 6; ++i) if (order[i] == app.focus) at = i; app.focus = at < 0 ? 0 : order[(at + dir + 6) % 6]; };
+        if (ImGui::IsKeyPressed(ImGuiKey_Tab)) app.focus = (app.focus + (io.KeyShift ? App::kFocusCount - 1 : 1)) % App::kFocusCount;
+        const bool up = ImGui::IsKeyPressed(ImGuiKey_UpArrow), down = ImGui::IsKeyPressed(ImGuiKey_DownArrow);
+        if ((up || down) && app.focus == 1) { // the chooser: another mod
+            const int n = static_cast<int>(app.mods.size());
+            if (n > 1) { app.modIndex = (app.modIndex + (down ? 1 : n - 1)) % n; app.ApplySkin(); app.Save(); app.Click(); }
+        } else if (up) vertical(-1); else if (down) vertical(1);
+        kbActivate = ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter) || ImGui::IsKeyPressed(ImGuiKey_Space);
+    }
+    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), 0, idle && !app.UpdateInstalling());
+    opt = MenuButton(app, "op", "Options", ImVec2(237, 126), 2);
+    readme = MenuButton(app, "re", "Readme", ImVec2(237, 161), 3);
+    web = MenuButton(app, "we", "Web", ImVec2(237, 196), 4);
+    uninstall = MenuButton(app, "un", "Uninstall", ImVec2(237, 231), 5);
+    exit = MenuButton(app, "ex", "Exit", ImVec2(237, 266), 6);
+    if (kbActivate) { // Enter on the chooser starts the game too (Play is the accept button)
+        switch (app.focus) { case 0: case 1: play = true; break; case 2: opt = true; break; case 3: readme = true; break; case 4: web = true; break; case 5: uninstall = true; break; case 6: exit = true; break; default: break; }
+    }
 
     // The mod chooser beside Play, and the (i) button.
     const Texture& playImg = app.skin.Image("pl");
@@ -325,14 +344,16 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 1));
     ImGui::PushStyleColor(ImGuiCol_Text, kSteel);
     ImGui::PushStyleColor(ImGuiCol_PopupBg, ImVec4(0, 0, 0, 1));
-    ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0.2f, 0.2f, 0.2f, 1));
+    ImGui::PushStyleColor(ImGuiCol_Border, app.focus == 1 ? kSteel : ImVec4(0.2f, 0.2f, 0.2f, 1));
     ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.12f, 0.2f, 0.3f, 1));
     ImGui::PushStyleColor(ImGuiCol_HeaderHovered, ImVec4(0.18f, 0.3f, 0.45f, 1));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1);
     if (app.skinFont) ImGui::PushFont(app.skinFont, 14.5f);
     ImGui::SetNextItemWidth(169);
     const ModInfo* cur = app.CurrentMod();
-    if (ImGui::BeginCombo("##mod", cur ? app.DisplayTitle(*cur).c_str() : "No mods")) {
+    const bool comboOpen = ImGui::BeginCombo("##mod", cur ? app.DisplayTitle(*cur).c_str() : "No mods");
+    if (ImGui::IsItemActivated()) app.focus = 1;
+    if (comboOpen) {
         for (int i = 0; i < static_cast<int>(app.mods.size()); ++i)
             if (ImGui::Selectable((app.DisplayTitle(app.mods[static_cast<size_t>(i)]) + "##" + std::to_string(i)).c_str(), i == app.modIndex)) {
                 app.Click();
@@ -350,9 +371,10 @@ static void DrawMain(App& app, GLFWwindow* window) {
         if (infoImg) {
             ImGui::SetCursorPos(ImVec2(infoX, 93));
             ImGui::InvisibleButton("##info", ImVec2(static_cast<float>(infoImg.w - 1), static_cast<float>(infoImg.h - 1)));
-            const Texture& show = ImGui::IsItemHovered() && app.skin.Image("info_h") ? app.skin.Image("info_h") : infoImg;
+            if (ImGui::IsItemActivated()) app.focus = 8;
+            const Texture& show = (ImGui::IsItemHovered() || app.focus == 8) && app.skin.Image("info_h") ? app.skin.Image("info_h") : infoImg;
             bg->AddImage(Tid(show), ImVec2(infoX, 93), ImVec2(infoX + static_cast<float>(show.w), 93 + static_cast<float>(show.h)));
-            if (ImGui::IsItemDeactivated() && ImGui::IsItemHovered()) { app.Click(); app.showInfo = true; }
+            if ((ImGui::IsItemDeactivated() && ImGui::IsItemHovered()) || (kbActivate && app.focus == 8)) { app.Click(); app.showInfo = true; }
         } else {
             ImGui::SetCursorPos(ImVec2(infoX, 98));
             if (ImGui::Button("i", ImVec2(24, 23))) app.showInfo = true;
@@ -363,10 +385,11 @@ static void DrawMain(App& app, GLFWwindow* window) {
         bool lang = false;
         if (langImg) {
             ImGui::InvisibleButton("##lang", ImVec2(static_cast<float>(langImg.w - 1), static_cast<float>(langImg.h - 1)));
-            const Texture& show = ImGui::IsItemHovered() && app.skin.Image("lang_h") ? app.skin.Image("lang_h") : langImg;
+            if (ImGui::IsItemActivated()) app.focus = 7;
+            const Texture& show = (ImGui::IsItemHovered() || app.focus == 7) && app.skin.Image("lang_h") ? app.skin.Image("lang_h") : langImg;
             const ImVec2 p = ImGui::GetItemRectMin();
             bg->AddImage(Tid(show), p, ImVec2(p.x + static_cast<float>(show.w), p.y + static_cast<float>(show.h)));
-            lang = ImGui::IsItemDeactivated() && ImGui::IsItemHovered();
+            lang = (ImGui::IsItemDeactivated() && ImGui::IsItemHovered()) || (kbActivate && app.focus == 7);
         } else lang = ImGui::Button(("Lang: " + app.cfg.language).c_str());
         if (lang && app.languages.size() > 1) {
             auto it = std::find(app.languages.begin(), app.languages.end(), app.cfg.language);
@@ -377,7 +400,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::EndDisabled();
 
     if (!modal) {
-        if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.UpdateInstalling()) { app.Click(); app.Play(); }
+        if (play && idle && !app.UpdateInstalling()) { app.Click(); app.Play(); }
         if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the Evil Islands folder.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
         if (readme) {
             app.Click();
