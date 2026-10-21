@@ -22,6 +22,7 @@ struct GuiOptions {
     bool openSettings = false;     // start on the Settings tab
     std::string dbFile;            // start on File Processing > DB with this database (.res, .xlsx, .ods)
     std::string mpFolder;          // start on File Processing > MP with this characters folder
+    std::string iniFile;           // start on File Processing > INI <-> REG with this file (.ini or .reg)
     bool openTexture = false;      // start on the Texture Editor tab
     std::string textureFile;       // with openTexture: open this picture (.mmp, .dds, .png...)
     std::string screenshotPath;    // save the window after a few frames, then quit

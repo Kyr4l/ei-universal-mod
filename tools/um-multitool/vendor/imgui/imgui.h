@@ -4297,4 +4297,12 @@ typedef ImFontAtlasRect ImFontAtlasCustomRect;
 #endif
 #endif
 
+
+// um-multitool: syntax colouring of a multi-line text input (imgui_widgets.cpp, InputTextEx). Set before ImGui::InputTextMultiline, clear after: while it is set (and the
+// field does not wrap) every visible line is asked for its coloured spans, byte offsets inside the line; what no span covers is drawn in the normal text colour.
+struct UmColorSpan { int begin, end; ImU32 col; };
+typedef int (*UmColorLineFn)(void* user, const char* line_begin, const char* line_end, UmColorSpan* spans, int max_spans);
+extern UmColorLineFn g_UmColorLine;
+extern void* g_UmColorUser;
+
 #endif // #ifndef IMGUI_DISABLE

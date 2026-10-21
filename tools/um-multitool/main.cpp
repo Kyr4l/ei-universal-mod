@@ -74,6 +74,7 @@ static void PrintTopLevelHelp() {
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
               << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
+              << "  um-multitool gui --ini <file>         # ... on File Processing > INI <-> REG with this .ini or .reg open in the editor\n"
               << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>] [--mode object|paint|ground|sculpt|water|script|nodes]  # ... on the Map Editor with these files (looking at that object, in that editing mode)\n"
               << "  um-multitool gui --texture [<file>]   # ... on the Texture Editor (with this picture: .mmp, .dds, .png)\n"
               << "  um-multitool gui --settings           # ... on the Settings tab\n"
@@ -337,6 +338,8 @@ static int StartGui(int argc, char* argv[], int first) {
             options.viewerFrame = static_cast<float>(std::atof(argv[++i]));
         } else if (a == "--skin" && i + 1 < argc) {
             options.viewerSkin = argv[++i];
+        } else if (a == "--ini" && i + 1 < argc) {
+            options.iniFile = argv[++i];
         } else if (a == "--mp" && i + 1 < argc) {
             options.mpFolder = argv[++i];
         } else if (a == "--texture") {
@@ -527,7 +530,7 @@ static const CompletionEntry kCompletions[] = {
     {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
     {"map",      "--check --navmesh --mpr --write --force --config --help --verbose"},
     {"dll",      "--port --listen --stats --help --verbose"},
-    {"gui",      "--db --viewer --map --mp --skin --naked --settings --texture --mode --screenshot --verbose"},
+    {"gui",      "--db --viewer --map --mp --ini --skin --naked --settings --texture --mode --screenshot --verbose"},
     {"install-desktop", "--remove"},
     {"completion", "bash"},
 };
