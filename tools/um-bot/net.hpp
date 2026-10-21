@@ -13,6 +13,7 @@
 #pragma once
 
 #include "mp_file.hpp" // the .mp compression (um-multitool)
+#include "zone_exits.hpp" // the zone exits of the quest world (where a hero may leave it)
 
 #include <cctype>
 #include <algorithm>
@@ -429,6 +430,7 @@ public:
             else if (cmd == "passive") { chatEngagement_ = 0; Log("chat command: passive"); }
             else if (cmd == "defensive") { chatEngagement_ = 1; Log("chat command: defensive"); }
             else if (cmd == "aggressive" || cmd == "attack") { chatEngagement_ = 2; Log("chat command: aggressive"); }
+            else if (cmd == "leave" || cmd == "exit" || cmd == "quit" || cmd == "go home") { Log("chat command: leave the zone"); LeaveWorld(); }
             else if (cmd == "reset") { chatStay_ = false; chatEngagement_ = -1; Log("chat command: back to the settings"); }
             else Log("chat command not understood: " + cmd);
             return;
@@ -516,6 +518,8 @@ public:
     std::vector<std::string> QuestFiles() const { std::vector<std::string> v; for (const auto& kv : quests) v.push_back(kv.second); return v; } // the session's quest list (kind 11): the loaded allod's quests
     bool holdEntry = false;      // wait before entering the quest (the shop visit comes first)
     bool leaveWithHost = true;  // leave the quest zone when the host does
+    bool leaveAtExit = true;    // leave the quest zone first when the host stands in a zone exit: the host cannot leave while other players are still in it
+    bool sayLeaving = false;    // say it in the chat when it does
     bool autoEnter = true;      // enter the chosen quest when its zone opens
     uint32_t worldUnit = 0;     // our hero's unit in the quest world (0: not in it)
 
@@ -566,7 +570,7 @@ public:
             Handle(buf, n);
         }
         // In the session: an update every 20 ms (as the game): the ack bits, our stream part, the JOIN after a change.
-        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchJoin(); WatchEntry(); WatchDeath(); LeaveSteps(); LootSteps(); }
+        if (state == State::Accepted) { Enter(); RespawnSteps(); WatchHost(); WatchExit(); WatchJoin(); WatchEntry(); WatchDeath(); LeaveSteps(); LootSteps(); }
         // The view point (0x40 + f32 x, y in map units), as the game's client sends its camera's about twice a second:
         // the server may send each client what is around it.
         if (state == State::Accepted && worldUnit && Now() - viewAt_ > 0.5) {
@@ -959,6 +963,40 @@ private:
         unitPos.clear(); unitInfo_.clear(); unitFields_.clear(); dead_.clear(); unitTarget_.clear(); unitAction_.clear();
         unitHp_.clear(); unitMana_.clear(); unitHpMax_.clear(); unitManaMax_.clear(); unitSide_.clear(); unitEnemies_.clear(); unitPace_.clear();
     }
+    // The zone exits (from the snapshot) and the host standing in one: the host cannot leave the zone while other players are still in it, so the bot leaves first,
+    // as soon as the host has stayed 2.5 s in an exit it came into from outside (an exit may cover the arrival point: the host must have been seen outside first).
+    std::vector<zone::Exit> exits_;
+    double exitSince_ = 0; bool exitArmed_ = false;
+    bool HostPosition(float& x, float& y) const {
+        for (const auto& kv : players) {
+            if (!IsHost(kv.second) || kv.second.name == name_ || !kv.second.unitId || kv.second.state != 0) continue;
+            const auto it = unitPos.find(kv.second.unitId);
+            if (it == unitPos.end() || Now() - it->second.at > 3) return false;
+            x = it->second.x; y = it->second.y;
+            return true;
+        }
+        return false;
+    }
+    const zone::Exit* ExitAt(float x, float y) const {
+        for (const zone::Exit& e : exits_) if (e.name != "none" && zone::Contains(e, x, y)) return &e;
+        return nullptr;
+    }
+    void WatchExit() {
+        if (phase_ != Phase::InWorld || !leaveAtExit || exits_.empty() || leavingAt_ > 0 || !worldUnit) { exitSince_ = 0; return; }
+        if (Now() - worldSince_ < 20) { exitSince_ = 0; return; }
+        float x, y;
+        if (!HostPosition(x, y)) { exitSince_ = 0; return; }
+        const zone::Exit* e = ExitAt(x, y);
+        if (!e) { exitArmed_ = true; exitSince_ = 0; return; }
+        if (!exitArmed_) return;
+        if (exitSince_ == 0) exitSince_ = Now();
+        else if (Now() - exitSince_ > 2.5) {
+            Log("the host stands in the exit \"" + e->name + "\": leaving the zone first (the host cannot leave while we are in it)");
+            if (sayLeaving) Say("leaving the zone first, the exit is yours");
+            exitArmed_ = false; exitSince_ = 0;
+            LeaveWorld();
+        }
+    }
     // The host left the quest zone (no other player is in it for a while): follow it back to the lobby.
     void WatchHost() {
         if (phase_ != Phase::InWorld || !leaveWithHost) { hostGoneAt_ = 0; return; }
@@ -1065,6 +1103,16 @@ private:
             }
             if (ulen > 64 && phase_ == Phase::Entering) {
                 const std::vector<uint8_t>& snap = m;
+                {   // the zone's exits (where a hero may leave it): from the zone state in this message
+                    std::vector<zone::Exit> found; std::string zoneN, mapN;
+                    exits_.clear(); exitSince_ = 0; exitArmed_ = false;
+                    if (zone::ParseExits(snap, found, &zoneN, &mapN)) {
+                        exits_ = found;
+                        std::string list;
+                        for (const zone::Exit& e : exits_) if (e.name != "none") list += (list.empty() ? "" : ", ") + e.name + " (" + std::to_string(static_cast<int>(e.x0)) + "," + std::to_string(static_cast<int>(e.y0)) + ")-(" + std::to_string(static_cast<int>(e.x1)) + "," + std::to_string(static_cast<int>(e.y1)) + ")";
+                        Log("zone " + zoneN + " / map " + mapN + ": " + std::to_string(exits_.size()) + " exit record(s)" + (list.empty() ? "" : ": " + list));
+                    }
+                }
                 uint32_t mine = 0;
                 for (size_t k = 0; k + 4 <= snap.size(); ++k) {
                     uint32_t v; std::memcpy(&v, snap.data() + k, 4);

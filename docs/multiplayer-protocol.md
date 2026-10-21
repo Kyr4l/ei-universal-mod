@@ -266,6 +266,15 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x82 | 0x669960 | **unknown** | |
 | 0x83 | 0x669C90 | the same party blob as 0x80 | sent when the player leaves the world (`World::PlayerOut` 0x590A40, after the picked-up items are moved into the party): the final save; the client message 0x04 + u32 0 triggers it (checked live 2026-10-20: the reply holds a 0x83 and then a 0x80); entering again after it needs a new connection (JOIN 3 + upload got no snapshot) |
 
+### The zone state and the zone exits (read from game.exe 2026-10-21, not yet checked live)
+
+The server's first big message (`CWorldServer::SendZoneState` 0x58C890, read by `CWorldClient::LoadZone` 0x567AB0) starts with: u32 tick - 1, the zone name and the map name (zero-terminated, no length),
+u32 exit count, then per exit (`CEffectKey::Write` 0x4E58A0 is really the exit record writer): 9 x u32 (+0 .. +0x20; **+0x14 / +0x18 / +0x1C / +0x20 are the rectangle: x min, y min, x max, y max** in
+world units, the same as the units' positions), the exit's name (zero-terminated; "none" = unused), u32 entrance, u32, u8, u32, and a float (the rectangle's rotation about its centre, 0 = none), then
+u32 (+0xE0) and the unit hashes. A hero inside an exit (`CRect2F::Contains` 0x4E59F0) can leave the zone through it: the client sends the zone id (`CPlayerServer::OnMsg_ChangeMapById` 0x670C20
+-> `CPlayerServer::ChangeMap`); an exit shows its glow only when the player's named value `<prefix><exit name>` is 1.0 (`UpdateZoneExitEffectStates` 0x567680). um-bot (zone_exits.hpp, `make test`) parses
+the records to know when the host stands in one: the host cannot leave while other players are in the zone, so the bot leaves first (the leave message 0x04 + u32 0).
+
 ### The 0x41 unit update (decoded, um-bot UnitUpdate / unit41.py)
 
 After the u32 unit id: a u16 mask of the fields present (fields 0..13). Every field is **delta coded**

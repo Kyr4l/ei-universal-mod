@@ -9,6 +9,7 @@
 #include "growth.hpp"
 #include "shop.hpp"
 #include "spells.hpp"
+#include "zone_exits.hpp"
 
 static int g_fail = 0, g_run = 0;
 #define CHECK(cond) do { ++g_run; if (!(cond)) { ++g_fail; std::printf("FAIL %s:%d  %s\n", __FILE__, __LINE__, #cond); } } while (0)
@@ -85,6 +86,31 @@ int main(int argc, char** argv) {
         CHECK(load("BUILD=1\n").role == bot::Role::Tank);
         CHECK(bot::RoleKind(bot::Role::Archer) == 1 && bot::RoleKind(bot::Role::Tank) == 0 && bot::RoleKind(bot::Role::Fighter) == 0); }
 
+    // the zone exits of the server's snapshot (layout from CEffectKey::Write 0x4E58A0): a synthetic message, with the parts before and after it
+    {
+        std::vector<uint8_t> m;
+        auto u32 = [&](uint32_t v) { for (int i = 0; i < 4; ++i) m.push_back(static_cast<uint8_t>(v >> (8 * i))); };
+        auto f32 = [&](float f) { uint32_t v; std::memcpy(&v, &f, 4); u32(v); };
+        auto str = [&](const char* t) { while (*t) m.push_back(static_cast<uint8_t>(*t++)); m.push_back(0); };
+        for (int i = 0; i < 7; ++i) m.push_back(0xAB);                       // something before it
+        u32(12345); str("z11d2q1"); str("z11d2q1m"); u32(2);
+        auto exit = [&](const char* name, float x0, float y0, float x1, float y1, float angle) {
+            u32(1); u32(2); u32(3); u32(4); u32(5); f32(x0); f32(y0); f32(x1); f32(y1);
+            str(name); u32(7); u32(0); m.push_back(1); u32(0); f32(angle);
+        };
+        exit("none", 0, 0, 0, 0, 0);
+        exit("gate", 70, 5, 90, 20, 0);
+        u32(77); for (int i = 0; i < 30; ++i) m.push_back(static_cast<uint8_t>(i));
+        std::vector<zone::Exit> list; std::string zoneN, mapN;
+        CHECK(zone::ParseExits(m, list, &zoneN, &mapN));
+        CHECK(zoneN == "z11d2q1" && mapN == "z11d2q1m" && list.size() == 2);
+        CHECK(list.size() == 2 && list[1].name == "gate" && list[1].entrance == 7 && list[1].x0 == 70 && list[1].y1 == 20);
+        CHECK(list.size() == 2 && zone::Contains(list[1], 80, 10) && !zone::Contains(list[1], 60, 10) && !zone::Contains(list[1], 80, 25));
+        zone::Exit rot = list.size() == 2 ? list[1] : zone::Exit(); rot.angle = 1.5707963f; // a rotated rectangle: the test turns the point about the centre
+        CHECK(zone::Contains(rot, 80, 10));
+        std::vector<uint8_t> junk(200, 0x41); std::vector<zone::Exit> none;
+        CHECK(!zone::ParseExits(junk, none));
+    }
     std::printf("%d checks, %d failed\n", g_run, g_fail);
     return g_fail ? 1 : 0;
 }

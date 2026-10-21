@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.22";
+static const char* const kVersion = "0.1.23";
 
 
 struct App {
@@ -344,6 +344,7 @@ static void StartConnection(App& app) {
     app.shopped = false; app.shopWaitFrom = 0; app.shopSeed = std::random_device{}() | 1u;
     app.client.holdEntry = app.cfg.shop || app.cfg.grow; // the quest is entered after the camp visit
     app.client.acceptSwaps = app.cfg.acceptSwaps;
+    app.client.leaveAtExit = app.cfg.leaveAtExit; app.client.sayLeaving = app.cfg.announce;
     if (!app.character.members.empty()) {
         const mp::Member& m = app.character.members[0];
         app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
@@ -504,6 +505,8 @@ static void BuildPanel(App& app) {
         "what its role and the Damage <-> Defence slider call for, within its money and what it can carry. It needs the database (see below).");
     app.dirty |= ImGui::Checkbox("Accept swaps", &c.acceptSwaps);
     Tip("A player can click the bot's head in the lobby to offer a swap: the bot takes what is offered (loot it sells for money) and gives nothing. Off: it ignores swap requests.");
+    app.dirty |= ImGui::Checkbox("Leave first at an exit", &c.leaveAtExit);
+    Tip("When the host stands in a zone exit the bot leaves the zone first: the host cannot leave while other players are still in it. The host can also type \"bot leave\" in the chat.");
     app.dirty |= ImGui::Checkbox("Report in chat", &c.announce);
     Tip("Says in the game's chat what it did at the camp: what it bought and for how much, what it sold, repairs, training and spells.");
     app.dirty |= ImGui::Checkbox("Spend experience", &c.grow);
@@ -834,6 +837,7 @@ int main(int argc, char** argv) {
             if (const char* sg = std::getenv("UM_BOT_SIGHT")) client.sight = static_cast<float>(std::atof(sg)); // research: pretend a longer sight so it fights from farther
             client.holdEntry = (cfg.shop || cfg.grow) && !std::getenv("UM_BOT_NOSHOP");
             client.acceptSwaps = cfg.acceptSwaps;
+            client.leaveAtExit = cfg.leaveAtExit; client.sayLeaving = cfg.announce;
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
