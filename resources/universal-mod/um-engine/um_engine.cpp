@@ -42,6 +42,7 @@ extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, 
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
 extern "C" bool UmTerrainShadowSoftness(float spread); // terrain_shadow.cpp
 extern "C" void UmShadowVolumeCall(); // shadow_occlusion.cpp
+extern "C" void __attribute__((thiscall)) UmClipTriangle(void*, const float*, const float*, const float*);
 extern "C" bool UmShadowAlphaInstall();
 struct NetReader;
 extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, NetReader* reader, unsigned packetSeq);  // net_message.cpp
@@ -96,6 +97,8 @@ static const UmCallSite kCallSites[] = {
     { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
     // shadow_occlusion.cpp: the receiver mesh of a unit's shadow loses the triangles the sun cannot reach
     { "ShadowReceiver::Occlusion", 0x0051E08B, reinterpret_cast<void*>(&UmShadowVolumeCall), -1, {0xE8, 0xC0, 0xE6, 0x04, 0x00} },
+    { "ShadowReceiver::Occlusion", 0x006CD505, reinterpret_cast<void*>(&UmClipTriangle), -1, {0xE8, 0x86, 0xAF, 0xE0, 0xFF} },
+    { "ShadowReceiver::Occlusion", 0x006CD516, reinterpret_cast<void*>(&UmClipTriangle), -1, {0xE8, 0x75, 0xAF, 0xE0, 0xFF} },
     { nullptr, 0, nullptr, 0, {} }
 };
 
