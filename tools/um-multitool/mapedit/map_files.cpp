@@ -165,7 +165,9 @@ static void RemoveMob(App& app, int index) {
 
 // Unloads a file, the terrain or a map (its path): at once when it has no unsaved changes, else after
 // UnloadDialog asks whether to save them, drop them, or keep the file.
-void UnloadFile(App& app, const std::string& path) {
+// The path is taken BY VALUE: callers pass the map's own path string (or the terrain path, or a load-order entry), which this very function destroys; using the
+// reference afterwards (the message, the load order, the session) was a use-after-free that crashed the editor when a map was unloaded.
+void UnloadFile(App& app, std::string path) {
     if (app.terrainLoaded && path == app.terrainPath) {
         UnloadTerrain(app);
         app.filesMessage = "Unloaded the terrain " + path;
@@ -184,7 +186,7 @@ bool FileUnsaved(const App& app, const std::string& path) {
     return false;
 }
 
-void RequestUnload(App& app, const std::string& path) {
+void RequestUnload(App& app, std::string path) {
     if (FileUnsaved(app, path)) app.unloadAsk = path;
     else UnloadFile(app, path);
 }
