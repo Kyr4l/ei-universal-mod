@@ -18,6 +18,16 @@ mkdir -p "$OUT/mods" dist
 cp -r "$SRC/design" "$SRC/lang" "$SRC/Engine" "$OUT/"
 python3 fix_english.py "$OUT/lang/en" "$OUT/lang/ko" "$OUT/lang/zh" # the English copies of the texts: typos of EIStarter OBT-1 corrected
 cp "$SRC/addon.dll" "$OUT/"
+# Engine/game.exe ships with the large-address-aware flag set (one bit of the PE header, as the community's patched exe): with the stock exe the game
+# ran out of address space (D7VK "map failed", "abnormal program termination") where the patched exe did not.
+python3 - "$OUT/Engine/game.exe" <<'PY'
+import struct, sys
+d = bytearray(open(sys.argv[1], 'rb').read())
+off = struct.unpack_from('<I', d, 0x3C)[0] + 4 + 18
+c = struct.unpack_from('<H', d, off)[0]
+struct.pack_into('<H', d, off, c | 0x20)
+open(sys.argv[1], 'wb').write(d)
+PY
 cp -r "$SRC/mods/.0" "$OUT/mods/"
 mkdir -p "$OUT/docs"
 cp "$SRC/docs/how to make translation.txt" "$OUT/docs/"
@@ -39,7 +49,7 @@ Credits
   Evil Islands Addon engine by the EIStarter / Gipat.Ru authors (Sun, Atm, Demoth, Void Dragon, Lost Soul, Asp Adm; translations: Tyrianix, Fred,
   Peter plEI ...; addon.dll: Jet, Nivea, Holy Warrior, Sagrer, Barges, Demoth ...). Thank you.
 - EIStarter-UM itself (the program, um-window.asi) is part of the Universal Mod project: https://github.com/Kyr4l/ei-universal-mod
-- Engine/game.exe is the game's own executable (Nival Interactive / Fishtank Interactive).
+- Engine/game.exe is the game's own executable (Nival Interactive / Fishtank Interactive) with the 4 GB (large address aware) flag set.
 TXT
 rm -f "dist/EIStarter-UM-$VERSION.zip"
 (cd "$TMP" && 7z a -tzip -mx=9 -bso0 -bsp0 "$OLDPWD/dist/EIStarter-UM-$VERSION.zip" EIStarter-UM)
