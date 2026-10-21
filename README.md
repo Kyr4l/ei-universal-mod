@@ -40,7 +40,7 @@ You need Evil Islands installed (the GOG version or the original CD, both work).
 
 **Linux (Lutris).** Linux players need Lutris: install the game in Lutris as usual (GOG or CD), unpack the launcher inside that game's prefix (for example into `drive_c/EIStarter-UM`), then in Lutris open the game's configuration, set the executable to `EIStarter-UM.exe` and start the game from Lutris.
 
-EIStarter-UM replaces EIStarter: no registry file to import, no DLL override, no .NET. It also checks for new mod builds in the background and updates them in place. How it works: [docs/EIStarter-UM.md](docs/EIStarter-UM.md).
+EIStarter-UM replaces EIStarter: no registry file to import, no DLL override, no .NET. When it starts it checks GitHub once for a newer mod build and tells you; nothing is downloaded or installed unless you click Install or Update. How it works: [docs/EIStarter-UM.md](docs/EIStarter-UM.md).
 
 Prefer the original EIStarter? See the [manual installation guide](docs/manual-installation.md).
 
