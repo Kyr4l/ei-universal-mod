@@ -285,6 +285,7 @@ convert_ini_to_reg() {
     cp -fv "$INI_DIR"/lightsjigran.ini "$MOD_DIR/config/" 2>/dev/null || true
     cp -fv "$INI_DIR"/lightscavejigran.ini "$MOD_DIR/config/" 2>/dev/null || true
     cp -fv "$INI_DIR/SPELLADDON.INI" "$MOD_DIR/" 2>/dev/null || true
+    cp -fv "$INI_DIR/build.info" "$MOD_DIR/" 2>/dev/null || true
 
     log_info "Converting INI files to REG directly into mod output..."
     [[ -f "$INI_DIR/config.ini" ]] && bin/um-multitool inireg -o "$MOD_DIR/config.reg" "$INI_DIR/config.ini"
@@ -453,6 +454,9 @@ update_version_info() {
     else
         log_info "Keeping current version: ${BOLD}$current_version${RESTORE}"
     fi
+
+    # build.info: what a launcher (EIStarter-UM) reads to tell which build a mod folder holds
+    printf 'version=%s\ncommit=%s\n' "$current_version" "$commit_hash" > "$INI_DIR/build.info"
 
     # Update inidir/config.ini version
     sed -i "s/^Version=.*/Version=$current_version/" "$INI_DIR/config.ini" 2>/dev/null || true

@@ -7,6 +7,7 @@
 #pragma once
 
 #include <atomic>
+#include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <cstdio>
@@ -131,13 +132,25 @@ struct Release {
     bool prerelease = false;
     std::string assetName, assetUrl, assetUpdated;
     uint64_t assetSize = 0;
-    // What identifies this exact build (a pre-release's asset is replaced after each commit under the same tag).
-    std::string Key() const { return tag + "|" + assetUpdated + "|" + std::to_string(assetSize); }
+    std::string hash; // the commit hash in the asset's name (Universal-Mod-beta-0.8.6-<hash>.zip), "" when it has none
+    // What identifies this exact build (a pre-release's asset is replaced after each commit under the same tag): the commit when the name has one.
+    std::string Key() const { return hash.empty() ? tag + "|" + assetUpdated + "|" + std::to_string(assetSize) : tag + "|" + hash; }
 };
 
 inline bool IsModZip(const std::string& name) {
     const std::string l = LowerAscii(name);
     return l.compare(0, 13, "universal-mod") == 0 && l.size() > 4 && l.compare(l.size() - 4, 4, ".zip") == 0;
+}
+
+// "Universal-Mod-beta-0.8.6-b373a09c9.zip" -> "b373a09c9" (7 to 40 hex digits just before .zip, after a dash), else "".
+inline std::string HashOfAssetName(const std::string& name) {
+    const std::string l = LowerAscii(name);
+    if (l.size() < 12 || l.compare(l.size() - 4, 4, ".zip") != 0) return {};
+    size_t end = l.size() - 4, start = end;
+    while (start > 0 && std::isxdigit(static_cast<unsigned char>(l[start - 1]))) --start;
+    if (start == 0 || l[start - 1] != '-' || end - start < 7 || end - start > 40) return {};
+    for (size_t i = start; i < end; ++i) if (!((l[i] >= '0' && l[i] <= '9') || (l[i] >= 'a' && l[i] <= 'f'))) return {};
+    return l.substr(start, end - start);
 }
 
 // The newest release of the list (GitHub lists newest first) that is not a draft, is a release when `stableOnly`, and has a Universal-Mod*.zip.
@@ -159,6 +172,7 @@ inline bool PickRelease(const std::string& json, bool stableOnly, Release& out, 
             out.tag = r.Str("tag_name"); out.name = r.Str("name"); out.published = r.Str("published_at"); out.prerelease = r.Bool("prerelease");
             out.assetName = name; out.assetUrl = a.Str("browser_download_url"); out.assetUpdated = a.Str("updated_at");
             out.assetSize = static_cast<uint64_t>(a.Num("size"));
+            out.hash = HashOfAssetName(name);
             return !out.assetUrl.empty();
         }
     }

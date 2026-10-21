@@ -94,12 +94,30 @@ struct App {
         c.updater.Check(UpdateRepo(), c.stableOnly, key == cfg.updateKeys.end() ? std::string() : key->second);
     }
     void CheckUpdates() { for (Channel& c : channels) CheckChannel(c); }
-    // True when the channel's newest build is worth offering for its folder: the updater installed another build there, or (folder not installed by the
-    // updater) the release is newer than the mod's own version; a missing folder is always offered.
+    // The commit of the build in a channel's folder: build.info (makemod writes it), else the one the updater recorded.
+    std::string InstalledHash(const Channel& c) const {
+        const ModInfo* m = FindMod(c.folder);
+        if (!m) return {};
+        if (!m->commit.empty()) return m->commit;
+        auto it = cfg.updateKeys.find(c.folder);
+        if (it != cfg.updateKeys.end()) { const size_t a = it->second.find('|'); if (a != std::string::npos && it->second.find('|', a + 1) == std::string::npos) return it->second.substr(a + 1); }
+        return {};
+    }
+    static bool SameCommit(const std::string& a, const std::string& b) {
+        const size_t n = std::min(a.size(), b.size());
+        return n >= 7 && a.compare(0, n, b, 0, n) == 0;
+    }
+    // "0.8.6 (b373a09)": the version with the commit when it is known.
+    static std::string BuildLabel(const std::string& version, const std::string& hash) { return version + (hash.size() >= 7 ? " (" + hash.substr(0, 7) + ")" : std::string()); }
+    // True when the channel's newest build is worth offering for its folder: a missing folder always; otherwise another commit than the folder's; with no
+    // commit to compare, another build than the updater recorded; for a folder it did not install, a newer version number.
     bool WorthInstalling(const Channel& c, const update::Release& r) const {
         const ModInfo* m = FindMod(c.folder);
         if (!m) return true;
-        if (cfg.updateKeys.count(c.folder)) return cfg.updateKeys.at(c.folder) != r.Key();
+        const std::string inst = InstalledHash(c);
+        if (!r.hash.empty() && !inst.empty()) return !SameCommit(inst, r.hash);
+        auto it = cfg.updateKeys.find(c.folder);
+        if (it != cfg.updateKeys.end()) return it->second != r.Key();
         return update::CompareVersions(r.tag, m->version) > 0;
     }
     void InstallChannel(Channel& c) {
@@ -483,9 +501,13 @@ static void DrawMain(App& app, GLFWwindow* window) {
                         case S::Checking: status = "checking..."; break;
                         case S::Available: case S::UpToDate:
                             offer = true;
-                            if (!installed) status = snap.latest.tag;
-                            else if (app.WorthInstalling(c, snap.latest)) status = installed->version + " -> " + snap.latest.tag;
-                            else status = "up to date";
+                            {
+                                std::string built = snap.latest.assetUpdated.size() >= 16 ? snap.latest.assetUpdated.substr(0, 10) + " " + snap.latest.assetUpdated.substr(11, 5) : std::string();
+                                const std::string fresh = App::BuildLabel(snap.latest.tag, snap.latest.hash) + (snap.latest.hash.empty() && !built.empty() ? ", built " + built : std::string());
+                                if (!installed) status = fresh;
+                                else if (app.WorthInstalling(c, snap.latest)) status = App::BuildLabel(installed->version, app.InstalledHash(c)) + " -> " + fresh;
+                                else status = "up to date";
+                            }
                             break;
                         case S::Downloading: case S::Extracting: case S::Applying: case S::Done: case S::Failed: status = snap.message; break;
                         }
