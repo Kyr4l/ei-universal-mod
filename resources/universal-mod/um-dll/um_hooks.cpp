@@ -144,6 +144,12 @@ static void ApplyMsaa() {
 static void ChainloadDirectDraw() {
     if (!g_ddrawDll[0]) return;
     std::string path = g_ddrawDll;
+    bool automatic = false;
+    if (_stricmp(g_ddrawDll, "auto") == 0) { // the patched D7VK next to um.dll under Wine; on Windows the game's own DirectDraw until D7VK is tested there
+        HMODULE ntdll = GetModuleHandleA("ntdll.dll");
+        if (!ntdll || !GetProcAddress(ntdll, "wine_get_version")) return;
+        path = "d7vk.dll"; automatic = true;
+    }
     const bool absolute = path.size() > 1 && (path[1] == ':' || path[0] == '\\' || path[0] == '/');
     if (!absolute) {
         char self[MAX_PATH] = "";
@@ -152,6 +158,7 @@ static void ChainloadDirectDraw() {
         const size_t slash = dir.find_last_of("\\/");
         path = (slash == std::string::npos ? std::string() : dir.substr(0, slash + 1)) + path;
     }
+    if (automatic && GetFileAttributesA(path.c_str()) == INVALID_FILE_ATTRIBUTES) return; // not shipped: silently the game's own
     HMODULE module = LoadLibraryExA(path.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!module) { LogLine("ERROR", "DDRAW_DLL %s could not be loaded (error %lu); the game's ddraw.dll is used", path.c_str(), GetLastError()); return; }
     FARPROC create = GetProcAddress(module, "DirectDrawCreate"), createEx = GetProcAddress(module, "DirectDrawCreateEx");

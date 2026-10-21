@@ -29,7 +29,7 @@ bool g_keyboardRewriteKeyDown[256] = {};
 bool g_enableFileIoLogging = false;
 char g_fileIoLoggingFilter[256] = {};
 bool g_enableMsaa = false;       // MSAA: D7VK's ddraw.emulateFSAA = forced (real multisampling, up to 4x)
-char g_ddrawDll[MAX_PATH] = {};   // DDRAW_DLL: a DirectDraw wrapper (D7VK) loaded from there instead of the game folder's ddraw.dll
+char g_ddrawDll[MAX_PATH] = "auto";   // DDRAW_DLL: a DirectDraw wrapper (D7VK) loaded from there instead of the game folder's ddraw.dll
 HMODULE g_chainedDdraw = NULL;    // that module once loaded
 DirectDrawCreateFunction g_gameDirectDrawCreate = NULL;     // the game folder's own DirectDrawCreate / Ex, kept for when the wrapper cannot create a device
 DirectDrawCreateExFunction g_gameDirectDrawCreateEx = NULL;
@@ -43,7 +43,7 @@ BYTE g_overlayLogToggleKey = VK_F10;
 volatile LONG g_overlayLogVisible = 0;
 BYTE g_profilerKey = VK_F11;
 BYTE g_profilerDumpKey = VK_SCROLL; // OVERLAY_PROFILER_DUMP_KEY: the tree to um-profile.txt
-bool g_uiQuadBlit = false;          // UI_QUAD_BLIT (#80): the interface panels drawn as textured quads instead of Blts onto the frame
+bool g_uiQuadBlit = true;           // UI_QUAD_BLIT (#80): the interface panels drawn as textured quads instead of Blts onto the frame
 bool g_uiBlitCache = false;         // UI_BLIT_CACHE (#80): the interface panels uploaded only when they change
 bool g_shadowLockCache = false;     // SHADOW_LOCK_CACHE (#80): the units' shadow textures re-uploaded only when they change
 // UM_PROFILE_AUTODUMP=<seconds> in the environment (unattended runs, no um.cfg change): the profiler runs from the

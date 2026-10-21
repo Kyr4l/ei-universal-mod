@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.5.0";
+static const char* const kEngineVersion = "0.5.1";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -48,7 +48,7 @@ static const UmEngineFunction kFunctions[] = {
     { "NetSocket::SendTo", 0x00440B90, reinterpret_cast<void*>(&UmNetSendTo), 0, {0x8B, 0x44, 0x24, 0x08, 0x56, 0x57, 0x8B, 0x50} },
     { "NetSocket::ReceiveFrom", 0x00440BE0, reinterpret_cast<void*>(&UmNetReceiveFrom), 0, {0x53, 0x56, 0x8B, 0x74, 0x24, 0x10, 0x57, 0x8B} },
     // The CRT's math (crt_math.cpp): the distance function, 22 % of the main thread's CPU time in the lobby
-    { "_hypot", 0x006FD026, reinterpret_cast<void*>(&UmHypot), -1, {0xDD, 0x44, 0x24, 0x0C, 0x6A, 0x18, 0x51, 0x51} },
+    { "_hypot", 0x006FD026, reinterpret_cast<void*>(&UmHypot), 0, {0xDD, 0x44, 0x24, 0x0C, 0x6A, 0x18, 0x51, 0x51} },
     // The update packet codec (net_update.cpp): sequence window, acks, stream chunks, the update parser
     { "NetConnection::WriteAcks", 0x00434C20, reinterpret_cast<void*>(&UmNetWriteAcks), -1, {0x51, 0x8B, 0xD1, 0x53, 0x55, 0x56, 0x66, 0x8B} },
     { "NetConnection::AckOne", 0x00434CE0, reinterpret_cast<void*>(&UmNetAckOne), -1, {0x8B, 0x81, 0xF8, 0x10, 0x00, 0x00, 0x56, 0x57} },
@@ -71,7 +71,7 @@ struct UmModuleFunction {
 };
 static const UmModuleFunction kModuleFunctions[] = {
     // 3DfpFPU.dll, the 3D pipeline: the per-vertex lighting (fp_light.cpp), ~40 % of that library's time
-    { "3DfpFPU::LightVertices", "3DfpFPU.dll", 0xD910, reinterpret_cast<void*>(&UmFpLight), -1, {0x53, 0x8B, 0xDC, 0x83, 0xEC, 0x08, 0x83, 0xE4} },
+    { "3DfpFPU::LightVertices", "3DfpFPU.dll", 0xD910, reinterpret_cast<void*>(&UmFpLight), 0, {0x53, 0x8B, 0xDC, 0x83, 0xEC, 0x08, 0x83, 0xE4} },
     { nullptr, nullptr, 0, nullptr, 0, {} }
 };
 
@@ -87,9 +87,9 @@ struct UmCallSite {
 };
 static const UmCallSite kCallSites[] = {
     // camera_smooth.cpp: the camera's fixed-tick lump (18 Hz) spread over the frames, the frame time measured precisely
-    { "CCamera::SmoothUpdate", 0x004573A9, reinterpret_cast<void*>(&UmCameraTick),  -1, {0xE8, 0x82, 0x87, 0xFB, 0xFF} },
-    { "CCamera::SmoothUpdate", 0x0045756D, reinterpret_cast<void*>(&UmCameraFrame), -1, {0xE8, 0xBE, 0x85, 0xFB, 0xFF} },
-    { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), -1, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x004573A9, reinterpret_cast<void*>(&UmCameraTick),  0, {0xE8, 0x82, 0x87, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x0045756D, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0xBE, 0x85, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
     { nullptr, 0, nullptr, 0, {} }
 };
 
