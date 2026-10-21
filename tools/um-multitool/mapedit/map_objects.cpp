@@ -4,6 +4,8 @@
 // Shared state and the other files' functions: map_internal.hpp.
 #include "map_internal.hpp"
 
+#include <cstdarg>
+
 namespace mapedit {
 
 // ------------------------------------------------------------------------------------------------
@@ -638,8 +640,37 @@ void FindWindow(App& app) {
 
 // ------------------------------------------------------------------------------------------------
 // Diplomacy: the active map's 32 x 32 table between player groups (DIPLOMATION), as ei_maper edits it:
-// 0 friend (green), 1 neutral (yellow), 2 enemy (red); a click cycles the value, both ways by default.
+// 0 friend (green), 1 neutral (yellow), 2 enemy (red); a double-click cycles the value, both ways by default.
+// Cell [row r][column c] = what group r thinks of group c; the mirror cell [c][r] is the opposite opinion.
 // ------------------------------------------------------------------------------------------------
+
+static ImVec4 DiplomacyColor(int v) {
+    return v == 0 ? ImVec4(0.35f, 0.8f, 0.35f, 1) : v == 1 ? ImVec4(0.9f, 0.8f, 0.25f, 1) : v == 2 ? ImVec4(0.9f, 0.3f, 0.25f, 1) : ImVec4(0.55f, 0.55f, 1, 1);
+}
+
+static std::string DiplomacyWord(int v) {
+    return v == 0 ? i18n::Tr("friend") : v == 1 ? i18n::Tr("neutral") : v == 2 ? i18n::Tr("enemy") : std::string(i18n::Tr("value")) + " " + std::to_string(v);
+}
+
+// The groups that group `g` thinks of as value `v` (row) or that think of `g` as `v` (column), as "0 3 12".
+static std::string DiplomacyList(const mob::File& f, int g, int v, bool row) {
+    std::string out;
+    for (int o = 0; o < 32; ++o) {
+        if (o == g) continue;
+        if (f.diplomacy[static_cast<size_t>(row ? g : o) * 32 + (row ? o : g)] == v) out += (out.empty() ? "" : " ") + std::to_string(o);
+    }
+    return out.empty() ? "-" : out;
+}
+
+// A translated printf-style text (the format is looked up in the language table first).
+static std::string TrFmt(const char* english, ...) {
+    char buf[512];
+    va_list args;
+    va_start(args, english);
+    std::vsnprintf(buf, sizeof(buf), i18n::Tr(english), args);
+    va_end(args);
+    return buf;
+}
 
 void DiplomacyTab(App& app) {
     if (app.mobs.empty()) { ImGui::TextDisabled("(no maps loaded)"); return; }
@@ -647,17 +678,35 @@ void DiplomacyTab(App& app) {
     mob::File& f = m.file;
     ImGui::Text("%s", f.fileName.c_str());
     if (!f.hasDiplomacy) { ImGui::TextDisabled("This map has no diplomacy table (quest maps use their base map's)."); return; }
-    ImGui::Checkbox("Both ways", &app.dipSymmetric);
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("A change applies to row -> column and column -> row");
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.35f, 0.8f, 0.35f, 1), "friend");
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.9f, 0.8f, 0.25f, 1), "neutral");
-    ImGui::SameLine();
-    ImGui::TextColored(ImVec4(0.9f, 0.3f, 0.25f, 1), "enemy");
+    auto name = [&](int i) -> std::string {
+        if (i < static_cast<int>(f.diplomacyNames.size()) && !f.diplomacyNames[i].empty()) return mob::Utf8(f.diplomacyNames[i]);
+        return std::string(i18n::Tr("group")) + " " + std::to_string(i);
+    };
+    auto at = [&](int r, int c) { return f.diplomacy[static_cast<size_t>(r) * 32 + c]; };
+
     ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-    ImGui::TextWrapped("Click a number or a cell: selects that group (its units are marked in the view). Double-click a cell: next value; right-click: previous. A row is a group, its cells its attitude towards the column's group.");
+    ImGui::TextWrapped("A row is the group that has the opinion, a column the group it has the opinion about: row 0, column 3 is what group 0 thinks of group 3. The mirror cell (row 3, column 0) is the opposite opinion, what group 3 thinks of group 0: the two may differ.");
     ImGui::PopStyleColor();
+    ImGui::Checkbox("Both ways", &app.dipSymmetric);
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("On: a change is written to the cell and to its mirror cell, so the two groups think the same of each other.\nOff: only the cell you change; group 0 can be hostile to group 3 while group 3 stays friendly to group 0.");
+    ImGui::SameLine();
+    ImGui::Checkbox("Mark pairs that differ", &app.dipMarkAsym);
+    int differing = 0;
+    for (int r = 0; r < 32; ++r)
+        for (int c = r + 1; c < 32; ++c) differing += at(r, c) != at(c, r);
+    // the legend
+    for (int v = 0; v < 3; ++v) {
+        ImVec2 p = ImGui::GetCursorScreenPos();
+        const float h = ImGui::GetTextLineHeight();
+        ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(p.x, p.y + 2), ImVec2(p.x + h - 2, p.y + h), ImGui::GetColorU32(DiplomacyColor(v)));
+        ImGui::Dummy(ImVec2(h, h));
+        ImGui::SameLine();
+        ImGui::TextColored(DiplomacyColor(v), "%s", DiplomacyWord(v).c_str());
+        ImGui::SameLine();
+    }
+    ImGui::TextDisabled("(%d pair(s) differ)", differing);
+    if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("%s", i18n::Tr("A pair is two groups: the cell and its mirror cell. A white corner mark on a cell means the mirror cell has another value.\nScripts read the same table: GetDiplomacy returns 1 ally / 0 neutral / -1 enemy."));
     if (app.dipSelected >= 0) {
         int count = 0;
         for (const mob::Object& o : f.objects) if (o.kind == mob::Kind::Unit && o.player == app.dipSelected) ++count;
@@ -667,53 +716,71 @@ void DiplomacyTab(App& app) {
         ImGui::SameLine();
         if (ImGui::SmallButton("Clear")) app.dipSelected = -1;
     }
-    const float cell = std::max(10.0f, std::min(22.0f, (ImGui::GetContentRegionAvail().x - 30.0f) / 32.0f));
+
+    // What the hovered cell says, in words, above the grid so that it is in view (drawn once the hover is known; four lines always).
+    const float lineH = ImGui::GetFontSize() + 3.0f;
+    const ImVec2 infoPos = ImGui::GetCursorScreenPos();
+    ImGui::Dummy(ImVec2(1, lineH * 4 + 4));
+
+    const float headX = 44.0f, headY = 40.0f;
+    const float cell = std::max(10.0f, std::min(22.0f, (ImGui::GetContentRegionAvail().x - headX - 8.0f) / 32.0f));
     ImDrawList* draw = ImGui::GetWindowDrawList();
-    ImVec2 origin = ImGui::GetCursorScreenPos();
-    const float head = 26.0f;
-    ImGui::InvisibleButton("##dipgrid", ImVec2(head + cell * 32, head + cell * 32), ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
+    const ImVec2 origin = ImGui::GetCursorScreenPos();
+    ImGui::InvisibleButton("##dipgrid", ImVec2(headX + cell * 32, headY + cell * 32), ImGuiButtonFlags_MouseButtonLeft | ImGuiButtonFlags_MouseButtonRight);
     const bool hovered = ImGui::IsItemHovered();
-    ImVec2 mouse = ImGui::GetIO().MousePos;
+    const ImVec2 mouse = ImGui::GetIO().MousePos;
     int hr = -1, hc = -1, headRow = -1, headCol = -1; // the cell under the mouse, or the row / column number under it
     if (hovered) {
-        int c = static_cast<int>((mouse.x - origin.x - head) / cell), r = static_cast<int>((mouse.y - origin.y - head) / cell);
-        if (c >= 0 && c < 32 && r >= 0 && r < 32 && mouse.x >= origin.x + head && mouse.y >= origin.y + head) { hr = r; hc = c; }
-        else if (mouse.x < origin.x + head && r >= 0 && r < 32 && mouse.y >= origin.y + head) headRow = r;
-        else if (mouse.y < origin.y + head && c >= 0 && c < 32 && mouse.x >= origin.x + head) headCol = c;
+        const int c = static_cast<int>(std::floor((mouse.x - origin.x - headX) / cell)), r = static_cast<int>(std::floor((mouse.y - origin.y - headY) / cell));
+        if (c >= 0 && c < 32 && r >= 0 && r < 32) { hr = r; hc = c; }
+        else if (mouse.x < origin.x + headX && r >= 0 && r < 32 && mouse.y >= origin.y + headY) headRow = r;
+        else if (mouse.y < origin.y + headY && c >= 0 && c < 32 && mouse.x >= origin.x + headX) headCol = c;
     }
-    auto name = [&](int i) {
-        return i < static_cast<int>(f.diplomacyNames.size()) && !f.diplomacyNames[i].empty() ? mob::Utf8(f.diplomacyNames[i]) : "group " + std::to_string(i);
-    };
+    const int focusRow = hr >= 0 ? hr : headRow, focusCol = hr >= 0 ? hc : headCol; // what is lit: the hovered cell's row and column (or the header's)
+    // the axes: who thinks (rows, down the left) about whom (columns, along the top)
+    draw->AddText(ImVec2(origin.x + headX, origin.y + 2), IM_COL32(200, 200, 205, 255), i18n::Tr("about whom (column) ->"));
+    draw->AddText(ImVec2(origin.x + 2, origin.y + headY - 2 * ImGui::GetFontSize() - 2), IM_COL32(200, 200, 205, 255), i18n::Tr("who"));
+    draw->AddText(ImVec2(origin.x + 2, origin.y + headY - ImGui::GetFontSize() - 1), IM_COL32(200, 200, 205, 255), i18n::Tr("(row)"));
     for (int i = 0; i < 32; ++i) {
         char n[8];
         std::snprintf(n, sizeof(n), "%d", i);
-        ImU32 col = i == app.dipSelected ? IM_COL32(255, 120, 255, 255) : (i == hr || i == hc || i == headRow || i == headCol) ? IM_COL32(255, 225, 130, 255) : IM_COL32(170, 170, 175, 255);
+        const ImU32 col = i == app.dipSelected ? IM_COL32(255, 120, 255, 255) : (i == focusRow || i == focusCol) ? IM_COL32(255, 225, 130, 255) : IM_COL32(170, 170, 175, 255);
         // Column numbers: every other one when two digits do not fit a cell.
-        if (i < 10 || ImGui::CalcTextSize(n).x + 2 <= cell || i % 2 == 0) draw->AddText(ImVec2(origin.x + head + i * cell + 1, origin.y + 6), col, n);
-        draw->AddText(ImVec2(origin.x + 2, origin.y + head + i * cell + (cell - ImGui::GetFontSize()) * 0.5f), col, n);
+        if (i < 10 || ImGui::CalcTextSize(n).x + 2 <= cell || i % 2 == 0) draw->AddText(ImVec2(origin.x + headX + i * cell + 1, origin.y + headY - ImGui::GetFontSize() - 2), col, n);
+        draw->AddText(ImVec2(origin.x + headX - ImGui::CalcTextSize(n).x - 4, origin.y + headY + i * cell + (cell - ImGui::GetFontSize()) * 0.5f), col, n);
     }
     for (int r = 0; r < 32; ++r)
         for (int c = 0; c < 32; ++c) {
-            const int v = f.diplomacy[static_cast<size_t>(r) * 32 + c];
-            ImU32 col = r == c ? IM_COL32(60, 60, 64, 255) : v == 0 ? IM_COL32(40, 130, 50, 255) : v == 1 ? IM_COL32(170, 150, 40, 255)
+            const int v = at(r, c);
+            const ImU32 col = r == c ? IM_COL32(60, 60, 64, 255) : v == 0 ? IM_COL32(40, 130, 50, 255) : v == 1 ? IM_COL32(170, 150, 40, 255)
                                                            : v == 2 ? IM_COL32(160, 45, 40, 255) : IM_COL32(90, 90, 200, 255);
-            ImVec2 a(origin.x + head + c * cell, origin.y + head + r * cell);
-            draw->AddRectFilled(a, ImVec2(a.x + cell - 1, a.y + cell - 1), col);
-            if (r == hr && c == hc) draw->AddRect(a, ImVec2(a.x + cell - 1, a.y + cell - 1), IM_COL32(255, 255, 255, 255));
+            const ImVec2 a(origin.x + headX + c * cell, origin.y + headY + r * cell), b(a.x + cell - 1, a.y + cell - 1);
+            draw->AddRectFilled(a, b, col);
+            if (app.dipMarkAsym && r != c && v != at(c, r)) { // the mirror cell says something else
+                const float t = std::max(4.0f, cell * 0.38f);
+                draw->AddTriangleFilled(ImVec2(b.x - t, a.y), ImVec2(b.x, a.y), ImVec2(b.x, a.y + t), IM_COL32(255, 255, 255, 235));
+            }
         }
+    if (focusRow >= 0 || focusCol >= 0) { // the row and the column of what the mouse is on: a light band over each
+        const ImU32 band = IM_COL32(255, 255, 255, 38);
+        if (focusRow >= 0) draw->AddRectFilled(ImVec2(origin.x + headX, origin.y + headY + focusRow * cell), ImVec2(origin.x + headX + 32 * cell - 1, origin.y + headY + focusRow * cell + cell - 1), band);
+        if (focusCol >= 0) draw->AddRectFilled(ImVec2(origin.x + headX + focusCol * cell, origin.y + headY), ImVec2(origin.x + headX + focusCol * cell + cell - 1, origin.y + headY + 32 * cell - 1), band);
+    }
+    if (hr >= 0 && hr != hc) { // the mirror cell: the opposite opinion
+        const ImVec2 a(origin.x + headX + hr * cell, origin.y + headY + hc * cell);
+        draw->AddRect(a, ImVec2(a.x + cell - 1, a.y + cell - 1), IM_COL32(90, 220, 255, 255), 0, 0, 2.0f);
+    }
+    if (hr >= 0) draw->AddRect(ImVec2(origin.x + headX + hc * cell, origin.y + headY + hr * cell), ImVec2(origin.x + headX + hc * cell + cell - 1, origin.y + headY + hr * cell + cell - 1), IM_COL32(255, 255, 255, 255), 0, 0, 2.0f);
     if (app.dipSelected >= 0) { // the selected group's row and column
         const float g = app.dipSelected * cell;
-        draw->AddRect(ImVec2(origin.x + head - 1, origin.y + head + g - 1), ImVec2(origin.x + head + cell * 32, origin.y + head + g + cell), IM_COL32(255, 120, 255, 220), 0, 0, 2.0f);
-        draw->AddRect(ImVec2(origin.x + head + g - 1, origin.y + head - 1), ImVec2(origin.x + head + g + cell, origin.y + head + cell * 32), IM_COL32(255, 120, 255, 220), 0, 0, 2.0f);
+        draw->AddRect(ImVec2(origin.x + headX - 1, origin.y + headY + g - 1), ImVec2(origin.x + headX + cell * 32, origin.y + headY + g + cell), IM_COL32(255, 120, 255, 220), 0, 0, 2.0f);
+        draw->AddRect(ImVec2(origin.x + headX + g - 1, origin.y + headY - 1), ImVec2(origin.x + headX + g + cell, origin.y + headY + cell * 32), IM_COL32(255, 120, 255, 220), 0, 0, 2.0f);
     }
     if ((headRow >= 0 || headCol >= 0) && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) app.dipSelected = headRow >= 0 ? headRow : headCol;
     if (headRow >= 0 || headCol >= 0) ImGui::SetTooltip("%s: click to select the group", name(headRow >= 0 ? headRow : headCol).c_str());
     if (hr >= 0) {
-        static const char* values[] = {"friend", "neutral", "enemy"};
-        const int v = f.diplomacy[static_cast<size_t>(hr) * 32 + hc];
-        ImGui::SetTooltip("%s -> %s: %s%s", name(hr).c_str(), name(hc).c_str(), v >= 0 && v <= 2 ? values[v] : std::to_string(v).c_str(),
-                          hr == hc ? " (a group with itself: not editable)" : "");
         if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) app.dipSelected = hr; // a click selects the row's group
+        const int v = at(hr, hc);
         const bool left = ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left), right = ImGui::IsMouseClicked(ImGuiMouseButton_Right);
         if ((left || right) && hr != hc) {
             EditStep step;
@@ -726,9 +793,46 @@ void DiplomacyTab(App& app) {
             if (app.dipSymmetric) mob::SetDiplomacy(f, hc, hr, next);
         }
     }
+
+    {
+        ImDrawList* dl = ImGui::GetWindowDrawList();
+        const ImU32 plain = ImGui::GetColorU32(ImGuiCol_Text), dim = ImGui::GetColorU32(ImGuiCol_TextDisabled);
+        auto put = [&](ImVec2& p, const std::string& text, ImU32 col) { dl->AddText(p, col, text.c_str()); p.x += ImGui::CalcTextSize(text.c_str()).x; };
+        auto line = [&](int n) { return ImVec2(infoPos.x, infoPos.y + lineH * static_cast<float>(n)); };
+        if (hr >= 0 && hr != hc) {
+            const int v = at(hr, hc), back = at(hc, hr), next = (v + 1) % 3;
+            ImVec2 p = line(0);
+            put(p, TrFmt("Group %d (%s) regards group %d (%s) as:", hr, name(hr).c_str(), hc, name(hc).c_str()) + " ", plain);
+            put(p, DiplomacyWord(v), ImGui::GetColorU32(DiplomacyColor(v)));
+            p = line(1);
+            put(p, TrFmt("The other way round, group %d regards group %d as:", hc, hr) + " ", plain);
+            put(p, DiplomacyWord(back), ImGui::GetColorU32(DiplomacyColor(back)));
+            p = line(2);
+            if (back == v) put(p, i18n::Tr("The same opinion both ways."), dim);
+            else put(p, i18n::Tr("Different opinions (the cell has a white corner mark)."), IM_COL32(255, 255, 255, 255));
+            p = line(3);
+            put(p, std::string(i18n::Tr("Double-click: becomes")) + " ", dim);
+            put(p, DiplomacyWord(next), ImGui::GetColorU32(DiplomacyColor(next)));
+            put(p, std::string(" ") + i18n::Tr(app.dipSymmetric ? "(and the mirror cell: Both ways)" : "(the mirror cell stays)"), dim);
+        } else if (hr >= 0) {
+            ImVec2 p = line(0);
+            put(p, TrFmt("Group %d (%s) with itself: not editable.", hr, name(hr).c_str()), plain);
+        } else {
+            ImVec2 p = line(0);
+            put(p, i18n::Tr("Hover a cell to read it: who thinks what of whom."), dim);
+        }
+    }
+    if (app.dipSelected >= 0) { // the selected group's whole row and column
+        const int g = app.dipSelected;
+        ImGui::Separator();
+        ImGui::Text("Group %d (%s) regards as:", g, name(g).c_str());
+        for (int v = 0; v < 3; ++v) ImGui::TextColored(DiplomacyColor(v), "  %s: %s", DiplomacyWord(v).c_str(), DiplomacyList(f, g, v, true).c_str());
+        ImGui::Text("Regarded by the others as:");
+        for (int v = 0; v < 3; ++v) ImGui::TextColored(DiplomacyColor(v), "  %s: %s", DiplomacyWord(v).c_str(), DiplomacyList(f, g, v, false).c_str());
+    }
     ImGui::Spacing();
     ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_TextDisabled));
-    ImGui::TextWrapped("Hover a cell for the groups' names (DIPLOMATION_PL_NAMES). Save with %s, undo with %s.",
+    ImGui::TextWrapped("Click a number or a cell: selects that group (its units are marked in the view). Double-click a cell: next value; right-click: previous. The groups' names are the map's DIPLOMATION_PL_NAMES. Save with %s, undo with %s.",
                        ui::BindName(app.lib.mapKeys[config::kKeySave]).c_str(), ui::BindName(app.lib.mapKeys[config::kKeyUndo]).c_str());
     ImGui::PopStyleColor();
 }

@@ -287,6 +287,7 @@ struct App {
 
     // Diplomacy tab
     bool dipSymmetric = true;
+    bool dipMarkAsym = true;          // Diplomacy: a corner mark on the cells whose mirror cell differs
     int dipSelected = -1;             // Diplomacy: the selected group (its units are marked in the view)
 
     // Object parameters: apply an edit to every selected object (else the one shown)
