@@ -285,8 +285,6 @@ private:
         ImGui::Checkbox("Close when the game is up", &edit_.closeOnStart);
         ImGui::Checkbox("Debug log", &edit_.debugLog);
         ImGui::Checkbox("Check for mod updates at start", &edit_.checkUpdatesAtStart);
-        ImGui::Checkbox("Large address aware (4 GB)", &edit_.largeAddressAware);
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Sets the 4 GB flag in Engine/game.exe (backup: game.exe.orig). Off by default.");
     }
 
     bool modMsaa_ = false, modBorderless_ = false;

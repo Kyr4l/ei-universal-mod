@@ -8,6 +8,10 @@ the game). It starts `Engine\game.exe` with a mod and shows "Starting..." until 
 
 The skins, texts, loader (`Engine\dinput.dll`), `addon.dll` and `mp3dec.asi` in the package are EIStarter OBT-1's, by the EIStarter / Gipat.Ru authors; EIStarter-UM only reads their formats, its code is new.
 
+## The game executable
+
+The package's `Engine\\game.exe` is the game's own exe with the large address aware flag set (one bit of the PE header, byte-identical to the community's patched exe). With the stock exe the game ran out of address space under D7VK ("map failed", then "abnormal program termination" in the Multiplayer lobby). The launcher does not patch anything itself.
+
 ## Tested
 
 In clean Wine 11.19 prefixes (hidden display, silent audio) with the package, an empty registry and Universal-Mod: the author's own install, the GOG installer (`setup_evil_islands_2.0.0.5.exe`, installed silently to `C:\GOG Games\Evil Islands`) and the 2001 CD edition (the ISO mounted as `D:`, label `EICD1`, installed by its InstallShield to `C:\Program Files (x86)\Evil Islands`): each reaches the main menu with "Universal Mod ver. 0.8.6" through the launcher. GOG writes a relative CD-ROM Path (`.\`) that makes the game ask for a disc; the launcher replaces such a path by the game folder, and keeps an existing one (the CD edition's `D:\`). Every Options control was checked: widget -> `EIStarter-UM.cfg` (OK keeps, Cancel discards), `.cfg` -> registry (the debug log lists every value written), and what the game does with it where it is visible (window size and borderless, movies off, addon.dll's draw-radius / MQ / second speed / console patches, the log level, the mod and its skin, the engine exe name and the failure message). Not exercised: real fullscreen (the hidden X display has no mode switching: the game dies on its exclusive-fullscreen mode there), the Website button (it would open a browser).
@@ -33,7 +37,7 @@ button (mod information, its readme / changelog, and the mod's own script button
 **Options** (the tabs of EIStarter's dialog): Graphics (adapter, resolution, mip-mapping, antialiasing, dithering, FPS-independent cursor (marked not recommended: it flickers with D7VK; off on a new install),
 filtering, textures, shadows, terrain LOD, lighting / shadowing frequency, movies, audio), Addon (landscape / objects draw radius, pause when
 minimized, addon.log levels), Multiplayer (console, "do not load .MQ from the host", second speed), Camera (every camera value), Paths (game folder,
-resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log,  and "Large address aware (4 GB)": the package's `Engine\game.exe` already has that flag set (one bit of the PE header, byte-identical to the community's patched exe); with the stock exe the game ran out of address space (D7VK "map failed", then "abnormal program termination" in the Multiplayer lobby). The option sets the flag on another exe: it patches `Engine\game.exe` once, permanently (the unpatched file is kept as `game.exe.orig`), off by default. New: **Window mode** = Fullscreen /
+resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log. New: **Window mode** = Fullscreen /
 Windowed / **Borderless window**. In EIStarter's Windowed mode the game is a frameless window that minimizes and pauses when it loses the focus
 (a multiplayer game then desyncs); Borderless keeps it running and keeps the mouse inside. EIStarter's presets (disabled there) and its "Russian
 charset fix for WinXP" checkbox (it did nothing) are not carried over.

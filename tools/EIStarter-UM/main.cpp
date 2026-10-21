@@ -20,7 +20,6 @@
 
 #include "config.hpp"
 #include "icon_data.hpp"
-#include "laa.hpp"
 #include "lang.hpp"
 #include "mods.hpp"
 #include "options_ui.hpp"
@@ -161,10 +160,6 @@ struct App {
         SyncResult r = SyncRegistry(cfg, dir, CurrentMod()->folder, cfg.debugLog ? +[](const std::string& line) { self->Log("  " + line); } : nullptr);
         if (!r.ok) { message = r.error; Log(message); return; }
         ApplyBorderless();
-        if (cfg.largeAddressAware) {
-            const int laa = EnsureLargeAddressAware(exe);
-            Log(laa > 0 ? "Engine/" + cfg.exeName + ": large address aware flag set (the original is kept as .orig)" : laa == 0 ? "large address aware: already set" : "large address aware: could not patch " + exe.string());
-        }
         std::string error;
         if (!platform::Start(exe, dir / "Engine", proc, error)) { failure = error; phase = Phase::Failed; Log("start failed: " + error); return; }
         Log("game started");

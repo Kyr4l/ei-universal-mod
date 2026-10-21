@@ -37,7 +37,6 @@ struct LauncherConfig {
     bool closeOnStart = true;      // leave when the game window is up
     bool debugLog = false;         // more detail in EIStarter-UM.log
     bool borderless = false;       // windowed game without a frame (needs fullscreen off)
-    bool largeAddressAware = false; // set the 4 GB flag in Engine/game.exe before starting (off by default: only for a game that runs out of memory)
     AddonOptions addon;
     GameSettings game;
     bool checkUpdatesAtStart = true;     // look for a newer mod in the background at start
@@ -73,7 +72,6 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.closeOnStart = ini.GetBool("Launcher", "CloseOnStart", true);
         c.debugLog = ini.GetBool("Launcher", "DebugLog", false);
         c.borderless = ini.GetBool("Launcher", "Borderless", false);
-        c.largeAddressAware = ini.GetBool("Launcher", "LargeAddressAware", false);
         c.checkUpdatesAtStart = ini.GetBool("Launcher", "CheckUpdatesAtStart", true);
         for (const IniFile::Section& s : ini.Sections()) {
             if (LowerAscii(s.name) == "updates") for (const IniFile::Entry& e : s.entries) c.updateKeys[e.key] = e.value;
@@ -123,7 +121,6 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Launcher", "CloseOnStart", c.closeOnStart);
     ini.SetBool("Launcher", "DebugLog", c.debugLog);
     ini.SetBool("Launcher", "Borderless", c.borderless);
-    ini.SetBool("Launcher", "LargeAddressAware", c.largeAddressAware);
     ini.SetBool("Launcher", "CheckUpdatesAtStart", c.checkUpdatesAtStart);
     for (const auto& kv : c.updateKeys) ini.Set("Updates", kv.first, kv.second);
     for (const auto& kv : c.updateRepos) ini.Set("Update Repositories", kv.first, kv.second);
