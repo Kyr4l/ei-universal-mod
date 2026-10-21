@@ -30,7 +30,7 @@ static void FolderList(App& app) {
         app.folderFiles = app.lib.ListMapFiles();
         app.listedMapsVersion = app.lib.mapsVersion;
     }
-    ImGui::SeparatorText("In the map folders");
+    ImGui::SeparatorText("Map folders");
     if (app.lib.maps.layers.empty()) {
         ImGui::TextDisabled("Add the game's (and a mod's) maps folder in the Settings tab to list their files here.");
         return;
