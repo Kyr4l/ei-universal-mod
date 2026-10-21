@@ -103,7 +103,7 @@ private:
         labelWidth_ = 110; comboWidth_ = 230;
         // Adapter and resolution.
         {
-            std::vector<std::string> ad{"Primary Videodriver"};
+            std::vector<std::string> ad{"Primary video driver"};
             for (const std::string& a : adapters_) ad.push_back(a);
             int i = g.GetInt("general settings", "drawingtarget", 0);
             if (Combo(tx, "Adapter", "lbAdapter", "cbbAdapter", ad, i)) g.SetInt("general settings", "drawingtarget", i);
@@ -129,26 +129,26 @@ private:
                 g.SetBool("general settings", "fullscreen", mode == 0);
                 edit_.borderless = mode == 2;
             }
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip(modBorderless_ ? "Borderless window: keeps running when the window loses the focus and keeps the mouse inside.\nThe launcher writes this choice into the mod's um.cfg (BORDERLESS) at every Play." : "Borderless window: keeps running when the window loses the focus and keeps the mouse inside.");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip(modBorderless_ ? "Borderless window: keeps running when the window loses focus and keeps the mouse inside.\nThe launcher writes this choice into the mod's um.cfg (BORDERLESS) at every Play." : "Borderless window: keeps running when the window loses focus and keeps the mouse inside.");
         }
         bool b;
         b = g.GetBool("general settings", "mipmapping"); if (Check(tx, "cbMipMapping", "Mip-Mapping", b)) g.SetBool("general settings", "mipmapping", b);
         b = g.GetBool("general settings", "antialiasing"); if (Check(tx, "cbAntialiasing", "Antialiasing", b)) g.SetBool("general settings", "antialiasing", b);
-        if (modMsaa_ && ImGui::IsItemHovered()) ImGui::SetTooltip("The mod's um.cfg has MSAA=true (sharp anti-aliasing through D7VK); the game's own antialiasing is the blurring one. Leave this off to avoid both.");
+        if (modMsaa_ && ImGui::IsItemHovered()) ImGui::SetTooltip("The mod's um.cfg has MSAA=true (sharp antialiasing through D7VK); the game's own antialiasing is a blurring one. Leave this off to avoid using both.");
         b = g.GetBool("general settings", "dithering"); if (Check(tx, "cbDithering", "Dithering", b)) g.SetBool("general settings", "dithering", b);
-        b = g.GetBool("general settings", "FPSIndependentCursor"); if (Check(tx, "cbFPSCursor", "FPS independed cursor", b)) g.SetBool("general settings", "FPSIndependentCursor", b);
+        b = g.GetBool("general settings", "FPSIndependentCursor"); if (Check(tx, "cbFPSCursor", "FPS-independent cursor", b)) g.SetBool("general settings", "FPSIndependentCursor", b);
         int i;
         i = g.GetInt("general settings", "video"); if (Combo(tx, "Movies", "lbMovies", "cbbMovies", {"Off", "1:1", "Fit"}, i)) g.SetInt("general settings", "video", i);
         i = g.GetInt("general settings", "audio"); if (Combo(tx, "Audio", "lbAudio", "cbbAudio", {"Off", "Normal", "Safe"}, i)) g.SetInt("general settings", "audio", i);
         ImGui::TableNextColumn();
-        i = g.GetInt("general settings", "filtering"); if (Combo(tx, "Filtering", "lbFiltering", "cbbFiltering", {"point", "bilinear", "thrilinear"}, i)) g.SetInt("general settings", "filtering", i);
-        i = g.GetInt("general settings", "TextureQuality"); if (Combo(tx, "Textures quality", "lbTexturesQ", "cbbTextures", {"high", "normal", "low"}, i)) g.SetInt("general settings", "TextureQuality", i);
-        i = g.GetInt("shadow settings", "shadowquality"); if (Combo(tx, "Shadows quality", "lbShadowsQ", "cbbShadows", {"None", "Low", "Smooth"}, i)) g.SetInt("shadow settings", "shadowquality", i);
+        i = g.GetInt("general settings", "filtering"); if (Combo(tx, "Filtering", "lbFiltering", "cbbFiltering", {"Point", "Bilinear", "Trilinear"}, i)) g.SetInt("general settings", "filtering", i);
+        i = g.GetInt("general settings", "TextureQuality"); if (Combo(tx, "Texture quality", "lbTexturesQ", "cbbTextures", {"High", "Normal", "Low"}, i)) g.SetInt("general settings", "TextureQuality", i);
+        i = g.GetInt("shadow settings", "shadowquality"); if (Combo(tx, "Shadow quality", "lbShadowsQ", "cbbShadows", {"None", "Low", "Smooth"}, i)) g.SetInt("shadow settings", "shadowquality", i);
         // Terrain LOD: a preset of three values (the original's rule).
         {
             const bool waves = g.GetBool("terrain settings", "EnableWaterWaves");
             int t = waves ? 0 : ((g.GetFloat("terrain settings", "LOD1") == 90.f && g.GetFloat("terrain settings", "LOD2") == 130.f) ? 1 : 2);
-            if (Combo(tx, "Terrain LOD", "lbTerrainQ", "cbbTerrain", {"High", "normal", "Low"}, t)) {
+            if (Combo(tx, "Terrain LOD", "lbTerrainQ", "cbbTerrain", {"High", "Normal", "Low"}, t)) {
                 if (t < 2) { g.SetFloat("terrain settings", "LOD1", 90.f); g.SetFloat("terrain settings", "LOD2", 130.f); g.SetBool("terrain settings", "EnableWaterWaves", t == 0); }
                 else { g.SetFloat("terrain settings", "LOD1", 55.f); g.SetFloat("terrain settings", "LOD2", 90.f); g.SetBool("terrain settings", "EnableWaterWaves", false); }
             }
@@ -175,7 +175,7 @@ private:
         ImGui::SameLine(190); ImGui::SetNextItemWidth(110);
         ImGui::InputInt("##or", &a.objectsDrawRadius, 10, 100); a.objectsDrawRadius = std::max(0, std::min(5000, a.objectsDrawRadius));
         ImGui::TextDisabled("0 = the game's own radius (10 - 5000).");
-        Check(tx, "cbOnMinimizePause", "Pause when minimized game", a.pauseOnMinimize);
+        Check(tx, "cbOnMinimizePause", "Pause the game when minimized", a.pauseOnMinimize);
         ImGui::Separator();
         ImGui::AlignTextToFramePadding(); ImGui::TextUnformatted("addon.log level");
         ImGui::SameLine(190); ImGui::SetNextItemWidth(110); ImGui::InputInt("##ll", &a.logLevel, 1, 1);
@@ -186,7 +186,7 @@ private:
     void Multiplayer(const Texts& tx) {
         AddonOptions& a = edit_.addon;
         Check(tx, "cbMPConsoleSupport", "Console support", a.mpConsole);
-        Check(tx, "cbMPDisableMQ", "Do not load .MQ (Quest) files from Host", a.mqClient);
+        Check(tx, "cbMPDisableMQ", "Do not load .MQ (quest) files from the host", a.mqClient);
         Check(tx, "cbMPSecondSpeed", "Second speed support", a.mpSpeedControl);
     }
 
@@ -223,20 +223,20 @@ private:
     }
     void Camera(const Texts&) {
         if (ImGui::TreeNodeEx("General", ImGuiTreeNodeFlags_DefaultOpen)) {
-            Flag("Flip X Axis", "CameraFlipXAxis"); Flag("Flip Y Axis", "CameraFlipYAxis");
-            Float("Clip Distance: Far", "FarClipDistance", 1.0f); Float("Clip Distance: Near", "NearClipDistance", 0.1f);
-            Float("Terrain Sensitive", "CameraTerrainSensetiveArea"); Int("Border Scroll", "CameraBorderScrollArea"); Int("Frame Selection Sensitive", "CameraFrameSelectionSensetiveArea");
+            Flag("Flip X axis", "CameraFlipXAxis"); Flag("Flip Y axis", "CameraFlipYAxis");
+            Float("Clip distance: far", "FarClipDistance", 1.0f); Float("Clip distance: near", "NearClipDistance", 0.1f);
+            Float("Terrain sensitivity", "CameraTerrainSensetiveArea"); Int("Border scroll", "CameraBorderScrollArea"); Int("Frame selection sensitivity", "CameraFrameSelectionSensetiveArea");
             Float("Deploy X", "CameraDefaultXDeploy"); Float("Deploy Y", "CameraDefaultYDeploy");
             Move("Pitch", "CameraDefaultPitch%s"); Move("Rotate", "CameraDefaultRotate%s"); Move("Scroll", "CameraDefaultScroll%s"); Move("Zoom", "CameraDefaultZoom%s");
             ImGui::TreePop();
         }
         if (ImGui::TreeNode("Camera")) {
-            Range("Height", "Camera%sHeight", true); Range("Distance To Carrier", "Camera%sDistanceToCarrier", true);
-            Range("Distance To Carrier Limit", "Camera%sLimitDistanceToCarrier", false); Range("Pitch", "CameraDefault%sPitch", false);
+            Range("Height", "Camera%sHeight", true); Range("Distance to carrier", "Camera%sDistanceToCarrier", true);
+            Range("Distance to carrier limit", "Camera%sLimitDistanceToCarrier", false); Range("Pitch", "CameraDefault%sPitch", false);
             ImGui::TreePop();
         }
-        if (ImGui::TreeNode("Briefing Camera")) {
-            Range("Distance To Carrier", "CameraBriefing%sDistanceToCarrier", false); Range("Distance To Carrier Limit", "CameraBriefing%sLimitDistanceToCarrier", false);
+        if (ImGui::TreeNode("Briefing camera")) {
+            Range("Distance to carrier", "CameraBriefing%sDistanceToCarrier", false); Range("Distance to carrier limit", "CameraBriefing%sLimitDistanceToCarrier", false);
             Range("Pitch", "CameraBriefing%sPitch", false);
             ImGui::TreePop();
         }
@@ -260,17 +260,17 @@ private:
         if (ImGui::Button((std::string("...##") + name).c_str(), ImVec2(30, 0))) { std::string p = v; if (platform::PickFolder(p)) edit_.game.SetString("Path Settings", name, WithSlash(p)); }
     }
     void Paths(const Texts& tx) {
-        PathRow(tx, "Game Workdir Path (the folder of the original game)", "lbPathGameWorkdir", "Work Path");
+        PathRow(tx, "Game folder (where the original game is installed)", "lbPathGameWorkdir", "Work Path");
         const bool ok = LooksLikeGameFolder(edit_.game.GetString("Path Settings", "Work Path"));
-        if (ok) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "game.exe and res found"); else ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "game.exe / res not found in this folder");
-        PathRow(tx, "Game Resources Path", "lbPathRes", "Resources Path");
-        PathRow(tx, "CD Path", "lbPathCD", "CD-ROM Path");
+        if (ok) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "game.exe and res found"); else ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "game.exe and res not found in this folder");
+        PathRow(tx, "Game resources folder", "lbPathRes", "Resources Path");
+        PathRow(tx, "CD folder", "lbPathCD", "CD-ROM Path");
         char buf[200]; std::snprintf(buf, sizeof buf, "%s", edit_.exeName.c_str());
-        ImGui::TextUnformatted(tx.Get("Options", "lbEXEName", "Game Engine Filename").c_str());
+        ImGui::TextUnformatted(tx.Get("Options", "lbEXEName", "Game engine file name").c_str());
         ImGui::SetNextItemWidth(200);
         if (ImGui::InputText("##exe", buf, sizeof buf)) edit_.exeName = buf;
         ImGui::SameLine(); ImGui::TextDisabled("in Engine/");
-        if (ImGui::SmallButton("Resources = <game folder>/Res/, CD = game folder")) {
+        if (ImGui::SmallButton("Use the game folder for the resources and CD paths")) {
             const std::string w = WithSlash(edit_.game.GetString("Path Settings", "Work Path"));
             edit_.game.SetString("Path Settings", "Resources Path", w + "Res" + std::string(w.find('\\') != std::string::npos ? "\\" : "/"));
             edit_.game.SetString("Path Settings", "CD-ROM Path", w);

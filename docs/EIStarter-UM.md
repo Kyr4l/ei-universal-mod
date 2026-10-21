@@ -4,6 +4,10 @@
 C++17, Dear ImGui + GLFW like um-multitool; one 32-bit `EIStarter-UM.exe` (GLFW 3.3: runs on Windows XP and newer, and under Wine in the prefix of
 the game). It starts `Engine\game.exe` with a mod and shows "Starting..." until the game window is up.
 
+## Credits
+
+The skins, texts, loader (`Engine\dinput.dll`), `addon.dll` and `mp3dec.asi` in the package are EIStarter OBT-1's, by the EIStarter / Gipat.Ru authors; EIStarter-UM only reads their formats, its code is new.
+
 ## Tested
 
 In clean Wine 11.19 prefixes (hidden display, silent audio) with the package, an empty registry and Universal-Mod: the author's own install, the GOG installer (`setup_evil_islands_2.0.0.5.exe`, installed silently to `C:\GOG Games\Evil Islands`) and the 2001 CD edition (the ISO mounted as `D:`, label `EICD1`, installed by its InstallShield to `C:\Program Files (x86)\Evil Islands`): each reaches the main menu with "Universal Mod ver. 0.8.6" through the launcher. GOG writes a relative CD-ROM Path (`.\`) that makes the game ask for a disc; the launcher replaces such a path by the game folder, and keeps an existing one (the CD edition's `D:\`). Every Options control was checked: widget -> `EIStarter-UM.cfg` (OK keeps, Cancel discards), `.cfg` -> registry (the debug log lists every value written), and what the game does with it where it is visible (window size and borderless, movies off, addon.dll's draw-radius / MQ / second speed / console patches, the log level, the mod and its skin, the engine exe name and the failure message). Not exercised: real fullscreen (the hidden X display has no mode switching: the game dies on its exclusive-fullscreen mode there), the Website button (it would open a browser).
@@ -40,7 +44,7 @@ Play = start `Engine\<ExeName>` (`game.exe`) with `Engine\` as the working direc
 
 - `Engine\dinput.dll` ("Addon Loader") is an override of DirectInput. It reads `HKCU\Software\Gipat.Ru\EI_Starter\path` (the starter's folder) and
   loads `addon.dll` from there. Without `path` addon.dll is not loaded and the game runs vanilla, silently.
-- `addon.dll` (0.12, closed source; its authors allow shipping it) reads `EI_Starter\settings\AddonPath` (the mod's folder; none = no mod), hooks
+- `addon.dll` (0.12, closed source) reads `EI_Starter\settings\AddonPath` (the mod's folder; none = no mod), hooks
   `WinMain`, applies its patches, loads the mod's `config.reg` ([RES] resources, [DEV] Plugin = um.dll, [MPZone], [CONFIG]), the plugins and the
   `Engine\*.asi` files, and points game.exe's registry root from `Software\Nival Interactive\EvilIslands` to `Software\Gipat.Ru\EI_Starter\EvilIslands`.
   It only READS the registry. Its patches (MP console, second speed, MQ client, draw radii, pause on minimize) are switched by values of `EI_Starter\settings`.

@@ -114,7 +114,7 @@ struct App {
         const fs::path exe = dir / "Engine" / cfg.exeName;
         std::error_code ec;
         if (!fs::is_regular_file(exe, ec)) { message = "Engine/" + cfg.exeName + " not found!"; Log(message); return; }
-        if (!CurrentMod() || CurrentMod()->folder.empty()) { message = "There is no mod to start (mods/ holds no mod folder)."; Log(message); return; }
+        if (!CurrentMod() || CurrentMod()->folder.empty()) { message = "There is no mod to start: the mods folder is empty."; Log(message); return; }
         if (!GameFolderOk()) { options.Open(cfg, true, "Evil Islands was not found. Choose the folder of the original game (the one with game.exe and res)."); return; }
         if (NormalizePaths(cfg.game)) Log("path settings repaired");
         Save();
@@ -169,7 +169,7 @@ struct App {
 };
 
 static std::string FormatInfo(const Texts& tx, const ModInfo& m) {
-    std::string t = tx.Get("ModInfo", "ModDesc", "{0} \nVersion: {1} \nAuthor(s): {2} \nDate: {3} \n\nSite: {4} \nE-mail: {5} \n\nSingleplayer: {6} \nMultiplayer: {7} \n");
+    std::string t = tx.Get("ModInfo", "ModDesc", "{0} \nVersion: {1} \nAuthor(s): {2} \nDate: {3} \n\nSite: {4} \nE-mail: {5} \n\nSingle player: {6} \nMultiplayer: {7} \n");
     const std::string vals[8] = {m.title, m.version, m.author, m.date, m.site, m.email, m.single ? "True" : "False", m.multi ? "True" : "False"};
     for (int i = 0; i < 8; ++i) for (size_t p; (p = t.find("{" + std::to_string(i) + "}")) != std::string::npos;) t.replace(p, 3, vals[i]);
     return t;
@@ -333,7 +333,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     if (app.showInfo) {
         ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
         ImGui::SetNextWindowSize(ImVec2(420, 300));
-        if (ImGui::Begin((app.texts.Get("ModInfo", "ModInfo", "ModInfo") + "###info").c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
+        if (ImGui::Begin((app.texts.Get("ModInfo", "ModInfo", "Mod info") + "###info").c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
             const ModInfo* m = app.CurrentMod();
             if (m) {
                 ImGui::BeginChild("##infotext", ImVec2(0, -ImGui::GetFrameHeightWithSpacing() - 4));
@@ -459,6 +459,10 @@ int main(int argc, char** argv) {
         }
     }
     if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
+    if (!app.GameFolderOk()) { // nothing found: ask for the game folder right away instead of at the first Play
+        app.Log("Evil Islands folder not found: asking");
+        app.options.Open(app.cfg, true, "Evil Islands was not found. Choose the folder of the original game (the one with game.exe and res), then press OK.");
+    }
     glfwShowWindow(window);
     int frame = 0;
     while (!glfwWindowShouldClose(window) && !app.quit) {
