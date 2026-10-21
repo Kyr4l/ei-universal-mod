@@ -141,6 +141,7 @@ public:
     std::map<uint32_t, int> badPos_;
     struct Jump { float x = 0, y = 0; int count = 0; };
     std::map<uint32_t, Jump> jumpSeen_;
+    std::function<void(uint32_t, bool, size_t, int)> updateHook; // research: every 0x41 update tried (id, known unit, end offset or 0, the byte after it or -1)
     std::function<void(uint32_t, float, float, const char*)> rawPosHook; // research (research/poscheck.cpp): every decoded position before the filters below
     const char* posSrc_ = "?"; // which field the position being set came from
     // Sections 1 and 2 hold a position that is only a snapshot: it can lag the unit's walk (monsters: ~2 units) or even be a stale spawn point (a host moved by
@@ -249,10 +250,20 @@ public:
             if (m[o] != 0x41 || o + 7 > m.size()) continue;
             uint32_t id; std::memcpy(&id, &m[o + 1], 4);
             if (!((id >= 0x100 && id < 0x01000000) || IsPlayerId(id))) continue;
+            // An update is believed only when the unit is known (a creation or an earlier update came first: the values are deltas against its state, so an unknown
+            // unit decodes to garbage) and when it ends where another record starts. Replays of 3 captures (research/endstats.cpp): 99.3 % of the known units' updates are
+            // followed by 0x41 / 0x60 / 0x42 / 0x50 / 0x52 / 0x80 / 0x3B or the end; the rest (00, 0F, 8F, A5, 62 ...) are misreads, and one used to store a wrong state.
+            const bool known = unitInfo_.count(id) || unitFields_.count({id, 0}) || unitFields_.count({id, 10}) || id == worldUnit;
+            dryRun_ = true; const size_t e0 = UnitUpdate(m, o); dryRun_ = false;
+            const int after = e0 && e0 < m.size() ? m[e0] : -1;
+            if (updateHook) updateHook(id, known, e0, after);
+            const bool plausible = e0 && (after < 0 || (after >= 0x40 && after <= 0x43) || after == 0x50 || after == 0x52 || after == 0x60 || after == 0x80 || after == 0x81 || after == 0x3B || after == 0x0B || after == 0x18 || after == 0x0E || after == 0x04);
+            if (!known || !plausible) { if (e0 && known && ++updatesRejected_ % 25 == 1) Log("a unit update did not end at another record (" + std::to_string(updatesRejected_) + " so far): ignored, next byte " + std::to_string(after)); continue; }
             const size_t e = UnitUpdate(m, o);
             if (e) o = e - 1;
         }
     }
+    size_t updatesRejected_ = 0; // known units' updates dropped because they did not end at another record (misreads)
     // A 0x41 unit update (game.exe: client 0x6687B0 -> unit 0x52EF90, its base 0x50EC30; reads 0x47E000): u32 id, u16
     // mask of the fields sent, then each field in order. Every value is delta coded against the unit's previous one:
     // a bit "unchanged", else for each 4-byte chunk a bit "unchanged" or the 4 bytes, then the rest raw. Bits are read
