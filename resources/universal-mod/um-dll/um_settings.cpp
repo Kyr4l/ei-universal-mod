@@ -192,7 +192,7 @@ const SettingDef kSettings[] = {
     StringSetting("DDRAW_DLL", g_ddrawDll, sizeof(g_ddrawDll), "", true, false,
         "; DirectDraw wrapper to use instead of the Engine folder's ddraw.dll (the patched D7VK): a path relative to this folder. Empty = the game's."),
     BoolSetting("MSAA", &g_enableMsaa, false, true,
-        "; Sharp multisample anti-aliasing (4x, or 2x) through D7VK; no blur, no ghosting; (true/false)"),
+        "; Sharp anti-aliasing (MSAA) through D7VK: 4x, or 2x if the GPU has no 4x (automatic). No blur; (true/false)"),
     BoolSetting("UI_QUAD_BLIT", &g_uiQuadBlit, false, true,
         "; Draw the interface and the software cursor as quads, so D7VK does not read the whole frame back every frame. Experimental; (true/false)"),
     BoolSetting("SHADOW_LOCK_CACHE", &g_shadowLockCache, false, true,
