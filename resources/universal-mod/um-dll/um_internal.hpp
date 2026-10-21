@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.4.12";
+static const char* const UM_VERSION = "1.4.14";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 
@@ -349,8 +349,11 @@ extern volatile LONG g_errorBlockNumber;
 extern bool g_keyboardRewriteKeyDown[256];
 extern bool g_enableFileIoLogging;
 extern char g_fileIoLoggingFilter[256];
+extern bool g_enableMsaa;
 extern char g_ddrawDll[MAX_PATH];
 extern HMODULE g_chainedDdraw;
+extern DirectDrawCreateFunction g_gameDirectDrawCreate;
+extern DirectDrawCreateExFunction g_gameDirectDrawCreateEx;
 extern bool g_enableMobValidation;
 extern bool g_enableHeapFreeQuarantine;
 extern int g_heapAllocPadding;

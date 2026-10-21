@@ -203,8 +203,13 @@ const SettingDef kSettings[] = {
         "; -- Performance (see the profiler) --"),
     StringSetting("DDRAW_DLL", g_ddrawDll, sizeof(g_ddrawDll), "", true, false,
         "; A DirectDraw wrapper (D7VK's ddraw.dll) to use instead of the one in the game's Engine folder: a path\n"
-        "; relative to this folder, or absolute (e.g. d7vk\\ddraw.dll). The game's own ddraw.dll stays loaded but\n"
+        "; relative to this folder, or absolute (e.g. d7vk.dll). The game's own ddraw.dll stays loaded but\n"
         "; unused. Empty = the game's. The patched D7VK in tools/d7vk presents the frame without reading it back."),
+    BoolSetting("MSAA", &g_enableMsaa, false, true,
+        "; Multisample anti-aliasing of the 3D scene (4x, or 2x when the GPU has no 4x): sharp edges, no blur and no\n"
+        "; ghosting (it is not FXAA / TAA). Works through D7VK (ddraw.emulateFSAA = forced, set here through the\n"
+        "; DXVK_CONFIG environment variable, so the game folder's dxvk.conf stays as it is); ignored by other DirectDraw\n"
+        "; drivers. Costs GPU time, nothing measurable at 1080p on a GTX 1660 SUPER; (true/false)"),
     BoolSetting("UI_QUAD_BLIT", &g_uiQuadBlit, false, true,
         "; The interface panels the game blits onto the frame are drawn as textured quads on\n"
         "; the 3D device instead. A Blt onto the frame makes D7VK read the whole 1920x1080 frame\n"

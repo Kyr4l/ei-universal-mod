@@ -129,6 +129,18 @@ static VOID WINAPI HookedExitProcessCrt(UINT code) {
 
 // DDRAW_DLL: loads that DirectDraw wrapper by its full path and makes the game's DirectDrawCreate / DirectDrawCreateEx calls (already routed through
 // um.dll's hooks) go to it. Runs before the game's first DirectDrawCreate; any failure keeps the ddraw.dll of the game folder.
+// MSAA: D7VK reads DXVK_CONFIG (semicolon separated options, merged over dxvk.conf) when it creates its device, so this must run before the game's first DirectDrawCreate.
+static void ApplyMsaa() {
+    if (!g_enableMsaa) return;
+    char current[1024] = "";
+    const DWORD length = GetEnvironmentVariableA("DXVK_CONFIG", current, sizeof(current));
+    if (length >= sizeof(current)) return;
+    std::string value = length ? std::string(current) + ";" : std::string();
+    value += "ddraw.emulateFSAA = forced";
+    SetEnvironmentVariableA("DXVK_CONFIG", value.c_str());
+    LogLine("INFO", "MSAA: DXVK_CONFIG=%s (takes effect when D7VK is the DirectDraw driver)", value.c_str());
+}
+
 static void ChainloadDirectDraw() {
     if (!g_ddrawDll[0]) return;
     std::string path = g_ddrawDll;
@@ -144,6 +156,7 @@ static void ChainloadDirectDraw() {
     if (!module) { LogLine("ERROR", "DDRAW_DLL %s could not be loaded (error %lu); the game's ddraw.dll is used", path.c_str(), GetLastError()); return; }
     FARPROC create = GetProcAddress(module, "DirectDrawCreate"), createEx = GetProcAddress(module, "DirectDrawCreateEx");
     if (!create || !createEx) { LogLine("ERROR", "DDRAW_DLL %s lacks DirectDrawCreate / DirectDrawCreateEx; the game's ddraw.dll is used", path.c_str()); FreeLibrary(module); return; }
+    g_gameDirectDrawCreate = g_originalDirectDrawCreate; g_gameDirectDrawCreateEx = g_originalDirectDrawCreateEx;
     memcpy(&g_originalDirectDrawCreate, &create, sizeof(create));
     memcpy(&g_originalDirectDrawCreateEx, &createEx, sizeof(createEx));
     g_chainedDdraw = module;
@@ -176,6 +189,7 @@ void InstallFileIoHooks() {
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreate), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreate)) || hooked;
     hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
+    ApplyMsaa();
     ChainloadDirectDraw();
     if (!hooked) {
         // These hooks back file-I/O logging, .mob validation, and the overlay's

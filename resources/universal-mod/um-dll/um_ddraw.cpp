@@ -659,6 +659,11 @@ static void InstallDirectDrawFrameCounterHooks(void* directDrawObject) {
 HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw,
         IUnknown* outerUnknown) {
     HRESULT result = g_originalDirectDrawCreate(guid, directDraw, outerUnknown);
+    if (FAILED(result) && g_chainedDdraw && g_gameDirectDrawCreate) { // DDRAW_DLL could not make a device (no Vulkan?): the game's own ddraw.dll
+        LogLine("ERROR", "DDRAW_DLL: DirectDrawCreate failed (0x%08lX); using the game's ddraw.dll", result);
+        g_chainedDdraw = NULL; g_originalDirectDrawCreate = g_gameDirectDrawCreate; g_originalDirectDrawCreateEx = g_gameDirectDrawCreateEx;
+        result = g_originalDirectDrawCreate(guid, directDraw, outerUnknown);
+    }
     LogLine(FAILED(result) ? "ERROR" : "INFO",
         "DirectDrawCreate result=0x%08lX object=%p", result,
         directDraw ? *directDraw : NULL);
@@ -674,6 +679,11 @@ HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDraw,
         const GUID* interfaceId, IUnknown* outerUnknown) {
     HRESULT result = g_originalDirectDrawCreateEx(guid, directDraw, interfaceId,
         outerUnknown);
+    if (FAILED(result) && g_chainedDdraw && g_gameDirectDrawCreateEx) {
+        LogLine("ERROR", "DDRAW_DLL: DirectDrawCreateEx failed (0x%08lX); using the game's ddraw.dll", result);
+        g_chainedDdraw = NULL; g_originalDirectDrawCreate = g_gameDirectDrawCreate; g_originalDirectDrawCreateEx = g_gameDirectDrawCreateEx;
+        result = g_originalDirectDrawCreateEx(guid, directDraw, interfaceId, outerUnknown);
+    }
     if (FAILED(result)) LogLine("ERROR", "DirectDrawCreateEx failed: result=0x%08lX", result);
     if ((g_enableOverlay || g_uiQuadBlit) && SUCCEEDED(result) && directDraw && *directDraw) {
         IdentifyDirectDrawBackend();
