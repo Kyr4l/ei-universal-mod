@@ -348,6 +348,7 @@ extern bool g_keyboardRewriteKeyDown[256];
 extern bool g_enableFileIoLogging;
 extern char g_fileIoLoggingFilter[256];
 extern bool g_enableMsaa;
+void TraceInstallDevice(void* device); // um_trace.cpp: UM_TRACE_D3D research tracer
 extern bool g_enableBorderless;
 void InstallWindowHooks(); // um_window.cpp
 bool PatchImportedFunction(HMODULE module, const char* functionName, ULONG_PTR replacement, ULONG_PTR* original); // um_hooks.cpp

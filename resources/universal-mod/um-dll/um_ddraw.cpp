@@ -25,6 +25,7 @@ static ULONG WINAPI HookedDeviceRelease(void* self) {
 }
 static HRESULT WINAPI HookedD3DCreateDevice(void* d3d, const IID* iid, void* target, void** device) {
     const HRESULT result = g_originalD3DCreateDevice(d3d, iid, target, device);
+    if (SUCCEEDED(result) && device && *device && std::getenv("UM_TRACE_D3D")) TraceInstallDevice(*device);
     if (SUCCEEDED(result) && device && *device && g_uiQuadBlit) {
         g_quadDevice = *device; // the UI quad blit draws on it
         bool already = false;
