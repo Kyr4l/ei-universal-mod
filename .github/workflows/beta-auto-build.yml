@@ -19,7 +19,9 @@ jobs:
 
       - name: Extract commit Hash
         run: |
-          COMMITHASH=$(grep -oE '[0-9a-f]{7,}' "resources/universal-mod/res-texts/texts-eng_res/string version_name" | head -n 1)
+          # the entry "string version_name" lives in the grouped texts file STRING.umtexts (um-multitool's format); makemod writes the commit hash on its "post-commit." line
+          COMMITHASH=$(awk '{sub(/\r$/,"")} /^=== /{on=($0=="=== string version_name")} on' "resources/universal-mod/res-texts/texts-eng_res/STRING.umtexts" | grep -oE '[0-9a-f]{7,}' | head -n 1)
+          [ -n "$COMMITHASH" ] || COMMITHASH=$(git rev-parse --short=9 HEAD)   # never an empty hash in the zip's name
           echo "COMMITHASH=$COMMITHASH" >> $GITHUB_ENV
 
       - name: Declare ZIPNAME and echo the other variables
