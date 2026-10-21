@@ -25,9 +25,13 @@ WIN_LIBS = -L$(VENDOR)/glfw-mingw-xp32/lib -lglfw3 -lopengl32 -lgdi32 -lcomdlg32
 
 all: win window
 
+# The .exe's icon (assets/EIStarter-UM.ico, made by assets/make_icons.py), compiled into a resource object.
+EIStarter-UM-res.o: EIStarter-UM.rc assets/EIStarter-UM.ico
+	i686-w64-mingw32-windres $< -O coff -o $@
+
 win: EIStarter-UM.exe
-EIStarter-UM.exe: $(SRCS) $(HDRS)
-	$(WIN_CXX) $(WIN_FLAGS) -o $@ $(SRCS) $(WIN_LIBS)
+EIStarter-UM.exe: $(SRCS) $(HDRS) EIStarter-UM-res.o
+	$(WIN_CXX) $(WIN_FLAGS) -o $@ $(SRCS) EIStarter-UM-res.o $(WIN_LIBS)
 
 # um-window.asi: the borderless-window plugin (resources/universal-mod/um-dll/um_window.cpp built on its own); addon.dll loads it from Engine\.
 window: window/um-window.asi
@@ -41,6 +45,6 @@ tests/launcher_tests: tests/launcher_tests.cpp $(HDRS)
 	$(CXX) -std=c++17 -O1 -Wall -Wextra -pthread -I. -I../um-multitool -o $@ $<
 
 clean:
-	rm -f EIStarter-UM.exe window/um-window.asi tests/launcher_tests
+	rm -f EIStarter-UM.exe EIStarter-UM-res.o window/um-window.asi tests/launcher_tests
 
 .PHONY: all win window test clean

@@ -1,3 +1,5 @@
+<p align="center"><img src="tools/EIStarter-UM/assets/logo.png" alt="Universal Mod" width="220"></p>
+
 # EI-Universal-Mod
 
 A multiplayer-friendly rebalance of **Evil Islands: Curse of the Lost Soul**, inspired by EI-Mod, HG-Mod and others.

@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "config.hpp"
+#include "icon_data.hpp"
 #include "laa.hpp"
 #include "lang.hpp"
 #include "mods.hpp"
@@ -572,6 +573,7 @@ int main(int argc, char** argv) {
         int mx, my, mw, mh; glfwGetMonitorWorkarea(mon, &mx, &my, &mw, &mh);
         glfwSetWindowPos(window, mx + (mw - kW) / 2, my + (mh - kH) / 2);
     }
+    { GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)}, {48, 48, const_cast<unsigned char*>(logo::kIcon48)}, {32, 32, const_cast<unsigned char*>(logo::kIcon32)}}; glfwSetWindowIcon(window, 3, icons); }
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
     IMGUI_CHECKVERSION();
