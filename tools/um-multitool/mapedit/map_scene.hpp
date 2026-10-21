@@ -30,6 +30,9 @@
 #endif
 
 #include <algorithm>
+#include <chrono>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <cmath>
 #include <functional>
@@ -368,7 +371,11 @@ public:
     // ---- drawing -------------------------------------------------------------------------------
     void Draw(const Library& lib, int x, int y, int width, int height) {
         width_ = width; height_ = height;
+        static const bool timing = std::getenv("UM_DRAW_DEBUG") != nullptr; // research: where the frame goes
+        static double tHash = 0, tObjects = 0, tCpu = 0; static int nFrames = 0; static auto last = std::chrono::steady_clock::now();
+        const auto t0 = std::chrono::steady_clock::now();
         RefreshHashes();
+        if (timing) tHash += std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
         glViewport(x, y, width, height);
         const float* bg = light.on ? light.sky : options.background;
         glClearColor(bg[0], bg[1], bg[2], 1.0f);
@@ -392,7 +399,10 @@ public:
         SetupSun();
 
         if (terrain_ && options.terrain) DrawTerrainBatch(false);
+        { const auto t1 = std::chrono::steady_clock::now();
         if (options.objects || options.units) DrawObjects(lib);
+        if (timing) { tCpu += std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t1).count(); glFinish(); tObjects += std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t1).count(); ++nFrames;
+            if (std::chrono::steady_clock::now() - last > std::chrono::seconds(3)) { size_t n = 0; for (auto* m : maps_) n += m->objects.size(); std::fprintf(stderr, "DRAW %d frames: hashes %.2f ms, objects %.2f ms (CPU to issue %.2f) per frame (%zu objects, %zu models)\n", nFrames, tHash / nFrames, tObjects / nFrames, tCpu / nFrames, n, models_.size()); tHash = tObjects = tCpu = 0; nFrames = 0; last = std::chrono::steady_clock::now(); } } }
         if (shadows && options.terrain) DrawShadows();
         if (options.markers) DrawMarkers(lib.markerOpacity);
         if (terrain_ && options.water) DrawTerrainBatch(true);
@@ -1454,6 +1464,16 @@ private:
         return SphereVisible(f, p.x, p.y, p.z, std::sqrt(Dot(e, e)) + 0.5f);
     }
 
+    // Too far or small to see: under ~1.5 pixels across on the screen (not in the sun's box: its shadow still counts).
+    bool TooSmall(const Frustum& f, const mob::Object& o, const MapModel* m) const {
+        if (f.ortho || height_ <= 0) return false;
+        const fig::Vec3 e = (m->boundsMax - m->boundsMin) * 0.5f;
+        const float dx = o.position.x - f.eye[0], dy = o.position.y - f.eye[1], dz = o.position.z - f.eye[2];
+        const float dist = std::sqrt(dx * dx + dy * dy + dz * dz) + 0.01f;
+        const float pxPerUnit = static_cast<float>(height_) / (2.0f * std::tan(kFov * kPi / 360.0f));
+        return std::sqrt(Dot(e, e)) / dist * pxPerUnit < 1.5f;
+    }
+
     void DrawObjects(const Library& lib) {
         (void)lib;
         const Frustum frustum = CurrentFrustum(); // the camera's, or the sun's box in the shadow pass
@@ -1479,12 +1499,15 @@ private:
         glEnable(GL_LIGHTING);
         glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, alphaCut_);
+        struct PlainDraw { const mob::Object* o; const MapModel* m; };
+        static std::vector<PlainDraw> plain; // (kept between frames: no allocation each time)
+        plain.clear();
         for (size_t fi = 0; fi < maps_.size(); ++fi) {
             if (fi < visible_.size() && !visible_[fi]) continue;
             for (const mob::Object& o : maps_[fi]->objects) {
                 if (!mob::HasFigure(o.kind) || !Shown(o) || TooFar(o)) continue;
                 const MapModel* m = ModelFor(o);
-                if (!m || !m->ok || !ObjectVisible(frustum, o, m)) continue;
+                if (!m || !m->ok || !ObjectVisible(frustum, o, m) || TooSmall(frustum, o, m)) continue;
                 if (!m->layers.empty()) { // a dressed unit
                     glPushMatrix();
                     ApplyObjectTransform(DrawPosition(o, m), Rotation(o));
@@ -1515,21 +1538,38 @@ private:
                     glPopMatrix();
                     continue;
                 }
-                bool textured = options.textured && m->texture;
-                if (textured) {
-                    glEnable(GL_TEXTURE_2D);
-                    glBindTexture(GL_TEXTURE_2D, m->texture);
-                    glColor4f(1, 1, 1, 1);
-                } else {
-                    glDisable(GL_TEXTURE_2D);
-                    if (o.kind == mob::Kind::Unit) glColor4f(0.85f, 0.55f, 0.45f, 1);
-                    else glColor4f(0.7f, 0.68f, 0.62f, 1);
-                }
-                glPushMatrix();
-                ApplyObjectTransform(DrawPosition(o, m), Rotation(o));
-                glCallList(m->list);
-                glPopMatrix();
+                plain.push_back({&o, m});
             }
+        }
+        // The plain models by texture (and unit / not: the untextured colour): one state change per texture, not per object.
+        std::stable_sort(plain.begin(), plain.end(), [&](const PlainDraw& a, const PlainDraw& b) {
+            const GLuint ta = options.textured ? a.m->texture : 0, tb = options.textured ? b.m->texture : 0;
+            if (ta != tb) return ta < tb;
+            return (a.o->kind == mob::Kind::Unit) < (b.o->kind == mob::Kind::Unit);
+        });
+        GLuint boundTexture = ~0u; int boundKind = -1;
+        for (const PlainDraw& d : plain) {
+            const bool textured = options.textured && d.m->texture;
+            if (textured) {
+                if (boundTexture != d.m->texture || boundKind != -2) {
+                    glEnable(GL_TEXTURE_2D);
+                    glBindTexture(GL_TEXTURE_2D, d.m->texture);
+                    glColor4f(1, 1, 1, 1);
+                    boundTexture = d.m->texture; boundKind = -2;
+                }
+            } else {
+                const int kind = d.o->kind == mob::Kind::Unit ? 1 : 0;
+                if (boundKind != kind) {
+                    glDisable(GL_TEXTURE_2D);
+                    if (kind) glColor4f(0.85f, 0.55f, 0.45f, 1);
+                    else glColor4f(0.7f, 0.68f, 0.62f, 1);
+                    boundKind = kind; boundTexture = ~0u;
+                }
+            }
+            glPushMatrix();
+            ApplyObjectTransform(DrawPosition(*d.o, d.m), Rotation(*d.o));
+            glCallList(d.m->list);
+            glPopMatrix();
         }
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_ALPHA_TEST);
