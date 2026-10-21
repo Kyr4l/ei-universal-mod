@@ -243,7 +243,7 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
     auto trySlot = [&](const Offer& o, const mp::Object* current, const std::string& why) {
         const float newW = o.weight - (current ? DF(*current, 28) : 0.0f);
         const float gain = current ? sellValue(*current) : 0.0f;
-        if (static_cast<float>(money) + gain - static_cast<float>(keep) < o.price * kBuy || weight + newW > limit) return false;
+        if (static_cast<float>(money) + gain - static_cast<float>(keep) < o.price * kBuy || weight + newW > std::max(limit, weight)) return false; // over the limit already: a swap may not make it heavier
         money += static_cast<long>(gain - o.price * kBuy); weight += newW;
         plan.buy.push_back(o); plan.replaces.push_back(current ? current->id : 0);
         if (current) plan.sell.push_back(current->id);
@@ -291,7 +291,10 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
         return pf.role == 1 ? typeId >= 5 : typeId <= 4;
     };
     if (!weaponDone) {
-        float bestScore = weapon ? WeaponScore(DF(*weapon, 56), DF(*weapon, 60)) * (1 + 0.35f * ability(WeaponGroup(db.List(items::Category::Weapons)[weapon->b].typeId))) : 0.0f;
+        // A weapon of the wrong kind for the role (a melee weapon on an Archer) counts for nothing: the best weapon of the role's kind is bought and the old one sold.
+        // (Scoring it by damage x the character's ability left a melee character with high axe skill with its axe forever: no bow could beat it.)
+        const bool rightKind = weapon && allowed(db.List(items::Category::Weapons)[weapon->b].typeId);
+        float bestScore = rightKind ? WeaponScore(DF(*weapon, 56), DF(*weapon, 60)) * (1 + 0.35f * ability(WeaponGroup(db.List(items::Category::Weapons)[weapon->b].typeId))) : 0.0f;
         const Offer* best = nullptr;
         for (const Offer& o : stock) {
             if (o.kind != 0x3004) continue;
@@ -300,7 +303,7 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
             const items::Material& M = db.materials[static_cast<size_t>(o.material)];
             const float score = WeaponScore(P.n[24] * M.n[10], P.n[25] * M.n[10]) * (1 + 0.35f * ability(WeaponGroup(P.typeId)));
             const float cost = o.price * kBuy - (weapon ? sellValue(*weapon) : 0.0f);
-            if (score > bestScore * 1.10f && static_cast<float>(money - keep) >= cost && weight + o.weight - (weapon ? DF(*weapon, 28) : 0.0f) <= limit && static_cast<long>(cost) <= money * (100 - pf.tankiness) / 100 + 1) { best = &o; bestScore = score; }
+            if (score > bestScore * 1.10f && static_cast<float>(money - keep) >= cost && weight + o.weight - (weapon ? DF(*weapon, 28) : 0.0f) <= std::max(limit, weight) && static_cast<long>(cost) <= money * (100 - pf.tankiness) / 100 + 1) { best = &o; bestScore = score; }
         }
         if (best) trySlot(*best, weapon, "weapon");
     }
@@ -314,7 +317,7 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
             const Built b = Build(db, 0x3005, o.row, o.material, 1);
             const float score = ArmorScore(b.detail);
             const float cost = o.price * kBuy - (cur != armorBy.end() ? sellValue(*cur->second) : 0.0f);
-            if (score > bestScore * 1.08f && static_cast<float>(money - keep) >= cost && weight + o.weight - (cur != armorBy.end() ? DF(*cur->second, 28) : 0.0f) <= limit && (pf.tankiness > 0)) { best = &o; bestScore = score; }
+            if (score > bestScore * 1.08f && static_cast<float>(money - keep) >= cost && weight + o.weight - (cur != armorBy.end() ? DF(*cur->second, 28) : 0.0f) <= std::max(limit, weight) && (pf.tankiness > 0)) { best = &o; bestScore = score; }
         }
         if (best) trySlot(*best, cur != armorBy.end() ? cur->second : nullptr, "armor");
     }

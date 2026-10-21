@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.25";
+static const char* const kVersion = "0.1.26";
 
 
 struct App {
@@ -723,7 +723,9 @@ static void CharacterPanel(App& app) {
         for (uint32_t id : m.lists[l]) t += std::string(t.empty() ? "" : ", ") + name(id);
         ImGui::TextWrapped("%s: %s", i18n::Tr(kLists[l]), t.empty() ? i18n::Tr("none") : t.c_str());
     }
+    ImGui::PushTextWrapPos(0.0f);
     ImGui::TextDisabled("Backpack: %zu items%s", app.character.backpack.size(), app.dbLoaded ? "" : " (no database found beside the mp folder: no item names)");
+    ImGui::PopTextWrapPos();
 }
 
 // `um-bot --install-desktop [--remove]` (Linux): the menu entry (um-bot.desktop, with this binary's path) and the
@@ -980,8 +982,16 @@ int main(int argc, char** argv) {
     glfwWindowHintString(GLFW_WAYLAND_APP_ID, "um-bot"); // the menu entry's (um-bot.desktop): its icon on Wayland
     glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-bot");
     glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-bot");
-    GLFWwindow* window = glfwCreateWindow(900, 560, (std::string("um-bot ") + kVersion).c_str(), nullptr, nullptr);
+    // The first size follows the screen (the content needs about 1000 x 740: at 900 x 560 the Movement section and the Save button fell off the bottom and long lines were cut).
+    int startW = 1100, startH = 780;
+    if (GLFWmonitor* monitor = glfwGetPrimaryMonitor()) {
+        int wx = 0, wy = 0, ww = 0, wh = 0;
+        glfwGetMonitorWorkarea(monitor, &wx, &wy, &ww, &wh);
+        if (ww > 0 && wh > 0) { startW = std::clamp(static_cast<int>(ww * 0.7), 1000, 1400); startH = std::clamp(static_cast<int>(wh * 0.85), 740, 980); }
+    }
+    GLFWwindow* window = glfwCreateWindow(startW, startH, (std::string("um-bot ") + kVersion).c_str(), nullptr, nullptr);
     if (!window) { std::fprintf(stderr, "cannot open a window\n"); glfwTerminate(); return 1; }
+    glfwSetWindowSizeLimits(window, 960, 700, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwMakeContextCurrent(window);
     if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) { // Wayland has no way to set one from the program
         GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)},
@@ -1008,6 +1018,7 @@ int main(int argc, char** argv) {
         }
     }
     ImGui::GetIO().IniFilename = nullptr; // no imgui.ini: the layout is fixed
+    { float sx = 1, sy = 1; glfwGetWindowContentScale(window, &sx, &sy); if (sx > 1.05f) ImGui::GetIO().FontGlobalScale = std::min(sx, 2.0f); } // a scaled desktop: the text scales with it
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();

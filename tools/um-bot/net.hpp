@@ -96,7 +96,7 @@ public:
         for (const auto& kv : players) if (kv.second.flag == 1) return p.flag == 1;
         return p.name != name_;
     }
-    bool ZoneOpen() const {                      // the chosen quest's zone can be entered (the host is in it)
+    bool ZoneOpen() const {                      // the chosen quest's zone can be entered: the server's quest state "<quest>_2" exists (it is removed when the host leaves the zone), or the host is in it
         for (const auto& kv : questStates) if (kv.second == chosenQuest + "_2") return true;
         if (!chosenQuest.empty()) for (const auto& kv : players) if (IsHost(kv.second) && kv.second.state == 0) return true; // the host is in it
         return false;
@@ -136,7 +136,18 @@ public:
     static constexpr float kWalkSpeed = 1.5f; // map units per second: the first guess for a unit (a run is about 3.9, learned per unit from its updates)
     std::map<uint32_t, Pos> unitPos;
     // A new position report: the unit's speed is learned from how far it moved since the previous report while it was walking somewhere.
+    // Updates sometimes decode to impossible positions (seen: x = 9345.8 on a map 400 wide: the bot then thought the host was thousands of units away and ran off after it).
+    // A report outside the map, or a jump of more than 60 units within 3 s, is dropped (three in a row are believed: a real teleport).
+    std::map<uint32_t, int> badPos_;
     void SetPos(uint32_t id, float x, float y, float tx, float ty) {
+        if (!(tx > 0 && tx < 1024 && ty > 0 && ty < 1024)) { tx = x; ty = y; } // a destination outside the map is no destination
+        const auto prev = unitPos.find(id);
+        const bool inside = x > 0 && x < 1024 && y > 0 && y < 1024;
+        const bool jump = prev != unitPos.end() && Now() - prev->second.at < 3.0 && std::hypot(x - prev->second.x, y - prev->second.y) > 60.0f;
+        if (!inside || jump) {
+            if (++badPos_[id] < 3) { if (badPos_[id] == 1) Log("ignored an impossible position of unit " + std::to_string(id) + ": (" + std::to_string(x) + "," + std::to_string(y) + ")"); return; }
+        }
+        badPos_[id] = 0;
         Pos np{x, y, tx, ty, Now(), kWalkSpeed};
         const auto it = unitPos.find(id);
         if (it != unitPos.end()) {
@@ -581,6 +592,7 @@ public:
     bool Connect(const std::string& host, int port) {
         Close();
         error.clear();
+        players.clear(); questStates.clear(); // a new session: the player records and the quest states of the previous connection are stale (the bot entered a closed zone, and its entry timeout cut a swap)
 #ifdef _WIN32
         static bool wsa = false;
         if (!wsa) { WSADATA d; WSAStartup(MAKEWORD(2, 2), &d); wsa = true; }
