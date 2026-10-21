@@ -411,3 +411,6 @@ um-bot (`tools/um-bot/net.hpp`) is the reference implementation of everything ma
 switches (`UM_BOT_DUMP=<dir>` writes every stream message) record new captures. um-engine.dll
 (`resources/universal-mod/um-engine/net_*.cpp`) re-implements the update codec and ReadMessage on the game's
 own structures.
+
+## Where a unit is (checked against um.dll's UNITS, 2026-10-21, um-bot 0.1.29)
+A replay of captured streams (`research/poscheck.cpp`: every decoded position against the true ones sampled while the capture was taken) showed: the positions from the walk (section 10: the first step, in half-unit cells) always followed the unit (122 of 122 within 1 unit); the position in section 2 (3 floats) is only a SNAPSHOT: monsters lag it by ~2 units and a host moved by a research poke kept its spawn point (23,267) in every snapshot, so believing it made the bot think the host went back; section 1 (3 floats) is no position at all (0.2 / 0.5 on units standing at x = 30..60). um-bot believes a snapshot only for a unit with no walk position of the last 6 s and ignores section 1. Rare garbage still comes from the walk (unit 4651: x = 5899.25, y = 0.25: both codes absolute with a wrong value; the delta state of a unit goes stale when one of its updates did not decode): the bot ignores positions outside 4..1024 and now logs which section they came from.

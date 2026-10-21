@@ -141,12 +141,19 @@ public:
     std::map<uint32_t, int> badPos_;
     struct Jump { float x = 0, y = 0; int count = 0; };
     std::map<uint32_t, Jump> jumpSeen_;
+    std::function<void(uint32_t, float, float, const char*)> rawPosHook; // research (research/poscheck.cpp): every decoded position before the filters below
+    const char* posSrc_ = "?"; // which field the position being set came from
+    // Sections 1 and 2 hold a position that is only a snapshot: it can lag the unit's walk (monsters: ~2 units) or even be a stale spawn point (a host moved by
+    // research pokes kept (23,267) in every snapshot, seen 2026-10-21 against um.dll's UNITS). The walk (section 10's steps) is the position that follows
+    // the unit, so a snapshot is believed only for a unit with no recent position from a walk.
+    bool SnapshotWelcome(uint32_t id) const { const auto p = unitPos.find(id); return p == unitPos.end() || Now() - p->second.at > 6.0; }
     void SetPos(uint32_t id, float x, float y, float tx, float ty) {
+        if (rawPosHook) rawPosHook(id, x, y, posSrc_);
         if (!(tx > 0 && tx < 1024 && ty > 0 && ty < 1024)) { tx = x; ty = y; } // a destination outside the map is no destination
         const auto prev = unitPos.find(id);
         const bool inside = x > 4 && x < 1024 && y > 4 && y < 1024; // (the garbage also lands near the corner: (0.9, 0.5) made the bot run to the origin)
         const bool jump = prev != unitPos.end() && Now() - prev->second.at < 3.0 && std::hypot(x - prev->second.x, y - prev->second.y) > 60.0f;
-        if (!inside) { if (++badPos_[id] % 50 == 1) Log("ignored an impossible position of unit " + std::to_string(id) + ": (" + std::to_string(x) + "," + std::to_string(y) + ")"); return; } // never believed
+        if (!inside) { if (++badPos_[id] % 50 == 1) Log("ignored an impossible position of unit " + std::to_string(id) + " (from " + posSrc_ + "): (" + std::to_string(x) + "," + std::to_string(y) + ")"); return; } // never believed
         if (jump) { // a real teleport shows up as three reports that agree with each other; decoding garbage varies from report to report
             Jump& j = jumpSeen_[id];
             if (j.count > 0 && std::hypot(x - j.x, y - j.y) < 3.0f) ++j.count; else { j.x = x; j.y = y; j.count = 1; }
@@ -312,7 +319,7 @@ public:
             if (side > 31) return 0;
             unitInfo_[id] = u; unitSide_[id] = side; unitEnemies_[id] = enemies;
             if (u.flags & 0x80000u) { MarkDead(id); }
-            else if (m[p + 2] == 0x01 && (mask & 4) && p + 12 < m.size()) { float x, y; std::memcpy(&x, &m[p + 4], 4); std::memcpy(&y, &m[p + 8], 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) SetPos(id, x, y, x, y); }
+            else if (m[p + 2] == 0x01 && (mask & 4) && p + 12 < m.size()) { float x, y; std::memcpy(&x, &m[p + 4], 4); std::memcpy(&y, &m[p + 8], 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) { posSrc_ = "cr"; SetPos(id, x, y, x, y); } }
             return q;
         }
         const size_t e = UnitUpdate(b, 0);
@@ -388,8 +395,8 @@ public:
                         unitAction_[id] = a;
                         if (a == 0xFF && id < 0x01000000u) { MarkDead(id); }
                     });
-                    if (k == 2 && !bad && n == 12) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) commit.push_back([this, id, x, y] { SetPos(id, x, y, x, y); }); }
-                    if (k == 1 && !bad) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 2048 && y < 2048) commit.push_back([this, id, x, y] { SetPos(id, x, y, x, y); }); }
+                    if (k == 2 && !bad && n == 12) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) commit.push_back([this, id, x, y] { if (SnapshotWelcome(id)) { posSrc_ = "f2"; SetPos(id, x, y, x, y); } }); }
+                    // section 1 (12 bytes) is not a position (decoded values 0.2 / 0.5 on units at x = 30..60, seen 2026-10-21): not used
                 }
             } else if (k == 3) {
                 const int n = *delta(f, 1);
@@ -419,7 +426,7 @@ public:
                     if (st == 0 && cx >= 0 && cy >= 0) { // where it is now, where it walks to (unknown when only the creation sent it)
                         const float x = (cx + 0.5f) / 2, y = (cy + 0.5f) / 2;
                         const bool dest = mode == 2 && fl[1] > 0 && fl[2] > 0; // only a move order holds a destination: in an attack the field is the target's id
-                        commit.push_back([this, id, x, y, tx = dest ? fl[1] / 2 : x, ty = dest ? fl[2] / 2 : y] { SetPos(id, x, y, tx, ty); });
+                        commit.push_back([this, id, x, y, tx = dest ? fl[1] / 2 : x, ty = dest ? fl[2] / 2 : y] { posSrc_ = "f10"; SetPos(id, x, y, tx, ty); });
                     }
                 }
             }
@@ -828,12 +835,12 @@ public:
                     // the old "run up to 3 units": that ran archers into the monsters and woke the pack).
                     const float known = std::min(sight * 0.9f, 13.0f);
                     const float stand = weaponRange > 1.5f ? std::min(weaponRange * 0.9f, known) : known;
-                    const bool far = d > stand + 1.0f;
-                    const bool walk = far || (engageTries_ >= 2 && d > 3.5f);
-                    const float stopAt = far ? stand : std::max(2.5f, d - 3.0f);
+                    const bool outOfReach = d > stand + 1.0f;
+                    const bool walk = outOfReach || (engageTries_ >= 2 && d > 3.5f);
+                    const float stopAt = outOfReach ? stand : std::max(2.5f, d - 3.0f);
                     if (Now() - attackedAt_ > (walk ? 1.2 : 1.5)) {
                         if (engageTries_ >= 8) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_) + " times: leaving it for 30 s"); }
-                        else if (walk) { orderWhy_ = far ? "walk into sight / weapon range of target " + std::to_string(t) : "step closer to target " + std::to_string(t) + " (attack refused)"; MoveTo(x + (mx - x) * stopAt / d, y + (my - y) * stopAt / d); attackedAt_ = Now(); attackedTarget_ = 0; if (!far) ++engageTries_; }
+                        else if (walk) { orderWhy_ = outOfReach ? "walk into sight / weapon range of target " + std::to_string(t) : "step closer to target " + std::to_string(t) + " (attack refused)"; MoveTo(x + (mx - x) * stopAt / d, y + (my - y) * stopAt / d); attackedAt_ = Now(); attackedTarget_ = 0; if (!outOfReach) ++engageTries_; }
                         else {
                             Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_ + 1) + ")");
                             orderWhy_ = "fight: target " + std::to_string(t); Attack(t);
