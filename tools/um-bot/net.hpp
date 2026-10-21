@@ -634,10 +634,22 @@ public:
                 else if (leashed_ && dh < followDistance * 2 + 1) { leashed_ = false; Log("back near the host"); }
             }
         }
-        // Fight: the nearest unit (not a player's hero) within sight, attacked again every 3 s while it stays the target;
-        // nothing in sight: follow the host as usual.
+        // Fight. The game's own logic is the base: a hero that has no order and whose "battle" button is on (unit +0x438 == 1, the default) defends itself against whoever
+        // attacks it and keeps its target (AiLogicPlayer::Regroup; checked live 2026-10-21: an idle bot killed the monster that bit it without any order). So while our own
+        // update says the hero is attacking (field 10 mode 3) the bot sends no order. On top of that it does what the game does not do for another player's hero: it helps
+        // the host (the units attacking it, the host's target), the aggressive engagement also takes any enemy in sight, and the leash and the follow below still apply.
         bool fighting = false;
-        if (state == State::Accepted && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Alive() && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
+        uint32_t ownTarget = 0; bool underAttack = false;
+        if (state == State::Accepted && worldUnit) {
+            const auto ot = unitTarget_.find(worldUnit);
+            if (ot != unitTarget_.end() && !dead_.count(ot->second)) ownTarget = ot->second;
+            for (const auto& kv : unitTarget_) if (kv.second == worldUnit && !dead_.count(kv.first) && !IsHero(kv.first)) underAttack = true;
+            if (ownTarget && !leashed_) { fightTarget_ = ownTarget; idleFrom_ = 0; }
+            else if (idleFrom_ == 0) idleFrom_ = Now();
+        }
+        const bool attacking = ownTarget != 0 && !leashed_;
+        if (attacking) fighting = true;
+        if (state == State::Accepted && !attacking && (chatEngagement_ >= 0 ? chatEngagement_ > 0 : fightInSight) && worldUnit && Alive() && Now() - fightAt_ > 1 && Now() >= holdUntil_ && !leashed_) {
             fightAt_ = Now();
             float d = 0;
             uint32_t t = (chatEngagement_ >= 0 ? chatEngagement_ : engagement) >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
@@ -648,7 +660,7 @@ public:
                 if (Where(worldUnit, mx, my))
                     for (const auto& kv : unitTarget_) {
                         float x, y;
-                        const bool onUs = kv.second == host || kv.second == worldUnit;
+                        const bool onUs = kv.second == host || (kv.second == worldUnit && idleFrom_ > 0 && Now() - idleFrom_ > 2.5); // our own attackers: the game's logic answers first
                         const bool hostsTarget = kv.first == host;
                         const uint32_t u = hostsTarget ? kv.second : kv.first;
                         if (!(onUs || hostsTarget) || IsHero(u) || dead_.count(u) || !Where(u, x, y)) continue;
@@ -691,18 +703,16 @@ public:
                     // The server refuses an attack order on a unit our hero has not seen (WorldServer::OrderOnTarget 0x5D3C30: AiMemory::IsFriendOrKnown 0x5CB7F0
                     // must find it in the hero's known list): found 2026-10-19 by ordering from 9, 8, 7, 5 units (refused) and ~3 (accepted). So: walk up to
                     // kAttackReach, order the attack, and take "our own update says: attacking this unit" as the answer (unitTarget_, field 10 mode 3).
-                    const auto tg = unitTarget_.find(worldUnit);
-                    const bool engaged = tg != unitTarget_.end() && tg->second == t;
-                    if (engaged) { idleSince_ = Now(); engageTries_ = 0; }
-                    else if (d > kAttackReach + 0.7f) {
-                        if (Now() - attackedAt_ > 1.2) { MoveTo(x + (mx - x) * kAttackReach / d, y + (my - y) * kAttackReach / d); attackedAt_ = Now(); attackedTarget_ = 0; }
-                    } else if (Now() - attackedAt_ > 1.5) {
-                        if (++engageTries_ > 6) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_ - 1) + " times: leaving it for 30 s"); }
+                    // The order goes out from where we stand (a bow needs no walk: the server brings the hero into its weapon's range, OrderReachDistance); only when it
+                    // is refused twice (the target is not in the hero's known list yet) does the bot walk closer, as before.
+                    const bool walk = engageTries_ >= 2 && d > kAttackReach + 0.7f;
+                    if (Now() - attackedAt_ > (walk ? 1.2 : 1.5)) {
+                        if (engageTries_ >= 8) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_) + " times: leaving it for 30 s"); }
+                        else if (walk) { MoveTo(x + (mx - x) * kAttackReach / d, y + (my - y) * kAttackReach / d); attackedAt_ = Now(); attackedTarget_ = 0; ++engageTries_; }
                         else {
-                            Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_) + ")");
+                            Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_ + 1) + ")");
                             Attack(t);
-                            attackedAt_ = Now(); attackedTarget_ = t;
-                            if (engageTries_ > 2 && d > 1.5f) MoveTo(x + (mx - x) * 1.0f / d, y + (my - y) * 1.0f / d); // still refused: one step closer
+                            attackedAt_ = Now(); attackedTarget_ = t; ++engageTries_;
                         }
                     }
                 }
@@ -712,7 +722,7 @@ public:
         }
         if (fightTarget_ && !unitPos.count(fightTarget_)) fightTarget_ = 0;
         if (fightTarget_) fighting = true;
-        if (!fighting && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away
+        if (!fighting && (!underAttack || leashed_) && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away (not while something bites us: the game's logic answers; the leash still pulls back)
             followAt_ = Now();
             float hx, hy, mx, my;
             if (Where(HostUnit(), hx, hy)) {
@@ -877,7 +887,7 @@ private:
     double followAt_ = 0, fightAt_ = 0, attackedAt_ = 0;
     int paceSent_ = -1;
     uint32_t fightTarget_ = 0;
-    double targetSince_ = 0, idleSince_ = 0, selfHurtAt_ = -99;
+    double targetSince_ = 0, idleSince_ = 0, selfHurtAt_ = -99, idleFrom_ = 0; // idleFrom_: since when our hero attacks nothing (0: it does)
     uint32_t attackedTarget_ = 0;
     int targetHp_ = 0;
     std::map<uint32_t, double> ignored_; // targets left alone until then

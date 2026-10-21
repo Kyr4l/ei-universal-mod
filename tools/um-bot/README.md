@@ -4,9 +4,10 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.22.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
-enters the quest the host chose, follows the host at the host's pace, fights hostile monsters (walks to 3 units, orders
-the attack, retries, ignores a refused target for 30 s), drinks the belt's healing potion below the set health, keeps
+**Status: 0.1.24.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+enters the quest the host chose, follows the host at the host's pace, fights on top of the game's own fighting logic (a hero without orders defends itself and keeps its target, as for any player: the bot
+gives no order while its hero is attacking, helps the host against the units attacking it, orders attacks from where it stands - the server walks a
+bow or a sword into range - and only walks closer when an order is refused twice; a target refused eight times is ignored for 30 s), drinks the belt's healing potion below the set health, keeps
 a leash, goes back to the lobby with the host (and enters the next quest), reconnects after a failure and saves its
 progress (experience, items) into its `.mp` from the server's party messages. When its hero dies it asks the server for a new one on the same connection (6 s later; the new hero appears at the arrival point and the host shows it normally), then walks to its body and loots it when no known enemy is within 20 units of it (three tries per hero, up to 5 minutes); if the respawn fails it leaves the world and enters again after 45 s. The host cannot leave a quest zone while other players are still in it, so the bot leaves first: it knows the zone's exits from the server's first message (their rectangles), and when the host has stayed 2.5 s in an exit it came into from outside it leaves the zone itself (the final save, then back to the lobby; setting `LEAVE_AT_EXIT`, "Leave first at an exit"). The host can also type `bot leave` (or `<the bot's first name> leave`) in the chat. Not done: several bots in one window.
 

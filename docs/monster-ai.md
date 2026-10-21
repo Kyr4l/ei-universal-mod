@@ -53,6 +53,8 @@ A sneaking or crawling hero is harder to see and hear (its visibility and noise 
 
 Every candidate is scored for every spell / attack the monster has (`AiSpellInfo_Score` 0x5CF9A0); the old target is kept while it is valid and nothing scores better; a target that cannot be reached or attacked is ignored for 20 ticks. Behaviours (`AiLogicGuard`, `Patrol`, `Sentry`, `Follow`) decide where the monster stands when it has no target.
 
+**Checked live (2026-10-21, test rig, bot = Archer with +0x438 == 1, no order sent at all):** a monster (hp 11) came and bit the idle bot; the bot's own update showed an attack order on it within seconds (`k3`), the monster died after about 7 s and the bot lost 1 hp. The old um-bot fight loop (a move to 3 units before every attack, a new target every second) instead walked away from the monster biting it towards a farther one and died. So um-bot 0.1.24 sends no order while its hero attacks (its own field-10 mode 3) and adds only the host's defence, the aggressive pick, the leash and the follow. Not yet seen live: the host's defence and the follow during a fight (the host cannot be moved on the rig reliably: a poked host is not seen by the bot).
+
 ## What um-bot does with it
 
 - It picks lone monsters before ones in a pack: every other hostile within 7 units of a candidate (the call-for-help radius) adds 5 to its distance.
