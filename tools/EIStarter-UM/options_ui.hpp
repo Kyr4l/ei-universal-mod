@@ -284,8 +284,6 @@ private:
         ImGui::Checkbox("Close the launcher when the game window is up", &edit_.closeOnStart);
         ImGui::Checkbox("Debug log (more detail in EIStarter-UM.log)", &edit_.debugLog);
         ImGui::Checkbox("Look for a newer mod in the background at start", &edit_.checkUpdatesAtStart);
-        { int src = edit_.updateStableOnly ? 1 : 0; ImGui::AlignTextToFramePadding(); ImGui::TextUnformatted("Mod updates come from"); ImGui::SameLine(); ImGui::SetNextItemWidth(250);
-          if (ImGui::Combo("##updsrc", &src, "The newest release or pre-release\0Releases only\0")) edit_.updateStableOnly = src == 1; }
         ImGui::Checkbox("Large address aware game (4 GB of address space)", &edit_.largeAddressAware);
         if (ImGui::IsItemHovered()) ImGui::SetTooltip("Sets the 4 GB flag in Engine/game.exe (the launcher's copy; the unpatched file is kept as game.exe.orig).\nOff by default: only for a game that runs out of memory (seen once: Universal-Mod, D7VK, fullscreen 1920x1080).");
     }

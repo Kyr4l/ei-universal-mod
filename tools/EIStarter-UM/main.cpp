@@ -62,11 +62,6 @@ struct App {
     bool showInfo = false;
     std::string message;                // a message popup
     std::ofstream log;
-    // Mod updates (update.hpp): `updateFor` is the mod folder the last check was about.
-    update::Updater updater;
-    std::string updateFor;
-    bool updateHandled = true;
-
     void Log(const std::string& line) {
         if (!log.is_open()) log.open((dir / "EIStarter-UM.log").string(), std::ios::trunc);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -74,26 +69,41 @@ struct App {
         log << t << " " << line << "\n"; log.flush();
     }
 
-    // The GitHub repository a mod's updates come from: the author's, for Universal Mod; others only through [Update Repositories] in the cfg.
-    std::string UpdateRepo(const ModInfo& m) const {
-        auto it = cfg.updateRepos.find(m.folder);
-        if (it != cfg.updateRepos.end()) return it->second;
-        return (m.folder == "Universal-Mod" || m.title == "Universal Mod") ? "Kyr4l/ei-universal-mod" : std::string();
+    // Mod updates (update.hpp). The mod's two lines are installed side by side so their saves never mix: the newest release into mods/Universal-Mod,
+    // the newest pre-release (beta) into mods/Universal-Mod-Beta.
+    struct Channel { const char* label; const char* folder; bool stableOnly; update::Updater updater; bool handled = true; };
+    Channel channels[2] = {{"Release (master)", "Universal-Mod", true}, {"Beta (pre-release)", "Universal-Mod-Beta", false}};
+    std::string UpdateRepo() const { auto it = cfg.updateRepos.find("*"); return it != cfg.updateRepos.end() ? it->second : std::string("Kyr4l/ei-universal-mod"); }
+    bool UpdateBusy() const { for (const Channel& c : channels) if (c.updater.Busy()) return true; return false; }
+    const ModInfo* FindMod(const std::string& folder) const { for (const ModInfo& m : mods) if (LowerAscii(m.folder) == LowerAscii(folder)) return &m; return nullptr; }
+    // Mods that share a title are told apart by their folder in the chooser.
+    std::string DisplayTitle(const ModInfo& m) const {
+        int same = 0;
+        for (const ModInfo& o : mods) if (o.title == m.title) ++same;
+        if (same <= 1) return m.title;
+        const std::string l = LowerAscii(m.folder);
+        const bool beta = l.size() > 5 && l.compare(l.size() - 5, 5, "-beta") == 0;
+        return m.title + " (" + (beta ? "beta" : l == "universal-mod" ? "release" : m.folder) + ")";
     }
-    void CheckUpdates() {
-        const ModInfo* m = CurrentMod();
-        if (!m || UpdateRepo(*m).empty()) return;
-        auto key = cfg.updateKeys.find(m->folder);
-        updateFor = m->folder;
-        updater.Check(UpdateRepo(*m), cfg.updateStableOnly, key == cfg.updateKeys.end() ? std::string() : key->second);
+    void CheckChannel(Channel& c) {
+        auto key = cfg.updateKeys.find(c.folder);
+        c.updater.Check(UpdateRepo(), c.stableOnly, key == cfg.updateKeys.end() ? std::string() : key->second);
     }
-    void InstallUpdate() {
-        const ModInfo* m = CurrentMod();
-        const auto snap = updater.Get();
-        if (!m || snap.state != update::Updater::State::Available) return;
-        Log("update: " + snap.latest.tag + " (" + snap.latest.assetName + ") over " + m->path);
-        updateFor = m->folder; updateHandled = false;
-        updater.Install(snap.latest, fs::path(m->path), dir / "mods" / ".update", {"mp", "saves"});
+    void CheckUpdates() { for (Channel& c : channels) CheckChannel(c); }
+    // True when the channel's newest build is worth offering for its folder: the updater installed another build there, or (folder not installed by the
+    // updater) the release is newer than the mod's own version; a missing folder is always offered.
+    bool WorthInstalling(const Channel& c, const update::Release& r) const {
+        const ModInfo* m = FindMod(c.folder);
+        if (!m) return true;
+        if (cfg.updateKeys.count(c.folder)) return cfg.updateKeys.at(c.folder) != r.Key();
+        return update::CompareVersions(r.tag, m->version) > 0;
+    }
+    void InstallChannel(Channel& c) {
+        const auto snap = c.updater.Get();
+        if (snap.state != update::Updater::State::Available && snap.state != update::Updater::State::UpToDate) return;
+        Log("update: " + snap.latest.tag + " (" + snap.latest.assetName + ") into mods/" + c.folder);
+        c.handled = false;
+        c.updater.Install(snap.latest, dir / "mods" / c.folder, dir / "mods" / ".update", {"mp", "saves"});
     }
 
     const ModInfo* CurrentMod() const { return modIndex >= 0 && modIndex < static_cast<int>(mods.size()) ? &mods[static_cast<size_t>(modIndex)] : nullptr; }
@@ -178,14 +188,14 @@ struct App {
     }
 
     void Poll() {
-        { // a finished update: remember the build, read the new mod
-            const auto snap = updater.Get();
-            if (snap.state == update::Updater::State::Done && !updateHandled) {
-                updateHandled = true;
-                cfg.updateKeys[updateFor] = snap.latest.Key();
+        for (Channel& c : channels) { // a finished update: remember the build, read the new mod
+            const auto snap = c.updater.Get();
+            if (snap.state == update::Updater::State::Done && !c.handled) {
+                c.handled = true;
+                cfg.updateKeys[c.folder] = snap.latest.Key();
                 Log("update done: " + snap.message);
                 ReloadMods(); ApplySkin(); Save();
-            } else if (snap.state == update::Updater::State::Failed && !updateHandled) { updateHandled = true; Log("update failed: " + snap.message); }
+            } else if (snap.state == update::Updater::State::Failed && !c.handled) { c.handled = true; Log("update failed: " + snap.message); }
         }
         if (phase != Phase::Starting && phase != Phase::Running) return;
         int code = 0;
@@ -248,14 +258,21 @@ static void DrawCorner(App& app, ImDrawList* bg) {
     lines.push_back({ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled" : m->umListed ? "um.dll listed, file missing" : "no um.dll",
                      ok ? green : (m->umFile || m->umListed) ? amber : grey,
                      ok ? "The mod's config.reg loads um.dll (Universal Mod's plugin) and the file is there." : m->umFile ? "um.dll is in the mod's folder, but its config.reg [DEV] Plugin does not name it: addon.dll will not load it." : m->umListed ? "The mod's config.reg names um.dll as its plugin, but the file is not in the mod's folder." : "This mod does not use um.dll."});
-    const auto snap = app.updater.Get();
-    if (app.updateFor == m->folder) {
+    {
         using S = update::Updater::State;
         char buf[96];
-        if (snap.state == S::Available) lines.push_back({"update available: " + snap.latest.tag, amber, "A newer build is on GitHub. Open the (i) window to install it."});
-        else if (snap.state == S::Downloading) { std::snprintf(buf, sizeof buf, "updating: %d%%", static_cast<int>(snap.progress * 100)); lines.push_back({buf, amber, "Downloading the mod. Play is disabled meanwhile."}); }
-        else if (snap.state == S::Extracting || snap.state == S::Applying) lines.push_back({"updating: " + std::string(snap.state == S::Extracting ? "unpacking" : "replacing files"), amber, "Play is disabled meanwhile."});
-        else if (snap.state == S::Done) lines.push_back({"mod updated", green, snap.message});
+        bool shown = false;
+        for (App::Channel& c : app.channels) { // an update in progress, whichever channel
+            const auto snap = c.updater.Get();
+            if (snap.state == S::Downloading) { std::snprintf(buf, sizeof buf, "updating %s: %d%%", c.folder, static_cast<int>(snap.progress * 100)); lines.push_back({buf, amber, "Downloading the mod. Play is disabled meanwhile."}); shown = true; }
+            else if (snap.state == S::Extracting || snap.state == S::Applying) { lines.push_back({std::string("updating ") + c.folder + ": " + (snap.state == S::Extracting ? "unpacking" : "replacing files"), amber, "Play is disabled meanwhile."}); shown = true; }
+        }
+        if (!shown) for (App::Channel& c : app.channels) {
+            if (LowerAscii(c.folder) != LowerAscii(m->folder)) continue; // the update for the selected mod's own line
+            const auto snap = c.updater.Get();
+            if (snap.state == S::Available && app.WorthInstalling(c, snap.latest)) lines.push_back({"update available: " + snap.latest.tag, amber, "A newer build is on GitHub. Open the (i) window to install it."});
+            else if (snap.state == S::Done) lines.push_back({"mod updated", green, snap.message});
+        }
     }
     const ImVec2 o = ImGui::GetWindowPos();
     float y = static_cast<float>(kH) - 8;
@@ -291,7 +308,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     ImGui::BeginDisabled(modal);
     bool play = false, opt = false, readme = false, web = false, uninstall = false, exit = false;
-    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle && !app.updater.Busy());
+    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle && !app.UpdateBusy());
     opt = MenuButton(app, "op", "Options", ImVec2(237, 126));
     readme = MenuButton(app, "re", "Readme", ImVec2(237, 161));
     web = MenuButton(app, "we", "Web", ImVec2(237, 196));
@@ -312,9 +329,9 @@ static void DrawMain(App& app, GLFWwindow* window) {
     if (app.skinFont) ImGui::PushFont(app.skinFont, 14.5f);
     ImGui::SetNextItemWidth(169);
     const ModInfo* cur = app.CurrentMod();
-    if (ImGui::BeginCombo("##mod", cur ? cur->title.c_str() : "No mods")) {
+    if (ImGui::BeginCombo("##mod", cur ? app.DisplayTitle(*cur).c_str() : "No mods")) {
         for (int i = 0; i < static_cast<int>(app.mods.size()); ++i)
-            if (ImGui::Selectable((app.mods[static_cast<size_t>(i)].title + "##" + std::to_string(i)).c_str(), i == app.modIndex)) {
+            if (ImGui::Selectable((app.DisplayTitle(app.mods[static_cast<size_t>(i)]) + "##" + std::to_string(i)).c_str(), i == app.modIndex)) {
                 app.Click();
                 if (i != app.modIndex) { app.modIndex = i; app.ApplySkin(); app.Save(); }
             }
@@ -357,7 +374,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::EndDisabled();
 
     if (!modal) {
-        if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.updater.Busy()) { app.Click(); app.Play(); }
+        if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.UpdateBusy()) { app.Click(); app.Play(); }
         if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the folder of the original game.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
         if (readme) {
             app.Click();
@@ -405,7 +422,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     // The mod's information.
     if (app.showInfo) {
         ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-        ImGui::SetNextWindowSize(ImVec2(440, 340));
+        ImGui::SetNextWindowSize(ImVec2(480, 350));
         if (ImGui::Begin((app.texts.Get("ModInfo", "ModInfo", "Mod info") + "###info").c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
             const ModInfo* m = app.CurrentMod();
             if (m) {
@@ -415,40 +432,57 @@ static void DrawMain(App& app, GLFWwindow* window) {
                 buf.push_back('\0');
                 const bool ok = m->umListed && m->umFile;
                 ImGui::TextColored(ok ? ImVec4(0.43f, 0.82f, 0.47f, 1) : (m->umFile || m->umListed) ? ImVec4(0.92f, 0.7f, 0.27f, 1) : ImVec4(0.6f, 0.6f, 0.6f, 1), "%s", ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled (config.reg)" : m->umListed ? "um.dll listed, but the file is missing" : "no um.dll");
-                const std::string repo = app.UpdateRepo(*m);
-                const float below = ImGui::GetFrameHeightWithSpacing() * (repo.empty() ? 2 : 4) + 8;
+                // Updates: the release and the beta live in their own folders (their saves never mix); each has its own button.
+                const bool umFamily = LowerAscii(m->folder).compare(0, 13, "universal-mod") == 0 || m->title == "Universal Mod";
+                const float below = ImGui::GetFrameHeightWithSpacing() * (umFamily ? 6 : 2) + 12;
                 ImGui::InputTextMultiline("##infotext", buf.data(), buf.size(), ImVec2(-1, -below), ImGuiInputTextFlags_ReadOnly);
-                if (!repo.empty()) { // updates: the newest release or pre-release of the mod's repository
+                if (umFamily) {
                     using S = update::Updater::State;
-                    const auto snap = app.updater.Get();
-                    const bool mine = app.updateFor == m->folder;
-                    const bool busy = app.updater.Busy();
-                    std::string line = "Updates (" + repo + "): ";
-                    if (!mine || snap.state == S::Idle) line += "not checked yet";
-                    else if (snap.state == S::Checking) line += "asking GitHub...";
-                    else if (snap.state == S::Available) line += snap.latest.tag + (snap.latest.prerelease ? " (pre-release)" : "") + ", built " + snap.latest.assetUpdated.substr(0, 10) + (app.cfg.updateKeys.count(m->folder) ? "" : "; this folder was not installed by the updater");
-                    else if (snap.state == S::Downloading || snap.state == S::Extracting || snap.state == S::Applying) line += snap.message;
-                    else line += snap.message;
-                    ImGui::TextWrapped("%s", line.c_str());
-                    if (mine && (snap.state == S::Downloading || snap.state == S::Extracting)) {
-                        char over[64] = "";
-                        if (snap.state == S::Downloading) std::snprintf(over, sizeof over, "%.0f / %.0f MB", snap.done / 1048576.0, snap.total / 1048576.0);
-                        ImGui::ProgressBar(static_cast<float>(snap.progress), ImVec2(-1, 0), over);
-                    }
+                    const bool busyAny = app.UpdateBusy();
                     const bool gameUp = app.phase == App::Phase::Starting || app.phase == App::Phase::Running;
-                    ImGui::BeginDisabled(busy);
+                    ImGui::AlignTextToFramePadding();
+                    ImGui::Text("Updates (%s)", app.UpdateRepo().c_str());
+                    ImGui::SameLine();
+                    ImGui::BeginDisabled(busyAny);
                     if (ImGui::Button("Check for updates")) app.CheckUpdates();
                     ImGui::EndDisabled();
-                    ImGui::SameLine();
-                    if (mine && snap.state == S::Available) {
-                        ImGui::BeginDisabled(gameUp);
-                        if (ImGui::Button(("Update to " + snap.latest.tag).c_str())) app.InstallUpdate();
+                    if (busyAny) { ImGui::SameLine(); if (ImGui::Button("Cancel")) for (App::Channel& c : app.channels) c.updater.Cancel(); }
+                    for (App::Channel& c : app.channels) {
+                        const auto snap = c.updater.Get();
+                        const ModInfo* installed = app.FindMod(c.folder);
+                        std::string status;
+                        bool offer = false;
+                        switch (snap.state) {
+                        case S::Idle: status = installed ? "installed " + installed->version + ", not checked yet" : "not installed, not checked yet"; break;
+                        case S::Checking: status = "asking GitHub..."; break;
+                        case S::Available: case S::UpToDate:
+                            offer = true;
+                            if (!installed) status = snap.latest.tag + " (" + snap.latest.assetUpdated.substr(0, 10) + ")";
+                            else if (app.WorthInstalling(c, snap.latest)) status = "installed " + installed->version + ", new: " + snap.latest.tag + " (" + snap.latest.assetUpdated.substr(0, 10) + ")";
+                            else status = "up to date: " + snap.latest.tag;
+                            break;
+                        case S::Downloading: case S::Extracting: case S::Applying: case S::Done: case S::Failed: status = snap.message; break;
+                        }
+                        ImGui::PushID(c.folder);
+                        ImGui::TextColored(ImVec4(0.7f, 0.85f, 1, 1), "%s", c.label);
+                        ImGui::SameLine(125);
+                        ImGui::BeginDisabled(busyAny || gameUp || !offer);
+                        const bool worth = snap.state == S::Available || snap.state == S::UpToDate ? (!installed || app.WorthInstalling(c, snap.latest)) : false;
+                        if (ImGui::Button(!installed ? "Install" : worth ? "Update" : "Reinstall", ImVec2(70, 0))) app.InstallChannel(c);
                         ImGui::EndDisabled();
-                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("Replaces everything in the mod's folder with the new build; the mp and saves folders are kept.\num.cfg and um-engine.cfg are kept when the new build has none; otherwise they are replaced (copies go to mods/.update/backup).");
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("Installs into mods/%s. The mp and saves folders are kept, um.cfg and um-engine.cfg too when the new build has none\n(otherwise they are replaced, copies go to mods/.update/backup). Saves of the other line are not touched: copy them by hand.", c.folder);
                         ImGui::SameLine();
+                        if (status.size() > 46) status = status.substr(0, 45) + "...";
+                        ImGui::AlignTextToFramePadding();
+                        ImGui::TextUnformatted(status.c_str());
+                        if (snap.state == S::Downloading || snap.state == S::Extracting) {
+                            char over[64] = "";
+                            if (snap.state == S::Downloading) std::snprintf(over, sizeof over, "%.0f / %.0f MB", static_cast<double>(snap.done) / 1048576.0, static_cast<double>(snap.total) / 1048576.0);
+                            else std::snprintf(over, sizeof over, "unpacking %d%%", static_cast<int>(snap.progress * 100));
+                            ImGui::ProgressBar(static_cast<float>(snap.progress), ImVec2(-1, 14), over);
+                        }
+                        ImGui::PopID();
                     }
-                    if (busy && ImGui::Button("Cancel")) app.updater.Cancel();
-                    if (busy) ImGui::SameLine();
                 }
                 if (!m->site.empty()) {
                     if (ImGui::Button("Copy site")) ImGui::SetClipboardText(m->site.c_str());

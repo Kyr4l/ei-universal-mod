@@ -77,6 +77,7 @@ int main(int argc, char** argv) {
         CHECK(update::PickRelease(json, true, r, err)); CHECK(r.tag == "0.8.5" && r.assetUrl == "https://h/r.zip");
         CHECK(!update::PickRelease("{\"message\":\"API rate limit exceeded\"}", false, r, err) && err.find("rate limit") != std::string::npos);
         CHECK(!update::PickRelease("not json", false, r, err));
+        CHECK(update::CompareVersions("0.8.6", "0.8.5") > 0); CHECK(update::CompareVersions("v.1.0.0", "1.0") == 0); CHECK(update::CompareVersions("0.9", "0.10") < 0); CHECK(update::CompareVersions("", "0.1") < 0);
         CHECK(update::SafeRelative("a/b.txt")); CHECK(!update::SafeRelative("../x")); CHECK(!update::SafeRelative("a/../../x")); CHECK(!update::SafeRelative("/abs")); CHECK(!update::SafeRelative("C:/x"));
         // a real zip made by 7z (deflate and stored entries, a root folder "Universal-Mod/")
         const fs::path z = fs::temp_directory_path() / "um-launcher-zip"; fs::remove_all(z); fs::create_directories(z / "src/Universal-Mod/res"); fs::create_directories(z / "src/Universal-Mod/mp");
@@ -99,6 +100,10 @@ int main(int argc, char** argv) {
             { fs::create_directories(z / "fresh2"); std::ofstream(z / "fresh2/config.reg") << "x"; std::ofstream(mod / "um-engine.cfg") << "MINE=1\n"; }
             CHECK(update::SwapModFolder(mod, z / "fresh2", z / "mods/.u/old", z / "mods/.u/backup", {"mp", "saves"}, err));
             CHECK(ReadTextFile((mod / "um-engine.cfg").string()) == "MINE=1\n");
+            // a fresh install: the folder does not exist yet
+            { fs::create_directories(z / "fresh3"); std::ofstream(z / "fresh3/config.reg") << "x"; }
+            CHECK(update::SwapModFolder(z / "mods/Universal-Mod-Beta", z / "fresh3", z / "mods/.u/old2", z / "mods/.u/backup", {"mp", "saves"}, err));
+            CHECK(fs::exists(z / "mods/Universal-Mod-Beta/config.reg"));
             // a damaged archive: flip a byte inside the data, the CRC must catch it
             { std::fstream f(z / "t.zip", std::ios::in | std::ios::out | std::ios::binary); const std::streamoff at = static_cast<std::streamoff>(fs::file_size(z / "t.zip") / 3); f.seekg(at); char c; f.read(&c, 1); f.seekp(at); c = static_cast<char>(c ^ 0x55); f.write(&c, 1); }
             CHECK(!update::ExtractZip(z / "t.zip", z / "out2", nullptr, no, files, err));

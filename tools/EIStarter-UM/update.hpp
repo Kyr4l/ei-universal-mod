@@ -329,12 +329,15 @@ inline bool SwapModFolder(const fs::path& modDir, const fs::path& fresh, const f
     std::error_code ec;
     fs::create_directories(old.parent_path(), ec);
     fs::remove_all(old, ec);
-    fs::rename(modDir, old, ec);
-    if (ec) { error = "cannot replace " + modDir.string() + ": " + ec.message() + " (is the game running?)"; return false; }
+    const bool hadOld = fs::exists(modDir, ec); // not there yet: a fresh install
+    if (hadOld) {
+        fs::rename(modDir, old, ec);
+        if (ec) { error = "cannot replace " + modDir.string() + ": " + ec.message() + " (is the game running?)"; return false; }
+    }
     auto rollback = [&](const std::string& why) {
         std::error_code e2;
         fs::remove_all(modDir, e2);
-        fs::rename(old, modDir, e2);
+        if (hadOld) fs::rename(old, modDir, e2);
         error = why;
         return false;
     };
@@ -354,6 +357,14 @@ inline bool SwapModFolder(const fs::path& modDir, const fs::path& fresh, const f
     }
     fs::remove_all(old, ec);
     return true;
+}
+
+// Compares dotted versions ("0.8.6", "v.1.0.0") number by number: <0, 0, >0.
+inline int CompareVersions(const std::string& a, const std::string& b) {
+    auto parts = [](const std::string& s) { std::vector<long> v; long cur = -1; for (char c : s) { if (c >= '0' && c <= '9') cur = (cur < 0 ? 0 : cur) * 10 + (c - '0'); else if (cur >= 0) { v.push_back(cur); cur = -1; } } if (cur >= 0) v.push_back(cur); return v; };
+    const std::vector<long> x = parts(a), y = parts(b);
+    for (size_t i = 0; i < std::max(x.size(), y.size()); ++i) { const long p = i < x.size() ? x[i] : 0, q = i < y.size() ? y[i] : 0; if (p != q) return p < q ? -1 : 1; }
+    return 0;
 }
 
 // ---- the updater the UI talks to -----------------------------------------------------------------------------------------------------------
