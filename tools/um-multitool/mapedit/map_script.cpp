@@ -1182,8 +1182,8 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         const bool over = hovered && ImGui::IsMouseHoveringRect(bp, ImVec2(bp.x + bs.x, bp.y + bs.y));
         dl->AddRectFilled(bp, ImVec2(bp.x + bs.x, bp.y + bs.y), over ? IM_COL32(75, 100, 140, 255) : IM_COL32(55, 70, 100, 255), 3.0f);
         dl->AddText(ImVec2(bp.x + 12.0f, bp.y + (bs.y - ts.y) * 0.5f), IM_COL32(235, 235, 235, 255), nearestText);
-        // Let go over an empty part (or click the button): back to the nearest node, so that the view is never left on nothing.
-        if ((over && ImGui::IsMouseReleased(ImGuiMouseButton_Left) && !dragged) || !(io.MouseDown[0] || io.MouseDown[1] || io.MouseDown[2])) {
+        // The view goes where the user takes it, empty parts included; this button is the way back (never done by itself).
+        if (over && ImGui::IsMouseReleased(ImGuiMouseButton_Left) && !dragged) {
             const float cx = (size.x * 0.5f - view.pan.x) / z, cy = (size.y * 0.5f - view.pan.y) / z;
             float best = 1e30f; ImVec2 at(cx, cy);
             for (const Node& n : g.nodes) {
