@@ -13,6 +13,14 @@ presented without any copy and without waiting for the GPU. In every other case 
 disappears from the profile and the picture is unchanged (screenshots). The rig's own display path (Xvfb) is slower than the game, so
 it cannot show the frame-rate gain; that needs a run on a real display (um.dll profiler: the BltFast line).
 
+**Measured on a real-GPU path (2026-10-21, gamescope headless on the NVIDIA card, the multiplayer base, um.dll profiler).** Main thread per frame, with um-engine's
+lighting kernel on: **11.8 ms (84 FPS) with the stock D7VK, 6.9 - 7.4 ms (135 - 145 FPS) with this patch.** `BltFast` 4.46 ms -> 0.01 ms: the stock build waited
+3.8 ms for the GPU in the download and copied the frame (0.7 ms). Screenshots of the same scene differ only where things move (idle characters, sparks, water, cursor).
+
+**Ready-made build: `ddraw.dll` (in this folder, 8.9 MB, stripped, win32).** Copy it over `<game>/EIStarter OBT-1/Engine/ddraw.dll` (keep the old one as `ddraw.dll.orig`; the
+stock file is D7VK 3.1.1). Built from the D7VK 3.1.1 sources plus `present-before-download.patch`, with the submodule branch heads of 2026-10-21 (not the pinned commits).
+Undo = put the old file back. Needs `UI_QUAD_BLIT=true` in um.cfg (the default) so that the interface does not mark the frame as changed.
+
 **Build (what was done here).** meson 1.12 (`pip install meson`), the Vulkan-Headers and SPIRV-Headers checkouts in `include/vulkan`
 and `include/spirv`, `subprojects/dxbc-spirv` (with its `submodules/spirv_headers`) and `subprojects/libdisplay-info` (branch
 `windows`) cloned, glslang's release binary in PATH, then
