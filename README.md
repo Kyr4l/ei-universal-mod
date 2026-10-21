@@ -57,12 +57,12 @@ We value feedback! If you have any comments to make please open an Issue on this
 - [Testing – Beta] - Download the [Pre-Release](https://github.com/Kyr4l/ei-universal-mod/releases) archive of this mod (automatically built from the `beta` branch and updated after each new commit)
 - [Advanced – Development] Download the entire repo and link the mod directory to EIStarter's `Mod` directory
 
-### Install the mod (um-launcher, recommended)
+### Install the mod (EIStarter-UM, recommended)
 
-- Unpack the launcher package (`tools/um-launcher/package.sh` builds it; it replaces EIStarter) anywhere you can write to
+- Unpack the launcher package (`tools/EIStarter-UM/package.sh` builds it; it replaces EIStarter) anywhere you can write to
 - Copy (or symlink) the `Universal-Mod` directory into its `mods` folder
-- Run `um-launcher.exe` (Linux: `wine um-launcher.exe` in the game's prefix), select "Universal Mod", click "Play". It asks for the folder of the original game the first time if it cannot find it.
-- No registry file, no DLL override, no .NET / vcrun2022: see [docs/launcher.md](docs/launcher.md)
+- Run `EIStarter-UM.exe` (Linux: `wine EIStarter-UM.exe` in the game's prefix), select "Universal Mod", click "Play". It asks for the folder of the original game the first time if it cannot find it.
+- No registry file, no DLL override, no .NET / vcrun2022: see [docs/EIStarter-UM.md](docs/EIStarter-UM.md)
 
 ### Install the mod (with EIStarter)
 

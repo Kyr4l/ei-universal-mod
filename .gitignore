@@ -61,8 +61,8 @@ tools/um-multitool/build/
 tools/um-multitool/um-multitool.log
 tools/um-bot/tests/um_bot_tests
 
-# um-launcher test binary and its run files
-tools/um-launcher/tests/launcher_tests
-tools/um-launcher/launcher.cfg
-tools/um-launcher/launcher.log
-tools/um-launcher/dist/
+# EIStarter-UM test binary and its run files
+tools/EIStarter-UM/tests/launcher_tests
+tools/EIStarter-UM/EIStarter-UM.cfg
+tools/EIStarter-UM/EIStarter-UM.log
+tools/EIStarter-UM/dist/

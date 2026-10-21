@@ -74,9 +74,12 @@ public:
             }
         return true;
     }
-    void ApplyToRegistry(const std::string& root) const {
+    void ApplyToRegistry(const std::string& root, void (*log)(const std::string&) = nullptr) const {
         winreg::CreateKey(root);
-        for (const Item& i : items_) winreg::Set(root + "\\" + i.key, i.name, i.value);
+        for (const Item& i : items_) {
+            winreg::Set(root + "\\" + i.key, i.name, i.value);
+            if (log) log("HKCU\\" + root + "\\" + i.key + "\\" + i.name + " = " + Encode(i.value));
+        }
     }
 
     // [Game: <key>] sections of the config file.

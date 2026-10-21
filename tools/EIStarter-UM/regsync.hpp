@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// Writes what the loader chain reads (HKCU\Software\Gipat.Ru\EI_Starter, see docs/launcher.md) from the launcher's config file, so nobody has to
+// Writes what the loader chain reads (HKCU\Software\Gipat.Ru\EI_Starter, see docs/EIStarter-UM.md) from the launcher's config file, so nobody has to
 // run "Init Starter Registry.bat" or add the `path` value by hand:
 //   EI_Starter\path            the launcher's folder (Engine\dinput.dll looks for addon.dll there)
 //   EI_Starter\settings        AddonPath (the chosen mod's folder) and the addon.dll options
@@ -54,17 +54,36 @@ inline bool RunningUnderWine() {
 #endif
 }
 
+// Makes the path settings usable: GOG's installer writes a relative CD-ROM Path (".\\"), which the game resolves against Engine\\ and then asks for a disc;
+// a missing path becomes the game folder (the original starter's convention: CD = game folder, resources = <game folder>\\res\\). A path that exists
+// (the CD drive of the CD edition, D:\\) is kept. Returns true when something changed.
+inline bool NormalizePaths(GameSettings& g) {
+    std::error_code ec;
+    const std::string work = g.GetString("Path Settings", "Work Path");
+    if (!LooksLikeGameFolder(work)) return false;
+    auto usable = [&](const std::string& p) { return p.size() >= 2 && (p[1] == ':' || p[0] == '/') && fs::is_directory(fs::path(p), ec); };
+    bool changed = false;
+    if (!usable(g.GetString("Path Settings", "CD-ROM Path"))) { g.SetString("Path Settings", "CD-ROM Path", WithSlash(work)); changed = true; }
+    if (!usable(g.GetString("Path Settings", "Resources Path"))) { g.SetString("Path Settings", "Resources Path", WithSlash(WithSlash(work) + "res")); changed = true; }
+    return changed;
+}
+
 struct SyncResult { bool ok = true; std::string error; };
 
-inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launcherDir, const std::string& modFolder) {
+inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launcherDir, const std::string& modFolder, void (*log)(const std::string&) = nullptr) {
     SyncResult r;
     const std::string dir = WinPath(launcherDir.string());
     if (!winreg::Set(kStarterKey, "path", winreg::Value::String(dir))) { r.ok = false; r.error = "cannot write the registry (HKCU\\" + std::string(kStarterKey) + ")"; return r; }
 
     // The addon options: AddonPath always, the others only when set (a missing value keeps the game's behaviour).
     winreg::Set(kAddonKey, "AddonPath", winreg::Value::String(WinPath((launcherDir / "mods" / modFolder).string())));
+    if (log) log(std::string("HKCU\\") + kStarterKey + "\\path = " + dir + "; AddonPath = " + WinPath((launcherDir / "mods" / modFolder).string()));
     const AddonOptions& a = cfg.addon;
-    auto dword = [&](const char* name, int v, bool write) { if (write) winreg::Set(kAddonKey, name, winreg::Value::Dword(static_cast<uint32_t>(v))); };
+    auto dword = [&](const char* name, int v, bool write) {
+        if (!write) return;
+        winreg::Set(kAddonKey, name, winreg::Value::Dword(static_cast<uint32_t>(v)));
+        if (log) log(std::string("HKCU\\") + kAddonKey + "\\" + name + " = dword:" + std::to_string(v));
+    };
     dword("LandscapeDrawRadius", a.landscapeDrawRadius, a.landscapeDrawRadius > 0);
     dword("ObjectsDrawRadius", a.objectsDrawRadius, a.objectsDrawRadius > 0);
     dword("PauseOnMinimize", a.pauseOnMinimize, true);
@@ -86,7 +105,7 @@ inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launch
 
     // The game's own settings, over the clone (created from Nival's key when it does not exist yet).
     if (!winreg::KeyExists(kCloneKey) && winreg::KeyExists(kNivalKey)) winreg::CopyTree(kNivalKey, kCloneKey);
-    cfg.game.ApplyToRegistry(kCloneKey);
+    cfg.game.ApplyToRegistry(kCloneKey, log);
     return r;
 }
 

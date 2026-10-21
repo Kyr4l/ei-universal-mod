@@ -18,34 +18,6 @@
 
 namespace launcher {
 
-// Windows-1251 -> UTF-8 (the starter's mod titles are Russian).
-inline std::string Cp1251ToUtf8(const std::string& in) {
-    std::string out;
-    for (unsigned char c : in) {
-        if (c < 0x80) { out += static_cast<char>(c); continue; }
-        uint32_t cp;
-        if (c >= 0xC0) cp = 0x410 + (c - 0xC0);
-        else if (c == 0xA8) cp = 0x401;
-        else if (c == 0xB8) cp = 0x451;
-        else if (c == 0xB9) cp = 0x2116;
-        else if (c == 0x85) cp = 0x2026;
-        else if (c == 0x91) cp = 0x2018;
-        else if (c == 0x92) cp = 0x2019;
-        else if (c == 0x93) cp = 0x201C;
-        else if (c == 0x94) cp = 0x201D;
-        else if (c == 0x96) cp = 0x2013;
-        else if (c == 0x97) cp = 0x2014;
-        else if (c == 0xA0) cp = 0xA0;
-        else if (c == 0xA9) cp = 0xA9;
-        else if (c == 0xAB) cp = 0xAB;
-        else if (c == 0xBB) cp = 0xBB;
-        else if (c == 0xB0) cp = 0xB0;
-        else cp = '?';
-        AppendUtf8(out, cp);
-    }
-    return out;
-}
-
 class EiRegFile {
 public:
     enum class Type : uint8_t { Dword = 0, Float = 1, String = 2, Other = 255 };

@@ -28,8 +28,8 @@ int main(int argc, char** argv) {
     CHECK(fr.Get("Options", "cbFullscreen") == "Plein \xC3\xA9" "cran");
     CHECK(fr.Get("options", "CBBTEXTURES__1") == "normale");
     // config round trip + registry sync (the stand-in registry on Linux)
-    fs::path tmp = fs::temp_directory_path() / "um-launcher-test"; fs::create_directories(tmp);
-    fs::remove(tmp / "launcher.cfg");
+    fs::path tmp = fs::temp_directory_path() / "EIStarter-UM-test"; fs::create_directories(tmp);
+    fs::remove(tmp / "EIStarter-UM.cfg");
     {
         std::ofstream(tmp / "starter.config") << "[Settings]\nModSel=Mods\\Universal-Mod\\config.reg\nlanguage=fr\nModSkins=True\nUsingINIconfigs=False\nExeName=game.exe\n";
         LauncherConfig c = LoadConfig(tmp);

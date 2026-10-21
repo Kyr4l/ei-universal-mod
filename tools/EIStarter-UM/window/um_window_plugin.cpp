@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // um-window.asi: the BORDERLESS feature of um.dll (um_window.cpp) as a plugin of its own, for mods that do not use um.dll. addon.dll loads
-// the *.asi files of Engine\. um-launcher writes Engine\um-window.ini ([Window] Borderless=1) when "Borderless window" is chosen in its Options.
+// the *.asi files of Engine\. EIStarter-UM writes Engine\um-window.ini ([Window] Borderless=1) when "Borderless window" is chosen in its Options.
 // When um.dll is loaded it does the same job (um.cfg BORDERLESS), so this one stays out of the way.
 #ifndef UM_WINDOW_STANDALONE
 #define UM_WINDOW_STANDALONE

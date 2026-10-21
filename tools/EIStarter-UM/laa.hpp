@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
 // "Large address aware": sets bit 0x0020 of the PE file header's Characteristics in Engine\game.exe (the launcher's own copy of the game's
-// exe, never the one of the installation) so the 32-bit game may use up to 4 GB of address space on a 64-bit system. Universal-Mod needs it:
-// with the stock exe the game runs out of address space after the first frames (its heap padding, D7VK's texture mappings fail).
+// exe, never the one of the installation) so the 32-bit game may use up to 4 GB of address space on a 64-bit system. An option, off by default:
+// it is not needed in general. Seen once (Wine 11.19, Universal-Mod with D7VK, fullscreen 1920x1080): the stock exe exited after ~2 s with
+// D7VK "InitTexture: map failed" (2 of 2 runs), the same exe patched ran (2 of 2); windowed 1024x768 ran with the stock exe, and so did the
+// vanilla game (no um.dll) at the same fullscreen setup. The cause (address space) is an inference, not verified.
 // The unpatched file is kept once as <name>.orig.
 #pragma once
 

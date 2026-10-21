@@ -57,7 +57,13 @@ inline void PlayWav(const std::string& path) {
 // A folder chooser; `path` is the start folder and receives the choice. False when cancelled or unavailable.
 inline bool PickFolder(std::string& path) {
 #ifdef _WIN32
+    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED); // the new-style dialog needs COM
+    struct Cb { static int CALLBACK Init(HWND h, UINT msg, LPARAM, LPARAM data) { if (msg == BFFM_INITIALIZED && data) SendMessageA(h, BFFM_SETSELECTIONA, TRUE, data); return 0; } };
+    std::string start = path;
+    while (start.size() > 3 && (start.back() == '\\' || start.back() == '/')) start.pop_back(); // the dialog wants no trailing slash
     BROWSEINFOA bi = {};
+    bi.lpfn = Cb::Init;
+    bi.lParam = reinterpret_cast<LPARAM>(start.c_str());
     char name[MAX_PATH] = {};
     bi.pszDisplayName = name;
     bi.lpszTitle = "Evil Islands folder";
@@ -140,7 +146,7 @@ inline bool Start(const fs::path& exe, const fs::path& workDir, Process& p, std:
     return true;
 #else
     (void)exe; (void)workDir; (void)p;
-    error = "Starting the game needs Windows or Wine: run um-launcher.exe there.";
+    error = "Starting the game needs Windows or Wine: run EIStarter-UM.exe there.";
     return false;
 #endif
 }

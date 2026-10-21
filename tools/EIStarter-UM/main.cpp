@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// um-launcher: starts Evil Islands with a mod (the replacement of EIStarter OBT-1, see docs/launcher.md). It keeps its settings in launcher.cfg,
+// EIStarter-UM: starts Evil Islands with a mod (the replacement of EIStarter OBT-1, see docs/EIStarter-UM.md). It keeps its settings in EIStarter-UM.cfg,
 // writes what the loader chain (Engine\dinput.dll -> addon.dll) reads from the registry at the moment the game starts, starts Engine\game.exe,
 // and shows "Starting..." until the game window is up. The looks, sounds, fonts, languages and mod folders are EIStarter's, so its skins and
 // translations work.
@@ -63,7 +63,7 @@ struct App {
     std::ofstream log;
 
     void Log(const std::string& line) {
-        if (!log.is_open()) log.open((dir / "launcher.log").string(), std::ios::trunc);
+        if (!log.is_open()) log.open((dir / "EIStarter-UM.log").string(), std::ios::trunc);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         char t[32]; std::strftime(t, sizeof t, "%H:%M:%S", std::localtime(&now));
         log << t << " " << line << "\n"; log.flush();
@@ -116,9 +116,11 @@ struct App {
         if (!fs::is_regular_file(exe, ec)) { message = "Engine/" + cfg.exeName + " not found!"; Log(message); return; }
         if (!CurrentMod() || CurrentMod()->folder.empty()) { message = "There is no mod to start (mods/ holds no mod folder)."; Log(message); return; }
         if (!GameFolderOk()) { options.Open(cfg, true, "Evil Islands was not found. Choose the folder of the original game (the one with game.exe and res)."); return; }
+        if (NormalizePaths(cfg.game)) Log("path settings repaired");
         Save();
         Log("writing the registry");
-        SyncResult r = SyncRegistry(cfg, dir, CurrentMod()->folder);
+        static App* self = this;
+        SyncResult r = SyncRegistry(cfg, dir, CurrentMod()->folder, cfg.debugLog ? +[](const std::string& line) { self->Log("  " + line); } : nullptr);
         if (!r.ok) { message = r.error; Log(message); return; }
         ApplyBorderless();
         if (cfg.largeAddressAware) {
@@ -377,7 +379,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
                 ImGui::TextWrapped("%s", app.failure.c_str());
                 ImGui::SetCursorPosY(ImGui::GetWindowHeight() - 36);
                 if (ImGui::Button("Open addon.log")) platform::OpenWithDefault((app.dir / "addon.log").string());
-                ImGui::SameLine(); ImGui::Button("launcher.log") ? platform::OpenWithDefault((app.dir / "launcher.log").string()) : (void)0;
+                ImGui::SameLine(); ImGui::Button("EIStarter-UM.log") ? platform::OpenWithDefault((app.dir / "EIStarter-UM.log").string()) : (void)0;
                 ImGui::SameLine(); if (ImGui::Button("Close")) app.phase = App::Phase::Idle;
             }
         }
@@ -408,7 +410,7 @@ int main(int argc, char** argv) {
         else if (a == "--screenshot" && i + 1 < argc) shot = argv[++i];
         else if (a == "--play") selfTest = true;
     }
-    app.Log(std::string("um-launcher ") + kVersion + " in " + app.dir.string());
+    app.Log(std::string("EIStarter-UM ") + kVersion + " in " + app.dir.string());
 
     if (!glfwInit()) { std::fprintf(stderr, "cannot start GLFW\n"); return 1; }
     glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
@@ -456,6 +458,7 @@ int main(int argc, char** argv) {
             }
         }
     }
+    if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
     glfwShowWindow(window);
     int frame = 0;
     while (!glfwWindowShouldClose(window) && !app.quit) {

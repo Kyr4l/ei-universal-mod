@@ -1,12 +1,12 @@
-# Makefile for um-launcher (C++17): the mod launcher that replaces EIStarter (see docs/launcher.md).
+# Makefile for EIStarter-UM (C++17): the mod launcher that replaces EIStarter (see docs/EIStarter-UM.md).
 #
-#   make win    - um-launcher.exe: 32-bit, GLFW 3.3 (runs on Windows XP and newer, and under Wine), the build to ship
-#   make linux  - um-launcher (native: shows the screens; starting the game needs the Windows registry, so use the .exe under Wine)
+#   make win    - EIStarter-UM.exe: 32-bit, GLFW 3.3 (runs on Windows XP and newer, and under Wine), the build to ship
 #   make window - window/um-window.asi (the borderless-window plugin)
 #   make all    - all of them
-#   ./package.sh - dist/um-launcher-<version>.zip, the package users get
+#   ./package.sh - dist/EIStarter-UM-<version>.zip, the package users get
 #   make test   - the file-handling tests against a real EIStarter folder (make test STARTER=/path/to/EIStarter)
 #
+# The launcher is a Windows program (it runs under Wine on Linux: the game needs Wine anyway). The test target builds the file handling natively.
 # Dear ImGui, GLFW and stb_image are um-multitool's vendored copies (../um-multitool/vendor).
 
 CXX ?= g++
@@ -20,19 +20,13 @@ SRCS = main.cpp ../um-multitool/i18n.cpp $(VENDOR)/stb/stb_image_impl.cpp $(IMGU
 HDRS = $(wildcard *.hpp) ../um-multitool/i18n.hpp ../um-multitool/lang/ru.txt
 
 COMMON_FLAGS = -std=c++17 -O2 -Wall -Wextra -pthread -I. -I../um-multitool -I$(VENDOR) -isystem $(IMGUI_DIR) -isystem $(VENDOR)/stb
-LINUX_FLAGS = $(COMMON_FLAGS) $(shell pkg-config --cflags glfw3)
-LINUX_LIBS = $(shell pkg-config --libs glfw3) -lGL -ldl -lm
 WIN_FLAGS = $(COMMON_FLAGS) -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -isystem $(VENDOR)/glfw-mingw-xp32/include -static -static-libgcc -static-libstdc++ -s -mwindows
 WIN_LIBS = -L$(VENDOR)/glfw-mingw-xp32/lib -lglfw3 -lopengl32 -lgdi32 -lcomdlg32 -lole32 -lshell32 -luuid -lwinmm -lws2_32
 
-all: linux win window
+all: win window
 
-linux: um-launcher
-um-launcher: $(SRCS) $(HDRS)
-	$(CXX) $(LINUX_FLAGS) -o $@ $(SRCS) $(LINUX_LIBS)
-
-win: um-launcher.exe
-um-launcher.exe: $(SRCS) $(HDRS)
+win: EIStarter-UM.exe
+EIStarter-UM.exe: $(SRCS) $(HDRS)
 	$(WIN_CXX) $(WIN_FLAGS) -o $@ $(SRCS) $(WIN_LIBS)
 
 # um-window.asi: the borderless-window plugin (resources/universal-mod/um-dll/um_window.cpp built on its own); addon.dll loads it from Engine\.
@@ -47,6 +41,6 @@ tests/launcher_tests: tests/launcher_tests.cpp $(HDRS)
 	$(CXX) -std=c++17 -O1 -Wall -Wextra -I. -o $@ $<
 
 clean:
-	rm -f um-launcher um-launcher.exe window/um-window.asi tests/launcher_tests
+	rm -f EIStarter-UM.exe window/um-window.asi tests/launcher_tests
 
-.PHONY: all linux win window test clean
+.PHONY: all win window test clean

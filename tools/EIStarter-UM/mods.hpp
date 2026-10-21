@@ -17,7 +17,7 @@ namespace launcher {
 namespace fs = std::filesystem;
 
 struct ModInfo {
-    std::string folder;        // the folder name under mods\ (what launcher.cfg keeps)
+    std::string folder;        // the folder name under mods\ (what EIStarter-UM.cfg keeps)
     std::string path;          // the full folder path
     std::string title = "Unkn_Title";
     std::string version, author = "Unknown_Author", email, site, date;

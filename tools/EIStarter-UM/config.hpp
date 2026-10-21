@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// The launcher's settings, kept in launcher.cfg beside the program (no registry): the chosen mod, the language, the starter options of
+// The launcher's settings, kept in EIStarter-UM.cfg beside the program (no registry): the chosen mod, the language, the starter options of
 // EIStarter (ModSkins, UsingINIconfigs, ExeName), the addon.dll options of its Options dialog, and the game's own settings
 // ([Game: ...] sections, gamesettings.hpp). A first start imports what EIStarter left: starter.config and the registry.
 #pragma once
@@ -34,15 +34,15 @@ struct LauncherConfig {
     bool usingIniConfigs = false;
     std::string exeName = "game.exe";
     bool closeOnStart = true;      // leave when the game window is up
-    bool debugLog = false;         // more detail in launcher.log
+    bool debugLog = false;         // more detail in EIStarter-UM.log
     bool borderless = false;       // windowed game without a frame (needs fullscreen off)
-    bool largeAddressAware = true; // set the 4 GB flag in Engine/game.exe before starting (Universal-Mod needs it)
+    bool largeAddressAware = false; // set the 4 GB flag in Engine/game.exe before starting (off by default: only for a game that runs out of memory)
     AddonOptions addon;
     GameSettings game;
-    bool firstRun = false;         // no launcher.cfg existed
+    bool firstRun = false;         // no EIStarter-UM.cfg existed
 };
 
-inline std::string ConfigPath(const fs::path& dir) { return (dir / "launcher.cfg").string(); }
+inline std::string ConfigPath(const fs::path& dir) { return (dir / "EIStarter-UM.cfg").string(); }
 
 inline AddonOptions ReadAddonRegistry() {
     AddonOptions a;
@@ -69,7 +69,7 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.closeOnStart = ini.GetBool("Launcher", "CloseOnStart", true);
         c.debugLog = ini.GetBool("Launcher", "DebugLog", false);
         c.borderless = ini.GetBool("Launcher", "Borderless", false);
-        c.largeAddressAware = ini.GetBool("Launcher", "LargeAddressAware", true);
+        c.largeAddressAware = ini.GetBool("Launcher", "LargeAddressAware", false);
         AddonOptions& a = c.addon;
         a.landscapeDrawRadius = ini.GetInt("Addon", "LandscapeDrawRadius", 0);
         a.objectsDrawRadius = ini.GetInt("Addon", "ObjectsDrawRadius", 0);
@@ -124,7 +124,7 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetInt("Addon", "LogLevel", a.logLevel);
     ini.SetInt("Addon", "ConsoleLogLevel", a.consoleLogLevel);
     c.game.Save(ini);
-    return ini.Save(ConfigPath(dir), {"um-launcher settings. The [Game: ...] sections are the game's own options (written to the registry when the game starts)."});
+    return ini.Save(ConfigPath(dir), {"EIStarter-UM settings. The [Game: ...] sections are the game's own options (written to the registry when the game starts)."});
 }
 
 } // namespace launcher

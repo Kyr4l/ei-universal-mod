@@ -2,7 +2,7 @@
 // Copyright (C) 2026 Kyr4l
 // The settings of a fresh Evil Islands installation (HKEY_CURRENT_USER\Software\Nival Interactive\EvilIslands, as the game's installer writes it),
 // used by the launcher when that key does not exist (the game was copied, not installed). Generated from a real installation by
-// tools/um-launcher/tests/gen_defaults.py; the installation-specific paths are overwritten from the launcher's settings.
+// tools/EIStarter-UM/tests/gen_defaults.py; the installation-specific paths are overwritten from the launcher's settings.
 #pragma once
 
 namespace launcher {

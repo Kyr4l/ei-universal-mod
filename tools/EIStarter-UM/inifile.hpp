@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Kyr4l
-// A small INI reader / writer for the launcher: launcher.cfg, starter.config (EIStarter's), a mod's mod.config and the lang.ini
+// A small INI reader / writer for the launcher: EIStarter-UM.cfg, starter.config (EIStarter's), a mod's mod.config and the lang.ini
 // translation files. Reads UTF-8 (with or without BOM), UTF-16 LE / BE (with BOM, as lang.ini is) and plain ANSI bytes (kept as they are).
 // Sections and keys are case-insensitive; the file order is kept; `;` and `#` start a comment line.
 #pragma once
@@ -29,6 +29,45 @@ inline void AppendUtf8(std::string& out, uint32_t cp) {
     else { out += static_cast<char>(0xF0 | (cp >> 18)); out += static_cast<char>(0x80 | ((cp >> 12) & 0x3F)); out += static_cast<char>(0x80 | ((cp >> 6) & 0x3F)); out += static_cast<char>(0x80 | (cp & 0x3F)); }
 }
 
+// Windows-1251 -> UTF-8 (the starter's mod titles are Russian).
+inline std::string Cp1251ToUtf8(const std::string& in) {
+    std::string out;
+    for (unsigned char c : in) {
+        if (c < 0x80) { out += static_cast<char>(c); continue; }
+        uint32_t cp;
+        if (c >= 0xC0) cp = 0x410 + (c - 0xC0);
+        else if (c == 0xA8) cp = 0x401;
+        else if (c == 0xB8) cp = 0x451;
+        else if (c == 0xB9) cp = 0x2116;
+        else if (c == 0x85) cp = 0x2026;
+        else if (c == 0x91) cp = 0x2018;
+        else if (c == 0x92) cp = 0x2019;
+        else if (c == 0x93) cp = 0x201C;
+        else if (c == 0x94) cp = 0x201D;
+        else if (c == 0x96) cp = 0x2013;
+        else if (c == 0x97) cp = 0x2014;
+        else if (c == 0xA0) cp = 0xA0;
+        else if (c == 0xA9) cp = 0xA9;
+        else if (c == 0xAB) cp = 0xAB;
+        else if (c == 0xBB) cp = 0xBB;
+        else if (c == 0xB0) cp = 0xB0;
+        else cp = '?';
+        AppendUtf8(out, cp);
+    }
+    return out;
+}
+
+inline bool IsValidUtf8(const std::string& s) {
+    for (size_t i = 0; i < s.size();) {
+        const unsigned char c = static_cast<unsigned char>(s[i]);
+        const size_t n = c < 0x80 ? 1 : (c >> 5) == 6 ? 2 : (c >> 4) == 14 ? 3 : (c >> 3) == 30 ? 4 : 0;
+        if (n == 0 || i + n > s.size()) return false;
+        for (size_t k = 1; k < n; ++k) if ((static_cast<unsigned char>(s[i + k]) & 0xC0) != 0x80) return false;
+        i += n;
+    }
+    return true;
+}
+
 // The text of a file as UTF-8 ("" when it cannot be read). UTF-16 (BOM) is converted, a UTF-8 BOM is dropped.
 inline std::string ReadTextFile(const std::string& path) {
     std::ifstream in(path, std::ios::binary);
@@ -48,8 +87,9 @@ inline std::string ReadTextFile(const std::string& path) {
         }
         return out;
     }
-    if (raw.size() >= 3 && u8(0) == 0xEF && u8(1) == 0xBB && u8(2) == 0xBF) raw.erase(0, 3);
-    return raw;
+    if (raw.size() >= 3 && u8(0) == 0xEF && u8(1) == 0xBB && u8(2) == 0xBF) { raw.erase(0, 3); return raw; }
+    return IsValidUtf8(raw) ? raw : Cp1251ToUtf8(raw); // an ANSI file (EIStarter's mod.config): Windows-1251
+
 }
 
 class IniFile {
