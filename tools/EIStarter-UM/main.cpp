@@ -72,7 +72,7 @@ struct App {
     // Mod updates (update.hpp). The mod's two lines are installed side by side so their saves never mix: the newest release into mods/Universal-Mod,
     // the newest pre-release (beta) into mods/Universal-Mod-Beta.
     struct Channel { const char* label; const char* folder; bool stableOnly; update::Updater updater; bool handled = true; };
-    Channel channels[2] = {{"Release (master)", "Universal-Mod", true}, {"Beta (pre-release)", "Universal-Mod-Beta", false}};
+    Channel channels[2] = {{"Release (master)", "Universal-Mod", true}, {"Pre-Release (beta)", "Universal-Mod-Beta", false}};
     std::string UpdateRepo() const { auto it = cfg.updateRepos.find("*"); return it != cfg.updateRepos.end() ? it->second : std::string("Kyr4l/ei-universal-mod"); }
     bool UpdateBusy() const { for (const Channel& c : channels) if (c.updater.Busy()) return true; return false; }
     const ModInfo* FindMod(const std::string& folder) const { for (const ModInfo& m : mods) if (LowerAscii(m.folder) == LowerAscii(folder)) return &m; return nullptr; }
@@ -114,8 +114,7 @@ struct App {
     void ApplySkin() {
         std::string modDesign;
         if (cfg.modSkins && CurrentMod()) { std::error_code ec; const fs::path p = fs::path(CurrentMod()->path) / "design"; if (fs::is_directory(p, ec)) modDesign = p.string(); }
-        skin.Clear();
-        skin.Configure(dir, modDesign, cfg.language);
+        skin.Configure(dir, modDesign, cfg.language); // no Clear(): textures already in this frame's draw list must stay valid
         clickSound = skin.ClickSound();
         texts.Load(dir.string(), cfg.language);
         const std::string fp = skin.FontPath();
@@ -151,8 +150,8 @@ struct App {
         const fs::path exe = dir / "Engine" / cfg.exeName;
         std::error_code ec;
         if (!fs::is_regular_file(exe, ec)) { message = "Engine/" + cfg.exeName + " not found!"; Log(message); return; }
-        if (!CurrentMod() || CurrentMod()->folder.empty()) { message = "There is no mod to start: the mods folder is empty."; Log(message); return; }
-        if (!GameFolderOk()) { options.Open(cfg, true, "Evil Islands was not found. Choose the folder of the original game (the one with game.exe and res)."); return; }
+        if (!CurrentMod() || CurrentMod()->folder.empty()) { message = "No mod in the mods folder."; Log(message); return; }
+        if (!GameFolderOk()) { options.Open(cfg, true, "Evil Islands not found. Choose its folder."); return; }
         if (NormalizePaths(cfg.game)) Log("path settings repaired");
         Save();
         Log("writing the registry");
@@ -200,7 +199,7 @@ struct App {
         if (phase != Phase::Starting && phase != Phase::Running) return;
         int code = 0;
         if (!platform::Running(proc, code)) {
-            failure = "The game exited" + std::string(phase == Phase::Starting ? " before its window came up" : "") + " (exit code " + std::to_string(code) + "). See addon.log in this folder.";
+            failure = "The game exited (code " + std::to_string(code) + "). See addon.log.";
             Log(failure);
             phase = phase == Phase::Starting ? Phase::Failed : Phase::Idle;
             return;
@@ -209,7 +208,7 @@ struct App {
             if (platform::HasWindow(proc)) {
                 if (windowSeen == 0) { windowSeen = glfwGetTime(); Log("game window up"); }
                 if (glfwGetTime() - windowSeen > 1.0) { phase = Phase::Running; status = "The game is running."; if (cfg.closeOnStart) quit = true; }
-            } else if (glfwGetTime() - phaseStart > 120) { failure = "The game window did not come up in 120 seconds."; phase = Phase::Failed; Log(failure); }
+            } else if (glfwGetTime() - phaseStart > 120) { failure = "The game did not start within 120 s."; phase = Phase::Failed; Log(failure); }
         }
     }
 };
@@ -255,22 +254,22 @@ static void DrawCorner(App& app, ImDrawList* bg) {
     std::vector<Line> lines;
     const bool ok = m->umListed && m->umFile;
     const ImU32 green = IM_COL32(110, 210, 120, 255), amber = IM_COL32(235, 180, 70, 255), grey = IM_COL32(195, 195, 195, 255);
-    lines.push_back({ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled" : m->umListed ? "um.dll listed, file missing" : "no um.dll",
+    lines.push_back({ok ? "um.dll detected" : m->umFile ? "um.dll not enabled" : m->umListed ? "um.dll missing" : "no um.dll",
                      ok ? green : (m->umFile || m->umListed) ? amber : grey,
-                     ok ? "The mod's config.reg loads um.dll (Universal Mod's plugin) and the file is there." : m->umFile ? "um.dll is in the mod's folder, but its config.reg [DEV] Plugin does not name it: addon.dll will not load it." : m->umListed ? "The mod's config.reg names um.dll as its plugin, but the file is not in the mod's folder." : "This mod does not use um.dll."});
+                     ok ? "config.reg loads um.dll." : m->umFile ? "um.dll is there, but config.reg [DEV] Plugin does not name it." : m->umListed ? "config.reg names um.dll, but the file is missing." : "This mod does not use um.dll."});
     {
         using S = update::Updater::State;
         char buf[96];
         bool shown = false;
         for (App::Channel& c : app.channels) { // an update in progress, whichever channel
             const auto snap = c.updater.Get();
-            if (snap.state == S::Downloading) { std::snprintf(buf, sizeof buf, "updating %s: %d%%", c.folder, static_cast<int>(snap.progress * 100)); lines.push_back({buf, amber, "Downloading the mod. Play is disabled meanwhile."}); shown = true; }
+            if (snap.state == S::Downloading) { std::snprintf(buf, sizeof buf, "updating %s: %d%%", c.folder, static_cast<int>(snap.progress * 100)); lines.push_back({buf, amber, "Play is disabled meanwhile."}); shown = true; }
             else if (snap.state == S::Extracting || snap.state == S::Applying) { lines.push_back({std::string("updating ") + c.folder + ": " + (snap.state == S::Extracting ? "unpacking" : "replacing files"), amber, "Play is disabled meanwhile."}); shown = true; }
         }
         if (!shown) for (App::Channel& c : app.channels) {
             if (LowerAscii(c.folder) != LowerAscii(m->folder)) continue; // the update for the selected mod's own line
             const auto snap = c.updater.Get();
-            if (snap.state == S::Available && app.WorthInstalling(c, snap.latest)) lines.push_back({"update available: " + snap.latest.tag, amber, "A newer build is on GitHub. Open the (i) window to install it."});
+            if (snap.state == S::Available && app.WorthInstalling(c, snap.latest)) lines.push_back({"update available: " + snap.latest.tag, amber, "Open (i) to install it."});
             else if (snap.state == S::Done) lines.push_back({"mod updated", green, snap.message});
         }
     }
@@ -375,7 +374,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     if (!modal) {
         if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.UpdateBusy()) { app.Click(); app.Play(); }
-        if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the folder of the original game.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
+        if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the Evil Islands folder.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
         if (readme) {
             app.Click();
             fs::path p = app.dir / "lang" / app.cfg.language / "readme.txt", en = app.dir / "lang" / "en" / "readme.txt";
@@ -441,7 +440,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
                     const bool busyAny = app.UpdateBusy();
                     const bool gameUp = app.phase == App::Phase::Starting || app.phase == App::Phase::Running;
                     ImGui::AlignTextToFramePadding();
-                    ImGui::Text("Updates (%s)", app.UpdateRepo().c_str());
+                    ImGui::TextUnformatted("Updates");
                     ImGui::SameLine();
                     ImGui::BeginDisabled(busyAny);
                     if (ImGui::Button("Check for updates")) app.CheckUpdates();
@@ -453,13 +452,13 @@ static void DrawMain(App& app, GLFWwindow* window) {
                         std::string status;
                         bool offer = false;
                         switch (snap.state) {
-                        case S::Idle: status = installed ? "installed " + installed->version + ", not checked yet" : "not installed, not checked yet"; break;
-                        case S::Checking: status = "asking GitHub..."; break;
+                        case S::Idle: status = installed ? "not checked" : "not checked"; break;
+                        case S::Checking: status = "checking..."; break;
                         case S::Available: case S::UpToDate:
                             offer = true;
-                            if (!installed) status = snap.latest.tag + " (" + snap.latest.assetUpdated.substr(0, 10) + ")";
-                            else if (app.WorthInstalling(c, snap.latest)) status = "installed " + installed->version + ", new: " + snap.latest.tag + " (" + snap.latest.assetUpdated.substr(0, 10) + ")";
-                            else status = "up to date: " + snap.latest.tag;
+                            if (!installed) status = snap.latest.tag;
+                            else if (app.WorthInstalling(c, snap.latest)) status = installed->version + " -> " + snap.latest.tag;
+                            else status = "up to date";
                             break;
                         case S::Downloading: case S::Extracting: case S::Applying: case S::Done: case S::Failed: status = snap.message; break;
                         }
@@ -470,9 +469,9 @@ static void DrawMain(App& app, GLFWwindow* window) {
                         const bool worth = snap.state == S::Available || snap.state == S::UpToDate ? (!installed || app.WorthInstalling(c, snap.latest)) : false;
                         if (ImGui::Button(!installed ? "Install" : worth ? "Update" : "Reinstall", ImVec2(70, 0))) app.InstallChannel(c);
                         ImGui::EndDisabled();
-                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("Installs into mods/%s. The mp and saves folders are kept, um.cfg and um-engine.cfg too when the new build has none\n(otherwise they are replaced, copies go to mods/.update/backup). Saves of the other line are not touched: copy them by hand.", c.folder);
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("Into mods/%s. mp and saves are kept.", c.folder);
                         ImGui::SameLine();
-                        if (status.size() > 46) status = status.substr(0, 45) + "...";
+                        if (status.size() > 40) status = status.substr(0, 39) + "...";
                         ImGui::AlignTextToFramePadding();
                         ImGui::TextUnformatted(status.c_str());
                         if (snap.state == S::Downloading || snap.state == S::Extracting) {
@@ -613,7 +612,7 @@ int main(int argc, char** argv) {
     if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
     if (!app.GameFolderOk()) { // nothing found: ask for the game folder right away instead of at the first Play
         app.Log("Evil Islands folder not found: asking");
-        app.options.Open(app.cfg, true, "Evil Islands was not found. Choose the folder of the original game (the one with game.exe and res), then press OK.");
+        app.options.Open(app.cfg, true, "Evil Islands not found. Choose its folder, then OK.");
     }
     glfwShowWindow(window);
     int frame = 0;

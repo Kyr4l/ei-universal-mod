@@ -76,7 +76,7 @@ private:
     }
 
     // Labelled combo over a list of strings (translated by cbb<name>__<index> keys when `tx` has them).
-    bool Combo(const Texts& tx, const char* label, const char* labelKey, const char* itemKeyPrefix, const std::vector<std::string>& english, int& index) {
+    bool Combo(const Texts& tx, const char* label, const char* labelKey, const char* itemKeyPrefix, const std::vector<std::string>& english, int& index, bool bestFirst = false) {
         const std::string text = tx.Get("Options", labelKey, label);
         ImGui::AlignTextToFramePadding();
         const float x0 = ImGui::GetCursorPosX();
@@ -88,7 +88,8 @@ private:
         const std::string cur = tx.Get("Options", (std::string(itemKeyPrefix) + "__" + std::to_string(index)).c_str(), english[static_cast<size_t>(index)].c_str());
         bool changed = false;
         if (ImGui::BeginCombo((std::string("##") + labelKey).c_str(), cur.c_str())) {
-            for (int i = 0; i < static_cast<int>(english.size()); ++i) {
+            for (int k = 0; k < static_cast<int>(english.size()); ++k) {
+                const int i = bestFirst ? static_cast<int>(english.size()) - 1 - k : k; // the stored values run from worst to best: shown best first like the other quality lists
                 const std::string item = tx.Get("Options", (std::string(itemKeyPrefix) + "__" + std::to_string(i)).c_str(), english[static_cast<size_t>(i)].c_str());
                 if (ImGui::Selectable(item.c_str(), i == index)) { index = i; changed = true; }
             }
@@ -129,22 +130,22 @@ private:
                 g.SetBool("general settings", "fullscreen", mode == 0);
                 edit_.borderless = mode == 2;
             }
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip(modBorderless_ ? "Borderless window: keeps running when the window loses focus and keeps the mouse inside.\nThe launcher writes this choice into the mod's um.cfg (BORDERLESS) at every Play." : "Borderless window: keeps running when the window loses focus and keeps the mouse inside.");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip(modBorderless_ ? "Keeps running when unfocused; the mouse stays inside.\nWritten to the mod's um.cfg at every Play." : "Keeps running when unfocused; the mouse stays inside.");
         }
         bool b;
         b = g.GetBool("general settings", "mipmapping"); if (Check(tx, "cbMipMapping", "Mip-Mapping", b)) g.SetBool("general settings", "mipmapping", b);
         b = g.GetBool("general settings", "antialiasing"); if (Check(tx, "cbAntialiasing", "Antialiasing", b)) g.SetBool("general settings", "antialiasing", b);
-        if (modMsaa_ && ImGui::IsItemHovered()) ImGui::SetTooltip("The mod's um.cfg has MSAA=true (sharp antialiasing through D7VK); the game's own antialiasing is a blurring one. Leave this off to avoid using both.");
+        if (modMsaa_ && ImGui::IsItemHovered()) ImGui::SetTooltip("The mod's um.cfg has MSAA=true. Keep this off.");
         b = g.GetBool("general settings", "dithering"); if (Check(tx, "cbDithering", "Dithering", b)) g.SetBool("general settings", "dithering", b);
         b = g.GetBool("general settings", "FPSIndependentCursor"); if (Check(tx, "cbFPSCursor", "FPS-independent cursor (not recommended)", b)) g.SetBool("general settings", "FPSIndependentCursor", b);
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Not recommended: it makes the cursor flicker with D7VK (the renderer Universal Mod uses under Wine). Leave it off.");
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Flickers with D7VK.");
         int i;
         i = g.GetInt("general settings", "video"); if (Combo(tx, "Movies", "lbMovies", "cbbMovies", {"Off", "1:1", "Fit"}, i)) g.SetInt("general settings", "video", i);
         i = g.GetInt("general settings", "audio"); if (Combo(tx, "Audio", "lbAudio", "cbbAudio", {"Off", "Normal", "Safe"}, i)) g.SetInt("general settings", "audio", i);
         ImGui::TableNextColumn();
-        i = g.GetInt("general settings", "filtering"); if (Combo(tx, "Filtering", "lbFiltering", "cbbFiltering", {"Point", "Bilinear", "Trilinear"}, i)) g.SetInt("general settings", "filtering", i);
+        i = g.GetInt("general settings", "filtering"); if (Combo(tx, "Filtering", "lbFiltering", "cbbFiltering", {"Point", "Bilinear", "Trilinear"}, i, true)) g.SetInt("general settings", "filtering", i);
         i = g.GetInt("general settings", "TextureQuality"); if (Combo(tx, "Texture quality", "lbTexturesQ", "cbbTextures", {"High", "Normal", "Low"}, i)) g.SetInt("general settings", "TextureQuality", i);
-        i = g.GetInt("shadow settings", "shadowquality"); if (Combo(tx, "Shadow quality", "lbShadowsQ", "cbbShadows", {"None", "Low", "Smooth"}, i)) g.SetInt("shadow settings", "shadowquality", i);
+        i = g.GetInt("shadow settings", "shadowquality"); if (Combo(tx, "Shadow quality", "lbShadowsQ", "cbbShadows", {"None", "Low", "Smooth"}, i, true)) g.SetInt("shadow settings", "shadowquality", i);
         // Terrain LOD: a preset of three values (the original's rule).
         {
             const bool waves = g.GetBool("terrain settings", "EnableWaterWaves");
@@ -175,7 +176,7 @@ private:
         ImGui::AlignTextToFramePadding(); ImGui::TextUnformatted(tx.Get("Options", "lbDrawRadiusObjects", "Objects draw radius").c_str());
         ImGui::SameLine(190); ImGui::SetNextItemWidth(110);
         ImGui::InputInt("##or", &a.objectsDrawRadius, 10, 100); a.objectsDrawRadius = std::max(0, std::min(5000, a.objectsDrawRadius));
-        ImGui::TextDisabled("0 = the game's own radius (10 - 5000).");
+        ImGui::TextDisabled("0 = game default (10 - 5000)");
         Check(tx, "cbOnMinimizePause", "Pause the game when minimized", a.pauseOnMinimize);
         ImGui::Separator();
         ImGui::AlignTextToFramePadding(); ImGui::TextUnformatted("addon.log level");
@@ -261,17 +262,17 @@ private:
         if (ImGui::Button((std::string("...##") + name).c_str(), ImVec2(30, 0))) { std::string p = v; if (platform::PickFolder(p)) edit_.game.SetString("Path Settings", name, WithSlash(p)); }
     }
     void Paths(const Texts& tx) {
-        PathRow(tx, "Game folder (where the original game is installed)", "lbPathGameWorkdir", "Work Path");
+        PathRow(tx, "Game folder", "lbPathGameWorkdir", "Work Path");
         const bool ok = LooksLikeGameFolder(edit_.game.GetString("Path Settings", "Work Path"));
-        if (ok) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "game.exe and res found"); else ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "game.exe and res not found in this folder");
+        if (ok) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "Game found"); else ImGui::TextColored(ImVec4(1, 0.6f, 0.3f, 1), "Not an Evil Islands folder");
         PathRow(tx, "Game resources folder", "lbPathRes", "Resources Path");
         PathRow(tx, "CD folder", "lbPathCD", "CD-ROM Path");
         char buf[200]; std::snprintf(buf, sizeof buf, "%s", edit_.exeName.c_str());
         ImGui::TextUnformatted(tx.Get("Options", "lbEXEName", "Game engine file name").c_str());
         ImGui::SetNextItemWidth(200);
         if (ImGui::InputText("##exe", buf, sizeof buf)) edit_.exeName = buf;
-        ImGui::SameLine(); ImGui::TextDisabled("in Engine/");
-        if (ImGui::SmallButton("Use the game folder for the resources and CD paths")) {
+        ImGui::SameLine(); ImGui::TextDisabled("in Engine");
+        if (ImGui::SmallButton("Resources and CD = game folder")) {
             const std::string w = WithSlash(edit_.game.GetString("Path Settings", "Work Path"));
             edit_.game.SetString("Path Settings", "Resources Path", w + "Res" + std::string(w.find('\\') != std::string::npos ? "\\" : "/"));
             edit_.game.SetString("Path Settings", "CD-ROM Path", w);
@@ -279,13 +280,13 @@ private:
     }
     void Utils(const Texts& tx) {
         (void)tx;
-        ImGui::Checkbox("Mod skins (a mod's own design/ folder)", &edit_.modSkins);
-        ImGui::Checkbox("Read mods from mod.config (INI) instead of config.reg", &edit_.usingIniConfigs);
-        ImGui::Checkbox("Close the launcher when the game window is up", &edit_.closeOnStart);
-        ImGui::Checkbox("Debug log (more detail in EIStarter-UM.log)", &edit_.debugLog);
-        ImGui::Checkbox("Look for a newer mod in the background at start", &edit_.checkUpdatesAtStart);
-        ImGui::Checkbox("Large address aware game (4 GB of address space)", &edit_.largeAddressAware);
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Sets the 4 GB flag in Engine/game.exe (the launcher's copy; the unpatched file is kept as game.exe.orig).\nOff by default: only for a game that runs out of memory (seen once: Universal-Mod, D7VK, fullscreen 1920x1080).");
+        ImGui::Checkbox("Mod skins", &edit_.modSkins);
+        ImGui::Checkbox("Read mod.config (INI) instead of config.reg", &edit_.usingIniConfigs);
+        ImGui::Checkbox("Close when the game is up", &edit_.closeOnStart);
+        ImGui::Checkbox("Debug log", &edit_.debugLog);
+        ImGui::Checkbox("Check for mod updates at start", &edit_.checkUpdatesAtStart);
+        ImGui::Checkbox("Large address aware (4 GB)", &edit_.largeAddressAware);
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Sets the 4 GB flag in Engine/game.exe (backup: game.exe.orig). Off by default.");
     }
 
     bool modMsaa_ = false, modBorderless_ = false;

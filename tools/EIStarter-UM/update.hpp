@@ -384,7 +384,7 @@ public:
         if (Busy()) return;
         Join();
         cancel_ = false;
-        Set(State::Checking, "Asking GitHub...", 0, 0, 0);
+        Set(State::Checking, "Checking...", 0, 0, 0);
         thread_ = std::thread([=] {
             std::string api = std::getenv("EISTARTER_UM_API") ? std::getenv("EISTARTER_UM_API") : "https://api.github.com";
             std::string body, error;
@@ -392,7 +392,7 @@ public:
             Release r;
             if (!PickRelease(body, stableOnly, r, error)) { Fail(error); return; }
             { std::lock_guard<std::mutex> l(mutex_); snap_.latest = r; }
-            if (!installedKey.empty() && installedKey == r.Key()) Set(State::UpToDate, "Up to date: " + r.tag, 0, 0, 0);
+            if (!installedKey.empty() && installedKey == r.Key()) Set(State::UpToDate, "Up to date", 0, 0, 0);
             else Set(State::Available, "", 0, 0, 0);
         });
     }
@@ -402,7 +402,7 @@ public:
         if (Busy()) return;
         Join();
         cancel_ = false;
-        Set(State::Downloading, "Downloading " + latest.assetName, 0, 0, latest.assetSize);
+        Set(State::Downloading, "Downloading...", 0, 0, latest.assetSize);
         thread_ = std::thread([=] {
             std::error_code ec;
             fs::create_directories(workDir, ec);
@@ -415,10 +415,10 @@ public:
             size_t files = 0;
             if (!ExtractZip(zip, fresh, [&](size_t i, size_t n) { Progress(i, n); }, cancel_, files, error)) { fs::remove_all(fresh, ec); fs::remove(zip, ec); Fail(error); return; }
             if (!fs::exists(fresh / "config.reg", ec)) { fs::remove_all(fresh, ec); fs::remove(zip, ec); Fail("the archive does not look like a mod (no config.reg in it)"); return; }
-            Set(State::Applying, "Replacing the mod's files...", 0, 0, 0);
+            Set(State::Applying, "Replacing files...", 0, 0, 0);
             if (!SwapModFolder(modDir, fresh, old, workDir / "backup", keep, error)) { fs::remove_all(fresh, ec); Fail(error); return; }
             fs::remove(zip, ec);
-            Set(State::Done, "Updated to " + latest.tag + " (" + std::to_string(files) + " files)", 1, 0, 0);
+            Set(State::Done, "Updated to " + latest.tag, 1, 0, 0);
         });
     }
 
