@@ -21,7 +21,7 @@ HDRS = $(wildcard *.hpp) ../um-multitool/i18n.hpp ../um-multitool/lang/ru.txt
 
 COMMON_FLAGS = -std=c++17 -O2 -Wall -Wextra -pthread -I. -I../um-multitool -I$(VENDOR) -isystem $(IMGUI_DIR) -isystem $(VENDOR)/stb
 WIN_FLAGS = $(COMMON_FLAGS) -D_WIN32_WINNT=0x0501 -DWINVER=0x0501 -isystem $(VENDOR)/glfw-mingw-xp32/include -static -static-libgcc -static-libstdc++ -s -mwindows
-WIN_LIBS = -L$(VENDOR)/glfw-mingw-xp32/lib -lglfw3 -lopengl32 -lgdi32 -lcomdlg32 -lole32 -lshell32 -luuid -lwinmm -lws2_32
+WIN_LIBS = -L$(VENDOR)/glfw-mingw-xp32/lib -lglfw3 -lopengl32 -lgdi32 -lcomdlg32 -lole32 -lshell32 -luuid -lwinmm -lws2_32 -lwininet
 
 all: win window
 
@@ -38,7 +38,7 @@ STARTER ?= .
 test: tests/launcher_tests
 	./tests/launcher_tests "$(STARTER)"
 tests/launcher_tests: tests/launcher_tests.cpp $(HDRS)
-	$(CXX) -std=c++17 -O1 -Wall -Wextra -I. -o $@ $<
+	$(CXX) -std=c++17 -O1 -Wall -Wextra -pthread -I. -I../um-multitool -o $@ $<
 
 clean:
 	rm -f EIStarter-UM.exe window/um-window.asi tests/launcher_tests

@@ -28,10 +28,12 @@ Under the mod chooser a dot tells whether the selected mod uses um.dll: green "u
 Buttons: Play, Options, Readme (`lang\<lang>\readme.txt`), Website, Uninstall (`uninstall.exe` when there is one), Exit, the mod chooser, the (i)
 button (mod information, its readme / changelog, and the mod's own script button), Lang (cycles the languages). Enter = Play, Esc = Exit.
 
-**Options** (the tabs of EIStarter's dialog): Graphics (adapter, resolution, mip-mapping, antialiasing, dithering, FPS independent cursor,
+**Mod updates** (Universal Mod; other mods only with a repository named in the cfg's `[Update Repositories]`): the launcher asks GitHub in the background at start (Utils: turn it off, or take releases only instead of the newest release or pre-release) and shows "update available" in the bottom right corner. The (i) window has Check for updates / Update to <tag>: it downloads the release's `Universal-Mod*.zip`, checks every file's CRC, unpacks it beside the mod, then swaps the folders: everything is replaced except `mp` and `saves` (the saves); `um.cfg` and `um-engine.cfg` are kept when the new build has none (the release ships none) and the old ones are copied to `mods/.update/backup` when replaced. If anything fails the old folder is put back. Needs HTTPS (TLS 1.2): not on Windows XP. `EISTARTER_UM_API` (a base URL) replaces `https://api.github.com` for tests. Play is disabled during an update; do not update while the game runs.
+
+**Options** (the tabs of EIStarter's dialog): Graphics (adapter, resolution, mip-mapping, antialiasing, dithering, FPS-independent cursor (marked not recommended: it flickers with D7VK; off on a new install),
 filtering, textures, shadows, terrain LOD, lighting / shadowing frequency, movies, audio), Addon (landscape / objects draw radius, pause when
 minimized, addon.log levels), Multiplayer (console, "do not load .MQ from the host", second speed), Camera (every camera value), Paths (game folder,
-resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log, and "Large address aware game": sets the 4 GB flag in the launcher's `Engine\\game.exe`, off by default, the unpatched exe is kept as `game.exe.orig`; seen to matter once: Universal-Mod + D7VK at fullscreen 1920x1080 under Wine, where the stock exe exited after ~2 s while windowed 1024x768 and the vanilla game ran fine without it). New: **Window mode** = Fullscreen /
+resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log, the update source, and "Large address aware game": sets the 4 GB flag in the launcher's `Engine\\game.exe`, off by default, the unpatched exe is kept as `game.exe.orig`; seen to matter once: Universal-Mod + D7VK at fullscreen 1920x1080 under Wine, where the stock exe exited after ~2 s while windowed 1024x768 and the vanilla game ran fine without it). New: **Window mode** = Fullscreen /
 Windowed / **Borderless window**. In EIStarter's Windowed mode the game is a frameless window that minimizes and pauses when it loses the focus
 (a multiplayer game then desyncs); Borderless keeps it running and keeps the mouse inside. EIStarter's presets (disabled there) and its "Russian
 charset fix for WinXP" checkbox (it did nothing) are not carried over.
@@ -70,6 +72,10 @@ it from what EIStarter left (the clone, then Nival's key). The `[Game: <key>]` s
 any `*.asi`; the launcher switches it with `Engine\um-window.ini` (`[Window] Borderless=1`). It subclasses the game window: a deactivation never reaches the
 game, the cursor is confined to the window while it has the focus. Needs the game's `fullscreen=0` (the launcher's window mode takes care of both). When
 a mod loads um.dll, um.dll's own `BORDERLESS` does it (the launcher sets it in the mod's `um.cfg`) and the plugin stays out of the way.
+
+## Releases
+
+`.github/workflows/beta-auto-build.yml` and `master-auto-build.yml` run `tools/EIStarter-UM/package.sh` and attach `EIStarter-UM-<version>.zip` to every beta pre-release and master release, next to the mod zip. The workflow packages the committed `EIStarter-UM.exe` and `window/um-window.asi`: rebuild them (`make win window`) and commit them with a change.
 
 ## Building and testing
 

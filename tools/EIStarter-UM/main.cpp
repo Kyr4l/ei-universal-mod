@@ -26,10 +26,11 @@
 #include "platform.hpp"
 #include "regsync.hpp"
 #include "skin.hpp"
+#include "update.hpp"
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.1.0";
+static constexpr const char* kVersion = "0.2.0";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -61,12 +62,38 @@ struct App {
     bool showInfo = false;
     std::string message;                // a message popup
     std::ofstream log;
+    // Mod updates (update.hpp): `updateFor` is the mod folder the last check was about.
+    update::Updater updater;
+    std::string updateFor;
+    bool updateHandled = true;
 
     void Log(const std::string& line) {
         if (!log.is_open()) log.open((dir / "EIStarter-UM.log").string(), std::ios::trunc);
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         char t[32]; std::strftime(t, sizeof t, "%H:%M:%S", std::localtime(&now));
         log << t << " " << line << "\n"; log.flush();
+    }
+
+    // The GitHub repository a mod's updates come from: the author's, for Universal Mod; others only through [Update Repositories] in the cfg.
+    std::string UpdateRepo(const ModInfo& m) const {
+        auto it = cfg.updateRepos.find(m.folder);
+        if (it != cfg.updateRepos.end()) return it->second;
+        return (m.folder == "Universal-Mod" || m.title == "Universal Mod") ? "Kyr4l/ei-universal-mod" : std::string();
+    }
+    void CheckUpdates() {
+        const ModInfo* m = CurrentMod();
+        if (!m || UpdateRepo(*m).empty()) return;
+        auto key = cfg.updateKeys.find(m->folder);
+        updateFor = m->folder;
+        updater.Check(UpdateRepo(*m), cfg.updateStableOnly, key == cfg.updateKeys.end() ? std::string() : key->second);
+    }
+    void InstallUpdate() {
+        const ModInfo* m = CurrentMod();
+        const auto snap = updater.Get();
+        if (!m || snap.state != update::Updater::State::Available) return;
+        Log("update: " + snap.latest.tag + " (" + snap.latest.assetName + ") over " + m->path);
+        updateFor = m->folder; updateHandled = false;
+        updater.Install(snap.latest, fs::path(m->path), dir / "mods" / ".update", {"mp", "saves"});
     }
 
     const ModInfo* CurrentMod() const { return modIndex >= 0 && modIndex < static_cast<int>(mods.size()) ? &mods[static_cast<size_t>(modIndex)] : nullptr; }
@@ -151,6 +178,15 @@ struct App {
     }
 
     void Poll() {
+        { // a finished update: remember the build, read the new mod
+            const auto snap = updater.Get();
+            if (snap.state == update::Updater::State::Done && !updateHandled) {
+                updateHandled = true;
+                cfg.updateKeys[updateFor] = snap.latest.Key();
+                Log("update done: " + snap.message);
+                ReloadMods(); ApplySkin(); Save();
+            } else if (snap.state == update::Updater::State::Failed && !updateHandled) { updateHandled = true; Log("update failed: " + snap.message); }
+        }
         if (phase != Phase::Starting && phase != Phase::Running) return;
         int code = 0;
         if (!platform::Running(proc, code)) {
@@ -201,6 +237,42 @@ static bool MenuButton(App& app, const char* mask, const char* fallback, ImVec2 
     return ImGui::IsItemDeactivated() && hovered && enabled;
 }
 
+// Bottom right corner: whether the selected mod uses um.dll, and the state of its update.
+static void DrawCorner(App& app, ImDrawList* bg) {
+    const ModInfo* m = app.CurrentMod();
+    if (!m) return;
+    struct Line { std::string text; ImU32 color; std::string tip; };
+    std::vector<Line> lines;
+    const bool ok = m->umListed && m->umFile;
+    const ImU32 green = IM_COL32(110, 210, 120, 255), amber = IM_COL32(235, 180, 70, 255), grey = IM_COL32(195, 195, 195, 255);
+    lines.push_back({ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled" : m->umListed ? "um.dll listed, file missing" : "no um.dll",
+                     ok ? green : (m->umFile || m->umListed) ? amber : grey,
+                     ok ? "The mod's config.reg loads um.dll (Universal Mod's plugin) and the file is there." : m->umFile ? "um.dll is in the mod's folder, but its config.reg [DEV] Plugin does not name it: addon.dll will not load it." : m->umListed ? "The mod's config.reg names um.dll as its plugin, but the file is not in the mod's folder." : "This mod does not use um.dll."});
+    const auto snap = app.updater.Get();
+    if (app.updateFor == m->folder) {
+        using S = update::Updater::State;
+        char buf[96];
+        if (snap.state == S::Available) lines.push_back({"update available: " + snap.latest.tag, amber, "A newer build is on GitHub. Open the (i) window to install it."});
+        else if (snap.state == S::Downloading) { std::snprintf(buf, sizeof buf, "updating: %d%%", static_cast<int>(snap.progress * 100)); lines.push_back({buf, amber, "Downloading the mod. Play is disabled meanwhile."}); }
+        else if (snap.state == S::Extracting || snap.state == S::Applying) lines.push_back({"updating: " + std::string(snap.state == S::Extracting ? "unpacking" : "replacing files"), amber, "Play is disabled meanwhile."});
+        else if (snap.state == S::Done) lines.push_back({"mod updated", green, snap.message});
+    }
+    const ImVec2 o = ImGui::GetWindowPos();
+    float y = static_cast<float>(kH) - 8;
+    for (size_t i = lines.size(); i-- > 0;) {
+        const Line& l = lines[i];
+        const ImVec2 sz = ImGui::CalcTextSize(l.text.c_str());
+        const float right = o.x + static_cast<float>(kW) - 8, top = o.y + y - sz.y;
+        const ImVec2 p(right - sz.x, top);
+        bg->AddText(ImVec2(p.x + 1, p.y + 1), IM_COL32(0, 0, 0, 255), l.text.c_str());
+        bg->AddText(p, l.color, l.text.c_str());
+        bg->AddCircleFilled(ImVec2(p.x - 8, top + sz.y * 0.5f + 1), 4.5f, IM_COL32(0, 0, 0, 255));
+        bg->AddCircleFilled(ImVec2(p.x - 8, top + sz.y * 0.5f), 4.0f, l.color);
+        if (ImGui::IsMouseHoveringRect(ImVec2(p.x - 16, top), ImVec2(right, top + sz.y))) ImGui::SetTooltip("%s", l.tip.c_str());
+        y -= sz.y + 5;
+    }
+}
+
 static void DrawMain(App& app, GLFWwindow* window) {
     ImGuiIO& io = ImGui::GetIO();
     ImGui::SetNextWindowPos(ImVec2(0, 0));
@@ -219,7 +291,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     ImGui::BeginDisabled(modal);
     bool play = false, opt = false, readme = false, web = false, uninstall = false, exit = false;
-    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle);
+    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle && !app.updater.Busy());
     opt = MenuButton(app, "op", "Options", ImVec2(237, 126));
     readme = MenuButton(app, "re", "Readme", ImVec2(237, 161));
     web = MenuButton(app, "we", "Web", ImVec2(237, 196));
@@ -251,17 +323,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     if (app.skinFont) ImGui::PopFont();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor(6);
-    if (cur) { // does the mod bring um.dll? (a dot and a word under the chooser)
-        const bool ok = cur->umListed && cur->umFile;
-        const char* word = ok ? "um.dll detected" : cur->umFile ? "um.dll in the folder, not enabled" : cur->umListed ? "um.dll listed, file missing" : "no um.dll";
-        const ImU32 color = ok ? IM_COL32(110, 210, 120, 255) : (cur->umFile || cur->umListed) ? IM_COL32(235, 180, 70, 255) : IM_COL32(195, 195, 195, 255);
-        const ImVec2 o = ImGui::GetWindowPos();
-        bg->AddCircleFilled(ImVec2(o.x + comboX + 7, o.y + 134), 4.5f, color);
-        bg->AddText(ImVec2(o.x + comboX + 17, o.y + 127), color, word);
-        ImGui::SetCursorPos(ImVec2(comboX, 124));
-        ImGui::InvisibleButton("##um", ImVec2(169, 18));
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip(ok ? "The mod's config.reg loads um.dll (Universal Mod's plugin) and the file is there." : cur->umFile ? "um.dll is in the mod's folder, but its config.reg [DEV] Plugin does not name it: addon.dll will not load it." : cur->umListed ? "The mod's config.reg names um.dll as its plugin, but the file is not in the mod's folder." : "This mod does not use um.dll.");
-    }
+    DrawCorner(app, bg);
     {
         const float infoX = comboX + 169 + 10;
         const Texture& infoImg = app.skin.Image("info");
@@ -295,7 +357,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::EndDisabled();
 
     if (!modal) {
-        if (play || ImGui::IsKeyPressed(ImGuiKey_Enter)) { app.Click(); app.Play(); }
+        if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.updater.Busy()) { app.Click(); app.Play(); }
         if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the folder of the original game.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
         if (readme) {
             app.Click();
@@ -343,7 +405,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     // The mod's information.
     if (app.showInfo) {
         ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-        ImGui::SetNextWindowSize(ImVec2(420, 300));
+        ImGui::SetNextWindowSize(ImVec2(440, 340));
         if (ImGui::Begin((app.texts.Get("ModInfo", "ModInfo", "Mod info") + "###info").c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
             const ModInfo* m = app.CurrentMod();
             if (m) {
@@ -353,7 +415,41 @@ static void DrawMain(App& app, GLFWwindow* window) {
                 buf.push_back('\0');
                 const bool ok = m->umListed && m->umFile;
                 ImGui::TextColored(ok ? ImVec4(0.43f, 0.82f, 0.47f, 1) : (m->umFile || m->umListed) ? ImVec4(0.92f, 0.7f, 0.27f, 1) : ImVec4(0.6f, 0.6f, 0.6f, 1), "%s", ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled (config.reg)" : m->umListed ? "um.dll listed, but the file is missing" : "no um.dll");
-                ImGui::InputTextMultiline("##infotext", buf.data(), buf.size(), ImVec2(-1, -ImGui::GetFrameHeightWithSpacing() * 2 - 8), ImGuiInputTextFlags_ReadOnly);
+                const std::string repo = app.UpdateRepo(*m);
+                const float below = ImGui::GetFrameHeightWithSpacing() * (repo.empty() ? 2 : 4) + 8;
+                ImGui::InputTextMultiline("##infotext", buf.data(), buf.size(), ImVec2(-1, -below), ImGuiInputTextFlags_ReadOnly);
+                if (!repo.empty()) { // updates: the newest release or pre-release of the mod's repository
+                    using S = update::Updater::State;
+                    const auto snap = app.updater.Get();
+                    const bool mine = app.updateFor == m->folder;
+                    const bool busy = app.updater.Busy();
+                    std::string line = "Updates (" + repo + "): ";
+                    if (!mine || snap.state == S::Idle) line += "not checked yet";
+                    else if (snap.state == S::Checking) line += "asking GitHub...";
+                    else if (snap.state == S::Available) line += snap.latest.tag + (snap.latest.prerelease ? " (pre-release)" : "") + ", built " + snap.latest.assetUpdated.substr(0, 10) + (app.cfg.updateKeys.count(m->folder) ? "" : "; this folder was not installed by the updater");
+                    else if (snap.state == S::Downloading || snap.state == S::Extracting || snap.state == S::Applying) line += snap.message;
+                    else line += snap.message;
+                    ImGui::TextWrapped("%s", line.c_str());
+                    if (mine && (snap.state == S::Downloading || snap.state == S::Extracting)) {
+                        char over[64] = "";
+                        if (snap.state == S::Downloading) std::snprintf(over, sizeof over, "%.0f / %.0f MB", snap.done / 1048576.0, snap.total / 1048576.0);
+                        ImGui::ProgressBar(static_cast<float>(snap.progress), ImVec2(-1, 0), over);
+                    }
+                    const bool gameUp = app.phase == App::Phase::Starting || app.phase == App::Phase::Running;
+                    ImGui::BeginDisabled(busy);
+                    if (ImGui::Button("Check for updates")) app.CheckUpdates();
+                    ImGui::EndDisabled();
+                    ImGui::SameLine();
+                    if (mine && snap.state == S::Available) {
+                        ImGui::BeginDisabled(gameUp);
+                        if (ImGui::Button(("Update to " + snap.latest.tag).c_str())) app.InstallUpdate();
+                        ImGui::EndDisabled();
+                        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled)) ImGui::SetTooltip("Replaces everything in the mod's folder with the new build; the mp and saves folders are kept.\num.cfg and um-engine.cfg are kept when the new build has none; otherwise they are replaced (copies go to mods/.update/backup).");
+                        ImGui::SameLine();
+                    }
+                    if (busy && ImGui::Button("Cancel")) app.updater.Cancel();
+                    if (busy) ImGui::SameLine();
+                }
                 if (!m->site.empty()) {
                     if (ImGui::Button("Copy site")) ImGui::SetClipboardText(m->site.c_str());
                     ImGui::SameLine();
@@ -479,6 +575,7 @@ int main(int argc, char** argv) {
             }
         }
     }
+    if (app.cfg.checkUpdatesAtStart) app.CheckUpdates(); // in the background; the corner shows the result
     if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
     if (!app.GameFolderOk()) { // nothing found: ask for the game folder right away instead of at the first Play
         app.Log("Evil Islands folder not found: asking");

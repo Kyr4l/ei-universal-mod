@@ -4,7 +4,7 @@
 import sys
 
 REPLACE = [
-    ("FPS independed cursor", "FPS-independent cursor"), ("thrilinear", "Trilinear"), ("=point", "=Point"), ("=bilinear", "=Bilinear"),
+    ("FPS independed cursor", "FPS-independent cursor (not recommended)"), ("thrilinear", "Trilinear"), ("=point", "=Point"), ("=bilinear", "=Bilinear"),
     ("Primary Videodriver", "Primary video driver"), ("cbFullscreen=FullScreen", "cbFullscreen=Fullscreen"),
     ("Pause when minimized game", "Pause the game when minimized"), ("Textures quality", "Texture quality"), ("Shadows quality", "Shadow quality"),
     ("Do not load .MQ (Quest) files from Host", "Do not load .MQ (quest) files from the host"),

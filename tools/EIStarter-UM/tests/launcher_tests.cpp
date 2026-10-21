@@ -8,6 +8,7 @@
 #include "../config.hpp"
 #include "../mods.hpp"
 #include "../regsync.hpp"
+#include "../update.hpp"
 
 using namespace launcher;
 static int g_fail = 0;
@@ -65,6 +66,43 @@ int main(int argc, char** argv) {
         CHECK(GetCfgLine((tmp / "um.cfg").string(), "borderless") == "false");
         CHECK(GetCfgLine((tmp / "um.cfg").string(), "C") == "3");
         CHECK(GetCfgLine((tmp / "um.cfg").string(), "nope").empty());
+    }
+    // updater: JSON, release choice, zip extraction, folder swap
+    {
+        const std::string json = R"([{"tag_name":"0.9.0","name":"Beta","draft":false,"prerelease":true,"published_at":"2026-10-20T10:00:00Z","assets":[{"name":"um.dll","size":5,"updated_at":"x","browser_download_url":"https://h/um.dll"},{"name":"Universal-Mod-beta-0.9.0-abc.zip","size":123,"updated_at":"2026-10-21T19:40:17Z","browser_download_url":"https://h/b.zip"}]},
+            {"tag_name":"0.8.5","name":"Rel \u00e9","draft":false,"prerelease":false,"published_at":"2026-08-07T23:00:52Z","assets":[{"name":"Universal-Mod-0.8.5-10ed.zip","size":99,"updated_at":"2026-09-14T19:02:01Z","browser_download_url":"https://h/r.zip"}]}])";
+        update::Release r; std::string err;
+        CHECK(update::PickRelease(json, false, r, err)); CHECK(r.tag == "0.9.0" && r.prerelease && r.assetName == "Universal-Mod-beta-0.9.0-abc.zip" && r.assetSize == 123);
+        CHECK(r.Key() == "0.9.0|2026-10-21T19:40:17Z|123");
+        CHECK(update::PickRelease(json, true, r, err)); CHECK(r.tag == "0.8.5" && r.assetUrl == "https://h/r.zip");
+        CHECK(!update::PickRelease("{\"message\":\"API rate limit exceeded\"}", false, r, err) && err.find("rate limit") != std::string::npos);
+        CHECK(!update::PickRelease("not json", false, r, err));
+        CHECK(update::SafeRelative("a/b.txt")); CHECK(!update::SafeRelative("../x")); CHECK(!update::SafeRelative("a/../../x")); CHECK(!update::SafeRelative("/abs")); CHECK(!update::SafeRelative("C:/x"));
+        // a real zip made by 7z (deflate and stored entries, a root folder "Universal-Mod/")
+        const fs::path z = fs::temp_directory_path() / "um-launcher-zip"; fs::remove_all(z); fs::create_directories(z / "src/Universal-Mod/res"); fs::create_directories(z / "src/Universal-Mod/mp");
+        { std::ofstream(z / "src/Universal-Mod/config.reg") << "x"; std::ofstream(z / "src/Universal-Mod/um.cfg") << "NEW=1\n"; std::ofstream(z / "src/Universal-Mod/mp/zip.mp") << "zipsave";
+          std::ofstream o(z / "src/Universal-Mod/res/big.txt"); for (int i = 0; i < 20000; ++i) o << "line " << i << " of a compressible text\n"; }
+        const std::string cmd = "cd '" + (z / "src").string() + "' && 7z a -tzip -bso0 ../t.zip Universal-Mod >/dev/null 2>&1";
+        if (std::system(cmd.c_str()) == 0) {
+            std::atomic<bool> no{false}; size_t files = 0;
+            CHECK(update::ExtractZip(z / "t.zip", z / "out", nullptr, no, files, err)); CHECK(files == 4);
+            CHECK(fs::exists(z / "out/config.reg") && fs::exists(z / "out/res/big.txt") && !fs::exists(z / "out/Universal-Mod"));
+            CHECK(fs::file_size(z / "out/res/big.txt") == fs::file_size(z / "src/Universal-Mod/res/big.txt"));
+            // swap: keeps mp and saves of the old folder, backs up the cfgs, removes the rest
+            const fs::path mod = z / "mods/Universal-Mod"; fs::create_directories(mod / "mp"); fs::create_directories(mod / "saves"); fs::create_directories(mod / "old");
+            { std::ofstream(mod / "mp/my.mp") << "mine"; std::ofstream(mod / "saves/s.sav") << "s"; std::ofstream(mod / "um.cfg") << "OLD=1\n"; std::ofstream(mod / "old/gone.txt") << "g"; }
+            CHECK(update::SwapModFolder(mod, z / "out", z / "mods/.u/old", z / "mods/.u/backup", {"mp", "saves"}, err));
+            CHECK(fs::exists(mod / "mp/my.mp") && !fs::exists(mod / "mp/zip.mp") && fs::exists(mod / "saves/s.sav") && !fs::exists(mod / "old") && fs::exists(mod / "res/big.txt"));
+            CHECK(ReadTextFile((mod / "um.cfg").string()) == "NEW=1\n" && ReadTextFile((z / "mods/.u/backup/um.cfg").string()) == "OLD=1\n");
+            CHECK(!fs::exists(z / "mods/.u/old"));
+            // a build without um-engine.cfg keeps the user's
+            { fs::create_directories(z / "fresh2"); std::ofstream(z / "fresh2/config.reg") << "x"; std::ofstream(mod / "um-engine.cfg") << "MINE=1\n"; }
+            CHECK(update::SwapModFolder(mod, z / "fresh2", z / "mods/.u/old", z / "mods/.u/backup", {"mp", "saves"}, err));
+            CHECK(ReadTextFile((mod / "um-engine.cfg").string()) == "MINE=1\n");
+            // a damaged archive: flip a byte inside the data, the CRC must catch it
+            { std::fstream f(z / "t.zip", std::ios::in | std::ios::out | std::ios::binary); const std::streamoff at = static_cast<std::streamoff>(fs::file_size(z / "t.zip") / 3); f.seekg(at); char c; f.read(&c, 1); f.seekp(at); c = static_cast<char>(c ^ 0x55); f.write(&c, 1); }
+            CHECK(!update::ExtractZip(z / "t.zip", z / "out2", nullptr, no, files, err));
+        } else std::printf("(7z missing: zip tests skipped)\n");
     }
     std::printf(g_fail ? "%d FAILED\n" : "all passed\n", g_fail);
     return g_fail != 0;

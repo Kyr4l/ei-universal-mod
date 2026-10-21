@@ -6,6 +6,7 @@
 #pragma once
 
 #include <filesystem>
+#include <map>
 #include <string>
 
 #include "gamesettings.hpp"
@@ -39,6 +40,10 @@ struct LauncherConfig {
     bool largeAddressAware = false; // set the 4 GB flag in Engine/game.exe before starting (off by default: only for a game that runs out of memory)
     AddonOptions addon;
     GameSettings game;
+    bool updateStableOnly = false;       // mod updates: releases only (false: the newest release or pre-release)
+    bool checkUpdatesAtStart = true;     // look for a newer mod in the background at start
+    std::map<std::string, std::string> updateKeys; // per mod folder: the build the updater installed last (update::Release::Key)
+    std::map<std::string, std::string> updateRepos; // per mod folder: an owner/repo overriding the built-in one
     bool firstRun = false;         // no EIStarter-UM.cfg existed
 };
 
@@ -70,6 +75,12 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.debugLog = ini.GetBool("Launcher", "DebugLog", false);
         c.borderless = ini.GetBool("Launcher", "Borderless", false);
         c.largeAddressAware = ini.GetBool("Launcher", "LargeAddressAware", false);
+        c.updateStableOnly = ini.GetBool("Launcher", "UpdateStableOnly", false);
+        c.checkUpdatesAtStart = ini.GetBool("Launcher", "CheckUpdatesAtStart", true);
+        for (const IniFile::Section& s : ini.Sections()) {
+            if (LowerAscii(s.name) == "updates") for (const IniFile::Entry& e : s.entries) c.updateKeys[e.key] = e.value;
+            if (LowerAscii(s.name) == "update repositories") for (const IniFile::Entry& e : s.entries) c.updateRepos[e.key] = e.value;
+        }
         AddonOptions& a = c.addon;
         a.landscapeDrawRadius = ini.GetInt("Addon", "LandscapeDrawRadius", 0);
         a.objectsDrawRadius = ini.GetInt("Addon", "ObjectsDrawRadius", 0);
@@ -100,6 +111,7 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.game.ImportRegistry(kCloneKey);
     }
     c.game.FillDefaults();
+    if (c.firstRun) c.game.SetBool("general settings", "FPSIndependentCursor", false); // flickers with D7VK: off unless chosen
     return c;
 }
 
@@ -114,6 +126,10 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Launcher", "DebugLog", c.debugLog);
     ini.SetBool("Launcher", "Borderless", c.borderless);
     ini.SetBool("Launcher", "LargeAddressAware", c.largeAddressAware);
+    ini.SetBool("Launcher", "UpdateStableOnly", c.updateStableOnly);
+    ini.SetBool("Launcher", "CheckUpdatesAtStart", c.checkUpdatesAtStart);
+    for (const auto& kv : c.updateKeys) ini.Set("Updates", kv.first, kv.second);
+    for (const auto& kv : c.updateRepos) ini.Set("Update Repositories", kv.first, kv.second);
     const AddonOptions& a = c.addon;
     ini.SetInt("Addon", "LandscapeDrawRadius", a.landscapeDrawRadius);
     ini.SetInt("Addon", "ObjectsDrawRadius", a.objectsDrawRadius);

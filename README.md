@@ -59,7 +59,7 @@ We value feedback! If you have any comments to make please open an Issue on this
 
 ### Install the mod (EIStarter-UM, recommended)
 
-- Unpack the launcher package (`tools/EIStarter-UM/package.sh` builds it; it replaces EIStarter) anywhere you can write to
+- Download `EIStarter-UM-<version>.zip` from the [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) section (it replaces EIStarter) and unpack it anywhere you can write to
 - Copy (or symlink) the `Universal-Mod` directory into its `mods` folder
 - Run `EIStarter-UM.exe` (Linux: `wine EIStarter-UM.exe` in the game's prefix), select "Universal Mod", click "Play". It asks for the folder of the original game the first time if it cannot find it.
 - No registry file, no DLL override, no .NET / vcrun2022: see [docs/EIStarter-UM.md](docs/EIStarter-UM.md)

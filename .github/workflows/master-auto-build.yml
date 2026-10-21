@@ -35,12 +35,18 @@ jobs:
           zip -r $ZIPNAME "Universal-Mod"
           ls -lah $ZIPNAME
 
+      - name: Package the launcher (EIStarter-UM)
+        run: |
+          sudo apt-get install -y p7zip-full unzip
+          (cd tools/EIStarter-UM && ./package.sh)
+
       - name: Upload release
         uses: ncipollo/release-action@v1.12.0
         with:
           artifacts: |
             ${{ env.ZIPNAME }}
             tools/eistarter-obt-1.zip
+            tools/EIStarter-UM/dist/EIStarter-UM-*.zip
             tools/um-multitool/um-multitool
             tools/um-multitool/um-multitool.exe
             tools/um-multitool/um-multitool-xp32.exe
