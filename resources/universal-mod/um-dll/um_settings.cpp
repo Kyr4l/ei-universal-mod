@@ -100,13 +100,9 @@ const SettingDef kSettings[] = {
     BoolSetting("CRASH_DUMPS", &g_enableCrashDumps, true, false,
         "; Write a minidump (.dmp) next to um.log when the game crashes; (true/false)"),
     BoolSetting("MOB_VALIDATION", &g_enableMobValidation, false, true,
-        "; Check .mob map files when they are opened and log problems: items and spells\n"
-        "; missing from the database, errors in the mission script, and object IDs a quest\n"
-        "; map shares with its base map. Only this mod's own map files are checked; (true/false)"),
+        "; Check this mod's .mob map files when opened and log problems (missing items or spells, script errors, shared object IDs); (true/false)"),
     IntSetting("HEAP_ALLOC_PADDING", &g_heapAllocPadding, 0, 256, 64, true,
-        "; Fixes a game bug that crashes it on Wine: the game writes past the end of some of\n"
-        "; its memory blocks and corrupts the heap. This adds spare bytes after every block\n"
-        "; to absorb it (larger blocks get more). Needs a restart; 0 = off (0-256 bytes)."),
+        "; Spare bytes after each memory block, absorbing the game's heap overrun that crashes it on Wine. Restart needed; 0 = off (0-256)."),
     BoolSetting("HEAP_OVERRUN_REPORTS", &g_enableHeapFreeQuarantine, false, true,
         "; Diagnostics: tracks every allocation and reports in um.log which ones the game\n"
         "; overruns. Slows the game down and uses extra memory; needs a restart; (true/false)"),
@@ -175,16 +171,10 @@ const SettingDef kSettings[] = {
         "; Log levels to hide in the panel, comma-separated (SYSINFO, INFO, WARN, ERROR,\n"
         "; FATAL, DEBUG); um.log still keeps everything."),
     BoolSetting("OVERLAY_PROFILER_ENABLED", &g_profilerEnabled, false, true,
-        "; Enable the profiler window (opened with OVERLAY_PROFILER_KEY below): where the\n"
-        "; game's main thread spends each frame. A tool for finding performance problems,\n"
-        "; so off by default. Needs a restart; (true/false)",
+        "; Profiler window: where the main thread spends each frame. Restart needed; (true/false)",
         "; -- Profiler --"),
     VKeySetting("OVERLAY_PROFILER_KEY", &g_profilerKey, VK_F11, true,
-        "; Key that shows/hides the profiler window, a call tree of game.exe functions.\n"
-        "; Names are guessed from the game's classes, strings and API calls (sub_<address>\n"
-        "; when unknown); you can name functions in um-names.txt, one \"address name\" per\n"
-        "; line. Sampling only runs while the window is shown, at a cost of a few percent of\n"
-        "; one core; F1-F12 or a virtual-key code."),
+        "; Key that shows/hides the profiler window (F1-F12 or a virtual-key code). Functions can be named in um-names.txt (\"address name\")."),
     PositionSetting("OVERLAY_PROFILER_POSITION", g_profilerPosition, sizeof(g_profilerPosition), "left", true,
         "; Profiler window position, same choices as OVERLAY_POSITION."),
     VKeySetting("OVERLAY_PROFILER_DUMP_KEY", &g_profilerDumpKey, VK_SCROLL, true,
@@ -197,42 +187,23 @@ const SettingDef kSettings[] = {
         "; Number of lines of the profiler tree (6-40)."),
 
     BoolSetting("UI_BLIT_CACHE", &g_uiBlitCache, false, true,
-        "; The interface panels the game blits onto the frame go through a pair of staging\n"
-        "; copies, so the game's own pictures are never GPU sources and its drawing into them\n"
-        "; never waits for the GPU (D7VK makes it wait 1-4 ms otherwise). Experimental; (true/false)",
+        "; Interface panels reach the frame through staging copies, so the game never waits for the GPU on them. Experimental; (true/false)",
         "; -- Performance (see the profiler) --"),
     StringSetting("DDRAW_DLL", g_ddrawDll, sizeof(g_ddrawDll), "", true, false,
-        "; A DirectDraw wrapper (D7VK's ddraw.dll) to use instead of the one in the game's Engine folder: a path\n"
-        "; relative to this folder, or absolute (e.g. d7vk.dll). The game's own ddraw.dll stays loaded but\n"
-        "; unused. Empty = the game's. The patched D7VK in tools/d7vk presents the frame without reading it back."),
+        "; DirectDraw wrapper to use instead of the Engine folder's ddraw.dll (the patched D7VK): a path relative to this folder. Empty = the game's."),
     BoolSetting("MSAA", &g_enableMsaa, false, true,
-        "; Multisample anti-aliasing of the 3D scene (4x, or 2x when the GPU has no 4x): sharp edges, no blur and no\n"
-        "; ghosting (it is not FXAA / TAA). Works through D7VK (ddraw.emulateFSAA = forced, set here through the\n"
-        "; DXVK_CONFIG environment variable, so the game folder's dxvk.conf stays as it is); ignored by other DirectDraw\n"
-        "; drivers. Costs GPU time, nothing measurable at 1080p on a GTX 1660 SUPER; (true/false)"),
+        "; Sharp multisample anti-aliasing (4x, or 2x) through D7VK; no blur, no ghosting; (true/false)"),
     BoolSetting("UI_QUAD_BLIT", &g_uiQuadBlit, false, true,
-        "; The interface panels the game blits onto the frame are drawn as textured quads on\n"
-        "; the 3D device instead. A Blt onto the frame makes D7VK read the whole 1920x1080 frame\n"
-        "; back from the GPU, blit on the CPU and upload it again, every frame (the CPU waits\n"
-        "; for the GPU and copies 16 MB); a quad costs nothing of that. Experimental; (true/false)"),
+        "; Draw the interface and the software cursor as quads, so D7VK does not read the whole frame back every frame. Experimental; (true/false)"),
     BoolSetting("SHADOW_LOCK_CACHE", &g_shadowLockCache, false, true,
-        "; The game redraws every unit's shadow into a small texture each frame and uploads\n"
-        "; it; the upload goes through a pair of staging textures, so the game's drawing into\n"
-        "; its own texture never waits for the GPU. Experimental; (true/false)"),
+        "; Unit shadow textures are uploaded through staging copies, so the game never waits for the GPU on them. Experimental; (true/false)"),
     BoolSetting("DLL_SERVER_ENABLED", &g_dllServerEnabled, false, true,
-        "; Let um-multitool (its UM DLL Connector tab) connect to the running game, to\n"
-        "; show its statistics. Only programs on this computer can connect, without a\n"
-        "; password: any of them can read the game's memory. Needs a restart; (true/false)",
+        "; Let um-multitool connect to the running game (this computer only, no password: it can read the game's memory). Restart needed; (true/false)",
         "; -- DLL server --"),
     IntSetting("DLL_SERVER_PORT", &g_dllServerPort, 1024, 65535, 18888, true,
         "; TCP port the DLL server listens on (1024-65535); the same as in um-multitool."),
     BoolSetting("DLL_SERVER_DEBUG", &g_dllServerDebug, false, true,
-        "; DEVELOPMENT ONLY - DANGEROUS. With the DLL server: also allow the commands\n"
-        "; that change the running game: writing its memory, hardware breakpoints,\n"
-        "; typing in its console, and CALL, which runs any code inside game.exe. Any\n"
-        "; program on this computer could then take control of the game process (an\n"
-        "; attack vector). Only turn it on in a safe, controlled development setup,\n"
-        "; never on a player's install. Needs a restart; (true/false)"),
+        "; DEVELOPMENT ONLY, DANGEROUS: lets the DLL server write the game's memory and run code inside game.exe. Never on a player's install. Restart needed; (true/false)"),
 };
 const size_t kSettingCount = sizeof(kSettings) / sizeof(kSettings[0]);
 
