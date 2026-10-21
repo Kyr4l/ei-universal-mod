@@ -235,7 +235,14 @@ static bool MenuButton(App& app, const char* mask, const char* fallback, ImVec2 
     ImGui::InvisibleButton((std::string("##") + mask).c_str(), size);
     const bool hovered = ImGui::IsItemHovered(), down = ImGui::IsItemActive();
     const Texture* shown = &normal;
-    if (down) { const Texture& d = app.skin.Image(std::string(mask) + "_d"); if (d) shown = &d; }
+    static bool otherHovered = false;          // last frame: is the mouse on one of the other buttons?
+    static bool anyHoverThisFrame = false;
+    if (std::string(mask) != "pl" && hovered) anyHoverThisFrame = true;
+    if (std::string(mask) == "ex") { otherHovered = anyHoverThisFrame; anyHoverThisFrame = false; } // Exit is the last button of the frame
+    // Play is the default button (Enter starts the game): it wears its highlighted picture until the mouse is on another button.
+    const bool preselected = std::string(mask) == "pl" && enabled && !otherHovered && !down;
+    if (preselected) { const Texture& h = app.skin.Image("pl_h"); if (h) shown = &h; }
+    else if (down) { const Texture& d = app.skin.Image(std::string(mask) + "_d"); if (d) shown = &d; }
     else if (hovered) { const Texture& h = app.skin.Image(std::string(mask) + "_h"); if (h) shown = &h; }
     const ImVec2 origin = ImGui::GetWindowPos();
     dl->AddImage(Tid(*shown), ImVec2(origin.x + pos.x, origin.y + pos.y), ImVec2(origin.x + pos.x + static_cast<float>(shown->w), origin.y + pos.y + static_cast<float>(shown->h)));
@@ -613,6 +620,7 @@ int main(int argc, char** argv) {
         app.options.Open(app.cfg, true, "Evil Islands not found. Choose its folder, then OK.");
     }
     glfwShowWindow(window);
+    glfwFocusWindow(window); // so that Enter reaches the launcher at once (Play is the default button)
     int frame = 0;
     while (!glfwWindowShouldClose(window) && !app.quit) {
         glfwWaitEventsTimeout(app.phase == App::Phase::Starting ? 0.016 : 0.05);
