@@ -76,6 +76,7 @@ struct App {
     Channel channels[2] = {{"Release (master)", "Universal-Mod", true}, {"Pre-Release (beta)", "Universal-Mod-Beta", false}};
     std::string UpdateRepo() const { auto it = cfg.updateRepos.find("*"); return it != cfg.updateRepos.end() ? it->second : std::string("Kyr4l/ei-universal-mod"); }
     bool UpdateBusy() const { for (const Channel& c : channels) if (c.updater.Busy()) return true; return false; }
+    bool UpdateInstalling() const { for (const Channel& c : channels) if (c.updater.Installing()) return true; return false; } // files are being replaced: no Play
     const ModInfo* FindMod(const std::string& folder) const { for (const ModInfo& m : mods) if (LowerAscii(m.folder) == LowerAscii(folder)) return &m; return nullptr; }
     // Mods that share a title are told apart by their folder in the chooser.
     std::string DisplayTitle(const ModInfo& m) const {
@@ -308,7 +309,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     ImGui::BeginDisabled(modal);
     bool play = false, opt = false, readme = false, web = false, uninstall = false, exit = false;
-    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle && !app.UpdateBusy());
+    play = MenuButton(app, "pl", "Play", ImVec2(237, 91), idle && !app.UpdateInstalling());
     opt = MenuButton(app, "op", "Options", ImVec2(237, 126));
     readme = MenuButton(app, "re", "Readme", ImVec2(237, 161));
     web = MenuButton(app, "we", "Web", ImVec2(237, 196));
@@ -374,7 +375,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::EndDisabled();
 
     if (!modal) {
-        if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.UpdateBusy()) { app.Click(); app.Play(); }
+        if ((play || ImGui::IsKeyPressed(ImGuiKey_Enter)) && !app.UpdateInstalling()) { app.Click(); app.Play(); }
         if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the Evil Islands folder.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
         if (readme) {
             app.Click();

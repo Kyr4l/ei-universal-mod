@@ -376,6 +376,7 @@ public:
     ~Updater() { Cancel(); Join(); }
 
     Snapshot Get() const { std::lock_guard<std::mutex> l(mutex_); return snap_; }
+    bool Installing() const { const State s = Get().state; return s == State::Downloading || s == State::Extracting || s == State::Applying; } // a check does not count: Play stays usable
     bool Busy() const { const State s = Get().state; return s == State::Checking || s == State::Downloading || s == State::Extracting || s == State::Applying; }
     void Cancel() { cancel_ = true; }
 
