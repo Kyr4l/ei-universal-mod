@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.7.0";
+static const char* const kEngineVersion = "0.8.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -41,6 +41,8 @@ extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
 extern "C" bool UmTerrainShadowSoftness(float spread); // terrain_shadow.cpp
+extern "C" void UmShadowVolumeCall(); // shadow_occlusion.cpp
+extern "C" bool UmShadowAlphaInstall();
 struct NetReader;
 extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, NetReader* reader, unsigned packetSeq);  // net_message.cpp
 
@@ -92,6 +94,8 @@ static const UmCallSite kCallSites[] = {
     { "CCamera::SmoothUpdate", 0x004573A9, reinterpret_cast<void*>(&UmCameraTick),  0, {0xE8, 0x82, 0x87, 0xFB, 0xFF} },
     { "CCamera::SmoothUpdate", 0x0045756D, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0xBE, 0x85, 0xFB, 0xFF} },
     { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
+    // shadow_occlusion.cpp: the receiver mesh of a unit's shadow loses the triangles the sun cannot reach
+    { "ShadowReceiver::Occlusion", 0x0051E08B, reinterpret_cast<void*>(&UmShadowVolumeCall), -1, {0xE8, 0xC0, 0xE6, 0x04, 0x00} },
     { nullptr, 0, nullptr, 0, {} }
 };
 
@@ -221,6 +225,7 @@ static std::map<std::string, bool> ReadConfig() {
             missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
             values[fn.name] = on;
         }
+    if (!values.count("ShadowAlpha::Textured")) { missing += "ShadowAlpha::Textured=false\n"; values["ShadowAlpha::Textured"] = false; }
     if (!values.count(kShadowResolutionKey)) missing += std::string(kShadowResolutionKey) + "=64\n";
     if (!values.count(kTerrainSoftnessKey)) missing += std::string(kTerrainSoftnessKey) + "=0\n";
     const bool exists = GetFileAttributesA(path.c_str()) != INVALID_FILE_ATTRIBUTES;
@@ -255,6 +260,7 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabledModule.push_back(fn);
     }
     InstallCallSites(config);
+    { const auto it = config.find("ShadowAlpha::Textured"); if (it != config.end() && it->second) UmShadowAlphaInstall(); }
     { // the shadow settings that are numbers
         double resolution = 64, softness = 0;
         if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {

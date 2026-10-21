@@ -7,7 +7,6 @@
 //   - the two texture creators (CTextureManager::CreateFormat25 0x692010 and GetOrCreateFormat25 0x692140): width and height, twice each;
 //   - the scale of the projected silhouette (63.0 / extent): two `fdivr` operands in Render, pointed at a float of this DLL;
 //   - the clearing of the scratch texture (`mov ecx, 0x800` dwords) and the two blur calls (`push 0x40; push 0x40`);
-//   - the 0x200 stored in the target descriptor given to the polygon drawer (2DintMMX.dll): taken as 8 x the width.
 // All or nothing: if any of the places holds other bytes (another game.exe build), nothing is changed.
 #include <windows.h>
 
@@ -55,7 +54,6 @@ const Place kScale[] = { // fdivr dword ptr [0x73D044]  (63.0)
     { 0x0051D878, {0xD8, 0x3D, 0x44, 0xD0, 0x73, 0x00}, 6 }, { 0x0051D88D, {0xD8, 0x3D, 0x44, 0xD0, 0x73, 0x00}, 6 },
 };
 const Place kClear   = { 0x0051DA9C, {0xB9, 0x00, 0x08, 0x00, 0x00}, 5 };                 // mov ecx, 0x800 (dwords)
-const Place kDescriptor = { 0x0051DA82, {0xC7, 0x85, 0xF8, 0xFE, 0xFF, 0xFF}, 6 };         // mov [ebp-0x108], 0x200 (the imm32 follows)
 const Place kBlurA   = { 0x0051DBFB, {0x6A, 0x40, 0x6A, 0x40, 0x8B, 0x16}, 6 };           // push 0x40; push 0x40; mov edx,[esi]
 const Place kBlurB   = { 0x0051DC0F, {0x6A, 0x40, 0x6A, 0x40, 0x50}, 5 };                 // push 0x40; push 0x40; push eax
 
@@ -84,8 +82,6 @@ void Jump(unsigned long address, void* target, size_t length) {
 extern "C" bool UmShadowResolution(unsigned size) {
     if (size <= 64 || size > 256 || (size & (size - 1))) return false;
     bool ok = Matches(kClear) && Matches(kBlurA) && Matches(kBlurB);
-    ok = ok && memcmp(reinterpret_cast<void*>(kDescriptor.address), kDescriptor.expect, 6) == 0 &&
-         *reinterpret_cast<unsigned*>(kDescriptor.address + 6) == 0x200;
     for (const Place& p : kCreatorSize) ok = ok && Matches(p);
     for (const Place& p : kScale) ok = ok && Matches(p);
     if (!ok) { UmEngineLog("um-engine: UnitShadow::Resolution skipped, game.exe has other code at the shadow sites (another build)"); return false; }
@@ -96,8 +92,6 @@ extern "C" bool UmShadowResolution(unsigned size) {
     for (const Place& p : kScale) { const void* operand = &g_scale; Write(p.address + 2, &operand, 4); }
     const unsigned dwords = size * size / 2;
     Write(kClear.address + 1, &dwords, 4);
-    const unsigned descriptor = size * 8;
-    Write(kDescriptor.address + 6, &descriptor, 4);
     Jump(kBlurA.address, reinterpret_cast<void*>(&UmShadowBlurStubA), 6);
     Jump(kBlurB.address, reinterpret_cast<void*>(&UmShadowBlurStubB), 5);
     UmEngineLog("um-engine: UnitShadow::Resolution installed (%u x %u)", size, size);
