@@ -1273,3 +1273,26 @@ UM_GUARDED_THREAD(OverlayThread) {
     return 0;
 }
 
+
+// Whether D7VK is the DirectDraw driver (only then does MSAA's ddraw.alternatePixelCenter apply): found once, by the text inside the driver's file.
+// Has its own result (not the overlay thread's fingerprint cache), so the game's thread may call it.
+bool IsD7vkDirectDraw() {
+    static volatile LONG state = 0; // 0 unknown, 1 yes, 2 no
+    if (state) return state == 1;
+    HMODULE module = g_chainedDdraw ? g_chainedDdraw : GetModuleHandleA("ddraw.dll");
+    char path[MAX_PATH] = "";
+    if (!module || !GetModuleFileNameA(module, path, sizeof(path))) return false;
+    bool d7vk = false;
+    HANDLE file = CreateFileA(path, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (file != INVALID_HANDLE_VALUE) {
+        const DWORD size = GetFileSize(file, NULL);
+        if (size != INVALID_FILE_SIZE && size > 0 && size <= 48u * 1024 * 1024) {
+            std::vector<char> data(size);
+            DWORD read = 0;
+            if (ReadFile(file, data.data(), size, &read, NULL) && read == size) d7vk = BufferContainsText(data, "D7VK") || BufferContainsText(data, "d7vk");
+        }
+        CloseHandle(file);
+    }
+    InterlockedExchange(&state, d7vk ? 1 : 2);
+    return d7vk;
+}

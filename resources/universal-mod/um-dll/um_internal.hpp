@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.5.0";
+static const char* const UM_VERSION = "1.5.2";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 
@@ -164,7 +164,6 @@ typedef HRESULT (WINAPI *DDQueryInterfaceFunction)(void*, const IID*, void**);
 
 typedef HRESULT (WINAPI *D3DCreateDeviceFunction)(void*, const IID*, void*, void**);
 
-typedef HRESULT (WINAPI *D3DLoadFunction)(void*, void*, void*, void*, void*, DWORD);
 
 static const int DD_VTABLE_CREATESURFACE_SLOT = 6;
 
@@ -188,7 +187,6 @@ static const int DD_VTABLE_UNLOCK_SLOT = 32;
 
 static const int D3D7_VTABLE_CREATEDEVICE_SLOT = 4;   // IDirect3D7::CreateDevice
 
-static const int D3DDEVICE7_VTABLE_LOAD_SLOT = 43;    // IDirect3DDevice7::Load (a texture upload): offset 0xAC. Slot 37 is SetTextureStageState (3 arguments): hooking it with Load's 6-argument stdcall signature crashed 1.4.8 on launch
 
 static const size_t DD_SURFACEDESC_DDSCAPS_OFFSET = 0x68;
 
@@ -350,6 +348,7 @@ extern bool g_keyboardRewriteKeyDown[256];
 extern bool g_enableFileIoLogging;
 extern char g_fileIoLoggingFilter[256];
 extern bool g_enableMsaa;
+bool IsD7vkDirectDraw(); // the DirectDraw driver in use (the chained DDRAW_DLL, else the loaded ddraw.dll) is D7VK (found by strings in its file)
 extern char g_ddrawDll[MAX_PATH];
 extern HMODULE g_chainedDdraw;
 extern DirectDrawCreateFunction g_gameDirectDrawCreate;
@@ -364,8 +363,6 @@ extern BYTE g_overlayLogToggleKey;
 extern volatile LONG g_overlayLogVisible;
 extern BYTE g_profilerKey;
 extern BYTE g_profilerDumpKey;
-extern bool g_uiBlitCache;
-extern bool g_shadowLockCache;
 extern bool g_uiQuadBlit;
 extern int g_profilerAutoDumpSeconds;
 extern char g_profilerPosition[16];
@@ -454,7 +451,6 @@ extern DDGetDCFunction g_originalDDGetDC;
 extern DDUnlockFunction g_originalDDUnlock;
 extern DDQueryInterfaceFunction g_originalDDQueryInterface;
 extern D3DCreateDeviceFunction g_originalD3DCreateDevice;
-extern D3DLoadFunction g_originalD3DLoad;
 extern void* g_directDrawObject;
 extern ExitProcessFunction g_originalExitProcess;
 extern ExitProcessFunction g_originalExitProcessCrt;
@@ -488,8 +484,6 @@ extern volatile LONG g_ddPixels[kDdKinds];
 extern volatile LONG g_ddWholeSurface[kDdKinds];
 extern volatile LONG g_ddInfoLock;
 extern std::map<std::string, DdPairStat> g_ddPairs;
-extern volatile LONG g_uiStaged;
-extern volatile LONG g_shadowStaged;
 extern volatile LONG g_uiQuadDrawn;
 extern volatile LONG g_uiQuadFallback;
 bool UiQuadCursorSave(void* destination, LPRECT destRect, void* source, LPRECT srcRect);
@@ -572,7 +566,6 @@ HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface, LPRECT
 HRESULT WINAPI HookedDDBltFast(void* self, DWORD x, DWORD y, void* srcSurface, LPRECT srcRect, DWORD trans);
 
 // um_ddraw.cpp
-void* UiStageFor(void* source, void* destination);
 HRESULT WINAPI HookedDirectDrawCreate(const GUID* guid, void** directDraw, IUnknown* outerUnknown);
 HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDraw, const GUID* interfaceId, IUnknown* outerUnknown);
 

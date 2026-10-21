@@ -1045,7 +1045,6 @@ HRESULT WINAPI HookedDDBlt(void* self, LPRECT destRect, void* srcSurface,
         LPRECT srcRect, DWORD flags, void* bltFx) {
     DdTimer timer(kDdBlt, destRect, self, srcSurface, __builtin_return_address(0));
     if (g_uiQuadBlit && (UiQuadCursorSave(self, destRect, srcSurface, srcRect) || UiQuadBlt(self, destRect, srcSurface, srcRect, flags, bltFx))) return 0;
-    if (void* stage = UiStageFor(srcSurface, self)) return g_originalDDBlt(self, destRect, stage, srcRect, flags, bltFx);
     if (!destRect) {
         CountPresentedFrame();
     } else {

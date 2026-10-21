@@ -455,11 +455,6 @@ static DWORD WINAPI ProfilerThreadBody(LPVOID) {
                     }
                 }
                 if (!dd.empty()) lines.push_back("DirectDraw per frame: " + dd);
-                if (g_shadowLockCache || g_uiBlitCache) {
-                    const LONG sh = InterlockedExchange(&g_shadowStaged, 0), ui = InterlockedExchange(&g_uiStaged, 0);
-                    snprintf(text, sizeof(text), "Staging per frame: %.1f shadow textures, %.1f interface pictures (copied on the CPU: the game's own are never GPU sources)", frames > 0 ? static_cast<double>(sh) / frames : 0.0, frames > 0 ? static_cast<double>(ui) / frames : 0.0);
-                    lines.push_back(text);
-                }
                 if (g_uiQuadBlit) {
                     const LONG drawn = InterlockedExchange(&g_uiQuadDrawn, 0), fell = InterlockedExchange(&g_uiQuadFallback, 0);
                     snprintf(text, sizeof(text), "UI quads per frame: %.1f interface pictures drawn as quads, %.1f blitted the normal way", frames > 0 ? static_cast<double>(drawn) / frames : 0.0, frames > 0 ? static_cast<double>(fell) / frames : 0.0);
