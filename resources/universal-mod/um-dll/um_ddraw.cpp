@@ -340,17 +340,22 @@ static QuadSource* QuadSourceFor(void* source, bool keyed, DWORD key) {
 
 
 // ---- the software cursor's background (part of the UI quad blit) -----------------------------------------
-// The game draws its mouse cursor in software (CSoftCursor::Draw 0x5E54A0): each frame it Blts the 32x32 pixels under
-// the cursor from the frame into a small system-memory surface (a read-back of the whole frame for D7VK: a GPU
-// stall and 8 MB of copies), mixes the cursor into them with an AND mask (background & mask | cursor pixels, so the
-// cursor's transparent pixels keep the background) and Blts that composite back onto the frame. Here the "read" fills
-// the small surface with a marker colour instead (no frame access), the composite then holds the marker where the
-// cursor is transparent, and its quad is drawn with the marker as the colour key: the same picture.
+// The game draws its mouse cursor in software (CSoftCursor::Draw 0x5E54A0): each frame it Blts the pixels under the
+// cursor from the frame into a small system-memory surface (a read-back of the whole frame for D7VK: a GPU stall and
+// 8 MB of copies), mixes the cursor into them with an AND mask (background & mask | cursor pixels, so the cursor's
+// transparent pixels keep the background) and Blts that composite back onto the frame. Here the "read" fills the
+// small surface with a marker colour instead (no frame access), the composite then holds the marker where the cursor
+// is transparent, and its quad is drawn with the marker as the colour key: the same picture. The composite is the
+// next plain Blt of the same size onto the frame on the same thread (CSoftCursor::Draw does nothing in between).
+// The rectangle shrinks at the edges of the screen (a 32 x 20 cursor at the bottom), so any size up to the cursor's.
 static const DWORD kCursorMarker = 0x00FA01FB;     // R 0xFA, G 0x01, B 0xFB
+static DWORD g_cursorPendingThread = 0;            // set by a saved background, cleared by the composite that follows it
+static LONG g_cursorPendingW = 0, g_cursorPendingH = 0;
+
 static bool CursorSizeKnown(DWORD* width, DWORD* height) {
     const DWORD* w = reinterpret_cast<const DWORD*>(0x7C7C90);
     const DWORD* h = reinterpret_cast<const DWORD*>(0x7C7C94);
-    if (IsBadReadPtr(w, 4) || IsBadReadPtr(h, 4)) return false;
+    if (!g_knownGameBuild || IsBadReadPtr(w, 4) || IsBadReadPtr(h, 4)) return false;
     if (*w < 8 || *w > 64 || *h < 8 || *h > 64) return false;
     *width = *w; *height = *h;
     return true;
@@ -364,29 +369,33 @@ static bool IsRenderTargetSurface(void* surface) {
     return target == surface;
 }
 
+static DWORD PackMarker(DWORD bits, DWORD rMask, DWORD gMask, DWORD bMask) {
+    if (bits == 32) return kCursorMarker;
+    auto pack = [](DWORD channel8, DWORD mask) -> DWORD {
+        if (!mask) return 0;
+        int shift = 0; DWORD m = mask; while (!(m & 1)) { m >>= 1; ++shift; }
+        return ((channel8 * m + 127) / 255) << shift;
+    };
+    return pack(0xFA, rMask) | pack(0x01, gMask) | pack(0xFB, bMask);
+}
+
 // `Blt(destination small system surface <- the frame)`: fills it with the marker instead of reading the frame.
 bool UiQuadCursorSave(void* destination, LPRECT destRect, void* source, LPRECT srcRect) {
     if (!g_uiQuadBlit || !g_quadDevice || !destination || !source || !srcRect || !g_originalDDLock || !g_originalDDUnlock) return false;
     DWORD cw = 0, ch = 0;
     if (!CursorSizeKnown(&cw, &ch)) return false;
-    if (srcRect->right - srcRect->left != static_cast<LONG>(cw) || srcRect->bottom - srcRect->top != static_cast<LONG>(ch)) return false;
-    if (destRect && (destRect->right - destRect->left != static_cast<LONG>(cw) || destRect->bottom - destRect->top != static_cast<LONG>(ch))) return false;
+    const LONG rw = srcRect->right - srcRect->left, rh = srcRect->bottom - srcRect->top;
+    if (rw < 1 || rh < 1 || rw > static_cast<LONG>(cw) || rh > static_cast<LONG>(ch)) return false;
+    if (destRect && (destRect->right - destRect->left != rw || destRect->bottom - destRect->top != rh)) return false;
     BYTE dd[128];
     if (!DdSurfaceDesc(destination, dd)) return false;
     DWORD caps = 0, w = 0, h = 0, bits = 0, pfFlags = 0, rMask = 0, gMask = 0, bMask = 0;
     memcpy(&caps, dd + 104, 4); memcpy(&h, dd + 8, 4); memcpy(&w, dd + 12, 4); memcpy(&bits, dd + 84, 4);
     memcpy(&pfFlags, dd + 76, 4); memcpy(&rMask, dd + 88, 4); memcpy(&gMask, dd + 92, 4); memcpy(&bMask, dd + 96, 4);
-    if (!(caps & 0x800) || (caps & 0x1000) || w != cw || h != ch || !(pfFlags & 0x40) || (bits != 16 && bits != 32)) return false;
+    // a small plain system-memory surface (the surface may be larger than the cursor: 32 x 32 for a 16 x 16 one)
+    if (!(caps & 0x800) || (caps & 0x1000) || w < static_cast<DWORD>(rw) || h < static_cast<DWORD>(rh) || w > 128 || h > 128 || !(pfFlags & 0x40) || (bits != 16 && bits != 32)) return false;
     if (!IsRenderTargetSurface(source)) return false;
-    DWORD marker = kCursorMarker;
-    if (bits == 16) {
-        auto pack = [](DWORD channel8, DWORD mask) -> DWORD {
-            if (!mask) return 0;
-            int shift = 0; DWORD m = mask; while (!(m & 1)) { m >>= 1; ++shift; }
-            return ((channel8 * m + 127) / 255) << shift;
-        };
-        marker = pack(0xFA, rMask) | pack(0x01, gMask) | pack(0xFB, bMask);
-    }
+    const DWORD marker = PackMarker(bits, rMask, gMask, bMask);
     BYTE desc[128];
     memset(desc, 0, 128);
     const DWORD size = 124;
@@ -401,8 +410,11 @@ bool UiQuadCursorSave(void* destination, LPRECT destRect, void* source, LPRECT s
         else for (DWORD x = 0; x < w; ++x) { const WORD m16 = static_cast<WORD>(marker); memcpy(row + 2 * x, &m16, 2); }
     }
     g_originalDDUnlock(destination, NULL);
-    if (ok) InterlockedIncrement(&g_uiQuadDrawn);
-    return ok;
+    if (!ok) return false;
+    g_cursorPendingThread = GetCurrentThreadId();
+    g_cursorPendingW = rw; g_cursorPendingH = rh;
+    InterlockedIncrement(&g_uiQuadDrawn);
+    return true;
 }
 
 bool UiQuadBlt(void* destination, LPRECT destRect, void* source, LPRECT srcRect, DWORD flags, void* bltFx) {
@@ -432,22 +444,18 @@ bool UiQuadBlt(void* destination, LPRECT destRect, void* source, LPRECT srcRect,
     if (destRect->right - destRect->left != from.right - from.left || destRect->bottom - destRect->top != from.bottom - from.top) { QuadNoteFallback("stretched"); return false; }
     DWORD key = 0;
     if (keyed) memcpy(&key, static_cast<BYTE*>(bltFx) + 92, 4); // DDBLTFX.ddckSrcColorKey.dwColorSpaceLowValue
-    DWORD cursorW = 0, cursorH = 0;
-    if (!keyed && CursorSizeKnown(&cursorW, &cursorH) && from.right - from.left == static_cast<LONG>(cursorW) && from.bottom - from.top == static_cast<LONG>(cursorH)) {
-        // the software cursor's composite: its transparent pixels hold the marker (UiQuadCursorSave)
-        BYTE pf[128];
-        DWORD bitsHere = 0, rM = 0, gM = 0, bM = 0;
-        memcpy(&bitsHere, srcDesc + 84, 4); memcpy(&rM, srcDesc + 88, 4); memcpy(&gM, srcDesc + 92, 4); memcpy(&bM, srcDesc + 96, 4);
-        (void)pf;
-        keyed = true;
-        if (bitsHere == 32) key = kCursorMarker;
-        else {
-            auto pack = [](DWORD channel8, DWORD mask) -> DWORD {
-                if (!mask) return 0;
-                int shift = 0; DWORD m = mask; while (!(m & 1)) { m >>= 1; ++shift; }
-                return ((channel8 * m + 127) / 255) << shift;
-            };
-            key = pack(0xFA, rM) | pack(0x01, gM) | pack(0xFB, bM);
+    // the software cursor's composite: the first plain Blt of the saved rectangle's size after its background was "read"
+    if (g_cursorPendingThread) {
+        if (g_cursorPendingThread == GetCurrentThreadId() && !keyed && destRect->right - destRect->left == g_cursorPendingW && destRect->bottom - destRect->top == g_cursorPendingH) {
+            BYTE pf[128];
+            DWORD bitsHere = 0, rM = 0, gM = 0, bM = 0;
+            memcpy(&bitsHere, srcDesc + 84, 4); memcpy(&rM, srcDesc + 88, 4); memcpy(&gM, srcDesc + 92, 4); memcpy(&bM, srcDesc + 96, 4);
+            (void)pf;
+            keyed = true;
+            key = PackMarker(bitsHere, rM, gM, bM);
+            g_cursorPendingThread = 0;
+        } else if (g_cursorPendingThread == GetCurrentThreadId()) {
+            g_cursorPendingThread = 0; // something else came first: the marker would stay visible, but nothing was kept to undo it
         }
     }
     QuadSource* q = QuadSourceFor(source, keyed, key);
@@ -622,12 +630,23 @@ static void IdentifyDirectDrawBackend() {
     LogLine("INFO", "DirectDraw backend identified as \"%s\"", g_directDrawBackendName);
 }
 
+// IDirectDraw::SetCooperativeLevel (slot 20): logged, so the profile can say whether the game asked for exclusive full screen.
+static HRESULT (WINAPI *g_originalSetCooperativeLevel)(void*, HWND, DWORD) = NULL;
+static HRESULT WINAPI HookedSetCooperativeLevel(void* self, HWND window, DWORD flags) {
+    LogLine("INFO", "DirectDraw SetCooperativeLevel(flags 0x%lX%s%s)", flags, (flags & 0x10) ? " EXCLUSIVE" : "", (flags & 0x1) ? " FULLSCREEN" : "");
+    return g_originalSetCooperativeLevel(self, window, flags);
+}
+
 // Patch CreateSurface on a newly created DirectDraw object so the overlay can
 // find and hook the primary surface once the game creates it.
 static void InstallDirectDrawFrameCounterHooks(void* directDrawObject) {
     bool alreadyPatched = false;
     void* original = PatchVTableSlot(directDrawObject, DD_VTABLE_CREATESURFACE_SLOT,
         reinterpret_cast<void*>(HookedDDCreateSurface), &alreadyPatched);
+    {
+        void* originalLevel = PatchVTableSlot(directDrawObject, 20, reinterpret_cast<void*>(HookedSetCooperativeLevel));
+        if (originalLevel) g_originalSetCooperativeLevel = reinterpret_cast<HRESULT (WINAPI*)(void*, HWND, DWORD)>(originalLevel);
+    }
     if (original) {
         g_originalDDCreateSurface = reinterpret_cast<DDCreateSurfaceFunction>(original);
         LogLine("INFO", "[OVERLAY] DirectDraw CreateSurface hooked for the overlay's FPS counter");
