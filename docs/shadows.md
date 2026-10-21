@@ -18,3 +18,7 @@ The terrain has its OWN per-vertex sun shadow: `CTerrain::SetSunLight` 0x6C8ED0 
 
 ## What the tracer showed
 The shadow texture is a smooth blob (blurred edges, ~3 px), the mesh follows the terrain relief. The cell-sized "crenellated" edges seen in some screenshots are therefore probably the terrain's per-vertex sun shadow (or the 64 x 64 resolution on very large casters), not the unit texture's filtering: to be separated by turning the game's shadow setting off at that spot.
+
+## Footprints (not shadows) and the "pixelated and smooth" look
+Footprints, blood and scorch marks are terrain decals (`CWorldClient::AddTerrainPrint` / 2 / 3, `CFootPrint`, `CBloodPrint`, `CFirePrint`; records built from terrain triangles clipped to the print's area, like the shadow receiver mesh), textured from the atlases `footprints`, `bloodprints`, `fireprints`. `prints.db` only holds opacity, lifetime and fade-out per terrain type and weather; the print's size comes from the unit's footprint type.
+The crenellated, stepped look of a giant creature's footprint (ice golem) is in the ART: HD Lands' `HDTexRes/t_world_res/footprints.mmp` (1024 x 1024 DXT3, alpha only) has several large tiles that are low-resolution art with flat half-transparent 8 x 8 cells along their edges, magnified by the creature's size. A cleaned atlas (smoothing only around those cells) is in `_cpr/footprint-fix/`; the mod does not ship it (a report for the HD Lands authors).
