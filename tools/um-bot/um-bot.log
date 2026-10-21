@@ -1,163 +1,650 @@
-16:11:31.765 um-bot 0.1.25: it joins the session, enters the chosen quest when the host is in it and follows the host. Fighting comes next.
-16:12:19.999 asked 127.0.0.1:8888 for its info
-16:12:20.013 server "Kalyr" answered; logging in
-16:12:20.026 accepted (the server echoed our cookie)
-16:12:20.066 in the session: the server sends its updates (players, quests)
-16:12:20.093 joined: the server lists "KalyrBot | BOT" (chat: connected, face in the lobby)
-16:12:20.093 player Kalyr | SOLO: state 1
-16:12:20.093 the host chose the quest z25q1
-16:12:20.093 shop 3 (ingos): nothing to buy or sell (57 items in stock, money 25192)
-16:12:20.106 player KalyrBot | BOT: state 1
-16:12:20.173 player KalyrBot | BOT: state 1
-16:12:29.776 player Kalyr | SOLO: state 3
-16:12:30.083 server: 172.16.0.200:8000 z25q1
-16:12:30.083 server: Access to  Game Zone is open
-16:12:30.190 player Kalyr | SOLO: state 0
-16:12:30.190 the zone of z25q1 is open: entering it
-16:12:30.243 player KalyrBot | BOT: state 3
-16:12:30.550 player Kalyr | SOLO: state 0
-16:12:31.110 zone zone25.mpr / map zone25-lmp.mob: 1 exit record(s): MPGame1 (212,3)-(219,11)
-16:12:31.110 in the quest world: our hero is unit 1000000014
-16:12:31.110 server order on our hero: none destination (0.0,0.0) target 0; me (0.0,0.0) host (0.0,0.0) dHost -1.0
-16:12:31.111 saved the character's progress (periodic, 3907 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
-16:12:31.124 player KalyrBot | BOT: state 0
-16:12:41.114 order: move to (216.1,18.1) [follow the host] me (215.5,13.5) host (216.6,22.0) dHost 8.6
-16:12:41.247 server order on our hero: move destination (215.5,18.5) target 0; me (214.2,13.8) host (215.0,24.2) dHost 10.5
-16:12:42.768 server order on our hero: none destination (215.5,18.5) target 0; me (214.8,16.0) host (211.4,26.8) dHost 11.3
-16:12:43.115 order: move to (211.8,23.8) [follow the host] me (215.0,16.5) host (210.2,27.5) dHost 12.0
-16:12:43.275 server order on our hero: move destination (211.8,23.8) target 0; me (215.2,18.9) host (209.6,27.7) dHost 10.4
-16:12:44.795 server order on our hero: none destination (211.8,23.8) target 0; me (213.5,21.3) host (206.2,28.6) dHost 10.3
-16:12:45.116 order: move to (208.8,26.7) [follow the host] me (213.2,21.8) host (206.1,29.6) dHost 10.5
-16:12:45.302 server order on our hero: move destination (208.8,26.7) target 0; me (211.6,23.9) host (206.0,30.2) dHost 8.4
-16:12:46.316 server order on our hero: none destination (208.8,26.7) target 0; me (209.8,25.6) host (205.8,32.6) dHost 8.1
-16:12:47.116 order: move to (207.4,31.3) [follow the host] me (208.8,26.7) host (206.3,35.1) dHost 8.8
-16:12:47.330 server order on our hero: move destination (207.4,31.3) target 0; me (208.7,27.0) host (206.3,35.8) dHost 9.2
-16:12:48.343 server order on our hero: none destination (207.4,31.3) target 0; me (208.0,29.3) host (207.7,39.7) dHost 10.3
-16:12:49.117 order: move to (206.6,38.5) [follow the host] me (207.5,31.1) host (206.2,42.4) dHost 11.4
-16:12:49.357 server order on our hero: move destination (206.6,38.5) target 0; me (207.2,31.6) host (205.6,43.1) dHost 11.6
-16:12:50.878 server order on our hero: none destination (206.6,38.5) target 0; me (206.9,35.2) host (203.5,48.3) dHost 13.5
-16:12:51.118 order: move to (205.2,44.5) [follow the host] me (206.9,35.8) host (204.5,48.5) dHost 12.9
-16:12:51.384 server order on our hero: move destination (205.2,44.5) target 0; me (206.7,38.6) host (205.6,48.6) dHost 10.1
-16:12:52.905 server order on our hero: none destination (205.2,44.5) target 0; me (205.8,42.1) host (211.9,49.6) dHost 9.7
-16:12:53.118 order: move to (210.0,46.9) [follow the host] me (205.7,42.6) host (212.8,49.8) dHost 10.1
-16:12:53.412 server order on our hero: move destination (210.0,46.9) target 0; me (205.8,45.0) host (214.0,50.0) dHost 9.5
-16:12:53.919 server order on our hero: none destination (210.0,46.9) target 0; me (207.1,45.6) host (219.6,50.7) dHost 13.5
-16:12:54.839 beyond the leash (1392 units): back to the host
-16:12:55.120 order: move to (217.9,49.2) [follow the host] me (210.0,46.9) host (221.8,50.2) dHost 12.3
-16:12:55.439 server order on our hero: move destination (217.9,49.2) target 0; me (210.4,47.0) host (221.8,50.2) dHost 11.8
-16:12:56.440 back near the host
-16:12:56.440 attacking unit 2259759
-16:12:56.440 attack 2259759 at 24.287172 (try 1)
-16:12:56.440 order: attack unit 2259759 [fight: target 2259759] me (213.1,47.8) host (221.8,50.2) dHost 9.0
-16:12:56.453 server order on our hero: none destination (217.9,49.2) target 0; me (213.2,47.8) host (221.8,50.2) dHost 8.9
-16:12:56.453 state: hp 174/174 fightTarget 2259759 bitten 0 leashed 0 host hp 143; me (213.2,47.8) host (221.8,50.2) dHost 8.9
-16:12:58.441 attack 2259759 at 19.175529 (try 2)
-16:12:58.441 order: attack unit 2259759 [fight: target 2259759] me (217.9,49.2) host (221.8,50.2) dHost 4.0
-16:12:59.201 beyond the leash (9127 units): back to the host
-16:12:59.201 order: move to (9341.8,2.3) [follow the host] me (217.9,49.2) host (9345.8,2.2) dHost 9128.0
-16:12:59.494 server order on our hero: move destination (233.2,49.2) target 0; me (218.4,49.2) host (9345.8,2.2) dHost 9127.5
-16:13:01.015 server order on our hero: move destination (248.8,49.2) target 0; me (233.4,49.2) host (16769.8,2.2) dHost 16536.4
-16:13:01.203 order: move to (16765.8,2.3) [follow the host] me (234.4,49.2) host (16769.8,2.2) dHost 16535.4
-16:13:01.522 server order on our hero: none destination (248.8,49.2) target 0; me (236.1,49.2) host (16769.8,2.2) dHost 16533.7
-16:13:03.203 order: move to (24189.8,2.3) [follow the host] me (245.0,49.2) host (24193.8,2.2) dHost 23948.8
-16:13:03.603 experience share +29.999998 (total 29.999998)
-16:13:05.203 order: move to (228.6,48.3) [follow the host] me (248.8,49.2) host (224.6,48.1) dHost 24.1
-16:13:05.390 back near the host
-16:13:05.390 attacking unit 2259759
-16:13:05.390 attack 2259759 at 16.362310 (try 1)
-16:13:05.390 order: attack unit 2259759 [fight: target 2259759] me (234.6,49.2) host (227.3,49.3) dHost 7.4
-16:13:05.576 server order on our hero: move destination (228.6,48.3) target 0; me (233.6,49.0) host (227.6,50.2) dHost 6.2
-16:13:05.576 state: hp 174/174 fightTarget 2259759 bitten 0 leashed 0 host hp 114; me (233.6,49.0) host (227.6,50.2) dHost 6.2
-16:13:06.083 server order on our hero: none destination (228.6,48.3) target 0; me (231.0,48.6) host (228.5,52.9) dHost 5.0
-16:13:07.390 attack 2259759 at 19.771194 (try 2)
-16:13:07.390 order: attack unit 2259759 [fight: target 2259759] me (228.6,48.3) host (231.5,65.9) dHost 17.9
-16:13:07.524 order: move to (231.1,63.0) [follow the host] me (228.6,48.3) host (231.8,67.0) dHost 19.0
-16:13:07.604 server order on our hero: move destination (231.1,63.0) target 0; me (228.8,48.4) host (232.0,67.6) dHost 19.5
-16:13:08.191 beyond the leash (18972 units): back to the host
-16:13:09.525 order: move to (19197.8,2.9) [follow the host] me (1537.2,737.2) host (19201.8,2.8) dHost 17679.8
-16:13:09.631 server order on our hero: none destination (1537.2,737.2) target 0; me (1537.2,737.2) host (19201.8,2.8) dHost 17679.8
-16:13:10.138 server order on our hero: attack destination (1537.2,737.2) target 2259759; me (1537.2,737.2) host (26625.8,2.8) dHost 25099.2
-16:13:10.138 state: hp 174/174 fightTarget 0 bitten 0 leashed 1 host hp 98; me (1537.2,737.2) host (26625.8,2.8) dHost 25099.2
-16:13:10.645 server order on our hero: none destination (30721.8,2.8) target 0; me (30721.8,2.8) host (26625.8,2.8) dHost 4096.0
-16:13:11.525 order: move to (26629.8,2.8) [follow the host] me (30721.8,2.8) host (26625.8,2.8) dHost 4096.0
-16:13:16.954 server: Game paused by player Kalyr | SOLO
-16:13:28.959 saved the character's progress (periodic, 3917 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
-16:13:45.538 order: move to (236.9,69.9) [follow the host] me (30721.8,2.8) host (232.9,69.9) dHost 30488.9
-16:13:45.592 the host's health 77 / 174: casting Healing on it
-16:13:45.592 back near the host
-16:13:45.618 server order on our hero: move destination (236.9,69.9) target 0; me (232.8,65.8) host (232.9,69.9) dHost 4.0
-16:13:45.938 healed the host (77 -> 144)
-16:13:46.125 server order on our hero: none destination (236.9,69.9) target 0; me (234.8,67.7) host (232.1,68.1) dHost 2.7
-16:13:46.125 state: hp 174/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 144; me (234.8,67.7) host (232.1,68.1) dHost 2.7
-16:13:47.099 order: move to (232.3,64.4) [walk up to target 1000000013 (attack refused)] me (236.9,69.9) host (230.3,62.1) dHost 10.2
-16:13:49.099 order: move to (225.8,47.7) [walk up to target 1000000013 (attack refused)] me (232.3,64.4) host (224.7,44.9) dHost 20.9
-16:13:49.166 server order on our hero: move destination (225.8,48.8) target 0; me (232.2,64.2) host (224.6,44.5) dHost 21.2
-16:13:49.166 state: hp 174/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 145; me (232.2,64.2) host (224.6,44.5) dHost 21.2
-16:13:51.100 order: move to (225.0,46.1) [walk up to target 1000000013 (attack refused)] me (225.8,48.6) host (224.1,43.2) dHost 5.6
-16:13:51.194 server order on our hero: move destination (225.0,46.1) target 0; me (225.7,47.6) host (224.1,43.2) dHost 4.6
-16:13:51.700 server order on our hero: none destination (225.0,46.1) target 0; me (225.0,46.1) host (224.1,43.2) dHost 3.0
-16:13:52.208 state: hp 174/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 147; me (225.0,46.1) host (224.1,43.2) dHost 3.0
-16:13:53.101 attack 1000000013 at 3.000003 (try 6)
-16:13:53.101 order: attack unit 1000000013 [fight: target 1000000013] me (225.0,46.1) host (224.1,43.2) dHost 3.0
-16:13:55.102 order: move to (219.8,37.7) [walk up to target 1000000013 (attack refused)] me (225.0,46.1) host (218.2,35.2) dHost 12.9
-16:13:55.249 server order on our hero: move destination (219.8,37.7) target 0; me (225.0,45.9) host (217.3,34.3) dHost 13.9
-16:13:55.249 state: hp 174/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 174; me (225.0,45.9) host (217.3,34.3) dHost 13.9
-16:13:56.769 server order on our hero: none destination (219.8,37.7) target 0; me (219.8,37.7) host (207.6,25.6) dHost 17.2
-16:13:57.103 order: move to (207.6,26.0) [walk up to target 1000000013 (attack refused)] me (219.8,37.7) host (205.4,23.9) dHost 19.9
-16:13:57.276 server order on our hero: move destination (207.6,26.0) target 0; me (219.3,37.3) host (204.3,23.0) dHost 20.8
-16:13:58.290 state: hp 174/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 174; me (214.4,32.6) host (196.3,18.4) dHost 23.0
-16:13:59.103 attack on unit 1000000013 refused 8 times: leaving it for 30 s
-16:13:59.103 order: move to (193.5,17.3) [follow the host] me (210.5,28.8) host (190.1,15.1) dHost 24.5
-16:13:59.170 beyond the leash (26 units): back to the host
-16:13:59.304 server order on our hero: none destination (211.8,29.2) target 0; me (211.8,29.2) host (188.6,14.2) dHost 27.6
-16:14:01.105 order: move to (184.9,20.8) [follow the host] me (211.8,29.2) host (181.1,19.6) dHost 32.1
-16:14:03.105 order: move to (195.9,19.9) [follow the host] me (200.8,24.2) host (193.0,17.2) dHost 10.5
-16:14:03.865 server order on our hero: none destination (200.8,24.2) target 0; me (200.8,24.2) host (196.6,15.5) dHost 9.7
-16:14:05.105 order: move to (209.1,11.5) [follow the host] me (200.8,24.2) host (211.3,8.2) dHost 19.2
-16:14:05.386 server order on our hero: move destination (209.1,11.5) target 0; me (196.9,19.0) host (213.1,7.1) dHost 20.1
-16:14:07.106 order: move to (211.7,8.7) [follow the host] me (206.3,13.3) host (214.7,6.1) dHost 11.1
-16:14:07.347 saved the character's progress (periodic, 3917 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
-16:14:07.413 server order on our hero: none destination (202.2,15.8) target 0; me (202.2,15.8) host (214.7,6.1) dHost 15.7
-16:14:10.454 server order on our hero: none destination (202.2,15.8) target 0; me (202.2,15.8) host (214.7,6.1) dHost 15.7
-16:14:13.108 order: move to (212.6,8.0) [follow the host] me (202.2,15.8) host (215.8,5.6) dHost 17.0
-16:14:13.215 back near the host
-16:14:13.495 server order on our hero: move destination (212.6,8.0) target 0; me (212.6,8.0) host (216.4,5.2) dHost 4.6
-16:14:14.002 server order on our hero: none destination (212.6,8.0) target 0; me (212.6,8.0) host (216.4,5.2) dHost 4.6
-16:14:15.444 the host stands in the exit "MPGame1": leaving the zone first (the host cannot leave while we are in it)
-16:14:15.444 leaving the world (the final save), then reconnecting
-16:14:15.469 server: ^2KalyrBot | BOT^7: leaving the zone first, the exit is yours
-16:14:15.777 saved the character's progress (on leaving, 3917 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
-16:14:17.457 disconnected
-16:14:20.458 connecting again after leaving the world
-16:14:20.458 asked 127.0.0.1:8888 for its info
-16:14:20.471 server "Kalyr" answered; logging in
-16:14:20.485 accepted (the server echoed our cookie)
-16:14:20.485 shop 3 (ingos): 0 bought, 0 sold, 1 repaired, money 25190
-  repair id 22461 for 2
-16:14:20.498 the zone of z25q1 is open: entering it
-16:14:20.525 player Kalyr | SOLO: state 1
-16:14:20.525 the host chose the quest z25q1
-16:14:20.551 server: ^2KalyrBot | BOT^7: repaired 1 item(s) for 2
-16:14:20.551 player KalyrBot | BOT: state 3
-16:14:20.565 server: ^2KalyrBot | BOT^7: money left: 25190
-16:14:35.157 swap offered by player slot 1: accepting
-16:14:35.157 confirming the swap (partner nonce 1, it confirmed 0, saw 0, offering 0 items)
-16:14:35.157 server: Player Kalyr | SOLO is offering you a swap
-16:14:35.184 swap pair 1: confirmed 0 (0, 0)
-16:14:35.477 player Kalyr | SOLO: state 1
-16:14:35.490 confirming the swap (partner nonce 2, it confirmed 0, saw 0, offering 0 items)
-16:14:36.010 entering the quest took more than 15 s: connecting again
-16:14:36.011 disconnected
-16:14:39.012 connecting again after leaving the world
-16:14:39.012 asked 127.0.0.1:8888 for its info
-16:14:39.025 server "Kalyr" answered; logging in
-16:14:39.039 accepted (the server echoed our cookie)
-16:14:39.039 shop 3 (ingos): nothing to buy or sell (57 items in stock, money 25190)
-16:14:39.079 player KalyrBot | BOT: state 1
-16:14:39.119 player Kalyr | SOLO: state 1
-16:14:39.119 the host chose the quest z25q1
-16:14:39.185 player KalyrBot | BOT: state 1
-16:14:45.094 server: Player Kalyr | SOLO is offering you a swap
-16:14:45.094 confirming the swap (partner nonce 1, it confirmed 0, saw 0, offering 0 items)
-16:14:45.121 server: Player Kalyr | SOLO is offering you a swap
-16:16:13.368 received a packet of type 1 (5 bytes): not handled yet
+16:45:21.204 um-bot 0.1.26: it joins the session, enters the chosen quest when the host is in it and follows the host. Fighting comes next.
+16:45:40.556 asked 127.0.0.1:8888 for its info
+16:45:40.570 server "Kalyr" answered; logging in
+16:45:40.583 accepted (the server echoed our cookie)
+16:45:40.623 in the session: the server sends its updates (players, quests)
+16:45:40.623 player Kalyr | SOLO: state 1
+16:45:40.649 joined: the server lists "KalyrBot | BOT" (chat: connected, face in the lobby)
+16:45:40.650 player KalyrBot | BOT: state 1
+16:45:40.650 shop 3 (ingos): 1 bought, 1 sold, 0 repaired, money 10040
+  weapon: long bow (iron) for 52200
+16:45:40.703 server: ^2KalyrBot | BOT^7: bought: long bow (iron) for 52200
+16:45:40.729 player KalyrBot | BOT: state 1
+16:45:40.743 server: ^2KalyrBot | BOT^7: money left: 10040
+16:45:44.451 server: Player Kalyr | SOLO is offering you a swap
+16:45:44.451 swap offered by player slot 1: accepting
+16:45:44.451 confirming the swap (partner nonce 1, it confirmed 0, saw 0, offering 0 items)
+16:45:44.478 swap pair 1: confirmed 0 (0, 0)
+16:45:44.638 player Kalyr | SOLO: state 1
+16:45:44.638 confirming the swap (partner nonce 2, it confirmed 0, saw 0, offering 0 items)
+16:45:45.905 confirming the swap (partner nonce 3, it confirmed 0, saw 0, offering 1 items)
+16:45:45.905 swap item 1: 72 bytes
+16:45:46.012 confirming the swap (partner nonce 4, it confirmed 0, saw 0, offering 1 items)
+16:45:46.012 swap item 2: 72 bytes
+16:45:46.478 swap pair 1: confirmed 1 (1, 4)
+16:45:46.478 swap done: received 1 items and 0 money
+16:45:46.478 swap offered by player slot 1: accepting
+16:45:46.478 confirming the swap (partner nonce 4, it confirmed 1, saw 1, offering 1 items)
+16:45:46.479 swap: 1 items added to the character
+16:45:46.479 shop 3 (ingos): 0 bought, 1 sold, 0 repaired, money 12040
+  sell loot id 22489 for 2000
+16:45:46.505 server: ^2KalyrBot | BOT^7: sold loot for 2000
+16:45:46.572 server: ^2KalyrBot | BOT^7: money left: 12040
+16:45:54.268 the host chose the quest z25q1
+16:45:54.268 server: Quest accepted: Clear the path to the cave
+16:46:03.405 player Kalyr | SOLO: state 3
+16:46:03.685 server: 172.16.0.200:8000 z25q1
+16:46:03.685 server: Access to  Game Zone is open
+16:46:03.752 player Kalyr | SOLO: state 0
+16:46:03.752 the zone of z25q1 is open: entering it
+16:46:03.792 player KalyrBot | BOT: state 3
+16:46:04.178 player Kalyr | SOLO: state 0
+16:46:04.712 zone zone25.mpr / map zone25-lmp.mob: 1 exit record(s): MPGame1 (212,3)-(219,11)
+16:46:04.712 in the quest world: our hero is unit 1000000014
+16:46:04.712 server order on our hero: none destination (0.0,0.0) target 0; me (0.0,0.0) host (0.0,0.0) dHost -1.0
+16:46:04.712 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:46:04.725 player KalyrBot | BOT: state 0
+16:46:08.713 order: move to (218.0,21.3) [follow the host] me (215.5,13.5) host (219.2,25.1) dHost 12.2
+16:46:09.274 server order on our hero: move destination (218.0,21.3) target 0; me (214.6,14.4) host (219.9,26.9) dHost 13.7
+16:46:10.714 order: move to (221.3,29.3) [follow the host] me (215.5,16.3) host (222.9,32.9) dHost 18.2
+16:46:11.301 server order on our hero: none destination (217.8,21.2) target 0; me (217.8,21.2) host (224.3,35.4) dHost 15.6
+16:46:12.715 order: move to (225.7,36.5) [follow the host] me (217.8,21.2) host (227.5,40.0) dHost 21.2
+16:46:14.716 order: move to (227.0,43.7) [follow the host] me (221.2,29.2) host (228.5,47.4) dHost 19.6
+16:46:14.849 server order on our hero: move destination (227.0,43.7) target 0; me (225.8,36.3) host (228.4,48.0) dHost 12.0
+16:46:16.717 order: move to (225.4,46.8) [follow the host] me (226.6,41.0) host (224.6,50.8) dHost 9.9
+16:46:16.877 server order on our hero: move destination (225.4,46.8) target 0; me (227.1,43.9) host (224.1,50.4) dHost 7.1
+16:46:17.890 server order on our hero: none destination (225.4,46.8) target 0; me (225.5,46.6) host (220.7,47.7) dHost 4.9
+16:46:18.717 attacking unit 2259760
+16:46:18.717 attack 2259760 at 8.984844 (try 1)
+16:46:18.717 order: attack unit 2259760 [fight: target 2259760] me (225.4,46.8) host (218.0,45.6) dHost 7.5
+16:46:18.797 order: move to (221.7,46.1) [follow the host] me (225.4,46.8) host (217.7,45.4) dHost 7.8
+16:46:18.904 server order on our hero: move destination (221.7,46.1) target 0; me (225.2,46.7) host (217.4,45.1) dHost 8.0
+16:46:19.918 server order on our hero: none destination (221.7,46.1) target 0; me (222.2,46.2) host (216.8,44.7) dHost 5.6
+16:46:20.424 server order on our hero: attack destination (221.7,46.1) target 2259760; me (221.7,46.1) host (216.8,44.7) dHost 5.1
+16:46:20.425 state: hp 174/174 fightTarget 0 bitten 0 leashed 0 host hp 174; me (221.7,46.1) host (216.8,44.7) dHost 5.1
+16:46:20.798 order: move to (220.6,45.8) [follow the host] me (221.7,46.1) host (216.8,44.7) dHost 5.1
+16:46:20.931 server order on our hero: none destination (221.7,46.1) target 0; me (221.7,46.1) host (216.8,44.7) dHost 5.1
+16:46:21.732 attacking unit 2259759
+16:46:21.732 attack 2259759 at 17.436846 (try 1)
+16:46:21.732 order: attack unit 2259759 [fight: target 2259759] me (221.7,46.1) host (216.8,44.7) dHost 5.1
+16:46:21.945 server order on our hero: move destination (221.0,45.5) target 0; me (221.5,46.0) host (216.8,44.7) dHost 4.9
+16:46:22.452 server order on our hero: attack destination (221.0,45.5) target 2259760; me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:23.466 state: hp 174/174 fightTarget 2259759 bitten 0 leashed 0 host hp 144; me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:23.732 attack 2259759 at 19.088953 (try 2)
+16:46:23.733 order: attack unit 2259759 [fight: target 2259759] me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:23.973 server order on our hero: none destination (221.0,45.5) target 0; me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:24.479 server order on our hero: attack destination (221.0,45.5) target 2259760; me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:25.493 server order on our hero: none destination (221.0,45.5) target 0; me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:25.613 experience share +30.000000 (total 30.000000)
+16:46:25.733 order: move to (225.7,63.9) [walk up to target 2259759 (attack refused)] me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:26.507 state: hp 174/174 fightTarget 2259759 bitten 0 leashed 0 host hp 135; me (221.0,45.5) host (216.8,44.7) dHost 4.3
+16:46:27.014 server order on our hero: move destination (224.2,61.2) target 0; me (221.4,46.7) host (216.8,44.7) dHost 5.1
+16:46:27.734 order: move to (227.0,66.7) [walk up to target 2259759 (attack refused)] me (221.9,48.9) host (219.4,46.1) dHost 3.7
+16:46:28.027 server order on our hero: move destination (227.0,66.7) target 0; me (221.8,55.9) host (218.3,45.6) dHost 10.9
+16:46:29.548 server order on our hero: none destination (227.0,66.7) target 0; me (225.2,63.0) host (216.0,43.8) dHost 21.2
+16:46:29.548 state: hp 174/174 fightTarget 2259759 bitten 0 leashed 0 host hp 137; me (225.2,63.0) host (216.0,43.8) dHost 21.2
+16:46:29.668 chase limit: dropping unit 2259759 (it attacks neither the host nor us): bot 22.2, target 29.3 from the host (limit 12.0)
+16:46:29.668 order: move to (216.8,47.6) [follow the host] me (225.5,63.5) host (214.9,44.0) dHost 22.2
+16:46:29.681 chase limit: dropping unit 2259759 (it attacks neither the host nor us): bot 22.2, target 29.3 from the host (limit 12.0)
+16:46:29.681 order: move to (216.8,47.6) [follow the host] me (225.5,63.6) host (214.9,44.1) dHost 22.2
+16:46:29.695 chase limit: dropping unit 2259759 (it attacks neither the host nor us): bot 22.2, target 29.2 from the host (limit 12.0)
+16:46:29.695 order: move to (216.9,47.6) [follow the host] me (225.5,63.7) host (215.0,44.1) dHost 22.2
+16:46:29.708 chase limit: dropping unit 2259759 (it attacks neither the host nor us): bot 22.2, target 29.1 from the host (limit 12.0)
+16:46:29.708 order: move to (216.9,47.7) [follow the host] me (225.6,63.7) host (215.0,44.2) dHost 22.2
+16:46:29.722 chase limit: dropping unit 2259759 (it attacks neither the host nor us): bot 22.3, target 29.1 from the host (limit 12.0)
+16:46:29.722 order: move to (216.9,47.7) [follow the host] me (225.6,63.8) host (215.0,44.2) dHost 22.3
+16:46:30.562 server order on our hero: move destination (218.8,51.8) target 0; me (225.8,65.0) host (216.5,46.8) dHost 20.5
+16:46:30.736 attacking unit 2259757
+16:46:30.736 attack 2259757 at 28.207596 (try 1)
+16:46:30.736 order: attack unit 2259757 [fight: target 2259757] me (225.4,64.2) host (216.8,47.3) dHost 19.0
+16:46:31.162 ignored an impossible position of unit 1000000013: (524.750000,0.250000)
+16:46:31.576 server order on our hero: move destination (216.9,47.7) target 0; me (221.2,56.7) host (221.8,57.3) dHost 0.9
+16:46:32.589 state: hp 153/174 fightTarget 2259757 bitten 0 leashed 0 host hp 137; me (218.4,50.8) host (221.9,57.9) dHost 7.9
+16:46:32.736 attack 2259757 at 20.142782 (try 2)
+16:46:32.736 order: attack unit 2259757 [fight: target 2259757] me (218.0,49.9) host (222.2,58.4) dHost 9.5
+16:46:33.096 server order on our hero: none destination (216.9,47.7) target 0; me (217.0,47.9) host (223.0,59.7) dHost 13.3
+16:46:34.737 order: move to (202.6,52.2) [walk up to target 2259757 (attack refused)] me (216.9,47.7) host (226.4,65.9) dHost 20.5
+16:46:35.123 server order on our hero: move destination (202.6,52.2) target 0; me (214.9,48.3) host (226.7,66.4) dHost 21.5
+16:46:35.630 state: hp 155/174 fightTarget 2259757 bitten 0 leashed 0 host hp 98; me (211.8,49.3) host (226.7,66.4) dHost 22.6
+16:46:36.391 beyond the leash (25 units): back to the host
+16:46:36.391 order: move to (223.5,63.9) [follow the host] me (207.1,50.8) host (226.7,66.4) dHost 25.0
+16:46:36.644 server order on our hero: move destination (219.2,56.8) target 0; me (205.0,52.6) host (226.7,66.4) dHost 25.6
+16:46:37.017 ignored an impossible position of unit 1000000013: (30977.750000,2.250000)
+16:46:37.151 server order on our hero: move destination (222.2,60.2) target 0; me (209.0,54.1) host (226.7,66.4) dHost 21.5
+16:46:38.031 the host's health 80 / 174: casting Healing on it
+16:46:38.165 server order on our hero: move destination (225.7,63.9) target 0; me (212.1,53.5) host (226.7,66.4) dHost 19.4
+16:46:38.485 healed the host (80 -> 81)
+16:46:39.886 back near the host
+16:46:41.739 attacking unit 2259758
+16:46:41.739 attack 2259758 at 18.889742 (try 1)
+16:46:41.739 order: attack unit 2259758 [fight: target 2259758] me (225.7,63.9) host (226.7,66.4) dHost 2.7
+16:46:42.220 state: hp 70/174 fightTarget 2259758 bitten 0 leashed 0 host hp 143; me (225.7,63.9) host (226.7,66.4) dHost 2.7
+16:46:42.633 the host's health 83 / 174: casting Healing on it
+16:46:43.420 health 70 / 263: drinking the potion in quick slot 0
+16:46:43.580 the potion healed (70 -> 80)
+16:46:43.647 healed the host (83 -> 141)
+16:46:43.740 server order on our hero: none destination (225.7,63.9) target 0; me (225.7,63.9) host (226.7,66.4) dHost 2.7
+16:46:45.261 state: hp 81/263 fightTarget 2259758 bitten 0 leashed 0 host hp 142; me (225.7,63.9) host (226.7,66.4) dHost 2.7
+16:46:45.927 attack 2259758 at 19.861380 (try 2)
+16:46:45.928 order: attack unit 2259758 [fight: target 2259758] me (225.7,63.9) host (226.7,66.4) dHost 2.7
+16:46:46.341 beyond the leash (9376 units): back to the host
+16:46:46.341 order: move to (9597.8,3.3) [follow the host] me (225.7,63.9) host (9601.8,3.2) dHost 9376.3
+16:46:47.288 server order on our hero: move destination (234.8,56.8) target 0; me (221.8,56.8) host (9601.8,3.2) dHost 9380.1
+16:46:47.475 health 74 / 263: drinking the potion in quick slot 0
+16:46:48.476 the potion raised nothing: the belt is empty, not drinking any more
+16:46:48.476 health 74 / 263: casting Healing on itself
+16:46:48.676 the Healing spell healed (74 -> 75)
+16:46:48.716 ignored an impossible position of unit 1000000013: (20865.750000,3.250000)
+16:46:49.196 experience share +30.000000 (total 60.000000)
+16:46:50.837 server order on our hero: none destination (234.8,56.8) target 0; me (234.8,56.8) host (9601.8,3.2) dHost 9367.2
+16:46:54.864 experience share +30.000000 (total 90.000000)
+16:46:56.185 order: move to (223.6,56.2) [follow the host] me (234.8,56.8) host (219.6,56.0) dHost 15.1
+16:46:56.439 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:46:56.732 back near the host
+16:46:56.918 server order on our hero: move destination (223.6,56.2) target 0; me (222.8,56.4) host (218.3,54.0) dHost 5.2
+16:46:57.425 server order on our hero: none destination (223.6,56.2) target 0; me (223.6,56.2) host (220.1,56.2) dHost 3.5
+16:47:00.200 order: move to (223.9,64.0) [follow the host] me (223.6,56.2) host (224.0,68.0) dHost 11.8
+16:47:00.466 server order on our hero: move destination (223.9,64.0) target 0; me (223.8,57.5) host (219.1,70.8) dHost 14.2
+16:47:02.201 order: move to (216.8,78.9) [follow the host] me (223.9,64.0) host (215.1,82.5) dHost 20.5
+16:47:02.493 server order on our hero: move destination (216.8,78.9) target 0; me (223.2,64.9) host (216.0,84.6) dHost 21.0
+16:47:02.987 ignored an impossible position of unit 1000000013: (23041.750000,4.250000)
+16:47:04.201 order: move to (217.6,82.3) [follow the host] me (219.6,72.9) host (216.8,86.2) dHost 13.6
+16:47:04.522 server order on our hero: move destination (217.6,82.3) target 0; me (220.0,72.0) host (216.8,86.2) dHost 14.5
+16:47:05.748 attacking unit 2259763
+16:47:05.748 attack 2259763 at 23.037903 (try 1)
+16:47:05.748 order: attack unit 2259763 [fight: target 2259763] me (218.5,78.2) host (216.8,86.2) dHost 8.2
+16:47:06.042 state: hp 159/263 fightTarget 2259763 bitten 0 leashed 0 host hp 88; me (218.2,79.7) host (216.8,86.2) dHost 6.7
+16:47:07.335 experience share +30.000002 (total 120.000002)
+16:47:07.562 server order on our hero: none destination (217.6,82.3) target 0; me (217.6,82.3) host (216.8,86.2) dHost 4.0
+16:47:07.749 attack 2259763 at 21.479832 (try 2)
+16:47:07.749 order: attack unit 2259763 [fight: target 2259763] me (217.6,82.3) host (216.8,86.2) dHost 4.0
+16:47:09.083 state: hp 161/263 fightTarget 2259763 bitten 0 leashed 0 host hp 89; me (217.6,82.3) host (216.7,86.3) dHost 4.1
+16:47:09.750 order: move to (197.8,94.4) [walk up to target 2259763 (attack refused)] me (217.6,82.3) host (217.1,87.2) dHost 4.9
+16:47:10.096 server order on our hero: move destination (202.2,89.2) target 0; me (216.5,82.8) host (217.6,87.2) dHost 4.5
+16:47:11.751 order: move to (197.9,91.6) [walk up to target 2259763 (attack refused)] me (208.7,86.3) host (216.5,98.5) dHost 14.4
+16:47:12.124 server order on our hero: move destination (197.9,91.6) target 0; me (209.0,85.5) host (217.7,101.3) dHost 18.1
+16:47:12.125 state: hp 163/263 fightTarget 2259763 bitten 0 leashed 0 host hp 91; me (209.0,85.5) host (217.7,101.3) dHost 18.1
+16:47:13.751 order: move to (198.1,90.0) [walk up to target 2259763 (attack refused)] me (202.3,89.2) host (218.5,103.0) dHost 21.3
+16:47:13.791 order: move to (215.4,100.5) [follow the host] me (202.2,89.3) host (218.5,103.0) dHost 21.4
+16:47:14.152 server order on our hero: move destination (215.0,99.0) target 0; me (204.2,88.2) host (218.5,103.0) dHost 20.6
+16:47:15.112 ignored an impossible position of unit 1000000013: (14977.750000,5.250000)
+16:47:15.365 the host's health 47 / 174: casting Healing on it
+16:47:15.672 server order on our hero: move destination (217.7,99.9) target 0; me (207.9,90.4) host (218.5,103.0) dHost 16.5
+16:47:16.139 healed the host (47 -> 48)
+16:47:16.712 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.4, target 0.0 from the host (limit 12.0)
+16:47:16.726 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.3, target 0.0 from the host (limit 12.0)
+16:47:16.739 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.3, target 0.0 from the host (limit 12.0)
+16:47:16.753 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.2, target 0.0 from the host (limit 12.0)
+16:47:16.766 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.2, target 0.0 from the host (limit 12.0)
+16:47:16.779 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.1, target 0.0 from the host (limit 12.0)
+16:47:16.792 chase limit: dropping unit 1000000013 (it attacks neither the host nor us): bot 12.0, target 0.0 from the host (limit 12.0)
+16:47:17.166 experience share +30.000000 (total 150.000002)
+16:47:17.193 server order on our hero: attack destination (217.7,99.9) target 1000000013; me (212.3,94.6) host (218.5,103.0) dHost 10.5
+16:47:17.193 state: hp 110/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 32; me (212.3,94.6) host (218.5,103.0) dHost 10.5
+16:47:17.699 server order on our hero: none destination (217.7,99.9) target 0; me (213.7,96.1) host (218.5,103.0) dHost 8.5
+16:47:19.074 attack 1000000013 at 0.789880 (try 6)
+16:47:19.074 order: attack unit 1000000013 [fight: target 1000000013] me (217.7,99.9) host (217.2,99.2) dHost 0.8
+16:47:20.234 state: hp 89/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 101; me (217.7,99.9) host (217.2,99.2) dHost 0.8
+16:47:21.074 attack 1000000013 at 0.826206 (try 7)
+16:47:21.074 order: attack unit 1000000013 [fight: target 1000000013] me (217.7,99.9) host (217.2,99.2) dHost 0.8
+16:47:23.075 attack 1000000013 at 0.826206 (try 8)
+16:47:23.075 order: attack unit 1000000013 [fight: target 1000000013] me (217.7,99.9) host (217.2,99.2) dHost 0.8
+16:47:23.088 server: Game paused by player Kalyr | SOLO
+16:47:23.275 state: hp 74/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 102; me (217.7,99.9) host (217.2,99.2) dHost 0.8
+16:47:25.076 attack on unit 1000000013 refused 8 times: leaving it for 30 s
+16:47:27.116 health 47 / 174: casting Healing on itself
+16:47:28.517 the Healing spell healed (47 -> 48)
+16:47:28.610 server: Game paused by player Kalyr | SOLO
+16:47:30.811 ignored an impossible position of unit 1000000013: (8321.750000,6.250000)
+16:47:31.238 experience share +30.000000 (total 180.000002)
+16:47:32.826 order: move to (210.5,94.0) [follow the host] me (217.7,99.9) host (207.4,91.4) dHost 13.3
+16:47:34.839 order: move to (208.7,93.5) [follow the host] me (210.5,94.0) host (204.9,92.3) dHost 5.9
+16:47:34.932 server order on our hero: move destination (208.7,93.5) target 0; me (210.7,93.7) host (204.6,92.4) dHost 6.3
+16:47:35.946 server order on our hero: none destination (208.7,93.5) target 0; me (208.7,93.5) host (204.6,92.4) dHost 4.3
+16:47:36.840 order: move to (207.6,93.3) [follow the host] me (208.7,93.5) host (203.7,92.6) dHost 5.1
+16:47:36.960 server order on our hero: move destination (207.6,93.3) target 0; me (208.6,93.3) host (203.1,92.8) dHost 5.5
+16:47:37.467 server order on our hero: none destination (207.6,93.3) target 0; me (207.6,93.3) host (200.4,93.6) dHost 7.2
+16:47:38.841 order: move to (199.0,97.0) [follow the host] me (207.6,93.3) host (195.4,98.6) dHost 13.4
+16:47:38.987 server order on our hero: move destination (199.0,97.0) target 0; me (207.6,93.3) host (195.5,99.5) dHost 13.6
+16:47:40.575 beyond the leash (25 units): back to the host
+16:47:40.842 order: move to (185.2,106.3) [follow the host] me (204.6,94.6) host (181.8,108.4) dHost 26.6
+16:47:41.015 server order on our hero: move destination (185.2,106.3) target 0; me (200.6,96.8) host (179.7,109.5) dHost 24.5
+16:47:42.232 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:47:42.843 order: move to (170.8,113.7) [follow the host] me (197.9,98.5) host (167.3,115.7) dHost 35.0
+16:47:43.043 server order on our hero: move destination (178.2,110.2) target 0; me (193.6,101.8) host (167.3,115.7) dHost 29.7
+16:47:44.137 ignored an impossible position of unit 1000000013: (0.250000,8.250000)
+16:47:44.843 order: move to (181.2,109.3) [follow the host] me (190.8,103.4) host (177.8,111.4) dHost 15.3
+16:47:45.070 server order on our hero: move destination (181.2,109.3) target 0; me (186.4,106.0) host (177.8,111.4) dHost 10.1
+16:47:45.497 back near the host
+16:47:47.097 server order on our hero: none destination (181.2,109.3) target 0; me (181.8,108.9) host (177.8,111.4) dHost 4.7
+16:47:49.111 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.125 server order on our hero: attack destination (181.2,109.3) target 201; me (181.2,109.3) host (177.8,111.4) dHost 4.0
+16:47:49.125 state: hp 98/174 fightTarget 0 bitten 0 leashed 0 host hp 174; me (181.2,109.3) host (177.8,111.4) dHost 4.0
+16:47:49.125 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.138 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.151 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.165 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.178 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.192 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.205 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.218 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.231 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.245 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.258 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.272 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.285 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.298 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.311 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.325 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.338 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.351 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.365 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.378 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.391 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.405 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.418 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.432 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.445 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.458 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.472 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.485 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.498 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.511 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.525 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.538 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.552 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.565 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.578 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.592 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.605 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.618 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.632 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.645 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.658 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.672 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.685 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.698 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.712 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.725 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.738 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.752 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.765 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.778 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.792 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.805 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.818 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.832 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.845 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.859 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.872 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.886 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.899 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.912 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.925 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.939 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.952 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.965 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.979 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:49.992 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.005 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.018 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.032 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.045 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.058 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.072 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.086 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.099 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.112 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.125 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.139 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.152 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.165 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.178 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.192 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.205 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.218 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.232 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.245 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.259 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.272 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.285 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.299 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.312 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.325 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.339 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.352 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.365 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.378 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.392 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.405 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.419 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.432 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.445 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.459 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.472 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.485 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.499 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.512 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.525 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.539 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.552 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.565 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.579 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.592 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.606 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.619 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.632 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.646 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.659 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.673 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.685 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.699 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.712 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.725 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.739 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.752 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.765 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.779 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.792 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.805 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.819 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.832 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.845 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.859 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.873 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.886 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.899 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.912 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.926 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.939 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.952 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.966 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.979 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:50.992 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:51.006 chase limit: dropping unit 201 (it attacks neither the host nor us): bot 4.0, target 15.7 from the host (limit 12.0)
+16:47:51.152 server order on our hero: none destination (181.2,109.3) target 0; me (181.2,109.3) host (177.8,111.4) dHost 4.0
+16:47:51.299 beyond the leash (6989 units): back to the host
+16:47:51.753 experience share +12.000000 (total 192.000002)
+16:47:52.806 ignored an impossible position of unit 1000000013: (177.250000,112.250000)
+16:47:53.006 order: move to (7165.8,7.8) [follow the host] me (181.2,109.3) host (7169.8,7.8) dHost 6989.3
+16:47:53.180 server order on our hero: move destination (196.8,106.8) target 0; me (181.6,109.2) host (7169.8,7.8) dHost 6988.9
+16:47:55.007 order: move to (173.1,114.2) [follow the host] me (186.4,108.4) host (169.5,115.7) dHost 18.5
+16:47:55.207 server order on our hero: move destination (173.1,114.2) target 0; me (188.4,107.9) host (167.8,116.0) dHost 22.1
+16:47:57.008 order: move to (162.7,118.6) [follow the host] me (183.9,109.7) host (159.0,120.1) dHost 27.0
+16:47:57.235 server order on our hero: move destination (166.2,117.8) target 0; me (181.4,110.9) host (157.8,120.9) dHost 25.6
+16:47:59.009 order: move to (158.0,121.5) [follow the host] me (177.0,112.9) host (154.4,123.2) dHost 24.9
+16:47:59.262 server order on our hero: move destination (159.2,121.2) target 0; me (174.2,114.5) host (153.7,123.3) dHost 22.3
+16:48:01.009 order: move to (145.3,129.4) [follow the host] me (167.6,117.4) host (141.8,131.3) dHost 29.3
+16:48:01.290 server order on our hero: move destination (145.3,129.4) target 0; me (158.3,121.8) host (140.2,132.5) dHost 21.0
+16:48:03.010 order: move to (130.4,139.7) [follow the host] me (149.6,126.8) host (127.1,141.9) dHost 27.1
+16:48:03.317 server order on our hero: move destination (130.5,139.5) target 0; me (144.2,130.0) host (125.2,142.8) dHost 22.9
+16:48:04.278 ignored an impossible position of unit 1000000013: (2177.250000,2188.250000)
+16:48:05.011 order: move to (119.4,148.3) [follow the host] me (136.1,135.6) host (116.2,150.8) dHost 25.0
+16:48:05.344 server order on our hero: move destination (120.0,148.0) target 0; me (130.8,141.2) host (116.2,150.8) dHost 17.4
+16:48:06.571 back near the host
+16:48:07.092 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.105 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.119 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.132 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.145 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.159 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.172 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.185 chase limit: dropping unit 200 (it attacks neither the host nor us): bot 4.3, target 20.1 from the host (limit 12.0)
+16:48:07.199 experience share +12.000000 (total 204.000002)
+16:48:07.372 server order on our hero: none destination (119.5,148.0) target 0; me (119.5,148.0) host (116.2,150.8) dHost 4.3
+16:48:09.906 server order on our hero: none destination (119.5,148.0) target 0; me (119.5,148.0) host (116.2,150.8) dHost 4.3
+16:48:11.253 experience share +12.000000 (total 216.000002)
+16:48:11.427 server order on our hero: none destination (119.5,148.0) target 0; me (119.5,148.0) host (116.2,150.8) dHost 4.3
+16:48:13.188 order: move to (118.1,149.0) [follow the host] me (119.5,148.0) host (114.9,151.3) dHost 5.7
+16:48:13.454 server order on our hero: move destination (118.1,149.0) target 0; me (118.3,148.9) host (115.3,151.5) dHost 4.0
+16:48:13.961 server order on our hero: none destination (118.1,149.0) target 0; me (118.1,149.0) host (114.8,151.5) dHost 4.1
+16:48:15.188 order: move to (110.5,153.3) [follow the host] me (118.1,149.0) host (107.1,155.3) dHost 12.7
+16:48:15.482 server order on our hero: move destination (110.5,153.3) target 0; me (116.7,149.7) host (105.7,155.6) dHost 12.5
+16:48:17.189 order: move to (94.2,155.8) [follow the host] me (110.5,153.3) host (90.3,156.4) dHost 20.5
+16:48:17.509 server order on our hero: move destination (96.2,158.2) target 0; me (110.1,153.3) host (88.2,156.2) dHost 22.2
+16:48:19.189 order: move to (81.8,148.0) [follow the host] me (100.4,156.8) host (78.2,146.3) dHost 24.6
+16:48:19.243 beyond the leash (28 units): back to the host
+16:48:19.536 server order on our hero: move destination (89.2,155.8) target 0; me (103.0,156.2) host (76.3,144.3) dHost 29.2
+16:48:20.764 ignored an impossible position of unit 1000000013: (15745.750000,9.750000)
+16:48:21.190 order: move to (78.7,145.7) [follow the host] me (92.8,155.9) host (75.5,143.4) dHost 21.4
+16:48:21.564 server order on our hero: move destination (82.2,149.2) target 0; me (96.1,157.3) host (75.5,143.4) dHost 24.8
+16:48:23.191 order: move to (77.6,144.6) [follow the host] me (87.4,152.3) host (74.4,142.1) dHost 16.5
+16:48:23.591 server order on our hero: move destination (77.6,144.6) target 0; me (88.8,155.3) host (75.9,144.4) dHost 17.0
+16:48:24.098 back near the host
+16:48:25.192 order: move to (84.0,150.8) [follow the host] me (81.7,148.5) host (86.9,153.6) dHost 7.2
+16:48:25.618 server order on our hero: none destination (84.0,150.8) target 0; me (84.0,150.8) host (89.4,155.7) dHost 7.3
+16:48:27.193 order: move to (96.6,162.0) [follow the host] me (84.0,150.8) host (99.6,164.7) dHost 20.9
+16:48:27.646 server order on our hero: move destination (96.6,162.0) target 0; me (85.9,152.3) host (100.5,165.5) dHost 19.7
+16:48:29.193 order: move to (97.5,162.8) [follow the host] me (92.9,158.7) host (100.5,165.5) dHost 10.2
+16:48:29.194 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:48:31.701 server order on our hero: none destination (97.5,162.8) target 0; me (97.5,162.8) host (92.9,160.2) dHost 5.3
+16:48:33.195 order: move to (86.4,155.5) [follow the host] me (97.5,162.8) host (83.0,153.3) dHost 17.3
+16:48:33.728 server order on our hero: move destination (86.4,155.5) target 0; me (95.3,161.2) host (79.9,150.8) dHost 18.6
+16:48:35.196 order: move to (76.3,148.0) [follow the host] me (86.4,155.5) host (73.1,145.6) dHost 16.5
+16:48:35.756 server order on our hero: move destination (76.3,148.0) target 0; me (85.9,155.0) host (70.4,143.3) dHost 19.5
+16:48:37.196 order: move to (66.6,141.0) [follow the host] me (81.4,151.6) host (63.3,138.7) dHost 22.3
+16:48:37.277 server order on our hero: move destination (66.6,141.0) target 0; me (78.0,149.1) host (62.8,138.4) dHost 18.6
+16:48:39.198 order: move to (56.1,134.5) [follow the host] me (66.8,141.2) host (52.7,132.4) dHost 16.6
+16:48:39.304 server order on our hero: move destination (56.1,134.5) target 0; me (70.0,143.1) host (53.9,133.0) dHost 19.0
+16:48:41.198 order: move to (46.9,128.6) [follow the host] me (58.9,136.2) host (43.5,126.4) dHost 18.2
+16:48:41.331 server order on our hero: move destination (46.9,128.6) target 0; me (60.8,138.0) host (44.9,127.9) dHost 18.8
+16:48:43.199 order: move to (44.4,123.9) [follow the host] me (52.5,132.3) host (41.6,121.0) dHost 15.7
+16:48:43.359 server order on our hero: move destination (44.4,123.9) target 0; me (54.4,133.9) host (41.4,120.3) dHost 18.8
+16:48:45.200 order: move to (41.4,115.4) [follow the host] me (47.4,126.9) host (39.6,111.8) dHost 16.9
+16:48:45.386 server order on our hero: move destination (41.4,115.4) target 0; me (48.9,128.7) host (39.5,111.5) dHost 19.6
+16:48:46.106 attacking unit 2259790
+16:48:46.106 attack 2259790 at 10.084874 (try 1)
+16:48:46.106 order: attack unit 2259790 [fight: target 2259790] me (47.0,125.3) host (39.5,111.5) dHost 15.7
+16:48:46.400 state: hp 115/174 fightTarget 2259790 bitten 0 leashed 0 host hp 166; me (46.2,123.9) host (39.5,111.5) dHost 14.1
+16:48:46.680 experience share +11.000000 (total 227.000002)
+16:48:47.107 attacking unit 26
+16:48:47.107 attack 26 at 17.370596 (try 1)
+16:48:47.107 order: attack unit 26 [fight: target 26] me (44.4,120.6) host (39.5,111.5) dHost 10.3
+16:48:47.667 ignored an impossible position of unit 1000000013: (12289.750000,11.750000)
+16:48:48.867 experience share +8.500000 (total 235.500002)
+16:48:48.934 server order on our hero: attack destination (41.4,115.4) target 1027303; me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:49.108 attack 26 at 12.701347 (try 2)
+16:48:49.108 order: attack unit 26 [fight: target 26] me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:49.441 state: hp 101/174 fightTarget 26 bitten 0 leashed 0 host hp 89; me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:50.961 server order on our hero: none destination (41.4,115.4) target 0; me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:51.122 order: move to (32.0,113.0) [walk up to target 26 (attack refused)] me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:51.415 health 50 / 174: casting Healing on itself
+16:48:51.482 the host's health 83 / 174: casting Healing on it
+16:48:51.602 healed the host (83 -> 154)
+16:48:51.975 server order on our hero: attack destination (41.4,115.4) target 1000000013; me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:52.482 state: hp 50/174 fightTarget 1000000013 bitten 0 leashed 0 host hp 154; me (41.4,115.4) host (39.5,111.5) dHost 4.3
+16:48:52.669 beyond the leash (121 units): back to the host
+16:48:52.989 server order on our hero: none destination (41.4,115.4) target 0; me (41.4,115.4) host (0.9,0.5) dHost 121.8
+16:48:52.989 order: move to (2.2,4.3) [follow the host] me (41.4,115.4) host (0.9,0.5) dHost 121.8
+16:48:53.722 the Healing spell healed (50 -> 104)
+16:48:55.417 health 52 / 263: casting Healing on itself
+16:48:55.577 ignored an impossible position of unit 1000000013: (17025.750000,12.250000)
+16:48:56.043 experience share +8.500000 (total 244.000002)
+16:48:56.684 the server took our hero out of the world (its final party came): counted as dead
+16:48:56.684 our body lies at 41 115
+16:48:56.684 our hero is dead
+16:48:56.684 saved the character's progress (on leaving, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:48:59.925 health 24 / 263: casting Healing on itself
+16:49:02.086 ignored an impossible position of unit 1000000013: (15105.750000,12.750000)
+16:49:02.686 asking for a new hero: entering again on this connection (JOIN 3, the upload)
+16:49:02.713 player KalyrBot | BOT: state 3
+16:49:03.233 the server's respawn answered (reserved unit 1001000014): entering once more
+16:49:03.700 saved the character's progress (on leaving, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:49:04.113 zone zone25.mpr / map zone25-lmp.mob: 1 exit record(s): MPGame1 (212,3)-(219,11)
+16:49:04.113 in the quest world: our hero is unit 1000000016
+16:49:04.113 order: move to (3841.8,12.8) [follow the host] me (0.0,0.0) host (3841.8,12.8) dHost -1.0
+16:49:04.140 player KalyrBot | BOT: state 0
+16:49:04.381 ignored an impossible position of unit 2259775: (29.638294,110.022301)
+16:49:04.381 ignored an impossible position of unit 53: (27.593035,118.124763)
+16:49:04.381 ignored an impossible position of unit 1000867: (34.300716,117.644318)
+16:49:04.381 the Healing spell healed (24 -> 174)
+16:49:13.623 player Kalyr | SOLO: state 0
+16:49:14.717 back near the host
+16:49:14.717 attacking unit 2259796
+16:49:14.717 attack 2259796 at 12.168459 (try 1)
+16:49:14.717 order: attack unit 2259796 [fight: target 2259796] me (215.5,13.5) host (214.2,13.8) dHost 1.3
+16:49:14.758 state: hp 174/174 fightTarget 2259796 bitten 0 leashed 0 host hp 174; me (215.5,13.5) host (214.2,13.8) dHost 1.3
+16:49:16.718 attack 2259796 at 12.168459 (try 2)
+16:49:16.718 order: attack unit 2259796 [fight: target 2259796] me (215.5,13.5) host (201.3,24.3) dHost 17.9
+16:49:17.798 state: hp 174/174 fightTarget 2259796 bitten 0 leashed 0 host hp 174; me (215.5,13.5) host (196.8,29.1) dHost 24.4
+16:49:17.905 beyond the leash (25 units): back to the host
+16:49:17.905 order: move to (199.4,27.0) [follow the host] me (215.5,13.5) host (196.3,29.6) dHost 25.0
+16:49:18.305 server order on our hero: move destination (199.8,26.8) target 0; me (214.9,13.6) host (194.7,31.3) dHost 26.9
+16:49:19.906 order: move to (186.8,40.9) [follow the host] me (213.0,15.2) host (184.0,43.7) dHost 40.7
+16:49:20.333 server order on our hero: move destination (187.8,39.8) target 0; me (201.9,24.7) host (179.6,48.1) dHost 32.3
+16:49:21.908 order: move to (176.3,39.2) [follow the host] me (200.3,26.4) host (172.8,41.1) dHost 31.1
+16:49:22.360 server order on our hero: move destination (176.3,39.2) target 0; me (188.4,37.5) host (172.8,41.1) dHost 16.0
+16:49:22.667 ignored an impossible position of unit 1001000013: (14337.750000,14.250000)
+16:49:23.882 server order on our hero: attack destination (176.3,39.2) target 2259761; me (181.7,38.5) host (172.8,41.1) dHost 9.3
+16:49:23.882 state: hp 174/174 fightTarget 0 bitten 0 leashed 1 host hp 108; me (181.7,38.5) host (172.8,41.1) dHost 9.3
+16:49:23.947 back near the host
+16:49:23.947 attacking unit 3999
+16:49:23.947 attack 3999 at 27.029680 (try 1)
+16:49:23.947 order: attack unit 3999 [fight: target 3999] me (181.4,38.5) host (172.8,41.1) dHost 9.0
+16:49:24.387 server order on our hero: none destination (176.3,39.2) target 0; me (179.5,38.8) host (172.8,41.1) dHost 7.1
+16:49:24.894 server order on our hero: attack destination (176.3,39.2) target 2259761; me (177.2,39.1) host (172.8,41.1) dHost 4.9
+16:49:25.402 server order on our hero: none destination (176.3,39.2) target 0; me (176.3,39.2) host (172.8,41.1) dHost 4.0
+16:49:25.948 attack 3999 at 28.023266 (try 2)
+16:49:25.948 order: attack unit 3999 [fight: target 3999] me (176.3,39.2) host (172.8,41.1) dHost 4.0
+16:49:26.295 experience share +29.998407 (total 273.998409)
+16:49:26.922 state: hp 174/174 fightTarget 3999 bitten 0 leashed 0 host hp 103; me (176.3,39.2) host (172.8,41.1) dHost 4.0
+16:49:28.949 attacking unit 3999
+16:49:28.949 attack 3999 at 28.648762 (try 1)
+16:49:28.949 order: attack unit 3999 [fight: target 3999] me (176.3,39.2) host (170.4,43.8) dHost 7.5
+16:49:29.963 state: hp 174/174 fightTarget 3999 bitten 0 leashed 0 host hp 104; me (176.3,39.2) host (162.7,49.8) dHost 17.2
+16:49:30.737 beyond the leash (25 units): back to the host
+16:49:30.737 order: move to (159.7,52.0) [follow the host] me (176.3,39.2) host (156.5,54.5) dHost 25.0
+16:49:30.977 server order on our hero: move destination (160.8,51.2) target 0; me (175.6,39.7) host (155.1,55.7) dHost 26.0
+16:49:32.738 order: move to (146.9,63.4) [follow the host] me (169.4,44.5) host (143.9,66.0) dHost 33.4
+16:49:33.004 server order on our hero: move destination (147.8,61.2) target 0; me (161.1,50.6) host (143.2,68.9) dHost 25.6
+16:49:34.738 order: move to (148.9,67.8) [follow the host] me (152.7,57.3) host (147.5,71.6) dHost 15.1
+16:49:34.765 the host's health 69 / 174: casting Healing on it
+16:49:35.031 server order on our hero: none destination (145.1,69.6) target 0; me (147.9,60.9) host (147.5,71.6) dHost 10.6
+16:49:35.312 back near the host
+16:49:35.432 healed the host (69 -> 70)
+16:49:36.365 ignored an impossible position of unit 1001000013: (13825.750000,15.250000)
+16:49:36.552 server order on our hero: none destination (145.1,69.6) target 0; me (145.1,69.6) host (147.5,71.6) dHost 3.2
+16:49:41.567 experience share +29.998407 (total 303.996817)
+16:49:43.475 attacking unit 3999
+16:49:43.475 attack 3999 at 27.939703 (try 1)
+16:49:43.475 order: attack unit 3999 [fight: target 3999] me (145.1,69.6) host (148.4,72.3) dHost 4.3
+16:49:43.648 state: hp 174/174 fightTarget 3999 bitten 0 leashed 0 host hp 91; me (145.1,69.6) host (146.8,72.0) dHost 3.0
+16:49:44.475 order: move to (142.9,72.2) [follow the host] me (145.1,69.6) host (140.4,75.3) dHost 7.4
+16:49:44.662 server order on our hero: move destination (143.0,71.5) target 0; me (147.5,60.9) host (139.3,76.0) dHost 17.2
+16:49:45.036 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:49:45.476 attacking unit 2259765
+16:49:45.476 attack 2259765 at 30.575878 (try 1)
+16:49:45.476 order: attack unit 2259765 [fight: target 2259765] me (145.5,65.6) host (132.4,78.6) dHost 18.5
+16:49:46.183 server order on our hero: none destination (143.0,71.5) target 0; me (143.8,69.7) host (129.3,83.0) dHost 19.8
+16:49:46.476 order: move to (132.1,82.7) [follow the host] me (143.1,71.3) host (129.3,85.5) dHost 19.8
+16:49:46.689 server order on our hero: move destination (132.1,82.7) target 0; me (142.6,71.9) host (129.3,87.3) dHost 20.3
+16:49:46.769 ignored an impossible position of unit 1001000013: (1.750000,2187.750000)
+16:49:48.130 the host's health 28 / 174: casting Healing on it
+16:49:48.210 server order on our hero: attack destination (132.1,82.7) target 1001000013; me (136.0,78.6) host (129.3,91.5) dHost 14.5
+16:49:48.210 state: hp 174/174 fightTarget 0 bitten 0 leashed 0 host hp 28; me (136.0,78.6) host (129.3,91.5) dHost 14.5
+16:49:48.490 healed the host (28 -> 110)
+16:49:48.717 server order on our hero: none destination (132.1,82.7) target 0; me (133.9,80.8) host (129.3,91.5) dHost 11.6
+16:49:49.637 order: move to (130.5,87.6) [follow the host] me (132.1,82.7) host (129.3,91.5) dHost 9.2
+16:49:49.730 server order on our hero: move destination (130.5,87.6) target 0; me (134.2,81.8) host (129.3,91.5) dHost 10.8
+16:49:50.744 server order on our hero: attack destination (130.5,87.6) target 2259765; me (130.9,87.1) host (129.3,91.5) dHost 4.7
+16:49:51.251 server order on our hero: none destination (130.5,87.6) target 0; me (130.5,87.6) host (129.3,91.5) dHost 4.0
+16:49:51.758 server order on our hero: none destination (130.5,87.6) target 0; me (130.5,87.6) host (129.3,91.5) dHost 4.0
+16:49:52.131 the host's health 69 / 174: casting Healing on it
+16:49:52.265 experience share +29.998409 (total 333.995226)
+16:49:52.265 server order on our hero: none destination (130.5,87.6) target 0; me (130.5,87.6) host (129.3,91.5) dHost 4.0
+16:49:53.145 healed the host (69 -> 133)
+16:49:53.639 order: move to (130.3,88.7) [follow the host] me (130.5,87.6) host (129.3,92.6) dHost 5.1
+16:49:55.639 order: move to (121.0,90.7) [follow the host] me (130.3,88.7) host (117.0,91.6) dHost 13.5
+16:49:55.813 server order on our hero: move destination (121.0,90.7) target 0; me (129.9,88.8) host (115.8,91.7) dHost 14.4
+16:49:56.640 attacking unit 2259766
+16:49:56.640 attack 2259766 at 32.350998 (try 1)
+16:49:56.640 order: attack unit 2259766 [fight: target 2259766] me (126.7,89.5) host (108.6,92.8) dHost 18.4
+16:49:56.760 looting our body (1000000014)
+16:49:56.826 server order on our hero: none destination (121.0,90.7) target 0; me (126.0,89.7) host (107.2,93.1) dHost 19.1
+16:49:58.014 beyond the leash (25 units): back to the host
+16:49:58.467 ignored an impossible position of unit 1001000013: (20225.750000,16.750000)
+16:49:59.761 order: move to (100.0,95.0) [follow the host] me (121.0,90.7) host (96.1,95.9) dHost 25.4
+16:49:59.841 the host's health 83 / 174: casting Healing on it
+16:50:00.375 server order on our hero: none destination (106.2,92.2) target 0; me (106.2,92.2) host (96.1,95.9) dHost 10.8
+16:50:01.762 healed the host (83 -> 84)
+16:50:03.282 server: Game paused by player Kalyr | SOLO
+16:50:03.843 the host's health 51 / 174: casting Healing on it
+16:50:07.852 the host's health 51 / 174: casting Healing on it
+16:50:11.853 the host's health 51 / 174: casting Healing on it
+16:50:14.854 three casts on the host raised nothing: pausing 30 s
+16:50:21.764 looting our body (1000000014)
+16:50:44.866 the host's health 51 / 174: casting Healing on it
+16:50:46.773 looting our body (1000000014)
+16:50:48.867 the host's health 51 / 174: casting Healing on it
+16:50:52.869 the host's health 51 / 174: casting Healing on it
+16:50:55.870 three casts on the host raised nothing: pausing 30 s
+16:51:11.783 our body could not be looted: giving up
+16:51:25.882 the host's health 51 / 174: casting Healing on it
+16:51:29.884 the host's health 51 / 174: casting Healing on it
+16:51:33.885 the host's health 51 / 174: casting Healing on it
+16:51:36.886 three casts on the host raised nothing: pausing 30 s
+16:51:39.233 server order on our hero: attack destination (106.2,92.2) target 1001000013; me (106.2,92.2) host (96.1,95.9) dHost 10.8
+16:51:39.233 state: hp 174/174 fightTarget 0 bitten 0 leashed 1 host hp 110; me (106.2,92.2) host (96.1,95.9) dHost 10.8
+16:51:41.527 experience share +29.998409 (total 363.993635)
+16:51:42.035 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:51:42.275 state: hp 174/174 fightTarget 0 bitten 0 leashed 1 host hp 90; me (106.2,92.2) host (96.1,95.9) dHost 10.8
+16:51:42.688 back near the host
+16:51:43.595 order: move to (98.8,95.0) [follow the host] me (106.2,92.2) host (95.1,96.3) dHost 11.9
+16:51:43.795 server order on our hero: move destination (98.8,95.0) target 0; me (105.2,92.5) host (95.1,96.3) dHost 10.9
+16:51:45.596 order: move to (86.6,98.8) [follow the host] me (98.8,95.0) host (82.8,100.0) dHost 16.8
+16:51:45.689 attacking unit 2259767
+16:51:45.689 attack 2259767 at 27.861814 (try 1)
+16:51:45.689 order: attack unit 2259767 [fight: target 2259767] me (98.7,94.8) host (82.2,99.8) dHost 17.2
+16:51:45.822 server order on our hero: move destination (86.6,98.8) target 0; me (98.2,94.9) host (81.3,99.6) dHost 17.5
+16:51:45.822 state: hp 174/174 fightTarget 2259767 bitten 0 leashed 0 host hp 92; me (98.2,94.9) host (81.2,99.6) dHost 17.5
+16:51:47.609 order: move to (72.8,96.4) [follow the host] me (91.5,97.2) host (68.8,96.2) dHost 22.7
+16:51:47.850 server order on our hero: move destination (76.2,100.2) target 0; me (91.1,97.9) host (68.8,96.2) dHost 22.4
+16:51:48.463 ignored an impossible position of unit 1001000013: (23041.750000,17.750000)
+16:51:49.690 attacking unit 2259777
+16:51:49.690 attack 2259777 at 31.165831 (try 1)
+16:51:49.690 order: attack unit 2259777 [fight: target 2259777] me (84.0,99.0) host (68.8,96.2) dHost 15.4
+16:51:49.877 state: hp 174/174 fightTarget 2259777 bitten 0 leashed 0 host hp 66; me (83.3,99.1) host (68.8,96.2) dHost 14.7
+16:51:50.384 server: Game paused by player Kalyr | SOLO
+16:51:50.691 attacking unit 2259776
+16:51:50.691 attack 2259776 at 32.694237 (try 1)
+16:51:50.691 order: attack unit 2259776 [fight: target 2259776] me (80.1,99.6) host (68.8,96.2) dHost 11.8
+16:51:52.705 attack 2259776 at 29.076023 (try 2)
+16:51:52.705 order: attack unit 2259776 [fight: target 2259776] me (76.2,100.2) host (68.8,96.2) dHost 8.5
+16:51:52.918 state: hp 174/174 fightTarget 2259776 bitten 0 leashed 0 host hp 66; me (76.2,100.2) host (68.8,96.2) dHost 8.5
+16:51:52.985 server: Game paused by player Kalyr | SOLO
+16:51:54.012 server: Game paused by player Kalyr | SOLO
+16:51:54.520 beyond the leash (5046 units): back to the host
+16:51:54.520 order: move to (5117.8,18.3) [follow the host] me (76.2,100.2) host (5121.8,18.2) dHost 5046.2
+16:51:54.946 server order on our hero: none destination (76.8,100.2) target 0; me (76.8,100.2) host (5121.8,18.2) dHost 5045.7
+16:51:55.012 server: Game paused by player Kalyr | SOLO
+16:54:16.292 experience share +29.998407 (total 393.992043)
+16:54:16.746 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:54:17.493 server: Game paused by player Kalyr | SOLO
+16:54:39.180 the host's health 47 / 174: casting Healing on it
+16:54:39.180 back near the host
+16:54:40.715 healed the host (47 -> 48)
+16:54:41.395 ignored an impossible position of unit 1001000013: (1665.250000,4743.750000)
+16:54:41.676 beyond the leash (25 units): back to the host
+16:54:42.889 order: move to (60.9,99.4) [follow the host] me (80.8,100.2) host (56.9,99.2) dHost 23.9
+16:54:43.876 ignored an impossible position of unit 2259776: (59.750000,96.750000)
+16:54:44.890 order: move to (63.5,97.3) [follow the host] me (77.8,100.2) host (59.6,96.5) dHost 18.5
+16:54:44.943 the host's health 49 / 174: casting Healing on it
+16:54:45.143 experience share +8.499549 (total 402.491591)
+16:54:45.597 healed the host (49 -> 50)
+16:54:45.757 server order on our hero: none destination (69.8,99.2) target 0; me (69.8,99.2) host (59.6,96.5) dHost 10.5
+16:54:48.665 ignored an impossible position of unit 1001000013: (3713.750000,19.250000)
+16:54:48.945 the host's health 79 / 174: casting Healing on it
+16:54:49.305 healed the host (79 -> 151)
+16:54:50.719 experience share +10.999415 (total 413.491007)
+16:54:51.173 saved the character's progress (periodic, 3839 bytes) into /home/kyral/repositories/github/Kyr4l/ei-universal-mod/Universal-Mod/mp/10.mp
+16:54:52.893 order: move to (61.0,97.3) [follow the host] me (69.8,99.2) host (57.1,96.5) dHost 12.9
+16:54:53.360 server order on our hero: move destination (61.0,97.3) target 0; me (66.7,98.8) host (54.9,97.2) dHost 11.9
+16:54:54.533 back near the host
+16:54:54.880 server order on our hero: none destination (61.0,97.3) target 0; me (61.0,97.3) host (52.2,99.3) dHost 9.0
+16:54:54.894 order: move to (56.1,98.4) [follow the host] me (61.0,97.3) host (52.2,99.3) dHost 9.0
+16:54:55.387 server order on our hero: move destination (56.1,98.4) target 0; me (59.6,97.6) host (50.8,100.7) dHost 9.4
+16:54:56.401 server order on our hero: none destination (56.1,98.4) target 0; me (56.1,98.4) host (46.3,105.1) dHost 11.9
+16:54:56.894 order: move to (47.9,104.3) [follow the host] me (56.1,98.4) host (44.7,106.7) dHost 14.1
+16:54:57.415 server order on our hero: move destination (47.9,104.3) target 0; me (54.8,99.3) host (43.0,108.3) dHost 14.9
+16:54:58.907 order: move to (44.2,117.0) [follow the host] me (50.1,102.8) host (42.7,120.7) dHost 19.4
+16:54:59.441 server order on our hero: move destination (44.2,117.0) target 0; me (49.1,104.5) host (42.5,124.8) dHost 21.4

@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.26";
+static const char* const kVersion = "0.1.27";
 
 
 struct App {
@@ -621,6 +621,11 @@ static void Sonar(const net::Client& c, float size, float range) {
 static void StatusPanel(App& app) {
     const bool on = app.client.state == net::Client::State::Accepted;
     app.client.followDistance = app.cfg.followDistance;
+    app.client.weaponRange = 0; // the wielded weapon's range (database column Range)
+    if (app.dbLoaded && !app.character.members.empty()) {
+        const auto& weapons = app.db.List(items::Category::Weapons);
+        for (uint32_t id : app.character.members[0].lists[0]) if (const mp::Object* o = shop::FindObject(app.character, id)) if (o->kind == 0x3004 && o->b < weapons.size()) { app.client.weaponRange = weapons[o->b].n[23]; break; }
+    }
     app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
     app.client.engagement = static_cast<int>(app.cfg.engagement); // Passive / Defensive / Aggressive
     app.client.healSelfBelow = app.cfg.healSelfBelow; app.client.usePotions = app.cfg.usePotions;

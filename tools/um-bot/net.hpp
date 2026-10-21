@@ -144,9 +144,8 @@ public:
         const auto prev = unitPos.find(id);
         const bool inside = x > 0 && x < 1024 && y > 0 && y < 1024;
         const bool jump = prev != unitPos.end() && Now() - prev->second.at < 3.0 && std::hypot(x - prev->second.x, y - prev->second.y) > 60.0f;
-        if (!inside || jump) {
-            if (++badPos_[id] < 3) { if (badPos_[id] == 1) Log("ignored an impossible position of unit " + std::to_string(id) + ": (" + std::to_string(x) + "," + std::to_string(y) + ")"); return; }
-        }
+        if (!inside) { if (++badPos_[id] % 50 == 1) Log("ignored an impossible position of unit " + std::to_string(id) + ": (" + std::to_string(x) + "," + std::to_string(y) + ")"); return; } // never believed
+        if (jump && ++badPos_[id] < 3) return; // a real teleport shows three times in a row
         badPos_[id] = 0;
         Pos np{x, y, tx, ty, Now(), kWalkSpeed};
         const auto it = unitPos.find(id);
@@ -559,6 +558,7 @@ public:
     bool fightInSight = false;  // fighting at all (Engagement not Passive)
     int engagement = 1;         // 0 passive, 1 defensive (the units attacking the host or us, the host's target), 2 aggressive (also anything in sight)
     float sight = 13.0f;        // the character's sight (map units)
+    float weaponRange = 0;      // the wielded weapon's range from the database (bows 10-18, crossbows 12-22; 0: a melee weapon)
     bool chatStay_ = false; int chatEngagement_ = -1; // set by the host's chat commands ("bot stay", "bot follow", "bot passive|defensive|aggressive")
     bool followHost = true;     // walk after the host's hero, staying about followDistance from it
     float followDistance = 4.0f;
@@ -643,7 +643,18 @@ public:
             }
             viewAt_ = Now();
         }
-        if (matchPace) { const auto hp = unitPace_.find(HostUnit()); if (hp != unitPace_.end() && hp->second >= 0 && hp->second <= 3) pace = hp->second; }
+        if (matchPace) { // the bot starts walking (the stance a hero spawns in); the host's own pace is followed when it changes, and a crawl / sneak is not believed while the host runs
+            if (!paceSeen_) { pace = 2; }
+            const uint32_t host = HostUnit();
+            const auto hp = unitPace_.find(host);
+            if (host && hp != unitPace_.end() && hp->second >= 0 && hp->second <= 3 && hp->second != hostPaceValue_) {
+                hostPaceValue_ = hp->second;
+                const auto sp = unitPos.find(host);
+                const bool implausible = hp->second <= 1 && sp != unitPos.end() && sp->second.speed > 2.5f;
+                Log("the host's pace value is " + std::to_string(hp->second) + (implausible ? " (not believed: it moves at " + std::to_string(sp->second.speed) + " u/s)" : ""));
+                if (!implausible) { pace = hp->second; paceSeen_ = true; }
+            }
+        }
         if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
         SpellSteps();
         // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
@@ -739,7 +750,8 @@ public:
             if (!threat && host && Where(ownTarget, tx, ty) && Where(host, hx, hy) && Where(worldUnit, mx, my)) {
                 const float limit = std::max(10.0f, followDistance * 3);
                 const float dBot = std::hypot(mx - hx, my - hy), dTarget = std::hypot(tx - hx, ty - hy);
-                if (dBot > limit || dTarget > limit) {
+                const auto ig = ignored_.find(ownTarget);
+                if ((dBot > limit || dTarget > limit) && (ig == ignored_.end() || ig->second < Now())) {
                     char b[160]; std::snprintf(b, sizeof b, "chase limit: dropping unit %u (it attacks neither the host nor us): bot %.1f, target %.1f from the host (limit %.1f)", ownTarget, dBot, dTarget, limit);
                     Log(b);
                     ignored_[ownTarget] = Now() + 15; fightTarget_ = 0; ownTarget = 0; followAt_ = 0; followX_ = -99;
@@ -804,10 +816,17 @@ public:
                     // kAttackReach, order the attack, and take "our own update says: attacking this unit" as the answer (unitTarget_, field 10 mode 3).
                     // The order goes out from where we stand (a bow needs no walk: the server brings the hero into its weapon's range, OrderReachDistance); only when it
                     // is refused twice (the target is not in the hero's known list yet) does the bot walk closer, as before.
-                    const bool walk = engageTries_ >= 2 && d > kAttackReach + 0.7f;
+                    // Where to stand: the server only accepts an attack order on a target the hero has SEEN (within its sight, 13-14 units), so the order goes out from just inside the sight;
+                    // an archer stays there (min(weapon range, sight) x 0.9: a bow reaches 10-18) and the server walks a melee hero in by itself. Only after two refusals does the bot step closer (never
+                    // the old "run up to 3 units": that ran archers into the monsters and woke the pack).
+                    const float known = std::min(sight * 0.9f, 13.0f);
+                    const float stand = weaponRange > 1.5f ? std::min(weaponRange * 0.9f, known) : known;
+                    const bool far = d > stand + 1.0f;
+                    const bool walk = far || (engageTries_ >= 2 && d > 3.5f);
+                    const float stopAt = far ? stand : std::max(2.5f, d - 3.0f);
                     if (Now() - attackedAt_ > (walk ? 1.2 : 1.5)) {
                         if (engageTries_ >= 8) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_) + " times: leaving it for 30 s"); }
-                        else if (walk) { orderWhy_ = "walk up to target " + std::to_string(t) + " (attack refused)"; MoveTo(x + (mx - x) * kAttackReach / d, y + (my - y) * kAttackReach / d); attackedAt_ = Now(); attackedTarget_ = 0; ++engageTries_; }
+                        else if (walk) { orderWhy_ = far ? "walk into sight / weapon range of target " + std::to_string(t) : "step closer to target " + std::to_string(t) + " (attack refused)"; MoveTo(x + (mx - x) * stopAt / d, y + (my - y) * stopAt / d); attackedAt_ = Now(); attackedTarget_ = 0; if (!far) ++engageTries_; }
                         else {
                             Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_ + 1) + ")");
                             orderWhy_ = "fight: target " + std::to_string(t); Attack(t);
@@ -821,6 +840,14 @@ public:
         }
         if (fightTarget_ && !unitPos.count(fightTarget_)) fightTarget_ = 0;
         if (fightTarget_) fighting = true;
+        if (state == State::Accepted && worldUnit && Now() - trailAt_ > 0.4) { // the host's trail
+            trailAt_ = Now();
+            float hx, hy;
+            if (Where(HostUnit(), hx, hy)) {
+                if (!hostTrail_.empty() && std::hypot(hx - hostTrail_.back().first, hy - hostTrail_.back().second) > 60.0f) hostTrail_.clear(); // it jumped (another zone, a respawn)
+                if (hostTrail_.empty() || std::hypot(hx - hostTrail_.back().first, hy - hostTrail_.back().second) > 1.5f) { hostTrail_.emplace_back(hx, hy); if (hostTrail_.size() > 120) hostTrail_.pop_front(); }
+            }
+        }
         if (!fighting && (!underAttack || leashed_) && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_) { // walk to the host when it is away (not while something bites us: the game's logic answers; the leash still pulls back)
             followAt_ = Now();
             float hx, hy, mx, my;
@@ -831,7 +858,22 @@ public:
                     followX_ = hx; followY_ = hy;
                     // to the point followDistance short of the host, on our side of it
                     const float k = known && away > 0 ? followDistance / away : 0.0f;
-                    orderWhy_ = "follow the host"; MoveTo(hx + (mx - hx) * k, hy + (my - hy) * k);
+                    float tx = hx + (mx - hx) * k, ty = hy + (my - hy) * k;
+                    // Retrace the host's route instead of cutting across to it (a straight line ran the bot through the monsters the host went around): the point of its trail
+                    // about 6 units ahead of the trail point nearest to us, but never nearer to the host than followDistance along the trail.
+                    if (known && hostTrail_.size() >= 2) {
+                        size_t nearest = 0; float nd = 1e9f;
+                        for (size_t i = 0; i < hostTrail_.size(); ++i) { const float dd = std::hypot(hostTrail_[i].first - mx, hostTrail_[i].second - my); if (dd < nd) { nd = dd; nearest = i; } }
+                        if (nd < 25.0f) {
+                            size_t stopAt = hostTrail_.size() - 1; float back = 0;                                     // followDistance behind the host along the trail
+                            while (stopAt > 0 && back < followDistance) { back += std::hypot(hostTrail_[stopAt].first - hostTrail_[stopAt - 1].first, hostTrail_[stopAt].second - hostTrail_[stopAt - 1].second); --stopAt; }
+                            size_t ahead = nearest; float fwd = 0;                                                       // 6 units on from the nearest point
+                            while (ahead + 1 < hostTrail_.size() && fwd < 6.0f) { fwd += std::hypot(hostTrail_[ahead + 1].first - hostTrail_[ahead].first, hostTrail_[ahead + 1].second - hostTrail_[ahead].second); ++ahead; }
+                            const size_t j = std::max(nearest, std::min(ahead, stopAt));
+                            tx = hostTrail_[j].first; ty = hostTrail_[j].second;
+                        }
+                    }
+                    orderWhy_ = "follow the host"; MoveTo(tx, ty);
                     if (std::getenv("UM_BOT_FIGHT")) Log("follow");
                 }
             }
@@ -984,7 +1026,7 @@ private:
     bool heroJoined_ = false;
     int dumped_ = 0;
     double followAt_ = 0, fightAt_ = 0, attackedAt_ = 0;
-    int paceSent_ = -1;
+    int paceSent_ = -1; int hostPaceValue_ = -1; bool paceSeen_ = false;
     uint32_t fightTarget_ = 0;
     double diagAt_ = 0, stateLogAt_ = 0; int diagMode_ = -1; float diagX_ = 0, diagY_ = 0;
     double targetSince_ = 0, idleSince_ = 0, selfHurtAt_ = -99, idleFrom_ = 0; // idleFrom_: since when our hero attacks nothing (0: it does)
@@ -1069,7 +1111,9 @@ private:
         fightTarget_ = 0; leashed_ = false; paceSent_ = -1; hostGoneAt_ = 0; // the world state stays: re-entering the same quest resends no creations (the host's world is the same); a new quest clears it in Enter()
         SetJoin(1, heroId_);
     }
+    std::deque<std::pair<float, float>> hostTrail_; double trailAt_ = 0; // where the host walked (a point every 1.5 units): the bot retraces it instead of cutting across to the host
     void ClearWorld() {
+        hostTrail_.clear();
         unitPos.clear(); unitInfo_.clear(); unitFields_.clear(); dead_.clear(); unitTarget_.clear(); unitAction_.clear();
         unitHp_.clear(); unitMana_.clear(); unitHpMax_.clear(); unitManaMax_.clear(); unitSide_.clear(); unitEnemies_.clear(); unitPace_.clear();
     }
