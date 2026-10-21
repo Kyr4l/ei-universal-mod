@@ -10,7 +10,7 @@ The skins, texts, loader (`Engine\dinput.dll`), `addon.dll` and `mp3dec.asi` in 
 
 ## The game executable
 
-The package's `Engine\\game.exe` is the game's own exe with the large address aware flag set (one bit of the PE header, byte-identical to the community's patched exe). With the stock exe the game ran out of address space under D7VK ("map failed", then "abnormal program termination" in the Multiplayer lobby). The launcher does not patch anything itself.
+The package's `Engine\game.exe` is the game's own exe with the large address aware flag set (one bit of the PE header, byte-identical to the community's patched exe). With the stock exe the game ran out of address space under D7VK ("map failed", then "abnormal program termination" in the Multiplayer lobby). The launcher does not patch anything itself.
 
 ## Tested
 
