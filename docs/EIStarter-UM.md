@@ -20,7 +20,7 @@ In clean Wine 11.19 prefixes (hidden display, silent audio) with the package, an
 
 1. Unpack the launcher package (`tools/EIStarter-UM/package.sh` builds `dist/EIStarter-UM-<version>.zip`) anywhere you can write to.
 2. Unpack a mod (Universal-Mod ...) into its `mods\` folder.
-3. Run `EIStarter-UM.exe` (Linux: `wine EIStarter-UM.exe` in the game's prefix; there is no native Linux build, the game needs Wine anyway), choose the mod, **Play**.
+3. Run `EIStarter-UM.exe` (Linux: install the game in Lutris, unpack the launcher inside the game's prefix, set the game's executable in Lutris to `EIStarter-UM.exe` and start it from Lutris; there is no native Linux build, the game needs Wine anyway), choose the mod, **Play**.
 
 The first start asks for the folder of the original game (the one with `game.exe` and `res`) when it cannot find it (`C:\Evil Islands`, the
 installer's registry key, GOG's folders). There is no `Init Starter Registry.bat`, no `path` value to add by hand, no DLL override to set, and no

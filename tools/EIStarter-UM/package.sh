@@ -40,7 +40,9 @@ EIStarter-UM $VERSION - starts Evil Islands with a mod (a replacement of EIStart
 
 1. Unpack this folder anywhere (it needs write access: EIStarter-UM.cfg is created here).
 2. Unpack a mod (for example Universal-Mod) into its mods folder.
-3. Run EIStarter-UM.exe (under Linux: with Wine, in the prefix of the game), choose the mod, click Play.
+3. Run EIStarter-UM.exe, choose the mod, click Play.
+   Linux: install the game in Lutris first, unpack this folder inside the game's prefix (e.g. drive_c/EIStarter-UM), set the game's
+   executable in Lutris to EIStarter-UM.exe and start it from Lutris.
    The first time it asks for the folder of the original game if it cannot find it.
 Nothing else to set up: no registry file, no DLL override. Details: docs/EIStarter-UM.md
 
