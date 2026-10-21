@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.24";
+static const char* const kVersion = "0.1.25";
 
 
 struct App {
@@ -60,7 +60,8 @@ struct App {
     std::string dbFor;                // the database choice + character it was looked for
     std::string dbPath;               // the file it was loaded from ("" = none found)
     bool dbLoaded = false;
-    void Log(const std::string& s) {
+    void Log(const std::string& s, bool toFile = true) {
+        if (toFile) net::BotLogLine(s);
         log.push_back(s);
         while (log.size() > 200) log.pop_front();
     }
@@ -142,7 +143,7 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
 
 // What the camp's shop of the session's allod offers: which allod the quests of the session belong to (its quest list / the chosen quest), the shop number, and this session's draw of items
 // and spell blueprints (one draw per session: the stock stays the same for every visit of the shop in it).
-struct ShopCtx { int shopNo = 0; std::string allod; std::vector<shop::Offer> stock; std::vector<spells::StockSpell> spellStock; std::vector<spells::StockRune> runeStock; };
+struct ShopCtx { int shopNo = 0; std::string why; std::string allod; std::vector<shop::Offer> stock; std::vector<spells::StockSpell> spellStock; std::vector<spells::StockRune> runeStock; };
 static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, ShopCtx& ctx) {
     std::mt19937 rng(seed);
     std::string mapsDir;
@@ -155,7 +156,12 @@ static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, cons
     }
     ctx.allod = allod;
     ctx.shopNo = shop::ShopOfAllod(allod);
-    if (!ctx.shopNo || ch.members.empty() || db.materials.empty()) return false;
+    if (!ctx.shopNo || ch.members.empty() || db.materials.empty()) {
+        ctx.why = db.materials.empty() ? "no item database loaded (set DATABASE, or put databaselmp.res in <character folder>/../res)"
+                : ch.members.empty() ? "the character has no members"
+                : "the allod of the quest is unknown (chosen quest '" + client.chosenQuest + "', " + std::to_string(client.QuestFiles().size()) + " quests listed, maps folder " + mapsDir + ")";
+        return false;
+    }
     ctx.stock = shop::Stock(db, ctx.shopNo, rng);
     ctx.spellStock = spells::Stock(db, ctx.shopNo, rng);
     ctx.runeStock = spells::RuneStock(db, ctx.shopNo, rng);
@@ -168,7 +174,11 @@ static std::string DoShopping(mp::Character& ch, const items::Database& db, cons
     shop::Prefs pf;
     pf.role = bot::RoleKind(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
     const shop::Plan plan = shop::MakePlan(db, ch, pf, ctx.stock);
-    if (plan.buy.empty() && plan.sell.empty() && plan.repair.empty() && plan.potionAdd == 0) return "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell";
+    if (plan.buy.empty() && plan.sell.empty() && plan.repair.empty() && plan.potionAdd == 0) {
+        std::string none = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell (" + std::to_string(ctx.stock.size()) + " items in stock, money " + std::to_string(plan.money) + ")";
+        for (const std::string& n : plan.notes) none += "\n  " + n;
+        return none;
+    }
     std::string text = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): " + shop::Apply(db, ch, plan);
     for (const std::string& n : plan.notes) text += "\n  " + n;
     if (cfg.announce) { // the useful part, in the chat: what it bought (with the price), what it sold, repairs, potions, what is left
@@ -249,6 +259,7 @@ static std::string DoCamp(mp::Character& ch, const items::Database& db, const bo
     auto add = [&](const std::string& t) { if (!t.empty()) text += (text.empty() ? "" : "\n") + t; };
     if (cfg.grow) add(DoGrowth(ch, db, cfg, client, ctx, path));
     if (cfg.shop && haveShop) { add(DoSpells(ch, db, cfg, client, ctx, path)); add(DoShopping(ch, db, cfg, client, ctx, path)); }
+    else if (cfg.shop) add("shop skipped: " + ctx.why);
     SetSpellSlots(client, ch, db, cfg); // a spell made now can be cast in the quest
     return text;
 }
@@ -801,6 +812,11 @@ static void Frame(App& app) {
 }
 
 int main(int argc, char** argv) {
+    { // um-bot.log next to the program (the window's log and every order with its reason); not for --version / --help
+        bool wantLog = argc == 1;
+        for (int i = 1; i < argc; ++i) if (std::string(argv[i]) == "--connect-test") wantLog = true;
+        if (wantLog) net::OpenBotLog(bot::ProgramDir() + "/um-bot.log");
+    }
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
         if (a == "--version") {
@@ -1034,7 +1050,7 @@ int main(int argc, char** argv) {
             if (!said.empty()) { app.Log(said); if (!updated.members.empty()) app.character = updated; }
         } else if (!app.cfg.saveProgress) app.client.partyIn.clear();
         if (app.clientLogShown > app.client.log.size()) app.clientLogShown = 0; // the client trims its log
-        for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown]);
+        for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown], false);
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();

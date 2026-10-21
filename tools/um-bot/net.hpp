@@ -24,6 +24,7 @@
 #include <chrono>
 #include <cstdint>
 #include <cstdio>
+#include <ctime>
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
@@ -45,6 +46,28 @@ typedef int socklen_t;
 #endif
 
 namespace net {
+
+// um-bot.log next to the program: every log line with the wall clock time (the previous run's log is kept as um-bot.log.1), to send with a bug report.
+inline std::FILE*& BotLogFile() { static std::FILE* f = nullptr; return f; }
+inline void OpenBotLog(const std::string& path) {
+    std::rename(path.c_str(), (path + ".1").c_str());
+    BotLogFile() = std::fopen(path.c_str(), "w");
+}
+inline void BotLogLine(const std::string& s) {
+    std::FILE* f = BotLogFile();
+    if (!f) return;
+    const auto now = std::chrono::system_clock::now();
+    const std::time_t t = std::chrono::system_clock::to_time_t(now);
+    const int ms = static_cast<int>(std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() % 1000);
+    std::tm tmv{};
+#ifdef _WIN32
+    localtime_s(&tmv, &t);
+#else
+    localtime_r(&t, &tmv);
+#endif
+    std::fprintf(f, "%02d:%02d:%02d.%03d %s\n", tmv.tm_hour, tmv.tm_min, tmv.tm_sec, ms, s.c_str());
+    std::fflush(f);
+}
 
 struct ServerInfo {
     uint32_t key = 0;
@@ -91,8 +114,16 @@ public:
     }
     // Orders our hero (stream message 0x30, read by the server's 0x66FFF0, the same path as a click on the ground):
     // u32 n, n x u32 unit id, u32 flags (?), f32 x, y, z.
+    std::string orderWhy_ = "?"; // why the next order is sent (set by the callers, logged with the order)
+    std::string Where3() const { // "me (x,y) host (x,y) d" for the order log
+        float mx = 0, my = 0, hx = 0, hy = 0; char b[120];
+        const bool m = Where(worldUnit, mx, my), h = Where(HostUnit(), hx, hy);
+        std::snprintf(b, sizeof b, "me (%.1f,%.1f) host (%.1f,%.1f) dHost %.1f", mx, my, hx, hy, m && h ? std::hypot(mx - hx, my - hy) : -1.0f);
+        return b;
+    }
     void MoveTo(float x, float y, float z = 0, uint32_t flags = 0) {
         if (!worldUnit) return;
+        { char b[80]; std::snprintf(b, sizeof b, "order: move to (%.1f,%.1f) ", x, y); Log(std::string(b) + "[" + orderWhy_ + "] " + Where3()); orderWhy_ = "?"; }
         std::vector<uint8_t> m{0x30};
         Put32(m, 1); Put32(m, worldUnit); Put32(m, flags);
         for (float f : {x, y, z}) { uint32_t v; std::memcpy(&v, &f, 4); Put32(m, v); }
@@ -101,15 +132,30 @@ public:
     // The players' heroes, from their 0x41 updates (decoded from live walks, 2026-10-03; the rest not decoded yet):
     // while a unit walks, its update holds "00 00 10", f32 x, f32 y (where it walks to), 2 bytes, u16 x, u16 y (the cell
     // it is in), all in half map units. Between updates it is assumed to walk on at kWalkSpeed.
-    struct Pos { float x = 0, y = 0, tx = 0, ty = 0; double at = 0; };
-    static constexpr float kWalkSpeed = 1.5f; // map units per second (measured roughly)
+    struct Pos { float x = 0, y = 0, tx = 0, ty = 0; double at = 0; float speed = 1.5f; };
+    static constexpr float kWalkSpeed = 1.5f; // map units per second: the first guess for a unit (a run is about 3.9, learned per unit from its updates)
     std::map<uint32_t, Pos> unitPos;
+    // A new position report: the unit's speed is learned from how far it moved since the previous report while it was walking somewhere.
+    void SetPos(uint32_t id, float x, float y, float tx, float ty) {
+        Pos np{x, y, tx, ty, Now(), kWalkSpeed};
+        const auto it = unitPos.find(id);
+        if (it != unitPos.end()) {
+            const Pos& o = it->second;
+            np.speed = o.speed;
+            const double dt = np.at - o.at;
+            if (dt > 0.05 && dt < 2.0 && (o.tx != o.x || o.ty != o.y)) {
+                const float observed = static_cast<float>(std::hypot(x - o.x, y - o.y) / dt);
+                if (observed > 0.3f && observed < 12.0f) np.speed = 0.6f * o.speed + 0.4f * observed;
+            }
+        }
+        unitPos[id] = np;
+    }
     bool Where(uint32_t id, float& x, float& y) const { // the estimated position now
         const auto it = unitPos.find(id);
         if (it == unitPos.end()) return false;
         const Pos& p = it->second;
         const float dx = p.tx - p.x, dy = p.ty - p.y, d = std::sqrt(dx * dx + dy * dy);
-        const float k = d > 0 ? std::min(1.0f, static_cast<float>(Now() - p.at) * kWalkSpeed / d) : 1.0f;
+        const float k = d > 0 ? std::min(1.0f, static_cast<float>(Now() - p.at) * p.speed / d) : 1.0f;
         x = p.x + dx * k; y = p.y + dy * k;
         return true;
     }
@@ -163,7 +209,7 @@ public:
             for (size_t k = static_cast<size_t>(it - m.begin()) + name_.size(); it != m.end() && k + 9 <= m.size() && k < static_cast<size_t>(it - m.begin()) + 90; ++k) {
                 if (m[k] != 0x91 || m[k + 1]) continue;
                 float x, y; std::memcpy(&x, &m[k + 1], 4); std::memcpy(&y, &m[k + 5], 4);
-                if (x > 0 && y > 0 && x < 2048 && y < 2048) unitPos[worldUnit] = {x, y, x, y, Now()};
+                if (x > 0 && y > 0 && x < 2048 && y < 2048) SetPos(worldUnit, x, y, x, y);
                 break;
             }
         }
@@ -249,7 +295,7 @@ public:
             if (side > 31) return 0;
             unitInfo_[id] = u; unitSide_[id] = side; unitEnemies_[id] = enemies;
             if (u.flags & 0x80000u) { MarkDead(id); }
-            else if (m[p + 2] == 0x01 && (mask & 4) && p + 12 < m.size()) { float x, y; std::memcpy(&x, &m[p + 4], 4); std::memcpy(&y, &m[p + 8], 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) unitPos[id] = {x, y, x, y, Now()}; }
+            else if (m[p + 2] == 0x01 && (mask & 4) && p + 12 < m.size()) { float x, y; std::memcpy(&x, &m[p + 4], 4); std::memcpy(&y, &m[p + 8], 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) SetPos(id, x, y, x, y); }
             return q;
         }
         const size_t e = UnitUpdate(b, 0);
@@ -263,6 +309,7 @@ public:
     std::map<uint32_t, int> unitHp_, unitMana_, unitHpMax_, unitManaMax_;
     std::map<uint32_t, int> unitPace_;   // id -> pace (section 6)
     std::map<uint32_t, uint32_t> unitTarget_; // who attacks whom (field 10 mode 3)
+    std::map<uint32_t, int> unitMode_;        // each unit's current order (field 10 mode: 0 none, 2 move to a point, 3 attack)
     std::map<uint32_t, int> unitAction_; // field 8's action code: 0xFE idle, 0x07 often in a fight
     double hostHurtAt_ = -99;
     std::set<uint32_t> dead_;
@@ -324,8 +371,8 @@ public:
                         unitAction_[id] = a;
                         if (a == 0xFF && id < 0x01000000u) { MarkDead(id); }
                     });
-                    if (k == 2 && !bad && n == 12) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) commit.push_back([this, id, x, y] { unitPos[id] = {x, y, x, y, Now()}; }); }
-                    if (k == 1 && !bad) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 2048 && y < 2048) commit.push_back([this, id, x, y] { unitPos[id] = {x, y, x, y, Now()}; }); }
+                    if (k == 2 && !bad && n == 12) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 4096 && y < 4096) commit.push_back([this, id, x, y] { SetPos(id, x, y, x, y); }); }
+                    if (k == 1 && !bad) { float x, y; std::memcpy(&x, v, 4); std::memcpy(&y, v + 4, 4); if (x > 0 && y > 0 && x < 2048 && y < 2048) commit.push_back([this, id, x, y] { SetPos(id, x, y, x, y); }); }
                 }
             } else if (k == 3) {
                 const int n = *delta(f, 1);
@@ -339,7 +386,8 @@ public:
                 float fl[4];
                 for (float& v : fl) std::memcpy(&v, delta(f, 4), 4);
                 uint32_t target; std::memcpy(&target, &fl[1], 4);
-                commit.push_back([this, id, mode, target] { if (mode == 3) unitTarget_[id] = target; else unitTarget_.erase(id); });
+                if (mode == 3 && std::getenv("UM_BOT_DUMP10")) { char b[200]; std::snprintf(b, sizeof b, "field 10 attack: unit %u fl %g %g %g %g (fl1 bits %u)", id, fl[0], fl[1], fl[2], fl[3], target); Log(b); } // research
+                commit.push_back([this, id, mode, target] { unitMode_[id] = mode; if (mode == 3) unitTarget_[id] = target; else unitTarget_.erase(id); });
                 int cx = -1, cy = -1;
                 for (int st = 0; st < hi * 256 + lo && !bad; ++st) {
                     const uint8_t* c = raw(2);
@@ -353,8 +401,8 @@ public:
                     axis((code >> 2) & 3, cy);
                     if (st == 0 && cx >= 0 && cy >= 0) { // where it is now, where it walks to (unknown when only the creation sent it)
                         const float x = (cx + 0.5f) / 2, y = (cy + 0.5f) / 2;
-                        const bool dest = fl[1] > 0 && fl[2] > 0;
-                        commit.push_back([this, id, x, y, tx = dest ? fl[1] / 2 : x, ty = dest ? fl[2] / 2 : y] { unitPos[id] = {x, y, tx, ty, Now()}; });
+                        const bool dest = mode == 2 && fl[1] > 0 && fl[2] > 0; // only a move order holds a destination: in an attack the field is the target's id
+                        commit.push_back([this, id, x, y, tx = dest ? fl[1] / 2 : x, ty = dest ? fl[2] / 2 : y] { SetPos(id, x, y, tx, ty); });
                     }
                 }
             }
@@ -369,6 +417,7 @@ public:
     // n x u32 unit id, u32 ?, u32 the target's id, u32 ?. On a monster: attack it (to confirm).
     void Attack(uint32_t target, uint32_t a = 0, uint32_t c = 0) {
         if (!worldUnit) return;
+        Log("order: attack unit " + std::to_string(target) + " [" + orderWhy_ + "] " + Where3()); orderWhy_ = "?";
         std::vector<uint8_t> m{0x31};
         Put32(m, 1); Put32(m, worldUnit); Put32(m, a); Put32(m, target); Put32(m, c);
         StreamMessage(m);
@@ -625,6 +674,27 @@ public:
                 if (bySpell) CastHealSpell(host); else UseQuickSlot(potionSlot, host); hostHealAt_ = hostHealCastAt_ = Now(); hostHealHp_ = hp; holdUntil_ = Now() + 1.5;
             }
         }
+        // Diagnostics for um-bot.log: what the SERVER thinks our hero is doing (an order the bot did not send shows here too), and a state line while fighting.
+        if (state == State::Accepted && worldUnit && Now() - diagAt_ > 0.5) {
+            diagAt_ = Now();
+            const auto md = unitMode_.find(worldUnit); const int mode = md == unitMode_.end() ? 0 : md->second;
+            float tx = 0, ty = 0;
+            const auto up = unitPos.find(worldUnit);
+            if (up != unitPos.end()) { tx = up->second.tx; ty = up->second.ty; }
+            if (mode != diagMode_ || (mode == 2 && std::hypot(tx - diagX_, ty - diagY_) > 1.5f)) {
+                diagMode_ = mode; diagX_ = tx; diagY_ = ty;
+                const auto tg = unitTarget_.find(worldUnit);
+                char b[160]; std::snprintf(b, sizeof b, "server order on our hero: %s%s destination (%.1f,%.1f) target %u; ", mode == 3 ? "attack" : mode == 2 ? "move" : "none", mode == 0 ? "" : "", tx, ty, tg == unitTarget_.end() ? 0u : tg->second);
+                Log(std::string(b) + Where3());
+            }
+            bool bitten = false;
+            for (const auto& kv : unitTarget_) if (kv.second == worldUnit && !dead_.count(kv.first) && !IsHero(kv.first)) bitten = true;
+            if ((mode == 3 || bitten || fightTarget_) && Now() - stateLogAt_ > 3) {
+                stateLogAt_ = Now();
+                char b[200]; std::snprintf(b, sizeof b, "state: hp %d/%d fightTarget %u bitten %d leashed %d host hp %d; ", Health(worldUnit), unitHpMax_.count(worldUnit) ? unitHpMax_.at(worldUnit) : 0, fightTarget_, bitten ? 1 : 0, leashed_ ? 1 : 0, Health(HostUnit()));
+                Log(std::string(b) + Where3());
+            }
+        }
         // Leash: past `leash` units from the host the fight is dropped and the bot walks back (the follow below) until it is near the host again.
         if (state == State::Accepted && worldUnit && Alive()) {
             float hx, hy, mx, my;
@@ -646,6 +716,23 @@ public:
             for (const auto& kv : unitTarget_) if (kv.second == worldUnit && !dead_.count(kv.first) && !IsHero(kv.first)) underAttack = true;
             if (ownTarget && !leashed_) { fightTarget_ = ownTarget; idleFrom_ = 0; }
             else if (idleFrom_ == 0) idleFrom_ = Now();
+        }
+        // Chase limit: the server keeps a hero on its attack order for as long as the target lives (a wounded monster that flees drags it away from the player). A target
+        // that attacks neither the host nor us is dropped when the bot or the target is farther than the chase limit from the host: the bot walks back (the follow below).
+        if (ownTarget && !leashed_) {
+            const uint32_t host = HostUnit();
+            const auto victim = unitTarget_.find(ownTarget);
+            const bool threat = victim != unitTarget_.end() && (victim->second == host || victim->second == worldUnit);
+            float tx, ty, hx, hy, mx, my;
+            if (!threat && host && Where(ownTarget, tx, ty) && Where(host, hx, hy) && Where(worldUnit, mx, my)) {
+                const float limit = std::max(10.0f, followDistance * 3);
+                const float dBot = std::hypot(mx - hx, my - hy), dTarget = std::hypot(tx - hx, ty - hy);
+                if (dBot > limit || dTarget > limit) {
+                    char b[160]; std::snprintf(b, sizeof b, "chase limit: dropping unit %u (it attacks neither the host nor us): bot %.1f, target %.1f from the host (limit %.1f)", ownTarget, dBot, dTarget, limit);
+                    Log(b);
+                    ignored_[ownTarget] = Now() + 15; fightTarget_ = 0; ownTarget = 0; followAt_ = 0; followX_ = -99;
+                }
+            }
         }
         const bool attacking = ownTarget != 0 && !leashed_;
         if (attacking) fighting = true;
@@ -708,10 +795,10 @@ public:
                     const bool walk = engageTries_ >= 2 && d > kAttackReach + 0.7f;
                     if (Now() - attackedAt_ > (walk ? 1.2 : 1.5)) {
                         if (engageTries_ >= 8) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_) + " times: leaving it for 30 s"); }
-                        else if (walk) { MoveTo(x + (mx - x) * kAttackReach / d, y + (my - y) * kAttackReach / d); attackedAt_ = Now(); attackedTarget_ = 0; ++engageTries_; }
+                        else if (walk) { orderWhy_ = "walk up to target " + std::to_string(t) + " (attack refused)"; MoveTo(x + (mx - x) * kAttackReach / d, y + (my - y) * kAttackReach / d); attackedAt_ = Now(); attackedTarget_ = 0; ++engageTries_; }
                         else {
                             Log(std::string("attack ") + std::to_string(t) + " at " + std::to_string(d) + " (try " + std::to_string(engageTries_ + 1) + ")");
-                            Attack(t);
+                            orderWhy_ = "fight: target " + std::to_string(t); Attack(t);
                             attackedAt_ = Now(); attackedTarget_ = t; ++engageTries_;
                         }
                     }
@@ -732,7 +819,7 @@ public:
                     followX_ = hx; followY_ = hy;
                     // to the point followDistance short of the host, on our side of it
                     const float k = known && away > 0 ? followDistance / away : 0.0f;
-                    MoveTo(hx + (mx - hx) * k, hy + (my - hy) * k);
+                    orderWhy_ = "follow the host"; MoveTo(hx + (mx - hx) * k, hy + (my - hy) * k);
                     if (std::getenv("UM_BOT_FIGHT")) Log("follow");
                 }
             }
@@ -887,6 +974,7 @@ private:
     double followAt_ = 0, fightAt_ = 0, attackedAt_ = 0;
     int paceSent_ = -1;
     uint32_t fightTarget_ = 0;
+    double diagAt_ = 0, stateLogAt_ = 0; int diagMode_ = -1; float diagX_ = 0, diagY_ = 0;
     double targetSince_ = 0, idleSince_ = 0, selfHurtAt_ = -99, idleFrom_ = 0; // idleFrom_: since when our hero attacks nothing (0: it does)
     uint32_t attackedTarget_ = 0;
     int targetHp_ = 0;
@@ -1155,7 +1243,7 @@ private:
     static void Put16(std::vector<uint8_t>& p, uint16_t v) { p.push_back(static_cast<uint8_t>(v)); p.push_back(static_cast<uint8_t>(v >> 8)); }
     static void Put32(std::vector<uint8_t>& p, uint32_t v) { for (int i = 0; i < 4; ++i) p.push_back(static_cast<uint8_t>(v >> (8 * i))); }
     static uint32_t Get32(const uint8_t* b) { uint32_t v; std::memcpy(&v, b, 4); return v; }
-    void Log(const std::string& s) { log.push_back(s); if (log.size() > 2000) log.erase(log.begin(), log.begin() + 500); }
+    void Log(const std::string& s) { BotLogLine(s); log.push_back(s); if (log.size() > 2000) log.erase(log.begin(), log.begin() + 500); }
     bool Fail(const std::string& why) { error = why; state = State::Failed; Log("failed: " + why); Close(); return false; }
     void Send(const std::vector<uint8_t>& p) {
         sendto(sock_, reinterpret_cast<const char*>(p.data()), static_cast<int>(p.size()), 0, reinterpret_cast<const sockaddr*>(&server_), sizeof server_);

@@ -4,7 +4,7 @@ A companion player for Evil Islands multiplayer. It joins the game as an ordinar
 network client, with no game copy and no second game instance. In the game it follows the human player,
 heals them and fights their targets. It levels up and keeps its own inventory like any player.
 
-**Status: 0.1.24.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
+**Status: 0.1.25.** It joins a game like a player (handshake, login with the server's key, its character from the `.mp`),
 enters the quest the host chose, follows the host at the host's pace, fights on top of the game's own fighting logic (a hero without orders defends itself and keeps its target, as for any player: the bot
 gives no order while its hero is attacking, helps the host against the units attacking it, orders attacks from where it stands - the server walks a
 bow or a sword into range - and only walks closer when an order is refused twice; a target refused eight times is ignored for 30 s), drinks the belt's healing potion below the set health, keeps
@@ -108,3 +108,8 @@ make all
 
 It uses um-multitool's vendored Dear ImGui and GLFW (`../um-multitool/vendor`). On Linux, GLFW picks X11 or
 Wayland by itself.
+
+## The log file
+
+`um-bot.log` is written next to the program (the previous run's log is kept as `um-bot.log.1`): every line of the window's log with the clock time, each order the bot sends with the reason (`order: move to ... [follow the host]`, `order: attack unit ... [fight: target ...]`), what the SERVER says our hero is doing (`server order on our hero: ...`, so an order the bot did not send shows too), and every 3 s in a fight a `state:` line with the positions and the distance to the host. Send it with a bug report. If shopping is skipped it says why (`shop skipped: ...`), and a shop visit that buys nothing lists its reasons.
+
