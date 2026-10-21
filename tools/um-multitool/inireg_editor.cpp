@@ -6,7 +6,7 @@
 // "Keys" view groups the lines in sections, with each key and value in its own box; the "Text" view is the plain text. Saving to a name ending in .reg
 // writes the binary format again (the keys' types come from the shape of their values: a number, a number with a decimal point, anything else; a key
 // repeated in a section is an array), any other name writes the text. A .reg that would not come back byte for byte from its text says so when it opens.
-// Texts are shown as UTF-8; the file's own encoding (CP1251, as the game's) is kept when saving.
+// Texts are shown as UTF-8; the file is saved in the encoding chosen in the encoding box (CP1251, as the game's, for a .reg; a text file keeps UTF-8 or CP1251 as found).
 
 #include "inireg_editor.hpp"
 
@@ -19,6 +19,7 @@
 #include "imgui.h"
 
 #include "cp1251.hpp"
+#include "textenc.hpp"
 #include "i18n.hpp"
 #include "inireg_model.hpp"
 #include "subtools.hpp"
@@ -36,7 +37,8 @@ struct Doc {
     std::string path;
     FileKind kind = FileKind::None;
     std::vector<std::string> lines;
-    bool crlf = false, cp1251 = false, bom = false;
+    bool crlf = false, bom = false;
+    textenc::Enc enc = textenc::Enc::Utf8;
     bool dirty = false;
     std::string warning;          // opened with a caveat (does not round trip)
     size_t fileSize = 0;
@@ -86,20 +88,26 @@ bool HasExtension(const std::string& path, const char* ext) { return LowerCopy(f
 void SyncFromText() { g_doc.lines = Split(g_text); }
 void SyncToText() { g_text = Join(g_doc.lines, g_doc.crlf); }
 
+// Reads the same bytes in another encoding (what the text is in the old one, as the new one): for a file whose letters show as garbage.
+void ChangeEncoding(textenc::Enc enc) {
+    if (g_view == 1) SyncFromText();
+    const std::vector<uint8_t> bytes = textenc::Encode(g_doc.enc, Join(g_doc.lines, g_doc.crlf));
+    g_doc.enc = enc;
+    g_doc.lines = Split(textenc::Decode(enc, bytes));
+    if (g_view == 1) SyncToText();
+    g_editId = 0;
+}
+
 // The editor's text as the bytes of a file of that kind; `lost` counts the characters the encoding cannot hold.
 bool Encode(FileKind kind, std::vector<uint8_t>& out, int& lost, std::string& err) {
     const std::string text = Join(g_doc.lines, g_doc.crlf);
     lost = 0;
-    std::vector<uint8_t> bytes;
-    if (kind == FileKind::Reg || g_doc.cp1251) {
-        bytes = cp1251::EncodeCp1251(text);
+    std::vector<uint8_t> bytes = textenc::Encode(g_doc.enc, text);
+    if (g_doc.enc != textenc::Enc::Utf8) {
         for (size_t i = 0; i < bytes.size(); ++i) if (bytes[i] == '?') ++lost;
         for (char c : text) if (c == '?') --lost;
         if (lost < 0) lost = 0;
-    } else {
-        bytes.assign(text.begin(), text.end());
-        if (g_doc.bom) bytes.insert(bytes.begin(), {0xEF, 0xBB, 0xBF});
-    }
+    } else if (g_doc.bom && kind == FileKind::Ini) bytes.insert(bytes.begin(), {0xEF, 0xBB, 0xBF});
     if (kind == FileKind::Reg) {
         std::vector<uint8_t> reg;
         if (!IniRegTextToReg(std::string(bytes.begin(), bytes.end()), reg)) { err = i18n::Tr("The text could not be made into a .reg"); return false; }
@@ -119,8 +127,8 @@ bool LoadFile(const std::string& path) {
         std::string ini, err;
         if (!IniRegRegToText(bytes, ini, err)) { Say(std::string(i18n::Tr("Not a readable .reg: ")) + err, true); return false; }
         d.kind = FileKind::Reg;
-        d.cp1251 = true;
-        text = cp1251::DecodeCp1251(reinterpret_cast<const uint8_t*>(ini.data()), ini.size());
+        d.enc = textenc::Enc::Cp1251;
+        text = textenc::Decode(d.enc, std::vector<uint8_t>(ini.begin(), ini.end()));
         std::vector<uint8_t> back;
         if (!IniRegTextToReg(ini, back) || back != bytes)
             d.warning = i18n::Tr("This .reg does not come back byte for byte from its text (the types or the order of some keys may change when it is saved).");
@@ -130,7 +138,7 @@ bool LoadFile(const std::string& path) {
         if (bytes.size() >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF) { d.bom = true; skip = 3; }
         const std::vector<uint8_t> body(bytes.begin() + static_cast<long>(skip), bytes.end());
         if (IsValidUtf8(body)) text.assign(body.begin(), body.end());
-        else { d.cp1251 = true; text = cp1251::DecodeCp1251(body.data(), body.size()); }
+        else { d.enc = textenc::Enc::Cp1251; text = textenc::Decode(d.enc, body); }
     }
     d.crlf = UsesCrlf(text);
     d.lines = Split(text);
@@ -529,7 +537,7 @@ void DrawTab() {
     ImGui::EndDisabled();
     ImGui::SameLine();
     if (ImGui::Button("New")) {
-        Doc d; d.kind = FileKind::Ini; d.cp1251 = true; g_doc = d; g_text.clear(); g_selected = 0; g_editId = 0; g_pathBuf[0] = '\0'; Say(i18n::Tr("A new empty file: add a section, then save it with Save as."));
+        Doc d; d.kind = FileKind::Ini; d.enc = textenc::Enc::Cp1251; g_doc = d; g_text.clear(); g_selected = 0; g_editId = 0; g_pathBuf[0] = '\0'; Say(i18n::Tr("A new empty file: add a section, then save it with Save as."));
     }
     ImGui::SameLine();
     if (ImGui::Button("Convert...")) ImGui::OpenPopup("Convert INI <-> REG files");
@@ -547,7 +555,7 @@ void DrawTab() {
     for (const Section& s : sections) keys += s.keys;
     ImGui::TextDisabled("%s%s  |  %s  |  %zu %s, %d %s",
                         i18n::Tr(g_doc.kind == FileKind::Reg ? "REG (binary)" : "INI (text)"), g_doc.dirty ? " *" : "",
-                        g_doc.cp1251 ? "CP1251" : "UTF-8", sections.size(), i18n::Tr("sections"), keys, i18n::Tr("keys"));
+                        textenc::Name(g_doc.enc), sections.size(), i18n::Tr("sections"), keys, i18n::Tr("keys"));
     if (!g_doc.warning.empty()) { ImGui::SameLine(); ImGui::TextColored(ImVec4(0.95f, 0.75f, 0.3f, 1), "  %s", g_doc.warning.c_str()); }
     if (!g_status.empty()) ImGui::TextColored(g_statusError ? ImVec4(0.95f, 0.45f, 0.4f, 1) : ImVec4(0.6f, 0.85f, 0.6f, 1), "%s", g_status.c_str());
 
@@ -556,6 +564,22 @@ void DrawTab() {
     if (ImGui::RadioButton("Keys", view == 0)) view = 0;
     ImGui::SameLine();
     if (ImGui::RadioButton("Text", view == 1)) view = 1;
+    ImGui::SameLine(0, 24.0f);
+    ImGui::AlignTextToFramePadding();
+    ImGui::TextUnformatted(i18n::Tr("Encoding"));
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", i18n::Tr("How the file's bytes are read and written. If letters show as garbage, try another one (the game's own files use CP1251; some comments are in CP866)."));
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(110.0f);
+    {
+        i18n::Verbatim verbatim;
+        if (ImGui::BeginCombo("##enc", textenc::Name(g_doc.enc))) {
+            for (int i = 0; i < textenc::kCount; ++i) {
+                const auto e = static_cast<textenc::Enc>(i);
+                if (ImGui::Selectable(textenc::Name(e), e == g_doc.enc) && e != g_doc.enc) ChangeEncoding(e);
+            }
+            ImGui::EndCombo();
+        }
+    }
     if (view != g_view) {
         if (view == 1) SyncToText(); else SyncFromText();
         g_view = view; g_editId = 0;
