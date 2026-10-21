@@ -192,7 +192,7 @@ const SettingDef kSettings[] = {
     BoolSetting("MSAA", &g_enableMsaa, true, true,
         "; Sharp anti-aliasing (MSAA) through D7VK: 4x, or 2x if the GPU has no 4x (automatic). No blur; (true/false)"),
     BoolSetting("UI_QUAD_BLIT", &g_uiQuadBlit, true, true,
-        "; Draw the interface and the software cursor as quads, so D7VK does not read the whole frame back every frame. Experimental; (true/false)"),
+        "; Draw the interface and the software cursor as quads instead of blitting them onto the frame: saves ~3 ms per frame on D7VK, ~6 ms with the patched one (it needs this). (true/false)"),
     BoolSetting("DLL_SERVER_ENABLED", &g_dllServerEnabled, false, true,
         "; Let um-multitool connect to the running game (this computer only, no password: it can read the game's memory). Restart needed; (true/false)",
         "; -- DLL server --"),
