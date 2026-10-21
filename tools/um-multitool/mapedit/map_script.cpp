@@ -803,8 +803,9 @@ private:
         const Node& made = g_.nodes[static_cast<size_t>(idx)];
         const ImVec2 a = OutSocket(made), b = InSocket(g_.nodes[static_cast<size_t>(to)], row);
         g_.wires.push_back({a, b, ImGui::GetColorU32(TypeColor(made.outType == '?' ? g_.nodes[static_cast<size_t>(to)].rows[row].type : made.outType)), false});
-        const float fed = Feed(e.args, idx, made.pos.x - gapX, top);
-        return std::max(made.size.y, fed);
+        const float height = made.size.y, left = made.pos.x; // read before Feed: it adds nodes, and the vector may move (`made` would dangle: a crash on Windows)
+        const float fed = Feed(e.args, idx, left - gapX, top);
+        return std::max(height, fed);
     }
 
     // A statement's own node (not placed yet), and the expressions feeding its rows.
@@ -1038,6 +1039,12 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         view.pan = ImVec2(m.x - at.x * z, m.y - at.y * z);
     }
     if (hovered && ImGui::IsKeyPressed(ImGuiKey_Home, false)) view.placed = false;
+    { // The graph cannot be lost: a quarter of the view (or all of a graph smaller than that) always stays over it. Dragged far to the right the canvas used to show nothing at all.
+        const float vw = size.x / view.zoom, vh = size.y / view.zoom;
+        const float mx = std::min(0.25f * vw, std::max(0.0f, g.max.x - g.min.x)), my = std::min(0.25f * vh, std::max(0.0f, g.max.y - g.min.y));
+        view.pan.x = std::clamp(view.pan.x, -(g.max.x - mx) * view.zoom, size.x - (g.min.x + mx) * view.zoom);
+        view.pan.y = std::clamp(view.pan.y, -(g.max.y - my) * view.zoom, size.y - (g.min.y + my) * view.zoom);
+    }
     const float z = view.zoom;
     auto S = [&](ImVec2 p) { return ImVec2(origin.x + view.pan.x + p.x * z, origin.y + view.pan.y + p.y * z); };
 
@@ -1052,6 +1059,8 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
             for (float y = sy; y < size.y; y += step) dl->AddLine(ImVec2(origin.x, origin.y + y), ImVec2(origin.x + size.x, origin.y + y), IM_COL32(40, 40, 40, 255));
         }
     }
+    const char* const emptyText = i18n::Tr("Nothing in this part of the graph");
+    const char* const nearestText = i18n::Tr("Go to the nearest node");
     const i18n::Verbatim verbatim; // everything drawn below is the script's own words
     ImFont* font = ImGui::GetFont();
     const float fs = F * z;
@@ -1088,6 +1097,7 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
     }
     const int hoverIndex = hover ? static_cast<int>(hover - g.nodes.data()) : -1;
     // wires
+    int drawn = 0; // the nodes that really reached the canvas (the grid also lists what only has its bounding box in view, and a call's wire can cross an empty part)
     for (int wi : inWires) {
         const Wire& w = g.wires[static_cast<size_t>(wi)];
         const ImVec2 a = S(w.a), b = S(w.b);
@@ -1119,6 +1129,7 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         const Node& n = g.nodes[static_cast<size_t>(ni)];
         const ImVec2 a = S(n.pos), b = S(ImVec2(n.pos.x + n.size.x, n.pos.y + n.size.y));
         if (!visible(ImVec2(a.x - r, a.y), ImVec2(b.x + r, b.y))) continue;
+        ++drawn;
         const bool comment = n.kind == Node::Comment;
         const ImVec4 hc = HeaderColor(n.kind);
         if (b.x - a.x < 3.0f) { dl->AddRectFilled(a, b, ImGui::GetColorU32(hc)); continue; } // a speck: its colour
@@ -1169,6 +1180,25 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
     }
     if (hover) dl->AddRect(S(hover->pos), S(ImVec2(hover->pos.x + hover->size.x, hover->pos.y + hover->size.y)), IM_COL32(255, 255, 255, 220), corner, 0, 1.5f);
     dl->Flags = dlFlags;
+    if (drawn == 0 && !g.nodes.empty()) { // dragged away from everything: say so, and a way back
+        const ImVec2 ts = ImGui::CalcTextSize(emptyText);
+        const ImVec2 c(origin.x + size.x * 0.5f, origin.y + size.y * 0.5f);
+        dl->AddText(ImVec2(c.x - ts.x * 0.5f, c.y - ts.y - 8.0f), IM_COL32(190, 190, 190, 255), emptyText);
+        const ImVec2 bs(ImGui::CalcTextSize(nearestText).x + 24.0f, ImGui::GetFrameHeight()), bp(c.x - bs.x * 0.5f, c.y + 2.0f); // a button drawn by hand: the canvas already owns the mouse
+        const bool over = hovered && ImGui::IsMouseHoveringRect(bp, ImVec2(bp.x + bs.x, bp.y + bs.y));
+        dl->AddRectFilled(bp, ImVec2(bp.x + bs.x, bp.y + bs.y), over ? IM_COL32(75, 100, 140, 255) : IM_COL32(55, 70, 100, 255), 3.0f);
+        dl->AddText(ImVec2(bp.x + 12.0f, bp.y + (bs.y - ts.y) * 0.5f), IM_COL32(235, 235, 235, 255), nearestText);
+        if (over && ImGui::IsMouseReleased(ImGuiMouseButton_Left) && !dragged) {
+            const float cx = (size.x * 0.5f - view.pan.x) / z, cy = (size.y * 0.5f - view.pan.y) / z;
+            float best = 1e30f; ImVec2 at(cx, cy);
+            for (const Node& n : g.nodes) {
+                const ImVec2 m(n.pos.x + n.size.x * 0.5f, n.pos.y + n.size.y * 0.5f);
+                const float d = (m.x - cx) * (m.x - cx) + (m.y - cy) * (m.y - cy);
+                if (d < best) { best = d; at = m; }
+            }
+            view.pan = ImVec2(size.x * 0.5f - at.x * z, size.y * 0.5f - at.y * z);
+        }
+    }
     dl->PopClipRect();
     if (text == false && hovered) ImGui::SetTooltip("%s", i18n::Tr("Zoom in to read the nodes (mouse wheel)"));
 
