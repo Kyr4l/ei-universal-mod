@@ -7,7 +7,7 @@
 // Patch the executable's import address table instead of replacing kernel32
 // exports globally. This limits logging to calls made through game.exe's
 // imported file APIs and leaves other processes untouched.
-static bool PatchImportedFunction(HMODULE module, const char* functionName,
+bool PatchImportedFunction(HMODULE module, const char* functionName,
     ULONG_PTR replacement, ULONG_PTR* original) {
     if (!module || !functionName || !replacement || !original) {
         return false;
@@ -196,6 +196,7 @@ void InstallFileIoHooks() {
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreate), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreate)) || hooked;
     hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
+    InstallWindowHooks();
     ApplyMsaa();
     ChainloadDirectDraw();
     if (!hooked) {
