@@ -17,9 +17,9 @@ it cannot show the frame-rate gain; that needs a run on a real display (um.dll p
 lighting kernel on: **11.8 ms (84 FPS) with the stock D7VK, 6.9 - 7.4 ms (135 - 145 FPS) with this patch.** `BltFast` 4.46 ms -> 0.01 ms: the stock build waited
 3.8 ms for the GPU in the download and copied the frame (0.7 ms). Screenshots of the same scene differ only where things move (idle characters, sparks, water, cursor).
 
-**Ready-made build: `Universal-Mod/d7vk/ddraw.dll` (8.9 MB, stripped, win32; D7VK 3.1.1 + `present-before-download.patch`, built with the submodule branch heads of 2026-10-21, not the pinned commits).**
-um.dll 1.4.12 loads it when um.cfg says `DDRAW_DLL="d7vk\ddraw.dll"` (a path relative to the mod folder, or absolute): the game folder is not touched, its own `ddraw.dll` stays loaded but unused
-(um.log: "DDRAW_DLL: DirectDraw comes from ..."). Without um.dll, copy it over `Engine/ddraw.dll` (keep the old one; the stock file is D7VK 3.1.1).
+**Ready-made build: `Universal-Mod/d7vk.dll` (8.9 MB, stripped, win32; D7VK 3.1.1 + `present-before-download.patch`, built with the submodule branch heads of 2026-10-21, not the pinned commits).**
+um.dll 1.4.13 loads it when um.cfg says `DDRAW_DLL="d7vk.dll"` (a path relative to the mod folder, or absolute): the game folder is not touched, its own `ddraw.dll` stays loaded but unused
+(um.log: "DDRAW_DLL: DirectDraw comes from ..."; if the file cannot be loaded, lacks the exports, or D7VK cannot create a device (no Vulkan), um.dll logs an error and uses the game folder's ddraw.dll). Without um.dll, copy it over `Engine/ddraw.dll` (keep the old one; the stock file is D7VK 3.1.1).
 Undo = empty `DDRAW_DLL` (or put the old file back). Needs `UI_QUAD_BLIT=true` in um.cfg (the default) so that the interface does not mark the frame as changed.
 
 **Build (what was done here).** meson 1.12 (`pip install meson`), the Vulkan-Headers and SPIRV-Headers checkouts in `include/vulkan`
