@@ -22,10 +22,12 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.4.0";
+static const char* const kEngineVersion = "0.5.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
+extern "C" void __attribute__((thiscall)) UmCameraTick(void*, float);  // camera_smooth.cpp
+extern "C" void __attribute__((thiscall)) UmCameraFrame(void*, float);
 extern "C" void __attribute__((thiscall)) UmFpLight(void*, const char*, const char*, unsigned*, const unsigned short*, int, void* const*, int, const float*); // fp_light.cpp
 struct sockaddr; struct sockaddr_in; struct GameBuffer; // net_udp.cpp
 extern "C" bool __attribute__((thiscall)) UmNetSendTo(unsigned* self, sockaddr* to, GameBuffer* buffer);
@@ -73,10 +75,52 @@ static const UmModuleFunction kModuleFunctions[] = {
     { nullptr, nullptr, 0, nullptr, 0, {} }
 };
 
+extern "C" void UmEngineLog(const char* format, ...);
+
+// Call sites inside game.exe (a `call rel32` is rewritten to call the replacement): all sites of one name are patched together, or none.
+struct UmCallSite {
+    const char* name;        // the key in um-engine.cfg
+    unsigned long address;   // the call instruction
+    void* replacement;
+    int required;            // as in UmEngineFunction
+    unsigned char expect[5]; // the original instruction
+};
+static const UmCallSite kCallSites[] = {
+    // camera_smooth.cpp: the camera's fixed-tick lump (18 Hz) spread over the frames, the frame time measured precisely
+    { "CCamera::SmoothUpdate", 0x004573A9, reinterpret_cast<void*>(&UmCameraTick),  -1, {0xE8, 0x82, 0x87, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x0045756D, reinterpret_cast<void*>(&UmCameraFrame), -1, {0xE8, 0xBE, 0x85, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), -1, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
+    { nullptr, 0, nullptr, 0, {} }
+};
+
+static void InstallCallSites(const std::map<std::string, bool>& config) {
+    std::map<std::string, bool> done;
+    for (const UmCallSite& site : kCallSites) {
+        if (!site.name || done.count(site.name)) continue;
+        done[site.name] = true;
+        const auto it = config.find(site.name);
+        if (!(site.required > 0 || (it != config.end() ? it->second : site.required >= 0))) continue;
+        bool match = true;
+        for (const UmCallSite& other : kCallSites)
+            if (other.name && std::string(other.name) == site.name && memcmp(reinterpret_cast<void*>(other.address), other.expect, 5) != 0) match = false;
+        if (!match) { UmEngineLog("um-engine: %s skipped, game.exe has other code at its call sites (another build)", site.name); continue; }
+        for (const UmCallSite& other : kCallSites) {
+            if (!other.name || std::string(other.name) != site.name) continue;
+            unsigned char* at = reinterpret_cast<unsigned char*>(other.address);
+            DWORD old = 0;
+            if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) continue;
+            const long rel = reinterpret_cast<long>(other.replacement) - reinterpret_cast<long>(at + 5);
+            memcpy(at + 1, &rel, 4);
+            VirtualProtect(at, 5, old, &old);
+            FlushInstructionCache(GetCurrentProcess(), at, 5);
+        }
+        UmEngineLog("um-engine: %s installed (call sites in game.exe)", site.name);
+    }
+}
+
 static HMODULE g_module = NULL;
 static std::vector<UmModuleFunction> g_enabledModule;
 static HANDLE g_moduleThread = NULL;
-extern "C" void UmEngineLog(const char* format, ...);
 
 // Waits for each library to be loaded by the game, then redirects its functions with a jump (the library's code is not running yet:
 // the game loads it when it starts the renderer, long before the first frame).
@@ -160,6 +204,12 @@ static std::map<std::string, bool> ReadConfig() {
             missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
             values[fn.name] = on;
         }
+    for (const UmCallSite& fn : kCallSites)
+        if (fn.name && !values.count(fn.name)) {
+            const bool on = fn.required >= 0;
+            missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
+            values[fn.name] = on;
+        }
     for (const UmModuleFunction& fn : kModuleFunctions)
         if (fn.name && !values.count(fn.name)) {
             const bool on = fn.required >= 0;
@@ -197,6 +247,7 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         const auto it = config.find(fn.name);
         if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabledModule.push_back(fn);
     }
+    InstallCallSites(config);
     if (!g_enabledModule.empty() && !g_moduleThread) g_moduleThread = CreateThread(NULL, 0, ModulePatchThread, NULL, 0, NULL);
     if (count) *count = static_cast<int>(g_enabled.size());
     return g_enabled.empty() ? nullptr : g_enabled.data();
