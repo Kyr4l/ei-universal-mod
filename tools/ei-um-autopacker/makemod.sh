@@ -545,6 +545,10 @@ compile_mod_dll() {
     i686-w64-mingw32-g++ -shared -o "$MOD_DIR/um-engine.dll" um-engine/*.cpp -I um-engine \
         -std=c++17 -O3 -flto -static -s -Wall -Wextra -Wno-unused-parameter -lws2_32
     log_ok "um-engine.dll built successfully"
+    # The patched D7VK (um.cfg DDRAW_DLL="d7vk\ddraw.dll"): a prebuilt file kept in resources/universal-mod/d7vk (see its README), so the release sync below does not delete it.
+    mkdir -p "$MOD_DIR/d7vk"
+    cp -f d7vk/ddraw.dll d7vk/README.md "$MOD_DIR/d7vk/"
+    log_ok "d7vk/ddraw.dll copied"
 }
 
 sync_to_release_directory() {
@@ -554,6 +558,7 @@ sync_to_release_directory() {
             --exclude "saves" \
             --exclude "mp" \
             --exclude "um.cfg" \
+            --exclude "um-engine.cfg" \
             --exclude "um.log" \
             --delete \
             "$MOD_DIR/" "$RELEASE_TARGET_DIR"
