@@ -19,6 +19,28 @@ Read from game.exe (the AI module 0x5C8000 - 0x5D3000: `StimulusMap`, `AiMemory`
 
 (The skill / HP / mana tables of the same block: +0x5C.. HP 25, 30, 50, 1.1, 1.61; +0x70.. mana the same; skill 50, 5; ability base 1.95; exp 200, 1.61: see `docs/game-memory.md`.)
 
+## Who reads the [Logic] values (found 2026-10-21 by scanning game.exe for the globals 0x7C53FC..0x7C5428)
+
+| value (global) | read by |
+|---|---|
+| GuardStayTime (0x7C53FC) | `GuardPoint_Init` 0x5D0B70, `Brain::AddLogicStand` 0x5D6300, `AiLogicSentry::Update` 0x5D1B70 |
+| SentryStayTime (0x7C5400) | `AiLogicSentry::Update` |
+| FollowMinDist / FollowMaxDist (0x7C5404 / 08) | `Brain::TickFollow` 0x5D6F90 (a follower walks when farther than Max, stops inside Min), `Brain::IsNearLeader` 0x5D4860 (Max) |
+| GuardRadius (0x7C540C) | `GuardPoint_Init`, `Brain::AddLogicStand` |
+| CallForHelpRadius / ...Default (0x7C5410 / 14) | `Brain::BuildFromLogicSlot` 0x5D6630, `Brain::AddLogicSentry` 0x5D65B0, `Brain::Read` 0x5D8310 (a unit whose own radius equals the default gets the first one) |
+| FollowLimit (0x7C5418) | **no reader found** (the 15-unit chase limit is not this value) |
+| PlayerCallForHelp (0x7C541C) | `Brain::CollectCallers` 0x5D3F50 |
+| RangedRunDist / RangedAttackDist (0x7C5420 / 24) | only `AiLogicFear::Enter` 0x5D2960 (the logic of a monster that flees: it keeps 4 away and shoots from 7) |
+| SwarmRadius (0x7C5428) | `AiLogicPlayer::Regroup` 0x5D4170 |
+
+## The logic of a player's own units (`AiLogicPlayer`, brain kind 6): what the game does for a hero that has no order
+
+`AiLogicPlayer::Update` 0x5D4A90 runs for every hero. The unit field +0x438 is the **"battle" button** of the hero panel (`CUIWindow742530::OnSelect` 0x649810 sends client message 0x3B: u32 unit, u8 0 or 1; the unit's default is 1; the value is stored in the party record). The player's mode +0x5120 (set by `CPlayerServer::SendMsg60_PartyStatus`) is 1 when a hero is hurt, 2 when a hero of the party is fighting.
+- With +0x438 == 1 the idle hero runs `Regroup`: it keeps its current target while `TryAttackTarget` still allows it; else it collects the **units that attack it** (`AiMemory::CollectAttackers`; around the destination within SwarmRadius 10 while it walks to a point, else around itself), drops the ones farther than 1.1 x their own sight range, adds the **units attacking any other hero of the same player within PlayerCallForHelp 16** (`CollectCallers`: same player id only), scores them with `Brain::ChooseTarget` and orders `QueueOrderAttack(target, mode 6)`; when the player's mode is not 2 the hero's followers stop following first.
+- So the game's defence reacts to attackers of the hero itself and of the same player's heroes. A **host's** attackers are another player's business: the bot's hero never reacts to them by itself, and a second player in a session is not a "caller".
+- Any order the client sends (move, follow walk, attack) replaces what `Regroup` chose, so an order every 2 s (um-bot's follow) keeps the hero from ever fighting by itself.
+- The attack order itself: the server walks the hero into range (`ApproachTarget` 0x54D140 / `OrderReachDistance` 0x54C070: weapon range, not melee: a bow needs no walk to 3 units); `CanReachTarget` lets ranged attackers (weapon type 5 / 6) attack any size, melee ones only targets of size < 1.5. The order is refused when the target is not in the hero's known list (see multiplayer-protocol.md).
+
 ## Perception (`AiMemory::ComputeThreatFactors` 0x5CB850, `StimulusMap`)
 
 A monster knows a unit once a *factor* drops below 1; the factors are distance / (range x modifiers), kept at most 3, one per sense:
