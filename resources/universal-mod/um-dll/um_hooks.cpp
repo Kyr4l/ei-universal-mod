@@ -127,6 +127,29 @@ static VOID WINAPI HookedExitProcessCrt(UINT code) {
     g_originalExitProcessCrt(code);
 }
 
+// DDRAW_DLL: loads that DirectDraw wrapper by its full path and makes the game's DirectDrawCreate / DirectDrawCreateEx calls (already routed through
+// um.dll's hooks) go to it. Runs before the game's first DirectDrawCreate; any failure keeps the ddraw.dll of the game folder.
+static void ChainloadDirectDraw() {
+    if (!g_ddrawDll[0]) return;
+    std::string path = g_ddrawDll;
+    const bool absolute = path.size() > 1 && (path[1] == ':' || path[0] == '\\' || path[0] == '/');
+    if (!absolute) {
+        char self[MAX_PATH] = "";
+        if (!g_dllModule || GetModuleFileNameA(g_dllModule, self, sizeof(self)) == 0) return;
+        std::string dir = self;
+        const size_t slash = dir.find_last_of("\\/");
+        path = (slash == std::string::npos ? std::string() : dir.substr(0, slash + 1)) + path;
+    }
+    HMODULE module = LoadLibraryExA(path.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
+    if (!module) { LogLine("ERROR", "DDRAW_DLL %s could not be loaded (error %lu); the game's ddraw.dll is used", path.c_str(), GetLastError()); return; }
+    FARPROC create = GetProcAddress(module, "DirectDrawCreate"), createEx = GetProcAddress(module, "DirectDrawCreateEx");
+    if (!create || !createEx) { LogLine("ERROR", "DDRAW_DLL %s lacks DirectDrawCreate / DirectDrawCreateEx; the game's ddraw.dll is used", path.c_str()); FreeLibrary(module); return; }
+    memcpy(&g_originalDirectDrawCreate, &create, sizeof(create));
+    memcpy(&g_originalDirectDrawCreateEx, &createEx, sizeof(createEx));
+    g_chainedDdraw = module;
+    LogLine("INFO", "DDRAW_DLL: DirectDraw comes from %s", path.c_str());
+}
+
 void InstallFileIoHooks() {
     HMODULE process = GetModuleHandleA(NULL);
     if (!process) {
@@ -153,6 +176,7 @@ void InstallFileIoHooks() {
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreate), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreate)) || hooked;
     hooked = PatchImportedFunction(process, "DirectDrawCreateEx",
         reinterpret_cast<ULONG_PTR>(HookedDirectDrawCreateEx), reinterpret_cast<ULONG_PTR*>(&g_originalDirectDrawCreateEx)) || hooked;
+    ChainloadDirectDraw();
     if (!hooked) {
         // These hooks back file-I/O logging, .mob validation, and the overlay's
         // FPS counter, so a generic success line here would not indicate which

@@ -616,7 +616,7 @@ static void IdentifyDirectDrawBackend() {
     if (InterlockedCompareExchange(&g_directDrawBackendIdentified, 1, 0) != 0) {
         return;
     }
-    HMODULE ddrawModule = GetModuleHandleA("ddraw.dll");
+    HMODULE ddrawModule = g_chainedDdraw ? g_chainedDdraw : GetModuleHandleA("ddraw.dll");
     DirectDrawEnumerateAFunction enumerate = NULL;
     if (ddrawModule) {
         FARPROC enumerateAddress = GetProcAddress(ddrawModule, "DirectDrawEnumerateA");

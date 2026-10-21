@@ -201,6 +201,10 @@ const SettingDef kSettings[] = {
         "; copies, so the game's own pictures are never GPU sources and its drawing into them\n"
         "; never waits for the GPU (D7VK makes it wait 1-4 ms otherwise). Experimental; (true/false)",
         "; -- Performance (see the profiler) --"),
+    StringSetting("DDRAW_DLL", g_ddrawDll, sizeof(g_ddrawDll), "", true, false,
+        "; A DirectDraw wrapper (D7VK's ddraw.dll) to use instead of the one in the game's Engine folder: a path\n"
+        "; relative to this folder, or absolute (e.g. d7vk\\ddraw.dll). The game's own ddraw.dll stays loaded but\n"
+        "; unused. Empty = the game's. The patched D7VK in tools/d7vk presents the frame without reading it back."),
     BoolSetting("UI_QUAD_BLIT", &g_uiQuadBlit, false, true,
         "; The interface panels the game blits onto the frame are drawn as textured quads on\n"
         "; the 3D device instead. A Blt onto the frame makes D7VK read the whole 1920x1080 frame\n"
