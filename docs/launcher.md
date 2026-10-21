@@ -1,0 +1,73 @@
+# um-launcher: the mod launcher
+
+`tools/um-launcher` replaces EIStarter OBT-1 (a closed-source .NET program, slow to open under Wine, and a registry setup that many users get wrong).
+C++17, Dear ImGui + GLFW like um-multitool; one 32-bit `um-launcher.exe` (GLFW 3.3: runs on Windows XP and newer, and under Wine in the prefix of
+the game). It starts `Engine\game.exe` with a mod and shows "Starting..." until the game window is up.
+
+## For users
+
+1. Unpack the launcher package (`tools/um-launcher/package.sh` builds `dist/um-launcher-<version>.zip`) anywhere you can write to.
+2. Unpack a mod (Universal-Mod ...) into its `mods\` folder.
+3. Run `um-launcher.exe` (Linux: `wine um-launcher.exe` in the game's prefix), choose the mod, **Play**.
+
+The first start asks for the folder of the original game (the one with `game.exe` and `res`) when it cannot find it (`C:\Evil Islands`, the
+installer's registry key, GOG's folders). There is no `Init Starter Registry.bat`, no `path` value to add by hand, no DLL override to set, and no
+.NET / vcrun2022 to install (EIStarter 2 needed all of them).
+
+The window is EIStarter's: the same skins (`design\<lang>\*.png|bmp`, `font.otf`, `click.wav`), languages (`lang\<code>\lang.ini`, UTF-16) and mod
+folders (`mods\<mod>\config.reg`, or `mod.config` with the Utils option "Read mods from mod.config"), so what was made for EIStarter works.
+Buttons: Play, Options, Readme (`lang\<lang>\readme.txt`), Website, Uninstall (`uninstall.exe` when there is one), Exit, the mod chooser, the (i)
+button (mod information, its readme / changelog, and the mod's own script button), Lang (cycles the languages). Enter = Play, Esc = Exit.
+
+**Options** (the tabs of EIStarter's dialog): Graphics (adapter, resolution, mip-mapping, antialiasing, dithering, FPS independent cursor,
+filtering, textures, shadows, terrain LOD, lighting / shadowing frequency, movies, audio), Addon (landscape / objects draw radius, pause when
+minimized, addon.log levels), Multiplayer (console, "do not load .MQ from the host", second speed), Camera (every camera value), Paths (game folder,
+resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log). New: **Window mode** = Fullscreen /
+Windowed / **Borderless window**. In EIStarter's Windowed mode the game is a frameless window that minimizes and pauses when it loses the focus
+(a multiplayer game then desyncs); Borderless keeps it running and keeps the mouse inside. EIStarter's presets (disabled there) and its "Russian
+charset fix for WinXP" checkbox (it did nothing) are not carried over.
+
+Files beside the exe: `launcher.cfg` (all settings), `launcher.log` (what the launcher did, the replacement of `EIStarter With Debug.bat`),
+`addon.log` (written by addon.dll). `starter.config` of EIStarter is imported on the first start, and so are its registry settings.
+
+## How the game gets its mod (verified by decompiling EIStarter and by tests in a fresh Wine prefix)
+
+Play = start `Engine\<ExeName>` (`game.exe`) with `Engine\` as the working directory; nothing is injected by the starter. The rest is the loader chain:
+
+- `Engine\dinput.dll` ("Addon Loader") is an override of DirectInput. It reads `HKCU\Software\Gipat.Ru\EI_Starter\path` (the starter's folder) and
+  loads `addon.dll` from there. Without `path` addon.dll is not loaded and the game runs vanilla, silently.
+- `addon.dll` (0.12, closed source; its authors allow shipping it) reads `EI_Starter\settings\AddonPath` (the mod's folder; none = no mod), hooks
+  `WinMain`, applies its patches, loads the mod's `config.reg` ([RES] resources, [DEV] Plugin = um.dll, [MPZone], [CONFIG]), the plugins and the
+  `Engine\*.asi` files, and points game.exe's registry root from `Software\Nival Interactive\EvilIslands` to `Software\Gipat.Ru\EI_Starter\EvilIslands`.
+  It only READS the registry. Its patches (MP console, second speed, MQ client, draw radii, pause on minimize) are switched by values of `EI_Starter\settings`.
+- Without the `EvilIslands` clone game.exe stops right after choosing the renderer.
+- game.exe does not write the registry while it runs.
+
+Registry written by the launcher at Play from `launcher.cfg` (HKCU, `regsync.hpp`):
+
+| Key | Values |
+| --- | --- |
+| `Software\Gipat.Ru\EI_Starter` | `path` = the launcher's folder |
+| `...\EI_Starter\settings` | `AddonPath`, `LandscapeDrawRadius`, `ObjectsDrawRadius` (only when set), `PauseOnMinimize`, `MP Speed-control`, `MQ client`, `MP console`, `LogLevel`, `ConsoleLogLevel`, `Xoptions Active=1`, `ModesFiltration=0` |
+| `...\EI_Starter\EvilIslands\*` | the game's own settings: made from Nival's key (`Software\Nival Interactive\EvilIslands`) when missing, else from the built-in defaults of a fresh installation (`game_defaults.hpp`), then every value of the `[Game: ...]` sections of `launcher.cfg` |
+| `Software\Wine\DllOverrides` | only under Wine: `dinput` (and `ddraw` when `Engine\ddraw.dll` exists) = `native,builtin` (current Wine prefers a DLL beside the exe anyway; older versions do not) |
+
+`launcher.cfg` is the source of truth: the registry is rewritten from it at every Play, so a deleted Wine prefix loses nothing. The first start fills
+it from what EIStarter left (the clone, then Nival's key). The `[Game: <key>]` sections hold `name=dword:N`, `name=float:X`, `name=string:TEXT` or `name=hex:..`.
+
+## Borderless window
+
+`Engine\um-window.asi` (`window/`, built from `resources/universal-mod/um-dll/um_window.cpp`, the code of um.dll's `BORDERLESS`) is loaded by addon.dll like
+any `*.asi`; the launcher switches it with `Engine\um-window.ini` (`[Window] Borderless=1`). It subclasses the game window: a deactivation never reaches the
+game, the cursor is confined to the window while it has the focus. Needs the game's `fullscreen=0` (the launcher's window mode takes care of both). When
+a mod loads um.dll, um.dll's own `BORDERLESS` does it (the launcher sets it in the mod's `um.cfg`) and the plugin stays out of the way.
+
+## Building and testing
+
+`make win` (um-launcher.exe, i686 MinGW, GLFW 3.3 from um-multitool's vendor folder), `make window` (um-window.asi), `make linux` (a native build that
+shows the screens: starting the game needs the Windows registry, so there it only says so), `make test STARTER=<an EIStarter folder>` (parsers against real
+mods / lang.ini / config round trip / registry sync on a stand-in), `./package.sh` (the zip).
+
+Test rig (not in the repository): a dedicated Wine prefix with the game, the starter folder and Universal-Mod, `launch.sh` runs `um-launcher.exe --play`
+(the launcher presses Play itself after 5 frames) on the hidden display with the audio on a null sink and collects `launcher.log`, `addon.log`, `um.log`.
+`--dir <folder>` makes the launcher use another folder than its own; `--screenshot <file.ppm>` saves frame 12 and exits.

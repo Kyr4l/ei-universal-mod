@@ -8,9 +8,13 @@
 //   - the deactivation never reaches the game (it stays active, does not minimize and keeps running in the background);
 //   - while the window has the focus the cursor is confined to it (ClipCursor), and released when it loses the focus.
 // Needs the game's own setting fullscreen=0 (the window is a plain WS_POPUP at 0,0 of the game's resolution).
-// Self-contained: only LogLine and the import patch of CreateWindowExA are shared with the rest of um.dll, so it can be loaded
-// on its own by a launcher.
+// Self-contained: only LogLine and the import patch of CreateWindowExA are shared with the rest of um.dll. um-launcher builds this file
+// on its own (UM_WINDOW_STANDALONE, tools/um-launcher/window/) as um-window.asi for mods that do not use um.dll.
+#ifdef UM_WINDOW_STANDALONE
+#include "um_window_standalone.hpp"
+#else
 #include "um_internal.hpp"
+#endif
 
 bool g_enableBorderless = false;
 

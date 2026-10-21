@@ -36,6 +36,7 @@ struct LauncherConfig {
     bool closeOnStart = true;      // leave when the game window is up
     bool debugLog = false;         // more detail in launcher.log
     bool borderless = false;       // windowed game without a frame (needs fullscreen off)
+    bool largeAddressAware = true; // set the 4 GB flag in Engine/game.exe before starting (Universal-Mod needs it)
     AddonOptions addon;
     GameSettings game;
     bool firstRun = false;         // no launcher.cfg existed
@@ -68,6 +69,7 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.closeOnStart = ini.GetBool("Launcher", "CloseOnStart", true);
         c.debugLog = ini.GetBool("Launcher", "DebugLog", false);
         c.borderless = ini.GetBool("Launcher", "Borderless", false);
+        c.largeAddressAware = ini.GetBool("Launcher", "LargeAddressAware", true);
         AddonOptions& a = c.addon;
         a.landscapeDrawRadius = ini.GetInt("Addon", "LandscapeDrawRadius", 0);
         a.objectsDrawRadius = ini.GetInt("Addon", "ObjectsDrawRadius", 0);
@@ -111,6 +113,7 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Launcher", "CloseOnStart", c.closeOnStart);
     ini.SetBool("Launcher", "DebugLog", c.debugLog);
     ini.SetBool("Launcher", "Borderless", c.borderless);
+    ini.SetBool("Launcher", "LargeAddressAware", c.largeAddressAware);
     const AddonOptions& a = c.addon;
     ini.SetInt("Addon", "LandscapeDrawRadius", a.landscapeDrawRadius);
     ini.SetInt("Addon", "ObjectsDrawRadius", a.objectsDrawRadius);

@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "config.hpp"
+#include "laa.hpp"
 #include "lang.hpp"
 #include "mods.hpp"
 #include "options_ui.hpp"
@@ -119,18 +120,32 @@ struct App {
         Log("writing the registry");
         SyncResult r = SyncRegistry(cfg, dir, CurrentMod()->folder);
         if (!r.ok) { message = r.error; Log(message); return; }
-        if (cfg.borderless || !cfg.game.GetBool("general settings", "fullscreen")) ApplyBorderless();
+        ApplyBorderless();
+        if (cfg.largeAddressAware) {
+            const int laa = EnsureLargeAddressAware(exe);
+            Log(laa > 0 ? "Engine/" + cfg.exeName + ": large address aware flag set (the original is kept as .orig)" : laa == 0 ? "large address aware: already set" : "large address aware: could not patch " + exe.string());
+        }
         std::string error;
         if (!platform::Start(exe, dir / "Engine", proc, error)) { failure = error; phase = Phase::Failed; Log("start failed: " + error); return; }
         Log("game started");
         phase = Phase::Starting; phaseStart = glfwGetTime(); windowSeen = 0; status = "Starting the game...";
     }
 
-    // Borderless windowed: for Universal-Mod its um.cfg key BORDERLESS (um.dll does it); other mods need the window plugin (not there yet).
+    // Borderless windowed (the game window keeps running when it loses the focus, the mouse stays inside): um.dll does it for the mods that use it
+    // (um.cfg BORDERLESS), Engine\\um-window.asi (window/) for every other mod, switched by Engine\\um-window.ini.
     void ApplyBorderless() {
-        if (!CurrentMod()) return;
-        const std::string umcfg = (fs::path(CurrentMod()->path) / "um.cfg").string();
-        if (SetCfgLine(umcfg, "BORDERLESS", cfg.borderless && !cfg.game.GetBool("general settings", "fullscreen") ? "true" : "false")) Log("um.cfg BORDERLESS set");
+        const bool on = cfg.borderless && !cfg.game.GetBool("general settings", "fullscreen");
+        std::error_code ec;
+        if (CurrentMod()) {
+            const std::string umcfg = (fs::path(CurrentMod()->path) / "um.cfg").string();
+            if (SetCfgLine(umcfg, "BORDERLESS", on ? "true" : "false")) Log(std::string("um.cfg BORDERLESS ") + (on ? "on" : "off"));
+        }
+        if (fs::exists(dir / "Engine" / "um-window.asi", ec)) {
+            IniFile ini;
+            ini.SetInt("Window", "Borderless", on ? 1 : 0);
+            ini.Save((dir / "Engine" / "um-window.ini").string());
+            Log(std::string("Engine/um-window.ini Borderless ") + (on ? "1" : "0"));
+        }
     }
 
     void Poll() {
@@ -268,7 +283,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
 
     if (!modal) {
         if (play || ImGui::IsKeyPressed(ImGuiKey_Enter)) { app.Click(); app.Play(); }
-        if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the folder of the original game."); }
+        if (opt) { app.Click(); app.options.Open(app.cfg, !app.GameFolderOk(), app.GameFolderOk() ? "" : "Choose the folder of the original game.", app.CurrentMod() ? (fs::path(app.CurrentMod()->path) / "um.cfg").string() : std::string()); }
         if (readme) {
             app.Click();
             fs::path p = app.dir / "lang" / app.cfg.language / "readme.txt", en = app.dir / "lang" / "en" / "readme.txt";
@@ -427,7 +442,10 @@ int main(int argc, char** argv) {
     if (!app.languages.empty() && std::find(app.languages.begin(), app.languages.end(), app.cfg.language) == app.languages.end()) app.cfg.language = app.languages[0];
     app.ReloadMods();
     app.ApplySkin();
-    if (app.cfg.firstRun) app.Save();
+    if (app.cfg.firstRun) { // a mod that already runs borderless (um.cfg BORDERLESS=true) keeps doing so
+        if (const ModInfo* m = app.CurrentMod()) app.cfg.borderless = LowerAscii(GetCfgLine((fs::path(m->path) / "um.cfg").string(), "BORDERLESS")) == "true";
+        app.Save();
+    }
     if (!app.GameFolderOk()) { // look for the game where an installation puts it
         for (const char* guess : {"C:\\Evil Islands\\", "C:\\Program Files (x86)\\Evil Islands\\", "C:\\Program Files\\Evil Islands\\", "C:\\GOG Games\\Evil Islands\\"}) {
             if (LooksLikeGameFolder(guess)) {

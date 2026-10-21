@@ -65,3 +65,4 @@ tools/um-bot/tests/um_bot_tests
 tools/um-launcher/tests/launcher_tests
 tools/um-launcher/launcher.cfg
 tools/um-launcher/launcher.log
+tools/um-launcher/dist/

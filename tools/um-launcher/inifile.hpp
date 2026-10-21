@@ -196,4 +196,27 @@ inline bool SetCfgLine(const std::string& path, const std::string& key, const st
     return false;
 }
 
+// The value of `KEY=value` in a mod's plain cfg file ("" when the file or the key is missing).
+inline std::string GetCfgLine(const std::string& path, const std::string& key) {
+    std::istringstream in(ReadTextFile(path));
+    std::string line;
+    const std::string lk = LowerAscii(key);
+    while (std::getline(in, line)) {
+        size_t b = line.find_first_not_of(" \t");
+        if (b == std::string::npos || line[b] == ';' || line[b] == '#') continue;
+        const size_t eq = line.find('=', b);
+        if (eq == std::string::npos) continue;
+        std::string k = line.substr(b, eq - b);
+        while (!k.empty() && (k.back() == ' ' || k.back() == '\t')) k.pop_back();
+        if (LowerAscii(k) != lk) continue;
+        std::string v = line.substr(eq + 1);
+        const size_t c = v.find(';');
+        if (c != std::string::npos) v.erase(c);
+        while (!v.empty() && (v.back() == ' ' || v.back() == '\t' || v.back() == '\r')) v.pop_back();
+        while (!v.empty() && (v.front() == ' ' || v.front() == '\t')) v.erase(0, 1);
+        return v;
+    }
+    return {};
+}
+
 } // namespace launcher

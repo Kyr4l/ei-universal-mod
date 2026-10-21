@@ -61,6 +61,9 @@ int main(int argc, char** argv) {
         CHECK(!SetCfgLine((tmp / "um.cfg").string(), "NOPE", "1"));
         std::string t = ReadTextFile((tmp / "um.cfg").string());
         CHECK(t == "; comment\r\nA=1\r\nBORDERLESS=false\r\nC=3\r\n");
+        CHECK(GetCfgLine((tmp / "um.cfg").string(), "borderless") == "false");
+        CHECK(GetCfgLine((tmp / "um.cfg").string(), "C") == "3");
+        CHECK(GetCfgLine((tmp / "um.cfg").string(), "nope").empty());
     }
     std::printf(g_fail ? "%d FAILED\n" : "all passed\n", g_fail);
     return g_fail != 0;

@@ -19,8 +19,10 @@ namespace launcher {
 class OptionsWindow {
 public:
     // Opens the window on a copy of `cfg`; `pathsTab`: start on the Paths tab (the game folder is missing).
-    void Open(const LauncherConfig& cfg, bool pathsTab, const std::string& hint) {
+    void Open(const LauncherConfig& cfg, bool pathsTab, const std::string& hint, const std::string& modCfg = {}) {
         edit_ = cfg;
+        modMsaa_ = !modCfg.empty() && LowerAscii(GetCfgLine(modCfg, "MSAA")) == "true";
+        modBorderless_ = !modCfg.empty() && !GetCfgLine(modCfg, "BORDERLESS").empty();
         open_ = true; requestTab_ = pathsTab ? 4 : 0; hint_ = hint;
         adapters_ = platform::Adapters();
         resolutions_ = platform::Resolutions();
@@ -127,11 +129,12 @@ private:
                 g.SetBool("general settings", "fullscreen", mode == 0);
                 edit_.borderless = mode == 2;
             }
-            if (ImGui::IsItemHovered()) ImGui::SetTooltip("Borderless window: a windowed game without a frame that keeps running when it loses the focus and keeps the mouse inside.");
+            if (ImGui::IsItemHovered()) ImGui::SetTooltip(modBorderless_ ? "Borderless window: keeps running when the window loses the focus and keeps the mouse inside.\nThe launcher writes this choice into the mod's um.cfg (BORDERLESS) at every Play." : "Borderless window: keeps running when the window loses the focus and keeps the mouse inside.");
         }
         bool b;
         b = g.GetBool("general settings", "mipmapping"); if (Check(tx, "cbMipMapping", "Mip-Mapping", b)) g.SetBool("general settings", "mipmapping", b);
         b = g.GetBool("general settings", "antialiasing"); if (Check(tx, "cbAntialiasing", "Antialiasing", b)) g.SetBool("general settings", "antialiasing", b);
+        if (modMsaa_ && ImGui::IsItemHovered()) ImGui::SetTooltip("The mod's um.cfg has MSAA=true (sharp anti-aliasing through D7VK); the game's own antialiasing is the blurring one. Leave this off to avoid both.");
         b = g.GetBool("general settings", "dithering"); if (Check(tx, "cbDithering", "Dithering", b)) g.SetBool("general settings", "dithering", b);
         b = g.GetBool("general settings", "FPSIndependentCursor"); if (Check(tx, "cbFPSCursor", "FPS independed cursor", b)) g.SetBool("general settings", "FPSIndependentCursor", b);
         int i;
@@ -279,8 +282,11 @@ private:
         ImGui::Checkbox("Read mods from mod.config (INI) instead of config.reg", &edit_.usingIniConfigs);
         ImGui::Checkbox("Close the launcher when the game window is up", &edit_.closeOnStart);
         ImGui::Checkbox("Debug log (more detail in launcher.log)", &edit_.debugLog);
+        ImGui::Checkbox("Large address aware game (up to 4 GB: needed by Universal-Mod)", &edit_.largeAddressAware);
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("Sets the 4 GB flag in Engine/game.exe (the launcher's copy; the unpatched file is kept as game.exe.orig).");
     }
 
+    bool modMsaa_ = false, modBorderless_ = false;
     float labelWidth_ = 150, comboWidth_ = 170;
     LauncherConfig edit_;
     bool open_ = false;

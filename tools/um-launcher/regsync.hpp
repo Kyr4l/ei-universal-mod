@@ -44,6 +44,16 @@ inline bool LooksLikeGameFolder(const std::string& dir) {
     return has("game.exe") && has("res");
 }
 
+// Whether the program runs under Wine (it has to ask Wine to use Engine\\dinput.dll, see SyncRegistry).
+inline bool RunningUnderWine() {
+#ifdef _WIN32
+    HMODULE ntdll = GetModuleHandleA("ntdll.dll");
+    return ntdll && GetProcAddress(ntdll, "wine_get_version") != nullptr;
+#else
+    return false;
+#endif
+}
+
 struct SyncResult { bool ok = true; std::string error; };
 
 inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launcherDir, const std::string& modFolder) {
@@ -65,6 +75,14 @@ inline SyncResult SyncRegistry(const LauncherConfig& cfg, const fs::path& launch
     dword("ConsoleLogLevel", a.consoleLogLevel, true);
     dword("Xoptions Active", 1, true);   // what EIStarter's Options dialog always wrote
     dword("ModesFiltration", 0, true);
+
+    // Wine uses its own dinput / ddraw unless told otherwise: Engine\\dinput.dll is the loader that brings addon.dll in (EIStarter needed this set by hand,
+    // in winecfg or WINEDLLOVERRIDES). A Windows system has no use for the key.
+    if (RunningUnderWine()) {
+        std::error_code ec;
+        winreg::Set("Software\\Wine\\DllOverrides", "dinput", winreg::Value::String("native,builtin"));
+        if (fs::exists(launcherDir / "Engine" / "ddraw.dll", ec)) winreg::Set("Software\\Wine\\DllOverrides", "ddraw", winreg::Value::String("native,builtin"));
+    }
 
     // The game's own settings, over the clone (created from Nival's key when it does not exist yet).
     if (!winreg::KeyExists(kCloneKey) && winreg::KeyExists(kNivalKey)) winreg::CopyTree(kNivalKey, kCloneKey);
