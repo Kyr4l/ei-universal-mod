@@ -585,6 +585,17 @@ public:
         for (const scriptast::Script& s : prog_.scripts) if (s.world) columns[0].push_back(&s);
         for (const scriptast::Script& s : prog_.scripts) if (!s.world) columns[static_cast<size_t>(depth[mobscript::LowerCase(s.name)])].push_back(&s);
         std::unordered_map<std::string, int> entryOf; // lower-case script name -> its entry node
+        // A column of many scripts is not one tall stack: past a page's height the next scripts go in a column to the right, so that the whole
+        // graph is about as wide as tall (like a Blender node tree). The page height from the size of the whole: a square of the area the
+        // statements take (~55 units tall each, a script ~700 wide).
+        float stackH = 0;
+        {
+            size_t stmts = 0;
+            for (const scriptast::Script& sc : prog_.scripts) stmts += CountStmts(sc.body);
+            const float area = (static_cast<float>(stmts) * 55.0f + static_cast<float>(prog_.scripts.size()) * F * 7.0f) * 700.0f;
+            stackH = std::clamp(std::sqrt(area), 4000.0f, 40000.0f);
+        }
+        struct Placed { size_t frame, firstNode, lastNode, firstWire, lastWire; float w, h; };
         float colX = 0;
         for (size_t col = 0; col < columns.size(); ++col) {
             if (col > 0) { // by the height of the first call coming from the columns on the left
@@ -600,11 +611,12 @@ public:
                 });
             }
             float y = 0, right = colX;
+            std::vector<Placed> placed;
             for (const scriptast::Script* sp : columns[col]) {
                 const scriptast::Script& s = *sp;
                 const float left = colX;
                 script_ = mobscript::LowerCase(s.name);
-                const size_t first = g_.nodes.size();
+                const size_t first = g_.nodes.size(), firstWire = g_.wires.size();
                 Node entry;
                 entry.kind = Node::Entry;
                 entry.title = s.world ? "WorldScript" : "Script " + s.name;
@@ -618,6 +630,10 @@ public:
                 else if (!s.name.empty() && s.name[0] == '#') entry.rows.push_back({"started by the game (event, dialog or object)", std::string(), 'n', false});
                 else if (!called) entry.rows.push_back({"called by no script", std::string(), 'w', false});
                 entry.size = NodeSize(entry);
+                { // a long script is laid out in pages side by side: about as wide as tall
+                    const float est = static_cast<float>(CountStmts(s.body)) * 60.0f;
+                    pageH_ = est > 2400.0f ? std::max(2400.0f, std::sqrt(est * 450.0f)) : 0.0f;
+                }
                 const float inW = ChainInputsWidth(s.body);
                 entry.pos = ImVec2(left + inW, y + F * 2.2f); // room for the frame's label
                 const int e = Add(entry);
@@ -645,8 +661,21 @@ public:
                 fr.max.y += F;
                 fr.max.x = std::max(fr.max.x, fr.min.x + ImGui::CalcTextSize((fr.name + "    " + fr.subtitle).c_str()).x + 2 * F);
                 g_.frames.push_back(fr);
-                right = std::max(right, fr.max.x);
+                placed.push_back({g_.frames.size() - 1, first, g_.nodes.size(), firstWire, g_.wires.size(), fr.max.x - fr.min.x, fr.max.y - fr.min.y});
                 y = fr.max.y + F * 2.5f;
+            }
+            // the column's scripts in pages side by side: moved (nodes, their wires, the frame) to their place
+            float cx = colX, cy = 0, pageRight = colX;
+            for (const Placed& pl : placed) {
+                if (cy > 0 && cy + pl.h > stackH) { cx = pageRight + F * 5; cy = 0; }
+                Frame& fr = g_.frames[pl.frame];
+                const ImVec2 d(cx - fr.min.x, cy - fr.min.y);
+                for (size_t i = pl.firstNode; i < pl.lastNode; ++i) { g_.nodes[i].pos.x += d.x; g_.nodes[i].pos.y += d.y; }
+                for (size_t i = pl.firstWire; i < pl.lastWire; ++i) { Wire& w = g_.wires[i]; w.a.x += d.x; w.a.y += d.y; w.b.x += d.x; w.b.y += d.y; }
+                fr.min.x += d.x; fr.max.x += d.x; fr.min.y += d.y; fr.max.y += d.y;
+                cy += pl.h + F * 2.5f;
+                pageRight = std::max(pageRight, cx + pl.w);
+                right = std::max(right, pageRight);
             }
             colX = right + F * 6;
         }
@@ -682,6 +711,8 @@ private:
     std::string script_;
     Graph g_;
     float gapX = 0, gapY = 0;
+    float pageH_ = 0; // the page height of the script being laid out (0: one column)
+    static size_t CountStmts(const std::vector<Stmt>& v) { size_t n = 0; for (const Stmt& s : v) n += 1 + CountStmts(s.then) + CountStmts(s.otherwise) + CountStmts(s.body); return n; }
 
     void Calls(const std::vector<Stmt>& v, std::vector<std::string>& out) {
         std::function<void(const Expr&)> expr = [&](const Expr& e) {
@@ -891,9 +922,22 @@ private:
     // Statements down a column whose inputs start at `left`, from `y`: the first one is reached from node
     // `prev` (down its spine) or, when `branchOf` >= 0, from branch `branch` of node `branchOf`. The bottom.
     float Chain(const std::vector<Stmt>& v, float left, float y, int prev, int branchOf, size_t branch = 0) {
-        const float x = left + ChainInputsWidth(v);
+        const float inputs = ChainInputsWidth(v);
+        float x = left + inputs;
         float bottom = y;
+        // A long chain does not become one tall column: past a page's height the next statements start a new column to the right (like a node
+        // tree laid out in both directions), joined to the last node of the page before.
+        const float top = y;
+        size_t scanned = g_.nodes.size();
+        float maxRight = x;
+        bool newColumn = false;
         for (const Stmt& s : v) {
+            if (pageH_ > 0 && y - top > pageH_) {
+                for (; scanned < g_.nodes.size(); ++scanned) maxRight = std::max(maxRight, g_.nodes[scanned].pos.x + g_.nodes[scanned].size.x);
+                x = maxRight + gapX * 3 + inputs;
+                y = top;
+                newColumn = true;
+            }
             std::vector<const Expr*> feeds;
             Node n = StmtNode(s, feeds);
             n.pos = ImVec2(x, y);
@@ -902,7 +946,13 @@ private:
             // reached from the previous statement, or from the branch that starts this column
             const ImU32 flow = IM_COL32(230, 230, 230, 200);
             if (made.kind != Node::Comment) {
-                if (prev >= 0) {
+                if (prev >= 0 && newColumn) { // the join to the next page: out of the right of the last node, into the left of this one
+                    const Node& p = g_.nodes[static_cast<size_t>(prev)];
+                    Wire w{ImVec2(p.pos.x + p.size.x, p.pos.y + headerH * 0.5f), FlowIn(made), flow, false};
+                    w.call = true; w.from = prev; w.to = idx;
+                    g_.wires.push_back(w);
+                    newColumn = false;
+                } else if (prev >= 0) {
                     const Node& p = g_.nodes[static_cast<size_t>(prev)];
                     g_.wires.push_back({ImVec2(p.pos.x + F, p.pos.y + p.size.y), ImVec2(made.pos.x + F, made.pos.y), flow, true});
                 } else if (branchOf >= 0) {
@@ -930,7 +980,7 @@ private:
             } else if (s.kind == Stmt::Loop) {
                 rowBottom = std::max(rowBottom, Chain(s.body, bx, y, -1, idx, 0));
             }
-            bottom = rowBottom;
+            bottom = std::max(bottom, rowBottom);
             y = rowBottom + gapY;
         }
         return bottom;
@@ -1032,7 +1082,9 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         dragged = true;
     }
     if (hovered && io.MouseWheel != 0) {
-        const float z = std::clamp(view.zoom * std::pow(1.15f, io.MouseWheel), 0.15f, 2.5f);
+        // zoomed out as far as the whole graph in view (a long script laid out in pages is tens of thousands of units across)
+        const float fit = std::min(size.x / std::max(g.max.x - g.min.x, 1.0f), size.y / std::max(g.max.y - g.min.y, 1.0f));
+        const float z = std::clamp(view.zoom * std::pow(1.15f, io.MouseWheel), std::clamp(fit * 0.7f, 0.01f, 0.15f), 2.5f);
         const ImVec2 m(io.MousePos.x - origin.x, io.MousePos.y - origin.y);
         const ImVec2 at((m.x - view.pan.x) / view.zoom, (m.y - view.pan.y) / view.zoom);
         view.zoom = z;
