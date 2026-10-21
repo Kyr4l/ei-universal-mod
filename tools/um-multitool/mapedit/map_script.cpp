@@ -1039,12 +1039,6 @@ static void ScriptNodes(App& app, const mob::File& f, const std::string& utf8, s
         view.pan = ImVec2(m.x - at.x * z, m.y - at.y * z);
     }
     if (hovered && ImGui::IsKeyPressed(ImGuiKey_Home, false)) view.placed = false;
-    { // The graph cannot be lost: a quarter of the view (or all of a graph smaller than that) always stays over it. Dragged far to the right the canvas used to show nothing at all.
-        const float vw = size.x / view.zoom, vh = size.y / view.zoom;
-        const float mx = std::min(0.25f * vw, std::max(0.0f, g.max.x - g.min.x)), my = std::min(0.25f * vh, std::max(0.0f, g.max.y - g.min.y));
-        view.pan.x = std::clamp(view.pan.x, -(g.max.x - mx) * view.zoom, size.x - (g.min.x + mx) * view.zoom);
-        view.pan.y = std::clamp(view.pan.y, -(g.max.y - my) * view.zoom, size.y - (g.min.y + my) * view.zoom);
-    }
     const float z = view.zoom;
     auto S = [&](ImVec2 p) { return ImVec2(origin.x + view.pan.x + p.x * z, origin.y + view.pan.y + p.y * z); };
 
