@@ -136,7 +136,7 @@ static void ApplyMsaa() {
     const DWORD length = GetEnvironmentVariableA("DXVK_CONFIG", current, sizeof(current));
     if (length >= sizeof(current)) return;
     std::string value = length ? std::string(current) + ";" : std::string();
-    value += "ddraw.emulateFSAA = forced";
+    value += "ddraw.emulateFSAA = forced;ddraw.alternatePixelCenter = true"; // the pixel-center fix: without it a multisampled frame has a 1-pixel line at the left and top edge
     SetEnvironmentVariableA("DXVK_CONFIG", value.c_str());
     LogLine("INFO", "MSAA: DXVK_CONFIG=%s (takes effect when D7VK is the DirectDraw driver)", value.c_str());
 }
