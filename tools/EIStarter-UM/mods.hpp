@@ -23,12 +23,17 @@ struct ModInfo {
     std::string version, author = "Unknown_Author", email, site, date;
     bool single = true, multi = true;
     std::string pluginPath = "none", pluginText = "Plugin"; // [starter] pluginpath / plugintext: a script the Info window offers to run
+    // um.dll: UmListed = the mod's config.reg [DEV] Plugin names it (addon.dll loads it), UmFile = um.dll is in the mod's folder.
+    bool umListed = false, umFile = false;
 };
+
+inline bool NamesUmDll(const std::string& plugin) { return LowerAscii(plugin).find("um.dll") != std::string::npos; }
 
 inline bool ReadMod(const fs::path& folder, bool iniConfigs, ModInfo& m) {
     m.folder = folder.filename().string();
     m.path = folder.string();
     std::error_code ec;
+    for (const fs::directory_entry& f : fs::directory_iterator(folder, ec)) if (LowerAscii(f.path().filename().string()) == "um.dll") m.umFile = true;
     if (iniConfigs && fs::exists(folder / "mod.config", ec)) {
         IniFile ini;
         if (!ini.Load((folder / "mod.config").string())) return false;
@@ -36,6 +41,7 @@ inline bool ReadMod(const fs::path& folder, bool iniConfigs, ModInfo& m) {
         m.version = ini.Get("MOD", "Version"); m.author = ini.Get("MOD", "Author", "Unknown_Author");
         m.email = ini.Get("MOD", "AuthorEmail"); m.site = ini.Get("MOD", "URL"); m.date = ini.Get("MOD", "date_DMY");
         m.pluginPath = ini.Get("Starter", "pluginpath", "none"); m.pluginText = ini.Get("Starter", "plugintext", "Plugin");
+        m.umListed = NamesUmDll(ini.Get("DEV", "Plugin"));
         if (!ini.Get("MOD", "Single").empty()) m.single = ini.GetInt("MOD", "Single", 1) != 0;
         if (!ini.Get("MOD", "Multi").empty()) m.multi = ini.GetInt("MOD", "Multi", 1) != 0;
         return true;
@@ -47,6 +53,7 @@ inline bool ReadMod(const fs::path& folder, bool iniConfigs, ModInfo& m) {
         m.version = reg.GetString("MOD", "Version"); m.author = reg.GetString("MOD", "Author", "Unknown_Author");
         m.email = reg.GetString("MOD", "AuthorEmail"); m.site = reg.GetString("MOD", "URL"); m.date = reg.GetString("MOD", "date_DMY");
         m.pluginPath = reg.GetString("starter", "pluginpath", "none"); m.pluginText = reg.GetString("starter", "plugintext", "Plugin");
+        m.umListed = NamesUmDll(reg.GetString("DEV", "Plugin"));
         m.single = reg.GetDword("MOD", "Single", 1) != 0;
         m.multi = reg.GetDword("MOD", "Multi", 1) != 0;
         return true;

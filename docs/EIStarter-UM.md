@@ -24,6 +24,7 @@ installer's registry key, GOG's folders). There is no `Init Starter Registry.bat
 
 The window is EIStarter's: the same skins (`design\<lang>\*.png|bmp`, `font.otf`, `click.wav`), languages (`lang\<code>\lang.ini`, UTF-16) and mod
 folders (`mods\<mod>\config.reg`, or `mod.config` with the Utils option "Read mods from mod.config"), so what was made for EIStarter works.
+Under the mod chooser a dot tells whether the selected mod uses um.dll: green "um.dll detected" (its `config.reg` [DEV] Plugin names it and the file is in the mod's folder), amber when only one of the two is true (addon.dll would not load it), grey "no um.dll". The (i) window's text is read-only but selectable (Ctrl+C), with Copy site / Open site buttons.
 Buttons: Play, Options, Readme (`lang\<lang>\readme.txt`), Website, Uninstall (`uninstall.exe` when there is one), Exit, the mod chooser, the (i)
 button (mod information, its readme / changelog, and the mod's own script button), Lang (cycles the languages). Enter = Play, Esc = Exit.
 

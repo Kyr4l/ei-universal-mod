@@ -251,6 +251,17 @@ static void DrawMain(App& app, GLFWwindow* window) {
     if (app.skinFont) ImGui::PopFont();
     ImGui::PopStyleVar();
     ImGui::PopStyleColor(6);
+    if (cur) { // does the mod bring um.dll? (a dot and a word under the chooser)
+        const bool ok = cur->umListed && cur->umFile;
+        const char* word = ok ? "um.dll detected" : cur->umFile ? "um.dll in the folder, not enabled" : cur->umListed ? "um.dll listed, file missing" : "no um.dll";
+        const ImU32 color = ok ? IM_COL32(110, 210, 120, 255) : (cur->umFile || cur->umListed) ? IM_COL32(235, 180, 70, 255) : IM_COL32(195, 195, 195, 255);
+        const ImVec2 o = ImGui::GetWindowPos();
+        bg->AddCircleFilled(ImVec2(o.x + comboX + 7, o.y + 134), 4.5f, color);
+        bg->AddText(ImVec2(o.x + comboX + 17, o.y + 127), color, word);
+        ImGui::SetCursorPos(ImVec2(comboX, 124));
+        ImGui::InvisibleButton("##um", ImVec2(169, 18));
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip(ok ? "The mod's config.reg loads um.dll (Universal Mod's plugin) and the file is there." : cur->umFile ? "um.dll is in the mod's folder, but its config.reg [DEV] Plugin does not name it: addon.dll will not load it." : cur->umListed ? "The mod's config.reg names um.dll as its plugin, but the file is not in the mod's folder." : "This mod does not use um.dll.");
+    }
     {
         const float infoX = comboX + 169 + 10;
         const Texture& infoImg = app.skin.Image("info");
@@ -336,9 +347,19 @@ static void DrawMain(App& app, GLFWwindow* window) {
         if (ImGui::Begin((app.texts.Get("ModInfo", "ModInfo", "Mod info") + "###info").c_str(), nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
             const ModInfo* m = app.CurrentMod();
             if (m) {
-                ImGui::BeginChild("##infotext", ImVec2(0, -ImGui::GetFrameHeightWithSpacing() - 4));
-                ImGui::TextWrapped("%s", FormatInfo(app.texts, *m).c_str());
-                ImGui::EndChild();
+                // Read-only text boxes: every line can be selected and copied (Ctrl+C); the site also has its own buttons.
+                const std::string info = FormatInfo(app.texts, *m);
+                std::vector<char> buf(info.begin(), info.end());
+                buf.push_back('\0');
+                const bool ok = m->umListed && m->umFile;
+                ImGui::TextColored(ok ? ImVec4(0.43f, 0.82f, 0.47f, 1) : (m->umFile || m->umListed) ? ImVec4(0.92f, 0.7f, 0.27f, 1) : ImVec4(0.6f, 0.6f, 0.6f, 1), "%s", ok ? "um.dll detected" : m->umFile ? "um.dll in the folder, not enabled (config.reg)" : m->umListed ? "um.dll listed, but the file is missing" : "no um.dll");
+                ImGui::InputTextMultiline("##infotext", buf.data(), buf.size(), ImVec2(-1, -ImGui::GetFrameHeightWithSpacing() * 2 - 8), ImGuiInputTextFlags_ReadOnly);
+                if (!m->site.empty()) {
+                    if (ImGui::Button("Copy site")) ImGui::SetClipboardText(m->site.c_str());
+                    ImGui::SameLine();
+                    if (ImGui::Button("Open site")) platform::OpenWithDefault(m->site);
+                    ImGui::SameLine();
+                }
                 // The mod folder's readme / changelog, and the mod's own script (its [starter] plugin button).
                 std::error_code ec; std::string readme, changelog;
                 for (const fs::directory_entry& f : fs::directory_iterator(m->path, ec)) {

@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
     bool um = false, none = false;
     for (auto& m : mods) { if (m.folder == "Universal-Mod") { um = m.title == "Universal Mod" && m.author == "Formcaster & Kyral" && !m.single && m.multi; } if (m.folder == ".0") none = m.title == "\xD0\x91\xD0\xB5\xD0\xB7 \xD0\xBC\xD0\xBE\xD0\xB4\xD0\xBE\xD0\xB2"; }
     CHECK(um); CHECK(none);
+    for (auto& m : mods) { if (m.folder == "Universal-Mod") CHECK(m.umListed && m.umFile); else CHECK(!m.umListed); }
     // lang.ini (UTF-16)
     IniFile fr; CHECK(fr.Load((starter / "lang/fr/lang.ini").string()));
     CHECK(fr.Get("Options", "cbFullscreen") == "Plein \xC3\xA9" "cran");
