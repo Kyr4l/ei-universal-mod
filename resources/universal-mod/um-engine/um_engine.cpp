@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.5.1";
+static const char* const kEngineVersion = "0.6.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -39,6 +39,7 @@ extern "C" void __attribute__((thiscall)) UmNetReadAcks(NetConnection* self, uns
 extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, unsigned seq);
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
+extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
 struct NetReader;
 extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, NetReader* reader, unsigned packetSeq);  // net_message.cpp
 
@@ -171,6 +172,8 @@ extern "C" void UmEngineLog(const char* format, ...) {
     std::fclose(f);
 }
 
+static const char* const kShadowResolutionKey = "UnitShadow::Resolution"; // a number (64 = the game's own), not on / off
+
 static std::string ConfigPath() {
     char path[MAX_PATH] = "";
     GetModuleFileNameA(g_module, path, sizeof(path));
@@ -216,6 +219,7 @@ static std::map<std::string, bool> ReadConfig() {
             missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
             values[fn.name] = on;
         }
+    if (!values.count(kShadowResolutionKey)) missing += std::string(kShadowResolutionKey) + "=64\n";
     const bool exists = GetFileAttributesA(path.c_str()) != INVALID_FILE_ATTRIBUTES;
     if (!exists || !missing.empty()) {
         if (FILE* f = std::fopen(path.c_str(), "a")) {
@@ -248,6 +252,17 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabledModule.push_back(fn);
     }
     InstallCallSites(config);
+    { // the unit shadow size: a number
+        unsigned size = 64;
+        if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {
+            char line[512];
+            const size_t keyLength = std::strlen(kShadowResolutionKey);
+            while (std::fgets(line, sizeof(line), f))
+                if (std::strncmp(line, kShadowResolutionKey, keyLength) == 0 && line[keyLength] == '=') size = static_cast<unsigned>(std::atoi(line + keyLength + 1));
+            std::fclose(f);
+        }
+        if (size > 64) UmShadowResolution(size);
+    }
     if (!g_enabledModule.empty() && !g_moduleThread) g_moduleThread = CreateThread(NULL, 0, ModulePatchThread, NULL, 0, NULL);
     if (count) *count = static_cast<int>(g_enabled.size());
     return g_enabled.empty() ? nullptr : g_enabled.data();
