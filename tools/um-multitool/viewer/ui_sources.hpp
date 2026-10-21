@@ -644,7 +644,7 @@ inline void PerformancePanel(Library& lib) {
     if (ImGui::Checkbox("VSync", &lib.vsync)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("On: a frame per display refresh at most, no tearing. Off: the cap alone paces the frames (try off with a cap on a slow GPU driver).");
     if (ImGui::Checkbox("Idle at 25 FPS", &lib.idleRedraw)) lib.SaveConfig();
-    if (ImGui::IsItemHovered()) ImGui::SetTooltip("25 frames per second from half a second after the last mouse or key activity until the next one; jobs, loads and animations keep the full rate.");
+    if (ImGui::IsItemHovered()) ImGui::SetTooltip("25 frames per second from half a second after the last mouse or key activity until the next one; jobs, loads and animations keep the full rate.\nWhile resting, the Map Editor's 3D view is drawn again only when something in it changed (the last frame is kept).");
     if (ImGui::Checkbox("Show FPS", &lib.showFps)) lib.SaveConfig();
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("Frames per second and milliseconds per frame, averaged over the last half second, in the window's top-right corner; 'resting' while the loop rests.");
 }

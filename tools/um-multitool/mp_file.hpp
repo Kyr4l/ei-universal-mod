@@ -181,6 +181,65 @@ inline std::vector<uint8_t> Pack(const std::vector<uint8_t>& raw, uint32_t head,
     return f;
 }
 
+// The same container with real LZ compression (matches inside the data, never reaching back before its start): the game's decoder reads flag bits from the byte stream lazily,
+// a literal is a 0 bit and a raw byte, a match a 1 bit, a length code and an offset code (MatchLength / MatchOffset above, written back out here).
+inline std::vector<uint8_t> PackLz(const std::vector<uint8_t>& raw, uint32_t head, uint32_t version) {
+    std::vector<uint8_t> f(17);
+    const uint32_t sum = Checksum(raw), size = static_cast<uint32_t>(raw.size());
+    std::memcpy(f.data(), &head, 4);
+    std::memcpy(f.data() + 4, &version, 4);
+    std::memcpy(f.data() + 8, &sum, 4);
+    f[12] = 1;
+    std::memcpy(f.data() + 13, &size, 4);
+    std::vector<std::pair<size_t, int>> avail; // bytes whose bits are loaded but not used: (position, bits left)
+    int total = 0;
+    auto put = [&](uint32_t v, int k) { // the decoder's Bits(k): loads whole bytes (at the then-current end of the stream) while it has fewer than k bits
+        while (total < k) { f.push_back(0); avail.push_back({f.size() - 1, 8}); total += 8; }
+        for (int i = 0; i < k; ++i) {
+            auto& a = avail.front();
+            if ((v >> i) & 1) f[a.first] = static_cast<uint8_t>(f[a.first] | (1u << (8 - a.second)));
+            if (--a.second == 0) avail.erase(avail.begin());
+            --total;
+        }
+    };
+    auto putLen = [&](int len) {
+        if (len == 2) put(0, 1), put(0, 1);
+        else if (len == 4) put(0, 1), put(1, 1);
+        else if (len >= 7 && len <= 10) { put(1, 1); put(0, 1); put(1, 1); put(static_cast<uint32_t>(len - 7), 2); }
+        else if (len == 3) { put(1, 1); put(0, 1); put(0, 1); put(0, 1); }
+        else if (len >= 11 && len <= 18) { put(1, 1); put(0, 1); put(0, 1); put(1, 1); put(static_cast<uint32_t>(len - 0xB), 3); }
+        else if (len == 5) { put(1, 1); put(1, 1); put(0, 1); put(0, 1); }
+        else if (len >= 35 && len <= 98) { put(1, 1); put(1, 1); put(0, 1); put(1, 1); put(static_cast<uint32_t>(len - 0x23), 6); }
+        else if (len == 6) { put(1, 1); put(1, 1); put(1, 1); put(0, 1); }
+        else if (len >= 99) { put(1, 1); put(1, 1); put(1, 1); put(1, 1); put(1, 1); put(static_cast<uint32_t>(len - 0x63), 7); }
+        else { put(1, 1); put(1, 1); put(1, 1); put(1, 1); put(0, 1); put(static_cast<uint32_t>(len - 0x13), 4); } // 19..34
+    };
+    auto putOff = [&](int off) {
+        if (off >= 0x562) { put(1, 1); put(0, 1); put(static_cast<uint32_t>(off - 0x562), 12); }
+        else if (off >= 0x162) { put(1, 1); put(1, 1); put(static_cast<uint32_t>(off - 0x162), 10); }
+        else if (off >= 0x62) { put(0, 1); put(1, 1); put(1, 1); put(static_cast<uint32_t>(off - 0x62), 8); }
+        else if (off >= 0x22) { put(0, 1); put(1, 1); put(0, 1); put(static_cast<uint32_t>(off - 0x22), 6); }
+        else if (off >= 0x12) { put(0, 1); put(0, 1); put(1, 1); put(1, 1); put(0, 1); put(static_cast<uint32_t>(off - 0x12), 4); }
+        else if (off >= 10) { put(0, 1); put(0, 1); put(0, 1); put(0, 1); put(static_cast<uint32_t>(off - 0xA), 3); }
+        else if (off >= 6) { put(0, 1); put(0, 1); put(1, 1); put(0, 1); put(static_cast<uint32_t>(off - 6), 2); }
+        else if (off >= 2) { put(0, 1); put(0, 1); put(0, 1); put(1, 1); put(static_cast<uint32_t>(off - 2), 2); }
+        else { put(0, 1); put(0, 1); put(1, 1); put(1, 1); put(1, 1); put(static_cast<uint32_t>(off), 1); }
+    };
+    size_t i = 0;
+    while (i < raw.size()) {
+        int bestLen = 0, bestOff = 0;
+        const size_t maxBack = std::min<size_t>(i, 1023);
+        for (size_t back = 1; back <= maxBack; ++back) { // distance = off + 1
+            int len = 0;
+            while (i + static_cast<size_t>(len) < raw.size() && len < 226 && raw[i + static_cast<size_t>(len)] == raw[i + static_cast<size_t>(len) - back]) ++len;
+            if (len > bestLen) { bestLen = len; bestOff = static_cast<int>(back) - 1; if (len == 226) break; }
+        }
+        if (bestLen >= 3) { put(1, 1); putLen(bestLen); putOff(bestOff); i += static_cast<size_t>(bestLen); }
+        else { put(0, 1); f.push_back(raw[i]); ++i; } // the literal byte is written raw at the stream's current end
+    }
+    return f;
+}
+
 // ---- the data -----------------------------------------------------------------------------------------
 struct Reader {
     const std::vector<uint8_t>& d;

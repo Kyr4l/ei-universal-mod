@@ -7,6 +7,9 @@
 // Skeleton: the settings and the window. The network client (the game's UDP protocol, port 8888) is not
 // written yet: Connect only says so. See README.md for the plan.
 #include "net.hpp" // first: winsock2.h before windows.h
+#include "growth.hpp"
+#include "shop.hpp"
+#include "spells.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -32,11 +35,12 @@
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <random>
 #include <set>
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.2a";
+static const char* const kVersion = "0.1.30";
 
 
 struct App {
@@ -45,14 +49,19 @@ struct App {
     std::deque<std::string> log;      // newest last
     net::Client client;
     size_t clientLogShown = 0;
+    unsigned shopSeed = 1; bool shopped = false; double shopWaitFrom = 0; // the camp's shop: one stock draw per session, visited once before the quest
+    bool keepConnected = false;       // the user pressed Connect: reconnect after a failure
+    double retryAt = 0; int retries = 0;
     mp::Character character;          // the loaded .mp
     std::string characterError;
     std::string characterFor;         // the path it was loaded from
     bool nameDirty = false;           // the name was changed, not saved yet
     items::Database db;               // for the equipment's names (<mp folder>/../res/databaselmp.res)
-    std::string dbFor;                // the character it was looked for
+    std::string dbFor;                // the database choice + character it was looked for
+    std::string dbPath;               // the file it was loaded from ("" = none found)
     bool dbLoaded = false;
-    void Log(const std::string& s) {
+    void Log(const std::string& s, bool toFile = true) {
+        if (toFile) net::BotLogLine(s);
         log.push_back(s);
         while (log.size() > 200) log.pop_front();
     }
@@ -67,6 +76,62 @@ static bool EnumCombo(const char* label, E& value, const char* const (&names)[N]
     return true;
 }
 
+// The database (item and spell names): the chosen file, else <mp folder>/../res/databaselmp.res or database.res. Returns the file it loaded ("" if none).
+static std::string LoadDb(const bot::Config& cfg, items::Database& db) {
+    std::vector<std::string> tries;
+    if (!cfg.database.empty()) tries.push_back(cfg.database);
+    else {
+        std::string dir = cfg.character;
+        const size_t slash = dir.find_last_of("/\\");
+        dir = slash == std::string::npos ? "." : dir.substr(0, slash);
+        for (const char* rel : {"/../res/databaselmp.res", "/../res/database.res"}) tries.push_back(dir + rel);
+    }
+    for (const std::string& path : tries) {
+        std::ifstream f(path, std::ios::binary);
+        if (!f) continue;
+        std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+        std::string err;
+        if (items::LoadDatabaseRes(bytes, path.substr(path.find_last_of("/\\") == std::string::npos ? 0 : path.find_last_of("/\\") + 1), db, err)) return path;
+    }
+    return "";
+}
+static std::string Lower(std::string v) { for (char& c : v) c = static_cast<char>(std::tolower(static_cast<unsigned char>(c))); return v; }
+static const mp::Object* FindObject(const mp::Character& ch, uint32_t id) {
+    for (const auto& list : ch.lists) for (const mp::Object& o : list) if (o.id == id) return &o;
+    return nullptr;
+}
+// The belt slot of the healing potion (a QuickItems row whose spell starts with "healing"): the database says which potion heals; -1 when none / no database.
+static int FindHealPotionSlot(const mp::Character& ch, const items::Database& db) {
+    if (ch.members.empty()) return -1;
+    const auto& belt = ch.members[0].lists[1];
+    for (size_t i = 0; i < belt.size(); ++i) {
+        const mp::Object* o = FindObject(ch, belt[i]);
+        if (!o || o->kind != 0x3006) continue;
+        const auto& q = db.List(items::Category::QuickItems);
+        if (o->b < q.size() && Lower(q[o->b].spell).rfind("healing", 0) == 0) return static_cast<int>(i);
+    }
+    return -1;
+}
+// The index in the hero's spell items (the .mp's 4th list: spell containers) of a container holding the Healing spell: the container's block holds its spell object's id at +40,
+// the spell object (the party's spell list) refers to a SpellPrototypes row whose code name is "healing". A cast order's spell id (no bit 31) is this index. -1: none.
+static int FindHealSpellSlot(const mp::Character& ch, const items::Database& db) {
+    if (ch.members.empty()) return -1;
+    const auto& slots = ch.members[0].lists[3];
+    for (size_t i = 0; i < slots.size(); ++i) {
+        const mp::Object* c = FindObject(ch, slots[i]);
+        if (!c || c->kind != 0x3008 || c->detail.size() < 44) continue;
+        uint32_t spellId; std::memcpy(&spellId, &c->detail[40], 4);
+        const mp::Object* sp = FindObject(ch, spellId);
+        if (sp && sp->kind == 0x3002 && sp->b < db.spells.size() && Lower(db.spells[sp->b].code) == "healing") return static_cast<int>(i);
+    }
+    return -1;
+}
+
+// The spells the client casts: the Healing spell.
+static void SetSpellSlots(net::Client& client, const mp::Character& ch, const items::Database& db, const bot::Config&) {
+    client.healSpellSlot = FindHealSpellSlot(ch, db);
+}
+
 // The character .mp's decompressed content: what the bot uploads when entering a quest.
 static std::vector<uint8_t> MpRaw(const std::string& path) {
     std::ifstream in(path, std::ios::binary);
@@ -76,10 +141,227 @@ static std::vector<uint8_t> MpRaw(const std::string& path) {
     return raw;
 }
 
+// What the camp's shop of the session's allod offers: which allod the quests of the session belong to (its quest list / the chosen quest), the shop number, and this session's draw of items
+// and spell blueprints (one draw per session: the stock stays the same for every visit of the shop in it).
+struct ShopCtx { int shopNo = 0; std::string why; std::string allod; std::vector<shop::Offer> stock; std::vector<spells::StockSpell> spellStock; std::vector<spells::StockRune> runeStock; };
+static bool MakeShopCtx(const mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, ShopCtx& ctx) {
+    std::mt19937 rng(seed);
+    std::string mapsDir;
+    { std::string dir = cfg.character; const size_t slash = dir.find_last_of("/\\"); if (slash != std::string::npos) mapsDir = dir.substr(0, slash) + "/../maps"; }
+    std::string allod = client.chosenQuest.empty() ? "" : shop::AllodOfQuest(client.chosenQuest, mapsDir);
+    if (allod.empty() || allod == "final") { // the quest list of the session: the allod most of its quests belong to
+        std::map<std::string, int> votes;
+        for (const std::string& q : client.QuestFiles()) { const std::string a = shop::AllodOfQuest(q, mapsDir); if (!a.empty() && a != "final") ++votes[a]; }
+        int best = 0; for (const auto& kv : votes) if (kv.second > best) { best = kv.second; allod = kv.first; }
+    }
+    ctx.allod = allod;
+    ctx.shopNo = shop::ShopOfAllod(allod);
+    if (!ctx.shopNo || ch.members.empty() || db.materials.empty()) {
+        ctx.why = db.materials.empty() ? "no item database loaded (set DATABASE, or put databaselmp.res in <character folder>/../res)"
+                : ch.members.empty() ? "the character has no members"
+                : "the allod of the quest is unknown (chosen quest '" + client.chosenQuest + "', " + std::to_string(client.QuestFiles().size()) + " quests listed, maps folder " + mapsDir + ")";
+        return false;
+    }
+    ctx.stock = shop::Stock(db, ctx.shopNo, rng);
+    ctx.spellStock = spells::Stock(db, ctx.shopNo, rng);
+    ctx.runeStock = spells::RuneStock(db, ctx.shopNo, rng);
+    return true;
+}
+
+// The camp's shop before a quest: what to buy and sell for the role and the gear target, applied to the character, saved, and handed to the client for the quest entry.
+// Returns what to log ("" when nothing to do).
+static std::string DoShopping(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
+    shop::Prefs pf;
+    pf.role = bot::RoleKind(cfg.role); pf.tankiness = cfg.tankiness; pf.wishes = shop::ParseWishes(cfg.gearTarget);
+    const shop::Plan plan = shop::MakePlan(db, ch, pf, ctx.stock);
+    if (plan.buy.empty() && plan.sell.empty() && plan.repair.empty() && plan.potionAdd == 0) {
+        std::string none = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): nothing to buy or sell (" + std::to_string(ctx.stock.size()) + " items in stock, money " + std::to_string(plan.money) + ")";
+        for (const std::string& n : plan.notes) none += "\n  " + n;
+        return none;
+    }
+    std::string text = "shop " + std::to_string(ctx.shopNo) + " (" + ctx.allod + "): " + shop::Apply(db, ch, plan);
+    for (const std::string& n : plan.notes) text += "\n  " + n;
+    if (cfg.announce) { // the useful part, in the chat: what it bought (with the price), what it sold, repairs, potions, what is left
+        std::string bought; long soldFor = 0, repairFor = 0;
+        for (const std::string& n : plan.notes) {
+            const size_t colon = n.find(": ");
+            if (colon != std::string::npos && (n.compare(0, 6, "weapon") == 0 || n.compare(0, 5, "armor") == 0 || n.compare(0, 6, "wished") == 0)) bought += (bought.empty() ? "" : ", ") + n.substr(colon + 2);
+            else if (n.compare(0, 9, "sell loot") == 0) soldFor += std::atol(n.substr(n.rfind(" for ") + 5).c_str());
+            else if (n.compare(0, 6, "repair") == 0) repairFor += std::atol(n.substr(n.rfind(" for ") + 5).c_str());
+        }
+        if (!bought.empty()) client.Say("bought: " + bought);
+        if (soldFor > 0) client.Say("sold loot for " + std::to_string(soldFor));
+        if (!plan.repair.empty()) client.Say("repaired " + std::to_string(plan.repair.size()) + " item(s) for " + std::to_string(repairFor));
+        if (plan.potionAdd > 0) client.Say("bought " + std::to_string(plan.potionAdd) + " healing potions");
+        if (!bought.empty() || soldFor > 0 || !plan.repair.empty()) client.Say("money left: " + std::to_string(plan.money));
+    }
+    std::string err;
+    if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
+    client.SetMpRaw(mp::Serialize(ch));
+    return text;
+}
+
+// The spell constructor: the Healing spell for the bot's job as a companion (blueprint from the shop, made at once like the camp's constructor does with no runes).
+static std::string DoSpells(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
+    const spells::Plan plan = spells::MakePlan(db, ch, ctx.spellStock, ctx.runeStock);
+    std::string text = spells::Apply(db, ch, plan);
+    for (const std::string& n : plan.notes) text += (text.empty() ? "" : "\n") + n;
+    if (cfg.announce) {
+        for (const spells::Buy& b : plan.buys) client.Say((plan.replaced.empty() ? "made the spell " : "made a stronger ") + db.spells[static_cast<size_t>(b.row)].name + (b.runes.empty() ? std::string() : " with " + std::to_string(b.runes.size()) + " rune(s)") + " (" + std::to_string(static_cast<long>(b.cost)) + ")");
+        if (!plan.equips.empty()) client.Say("equipped a spell");
+    }
+    if (plan.buys.empty() && plan.equips.empty()) return text;
+    std::string err;
+    if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
+    client.SetMpRaw(mp::Serialize(ch));
+    return text;
+}
+
+// The camp's skills window before a quest: the free experience spent on skills and abilities for the role (growth.hpp), applied to the character, saved and handed to the client.
+static std::string DoGrowth(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, const ShopCtx& ctx, const std::string& path) {
+    if (ch.members.empty() || db.perks.empty()) return "";
+    growth::Prefs pf;
+    pf.role = bot::RoleKind(cfg.role); pf.tankiness = cfg.tankiness;
+    if (cfg.shop && !ch.members.empty()) { // the skill the Healing spell needs (and the stronger one it would make), when the shop offers the blueprint
+        const int heal = spells::RowOfCode(db, "healing");
+        const std::vector<int> owned = spells::OwnedRows(ch);
+        const mp::Member& me = ch.members[0];
+        const bool haveBlueprint = heal >= 0 && std::any_of(ctx.spellStock.begin(), ctx.spellStock.end(), [&](const spells::StockSpell& s) { return s.row == heal && s.count > 0; });
+        if (haveBlueprint) {
+            const int school = db.spells[static_cast<size_t>(heal)].ni[19];
+            const int skill = school <= 2 ? growth::kElemental : school <= 4 ? growth::kSense : growth::kAstral;
+            int byte = -1;
+            if (std::find(owned.begin(), owned.end(), heal) == owned.end()) byte = spells::SkillByteNeeded(db, me, heal);
+            else { // owned: what its runes would need, as far as the money and the mana pool allow
+                const spells::Equipped cur = spells::EquippedSpell(ch, heal);
+                const spells::Upgrade up = spells::BestVersion(db, me, heal, ctx.runeStock, static_cast<float>(mp::Money(ch)) * 0.5f, true);
+                float effect = 0; if (up.ok && !up.runes.empty()) std::memcpy(&effect, up.built.object.data() + 10, 4);
+                if (cur.container && effect >= cur.effect * 1.25f) byte = spells::SkillByteForBuilt(db, me, up.built);
+            }
+            if (byte > 0) pf.minSkill[skill] = std::max(pf.minSkill[skill], byte);
+        }
+    }
+    const growth::Plan plan = growth::MakePlan(db, ch, pf);
+    if (plan.buys.empty()) return "";
+    std::string text = growth::Apply(db, ch, plan);
+    if (cfg.announce) { std::string said; for (const std::string& l : plan.lines) said += (said.empty() ? "" : ", ") + l; client.Say("trained (" + std::to_string(plan.cost) + " exp): " + said); }
+    std::string err;
+    if (!path.empty() && !mp::Save(path, ch, err)) return text + "\n  not saved: " + err;
+    client.SetMpRaw(mp::Serialize(ch));
+    return text;
+}
+
+// Everything the camp offers before a quest, in the order a player does it: experience first (the abilities weigh in the weapon choice), then the shop.
+static std::string DoCamp(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, const std::string& path) {
+    std::string text;
+    ShopCtx ctx;
+    const bool haveShop = MakeShopCtx(ch, db, cfg, client, seed, ctx);
+    auto add = [&](const std::string& t) { if (!t.empty()) text += (text.empty() ? "" : "\n") + t; };
+    if (cfg.grow) add(DoGrowth(ch, db, cfg, client, ctx, path));
+    if (cfg.shop && haveShop) { add(DoSpells(ch, db, cfg, client, ctx, path)); add(DoShopping(ch, db, cfg, client, ctx, path)); }
+    else if (cfg.shop) add("shop skipped: " + ctx.why);
+    SetSpellSlots(client, ch, db, cfg); // a spell made now can be cast in the quest
+    return text;
+}
+
+// The swap's loot sold at once (the shop only, in this session's stock).
+static std::string DoSelling(mp::Character& ch, const items::Database& db, const bot::Config& cfg, net::Client& client, unsigned seed, const std::string& path) {
+    ShopCtx ctx;
+    return MakeShopCtx(ch, db, cfg, client, seed, ctx) ? DoShopping(ch, db, cfg, client, ctx, path) : std::string();
+}
+
+// Items received in a finished swap (the partner's item blobs: u32 id, u32 kind, u16 a, u16 b, 4 bytes, the detail's tail) added to the character's items and backpack, the
+// file saved and the new content handed to the client for the next quest entry. Returns what to log.
+static std::string AddSwappedItems(mp::Character& ch, const std::vector<std::vector<uint8_t>>& blobs, uint32_t money, const std::string& path, net::Client& client) {
+    int added = 0; uint32_t moneyGot = 0;
+    if (money) { mp::SetMoney(ch, mp::Money(ch) + money); moneyGot += money; ++added; } // the partner's offered amount
+    uint32_t next = 1;
+    for (const auto& list : ch.lists) for (const mp::Object& o : list) next = std::max(next, o.id + 1);
+    for (const auto& blob : blobs) {
+        if (blob.size() < 16) continue;
+        mp::Object o;
+        std::memcpy(&o.kind, &blob[4], 4); std::memcpy(&o.a, &blob[8], 2); std::memcpy(&o.b, &blob[10], 2);
+        const int size = mp::DetailSize(o.kind);
+        if (size < 0 || static_cast<int>(blob.size()) != size + 8) continue; // not an item shape we know
+        o.id = next++;
+        o.detail.resize(8); // the detail: the object's id, a, b, then the blob's tail (the blob has 4 extra bytes after b that the .mp does not)
+        std::memcpy(o.detail.data(), &o.id, 4); std::memcpy(o.detail.data() + 4, &o.a, 2); std::memcpy(o.detail.data() + 6, &o.b, 2);
+        o.detail.insert(o.detail.end(), blob.begin() + 16, blob.end());
+        if (static_cast<int>(o.detail.size()) != size) continue;
+        if (o.kind == 0x3007 && o.b == 0 && o.detail.size() >= 48) { // the loot item of row 0 is money: the amount (the count) goes into the purse, as the game's exchange adds it to the party's money
+            uint32_t amount; std::memcpy(&amount, &o.detail[44], 4);
+            mp::SetMoney(ch, mp::Money(ch) + amount); moneyGot += amount; ++added; continue;
+        }
+        ch.lists[0].push_back(o); ch.backpack.push_back(o.id); ++added;
+    }
+    if (!added) return "";
+    std::string err;
+    const std::vector<uint8_t> raw = mp::Serialize(ch);
+    if (!path.empty() && !mp::Save(path, ch, err)) return "swap: " + std::to_string(added) + " items received, but the character was not saved: " + err;
+    client.SetMpRaw(raw);
+    return "swap: " + std::to_string(added) + " items added to the character" + (moneyGot ? ", money +" + std::to_string(moneyGot) : std::string());
+}
+
+// The party the server sent (its 0x80 / 0x83 messages): checked with the .mp reader (must parse and write back the same), then written into the
+// character's file. The first save keeps the original as .bak. Returns a message for the log ("" when nothing was saved).
+static std::string SaveProgress(net::Client& client, const std::string& path, mp::Character* current = nullptr) {
+    std::string said; bool final = false;
+    while (!client.partyIn.empty()) {
+        net::Client::PartyBlob pb = std::move(client.partyIn.front());
+        if (pb.op == 0x83) final = true;
+        client.partyIn.erase(client.partyIn.begin());
+        mp::Character fresh, base;
+        std::string err;
+        if (!mp::Parse(pb.bytes, fresh, err) || mp::Serialize(fresh) != pb.bytes || fresh.members.empty()) continue; // not a party
+        if (!mp::Load(path, base, err)) continue;                                    // the file must still be a character we understand
+        if (mp::Serialize(base) == pb.bytes) continue;                               // nothing new
+        fresh.head = base.head; fresh.version = base.version;
+        const std::string bak = path + ".bak";
+        if (FILE* f = std::fopen(bak.c_str(), "rb")) std::fclose(f);
+        else if (FILE* in = std::fopen(path.c_str(), "rb")) {
+            std::vector<char> bytes; char buf[4096]; size_t n;
+            while ((n = std::fread(buf, 1, sizeof buf, in)) > 0) bytes.insert(bytes.end(), buf, buf + n);
+            std::fclose(in);
+            if (FILE* out = std::fopen(bak.c_str(), "wb")) { std::fwrite(bytes.data(), 1, bytes.size(), out); std::fclose(out); }
+        }
+        if (mp::Save(path, fresh, err)) {
+            said = std::string("saved the character's progress (") + (final ? "on leaving" : "periodic") + ", " + std::to_string(pb.bytes.size()) + " bytes) into " + path;
+            if (current) *current = fresh;
+            client.SetMpRaw(pb.bytes); // what the next entry uploads is what the server holds now (a death took the inventory to the body: uploading the old one would duplicate it)
+        } else said = "progress not saved: " + err;
+    }
+    return said;
+}
+
 static void Tip(const char* text) {
     if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", text);
 }
 
+static void EnsureDb(App& app) { // (re)load the database when the choice or the character changed
+    const std::string key = app.cfg.database + "|" + app.cfg.character;
+    if (app.dbFor == key) return;
+    app.dbFor = key;
+    app.db = items::Database{};
+    app.dbPath = LoadDb(app.cfg, app.db);
+    app.dbLoaded = !app.dbPath.empty();
+}
+static void SetHealing(App& app) { // the healing potion's belt slot (from the database), and the heal-the-host setting
+    EnsureDb(app);
+    if (app.dbLoaded) { const int slot = FindHealPotionSlot(app.character, app.db); if (slot >= 0) app.client.potionSlot = slot; SetSpellSlots(app.client, app.character, app.db, app.cfg); }
+    app.client.healHostBelow = app.cfg.healPlayerBelow;
+}
+static void StartConnection(App& app) {
+    SetHealing(app);
+    app.shopped = false; app.shopWaitFrom = 0; app.shopSeed = std::random_device{}() | 1u;
+    app.client.holdEntry = app.cfg.shop || app.cfg.grow; // the quest is entered after the camp visit
+    app.client.acceptSwaps = app.cfg.acceptSwaps;
+    app.client.leaveAtExit = app.cfg.leaveAtExit; app.client.sayLeaving = app.cfg.announce;
+    if (!app.character.members.empty()) {
+        const mp::Member& m = app.character.members[0];
+        app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
+    }
+    app.client.Connect(app.cfg.host, app.cfg.port);
+}
 static void ConnectionPanel(App& app) {
     { // the language (um-multitool's table: lang/ru.txt)
         i18n::Lang cur = i18n::Current();
@@ -110,16 +392,15 @@ static void ConnectionPanel(App& app) {
     if (!active) {
         ImGui::BeginDisabled(app.characterFor.empty() || !app.characterError.empty());
         if (ImGui::Button("Connect")) {
-            if (!app.character.members.empty()) {
-                const mp::Member& m = app.character.members[0];
-                app.client.SetCharacter(m.strings[0], m.strings[4], m.u0, MpRaw(app.characterFor));
-            }
-            app.client.Connect(c.host, c.port);
+            app.keepConnected = true; app.retries = 0;
+            StartConnection(app);
         }
         ImGui::EndDisabled();
         Tip("Joins the game: asks the server for its info, then logs in (needs a character)");
     } else if (ImGui::Button("Disconnect")) {
-        app.client.Disconnect();
+        app.keepConnected = false;
+        if (app.client.worldUnit) app.client.LeaveWorld(); // the final save first; it disconnects 2 s later
+        else app.client.Disconnect();
     }
     ImGui::SameLine();
     using S = net::Client::State;
@@ -143,6 +424,19 @@ static void ConnectionPanel(App& app) {
     ImGui::SameLine();
     std::string picked;
     if (ImGui::Button("Character...") && ui::PickFile(picked)) { c.character = picked; app.dirty = true; }
+    EnsureDb(app);
+    { // the database: names of the items and spells (the Healing spell needs it)
+        char dbp[1024];
+        std::snprintf(dbp, sizeof dbp, "%s", c.database.c_str());
+        ImGui::SetNextItemWidth(-160);
+        if (ImGui::InputTextWithHint("##database", app.dbLoaded ? app.dbPath.c_str() : "the database: databaselmp.res (or database.res)", dbp, sizeof dbp, ImGuiInputTextFlags_EnterReturnsTrue)) { c.database = dbp; app.dirty = true; }
+        Tip("The game's (or the mod's) database.res / databaselmp.res: item names, and which belt potion heals (the bot drinks that one).\n"
+            "Empty: it looks in the res folder next to the mp folder.");
+        ImGui::SameLine();
+        std::string dbPicked;
+        if (ImGui::Button("Database...") && ui::PickFile(dbPicked)) { c.database = dbPicked; app.dirty = true; }
+        if (!app.dbLoaded) ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "%s", i18n::Tr("No database found: no item names, and the bot cannot tell which belt potion heals. Choose database.res or databaselmp.res."));
+    }
     if (app.characterFor != c.character) { // (re)load it
         app.characterFor = c.character;
         app.nameDirty = false;
@@ -206,17 +500,37 @@ static void ConnectionPanel(App& app) {
 
 static void BuildPanel(App& app) {
     bot::Config& c = app.cfg;
-    static const char* const kRoles[] = {"Melee", "Ranged", "Mage", "Hybrid"};
+    static const char* const kRoles[] = {"Fighter", "Tank", "Archer"};
     ImGui::SetNextItemWidth(200);
-    app.dirty |= EnumCombo("Role", c.role, kRoles);
+    if (EnumCombo("Build", c.role, kRoles)) { app.dirty = true; c.tankiness = c.role == bot::Role::Tank ? 80 : 30; } // each build has its own default of the slider
     Tip("What the bot builds and plays:\n"
-        "Melee: weapons and armour, in front of the player\n"
-        "Ranged: bows and crossbows, behind the player\n"
-        "Mage: spells, heals and buffs first\n"
-        "Hybrid: a weapon plus healing spells");
+        "Fighter: a melee weapon, damage first\n"
+        "Tank: a melee weapon, armour and health first\n"
+        "Archer: bows and crossbows\n"
+        "All of them keep a Healing spell, made stronger with runes when the money and the skill allow.");
     ImGui::SetNextItemWidth(200);
     app.dirty |= ImGui::SliderInt("Damage <-> Defence", &c.tankiness, 0, 100, i18n::Tr("%d%% defence"));
     Tip("Where its skill points and gear go: 0 all damage, 100 all defence (health, armour)");
+    app.dirty |= ImGui::Checkbox("Shop before quests", &c.shop);
+    Tip("Before entering a quest it visits the camp's shop of the allod (Gipath, Ingos, Suslanger or Jigran: found from the quests of the session): sells loot and old gear, buys and wears\n"
+        "what its role and the Damage <-> Defence slider call for, within its money and what it can carry. It needs the database (see below).");
+    app.dirty |= ImGui::Checkbox("Accept swaps", &c.acceptSwaps);
+    Tip("A player can click the bot's head in the lobby to offer a swap: the bot takes what is offered (loot it sells for money) and gives nothing. Off: it ignores swap requests.");
+    app.dirty |= ImGui::Checkbox("Leave first at an exit", &c.leaveAtExit);
+    Tip("When the host stands in a zone exit the bot leaves the zone first: the host cannot leave while other players are still in it. The host can also type \"bot leave\" in the chat.");
+    app.dirty |= ImGui::Checkbox("Report in chat", &c.announce);
+    Tip("Says in the game's chat what it did at the camp: what it bought and for how much, what it sold, repairs, training and spells.");
+    app.dirty |= ImGui::Checkbox("Spend experience", &c.grow);
+    Tip("Before entering a quest it spends its free experience in the camp like a player: skill points and abilities for the role and the Damage <-> Defence slider, at the game's\n"
+        "prices (a melee build raises Melee and the wielded weapon's ability, a ranged one Archery, a mage the magic skills). It needs the database (see below).");
+    char gt[512];
+    std::snprintf(gt, sizeof gt, "%s", c.gearTarget.c_str());
+    ImGui::SetNextItemWidth(-130);
+    if (ImGui::InputTextWithHint("##geartarget", "auto: built from the role", gt, sizeof gt)) { c.gearTarget = gt; app.dirty = true; }
+    ImGui::SameLine(); ImGui::TextUnformatted("Gear target");
+    Tip("Gear it builds first and keeps, separated by ';': an item name, optionally with a material after ':'\n"
+        "e.g.  bone long bow:dragon red bones; gipat highest plate\n"
+        "While the shop does not offer it (its materials are drawn anew every session) the bot saves the money. Empty: auto, from the role.");
 }
 
 static void BehaviourPanel(App& app) {
@@ -235,6 +549,8 @@ static void BehaviourPanel(App& app) {
     app.dirty |= ImGui::SliderInt("Mana kept for heals", &c.manaReserve, 0, 100, "%d%%");
     Tip("Mana it does not spend on attacks");
     app.dirty |= ImGui::Checkbox("Use potions", &c.usePotions);
+    app.dirty |= ImGui::Checkbox("Save progress", &c.saveProgress);
+    Tip("Writes the experience and items the server reports back into the character's .mp (the original is kept as .bak the first time)");
     static const char* const kEngagement[] = {"Passive", "Defensive", "Aggressive"};
     ImGui::SetNextItemWidth(200);
     app.dirty |= EnumCombo("Engagement", c.engagement, kEngagement);
@@ -305,8 +621,16 @@ static void Sonar(const net::Client& c, float size, float range) {
 static void StatusPanel(App& app) {
     const bool on = app.client.state == net::Client::State::Accepted;
     app.client.followDistance = app.cfg.followDistance;
+    app.client.weaponRange = 0; // the wielded weapon's range (database column Range)
+    if (app.dbLoaded && !app.character.members.empty()) {
+        const auto& weapons = app.db.List(items::Category::Weapons);
+        for (uint32_t id : app.character.members[0].lists[0]) if (const mp::Object* o = shop::FindObject(app.character, id)) if (o->kind == 0x3004 && o->b < weapons.size()) { app.client.weaponRange = weapons[o->b].n[23]; break; }
+    }
     app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
     app.client.engagement = static_cast<int>(app.cfg.engagement); // Passive / Defensive / Aggressive
+    app.client.healSelfBelow = app.cfg.healSelfBelow; app.client.usePotions = app.cfg.usePotions;
+    SetHealing(app);
+    app.client.leash = app.cfg.leashDistance; app.client.priority = static_cast<int>(app.cfg.priority); app.client.matchPace = app.cfg.pace == bot::Pace::MatchPlayer;
     app.client.fightInSight = app.client.engagement > 0;
     if (!app.character.members.empty() && mp::GetF(app.character.members[0].stats, 0xB4) > 1) app.client.sight = mp::GetF(app.character.members[0].stats, 0xB4);
     const ImVec2 avail = ImGui::GetContentRegionAvail();
@@ -346,20 +670,6 @@ static void LogPanel(App& app) {
 static void CharacterPanel(App& app) {
     if (app.character.members.empty()) { ImGui::TextDisabled("No character loaded."); return; }
     const mp::Member& m = app.character.members[0];
-    if (app.dbFor != app.cfg.character) { // the mod's database: <mp folder>/../res/databaselmp.res
-        app.dbFor = app.cfg.character;
-        app.dbLoaded = false;
-        std::string dir = app.cfg.character;
-        const size_t slash = dir.find_last_of("/\\");
-        dir = slash == std::string::npos ? "." : dir.substr(0, slash);
-        for (const char* rel : {"/../res/databaselmp.res", "/../res/database.res"}) {
-            std::ifstream f(dir + rel, std::ios::binary);
-            if (!f) continue;
-            std::vector<uint8_t> bytes((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
-            std::string err;
-            if (items::LoadDatabaseRes(bytes, rel + 8, app.db, err)) { app.dbLoaded = true; break; }
-        }
-    }
     const float total = mp::GetF(m.stats, mp::kExpTotal), spent = mp::GetF(m.stats, mp::kExpSpent);
     ImGui::Text("%s", m.strings[0].c_str());
     ImGui::TextDisabled("%s", m.strings[4].c_str());
@@ -418,7 +728,9 @@ static void CharacterPanel(App& app) {
         for (uint32_t id : m.lists[l]) t += std::string(t.empty() ? "" : ", ") + name(id);
         ImGui::TextWrapped("%s: %s", i18n::Tr(kLists[l]), t.empty() ? i18n::Tr("none") : t.c_str());
     }
+    ImGui::PushTextWrapPos(0.0f);
     ImGui::TextDisabled("Backpack: %zu items%s", app.character.backpack.size(), app.dbLoaded ? "" : " (no database found beside the mp folder: no item names)");
+    ImGui::PopTextWrapPos();
 }
 
 // `um-bot --install-desktop [--remove]` (Linux): the menu entry (um-bot.desktop, with this binary's path) and the
@@ -507,6 +819,11 @@ static void Frame(App& app) {
 }
 
 int main(int argc, char** argv) {
+    { // um-bot.log next to the program (the window's log and every order with its reason); not for --version / --help
+        bool wantLog = argc == 1;
+        for (int i = 1; i < argc; ++i) if (std::string(argv[i]) == "--connect-test") wantLog = true;
+        if (wantLog) net::OpenBotLog(bot::ProgramDir() + "/um-bot.log");
+    }
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
         if (a == "--version") {
@@ -524,38 +841,110 @@ int main(int argc, char** argv) {
                 client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
             else
                 std::printf("no character (%s): logs in without joining\n", err.empty() ? "CHARACTER not set" : err.c_str());
+            client.healSelfBelow = cfg.healSelfBelow; client.usePotions = cfg.usePotions;
+            items::Database shopDb; const std::string dbf = LoadDb(cfg, shopDb); bool shopped = false; // the shop visit (before the quest) needs the database
+            { items::Database& db = shopDb; // the healing potion's slot, and the Healing spell's
+              if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; SetSpellSlots(client, ch, db, cfg); }
+              client.healHostBelow = cfg.healPlayerBelow;
+              std::printf("database: %s, healing potion slot %d, Healing spell slot %d\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot); }
+            if (std::getenv("UM_BOT_NOSPELL")) client.healSpellSlot = -1; // research: potion only
+            if (std::getenv("UM_BOT_NOPOTION")) client.usePotions = false; // research: spell only
+            client.leash = cfg.leashDistance; client.priority = static_cast<int>(cfg.priority); client.matchPace = cfg.pace == bot::Pace::MatchPlayer;
+            if (const char* hb = std::getenv("UM_BOT_HEAL")) client.healSelfBelow = std::atoi(hb); // research: heal below this % (default the setting)
             client.followHost = std::getenv("UM_BOT_FOLLOW") != nullptr;
             client.followDistance = cfg.followDistance;
-            client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read
+            client.pace = cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3; // MatchPlayer: run until the host's pace is read (client.matchPace)
             client.fightInSight = std::getenv("UM_BOT_FIGHT") != nullptr;
             client.engagement = client.fightInSight ? (std::getenv("UM_BOT_FIGHT")[0] == '1' ? 2 : std::atoi(std::getenv("UM_BOT_FIGHT"))) : 0;
             if (!ch.members.empty() && mp::GetF(ch.members[0].stats, 0xB4) > 1) client.sight = mp::GetF(ch.members[0].stats, 0xB4);
+            if (const char* sg = std::getenv("UM_BOT_SIGHT")) client.sight = static_cast<float>(std::atof(sg)); // research: pretend a longer sight so it fights from farther
+            client.holdEntry = (cfg.shop || cfg.grow) && !std::getenv("UM_BOT_NOSHOP");
+            client.acceptSwaps = cfg.acceptSwaps;
+            client.leaveAtExit = cfg.leaveAtExit; client.sayLeaving = cfg.announce;
             client.Connect(cfg.host, cfg.port);
             const auto start = std::chrono::steady_clock::now();
             while (std::chrono::steady_clock::now() - start < std::chrono::seconds(std::getenv("UM_BOT_STAY") ? std::atoi(std::getenv("UM_BOT_STAY")) : client.ZoneOpen() && !client.worldUnit ? 30 : 8) && client.state != net::Client::State::Failed &&
                    client.state != net::Client::State::Rejected) {
                 client.Update();
+                if (client.holdEntry && !shopped && client.joined && (!client.chosenQuest.empty() || !client.quests.empty())) { // the shop visit
+                    const unsigned seed = std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u;
+                    if (!dbf.empty() && !ch.members.empty()) { const std::string said = DoCamp(ch, shopDb, cfg, client, seed, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
+                    shopped = true; client.holdEntry = false;
+                }
+                if (client.reconnect && client.state == net::Client::State::Idle) { // as the window does after leaving the world
+                    client.reconnect = false;
+                    if (!ch.members.empty()) client.SetCharacter(ch.members[0].strings[0], ch.members[0].strings[4], ch.members[0].u0, MpRaw(cfg.character));
+                    client.Connect(cfg.host, cfg.port); std::printf("connecting again\n"); std::fflush(stdout);
+                }
+                if ((!client.swapReceived.empty() || client.swapMoney) && !ch.members.empty()) {
+                    const std::string said = AddSwappedItems(ch, client.TakeSwapped(), client.TakeSwapMoney(), cfg.character, client); if (!said.empty()) std::printf("%s\n", said.c_str());
+                    if (!said.empty() && cfg.shop && !dbf.empty()) { const std::string sold = DoSelling(ch, shopDb, cfg, client, std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u, cfg.character); if (!sold.empty()) std::printf("%s\n", sold.c_str()); }
+                }
+                if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
                 static size_t printed = 0; // the log as it comes, with the time
                 for (; printed < client.log.size(); ++printed)
                     std::printf("%6.1f %s\n", std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count(), client.log[printed].c_str());
                 std::fflush(stdout);
-                static int attackStep = 0; // research: UM_BOT_ATTACK=1: 12 s in, walk near the nearest monster; 8 s later, attack it
-                static uint32_t target = 0;
-                if (std::getenv("UM_BOT_ATTACK") && client.worldUnit) {
-                    const auto in = std::chrono::steady_clock::now() - start;
+                static int attackStep = 0; // research: UM_BOT_ATTACK=<d> (1 = 6): 12 s in, walk to d units from the nearest hostile monster; 8 s later attack it, then every 4 s again, d - 1 closer each time
+                static uint32_t target = 0; static float approach = 6;
+                if (const char* ev = std::getenv("UM_BOT_ATTACK"); ev && client.worldUnit) {
+                    static auto worldAt = std::chrono::steady_clock::now(); static bool worldSeen = false;
+                    if (!worldSeen) { worldAt = std::chrono::steady_clock::now(); worldSeen = true; }
+                    const auto in = std::chrono::steady_clock::now() - worldAt; // the times count from the hero's arrival in the world
                     float mx = 0, my = 0, tx = 0, ty = 0, d = 0;
                     client.Where(client.worldUnit, mx, my);
                     if (attackStep == 0 && in > std::chrono::seconds(12)) {
+                        approach = std::atof(ev) > 1 ? static_cast<float>(std::atof(ev)) : 6.0f;
                         target = client.NearestOther(d);
-                        if (target && client.Where(target, tx, ty) && d > 7) client.MoveTo(tx + (mx - tx) * 6 / d, ty + (my - ty) * 6 / d);
-                        std::printf("target %X at %.1f (me at %.1f %.1f): walking near\n", target, d, mx, my); std::fflush(stdout);
+                        if (target && client.Where(target, tx, ty) && d > approach + 1) client.MoveTo(tx + (mx - tx) * approach / d, ty + (my - ty) * approach / d);
+                        std::printf("target %X at %.1f (me at %.1f %.1f): walking to %.1f of it\n", target, d, mx, my, approach); std::fflush(stdout);
                         attackStep = 1;
-                    } else if (attackStep == 1 && in > std::chrono::seconds(22)) {
+                    } else if (attackStep >= 1 && attackStep <= 6 && in > std::chrono::seconds(22 + 4 * (attackStep - 1))) {
                         if (target) client.Attack(target);
                         client.Where(target, tx, ty);
-                        std::printf("attack %X (me at %.1f %.1f, it at %.1f %.1f)\n", target, mx, my, tx, ty); std::fflush(stdout);
-                        attackStep = 2;
+                        const float dd = std::hypot(tx - mx, ty - my);
+                        std::printf("attack %X try %d (me at %.1f %.1f, it at %.1f %.1f, %.1f apart)\n", target, attackStep, mx, my, tx, ty, dd); std::fflush(stdout);
+                        if (target && dd > 1.5f) client.MoveTo(tx + (mx - tx) * std::max(0.5f, dd - 1.5f) / dd, ty + (my - ty) * std::max(0.5f, dd - 1.5f) / dd);
+                        ++attackStep;
                     }
+                }
+                static bool used = false; // research: UM_BOT_USE="slot,seconds" uses a quick slot (belt) on ourselves; UM_BOT_CASTON="spell,seconds,self|host" casts a spell object id
+                if (!used && client.worldUnit) {
+                    const double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+                    int slot = 0, spell = 0; double at = 0; char who[16] = "self";
+                    if (const char* u = std::getenv("UM_BOT_USE"); u && std::sscanf(u, "%d,%lf", &slot, &at) == 2 && t > at) { client.UseQuickSlot(slot, client.worldUnit); std::printf("use quick slot %d on ourselves\n", slot); std::fflush(stdout); used = true; }
+                    if (const char* c = std::getenv("UM_BOT_CASTON"); c && std::sscanf(c, "%d,%lf,%15s", &spell, &at, who) >= 2 && t > at) {
+                        const uint32_t tg = std::string(who) == "host" ? client.HostUnit() : (who[0] >= '0' && who[0] <= '9') ? static_cast<uint32_t>(std::atoi(who)) : client.worldUnit; // a number: that unit
+                        static int casts = 0; static double lastCast = -1e9; // UM_BOT_CASTN=<n> (default 1) orders, 2 s apart: the first one only switches the hero's stance
+                        const int total = std::getenv("UM_BOT_CASTN") ? std::atoi(std::getenv("UM_BOT_CASTN")) : 1;
+                        if (t - lastCast >= 2) { client.CastOn(static_cast<uint32_t>(spell), tg); std::printf("cast %d on %s (%u) #%d\n", spell, who, tg, ++casts); std::fflush(stdout); lastCast = t; }
+                        if (casts >= total) used = true;
+                    }
+                }
+                if (const char* lw = std::getenv("UM_BOT_LEAVEWORLD"); lw && client.worldUnit && std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > std::atof(lw)) client.LeaveWorld(); // research: leave the world for good (final save) at that time
+                static bool leftZone = false, reentered = false; // research: UM_BOT_LEAVE="secs[,rejoin secs]": leave the zone, optionally enter it again later
+                if (const char* lv = std::getenv("UM_BOT_LEAVE")) {
+                    double a = 0, b = -1; std::sscanf(lv, "%lf,%lf", &a, &b);
+                    const double t = std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
+                    if (!leftZone && client.worldUnit && t > a) { client.GoToLobby(); leftZone = true; client.autoEnter = false; std::printf("left the zone\n"); std::fflush(stdout); }
+                    if (leftZone && !reentered && b >= 0 && t > b) { client.autoEnter = true; reentered = true; std::printf("entering again\n"); std::fflush(stdout); }
+                }
+                if (const char* lt = std::getenv("UM_BOT_LOOT"); lt && client.worldUnit) { // research: UM_BOT_LOOT="secs,bodyUnitId": loot that body at that time (once)
+                    static bool looted = false; double a = 0; unsigned body = 0; std::sscanf(lt, "%lf,%u", &a, &body);
+                    if (!looted && std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) { client.LootBody(body); looted = true; std::printf("looting body %u\n", body); std::fflush(stdout); }
+                }
+                static bool rawSent = false; // research: UM_BOT_RAW="secs,hex bytes": send one stream message (e.g. "20,04000000" = the leave message 0x04 with a u32 0)
+                if (const char* rw = std::getenv("UM_BOT_RAW"); rw && !rawSent && client.worldUnit) {
+                    double a = 0; char hex[256] = ""; std::sscanf(rw, "%lf,%255s", &a, hex);
+                    if (std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) {
+                        std::vector<uint8_t> m; for (size_t k = 0; hex[k] && hex[k + 1]; k += 2) m.push_back(static_cast<uint8_t>(std::strtoul(std::string(hex + k, 2).c_str(), nullptr, 16)));
+                        client.SendRaw(m); rawSent = true; std::printf("sent raw stream message %s\n", hex); std::fflush(stdout);
+                    }
+                }
+                static bool mapSent = false; // research: UM_BOT_MAP="secs,name,entry": send a ChangeMapByName at that time
+                if (const char* mp_ = std::getenv("UM_BOT_MAP"); mp_ && !mapSent && client.worldUnit) {
+                    double a = 0; char nm[64] = ""; unsigned en = 0; std::sscanf(mp_, "%lf,%63[^,],%u", &a, nm, &en);
+                    if (std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) { client.ChangeMapByName(nm, en); mapSent = true; std::printf("sent ChangeMapByName %s %u\n", nm, en); std::fflush(stdout); }
                 }
                 static int moves = 0; // research: UM_BOT_MOVE="x,y;x,y;..." once in the world, one every 8 s
                 static auto movedAt = std::chrono::steady_clock::now();
@@ -569,11 +958,20 @@ int main(int argc, char** argv) {
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
+            std::printf("loop ended: state %d %s\n", static_cast<int>(client.state), client.error.c_str());
+            if (client.state == net::Client::State::Accepted && client.worldUnit && !std::getenv("UM_BOT_NOLEAVE")) { // leave the world properly: the final save
+                client.LeaveWorld();
+                for (int i = 0; i < 60 && client.state == net::Client::State::Accepted; ++i) {
+                    client.Update();
+                    if (cfg.saveProgress && !cfg.character.empty()) { const std::string said = SaveProgress(client, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
+                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                }
+            }
             client.Disconnect();
-            for (const auto& pl : client.players) std::printf("player %s state %u unit %08X\n", pl.second.name.c_str(), pl.second.state, pl.second.unitId);
+            for (const auto& pl : client.players) std::printf("player #%u %s state %u unit %08X flag %u tail %u\n", pl.first, pl.second.name.c_str(), pl.second.state, pl.second.unitId, pl.second.flag, pl.second.tail);
             for (const auto& q : client.questStates) std::printf("quest state %s\n", q.second.c_str());
             { float x = 0, y = 0; client.Where(client.worldUnit, x, y); std::printf("units known: %zu, me at %.1f %.1f\n", client.unitPos.size(), x, y); }
-            std::printf("world unit: %u\n", client.worldUnit); return client.joined ? 0 : 1;
+            std::printf("world unit: %u, state %d %s\n", client.worldUnit, static_cast<int>(client.state), client.error.c_str()); return client.joined ? 0 : 1;
         }
         if (a == "--install-desktop") return InstallDesktop(i + 1 < argc && std::string(argv[i + 1]) == "--remove");
         if (a == "--help" || a == "-h") {
@@ -589,8 +987,16 @@ int main(int argc, char** argv) {
     glfwWindowHintString(GLFW_WAYLAND_APP_ID, "um-bot"); // the menu entry's (um-bot.desktop): its icon on Wayland
     glfwWindowHintString(GLFW_X11_CLASS_NAME, "um-bot");
     glfwWindowHintString(GLFW_X11_INSTANCE_NAME, "um-bot");
-    GLFWwindow* window = glfwCreateWindow(900, 560, (std::string("um-bot ") + kVersion).c_str(), nullptr, nullptr);
+    // The first size follows the screen (the content needs about 1000 x 740: at 900 x 560 the Movement section and the Save button fell off the bottom and long lines were cut).
+    int startW = 1100, startH = 780;
+    if (GLFWmonitor* monitor = glfwGetPrimaryMonitor()) {
+        int wx = 0, wy = 0, ww = 0, wh = 0;
+        glfwGetMonitorWorkarea(monitor, &wx, &wy, &ww, &wh);
+        if (ww > 0 && wh > 0) { startW = std::clamp(static_cast<int>(ww * 0.7), 1000, 1400); startH = std::clamp(static_cast<int>(wh * 0.85), 740, 980); }
+    }
+    GLFWwindow* window = glfwCreateWindow(startW, startH, (std::string("um-bot ") + kVersion).c_str(), nullptr, nullptr);
     if (!window) { std::fprintf(stderr, "cannot open a window\n"); glfwTerminate(); return 1; }
+    glfwSetWindowSizeLimits(window, 960, 700, GLFW_DONT_CARE, GLFW_DONT_CARE);
     glfwMakeContextCurrent(window);
     if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) { // Wayland has no way to set one from the program
         GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)},
@@ -617,6 +1023,7 @@ int main(int argc, char** argv) {
         }
     }
     ImGui::GetIO().IniFilename = nullptr; // no imgui.ini: the layout is fixed
+    { float sx = 1, sy = 1; glfwGetWindowContentScale(window, &sx, &sy); if (sx > 1.05f) ImGui::GetIO().FontGlobalScale = std::min(sx, 2.0f); } // a scaled desktop: the text scales with it
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();
@@ -629,8 +1036,37 @@ int main(int argc, char** argv) {
     while (!glfwWindowShouldClose(window)) {
         glfwWaitEventsTimeout(0.05);
         app.client.Update();
+        // The connection dropped without the user asking (a join race, a lost server): connect again a few times.
+        if (app.keepConnected && app.client.state == net::Client::State::Failed) {
+            if (app.retryAt == 0) app.retryAt = glfwGetTime() + 5;
+            else if (glfwGetTime() > app.retryAt) {
+                app.retryAt = 0;
+                if (++app.retries <= 5) { app.Log("connection lost: connecting again (" + std::to_string(app.retries) + ")"); StartConnection(app); }
+                else app.keepConnected = false;
+            }
+        } else if (app.client.state == net::Client::State::Accepted && app.client.worldUnit) app.retries = 0;
+        if (app.keepConnected && app.client.reconnect && app.client.state == net::Client::State::Idle) { // after leaving the world: back into the session
+            if (app.retryAt == 0) app.retryAt = glfwGetTime() + 3;
+            else if (glfwGetTime() > app.retryAt) { app.retryAt = 0; app.client.reconnect = false; app.Log("connecting again after leaving the world"); StartConnection(app); }
+        }
+        if ((app.cfg.shop || app.cfg.grow) && !app.shopped && app.client.state == net::Client::State::Accepted && app.client.joined && !app.character.members.empty()) { // the shop visit
+            if (app.shopWaitFrom == 0) app.shopWaitFrom = glfwGetTime();
+            if (app.client.chosenQuest.size() || !app.client.quests.empty()) {
+                if (app.dbLoaded) { const std::string said = DoCamp(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!said.empty()) app.Log(said); }
+                app.shopped = true; app.client.holdEntry = false;
+            } else if (glfwGetTime() - app.shopWaitFrom > 8) { app.shopped = true; app.client.holdEntry = false; } // no quest list: go without
+        }
+        if ((!app.client.swapReceived.empty() || app.client.swapMoney) && !app.character.members.empty()) {
+            const std::string said = AddSwappedItems(app.character, app.client.TakeSwapped(), app.client.TakeSwapMoney(), app.characterFor, app.client); if (!said.empty()) app.Log(said);
+            if (!said.empty() && app.cfg.shop && app.dbLoaded) { const std::string sold = DoSelling(app.character, app.db, app.cfg, app.client, app.shopSeed, app.characterFor); if (!sold.empty()) app.Log(sold); } // the loot it was given is sold at once
+        }
+        if (app.cfg.saveProgress && !app.characterFor.empty() && !app.client.partyIn.empty()) {
+            mp::Character updated;
+            const std::string said = SaveProgress(app.client, app.characterFor, &updated);
+            if (!said.empty()) { app.Log(said); if (!updated.members.empty()) app.character = updated; }
+        } else if (!app.cfg.saveProgress) app.client.partyIn.clear();
         if (app.clientLogShown > app.client.log.size()) app.clientLogShown = 0; // the client trims its log
-        for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown]);
+        for (; app.clientLogShown < app.client.log.size(); ++app.clientLogShown) app.Log(app.client.log[app.clientLogShown], false);
         ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -643,6 +1079,14 @@ int main(int argc, char** argv) {
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(window);
+    }
+    if (app.client.state == net::Client::State::Accepted && app.client.worldUnit) { // closing the window in a world: leave it properly (the final save)
+        app.client.LeaveWorld();
+        for (int i = 0; i < 60 && app.client.state == net::Client::State::Accepted; ++i) {
+            app.client.Update();
+            if (app.cfg.saveProgress && !app.characterFor.empty()) SaveProgress(app.client, app.characterFor);
+            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        }
     }
     if (app.dirty) bot::Save(app.cfg); // keep what was set
     ImGui_ImplOpenGL2_Shutdown();

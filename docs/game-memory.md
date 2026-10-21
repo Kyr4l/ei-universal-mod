@@ -41,6 +41,8 @@ um.dll finds them by scanning the heap for 0x0073EA8C (on its own thread, every 
 | +0x280, +0x288 | its current path: an array of waypoints {x × 2, y × 2, direction x, direction y, ?, cell x, cell y}, and their count |
 | +0x238 | a player's character: its name (a game string, e.g. "HALAL MAN \| TEST"); empty for the map's units |
 | +0x250 | side: the .mob's "player" number (u32) |
+| +0x254, +0x255 | the animation (read from game.exe 2026-10-20, not yet seen live): the `.adb` index (record +16, see file-formats/adb-format.md) of the clip playing and of the one queued after it, signed bytes: -1 none, -2 the default idle set. The server's order code writes them (queues `{clip, duration}` per action) and the client plays them (`CUnitClientSpecific::SetAnimation` 0x5352B0: CAnimationSystem2::SetAnimation / QueueAnimation) |
+| +0x258 | the world time the clip started (the client seeks to now - this) |
 | +0x2E4, +0x2E8 | the walking direction, as a unit vector |
 
 Facing: θ = 2·atan2(z, w), and the unit faces (sin θ, −cos θ), because figures face their local −Y.
@@ -278,8 +280,48 @@ maintained by the interface (sub_5800C0, from the interface object at 0x0079B5C8
 - game.exe is client/server: CWorldClient / CPlayerClient / CUnitClientSpecific and CWorldServer /
   CUnitServer / CMapObjectServer; the host's server is authoritative (also in single player).
 
+## Experience: levels, skills and abilities (the camp's skills window)
+
+Everything is client side, on the party's unit parameters (the .mp `stats`): the camp changes the bytes and `+8` (experience spent) and the server takes them over at the next join.
+Verified live (2026-10-20) against the game's own cost functions, and against the saved characters (a character's spent experience = its skills + its abilities at their prices).
+
+- Experience total `stats+4`, spent `stats+8`; the free points of the window = (int)(total - spent) (`CCampSkillsWin::OnLButtonUp` 0x626920). The level is `round(log(total / 200) / log(1.61))`
+  (`CUnitServer::GetLevel` 0x556760; the constants are the float table at 0x7C5430: 200 at +0x58, 1.61 at +0x5C, 1.95 at +0x54, 5 at +0x50, 50 at +0x4C).
+- A skill (bytes at `stats+0x6CB`: melee, archery, backstab, elemental, sense, astral; `+0x6C8` the "science" row) rises by 1 for `trunc(50 * (1.61^((v+1)/5) - 1.61^(v/5)))`
+  (0x527FF0), at most to 100.
+- An ability ("perk", byte `stats+0x6D3+group`, level 0..3; 26 groups x 3 levels = the 78 rows of perks.pdb block 2): the next level costs
+  `base = trunc(50 * (1.61^(c/5) - 1.61^(c'/5)))` (c = the row's cost number, db field 18; c' = the previous level's, 0 for level 1), times `1.95^N` (N = all ability levels the character owns,
+  the sum of the 36 bytes `stats+0x6D3..0x6F6`), then rounded to one significant digit, or two when the leading digit is below 4 (below 100 it is rounded up) (`Perk_ComputeCost` 0x528050).
+- It can be learned (`UnitStats_CanLearnPerk` 0x5260A0) when the row is enabled (db field 22; in databaselmp.res the magic schools' rows are off), the attribute minima (fields 15..17) are met, the skill
+  it names (fields 11 / 12 / 14) is high enough, exactly the previous level is owned (the row names it in field 10), and no other group already owned has the same exclusion number (field 23).
+- Row fields: 18 cost number, 19 bonus (percent; points for the attribute groups 23..25), 20 / 21 unused here. Groups: 0..6 sword, axe, dagger, spear, bludgeon, bow, crossbow; 7..14 fire, lightning, acid,
+  illusion, divination, enchantments, healing, domination; 15 night vision, 16 health, 17 mana, 18 vitality, 19 spirit, 20 quickness, 21 lift, 22 backstab, 23 strength, 24 dexterity, 25 intelligence.
+- The cached values `UnitStats_Recompute` (0x524CD0) rebuilds from the base values and the abilities: `+0x10 / +0x18 / +0x20` = base `+0xC / +0x14 / +0x1C` + the attribute abilities' bonus;
+  `+0x54` (max encumbrance) = (1 + lift%) * strength * 12; `+0x2C` = dexterity * 0.2 + 10; `+0x30` (actions) = (1 + quickness%) * `+0x5C` * `+0x2C`. The game rebuilds them when the unit is created.
+
+## Spells: blueprints, runes, the constructor (camp tab "spell trade" / "spell constructor")
+
+Verified 2026-10-20 against the shop (live dump), every spell object of the saved characters (24 of 33 byte-identical; the others come from an older database) and a live cast.
+
+- The shops sell **blueprints** ("Prototype" loot items, `+0x54` = SpellPrototypes row) and **runes** ("Rune" loot items, `+0x54` = runes row): every spell / rune whose "Shop N" bit is set, blueprints 1..3 of each, runes 20..47.
+  Price = the blueprint's field 3 / the rune's field 2 (CItemLoot slot 16 0x6A5470 returns it in st0; the stored price 1.0 of the item is unused), times the camp's spell coefficient (buy 1.0, sell 0.5).
+- The constructor (`CSpellConstructor` 0x684xxx) turns one blueprint + up to 8 runes into a **spell container** item (kind 0x3008, the "wand": 56 bytes of detail, `+0x40` = the spell object's id, price field = the spell's price + 2) holding a **spell object**
+  (kind 0x3002, 66 bytes). The spell goes into the member's list 4 (spell slots); the 0x33 cast order's spell id is the index there. A container carried in the items but not worn is not castable.
+- Object layout (`CSpell::Write` 0x68B920): u32 id, u8 row, u8 0x10, u32 duration (S+0x20), f32 effect (+0x24), f32 area radius (+0x28), f32 +0x30, f32 range (+0x34), i32 targets (+0x38), u32 flags (+0x3C: 0x10000000 'u' / 0x20000000 't' target kind),
+  f32 mana (+0x40), i32 rune count + 1 (+0x44), f32 price (+0x48), i32 field 14 (+0x4C), 8 bytes rune rows + 1, u32 0, u32 required skill level (+0x50). Start values = the proto's fields 13, 10, 9, 7, 8, 12, 11, 5, 6, 3, 14, 21.
+- `CSpellContainer::Finalize` 0x68BF60 applies each rune by the first letter of its code: a area += v * proto f9 (then radius = sqrt(area / pi)), d duration += trunc(proto f13 * v), e effect += v * proto f10, f? / i? flag bits, m mana += v * proto f5,
+  r range += v * proto f8, t targets += trunc(proto f12 * v); every rune also: count + 1, required level += rune level (field 6), mana += rune field 4, price += rune price; the final mana = max(proto mana, mana). A rune of kind r/t/a/e/d needs the blueprint's field 20 flag of that kind.
+- Usable (`CanDropItem` 0x6100E0, `CanCastSpell` 0x54B950): magic skill >= required level, and trunc(mana * 25 / Intelligence) <= trunc(max mana). Magic skill = Intelligence - 25 + the school's skill byte (0x6CE elemental for schools 0..2, 0x6CF sense 3..4, 0x6D0 astral 5..7)
+  + the school ability's bonus; school = proto field 19. Max mana = (dexterity / 25) * 30 * 1.1^(log(exp / 50) / log(1.61)) * (1 + mana ability%) (live: 86.53 for exp 4000, dexterity 30); max health the same with strength / 25 and `+0x10`.
+
 ## Not known yet
 
 - The live diplomacy table, in case scripts change it during play.
 - A list or global pointer giving all units without a scan.
 - The meaning of each flag bit.
+
+## The camp screen's modes, prices and the item constructor / deconstruction (reversed and checked live 2026-10-21)
+`CCampScreen` (vtable 0x74091C; the multiplayer base's craftsman, "Buy, sell, order...") has the mode at `+0x190`, the shop's GSPlayer at `+0x198` and nine price coefficients at `+0x21C` (floats). The MP camp in the rig showed all seven tabs, their modes read from `+0x190` after a click on each button: 0 weapons / equipment, 1 skills, 2 spell trade, 3 spell constructor, 4 item trade, 5 item constructor, 6 repair (the 8th button leaves). Coefficients seen: `[1.0, 0.5, 0.2, 0.1, 1.0, 0.5, 0.2, 0.1, 0.2]` (indices: 0 / 4 buy, 1 / 5 sell, 2 / 6 construct fee, 3 / 7 deconstruct fee, 8 repair).
+`GetItemPrice(item, mode)` (0x60FAB0, thiscall on the camp, ret 8; checked by CALLing it on 4 shop weapons for modes 0..8: 960 -> 960, 480, 192, 96, 960, 480, 192, 96, 0): for a weapon / armor (kind 0x3004 / 0x3005) `round(base * coef[mode] - base * coef[8] * (1 - cur / max))`, mode 8 = `max(1, round(base * coef[8] * (1 - cur / max)))` (0 when undamaged); for any other item `round(base * coef[mode])`; base = the item's price (vtable slot 0x40). The money counter `+0x20C` is subtracted from the party's money when the action is confirmed (`OnBuyOrRepair` 0x611220, which ends `party +0x50 -= +0x20C`).
+Deconstruction (mode 5 with an item that `Item_IsUsable`: a weapon / armor / quick item) = `CCampItemConstr::CreateItem` 0x6129C0: the item is removed and the party gets (1) an "Instruction Weapon / Armor / Quick Item" item (its `+0x54` = the item's prototype row = the HIGH word of the item's id `+0x18`), (2) `material.<name>` items, one per `proto +0x4C` (the material = the LOW word of `+0x18`, row stride 0x50 in the materials table), (3) a spell container holding the item's spell when it has one (`+0x44`). The fee (`EnterMode` 0x611930, case 5) = `GetItemPrice(item, 7)` (10 % of the base price less the wear value), plus `GetItemPrice(item, 4)` (the full price) when the item's material (`+0x1C`) has its flag byte `+0x10` set. Construction (mode 5 with an "Instruction" loot item, category 2 subtype 0..2, and materials, category 1) uses `GetItemPrice(component, 6)` (20 %) per component. Not verified by hand in the UI yet: the deconstruction fee shown, the exact construction price rule, what a constructed item's material can be.
+Consequence for the bot's "disassemble and rebuy" idea: selling an item returns 50 % of its price, deconstructing costs 10 % and gives back a blueprint plus the materials (each sellable at 50 % of its own price): the money is never better than selling; the point of deconstruction is to REUSE the parts (the same blueprint with other materials), which needs the construction rules.

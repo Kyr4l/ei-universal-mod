@@ -22,9 +22,13 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.3.2";
+static const char* const kEngineVersion = "0.8.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
+extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
+extern "C" void __attribute__((thiscall)) UmCameraTick(void*, float);  // camera_smooth.cpp
+extern "C" void __attribute__((thiscall)) UmCameraFrame(void*, float);
+extern "C" void __attribute__((thiscall)) UmFpLight(void*, const char*, const char*, unsigned*, const unsigned short*, int, void* const*, int, const float*); // fp_light.cpp
 struct sockaddr; struct sockaddr_in; struct GameBuffer; // net_udp.cpp
 extern "C" bool __attribute__((thiscall)) UmNetSendTo(unsigned* self, sockaddr* to, GameBuffer* buffer);
 extern "C" bool __attribute__((thiscall)) UmNetReceiveFrom(unsigned* self, sockaddr_in* from, GameBuffer* buffer);
@@ -35,6 +39,7 @@ extern "C" void __attribute__((thiscall)) UmNetReadAcks(NetConnection* self, uns
 extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, unsigned seq);
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
+extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
 struct NetReader;
 extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, NetReader* reader, unsigned packetSeq);  // net_message.cpp
 
@@ -43,6 +48,8 @@ static const UmEngineFunction kFunctions[] = {
     { "strlen", 0x006ECCB0, reinterpret_cast<void*>(&UmStrlen), 0, {0x8B, 0x4C, 0x24, 0x04, 0xF7, 0xC1, 0x03, 0x00} }, // the Russian game.exe (EIStarter/Engine)
     { "NetSocket::SendTo", 0x00440B90, reinterpret_cast<void*>(&UmNetSendTo), 0, {0x8B, 0x44, 0x24, 0x08, 0x56, 0x57, 0x8B, 0x50} },
     { "NetSocket::ReceiveFrom", 0x00440BE0, reinterpret_cast<void*>(&UmNetReceiveFrom), 0, {0x53, 0x56, 0x8B, 0x74, 0x24, 0x10, 0x57, 0x8B} },
+    // The CRT's math (crt_math.cpp): the distance function, 22 % of the main thread's CPU time in the lobby
+    { "_hypot", 0x006FD026, reinterpret_cast<void*>(&UmHypot), 0, {0xDD, 0x44, 0x24, 0x0C, 0x6A, 0x18, 0x51, 0x51} },
     // The update packet codec (net_update.cpp): sequence window, acks, stream chunks, the update parser
     { "NetConnection::WriteAcks", 0x00434C20, reinterpret_cast<void*>(&UmNetWriteAcks), -1, {0x51, 0x8B, 0xD1, 0x53, 0x55, 0x56, 0x66, 0x8B} },
     { "NetConnection::AckOne", 0x00434CE0, reinterpret_cast<void*>(&UmNetAckOne), -1, {0x8B, 0x81, 0xF8, 0x10, 0x00, 0x00, 0x56, 0x57} },
@@ -54,7 +61,95 @@ static const UmEngineFunction kFunctions[] = {
     { nullptr, 0, nullptr, 0, {} } // end (kept so the table is never empty)
 };
 
+// Functions of the libraries game.exe loads (RE: _cpr/claude-re/dll/): patched once the library is in the process, at module + rva.
+struct UmModuleFunction {
+    const char* name;        // the key in um-engine.cfg
+    const char* module;      // the library's file name
+    unsigned long rva;       // where the function starts in it
+    void* replacement;       // the new code (same calling convention and arguments)
+    int required;            // as in UmEngineFunction
+    unsigned char expect[8]; // the original's first 8 bytes
+};
+static const UmModuleFunction kModuleFunctions[] = {
+    // 3DfpFPU.dll, the 3D pipeline: the per-vertex lighting (fp_light.cpp), ~40 % of that library's time
+    { "3DfpFPU::LightVertices", "3DfpFPU.dll", 0xD910, reinterpret_cast<void*>(&UmFpLight), 0, {0x53, 0x8B, 0xDC, 0x83, 0xEC, 0x08, 0x83, 0xE4} },
+    { nullptr, nullptr, 0, nullptr, 0, {} }
+};
+
+extern "C" void UmEngineLog(const char* format, ...);
+
+// Call sites inside game.exe (a `call rel32` is rewritten to call the replacement): all sites of one name are patched together, or none.
+struct UmCallSite {
+    const char* name;        // the key in um-engine.cfg
+    unsigned long address;   // the call instruction
+    void* replacement;
+    int required;            // as in UmEngineFunction
+    unsigned char expect[5]; // the original instruction
+};
+static const UmCallSite kCallSites[] = {
+    // camera_smooth.cpp: the camera's fixed-tick lump (18 Hz) spread over the frames, the frame time measured precisely
+    { "CCamera::SmoothUpdate", 0x004573A9, reinterpret_cast<void*>(&UmCameraTick),  0, {0xE8, 0x82, 0x87, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x0045756D, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0xBE, 0x85, 0xFB, 0xFF} },
+    { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
+    { nullptr, 0, nullptr, 0, {} }
+};
+
+static void InstallCallSites(const std::map<std::string, bool>& config) {
+    std::map<std::string, bool> done;
+    for (const UmCallSite& site : kCallSites) {
+        if (!site.name || done.count(site.name)) continue;
+        done[site.name] = true;
+        const auto it = config.find(site.name);
+        if (!(site.required > 0 || (it != config.end() ? it->second : site.required >= 0))) continue;
+        bool match = true;
+        for (const UmCallSite& other : kCallSites)
+            if (other.name && std::string(other.name) == site.name && memcmp(reinterpret_cast<void*>(other.address), other.expect, 5) != 0) match = false;
+        if (!match) { UmEngineLog("um-engine: %s skipped, game.exe has other code at its call sites (another build)", site.name); continue; }
+        for (const UmCallSite& other : kCallSites) {
+            if (!other.name || std::string(other.name) != site.name) continue;
+            unsigned char* at = reinterpret_cast<unsigned char*>(other.address);
+            DWORD old = 0;
+            if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) continue;
+            const long rel = reinterpret_cast<long>(other.replacement) - reinterpret_cast<long>(at + 5);
+            memcpy(at + 1, &rel, 4);
+            VirtualProtect(at, 5, old, &old);
+            FlushInstructionCache(GetCurrentProcess(), at, 5);
+        }
+        UmEngineLog("um-engine: %s installed (call sites in game.exe)", site.name);
+    }
+}
+
 static HMODULE g_module = NULL;
+static std::vector<UmModuleFunction> g_enabledModule;
+static HANDLE g_moduleThread = NULL;
+
+// Waits for each library to be loaded by the game, then redirects its functions with a jump (the library's code is not running yet:
+// the game loads it when it starts the renderer, long before the first frame).
+static DWORD WINAPI ModulePatchThread(LPVOID) {
+    std::vector<bool> done(g_enabledModule.size(), false);
+    size_t remaining = g_enabledModule.size();
+    for (int waited = 0; remaining > 0 && waited < 60000; waited += 2) {
+        for (size_t i = 0; i < g_enabledModule.size(); ++i) {
+            if (done[i]) continue;
+            HMODULE lib = GetModuleHandleA(g_enabledModule[i].module);
+            if (!lib) continue;
+            const UmModuleFunction& fn = g_enabledModule[i];
+            unsigned char* at = reinterpret_cast<unsigned char*>(lib) + fn.rva;
+            done[i] = true; --remaining;
+            if (memcmp(at, fn.expect, 8) != 0) { UmEngineLog("um-engine: %s skipped, %s has other code at +0x%lX (another build)", fn.name, fn.module, fn.rva); continue; }
+            DWORD old = 0;
+            if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) { UmEngineLog("um-engine: cannot patch %s", fn.name); continue; }
+            const long rel = reinterpret_cast<long>(fn.replacement) - reinterpret_cast<long>(at + 5);
+            at[0] = 0xE9; memcpy(at + 1, &rel, 4);
+            VirtualProtect(at, 5, old, &old);
+            FlushInstructionCache(GetCurrentProcess(), at, 5);
+            UmEngineLog("um-engine: %s replaced (%s +0x%lX)", fn.name, fn.module, fn.rva);
+        }
+        if (remaining > 0) Sleep(2);
+    }
+    return 0;
+}
+
 static std::vector<UmEngineFunction> g_enabled;
 
 // um-engine.log beside the DLL: research logging for the functions under test (cheap when nothing calls it).
@@ -76,6 +171,8 @@ extern "C" void UmEngineLog(const char* format, ...) {
     std::fputc('\n', f);
     std::fclose(f);
 }
+
+static const char* const kShadowResolutionKey = "UnitShadow::Resolution"; // a number (64 = the game's own), not on / off
 
 static std::string ConfigPath() {
     char path[MAX_PATH] = "";
@@ -110,6 +207,19 @@ static std::map<std::string, bool> ReadConfig() {
             missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
             values[fn.name] = on;
         }
+    for (const UmCallSite& fn : kCallSites)
+        if (fn.name && !values.count(fn.name)) {
+            const bool on = fn.required >= 0;
+            missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
+            values[fn.name] = on;
+        }
+    for (const UmModuleFunction& fn : kModuleFunctions)
+        if (fn.name && !values.count(fn.name)) {
+            const bool on = fn.required >= 0;
+            missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
+            values[fn.name] = on;
+        }
+    if (!values.count(kShadowResolutionKey)) missing += std::string(kShadowResolutionKey) + "=64\n";
     const bool exists = GetFileAttributesA(path.c_str()) != INVALID_FILE_ATTRIBUTES;
     if (!exists || !missing.empty()) {
         if (FILE* f = std::fopen(path.c_str(), "a")) {
@@ -135,6 +245,25 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         const auto it = config.find(fn.name);
         if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabled.push_back(fn);
     }
+    g_enabledModule.clear();
+    for (const UmModuleFunction& fn : kModuleFunctions) {
+        if (!fn.name) continue;
+        const auto it = config.find(fn.name);
+        if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabledModule.push_back(fn);
+    }
+    InstallCallSites(config);
+    { // the unit shadow size: a number
+        double resolution = 64;
+        if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {
+            char line[512];
+            const size_t resLength = std::strlen(kShadowResolutionKey);
+            while (std::fgets(line, sizeof(line), f))
+                if (std::strncmp(line, kShadowResolutionKey, resLength) == 0 && line[resLength] == '=') resolution = std::atof(line + resLength + 1);
+            std::fclose(f);
+        }
+        if (resolution > 64) UmShadowResolution(static_cast<unsigned>(resolution));
+    }
+    if (!g_enabledModule.empty() && !g_moduleThread) g_moduleThread = CreateThread(NULL, 0, ModulePatchThread, NULL, 0, NULL);
     if (count) *count = static_cast<int>(g_enabled.size());
     return g_enabled.empty() ? nullptr : g_enabled.data();
 }

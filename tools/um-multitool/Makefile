@@ -7,6 +7,9 @@
 #   make win    - um-multitool.exe, cross-compiled with MinGW
 #   make all    - both (the Windows part is skipped when MinGW is not installed)
 #   make xp     - um-multitool-xp32.exe for Windows XP (32-bit runs on XP x64 too; after vendor/build-glfw-mingw-xp.sh)
+#   make appimage - um-multitool-x86_64.AppImage: one portable file for Linux desktops (GLFW and the C++
+#                 runtime bundled; build-appimage.sh fetches appimagetool once into vendor/). Part of
+#                 `make all` once appimagetool is there.
 # Builds run on all cores; objects go to build/<variant>/.
 #
 # GUI toolkit: Dear ImGui (vendored as source in vendor/imgui) on GLFW with the
@@ -21,7 +24,7 @@ WIN_CXX = x86_64-w64-mingw32-g++
 IMGUI_DIR = vendor/imgui
 IMGUI_SRCS = $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp \
              $(IMGUI_DIR)/imgui_widgets.cpp $(IMGUI_DIR)/imgui_impl_glfw.cpp $(IMGUI_DIR)/imgui_impl_opengl2.cpp
-SRCS = main.cpp i18n.cpp splash.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp mp_editor.cpp alerts.cpp log.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp texedit/texture_app.cpp texedit/quest_map.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
+SRCS = main.cpp i18n.cpp splash.cpp ddsmmp.cpp inireg.cpp mobdumper.cpp restool.cpp xlsxdb.cpp dbexport.cpp db_model.cpp db_editor.cpp text_editor.cpp inireg_editor.cpp mp_editor.cpp alerts.cpp log.cpp gui_main.cpp viewer/viewer_app.cpp mapedit/map_files.cpp mapedit/map_sidebar.cpp mapedit/map_script.cpp mapedit/map_quest.cpp mapedit/map_objects.cpp mapedit/map_terrain.cpp mapedit/map_simulation.cpp mapedit/map_transform.cpp mapedit/map_minimap.cpp mapedit/map_app.cpp dllconnect/connector_app.cpp texedit/texture_app.cpp texedit/quest_map.cpp vendor/stb/stb_image_impl.cpp $(IMGUI_SRCS)
 # um.dll's mission script checker is shared with the Map Editor's checks (not copied).
 UMDLL_DIR = ../../resources/universal-mod/um-dll
 HDRS = $(wildcard *.hpp) lang/ru.txt $(wildcard viewer/*.hpp) $(wildcard mapedit/*.hpp) $(wildcard dllconnect/*.hpp) $(wildcard texedit/*.hpp) $(UMDLL_DIR)/mob_script_check.hpp $(UMDLL_DIR)/mob_script_functions.hpp $(wildcard sfx/*.mp3)
@@ -49,10 +52,18 @@ endif
 MAKEFLAGS += -j$(shell nproc)
 DEPFLAGS = -MMD -MP
 
-all: linux $(WIN_BINS)
+APPIMAGE = $(TARGET)-x86_64.AppImage
+APPIMAGETOOL = vendor/appimagetool
+APPIMAGE_BIN =
+ifneq ($(wildcard $(APPIMAGETOOL)),)
+APPIMAGE_BIN = appimage
+endif
+
+all: linux $(WIN_BINS) $(APPIMAGE_BIN)
 
 linux: $(TARGET)
 win: $(TARGET).exe
+appimage: $(APPIMAGE)
 
 # One object list per variant, and the rule to build them.
 LINUX_OBJS = $(SRCS:%.cpp=build/linux/%.o)
@@ -74,6 +85,24 @@ build/linux/splash.o build/win/splash.o build/xp32/splash.o: assets/splash.png
 
 $(TARGET): $(LINUX_OBJS)
 	$(CXX) $(LINUX_FLAGS) -o $@ $^ $(LINUX_LIBS)
+
+# The AppImage's binary: the same objects, linked with libstdc++ static (the user's distribution may have
+# an older one; libgcc_s stays shared, every system has it and the static one wants glibc 2.35), an rpath to the bundled GLFW (AppDir/usr/lib), and the few glibc symbols that
+# got new versions after 2.34 bound to their old ones through glibc_compat.c (--wrap), so it runs on
+# distributions since 2021. The rest of the AppDir (the files read beside the binary, the menu entry, the
+# icon) is assembled by build-appimage.sh.
+APPIMAGE_WRAPS = asinf acosf log10f sqrtf atan2f hypotf fmodf fmod __isoc23_strtol __isoc23_strtoul __isoc23_sscanf arc4random
+APPIMAGE_LINK_FLAGS = -static-libstdc++ -Wl,-rpath,'$$ORIGIN/../lib' $(addprefix -Wl$(comma)--wrap=,$(APPIMAGE_WRAPS))
+comma = ,
+build/appimage/glibc_compat.o: glibc_compat.c
+	@mkdir -p $(dir $@)
+	$(CC) -std=gnu99 -O2 -Wall -c $< -o $@
+build/appimage/$(TARGET): $(LINUX_OBJS) build/appimage/glibc_compat.o
+	@mkdir -p $(dir $@)
+	$(CXX) $(LINUX_FLAGS) $(APPIMAGE_LINK_FLAGS) -o $@ $^ $(LINUX_LIBS)
+
+$(APPIMAGE): build/appimage/$(TARGET) build-appimage.sh um-multitool.desktop assets/logo-256.png lang/ru.txt $(wildcard materials/*.tsv)
+	./build-appimage.sh $< $@
 
 # Requires vendor/glfw-mingw to exist first: run vendor/build-glfw-mingw.sh
 # The .exe's icon (assets/um-multitool.ico), compiled into a resource object.
@@ -104,6 +133,6 @@ $(TARGET)-xp32.exe: $(XP32_OBJS) um-multitool-res32.o
 -include $(LINUX_OBJS:.o=.d) $(WIN_OBJS:.o=.d) $(XP32_OBJS:.o=.d)
 
 clean:
-	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe $(WIN_RES) um-multitool-res32.o
+	rm -rf build um-multitool um-multitool.exe um-multitool-xp32.exe $(APPIMAGE) $(WIN_RES) um-multitool-res32.o
 
-.PHONY: all linux win xp clean
+.PHONY: all linux win xp appimage clean

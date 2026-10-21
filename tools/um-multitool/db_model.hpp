@@ -55,6 +55,11 @@ struct Issue {
     std::string Where() const; // "Monsters!AE12"
 };
 std::vector<Issue> CheckBook(const Book& book);
+// The checks of some sheets only (the editor after a change): `sheets` are sheet names.
+std::vector<Issue> CheckSheets(const Book& book, const std::vector<std::string>& sheets);
+// The sheets whose checks read `sheet` (references, the item / spell / race lists), `sheet` itself first:
+// what to re-check after a change in it.
+std::vector<std::string> SheetsReading(const Book& book, const std::string& sheet);
 // Prints the issues (errors to stderr, warnings to stdout) as "[ERROR] Monsters!AE12 (Items): ...";
 // returns the number of errors.
 int PrintIssues(const std::vector<Issue>& issues);

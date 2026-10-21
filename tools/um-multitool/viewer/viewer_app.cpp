@@ -489,7 +489,7 @@ static void Toolbar(App& app) {
     if (ImGui::Button("Export GIF...")) {
         app.gifOpen = true;
         app.gifMessage.clear();
-        std::string dir = app.lib.gif.lastDirectory.empty() ? config::ExeDir() : app.lib.gif.lastDirectory;
+        std::string dir = app.lib.gif.lastDirectory.empty() ? config::DefaultSaveDir() : app.lib.gif.lastDirectory;
         std::snprintf(app.gifPath, sizeof(app.gifPath), "%s/%s.gif", dir.c_str(), SafeFileName(app.selectedName).c_str());
     }
     ImGui::EndDisabled();

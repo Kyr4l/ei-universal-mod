@@ -16,7 +16,8 @@
 
 namespace bot {
 
-enum class Role { Melee, Ranged, Mage, Hybrid };
+enum class Role { Fighter, Tank, Archer };   // the builds: a melee fighter (damage), a melee tank (defence), an archer
+inline int RoleKind(Role r) { return r == Role::Archer ? 1 : 0; } // what the planners use: 0 melee, 1 ranged
 enum class Priority { HealPlayer, FocusPlayerTarget, GuardPlayer };
 enum class Engagement { Passive, Defensive, Aggressive };
 enum class Pace { MatchPlayer, AlwaysRun, AlwaysWalk };
@@ -28,9 +29,17 @@ struct Config {
     std::string name = "Companion";
     std::string language = "en";  // the window's language: en, ru
     std::string character;       // the bot's character: a .mp file of the game's (or a mod's) mp folder
+    std::string database;        // databaselmp.res / database.res (item and spell names; the Healing spell): empty = look beside the mp folder
+    bool saveProgress = true;    // write the party the server sends (experience, items) back into the character's .mp
     // Build
-    Role role = Role::Ranged;
+    Role role = Role::Archer;
     int tankiness = 30;          // 0 all damage .. 100 all defence (where skill points and gear go)
+    std::string gearTarget;      // the gear the bot builds in priority ("bone long bow:dragon red bones; gipat highest plate"), empty = auto (from the role and the slider)
+    bool shop = true;            // buy, sell and equip at the camp's shop before a quest
+    bool acceptSwaps = true;     // answer a player's swap request (click on its head in the lobby): the bot takes what is offered and gives nothing
+    bool announce = true;        // say in the chat what it does at the camp (bought, sold, trained, spells)
+    bool leaveAtExit = true;     // leave the quest zone first when the host stands in a zone exit (the host cannot leave while players are still in it)
+    bool grow = true;            // spend the free experience (skills, abilities) in the camp before a quest
     // Behaviour
     Priority priority = Priority::HealPlayer;
     int healPlayerBelow = 50;    // % of the player's health
@@ -76,8 +85,17 @@ inline void Load(Config& c) {
         else if (k == "PORT") c.port = clampi(i, 1, 65535);
         else if (k == "NAME") c.name = v;
         else if (k == "CHARACTER") c.character = v;
+        else if (k == "DATABASE") c.database = v;
+        else if (k == "SAVE_PROGRESS") c.saveProgress = i != 0;
         else if (k == "LANGUAGE") c.language = v;
-        else if (k == "ROLE") c.role = static_cast<Role>(clampi(i, 0, 3));
+        else if (k == "ROLE") c.role = i == 1 ? Role::Archer : Role::Fighter; // the old setting: 0 melee, 1 ranged, (2 mage, 3 hybrid are gone)
+        else if (k == "BUILD") c.role = static_cast<Role>(clampi(i, 0, 2));
+        else if (k == "GEAR_TARGET") c.gearTarget = v;
+        else if (k == "SHOP") c.shop = i != 0;
+        else if (k == "GROW") c.grow = i != 0;
+        else if (k == "ANNOUNCE") c.announce = i != 0;
+        else if (k == "LEAVE_AT_EXIT") c.leaveAtExit = i != 0;
+        else if (k == "SWAPS") c.acceptSwaps = i != 0;
         else if (k == "TANKINESS") c.tankiness = clampi(i, 0, 100);
         else if (k == "PRIORITY") c.priority = static_cast<Priority>(clampi(i, 0, 2));
         else if (k == "HEAL_PLAYER_BELOW") c.healPlayerBelow = clampi(i, 0, 100);
@@ -95,8 +113,8 @@ inline bool Save(const Config& c) {
     std::ofstream o(c.path, std::ios::trunc);
     if (!o) return false;
     o << "# um-bot settings\n"
-      << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\nCHARACTER=" << c.character << "\nLANGUAGE=" << c.language << "\n"
-      << "ROLE=" << static_cast<int>(c.role) << "\nTANKINESS=" << c.tankiness << "\n"
+      << "HOST=" << c.host << "\nPORT=" << c.port << "\nNAME=" << c.name << "\nCHARACTER=" << c.character << "\nDATABASE=" << c.database << "\nSAVE_PROGRESS=" << (c.saveProgress ? 1 : 0) << "\nLANGUAGE=" << c.language << "\n"
+      << "BUILD=" << static_cast<int>(c.role) << "\nTANKINESS=" << c.tankiness << "\nGEAR_TARGET=" << c.gearTarget << "\nSHOP=" << (c.shop ? 1 : 0) << "\nGROW=" << (c.grow ? 1 : 0) << "\nSWAPS=" << (c.acceptSwaps ? 1 : 0) << "\nANNOUNCE=" << (c.announce ? 1 : 0) << "\nLEAVE_AT_EXIT=" << (c.leaveAtExit ? 1 : 0) << "\n"
       << "PRIORITY=" << static_cast<int>(c.priority) << "\nHEAL_PLAYER_BELOW=" << c.healPlayerBelow
       << "\nHEAL_SELF_BELOW=" << c.healSelfBelow << "\nMANA_RESERVE=" << c.manaReserve << "\nUSE_POTIONS=" << (c.usePotions ? 1 : 0) << "\n"
       << "ENGAGEMENT=" << static_cast<int>(c.engagement) << "\n"

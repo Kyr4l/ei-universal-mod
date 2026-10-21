@@ -230,4 +230,14 @@ Lines with findings are tinted in the finding's colour. The line numbers are the
 | `quest_file.hpp` | quests (`.mq` / unpacked): `map.txt`, exits and areas, reading and writing their files, language packs |
 | `text_codec.hpp` | UTF-8 / CP1251 / CP949 for the Quest tab |
 | `map_scene.hpp` | the GL view: terrain display lists per texture, figures, markers, picking |
-| `map_app.cpp` | the tab, and `um-multitool map` |
+| `map_internal.hpp` | the editor's shared state (`App`) and the functions its files define for each other |
+| `map_app.cpp` | entry points: the tab, the GL view, `um-multitool map` |
+| `map_files.cpp` | Files tab: opening, saving, unloading, quests, the undo history, the checks |
+| `map_sidebar.cpp` | the sidebar's Objects tab and the editing of an object's parameters |
+| `map_script.cpp` | Script tab: the editor, completion, the script as nodes |
+| `map_quest.cpp` | Quest tab, the navmesh job, saving changes, the unload dialog |
+| `map_objects.cpp` | find, delete / copy / paste / duplicate / new, randomize, Diplomacy, IDs |
+| `map_terrain.cpp` | terrain editing (tile brush, paint by ground, sculpt, water), lighting, the sidebar's tabs |
+| `map_simulation.cpp` | the patrol simulation, the toolbar and the bottom bar |
+| `map_transform.cpp` | the view's input: move / scale, logic points, overlays, the tool shelf |
+| `map_minimap.cpp` | minimap export, new terrain from a picture, crop, merge |

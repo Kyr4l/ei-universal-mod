@@ -13,7 +13,7 @@ struct GuiOptions {
     bool viewerNaked = false;      // with "--viewer units <name>": without its equipment (--naked)
     std::string viewerSkin;        // with "--viewer units <name>": a skin texture file to try on it (--skin)
     uint32_t mapFocus = 0;         // with "--map": an object ID to select and look at (--focus)
-    std::string mapMode;           // with "--map": the editing mode to start in: object, paint, ground (by material), sculpt, water (--mode)
+    std::string mapMode;           // with "--map": the editing mode to start in: object, paint, ground (by material), sculpt, water; or the Script tab as script (text) / nodes (--mode)
     std::string viewerClip;        // with "--viewer units <name>": an animation clip to show (--clip)
     float viewerFrame = -1.0f;     // ... held at that frame (--frame); -1: playing
     float viewerYaw = -1000.0f;    // with "--viewer units": the camera's yaw in degrees (--yaw; 225 = from the front, 45 = the back)
@@ -22,6 +22,7 @@ struct GuiOptions {
     bool openSettings = false;     // start on the Settings tab
     std::string dbFile;            // start on File Processing > DB with this database (.res, .xlsx, .ods)
     std::string mpFolder;          // start on File Processing > MP with this characters folder
+    std::string iniFile;           // start on File Processing > INI <-> REG with this file (.ini or .reg)
     bool openTexture = false;      // start on the Texture Editor tab
     std::string textureFile;       // with openTexture: open this picture (.mmp, .dds, .png...)
     std::string screenshotPath;    // save the window after a few frames, then quit

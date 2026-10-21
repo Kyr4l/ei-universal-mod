@@ -11,6 +11,7 @@
 #pragma once
 
 #include <array>
+#include <cmath>
 #include <cstdint>
 #include <cstring>
 #include <map>
@@ -166,6 +167,10 @@ struct Material {
     std::string code;   // 2-letter texture code, e.g. "br" (NOT unique: "dragon red bones" is "br" too)
     int id = 0;         // field 3: the number in material<NNNN>.mmp and initlimt<N>
     float price = 0, weight = 0, damage = 0;
+    int ni[16] = {};               // the same fields as integers (7: the integer added to the item's +0x40)
+    float n[16] = {};              // the numeric fields 0..15 as floats (4 price, 5 weight, 6 durability add, 7 / 8 factors, 10 damage ...): what the game's item constructor applies to a prototype
+    std::vector<float> list11;     // field 11: 7 floats, the armor absorb factors per body part
+    uint32_t shopMask = 0;         // field 13: bit k = "Shop k+1" sells it (the camp's shops: 1 Babur / Gipath, 3 Ingos, 4 Suslanger, 5 Jigran; 2 is the singleplayer witch)
 };
 
 // One row of Weapons/Armors/QuickItems/QuestItems/LootItems. The first 16
@@ -198,12 +203,29 @@ struct Item {
     std::vector<std::string> zones;                               // 22
     // LootItems
     int lootField21 = 0, lootField22 = 0, lootField23 = 0;
+    // Raw numbers for the constructor formulas (weapons / armors): fields 7..13 and 23..25 as floats, the lists 21 / 22 (armor: s, 7 absorb factors, flags), the shop mask (field 14)
+    float n[32] = {};
+    int ni[32] = {};               // the same fields as integers (11: an integer, 13: the price factor K)
+    std::vector<float> list21, list22;
+    uint32_t shopMask = 0;
 };
 
 struct Database {
     std::vector<Material> materials;
     std::array<std::vector<Item>, static_cast<size_t>(Category::Count)> items;
     std::string sourceLabel;
+    // SpellPrototypes (spells.sdb block 1), by row: field 0 the name, field 1 the code name ("healing"); n / ni: the numeric fields 3..27 by tag as floats / integers,
+    // shopMask: field 22 (bit k = Shop k+1), runeKinds: field 20's five flags (range, targets, area, effect, duration runes allowed)
+    struct SpellProto { std::string name, code; float n[32] = {}; int ni[32] = {}; uint32_t shopMask = 0; uint8_t runeKinds[5] = {}; };
+    std::vector<SpellProto> spells;
+    // Runes (spells.sdb block 2), by row: field 0 the name, 1 the two-letter code (first letter = kind of change: r range, t targets, a area, e effect, d duration, m mana, f filter, i item), 2 the price,
+    // 3 the kind 0..7, 4 the mana added, 5 the value, 6 the skill level it adds, 8 the shop mask
+    struct Rune { std::string name; char code[3] = {0, 0, 0}; float price = 0, mana = 0, value = 0; int kind = 0, level = 0; uint32_t shopMask = 0; };
+    std::vector<Rune> runes;
+    // Perks (perks.pdb block 2), in the game's order (3 levels per ability group). The fields: the camp's experience cost number (18), the bonus in percent / points (19), the
+    // skill needed (11 name, 12 index, 14 level), the attribute minima (15..17), the perk needed first (10), enabled (22), the exclusion group (23).
+    struct Perk { std::string name, key, prereq, skill; int skillIndex = INT32_MAX, skillLevel = 0, costNum = 0, bonus = 0, group = 0; float attrMin[3] = {0, 0, 0}; bool enabled = false; };
+    std::vector<Perk> perks;
 
     const std::vector<Item>& List(Category c) const { return items[static_cast<size_t>(c)]; }
 
@@ -240,6 +262,9 @@ inline bool ParseItemsIdb(const std::vector<uint8_t>& idb, Database& out, std::s
                 m.price = f.Float(4);
                 m.weight = f.Float(5);
                 m.damage = f.Float(10);
+                for (int k = 0; k < 16; ++k) { m.n[k] = f.Float(static_cast<uint8_t>(k)); m.ni[k] = f.Int(static_cast<uint8_t>(k)); }
+                m.list11 = f.Floats(11);
+                m.shopMask = static_cast<uint32_t>(f.Int(13));
                 if (!m.name.empty()) out.materials.push_back(std::move(m));
                 continue;
             }
@@ -251,6 +276,9 @@ inline bool ParseItemsIdb(const std::vector<uint8_t>& idb, Database& out, std::s
             it.type = f.String(1);
             it.typeId = f.Int(2);
             it.materialType = f.String(3);
+            for (int k = 0; k < 32; ++k) { it.n[k] = f.Float(static_cast<uint8_t>(k)); it.ni[k] = f.Int(static_cast<uint8_t>(k)); }
+            it.list21 = f.Floats(21); it.list22 = f.Floats(22);
+            it.shopMask = static_cast<uint32_t>(f.Int(14));
             it.tti = f.Int(5);
             it.tti2 = f.Int(6);
             it.price = f.Float(7);
@@ -297,6 +325,61 @@ inline bool ParseItemsIdb(const std::vector<uint8_t>& idb, Database& out, std::s
     return true;
 }
 
+// spells.sdb: block 1 = SpellPrototypes; a spell object of a character (.mp) refers to a row of it.
+inline void ParseSpellsSdb(const std::vector<uint8_t>& sdb, Database& out) {
+    const uint8_t* data = sdb.data();
+    size_t off = 0;
+    Span file;
+    if (!ReadTag(data, sdb.size(), off, file)) return;
+    for (const Span& block : Children(data, file)) {
+        if (block.tag != 1 && block.tag != 2) continue;
+        for (const Span& record : Children(data, block)) {
+            Fields f;
+            f.data = data;
+            for (const Span& field : Children(data, record)) f.byId[field.tag] = field;
+            if (block.tag == 2) {
+                Database::Rune r;
+                r.name = f.String(0);
+                const int code = f.Int(1);
+                r.code[0] = static_cast<char>(code & 0xFF); r.code[1] = static_cast<char>((code >> 8) & 0xFF);
+                r.price = f.Float(2); r.kind = f.Int(3); r.mana = f.Float(4); r.value = f.Float(5); r.level = f.Int(6); r.shopMask = static_cast<uint32_t>(f.Int(8));
+                out.runes.push_back(std::move(r));
+                continue;
+            }
+            Database::SpellProto sp;
+            sp.name = f.String(0); sp.code = f.String(1);
+            for (int k = 3; k < 28; ++k) { sp.n[k] = f.Float(static_cast<uint8_t>(k)); sp.ni[k] = f.Int(static_cast<uint8_t>(k)); }
+            sp.shopMask = static_cast<uint32_t>(f.Int(22));
+            const auto kinds = f.byId.find(20);
+            if (kinds != f.byId.end()) for (size_t k = 0; k < 5 && k < kinds->second.length; ++k) sp.runeKinds[k] = data[kinds->second.start + k];
+            out.spells.push_back(std::move(sp));
+        }
+    }
+}
+
+inline void ParsePerksPdb(const std::vector<uint8_t>& pdb, Database& out) {
+    const uint8_t* data = pdb.data();
+    size_t off = 0;
+    Span file;
+    if (!ReadTag(data, pdb.size(), off, file)) return;
+    for (const Span& block : Children(data, file)) {
+        if (block.tag != 2) continue;
+        for (const Span& record : Children(data, block)) {
+            Fields f;
+            f.data = data;
+            for (const Span& field : Children(data, record)) f.byId[field.tag] = field;
+            Database::Perk p;
+            p.name = f.String(0); p.key = f.String(1); p.prereq = f.String(10); p.skill = f.String(11);
+            p.skillIndex = f.Has(12) ? f.Int(12) : INT32_MAX; p.skillLevel = f.Int(14);
+            for (int k = 0; k < 3; ++k) { const uint8_t id = static_cast<uint8_t>(15 + k); const int32_t i = f.Int(id); const float x = f.Float(id); p.attrMin[k] = i != 0 && std::fabs(x) < 1e-20f ? static_cast<float>(i) : x; } // the game keeps floats
+            p.costNum = f.Int(18); p.bonus = f.Int(19); p.group = f.Int(23);
+            const auto en = f.byId.find(22);
+            p.enabled = en != f.byId.end() && en->second.length >= 1 && data[en->second.start] != 0;
+            out.perks.push_back(std::move(p));
+        }
+    }
+}
+
 // database.res and databaselmp.res are both RES archives; either works as long as it holds items.idb
 // (the vanilla game has it in both, Universal-Mod only in databaselmp.res).
 inline bool LoadDatabaseRes(const std::vector<uint8_t>& resBytes, const std::string& label, Database& out, std::string& err) {
@@ -310,6 +393,8 @@ inline bool LoadDatabaseRes(const std::vector<uint8_t>& resBytes, const std::str
     }
     Database db;
     if (!ParseItemsIdb(*idb, db, err)) return false;
+    if (const std::vector<uint8_t>* sdb = archive.Find("spells.sdb")) ParseSpellsSdb(*sdb, db);
+    if (const std::vector<uint8_t>* pdb = archive.Find("perks.pdb")) ParsePerksPdb(*pdb, db);
     db.sourceLabel = label;
     out = std::move(db);
     return true;

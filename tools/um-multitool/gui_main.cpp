@@ -53,6 +53,7 @@
 #include "db_editor.hpp"
 #include "text_editor.hpp"
 #include "mp_editor.hpp"
+#include "inireg_editor.hpp"
 #include "viewer/dds_texture.hpp"
 
 #include <string>
@@ -552,49 +553,6 @@ static std::vector<std::string> BuildDdsMmpArgs() {
 }
 
 // ============================================================================
-// INI <-> REG Tab
-// ============================================================================
-
-struct IniRegTab {
-    char inputPath[1024] = "";
-    char outputPath[1024] = "";
-    bool multiThread = false;
-    bool dryRun = false;
-    int mode = 0; // 0=auto, 1=ini2reg, 2=reg2ini
-};
-
-static IniRegTab g_ini;
-
-static void DrawIniRegTab() {
-    if (PathRow("ini_in", "Input:", g_ini.inputPath, sizeof(g_ini.inputPath), false, true)) {
-        std::error_code ec;
-        g_ini.multiThread = fs::is_directory(g_ini.inputPath, ec);
-    }
-    PathRow("ini_out", "Output:", g_ini.outputPath, sizeof(g_ini.outputPath), true, true);
-
-    ImGui::Checkbox("Multi-threaded (-m)", &g_ini.multiThread);
-    ImGui::Checkbox("Dry run (--dry-run)", &g_ini.dryRun);
-
-    ImGui::Spacing();
-    ImGui::TextUnformatted("Conversion direction:");
-    ImGui::RadioButton("Auto-detect (default)", &g_ini.mode, 0);
-    ImGui::RadioButton("Force INI -> REG", &g_ini.mode, 1);
-    ImGui::RadioButton("Force REG -> INI", &g_ini.mode, 2);
-}
-
-static std::vector<std::string> BuildIniRegArgs() {
-    std::vector<std::string> args;
-    if (g_ini.dryRun) args.push_back("--dry-run");
-    if (g_ini.multiThread) args.push_back("-m");
-    if (g_ini.mode == 1) args.push_back("--ini2reg");
-    else if (g_ini.mode == 2) args.push_back("--reg2ini");
-
-    if (g_ini.outputPath[0]) { args.push_back("-o"); args.push_back(g_ini.outputPath); }
-    if (g_ini.inputPath[0]) args.push_back(g_ini.inputPath);
-    return args;
-}
-
-// ============================================================================
 // MOB Dump Tab
 // ============================================================================
 
@@ -715,6 +673,7 @@ static int g_activeTab = 0;
 static const char* g_activeSubcommand = ""; // the shown File Processing sub-tab's tool ("" for DB)
 constexpr int kDbSubTab = 0; // File Processing's DB sub-tab (see the tabs in RunGui)
 constexpr int kMpSubTab = 2; // its MP sub-tab
+constexpr int kIniSubTab = 4; // its INI <-> REG sub-tab
 // The "?" of the main tab bar: every key and mouse control of the tab shown.
 static void KeysHelp(const Library& lib, int tab) { // tab: 0 File Processing, 1 3D Viewer, 2 Map Editor (main()'s order)
     static const char* const kButtons[] = {"left", "right", "middle", "side 1", "side 2"};
@@ -829,7 +788,6 @@ static void OnRunClicked() {
     const char* subcommand = "";
     const std::string tool = g_activeSubcommand;
     if (tool == "ddsmmp") { activeInput = g_dds.inputPath; tokens = BuildDdsMmpArgs(); subcommand = "ddsmmp"; }
-    else if (tool == "inireg") { activeInput = g_ini.inputPath; tokens = BuildIniRegArgs(); subcommand = "inireg"; }
     else if (tool == "mobdump") { activeInput = g_mob.inputPath; tokens = BuildMobDumpArgs(); subcommand = "mobdump"; }
     else if (tool == "restool") { activeInput = g_res.inputPath; tokens = BuildResToolArgs(); subcommand = "restool"; }
     else return;
@@ -1107,6 +1065,11 @@ int RunGui(const GuiOptions& options) {
         requestedTab = kFiles;
         g_requestSubTab = kDbSubTab; // DB
     }
+    if (!options.iniFile.empty()) {
+        inireg_edit::OpenFile(options.iniFile);
+        requestedTab = kFiles;
+        g_requestSubTab = kIniSubTab;
+    }
     if (!options.mpFolder.empty()) {
         mpedit::OpenFolder(*g_library, options.mpFolder);
         requestedTab = kFiles;
@@ -1122,7 +1085,7 @@ int RunGui(const GuiOptions& options) {
         {"Texts", DrawTextsTab, nullptr, nullptr, nullptr},  // the same
         {"MP / Saves (WIP)", DrawMpTab, nullptr, nullptr, nullptr},        // multiplayer characters (in-process)
         {"RES / MQ", DrawResToolTab, BuildResToolArgs, "restool", nullptr},
-        {"INI <-> REG", DrawIniRegTab, BuildIniRegArgs, "inireg", nullptr},
+        {"INI <-> REG", inireg_edit::DrawTab, nullptr, nullptr, nullptr},  // in-process: an editor for INI and REG files
         {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},
         {"MOB Dump", DrawMobDumpTab, BuildMobDumpArgs, "mobdump", nullptr},
     };
@@ -1319,7 +1282,7 @@ int RunGui(const GuiOptions& options) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (ui::BackgroundShown()) DrawBackground(bgTexture, bgSize, fbW, fbH, library.backgroundOpacity);
         viewer::RenderGl(viewerCtx, fbW, fbH, io.DisplayFramebufferScale.x, dt);
-        mapedit::RenderGl(mapCtx, fbW, fbH, io.DisplayFramebufferScale.x);
+        mapedit::RenderGl(mapCtx, fbW, fbH, io.DisplayFramebufferScale.x, g_resting);
         ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
         if (!options.screenshotPath.empty() && ++frameCount >= 8 && (!mapedit::Busy(mapCtx) || frameCount > 3000)) {
             SaveScreenshot(options.screenshotPath, fbW, fbH);

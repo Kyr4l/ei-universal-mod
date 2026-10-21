@@ -1,0 +1,70 @@
+--- a/src/ddraw/ddraw7/ddraw7_surface.cpp	2026-10-21 02:07:39.851609514 +0200
++++ b/src/ddraw/ddraw7/ddraw7_surface.cpp	2026-10-21 02:07:39.852704688 +0200
+@@ -296,6 +296,27 @@
+       return DDERR_UNSUPPORTED;
+     }
+ 
++    d3d9::IDirect3DDevice9* d3d9Device = m_commonSurf->GetRefreshedD3D9Device();
++
++    // Windowed mode presentation path, taken BEFORE any surface data is downloaded: presenting the current render
++    // target needs no copy of it on the CPU, and downloading it first (a GPU->CPU read of the whole frame, which
++    // also makes the CPU wait for the GPU to finish it) was the cost of every presented frame. It is only valid
++    // while the DDraw-side copy of the render target holds no pending changes (nothing was Blt or Lock'ed onto it
++    // since the last upload); otherwise the usual path below runs, as before.
++    if (likely(d3d9Device != nullptr && lpDDSrcSurface != nullptr)) {
++      const bool exclusiveMode = m_commonIntf->GetCooperativeLevel() & DDSCL_EXCLUSIVE;
++
++      if (!exclusiveMode && m_commonSurf->IsPrimarySurface()) {
++        DDraw7Surface* sourceSurface = static_cast<DDraw7Surface*>(lpDDSrcSurface);
++        DDraw7Surface* renderTarget = m_commonSurf->GetCommonD3DDevice()->GetCurrentRenderTarget7();
++
++        if (sourceSurface == renderTarget && !renderTarget->GetCommonSurface()->IsDDrawSurfaceDirty()) {
++          d3d9Device->Present(NULL, NULL, NULL, NULL);
++          return DD_OK;
++        }
++      }
++    }
++
+     // Write back any dirty surface data from bound D3D9 back buffers or
+     // depth stencils, for both the source surface and the current surface
+     if (likely(lpDDSrcSurface != nullptr)) {
+@@ -310,7 +331,6 @@
+       DownloadSurfaceData();
+     }
+ 
+-    d3d9::IDirect3DDevice9* d3d9Device = m_commonSurf->GetRefreshedD3D9Device();
+     if (likely(d3d9Device != nullptr)) {
+       const bool exclusiveMode = m_commonIntf->GetCooperativeLevel() & DDSCL_EXCLUSIVE;
+ 
+@@ -366,6 +386,23 @@
+       return DDERR_UNSUPPORTED;
+     }
+ 
++    d3d9::IDirect3DDevice9* d3d9Device = m_commonSurf->GetRefreshedD3D9Device();
++
++    // Windowed mode presentation path, taken BEFORE any surface data is downloaded (see DDraw7Surface::Blt)
++    if (likely(d3d9Device != nullptr && lpDDSrcSurface != nullptr)) {
++      const bool exclusiveMode = m_commonIntf->GetCooperativeLevel() & DDSCL_EXCLUSIVE;
++
++      if (!exclusiveMode && m_commonSurf->IsPrimarySurface()) {
++        DDraw7Surface* sourceSurface = static_cast<DDraw7Surface*>(lpDDSrcSurface);
++        DDraw7Surface* renderTarget = m_commonSurf->GetCommonD3DDevice()->GetCurrentRenderTarget7();
++
++        if (sourceSurface == renderTarget && !renderTarget->GetCommonSurface()->IsDDrawSurfaceDirty()) {
++          d3d9Device->Present(NULL, NULL, NULL, NULL);
++          return DD_OK;
++        }
++      }
++    }
++
+     const RECT* sourceFullSurfaceRect = nullptr;
+     // Write back any dirty surface data from bound D3D9 back buffers or
+     // depth stencils, for both the source surface and the current surface
+@@ -382,7 +419,6 @@
+       DownloadSurfaceData();
+     }
+ 
+-    d3d9::IDirect3DDevice9* d3d9Device = m_commonSurf->GetRefreshedD3D9Device();
+     if (likely(d3d9Device != nullptr)) {
+       const bool exclusiveMode = m_commonIntf->GetCooperativeLevel() & DDSCL_EXCLUSIVE;
+ 

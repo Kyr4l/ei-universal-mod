@@ -207,12 +207,16 @@ Only present for true composite (`.mod`+`.bon`) rigs. An `.anm` file is a **RES 
    vec3<float> vertices[F * V]    // F = the clip's frames, V = the part's real vertex count (its .fig stores them
                                   // in blocks of 4: 44 slots, 42 vertices). Used by wing membranes (`r_pereponka` of
                                   // the dragons unmodg, unmosu) and a few bodies (unmori bd, unmomi rh1/lh1/bd,
-                                  // unmowi bd01-04). Checked on unmodg's r_pereponka
-                                  // (2026-10-03): whole positions, not deltas (the frames span 0.9 x 3.3 x 3.5,
-                                  // the rest mesh 3.5 x 0.05 x 3.9: the same size), but in another frame: the
-                                  // rest membrane is flat along y, every frame flat along x (a 90-degree turn),
-                                  // and the vertex order does not match the .fig's index for index. Not applied
-                                  // by the viewers yet.
+                                  // unmowi bd01-04). They are DELTAS: the engine adds frame f's vertex i to the
+                                  // part's rest vertex i (the complection-blended .fig vertex of that index, before
+                                  // the part's rotation: CAnimationNode::UpdateTransform -> CFigure::SetMorphDeltas,
+                                  // SubmitMorphedVertices). Checked on unmodg's r_pereponka (2026-10-20): rest +
+                                  // frame is a smooth, evenly meshed wing (the frame alone is a crumpled sheet),
+                                  // and a vertex the wing hinges on (rest (-0.18, 0.36, 0.99)) has delta 0. The
+                                  // index is the .fig vertex index; the count V is less than the .fig's slot count
+                                  // by its block padding, and the track's last vertices may be 0. (An earlier note
+                                  // here read them as whole positions in another frame: wrong.) Applied by both
+                                  // viewers (fig::MorphDelta).
    ```
    (An earlier reading took the second count and the two trailing words for "N + 1 positions": there are N.)
 

@@ -98,7 +98,7 @@ inline std::string DecodeCp1251(const uint8_t* bytes, size_t size) {
     static const std::array<uint32_t, 128> high = [] {
         std::array<uint32_t, 128> t{};
         for (size_t i = 0; i < t.size(); ++i) t[i] = 0x80 + static_cast<uint32_t>(i);
-        for (const CpPair& p : NonAsciiTable()) t[p.byte - 0x80] = p.codepoint;
+        for (const CpPair& p : NonAsciiTable()) if (p.byte >= 0x80) t[p.byte - 0x80] = p.codepoint; // the table has 127 pairs: its last slot is empty
         return t;
     }();
     std::string out;

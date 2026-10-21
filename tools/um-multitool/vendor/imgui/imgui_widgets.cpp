@@ -4728,6 +4728,10 @@ extern void UmVerbatim(int delta);
 //   Note that in std::string world, capacity() would omit 1 byte used by the zero-terminator.
 // - When active, hold on a privately held copy of the text (and apply back to 'buf'). So changing 'buf' while the InputText is active has no effect.
 // - If you want to use InputText() with std::string or any custom dynamic string type, use the wrapper in misc/cpp/imgui_stdlib.h/.cpp!
+// um-multitool: see imgui.h (UmColorLineFn)
+UmColorLineFn g_UmColorLine = NULL;
+void* g_UmColorUser = NULL;
+
 bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_size, const ImVec2& size_arg, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* callback_user_data)
 {
     ImGuiWindow* window = GetCurrentWindow();
@@ -5688,6 +5692,34 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
     //draw_scroll.x = state->Scroll.x; // Preserve scroll when inactive?
 
     // Render text
+    if (is_multiline && g_UmColorLine && !is_wordwrap && !is_displaying_hint && (text_col & IM_COL32_A_MASK) && (line_visible_n0 < line_visible_n1))
+    {
+        // um-multitool: the visible lines in coloured spans
+        UmColorSpan spans[64];
+        for (int line_n = line_visible_n0; line_n < line_visible_n1; line_n++)
+        {
+            const char* lb = line_index->get_line_begin(buf_display, line_n);
+            const char* le = line_index->get_line_end(buf_display, line_n);
+            const ImVec2 lp = draw_pos - draw_scroll + ImVec2(0.0f, line_n * g.FontSize);
+            const int n = g_UmColorLine(g_UmColorUser, lb, le, spans, 64);
+            int at = 0;
+            const int len = (int)(le - lb);
+            for (int k = 0; k <= n; k++)
+            {
+                const int b = (k < n) ? ImClamp(spans[k].begin, at, len) : len;
+                if (b > at) // the part no span covers
+                    g.Font->RenderText(draw_window->DrawList, g.FontSize, lp + ImVec2(CalcTextSize(lb, lb + at).x, 0.0f), text_col, clip_rect.AsVec4(), lb + at, lb + b, 0.0f, ImDrawTextFlags_CpuFineClip);
+                if (k < n)
+                {
+                    const int e = ImClamp(spans[k].end, b, len);
+                    if (e > b)
+                        g.Font->RenderText(draw_window->DrawList, g.FontSize, lp + ImVec2(CalcTextSize(lb, lb + b).x, 0.0f), spans[k].col, clip_rect.AsVec4(), lb + b, lb + e, 0.0f, ImDrawTextFlags_CpuFineClip);
+                    at = e;
+                }
+            }
+        }
+    }
+    else
     if ((is_multiline || (buf_display_end - buf_display) < buf_display_max_length) && (text_col & IM_COL32_A_MASK) && (line_visible_n0 < line_visible_n1))
         g.Font->RenderText(draw_window->DrawList, g.FontSize,
             draw_pos - draw_scroll + ImVec2(0.0f, line_visible_n0 * g.FontSize),

@@ -8,6 +8,7 @@
 Universal-Mod/um.cfg
 Universal-Mod/um.log
 Universal-Mod/um-engine.cfg
+Universal-Mod/um-engine.log
 
 # UM saves
 Universal-Mod/mp/*
@@ -41,6 +42,9 @@ tools/um-multitool/vendor/glfw-src-xp/
 tools/um-multitool/vendor/glfw-src-xp33/
 tools/um-multitool/vendor/glfw-mingw-xp32/
 tools/um-multitool/vendor/glfw-mingw-xp64/
+# appimagetool, fetched by tools/um-multitool/build-appimage.sh (make appimage)
+tools/um-multitool/vendor/appimagetool
+tools/um-multitool/vendor/appimage-runtime-x86_64
 
 # CoPilot Resources
 _cpr
@@ -51,6 +55,14 @@ tools/um-multitool/um-multitool.cfg
 tools/um-multitool/um-multitool-res.o
 tools/um-multitool/um-multitool-res32.o
 tools/um-bot/um-bot-res.o
+tools/um-bot/um-bot.log*
 tools/um-multitool/imgui.ini
 tools/um-multitool/build/
 tools/um-multitool/um-multitool.log
+tools/um-bot/tests/um_bot_tests
+
+# EIStarter-UM test binary and its run files
+tools/EIStarter-UM/tests/launcher_tests
+tools/EIStarter-UM/EIStarter-UM.cfg
+tools/EIStarter-UM/EIStarter-UM.log
+tools/EIStarter-UM/dist/
