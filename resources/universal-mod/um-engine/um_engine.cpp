@@ -22,10 +22,16 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.8.0";
+static const char* const kEngineVersion = "0.8.2";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
+extern "C" int __attribute__((thiscall)) UmItemProtoType(unsigned itemId);   // item_proto.cpp (the weapon table lookups)
+extern "C" long double __attribute__((fastcall)) UmItemPrice(unsigned itemId);
+extern "C" long double __attribute__((fastcall)) UmItemPrice2(unsigned itemId);
+extern "C" long double __attribute__((fastcall)) UmItemWeight(unsigned itemId);
+extern "C" unsigned __attribute__((fastcall)) UmWeaponSkill(unsigned itemId);
+extern "C" int __attribute__((fastcall)) UmWeaponDamageKind(const char* weapon);
 extern "C" void __attribute__((thiscall)) UmCameraTick(void*, float);  // camera_smooth.cpp
 extern "C" void __attribute__((thiscall)) UmCameraFrame(void*, float);
 extern "C" void __attribute__((thiscall)) UmFpLight(void*, const char*, const char*, unsigned*, const unsigned short*, int, void* const*, int, const float*); // fp_light.cpp
@@ -50,6 +56,13 @@ static const UmEngineFunction kFunctions[] = {
     { "NetSocket::ReceiveFrom", 0x00440BE0, reinterpret_cast<void*>(&UmNetReceiveFrom), 0, {0x53, 0x56, 0x8B, 0x74, 0x24, 0x10, 0x57, 0x8B} },
     // The CRT's math (crt_math.cpp): the distance function, 22 % of the main thread's CPU time in the lobby
     { "_hypot", 0x006FD026, reinterpret_cast<void*>(&UmHypot), 0, {0xDD, 0x44, 0x24, 0x0C, 0x6A, 0x18, 0x51, 0x51} },
+    // The item prototype lookup (item_proto.cpp): an item id past the end of the table returns 0 instead of crashing (closing the multiplayer menu with a mod-row weapon equipped)
+    { "ItemId_GetProtoType", 0x006A2B80, reinterpret_cast<void*>(&UmItemProtoType), 0, {0xC1, 0xE9, 0x10, 0x56, 0x57, 0x8B, 0x3D, 0xF8} },
+    { "ItemId_GetPrice", 0x006A2A50, reinterpret_cast<void*>(&UmItemPrice), 0, {0x53, 0x8B, 0x1D, 0xF8, 0x86, 0x7C, 0x00, 0x56} },
+    { "ItemId_GetPrice2", 0x006A2AE0, reinterpret_cast<void*>(&UmItemPrice2), 0, {0x53, 0x8B, 0x1D, 0xF8, 0x86, 0x7C, 0x00, 0x56} },
+    { "ItemId_GetWeight", 0x006A2BD0, reinterpret_cast<void*>(&UmItemWeight), 0, {0x53, 0x8B, 0x1D, 0xF8, 0x86, 0x7C, 0x00, 0x56} },
+    { "CItemWeapon::GetSkill", 0x006A2C60, reinterpret_cast<void*>(&UmWeaponSkill), 0, {0xC1, 0xE9, 0x10, 0x56, 0x57, 0x8B, 0x3D, 0xF8} },
+    { "CItemWeapon::GetDamageKind", 0x006A07F0, reinterpret_cast<void*>(&UmWeaponDamageKind), 0, {0x56, 0x8B, 0x35, 0xFC, 0x86, 0x7C, 0x00, 0x57} },
     // The update packet codec (net_update.cpp): sequence window, acks, stream chunks, the update parser
     { "NetConnection::WriteAcks", 0x00434C20, reinterpret_cast<void*>(&UmNetWriteAcks), -1, {0x51, 0x8B, 0xD1, 0x53, 0x55, 0x56, 0x66, 0x8B} },
     { "NetConnection::AckOne", 0x00434CE0, reinterpret_cast<void*>(&UmNetAckOne), -1, {0x8B, 0x81, 0xF8, 0x10, 0x00, 0x00, 0x56, 0x57} },
@@ -116,6 +129,48 @@ static void InstallCallSites(const std::map<std::string, bool>& config) {
             FlushInstructionCache(GetCurrentProcess(), at, 5);
         }
         UmEngineLog("um-engine: %s installed (call sites in game.exe)", site.name);
+    }
+}
+
+// Inlined copies of a function inside other game.exe functions: the instruction is replaced by NOPs / a shorter one (len bytes, all sites of one name together or none).
+struct UmBytePatch {
+    const char* name;        // the key in um-engine.cfg
+    unsigned long address;
+    int length;              // 3
+    unsigned char expect[4]; // the original bytes
+    unsigned char replace[4];
+    int required;            // as in UmEngineFunction
+};
+static const UmBytePatch kBytePatches[] = {
+    // item_proto.cpp: three inlined copies of the weapon prototype lookup that read the kind (+0xC) of a NULL record when the index is outside the table;
+    // the register holding the null pointer is zero already (xor), so no instruction is the same as "kind 0".
+    { "ItemTable::InlineLookups", 0x005354FB, 3, {0x8B, 0x49, 0x0C, 0}, {0x90, 0x90, 0x90, 0}, 0 },   // ApplyWeaponAnimMask: mov ecx, [ecx+0xC]
+    { "ItemTable::InlineLookups", 0x0056849C, 3, {0x8B, 0x50, 0x0C, 0}, {0x31, 0xD2, 0x90, 0}, 0 },   // Hero_BuildEquipmentEntries: mov edx, [eax+0xC] -> xor edx, edx
+    { "ItemTable::InlineLookups", 0x00568529, 3, {0x8B, 0x40, 0x0C, 0}, {0x90, 0x90, 0x90, 0}, 0 },   // Hero_BuildEquipmentEntries: mov eax, [eax+0xC] (eax is 0)
+    { nullptr, 0, 0, {0}, {0}, 0 }
+};
+
+static void InstallBytePatches(const std::map<std::string, bool>& config) {
+    std::map<std::string, bool> done;
+    for (const UmBytePatch& patch : kBytePatches) {
+        if (!patch.name || done.count(patch.name)) continue;
+        done[patch.name] = true;
+        const auto it = config.find(patch.name);
+        if (!(patch.required > 0 || (it != config.end() ? it->second : patch.required >= 0))) continue;
+        bool match = true;
+        for (const UmBytePatch& other : kBytePatches)
+            if (other.name && std::string(other.name) == patch.name && memcmp(reinterpret_cast<void*>(other.address), other.expect, static_cast<size_t>(other.length)) != 0) match = false;
+        if (!match) { UmEngineLog("um-engine: %s skipped, game.exe has other code at its patch sites (another build)", patch.name); continue; }
+        for (const UmBytePatch& other : kBytePatches) {
+            if (!other.name || std::string(other.name) != patch.name) continue;
+            unsigned char* at = reinterpret_cast<unsigned char*>(other.address);
+            DWORD old = 0;
+            if (!VirtualProtect(at, static_cast<SIZE_T>(other.length), PAGE_EXECUTE_READWRITE, &old)) continue;
+            memcpy(at, other.replace, static_cast<size_t>(other.length));
+            VirtualProtect(at, static_cast<SIZE_T>(other.length), old, &old);
+            FlushInstructionCache(GetCurrentProcess(), at, static_cast<SIZE_T>(other.length));
+        }
+        UmEngineLog("um-engine: %s installed (patched in game.exe)", patch.name);
     }
 }
 
@@ -213,6 +268,12 @@ static std::map<std::string, bool> ReadConfig() {
             missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
             values[fn.name] = on;
         }
+    for (const UmBytePatch& fn : kBytePatches)
+        if (fn.name && !values.count(fn.name)) {
+            const bool on = fn.required >= 0;
+            missing += std::string(fn.name) + (on ? "=true\n" : "=false\n");
+            values[fn.name] = on;
+        }
     for (const UmModuleFunction& fn : kModuleFunctions)
         if (fn.name && !values.count(fn.name)) {
             const bool on = fn.required >= 0;
@@ -252,6 +313,7 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabledModule.push_back(fn);
     }
     InstallCallSites(config);
+    InstallBytePatches(config);
     { // the unit shadow size: a number
         double resolution = 64;
         if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {

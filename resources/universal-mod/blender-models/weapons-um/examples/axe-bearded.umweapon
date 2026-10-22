@@ -1,0 +1,5 @@
+# sample axe: the head is on +X in the model; the vanilla axes have it on -X and the importer turns it
+model=axe-bearded.obj
+kind=axe
+number=-1
+normals=smooth

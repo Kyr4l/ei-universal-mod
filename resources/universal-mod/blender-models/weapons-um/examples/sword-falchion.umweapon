@@ -1,0 +1,5 @@
+# sample sword: stands along +Z, the point up; the importer finds the tip and the hand
+model=sword-falchion.obj
+kind=sword
+number=-1
+normals=smooth

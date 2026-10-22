@@ -1,0 +1,5 @@
+# sample halberd: held about 40% of the way from the butt
+model=pike-halberd.obj
+kind=pike
+number=-1
+normals=smooth

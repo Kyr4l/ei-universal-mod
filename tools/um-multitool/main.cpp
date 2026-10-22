@@ -72,7 +72,7 @@ static void PrintTopLevelHelp() {
               << "Usage:\n"
               << "  um-multitool gui                      # open the GUI (also what double-clicking does)\n"
               << "  um-multitool gui --db <file>          # ... on File Processing > DB with this database (.res, .xlsx, .ods)\n"
-              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, an animation)\n"
+              << "  um-multitool gui --viewer units <unit> [--skin <file>] [--naked] [--weapon <item.material>]... [--complection a,b,c] [--zoom f] [--look dx,dy,dz] [--clip <anim> [--frame <n>]] | objects <figure> [--skin <texture>]  # ... on 3D Viewer > Units (a skin to try, no equipment, other weapons, a build, an animation)\n"
               << "  um-multitool gui --mp <folder>        # ... on File Processing > MP with this characters folder (<game>/mp)\n"
               << "  um-multitool gui --ini <file>         # ... on File Processing > INI <-> REG with this .ini or .reg open in the editor\n"
               << "  um-multitool gui --map <file.mpr|file.mob> [...] [--focus <id>] [--mode object|paint|ground|sculpt|water|script|nodes]  # ... on the Map Editor with these files (looking at that object, in that editing mode)\n"
@@ -338,6 +338,16 @@ static int StartGui(int argc, char* argv[], int first) {
             options.viewerFrame = static_cast<float>(std::atof(argv[++i]));
         } else if (a == "--skin" && i + 1 < argc) {
             options.viewerSkin = argv[++i];
+        } else if (a == "--weapon" && i + 1 < argc) {
+            options.viewerWeapons.push_back(argv[++i]);
+        } else if (a == "--complection" && i + 1 < argc) {
+            options.viewerHasComplection = std::sscanf(argv[++i], "%f,%f,%f", &options.viewerComplection[0], &options.viewerComplection[1], &options.viewerComplection[2]) == 3;
+        } else if (a == "--zoom" && i + 1 < argc) {
+            options.viewerZoom = static_cast<float>(std::atof(argv[++i]));
+        } else if (a == "--look" && i + 1 < argc) {
+            std::sscanf(argv[++i], "%f,%f,%f", &options.viewerLook[0], &options.viewerLook[1], &options.viewerLook[2]);
+        } else if (a == "--config" && i + 1 < argc) {
+            options.configFile = argv[++i];
         } else if (a == "--ini" && i + 1 < argc) {
             options.iniFile = argv[++i];
         } else if (a == "--mp" && i + 1 < argc) {
@@ -527,10 +537,10 @@ static const CompletionEntry kCompletions[] = {
     {"xlsxdb",   "-o --output --check --no-check -h --help --version --verbose"},
     {"dbexport", "-o --output -h --help --verbose"},
     {"texts",    "--pack --unpack --group --set --loose -o --output -e --exclude -h --help --verbose"},
-    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
+    {"viewer",   "--list --resolve --render --gif --uvdump --uvmap --figure --weapon-export-ref --weapon-import --weapon-project --edit --kind --number --out --races --reference --group --flip --roll --grip --keep-depth --no-ground --uv --uv-width --normals --no-fit --scale --shift --level --up-down --height-from-anchors --keep-prod-height --replace --pack-res --yaw --pitch --zoom --category --material --texture --size --config --help --verbose"},
     {"map",      "--check --navmesh --mpr --write --force --config --help --verbose"},
     {"dll",      "--port --listen --stats --help --verbose"},
-    {"gui",      "--db --viewer --map --mp --ini --skin --naked --settings --texture --mode --screenshot --verbose"},
+    {"gui",      "--db --viewer --map --mp --ini --skin --naked --weapon --complection --zoom --look --config --clip --frame --yaw --settings --texture --mode --screenshot --verbose"},
     {"install-desktop", "--remove"},
     {"completion", "bash"},
 };

@@ -146,6 +146,9 @@ struct LayeredAssetSource {
         std::string error;
     };
     std::vector<Layer> layers;
+    // Files held in memory that win over every layer (lower-case name -> bytes): a preview of something not saved yet
+    // (the 3D Viewer's weapon import). Not a layer: nothing is listed in Settings or written to the config.
+    std::map<std::string, std::vector<uint8_t>> overrides;
 
     bool AddLayer(const std::string& path) {
         Layer layer;
@@ -171,6 +174,7 @@ struct LayeredAssetSource {
     }
 
     bool Contains(const std::string& name) const {
+        if (overrides.count(res::Archive::ToLower(name))) return true;
         for (auto it = layers.rbegin(); it != layers.rend(); ++it) {
             if (it->ok && it->source.Contains(name)) return true;
         }
@@ -178,6 +182,8 @@ struct LayeredAssetSource {
     }
 
     bool ReadFile(const std::string& name, std::vector<uint8_t>& out) const {
+        auto ov = overrides.find(res::Archive::ToLower(name));
+        if (ov != overrides.end()) { out = ov->second; return true; }
         for (auto it = layers.rbegin(); it != layers.rend(); ++it) {
             if (it->ok && it->source.ReadFile(name, out)) return true;
         }

@@ -235,6 +235,119 @@ Only present for true composite (`.mod`+`.bon`) rigs. An `.anm` file is a **RES 
 
 ---
 
+## Writing a `.fig` / `.bon` / link table (verified 2026-10-22)
+
+`viewer/figure_write.hpp` writes all three; every rule was checked on the vanilla `figures.res`: all 3,563 non-empty FIG8 meshes, all 3,564
+`.bon` entries and all 452 link tables are reproduced **byte for byte** from their parsed form (`tests/figwrite_test.cpp`; the two
+exceptions are `nawa1` / `nawa2`, whose one name is stored without its NUL).
+
+- **Bounds** (per corner): centre = the bounding box's centre, `min` / `max` = **minus / plus the half extents** (not the box's corners),
+  radius = the half diagonal. (ei_figer writes the absolute corners instead; the game takes both, vanilla uses the half extents.)
+- **Trailer** (`morphingComponentCount` words, = one per vertex point): point `p` holds `(p << 16) | min(p, usedPoints - 1)`, where
+  `usedPoints` = the highest vertex index a component uses + 1. Exact on all meshes.
+- **Normals**: `w` is always 1.0; one normal per vertex point (`normalIndex == vertexIndex` in every vanilla component); the arrays are
+  padded to blocks of 4 with copies of existing points (the padding is never referenced).
+- **Components** are sorted by vertex index, every (vertex, uv) pair is unique, and every component is used by a triangle.
+- A mesh that stores a hard edge repeats the position once per normal (a flat-shaded cube has 24 points).
+
+## Hand-held weapons: how they scale (measured 2026-10-22)
+
+A weapon in the hand is a few parts under the unit's hand part; each part, like every `.fig`, holds its vertices at the 8 complection
+corners. For the vanilla **crossbows** (`rh3.crbowNNmain`, `crbowNNpart01/02` the limbs, `crbowNNtetiva01/02` the strings) the 8 corners are
+**exactly one mesh multiplied by one number per corner**, and the `.bon` pivots follow the same numbers (residual 0.000 on every part of
+unhuma; unhufe's limbs and strings 0.0004, see below). The numbers (corner 5 = 1, the build the animation clips were made on) differ per race:
+
+| corner | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| unhuma | 0.4953 | 0.6729 | 0.5998 | 0.6452 | 0.7678 | 1 | 0.9441 | 1.0164 |
+| unhufe | 0.5019 | 0.6183 | 0.5646 | 0.6948 | 0.7911 | 1 | 1.1088 | 0.9776 |
+
+(corner index as in the `.fig`: ei_figer's `base, str, dex, unique`, then the same four "scaled"). unhufe's corner 5 is 0.9444 of unhuma's.
+The bows' corners are not exactly uniform (1-6 cm of hand shaping per axis). unhufe's crossbow **stock** has a hand-made lift of its rear
+vertices (0.004-0.024 in height) at the big builds (corners 3, 4, 6), probably body clearance: not derived by the importer.
+The orcs (`unorma` / `unorfe`) have no crossbows.
+
+**Frames and the animation.** Only the `01` parts of a variant family carry animation tracks (`rh3.crbow01main`, `crbow01part01/02`,
+`crbow01tetiva01/02`); every other variant is their child in the link table (`crbow04part01 <- crbow01part01`, ...), so a new variant needs a link
+entry and a `.bon` entry and no `.anm` change. A variant's mesh is in the frame of its `01` ancestor: the main in the hand-part's frame shifted by
+`rh3.crbow01main`'s offset; a limb in the frame of its hinge (`crbow01part01`'s offset in the main's frame: (0, -0.688, 0.012) at corner 5 of
+unhuma); a string in the frame of its anchor on the limb (`crbow01tetiva01`'s offset: (0.547, 0.104, -0.069)). A variant's own `.bon` offset
+only shifts its mesh (vanilla variants use a few cm), so a new part can have offset 0. In the shooting clips (`uattack14/15/16`) the limbs turn up to
+26 deg and the strings 60 deg, **about the vertical axis**: an anchor that is off in height moves nothing, one that is off across does.
+
+**Limbs that are turned over.** Five clips of unhufe (`udeath23-26`, `uhit13`) hold `crbow01part01` turned 180 degrees from frame 0 on, the shooting clips only turn the limbs about the vertical axis. A vanilla limb is centred on its hinge, so the turn is invisible; a limb whose root is higher than the hinge is thrown off the stock (6.6 cm measured on cb4). The importer lowers the limbs and strings together until the roots sit at the hinge's height (`prodAtHinge`).
+
+**The ground / inventory figure** (`initwecbNweapon.fig` + `.bon` + `initwecbN.lnk`) is the item lying on the ground and in the inventory: one mesh of all the parts, the 8 corners identical, UVs through the 256 atlas. For the vanilla crossbows 1-3 it is an exact similarity of the hand parts at corner 5 (matched by UV, residual 0.00000): ground = 1.8642 * M * hand + t, M = (x, y, z) -> ((x + y) / sqrt 2, (x - y) / sqrt 2, -z) (turned 45 degrees about Z and upside down), t centring the box in z and across the diagonal and putting the hand-frame y of about the vertex mean (-0.54) at the origin along it. Crossbow 1 is reproduced point for point (all 67 within 8 mm after sliding the origin 4 cm), 2 and 3 were touched up by hand. The importer writes it for crossbows (`--no-ground` skips it); the other kinds turn by other angles (bow 04 and sword 02 differ) and are not derived yet. The mod's old unfinished `initwecb4weapon.fig` had negative v and texture number 4.
+
+**Shape edits.** Everything but the corner-5 mesh is derived, so reshaping that mesh before the corners are built reaches every build and both races (`ShapeEdit`: scale a piece's cross-section about its own centre line over a stretch of its length, after cutting the piece across the stretch because grips and limbs have no vertices there). The placement is computed from the model as modelled, so an edit never moves anything else.
+
+**Blueprint textures** (`textures.res`, `cb_NN.0`) are the item's coloured texture desaturated to a flat grey: same 128 x 128 layout and footprint, about `0.51 x luminance + 96` per channel with a faint warm tint (chroma <= 14), transparent outside the islands. They are drawn with the ground / inventory figure (`initwecbNN...`), whose UVs go through the 256 atlas.
+
+**UVs and the texture.** A hand-held part's UVs are *direct* texture coordinates: u across the image, v down from its top row (measured through the viewer with a
+texture whose every texel encodes its own position: 97% of the texels the vanilla crossbow samples are `(u*W, v*H)`; the "256 atlas" mapping is for ground / inventory
+models, which is why ei_figer converts the UVs of `init...` figures and leaves in-hand parts alone). The same texture also paints the **quiver and the arrows** the unit
+carries with a ranged weapon; they sample columns 42-83 of the lower half (rows 63-127) of a 128 px texture. The vanilla crossbow textures are transparent there, so a
+crossbow shows no quiver; a new crossbow texture must keep that band transparent, or a quiver appears on the back. The same goes for the **helmets**: a helmet's face part samples the crossbow's texture too (rows 0-49, columns 55-84 for the helm of the test hero; measured in the real game with a texture whose texels encode their position): painted there, the helmet's face turns the texture's colour. Every vanilla crossbow texture keeps ALL its art in columns 0-41 (11 of 11 textures) and is transparent elsewhere, which is the safe rule: art only in columns 0-41. Textures are 128 x 128 uncompressed 32-bit ARGB, transparent
+outside the islands (`redress.res` holds them as `.mmp`: `um-multitool ddsmmp`); the bone variants (`bn bd bb bs bg bc br`) differ only in the bone's tint, the leather / dark
+parts (58, 46, 31) are shared; male and female use the same pixels.
+
+**The crossbow importer** (`viewer/weapon_import.hpp`, `um-multitool viewer --weapon-import`, 3D Viewer > Units > "Weapon import"): an OBJ of 5 pieces, placed on
+the hinge and the string anchors (scale from the strings' outer ends, tilt of the reference stock, height from the stock at the hand), the 8 corners
+built from the race's measured scales, parts + link entries + `.bon` entries added to a copy of the rig's `.mod` / `.bon`. Checked (`tests/weapon_import_test.cpp`,
+`tests/weapon_anim_test.cpp`): rebuilt vanilla crossbows equal the originals at all 8 corners to 1e-6 (unhuma); the fit puts vanilla models back within 6 mm;
+the fit does not depend on how the model is turned, moved or scaled; no anchor drifts more than vanilla's over every clip at every build; the
+real game draws the result (both rigs, no crash, 2026-10-22); ei_figer's own reader reads the files.
+
+## Hand-held weapons: bows and melee weapons (measured 2026-10-22)
+
+The importer (`viewer/weapon_import.hpp`) takes one weapon **kind** per import: `crossbow`, `bow`, `sword`, `dagger`, `axe`, `club` (the "hammer" items), `pike` (the "spear" items). A kind says which parts the weapon is made of, where they hang, how the 8 corners are built and where the hand holds it.
+
+| kind | parts of variant NN (unhuma and unhufe alike) | hangs under | animated ancestor |
+|---|---|---|---|
+| crossbow | `rh3.crbowNNmain`, `crbowNNpart01/02`, `crbowNNtetiva01/02` | the `01` parts | `01` |
+| bow | `lh3.bwpartbNN` (the +Y limb half), `bwpartaNN` (-Y), `bwtetivabNN`, `bwtetivaaNN` (a string half on each) | `lh3.bwpartb00`, `bwparta00`, `bwtetivab00`, `bwtetivaa00` | `00` |
+| sword, dagger | `rh3.swordNN` / `rh3.daggerNN`, and `baseswordNN` / `basedaggerNN` | `rh3.sword00` (the daggers too) | `00` |
+| axe, club | `rh3.axeNN` / `rh3.clubNN`, `baseaxeNN` / `baseclubNN` | `rh3.axe00` (the clubs too) | `00` |
+| pike | `rh3.pikeNN`, `basepikeNN` | `rh3.pike00` | `00` |
+
+The `baseNNN` part is a 0.06 m cube a few cm short of the tip (the weapon's "bash" mesh: `dress.hpp` never draws it); the importer copies the base game's and sets its `.bon` offset.
+
+**Bows.** The two limb halves are in the frame of `lh3.bwpartb00` (`bwparta00`'s own offset is 0): the half at +Y is `partb`, the one at -Y `parta`, meeting at y = 0; a string half is in the frame of its tip anchor (`bwtetivaa00`: (-0.106, -0.804, 0.004), `bwtetivab00`: (-0.119, 0.802, -0.001) at corner 5 of unhuma, 1.6065 apart; the vanilla variants' anchors differ by 1 cm) and runs toward the middle. The string is on the -X side, the limbs curve toward it, the hand is at (-0.07, 0.099, 0.017) in the frame. The `00` parts are one mesh times one number per corner (residual 0.005); the variants 01-05 are shaped by hand (1-6 cm off a single number per corner):
+
+| corner | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| unhuma | 0.5893 | 0.6791 | 0.5612 | 0.5560 | 0.8999 | 1 | 0.9000 | 1 |
+| unhufe | 0.5490 | 0.5708 | 0.4992 | 0.5637 | 0.8186 | 1 | 1.0289 | 0.9345 |
+
+**The grip must be on the pivot.** The limbs turn about the frame's origin and the strings about their anchors, 0.113 further out in X (unhuma; 0.127 unhufe). Every vanilla bow has its two limb halves joined on that origin (the join's middle at x = -0.004 to 0.027, y and z within 1 cm) and its string ends on the anchors. A model with another depth (string to grip) cannot have both: a sample bow 0.18 deep put its string ends on the anchors and the limb halves then came apart by 4.3 cm at the grip in the draw clips, the hand 15 cm from the limbs (vanilla: 0.1 cm and 10 cm). The importer puts the grip on the pivot and bends the limbs (the tips and the strings moved in X by the difference, the limbs by (y / tip)^2 of it, normals recomputed): the same sample then stays within 0.3 cm of the vanilla bows' drift over every frame; `keep depth` / `--keep-depth` keeps the model's own.
+
+unhufe's bow is 1.145 times unhuma's at corner 5 (the arrows have the same numbers). `uattack01-03` (60, 56, 77 frames) are the clips that move the strings; the limb halves stay joined (0.001-0.004 m) and the strings hang on the limb tips (0.005-0.008 m) in every frame at every build, the same as the vanilla bows.
+
+**Melee weapons.** One rigid part in the frame of its family's `00` part, blade (or head) toward -Y, the hand's origin about 0.15 from the butt end; it follows the hand part `rh3`. Each vanilla variant is, per corner, an **affine copy** of its corner-5 mesh (a scale per axis and a shift along Y, residual 0.0000), but the numbers differ from one variant to the next (sword01 is 0.589 uniform at corner 0, axe03 is (0.498, 0.570, 0.380), a pike 0.604): there is no single law, so the importer averages the family's variants (one number per corner, as the bows and crossbows have; the largest remaining distance from a variant's own corners is 3-6 cm, 10 cm on a 2.8 m spear):
+
+| corner | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+|---|---|---|---|---|---|---|---|---|
+| sword + dagger, unhuma | 0.5819 | 0.6459 | 0.5546 | 0.7053 | 0.8762 | 1 | 0.9779 | 0.9825 |
+| sword + dagger, unhufe | 0.5575 | 0.5705 | 0.4989 | 0.5749 | 0.6906 | 1 | 1.0472 | 0.9320 |
+| axe + club, unhuma | 0.5749 | 0.6941 | 0.5327 | 0.6024 | 0.8174 | 1 | 0.8882 | 0.9864 |
+| axe + club, unhufe | 0.5502 | 0.5798 | 0.5133 | 0.5100 | 0.6782 | 1 | 0.9848 | 0.8936 |
+| pike, unhuma | 0.5993 | 0.6875 | 0.5790 | 0.5796 | 0.9293 | 1 | 0.9213 | 1.0348 |
+| pike, unhufe | 0.5729 | 0.5855 | 0.4952 | 0.5778 | 0.7007 | 1 | 1.0644 | 0.9816 |
+
+(measured on the base game's rigs, whatever a mod adds: the importer reads the lowest figure layer for this; `--reference NN` copies one variant instead, from the rig as it is). unhufe's weapons are bigger at corner 5, by 1.126 (sword), 1.078 (dagger), 1.135 (axe), 1.123 (club), 1.157 (pike) on average: a new weapon is made that much bigger there.
+
+**Where the hand holds it** (the handle's centre line through the hand, from the vanilla weapons): the hand is 0.152 (sword), 0.142 (dagger), 0.19 (axe), 0.153 (club) from the butt end (times the ratio above in unhufe), a pike at 41% of its length (the halberd `pike06` at 48%); the handle's centre line is at (x, z) = (0, 0) (sword), (0.004, 0) (dagger), (-0.048, -0.013) (axe, club), (-0.003, 0.008) (pike) in unhuma, (0.001, 0), (0.008, -0.002), (-0.026, -0.010) / (-0.024, -0.005), (-0.001, 0) in unhufe; the axes' and clubs' handles point 1.3 degrees above level in unhuma, level in unhufe. The head of an axe or club points to -X.
+
+**Which end is the tip** is not in the shape alone (a sword's guard is as heavy as its point, a spear's pole as long as its shaft). Two rules, each right on all 31 vanilla weapons of its kinds: a sword or dagger ends in a point, so the end whose cross-section 4% in from it is smaller is the tip; an axe, club or spear has its cross-sections' weight (their size along the length, as a mass) toward the head. `flip` reverses the result, `roll` turns the weapon about its length.
+
+The mesh's first header word (render flags, 18 or 19 on the melee weapons: bit 0 differs, not understood) is taken from the family's most common value, or `group=`.
+
+**The Universal Mod's own `rh3.sword06` and `rh3.dagger05`** (not in the base game: the items "stone battle sword" and "bone dagger") hold the same mesh at all 8 corners in both races: they do not scale with the build. `viewer --weapon-export-ref <race> 06 out.obj --kind sword` and `--weapon-import out.obj --kind sword --number 6 --replace --no-fit` rebuild one with the corner scales above.
+
+**Textures.** Every vanilla human texture of the melee weapons, the crossbows and the spears keeps its art in columns 0-41 of the 128 px image (the 12 spear textures have one stray texel). The bows are the exception that confirms why: all 26 hold the quiver and the arrows in rows 64-127, columns 42-83 (1612-1657 texels), and a new bow texture without them shows no quiver. A new bow's texture must copy that band from a vanilla bow's, and leave the helmet area (rows 0-49, columns 55-84) empty.
+
+**Tests** (`tests/weapon_kinds_test.cpp`, `tests/weapon_anim_test.cpp --kind K`): every vanilla bow and melee weapon of both rigs is exported, turned about the vertical axis, moved and scaled, and imported with the automatic fit: it lands within 1-2 cm (bows), 3-7 cm (melee weapons, the spread of the vanilla hand), the same result whatever the model's own turn, place or scale (1e-6), a bow modelled standing up and a melee weapon lying down or end for end come out the same; a shape edit thins a stretch by its factor and moves nothing else. The animation test measures every frame of all 170-179 clips at the 8 corners and random builds: the bows' strings, limb tips, limb join and the hand's distance to the limbs, the melee weapons' hand-to-tip, hand-to-butt and hand-to-handle distances all stay within the vanilla weapons' own variation.
+
 ## `.lnk` — Attachment Socket Redirect
 
 A tiny fixed-format file used for weapon/item attachment points (their filenames match the hand-socket part names `box03`/`box23` seen above by convention, e.g. a unit template referring to a "weapon" or "item" slot):

@@ -31,6 +31,7 @@
 
 #include "library.hpp"
 #include "png_writer.hpp"
+#include "weapon_import.hpp"
 #include "uv_map.hpp"
 #include <set>
 #include <map>
@@ -117,6 +118,24 @@ void PrintCliHelpImpl() {
         "                                               Any figure (a map object too) to a PNG with a transparent background,\n"
         "                                               from that angle (default yaw 225, pitch 10: the front): logos, icons.\n"
         "                                               --category: stood up like in that item tab (e.g. questitems).\n"
+        "  um-multitool viewer --weapon-export-ref <unhuma|unhufe> <NN> <out.obj> [--kind crossbow|bow|sword|dagger|axe|club|pike]\n"
+        "                                               A vanilla weapon (NN = its variant number) as an OBJ in the frame the rig wants\n"
+        "                                               (complection corner 5; UVs as the file has them: u across the image, v down\n"
+        "                                               from its top row): a model to build on.\n"
+        "  um-multitool viewer --weapon-import <model.obj> --out <folder> [--kind K] [--number N] [--races unhuma,unhufe] [--reference NN]\n"
+        "                       [--uv raw|atlas --uv-width 128] [--normals keep|smooth] [--no-fit] [--scale s] [--shift x,y,z]\n"
+        "                       [--flip] [--roll deg] [--grip d] [--group 18|19] [--keep-depth] [--no-ground] [--edit main,0.6,0.85,0.7] [--replace] [--pack-res <dest.res>]\n"
+        "                                               A new weapon into the human rigs, written as <race>.mod / <race>.bon (copies of the top\n"
+        "                                               figure source's files with the new parts; a crossbow also gets its ground / inventory figure) into <folder>, with a report. Kinds:\n"
+        "                                               crossbow (5 pieces: stock, 2 limbs, 2 strings; objects main / part01 / part02 / tetiva01 /\n"
+        "                                               tetiva02, or 5 loose pieces), bow (4: limb halves partb / parta, string halves tetivab /\n"
+        "                                               tetivaa, or limb1 / limb2, string1 / string2), sword, dagger, axe, club, pike (1: the\n"
+        "                                               whole model). Placed on the rig (anchors, hand), its 8 complection corners built from the\n"
+        "                                               vanilla ones' scales. --number: the first free one when left out. --flip: a melee weapon's\n"
+        "                                               tip and butt the other way round. --roll: turn it about its length. --edit: thinner or thicker\n"
+        "                                               between t0 and t1 of a piece (main = the weapon / the stock, limbs, strings).\n"
+        "  um-multitool viewer --weapon-project <file.umweapon> --out <folder> [--pack-res <dest.res>] [--edit ...]\n"
+        "                                               The same from a project file (model, options, shape edits; see the Weapon import panel).\n"
         "  --config <file>                              Use another settings file than um-multitool-viewer.cfg.\n\n"
         "Categories: weapons, armors, quick, quest, loot. The sources (figures, textures, database)\n"
         "are the ones set in the GUI's Settings tab, saved in um-multitool.cfg.\n");
@@ -663,6 +682,21 @@ bool OpenItem(Context* ctx, const std::string& category, const std::string& item
     return true;
 }
 
+void SetUnitDress(Context* ctx, const std::vector<std::string>& weapons, const float* complection, float zoom, const float* look) {
+    ui::UnitsTabState& st = ctx->app.units;
+    if (!weapons.empty()) {
+        st.weapons.clear();
+        for (const std::string& w : weapons) {
+            ui::UnitsTabState::Worn x;
+            ui::units_detail::Split(w, x.item, x.material);
+            st.weapons.push_back(x);
+        }
+    }
+    if (complection) for (int i = 0; i < 3; ++i) st.complection[i] = complection[i];
+    if (zoom > 0) { st.zoomOverride = zoom; if (look) for (int i = 0; i < 3; ++i) st.lookShift[i] = look[i]; }
+    st.dirty = true;
+}
+
 void DrawTab(Context* ctx) {
     App& app = ctx->app;
     // The item list and the view, side by side (the list on the right when set in Settings).
@@ -821,6 +855,92 @@ static int RunUvMap(const Library& lib, const std::string& figure, const std::st
     return 0;
 }
 
+
+// ---- weapon import (viewer/weapon_import.hpp) -------------------------------------------------------------
+static std::vector<std::string> SplitCommas(const std::string& s) {
+    std::vector<std::string> out;
+    std::string cur;
+    for (char c : s) { if (c == ',') { if (!cur.empty()) out.push_back(cur); cur.clear(); } else cur += c; }
+    if (!cur.empty()) out.push_back(cur);
+    return out;
+}
+
+// --weapon-export-ref <race> <NN> <out.obj> [--kind K]: a vanilla weapon as an OBJ in the authoring frame (the model to build on).
+static int RunWeaponExportRef(const Library& lib, const std::string& race, const std::string& nn, const std::string& outPath, const std::string& kindId) {
+    wimp::Rig rig;
+    std::string err;
+    const wimp::Kind* kind = wimp::FindKind(kindId);
+    if (!kind) { std::fprintf(stderr, "unknown kind '%s' (crossbow, bow, sword, dagger, axe, club, pike)\n", kindId.c_str()); return 1; }
+    if (!wimp::LoadRig(lib.figures, race, rig, err)) { std::fprintf(stderr, "%s\n", err.c_str()); return 1; }
+    const std::string text = wimp::ExportReferenceObj(rig, *kind, wimp::TwoDigits(std::atoi(nn.c_str())), err);
+    if (text.empty()) { std::fprintf(stderr, "%s\n", err.c_str()); return 1; }
+    std::FILE* f = std::fopen(outPath.c_str(), "wb");
+    if (!f) { std::fprintf(stderr, "cannot write %s\n", outPath.c_str()); return 1; }
+    std::fwrite(text.data(), 1, text.size(), f);
+    std::fclose(f);
+    std::printf("written %s (%s %s of %s: the rig's frame at complection corner 5)\n", outPath.c_str(), kind->id, nn.c_str(), race.c_str());
+    return 0;
+}
+
+// --weapon-import <model.obj> --number N --out <folder> [options]: see PrintCliHelpImpl.
+static int RunWeaponImport(const Library& lib, const std::string& objPath, const std::vector<std::string>& args, const wimp::ImportOptions* preset = nullptr) {
+    wimp::ImportOptions opt;
+    if (preset) opt = *preset;
+    std::string outDir, packDest;
+    for (size_t i = 0; i < args.size(); ++i) {
+        const std::string& a = args[i];
+        auto next = [&]() -> std::string { return i + 1 < args.size() ? args[++i] : std::string(); };
+        if (a == "--number") opt.number = std::atoi(next().c_str());
+        else if (a == "--kind") { const wimp::Kind* k = wimp::FindKind(next()); if (!k) { std::fprintf(stderr, "--kind: crossbow, bow, sword, dagger, axe, club or pike\n"); return 1; } opt.kind = k->id; }
+        else if (a == "--group") opt.group = std::atoi(next().c_str());
+        else if (a == "--flip") opt.fit.flip = true;
+        else if (a == "--keep-depth") opt.fit.keepDepth = true;
+        else if (a == "--no-ground") opt.ground = false;
+        else if (a == "--roll") opt.fit.roll = std::atof(next().c_str());
+        else if (a == "--grip") opt.fit.grip = std::atof(next().c_str());
+        else if (a == "--out") outDir = next();
+        else if (a == "--reference") { const std::string v = next(); opt.referenceNumber = v.empty() ? std::string() : wimp::TwoDigits(std::atoi(v.c_str())); }
+        else if (a == "--races") opt.races = SplitCommas(next());
+        else if (a == "--uv") { const std::string m = next(); opt.uvMode = (m == "atlas" || m == "texture") ? wimp::UvMode::Texture : wimp::UvMode::Raw; }
+        else if (a == "--uv-width") opt.uvTextureWidth = std::atoi(next().c_str());
+        else if (a == "--normals") opt.normals = next() == "smooth" ? wimp::NormalMode::Smooth : wimp::NormalMode::Keep;
+        else if (a == "--no-fit") opt.fit.autoFit = false;
+        else if (a == "--scale") opt.fit.scale = std::atof(next().c_str());
+        else if (a == "--shift") { float x = 0, y = 0, z = 0; std::sscanf(next().c_str(), "%f,%f,%f", &x, &y, &z); opt.fit.shift = {x, y, z}; }
+        else if (a == "--level") opt.fit.levelStock = true;
+        else if (a == "--up-down") { opt.fit.upIsZ = false; opt.fit.upAuto = false; }
+        else if (a == "--up") { const std::string v = next(); opt.fit.upAuto = v != "z" && v != "down"; opt.fit.upIsZ = v != "down"; }
+        else if (a == "--height-from-anchors") opt.fit.gripHeight = false;
+        else if (a == "--keep-prod-height") opt.fit.prodAtHinge = false;
+        else if (a == "--edit") {
+            wimp::ShapeEdit e; char piece[32] = "";
+            if (std::sscanf(next().c_str(), "%31[^,],%lf,%lf,%lf,%lf", piece, &e.t0, &e.t1, &e.factor, &e.soft) < 4) { std::fprintf(stderr, "--edit <main|limbs|strings>,t0,t1,factor[,soft]\n"); return 1; }
+            e.piece = piece; opt.edits.push_back(e);
+        }
+        else if (a == "--replace") opt.replace = true;
+        else if (a == "--pack-res") packDest = next();
+    }
+    if (outDir.empty() || opt.number > 99 || opt.races.empty()) {
+        std::fprintf(stderr, "usage: viewer --weapon-import <model.obj> --out <folder> [--kind crossbow|bow|sword|dagger|axe|club|pike] [--number <0-99>] [--races unhuma,unhufe] [--reference NN]\n"
+                             "       [--uv raw|atlas --uv-width 128] [--normals keep|smooth] [--no-fit] [--scale s] [--shift x,y,z] [--flip] [--roll deg] [--grip d] [--group 18|19] [--keep-depth]\n"
+                             "       [--level] [--up auto|z|down] [--height-from-anchors] [--keep-prod-height] [--edit main,0.6,0.85,0.7] [--replace] [--pack-res <dest.res>]\n");
+        return 1;
+    }
+    std::string text, err;
+    if (!wimp::ReadWholeFile(objPath, text)) { std::fprintf(stderr, "cannot read %s\n", objPath.c_str()); return 1; }
+    wimp::ObjFile obj;
+    if (!wimp::ParseObj(text, obj, err)) { std::fprintf(stderr, "%s: %s\n", objPath.c_str(), err.c_str()); return 1; }
+    std::vector<wimp::RaceOutput> out;
+    std::vector<std::string> log;
+    const bool ok = wimp::ImportWeapon(lib.figures, obj, opt, out, log, err);
+    for (const std::string& l : log) std::printf("%s\n", l.c_str());
+    if (!ok) { std::fprintf(stderr, "import failed: %s\n", err.c_str()); return 1; }
+    if (!wimp::SaveImport(lib.figures, out, log, outDir, packDest, err, opt.uvMode, opt.uvTextureWidth)) { std::fprintf(stderr, "%s\n", err.c_str()); return 1; }
+    for (const wimp::RaceOutput& ro : out) std::printf("written %s.mod / %s.bon (%zu and %zu bytes) in %s\n", ro.race.c_str(), ro.race.c_str(), ro.mod.size(), ro.bon.size(), outDir.c_str());
+    if (!packDest.empty()) std::printf("written %s: a copy of the figures archive with the new .mod and .bon\n", packDest.c_str());
+    return 0;
+}
+
 int RunCli(int argc, char** argv) {
     std::vector<std::string> args(argv + 1, argv + argc); // argv[0] is "viewer"
     Library lib;
@@ -835,6 +955,20 @@ int RunCli(int argc, char** argv) {
     }
     if (args.empty() || args[0] == "--help" || args[0] == "-h") { PrintCliHelpImpl(); return args.empty() ? 1 : 0; }
     lib.LoadConfig();
+    if (args[0] == "--weapon-export-ref" && args.size() >= 4) {
+        std::string kindId = "crossbow";
+        for (size_t i = 4; i + 1 < args.size(); ++i) if (args[i] == "--kind") kindId = args[i + 1];
+        return RunWeaponExportRef(lib, args[1], args[2], args[3], kindId);
+    }
+    if (args[0] == "--weapon-project" && args.size() >= 2) {   // the project's model and options; --out / --pack-res (and --edit, added to the project's) from the command line
+        std::string text, model, err;
+        if (!wimp::ReadWholeFile(args[1], text)) { std::fprintf(stderr, "cannot read %s\n", args[1].c_str()); return 1; }
+        wimp::ImportOptions po;
+        const size_t slash = args[1].find_last_of("/\\");
+        if (!wimp::ParseProject(text, slash == std::string::npos ? "" : args[1].substr(0, slash), model, po, err)) { std::fprintf(stderr, "%s: %s\n", args[1].c_str(), err.c_str()); return 1; }
+        return RunWeaponImport(lib, model, std::vector<std::string>(args.begin() + 2, args.end()), &po);
+    }
+    if (args[0] == "--weapon-import" && args.size() >= 2) return RunWeaponImport(lib, args[1], std::vector<std::string>(args.begin() + 2, args.end()));
     if (args[0] == "--uvdump" && args.size() >= 2) return RunUvDump(lib, args[1], args.size() >= 3 ? args[2] : "");
     if (args[0] == "--uvmap" && args.size() >= 3) {
         int size = 0;

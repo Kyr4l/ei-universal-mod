@@ -16,6 +16,12 @@ struct GuiOptions {
     std::string mapMode;           // with "--map": the editing mode to start in: object, paint, ground (by material), sculpt, water; or the Script tab as script (text) / nodes (--mode)
     std::string viewerClip;        // with "--viewer units <name>": an animation clip to show (--clip)
     float viewerFrame = -1.0f;     // ... held at that frame (--frame); -1: playing
+    std::vector<std::string> viewerWeapons; // with "--viewer units": the weapons to hold instead of its own, "item.material" (--weapon, twice at most)
+    float viewerComplection[3] = {0.5f, 0.5f, 0.5f}; // ... and its build (--complection a,b,c)
+    bool viewerHasComplection = false;
+    float viewerZoom = -1.0f;      // ... the camera distance x this (--zoom) and its target moved by --look dx,dy,dz
+    float viewerLook[3] = {0, 0, 0};
+    std::string configFile;        // another settings file than the one beside the program (--config)
     float viewerYaw = -1000.0f;    // with "--viewer units": the camera's yaw in degrees (--yaw; 225 = from the front, 45 = the back)
     bool openMap = false;          // start on the Map Editor tab
     std::vector<std::string> mapFiles; // with openMap: open these (.mpr, .mob) instead of the last session's

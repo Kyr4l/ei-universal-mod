@@ -23,14 +23,40 @@
 #include "ui_items.hpp"
 #include "ui_common.hpp"
 #include "../mapedit/dress.hpp"
+#include "weapon_import.hpp"
 
 namespace ui {
+
+// The Weapon import panel's choices and its last result.
+struct WeaponImportState {
+    char model[512] = "";
+    int kind = 0;                   // index in wimp::AllKinds()
+    int number = -1;                // the model number: crbow04... (the item's TTI); -1: the first free one
+    char reference[8] = "";         // the vanilla variant whose scales are used; empty: the kind's own
+    int uvMode = 0;                 // 0: the file's own (direct texture coordinates, v down from the top row), 1: a ground model's, through the 256 atlas
+    int uvWidth = 128;              // the texture's width in pixels, for uvMode 0
+    int normals = 0;                // 0: as the model has them, 1: smoothed (one per vertex, like ei_figer)
+    bool autoFit = true, level = false, heightFromGrip = true, prodAtHinge = true, replace = false, flip = false, keepDepth = false, ground = true;
+    float scale = 0;                // 0: the kind's own (crossbow, bow: from the strings; melee: 1)
+    float shift[3] = {0, 0, 0};
+    int up = 1;                     // crossbow: 0 auto (experimental), 1 the model's +Z, 2 turned over
+    float roll = 0, grip = 0;       // melee
+    struct Edit { int target = 0; float t0 = 0.6f, t1 = 0.85f, factor = 0.8f, soft = 0.06f; }; // target 0 main (the weapon / stock), 1 limbs, 2 strings
+    std::vector<Edit> edits;
+    std::string projectPath;
+    std::vector<wimp::RaceOutput> outputs; // the last import
+    std::vector<std::string> log;
+    std::string message;
+    bool previewing = false;
+};
 
 struct UnitsTabState {
     char filter[96] = "";
     int selected = -1;            // in lib.unitsDb.monsters
     bool dirty = true;            // rebuild the scene's model
     bool frame = true;            // and frame it
+    float zoomOverride = -1.0f;   // gui --viewer units --zoom: the camera distance x this after the next rebuild (<= 0: none)
+    float lookShift[3] = {0, 0, 0}; // ... and the camera target moved by this (--look)
     float yawOverride = -1000.0f; // gui --viewer units --yaw: the camera's yaw after the next rebuild (-1000: none)
     // Overrides of the monster's own values
     int skin = -1;                // index in the race's primary textures; -1: the monster's
@@ -48,6 +74,7 @@ struct UnitsTabState {
     std::string clip;
     float animSpeed = 1.0f, animTime = 0.0f;
     bool animPlaying = false;
+    WeaponImportState wimport;
 };
 
 namespace units_detail {
@@ -184,7 +211,261 @@ inline void Rebuild(const Library& lib, Scene& scene, UnitsTabState& st) {
                    },
                    [&](const fig::Model& model, const fig::ModelPart& part) { return dress::PartTexture(d, model, part); });
     if (st.yawOverride > -999.0f) { scene.camera.yawDeg = st.yawOverride; st.yawOverride = -1000.0f; }
+    if (st.zoomOverride > 0) {
+        scene.camera.distance *= st.zoomOverride;
+        scene.camera.targetX += st.lookShift[0]; scene.camera.targetY += st.lookShift[1]; scene.camera.targetZ += st.lookShift[2];
+        st.zoomOverride = -1.0f;
+    }
     scene.textureName = skin;
+}
+
+
+// ---- Weapon import ------------------------------------------------------------------------------------
+inline wimp::ImportOptions WeaponOptions(const WeaponImportState& w) {
+    static const char* const targets[] = {"main", "limbs", "strings"};
+    wimp::ImportOptions opt;
+    opt.kind = wimp::AllKinds()[static_cast<size_t>(std::max(0, std::min(static_cast<int>(wimp::AllKinds().size()) - 1, w.kind)))].id;
+    opt.number = w.number;
+    opt.referenceNumber = w.reference[0] ? wimp::TwoDigits(std::atoi(w.reference)) : std::string();
+    opt.uvMode = w.uvMode == 1 ? wimp::UvMode::Texture : wimp::UvMode::Raw;
+    opt.uvTextureWidth = w.uvWidth;
+    opt.normals = w.normals == 1 ? wimp::NormalMode::Smooth : wimp::NormalMode::Keep;
+    opt.replace = w.replace;
+    opt.fit.autoFit = w.autoFit;
+    opt.fit.levelStock = w.level;
+    opt.fit.gripHeight = w.heightFromGrip;
+    opt.fit.prodAtHinge = w.prodAtHinge;
+    opt.fit.scale = w.scale;
+    opt.fit.shift = {w.shift[0], w.shift[1], w.shift[2]};
+    opt.fit.flip = w.flip;
+    opt.fit.keepDepth = w.keepDepth;
+    opt.fit.upAuto = w.up == 0; opt.fit.upIsZ = w.up != 2;
+    opt.ground = w.ground;
+    opt.fit.roll = w.roll;
+    opt.fit.grip = w.grip;
+    for (const auto& e : w.edits) opt.edits.push_back({targets[std::max(0, std::min(2, e.target))], e.t0, e.t1, e.factor, e.soft});
+    return opt;
+}
+
+// Runs the import of the panel's model into the human rigs (nothing is written): the result is in w.outputs / w.log.
+inline bool RunWeaponImport(Library& lib, WeaponImportState& w) {
+    w.outputs.clear();
+    w.log.clear();
+    lib.figures.overrides.clear(); // the real rigs, not a previous preview
+    w.previewing = false;
+    std::string text, err;
+    if (!wimp::ReadWholeFile(w.model, text)) { w.message = std::string("cannot read ") + w.model; return false; }
+    wimp::ObjFile obj;
+    if (!wimp::ParseObj(text, obj, err)) { w.message = err; return false; }
+    if (!wimp::ImportWeapon(lib.figures, obj, WeaponOptions(w), w.outputs, w.log, err)) { w.message = err; w.outputs.clear(); return false; }
+    w.message = "imported into " + std::to_string(w.outputs.size()) + " rigs, as " + wimp::AllKinds()[static_cast<size_t>(w.kind)].label + " " + wimp::TwoDigits(w.outputs[0].number) + ": nothing is saved yet";
+    return true;
+}
+
+inline void WeaponImportPanel(Library& lib, UnitsTabState& st) {
+    WeaponImportState& w = st.wimport;
+    if (!ImGui::CollapsingHeader("Weapon import")) return;
+    const std::vector<wimp::Kind>& kinds = wimp::AllKinds();
+    w.kind = std::max(0, std::min(static_cast<int>(kinds.size()) - 1, w.kind));
+    const wimp::Kind& kind = kinds[static_cast<size_t>(w.kind)];
+    const bool crossbow = kind.family == wimp::Family::Crossbow, bow = kind.family == wimp::Family::Bow, melee = kind.family == wimp::Family::Melee;
+    ImGui::TextDisabled("A new weapon for the human rigs. Nothing is written until Save.");
+    ImGui::SetNextItemWidth(-90);
+    ImGui::InputTextWithHint("##wimodel", "Model (.obj)", w.model, sizeof w.model);
+    ImGui::SetItemTooltip("Crossbow: 5 pieces (main, part01/02, tetiva01/02)\nBow: 4 (partb, parta, tetivab, tetivaa)\nMelee: the whole model is one weapon");
+    ImGui::SameLine();
+    std::string picked;
+    if (ImGui::Button("File...##wimodel") && PickFile(picked)) std::snprintf(w.model, sizeof w.model, "%s", picked.c_str());
+    {
+        std::string names;
+        for (const wimp::Kind& k : kinds) { names += k.label; names += '\0'; }
+        ImGui::SetNextItemWidth(130);
+        ImGui::Combo("Kind", &w.kind, names.c_str());
+    }
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(60);
+    ImGui::InputInt("Number", &w.number, 0, 0);
+    w.number = std::max(-1, std::min(99, w.number));
+    ImGui::SetItemTooltip("The model number of the item that holds it (its TTI). -1: the first free one");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(40);
+    ImGui::InputText("Like", w.reference, sizeof w.reference, ImGuiInputTextFlags_CharsDecimal);
+    ImGui::SetItemTooltip("The vanilla variant whose scales are used. Empty: %s", crossbow ? "02" : bow ? "00" : "all of them, averaged");
+    const char* uvs[] = {"direct (hand-held)", "atlas (ground model)"};
+    ImGui::SetNextItemWidth(150);
+    ImGui::Combo("UVs", &w.uvMode, uvs, 2);
+    ImGui::SetItemTooltip("Hand-held: u across, v down from the top row.\nAtlas: a ground / inventory model's, through the 256 atlas.");
+    if (w.uvMode == 1) { ImGui::SameLine(); ImGui::SetNextItemWidth(60); ImGui::InputInt("px", &w.uvWidth, 0, 0); w.uvWidth = std::max(16, std::min(2048, w.uvWidth)); }
+    ImGui::SameLine();
+    const char* nm[] = {"as is", "smooth"};
+    ImGui::SetNextItemWidth(90);
+    ImGui::Combo("Normals", &w.normals, nm, 2);
+    ImGui::SetItemTooltip("Smooth: one normal per vertex, like ei_figer's export");
+    ImGui::Checkbox("Fit", &w.autoFit);
+    ImGui::SetItemTooltip("Turn, scale and place the model on the rig.\nOff: it is already in the rig's frame (Export reference).");
+    ImGui::BeginDisabled(!w.autoFit);
+    if (crossbow) {
+        ImGui::SameLine(); ImGui::Checkbox("level", &w.level);
+        ImGui::SetItemTooltip("Stock exactly along the axis, not at the reference's tilt");
+        ImGui::SameLine(); ImGui::Checkbox("height from grip", &w.heightFromGrip);
+        ImGui::SetItemTooltip("Off: the string ends' height decides");
+        ImGui::SameLine(); ImGui::Checkbox("limbs at hinge", &w.prodAtHinge);
+        ImGui::SetNextItemWidth(90);
+        const char* ups[] = {"auto (test)", "model +Z", "turned over"};
+        ImGui::Combo("Up", &w.up, ups, 3);
+        ImGui::SetItemTooltip("Which way is up on the crossbow: the model's +Z, or turned over (half a turn about the stock)");
+        ImGui::SetItemTooltip("Lower the limbs and strings until the limb roots sit at the hinge's height (some female death clips turn a limb over)");
+    }
+    if (bow) {
+        ImGui::SameLine(); ImGui::Checkbox("keep depth", &w.keepDepth);
+        ImGui::SetItemTooltip("Off: the limbs are bent so the grip sits on the rig's pivot and the string on its anchors.\nOn: the model's own depth (the limb halves come apart at the grip in the draw clips if it differs).");
+    }
+    if (melee) {
+        ImGui::SameLine(); ImGui::Checkbox("flip", &w.flip);
+        ImGui::SetItemTooltip("Tip and butt the other way round");
+        ImGui::SameLine(); ImGui::SetNextItemWidth(60); ImGui::InputFloat("Roll", &w.roll, 0, 0, "%.0f");
+        ImGui::SetItemTooltip("Extra turn about the weapon's length, degrees");
+        ImGui::SameLine(); ImGui::SetNextItemWidth(60); ImGui::InputFloat("Grip", &w.grip, 0, 0, "%.3f");
+        ImGui::SetItemTooltip("The hand's distance from the butt. 0: the vanilla rule");
+    }
+    ImGui::SetNextItemWidth(70);
+    ImGui::InputFloat("Scale", &w.scale, 0, 0, "%.4f");
+    ImGui::SetItemTooltip(melee ? "0: 1 (the model's own size; the female rig gets her vanilla ratio on top)" : "0: from the strings' outer ends");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(200);
+    ImGui::InputFloat3("Shift", w.shift, "%.3f");
+    ImGui::SetItemTooltip("Extra move after the fit, rig units (+X right, +Y toward the shooter, +Z up)");
+    ImGui::EndDisabled();
+    ImGui::Checkbox("Replace", &w.replace);
+    if (crossbow) {
+        ImGui::SameLine();
+        ImGui::Checkbox("Ground model", &w.ground);
+        ImGui::SetItemTooltip("Also make the ground / inventory figure (initwecb<N>weapon.fig)");
+    }
+    ImGui::SetItemTooltip("Overwrite parts of that number the rig already has");
+
+    // Shape edits: the model's one mesh is reshaped before every corner and both races are built from it.
+    ImGui::SeparatorText("Shape edits");
+    ImGui::TextDisabled("t: 0 at the %s, 1 at the %s", melee ? "tip" : crossbow ? "limbs (stock)" : "middle", melee || crossbow ? "butt" : "tip");
+    bool changed = false;
+    int removeEdit = -1;
+    for (size_t i = 0; i < w.edits.size(); ++i) {
+        ImGui::PushID(2000 + static_cast<int>(i));
+        auto& e = w.edits[i];
+        const char* tg[] = {melee ? "weapon" : "stock", "limbs", "strings"};
+        ImGui::SetNextItemWidth(80);
+        if (melee || (bow && e.target == 0)) e.target = melee ? 0 : 1;
+        changed |= ImGui::Combo("##target", &e.target, tg, 3);
+        ImGui::SameLine(); ImGui::SetNextItemWidth(150);
+        changed |= ImGui::DragFloatRange2("##range", &e.t0, &e.t1, 0.005f, 0.0f, 1.0f, "from %.2f", "to %.2f");
+        ImGui::SetItemTooltip("The stretch that changes");
+        ImGui::SameLine(); ImGui::SetNextItemWidth(120);
+        changed |= ImGui::SliderFloat("##factor", &e.factor, 0.2f, 1.8f, "x%.2f");
+        ImGui::SetItemTooltip("Thickness: 1 unchanged, 0.7 a third thinner (about the piece's centre line)");
+        ImGui::SameLine(); ImGui::SetNextItemWidth(60);
+        changed |= ImGui::SliderFloat("##soft", &e.soft, 0.0f, 0.3f, "%.2f");
+        ImGui::SetItemTooltip("How softly it fades in and out");
+        ImGui::SameLine();
+        if (ImGui::SmallButton("X")) removeEdit = static_cast<int>(i);
+        ImGui::PopID();
+    }
+    if (removeEdit >= 0) { w.edits.erase(w.edits.begin() + removeEdit); changed = true; }
+    if (ImGui::SmallButton("Add edit")) { WeaponImportState::Edit e; e.target = melee ? 0 : crossbow ? 0 : 1; w.edits.push_back(e); }
+    ImGui::SetItemTooltip("E.g. a thinner handle: from 0.64 to 0.86, x0.7");
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Open project...")) {
+        std::string path, text, model, err;
+        if (PickFile(path) && wimp::ReadWholeFile(path, text)) {
+            wimp::ImportOptions po;
+            const size_t slash = path.find_last_of("/\\");
+            if (!wimp::ParseProject(text, slash == std::string::npos ? "" : path.substr(0, slash), model, po, err)) w.message = path + ": " + err;
+            else {
+                std::snprintf(w.model, sizeof w.model, "%s", model.c_str());
+                for (size_t k = 0; k < kinds.size(); ++k) if (po.kind == kinds[k].id) w.kind = static_cast<int>(k);
+                w.number = po.number; std::snprintf(w.reference, sizeof w.reference, "%s", po.referenceNumber.c_str());
+                w.uvMode = po.uvMode == wimp::UvMode::Texture ? 1 : 0; w.uvWidth = po.uvTextureWidth; w.normals = po.normals == wimp::NormalMode::Smooth ? 1 : 0;
+                w.autoFit = po.fit.autoFit; w.level = po.fit.levelStock; w.heightFromGrip = po.fit.gripHeight; w.prodAtHinge = po.fit.prodAtHinge; w.replace = po.replace;
+                w.flip = po.fit.flip; w.keepDepth = po.fit.keepDepth; w.up = po.fit.upAuto ? 0 : po.fit.upIsZ ? 1 : 2; w.ground = po.ground; w.roll = static_cast<float>(po.fit.roll); w.grip = static_cast<float>(po.fit.grip);
+                w.scale = static_cast<float>(po.fit.scale); w.shift[0] = po.fit.shift.x; w.shift[1] = po.fit.shift.y; w.shift[2] = po.fit.shift.z;
+                w.edits.clear();
+                for (const auto& e : po.edits) w.edits.push_back({e.piece == "limbs" ? 1 : e.piece == "strings" ? 2 : 0, static_cast<float>(e.t0), static_cast<float>(e.t1), static_cast<float>(e.factor), static_cast<float>(e.soft)});
+                w.projectPath = path; w.message = "project " + path + " loaded"; changed = true;
+            }
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::SmallButton("Save project...")) {
+        std::string path;
+        if (PickSaveFile(w.projectPath.empty() ? "weapon.umweapon" : w.projectPath, path, "umweapon")) {
+            const std::string text = wimp::ProjectText(w.model, WeaponOptions(w));
+            w.message = wimp::WriteWholeFile(path, text.data(), text.size()) ? "project saved: " + path + " (viewer --weapon-project <it> --out <folder> rebuilds everything)" : "cannot write " + path;
+            if (w.message.rfind("project saved", 0) == 0) w.projectPath = path;
+        }
+    }
+    ImGui::SetItemTooltip("Model, options and edits in one small text file");
+
+    bool doPreview = changed && w.previewing;   // an edit changed while a preview is shown: show the new one
+    if (ImGui::Button("Preview") || doPreview) {
+        if (RunWeaponImport(lib, w)) {
+            for (const wimp::RaceOutput& ro : w.outputs) {
+                lib.figures.overrides[ro.race + ".mod"] = ro.mod;
+                lib.figures.overrides[ro.race + ".bon"] = ro.bon;
+            }
+            w.previewing = true;
+            // hold a weapon of that kind with that model number, so the new parts show
+            bool held = false;
+            for (const items::Item& it : lib.db.List(items::Category::Weapons)) {
+                if (LowerCopy(it.type) != kind.itemType || it.tti != w.outputs[0].number) continue;
+                const auto mats = lib.db.MaterialsOfType(it.materialType);
+                st.weapons.clear();
+                st.weapons.push_back({it.name, mats.empty() ? "" : mats[0]->name});
+                held = true;
+                break;
+            }
+            if (!held) w.message += " (no " + std::string(kind.itemType) + " item has the model number " + std::to_string(w.outputs[0].number) + ": add one to the database, or give Number an existing item's with Replace)";
+            st.dirty = true;
+        }
+    }
+    ImGui::SetItemTooltip("Show it on the unit above (pick a Human Male / Female: it holds the item with that model number)");
+    ImGui::SameLine();
+    ImGui::BeginDisabled(!w.previewing);
+    if (ImGui::Button("Stop")) { lib.figures.overrides.clear(); w.previewing = false; st.dirty = true; }
+    ImGui::EndDisabled();
+    ImGui::SameLine();
+    ImGui::BeginDisabled(w.outputs.empty());
+    if (ImGui::Button("Save...")) {
+        std::string dir;
+        if (PickFolder(dir)) {
+            std::string err;
+            w.message = wimp::SaveImport(lib.figures, w.outputs, w.log, dir, "", err, w.uvMode == 1 ? wimp::UvMode::Texture : wimp::UvMode::Raw, w.uvWidth) ? "saved unhuma / unhufe .mod and .bon, placed-*.obj and import-report.txt in " + dir : err;
+        }
+    }
+    ImGui::SetItemTooltip("<race>.mod / <race>.bon (the rigs with the new parts), the placed model as OBJ and the report, in a folder.\nThe game's and the mod's own files are never written.");
+    ImGui::EndDisabled();
+    ImGui::SameLine();
+    if (ImGui::Button("Export reference...")) {
+        std::string path;
+        char suggestion[64];
+        const std::string refNN = w.reference[0] ? wimp::TwoDigits(std::atoi(w.reference)) : std::string(kind.defaultReference).empty() ? (melee ? "02" : "00") : std::string(kind.defaultReference);
+        std::snprintf(suggestion, sizeof suggestion, "%s-%s.obj", kind.id, refNN.c_str());
+        if (PickSaveFile(suggestion, path, "obj")) {
+            wimp::Rig rig;
+            std::string err;
+            const std::map<std::string, std::vector<uint8_t>> saved = lib.figures.overrides;
+            lib.figures.overrides.clear();
+            const bool loaded = wimp::LoadRig(lib.figures, "unhuma", rig, err);
+            lib.figures.overrides = saved;
+            const std::string text = loaded ? wimp::ExportReferenceObj(rig, kind, refNN, err, w.uvMode == 1 ? wimp::UvMode::Texture : wimp::UvMode::Raw, w.uvWidth) : std::string();
+            w.message = !text.empty() && wimp::WriteWholeFile(path, text.data(), text.size()) ? "written " + path : "cannot export: " + err;
+        }
+    }
+    ImGui::SetItemTooltip("A vanilla %s as an OBJ in the rig's frame: a model to build on", kind.id);
+    if (!w.message.empty()) ImGui::TextWrapped("%s", w.message.c_str());
+    if (!w.log.empty()) {
+        ImGui::BeginChild("##wilog", ImVec2(0, 170), ImGuiChildFlags_Borders);
+        for (const std::string& l : w.log) ImGui::TextWrapped("%s", l.c_str());
+        ImGui::EndChild();
+    }
 }
 
 } // namespace units_detail
@@ -349,6 +630,8 @@ inline void UnitsTab(Library& lib, Scene& scene, UnitsTabState& st) {
         if (frames > 0 && st.animPlaying) st.animTime = std::fmod(st.animTime + ImGui::GetIO().DeltaTime * 15.0f * st.animSpeed, static_cast<float>(frames));
         if (frames > 0) ImGui::TextDisabled("%d frames, %.1f s at the game's 15 frames a second", frames, frames / 15.0f);
     }
+
+    WeaponImportPanel(lib, st);
 
     if (st.dirty) Rebuild(lib, scene, st);
     scene.Pose(st.clip, st.animTime); // every frame: the scene's vertices follow the clip (or go back to rest)

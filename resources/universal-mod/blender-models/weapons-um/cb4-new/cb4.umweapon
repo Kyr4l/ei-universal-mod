@@ -1,0 +1,18 @@
+# um-multitool weapon import project (viewer --weapon-project <file> --out <folder>)
+model=cb4_uv.obj
+number=4
+reference=02
+uv=raw
+width=128
+normals=smooth
+fit=auto
+scale=0
+shift=0,0,0
+level=0
+height=grip
+prod=hinge
+up=down
+replace=0
+# shape edits reach every build and both races: edit=<main|limbs|strings>,<t from>,<t to>,<thickness factor>[,<softness>]
+# t: the stock 0 at the limbs .. 1 at the butt (the hand holds it at about 0.73); limbs / strings 0 at the centre .. 1 at the tip
+# edit=main,0.62,0.86,0.7,0.06

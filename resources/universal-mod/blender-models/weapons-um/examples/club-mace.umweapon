@@ -1,0 +1,5 @@
+# sample mace: a round head (the importer uses the model's own up here)
+model=club-mace.obj
+kind=club
+number=-1
+normals=smooth

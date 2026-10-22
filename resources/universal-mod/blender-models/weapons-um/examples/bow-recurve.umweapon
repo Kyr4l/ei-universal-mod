@@ -1,0 +1,5 @@
+# sample bow: the model's own up is +Z, the bow stands, the string is on +X
+model=bow-recurve.obj
+kind=bow
+number=-1
+normals=smooth

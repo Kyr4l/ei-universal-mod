@@ -979,6 +979,7 @@ int RunGui(const GuiOptions& options) {
     if (library.logVerbose) umlog::SetVerbose(true);
     splash::Step("Reading the settings", 0.08f);
     library.onLoadProgress = [](const std::string& what, float f) { splash::Step(what, 0.1f + f * 0.55f); };
+    if (!options.configFile.empty()) library.configPath = options.configFile;
     library.LoadConfig();
     library.onLoadProgress = nullptr;
     splash::Step("Sources loaded", 0.66f);
@@ -1056,6 +1057,7 @@ int RunGui(const GuiOptions& options) {
     if (!options.viewerCategory.empty()) {
         std::string err;
         if (!viewer::OpenItem(viewerCtx, options.viewerCategory, options.viewerItem, err, options.viewerSkin, options.viewerNaked, options.viewerClip, options.viewerFrame, options.viewerYaw)) std::fprintf(stderr, "%s\n", err.c_str());
+        else viewer::SetUnitDress(viewerCtx, options.viewerWeapons, options.viewerHasComplection ? options.viewerComplection : nullptr, options.viewerZoom, options.viewerLook);
         requestedTab = kViewer;
     }
     texedit::SetMapSource([mapCtx](questmap::Input& in, std::string& err) { return mapedit::FillQuestMapInput(mapCtx, in, err); });

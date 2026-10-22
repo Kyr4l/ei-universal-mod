@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 struct Library;
 
@@ -16,6 +17,10 @@ Context* Create(Library& lib);     // lib: the GUI's shared sources (outlives th
 void Destroy(Context* ctx);        // likewise
 
 // Inside the ImGui frame, in the 3D Viewer tab's content region.
+// After OpenItem on a unit: hold these weapons ("item.material") instead of its own (none given: keep them) and take this
+// build (a, b, c in 0..1; null: keep it). The command line's --weapon / --complection.
+void SetUnitDress(Context* ctx, const std::vector<std::string>& weapons, const float* complection, float zoom = -1.0f, const float* look = nullptr);
+
 void DrawTab(Context* ctx);
 // After ImGui::Render and before drawing ImGui's data: the 3D view into the region DrawTab
 // reserved, and any pending GIF export. Does nothing on frames where DrawTab was not called.
