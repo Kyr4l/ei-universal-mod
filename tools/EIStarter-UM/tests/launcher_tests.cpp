@@ -77,6 +77,10 @@ int main(int argc, char** argv) {
         CHECK(update::PickRelease(json, true, r, err)); CHECK(r.tag == "0.8.5" && r.assetUrl == "https://h/r.zip");
         CHECK(!update::PickRelease("{\"message\":\"API rate limit exceeded\"}", false, r, err) && err.find("rate limit") != std::string::npos);
         CHECK(!update::PickRelease("not json", false, r, err));
+        CHECK(update::HashOfAssetName("Universal-Mod-beta-0.8.6-b373a09c9.zip") == "b373a09c9"); CHECK(update::HashOfAssetName("Universal-Mod-0.8.5-10ed39635.zip") == "10ed39635");
+        CHECK(update::HashOfAssetName("Universal-Mod-beta-0.8.6-.zip").empty()); CHECK(update::HashOfAssetName("Universal-Mod-0.8.6.zip").empty());
+        { update::Release hr; std::string e2; const std::string j2 = R"([{"tag_name":"0.8.6","draft":false,"prerelease":true,"assets":[{"name":"Universal-Mod-beta-0.8.6-abc1234.zip","size":5,"updated_at":"x","browser_download_url":"https://h/z.zip"}]}])";
+          CHECK(update::PickRelease(j2, false, hr, e2) && hr.hash == "abc1234" && hr.Key() == "0.8.6|abc1234"); }
         CHECK(update::CompareVersions("0.8.6", "0.8.5") > 0); CHECK(update::CompareVersions("v.1.0.0", "1.0") == 0); CHECK(update::CompareVersions("0.9", "0.10") < 0); CHECK(update::CompareVersions("", "0.1") < 0);
         CHECK(update::SafeRelative("a/b.txt")); CHECK(!update::SafeRelative("../x")); CHECK(!update::SafeRelative("a/../../x")); CHECK(!update::SafeRelative("/abs")); CHECK(!update::SafeRelative("C:/x"));
         // a real zip made by 7z (deflate and stored entries, a root folder "Universal-Mod/")

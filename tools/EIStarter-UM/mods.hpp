@@ -25,6 +25,7 @@ struct ModInfo {
     std::string pluginPath = "none", pluginText = "Plugin"; // [starter] pluginpath / plugintext: a script the Info window offers to run
     // um.dll: UmListed = the mod's config.reg [DEV] Plugin names it (addon.dll loads it), UmFile = um.dll is in the mod's folder.
     bool umListed = false, umFile = false;
+    std::string commit; // build.info (written by makemod): the commit the build was made at ("" for older builds)
 };
 
 inline bool NamesUmDll(const std::string& plugin) { return LowerAscii(plugin).find("um.dll") != std::string::npos; }
@@ -34,6 +35,7 @@ inline bool ReadMod(const fs::path& folder, bool iniConfigs, ModInfo& m) {
     m.path = folder.string();
     std::error_code ec;
     for (const fs::directory_entry& f : fs::directory_iterator(folder, ec)) if (LowerAscii(f.path().filename().string()) == "um.dll") m.umFile = true;
+    { IniFile info; if (info.Load((folder / "build.info").string())) m.commit = LowerAscii(info.Get("", "commit")); }
     if (iniConfigs && fs::exists(folder / "mod.config", ec)) {
         IniFile ini;
         if (!ini.Load((folder / "mod.config").string())) return false;
