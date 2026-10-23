@@ -433,25 +433,26 @@ every second while x2 so a late joiner follows; the host's own copy in the playe
 screen closes or a zone loads), back to 55 when the host says normal or the game is left. A player without um-engine does not follow: all players need it before the host uses x2.
 Only the players of the host's current world get the message: the bases are separate worlds (a player in the base is not told), the speed buttons only exist in a zone.
 
-## Ghost units: a unit that exists only in the local world (research for PENDING #145, 2026-10-23)
+## Ghost units: the other players in your base (um-engine 0.10.0, `mp_ghost.cpp`, key `MpGhost`; PENDING #145)
 
-Goal: show the other players in your own base (visual only). The bases are separate worlds, so another player has no unit there; a **client-only unit** can be made by feeding the
-game's own creation handler (`WorldClient::OnUnitCreated` 0x667EC0, "Unit creation" above) a record built locally: the handler reads it from the local player's embedded input stream
-(`CPlayerClient + 0x34`, vtable slot 1 = Read(buffer, count)); swapping that vtable for a copy whose slot 1 reads from our own buffer is enough. Code: `resources/universal-mod/um-engine/research/ghost.cpp`
-(`UmGhostSpawn`, run through the DLL server's CALL; not built into the shipped DLL). Verified in the rig (a ghost standing in the Gipath base next to the hero, animation idle, shadow, game kept running):
+Every player's base is a world of its own, so another player never has a unit in yours. um-engine shows each of them as a **ghost**: a hero unit that exists only in the local world, made through the game's own
+unit creation handler, fed by a hidden chat line. Verified in the rig with two real game.exe (a host and a client in their bases): each sees the other's hero walk about with its armour and weapon, the ghost
+follows the walk, goes when the player enters a quest ("On map") and nothing crashes in a 3 minute stress walk; clicking a ghost does nothing.
 
-- `this` of the handler is the `CPlayerClient` = `[[0x7AF5B8 + 0x20C] + 0x20]` (the world client's local player object, then its +0x20); its byte at +0x39 must be non-zero or the handler returns at once (0 = "lobby" mode).
-- Record: u32 id (any unused one, e.g. 1000000099), u32 kind 0x32, u32 prototype row (97 = human hero), u32 flags, 3 x f32 complexion, CString "", CString figure ("unhuma" / "unhufe"), CString texture,
-  CString label, u16 n + n part names (hp bd hd hr lh1..3 rh1..3 ll1..3 rl1..3), CString name, u32 prototype row, then the net state: u16 section mask + the sections in ascending order, each delta coded
-  with every chunk "changed" (the `DeltaWriter` in ghost.cpp; each section starts a new bit byte). A record that leaves any bytes unread or reads past the end breaks the stream: ghost.cpp counts both (0 / 0 when right).
-- The sections that matter: **2** position (u8 flag, x y z f32, rotation quaternion w x y z about the vertical axis); **10** the order: `mode 0, 0, 1` (one step), the order's point as two u16 (v * 0.016601816 - 32), a range u16, 4 x u32 zero,
-  then the step (u16 0x000F = both axes absolute, 2 x u16 cells). WITHOUT section 10 the unit snaps back to the origin the next frame (CUnitClientSpecific::AdvanceTime replays the move from its move state). The unit then stands at
-  **2 * v + 48** for the order's point v (measured; the step cells are ignored); **8** animation (current, queued = 0xFE idle, start tick = world +0x64, flags) = standing idle; 6 stance 2, 7 zero, 9 the player's name (raw string),
-  11 hostile mask 0x3FFE / side 0 / owner -1; 5 equipment (4 weapon slots + 7 armour, -1 = empty).
-- Moving it: the unit's `senses` object (obj + 0x240) holds the position in half units as two floats at +0x3C / +0x40 (x2, y2): writing 2x / 2y there moves the unit (the object's own position, z from the terrain and the
-  grid cell follow within a frame; tested stepping 0.6 units every 0.3 s). The net-state UPDATE path (handler 0x6687B0) was tried with the same writer and desynchronises (it reads a different number of bytes per call; not understood).
-- Not done yet: the **skin / armour textures** (the figure is a plain white body: its texture comes from `CUnitClientSpecific::BuildSkinTextures` 0x536670, which builds "%sskin_%.2d" from the character's skin number and the
-  equipped items; equipment in section 5 are OBJECT ids looked up in the item manager, so the ghost needs client-side item objects, or its texture name has to be forced), the weapon in hand, the walking animation (section 8 codes other than 0xFE),
-  and removing a ghost (CWorldClient::RemoveObject 0x564BE0).
-- Open design: how the other players' look and position reach the machine. The lobby carries only players / quests / chat (reliable kinds 1-17) and the bases are separate worlds, so a side channel is needed (a hidden prefixed chat
-  message from um-engine, or a UDP packet beside the game's). The "On Base / On map" portraits at the top of the screen already tell who is where.
+**Transport.** The lobby's chat is the only channel every player has in a base: a line typed by a client goes to the server (`LobbyClient::AddKeyedRef2604`, as `CUIMessageLog::EditOnKeyDown` does) and comes back to everybody
+as a system line (`LobbyClient::OnAddressLine` 0x41E5D0 -> `ChatSystemLine` 0x5F82F0). Sending: a `ChatMessage` (`ctor2` 0x4171A0, text set with `ChatMessage::Read` 0x413B50) handed to `AddKeyedRef2604(client, msg, 60.0f)`. Receiving: the
+call of ChatSystemLine at 0x41E656 is replaced; a line containing `um!g|` is taken out (not shown) and parsed. Line: `um!g|<session>|<name>|x|y|yaw|animCurrent|animQueued|pack|pack2|proto|figure|c0|c1|c2|weaponSlot|<11 item codes in hex>`
+(~170 characters; weapons 4 then armour 7 = the client hero's senses +0xBC..+0xC8 and +0xA0..+0xB8) and `um!g|bye|<session>` when a player leaves the base. A hero is sent about 3 times a second while it moves or changes animation, else every 3 s;
+a ghost with no news for 12 s goes. Players without the DLL see the lines in their chat and no ghosts (all players need um-engine). Only in a multiplayer base (lobby alive, no quest, the local hero 1000011214 present).
+
+**Making a ghost** (`SpawnGhost`): run `WorldClient::OnUnitCreated` (0x667EC0) on our own bytes: its `this` is the `CPlayerClient` = `[[0x7AF5B8 + 0x20C] + 0x20]`; the embedded input stream (`+0x34`) gets a copy of its vtable whose slot 1
+(Read) reads our buffer, and the byte at `+0x39` is set to 1 for the call (the handler stops at once while it is 0). The record is the 0x40 creation record of "Unit creation" above with kind 0x32, a free id (1000000100 + n), the
+sender's proto row, figure, complexion, part names (hp bd hd hr lh1-3 rh1-3 ll1-3 rl1-3), name, and the net state: u16 section mask 0x0FE4 (sections 2, 5, 6, 7, 8, 9, 10, 11), every value delta coded as "changed"
+(`DeltaWriter`: a bit byte is taken when its 8 bits are used and each section starts a new one; a wrong layout shows as bytes left over or read beyond the end of the buffer). Section 2 position + rotation; **5 the equipment as item
+codes** (row << 16 | material: 4 weapons, 7 armour pieces; they give the skin layers, the armour meshes and the weapon in hand: the ghost looks like its player); 6 stance and weapon slot; 8 animation (0xFE idle); 9 the name; **10 the order**:
+mode 0 with one step (without it the unit is put back on the origin every frame by `CUnitClientSpecific::AdvanceTime`; the unit then stands at 2 * v + 48 for the order's point v, so v = (x - 48) / 2); 11 hostile mask / side.
+**Removing:** `CPlayerClient::OnMsg_DetachUnit` (0x668850, a u32 id) through the same stream.
+
+**Moving it:** the unit's client object (`senses`, obj + 0x240) holds the position in half units as two floats at +0x3C / +0x40 (write 2x, 2y: the object follows in a frame, z from the terrain), the rotation quaternion is at obj + 0x34, and
+the animation bytes at obj + 0x254 (current) / 0x255 (queued) with the start tick at +0x258 and the packed stance fields at +0x25C / +0x260: copying the hero's own values (idle 0xFF / 0xFE, walk 0x26 / 0x68, run 0x23 / 0x72
+with the crossbow) gives the ghost its walking pose. The game's own update message (0x41 handler 0x6687B0) was tried first with the same writer: sections 2 and 10 alone read right, section 8 reads 4 bytes beyond: not understood, not needed.

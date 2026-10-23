@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.9.0";
+static const char* const kEngineVersion = "0.10.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -47,6 +47,8 @@ extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, un
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
+extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char* text, unsigned number);   // mp_ghost.cpp (the other players in the base)
+extern "C" void UmMpGhostFrame();
 extern "C" int UmMpSpeedLobbyAlive();                                              // mp_speed.cpp (x2 speed in multiplayer)
 extern "C" void UmMpSpeedNetTick();
 extern "C" void __attribute__((thiscall)) UmMpSpeedNamedValue(void* map, const char* name, float value);
@@ -118,6 +120,9 @@ static const UmCallSite kCallSites[] = {
     { "MpSpeed::HostButtons", 0x0063A733, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0x08, 0x4D, 0xF4, 0xFF} },
     { "MpSpeed::Sync", 0x00457252, reinterpret_cast<void*>(&UmMpSpeedNetTick), 0, {0xE8, 0x79, 0xB0, 0xFB, 0xFF} },
     { "MpSpeed::Sync", 0x006698DF, reinterpret_cast<void*>(&UmMpSpeedNamedValue), 0, {0xE8, 0xDC, 0x72, 0xDF, 0xFF} },
+    // mp_ghost.cpp: the other players shown in the base (their state travels as a hidden chat line)
+    { "MpGhost", 0x0041E656, reinterpret_cast<void*>(&UmMpGhostChatLine), 0, {0xE8, 0x95, 0x9C, 0x1D, 0x00} },
+    { "MpGhost", 0x004573AE, reinterpret_cast<void*>(&UmMpGhostFrame), 0, {0xE8, 0x1D, 0xAF, 0xFB, 0xFF} },
     { nullptr, 0, nullptr, 0, {} }
 };
 
