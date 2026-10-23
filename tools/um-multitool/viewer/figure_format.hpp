@@ -310,11 +310,12 @@ inline bool ParseLinkTable(const uint8_t* data, size_t size, std::vector<LinkEnt
     int32_t nLink;
     if (!ReadI32(data, size, off, nLink)) return false;
     out.clear();
+    if (nLink < 0 || static_cast<size_t>(nLink) > (size - off) / 8) return false; // every entry takes at least two lengths: a damaged count must not reserve gigabytes
     out.reserve(static_cast<size_t>(nLink));
     for (int32_t i = 0; i < nLink; ++i) {
         int32_t childLen;
         if (!ReadI32(data, size, off, childLen)) return false;
-        if (off + static_cast<size_t>(childLen) > size) return false;
+        if (childLen < 0 || static_cast<size_t>(childLen) > size - off) return false;
         std::string child(reinterpret_cast<const char*>(data + off), static_cast<size_t>(childLen));
         off += static_cast<size_t>(childLen);
         // strip trailing NUL(s)
@@ -324,7 +325,7 @@ inline bool ParseLinkTable(const uint8_t* data, size_t size, std::vector<LinkEnt
         if (!ReadI32(data, size, off, parentLen)) return false;
         std::string parent;
         if (parentLen != 0) {
-            if (off + static_cast<size_t>(parentLen) > size) return false;
+            if (parentLen < 0 || static_cast<size_t>(parentLen) > size - off) return false;
             parent.assign(reinterpret_cast<const char*>(data + off), static_cast<size_t>(parentLen));
             off += static_cast<size_t>(parentLen);
             while (!parent.empty() && parent.back() == '\0') parent.pop_back();

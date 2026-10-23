@@ -119,15 +119,26 @@ other bits are not tied to anything yet.
 
 ### The older figure format (22 vanilla files, no `FIG8` signature)
 
-`in25arrow`, `efcu0lightsourse`..`efcu5eye`, `initlitr1..6item`, `initqi4item`, `ingm1gipat01..08`, `nask0sky`:
-the file starts with u32 17-23 (the same values as the render flags above) and u32 3-8 (the same as
-`textureNumber`), then the 8-corner bounding data as in `FIG8` (centre, min, max...). The counts and the rest are
-not decoded yet; their `.bon` files are 72 bytes (not 96), all zeros in the samples. The viewer does not read them. Seen in `in25arrow` (874 bytes): after the two words, 8 identical vec3 (a bounding centre per corner),
-then more per-corner data, and the file ends like a `FIG8` body: u16 vertex-component triples and u16 triangle
-indices (values 0-9 for this small mesh). The counts are not in a header: to find (maybe derived from the sizes). game.exe's reader (0x4F7F49, on a .fig in memory): 8 header words (the first compared with `FIG8`) + 2 words, then
-with `FIG8` the 320 bytes of per-corner bounds; with any other first word only 40 bytes (one corner: centre, min,
-max, radius) and a separate branch at 0x4F8689 for the rest: there the vertex data advances 0x40 bytes per block (one corner: 4 points x 16 bytes?) instead of 384: to confirm by parsing a file that way. A brute
-force over layouts by size alone gave thousands of fits (inconclusive).
+`in25arrow`, `efcu0lightsourse`..`efcu5eye`, `initlitr1..6item` (no 4), `initqi4item`, `ingm1gipat01..08`, `nask0sky`. Decoded 2026-10-23 from the game's own reader
+(`CRenderManager::LoadFigFile` 0x4F7D20 sends a file whose first three bytes are not `FIG` to `BuildFigureMesh2` 0x4F87D0; `FIG8` goes to `BuildFigureMesh` 0x4F7F00). All 22 files parse to
+exactly their size with the layout below (`_cpr/claude-re/full/tools/oldfig.py` checks it). It is the `FIG8` mesh with **6 morph corners instead of 8** and a different header; the `.bon` is 72 bytes (6 x vec3) instead of 96.
+
+| offset | size | what |
+|---|---|---|
+| 0 | u32 | render flags (17-23, as in `FIG8`'s word before the texture number) |
+| 4 | u32 | texture number (3 or 8) |
+| 8 | 244 B | per-corner bounds data (centre, min, max, radius per corner; not needed to draw) |
+| 0xF8 | u32 | `n`: vertex blocks |
+| 0xFC | n x 288 B | vertex blocks: 3 vec4 of the output vertex (position, ...), each blended from **6 vec4** (24 floats) of morph corners: with the three complection weights `a`, `b`, `c`: `lerp(lerp(lerp(v0,v1,a), v2, b), lerp(lerp(v3,v4,a), v5, b), c)` (exactly the game's 24-float expression; the fourth vec4 of the output is 1,1,1,1) |
+| next | u32 `a`, a x 64 B | the "normals" array (64 bytes per element, as `FIG8`'s second block) |
+| next | u32 `b`, b x 8 B | UVs (2 floats) |
+| next | u32 `c`, c x 52 B | records the game skips (not given to the mesh builder; per-vertex morph components?) |
+| next | u32 `t`, t x 6 B | u16 triples (vertex-component references) |
+| next | u32 `q`, q x 4 B | 4-byte items (the `FIG8` "morphing component" array) |
+| next | u32 `r`, r x 2 B | u16 indices (triangle list) |
+
+The file ends right after the index array. `n` equals `a` in all 22 files (one normal element per vertex block). In the `FIG8` reader the same code path's non-`FIG8` branch (header words copied from a
+`FIG8` shape) is dead for these files.
 
 ## `.bon` — Assembly Offsets
 
