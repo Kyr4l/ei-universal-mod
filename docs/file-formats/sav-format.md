@@ -43,7 +43,25 @@ to 821 in the samples), then a tail of about 260 bytes whose first 8 bytes hold 
 "Human Hadagan Pretty" with the role `Nalo`). They are found where a `.mp` party section reads and writes back
 exactly; the quest variables follow the last one. All 255 scenario.sav files of the installed mods are written back
 byte for byte. In a save made inside a zone, mission.sav holds the party too (the same format, near its end). um-multitool's MP editor
-opens saves (a saves folder: each saveNN) with these.
+opens saves (a saves folder: each saveNN) with these and edits both files.
+
+### Which copy the game plays (test in the game, 2026-10-23)
+
+mission.sav's party section is the same block as scenario.sav's (party, quest variables, 8 bytes of money) but NOT a byte copy: in
+XP-Mates save87 the members, items and money are equal but the variables come in another order and 4 items differ; in LostInAstral
+save38 the zone's party has 2 members, 38 items and another hero record where scenario.sav's has 1 member and 6 items.
+
+Test (a copy of save87 made inside a zone, vanilla game without UM, Collected items window): money edited only in scenario.sav
+(1111111; mission.sav kept 2288742): the game shows 2288742 in the zone, and a new save keeps scenario.sav's 1111111 and mission.sav's
+2288742 (the game writes each copy back as it read it). Edited only in mission.sav (2222222): the zone shows 2222222. So in a save
+made inside a zone the game plays the party of mission.sav and ignores scenario.sav's. A mission.sav written by the editor loads
+(money 7777777 shown). The code agrees (Ghidra, game.exe): `Game_LoadSavedGame` (0x57ABA0) always reads scenario.sav first (the party store DAT_007AA5A0,
+camera, interface flags); then, when the zone's record (field +0x28) is not 0 or 2, it reads mission.sav (`Game_ReadSaveFile`: the whole
+zone world, party included) over it. `Game_SaveToSlot` (0x57B3B0) writes scenario.sav from the party store (`ObjPartyRecord_Write`) and
+mission.sav from the world (`CWorldServer::WriteSave`): so a plain save in a zone leaves scenario.sav's party untouched (the test saw
+1111111 survive). A save made when leaving a zone (autosave slot saveb) has no mission.sav at all. Not checked in the game: that the
+party store is refreshed from the live party at the moment the party leaves a zone (the portal of the test save would not fire in the
+rig), so edit both copies to be safe.
 
 ## Zone files and mission.sav
 

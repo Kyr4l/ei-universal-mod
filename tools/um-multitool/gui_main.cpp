@@ -1085,7 +1085,7 @@ int RunGui(const GuiOptions& options) {
     const TabInfo tabs[] = {
         {"DB", dbedit::DrawTab, nullptr, nullptr, nullptr},  // in-process: no Run button nor log
         {"Texts", DrawTextsTab, nullptr, nullptr, nullptr},  // the same
-        {"MP / Saves (WIP)", DrawMpTab, nullptr, nullptr, nullptr},        // multiplayer characters (in-process)
+        {"MP / Saves", DrawMpTab, nullptr, nullptr, nullptr},        // multiplayer characters (in-process)
         {"RES / MQ", DrawResToolTab, BuildResToolArgs, "restool", nullptr},
         {"INI <-> REG", inireg_edit::DrawTab, nullptr, nullptr, nullptr},  // in-process: an editor for INI and REG files
         {"DDS <-> MMP", DrawDdsMmpTab, BuildDdsMmpArgs, "ddsmmp", nullptr},

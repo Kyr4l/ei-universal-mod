@@ -39,9 +39,12 @@ struct State {
     mp::Character ch;
     bool isSave = false;              // the open entry is a save: ch is its scenario.sav party
     sav::Scenario sav;                // (the rest of scenario.sav)
+    sav::Scenario mission;            // mission.sav of a save made inside a zone: its party is the one the game plays there
+    bool hasMission = false;
     int member = 0;                   // the party member shown (saves: the hero and the mercenaries)
-    int section = 0;                  // saves: which party-like section of scenario.sav (0: the party)
-    std::vector<uint8_t> savedBytes; // Serialize(ch) as loaded / last saved (for the unsaved mark)
+    int section = 0;                  // saves: which party-like section of scenario.sav (0: the party); sav.sections.size(): mission.sav's party
+    std::vector<uint8_t> savedBytes; // the open file(s) as loaded / last saved (for the unsaved mark)
+    std::vector<uint8_t> savedScenario, savedMission;
     std::string message;
     bool unsafe = false;              // "Allow unsafe edits"
     bool showRaw = false;
@@ -163,20 +166,31 @@ void Rescan() {
     std::sort(g.files.begin(), g.files.end(), [](const Entry& a, const Entry& b) { return a.file < b.file; });
 }
 
-// A save's section (party, quest variables, money) in g.ch, and back.
+// A save's section (party, quest variables, money) in g.ch, and back. The section after scenario.sav's own is mission.sav's party.
+bool IsMissionSection(int k) { return g.hasMission && k == static_cast<int>(g.sav.sections.size()); }
 void ShowSection(int k) {
     g.section = k;
     g.member = 0;
-    g.ch = g.sav.sections[static_cast<size_t>(k)].party;
+    g.ch = IsMissionSection(k) ? g.mission.sections[0].party : g.sav.sections[static_cast<size_t>(k)].party;
 }
-void StoreSection(sav::Scenario& s) {
-    s.sections[static_cast<size_t>(g.section)].party = g.ch;
+void StoreSection(sav::Scenario& s, sav::Scenario& m) {
+    if (IsMissionSection(g.section)) m.sections[0].party = g.ch;
+    else s.sections[static_cast<size_t>(g.section)].party = g.ch;
+}
+void StoreSection() { StoreSection(g.sav, g.mission); }
+// The files of the open save as they would be written (scenario.sav, mission.sav: empty when the save has none).
+void SaveFiles(std::vector<uint8_t>& scenario, std::vector<uint8_t>& mission) {
+    sav::Scenario s = g.sav, m = g.mission;
+    StoreSection(s, m);
+    scenario = sav::Serialize(s);
+    mission = g.hasMission ? sav::Serialize(m) : std::vector<uint8_t>();
 }
 std::vector<uint8_t> Bytes() { // the open file's content as it would be written
     if (!g.isSave) return mp::Serialize(g.ch);
-    sav::Scenario s = g.sav;
-    StoreSection(s);
-    return sav::Serialize(s);
+    std::vector<uint8_t> s, m;
+    SaveFiles(s, m);
+    s.insert(s.end(), m.begin(), m.end());
+    return s;
 }
 void Open(int i) {
     g.selected = i;
@@ -186,20 +200,42 @@ void Open(int i) {
     g.member = 0;
     if (g.isSave) {
         if (!sav::Load(g.files[i].path + "/scenario.sav", g.sav, err)) { g.message = err; g.selected = -1; return; }
-        ShowSection(0);
+        std::string missionErr;
+        g.mission = sav::Scenario{};
+        g.hasMission = sav::Load(g.files[i].path + "/mission.sav", g.mission, missionErr);
+        ShowSection(g.hasMission ? static_cast<int>(g.sav.sections.size()) : 0); // inside a zone the game plays mission.sav's party
+        SaveFiles(g.savedScenario, g.savedMission);
     } else if (!mp::Load(g.files[i].path, g.ch, err)) { g.message = err; g.selected = -1; return; }
     g.savedBytes = Bytes();
 }
 bool Dirty() { return g.selected >= 0 && Bytes() != g.savedBytes; }
 
+// Writes a save's file when it changed; the first save of it keeps the original as .bak. Returns false (message set) when it fails.
+bool SaveSavFile(const std::string& path, sav::Scenario& data, bool& backedUp) {
+    std::error_code ec;
+    if (!fs::exists(path + ".bak", ec)) { fs::copy_file(path, path + ".bak", ec); backedUp = true; }
+    std::string err;
+    if (!sav::Save(path, data, err)) { g.message = "Not saved: " + err; return false; }
+    return true;
+}
 void SaveCurrent() {
     const std::string path = g.files[g.selected].path + (g.isSave ? "/scenario.sav" : "");
     std::error_code ec;
-    const bool backup = !fs::exists(path + ".bak", ec);
-    if (backup) fs::copy_file(path, path + ".bak", ec); // the first save keeps the original
+    bool backup = false;
     std::string err;
-    if (g.isSave) { StoreSection(g.sav); if (!sav::Save(path, g.sav, err)) { g.message = "Not saved: " + err; return; } }
-    else if (!mp::Save(path, g.ch, err)) { g.message = "Not saved: " + err; return; }
+    if (g.isSave) {
+        StoreSection();
+        std::vector<uint8_t> sc, ms;
+        SaveFiles(sc, ms);
+        if (sc != g.savedScenario && !SaveSavFile(path, g.sav, backup)) return;
+        if (g.hasMission && ms != g.savedMission && !SaveSavFile(g.files[g.selected].path + "/mission.sav", g.mission, backup)) return;
+    }
+    else {
+        backup = !fs::exists(path + ".bak", ec);
+        if (backup) fs::copy_file(path, path + ".bak", ec); // the first save keeps the original
+        if (!mp::Save(path, g.ch, err)) { g.message = "Not saved: " + err; return; }
+    }
+    if (g.isSave) SaveFiles(g.savedScenario, g.savedMission);
     g.savedBytes = Bytes();
     g.message = "Saved" + std::string(backup ? " (the original is kept as .bak)" : "");
     const int sel = g.selected;
@@ -341,20 +377,25 @@ void Locked() {
 }
 
 void CharacterPanel() {
-    if (g.isSave && g.sav.sections.size() > 1) { // other characters kept in the save (spare heroes, NPCs)
+    if (g.isSave && (g.sav.sections.size() > 1 || g.hasMission)) { // the party in the zone, other characters kept in the save (spare heroes, NPCs)
         ImGui::SetNextItemWidth(260);
         auto name = [](const sav::Section& x) { const mp::Member& mm = x.party.members[0]; return (mm.strings[0].empty() ? mm.strings[4] : mm.strings[0]) + " (" + mm.s1 + (x.party.members.size() > 1 ? ", +" + std::to_string(x.party.members.size() - 1) : "") + ")"; };
-        const std::string shown = (g.section == 0 ? "The party: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(g.section)]);
-        if (ImGui::BeginCombo("Party", shown.c_str())) {
-            for (int k = 0; k < static_cast<int>(g.sav.sections.size()); ++k)
-                if (ImGui::Selectable(((k == 0 ? "The party: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(k)]) + "##s" + std::to_string(k)).c_str(), k == g.section)) {
-                    StoreSection(g.sav); // keep this one's edits
+        const int zoneSection = static_cast<int>(g.sav.sections.size());
+        auto label = [&](int k) {
+            if (IsMissionSection(k)) return "In the zone: " + name(g.mission.sections[0]);
+            return (k == 0 ? "Campaign: " : "Other: ") + name(g.sav.sections[static_cast<size_t>(k)]);
+        };
+        if (ImGui::BeginCombo("Party", label(g.section).c_str())) {
+            for (int k = 0; k < zoneSection + (g.hasMission ? 1 : 0); ++k)
+                if (ImGui::Selectable((label(k) + "##s" + std::to_string(k)).c_str(), k == g.section)) {
+                    StoreSection(); // keep this one's edits
                     ShowSection(k);
                 }
             ImGui::EndCombo();
         }
-        ImGui::SetItemTooltip("A save keeps other characters in the party's format too (a spare hero, an NPC companion), each\n"
-                              "with its own quest variables and money: the party is the one with the Hero.");
+        ImGui::SetItemTooltip("In the zone (mission.sav): the party the game plays in a save made inside a zone (checked: money edited only\n"
+                              "in scenario.sav is ignored there). Campaign (scenario.sav): the party between zones; the two copies can differ.\n"
+                              "Other: spare heroes / NPC companions kept in the party's format, each with its own variables and money.");
     }
     if (g.ch.members.size() > 1) { // a save's party
         ImGui::SetNextItemWidth(260);
@@ -712,10 +753,8 @@ void DrawTab(Library& lib) {
     if (!g.message.empty()) { ImGui::SameLine(); ImGui::TextUnformatted(g.message.c_str()); }
     ImGui::TextDisabled("Close the game first, or it may overwrite the file with its own copy.");
     if (g.isSave) {
-        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.35f, 1), "Save editor (WIP): only scenario.sav's parties, quest variables and money are edited; the zones are kept.");
-        std::error_code ec;
-        if (fs::exists(g.files[g.selected].path + "/mission.sav", ec))
-            ImGui::TextColored(ImVec4(1.0f, 0.55f, 0.4f, 1), "This save was made inside a zone: mission.sav holds its own copy of the party, not edited yet: the game may use that one.");
+        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.35f, 1), "Save editor: the parties, quest variables and money of scenario.sav and mission.sav; the zones are kept.");
+        if (g.hasMission) ImGui::TextDisabled("Made inside a zone: the game plays mission.sav's party there (\"Party\"); scenario.sav's is the campaign's copy: edit both.");
     }
     ChecksPanel(found);
     if (ImGui::BeginTable("cols", 2, ImGuiTableFlags_Resizable)) {

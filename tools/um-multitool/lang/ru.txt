@@ -1543,7 +1543,7 @@ T("Save (DB editor, text editor)", "Сохранить (редактор БД, �
 T("Close a message", "Закрыть сообщение")
 T("No keys in this tab", "На этой вкладке нет клавиш")
 T("The keys and mouse buttons are set in Settings.", "Клавиши и кнопки мыши настраиваются в Настройках.")
-T("MP / Saves (WIP)", "MP / Сохранения (WIP)")
+T("MP / Saves", "MP / Сохранения")
 T("Party", "Отряд")
 T("Member", "Персонаж")
 T("Add an object or a unit (the Add window)", "Добавить объект или юнита (окно добавления)")
