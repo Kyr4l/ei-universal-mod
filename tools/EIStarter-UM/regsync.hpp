@@ -7,6 +7,7 @@
 //   EI_Starter\EvilIslands     the game's settings (the clone of Nival's key that addon.dll points game.exe at)
 #pragma once
 
+#include <cstring>
 #include <filesystem>
 #include <string>
 
@@ -59,10 +60,16 @@ inline bool RunningUnderWine() {
 // (the CD drive of the CD edition, D:\\) is kept. Returns true when something changed.
 inline bool NormalizePaths(GameSettings& g) {
     std::error_code ec;
-    const std::string work = g.GetString("Path Settings", "Work Path");
-    if (!LooksLikeGameFolder(work)) return false;
-    auto usable = [&](const std::string& p) { return p.size() >= 2 && (p[1] == ':' || p[0] == '/') && fs::is_directory(fs::path(p), ec); };
     bool changed = false;
+    // The zone and the music the game starts with: a key imported as "none" (or emptied) leaves the game in an empty zone without music, and the launcher wrote it back at every start.
+    for (const DefaultValue& d : kGameDefaults) {
+        if (std::strcmp(d.key, "Game Specific Settings") != 0 || (LowerAscii(d.name) != "defaultmapname" && LowerAscii(d.name) != "defaultstreamingsound")) continue;
+        const winreg::Value* v = g.Find(d.key, d.name);
+        if (v && v->kind == winreg::Value::Kind::String && (v->text.empty() || LowerAscii(v->text) == "none")) { g.SetString(d.key, d.name, d.text); changed = true; }
+    }
+    const std::string work = g.GetString("Path Settings", "Work Path");
+    if (!LooksLikeGameFolder(work)) return changed;
+    auto usable = [&](const std::string& p) { return p.size() >= 2 && (p[1] == ':' || p[0] == '/') && fs::is_directory(fs::path(p), ec); };
     if (!usable(g.GetString("Path Settings", "CD-ROM Path"))) { g.SetString("Path Settings", "CD-ROM Path", WithSlash(work)); changed = true; }
     if (!usable(g.GetString("Path Settings", "Resources Path"))) { g.SetString("Path Settings", "Resources Path", WithSlash(WithSlash(work) + "res")); changed = true; }
     // The game builds its file names by appending to these paths ("<CD-ROM Path>3DfpFPU.dll", "<..>textures\\"): one without its closing backslash (typed by hand in
