@@ -102,3 +102,9 @@ When the launcher starts for the first time (no `EIStarter-UM.cfg`) and no mod o
 with the choice of the line: **Release (master)** (the newest stable build, the default) or **Pre-release (beta)**. "Download" runs the updater of Info > Updates (GitHub releases of Kyr4l/ei-universal-mod; the release goes to
 `mods\Universal-Mod`, the beta to `mods\Universal-Mod-Beta`), shows the progress, then selects the new mod; a failure offers "Try again". "Not now" does not ask again (the cfg exists from then on; Info > Updates installs it later).
 Tested under Wine against a local stand-in for GitHub's API (`EISTARTER_UM_API=http://127.0.0.1:<port>`): the question, the beta choice, the download, the unpacking, "um.dll detected" and the new mod chosen in the list.
+
+## 0.2.3 (2026-10-23): no more silent failures at start
+
+A program without a console shows nothing when it cannot start, which is what a virtual machine without 3D acceleration looked like. Now EIStarter-UM.log records each step (GLFW started, window created, the OpenGL renderer and
+version, settings loaded, window shown) and every GLFW error; the window is requested three times (as wanted, then with no depth / stencil buffer, then with a frame and no alpha) before giving up; a failure to open a window, and a crash
+of the launcher itself (address and code), show a message box that says what to do ("turn on 3D acceleration in the virtual machine, or update the graphics driver; send EIStarter-UM.log").

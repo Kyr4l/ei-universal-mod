@@ -30,7 +30,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.2";
+static constexpr const char* kVersion = "0.2.3";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -675,6 +675,16 @@ static void DrawMain(App& app, GLFWwindow* window) {
     }
 }
 
+#ifdef _WIN32
+static App* g_crashApp = nullptr;
+static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* e) {
+    char b[160]; std::snprintf(b, sizeof b, "crash: exception 0x%08lX at 0x%p", static_cast<unsigned long>(e->ExceptionRecord->ExceptionCode), e->ExceptionRecord->ExceptionAddress);
+    if (g_crashApp) g_crashApp->Log(b);
+    platform::ShowFatal(std::string(b) + "\n\nThe launcher crashed. Please send EIStarter-UM.log (next to EIStarter-UM.exe).");
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+#endif
+
 int main(int argc, char** argv) {
     App app;
     app.dir = platform::ExeDir();
@@ -687,12 +697,37 @@ int main(int argc, char** argv) {
     }
     app.Log(std::string("EIStarter-UM ") + kVersion + " in " + app.dir.string());
 
-    if (!glfwInit()) { std::fprintf(stderr, "cannot start GLFW\n"); return 1; }
-    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    GLFWwindow* window = glfwCreateWindow(kW, kH, "Evil Islands", nullptr, nullptr);
-    if (!window) { std::fprintf(stderr, "cannot open a window\n"); glfwTerminate(); return 1; }
+    // Whatever goes wrong must reach EIStarter-UM.log (and a message box): a program without a console just shows nothing otherwise (virtual machines without 3D).
+    static App* logApp = &app;
+#ifdef _WIN32
+    g_crashApp = &app;
+#endif
+    glfwSetErrorCallback([](int code, const char* text) { logApp->Log("GLFW error " + std::to_string(code) + ": " + (text ? text : "")); });
+#ifdef _WIN32
+    SetUnhandledExceptionFilter(CrashFilter);
+#endif
+    if (!glfwInit()) { app.Log("cannot start GLFW"); platform::ShowFatal("EIStarter-UM cannot start its window library (GLFW).\nSee EIStarter-UM.log."); return 1; }
+    app.Log("GLFW started");
+    // A window with an OpenGL context: first as wanted; a virtual machine or an old driver without a matching pixel format gets the plainest request (no depth / stencil buffer,
+    // which the launcher never uses), then a visible window.
+    GLFWwindow* window = nullptr;
+    for (int attempt = 0; attempt < 3 && !window; ++attempt) {
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        if (attempt >= 1) { glfwWindowHint(GLFW_DEPTH_BITS, 0); glfwWindowHint(GLFW_STENCIL_BITS, 0); }
+        if (attempt >= 2) { glfwWindowHint(GLFW_ALPHA_BITS, 0); glfwWindowHint(GLFW_DECORATED, GLFW_TRUE); }
+        window = glfwCreateWindow(kW, kH, "Evil Islands", nullptr, nullptr);
+        if (!window) app.Log("window attempt " + std::to_string(attempt + 1) + " failed");
+    }
+    if (!window) {
+        app.Log("cannot open a window");
+        platform::ShowFatal("EIStarter-UM cannot open its window: no usable OpenGL.\n\nIn a virtual machine turn on 3D acceleration (or install the guest drivers); on a real PC update the graphics driver.\nDetails: EIStarter-UM.log.");
+        glfwTerminate();
+        return 1;
+    }
+    app.Log("window created");
     if (GLFWmonitor* mon = glfwGetPrimaryMonitor()) {
         int mx, my, mw, mh; glfwGetMonitorWorkarea(mon, &mx, &my, &mw, &mh);
         glfwSetWindowPos(window, mx + (mw - kW) / 2, my + (mh - kH) / 2);
@@ -700,6 +735,7 @@ int main(int argc, char** argv) {
     { GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)}, {48, 48, const_cast<unsigned char*>(logo::kIcon48)}, {32, 32, const_cast<unsigned char*>(logo::kIcon32)}}; glfwSetWindowIcon(window, 3, icons); }
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
+    if (const char* gl = reinterpret_cast<const char*>(glGetString(GL_RENDERER))) app.Log(std::string("OpenGL: ") + gl + " " + (glGetString(GL_VERSION) ? reinterpret_cast<const char*>(glGetString(GL_VERSION)) : ""));
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -715,6 +751,7 @@ int main(int argc, char** argv) {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL2_Init();
 
+    app.Log("loading the settings");
     app.cfg = LoadConfig(app.dir);
     app.languages = EnumerateLanguages(app.dir);
     if (!app.languages.empty() && std::find(app.languages.begin(), app.languages.end(), app.cfg.language) == app.languages.end()) app.cfg.language = app.languages[0];
@@ -741,6 +778,7 @@ int main(int argc, char** argv) {
         app.Log("Evil Islands folder not found: asking");
         app.options.Open(app.cfg, true, "Evil Islands not found. Choose its folder, then OK.");
     }
+    app.Log("showing the window");
     glfwShowWindow(window);
     glfwFocusWindow(window); // so that Enter reaches the launcher at once (Play is the default button)
     int frame = 0;

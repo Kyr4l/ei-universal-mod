@@ -4,6 +4,7 @@
 // looked at on Linux: starting the game needs the registry setup of Windows / Wine, so there it only reports that).
 #pragma once
 
+#include <cstdio>
 #include <filesystem>
 #include <string>
 #include <vector>
@@ -34,6 +35,15 @@ inline fs::path ExeDir() {
 }
 
 // Opens a file or a web address with the default program.
+// A message the user sees when the launcher cannot even open its window (a GUI program has no console, so stderr is lost). Windows only; elsewhere stderr.
+inline void ShowFatal(const std::string& text) {
+#ifdef _WIN32
+    MessageBoxA(nullptr, text.c_str(), "EIStarter-UM", MB_OK | MB_ICONERROR);
+#else
+    std::fprintf(stderr, "%s\n", text.c_str());
+#endif
+}
+
 inline void OpenWithDefault(const std::string& target) {
 #ifdef _WIN32
     int n = MultiByteToWideChar(CP_UTF8, 0, target.c_str(), -1, nullptr, 0);
