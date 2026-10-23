@@ -95,3 +95,10 @@ Test rig (not in the repository): a dedicated Wine prefix with the game, the sta
 The game builds file names by appending to the path settings (`<Work Path>3DfpFPU.dll`, `<Work Path>textures\`). A "Work Path" typed or imported without its closing backslash (`D:\Evil Islands`) made the game look for `D:\Evil Islands3DfpFPU.dll`, fail to load its 3D library
 ("Can't load 3D transform library", an exception the game catches) and then read its missing renderer: an access violation at game.exe 0x456D8D (reading address 0xC), exit code -1073741819, with nothing shown (the crash dump has the string `D:\Evil Islandstextures\`). Reproduced in the Wine rig with the same address.
 `NormalizePaths` now adds the backslash to CD-ROM Path, Resources Path and Work Path whenever one is missing (tests/launcher_tests.cpp).
+
+## 0.2.2 (2026-10-23): offer to download Universal Mod at the first start
+
+When the launcher starts for the first time (no `EIStarter-UM.cfg`) and no mod of `mods\` is a Universal Mod with its `um.dll` (config.reg names it and the file is there), it asks "Universal Mod is not installed: download it now?"
+with the choice of the line: **Release (master)** (the newest stable build, the default) or **Pre-release (beta)**. "Download" runs the updater of Info > Updates (GitHub releases of Kyr4l/ei-universal-mod; the release goes to
+`mods\Universal-Mod`, the beta to `mods\Universal-Mod-Beta`), shows the progress, then selects the new mod; a failure offers "Try again". "Not now" does not ask again (the cfg exists from then on; Info > Updates installs it later).
+Tested under Wine against a local stand-in for GitHub's API (`EISTARTER_UM_API=http://127.0.0.1:<port>`): the question, the beta choice, the download, the unpacking, "um.dll detected" and the new mod chosen in the list.

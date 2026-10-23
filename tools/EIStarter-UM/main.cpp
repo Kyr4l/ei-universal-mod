@@ -30,7 +30,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.1";
+static constexpr const char* kVersion = "0.2.2";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -88,6 +88,32 @@ struct App {
         const std::string l = LowerAscii(m.folder);
         const bool beta = l.size() > 5 && l.compare(l.size() - 5, 5, "-beta") == 0;
         return m.title + " (" + (beta ? "beta" : l == "universal-mod" ? "release" : m.folder) + ")";
+    }
+    // First start with no Universal Mod in mods\\: offer to download it (the same updater as Info > Updates) and let the user pick the line.
+    enum class Offer { None, Asking, Working, Failed };
+    Offer offer = Offer::None;
+    int offerChannel = 0;           // which of channels[]: 0 release, 1 beta
+    bool offerInstalling = false;   // the install of the chosen channel has been started
+    std::string offerError;
+    bool UmDetected() const { for (const ModInfo& m : mods) if (m.umListed && m.umFile) return true; return false; }
+    void StartOffer() {
+        Channel& c = channels[offerChannel];
+        Log(std::string("no Universal Mod: downloading ") + c.label);
+        offerInstalling = false; offerError.clear();
+        offer = Offer::Working;
+        CheckChannel(c);
+    }
+    void PollOffer() {
+        if (offer != Offer::Working) return;
+        using S = update::Updater::State;
+        Channel& c = channels[offerChannel];
+        const auto snap = c.updater.Get();
+        if (!offerInstalling && (snap.state == S::Available || snap.state == S::UpToDate)) { offerInstalling = true; InstallChannel(c); }
+        else if (offerInstalling && snap.state == S::Done && c.handled) { // Poll has read the new mod: choose it
+            for (size_t i = 0; i < mods.size(); ++i) if (mods[i].folder == c.folder) { modIndex = static_cast<int>(i); Save(); break; }
+            Log("Universal Mod installed: " + snap.message);
+            offer = Offer::None;
+        } else if (snap.state == S::Failed) { offerError = snap.message; offer = Offer::Failed; Log("download failed: " + snap.message); }
     }
     void CheckChannel(Channel& c) {
         auto key = cfg.updateKeys.find(c.folder);
@@ -214,6 +240,7 @@ struct App {
                 ReloadMods(); ApplySkin(); Save();
             } else if (snap.state == update::Updater::State::Failed && !c.handled) { c.handled = true; Log("update failed: " + snap.message); }
         }
+        PollOffer();
         if (phase != Phase::Starting && phase != Phase::Running) return;
         int code = 0;
         if (!platform::Running(proc, code)) {
@@ -323,7 +350,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::PopStyleVar(2);
 
     const bool idle = app.phase == App::Phase::Idle || app.phase == App::Phase::Running;
-    const bool modal = app.options.IsOpen() || app.showInfo || !app.message.empty() || app.phase == App::Phase::Starting || app.phase == App::Phase::Failed;
+    const bool modal = app.options.IsOpen() || app.showInfo || !app.message.empty() || app.offer != App::Offer::None || app.phase == App::Phase::Starting || app.phase == App::Phase::Failed;
     ImDrawList* bg = ImGui::GetBackgroundDrawList();
     const Texture& back = app.skin.Background();
     if (back) bg->AddImage(Tid(back), ImVec2(0, 0), ImVec2(static_cast<float>(kW), static_cast<float>(kH)));
@@ -586,6 +613,55 @@ static void DrawMain(App& app, GLFWwindow* window) {
         ImGui::PopStyleColor();
     }
 
+    // First start without Universal Mod: download it?
+    if (app.offer != App::Offer::None && !app.options.IsOpen() && app.message.empty()) {
+        using S = update::Updater::State;
+        ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize(ImVec2(470, app.offer == App::Offer::Asking ? 236 : 150));
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.02f, 0.04f, 0.07f, 0.96f));
+        if (ImGui::Begin("##offer", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
+            App::Channel& c = app.channels[app.offerChannel];
+            if (app.offer == App::Offer::Asking) {
+                ImGui::TextColored(ImVec4(0.92f, 0.7f, 0.27f, 1), "Universal Mod is not installed");
+                ImGui::Spacing();
+                ImGui::TextWrapped("Download it now from GitHub (Kyr4l/ei-universal-mod)? It is unpacked into the mods folder; later updates keep your saves. Which line?");
+                ImGui::Spacing();
+                if (ImGui::RadioButton("Release (master)", app.offerChannel == 0)) app.offerChannel = 0;
+                ImGui::SameLine(190); ImGui::TextDisabled("the newest stable build (recommended)");
+                if (ImGui::RadioButton("Pre-release (beta)", app.offerChannel == 1)) app.offerChannel = 1;
+                ImGui::SameLine(190); ImGui::TextDisabled("new features first, may have bugs");
+                ImGui::TextDisabled("Both can be installed side by side later (Info > Updates).");
+                ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 190, ImGui::GetWindowHeight() - 34));
+                if (ImGui::Button("Download", ImVec2(84, 0)) || ImGui::IsKeyPressed(ImGuiKey_Enter)) app.StartOffer();
+                ImGui::SameLine();
+                if (ImGui::Button("Not now", ImVec2(84, 0)) || ImGui::IsKeyPressed(ImGuiKey_Escape)) { app.Log("no Universal Mod: download declined"); app.offer = App::Offer::None; }
+            } else if (app.offer == App::Offer::Working) {
+                const auto snap = c.updater.Get();
+                ImGui::TextColored(ImVec4(0.7f, 0.85f, 1, 1), "%s", c.label);
+                const char* what = snap.state == S::Checking ? "Looking for the newest build..." : snap.state == S::Downloading ? "Downloading..." : snap.state == S::Extracting ? "Unpacking..." : snap.state == S::Applying ? "Putting the files in place..." : "Starting...";
+                ImGui::TextUnformatted(what);
+                char over[64] = "";
+                if (snap.state == S::Downloading) std::snprintf(over, sizeof over, "%.0f / %.0f MB", static_cast<double>(snap.done) / 1048576.0, static_cast<double>(snap.total) / 1048576.0);
+                else if (snap.state == S::Extracting) std::snprintf(over, sizeof over, "%d%%", static_cast<int>(snap.progress * 100));
+                const bool known = snap.state == S::Downloading || snap.state == S::Extracting;
+                ImGui::ProgressBar(known ? static_cast<float>(snap.progress) : -1.0f * static_cast<float>(glfwGetTime()), ImVec2(-1, 16), over);
+                ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 94, ImGui::GetWindowHeight() - 34));
+                ImGui::BeginDisabled(snap.state == S::Applying);
+                if (ImGui::Button("Cancel", ImVec2(84, 0)) || ImGui::IsKeyPressed(ImGuiKey_Escape)) { c.updater.Cancel(); app.Log("no Universal Mod: download cancelled"); app.offer = App::Offer::None; }
+                ImGui::EndDisabled();
+            } else {
+                ImGui::TextColored(ImVec4(1, 0.5f, 0.4f, 1), "The download did not work");
+                ImGui::TextWrapped("%s", app.offerError.c_str());
+                ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 190, ImGui::GetWindowHeight() - 34));
+                if (ImGui::Button("Try again", ImVec2(84, 0))) app.StartOffer();
+                ImGui::SameLine();
+                if (ImGui::Button("Close", ImVec2(84, 0)) || ImGui::IsKeyPressed(ImGuiKey_Escape)) app.offer = App::Offer::None;
+            }
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
+    }
+
     // A message.
     if (!app.message.empty()) {
         ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
@@ -658,7 +734,8 @@ int main(int argc, char** argv) {
             }
         }
     }
-    if (app.cfg.checkUpdatesAtStart) app.CheckUpdates(); // in the background; the corner shows the result
+    if (app.cfg.firstRun && !app.UmDetected()) { app.offer = App::Offer::Asking; app.Log("first start without Universal Mod: offering the download"); }
+    if (app.cfg.checkUpdatesAtStart && app.offer == App::Offer::None) app.CheckUpdates(); // in the background; the corner shows the result
     if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
     if (!app.GameFolderOk()) { // nothing found: ask for the game folder right away instead of at the first Play
         app.Log("Evil Islands folder not found: asking");
