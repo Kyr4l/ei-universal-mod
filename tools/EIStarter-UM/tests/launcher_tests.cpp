@@ -36,15 +36,17 @@ int main(int argc, char** argv) {
         std::ofstream(tmp / "starter.config") << "[Settings]\nModSel=Mods\\Universal-Mod\\config.reg\nlanguage=fr\nModSkins=True\nUsingINIconfigs=False\nExeName=game.exe\n";
         LauncherConfig c = LoadConfig(tmp);
         CHECK(c.firstRun); CHECK(c.mod == "Universal-Mod"); CHECK(c.language == "fr");
+        CHECK(c.addon.mpSpeedControl && c.addon.mpConsole);   // the multiplayer second speed and console are on by default
+        CHECK(!c.addon.mqClient);
         CHECK(c.game.GetBool("general settings", "fullscreen", true) == false || true);
         CHECK(c.game.Has("Camera Settings", "CameraFlipXAxis") || c.game.Has("camera settings", "CAMERADEFAULTHEIGHT"));
         c.game.SetBool("general settings", "fullscreen", true);
         c.game.SetFloat("terrain settings", "LOD1", 90.f);
         c.game.SetString("Path Settings", "Work Path", "C:\\Evil Islands\\");
-        c.addon.landscapeDrawRadius = 250; c.addon.mpConsole = true;
+        c.addon.landscapeDrawRadius = 250; c.addon.mpConsole = true; c.addon.mpSpeedControl = false;
         CHECK(SaveConfig(tmp, c));
         LauncherConfig d = LoadConfig(tmp);
-        CHECK(!d.firstRun); CHECK(d.mod == "Universal-Mod"); CHECK(d.addon.landscapeDrawRadius == 250 && d.addon.mpConsole);
+        CHECK(!d.firstRun); CHECK(d.mod == "Universal-Mod"); CHECK(d.addon.landscapeDrawRadius == 250 && d.addon.mpConsole && !d.addon.mpSpeedControl);   // a saved choice is kept
         CHECK(d.game.GetBool("general settings", "fullscreen"));
         CHECK(d.game.GetFloat("terrain settings", "LOD1") == 90.f);
         CHECK(d.game.GetString("Path Settings", "Work Path") == "C:\\Evil Islands\\");

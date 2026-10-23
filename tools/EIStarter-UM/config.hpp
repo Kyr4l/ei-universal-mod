@@ -21,9 +21,9 @@ struct AddonOptions {
     int landscapeDrawRadius = 0;  // 0 = the game's own (the registry value is not written)
     int objectsDrawRadius = 0;
     bool pauseOnMinimize = false;
-    bool mpSpeedControl = false;  // "second speed support" in multiplayer
+    bool mpSpeedControl = true;   // "second speed support" in multiplayer (on by default: the tested setup, with um-engine's speed sync)
     bool mqClient = false;        // "do not load .MQ (quest) files from the host"
-    bool mpConsole = false;
+    bool mpConsole = true;
     int logLevel = 1;             // addon.log
     int consoleLogLevel = 1;
 };
@@ -81,9 +81,9 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         a.landscapeDrawRadius = ini.GetInt("Addon", "LandscapeDrawRadius", 0);
         a.objectsDrawRadius = ini.GetInt("Addon", "ObjectsDrawRadius", 0);
         a.pauseOnMinimize = ini.GetBool("Addon", "PauseOnMinimize", false);
-        a.mpSpeedControl = ini.GetBool("Addon", "MPSpeedControl", false);
+        a.mpSpeedControl = ini.GetBool("Addon", "MPSpeedControl", true);
         a.mqClient = ini.GetBool("Addon", "MQClient", false);
-        a.mpConsole = ini.GetBool("Addon", "MPConsole", false);
+        a.mpConsole = ini.GetBool("Addon", "MPConsole", true);
         a.logLevel = ini.GetInt("Addon", "LogLevel", 1);
         a.consoleLogLevel = ini.GetInt("Addon", "ConsoleLogLevel", 1);
         c.game.Load(ini);

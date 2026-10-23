@@ -115,3 +115,9 @@ When no OpenGL window can be opened (a virtual machine without 3D acceleration, 
 Dear ImGui's draw lists are rasterised into a 640 x 360 image (triangle filler with the top-left rule, vertex colour times texel, straight alpha blending, nearest-neighbour textures including the font atlas through ImGui's texture protocol),
 which is copied to the window with GDI every frame. `--software` forces this mode; EIStarter-UM.log says "software rendering". The picture is the same as the OpenGL one (Wine rig: mean difference 0.04 / 255 over the whole window,
 no pixel differing by more than 40), and one frame costs a few milliseconds. `make test` includes tests/softrender_test.cpp (a quad cut in two triangles covers every pixel once, also at fractional corners).
+
+## 0.2.5 (2026-10-23): multiplayer second speed and console on by default
+
+"Second speed support" (`MP Speed-control`) and "Console support" (`MP console`) were off in a new EIStarter-UM.cfg (the launcher's own default, not an EIStarter one: the first start still imports the values of an old
+`EI_Starter\settings` key). Both are now on by default: that is the configuration the speed sync (um-engine `MpSpeed`) and the ghost players were tested with. A cfg that already holds a choice keeps it;
+"Do not load .MQ files from the host" stays off.
