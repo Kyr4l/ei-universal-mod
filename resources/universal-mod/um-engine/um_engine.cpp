@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.8.3";
+static const char* const kEngineVersion = "0.9.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -47,6 +47,9 @@ extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, un
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
+extern "C" int UmMpSpeedLobbyAlive();                                              // mp_speed.cpp (x2 speed in multiplayer)
+extern "C" void UmMpSpeedNetTick();
+extern "C" void __attribute__((thiscall)) UmMpSpeedNamedValue(void* map, const char* name, float value);
 struct NetReader;
 extern "C" bool __attribute__((thiscall)) UmNetReadMessage(NetConnection* self, NetReader* reader, unsigned packetSeq);  // net_message.cpp
 
@@ -106,6 +109,15 @@ static const UmCallSite kCallSites[] = {
     { "CCamera::SmoothUpdate", 0x004573A9, reinterpret_cast<void*>(&UmCameraTick),  0, {0xE8, 0x82, 0x87, 0xFB, 0xFF} },
     { "CCamera::SmoothUpdate", 0x0045756D, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0xBE, 0x85, 0xFB, 0xFF} },
     { "CCamera::SmoothUpdate", 0x00457595, reinterpret_cast<void*>(&UmCameraFrame), 0, {0xE8, 0x96, 0x85, 0xFB, 0xFF} },
+    // mp_speed.cpp: game speed x2 in multiplayer (the host's buttons work, the players follow the host's speed)
+    { "MpSpeed::HostButtons", 0x006490B6, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0x85, 0x63, 0xF3, 0xFF} },
+    { "MpSpeed::HostButtons", 0x00649116, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0x25, 0x63, 0xF3, 0xFF} },
+    { "MpSpeed::HostButtons", 0x00648DF7, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0x44, 0x66, 0xF3, 0xFF} },
+    { "MpSpeed::HostButtons", 0x00648E5E, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0xDD, 0x65, 0xF3, 0xFF} },
+    { "MpSpeed::HostButtons", 0x0063A6CD, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0x6E, 0x4D, 0xF4, 0xFF} },
+    { "MpSpeed::HostButtons", 0x0063A733, reinterpret_cast<void*>(&UmMpSpeedLobbyAlive), 0, {0xE8, 0x08, 0x4D, 0xF4, 0xFF} },
+    { "MpSpeed::Sync", 0x00457252, reinterpret_cast<void*>(&UmMpSpeedNetTick), 0, {0xE8, 0x79, 0xB0, 0xFB, 0xFF} },
+    { "MpSpeed::Sync", 0x006698DF, reinterpret_cast<void*>(&UmMpSpeedNamedValue), 0, {0xE8, 0xDC, 0x72, 0xDF, 0xFF} },
     { nullptr, 0, nullptr, 0, {} }
 };
 

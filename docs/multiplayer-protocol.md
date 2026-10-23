@@ -414,3 +414,21 @@ own structures.
 
 ## Where a unit is (checked against um.dll's UNITS, 2026-10-21, um-bot 0.1.29)
 A replay of captured streams (`research/poscheck.cpp`: every decoded position against the true ones sampled while the capture was taken) showed: the positions from the walk (section 10: the first step, in half-unit cells) always followed the unit (122 of 122 within 1 unit); the position in section 2 (3 floats) is only a SNAPSHOT: monsters lag it by ~2 units and a host moved by a research poke kept its spawn point (23,267) in every snapshot, so believing it made the bot think the host went back; section 1 (3 floats) is no position at all (0.2 / 0.5 on units standing at x = 30..60). um-bot believes a snapshot only for a unit with no walk position of the last 6 s and ignores section 1. Rare garbage still comes from the walk (unit 4651: x = 5899.25, y = 0.25: both codes absolute with a wrong value; the delta state of a unit goes stale when one of its updates did not decode): the bot ignores positions outside 4..1024 and now logs which section they came from.
+
+## Game speed x2 in a multiplayer game (um-engine 0.9.0, `mp_speed.cpp`)
+
+`main` (0x456440) is a fixed-timestep loop with two accumulators: the server one (g_0x79BC64) runs `CWorldServer::v6` (0x58DFF0) once per g_0x78FF34 ms of real time, the client one
+(g_0x79BC68) runs `CWorldClient::v6` (0x5641F0) the same way (scaled by a catch-up factor g_0x784758 that stays 1.0 in practice). g_0x78FF34 is 55 at normal speed and 27 at x2 (tick
+counter g_0x7AF61C 18.4 / s, 37 / s). The speed buttons and keys (CBattleBar::OnPauseButton 0x6490A0 = x2, OnNormalSpeedButton 0x649100, CBattleBar2::OnLButtonUp 0x648D70 cases 1 / 2,
+CUIScreen740730::OnKeyDown 0x63A560) write it only when `Lobby_IsAlive()` (0x57F440) is false, i.e. never in multiplayer.
+
+Tested with two real game.exe (rig): the value set on the host alone doubles the host's server ticks (18.5 -> 36.9 / s) but the clients keep 18.2 / s and their heroes walk at 1.87
+units / s; set on the host and on the client both counters run at 37 / s in step (418 / 417 in 11 s) and the client's hero walks at 3.79 units / s.
+
+So um-engine (keys `MpSpeed::HostButtons`, `MpSpeed::Sync` in um-engine.cfg; both on by default, nothing happens until the host presses x2): the six speed gates ask a function that answers
+"no lobby" for the host (the one that has a lobby server object, g_0x79B5DC); once a frame (the first `Net_TickAll` call of `main`) the host compares g_0x78FF34 with the last value it sent and
+sends every player of its world the named value `um.speed` (2 = x2, 0 = normal; message 0x81 through `CPlayerServer::SendMsg81_NamedValue` 0x66EE10, the one that carries "gtime"; repeated
+every second while x2 so a late joiner follows; the host's own copy in the player's variables is removed again); the client's 0x81 handler (`WorldClient::OnQuestString` 0x669850, the
+`StringFloatMap_Set` call at 0x6698DF) takes `um.speed` out (not stored in the character) and the client keeps g_0x78FF34 at the host's value every frame (the game resets it to 55 when a
+screen closes or a zone loads), back to 55 when the host says normal or the game is left. A player without um-engine does not follow: all players need it before the host uses x2.
+Only the players of the host's current world get the message: the bases are separate worlds (a player in the base is not told), the speed buttons only exist in a zone.
