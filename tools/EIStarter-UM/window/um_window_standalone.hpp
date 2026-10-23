@@ -15,3 +15,4 @@ void LogLine(const char* level, const char* format, ...);
 bool PatchImportedFunction(HMODULE module, const char* functionName, ULONG_PTR replacement, ULONG_PTR* original);
 void InstallWindowHooks();
 extern bool g_enableBorderless;
+extern bool g_enableScale;

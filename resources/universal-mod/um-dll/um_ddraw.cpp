@@ -538,6 +538,7 @@ HRESULT WINAPI HookedDirectDrawCreateEx(const GUID* guid, void** directDraw,
         result = g_originalDirectDrawCreateEx(guid, directDraw, interfaceId, outerUnknown);
     }
     if (FAILED(result)) LogLine("ERROR", "DirectDrawCreateEx failed: result=0x%08lX", result);
+    else if (g_enableScale && directDraw && *directDraw) WindowScaleDirectDrawCreated(*directDraw, IsD7vkDirectDraw());
     if ((g_enableOverlay || g_uiQuadBlit) && SUCCEEDED(result) && directDraw && *directDraw) {
         IdentifyDirectDrawBackend();
         InstallDirectDrawFrameCounterHooks(*directDraw);

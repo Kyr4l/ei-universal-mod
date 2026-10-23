@@ -36,7 +36,7 @@ EIStarter-UM.exe: $(SRCS) $(HDRS) EIStarter-UM-res.o
 # um-window.asi: the borderless-window plugin (resources/universal-mod/um-dll/um_window.cpp built on its own); addon.dll loads it from Engine\.
 window: window/um-window.asi
 window/um-window.asi: window/um_window_plugin.cpp window/um_window_standalone.hpp ../../resources/universal-mod/um-dll/um_window.cpp
-	$(WIN_CXX) -shared -DUM_WINDOW_STANDALONE -o $@ window/um_window_plugin.cpp ../../resources/universal-mod/um-dll/um_window.cpp -Iwindow -std=c++17 -O2 -static -static-libgcc -s -Wall -Wextra
+	$(WIN_CXX) -shared -DUM_WINDOW_STANDALONE -o $@ window/um_window_plugin.cpp ../../resources/universal-mod/um-dll/um_window.cpp -Iwindow -std=c++17 -O2 -static -static-libgcc -s -Wall -Wextra -lgdi32
 
 STARTER ?= .
 test: tests/launcher_tests tests/softrender_test

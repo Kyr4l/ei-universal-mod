@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.6.0";
+static const char* const UM_VERSION = "1.7.0";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 
@@ -350,7 +350,9 @@ extern char g_fileIoLoggingFilter[256];
 extern bool g_enableMsaa;
 void TraceInstallDevice(void* device); // um_trace.cpp: UM_TRACE_D3D research tracer
 extern bool g_enableBorderless;
+extern bool g_enableScale;
 void InstallWindowHooks(); // um_window.cpp
+void WindowScaleDirectDrawCreated(void* directDraw, bool stretchesByItself); // um_window.cpp: BORDERLESS_SCALE
 bool PatchImportedFunction(HMODULE module, const char* functionName, ULONG_PTR replacement, ULONG_PTR* original); // um_hooks.cpp
 bool IsD7vkDirectDraw(); // the DirectDraw driver in use (the chained DDRAW_DLL, else the loaded ddraw.dll) is D7VK (found by strings in its file)
 extern char g_ddrawDll[MAX_PATH];

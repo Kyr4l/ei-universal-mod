@@ -38,7 +38,7 @@ button (mod information, its readme / changelog, and the mod's own script button
 filtering, textures, shadows, terrain LOD, lighting / shadowing frequency, movies, audio), Addon (landscape / objects draw radius, pause when
 minimized, addon.log levels), Multiplayer (console, "do not load .MQ from the host", second speed), Camera (every camera value), Paths (game folder,
 resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log. New: **Window mode** = Fullscreen /
-Windowed / **Borderless window**. In EIStarter's Windowed mode the game is a frameless window that minimizes and pauses when it loses the focus
+Windowed / **Borderless window** / **Borderless scaled**. In EIStarter's Windowed mode the game is a frameless window that minimizes and pauses when it loses the focus
 (a multiplayer game then desyncs); Borderless keeps it running and keeps the mouse inside. EIStarter's presets (disabled there) and its "Russian
 charset fix for WinXP" checkbox (it did nothing) are not carried over.
 
@@ -76,6 +76,18 @@ it from what EIStarter left (the clone, then Nival's key). The `[Game: <key>]` s
 any `*.asi`; the launcher switches it with `Engine\um-window.ini` (`[Window] Borderless=1`). It subclasses the game window: a deactivation never reaches the
 game, the cursor is confined to the window while it has the focus. Needs the game's `fullscreen=0` (the launcher's window mode takes care of both). When
 a mod loads um.dll, um.dll's own `BORDERLESS` does it (the launcher sets it in the mod's `um.cfg`) and the plugin stays out of the way.
+
+### Borderless scaled (a lower resolution fills the screen)
+
+The window mode **Borderless scaled** (um.cfg `BORDERLESS_SCALE=true`, `um-window.ini` `Scale=1`) lets a game resolution below the monitor's fill the screen instead of sitting in a small window in the corner: the game window gets
+the game's picture scaled by the largest factor that fits the monitor (the aspect ratio is kept: 1024x768 on a 1920x1080 monitor becomes 1440x1080, 1280x720 becomes 1920x1080), centred, with black bars around it. Set the game resolution
+in Video (lower than the screen's); a resolution as big as the monitor, or bigger, is left alone. How it works (`um_window.cpp`, the same code in um.dll and in the plugin):
+- the window is made at its final size and place when the game creates it; two to four black windows around it are the bars; the window and the bars are topmost only while the game is active (the taskbar would cover the edge of the picture otherwise);
+- D7VK stretches its frame to the window by itself; with any other DirectDraw (the game's own, Wine's) the primary surface's `Blt` / `BltFast` become one stretching `Blt` to the picture's rectangle (a stretch is the driver's job: 0.04 ms of the main thread per frame measured);
+- the game reads the mouse as if its window sat at 0,0 at its own size: `GetCursorPos` / `SetCursorPos` and the position of the mouse messages the game's loop takes from `GetMessageA` / `PeekMessageA` (it never dispatches them to the window procedure) are mapped
+  (`um_cursor_map.hpp`; the fraction of a pixel is carried over, so slow movement is not lost when the game re-centres the pointer every frame);
+- exclusive full screen (`fullscreen=1`) has no window to scale: the plugin switches itself off and logs it.
+Tested in the Wine rig on D7VK and on Wine's own ddraw: letterbox sizes, clicks and the hero's walk to the clicked point equal to the unscaled run, main thread 7.6 -> 6.8 ms (D7VK) and 7.0 -> 7.0 ms (native) per frame in the multiplayer base.
 
 ## Releases
 
@@ -121,3 +133,8 @@ no pixel differing by more than 40), and one frame costs a few milliseconds. `ma
 "Second speed support" (`MP Speed-control`) and "Console support" (`MP console`) were off in a new EIStarter-UM.cfg (the launcher's own default, not an EIStarter one: the first start still imports the values of an old
 `EI_Starter\settings` key). Both are now on by default: that is the configuration the speed sync (um-engine `MpSpeed`) and the ghost players were tested with. A cfg that already holds a choice keeps it;
 "Do not load .MQ files from the host" stays off.
+
+## 0.2.6 (2026-10-23): Borderless scaled
+
+New window mode **Borderless scaled** in Options > Video (see "Borderless scaled" under "Borderless window"): the launcher writes `BORDERLESS_SCALE` to the mod's `um.cfg` (the key is added after `BORDERLESS` when an older um.cfg lacks it) and `Scale` to
+`Engine\um-window.ini`, which the plugin and um.dll 1.7.0 read. `um-window.asi` is rebuilt with the scaling code (the Makefile links gdi32 for it).

@@ -196,6 +196,8 @@ const SettingDef kSettings[] = {
     BoolSetting("BORDERLESS", &g_enableBorderless, false, true,
         "; Windowed game (fullscreen=0) acts like borderless fullscreen: stays active and unminimized when it loses the focus, mouse confined to it while focused. (true/false)",
         "; -- Window --"),
+    BoolSetting("BORDERLESS_SCALE", &g_enableScale, false, true,
+        "; With BORDERLESS: the window covers the whole monitor and the game's frame is scaled up to it (black bars keep the aspect ratio), so a lower resolution fills the screen. (true/false)"),
     BoolSetting("DLL_SERVER_ENABLED", &g_dllServerEnabled, false, true,
         "; Let um-multitool connect to the running game (this computer only, no password: it can read the game's memory). Restart needed; (true/false)",
         "; -- DLL server --"),
