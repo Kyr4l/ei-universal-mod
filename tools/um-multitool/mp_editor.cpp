@@ -250,9 +250,11 @@ std::vector<Finding> Check() {
     auto warn = [&](const std::string& t) { out.push_back({'W', t}); };
     if (g.ch.members.empty()) { err("No character in the file"); return out; }
     const mp::Member& m = g.ch.members[static_cast<size_t>(std::min<int>(g.member, static_cast<int>(g.ch.members.size()) - 1))];
-    if (m.strings[0].empty()) err("The name is empty");
-    if (std::count(m.strings[0].begin(), m.strings[0].end(), '|') > 1) warn("The name has more than one '|' (name | clan tag)");
-    if (m.strings[0].size() > 31) warn("The name is long (" + std::to_string(m.strings[0].size()) + " characters): the game may cut it");
+    if (!g.isSave) { // a single-player character has no name of its own: the game shows the unit's name (from the database texts)
+        if (m.strings[0].empty()) err("The name is empty");
+        if (std::count(m.strings[0].begin(), m.strings[0].end(), '|') > 1) warn("The name has more than one '|' (name | clan tag)");
+        if (m.strings[0].size() > 31) warn("The name is long (" + std::to_string(m.strings[0].size()) + " characters): the game may cut it");
+    }
     const float total = mp::GetF(m.stats, mp::kExpTotal), spent = mp::GetF(m.stats, mp::kExpSpent);
     if (spent > total) err("Experience spent (" + std::to_string(static_cast<long long>(spent)) + ") is more than the total");
     if (total < 0 || spent < 0) err("Negative experience");
@@ -419,11 +421,17 @@ void CharacterPanel() {
     };
     name = trim(name);
     tag = trim(tag);
-    bool changed = InputString("Name", name);
-    ImGui::SetItemTooltip("The character's name (the game shows \"<name> | <clan tag>\")");
-    changed |= InputString("Clan tag", tag, 140);
-    ImGui::SetItemTooltip("After the '|' in the game; empty: no tag");
-    if (changed) full = tag.empty() ? name : name + " | " + tag;
+    if (g.isSave) { // a single-player character is named by the game from its unit (database texts), the file keeps no name
+        std::string unit = m.strings[4];
+        InputString("Name", unit, 260, true);
+        ImGui::SetItemTooltip("Single-player characters have no name of their own in the save: the game shows the name of their unit\n(the database's texts for this unit name).");
+    } else {
+        bool changed = InputString("Name", name);
+        ImGui::SetItemTooltip("The character's name (the game shows \"<name> | <clan tag>\")");
+        changed |= InputString("Clan tag", tag, 140);
+        ImGui::SetItemTooltip("After the '|' in the game; empty: no tag");
+        if (changed) full = tag.empty() ? name : name + " | " + tag;
+    }
     InputString("Unit name", m.strings[4], 260, !g.unsafe);
     Locked();
     InputString("Prototype", m.s6, 260, !g.unsafe);
@@ -725,12 +733,12 @@ void DrawTab(Library& lib) {
     if (g.files.empty()) ImGui::TextDisabled(g.folder[0] ? "No .mp files here." : "Choose the mp folder.");
     for (int i = 0; i < static_cast<int>(g.files.size()); ++i) {
         const Entry& e = g.files[i];
-        const std::string label = e.file + "  " + (e.error.empty() ? e.name : "(" + e.error + ")");
+        const std::string label = std::string(e.save ? "SP  " : "MP  ") + e.file + "  " + (e.error.empty() ? e.name : "(" + e.error + ")");
         if (ImGui::Selectable(label.c_str(), g.selected == i)) {
             if (Dirty()) g.message = "Save or revert the open character first.";
             else Open(i);
         }
-        if (e.error.empty()) ImGui::SetItemTooltip("%s\nzone %s, experience %.0f", e.name.c_str(), e.zone.c_str(), e.exp);
+        if (e.error.empty()) ImGui::SetItemTooltip("%s: %s\n%s, experience %.0f", e.save ? "Single-player save" : "Multiplayer character", e.name.c_str(), e.zone.c_str(), e.exp);
     }
     ImGui::EndChild();
     ImGui::SameLine();
@@ -743,6 +751,8 @@ void DrawTab(Library& lib) {
     }
     const std::vector<Finding> found = Check();
     const bool dirty = Dirty();
+    ImGui::TextColored(g.isSave ? ImVec4(0.55f, 0.8f, 1.0f, 1) : ImVec4(0.6f, 1.0f, 0.6f, 1), "%s", g.isSave ? "Single-player save" : "Multiplayer character (.mp)");
+    ImGui::SameLine();
     ImGui::BeginDisabled(!dirty);
     if (ImGui::Button("Save")) SaveCurrent();
     ImGui::SameLine();
