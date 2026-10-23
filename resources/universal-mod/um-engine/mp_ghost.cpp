@@ -24,7 +24,7 @@ extern "C" void UmEngineLog(const char* format, ...);
 namespace {
 const char kMarker[] = "um!g|";
 const unsigned kHeroId = 1000011214u;     // the id of the hero of every .mp in a base world (0x3B9AF5CE)
-const unsigned kGhostIdBase = 1000000100u;
+const unsigned kGhostIdBase = 2100000000u;   // above the ids IsHeroId (0x4613A0) accepts (1e9 .. 2e9): a ghost is never taken for a player hero
 
 char* const kWorld = reinterpret_cast<char*>(0x007AF5B8);   // CWorldClient
 typedef void*(__attribute__((thiscall)) *FindFn)(void*, unsigned);   // CWorldClient::FindObjectById 0x55FAE0
@@ -32,6 +32,7 @@ typedef void*(__attribute__((thiscall)) *FindFn)(void*, unsigned);   // CWorldCl
 bool Readable(const void* p, size_t n) { return p && !IsBadReadPtr(p, n); }
 template <class T> T Get(const void* base, size_t off) { T v{}; if (Readable(static_cast<const char*>(base) + off, sizeof(T))) std::memcpy(&v, static_cast<const char*>(base) + off, sizeof(T)); return v; }
 
+const size_t kMaxPlayers = 16;   // ghosts at most (a flood of invented sessions must not make a crowd)
 bool Alive(int* lobby) { return lobby && (static_cast<unsigned>(lobby[1]) & 0x80000000u) == 0; }
 int* LobbyClient() { return *reinterpret_cast<int* const*>(0x0079B5D8); }
 
@@ -102,6 +103,37 @@ std::string EncodeMotion(const State& s, unsigned session, float vx, float vy) {
     return b;
 }
 
+// ---- what a line may ask for -------------------------------------------------------------------------------
+// Every value of a line comes from another machine and goes into the game's own lookups (item tables, unit table, animation sets, terrain), which crash on an index they
+// do not have (docs/game-exe/item-tables.md): a hacked client, a bug or another mod's database must not be able to take a player down. Anything outside is refused.
+unsigned TableCount(unsigned begin, unsigned end, unsigned stride) {
+    const unsigned b = *reinterpret_cast<const unsigned*>(begin), e = *reinterpret_cast<const unsigned*>(end);
+    return e >= b && e - b < 0x10000000u ? (e - b) / stride : 0;
+}
+bool ValidItem(unsigned code, bool weapon) {   // 0xFFFFFFFF: empty slot; else (row << 16 | material)
+    if (code == 0xFFFFFFFFu) return true;
+    const unsigned rows = weapon ? TableCount(0x007C86F8, 0x007C86FC, 0xB4) : TableCount(0x007C8718, 0x007C871C, 200);
+    return (code >> 16) < rows && (code & 0xFFFF) < TableCount(0x007C86D8, 0x007C86DC, 0x50);
+}
+bool ValidFigure(const char* f) {   // the human heroes (and the local hero's own figure)
+    if (!std::strcmp(f, "unhuma") || !std::strcmp(f, "unhufe")) return true;
+    char* hero = static_cast<char*>(FindObject(kHeroId));
+    const char* mine = hero ? Get<const char*>(hero, 0xA4) : nullptr;
+    return mine && Readable(mine, 1) && !std::strcmp(f, mine);
+}
+bool ValidName(const char* n) {
+    const size_t len = std::strlen(n);
+    if (len == 0 || len > 40) return false;
+    for (size_t i = 0; i < len; ++i) if (static_cast<unsigned char>(n[i]) < 0x20 || static_cast<unsigned char>(n[i]) == 0x7F) return false;
+    return true;
+}
+bool ValidAnim(unsigned a) { return a <= 0xFF; }   // a sweep of every code 0..255 on a ghost in the rig did not crash the game
+bool ValidPos(float x, float y) {   // inside the map (the terrain's size in map units is at terrain + 0x10C / 0x110)
+    char* terrain = Get<char*>(kWorld, 0x180);
+    const float w = Get<float>(terrain, 0x10C), h = Get<float>(terrain, 0x110);   // floats (128.0 for the base map)
+    return Readable(terrain, 0x120) && w > 8 && h > 8 && w < 4096 && h < 4096 && x >= 2 && y >= 2 && x <= w - 2 && y <= h - 2;
+}
+
 struct Line { char kind = 0; unsigned session = 0; State s; float vx = 0, vy = 0; };   // kind: A appearance, P motion, Q "send your appearance", B bye
 
 bool Decode(const char* text, Line& out) {
@@ -126,7 +158,11 @@ bool Decode(const char* text, Line& out) {
         for (int i = 0; i < 3; ++i) s.complexion[i] = std::strtof(f[5 + static_cast<size_t>(i)].c_str(), nullptr);
         s.slot = static_cast<int>(std::strtol(f[8].c_str(), nullptr, 10));
         for (int i = 0; i < 11; ++i) s.eq[i] = static_cast<unsigned>(std::strtoul(f[9 + static_cast<size_t>(i)].c_str(), nullptr, 16));
-        return s.proto < 4096 && s.figure[0] && std::strlen(s.figure) < 12;
+        if (!ValidName(s.name) || !ValidFigure(s.figure) || s.proto >= TableCount(0x007AF358, 0x007AF35C, 0x120) || s.slot < -1 || s.slot > 3) return false;
+        for (float& c : s.complexion) if (!(c >= 0.0f && c <= 1.0f)) return false;
+        for (int i = 0; i < 4; ++i) if (!ValidItem(s.eq[i], true)) return false;
+        for (int i = 4; i < 11; ++i) if (!ValidItem(s.eq[i], false)) return false;
+        return true;
     }
     if (out.kind == 'P') {
         if (f.size() < 11) return false;
@@ -135,7 +171,7 @@ bool Decode(const char* text, Line& out) {
         s.yaw = std::strtof(f[6].c_str(), nullptr);
         s.cur = static_cast<unsigned>(std::strtoul(f[7].c_str(), nullptr, 10)); s.que = static_cast<unsigned>(std::strtoul(f[8].c_str(), nullptr, 10));
         s.pack = static_cast<unsigned>(std::strtoul(f[9].c_str(), nullptr, 10)); s.pack2 = static_cast<unsigned>(std::strtoul(f[10].c_str(), nullptr, 10));
-        return std::isfinite(s.x) && std::isfinite(s.y) && s.x > 0 && s.y > 0 && s.x < 2000 && s.y < 2000 && std::fabs(out.vx) < 30 && std::fabs(out.vy) < 30;
+        return std::isfinite(s.x) && std::isfinite(s.y) && std::isfinite(s.yaw) && ValidPos(s.x, s.y) && std::fabs(out.vx) < 30 && std::fabs(out.vy) < 30 && ValidAnim(s.cur) && ValidAnim(s.que) && s.pack <= 8 && s.pack2 <= 8;
     }
     return false;
 }
@@ -329,6 +365,7 @@ extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char
             const DWORD now = GetTickCount();
             if (l.kind == 'Q') { g_sendAppearanceNow = true; return; }   // somebody lacks the looks of the players: everybody answers
             if (l.kind == 'B') { auto it = g_remote.find(l.session); if (it != g_remote.end()) it->second.seen = 0; return; }
+            if (!g_remote.count(l.session) && g_remote.size() >= kMaxPlayers) return;
             Remote& r = g_remote[l.session];
             r.seen = now;
             if (l.kind == 'A') {
@@ -438,3 +475,10 @@ extern "C" void UmMpGhostFrame() {
     }
     if (lacksLook && now - g_lastQuery >= 1500) { g_lastQuery = now; SendLine(lobby, std::string(kMarker) + "Q|" + std::to_string(g_session)); }   // somebody's motion came without its looks: ask for them
 }
+
+#ifdef UM_GHOST_FUZZ   // test build only: feeds a line to the receiver as if the lobby had delivered it, with the frame hook run after
+extern "C" __declspec(dllexport) char UmGhostBuf[1024];
+char UmGhostBuf[1024];
+extern "C" __declspec(dllexport) void UmGhostFeed() { UmGhostBuf[1023] = 0; UmMpGhostChatLine(nullptr, UmGhostBuf, 0); }
+extern "C" __declspec(dllexport) void UmGhostSession(unsigned s) { g_session = s; }
+#endif
