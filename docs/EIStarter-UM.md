@@ -115,8 +115,3 @@ When no OpenGL window can be opened (a virtual machine without 3D acceleration, 
 Dear ImGui's draw lists are rasterised into a 640 x 360 image (triangle filler with the top-left rule, vertex colour times texel, straight alpha blending, nearest-neighbour textures including the font atlas through ImGui's texture protocol),
 which is copied to the window with GDI every frame. `--software` forces this mode; EIStarter-UM.log says "software rendering". The picture is the same as the OpenGL one (Wine rig: mean difference 0.04 / 255 over the whole window,
 no pixel differing by more than 40), and one frame costs a few milliseconds. `make test` includes tests/softrender_test.cpp (a quad cut in two triangles covers every pixel once, also at fractional corners).
-
-## 0.2.5 (2026-10-23): the start zone and music keys are no longer "none"
-
-`Game Specific Settings\DefaultMapName` and `DefaultStreamingSound` (the zone and the music the game starts with) imported as `none` (or empty), from a key that held them so, were kept in EIStarter-UM.cfg and written back at every start,
-which left the game in an empty zone without music even after the keys were fixed by hand in regedit. `NormalizePaths` (run at start and before Play) now replaces a `none` / empty value by the installation's default (`Zone1.mpr`, `melody.mp3`) and saves it; any other value stays (tests/launcher_tests.cpp).

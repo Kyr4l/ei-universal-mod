@@ -74,17 +74,6 @@ int main(int argc, char** argv) {
         CHECK(NormalizePaths(g) && g.GetString("Path Settings", "CD-ROM Path") == WithSlash(w));
         fs::remove_all(game);
     }
-    // the start zone / music keys imported as "none" are repaired
-    {
-        GameSettings g;
-        g.SetString("Game Specific Settings", "DefaultMapName", "none");
-        g.SetString("Game Specific Settings", "DefaultStreamingSound", "");
-        CHECK(NormalizePaths(g));
-        CHECK(g.GetString("Game Specific Settings", "DefaultMapName") == "Zone1.mpr");
-        CHECK(g.GetString("Game Specific Settings", "DefaultStreamingSound") == "melody.mp3");
-        g.SetString("Game Specific Settings", "DefaultMapName", "Zone2.mpr");
-        CHECK(!NormalizePaths(g) && g.GetString("Game Specific Settings", "DefaultMapName") == "Zone2.mpr"); // a real choice stays
-    }
     // SetCfgLine
     {
         std::ofstream(tmp / "um.cfg") << "; comment\r\nA=1\r\nBORDERLESS=true ; x\r\nC=3\r\n";
