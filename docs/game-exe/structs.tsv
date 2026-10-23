@@ -1,0 +1,141 @@
+class	parent	size	off	type	name	note
+CObject		0x1c	0x0	pointer	vtable	
+CObject			0x4	int	refcount	
+CObject			0x8	uint	flags	bit 28 = no animation (CUnitClientSpecific::SetAnimation)
+CObject			0xc	int	id	-1 before the manager sets it
+CObject			0x10	int	kind	the creation key (0x32..0x34 CUnit, 0x35 CTree ...)
+CObject			0x14	pointer	manager	CBaseManager*
+CObject			0x18	uint	field_18	read from the save stream
+CObject3D	CObject	0x170	0x1c	float[3]	localPos	
+CObject3D			0x28	float[3]	worldPos	
+CObject3D			0x34	float[4]	localRot	quaternion (w,x,y,z)
+CObject3D			0x44	float[4]	worldRot	
+CObject3D			0x94	pointer	renderSpecific	CObject3DClientSpecific*
+CObject3D			0x98	pointer	animSystem	CAnimationSystem2*
+CObject3D			0xa0	pointer	animDb	the mapped .adb of the model (AnimDb)
+CObject3D			0xa4	CString	modelName	char* ; "<model>.adb" is loaded from it
+CMapObject	CObject3D	0x4dc	0x170	pointer	specific	CMapObjectServer / ClientSpecific
+CMapObject			0x198	pointer	buffs	0x14-byte buff records
+CMapObject			0x1b8	int	cellX	position * 2 on the AI grid
+CMapObject			0x1bc	int	cellY	
+CUnit	CMapObject	0x4dc	0x238	char[4]	playerName	CString of a player's character
+CUnit			0x23c	int	protoIndex	index into the units db
+CUnit			0x240	pointer	senses	CUnitServer* (server) / CUnitClientSpecific* (client)
+CUnit			0x244	uint	alarmMask	
+CUnit			0x248	uint	mask248	
+CUnit			0x24c	int	field_24c	
+CUnit			0x250	byte	side	the .mob player number
+CUnit			0x254	sbyte	animCurrent	.adb index of the clip playing (-1 none, -2 default idle)
+CUnit			0x255	sbyte	animQueued	.adb index of the next clip
+CUnit			0x256	byte	animFlags	
+CUnit			0x258	uint	animStart	world time the clip started
+CUnit			0x264	int	stance	applied: 0 crawl 1 sneak 2 walk 3 run 4 sit
+CUnit			0x268	int	stanceWanted	writing it changes the stance
+CUnit			0x26c	int	weaponSlot	0-3, -1 none
+CUnit			0x2b8	float	stanceSpeed	
+CUnit			0x2e4	float[2]	walkDir	unit vector
+CUnit			0x324	int	animSpeedClass	
+CUnit			0x328	float	moveRadius2	
+CUnit			0x32c	float	radius	collision radius (footprint stamps)
+CUnit			0x340	byte	speedStat0	GetSpeeds inputs
+CUnit			0x34f	byte	bodyClass	0..6 unarmed anim weapon bit
+CUnit			0x49c	int	animSetType	0x19 axe/spear, 0x10 dagger, 0xF bow/none
+CUnit			0x4a0	pointer	quickItems	
+CUnit			0x4b0	float	animSpeedAttack	AnimDurationFor factors
+CUnit			0x4b4	float	animSpeedCast	
+CUnit			0x4b8	float	animSpeedHit	
+CUnit			0x4bc	float	animSpeedDeath	
+CUnit			0x4c0	float	animSpeedCross	
+CUnit			0x4c4	float	animSpeedSpecial	
+UnitStats		0x704	0x4	float	experience	total experience (the level = round(log(exp/200)/log(1.61)))
+UnitStats			0x8	float	expSpent	spent on skills + abilities
+UnitStats			0xc	int	strengthBase	
+UnitStats			0x10	int	strength	cached (UnitStats_Recompute)
+UnitStats			0x14	int	dexterityBase	
+UnitStats			0x18	int	dexterity	
+UnitStats			0x1c	int	intelligenceBase	
+UnitStats			0x20	int	intelligence	
+UnitStats			0x2c	float	moveSpeedBase	dexterity * 0.2 + 10
+UnitStats			0x30	float	actionPoints	
+UnitStats			0x54	float	carryWeight	max encumbrance
+UnitStats			0x58	float	crippleRatio0	
+UnitStats			0x5c	float	crippleRatio1	
+UnitStats			0x2f0	float	scale	
+UnitStats			0x6c8	byte[3]	attributeSkills	
+UnitStats			0x6cb	byte[6]	weaponSkills	melee archery backstab elemental sense astral
+UnitStats			0x6d3	byte[36]	perkLevels	26 groups x ability levels, 0..3 each
+UnitStats			0x6f8	uint	statFlags	
+UnitStats			0x6fc	float	maxHpStored	monsters
+UnitStats			0x700	float	hpFraction	
+CUnitServer		0xb20	0x1c	CUnit*	owner	
+CUnitServer			0x3c	int	moveState	slot 16 returns it; 2 = moving
+CUnitServer			0x164	int	state	0 walking 1 moving 2 waiting 3 attacking 4 casting 5 strike 6 idle
+CUnitServer			0x168	int	stance	0 crawl 1 sneak 2 walk 3 run 4 sit (mirrors CUnit +0x264)
+CUnitServer			0x16c	int	attackMode	
+CUnitServer			0x170	int	stanceWanted	
+CUnitServer			0x174	int	attackModeWanted	
+CUnitServer			0x190	int	orderKind	current order: 0 wait 1 move 2 direct move 3 attack 4 cast at 5 cast on 6 interact 7/8 script anim 9 none 10 use 11 sit
+CUnitServer			0x194	int	orderParam	
+CUnitServer			0x198	pointer	orderTarget	refcounted object
+CUnitServer			0x19c	float[3]	orderPos	
+CUnitServer			0x1a8	byte	orderExact	
+CUnitServer			0x1ac	int	orderExtra	
+CUnitServer			0x1b0	byte	orderRun	
+CUnitServer			0x1b4	byte[0x24]	queuedOrder	DispatchQueuedOrder moves it to +0x190
+CUnitServer			0x1e0	UnitStats	stats	
+CUnitServer			0x28c	int	bodyClass	
+CUnitServer			0x940	uint	stanceAnimKey	GetStanceAnimSet
+CUnitServer			0x95c	uint	moveAnimKey	attack kind mask | move mode flag
+CUnitServer			0x960	pointer	moveAnimSet	CArray
+CUnitServer			0x980	pointer	brain	
+CUnitServer			0xa50	pointer	aiMemory	AiMemory 0xb8 bytes
+CAIMap		0x26d0	0x0	byte	loaded	
+CAIMap			0x2	byte	navGridOn	NavGrid rebuilt on passability changes
+CAIMap			0x14	byte[64]	walkCostTable	16 terrain material classes, 0x400 = 1.0, -1 impassable
+CAIMap			0x54	byte[64]	costTable2	
+CAIMap			0x94	byte[64]	costTable3	
+CAIMap			0xd8	pointer	slopeCostWalk	0x3ff fixed-point entries by height step
+CAIMap			0xec	pointer	slopeCostClass0	
+CAIMap			0xfc	pointer	materials	0x118-byte entries from tileDesc.reg
+CAIMap			0x100	int	materialCount	
+CAIMap			0x10c	pointer	bridgeHash	cells with bit 6: x<<16|y -> saved height
+CAIMap			0x120	float	heightScale	511 / max height
+CAIMap			0x124	pointer	collisionMapVt	CollisionMap embedded here (sectors of 32 x 32 cells)
+CAIMap			0x1f8	pointer	obstacleGridRows	
+CAIMap			0x2698	pointer	terrainGridData	
+CAIMap			0x269c	pointer	terrainGridRows	9-byte cells: +0 dword passability nibbles (8 classes), +4 u16 height, +6 water depth / flags, +8 radius byte
+CAIMap			0x26a0	int	width	cells (0.5 m): sectors * 64
+CAIMap			0x26a4	int	height	
+CAIMap			0x26ac	pointer	flagsGridRows	dword per cell: bits 0-4 material, 0x80 sector chain, 0x100 empty, objects inline
+CAIMap			0x26bc	pointer	occupancyGridRows	
+CItem		0x4c	0x4	short	refcount	16-bit refcount of the item (also the prototype ref)
+CItem			0xc	int	id	-1 none
+CItem			0x18	uint	packedId	low 16 bits material (table 0x7C86D8), high 16 bits weapon / item type (table 0x7C86F8 / 0x7C8718)
+CItem			0x1c	pointer	proto	prototype ref
+CItem			0x20	float	durabilityBase	
+CItem			0x24	float	durabilityBase2	
+CItem			0x28	float	durability	current; regenerates by +0x30 * +0x2c per update
+CItem			0x2c	float	durabilityMax	
+CItem			0x30	float	durabilityRegen	0.001
+CItem			0x34	float	field_34	proto +0x38
+CItem			0x38	float	weight	total (with the sub item +0x48)
+CItem			0x3c	float	field_3c	proto +0x3c
+CItem			0x40	float	field_40	proto +0x44
+CItem			0x44	pointer	subItem	CItem* (a spell inside its container ...)
+CItem			0x48	int	subWeight	
+CItemWeapon	CItem	0x5c	0x4c	float	rangeMin	weapon ranges / damage (info[0x13..0x16])
+CItemWeapon			0x50	float	range50	
+CItemWeapon			0x54	float	range54	
+CItemWeapon			0x58	float	range58	
+CItemArmor	CItem	0x8c	0x4c	float[7]	armorValues	one per damage type
+CItemArmor			0x68	float[7]	armorValues2	
+CMover		0xa4	0x3c	int	field_3c	
+CMover			0x40	pointer	pathCells	CellList of 0x10-byte nodes
+CMover			0x48	float	heading	
+CMover			0x58	int	unitCellX	unit position * 2
+CMover			0x5c	int	unitCellY	
+CMover			0x6c	byte[4]	flags	reset to {1, 0, 0, 1}
+CMover			0x70	pointer	blockedCells	
+CMover			0x74	pointer	pairBuffer	
+CMover			0x78	int	pairCount	
+CMover			0x84	int	field_84	
