@@ -89,3 +89,9 @@ mods / lang.ini / config round trip / registry sync on a stand-in), `./package.s
 Test rig (not in the repository): a dedicated Wine prefix with the game, the starter folder and Universal-Mod, `launch.sh` runs `EIStarter-UM.exe --play`
 (the launcher presses Play itself after 5 frames) on the hidden display with the audio on a null sink and collects `EIStarter-UM.log`, `addon.log`, `um.log`.
 `--dir <folder>` makes the launcher use another folder than its own; `--screenshot <file.ppm>` saves frame 12 and exits.
+
+## 0.2.1 (2026-10-23): path settings without their closing backslash
+
+The game builds file names by appending to the path settings (`<Work Path>3DfpFPU.dll`, `<Work Path>textures\`). A "Work Path" typed or imported without its closing backslash (`D:\Evil Islands`) made the game look for `D:\Evil Islands3DfpFPU.dll`, fail to load its 3D library
+("Can't load 3D transform library", an exception the game catches) and then read its missing renderer: an access violation at game.exe 0x456D8D (reading address 0xC), exit code -1073741819, with nothing shown (the crash dump has the string `D:\Evil Islandstextures\`). Reproduced in the Wine rig with the same address.
+`NormalizePaths` now adds the backslash to CD-ROM Path, Resources Path and Work Path whenever one is missing (tests/launcher_tests.cpp).

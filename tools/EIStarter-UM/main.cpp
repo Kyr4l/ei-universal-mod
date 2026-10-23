@@ -30,7 +30,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.0";
+static constexpr const char* kVersion = "0.2.1";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 

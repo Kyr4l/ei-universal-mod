@@ -65,6 +65,12 @@ inline bool NormalizePaths(GameSettings& g) {
     bool changed = false;
     if (!usable(g.GetString("Path Settings", "CD-ROM Path"))) { g.SetString("Path Settings", "CD-ROM Path", WithSlash(work)); changed = true; }
     if (!usable(g.GetString("Path Settings", "Resources Path"))) { g.SetString("Path Settings", "Resources Path", WithSlash(WithSlash(work) + "res")); changed = true; }
+    // The game builds its file names by appending to these paths ("<CD-ROM Path>3DfpFPU.dll", "<..>textures\\"): one without its closing backslash (typed by hand in
+    // Options, or imported from another starter) makes "D:\Evil Islands3DfpFPU.dll", the game cannot load its 3D library and crashes on its missing renderer.
+    for (const char* key : {"CD-ROM Path", "Resources Path", "Work Path"}) {
+        const std::string v = g.GetString("Path Settings", key);
+        if (!v.empty() && v != WithSlash(v)) { g.SetString("Path Settings", key, WithSlash(v)); changed = true; }
+    }
     return changed;
 }
 

@@ -56,6 +56,24 @@ int main(int argc, char** argv) {
         winreg::Value v; CHECK(winreg::Get(kAddonKey, "LandscapeDrawRadius", v) && v.dword == 250);
         CHECK(winreg::Get(std::string(kCloneKey) + "\\terrain settings", "LOD1", v) && v.bytes.size() == 4);
     }
+    // path settings: a path without its closing backslash gets one (the game appends "3DfpFPU.dll" to it), usable paths are kept, a relative GOG path is replaced
+    {
+        fs::path game = fs::temp_directory_path() / "EIStarter-UM-test-game"; fs::create_directories(game / "res");
+        std::ofstream(game / "game.exe") << "x";
+        GameSettings g;
+        const std::string w = game.string();
+        g.SetString("Path Settings", "Work Path", w);
+        g.SetString("Path Settings", "CD-ROM Path", w);
+        g.SetString("Path Settings", "Resources Path", (game / "res").string());
+        CHECK(NormalizePaths(g));
+        CHECK(g.GetString("Path Settings", "CD-ROM Path") == WithSlash(w));
+        CHECK(g.GetString("Path Settings", "Resources Path") == WithSlash((game / "res").string()));
+        CHECK(g.GetString("Path Settings", "Work Path") == WithSlash(w));
+        CHECK(!NormalizePaths(g));   // done: nothing more to repair
+        g.SetString("Path Settings", "CD-ROM Path", ".\\");
+        CHECK(NormalizePaths(g) && g.GetString("Path Settings", "CD-ROM Path") == WithSlash(w));
+        fs::remove_all(game);
+    }
     // SetCfgLine
     {
         std::ofstream(tmp / "um.cfg") << "; comment\r\nA=1\r\nBORDERLESS=true ; x\r\nC=3\r\n";
