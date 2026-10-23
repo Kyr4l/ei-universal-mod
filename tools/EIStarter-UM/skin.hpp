@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#include "softrender.hpp"
 #include "stb/stb_image.h"
 
 namespace launcher {
@@ -25,11 +26,19 @@ struct Texture {
     explicit operator bool() const { return id != 0; }
 };
 
+// Set when the launcher draws on the CPU (no OpenGL): the images then go to the software renderer's list instead of the graphics card.
+inline bool g_softRender = false;
+
 inline Texture LoadTexture(const std::string& path) {
     Texture t;
     int w = 0, h = 0, n = 0;
     unsigned char* px = stbi_load(path.c_str(), &w, &h, &n, 4);
     if (!px) return t;
+    if (g_softRender) {
+        t.id = soft::AddImage(px, w, h); t.w = w; t.h = h;
+        stbi_image_free(px);
+        return t;
+    }
     GLuint id = 0;
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
@@ -90,7 +99,7 @@ public:
     }
     std::string ClickSound() const { return FindExact("click.wav"); }
 
-    void Clear() { for (auto& kv : cache_) if (kv.second.id) glDeleteTextures(1, &kv.second.id); cache_.clear(); }
+    void Clear() { for (auto& kv : cache_) if (kv.second.id && !g_softRender) glDeleteTextures(1, &kv.second.id); cache_.clear(); }
 
 private:
     std::vector<fs::path> dirs_;

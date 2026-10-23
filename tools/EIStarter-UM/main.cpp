@@ -5,6 +5,10 @@
 // and shows "Starting..." until the game window is up. The looks, sounds, fonts, languages and mod folders are EIStarter's, so its skins and
 // translations work.
 #include <GLFW/glfw3.h>
+#ifdef _WIN32
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#endif
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl2.h>
@@ -26,11 +30,12 @@
 #include "platform.hpp"
 #include "regsync.hpp"
 #include "skin.hpp"
+#include "softrender.hpp"
 #include "update.hpp"
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.3";
+static constexpr const char* kVersion = "0.2.4";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -688,12 +693,13 @@ static LONG WINAPI CrashFilter(EXCEPTION_POINTERS* e) {
 int main(int argc, char** argv) {
     App app;
     app.dir = platform::ExeDir();
-    bool selfTest = false; std::string shot;
+    bool selfTest = false, software = false; std::string shot;
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
         if (a == "--dir" && i + 1 < argc) app.dir = argv[++i];
         else if (a == "--screenshot" && i + 1 < argc) shot = argv[++i];
         else if (a == "--play") selfTest = true;
+        else if (a == "--software") software = true;
     }
     app.Log(std::string("EIStarter-UM ") + kVersion + " in " + app.dir.string());
 
@@ -711,7 +717,7 @@ int main(int argc, char** argv) {
     // A window with an OpenGL context: first as wanted; a virtual machine or an old driver without a matching pixel format gets the plainest request (no depth / stencil buffer,
     // which the launcher never uses), then a visible window.
     GLFWwindow* window = nullptr;
-    for (int attempt = 0; attempt < 3 && !window; ++attempt) {
+    for (int attempt = 0; attempt < 3 && !window && !software; ++attempt) {
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
@@ -721,9 +727,20 @@ int main(int argc, char** argv) {
         window = glfwCreateWindow(kW, kH, "Evil Islands", nullptr, nullptr);
         if (!window) app.Log("window attempt " + std::to_string(attempt + 1) + " failed");
     }
+    if (!window) { // no OpenGL (a virtual machine without 3D acceleration, a broken driver) or --software: a plain window the launcher draws on with the CPU
+        app.Log(software ? "software rendering (--software)" : "no OpenGL window: software rendering");
+        glfwDefaultWindowHints();
+        glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        window = glfwCreateWindow(kW, kH, "Evil Islands", nullptr, nullptr);
+        if (!window) { glfwWindowHint(GLFW_DECORATED, GLFW_TRUE); window = glfwCreateWindow(kW, kH, "Evil Islands", nullptr, nullptr); }
+        g_softRender = window != nullptr;
+    }
     if (!window) {
         app.Log("cannot open a window");
-        platform::ShowFatal("EIStarter-UM cannot open its window: no usable OpenGL.\n\nIn a virtual machine turn on 3D acceleration (or install the guest drivers); on a real PC update the graphics driver.\nDetails: EIStarter-UM.log.");
+        platform::ShowFatal("EIStarter-UM cannot open its window.\nDetails: EIStarter-UM.log.");
         glfwTerminate();
         return 1;
     }
@@ -733,9 +750,9 @@ int main(int argc, char** argv) {
         glfwSetWindowPos(window, mx + (mw - kW) / 2, my + (mh - kH) / 2);
     }
     { GLFWimage icons[3] = {{64, 64, const_cast<unsigned char*>(logo::kIcon64)}, {48, 48, const_cast<unsigned char*>(logo::kIcon48)}, {32, 32, const_cast<unsigned char*>(logo::kIcon32)}}; glfwSetWindowIcon(window, 3, icons); }
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
-    if (const char* gl = reinterpret_cast<const char*>(glGetString(GL_RENDERER))) app.Log(std::string("OpenGL: ") + gl + " " + (glGetString(GL_VERSION) ? reinterpret_cast<const char*>(glGetString(GL_VERSION)) : ""));
+    if (!g_softRender) glfwMakeContextCurrent(window);
+    if (!g_softRender) glfwSwapInterval(1);
+    if (g_softRender) {} else if (const char* gl = reinterpret_cast<const char*>(glGetString(GL_RENDERER))) app.Log(std::string("OpenGL: ") + gl + " " + (glGetString(GL_VERSION) ? reinterpret_cast<const char*>(glGetString(GL_VERSION)) : ""));
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -748,8 +765,14 @@ int main(int argc, char** argv) {
     if (!app.uiFont) app.uiFont = io.Fonts->AddFontDefault();
     ImGui::StyleColorsDark();
     ImGui::GetStyle().WindowRounding = 0; ImGui::GetStyle().FrameRounding = 2;
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL2_Init();
+    if (g_softRender) {
+        ImGui_ImplGlfw_InitForOther(window, true);
+        io.BackendFlags |= ImGuiBackendFlags_RendererHasTextures; // the software renderer follows ImGui's texture protocol like the OpenGL backend does
+    } else {
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL2_Init();
+    }
+    soft::Target target; target.Resize(kW, kH);
 
     app.Log("loading the settings");
     app.cfg = LoadConfig(app.dir);
@@ -784,7 +807,7 @@ int main(int argc, char** argv) {
     int frame = 0;
     while (!glfwWindowShouldClose(window) && !app.quit) {
         glfwWaitEventsTimeout(app.phase == App::Phase::Starting ? 0.016 : 0.05);
-        ImGui_ImplOpenGL2_NewFrame();
+        if (!g_softRender) ImGui_ImplOpenGL2_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
         ImGui::PushFont(app.uiFont, 14.0f);
@@ -793,17 +816,33 @@ int main(int argc, char** argv) {
         ImGui::PopFont();
         ImGui::Render();
         int w, h; glfwGetFramebufferSize(window, &w, &h);
-        glViewport(0, 0, w, h);
-        glClearColor(0.17f, 0.17f, 0.17f, 1);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
+        if (g_softRender) {
+            if (w != target.w || h != target.h) target.Resize(w, h);
+            soft::Render(ImGui::GetDrawData(), target, 0x2B2B2B);
+#ifdef _WIN32
+            soft::Present(glfwGetWin32Window(window), target);
+#endif
+        } else {
+            glViewport(0, 0, w, h);
+            glClearColor(0.17f, 0.17f, 0.17f, 1);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+            glfwSwapBuffers(window);
+        }
         ++frame;
         if (selfTest && frame == 5) app.Play();
         if (!shot.empty() && frame == 12) {
             std::vector<unsigned char> px(static_cast<size_t>(w) * static_cast<size_t>(h) * 3);
-            glPixelStorei(GL_PACK_ALIGNMENT, 1);
-            glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, px.data());
+            if (g_softRender) {
+                for (int y = 0; y < h; ++y) for (int x = 0; x < w; ++x) {
+                    const uint32_t c = target.px[static_cast<size_t>(y) * static_cast<size_t>(w) + static_cast<size_t>(x)];
+                    unsigned char* o = &px[(static_cast<size_t>(h - 1 - y) * static_cast<size_t>(w) + static_cast<size_t>(x)) * 3]; // stored bottom-up like glReadPixels
+                    o[0] = static_cast<unsigned char>(c >> 16); o[1] = static_cast<unsigned char>(c >> 8); o[2] = static_cast<unsigned char>(c);
+                }
+            } else {
+                glPixelStorei(GL_PACK_ALIGNMENT, 1);
+                glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, px.data());
+            }
             if (FILE* f = std::fopen(shot.c_str(), "wb")) { // PPM, flipped
                 std::fprintf(f, "P6\n%d %d\n255\n", w, h);
                 for (int y = h - 1; y >= 0; --y) std::fwrite(&px[static_cast<size_t>(y) * static_cast<size_t>(w) * 3], 1, static_cast<size_t>(w) * 3, f);
@@ -813,7 +852,7 @@ int main(int argc, char** argv) {
         }
     }
     app.Save();
-    ImGui_ImplOpenGL2_Shutdown();
+    if (!g_softRender) ImGui_ImplOpenGL2_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
     glfwDestroyWindow(window);

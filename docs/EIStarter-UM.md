@@ -108,3 +108,10 @@ Tested under Wine against a local stand-in for GitHub's API (`EISTARTER_UM_API=h
 A program without a console shows nothing when it cannot start, which is what a virtual machine without 3D acceleration looked like. Now EIStarter-UM.log records each step (GLFW started, window created, the OpenGL renderer and
 version, settings loaded, window shown) and every GLFW error; the window is requested three times (as wanted, then with no depth / stencil buffer, then with a frame and no alpha) before giving up; a failure to open a window, and a crash
 of the launcher itself (address and code), show a message box that says what to do ("turn on 3D acceleration in the virtual machine, or update the graphics driver; send EIStarter-UM.log").
+
+## 0.2.4 (2026-10-23): runs without 3D acceleration
+
+When no OpenGL window can be opened (a virtual machine without 3D acceleration, a broken driver, a remote desktop), the launcher no longer gives up: it opens a plain window and draws itself on the CPU (`softrender.hpp`).
+Dear ImGui's draw lists are rasterised into a 640 x 360 image (triangle filler with the top-left rule, vertex colour times texel, straight alpha blending, nearest-neighbour textures including the font atlas through ImGui's texture protocol),
+which is copied to the window with GDI every frame. `--software` forces this mode; EIStarter-UM.log says "software rendering". The picture is the same as the OpenGL one (Wine rig: mean difference 0.04 / 255 over the whole window,
+no pixel differing by more than 40), and one frame costs a few milliseconds. `make test` includes tests/softrender_test.cpp (a quad cut in two triangles covers every pixel once, also at fractional corners).

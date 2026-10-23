@@ -63,6 +63,7 @@ tools/um-bot/tests/um_bot_tests
 
 # EIStarter-UM test binary and its run files
 tools/EIStarter-UM/tests/launcher_tests
+tools/EIStarter-UM/tests/softrender_test
 tools/EIStarter-UM/EIStarter-UM.cfg
 tools/EIStarter-UM/EIStarter-UM.log
 tools/EIStarter-UM/dist/

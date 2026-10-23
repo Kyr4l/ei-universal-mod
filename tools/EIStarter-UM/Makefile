@@ -4,7 +4,7 @@
 #   make window - window/um-window.asi (the borderless-window plugin)
 #   make all    - all of them
 #   ./package.sh - dist/EIStarter-UM-<version>.zip, the package users get
-#   make test   - the file-handling tests against a real EIStarter folder (make test STARTER=/path/to/EIStarter)
+#   make test   - the file-handling and software-renderer tests against a real EIStarter folder (make test STARTER=/path/to/EIStarter)
 #
 # The launcher is a Windows program (it runs under Wine on Linux: the game needs Wine anyway). The test target builds the file handling natively.
 # Dear ImGui, GLFW and stb_image are um-multitool's vendored copies (../um-multitool/vendor).
@@ -39,12 +39,15 @@ window/um-window.asi: window/um_window_plugin.cpp window/um_window_standalone.hp
 	$(WIN_CXX) -shared -DUM_WINDOW_STANDALONE -o $@ window/um_window_plugin.cpp ../../resources/universal-mod/um-dll/um_window.cpp -Iwindow -std=c++17 -O2 -static -static-libgcc -s -Wall -Wextra
 
 STARTER ?= .
-test: tests/launcher_tests
+test: tests/launcher_tests tests/softrender_test
 	./tests/launcher_tests "$(STARTER)"
+	./tests/softrender_test
+tests/softrender_test: tests/softrender_test.cpp softrender.hpp
+	$(CXX) -std=c++17 -O1 -Wall -Wextra -I. -isystem $(IMGUI_DIR) -o $@ $<
 tests/launcher_tests: tests/launcher_tests.cpp $(HDRS)
 	$(CXX) -std=c++17 -O1 -Wall -Wextra -pthread -I. -I../um-multitool -o $@ $<
 
 clean:
-	rm -f EIStarter-UM.exe EIStarter-UM-res.o window/um-window.asi tests/launcher_tests
+	rm -f EIStarter-UM.exe EIStarter-UM-res.o window/um-window.asi tests/launcher_tests tests/softrender_test
 
 .PHONY: all win window test clean
