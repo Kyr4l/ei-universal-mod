@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.8.2";
+static const char* const kEngineVersion = "0.8.3";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -32,6 +32,7 @@ extern "C" long double __attribute__((fastcall)) UmItemPrice2(unsigned itemId);
 extern "C" long double __attribute__((fastcall)) UmItemWeight(unsigned itemId);
 extern "C" unsigned __attribute__((fastcall)) UmWeaponSkill(unsigned itemId);
 extern "C" int __attribute__((fastcall)) UmWeaponDamageKind(const char* weapon);
+extern "C" long double __attribute__((stdcall)) UmWeaponSkillGroupByte(unsigned itemId);
 extern "C" void __attribute__((thiscall)) UmCameraTick(void*, float);  // camera_smooth.cpp
 extern "C" void __attribute__((thiscall)) UmCameraFrame(void*, float);
 extern "C" void __attribute__((thiscall)) UmFpLight(void*, const char*, const char*, unsigned*, const unsigned short*, int, void* const*, int, const float*); // fp_light.cpp
@@ -63,6 +64,7 @@ static const UmEngineFunction kFunctions[] = {
     { "ItemId_GetWeight", 0x006A2BD0, reinterpret_cast<void*>(&UmItemWeight), 0, {0x53, 0x8B, 0x1D, 0xF8, 0x86, 0x7C, 0x00, 0x56} },
     { "CItemWeapon::GetSkill", 0x006A2C60, reinterpret_cast<void*>(&UmWeaponSkill), 0, {0xC1, 0xE9, 0x10, 0x56, 0x57, 0x8B, 0x3D, 0xF8} },
     { "CItemWeapon::GetDamageKind", 0x006A07F0, reinterpret_cast<void*>(&UmWeaponDamageKind), 0, {0x56, 0x8B, 0x35, 0xFC, 0x86, 0x7C, 0x00, 0x57} },
+    { "Weapon_SkillGroupByte", 0x00526860, reinterpret_cast<void*>(&UmWeaponSkillGroupByte), 0, {0x56, 0x8B, 0x35, 0xFC, 0x86, 0x7C, 0x00, 0x57} },
     // The update packet codec (net_update.cpp): sequence window, acks, stream chunks, the update parser
     { "NetConnection::WriteAcks", 0x00434C20, reinterpret_cast<void*>(&UmNetWriteAcks), -1, {0x51, 0x8B, 0xD1, 0x53, 0x55, 0x56, 0x66, 0x8B} },
     { "NetConnection::AckOne", 0x00434CE0, reinterpret_cast<void*>(&UmNetAckOne), -1, {0x8B, 0x81, 0xF8, 0x10, 0x00, 0x00, 0x56, 0x57} },

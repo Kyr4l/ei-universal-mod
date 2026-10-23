@@ -15,7 +15,7 @@
 // Here: the lookups return what an empty slot gives (0 / no kind / skill 6) for an index outside the table, the first few are logged.
 // Everything else is what the game computes (the price and weight in the same extended precision). Replaced functions:
 //   0x6A2B80 ItemId_GetProtoType   0x6A2A50 ItemId_GetPrice   0x6A2AE0 ItemId_GetPrice2   0x6A2BD0 ItemId_GetWeight
-//   0x6A2C60 CItemWeapon::GetSkill   0x6A07F0 CItemWeapon::GetDamageKind
+//   0x6A2C60 CItemWeapon::GetSkill   0x6A07F0 CItemWeapon::GetDamageKind   0x526860 Weapon_SkillGroupByte (the weapon tooltip)
 // and three inlined copies of the same lookup (ApplyWeaponAnimMask, Hero_BuildEquipmentEntries) are patched in um_engine.cpp.
 #include <cstdio>
 
@@ -32,6 +32,7 @@ extern const char* g_matEnd;
 #define UM_MATERIALS_END g_matEnd
 #define UM_THISCALL
 #define UM_FASTCALL
+#define UM_STDCALL
 #else
 #define UM_WEAPONS_BEGIN (*reinterpret_cast<const char* const*>(0x007C86F8))
 #define UM_WEAPONS_END (*reinterpret_cast<const char* const*>(0x007C86FC))
@@ -39,6 +40,7 @@ extern const char* g_matEnd;
 #define UM_MATERIALS_END (*reinterpret_cast<const char* const*>(0x007C86DC))
 #define UM_THISCALL __attribute__((thiscall))
 #define UM_FASTCALL __attribute__((fastcall))
+#define UM_STDCALL __attribute__((stdcall))
 #endif
 
 namespace {
@@ -109,4 +111,18 @@ extern "C" int UM_FASTCALL UmWeaponDamageKind(const char* weapon) {
     const char* record = WeaponRecord(itemId);
     if (!record) { Report("CItemWeapon::GetDamageKind", itemId); return 0; }
     return *reinterpret_cast<const int*>(record + 0xC);
+}
+
+// 0x526860 (stdcall, the weapon id on the stack, the result in ST0): the byte of the prototype that rates the weapon's skill group (the weapon tooltip
+// reads it). The game reads the record's kind before it tests the record for null, so an id outside the table crashes it there; a kind it has no
+// group for (7 and 9 up) makes it read from the record + 0x8000007A. Both give 0 here.
+extern "C" long double UM_STDCALL UmWeaponSkillGroupByte(unsigned itemId) {
+    const char* p = WeaponRecord(itemId);
+    if (!p) { Report("Weapon_SkillGroupByte", itemId); return 0; }
+    const int kind = *reinterpret_cast<const int*>(p + 0xC);
+    int group;
+    if (kind < 5 || kind == 8) group = 0;
+    else if (kind == 5 || kind == 6) group = 1;
+    else return 0;
+    return static_cast<long double>(static_cast<unsigned char>(p[0x7B + group]));
 }

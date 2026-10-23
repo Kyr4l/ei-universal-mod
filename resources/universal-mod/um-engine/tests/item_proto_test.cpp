@@ -15,6 +15,7 @@ extern "C" long double UmItemPrice2(unsigned itemId);
 extern "C" long double UmItemWeight(unsigned itemId);
 extern "C" unsigned UmWeaponSkill(unsigned itemId);
 extern "C" int UmWeaponDamageKind(const char* weapon);
+extern "C" long double UmWeaponSkillGroupByte(unsigned itemId);
 extern "C" void UmEngineLog(const char* format, ...) { (void)format; }
 
 static void PutF(std::vector<char>& v, size_t at, float f) { std::memcpy(&v[at], &f, 4); }
@@ -48,6 +49,18 @@ int main() {
     unsigned item[8] = {};
     item[6] = (36u << 16); check(UmWeaponDamageKind(reinterpret_cast<const char*>(item)) == 136, "damage kind");
     item[6] = (45u << 16); check(UmWeaponDamageKind(reinterpret_cast<const char*>(item)) == 0, "damage kind of an unknown weapon");
+    {   // the tooltip's skill group byte: kinds 0-4 and 8 read +0x7B, 5 and 6 read +0x7C, anything else gives 0
+        auto setKind = [&](int i, int kind, int b7b, int b7c) {
+            const size_t r = static_cast<size_t>(i) * 0xB4;
+            std::memcpy(&weapons[r + 0xC], &kind, 4); weapons[r + 0x7B] = static_cast<char>(b7b); weapons[r + 0x7C] = static_cast<char>(b7c);
+        };
+        setKind(1, 2, 11, 22); setKind(2, 5, 11, 22); setKind(3, 6, 33, 44); setKind(4, 8, 55, 66); setKind(5, 7, 77, 88); setKind(6, 9, 99, 100);
+        check(UmWeaponSkillGroupByte(1u << 16) == 11, "skill group byte, kind 2 -> +0x7B");
+        check(UmWeaponSkillGroupByte(2u << 16) == 22 && UmWeaponSkillGroupByte(3u << 16) == 44, "kinds 5 and 6 -> +0x7C");
+        check(UmWeaponSkillGroupByte(4u << 16) == 55, "kind 8 -> +0x7B");
+        check(UmWeaponSkillGroupByte(5u << 16) == 0 && UmWeaponSkillGroupByte(6u << 16) == 0, "kinds without a group: 0 (the game would fault)");
+        check(UmWeaponSkillGroupByte(45u << 16) == 0 && UmWeaponSkillGroupByte(0xFFFFFFFFu) == 0, "an unknown weapon: 0");
+    }
     g_begin = nullptr; g_end = nullptr;
     check(UmItemProtoType(0) == 0 && UmItemPrice(0) == 0 && UmWeaponSkill(0) == 6, "an empty table (being rebuilt)");
     g_begin = weapons.data() + 100; g_end = weapons.data();
