@@ -3,7 +3,8 @@
 // See the other players in the base (PENDING #145): every player's base is a world of its own, so a unit of another player never exists in it. Here each machine sends
 // its own hero's look and position to the others through the lobby's chat (a hidden line the receiving side swallows) and shows every other player as a "ghost":
 // a hero unit that exists only in the local world, made through the game's own unit creation handler (docs/multiplayer-protocol.md "Ghost units").
-//  * send (MpGhost, the frame hook): in the base, about 3 times a second while the hero moves and every 3 seconds otherwise, one chat line "um!g|..." (< 200 characters);
+//  * send (MpGhost, the frame hook): in the base, an appearance line "um!g|A|..." (name, figure, body, equipment) when it changes and every 8 s, and a motion line "um!g|P|..." (position,
+//    velocity, animation) only when the hero's walk changes: the receiver walks the ghost on along the velocity (dead reckoning), so a click-walk costs a couple of lines, not 3 a second;
 //  * receive (MpGhost, the chat line hook, the call of ChatSystemLine in LobbyClient::OnAddressLine 0x41E656): a line with the marker is taken out and not shown;
 //  * the ghosts are made, moved and removed from the frame hook (the second Net_TickAll call of the client loop in main, 0x4573AE).
 // A player without this DLL sees the lines as chat text and no ghosts. Everything is skipped outside a multiplayer base.
@@ -13,6 +14,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
+#include <algorithm>
 #include <map>
 #include <string>
 #include <vector>
@@ -86,36 +88,56 @@ bool SendLine(int* lobby, const std::string& text) {
     return true;
 }
 
-std::string Encode(const State& s, unsigned session) {
+std::string EncodeAppearance(const State& s, unsigned session) {
     char b[400];
-    int n = std::snprintf(b, sizeof b, "%s%u|%s|%.2f|%.2f|%.3f|%u|%u|%u|%u|%u|%s|%.3f|%.3f|%.3f|%d", kMarker, session, s.name, static_cast<double>(s.x), static_cast<double>(s.y), static_cast<double>(s.yaw),
-                          s.cur, s.que, s.pack, s.pack2, s.proto, s.figure, static_cast<double>(s.complexion[0]), static_cast<double>(s.complexion[1]), static_cast<double>(s.complexion[2]), s.slot);
+    int n = std::snprintf(b, sizeof b, "%sA|%u|%s|%u|%s|%.3f|%.3f|%.3f|%d", kMarker, session, s.name, s.proto, s.figure, static_cast<double>(s.complexion[0]), static_cast<double>(s.complexion[1]),
+                          static_cast<double>(s.complexion[2]), s.slot);
     for (unsigned e : s.eq) n += std::snprintf(b + n, sizeof b - static_cast<size_t>(n), "|%x", e);
     return b;
 }
+std::string EncodeMotion(const State& s, unsigned session, float vx, float vy) {
+    char b[160];
+    std::snprintf(b, sizeof b, "%sP|%u|%.2f|%.2f|%.2f|%.2f|%.2f|%u|%u|%u|%u", kMarker, session, static_cast<double>(s.x), static_cast<double>(s.y), static_cast<double>(vx), static_cast<double>(vy),
+                  static_cast<double>(s.yaw), s.cur, s.que, s.pack, s.pack2);
+    return b;
+}
 
-// "um!g|session|name|x|y|yaw|cur|que|pack|pack2|proto|figure|c0|c1|c2|slot|eq x 11": false when it is not a complete one
-bool Decode(const char* text, unsigned& session, State& s) {
+struct Line { char kind = 0; unsigned session = 0; State s; float vx = 0, vy = 0; };   // kind: A appearance, P motion, Q "send your appearance", B bye
+
+bool Decode(const char* text, Line& out) {
     const char* p = std::strstr(text, kMarker);
     if (!p) return false;
     std::vector<std::string> f;
     std::string cur;
     for (p += sizeof(kMarker) - 1; *p; ++p) { if (*p == '|') { f.push_back(cur); cur.clear(); } else cur += *p; }
     f.push_back(cur);
-    if (f.size() == 2 && f[0] == "bye") { session = static_cast<unsigned>(std::strtoul(f[1].c_str(), nullptr, 10)); s.x = -1; return true; }   // the sender left the base
-    if (f.size() < 15 + 11) return false;
-    char* end = nullptr;
-    session = static_cast<unsigned>(std::strtoul(f[0].c_str(), &end, 10));
-    std::snprintf(s.name, sizeof s.name, "%s", f[1].c_str());
-    s.x = std::strtof(f[2].c_str(), nullptr); s.y = std::strtof(f[3].c_str(), nullptr); s.yaw = std::strtof(f[4].c_str(), nullptr);
-    s.cur = static_cast<unsigned>(std::strtoul(f[5].c_str(), nullptr, 10)); s.que = static_cast<unsigned>(std::strtoul(f[6].c_str(), nullptr, 10));
-    s.pack = static_cast<unsigned>(std::strtoul(f[7].c_str(), nullptr, 10)); s.pack2 = static_cast<unsigned>(std::strtoul(f[8].c_str(), nullptr, 10));
-    s.proto = static_cast<unsigned>(std::strtoul(f[9].c_str(), nullptr, 10));
-    std::snprintf(s.figure, sizeof s.figure, "%s", f[10].c_str());
-    for (int i = 0; i < 3; ++i) s.complexion[i] = std::strtof(f[11 + static_cast<size_t>(i)].c_str(), nullptr);
-    s.slot = static_cast<int>(std::strtol(f[14].c_str(), nullptr, 10));
-    for (int i = 0; i < 11; ++i) s.eq[i] = static_cast<unsigned>(std::strtoul(f[15 + static_cast<size_t>(i)].c_str(), nullptr, 16));
-    return std::isfinite(s.x) && std::isfinite(s.y) && s.x > 0 && s.y > 0 && s.x < 2000 && s.y < 2000 && s.proto < 4096 && s.figure[0] && std::strlen(s.figure) < 12;
+    if (f.size() < 2 || (f[0].size() != 1 && f[0] != "bye")) return false;
+    out = Line();
+    State& s = out.s;
+    out.session = static_cast<unsigned>(std::strtoul(f[1].c_str(), nullptr, 10));
+    if (f[0] == "bye") { out.kind = 'B'; return true; }
+    out.kind = f[0][0];
+    if (out.kind == 'Q') return true;
+    if (out.kind == 'A') {
+        if (f.size() < 9 + 11) return false;
+        std::snprintf(s.name, sizeof s.name, "%s", f[2].c_str());
+        s.proto = static_cast<unsigned>(std::strtoul(f[3].c_str(), nullptr, 10));
+        std::snprintf(s.figure, sizeof s.figure, "%s", f[4].c_str());
+        for (int i = 0; i < 3; ++i) s.complexion[i] = std::strtof(f[5 + static_cast<size_t>(i)].c_str(), nullptr);
+        s.slot = static_cast<int>(std::strtol(f[8].c_str(), nullptr, 10));
+        for (int i = 0; i < 11; ++i) s.eq[i] = static_cast<unsigned>(std::strtoul(f[9 + static_cast<size_t>(i)].c_str(), nullptr, 16));
+        return s.proto < 4096 && s.figure[0] && std::strlen(s.figure) < 12;
+    }
+    if (out.kind == 'P') {
+        if (f.size() < 11) return false;
+        s.x = std::strtof(f[2].c_str(), nullptr); s.y = std::strtof(f[3].c_str(), nullptr);
+        out.vx = std::strtof(f[4].c_str(), nullptr); out.vy = std::strtof(f[5].c_str(), nullptr);
+        s.yaw = std::strtof(f[6].c_str(), nullptr);
+        s.cur = static_cast<unsigned>(std::strtoul(f[7].c_str(), nullptr, 10)); s.que = static_cast<unsigned>(std::strtoul(f[8].c_str(), nullptr, 10));
+        s.pack = static_cast<unsigned>(std::strtoul(f[9].c_str(), nullptr, 10)); s.pack2 = static_cast<unsigned>(std::strtoul(f[10].c_str(), nullptr, 10));
+        return std::isfinite(s.x) && std::isfinite(s.y) && s.x > 0 && s.y > 0 && s.x < 2000 && s.y < 2000 && std::fabs(out.vx) < 30 && std::fabs(out.vy) < 30;
+    }
+    return false;
 }
 
 // ---- making and removing a unit that exists only here --------------------------------------------------
@@ -232,13 +254,25 @@ void RemoveGhost(unsigned id) {   // CPlayerClient::OnMsg_DetachUnit: out of the
 }
 
 // ---- the others ------------------------------------------------------------------------------------------
-struct Remote { State state; unsigned id = 0; DWORD seen = 0; bool spawned = false; unsigned look = 0; };
+struct Remote {
+    State state;                      // appearance (A) and the last motion line (P)
+    bool haveLook = false, haveMotion = false;
+    float vx = 0, vy = 0;             // the walk the sender announced: the ghost goes on along it from where the line said (dead reckoning)
+    DWORD motionAt = 0, seen = 0, askedAt = 0;
+    float shownX = 0, shownY = 0;     // where the ghost is drawn (it eases to the target)
+    unsigned id = 0; bool spawned = false; unsigned look = 0;
+};
 std::map<unsigned, Remote> g_remote;   // by the sender's session number
 unsigned g_nextId = 0;
 unsigned g_session = 0;
-DWORD g_lastSend = 0, g_lastFull = 0, g_lastBaseCheck = 0;
-State g_lastSent;
+DWORD g_lastBaseCheck = 0, g_lastAppearance = 0, g_lastMotion = 0, g_lastQuery = 0;
+State g_lastSentLook;
 bool g_wasBase = false;
+bool g_sendAppearanceNow = false;
+// the sender's own walk
+float g_prevX = 0, g_prevY = 0, g_sentX = 0, g_sentY = 0, g_sentVx = 0, g_sentVy = 0, g_vx = 0, g_vy = 0;
+DWORD g_prevAt = 0, g_sentAt = 0;
+unsigned g_sentCur = 0xFFFF, g_sentQue = 0xFFFF;
 
 unsigned LookHash(const State& s) {   // what a new ghost has to be made again for: the figure, the body and the equipment
     unsigned h = s.proto * 2654435761u;
@@ -253,16 +287,30 @@ void ForgetAll(bool remove) {
     g_remote.clear();
 }
 
-void UpdateGhost(Remote& r) {
+// Where a remote hero is now: the position of its last line plus its velocity for the time since (at most 2 seconds: a line lost must not send the ghost far off).
+void Target(const Remote& r, DWORD now, float& x, float& y) {
+    const float dt = std::min(2.0f, static_cast<float>(now - r.motionAt) / 1000.0f);
+    x = r.state.x + r.vx * dt;
+    y = r.state.y + r.vy * dt;
+}
+
+void UpdateGhost(Remote& r, DWORD now, float seconds) {
     char* obj = static_cast<char*>(FindObject(r.id));
     if (!Readable(obj, 0x300)) { r.spawned = false; return; }
     char* senses = Get<char*>(obj, 0x240);
     if (!Readable(senses, 0x50)) return;
     const State& s = r.state;
-    *reinterpret_cast<float*>(senses + 0x3C) = 2 * s.x;   // the unit's move state holds its place in half units: the object follows within a frame
-    *reinterpret_cast<float*>(senses + 0x40) = 2 * s.y;
+    float tx, ty;
+    Target(r, now, tx, ty);
+    const float dx = tx - r.shownX, dy = ty - r.shownY, d = std::sqrt(dx * dx + dy * dy);
+    if (d > 6.0f) { r.shownX = tx; r.shownY = ty; }                          // far: it jumped (a new spot)
+    else { const float k = std::min(1.0f, seconds * 8.0f); r.shownX += dx * k; r.shownY += dy * k; }   // eased: a lost or late line does not make it jerk
+    *reinterpret_cast<float*>(senses + 0x3C) = 2 * r.shownX;   // the unit's move state holds its place in half units: the object follows within a frame
+    *reinterpret_cast<float*>(senses + 0x40) = 2 * r.shownY;
+    float yaw = s.yaw;
+    if (r.vx * r.vx + r.vy * r.vy > 0.04f) yaw = std::atan2(r.vx, -r.vy);   // facing the way it walks (the unit faces (sin yaw, -cos yaw))
     float* q = reinterpret_cast<float*>(obj + 0x34);
-    q[0] = std::cos(s.yaw / 2); q[1] = 0; q[2] = 0; q[3] = std::sin(s.yaw / 2);
+    q[0] = std::cos(yaw / 2); q[1] = 0; q[2] = 0; q[3] = std::sin(yaw / 2);
     if (Get<uint8_t>(obj, 0x254) != s.cur || Get<uint8_t>(obj, 0x255) != s.que) {
         *reinterpret_cast<uint8_t*>(obj + 0x254) = static_cast<uint8_t>(s.cur);
         *reinterpret_cast<uint8_t*>(obj + 0x255) = static_cast<uint8_t>(s.que);
@@ -276,14 +324,27 @@ void UpdateGhost(Remote& r) {
 // The chat line hook: the call of ChatSystemLine (0x5F82F0) in LobbyClient::OnAddressLine (0x41E656). thiscall(the interface, the text, the line's number).
 extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char* text, unsigned number) {
     if (Readable(text, 6) && std::strstr(text, kMarker)) {
-        unsigned session = 0;
-        State s;
-        if (Decode(text, session, s) && session != g_session) {
-            if (s.x < 0) { auto it = g_remote.find(session); if (it != g_remote.end()) it->second.seen = 0; return; }   // "bye": the frame takes it out
-            Remote& r = g_remote[session];
-            if (r.spawned && LookHash(r.state) != LookHash(s) && r.look != LookHash(s)) { /* a new look: made again in the frame */ }
-            r.state = s;
-            r.seen = GetTickCount();
+        Line l;
+        if (Decode(text, l) && l.session != g_session) {
+            const DWORD now = GetTickCount();
+            if (l.kind == 'Q') { g_sendAppearanceNow = true; return; }   // somebody lacks the looks of the players: everybody answers
+            if (l.kind == 'B') { auto it = g_remote.find(l.session); if (it != g_remote.end()) it->second.seen = 0; return; }
+            Remote& r = g_remote[l.session];
+            r.seen = now;
+            if (l.kind == 'A') {
+                const State keep = r.state;
+                r.state = l.s;
+                if (r.haveMotion) { r.state.x = keep.x; r.state.y = keep.y; r.state.yaw = keep.yaw; r.state.cur = keep.cur; r.state.que = keep.que; r.state.pack = keep.pack; r.state.pack2 = keep.pack2; }
+                r.haveLook = true;
+            } else if (l.kind == 'P') {
+                const State look = r.state;
+                r.state = l.s;
+                if (r.haveLook) { std::memcpy(r.state.name, look.name, sizeof look.name); std::memcpy(r.state.figure, look.figure, sizeof look.figure); r.state.proto = look.proto; r.state.slot = look.slot;
+                                  std::memcpy(r.state.eq, look.eq, sizeof look.eq); std::memcpy(r.state.complexion, look.complexion, sizeof look.complexion); }
+                r.vx = l.vx; r.vy = l.vy; r.motionAt = now;
+                if (!r.haveMotion) { r.shownX = l.s.x; r.shownY = l.s.y; }
+                r.haveMotion = true;
+            }
         }
         return;
     }
@@ -295,6 +356,7 @@ extern "C" void UmMpGhostFrame() {
     reinterpret_cast<void (*)()>(0x004122D0)();
     const DWORD now = GetTickCount();
     if (now - g_lastBaseCheck < 100) return;
+    const float seconds = std::min(0.5f, static_cast<float>(now - g_lastBaseCheck) / 1000.0f);
     g_lastBaseCheck = now;
     int* lobby = LobbyClient();
     const bool base = Alive(lobby) && InBase() && Readable(Get<char*>(kWorld, 0x20C), 0x30) && FindObject(kHeroId);
@@ -303,34 +365,58 @@ extern "C" void UmMpGhostFrame() {
             ForgetAll(true);
             g_wasBase = false;
             if (Alive(lobby)) SendLine(lobby, std::string(kMarker) + "bye|" + std::to_string(g_session));   // the others take our ghost out at once
-            g_lastFull = 0;
             UmEngineLog("um-engine: MpGhost: left the base");
         }
         return;
     }
-    if (!g_wasBase) { g_wasBase = true; if (!g_session) g_session = (now ^ GetCurrentProcessId() * 2654435761u) | 1; g_remote.clear(); UmEngineLog("um-engine: MpGhost: in a multiplayer base (session %u)", g_session); }
+    if (!g_wasBase) {
+        g_wasBase = true;
+        if (!g_session) g_session = (now ^ GetCurrentProcessId() * 2654435761u) | 1;
+        g_remote.clear();
+        g_lastAppearance = 0; g_lastMotion = 0; g_sentCur = 0xFFFF; g_prevAt = 0; g_sentVx = g_sentVy = 0;
+        g_sendAppearanceNow = true;
+        UmEngineLog("um-engine: MpGhost: in a multiplayer base (session %u)", g_session);
+    }
 
     // send our own state
     State me;
     if (SampleLocal(me)) {
-        const bool moved = std::fabs(me.x - g_lastSent.x) + std::fabs(me.y - g_lastSent.y) > 0.05f || me.cur != g_lastSent.cur || me.que != g_lastSent.que || std::fabs(me.yaw - g_lastSent.yaw) > 0.1f;
-        if ((moved && now - g_lastSend >= 300) || now - g_lastFull >= 3000) {
-            if (SendLine(lobby, Encode(me, g_session))) {
-                g_lastSent = me;
-                g_lastSend = now;
-                if (now - g_lastFull >= 3000) g_lastFull = now;
+        if (LookHash(me) != LookHash(g_lastSentLook)) g_sendAppearanceNow = true;
+        if (g_sendAppearanceNow || now - g_lastAppearance >= 8000) {
+            if (SendLine(lobby, EncodeAppearance(me, g_session))) { g_lastSentLook = me; g_lastAppearance = now; g_sendAppearanceNow = false; }
+        }
+        // our velocity from the last two samples (smoothed), then the walk is announced when it differs from the one the others are following
+        if (g_prevAt && now > g_prevAt) {
+            const float dt = static_cast<float>(now - g_prevAt) / 1000.0f;
+            const float vx = (me.x - g_prevX) / dt, vy = (me.y - g_prevY) / dt;
+            g_vx += (vx - g_vx) * 0.6f; g_vy += (vy - g_vy) * 0.6f;
+            if (std::fabs(g_vx) < 0.05f) g_vx = 0;
+            if (std::fabs(g_vy) < 0.05f) g_vy = 0;
+        }
+        g_prevX = me.x; g_prevY = me.y; g_prevAt = now;
+        const float age = static_cast<float>(now - g_sentAt) / 1000.0f;
+        const float predictedX = g_sentX + g_sentVx * age, predictedY = g_sentY + g_sentVy * age;
+        const float off = std::fabs(me.x - predictedX) + std::fabs(me.y - predictedY);
+        const float dv = std::fabs(g_vx - g_sentVx) + std::fabs(g_vy - g_sentVy);
+        const bool changed = off > 0.6f || dv > 0.9f || me.cur != g_sentCur || me.que != g_sentQue;
+        if ((changed && now - g_lastMotion >= 200) || now - g_lastMotion >= 5000) {
+            if (SendLine(lobby, EncodeMotion(me, g_session, g_vx, g_vy))) {
+                g_sentX = me.x; g_sentY = me.y; g_sentVx = g_vx; g_sentVy = g_vy; g_sentAt = now; g_sentCur = me.cur; g_sentQue = me.que; g_lastMotion = now;
             }
         }
     }
 
     // make, move and remove the others'
+    bool lacksLook = false;
     for (auto it = g_remote.begin(); it != g_remote.end();) {
         Remote& r = it->second;
-        if (now - r.seen > 12000 || r.seen == 0) {
+        if (now - r.seen > 15000 || r.seen == 0) {
             if (r.spawned && FindObject(r.id)) RemoveGhost(r.id);
             it = g_remote.erase(it);
             continue;
         }
+        if (r.haveMotion && !r.haveLook) lacksLook = true;
+        if (!(r.haveLook && r.haveMotion)) { ++it; continue; }
         if (r.spawned && (!FindObject(r.id) || r.look != LookHash(r.state))) {   // gone with its world, or it changed its look: made again
             UmEngineLog("um-engine: MpGhost: the ghost of %s is made again (%s)", r.state.name, FindObject(r.id) ? "its look changed" : "it was gone");
             if (FindObject(r.id)) RemoveGhost(r.id);
@@ -339,11 +425,16 @@ extern "C" void UmMpGhostFrame() {
         if (!r.spawned) {
             if (!r.id) r.id = kGhostIdBase + (g_nextId++ % 200);
             if (FindObject(r.id)) RemoveGhost(r.id);
-            r.spawned = SpawnGhost(r.id, r.state);
+            float tx, ty;
+            Target(r, now, tx, ty);
+            r.shownX = tx; r.shownY = ty;
+            State at = r.state; at.x = tx; at.y = ty;
+            r.spawned = SpawnGhost(r.id, at);
             r.look = LookHash(r.state);
-            UmEngineLog("um-engine: MpGhost: %s %s at (%.1f, %.1f) as unit %u", r.spawned ? "made the ghost of" : "could not make the ghost of", r.state.name, static_cast<double>(r.state.x), static_cast<double>(r.state.y), r.id);
+            UmEngineLog("um-engine: MpGhost: %s %s at (%.1f, %.1f) as unit %u", r.spawned ? "made the ghost of" : "could not make the ghost of", r.state.name, static_cast<double>(tx), static_cast<double>(ty), r.id);
         }
-        if (r.spawned) UpdateGhost(r);
+        if (r.spawned) UpdateGhost(r, now, seconds);
         ++it;
     }
+    if (lacksLook && now - g_lastQuery >= 1500) { g_lastQuery = now; SendLine(lobby, std::string(kMarker) + "Q|" + std::to_string(g_session)); }   // somebody's motion came without its looks: ask for them
 }
