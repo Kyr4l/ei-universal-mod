@@ -35,7 +35,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.5";
+static constexpr const char* kVersion = "0.2.6";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -222,16 +222,19 @@ struct App {
     // (um.cfg BORDERLESS), Engine\\um-window.asi (window/) for every other mod, switched by Engine\\um-window.ini.
     void ApplyBorderless() {
         const bool on = cfg.borderless && !cfg.game.GetBool("general settings", "fullscreen");
+        const bool scale = on && cfg.borderlessScale;
         std::error_code ec;
         if (CurrentMod()) {
             const std::string umcfg = (fs::path(CurrentMod()->path) / "um.cfg").string();
             if (SetCfgLine(umcfg, "BORDERLESS", on ? "true" : "false")) Log(std::string("um.cfg BORDERLESS ") + (on ? "on" : "off"));
+            if (SetCfgLineAfter(umcfg, "BORDERLESS_SCALE", scale ? "true" : "false", "BORDERLESS")) Log(std::string("um.cfg BORDERLESS_SCALE ") + (scale ? "on" : "off"));
         }
         if (fs::exists(dir / "Engine" / "um-window.asi", ec)) {
             IniFile ini;
             ini.SetInt("Window", "Borderless", on ? 1 : 0);
+            ini.SetInt("Window", "Scale", scale ? 1 : 0);
             ini.Save((dir / "Engine" / "um-window.ini").string());
-            Log(std::string("Engine/um-window.ini Borderless ") + (on ? "1" : "0"));
+            Log(std::string("Engine/um-window.ini Borderless ") + (on ? "1" : "0") + " Scale " + (scale ? "1" : "0"));
         }
     }
 

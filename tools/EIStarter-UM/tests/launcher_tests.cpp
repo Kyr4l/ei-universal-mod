@@ -86,6 +86,15 @@ int main(int argc, char** argv) {
         CHECK(GetCfgLine((tmp / "um.cfg").string(), "borderless") == "false");
         CHECK(GetCfgLine((tmp / "um.cfg").string(), "C") == "3");
         CHECK(GetCfgLine((tmp / "um.cfg").string(), "nope").empty());
+        // a missing key is added on its own line after another key (the DLLs never add keys to an existing cfg)
+        std::ofstream(tmp / "um2.cfg", std::ios::binary) << "; comment\r\nA=1\r\nBORDERLESS=true ; x\r\nC=3\r\n";
+        const std::string p2 = (tmp / "um2.cfg").string();
+        CHECK(SetCfgLineAfter(p2, "SCALE_KEY", "true", "BORDERLESS"));
+        CHECK(ReadTextFile(p2) == "; comment\r\nA=1\r\nBORDERLESS=true ; x\r\nSCALE_KEY=true\r\nC=3\r\n");
+        CHECK(SetCfgLineAfter(p2, "SCALE_KEY", "false", "BORDERLESS") && GetCfgLine(p2, "SCALE_KEY") == "false");
+        CHECK(!SetCfgLineAfter(p2, "X", "1", "NOPE_EITHER"));
+        std::ofstream(tmp / "um3.cfg", std::ios::binary) << "A=1\nBORDERLESS=true";   // no newline at the end, LF endings
+        CHECK(SetCfgLineAfter((tmp / "um3.cfg").string(), "SCALE_KEY", "true", "BORDERLESS") && ReadTextFile((tmp / "um3.cfg").string()) == "A=1\nBORDERLESS=true\nSCALE_KEY=true\n");
     }
     // updater: JSON, release choice, zip extraction, folder swap
     {

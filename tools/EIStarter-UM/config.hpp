@@ -37,6 +37,7 @@ struct LauncherConfig {
     bool closeOnStart = true;      // leave when the game window is up
     bool debugLog = false;         // more detail in EIStarter-UM.log
     bool borderless = false;       // windowed game without a frame (needs fullscreen off)
+    bool borderlessScale = false;  // with borderless: the window covers the monitor and the game picture is scaled up to it (black bars keep the aspect ratio)
     AddonOptions addon;
     GameSettings game;
     bool checkUpdatesAtStart = true;     // look for a newer mod in the background at start
@@ -72,6 +73,7 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.closeOnStart = ini.GetBool("Launcher", "CloseOnStart", true);
         c.debugLog = ini.GetBool("Launcher", "DebugLog", false);
         c.borderless = ini.GetBool("Launcher", "Borderless", false);
+        c.borderlessScale = ini.GetBool("Launcher", "BorderlessScale", false);
         c.checkUpdatesAtStart = ini.GetBool("Launcher", "CheckUpdatesAtStart", true);
         for (const IniFile::Section& s : ini.Sections()) {
             if (LowerAscii(s.name) == "updates") for (const IniFile::Entry& e : s.entries) c.updateKeys[e.key] = e.value;
@@ -121,6 +123,7 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Launcher", "CloseOnStart", c.closeOnStart);
     ini.SetBool("Launcher", "DebugLog", c.debugLog);
     ini.SetBool("Launcher", "Borderless", c.borderless);
+    ini.SetBool("Launcher", "BorderlessScale", c.borderlessScale);
     ini.SetBool("Launcher", "CheckUpdatesAtStart", c.checkUpdatesAtStart);
     for (const auto& kv : c.updateKeys) ini.Set("Updates", kv.first, kv.second);
     for (const auto& kv : c.updateRepos) ini.Set("Update Repositories", kv.first, kv.second);

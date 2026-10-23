@@ -236,6 +236,39 @@ inline bool SetCfgLine(const std::string& path, const std::string& key, const st
     return false;
 }
 
+// Like SetCfgLine, but a missing key is added on its own line right after the line of `afterKey` (the DLLs never add missing keys to an existing cfg); false when
+// neither the key nor `afterKey` is there.
+inline bool SetCfgLineAfter(const std::string& path, const std::string& key, const std::string& value, const std::string& afterKey) {
+    if (SetCfgLine(path, key, value)) return true;
+    std::ifstream in(path, std::ios::binary);
+    if (!in) return false;
+    std::string text((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    in.close();
+    const std::string la = LowerAscii(afterKey);
+    size_t pos = 0;
+    while (pos < text.size()) {
+        size_t eol = text.find('\n', pos);
+        const size_t next = eol == std::string::npos ? text.size() : eol + 1;
+        size_t b = pos;
+        while (b < text.size() && (text[b] == ' ' || text[b] == '\t')) ++b;
+        const size_t eq = text.find('=', b);
+        if (b < text.size() && text[b] != ';' && text[b] != '#' && eq != std::string::npos && (eol == std::string::npos || eq < eol)) {
+            std::string k = text.substr(b, eq - b);
+            while (!k.empty() && (k.back() == ' ' || k.back() == '\t')) k.pop_back();
+            if (LowerAscii(k) == la) {
+                std::string line = key + "=" + value + (eol != std::string::npos && eol > pos && text[eol - 1] == '\r' ? "\r\n" : "\n");
+                if (eol == std::string::npos) text += (text.empty() || text.back() == '\n' ? "" : "\n"), text += line;
+                else text.insert(next, line);
+                std::ofstream out(path, std::ios::binary | std::ios::trunc);
+                out << text;
+                return out.good();
+            }
+        }
+        pos = next;
+    }
+    return false;
+}
+
 // The value of `KEY=value` in a mod's plain cfg file ("" when the file or the key is missing).
 inline std::string GetCfgLine(const std::string& path, const std::string& key) {
     std::istringstream in(ReadTextFile(path));
