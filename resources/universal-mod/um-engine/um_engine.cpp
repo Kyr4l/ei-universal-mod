@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.12.0";
+static const char* const kEngineVersion = "0.12.1";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -268,7 +268,7 @@ static const struct { const char* key; const char* value; const char* comment; }
     { "SunShadows::Extra",     "0.3",    "SunShadows: 0..1, extra darkness inside shadows on top of the game's own sun / ambient ratio (0 = none, 0.3 reads clearly)" },
     { "SunShadows::Indoor",    "0",      "SunShadows: 1 also shadows caves (the game gives them a fixed direction instead of a sun), 0 keeps the game's own shadows there" },
     { "SunShadows::Guard",     "0.15",   "SunShadows: 0..0.5, the world is also drawn this much (of the screen's size) beyond each screen edge, so casters just off screen shadow too (0 = off; needs a restart; costs about 0.5 ms a frame at 0.15)" },
-    { "SunShadows::GuardLog",  "0",      "SunShadows: 1 logs the camera set-ups (research)" },
+    { "SunShadows::GuardLog",  "0",      "SunShadows: 1 logs the camera set-ups, 2 also counts frames (research)" },
     { "SunShadows::Debug",     "0",      "SunShadows: research views (1 shadow term only, 2 lit fraction / sun angle, 4 normals, 5 world position)" },
 };
 
@@ -352,6 +352,20 @@ extern "C" double UmEngineConfigNumber(const char* key, double fallback) {
         std::fclose(f);
     }
     return result;
+}
+
+// Several numbers with one pass over the file; false (the values stay as they are) when the file cannot be read
+extern "C" bool UmEngineConfigNumbers(const char* const* keys, double* values, int count) {
+    FILE* f = std::fopen(ConfigPath().c_str(), "r");
+    if (!f) return false;
+    char line[512];
+    while (std::fgets(line, sizeof(line), f))
+        for (int i = 0; i < count; ++i) {
+            const size_t length = std::strlen(keys[i]);
+            if (std::strncmp(line, keys[i], length) == 0 && line[length] == '=') values[i] = std::atof(line + length + 1);
+        }
+    std::fclose(f);
+    return true;
 }
 
 extern "C" __declspec(dllexport) const char* UmEngineVersion() { return kEngineVersion; }

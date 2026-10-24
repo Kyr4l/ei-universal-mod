@@ -16,6 +16,7 @@
 #include <cstring>
 
 extern "C" void UmEngineLog(const char* format, ...);
+extern "C" bool UmEngineConfigNumbers(const char* const* keys, double* values, int count);
 extern "C" double UmEngineConfigNumber(const char* key, double fallback); // um_engine.cpp
 
 namespace {
@@ -50,18 +51,14 @@ const Cfg& C() {
     const DWORD now = GetTickCount();
     if (g_cfgAt == 0 || now - g_cfgAt > 1000) {
         g_cfgAt = now ? now : 1;
-        g_cfg.enabled = UmEngineConfigNumber("SunShadows::Enabled", 1.0);
-        g_cfg.margin = UmEngineConfigNumber("SunShadows::Margin", 8.0);
-        g_cfg.height = UmEngineConfigNumber("SunShadows::Height", 50.0);
-        g_cfg.strength = UmEngineConfigNumber("SunShadows::Strength", 1.0);
-        g_cfg.bias = UmEngineConfigNumber("SunShadows::Bias", 0.0015);
-        g_cfg.slopeBias = UmEngineConfigNumber("SunShadows::SlopeBias", 0.004);
-        g_cfg.mapSize = UmEngineConfigNumber("SunShadows::MapSize", 2048.0);
-        g_cfg.extra = UmEngineConfigNumber("SunShadows::Extra", 0.3);
-        g_cfg.debug = UmEngineConfigNumber("SunShadows::Debug", 0.0);
-        g_cfg.indoor = UmEngineConfigNumber("SunShadows::Indoor", 0.0);
-        g_cfg.guard = UmEngineConfigNumber("SunShadows::Guard", 0.15);
-        g_cfg.guardLog = UmEngineConfigNumber("SunShadows::GuardLog", 0.0);
+        // one pass over the file (many small reads on the game's thread are a visible hitch every second under Wine); an unreadable file keeps the values
+        static const char* const keys[12] = { "SunShadows::Enabled", "SunShadows::Margin", "SunShadows::Height", "SunShadows::Strength", "SunShadows::Bias", "SunShadows::SlopeBias",
+            "SunShadows::MapSize", "SunShadows::Extra", "SunShadows::Debug", "SunShadows::Indoor", "SunShadows::Guard", "SunShadows::GuardLog" };
+        double v[12] = { g_cfg.enabled, g_cfg.margin, g_cfg.height, g_cfg.strength, g_cfg.bias, g_cfg.slopeBias, g_cfg.mapSize, g_cfg.extra, g_cfg.debug, g_cfg.indoor, g_cfg.guard, g_cfg.guardLog };
+        if (UmEngineConfigNumbers(keys, v, 12)) {
+            g_cfg.enabled = v[0]; g_cfg.margin = v[1]; g_cfg.height = v[2]; g_cfg.strength = v[3]; g_cfg.bias = v[4]; g_cfg.slopeBias = v[5];
+            g_cfg.mapSize = v[6]; g_cfg.extra = v[7]; g_cfg.debug = v[8]; g_cfg.indoor = v[9]; g_cfg.guard = v[10]; g_cfg.guardLog = v[11];
+        }
     }
     return g_cfg;
 }
@@ -451,6 +448,9 @@ bool Gather(Params& p) {
     const Cfg& cfg = C();
     // the radius moves in steps of 4 units: a radius that follows the camera continuously changes the texel size every frame and the shadows shimmer
     p.radius = static_cast<float>(std::fmin(std::fmax(std::ceil((radius + cfg.margin) / 4.0) * 4.0, 16.0), 120.0));
+    { static float lr = 0, lz = 0, lcx = 0, lcy = 0; static DWORD lt = 0; const float gz = static_cast<float>(groundZ);
+      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lz - gz) > 0.05f || std::fabs(lcx - p.center[0]) > 1.0f || std::fabs(lcy - p.center[1]) > 1.0f)) { const DWORD n = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms radius %.1f (raw %.2f) groundZ %.2f center %.1f %.1f", static_cast<unsigned long>(n - lt), p.radius, radius, gz, p.center[0], p.center[1]); lt = n; }
+      lr = p.radius; lz = gz; lcx = p.center[0]; lcy = p.center[1]; }
     p.height = static_cast<float>(cfg.height);
     p.strength = static_cast<float>(cfg.strength);
     p.bias = static_cast<float>(cfg.bias);
@@ -468,13 +468,17 @@ extern "C" void UmWorldEarlyInit() {
     if (C().guard > 0.0 || C().guardLog > 0.5) InstallSetupHook();
 }
 
+static unsigned g_dbgFrames = 0, g_dbgClosed = 0, g_dbgGatherFail = 0; static DWORD g_dbgAt = 0;
 extern "C" __attribute__((force_align_arg_pointer)) void UmWorldBegin() {
     Lookup();
     g_open = false;
+    ++g_dbgFrames;
+    { const DWORD n = GetTickCount(); if (!g_dbgAt) g_dbgAt = n; if (n - g_dbgAt > 5000) { g_dbgAt = n; if (C().guardLog > 1.5) UmEngineLog("um-engine: dbg frames %u closed %u gatherfail %u", g_dbgFrames, g_dbgClosed, g_dbgGatherFail); } }
     if (!g_enabled) return;
     // Off: SunShadows::Enabled=0 (checked once a second), the game's own shadow switches all off (the options screen), a cave. The game's own pass is given back then.
     const bool indoor = Read<int>(kWorld + 0x6E0) == 1 && C().indoor < 0.5;
     if (C().enabled < 0.5 || !GameShadowsOn() || indoor) {
+        ++g_dbgClosed;
         if (g_clearedFlag && Read<int>(kShadowQuality) > 0) *reinterpret_cast<uint32_t*>(kWorld + 8) |= 0x200u;
         g_clearedFlag = false;
         return;
@@ -489,8 +493,11 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmWorldBegin() {
 extern "C" __attribute__((force_align_arg_pointer)) void UmWorldEnd() {
     if (!g_open) return;
     g_open = false;
-    if (Gather(g_params)) g_end(&g_params);
-    else g_end(nullptr);
+    // a frame whose matrices cannot be read keeps the last good ones (no frame without shadows)
+    static Params last; static bool haveLast = false;
+    Params now;
+    if (Gather(now)) { last = now; haveLast = true; g_end(&last); }
+    else { ++g_dbgGatherFail; if (haveLast) g_end(&last); else g_end(nullptr); }
 }
 
 // The stubs: begin = the call of CTerrain::RenderOpaque (thiscall, one stack argument), end = the call of CWorldClient::RenderObjects (fastcall).
