@@ -12,9 +12,9 @@
 // Logging, crash reporting, keyboard rewrite logging, and anti-crash
 // behavior are configured through um.cfg beside the DLL or environment variables.
 
-#include "../um-engine/um_engine.h"
 #include <winsock2.h> // before windows.h (the DLL server, dll_server.hpp)
 #include <windows.h>
+#include "../um-engine/um_engine.h"
 #include <dbghelp.h>
 #include <psapi.h>
 #include <tlhelp32.h>
@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.7.2";
+static const char* const UM_VERSION = "1.7.3";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 

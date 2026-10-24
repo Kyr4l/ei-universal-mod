@@ -11,6 +11,8 @@
 // read from the game's own state at the end of the pass. The game's own shadow pass (world flag 0x200) is switched off while this works.
 #include <windows.h>
 
+#include "um_engine.h"
+
 #include <cmath>
 #include <cstdint>
 #include <cstring>
@@ -56,8 +58,11 @@ const Cfg& C() {
             "SunShadows::MapSize", "SunShadows::Extra", "SunShadows::Debug", "SunShadows::Indoor", "SunShadows::Guard", "SunShadows::GuardLog" };
         double v[12] = { g_cfg.enabled, g_cfg.margin, g_cfg.height, g_cfg.strength, g_cfg.bias, g_cfg.slopeBias, g_cfg.mapSize, g_cfg.extra, g_cfg.debug, g_cfg.indoor, g_cfg.guard, g_cfg.guardLog };
         if (UmEngineConfigNumbers(keys, v, 12)) {
-            g_cfg.enabled = v[0]; g_cfg.margin = v[1]; g_cfg.height = v[2]; g_cfg.strength = v[3]; g_cfg.bias = v[4]; g_cfg.slopeBias = v[5];
-            g_cfg.mapSize = v[6]; g_cfg.extra = v[7]; g_cfg.debug = v[8]; g_cfg.indoor = v[9]; g_cfg.guard = v[10]; g_cfg.guardLog = v[11];
+            // a hand-edited file may hold anything: every number is kept inside what the code can use
+            auto clamp = [](double x, double lo, double hi) { return x != x ? lo : x < lo ? lo : x > hi ? hi : x; };
+            g_cfg.enabled = v[0]; g_cfg.margin = clamp(v[1], 0, 64); g_cfg.height = clamp(v[2], 1, 400); g_cfg.strength = clamp(v[3], 0, 1); g_cfg.bias = clamp(v[4], 0, 0.1);
+            g_cfg.slopeBias = clamp(v[5], 0, 0.1); g_cfg.mapSize = clamp(v[6], 1024, 8192); g_cfg.extra = clamp(v[7], 0, 1); g_cfg.debug = clamp(v[8], 0, 99);
+            g_cfg.indoor = v[9]; g_cfg.guard = clamp(v[10], 0, 0.6); g_cfg.guardLog = v[11];
         }
     }
     return g_cfg;
@@ -144,7 +149,7 @@ typedef int (__attribute__((thiscall)) *TypeIdFn)(void*);
 } // namespace
 
 // CObject3DClientSpecific::Draw (0x51B7E0) is wrapped: while an object whose kind the game's shadow settings switch off is drawn, its triangles are not recorded as casters.
-extern "C" __attribute__((force_align_arg_pointer)) void UmCasterOn(void* specific) {
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmCasterOn(void* specific) {
     if (!g_open || !g_caster || !specific) return;
     void* owner = Read<void*>(reinterpret_cast<uintptr_t>(specific) + 0x1C);
     if (!owner) return;
@@ -154,9 +159,27 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmCasterOn(void* specif
     if (on == 0) g_caster(0);
 }
 
-extern "C" __attribute__((force_align_arg_pointer)) void UmCasterOff() {
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmCasterOff() {
     if (g_open && g_caster) g_caster(1);
 }
+
+namespace { void Lookup(); bool ShadowsWanted(); }   // below
+
+// The vertices the game batches (CRenderDevice::FlushVertexBuffer 0x4E7840 / FlushVertexBuffer2 0x4E7A40, fastcall on the device at 0x7AF080) are drawn when flushed, not when the object is
+// drawn: the shifts of the guard band and the end of the shadow capture must not cut through a pending batch. Both return at once when nothing is queued.
+void FlushPending() {
+    void* device = Read<void*>(0x7AF080);
+    if (!device) return;
+    reinterpret_cast<void (__attribute__((fastcall)) *)(void*)>(0x004E7840)(device);
+    reinterpret_cast<void (__attribute__((fastcall)) *)(void*)>(0x004E7A40)(device);
+}
+
+// D7VK sets the x87 to 24-bit precision for its thread (Direct3D's default): the doubles of the fit below would round like floats. Extended precision while the mod computes.
+struct FpuExtended {
+    unsigned short saved;
+    FpuExtended() { __asm__ volatile("fnstcw %0" : "=m"(saved)); unsigned short cw = saved | 0x0300; __asm__ volatile("fldcw %0" : : "m"(cw)); }
+    ~FpuExtended() { __asm__ volatile("fldcw %0" : : "m"(saved)); }
+};
 
 // The guard band. The game's CPU clipper drops every triangle outside the screen, so a tree just beyond an edge would cast no shadow. Inside CWorldClient::Render (called through the wrapper
 // at 0x578910) the camera's matrices are replaced by ones for a LARGER window: the screen plus a band (padL / padT / padR / padB pixels) on the sides the sun's shadows come from, with the same
@@ -167,6 +190,8 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmCasterOff() {
 bool g_guardOn = false;
 int g_padL = 0, g_padT = 0, g_padR = 0, g_padB = 0;   // the pads of the last world pass (the mouse picking compares with rectangles made during it)
 int g_screenW = 0, g_screenH = 0;
+bool g_applied = false;     // the replaced matrices are in the game's stacks (between UmGuardOn and UmGuardOff)
+int g_swapTries = 0;
 
 typedef void (*GuardFn)(float, float);
 GuardFn g_guardFn = nullptr;
@@ -189,7 +214,7 @@ float* StackLevel(int stack, int level) {
     const uintptr_t globals = Read<uintptr_t>(kRenderGlobals);
     if (!globals) return nullptr;
     const int depth = Read<int>(globals + kSwapStacks[stack] + 4);
-    if (depth < kSwapLevels[stack]) return nullptr;
+    if (depth != kSwapLevels[stack]) return nullptr;   // exactly the rest state: Render multiplies onto the TOP level of each stack
     float* base = Read<float*>(globals + kSwapStacks[stack]);
     return base ? base + level * 16 : nullptr;
 }
@@ -309,35 +334,51 @@ void ChoosePads(const StackSet& o, double fraction, int& padL, int& padT, int& p
     padL = out[0]; padT = out[1]; padR = out[2]; padB = out[3];
 }
 
+// One-time part: D7VK's guard export. The stacks themselves are checked on every frame (a cutscene camera, a resolution change or a 3D interface screen may leave others).
 void PrepareSwap() {
     g_swap = -1;
     HMODULE module = GetModuleHandleA("d7vk.dll");
     if (!module) module = GetModuleHandleA("ddraw.dll");
     g_guardFn = module ? reinterpret_cast<GuardFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowGuard"))) : nullptr;
     if (!g_guardFn) { UmEngineLog("um-engine: SunShadows::Guard needs d7vk.dll: not applied"); return; }
-    if (!ReadSet(g_orig)) { UmEngineLog("um-engine: guard band: the matrix stacks are not as expected: off"); return; }
-    if (!SetIsConsistent(g_orig, g_orig.m[2][0])) { UmEngineLog("um-engine: guard band: the matrix stacks are not what was expected: off"); return; }
     g_swap = 1;
-    g_guardOn = true;
-    UmEngineLog("um-engine: guard band on: the world is drawn with a band on the sides the sun's shadows come from (at most %.0f %% of the screen)", C().guard * 100);
+    UmEngineLog("um-engine: guard band ready: the world is drawn with a band on the sides the sun's shadows come from (at most %.0f %% of the screen)", C().guard * 100);
 }
 
-extern "C" __attribute__((force_align_arg_pointer)) void UmGuardOn() {
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmGuardOn() {
+    FpuExtended fpu;
+    if (g_applied) {   // a world pass that did not come back through UmGuardOff (an exception unwound through it): put the original matrices back first
+        g_applied = false;
+        g_guardFn(0.0f, 0.0f); SetDrawerSize(g_screenW, g_screenH); WriteSet(g_orig);
+    }
+    g_padL = g_padT = g_padR = g_padB = 0;
     if (g_swap == 0) PrepareSwap();
-    if (g_swap != 1 || C().guard <= 0.0) { g_padL = g_padT = g_padR = g_padB = 0; return; }
-    if (!ReadSet(g_orig)) return;
+    if (g_swap != 1 || C().guard <= 0.0 || !ShadowsWanted()) return;
+    StackSet now;
+    static unsigned bad = 0;
+    if (!ReadSet(now) || !SetIsConsistent(now, now.m[2][0])) {   // not the rest state of the game's own set-up: this frame is drawn as the game does
+        if (C().guardLog > 0.5 && (bad++ & 255) == 0) UmEngineLog("um-engine: guard band: the matrix stacks are not as expected in this frame (%u so far): no band", bad);
+        return;
+    }
+    g_orig = now;
     g_screenW = static_cast<int>(std::lround(2.0 * g_orig.m[5][0][0])); g_screenH = static_cast<int>(std::lround(-2.0 * g_orig.m[5][0][5]));
-    ChoosePads(g_orig, std::fmin(std::fmax(C().guard, 0.0), 0.6), g_padL, g_padT, g_padR, g_padB);
-    if (!BuildBig(g_orig, g_padL, g_padT, g_padR, g_padB, g_big)) { g_padL = g_padT = g_padR = g_padB = 0; return; }
+    if (g_screenW < 320 || g_screenH < 240) return;
+    int l, t, r, b;
+    ChoosePads(g_orig, std::fmin(std::fmax(C().guard, 0.0), 0.6), l, t, r, b);
+    if (!BuildBig(g_orig, l, t, r, b, g_big)) return;
+    g_padL = l; g_padT = t; g_padR = r; g_padB = b;
     { static int lp[4] = {-1,-1,-1,-1}; if (C().guardLog > 1.5 && (lp[0] != g_padL || lp[1] != g_padT || lp[2] != g_padR || lp[3] != g_padB)) { lp[0] = g_padL; lp[1] = g_padT; lp[2] = g_padR; lp[3] = g_padB; UmEngineLog("um-engine: dbg pads L %d T %d R %d B %d (screen %d x %d)", g_padL, g_padT, g_padR, g_padB, g_screenW, g_screenH); } }
+    FlushPending();   // what the interface left queued is drawn without the shift
     WriteSet(g_big);
     SetDrawerSize(g_screenW + g_padL + g_padR, g_screenH + g_padT + g_padB);
     g_guardFn(static_cast<float>(g_padL), static_cast<float>(g_padT));
-    g_guardOn = true;
+    g_applied = true;
 }
 
-extern "C" __attribute__((force_align_arg_pointer)) void UmGuardOff() {
-    if (g_swap != 1 || !g_guardFn || (g_padL | g_padT | g_padR | g_padB) == 0) return;
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmGuardOff() {
+    if (!g_applied) return;
+    g_applied = false;
+    FlushPending();   // the world's last batch is drawn with the shift
     g_guardFn(0.0f, 0.0f);
     SetDrawerSize(g_screenW, g_screenH);
     WriteSet(g_orig);
@@ -345,7 +386,7 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmGuardOff() {
 
 // The mouse picking of objects compares the mouse with the screen rectangles made during the last world pass (PickObjectsAt 0x565790 / PickObjectsAt2 0x5659D0: a POINT*): they carry the
 // shift of that pass. (The terrain picking inverts the original matrices at rest and needs nothing.)
-extern "C" __attribute__((force_align_arg_pointer)) void UmPickObjectsFix(int* args) {
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmPickObjectsFix(int* args) {
     if (g_padL == 0 && g_padT == 0) return;
     static long ring[4][2]; static int next = 0;
     const long* pt = reinterpret_cast<const long*>(args[0]);
@@ -355,7 +396,19 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmPickObjectsFix(int* a
     args[0] = reinterpret_cast<int>(copy);
 }
 
+// The selection frame (CWorldClient::CollectVisibleRecordObjects 0x5656A0, thiscall(this, RECT*, list*), called from the group selection of the UI screens) is intersected with the same
+// rectangles: its RECT gets the shift too.
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmRectFix(int* args) {
+    if (g_padL == 0 && g_padT == 0) return;
+    static RECT copy;
+    const RECT* r = reinterpret_cast<const RECT*>(args[0]);
+    if (!r) return;
+    copy.left = r->left + g_padL; copy.right = r->right + g_padL; copy.top = r->top + g_padT; copy.bottom = r->bottom + g_padT;
+    args[0] = reinterpret_cast<int>(&copy);
+}
+
 extern "C" void UmPickObjectsHook();
+extern "C" void UmCollectHook();
 extern "C" void UmPickObjects2Hook();
 
 extern "C" void UmDrawHook();
@@ -366,26 +419,17 @@ void InstallDrawHook() {
     static const unsigned char kExpect[5] = { 0x55, 0x8B, 0xEC, 0x6A, 0xFF };
     unsigned char* at = reinterpret_cast<unsigned char*>(0x0051B7E0);
     if (std::memcmp(at, kExpect, 5) != 0) { UmEngineLog("um-engine: sun shadows: CObject3DClientSpecific::Draw has other code (another build): per-kind switches not applied"); return; }
-    DWORD old = 0;
-    if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) return;
-    const long rel = reinterpret_cast<long>(&UmDrawHook) - reinterpret_cast<long>(at + 5);
-    at[0] = 0xE9; std::memcpy(at + 1, &rel, 4);
-    VirtualProtect(at, 5, old, &old);
-    FlushInstructionCache(GetCurrentProcess(), at, 5);
+    UmPatchJump(0x0051B7E0, 0xE9, reinterpret_cast<void*>(&UmDrawHook));
 }
 
-// the first bytes of a function are replaced by a jump (the rest of the replaced instructions is NOPs); the hook runs them again
-void HookPrologue(uintptr_t address, void* hook, int length = 6, int b0 = 0x55, int b1 = 0x8B, int b2 = 0xEC, int b3 = 0x83, int b4 = 0xEC, int b5 = 0x08) {
-    const unsigned char expect[6] = { static_cast<unsigned char>(b0), static_cast<unsigned char>(b1), static_cast<unsigned char>(b2), static_cast<unsigned char>(b3), static_cast<unsigned char>(b4), static_cast<unsigned char>(b5) };
+// the first bytes of a function (whole instructions, no relative operands) are replaced by a jump, the rest of them by NOPs; the hook runs them again
+bool HookPrologue(uintptr_t address, void* hook, const unsigned char* expect, int length) {
     unsigned char* at = reinterpret_cast<unsigned char*>(address);
-    if (std::memcmp(at, expect, length) != 0) { UmEngineLog("um-engine: sun shadows: 0x%X has other code (another build): no guard band", static_cast<unsigned>(address)); return; }
-    DWORD old = 0;
-    if (!VirtualProtect(at, length, PAGE_EXECUTE_READWRITE, &old)) return;
-    const long rel = reinterpret_cast<long>(hook) - reinterpret_cast<long>(at + 5);
-    at[0] = 0xE9; std::memcpy(at + 1, &rel, 4);
-    for (int i = 5; i < length; ++i) at[i] = 0x90;
-    VirtualProtect(at, length, old, &old);
-    FlushInstructionCache(GetCurrentProcess(), at, length);
+    if (length < 5 || std::memcmp(at, expect, length) != 0) { UmEngineLog("um-engine: sun shadows: 0x%X has other code (another build): no guard band", static_cast<unsigned>(address)); return false; }
+    // the jump over the first five bytes (one locked write), then the rest of the replaced instructions as NOPs (they are not reached any more)
+    if (!UmPatchJump(address, 0xE9, hook)) return false;
+    if (length > 5) { static const unsigned char nops[8] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 }; UmPatchCode(at + 5, nops, static_cast<size_t>(length - 5)); }
+    return true;
 }
 
 extern "C" void UmRenderWrap();
@@ -395,20 +439,21 @@ void InstallSetupHook() {
     static const unsigned char kJump[5] = { 0xE9, 0x26, 0x15, 0xFF, 0xFF };
     unsigned char* wrap = reinterpret_cast<unsigned char*>(0x00578915);
     if (std::memcmp(wrap, kJump, 5) != 0) { UmEngineLog("um-engine: sun shadows: the world render wrapper has other code (another build): no guard band"); return; }
-    HookPrologue(0x00565790, reinterpret_cast<void*>(&UmPickObjectsHook), 5, 0x83, 0xEC, 0x1C, 0x53, 0x55);
-    HookPrologue(0x005659D0, reinterpret_cast<void*>(&UmPickObjects2Hook), 5, 0x83, 0xEC, 0x1C, 0x53, 0x55);
-    DWORD old = 0;
-    if (!VirtualProtect(wrap, 5, PAGE_EXECUTE_READWRITE, &old)) return;
-    const long rel = reinterpret_cast<long>(&UmRenderWrap) - reinterpret_cast<long>(wrap + 5);
-    std::memcpy(wrap + 1, &rel, 4);
-    VirtualProtect(wrap, 5, old, &old);
-    FlushInstructionCache(GetCurrentProcess(), wrap, 5);
+    static const unsigned char kPick[5] = { 0x83, 0xEC, 0x1C, 0x53, 0x55 };
+    static const unsigned char kCollect[10] = { 0x56, 0x57, 0x8B, 0xF9, 0x8B, 0x87, 0xF0, 0x00, 0x00, 0x00 };
+    // all or none: every site is checked before the first is patched
+    if (std::memcmp(reinterpret_cast<void*>(0x00565790), kPick, 5) || std::memcmp(reinterpret_cast<void*>(0x005659D0), kPick, 5) || std::memcmp(reinterpret_cast<void*>(0x005656A0), kCollect, 10)) {
+        UmEngineLog("um-engine: sun shadows: the picking functions have other code (another build): no guard band"); return;
+    }
+    HookPrologue(0x00565790, reinterpret_cast<void*>(&UmPickObjectsHook), kPick, 5);
+    HookPrologue(0x005659D0, reinterpret_cast<void*>(&UmPickObjects2Hook), kPick, 5);
+    HookPrologue(0x005656A0, reinterpret_cast<void*>(&UmCollectHook), kCollect, 10);
+    UmPatchJump(0x00578915, 0xE9, reinterpret_cast<void*>(&UmRenderWrap));
 }
 
 void Lookup() {
     if (g_looked) return;
     g_looked = true;
-    if (UmEngineConfigNumber("SunShadows::Enabled", 1.0) < 0.5) return;
     HMODULE module = GetModuleHandleA("d7vk.dll");
     if (!module) module = GetModuleHandleA("ddraw.dll");
     if (!module) return;
@@ -418,6 +463,14 @@ void Lookup() {
     g_enabled = g_begin && g_end;
     if (g_enabled && g_caster) InstallDrawHook();
     UmEngineLog("um-engine: sun shadows %s (UmShadowBegin / UmShadowEnd %sfound in the DirectDraw library)", g_enabled ? "on" : "off", g_enabled ? "" : "not ");
+}
+
+// The sun shadows (and the guard band) work: D7VK has them, Enabled is on, the game's own shadow settings allow them, no cave (the game gives it a fixed direction instead of a sun).
+bool ShadowsWanted() {
+    Lookup();
+    if (!g_enabled) return false;
+    const bool indoor = Read<int>(kWorld + 0x6E0) == 1 && C().indoor < 0.5;
+    return C().enabled >= 0.5 && GameShadowsOn() && !indoor;
 }
 
 // Fills the parameters from the game's state; false when something is not ready (no frame is shadowed then).
@@ -473,8 +526,11 @@ bool Gather(Params& p) {
     auto dot3 = [](const double* x, const double* y) { return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]; };
 
     void* terrain = Read<void*>(kWorld + 0x180);
+    if (terrain && Read<int>(reinterpret_cast<uintptr_t>(terrain) + 0x100) == 0) terrain = nullptr;   // no sector data (the game's own RenderObjects needs it too)
     typedef float (__attribute__((thiscall)) *HeightFn)(void*, float, float, int);
     const HeightFn heightAt = reinterpret_cast<HeightFn>(0x006C8680);
+    typedef float* (__attribute__((thiscall)) *VertexFn)(void*, int, int, int);   // CTerrain::GetVertex 0x6C85A0: the vertex of a cell, 0 outside the map
+    const VertexFn vertexAt = reinterpret_cast<VertexFn>(0x006C85A0);
     const double camX = p.cameraPos[0], camY = p.cameraPos[1];
     const double sx[9] = { gpx, gpx + width, gpx, gpx + width, gpx + 0.5 * width, gpx + 0.5 * width, gpx, gpx + width, gpx + 0.5 * width };
     const double sy[9] = { gpy, gpy, gpy + height, gpy + height, gpy, gpy + height, gpy + 0.5 * height, gpy + 0.5 * height, gpy + 0.5 * height };
@@ -497,7 +553,7 @@ bool Gather(Params& p) {
             double t0 = 0;
             for (int s = 1; s <= 96 && !found; ++s) {
                 const double t1 = double(s) / 96.0; double q[3]; at(t1, q);
-                if (std::hypot(q[0] - camX, q[1] - camY) > 70.0) { hit[0] = q[0]; hit[1] = q[1]; hit[2] = q[2]; found = true; break; }
+                if ((q[0] - camX) * (q[0] - camX) + (q[1] - camY) * (q[1] - camY) > 4900.0) { hit[0] = q[0]; hit[1] = q[1]; hit[2] = q[2]; found = true; break; }
                 if (q[2] <= heightAt(terrain, static_cast<float>(q[0]), static_cast<float>(q[1]), 0)) {
                     double ta = t0, tb = t1;
                     for (int it = 0; it < 12; ++it) { const double tm = 0.5 * (ta + tb); double m[3]; at(tm, m); if (m[2] <= heightAt(terrain, static_cast<float>(m[0]), static_cast<float>(m[1]), 0)) tb = tm; else ta = tm; }
@@ -506,8 +562,8 @@ bool Gather(Params& p) {
                 t0 = t1;
             }
             if (!found) at(1.0, hit);
-            // terrain heights are 0 outside the map: such a hit is dropped
-            if (std::fabs(hit[2]) < 1e-6 && found) found = false;
+            // outside the map the terrain answers 0: a hit there is dropped (a hit AT height 0 inside the map is fine: asked with the vertex, not the height)
+            if (found && !vertexAt(terrain, static_cast<int>(std::lround(hit[0])), static_cast<int>(std::lround(hit[1])), 0)) found = false;
             if (!found) { at(1.0, hit); }
             add(hit[0], hit[1], hit[2]);
         } else {
@@ -559,15 +615,14 @@ extern "C" void UmWorldEarlyInit() {
 }
 
 static unsigned g_dbgFrames = 0, g_dbgClosed = 0, g_dbgGatherFail = 0; static DWORD g_dbgAt = 0;
-extern "C" __attribute__((force_align_arg_pointer)) void UmWorldBegin() {
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmWorldBegin() {
     Lookup();
     g_open = false;
     ++g_dbgFrames;
     { const DWORD n = GetTickCount(); if (!g_dbgAt) g_dbgAt = n; if (n - g_dbgAt > 5000) { g_dbgAt = n; if (C().guardLog > 1.5) UmEngineLog("um-engine: dbg frames %u closed %u gatherfail %u", g_dbgFrames, g_dbgClosed, g_dbgGatherFail); } }
     if (!g_enabled) return;
     // Off: SunShadows::Enabled=0 (checked once a second), the game's own shadow switches all off (the options screen), a cave. The game's own pass is given back then.
-    const bool indoor = Read<int>(kWorld + 0x6E0) == 1 && C().indoor < 0.5;
-    if (C().enabled < 0.5 || !GameShadowsOn() || indoor) {
+    if (!ShadowsWanted()) {
         ++g_dbgClosed;
         if (g_clearedFlag && Read<int>(kShadowQuality) > 0) *reinterpret_cast<uint32_t*>(kWorld + 8) |= 0x200u;
         g_clearedFlag = false;
@@ -580,9 +635,11 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmWorldBegin() {
     g_open = true;
 }
 
-extern "C" __attribute__((force_align_arg_pointer)) void UmWorldEnd() {
+extern "C" __attribute__((used, force_align_arg_pointer)) void UmWorldEnd() {
     if (!g_open) return;
     g_open = false;
+    FpuExtended fpu;
+    FlushPending();   // the last batch of RenderObjects belongs to the capture and to the depth the resolve reads
     // a frame whose matrices cannot be read keeps the last good ones (no frame without shadows)
     static Params last; static bool haveLast = false;
     Params now;
@@ -681,5 +738,22 @@ _UmPickObjects2Hook:
     pushl %ebx
     pushl %ebp
     pushl $0x005659D5
+    ret
+)");
+asm(R"(
+.text
+.globl _UmCollectHook
+_UmCollectHook:
+    pushl %ecx
+    leal 8(%esp), %eax
+    pushl %eax
+    call _UmRectFix
+    addl $4, %esp
+    popl %ecx
+    pushl %esi
+    pushl %edi
+    movl %ecx, %edi
+    movl 0xF0(%edi), %eax
+    pushl $0x005656AA
     ret
 )");

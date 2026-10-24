@@ -3251,7 +3251,8 @@ namespace dxvk {
     FillUPVertexBuffer(data, pVertexStreamZeroData, vertexDataSize, vertexBufferSize);
     std::memcpy(data + vertexBufferSize, pIndexData, indicesSize);
 
-    if (unlikely(m_umShadowCapture))
+    // only triangle lists: the shadow pass draws every recorded draw as a list
+    if (unlikely(m_umShadowCapture) && PrimitiveType == D3DPT_TRIANGLELIST)
       UmShadowCaptureUP(upSlice.slice, vertexBufferSize, VertexStreamZeroStride, vertexCount,
         DecodeIndexType(static_cast<D3D9Format>(IndexDataFormat)));
 

@@ -69,6 +69,9 @@ void main() {
 
   // Sky / cleared depth: nothing to shade (no early exit: keeps the shader simple for the quad)
   bool is_sky = zs >= 0.99999f;
+  // The sky is not shaded: the blended passes multiply by 1 there, so leaving it out changes nothing (the opaque research views still write it)
+  if (is_sky && debug_mode < 3u)
+    discard;
 
   vec3 wp = world_at(ip, zs);
 
@@ -96,6 +99,10 @@ void main() {
 
   vec3 to_sun = -light_dir_strength.xyz;
   float ndl = max(dot(n, to_sun), 0.0f);
+
+  // A surface turned away from the sun gets no shadow darkening (the factor below is exactly 1): none of the 49 lookups is needed
+  if (debug_mode == 0u && smoothstep(0.05f, 0.35f, ndl) <= 0.0f)
+    discard;
 
   // Normal offset: the receiving point is moved along its normal by one to three shadow texels (more where the surface is edge-on to the sun) before the lookup: no acne on slopes
   // (river banks, cliffs, terrain facing away) and so nothing to flicker as the camera or the sun moves a little
@@ -147,6 +154,8 @@ void main() {
     factor = vec3(wp.x * 0.01f, wp.y * 0.01f, wp.z * 0.1f);
   else if (debug_mode == 10u)
     factor = vec3(s);
+  else if (debug_mode == 11u)
+    factor = vec3(dot(factor, vec3(0.3333f)));   // the real result (grey): what the shadows do to the picture
   else if (debug_mode == 4u)
     factor = n * 0.5f + 0.5f;
   else if (debug_mode == 6u)

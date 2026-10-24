@@ -12,7 +12,8 @@ layout(location = 0) out vec2 o_uv;
 layout(location = 1) out float o_alpha;
 
 void main() {
-  float cw = 1.0f / i_pos.w;
+  // rhw of a pre-transformed vertex is positive; a zero or negative one (a damaged vertex) must not turn into inf / NaN positions
+  float cw = 1.0f / max(abs(i_pos.w), 1e-6f);
   vec4 p = vec4(i_pos.xy * cw, i_pos.z * cw, cw);
   gl_Position = m_screen_to_light * p;
   o_uv = i_uv;

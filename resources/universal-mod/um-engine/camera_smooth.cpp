@@ -29,6 +29,7 @@ double g_frequency = 0;
 
 // The fixed-tick call site: keeps the tick's time for the next frames.
 extern "C" void __attribute__((thiscall)) UmCameraTick(void* /*camera*/, float dt) {
+    if (!(dt >= 0.0f && dt < 100.0f)) return;   // a NaN / absurd time must not poison the pending time for good
     g_pending = std::min(g_pending + dt, 8.0f);
 }
 

@@ -136,7 +136,6 @@ UM_GUARDED_THREAD(InitializeDllThread) {
         g_enableOverlay ? "enabled" : "disabled",
         g_dllServerEnabled ? "enabled" : "disabled",
         g_dllServerDebug ? "enabled" : "disabled");
-    LogSystemInformation();
 
     HANDLE threadHandle = CreateThread(NULL, 0, KeyPopupThread, hModule, 0, NULL);
     if (threadHandle) {
@@ -169,6 +168,8 @@ UM_GUARDED_THREAD(InitializeDllThread) {
     if (g_enableEngine) {
         InstallEngineFunctions();
     }
+    // after the hooks: the system information (a Vulkan instance and device enumeration) takes about a second, which the game must not win against the hooks
+    LogSystemInformation();
 
     char exePath[MAX_PATH] = {};
     if (GetModuleFileNameA(NULL, exePath, MAX_PATH) == 0) {

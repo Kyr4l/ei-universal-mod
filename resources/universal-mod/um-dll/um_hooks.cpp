@@ -84,6 +84,12 @@ void InstallEngineFunctions() {
     const auto version = reinterpret_cast<UmEngineVersionFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineVersion")));
     const auto functions = reinterpret_cast<UmEngineFunctionsFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineFunctions")));
     if (!functions) { LogLine("ERROR", "um-engine.dll has no UmEngineFunctions export"); return; }
+    const auto abi = reinterpret_cast<UmEngineAbiFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineAbi")));
+    if (!abi || abi() != UM_ENGINE_ABI) {
+        LogLine("ERROR", "um-engine.dll %s is not the build um.dll %s was made for (interface %s != 0x%X): not used, the game's own functions are used", version ? version() : "?", UM_VERSION,
+                abi ? "different" : "unknown", UM_ENGINE_ABI);
+        return;
+    }
     // um-engine's own messages (what it installed, what it skipped, its research counters) are written to this log
     if (const auto setLogger = reinterpret_cast<UmEngineSetLoggerFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineSetLogger"))))
         setLogger([](const char* level, const char* text) { LogLine(level, "%s", text); });
@@ -96,16 +102,11 @@ void InstallEngineFunctions() {
             LogLine("WARN", "um-engine: %s skipped, game.exe has other code at 0x%08lX (another build)", list[i].name, list[i].address);
             continue;
         }
-        DWORD old = 0;
-        if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) {
+        // one locked write of the first eight bytes: the game's threads are already running while this is done (um_engine.h)
+        if (!UmPatchJump(list[i].address, 0xE9, list[i].replacement)) {
             LogLine("ERROR", "um-engine: cannot patch %s at 0x%08lX", list[i].name, list[i].address);
             continue;
         }
-        const DWORD relative = reinterpret_cast<DWORD>(list[i].replacement) - (list[i].address + 5);
-        at[0] = 0xE9; // jmp rel32
-        memcpy(at + 1, &relative, 4);
-        VirtualProtect(at, 5, old, &old);
-        FlushInstructionCache(GetCurrentProcess(), at, 5);
         ++installed;
     }
     LogLine("INFO", "um-engine.dll %s: %d of %d function(s) replaced", version ? version() : "?", installed, count);

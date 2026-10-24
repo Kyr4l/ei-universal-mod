@@ -7,7 +7,10 @@
 //    velocity, animation) only when the hero's walk changes: the receiver walks the ghost on along the velocity (dead reckoning), so a click-walk costs a couple of lines, not 3 a second;
 //  * receive (MpGhost, the chat line hook, the call of ChatSystemLine in LobbyClient::OnAddressLine 0x41E656): a line with the marker is taken out and not shown;
 //  * the ghosts are made, moved and removed from the frame hook (the second Net_TickAll call of the client loop in main, 0x4573AE).
-// A player without this DLL sees the lines as chat text and no ghosts. Everything is skipped outside a multiplayer base.
+// A player without this DLL sees the lines as chat text and no ghosts, so nothing but a short hello ("um!g|H|session": at the start in the base, once more 10 s later, then every
+// 2 minutes) is sent until another machine has been heard with a marker line within the last minute; a lobby of vanilla players sees those few lines, nothing else. MpGhost is off by
+// default (um-engine.cfg MpGhost=true) for lobbies in which every player has the mod: in a mixed one the modded players' lines still reach the vanilla ones as chat text.
+// Everything is skipped outside a multiplayer base.
 #include <windows.h>
 
 #include <cmath>
@@ -134,7 +137,7 @@ bool ValidPos(float x, float y) {   // inside the map (the terrain's size in map
     return Readable(terrain, 0x120) && w > 8 && h > 8 && w < 4096 && h < 4096 && x >= 2 && y >= 2 && x <= w - 2 && y <= h - 2;
 }
 
-struct Line { char kind = 0; unsigned session = 0; State s; float vx = 0, vy = 0; };   // kind: A appearance, P motion, Q "send your appearance", B bye
+struct Line { char kind = 0; unsigned session = 0; State s; float vx = 0, vy = 0; };   // kind: A appearance, P motion, Q "send your appearance", H hello (a mod is here), B bye
 
 bool Decode(const char* text, Line& out) {
     const char* p = std::strstr(text, kMarker);
@@ -149,7 +152,7 @@ bool Decode(const char* text, Line& out) {
     out.session = static_cast<unsigned>(std::strtoul(f[1].c_str(), nullptr, 10));
     if (f[0] == "bye") { out.kind = 'B'; return true; }
     out.kind = f[0][0];
-    if (out.kind == 'Q') return true;
+    if (out.kind == 'Q' || out.kind == 'H') return true;
     if (out.kind == 'A') {
         if (f.size() < 9 + 11) return false;
         std::snprintf(s.name, sizeof s.name, "%s", f[2].c_str());
@@ -297,11 +300,13 @@ struct Remote {
     DWORD motionAt = 0, seen = 0, askedAt = 0;
     float shownX = 0, shownY = 0;     // where the ghost is drawn (it eases to the target)
     unsigned id = 0; bool spawned = false; unsigned look = 0;
+    DWORD nextTry = 0; unsigned fails = 0;   // a ghost that cannot be made is tried again later and later (not every 100 ms)
 };
 std::map<unsigned, Remote> g_remote;   // by the sender's session number
 unsigned g_nextId = 0;
 unsigned g_session = 0;
 DWORD g_lastBaseCheck = 0, g_lastAppearance = 0, g_lastMotion = 0, g_lastQuery = 0;
+DWORD g_peerSeen = 0, g_helloAt = 0; unsigned g_hellos = 0;   // the last marker line of another machine; the hello's schedule
 State g_lastSentLook;
 bool g_wasBase = false;
 bool g_sendAppearanceNow = false;
@@ -363,6 +368,8 @@ extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char
         Line l;
         if (Decode(text, l) && l.session != g_session) {
             const DWORD now = GetTickCount();
+            g_peerSeen = now ? now : 1;
+            if (l.kind == 'H') { g_sendAppearanceNow = true; return; }   // a new mod player: our looks go out at once
             if (l.kind == 'Q') { g_sendAppearanceNow = true; return; }   // somebody lacks the looks of the players: everybody answers
             if (l.kind == 'B') { auto it = g_remote.find(l.session); if (it != g_remote.end()) it->second.seen = 0; return; }
             if (!g_remote.count(l.session) && g_remote.size() >= kMaxPlayers) return;
@@ -412,12 +419,19 @@ extern "C" void UmMpGhostFrame() {
         g_remote.clear();
         g_lastAppearance = 0; g_lastMotion = 0; g_sentCur = 0xFFFF; g_prevAt = 0; g_sentVx = g_sentVy = 0;
         g_sendAppearanceNow = true;
+        g_hellos = 0; g_helloAt = 0; g_peerSeen = 0;
         UmEngineLog("um-engine: MpGhost: in a multiplayer base (session %u)", g_session);
+    }
+
+    // Until another machine with the mod has been heard only the hello goes out (a vanilla player would read every other line as chat)
+    const bool peers = g_peerSeen && now - g_peerSeen < 60000;
+    if (!peers && (g_hellos == 0 || (g_hellos == 1 ? now - g_helloAt >= 10000 : now - g_helloAt >= 120000))) {
+        if (SendLine(lobby, std::string(kMarker) + "H|" + std::to_string(g_session))) { g_helloAt = now; ++g_hellos; }
     }
 
     // send our own state
     State me;
-    if (SampleLocal(me)) {
+    if (peers && SampleLocal(me)) {
         if (LookHash(me) != LookHash(g_lastSentLook)) g_sendAppearanceNow = true;
         if (g_sendAppearanceNow || now - g_lastAppearance >= 8000) {
             if (SendLine(lobby, EncodeAppearance(me, g_session))) { g_lastSentLook = me; g_lastAppearance = now; g_sendAppearanceNow = false; }
@@ -459,6 +473,7 @@ extern "C" void UmMpGhostFrame() {
             if (FindObject(r.id)) RemoveGhost(r.id);
             r.spawned = false;
         }
+        if (!r.spawned && now < r.nextTry) { ++it; continue; }
         if (!r.spawned) {
             if (!r.id) r.id = kGhostIdBase + (g_nextId++ % 200);
             if (FindObject(r.id)) RemoveGhost(r.id);
@@ -468,6 +483,7 @@ extern "C" void UmMpGhostFrame() {
             State at = r.state; at.x = tx; at.y = ty;
             r.spawned = SpawnGhost(r.id, at);
             r.look = LookHash(r.state);
+            if (!r.spawned) { r.nextTry = now + 2000u * (1u << std::min(r.fails++, 4u)); if (r.fails > 3) { ++it; continue; } } else r.fails = 0;   // later and later, logged three times
             UmEngineLog("um-engine: MpGhost: %s %s at (%.1f, %.1f) as unit %u", r.spawned ? "made the ghost of" : "could not make the ghost of", r.state.name, static_cast<double>(tx), static_cast<double>(ty), r.id);
         }
         if (r.spawned) UpdateGhost(r, now, seconds);

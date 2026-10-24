@@ -4,6 +4,9 @@
 // Shared declarations: um_internal.hpp.
 #include "um_internal.hpp"
 
+// A node's declared length against the end of its container, without the 32-bit wrap of `pos + length` (a length of 0xFFFFFFF8 passed the old test and then looped or read outside).
+static inline bool MobNodeBeyond(size_t pos, size_t length, size_t end) { return pos > end || length > end - pos; }
+
 // Read one node header at offset; returns false if it doesn't fit in [0, size).
 static bool ReadMobNodeHeader(const BYTE* data, size_t size, size_t offset, DWORD* type, DWORD* length) {
     if (offset + 8 > size) {
@@ -296,7 +299,7 @@ static void ValidateMobStringArray(const char* path, const BYTE* data, size_t pa
     size_t pos = payloadStart + 4;
     for (DWORD i = 0; i < count; ++i) {
         DWORD entryType = 0, entryLength = 0;
-        if (pos + 8 > payloadEnd) {
+        if (MobNodeBeyond(pos, 8, payloadEnd)) {
             LogLine("ERROR", "[MOBCHECK] %s unit %s has a truncated %s list (expected %lu entries)",
                 path, unitLabel, fieldName, count);
             *hasError = true;
@@ -304,7 +307,7 @@ static void ValidateMobStringArray(const char* path, const BYTE* data, size_t pa
         }
         memcpy(&entryType, data + pos, sizeof(entryType));
         memcpy(&entryLength, data + pos + 4, sizeof(entryLength));
-        if (entryLength < 8 || pos + entryLength > payloadEnd) {
+        if (entryLength < 8 || MobNodeBeyond(pos, entryLength, payloadEnd)) {
             LogLine("ERROR", "[MOBCHECK] %s unit %s has a %s entry with an invalid length %lu",
                 path, unitLabel, fieldName, entryLength);
             *hasError = true;
@@ -344,7 +347,7 @@ static void ValidateMobUnit(const char* path, const BYTE* data, size_t unitStart
     size_t pos = unitStart + 8;
     while (pos + 8 <= unitEnd) {
         DWORD type = 0, length = 0;
-        if (!ReadMobNodeHeader(data, unitEnd, pos, &type, &length) || length < 8 || pos + length > unitEnd) {
+        if (!ReadMobNodeHeader(data, unitEnd, pos, &type, &length) || length < 8 || MobNodeBeyond(pos, length, unitEnd)) {
             break;
         }
         if (type == kMobTypeNid && length == 12) {
@@ -371,7 +374,7 @@ static void ValidateMobUnit(const char* path, const BYTE* data, size_t unitStart
     pos = unitStart + 8;
     while (pos + 8 <= unitEnd) {
         DWORD type = 0, length = 0;
-        if (!ReadMobNodeHeader(data, unitEnd, pos, &type, &length) || length < 8 || pos + length > unitEnd) {
+        if (!ReadMobNodeHeader(data, unitEnd, pos, &type, &length) || length < 8 || MobNodeBeyond(pos, length, unitEnd)) {
             return;
         }
         const char* fieldName = NULL;
@@ -393,7 +396,7 @@ static void ValidateMobObjectSection(const char* path, const BYTE* data, size_t 
     size_t pos = sectionStart + 8;
     while (pos + 8 <= sectionEnd) {
         DWORD type = 0, length = 0;
-        if (!ReadMobNodeHeader(data, sectionEnd, pos, &type, &length) || length < 8 || pos + length > sectionEnd) {
+        if (!ReadMobNodeHeader(data, sectionEnd, pos, &type, &length) || length < 8 || MobNodeBeyond(pos, length, sectionEnd)) {
             LogLine("ERROR", "[MOBCHECK] %s has a corrupted object entry inside OBJECT_SECTION", path);
             *hasError = true;
             return;
@@ -448,7 +451,7 @@ static void ExtractMobScriptAndIds(const BYTE* data, size_t size, std::string* s
         DWORD type = 0, length = 0;
         memcpy(&type, data + pos, sizeof(type));
         memcpy(&length, data + pos + 4, sizeof(length));
-        if (type == kMobTypeRoot || length < 8 || pos + length > size) {
+        if (type == kMobTypeRoot || length < 8 || MobNodeBeyond(pos, length, size)) {
             break;
         }
         if (type == kMobTypeSsText) {
@@ -1035,7 +1038,7 @@ void ValidateMobFile(const char* path) {
         if (type == kMobTypeRoot) {
             break;
         }
-        if (length < 8 || pos + length > bytesRead) {
+        if (length < 8 || MobNodeBeyond(pos, length, bytesRead)) {
             LogLine("ERROR", "[MOBCHECK] %s has a node declaring a length of %lu bytes that extends past the end of the file; the file is likely truncated or corrupted",
                 path, length);
             free(buffer);

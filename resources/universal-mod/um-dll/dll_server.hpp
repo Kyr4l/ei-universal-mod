@@ -1028,7 +1028,18 @@ inline void Server::ConsoleCommand(Client& c, const std::vector<std::string>& w)
     Err(c, "CONSOLE", "usage: CONSOLE lines [from] [max] / CONSOLE send text");
 }
 
+// A browser page (fetch / XHR to 127.0.0.1, DNS rebinding) can only speak HTTP: its request line and headers are never a command of this protocol, and its body would be taken as
+// commands (WRITE / CALL). The first line of that kind ends the connection before anything is executed.
+inline bool LooksLikeHttp(const std::string& line) {
+    static const char* const kVerbs[] = { "GET ", "POST ", "PUT ", "HEAD ", "OPTIONS ", "DELETE ", "PATCH ", "CONNECT ", "TRACE ", "HOST:", "ORIGIN:", "USER-AGENT:", "CONTENT-LENGTH:", "CONTENT-TYPE:", "SEC-FETCH" };
+    std::string up;
+    for (size_t i = 0; i < line.size() && i < 24; ++i) up += static_cast<char>(toupper(static_cast<unsigned char>(line[i])));
+    for (const char* verb : kVerbs) if (up.compare(0, std::strlen(verb), verb) == 0) return true;
+    return line.find(" HTTP/1.") != std::string::npos;
+}
+
 inline bool Server::Handle(Client& c, const std::string& line) {
+    if (LooksLikeHttp(line)) { Log("WARN", "DLL server: an HTTP request (a web page?) was refused and its connection closed"); return false; }
     std::vector<std::string> w = Split(line);
     if (w.empty()) return true;
     for (char& ch : w[0]) ch = static_cast<char>(toupper(static_cast<unsigned char>(ch)));

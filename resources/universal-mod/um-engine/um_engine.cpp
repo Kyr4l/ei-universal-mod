@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.13.1";
+static const char* const kEngineVersion = "0.13.2";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -125,8 +125,8 @@ static const UmCallSite kCallSites[] = {
     { "MpSpeed::Sync", 0x00457252, reinterpret_cast<void*>(&UmMpSpeedNetTick), 0, {0xE8, 0x79, 0xB0, 0xFB, 0xFF} },
     { "MpSpeed::Sync", 0x006698DF, reinterpret_cast<void*>(&UmMpSpeedNamedValue), 0, {0xE8, 0xDC, 0x72, 0xDF, 0xFF} },
     // mp_ghost.cpp: the other players shown in the base (their state travels as a hidden chat line)
-    { "MpGhost", 0x0041E656, reinterpret_cast<void*>(&UmMpGhostChatLine), 0, {0xE8, 0x95, 0x9C, 0x1D, 0x00} },
-    { "MpGhost", 0x004573AE, reinterpret_cast<void*>(&UmMpGhostFrame), 0, {0xE8, 0x1D, 0xAF, 0xFB, 0xFF} },
+    { "MpGhost", 0x0041E656, reinterpret_cast<void*>(&UmMpGhostChatLine), -1, {0xE8, 0x95, 0x9C, 0x1D, 0x00} },
+    { "MpGhost", 0x004573AE, reinterpret_cast<void*>(&UmMpGhostFrame), -1, {0xE8, 0x1D, 0xAF, 0xFB, 0xFF} },
     // world_shadow.cpp: real sun shadows with D7VK (shadow map + screen-space resolve); the game's own projected-bitmap shadows are switched off while it works
     { "SunShadows", 0x0056A06B, reinterpret_cast<void*>(&UmWorldBeginStub), -1, {0xE8, 0xC0, 0xC1, 0x15, 0x00} },
     { "SunShadows", 0x0056A080, reinterpret_cast<void*>(&UmWorldEndStub),   -1, {0xE8, 0x5B, 0x0F, 0x00, 0x00} },
@@ -146,13 +146,7 @@ static void InstallCallSites(const std::map<std::string, bool>& config) {
         if (!match) { UmEngineLog("um-engine: %s skipped, game.exe has other code at its call sites (another build)", site.name); continue; }
         for (const UmCallSite& other : kCallSites) {
             if (!other.name || std::string(other.name) != site.name) continue;
-            unsigned char* at = reinterpret_cast<unsigned char*>(other.address);
-            DWORD old = 0;
-            if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) continue;
-            const long rel = reinterpret_cast<long>(other.replacement) - reinterpret_cast<long>(at + 5);
-            memcpy(at + 1, &rel, 4);
-            VirtualProtect(at, 5, old, &old);
-            FlushInstructionCache(GetCurrentProcess(), at, 5);
+            UmPatchJump(other.address, 0xE8, other.replacement);
         }
         if (std::string(site.name) == "SunShadows") g_sunShadowsInstalled = true;
         UmEngineLog("um-engine: %s installed (call sites in game.exe)", site.name);
@@ -172,8 +166,9 @@ static const UmBytePatch kBytePatches[] = {
     // item_proto.cpp: three inlined copies of the weapon prototype lookup that read the kind (+0xC) of a NULL record when the index is outside the table;
     // the register holding the null pointer is zero already (xor), so no instruction is the same as "kind 0".
     { "ItemTable::InlineLookups", 0x005354FB, 3, {0x8B, 0x49, 0x0C, 0}, {0x90, 0x90, 0x90, 0}, 0 },   // ApplyWeaponAnimMask: mov ecx, [ecx+0xC]
-    { "ItemTable::InlineLookups", 0x0056849C, 3, {0x8B, 0x50, 0x0C, 0}, {0x31, 0xD2, 0x90, 0}, 0 },   // Hero_BuildEquipmentEntries: mov edx, [eax+0xC] -> xor edx, edx
-    { "ItemTable::InlineLookups", 0x00568529, 3, {0x8B, 0x40, 0x0C, 0}, {0x90, 0x90, 0x90, 0}, 0 },   // Hero_BuildEquipmentEntries: mov eax, [eax+0xC] (eax is 0)
+    // Hero_BuildEquipmentEntries (0x5683D0), the null record of the WEAPON table: after `xor eax, eax` at 0x5685A6 only this path reaches the load (the valid path returns at 0x5685A1),
+    // so the load goes and eax stays 0, the field stored is 0. (The armour lookups at 0x56849C / 0x568529 are shared with their valid paths: not patched; an earlier version broke them.)
+    { "ItemTable::InlineLookups", 0x005685A8, 3, {0x8B, 0x40, 0x0C, 0}, {0x90, 0x90, 0x90, 0}, 0 },
     { nullptr, 0, 0, {0}, {0}, 0 }
 };
 
@@ -190,12 +185,7 @@ static void InstallBytePatches(const std::map<std::string, bool>& config) {
         if (!match) { UmEngineLog("um-engine: %s skipped, game.exe has other code at its patch sites (another build)", patch.name); continue; }
         for (const UmBytePatch& other : kBytePatches) {
             if (!other.name || std::string(other.name) != patch.name) continue;
-            unsigned char* at = reinterpret_cast<unsigned char*>(other.address);
-            DWORD old = 0;
-            if (!VirtualProtect(at, static_cast<SIZE_T>(other.length), PAGE_EXECUTE_READWRITE, &old)) continue;
-            memcpy(at, other.replace, static_cast<size_t>(other.length));
-            VirtualProtect(at, static_cast<SIZE_T>(other.length), old, &old);
-            FlushInstructionCache(GetCurrentProcess(), at, static_cast<SIZE_T>(other.length));
+            UmPatchCode(reinterpret_cast<void*>(other.address), other.replace, static_cast<size_t>(other.length));
         }
         UmEngineLog("um-engine: %s installed (patched in game.exe)", patch.name);
     }
@@ -219,12 +209,7 @@ static DWORD WINAPI ModulePatchThread(LPVOID) {
             unsigned char* at = reinterpret_cast<unsigned char*>(lib) + fn.rva;
             done[i] = true; --remaining;
             if (memcmp(at, fn.expect, 8) != 0) { UmEngineLog("um-engine: %s skipped, %s has other code at +0x%lX (another build)", fn.name, fn.module, fn.rva); continue; }
-            DWORD old = 0;
-            if (!VirtualProtect(at, 5, PAGE_EXECUTE_READWRITE, &old)) { UmEngineLog("um-engine: cannot patch %s", fn.name); continue; }
-            const long rel = reinterpret_cast<long>(fn.replacement) - reinterpret_cast<long>(at + 5);
-            at[0] = 0xE9; memcpy(at + 1, &rel, 4);
-            VirtualProtect(at, 5, old, &old);
-            FlushInstructionCache(GetCurrentProcess(), at, 5);
+            if (!UmPatchJump(reinterpret_cast<unsigned long>(at), 0xE9, fn.replacement)) { UmEngineLog("um-engine: cannot patch %s", fn.name); continue; }
             UmEngineLog("um-engine: %s replaced (%s +0x%lX)", fn.name, fn.module, fn.rva);
         }
         if (remaining > 0) Sleep(2);
@@ -296,6 +281,26 @@ static std::string ConfigPath() {
     return (slash == std::string::npos ? std::string() : p.substr(0, slash + 1)) + "um-engine.cfg";
 }
 
+// One line of um-engine.cfg: "key = value ; comment". Spaces / tabs around the key and the value, a BOM, CR LF and an inline ';' / '#' comment are all accepted.
+static bool ParseCfgLine(const char* line, std::string& key, std::string& value) {
+    std::string s = line;
+    if (s.size() >= 3 && static_cast<unsigned char>(s[0]) == 0xEF && static_cast<unsigned char>(s[1]) == 0xBB && static_cast<unsigned char>(s[2]) == 0xBF) s.erase(0, 3);
+    auto trim = [](std::string& t) {
+        size_t b = 0; while (b < t.size() && (t[b] == ' ' || t[b] == '\t' || t[b] == '\r' || t[b] == '\n')) ++b;
+        size_t e = t.size(); while (e > b && (t[e - 1] == ' ' || t[e - 1] == '\t' || t[e - 1] == '\r' || t[e - 1] == '\n')) --e;
+        t = t.substr(b, e - b);
+    };
+    trim(s);
+    if (s.empty() || s[0] == ';' || s[0] == '#') return false;
+    const size_t eq = s.find('=');
+    if (eq == std::string::npos) return false;
+    key = s.substr(0, eq); value = s.substr(eq + 1);
+    const size_t comment = value.find_first_of(";#");
+    if (comment != std::string::npos) value.erase(comment);
+    trim(key); trim(value);
+    return !key.empty();
+}
+
 // Reads um-engine.cfg (name -> on/off) and appends a "=true" line for every function it does not list yet.
 static std::map<std::string, bool> ReadConfig() {
     std::map<std::string, bool> values;
@@ -303,14 +308,10 @@ static std::map<std::string, bool> ReadConfig() {
     if (FILE* f = std::fopen(path.c_str(), "r")) {
         char line[512];
         while (std::fgets(line, sizeof(line), f)) {
-            std::string s = line;
-            while (!s.empty() && (s.back() == '\n' || s.back() == '\r' || s.back() == ' ')) s.pop_back();
-            if (s.empty() || s[0] == ';' || s[0] == '#') continue;
-            const size_t eq = s.find('=');
-            if (eq == std::string::npos) continue;
-            std::string value = s.substr(eq + 1);
+            std::string key, value;
+            if (!ParseCfgLine(line, key, value)) continue;
             for (char& c : value) c = static_cast<char>(tolower(static_cast<unsigned char>(c)));
-            values[s.substr(0, eq)] = !(value == "false" || value == "0" || value == "off");
+            values[key] = !(value == "false" || value == "0" || value == "off" || value == "no");
         }
         std::fclose(f);
     }
@@ -344,7 +345,10 @@ static std::map<std::string, bool> ReadConfig() {
         if (!values.count(number.key)) missing += std::string("; ") + number.comment + "\n" + number.key + "=" + number.value + "\n";
     const bool exists = GetFileAttributesA(path.c_str()) != INVALID_FILE_ATTRIBUTES;
     if (!exists || !missing.empty()) {
+        bool endsInNewline = true;   // the appended lines must start on a line of their own
+        if (exists) if (FILE* r = std::fopen(path.c_str(), "rb")) { if (std::fseek(r, -1, SEEK_END) == 0) endsInNewline = std::fgetc(r) == '\n'; std::fclose(r); }
         if (FILE* f = std::fopen(path.c_str(), "a")) {
+            if (!endsInNewline) std::fputc('\n', f);
             if (!exists)
                 std::fputs("; um-engine.cfg: re-implemented game.exe functions, named after the game function.\n"
                            "; <FunctionName>=true uses the new code, false keeps the game's own. Missing = true.\n"
@@ -360,9 +364,10 @@ extern "C" double UmEngineConfigNumber(const char* key, double fallback) {
     double result = fallback;
     if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {
         char line[512];
-        const size_t length = std::strlen(key);
-        while (std::fgets(line, sizeof(line), f))
-            if (std::strncmp(line, key, length) == 0 && line[length] == '=') result = std::atof(line + length + 1);
+        while (std::fgets(line, sizeof(line), f)) {
+            std::string k, v;
+            if (ParseCfgLine(line, k, v) && k == key) result = std::atof(v.c_str());
+        }
         std::fclose(f);
     }
     return result;
@@ -373,14 +378,16 @@ extern "C" bool UmEngineConfigNumbers(const char* const* keys, double* values, i
     FILE* f = std::fopen(ConfigPath().c_str(), "r");
     if (!f) return false;
     char line[512];
-    while (std::fgets(line, sizeof(line), f))
-        for (int i = 0; i < count; ++i) {
-            const size_t length = std::strlen(keys[i]);
-            if (std::strncmp(line, keys[i], length) == 0 && line[length] == '=') values[i] = std::atof(line + length + 1);
-        }
+    while (std::fgets(line, sizeof(line), f)) {
+        std::string k, v;
+        if (!ParseCfgLine(line, k, v)) continue;
+        for (int i = 0; i < count; ++i) if (k == keys[i]) values[i] = std::atof(v.c_str());
+    }
     std::fclose(f);
     return true;
 }
+
+extern "C" __declspec(dllexport) unsigned UmEngineAbi() { return UM_ENGINE_ABI; }
 
 extern "C" __declspec(dllexport) const char* UmEngineVersion() { return kEngineVersion; }
 
@@ -406,9 +413,10 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         double resolution = 64;
         if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {
             char line[512];
-            const size_t resLength = std::strlen(kShadowResolutionKey);
-            while (std::fgets(line, sizeof(line), f))
-                if (std::strncmp(line, kShadowResolutionKey, resLength) == 0 && line[resLength] == '=') resolution = std::atof(line + resLength + 1);
+            while (std::fgets(line, sizeof(line), f)) {
+                std::string k, v;
+                if (ParseCfgLine(line, k, v) && k == kShadowResolutionKey) resolution = std::atof(v.c_str());
+            }
             std::fclose(f);
         }
         if (resolution > 64) UmShadowResolution(static_cast<unsigned>(resolution));
