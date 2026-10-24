@@ -42,7 +42,7 @@ float fetch_depth(ivec2 p) {
 
 vec3 world_at(ivec2 p, float zs) {
   float cw = depth_map.x / (depth_map.y - zs * depth_map.z);
-  vec4 w4 = m_screen_to_world * vec4((vec2(p) + 0.5f) * cw, zs * cw, cw);
+  vec4 w4 = m_screen_to_world * vec4((vec2(p) + 0.5f + vec2(uintBitsToFloat(pad0), uintBitsToFloat(pad1))) * cw, zs * cw, cw);
   return w4.xyz / w4.w;
 }
 
@@ -72,11 +72,19 @@ void main() {
 
   vec3 wp = world_at(ip, zs);
 
-  // Surface normal from the neighbouring depth samples (the smaller step on each axis: no smearing over depth edges), facing the camera
-  float zl = fetch_depth(ip + ivec2(-1, 0)), zr = fetch_depth(ip + ivec2(1, 0));
-  float zu = fetch_depth(ip + ivec2(0, -1)), zd = fetch_depth(ip + ivec2(0, 1));
-  vec3 pl = world_at(ip + ivec2(-1, 0), zl), pr = world_at(ip + ivec2(1, 0), zr);
-  vec3 pu = world_at(ip + ivec2(0, -1), zu), pd = world_at(ip + ivec2(0, 1), zd);
+  // Surface normal from the neighbouring depth samples, two pixels away (the game's depth buffer is only 16 bits: one pixel away the steps are as
+  // small as the quantisation and the normal flickers with the camera). The smaller step on each axis: no smearing over depth edges. Facing the camera.
+#if defined(UM_MS) || defined(UM_MS_EDGE)
+  ivec2 dsize = textureSize(s_depth_ms) - ivec2(1);
+#else
+  ivec2 dsize = textureSize(s_depth, 0) - ivec2(1);
+#endif
+  ivec2 ql = clamp(ip + ivec2(-2, 0), ivec2(0), dsize), qr = clamp(ip + ivec2(2, 0), ivec2(0), dsize);
+  ivec2 qu = clamp(ip + ivec2(0, -2), ivec2(0), dsize), qd = clamp(ip + ivec2(0, 2), ivec2(0), dsize);
+  float zl = fetch_depth(ql), zr = fetch_depth(qr);
+  float zu = fetch_depth(qu), zd = fetch_depth(qd);
+  vec3 pl = world_at(ql, zl), pr = world_at(qr, zr);
+  vec3 pu = world_at(qu, zu), pd = world_at(qd, zd);
   vec3 dx = (abs(zr - zs) < abs(zs - zl)) ? (pr - wp) : (wp - pl);
   vec3 dy = (abs(zd - zs) < abs(zs - zu)) ? (pd - wp) : (wp - pu);
   vec3 n = cross(dx, dy);
@@ -97,15 +105,18 @@ void main() {
   float texel = 1.0f / cam_map_size.w;
   float lit = 0.0f;
 
-  // 3x3 taps of the hardware 2x2 compare: a soft penumbra of about two texels
-  for (int y = -1; y <= 1; y++) {
-    for (int x = -1; x <= 1; x++) {
-      vec2 o = vec2(x, y) * texel;
-      lit += texture(sampler2DShadow(s_map, s_samplers[sampler_cmp]), vec3(uv + o, depth));
+  // 5x5 taps of the hardware 2x2 compare, weighted by distance (a soft penumbra of about three texels: swaying leaves and moving units do not make the edges flicker)
+  float wsum = 0.0f;
+  for (int y = -2; y <= 2; y++) {
+    for (int x = -2; x <= 2; x++) {
+      vec2 o = vec2(x, y);
+      float w = max(0.0f, 1.0f - length(o) / 3.0f);
+      lit += w * texture(sampler2DShadow(s_map, s_samplers[sampler_cmp]), vec3(uv + o * texel, depth));
+      wsum += w;
     }
   }
 
-  lit /= 9.0f;
+  lit /= wsum;
 
   // Outside the shadow map: no shadow
   if (any(lessThan(uv, vec2(0.0f))) || any(greaterThan(uv, vec2(1.0f))) || lp.z < 0.0f || lp.z > 1.0f)
@@ -118,7 +129,7 @@ void main() {
   // measured on a surface facing straight up; surfaces turned away from the sun get no extra darkening (they are lit by the ambient light already).
   vec3 sun_up = sun_color_bias.rgb * max(-light_dir_strength.z, 0.15f);
   vec3 k = ambient_slope.rgb / max(max(ambient_slope.rgb, sun_up), vec3(0.004f));
-  float facing = smoothstep(0.0f, 0.25f, ndl);
+  float facing = smoothstep(0.05f, 0.35f, ndl);
   vec3 factor = mix(vec3(1.0f), k, s * facing) * (1.0f - clamp(depth_map.w, 0.0f, 1.0f) * s * facing);
 
   if (debug_mode == 1u)
@@ -129,6 +140,8 @@ void main() {
     factor = fract(wp * 0.1f);
   else if (debug_mode == 5u)
     factor = vec3(wp.x * 0.01f, wp.y * 0.01f, wp.z * 0.1f);
+  else if (debug_mode == 10u)
+    factor = vec3(s);
   else if (debug_mode == 4u)
     factor = n * 0.5f + 0.5f;
   else if (debug_mode == 6u)

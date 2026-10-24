@@ -23,3 +23,5 @@ EXPORTS
   ReleaseDDThreadLock         @22
   UmShadowBegin               @23
   UmShadowEnd                 @24
+  UmShadowCaster              @25
+  UmShadowGuard               @26

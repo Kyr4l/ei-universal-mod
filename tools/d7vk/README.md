@@ -32,9 +32,10 @@ and `include/spirv`, `subprojects/dxbc-spirv` (with its `submodules/spirv_header
 (the `vcs_tag` in `meson.build` needs `fallback: 'd7vk-local'` without a git checkout). The result is the game's 32-bit `ddraw.dll`
 (8.9 MB). The submodule commits were the branch heads of 2026-10-21, not the ones D7VK 3.1.1 pins: use the pinned ones for a release.
 
-## Sun shadows (um-engine 0.11.0 `SunShadows`, 2026-10-24)
+## Sun shadows (um-engine 0.12.0 `SunShadows`, 2026-10-24)
 
 `Universal-Mod/d7vk.dll` now also has the shadow pass of `um-shadow/` (sources + README there): a sun shadow map in which terrain, objects and units cast and receive shadows,
 drawn by D7VK from the game's own draw calls and driven by um-engine (`SunShadows=true` in um-engine.cfg; numbers `SunShadows::*`). Without um-engine the build behaves as before.
 With the game's own ddraw.dll the stock shadows stay.
+Exports used by um-engine: `UmShadowBegin`, `UmShadowCaster(on)` (the next draws are / are not casters: the game's per kind shadow switches), `UmShadowGuard(x, y)` (the game draws the world x / y pixels right / down of where it belongs, a guard band around the screen: the fixed-function vertex shader of the pre-transformed vertices takes it off again), `UmShadowEnd(params)`.
 

@@ -39,6 +39,7 @@ namespace dxvk {
     float    height          = 60.0f;     // half extent of the casters' range along the light
     uint32_t mapSize         = 2048u;     // shadow map texels per side
     float    extra           = 0.0f;      // extra darkness inside a shadow, on top of the game's own sun / ambient ratio (0 = none)
+    float    guard[2]        = { };       // pixels the game's world coordinates are shifted by (guard band): screen pixel + guard = the game's x / y
   };
 
   /** One recorded caster draw. */

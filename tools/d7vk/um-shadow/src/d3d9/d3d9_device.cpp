@@ -39,6 +39,14 @@ namespace dxvk {
     if (g_umShadowDevice) g_umShadowDevice->UmShadowBegin();
   }
 
+  void UmShadowApiGuard(float x, float y) {
+    if (g_umShadowDevice) g_umShadowDevice->UmShadowSetGuard(x, y);
+  }
+
+  void UmShadowApiCaster(int on) {
+    if (g_umShadowDevice) g_umShadowDevice->UmShadowSetCasting(on != 0);
+  }
+
   void UmShadowApiEnd(const DxvkUmShadowParams* params) {
     if (!g_umShadowDevice) return;
     DxvkUmShadowParams none;
@@ -4816,9 +4824,20 @@ namespace dxvk {
   }
 
 
+  void D3D9DeviceEx::UmShadowSetGuard(float x, float y) {
+    if (m_umGuard[0] == x && m_umGuard[1] == y)
+      return;
+
+    m_umGuard[0] = x;
+    m_umGuard[1] = y;
+    m_dirty.set(D3D9DeviceDirtyFlag::FFViewport);
+  }
+
+
   void D3D9DeviceEx::UmShadowBegin() {
     D3D9DeviceLock lock = LockDevice();
     m_umShadowCapture = true;
+    m_umShadowCasting = true;
     EmitCs([] (DxvkContext* ctx) { ctx->umShadowBegin(); });
   }
 
@@ -4832,7 +4851,7 @@ namespace dxvk {
 
   // A depth-writing draw of the game's pre-transformed world: kept for the shadow map (the slice holds the vertices, then the indices).
   void D3D9DeviceEx::UmShadowCaptureUP(const DxvkBufferSlice& slice, uint32_t vertexSize, uint32_t stride, uint32_t indexCount, VkIndexType indexType) {
-    if (!m_state.renderStates[D3DRS_ZENABLE] || !m_state.renderStates[D3DRS_ZWRITEENABLE] || stride != 32u)
+    if (!m_umShadowCasting || !m_state.renderStates[D3DRS_ZENABLE] || !m_state.renderStates[D3DRS_ZWRITEENABLE] || stride != 32u)
       return;
 
     uint32_t alphaMode = 0u;
@@ -8278,7 +8297,7 @@ namespace dxvk {
         1.0f);
 
       m_viewportInfo.inverseOffset = Vector4(
-        -float(vp.X), -float(vp.Y),
+        -(float(vp.X) + m_umGuard[0]), -(float(vp.Y) + m_umGuard[1]),
          0.0f,         0.0f);
 
       m_viewportInfo.inverseOffset = m_viewportInfo.inverseOffset * m_viewportInfo.inverseExtent;

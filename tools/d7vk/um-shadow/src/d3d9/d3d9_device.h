@@ -212,6 +212,7 @@ namespace dxvk {
   // Universal Mod: sun shadows (called by the exported UmShadow* functions of ddraw.dll)
   void UmShadowApiBegin();
   void UmShadowApiEnd(const DxvkUmShadowParams* params);
+  void UmShadowApiCaster(int on);
 
   class D3D9DeviceEx final : public ComObjectClamp<IDirect3DDevice9Ex> {
     constexpr static uint32_t DefaultFrameLatency = 3;
@@ -548,6 +549,8 @@ namespace dxvk {
     // Universal Mod: sun shadows
     void UmShadowBegin();
     void UmShadowEnd(const DxvkUmShadowParams& params);
+    void UmShadowSetCasting(bool on) { m_umShadowCasting = on; }
+    void UmShadowSetGuard(float x, float y);
 
 
     HRESULT STDMETHODCALLTYPE ProcessVertices(
@@ -1655,6 +1658,8 @@ namespace dxvk {
     std::array<D3D9ConstantBuffer, CbvIndex::Count> m_constantBuffers;
 
     bool                            m_umShadowCapture = false;
+    float                           m_umGuard[2] = { 0.0f, 0.0f };   // pixels the game's pre-transformed world vertices are shifted by (its guard band), subtracted again in the fixed-function vertex shader
+    bool                            m_umShadowCasting = true;   // false while an object whose kind the game's shadow settings switch off is drawn
 
     Rc<DxvkBuffer>                  m_upBuffer;
     VkDeviceSize                    m_upBufferOffset  = 0ull;

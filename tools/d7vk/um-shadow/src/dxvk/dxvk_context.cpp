@@ -11307,6 +11307,8 @@ namespace dxvk {
     rp.camMapSize[0] = p.cameraPos[0]; rp.camMapSize[1] = p.cameraPos[1]; rp.camMapSize[2] = p.cameraPos[2]; rp.camMapSize[3] = float(mapSize);
     rp.samplerCmp = objects.compareSampler()->getDescriptor().samplerIndex;
     rp.debugMode = p.flags;
+    std::memcpy(&rp.pad0, &p.guard[0], 4);
+    std::memcpy(&rp.pad1, &p.guard[1], 4);
 
     // Interior pixels once per pixel, then (multisampled targets only) the object edges once per sample
     m_cmd->cmdBindPipeline(DxvkCmdBuffer::ExecBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS,

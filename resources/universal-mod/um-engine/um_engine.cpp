@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.11.0";
+static const char* const kEngineVersion = "0.12.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -47,6 +47,8 @@ extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, un
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
+extern "C" void UmWorldEarlyInit(); // world_shadow.cpp (the guard band: the camera's set-up hooks; only with the sun shadows installed)
+static bool g_sunShadowsInstalled = false;
 extern "C" void __attribute__((thiscall)) UmWorldBeginStub(); // world_shadow.cpp (sun shadows: the call sites bracketing the world pass)
 extern "C" void __attribute__((thiscall)) UmWorldEndStub();
 extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char* text, unsigned number);   // mp_ghost.cpp (the other players in the base)
@@ -152,6 +154,7 @@ static void InstallCallSites(const std::map<std::string, bool>& config) {
             VirtualProtect(at, 5, old, &old);
             FlushInstructionCache(GetCurrentProcess(), at, 5);
         }
+        if (std::string(site.name) == "SunShadows") g_sunShadowsInstalled = true;
         UmEngineLog("um-engine: %s installed (call sites in game.exe)", site.name);
     }
 }
@@ -255,6 +258,7 @@ static const char* const kShadowResolutionKey = "UnitShadow::Resolution"; // a n
 
 // Numeric keys of um-engine.cfg ("Name=1.5"): default values, written to the file when missing.
 static const struct { const char* key; const char* value; const char* comment; } kNumberKeys[] = {
+    { "SunShadows::Enabled",   "1",      "SunShadows: 0 switches the sun shadows off while playing (the game's own come back); checked once a second" },
     { "SunShadows::MapSize",   "2048",   "SunShadows: the shadow map's size in texels (1024 / 2048 / 4096)" },
     { "SunShadows::Strength",  "1",      "SunShadows: 0..1, how much of the sun's light a shadow takes (1 = all of it: as dark as the ambient light)" },
     { "SunShadows::Bias",      "0.0015", "SunShadows: depth bias against shadow acne (light depth units)" },
@@ -263,6 +267,8 @@ static const struct { const char* key; const char* value; const char* comment; }
     { "SunShadows::Height",    "50",     "SunShadows: half of the casters' height range along the light (world units)" },
     { "SunShadows::Extra",     "0.3",    "SunShadows: 0..1, extra darkness inside shadows on top of the game's own sun / ambient ratio (0 = none, 0.3 reads clearly)" },
     { "SunShadows::Indoor",    "0",      "SunShadows: 1 also shadows caves (the game gives them a fixed direction instead of a sun), 0 keeps the game's own shadows there" },
+    { "SunShadows::Guard",     "0.15",   "SunShadows: 0..0.5, the world is also drawn this much (of the screen's size) beyond each screen edge, so casters just off screen shadow too (0 = off; needs a restart; costs about 0.5 ms a frame at 0.15)" },
+    { "SunShadows::GuardLog",  "0",      "SunShadows: 1 logs the camera set-ups (research)" },
     { "SunShadows::Debug",     "0",      "SunShadows: research views (1 shadow term only, 2 lit fraction / sun angle, 4 normals, 5 world position)" },
 };
 
@@ -366,6 +372,7 @@ extern "C" __declspec(dllexport) const UmEngineFunction* UmEngineFunctions(int* 
         if (fn.required > 0 || (it != config.end() ? it->second : fn.required >= 0)) g_enabledModule.push_back(fn);
     }
     InstallCallSites(config);
+    if (g_sunShadowsInstalled) UmWorldEarlyInit();
     InstallBytePatches(config);
     { // the unit shadow size: a number
         double resolution = 64;
