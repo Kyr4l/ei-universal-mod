@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.7.0";
+static const char* const UM_VERSION = "1.7.1";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 

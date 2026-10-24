@@ -69,13 +69,48 @@ void Trace(void* device, const char* kind, DWORD type, DWORD fvf, DWORD count, c
     if (n++ == 0) LogLine("INFO", "D3D trace: %s (first draw: %lu primitives)", line, count);
 }
 
+// Per-frame draw statistics (UM_TRACE_D3D): draws / primitives / vertices by class, logged every 120 BeginScene calls.
+struct FrameStats { long draws = 0, prims = 0, verts = 0; };
+FrameStats g_cls[4]; // 0 opaque (ztest+zwrite, no blend), 1 blended, 2 z-write-off opaque, 3 other
+long g_frames = 0; DWORD g_fvfMask = 0;
+typedef HRESULT (WINAPI *BeginSceneFn)(void*);
+BeginSceneFn g_beginScene = NULL;
+void Account(void* device, DWORD fvf, DWORD prims, DWORD verts) {
+    void** vt = *reinterpret_cast<void***>(device);
+    const GetRSFn getRs = reinterpret_cast<GetRSFn>(vt[21]);
+    DWORD zw = 0, ab = 0; getRs(device, 14, &zw); getRs(device, 27, &ab);
+    (void)ab; FrameStats& c = g_cls[zw ? 0 : 2];
+    ++c.draws; c.prims += prims; c.verts += verts; g_fvfMask |= fvf;
+}
+HRESULT WINAPI HookedBeginScene(void* device) {
+    if (++g_frames % 120 == 0) {
+        LogLine("INFO", "D3D frame stats (last frame): opaque %ld draws %ld prims %ld verts | blended %ld draws %ld prims %ld verts | zwrite-off %ld draws %ld prims %ld verts | fvf mask 0x%lX",
+                g_cls[0].draws, g_cls[0].prims, g_cls[0].verts, g_cls[1].draws, g_cls[1].prims, g_cls[1].verts, g_cls[2].draws, g_cls[2].prims, g_cls[2].verts, g_fvfMask);
+    }
+    for (FrameStats& c : g_cls) c = FrameStats();
+    return g_beginScene(device);
+}
+
 HRESULT WINAPI HookedSetTexture(void* device, DWORD stage, void* texture) { if (stage == 0) g_texture0 = texture; return g_setTexture(device, stage, texture); }
-HRESULT WINAPI HookedDrawPrimitive(void* device, DWORD type, DWORD fvf, void* verts, DWORD n, DWORD flags) { Trace(device, "DP", type, fvf, n); return g_drawPrimitive(device, type, fvf, verts, n, flags); }
-HRESULT WINAPI HookedDrawIndexed(void* device, DWORD type, DWORD fvf, void* verts, DWORD n, void* idx, DWORD ni, DWORD flags) { Trace(device, "DIP", type, fvf, ni / 3, verts, n, static_cast<const WORD*>(idx), ni); return g_drawIndexed(device, type, fvf, verts, n, idx, ni, flags); }
+HRESULT WINAPI HookedDrawPrimitive(void* device, DWORD type, DWORD fvf, void* verts, DWORD n, DWORD flags) { Account(device, fvf, n / 3, n); Trace(device, "DP", type, fvf, n); return g_drawPrimitive(device, type, fvf, verts, n, flags); }
+int g_vdumped = 0;
+// Research (UM_TRACE_VERTS=1): the vertices (x y z rhw) of the first big pre-transformed draws, to check the z / rhw relation of the game's projection.
+void DumpVerts(const void* verts, DWORD n) {
+    if (g_vdumped >= 3 || n < 200 || !std::getenv("UM_TRACE_VERTS")) return;
+    char path[MAX_PATH]; GetModuleFileNameA(g_dllModule, path, MAX_PATH);
+    std::string dir = path; dir = dir.substr(0, dir.find_last_of("\\/") + 1);
+    FILE* f = std::fopen((dir + "um-verts-" + std::to_string(g_vdumped++) + ".txt").c_str(), "w");
+    if (!f) return;
+    const float* v = static_cast<const float*>(verts);
+    for (DWORD i = 0; i < n && i < 3000; ++i) std::fprintf(f, "%g %g %g %g\n", v[i*8], v[i*8+1], v[i*8+2], v[i*8+3]);
+    std::fclose(f);
+}
+HRESULT WINAPI HookedDrawIndexed(void* device, DWORD type, DWORD fvf, void* verts, DWORD n, void* idx, DWORD ni, DWORD flags) { if (fvf == 0x1C4) DumpVerts(verts, n); Account(device, fvf, ni / 3, n); Trace(device, "DIP", type, fvf, ni / 3, verts, n, static_cast<const WORD*>(idx), ni); return g_drawIndexed(device, type, fvf, verts, n, idx, ni, flags); }
 }
 
 void TraceInstallDevice(void* device) {
     bool already = false;
+    if (void* o = PatchVTableSlot(device, 5, reinterpret_cast<void*>(HookedBeginScene), &already)) g_beginScene = reinterpret_cast<BeginSceneFn>(o);
     if (void* o = PatchVTableSlot(device, 35, reinterpret_cast<void*>(HookedSetTexture), &already)) g_setTexture = reinterpret_cast<SetTextureFn>(o);
     if (void* o = PatchVTableSlot(device, 25, reinterpret_cast<void*>(HookedDrawPrimitive), &already)) g_drawPrimitive = reinterpret_cast<DrawPrimitiveFn>(o);
     if (void* o = PatchVTableSlot(device, 26, reinterpret_cast<void*>(HookedDrawIndexed), &already)) g_drawIndexed = reinterpret_cast<DrawIndexedPrimitiveFn>(o);

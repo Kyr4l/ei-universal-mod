@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.10.0";
+static const char* const kEngineVersion = "0.11.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -47,6 +47,8 @@ extern "C" bool __attribute__((thiscall)) UmNetAcceptSeq(NetConnection* self, un
 extern "C" void __attribute__((thiscall)) UmNetDrainChunks(NetConnection* self);
 extern "C" bool __attribute__((thiscall)) UmNetParseUpdate(NetConnection* self, unsigned char** cursor);
 extern "C" bool UmShadowResolution(unsigned size); // shadow_res.cpp
+extern "C" void __attribute__((thiscall)) UmWorldBeginStub(); // world_shadow.cpp (sun shadows: the call sites bracketing the world pass)
+extern "C" void __attribute__((thiscall)) UmWorldEndStub();
 extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char* text, unsigned number);   // mp_ghost.cpp (the other players in the base)
 extern "C" void UmMpGhostFrame();
 extern "C" int UmMpSpeedLobbyAlive();                                              // mp_speed.cpp (x2 speed in multiplayer)
@@ -123,6 +125,9 @@ static const UmCallSite kCallSites[] = {
     // mp_ghost.cpp: the other players shown in the base (their state travels as a hidden chat line)
     { "MpGhost", 0x0041E656, reinterpret_cast<void*>(&UmMpGhostChatLine), 0, {0xE8, 0x95, 0x9C, 0x1D, 0x00} },
     { "MpGhost", 0x004573AE, reinterpret_cast<void*>(&UmMpGhostFrame), 0, {0xE8, 0x1D, 0xAF, 0xFB, 0xFF} },
+    // world_shadow.cpp: real sun shadows with D7VK (shadow map + screen-space resolve); the game's own projected-bitmap shadows are switched off while it works
+    { "SunShadows", 0x0056A06B, reinterpret_cast<void*>(&UmWorldBeginStub), -1, {0xE8, 0xC0, 0xC1, 0x15, 0x00} },
+    { "SunShadows", 0x0056A080, reinterpret_cast<void*>(&UmWorldEndStub),   -1, {0xE8, 0x5B, 0x0F, 0x00, 0x00} },
     { nullptr, 0, nullptr, 0, {} }
 };
 
@@ -248,6 +253,21 @@ extern "C" void UmEngineLog(const char* format, ...) {
 
 static const char* const kShadowResolutionKey = "UnitShadow::Resolution"; // a number (64 = the game's own), not on / off
 
+// Numeric keys of um-engine.cfg ("Name=1.5"): default values, written to the file when missing.
+static const struct { const char* key; const char* value; const char* comment; } kNumberKeys[] = {
+    { "SunShadows::MapSize",   "2048",   "SunShadows: the shadow map's size in texels (1024 / 2048 / 4096)" },
+    { "SunShadows::Strength",  "1",      "SunShadows: 0..1, how much of the sun's light a shadow takes (1 = all of it: as dark as the ambient light)" },
+    { "SunShadows::Bias",      "0.0015", "SunShadows: depth bias against shadow acne (light depth units)" },
+    { "SunShadows::SlopeBias", "0.004",  "SunShadows: extra bias on surfaces edge-on to the sun" },
+    { "SunShadows::Margin",    "8",      "SunShadows: world units added around the visible ground (casters just off screen)" },
+    { "SunShadows::Height",    "50",     "SunShadows: half of the casters' height range along the light (world units)" },
+    { "SunShadows::Extra",     "0.3",    "SunShadows: 0..1, extra darkness inside shadows on top of the game's own sun / ambient ratio (0 = none, 0.3 reads clearly)" },
+    { "SunShadows::Indoor",    "0",      "SunShadows: 1 also shadows caves (the game gives them a fixed direction instead of a sun), 0 keeps the game's own shadows there" },
+    { "SunShadows::Debug",     "0",      "SunShadows: research views (1 shadow term only, 2 lit fraction / sun angle, 4 normals, 5 world position)" },
+};
+
+extern "C" double UmEngineConfigNumber(const char* key, double fallback);
+
 static std::string ConfigPath() {
     char path[MAX_PATH] = "";
     GetModuleFileNameA(g_module, path, sizeof(path));
@@ -300,6 +320,8 @@ static std::map<std::string, bool> ReadConfig() {
             values[fn.name] = on;
         }
     if (!values.count(kShadowResolutionKey)) missing += std::string(kShadowResolutionKey) + "=64\n";
+    for (const auto& number : kNumberKeys)
+        if (!values.count(number.key)) missing += std::string("; ") + number.comment + "\n" + number.key + "=" + number.value + "\n";
     const bool exists = GetFileAttributesA(path.c_str()) != INVALID_FILE_ATTRIBUTES;
     if (!exists || !missing.empty()) {
         if (FILE* f = std::fopen(path.c_str(), "a")) {
@@ -312,6 +334,18 @@ static std::map<std::string, bool> ReadConfig() {
         }
     }
     return values;
+}
+
+extern "C" double UmEngineConfigNumber(const char* key, double fallback) {
+    double result = fallback;
+    if (FILE* f = std::fopen(ConfigPath().c_str(), "r")) {
+        char line[512];
+        const size_t length = std::strlen(key);
+        while (std::fgets(line, sizeof(line), f))
+            if (std::strncmp(line, key, length) == 0 && line[length] == '=') result = std::atof(line + length + 1);
+        std::fclose(f);
+    }
+    return result;
 }
 
 extern "C" __declspec(dllexport) const char* UmEngineVersion() { return kEngineVersion; }
