@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.12.2";
+static const char* const kEngineVersion = "0.12.3";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp

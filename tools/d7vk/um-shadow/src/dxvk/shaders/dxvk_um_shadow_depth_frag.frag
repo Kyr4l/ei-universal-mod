@@ -17,6 +17,7 @@ void main() {
   if (alpha_mode == 2u)
     a *= texture(sampler2D(s_tex, s_samplers[sampler_index]), i_uv).a;
 
-  if (a < alpha_ref)
+  // a lower threshold than the game's: leaves and grass cast fuller shadows, so the cut-out pattern does not speckle as the wind moves them
+  if (a < alpha_ref * 0.5)
     discard;
 }

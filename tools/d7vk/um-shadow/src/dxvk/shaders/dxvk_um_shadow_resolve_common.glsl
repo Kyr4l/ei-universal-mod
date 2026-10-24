@@ -97,7 +97,12 @@ void main() {
   vec3 to_sun = -light_dir_strength.xyz;
   float ndl = max(dot(n, to_sun), 0.0f);
 
-  vec4 lp = m_world_to_light * vec4(wp, 1.0f);
+  // Normal offset: the receiving point is moved along its normal by one to three shadow texels (more where the surface is edge-on to the sun) before the lookup: no acne on slopes
+  // (river banks, cliffs, terrain facing away) and so nothing to flicker as the camera or the sun moves a little
+  float world_texel = 2.0f / (length(vec3(m_world_to_light[0][0], m_world_to_light[1][0], m_world_to_light[2][0])) * cam_map_size.w);
+  vec3 wp_offset = wp + n * world_texel * (1.0f + 2.0f * (1.0f - ndl));
+
+  vec4 lp = m_world_to_light * vec4(wp_offset, 1.0f);
   vec2 uv = lp.xy * 0.5f + 0.5f;
   float bias = sun_color_bias.w + ambient_slope.w * (1.0f - ndl);
   float depth = lp.z - bias;
@@ -105,12 +110,12 @@ void main() {
   float texel = 1.0f / cam_map_size.w;
   float lit = 0.0f;
 
-  // 5x5 taps of the hardware 2x2 compare, weighted by distance (a soft penumbra of about three texels: swaying leaves and moving units do not make the edges flicker)
+  // 7x7 taps of the hardware 2x2 compare, weighted by distance (a soft penumbra of about four texels: swaying leaves and moving units do not make the edges flicker)
   float wsum = 0.0f;
-  for (int y = -2; y <= 2; y++) {
-    for (int x = -2; x <= 2; x++) {
+  for (int y = -3; y <= 3; y++) {
+    for (int x = -3; x <= 3; x++) {
       vec2 o = vec2(x, y);
-      float w = max(0.0f, 1.0f - length(o) / 3.0f);
+      float w = max(0.0f, 1.0f - length(o) / 4.2f);
       lit += w * texture(sampler2DShadow(s_map, s_samplers[sampler_cmp]), vec3(uv + o * texel, depth));
       wsum += w;
     }

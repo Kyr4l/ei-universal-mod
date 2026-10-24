@@ -424,59 +424,96 @@ bool Gather(Params& p) {
     const double width = 2 * hw - 2 * gpx, height = 2 * hh - 2 * gpy;
     p.guard[0] = static_cast<float>(gpx); p.guard[1] = static_cast<float>(gpy);
     const double groundZ = Read<float>(kCamera + 0xE8);
-    // Each screen corner's ray meets planes above, at and below the camera's target height (a gorge or a hill is not at the target's height); every point found is inside the bounds
-    // (the far end of the ray is at depth z = 0.999 of the projection).
-    double cz = groundZ;
-    const double planes[3] = { groundZ + 8.0, groundZ, groundZ - 16.0 };
-    const double xs[4] = { gpx, gpx + width, gpx, gpx + width }, ys[4] = { gpy, gpy, gpy + height, gpy + height };
-    double minX = 1e30, maxX = -1e30, minY = 1e30, maxY = -1e30;
-    double hx[12], hy[12];
-    int n = 0;
-    for (int i = 0; i < 4; ++i) {
+    // The shadowed area, fitted in the sun's own axes (the map is a square in R / U around its centre, light depth runs along D): the visible ground is found by sending nine rays through the
+    // screen (corners, edge middles, centre) down to the game's own terrain (CTerrain::GetHeightAt), the nearest hit within 70 units of the camera; their bounds in R / U / D give the
+    // map's centre and half size, the depth range reaches 40 units upstream (casters standing on the area) and 6 downstream. Without a terrain the rays meet three planes instead.
+    const Cfg& cfg = C();
+    double D[3] = { p.lightDir[0], p.lightDir[1], p.lightDir[2] };
+    const double dlen = std::sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]);
+    if (dlen < 1e-6) return false;
+    for (double& v : D) v /= dlen;
+    double upv[3] = { 0, 0, 1 };
+    if (std::fabs(D[2]) > 0.99) { upv[1] = 1; upv[2] = 0; }
+    auto cross3 = [](const double* x, const double* y, double* o) { o[0] = x[1] * y[2] - x[2] * y[1]; o[1] = x[2] * y[0] - x[0] * y[2]; o[2] = x[0] * y[1] - x[1] * y[0]; };
+    auto norm3 = [](double* v) { const double l = std::sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]); if (l > 1e-9) { v[0] /= l; v[1] /= l; v[2] /= l; } };
+    double Rv[3], Uv[3];
+    cross3(D, upv, Rv); norm3(Rv); cross3(Rv, D, Uv); norm3(Uv);
+    auto dot3 = [](const double* x, const double* y) { return x[0] * y[0] + x[1] * y[1] + x[2] * y[2]; };
+
+    void* terrain = Read<void*>(kWorld + 0x180);
+    typedef float (__attribute__((thiscall)) *HeightFn)(void*, float, float, int);
+    const HeightFn heightAt = reinterpret_cast<HeightFn>(0x006C8680);
+    const double camX = p.cameraPos[0], camY = p.cameraPos[1];
+    const double sx[9] = { gpx, gpx + width, gpx, gpx + width, gpx + 0.5 * width, gpx + 0.5 * width, gpx, gpx + width, gpx + 0.5 * width };
+    const double sy[9] = { gpy, gpy, gpy + height, gpy + height, gpy, gpy + height, gpy + 0.5 * height, gpy + 0.5 * height, gpy + 0.5 * height };
+    double lo[3] = { 1e30, 1e30, 1e30 }, hi[3] = { -1e30, -1e30, -1e30 };
+    auto add = [&](double x, double y, double z) {
+        const double pt[3] = { x, y, z };
+        const double c[3] = { dot3(Rv, pt), dot3(Uv, pt), dot3(D, pt) };
+        for (int k = 0; k < 3; ++k) { lo[k] = std::fmin(lo[k], c[k]); hi[k] = std::fmax(hi[k], c[k]); }
+    };
+    for (int i = 0; i < 9; ++i) {
         const double z0 = 0.05, z1 = 0.999;
         const double w0 = p.depthK / (p.depthFar - z0 * (p.depthFar - p.depthNear)), w1 = p.depthK / (p.depthFar - z1 * (p.depthFar - p.depthNear));
-        double a[3], b[3];
-        Transform(inv, xs[i] * w0, ys[i] * w0, z0 * w0, w0, a);
-        Transform(inv, xs[i] * w1, ys[i] * w1, z1 * w1, w1, b);
-        const double dz = b[2] - a[2];
-        for (int k = 0; k < 3; ++k) {
-            double t = std::fabs(dz) > 1e-9 ? (planes[k] - a[2]) / dz : 1.0;
-            t = std::fmin(std::fmax(t, 0.0), 1.0);
-            hx[n] = a[0] + (b[0] - a[0]) * t; hy[n] = a[1] + (b[1] - a[1]) * t;
-            minX = std::fmin(minX, hx[n]); maxX = std::fmax(maxX, hx[n]); minY = std::fmin(minY, hy[n]); maxY = std::fmax(maxY, hy[n]);
-            ++n;
+        double a0[3], b0[3];
+        Transform(inv, sx[i] * w0, sy[i] * w0, z0 * w0, w0, a0);
+        Transform(inv, sx[i] * w1, sy[i] * w1, z1 * w1, w1, b0);
+        auto at = [&](double t, double* o) { for (int k = 0; k < 3; ++k) o[k] = a0[k] + (b0[k] - a0[k]) * t; };
+        double hit[3]; bool found = false;
+        if (terrain) {
+            // march until the ray is under the ground (96 steps), then bisect; stop at 70 units from the camera
+            double t0 = 0;
+            for (int s = 1; s <= 96 && !found; ++s) {
+                const double t1 = double(s) / 96.0; double q[3]; at(t1, q);
+                if (std::hypot(q[0] - camX, q[1] - camY) > 70.0) { hit[0] = q[0]; hit[1] = q[1]; hit[2] = q[2]; found = true; break; }
+                if (q[2] <= heightAt(terrain, static_cast<float>(q[0]), static_cast<float>(q[1]), 0)) {
+                    double ta = t0, tb = t1;
+                    for (int it = 0; it < 12; ++it) { const double tm = 0.5 * (ta + tb); double m[3]; at(tm, m); if (m[2] <= heightAt(terrain, static_cast<float>(m[0]), static_cast<float>(m[1]), 0)) tb = tm; else ta = tm; }
+                    at(tb, hit); found = true;
+                }
+                t0 = t1;
+            }
+            if (!found) at(1.0, hit);
+            // terrain heights are 0 outside the map: such a hit is dropped
+            if (std::fabs(hit[2]) < 1e-6 && found) found = false;
+            if (!found) { at(1.0, hit); }
+            add(hit[0], hit[1], hit[2]);
+        } else {
+            const double planeZ[3] = { groundZ + 8.0, groundZ, groundZ - 16.0 };
+            for (double pz : planeZ) {
+                const double dz = b0[2] - a0[2]; double t = std::fabs(dz) > 1e-9 ? (pz - a0[2]) / dz : 1.0; t = std::fmin(std::fmax(t, 0.0), 1.0);
+                double q[3]; at(t, q); add(q[0], q[1], q[2]);
+            }
         }
     }
-    const double cx = 0.5 * (minX + maxX), cy = 0.5 * (minY + maxY);
-    double radius = 0;
-    for (int i = 0; i < n; ++i) radius = std::fmax(radius, std::hypot(hx[i] - cx, hy[i] - cy));
-    p.center[0] = static_cast<float>(cx); p.center[1] = static_cast<float>(cy); p.center[2] = static_cast<float>(cz);
-    const Cfg& cfg = C();
-    // The radius keeps its value until the area needs more or is much smaller (steps of 8 units, a quarter of slack): a radius that follows the camera changes the texel size and the shadows shimmer
-    {
+    // the camera's own ground point and the target (the shadows around the hero) always belong to the area
+    add(camX, camY, groundZ);
+    const double ext = 0.5 * std::fmax(hi[0] - lo[0], hi[1] - lo[1]);
+    const double half = ext * 1.08 + cfg.margin;
+    const double mid[3] = { 0.5 * (lo[0] + hi[0]), 0.5 * (lo[1] + hi[1]), 0.5 * (lo[2] + hi[2]) };
+    const double dLow = lo[2] - 40.0, dHigh = hi[2] + 6.0;
+    const double midD = 0.5 * (dLow + dHigh), hD = 0.5 * (dHigh - dLow);
+    for (int k = 0; k < 3; ++k) p.center[k] = static_cast<float>(Rv[k] * mid[0] + Uv[k] * mid[1] + D[k] * midD);
+    {   // The radius keeps its value until the area needs more or is much smaller (steps of 8 units, 30 % slack): a radius that follows the camera changes the texel size and the shadows shimmer
         static double kept = 0;
-        const double need = std::fmin(std::fmax(std::ceil((radius + cfg.margin) / 8.0) * 8.0, 16.0), 120.0);
+        const double need = std::fmin(std::fmax(std::ceil(half / 8.0) * 8.0, 16.0), 120.0);
         if (need > kept || need < kept * 0.7) kept = need;
         p.radius = static_cast<float>(kept);
     }
-    { static float lr = 0, lz = 0, lcx = 0, lcy = 0; static DWORD lt = 0; const float gz = static_cast<float>(groundZ);
-      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lz - gz) > 0.5f || std::fabs(lcx - p.center[0]) > 2.0f || std::fabs(lcy - p.center[1]) > 2.0f)) { const DWORD n2 = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms radius %.1f (raw %.2f) groundZ %.2f center %.1f %.1f", static_cast<unsigned long>(n2 - lt), p.radius, radius, gz, p.center[0], p.center[1]); lt = n2; }
-      lr = p.radius; lz = gz; lcx = p.center[0]; lcy = p.center[1]; }
-    {   // Light depth is measured along the light through the area's centre: the area's horizontal radius times the light's horizontal part plus the vertical spread must fit in +-height,
-        // else the far corners of the screen (and casters upstream of the sun) fall outside the map and have no shadows. The bias is kept in world units (the cfg's is for a range of 100).
-        const double lz = p.lightDir[2], len = std::sqrt(double(p.lightDir[0]) * p.lightDir[0] + double(p.lightDir[1]) * p.lightDir[1] + lz * lz);
-        const double sinE = len > 1e-6 ? std::fabs(lz) / len : 0.7, cosE = std::sqrt(std::fmax(0.0, 1.0 - sinE * sinE));
-        const double h = std::fmax(cfg.height, p.radius * cosE + 30.0 * sinE + 12.0);
+    {
+        const double h = std::fmax(hD, 20.0);
         p.height = static_cast<float>(h);
         p.bias = static_cast<float>(cfg.bias * 100.0 / (2.0 * h));
         p.slopeBias = static_cast<float>(cfg.slopeBias * 100.0 / (2.0 * h));
     }
-    p.strength = static_cast<float>(cfg.strength);
     {   // the map's size follows the area: about 0.04 world units a texel (a power of two between 1024 and SunShadows::MapSize)
         uint32_t size = 1024;
         while (size < 8192 && 2.0 * p.radius / size > 0.04) size *= 2;
         p.mapSize = std::min<uint32_t>(size, std::max<uint32_t>(1024u, static_cast<uint32_t>(cfg.mapSize)));
     }
+    { static float lr = 0, lh = 0; static DWORD lt = 0;
+      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lh - p.height) > 3.0f)) { const DWORD n2 = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms area half %.1f -> radius %.0f, depth half %.1f, map %u, terrain %s", static_cast<unsigned long>(n2 - lt), half, p.radius, p.height, p.mapSize, terrain ? "yes" : "no"); lt = n2; lr = p.radius; lh = p.height; } }
+    p.strength = static_cast<float>(cfg.strength);
     p.extra = static_cast<float>(cfg.extra);
     p.flags = static_cast<uint32_t>(cfg.debug);
     return true;
