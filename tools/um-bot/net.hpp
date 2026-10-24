@@ -132,7 +132,7 @@ public:
     // The players' heroes, from their 0x41 updates (decoded from live walks, 2026-10-03; the rest not decoded yet):
     // while a unit walks, its update holds "00 00 10", f32 x, f32 y (where it walks to), 2 bytes, u16 x, u16 y (the cell
     // it is in), all in half map units. Between updates it is assumed to walk on at kWalkSpeed.
-    struct Pos { float x = 0, y = 0, tx = 0, ty = 0; double at = 0; float speed = 1.5f; };
+    struct Pos { float x = 0, y = 0, tx = 0, ty = 0; double at = 0; float speed = 1.5f; bool real = false; }; // real: from a walk, not only the snapshot of the join (the arrival point, for every player)
     static constexpr float kWalkSpeed = 1.5f; // map units per second: the first guess for a unit (a run is about 3.9, learned per unit from its updates)
     std::map<uint32_t, Pos> unitPos;
     // A new position report: the unit's speed is learned from how far it moved since the previous report while it was walking somewhere.
@@ -162,11 +162,12 @@ public:
         }
         jumpSeen_.erase(id);
         badPos_[id] = 0;
-        Pos np{x, y, tx, ty, Now(), kWalkSpeed};
+        Pos np{x, y, tx, ty, Now(), kWalkSpeed, std::strcmp(posSrc_, "f2") != 0};
         const auto it = unitPos.find(id);
         if (it != unitPos.end()) {
             const Pos& o = it->second;
             np.speed = o.speed;
+            if (!np.real) np.real = o.real; // a snapshot does not make a walked position unreal
             const double dt = np.at - o.at;
             if (dt > 0.05 && dt < 2.0 && (o.tx != o.x || o.ty != o.y)) {
                 const float observed = static_cast<float>(std::hypot(x - o.x, y - o.y) / dt);
@@ -483,12 +484,21 @@ public:
     bool matchPace = false;     // follow the host's pace (read from its section 6) instead of always running
     float leash = 25.0f;        // past this distance from the host the fight is dropped and the bot walks back
     int priority = 0;           // 0 heal the player first, 1 focus the player's target, 2 guard the player (only fights what is near the player)
+    // 0x39 SetLeader (u32 unit, u32 leader): the server's own follow (Brain::TickFollow: walks when farther than FollowMaxDist, stops inside FollowMinDist)
+    void SetLeader(uint32_t unit, uint32_t leader) {
+        if (!worldUnit) return;
+        std::vector<uint8_t> m{0x39};
+        Put32(m, unit); Put32(m, leader);
+        StreamMessage(m);
+        Log("order: set leader of unit " + std::to_string(unit) + " to " + std::to_string(leader));
+    }
     void SetPace(int mode) {
         if (!worldUnit) return;
         std::vector<uint8_t> m{0x35};
         Put32(m, worldUnit);
         m.push_back(static_cast<uint8_t>(mode));
         StreamMessage(m);
+        Log("order: stance " + std::to_string(mode) + " (0 crawl, 1 sneak, 2 walk, 3 run)");
         paceSent_ = mode;
     }
     // A chat line from another player ("^1Name^7: bot stay"): commands for the bot, after "bot" or its first name.
@@ -555,7 +565,7 @@ public:
             const auto ig = ignored_.find(kv.first);
             if (hero || dead_.count(kv.first) || (ig != ignored_.end() && ig->second > Now()) || !Where(kv.first, x, y)) continue;
             if (!(unitEnemies_.count(kv.first) && Hostile(kv.first))) continue; // only known enemies (#67): NPCs, animals and unknown units are left alone
-            { float hx, hy; if (Where(HostUnit(), hx, hy) && std::hypot(x - hx, y - hy) > (priority == 2 ? 10.0f : leash)) continue; } // guard: only what is near the player; else inside the leash
+            { float hx, hy; if (HostWhere(hx, hy) && std::hypot(x - hx, y - hy) > (priority == 2 ? 10.0f : leash)) continue; } // guard: only what is near the player; else inside the leash
             const float d = std::hypot(x - mx, y - my);
             // A hit monster calls its friends within 7 units (the game's CallForHelpRadius): a lone one is chosen before one in a pack (each neighbour counts as 5 units of distance).
             int pack = 0;
@@ -586,8 +596,16 @@ public:
     float weaponRange = 0;      // the wielded weapon's range from the database (bows 10-18, crossbows 12-22; 0: a melee weapon)
     bool chatStay_ = false; int chatEngagement_ = -1; // set by the host's chat commands ("bot stay", "bot follow", "bot passive|defensive|aggressive")
     bool followHost = true;     // walk after the host's hero, staying about followDistance from it
+    bool useLeader = std::getenv("UM_BOT_NOLEADER") == nullptr; // follow with the server's own SetLeader (the host's true position) instead of the bot's move orders
     float followDistance = 4.0f;
     // The host's hero: the first other player in the quest world (the host is listed first).
+    // The host's position, only when it is a real one (walked / seen), never the snapshot of the join: that is the arrival point of every player, and a host that stood
+    // elsewhere made the leash pull the bot back to the arrival point.
+    bool HostWhere(float& x, float& y) const {
+        const uint32_t h = HostUnit();
+        const auto it = unitPos.find(h);
+        return h && it != unitPos.end() && it->second.real && Where(h, x, y);
+    }
     uint32_t HostUnit() const {
         for (const auto& kv : players) if (IsHost(kv.second) && kv.second.unitId != worldUnit && kv.second.state == 0 && kv.second.unitId) return kv.second.unitId;
         return 0;
@@ -668,19 +686,27 @@ public:
             }
             viewAt_ = Now();
         }
-        if (matchPace) { // the bot starts walking (the stance a hero spawns in); the host's own pace is followed when it changes, and a crawl / sneak is not believed while the host runs
+        int wantPace = pace;
+        if (matchPace) { // the bot starts walking (the stance a hero spawns in); the host's own pace is followed when it changes, and a crawl / sneak is not believed while the host RUNS (a standing host's stance is believed: its learned speed is stale)
             if (!paceSeen_) { pace = 2; }
             const uint32_t host = HostUnit();
             const auto hp = unitPace_.find(host);
-            if (host && hp != unitPace_.end() && hp->second >= 0 && hp->second <= 3 && hp->second != hostPaceValue_) {
-                hostPaceValue_ = hp->second;
+            if (host && hp != unitPace_.end() && hp->second >= 0 && hp->second <= 3) {
                 const auto sp = unitPos.find(host);
-                const bool implausible = hp->second <= 1 && sp != unitPos.end() && sp->second.speed > 2.5f;
-                Log("the host's pace value is " + std::to_string(hp->second) + (implausible ? " (not believed: it moves at " + std::to_string(sp->second.speed) + " u/s)" : ""));
-                if (!implausible) { pace = hp->second; paceSeen_ = true; }
+                const bool hostMoving = sp != unitPos.end() && Now() - sp->second.at < 1.5 && (sp->second.tx != sp->second.x || sp->second.ty != sp->second.y);
+                const bool implausible = hp->second <= 1 && hostMoving && sp->second.speed > 2.5f;
+                if (host != paceHost_) { paceHost_ = host; paceFirst_ = true; hostPaceValue_ = -1; } // another unit (the host respawned)
+                const bool stale = paceFirst_ && hp->second == 0; // a new unit's field is 0 until its first stance change (a respawned host walked while the field said crawl)
+                if (hp->second != hostPaceValue_) {
+                    hostPaceValue_ = hp->second;
+                    Log("the host's pace value is " + std::to_string(hp->second) + (stale ? " (a new unit's first value: not believed)" : implausible ? " (not believed: it moves at " + std::to_string(sp->second.speed) + " u/s)" : ""));
+                    if (!stale) paceFirst_ = false;
+                }
+                if (!implausible && !stale) { pace = hp->second; paceSeen_ = true; }
             }
+            wantPace = catchUp_ ? 3 : pace; // far behind the host (it sprints with a double click, which its pace field does not show): run until near again
         }
-        if (state == State::Accepted && worldUnit && pace != paceSent_) SetPace(pace);
+        if (state == State::Accepted && worldUnit && wantPace != paceSent_) SetPace(wantPace);
         SpellSteps();
         // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
         // The answer is read from our own health 2.5 s later; two drinks without a rise = no potion left (or none that heals).
@@ -716,7 +742,7 @@ public:
             else if (hostHealAt_ > 0 && Now() - hostHealAt_ > 3) { if (++hostHealFails_ >= 3) { Log("three casts on the host raised nothing: pausing 30 s"); hostHealPause_ = Now() + 30; hostHealFails_ = 0; } hostHealAt_ = 0; }
             float hx, hy, mx2, my2;
             if (hostHealAt_ == 0 && host && mx > 0 && hp > 0 && hp * 100 < healHostBelow * mx && Now() > hostHealPause_ && Now() - hostHealCastAt_ > 4 &&
-                Where(host, hx, hy) && Where(worldUnit, mx2, my2) && std::hypot(hx - mx2, hy - my2) < 15) {
+                HostWhere(hx, hy) && Where(worldUnit, mx2, my2) && std::hypot(hx - mx2, hy - my2) < 15) {
                 const bool bySpell = healSpellSlot >= 0;
                 Log("the host's health " + std::to_string(hp) + " / " + std::to_string(mx) + (bySpell ? ": casting Healing on it" : ": using the potion in quick slot " + std::to_string(potionSlot) + " on it"));
                 if (bySpell) CastHealSpell(host); else UseQuickSlot(potionSlot, host); hostHealAt_ = hostHealCastAt_ = Now(); hostHealHp_ = hp; holdUntil_ = Now() + 1.5;
@@ -746,7 +772,7 @@ public:
         // Leash: past `leash` units from the host the fight is dropped and the bot walks back (the follow below) until it is near the host again.
         if (state == State::Accepted && worldUnit && Alive()) {
             float hx, hy, mx, my;
-            if (Where(HostUnit(), hx, hy) && Where(worldUnit, mx, my)) {
+            if (HostWhere(hx, hy) && Where(worldUnit, mx, my)) {
                 const float dh = std::hypot(hx - mx, hy - my);
                 if (!leashed_ && dh > leash && !(Now() < lootUntil_ && Now() - selfHurtAt_ > 3)) { leashed_ = true; fightTarget_ = 0; Log("beyond the leash (" + std::to_string(static_cast<int>(dh)) + " units): back to the host"); }
                 else if (leashed_ && dh < followDistance * 2 + 1) { leashed_ = false; Log("back near the host"); }
@@ -772,7 +798,7 @@ public:
             const auto victim = unitTarget_.find(ownTarget);
             const bool threat = victim != unitTarget_.end() && (victim->second == host || victim->second == worldUnit);
             float tx, ty, hx, hy, mx, my;
-            if (!threat && host && Where(ownTarget, tx, ty) && Where(host, hx, hy) && Where(worldUnit, mx, my)) {
+            if (!threat && host && Where(ownTarget, tx, ty) && HostWhere(hx, hy) && Where(worldUnit, mx, my)) {
                 const float limit = std::max(10.0f, followDistance * 3);
                 const float dBot = std::hypot(mx - hx, my - hy), dTarget = std::hypot(tx - hx, ty - hy);
                 const auto ig = ignored_.find(ownTarget);
@@ -790,6 +816,10 @@ public:
             float d = 0;
             uint32_t t = (chatEngagement_ >= 0 ? chatEngagement_ : engagement) >= 2 ? NearestOther(d) : 0; // aggressive: anything in sight
             if (!(t && d <= sight)) t = 0;
+            { // an aggressive bot does not start on a unit far from the host (the host walks on and the bot would be dragged off: the leash would pull it back mid-fight); what attacks the host or us is chosen below
+                float tx, ty, hx, hy;
+                if (t && HostWhere(hx, hy) && Where(t, tx, ty) && std::hypot(tx - hx, ty - hy) > std::max(10.0f, followDistance * 3)) t = 0;
+            }
             { // first the units attacking the host or us, then the host's own target
                 float mx, my, best = 1e9f;
                 const uint32_t host = HostUnit();
@@ -817,7 +847,7 @@ public:
             if (!sticky && !(t && d <= sight * 2) && Now() - hostHurtAt_ < 6) { // the host is hurt: the unit nearest to it, even out of our sight
                 float hx, hy, mx, my, best = 25;
                 t = 0;
-                if (Where(HostUnit(), hx, hy) && Where(worldUnit, mx, my))
+                if (HostWhere(hx, hy) && Where(worldUnit, mx, my))
                     for (const auto& kv : unitPos) {
                         float x, y;
                         const auto ig = ignored_.find(kv.first);
@@ -865,22 +895,45 @@ public:
         }
         if (fightTarget_ && !unitPos.count(fightTarget_)) fightTarget_ = 0;
         if (fightTarget_) fighting = true;
+        // Follow: the game's own (0x39 SetLeader, found 2026-10-24: works across players). The server then walks our hero after the host with the host's TRUE position (Brain::TickFollow:
+        // it walks when farther than FollowMaxDist 4, stops inside FollowMinDist 2, keeps up with a sprinting host), where the bot's own idea of a standing host is only the join
+        // snapshot (the arrival point, never the real place: a host that stood elsewhere when the bot entered left the bot standing, and the host after its respawn too).
+        // The link is re-sent for a new host unit (respawn) or a new hero of ours; "bot stay" clears it. The own follow below remains for the leash and as the fallback.
+        const bool leaderMode = useLeader && followHost && state == State::Accepted && worldUnit && Alive();
+        if (leaderMode) {
+            const uint32_t host = HostUnit();
+            if (chatStay_) { if (leaderOf_) { SetLeader(worldUnit, worldUnit); leaderOf_ = 0; float x, y; if (Where(worldUnit, x, y)) { orderWhy_ = "stay"; MoveTo(x, y); } } }
+            else if (host && (leaderOf_ != host || leaderFor_ != worldUnit) && Now() - leaderAt_ > 1.5) { SetLeader(worldUnit, host); leaderOf_ = host; leaderFor_ = worldUnit; leaderAt_ = Now(); }
+            // Where the host is: it walked, so its snapshot is stale. When the server's follow stops our hero (move -> none) next to it, the host is within its FollowMinDist of us.
+            const auto md = unitMode_.find(worldUnit); const int modeNow = md == unitMode_.end() ? 0 : md->second;
+            float mx, my;
+            if (leaderOf_ == host && host && modeNow == 0 && leaderPrevMode_ == 2 && !fighting && !fightTarget_ && SnapshotWelcome(host) && Where(worldUnit, mx, my)) {
+                const auto old = unitPos.find(host);
+                unitPos[host] = Pos{mx, my, mx, my, Now(), old != unitPos.end() ? old->second.speed : kWalkSpeed, true};
+                Log("the host stands near us: its position taken as (" + std::to_string(mx).substr(0, 5) + "," + std::to_string(my).substr(0, 5) + ")");
+            }
+            leaderPrevMode_ = modeNow;
+        } else if (!followHost || !useLeader) leaderOf_ = 0;
+        const bool leaderActive = leaderMode && !chatStay_ && leaderOf_ != 0 && leaderOf_ == HostUnit() && leaderFor_ == worldUnit;
         if (state == State::Accepted && worldUnit && Now() - trailAt_ > 0.4) { // the host's trail
             trailAt_ = Now();
             float hx, hy;
-            if (Where(HostUnit(), hx, hy)) {
+            if (HostWhere(hx, hy)) {
                 if (!hostTrail_.empty() && std::hypot(hx - hostTrail_.back().first, hy - hostTrail_.back().second) > 60.0f) hostTrail_.clear(); // it jumped (another zone, a respawn)
                 if (hostTrail_.empty() || std::hypot(hx - hostTrail_.back().first, hy - hostTrail_.back().second) > 1.5f) { hostTrail_.emplace_back(hx, hy); if (hostTrail_.size() > 120) hostTrail_.pop_front(); }
             }
         }
-        if (!fighting && (!underAttack || leashed_) && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 2 && Now() >= holdUntil_ && (Now() >= lootUntil_ || underAttack)) { // walk to the host when it is away (not while something bites us: the game's logic answers; the leash still pulls back)
+        if (!fighting && (!underAttack || leashed_) && (!leaderActive || leashed_) && state == State::Accepted && followHost && !chatStay_ && worldUnit && Alive() && Now() - followAt_ > 0.6 && Now() >= holdUntil_ && (Now() >= lootUntil_ || underAttack)) { // walk to the host when it is away (not while something bites us: the game's logic answers; the leash still pulls back)
             followAt_ = Now();
             float hx, hy, mx, my;
-            if (Where(HostUnit(), hx, hy)) {
+            if (!HostWhere(hx, hy) && Now() - hostUnknownLogAt_ > 5) { hostUnknownLogAt_ = Now(); Log("follow: the host's position is not known yet (host unit " + std::to_string(HostUnit()) + ": only the join snapshot, until it walks or the server's follow brings us to it)"); }
+            if (HostWhere(hx, hy)) {
                 const bool known = Where(worldUnit, mx, my);
                 const float away = known ? std::hypot(hx - mx, hy - my) : 99.0f;
-                if (away > followDistance + 1.0f && std::hypot(hx - followX_, hy - followY_) > 1.0f) {
-                    followX_ = hx; followY_ = hy;
+                if (known && away > followDistance * 2 + 4) catchUp_ = true; else if (away < followDistance + 2) catchUp_ = false;
+                const auto md = unitMode_.find(worldUnit);
+                const bool walking = md != unitMode_.end() && md->second == 2; // the server says our hero is on a move order
+                if (away > followDistance + 1.0f) {
                     // to the point followDistance short of the host, on our side of it
                     const float k = known && away > 0 ? followDistance / away : 0.0f;
                     float tx = hx + (mx - hx) * k, ty = hy + (my - hy) * k;
@@ -892,13 +945,19 @@ public:
                         if (nd < 25.0f) {
                             size_t stopAt = hostTrail_.size() - 1; float back = 0;                                     // followDistance behind the host along the trail
                             while (stopAt > 0 && back < followDistance) { back += std::hypot(hostTrail_[stopAt].first - hostTrail_[stopAt - 1].first, hostTrail_[stopAt].second - hostTrail_[stopAt - 1].second); --stopAt; }
-                            size_t ahead = nearest; float fwd = 0;                                                       // 6 units on from the nearest point
-                            while (ahead + 1 < hostTrail_.size() && fwd < 6.0f) { fwd += std::hypot(hostTrail_[ahead + 1].first - hostTrail_[ahead].first, hostTrail_[ahead + 1].second - hostTrail_[ahead].second); ++ahead; }
+                            size_t ahead = nearest; float fwd = 0;                                                       // 10 units on from the nearest point
+                            while (ahead + 1 < hostTrail_.size() && fwd < 10.0f) { fwd += std::hypot(hostTrail_[ahead + 1].first - hostTrail_[ahead].first, hostTrail_[ahead + 1].second - hostTrail_[ahead].second); ++ahead; }
                             const size_t j = std::max(nearest, std::min(ahead, stopAt));
                             tx = hostTrail_[j].first; ty = hostTrail_[j].second;
                         }
                     }
-                    orderWhy_ = "follow the host"; MoveTo(tx, ty);
+                    // A new order only when the hero stands, or the wanted point moved (a host that stands still no longer leaves the bot standing halfway: the old rule sent
+                    // no order until the host had moved 1 unit); the same point that was just refused (a blocked way) is not ordered again within 2 s.
+                    const bool samePoint = std::hypot(tx - followX_, ty - followY_) < 2.5f;
+                    if ((!walking && !(samePoint && Now() - followOrderAt_ < 2.0)) || (walking && !samePoint)) {
+                        followX_ = tx; followY_ = ty; followOrderAt_ = Now();
+                        orderWhy_ = "follow the host"; MoveTo(tx, ty);
+                    }
                     if (std::getenv("UM_BOT_FIGHT")) Log("follow");
                 }
             }
@@ -1059,7 +1118,7 @@ private:
     uint32_t attackedTarget_ = 0;
     int targetHp_ = 0;
     std::map<uint32_t, double> ignored_; // targets left alone until then
-    float followX_ = -99, followY_ = -99;
+    float followX_ = -99, followY_ = -99; double followOrderAt_ = 0, hostUnknownLogAt_ = 0, leaderAt_ = 0; uint32_t leaderOf_ = 0, leaderFor_ = 0; int leaderPrevMode_ = 0; uint32_t paceHost_ = 0; bool paceFirst_ = true; bool catchUp_ = false; // the last follow destination, when it was ordered; run to catch up with the host
     void AnswerSwap(uint16_t a, uint16_t b) { // the mirrored record (what clicking their head does): the same refs, swapped (the server pairs records whose refs are swapped)
         pairOut_.assign(13, 0); Put32(pairOut_, 1);
         const bool same = std::getenv("UM_BOT_SWAPSAME") != nullptr; // research: answer with the refs in the same order
@@ -1099,7 +1158,7 @@ private:
     // snapshot (our new hero id), "09" (ready: the server spawns the hero), JOIN 0 with that id.
     void Enter() {
         if (phase_ == Phase::Lobby && !heroJoined_ && joinSends_ == 0) { heroJoined_ = true; SetJoin(1, heroId_); return; }
-        if (phase_ == Phase::Lobby && autoEnter && joined && !holdEntry && ZoneOpen() && !mpRaw_.empty()) {
+        if (phase_ == Phase::Lobby && autoEnter && joined && !holdEntry && !ExitWaiting() && ZoneOpen() && !mpRaw_.empty()) {
             phase_ = Phase::Loading; phaseAt_ = Now(); worldSince_ = Now(); SetJoin(3, heroId_);
             if (worldQuest_ != chosenQuest) ClearWorld(); // another quest = another world
             worldQuest_ = chosenQuest;
@@ -1134,7 +1193,7 @@ private:
         if (phase_ != Phase::InWorld && phase_ != Phase::Entering) return;
         Log("leaving the quest zone (back to the lobby)");
         phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = true;
-        fightTarget_ = 0; leashed_ = false; paceSent_ = -1; hostGoneAt_ = 0; // the world state stays: re-entering the same quest resends no creations (the host's world is the same); a new quest clears it in Enter()
+        fightTarget_ = 0; leashed_ = false; catchUp_ = false; leaderOf_ = leaderFor_ = 0; leaderPrevMode_ = 0; paceSent_ = -1; hostGoneAt_ = 0; // the world state stays: re-entering the same quest resends no creations (the host's world is the same); a new quest clears it in Enter()
         SetJoin(1, heroId_);
     }
     std::deque<std::pair<float, float>> hostTrail_; double trailAt_ = 0; // where the host walked (a point every 1.5 units): the bot retraces it instead of cutting across to the host
@@ -1147,12 +1206,22 @@ private:
     // as soon as the host has stayed 2.5 s in an exit it came into from outside (an exit may cover the arrival point: the host must have been seen outside first).
     std::vector<zone::Exit> exits_;
     double exitSince_ = 0; bool exitArmed_ = false;
+    double exitWait_ = 0; // we left because the host stands in an exit: the zone is not entered again until the host has left it (its quest state closes), or after 60 s
+    bool ExitWaiting() {
+        if (!exitWait_) return false;
+        if (Now() - exitWait_ > 60) { exitWait_ = 0; Log("the host is still in the zone after 60 s: entering it again"); return false; }
+        if (joined && Now() - exitWait_ > 8 && !ZoneOpen()) { exitWait_ = 0; Log("the host left the zone: waiting for the next one"); return false; } // (the first seconds: the lobby state may not be in yet)
+        return true;
+    }
     bool HostPosition(float& x, float& y) const {
         for (const auto& kv : players) {
             if (!IsHost(kv.second) || kv.second.name == name_ || !kv.second.unitId || kv.second.state != 0) continue;
             const auto it = unitPos.find(kv.second.unitId);
-            if (it == unitPos.end() || Now() - it->second.at > 3) return false;
-            x = it->second.x; y = it->second.y;
+            if (it == unitPos.end() || !it->second.real) return false; // the join snapshot is the arrival point, not where the host is
+            float wx, wy; Where(kv.second.unitId, wx, wy);
+            const bool arrived = std::hypot(wx - it->second.tx, wy - it->second.ty) < 0.5f; // a host that stopped sends no more updates: it is where its last walk ended
+            if (!arrived && Now() - it->second.at > 3) return false;
+            x = wx; y = wy;
             return true;
         }
         return false;
@@ -1173,7 +1242,7 @@ private:
         else if (Now() - exitSince_ > 2.5) {
             Log("the host stands in the exit \"" + e->name + "\": leaving the zone first (the host cannot leave while we are in it)");
             if (sayLeaving) Say("leaving the zone first, the exit is yours");
-            exitArmed_ = false; exitSince_ = 0;
+            exitArmed_ = false; exitSince_ = 0; exitWait_ = Now();
             LeaveWorld();
         }
     }
@@ -1211,7 +1280,7 @@ private:
         if (!corpse_.id || !worldUnit || !Alive() || phase_ != Phase::InWorld || worldUnit == corpse_.id) return;
         if (Now() - corpse_.at < 25) return;
         float hx, hy;
-        if (!Where(HostUnit(), hx, hy) || std::hypot(hx - corpse_.x, hy - corpse_.y) > 70) return; // the body is not far from the host (it walks there by itself: the server paths the order)
+        if (!HostWhere(hx, hy) || std::hypot(hx - corpse_.x, hy - corpse_.y) > 70) return; // the body is not far from the host (it walks there by itself: the server paths the order)
         if (!corpse_.since) corpse_.since = Now();
         if (Now() - corpse_.since > 300) { Log("our body could not be looted in 5 minutes: giving up"); corpse_.id = 0; return; }
         for (const auto& kv : unitPos) { // monsters at the body killed us once: wait until none is known near it (the hero would walk into them)

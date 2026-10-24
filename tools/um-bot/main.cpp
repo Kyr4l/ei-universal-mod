@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.30";
+static const char* const kVersion = "0.1.31";
 
 
 struct App {
@@ -946,6 +946,9 @@ int main(int argc, char** argv) {
                     double a = 0; char nm[64] = ""; unsigned en = 0; std::sscanf(mp_, "%lf,%63[^,],%u", &a, nm, &en);
                     if (std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > a) { client.ChangeMapByName(nm, en); mapSent = true; std::printf("sent ChangeMapByName %s %u\n", nm, en); std::fflush(stdout); }
                 }
+                static bool leaderSent = false; // research: UM_BOT_LEADER=<secs>: 0x39 SetLeader(our hero, the host's hero) at that time (the server's own follow)
+                if (const char* ld = std::getenv("UM_BOT_LEADER"); ld && !leaderSent && client.worldUnit && client.HostUnit() &&
+                    std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > std::atof(ld)) { client.SetLeader(client.worldUnit, client.HostUnit()); leaderSent = true; }
                 static int moves = 0; // research: UM_BOT_MOVE="x,y;x,y;..." once in the world, one every 8 s
                 static auto movedAt = std::chrono::steady_clock::now();
                 if (const char* mv = std::getenv("UM_BOT_MOVE"); mv && client.worldUnit &&
