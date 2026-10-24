@@ -45,7 +45,7 @@ struct Params {
 };
 
 // um-engine.cfg numbers, re-read once a second (the file is not parsed every frame; editing it while the game runs works)
-struct Cfg { double enabled = 1, margin = 8, height = 50, strength = 1, bias = 0.0015, slopeBias = 0.004, mapSize = 4096, extra = 0.3, debug = 0, indoor = 0, guard = 0.15, guardLog = 0; };
+struct Cfg { double enabled = 1, margin = 8, height = 50, strength = 1, bias = 0.0015, slopeBias = 0.004, mapSize = 4096, extra = 0.3, debug = 0, indoor = 0, guard = 0.3, guardLog = 0; };
 Cfg g_cfg; DWORD g_cfgAt = 0;
 const Cfg& C() {
     const DWORD now = GetTickCount();
@@ -158,59 +158,20 @@ extern "C" __attribute__((force_align_arg_pointer)) void UmCasterOff() {
     if (g_open && g_caster) g_caster(1);
 }
 
-// The guard band: the camera's matrices (built once, by I3DFigureImpl::InitRenderer: Mat4_Perspective 0x4F0E80 (out, fov, aspect, near, far) and Mat4_Viewport 0x4F1370 (out, rect*), both
-// stdcall) and the CPU transform's window (3DfpFPU, vt[1](w, h)) are made (1 + 2 f) times larger with the same pixel scale: the game then transforms, clips and draws a band of f x the screen's size
-// around the screen too (its coordinates are shifted by the band's width, D7VK shifts them back and its viewport clips the band off). Objects just off screen cast their shadows.
+// The guard band. The game's CPU clipper drops every triangle outside the screen, so a tree just beyond an edge would cast no shadow. Inside CWorldClient::Render (called through the wrapper
+// at 0x578910) the camera's matrices are replaced by ones for a LARGER window: the screen plus a band (padL / padT / padR / padB pixels) on the sides the sun's shadows come from, with the same
+// pixel scale; the game then transforms, culls, clips and draws the band too (its coordinates are shifted by padL / padT: D7VK shifts them back and its own viewport clips the band off).
+// The matrix stacks of the render globals hold (at rest, outside Render) the matrices the interface and the mouse picking use, which are put back afterwards: +0x14 / +0x1C = {V, V W, V W P},
+// +0x24 / +0x3C = {W, W P}, +0x44 = {P}, +0x54 = {V} (V viewport, W the +0x4C matrix, P the projection), checked against each other before anything is replaced.
+// For the larger window: V' is the viewport of the larger window, P' = (V' W)^-1 T V W P with T the shift by (padL, padT), so that V' W P' = T V W P (the same picture, shifted).
 bool g_guardOn = false;
-int g_guardPx = 0, g_guardPy = 0, g_screenW = 0, g_screenH = 0;
-int g_rectBig[4] = {};
-int g_rectOrig[4] = {};
-float g_origPersp[4] = {};   // fov, aspect, near, far as the game asked for them
-bool g_bypass = false;       // our own calls of Mat4_Viewport / Mat4_Perspective (building the original matrices) are not changed
+int g_padL = 0, g_padT = 0, g_padR = 0, g_padB = 0;   // the pads of the last world pass (the mouse picking compares with rectangles made during it)
+int g_screenW = 0, g_screenH = 0;
 
 typedef void (*GuardFn)(float, float);
 GuardFn g_guardFn = nullptr;
 
-const uintptr_t kDeviceRect = 0x24;   // CRenderDevice: the viewport rect (x0, y0, x1, y1) the game was started with
-
-extern "C" __attribute__((force_align_arg_pointer)) void UmPerspectiveFix(int* args) {
-    const double f = C().guard;
-    if (f <= 0.0) return;
-    static int logged = 0;
-    float v[4]; std::memcpy(v, &args[1], 16);
-    if (C().guardLog > 0.5 && logged < 20) { ++logged; UmEngineLog("um-engine: Mat4_Perspective from 0x%X fov %f aspect %f near %f far %f", static_cast<unsigned>(args[-1]), v[0], v[1], v[2], v[3]); }
-    const uintptr_t device = Read<uintptr_t>(0x7AF060 + 0x20);
-    const unsigned caller = static_cast<unsigned>(args[-1]);
-    if (!device || caller < 0x500B70 || caller > 0x501400) return;   // only the renderer's start-up (this also keeps SetupCamera's calls, if the game makes them, untouched)
-    HMODULE module = GetModuleHandleA("d7vk.dll");
-    if (!module) module = GetModuleHandleA("ddraw.dll");
-    g_guardFn = module ? reinterpret_cast<GuardFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowGuard"))) : nullptr;
-    if (!g_guardFn) { UmEngineLog("um-engine: SunShadows::Guard needs d7vk.dll: not applied"); return; }
-    const int* rect = reinterpret_cast<const int*>(device + kDeviceRect);
-    const int w = rect[2] - rect[0], h = rect[3] - rect[1];
-    std::memcpy(g_origPersp, v, 16); std::memcpy(g_rectOrig, rect, 16);
-    if (w < 320 || h < 240) return;
-    const double fc = std::fmin(std::fmax(f, 0.0), 0.5);
-    g_guardPx = static_cast<int>(std::lround(fc * w)); g_guardPy = static_cast<int>(std::lround(fc * h));
-    g_screenW = w; g_screenH = h;
-    const double gx = double(w + 2 * g_guardPx) / w, gy = double(h + 2 * g_guardPy) / h;
-    // the same pixels per unit as before: tan(fov' / 2) = gx tan(fov / 2); the vertical scale is kept by the aspect
-    const float fov2 = static_cast<float>(2.0 * std::atan(gx * std::tan(0.5 * v[0])));
-    const float aspect2 = static_cast<float>(v[1] * gx / gy);
-    std::memcpy(&args[1], &fov2, 4); std::memcpy(&args[2], &aspect2, 4);
-    g_rectBig[0] = rect[0]; g_rectBig[1] = rect[1]; g_rectBig[2] = rect[0] + w + 2 * g_guardPx; g_rectBig[3] = rect[1] + h + 2 * g_guardPy;
-    g_guardOn = true;
-    UmEngineLog("um-engine: guard band %d x %d pixels around the %d x %d screen", g_guardPx, g_guardPy, w, h);
-}
-
-extern "C" __attribute__((force_align_arg_pointer)) void UmViewportFix(int* args) {
-    if (!g_guardOn || g_bypass) return;
-    const int* rect = reinterpret_cast<const int*>(args[1]);
-    if (rect[2] - rect[0] == g_screenW && rect[3] - rect[1] == g_screenH) args[1] = reinterpret_cast<int>(g_rectBig);
-}
-
-// CWorldClient::Render (through the wrapper at 0x578910) is bracketed: the game's vertices are shifted by the band only inside it
-// The CPU transform's window (3DfpFPU, drawer vt[1](w, h)) is the enlarged one only while the world is drawn: the 2D interface uses the same drawer
+// The CPU transform's window (3DfpFPU, drawer vt[1](w, h)) is the larger one only while the world is drawn: the 2D interface uses the same drawer
 void SetDrawerSize(int w, int h) {
     const uintptr_t globals = Read<uintptr_t>(0x7AF068);
     void* drawer = globals ? Read<void*>(globals + 0xC) : nullptr;
@@ -218,9 +179,6 @@ void SetDrawerSize(int w, int h) {
     if (vt) reinterpret_cast<void (__attribute__((thiscall)) *)(void*, float, float)>(vt[1])(drawer, static_cast<float>(w), static_cast<float>(h));
 }
 
-// The matrix stacks of the render globals hold (at rest, outside CWorldClient::Render) the matrices the interface and the mouse picking use. The guard band's (larger) ones are
-// built at start-up (the hooks above); inside Render the stacks hold those, outside the original ones, computed here the way the game does: +0x14 / +0x1c = {V, V W, V W P},
-// +0x24 / +0x3c = {W, W P}, +0x44 = {P}, +0x54 = {V} (V viewport, W the stack +0x4c's matrix, P the projection).
 struct StackSet { float m[6][3][16]; };
 const uintptr_t kSwapStacks[6] = { 0x14, 0x1C, 0x24, 0x3C, 0x44, 0x54 };
 const int kSwapLevels[6] = { 3, 3, 2, 2, 1, 1 };
@@ -255,72 +213,148 @@ bool Close(const float* a, const float* b) {
     return true;
 }
 
-void ReadSet(StackSet& set) {
-    for (int s = 0; s < 6; ++s) for (int l = 0; l < kSwapLevels[s]; ++l) { const float* m = StackLevel(s, l); if (m) std::memcpy(set.m[s][l], m, 64); }
+bool ReadSet(StackSet& set) {
+    for (int s = 0; s < 6; ++s) for (int l = 0; l < kSwapLevels[s]; ++l) { const float* m = StackLevel(s, l); if (!m) return false; std::memcpy(set.m[s][l], m, 64); }
+    return true;
 }
 
 void WriteSet(const StackSet& set) {
     for (int s = 0; s < 6; ++s) for (int l = 0; l < kSwapLevels[s]; ++l) { float* m = StackLevel(s, l); if (m) std::memcpy(m, set.m[s][l], 64); }
 }
 
+bool SetIsConsistent(const StackSet& set, const float* W) {
+    StackSet check;
+    BuildSet(set.m[5][0], W, set.m[4][0], check);
+    for (int s = 0; s < 6; ++s) for (int l = 0; l < kSwapLevels[s]; ++l) if (!Close(check.m[s][l], set.m[s][l])) return false;
+    return true;
+}
+
+// The sets for the larger window (pad in pixels on each side) from the original one.
+bool BuildBig(const StackSet& o, int padL, int padT, int padR, int padB, StackSet& big) {
+    const float* V = o.m[5][0]; const float* W = o.m[2][0]; const float* P = o.m[4][0];
+    const double hw = V[0], hh = -V[5];
+    float V2[16]; std::memcpy(V2, V, 64);
+    const double w2 = 2 * hw + padL + padR, h2 = 2 * hh + padT + padB;
+    V2[0] = static_cast<float>(w2 / 2); V2[3] = static_cast<float>(w2 / 2); V2[5] = static_cast<float>(-h2 / 2); V2[7] = static_cast<float>(h2 / 2);
+    float V2W[16], VW[16], VWP[16], T[16] = { 1, 0, 0, static_cast<float>(padL), 0, 1, 0, static_cast<float>(padT), 0, 0, 1, 0, 0, 0, 0, 1 }, TVWP[16];
+    MulF(V2, W, V2W); MulF(V, W, VW); MulF(VW, P, VWP); MulF(T, VWP, TVWP);
+    double a[16], inv[16];
+    for (int i = 0; i < 16; ++i) a[i] = V2W[i];
+    if (!Invert(a, inv)) return false;
+    float invf[16], P2[16];
+    for (int i = 0; i < 16; ++i) invf[i] = static_cast<float>(inv[i]);
+    MulF(invf, TVWP, P2);
+    BuildSet(V2, W, P2, big);
+    return true;
+}
+
+// How far beyond each screen edge a caster can stand and still shadow the screen: the sun's shadows fall along the light's horizontal direction, about 14 units tall casters; the edge's
+// ground points shifted towards the sun (their feet and tops) are projected back to the screen.
+const double kCasterHeight = 9.0;   // the casters that matter at the screen's edge (trees, huts, rocks; the tallest are cut off)
+
+void ChoosePads(const StackSet& o, double fraction, int& padL, int& padT, int& padR, int& padB) {
+    const double W = 2.0 * o.m[5][0][0], H = -2.0 * o.m[5][0][5];
+    const double minPadX = std::ceil(0.04 * W / 8) * 8, minPadY = std::ceil(0.04 * H / 8) * 8;
+    const double maxPadX = std::ceil(fraction * W / 8) * 8, maxPadY = std::ceil(fraction * H / 8) * 8;
+    double need[4] = { minPadX, minPadY, minPadX, minPadY };   // left, top, right, bottom
+    double view[16], m[16], inv[16], proj[16];
+    const uintptr_t sun = Read<uintptr_t>(kSunPtr);
+    if (sun && StackTop(0x5C, view)) {
+        for (int i = 0; i < 16; ++i) proj[i] = o.m[0][2][i];
+        Mul(proj, view, m);
+        if (Invert(m, inv)) {
+            double dx = Read<float>(sun + 0xD4), dy = Read<float>(sun + 0xD8), dz = Read<float>(sun + 0xDC);
+            const double hl = std::hypot(dx, dy);
+            if (hl > 1e-6) {
+                dx /= hl; dy /= hl;
+                const double tanE = std::fabs(dz) / hl;
+                const double L = std::fmin(std::fmax(kCasterHeight / std::fmax(tanE, 0.25), 4.0), 24.0);   // shadow length of a caster of that height
+                const double m10 = proj[10], m11 = proj[11], m14 = proj[14];
+                if (std::fabs(m14) > 1e-9) {
+                    const double K = -m14 * m11, gz = Read<float>(kCamera + 0xE8);
+                    const double sxs[8] = { 0, W, 0, W, W / 2, W / 2, 0, W }, sys[8] = { 0, 0, H, H, 0, H, H / 2, H / 2 };
+                    for (int i = 0; i < 8; ++i) {
+                        // the edge point on the ground plane at the target's height
+                        double a0[3], b0[3];
+                        const double z0 = 0.05, z1 = 0.999;
+                        const double w0 = K / (m10 - z0 * m14), w1 = K / (m10 - z1 * m14);
+                        Transform(inv, sxs[i] * w0, sys[i] * w0, z0 * w0, w0, a0);
+                        Transform(inv, sxs[i] * w1, sys[i] * w1, z1 * w1, w1, b0);
+                        const double dzr = b0[2] - a0[2];
+                        if (std::fabs(dzr) < 1e-9) continue;
+                        double t = (gz - a0[2]) / dzr; if (t < 0 || t > 1) continue;
+                        const double gx = a0[0] + (b0[0] - a0[0]) * t, gy = a0[1] + (b0[1] - a0[1]) * t;
+                        for (int k = 0; k < 2; ++k) {   // the caster's foot and top, towards the sun (opposite to the light's travel)
+                            double q[4] = { gx - dx * L, gy - dy * L, gz + (k ? kCasterHeight : 0.0), 1.0 }, r[4];
+                            for (int row = 0; row < 4; ++row) r[row] = m[row * 4] * q[0] + m[row * 4 + 1] * q[1] + m[row * 4 + 2] * q[2] + m[row * 4 + 3] * q[3];
+                            if (r[3] < 1e-6) continue;
+                            const double px = r[0] / r[3], py = r[1] / r[3];
+                            need[0] = std::fmax(need[0], -px + 8); need[2] = std::fmax(need[2], px - W + 8);
+                            need[1] = std::fmax(need[1], -py + 8); need[3] = std::fmax(need[3], py - H + 8);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    static double kept[4] = { 0, 0, 0, 0 };
+    int out[4];
+    for (int i = 0; i < 4; ++i) {
+        const double cap = (i & 1) ? maxPadY : maxPadX;
+        double v = std::fmin(need[i], cap);
+        // grows at once, shrinks slowly (the shadows do not change with the pads, but the game's matrices do)
+        kept[i] = v > kept[i] ? v : std::fmax(v, kept[i] * 0.98);
+        out[i] = static_cast<int>(std::ceil(kept[i] / 8.0) * 8.0);
+    }
+    padL = out[0]; padT = out[1]; padR = out[2]; padB = out[3];
+}
+
 void PrepareSwap() {
     g_swap = -1;
-    for (int s = 0; s < 6; ++s) if (!StackLevel(s, 0)) { UmEngineLog("um-engine: guard band: the matrix stacks are not as expected: off"); return; }
-    ReadSet(g_big);
-    const float* W = StackLevel(2, 0);   // the stack +0x4C's matrix is also the first of +0x24 / +0x3C
-    float Vo[16], Po[16];
-    g_bypass = true;
-    reinterpret_cast<void (__attribute__((stdcall)) *)(float*, int*)>(0x004F1370)(Vo, g_rectOrig);
-    reinterpret_cast<void (__attribute__((stdcall)) *)(float*, float, float, float, float)>(0x004F0E80)(Po, g_origPersp[0], g_origPersp[1], g_origPersp[2], g_origPersp[3]);
-    g_bypass = false;
-    // the formulas must reproduce what the game built for the larger ones (from its P and V)
-    StackSet check;
-    BuildSet(g_big.m[5][0], W, g_big.m[4][0], check);
-    for (int s = 0; s < 6; ++s) for (int l = 0; l < kSwapLevels[s]; ++l)
-        if (!Close(check.m[s][l], g_big.m[s][l])) { UmEngineLog("um-engine: guard band: the matrix stacks (%d, level %d) are not what was expected: off", s, l); return; }
-    BuildSet(Vo, W, Po, g_orig);
+    HMODULE module = GetModuleHandleA("d7vk.dll");
+    if (!module) module = GetModuleHandleA("ddraw.dll");
+    g_guardFn = module ? reinterpret_cast<GuardFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowGuard"))) : nullptr;
+    if (!g_guardFn) { UmEngineLog("um-engine: SunShadows::Guard needs d7vk.dll: not applied"); return; }
+    if (!ReadSet(g_orig)) { UmEngineLog("um-engine: guard band: the matrix stacks are not as expected: off"); return; }
+    if (!SetIsConsistent(g_orig, g_orig.m[2][0])) { UmEngineLog("um-engine: guard band: the matrix stacks are not what was expected: off"); return; }
     g_swap = 1;
-    UmEngineLog("um-engine: guard band: matrix stacks swapped around the world pass");
+    g_guardOn = true;
+    UmEngineLog("um-engine: guard band on: the world is drawn with a band on the sides the sun's shadows come from (at most %.0f %% of the screen)", C().guard * 100);
 }
 
 extern "C" __attribute__((force_align_arg_pointer)) void UmGuardOn() {
-    if (!g_guardOn || !g_guardFn) return;
     if (g_swap == 0) PrepareSwap();
-    if (g_swap == 1) WriteSet(g_big);
-    SetDrawerSize(g_rectBig[2] - g_rectBig[0], g_rectBig[3] - g_rectBig[1]);
-    g_guardFn(static_cast<float>(g_guardPx), static_cast<float>(g_guardPy));
+    if (g_swap != 1 || C().guard <= 0.0) { g_padL = g_padT = g_padR = g_padB = 0; return; }
+    if (!ReadSet(g_orig)) return;
+    g_screenW = static_cast<int>(std::lround(2.0 * g_orig.m[5][0][0])); g_screenH = static_cast<int>(std::lround(-2.0 * g_orig.m[5][0][5]));
+    ChoosePads(g_orig, std::fmin(std::fmax(C().guard, 0.0), 0.6), g_padL, g_padT, g_padR, g_padB);
+    if (!BuildBig(g_orig, g_padL, g_padT, g_padR, g_padB, g_big)) { g_padL = g_padT = g_padR = g_padB = 0; return; }
+    { static int lp[4] = {-1,-1,-1,-1}; if (C().guardLog > 1.5 && (lp[0] != g_padL || lp[1] != g_padT || lp[2] != g_padR || lp[3] != g_padB)) { lp[0] = g_padL; lp[1] = g_padT; lp[2] = g_padR; lp[3] = g_padB; UmEngineLog("um-engine: dbg pads L %d T %d R %d B %d (screen %d x %d)", g_padL, g_padT, g_padR, g_padB, g_screenW, g_screenH); } }
+    WriteSet(g_big);
+    SetDrawerSize(g_screenW + g_padL + g_padR, g_screenH + g_padT + g_padB);
+    g_guardFn(static_cast<float>(g_padL), static_cast<float>(g_padT));
+    g_guardOn = true;
 }
 
 extern "C" __attribute__((force_align_arg_pointer)) void UmGuardOff() {
-    if (!g_guardOn || !g_guardFn) return;
+    if (g_swap != 1 || !g_guardFn || (g_padL | g_padT | g_padR | g_padB) == 0) return;
     g_guardFn(0.0f, 0.0f);
     SetDrawerSize(g_screenW, g_screenH);
-    if (g_swap == 1) WriteSet(g_orig);
+    WriteSet(g_orig);
 }
 
-// The game picks with the screen points of the mouse (CWorldClient::PickTerrainPoint 0x56C350 / PickTerrainPoint2 0x56BF30: out, x, y as floats, and PickObjectsAt 0x565790 /
-// PickObjectsAt2 0x5659D0: a POINT*): its screen is now the band's width / height further to the top left, so the points get the same shift.
-extern "C" __attribute__((force_align_arg_pointer)) void UmPickTerrainFix(int* args) {
-    if (!g_guardOn) return;
-    float x, y; std::memcpy(&x, &args[1], 4); std::memcpy(&y, &args[2], 4);
-    x += static_cast<float>(g_guardPx); y += static_cast<float>(g_guardPy);
-    std::memcpy(&args[1], &x, 4); std::memcpy(&args[2], &y, 4);
-}
-
+// The mouse picking of objects compares the mouse with the screen rectangles made during the last world pass (PickObjectsAt 0x565790 / PickObjectsAt2 0x5659D0: a POINT*): they carry the
+// shift of that pass. (The terrain picking inverts the original matrices at rest and needs nothing.)
 extern "C" __attribute__((force_align_arg_pointer)) void UmPickObjectsFix(int* args) {
-    if (!g_guardOn) return;
+    if (g_padL == 0 && g_padT == 0) return;
     static long ring[4][2]; static int next = 0;
     const long* pt = reinterpret_cast<const long*>(args[0]);
     if (!pt) return;
     long* copy = ring[next]; next = (next + 1) & 3;
-    copy[0] = pt[0] + g_guardPx; copy[1] = pt[1] + g_guardPy;
+    copy[0] = pt[0] + g_padL; copy[1] = pt[1] + g_padT;
     args[0] = reinterpret_cast<int>(copy);
 }
 
-extern "C" void UmViewportHook();
-extern "C" void UmPerspectiveHook();
-extern "C" void UmPickTerrainHook();
-extern "C" void UmPickTerrain2Hook();
 extern "C" void UmPickObjectsHook();
 extern "C" void UmPickObjects2Hook();
 
@@ -363,8 +397,6 @@ void InstallSetupHook() {
     if (std::memcmp(wrap, kJump, 5) != 0) { UmEngineLog("um-engine: sun shadows: the world render wrapper has other code (another build): no guard band"); return; }
     HookPrologue(0x00565790, reinterpret_cast<void*>(&UmPickObjectsHook), 5, 0x83, 0xEC, 0x1C, 0x53, 0x55);
     HookPrologue(0x005659D0, reinterpret_cast<void*>(&UmPickObjects2Hook), 5, 0x83, 0xEC, 0x1C, 0x53, 0x55);
-    HookPrologue(0x004F1370, reinterpret_cast<void*>(&UmViewportHook));
-    HookPrologue(0x004F0E80, reinterpret_cast<void*>(&UmPerspectiveHook));
     DWORD old = 0;
     if (!VirtualProtect(wrap, 5, PAGE_EXECUTE_READWRITE, &old)) return;
     const long rel = reinterpret_cast<long>(&UmRenderWrap) - reinterpret_cast<long>(wrap + 5);
@@ -420,8 +452,8 @@ bool Gather(Params& p) {
     if (!StackTop(0x54, vp)) return false;
     const double hw = vp[0], hh = -vp[5];
     // with the guard band the screen is the middle of the (larger) window the game draws: its coordinates are shifted by the band's width
-    const double gpx = g_guardOn ? g_guardPx : 0, gpy = g_guardOn ? g_guardPy : 0;
-    const double width = 2 * hw - 2 * gpx, height = 2 * hh - 2 * gpy;
+    const double gpx = g_padL, gpy = g_padT;
+    const double width = 2 * hw - g_padL - g_padR, height = 2 * hh - g_padT - g_padB;
     p.guard[0] = static_cast<float>(gpx); p.guard[1] = static_cast<float>(gpy);
     const double groundZ = Read<float>(kCamera + 0xE8);
     // The shadowed area, fitted in the sun's own axes (the map is a square in R / U around its centre, light depth runs along D): the visible ground is found by sending nine rays through the
@@ -607,28 +639,6 @@ _UmDrawTrampoline:
 )");
 asm(R"(
 .text
-.globl _UmViewportHook
-_UmViewportHook:
-    leal 4(%esp), %eax
-    pushl %eax
-    call _UmViewportFix
-    addl $4, %esp
-    pushl %ebp
-    movl %esp, %ebp
-    subl $8, %esp
-    pushl $0x004F1376
-    ret
-.globl _UmPerspectiveHook
-_UmPerspectiveHook:
-    leal 4(%esp), %eax
-    pushl %eax
-    call _UmPerspectiveFix
-    addl $4, %esp
-    pushl %ebp
-    movl %esp, %ebp
-    subl $8, %esp
-    pushl $0x004F0E86
-    ret
 )");
 asm(R"(
 .text
@@ -646,32 +656,6 @@ _UmRenderWrap:
 )");
 asm(R"(
 .text
-.globl _UmPickTerrainHook
-_UmPickTerrainHook:
-    pushl %ecx
-    leal 8(%esp), %eax
-    pushl %eax
-    call _UmPickTerrainFix
-    addl $4, %esp
-    popl %ecx
-    pushl %ebp
-    movl %esp, %ebp
-    subl $0x30, %esp
-    pushl $0x0056C356
-    ret
-.globl _UmPickTerrain2Hook
-_UmPickTerrain2Hook:
-    pushl %ecx
-    leal 8(%esp), %eax
-    pushl %eax
-    call _UmPickTerrainFix
-    addl $4, %esp
-    popl %ecx
-    pushl %ebp
-    movl %esp, %ebp
-    subl $0x30, %esp
-    pushl $0x0056BF36
-    ret
 .globl _UmPickObjectsHook
 _UmPickObjectsHook:
     pushl %ecx
