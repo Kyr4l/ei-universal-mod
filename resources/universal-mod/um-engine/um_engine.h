@@ -14,5 +14,8 @@ struct UmEngineFunction {
 // Exported by um-engine.dll:
 //   const char* UmEngineVersion();
 //   const UmEngineFunction* UmEngineFunctions(int* count);   // the ones to install (config applied)
+//   void UmEngineSetLogger(UmEngineLogFn log);               // um.dll's log: um-engine's messages go to um.log (called before UmEngineFunctions)
 typedef const char* (*UmEngineVersionFn)();
 typedef const UmEngineFunction* (*UmEngineFunctionsFn)(int* count);
+typedef void (*UmEngineLogFn)(const char* level, const char* text);   // level: "INFO", "WARN", "DEBUG"
+typedef void (*UmEngineSetLoggerFn)(UmEngineLogFn log);

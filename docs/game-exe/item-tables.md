@@ -22,4 +22,4 @@ CItemManager::CreateItemByName, CGSPlayer::InitAllowedLists, CCampTradeWin::Draw
 out-of-range index they carry a NULL record on and no null test follows in the decompile (not proven to crash in each case): CItemWeapon::GetText20 0x6A27E0 (no caller:
 a virtual slot), CItemLoot::GetIconName / GetInitIconName 0x6A4B90 / 0x6A5030, CCampScreen::CanDropItem / OnBuyOrRepair, CCampItemConstr::CreateItem / OnOpen,
 ArmorName_Format (the material), UIItemInfoWin::Refresh, CItemManager::CreateItem. If one of them shows up in a crash dump, the fix is the same as above (a replaced function or a patched inline
-lookup); um-engine.log names every out-of-range id the replaced functions meet (the first 8).
+lookup); um.log (lines starting "um-engine:") names every out-of-range id the replaced functions meet (the first 8).

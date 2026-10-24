@@ -544,7 +544,7 @@ bool Gather(Params& p) {
         p.mapSize = std::min<uint32_t>(size, std::max<uint32_t>(1024u, static_cast<uint32_t>(cfg.mapSize)));
     }
     { static float lr = 0, lh = 0; static DWORD lt = 0;
-      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lh - p.height) > 3.0f)) { const DWORD n2 = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms area half %.1f -> radius %.0f, depth half %.1f, map %u, terrain %s", static_cast<unsigned long>(n2 - lt), half, p.radius, p.height, p.mapSize, terrain ? "yes" : "no"); lt = n2; lr = p.radius; lh = p.height; } }
+      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lh - p.height) > 3.0f)) { const DWORD n2 = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms area half %.1f -> radius %.0f, depth half %.1f, map %u, terrain %s", static_cast<unsigned long>(lt ? n2 - lt : 0), half, p.radius, p.height, p.mapSize, terrain ? "yes" : "no"); lt = n2; lr = p.radius; lh = p.height; } }
     p.strength = static_cast<float>(cfg.strength);
     p.extra = static_cast<float>(cfg.extra);
     p.flags = static_cast<uint32_t>(cfg.debug);

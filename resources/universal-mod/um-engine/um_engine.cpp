@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.13.0";
+static const char* const kEngineVersion = "0.13.1";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -234,8 +234,25 @@ static DWORD WINAPI ModulePatchThread(LPVOID) {
 
 static std::vector<UmEngineFunction> g_enabled;
 
-// um-engine.log beside the DLL: research logging for the functions under test (cheap when nothing calls it).
+// um-engine's log lines go to um.log through the function um.dll hands over (UmEngineSetLogger, before anything is installed): one log file for the mod. Without it (an um.dll that
+// does not know the function) they go to um-engine.log beside the DLL as before.
+static void (*g_logger)(const char* level, const char* text) = nullptr;
+
+extern "C" __declspec(dllexport) void UmEngineSetLogger(void (*log)(const char* level, const char* text)) { g_logger = log; }
+
 extern "C" void UmEngineLog(const char* format, ...) {
+    char text[1024];
+    va_list args;
+    va_start(args, format);
+    std::vsnprintf(text, sizeof(text), format, args);
+    va_end(args);
+    if (g_logger) {
+        // problems are warnings (the counts um.log keeps), the research counters ("dbg") are debug lines, the rest information
+        const char* level = std::strstr(text, " skipped") || std::strstr(text, "other code") || std::strstr(text, ": off") || std::strstr(text, "not applied") || std::strstr(text, "not as expected")
+            ? "WARN" : std::strstr(text, "dbg ") ? "DEBUG" : "INFO";
+        g_logger(level, text);
+        return;
+    }
     static std::string path;
     if (path.empty()) {
         char buffer[MAX_PATH] = {0};
@@ -244,14 +261,11 @@ extern "C" void UmEngineLog(const char* format, ...) {
         const size_t slash = path.find_last_of("\\/");
         path = (slash == std::string::npos ? std::string() : path.substr(0, slash + 1)) + "um-engine.log";
     }
-    FILE* f = std::fopen(path.c_str(), "a");
-    if (!f) return;
-    va_list args;
-    va_start(args, format);
-    std::vfprintf(f, format, args);
-    va_end(args);
-    std::fputc('\n', f);
-    std::fclose(f);
+    if (FILE* f = std::fopen(path.c_str(), "a")) {
+        std::fputs(text, f);
+        std::fputc('\n', f);
+        std::fclose(f);
+    }
 }
 
 static const char* const kShadowResolutionKey = "UnitShadow::Resolution"; // a number (64 = the game's own), not on / off

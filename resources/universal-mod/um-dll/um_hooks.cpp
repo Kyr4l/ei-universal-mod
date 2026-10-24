@@ -84,6 +84,9 @@ void InstallEngineFunctions() {
     const auto version = reinterpret_cast<UmEngineVersionFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineVersion")));
     const auto functions = reinterpret_cast<UmEngineFunctionsFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineFunctions")));
     if (!functions) { LogLine("ERROR", "um-engine.dll has no UmEngineFunctions export"); return; }
+    // um-engine's own messages (what it installed, what it skipped, its research counters) are written to this log
+    if (const auto setLogger = reinterpret_cast<UmEngineSetLoggerFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineSetLogger"))))
+        setLogger([](const char* level, const char* text) { LogLine(level, "%s", text); });
     int count = 0;
     const UmEngineFunction* list = functions(&count);
     int installed = 0;
