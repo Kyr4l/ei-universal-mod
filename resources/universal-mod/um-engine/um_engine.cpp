@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.12.1";
+static const char* const kEngineVersion = "0.12.2";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -259,7 +259,7 @@ static const char* const kShadowResolutionKey = "UnitShadow::Resolution"; // a n
 // Numeric keys of um-engine.cfg ("Name=1.5"): default values, written to the file when missing.
 static const struct { const char* key; const char* value; const char* comment; } kNumberKeys[] = {
     { "SunShadows::Enabled",   "1",      "SunShadows: 0 switches the sun shadows off while playing (the game's own come back); checked once a second" },
-    { "SunShadows::MapSize",   "2048",   "SunShadows: the shadow map's size in texels (1024 / 2048 / 4096)" },
+    { "SunShadows::MapSize",   "4096",   "SunShadows: the largest shadow map, in texels (1024 / 2048 / 4096; the map follows the visible area at about 0.04 world units a texel)" },
     { "SunShadows::Strength",  "1",      "SunShadows: 0..1, how much of the sun's light a shadow takes (1 = all of it: as dark as the ambient light)" },
     { "SunShadows::Bias",      "0.0015", "SunShadows: depth bias against shadow acne (light depth units)" },
     { "SunShadows::SlopeBias", "0.004",  "SunShadows: extra bias on surfaces edge-on to the sun" },

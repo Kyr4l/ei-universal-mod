@@ -45,7 +45,7 @@ struct Params {
 };
 
 // um-engine.cfg numbers, re-read once a second (the file is not parsed every frame; editing it while the game runs works)
-struct Cfg { double enabled = 1, margin = 8, height = 50, strength = 1, bias = 0.0015, slopeBias = 0.004, mapSize = 2048, extra = 0.3, debug = 0, indoor = 0, guard = 0.15, guardLog = 0; };
+struct Cfg { double enabled = 1, margin = 8, height = 50, strength = 1, bias = 0.0015, slopeBias = 0.004, mapSize = 4096, extra = 0.3, debug = 0, indoor = 0, guard = 0.15, guardLog = 0; };
 Cfg g_cfg; DWORD g_cfgAt = 0;
 const Cfg& C() {
     const DWORD now = GetTickCount();
@@ -424,38 +424,59 @@ bool Gather(Params& p) {
     const double width = 2 * hw - 2 * gpx, height = 2 * hh - 2 * gpy;
     p.guard[0] = static_cast<float>(gpx); p.guard[1] = static_cast<float>(gpy);
     const double groundZ = Read<float>(kCamera + 0xE8);
-    double cx = 0, cy = 0, cz = groundZ;
-    double hits[4][3];
-    int n = 0;
+    // Each screen corner's ray meets planes above, at and below the camera's target height (a gorge or a hill is not at the target's height); every point found is inside the bounds
+    // (the far end of the ray is at depth z = 0.999 of the projection).
+    double cz = groundZ;
+    const double planes[3] = { groundZ + 8.0, groundZ, groundZ - 16.0 };
     const double xs[4] = { gpx, gpx + width, gpx, gpx + width }, ys[4] = { gpy, gpy, gpy + height, gpy + height };
+    double minX = 1e30, maxX = -1e30, minY = 1e30, maxY = -1e30;
+    double hx[12], hy[12];
+    int n = 0;
     for (int i = 0; i < 4; ++i) {
-        const double z0 = 0.05, z1 = 0.9;
+        const double z0 = 0.05, z1 = 0.999;
         const double w0 = p.depthK / (p.depthFar - z0 * (p.depthFar - p.depthNear)), w1 = p.depthK / (p.depthFar - z1 * (p.depthFar - p.depthNear));
         double a[3], b[3];
         Transform(inv, xs[i] * w0, ys[i] * w0, z0 * w0, w0, a);
         Transform(inv, xs[i] * w1, ys[i] * w1, z1 * w1, w1, b);
         const double dz = b[2] - a[2];
-        double t = std::fabs(dz) > 1e-9 ? (groundZ - a[2]) / dz : 1.0;
-        if (t < 0 || t > 3) t = 1.0;   // not hitting the ground plane: use the far point
-        for (int k = 0; k < 3; ++k) hits[n][k] = a[k] + (b[k] - a[k]) * t;
-        ++n;
+        for (int k = 0; k < 3; ++k) {
+            double t = std::fabs(dz) > 1e-9 ? (planes[k] - a[2]) / dz : 1.0;
+            t = std::fmin(std::fmax(t, 0.0), 1.0);
+            hx[n] = a[0] + (b[0] - a[0]) * t; hy[n] = a[1] + (b[1] - a[1]) * t;
+            minX = std::fmin(minX, hx[n]); maxX = std::fmax(maxX, hx[n]); minY = std::fmin(minY, hy[n]); maxY = std::fmax(maxY, hy[n]);
+            ++n;
+        }
     }
-    for (int i = 0; i < n; ++i) { cx += hits[i][0]; cy += hits[i][1]; }
-    cx /= n; cy /= n;
+    const double cx = 0.5 * (minX + maxX), cy = 0.5 * (minY + maxY);
     double radius = 0;
-    for (int i = 0; i < n; ++i) radius = std::fmax(radius, std::hypot(hits[i][0] - cx, hits[i][1] - cy));
+    for (int i = 0; i < n; ++i) radius = std::fmax(radius, std::hypot(hx[i] - cx, hy[i] - cy));
     p.center[0] = static_cast<float>(cx); p.center[1] = static_cast<float>(cy); p.center[2] = static_cast<float>(cz);
     const Cfg& cfg = C();
-    // the radius moves in steps of 4 units: a radius that follows the camera continuously changes the texel size every frame and the shadows shimmer
-    p.radius = static_cast<float>(std::fmin(std::fmax(std::ceil((radius + cfg.margin) / 4.0) * 4.0, 16.0), 120.0));
+    // The radius keeps its value until the area needs more or is much smaller (steps of 8 units, a quarter of slack): a radius that follows the camera changes the texel size and the shadows shimmer
+    {
+        static double kept = 0;
+        const double need = std::fmin(std::fmax(std::ceil((radius + cfg.margin) / 8.0) * 8.0, 16.0), 120.0);
+        if (need > kept || need < kept * 0.7) kept = need;
+        p.radius = static_cast<float>(kept);
+    }
     { static float lr = 0, lz = 0, lcx = 0, lcy = 0; static DWORD lt = 0; const float gz = static_cast<float>(groundZ);
-      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lz - gz) > 0.05f || std::fabs(lcx - p.center[0]) > 1.0f || std::fabs(lcy - p.center[1]) > 1.0f)) { const DWORD n = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms radius %.1f (raw %.2f) groundZ %.2f center %.1f %.1f", static_cast<unsigned long>(n - lt), p.radius, radius, gz, p.center[0], p.center[1]); lt = n; }
+      if (cfg.guardLog > 1.5 && (lr != p.radius || std::fabs(lz - gz) > 0.5f || std::fabs(lcx - p.center[0]) > 2.0f || std::fabs(lcy - p.center[1]) > 2.0f)) { const DWORD n2 = GetTickCount(); UmEngineLog("um-engine: dbg +%lu ms radius %.1f (raw %.2f) groundZ %.2f center %.1f %.1f", static_cast<unsigned long>(n2 - lt), p.radius, radius, gz, p.center[0], p.center[1]); lt = n2; }
       lr = p.radius; lz = gz; lcx = p.center[0]; lcy = p.center[1]; }
-    p.height = static_cast<float>(cfg.height);
+    {   // Light depth is measured along the light through the area's centre: the area's horizontal radius times the light's horizontal part plus the vertical spread must fit in +-height,
+        // else the far corners of the screen (and casters upstream of the sun) fall outside the map and have no shadows. The bias is kept in world units (the cfg's is for a range of 100).
+        const double lz = p.lightDir[2], len = std::sqrt(double(p.lightDir[0]) * p.lightDir[0] + double(p.lightDir[1]) * p.lightDir[1] + lz * lz);
+        const double sinE = len > 1e-6 ? std::fabs(lz) / len : 0.7, cosE = std::sqrt(std::fmax(0.0, 1.0 - sinE * sinE));
+        const double h = std::fmax(cfg.height, p.radius * cosE + 30.0 * sinE + 12.0);
+        p.height = static_cast<float>(h);
+        p.bias = static_cast<float>(cfg.bias * 100.0 / (2.0 * h));
+        p.slopeBias = static_cast<float>(cfg.slopeBias * 100.0 / (2.0 * h));
+    }
     p.strength = static_cast<float>(cfg.strength);
-    p.bias = static_cast<float>(cfg.bias);
-    p.slopeBias = static_cast<float>(cfg.slopeBias);
-    p.mapSize = static_cast<uint32_t>(cfg.mapSize);
+    {   // the map's size follows the area: about 0.04 world units a texel (a power of two between 1024 and SunShadows::MapSize)
+        uint32_t size = 1024;
+        while (size < 8192 && 2.0 * p.radius / size > 0.04) size *= 2;
+        p.mapSize = std::min<uint32_t>(size, std::max<uint32_t>(1024u, static_cast<uint32_t>(cfg.mapSize)));
+    }
     p.extra = static_cast<float>(cfg.extra);
     p.flags = static_cast<uint32_t>(cfg.debug);
     return true;
