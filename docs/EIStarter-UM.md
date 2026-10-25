@@ -36,7 +36,7 @@ button (mod information, its readme / changelog, and the mod's own script button
 
 **Options** (the tabs of EIStarter's dialog): Graphics (adapter, resolution, mip-mapping, antialiasing, dithering, FPS-independent cursor (marked not recommended: it flickers with D7VK; off on a new install),
 filtering, textures, shadows, terrain LOD, lighting / shadowing frequency, movies, audio), Addon (landscape / objects draw radius, pause when
-minimized, addon.log levels), Multiplayer (console, "do not load .MQ from the host", second speed), Camera (every camera value), Paths (game folder,
+minimized, addon.log levels), Multiplayer (console, "do not load .MQ from the host", second speed), Camera (every camera value, and the **Original camera** button), Paths (game folder,
 resources, CD, the engine exe name), Utils (mod skins, mod.config, close when the game is up, debug log. New: **Window mode** = Fullscreen /
 Windowed / **Borderless window** / **Borderless scaled**. In EIStarter's Windowed mode the game is a frameless window that minimizes and pauses when it loses the focus
 (a multiplayer game then desyncs); Borderless keeps it running and keeps the mouse inside. EIStarter's presets (disabled there) and its "Russian
@@ -138,3 +138,14 @@ no pixel differing by more than 40), and one frame costs a few milliseconds. `ma
 
 New window mode **Borderless scaled** in Options > Video (see "Borderless scaled" under "Borderless window"): the launcher writes `BORDERLESS_SCALE` to the mod's `um.cfg` (the key is added after `BORDERLESS` when an older um.cfg lacks it) and `Scale` to
 `Engine\um-window.ini`, which the plugin and um.dll 1.7.0 read. `um-window.asi` is rebuilt with the scaling code (the Makefile links gdi32 for it).
+
+## 0.2.7 (2026-10-25): the camera of the original CD release
+
+The GOG release of the game writes camera settings (`HKCU\Software\Nival Interactive\EvilIslands\Camera Settings`) that make a bad camera. The launcher knows the 62 camera values of the original CD release (`game_defaults.hpp`, read from a CD installation's registry):
+
+* **At start** it compares the camera values it will give the game (its `[Game: Camera Settings]` section, imported from the registry at the first start) with them. When any differ, a window offers to replace them with the original ones (**Replace** / **Keep mine**, and a **Don't show again** checkbox that sets `CameraCheck=false` in `EIStarter-UM.cfg`).
+* **Options > Camera > Original camera** does the same on demand (applied with OK; Cancel changes nothing); the tab says how many values differ.
+* Replacing writes the original values into the launcher's settings and into the registry: Nival's key (what the game reads without the launcher) and the clone `HKCU\Software\Gipat.Ru\EI_Starter\EvilIslands` (what addon.dll points the game at). The values it replaced are appended to `EIStarter-UM-camera-backup.txt` (one block per replacement, `name=value` lines in the cfg's format, to paste back under `[Game: Camera Settings]`).
+* Only the "Camera Settings" key is touched (including the clip distances `FarClipDistance` / `NearClipDistance`, 100 / 2 in the CD release); graphics and the other settings stay as they are.
+
+Russian texts of the new window and button are built in (`lang.hpp`, used when the language is `ru` and the language's `lang.ini` has no such key). Tested in the launcher rig (a Wine prefix with GOG-like values in Nival's key): popup with the right count, Replace (registry, cfg and backup written), no second popup, Keep + Don't show again, the Options button with OK and with Cancel.

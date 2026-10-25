@@ -224,7 +224,15 @@ private:
         std::snprintf(n, sizeof n, fmt, "PowerKeyboard"); Float("Power: keyboard", n, 0.01f);
         ImGui::TreePop();
     }
-    void Camera(const Texts&) {
+    void Camera(const Texts& tx) {
+        // The original CD release's camera (GOG's differs and is hard to use); the registry and the backup file are handled when OK is pressed (main.cpp).
+        if (ImGui::Button((tx.Get("Options", "btCameraOriginal", "Original camera") + "##camOriginal").c_str())) { edit_.game.RestoreOriginalCamera(); edit_.cameraRestored = true; }
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tx.Get("Options", "tipCameraOriginal", "Replaces all camera settings with the values of the original CD release of the game (the GOG release changes them).\nThe old values are kept in EIStarter-UM-camera-backup.txt.").c_str());
+        ImGui::SameLine();
+        const size_t differ = edit_.game.CameraDifferences().size();
+        if (differ == 0) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", tx.Get("Options", "camSame", "Same as the original.").c_str());
+        else { char t[160]; std::snprintf(t, sizeof t, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(differ)); ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "%s", t); }
+        ImGui::Separator();
         if (ImGui::TreeNodeEx("General", ImGuiTreeNodeFlags_DefaultOpen)) {
             Flag("Flip X axis", "CameraFlipXAxis"); Flag("Flip Y axis", "CameraFlipYAxis");
             Float("Clip distance: far", "FarClipDistance", 1.0f); Float("Clip distance: near", "NearClipDistance", 0.1f);

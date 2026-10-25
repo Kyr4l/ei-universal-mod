@@ -76,6 +76,31 @@ int main(int argc, char** argv) {
         CHECK(NormalizePaths(g) && g.GetString("Path Settings", "CD-ROM Path") == WithSlash(w));
         fs::remove_all(game);
     }
+    // the camera of the original CD release: found, replaced, written to the registry, the choice kept
+    {
+        GameSettings g; g.FillDefaults();
+        CHECK(g.CameraDifferences().empty());                                      // a fresh installation's values are the original ones
+        g.SetFloat("camera settings", "CameraDefaultScrollSpeed", 3.f);               // the GOG values differ (the names are in capitals there)
+        g.SetInt("CAMERA SETTINGS", "CAMERABORDERSCROLLAREA", 9);
+        g.SetBool("general settings", "fullscreen", false);
+        CHECK(g.CameraDifferences().size() == 2);
+        CHECK(!g.CameraLines().empty() && g.CameraLines().size() == 62);
+        g.RestoreOriginalCamera();
+        CHECK(g.CameraDifferences().empty());
+        CHECK(!g.GetBool("general settings", "fullscreen", true));                   // the other settings stay
+        GameSettings none; CHECK(none.CameraDifferences().size() == 62);              // a missing value counts as different
+        GameSettings::WriteOriginalCameraToRegistry(kNivalKey);
+        winreg::Value v;
+        CHECK(winreg::Get(std::string(kNivalKey) + "\\Camera Settings", "FARCLIPDISTANCE", v) && v.bytes == std::vector<uint8_t>({0x00, 0x00, 0xC8, 0x42}));
+        CHECK(winreg::Get(std::string(kNivalKey) + "\\camera settings", "CameraBorderScrollArea", v) && v.dword == 1);
+        // the choice "don't show again" survives the config file
+        LauncherConfig c; c.game = g; CHECK(c.cameraCheck);
+        c.cameraCheck = false; c.cameraRestored = true;
+        CHECK(SaveConfig(tmp, c));
+        LauncherConfig d = LoadConfig(tmp);
+        CHECK(!d.cameraCheck); CHECK(!d.cameraRestored);                              // cameraRestored is not saved
+        CHECK(d.game.CameraDifferences().empty());
+    }
     // SetCfgLine
     {
         std::ofstream(tmp / "um.cfg") << "; comment\r\nA=1\r\nBORDERLESS=true ; x\r\nC=3\r\n";

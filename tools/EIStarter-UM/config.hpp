@@ -41,6 +41,8 @@ struct LauncherConfig {
     AddonOptions addon;
     GameSettings game;
     bool checkUpdatesAtStart = true;     // look for a newer mod in the background at start
+    bool cameraCheck = true;       // at start: offer the original camera when the camera values differ from the CD release's ("Don't show again" turns it off)
+    bool cameraRestored = false;   // not saved: the Options window restored the original camera (the launcher then writes it to the registry and keeps a backup)
     std::map<std::string, std::string> updateKeys; // per mod folder: the build the updater installed last (update::Release::Key)
     std::map<std::string, std::string> updateRepos; // "*" = an owner/repo overriding the built-in one
     bool firstRun = false;         // no EIStarter-UM.cfg existed
@@ -75,6 +77,7 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.borderless = ini.GetBool("Launcher", "Borderless", false);
         c.borderlessScale = ini.GetBool("Launcher", "BorderlessScale", false);
         c.checkUpdatesAtStart = ini.GetBool("Launcher", "CheckUpdatesAtStart", true);
+        c.cameraCheck = ini.GetBool("Launcher", "CameraCheck", true);
         for (const IniFile::Section& s : ini.Sections()) {
             if (LowerAscii(s.name) == "updates") for (const IniFile::Entry& e : s.entries) c.updateKeys[e.key] = e.value;
             if (LowerAscii(s.name) == "update repositories") for (const IniFile::Entry& e : s.entries) c.updateRepos[e.key] = e.value;
@@ -125,6 +128,7 @@ inline bool SaveConfig(const fs::path& dir, const LauncherConfig& c) {
     ini.SetBool("Launcher", "Borderless", c.borderless);
     ini.SetBool("Launcher", "BorderlessScale", c.borderlessScale);
     ini.SetBool("Launcher", "CheckUpdatesAtStart", c.checkUpdatesAtStart);
+    ini.SetBool("Launcher", "CameraCheck", c.cameraCheck);
     for (const auto& kv : c.updateKeys) ini.Set("Updates", kv.first, kv.second);
     for (const auto& kv : c.updateRepos) ini.Set("Update Repositories", kv.first, kv.second);
     const AddonOptions& a = c.addon;

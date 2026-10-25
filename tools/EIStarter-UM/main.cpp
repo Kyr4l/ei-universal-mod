@@ -35,7 +35,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.6";
+static constexpr const char* kVersion = "0.2.7";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -192,6 +192,32 @@ struct App {
         // Nothing chosen yet: the first real mod ("no mods" is the folder .0).
         if (!found) for (size_t i = 0; i < mods.size(); ++i) if (mods[i].folder != ".0") { modIndex = static_cast<int>(i); break; }
         if (mods.empty()) { ModInfo none; none.title = "No mods"; none.folder = ""; mods.push_back(none); }
+    }
+
+    // The camera of the original CD release (GameSettings::CameraDifferences): at start the launcher offers it when the values differ (the GOG release writes
+    // other ones), and the Options > Camera button restores it. The replaced values are appended to EIStarter-UM-camera-backup.txt; the original ones go into
+    // the launcher's settings and into Nival's registry key and the clone (the keys the game and addon.dll read).
+    bool cameraAsk = false, cameraDontShow = false;
+    size_t cameraDiffCount = 0;
+    void BackupCamera(const GameSettings& g) {
+        if (g.CameraDifferences().empty()) return;
+        std::ofstream f((dir / "EIStarter-UM-camera-backup.txt").string(), std::ios::app);
+        const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+        char t[32]; std::strftime(t, sizeof t, "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+        f << "; " << t << ": the camera values the launcher replaced by the original CD release's. To go back, put these lines under [Game: Camera Settings] in EIStarter-UM.cfg.\n";
+        for (const std::string& l : g.CameraLines()) f << l << "\n";
+        f << "\n";
+    }
+    void WriteCameraRegistry() {
+        GameSettings::WriteOriginalCameraToRegistry(kNivalKey);
+        GameSettings::WriteOriginalCameraToRegistry(kCloneKey);
+        Log("camera: the original CD release's values written to HKCU\\" + std::string(kNivalKey) + " and the clone");
+    }
+    void RestoreCamera() {
+        BackupCamera(cfg.game);
+        cfg.game.RestoreOriginalCamera();
+        WriteCameraRegistry();
+        Save();
     }
 
     void Click() { if (!clickSound.empty()) platform::PlayWav(clickSound); }
@@ -358,7 +384,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
     ImGui::PopStyleVar(2);
 
     const bool idle = app.phase == App::Phase::Idle || app.phase == App::Phase::Running;
-    const bool modal = app.options.IsOpen() || app.showInfo || !app.message.empty() || app.offer != App::Offer::None || app.phase == App::Phase::Starting || app.phase == App::Phase::Failed;
+    const bool modal = app.options.IsOpen() || app.showInfo || !app.message.empty() || app.offer != App::Offer::None || app.cameraAsk || app.phase == App::Phase::Starting || app.phase == App::Phase::Failed;
     ImDrawList* bg = ImGui::GetBackgroundDrawList();
     const Texture& back = app.skin.Background();
     if (back) bg->AddImage(Tid(back), ImVec2(0, 0), ImVec2(static_cast<float>(kW), static_cast<float>(kH)));
@@ -491,6 +517,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
         if (app.options.Draw(app.texts, result, ImVec2(kW, kH)) == OptionsWindow::Result::Ok) {
             const bool reloadMods = result.usingIniConfigs != app.cfg.usingIniConfigs;
             const bool reskin = result.modSkins != app.cfg.modSkins;
+            if (result.cameraRestored) { app.BackupCamera(app.cfg.game); app.WriteCameraRegistry(); result.cameraRestored = false; }
             app.cfg = result;
             if (reloadMods) app.ReloadMods();
             if (reskin || reloadMods) app.ApplySkin();
@@ -670,6 +697,38 @@ static void DrawMain(App& app, GLFWwindow* window) {
         ImGui::PopStyleColor();
     }
 
+    // The camera differs from the original CD release's: offer the original one.
+    if (app.cameraAsk && !app.options.IsOpen() && app.message.empty() && app.offer == App::Offer::None) {
+        ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize(ImVec2(470, 196));
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.02f, 0.04f, 0.07f, 0.96f));
+        if (ImGui::Begin("##camera", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
+            const Texts& tx = app.texts;
+            ImGui::TextColored(ImVec4(0.92f, 0.7f, 0.27f, 1), "%s", tx.Get("Options", "camTitle", "Camera settings").c_str());
+            ImGui::Spacing();
+            ImGui::TextWrapped("%s", tx.Get("Options", "camQuestion", "Your camera settings differ from the original CD release of Evil Islands (the GOG release changes them). Replace them with the original ones? The old values are saved in EIStarter-UM-camera-backup.txt.").c_str());
+            char n[160]; std::snprintf(n, sizeof n, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(app.cameraDiffCount));
+            ImGui::Spacing();
+            ImGui::TextDisabled("%s", n);
+            ImGui::SetCursorPos(ImVec2(12, ImGui::GetWindowHeight() - 34));
+            ImGui::Checkbox((tx.Get("Options", "camDontShow", "Don't show again") + "##camDont").c_str(), &app.cameraDontShow);
+            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 190, ImGui::GetWindowHeight() - 34));
+            const bool replace = ImGui::Button((tx.Get("Options", "camReplace", "Replace") + "##camReplace").c_str(), ImVec2(84, 0));
+            ImGui::SameLine();
+            const bool keep = ImGui::Button((tx.Get("Options", "camKeep", "Keep mine") + "##camKeep").c_str(), ImVec2(84, 0)) || ImGui::IsKeyPressed(ImGuiKey_Escape);
+            if (replace || keep) {
+                app.Click();
+                if (replace) { app.Log("camera: replaced by the original CD release's"); app.RestoreCamera(); }
+                else app.Log("camera: kept");
+                if (app.cameraDontShow) { app.cfg.cameraCheck = false; app.Log("camera: not asked again"); }
+                app.cameraAsk = false;
+                app.Save();
+            }
+        }
+        ImGui::End();
+        ImGui::PopStyleColor();
+    }
+
     // A message.
     if (!app.message.empty()) {
         ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
@@ -800,6 +859,11 @@ int main(int argc, char** argv) {
     if (app.cfg.firstRun && !app.UmDetected()) { app.offer = App::Offer::Asking; app.Log("first start without Universal Mod: offering the download"); }
     if (app.cfg.checkUpdatesAtStart && app.offer == App::Offer::None) app.CheckUpdates(); // in the background; the corner shows the result
     if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
+    if (app.cfg.cameraCheck) { // the camera of the original CD release, or the user's say that it is fine
+        app.cameraDiffCount = app.cfg.game.CameraDifferences().size();
+        app.cameraAsk = app.cameraDiffCount > 0;
+        if (app.cameraAsk) app.Log("camera: " + std::to_string(app.cameraDiffCount) + " values differ from the original CD release's: asking");
+    }
     if (!app.GameFolderOk()) { // nothing found: ask for the game folder right away instead of at the first Play
         app.Log("Evil Islands folder not found: asking");
         app.options.Open(app.cfg, true, "Evil Islands not found. Choose its folder, then OK.");

@@ -64,6 +64,40 @@ public:
     void FillDefaults() {
         for (const DefaultValue& d : kGameDefaults) if (!Has(d.key, d.name)) Set(d.key, d.name, FromDefault(d));
     }
+    // The camera of the original CD release of the game: the "Camera Settings" rows of game_defaults.hpp (read from a CD installation's registry).
+    // The GOG release writes other values, which make a bad camera.
+    static bool SameValue(const winreg::Value& a, const winreg::Value& b) {
+        return a.kind == b.kind && a.dword == b.dword && a.bytes == b.bytes && a.text == b.text;
+    }
+    static bool IsCameraRow(const DefaultValue& d) { return LowerAscii(d.key) == "camera settings"; }
+    // The names of the camera values that differ from the original release (a missing value counts as different).
+    std::vector<std::string> CameraDifferences() const {
+        std::vector<std::string> out;
+        for (const DefaultValue& d : kGameDefaults) {
+            if (!IsCameraRow(d)) continue;
+            const winreg::Value* v = Find(d.key, d.name);
+            if (!v || !SameValue(*v, FromDefault(d))) out.push_back(d.name);
+        }
+        return out;
+    }
+    // Puts every camera value of the original release back; the other settings are not touched.
+    void RestoreOriginalCamera() {
+        for (const DefaultValue& d : kGameDefaults) if (IsCameraRow(d)) Set(d.key, d.name, FromDefault(d));
+    }
+    // The camera values as "name=value" lines (the backup file written before they are replaced).
+    std::vector<std::string> CameraLines() const {
+        std::vector<std::string> out;
+        for (const Item& i : items_) if (LowerAscii(i.key) == "camera settings") out.push_back(i.name + "=" + Encode(i.value));
+        return out;
+    }
+    // Writes the original camera into a registry key (Nival's key, the clone): the "Camera Settings" values under `root`.
+    static void WriteOriginalCameraToRegistry(const std::string& root, void (*log)(const std::string&) = nullptr) {
+        for (const DefaultValue& d : kGameDefaults) {
+            if (!IsCameraRow(d)) continue;
+            winreg::Set(root + "\\" + d.key, d.name, FromDefault(d));
+        }
+        if (log) log("HKCU\\" + root + "\\Camera Settings: the original camera written");
+    }
     // Overlays the values of a registry key tree (the clone or Nival's key); returns false when the key does not exist.
     bool ImportRegistry(const std::string& root) {
         if (!winreg::KeyExists(root)) return false;
