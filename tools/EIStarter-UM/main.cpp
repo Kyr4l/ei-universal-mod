@@ -705,7 +705,7 @@ static void DrawMain(App& app, GLFWwindow* window) {
         if (ImGui::Begin("##camera", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
             const Texts& tx = app.texts;
             ImGui::TextColored(ImVec4(0.92f, 0.7f, 0.27f, 1), "%s", tx.Get("Options", "camTitle", "Camera settings").c_str());
-            ImGui::TextWrapped("%s", tx.Get("Options", "camQuestion", "Your camera settings differ from the original CD release of Evil Islands (the GOG release changes them; so does the old EIStarter). Replace them with the original ones? The old values are saved in EIStarter-UM-camera-backup.txt.").c_str());
+            ImGui::TextWrapped("%s", tx.Get("Options", "camQuestion", "Your camera settings differ from the original CD release of Evil Islands. Replace them with the original ones? The old values are saved in EIStarter-UM-camera-backup.txt.").c_str());
             char n[160]; std::snprintf(n, sizeof n, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(app.cameraDiffs.size()));
             ImGui::TextDisabled("%s", n);
             if (ImGui::BeginChild("##camdiffs", ImVec2(0, ImGui::GetContentRegionAvail().y - 38), ImGuiChildFlags_Borders)) {

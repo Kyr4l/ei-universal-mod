@@ -17,9 +17,9 @@ namespace launcher {
 struct BuiltinText { const char* key; const char* russian; };
 inline const BuiltinText kRussian[] = {
     {"btCameraOriginal", "Камера из оригинала"},
-    {"tipCameraOriginal", "Заменяет все настройки камеры значениями оригинального выпуска игры на CD (версия GOG меняет их).\nПрежние значения сохраняются в EIStarter-UM-camera-backup.txt."},
+    {"tipCameraOriginal", "Заменяет все настройки камеры значениями оригинального выпуска игры на CD.\nПрежние значения сохраняются в EIStarter-UM-camera-backup.txt."},
     {"camTitle", "Настройки камеры"},
-    {"camQuestion", "Настройки камеры отличаются от оригинального выпуска Evil Islands на CD (так делают версия GOG и старый EIStarter). Заменить их оригинальными? Прежние значения будут сохранены в EIStarter-UM-camera-backup.txt."},
+    {"camQuestion", "Настройки камеры отличаются от оригинального выпуска Evil Islands на CD. Заменить их оригинальными? Прежние значения будут сохранены в EIStarter-UM-camera-backup.txt."},
     {"camCount", "Отличающихся значений: %d."},
     {"camColName", "Значение"},
     {"camColMine", "Ваше"},

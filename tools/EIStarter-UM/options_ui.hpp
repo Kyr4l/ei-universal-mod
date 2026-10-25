@@ -227,7 +227,7 @@ private:
     void Camera(const Texts& tx) {
         // The original CD release's camera (GOG's differs and is hard to use); the registry and the backup file are handled when OK is pressed (main.cpp).
         if (ImGui::Button((tx.Get("Options", "btCameraOriginal", "Original camera") + "##camOriginal").c_str())) { edit_.game.RestoreOriginalCamera(); edit_.cameraRestored = true; }
-        if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tx.Get("Options", "tipCameraOriginal", "Replaces all camera settings with the values of the original CD release of the game (the GOG release changes them).\nThe old values are kept in EIStarter-UM-camera-backup.txt.").c_str());
+        if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tx.Get("Options", "tipCameraOriginal", "Replaces all camera settings with the values of the original CD release of the game.\nThe old values are kept in EIStarter-UM-camera-backup.txt.").c_str());
         ImGui::SameLine();
         const size_t differ = edit_.game.CameraDifferences().size();
         if (differ == 0) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", tx.Get("Options", "camSame", "Same as the original.").c_str());
