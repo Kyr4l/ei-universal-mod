@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.14.1";
+static const char* const kEngineVersion = "0.15.0";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -51,6 +51,7 @@ extern "C" void UmWorldEarlyInit(int shadowsInstalled); // world_shadow.cpp: the
 static bool g_sunShadowsInstalled = false;
 extern "C" void __attribute__((thiscall)) UmWorldBeginStub(); // world_shadow.cpp (sun shadows: the call sites bracketing the world pass)
 extern "C" void __attribute__((thiscall)) UmWorldEndStub();
+extern "C" void __attribute__((thiscall)) UmWaterEndStub(); // water_border.cpp (the water's border: foam where the water meets the land; the call site after CTerrain::RenderWater)
 extern "C" void __attribute__((thiscall)) UmMpGhostChatLine(void* ui, const char* text, unsigned number);   // mp_ghost.cpp (the other players in the base)
 extern "C" void UmMpGhostFrame();
 extern "C" int UmMpSpeedLobbyAlive();                                              // mp_speed.cpp (x2 speed in multiplayer)
@@ -130,6 +131,8 @@ static const UmCallSite kCallSites[] = {
     // world_shadow.cpp: real sun shadows with D7VK (shadow map + screen-space resolve); the game's own projected-bitmap shadows are switched off while it works
     { "SunShadows", 0x0056A06B, reinterpret_cast<void*>(&UmWorldBeginStub), -1, {0xE8, 0xC0, 0xC1, 0x15, 0x00} },
     { "SunShadows", 0x0056A080, reinterpret_cast<void*>(&UmWorldEndStub),   -1, {0xE8, 0x5B, 0x0F, 0x00, 0x00} },
+    // water_border.cpp: foam where the water meets the land (needs D7VK): right after the game has drawn the water layer
+    { "WaterBorder", 0x0056A120, reinterpret_cast<void*>(&UmWaterEndStub), -1, {0xE8, 0x1B, 0xD9, 0xF7, 0xFF} },
     { nullptr, 0, nullptr, 0, {} }
 };
 
@@ -268,6 +271,10 @@ static const struct { const char* key; const char* value; const char* comment; }
     { "SunShadows::Indoor",    "0",      "SunShadows: 1 also shadows caves (the game gives them a fixed direction instead of a sun), 0 keeps the game's own shadows there" },
     { "SunShadows::Guard",     "0.3",   "SunShadows: 0..0.6, at most this much of the screen's size is also drawn beyond an edge, on the sides the sun's shadows come from, so casters just off screen shadow too (0 = off; needs a restart)" },
     { "SunShadows::GuardLog",  "0",      "SunShadows: 1 logs the guard band's problems, 2 also every change of its pads / the shadowed area and a frame count every 5 s (research)" },
+    { "WaterBorder::Width",    "0.35",   "WaterBorder: width of the foam line inside the water, in world units (a step is about 1)" },
+    { "WaterBorder::Strength", "0.55",   "WaterBorder: 0..1, how visible the shore is (foam, paler shallows, wet ground); 0 = off" },
+    { "WaterBorder::Wet",      "0.3",    "WaterBorder: how far the ground above the waterline looks wet (darker), in world units" },
+    { "WaterBorder::Speed",    "1",      "WaterBorder: speed of the foam's movement (0 = still)" },
     { "Recorder::Enabled",     "1",      "Recorder: 0 switches the frame recorder and its hotkey off (needs a restart)" },
     { "Recorder::Key",         "19",      "Recorder: this key (a virtual-key code: 19 = Pause, 119 = F8, 0 = none) writes the last seconds as a report + picture into um-reports\\ beside the DLL" },
     { "Recorder::Ctrl",        "0",      "Recorder: 1 needs Ctrl held with the key" },

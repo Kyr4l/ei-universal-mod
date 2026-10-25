@@ -11359,4 +11359,115 @@ namespace dxvk {
     g_umShadowStat[2].store(0u, std::memory_order_relaxed);
   }
 
+
+  // Universal Mod: the water's border (see dxvk_um_water_common.glsl): a full-screen pass over the finished frame, after the game has drawn the water layer.
+  void DxvkContext::umWaterEnd(const DxvkUmWaterParams& p, const Rc<DxvkImageView>& thickness) {
+    if (p.size < sizeof(DxvkUmWaterParams) || thickness == nullptr)
+      return;
+
+    const auto& fbInfo = m_state.om.framebufferInfo;
+    Rc<DxvkImageView> colorView = fbInfo.getColorTarget(0u).view;
+    Rc<DxvkImageView> depthView = fbInfo.getDepthTarget().view;
+
+    if (colorView == nullptr || depthView == nullptr)
+      return;
+
+    DxvkUmShadowObjects& objects = m_common->umShadow();
+    const VkSampleCountFlagBits colorSamples = colorView->image()->info().sampleCount;
+    VkPipeline pipeline = objects.getWaterPipeline(colorView->info().format, colorSamples);
+
+    if (pipeline == VK_NULL_HANDLE)
+      return;
+
+    // the game's depth buffer has to be readable by the pass
+    Rc<DxvkImage> depthImage = depthView->image();
+
+    DxvkImageUsageInfo depthUsage = { };
+    depthUsage.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+    depthUsage.stages = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    depthUsage.access = VK_ACCESS_SHADER_READ_BIT;
+
+    if (!ensureImageCompatibility(depthImage, depthUsage))
+      return;
+
+    DxvkImageViewKey depthKey = { };
+    depthKey.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    depthKey.format = depthView->info().format;
+    depthKey.aspects = VK_IMAGE_ASPECT_DEPTH_BIT;
+    depthKey.mipIndex = depthView->info().mipIndex;
+    depthKey.mipCount = 1u;
+    depthKey.layerIndex = 0u;
+    depthKey.layerCount = 1u;
+    depthKey.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+    Rc<DxvkImageView> depthSrv = depthImage->createView(depthKey);
+
+    // the game's own render pass ends here, the pass below is ours (as in umShadowEnd)
+    this->endCurrentPass(true);
+    this->invalidateState();
+
+    small_vector<DxvkResourceAccess, 4u> batch;
+    batch.emplace_back(*thickness->image(), thickness->imageSubresources(), thickness->getLayout(),
+      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, VK_ACCESS_2_SHADER_READ_BIT, false);
+    batch.emplace_back(*depthImage, depthSrv->imageSubresources(), depthSrv->getLayout(),
+      VK_PIPELINE_STAGE_2_FRAGMENT_SHADER_BIT, VK_ACCESS_2_SHADER_READ_BIT, false);
+    batch.emplace_back(*colorView->image(), colorView->imageSubresources(), colorView->getLayout(),
+      VK_PIPELINE_STAGE_2_COLOR_ATTACHMENT_OUTPUT_BIT,
+      VK_ACCESS_2_COLOR_ATTACHMENT_READ_BIT | VK_ACCESS_2_COLOR_ATTACHMENT_WRITE_BIT, false);
+    syncResources(DxvkCmdBuffer::ExecBuffer, batch.size(), batch.data());
+
+    VkExtent3D extent = colorView->mipLevelExtent(0u);
+    VkRect2D area = { { 0, 0 }, { extent.width, extent.height } };
+
+    VkRenderingAttachmentInfo colorAttachment = { VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO };
+    colorAttachment.imageView = colorView->handle();
+    colorAttachment.imageLayout = colorView->getLayout();
+    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_LOAD;
+    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+
+    VkRenderingInfo rendering = { VK_STRUCTURE_TYPE_RENDERING_INFO };
+    rendering.renderArea = area;
+    rendering.layerCount = 1u;
+    rendering.colorAttachmentCount = 1u;
+    rendering.pColorAttachments = &colorAttachment;
+
+    m_cmd->cmdBeginRendering(DxvkCmdBuffer::ExecBuffer, &rendering);
+
+    VkViewport viewport = { 0.0f, 0.0f, float(extent.width), float(extent.height), 0.0f, 1.0f };
+    m_cmd->cmdSetViewport(1, &viewport);
+    m_cmd->cmdSetScissor(1, &area);
+
+    std::array<DxvkDescriptorWrite, 2> descriptors = { };
+    descriptors[0].descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+    descriptors[0].descriptor = depthSrv->getDescriptor();
+    descriptors[1].descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+    descriptors[1].descriptor = thickness->getDescriptor();
+
+    struct WaterPush {
+      float s2w[16];
+      float depthMap[4];
+      float tintStrength[4];
+      float shape[4];
+      float guardSize[4];
+    } wp = { };
+    static_assert(sizeof(WaterPush) <= 128u, "push constants");
+
+    VkExtent3D tex = thickness->mipLevelExtent(0u);
+    std::memcpy(wp.s2w, p.screenToWorld, sizeof(wp.s2w));
+    wp.depthMap[0] = p.depthK; wp.depthMap[1] = p.depthFar; wp.depthMap[2] = p.depthFar - p.depthNear;
+    wp.tintStrength[0] = p.tint[0]; wp.tintStrength[1] = p.tint[1]; wp.tintStrength[2] = p.tint[2]; wp.tintStrength[3] = p.strength;
+    wp.shape[0] = p.width; wp.shape[1] = p.wet; wp.shape[2] = p.speed; wp.shape[3] = p.time;
+    wp.guardSize[0] = p.guard[0]; wp.guardSize[1] = p.guard[1]; wp.guardSize[2] = float(tex.width); wp.guardSize[3] = float(tex.height);
+
+    m_cmd->cmdBindPipeline(DxvkCmdBuffer::ExecBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+    m_cmd->bindResources(DxvkCmdBuffer::ExecBuffer, objects.waterLayout(), descriptors.size(), descriptors.data(), sizeof(wp), &wp);
+    m_cmd->cmdDraw(3u, 1u, 0u, 0u);
+
+    m_cmd->cmdEndRendering(DxvkCmdBuffer::ExecBuffer);
+
+    m_cmd->track(thickness->image(), DxvkAccess::Read);
+    m_cmd->track(depthImage, DxvkAccess::Read);
+    m_cmd->track(colorView->image(), DxvkAccess::Write);
+  }
+
+
 }

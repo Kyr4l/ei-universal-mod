@@ -584,6 +584,9 @@ namespace dxvk {
   void UmShadowApiGuard(float x, float y);
   bool UmShadowApiScreenshot(const char* path, int half);
   void UmShadowApiStats(uint32_t* out);
+  struct DxvkUmWaterParams;
+  void UmShadowApiWaterMap(const float* data, int w, int h);
+  void UmShadowApiWaterEnd(const DxvkUmWaterParams* params);
   void UmShadowApiRingConfig(int frames, int div);
   bool UmShadowApiRingGrab(uint32_t id);
   int UmShadowApiRingDump(const char* prefix);
@@ -615,6 +618,16 @@ extern "C" {
   // What the last UmShadowEnd did: out[0] frames closed so far, [1] caster draws of the last one, [2] result (0 drawn, 1 none / no params, 2 no targets, 3 map, 4 pipeline, 5 depth, 6 light), [3] map size.
   __declspec(dllexport) void UmShadowStats(uint32_t* out) {
     if (out) dxvk::UmShadowApiStats(out);
+  }
+
+  // The water's border: the map of the water's depth over the ground (one float per terrain vertex, -100 = no water there) and the pass that draws the foam after the game's water layer
+  // (params: dxvk::DxvkUmWaterParams, see dxvk_um_shadow.h).
+  __declspec(dllexport) void UmWaterMap(const float* data, int width, int height) {
+    dxvk::UmShadowApiWaterMap(data, width, height);
+  }
+
+  __declspec(dllexport) void UmWaterEnd(const dxvk::DxvkUmWaterParams* params) {
+    dxvk::UmShadowApiWaterEnd(params);
   }
 
   // The frame ring (the recorder's burst): configure it (frames 0 = off, div = the pictures are 1/div of the screen), keep the current colour buffer in it (id = the caller's frame number),

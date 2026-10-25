@@ -7,6 +7,8 @@
 #include <dxvk_um_shadow_resolve_frag.h>
 #include <dxvk_um_shadow_resolve_ms_frag.h>
 #include <dxvk_um_shadow_resolve_edge_frag.h>
+#include <dxvk_um_water_frag.h>
+#include <dxvk_um_water_ms_frag.h>
 
 namespace dxvk {
 
@@ -38,6 +40,10 @@ namespace dxvk {
 
     m_resolveLayout = m_device->createBuiltInPipelineLayout(DxvkPipelineLayoutFlag::UsesSamplerHeap,
       VK_SHADER_STAGE_FRAGMENT_BIT, 224u, resolveBindings.size(), resolveBindings.data());
+
+    // the water's border pass: the finished frame's depth and the water-depth map, no samplers (texel fetches only)
+    m_waterLayout = m_device->createBuiltInPipelineLayout(DxvkPipelineLayoutFlag::UsesSamplerHeap,
+      VK_SHADER_STAGE_FRAGMENT_BIT, 128u, resolveBindings.size(), resolveBindings.data());
 
     // Samplers: hardware depth compare with a white border (outside the map = lit), and a plain one for the alpha-tested casters' textures
     DxvkSamplerKey samplerInfo = { };
@@ -73,6 +79,9 @@ namespace dxvk {
     if (m_depthAlphaPipeline) vk->vkDestroyPipeline(vk->device(), m_depthAlphaPipeline, nullptr);
 
     for (const auto& p : m_resolvePipelines)
+      vk->vkDestroyPipeline(vk->device(), p.second, nullptr);
+
+    for (const auto& p : m_waterPipelines)
       vk->vkDestroyPipeline(vk->device(), p.second, nullptr);
   }
 
@@ -245,6 +254,58 @@ namespace dxvk {
     state.cbAttachment = &cbAttachment;
 
     return m_device->createBuiltInGraphicsPipeline(m_resolveLayout, state);
+  }
+
+
+  VkPipeline DxvkUmShadowObjects::getWaterPipeline(VkFormat colorFormat, VkSampleCountFlagBits samples) {
+    std::lock_guard lock(m_mutex);
+    const uint64_t key = (uint64_t(samples) << 32) | uint64_t(colorFormat);
+    auto entry = m_waterPipelines.find(key);
+
+    if (entry != m_waterPipelines.end())
+      return entry->second;
+
+    if (m_failed)
+      return VK_NULL_HANDLE;
+
+    VkPipeline pipeline = VK_NULL_HANDLE;
+
+    try {
+      pipeline = createWaterPipeline(colorFormat, samples);
+    } catch (const DxvkError& e) {
+      Logger::err(str::format("UmWater: ", e.message()));
+      m_failed = true;
+      return VK_NULL_HANDLE;
+    }
+
+    m_waterPipelines.insert({ key, pipeline });
+    return pipeline;
+  }
+
+
+  VkPipeline DxvkUmShadowObjects::createWaterPipeline(VkFormat colorFormat, VkSampleCountFlagBits samples) {
+    // dst = foam * a + dst * (1 - a)
+    VkPipelineColorBlendAttachmentState cbAttachment = { };
+    cbAttachment.blendEnable = VK_TRUE;
+    cbAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+    cbAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    cbAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+    cbAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    cbAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    cbAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+    cbAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT;
+
+    util::DxvkBuiltInGraphicsState state = { };
+    state.vs = util::DxvkBuiltInShaderStage(dxvk_present_vert, nullptr);
+    if (samples == VK_SAMPLE_COUNT_1_BIT)
+      state.fs = util::DxvkBuiltInShaderStage(dxvk_um_water_frag, nullptr);
+    else
+      state.fs = util::DxvkBuiltInShaderStage(dxvk_um_water_ms_frag, nullptr);
+    state.colorFormats[0] = colorFormat;
+    state.sampleCount = samples;
+    state.cbAttachment = &cbAttachment;
+
+    return m_device->createBuiltInGraphicsPipeline(m_waterLayout, state);
   }
 
 }

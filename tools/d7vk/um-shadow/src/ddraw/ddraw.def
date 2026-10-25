@@ -30,3 +30,5 @@ EXPORTS
   UmShadowRingConfig          @29
   UmShadowRingGrab            @30
   UmShadowRingDump            @31
+  UmWaterMap                  @32
+  UmWaterEnd                  @33
