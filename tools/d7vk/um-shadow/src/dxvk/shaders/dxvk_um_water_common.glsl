@@ -12,7 +12,7 @@ layout(set = 1, binding = 1) uniform texture2D s_thick;
 layout(push_constant)
 uniform um_water_info_t {
   mat4  m_screen_to_world;   // (x*cw, y*cw, z*cw, cw) -> world (homogeneous)
-  vec4  depth_map;           // x: K, y: m10 (far), z: m10 - near, w: unused
+  vec4  depth_map;           // x: K, y: m10 (far), z: m10 - near, w: style (0 soft, 1 patchy foam, 2 even foam)
   vec4  tint_strength;       // rgb: light colour of the foam, w: strength 0..1
   vec4  shape;               // x: foam width (world units), y: wet strip outside the waterline, z: speed, w: time (s)
   vec4  guard_size;          // xy: guard band shift (pixels), zw: thickness map size
@@ -27,9 +27,9 @@ vec3 world_at(ivec2 p, float zs) {
   return w4.xyz / w4.w;
 }
 
-vec2 thick_at(ivec2 c) {   // x: the water's depth over the ground (-100: no water), y: the water's level
+vec4 thick_at(ivec2 c) {   // x: the water's depth over the ground (-100: no water), y: the water's level, z: the liquid's colour as 0xRRGGBB
   c = clamp(c, ivec2(0), ivec2(guard_size.zw) - ivec2(1));
-  return texelFetch(s_thick, c, 0).rg;
+  return texelFetch(s_thick, c, 0);
 }
 
 float hash21(vec2 p) {
@@ -56,7 +56,7 @@ void main() {
   vec2 f = wp.xy;
   ivec2 i0 = ivec2(floor(f));
   vec2 w = f - vec2(i0);
-  vec2 v00 = thick_at(i0), v10 = thick_at(i0 + ivec2(1, 0)), v01 = thick_at(i0 + ivec2(0, 1)), v11 = thick_at(i0 + ivec2(1, 1));
+  vec4 v00 = thick_at(i0), v10 = thick_at(i0 + ivec2(1, 0)), v01 = thick_at(i0 + ivec2(0, 1)), v11 = thick_at(i0 + ivec2(1, 1));
   if (min(min(v00.x, v10.x), min(v01.x, v11.x)) < -50.0f)
     discard;
 
@@ -81,27 +81,37 @@ void main() {
 
   float n = vnoise(wp.xy * 1.9f + vec2(time * 0.30f, -time * 0.18f) * speed) * 0.65f + vnoise(wp.xy * 4.7f - vec2(time * 0.22f, time * 0.35f) * speed) * 0.35f;
   float lap = 0.5f + 0.5f * sin(time * speed * 1.7f + n * 7.0f + wp.x * 0.35f + wp.y * 0.21f);   // the foam laps back and forth
+  // foam gathers in patches (a shore is not foamy everywhere): a slow low-frequency noise
+  float gather = smoothstep(0.40f, 0.70f, vnoise(wp.xy * 0.50f + vec2(time * 0.05f, -time * 0.035f) * speed));
 
   float strength = tint_strength.w;
   vec3 light = tint_strength.rgb;
+  int style = int(depth_map.w + 0.5f);   // 0 soft (paler shallows + wet ground only), 1 patchy foam, 2 an even thin foam line
 
   if (dist < 0.0f) {
     // the dry side: the ground is wet just above the waterline (darker, fading out over `wet`)
     float wetness = smoothstep(-wet, 0.0f, dist) * (0.65f + 0.35f * n);
-    float a = wetness * 0.30f * strength * flat_fade;
+    float a = wetness * 0.20f * strength * flat_fade;
     if (a < 0.003f) discard;
     o_color = vec4(vec3(0.04f, 0.035f, 0.03f), a);
     return;
   }
 
-  // the water side: a broken line of foam right at the waterline, and the shallows a little paler than the deep water
-  float reach = max(width * (0.40f + 0.60f * lap) * (0.35f + 1.30f * n), 0.02f);
-  float foam = (1.0f - smoothstep(0.0f, reach, dist)) * (0.45f + 0.55f * n);
-  float shallow = (1.0f - smoothstep(0.0f, width * 3.0f, dist)) * 0.16f;
-  float a = clamp(foam * 0.80f + shallow, 0.0f, 1.0f) * strength * flat_fade;
+  // the water side
+  float reach = max(width * (0.50f + 0.50f * lap) * (0.40f + 1.00f * n), 0.02f);
+  float body = (1.0f - smoothstep(0.0f, reach, dist));
+  float foam = style == 0 ? 0.0f : body * (style == 1 ? gather * (0.45f + 0.55f * n) : (0.55f + 0.45f * n));
+  float shallow = (1.0f - smoothstep(0.0f, width * 4.0f, dist)) * 0.10f;
+  float a = (foam * 0.60f + shallow) * strength * flat_fade;
   if (a < 0.003f)
     discard;
 
-  vec3 foam_color = light * mix(vec3(0.62f, 0.74f, 0.80f), vec3(0.95f, 0.98f, 1.0f), clamp(foam * 1.6f, 0.0f, 1.0f));   // pale blue-green in the shallows, near white in the foam
+  // the liquid's own colour (the nearest vertex's material), lit like the world and lightened: the shallows a little, the foam more, never white
+  vec4 vn = thick_at(i0 + ivec2(w.x > 0.5f ? 1 : 0, w.y > 0.5f ? 1 : 0));
+  uint packed_rgb = uint(max(vn.z, 0.0f) + 0.5f);
+  vec3 liquid = vec3(float((packed_rgb >> 16) & 255u), float((packed_rgb >> 8) & 255u), float(packed_rgb & 255u)) / 255.0f;
+  liquid = max(liquid, vec3(0.05f));
+  vec3 base = liquid * light;
+  vec3 foam_color = mix(base + (vec3(1.0f) - base) * 0.22f, base + (vec3(1.0f) - base) * 0.50f, clamp(foam * 2.0f, 0.0f, 1.0f));
   o_color = vec4(foam_color, a);
 }

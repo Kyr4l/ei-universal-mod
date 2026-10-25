@@ -5067,7 +5067,7 @@ namespace dxvk {
   }
 
 
-  // Universal Mod: the water border's map (two floats per terrain vertex: water depth over the ground, water level), uploaded when um-engine hands a new one over
+  // Universal Mod: the water border's map (four floats per terrain vertex: water depth over the ground, water level, liquid colour), uploaded when um-engine hands a new one over
   static int UmWaterStage() { static int stage = -1; if (stage < 0) { const char* e = std::getenv("UM_WATER_STAGE"); stage = e ? std::atoi(e) : 2; } return stage; }   // research: 0 nothing, 1 upload only, 2 the pass too
 
   void D3D9DeviceEx::UmWaterMap(const float* data, uint32_t width, uint32_t height) {
@@ -5077,7 +5077,7 @@ namespace dxvk {
     if (m_umWaterImage == nullptr || m_umWaterImage->info().extent.width != width || m_umWaterImage->info().extent.height != height) {
       DxvkImageCreateInfo imageInfo = { };
       imageInfo.type = VK_IMAGE_TYPE_2D;
-      imageInfo.format = VK_FORMAT_R32G32_SFLOAT;
+      imageInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
       imageInfo.sampleCount = VK_SAMPLE_COUNT_1_BIT;
       imageInfo.extent = { width, height, 1u };
       imageInfo.numLayers = 1u;
@@ -5093,7 +5093,7 @@ namespace dxvk {
 
       DxvkImageViewKey viewInfo = { };
       viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-      viewInfo.format = VK_FORMAT_R32G32_SFLOAT;
+      viewInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
       viewInfo.aspects = VK_IMAGE_ASPECT_COLOR_BIT;
       viewInfo.mipIndex = 0u;
       viewInfo.mipCount = 1u;
@@ -5103,7 +5103,7 @@ namespace dxvk {
       m_umWaterView = m_umWaterImage->createView(viewInfo);
     }
 
-    const VkDeviceSize bytes = VkDeviceSize(width) * height * 2u * sizeof(float);   // per vertex: the water's depth over the ground, the water's level
+    const VkDeviceSize bytes = VkDeviceSize(width) * height * 4u * sizeof(float);   // per vertex: the water's depth over the ground, the water's level, the liquid's colour (0xRRGGBB), 0
     D3D9BufferSlice slice = AllocStagingBuffer(bytes);
     std::memcpy(slice.mapPtr, data, size_t(bytes));
 

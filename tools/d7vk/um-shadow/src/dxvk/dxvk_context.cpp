@@ -11453,7 +11453,7 @@ namespace dxvk {
 
     VkExtent3D tex = thickness->mipLevelExtent(0u);
     std::memcpy(wp.s2w, p.screenToWorld, sizeof(wp.s2w));
-    wp.depthMap[0] = p.depthK; wp.depthMap[1] = p.depthFar; wp.depthMap[2] = p.depthFar - p.depthNear;
+    wp.depthMap[0] = p.depthK; wp.depthMap[1] = p.depthFar; wp.depthMap[2] = p.depthFar - p.depthNear; wp.depthMap[3] = float(p.flags & 0xFFu);   // flags: the style
     wp.tintStrength[0] = p.tint[0]; wp.tintStrength[1] = p.tint[1]; wp.tintStrength[2] = p.tint[2]; wp.tintStrength[3] = p.strength;
     wp.shape[0] = p.width; wp.shape[1] = p.wet; wp.shape[2] = p.speed; wp.shape[3] = p.time;
     wp.guardSize[0] = p.guard[0]; wp.guardSize[1] = p.guard[1]; wp.guardSize[2] = float(tex.width); wp.guardSize[3] = float(tex.height);

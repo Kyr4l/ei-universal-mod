@@ -310,6 +310,7 @@ inline void Server::Help(Client& c) {
         "ENGINE SHOT file.png [half]           saves the world as drawn at the end of the next world frame (no interface) as a PNG  [debug]",
         "ENGINE CAM x y [dist [yaw]]           the camera over a map point, not following a unit (yaw in degrees)  [debug]",
         "ENGINE PAUSE 0|1 / HOUR h             pauses the game clock / sets the world clock to hour h  [debug]",
+        "ENGINE WATERSPOT                      the best shorelines of the map (loads every sector; research): spotN=x,y,cells  [debug]",
         "ENGINE SCRIPT text                    runs a mob script line in the client script VM (ConsoleFloat(x) prints a value)  [debug]",
         "                                      (ENGINE commands run on the game's thread at the end of its next world frame: 5 s at most)",
         "BYE                                   closes the connection",
