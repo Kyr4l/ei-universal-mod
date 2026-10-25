@@ -584,6 +584,9 @@ namespace dxvk {
   void UmShadowApiGuard(float x, float y);
   bool UmShadowApiScreenshot(const char* path, int half);
   void UmShadowApiStats(uint32_t* out);
+  void UmShadowApiRingConfig(int frames, int div);
+  bool UmShadowApiRingGrab(uint32_t id);
+  int UmShadowApiRingDump(const char* prefix);
 }
 
 // Universal Mod: sun shadows. um-engine.dll finds these with GetProcAddress on d7vk.dll / ddraw.dll.
@@ -612,6 +615,20 @@ extern "C" {
   // What the last UmShadowEnd did: out[0] frames closed so far, [1] caster draws of the last one, [2] result (0 drawn, 1 none / no params, 2 no targets, 3 map, 4 pipeline, 5 depth, 6 light), [3] map size.
   __declspec(dllexport) void UmShadowStats(uint32_t* out) {
     if (out) dxvk::UmShadowApiStats(out);
+  }
+
+  // The frame ring (the recorder's burst): configure it (frames 0 = off, div = the pictures are 1/div of the screen), keep the current colour buffer in it (id = the caller's frame number),
+  // write it out oldest first as <prefix><id>.png (returns the number of files).
+  __declspec(dllexport) void UmShadowRingConfig(int frames, int div) {
+    dxvk::UmShadowApiRingConfig(frames, div);
+  }
+
+  __declspec(dllexport) int UmShadowRingGrab(unsigned id) {
+    return dxvk::UmShadowApiRingGrab(id) ? 1 : 0;
+  }
+
+  __declspec(dllexport) int UmShadowRingDump(const char* prefix) {
+    return dxvk::UmShadowApiRingDump(prefix);
   }
 
   // The world pass is over: draw the shadow map and darken the colour buffer (params: dxvk::DxvkUmShadowParams, see dxvk_um_shadow.h).

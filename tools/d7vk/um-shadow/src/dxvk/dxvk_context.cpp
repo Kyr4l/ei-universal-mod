@@ -11061,10 +11061,11 @@ namespace dxvk {
 
     g_umShadowStat[0].fetch_add(1u, std::memory_order_relaxed);
     g_umShadowStat[1].store(uint32_t(draws.size()), std::memory_order_relaxed);
-    g_umShadowStat[2].store(1u, std::memory_order_relaxed);
 
-    if (draws.empty() || p.size < sizeof(DxvkUmShadowParams))
+    if (draws.empty() || p.size < sizeof(DxvkUmShadowParams)) {
+      g_umShadowStat[2].store(1u, std::memory_order_relaxed);
       return;
+    }
 
     const auto& fbInfo = m_state.om.framebufferInfo;
     Rc<DxvkImageView> colorView = fbInfo.getColorTarget(0u).view;

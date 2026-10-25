@@ -24,12 +24,23 @@ At most `Recorder::MaxReports` (20) reports are kept: the oldest pair is deleted
 | `Recorder::Ctrl` | 0 | 1 = Ctrl has to be held too |
 | `Recorder::Frames` | 600 | frames in a report (60..7200) |
 | `Recorder::Screenshot` | 1 | 1 PNG, 2 half-size PNG, 0 none |
-| `Recorder::MaxReports` | 20 | reports kept |
+| `Recorder::MaxReports` | 20 | reports kept (a burst report is ~100 MB) |
+| `Recorder::Burst` | 0 | 1 = keep the last frames as pictures and write them with each report (see below) |
+| `Recorder::BurstFrames` | 240 | frames kept (30..1200) |
+| `Recorder::BurstScale` | 4 | the pictures are 1/this of the screen in each direction (1..8) |
 
 Reading a report: `mode drawn` = shadows with this frame's own parameters, `kept` = the matrices could not be read and the last good parameters were used, `none` = no shadows in that frame,
 `off` = not wanted (`SunShadows::Enabled=0`, the game's shadow setting, a cave). `g` (guard) 1 = band drawn, 2 = the matrix stacks were not as expected (no band this frame). `d7vk(draws res)` = caster
 draws captured and D7VK's result (0 drawn, 1 no draws, 2 no colour / depth target, 3 shadow map not made, 4 pipeline not made, 5 depth buffer not readable, 6 no light direction).
 A flicker usually shows as a row where `mode`, `res`, the caster count, the radius or the map size jumps for a frame or two, or as a frame time spike.
+
+## Burst: catching a flicker of one or two frames
+
+A single picture cannot catch something that is on screen for 10 ms. With `Recorder::Burst=1` um-engine reads the finished world of EVERY frame back (a few ms a frame: a few FPS less) and keeps the last
+`Recorder::BurstFrames` of them in memory, downscaled (`BurstScale` 4 = 480 x 270 at 1080p; about 0.4 MB a frame, 100 MB for 240). The recorder key then also writes them, oldest first, into
+`um-report-<...>-frames\f<frame number>.png`: the frames BEFORE the key press, so reaction time does not matter (240 frames = 1.5 s at 160 FPS). The frame numbers are the report table's first column,
+so a frame where something flips can be looked up in it (mode, pads, D7VK result, area). The pictures are lossless: consecutive frames can be subtracted. Switch it off again when not hunting:
+the read-back costs frame time, and each report with pictures is about 100 MB (the oldest reports and their folders are deleted at `Recorder::MaxReports`).
 
 ## `SunShadows::GuardLog`
 

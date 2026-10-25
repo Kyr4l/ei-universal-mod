@@ -35,17 +35,17 @@ const uintptr_t kCamera = 0x79B2A8;    // CCamera
 template <typename T> T Read(uintptr_t address) { return *reinterpret_cast<const T*>(address); }
 
 // ---- config (re-read once a second) ----
-struct RigCfg { double key = 19, frames = 600, screenshot = 1, maxReports = 20, enabled = 1, ctrl = 0; };
+struct RigCfg { double key = 19, frames = 600, screenshot = 1, maxReports = 20, enabled = 1, ctrl = 0, burst = 0, burstFrames = 240, burstScale = 4; };
 RigCfg g_cfg; DWORD g_cfgAt = 0;
 const RigCfg& Cfg() {
     const DWORD now = GetTickCount();
     if (g_cfgAt == 0 || now - g_cfgAt > 1000) {
         g_cfgAt = now ? now : 1;
-        static const char* const keys[6] = { "Recorder::Key", "Recorder::Frames", "Recorder::Screenshot", "Recorder::MaxReports", "Recorder::Enabled", "Recorder::Ctrl" };
-        double v[6] = { g_cfg.key, g_cfg.frames, g_cfg.screenshot, g_cfg.maxReports, g_cfg.enabled, g_cfg.ctrl };
-        if (UmEngineConfigNumbers(keys, v, 6)) {
+        static const char* const keys[9] = { "Recorder::Key", "Recorder::Frames", "Recorder::Screenshot", "Recorder::MaxReports", "Recorder::Enabled", "Recorder::Ctrl", "Recorder::Burst", "Recorder::BurstFrames", "Recorder::BurstScale" };
+        double v[9] = { g_cfg.key, g_cfg.frames, g_cfg.screenshot, g_cfg.maxReports, g_cfg.enabled, g_cfg.ctrl, g_cfg.burst, g_cfg.burstFrames, g_cfg.burstScale };
+        if (UmEngineConfigNumbers(keys, v, 9)) {
             auto clamp = [](double x, double lo, double hi) { return x != x ? lo : x < lo ? lo : x > hi ? hi : x; };
-            g_cfg.key = clamp(v[0], 0, 254); g_cfg.frames = clamp(v[1], 0, 7200); g_cfg.screenshot = v[2]; g_cfg.maxReports = clamp(v[3], 1, 500); g_cfg.enabled = v[4]; g_cfg.ctrl = v[5];
+            g_cfg.key = clamp(v[0], 0, 254); g_cfg.frames = clamp(v[1], 0, 7200); g_cfg.screenshot = v[2]; g_cfg.maxReports = clamp(v[3], 1, 500); g_cfg.enabled = v[4]; g_cfg.ctrl = v[5]; g_cfg.burst = v[6]; g_cfg.burstFrames = clamp(v[7], 30, 1200); g_cfg.burstScale = clamp(v[8], 1, 8);
         }
     }
     return g_cfg;
@@ -60,7 +60,12 @@ LARGE_INTEGER g_freq, g_beginAt, g_prevBegin;
 
 typedef void (*StatsFn)(uint32_t*);
 typedef int (*ShotFn)(const char*, int);
+typedef void (*RingConfigFn)(int, int);
+typedef int (*RingGrabFn)(unsigned);
+typedef int (*RingDumpFn)(const char*);
 StatsFn g_stats = nullptr; ShotFn g_shot = nullptr; bool g_looked = false;
+RingConfigFn g_ringConfig = nullptr; RingGrabFn g_ringGrab = nullptr; RingDumpFn g_ringDump = nullptr;
+bool g_ringOn = false; int g_ringFrames = 0, g_ringScale = 0;   // the ring as last configured
 
 void Lookup() {
     if (g_looked) return;
@@ -70,6 +75,9 @@ void Lookup() {
     if (!module) return;
     g_stats = reinterpret_cast<StatsFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowStats")));
     g_shot = reinterpret_cast<ShotFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowScreenshot")));
+    g_ringConfig = reinterpret_cast<RingConfigFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowRingConfig")));
+    g_ringGrab = reinterpret_cast<RingGrabFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowRingGrab")));
+    g_ringDump = reinterpret_cast<RingDumpFn>(reinterpret_cast<void*>(GetProcAddress(module, "UmShadowRingDump")));
     if (!g_shot) UmEngineLog("um-engine: recorder: the DirectDraw library has no UmShadowScreenshot (an older d7vk.dll): reports come without a picture");
 }
 
@@ -102,6 +110,11 @@ void TrimReports(const std::string& folder, int max) {
         const std::string base = folder + names[i].substr(0, names[i].size() - 4);
         DeleteFileA((base + ".txt").c_str());
         DeleteFileA((base + ".png").c_str());
+        WIN32_FIND_DATAA pic;   // its burst folder (only the .png files this recorder wrote into it)
+        const std::string dir = base + "-frames\\";
+        HANDLE hp = FindFirstFileA((dir + "*.png").c_str(), &pic);
+        if (hp != INVALID_HANDLE_VALUE) { do DeleteFileA((dir + pic.cFileName).c_str()); while (FindNextFileA(hp, &pic)); FindClose(hp); }
+        RemoveDirectoryA((base + "-frames").c_str());
     }
 }
 
@@ -188,6 +201,11 @@ std::string WriteReport(const char* why, bool picture, bool* pictureOk) {
     if (picture && g_shot) shotOk = g_shot((base + ".png").c_str(), Cfg().screenshot >= 1.5 ? 1 : 0) != 0;
     if (pictureOk) *pictureOk = shotOk;
 
+    int burstPictures = 0;
+    if (g_ringOn && g_ringDump) {
+        CreateDirectoryA((base + "-frames").c_str(), nullptr);
+        burstPictures = g_ringDump((base + "-frames\\f").c_str());
+    }
     std::string out;
     out += Format("um-engine %s report, %04d-%02d-%02d %02d:%02d:%02d (%s)\n", UmEngineVersion(), t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond, why);
     out += shotOk ? Format("picture: %s.png (the world as drawn at the end of the last row, without the interface; may be half size)\n", base.substr(base.find_last_of('\\') + 1).c_str()) : "picture: none\n";
@@ -197,6 +215,7 @@ std::string WriteReport(const char* why, bool picture, bool* pictureOk) {
     out += "um-engine.cfg:";
     if (UmEngineConfigNumbers(cfgKeys, values, 12)) for (int i = 0; i < 12; ++i) out += Format(" %s=%g", cfgKeys[i] + 12, values[i]);
     out += "\n";
+    if (burstPictures > 0) out += Format("burst: %d consecutive frames in %s-frames\\ (f<frame number>.png, 1/%d of the screen in each direction; the frame numbers are the table's first column)\n", burstPictures, base.substr(base.find_last_of('\\') + 1).c_str(), g_ringScale);
     const std::vector<UmFrameRec> frames = Ordered();
     Summary(out, frames);
     out += "\nrows are oldest first; the last row is the frame of the report (+ms is the time before it). mode: drawn = shadows with this frame's parameters, kept = last good ones, none = no shadows, off = not wanted.\n";
@@ -372,6 +391,11 @@ extern "C" __attribute__((used, force_align_arg_pointer)) void UmRigFrameEnd() {
         if (g_ringCount < g_ringCapacity) ++g_ringCount;
     }
     g_last = r; g_haveLast = true;
+    if (cfg.enabled >= 0.5 && cfg.burst >= 0.5 && g_ringConfig && g_ringGrab) {   // the burst ring (a few ms a frame: the render target is read back)
+        const int frames = static_cast<int>(cfg.burstFrames), scale = static_cast<int>(cfg.burstScale);
+        if (!g_ringOn || frames != g_ringFrames || scale != g_ringScale) { g_ringConfig(frames, scale); g_ringFrames = frames; g_ringScale = scale; g_ringOn = true; UmEngineLog("um-engine: recorder: burst ring on (%d frames at 1/%d size)", frames, scale); }
+        g_ringGrab(r.frame);
+    } else if (g_ringOn && g_ringConfig) { g_ringConfig(0, 1); g_ringOn = false; UmEngineLog("um-engine: recorder: burst ring off"); }
 
     if (g_reportWanted) {
         g_reportWanted = false; g_lastReportAt = GetTickCount();

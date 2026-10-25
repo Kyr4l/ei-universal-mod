@@ -22,7 +22,7 @@
 
 #include "um_engine.h"
 
-static const char* const kEngineVersion = "0.14.0";
+static const char* const kEngineVersion = "0.14.1";
 
 extern "C" size_t __cdecl UmStrlen(const char* text); // crt_strings.cpp
 extern "C" double __cdecl UmHypot(double x, double y); // crt_math.cpp
@@ -271,6 +271,9 @@ static const struct { const char* key; const char* value; const char* comment; }
     { "Recorder::Enabled",     "1",      "Recorder: 0 switches the frame recorder and its hotkey off (needs a restart)" },
     { "Recorder::Key",         "19",      "Recorder: this key (a virtual-key code: 19 = Pause, 119 = F8, 0 = none) writes the last seconds as a report + picture into um-reports\\ beside the DLL" },
     { "Recorder::Ctrl",        "0",      "Recorder: 1 needs Ctrl held with the key" },
+    { "Recorder::Burst",       "0",      "Recorder: 1 keeps the last frames of the world as pictures and writes them with each report (a flicker of one or two frames; costs a few FPS)" },
+    { "Recorder::BurstFrames", "240",    "Recorder: frames kept by the burst (30..1200; 240 is 1.5 s at 160 FPS, about 0.4 MB each)" },
+    { "Recorder::BurstScale",  "4",      "Recorder: the burst pictures are 1/this of the screen in each direction (1..8)" },
     { "Recorder::Frames",      "600",    "Recorder: how many world frames the report holds (60..7200; about ten seconds at 60 FPS)" },
     { "Recorder::Screenshot",  "1",      "Recorder: 1 also saves a PNG of the world (no interface) with each report, 2 at half the size (a quarter of the bytes), 0 none" },
     { "Recorder::MaxReports",  "20",     "Recorder: at most this many reports are kept in um-reports\\ (the oldest goes first)" },

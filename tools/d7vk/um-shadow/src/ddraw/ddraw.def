@@ -27,3 +27,6 @@ EXPORTS
   UmShadowGuard               @26
   UmShadowScreenshot          @27
   UmShadowStats               @28
+  UmShadowRingConfig          @29
+  UmShadowRingGrab            @30
+  UmShadowRingDump            @31

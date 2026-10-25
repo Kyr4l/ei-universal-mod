@@ -4955,6 +4955,109 @@ namespace dxvk {
   }
 
 
+  // Universal Mod: a ring of the last frames of the world (the frame recorder's burst): every grabbed frame is kept downscaled (div x div box average) in memory, and written out
+  // as PNG files when the player presses the recorder key, so a flicker of a frame or two can be looked at frame by frame without video compression.
+  struct UmRingState {
+    uint32_t frames = 0, div = 4, width = 0, height = 0, next = 0, count = 0;
+    std::vector<uint8_t> pixels;      // frames * width * height * 3
+    std::vector<uint32_t> ids;        // the caller's frame number of each slot
+    Com<IDirect3DSurface9> staging;   // system memory copy of the render target, reused
+    uint32_t stagingW = 0, stagingH = 0;
+    D3DFORMAT stagingFormat = D3DFMT_UNKNOWN;
+  };
+  static UmRingState g_umRing;
+
+  // frames = 0 frees the ring; div 1..8 (the pictures are 1/div of the render target in each direction)
+  void UmShadowApiRingConfig(int frames, int div) {
+    UmRingState& r = g_umRing;
+    frames = std::max(0, std::min(frames, 1200));
+    div = std::max(1, std::min(div, 8));
+    if (uint32_t(frames) == r.frames && uint32_t(div) == r.div)
+      return;
+    r = UmRingState();
+    r.frames = uint32_t(frames);
+    r.div = uint32_t(div);
+  }
+
+  // Keeps the current render target in the ring; false when it cannot be read (the ring is left as it is).
+  bool UmShadowApiRingGrab(uint32_t id) {
+    UmRingState& r = g_umRing;
+    D3D9DeviceEx* device = g_umShadowDevice;
+    if (!device || r.frames == 0)
+      return false;
+
+    Com<IDirect3DSurface9> target;
+    if (FAILED(device->GetRenderTarget(0, &target)) || target == nullptr)
+      return false;
+
+    D3DSURFACE_DESC desc;
+    if (FAILED(target->GetDesc(&desc)) || desc.Width < r.div || desc.Height < r.div || desc.Width > 16384 || desc.Height > 16384)
+      return false;
+    if (desc.Format != D3DFMT_X8R8G8B8 && desc.Format != D3DFMT_A8R8G8B8)
+      return false;
+
+    const uint32_t w = desc.Width / r.div, h = desc.Height / r.div;
+    if (r.staging == nullptr || r.stagingW != desc.Width || r.stagingH != desc.Height || r.stagingFormat != desc.Format) {
+      r.staging = nullptr;
+      if (FAILED(device->CreateOffscreenPlainSurface(desc.Width, desc.Height, desc.Format, D3DPOOL_SYSTEMMEM, &r.staging, nullptr)))
+        return false;
+      r.stagingW = desc.Width; r.stagingH = desc.Height; r.stagingFormat = desc.Format;
+    }
+    if (r.width != w || r.height != h) {   // a new size: the old pictures do not fit
+      const size_t bytes = size_t(r.frames) * w * h * 3u;
+      if (bytes > (size_t(768) << 20))
+        return false;
+      r.width = w; r.height = h; r.next = 0; r.count = 0;
+      r.pixels.assign(bytes, 0);
+      r.ids.assign(r.frames, 0);
+    }
+
+    if (FAILED(device->GetRenderTargetData(target.ptr(), r.staging.ptr())))
+      return false;
+    D3DLOCKED_RECT lr;
+    if (FAILED(r.staging->LockRect(&lr, nullptr, D3DLOCK_READONLY)))
+      return false;
+
+    uint8_t* out = &r.pixels[size_t(r.next) * w * h * 3u];
+    const uint32_t div = r.div, area = div * div;
+    for (uint32_t y = 0; y < h; y++) {
+      for (uint32_t x = 0; x < w; x++) {
+        uint32_t sb = 0, sg = 0, sr = 0;
+        for (uint32_t dy = 0; dy < div; dy++) {
+          const uint8_t* src = static_cast<const uint8_t*>(lr.pBits) + size_t(y * div + dy) * lr.Pitch + size_t(x) * div * 4u;
+          for (uint32_t dx = 0; dx < div; dx++, src += 4) { sb += src[0]; sg += src[1]; sr += src[2]; }
+        }
+        out[0] = uint8_t(sr / area); out[1] = uint8_t(sg / area); out[2] = uint8_t(sb / area);
+        out += 3;
+      }
+    }
+    r.staging->UnlockRect();
+
+    r.ids[r.next] = id;
+    r.next = (r.next + 1) % r.frames;
+    if (r.count < r.frames) r.count++;
+    return true;
+  }
+
+  // Writes the ring, oldest first, as <prefix><frame number>.png; returns how many files were written.
+  int UmShadowApiRingDump(const char* prefix) {
+    UmRingState& r = g_umRing;
+    if (!prefix || r.count == 0 || r.width == 0)
+      return 0;
+    int written = 0;
+    const size_t slot = size_t(r.width) * r.height * 3u;
+    const uint32_t start = r.count < r.frames ? 0u : r.next;
+    for (uint32_t i = 0; i < r.count; i++) {
+      const uint32_t k = (start + i) % r.frames;
+      char name[600];
+      snprintf(name, sizeof(name), "%s%08u.png", prefix, r.ids[k]);
+      if (UmWritePng(name, &r.pixels[size_t(k) * slot], r.width, r.height))
+        written++;
+    }
+    return written;
+  }
+
+
   void D3D9DeviceEx::UmShadowBegin() {
     D3D9DeviceLock lock = LockDevice();
     m_umShadowCapture = true;
