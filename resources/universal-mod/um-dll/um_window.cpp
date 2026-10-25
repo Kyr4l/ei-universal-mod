@@ -6,7 +6,7 @@
 // pauses all sound and minimizes its window (ShowWindow SW_MINIMIZE), even in windowed mode. It also never confines the cursor
 // to its window, so the camera cannot be scrolled with the mouse at the screen edge. Here the game's window is subclassed:
 //   - the deactivation never reaches the game (it stays active, does not minimize and keeps running in the background);
-//   - while the window has the focus the cursor is confined to it (ClipCursor), and released when it loses the focus.
+//   - while the window has the focus the cursor is confined to it (ClipCursor), and released when it loses the focus; a timer (4 / s) confines it again when something took the confinement away.
 // Needs the game's own setting fullscreen=0 (the window is a plain WS_POPUP at 0,0 of the game's resolution).
 // SCALE (um.cfg BORDERLESS_SCALE / um-window.ini Scale=1): a game resolution lower than the monitor's fills the screen. The window gets the size of the game
 // picture scaled by the largest factor that fits the monitor (aspect ratio kept), centred, with a black window behind it for the bars. D7VK stretches its frame to
@@ -39,18 +39,48 @@ static HWND g_gameWindow = NULL;
 static WNDPROC g_originalProc = NULL;
 static bool g_clipped = false;
 
+static bool WindowClientOnScreen(RECT& screen) {
+    RECT client;
+    if (!g_gameWindow || !GetClientRect(g_gameWindow, &client)) return false;
+    POINT a = {client.left, client.top}, b = {client.right, client.bottom};
+    ClientToScreen(g_gameWindow, &a); ClientToScreen(g_gameWindow, &b);
+    screen.left = a.x; screen.top = a.y; screen.right = b.x; screen.bottom = b.y;
+    return true;
+}
+
 static void WindowClip(bool on) {
     if (!g_gameWindow) return;
     if (!on) {
         if (g_clipped) { ClipCursor(NULL); g_clipped = false; }
         return;
     }
-    RECT client;
-    if (!GetClientRect(g_gameWindow, &client)) return;
-    POINT a = {client.left, client.top}, b = {client.right, client.bottom};
-    ClientToScreen(g_gameWindow, &a); ClientToScreen(g_gameWindow, &b);
-    RECT screen = {a.x, a.y, b.x, b.y};
+    RECT screen;
+    if (!WindowClientOnScreen(screen)) return;
     if (ClipCursor(&screen)) g_clipped = true;
+}
+
+// The confinement is also checked on a timer (four times a second): the system drops it by itself (an overlay, another program, a desktop switch, a focus change that sends no
+// message to the game) and a ClipCursor made before the window had its final place or its X focus (Wine) can fail or be wrong; none of that sends the game window a message.
+// While the game window is the foreground window and the cursor is not confined to it, it is confined again; when the game is not in front, a confinement of ours is released.
+static const UINT_PTR kClipWatchTimer = 0x5CA20;
+static void WindowClipWatch() {
+    if (!g_gameWindow) return;
+    if (GetForegroundWindow() != g_gameWindow || IsIconic(g_gameWindow)) {
+        if (g_clipped) WindowClip(false);
+        return;
+    }
+    RECT want, now;
+    if (!WindowClientOnScreen(want)) return;
+    if (GetClipCursor(&now) && EqualRect(&now, &want)) { g_clipped = true; return; }
+    g_clipped = false;
+    const bool ok = ClipCursor(&want) != 0;
+    g_clipped = ok;
+    static DWORD lastLog = 0;
+    const DWORD tick = GetTickCount();
+    if (tick - lastLog > 30000) {
+        lastLog = tick;
+        LogLine(ok ? "INFO" : "WARN", "BORDERLESS: the cursor was free while the game window has the focus: %s", ok ? "confined to it again" : "ClipCursor failed");
+    }
 }
 
 static void CreateBars(const RECT& monitor, const RECT& game);
@@ -140,6 +170,7 @@ static LRESULT CALLBACK BorderlessProc(HWND window, UINT message, WPARAM wParam,
             return 1;
         }
     }
+    if (message == WM_TIMER && wParam == kClipWatchTimer) { WindowClipWatch(); return 0; }
     if (message == WM_TIMER && wParam == 0x5CA1E) { KillTimer(window, 0x5CA1E); if (g_scaleActive) CreateBars(g_monitorRect, g_gameRect); return 0; }
     switch (message) {
     case WM_ACTIVATE:
@@ -162,6 +193,7 @@ static LRESULT CALLBACK BorderlessProc(HWND window, UINT message, WPARAM wParam,
         if (GetForegroundWindow() == window) WindowClip(true);
         break;
     case WM_DESTROY:
+        KillTimer(window, kClipWatchTimer);
         WindowClip(false);
         DestroyBars();
         g_scaleActive = false;
@@ -236,6 +268,7 @@ static HWND WINAPI HookedCreateWindowExA(DWORD exStyle, LPCSTR className, LPCSTR
         g_gameWindow = window;
         g_originalProc = reinterpret_cast<WNDPROC>(SetWindowLongA(window, GWL_WNDPROC, reinterpret_cast<LONG>(BorderlessProc)));
         LogLine("INFO", "BORDERLESS: the game window %dx%d at %d,%d is kept active when it loses the focus, and the cursor is confined to it while it has it", w, h, x, y);
+        SetTimer(window, kClipWatchTimer, 250, NULL);
         if (g_scaleActive) SetTimer(window, 0x5CA1E, 1500, NULL); // the bars after the game window has been shown
         if (getenv("UM_WINTEST")) CreateThread(NULL, 0, WindowTestThread, NULL, 0, NULL);
     }
