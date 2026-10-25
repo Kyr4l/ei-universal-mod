@@ -85,12 +85,19 @@ UM_GUARDED_THREAD(DllServerThread) {
     if (g_dllServerDebug) {
         g_onMainThreadFrame = dllserver::RunQueuedCalls; // CALL (development only)
         if (host.password.empty())
-            LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on but DLL_SERVER_PASSWORD is empty: the debug commands (WRITE, POKE, CALL, BP set, CONSOLE send) are refused until a password is set in um.cfg.");
+            LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on but DLL_SERVER_PASSWORD is empty: the debug commands (WRITE, POKE, CALL, BP set, CONSOLE send, ENGINE) are refused until a password is set in um.cfg.");
         else
             LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on: a program on this computer that knows DLL_SERVER_PASSWORD can write the game's memory and run "
                             "code in it (CALL). Development only: turn it off in um.cfg outside a controlled development setup.");
     }
     host.log = [](const char* level, const char* message) { LogLine(level, "%s", message); };
+    host.engineCommand = [](const char* line, char* reply, int size) -> int {   // um-engine's rig commands (it may not be loaded)
+        typedef int (*RigFn)(const char*, char*, int);
+        static RigFn rig = nullptr; static bool looked = false;
+        if (!looked) { looked = true; if (HMODULE engine = GetModuleHandleA("um-engine.dll")) rig = reinterpret_cast<RigFn>(reinterpret_cast<void*>(GetProcAddress(engine, "UmEngineRig"))); }
+        if (!rig) { snprintf(reply, static_cast<size_t>(size), "um-engine is not loaded or too old for the ENGINE commands"); return 0; }
+        return rig(line, reply, size);
+    };
     dllserver::Run(g_dllServerPort, host);
     return 0;
 }

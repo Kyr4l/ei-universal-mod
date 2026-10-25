@@ -25,3 +25,5 @@ EXPORTS
   UmShadowEnd                 @24
   UmShadowCaster              @25
   UmShadowGuard               @26
+  UmShadowScreenshot          @27
+  UmShadowStats               @28

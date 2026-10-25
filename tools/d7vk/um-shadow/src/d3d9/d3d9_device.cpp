@@ -26,6 +26,9 @@
 
 #include <algorithm>
 #include <cfloat>
+#include <cstdio>
+#include <cstring>
+#include <vector>
 #ifdef MSC_VER
 #pragma fenv_access (on)
 #endif
@@ -45,6 +48,10 @@ namespace dxvk {
 
   void UmShadowApiCaster(int on) {
     if (g_umShadowDevice) g_umShadowDevice->UmShadowSetCasting(on != 0);
+  }
+
+  bool UmShadowApiScreenshot(const char* path, int half) {
+    return g_umShadowDevice && path && g_umShadowDevice->UmShadowScreenshot(path, half != 0);
   }
 
   void UmShadowApiEnd(const DxvkUmShadowParams* params) {
@@ -4832,6 +4839,119 @@ namespace dxvk {
     m_umGuard[0] = x;
     m_umGuard[1] = y;
     m_dirty.set(D3D9DeviceDirtyFlag::FFViewport);
+  }
+
+
+  // Universal Mod: the render target as a PNG (stored blocks: no compression library needed), written on the calling (game) thread.
+  static uint32_t UmCrc32(uint32_t crc, const uint8_t* data, size_t size) {
+    static uint32_t table[256]; static bool made = false;
+    if (!made) { for (uint32_t n = 0; n < 256; n++) { uint32_t c = n; for (int k = 0; k < 8; k++) c = (c & 1u) ? 0xEDB88320u ^ (c >> 1) : c >> 1; table[n] = c; } made = true; }
+    crc = ~crc;
+    for (size_t i = 0; i < size; i++) crc = table[(crc ^ data[i]) & 0xFFu] ^ (crc >> 8);
+    return ~crc;
+  }
+
+  static void UmPngChunk(FILE* f, const char* type, const uint8_t* data, uint32_t size) {
+    uint8_t head[8] = { uint8_t(size >> 24), uint8_t(size >> 16), uint8_t(size >> 8), uint8_t(size), uint8_t(type[0]), uint8_t(type[1]), uint8_t(type[2]), uint8_t(type[3]) };
+    fwrite(head, 1, 8, f);
+    if (size) fwrite(data, 1, size, f);
+    uint32_t crc = UmCrc32(0, head + 4, 4);
+    if (size) crc = UmCrc32(crc, data, size);
+    uint8_t tail[4] = { uint8_t(crc >> 24), uint8_t(crc >> 16), uint8_t(crc >> 8), uint8_t(crc) };
+    fwrite(tail, 1, 4, f);
+  }
+
+  static bool UmWritePng(const char* path, const uint8_t* rgb, uint32_t width, uint32_t height) {
+    FILE* f = fopen(path, "wb");
+    if (!f) return false;
+    static const uint8_t sig[8] = { 0x89, 'P', 'N', 'G', 0x0D, 0x0A, 0x1A, 0x0A };
+    fwrite(sig, 1, 8, f);
+    const uint8_t ihdr[13] = { uint8_t(width >> 24), uint8_t(width >> 16), uint8_t(width >> 8), uint8_t(width), uint8_t(height >> 24), uint8_t(height >> 16), uint8_t(height >> 8), uint8_t(height), 8, 2, 0, 0, 0 };
+    UmPngChunk(f, "IHDR", ihdr, 13);
+    // the zlib stream: header, stored blocks of at most 65535 bytes over the filtered rows (filter byte 0 + the row), Adler-32
+    const size_t rowBytes = size_t(width) * 3u + 1u, total = rowBytes * height;
+    std::vector<uint8_t> raw(total);
+    for (uint32_t y = 0; y < height; y++) { raw[y * rowBytes] = 0; std::memcpy(&raw[y * rowBytes + 1], rgb + size_t(y) * width * 3u, size_t(width) * 3u); }
+    std::vector<uint8_t> z;
+    z.reserve(total + total / 65535u * 5u + 16u);
+    z.push_back(0x78); z.push_back(0x01);
+    uint32_t a = 1u, b = 0u;
+    for (size_t i = 0; i < total; i++) { a = (a + raw[i]) % 65521u; b = (b + a) % 65521u; }
+    for (size_t pos = 0; pos < total || pos == 0; ) {
+      const size_t n = std::min<size_t>(65535u, total - pos);
+      const bool last = pos + n >= total;
+      z.push_back(last ? 1 : 0); z.push_back(uint8_t(n)); z.push_back(uint8_t(n >> 8)); z.push_back(uint8_t(~n)); z.push_back(uint8_t((~n) >> 8));
+      z.insert(z.end(), raw.begin() + pos, raw.begin() + pos + n);
+      pos += n;
+      if (last) break;
+    }
+    const uint32_t adler = (b << 16) | a;
+    z.push_back(uint8_t(adler >> 24)); z.push_back(uint8_t(adler >> 16)); z.push_back(uint8_t(adler >> 8)); z.push_back(uint8_t(adler));
+    // the IDAT chunks (one is fine up to 2 GB)
+    UmPngChunk(f, "IDAT", z.data(), uint32_t(z.size()));
+    UmPngChunk(f, "IEND", nullptr, 0);
+    const bool ok = ferror(f) == 0;
+    fclose(f);
+    return ok;
+  }
+
+  bool D3D9DeviceEx::UmShadowScreenshot(const char* path, bool half) {
+    Com<IDirect3DSurface9> target;
+    if (FAILED(GetRenderTarget(0, &target)) || target == nullptr)
+      return false;
+
+    D3DSURFACE_DESC desc;
+    if (FAILED(target->GetDesc(&desc)) || desc.Width == 0 || desc.Height == 0 || desc.Width > 16384 || desc.Height > 16384)
+      return false;
+
+    Com<IDirect3DSurface9> sys;
+    if (FAILED(CreateOffscreenPlainSurface(desc.Width, desc.Height, desc.Format, D3DPOOL_SYSTEMMEM, &sys, nullptr)))
+      return false;
+    if (FAILED(GetRenderTargetData(target.ptr(), sys.ptr())))
+      return false;
+
+    D3DLOCKED_RECT lr;
+    if (FAILED(sys->LockRect(&lr, nullptr, D3DLOCK_READONLY)))
+      return false;
+
+    std::vector<uint8_t> rgb(size_t(desc.Width) * desc.Height * 3u);
+    bool known = true;
+    for (uint32_t y = 0; y < desc.Height && known; y++) {
+      const uint8_t* src = static_cast<const uint8_t*>(lr.pBits) + size_t(y) * lr.Pitch;
+      uint8_t* dst = &rgb[size_t(y) * desc.Width * 3u];
+      for (uint32_t x = 0; x < desc.Width; x++, dst += 3) {
+        if (desc.Format == D3DFMT_X8R8G8B8 || desc.Format == D3DFMT_A8R8G8B8) {
+          dst[0] = src[x * 4 + 2]; dst[1] = src[x * 4 + 1]; dst[2] = src[x * 4];
+        } else if (desc.Format == D3DFMT_R5G6B5) {
+          const uint16_t v = uint16_t(src[x * 2] | (src[x * 2 + 1] << 8));
+          dst[0] = uint8_t(((v >> 11) & 31u) * 255u / 31u); dst[1] = uint8_t(((v >> 5) & 63u) * 255u / 63u); dst[2] = uint8_t((v & 31u) * 255u / 31u);
+        } else if (desc.Format == D3DFMT_X1R5G5B5 || desc.Format == D3DFMT_A1R5G5B5) {
+          const uint16_t v = uint16_t(src[x * 2] | (src[x * 2 + 1] << 8));
+          dst[0] = uint8_t(((v >> 10) & 31u) * 255u / 31u); dst[1] = uint8_t(((v >> 5) & 31u) * 255u / 31u); dst[2] = uint8_t((v & 31u) * 255u / 31u);
+        } else { known = false; break; }
+      }
+    }
+    sys->UnlockRect();
+    if (!known)
+      return false;
+
+    if (half && desc.Width >= 2 && desc.Height >= 2) {
+      // a quarter of the data: every 2 x 2 pixels averaged
+      const uint32_t w = desc.Width / 2, h = desc.Height / 2;
+      std::vector<uint8_t> small(size_t(w) * h * 3u);
+      for (uint32_t y = 0; y < h; y++) {
+        for (uint32_t x = 0; x < w; x++) {
+          for (uint32_t c = 0; c < 3; c++) {
+            const uint32_t sum = rgb[(size_t(2 * y) * desc.Width + 2 * x) * 3u + c] + rgb[(size_t(2 * y) * desc.Width + 2 * x + 1) * 3u + c]
+                               + rgb[(size_t(2 * y + 1) * desc.Width + 2 * x) * 3u + c] + rgb[(size_t(2 * y + 1) * desc.Width + 2 * x + 1) * 3u + c];
+            small[(size_t(y) * w + x) * 3u + c] = uint8_t((sum + 2u) / 4u);
+          }
+        }
+      }
+      return UmWritePng(path, small.data(), w, h);
+    }
+
+    return UmWritePng(path, rgb.data(), desc.Width, desc.Height);
   }
 
 

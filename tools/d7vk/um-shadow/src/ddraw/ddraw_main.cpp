@@ -582,6 +582,8 @@ namespace dxvk {
   void UmShadowApiEnd(const DxvkUmShadowParams* params);
   void UmShadowApiCaster(int on);
   void UmShadowApiGuard(float x, float y);
+  bool UmShadowApiScreenshot(const char* path, int half);
+  void UmShadowApiStats(uint32_t* out);
 }
 
 // Universal Mod: sun shadows. um-engine.dll finds these with GetProcAddress on d7vk.dll / ddraw.dll.
@@ -600,6 +602,16 @@ extern "C" {
   // The next draws are (on != 0) or are not casters: the game's shadow switches of units / trees / buildings.
   __declspec(dllexport) void UmShadowCaster(int on) {
     dxvk::UmShadowApiCaster(on);
+  }
+
+  // The colour buffer as a PNG file (call it after UmShadowEnd, on the game's thread; half != 0: half the width and height); 0 when it cannot be read or written.
+  __declspec(dllexport) int UmShadowScreenshot(const char* path, int half) {
+    return dxvk::UmShadowApiScreenshot(path, half) ? 1 : 0;
+  }
+
+  // What the last UmShadowEnd did: out[0] frames closed so far, [1] caster draws of the last one, [2] result (0 drawn, 1 none / no params, 2 no targets, 3 map, 4 pipeline, 5 depth, 6 light), [3] map size.
+  __declspec(dllexport) void UmShadowStats(uint32_t* out) {
+    if (out) dxvk::UmShadowApiStats(out);
   }
 
   // The world pass is over: draw the shadow map and darken the colour buffer (params: dxvk::DxvkUmShadowParams, see dxvk_um_shadow.h).

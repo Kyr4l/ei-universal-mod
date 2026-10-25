@@ -12,6 +12,7 @@
 #include <windows.h>
 
 #include "um_engine.h"
+#include "um_rig.h"
 
 #include <cmath>
 #include <cstdint>
@@ -76,7 +77,7 @@ BeginFn g_begin = nullptr;
 EndFn g_end = nullptr;
 CasterFn g_caster = nullptr;
 bool g_clearedFlag = false;   // the game's own shadow pass (world flag 0x200) was switched off by us
-bool g_looked = false, g_enabled = false, g_open = false;
+bool g_looked = false, g_enabled = false, g_open = false, g_shadowsInstalled = false;   // g_shadowsInstalled: the call sites of the sun shadows are patched
 Params g_params;
 
 const uintptr_t kRenderGlobals = 0x7AF068;   // the matrix stacks (g_0x7AF068)
@@ -352,11 +353,13 @@ extern "C" __attribute__((used, force_align_arg_pointer)) void UmGuardOn() {
         g_guardFn(0.0f, 0.0f); SetDrawerSize(g_screenW, g_screenH); WriteSet(g_orig);
     }
     g_padL = g_padT = g_padR = g_padB = 0;
+    g_umFrame.guard = 0;
     if (g_swap == 0) PrepareSwap();
     if (g_swap != 1 || C().guard <= 0.0 || !ShadowsWanted()) return;
     StackSet now;
     static unsigned bad = 0;
     if (!ReadSet(now) || !SetIsConsistent(now, now.m[2][0])) {   // not the rest state of the game's own set-up: this frame is drawn as the game does
+        g_umFrame.guard = 2;
         if (C().guardLog > 0.5 && (bad++ & 255) == 0) UmEngineLog("um-engine: guard band: the matrix stacks are not as expected in this frame (%u so far): no band", bad);
         return;
     }
@@ -367,6 +370,7 @@ extern "C" __attribute__((used, force_align_arg_pointer)) void UmGuardOn() {
     ChoosePads(g_orig, std::fmin(std::fmax(C().guard, 0.0), 0.6), l, t, r, b);
     if (!BuildBig(g_orig, l, t, r, b, g_big)) return;
     g_padL = l; g_padT = t; g_padR = r; g_padB = b;
+    g_umFrame.guard = 1; g_umFrame.pad[0] = static_cast<int16_t>(l); g_umFrame.pad[1] = static_cast<int16_t>(t); g_umFrame.pad[2] = static_cast<int16_t>(r); g_umFrame.pad[3] = static_cast<int16_t>(b);
     { static int lp[4] = {-1,-1,-1,-1}; if (C().guardLog > 1.5 && (lp[0] != g_padL || lp[1] != g_padT || lp[2] != g_padR || lp[3] != g_padB)) { lp[0] = g_padL; lp[1] = g_padT; lp[2] = g_padR; lp[3] = g_padB; UmEngineLog("um-engine: dbg pads L %d T %d R %d B %d (screen %d x %d)", g_padL, g_padT, g_padR, g_padB, g_screenW, g_screenH); } }
     FlushPending();   // what the interface left queued is drawn without the shift
     WriteSet(g_big);
@@ -467,6 +471,7 @@ void Lookup() {
 
 // The sun shadows (and the guard band) work: D7VK has them, Enabled is on, the game's own shadow settings allow them, no cave (the game gives it a fixed direction instead of a sun).
 bool ShadowsWanted() {
+    if (!g_shadowsInstalled) return false;
     Lookup();
     if (!g_enabled) return false;
     const bool indoor = Read<int>(kWorld + 0x6E0) == 1 && C().indoor < 0.5;
@@ -610,8 +615,9 @@ bool Gather(Params& p) {
 } // namespace
 
 // Called once from um_engine.cpp when the call sites are installed (the camera is set up before the first world frame)
-extern "C" void UmWorldEarlyInit() {
-    if (C().guard > 0.0 || C().guardLog > 0.5) InstallSetupHook();
+extern "C" void UmWorldEarlyInit(int shadowsInstalled) {
+    g_shadowsInstalled = shadowsInstalled != 0;
+    if (C().guard > 0.0 || C().guardLog > 0.5 || UmEngineConfigNumber("Recorder::Enabled", 1) >= 0.5) InstallSetupHook();
 }
 
 static unsigned g_dbgFrames = 0, g_dbgClosed = 0, g_dbgGatherFail = 0; static DWORD g_dbgAt = 0;
@@ -624,6 +630,7 @@ extern "C" __attribute__((used, force_align_arg_pointer)) void UmWorldBegin() {
     // Off: SunShadows::Enabled=0 (checked once a second), the game's own shadow switches all off (the options screen), a cave. The game's own pass is given back then.
     if (!ShadowsWanted()) {
         ++g_dbgClosed;
+        g_umFrame.mode = kModeOff;
         if (g_clearedFlag && Read<int>(kShadowQuality) > 0) *reinterpret_cast<uint32_t*>(kWorld + 8) |= 0x200u;
         g_clearedFlag = false;
         return;
@@ -643,8 +650,13 @@ extern "C" __attribute__((used, force_align_arg_pointer)) void UmWorldEnd() {
     // a frame whose matrices cannot be read keeps the last good ones (no frame without shadows)
     static Params last; static bool haveLast = false;
     Params now;
-    if (Gather(now)) { last = now; haveLast = true; g_end(&last); }
-    else { ++g_dbgGatherFail; if (haveLast) g_end(&last); else g_end(nullptr); }
+    if (Gather(now)) { last = now; haveLast = true; g_end(&last); g_umFrame.mode = kModeDrawn; }
+    else { ++g_dbgGatherFail; if (haveLast) { g_end(&last); g_umFrame.mode = kModeKept; } else { g_end(nullptr); g_umFrame.mode = kModeNone; } }
+    if (haveLast) {
+        UmFrameRec& r = g_umFrame;
+        for (int i = 0; i < 3; ++i) { r.center[i] = last.center[i]; r.light[i] = last.lightDir[i]; }
+        r.radius = last.radius; r.height = last.height; r.mapSize = last.mapSize;
+    }
 }
 
 // The stubs: begin = the call of CTerrain::RenderOpaque (thiscall, one stack argument), end = the call of CWorldClient::RenderObjects (fastcall).
@@ -702,12 +714,14 @@ asm(R"(
 .globl _UmRenderWrap
 _UmRenderWrap:
     pushl %ecx
+    call _UmRigFrameBegin
     call _UmGuardOn
     popl %ecx
     movl $0x00569E40, %eax
     call *%eax
     pushl %eax
     call _UmGuardOff
+    call _UmRigFrameEnd
     popl %eax
     ret
 )");

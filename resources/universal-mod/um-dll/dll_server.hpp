@@ -4,7 +4,7 @@
 // "UM DLL Connector" tab (and `um-multitool dll`) connects to while the game runs. Off unless
 // DLL_SERVER_ENABLED=true in um.cfg. Only this computer can connect (the socket is bound to the loopback
 // address). It reports statistics, and is a debugger for the game (dll_debug.hpp): what reads is always
-// on; what changes the game (WRITE, POKE, breakpoints, CONSOLE send, CALL) needs DLL_SERVER_DEBUG=true as well.
+// on; what changes the game (WRITE, POKE, breakpoints, CONSOLE send, CALL, ENGINE) needs DLL_SERVER_DEBUG=true as well.
 //
 // SECURITY: there is no authentication; any program on this computer can connect. Reading already exposes
 // the game's memory. With DLL_SERVER_DEBUG, a client can write memory and, with CALL, run arbitrary code
@@ -61,6 +61,7 @@ struct Host {
     std::string (*gameFunction)(uint32_t) = nullptr; // "sub_4A1F20+0x12" (or a known name) in game.exe, else ""
     uint32_t (*mainThread)() = nullptr;              // the thread that draws the frames, 0 when not known
     void (*log)(const char* level, const char* message) = nullptr;
+    int (*engineCommand)(const char* line, char* reply, int size) = nullptr;   // um-engine's UmEngineRig (null without um-engine): 1 = ok
 };
 
 // ---- um.log lines, for the clients that asked (SUB log on) ------------------------------------------
@@ -232,7 +233,7 @@ private:
     void Ok(Client& c, const std::string& command, const std::string& text = "") { c.output += "OK " + command + (text.empty() ? "" : " " + text) + "\n"; }
     void Err(Client& c, const std::string& command, const std::string& why) { c.output += "ERR " + command + " " + why + "\n"; }
 
-    // The commands that change the game (WRITE / POKE / CALL / BP set / CONSOLE send) need DLL_SERVER_DEBUG, a password in um.cfg (DLL_SERVER_PASSWORD) and `AUTH <password>` on the connection.
+    // The commands that change the game (WRITE / POKE / CALL / BP set / CONSOLE send / ENGINE except STATE) need DLL_SERVER_DEBUG, a password in um.cfg (DLL_SERVER_PASSWORD) and `AUTH <password>` on the connection.
     bool DebugOk(const Client& c) const { return host_.debugAllowed && !host_.password.empty() && c.authed; }
     void DebugDenied(Client& c, const std::string& cmd) {
         if (!host_.debugAllowed) Err(c, cmd, "this needs DLL_SERVER_DEBUG=true in um.cfg");
@@ -264,6 +265,7 @@ private:
     void Vars(Client& c, const std::vector<std::string>& w);
     void Scripts(Client& c, const std::vector<std::string>& w);
     void ConsoleCommand(Client& c, const std::vector<std::string>& w);
+    void EngineCommand(Client& c, const std::vector<std::string>& w);
     void RefreshBreakpointThreads(bool all);
 };
 
@@ -303,6 +305,13 @@ inline void Server::Help(Client& c) {
         "CAMERA                                the game camera: position, rotation quaternion, the point it aims at",
         "CONSOLE lines [from] [max]            the in-game console's lines (from index from, default 0), and its input line",
         "CONSOLE send text                     types the text in the game window and presses Enter; refused while the console is closed  [debug]",
+        "ENGINE STATE                          um-engine's last world frame: shadow state, pads, D7VK result, frame time, camera, hour",
+        "ENGINE REC                            writes the frame recorder's report + picture (um-reports\\ beside um-engine.dll)  [debug]",
+        "ENGINE SHOT file.png [half]           saves the world as drawn at the end of the next world frame (no interface) as a PNG  [debug]",
+        "ENGINE CAM x y [dist [yaw]]           the camera over a map point, not following a unit (yaw in degrees)  [debug]",
+        "ENGINE PAUSE 0|1 / HOUR h             pauses the game clock / sets the world clock to hour h  [debug]",
+        "ENGINE SCRIPT text                    runs a mob script line in the client script VM (ConsoleFloat(x) prints a value)  [debug]",
+        "                                      (ENGINE commands run on the game's thread at the end of its next world frame: 5 s at most)",
         "BYE                                   closes the connection",
         "AUTH password                         unlocks the [debug] commands on this connection (DLL_SERVER_PASSWORD in um.cfg)",
         "[debug]: needs DLL_SERVER_DEBUG=true and DLL_SERVER_PASSWORD in um.cfg, and AUTH",
@@ -1040,6 +1049,21 @@ inline void Server::ConsoleCommand(Client& c, const std::vector<std::string>& w)
     Err(c, "CONSOLE", "usage: CONSOLE lines [from] [max] / CONSOLE send text");
 }
 
+inline void Server::EngineCommand(Client& c, const std::vector<std::string>& w) {
+    if (w.size() < 2) return Err(c, "ENGINE", "usage: ENGINE STATE | REC | SHOT file.png | CAM x y [dist [yaw]] | PAUSE 0|1 | HOUR h | SCRIPT text");
+    if (!host_.engineCommand) return Err(c, "ENGINE", "um-engine is not loaded (UM_ENGINE=false) or has no rig commands");
+    std::string verb = w[1];
+    for (char& ch : verb) ch = static_cast<char>(toupper(static_cast<unsigned char>(ch)));
+    if (verb != "STATE" && !DebugOk(c)) return DebugDenied(c, "ENGINE");
+    std::string line = verb;
+    for (size_t i = 2; i < w.size(); ++i) line += " " + w[i];
+    char reply[1024] = "";
+    const int ok = host_.engineCommand(line.c_str(), reply, sizeof(reply));
+    if (verb != "STATE") Log("INFO", "DLL server: ENGINE " + line);
+    if (ok) Ok(c, "ENGINE", reply);
+    else Err(c, "ENGINE", reply);
+}
+
 // A browser page (fetch / XHR to 127.0.0.1, DNS rebinding) can only speak HTTP: its request line and headers are never a command of this protocol, and its body would be taken as
 // commands (WRITE / CALL). The first line of that kind ends the connection before anything is executed.
 inline bool LooksLikeHttp(const std::string& line) {
@@ -1106,6 +1130,7 @@ inline bool Server::Handle(Client& c, const std::string& line) {
     else if (cmd == "VARS") Vars(c, w);
     else if (cmd == "SCRIPTS") Scripts(c, w);
     else if (cmd == "CONSOLE") ConsoleCommand(c, w);
+    else if (cmd == "ENGINE") EngineCommand(c, w);
     else if (cmd == "CAMERA") {
         dllgame::Camera cam;
         char text[256];

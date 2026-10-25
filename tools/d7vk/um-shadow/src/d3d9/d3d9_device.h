@@ -551,6 +551,7 @@ namespace dxvk {
     void UmShadowEnd(const DxvkUmShadowParams& params);
     void UmShadowSetCasting(bool on) { m_umShadowCasting = on; }
     void UmShadowSetGuard(float x, float y);
+    bool UmShadowScreenshot(const char* path, bool half);
 
 
     HRESULT STDMETHODCALLTYPE ProcessVertices(

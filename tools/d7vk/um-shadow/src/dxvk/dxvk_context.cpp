@@ -1,3 +1,4 @@
+#include <atomic>
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -11043,11 +11044,24 @@ namespace dxvk {
   }
 
 
+  // Universal Mod: what the last umShadowEnd did (read by UmShadowStats; plain relaxed atomics)
+  static std::atomic<uint32_t> g_umShadowStat[4];   // [0] frames closed, [1] caster draws of the last one, [2] result (see below), [3] map size
+  // result: 0 drawn, 1 no draws / no params, 2 no colour or depth target, 3 shadow map not made, 4 pipeline not made, 5 depth buffer not readable, 6 no light direction
+
+  void UmShadowApiStats(uint32_t* out) {
+    for (int i = 0; i < 4; i++) out[i] = g_umShadowStat[i].load(std::memory_order_relaxed);
+  }
+
+
   void DxvkContext::umShadowEnd(const DxvkUmShadowParams& p) {
     m_umShadowActive = false;
 
     std::vector<DxvkUmShadowDraw> draws = std::move(m_umShadowDraws);
     m_umShadowDraws.clear();
+
+    g_umShadowStat[0].fetch_add(1u, std::memory_order_relaxed);
+    g_umShadowStat[1].store(uint32_t(draws.size()), std::memory_order_relaxed);
+    g_umShadowStat[2].store(1u, std::memory_order_relaxed);
 
     if (draws.empty() || p.size < sizeof(DxvkUmShadowParams))
       return;
@@ -11056,8 +11070,10 @@ namespace dxvk {
     Rc<DxvkImageView> colorView = fbInfo.getColorTarget(0u).view;
     Rc<DxvkImageView> depthView = fbInfo.getDepthTarget().view;
 
-    if (colorView == nullptr || depthView == nullptr)
+    if (colorView == nullptr || depthView == nullptr) {
+      g_umShadowStat[2].store(2u, std::memory_order_relaxed);
       return;
+    }
 
     {
       static bool s_logged = false;
@@ -11072,8 +11088,11 @@ namespace dxvk {
     DxvkUmShadowObjects& objects = m_common->umShadow();
     const uint32_t mapSize = std::min(std::max(p.mapSize, 256u), 4096u);
 
-    if (!objects.ensureMap(mapSize))
+    if (!objects.ensureMap(mapSize)) {
+      g_umShadowStat[2].store(3u, std::memory_order_relaxed);
       return;
+    }
+    g_umShadowStat[3].store(mapSize, std::memory_order_relaxed);
 
     // All pipelines first: a driver that cannot build one (no per-sample shading, ...) switches the shadows off instead of breaking the frame
     {
@@ -11087,6 +11106,7 @@ namespace dxvk {
         static bool s_failed = false;
         if (!std::exchange(s_failed, true))
           Logger::err("UmShadow: a shadow pipeline could not be created, the shadows are off");
+        g_umShadowStat[2].store(4u, std::memory_order_relaxed);
         return;
       }
     }
@@ -11099,8 +11119,10 @@ namespace dxvk {
     depthUsage.stages = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     depthUsage.access = VK_ACCESS_SHADER_READ_BIT;
 
-    if (!ensureImageCompatibility(depthImage, depthUsage))
+    if (!ensureImageCompatibility(depthImage, depthUsage)) {
+      g_umShadowStat[2].store(5u, std::memory_order_relaxed);
       return;
+    }
 
     DxvkImageViewKey depthKey = { };
     depthKey.viewType = VK_IMAGE_VIEW_TYPE_2D;
@@ -11116,7 +11138,7 @@ namespace dxvk {
     // ---- matrices (column-major) ----
     float D[3] = { p.lightDir[0], p.lightDir[1], p.lightDir[2] };
     float dl = std::sqrt(D[0] * D[0] + D[1] * D[1] + D[2] * D[2]);
-    if (dl < 1e-6f) return;
+    if (dl < 1e-6f) { g_umShadowStat[2].store(6u, std::memory_order_relaxed); return; }
     for (float& v : D) v /= dl;
 
     float up[3] = { 0.0f, 0.0f, 1.0f };
@@ -11332,6 +11354,8 @@ namespace dxvk {
     m_cmd->track(colorView->image(), DxvkAccess::Write);
     m_cmd->track(objects.compareSampler());
     m_cmd->track(objects.alphaSampler());
+
+    g_umShadowStat[2].store(0u, std::memory_order_relaxed);
   }
 
 }

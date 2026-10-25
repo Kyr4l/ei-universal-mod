@@ -10,7 +10,7 @@ Turn the server on in `um.cfg`, next to um.dll, then start the game:
 | `DLL_SERVER_ENABLED` | false | turns the server on |
 | `DLL_SERVER_PORT` | 18888 | the port, the same as in the tab |
 | `DLL_SERVER_PASSWORD` | empty | the password of the debug commands (plain text): a client sends `AUTH <password>` first; without a password those commands are refused even with `DLL_SERVER_DEBUG=true` |
-| `DLL_SERVER_DEBUG` | false | **development only, dangerous**: allows the commands that change the game: writing memory, breakpoints (`BP set` / `clear`), `CONSOLE send`, and `CALL` (runs any code in the game); needs the password |
+| `DLL_SERVER_DEBUG` | false | **development only, dangerous**: allows the commands that change the game: writing memory, breakpoints (`BP set` / `clear`), `CONSOLE send`, `ENGINE` (except `ENGINE STATE`: camera, clock, pause, screenshot, mob script lines; see docs/recorder-and-rig.md) and `CALL` (runs any code in the game); needs the password |
 
 **Security.** The reading commands have no password: any program running on the same computer can connect and read the game's memory. The commands that change the game need three things: `DLL_SERVER_DEBUG=true`, a `DLL_SERVER_PASSWORD` in um.cfg, and `AUTH <password>` on the connection (the tab's **Password** field sends it; three wrong ones close the connection). HTTP requests (a web page trying to reach 127.0.0.1) are refused at their first line.
 - With the server on, any local program can read the game's memory.
