@@ -34,11 +34,13 @@ And more. Bugs and inconsistencies of the original game are patched or worked ar
 You need Evil Islands installed (the GOG version or the original CD, both work). The launcher does everything else.
 
 1. Download `EIStarter-UM-<version>.zip` from [Releases](https://github.com/Kyr4l/ei-universal-mod/releases) and unpack it anywhere you can write to.
-2. Run `EIStarter-UM.exe` (Linux: see below). The first time it asks for the game's folder if it cannot find it.
+2. Run `EIStarter-UM.exe` (Linux: see below; macOS: see the CrossOver guide below). The first time it asks for the game's folder if it cannot find it.
 3. Click the **(i)** button next to the mod list, then **Install** on the line you want (see below). The mod can also be unpacked by hand into `mods`.
 4. Pick the mod in the list and click **Play**.
 
 **Linux (Lutris).** Linux players need Lutris: install the game in Lutris as usual (GOG or CD), unpack the launcher inside that game's prefix (for example into `drive_c/EIStarter-UM`), then in Lutris open the game's configuration, set the executable to `EIStarter-UM.exe` and start the game from Lutris.
+
+**macOS (CrossOver).** A tested Apple Silicon setup can reach a locally hosted multiplayer camp without a Windows VM. See the [CrossOver guide](docs/macos-crossover.md) for the tested versions, OpenGL configuration, borderless scaling, locale settings and verification limits.
 
 EIStarter-UM replaces EIStarter: no registry file to import, no DLL override, no .NET. When it starts it checks GitHub once for a newer mod build and tells you; nothing is downloaded or installed unless you click Install or Update. How it works: [docs/EIStarter-UM.md](docs/EIStarter-UM.md).
 
