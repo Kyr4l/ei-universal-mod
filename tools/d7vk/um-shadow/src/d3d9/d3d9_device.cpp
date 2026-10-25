@@ -27,7 +27,6 @@
 #include <algorithm>
 #include <cfloat>
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
 #include <vector>
 #ifdef MSC_VER
@@ -49,14 +48,6 @@ namespace dxvk {
 
   void UmShadowApiCaster(int on) {
     if (g_umShadowDevice) g_umShadowDevice->UmShadowSetCasting(on != 0);
-  }
-
-  void UmShadowApiWaterMap(const float* data, int w, int h) {
-    if (g_umShadowDevice && data && w > 1 && h > 1 && w <= 4096 && h <= 4096) g_umShadowDevice->UmWaterMap(data, uint32_t(w), uint32_t(h));
-  }
-
-  void UmShadowApiWaterEnd(const DxvkUmWaterParams* params) {
-    if (g_umShadowDevice && params) g_umShadowDevice->UmWaterEnd(*params);
   }
 
   bool UmShadowApiScreenshot(const char* path, int half) {
@@ -5064,73 +5055,6 @@ namespace dxvk {
         written++;
     }
     return written;
-  }
-
-
-  // Universal Mod: the water border's map (four floats per terrain vertex: water depth over the ground, water level, liquid colour), uploaded when um-engine hands a new one over
-  static int UmWaterStage() { static int stage = -1; if (stage < 0) { const char* e = std::getenv("UM_WATER_STAGE"); stage = e ? std::atoi(e) : 2; } return stage; }   // research: 0 nothing, 1 upload only, 2 the pass too
-
-  void D3D9DeviceEx::UmWaterMap(const float* data, uint32_t width, uint32_t height) {
-    if (UmWaterStage() < 1) return;
-    D3D9DeviceLock lock = LockDevice();
-
-    if (m_umWaterImage == nullptr || m_umWaterImage->info().extent.width != width || m_umWaterImage->info().extent.height != height) {
-      DxvkImageCreateInfo imageInfo = { };
-      imageInfo.type = VK_IMAGE_TYPE_2D;
-      imageInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-      imageInfo.sampleCount = VK_SAMPLE_COUNT_1_BIT;
-      imageInfo.extent = { width, height, 1u };
-      imageInfo.numLayers = 1u;
-      imageInfo.mipLevels = 1u;
-      imageInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
-      imageInfo.stages = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT;
-      imageInfo.access = VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
-      imageInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
-      imageInfo.layout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-      imageInfo.debugName = "Universal Mod water depth";
-
-      m_umWaterImage = m_dxvkDevice->createImage(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
-      DxvkImageViewKey viewInfo = { };
-      viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-      viewInfo.format = VK_FORMAT_R32G32B32A32_SFLOAT;
-      viewInfo.aspects = VK_IMAGE_ASPECT_COLOR_BIT;
-      viewInfo.mipIndex = 0u;
-      viewInfo.mipCount = 1u;
-      viewInfo.layerIndex = 0u;
-      viewInfo.layerCount = 1u;
-      viewInfo.usage = VK_IMAGE_USAGE_SAMPLED_BIT;
-      m_umWaterView = m_umWaterImage->createView(viewInfo);
-    }
-
-    const VkDeviceSize bytes = VkDeviceSize(width) * height * 4u * sizeof(float);   // per vertex: the water's depth over the ground, the water's level, the liquid's colour (0xRRGGBB), 0
-    D3D9BufferSlice slice = AllocStagingBuffer(bytes);
-    std::memcpy(slice.mapPtr, data, size_t(bytes));
-
-    VkImageSubresourceLayers layers = { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
-
-    EmitCs([
-      cSrcSlice  = slice.slice,
-      cDstImage  = m_umWaterImage,
-      cLayers    = layers,
-      cExtent    = VkExtent3D { width, height, 1u }
-    ] (DxvkContext* ctx) {
-      ctx->copyBufferToImage(cDstImage, cLayers, VkOffset3D { 0, 0, 0 }, cExtent,
-        cSrcSlice.buffer(), cSrcSlice.offset(), 0, 0, VK_FORMAT_UNDEFINED);
-    });
-  }
-
-
-  void D3D9DeviceEx::UmWaterEnd(const DxvkUmWaterParams& params) {
-    if (UmWaterStage() < 2) return;
-    D3D9DeviceLock lock = LockDevice();
-
-    if (m_umWaterView == nullptr)
-      return;
-
-    EmitCs([cParams = params, cView = m_umWaterView] (DxvkContext* ctx) {
-      ctx->umWaterEnd(cParams, cView);
-    });
   }
 
 

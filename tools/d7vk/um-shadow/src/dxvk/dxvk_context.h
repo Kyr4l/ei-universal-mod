@@ -975,7 +975,6 @@ namespace dxvk {
     void umShadowBegin();
     void umShadowCapture(DxvkUmShadowDraw&& draw);
     void umShadowEnd(const DxvkUmShadowParams& params);
-    void umWaterEnd(const DxvkUmWaterParams& params, const Rc<DxvkImageView>& thickness);
 
     /**
      * \brief Resolves a multisampled image resource

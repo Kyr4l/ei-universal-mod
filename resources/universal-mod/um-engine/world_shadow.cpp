@@ -614,22 +614,6 @@ bool Gather(Params& p) {
 
 } // namespace
 
-// The camera / projection of the world pass as the water border needs it (the same matrices Gather reads: valid between the guard band's set-up and its end, i.e. inside CWorldClient::Render):
-// screenToWorld column-major (see DxvkUmShadowParams), depth = { K, far, near }, guard = the band's shift in pixels. false when the stacks cannot be read.
-extern "C" bool UmViewParams(float* screenToWorld, float* depth, float* guard) {
-    FpuExtended fpu;
-    double view[16], proj[16], m[16], inv[16];
-    if (!StackTop(0x14, proj) || !StackTop(0x5C, view)) return false;
-    Mul(proj, view, m);
-    if (!Invert(m, inv)) return false;
-    const double m10 = proj[10], m11 = proj[11], m14 = proj[14];
-    if (std::fabs(m14) < 1e-9) return false;
-    for (int r = 0; r < 4; ++r) for (int c = 0; c < 4; ++c) screenToWorld[c * 4 + r] = static_cast<float>(inv[r * 4 + c]);
-    depth[0] = static_cast<float>(-m14 * m11); depth[1] = static_cast<float>(m10); depth[2] = static_cast<float>(m10 - m14);
-    guard[0] = static_cast<float>(g_padL); guard[1] = static_cast<float>(g_padT);
-    return true;
-}
-
 // Called once from um_engine.cpp when the call sites are installed (the camera is set up before the first world frame)
 extern "C" void UmWorldEarlyInit(int shadowsInstalled) {
     g_shadowsInstalled = shadowsInstalled != 0;

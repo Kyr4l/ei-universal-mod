@@ -24,7 +24,6 @@ extern "C" void UmEngineLog(const char* format, ...);
 extern "C" bool UmEngineConfigNumbers(const char* const* keys, double* values, int count);
 extern "C" bool UmEngineDirectory(char* out, int size);   // um_engine.cpp: the folder of um-engine.dll, with a trailing backslash
 extern "C" const char* UmEngineVersion();
-extern "C" int UmWaterSpots(float* out, int max);   // water_border.cpp
 
 UmFrameRec g_umFrame;
 
@@ -243,7 +242,7 @@ typedef void (__attribute__((thiscall)) *CameraSetYaw)(void* camera, float angle
 bool WorldReady() { return Read<uintptr_t>(0x7AF068) != 0 && Read<uintptr_t>(kWorld + 0x180) != 0; }
 
 // ---- requests: a client thread (the DLL server) hands one over, the game thread runs it at the end of its next world frame ----
-enum Kind { kNone, kShot, kReport, kCam, kPause, kHour, kScript, kState, kWaterSpots };
+enum Kind { kNone, kShot, kReport, kCam, kPause, kHour, kScript, kState };
 struct Request { Kind kind = kNone; std::string text; double a = 0, b = 0, c = 0, d = 0; int count = 0; bool ok = false; std::string reply; };
 Request g_req;
 volatile LONG g_state = 0;   // 0 free, 1 handed over, 2 being run, 3 done
@@ -284,15 +283,6 @@ void Run(Request& q) {
         return;
     }
     case kState: q.ok = true; q.reply = StateLine(); return;
-    case kWaterSpots: {
-        if (!WorldReady()) { q.reply = "no world"; return; }
-        float spots[3 * 6];
-        const int n = UmWaterSpots(spots, 6);
-        q.ok = true;
-        q.reply = Format("count=%d", n);
-        for (int i = 0; i < n; ++i) q.reply += Format(" spot%d=%.1f,%.1f,%d", i, spots[i * 3], spots[i * 3 + 1], static_cast<int>(spots[i * 3 + 2]));
-        return;
-    }
     case kCam: {
         if (!WorldReady()) { q.reply = "no world"; return; }
         void* camera = reinterpret_cast<void*>(kCamera);
@@ -434,7 +424,6 @@ extern "C" __declspec(dllexport) int UmEngineRig(const char* line, char* reply, 
     for (char& c : verb) c = static_cast<char>(toupper(static_cast<unsigned char>(c)));
     std::string text;
     if (verb == "STATE") { const bool ok = Submit(kState, "", 0, 0, 0, 0, 0, text); return answer(ok, text); }
-    if (verb == "WATERSPOT") { const bool ok = Submit(kWaterSpots, "", 0, 0, 0, 0, 0, text); return answer(ok, text); }
     if (verb == "REC") { const bool ok = Submit(kReport, "", 0, 0, 0, 0, 0, text); return answer(ok, text); }
     if (verb == "SHOT") {
         if (rest.empty() || rest.size() > MAX_PATH - 8) return answer(false, "usage: SHOT file.png [half]");
@@ -459,5 +448,5 @@ extern "C" __declspec(dllexport) int UmEngineRig(const char* line, char* reply, 
         if (rest.empty() || rest.size() > 480) return answer(false, "usage: SCRIPT mob-script-text (480 characters at most)");
         const bool ok = Submit(kScript, rest, 0, 0, 0, 0, 0, text); return answer(ok, text);
     }
-    return answer(false, "unknown ENGINE command (STATE, REC, SHOT file.png [half], CAM x y [dist [yaw]], PAUSE 0|1, HOUR h, SCRIPT text, WATERSPOT)");
+    return answer(false, "unknown ENGINE command (STATE, REC, SHOT file.png [half], CAM x y [dist [yaw]], PAUSE 0|1, HOUR h, SCRIPT text)");
 }

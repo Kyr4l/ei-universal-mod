@@ -552,8 +552,6 @@ namespace dxvk {
     void UmShadowSetCasting(bool on) { m_umShadowCasting = on; }
     void UmShadowSetGuard(float x, float y);
     bool UmShadowScreenshot(const char* path, bool half);
-    void UmWaterMap(const float* data, uint32_t width, uint32_t height);
-    void UmWaterEnd(const DxvkUmWaterParams& params);
 
 
     HRESULT STDMETHODCALLTYPE ProcessVertices(
@@ -1662,8 +1660,6 @@ namespace dxvk {
 
     bool                            m_umShadowCapture = false;
     float                           m_umGuard[2] = { 0.0f, 0.0f };   // pixels the game's pre-transformed world vertices are shifted by (its guard band), subtracted again in the fixed-function vertex shader
-    Rc<DxvkImage>                   m_umWaterImage;             // the water-depth map of the water border pass (R32F, one value per terrain vertex)
-    Rc<DxvkImageView>               m_umWaterView;
     bool                            m_umShadowCasting = true;   // false while an object whose kind the game's shadow settings switch off is drawn
 
     Rc<DxvkBuffer>                  m_upBuffer;

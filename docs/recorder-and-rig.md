@@ -61,7 +61,6 @@ supersedes it for most purposes; leave it at 0 for normal play. (`SunShadows::De
 | `ENGINE CAM x y [dist [yaw]]` | camera over the map point (x, y), no longer following a unit (the scroll key's job); `dist` 2..200, `yaw` in degrees |
 | `ENGINE PAUSE 0\|1` | the two pause flags (0x7AF624 / 0x7AFFCC) |
 | `ENGINE HOUR h` | the client world clock to hour `h` (0..24) |
-| `ENGINE WATERSPOT` | the best shorelines of the map (loads every sector: research): `spotN=x,y,cells`; the rig samples the water there |
 | `ENGINE SCRIPT text` | runs a mob script line in the game's console VM (`WorldScript_Execute`, wrapped as `WorldScript( text )` like the console's `@` prefix, no cheat switch needed): `MoveToPoint(GetObject(id), x, y)`, `Attack(GetObject(a), GetObject(b))`, `GodMode(0, 1)`, `FixWorldTime(11)`... A value is printed with `ConsoleFloat(x)` and read with `CONSOLE lines`. See `docs/game-exe/gs-functions.md` for every command |
 
 The rig scripts in `_cpr/game-src/tools` use them: `dll.py "ENGINE CAM 81.5 63 40" "ENGINE SHOT /tmp/a.png"`.

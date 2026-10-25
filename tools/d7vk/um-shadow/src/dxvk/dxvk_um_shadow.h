@@ -42,23 +42,6 @@ namespace dxvk {
     float    guard[2]        = { };       // pixels the game's world coordinates are shifted by (guard band): screen pixel + guard = the game's x / y
   };
 
-  /** Parameters of the water's border pass (plain data, versioned by size). */
-  struct DxvkUmWaterParams {
-    uint32_t size            = sizeof(DxvkUmWaterParams);
-    uint32_t flags           = 0;
-    float    screenToWorld[16] = { };     // as DxvkUmShadowParams
-    float    depthK          = 0.0f;
-    float    depthFar        = 100.0f;
-    float    depthNear       = 2.0f;
-    float    guard[2]        = { };
-    float    tint[3]         = { };       // light colour of the foam
-    float    strength        = 1.0f;      // 0..1
-    float    width           = 0.6f;      // foam width inside the water (world units)
-    float    wet             = 0.15f;     // fade-out outside the waterline (world units)
-    float    speed           = 1.0f;
-    float    time            = 0.0f;      // seconds
-  };
-
   /** One recorded caster draw. */
   struct DxvkUmShadowDraw {
     VkBuffer              vertexBuffer = VK_NULL_HANDLE;
@@ -85,8 +68,6 @@ namespace dxvk {
 
     const DxvkPipelineLayout* depthLayout(bool alpha) const { return alpha ? m_depthAlphaLayout : m_depthLayout; }
     const DxvkPipelineLayout* resolveLayout() const { return m_resolveLayout; }
-    const DxvkPipelineLayout* waterLayout() const { return m_waterLayout; }
-    VkPipeline getWaterPipeline(VkFormat colorFormat, VkSampleCountFlagBits samples);
 
     VkPipeline getDepthPipeline(bool alpha);
     VkPipeline getResolvePipeline(VkFormat colorFormat, VkSampleCountFlagBits samples, bool opaque, bool edge);
@@ -110,9 +91,6 @@ namespace dxvk {
     const DxvkPipelineLayout* m_depthLayout      = nullptr;
     const DxvkPipelineLayout* m_depthAlphaLayout = nullptr;
     const DxvkPipelineLayout* m_resolveLayout    = nullptr;
-    const DxvkPipelineLayout* m_waterLayout      = nullptr;
-    std::unordered_map<uint64_t, VkPipeline> m_waterPipelines;
-    VkPipeline createWaterPipeline(VkFormat colorFormat, VkSampleCountFlagBits samples);
 
     Rc<DxvkSampler> m_compareSampler;
     Rc<DxvkSampler> m_alphaSampler;

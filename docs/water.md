@@ -1,4 +1,4 @@
-# The water (reverse engineering notes) and the water border (um-engine 0.15.0)
+# The water (reverse engineering notes)
 
 ## How the game draws water
 - **A second vertex layer.** Every terrain sector (`TerrainSector`, 0x394 bytes) has a ground layer and, when `sector+0x10` is set, a water layer: 0x441 (33 x 33) vertices each, one vertex per world unit, 32 units per sector.
@@ -13,25 +13,9 @@
   (`CTerrain::BuildWaveTable` 0x6C57E0: 33 x 33 phases, 40 random radial bumps). Terrain flags (+0x94): 1 water waves, 2 animated tiles, 0x10 sun shadows of the terrain (`EnableSelfShadowing`, off in the stock settings).
   The long diagonal stripes that pop in and out every ~0.8 s (reported as shadow flicker) are this animation: the same cycle shows with the sun shadows, um-engine's patches and D7VK all switched off, and in the unmodified game (the user checked).
 
-## The water border (`WaterBorder`, `water_border.cpp` + D7VK `UmWaterMap` / `UmWaterEnd`)
-A soft border where the water meets the land, drawn right after the game's water layer (the call after `RenderWater`, 0x56A120, patched like the sun shadows' sites; needs D7VK).
-- um-engine collects, for the terrain in view (every 0.4 s, only sectors the game has loaded), per terrain vertex: the water's depth over the ground (ground record +0x27, -100 where the water layer has no vertex or the liquid is red = lava),
-  the water's level (+0x21 of the water vertex) and the liquid's colour (its material's r g b). **Short shores are taken out** before the map goes to D7VK: the dry regions and the water regions of the map are labelled (flood fill); a region that does not reach unknown cells and
-  whose edge is shorter than `MinEdge` world units (about four times the square root of its area: an islet, a stone in the shallows, a puddle) is turned into the other kind, so no shoreline is left there.
-- D7VK draws one full-screen pass (`dxvk_um_water_common.glsl`): every pixel's world position comes from the depth buffer (as in the shadow resolve); the map is sampled there (bilinear) and its gradient gives the distance to the waterline along the ground, so the band is as wide
-  as asked in world units on any slope. Pixels well above the water's level (a bridge, units, trees) and flat marsh (slope under ~0.04: no sharp shoreline) are left alone.
-- **Colour:** relative to the liquid's own colour (the nearest vertex's material), lit like the world (ambient + sun on an upward surface: dim at night) and lightened, never white: the shallows 22 % toward white, the foam 22-50 %. The dry side gets a thin wet (darker) strip, 20 % at most.
-- Styles (`WaterBorder::Style`): 0 soft (paler shallows and wet ground only, no foam), 1 patchy foam (the default: foam gathers in patches, a low-frequency noise picks where, the rest of the shore stays plain), 2 an even thin foam line.
+## A shore border was tried and removed
+A "water border" (foam where the water meets the land: the shore found from the depth buffer plus a per-vertex map of the water's depth over the ground, drawn by a D7VK full-screen pass after `RenderWater`) was built in um-engine 0.15.0
+and removed again at the user's request ("in the end i don't like it"). What is worth keeping from it: the water's depth over a ground vertex is `ground record +0x27` (negative on dry land), the water layer's vertex says where the sheet exists
+(`record +0x25` != 0xFFFF) and at which level (`+0x21`), the liquid's colour is the material's r g b (`terrain+0x12C`, +4 / +8 / +0xC; lava is red), and the call after `CTerrain::RenderWater` is at 0x56A120. The code is in git history:
+commits 088cfb09d and b8d3dffe3 (`water_border.cpp`, `dxvk_um_water_common.glsl`, D7VK `UmWaterMap` / `UmWaterEnd`).
 
-| `um-engine.cfg` key | Default | |
-|---|---|---|
-| `WaterBorder` | false | the call site (needs a restart; D7VK with `UmWaterMap` / `UmWaterEnd` required) |
-| `WaterBorder::Style` | 1 | 0 soft, 1 patchy foam, 2 even thin line |
-| `WaterBorder::Width` | 0.25 | foam width inside the water (world units) |
-| `WaterBorder::Strength` | 0.5 | 0..1: how visible the shore is (0 = nothing drawn) |
-| `WaterBorder::Wet` | 0.3 | wet strip width on the dry side |
-| `WaterBorder::Speed` | 1 | movement of the foam |
-| `WaterBorder::MinEdge` | 24 | shores shorter than this (world units) get no border; 0 = every shore |
-
-Checked on the rig (`ENGINE WATERSPOT` finds the best shorelines of a map; `_cpr/water-samples/`): the Gipath base and its quest allods (zone3xobr river / marsh, the other easy quests), the Jigran base (murky pond), the Ingos base (hardly any water: nothing drawn), and the Suslanger base, whose liquid is lava: no border at all (red liquids are skipped).
-D7VK research switch: the environment variable `UM_WATER_STAGE` (0 nothing, 1 only the map upload, 2 the pass; default 2).
