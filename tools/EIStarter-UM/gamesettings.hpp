@@ -7,7 +7,9 @@
 // `name=hex:aa,bb,...`.
 #pragma once
 
+#include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include <vector>
 
@@ -77,6 +79,30 @@ public:
             if (!IsCameraRow(d)) continue;
             const winreg::Value* v = Find(d.key, d.name);
             if (!v || !SameValue(*v, FromDefault(d))) out.push_back(d.name);
+        }
+        return out;
+    }
+    // The values as text for the window that lists the differences: a dword as a number, a 4-byte binary as a float, a string as it is.
+    static std::string Describe(const winreg::Value& v) {
+        char b[48];
+        switch (v.kind) {
+        case winreg::Value::Kind::Dword: return std::to_string(v.dword);
+        case winreg::Value::Kind::String: return v.text;
+        case winreg::Value::Kind::Binary:
+            if (v.bytes.size() == 4) { float f; std::memcpy(&f, v.bytes.data(), 4); std::snprintf(b, sizeof b, "%.6g", static_cast<double>(f)); return b; }
+            { std::string t; for (size_t i = 0; i < v.bytes.size(); ++i) { std::snprintf(b, sizeof b, "%s%02x", i ? " " : "", v.bytes[i]); t += b; } return t; }
+        }
+        return {};
+    }
+    struct CameraDiff { std::string name, mine, original; };
+    // The camera values that differ from the original release, with both values as text (a missing one shows as "-").
+    std::vector<CameraDiff> CameraDifferenceDetails() const {
+        std::vector<CameraDiff> out;
+        for (const DefaultValue& d : kGameDefaults) {
+            if (!IsCameraRow(d)) continue;
+            const winreg::Value* v = Find(d.key, d.name);
+            const winreg::Value orig = FromDefault(d);
+            if (!v || !SameValue(*v, orig)) out.push_back({d.name, v ? Describe(*v) : std::string("-"), Describe(orig)});
         }
         return out;
     }

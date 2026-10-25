@@ -198,7 +198,7 @@ struct App {
     // other ones), and the Options > Camera button restores it. The replaced values are appended to EIStarter-UM-camera-backup.txt; the original ones go into
     // the launcher's settings and into Nival's registry key and the clone (the keys the game and addon.dll read).
     bool cameraAsk = false, cameraDontShow = false;
-    size_t cameraDiffCount = 0;
+    std::vector<GameSettings::CameraDiff> cameraDiffs;   // what differs, listed in the window
     void BackupCamera(const GameSettings& g) {
         if (g.CameraDifferences().empty()) return;
         std::ofstream f((dir / "EIStarter-UM-camera-backup.txt").string(), std::ios::app);
@@ -697,22 +697,37 @@ static void DrawMain(App& app, GLFWwindow* window) {
         ImGui::PopStyleColor();
     }
 
-    // The camera differs from the original CD release's: offer the original one.
+    // The camera differs from the original CD release's: offer the original one (the differing values are listed).
     if (app.cameraAsk && !app.options.IsOpen() && app.message.empty() && app.offer == App::Offer::None) {
         ImGui::SetNextWindowPos(ImVec2(kW / 2.f, kH / 2.f), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-        ImGui::SetNextWindowSize(ImVec2(470, 196));
-        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.02f, 0.04f, 0.07f, 0.96f));
+        ImGui::SetNextWindowSize(ImVec2(600, 332));
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.02f, 0.04f, 0.07f, 0.97f));
         if (ImGui::Begin("##camera", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings)) {
             const Texts& tx = app.texts;
             ImGui::TextColored(ImVec4(0.92f, 0.7f, 0.27f, 1), "%s", tx.Get("Options", "camTitle", "Camera settings").c_str());
-            ImGui::Spacing();
-            ImGui::TextWrapped("%s", tx.Get("Options", "camQuestion", "Your camera settings differ from the original CD release of Evil Islands (the GOG release changes them). Replace them with the original ones? The old values are saved in EIStarter-UM-camera-backup.txt.").c_str());
-            char n[160]; std::snprintf(n, sizeof n, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(app.cameraDiffCount));
-            ImGui::Spacing();
+            ImGui::TextWrapped("%s", tx.Get("Options", "camQuestion", "Your camera settings differ from the original CD release of Evil Islands (the GOG release changes them; so does the old EIStarter). Replace them with the original ones? The old values are saved in EIStarter-UM-camera-backup.txt.").c_str());
+            char n[160]; std::snprintf(n, sizeof n, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(app.cameraDiffs.size()));
             ImGui::TextDisabled("%s", n);
-            ImGui::SetCursorPos(ImVec2(12, ImGui::GetWindowHeight() - 34));
+            if (ImGui::BeginChild("##camdiffs", ImVec2(0, ImGui::GetContentRegionAvail().y - 38), ImGuiChildFlags_Borders)) {
+                if (ImGui::BeginTable("##camtable", 3, ImGuiTableFlags_RowBg | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollY)) {
+                    ImGui::TableSetupScrollFreeze(0, 1);
+                    ImGui::TableSetupColumn(tx.Get("Options", "camColName", "Value").c_str(), ImGuiTableColumnFlags_WidthFixed, 330);
+                    ImGui::TableSetupColumn(tx.Get("Options", "camColMine", "Yours").c_str(), ImGuiTableColumnFlags_WidthFixed, 110);
+                    ImGui::TableSetupColumn(tx.Get("Options", "camColOriginal", "Original").c_str(), ImGuiTableColumnFlags_WidthFixed, 110);
+                    ImGui::TableHeadersRow();
+                    for (const GameSettings::CameraDiff& d : app.cameraDiffs) {
+                        ImGui::TableNextRow();
+                        ImGui::TableNextColumn(); ImGui::TextUnformatted(d.name.c_str());
+                        ImGui::TableNextColumn(); ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "%s", d.mine.c_str());
+                        ImGui::TableNextColumn(); ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", d.original.c_str());
+                    }
+                    ImGui::EndTable();
+                }
+            }
+            ImGui::EndChild();
+            ImGui::SetCursorPos(ImVec2(12, ImGui::GetWindowHeight() - 32));
             ImGui::Checkbox((tx.Get("Options", "camDontShow", "Don't show again") + "##camDont").c_str(), &app.cameraDontShow);
-            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 190, ImGui::GetWindowHeight() - 34));
+            ImGui::SetCursorPos(ImVec2(ImGui::GetWindowWidth() - 190, ImGui::GetWindowHeight() - 32));
             const bool replace = ImGui::Button((tx.Get("Options", "camReplace", "Replace") + "##camReplace").c_str(), ImVec2(84, 0));
             ImGui::SameLine();
             const bool keep = ImGui::Button((tx.Get("Options", "camKeep", "Keep mine") + "##camKeep").c_str(), ImVec2(84, 0)) || ImGui::IsKeyPressed(ImGuiKey_Escape);
@@ -860,9 +875,12 @@ int main(int argc, char** argv) {
     if (app.cfg.checkUpdatesAtStart && app.offer == App::Offer::None) app.CheckUpdates(); // in the background; the corner shows the result
     if (NormalizePaths(app.cfg.game)) { app.Log("path settings repaired"); app.Save(); }
     if (app.cfg.cameraCheck) { // the camera of the original CD release, or the user's say that it is fine
-        app.cameraDiffCount = app.cfg.game.CameraDifferences().size();
-        app.cameraAsk = app.cameraDiffCount > 0;
-        if (app.cameraAsk) app.Log("camera: " + std::to_string(app.cameraDiffCount) + " values differ from the original CD release's: asking");
+        app.cameraDiffs = app.cfg.game.CameraDifferenceDetails();
+        app.cameraAsk = !app.cameraDiffs.empty();
+        if (app.cameraAsk) {
+            app.Log("camera: " + std::to_string(app.cameraDiffs.size()) + " values differ from the original CD release's: asking");
+            for (const GameSettings::CameraDiff& d : app.cameraDiffs) app.Log("  " + d.name + ": " + d.mine + " (original " + d.original + ")");
+        }
     }
     if (!app.GameFolderOk()) { // nothing found: ask for the game folder right away instead of at the first Play
         app.Log("Evil Islands folder not found: asking");

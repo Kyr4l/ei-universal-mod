@@ -231,7 +231,14 @@ private:
         ImGui::SameLine();
         const size_t differ = edit_.game.CameraDifferences().size();
         if (differ == 0) ImGui::TextColored(ImVec4(0.5f, 0.85f, 0.5f, 1), "%s", tx.Get("Options", "camSame", "Same as the original.").c_str());
-        else { char t[160]; std::snprintf(t, sizeof t, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(differ)); ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "%s", t); }
+        else {
+            char t[160]; std::snprintf(t, sizeof t, tx.Get("Options", "camCount", "%d values differ.").c_str(), static_cast<int>(differ)); ImGui::TextColored(ImVec4(1, 0.75f, 0.3f, 1), "%s", t);
+            if (ImGui::IsItemHovered()) { // which ones: yours -> original
+                std::string list;
+                for (const GameSettings::CameraDiff& d : edit_.game.CameraDifferenceDetails()) list += d.name + ": " + d.mine + " -> " + d.original + "\n";
+                ImGui::SetTooltip("%s", list.c_str());
+            }
+        }
         ImGui::Separator();
         if (ImGui::TreeNodeEx("General", ImGuiTreeNodeFlags_DefaultOpen)) {
             Flag("Flip X axis", "CameraFlipXAxis"); Flag("Flip Y axis", "CameraFlipYAxis");
