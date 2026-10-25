@@ -66,6 +66,7 @@ struct Library {
     std::string background, tabBackground[6];     // background pictures (config.hpp)
     int dllPort = 18888, dllTab = 0;               // the UM DLL Connector (config.hpp)
     bool dllAutoConnect = false;
+    std::string dllPassword;                       // sent as AUTH to the DLL server (config.hpp)
     bool sfxEnabled = false, alertPopups = true;   // problem alerts (config.hpp, alerts.hpp)
     int sfxVolume = 100;                           // 0-100 %
     bool dbAutoLoad = false;                       // File Processing > DB opens dbPath by itself
@@ -169,7 +170,7 @@ struct Library {
         background = cfg.background;
         for (int i = 0; i < 6; ++i) tabBackground[i] = cfg.tabBackground[i];
         backgroundOpacity = cfg.backgroundOpacity;
-        dllPort = cfg.dllPort; dllTab = cfg.dllTab; dllAutoConnect = cfg.dllAutoConnect;
+        dllPort = cfg.dllPort; dllTab = cfg.dllTab; dllAutoConnect = cfg.dllAutoConnect; dllPassword = cfg.dllPassword;
         sfxEnabled = cfg.sfxEnabled; sfxVolume = cfg.sfxVolume; alertPopups = cfg.alertPopups; dbAutoLoad = cfg.dbAutoLoad; mapRegenNavmesh = cfg.mapRegenNavmesh; mpFolder = cfg.mpFolder; dbCompileTo = cfg.dbCompileTo;
         windowW = cfg.windowW; windowH = cfg.windowH; windowX = cfg.windowX; windowY = cfg.windowY; windowMaximized = cfg.windowMaximized;
         mapMousePan = cfg.mapMousePan;
@@ -211,7 +212,7 @@ struct Library {
         cfg.background = background;
         for (int i = 0; i < 6; ++i) cfg.tabBackground[i] = tabBackground[i];
         cfg.backgroundOpacity = backgroundOpacity;
-        cfg.dllPort = dllPort; cfg.dllTab = dllTab; cfg.dllAutoConnect = dllAutoConnect;
+        cfg.dllPort = dllPort; cfg.dllTab = dllTab; cfg.dllAutoConnect = dllAutoConnect; cfg.dllPassword = dllPassword;
         cfg.sfxEnabled = sfxEnabled; cfg.sfxVolume = sfxVolume; cfg.alertPopups = alertPopups; cfg.dbAutoLoad = dbAutoLoad; cfg.mapRegenNavmesh = mapRegenNavmesh; cfg.mpFolder = mpFolder; cfg.dbCompileTo = dbCompileTo;
         cfg.windowW = windowW; cfg.windowH = windowH; cfg.windowX = windowX; cfg.windowY = windowY; cfg.windowMaximized = windowMaximized;
         cfg.mapMousePan = mapMousePan;

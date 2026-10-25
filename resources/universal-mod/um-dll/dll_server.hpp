@@ -56,6 +56,7 @@ static const int kMaxClients = 4;
 struct Host {
     const char* version = "";
     bool debugAllowed = false;                       // DLL_SERVER_DEBUG
+    std::string password;                            // DLL_SERVER_PASSWORD: the debug commands need `AUTH <password>` first; none set = no debug command at all
     std::string (*mapInfo)() = nullptr;              // the map the game shows, as key=value words
     std::string (*gameFunction)(uint32_t) = nullptr; // "sub_4A1F20+0x12" (or a known name) in game.exe, else ""
     uint32_t (*mainThread)() = nullptr;              // the thread that draws the frames, 0 when not known
@@ -145,6 +146,8 @@ struct Client {
     std::string input;   // bytes received, up to the next '\n'
     std::string output;  // what is to be sent: answers and events
     bool logEvents = false, hitEvents = true;
+    bool authed = false;      // AUTH <password> was right
+    int authFailures = 0;
     LONG logSeq = 0, hitSeq = 0;
     std::vector<Watch> watches;
     int nextWatchId = 1;
@@ -229,6 +232,14 @@ private:
     void Ok(Client& c, const std::string& command, const std::string& text = "") { c.output += "OK " + command + (text.empty() ? "" : " " + text) + "\n"; }
     void Err(Client& c, const std::string& command, const std::string& why) { c.output += "ERR " + command + " " + why + "\n"; }
 
+    // The commands that change the game (WRITE / POKE / CALL / BP set / CONSOLE send) need DLL_SERVER_DEBUG, a password in um.cfg (DLL_SERVER_PASSWORD) and `AUTH <password>` on the connection.
+    bool DebugOk(const Client& c) const { return host_.debugAllowed && !host_.password.empty() && c.authed; }
+    void DebugDenied(Client& c, const std::string& cmd) {
+        if (!host_.debugAllowed) Err(c, cmd, "this needs DLL_SERVER_DEBUG=true in um.cfg");
+        else if (host_.password.empty()) Err(c, cmd, "this needs DLL_SERVER_PASSWORD in um.cfg (debug commands are refused without a password)");
+        else Err(c, cmd, "this needs AUTH <password> first");
+    }
+    void Auth(Client& c, const std::string& line);
     bool Handle(Client& c, const std::string& line);
     void Help(Client& c);
     void Info(Client& c);
@@ -293,7 +304,8 @@ inline void Server::Help(Client& c) {
         "CONSOLE lines [from] [max]            the in-game console's lines (from index from, default 0), and its input line",
         "CONSOLE send text                     types the text in the game window and presses Enter; refused while the console is closed  [debug]",
         "BYE                                   closes the connection",
-        "[debug]: needs DLL_SERVER_DEBUG=true in um.cfg",
+        "AUTH password                         unlocks the [debug] commands on this connection (DLL_SERVER_PASSWORD in um.cfg)",
+        "[debug]: needs DLL_SERVER_DEBUG=true and DLL_SERVER_PASSWORD in um.cfg, and AUTH",
     };
     for (const char* l : lines) Row(c, "HELP", Quote(l));
     Ok(c, "HELP");
@@ -722,7 +734,7 @@ inline void Server::Breakpoints(Client& c, const std::vector<std::string>& w) {
         for (const auto& s : sites) Row(c, "BP", "eip=" + Hex(s.second) + " count=" + std::to_string(s.first) + " sym=" + Quote(Where(s.second)));
         return Ok(c, "BP", "sites=" + std::to_string(sites.size()));
     }
-    if (!host_.debugAllowed) return Err(c, "BP", "breakpoints need DLL_SERVER_DEBUG=true in um.cfg");
+    if (!DebugOk(c)) return DebugDenied(c, "BP");
     if (sub == "clear") {
         if (w.size() < 3) return Err(c, "BP", "usage: BP clear slot|all");
         for (int i = 0; i < kBpSlots; ++i)
@@ -800,7 +812,7 @@ inline void RunQueuedCalls() {
 }
 
 inline void Server::Call(Client& c, const std::vector<std::string>& w) {
-    if (!host_.debugAllowed) return Err(c, "CALL", "calling needs DLL_SERVER_DEBUG=true in um.cfg");
+    if (!DebugOk(c)) return DebugDenied(c, "CALL");
     if (!host_.mainThread || !host_.mainThread()) return Err(c, "CALL", "the game's main thread is not known yet (no frame drawn)");
     auto* q = new QueuedCall;
     bool convGiven = false, thisGiven = false;
@@ -855,7 +867,7 @@ inline void Server::Call(Client& c, const std::vector<std::string>& w) {
 
 inline void Server::Write(Client& c, const std::vector<std::string>& w, bool typed) {
     const char* cmd = typed ? "POKE" : "WRITE";
-    if (!host_.debugAllowed) return Err(c, cmd, "writing needs DLL_SERVER_DEBUG=true in um.cfg");
+    if (!DebugOk(c)) return DebugDenied(c, cmd);
     uint32_t address;
     if (w.size() < (typed ? 4u : 3u) || !ParseAddress(w[1], address)) return Err(c, cmd, typed ? "usage: POKE addr type value" : "usage: WRITE addr hexbytes");
     std::vector<uint8_t> bytes, mask;
@@ -1016,7 +1028,7 @@ inline void Server::ConsoleCommand(Client& c, const std::vector<std::string>& w)
         return Ok(c, "CONSOLE", "count=" + std::to_string(count) + " open=" + (dllgame::ConsoleOpen() ? "1" : "0") + " input=" + Quote(input));
     }
     if (sub == "send") {
-        if (!host_.debugAllowed) return Err(c, "CONSOLE", "sending needs DLL_SERVER_DEBUG=true in um.cfg");
+        if (!DebugOk(c)) return DebugDenied(c, "CONSOLE");
         if (w.size() < 3) return Err(c, "CONSOLE", "usage: CONSOLE send text");
         std::string text = w[2];
         for (size_t i = 3; i < w.size(); ++i) text += " " + w[i];
@@ -1038,6 +1050,23 @@ inline bool LooksLikeHttp(const std::string& line) {
     return line.find(" HTTP/1.") != std::string::npos;
 }
 
+// AUTH <password>: the rest of the line after the command word is the password (spaces allowed). Compared without stopping at the first difference; a wrong one is answered after a pause and the
+// third in a row ends the connection. The password is never written to um.log.
+inline void Server::Auth(Client& c, const std::string& line) {
+    if (host_.password.empty()) return Err(c, "AUTH", "no DLL_SERVER_PASSWORD is set in um.cfg");
+    size_t at = 0;
+    while (at < line.size() && line[at] != ' ' && line[at] != '\t') ++at;
+    while (at < line.size() && (line[at] == ' ' || line[at] == '\t')) ++at;
+    const std::string given = line.substr(at);
+    unsigned diff = static_cast<unsigned>(given.size() ^ host_.password.size());
+    for (size_t i = 0; i < given.size(); ++i) diff |= static_cast<unsigned char>(given[i]) ^ static_cast<unsigned char>(host_.password[i % host_.password.size()]);
+    if (diff == 0) { c.authed = true; c.authFailures = 0; return Ok(c, "AUTH"); }
+    ++c.authFailures;
+    Sleep(400);
+    Log("WARN", "DLL server: a wrong password was given (" + std::to_string(c.authFailures) + ")");
+    Err(c, "AUTH", "wrong password");
+}
+
 inline bool Server::Handle(Client& c, const std::string& line) {
     if (LooksLikeHttp(line)) { Log("WARN", "DLL server: an HTTP request (a web page?) was refused and its connection closed"); return false; }
     std::vector<std::string> w = Split(line);
@@ -1046,6 +1075,7 @@ inline bool Server::Handle(Client& c, const std::string& line) {
     const std::string cmd = w[0];
     if (cmd == "PING") Ok(c, "PING");
     else if (cmd == "BYE") return false;
+    else if (cmd == "AUTH") { Auth(c, line); if (c.authFailures >= 3) return false; }
     else if (cmd == "HELP") Help(c);
     else if (cmd == "INFO") Info(c);
     else if (cmd == "MAP") Ok(c, "MAP", host_.mapInfo ? host_.mapInfo() : "");
@@ -1193,8 +1223,8 @@ inline void Server::Run(int port) {
                     DWORD timeoutMs = 5000; // a client that stops reading is dropped
                     setsockopt(s, SOL_SOCKET, SO_SNDTIMEO, reinterpret_cast<const char*>(&timeoutMs), sizeof(timeoutMs));
                     char hello[160];
-                    snprintf(hello, sizeof(hello), "HELLO um.dll version=%s proto=%d pid=%lu debug=%s\n", host_.version, kProtocol,
-                             static_cast<unsigned long>(GetCurrentProcessId()), host_.debugAllowed ? "on" : "off");
+                    snprintf(hello, sizeof(hello), "HELLO um.dll version=%s proto=%d pid=%lu debug=%s auth=%s\n", host_.version, kProtocol,
+                             static_cast<unsigned long>(GetCurrentProcessId()), host_.debugAllowed ? "on" : "off", host_.password.empty() ? "none" : "password");
                     Client c;
                     c.socket = s;
                     c.hitSeq = g_hitCount;

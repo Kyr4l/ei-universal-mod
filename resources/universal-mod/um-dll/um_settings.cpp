@@ -203,6 +203,8 @@ const SettingDef kSettings[] = {
         "; -- DLL server --"),
     IntSetting("DLL_SERVER_PORT", &g_dllServerPort, 1024, 65535, 18888, true,
         "; TCP port the DLL server listens on (1024-65535); the same as in um-multitool."),
+    StringSetting("DLL_SERVER_PASSWORD", g_dllServerPassword, sizeof(g_dllServerPassword), "", true, false,
+        "; The password of the debug commands (WRITE / POKE / CALL / BP set / CONSOLE send): a client sends AUTH <password> first. Without one they are refused even with DLL_SERVER_DEBUG=true. Plain text: only for this computer."),
     BoolSetting("DLL_SERVER_DEBUG", &g_dllServerDebug, false, true,
         "; DEVELOPMENT ONLY, DANGEROUS: lets the DLL server write the game's memory and run code inside game.exe. Never on a player's install. Restart needed; (true/false)"),
 };

@@ -91,7 +91,7 @@ struct Link {
     std::deque<std::string> incoming, outgoing; // lines without their '\n'
     std::string error;                          // why the last attempt or connection ended
 
-    void Start(int port) {
+    void Start(int port, const std::string& password) {
         Join();
         stop = false;
         finished = false;
@@ -101,6 +101,7 @@ struct Link {
             incoming.clear();
             outgoing.clear();
             error.clear();
+            if (!password.empty()) outgoing.push_back("AUTH " + password);   // unlocks the debug commands; not shown in the log
         }
         thread = std::thread([this, port] { Run(port); finished = true; });
     }
@@ -197,6 +198,8 @@ struct Context {
     bool wasConnected = false;
     int portEdit = 0;           // the port field while it is edited
     bool portEditing = false;
+    char passwordEdit[128] = "";   // the password field (applied when it is left)
+    bool passwordEditing = false;
     bool tabRestored = false;   // the sub-tab open last time was selected
     // What um.dll said.
     std::map<std::string, std::string> hello;          // version, proto, pid
@@ -999,7 +1002,7 @@ void Update(Context* ctx) {
     if (!c.link.finished) return;
     if (!c.wanted && !c.lib.dllAutoConnect) return;
     if (NowSeconds() < c.nextAttempt) return;
-    c.link.Start(c.lib.dllPort);
+    c.link.Start(c.lib.dllPort, c.lib.dllPassword);
     c.nextAttempt = NowSeconds() + 2.0;
 }
 
@@ -1042,6 +1045,19 @@ void DrawTab(Context* ctx) {
     ImGui::EndDisabled();
     if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
         ImGui::SetTooltip("DLL_SERVER_PORT in um.cfg (18888 by default)");
+    ImGui::SameLine();
+    ImGui::AlignTextToFramePadding();
+    ImGui::TextUnformatted("Password");
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(150);
+    ImGui::BeginDisabled(connected);
+    if (!c.passwordEditing) { std::snprintf(c.passwordEdit, sizeof(c.passwordEdit), "%s", lib.dllPassword.c_str()); }
+    ImGui::InputText("##dllpassword", c.passwordEdit, sizeof(c.passwordEdit), ImGuiInputTextFlags_Password);
+    c.passwordEditing = ImGui::IsItemActive();
+    if (ImGui::IsItemDeactivatedAfterEdit() && lib.dllPassword != c.passwordEdit) { lib.dllPassword = c.passwordEdit; lib.SaveConfig(); c.nextAttempt = 0; }
+    ImGui::EndDisabled();
+    if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+        ImGui::SetTooltip("DLL_SERVER_PASSWORD in um.cfg: unlocks the debug commands (write, call, console send)");
     ImGui::SameLine();
     if (state == Link::Idle) {
         if (ImGui::Button("Connect", ImVec2(100, 0))) { c.wanted = true; c.nextAttempt = 0; }
@@ -1096,7 +1112,7 @@ namespace dllconnect {
 
 void PrintCliHelp() {
     std::printf(
-        "Usage: um-multitool dll [--port N] [--listen SECONDS] [\"COMMAND\" ...]\n"
+        "Usage: um-multitool dll [--port N] [--password PW] [--listen SECONDS] [\"COMMAND\" ...]\n"
         "\n"
         "Sends commands to um.dll's DLL server inside the running game (DLL_SERVER_ENABLED=true in um.cfg)\n"
         "and prints the answers (the ROW lines, then OK or ERR) and the events that arrive meanwhile (not the\n"
@@ -1107,6 +1123,7 @@ void PrintCliHelp() {
         "  --listen SECONDS  after the commands, keep printing events (breakpoint hits, watched values, log\n"
         "                    lines) this long; 0 = until Ctrl+C\n"
         "  --stats           print the STATS lines too\n"
+        "  --password PW     the DLL server's password (DLL_SERVER_PASSWORD): unlocks the debug commands; else the tab's, else UM_DLL_PASSWORD\n"
         "\n"
         "Examples:\n"
         "  um-multitool dll HELP\n"
@@ -1119,6 +1136,7 @@ int RunCli(int argc, char** argv) {
     int port = 0;
     double listen = -1;
     bool stats = false;
+    std::string password;   // --password, else the tab's (um-multitool.cfg DLL_PASSWORD), else UM_DLL_PASSWORD
     std::vector<std::string> commands;
     for (int i = 1; i < argc; ++i) {
         const std::string a = argv[i];
@@ -1126,12 +1144,15 @@ int RunCli(int argc, char** argv) {
         if (a == "--port" && i + 1 < argc) port = std::atoi(argv[++i]);
         else if (a == "--listen" && i + 1 < argc) listen = std::atof(argv[++i]);
         else if (a == "--stats") stats = true;
+        else if (a == "--password" && i + 1 < argc) password = argv[++i];
         else commands.push_back(a);
     }
-    if (port <= 0) {
-        Library lib; // the port the GUI uses
+    {
+        Library lib; // the port and the password the GUI uses
         lib.LoadConfig();
-        port = lib.dllPort > 0 ? lib.dllPort : 18888;
+        if (port <= 0) port = lib.dllPort > 0 ? lib.dllPort : 18888;
+        if (password.empty()) password = lib.dllPassword;
+        if (password.empty()) if (const char* env = std::getenv("UM_DLL_PASSWORD")) password = env;
     }
     StartSockets();
     Socket s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -1191,6 +1212,15 @@ int RunCli(int argc, char** argv) {
         allOk = false;
         return false;
     };
+    if (!password.empty()) {   // unlocks the debug commands; the answer is not shown unless it is a refusal
+        const std::string text = "AUTH " + password + "\n";
+        send(s, text.data(), static_cast<int>(text.size()), 0);
+        std::string line;
+        while (readLine(line, 5000)) {
+            if (line.compare(0, 8, "OK AUTH") == 0) break;
+            if (line.compare(0, 9, "ERR AUTH ") == 0) { std::fprintf(stderr, "%s\n", line.c_str()); break; }
+        }
+    }
     bool open = true;
     if (commands.empty() && listen < 0) {
         std::string command;

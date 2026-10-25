@@ -53,6 +53,7 @@ int g_profilerHz = 250;
 int g_profilerLineCount = 20;
 // The DLL server for um-multitool (dll_server.hpp): off unless DLL_SERVER_ENABLED; needs a restart.
 bool g_dllServerEnabled = false;
+char g_dllServerPassword[128] = "";   // DLL_SERVER_PASSWORD: the debug commands of the DLL server need it (AUTH)
 bool g_dllServerDebug = false;   // DLL_SERVER_DEBUG: commands that change the game (write, breakpoints)
 int g_dllServerPort = 18888;
 bool g_profilerEnabled = false;  // OVERLAY_PROFILER_ENABLED

@@ -50,6 +50,15 @@ static void SendQwertyNumberKeyPress(BYTE vkCode, bool logRewrite) {
     }
 }
 
+// The low-level hook sees the keys of the whole desktop session: the rewrite must only touch them while a window of the game is the one being typed into.
+static bool GameWindowHasFocus() {
+    HWND foreground = GetForegroundWindow();
+    if (!foreground) return true;   // no foreground window known (some Wine setups): as before, the game's
+    DWORD pid = 0;
+    GetWindowThreadProcessId(foreground, &pid);
+    return pid == GetCurrentProcessId();
+}
+
 // Intercept the backtick and number-row keys and rewrite them as US-QWERTY presses;
 // also watch for the overlay toggle key and the config-reload key, both
 // independently of the rewrite feature.
@@ -137,7 +146,7 @@ static LRESULT CALLBACK LowLevelKeyboardProcBody(int nCode, WPARAM wParam, LPARA
                 }
                 return CallNextHookEx(g_keyboardHook, nCode, wParam, lParam); // let the key still reach the game
             }
-            if (g_enableKeyboardRewrites) {
+            if (g_enableKeyboardRewrites && GameWindowHasFocus()) {
                 if (kb->vkCode == 0xC0 || kb->scanCode == 0x29) {
                     if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
                         bool logRewrite = !g_keyboardRewriteKeyDown[0xC0];

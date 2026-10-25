@@ -78,13 +78,17 @@ UM_GUARDED_THREAD(DllServerThread) {
     static dllserver::Host host;
     host.version = UM_VERSION;
     host.debugAllowed = g_dllServerDebug;
+    host.password = g_dllServerPassword;
     host.mapInfo = DllServerMapInfo;
     host.gameFunction = DllServerGameFunction;
     host.mainThread = []() -> uint32_t { return g_profilerFrameThreadId; };
     if (g_dllServerDebug) {
         g_onMainThreadFrame = dllserver::RunQueuedCalls; // CALL (development only)
-        LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on: any program on this computer can write the game's memory and run "
-                        "code in it (CALL). Development only: turn it off in um.cfg outside a controlled development setup.");
+        if (host.password.empty())
+            LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on but DLL_SERVER_PASSWORD is empty: the debug commands (WRITE, POKE, CALL, BP set, CONSOLE send) are refused until a password is set in um.cfg.");
+        else
+            LogLine("WARN", "[DLL SERVER] DLL_SERVER_DEBUG is on: a program on this computer that knows DLL_SERVER_PASSWORD can write the game's memory and run "
+                            "code in it (CALL). Development only: turn it off in um.cfg outside a controlled development setup.");
     }
     host.log = [](const char* level, const char* message) { LogLine(level, "%s", message); };
     dllserver::Run(g_dllServerPort, host);

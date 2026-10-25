@@ -197,6 +197,7 @@ struct Config {
     bool lightingOn = false;
     int dllPort = 18888;                      // the UM DLL Connector: um.dll's DLL server port (DLL_SERVER_PORT)
     bool dllAutoConnect = false;              // keep trying to connect while not connected
+    std::string dllPassword;                  // DLL_SERVER_PASSWORD of um.cfg: sent as AUTH after connecting (the debug commands need it)
     int dllTab = 0;                           // its sub-tab open last time
     bool sfxEnabled = false;                  // sounds when errors / warnings are detected (alerts.hpp)
     int sfxVolume = 100;                      // their volume, 0-100 %
@@ -280,6 +281,7 @@ inline Config Load(const std::string& path = Path()) {
         else if (key == "BACKGROUND_TEXTURE") cfg.tabBackground[5] = value;
         else if (key == "DLL_PORT") cfg.dllPort = std::min(std::max(std::atoi(value.c_str()), 1), 65535);
         else if (key == "DLL_AUTO_CONNECT") cfg.dllAutoConnect = value == "true";
+        else if (key == "DLL_PASSWORD") cfg.dllPassword = value;
         else if (key == "SFX_ENABLED") cfg.sfxEnabled = value == "true";
         else if (key == "SFX_VOLUME") cfg.sfxVolume = std::max(0, std::min(100, std::atoi(value.c_str())));
         else if (key == "ALERT_POPUPS") cfg.alertPopups = value == "true";
@@ -497,7 +499,7 @@ inline void Save(const Config& cfg, const std::string& path = Path()) {
 
     section("UM DLL Connector");
     f << "; um.dll's DLL server port (DLL_SERVER_PORT in um.cfg), and whether to keep trying to connect; (true/false)\n";
-    f << "DLL_PORT=" << cfg.dllPort << "\nDLL_AUTO_CONNECT=" << flag(cfg.dllAutoConnect) << "\nDLL_TAB=" << cfg.dllTab << "\n";
+    f << "DLL_PORT=" << cfg.dllPort << "\nDLL_AUTO_CONNECT=" << flag(cfg.dllAutoConnect) << "\nDLL_TAB=" << cfg.dllTab << "\nDLL_PASSWORD=" << cfg.dllPassword << "\n";
     f << "SFX_ENABLED=" << flag(cfg.sfxEnabled) << "\nSFX_VOLUME=" << cfg.sfxVolume << "\nALERT_POPUPS=" << flag(cfg.alertPopups)
       << "\nDB_AUTO_LOAD=" << flag(cfg.dbAutoLoad) << "\nMAP_REGEN_NAVMESH=" << flag(cfg.mapRegenNavmesh) << "\nMP_FOLDER=" << cfg.mpFolder << "\n";
     for (const auto& [db, res] : cfg.dbCompileTo) f << "DB_COMPILE_TO=" << db << "|" << res << "\n";

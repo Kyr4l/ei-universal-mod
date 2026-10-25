@@ -42,7 +42,7 @@
 // ---- types, macros and constants shared by the files (in their original order) --------------------------
 
 // um.dll's own version, shown in the overlay title and logged at startup.
-static const char* const UM_VERSION = "1.7.3";
+static const char* const UM_VERSION = "1.7.4";
 
 static const int OVERLAY_HISTORY_CAPACITY = 64;
 
@@ -377,6 +377,7 @@ extern int g_profilerHz;
 extern int g_profilerLineCount;
 extern bool g_dllServerEnabled;
 extern bool g_dllServerDebug;
+extern char g_dllServerPassword[128];
 extern int g_dllServerPort;
 extern bool g_profilerEnabled;
 extern volatile LONG g_profilerVisible;
