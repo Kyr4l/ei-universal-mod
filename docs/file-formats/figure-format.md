@@ -386,6 +386,13 @@ wood and gems stay; some variants are also repainted). `_cpr/lia-weapons/metals.
 recolours the metal texels of LiA's one painted metal. Blueprints (`textures.res`, `<code>_NN.0`): G = 0.5 x brightness + 96, R = G + 1,
 B = G - 13, the item's footprint.
 
+**pike00, the barbed pike** (2026-10-26, `_cpr/lia-weapons/pike.py`): vanilla's `rh3.pike00` (a 2.84 m pike with a barbed head, both
+races, authored at all 8 corners) is the spear family's animated ancestor and is never drawn; its copy `rh3.pike08` (+ `basepike08`,
+offset 0 under `rh3.pike00`) is the item "barbed pike" (TTI 8; 07 is the mod's `initwesp7` ground figure). pike00 maps its whole length
+into columns 17-25 of the `sp_03` layout, where only the head is painted (v 0.84-1): `sp_08` = each metal's `sp_03` with its shaft
+column (32-40) resampled into that strip above the head. Ground figures of the pikes: turned 45 degrees and upside down, length about
+0.87 + 0.825 x the hand length.
+
 **A crown (helm 18) that keeps the head and the hair.** A helm slot changes `hd` -> `hd.armorNN` and the hair `hr.NN` -> `hr.NN.armorNN`
 (`BuildArmorModelNames` 0x535CB0, the part list at 0x73EC24: `hr`, `hd`); a missing `hr.NN.armorNN` hides the hair (every vanilla helm:
 none exists). A kind-2 helm mesh is drawn with the helm's own texture (`hl_NN.<metal>.<TTI2>`), the head stays: LiA's crown
