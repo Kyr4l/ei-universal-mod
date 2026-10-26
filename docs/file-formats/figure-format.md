@@ -393,6 +393,12 @@ into columns 17-25 of the `sp_03` layout, where only the head is painted (v 0.84
 column (32-40) resampled into that strip above the head. Ground figures of the pikes: turned 45 degrees and upside down, length about
 0.87 + 0.825 x the hand length.
 
+**Crossbow fit fixes** (2026-10-26). LiA's crossbow 04: in LiA's rig the stock ends short of the bow and the limbs float in front of
+the bone knot (clipping it); its own ground figure has the bow 4.3 cm behind the knot, which the port now follows (`build.py`
+`lia_crossbow_obj`, `--no-fit`). The mod's crossbow 05 is the "ingos crossbow" (a makeshift crossbow with a goat skull for a head,
+a metal item sold on Ingos, Shop 3): its stock front got its own UV area (texels 9-29 x 100-127, a top view: `cb5uv.py`) so the skull
+reads; the texture is vanilla crossbow 02's transferred part by part (`cb5tex.py`), the limbs in the item's metal.
+
 **A crown (helm 18) that keeps the head and the hair.** A helm slot changes `hd` -> `hd.armorNN` and the hair `hr.NN` -> `hr.NN.armorNN`
 (`BuildArmorModelNames` 0x535CB0, the part list at 0x73EC24: `hr`, `hd`); a missing `hr.NN.armorNN` hides the hair (every vanilla helm:
 none exists). A kind-2 helm mesh is drawn with the helm's own texture (`hl_NN.<metal>.<TTI2>`), the head stays: LiA's crown
