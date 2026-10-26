@@ -4,8 +4,8 @@
 // tag, experience, money, attributes, skills, abilities, items (with their database names), equipment and quest
 // variables, with checks like the DB tab's. See mp_file.hpp for the format.
 //
-// Safeguards: what can break a character (its unit, prototype, zone, quest variables, the items list itself) is
-// read-only until "Allow unsafe edits" is ticked.
+// Safeguards: what can break a character (its unit, prototype, zone, quest variables, changing an item's row or material)
+// is read-only until "Allow unsafe edits" is ticked; adding and removing items is always allowed.
 #include "mp_editor.hpp"
 
 #include <algorithm>
@@ -98,11 +98,24 @@ const char* KindSheet(uint32_t kind) {
 }
 // Weapons and armour have a material; so do loot items (only the "material" row uses it: material.granite).
 bool HasMaterial(uint32_t kind) { return kind == 0x3004 || kind == 0x3005 || kind == 0x3007; }
+// A blueprint (the loot rows "instruction weapon / armor / quick item") makes one database item: its row is the u32 at +60
+// of the block (found 2026-10-26 on a character whose blueprint pointed past the end of Weapons after a row was deleted).
+const char* BlueprintSheetForRow(int lootRow) {
+    const std::string n = Row("LootItems", lootRow);
+    if (n == "instruction weapon") return "Weapons";
+    if (n == "instruction armor") return "Armors";
+    if (n == "instruction quick item") return "QuickItems";
+    return nullptr;
+}
+const char* BlueprintSheet(const mp::Object& o) { return o.kind == 0x3007 && o.detail.size() >= 64 ? BlueprintSheetForRow(o.b) : nullptr; }
+uint32_t BlueprintTarget(const mp::Object& o) { uint32_t v = 0; std::memcpy(&v, o.detail.data() + 60, 4); return v; }
+void SetBlueprintTarget(mp::Object& o, uint32_t v) { std::memcpy(o.detail.data() + 60, &v, 4); }
 std::string ObjectName(const mp::Object& o) {
     const char* sheet = KindSheet(o.kind);
     if (!sheet) return "?";
     std::string n = Row(sheet, o.b);
-    if (o.kind == 0x3007) { if (n == "material") n += "." + Row("Materials", o.a); }
+    if (const char* bs = BlueprintSheet(o)) n += ": " + Row(bs, static_cast<int>(BlueprintTarget(o)));
+    else if (o.kind == 0x3007) { if (n == "material") n += "." + Row("Materials", o.a); }
     else if (HasMaterial(o.kind)) n += " (" + Row("Materials", o.a) + ")";
     return n;
 }
@@ -277,6 +290,9 @@ std::vector<Finding> Check() {
                 if (rows && o.b >= rows->size()) err(what + ": row " + std::to_string(o.b) + " is not in the database's " + sheet);
                 const auto* mats = Sheet("Materials");
                 if (HasMaterial(o.kind) && mats && o.a >= mats->size()) err(what + ": material " + std::to_string(o.a) + " is not in the database");
+                if (const char* bs = BlueprintSheet(o))
+                    if (const auto* target = Sheet(bs); target && BlueprintTarget(o) >= target->size())
+                        err(what + ": a blueprint for row " + std::to_string(BlueprintTarget(o)) + " of " + bs + ", which is not in the database (remove it, or tick \"Allow unsafe edits\" and pick what it makes)");
             }
             if (o.kind == 0x3004 || o.kind == 0x3005) {
                 const float dur = mp::GetF(o.detail, 8), max = mp::GetF(o.detail, 12);
@@ -532,10 +548,10 @@ void EquipmentPanel() {
 }
 
 // A database row picker (searchable), for an item's row or material.
-bool RowCombo(const char* id, const char* sheet, uint16_t& value) {
+bool RowCombo(const char* id, const char* sheet, uint16_t& value, float width = -1) {
     const auto* rows = Sheet(sheet);
     const std::string current = Row(sheet, value);
-    ImGui::SetNextItemWidth(-1);
+    ImGui::SetNextItemWidth(width);
     if (!rows || !ImGui::BeginCombo(id, current.c_str(), ImGuiComboFlags_HeightLarge)) return false;
     static char filter[64] = "";
     if (ImGui::IsWindowAppearing()) { filter[0] = 0; ImGui::SetKeyboardFocusHere(); }
@@ -554,21 +570,44 @@ bool RowCombo(const char* id, const char* sheet, uint16_t& value) {
     return changed;
 }
 
+// Fallback blocks for a new item when the character has none of that kind to copy (from a vanilla character: an iron long spear,
+// an alloy helm, a quick item, a material, a weapon blueprint); the game updates durability, energy and protection itself.
+const std::vector<uint8_t>& FallbackBlock(uint32_t kind, bool blueprint) {
+    static const std::vector<uint8_t> weapon = {0x0e, 0xc5, 0x00, 0x00, 0x27, 0x00, 0x17, 0x00, 0x00, 0x63, 0xab, 0x48, 0x00, 0x63, 0xab, 0x48, 0x00, 0x00, 0x4d, 0x43, 0x00, 0x00, 0x4d, 0x43, 0x6f, 0x12, 0x83, 0x3a, 0x00, 0x00, 0xc0, 0x41, 0x80, 0x09, 0x6e, 0x4a, 0x00, 0x00, 0x7a, 0x44, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00, 0x30, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x2e, 0x34, 0x42, 0xe1, 0xfa, 0x59, 0x42, 0x00, 0x00, 0x80, 0x3f};
+    static const std::vector<uint8_t> armour = {0x1b, 0xc5, 0x00, 0x00, 0x27, 0x00, 0x95, 0x00, 0x92, 0xd7, 0x3d, 0x46, 0x00, 0xd8, 0x3d, 0x46, 0x00, 0x00, 0x9e, 0x42, 0x00, 0x00, 0x9e, 0x42, 0x6f, 0x12, 0x83, 0x3a, 0x00, 0x00, 0x40, 0x41, 0xa0, 0xcd, 0x87, 0x4a, 0x00, 0x00, 0x2f, 0x44, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00, 0x22, 0x00, 0x00, 0x00, 0xd7, 0xa3, 0xe3, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xac, 0x1c, 0xb6, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xac, 0x1c, 0xb6, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xac, 0x1c, 0xb6, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xd7, 0xa3, 0xe3, 0x41, 0xac, 0x1c, 0xb6, 0x41, 0xd7, 0xa3, 0xe3, 0x41};
+    static const std::vector<uint8_t> quick = {0x3b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0xaf, 0x44, 0x00, 0x00, 0xaf, 0x44, 0x00, 0x00, 0xa0, 0x41, 0x00, 0x00, 0xa0, 0x41, 0x6f, 0x12, 0x83, 0x3a, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0xa0, 0x41, 0x00, 0x00, 0x00, 0x40, 0x23, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00};
+    static const std::vector<uint8_t> loot = {0x0b, 0xc5, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x60, 0x41, 0x00, 0x00, 0x60, 0x41, 0x00, 0x00, 0xc0, 0x40, 0x00, 0x00, 0xc0, 0x40, 0x6f, 0x12, 0x83, 0x3a, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x10, 0x41, 0x00, 0x00, 0x80, 0x3f, 0xff, 0xff, 0xff, 0xff, 0x06, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x7f, 0x00, 0x00, 0x00, 0x00};
+    static const std::vector<uint8_t> plan = {0x11, 0xc5, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x6f, 0x12, 0x83, 0x3a, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00, 0x80, 0x3f, 0xff, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00};
+    switch (kind) {
+    case 0x3004: return weapon;
+    case 0x3005: return armour;
+    case 0x3006: return quick;
+    default: return blueprint ? plan : loot;
+    }
+}
+
 void ItemsPanel() {
     ImGui::SeparatorText("Items");
-    ImGui::TextDisabled(g.unsafe ? "Remove, duplicate (into the backpack) or change items. A changed item keeps its old durability,\n"
+    ImGui::TextDisabled(g.unsafe ? "Add, remove, copy (into the backpack) or change items. A changed item keeps its old durability,\n"
                                    "energy and protection until the game updates them."
-                                 : "Durability and energy can be changed. Tick \"Allow unsafe edits\" to remove, duplicate or change items.");
+                                 : "Add or remove items; durability and energy can be changed. Tick \"Allow unsafe edits\" to copy\n"
+                                   "or change an item (its row, material, or what a blueprint makes).");
     uint32_t removeId = 0, dupId = 0;
-    if (ImGui::BeginTable("items", g.unsafe ? 8 : 6, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingStretchProp)) {
+    size_t count = 0;
+    for (const auto& list : g.ch.lists) count += list.size();
+    // fixed widths and a horizontal scrollbar: in a narrow window the names keep their room
+    const float tableH = (count + 1) * ImGui::GetFrameHeightWithSpacing() + ImGui::GetStyle().ScrollbarSize + 8;
+    if (ImGui::BeginTable("items", 8, ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX,
+                          ImVec2(0, tableH))) {
+        ImGui::TableSetupScrollFreeze(2, 1);
         ImGui::TableSetupColumn("Kind", ImGuiTableColumnFlags_WidthFixed, 90);
-        ImGui::TableSetupColumn("Item");
-        if (g.unsafe) ImGui::TableSetupColumn("Material");
+        ImGui::TableSetupColumn("Item", ImGuiTableColumnFlags_WidthFixed, 200);
+        ImGui::TableSetupColumn("Material / makes", ImGuiTableColumnFlags_WidthFixed, 160);
         ImGui::TableSetupColumn("Durability", ImGuiTableColumnFlags_WidthFixed, 80);
         ImGui::TableSetupColumn("Max", ImGuiTableColumnFlags_WidthFixed, 80);
         ImGui::TableSetupColumn("Energy", ImGuiTableColumnFlags_WidthFixed, 70);
         ImGui::TableSetupColumn("Energy max", ImGuiTableColumnFlags_WidthFixed, 70);
-        if (g.unsafe) ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, 130);
+        ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, 110);
         ImGui::TableHeadersRow();
         for (auto& list : g.ch.lists)
             for (mp::Object& o : list) {
@@ -582,15 +621,18 @@ void ItemsPanel() {
                     uint16_t b = o.b;
                     if (RowCombo("##row", sheet, b)) SetRow(o, o.a, b);
                 } else {
-                    ImGui::TextUnformatted(IdName(o.id).c_str());
+                    ImGui::TextUnformatted(Row(sheet ? sheet : "", o.b).c_str());
                 }
                 ImGui::SetItemTooltip("Object %u, database row %u, material %u", o.id, o.b, o.a);
-                if (g.unsafe) {
-                    ImGui::TableNextColumn();
-                    if (HasMaterial(o.kind) && Sheet("Materials")) {
-                        uint16_t a = o.a;
-                        if (RowCombo("##mat", "Materials", a)) SetRow(o, a, o.b);
-                    }
+                ImGui::TableNextColumn();
+                if (const char* bs = BlueprintSheet(o)) {                      // what the blueprint makes
+                    uint16_t t = static_cast<uint16_t>(std::min<uint32_t>(BlueprintTarget(o), 0xFFFF));
+                    if (g.unsafe && Sheet(bs)) { if (RowCombo("##makes", bs, t)) SetBlueprintTarget(o, t); }
+                    else ImGui::TextUnformatted(Row(bs, static_cast<int>(BlueprintTarget(o))).c_str());
+                    ImGui::SetItemTooltip("The blueprint makes row %u of %s", BlueprintTarget(o), bs);
+                } else if (HasMaterial(o.kind) && (o.kind != 0x3007 || Row("LootItems", o.b) == "material")) {
+                    if (g.unsafe && Sheet("Materials")) { uint16_t a = o.a; if (RowCombo("##mat", "Materials", a)) SetRow(o, a, o.b); }
+                    else ImGui::TextUnformatted(Row("Materials", o.a).c_str());
                 }
                 if (o.kind == 0x3004 || o.kind == 0x3005) { // block: id, a, b, then durability, its max, energy, its max
                     for (int c = 0; c < 4; ++c) {
@@ -602,56 +644,62 @@ void ItemsPanel() {
                 } else {
                     for (int c = 0; c < 4; ++c) ImGui::TableNextColumn();
                 }
-                if (g.unsafe) {
-                    ImGui::TableNextColumn();
-                    if (o.kind != 0x3002) {
-                        if (ImGui::SmallButton("Duplicate")) dupId = o.id;
-                        ImGui::SetItemTooltip("A copy into the backpack (with its spell)");
-                        ImGui::SameLine();
-                    }
-                    if (ImGui::SmallButton("Remove")) removeId = o.id;
-                    ImGui::SetItemTooltip("Removes it from the character (and from where it is worn)");
+                ImGui::TableNextColumn();
+                if (ImGui::SmallButton("Remove")) removeId = o.id;
+                ImGui::SetItemTooltip("Removes it from the character (and from where it is worn)");
+                if (g.unsafe && o.kind != 0x3002) {
+                    ImGui::SameLine();
+                    if (ImGui::SmallButton("Copy")) dupId = o.id;
+                    ImGui::SetItemTooltip("A copy into the backpack (with its spell)");
                 }
                 ImGui::PopID();
             }
         ImGui::EndTable();
     }
     if (removeId) RemoveObject(removeId);
-    // A new item: the block of an item of the same kind is the template (the game updates its values).
-    if (g.unsafe) {
-        static int kindIndex = 0;
-        static uint16_t row = 0, material = 0;
-        static const uint32_t kKinds[] = {0x3004, 0x3005, 0x3006, 0x3007};
-        static const char* const kNames[] = {"Weapon", "Armour", "Quick item", "Loot item"};
-        ImGui::SetNextItemWidth(110);
-        ImGui::Combo("##newkind", &kindIndex, kNames, 4);
-        const uint32_t kind = kKinds[kindIndex];
-        const mp::Object* tmpl = nullptr;
-        for (const mp::Object& o : g.ch.lists[0]) if (o.kind == kind) { tmpl = &o; break; }
+    // A new item into the backpack: the block of one of the character's items of the same kind is the template (the file
+    // layout), else a vanilla one (FallbackBlock); the game updates its values.
+    static int kindIndex = 0;
+    static uint16_t row = 0, material = 0, makes = 0;
+    static const uint32_t kKinds[] = {0x3004, 0x3005, 0x3006, 0x3007};
+    static const char* const kNames[] = {"Weapon", "Armour", "Quick item", "Loot item"};
+    ImGui::TextUnformatted("New item:");
+    ImGui::SetNextItemWidth(110);
+    ImGui::Combo("##newkind", &kindIndex, kNames, 4);
+    const uint32_t kind = kKinds[kindIndex];
+    const char* makesSheet = kind == 0x3007 ? BlueprintSheetForRow(row) : nullptr;
+    const mp::Object* tmpl = nullptr;
+    for (const mp::Object& o : g.ch.lists[0])
+        if (o.kind == kind && (kind != 0x3007 || (BlueprintSheet(o) != nullptr) == (makesSheet != nullptr))) { tmpl = &o; break; }
+    ImGui::SameLine();
+    if (Sheet(KindSheet(kind))) RowCombo("##newrow", KindSheet(kind), row, 200);
+    if (makesSheet && Sheet(makesSheet)) {
         ImGui::SameLine();
-        ImGui::SetNextItemWidth(200);
-        if (Sheet(KindSheet(kind))) RowCombo("##newrow", KindSheet(kind), row);
-        if (HasMaterial(kind) && Sheet("Materials")) {
-            ImGui::SameLine();
-            ImGui::SetNextItemWidth(120);
-            RowCombo("##newmat", "Materials", material);
-        }
+        RowCombo("##newmakes", makesSheet, makes, 200);
+        ImGui::SetItemTooltip("What the blueprint makes");
+    } else if (HasMaterial(kind) && Sheet("Materials") && (kind != 0x3007 || Row("LootItems", row) == "material")) {
         ImGui::SameLine();
-        ImGui::BeginDisabled(!tmpl || !Sheet(KindSheet(kind)));
-        if (ImGui::Button("Add to the backpack") && tmpl) {
-            mp::Object o = *tmpl;
-            o.id = NewId();
-            SetDetailId(o);
-            SetRow(o, HasMaterial(kind) ? material : o.a, row);
-            if (o.detail.size() >= 44 && (kind == 0x3004 || kind == 0x3005)) { const uint32_t none = 0xFFFFFFFFu; std::memcpy(o.detail.data() + 40, &none, 4); }
-            g.ch.lists[0].push_back(o);
-            g.ch.backpack.push_back(o.id);
-        }
-        ImGui::EndDisabled();
-        if (!tmpl) ImGui::SetItemTooltip("The character has no %s yet: one is needed as a template (its file layout)", kNames[kindIndex]);
-        else ImGui::SetItemTooltip("A copy of the character's %s with this item and material; durability, energy and protection\n"
-                                   "stay the template's until the game updates them. No spell attached.", ObjectName(*tmpl).c_str());
+        RowCombo("##newmat", "Materials", material, 120);
     }
+    ImGui::SameLine();
+    ImGui::BeginDisabled(!Sheet(KindSheet(kind)));
+    if (ImGui::Button("Add to the backpack")) {
+        mp::Object o;
+        if (tmpl) o = *tmpl;
+        else { o.kind = kind; o.detail = FallbackBlock(kind, makesSheet != nullptr); }
+        o.id = NewId();
+        SetDetailId(o);
+        SetRow(o, HasMaterial(kind) ? material : o.a, row);
+        if (o.detail.size() >= 44 && (kind == 0x3004 || kind == 0x3005)) { const uint32_t none = 0xFFFFFFFFu; std::memcpy(o.detail.data() + 40, &none, 4); }
+        if (makesSheet && o.detail.size() >= 64) SetBlueprintTarget(o, makes);
+        g.ch.lists[0].push_back(o);
+        g.ch.backpack.push_back(o.id);
+    }
+    ImGui::EndDisabled();
+    if (!Sheet(KindSheet(kind))) ImGui::SetItemTooltip("Set the database in Settings: the item is picked from it");
+    else if (!tmpl) ImGui::SetItemTooltip("A new %s from a vanilla item's layout; durability, energy and protection are updated by the game.\nNo spell attached.", kNames[kindIndex]);
+    else ImGui::SetItemTooltip("A copy of the character's %s with this item and material; durability, energy and protection\n"
+                               "stay the template's until the game updates them. No spell attached.", ObjectName(*tmpl).c_str());
     if (dupId) DuplicateObject(dupId);
 }
 
@@ -767,13 +815,13 @@ void DrawTab(Library& lib) {
         if (g.hasMission) ImGui::TextDisabled("Made inside a zone: the game plays mission.sav's party there (\"Party\"); scenario.sav's is the campaign's copy: edit both.");
     }
     ChecksPanel(found);
+    ItemsPanel();                                                    // full width: the table has 8 columns
     if (ImGui::BeginTable("cols", 2, ImGuiTableFlags_Resizable)) {
         ImGui::TableNextColumn();
         CharacterPanel();
         VarsPanel();
         ImGui::TableNextColumn();
         EquipmentPanel();
-        ItemsPanel();
         ImGui::EndTable();
     }
     ImGui::EndChild();
