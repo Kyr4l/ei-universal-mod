@@ -91,3 +91,23 @@ Cette amulette peut abriter des sorts simples (sans qu'il faille une rune "objet
 Anneau magique en cristal
 Cet anneau peut abriter des sorts simples (sans qu'il faille une rune "objet" pour cela).
 
+=== INSTR Sickle
+Faucille
+Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+
+=== INSTR Guard_Dagger
+Dague à garde
+Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+
+=== INSTR Royal_Sword
+Épée royale
+Une longue lame richement ornée, digne d'un roi.
+
+=== INSTR Crown
+Couronne
+Une couronne sertie d'améthystes. Elle protège peu, mais chacun sait qui commande.
+
+=== INSTR Bone_Long_Crossbow
+Arbalète longue en os
+Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
+

@@ -328,3 +328,87 @@ Although its damage is low, it can be used for support.
 Thieving sword
 With such a sword, you can prove to a young ogre that sometimes food is wormy.
 
+=== WEAPON Sickle Bronze
+청동 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Sickle Iron
+철 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Sickle Steel
+강철 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Sickle Mithrill
+미스릴 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Sickle Adamantium
+아다만티움 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Sickle Meteoric
+운석 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Sickle Alloy
+합금 낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== WEAPON Guard_Dagger Bronze
+청동 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Guard_Dagger Iron
+철 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Guard_Dagger Steel
+강철 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Guard_Dagger Mithrill
+미스릴 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Guard_Dagger Adamantium
+아다만티움 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Guard_Dagger Meteoric
+운석 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Guard_Dagger Alloy
+합금 가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== WEAPON Royal_Sword Bronze
+청동 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Royal_Sword Iron
+철 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Royal_Sword Steel
+강철 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Royal_Sword Mithrill
+미스릴 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Royal_Sword Adamantium
+아다만티움 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Royal_Sword Meteoric
+운석 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Royal_Sword Alloy
+합금 왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== WEAPON Bone_Long_Crossbow Burned_bones
+긴 뼈 쇠뇌 (단단한 뼈)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
+=== WEAPON Bone_Long_Crossbow Decayed_bones
+긴 뼈 쇠뇌 (얇은 뼈)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
+=== WEAPON Bone_Long_Crossbow Dragon_Black_Bones
+긴 뼈 쇠뇌 (블루 드래곤 뼈)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
+=== WEAPON Bone_Long_Crossbow Dragon_Green_Bones
+긴 뼈 쇠뇌 (그린 드래곤 뼈)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
+=== WEAPON Bone_Long_Crossbow Dragon_Red_Bones
+긴 뼈 쇠뇌 (레드 드래곤 뼈)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
+=== WEAPON Bone_Long_Crossbow Dry_bones
+긴 뼈 쇠뇌 (강한 뼈)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
+=== WEAPON Bone_Long_Crossbow Scrab_bones
+긴 뼈 쇠뇌 (쉘 본)
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.

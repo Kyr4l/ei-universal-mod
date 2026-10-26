@@ -69,3 +69,23 @@ Simple magic spells can be contained in this amulet (no "object rune" necessary)
 === INSTR Wand_9
 Crystal magic ring
 Simple magic spells can be contained in this ring (no "object rune" necessary).
+=== INSTR Sickle
+Sickle
+A curved blade on a short wooden haft: quick strokes that reach around a shield.
+
+=== INSTR Guard_Dagger
+Guard dagger
+A wavy blade behind a knuckle guard: it parries as well as it stabs.
+
+=== INSTR Royal_Sword
+Royal sword
+A long, richly decorated blade, worthy of a king.
+
+=== INSTR Crown
+Crown
+A crown set with amethysts. It protects little, but everyone knows who is in charge.
+
+=== INSTR Bone_Long_Crossbow
+Long bone crossbow
+Longer limbs, a stronger draw: the bolts fly further.
+

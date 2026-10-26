@@ -57,3 +57,18 @@ This is a fearsome weapon in the hands of an experienced warrior.
 === INSTR Wand_9
 크리스탈 마법 반지
 단순한 마법을 담을 수 있다 ("오브젝트 룬" 불필요).
+=== INSTR Sickle
+낫
+짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+=== INSTR Guard_Dagger
+가드 단검
+손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+=== INSTR Royal_Sword
+왕실 검
+화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+=== INSTR Crown
+왕관
+자수정이 박힌 왕관. 보호는 약하지만 누가 주인인지 모두가 안다.
+=== INSTR Bone_Long_Crossbow
+긴 뼈 쇠뇌
+더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.

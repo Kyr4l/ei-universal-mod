@@ -363,6 +363,36 @@ The mesh's first header word (render flags, 18 or 19 on the melee weapons: bit 0
 
 **Tests** (`tests/weapon_kinds_test.cpp`, `tests/weapon_anim_test.cpp --kind K`): every vanilla bow and melee weapon of both rigs is exported, turned about the vertical axis, moved and scaled, and imported with the automatic fit: it lands within 1-2 cm (bows), 3-7 cm (melee weapons, the spread of the vanilla hand), the same result whatever the model's own turn, place or scale (1e-6), a bow modelled standing up and a melee weapon lying down or end for end come out the same; a shape edit thins a stretch by its factor and moves nothing else. The animation test measures every frame of all 170-179 clips at the 8 corners and random builds: the bows' strings, limb tips, limb join and the hand's distance to the limbs, the melee weapons' hand-to-tip, hand-to-butt and hand-to-handle distances all stay within the vanilla weapons' own variation.
 
+**LiA's weapons in Universal Mod** (2026-10-26, `_cpr/lia-weapons/build.py`): the sickle (`sword07`), the royal sword (`sword08`), the guard
+dagger (`dagger06`) and LiA's bone crossbow (`crbow04`; the mod's own crossbow 04 became 05) went through the importer: the melee ones
+with LiA's placement (`--no-fit`; LiA's meshes are one mesh at all 8 corners) and, for unhufe, the vanilla female/male ratio (x1.126 sword,
+x1.078 dagger, + 1 cm along the blade; LiA's female dagger06 is the male mesh unchanged), the crossbow with the auto fit (scale 1.022 /
+0.966, strings on the anchors). LiA stores its UVs with v negative (the hand wraps them): they are put in 0..1 first, or the ground
+figure's atlas mapping misses its quadrant (an invisible inventory icon).
+
+**Melee ground / inventory figures** (measured on the vanilla swords and daggers): the corner-5 hand mesh lying flat on the 45 degree
+diagonal, centred, all 8 corners equal, UV = (u / 2, 0.5 + v / 2) (the 128 px texture in the bottom-left quadrant of the 256 atlas,
+exact on every vanilla one), `.bon` 96 zero bytes, `.lnk` "weapon". Swords: turned 45 degrees about Z, daggers: turned and upside down.
+The vanilla models are touched up by hand (an affine fit leaves 6-15 cm); their size grows with the weapon: ground length about
+1.55 + 0.9 x the hand length (swords), 0.2 + 3.3 x (daggers). Helmets (`initarhlNNarmor`, `.lnk` "armor"): the same UV mapping, the
+helmet on its back (up -> +Y), about 2.5 x.
+
+**Weapon texture columns.** Every kind-2 item part samples one composed item picture: the weapon's art in columns 0-41, the helmet in
+columns 42-83 of the top half, the quiver below it. LiA's sword08 painted up to column 59; its texture is squeezed into 0-41 (its u x 0.7).
+
+**Metal variants.** The vanilla metal textures of an item share its layout, and its metal surfaces follow one palette per metal (bronze
+yellow-olive, iron copper-brown, steel grey, mithril pale blue, adamantium lilac, meteoric dark blue, alloy near black; leather, cloth,
+wood and gems stay; some variants are also repainted). `_cpr/lia-weapons/metals.py` learns brightness -> colour per metal from them and
+recolours the metal texels of LiA's one painted metal. Blueprints (`textures.res`, `<code>_NN.0`): G = 0.5 x brightness + 96, R = G + 1,
+B = G - 13, the item's footprint.
+
+**A crown (helm 18) that keeps the head and the hair.** A helm slot changes `hd` -> `hd.armorNN` and the hair `hr.NN` -> `hr.NN.armorNN`
+(`BuildArmorModelNames` 0x535CB0, the part list at 0x73EC24: `hr`, `hd`); a missing `hr.NN.armorNN` hides the hair (every vanilla helm:
+none exists). A kind-2 helm mesh is drawn with the helm's own texture (`hl_NN.<metal>.<TTI2>`), the head stays: LiA's crown
+(`hd.armor18`, kind 1 with UVs in the ground convention: on the body texture it showed skin) is a kind-2 crown with UV (2u, 2v - 1),
+put on the mod's head per corner and widened to clear it by 2 mm; every hair has an `hr.NN.armor18` copy squeezed inside the crown's band
+(the dome inside the ring, the band's big triangles split first; ponytails further out than 7 cm stay).
+
 ## `.lnk` — Attachment Socket Redirect
 
 A tiny fixed-format file used for weapon/item attachment points (their filenames match the hand-socket part names `box03`/`box23` seen above by convention, e.g. a unit template referring to a "weapon" or "item" slot):
