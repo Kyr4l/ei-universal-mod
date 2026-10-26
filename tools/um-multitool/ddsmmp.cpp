@@ -172,10 +172,13 @@ static inline void WriteUint32LE(uint8_t* p, uint32_t val) {
 /**
  * Encodes uncompressed 32-bit BGRA pixel data into Evil Islands PNT3 format.
  * Runs of transparent pixels (0x00000000) are compressed into 16-byte aligned skips.
+ * Every pixel of alpha 0 is written as 0: the game's decoder (2DintMMX.dll) reads a word whose alpha byte is 0 as a skip
+ * count, so a transparent pixel that keeps a colour made it write past the picture (a crash, 2026-10-26).
  */
 static std::vector<uint8_t> EncodePnt3(const uint8_t* data, size_t dataLen) {
     std::vector<uint8_t> out;
     out.reserve(dataLen);
+    auto pixel = [&](size_t at) { const uint32_t v = ReadUint32LE(data + at); return (v >> 24) == 0 ? 0u : v; };
 
     size_t pos = 0;
     while (pos < dataLen) {
@@ -184,12 +187,12 @@ static std::vector<uint8_t> EncodePnt3(const uint8_t* data, size_t dataLen) {
             break;
         }
 
-        uint32_t val = ReadUint32LE(data + pos);
+        uint32_t val = pixel(pos);
         if (val == 0) {
             if ((pos % 16) == 0) {
                 // Pos is 16-byte aligned, count contiguous zeroes
                 size_t zStart = pos;
-                while (pos + 4 <= dataLen && ReadUint32LE(data + pos) == 0) {
+                while (pos + 4 <= dataLen && pixel(pos) == 0) {
                     pos += 4;
                 }
                 size_t totalZeroes = pos - zStart;

@@ -66,6 +66,11 @@ Each `.mmp` file consists of a **76-byte header** (19 little-endian 32-bit integ
    - Write `uint32_t chunk16` (the number of zero bytes in the run).
    - Advance position by `chunk16`.
 
+**Transparent pixels must be 0** (found 2026-10-26): the game's decoder (`2DintMMX.dll`) reads every word whose alpha byte is 0
+as a skip count, not only the 16-byte aligned multiples of 16. A transparent pixel that keeps a colour (an edge "bleed", a paint
+program's leftover) is read as a huge skip and the decoder writes past the picture: game.exe crashes in `2DintMMX.dll` as soon as the
+texture is shown. `um-multitool ddsmmp` (1.16.6) writes every alpha-0 pixel as 0.
+
 ### Decoding Logic
 
 1. Read 4-byte `uint32_t val`.
