@@ -419,169 +419,141 @@ With such a sword, you can prove to a young ogre that sometimes food is wormy.
 
 === WEAPON Sickle Bronze
 Faucille en bronze
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Une faucille de paysan en bronze, aiguisée pour la guerre. Elle accroche bien, mais plie sur l'armure.
 
 === WEAPON Sickle Iron
 Faucille en fer
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Le fer tient mieux la courbe que le bronze, mais rouille sous la pluie.
 
 === WEAPON Sickle Steel
 Faucille en acier
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Une faucille d'acier : sa lame courbe passe derrière le bouclier.
 
 === WEAPON Sickle Mithrill
 Faucille en mithril
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Légère et tranchante : la lame de mithril chante en fauchant.
 
 === WEAPON Sickle Adamantium
 Faucille en adamantite
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Une faucille d'adamantite fauche les boucliers comme le blé.
 
 === WEAPON Sickle Meteoric
 Faucille en fer météorique
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Du fer météorique dans la courbe d'une faucille : aucune armure ne survit à cette moisson.
 
 === WEAPON Sickle Alloy
 Faucille en alliage
-Une lame courbe sur un court manche de bois : des coups rapides qui contournent les boucliers.
+Une faucille d'alliage, sombre et lourde, au fil inusable.
 
 === WEAPON Guard_Dagger Bronze
 Dague à garde en bronze
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+Une dague de bronze à lame ondulée. Le forgeron ne s'est pas donné la peine d'une garde.
 
 === WEAPON Guard_Dagger Iron
 Dague à garde en fer
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+Du fer, une lame ondulée et pas de garde : attention aux doigts.
 
 === WEAPON Guard_Dagger Steel
 Dague à garde en acier
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+De l'acier et une garde de main : elle pare aussi bien qu'elle frappe.
 
 === WEAPON Guard_Dagger Mithrill
 Dague à garde en mithril
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+Une lame de mithril derrière une fine garde. Légère et vive.
 
 === WEAPON Guard_Dagger Adamantium
 Dague à garde en adamantite
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+Adamantite : la garde détourne l'épée, la lame trouve les failles.
 
 === WEAPON Guard_Dagger Meteoric
 Dague à garde en fer météorique
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+Une dague à garde en fer météorique : la plus belle qu'un duelliste puisse posséder.
 
 === WEAPON Guard_Dagger Alloy
 Dague à garde en alliage
-Une lame ondulée derrière une garde de main : elle pare aussi bien qu'elle frappe.
+Alliage sombre et garde de main : une dague pour la nuit.
 
 === WEAPON Royal_Sword Bronze
 Épée royale en bronze
-Une longue lame richement ornée, digne d'un roi.
+Une copie en bronze de l'épée d'un roi. Jolie, mais elle ne garde pas son fil longtemps.
 
 === WEAPON Royal_Sword Iron
 Épée royale en fer
-Une longue lame richement ornée, digne d'un roi.
+Du fer habillé en roi : plus lourd qu'il n'en a l'air.
 
 === WEAPON Royal_Sword Steel
 Épée royale en acier
-Une longue lame richement ornée, digne d'un roi.
+Une épée royale en acier, à la garde et au pommeau richement ouvragés.
 
 === WEAPON Royal_Sword Mithrill
 Épée royale en mithril
-Une longue lame richement ornée, digne d'un roi.
+Mithril et dorures : une épée pour la garde d'un prince.
 
 === WEAPON Royal_Sword Adamantium
 Épée royale en adamantite
-Une longue lame richement ornée, digne d'un roi.
+Une épée royale en adamantite, aussi dure que la couronne qu'elle sert.
 
 === WEAPON Royal_Sword Meteoric
 Épée royale en fer météorique
-Une longue lame richement ornée, digne d'un roi.
+Du fer météorique dans l'épée d'un roi. On en voit rarement de pareille.
 
 === WEAPON Royal_Sword Alloy
 Épée royale en alliage
-Une longue lame richement ornée, digne d'un roi.
-
-=== WEAPON Bone_Long_Crossbow Burned_bones
-Arbalète longue en os (os dur)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Bone_Long_Crossbow Decayed_bones
-Arbalète longue en os (os fin)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Bone_Long_Crossbow Dragon_Black_Bones
-Arbalète longue en os (os de dragon bleu)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Bone_Long_Crossbow Dragon_Green_Bones
-Arbalète longue en os (os de dragon vert)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Bone_Long_Crossbow Dragon_Red_Bones
-Arbalète longue en os (os de dragon rouge)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Bone_Long_Crossbow Dry_bones
-Arbalète longue en os (os épais)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Bone_Long_Crossbow Scrab_bones
-Arbalète longue en os (coquille de conque)
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== WEAPON Barbed_Pike Bronze
-Pique barbelée en bronze
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
-=== WEAPON Barbed_Pike Iron
-Pique barbelée en fer
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
-=== WEAPON Barbed_Pike Steel
-Pique barbelée en acier
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
-=== WEAPON Barbed_Pike Mithrill
-Pique barbelée en mithril
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
-=== WEAPON Barbed_Pike Adamantium
-Pique barbelée en adamantite
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
-=== WEAPON Barbed_Pike Meteoric
-Pique barbelée en fer météorique
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
-=== WEAPON Barbed_Pike Alloy
-Pique barbelée en alliage
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
+Une épée royale d'alliage, sombre et ornée, la fierté d'une armurerie royale.
 
 === WEAPON Ingos_Crossbow Bronze
 Arbalète d'Ingos en bronze
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Une arbalète de fortune, un arc de bronze et un crâne de bouc en tête.
 
 === WEAPON Ingos_Crossbow Iron
 Arbalète d'Ingos en fer
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Un arc de fer sur une crosse grossière : le crâne de bouc ricane à la cible.
 
 === WEAPON Ingos_Crossbow Steel
 Arbalète d'Ingos en acier
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Un arc d'acier donne à cette rude arbalète d'Ingos un tir puissant.
 
 === WEAPON Ingos_Crossbow Mithrill
 Arbalète d'Ingos en mithril
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Le mithril rend même une arbalète de fortune légère et solide.
 
 === WEAPON Ingos_Crossbow Adamantium
 Arbalète d'Ingos en adamantite
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Un arc d'adamantite sur une crosse de chasseur : grossière, et mortelle.
 
 === WEAPON Ingos_Crossbow Meteoric
 Arbalète d'Ingos en fer météorique
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Du fer météorique sur une arbalète à crâne de bouc : le chef-d'œuvre des forgerons d'Ingos.
 
 === WEAPON Ingos_Crossbow Alloy
 Arbalète d'Ingos en alliage
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Un arc d'alliage, sombre et raide : le crâne de bouc a vu bien des proies.
+
+=== WEAPON Barbed_Spear Bronze
+Lance barbelée en bronze
+Une longue lance de bronze à tête barbelée. Une fois plantée, elle ne ressort pas facilement.
+
+=== WEAPON Barbed_Spear Iron
+Lance barbelée en fer
+Des barbes de fer : la plaie est pire en sortant qu'en entrant.
+
+=== WEAPON Barbed_Spear Steel
+Lance barbelée en acier
+Une lance barbelée d'acier, assez longue pour tenir une charge à distance.
+
+=== WEAPON Barbed_Spear Mithrill
+Lance barbelée en mithril
+De légères barbes de mithril sur une longue hampe.
+
+=== WEAPON Barbed_Spear Adamantium
+Lance barbelée en adamantite
+Des barbes d'adamantite percent la plaque, et y restent.
+
+=== WEAPON Barbed_Spear Meteoric
+Lance barbelée en fer météorique
+Une lance barbelée en fer météorique : le rêve des chasseurs.
+
+=== WEAPON Barbed_Spear Alloy
+Lance barbelée en alliage
+Des barbes d'alliage sombre : une lance pour la plus cruelle des chasses.
 

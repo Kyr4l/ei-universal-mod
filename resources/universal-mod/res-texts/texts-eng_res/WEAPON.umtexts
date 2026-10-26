@@ -386,169 +386,141 @@ With such a sword, you can prove to a young ogre that sometimes food is wormy.
 
 === WEAPON Sickle Bronze
 Bronze sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+A farmer's bronze sickle with a weapon's edge. It hooks well, but bends on armour.
 
 === WEAPON Sickle Iron
 Iron sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+Iron holds the curve better than bronze, but rusts in the rain.
 
 === WEAPON Sickle Steel
 Steel sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+A steel sickle: the curved edge reaches behind a shield.
 
 === WEAPON Sickle Mithrill
 Mithrill sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+Light and keen: the mithril blade sings as it sweeps.
 
 === WEAPON Sickle Adamantium
 Adamantite sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+An adamantite sickle reaps shields as easily as wheat.
 
 === WEAPON Sickle Meteoric
 Meteorite sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+Meteorite steel in a sickle's curve: a harvest no armour survives.
 
 === WEAPON Sickle Alloy
 Alloy sickle
-A curved blade on a short wooden haft: quick strokes that reach around a shield.
+A dark, heavy alloy sickle whose edge never dulls.
 
 === WEAPON Guard_Dagger Bronze
 Bronze guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+A bronze dagger with a wavy blade. The smith did not bother with a guard.
 
 === WEAPON Guard_Dagger Iron
 Iron guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+Iron, wavy and without a guard: mind your fingers.
 
 === WEAPON Guard_Dagger Steel
 Steel guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+Steel, with a knuckle guard: it parries as well as it stabs.
 
 === WEAPON Guard_Dagger Mithrill
 Mithrill guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+A mithril blade behind a fine knuckle guard. Light and quick.
 
 === WEAPON Guard_Dagger Adamantium
 Adamantite guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+Adamantite: the guard turns a sword, the blade finds the gaps.
 
 === WEAPON Guard_Dagger Meteoric
 Meteorite guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+A meteorite guard dagger: the finest a duellist can own.
 
 === WEAPON Guard_Dagger Alloy
 Alloy guard dagger
-A wavy blade behind a knuckle guard: it parries as well as it stabs.
+Dark alloy and a knuckle guard: a dagger for the night.
 
 === WEAPON Royal_Sword Bronze
 Bronze royal sword
-A long, richly decorated blade, worthy of a king.
+A bronze copy of a king's sword. Pretty, but it will not hold an edge for long.
 
 === WEAPON Royal_Sword Iron
 Iron royal sword
-A long, richly decorated blade, worthy of a king.
+Iron dressed as royalty: heavier than it looks.
 
 === WEAPON Royal_Sword Steel
 Steel royal sword
-A long, richly decorated blade, worthy of a king.
+A steel royal sword, its guard and pommel richly worked.
 
 === WEAPON Royal_Sword Mithrill
 Mithrill royal sword
-A long, richly decorated blade, worthy of a king.
+Mithril and gilding: a sword for a prince's guard.
 
 === WEAPON Royal_Sword Adamantium
 Adamantite royal sword
-A long, richly decorated blade, worthy of a king.
+An adamantite royal sword, as hard as the crown it serves.
 
 === WEAPON Royal_Sword Meteoric
 Meteorite royal sword
-A long, richly decorated blade, worthy of a king.
+Meteorite steel in a king's sword. Its like is rarely seen.
 
 === WEAPON Royal_Sword Alloy
 Alloy royal sword
-A long, richly decorated blade, worthy of a king.
-
-=== WEAPON Bone_Long_Crossbow Burned_bones
-Long bone crossbow (hard bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Bone_Long_Crossbow Decayed_bones
-Long bone crossbow (thin bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Bone_Long_Crossbow Dragon_Black_Bones
-Long bone crossbow (Blue Dragon bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Bone_Long_Crossbow Dragon_Green_Bones
-Long bone crossbow (Green Dragon bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Bone_Long_Crossbow Dragon_Red_Bones
-Long bone crossbow (Red Dragon bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Bone_Long_Crossbow Dry_bones
-Long bone crossbow (tough bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Bone_Long_Crossbow Scrab_bones
-Long bone crossbow (shell bone)
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== WEAPON Barbed_Pike Bronze
-Bronze barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
-=== WEAPON Barbed_Pike Iron
-Iron barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
-=== WEAPON Barbed_Pike Steel
-Steel barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
-=== WEAPON Barbed_Pike Mithrill
-Mithrill barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
-=== WEAPON Barbed_Pike Adamantium
-Adamantite barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
-=== WEAPON Barbed_Pike Meteoric
-Meteorite barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
-=== WEAPON Barbed_Pike Alloy
-Alloy barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
+A dark, ornate alloy royal sword, the pride of a royal armoury.
 
 === WEAPON Ingos_Crossbow Bronze
 Bronze Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+A makeshift crossbow with a bronze prod and a goat skull at its head.
 
 === WEAPON Ingos_Crossbow Iron
 Iron Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+An iron prod on a rough stock: the goat skull grins at the target.
 
 === WEAPON Ingos_Crossbow Steel
 Steel Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+A steel prod gives this rough Ingos crossbow a hard punch.
 
 === WEAPON Ingos_Crossbow Mithrill
 Mithrill Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+Mithril makes even a makeshift crossbow light and strong.
 
 === WEAPON Ingos_Crossbow Adamantium
 Adamantite Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+An adamantite prod on a hunter's stock: crude, and deadly.
 
 === WEAPON Ingos_Crossbow Meteoric
 Meteorite Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+Meteorite steel bent on a goat-skull crossbow: the Ingos smiths' masterpiece.
 
 === WEAPON Ingos_Crossbow Alloy
 Alloy Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+A dark, stiff alloy prod: the goat skull has seen many kills.
+
+=== WEAPON Barbed_Spear Bronze
+Bronze barbed spear
+A long bronze spear with a barbed head. Once it is in, it does not come out easily.
+
+=== WEAPON Barbed_Spear Iron
+Iron barbed spear
+Iron barbs: the wound is worse coming out than going in.
+
+=== WEAPON Barbed_Spear Steel
+Steel barbed spear
+A steel barbed spear, long enough to keep a charge at bay.
+
+=== WEAPON Barbed_Spear Mithrill
+Mithrill barbed spear
+Light mithril barbs on a long shaft.
+
+=== WEAPON Barbed_Spear Adamantium
+Adamantite barbed spear
+Adamantite barbs pierce plate, and stay there.
+
+=== WEAPON Barbed_Spear Meteoric
+Meteorite barbed spear
+A meteorite barbed spear: the hunters' dream.
+
+=== WEAPON Barbed_Spear Alloy
+Alloy barbed spear
+Dark alloy barbs: a spear for the cruellest hunt.
 

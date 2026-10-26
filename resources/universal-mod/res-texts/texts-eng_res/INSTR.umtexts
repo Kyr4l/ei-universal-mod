@@ -85,15 +85,11 @@ A long, richly decorated blade, worthy of a king.
 Crown
 A crown set with amethysts. It protects little, but everyone knows who is in charge.
 
-=== INSTR Bone_Long_Crossbow
-Long bone crossbow
-Longer limbs, a stronger draw: the bolts fly further.
-
-=== INSTR Barbed_Pike
-Barbed pike
-A long pike with a barbed head: once it is in, it does not come out easily.
-
 === INSTR Ingos_Crossbow
 Ingos crossbow
-A crossbow of the Ingos smiths, the front of its stock shaped as a skull.
+A makeshift crossbow of the Ingos hunters, a goat skull at the head of its stock.
+
+=== INSTR Barbed_Spear
+Barbed spear
+A long spear with a barbed head: once it is in, it does not come out easily.
 

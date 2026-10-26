@@ -330,127 +330,106 @@ With such a sword, you can prove to a young ogre that sometimes food is wormy.
 
 === WEAPON Sickle Bronze
 청동 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+무기처럼 날을 세운 농부의 청동 낫. 잘 걸리지만 갑옷에 휘어진다.
 === WEAPON Sickle Iron
 철 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+철은 청동보다 곡선을 잘 버티지만 비에 녹이 슨다.
 === WEAPON Sickle Steel
 강철 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+강철 낫. 굽은 날이 방패 뒤까지 닿는다.
 === WEAPON Sickle Mithrill
 미스릴 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+가볍고 날카롭다. 미스릴 날이 휘두를 때마다 노래한다.
 === WEAPON Sickle Adamantium
 아다만티움 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+아다만티움 낫은 밀을 베듯 방패를 벤다.
 === WEAPON Sickle Meteoric
 운석 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+낫의 곡선에 담긴 운석 강철. 어떤 갑옷도 이 수확을 견디지 못한다.
 === WEAPON Sickle Alloy
 합금 낫
-짧은 나무 자루에 달린 굽은 칼날. 방패를 돌아 들어가는 빠른 일격.
+날이 무뎌지지 않는 어둡고 무거운 합금 낫.
 === WEAPON Guard_Dagger Bronze
 청동 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+물결 모양 칼날의 청동 단검. 대장장이는 가드를 달 생각도 하지 않았다.
 === WEAPON Guard_Dagger Iron
 철 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+가드 없는 물결 모양의 철 단검. 손가락을 조심하라.
 === WEAPON Guard_Dagger Steel
 강철 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+손 가드가 달린 강철 단검. 찌르는 만큼 잘 막아낸다.
 === WEAPON Guard_Dagger Mithrill
 미스릴 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+섬세한 손 가드 뒤의 미스릴 칼날. 가볍고 빠르다.
 === WEAPON Guard_Dagger Adamantium
 아다만티움 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+아다만티움. 가드는 검을 막고 칼날은 틈을 찾는다.
 === WEAPON Guard_Dagger Meteoric
 운석 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+운석 가드 단검. 결투가가 가질 수 있는 최고의 단검.
 === WEAPON Guard_Dagger Alloy
 합금 가드 단검
-손을 감싸는 가드 뒤의 물결 모양 칼날. 찌르는 만큼 잘 막아낸다.
+어두운 합금과 손 가드. 밤을 위한 단검.
 === WEAPON Royal_Sword Bronze
 청동 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+왕의 검을 청동으로 본뜬 것. 아름답지만 날이 오래가지 않는다.
 === WEAPON Royal_Sword Iron
 철 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+왕실처럼 꾸민 철. 보기보다 무겁다.
 === WEAPON Royal_Sword Steel
 강철 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+가드와 손잡이 끝이 화려하게 세공된 강철 왕실 검.
 === WEAPON Royal_Sword Mithrill
 미스릴 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+미스릴과 금박. 왕자의 근위병을 위한 검.
 === WEAPON Royal_Sword Adamantium
 아다만티움 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+섬기는 왕관만큼 단단한 아다만티움 왕실 검.
 === WEAPON Royal_Sword Meteoric
 운석 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
+왕의 검에 담긴 운석 강철. 이런 검은 보기 드물다.
 === WEAPON Royal_Sword Alloy
 합금 왕실 검
-화려하게 장식된 긴 칼날. 왕에게 어울리는 검.
-=== WEAPON Bone_Long_Crossbow Burned_bones
-긴 뼈 쇠뇌 (단단한 뼈)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Bone_Long_Crossbow Decayed_bones
-긴 뼈 쇠뇌 (얇은 뼈)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Bone_Long_Crossbow Dragon_Black_Bones
-긴 뼈 쇠뇌 (블루 드래곤 뼈)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Bone_Long_Crossbow Dragon_Green_Bones
-긴 뼈 쇠뇌 (그린 드래곤 뼈)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Bone_Long_Crossbow Dragon_Red_Bones
-긴 뼈 쇠뇌 (레드 드래곤 뼈)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Bone_Long_Crossbow Dry_bones
-긴 뼈 쇠뇌 (강한 뼈)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Bone_Long_Crossbow Scrab_bones
-긴 뼈 쇠뇌 (쉘 본)
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== WEAPON Barbed_Pike Bronze
-청동 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
-=== WEAPON Barbed_Pike Iron
-철 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
-=== WEAPON Barbed_Pike Steel
-강철 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
-=== WEAPON Barbed_Pike Mithrill
-미스릴 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
-=== WEAPON Barbed_Pike Adamantium
-아다만티움 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
-=== WEAPON Barbed_Pike Meteoric
-운석 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
-=== WEAPON Barbed_Pike Alloy
-합금 미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
+왕실 무기고의 자랑인 어둡고 화려한 합금 왕실 검.
 === WEAPON Ingos_Crossbow Bronze
 청동 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+청동 활대와 염소 두개골을 단 임시변통 쇠뇌.
 === WEAPON Ingos_Crossbow Iron
 철 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+거친 개머리에 철 활대. 염소 두개골이 과녁을 비웃는다.
 === WEAPON Ingos_Crossbow Steel
 강철 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+강철 활대가 이 거친 잉고스 쇠뇌에 강한 힘을 준다.
 === WEAPON Ingos_Crossbow Mithrill
 미스릴 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+미스릴은 임시변통 쇠뇌조차 가볍고 튼튼하게 만든다.
 === WEAPON Ingos_Crossbow Adamantium
 아다만티움 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+사냥꾼의 개머리에 아다만티움 활대. 투박하지만 치명적이다.
 === WEAPON Ingos_Crossbow Meteoric
 운석 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+염소 두개골 쇠뇌에 휜 운석 강철. 잉고스 대장장이들의 걸작.
 === WEAPON Ingos_Crossbow Alloy
 합금 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+어둡고 뻣뻣한 합금 활대. 염소 두개골은 많은 사냥감을 보았다.
+=== WEAPON Barbed_Spear Bronze
+청동 미늘 창
+미늘 달린 머리의 긴 청동 창. 한 번 박히면 쉽게 빠지지 않는다.
+=== WEAPON Barbed_Spear Iron
+철 미늘 창
+철 미늘. 상처는 들어갈 때보다 나올 때가 더 심하다.
+=== WEAPON Barbed_Spear Steel
+강철 미늘 창
+돌격을 막아낼 만큼 긴 강철 미늘 창.
+=== WEAPON Barbed_Spear Mithrill
+미스릴 미늘 창
+긴 자루에 단 가벼운 미스릴 미늘.
+=== WEAPON Barbed_Spear Adamantium
+아다만티움 미늘 창
+아다만티움 미늘은 판금을 뚫고 그대로 박혀 있다.
+=== WEAPON Barbed_Spear Meteoric
+운석 미늘 창
+운석 미늘 창. 사냥꾼들의 꿈.
+=== WEAPON Barbed_Spear Alloy
+합금 미늘 창
+어두운 합금 미늘. 가장 잔인한 사냥을 위한 창.

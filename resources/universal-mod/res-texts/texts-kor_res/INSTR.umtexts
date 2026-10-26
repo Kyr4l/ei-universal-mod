@@ -69,12 +69,9 @@ This is a fearsome weapon in the hands of an experienced warrior.
 === INSTR Crown
 왕관
 자수정이 박힌 왕관. 보호는 약하지만 누가 주인인지 모두가 안다.
-=== INSTR Bone_Long_Crossbow
-긴 뼈 쇠뇌
-더 긴 활대, 더 강한 장력. 화살이 더 멀리 날아간다.
-=== INSTR Barbed_Pike
-미늘 창
-미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.
 === INSTR Ingos_Crossbow
 잉고스 쇠뇌
-잉고스 대장장이들의 쇠뇌. 개머리 앞부분이 해골 모양이다.
+개머리 앞에 염소 두개골을 단 잉고스 사냥꾼들의 임시변통 쇠뇌.
+=== INSTR Barbed_Spear
+미늘 창
+미늘 달린 머리의 긴 창. 한 번 박히면 쉽게 빠지지 않는다.

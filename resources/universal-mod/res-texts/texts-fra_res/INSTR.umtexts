@@ -107,15 +107,11 @@ Une longue lame richement ornée, digne d'un roi.
 Couronne
 Une couronne sertie d'améthystes. Elle protège peu, mais chacun sait qui commande.
 
-=== INSTR Bone_Long_Crossbow
-Arbalète longue en os
-Des branches plus longues, une tension plus forte : les carreaux vont plus loin.
-
-=== INSTR Barbed_Pike
-Pique barbelée
-Une longue pique à tête barbelée : une fois plantée, elle ne ressort pas facilement.
-
 === INSTR Ingos_Crossbow
 Arbalète d'Ingos
-Une arbalète des forgerons d'Ingos, l'avant de sa crosse en forme de crâne.
+Une arbalète de fortune des chasseurs d'Ingos, un crâne de bouc à l'avant de sa crosse.
+
+=== INSTR Barbed_Spear
+Lance barbelée
+Une longue lance à tête barbelée : une fois plantée, elle ne ressort pas facilement.
 
