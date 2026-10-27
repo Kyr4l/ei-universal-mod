@@ -118,7 +118,7 @@ non-silent spell), night visibility `+0x904 = world+0x88 * ((1-night) + night * 
 | off | field | use |
 |---|---|---|
 | +0 | kind | 0 stand, 1 move to, 2 turn to, 3 attack, 4 cast at point, 5 cast on object, 6 interact, 7 script animation, 8 looping script animation, 9 none, 10 use quick item, 11 sit |
-| +4 | param | 1: group flag (`CollectPartyFollowers`); 3: hit location 0..5, 6 any; 4/5: spell item id (bit 31 set = weapon-slot quick item `id & 0x7FFFFFFF`); 6: 0 use, 1/2 skills (science / stealing), 0x18A95 talk; 10: slot |
+| +4 | param | 1: group flag (`CollectPartyFollowers`); 3: hit location 0..5, 6 any; 4/5: spell item id (bit 31 set = weapon-slot quick item `id & 0x7FFFFFFF`); 6: 0 use, 1/2 skills (science / stealing), 0x18A95 loot a corpse (QueueOrderTalk, dead target only); 10: slot |
 | +8 | target | refcounted object |
 | +0xC | pos[3] | 1: goal, z = max path length; 2: direction; 4: cast point |
 | +0x18 | exact | position-locked: reach 0.2 (`OrderReachDistance`), 1e10 in `PlanActionApproach`, no path validation |
@@ -225,7 +225,7 @@ with `-2*dist/10` for ranged weapons, mapped over a +-5 band around the defence:
 
 | idx (off) | heroes with a weapon | others | meaning |
 |---|---|---|---|
-| 0..6 (+0) | weapon proto +0x98.. 7 factors | `stats +0x90` 7 factors (udb +0x50) | damage type distribution; a spell/effect hit puts a direction into [3..5] (`Hit_HasDirection` 0x522B80) |
+| 0..6 (+0) | weapon proto +0x98.. 7 factors | `stats +0x90` 7 factors (udb +0x50) | damage type distribution; a spell hit puts its element weights into [3..5] (1.0 = spell: `Hit_IsSpell` 0x522B80, no defender roll, death kind 7; the direction code is +0x30: spells.md) |
 | 7 (+0x1C) | `CItemWeapon +0x4C` | 0 | not read by the damage code |
 | 8 (+0x20) | random | `stats +0x74 * difficulty 0x7C54AC[]` | the roll; overwritten with +-INF by `ResolveHitChance`; a finite value = unresolved (spells are rolled in `TakeHit`) |
 | 9 (+0x24) | `proto +0x50 + rand * +0x54` (`ItemProto_RandomValue50` 0x6A2DE0) | `stats +0x84 + rand(0..+0x88)` | **damage**, then * strengthen/weaken |
@@ -310,7 +310,7 @@ experience, perk names). The full field list is in `batch-combat-structs.tsv`; t
 | +0x70..+0x88 | natural attack: range, attack, spread, defence, weight, damage min, damage spread | proto +0x64..+0x74, +0x80, +0x84 |
 | +0x90[7], +0xAC | natural damage factors, natural attack kind | udb +0x50, proto +0x78 |
 | +0xB0.. | 6 perception pairs {base, current} | proto +0x98..: sight (`CUnitServer +0x290/+0x294`), night sight (+0xBC *= 1 + night vision perk %), hearing?, ...; buffs 12/13/14 |
-| +0xE0.. | 6 resistance pairs | proto +0xB0..; buffs 15/16/17 subtract, 19 adds; +0xFC = noise radius |
+| +0xE0.. | 6 detection pairs (visibility, infra, life signature, noise, scent, tracking) | proto +0xB0..; buffs 15/16/17 subtract from the detectability, 19 adds; +0xFC = noise radius; the protections go into the placement armor +0x3C/+0x44/+0x4C (spells.md) |
 | +0x110 | 6 body parts x 0xF4 | kind (+0: 2 arm, 3 leg), cripple mask (+4), 3 armor tiers (+8, 0x48 each: 7 values at +4, state at +0x3C), state +0xE0 (3 ok, 2 dead, 1 crippled), hp +0xE4, max +0xE8 = `maxHP / torsoFraction(+0x2F0) * fraction(+0xEC)`, rate +0xF0 |
 | +0x6C8[3] | attribute skills (science, stealing, ?) | `UnitStats_AttrSkill` 0x525E10: `dex - 25 + byte` (int for 2) |
 | +0x6CB[8] | melee, archery, ?, magic schools 0..2 / 3..4 / 5..7, ?, ? | `UnitStats_MagicSkill` 0x527EB0 = `int - 25 + school byte + perk` |
@@ -349,8 +349,8 @@ embedded spells of the `+0x920` list on self on a countdown (`spell +0x20 - 3`, 
 unless `spellProto +0x10 == 1` (silent). Range / line of sight: `OrderReachDistance` (spell `+0x34`), `CanCastAt` 0x54C2F0 ->
 `ComputeCastTarget` 0x54BBC0 (`CAIMap::TraceVisibility`). Interrupt: a hit reaction does not cancel state 5 (`RestartIdleAnim` only runs in
 states 2/4); the cast is lost when the target leaves `+0xE8` (`CancelAction`), when the order is replaced by a move (`Update`), or when the
-unit dies. Silence = unit flag 0x10000000 (`v49_UpdateSilenced` 0x553220: buff kind 0x20). `CastFromSlot` 0x54ED60 serves the client
-messages 0x32/0x33 (use weapon-slot item). Spell damage comes back through `CSpellEffect` -> `TakeHit` with a directional hit record.
+unit dies. Feeblemind (cannot cast) = unit flag 0x10000000 (`v49_UpdateFeeblemind` 0x553220: buff kind 0x20; silence is buff 0x10, the noise radius: see spells.md). `CastFromSlot` 0x54ED60 serves the client
+messages 0x32/0x33 (use weapon-slot item). Spell damage comes back through `CSpellEffect` -> `TakeHit` with a spell hit record (element weights in [3..5], see spells.md).
 
 ## 8. Client side (`CUnitClientSpecific`, 0xDC bytes)
 

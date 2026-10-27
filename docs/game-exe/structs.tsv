@@ -440,7 +440,7 @@ Hit			0x30	int	direction	hit[12]: passed to OnDamaged as the hit direction (0 me
 Hit			0x34	float	backstabMult	1.0 normal; 3.0 + backstab perk % from behind (cancelled when the defender is in combat mode); > 1 ignores the defence and multiplies the damage
 Hit			0x38	byte	calledShot	-25 (head) / -10 (limbs) on the hit chance
 Order		0x24	0x0	int	kind	0 stand 1 move 2 turn 3 attack 4 cast at 5 cast on 6 interact 7 script anim 8 script anim loop 9 none 10 use quick item 11 sit
-Order			0x4	int	param	kind 1: group flag; 3: hit location (6 any); 4/5: spell item id (bit 31 = quick item slot); 6: 0 use / 1 / 2 steal / 0x18a95 talk; 10: slot
+Order			0x4	int	param	kind 1: group flag; 3: hit location (6 any); 4/5: spell item id (bit 31 = quick item slot); 6: 0 use / 1 / 2 steal / 0x18a95 loot a corpse; 10: slot
 Order			0x8	pointer	target	refcounted CMapObject
 Order			0xc	float[3]	pos	kind 1: goal (z = max path length); 2: direction; 4: cast point
 Order			0x18	byte	exact	position-locked: reach 0.2 / 1e10, no path validation

@@ -142,10 +142,10 @@ Tables: skills g_0x7AF268 (0x18-byte entries, +0xc name: first letter d/i/s = go
 (0xb4-byte entries), materials g_0x7C86D8 (0x50), items g_0x7C8718 (200). 7 damage types: impaling, slashing, crushing, termical, chemical, electrical, general.
 
 ## CUnitServer orders (module 0x545000-0x557000; the bot / um-engine need these)
-Order struct (0x24 bytes): +0 kind, +4 param (item id, hit location, skill, 0x18a95 = talk), +8 target object (refcounted), +0xc..+0x14 position,
+Order struct (0x24 bytes): +0 kind, +4 param (item id, hit location, skill, 0x18a95 = loot a corpse), +8 target object (refcounted), +0xc..+0x14 position,
 +0x18 byte (exact point), +0x1c extra, +0x20 run flag. Current order at CUnitServer +0x190, queued order at +0x1b4 (DispatchQueuedOrder moves it).
 Kinds: 0 wait, 1 move to pos (QueueOrderMoveTo), 2 direct move, 3 attack target (QueueOrderAttack; param = hit location 0..5 / 6 any),
-4 cast at pos (QueueCastAt), 5 cast on target (QueueCastOn), 6 interact (param 0 use / 1 interact / 2 interact-other / 0x18a95 talk; QueueOrderInteract*/Talk),
+4 cast at pos (QueueCastAt), 5 cast on target (QueueCastOn), 6 interact (param 0 use / 1 interact / 2 interact-other / 0x18a95 loot a corpse; QueueOrderInteract*/Talk),
 7 / 8 script animation / cast animation (QueueScriptOrder), 9 none, 10 use consumable (QueueOrderKindA), 0xb sit / stance 4 (QueueOrderKindB).
 States (+0x164): 0 walking, 1 moving (direct), 2 waiting, 3 attacking (anim), 4 casting (anim), 5 strike in progress (TickAttackAnim), 6 idle / arrived.
 Stances: +0x168 current (owner +0x264: 0 stand?, 1, 2 sneak (3 = sneak flag), 4 sit), attack mode +0x170 (owner +0x268: 1 / 2, 3 = flag). Net section 6 = +0x264/+0x268/+0x26c.
