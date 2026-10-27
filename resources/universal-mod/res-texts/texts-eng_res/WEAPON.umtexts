@@ -468,33 +468,33 @@ Meteorite steel in a king's sword. Its like is rarely seen.
 Alloy royal sword
 A dark, ornate alloy royal sword, the pride of a royal armoury.
 
-=== WEAPON Ingos_Crossbow Bronze
-Bronze Ingos crossbow
-A makeshift crossbow with a bronze prod and a goat skull at its head.
+=== WEAPON Hunter_Crossbow Bronze
+Bronze hunter crossbow
+A hunter's crossbow with a bronze prod: light enough to carry all day.
 
-=== WEAPON Ingos_Crossbow Iron
-Iron Ingos crossbow
-An iron prod on a rough stock: the goat skull grins at the target.
+=== WEAPON Hunter_Crossbow Iron
+Iron hunter crossbow
+An iron prod on a shaped wooden stock: a trusted tool of the woods.
 
-=== WEAPON Ingos_Crossbow Steel
-Steel Ingos crossbow
-A steel prod gives this rough Ingos crossbow a hard punch.
+=== WEAPON Hunter_Crossbow Steel
+Steel hunter crossbow
+A steel prod gives this hunter's crossbow a hard, clean shot.
 
-=== WEAPON Ingos_Crossbow Mithrill
-Mithrill Ingos crossbow
-Mithril makes even a makeshift crossbow light and strong.
+=== WEAPON Hunter_Crossbow Mithrill
+Mithrill hunter crossbow
+Mithril makes the hunter's crossbow light and quick to draw.
 
-=== WEAPON Ingos_Crossbow Adamantium
-Adamantite Ingos crossbow
-An adamantite prod on a hunter's stock: crude, and deadly.
+=== WEAPON Hunter_Crossbow Adamantium
+Adamantite hunter crossbow
+An adamantite prod: the hunter's crossbow now takes down far more than game.
 
-=== WEAPON Ingos_Crossbow Meteoric
-Meteorite Ingos crossbow
-Meteorite steel bent on a goat-skull crossbow: the Ingos smiths' masterpiece.
+=== WEAPON Hunter_Crossbow Meteoric
+Meteorite hunter crossbow
+Meteorite steel on a hunter's stock: no quarry escapes it.
 
-=== WEAPON Ingos_Crossbow Alloy
-Alloy Ingos crossbow
-A dark, stiff alloy prod: the goat skull has seen many kills.
+=== WEAPON Hunter_Crossbow Alloy
+Alloy hunter crossbow
+A dark, stiff alloy prod on a well-worn hunter's stock.
 
 === WEAPON Barbed_Spear Bronze
 Bronze barbed spear

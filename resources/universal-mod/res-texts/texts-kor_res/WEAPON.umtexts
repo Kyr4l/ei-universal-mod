@@ -391,27 +391,27 @@ With such a sword, you can prove to a young ogre that sometimes food is wormy.
 === WEAPON Royal_Sword Alloy
 합금 왕실 검
 왕실 무기고의 자랑인 어둡고 화려한 합금 왕실 검.
-=== WEAPON Ingos_Crossbow Bronze
-청동 잉고스 쇠뇌
-청동 활대와 염소 두개골을 단 임시변통 쇠뇌.
-=== WEAPON Ingos_Crossbow Iron
-철 잉고스 쇠뇌
-거친 개머리에 철 활대. 염소 두개골이 과녁을 비웃는다.
-=== WEAPON Ingos_Crossbow Steel
-강철 잉고스 쇠뇌
-강철 활대가 이 거친 잉고스 쇠뇌에 강한 힘을 준다.
-=== WEAPON Ingos_Crossbow Mithrill
-미스릴 잉고스 쇠뇌
-미스릴은 임시변통 쇠뇌조차 가볍고 튼튼하게 만든다.
-=== WEAPON Ingos_Crossbow Adamantium
-아다만티움 잉고스 쇠뇌
-사냥꾼의 개머리에 아다만티움 활대. 투박하지만 치명적이다.
-=== WEAPON Ingos_Crossbow Meteoric
-운석 잉고스 쇠뇌
-염소 두개골 쇠뇌에 휜 운석 강철. 잉고스 대장장이들의 걸작.
-=== WEAPON Ingos_Crossbow Alloy
-합금 잉고스 쇠뇌
-어둡고 뻣뻣한 합금 활대. 염소 두개골은 많은 사냥감을 보았다.
+=== WEAPON Hunter_Crossbow Bronze
+청동 사냥꾼 쇠뇌
+청동 활대를 단 사냥꾼의 쇠뇌. 하루 종일 들고 다닐 만큼 가볍다.
+=== WEAPON Hunter_Crossbow Iron
+철 사냥꾼 쇠뇌
+다듬은 나무 개머리에 철 활대. 숲에서 믿을 만한 도구.
+=== WEAPON Hunter_Crossbow Steel
+강철 사냥꾼 쇠뇌
+강철 활대가 이 사냥꾼 쇠뇌에 강하고 깔끔한 한 발을 준다.
+=== WEAPON Hunter_Crossbow Mithrill
+미스릴 사냥꾼 쇠뇌
+미스릴은 사냥꾼 쇠뇌를 가볍고 빠르게 장전되게 만든다.
+=== WEAPON Hunter_Crossbow Adamantium
+아다만티움 사냥꾼 쇠뇌
+아다만티움 활대. 이제 사냥꾼 쇠뇌는 짐승보다 훨씬 많은 것을 쓰러뜨린다.
+=== WEAPON Hunter_Crossbow Meteoric
+운석 사냥꾼 쇠뇌
+사냥꾼의 개머리에 운석 강철. 어떤 사냥감도 벗어나지 못한다.
+=== WEAPON Hunter_Crossbow Alloy
+합금 사냥꾼 쇠뇌
+잘 닳은 사냥꾼의 개머리에 어둡고 뻣뻣한 합금 활대.
 === WEAPON Barbed_Spear Bronze
 청동 미늘 창
 미늘 달린 머리의 긴 청동 창. 한 번 박히면 쉽게 빠지지 않는다.

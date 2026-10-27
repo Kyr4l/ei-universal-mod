@@ -395,9 +395,12 @@ column (32-40) resampled into that strip above the head. Ground figures of the p
 
 **Crossbow fit fixes** (2026-10-26). LiA's crossbow 04: in LiA's rig the stock ends short of the bow and the limbs float in front of
 the bone knot (clipping it); its own ground figure has the bow 4.3 cm behind the knot, which the port now follows (`build.py`
-`lia_crossbow_obj`, `--no-fit`). The mod's crossbow 05 is the "ingos crossbow" (a makeshift crossbow with a goat skull for a head,
-a metal item sold on Ingos, Shop 3): its stock front got its own UV area (texels 9-29 x 100-127, a top view: `cb5uv.py`) so the skull
-reads; the texture is vanilla crossbow 02's transferred part by part (`cb5tex.py`), the limbs in the item's metal.
+`lia_crossbow_obj`, `--no-fit`). The mod's crossbow 05 is the "hunter crossbow" (the "ingos crossbow"
+until 2026-10-27; a metal item sold on Ingos, Shop 3; database row kept in place, text keys `Hunter_Crossbow`): the user's reshaped
+`cb4.blend`, re-imported (`blender-models/weapons-um/cb5-hunter/`), its texture painted from the 3D shape (`cb5paint.py`: wood stock,
+the prod and fittings in the item's metal). Its islands are grown 4 texels, colour and alpha, inside columns 0-41: the old texture
+(crossbow 02 copied by nearest point, `cb5tex.py`) had alpha 0 right at the edges of 1-2 texel islands, and the game's filtering and
+mip levels frayed the strings and the stock's edges into holes.
 
 **A crown (helm 18) that keeps the head and the hair.** A helm slot changes `hd` -> `hd.armorNN` and the hair `hr.NN` -> `hr.NN.armorNN`
 (`BuildArmorModelNames` 0x535CB0, the part list at 0x73EC24: `hr`, `hd`); a missing `hr.NN.armorNN` hides the hair (every vanilla helm:

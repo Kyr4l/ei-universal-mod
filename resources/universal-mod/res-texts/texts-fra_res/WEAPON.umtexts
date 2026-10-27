@@ -501,33 +501,33 @@ Du fer météorique dans l'épée d'un roi. On en voit rarement de pareille.
 Épée royale en alliage
 Une épée royale d'alliage, sombre et ornée, la fierté d'une armurerie royale.
 
-=== WEAPON Ingos_Crossbow Bronze
-Arbalète d'Ingos en bronze
-Une arbalète de fortune, un arc de bronze et un crâne de bouc en tête.
+=== WEAPON Hunter_Crossbow Bronze
+Arbalète de chasseur en bronze
+Une arbalète de chasseur à l'arc de bronze : assez légère pour la porter tout le jour.
 
-=== WEAPON Ingos_Crossbow Iron
-Arbalète d'Ingos en fer
-Un arc de fer sur une crosse grossière : le crâne de bouc ricane à la cible.
+=== WEAPON Hunter_Crossbow Iron
+Arbalète de chasseur en fer
+Un arc de fer sur une crosse de bois façonnée : un fidèle outil des bois.
 
-=== WEAPON Ingos_Crossbow Steel
-Arbalète d'Ingos en acier
-Un arc d'acier donne à cette rude arbalète d'Ingos un tir puissant.
+=== WEAPON Hunter_Crossbow Steel
+Arbalète de chasseur en acier
+Un arc d'acier donne à cette arbalète de chasseur un tir sec et puissant.
 
-=== WEAPON Ingos_Crossbow Mithrill
-Arbalète d'Ingos en mithril
-Le mithril rend même une arbalète de fortune légère et solide.
+=== WEAPON Hunter_Crossbow Mithrill
+Arbalète de chasseur en mithril
+Le mithril rend l'arbalète de chasseur légère et prompte à armer.
 
-=== WEAPON Ingos_Crossbow Adamantium
-Arbalète d'Ingos en adamantite
-Un arc d'adamantite sur une crosse de chasseur : grossière, et mortelle.
+=== WEAPON Hunter_Crossbow Adamantium
+Arbalète de chasseur en adamantite
+Un arc d'adamantite : l'arbalète de chasseur abat désormais bien plus que du gibier.
 
-=== WEAPON Ingos_Crossbow Meteoric
-Arbalète d'Ingos en fer météorique
-Du fer météorique sur une arbalète à crâne de bouc : le chef-d'œuvre des forgerons d'Ingos.
+=== WEAPON Hunter_Crossbow Meteoric
+Arbalète de chasseur en fer météorique
+Du fer météorique sur une crosse de chasseur : aucune proie ne lui échappe.
 
-=== WEAPON Ingos_Crossbow Alloy
-Arbalète d'Ingos en alliage
-Un arc d'alliage, sombre et raide : le crâne de bouc a vu bien des proies.
+=== WEAPON Hunter_Crossbow Alloy
+Arbalète de chasseur en alliage
+Un arc d'alliage, sombre et raide, sur une crosse de chasseur bien usée.
 
 === WEAPON Barbed_Spear Bronze
 Lance barbelée en bronze
