@@ -1,5 +1,8 @@
 # How the game's monsters notice and fight (notes for um-bot)
 
+> **Superseded 2026-10-27 by [game-exe/unit-ai.md](game-exe/unit-ai.md)** (full read of the AI module). Its section 11 lists what is wrong below: the call-for-help radius is the unit's `.mob` Help value, there is no FollowLimit leash, RangedRun/AttackDist are the Fear logic's kiting distances, the detection factors are the hero's stealth meter (not monster perception), hearing is event-driven (HearSound), smell is dead code.
+
+
 Read from game.exe (the AI module 0x5C8000 - 0x5D3000: `StimulusMap`, `AiMemory`, `Brain`, `AiLogic*`) and from a running game's memory (2026-10-20). Used by um-bot to pick its targets.
 
 ## The AI parameters (`AiInfo`, the global at 0x7C53F8, loaded by `AiInfo_Load` 0x5CE0F0 from aiinfo.res's [Logic] section; values read live in the multiplayer rig)

@@ -16,7 +16,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00401000 | 367 | NetPlayerInfo::Write | serialize into GameBuffer: dwords +0x1c,+0x20, two CStrings (+0,+0xc), bytes +0x18,+0x19,+0x1b,+0x1a |
 | 0x00401570 | 258 | CObject3D::BuildRotationMatrix | 4x4 matrix (16 floats) from the quaternion at +0x44..0x50, identity elsewhere |
 | 0x00401E50 | 176 | CObject3D::RotateAxisAngle | post-multiply quaternion +0x34..0x40 by Quat_FromAngleAxis(axis, angle) |
-| 0x004018A0 | 148 | Quat_MulAssign | this = this * param (Hamilton product, 4 floats) |
+| 0x004018A0 | 148 | Quat_PreMulAssign | this = q * this (the doc comment 'this*param' is the other order) |
 | 0x00401490 | 115 | CObject3D::CopyTransform | CObject3D slot 13: copies +0x1c..+0x50 (local pos 3f @0x1c, world pos 3f @0x28, local rot quat 4f @0x34, world rot quat 4f @0x44) from the other object |
 | 0x00401340 | 97 | GameBuffer::ReadBytes | bounds-checked read of N bytes; slow path via GameBuffer::Read or vt[3] refill |
 | 0x00401310 | 46 | GameBuffer::ReadInline | copy N bytes from the cursor (+8) without bounds check, advance cursor |
@@ -122,7 +122,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004191C0 | 498 | LobbyServer::PostMapEvents | (mapRecord, withStart): for the first loaded player (list +0x25a4, +0x28 set): posts a kind-2 player event (0x419D90) for every string of the record's vector +0x14 and, when withStart, a kind-4 event with the string g_0x79B298 |
 | 0x00419D90 | 435 | LobbyServer::PostPlayerEvent | (player, kind, value, strBegin, strEnd): creates a RefDwordsStringMessage {player ref, kind, value, string} and appends it to the timed list +0x25b4 with a 60 s timeout |
 | 0x00418530 | 428 | LobbyServer::RefreshMapList | 0x580F10(); enumerates the maps (0x57F850 with +0x25e4 and the current name +0x25d4) and appends a StringMessage "<map><suffix 0x783D70>" per map to the list +0x25ac (0x5809D0 per map name) |
-| 0x004193F0 | 379 | LobbyServer::OnMapUnloaded | (name string*): when the current map message +0x25a8 carries that name: releases it, clears the map list +0x25ac and appends a StringMessage "<name><suffix 0x783D84>"; true when it matched |
+| 0x004193F0 | 379 | LobbyServer::OnQuestMapFinished | (name string*): when the current map message +0x25A8 carries that name: releases it, clears the map list +0x25AC and appends a StringMessage "<name>_3" (map progression); true when it matched. Was LobbyServer::OnMapUnloaded |
 | 0x00416220 | 355 | ListStringMessage::Clone | slot 3 of 0x73BD18: 0x2c-byte copy (short, dword, string, ref vector) |
 | 0x00415120 | 345 | StringPairMessage::Read | slot 5 of 0x73BCA0 (cursor*): assigns the two C strings at the cursor to +0xc and +0x18 |
 | 0x00414500 | 330 | TwoStringMessage::Clone | slot 3 of 0x73BC70: 0x3c-byte copy (two strings, +0x24.. +0x38) |
@@ -302,10 +302,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00455680 | 317 | AggroTable_Add | (world+0x12c64, attacker, victim): records who attacked whom |
+| 0x00455680 | 317 | PlayerRelations::DeclareHostile | (this = CWorldServer +0x12c64 PlayerRelations, attacker CUnit, victim CUnit): unless attacker.side is a FRIEND of victim.side (row bit): victim.SetAlarmMask(+0x244 / bit attacker.side) (sets flag 0x80000 = alarm to propagate) and ... |
 | 0x00455170 | 311 | Records14_SetSize | (this, n, grow): MFC CArray SetSize for 0x14-byte records (0x454ED0 ctor) |
 | 0x004552B0 | 311 | Records18_SetSize | (this, n, grow): MFC CArray SetSize for 0x18-byte records (0x454F00 ctor) |
-| 0x004554E0 | 292 | PlayerRelations::Set | (this, player, bit, mode 0/1/2, applyToUnits): mode 0 sets mask[player] bit and clears the forced bit, 1 clears both, 2 sets the forced bit and clears the mask bit; with applyToUnits also updates the alarm mask (CUnit::SetAlarmMas... |
+| 0x004554E0 | 292 | PlayerRelations::Set | (side a, side b, mode, applyToUnits): mode 0 FRIEND (row[a] /= bit b, forced bit cleared), 1 NEUTRAL (both cleared), 2 ENEMY (forced bit set, friend bit cleared); applyToUnits: every unit of side a gets bit b set (enemy) / cleared... |
 | 0x00455BA0 | 220 | Protection_Penalty | resets the application settings to defaults (AppSettings::SetDefaults on g_0x79BC70) and randomises the flags of every object of the world manager (CMapObject::SetSpecificRaw / CObject3D::SetSpecific46Raw with random 12-bit values... |
 | 0x00455E50 | 176 | GlobalList79BC2C_Init | allocates the sentinel node of the global list g_0x79BC2C from pool g_0x79B228 (self-linked) |
 | 0x00455A90 | 166 | Disk_GetFreeBytes | (root path): GetDiskFreeSpaceExA (via GetProcAddress on kernel32) or the sector-based GetDiskFreeSpaceA fallback; 0 on failure |
@@ -313,7 +313,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00455B50 | 79 | Protection_RandomCheck | rolls rand (~1 in 100 per call); when it hits finds an entry flagged in the global list g_0x79BC2C (byte +8 == 0) and calls Protection_Penalty |
 | 0x004553F0 | 74 | Pair8_ConstructN | (first, n): zero n 8-byte records and init their CString at +4 |
 | 0x004558B0 | 54 | HashIterator_Next4 | (iterator): next node of the same bucket or the next non-empty bucket (13 callers) |
-| 0x00455630 | 46 | PlayerRelations::GetRelation | (this, player, bit): 0 when the bit is set in mask[player] (+0), otherwise 1 + (bit set in the second mask array +0x80) |
+| 0x00455630 | 46 | PlayerRelations::GetRelation | (a, b): 0 friend when row[a] has bit b, 2 enemy when the forced row has it, else 1 neutral |
 | 0x004557C0 | 45 | PlayerRelations::Read | (stream): reads both 0x80-byte mask arrays |
 | 0x004557F0 | 45 | PlayerRelations::Write | (stream): writes both 0x80-byte mask arrays |
 
@@ -323,7 +323,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0045B210 | 4934 | AppSettings::ReadFromRegistry | (subkey): reads all settings from HKEY_CURRENT_USER with the current values as defaults |
+| 0x0045B210 | 4934 | AppSettings::ReadFromRegistry | reads ShadowQuality, HeroShadow, UnitShadow, BuildingShadow, FloraShadow, OtherShadow, LightingFreq... (global instance g_0x79BC70) |
 | 0x00456440 | 4832 | main |  |
 | 0x00459100 | 4734 | AppSettings::ReadFromIni | (ini path): reads every setting (Work path, Resources path, CD-ROM Path, DrawingTarget, VideoResolution, VideoColorDepthInBits, VideoZBufferDepthInBits, VideoRefreshRate, FullScreen, Joystick, Audio*, Camera*, shadow, fog, brightn... |
 | 0x0045EA20 | 4124 | MapInfo_Load | parses the map description text (CTextManager::OpenText / SeekSection / ReadLines) with the sections _allod, brief, _cage, _camera, _deploy, _deployangle, _exit, _figure, _maps, _passtime, _remove, _restrict, tornado, _view, _weat... |
@@ -409,7 +409,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x0046F1F0 | 10397 | Scene3ds_BuildFigures | (this, scene*, out): huge converter: queries the scene (vt slot 0x34), (re)allocates CFigure arrays (0x1c0 each, CFigure_ConstructN) and 3DS node records (0x120, Nodes3ds_ConstructN), aligned vertex / normal / uv vectors, dword ma... |
 | 0x0046AB20 | 824 | CObjectDesc::OnChunk | vt 0x73C5F0 slot 0 (ChunkFile reader): 0xB002 id +0x18, B003 +0x50, B004 name +0x3c, B006 +0x54, B007 +0x70, B008 +0x74, B009 vec3 +0x20, B00A quaternion +0x2c, B00C scale +0x60, B00D string list +0x78, B00E +0x58, B00F +0x40, B01... |
-| 0x0046CBC0 | 792 | UnitLogic_OnChunk | vt 0x73C720 slot 0: 0xBBBD0000 appends a 0x20 record (CArray +4) and reads it; 0xBBBC0001 / 0002 / 0003 ... fields (+0x48, +0x24 ...) |
+| 0x0046CBC0 | 792 | UnitLogic_OnChunk | (.mob UNIT_LOGIC 0xBBBC chunk into the 0x4c-byte MobLogicSlot): 0xBBBD0000 appends a point record (0x20: pos + guard-point/action records 0x14); 0001 byte (legacy: AggrMode -> 0 when > 0), 0002 byte +0x24 cyclic, 0003 dword +0 mod... |
 | 0x0046B7D0 | 774 | CLeverDesc::OnChunk | slot 0: 0xBBAB0001 +0x8c, 0002 string +0x90, 0003 count + 12-byte entries -> CArray +0xa0, 0004 count + 8-byte entries -> +0xb4, 0005 +0xc8, 0xBBAC0005 byte +0xcc; else CObjectDesc::OnChunk |
 | 0x0046C900 | 677 | UnitLogic_Write | (ChunkFile, logic +0x18): chunk 0xBBBC000B / 000C / 0002 / 000E / 000D / 0003 / 0004 / 000A / 0005 / 0007 / 0006 fields, then one 0xBBBD record chunk per entry of the record array (+8, 0x20 each) |
 | 0x0046E680 | 623 | UnitLogicRecords_Copy | (this = CArray of 0x20 records, src): destroys the current records, SetSize to the source count (0x45E180 ctor) and copies them (0x46EFA0) |
@@ -554,11 +554,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004BA510 | 101 | ObjHolder73D1C4::dtor | slot 2 of 0x73D1C4: the object +8 released (vt[4]); vt -> 0x73BB68 base |
 | 0x004BAA40 | 99 | TriggerTable_Reset | (name): the global table g_0x7AA608 (CArray g_0x7AA60C of 0xc records {id, CString, value}, count g_0x7AA610) destroyed (0x4BAEB0 per record) and cleared; g_0x7AA614 = 0; the CString g_0x7AA61C = name |
 | 0x004BA120 | 96 | ColorObj_SetRGB | (this, r, g, b): +0x14 = 0xff000000 / (r, g, b rounded * 255); vt[0](colour) |
-| 0x004BA1C0 | 85 | Class73D128::ctor | (this, a, x, y): vt = 0x73D128; GuardPoint_Init(this, a, x, y) |
+| 0x004BA1C0 | 85 | AiLogicGuard::Ctor | (this, pos[3], radius, stayTime): vt 0x73D128 then GuardPoint_Init; kind 0. Script UMGuard / UMGuardEx. Was Class73D128::ctor |
 | 0x004BA250 | 84 | Class73D128::Clone | slot 3 of 0x73D128 -> new 0x20-byte copy with +8 .. +0x1c (guard point pos, radius, stay time, +0x1c) copied |
 | 0x004BA5B0 | 84 | ObjHolder73D1C4::dtor_base | (this): the object +8 released (vt[4]); vt -> 0x73BB68 (scalar dtor body) |
 | 0x004BA8C0 | 84 | ObjHolder73D260::dtor_base | (this): the object +8 released (vt[4]); vt -> 0x73BB68 |
-| 0x004BA450 | 78 | ObjHolder73D1C4::ctor | (this, obj): vt 0x73D15C then 0x73D1C4; +8 = obj with refcount +4 ++ |
+| 0x004BA450 | 78 | AiLogicFollow::Ctor | (this, target): vt 0x73D15C then 0x73D1C4; +8 = target with refcount ++; kind 10. Script UMFollow. Was ObjHolder73D1C4::ctor |
 
 ## 0x4BB000 - 0x4D6000: WorldScript compiler (lexer, #define, Duplicate script) + spell name table
 
@@ -587,15 +587,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004D6E90 | 652 | Triangle_ClipByPlane | clip a triangle (3 five-float vertices) given the 3 signed plane distances; switch on sign mask (8 cases), emits 0/1/2 triangles via ClipVertex_Interpolate into globals g_0x7AA850/868 |
+| 0x004D6E90 | 652 | Triangle_ClipByPlane5 | Sutherland-Hodgman for one triangle of 5-float vertices, 3 signed distances, returns 0/1/2 triangles (second into param_2) |
 | 0x004D65E0 | 562 | SSCCmdArray_SetAtGrow | CArray of 0x94-byte SSCCmd entries: grow to index+1 (ctor 0x4CE920 range, dtor 0x4BF640), then assign element param_2 |
 | 0x004D6100 | 521 | SSCScriptDeclArray_Add | CArray<SSCScriptDecl,0xC0>::Add: grow by one element (dtor 0x4BE9D0 / ctor 0x4CEB80), assign element, returns index |
 | 0x004D63E0 | 406 | StringPairList::Serialize | vtable 0x73D4C0 slot 2: CArchive load/store of a list of (CString,CString) pairs, nodes of 0x10 bytes from CList free list |
 | 0x004D6970 | 406 | CServerSpecificManager::CreateByKind | slot 14 factory (kind): 0x46 CObject3DServer (0x20 bytes, ctor 0x51F240), 0x47 CMapObjectServer (0x94, 0x515610), 0x48 CUnitServer (0xb20, 0x545580), 0x49 CPlayerServer (0x5128, 0x66C540), 0x4b CTorchObjectSpecific (0x58, inline c... |
 | 0x004D6D60 | 298 | ClipBuf::AddTriangleClipFar | clip triangle against far plane (distances 1-p[4],1-p[9],1-p[14]) via Triangle_ClipByPlane, then add resulting 0/1/2 triangles with AddVertex |
 | 0x004D6340 | 153 | StringPairList_Clear | vtable 0x73D4C0 destructor/clear: walks bucket chain, releases two CStrings per node (+8,+0xc), frees node block +0x14 |
-| 0x004D6C50 | 148 | ClipBuf::AddVertex | append a 5-float vertex (x,y,z,u,v); xyz stored SoA in groups of 4 floats, uv in second array; returns index; count at +0x74 |
-| 0x004D6CF0 | 105 | ClipBuf::AddTriangle | append 3 vertices (stride 5 floats) via AddVertex, push the 3 resulting indices to the index array (+8), count +0x78 |
+| 0x004D6C50 | 148 | ClipBuf::AddVertex | append (x,y,z) into the SoA xyz array (16-float blocks) and (u,v) into the uv array; no vertex sharing; returns index |
+| 0x004D6CF0 | 105 | ClipBuf::AddTriangle | 3 x AddVertex + 3 indices (ushort) |
 | 0x004D6BA0 | 92 | CTorchObjectSpecific::~CTorchObjectSpecific | vt_CTorchObjectSpecific; Done, releases CString +0x24, base dtor 0x455930 |
 | 0x004D6840 | 79 | StringPairArray_Construct | default-constructs N elements of two CStrings (8 bytes each: both = empty string g_0x796E48) |
 | 0x004D68B0 | 41 | Quat_StaticInit_Identity3 | sets global quaternion g_0x7AA670 to (1,0,0,0) |
@@ -608,20 +608,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004D8000 | 1130 | SkyMesh_Build | (this, ..., params): initialises a sky mesh object from the given bounds / colour (+0x48 vec3, +0x54 vec3), ensures its vertex and index arrays are allocated, builds the dome geometry |
-| 0x004D74B0 | 911 | Clip_PolygonStage2 | (this, polygon): clips against the second plane pair (static buffers g_0x7AA790) and continues with Stage3 / emits |
+| 0x004D8000 | 1130 | ShadowProjector::Build | builds the prism from light dir, caster pos, radius a and 4 rectangle corners (SoA 3x4 matrix); sets u/v plane vectors +0x0C/+0x18, offsets +0x60/+0x64, lengths +0x6C/+0x70, cap plane +0x24/+0x68, step vector +0x3C; resets the 3 o... |
+| 0x004D74B0 | 911 | ShadowProjector::ClipStage2 | planes v>=0, 1-u>=0, 1-v>=0 then emit |
 | 0x004D9360 | 791 | CSkyObject::RebuildMesh | (this): converts the sky parameters to integers (ftol), resizes the vertex array +0x220 to +0x13c entries and fills the sky dome vertices |
-| 0x004D71D0 | 708 | Clip_PolygonStage3 | (this, polygon): clips against the third plane pair using static polygon buffers g_0x7AA7D0 / g_0x7AA810 and emits the triangle indices (+0x78 count) |
-| 0x004D7BD0 | 702 | Clip_PolygonStage1 | (this, polygon): clips against the first plane pair (plane +0x24..+0x2c, offset +0x68) with the static buffers g_0x7AA710 / g_0x7AA750 then runs Stage2 / Stage3 |
-| 0x004D9B80 | 594 | MatrixStack_Push | (this, matrix, index): pushes matrix * (current top) onto stack `index` (stack arrays at +0x14 + index * 8: {buffer of 0x40-byte matrices, depth}) (19 callers) |
-| 0x004D89A0 | 557 | SkyMesh_ReserveVertices | (this): resizes the aligned 16-byte vertex array to ceil((+0x74 + 3) / 4) quads |
-| 0x004D8780 | 531 | SkyMesh_ReserveIndices | (this, n triangles): resizes the aligned 8-byte index array to 3 n + current (+0x74), grow step 4..0x400 |
-| 0x004D9880 | 530 | Matrix4_Mul | (this = out 4x4, a, b): row-major 4x4 matrix product (40 callers) |
+| 0x004D71D0 | 708 | ShadowProjector::ClipStage3 | planes 1-u>=0 and 1-v>=0, emits triangles via ClipBuf::AddVertex |
+| 0x004D7BD0 | 702 | ShadowProjector::ClipStage1 | planes cap, u>=0, v>=0 then Stage3/Stage2 |
+| 0x004D9B80 | 594 | MatrixStack_Push | push param * top on matrix stack number index (stacks at CD3DLibrary+0x14 + 8*index: {buffer, depth}) |
+| 0x004D89A0 | 557 | ClipBuf::Finish | shrinks xyz array to ceil(n/4) blocks and index array to the real index count, pads unused lanes with vertex 0, detaches the 3 arrays from the ClipBuf |
+| 0x004D8780 | 531 | ClipBuf::ReserveForTriangles | (k): over-reserves 3k vertices in uv array (8 B each), 3k/4+1 blocks of xyz (64 B), 3k indices (2 B); count fields are SET to the reserved sizes |
+| 0x004D9880 | 530 | Matrix4_Mul | row-major 4x4 product out = a * b |
 | 0x004D8EB0 | 411 | ByteVector_Resize | (this, n, fill byte*): vector<byte>::resize(n) (shrinks or inserts fill bytes) |
 | 0x004D96E0 | 403 | CSkyObject::UpdateTransform | (this, owner, pos*): places the sky figure at the camera position (z - 16): rotates it about Z by game time * 0.00033, rebuilds its matrix (Quat_ToMatrix4) and pushes it onto the matrix stack |
-| 0x004D85F0 | 381 | Clip_TriangleToFrustumB | (this, v0, v1, v2): variant of Clip_TriangleToFrustumA using the static buffers g_0x7AA690.. |
+| 0x004D85F0 | 381 | ShadowProjector::ClipTriangleB | same for object triangles (scratch g_0x7AA690) |
 | 0x004D9110 | 344 | CSkyObject::ctor | CFigure-style construction (CObject3D base fields, vt_CFigure then vt_CSkyObject): zero the aligned arrays, CStrings |
-| 0x004D8490 | 330 | Clip_TriangleToFrustumA | (this, v0, v1, v2): copies the three vertices into static buffers g_0x7AA6D0.. with transformed coordinates (matrix +0xc..+0x20, +0x60/+0x64) and clips against the frustum planes (one-time static init) |
+| 0x004D8490 | 330 | ShadowProjector::ClipTriangleA | terrain triangle (3 float[3] pointers) -> 5-float vertices (x,y,z,u,v) -> 5-plane clip -> ClipBuf (static scratch g_0x7AA6D0) |
 
 ## 0x4DA000 - 0x4DB000: GameBuffer (stream)
 
@@ -693,7 +693,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004F16A0 | 4016 | CViewFrustum::CullBox | 4 KB: transform a box (corner extents +4..+0x10) by the current matrix stack (+0x24, depth +0x28) and test against the frustum planes; returns visibility class |
-| 0x004EA4A0 | 2855 | CRenderDevice::DrawQuadBatchClippedB | 2.8 KB: second clipped batch variant |
+| 0x004EA4A0 | 2855 | CRenderDevice::DrawShadowQuadBatch | SoA xyz + uv + index list -> transform, clip, 32-byte FVF 0x1C4 vertices (diffuse = param_7, specular = param_8, uv), z *= param_10, DrawIndexedPrimitive |
 | 0x004F93E0 | 2660 | CViewFrustum::BuildCornerRaysEx | 2.7 KB: extended variant of BuildCornerRays with rotation (0x448A10) |
 | 0x004E9A50 | 2632 | CRenderDevice::DrawQuadBatchClipped | 2.6 KB: clipped 2D quad/sprite batch with MMX/scratch buffers (DAT_007aee10), appends indices |
 | 0x004E4240 | 2623 | CEffectObj::UpdateParticles | 2.6 KB: per-frame update of an effect's particles from object transform (+0xA8..+0xB0 velocity, object +0x20), writes vertices with random jitter |
@@ -758,7 +758,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005179E0 | 1656 | CObject3D::BuildFromAnimation | (modelName): with the animation system +0x98: scale (0x50D7C0), 0x50D320(anim, modelName) loads it, 0x50CA50(anim, 0), 0x50D450; the part records +0x160 (0x38 each) and names +0x114 come from the animation's node list (+0x28 list,... |
 | 0x00510B80 | 1605 | CMapObjectClientSpecific::UpdateBuffEffects | (silent): the owner's buffs (+0x198) are reduced to kinds with their highest level; the effect records +0x28 (0x10: kind, level, effect, active) are synced: existing ones are rescaled (0x485480, level / 16 / effect +0x128); new on... |
 | 0x00518310 | 1175 | CObject3D::ComputeBoundsFromParts | min / max of every part's local position +0x1c + bounds offset +0x18c and extents +0x19c / +0x1a8 (parts farther than 1e9 skipped; the +0xe0 parts get their position zeroed); writes the centre +0x128, radius +0x134, min +0x138, ma... |
-| 0x005136D0 | 1157 | Unit_InitStatsFromProto | (placement, unitStats, protoName) -> 1: without a prototype (Units_FindProtoByName) Object_InitDefaultStats; otherwise fills the placement (+8 / +0xc HP max from proto +0x48, +0x10 from the units.udb entry +8, +0x14 / +0x18 MP fro... |
+| 0x005136D0 | 1157 | Unit_InitStatsFromProto | (placement, stats, protoName): fills the placement (HP/MP max from proto +0x48/+0x4c, regen from the udb entry +8/+0xc, armor pairs +0x20.. = udb +0x6c.. * proto +0x58) and the stats from the units db proto (0x120) and its udb ent... |
 | 0x00513DA0 | 1096 | Hero_InitStatsFromProto | (unitStats, protoName) -> bool: like Unit_InitStatsFromProto for a new hero (both current / max HP, MP, stamina set; warning when no hero record), then 0x524CD0(stats, 1.0), 0x525AF0, 0x524CD0 (recompute); FatalError "Can't find p... |
 | 0x0050EC30 | 1001 | CMapObject::ReadNetState | CMapObject slot 49 (seed name CUnitBase::ReadNetState) (mode): reads the net-state sections of +0x1c4 (the inverse of WriteNetState; DeltaReader::Read per field); CUnit / CLeverObject / CTorchObject extend it |
 | 0x00516DA0 | 866 | CObject3D::LoadModel | (modelName, part names CArray) -> bool: +0xa4 = name; animation +0x98: scale and 0x50D320(anim, name); without part names the animation lists them (0x50D920) and the figure +0xf0 = figure manager (world vt[23]()) vt[4](name, scale... |
@@ -776,8 +776,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0051CE60 | 4952 | CObject3DClientSpecific::Render | slot 20 (seed name UnitShadow::Render; 4952 bytes): draws the object's figure parts |
-| 0x0051B7E0 | 2337 | CObject3DClientSpecific::Draw | slot 19: draws the object: figure + texture sets, materials, wounds, shadows, lighting (fatal "CObject3DClientSpecific::Draw. SetTextu..."); 2.3 KB |
+| 0x0051CE60 | 4952 | CObject3DClientSpecific::RenderShadow | slot 20: builds the caster silhouette bitmap (64x64 A4R4G4B4) of one object, uploads it, builds the receiver mesh and draws it |
+| 0x0051B7E0 | 2337 | CObject3DClientSpecific::Draw | collects nearby lights (not the sun), edge alpha, lit draw, lighting cache flag 0x400 |
 | 0x0051C3D0 | 824 | CObject3DClientSpecific::CreateWoundsTexture | (name) -> bool: needs a primary set +0x20; the wounds texture +0xd8 = texture of kind 6 named name (texture manager g_0x7AF744: 0x692D30 find or 0x691D00 create; FatalError "Can't create wounds texture for object" after owner vt[1... |
 | 0x0051FF40 | 721 | PerksDb_Save | (this = perks database, path) -> bool: "Saving database." log; writes perks.pdb through the database writer (0x409AE0 / 0x40A000 framework: group records 0x5207D0 tag 1 and perk records 0x5208C0 tag 2) into the file opened by the ... |
 | 0x0051E5D0 | 476 | TexNameRefs_InsertRealloc | (this = vector of 0x14 TexNameRef, pos, value, n): reallocating fill-insert (size pool), old records destroyed |
@@ -797,20 +797,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00524560 | 1902 | UnitStats_Recompute2 | (stats, placement, unit; 1902 bytes, 9 callers = the main recompute): current attributes from the base (+0xc/+0x14/+0x1c) + perks 0xf / 0x17 / 0x18 / 0x19; placement pairs refreshed; buff values (+0x198 list: kinds < 0x28 -> per-k... |
+| 0x00524560 | 1902 | UnitStats_Recompute2 | (stats, placement, unit): the full recompute: attributes +0x10/+0x18/+0x20 = base + perk groups 23/24/25 bonus; sight pairs current = base (+0xb4.. = +0xb0.., +0xe4.. = +0xe0..), night sight +0xbc *= 1 + perk 15 %; buffs (max per ... |
 | 0x00520220 | 961 | PerksDb_Load | (this = perks database object {+0 vector<Record18> skills?, +0xc vector<Record44> perks}, path): opens the resource file (0x671280 / 0x671730 / 0x671B40 "perks.pdb"), parses it with the database reader (0x47A200 / 0x409AE0 / 0x409... |
 | 0x00527850 | 909 | UnitRecord_SkillValue | (hero record 0x108 bytes, skill, weaponEntry): the skill value from the record's attribute bytes (+0xc strength, +0xd dexterity, +0xe intelligence; base 25), skill bytes +0xdb/+0xdc, perk bytes +0xe3[skill] -> perk table bonus, an... |
-| 0x00526C70 | 895 | UnitStats_WeaponSkill | (stats, kind, unit): the effective skill for an attack kind: kinds < 5 / 7 / 8 / 0xb: skill byte (+0x6cb or +0x6cc) + perk bonus + for heroes the equipped weapon's (0x6A0110(weapon)) byte +0x7b / +0x7c + the governing attribute - ... |
-| 0x00525070 | 848 | UnitStats_ApplyDamage | (stats, unit, ?, hit, armorPlacement): the hit location group = +0x110 + hit+0x2c * 0xf4 (6 body parts: {+0 kind, +4 damage-type mask, tiers of 7 armor values, +0xe0 state (>= 2 alive), +0xe4 HP, +0xe8 max HP}); per damage type i ... |
-| 0x00522CE0 | 822 | UnitStats_PackToRecord | (stats, unit, record 0x108 = CUnit +0x330): the net / save form: +4 HP, +8 HP + accum - max, +0xc/+0xd/+0xe str/dex/int bytes, +0x10..+0x13 = +0x34..+0x40 * 127.5, +0x14 = +0x28 * 25.5, +0x15 = +0x30, +0x16 = +0x54 (short), +0xf =... |
-| 0x00528AB0 | 738 | UnitStats_RaiseSkill | (stats, skill index(this), delta, unit): when the unit's specific is a CMapObjectServer: skill byte +0x6cb[skill] += delta; flushes the HP accumulator (+0x700 -> +4 and +8); placement +0x2c (max HP) and +0x38 (max mana) recomputed... |
-| 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | (stats, kind(this) 0..2, delta, unit): same as UnitStats_RaiseSkill for the attribute skill bytes +0x6c8[kind] |
-| 0x00524CD0 | 712 | UnitStats_Recompute | (stats, arg -> +0x50): current attributes +0x10/+0x18/+0x20 = base +0xc/+0x14/+0x1c; +0xb4../+0xe4.. pairs copied from +0xb0../+0xe0..; +0xbc += perk(0xf)%; attribute perks +0x6ea/+0x6eb/+0x6ec (+0x44/+0x47/+0x4a) add to str/dex/i... |
+| 0x00526C70 | 895 | UnitStats_WeaponSkill | (stats, damageKind, unit): the attack skill: melee kinds 0..4: perk group = kind bonus + melee byte +0x6cb (+ heroes: weapon proto +0x7b + governing attribute - 25 from the skills table letter d/i/s); 5/6: archery byte +0x6cc + pr... |
+| 0x00525070 | 848 | UnitStats_ApplyDamage | (stats, unit, placement, hit, weapon): part = +0x110 + hit[11]*0xf4, state < 2 -> 0; per type i with dmg = hit[i]*hit[9] > 0: armor tiers (heroes 2..0, others 0) with state (+0x44+0x48t) > 1 absorb hit[10] * tierValue_i (wearing t... |
+| 0x00522CE0 | 822 | UnitStats_PackToRecord | (stats, unit, record 0x108 = CUnit +0x330): +4 exp, +8 exp + accum - spent, +0xc/+0xd/+0xe str/dex/int, +0x10..+0x13 stance speed mults * 127.5, +0x14 base speed * 25.5, +0x15 action speed, +0x16 carry max short, +0xf move type, +... |
+| 0x00528AB0 | 738 | UnitStats_RaiseSkill | (stats, skill, delta, unit): server units: byte +0x6cb[skill] += delta; the cost is added to the experience accumulator and flushed into total +4 and spent +8; max HP/mana and parts refreshed; Recompute2 |
+| 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | same for the attribute skill bytes +0x6c8[kind] |
+| 0x00524CD0 | 712 | UnitStats_Recompute | (stats, carriedWeight): older/simpler recompute (camp / client side): attributes + perk bytes +0x6ea..+0x6ec, +0x44 = -2, part max HP rescale with the health perk, +0x50 = arg, +0x54 carry max, +0x58/+0x5c limb factors, +0x28, +0x... |
 | 0x00520FA0 | 631 | vector18_InsertN | STLport vector<Record18>::insert(pos, n, value) |
-| 0x005254B0 | 618 | UnitStats_ApplyHit | (stats +0x1e0, unit, placement, hit, weapon): applies a hit to the stats; returns nonzero when the unit dies (CUnitServer::TakeHit) |
-| 0x005239B0 | 614 | UnitStats_UpdatePlacementMaxima | (stats, unit, dt): when the unit's specific is a CMapObjectServer (0x39): accumulates HP (+0x700 += dt * frame), placement+0x2c (max HP) = min(1?, MaxHP formula * buff speed ratio) (note: capped at 1.0 -> a fraction), placement+0x... |
+| 0x005254B0 | 618 | UnitStats_ApplyHit | (stats, unit, placement, hit[15], weapon): location > 6 -> 0; sets statFlags +0x6f8 bit 1 (head hit, location 0) / bit 2 (hit[5] electrical?); per damage type i: eff_i = max(0, hit[9]*hit[i] - hit[10]*placementArmor[i] (+0x24+8i) ... |
+| 0x005239B0 | 614 | UnitStats_TickExperienceAndMaxima | (stats, unit, dt): server units only: experience accumulator +0x700 += dt * rate (flushed into +4 when positive), max HP / max mana recomputed from the (new) experience, parts rescaled, HP derived (level growth over time?) |
 | 0x00521220 | 607 | vector44_InsertN | STLport vector<Record44>::insert(pos, n, value) (grows through 0x5218E0) |
-| 0x00528050 | 544 | Perk_ComputeCost | cost of a perk for the stats: perk index % 3 picks a formula, logarithmic cost via atan2 helpers, rounded |
+| 0x00528050 | 544 | Perk_ComputeCost | (stats, record): base = trunc(50*(1.61^(c/5) - 1.61^(c'/5))) * 1.95^N (N = owned ability levels), rounded to 1 significant digit (2 when the leading digit < 4) (see docs/game-memory.md) |
 
 ## 0x529000 - 0x52E000: CTree / CBuilding / CStone / CStuffObject / CTrapObject / CMagicTrapObject (areas, cast points, targets, CastAtTargets) / CLeverObject (SwitchState: AI map blocking, animation phase) / CTorchObject + specifics (light, effect, looping sound) + units.udb / prototype / hero record field serializers + UnitStats_BoostMax*
 
@@ -844,14 +844,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005321C0 | 1160 | CFakeUnit::Write | slot 10: writes a unit to the stream (CMapObject::Write, specific write, name, placement, stats, mover) 1.2 KB |
 | 0x0052EC70 | 798 | CUnit::WriteNetState | CUnit slot 50: CMapObject::WriteNetState, then sections 4 = +0x330 (0x523720), 5 = 0x52EC10 stats (4 dwords, 1 dword (-1 if flags&0x40000000), 6 dwords), then if server (specific typeId 0x3e) specific->vt[29](); 6 = +0x264,+0x268,... |
 | 0x0052FDF0 | 723 | CUnit::GetAttachPoint | CUnit slot 53 (out): if !vt[55]() -> local pos. Else anim/figure state = 0x518F80(this, +0x254 byte); by its +0x14/+0x18 bit fields picks forward (0x40D940 of quat +0x34) * +0x144 or right (0x40F560) * +0x148 etc.; if world->vt[26... |
-| 0x00530CD0 | 706 | CUnit::HitChanceVs | (target unit, hitLocation): 100 for non-units; player units attacking from behind (facing dot < -0.5, melee) get the backstab path; chance from both vt[50] attack params (own[8] / (target[8] * 20)), ranged weapons lose 2 * distanc... |
+| 0x00530CD0 | 706 | CUnit::HitChanceVs | client estimate for the HUD (target unit, hitLocation): backstab path for player units behind the target (facing dot < -0.5, melee only); chance = own AttackParams[6] - (ranged ? 2*dist/10) + (no backstab ? own[2]/(target[2]*20)),... |
 | 0x00532AC0 | 639 | CUnit::DropBrokenItems | armor +0x480[] and weapons +0x440[] with durability (+0x20) < 1 are unequipped (specific vt[27] / weapon slot shift, +0x44c = 0, net 5 / 6 / 4, specific->vt[25](-1)) and handed to the player's inventory (0x665470(player, list, 1))... |
-| 0x00530570 | 442 | CUnit::UpdateMoveParams | specific->vt[45]() (UpdateSpeedFactors); server (0x3e): +0x324 = the anim speed class (server +0x24c / +0x24e / +0x248 by stance), +0x32c = max(+0x144, +0x148) * 0.9 (+0.2 for player units, cap 2.0; 0.01 for huge protos > 1.5), +0... |
+| 0x00530570 | 442 | CUnit::UpdateMoveParams | specific vt[45] (UpdateSpeedFactors); server: +0x324 move class = server +0x24c (crawl) / +0x24e (sneak) / +0x248 (walk/run) by stance, +0x32c radius = max(+0x144,+0x148) * 0.9 (+0.2 player units, max 2.0; 0.01 for big protos with... |
 | 0x00532860 | 435 | CUnit::GetAttachPoint2 | (out pos[3]): kind-0x32 units: the bone named at 0x78F95C (0x516A80 / 0x5188B0); others: the specific's point (0x535770) or local pos + offset +0x128..+0x130; with an anim state: pos + forward * a + right * b (0x401DE0 / 0x40CDC0) |
 | 0x00532E70 | 434 | Segments1C_Serialize | slot 2 (CArchive): load / store of the 0x1c-byte segment CArray (0x708B3D count, 0x708B0F / 0x708832 / 0x708941) |
 | 0x0052E400 | 396 | CUnit::Init | slot 2 Init() -> bool (root layout) |
 | 0x0052E5B0 | 392 | CUnit::ResetFields | resets the CUnit-level fields (called by the ctor and the dtor) |
-| 0x00530A60 | 391 | CUnit::IsBehindTarget | (target): 0 without a player; the weapon in slot +0x26c (client: from the player's inventory record 0x6621B0(player+0x70, id)+0x730[]; server: +0x440[]) must not be ranged (5 / 6); returns 1 when the target's facing (quat +0x34) d... |
+| 0x00530A60 | 391 | CUnit::IsBehindTarget | (target): player units only, melee weapon: 1 when the target's facing (quat +0x34) . direction to this unit < -0.5 (attacking from behind = backstab) |
 | 0x00531220 | 387 | CUnit::AddObject4A0 | (obj): refcount++, appended to the CArray +0x4a0 (count +0x4a4, cap +0x4a8, step +0x4ac); MarkNetDirty |
 
 ## 0x533000 - 0x53A000: CUnitClientSpecific
@@ -861,18 +861,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00536670 | 1970 | CUnitClientSpecific::BuildSkinTextures | (mode, out): composes the body texture: mode 0 "mo%ds"/"prot%ds" (size 0x80) from the armor +0xa0 (0x6A3480 item texture name) and the weapon (0x6A0AA0); mode 1 "mo%dp"/"prot%dp" (0x100): "%sskin_%.2d.mmp" base skin + the items of... |
-| 0x00534B60 | 1724 | CUnitClientSpecific::UpdateAnimSounds | per animation time step (+0x2c previous, +0x30 previous anim rec): plays the animation's sounds through the sound system g_0x7AF784 (0x6B8600 play 3D at the unit pos, 0x6B94A0 stop): footsteps at the anim's step times (+0x30[4]) w... |
-| 0x00537500 | 1661 | CUnitClientSpecific::PlayAnimation | slot 46 (anim kind, speed, flags byte): base name from the proto 0x530970(owner)+0x118; for kind-0x32 units the equipment +0xa0[] (via tables 0x73EC80 / 0x73EC78 per kind, item db g_0x7C86D8 0x50-byte entries +4 name) changes the ... |
+| 0x00534B60 | 1724 | CUnitClientSpecific::UpdateAnimSounds | per frame: plays the animation's sound events (3D at the unit) when the animation time crosses them; the miss byte of the anim entry selects the miss sound |
+| 0x00537500 | 1661 | CUnitClientSpecific::PlayAnimation | slot 46 (kind, speed, flags): resolves the animation set name from the proto +0x118 and the equipment (tables 0x73EC80 / 0x73EC78) and plays it (client-only cosmetic animations) |
 | 0x00535CB0 | 1095 | CUnitClientSpecific::BuildArmorModelNames | (unit, armor ids vector, out, ...): for every armor item (item db g_0x7C8718 +0xc slot kind) builds the model name "hr.%.2d.armor%.2d" / "%s.armor%.2d" / "hr.%.2d" from the slot name table at 0x73EC24 (0x1c-byte strings), collects... |
 | 0x005381B0 | 1006 | CUnitClientSpecific::Equip | slot 26 (item id; hi word = index into the item database g_0x7C8718 (200-byte entries; +0xc = equipment slot 0..6)): +0xa0[slot] = id and attaches the item's figure / texture to the owner's figure (figure manager g_0x7AF5F4, name ... |
-| 0x00534760 | 953 | CUnitClientSpecific::GetAnimSoundName | (anim rec, t0, t1, out string, miss): sound name for an animation event: "weapons\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x005341A0 | 756 | CUnitClientSpecific::Update | slot 6 (per client frame): owner+0x260 == 1 -> 0x5C7CB0(move state +0x38, 1); owner+0x25c == 1 -> owner+0x258++; anim state from owner+0x98 (+0x40 current anim: +0x14 bit fields) -> 0x537CB0(this, idle?); hidden flag (owner flags ... |
+| 0x00534760 | 953 | CUnitClientSpecific::GetAnimSoundName | (anim record, t0, t1, out, miss): the sound of an animation event (weapon swing / hit / miss sounds "weapons\\..") |
+| 0x005341A0 | 756 | CUnitClientSpecific::Update | per client frame: paused (+0x260) shifts the move request ids, looping (+0x25c) advances +0x258; weapon parts hidden while the current anim has no weapon bits; hidden flag (owner flag 8) by anim class / death; fade +0x78 += 1/15 p... |
 | 0x00535850 | 706 | CUnitClientSpecific::ReplayMove | (this, time, dt): advances the client-side move interpolation (slots 40 / 41) |
 | 0x005385A0 | 695 | CUnitClientSpecific::Unequip | slot 27 (slot 0..6): +0xa0[slot] = -1 and restores the base figure part (figure manager g_0x7AF5F4, name +0xa4, table 0x73EC24 + 0x1c * kind) |
 | 0x00536300 | 682 | CUnitClientSpecific::BuildEquipmentList | (mode, out CArray<12-byte>): mode 0: two entries {0x3005 armor id +0xa0, item db +0xc} and {0x3004 weapon id, weapon db +0xc}; else 8 entries: {0x32, owner +0x18, -1} + items of +0xa0..+0xb8 (0x3005, item db +0xc) |
 | 0x005370F0 | 622 | CUnitClientSpecific::BuildDamageTextures | builds the wound overlay texture: per damaged body part (GetBodyPartDamageLevels) adds "%s%sw%d.mmp" to a string list and composes "mo%dw" through 0x693180 (texture compose, 0x4444 format); heroes use 0x80 size |
-| 0x00536EA0 | 587 | CUnitClientSpecific::GetBodyPartDamageLevels | (out byte[6]*): per body part of the owner's packed record (+0x374 + i*0x1c: +4 HP short / +6 max short): 0 fine (>= 0.75), 1 (>= 0.33), 2 (< 0.33), 3 (<= 1/max); heroes: armor items (+0xa8 / +0xa4 / +0xa0 ids -> item db g_0x7C871... |
-| 0x00538960 | 579 | CUnitClientSpecific::GetAttackParams | slot 50 (out[8]): client mirror of CUnitServer::GetAttackParams from the net copies owner+0x349/+0x34b/+0x34c/+0x34d/+0x34e (bytes) and the weapon ids +0xbc[+0x26c] (item db 0x6A2A50 / 0x6A2AE0 ranges, 0x6A2B80 kind, 0x6A2C60 skil... |
+| 0x00536EA0 | 587 | CUnitClientSpecific::GetBodyPartDamageLevels | (out byte[6]): from the record parts (+0x374 + 0x1c i: state, +4 HP short, +6 max): 0 >= 75 %, 1 >= 33 %, 2 < 33 %, 3 <= 1/max; heroes: armor items (db +0xb4 flag) hide the covered parts; others mirror the limb pairs; returns 1 wh... |
+| 0x00538960 | 579 | CUnitClientSpecific::GetAttackParams | slot 50, client mirror from the packed record: [6] = +0x349 (attack), [7] = +0x34b (defence), [2] = +0x34c (weight), [3] = +0x34d, [4] = +0x34d + +0x34e (damage), [5] = +0x34a (spread); armed heroes: from the item id +0xbc[+0x26c]... |
 | 0x00535590 | 480 | CUnitClientSpecific::v25_SetWeaponFigure | slot 25 (weapon index 0..3): the weapon id +0xbc[idx] vs the current +0x26c: attaches the weapon figure (figure manager g_0x7AF5F4 0x5AA5F0 by owner name +0xa4 ...) |
 
 ## 0x53A000 - 0x545000: units database (units.udb prototypes)
@@ -902,20 +902,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00547890 | 2850 | CUnitServer::TickMovement | (2850 bytes; the walking tick for states 0 / 1): Mover::Predict? advances the move state +0x3c (world speed factor); first tick: the stance anim set (GetStanceAnimSet) becomes the animation (+0x147); pending anim change +0x160 (Bu... |
-| 0x0054A900 | 2285 | CUnitServer::DispatchQueuedOrder | (2285 bytes; the order state machine): returns 0 when nothing is queued; a queued order while in stance 4 (sitting?) first stands up (attack mode 2, ApplyPendingStance). By the queued kind: 0 -> becomes current, wait state (SetSta... |
-| 0x0054D140 | 2079 | CUnitServer::ApproachTarget | (2079 bytes; the chase logic for combat orders): owner+0x43c = 1; with a target object: when it is dead / out of reach (OrderReachDistance) / not castable: for a moving target predict its position (vt[52](t)) over the remaining at... |
-| 0x0054CA40 | 1788 | CUnitServer::PlanActionApproach | (order, out path/plan): the core approach planner for orders 3..6 (1788 bytes): builds the action anim queue (ChooseAttackAnim / BuildActionAnimQueue / 0x550620 for spells) to know its duration; computes the reach radius (OrderRea... |
-| 0x0054F970 | 1728 | CUnitServer::ChooseAttackAnim | (hit record, b, c, target unit): picks the hit location (random table when +0x194 == 6, via UnitStats_PickHitLocation on the target's stats) and the vertical band of the strike from both units' heights (0x530280 terrain z + 0x5305... |
+| 0x00547890 | 2850 | CUnitServer::TickMovement | per tick for states 0 (walking a path) and 1 (turning): Predict the curve at the world tick, test the entered cell (CanUnitMoveTo, FindOverlappingUnit: standing blocker = re-path, walking blocker = wait unless faster, follow-chain... |
+| 0x0054A900 | 2285 | CUnitServer::DispatchQueuedOrder | the order dispatcher (queued +0x1b4 -> current +0x190): nothing queued (kind 9) -> 0; sitting (stance 4) and not kind 11 -> stand up first (wanted stance 2, ApplyPendingStance); run byte +0x1d4 with stance != 2 and no reachable co... |
+| 0x0054D140 | 2079 | CUnitServer::ApproachTarget | chase step of combat orders (every tick while out of reach): uniform cost table (+0x43c = 1), predicts the target over the attack window, waits (state 2) when it will come into reach, else re-paths every 16 ticks to the intercepti... |
+| 0x0054CA40 | 1788 | CUnitServer::PlanActionApproach | (order, out action record +0xc4): builds the action animation (ChooseAttackAnim kind 3 / BuildSpellAnimQueue 4,5 with cast time spell+0x4c*15/actionSpeed / BuildActionAnimQueue 6,10) to know its duration D; reach = OrderReachDista... |
+| 0x0054F970 | 1728 | CUnitServer::ChooseAttackAnim | (hit, queue, out duration, target): hit location: order param 6 = random from a 20-entry table (0 x2, 1 x6, 2 x3, 3 x3, 4 x3, 5 x3) else the param, resolved by UnitStats_PickHitLocation on the target; the strike height band from b... |
 | 0x005561C0 | 1427 | CUnitServer::Write | slot 10 Write(stream) (root layout: save stream, vt[2] write) |
-| 0x00550100 | 1298 | CUnitServer::BuildActionAnimQueue | (queue, out duration*, kind, flags): the animation record for an action: kind != 6 -> key = attack kind mask / flags / 0x90000; kind 6 (interactions): flags 0 / 1 / 2 -> keys 0x5440000 / 0x5040000 / 0x4c40000, 0x22800 (talk?) -> 0... |
-| 0x0054E600 | 1203 | CUnitServer::ValidateQueuedOrder | (order, check kind 4/5/6): returns 0 when the queued order cannot be executed (callers clear it) |
+| 0x00550100 | 1298 | CUnitServer::BuildActionAnimQueue | (queue, out duration, kind, flags): attack: key = attack kind mask / flags / 0x90000; kind 6 interactions by param (0x5440000 / 0x5040000 / 0x4c40000, talk 0xc000000..); fallback 0x2890000; stance transitions around it; *duration ... |
+| 0x0054E600 | 1203 | CUnitServer::ValidateQueuedOrder | (order, msg): non-player units: always 1 (kind 6 excepted); player units: FindInteractPoint (fails -> SendMsg0E_MoveState kind 3 flag 1, 0); CanReachTarget and IsOrderTargetReachable -> SendMsg0E_MoveState(kind 3), player message ... |
 | 0x00555D10 | 1198 | CUnitServer::Read | slot 9 Read(stream) (root layout: save stream, vt[1] read) |
-| 0x0054A150 | 1104 | CUnitServer::ApplyPendingStance | when the wanted stance / attack mode (+0x170 / +0x174) differs from the current (+0x168 / +0x16c): removes the owner from the grid g_0x7B01F4, tests the new stance against the passability map (0x5BA6E0 / 0x5BA830 on g_0x7B00D0), M... |
-| 0x00553F40 | 1097 | CUnitServer::TakeHit | slot 20 (hit[15 floats], attacker CUnit or 0, attackerSide?): logs "Unit <id> was attacked by <id> / xz", "skill", "damage", "backstab with power" (hit[0xd] > 1), "called shot" (hit[0xe]), "destHL" + hit location hit[0xb] (0 Head,... |
-| 0x0054F000 | 1092 | CUnitServer::ExecuteInteraction | (target) for kind-6 orders: talk (0x18a95) to a unit: 0x5942D0(world, target, player), 0x5935C0(world, target id), noise; skills 0 (science) / 1 (stealing) / 2: logs "Unit <id> is using skill <science/stealing/..> his_skill = .. t... |
-| 0x00550620 | 1075 | CUnitServer::BuildSpellAnimQueue | (queue, out duration*, order kind, castTime): the spell-casting animation: kind-0x32 units: key = attack kind mask / 0xc0000 (/ 0x28e0000 in stance 1; sneaking 0xd0000; random 0x2800000 / 0x1800000 side), others 0x2890000; when th... |
-| 0x0054D960 | 1033 | CUnitServer::ExecuteCombatOrder | (order kinds 3..6 in range): +0x18e = 0; weapon switch; path/reach check (0x54CA40) else 0x54D140 (approach); talk orders (6 / 0x18a95) on an aggro target are refused; attack mode +0x268 forced (1 for spells of kind-0x32 units in ... |
+| 0x0054A150 | 1104 | CUnitServer::ApplyPendingStance | when +0x170/+0x174 (wanted stance / combat mode) differ from +0x168/+0x16c: tests the new stance on the passability map (refused -> restore, message 0xd, 0); accepted: walking units are stopped (state 6), the transition animation ... |
+| 0x00553F40 | 1097 | CUnitServer::TakeHit | slot 20 (hit[15], attacker CUnit or 0, attacker object): unresolved hits (/hit[8]/ finite, spells) are rolled here (ResolveHitChance); alive: ActivateObject + combat log; damage is skipped for player units when their player +0x108... |
+| 0x0054F000 | 1092 | CUnitServer::ExecuteInteraction | (target) at the action end of kind 6: talk (0x18a95): world dialog start + noise; param 0/1/2 skills (science / stealing / ?): log own vs target AttrSkillWithWeapons(kind 0); failure -> AggroTable_Add(owner, target); science on an... |
+| 0x00550620 | 1075 | CUnitServer::BuildSpellAnimQueue | (queue, out duration, kind, castTime): casting key = attack kind mask / 0xc0000 (variants per stance, random side); pads with a hold entry (0xff, castTime - anim) when the animation is shorter than the cast time (spell +0x4c * 15 ... |
+| 0x0054D960 | 1033 | CUnitServer::ExecuteCombatOrder | runs a combat/interaction order (kinds 3..6) once the target is in reach: weapon switch; PlanActionApproach(order, +0xc4) fails -> ApproachTarget (chase); talk on an aggro target -> drop; spells of kind-0x32 units in crawl -> want... |
 
 ## 0x557000 - 0x55E000: CUnitServer helpers (no strings)
 
@@ -945,8 +945,8 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00561E50 | 2133 | CWorldClient::Init | slot 2 Init() -> bool (root layout) |
-| 0x00563930 | 1587 | CWorldClient::LoadDayLightTable | reads an ini (0x695B80 / 0x695BF0 on a path built from the zone name) with the sections "sunlight", "ambient" and a third one ("%s" format): every key = hour -> colour (bytes / 255) stored in the 24-entry rgba tables +0x22c (sunli... |
-| 0x00560820 | 1519 | CBridgeManager::AddBoxFaces | (owner id, part bounds record, pos, quat): rotates the 8 corners of the part's box (+0x14.. extents around +0x2c, offset +4) and its 6 face normals by the quaternion, translates by pos, and CBridgeManager::AddQuad for each of the ... |
+| 0x00563930 | 1587 | CWorldClient::LoadDayLightTable | config/lights[cave]<world>.ini [sunlight]/[ambient]/[sky] -> 24-hour tables |
+| 0x00560820 | 1519 | CBridgeManager::AddBoxFaces | 6 faces of a part box -> AddQuad |
 | 0x005641F0 | 1478 | CWorldClient::v6 | slot 6 (root layout; default returns 0) |
 | 0x00563290 | 1029 | CWorldClient::Done | slot 3 Done() (root layout) |
 | 0x005612F0 | 962 | CWorldClient::ctor | CWorld::ctor, then: +0x8c object (vt 0x73C400, 0x56FFE0), +0xa0 CArray (vt 0x73F53C), +0xb4 heroes list, +0xb8 objects list, +0xbc visible CList (vt 0x73F530), +0xd8 id hash (0x572160), +0xf0 / +0xf4 lists, +0x108 (0x5722C0), +0x1... |
@@ -966,11 +966,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00568800 | 4459 | CWorldClient::PrebuildUnitSkinsAndModels | (vector of 0x24-byte model records, vector of 0x3c-byte unit records): per unit record (proto index -> units database g_0x7AF358 / g_0x7AF398 entry +0xe8 model prefix): the equipment entries (Hero_BuildEquipmentEntries full / shor... |
-| 0x0056AFE0 | 3909 | CWorldClient::RenderObjects | needs the terrain +0x180 with data (+0x100): clears the global object list g_0x7AF5B4 and the render buckets g_0x7AF508..g_0x7AF5AC; the camera position (0x40FB20 on +0x210) selects the grid +0x124 cells within 100 units (clamped ... |
+| 0x0056AFE0 | 3909 | CWorldClient::RenderObjects | object / unit / print / SHADOW pass ordering (shadow pass last, state block g_0x7AEDD8, z write off) |
 | 0x00567AB0 | 2277 | CWorldClient::LoadZone | (reader): 0x57F150(); the sound system +0x1cc paused (0x6B7740 / 0x6B71C0); reads +0x64, the zone and map names, the zone exits (ZoneExitArray_SetSize + 0x4E5750 each), the indoor flag +0x6e0 and the unit save records (UnitHashes_... |
-| 0x00566360 | 2200 | CWorldClient::UpdateDayLight | when the renderer (0x500960 +4 bit 0) is active: UpdateZoneExitEffectStates; indoor (+0x6e0 == 1): the hour-0 colours (+0x22c sun, +0x3ac ambient or 0.8 * sun, +0x52c fog) become the current light +0x6cc / +0x6ac / +0x6bc with a f... |
-| 0x0056C750 | 1721 | CWorldClient::RenderShadowVolume | (light dir, pos, a, mat, b, c, d, onBridge, drawObjects): sets up the projection g_0x7AF488 (0x4D8000), draws the terrain shadow (0x6CCF20 on +0x180) unless the point is on a bridge quad (CBridgeManager::IsOnQuad); with drawObject... |
-| 0x0056A990 | 1535 | CWorldClient::ClassifyCellObjects | (cell list, view matrix, time, now, isGlobalList, includeHeroes): for every object with stats (+0x94): units on a cell list are moved to the global list g_0x7AF5B4 (unless hero units when !includeHeroes); on the global list units ... |
+| 0x00566360 | 2200 | CWorldClient::UpdateDayLight | hour -> sun direction/colour, ambient, fog, sky; hourly CTerrain::SetSunLight |
+| 0x0056C750 | 1721 | CWorldClient::RenderShadowVolume | builds the receiver mesh (terrain cells in the prism + dead object branch) into the caller's xyz/uv/index arrays |
+| 0x0056A990 | 1535 | CWorldClient::ClassifyCellObjects | buckets draw lists and shadow lists (g_0x7AF528..558) using IsShadowVisible |
 | 0x00569E40 | 1327 | CWorldClient::Render | UpdateDayLight; renderer flushes (0x4E7840 / 0x4E7A40 on g_0x7AF080); the camera matrix (0x4F0EF0 on g_0x79B2A8) is pushed on the view stack (g_0x7AF068 +0x5c / +0x60) and the transforms set (0x4D9B80 x2, world stack +0x3c); flag ... |
 | 0x00566F70 | 1167 | CWorldClient::CreateHeroUnits | (hero record array): per record: the "hr.%.2d" stat strings list (prototype 0x514880 from the model name), a unit created by the figure manager (vt[19] -> vt[23](0x32, record id)), proto index +0x18 from the units database (0x5149... |
 | 0x0056BF30 | 1053 | CWorldClient::PickTerrainPoint2 | (out pos, screen x, screen y): PickTerrainPoint variant that samples the terrain height directly (0x6C8680 on +0x180) instead of vt[29] |
@@ -1072,7 +1072,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x005A3800 | 4903 | CFigure::BuildMorphed | CFigure slot 21 (data**, s, d, h): +0x158/+0x15c from the header, then every vertex / normal / bone from the 8 morph components interpolated with the 3 coefficients ((b - a) * t + a) (3845-4903 bytes) |
 | 0x005A2500 | 4793 | CFigure::v20_ParseFIG | CFigure slot 20 (data**, 3 floats; 4793 bytes): parses the .fig blocks (see docs/file-formats) |
-| 0x005A7A70 | 4204 | CFigureClientSpecific::RenderLit | (ctx, lights {array, count}, light params, ambient, out RECT, blend texture a, b) -> 1: skipped when the figure is flagged 0x80 or culled (frustum 0x4F16A0); animated texture frame; without precomputed lighting (flag 0x100 / 0x10)... |
+| 0x005A7A70 | 4204 | CFigureClientSpecific::RenderLit | light gathering/precompute, calls TL pipeline light kernel, draws mesh |
 | 0x005A5C70 | 4094 | CFigure::LoadFig8 | slot 20: loads/interpolates a FIG8 mesh (32-byte header, bounds, raw SoA buffers, morph deltas); 4 KB |
 | 0x005A4D60 | 3845 | CFigure::LoadFig6 | slot 21: loads/interpolates a FIG6 mesh (raw SoA buffers, bounds, morph deltas) from the buffer with a morph factor; 3.8 KB |
 | 0x0059FDF0 | 3351 | CFigure::AccumulateWorldBounds | (out min x / y / z, max x / y / z): the 8 corners of the local box (offset +0x18c plus min +0x19c / max +0x1a8) transformed by the figure matrix (0x401570) extend the min / max (skipped for figures farther than 1e4 units) |
@@ -1092,18 +1092,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x005B43C0 | 6705 | CAIMap::Load | (map name): opens the <name>.mp resource (0x671280 / 0x671730), reads the map header (magic 0xce4af672, 0x26 bytes: size, scale 511 / height, counts), allocates the slope cost vectors (0x3ff entries), the terrain / flags / occupan... |
-| 0x005B6A80 | 3438 | CAIMap::StampObject | (obj, remove): units: FootprintStamp_GetCached by the radius (+0x32c) added to / removed from the stamp map (+0x12a4 obstacle map when the unit vt[54] says "flying / passable", else +0x27c terrain map) at cell - 8; other objects: ... |
-| 0x005B9C90 | 1881 | CAIMap::FindLongPath | (unit, x0, y0, x1, y1, mover, allowRetry, maxLen): nav grid path (NavGrid_FindPath with the mover's blocked cells +0x70); when the nav path is long enough: clears the occupancy around it, converts the nav cells to their best sub-c... |
-| 0x005BB350 | 1454 | CAIMap::FindPath | (unit, target pos, mover, maxLength, minDist): the main path request: removes the unit from the collision map, snaps the target to a free cell (CAIMap::FindFreeCellNear), stores it in the mover (+0x58 / +0x60); same cell -> single... |
-| 0x005BAC10 | 1397 | CAIMap::FindFreeCellNear | (unit, in/out pos (converted to cell units), checkRegion, minDist): when the unit cannot stand at pos (or checkRegion): spiral search along 8 directions (rotated by 45 degrees towards the unit) with growing distance (from minDist ... |
-| 0x005B8FA0 | 1256 | CAIMap::UpdatePassability | (x0, x1, y0, y1): recomputes the passability nibbles of the cells in the rectangle (+3 margin) for the 8 unit classes: CAIMap::GetCellStepCost per cell into the scratch byte grid (+0x26bc), then into the terrain cell dword (nibble... |
-| 0x005C46C0 | 1247 | CAIMap::ChooseExitDirection | (unit, nav world, path CellList, lastDir, straightness): for a path of at least 3 nav cells: step query for the unit (+0x14), stamp byte +0; computes the cost of leaving the first cell in each of the 8 directions (passability / sl... |
-| 0x005C25D0 | 1105 | PathFinder::ShiftWindow | (x0, y0, x1, y1, keepReached): moves the window (PathFinder::SetWindow) by less than 31 cells, copies the old node costs into the new window positions (Grid14_CtorCopy of the old grid), rebuilds the open lists: either every unreac... |
+| 0x005B6A80 | 3438 | CAIMap::StampObject | (obj, remove): units (type 0x50): FootprintStamp (radius) into the StampMap +0x12A4 (obstacle grid) when CUnit +0x278 (walking) is set, else +0x27C (terrain byte +8), not at all when +0x274; other objects: body-part boxes sampled ... |
+| 0x005B9C90 | 1881 | CAIMap::FindLongPath | (unit, x0, y0, x1, y1, mover, allowRetry, maxLen): nav path (NavGrid::FindPath), each nav cell -> its representative tile, one PathFinder walks the waypoint chain with ShiftWindow, direction codes into the occupancy grid, path rea... |
+| 0x005BB350 | 1454 | CAIMap::FindPath | (unit, goal[3] (z = ignored, kept at mover +0x68), mover, maxLength, minDist): the path request: reject far goals, remove the unit from the collision map, FindFreeCellNear, same tile = 1-cell path, octile distance < 25 tiles = two... |
+| 0x005BAC10 | 1397 | CAIMap::FindFreeCellNear | (unit, in/out pos (tile units), checkRegion, minDist): returns the goal when the unit can stand there (nibble != 0 and CanUnitStandAt); else searches along the 8 rotated directions of the unit-goal line at growing distance (from m... |
+| 0x005B8FA0 | 1256 | CAIMap::UpdatePassability | (x0, x1, y0, y1): recomputes the 8 class nibbles of the rectangle (+3 margin): GetCellStepCost per tile into the scratch grid, nibble copy, erosion by the class footprint list (+0x204 5 tiles, +0x218 13, +0x22C 29), MarkSteepCells... |
+| 0x005C46C0 | 1247 | CAIMap::SmoothPathStart | (unit, nav world, path, lastDir, straightness): for paths >= 3 cells re-plans the first cells with a turn penalty from the unit's facing (600 per 45 deg beyond the first, diagonals (1 - straightness) * 2048) over the portal tables... |
+| 0x005C25D0 | 1105 | PathFinder::ShiftWindow | (x0, y0, x1, y1, keepReached): slides the 34 x 34 window (< 31 tiles) keeping the node costs / back directions of the overlap, re-opens the nodes at the new border; used to chain waypoints in FindLongPath |
 | 0x005B8BA0 | 1011 | CAIMap::GetCellStepCost | (out info {zmin, zmax, cost, slopeClass, free, flag}, unitClass, height, x, y): cost of entering a cell: special cells (flag 0x100 with no water bits) use the material's packed nibble; water depth (cell +6 & 0x3f) raises the cost ... |
 | 0x005BC3E0 | 873 | CAIMap::TraceVisibility | (from, to): walks the 3D segment in 0.5 m steps (16.16 fixed point); returns 0 when the terrain is above the ray, multiplies the visibility by the object transparency table 0x791744 for every inline / sector object whose z range c... |
 | 0x005B7BB0 | 822 | CAIMap::FindOverlappingUnit | (unit, pos): among the units within 10 m (CollisionMap::FindUnitsNear) that are alive and closer than the sum of the radii (+0x32c): the first whose footprint stamp (ScriptRefCache::Get on g_0x7C2F70 by radius, 16 x 16 bytes) at t... |
 | 0x005BF8F0 | 794 | CellOffsets_Build | static init of the radius-sorted neighbour cell offset tables: the 21 x 21 offsets (-10..10) sorted by distance (0x6E88FC qsort) into g_0x7C2FFC (short pairs, count g_0x7C3000), the distinct distances into a temporary array and th... |
-| 0x005B07C0 | 790 | NavGrid_IsCellInRegion | (class, x, y, region, out byte grid): collects the 3 x 3 nav cells around (x, y) into the static list g_0x7C2EE0; when one of them has the region id (layer +0x220): runs the local PathFinder from (x, y) and returns whether a reach... |
+| 0x005B07C0 | 790 | NavGrid::IsCellInRegion | (class, x, y, region, byte grid): true when the tile can reach a nav cell of the region (local PathFinder, stamps ignored); marks reached tiles 1 / 2 in the scratch byte grid |
 | 0x005C02E0 | 788 | CollisionMap::Ctor | (w, h, world): vtables 0x73F9DC / 0x73F9EC (+0x10); sectors of 32 x 32 cells (w >> 5 x h >> 5, 0x54 bytes each, NavSector::Ctor), +0x24 = world |
 
 ## 0x5C6000 - 0x5C8000: Mover (unit movement state)
@@ -1112,20 +1112,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005C67D0 | 1545 | CMover::BuildPath | (req): resets the path and sets heading +0x48 = req +0xc; kind 1: turn in place to angle req[5] with turn speed req[6] (0 -> +0x40 default); kind 4: turn to angle; kind 0 / 3: nothing; others: builds the point list from the reques... |
-| 0x005C7430 | 1046 | Mover::Predict | (mover +0x27c, world, state, dt, out flags, out pos...) : position prediction along the current move (CUnit::GetDisplayPos) |
-| 0x005C6FC0 | 1005 | CMover::Evaluate | (t, &turning, pos[2], dir[2], &speed, &cellx, &celly): position / direction on the path at time t: while turning in place (t < +0x98 start, +0x44 turn speed) returns the heading only; else walks the segments from +0xa0 (cached +0x... |
-| 0x005C6370 | 844 | CMover::AddSegmentsBetween | (p0, p1, n, off0, off1, &speedIdx): appends n segments interpolated between p0 and p1 (speed = cell speed +0x2c[speedIdx] * +0x3c / 512); n == 1 with both offsets: just the two end points (0x5C8560 grows the segment CArray) |
-| 0x005C7FC0 | 589 | ReadUnitOrder |  |
-| 0x005C7DB0 | 519 | MoveState_WriteNet | writes the unit move state (specific->vt[16]()) into net-state section 10 |
-| 0x005C79B0 | 330 | CMover::Write | (stream): writes the segments (0x1c each), the points (0xc each), the cell speeds (4 each) and +0x3c..+0x4c through stream vt[2] |
-| 0x005C7860 | 327 | CMover::Read | (stream): reads the segments / points / cell speeds (counts first) and +0x3c..+0x4c through stream vt[1] |
-| 0x005C7B00 | 244 | MoveRequest::SetRect | (halfsize[2], dir[2], p3): kind 0 with +4 / +8 = size * 2, +0xc = atan2(dir), +0x10 = p3; clears the cell list +0x24..+0x34 (pool 0x6FE90F); returns true when nothing changed (16 callers) |
-| 0x005C6290 | 219 | CMover::LimitSegmentSpeeds | (maxTurnRate): for every pair of consecutive segments (0x1c-byte {x, y, dirx, diry, speed, cellx, celly}) caps the segment speed so the heading change (atan2 difference, wrapped) takes at least the time the length allows at maxTur... |
+| 0x005C67D0 | 1545 | MoveCurve::Build | (request): rebuilds the whole timed curve: kind 1 / 4 = turn in place, kind 2 = runs of equal direction (corner point when the direction changes >= 90 deg) -> segments -> speed limit -> optional initial turn (skipped when within c... |
+| 0x005C7430 | 1046 | MoveCurve::Predict | (world, request, tick, ...): position / direction / speed / cell of a unit at a tick, by request kind (0 stand, 1 and 4 turn, 2 EvalPath, 3 face the tracked unit); the server's TickMovement, the client's ReplayMove, GetDisplayPos ... |
+| 0x005C6FC0 | 1005 | MoveCurve::EvalPath | (t, &turning, pos[2], dir[2], &speed, &cellx, &celly): position, direction, speed and the cell being entered at ticks t after the request's start; per segment a Hermite cubic in distance (HermiteInit); past the end: end point, spe... |
+| 0x005C6370 | 844 | MoveCurve::AddSegmentsBetween | (p0, p1, n, off0, off1, &speedIdx): appends n 0x1C-byte segments {x, y, dirx, diry, speed = cellSpeed[i] * baseSpeed / 512, cellx, celly} spread along p0->p1 at (i + 0.5 + off0) / (n + off0 - off1); n == 1 with both offsets = just... |
+| 0x005C7FC0 | 589 | MoveRequest::ReadNet | counterpart of WriteNet: rebuilds the request and its cell list from net section 10 (CUnit::ReadNetState, CPlayerClient::OnMsg_UnitMoveState) |
+| 0x005C7DB0 | 519 | MoveRequest::WriteNet | writes the request into net section 10 (kind, cell count, pos Q64, heading 16 bit, +0x10..+0x1C raw, per cell one u16 {x code, y code, flags, speed factor <= 0x3FF} + explicit shorts); CUnit::WriteNetState and CPlayerServer::SendM... |
+| 0x005C79B0 | 330 | MoveCurve::Write | (stream): writes the segments (0x1C each), points (0xC), cell speeds (4) and +0x3C..+0x4C (save game) |
+| 0x005C7860 | 327 | MoveCurve::Read | (stream): reads the segments / points / cell speeds and +0x3C..+0x4C (save game) |
+| 0x005C7B00 | 244 | MoveRequest::SetStand | (pos[2], facing dir[2], tick): request kind 0 = stand at pos*2 with heading atan2(dir), start tick, clears the cell list; returns true when something changed (16 callers) |
+| 0x005C6290 | 219 | MoveCurve::LimitSegmentSpeeds | (maxTurnRate): caps each segment's speed so traversing it takes at least (heading change to the next segment) / maxTurnRate |
 | 0x005C6000 | 191 | PathCells_RemoveDuplicates | (list {vt, head, tail, count, free, pool}): unlinks consecutive nodes with equal (x, y) shorts into the free list; frees the pool (0x6FE90F) when the list becomes empty |
-| 0x005C6F20 | 150 | CMover::EvalTurn | (t, out heading): heading at time t of a turn in place: +0x48 base + clamp(+0x4c delta, +0x44 turn speed * t); returns 1 while still turning |
-| 0x005C66C0 | 131 | CMover::BuildSegments | for every pair of consecutive points (+0x18, 0xc-byte {x, y, count}) calls AddSegmentsBetween with -0.5 / +0.5 end offsets at the path ends |
-| 0x005C6750 | 118 | CMover::CopySegmentCells | (req): copies the path cell coords (short x at +8, y at +0xa of the request's cell nodes +0x24) into the segments' +0x14 / +0x18; the last segment gets the last cell when req +0x2c == 1 |
+| 0x005C6F20 | 150 | MoveCurve::EvalTurn | (t, out dir[2]): heading at time t of a turn in place (+0x48 start + clamp(+0x4C delta, +0x44 rate * t)); returns 1 while still turning |
+| 0x005C66C0 | 131 | MoveCurve::BuildSegments | for every pair of consecutive run points calls AddSegmentsBetween (offset -0.5 at the path start, +0.5 at its end) |
+| 0x005C6750 | 118 | MoveCurve::CopySegmentCells | copies the request cells' x / y into segment fields +0x14 / +0x18 (the last segment gets the last cell when the request has exactly one chunk) |
 
 ## 0x5C8000 - 0x5D3000: unit AI: perception (aiinfo.res, hearing, vision, smell)
 
@@ -1133,20 +1133,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005D0030 | 1965 | Brain::ChooseTarget | (tables, brain, out {spell, target}, candidates, pos, filter, direct): scores every candidate (list +4 of the candidates object, or the neighbour list brain +0xf8 for the second table) with every AiSpellInfo (AiSpellInfo_Score), k... |
-| 0x005D2960 | 1846 | AiLogicFear::Enter | slot 4 (brain): smooths +0xc; with a brain target +0x30: AiMemory::UpdateLastSeen(1000, -2) and widens the radius +8 to 1.5 x the distance; when a known unit is near (AiMemory::FindNearestKnownUnit), the unit can attack (0x54B6C0)... |
-| 0x005CE0F0 | 1577 | AiInfo_Load | (this = g_0x7C53F8 AiInfo, file): once: reads aiinfo.res [Logic] GuardStayTime +4, SentryStayTime +8, FollowMinDist +0xc, FollowMaxDist +0x10, GuardRadius +0x14, CallForHelpRadius +0x18, CallForHelpRadiusDefault +0x1c, FollowLimit... |
-| 0x005CF9A0 | 1111 | AiSpellInfo_Score | (pos, caster, memory, self, target unit, minScore, spell info): usefulness of casting a spell on the target: kind 0 (self buff?) / 1 (attack) / 2 (area attack, sums the effect over the known units within radius +0x10) / 3 (area, n... |
-| 0x005CA5A0 | 1105 | StimulusMap::SeeUnits | (observer unit, memory): for every neighbour (memory +0x28 list): skips the ones not accepted by 0x530150 unless the observer is player controlled (0x5301A0) or flag 0x2000000; already seen (+0x44) / corpse (+0x60) lists are skipp... |
-| 0x005CAA00 | 1059 | StimulusMap::UpdateVision | (unit server, memory): sets the eye position from the unit (+8.., cell +0x20 / +0x24), StimulusMap::RefreshNearbyUnits; for every seen unit (memory +0x44 list): dead -> moved to the corpse lists ("sees corpse of unit"; hostile cor... |
-| 0x005C9CD0 | 882 | StimulusMap::PerceiveFootsteps | (stimulus list, observer CUnitServer, memory): for every footstep stimulus of an enabled channel (+0x244 / +0x248 masks) newer than the memory attention: within 1.5 m and the stimulus age (ticks since +0x10) <= sight range (+0x904... |
-| 0x005CF3C0 | 862 | Brain::TryAttackTarget | (brain, {spell, target}, direct): false when the spell item has flag 0x20000000 (item +0x3c) and the target is idle (+0x324 == 0, proto +0x24 >= 0.5); picks the attack position: the unit itself (direct or self-target) or a spot fo... |
-| 0x005CB850 | 834 | AiMemory::ComputeThreatFactors | (unit server, out[5]): for every known unit (+0x28 list) that is alive and 0x530150-accepted: distance / (the other's perception ranges x this unit's factors): sight (+0x904 * +0x900 * +0x294 * +0x2c4, modulated by the terrain vis... |
-| 0x005D0BE0 | 707 | AiLogicGuard::Update | slot 5 (brain): every ~1000 ticks alertness(1); Brain::SelectCombatTarget; when idle: previous / current point (brain +0x50 / +0x5c = +8 pos), +0x44 = radius + 35, +0x48 = radius + 80; finds a random reachable spot within the radi... |
-| 0x005C98C0 | 631 | StimulusMap::HearSound | (source unit, loudness, time, pos or 0): for every unit within 50 m of the source (spatial grid 0x5C0BD0) accepted by 0x530150, whose alertness +0xa68 < 900 and whose hearing range (+0x8fc * +0x2ac * loudness) covers the distance:... |
-| 0x005CEED0 | 607 | AiSpellInfos_Build | (unit): rebuilds the unit's usable spell / attack tables: non-hero (0x4613A0) with weapon kind +0x28c != 0x10: entry {0, -1, attack range 0x54B620} + damage 0x54BA30; every spell slot 0..7 (CUnit::GetItemSpell 0x531A10) by GetObje... |
+| 0x005D0030 | 1965 | Brain::ChooseTarget | (this = brain +0xa4 AiSpellInfos, brain, out {spell, target}, candidates ObjRefList, pos, filter, direct): keeps the current order's {spell, target} when AiSpellInfos::IsTargetClear and (filter with a single-entry attack table); s... |
+| 0x005D2960 | 1846 | AiLogicFear::Evaluate | slot 4 (brain): jitter +0xc = (2 j + 3) / 3; with a brain attacker +0x30: SetNoticed(its pos, 1000, -2) and radius +8 = max(radius, 1.5 x distance); KITING for ranged units (CUnitServer::IsRangedAttacker, animSpeedClass < 6, no sp... |
+| 0x005CE0F0 | 1577 | AiInfo_Load | (this = g_0x7C53F8 AiInfo, file; from main 0x456440, once: +0 loaded byte): CFileRegistry over aiinfo.res: [Logic] GuardStayTime +4 .. SwarmRadius +0x30; [RPG] HumanCrossAnimationSpeed +0x34, BackstabAdd +0x38, BackstabMult +0x3c,... |
+| 0x005CF9A0 | 1111 | AiSpellInfo_Score | (casterPos, caster CUnit, candidates list, self CUnit, target CUnit, minScore, AiSpellInfo): base 10 when target == self; kind 0 weapon: + sum of the positive (damage - target absorption +0x8e4) shorts; 1 attack spell: + sum * 1.3... |
+| 0x005CA5A0 | 1105 | StimulusMap::SeeUnits | (observer CUnit, AiMemory): VISION TEST for every neighbour (AiMemory +0x28 list): non-player observers (CUnit +0x24c == 0, flag 0x2000000 'witness' off) only look at enemies (IsPlayerInMask) or units with a player (+0x24c); alrea... |
+| 0x005CAA00 | 1059 | StimulusMap::UpdateVision | (CUnitServer, AiMemory): per tick from AiMemory::Tick: eye = unit pos / cell; RefreshNearbyUnits; for every seen unit (+0x44 list): dead -> moved to the corpse lists ('sees corpse of unit'; a friendly corpse (g_0x7C2BC4) also sets... |
+| 0x005C9CD0 | 882 | StimulusMap::PerceiveFootsteps | DEAD CODE (only caller PerceiveStimuli 0x5CA060 has none): would let the observer 'see' (age <= +0x904 * +0x2bc Senses Tracking * stimulus +0x14, within 1.5 m, in the view cone +0x224, TraceVisibility) or 'smell' (age <= +0x2b4 Se... |
+| 0x005CF3C0 | 862 | Brain::TryAttackTarget | (brain, {spell, target}, direct): false when the spell item has flag 0x20000000 and the target is not fighting (+0x324 == 0 and proto +0x24 >= 0.5); attack position = the unit itself when direct or self-target, else the end of a p... |
+| 0x005CB850 | 834 | AiMemory::ComputeDetectionFactors | (CUnitServer, out float[5] = CUnit +0x4c8, replicated 0xc for the party panel eye / ear icons; player units only, from CUnitServer::Update): for every NEIGHBOUR (+0x28 list, not only seen) that is alive and an enemy: d = 3D distan... |
+| 0x005D0BE0 | 707 | AiLogicGuard::Update | slot 5 (brain): 1/1001 chance of AiAcknowledge 1; Brain::CastSupportSpell; when the brain order kind +4 == 0: waypoints (+0x50 prev = old current, +0x5c current = guard point), brain +0x44 = radius + 35, +0x48 = radius + 80 (leash... |
+| 0x005C98C0 | 631 | StimulusMap::HearSound | (source CUnitServer, loudness, delayTicks, pos or 0 = source pos): for every unit within 50 m (CollisionMap::FindUnitsNear on world+0x124) for which source.side is an enemy (CUnit::IsPlayerInMask(listener, source)), whose AiMemory... |
+| 0x005CEED0 | 607 | AiSpellInfos_Build | (this = brain +0xa4, CUnit): rebuilds the two tables: non-heroes with a natural weapon (+0x28c != 0x10) get {kind 0 weapon, slot -1, range GetAttackRange, damage GetDamage7} in the attack table; then every spell slot 0..7 (CUnit::... |
 | 0x005C8D40 | 584 | ByteGrid_EnsureCovers | (cx, cy, r): square byte map {originX, originY, buffer, rows, rowBytes, rowCount}: first use (origin 0x7fffffff) allocates (2r + 1)^2 zeroed; otherwise, when the circle leaves the map, grows the map (copy of the old one through By... |
-| 0x005CA1D0 | 565 | StimulusMap::RefreshNearbyUnits | (unit, perception): every 8..11 ticks (+0x20 countdown, flag 0x80000 on unit +8): rebuilds the perception's neighbour list (+0x28 ObjRefList) from the spatial grid (world +0x124, 0x5C0930 cell lookup) within the hearing / sight ra... |
+| 0x005CA1D0 | 565 | StimulusMap::RefreshNearbyUnits | (unit CUnit, AiMemory): every 8..11 ticks (AiMemory +0x20 countdown = (rand & 3) + 8; sets flag 0x80000 'alarm pending' on the unit +8): rebuilds the AiMemory neighbour list +0x24 (head +0x28) with every unit (except itself) of th... |
 
 ## 0x5D3000 - 0x5E2000: unit AI: behaviours (Guard / Patrol / Sentry / CorpseWatcher / Tamed) + #say
 
@@ -1156,17 +1156,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x005DC620 | 4571 | Console_RegisterCommands | registers the console commands into the string map g_0x7C7B38: help, debuginfo, console, history, filter, lastfps, listvar, loadvar, execute, fadeout, server, lootall, memusage, disconnect, generateacks, partyresend, localrate, ..... |
 | 0x005E18E0 | 2959 | CFlyingHitPoints::Draw | (renderer): draws the floating damage numbers (list +4 of entries {.., pos, time +0x14, text}; entries older than 3000 ms removed with 0x5E25B0); sets the digits texture (+0 via renderer vt[11], "CFlyingHitPoints::Draw. SetTexture... |
-| 0x005D6630 | 1589 | Brain::BuildFromLogicSlot | (slot (0x4c bytes), index): rebuilds the logics from a mob logic slot: +0x38 = CallForHelp (+0x3c; default g_0x7C5414 -> g_0x7C5410), +0x3c = +0x40; Model +0: 1 guard (AiLogicGuard ctor 0x4BA1C0 at the point +0x18 with radius +0x2... |
-| 0x005D30A0 | 1450 | AiLogicFear::Update | slot 5 (brain): flees: the flee origin is the nearest known unit (Brain::CallForHelp there) when +0x18c, else the remembered spot +0x10 / the unit position when in water (0x5BBDB0); within the radius +8: picks a point 5 m away fro... |
+| 0x005D6630 | 1589 | Brain::BuildFromLogicSlot | (MobLogicSlot (0x4c), index): LogicList_Clear, +0x44 / +0x48 = 100000, +0x4c = 1; +0x38 callForHelpRadius = slot +0x3c (CallForHelpRadiusDefault 7 -> CallForHelpRadius); +0x3c alarmCondition = slot +0x40; Model +0: 1 = AiLogicGuar... |
+| 0x005D30A0 | 1450 | AiLogicFear::Update | slot 5 (brain): flee origin = the nearest seen enemy when +0x18c (and Brain::CallForHelp(its pos)), else the unit position when inside a spell area, else the remembered spot +0x10 when that is in an area (otherwise the noticed pos... |
 | 0x005DB3F0 | 1435 | Movie_PlayFile | (name, flags, p3, p4, p5, withSound): plays a Bink file to the end (handles input to skip, volume g_0x79BCC4, sound system Miles, renderer reset 0x5E5270); returns true when the file could not be opened or playback ended |
-| 0x005D6F90 | 1410 | Brain::TickFollow | (brain): follow order (kind 6) of the target +0x2c: every 8 ticks (+0x6c counter): when the target moves (its orders +0x190 / +0x1b4 == 1): predicts its position 5 ticks ahead (vt[52] GetPosAt) and, beyond FollowMinDist g_0x7C5404... |
-| 0x005D8310 | 1296 | Brain::Read | (stream): clears the logics; reads +4 kind, pos, actions (PatrolActions_Read), +0x28, targets +0x2c / +0x30 (0x50E220), +0x3c.., +0x44 / +0x48 / +0x4c, waypoints, the logic count and current index, every logic (kind -> new object ... |
-| 0x005D53B0 | 1235 | Brain::Tick | (brain): alarm countdown (+0x34 flag, +0x40 ticks, +0x35 alarm number -> 0x593FC0 raise alarm at the unit position, alertness 8); +0x4c decays; AiMemory::Tick; +0x18c = any known unit alive and 0x530150-accepted; returns while the... |
+| 0x005D6F90 | 1410 | Brain::TickFollow | (brain; order kind 6): target +0x2c dead or gone -> kind 0; every 8 ticks (+0x6c): moving target (its order 1): predicted position 5 ticks ahead (vt[52] GetPosAt); farther than FollowMinDist 2 from it or its path (own move target ... |
+| 0x005D8310 | 1296 | Brain::Read | (stream, save): ClearLogics; +4 kind, +8 pos, actions +0x14, +0x28, targets +0x2c / +0x30 (object ids), +0x3c alarm condition, +0x44, +0x48, +0x4c, waypoints +0x50 / +0x5c (0xc each), +0x3c, +0x7c count, current index; every logic... |
+| 0x005D53B0 | 1235 | Brain::Tick | (brain; every tick from CUnitServer::Update 0x552300 for every living unit after AiAcknowledge::Tick): ALARM: when +0x34 alarm flag and +0x40 wait > 0: wait--, at 0 with +0x35 alarm slot != 0 -> CWorldServer::ActivateLogicSlot(slo... |
 | 0x005DA880 | 1221 | Movie_PlayProgress | plays "Movies\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x005D4170 | 1167 | AiLogicPlayer::Regroup | (brain): for player-controlled units (unit +0x438 == 1): keeps attacking the kept target +8 when Brain::TryAttackTarget(direct) succeeds (order kind 3, QueueOrderAttack 6); else collects the attackers (AiMemory::CollectAttackers w... |
+| 0x005D4170 | 1167 | AiLogicPlayer::Regroup | (brain; AiLogicPlayer::Update when idle): only for units with CUnit +0x438 battle button == 1: keeps attacking the kept target +8 while alive and Brain::TryAttackTarget(direct) (brain kind 3, QueueOrderAttack(target, 6, 0, run 0x1... |
 | 0x005DAEA0 | 1058 | Cursors_Register | (small, p2, smallSet): 0x5E60B0(g_0x7C7BD8 cursor manager, g_0x7AF080, 1 / 2, p2, smallSet); registers the cursor names "cursor_default" .. "cursor_steal" (or the "sm_cursor_*" set) with hot-spot flags (0x10 / 0x20 for the scroll ... |
 | 0x005DA400 | 1044 | Movie_PlayIntro | plays the Bink movie "Movies\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x005D7F80 | 905 | Brain::FindRandomReachableSpot | (center, radius, out pos): skips while the retry countdown +0x68 > 0; picks a random point in the circle (10 tries to be inside the radius), rejects it when the terrain slope / water (0x5BC2A0 g_0x7B00D0) > 0.3 or an enemy unit st... |
+| 0x005D7F80 | 905 | Brain::FindRandomReachableSpot | (center, radius, out pos): nothing while the retry countdown +0x68 > 0 (decremented); random point in the square, up to 10 re-rolls to be inside the circle; rejected when CAIMap::GetMaxSlopeAt > 0.3 or a FRIEND-side unit (g_0x7C2B... |
 | 0x005DFDA0 | 813 | Script_DumpScenack | writes scenack.txt (CStdioFile 0x701CB0): for every player script object (g_0x7C8A60 0x1c4-byte entries, hash table at +0xc) dumps the #say texts of its 0x28-byte and 0x2c-byte record tables (Script_DumpSays / Script_DumpSays2) |
 
 ## 0x5E2000 - 0x5E3000: IUIEvents defaults + CUIMessageLog (timed chat/message lines)
@@ -1376,7 +1376,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0066D7F0 | 722 | CPlayerServer::SendMsg40_Units | (array of units): per unit sends opcode 0x40, 16 bytes {id +0xc, +0x10, +0x18, +8 == 0x50 ?}, the position +0xc4..+0xcc, the name +0x1a8, +0xa4, the prototype's (+0x170) strings +0x78 / +0x7c and +0x88 strings at +0x84, the displa... |
 | 0x00671B40 | 698 | CMappedResource::OpenFile | slot 4 (name, out size): the cached entry of the name hash +0x44 → refcount ++ and its buffer; else the entry index (0x674850), when memory-mapped the base +0x28 + entry offset, else allocates an entry {name, buffer, size (table +... |
 | 0x0066C9A0 | 687 | CPlayerServer::Init | slot 2 Init() -> bool (root layout) |
-| 0x0066FD70 | 631 | Formation_ComputeOffsets | (unit list, out Vec3 array): one unit → zero offset; else the average x / y of the units' positions (+0x1c / +0x20) and per unit the normalized direction from that center (z = 0) |
+| 0x0066FD70 | 631 | Formation_ComputeOffsets | (unit list, out Vec3 array): one unit = zero offset; else per unit the unit vector (1 m) from the group's centroid to the unit; added to the move target when the offset point is reachable |
 | 0x00669A30 | 599 | CPlayerClient::OnMsg_PartyFull | saves the owner's named value table +0xc4, reads the rest of the stream into a CMemStream, MpFile::Read(party +0x70, stream, 1), rebuilds the id CList +0x118 from the party's unit list (vt[18]()) entries with +0x28 < +0x2c, restor... |
 
 ## 0x674000 - 0x676000: resources: CMappedResource / CResourceBase / CMappedFile + CObjectManager
@@ -1412,7 +1412,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0067CEF0 | 1324 | CEffectMoshka::Update | (time): drives the bird object +0x14c around the target unit (+0x154, CWorldClient::v40): state +0x168: 0 approach (within 5 -> state 1 circling, timer +0x15c = 100, radius +0x164 = 30), 1 circle at angle +0x160 + time * 0.2 (on t... |
 | 0x00678EC0 | 656 | CEffectParticle::CreateParticleSystem | (this): creates the particle system for type +0x158 via the particle manager g_0x7AF754 (0x498400) into +0x178, sets its position, scale (+0x15c / system +0x128), Attach(0), +0x118 / +0x11c = +0x160 / +0x164, AttachToObject; pre-w... |
 | 0x0067E170 | 612 | CEffectManager::CreateByKind | slot 14 factory (kind -> the CEffect* classes; 612 bytes) |
-| 0x006782D0 | 591 | CEffectPointLight::Activate | slot 23 (arg): arg 0: creates a CLight (kind 0x31 via the light manager g_0x7AF748) into +0x15c, CLight::Init(colour +0x14c, pos), radius /+0x158/ (+0xe0, r^2 +0x100, 1/r^2 +0x104), flags /= +0x160, CTerrain::AddLight (g_0x7AF738)... |
+| 0x006782D0 | 591 | CEffectPointLight::Activate | creates/updates the CLight of a point-light effect |
 | 0x0067AE30 | 533 | CEffectArrow::ctor | base vt 0x743754 (projectile base) with DeltaCodec, embedded CEffectParticle at +0x158 (particle system ref +0x2d0), CEffectPointLight at +0x2d8 (light ref +0x434), CEffectSound at +0x43c (handle +0x698), CString +0x6a0 model name... |
 | 0x0067D420 | 533 | CEffectMoshka::CreateBird | (target unit id): +0x154 = id; creates a client object (kind 0x38, g_0x7AF5F8) with model "unmobi" and animation "bird00" at a visible point around the target, adds it to the client world, attaches particle system 0x203c (scale 0.... |
 | 0x0067DBD0 | 503 | CEffectTornado::v6 | slot 6 (root layout; default returns 0) |
@@ -1450,13 +1450,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x0068E640 | 681 | CMaterialManager::Init | slot 2 Init() -> bool (root layout) |
 | 0x0068EC20 | 580 | DwordVector_Reserve_68EC20 | vector<uint>::reserve(n) |
-| 0x0068D5A0 | 394 | CLight::ApplyPointWrap | point-light variant with wrap lighting (N.L+1 factor when N.L <= 0) |
+| 0x0068D5A0 | 394 | CLight::ApplyPointWrap | point light with wrap factor min(1,1+N.L) and 1-d^2*k falloff |
 | 0x0068C680 | 362 | StlString_Reserve_68C680 | basic_string grow/reserve with length_error check ("basic_string") |
 | 0x0068DE30 | 347 | CMaterial::~CMaterial_body | vt_CMaterial: pops all deque elements, frees nodes and map, CStrings released, CObject base dtor 0x455930 |
 | 0x0068CB90 | 327 | PartialSort_Bytes | std::partial_sort for chars (heap select) |
-| 0x0068D450 | 323 | CLight::ApplyPoint | point-light vertex lighting: attenuation 1 - d2*k(+0x104), N.L * colour * intensity added to input, clamped to 1 |
+| 0x0068D450 | 323 | CLight::ApplyPoint | plain N.L point light; no callers (dead) |
 | 0x0068EE70 | 314 | DwordVector_InsertN_68EE70 | vector<uint>::insert(pos,n,value), grow path 0x68F040 |
-| 0x0068D310 | 310 | CLight::ApplyDirectional | out rgb = clamp(in + max(0,-(dir . normal)) * intensity * colour, 1) |
+| 0x0068D310 | 310 | CLight::ApplyDirectional | out = min(1, in + max(0,-D.N)*I*colour) |
 | 0x0068DBC0 | 294 | CMaterial::CMaterial | vt_CMaterial: id fields, CString name (+0x1C), animation deque (+0x64), CStrings +0x8C/+0x94 (texture names) = "", float +0x2C = 1.0 |
 | 0x0068E1C0 | 272 | Deque_InitMap_68E1C0 | compute node map size ((n>>5)+3, min 8), allocate map and nodes, set start/finish |
 | 0x0068C820 | 249 | NameSet_Insert_68C820 | build std::string from a C string and insert (via 0x613C20) |
@@ -1533,7 +1533,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006C1C00 | 5336 | TerrainSector_BuildMesh | (sector): the vertex records +0x194 (0x54 each, 0x441 per layer) from the packed vertices +0x18: normal (+0x2b.., 11-bit fields / 1000), material (+0x25) of the first linked tile with one (terrain +0x1e8 links, water tile map +0x2... |
-| 0x006BFF40 | 5051 | TerrainSector_Draw | (sector, draw ctx, terrain, pass) -> bool: unless culled: with water TerrainSector_ApplyMaterialHeightDeltas; for every non-culled quarter: the strip triplets of the pass (+0x318 group + pass * 0x10) are copied into the static ver... |
+| 0x006BFF40 | 5051 | TerrainSector_Draw | builds FVF 0x1C4 vertices (record +0x00..0F, diffuse/specular +0x11, uv), draws with SPECULARENABLE |
 | 0x006C13A0 | 2129 | TerrainSector_Load | (sector, reader, sx, sy, textureCount, tilesPerTexture, mapStem, terrain) -> bool: reads "<stem>%3.3i%3.3i.sec" (reader vt[5]); header: dword magic 0xCF4BF774 + byte flags (bit 0 = water layer -> +0x10; bits 0-1 -> +0x14 second ti... |
 | 0x006B89F0 | 1737 | CSoundManager::LoadSoundGroup | 1.7 KB: build the list of ".mp3" files for a sound group (std::string ops, resource lookups) and register it in the hash tables |
 | 0x006B4710 | 1584 | CMusicSystem::Init | slot 2 Init() -> bool (root layout) |
@@ -1556,16 +1556,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006C68B0 | 3743 | CTerrain::Load | (mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15c vt[1], "*.mp" filter 0x674AC0), names +0xfc (path without extension) / +0xf8 (file stem); reads "<stem>.mp" (vt[5]): header 0x26 bytes {magic 0xCE4AF... |
 | 0x006C98F0 | 2164 | CTerrain::SetVisibleQuad | (float[8] = 4 corner points x0,y0 .. x3,y3): computes the visible sector rows +0xaa4 (first row) / +0xaac (count) with per-row column ranges +0xaa8 (min) / +0xab8 (max): the sector centres inside the quadrilateral (4 edge line tes... |
 | 0x006CB390 | 2159 | CTerrain::UpdateAmbientSounds | around the listener (sound system g_0x7AF784 +0x250.. position / +0x25c.. forward): the 3 x 3 sectors' material histograms (sector +0x374 counts weighted by the ambient table 0x7969D8: 16 types "Grass"...) pick the dominant type p... |
-| 0x006C31C0 | 1261 | TerrainSector_LightVertexDynamic | (this = sector, pos, record, terrain, isWaterLayer): sums the point lights of the vertex link list +0x50 (0x68D5A0 per light with the normal +0x2b; water attenuation by depth (+0x27) and the material +0x14 factor when not on the w... |
+| 0x006C31C0 | 1261 | TerrainSector_LightVertexDynamic | max of cached sun colour and linked point lights -> diffuse +0x11, specular(glow+edge alpha) +0x15 |
 | 0x006C3E80 | 1046 | TerrainSector_Animate | (sector, terrain, frame): every third frame when the terrain flag 2 (animated tiles): the animated tile entries +0x364 (0x18 bytes: uv dest, rotation, tile, frame, frame count, chance / 1000) advance a frame and copy the UVs (CTer... |
-| 0x006C5AA0 | 1011 | CTerrain::LoadTextures | (count) -> bool: the texture array +0xd8 and material array +0xe8 get count + 2 entries: "<map>%3.3i" textures 0..count-1 and the two lightmap pages "<map>L%2.2i" (when the lightmap file does not exist (reader vt[21]) the arrays a... |
-| 0x006C8ED0 | 925 | CTerrain::SetSunLight | (sunLight, colour[4]): ambient colour +0x224..+0x230; the light direction (+0xd4.., components clamped away from 0) gives the shadow ray slopes +0x234 / +0x23c (dz / dx, dz / dy) and +0x238 / +0x240 (dx / dz, dy / dz), the per-ste... |
+| 0x006C5AA0 | 1011 | CTerrain::LoadTextures | count textures + optional lightmap pages <map>L00/L01 (absent in retail) |
+| 0x006C8ED0 | 925 | CTerrain::SetSunLight | copies ambient, derives ray slopes/steps (x95) from the sun direction, clears/schedules the lit flag of loaded sectors |
 | 0x006C8140 | 913 | CTerrain::GetSector | (sx, sy, wantedFlags, load) -> sector or 0: the sector grid +0x1f8 slot holds the node of the loaded-sector CList +0x1fc (MRU order: a used sector is moved to the head with the frame stamp +0x218 in +0x384); with load: a missing s... |
 | 0x006C8990 | 905 | CTerrain::SnapQuadsToGround | (array {0x40-byte quads (4 x at +0, 4 y at +0x10, 4 z at +0x20), count}): every corner z becomes the average height of the 4 vertices of the tile under it (sectors loaded with GetSector flags 1); the corner -> sector / tile mappin... |
 | 0x006C9560 | 897 | CTerrain::TraceRayToGround | (origin, rotation quat (w, x, y, z), maxDist, out hit) -> bool: the quaternion rotates the forward axis into a step direction (normalized by its larger x / y component); walks up to maxDist unit steps, loading the sector under eac... |
 | 0x006CA260 | 867 | CTerrain::SetVisibleArea | (x, y, radius): visible rows +0xaa4 / +0xaac and the same column range (+0xaa8 / +0xab8 per row) for the square around (x, y) |
-| 0x006CAC10 | 859 | TerrainSector_LinkLight | (sector, light, pos, rect, forceRemove): for every vertex of the sector within the rect's vertex range: when forceRemove or the vertex is farther than the light radius (+0xe0): the light's node is removed from the vertex light lin... |
-| 0x006C36B0 | 843 | TerrainSector_LightVertexSun | (this = sector, sunLight, vertexZ, record, terrain, isWaterLayer): the ambient colour (terrain +0x224..) and the sun (0x68D310 with the normal +0x2b) attenuated for underwater vertices by depth^2 * material +0x14 * g_0x7C8908 (wat... |
+| 0x006CAC10 | 859 | TerrainSector_LinkLight | add/remove the light node on each vertex within radius (3D distance) |
+| 0x006C36B0 | 843 | TerrainSector_LightVertexSun | ambient/sun/shadow/water term of one vertex -> record +0x37..0x3F |
 | 0x006C4310 | 769 | TerrainSector_PackVertex | (sector, vertexIndex, out 8 bytes): byte x / y offsets within the sector (126 / 0.5 units), ushort z (65534 / max height +0x114 of the terrain +0x1c), dword packed normal (11 bits each: nz * 1000, (nx + 1) * 1000, (ny + 1) * 1000)... |
 
 ## 0x6CC000 - 0x6E0000: terrain prints (foot/blood/fire decals), terrain tile helpers, CBitmapDib (BMP/mip loading), database.res loaders (CDatabase/CDatabase2/CDatabaseTables)
@@ -1576,10 +1576,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x006D7620 | 3520 | CDatabase2::LoadResource | load "database.res"/"databases.res" for the second database (3.5 KB): archive tags, CMemStream, tables, fatal "Can't open database file ""%s""" |
 | 0x006DE370 | 2156 | DbTableRecord_CopyCtor | copy-construct a 0x1C4-byte database table record (2.2 KB: strings, hash sets, vectors) |
-| 0x006CCF20 | 1567 | CTerrain::ClipAndAddTriangle | 1.6 KB: clip a terrain triangle (vertex indices from the sector, CTerrain::GetVertex) against the frustum (Clip_TriangleToFrustumA) and append to the sky/terrain mesh index buffer (SkyMesh_ReserveIndices) |
+| 0x006CCF20 | 1567 | CTerrain::BuildShadowReceiverMesh | finds the terrain cell box under the prism (iterates up the light ray to the highest vertex) and clips two triangles per cell with ClipTriangleA |
 | 0x006D5BF0 | 1475 | CBitmapDib::LoadMipLevel | read mip level data of a BMP stream into the DIB ("wrong level for mipmap", "read error 1"); 1.5 KB |
 | 0x006DC390 | 1423 | CDatabaseTables::~CDatabaseTables | destroys the whole table set (1.4 KB): hash tables, 0x28-byte record vectors, string pools and sub-objects (0x23 SEH levels); 11 callers |
-| 0x006CEDE0 | 1324 | CBridgeShadow::RenderShadow | 1.3 KB: render the shadow (CWorldClient::RenderShadowVolume) for a bridge/terrain object using CBridgeManager::GetHeightAt; mode flags +4/+5 |
+| 0x006CEDE0 | 1324 | CPrintDecal::Render | draw one terrain decal (blood / footprint / scorch): builds its receiver mesh once with RenderShadowVolume (light straight down), remaps uv into the atlas cell, draws with DrawQuadBatchClippedB (NOT a bridge shadow) |
 | 0x006D0630 | 1106 | CDatabase::LoadResource | load "database.res"/"databases.res" through an archive (Archive_Open, CMemStream) with tags and fatal "Can't open database file ""%s"""; 1.1 KB |
 | 0x006DF3E0 | 972 | DbRecord92Range_AssignTail | assign tail range of 0x5C-byte records (string, hash sets, vectors); 972 bytes |
 | 0x006DC000 | 910 | CDatabaseTables::CDatabaseTables | constructor (910 bytes): string, hash tables (HashTable_Ctor_6DCD90) and lists of the loaded database.res content |

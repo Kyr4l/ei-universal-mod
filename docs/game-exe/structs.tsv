@@ -21,33 +21,44 @@ CMapObject			0x1bc	int	cellY
 CUnit	CMapObject	0x4dc	0x238	char[4]	playerName	CString of a player's character
 CUnit			0x23c	int	protoIndex	index into the units db
 CUnit			0x240	pointer	senses	CUnitServer* (server) / CUnitClientSpecific* (client)
-CUnit			0x244	uint	alarmMask	
-CUnit			0x248	uint	mask248	
-CUnit			0x24c	int	field_24c	
+CUnit			0x244	uint	alarmMask	CORRECTION: was unnamed note: bit s = side s is an ENEMY of this unit (initial = PlayerRelations forced row; grows when attacked, by alarms and SetEnemy); IsPlayerInMask needs it AND +0x248
+CUnit			0x248	uint	attackableMask	CORRECTION: was mask248: sides this unit may treat as enemies; 0xffffffff default; taming (OnProvoked stage 1) clears the tamer side
+CUnit			0x24c	pointer	player	CORRECTION: was field_24c: owning CPlayer (0 = AI unit); +0x20 of it = CPlayerServer
 CUnit			0x250	byte	side	the .mob player number
 CUnit			0x254	sbyte	animCurrent	.adb index of the clip playing (-1 none, -2 default idle)
 CUnit			0x255	sbyte	animQueued	.adb index of the next clip
 CUnit			0x256	byte	animFlags	
 CUnit			0x258	uint	animStart	world time the clip started
 CUnit			0x264	int	stance	applied: 0 crawl 1 sneak 2 walk 3 run 4 sit
-CUnit			0x268	int	stanceWanted	writing it changes the stance
+CUnit			0x268	int	stanceWanted	the stance the player asked for (0 crawl 1 sneak 2 walk 3 run 4 sit); CUnitServer::RequestStance
 CUnit			0x26c	int	weaponSlot	0-3, -1 none
 CUnit			0x2b8	float	stanceSpeed	
 CUnit			0x2e4	float[2]	walkDir	unit vector
 CUnit			0x324	int	animSpeedClass	
 CUnit			0x328	float	moveRadius2	
 CUnit			0x32c	float	radius	collision radius (footprint stamps)
-CUnit			0x340	byte	speedStat0	GetSpeeds inputs
-CUnit			0x34f	byte	bodyClass	0..6 unarmed anim weapon bit
 CUnit			0x49c	int	animSetType	0x19 axe/spear, 0x10 dagger, 0xF bow/none
 CUnit			0x4a0	pointer	quickItems	
-CUnit			0x4b0	float	animSpeedAttack	AnimDurationFor factors
+CUnit			0x4b0	float	animSpeedAttack	AnimDurationFor class 0x80000
 CUnit			0x4b4	float	animSpeedCast	
 CUnit			0x4b8	float	animSpeedHit	
 CUnit			0x4bc	float	animSpeedDeath	
-CUnit			0x4c0	float	animSpeedCross	
+CUnit			0x4c0	float	animSpeedTransition	class 0x240000 (1.0 for kind 0x32 units); CORRECTION: was animSpeedCross
 CUnit			0x4c4	float	animSpeedSpecial	
-UnitStats		0x704	0x4	float	experience	total experience (the level = round(log(exp/200)/log(1.61)))
+CUnit	CMapObject	0x4dc	0x17e	short	hpDisplayed	packed placement: HP after part penalties
+CUnit			0x180	short	hpMaxDisplayed	
+CUnit			0x182	short	manaDisplayed	
+CUnit			0x270	int	weaponWanted	weapon slot asked for; TickState switches to it (SelectWeapon)
+CUnit			0x274	int	dead	SetDead: 1 = corpse (sinks); vt[55] returns it
+CUnit			0x278	int	walking	1 while the unit moves (collision grid class); net 7
+CUnit			0x330	UnitRecord	packedStats	0x108-byte net/save form of UnitStats (section 4)
+CUnit			0x440	pointer[4]	weaponSlots	CItem* (weapons / quick items)
+CUnit			0x450	pointer[4]	quickSlots	
+CUnit			0x460	pointer[8]	inventory	spells (CUnit::GetItemSpell: item +0x44)
+CUnit			0x480	pointer[7]	armorSlots	by CItem::GetType
+CUnit			0x438	int	battleButton	1 = Regroup may pick fights for this party member (client message 0x3b)
+CUnit			0x4c8	float[5]	detectionFactors	player units: sight, smell, hearing, (unused), senseLife; 3 = undetected, < 1 detected (replicated 0xc)
+UnitStats		0x704	0x4	float	experience	total experience; level = round(log(exp/200)/log(1.61)); MaxHP/MaxMana use log(exp/50)/log(1.61)
 UnitStats			0x8	float	expSpent	spent on skills + abilities
 UnitStats			0xc	int	strengthBase	
 UnitStats			0x10	int	strength	cached (UnitStats_Recompute)
@@ -55,25 +66,50 @@ UnitStats			0x14	int	dexterityBase
 UnitStats			0x18	int	dexterity	
 UnitStats			0x1c	int	intelligenceBase	
 UnitStats			0x20	int	intelligence	
-UnitStats			0x2c	float	moveSpeedBase	dexterity * 0.2 + 10
-UnitStats			0x30	float	actionPoints	
-UnitStats			0x54	float	carryWeight	max encumbrance
-UnitStats			0x58	float	crippleRatio0	
-UnitStats			0x5c	float	crippleRatio1	
-UnitStats			0x2f0	float	scale	
-UnitStats			0x6c8	byte[3]	attributeSkills	
-UnitStats			0x6cb	byte[6]	weaponSkills	melee archery backstab elemental sense astral
+UnitStats			0x2c	float	actionSpeedBase	dex * 0.2 + 10 (15 for monsters, dex/2 at hero init); CORRECTION: was moveSpeedBase
+UnitStats			0x30	float	actionSpeed	max(1, (1 + quickness %) * armFactor * actionSpeedBase + buff 0x21 - buff 0x22); attack period = weapon frames * 15 / this; CORRECTION: was actionPoints; = stats +0x30 (attack period = frames * 15 / this)
+UnitStats			0x54	float	carryWeight	str * 12 * (1 + lift %); 1e6 for monsters; carried > this = overloaded (EffectLevel 2)
+UnitStats			0x58	float	legFactor	1 / 0.5 / 0.33 by the worst leg part HP ratio (UnitStats_LegFactor); CORRECTION: was crippleRatio0
+UnitStats			0x5c	float	armFactor	same for the arm parts (UnitStats_ArmFactor); CORRECTION: was crippleRatio1
+UnitStats			0x6c8	byte[3]	attributeSkills	0 science, 1 stealing, 2 ? (UnitStats_AttrSkill)
+UnitStats			0x6cb	byte[8]	weaponSkills	+0x6cb melee, +0x6cc archery, +0x6cd ?, +0x6ce/+0x6cf/+0x6d0 magic schools (0..2, 3..4, 5..7), +0x6d1, +0x6d2
 UnitStats			0x6d3	byte[36]	perkLevels	26 groups x ability levels, 0..3 each
-UnitStats			0x6f8	uint	statFlags	
-UnitStats			0x6fc	float	maxHpStored	monsters
-UnitStats			0x700	float	hpFraction	
+UnitStats			0x6f8	uint	statFlags	bit 0 was backstabbed, bit 1 head hit, bit 2 hit[5] set, bit 3 HP > 0 after refresh; bit 4 set when a hit landed (net 4)
+UnitStats			0x6fc	float	maxHpStored	monsters: max HP from the proto (+0x48); heroes use the formula
+UnitStats			0x700	float	expAccumulator	fractional experience not yet flushed into +4 (skill costs, timed gain); CORRECTION: was hpFraction; = stats +0x700 (GiveExperience reads +0x8e0 + +0x1e4)
+UnitStats		0x704	0x0	int	header	not written by the code read; UnitStats_Init starts at +4
+UnitStats			0x24	float	baseSpeed	proto +0x60 (Unit_InitStatsFromProto)
+UnitStats			0x28	float	speed	= baseSpeed * legFactor (+0x58); packed to CUnit +0x344 (* 25.5)
+UnitStats			0x34	float[4]	stanceSpeedMult	run, walk, sneak, crawl multipliers (udb +0x1c..); packed * 127.5 to CUnit +0x340..+0x343
+UnitStats			0x44	float	viewConeCos	-2 heroes (all round); monsters from the race table; stats +0x44: cos of the half view angle (-2 = all round for heroes)
+UnitStats			0x48	float	peripheralRange	Skills Peripheral; stats +0x48 (Skills Peripheral)
+UnitStats			0x4c	float	cos45	cos(45 deg) constant
+UnitStats			0x50	float	carriedWeight	sum of item weights (+0x34) of the 23 item slots (CUnit::GetCarriedWeight 0x5307B0)
+UnitStats			0x60	int	moveType	udb +0x14: 1 walker (legs matter), 2 flying (CUnit +0x33f, CUnitServer +0x240); = stats +0x60 (2 flying)
+UnitStats			0x64	float	reachFactor	udb +0x44; natural reach = (this + 1) * radius (ChooseAttackAnim); = stats +0x64
+UnitStats			0x68	short	moveClassWalk	udb +0x48; AIGRAPH / passability class for walk and run (ComputeMoveClasses)
+UnitStats			0x6c	short	moveClassCrawl	udb +0x4c (both)
+UnitStats			0x6e	short	moveClassSneak	AIGRAPH / passability class (ComputeMoveClasses)
+UnitStats			0x70	float	naturalRange	proto +0x64: attack range without a weapon (CUnitServer +0x250); = stats +0x70
+UnitStats			0x74	float	naturalAttack	proto +0x68: attack skill without a weapon (AttackParams[6]); CUnit +0x349
+UnitStats			0x78	float	accuracySpread	proto +0x6c (init 1.0): the random band of the hit roll (AttackParams[5]); CUnit +0x34a
+UnitStats			0x7c	float	naturalDefence	proto +0x70: parry/defence skill (AttackParams[7]); CUnit +0x34b
+UnitStats			0x80	float	naturalWeight	proto +0x74: weapon-weight equivalent (AttackParams[2]); CUnit +0x34c
+UnitStats			0x84	float	naturalDamageMin	proto +0x80; CUnit +0x34d
+UnitStats			0x88	float	naturalDamageSpread	proto +0x84: damage roll = min + rand(0..spread); CUnit +0x34e
+UnitStats			0x8c	float	field_8c	proto +0x5c
+UnitStats			0x90	float[7]	naturalDamageFactors	udb +0x50: damage type distribution (impaling, slashing, crushing, thermal, chemical, electrical, general)
+UnitStats			0xac	int	naturalAttackKind	proto +0x78 (8 = none, 0x10 = ?); the animation set bit and the death kind; CUnitServer +0x28c, CUnit +0x34f; = stats +0xac; CORRECTION: was bodyClass
+UnitStats			0xb0	float[12]	senses	6 base/current pairs: Sight, Infra, SenseLife, Hearing, Smell, Tracking (current = base + buffs); base / current (= stats +0xb0/+0xb4)
+UnitStats			0xe0	float[12]	detections	6 base/current pairs: Sight (visibility), Infra, SenseLife, Hearing (noise), Smell (scent), Tracking; [7] = noise radius (footstep / attack loudness, CUnitServer +0x2dc)
+UnitStats			0x110	BodyPart[6]	bodyParts	0xf4 each: 0 head, 1 torso, 2/3 arms, 4/5 legs (pairs in PickHitLocation; crippling messages 0x1e arms kind 2 / 0x1f legs kind 3); part 1 +0xec = torso fraction: part max HP = maxHP / it * part fraction (was a separate row +0x2f0)
 CUnitServer		0xb20	0x1c	CUnit*	owner	
 CUnitServer			0x3c	int	moveState	slot 16 returns it; 2 = moving
-CUnitServer			0x164	int	state	0 walking 1 moving 2 waiting 3 attacking 4 casting 5 strike 6 idle
+CUnitServer			0x164	int	state	0 walking 1 turning 2 standing 3 one-shot animation 4 looping animation 5 action (attack/cast/use windup) 6 idle; CORRECTION: was '3 attacking 4 casting 5 strike'
 CUnitServer			0x168	int	stance	0 crawl 1 sneak 2 walk 3 run 4 sit (mirrors CUnit +0x264)
-CUnitServer			0x16c	int	attackMode	
+CUnitServer			0x16c	byte	combatMode	weapon drawn / attack-ready (set for attack orders)
 CUnitServer			0x170	int	stanceWanted	
-CUnitServer			0x174	int	attackModeWanted	
+CUnitServer			0x174	byte	fighting	CORRECTION: was attackModeWanted int: 1 while Suspection / Aggression / Fear is current (Begin) or a player unit attacks; keeps the unit active; AI units with it count as attackers
 CUnitServer			0x190	int	orderKind	current order: 0 wait 1 move 2 direct move 3 attack 4 cast at 5 cast on 6 interact 7/8 script anim 9 none 10 use 11 sit
 CUnitServer			0x194	int	orderParam	
 CUnitServer			0x198	pointer	orderTarget	refcounted object
@@ -83,13 +119,48 @@ CUnitServer			0x1ac	int	orderExtra
 CUnitServer			0x1b0	byte	orderRun	
 CUnitServer			0x1b4	byte[0x24]	queuedOrder	DispatchQueuedOrder moves it to +0x190
 CUnitServer			0x1e0	UnitStats	stats	
-CUnitServer			0x28c	int	bodyClass	
 CUnitServer			0x940	uint	stanceAnimKey	GetStanceAnimSet
 CUnitServer			0x95c	uint	moveAnimKey	attack kind mask | move mode flag
 CUnitServer			0x960	pointer	moveAnimSet	CArray
-CUnitServer			0x980	pointer	brain	
-CUnitServer			0xa50	pointer	aiMemory	AiMemory 0xb8 bytes
-CAIMap		0x26d0	0x0	byte	loaded	
+CUnitServer			0x980	Brain	brain	CORRECTION: was pointer: embedded, 0x190 bytes
+CUnitServer		0xb20	0x20	byte	paused	TickAnimation: time stands still (frozen)
+CUnitServer			0x21	byte	frozenAnim	set by RestartIdleAnim (hit reaction playing)
+CUnitServer			0x24	AnimQueue	currentAnim	{vtable, entries +0x28, count +0x2c, cap, grow, start tick +0x38}; entries 12 bytes {anim, sub, flags, duration, loop}
+CUnitServer			0xc4	ActionRecord	action	see ActionRecord (+0xc4..+0x104)
+CUnitServer			0x108	Hit	pendingHit	the hit record of the current attack (built by ExecuteCombatOrder, fired by CompleteOrder)
+CUnitServer			0x144	byte	idleAnimSaved	a hit reaction replaced the animation; TickState restores +0x148
+CUnitServer			0x145	byte	pathBlocked	partial path / cannot reach
+CUnitServer			0x146	byte	replanPath	stance / speed changed: BeginMoveTo again
+CUnitServer			0x148	AnimQueue	savedAnim	+0x15c = saved start tick
+CUnitServer			0x160	uint	pendingHitReaction	direction flags of the last hit, -1 none (RestartIdleAnim)
+CUnitServer			0x16d	byte	running	stance 3 folded into +0x168 = 2 with this flag
+CUnitServer			0x175	byte	stancePending	set by UpdateStanceFlags / ResetOrdersAndStance, cleared by ApplyPendingStance / TickMovement; CORRECTION: +0x174 was one int attackModeWanted, it is two bytes
+CUnitServer			0x178	int	runFailTicks	UpdateStance stops running after 6 failing ticks
+CUnitServer			0x17c	pointer	hitEffect	CEffect kind 0x4a attached during the strike
+CUnitServer			0x180	int	actionTimeoutTick	state 5: now + 10 (SetState)
+CUnitServer			0x184	int	nextAttackTick	the attack period: next swing not before this
+CUnitServer			0x18c	byte	moveDone	set by Think when a move order arrived (state 6); TickMoveOrder drops the order when the unit is not at the goal
+CUnitServer			0x18d	byte	deathProcessed	Update ran the death bookkeeping
+CUnitServer			0x18e	byte	stanceTransitionPending	ExecuteCombatOrder waits for ApplyPendingStance
+CUnitServer			0x8e4	short	attackSkill	ComputeAttack (saved 0x10 bytes with the armor)
+CUnitServer			0x8e6	short[7]	effectiveArmor	placement armor + torso tiers
+CUnitServer			0x8f4	float	corpseSink	z lowered by this each tick after death (+0.01/tick)
+CUnitServer			0x8f8	float	footstepMult	UpdatePerceptionFactors: 0.4 crawl 0.2 sneak 1 walk 2 run 0 standing
+CUnitServer			0x8fc	float	hearingMult	0.5 while running
+CUnitServer			0x900	float	visibilityMult	0.5 crawl 0.75 sneak x 1.5 casting
+CUnitServer			0x904	float	sightMult	weather x (1 - night + night x infra / 100)
+CUnitServer			0x908	int	tameStage	OnProvoked: 0..3
+CUnitServer			0x90c	int	sideBeforeTaming	
+CUnitServer			0x910	int	tamerSide	
+CUnitServer			0x914	uint	footstepTickMask	EmitFootstep when (tick & mask) == 0: 0 fast .. 0xf slow / standing
+CUnitServer			0x918	pointer	unused918	always 0 (EmitFootstep returns 0)
+CUnitServer			0x920	pointer	passiveSpellList	{next, ?, item, countdown} (TickPassiveSpells)
+CUnitServer			0x938	int	idleVoiceCounter	player units: > 500 then 1/1001 per tick -> message 0x29 (idle voice) unless the player mode is set
+CUnitServer			0x93c	int	lastOrderTick	world tick when the last order was dispatched
+CUnitServer			0x978	pointer	animDoneCallback	called when a state-3 animation ends
+CUnitServer			0x97c	uint	propagatedAlarmMask	enemy bits already exchanged with the neighbours
+CUnitServer			0xb10	AiAcknowledge	acknowledge	voice reaction object
+CAIMap		0x12704	0x0	byte	loaded	size 0x12704: the StimulusMap is embedded at +0x26c8
 CAIMap			0x2	byte	navGridOn	NavGrid rebuilt on passability changes
 CAIMap			0x14	byte[64]	walkCostTable	16 terrain material classes, 0x400 = 1.0, -1 impassable
 CAIMap			0x54	byte[64]	costTable2	
@@ -123,19 +194,491 @@ CItem			0x3c	float	field_3c	proto +0x3c
 CItem			0x40	float	field_40	proto +0x44
 CItem			0x44	pointer	subItem	CItem* (a spell inside its container ...)
 CItem			0x48	int	subWeight	
-CItemWeapon	CItem	0x5c	0x4c	float	rangeMin	weapon ranges / damage (info[0x13..0x16])
-CItemWeapon			0x50	float	range50	
-CItemWeapon			0x54	float	range54	
-CItemWeapon			0x58	float	range58	
+CItemWeapon	CItem	0x5c	0x4c	float	field_4c	copied to hit[7]; CORRECTION: was rangeMin (not a range)
+CItemWeapon			0x50	float	damageMin	AttackParams[3]; CORRECTION: was range50
+CItemWeapon			0x54	float	damageSpread	max = min + this; CORRECTION: was range54
+CItemWeapon			0x58	float	attackRange	GetAttackRange / OrderReachDistance; CORRECTION: was range58
 CItemArmor	CItem	0x8c	0x4c	float[7]	armorValues	one per damage type
 CItemArmor			0x68	float[7]	armorValues2	
-CMover		0xa4	0x3c	int	field_3c	
-CMover			0x40	pointer	pathCells	CellList of 0x10-byte nodes
-CMover			0x48	float	heading	
-CMover			0x58	int	unitCellX	unit position * 2
-CMover			0x5c	int	unitCellY	
-CMover			0x6c	byte[4]	flags	reset to {1, 0, 0, 1}
-CMover			0x70	pointer	blockedCells	
-CMover			0x74	pointer	pairBuffer	
-CMover			0x78	int	pairCount	
-CMover			0x84	int	field_84	
+MoveRequest		0x3c	0x0	int	kind	0 stand, 1 turn in place, 2 follow the cell list, 3 track a unit (face it), 4 timed turn
+MoveRequest			0x4	float	startX	unit x * 2 (tile units) at startTick
+MoveRequest			0x8	float	startY	unit y * 2
+MoveRequest			0xc	float	startHeading	radians, atan2 of the facing vector
+MoveRequest			0x10	int	startTick	world tick (CWorldServer +0x64) the request starts at
+MoveRequest			0x14	int	argA	kind 1/4: target angle (float); kind 2: goal x (float, tile units); kind 3: target unit id
+MoveRequest			0x18	int	argB	kind 1/4: turn speed (float); kind 2: goal y (float); kind 3: end tick
+MoveRequest			0x1c	int	argC	kind 4: time; kind 3: second end tick
+MoveRequest			0x20	pointer	cellsVtbl	CellList vtable 0x73EDB0 (nodes 0x10: next, prev, i16 x, i16 y, i16 speedFactor (512 = 1.0), i16 flags (bit0 water, bit1 costly))
+MoveRequest			0x24	pointer	cellsHead	
+MoveRequest			0x28	pointer	cellsTail	
+MoveRequest			0x2c	int	cellsCount	at most 32 per chunk
+MoveRequest			0x30	pointer	cellsFree	free node list
+MoveRequest			0x34	pointer	cellsPlex	node blocks
+MoveRequest			0x38	int	cellsBlockSize	0x80
+CMover	MoveRequest	0x88	0x3c	pointer	pendingVtbl	CellList: cells of the path not yet delivered to the request
+CMover			0x40	pointer	pendingHead	
+CMover			0x44	pointer	pendingTail	
+CMover			0x48	int	pendingCount	
+CMover			0x4c	pointer	pendingFree	
+CMover			0x50	pointer	pendingPlex	
+CMover			0x54	int	pendingBlockSize	
+CMover			0x58	float	goalX	snapped goal x * 2 (tile units); after a partial path the last reached tile + 0.5
+CMover			0x5c	float	goalY	
+CMover			0x60	float	reqX	requested goal x in metres
+CMover			0x64	float	reqY	
+CMover			0x68	float	maxLength	the order z: maximum path length in metres (1e6)
+CMover			0x6c	byte	pathDelivered	1 = whole path handed to the request (reset 1)
+CMover			0x6d	byte	needReplan	1 = no path / partial path: FindPath again from the stored goal when the chunk ends
+CMover			0x6e	byte	aiUnit	1 for units without a player (allows FindLongPath retries)
+CMover			0x6f	byte	firstRequest	1 after reset, cleared at the end of FindPath (allows a retry once)
+CMover			0x70	pointer	blockedVtbl	CArray of {int x, int y} blocked nav cells (cost -1 for NavGrid::FindPath)
+CMover			0x74	pointer	blockedData	
+CMover			0x78	int	blockedCount	
+CMover			0x7c	int	blockedCap	
+CMover			0x80	int	blockedGrow	
+CMover			0x84	int	field_84	cleared on reset; use unknown
+MoveCurve		0xa4	0x0	pointer	segVtbl	segment CArray: 0x1C-byte MoveSegment {x, y, dirx, diry, speed, cellx, celly}
+MoveCurve			0x4	pointer	segData	
+MoveCurve			0x8	int	segCount	
+MoveCurve			0xc	int	segCap	
+MoveCurve			0x10	int	segGrow	
+MoveCurve			0x14	pointer	ptVtbl	run point CArray: 0xC-byte {x, y, runLength}
+MoveCurve			0x18	pointer	ptData	
+MoveCurve			0x1c	int	ptCount	
+MoveCurve			0x20	int	ptCap	
+MoveCurve			0x24	int	ptGrow	
+MoveCurve			0x28	pointer	cellSpeedVtbl	per-cell speed factor CArray (float)
+MoveCurve			0x2c	pointer	cellSpeedData	
+MoveCurve			0x30	int	cellSpeedCount	
+MoveCurve			0x34	int	cellSpeedCap	
+MoveCurve			0x38	int	cellSpeedGrow	
+MoveCurve			0x3c	float	baseSpeed	tile units per tick (CUnit +0x2B8); segment speed = factor * baseSpeed / 512
+MoveCurve			0x40	float	turnRate	CUnit +0x2BC
+MoveCurve			0x44	float	curTurnRate	rate of the current turn in place
+MoveCurve			0x48	float	startHeading	
+MoveCurve			0x4c	float	turnDelta	wrapped angle to turn first
+MoveCurve			0x50	float	segX0	cached segment: start x
+MoveCurve			0x54	float	segY0	
+MoveCurve			0x58	float	segDx0	start direction
+MoveCurve			0x5c	float	segDy0	
+MoveCurve			0x60	float	segX1	end x
+MoveCurve			0x64	float	segY1	
+MoveCurve			0x68	float	segDx1	end direction
+MoveCurve			0x6c	float	segDy1	
+MoveCurve			0x70	float	segLength	
+MoveCurve			0x74	float	segSpeed	
+MoveCurve			0x78	float[4]	curveX	Hermite cubic a0..a3 in distance
+MoveCurve			0x88	float[4]	curveY	
+MoveCurve			0x98	float	segT0	segment start time (ticks since the request start)
+MoveCurve			0x9c	float	segT1	segment end time
+MoveCurve			0xa0	int	segIndex	cached segment, -1 = none (CUnit +0x31C)
+MoveSegment		0x1c	0x0	float	x	tile units
+MoveSegment			0x4	float	y	
+MoveSegment			0x8	float	dirx	unit direction of the run
+MoveSegment			0xc	float	diry	
+MoveSegment			0x10	float	speed	tile units per tick
+MoveSegment			0x14	int	cellx	cell being entered
+MoveSegment			0x18	int	celly	
+CellNode		0x10	0x0	pointer	next	CellList node (path cells)
+CellNode			0x4	pointer	prev	
+CellNode			0x8	short	x	tile
+CellNode			0xa	short	y	
+CellNode			0xc	short	speedFactor	512 = 1.0; set by RateFootprintPath, replicated (10 bits)
+CellNode			0xe	short	flags	bit0 water, bit1 costly (step cost > 12000)
+PathNode		0x14	0x0	int	cost	0x7FFFFFFF = unreached (tile level Dijkstra node, 34 x 34 window)
+PathNode			0x4	pointer	next	open / closed list
+PathNode			0x8	pointer	prev	
+PathNode			0xc	short	x	window column
+PathNode			0xe	short	y	window row
+PathNode			0x10	byte	usable	0 = window border
+PathNode			0x11	byte	reached	1 = closed / cost valid
+PathNode			0x12	byte	backDir	1..8 way back to the parent (1 N, 2 NW, 3 W, 4 SW, 5 S, 6 SE, 7 E, 8 NE), 0 = origin
+NavNode		0x18	0x0	int	cost	nav level (4 m cell) Dijkstra node
+NavNode			0x4	pointer	next	
+NavNode			0x8	pointer	prev	
+NavNode			0xc	short	x	
+NavNode			0xe	short	y	
+NavNode			0x10	int	backDir	
+NavNode			0x14	byte	closed	
+PathFinder		0x80	0x0	byte	active	
+PathFinder			0x1	byte	radiusSaved	free-radius bytes saved by SaveFreeRadius
+PathFinder			0x4	pointer	nodes	34 x 34 PathNode grid data
+PathFinder			0x8	pointer	nodeRows	
+PathFinder			0xc	int	nodesW	0x22
+PathFinder			0x10	int	nodesH	0x22
+PathFinder			0x14	pointer	savedBytes	34 x 34 byte map (saved stamp bytes)
+PathFinder			0x18	pointer	savedRows	
+PathFinder			0x24	pointer	aiMap	CAIMap*
+PathFinder			0x28	pointer	terrainRowsVtbl	vector of 34 row pointers into the terrain grid (+0x2c data)
+PathFinder			0x2c	pointer	terrainRows	
+PathFinder			0x3c	pointer	closedList	
+PathFinder			0x40	pointer	open0	4 open lists by node x & 3, each sorted by cost
+PathFinder			0x44	pointer	open1	
+PathFinder			0x48	pointer	open2	
+PathFinder			0x4c	pointer	open3	
+PathFinder			0x50	pointer	current	node being expanded
+PathFinder			0x54	int	originX	window origin tile
+PathFinder			0x58	int	originY	
+PathFinder			0x5c	int	currentCost	
+PathFinder			0x60	pointer	costTable	StepQuery: 16-int nibble cost table (CAIMap +0x14 / +0x54)
+PathFinder			0x64	pointer	slopeTable	StepQuery: slope table centred at dh = 0
+PathFinder			0x68	int	nibbleShift	class * 4
+PathFinder			0x6c	float	queryB	turn rate (GetSpeeds b)
+PathFinder			0x70	float	queryC	10.0
+PathFinder			0x74	float	queryA	stance speed (GetSpeeds a)
+PathFinder			0x78	int	moveClass	-1 after Reset
+PathFinder			0x7c	byte	backward	0 forward search, 1 backward (changes StepCost's nibble / slope roles)
+PathFinder			0x7d	byte	stampRadius	R = round((2 - radius) * 16)
+NavSearch		0x4c	0x0	pointer	nodes	NavNode grid data (coarse Dijkstra, was PathSearch)
+NavSearch			0x4	pointer	nodeRows	
+NavSearch			0x8	int	w	nav cells
+NavSearch			0xc	int	h	
+NavSearch			0x10	pointer	navGrid	
+NavSearch			0x14	pointer	costPlane	grid object of the cost plane A (8 x i16 per cell)
+NavSearch			0x18	pointer	closedList	
+NavSearch			0x1c	pointer	open0	8 open lists by node x & 7
+NavSearch			0x3c	pointer	current	
+NavSearch			0x40	int	baseCost	
+NavSearch			0x48	byte	backward	
+NavSearch			0x49	byte	active	
+NavGrid		0x29c	0x0	byte[76]	forward	NavSearch (0x4c)
+NavGrid			0x4c	byte[76]	backward	NavSearch
+NavGrid			0x98	byte[128]	local	PathFinder (0x80) used by CollectReachableCells / IsCellInRegion
+NavGrid			0x118	pointer	progress	progress callback (float 0..1) during Build
+NavGrid			0x124	int	w	nav cells (= tiles / 8)
+NavGrid			0x128	int	h	
+StampMap		0x1028	0x0	pointer	appliers	vtable: slot 0 Set(node), slot 1 Max(node); 0x73FD74 terrain byte +8, 0x73FD6C obstacle grid
+StampMap			0x1c	int	bucketCount	0x400
+StampMap			0x1020	pointer	freeNodes	
+StampMap			0x1024	pointer	aiMap	CAIMap*
+FootprintStamp		0x10c	0x0	pointer	vtbl	0x73FD5C
+FootprintStamp			0x4	short	refCount	
+FootprintStamp			0x8	byte[256]	level	16 x 16: round((radius + 2 - dist/2) * 16) around the centre (8, 8)
+FootprintStamp			0x108	float	radius	
+AICell		0x9	0x0	uint	passability	8 nibbles, nibble k = class k: 0 blocked, 15 best
+AICell			0x4	ushort	height	steps of maxZ / 511
+AICell			0x6	byte	waterAndFlags	bits 0-5 water depth (0x3F deep), bit 6 bridge / platform, bit 7 water
+AICell			0x7	byte	hiFlags	high byte of the +6 word, preserved by TerrainGrid_Alloc; use unknown
+AICell			0x8	byte	standingLevel	footprint level of standing units (max over stamps); 0 on a fresh map
+CAIMap			0x1	byte	batching	1 = StampObject merges into the dirty rectangle instead of calling UpdatePassability
+CAIMap			0x4	int	dirtyX0	dirty rectangle, reset to {10000, 0, 10000, 0}
+CAIMap			0x8	int	dirtyX1	
+CAIMap			0xc	int	dirtyY0	
+CAIMap			0x10	int	dirtyY1	
+CAIMap			0xdc	int	slopeWalkCount	0x3ff
+CAIMap			0xf0	int	slopeClass0Count	0x3ff
+CAIMap			0x128	int	sectorsX	CollisionMap (embedded at +0x124): sectors of 32 x 32 tiles, 0x54 bytes each
+CAIMap			0x12c	int	sectorsY	
+CAIMap			0x138	pointer	sectors	NavSector array: unit list +0x20, object list +4, entry chain CArray +0x44, free chain +0x3C
+CAIMap			0x13c	int	sectorCount	
+CAIMap			0x148	pointer	collisionWorld	back pointer (CAIMap)
+CAIMap			0x14c	pointer	cellObjectsFloors	object of the 24-byte cell-object record array (floors / obstacles); hash heads at +0x15C
+CAIMap			0x1a0	pointer	cellObjectsBridges	same for bridge parts; hash heads at +0x1B0
+CAIMap			0x1f4	pointer	obstacleGridData	obstacle (walking unit) level grid; rows at +0x1F8
+CAIMap			0x1fc	int	obstacleGridW	
+CAIMap			0x200	int	obstacleGridH	
+CAIMap			0x204	pointer	erodeList5	erosion footprint offsets for classes 0-4 (CArray of {dx, dy})
+CAIMap			0x218	pointer	erodeList13	classes 5-6
+CAIMap			0x22c	pointer	erodeList29	class 7
+CAIMap			0x240	pointer	steepList5	MarkSteepCells neighbour clears
+CAIMap			0x254	pointer	steepList13	
+CAIMap			0x268	pointer	steepList29	
+CAIMap			0x27c	byte[0x1028]	terrainStamps	StampMap: standing units -> terrain byte +8 (appliers 0x73FD74)
+CAIMap			0x12a4	byte[0x1028]	obstacleStamps	StampMap: walking units -> obstacle grid (appliers 0x73FD6C)
+CAIMap			0x22cc	byte[0x2c]	exitScratch	scratch of ChooseExitDirection / NavGraph::RelaxPortal
+CAIMap			0x22f8	byte[0x29c]	navGrid	NavGrid: the AIGRAPH, read from the .mob
+CAIMap			0x2594	byte[0x80]	pathFinderFwd	tile PathFinder, forward (flag 0)
+CAIMap			0x2614	byte[0x80]	pathFinderBwd	tile PathFinder, backward (flag 1)
+CAIMap			0x26a8	pointer	flagsGridData	flags grid data; rows at +0x26AC
+CAIMap			0x26b8	pointer	occupancyGridData	scratch / direction-code grid data; rows at +0x26BC
+CAIMap			0x26c8	StimulusMap	stimulusMap	CORRECTION: was unnamed/size unknown: 0x1003c bytes, g_0x7B2798
+AnimQueue		0x18	0x0	pointer	vtable	
+AnimQueue			0x4	pointer	entries	12-byte entries {anim, sub, flags, duration, loop}
+AnimQueue			0x8	int	count	
+AnimQueue			0xc	int	capacity	
+AnimQueue			0x10	int	growBy	
+AnimQueue			0x14	int	startTick	
+UnitRecord		0x108	0x0	int	field_0	packed net/save form of UnitStats (combat.md section 4); the rows below were read from CUnit
+UnitRecord			0xf	byte	moveType	2 = flying (stats +0x60) (CUnit +0x33f)
+UnitRecord			0x10	byte	speedStat0	GetSpeeds inputs (CUnit +0x340)
+UnitRecord			0x14	byte	speedBase	stats +0x28 * 25.5 (CUnit +0x344)
+UnitRecord			0x15	byte	actionSpeed	stats +0x30 (CUnit +0x345)
+UnitRecord			0x16	short	carryWeight	stats +0x54 (CUnit +0x346)
+UnitRecord			0x18	byte	naturalRange	stats +0x70 (CUnit +0x348)
+UnitRecord			0x19	byte	naturalAttack	stats +0x74 (client AttackParams[6]) (CUnit +0x349)
+UnitRecord			0x1a	byte	accuracySpread	stats +0x78 (CUnit +0x34a)
+UnitRecord			0x1b	byte	naturalDefence	stats +0x7c (CUnit +0x34b)
+UnitRecord			0x1c	byte	naturalWeight	stats +0x80 (CUnit +0x34c)
+UnitRecord			0x1d	byte	naturalDamageMin	stats +0x84 (CUnit +0x34d)
+UnitRecord			0x1e	byte	naturalDamageSpread	stats +0x88 (CUnit +0x34e)
+UnitRecord			0x1f	byte	naturalAttackKind	stats +0xac; CORRECTION: was bodyClass (CUnit +0x34f)
+UnitRecord			0x20	short	deathKind	7 spell / no attacker, else the killer's damage kind (weapon or natural), object typeId + 0x10 (TakeHit) (CUnit +0x350)
+UnitRecord			0x30	byte[0xa8]	packedParts	6 x 0x1c {kind, mask byte +4, 7 armor shorts +6, state +0x14, hp short +0x18, max short +0x1a} (CUnit +0x360)
+UnitRecord			0xd8	byte[3]	attributeSkills	packed +0x6c8 (CUnit +0x408)
+UnitRecord			0xdb	byte[8]	weaponSkillsPacked	packed +0x6cb (CUnit +0x40b)
+UnitRecord			0xe3	byte[36]	perkLevels	packed +0x6d3 (CUnit +0x413)
+BodyPart		0xf4	0x0	int	kind	from table g_0x7AF3B8 +4: 2 arm, 3 leg, 4 other (init), head/torso kinds not seen
+BodyPart			0x4	uint	crippleMask	damage-type bits that cripple this part when one blow >= part max HP (table +0x40, or-ed with the armor item +0x84/+0x88)
+BodyPart			0x8	BodyPartTier[3]	tiers	armor tiers stride 0x48: tier 0 natural / monsters, 1..2 hero armor layers; ApplyDamage walks 2..0 for heroes
+BodyPart			0xe0	int	state	0 absent, 1 crippled (HP = -5 max), 2 dead part (HP <= 0), 3 functional
+BodyPart			0xe4	float	hp	part HP; the unit HP = maxHP - sum of injury penalties
+BodyPart			0xe8	float	hpMax	= maxHP / torsoFraction * fraction
+BodyPart			0xec	float	fraction	udb +0x90+16i: HP fraction relative to the torso
+BodyPart			0xf0	float	penaltyRate	udb +0x94+16i: (max - hp)/max * rate * maxHP is lost from the unit HP; also the healing weight
+BodyPartTier		0x48	0x0	int	flag	init 0
+BodyPartTier			0x4	float[7]	armor	per damage type; absorbs hit[10] * value per blow (UnitStats_ApplyDamage)
+BodyPartTier			0x20	float[7]	armor2	second value set of the armor item (+0x68) [?]
+BodyPartTier			0x3c	int	state	> 1 = active (3 when an armor item fills it)
+Hit		0x3c	0x0	float[7]	typeFactors	damage distribution per type (weapon proto +0x98.. / natural +0x90); after ApplyHit = effective fraction per type
+Hit			0xc	float[3]	spellDir	hit[3..5] nonzero = a spell/effect hit (Hit_HasDirection): no roll on the defender's side, death kind 7 (overlaps typeFactors[3..5])
+Hit			0x1c	float	weaponValue4c	CItemWeapon +0x4c for armed heroes, else 0 (not read by the damage code)
+Hit			0x20	float	roll	attack roll; ResolveHitChance sets +INF (hit) / -INF (miss); finite = unresolved (spell hits are rolled in TakeHit)
+Hit			0x24	float	damage	rolled damage (weapon +0x50 + rand*+0x54, natural +0x84 + rand(+0x88)) * strengthen/weaken buffs
+Hit			0x28	float	armorFactor	1.0: multiplies the armor values subtracted (placement and tiers)
+Hit			0x2c	int	location	body part 0..5, 6 = whole body (split by part rate)
+Hit			0x30	int	direction	hit[12]: passed to OnDamaged as the hit direction (0 melee)
+Hit			0x34	float	backstabMult	1.0 normal; 3.0 + backstab perk % from behind (cancelled when the defender is in combat mode); > 1 ignores the defence and multiplies the damage
+Hit			0x38	byte	calledShot	-25 (head) / -10 (limbs) on the hit chance
+Order		0x24	0x0	int	kind	0 stand 1 move 2 turn 3 attack 4 cast at 5 cast on 6 interact 7 script anim 8 script anim loop 9 none 10 use quick item 11 sit
+Order			0x4	int	param	kind 1: group flag; 3: hit location (6 any); 4/5: spell item id (bit 31 = quick item slot); 6: 0 use / 1 / 2 steal / 0x18a95 talk; 10: slot
+Order			0x8	pointer	target	refcounted CMapObject
+Order			0xc	float[3]	pos	kind 1: goal (z = max path length); 2: direction; 4: cast point
+Order			0x18	byte	exact	position-locked: reach 0.2 / 1e10, no path validation
+Order			0x1c	int	extra	kind 1: 1 = report the result (message 1 / 0xe); 2: turn speed; 7/8: anim index
+Order			0x20	byte	run	stand up (stance 2) and run: UpdateStanceFlags sets the run flag
+ActionRecord		0x40	0x0	pointer	vtable	the current action (CUnitServer +0xc4): an anim queue {+4 entries, +8 count, +0xc cap, +0x10 grow, +0x14 start tick} plus the fields below
+ActionRecord			0x18	int	strikeTick	CUnitServer +0xdc: the strike animation starts here
+ActionRecord			0x1c	int	endTick	+0xe0: CompleteOrder (hit / cast / interaction) happens here
+ActionRecord			0x20	int	faceTargetId	+0xe4: object id to face during the action (-1 = face +0xfc)
+ActionRecord			0x24	float	reachSq	+0xe8: the target must be within sqrt of this at the end (TargetInRange); 1e38 = no test
+ActionRecord			0x28	byte	hitEffect	+0xec: spawn the hit effect (0x4a) at the strike
+ActionRecord			0x2c	int	hitLocation	+0xf0 (1 = torso default)
+ActionRecord			0x30	byte	calledShot	+0xf4
+ActionRecord			0x34	int	damageKind	+0xf8: effect id selector (8 = none)
+ActionRecord			0x38	float[2]	dir	+0xfc: facing direction / target point; [?] a third component would pass the 0x40-byte record
+AttackParams		0x20	0x0	float	damageKind	weapon kind or natural
+AttackParams			0x4	float	skillClass	weapon skill group or the first natural skill index
+AttackParams			0x8	float	weight	weapon weight (CItem +0x34) / natural +0x80; hit chance term A/(D*20)
+AttackParams			0xc	float	damageMin	
+AttackParams			0x10	float	damageMax	
+AttackParams			0x14	float	spread	accuracy spread: roll = 2*rand(0..spread) - spread - 1
+AttackParams			0x18	float	attack	attack skill
+AttackParams			0x1c	float	defence	parry skill; 0 for bows/crossbows
+CUnitClientSpecific	CUnitSpecific	0xdc	0x2c	float	lastAnimTime	SetAnimation
+CUnitClientSpecific			0x34	float	replayTime	client move replay clock
+CUnitClientSpecific			0x38	int	moveState	client MoveRequest copy (slot 16)
+CUnitClientSpecific			0x78	float	fadeAlpha	+1/15 per frame onto the figure parts
+CUnitClientSpecific			0x7c	int	fadeTicks	
+CUnitClientSpecific			0x9c	pointer	voiceQueue	list of 0x20-byte nodes {next, prev, entry, kind, countdown, sound, flag}
+CUnitClientSpecific			0xa0	int[7]	armorIds	equipped item ids (-1 none)
+CUnitClientSpecific			0xbc	int[4]	weaponIds	weapon slot item ids (-1 none)
+CUnitClientSpecific			0xcc	pointer	mouthTexture	
+Placement		0x58	0x4	int	regenTick	counts to 15 (Placement_Regenerate)
+Placement			0x8	float	hp	DERIVED each change: maxHP - body-part penalties
+Placement			0xc	float	hpMax	hero formula or proto +0x48, * strengthen/weaken ratio capped at 1.0 [?]
+Placement			0x10	float	hpRegen	udb +8, per 15 ticks * maxHP
+Placement			0x14	float	mana	
+Placement			0x18	float	manaMax	
+Placement			0x1c	float	manaRegen	udb +0xc
+Placement			0x20	float[14]	armor	7 pairs {base, current} per damage type = udb +0x6c.. * proto +0x58; buffs 9/10/11/0x1a raise the thermal/chemical/electrical currents; items use +0x20 durability / +0x24 max / +0x48 count
+WeaponProto		0xb4	0xc	int	damageKind	0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow 8 unarmed [I]
+WeaponProto			0x38	float	weight	
+WeaponProto			0x50	float	damageMin	
+WeaponProto			0x54	float	damageSpread	
+WeaponProto			0x6c	int	attackFrames	attack period = this * 15 / actionSpeed ticks
+WeaponProto			0x7b	byte	meleeSkillBonus	added to the melee attack skill
+WeaponProto			0x7c	byte	archerySkillBonus	
+WeaponProto			0x80	byte[3]	attributeSkillBonus	science / stealing / ? bonuses (best over the 4 weapon slots)
+WeaponProto			0x98	float[7]	damageFactors	damage type distribution (CItem::GetProtoFloats98)
+UnitProto		0x124	0x24	float	size	+ unit z >= 1.5: cannot be meleed
+UnitProto			0x48	float	hpMax	monsters: also str = this / 3
+UnitProto			0x4c	float	manaMax	dex = this / 3
+UnitProto			0x50	float	naturalSkill0	[?] read as the first of 7 floats (first nonzero index = AttackParams[1]) but +0x54.. are expValue / armorFactor: unresolved
+UnitProto			0x54	float	expValue	experience given to the killer's player
+UnitProto			0x58	float	armorFactor	scales the udb armor values
+UnitProto			0x60	float	baseSpeed	
+UnitProto			0x64	float[5]	naturalAttack	range, attack, spread, defence, weight -> stats +0x70..+0x80
+UnitProto			0x78	int	naturalAttackKind	
+UnitProto			0x80	float[2]	naturalDamage	min, spread
+UnitProto			0x88	float[3]	skillBases	skills / science / ? bytes
+UnitProto			0x98	float[6]	perceptionBases	sight, night sight, hearing ...
+UnitProto			0xb0	float[6]	resistanceBases	
+UnitProto			0x108	int	bloodKind	1..4 blood print
+UnitProto			0x114	int	hitEffectFlag	strike effect 0x4a allowed
+UnitProto			0x120	float	speedMult	move class speed
+AiInfo		0xcc	0x0	byte	loaded	AiInfo_Load runs once
+AiInfo		0xcc	0x4	float	GuardStayTime	[Logic] 10: guard / sentry idle time (x 15 ticks per idle action)
+AiInfo		0xcc	0x8	float	SentryStayTime	10
+AiInfo		0xcc	0xc	float	FollowMinDist	2: TickFollow stops inside
+AiInfo		0xcc	0x10	float	FollowMaxDist	4: TickFollow walks beyond; party cohesion 2 Max + 1 / 1.4 Max + 1
+AiInfo		0xcc	0x14	float	GuardRadius	10: default guard radius
+AiInfo		0xcc	0x18	float	CallForHelpRadius	7: brain +0x38 when the mob Help equals the default
+AiInfo		0xcc	0x1c	float	CallForHelpRadiusDefault	7
+AiInfo		0xcc	0x20	float	FollowLimit	15: no reader in the exe
+AiInfo		0xcc	0x24	float	PlayerCallForHelp	16: Brain::CollectCallers radius
+AiInfo		0xcc	0x28	float	RangedRunDist	4: kiting distance while Aggression is current
+AiInfo		0xcc	0x2c	float	RangedAttackDist	7: kiting distance otherwise
+AiInfo		0xcc	0x30	float	SwarmRadius	10: Regroup attacker radius around the move target
+AiInfo		0xcc	0x34	float	HumanCrossAnimationSpeed	[RPG] 1
+AiInfo		0xcc	0x38	float	BackstabAdd	3
+AiInfo		0xcc	0x3c	float	BackstabMult	0
+AiInfo		0xcc	0x40	float	RotateSpeedMult	100
+AiInfo		0xcc	0x44	float	DamageLevel1	0.5
+AiInfo		0xcc	0x48	float	DamageLevel1Value	0.5
+AiInfo		0xcc	0x4c	float	DamageLevel2	0
+AiInfo		0xcc	0x50	float	DamageLevel2Value	0.33
+AiInfo		0xcc	0x54	float	DamageLevelRunLimit	0.5
+AiInfo		0xcc	0x58	float	Int1ExpBonus	0.2
+AiInfo		0xcc	0x5c	float[5]	HP_Val	25 30 50 1.1 1.61
+AiInfo		0xcc	0x70	float[5]	MP_Val	25 30 50 1.1 1.61
+AiInfo		0xcc	0x84	float	Skill_Val_1	50
+AiInfo		0xcc	0x88	float	Skill_Val_2	5
+AiInfo		0xcc	0x8c	float	Perk_Power_Base	2
+AiInfo		0xcc	0x90	float	Consider_Modifier	200
+AiInfo		0xcc	0x94	float	Consider_Log_Base	1.61
+AiInfo		0xcc	0x98	float	Lost_Money	[LMP] 0.1
+AiInfo		0xcc	0x9c	float	Lost_XP	0.1
+AiInfo		0xcc	0xa0	int	QuestsToRespawn	[Scenario] 3
+AiInfo		0xcc	0xa4	float	Item_Durability_Critical	0.3
+AiInfo		0xcc	0xa8	float[3]	difficultyAbsorption	[DifficultyLevels] 1 1 1
+AiInfo		0xcc	0xb4	float[3]	difficultyAttack	1 1 1
+AiInfo		0xcc	0xc0	float[3]	difficultyDefence	1 1 1
+StimulusMap		0x1003c	0x0	pointer	world	CWorldServer
+StimulusMap		0x1003c	0x4	int	tick	ExpireBucket sets it; -1 after Reset
+StimulusMap		0x1003c	0x8	float[3]	eye	eye position of the unit being processed
+StimulusMap		0x1003c	0x14	float[3]	eyeDir	-forward axis of the unit quaternion
+StimulusMap		0x1003c	0x20	int	eyeCellX	tile cell round(x * 2 - 0.5)
+StimulusMap		0x1003c	0x24	int	eyeCellY	
+StimulusMap		0x1003c	0x28	int	eyeValid	SetEyeAndDirection done
+StimulusMap		0x1003c	0x2c	pointer[16384]	expiry	[1024 ticks][16 channels] stimulus list heads (unused feature)
+StimulusMap		0x1003c	0x1002c	pointer	cells	w * h cells of 16 channel heads (0x40 bytes) per 8 m cell
+StimulusMap		0x1003c	0x10030	pointer	rows	
+StimulusMap		0x1003c	0x10034	int	width	cells
+StimulusMap		0x1003c	0x10038	int	height	
+Stimulus		0x30	0x0	float[2]	pos	 (dead feature: never created)
+Stimulus		0x30	0x8	float[2]	pos2	copy
+Stimulus		0x30	0x10	int	tick	
+Stimulus		0x30	0x14	float	sightFactor	
+Stimulus		0x30	0x18	float	smellFactor	
+Stimulus		0x30	0x1c	pointer	owner	CUnitServer
+Stimulus		0x30	0x20	int	channel	side bit
+Stimulus		0x30	0x24	pointer	cellNext	
+Stimulus		0x30	0x28	pointer	cellPrev	
+Stimulus		0x30	0x2c	pointer	bucketNext	
+HeardSound		0x18	0x0	float[3]	pos	source position
+HeardSound		0x18	0xc	int	delay	ticks until it fires (26 sounds / 30 alarm)
+HeardSound		0x18	0x10	uint	alarmMask	0 = sound (noticed pos, interest 900, decay -3); else the enemy player mask to OR into CUnit +0x244
+HeardSound		0x18	0x14	char[4]	text	CString debug text
+AiMemory		0xbc	0x10	float[2]	noticedPos	xy of the last stimulus (sound / lost unit / corpse)
+AiMemory		0xbc	0x18	int	interest	0..1000; 800 corpse, 900 sound, 1000 lost unit; Suspection priority
+AiMemory		0xbc	0x1c	int	decay	added to interest every tick: -1 footstep, -2 lost unit, -3 sound / corpse (also tells the kind)
+AiMemory		0xbc	0x20	int	refreshCountdown	RefreshNearbyUnits: (rand & 3) + 8 ticks
+AiMemory		0xbc	0x24	ObjRefList	neighbours	every unit within max(sight, senseLife) * 2 (sectors); head +0x28 = CUnitServer +0xa78
+AiMemory		0xbc	0x40	ObjRefList	seen	units currently seen (vision / sense life / forced); head +0x44 = CUnitServer +0xa94
+AiMemory		0xbc	0x5c	ObjRefList	corpses	seen corpses
+AiMemory		0xbc	0x78	ObjRefList	friendCorpses	seen corpses of FRIEND sides; cleared every Brain::Tick; CorpseWatcher pops them
+AiMemory		0xbc	0x94	CArray	ignorePairs	{CUnit ref, ttl ticks} x count +0x9c: targets ChooseTarget skips (20 ticks unreachable, 15 after a cast)
+AiMemory		0xbc	0xa8	CArray	heardSounds	HeardSound x count +0xb0; = CUnitServer +0xaf8
+Brain		0x190	0x0	pointer	owner	CUnitServer
+Brain		0x190	0x4	int	orderKind	0 none 1 move 2 move + idle actions 3 attack 4 cast 5 interact 6 follow
+Brain		0x190	0x8	float[3]	orderPos	move goal
+Brain		0x190	0x14	CArray	actions	PatrolAction x count +0x1c: idle turns / waits run by TickMoveOrder
+Brain		0x190	0x28	int	actionTimer	-10000 idle, -9999 turning, else the tick the wait ends; also the spell slot of a cast order
+Brain		0x190	0x2c	pointer	target	order target (ref)
+Brain		0x190	0x30	pointer	attacker	last attacker (ref), released every tick after the logic update
+Brain		0x190	0x34	byte	alarmFlag	1 = the alarm countdown runs
+Brain		0x190	0x35	byte	alarmSlot	mob NumAlarm: CWorldServer::ActivateLogicSlot(slot) when the countdown ends
+Brain		0x190	0x36	byte	currentSlot	mob logic slot index in use
+Brain		0x190	0x37	byte	alwaysActive	mob AlwaysActive bit: the unit never sleeps (TickActiveObjects)
+Brain		0x190	0x38	float	callForHelpRadius	mob Help (7 default); also the PropagateAlarm radius
+Brain		0x190	0x3c	int	alarmCondition	mob AlarmCondition: 0 enemy seen, 1 attacked, 2 enemy seen or Suspection / Aggression / CorpseWatcher / Fear begins
+Brain		0x190	0x40	int	alarmWait	mob Wait ticks (min 1) before the alarm fires
+Brain		0x190	0x44	float	nearRange	guard radius + 35 / 35 (set by the stationary logics, no reader found)
+Brain		0x190	0x48	float	farRange	guard radius + 80 / 80 (no reader found)
+Brain		0x190	0x4c	float	idleSpeedFactor	random 0.8..1.0 on Begin of a stationary logic, decays to 1
+Brain		0x190	0x50	float[3]	prevWaypoint	-1313 = none
+Brain		0x190	0x5c	float[3]	curWaypoint	post / patrol point; IsNearPath
+Brain		0x190	0x68	int	spotRetryCountdown	FindRandomReachableSpot backoff
+Brain		0x190	0x6c	int	followTick	TickFollow every 8
+Brain		0x190	0x70	ObjRefList	logics	head +0x74: the motivations
+Brain		0x190	0x8c	pointer	currentLogic	the motivation whose Update runs
+Brain		0x190	0x90	CArray	mobLogicSlots	MobLogicSlot x count +0x98 (5 from the .mob)
+Brain		0x190	0xa4	AiSpellInfos	spells	attack / support tables
+Brain		0x190	0xd0	AiMemory	memory	= CUnitServer +0xa50
+Brain		0x190	0x188	int	unused188	
+Brain		0x190	0x18c	byte	enemySeen	a seen unit is an enemy and alive; = CUnitServer +0xb0c; keeps the unit active
+AiSpellInfos		0x2c	0x4	pointer	attackData	AiSpellInfo x count +0x8: weapon + attack spells
+AiSpellInfos		0x2c	0x18	pointer	supportData	AiSpellInfo x count +0x1c: buffs / heals
+AiSpellInfos		0x2c	0x28	float	maxLevel	max AiSpellInfo_GetLevel of the attack table
+AiSpellInfo		0x28	0x0	int	kind	0 weapon 1 attack 2 area 3 area-in-combat 4 buff others 5 / 6 buffs 7 heal
+AiSpellInfo		0x28	0x4	int	slot	spell slot 0..7, -1 weapon
+AiSpellInfo		0x28	0x8	float	range	
+AiSpellInfo		0x28	0xc	int	uses	spell charges - 1
+AiSpellInfo		0x28	0x10	float	radius	area spells
+AiSpellInfo		0x28	0x14	int	effect	buff kind / effect
+AiSpellInfo		0x28	0x18	short[8]	damage	7 damage kinds (or the spell cost vector)
+AiLogic		0x8	0x0	pointer	vtable	13 slots: 0 dtor 1 copy 2 Reset 3 Clone 4 Evaluate(brain)->priority 5 Update(brain) 6 Begin(brain) 7 End(brain) 8 GetKind 9 IsStationary 10 OnObjectRemoved 11 Read 12 Write
+AiLogic		0x8	0x4	short	refCount	
+AiLogicGuard	AiLogic	0x20	0x8	float[3]	point	
+AiLogicGuard	AiLogic	0x20	0x14	float	radius	GuardRadius default
+AiLogicGuard	AiLogic	0x20	0x18	float	stayTime	GuardStayTime default; x 15 ticks per idle turn
+AiLogicGuard	AiLogic	0x20	0x1c	int	failedSpots	100 failures -> search around the unit
+AiLogicPatrol	AiLogic	0x20	0x8	CArray	points	PatrolPoint x count +0x10 (data +0xc)
+AiLogicPatrol	AiLogic	0x20	0x1c	int	index	current point
+PatrolPoint		0x20	0x0	float[3]	pos	tile centre
+PatrolPoint		0x20	0xc	CArray	actions	PatrolAction x count +0x14 (data +0x10)
+PatrolAction		0x10	0x0	float	angle	turn to this heading (atan2)
+PatrolAction		0x10	0x4	float	turnSpeed	0 = default (mob record +0x10 short)
+PatrolAction		0x10	0x8	float	duration	wait ticks
+PatrolAction		0x10	0xc	byte	playAnim	QueueOrderKindB (idle animation) while waiting
+AiLogicSentry	AiLogic	0x14	0x8	float[3]	point	
+AiLogicFollow	AiLogic	0xc	0x8	pointer	target	ref
+AiLogicSuspection	AiLogic	0x18	0x8	float[3]	point	= AiMemory noticedPos when adopted
+AiLogicSuspection	AiLogic	0x18	0x14	int	stay	priority; -5 per tick near the point, -50 per tick while an enemy is seen
+AiLogicAggression	AiLogic	0x18	0x8	pointer	target	kept target (ref)
+AiLogicAggression	AiLogic	0x18	0xc	byte	revenge	1 = attacks only its attacker (mob AggrMode 1 / UMRevenge)
+AiLogicAggression	AiLogic	0x18	0x10	int	spell	chosen spell slot, -1 weapon
+AiLogicAggression	AiLogic	0x18	0x14	pointer	chosen	target chosen this tick (raw)
+AiLogicPlayer	AiLogic	0x24	0x8	pointer	keptTarget	attack target (ref)
+AiLogicPlayer	AiLogic	0x24	0xc	pointer	leader	followed unit (ref)
+AiLogicPlayer	AiLogic	0x24	0x10	float[2]	moveTarget	parked move goal
+AiLogicPlayer	AiLogic	0x24	0x18	float	moveIssued	1.0 once the parked move was queued (z slot reused)
+AiLogicPlayer	AiLogic	0x24	0x1c	int	state	0 idle 1 own move running 2 parked party move
+AiLogicPlayer	AiLogic	0x24	0x20	byte	run	flag passed to QueueOrderMoveTo
+AiLogicFear	AiLogic	0x2c	0x8	float	radius	flee radius; max(r, 1.5 x attacker distance); decays to 10
+AiLogicFear	AiLogic	0x2c	0xc	float	jitter	flee point jitter, 3; doubled per flee, max 2.5 r
+AiLogicFear	AiLogic	0x2c	0x10	float[3]	rememberedSpot	-1313 none; a spell area the unit stood in
+AiLogicFear	AiLogic	0x2c	0x1c	float[2]	kiteSpot	retreat point of a ranged unit
+AiLogicFear	AiLogic	0x2c	0x24	float	kiteSpotValid	1.0
+AiLogicFear	AiLogic	0x2c	0x28	byte	playerFear	afraid of player-owned seen units (mob AggrMode 3 / UMFear flag)
+AiAcknowledge		0x10	0x0	int	heardLevel	max level a neighbour is currently voicing (reset per tick)
+AiAcknowledge		0x10	0x4	int	pending	Request(level)
+AiAcknowledge		0x10	0x8	int	current	voiced level
+AiAcknowledge		0x10	0xc	int	timer	20 ticks
+MobLogicSlot		0x4c	0x0	int	model	0 point 1 guard 2 patrol 3 sentry 4 player 5 guard at the alarm position
+MobLogicSlot		0x4c	0x4	CArray	points	0x20 records {pos, 0x14-byte action records} x count +0xc (data +0x8)
+MobLogicSlot		0x4c	0x18	float[3]	guardPoint	
+MobLogicSlot		0x4c	0x24	int	cyclic	0 = the patrol goes back along the points
+MobLogicSlot		0x4c	0x28	int	flags	bit 3 AlwaysActive
+MobLogicSlot		0x4c	0x2c	float	guardRadius	
+MobLogicSlot		0x4c	0x30	float	unused30	chunk 0xBBBC000A
+MobLogicSlot		0x4c	0x34	int	numAlarm	alarm slot raised by this unit
+MobLogicSlot		0x4c	0x38	int	use	slot usable by InvokeAlarm
+MobLogicSlot		0x4c	0x3c	float	help	CallForHelp radius
+MobLogicSlot		0x4c	0x40	int	alarmCondition	0 / 1 / 2
+MobLogicSlot		0x4c	0x44	int	wait	ticks before the alarm
+MobLogicSlot		0x4c	0x48	int	aggrMode	0 standard 1 revenge 2 fearful 3 player-fear
+PlayerRelations		0x100	0x0	uint[32]	friends	row[a] bit b = a treats b as FRIEND (self bit set by Reset); g_0x7C2BC4 (.mob diplomacy) and CWorldServer +0x12c64
+PlayerRelations		0x100	0x80	uint[32]	enemies	forced enemy bits = initial alarmMask of a side
+CWorldServer			0x84	float	nightFactor	CWorld::NightFactor 0..1: sight x (1 - n + n x infra / 100)
+CWorldServer			0x88	float	weatherSight	1.0, 0.9 while it rains
+CWorldServer			0x8c	byte[80]	alarmSlots	5 x {byte active, int tick, float x, float y} (0x10 each): InvokeAlarm / ActivateLogicSlot; g_0x7AFFF4 = +0x94 of slot 0
+CWorldServer			0x12c64	PlayerRelations	relations	CORRECTION: was AggroTable: same class as g_0x7C2BC4 (Read / Write with PlayerRelations::Read / Write)
+CWorldServer			0x2838	StimulusMap	stimulusMap	= CAIMap +0x170 + 0x26c8 = g 0x7B2798
+CArray		0x14	0x0	pointer	vtable	MFC CArray
+CArray			0x4	pointer	data	
+CArray			0x8	int	count	
+CArray			0xc	int	capacity	
+CArray			0x10	int	growBy	
+ObjRefList		0x1c	0x0	pointer	vtable	list of object refs (AiMemory lists are 0x1c apart)
+ObjRefList			0x4	pointer	head	
