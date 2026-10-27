@@ -403,8 +403,13 @@ reads; the texture is vanilla crossbow 02's transferred part by part (`cb5tex.py
 (`BuildArmorModelNames` 0x535CB0, the part list at 0x73EC24: `hr`, `hd`); a missing `hr.NN.armorNN` hides the hair (every vanilla helm:
 none exists). A kind-2 helm mesh is drawn with the helm's own texture (`hl_NN.<metal>.<TTI2>`), the head stays: LiA's crown
 (`hd.armor18`, kind 1 with UVs in the ground convention: on the body texture it showed skin) is a kind-2 crown with UV (2u, 2v - 1),
-put on the mod's head per corner and widened to clear it by 2 mm; every hair has an `hr.NN.armor18` copy squeezed inside the crown's band
-(the dome inside the ring, the band's big triangles split first; ponytails further out than 7 cm stay).
+put on the mod's head per corner and widened to clear it by 2 mm; every hair has an `hr.NN.armor18` copy tucked inside the crown's band
+(2026-10-27, `_cpr/helmets/crownhair.py`): the crown is two rings 1.5-3 cm apart and sits tilted (its bottom edge up to 3 cm lower at
+the back), so the hair is cut along the band's bottom and top edges per corner (new points only on those lines), every hair point level
+with the crown moves in to the inner ring - 2 mm (never nearer the head than 1 mm), the dome above fades over 2.5 cm, and under the band
+the hair keeps its shape: the tuck faces down, the camera never sees it. LiA's crown also closed the band with a flat lid across the ring
+(hidden in LiA's skull); it is dropped. Helmet 02 (`hd.armor02`, male): the vanilla head shows through its back at wide builds (up to
+12 mm); its existing points were pushed out locally (`_cpr/helmets/helmback.py`, no new points).
 
 ## `.lnk` — Attachment Socket Redirect
 
