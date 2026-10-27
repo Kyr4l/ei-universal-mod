@@ -8,6 +8,7 @@ The 52 functions that reference the tables (ghidra_funcs.json data refs, decompi
 
 **Replaced by um-engine (`item_proto.cpp`, keys in um-engine.cfg, host test tests/item_proto_test.cpp)**: ItemId_GetProtoType 0x6A2B80, ItemId_GetPrice 0x6A2A50,
 ItemId_GetPrice2 0x6A2AE0, ItemId_GetWeight 0x6A2BD0, CItemWeapon::GetSkill 0x6A2C60, CItemWeapon::GetDamageKind 0x6A07F0, Weapon_SkillGroupByte 0x526860
+(naming note 2026-10-27, items.md: `ItemId_GetPrice` / `GetPrice2` compute the damage min / max (`D.Min * material Damage`, `(D.Min + D.Max) * material Damage`), not prices, and `GetSkill` returns the first nonzero damage-proportion index; the um-engine replacements keep the old hook names)
 (the weapon tooltip: it reads the kind before testing the record; checked in the rig: `CALL 0x526860 cc=std 0x2D0000` crashes the game without the key, answers 0 with it).
 
 **Patched inline (`ItemTable::InlineLookups`)**: CUnitClientSpecific::ApplyWeaponAnimMask 0x5354FB, Hero_BuildEquipmentEntries 0x56849C / 0x568529 (the compiler inlined the lookup).

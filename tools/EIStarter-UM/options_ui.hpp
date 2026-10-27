@@ -25,7 +25,7 @@ public:
         modBorderless_ = !modCfg.empty() && !GetCfgLine(modCfg, "BORDERLESS").empty();
         open_ = true; requestTab_ = pathsTab ? 4 : 0; hint_ = hint;
         adapters_ = platform::Adapters();
-        resolutions_ = platform::Resolutions();
+        resolutions_ = offered_ = platform::Resolutions();
         const std::string cur = edit_.game.GetString("general settings", "videoresolution");
         bool have = cur.empty();
         for (const std::string& r : resolutions_) have = have || r == cur;
@@ -114,9 +114,16 @@ private:
             ImGui::AlignTextToFramePadding();
             ImGui::TextUnformatted(tx.Get("Options", "lbResolution", "Resolution").c_str());
             ImGui::SameLine(150); ImGui::SetNextItemWidth(170);
-            if (ImGui::BeginCombo("##res", cur.c_str())) {
+            bool offered = cur.empty();                              // a stored size the screen has no 32-bit mode for: kept, but marked
+            for (const std::string& r : offered_) offered = offered || r == cur;
+            const std::string notOffered = tx.Get("Options", "resNotOffered", "not offered by this screen");
+            if (ImGui::BeginCombo("##res", offered ? cur.c_str() : (cur + " (" + notOffered + ")").c_str())) {
                 for (size_t k = 0; k < resolutions_.size(); ++k) if (ImGui::Selectable(resolutions_[k].c_str(), static_cast<int>(k) == ri)) g.SetString("general settings", "videoresolution", resolutions_[k]);
                 ImGui::EndCombo();
+            }
+            if (!offered) {
+                ImGui::SameLine(); ImGui::TextColored(ImVec4(1.0f, 0.45f, 0.3f, 1.0f), "(!)");
+                if (ImGui::IsItemHovered()) ImGui::SetTooltip("%s", tx.Get("Options", "tipResNotOffered", "Your screen has no 32-bit mode of this size: the game may not start.\nPick one from the list.").c_str());
             }
         }
         ImGui::Separator();
@@ -309,7 +316,7 @@ private:
     bool open_ = false;
     int requestTab_ = -1;
     std::string hint_;
-    std::vector<std::string> adapters_, resolutions_;
+    std::vector<std::string> adapters_, resolutions_, offered_;   // offered_: the screen's 32-bit modes (resolutions_ may add the stored one)
 };
 
 } // namespace launcher

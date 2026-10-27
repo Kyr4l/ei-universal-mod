@@ -310,8 +310,8 @@ party through `CParty::Write`; units replicate their slot ids in net section 5 (
 `AddSpellSlotItem` 0x531820 take the first free slot (1 when present, -1 when full), `ClearWeaponSlot` / `ClearQuickSlot`
 release one; `EquipArmor` 0x530730 (durability >= 1 only) replaces `+0x480[type]`, tells the specific (`vt[26]` Equip: figure +
 textures on the client, `UnitStats_AddArmorModifiers` preview on the server) and marks net section 5; `UnequipArmor`
-0x530840 (`vt[27]`, sections 5 + 4); `DropAllItems` 0x5315B0 clears everything. `CUnitServer::SelectWeapon` 0x553610 (slot 25,
-from message 0x..: `RequestWeapon` 0x5552E0 sets `+0x270` and `TickState` switches) accepts a slot whose item has durability,
+0x530840 (`vt[27]`, sections 5 + 4); `DropAllItems` 0x5315B0 clears everything. `CUnitServer::SelectWeapon` 0x553610 (slot 25;
+the client asks through `CPlayerServer::OnMsg_UnitByte` -> `RequestWeapon` 0x5552E0 which sets `+0x270`, `TickState` switches) accepts a slot whose item has durability,
 sets `+0x26c = +0x270`, rebuilds the AI spell infos for player units and `DropOtherWeapons` 0x5528F0 (only the weapon in hand
 stays attached; the passive spell list `+0x920` is rebuilt from the items whose spell has flag 0x20000). Carried weight =
 sum of `+0x34` over the 23 slots (`GetCarriedWeight`, capped by `str * 12 * (1 + lift)` in UnitStats). Two-handed / shield

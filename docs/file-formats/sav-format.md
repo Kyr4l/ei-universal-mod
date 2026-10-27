@@ -67,7 +67,7 @@ rig), so edit both copies to be safe.
 
 The file starts with `<map>.mob\0<terrain>.mpr\0<zone>\0` (the map can be another zone's: cz0k uses zone21.mpr),
 then a 128-byte header, then a variable part not decoded yet (about 5 KB; it starts with a long run of the u16
-0x00FF: a per-cell map such as the explored area?), then one record per unit (about 3.2 KB each), then the zone's item groups.
+0x00FF: the AIGRAPH patch stream, world-server.md 4.8), then one record per unit (about 3.2 KB each), then the zone's item groups.
 
 A unit record:
 
@@ -86,9 +86,9 @@ A unit record:
 |---|---|---|---|
 | +0 | f32 × 3 | (-0.894, 0.447, 0) or (0, 1, 0) | a unit vector: the sun's direction |
 | +12, +16 | f32 | 0.07, 0.255 / 0.076 | light or fog settings |
-| +100 | u32 | 160562..181538, different per zone | a game time (when the zone was last left?) |
-| +104 | u32 | 0 or 2 | ? |
-| +108 | f32 | 0 or 40 | ? |
+| +100 | u32 | 160562..181538, different per zone | the server tick `CWorldServer +0x64` when the zone was saved (world-server.md 4.8) |
+| +104 | u32 | 0 or 2 | rain kind |
+| +108 | f32 | 0 or 40 | rain strength (+112 hour, +116 rate follow) |
 | +112 | f32 | 21.07, 20.36, 13.36 | the time of day (hours) |
 | +116 | f32 | 60 | minutes per hour? |
 | +120 | u32 | the same in every zone of a save (123459, 176323) | the save's game time |

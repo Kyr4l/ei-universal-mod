@@ -1,5 +1,8 @@
 # Evil Islands multiplayer protocol (game.exe, Russian 1.06 build)
 
+> **2026-10-27:** the in-game protocol (every opcode in both directions, payloads, sender and handler addresses) is now in [game-exe/world-client-players.md](game-exe/world-client-players.md); where this page disagrees (0x00 / 0x04 / 0x05 / 0x0B / 0x42 / 0x43 meanings, 0x34 / 0x35 targets, 0x10 = pause), that page is right.
+
+
 What the game sends over UDP port 8888, both ways, as reverse-engineered from game.exe and confirmed with
 captures and with um-bot (a standalone client that joins, enters a quest, walks, follows and attacks).
 Addresses are game.exe's. The research notes behind this page: `_cpr/claude-re/net/README.md` (captures,

@@ -28,6 +28,8 @@ inline const BuiltinText kRussian[] = {
     {"camReplace", "Заменить"},
     {"camKeep", "Оставить"},
     {"camDontShow", "Больше не показывать"},
+    {"resNotOffered", "экран не поддерживает"},
+    {"tipResNotOffered", "У вашего экрана нет 32-битного режима такого размера: игра может не запуститься.\nВыберите режим из списка."},
 };
 
 class Texts {

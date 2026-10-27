@@ -149,3 +149,16 @@ The GOG release of the game writes camera settings (`HKCU\Software\Nival Interac
 * Only the "Camera Settings" key is touched (including the clip distances `FarClipDistance` / `NearClipDistance`, 100 / 2 in the CD release); graphics and the other settings stay as they are.
 
 Russian texts of the new window and button are built in (`lang.hpp`, used when the language is `ru` and the language's `lang.ini` has no such key). Tested in the launcher rig (a Wine prefix with GOG-like values in Nival's key): popup with the right count, Replace (registry, cfg and backup written), no second popup, Keep + Don't show again, the Options button with OK and with Cancel.
+
+## 0.2.8 (2026-10-27): only display modes the screen offers
+
+A tester's game did not start (game.exe 0x456D8D, see `_cpr/claude-re/full/notes-renderer-init.md`): the launcher had imported 2560x1440 from his old Nival key, a size his screen
+has no mode for, so the game's D3D7 device could not be created, with native DirectDraw and with D7VK alike (both set the screen's own modes), and addon.dll hides the game's error
+message. 1920x1080 fixed it.
+
+* The resolution list holds only the screen's **32-bit** modes (the game's colour depth, `VIDEOCOLORDEPTHINBITS`; the launcher does not show the colour depth or the Z-buffer
+  depth, `VIDEOZBUFFERDEPTHINBITS`: they stay 32 / 16). All modes when the driver reports no 32-bit one.
+* **First start:** an imported resolution the screen does not offer becomes the desktop's (else the largest offered), and an imported 16-bit colour depth becomes 32; the log
+  says so (`imported display settings fixed: ...`).
+* Later, a stored size the screen does not offer (a hand-made one for a window, say) is kept but marked in Options > Video: "(not offered by this screen)" and a red (!) with a
+  tooltip.

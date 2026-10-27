@@ -11,6 +11,7 @@
 
 #include "gamesettings.hpp"
 #include "inifile.hpp"
+#include "platform.hpp"
 #include "winreg.hpp"
 
 namespace launcher {
@@ -46,6 +47,7 @@ struct LauncherConfig {
     std::map<std::string, std::string> updateKeys; // per mod folder: the build the updater installed last (update::Release::Key)
     std::map<std::string, std::string> updateRepos; // "*" = an owner/repo overriding the built-in one
     bool firstRun = false;         // no EIStarter-UM.cfg existed
+    std::string displayFix;        // not saved: what the first run changed in the imported display settings (for the log)
 };
 
 inline std::string ConfigPath(const fs::path& dir) { return (dir / "EIStarter-UM.cfg").string(); }
@@ -112,7 +114,18 @@ inline LauncherConfig LoadConfig(const fs::path& dir) {
         c.game.ImportRegistry(kCloneKey);
     }
     c.game.FillDefaults();
-    if (c.firstRun) c.game.SetBool("general settings", "FPSIndependentCursor", false); // flickers with D7VK: off unless chosen
+    if (c.firstRun) {
+        c.game.SetBool("general settings", "FPSIndependentCursor", false); // flickers with D7VK: off unless chosen
+        // An imported display mode the screen does not offer (a tester's old Nival key had 2560x1440 on a screen without it: the game's
+        // D3D7 device fails with native DirectDraw and with D7VK, and addon.dll hides the error) becomes one it does; 16-bit colour, 32.
+        const std::string res = c.game.GetString("general settings", "videoresolution");
+        const std::string fit = platform::SupportedResolution(res, platform::Resolutions());
+        if (!res.empty() && fit != res) { c.game.SetString("general settings", "videoresolution", fit); c.displayFix = "resolution " + res + " -> " + fit + " (not offered by this screen)"; }
+        if (c.game.GetInt("general settings", "videocolordepthinbits", 32) != 32) {
+            c.displayFix += std::string(c.displayFix.empty() ? "" : ", ") + "colour depth " + std::to_string(c.game.GetInt("general settings", "videocolordepthinbits", 32)) + " -> 32 bits";
+            c.game.SetInt("general settings", "videocolordepthinbits", 32);
+        }
+    }
     return c;
 }
 

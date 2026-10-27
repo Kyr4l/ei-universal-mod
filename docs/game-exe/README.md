@@ -8,6 +8,8 @@ Generated 2026-10-18 from the full reverse (`_cpr/claude-re/full/`, phase 3 comp
 - [modules.tsv](modules.tsv): address ranges with a theme (the linker kept each source file contiguous).
 - [gs-functions.md](gs-functions.md): how a script runs and the 225 WorldScript commands and functions (id, name, parameters, handler address, what each does, verified / inferred); [pathfinding.md](pathfinding.md): the AI map, the path finders and the movement objects.
 - [combat.md](combat.md): the server unit tick, the order queue, the attack sequence (hit chance, damage per body part, death, experience), UnitStats and the items in combat; [unit-ai.md](unit-ai.md): perception (vision, hearing), AiMemory, Brain::Tick, the AiLogic motivations as state machines, target scoring, alarms and relations (supersedes docs/monster-ai.md).
+- [spells.md](spells.md): spells.sdb records, CSpell and the rune formulas, the cast path, CSpellEffect per kind, the buff record and buff-kind table, the CEffect* classes and their replication; [items.md](items.md): items.idb records and the prototype x material formulas, the CItem classes and layout, hero records / CParty / CInventory, equip rules, durability, loot, the shop stock generator, net opcodes.
+- [world-server.md](world-server.md): the session (frame loop, 55 ms server slices, SessionRequest kinds, zone kinds, zone transitions, save slots), CWorld managers and clock, CWorldServer containers / activation / .mob descriptor creation / LoadZone / save body chunks / replication / stat scramble, the resource files; [world-client-players.md](world-client-players.md): the complete in-game protocol (25 client -> server and 45 server -> client opcodes with payloads and handlers), join / leave / zone change sequences, CPlayer* layouts, CWorldClient (containers, LoadZone, the frame, picking, bridges, weather, day light).
 - [layouts.tsv](layouts.tsv): derived field layouts per class (class, offset, C types seen, number of methods touching it, example methods); built by `_cpr/claude-re/full/tools/layouts.py` from the decompiles of the class's own methods (inherited base fields are listed under the base class).
 - [flows.md](flows.md): call trees (in call order) from the key entry points: startup/main loop, session driver, zone load, rendering, unit tick, orders, network, script, save/load.
 - [findings.md](findings.md): chronological notes of the reverse with the discovered class layouts (GSWorld, CTerrain, CObject3D, CMapObject, animation, script runtime...).
@@ -97,7 +99,7 @@ Generated 2026-10-18 from the full reverse (`_cpr/claude-re/full/`, phase 3 comp
 
 ## Coverage
 
-Coverage (13785 functions): named 13769, guess 16.
+Coverage (13797 functions): named 13769, guess 28.
 
 ## Reading guide (how a frame / a map / a save works, as found)
 - **Startup and main loop:** application in 0x456000 (main window, settings, DX7 check); per-frame session driver `Game_SessionTick` 0x57C700 (Net_TickAll, loads/saves, MainMenu fallback); renderer `CRenderManager`/`CRenderDevice` in 0x4E3000-0x501000, `I3DFigureImpl::InitRenderer` 0x500B70.

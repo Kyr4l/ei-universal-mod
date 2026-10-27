@@ -167,6 +167,13 @@ int main(int argc, char** argv) {
             CHECK(!update::ExtractZip(z / "t.zip", z / "out2", nullptr, no, files, err));
         } else std::printf("(7z missing: zip tests skipped)\n");
     }
+    {   // an imported resolution the screen does not offer: the desktop's (here "1920x1080"), else the largest offered
+        const std::vector<std::string> scr = {"1024x768", "1920x1080", "1280x720"};
+        CHECK(platform::SupportedResolution("1280x720", scr) == "1280x720");
+        CHECK(platform::SupportedResolution("2560x1440", scr) == "1920x1080");
+        CHECK(platform::SupportedResolution("2560x1440", {"1024x768", "1600x900", "1280x720"}) == "1600x900");
+        CHECK(platform::SupportedResolution("2560x1440", {}) == "2560x1440");
+    }
     std::printf(g_fail ? "%d FAILED\n" : "all passed\n", g_fail);
     return g_fail != 0;
 }

@@ -35,7 +35,7 @@
 
 using namespace launcher;
 
-static constexpr const char* kVersion = "0.2.7";
+static constexpr const char* kVersion = "0.2.8";
 static constexpr int kW = 640, kH = 360;
 static const ImVec4 kSteel(70 / 255.f, 130 / 255.f, 180 / 255.f, 1);
 
@@ -853,6 +853,7 @@ int main(int argc, char** argv) {
 
     app.Log("loading the settings");
     app.cfg = LoadConfig(app.dir);
+    if (!app.cfg.displayFix.empty()) app.Log("imported display settings fixed: " + app.cfg.displayFix);
     app.languages = EnumerateLanguages(app.dir);
     if (!app.languages.empty() && std::find(app.languages.begin(), app.languages.end(), app.cfg.language) == app.languages.end()) app.cfg.language = app.languages[0];
     app.ReloadMods();

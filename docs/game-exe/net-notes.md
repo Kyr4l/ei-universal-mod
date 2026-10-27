@@ -1,5 +1,8 @@
 # Net / players / party class notes (game.exe, Russian build) — 2026-10-17
 
+> **2026-10-27:** CPlayer / CPlayerClient / CPlayerServer layouts are corrected in [world-client-players.md](world-client-players.md) (CPlayerClient is 0x50F8 and has no DeltaCodec member; CPlayerServer +0x50F8 known objects, +0x510C visible units, +0x5120 party status mode; CPlayer +0x118 synced item ids).
+
+
 Raw notes from reading modules 0x411000-0x433000, 0x433000, 0x474000, 0x47E000, 0x664000, 0x65F000. Function names are in
 functions.tsv; this file keeps the layouts that the one-line purposes cannot hold. To be rewritten into docs/game-exe/net.md.
 

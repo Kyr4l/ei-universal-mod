@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cstdio>
+#include <cstdlib>
 #include <filesystem>
 #include <string>
 #include <vector>
@@ -114,21 +115,49 @@ inline std::vector<std::string> Adapters() {
 #endif
     return out;
 }
+// Only the 32-bit modes (the game's colour depth; native DirectDraw and D7VK both set the screen's own modes, so a size the screen does
+// not offer fails with either: the tester's 2560x1440 imported from an old Nival key); all modes if the driver reports no 32-bit one.
 inline std::vector<std::string> Resolutions() {
-    std::vector<std::string> out;
+    std::vector<std::string> out, any;
 #ifdef _WIN32
     DEVMODEA dm = {};
     dm.dmSize = sizeof dm;
     for (DWORD i = 0; EnumDisplaySettingsA(nullptr, i, &dm); ++i) {
         const std::string s = std::to_string(dm.dmPelsWidth) + "x" + std::to_string(dm.dmPelsHeight);
-        bool have = false;
-        for (const std::string& o : out) have = have || o == s;
-        if (!have) out.push_back(s);
+        auto add = [&](std::vector<std::string>& v) { for (const std::string& o : v) if (o == s) return; v.push_back(s); };
+        add(any);
+        if (dm.dmBitsPerPel == 32) add(out);
     }
+    if (out.empty()) out = any;
 #else
     out = {"800x600", "1024x768", "1280x720", "1366x768", "1600x900", "1920x1080", "2560x1440"};
 #endif
     return out;
+}
+// The desktop's current resolution ("1920x1080"), empty when unknown.
+inline std::string DesktopResolution() {
+#ifdef _WIN32
+    DEVMODEA dm = {};
+    dm.dmSize = sizeof dm;
+    if (EnumDisplaySettingsA(nullptr, ENUM_CURRENT_SETTINGS, &dm)) return std::to_string(dm.dmPelsWidth) + "x" + std::to_string(dm.dmPelsHeight);
+    return {};
+#else
+    return "1920x1080";
+#endif
+}
+// A resolution the screen offers, for a stored one it does not: the desktop's, else the largest offered.
+inline std::string SupportedResolution(const std::string& want, const std::vector<std::string>& offered) {
+    for (const std::string& r : offered) if (r == want) return want;
+    if (offered.empty()) return want;
+    const std::string desk = DesktopResolution();
+    for (const std::string& r : offered) if (r == desk) return desk;
+    std::string best = offered[0]; long bestPx = 0;
+    for (const std::string& r : offered) {
+        const size_t x = r.find('x'); if (x == std::string::npos) continue;
+        const long px = std::atol(r.c_str()) * std::atol(r.c_str() + x + 1);
+        if (px > bestPx) { bestPx = px; best = r; }
+    }
+    return best;
 }
 
 // The game process.

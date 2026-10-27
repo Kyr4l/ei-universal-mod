@@ -62,12 +62,13 @@ money: u32 a, u32 b, amount = a ^ b (a changes on every save)
 | 0x3008 | spell container | QuickItems | the spell's object id at +40 of its block |
 
 **Detail block sizes:** 0x3002 66, 0x3004 68, 0x3005 108, 0x3006 56, 0x3007 64, 0x3008 56, 0x3009 56. A loot item's block
-holds its quantity at +48 (the number in the inventory slot's corner) and a number at +52 (1 for materials, 0 for a
-toad leg; the script function HaveItem compares it for quest items). A blueprint is a loot item of the LootItems rows
+holds its quantity at +44 (the number in the inventory slot's corner; every kind has it, it is `CItem +0x48`) and the
+slots / complexity number at +48; a loot item's +52 is the category (1 for materials, 0 for a toad leg; the script function
+HaveItem compares it for quest items). A blueprint is a loot item of the LootItems rows
 "instruction weapon", "instruction armor" or "instruction quick item": the u32 at +60 is the row it makes in Weapons,
 Armors or QuickItems (deleting a database row shifts the rows after it, so an old blueprint can point past the end or at
-the wrong item; the MP editor flags it and can retarget it). In the game's memory the item object is the
-block shifted by 0x18 (+0x48 quantity, +0x4C that number). Each block starts with
+the wrong item; the MP editor flags it and can retarget it). In the game's memory the fields are not in block order: `CItem::Write` 0x6A0360 writes +0x18, +0x20..+0x3C, the spell id,
++0x48 (count), +0x40 (slots), then the kind's own fields (docs/game-exe/items.md section 5). Each block starts with
 `{u32 id, u16 a, u16 b}`. For weapons and armour, the next words are:
 
 | Word | Meaning |
@@ -80,7 +81,8 @@ block shifted by 0x18 (+0x48 quantity, +0x4C that number). Each block starts wit
 | +28 | weight |
 | +32, +36 | ? (the battle axe: 6404500, 1000) |
 | +40 | an attached spell's object id, or -1 |
-| +48 | weapons: complexity max (the card's "Complexity: 30/48"; the used part is the spell's) |
+| +44 | count (quantity) |
+| +48 | slots / complexity max (the card's "Complexity: 30/48"; the used part is the spell's) |
 
 Weapons end with 3 floats: +56 the minimum damage, +60 the damage range (max = min + range: 48.51 + 37.8 shows as
 "Damage: 48-86"), +64 0. Armour ends with 2 × 7 protection floats, one per damage type (the third and sixth are 0.8 ×

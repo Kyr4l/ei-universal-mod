@@ -114,6 +114,8 @@ Checked on z3xq1 with the game paused through its flags (below):
 | 0x007C2CC8 | the base map's file name ("zone3xobr-lmp.mob") |
 | 0x007AFE90 (also 0x007C7DFC) | the quest's name ("z3xq1"); the empty string outside a quest |
 
+(Static view 2026-10-27, [game-exe/world-server.md](game-exe/world-server.md): 0x7C2CC8 / 0x7C2CCC are `CWorldServer +0x12d68` (.mob name) / `+0x12d6c` (.mpr name) of the global world `g_0x7AFF60`, 0x7C2CC4 just before them is the zone kind (1 playable, 2 main menu, 3 scripted, 4 camp, 7 editor, 8 end), 0x7AFE90 is the `SessionRequest` party zone.)
+
 The strings are rewritten in place when the map changes. um.dll's file-open tracking got this wrong after
 going back to a map the game already had in memory (it does not open the files again).
 
@@ -143,7 +145,9 @@ paused (Space), resumed, then set to ×2:
 | 0x007AF61C (copies at 0x007AFFC4, 0x007B279C) | game tick counter: +18.4 a second at normal speed, stopped while paused, +37 a second at ×2 (u32) |
 
 The counter's rate (55 ms a tick, about 18 a second) differs from the 15 ticks a second measured with
-spell durations (Fireworks: 75 ticks = 5 s): the spells may count another clock.
+spell durations (Fireworks: 75 ticks = 5 s). Static read 2026-10-27 (world-server.md): there is one clock, `CWorldServer +0x64`
+(0x7AFFC4) advanced in 55 ms slices (at most 5 per frame); 0x7AF624 is `CWorldClient +0x6c paused`; the game hour is 900 ticks
+at rate 60 (a day = 19.8 min). The 15/s figure came from the duration conversion, not from a second clock.
 
 Two floats at 0x007AFC68 (copy 0x007AFC78) and 0x007AFC88 rise slowly (0.0017 and 0.0047 a second)
 and stop while paused, but grow only about 1.8 times faster at ×2: perhaps the day cycle (not confirmed).

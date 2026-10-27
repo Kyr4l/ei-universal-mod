@@ -1,11 +1,11 @@
 class	parent	size	off	type	name	note
 CObject		0x1c	0x0	pointer	vtable	
-CObject			0x4	int	refcount	
+CObject			0x4	int	refcount	items use this int too (not a 16-bit refcount)
 CObject			0x8	uint	flags	bit 28 = no animation (CUnitClientSpecific::SetAnimation)
 CObject			0xc	int	id	-1 before the manager sets it
 CObject			0x10	int	kind	the creation key (0x32..0x34 CUnit, 0x35 CTree ...)
 CObject			0x14	pointer	manager	CBaseManager*
-CObject			0x18	uint	field_18	read from the save stream
+CObject			0x18	uint	objectId	object id (read from the save stream); for a CSpell: proto index << 16 | sequence number (0 = the bare prototype; others registered in CSpellManager +0xBC); for a CItem: prototype index << 16 | material index (items.idb Materials +0xc), set by CItemConstructor::ApplyProto
 CObject3D	CObject	0x170	0x1c	float[3]	localPos	
 CObject3D			0x28	float[3]	worldPos	
 CObject3D			0x34	float[4]	localRot	quaternion (w,x,y,z)
@@ -15,9 +15,14 @@ CObject3D			0x98	pointer	animSystem	CAnimationSystem2*
 CObject3D			0xa0	pointer	animDb	the mapped .adb of the model (AnimDb)
 CObject3D			0xa4	CString	modelName	char* ; "<model>.adb" is loaded from it
 CMapObject	CObject3D	0x4dc	0x170	pointer	specific	CMapObjectServer / ClientSpecific
-CMapObject			0x198	pointer	buffs	0x14-byte buff records
+CMapObject			0x198	pointer	buffs	CORRECTION: was 0x14-byte buff records: Buff[] (0x14 each): kind byte = spell proto index, level, duration ticks, power, radius; no stacking check (AddBuff appends; readers take the max per kind); ticked by CMapObjectServer::TickBuffs; replicated in net section 3
 CMapObject			0x1b8	int	cellX	position * 2 on the AI grid
 CMapObject			0x1bc	int	cellY	
+CMapObject			0x194	pointer	buffArrayVt	CArray vtable of the buff array (0x50FE70 grow); the array proper is +0x198
+CMapObject			0x19c	int	buffCount	
+CMapObject			0x1a0	int	buffCapacity	
+CMapObject			0xc4	float[3]	morphScale	x / height / y scale factors: +0.4 per present enlarge 0x25 / strengthen 0x1D buff, -0.4 per shrink 0x26 / weaken 0x1E (ApplyBuffKinds), net section 1
+CMapObject			0x1dc	uint	netDirtyMask	bit 1 section 1 (morph), bit 3 section 3 (buffs) ... (MarkNetDirty)
 CUnit	CMapObject	0x4dc	0x238	char[4]	playerName	CString of a player's character
 CUnit			0x23c	int	protoIndex	index into the units db
 CUnit			0x240	pointer	senses	CUnitServer* (server) / CUnitClientSpecific* (client)
@@ -54,10 +59,12 @@ CUnit			0x278	int	walking	1 while the unit moves (collision grid class); net 7
 CUnit			0x330	UnitRecord	packedStats	0x108-byte net/save form of UnitStats (section 4)
 CUnit			0x440	pointer[4]	weaponSlots	CItem* (weapons / quick items)
 CUnit			0x450	pointer[4]	quickSlots	
-CUnit			0x460	pointer[8]	inventory	spells (CUnit::GetItemSpell: item +0x44)
+CUnit			0x460	pointer[8]	spellSlots	CItemSpell* spell containers (GetSpellSlotItem / GetItemSpell -> +0x44); HeroRecord +0x760; CORRECTION: was inventory
 CUnit			0x480	pointer[7]	armorSlots	by CItem::GetType
 CUnit			0x438	int	battleButton	1 = Regroup may pick fights for this party member (client message 0x3b)
 CUnit			0x4c8	float[5]	detectionFactors	player units: sight, smell, hearing, (unused), senseLife; 3 = undetected, < 1 detected (replicated 0xc)
+CUnit			0x4a4	int	quickItemCount	count of the +0x4a0 extra item array (quest items given to the unit, PopRandomQuickItem pops it first)
+CUnit			0x4a8	int	quickItemMax	
 UnitStats		0x704	0x4	float	experience	total experience; level = round(log(exp/200)/log(1.61)); MaxHP/MaxMana use log(exp/50)/log(1.61)
 UnitStats			0x8	float	expSpent	spent on skills + abilities
 UnitStats			0xc	int	strengthBase	
@@ -154,12 +161,13 @@ CUnitServer			0x90c	int	sideBeforeTaming
 CUnitServer			0x910	int	tamerSide	
 CUnitServer			0x914	uint	footstepTickMask	EmitFootstep when (tick & mask) == 0: 0 fast .. 0xf slow / standing
 CUnitServer			0x918	pointer	unused918	always 0 (EmitFootstep returns 0)
-CUnitServer			0x920	pointer	passiveSpellList	{next, ?, item, countdown} (TickPassiveSpells)
+CUnitServer			0x920	pointer	passiveSpellList	CORRECTION: was {next, ?, item, countdown} (TickPassiveSpells): head of the list of nodes {next, prev, item ref, countdown, keep byte} of the equipped items whose spell has flag 0x20000 (ic); rebuilt by 0x5528F0
 CUnitServer			0x938	int	idleVoiceCounter	player units: > 500 then 1/1001 per tick -> message 0x29 (idle voice) unless the player mode is set
 CUnitServer			0x93c	int	lastOrderTick	world tick when the last order was dispatched
 CUnitServer			0x978	pointer	animDoneCallback	called when a state-3 animation ends
 CUnitServer			0x97c	uint	propagatedAlarmMask	enemy bits already exchanged with the neighbours
 CUnitServer			0xb10	AiAcknowledge	acknowledge	voice reaction object
+CUnitServer			0x924	pointer	passiveSpellTail	
 CAIMap		0x12704	0x0	byte	loaded	size 0x12704: the StimulusMap is embedded at +0x26c8
 CAIMap			0x2	byte	navGridOn	NavGrid rebuilt on passability changes
 CAIMap			0x14	byte[64]	walkCostTable	16 terrain material classes, 0x400 = 1.0, -1 impassable
@@ -179,27 +187,26 @@ CAIMap			0x26a0	int	width	cells (0.5 m): sectors * 64
 CAIMap			0x26a4	int	height	
 CAIMap			0x26ac	pointer	flagsGridRows	dword per cell: bits 0-4 material, 0x80 sector chain, 0x100 empty, objects inline
 CAIMap			0x26bc	pointer	occupancyGridRows	
-CItem		0x4c	0x4	short	refcount	16-bit refcount of the item (also the prototype ref)
-CItem			0xc	int	id	-1 none
-CItem			0x18	uint	packedId	low 16 bits material (table 0x7C86D8), high 16 bits weapon / item type (table 0x7C86F8 / 0x7C8718)
-CItem			0x1c	pointer	proto	prototype ref
-CItem			0x20	float	durabilityBase	
-CItem			0x24	float	durabilityBase2	
-CItem			0x28	float	durability	current; regenerates by +0x30 * +0x2c per update
-CItem			0x2c	float	durabilityMax	
-CItem			0x30	float	durabilityRegen	0.001
-CItem			0x34	float	field_34	proto +0x38
-CItem			0x38	float	weight	total (with the sub item +0x48)
-CItem			0x3c	float	field_3c	proto +0x3c
-CItem			0x40	float	field_40	proto +0x44
-CItem			0x44	pointer	subItem	CItem* (a spell inside its container ...)
-CItem			0x48	int	subWeight	
-CItemWeapon	CItem	0x5c	0x4c	float	field_4c	copied to hit[7]; CORRECTION: was rangeMin (not a range)
+CItem	CObject	0x4c	0x1c	pointer	partyLink	PartyItemLink* (0xc: vt 0x73FA88, 16-bit refcount +4, +8 party record item id) on unit items made from a party record; CORRECTION: was proto (prototype ref)
+CItem			0x20	float	durability	current; worn by Placement_Damage, < 1 = broken (DropBrokenItems); CORRECTION: was durabilityBase
+CItem			0x24	float	durabilityMax	proto Durability +0x48 * material Durability +0x20; CORRECTION: was durabilityBase2
+CItem			0x28	float	mana	charge / energy of the item (quick subtype 5, embedded spells); CORRECTION: was durability
+CItem			0x2c	float	manaMax	proto Mana +0x40 + material Mana +0x18; CORRECTION: was durabilityMax
+CItem			0x30	float	manaRegen	0.001 per CItem::RegenMana tick (fraction of manaMax); CORRECTION: was durabilityRegen
+CItem			0x34	float	weight	proto Weight +0x38 * material Weight +0x14; summed by GetCarriedWeight / HeroRecord::TotalWeight; CORRECTION: was field_34
+CItem			0x38	float	price	proto Price +0x34 + Components * material Price +0x10, + embedded spell price (+0x48); slot 16 GetPrice; CORRECTION: was weight
+CItem			0x3c	float	size	proto Size +0x3c; CORRECTION: was field_3c
+CItem			0x40	float	slots	complexity: proto Slots +0x44 + material Slots +0x1c (the max complexity of an embedded spell); CORRECTION: was field_40
+CItem			0x44	pointer	spell	CSpell* embedded spell (weapons / armor enchantments, the contained spell of a spell container); CORRECTION: was subItem
+CItem			0x48	int	count	stack count (party items, materials) / charges (wands 20..49, scrolls); CORRECTION: was subWeight
+CItemWeapon	CItem	0x5c	0x4c	float	field_4c	written by Read/Write and Equals only, -1 after ctor; not set by InitFromProto [?]
 CItemWeapon			0x50	float	damageMin	AttackParams[3]; CORRECTION: was range50
 CItemWeapon			0x54	float	damageSpread	max = min + this; CORRECTION: was range54
-CItemWeapon			0x58	float	attackRange	GetAttackRange / OrderReachDistance; CORRECTION: was range58
-CItemArmor	CItem	0x8c	0x4c	float[7]	armorValues	one per damage type
-CItemArmor			0x68	float[7]	armorValues2	
+CItemWeapon			0x58	float	attackRange	proto Range +0x8c (not scaled by the material)
+CItemArmor	CItem	0x8c	0x4c	float[7]	armorMain	proto main[k] +0x70 * material absorb[k] +0x2c * proto M.Absorb +0x6c, per damage type; CORRECTION: was armorValues
+CItemArmor			0x68	float[7]	armorAdd	proto add[k] +0x94 * material absorb[k] * proto A.Absorb +0x90 (the second tier set); CORRECTION: was armorValues2
+CItemArmor			0x84	int	field_84	0 after ctor, saved in the block
+CItemArmor			0x88	int	field_88	0 after ctor, saved in the block
 MoveRequest		0x3c	0x0	int	kind	0 stand, 1 turn in place, 2 follow the cell list, 3 track a unit (face it), 4 timed turn
 MoveRequest			0x4	float	startX	unit x * 2 (tile units) at startTick
 MoveRequest			0x8	float	startY	unit y * 2
@@ -429,8 +436,7 @@ BodyPartTier		0x48	0x0	int	flag	init 0
 BodyPartTier			0x4	float[7]	armor	per damage type; absorbs hit[10] * value per blow (UnitStats_ApplyDamage)
 BodyPartTier			0x20	float[7]	armor2	second value set of the armor item (+0x68) [?]
 BodyPartTier			0x3c	int	state	> 1 = active (3 when an armor item fills it)
-Hit		0x3c	0x0	float[7]	typeFactors	damage distribution per type (weapon proto +0x98.. / natural +0x90); after ApplyHit = effective fraction per type
-Hit			0xc	float[3]	spellDir	hit[3..5] nonzero = a spell/effect hit (Hit_HasDirection): no roll on the defender's side, death kind 7 (overlaps typeFactors[3..5])
+Hit		0x3c	0x0	float[7]	typeFactors	damage distribution per type (weapon proto +0x98.. / natural +0x90); after ApplyHit = effective fraction per type; [3..5] = element weights of a spell hit (1.0 = spell: no defender roll, death kind 7); the direction code is +0x30
 Hit			0x1c	float	weaponValue4c	CItemWeapon +0x4c for armed heroes, else 0 (not read by the damage code)
 Hit			0x20	float	roll	attack roll; ResolveHitChance sets +INF (hit) / -INF (miss); finite = unresolved (spell hits are rolled in TakeHit)
 Hit			0x24	float	damage	rolled damage (weapon +0x50 + rand*+0x54, natural +0x84 + rand(+0x88)) * strengthen/weaken buffs
@@ -440,7 +446,7 @@ Hit			0x30	int	direction	hit[12]: passed to OnDamaged as the hit direction (0 me
 Hit			0x34	float	backstabMult	1.0 normal; 3.0 + backstab perk % from behind (cancelled when the defender is in combat mode); > 1 ignores the defence and multiplies the damage
 Hit			0x38	byte	calledShot	-25 (head) / -10 (limbs) on the hit chance
 Order		0x24	0x0	int	kind	0 stand 1 move 2 turn 3 attack 4 cast at 5 cast on 6 interact 7 script anim 8 script anim loop 9 none 10 use quick item 11 sit
-Order			0x4	int	param	kind 1: group flag; 3: hit location (6 any); 4/5: spell item id (bit 31 = quick item slot); 6: 0 use / 1 / 2 steal / 0x18a95 loot a corpse; 10: slot
+Order			0x4	int	param	kind 1: group flag; 3: hit location (6 any); 4/5: spell item id (bit 31 = quick item slot); 6: 0 use / 1 / 2 steal / 0x18a95 talk; 10: slot
 Order			0x8	pointer	target	refcounted CMapObject
 Order			0xc	float[3]	pos	kind 1: goal (z = max path length); 2: direction; 4: cast point
 Order			0x18	byte	exact	position-locked: reach 0.2 / 1e10, no path validation
@@ -481,15 +487,19 @@ Placement			0x14	float	mana
 Placement			0x18	float	manaMax	
 Placement			0x1c	float	manaRegen	udb +0xc
 Placement			0x20	float[14]	armor	7 pairs {base, current} per damage type = udb +0x6c.. * proto +0x58; buffs 9/10/11/0x1a raise the thermal/chemical/electrical currents; items use +0x20 durability / +0x24 max / +0x48 count
-WeaponProto		0xb4	0xc	int	damageKind	0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow 8 unarmed [I]
-WeaponProto			0x38	float	weight	
-WeaponProto			0x50	float	damageMin	
-WeaponProto			0x54	float	damageSpread	
-WeaponProto			0x6c	int	attackFrames	attack period = this * 15 / actionSpeed ticks
+WeaponProto	ItemProtoBase	0xb4	0x6c	int	attackFrames	Actions (tag 0x15); CORRECTION: was attackFrames (kept, column name added)
 WeaponProto			0x7b	byte	meleeSkillBonus	added to the melee attack skill
 WeaponProto			0x7c	byte	archerySkillBonus	
 WeaponProto			0x80	byte[3]	attributeSkillBonus	science / stealing / ? bonuses (best over the 4 weapon slots)
 WeaponProto			0x98	float[7]	damageFactors	damage type distribution (CItem::GetProtoFloats98)
+WeaponProto			0x70	float[2]	field_70	tag 0x16 (Unk22-0/1)
+WeaponProto			0x78	byte[3]	field_78	tag 0x1b (Unk27)
+WeaponProto			0x7d	byte[3]	skillBonusRest	+0x7d..+0x7f: rest of the tag 0x1c byte[8] +0x7b (Unk28); +0x7b melee, +0x7c archery already listed; +0x80.. = attributeSkillBonus
+WeaponProto			0x84	float	attackModifier	Attack (tag 0x1d): client AttackParams[6] via ItemId_GetProto [I]
+WeaponProto			0x88	float	defenceModifier	Defence (tag 0x1e): AttackParams[7] [I]
+WeaponProto			0x8c	float	range	Range (tag 0x17) -> CItemWeapon +0x58
+WeaponProto			0x90	float	damageMin	D.Min (tag 0x18) * material Damage -> CItemWeapon +0x50
+WeaponProto			0x94	float	damageSpread	D.Max (tag 0x19): the code adds it to the min (max = min + spread)
 UnitProto		0x124	0x24	float	size	+ unit z >= 1.5: cannot be meleed
 UnitProto			0x48	float	hpMax	monsters: also str = this / 3
 UnitProto			0x4c	float	manaMax	dex = this / 3
@@ -605,7 +615,6 @@ Brain		0x190	0x8c	pointer	currentLogic	the motivation whose Update runs
 Brain		0x190	0x90	CArray	mobLogicSlots	MobLogicSlot x count +0x98 (5 from the .mob)
 Brain		0x190	0xa4	AiSpellInfos	spells	attack / support tables
 Brain		0x190	0xd0	AiMemory	memory	= CUnitServer +0xa50
-Brain		0x190	0x188	int	unused188	
 Brain		0x190	0x18c	byte	enemySeen	a seen unit is an enemy and alive; = CUnitServer +0xb0c; keeps the unit active
 AiSpellInfos		0x2c	0x4	pointer	attackData	AiSpellInfo x count +0x8: weapon + attack spells
 AiSpellInfos		0x2c	0x18	pointer	supportData	AiSpellInfo x count +0x1c: buffs / heals
@@ -674,7 +683,72 @@ CWorldServer			0x84	float	nightFactor	CWorld::NightFactor 0..1: sight x (1 - n +
 CWorldServer			0x88	float	weatherSight	1.0, 0.9 while it rains
 CWorldServer			0x8c	byte[80]	alarmSlots	5 x {byte active, int tick, float x, float y} (0x10 each): InvokeAlarm / ActivateLogicSlot; g_0x7AFFF4 = +0x94 of slot 0
 CWorldServer			0x12c64	PlayerRelations	relations	CORRECTION: was AggroTable: same class as g_0x7C2BC4 (Read / Write with PlayerRelations::Read / Write)
-CWorldServer			0x2838	StimulusMap	stimulusMap	= CAIMap +0x170 + 0x26c8 = g 0x7B2798
+CWorldServer			0x12de8	pointer[5]	effectObjects	id hash of the live CEffect objects (count +0x12DF8, max id +0x12DFC): AddEffectObject / RemoveEffectObject; Update removes those whose slot 6 returns 0; replicated by CPlayerServer msg 0x50 (full) / 0x51 (delta)
+CWorldServer			0x12e28	pointer	castListVt	CORRECTION: was 'RefPairList ... +0x12E2C head, +0x12E30 tail': vt 0x73F9D0, nodes {next, prev, CSpellEffect ref}; count +0x12e34, free +0x12e38, plex +0x12e3c, grow +0x12e40
+CWorldServer			0x12e2c	pointer	castListHead	
+CWorldServer			0x12e30	pointer	castListTail	
+CWorldServer			0x140	pointer	hoover	CHoover (typeId 0x1f): the loot collector
+CWorldServer			0x12e44	pointer	itemUpdateList	CList (vt 0x73BE74) of items whose mana +0x28 < max: RegenMana ticked; AddItemToUpdateList
+CWorldServer			0x12e64	pointer	lootRecords	list of loot records {+8 unit id, +0xc lobby index, +0x10 money, +0x18 item ids, +0x1c count} for already-looted units
+CWorldServer			0xdc	int	weatherMode	map.txt _weather: 0 none, 1 rain + thunder, 2, 3 tornado = lightning; SetWeatherMode; saved
+CWorldServer			0xe0	int	restrictFlag	zone record +0x30 (map.txt, 1 / 0) [?]; saved; sent in the zone state blob; 0 after LoadZone
+CWorldServer			0xe4	int	rainKind	0 none, 1 rain (with thunder flashes), 2; SetRain; msg 0x70 byte; saved
+CWorldServer			0xe8	float	rainStrength	20 or 40; msg 0x70 short; saved
+CWorldServer			0xec	pointer	zoneExitsVt	MFC CArray vt 0x73C400 of ZoneExit (0x3c) records from the zone record (SetZoneExits)
+CWorldServer			0xf0	pointer	zoneExits	ZoneExit[count]: +0x28 target zone CString, +0x2c entrance index
+CWorldServer			0xf4	int	zoneExitCount	
+CWorldServer			0xf8	int	zoneExitMax	
+CWorldServer			0xfc	int	zoneExitGrow	
+CWorldServer			0x100	byte	aiMapReady	1 after LoadZone / LoadSave (CAIMap changes applied directly); 0 during loading (BeginAIMapBatch)
+CWorldServer			0x104	pointer[5]	activeObjects	id hash {3 bytes, buckets +0x108 / +0x10c / +0x110, count +0x114}: ActivateObject / ActivateObjectsAround; ticked only in zone kind 1 (dead in this build)
+CWorldServer			0x118	int	activeMaxId	largest id ever inserted into the active hash
+CWorldServer			0x11c	byte	sendPositionOnJoin	SendZoneState sends the first tracked unit's position when set (0 after Init)
+CWorldServer			0x11d	byte	createUnits	CreateObjectFromDesc accepts units / lights / sounds / effects only when set (0 while re-loading a map whose units come from the save)
+CWorldServer			0x11e	byte	createObjects	CreateObjectFromDesc accepts static map objects only when set (0 when the map is already loaded: zone change inside the same .mob)
+CWorldServer			0x120	CString	progressZoneName	the zone record name (loading video, quest item zone filter, +0x120 in the save); LoadZone's third argument
+CWorldServer			0x124	pointer	mobNamesVt	CStringArray (vt 0x745F5C) of the extra .mob files loaded over the map (LoadMob); saved (version >= 0x60)
+CWorldServer			0x128	pointer	mobNames	
+CWorldServer			0x12c	int	mobNameCount	
+CWorldServer			0x138	int	mode	SetMode, global g_0x7B0098: 0 none, 1 single-player zone, 2 hosted multiplayer zone, 3 unused, 4 main-menu zone; UnloadZone clears it
+CWorldServer			0x13c	int	lastThunderTick	UpdateEnvironment: a flash every 20 ticks while rainKind == 1; saved
+CWorldServer			0x144	byte[0x18]	smessRegistry	CFileRegistry {+0, CMappedFile +4 (0x10), header pointer +0x14} over SMessBase.reg (server messages); opened by Init
+CWorldServer			0x15c	int	mapLoaded	1 between NewZone and UnloadZone; gates ReplicateToPlayer / PlayerIn / PlayerOut
+CWorldServer			0x160	int	worldScriptRunning	GSWorld +0x12874 ticks only when set: 1 after PlayerIn(runScript) / LoadSave with players; 0 after LoadZone
+CWorldServer			0x164	float[3]	startPosition	copied into a joining player's CPlayerServer +0x38 (AcceptPlayers); 0 after Reset
+CWorldServer			0x170	CAIMap	aiMap	
+CWorldServer			0x12874	GSWorld	worldScript	the zone's mission script VM (LoadMapObjects / LoadWorldScript compile into it; GSWorld::Write / Read in the save)
+CWorldServer			0x12a6c	GSWorld	systemScript	second VM, ticked every Update regardless of +0x160 (SpawnPartyHeroes / OnNamedEvent one-shot scripts) [I]
+CWorldServer			0x12d64	int	zoneKind	= g_0x7C2CC4, written through the global by Game_EnterZone (1 playable zone, 2 main menu, 3 scripted zone = record kind 2, 4 camp / map screen = record kind 1, 8 endofgame), Session_HostMpZone (1), App_LoadMapAndScript (7); 0 from Init / Reset / UnloadZone until the zone is loaded; selects the tick set (TickActiveObjects), replication set, random weather, hero spawn (1 / 3) and the camp behaviour (4)
+CWorldServer			0x12d68	CString	mapName	the loaded .mob (NewZone); saved first
+CWorldServer			0x12d6c	CString	terrainName	the loaded .mpr (CAIMap::Load); saved second
+CWorldServer			0x12d70	pointer[5]	allObjects	id hash of every object (static + dynamic): FindObjectById; buckets +0x12d74 / +0x12d78 / +0x12d7c, count +0x12d80
+CWorldServer			0x12d84	int	allObjectsMaxId	
+CWorldServer			0x12d88	pointer[5]	staticObjects	id hash of the objects moved out by SeparateStaticObjects (not ticked, not saved, sent once as the +0x12e00 stream); count +0x12d98
+CWorldServer			0x12d9c	int	staticMaxId	
+CWorldServer			0x12da0	pointer[5]	dynamicObjects	id hash of the ticked / saved / replicated objects (units, levers, traps, dynamic map objects); count +0x12db0
+CWorldServer			0x12db4	int	dynamicMaxId	
+CWorldServer			0x12db8	pointer[5]	dynamicNonUnits	id hash of the dynamic objects that are not units (ReplicateToPlayer in zone kind 1 with g_0x79BE6C); count +0x12dc8
+CWorldServer			0x12dcc	int	dynamicNonUnitMaxId	
+CWorldServer			0x12dd0	pointer[5]	namedObjects	id hash of the objects with a non-empty name +0x1a8 (scripts, replication in zone kind 1); count +0x12de0
+CWorldServer			0x12de4	int	namedMaxId	
+CWorldServer			0x12dfc	int	effectMaxId	
+CWorldServer			0x12e00	CMemStream	staticObjectStream	0x28 bytes (vt 0x73C960): the msg-0x40 creation records of the static objects (SeparateStaticObjects), sent to every joining client
+CWorldServer			0x12e34	int	castCount	
+CWorldServer			0x12e38	pointer	castFree	
+CWorldServer			0x12e3c	pointer	castPlex	
+CWorldServer			0x12e40	int	castGrow	10
+CWorldServer			0x12e48	pointer	itemUpdateHead	CList head of +0x12e44 (nodes {next, prev, item ref}); +0x12e4c tail, +0x12e50 count, +0x12e54 free, +0x12e58 plex, +0x12e5c grow
+CWorldServer			0x12e4c	pointer	itemUpdateTail	
+CWorldServer			0x12e50	int	itemUpdateCount	
+CWorldServer			0x12e54	pointer	itemUpdateFree	
+CWorldServer			0x12e58	pointer	itemUpdatePlex	
+CWorldServer			0x12e5c	int	itemUpdateGrow	10
+CWorldServer			0x12e60	pointer	lootRecordsVt	MFC CList vt 0x73FA10 of LootRecord (0x28-byte nodes); head at +0x12e64 (existing row), tail +0x12e68, count +0x12e6c, free +0x12e70, plex +0x12e74, grow +0x12e78 = 10. True size of CWorldServer 0x12e7c (Ghidra's struct stops at 0x12e60)
+CWorldServer			0x12e68	pointer	lootRecordsTail	
+CWorldServer			0x12e6c	int	lootRecordCount	saved
+CWorldServer			0x12e70	pointer	lootRecordsFree	
+CWorldServer			0x12e74	pointer	lootRecordsPlex	
+CWorldServer			0x12e78	int	lootRecordsGrow	
 CArray		0x14	0x0	pointer	vtable	MFC CArray
 CArray			0x4	pointer	data	
 CArray			0x8	int	count	
@@ -682,3 +756,638 @@ CArray			0xc	int	capacity
 CArray			0x10	int	growBy	
 ObjRefList		0x1c	0x0	pointer	vtable	list of object refs (AiMemory lists are 0x1c apart)
 ObjRefList			0x4	pointer	head	
+Buff		0x14	0x0	byte	kind	= the spell proto index (0x1D strengthen, 0x1E weaken, 0x1F regeneration, 0x20 feeblemind, 0x21 speed, 0x22 slow, 0x25 enlarge, 0x26 shrink, 0x19 stun, 0x1C teleport, 9/10/11 fire/lightning/acid protection, 12..14 senses, 15..17 invisibility/silence/lichdom, 0x13 stench, 0x1A antimagic)
+Buff			0x1	byte	level	client visual scale: ftol(16 * (pow(clamp(power / protoEffect, 1, 8), 0.33) - 0.2)) (CSpellEffect::Start); 0x10 in a bare CSpell
+Buff			0x4	int	duration	server ticks left; -- every tick (CMapObjectServer::TickBuffs), removed at 0
+Buff			0x8	float	power	the spell power (CSpell +0x24): the value the stat readers use (GetBuffValue = max over the kind)
+Buff			0xc	float	radius	the spell radius (CSpell +0x28); not read by the buff code
+Buff			0x10	byte	flag	zeroed by Buff_Clear, replicated in net section 3; not read by the code seen
+SpellProto		0x84	0x0	pointer	name	CString: display name (FLD0, e.g. "Fireball")
+SpellProto			0x4	pointer	code	CString: the code (FLD1, "fireball"): key of the code map g_0x7C851C and of the script / item syntax code{rune;rune}
+SpellProto			0x8	pointer	subtypeName	CString: school name (FLD2 "fire", "divination" ...)
+SpellProto			0xc	float	price	FLD3
+SpellProto			0x10	int	type	FLD4: 0 elemental, 1 sense (silent cast: no noise in CastOrderSpell), 2 astral
+SpellProto			0x14	int	school	FLD19 SubTypeCode 0 fire 1 lightning 2 acid 3 illusion 4 divination 5 enchantments 6 healing 7 domination (UnitStats_MagicSkill)
+SpellProto			0x18	float	mana	FLD5 base mana
+SpellProto			0x1c	int	slots	FLD6: initial slot count of a spell (rune count base)
+SpellProto			0x20	float	speed	FLD7: projectile speed m/s (fireball; -1 = none)
+SpellProto			0x24	float	range	FLD8 metres
+SpellProto			0x28	float	area	FLD9: area (m^2 scale: radius = sqrt(area / pi) after the a runes)
+SpellProto			0x2c	float	effect	FLD10: power (damage / heal / buff strength)
+SpellProto			0x30	int	target	FLD11: 117 u unit target (flag 0x10000000), 116 t point target (0x20000000), 115 s self/none
+SpellProto			0x34	int	targets	FLD12: number of targets (CastSpellMulti count)
+SpellProto			0x38	int	duration	FLD13 ticks (buff duration / wall lifetime)
+SpellProto			0x3c	int	actions	FLD14: cast time in action frames (cast ticks = actions * 15 / actionSpeed)
+SpellProto			0x40	int	reqTrace	FLD15: 1 = line of sight required (ComputeCastTarget)
+SpellProto			0x44	int	complex	FLD21: required magic skill of the school (CanCastSpell)
+SpellProto			0x48	pointer[3]	buildInMods	FLD16 vector<dword> {begin, end, cap} (rune indices); only read by the item constructor / UI [?]
+SpellProto			0x54	pointer[3]	specialMods	FLD17 vector<dword>
+SpellProto			0x60	int	tti	FLD18 TTI (texture / icon index [?]); not read in the spell code
+SpellProto			0x64	float[3]	lightRGB	FLD23..25: the point light colour of the cast effects
+SpellProto			0x70	float	lightRadius	FLD26
+SpellProto			0x74	float	fadeoutTime	FLD27: light drift = lightRadius / max(fadeout, 1) per tick
+SpellProto			0x78	byte[5]	modsAllowed	FLD20: runes r / t / a / e / d allowed on this blueprint (CSpellContainer::IsPerkKindAllowed)
+SpellProto			0x80	uint	shopBits	FLD22: Shop 1..5 bits
+PerkProto		0x24	0x0	pointer	name	CString display name ("Extra Effect")
+PerkProto			0x4	pointer	code	CString code ("e1", "ff", "ic"): the first letter selects the Finalize rule, key of g_0x7C853C
+PerkProto			0x8	float	price	FLD2: added to the spell price
+PerkProto			0xc	int	type	FLD3: 0 range 1 targets 2 area 3 effect 4 duration 5 mana 6 filter/colour 7 item
+PerkProto			0x10	float	mana	FLD4: added to the spell mana (negative for m runes)
+PerkProto			0x14	float	value	FLD5: the multiplier v of the Finalize formulas
+PerkProto			0x18	int	complex	FLD6: added to the required magic skill
+PerkProto			0x1c	pointer	allod	CString FLD7 (Gipath / Kania / Hadagan)
+PerkProto			0x20	uint	shopBits	FLD8
+SpellSetRecord		0x34	0x0	char[12]	prototype	std::string: the blueprint code (S_Spells / S_Armors / S_Weapons tables of spells.sdb)
+SpellSetRecord			0xc	pointer[3]	required	vector<std::string> required rune codes
+SpellSetRecord			0x18	pointer[3]	optional	vector<std::string> optional rune codes
+SpellSetRecord			0x24	char[12]	power	std::string: the power rune letter
+SpellSetRecord			0x30	uint	shopBits	Shop 1..5
+SpellsDb		0x64	0x0	pointer[3]	spellProtos	vector<SpellProto 0x84> (g_0x7C8510 begin / 0x7C8514 end); the proto index = the spell kind = the buff kind
+SpellsDb			0xc	pointer[5]	spellCodeMap	hash map code -> SpellProto* (g_0x7C851C)
+SpellsDb			0x20	pointer[3]	perkProtos	vector<PerkProto 0x24> (g_0x7C8530 / 34)
+SpellsDb			0x2c	pointer[5]	perkCodeMap	hash map code -> PerkProto* (g_0x7C853C)
+SpellsDb			0x40	pointer[3]	setSpells	vector<SpellSetRecord> S_Spells (archive tag 3)
+SpellsDb			0x4c	pointer[3]	setArmors	S_Armors (tag 4)
+SpellsDb			0x58	pointer[3]	setWeapons	S_Weapons (tag 5)
+CSpell	CObject	0x5c	0x1c	Buff	buff	the buff record written to the target by CSpellEffect::Start (kind byte = proto index, level 0x10, duration, power, radius)
+CSpell			0x30	float	speed	proto +0x20 (fireball flight speed)
+CSpell			0x34	float	range	proto +0x24 + r runes (OrderReachDistance, CastSpellMulti search radius)
+CSpell			0x38	int	targets	proto +0x34 + t runes
+CSpell			0x3c	uint	flags	0x10000000 unit target, 0x20000000 point target; filters 1 ff 2 fe 4 fh 8 fg 0x10 fo 0x20 fl; 0x10000 it (item trigger) 0x20000 ic (item continuous)
+CSpell			0x40	float	mana	max(proto mana, proto mana + m runes + rune mana); cost paid = mana * 25 / int
+CSpell			0x44	int	slots	proto slots + 1 per rune (rune count + 1)
+CSpell			0x48	float	price	proto price + rune prices
+CSpell			0x4c	int	castActions	proto +0x3C actions: cast time = castActions * 15 / actionSpeed ticks
+CSpell			0x50	int	reqSkill	proto complex + rune complex: MagicSkill(school) needed (CanCastSpell, message 0x13)
+CSpell			0x54	byte[8]	perks	perk index + 1 of each rune, sorted, 0-terminated
+CSpellContainer	CObject	0x90	0x1c	pointer	proto	SpellProto* (the blueprint); kind 0x3003
+CSpellContainer			0x20	pointer	runes	CList sentinel of 0x10 nodes {next, prev, PerkProto*}
+CSpellContainer			0x24	pointer[3]	perkString	std::string of perk index + 1 bytes (sorted into the spell perks)
+CSpellContainer			0x30	CSpell	spell	the result spell (Finalize rebuilds it; CSpell::FillFromId registers a copy)
+CSpellContainer			0x8c	pointer	name	CString (GetName)
+CSpellConstructor	CObject	0x24	0x1c	pointer	manager	CSpellManager ref (CWorld +0x4C); CWorld +0x50 holds the constructor
+CSpellConstructor			0x20	pointer	container	the CSpellContainer under construction
+CSpellManager	CObjectManager	0xd4	0xbc	pointer	registry	hash map (id & 0xFFFF0000) -> SpellRegistry* {buckets +4, count +0x10, max low id +0x14} of the created CSpells by low id
+CSpellManager			0xc0	pointer[3]	registryBuckets	vector of bucket heads
+CSpellManager			0xcc	int	registryCount	
+CSpellManager			0xd0	uint	maxHighId	largest id & 0xFFFF0000 seen (CreateSpellById)
+CSpellEffect		0xa8	0x0	pointer	vtable	0x74399C (2 slots: deleting dtor, dtor); not a CObject
+CSpellEffect			0x4	short	refcount	cast list +0x12E28 nodes hold one
+CSpellEffect			0x8	pointer	world	CWorldServer
+CSpellEffect			0xc	uint	flags	bit0 = a continuous hit was applied (ApplyHit* then passes attacker 0)
+CSpellEffect			0x10	float[3]	pos	current effect position (arrow / fireball / wall centre)
+CSpellEffect			0x1c	pointer	target	CMapObject ref (unit target) or 0
+CSpellEffect			0x20	pointer	caster	CMapObject ref (0 for script / trap casts)
+CSpellEffect			0x24	float[3]	targetPoint	cast point (z = terrain height)
+CSpellEffect			0x30	int	phase	0 Start, 1 TickFlight (projectile), 2 TickActive, 3 done (removed by the world)
+CSpellEffect			0x34	CSpell	spell	copy of the cast spell (+0x4C id, +0x50 buff block, +0x54 duration, +0x58 power, +0x5C radius, +0x64 speed, +0x68 range, +0x6C targets, +0x70 flags ...)
+CSpellEffect			0x90	pointer	mainEffect	CEffect* ref: arrow / particle / wall / lightning / visibility
+CSpellEffect			0x94	pointer	soundEffect	CEffectSound / CEffectSoundSeq ref
+CSpellEffect			0x98	pointer	lightEffect	CEffectPointLight ref
+CSpellEffect			0x9c	int	volumesPlaced	1 while the wall / fog / campfire cells block the passability map (UpdateVolumes)
+CSpellEffect			0xa0	int	countdown	ticks left in the phase (flight time, wall lifetime = duration, 0x23 after an impact)
+CSpellEffect			0xa4	byte	quiet	1 for passive item casts (no heal sound when HP is full); passed to AddBuff as the applyScale flag
+CEffect	CObject	0x14c	0x1c	float[3]	pos	CObject3D transform block (+0x1C pos, +0x28 world pos, +0x34 / +0x44 quaternions) without the figure fields of the CMapObject-style CObject3D
+CEffect			0x28	float[3]	worldPos	
+CEffect			0x34	float[4]	localRot	identity
+CEffect			0x44	float[4]	worldRot	identity
+CEffect			0x94	int	startTick	world tick when added (CWorldServer::AddEffectObject); pre-run count of the particle systems
+CEffect			0x98	float[3]	velocity	per-tick movement (SetVelocity)
+CEffect			0xa4	int	moving	velocity != 0
+CEffect			0xa8	DeltaCodec	net	four CMemStreams (0x28 each): +0xA8 writer, +0xD0, +0xF8 full state (msg 0x50), +0x120 delta (msg 0x51)
+CEffect			0x148	int	lastChangeTick	-1 when clean; set by MarkDirty / SetVelocity (g_0x7AFFC8)
+DeltaCodec		0xa0	0x0	byte[160]	streams	four CMemStreams of 0x28 (vt 0x73BD90 x2, 0x73C960 x2)
+CEffectSound	CEffect	0x264	0x14c	char[256]	name	wav path ("magic\Fireball\start.wav")
+CEffectSound			0x24c	float	volume	10 for spell sounds
+CEffectSound			0x250	float	radius	50 (slot 19 GetRadius)
+CEffectSound			0x254	int	oneShot	1 = removed when the sound ends
+CEffectSound			0x258	int	loop	1 = loops (Play3D 1000)
+CEffectSound			0x25c	int	handle	sound channel (-1 none)
+CEffectSound			0x260	byte	keepTick	per-tick keep-alive byte read by Update
+CEffectSoundSeq	CEffect	0x174	0x14c	pointer	folder	CString folder / base name
+CEffectSoundSeq			0x150	pointer[3]	files	CStringArray of wav names (+0x158 count)
+CEffectSoundSeq			0x164	float	volume	
+CEffectSoundSeq			0x168	float	radius	
+CEffectSoundSeq			0x16c	byte	loop	1 from CSpellEffect::CreateSoundSeq
+CEffectSoundSeq			0x170	int	handle	sound slot handle (-1)
+CEffectAmbientSound	CEffect	0x174	0x14c	pointer[5]	names	CStringArray
+CEffectAmbientSound			0x160	float	volume	
+CEffectAmbientSound			0x170	int	handle	
+CEffectPointLight	CEffect	0x164	0x14c	float[3]	colour	rgb 0..1 (proto +0x64)
+CEffectPointLight			0x158	float	radius	negative = fading flag 0x400 on the CLight
+CEffectPointLight			0x15c	pointer	light	CLight ref (client, kind 0x31)
+CEffectPointLight			0x160	uint	lightFlags	0x840 from the spell effects
+CEffectParticle	CEffect	0x180	0x14c	float[3]	attachedPos	GetPos result when attached to a unit
+CEffectParticle			0x158	int	type	particle system type 0x2000 + k (0x2000 fireball, 0x2002 blast, 0x2006 heal, 0x2007 acid fog, 0x2009 fireworks, 0x200C acid column, 0x2010 fire wall, 0x2014 link, 0x2018 clairvoyance, 0x2019 teleport, 0x2030 invoke lightning, 0x2041 / 0x2042 arrow hits)
+CEffectParticle			0x15c	float	scale	
+CEffectParticle			0x160	float	intensity	PowerFactor of the spell
+CEffectParticle			0x164	float	radius	
+CEffectParticle			0x168	int	attachUnitId	-1 none (the particle follows the unit)
+CEffectParticle			0x16c	float[3]	targetPos	the point the particle flies to (fireball)
+CEffectParticle			0x178	pointer	particleSystem	CParticle ref (client)
+CEffectParticle			0x17c	int	sourceUnitId	-1; when set the position is that unit's attach point (ReadDelta)
+CEffectWall	CEffectParticle	0x18c	0x180	float[3]	direction	half-extent vector of the wall (radius +0x5C along the perpendicular of the cast direction)
+CEffectLightning	CEffect	0x178	0x14c	float[3]	from	
+CEffectLightning			0x158	float[3]	to	
+CEffectLightning			0x164	float	width	PowerFactor * 5 (unit bolt), -7 * factor (invoke lightning)
+CEffectLightning			0x168	pointer	lightning	CLightning ref (client)
+CEffectLightning			0x16c	int	fromUnitId	-1 none
+CEffectLightning			0x170	int	toUnitId	-1 none
+CEffectLightning			0x174	byte	style	1 = curse_magic variant
+CEffectProjectile	CEffect	0x158	0x14c	int	arrived	1 once the target is reached (the CSpellEffect / the figure then applies the hit)
+CEffectProjectile			0x150	int	targetUnitId	
+CEffectProjectile			0x154	byte	fromAttachPoint	1 = the start position is the shooter's attach point
+CEffectArrow	CEffectProjectile	0x6c0	0x158	CEffectParticle	particle	embedded trail particle (system ref +0x2D0)
+CEffectArrow			0x2d8	CEffectPointLight	light	embedded (light ref +0x434)
+CEffectArrow			0x43c	CEffectSound	sound	embedded (handle +0x698)
+CEffectArrow			0x6a0	pointer	soundName	CString ("magic\Firearrow\circle.wav")
+CEffectArrow			0x6a4	float[3]	lightColour	
+CEffectArrow			0x6b0	float	lightRadius	
+CEffectArrow			0x6b4	int	particleType	0x2011 fire arrow, 0x204E rick magic, 0x2012 acid ray
+CEffectArrow			0x6b8	float	intensity	PowerFactor (acid ray * 0.4)
+CEffectArrow			0x6bc	int	casterUnitId	-1 none
+CEffectArrowFigure	CEffectProjectile	0x19c	0x158	pointer	figure	client arrow object ref (kind 0x38, model efar1)
+CEffectArrowFigure			0x15c	int	shooterUnitId	
+CEffectArrowFigure			0x160	Hit	hit	the resolved hit record (15 dwords) copied by CUnitServer::FireAttack, applied through target vt[31] on arrival
+CEffectShowVisibility	CEffect	0x170	0x14c	int	viewerUnitId	the caster (vision_fog)
+CEffectShowVisibility			0x150	int	watchedUnitId	the target whose sight is revealed
+CEffectShowVisibility			0x154	pointer	visFog	CVisibilityFog ref (client)
+CEffectShowVisibility			0x160	pointer	gridCells	byte grid of revealed cells (SightMap_Build)
+CEffectShowVisibility			0x164	pointer	gridRows	
+CEffectShowVisibility			0x168	int	gridW	
+CEffectShowVisibility			0x16c	int	gridH	
+CEffectMoshka	CEffect	0x16c	0x14c	pointer	bird	client object (model unmobi, anim bird00)
+CEffectMoshka			0x150	pointer	particle	particle 0x203C
+CEffectMoshka			0x154	int	targetUnitId	
+CEffectMoshka			0x158	int	startTick	
+CEffectMoshka			0x15c	int	timer	
+CEffectMoshka			0x160	float	angle	
+CEffectMoshka			0x164	float	radius	
+CEffectMoshka			0x168	int	state	0 approach 1 circle 2 fly to a point
+CEffectTornado	CEffect	0x15c	0x14c	pointer	particle	particle 0x200A
+CEffectTornado			0x150	int	soundHandle	-1
+CEffectTornado			0x154	int	age	ticks; hits every 8 ticks after 20
+CEffectTornado			0x158	int	startTick	
+CItemSpell	CItem	0x50	0x4c	int	gdLevel	same layout as CItemQuick (shared Read/Write/InitFromProto); the spell is +0x44
+CStringArray		0x14	0x0	pointer	vtable	MFC CStringArray
+CStringArray			0x4	pointer	data	CString*
+CStringArray			0x8	int	count	
+CStringArray			0xc	int	capacity	
+CStringArray			0x10	int	growBy	
+CItemQuick	CItem	0x50	0x4c	int	gdLevel	quick proto GD Level +0x70 (icon variant); the subtype is read from the proto (+0x6c ItemID) by CItem::GetProtoSubtype
+CItemQuest	CItem	0x50	0x4c	int	scriptId	quest proto ScriptID +0x6c (HaveItem / EraseQuestItem)
+CItemLoot	CItem	0x58	0x4c	int	category	loot proto TypeID +0x6c: 1 material, 2 instruction (blueprint)
+CItemLoot			0x50	int	refTable	loot proto +0x70: 0 weapons 1 armors 2 quick 3 spells 4 perks (the table +0x54 indexes)
+CItemLoot			0x54	int	refIndex	loot proto +0x74; category 1: the material ID; category 2: the referenced proto row (shifts when the database rows move)
+CInventory	CItem	0x64	0x4c	byte[3]	flags	unused CItem subclass (typeId 0x17); hosts the base Read/Write 0x6A0270/0x6A0360
+CInventory			0x50	pointer	hashBuckets	hash set of objects (100 buckets, 0xc nodes) released in Done
+ItemMaterial		0x50	0x0	CString	name	Materials Name (tag 0)
+ItemMaterial			0x4	CString	type	Type (tag 1): must equal the proto's M.Type to be usable (shop, camp constructor)
+ItemMaterial			0x8	CString	code	Code (tag 2)
+ItemMaterial			0xc	int	id	ID (tag 3): the low word of an item id (must equal the row index: every lookup indexes the table with it)
+ItemMaterial			0x10	float	price	Price (tag 4): added to the item price once per proto Components
+ItemMaterial			0x14	float	weightFactor	Weight (tag 5): multiplies the proto weight
+ItemMaterial			0x18	float	manaAdd	Mana (tag 6): added to the proto mana
+ItemMaterial			0x1c	int	slotsAdd	Slots (tag 7): added to the proto complexity
+ItemMaterial			0x20	float	durabilityFactor	Durability (tag 8): multiplies the proto durability
+ItemMaterial			0x24	int	skill	Skill (tag 9) [?] not read in this round
+ItemMaterial			0x28	float	damageFactor	Damage (tag 10): multiplies D.Min / D.Max of weapons
+ItemMaterial			0x2c	float[7]	absorb	Absorption (tag 11): multiplies the armor values per damage type
+ItemMaterial			0x48	uint	flags	tag 12 (Unk12): ORed into the armor flags +0x8c / +0xb0
+ItemMaterial			0x4c	uint	shopMask	Shop 1..5 bits (tag 13): bit (player index - 1) = sold by that player's shop
+ItemProtoBase		0x6c	0x0	pointer	vtable	0x744068 weapons / 0x744064 armors / 0x74405C quick / 0x744058 quest / 0x744054 loot; slot 0 GetItemKind returns 0x3004..
+ItemProtoBase			0x4	CString	name	Name (tag 0): the key of CItemManager::CreateItemByName
+ItemProtoBase			0x8	CString	type	Type (tag 1); "" protos are skipped by the shop
+ItemProtoBase			0xc	int	typeId	TypeID (tag 2): weapon kind 0 sw 1 ax 2 dg 3 sp 4 hm 5 bw 6 cb / armor slot 0 hl 1 pl 2 lg 3 sh 4 pt 5 bt 6 gl; weapons: 0 sword 1 axe 2 dagger 3 spear 4 bludgeon 5 bow 6 crossbow 8 unarmed [I]
+ItemProtoBase			0x10	CString	materialType	M.Type (tag 3): the material Type the proto accepts ("" = no material)
+ItemProtoBase			0x14	int	field_14	tag 4 (Unk4)
+ItemProtoBase			0x18	int	textureTypeIndex	TTI (tag 5)
+ItemProtoBase			0x1c	int	textureTypeIndex2	TTI2 (tag 6)
+ItemProtoBase			0x20	CStringArray	runtimeStrings	MFC CStringArray (0x14), not serialized; [0] is returned by item slot 18
+ItemProtoBase			0x34	float	price	Price (tag 7)
+ItemProtoBase			0x38	float	weight	Weight (tag 8)
+ItemProtoBase			0x3c	float	size	Size (tag 9)
+ItemProtoBase			0x40	float	mana	Mana (tag 10)
+ItemProtoBase			0x44	int	slots	Slots (tag 11): complexity
+ItemProtoBase			0x48	float	durability	Durability (tag 12)
+ItemProtoBase			0x4c	int	components	Components (tag 13): materials consumed / returned by the constructor
+ItemProtoBase			0x50	CStringArray	runtimeStrings2	MFC CStringArray (0x14), not serialized
+ItemProtoBase			0x64	uint	shopMask	Shop 1..5 bits (tag 14)
+ItemProtoBase			0x68	byte	deconstructable	Dec. (tag 15), 1 after ctor; Item_IsUsable
+ArmorProto	ItemProtoBase	0xc8	0x6c	float	mainAbsorb	M. Absorb. (tag 0x15 [0]): multiplies every main value
+ArmorProto			0x70	float[7]	mainValues	M. Piercing..General (tag 0x15 [1..7]) -> CItemArmor +0x4c
+ArmorProto			0x8c	uint	mainFlags	tag 0x15 [8] (Unk21-8), ORed with the material flags +0x48
+ArmorProto			0x90	float	addAbsorb	A. Absorb. (tag 0x16 [0])
+ArmorProto			0x94	float[7]	addValues	A. Piercing..General (tag 0x16 [1..7]) -> CItemArmor +0x68
+ArmorProto			0xb0	uint	addFlags	tag 0x16 [8] (Unk22-8)
+ArmorProto			0xb4	byte	applyWounds	Apply Wounds (tag 0x17)
+ArmorProto			0xb8	int	wearOrder	Wear Order (tag 0x18), ArmorProto_GetWearOrder
+ArmorProto			0xbc	byte[3]	field_bc	tag 0x19 (Unk25)
+ArmorProto			0xbf	byte[8]	field_bf	tag 0x1a (Unk26)
+QuickProto	ItemProtoBase	0x8c	0x6c	int	subtype	ItemID (tag 0x15): 2 consumable (order 10), 5 charged magic item, 8 wand / scroll / spell container
+QuickProto			0x70	int	gdLevel	GD Level (tag 0x16) -> CItemQuick +0x4c
+QuickProto			0x74	float	damage	Damage (tag 0x17)
+QuickProto			0x78	float	field_78	tag 0x18 (Unk24)
+QuickProto			0x7c	CString	spellName	Spell (tag 0x19): created and embedded for subtype 8 protos by ApplyProto
+QuickProto			0x80	byte[3]	attributeModifiers	Science / Stealing / ? modifiers (tag 0x1a; never written by DBEditor)
+QuickProto			0x83	byte[8]	field_83	tag 0x1b (Unk27, always empty)
+QuestProto	ItemProtoBase	0x7c	0x6c	int	scriptId	ScriptID (tag 0x15) -> CItemQuest +0x4c
+QuestProto			0x70	pointer	zones	STL vector<CString> (begin +0x70, end +0x74, cap +0x78): Zones (tag 0x16); FilterQuestItems keeps the item only in a listed zone
+LootProto	ItemProtoBase	0x78	0x6c	int	category	TypeID (tag 0x15): 1 material, 2 instruction
+LootProto			0x70	int	refTable	tag 0x16: 0 weapons 1 armors 2 quick 3 spells 4 perks
+LootProto			0x74	int	refIndex	tag 0x17
+ItemsDb		0xc0	0x0	pointer	materials	vector<ItemMaterial 0x50> begin (g_0x7C86D8), end +4, cap +8
+ItemsDb			0xc	pointer	materialMap	std::string -> ItemMaterial* hash map (0x14 nodes); +0x10 buckets, +0x14 end, +0x18 count
+ItemsDb			0x20	pointer	weapons	vector<WeaponProto 0xb4> (g_0x7C86F8 / end 0x7C86FC)
+ItemsDb			0x2c	pointer	weaponMap	name map (StrHashTable_LookupId 0x4AB720 reads it)
+ItemsDb			0x40	pointer	armors	vector<ArmorProto 200> (g_0x7C8718 / 0x7C871C)
+ItemsDb			0x4c	pointer	armorMap	name map (ArmorMap_FindOrInsert, lookup 0x4AB820)
+ItemsDb			0x60	pointer	quickItems	vector<QuickProto 0x8c> (g_0x7C8738 / 0x7C873C)
+ItemsDb			0x6c	pointer	quickMap	name map (g_0x7C8744; "spell container" is looked up here)
+ItemsDb			0x80	pointer	questItems	vector<QuestProto 0x7c> (g_0x7C8758 / 0x7C875C)
+ItemsDb			0x8c	pointer	questMap	name map
+ItemsDb			0xa0	pointer	lootItems	vector<LootProto 0x78> (g_0x7C8778 / 0x7C877C)
+ItemsDb			0xac	pointer	lootMap	name map (ItemsDb_FindLootProtoByName)
+CItemManager	CObjectManager	0xbc	0xac	pointer	world	the owning CWorld / CParty (vt[16] item constructor, vt[18] item manager, vt[22] spell manager) [V: CreateItemByName / CreateItem]
+CItemConstructor	CObject	0x34	0x1c	pointer	manager	CItemManager* set by SetManager around every build (refcount only)
+CItemConstructor			0x20	pointer	material	ItemMaterial* or 0
+CItemConstructor			0x24	pointer	proto	items.idb record (any of the five tables)
+CItemConstructor			0x28	pointer	item	the CItem being built (refcount held until FinishItem)
+CItemConstructor			0x2c	pointer	spell	CSpell* to embed (count / price added by SetSpell)
+CItemConstructor			0x30	int	count	stack count written to item +0x48 (1 by default; the "[n]" of material.x[n])
+PartyItemLink		0xc	0x0	pointer	vtable	0x73FA88 (slot 3 Clone)
+PartyItemLink			0x4	short	refcount	16-bit (RefCounted16_Release)
+PartyItemLink			0x8	int	partyItemId	id (+0xc) of the matching item in the party's item manager (ConsumeItemCharge mirrors mana / count into it)
+CParty	CObject	0x70	0x1c	pointer	itemManager	CItemManager (0xbc) created by Init; slot 18
+CParty			0x20	pointer	itemConstructor	CItemConstructor (0x34); slot 16
+CParty			0x24	pointer	spellManager	CSpellManager (0xd4); slot 22
+CParty			0x28	pointer	spellConstructor	CSpellConstructor (0x24); slot 17
+CParty			0x2c	pointer	heroArrayVtable	MFC CArray vtable 0x742FF4 (HeroRecordArray)
+CParty			0x30	pointer	heroes	HeroRecord[count] (0x784 each); CPlayer +0xa0 when embedded
+CParty			0x34	int	heroCount	
+CParty			0x38	int	heroMax	
+CParty			0x3c	int	heroGrow	
+CParty			0x40	pointer	items	aligned CItem*[]: the party inventory (backpack); CPlayer +0xb0 when embedded
+CParty			0x44	int	itemCount	
+CParty			0x48	int	itemMax	
+CParty			0x4c	int	itemGrow	
+CParty			0x50	int	money	saved as {money ^ r, r}
+CParty			0x54	StringFloatMap	namedValues	the named values: "gtime", quest variables "q.*", "constr.current" ... (messages 0x81 / 0x82; StringFloatMap_Get / Set); = CPlayer +0xc4
+CParty			0x68	CString	mapName	current map name (CPlayerServer::ChangeMap, World_GetClientMapName); = CPlayer +0xd8
+CParty			0x6c	int	mapEntry	entrance index for the next map (ChangeMap); = CPlayer +0xdc
+HeroRecord		0x784	0x0	CString	displayName	
+HeroRecord			0x4	CString	modelName	unhuma / unhufe ...; hashed into the id
+HeroRecord			0x8	CString	className	udb entry +0xe8 ("Hero")
+HeroRecord			0xc	CString	field_c	
+HeroRecord			0x10	CString	skinName	texture set unless "none" (CreateHeroUnits)
+HeroRecord			0x14	CString	protoName	units database prototype name
+HeroRecord			0x18	CString	protoNameSaved	copy of +0x14 (saved last, version > 0x6a)
+HeroRecord			0x1c	int	id	String_HashCI(model name) = the hero unit's object id; -1 when no model
+HeroRecord			0x20	UnitStats	stats	0x704 bytes, raw in the file
+HeroRecord			0x724	float[3]	complection	body proportions {0.8, 0.2, 1.0} default, proto +0x14..+0x1c
+HeroRecord			0x730	pointer	weapons	aligned CItem*[]: the 4 weapon slots (CUnit +0x440); order in the file: this first
+HeroRecord			0x734	int	weaponCount	
+HeroRecord			0x738	int	weaponMax	
+HeroRecord			0x73c	int	weaponGrow	
+HeroRecord			0x740	pointer	quickItems	the 4 belt slots (CUnit +0x450): wands, scrolls, potions; count +0x48 of each = charges
+HeroRecord			0x744	int	quickCount	
+HeroRecord			0x748	int	quickMax	
+HeroRecord			0x74c	int	quickGrow	
+HeroRecord			0x750	pointer	armor	the worn armor, one per type (CUnit +0x480[7])
+HeroRecord			0x754	int	armorCount	
+HeroRecord			0x758	int	armorMax	
+HeroRecord			0x75c	int	armorGrow	
+HeroRecord			0x760	pointer	spells	the 8 spell containers (CUnit +0x460[8]); the client reads them from here
+HeroRecord			0x764	int	spellCount	
+HeroRecord			0x768	int	spellMax	
+HeroRecord			0x76c	int	spellGrow	
+HeroRecord			0x770	int	stance	CUnit +0x268 stance wanted (2 walk default); DetachHeroes stores it
+HeroRecord			0x774	int	weaponSlot	weapon slot in hand (CUnit +0x26c), index into +0x730; the camp bar edits it
+HeroRecord			0x778	byte	field_778	saved byte, 0
+HeroRecord			0x77c	int	followTargetId	mode 1: Brain follow target unit id, -1 none (SpawnPartyHeroes restores it)
+HeroRecord			0x780	int	battleButton	CUnit +0x438 (1 default)
+PartyStore		0x84	0x0	CString	dir	the mp folder
+PartyStore			0x4	pointer	slots	STL vector<PartySlot 0x74>: begin +4, end +8, cap +0xc
+PartyStore			0x10	CParty	party	the selected / working party (0x70)
+PartyStore			0x80	CString	fileName	
+PartySlot		0x74	0x0	CParty	party	one 1-hero party per *.mp file
+PartySlot			0x70	CString	fileName	
+ShopStock		0xb8	0x0	pointer	world	the CWorld the stock builds items in (vt[16] constructor, vt[18] item manager, vt[22] spell manager); CGSPlayer +0x11c (item shop) and +0x1d4 (spell shop)
+ShopStock			0x4	int	playerBit	bit index tested against the S_* tables' mask +0x30
+ShopStock			0x8	pointer	armorProtos	vector<ArmorProto*> begin/end/cap (+8/+0xc/+0x10) [?: names swapped vs the old AddUnique_Weapon]
+ShopStock			0x14	pointer	weaponProtos	vector<WeaponProto*> (+0x14/+0x18/+0x1c)
+ShopStock			0x20	pointer	quickProtos	vector<QuickProto*> (+0x20/+0x24/+0x28)
+ShopStock			0x2c	pointer	materials	vector of 16-byte {ItemMaterial*, min, max, stock} (+0x2c/+0x30/+0x34)
+ShopStock			0x38	pointer	spellProtos	vector<SpellProto*> (0x84 records) (+0x38/+0x3c/+0x40)
+ShopStock			0x44	pointer	perkProtos	vector<spell modifier proto* (0x24)> (+0x44/+0x48/+0x4c)
+ShopStock			0x50	pointer	spellFilter	hash set of the spell protos allowed by the current S_* table (0x18 nodes); +0x54..+0x60
+ShopStock			0x64	pointer	perkByLetter	hash map rune letter -> perk proto; +0x68..+0x74
+ShopStock			0x78	float[8]	limitsA	SetLimits first array
+ShopStock			0x98	float[8]	limitsB	per-school complexity limit for GenerateSpells (spell shop)
+CPlayer	CObject		0x70	CParty	party	the player's party (0x70): +0xa0 heroes, +0xa4 count, +0xb0 items, +0xb4 count, +0xc0 money
+CPlayer			0xe4	pointer	itemList	MFC CList head of the player's loose items (loot, shop purchases); +0xe8 tail, +0xec count, +0xf0 free list, +0xf4 CPlex
+CPlayer			0x118	pointer	syncedItemIds	CORRECTION: was trackedIds "object ids to resend": head of the CList<DWORD> of party item ids whose +0x28 (durability) is resent with message 0x14
+CPlayer	CObject	0x134	0x1c	pointer	netStream	IMsgStream the packets go through (TcpMsgStream / PeerMsgStream / FileMsgStream): vt[4] ready, vt[6] HasPacketHeader, vt[8] SendBuffered, vt[9] PopPacket; short refcount at +4 of the stream (CPlayer::SetNetStream)
+CPlayer			0x20	pointer	connection	CPlayerClient (client) / CPlayerServer (server), kind 0x49; its +0x1c points back; slots 13..23 are the CPlayer callbacks (CPlayer::SetConnection)
+CPlayer			0x24	int	playerIndex	lobby player index (0 = host, -1 none): Script::NamedEventSource, CPlayerManager::FindPlayerByIndex
+CPlayer			0x28	IdHash	units	id -> CUnit of every unit replicated to this player (server SendMsg40 inserts, SendMsg42 removes); +0x38 count, +0x3c max id
+CPlayer			0x40	IdHash	partyUnits	id -> CUnit of the units the player controls (CPlayer::TrackUnit from CUnit::SetPlayer); +0x50 count, +0x54 max id
+CPlayer			0x58	IdHash	effects	id -> CEffect replicated with 0x50 / 0x51 / 0x52; +0x68 count, +0x6c max id
+CPlayer			0xe0	pointer	itemListVt	MFC CList vtable 0x73BE80 of the loose item list (+0xe4 head, +0xe8 tail, +0xec count, +0xf0 free, +0xf4 CPlex, +0xf8 block size 10)
+CPlayer			0xfc	uint	partyId	the party / session key handed to PartyHash_GetParty / SetParty; sent by the client in the identity block (last u32) and bumped by NextUniqueId on upload
+CPlayer		0x0	0x100	int	zoneKindCopy	CWorldServer +0x12d64 (g_0x7C2CC4) at AcceptPlayers; saved; CPlayerServer 0x670DA0 copies it again
+CPlayer			0x104	int	prevGameMode	previous +0x100 (client OnMsg07_GameMode)
+CPlayer			0x108	byte	flag108	cleared by Reset; not read in the functions of this round
+CPlayer			0x10c	int	netLogFlag	logs "client to server / server to client, size = N squeezed ..." when set
+CPlayer		0x0	0x110	int	gtimeTick	the world tick at which "gtime" was last updated (BroadcastGameTime); = tick after PlayerIn / LoadSave
+CPlayer			0x114	pointer	syncedItemsVt	MFC CList<DWORD> vtable 0x743138; +0x118 head (existing row trackedIds), +0x11c tail, +0x120 count, +0x124 free, +0x128 CPlex, +0x12c block 10: ids of party items whose float +0x28 (durability) is synced with message 0x14 (CPlayer::TrackItemId / PurgeSyncedItems / CPlayerServer::ResendItemValues)
+CPlayer		0x0	0x130	uint	replicationFlags	bits set by CWorldServer::FlagAllPlayers: 1 zone state, 2 weather, 4 time, 8 wind, 0x10 msg 0x07, 0x20 water levels; -1 after NewZone / LoadSave / AcceptPlayers; cleared by the CPlayerServer::SendMsg7x senders
+CGSPlayer			0x3c	CParty	itemShop	the item trade stock (GenerateItemShop)
+CGSPlayer			0xac	CParty	spellShop	the spell trade stock (GenerateSpellShop)
+CGSPlayer			0x11c	ShopStock	itemStock	allowed protos / materials for the item shop
+CGSPlayer			0x1d4	ShopStock	spellStock	allowed spells / perks for the spell shop
+HeroKit		0x60	0x0	CString	name	units.udb NPC record (tag 4, g_0x7AF384 map): the hero kit
+HeroKit			0x24	pointer	ints	vector<int> (+0x24/+0x28/+0x2c)
+HeroKit			0x30	pointer	weaponNames	vector<CString> item names -> HeroRecord +0x730 (ApplyHeroKit)
+HeroKit			0x3c	pointer	quickItemNames	vector<CString> -> +0x740
+HeroKit			0x48	pointer	spellNames	vector<CString> -> +0x760 spell containers
+HeroKit			0x54	float	experience	added to the hero's experience
+HeroKit			0x58	int	money	added to the party money
+CPlayerClient	CObject	0x50f8	0x1c	pointer	player	the owning CPlayer
+CPlayerClient			0x20	int	state	0 handshake (identity not sent), 1 identity sent, 2 in world (after 0x00), 3 leaving (after SendMsg04_Leave until SendMsg05_EnterWorld)
+CPlayerClient			0x24	pointer	handlers	256 handler pointers indexed by the server opcode (CPlayerClient::Init); +0x28 count 0x100, +0x2c capacity, +0x30 grow
+CPlayerClient			0x34	CMemStream	recvStream	the decompressed incoming message being dispatched (ok byte at +0x39: a short read clears it and DispatchPackets fails)
+CPlayerClient			0x5c	CMemStream	sendStream	the outgoing message; FlushSendStream compresses it and hands it to the net stream
+CPlayerClient			0x84	byte	lobbyMode	set in the lobby: OnMsg07_GameMode only forwards a key 0xd to the UI
+CPlayerClient			0x85	byte	uploadPending	SendClientState prefixes the identity with 0x08 + the party (MpFile::Write) when set
+CPlayerClient			0x88	LzCompressor	sendCodec	0x2828 bytes: the LZ window of the client -> server stream (kept across messages)
+CPlayerClient			0x28b0	LzCompressor	recvCodec	CORRECTION: was "+0x2898 DeltaCodec" (that offset is inside the send codec's bit writer); 0x2828 bytes: the LZ window of the server -> client stream
+CPlayerClient			0x50d8	pointer	partyUnitIds	aligned DWORD array of the party unit ids of the last message 0x60 (units flagged 0x400000); +0x50dc count, +0x50e0 capacity, +0x50e4 grow
+CPlayerClient			0x50e8	pointer	lootUnitIds	aligned DWORD array (4) of the unit ids whose loot belongs to the player (message 0x60 tail); +0x50ec count, +0x50f0 capacity, +0x50f4 grow
+CPlayerServer	CObject	0x5128	0x1c	pointer	player	the owning CPlayer
+CPlayerServer			0x20	int	state	0 new (identity awaited), 1 in game, 2 left the world (between zones, after 0x04), 3 disconnected / version refused, 4 hero uploaded (awaiting 0x09)
+CPlayerServer			0x24	int	syncMarker	-1 = UpdateVisibleSet rebuilds the known / visible arrays from the party units' AiMemory; else the previous known array is copied; sent in message 0x60
+CPlayerServer			0x28	pointer	handlers	256 handler pointers indexed by the client opcode (CPlayerServer::Init); +0x2c count, +0x30 capacity, +0x34 grow
+CPlayerServer			0x38	float[3]	viewPoint	the client's last view point (message 0x40: x, y) or the last camera position sent (SendMsg04 / 0x0F); ReplicateToPlayer replicates the objects within 100 units of it
+CPlayerServer			0x44	int	field44	-1 after Init / Reset; not read in this round
+CPlayerServer			0x48	CMemStream	sendStream	the outgoing message; FlushSendStream compresses it with +0x88 and hands it to the net stream
+CPlayerServer			0x70	byte	inWorld	1 between World::PlayerIn and World::PlayerOut
+CPlayerServer			0x74	pointer	spawnRecordsVt	MFC CArray (vt 0x73D2C8) of 0x28-byte spawn records (zeroed, quaternion +0x10 identity): +0x78 data, +0x7c count, +0x80 capacity, +0x84 grow; filled by World::PlayerOut and handed back to World::PlayerIn on re-entry (the units' positions between zones)
+CPlayerServer			0x88	LzCompressor	sendCodec	0x2828 bytes: the LZ window of the server -> client stream
+CPlayerServer			0x28b0	LzCompressor	recvCodec	0x2828 bytes: the LZ window of the client -> server stream
+CPlayerServer			0x50d8	pointer	trackedUnits	aligned array of the unit objects currently replicated to the client (PtrArray_Diff against the candidates -> SendMsg42 / 40 / 41); +0x50dc count, +0x50e0 capacity, +0x50e4 grow
+CPlayerServer			0x50e8	pointer	trackedEffects	aligned array of the effect objects currently replicated (diff -> SendMsg52 / 50 / 51); +0x50ec count, +0x50f0 capacity, +0x50f4 grow
+CPlayerServer			0x50f8	ObjRefCArray	knownObjects	CORRECTION: was "+0x50f8 / +0x510c object arrays (known / visible)" without layout; CArray of object refs (vt 0x73D110): +0x50fc data, +0x5100 count, +0x5104 capacity, +0x5108 grow: the party units plus their AiMemory seen lists (UpdateVisibleSet); cleared by ClearKnownObjects (slot 21)
+CPlayerServer			0x510c	ObjRefCArray	visibleUnits	CORRECTION: was "+0x5110 / +0x5114 party unit array"; CArray of object refs: +0x5110 data, +0x5114 count, +0x5118 capacity: the units the player may act on (IsUnitVisible; attack / combat checks) and the id list of message 0x60
+CPlayerServer			0x5120	int	partyMode	0 calm, 1 a party unit is hurt (a body-part stat +0x4c8..+0x4d8 <= 2.0), 2 a visible unit fights the party (offensive spell or a hostile brain targets a party unit); computed in SendMsg60_PartyStatus every replication, sent in 0x60, read by the follow AI (unit-ai.md)
+CPlayerServer			0x5124	int	partyResendTicks	countdown (random 900..1800) until ResendParty sends 0x80 again
+ObjRefCArray		0x14	0x0	pointer	vtable	0x73D110 / 0x73D11C: MFC CArray of refcounted object pointers
+ObjRefCArray			0x4	pointer	data	
+ObjRefCArray			0x8	int	count	
+ObjRefCArray			0xc	int	capacity	
+ObjRefCArray			0x10	int	grow	
+IdHash		0x18	0x0	int	field0	hash of DWORD id -> object (0x10-byte nodes {next, id, value}); ctor IdHash_CtorN (100 buckets, next prime)
+IdHash			0x4	pointer	buckets	
+IdHash			0x8	pointer	bucketsEnd	bucket count = (+8 - +4) / 4
+IdHash			0xc	int	field0c	
+IdHash			0x10	int	count	
+IdHash			0x14	int	maxId	highest id inserted
+CWorld			0x64	int	tick	the game tick, ++ in CWorldServer::Update (server g_0x7AFFC4, client g_0x7AF61C); 55 ms per tick at normal speed (g_0x78FF34), 27 at x2
+CWorld			0x6c	int	paused	byte used: 1 = Tick skips Update (server g_0x7AFFCC, client g_0x7AF624 = the Space pause); saved as one byte
+CWorld	CObject	0x84	0x1c	float	timeBase	hour offset: hour = fmod(timeBase + tick * timeScale, 24) [I]; SetTime(h) stores h - hourNow
+CWorld			0x20	float	timeScale	hours per tick = 1 / (15 * rate); rate = 60 in the saves (one game hour = 900 ticks); 0 = time stopped
+CWorld			0x24	float[3]	windDir	SetWind; msg 0x72
+CWorld			0x30	float	windStrength	0..1 (0.4 after Init)
+CWorld			0x34	pointer	manager34	slot 23; set only by CWorldClient::InitClientResources; 0 on the server
+CWorld			0x38	pointer	playerManager	CPlayerManager (0xb0); slot 20
+CWorld			0x3c	pointer	figureManager	CFigureManager (0xd0); slot 15
+CWorld			0x40	pointer	mapObjectManager	CMapObjectManager (0xbc); slot 19; FindById of every map object / unit
+CWorld			0x44	pointer	specificManager	CServerSpecificManager / CClientSpecificManager (0xb0); slot 21
+CWorld			0x48	pointer	effectManager	CEffectManager (0xb0); slot 14
+CWorld			0x4c	pointer	spellManager	CSpellManager (0xd4); slot 22
+CWorld			0x50	pointer	spellConstructor	CSpellConstructor (0x24); slot 17
+CWorld			0x54	pointer	itemManager	CItemManager (0xbc, g_0x7AFFB4 on the server); slot 18
+CWorld			0x58	pointer	itemConstructor	CItemConstructor (0x34); slot 16
+CWorld			0x5c	pointer	refHolder	12-byte RefHolder (vt 0x73F240) kept with the shared-ref protocol (short refcount +4, flags +6)
+CWorld			0x60	pointer	refListPair	RefListPair (vt 0x73F3A8) created by ResetRefListPair in net modes; 0 otherwise
+CWorld			0x68	int	frameTick	++ every CWorldServer::Tick even while paused (g_0x7AFFC8 = CEffect::lastChangeTick clock)
+CWorld			0x70	WaterLevels	waterLevels	MFC CArray (vt 0x73F234) of 16-byte {id, stepsLeft, level, step} records: script SetWaterLevel, WaterLevels::Tick in Update, msg 0x73, saved
+CWorldClient	CWorld	0x7e4	0x8c	pointer	zoneExitsVt	MFC CArray (ZoneExitArray_SetSize) of 0x3c-byte zone exit records (CEffectKey layout: rect +0x14..+0x20, rotation +0x24, name +0x28, entrance +0x2c); +0x90 data, +0x94 count, +0x98 capacity, +0x9c grow
+CWorldClient			0xa0	pointer	zoneExitEffectsVt	RefArray (vt 0x73F53C) of the kind-0x2038 particle effects placed on the zone exits (CreateZoneExitEffects); +0xa4 data, +0xa8 count
+CWorldClient			0xb4	pointer	heroList	STL list of the hero units (kind 0x32 + IsHeroId) added by AddObject; classified last in RenderObjects
+CWorldClient			0xb8	pointer	objectList	STL list of every object added to the client world (AddObject / RemoveObject)
+CWorldClient			0xbc	pointer	visibleListVt	MFC CList (vt 0x73F530) of the objects ticked by Update (AddVisibleObject): +0xc0 head, +0xc4 tail, +0xc8 count, +0xcc free, +0xd0 CPlex, +0xd4 block 10
+CWorldClient			0xd8	IdHash	visibleHash	object id -> node of the visible CList (AddVisibleObject; +0xec max id)
+CWorldClient			0xf0	pointer	screenRects	STL list of {RECT +4, object id +0xc} screen rectangles of the drawn objects (filled by the object renderers; PickObjectsAt / ScreenRects_CollectAt read it)
+CWorldClient			0xf4	pointer	pickRecords	STL vector of 0x18-byte pick records {_, object id +4, ...} built by PickObjectsAt and sorted by view depth; +0xf8 end, +0xfc capacity end (400 reserved)
+CWorldClient			0x100	pointer	pickCursor	current record of the pick iteration (NextPickedObject / NextPickedUnit)
+CWorldClient			0x108	IdHash	debugPolylines	id -> Polyline3D drawn by RenderDebugPolylines
+CWorldClient			0x120	ObjGrid	gridA	the 16-unit object grid used for rendering and CollectObjectsNear: cells +0x120, rows +0x124, w +0x128, h +0x12c, cellsX +0x130, cellsY +0x134, render window x0 / y0 / x1 / y1 / cx / cy +0x138..+0x14c
+CWorldClient			0x150	ObjGrid	gridB	second 16-unit grid (slot 42 moves objects in it; cleared by LoadZone / ClearVisibleEffects)
+CWorldClient			0x180	pointer	terrain	CTerrain (0xafc bytes, created by Init); terrain size at its +0x10c / +0x110
+CWorldClient			0x184	CString	worldName	"GIPAT" / "INGOS" / "SUSLANGER" (from the map record, upper case): light tables, music, environment mask
+CWorldClient			0x188	pointer	materialManager	CMaterialManager (slot 33)
+CWorldClient			0x18c	pointer	textureManager	CTextureManager (slot 34)
+CWorldClient			0x190	pointer	lightManager	CLightManager (slot 35)
+CWorldClient			0x19c	pointer	particleManager	CParticleManager (slot 36; zone exit effects, path debug effects)
+CWorldClient			0x1a0	pointer	lightningManager	CLightningManager (Render flag 0x400)
+CWorldClient			0x1a4	pointer	visFogManager	CVisFogManager
+CWorldClient			0x1a8	pointer	musicZone	CMusicZone (SetZoneMode in LoadZone, message 0x0D)
+CWorldClient			0x1ac	pointer	sky	the sky holder {figure object "nask0", material} (CreateSky; Render flag 0x1000)
+CWorldClient			0x1b0	pointer	moshkaEffect	CEffectMoshka (the guide bird) created by CreateMoshkaEffect
+CWorldClient			0x1b4	pointer	floatingNumbers	the damage / experience number list with the "numbers" texture (ShowFloatingNumber, CFlyingHitPoints::Draw, Render flag 0x2000)
+CWorldClient			0x1b8	pointer	bloodPrints	STL list (0xa4-byte nodes) of blood prints (AddBloodPrint, toggle g_0x79BD50)
+CWorldClient			0x1bc	pointer	footPrints	STL list (0x9c-byte nodes) of footprints (AddFootPrint, g_0x79BD4C)
+CWorldClient			0x1c0	pointer	scorchPrints	STL list (0x94-byte nodes) of scorch prints (AddScorchPrint, g_0x79BD54)
+CWorldClient			0x1c4	int	printLightCountdown	frames until the print colours are re-lit from the lights (g_0x79BD24)
+CWorldClient			0x1c8	pointer	netRefObject	refcounted helper (vt 0x73F628) pumped by Update / PumpNet (vt[5])
+CWorldClient			0x1cc	pointer	soundManager	CSoundManager
+CWorldClient			0x1d0	pointer	textManager	CTextManager (texts.res, textsLmp.res)
+CWorldClient			0x1d4	CBridgeManager	bridges	the walkable quads of buildings / stuff objects (types 0x54 / 0x5d): heights on bridges, shadow receivers
+CWorldClient			0x20c	pointer	player	the local CPlayer (CPlayerManager::CreatePlayerWithConnection); its +0x20 = the CPlayerClient (CWorldClient::GetConnection)
+CWorldClient			0x210	pointer	camera	CCamera (SetCamera); Render uses its position for the terrain window and the sky
+CWorldClient			0x224	CString	texturePath	"<root>textures/" (slot 25)
+CWorldClient			0x228	int	field228	10 after the ctor
+CWorldClient			0x22c	float[96]	sunTable	24 x rgba sun colours by hour ("sunlight" section of lights<zone>.ini)
+CWorldClient			0x3ac	float[96]	ambientTable	24 x rgba ambient colours ("ambient"; zero = 0.8 * sun)
+CWorldClient			0x52c	float[96]	fogTable	24 x rgba fog / sky colours (third section)
+CWorldClient			0x6ac	float[4]	ambientColor	current ambient light (UpdateDayLight)
+CWorldClient			0x6bc	float[4]	fogColor	current fog colour (also the sky)
+CWorldClient			0x6cc	float[4]	sunColor	current sun colour (CTerrain::SetSunLight once per hour)
+CWorldClient			0x6dc	int	lightFlags	0x80 outdoor after UpdateDayLight; 0 after Init
+CWorldClient			0x6e0	int	indoor	1 = cave zone (fixed light, "Sky01", "lightscave" tables, reverb)
+CWorldClient			0x6e4	int	partyMode	the server's party mode from message 0x60 (0 calm, 1 hurt, 2 fighting)
+CWorldClient			0x6ec	int	frameCounter	frames since LoadZone (10 = autosave + volumes; 0x5a music reset)
+CWorldClient			0x6f0	float	tickOffset	added to the tick for the session object updates (vt[25])
+CWorldClient			0x6f4	CWeather	weather	rain / snow (CWeatherSound, CEffectSoundObj::Update in Render, SetWind)
+CWorldClient			0x7bc	pointer	hiddenObjectIds	STL list of the ids hidden by HideObject (message 0x19)
+CWorldClient			0x7c0	int	field7c0	-1 after the ctor; message 0x12 writes byte << 24
+CWorldClient			0x7d0	pointer	hCursor	LoadCursorFromFile("wincurs/Df0000.cur")
+CWorldClient			0x7d4	CString	windowTitle	"EvilIslands"
+CWorldClient			0x7d8	CString	windowClass	"EvilIslandsClass"
+CWorldClient			0x7dc	CString	windowTitle2	"EvilIslands"
+CWorldClient			0x7e0	CString	pausedTitle	"EvilIslands Paused"
+CBridgeManager	CObject	0x38	0x1c	pointer	quadListVt	MFC CList (vt 0x73F548) of walkable quads: 0x54-byte nodes {next, prev, BridgeQuad}
+CBridgeManager			0x20	pointer	quadHead	first quad node (CWorldClient +0x1f4)
+CBridgeManager			0x24	pointer	quadTail	
+CBridgeManager			0x28	int	quadCount	
+CBridgeManager			0x2c	pointer	quadFree	
+CBridgeManager			0x30	pointer	quadPlex	
+CBridgeManager			0x34	int	quadBlock	10
+BridgeQuad		0x4c	0x0	int	ownerId	object id of the building / stuff object the face belongs to (node +8)
+BridgeQuad			0x4	float[3]	centre	face centre (circle test)
+BridgeQuad			0x10	float	radius	bounding circle radius
+BridgeQuad			0x14	float[3]	origin	corner p0
+BridgeQuad			0x20	float[3]	uAxis	(p1 - p0) normalised
+BridgeQuad			0x2c	float[3]	vAxis	(p2 - p0) normalised
+BridgeQuad			0x38	float[3]	normal	face normal (z >= 0.8 required)
+BridgeQuad			0x44	float	uLength	
+BridgeQuad			0x48	float	vLength	
+CWeather	CObject	0xc8	0x1c	pointer	ref1c	refcounted object released by the dtor
+CWeather			0x20	pointer	world	the CWorldClient (set by Init: +0x714 = this)
+CWeather			0x28	pointer	array28	aligned array (freed by the dtor)
+CWeather			0x38	pointer	array38	aligned array
+CWeather			0x48	pointer	map48	MFC map (vt 0x746560)
+CWeather			0x5c	pointer	map5c	MFC map (vt 0x746560)
+CWeather			0x70	pointer	array70	aligned array
+CWeather			0x80	pointer	map80	MFC map (vt 0x745F78)
+CWeather			0x94	pointer	array94	aligned array
+ZoneExit		0x3c	0x14	float	xMin	exit rectangle in world units (CRect2F::Contains; a hero inside may leave the zone)
+ZoneExit			0x18	float	yMin	
+ZoneExit			0x1c	float	xMax	
+ZoneExit			0x20	float	yMax	
+ZoneExit			0x24	float	rotation	rotation about the centre (cos / sin for the exit effect)
+ZoneExit		0x3c	0x28	CString	targetZone	"none" or the zone record name
+ZoneExit		0x3c	0x2c	int	entrance	the exit index in the target zone (-1 only with "none")
+ZoneExit		0x3c	0x4	float[4]	rect	x0, y0, x1, y1 of the exit area (map.txt _exit); centre = the arrival point of PlayerIn
+ZoneExit		0x3c	0x30	float	viewAngle	map.txt _view (arrival facing)
+ZoneExit		0x3c	0x34	byte	hasViewAngle	
+ZoneExit		0x3c	0x38	float	viewAngleOverride	used instead of the rect direction when +0x34 is set (PlayerIn)
+CMemStream		0x28	0x0	pointer	vtable	0x73C960 (IStream 0x73BDB0 base 0x73BD90): slots 1 Read(buf, n), 2 Write(buf, n), 3 Seek(pos), 4 GetSize, 5 GetPos, 6 Clear / SetSize
+CMemStream			0x5	byte	ok	1 while every read succeeded; a short read clears it (the dispatchers test it)
+CMemStream			0x8	int	limit	2000000000
+CMemStream			0xc	byte	bitByte	pending bit-writer byte
+CMemStream			0x10	int	bitMask	0x80 after a flush
+CMemStream			0x14	int	bitPos	-1 = no pending bit byte
+CMemStream			0x18	pointer	buffer	
+CMemStream			0x1c	int	capacity	
+CMemStream			0x20	int	position	
+CMemStream			0x24	int	size	
+LzCompressor		0x2828	0x0	byte[10256]	state	the LZ coder state: 1 KB ring window and the Huffman / bit writer (LzCompress 0x430450, LzDecompress 0x430960); one per direction, kept across messages
+LzCompressor			0x2810	pointer	reader	GameReader closed by LzCompressor::EndAndReset 0x6671A0
+StringFloatMap		0x14	0x0	int	header	case-insensitive string -> float hash (StringFloatMap_Get 0x460AF0 / Set 0x460BC0 / Remove); copied whole by HashTable_CopyCtor (OnMsg80_Party keeps it in a session)
+StringFloatMap			0x4	pointer	buckets	
+StringFloatMap			0x8	pointer	bucketsEnd	
+StringFloatMap			0xc	int	field0c	
+StringFloatMap			0x10	int	count	
+ObjGrid		0x30	0x0	pointer	cells	w * h object lists (STL list heads) allocated by ObjGrid_Init 0x572820
+ObjGrid			0x4	pointer	rows	row pointer table (rows[y][x] = cell list)
+ObjGrid			0x8	int	width	allocated columns
+ObjGrid			0xc	int	height	allocated rows
+ObjGrid			0x10	int	cellsX	used columns = terrain width / 16 (LoadZone)
+ObjGrid			0x14	int	cellsY	used rows
+ObjGrid			0x18	int	winX0	render / query window (RenderObjects: camera +- 100 units; CollectObjectsNear: the square)
+ObjGrid			0x1c	int	winY0	
+ObjGrid			0x20	int	winX1	
+ObjGrid			0x24	int	winY1	
+ObjGrid			0x28	int	curX	iteration cursor
+ObjGrid			0x2c	int	curY	
+WaterLevels		0x14	0x0	pointer	vtable	0x73F234 (Serialize at slot 2)
+WaterLevels		0x14	0x4	pointer	records	16-byte {int id, int stepsLeft, float level, float step}
+WaterLevels		0x14	0x8	int	count	
+WaterLevels		0x14	0xc	int	max	
+WaterLevels		0x14	0x10	int	grow	
+LootRecord		0x20	0x0	int	unitId	the looted unit (node payload at node +8)
+LootRecord		0x20	0x4	int	lobbyIndex	LobbyServer player index or -1 (who may take it)
+LootRecord		0x20	0x8	int	money	
+LootRecord		0x20	0xc	pointer	itemsVt	RefArray vt 0x73FABC / 0x73FAC8
+LootRecord		0x20	0x10	pointer	items	CItem*[count]
+LootRecord		0x20	0x14	int	itemCount	
+LootRecord		0x20	0x18	int	itemMax	
+LootRecord		0x20	0x1c	int	itemGrow	
+ZoneRecord		0x5c	0x0	CString	name	map.txt _zone (MapInfo g_0x79BF00: records +0x18, count +0x1c; Records5C_FindByName)
+ZoneRecord		0x5c	0x4	CString	allod	_allod ("gipat", "ingos", "suslanger": the loading video)
+ZoneRecord		0x5c	0x8	CString	mobBase	+ ".mob" = the map object file
+ZoneRecord		0x5c	0xc	CString	mprBase	+ ".mpr" = the terrain / AI map file; empty = no world (camp)
+ZoneRecord		0x5c	0x28	int	kind	0 playable zone (has mission.sav / <zone>.sav), 1 camp or map screen (zone kind 4), 2 scripted zone (world script from the .mob, zone kind 3)
+ZoneRecord		0x5c	0x2c	int	weatherMode	_weather: none 0, 1 rain, 2 (DAT_00785714), 3 tornado
+ZoneRecord		0x5c	0x30	int	restrictFlag	1 / 0 (CWorldServer +0xe0) [?]
+ZoneRecord		0x5c	0x44	byte	cage	_cage
+ZoneRecord		0x5c	0x48	pointer	exitsVt	MFC CArray of ZoneExit
+ZoneRecord		0x5c	0x4c	pointer	exits	
+ZoneRecord		0x5c	0x50	int	exitCount	
+SessionRequest		0x84	0x0	int	kind	g_0x7AFE20 (aka PartyEntry / MpCommand): 0 none, 1 main menu, 2 load save slot, 3 new game, 4 enter zone, 5 leave to lobby / menu, 6 host multiplayer zone; handled by Session_ProcessRequest once per frame
+SessionRequest		0x84	0x4	CString	name	zone or slot name
+SessionRequest		0x84	0x8	CParty	party	the party to install (kinds 5 / 6: CPlayer::SetPartyBlock)
+SessionRequest		0x84	0x78	int	recordStream	kind 2: CPlayerClient::SendMsg02_StartFile after loading (session recording)
+SessionRequest		0x84	0x7c	CString	mapName	the lobby map name (Session_SetMapName; kind 6)
+SessionRequest		0x84	0x80	byte	mpChangePending	RequestMpMapChange two-phase flag
+GameSession			0x0	int	zoneKind	pseudo-class of the session globals: g_0x7C2CC4 = CWorldServer +0x12d64 (see that row); the other CWorldServer globals: tick 0x7AFFC4, frame 0x7AFFC8, paused 0x7AFFCC, item manager 0x7AFFB4, player manager 0x7AFF98, CAIMap 0x7B00D0, relations 0x7C2BC4, mob name 0x7C2CC8, mpr name 0x7C2CCC
+GameSession			0x4	int	serverMode	g_0x7B0098 = CWorldServer +0x138 (SetMode)
+GameSession			0x8	int	tickMs	g_0x78FF34: 55 (0x37) normal, 27 (0x1b) at x2 speed; the server slice length and the client interpolation step
+GameSession			0xc	int	serverAccumulator	g_0x79BC64: elapsed ms not yet consumed by CWorldServer::Tick (main loop)
+GameSession			0x10	int	clientAccumulator	g_0x79BC68: elapsed ms for CWorldClient::Tick (slot 6)
+GameSession			0x14	int	inZoneFlag	g_0x79BE6C = 1 after Game_EnterZone kind 1 / Session_HostMpZone (unit AI checks it)
+GameSession			0x18	int	uiDirty	g_0x7C7D94 = 1 on every session transition (interface rebuild)
+GameSession			0x1c	CString	databaseName	g_0x7AFDEC: "database.res" or "databaseLMP.res" (lobby alive); Databases_LoadAll when it changes
+GameSession			0x20	int	balanceIndex	g_0x79BEC0 (saved copy g_0x79BEC4): index into the stat tables g_0x7C54A0; forced 0 in lobby games
+GameSession			0x24	pointer	lobbyClient	g_0x79B5D8 LobbyClient (alive when +4 bit 31 clear)
+GameSession			0x28	pointer	lobbyServer	g_0x79B5DC LobbyServer
+GameSession			0x2c	int	scrambleOn	g_0x79026C: 1 while the live stats are XOR-scrambled with the key g_0x7AFECC (World_SetStatScramble)
+GameSession			0x30	uint	scrambleKey	g_0x7AFECC
+GameSession			0x34	pointer	loadingVideo	g_0x791EE0: "progres[1-4].bik" chosen by World_SelectProgressVideo
+GameSession			0x38	int	mpFileVersion	g_0x790260 = the version MpFile::WriteContainer writes (0x74); g_0x790264 = the compressed-format threshold the reader tests
+CResourceBase		0x24	0x0	pointer	vtable	0x743324: the header / entry table / accel table part shared by CResourceFile (0x743320, the mmio reader used by the sound system), CMappedResource (0x7432E0, 0x58) and CMappedResource2 (0x743300, 0x6c)
+CResourceBase		0x24	0x4	uint	magic	0x019CE23C
+CResourceBase		0x24	0x8	int	entryCount	
+CResourceBase		0x24	0xc	int	tableOffset	16 + data size
+CResourceBase		0x24	0x10	int	namesLength	
+CResourceBase		0x24	0x14	pointer	entries	0x16-byte entries {u32 next (-1), u32 size, u32 offset, u32, u16 nameLen, u32 nameOffset}
+CResourceBase		0x24	0x18	pointer	names	the names block
+CResourceBase		0x24	0x1c	pointer	accelTable	index -> entry index (CreateAccelTable)
+CResourceBase		0x24	0x20	int	accelCount	
+CResourceFile	CResourceBase	0x34	0x24	pointer	archiveMmio	HMMIO of the .res; vt 0x743320; the functions named CResourceBase::Ctor / dtor / Close / OpenFile / CloseFile / Read / Seek belong to this class (CSoundManager::Init, CMusicSystem::StartStream, Mp3Stream_ReadCallback)
+CResourceFile	CResourceBase	0x34	0x28	int	entryOffset	offset of the open entry (0 = none)
+CResourceFile	CResourceBase	0x34	0x2c	int	entrySize	
+CResourceFile	CResourceBase	0x34	0x30	pointer	looseFileMmio	HMMIO of a loose file that overrides the archive entry
+CMappedResource	CResourceBase	0x58	0x24	int	fileHandle	CRT handle (-1 closed); vtable 0x7432E0: 0 dtor, 1 Open(path, writable), 2 Attach(data), 3 Release, 4 nop, 5 OpenFile(name, out size) -> buffer, 6 CloseFile(buffer), 7 FreeEntries [I slot order]
+CMappedResource		0x58	0x28	pointer	mappedBase	0 unless the archive is memory-mapped (Attach); then entries point into it
+CMappedResource		0x58	0x2c	int	writable	
+CMappedResource		0x58	0x30	pointer[5]	bufferHash	buffer pointer -> cached entry {.., buffer +0xc, refcount +0x14}
+CMappedResource		0x58	0x44	pointer[5]	nameHash	name -> cached entry (100 buckets)
+CMappedFile		0x10	0x0	pointer	file	CreateFileA handle (-1 closed)
+CMappedFile		0x10	0x4	pointer	mapping	CreateFileMappingA
+CMappedFile		0x10	0x8	pointer	view	MapViewOfFile base
+CMappedFile		0x10	0xc	uint	size	GetFileSize (<= 2 GB)
+CObjectManager	CBaseManager	0xbc	0xb0	pointer	archivesBegin	vector of 0x10 records {std::string name, CMappedResource* +0xc}: the opened prototype archives (slot 16 OpenProtoResource / 17 CloseProtoResource / 18 ClearProtos / 19 OpenFile / 20 CloseFile / 21 HasFile / 22 FreeCachedFiles)
+CObjectManager		0xbc	0xb4	pointer	archivesEnd	
+CObjectManager		0xbc	0xb8	pointer	archivesCapacity	
+CObjectDesc	CDescBase	0x8c	0x18	int	id	NID chunk 0xB002; -1 = assign (CreateObjectFromDesc writes the created id back)
+CObjectDesc		0x8c	0x1c	pointer	object	the created object (Spawn); 0 = not spawned
+CObjectDesc		0x8c	0x20	float[3]	position	0xB009
+CObjectDesc		0x8c	0x2c	float[4]	rotation	0xB00A quaternion
+CObjectDesc		0x8c	0x3c	CString	name	0xB004 OBJNAME (the object's +0x1a8 name; non-empty -> named hash)
+CObjectDesc		0x8c	0x48	int	kind	1 object, 2 light, 3 sound / particle, 4 effect 0x4a, 5 unit, 6 fire / campfire, 7 magic trap, 8 lever, 9 active object (CreateObjectFromDesc switch)
+CObjectDesc		0x8c	0x4c	CString	objectName	0xB004 [?] copied into the object with 0x50F150 and flags 0x20000 when non-empty
+CObjectDesc		0x8c	0x50	int	type	0xB003: the manager creation key (0x3010 .. units, 0x35 trees ...) given to vt[23]
+CObjectDesc		0x8c	0x54	CString	modelName	0xB006: the figure / model (BuildFromAnimation)
+CObjectDesc		0x8c	0x58	CString	protoName	non-unit prototype name (vt[34]); units use +0x20c
+CObjectDesc		0x8c	0x5c	int	field_5c	-1 after ctor
+CObjectDesc		0x8c	0x60	float[3]	morph	0xB00C complection (SetMorphParams; 0.5 default)
+CObjectDesc		0x8c	0x6c	byte	flag20000	0xB011: sets object flag 0x20000
+CObjectDesc		0x8c	0x6d	byte	isDynamic	1 after ctor; 0 -> object flag 8 (static, no tick)
+CObjectDesc		0x8c	0x6e	byte	side	units: player side (CUnit::SetSide, PlayerRelations forced mask)
+CObjectDesc		0x8c	0x70	CString	specificString1	0xB007 -> specific +0x78
+CObjectDesc		0x8c	0x74	CString	specificString2	0xB008 -> specific +0x7c
+CObjectDesc		0x8c	0x78	byte[0x14]	specificStrings	0xB00D CStringArray -> specific +0x80 (parts / textures)
+CUnitDesc	CObjectDesc	0x330	0x8c	int	field_8c	0 after ctor
+CUnitDesc		0x330	0x90	byte[0x17c]	logicSlots	five 0x4c unit-logic records (chunk 0xBBBC0000; Brain::SetMobLogics)
+CUnitDesc		0x330	0x20c	CString	protoName	0xBBBB0002 the unit prototype (Unit_ApplyPrototype)
+CUnitDesc		0x330	0x210	byte[0xac]	unitProto	0xBBBB0004 UnitProto stats block (UnitProto::ApplyTo)
+CUnitDesc		0x330	0x2bc	byte[0x14]	weapons	0xBBBC0008 item name list
+CUnitDesc		0x330	0x2d0	byte[0x14]	quickItems	0xBBBC0006 (CItemManager::CreateItemByName -> AddQuickSlotItem; data +0x2d4, count +0x2d8)
+CUnitDesc		0x330	0x2e4	byte[0x14]	questItems	0xBBBC0005
+CUnitDesc		0x330	0x2f8	byte[0x14]	armors	0xBBBC0009
+CUnitDesc		0x330	0x30c	byte[0x14]	spells	0xBBBC0007
+CUnitDesc		0x330	0x320	int	field_320	0 after ctor
+GSWorld		0x1f8	0x0	pointer	vtable	script VM (world-server.md; 0x1f8 = CWorldServer +0x12a6c - +0x12874)
