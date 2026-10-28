@@ -406,12 +406,15 @@ mip levels frayed the strings and the stock's edges into holes.
 (`BuildArmorModelNames` 0x535CB0, the part list at 0x73EC24: `hr`, `hd`); a missing `hr.NN.armorNN` hides the hair (every vanilla helm:
 none exists). A kind-2 helm mesh is drawn with the helm's own texture (`hl_NN.<metal>.<TTI2>`), the head stays: LiA's crown
 (`hd.armor18`, kind 1 with UVs in the ground convention: on the body texture it showed skin) is a kind-2 crown with UV (2u, 2v - 1),
-put on the mod's head per corner and widened to clear it by 2 mm; every hair has an `hr.NN.armor18` copy tucked inside the crown's band
-(2026-10-27, `_cpr/helmets/crownhair.py`): the crown is two rings 1.5-3 cm apart and sits tilted (its bottom edge up to 3 cm lower at
-the back), so the hair is cut along the band's bottom and top edges per corner (new points only on those lines), every hair point level
-with the crown moves in to the inner ring - 2 mm (never nearer the head than 1 mm), the dome above fades over 2.5 cm, and under the band
-the hair keeps its shape: the tuck faces down, the camera never sees it. LiA's crown also closed the band with a flat lid across the ring
-(hidden in LiA's skull); it is dropped. Helmet 02 (`hd.armor02`, male): the vanilla head shows through its back at wide builds (up to
+put on the mod's head per corner. **The crown sits on top of the hair** (2026-10-28, `_cpr/helmets/crowntop.py`; the earlier squeezes of
+the hair under a tight crown showed the scalp in the game: the crown's inner ring was up to 12 mm inside the vanilla female head at the
+front). Per complection corner the crown (two rings 1.5-3 cm apart, tilted, its bottom edge up to 3 cm lower at the back; LiA's flat lid
+across the ring, hidden in LiA's skull, dropped) is widened about its vertical axis until its inner ring clears the head by 15 mm
+(female) / 8 mm (male). Every hair has an `hr.NN.armor18` copy fitted to that ring (`crowncap.py`): cut along the band's bottom edge and
+12 mm lower per corner, hair at the band's height brought to the inner ring - 2 mm from both sides (thick hair in, thin hair out), the
+flare below fading over 12 mm; the hair inside the ring and over the band (tops, buns, top knots, ponytails) kept unless it cuts the
+crown; under the band a cap (the head's own surface lifted 1.5 mm, the hair's texture) so the scalp can never show. Checked in the game
+(the View screen, 8 turns, with and without the crown): every hair of both races at its own build and the extreme corners. Helmet 02 (`hd.armor02`, male): the vanilla head shows through its back at wide builds (up to
 12 mm); its existing points were pushed out locally (`_cpr/helmets/helmback.py`, no new points).
 
 ## `.lnk` — Attachment Socket Redirect
