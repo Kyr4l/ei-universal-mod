@@ -387,13 +387,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x004680D0 | 1454 | CLightning::Init | (this, from, to, type, demon): +0x50c type (>0 / 0 / <0), +0x510 amplitude (0.3 / 0.05; 0.05 when /dz/ == 30), main segment +0x5c with 3 seed pairs (+0x8c/+0xbc), +0x100 width = /type/ (x1.5 if < 0, 4 if 0); type 0: 6 random jitte... |
-| 0x004662C0 | 1314 | CLightning::EvalNoise | (this, time, out x[count], out y[count], scale): advances the three random seeds at +0x30/+0x40/+0x50 and +0x60/+0x70/+0x80 by whole steps since +0x90, then quadratic B-spline blend of the noise tables g_0x79CE78 (16 x 400 floats)... |
+| 0x004662C0 | 1314 | CLightning::EvalNoise | (segment, time, out x[count], out y[count], scale): advances the three random seeds at +0x30 / +0x40 / +0x50 and +0x60 / +0x70 / +0x80 by whole steps since +0x90, then a quadratic B-spline blend of the noise tables g_0x79CE78 (32 ... |
 | 0x00467590 | 1045 | CLightning::RenderGlow | (this, renderer, pos, frame, size): static 8-entry particle arrays (g_0x79C1D0 positions, g_0x79C1E4 colors/uv 0xA0FFFFFF), 4x4 atlas of 15 frames (uv table), 8 quads along the bolt direction with size * sqrt(1 - t^2); binds textu... |
 | 0x00467AD0 | 821 | CLightning::Render | (this, renderer): binds texture +0x1c (vt slot 0x2c), GetWorld, Update when type >= 0; type >= 0: DrawTexturedPolyline (vt slot 0x40) of the main points +0xf0 (width = /dir/ * count * 0.6, random frame 0..3 * 0.25) and the 6 branc... |
 | 0x00466820 | 713 | LightningSegment_Init | (this = segment, from xyz, to xyz): origin +0, dir +0x24 = to - from, side +0xc / up +0x18 = orthonormal vectors scaled to min(len, 15), segment count 4..400 (len / 4), dir /= count, point CArray +0x94 SetSize(count) |
 | 0x00467E10 | 689 | CLightning::InitRandom | (this, from, to): main segment +0x5c; type 0: 6 branches between random jittered copies of from/to (±5% of the length); else 6 branches from lerp(from, to, +0x4f4[i]) to `to`; type < 0: Update; ComputeBounds |
 | 0x004672E0 | 676 | CLightning::Update | (this): UpdatePoints of the main segment +0x5c (scale 1.5 / 1 / 2 by type +0x50c), for type != 0 moves the 6 branch segments (+0x104, 0xa8 each) to a sine-animated offset along the main bolt at fraction +0x4f4[i] (frequencies g_0x... |
-| 0x00468A00 | 530 | Lightning_LoadNoiseTables | reads gfx.res\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
+| 0x00468A00 | 530 | Lightning_LoadNoiseTables | reads 'gfx.res\lightning.dat' (CMappedResource) into g_0x79CE78: 32 tables x 400 floats (0x640 bytes each, 0xC800 bytes up to 0x7A9678) = the precomputed harmonic noise bands CLightning::EvalNoise blends; FatalError 'Unable to ope... |
 | 0x00468DA0 | 423 | CArray8::Serialize | (this = CArray of 8-byte elements, CArchive): loading: ReadCount, (re)allocate (grow step 4..0x400), zero new slots; then Read/Write count * 8 bytes |
 | 0x00467150 | 391 | CLightning::ComputeBounds | (this): min/max +0x38/+0x44 over the main segment +0x5c and 6 sub segments at +0x104 (0xa8 each); centre +0x28, half extents, radius +0x34, +0x24 = 3 |
 | 0x00466FD0 | 381 | CLightning::ExtendBounds | (this, segment): widens min +0x38..+0x40 / max +0x44..+0x4c by the segment's points (+0x94, count +0x98) |
@@ -587,15 +587,15 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004D6E90 | 652 | Triangle_ClipByPlane5 | Sutherland-Hodgman for one triangle of 5-float vertices, 3 signed distances, returns 0/1/2 triangles (second into param_2) |
+| 0x004D6E90 | 652 | Triangle_ClipByPlane5 | (tri float[15], extraTri, d0, d1, d2) -> 0 / 1 / 2 triangles: Sutherland-Hodgman of one triangle of 5-float vertices against a plane given by the three signed distances (inside = sign bit clear); the second result goes to extraTri... |
 | 0x004D65E0 | 562 | SSCCmdArray_SetAtGrow | CArray of 0x94-byte SSCCmd entries: grow to index+1 (ctor 0x4CE920 range, dtor 0x4BF640), then assign element param_2 |
 | 0x004D6100 | 521 | SSCScriptDeclArray_Add | CArray<SSCScriptDecl,0xC0>::Add: grow by one element (dtor 0x4BE9D0 / ctor 0x4CEB80), assign element, returns index |
 | 0x004D63E0 | 406 | StringPairList::Serialize | vtable 0x73D4C0 slot 2: CArchive load/store of a list of (CString,CString) pairs, nodes of 0x10 bytes from CList free list |
 | 0x004D6970 | 406 | CServerSpecificManager::CreateByKind | slot 14 factory (kind): 0x46 CObject3DServer (0x20 bytes, ctor 0x51F240), 0x47 CMapObjectServer (0x94, 0x515610), 0x48 CUnitServer (0xb20, 0x545580), 0x49 CPlayerServer (0x5128, 0x66C540), 0x4b CTorchObjectSpecific (0x58, inline c... |
-| 0x004D6D60 | 298 | ClipBuf::AddTriangleClipFar | clip triangle against far plane (distances 1-p[4],1-p[9],1-p[14]) via Triangle_ClipByPlane, then add resulting 0/1/2 triangles with AddVertex |
+| 0x004D6D60 | 298 | ClipBuf::AddTriangleClipFar | clips a triangle against the plane 1 - v >= 0 (Triangle_ClipByPlane5) and adds the 0 / 1 / 2 results; no callers |
 | 0x004D6340 | 153 | StringPairList_Clear | vtable 0x73D4C0 destructor/clear: walks bucket chain, releases two CStrings per node (+8,+0xc), frees node block +0x14 |
-| 0x004D6C50 | 148 | ClipBuf::AddVertex | append (x,y,z) into the SoA xyz array (16-float blocks) and (u,v) into the uv array; no vertex sharing; returns index |
-| 0x004D6CF0 | 105 | ClipBuf::AddTriangle | 3 x AddVertex + 3 indices (ushort) |
+| 0x004D6C50 | 148 | ClipBuf::AddVertex | (float[5] x y z u v) -> index: x / y / z into the SoA xyz array (descriptor +0: blocks of 16 floats = x[4] y[4] z[4] pad[4]; vertex n at block n >> 2 lane n & 3), (u, v) into the uv array (+4, 8 bytes each); count +0x74++; no vert... |
+| 0x004D6CF0 | 105 | ClipBuf::AddTriangle | (v0, v1, v2 float[5]): 3 x AddVertex + 3 ushort indices into the index array +8 (count +0x78) |
 | 0x004D6BA0 | 92 | CTorchObjectSpecific::~CTorchObjectSpecific | vt_CTorchObjectSpecific; Done, releases CString +0x24, base dtor 0x455930 |
 | 0x004D6840 | 79 | StringPairArray_Construct | default-constructs N elements of two CStrings (8 bytes each: both = empty string g_0x796E48) |
 | 0x004D68B0 | 41 | Quat_StaticInit_Identity3 | sets global quaternion g_0x7AA670 to (1,0,0,0) |
@@ -608,20 +608,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004D8000 | 1130 | ShadowProjector::Build | builds the prism from light dir, caster pos, radius a and 4 rectangle corners (SoA 3x4 matrix); sets u/v plane vectors +0x0C/+0x18, offsets +0x60/+0x64, lengths +0x6C/+0x70, cap plane +0x24/+0x68, step vector +0x3C; resets the 3 o... |
-| 0x004D74B0 | 911 | ShadowProjector::ClipStage2 | planes v>=0, 1-u>=0, 1-v>=0 then emit |
-| 0x004D9360 | 791 | CSkyObject::RebuildMesh | (this): converts the sky parameters to integers (ftol), resizes the vertex array +0x220 to +0x13c entries and fills the sky dome vertices |
-| 0x004D71D0 | 708 | ShadowProjector::ClipStage3 | planes 1-u>=0 and 1-v>=0, emits triangles via ClipBuf::AddVertex |
-| 0x004D7BD0 | 702 | ShadowProjector::ClipStage1 | planes cap, u>=0, v>=0 then Stage3/Stage2 |
-| 0x004D9B80 | 594 | MatrixStack_Push | push param * top on matrix stack number index (stacks at CD3DLibrary+0x14 + 8*index: {buffer, depth}) |
-| 0x004D89A0 | 557 | ClipBuf::Finish | shrinks xyz array to ceil(n/4) blocks and index array to the real index count, pads unused lanes with vertex 0, detaches the 3 arrays from the ClipBuf |
-| 0x004D8780 | 531 | ClipBuf::ReserveForTriangles | (k): over-reserves 3k vertices in uv array (8 B each), 3k/4+1 blocks of xyz (64 B), 3k indices (2 B); count fields are SET to the reserved sizes |
-| 0x004D9880 | 530 | Matrix4_Mul | row-major 4x4 product out = a * b |
+| 0x004D8000 | 1130 | ShadowProjector::Build | (A, B, C array descriptors, corners SoA float[16] (only 0, 2, 3 read), L light dir, pos caster centre, a radius): L normalised (+0x48, +0x24); AU = Eu' / /Eu'/^2 with Eu' = (corner2 - corner3) minus its L component (+0xC), AV like... |
+| 0x004D74B0 | 911 | ShadowProjector::ClipStage2 | planes v >= 0, 1 - u >= 0, 1 - v >= 0 then emit (the second half of a u-split triangle) |
+| 0x004D9360 | 791 | CSkyObject::Recolour | (this, r1 g1 b1, a2 r2 g2 b2 (ints after ftol of the colour floats)): rebuilds the horizon table +0x220 (one float per vertex: sqrt(-normal z) for vertices with z lane >= 1.0 in the SoA positions +0x1C0, else 0) when the vertex co... |
+| 0x004D71D0 | 708 | ShadowProjector::ClipStage3 | planes 1 - u >= 0 then 1 - v >= 0; each result emitted with 3 x ClipBuf::AddVertex + indices |
+| 0x004D7BD0 | 702 | ShadowProjector::ClipStage1 | (tri float[15]): planes cap (L . P + +0x68 >= 0), u >= 0, v >= 0 then Stage3 / Stage2: the prism clip of one triangle |
+| 0x004D9B80 | 594 | MatrixStack_Push | (CD3DLibrary, matrix, index): pushes matrix * top on matrix stack `index` (stacks at +0x14 + 8 * index: {buffer, depth}) |
+| 0x004D89A0 | 557 | ClipBuf::Finish | xyz count = ceil(v / 4) blocks, index count = the real count, unused lanes filled with vertex 0, the three array pointers detached (the arrays belong to the caster / decal) |
+| 0x004D8780 | 531 | ClipBuf::ReserveForTriangles | (k): n = 3k: uv array count = v + n (8 B each), xyz blocks = v + n/4 + 1 (64 B), indices = i + n (2 B): the count fields are SET to the reserved sizes (Finish trims them) |
+| 0x004D9880 | 530 | Matrix4_Mul | (out, a, b): row-major 4x4 product out = a * b (matrix stacks of the render context: world +0x24, view +0x1C) |
 | 0x004D8EB0 | 411 | ByteVector_Resize | (this, n, fill byte*): vector<byte>::resize(n) (shrinks or inserts fill bytes) |
-| 0x004D96E0 | 403 | CSkyObject::UpdateTransform | (this, owner, pos*): places the sky figure at the camera position (z - 16): rotates it about Z by game time * 0.00033, rebuilds its matrix (Quat_ToMatrix4) and pushes it onto the matrix stack |
-| 0x004D85F0 | 381 | ShadowProjector::ClipTriangleB | same for object triangles (scratch g_0x7AA690) |
-| 0x004D9110 | 344 | CSkyObject::ctor | CFigure-style construction (CObject3D base fields, vt_CFigure then vt_CSkyObject): zero the aligned arrays, CStrings |
-| 0x004D8490 | 330 | ShadowProjector::ClipTriangleA | terrain triangle (3 float[3] pointers) -> 5-float vertices (x,y,z,u,v) -> 5-plane clip -> ClipBuf (static scratch g_0x7AA6D0) |
+| 0x004D96E0 | 403 | CSky::Render | (this = sky holder, ctx, cameraPos): the sky figure (+0) is placed at (camera x, y, z - 16), spun about Z by Game_GetTimeSum() / 3000 rad when +0xC, its matrix +0x54 rebuilt (Quat_ToMatrix4) and pushed on the context's world stack... |
+| 0x004D85F0 | 381 | ShadowProjector::ClipTriangleB | same for object triangles (scratch g_0x7AA690; the dead object-receiver branch) |
+| 0x004D9110 | 344 | CSkyObject::ctor | CFigure-style construction (CObject3D base, vt_CFigure then vt_CSkyObject): the figure's aligned SoA arrays (+0x128.., positions +0x1C0, normals +0x1D0, +0x1E0, index arrays +0x1F0 / +0x200 / +0x210, horizon table +0x220) zeroed, ... |
+| 0x004D8490 | 330 | ShadowProjector::ClipTriangleA | (v0, v1, v2 float[3]: terrain triangle): 5-float vertices (x, y, z, u = P.AU + off_u, v = P.AV + off_v) in the static scratch g_0x7AA6D0 -> ClipStage1 |
 
 ## 0x4DA000 - 0x4DB000: GameBuffer (stream)
 
@@ -671,19 +671,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004E1EB0 | 937 | CVisibilityFog::Render | (this, renderer): draws the fog cells: ComputeBounds for large fogs (> 12000 cells), culls by texture state (0x4F16A0), builds vertex / colour arrays in static CArrays g_0x7ABA30..g_0x7ABA54 and submits quads |
-| 0x004E1770 | 725 | CVisibilityFog::ComputeBounds | min +0x30..+0x38 / max +0x3c..+0x44 over the cells of the hash map +0x54 (cell centre +0xc.., half size), then the centre and radius |
-| 0x004E1C60 | 584 | CVisibilityFog::RebuildCells | (this, grid {x0, y0, w, h, rows}): marks all current cells stale, then for every set cell of the byte grid (key = (y0 + row) << 16 / x0 + col) finds or creates a cell node and fills it from the grid; removes stale cells |
+| 0x004E1EB0 | 937 | CVisibilityFog::Render | (ctx) -> bool: no cells -> 1; ComputeBounds when > 12000 cells and the bounds flag +0x68 is clear; CViewFrustum::CullBox(ctx +8, bounds +0x1C) == 2 -> 1; static arrays (g_0x7ABA30 16-byte {x, y, z, size 0.4}, g_0x7ABA44 8-byte {co... |
+| 0x004E1770 | 725 | CVisibilityFog::ComputeBounds | min +0x30.. / max +0x3C.. over the cells of the hash map +0x54 (cell position +0xC.., half size), then the centre +0x1C and radius; flag +0x68 = 1 (bounds valid) |
+| 0x004E1C60 | 584 | CVisibilityFog::RebuildCells | (grid {x0, y0, rows ptr, w, h}): marks every cell stale (+0x1C = 0); for every non-zero byte of the grid: key = (y0 + row) << 16 / (x0 + col): an existing cell is marked alive, a new one gets {+8 short x, +0xA short y, +0xC world ... |
 | 0x004E2BC0 | 560 | HashBuckets_Reserve | (this, minBuckets): bucket vector grown to the next prime with zero fill |
-| 0x004E1AB0 | 405 | CVisibilityFog::v6 | slot 6 (root layout; default returns 0) |
+| 0x004E1AB0 | 405 | CVisibilityFog::Tick | slot 6, per tick: every cell: alpha (+0x18) *= 0.5 when stale (+0x1C == 0) else alpha = 1 - (1 - alpha) * 0.5 (eases towards 1); cells below 0.01 are removed (keys collected in g_0x7ABB58); sprite +0x1D = (sprite + 1) % 15; return... |
 | 0x004E2FA0 | 334 | DwordVector_InsertRealloc9 | vector<dword>::insert with reallocation |
 | 0x004E13E0 | 328 | CTextManager::GetItemDescription | (this, item, out CString): builds the item description text from the GetItemTextKeys keys and the "format_item1" / "format_item2" strings (when the stack count is below 2) |
-| 0x004E2290 | 314 | CVisFogManager::CreateByKind | slot 14 factory (kind -> CVisibilityFog) |
-| 0x004E24E0 | 310 | CVisibilityFog::dtorBody | vt_CVisibilityFog: frees the hash map nodes +0x58 (pool g_0x79B230), the cell nodes (0x4E31C0), vectors, then base dtor 0x455930 |
+| 0x004E2290 | 314 | CVisFogManager::CreateByKind | slot 14 factory: kind -> new CVisibilityFog (vt_CVisibilityFog, 0x69 bytes: CObject + bounds +0x1C.., min +0x30, max +0x3C, cell hash +0x54 (buckets +0x58 / +0x5C, count +0x64), bounds flag +0x68) |
+| 0x004E24E0 | 310 | CVisibilityFog::dtorBody | vt_CVisibilityFog: frees the cell nodes (0x20 bytes, pool g_0x79B230) and buckets +0x58, then the CObject dtor 0x455930 |
 | 0x004E15C0 | 244 | TextArchiveEntry_Create | (std::string*): allocates a 0x18 node from pool g_0x79B22C and copy-constructs the entry |
-| 0x004E2760 | 229 | CVisFogManager::v6 | slot 6 (root layout; default returns 0) |
-| 0x004E2620 | 210 | HashTable20_Destroy | hash table of 0x20-byte nodes: free every node chain and the bucket vector |
-| 0x004E28D0 | 190 | CVisFogManager::CreateAndRegister | creates a CVisibilityFog (vt slot 0x5c kind 0), refcount ++, and appends it to the CList +0xb8 (0xc nodes); returns it |
+| 0x004E2760 | 229 | CVisFogManager::Tick | slot 6: calls vt[6] Tick on every fog of the list +0xB8; a fog returning 0 is unlinked and vt[4] released |
+| 0x004E2620 | 210 | HashTable20_Destroy | hash table of 0x20-byte nodes (the fog cells): frees every chain and the bucket vector |
+| 0x004E28D0 | 190 | CVisFogManager::CreateAndRegister | creates a CVisibilityFog (vt[23](0, -1)), refcount++, appends it to the CList +0xB8 (0xC-byte nodes); returns it |
 | 0x004E2F00 | 146 | HashMapUint_EraseKey | (this, key*): removes all nodes with that key (nodes returned to pool g_0x79B230), count --; returns the number removed |
 
 ## 0x4E3000 - 0x501000: renderer: D3D7 device, state blocks, vertex buffers, MMX
@@ -692,19 +692,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x004F16A0 | 4016 | CViewFrustum::CullBox | 4 KB: transform a box (corner extents +4..+0x10) by the current matrix stack (+0x24, depth +0x28) and test against the frustum planes; returns visibility class |
-| 0x004EA4A0 | 2855 | CRenderDevice::DrawShadowQuadBatch | SoA xyz + uv + index list -> transform, clip, 32-byte FVF 0x1C4 vertices (diffuse = param_7, specular = param_8, uv), z *= param_10, DrawIndexedPrimitive |
+| 0x004F16A0 | 4016 | CD3DLibrary::CullBox | (this = the library g_0x7AF068; bounds record {+0 byte flags: 1 sphere valid, 2 box valid; +4 centre xyz, +0x10 radius, +0x14 min xyz, +0x20 max xyz (extents relative to the centre)}) -> 0 fully inside, 1 partly, 2 outside: the 8 ... |
+| 0x004EA4A0 | 2855 | CRenderDevice::DrawTrianglesTransformed | (ctx, positions {Vec3*, count} (plain xyz, not SoA), uvs, indices {ushort*, count}, diffuse, specular, flags, zScale): CD3DLibrary::TransformForDraw (cull box; vt[9] with clip codes or vt[14]); FVF 0x1C4 vertices with the constant... |
 | 0x004F93E0 | 2660 | CViewFrustum::BuildCornerRaysEx | 2.7 KB: extended variant of BuildCornerRays with rotation (0x448A10) |
-| 0x004E9A50 | 2632 | CRenderDevice::DrawQuadBatchClipped | 2.6 KB: clipped 2D quad/sprite batch with MMX/scratch buffers (DAT_007aee10), appends indices |
+| 0x004E9A50 | 2632 | CRenderDevice::DrawMeshBatchBlended | (texA, texB, then the DrawMeshBatch arguments): DrawMeshBatch whose final draw is DrawIndexedTwoPassBlend(texA, texB, ...): the mesh twice, the second pass with texture B alpha-blended over A (the wounds texture of CObject3DClient... |
 | 0x004E4240 | 2623 | CEffectObj::UpdateParticles | 2.6 KB: per-frame update of an effect's particles from object transform (+0xA8..+0xB0 velocity, object +0x20), writes vertices with random jitter |
-| 0x004E9010 | 2616 | CRenderDevice::DrawMeshBatch | 2.6 KB: draw a batch of meshes: transforms vertices to screen (Mesh_ComputeBounds2D_B), appends indices (CVertexBuffer::AppendIndices) and flushes |
-| 0x00500B70 | 2566 | I3DFigureImpl::InitRenderer | vt 0x73D93C: load libs, find a HW 3D driver (fatal "Can't find any driver with HW 3D."), create CRenderDevice, caps checks, matrices; 2.5 KB |
-| 0x004E5E50 | 2530 | CRenderDevice::CRenderDevice | 2.5 KB constructor: create the D3D object ("Can't create D3D object"), enumerate devices, pick the HW/SW device, create z-buffer (CreateZBuffer), vertex buffers; many fatal messages |
+| 0x004E9010 | 2616 | CRenderDevice::DrawMeshBatch | (positions SoA (blocks of 4: 4x,4y,4z,4w), vertBlocks, normals SoA, normalBlocks, diffuse[], specular[], uv[] (8 B), uvCount, components[] {ushort posIdx, colourIdx (= normal index), uvIdx}, compCount, -, -, indices[], indexCount,... |
+| 0x00500B70 | 2566 | I3DFigureImpl::InitRenderer | slot 2 (hwnd, AppSettings 0x79BC70): LoadLibraries; FindHw3dDriver (fatal "Can't find any driver with HW 3D.") or DrawingTarget (+0x2C); new CRenderDevice(hwnd, driver, FullScreen +0x44, w +0x30, h +0x34, bpp +0x38, 0, 1, zbpp +0x... |
+| 0x004E5E50 | 2530 | CRenderDevice::CRenderDevice | (hwnd, driver node, fullScreen, w, h, bpp, 0, 1, zDepth, 0): CDXDirectDraw base at +0; QueryInterface IID_IDirect3D7 (0x745A80) -> +0x50; EnumDevices into +0xB0 and picks ONLY the node whose GUID == IID_IDirect3DHALDevice (0x745A5... |
 | 0x004E4C80 | 2525 | CEffectObj::UpdateParticles_Alt | 2.5 KB: second effect particle update variant (positions from object transform, velocity +0xA8..+0xB0, jitter) |
-| 0x004F7F00 | 2245 | CRenderManager::BuildFigureMesh | 2.2 KB: create the scene entry for a loaded figure: vertices/UVs/indices copied from the figure's raw SoA buffers, AddMesh |
+| 0x004F7F00 | 2245 | CRenderManager::BuildFigureMesh | (scene, part name, data** (FIG8 file), s, d, h): the entry of the scene's +0x14 map (FindOrCreateEntry) gets +0 = textureNumber (file +0x24), +4 = materialKind (file +0x20, the 17..25 word); the 10-dword header is read, the bounds... |
 | 0x004E8900 | 1795 | Mesh_ComputeBounds2D_C | compute 2D min/max bounds (variant), 1.8 KB |
 | 0x004E7FB0 | 1783 | Mesh_ComputeBounds2D_A | compute 2D min/max of projected vertices for a draw call set (mode 0 / 1), 1.8 KB |
-| 0x004EEE30 | 1756 | CDXDirectDraw::InitFullscreen | 1.8 KB: select the driver/mode, create primary and back surfaces, device and z-buffer; messages "Probably, this is a PROGRAMMERS ERROR - ..." / "Check correct..."; many fatal paths |
+| 0x004EEE30 | 1756 | CDXDirectDraw::CreateSurfaces | (backBuffers (> 10 = "Probably, this is a PROGRAMMERS ERROR"), with3D): windowed (+0x20 bit 0 clear): primary (DDSCAPS_PRIMARYSURFACE 0x200) -> +0x14, then backBuffers == 0 -> the render surface +0x18 wraps the primary itself, els... |
 | 0x004F9FD0 | 1690 | CRenderManager::BuildFigureMeshB | build a scene mesh entry for a figure part (1.7 KB): FindOrCreateEntry, GetNamedValue, vertex/index arrays from the figure data |
 
 ## 0x501000 - 0x50A000: renderer: I3DFigure / C3DFigureImpl (scene, figure drawing)
@@ -713,19 +713,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x00501D90 | 3211 | I3DFigureImpl::DrawTexturedPolyline | slot 16 of 0x73D93C (points {Vec3*, count}, width, mode, uLength, v0, v1) -> 1: static buffers g_0x7AF020 transformed points, g_0x7AF000 vertices (0x20), g_0x7AF010 quad vertices, g_0x7AF030 indices (ushort), g_0x7AF040 clip codes... |
-| 0x00502CA0 | 2524 | I3DFigureImpl::DrawParticleQuads | slot 17 of 0x73D93C (alphaBlend, {positions (0x10 each), count}, {.., records (colour, uv rect*) +4}) -> bool: static buffers g_0x7AEFA0 / g_0x7AEF90 vertices (0x20) / g_0x7AEF78 / g_0x7AEF60 indices (atexit 0x5039E0..0x503A20) an... |
-| 0x00503A40 | 1238 | I3DFigureImpl::DrawArrow3D | slot 18 of 0x73D93C (pos, size, dir, right) -> 1: a debug arrow (shaft size * 3 along dir, head along right, z + 0.3) of 18 line-list indices, colour 0x8000ff00 / 0xff000000, drawn with 0x4EA4A0 on the device +0x20 |
-| 0x00507530 | 1109 | AnimNodeOld_AdvanceTime | (node, double* dt): the frame fraction +0x38 += dt; at >= 1 the frame +0x34 ++ and the key indices (+0x98 morph, +0x68 position, +0x54 rotation, +0x80) step past their keys' end frame; at the last frame +0x40 with the flag g_0x78E... |
+| 0x00501D90 | 3211 | I3DFigureImpl::DrawTexturedPolyline | slot 16 (points {Vec3*, count}, width, mode, uLength, v0, v1) -> 1: static buffers g_0x7AF020 transformed points, g_0x7AF000 / g_0x7AF010 vertices, g_0x7AF030 indices; each segment becomes a screen-space quad of the given width (L... |
+| 0x00502CA0 | 2524 | I3DFigureImpl::DrawParticleQuads | slot 17 (alphaBlend, {positions (0x10: xyz + size), count}, {.., records (colour, uv rect*) +4}) -> bool: static buffers g_0x7AEFA0 / g_0x7AEF90 vertices / g_0x7AEF78 / g_0x7AEF60 indices; the points transformed by the pipeline (s... |
+| 0x00503A40 | 1238 | I3DFigureImpl::DrawArrow3D | slot 18 (pos, size, dir, right) -> 1: a debug arrow (shaft size * 3 along dir, head along right, z + 0.3) of 18 line-list indices, colour 0x8000FF00 / 0xFF000000, drawn with DrawTrianglesTransformed on stack 1; CWorldClient::Rende... |
+| 0x00507530 | 1109 | AnimNodeOld_AdvanceTime | (node, double* dt): the OLD (.ani, double-precision) animation node of the 3ds tool chain: frame fraction +0x38 += dt, frame +0x34 ++ at 1, key indices step past their end frames; CFigureManager::MakeAnimationNode / LoadAnimationF... |
 | 0x00505CB0 | 1078 | AnimNodeOld_ReadFromData | (node, cursor*): +0xe4 / +0xec (two doubles rounded to int64), the pivot +0xf4 (Vec3), the base vertices +0x100 (count +0x104) and their working copy +0xd4, the frame count +0x40, the rotation keys +0x44 (0x28 each: start, end, qu... |
-| 0x005015A0 | 986 | I3DFigureImpl::SetupCamera | slot 25 of 0x73D93C (rect, fov): on the render context +8: the projection (0x4F0E80 with fov (default from g_0x79B2A8 via 0x40D380), aspect from the rect, near / far) pushed on the projection stack +0x44 / +0x48 (0x40-byte matrice... |
-| 0x00504A60 | 924 | I3DFigureImpl::SetGamma | slot 22 of 0x73D93C (brightness, contrast, c) -> bool: needs the device caps (device +0xc vt[11] GetCaps into two 0x17c-byte D3DDEVICEDESC7) flag 0x20000 of +8; the primary surface (+0x14 -> +0x10) QueryInterface(IDirectDrawGammaC... |
+| 0x005015A0 | 986 | I3DFigureImpl::SetupCamera | slot 25 (RECT, fov or 0): the 16 stack depths of the library +8 reset; P = Mat4_Perspective(fov (camera g_0x79B2A8 default), rect aspect, near, far) on stack 6, V = Mat4_Viewport(rect) on stack 8, identity on 7, stacks 1 and 0 = V... |
+| 0x00504A60 | 924 | I3DFigureImpl::SetGamma | slot 22 (brightness, contrast, c) -> bool: needs DDCAPS2_PRIMARYGAMMA (0x20000 of caps +8); IDirectDrawGammaControl on the primary surface (+0x14 -> +0x10): a 256-entry ramp per channel from brightness / contrast ("Brightness" set... |
 | 0x00507E80 | 826 | AnimNodeOld_ResetToFirstKey | (node): without a parent +0x1c: the rotation +0xb8 = the first rotation key quat, the position +0xc8 = that rotation applied to the pivot +0x110 (quaternion rotation formula); with a parent: rotation = key0 * parent rotation +0xb8... |
 | 0x00507990 | 699 | AnimNodeOld_StepTimeRecursive | (node, double dt) -> 1: the current morph frame (+0x88 [+0x98]) scaled by dt is accumulated into +0xd4; AnimNodeOld_AdvanceTime(dt); the world position / rotation composed with the parent (as in AnimNodeOld_RefreshRecursive); recu... |
 | 0x0050434F | 619 | I3DFigureImpl::DrawRect2D_part2 | tail of I3DRenderer::DrawRect2D split off by Ghidra (the outline line strip drawing) |
 | 0x00508240 | 596 | AnimNodeOld_EnsureDefaultKeys | (node): without position keys +0x58 one key (frames 0..1, pos / delta = g_0x7AF0F0 zero) is created; without rotation keys +0x44 one identity key (quat g_0x7AF0E0, axis (1, 0, 0), angle 0) |
 | 0x005064C0 | 592 | AnimNodeOld_SetMorphPivot | (node, bounds (6 Vec3), u, v, w): +0x11c..+0x124 = u, v, w; the pivot +0x110 = lerp(lerp(p0, p1, u) + (p2 - .) * v, lerp(p3, p4, u) + (p5 - .) * v, w) (the FIG bounds interpolation with the 3 morph params) |
-| 0x00508D30 | 563 | CAnimationSystemOld::ReadNodes | (stream): the node count (stream vt[13], 4 bytes) sizes the node list +4; each node is a new AnimNodeOld (0x128) with the name +4 and parent name +8 read (length + chars); the parent is looked up by name among the previous nodes (... |
+| 0x00508D30 | 563 | CAnimationSystemOld::ReadNodes | (stream): the OLD .ani skeleton (node count, per node name + parent name) of the 3ds tool chain (CFigureManager::LoadSkeletonOld); not the game's runtime path |
 | 0x00506A50 | 537 | AnimNodeOld_RefreshRecursive | (node) -> 1: AnimNodeOld_AdvanceTime(0); the world position +0xc8 / rotation +0xb8 composed with the parent +0x1c (rotated pivot +0x110 + parent position, local * parent rotation) or copied from the local +0xac / +0x9c; recursion ... |
 
 ## 0x50A000 - 0x50E000: CAnimationTrack (.anm keys: positions, rotations, morph frames; Evaluate) / CAnimationNode (hierarchy, bound figure part, morph interpolation, UpdateTransform) / CAnimationSystem2 (nodes, animation queue, SetTime / SetAnimation / SetMorphParams / BindPart)
@@ -734,18 +734,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0050B8C0 | 827 | CAnimationNode::Interpolate8 | (cursor -> 0x60-byte record of 8 points): the node position +0x5c = trilinear morph interpolation of the 8 points with the weights +0x68 / +0x6c / +0x70; the cursor advances by 0x60 |
-| 0x0050C230 | 763 | CAnimationNode::UpdateTransform | (offset): with a parent +0x28: world position +0x74 = parent rotation (+0x80) applied to the local position +0x5c plus the parent position; world rotation +0x80 = parent rotation * own rotation (+0x80 before); without parent: posi... |
-| 0x0050ACD0 | 582 | CAnimationTrack::Evaluate | (time): frame = floor(time), t = frac: position +0x4c = lerp of the position keys +0x28 (count +0x24; last key / zero beyond), rotation +0x58 = slerp (0x49ED20) of the rotation keys +0x30 (count +0x2c), morph vertices +0x68 = lerp... |
-| 0x0050AF40 | 575 | CAnimationNode::CAnimationNode | (0xa0 bytes): CObject base; name +0x1c, parent name +0x20, model name +0x24 (CStrings), parent +0x28 = 0, child CList +0x2c (vt 0x73DA40), bound part +0x48 = 0, tracks +0x4c..+0x58 = 0, world position +0x74 = 0, world rotation +0x... |
-| 0x0050BC00 | 546 | CAnimationNode::Interpolate6 | (cursor -> 0x48-byte record of 6 points): the node position +0x5c = the 3-parameter morph interpolation (weights +0x68 / +0x6c / +0x70) of the 6 points; the cursor advances by 0x48 |
-| 0x0050AAF0 | 473 | CAnimationTrack::LoadFromData | (cursor*): parses an .anm track blob: rotation key count +0x2c then the quaternions (0x10 each, pointed at +0x30), position key count +0x24 then the Vec3s (+0x28), morph vertex count +0x34, morph frame count +0x3c with the frame p... |
+| 0x0050B8C0 | 827 | CAnimationNode::Interpolate8 | (cursor -> 8 Vec3 of a .bon entry): +0x5C local position = trilinear blend of the 8 corner offsets with the node's morph params +0x68 (s), +0x6C (d), +0x70 (h) (same corner order as the .fig); cursor += 0x60 |
+| 0x0050C230 | 763 | CAnimationNode::UpdateTransform | (modelOffset xyz): root (no parent +0x28): world position +0x74 = the current track's position +0x4C scaled by CObject3D::GetModelLerp of the owner's height param (the .adb header floats: (min + (max - min) * h) / ref) minus model... |
+| 0x0050ACD0 | 582 | CAnimationTrack::Evaluate | (time in frames, float): frame = floor(time), t = frac: +0x4C position = lerp(key[frame], key[frame+1], t) (the last key / zero past the end), +0x58 rotation = Quat_Slerp (identity when no keys), +0x68 morph vertices = lerp of the... |
+| 0x0050AF40 | 575 | CAnimationNode::CAnimationNode | (0xA0, kind 0x300C): CObject base; +0x1C name, +0x20 parent name, +0x24 model name (CStrings), +0x28 parent node, +0x2C child CList (head +0x30), +0x48 bound part (CFigure*), +0x4C current track, +0x50 main track, +0x54 / +0x58 al... |
+| 0x0050BC00 | 546 | CAnimationNode::Interpolate6 | (cursor -> 6 Vec3 of an old 72-byte .bon entry): +0x5C local position = lerp(lerp(lerp(p0,p1,s), p2, d), lerp(lerp(p3,p4,s), p5, d), h) with the morph params +0x68..+0x70; cursor += 0x48 |
+| 0x0050AAF0 | 473 | CAnimationTrack::LoadFromData | (cursor*): one .anm part track: u32 rotation key count -> +0x2C, quaternions (w,x,y,z 16 B) pointed at +0x30 (not copied: the mapped file), u32 position key count -> +0x24, Vec3s at +0x28, u32 V (morph vertices per frame) -> +0x34... |
 | 0x0050A210 | 472 | Records18Array::Serialize | slot 2 of 0x73D9BC: CArchive of the array of 0x18-byte records (0x452E20 constructs, 0x454380 destroys; raw bytes) |
-| 0x0050B510 | 456 | CAnimationNode::Done | slot 3 Done() (root layout) |
-| 0x0050D600 | 444 | CAnimationSystem2::SetTime | (t): +0x60 = t (dirty when changed); without a current animation and with a queue: the first queued entry becomes current (time 0); while the current entry's duration (+0x20) is below the time: time -= duration, the end callback +... |
+| 0x0050B510 | 456 | CAnimationNode::Done | slot 3: releases (vt[4]) the bound part +0x48 and the tracks +0x50 / +0x54 / +0x58, then the Init reset |
+| 0x0050D600 | 444 | CAnimationSystem2::SetTime | (t, frames since the clip start, = world ticks: 1 frame per tick): +0x60 = t (dirty when changed); no current clip (+0x40) but a queue (+0x44, count +0x50): the first queued .adb entry becomes current at time 0; while the current ... |
 | 0x0050B1D0 | 416 | CAnimationNode::dtor | releases the bound part +0x48 and the tracks +0x4c..+0x58, CStrings reset, child CList reset, bone matrix vector +0x90 freed, CObject::dtor_body |
-| 0x0050B370 | 406 | CAnimationNode::Init | slot 2 Init() -> bool (root layout) |
-| 0x0050D7C0 | 351 | CAnimationSystem2::SetMorphParams | (a, b, c): the model record (figure manager 0x5AA5F0 by the owner's model name); every node gets +0x68..+0x70 = (a, b, c) and is rebuilt (0x5ACB80(node manager +0x14, model record, node)); +0x68.. = params; dirty = 0; ApplyTransfo... |
+| 0x0050B370 | 406 | CAnimationNode::Init | slot 2 -> 1: names +0x1C / +0x20 / +0x24 = "", parent +0x28 = 0, child list +0x2C reset, bound part +0x48 and tracks +0x4C..+0x58 = 0, world position +0x74 = 0, rotation +0x80 = identity, bone matrix vector +0x90 emptied, morph pa... |
+| 0x0050D7C0 | 351 | CAnimationSystem2::SetMorphParams | (s, d, h): the model record (CFigureManager::GetModel of the owner's model name); every node gets +0x68..+0x70 = (s, d, h) and its rest offset rebuilt (SetNodeRestOffset); +0x68.. of the system = the params; dirty |
 | 0x0050C730 | 294 | CAnimationSystem2::dtor | releases the nodes, resets the node and queue CLists (CPlex chains freed), CObject::dtor_body |
 | 0x0050DC20 | 281 | CList_73DA40::Serialize | slot 2 of 0x73DA40: CArchive of a CList of pointers (4 bytes each) |
 
@@ -755,19 +755,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005179E0 | 1656 | CObject3D::BuildFromAnimation | (modelName): with the animation system +0x98: scale (0x50D7C0), 0x50D320(anim, modelName) loads it, 0x50CA50(anim, 0), 0x50D450; the part records +0x160 (0x38 each) and names +0x114 come from the animation's node list (+0x28 list,... |
+| 0x005179E0 | 1656 | CObject3D::BuildFromAnimation | (modelName): with the animation system: SetMorphParams, BindSkeleton, SetAnimation(0), Update; the part records +0x160 (0x38 each, count +0x164) and names +0x114 are created from the node list (+0x28, count +0x30): LoadPartBounds(... |
 | 0x00510B80 | 1605 | CMapObjectClientSpecific::UpdateBuffEffects | (silent): the owner's buffs (+0x198) are reduced to kinds with their highest level; the effect records +0x28 (0x10: kind, level, effect, active) are synced: existing ones are rescaled (0x485480, level / 16 / effect +0x128); new on... |
-| 0x00518310 | 1175 | CObject3D::ComputeBoundsFromParts | min / max of every part's local position +0x1c + bounds offset +0x18c and extents +0x19c / +0x1a8 (parts farther than 1e9 skipped; the +0xe0 parts get their position zeroed); writes the centre +0x128, radius +0x134, min +0x138, ma... |
+| 0x00518310 | 1175 | CObject3D::ComputeBoundsFromParts | min / max over every part of +0xD0: local position +0x1C + bounds centre +0x18C +- extents +0x19C / +0x1A8 (parts farther than 1e9 skipped; the +0xE0 pending parts get their position zeroed); writes +0x128 centre, +0x134 radius, +... |
 | 0x005136D0 | 1157 | Unit_InitStatsFromProto | (placement, stats, protoName): fills the placement (HP/MP max from proto +0x48/+0x4c, regen from the udb entry +8/+0xc, armor pairs +0x20.. = udb +0x6c.. * proto +0x58) and the stats from the units db proto (0x120) and its udb ent... |
 | 0x00513DA0 | 1096 | Hero_InitStatsFromProto | (unitStats, protoName) -> bool: like Unit_InitStatsFromProto for a new hero (both current / max HP, MP, stamina set; warning when no hero record), then 0x524CD0(stats, 1.0), 0x525AF0, 0x524CD0 (recompute); FatalError "Can't find p... |
-| 0x0050EC30 | 1001 | CMapObject::ReadNetState | CMapObject slot 49 (seed name CUnitBase::ReadNetState) (mode): reads the net-state sections of +0x1c4 (the inverse of WriteNetState; DeltaReader::Read per field); CUnit / CLeverObject / CTorchObject extend it |
-| 0x00516DA0 | 866 | CObject3D::LoadModel | (modelName, part names CArray) -> bool: +0xa4 = name; animation +0x98: scale and 0x50D320(anim, name); without part names the animation lists them (0x50D920) and the figure +0xf0 = figure manager (world vt[23]()) vt[4](name, scale... |
-| 0x00510890 | 738 | CMapObjectClientSpecific::v6 | slot 6 (root layout; default returns 0) |
+| 0x0050EC30 | 1001 | CMapObject::ReadNetState | slot 49 (mode: 0 full / 1 delta) -> 1 when every section ended exactly: section 0 -> the placement (DeltaReader::ReadUnitSmall into +0x17C; a changed HP short +0x17E or a full read calls vt[58] (HP changed)); 1 -> 12 bytes into Se... |
+| 0x00516DA0 | 866 | CObject3D::LoadModel | (modelName, part names CArray) -> 1: +0xA4 = name; with an animation system +0x98: SetMorphParams(+0xC4..) and BindSkeleton (LoadSkeleton: the link table -> nodes); no part names -> the nodes' names (CollectNodeNames) and the figu... |
+| 0x00510890 | 738 | CMapObjectClientSpecific::Update | slot 6 (every frame from CMapObject::Update): a hero's buff (owner +0x198[], 0x14) whose duration +4 drops below 30 ticks plays "magic\\end1.wav" once (+0x54 sound id); the buff sounds +0x40 (count +0x44; 0x14 records {kind, handl... |
 | 0x00512730 | 732 | CMapObjectManager::CreateByKind | slot 14 factory (kind): 0x32/0x33/0x34 CUnit (0x4dc bytes, 0x52E110), 0x35 CTree (0x238, 0x5296E0), 0x36 -> 0x5297C0 (0x238), 0x37 -> 0x5298A0 (0x238), 0x38 -> 0x529980 (0x238), 0x39 CFakeUnit (0x580, 0x4466D0), 0x3a -> 0x52BEE0 (... |
-| 0x0050F2D0 | 724 | CMapObject::ApplyBuffKinds | slot 27: morph scale +0xC4/+0xC8/+0xCC += 0.4 * (has 0x1D - has 0x1E + has 0x25 - has 0x26) (presence, not count; clamped >= 0; +0xC8 (height) skipped for the strengthen/weaken pair on kind-0x32 units); net section 1 dirty |
-| 0x00517240 | 658 | CObject3D::CreatePart | (partName, modelRecord, arg) -> part or 0: the figure manager (world vt[15]()) creates a figure part (0x5AC2B0); with a figure +0xf0 the part must exist in it (vt[4](name)) and copies its bounds record (StrTreeMap_LowerBound on +0... |
+| 0x0050F2D0 | 724 | CMapObject::ApplyBuffKinds | slot 27: the morph params +0xC4 / +0xC8 / +0xCC += 0.4 * (has strengthen 0x1D - has weaken 0x1E + has enlarge 0x25 - has shrink 0x26) (presence, not count; clamped >= 0; +0xC8 (the dexterity axis) is skipped for the strengthen / w... |
+| 0x00517240 | 658 | CObject3D::CreatePart | (partName, FigureModel, arg) -> CFigure or 0: CFigureManager::CreatePart(model name +0xA4, part, kind A unless flag 0x1000, s, d, h, arg); with a scene +0xF0 the part must exist in it (scene vt[4](name)) and copies the scene entry... |
 | 0x005114D0 | 632 | BuffSound_Start | (start, rec {kind, handle +8}, pos, kind, suffix): the sound folder by buff kind (9 "magic\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x005190C0 | 596 | CObject3D::PickAnimDbEntryByMask | (mask) -> entry or 0: the .adb entries whose flags match mask (bits 0..14 subset, bits 15..31 equal) and pass vt[18](entry); one -> it; several -> entries whose chance +0x1c is below a random percent are dropped and one is picked ... |
+| 0x005190C0 | 596 | CObject3D::PickAnimDbEntryByMask | (key) -> .adb entry or 0: the entries whose key +0x14 matches (bits 0..14 subset, 15..31 equal) and pass vt[18](entry); one -> it; several -> those whose chance +0x1C >= a random percent, one at random (adb-format.md) |
 | 0x00513B60 | 573 | Unit_ApplyPrototype | (obj, protoName) -> 1: unknown prototype: default stats (Object_InitDefaultStats -> vt[35] / vt[36]) and the warning "Can't find prototype for object %d"; a CUnit (typeId 0x50): Unit_InitStatsFromProto -> vt[36](placement) (flag 1... |
 
 ## 0x51A000 - 0x520000: CObject3DClientSpecific (texture sets +0x20/+0x24, materials +0x38, skins SetTextureNames, wounds texture + TextureBlend, shadows, invisibility / stun material tweaks, material colour push/pop) + CObject3DServer + perks.pdb database (PerksDb_FindByName / Save) + aligned dword vectors / CString vector helpers
@@ -776,20 +776,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0051CE60 | 4952 | CObject3DClientSpecific::RenderShadow | slot 20: builds the caster silhouette bitmap (64x64 A4R4G4B4) of one object, uploads it, builds the receiver mesh and draws it |
-| 0x0051B7E0 | 2337 | CObject3DClientSpecific::Draw | collects nearby lights (not the sun), edge alpha, lit draw, lighting cache flag 0x400 |
-| 0x0051C3D0 | 824 | CObject3DClientSpecific::CreateWoundsTexture | (name) -> bool: needs a primary set +0x20; the wounds texture +0xd8 = texture of kind 6 named name (texture manager g_0x7AF744: 0x692D30 find or 0x691D00 create; FatalError "Can't create wounds texture for object" after owner vt[1... |
+| 0x0051CE60 | 4952 | CObject3DClientSpecific::RenderShadow | slot 20 (render context): the vanilla shadow (docs/shadows.md): ShadowQuality g_0x79BD0C > 0 and the kind switch (UnitShadow 0x79BD14 for typeId 0x50, FloraShadow 0x79BD1C for 0x52, BuildingShadow 0x79BD18 others); the 64x64 shado... |
+| 0x0051B7E0 | 2337 | CObject3DClientSpecific::Draw | slot 19 (renderer I3DFigureImpl, out RECT or 0) -> 1: unless the object (+0x1C) is hidden (flag 0x40 of +8): owner vt[26] Activate; the lighting cache flag 0x400 cleared unless 0x200 (static lighting); CAnimationSystem2::Update; t... |
+| 0x0051C3D0 | 824 | CObject3DClientSpecific::CreateWoundsTexture | (name) -> bool: needs a primary set +0x20; the wounds texture +0xD8 = a kind-6 texture named name (texture manager g_0x7AF744: find 0x692D30 or create 0x691D00; FatalError "Can't create wounds texture"); the texture blend +0xDC (T... |
 | 0x0051FF40 | 721 | PerksDb_Save | (this = perks database, path) -> bool: "Saving database." log; writes perks.pdb through the database writer (0x409AE0 / 0x40A000 framework: group records 0x5207D0 tag 1 and perk records 0x5208C0 tag 2) into the file opened by the ... |
 | 0x0051E5D0 | 476 | TexNameRefs_InsertRealloc | (this = vector of 0x14 TexNameRef, pos, value, n): reallocating fill-insert (size pool), old records destroyed |
 | 0x0051F5B0 | 471 | CStrings_Resize | (this = vector<CString>, n): shrinks (destroying) or grows with empty CStrings (CStrings_InsertRealloc when the capacity is exceeded) |
-| 0x0051C250 | 383 | CObject3DClientSpecific::SetTextureNames | (primary, secondary) -> 1: +0xe0 / +0xe4 = the names; for each non-empty name: an existing texture of the set's kind with that name (texture manager world vt[34]() 0x692D30) replaces the set's texture (ReplaceTexture), otherwise t... |
+| 0x0051C250 | 383 | CObject3DClientSpecific::SetTextureNames | (primary name, secondary name) -> 1: +0xE0 / +0xE4 = the names; for each non-empty name an existing texture of the set's kind with that name (texture manager world vt[34]() 0x692D30) replaces the set's texture (the skin "<prefix>s... |
 | 0x0051F790 | 382 | CStrings_InsertRealloc | (this = vector<CString>, pos, value, n): reallocating fill-insert (size pool), old strings destroyed |
 | 0x0051FB50 | 382 | PerksDb_DestroyTables | (this = perks database): destroys the 0x44-byte perk records (+0xc: CStrings +0, +4, +0xc, +0x14) and the 0x18-byte group records (+0: CStrings +0, +4, CString vector +0xc), frees both vectors |
-| 0x0051B2F0 | 358 | CObject3DClientSpecific::GetOrCreateTextureSet | (textureKind) -> set: an existing texture of that kind in +0x28 is returned; otherwise a new set {texture = CWorldClient::FindTexture(kind), slots} becomes the primary set +0x20 (kinds 1, 3, 4, 6..9, 0xb, 0xd..0x10; warning "Addin... |
+| 0x0051B2F0 | 358 | CObject3DClientSpecific::GetOrCreateTextureSet | (textureNumber) -> set (0x14: +0 CTexture* (CWorldClient::FindTexture(kind)), +4 material slots vector, +8 count, +0xC cap, +0x10 grow): an existing texture of that kind in +0x28 (count +0x2C) returns its set; kinds 1, 3, 4, 6..9,... |
 | 0x0051A010 | 311 | AlignedDwords_SetAtGrow3 | (this, index, value): grows the 32-byte aligned dword vector so that index fits and stores value |
 | 0x0051EE50 | 311 | AlignedDwords_SetAtGrow4 | (this, index, value): grows the 32-byte aligned dword vector so that index fits and stores value |
-| 0x0051C9F0 | 310 | CObject3DClientSpecific::SaveRestoreMaterialColors | (push): push: every material of +0x38 pushes its diffuse colour +0x50..+0x5c on its colour deque (+0x64.., ColorDeque_PushBack) and resets it to 1.0; restore: pops the saved colour back (the deque chunks of 0x200 bytes freed when ... |
-| 0x0051AB00 | 299 | CObject3DClientSpecific::CObject3DClientSpecific | ctor (kind 0x46, 0xfc bytes) |
+| 0x0051C9F0 | 310 | CObject3DClientSpecific::SaveRestoreMaterialColors | (push): push: every material of +0x38 pushes its diffuse +0x50..+0x5C on its colour deque (+0x64.., ColorDeque_PushBack) and resets it to 1.0; pop: restores it (the death fade / colour push-pop of CUnitClientSpecific) |
+| 0x0051AB00 | 299 | CObject3DClientSpecific::CObject3DClientSpecific | (kind 0x46, 0xFC, vt 0x73DEFC base): +0x1C owner CObject3D, +0x20 primary texture set, +0x24 secondary set, +0x28 textures vector (count +0x2C), +0x38 materials vector (count +0x3C), +0x48 = -1 registered material count, +0x4C / +... |
 
 ## 0x520000 - 0x529000: unit stats & damage model (perks.pdb, damage types, hit locations)
 
@@ -1070,19 +1070,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x005A3800 | 4903 | CFigure::BuildMorphed | CFigure slot 21 (data**, s, d, h): +0x158/+0x15c from the header, then every vertex / normal / bone from the 8 morph components interpolated with the 3 coefficients ((b - a) * t + a) (3845-4903 bytes) |
-| 0x005A2500 | 4793 | CFigure::v20_ParseFIG | CFigure slot 20 (data**, 3 floats; 4793 bytes): parses the .fig blocks (see docs/file-formats) |
-| 0x005A7A70 | 4204 | CFigureClientSpecific::RenderLit | light gathering/precompute, calls TL pipeline light kernel, draws mesh |
-| 0x005A5C70 | 4094 | CFigure::LoadFig8 | slot 20: loads/interpolates a FIG8 mesh (32-byte header, bounds, raw SoA buffers, morph deltas); 4 KB |
-| 0x005A4D60 | 3845 | CFigure::LoadFig6 | slot 21: loads/interpolates a FIG6 mesh (raw SoA buffers, bounds, morph deltas) from the buffer with a morph factor; 3.8 KB |
-| 0x0059FDF0 | 3351 | CFigure::AccumulateWorldBounds | (out min x / y / z, max x / y / z): the 8 corners of the local box (offset +0x18c plus min +0x19c / max +0x1a8) transformed by the figure matrix (0x401570) extend the min / max (skipped for figures farther than 1e4 units) |
+| 0x005A3800 | 4903 | CI3DFigure::BuildMorphed | slot 21 of vt 0x73C224 (data**, s, d, h): the CI3DFigure (UI figure) loader: +0x158 / +0x15C from the header, vertices / normals / bones from the 8 corners blended with (s, d, h) into the own arrays. Was CFigure::BuildMorphed |
+| 0x005A2500 | 4793 | CI3DFigure::ParseFIG | slot 20 of vt 0x73C224 (data**, s, d, h): parses the FIG8 blocks into the CI3DFigure arrays (4.8 KB; see LoadFig8 for the layout). Was CFigure::v20_ParseFIG |
+| 0x005A7A70 | 4204 | CFigureClientSpecific::RenderLit | (device, lights {CLight**, count}, light params, ambient, out RECT, blend texture A, B) -> 1: the lit draw of every world object part: hidden (0x80) / culled -> 1; texture frame animation; unless the colours are cached (figure fla... |
+| 0x005A5C70 | 4094 | CFigure::LoadFig8 | slot 20 (data**, s, d, h): unless flag 0x20 (loaded): the 10-dword header: +0x158 = materialKind (file +0x20), +0x15C = textureNumber (+0x24); ReadBoundsHeader (the 8-corner bounds blended into +0x188); vertex blocks (0x180 B each... |
+| 0x005A4D60 | 3845 | CFigure::LoadFigOld | slot 21 (data**, s, d, h): the pre-FIG8 6-corner figure (288-byte vertex blocks, 244-byte bounds) into the same own arrays. Was LoadFig6 |
+| 0x0059FDF0 | 3351 | CFigure::AccumulateWorldBounds | (out min xyz, max xyz): the 8 corners of the box (centre +0x18C +- extents +0x19C / +0x1A8 of the bounds record +0x188) transformed by the figure's model matrix (SetRotationQuat +0xE0) extend the min / max; skipped for figures far... |
 | 0x005A18E0 | 2967 | CFigure::ReadBoundsHeader | (cursor, a, b, c, magic): "FIG8" (0x38474946): the 8-variant trilinear interpolation (morph params a, b, c) of the centre +0x160, min +0x16c, max +0x178 (three 0x60-byte groups) and radius +0x184 (0x20 bytes); other magics read th... |
 | 0x005AAE60 | 2867 | PartRecord_ReadBoundsFIG8 | (record (0x38: flags, centre +4, radius +0x10, min / max +0x14..), data, a, b, c, magic): "FIG8": the 8-variant trilinear interpolation of centre, min, max (three 0x60 groups) and radius (0x20); else raw; flag 1 and 0x4F93A0 |
 | 0x005A1210 | 1736 | CFigure::ReadBoundsFIG6 | (cursor, a, b, c): old .fig bounds: three 0x48-byte groups (6 points) + a 0x60 group interpolated with the morph params into the offset +0x18c, +0x198, min +0x19c, max +0x1a8; flags +0x188 /= 3; the cursor advances |
 | 0x005AB9A0 | 1646 | PartRecord_ReadBoundsFIG6 | (record, data, a, b, c): the 6-variant interpolation of the old .fig bounds (0x48-byte groups) into the record; flag 1 and 0x4F93A0 |
 | 0x005ACE80 | 1612 | Menus_GetNewGameRect | (resource loader): opens "menus.reg" (vt[19]) as a .reg (0x694610) and reads the "MainMenu" / "NewGame" rect (0x695410); FatalError "Can't open file menus.reg" / "Can't open menus.reg as .reg" / "Can't get rect for MM_NewGame" |
 | 0x0059F8F0 | 1273 | CFigure::v17_ReadParts | CFigure slot 17 (stream*): stream->vt[13]() then reads the part tree ... (231 lines) |
-| 0x005A7640 | 1034 | CFigureClientSpecific::Render | (ctx, [stack] flags, out RECT) -> 1: skipped when the figure (+0x1c) is flagged 0x80; frustum test (0x4F16A0 on ctx +0xac with the bounds +0x188; 2 = culled -> 1); animated texture types (+0x15c 0xd..0x10) advance the uv frame; fl... |
+| 0x005A7640 | 1034 | CFigureClientSpecific::Render | (device, quat*, lights, params, alpha, out RECT or 0) -> 1: the unlit draw: skipped when the figure (+0x1C) is hidden (flag 0x80); flag 0x40 (drawn) cleared; CullBox(device +0xAC, figure +0x188): 2 -> return; animated texture kind... |
 | 0x005A8FB0 | 855 | CFigureClientSpecific::ComputeScreenRect3 | (projected points {data, count}, 4-wide SoA): SetRect(+0x20) from the min / max of the points |
 
 ## 0x5AD000 - 0x5C6000: CAIMap: terrain / passability grids, collision map, path finders, nav grid, stamps; Alertness
@@ -1204,7 +1204,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005E4180 | 709 | CUIConsole::OnKeyDown | handles shift (0x10)/ctrl (0x11) flags, PgUp (0x21)/PgDn (0x22) scroll by 1 or a page, other keys |
 | 0x005E4EB0 | 677 | CSoftCursor::CreateFrameFromMmp | create a cursor frame surface (0x4EFC60) and fill pixels from a decoded .mmp image: lock/unlock ("Can't get surface description.", "Can't lock surface.") |
 | 0x005E4800 | 524 | CUIConsole::RenderHistory | redraw the history area: dark background 0x282828, font colour 0xB4B4B4, visible lines from the end offset by scroll (+0x74), measures width using "+-987654321" |
-| 0x005E6D90 | 517 | CI3DFigure::Draw |  |
+| 0x005E6D90 | 517 | CI3DFigure::Draw | (renderer I3DFigureImpl) -> 1: when visible (+0x220): renderer vt[11] SetTexture(0, texture +0x280) (FatalError "CI3DFigure::Draw: SetTexture failed"); the model matrix (Quat_ToMatrix4 of +0x34 into +0x54, position +0x1C in column... |
 | 0x005E63F0 | 506 | CSoftCursor::AddFrame | append a cursor frame loaded from an ".mmp" image path (49 callers) |
 | 0x005E3700 | 481 | CUIMessageLog::RedrawInput | draw the chat input line (+0x150 text) into the widget DC with caret, clamp width 0x30C, shown only while input mode (+0x14C) is on |
 | 0x005E69C0 | 444 | ScreenFade::Draw | draws letterbox bars and a fade overlay using FadeTimer (value ramps 0..255 by elapsed ms), via surface vt[19] fill-rect calls |
@@ -1448,20 +1448,20 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0068E640 | 681 | CMaterialManager::Init | slot 2 Init() -> bool (root layout) |
+| 0x0068E640 | 681 | CMaterialManager::Init | slot 2: CBaseManager::Init; opens '<data>materials.res' (vt[16]); for every (kind, file name) pair of the table 0x743BF8..0x743C37: the material file (vt[19]: u16 name length + name + 17 dwords: diffuse rgb, alpha, ambient rgb, sp... |
 | 0x0068EC20 | 580 | DwordVector_Reserve_68EC20 | vector<uint>::reserve(n) |
-| 0x0068D5A0 | 394 | CLight::ApplyPointWrap | point light with wrap factor min(1,1+N.L) and 1-d^2*k falloff |
+| 0x0068D5A0 | 394 | CLight::ApplyPointWrap | (atten, in rgb, normal, L unit, d, out): k = 1 - d^2 * (+0x104); k < 0 -> out = in; w = N.L <= 0 ? N.L + 1 : 1 ('wrap'); out_c = min(1, in_c + w * k * atten * colour_c); the terrain point-light term (TerrainSector_LightVertexDynam... |
 | 0x0068C680 | 362 | StlString_Reserve_68C680 | basic_string grow/reserve with length_error check ("basic_string") |
 | 0x0068DE30 | 347 | CMaterial::~CMaterial_body | vt_CMaterial: pops all deque elements, frees nodes and map, CStrings released, CObject base dtor 0x455930 |
 | 0x0068CB90 | 327 | PartialSort_Bytes | std::partial_sort for chars (heap select) |
-| 0x0068D450 | 323 | CLight::ApplyPoint | plain N.L point light; no callers (dead) |
+| 0x0068D450 | 323 | CLight::ApplyPoint | plain N.L point light without the wrap term; no callers (dead) |
 | 0x0068EE70 | 314 | DwordVector_InsertN_68EE70 | vector<uint>::insert(pos,n,value), grow path 0x68F040 |
-| 0x0068D310 | 310 | CLight::ApplyDirectional | out = min(1, in + max(0,-D.N)*I*colour) |
-| 0x0068DBC0 | 294 | CMaterial::CMaterial | vt_CMaterial: id fields, CString name (+0x1C), animation deque (+0x64), CStrings +0x8C/+0x94 (texture names) = "", float +0x2C = 1.0 |
+| 0x0068D310 | 310 | CLight::ApplyDirectional | (intensity, in rgb, normal, out rgb): t = -(dir . N); t <= 0 -> out = in; else out_c = min(1, in_c + t * intensity * colour_c); the terrain sun term (TerrainSector_LightVertexSun) |
+| 0x0068DBC0 | 294 | CMaterial::CMaterial | vt_CMaterial (0x9C bytes): CObject header, name +0x1C = '', alpha +0x2C = 1.0, texture-frame deque +0x64 (0x200-byte nodes), texture names +0x8C / +0x94 = '', +0x90 / +0x98 = 0; the D3D material block is +0x20 diffuse rgb, +0x2C a... |
 | 0x0068E1C0 | 272 | Deque_InitMap_68E1C0 | compute node map size ((n>>5)+3, min 8), allocate map and nodes, set start/finish |
-| 0x0068C820 | 249 | SpellProto_FindByCode | (code C string) -> SpellProto* or 0: std::string lookup in the spell code map g_0x7C851C (CSpellContainer::Finalize derives the proto index from it). Was NameSet_Insert_68C820 |
-| 0x0068E3F0 | 246 | CMaterialManager::CMaterialManager | base CObjectManager ctor 0x674D90; hash at +0xBC (NextPrime(100) buckets), fields +0xBC..+0xCC |
-| 0x0068D850 | 245 | CLightManager::CLightManager | CBaseManager ctor; fields +0xC0/+0xCC/+0xD4 (light list sentinel from pool g_0x79B228) |
+| 0x0068C820 | 249 | SpellProto_FindByCode | (code C string) -> SpellProto* or 0: std::string lookup in the spell code map g_0x7C851C (CSpellContainer::Finalize derives the proto index) |
+| 0x0068E3F0 | 246 | CMaterialManager::CMaterialManager | CObjectManager ctor (0x674D90); the kind -> material template hash at +0xBC (NextPrime(100) buckets +0xC0 / +0xC4, count +0xCC), nodes 0x50 bytes {next, kind, 0x44-byte template} |
+| 0x0068D850 | 245 | CLightManager::CLightManager | CBaseManager ctor; +0xC0 / +0xCC fields, +0xD4 light-id std::list sentinel (pool g_0x79B228) |
 
 ## 0x68F000 - 0x69F000: CTexture / CTextureManager (.mmp), CFileRegistry (binary key/value registry), CIniFile, CWinRegistry, CItemConstructor, STL leaves
 
@@ -1470,14 +1470,14 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0069AE20 | 1828 | ShopStock::GenerateItems | (proto vector, min, max, out list, kind 0 weapons / 1 armors / 2 quick / 3): kind 0/3: SelectSpellFilters(S_Weapons g_0x7C8568), 1: (S_Armors g_0x7C855C); picks n = rand(min..max) random protos (skipping Type +8 == ""); material: ... |
-| 0x00693180 | 1684 | CTextureManager::ComposeAndSaveLayers | compose layered textures into one image (pixel format selectors ARGB1555/4444/8888) and write "textures\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x0068FBF0 | 1646 | CTexture::FillSurface | decode the texture file into its surface (fatal "CTexture::FillSurface. Can't Load text(ure)" / "Alpha-file %s"): loads the .mmp image, optional separate alpha file, converts to the device format and uploads all mip levels; 1.6 KB |
+| 0x00693180 | 1684 | CTextureManager::ComposeAndSaveLayers | composes layered textures (ComposeLayers) into one image, converts with PixelFormat_ARGB1555 / 4444 / 8888 and writes 'textures\<name>.mmp' ('Can't open file to write result'); the skin cache of CUnitClientSpecific::BuildSkinTextu... |
+| 0x0068FBF0 | 1646 | CTexture::LoadFromBmp | (device, bmpPath, alphaBmpPath) -> bool: loads the 24-bit .bmp (CBitmapDib::LoadStream) and the optional 8-bit alpha .bmp ('Alpha-file'), packs B G R A per pixel with PixelFormat_PackRGBA into a 16-bit system-memory surface (caps ... |
 | 0x0069B5B0 | 1294 | CItemConstructor::LoadState | CArchive-like read of the constructor state: vt+0x58 manager, strings via Stream_ReadCString and hash lookups (StrHashTable_LookupId); 1.3 KB |
-| 0x00690430 | 1189 | CTexture::LoadMipChain | 1.2 KB: decode/upload every mip level of the texture from the packed data (GetMipOffset, UploadMip), allocate the pixel buffer, flag 8 means already loaded |
+| 0x00690430 | 1189 | CTexture::LoadMipChain | (device, mmpHeader, firstLevel) -> bool: already loaded (flag 8) -> 1; w / h = header >> firstLevel (more levels skipped while w or h > 511 when the manager's small-texture flag +0xEC); levels = mip count (hdr +0xC) - first (1 whe... |
 | 0x0069A780 | 1169 | ShopStock::GenerateSpells | (out list of CSpell, float[8] limits, skipPercent): for every filtered spell proto (hash +0x50) with ISAAC%101 >= skipPercent: perk list = the proto's mandatory rune names (+0xc vector) plus random optional ones (+0x18 vector, 50 ... |
-| 0x006922A0 | 1060 | CTextureManager::LoadTexture | load a texture object: if already loaded (flag 8) return; else locate its .mmp (CTexture::Load), create the D3D surface and load the mip chain (CTexture::LoadMipChain); 19 callers |
+| 0x006922A0 | 1060 | CTextureManager::LoadTexture | (texture) -> bool: loaded (flag 8) -> 1; '<root g_0x79BC90>textures\<name>.bmp' exists (CFileFind) -> the BMP path: device format by kind (1 / 2 / 3 / 4 / 8 -> ARGB1555 id 0x5551, 6 / 0xD -> 4444, else RGB565 0x5650; IdMap_Lookup_... |
 | 0x0069A110 | 803 | ShopStock::AddMaterials | (min, max, out list): n = rand(min..max) random material entries of +0x2c: a "material" loot item (category 1) with that material, count +0x48 = rand(entry min..max) |
-| 0x006928C0 | 802 | CTextureManager::LoadMmpFile | build the path "%stextures\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
+| 0x006928C0 | 802 | CTextureManager::LoadMmpExtraBlock | (name, out CArray<byte>): from the loose file '%stextures\%s.mmp' (header 0x4C read first) or the archive copy (vt[19] / vt[20]): copies the header's extra block (hdr +0x48 bytes starting at +0x4C) into the array; 0 when the textu... |
 | 0x00693970 | 747 | CTextureManager::SaveComposedTexture | compose layers (ComposeLayers) and write the result to "textures\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
 | 0x0069A480 | 733 | ShopStock::SelectSpellFilters | (table = SpellsDb S_* vector of 0x34 records): clears the hashes +0x50 / +0x64; +0x50 = the allowed spell protos (+0x38 list) that the table lists with the player's bit in +0x30; +0x64 = the allowed perk protos (+0x44) keyed by th... |
 | 0x00691D80 | 649 | CTextureManager::CreateRenderTarget | create texture kind (param) with the device texture format table (0x68F6C0), fatal "Can't find texture format %d.\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
@@ -1532,9 +1532,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x006C1C00 | 5336 | TerrainSector_BuildMesh | (sector): the vertex records +0x194 (0x54 each, 0x441 per layer) from the packed vertices +0x18: normal (+0x2b.., 11-bit fields / 1000), material (+0x25) of the first linked tile with one (terrain +0x1e8 links, water tile map +0x2... |
-| 0x006BFF40 | 5051 | TerrainSector_Draw | builds FVF 0x1C4 vertices (record +0x00..0F, diffuse/specular +0x11, uv), draws with SPECULARENABLE |
-| 0x006C13A0 | 2129 | TerrainSector_Load | (sector, reader, sx, sy, textureCount, tilesPerTexture, mapStem, terrain) -> bool: reads "<stem>%3.3i%3.3i.sec" (reader vt[5]); header: dword magic 0xCF4BF774 + byte flags (bit 0 = water layer -> +0x10; bits 0-1 -> +0x14 second ti... |
+| 0x006C1C00 | 5336 | TerrainSector_BuildMesh | (sector): the vertex records +0x194 (0x54 each, 0x441 per layer, 0x882 with water) from the packed vertices +0x18: normal +0x2B/+0x2F/+0x33 from the packed dword d (nx = ((d >> 11 & 0x7FF) - 1000) / 1000, ny = ((d & 0x7FF) - 1000)... |
+| 0x006BFF40 | 5051 | TerrainSector_Draw | (sector, ctx, terrain, pass) -> bool: unless culled (+0x60 == 2): ApplyMaterialHeightDeltas when water; per quarter q with +0x144[q] != 2 and triplets for the pass ((+0x318 + q*0x14) vector[pass], 9 triplets per tile): the vertice... |
+| 0x006C13A0 | 2129 | TerrainSector_Load | (sector, reader, sx, sy, textureCount, tilesPerTextureSq, mapStem, terrain) -> bool: reads '<stem>%3.3i%3.3i.sec' (reader vt[5]); header dword magic 0xCF4BF774 + byte flags (bit 0 water layer -> +0x10, bits 0-1 -> +0x14); payload ... |
 | 0x006B89F0 | 1737 | CSoundManager::LoadSoundGroup | 1.7 KB: build the list of ".mp3" files for a sound group (std::string ops, resource lookups) and register it in the hash tables |
 | 0x006B4710 | 1584 | CMusicSystem::Init | slot 2 Init() -> bool (root layout) |
 | 0x006B9B10 | 1501 | CSoundManager::Update | per-frame sound update (1.5 KB): end finished channels (SoundChannel::End), update 3D voices, random ambience (Isaac_Generate), counters in the sound record table |
@@ -1543,9 +1543,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006B5350 | 875 | CMusicSystem::v6 | slot 6 (root layout; default returns 0) |
 | 0x006B8600 | 849 | CSoundManager::PlaySound | play a sound by name/id: look up the group (0x6B7D10), random variant (Isaac_Generate), find a free channel, set volume/3D (UpdateChannel3D) and start the AIL sample; returns the channel id or -1; 19 callers |
 | 0x006B6D80 | 722 | CSoundManager::Done | slot 3 Done() (root layout) |
-| 0x006BFC80 | 695 | TerrainSector_TransformVertices | (sector, ctx) -> +0x60: for every non-culled quarter (+0x144 != 2) the 17 x 17 vertices of the quarter (stepping 2 / 4 at LOD 1 / 2; both layers when +0x10) are gathered into the static buffer g_0x7C88F8 and transformed by 0x4F29F... |
+| 0x006BFC80 | 695 | TerrainSector_TransformVertices | (sector, ctx) -> +0x60: for every quarter with +0x144[q] != 2: its 17 x 17 vertices (step 1 / 2 / 4 at LOD 0 / 1 / 2 (+0x170); the water layer (+0x441) too when +0x10) are copied from +0x180 into g_0x7C88F8 (16 bytes each) and pro... |
 | 0x006B7D10 | 682 | CSoundManager::FindChannelSlot | choose a channel entry for a new sound (0x54-byte entries at +0x24C): first free entry or the lowest-priority/most distant one to steal (min key 0x7FFFFFFF); registers the group in the hash maps |
-| 0x006BF5F0 | 674 | TerrainSector_ctor | (sector 0x394 bytes): bounds +0x28 zeroed, 4 quarter bounds +0x64 (0x38 each, 0x4533E0), material list +0x15c (0x6FF5EA), vertex array +0x17c (vt 0x73C120), vertex record array +0x190 (vt 0x744184), tile textures +0x1a4, water til... |
+| 0x006BF5F0 | 674 | TerrainSector_ctor | (sector 0x394 bytes): bounds +0x28 (flags, centre +0x2C, min +0x38, max +0x44) and the 4 quarter bounds +0x64 (0x38 each) zeroed, water material list +0x15C (CByteArray), vertex positions +0x180, vertex records +0x194 (CArray vt 0... |
 
 ## 0x6C3000 - 0x6CC000: CTerrain: Load (.mp header, materials, tile types, textures + lightmap pages, UV tables), sector LRU cache (GetSector), per-vertex sun / dynamic lighting with shadow ray tracing, water waves + animated tiles, rendering passes, lights link lists, height / material queries, ray to ground, ambient sounds, modified-sector writer
 
@@ -1553,19 +1553,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x006C68B0 | 3743 | CTerrain::Load | (mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15c vt[1], "*.mp" filter 0x674AC0), names +0xfc (path without extension) / +0xf8 (file stem); reads "<stem>.mp" (vt[5]): header 0x26 bytes {magic 0xCE4AF... |
-| 0x006C98F0 | 2164 | CTerrain::SetVisibleQuad | (float[8] = 4 corner points x0,y0 .. x3,y3): computes the visible sector rows +0xaa4 (first row) / +0xaac (count) with per-row column ranges +0xaa8 (min) / +0xab8 (max): the sector centres inside the quadrilateral (4 edge line tes... |
-| 0x006CB390 | 2159 | CTerrain::UpdateAmbientSounds | around the listener (sound system g_0x7AF784 +0x250.. position / +0x25c.. forward): the 3 x 3 sectors' material histograms (sector +0x374 counts weighted by the ambient table 0x7969D8: 16 types "Grass"...) pick the dominant type p... |
-| 0x006C31C0 | 1261 | TerrainSector_LightVertexDynamic | max of cached sun colour and linked point lights -> diffuse +0x11, specular(glow+edge alpha) +0x15 |
-| 0x006C3E80 | 1046 | TerrainSector_Animate | (sector, terrain, frame): every third frame when the terrain flag 2 (animated tiles): the animated tile entries +0x364 (0x18 bytes: uv dest, rotation, tile, frame, frame count, chance / 1000) advance a frame and copy the UVs (CTer... |
-| 0x006C5AA0 | 1011 | CTerrain::LoadTextures | count textures + optional lightmap pages <map>L00/L01 (absent in retail) |
-| 0x006C8ED0 | 925 | CTerrain::SetSunLight | copies ambient, derives ray slopes/steps (x95) from the sun direction, clears/schedules the lit flag of loaded sectors |
-| 0x006C8140 | 913 | CTerrain::GetSector | (sx, sy, wantedFlags, load) -> sector or 0: the sector grid +0x1f8 slot holds the node of the loaded-sector CList +0x1fc (MRU order: a used sector is moved to the head with the frame stamp +0x218 in +0x384); with load: a missing s... |
+| 0x006C68B0 | 3743 | CTerrain::Load | (mapPath, worldKey, isDungeon) -> bool: Unload; opens the archive (reader +0x15C vt[1], '*.mp' filter), +0xFC = path, +0xF8 = file stem; reads '<stem>.mp' (vt[5]): header 0x26 bytes {u32 magic 0xCE4AF672, f32 max height -> +0x114,... |
+| 0x006C98F0 | 2164 | CTerrain::SetVisibleQuad | (float[8] = 4 corner points of the visible ground quadrilateral): the visible sector rows +0xAA4 (first) / +0xAAC (count) with per-row column ranges +0xAA8 (min) / +0xAB8 (max): the sectors whose centre lies inside the 4 edge line... |
+| 0x006CB390 | 2159 | CTerrain::UpdateAmbientSounds | (flag 8): around the listener (sound system g_0x7AF784 +0x250 position / +0x25C forward): the 3 x 3 sectors' material histograms (sector +0x374, weighted by the ambient table 0x7969D8: 16 tile types 'Grass'...) pick the dominant t... |
+| 0x006C31C0 | 1261 | TerrainSector_LightVertexDynamic | (sector, pos, record, terrain, isWaterLayer): c = cached sun colour +0x37..; for every light of the record's link list +0x50: L = light pos - pos, atten = 1 (ground under water: max(0, 1 - material +0x14 * depth^2 * Lz^2 / 15)), o... |
+| 0x006C3E80 | 1046 | TerrainSector_Animate | (sector, terrain, frame): every third frame when the terrain flag 2: every animated tile entry +0x364 (0x18: triplet ptr, rotation, tile column, frame, frame count, chance) advances a frame when it is mid-cycle or (frame 0, chance... |
+| 0x006C5AA0 | 1011 | CTerrain::LoadTextures | (count) -> bool: the texture array +0xD8 and material array +0xE8 get count entries '<stem>%3.3i' (texture manager g_0x7AF744 FindOrCreateNamed kind 0xB, refcount++) plus, for each of the two optional lightmap pages '<stem>L%2.2i'... |
+| 0x006C8ED0 | 925 | CTerrain::SetSunLight | (sunLight, ambient float[4]): ambient -> +0x224..+0x230; direction towards the sun = -(light +0xD4..+0xDC), components clamped to /c/ >= 0.01, normalised; +0x234 = nz/nx, +0x23C = nz/ny, +0x238 = nx/nz, +0x240 = ny/nz, +0x244 / +0... |
+| 0x006C8140 | 913 | CTerrain::GetSector | (sx, sy, wantedFlags, load) -> sector or 0: the grid +0x1F8[sx][sy] holds the node of the loaded-sector CList +0x1FC (MRU: a touched sector whose stamp +0x384 is older than the frame +0x218 moves to the head); with load: a missing... |
 | 0x006C8990 | 905 | CTerrain::SnapQuadsToGround | (array {0x40-byte quads (4 x at +0, 4 y at +0x10, 4 z at +0x20), count}): every corner z becomes the average height of the 4 vertices of the tile under it (sectors loaded with GetSector flags 1); the corner -> sector / tile mappin... |
 | 0x006C9560 | 897 | CTerrain::TraceRayToGround | (origin, rotation quat (w, x, y, z), maxDist, out hit) -> bool: the quaternion rotates the forward axis into a step direction (normalized by its larger x / y component); walks up to maxDist unit steps, loading the sector under eac... |
-| 0x006CA260 | 867 | CTerrain::SetVisibleArea | (x, y, radius): visible rows +0xaa4 / +0xaac and the same column range (+0xaa8 / +0xab8 per row) for the square around (x, y) |
-| 0x006CAC10 | 859 | TerrainSector_LinkLight | add/remove the light node on each vertex within radius (3D distance) |
-| 0x006C36B0 | 843 | TerrainSector_LightVertexSun | ambient/sun/shadow/water term of one vertex -> record +0x37..0x3F |
+| 0x006CA260 | 867 | CTerrain::SetVisibleArea | (x, y, radius): the visible rows / column ranges for the square around (x, y) (minimap / editor use) |
+| 0x006CAC10 | 859 | TerrainSector_LinkLight | (sector, light, pos, rect, forceRemove): for every vertex in the rect's sub range (33-wide rows): unlink the light's node (or skip) when forceRemove or /vertex - pos/^2 >= radius^2 (+0x100), else push a node {next, prev, chunk, li... |
+| 0x006C36B0 | 843 | TerrainSector_LightVertexSun | (sector, sun, pos, record, terrain, isWaterLayer): amb = terrain +0x224.., base = record +0x43.., I = 1; ground vertex under water (water record +0x25 != 0xFFFF, depth +0x27 >= 0): k = material +0x14 * depth^2 / 15, amb *= max(0, ... |
 | 0x006C4310 | 769 | TerrainSector_PackVertex | (sector, vertexIndex, out 8 bytes): byte x / y offsets within the sector (126 / 0.5 units), ushort z (65534 / max height +0x114 of the terrain +0x1c), dword packed normal (11 bits each: nz * 1000, (nx + 1) * 1000, (ny + 1) * 1000)... |
 
 ## 0x6CC000 - 0x6E0000: terrain prints (foot/blood/fire decals), terrain tile helpers, CBitmapDib (BMP/mip loading), database.res loaders (CDatabase/CDatabase2/CDatabaseTables)
@@ -1574,18 +1574,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x006D7620 | 3520 | CDatabase2::LoadResource | load "database.res"/"databases.res" for the second database (3.5 KB): archive tags, CMemStream, tables, fatal "Can't open database file ""%s""" |
-| 0x006DE370 | 2156 | DbTableRecord_CopyCtor | copy-construct a 0x1C4-byte database table record (2.2 KB: strings, hash sets, vectors) |
-| 0x006CCF20 | 1567 | CTerrain::BuildShadowReceiverMesh | finds the terrain cell box under the prism (iterates up the light ray to the highest vertex) and clips two triangles per cell with ClipTriangleA |
-| 0x006D5BF0 | 1475 | CBitmapDib::LoadMipLevel | read mip level data of a BMP stream into the DIB ("wrong level for mipmap", "read error 1"); 1.5 KB |
-| 0x006DC390 | 1423 | CDatabaseTables::~CDatabaseTables | destroys the whole table set (1.4 KB): hash tables, 0x28-byte record vectors, string pools and sub-objects (0x23 SEH levels); 11 callers |
-| 0x006CEDE0 | 1324 | CPrintDecal::Render | draw one terrain decal (blood / footprint / scorch): builds its receiver mesh once with RenderShadowVolume (light straight down), remaps uv into the atlas cell, draws with DrawQuadBatchClippedB (NOT a bridge shadow) |
-| 0x006D0630 | 1106 | CDatabase::LoadResource | load "database.res"/"databases.res" through an archive (Archive_Open, CMemStream) with tags and fatal "Can't open database file ""%s"""; 1.1 KB |
-| 0x006DF3E0 | 972 | DbRecord92Range_AssignTail | assign tail range of 0x5C-byte records (string, hash sets, vectors); 972 bytes |
-| 0x006DC000 | 910 | CDatabaseTables::CDatabaseTables | constructor (910 bytes): string, hash tables (HashTable_Ctor_6DCD90) and lists of the loaded database.res content |
-| 0x006DD6C0 | 875 | DbRecord92Vector_AssignN | assign n copies of a 0x5C-byte record (string, hash sets, vectors); 875 bytes |
-| 0x006D8430 | 796 | CDatabase2::PlayUnitHitSound | choose and play the hit sound for a unit (weapons\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x006DDA30 | 755 | DbRecord56Vector_AssignN | assign n copies of a 0x38-byte record; 755 bytes |
+| 0x006D7620 | 3520 | CAcksDb::Load | (dataDir) -> bool: opens '<dir>database.res' and its 'acks.db' ('Can't open acks database'); Archive tags 1 / 2 / 3 = the Answers (0x1C4 records, 0x71 dwords) / Cryes (0x5C) / Others (0x38) blocks of database-format.md into the ve... |
+| 0x006DE370 | 2156 | AcksAnswer::CopyCtor | copy-constructs a 0x1C4-byte Answers record |
+| 0x006CCF20 | 1567 | CTerrain::BuildShadowReceiverMesh | (clipBuf, corners SoA float[16]): the terrain cell box under the shadow prism (the rectangle slid up the light ray to the highest vertex of the box, 1-cell margin, clamped to the map), ClipBuf::ReserveForTriangles(((nx+1)*(ny+1) +... |
+| 0x006D5BF0 | 1475 | CBitmapDib::LoadMmpMipLevel | (stream, level) -> bool: reads an MMP header (0x4C bytes; 'read error 1', 'wrong level for mipmap' when width < 2^level), seeks to mip `level` (hdr +0x48 extra block + the level-size sum, relative to the header end) and builds a D... |
+| 0x006DC390 | 1423 | AcksAnswer::~AcksAnswer | destroys a 0x1C4-byte Answers record (hash tables, line vectors, strings) |
+| 0x006CEDE0 | 1324 | CPrintDecal::Render | (this) -> bool: inactive (+5 == 0) -> 1; mesh not built (+4 == 0): z0 = CBridgeManager::GetHeightAt(world +0x1D4, x, y, world vt[27] terrain height), the 4 rectangle corners (half extents +0x10 / +0x14 rotated by +0x44) at z0 -> C... |
+| 0x006D0630 | 1106 | CPrintsDb::Load | (dataDir) -> bool: opens '<dir>database.res' (CMappedResource; FatalError 'Can't open database file' naming databases.res) and its 'prints.db' ('Can't open terrain prints database'); the Archive tags 1 / 2 / 3 (database-format.md ... |
+| 0x006DF3E0 | 972 | AcksCryesRange_AssignTail | assign the tail range of 0x5C-byte Cryes records |
+| 0x006DC000 | 910 | AcksAnswer::AcksAnswer | constructor of a 0x1C4-byte Answers record: name string, the id -> list hash (+0xC), 0x19 vectors of 0x28-byte voice-line records {wav path, weight, subtitle, text id} (+0x20 + k * 0xC) and the remaining fields; was CDatabaseTable... |
+| 0x006DD6C0 | 875 | AcksCryesVector_AssignN | assign n copies of a 0x5C-byte Cryes record |
+| 0x006D8430 | 796 | CAcksDb::PlayUnitHitSound | (unit, ..): hit sound of a unit: hero check, proto lookup (CUnit::GetProto2), 'weapons\..' paths, CWorldClient::GetEnvironmentMask, CSoundManager::PlaySound |
+| 0x006DDA30 | 755 | AcksOthersVector_AssignN | assign n copies of a 0x38-byte Others record |
 | 0x006D2E40 | 723 | DbRecord40Vector_AssignN | assign n copies of a 0x28-byte record (string copies), grow path 0x6D3430; 723 bytes |
 | 0x006D3120 | 711 | Record52Vector_Assign | vector of 0x34-byte records assign(n, value)/insert helper with std::string copies; 711 bytes |
 

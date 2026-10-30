@@ -35,8 +35,8 @@ int32   indexCount         // number of triangle-list indices (uint16 each)
 int32   vertexComponentCount // number of {normalIdx, vertexIdx, uvIdx} triples
 int32   morphingComponentCount // always == vertBlocks * 4 (see "Unread Trailer" below)
 int32   unknown            // 0 in all 3564 vanilla meshes
-int32   unknown2           // see "Header fields: values" below (render flags: 17..25)
-int32   textureNumber      // see below: the kind of texture the mesh uses (0..8)
+int32   materialKind       // 17..25: the material kind resolved with CWorldClient::FindMaterial (game-exe/renderer.md; was "unknown2 / render flags")
+int32   textureNumber      // the texture kind resolved with CWorldClient::FindTexture (0..8)
 ```
 
 ### Complection Morphing (the 8-corner cube)
@@ -60,7 +60,7 @@ This same trilinear blend is applied to: the bounding-box center/min/max (below)
 
 ### Body
 
-Read in this exact order, immediately after the 36-byte header:
+Read in this exact order, immediately after the 40-byte header (signature + 9 words; the bounds start at 0x28, the vertex blocks at 0x168 in vanilla files):
 
 1. **`morphCenter`**: 8 × `vec3<float>` (96 bytes) — bounding-box center per morph corner.
 2. **`morphMin`**: 8 × `vec3<float>` (96 bytes) — bounding-box min per morph corner.

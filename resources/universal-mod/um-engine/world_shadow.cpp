@@ -168,6 +168,7 @@ namespace { void Lookup(); bool ShadowsWanted(); }   // below
 
 // The vertices the game batches (CRenderDevice::FlushVertexBuffer 0x4E7840 / FlushVertexBuffer2 0x4E7A40, fastcall on the device at 0x7AF080) are drawn when flushed, not when the object is
 // drawn: the shifts of the guard band and the end of the shadow capture must not cut through a pending batch. Both return at once when nothing is queued.
+// (RE 2026-10-28, docs/game-exe/renderer.md: the vertex-buffer path is dead code in this build, every batch is an immediate DrawIndexedPrimitive, so both calls are no-ops; kept as a harmless safety.)
 void FlushPending() {
     void* device = Read<void*>(0x7AF080);
     if (!device) return;

@@ -14,6 +14,20 @@ CObject3D			0x94	pointer	renderSpecific	CObject3DClientSpecific*
 CObject3D			0x98	pointer	animSystem	CAnimationSystem2*
 CObject3D			0xa0	pointer	animDb	the mapped .adb of the model (AnimDb)
 CObject3D			0xa4	CString	modelName	char* ; "<model>.adb" is loaded from it
+CObject3D			0xa8	byte[24]	effects	MFC CList (vt 0x73DE4C) of attached CEffect (head +0xAC, count +0xB4)
+CObject3D			0xc0	int	effectsGrow	10
+CObject3D			0xd0	pointer	parts	CFigure*[] (32-byte aligned; count +0xD4, cap +0xD8, grow +0xDC): the drawn parts (AddPart / CreatePart)
+CObject3D			0xe0	pointer	pendingParts	CFigure*[] (count +0xE4, cap +0xE8, grow +0xEC): parts named but not yet created (Activate creates them)
+CObject3D			0xf0	pointer	renderScene	CRenderScene of the model at +0xC4 (FindOrCreateScene through the figure manager); 0 for figures without a .mod
+CObject3D			0xf4	float[3]	modelOffset	scaled by GetModelLerp and subtracted from the root node position (Unit_ApplyPrototype sets (0, -udb +0x104, 0))
+CObject3D			0x110	byte[20]	partNames	CStringArray (data +0x114, count +0x118): the node names (BuildFromAnimation)
+CObject3D			0x124	uint	boundsFlags	bit 0 sphere, bit 1 box (the BoundsRecord header of the object box: CullBox(+0x124) in ClassifyCellObjects)
+CObject3D			0x128	float[3]	boundsCentre	relative to +0x1C (ComputeBoundsFromParts)
+CObject3D			0x134	float	boundsRadius	
+CObject3D			0x138	float[3]	boundsMin	
+CObject3D			0x144	float[3]	boundsMax	
+CObject3D			0x15c	pointer	partRecordsVt	CArray vtable 0x73DE40
+CObject3D			0x160	pointer	partRecords	BoundsRecord[] one per node (count +0x164, cap +0x168, grow +0x16C): BuildFromAnimation; the walkable BASE parts (0x400) feed the bridge manager
 CMapObject	CObject3D	0x4dc	0x170	pointer	specific	CMapObjectServer / ClientSpecific
 CMapObject			0x198	pointer	buffs	CORRECTION: was 0x14-byte buff records: Buff[] (0x14 each): kind byte = spell proto index, level, duration ticks, power, radius; no stacking check (AddBuff appends; readers take the max per kind); ticked by CMapObjectServer::TickBuffs; replicated in net section 3
 CMapObject			0x1b8	int	cellX	position * 2 on the AI grid
@@ -21,8 +35,17 @@ CMapObject			0x1bc	int	cellY
 CMapObject			0x194	pointer	buffArrayVt	CArray vtable of the buff array (0x50FE70 grow); the array proper is +0x198
 CMapObject			0x19c	int	buffCount	
 CMapObject			0x1a0	int	buffCapacity	
-CMapObject			0xc4	float[3]	morphScale	x / height / y scale factors: +0.4 per present enlarge 0x25 / strengthen 0x1D buff, -0.4 per shrink 0x26 / weaken 0x1E (ApplyBuffKinds), net section 1
+CMapObject			0xc4	float[3]	morphParams	CORRECTION: was morphScale "x / height / y scale factors": the three complection coefficients (str s, dex d, height h) of CObject3D::SetMorphParams (the field belongs to CObject3D); the buffs add 0.4 to them (ApplyBuffKinds); replicated as net section 1; the figure is rebuilt from the .fig corners (FindOrCreateScene), nothing is scaled
 CMapObject			0x1dc	uint	netDirtyMask	bit 1 section 1 (morph), bit 3 section 3 (buffs) ... (MarkNetDirty)
+CMapObject			0x178	float	sizeFactor	1.0 after the ctor [?]
+CMapObject			0x17c	short	placement0	packed placement block +0x17C..+0x193 (24 bytes, net section 0): +0x17E HP, +0x180 max HP, +0x182 mana (CUnit rows) ...
+CMapObject			0x1a4	int	buffGrow	CArray grow step of +0x198
+CMapObject			0x1a8	pointer	protoName	CString [?]
+CMapObject			0x1ac	float[3]	baseMorphParams	the complection at spawn (ResetMorphParams restores +0xC4 from it)
+CMapObject			0x1c0	int	dirtyTime	world time of the last MarkNetDirty
+CMapObject			0x1c4	byte[24]	netSections	DeltaCodecSet (vt 0x73DB94): the NetSection array (0xA0 each: 4 CMemStreams) + mode; sections 0..3 here, 4..13 CUnit
+CMapObject			0x1e8	byte[40]	netStreamFull	CMemStream (vt 0x73C960) the packed full state
+CMapObject			0x210	byte[40]	netStreamDelta	CMemStream the packed delta
 CUnit	CMapObject	0x4dc	0x238	char[4]	playerName	CString of a player's character
 CUnit			0x23c	int	protoIndex	index into the units db
 CUnit			0x240	pointer	senses	CUnitServer* (server) / CUnitClientSpecific* (client)
@@ -1391,3 +1414,665 @@ CUnitDesc		0x330	0x2f8	byte[0x14]	armors	0xBBBC0009
 CUnitDesc		0x330	0x30c	byte[0x14]	spells	0xBBBC0007
 CUnitDesc		0x330	0x320	int	field_320	0 after ctor
 GSWorld		0x1f8	0x0	pointer	vtable	script VM (world-server.md; 0x1f8 = CWorldServer +0x12a6c - +0x12874)
+VertexTL		0x20	0x0	float	x	FVF 0x1C4 = XYZRHW, DIFFUSE, SPECULAR, TEX1: every triangle the game draws (DrawMeshBatch, DrawIndexedTriangles, terrain, UI) is pre-transformed to screen pixels
+VertexTL			0x4	float	y	
+VertexTL			0x8	float	z	0..1 depth (z * 0.9999 for the shadow receiver mesh)
+VertexTL			0xc	float	rhw	1 / w
+VertexTL			0x10	uint	diffuse	0xAARRGGBB; the per-vertex light result (RenderLit) or the constant +0x150 / figure +0xD4
+VertexTL			0x14	uint	specular	alpha << 24 (the edge-fade / ambient alpha); specular rgb only with SPECULARENABLE (flag 8)
+VertexTL			0x18	float	u	
+VertexTL			0x1c	float	v	
+VertexSoABlock		0x40	0x0	float[4]	x	4 vertices per block (the .fig block of 4): the format of CFigure +0x1C0, CRenderScene +0x3C and the BuildFigureMesh / LoadFig8 output; vertex i is block i>>2, lane i&3
+VertexSoABlock			0x10	float[4]	y	
+VertexSoABlock			0x20	float[4]	z	
+VertexSoABlock			0x30	float[4]	w	1.0 (normals: the .fig's 4th normal component)
+FigComponent		0x6	0x0	ushort	normalIdx	the .fig vertex-component triple; the normal index also indexes the colour arrays (one lit colour per normal)
+FigComponent			0x2	ushort	vertexIdx	
+FigComponent			0x4	ushort	uvIdx	
+BoundsRecord		0x38	0x0	uint	flags	bit 0 sphere valid, bit 1 box valid, 0x400 BASE part (walkable, bridge quads), 0x90 CROWN, 0x800 EMPTY; CullBox reads bits 0 / 1
+BoundsRecord			0x4	float[3]	centre	blended from the 8 .fig corners at the part's complection (ReadBoundsHeader / PartRecord_ReadBoundsFIG8)
+BoundsRecord			0x10	float	radius	
+BoundsRecord			0x14	float[3]	min	extents relative to the centre (negative)
+BoundsRecord			0x20	float[3]	max	
+BoundsRecord			0x2c	float[3]	worldPos	the node's world position +0x74 copied by BuildFromAnimation (part records of CObject3D +0x160 only)
+MatrixStack		0x8	0x0	pointer	matrices	16 x 0x40 row-major floats (column-vector use: p' = M p, translation in [3],[7],[11]); 32-byte aligned
+MatrixStack			0x4	int	depth	top = matrices + (depth - 1) * 0x40; MatrixStack_Push: new top = top * pushed
+CD3DLibrary		0x94	0x0	pointer	vtable	0x73D778; the render context g_0x7AF068 (I3DFigureImpl +8, CRenderDevice +0xAC); CullBox / TransformForDraw take it as "this"
+CD3DLibrary			0x4	int	refcount	
+CD3DLibrary			0xc	pointer	pipeline	ITLPipeline from 3DfpFPU.dll GetTLPipeline(): vt[1] SetWindowSize, vt[2] SetDirectionalLight, vt[3] SetAmbient, vt[4] SetProjection, vt[5] SetFog(density, far), vt[7] ComputeBounds(record, SoA, blocks), vt[9] TransformClipCodes, vt[14] Transform, vt[29] ProjectToPlane, vt[30] Transform2D, vt[34] FinishClipped, vt[35] PostProcess, vt[37] ClipTriangles, vt[40] LightVertices
+CD3DLibrary			0x10	pointer	hmodule	3DfpFPU.dll
+CD3DLibrary			0x14	MatrixStack[16]	stacks	stack n at +0x14 + 8n: 0 V*W*P (unused copy), 1 V*W*P (screen: DrawMeshBatch unclipped, objects push their model matrix on 1 and 2), 2 W*P (clip space: CullBox, clipped transforms), 3 model (lights for RenderLit, pushed when relighting), 5 W*P, 6 P, 7 W (identity), 8 V (viewport), 9 view (CWorldClient::Render), 10 shadow light projection (RenderShadow)
+I3DFigureImpl		0x5c	0x0	pointer	vtable	0x73D93C; the static renderer object g_0x7AF060 (slots: docs/game-exe/findings.md 0x501000 section)
+I3DFigureImpl			0x4	uint	flags	bit 0 device ready (BeginFrame needs it), bit 1 initialised
+I3DFigureImpl			0x8	pointer	library	CD3DLibrary g_0x7AF068
+I3DFigureImpl			0x14	uint	clearColor	IDirect3DDevice7::Clear colour
+I3DFigureImpl			0x18	uint	ambientColor	SetAmbientColor (slot 7) D3DCOLOR
+I3DFigureImpl			0x1c	pointer	sunLight	CLight kind 0x2E = g_0x7AF07C (UpdateDayLight rewrites it)
+I3DFigureImpl			0x20	pointer	device	CRenderDevice g_0x7AF080 (null when the ctor threw: notes-renderer-init.md)
+I3DFigureImpl			0x24	pointer	stateBlocks	CStateBlockSet (0x118)
+I3DFigureImpl			0x28	float[3]	fogRGB	SetFogColor / GetFogRGB
+I3DFigureImpl			0x34	int	frameMs	BeginFrame: delta of timeGetTime
+I3DFigureImpl			0x38	int	frameMsMin	
+I3DFigureImpl			0x3c	int	frameMsMax	< 1000
+I3DFigureImpl			0x40	int	frameMsAvg	per second
+I3DFigureImpl			0x44	int	totalMs	
+I3DFigureImpl			0x48	int	frames	
+I3DFigureImpl			0x4c	uint	frameTime	timeGetTime at BeginFrame
+I3DFigureImpl			0x50	uint	lastFrameTime	set by EndFrame
+CDXDirectDraw		0x50	0x0	pointer	vtable	0x73D770 (base of CRenderDevice)
+CDXDirectDraw			0x8	int	hr	last HRESULT
+CDXDirectDraw			0xc	pointer	ddraw	IDirectDraw7
+CDXDirectDraw			0x14	pointer	primary	CDXDirectDrawSurface (fullscreen flipping chain or the window's primary)
+CDXDirectDraw			0x18	pointer	backBuffer	CDDSurface: the render target (+0x10 IDirectDrawSurface7, +0x14 / +0x18 size, +0x1C bpp)
+CDXDirectDraw			0x20	uint	modeFlags	bit 0 fullscreen, bit 1 display mode changed
+CDXDirectDraw			0x24	int[4]	rect	left, top, right, bottom of the render area (the viewport and Mat4_Viewport)
+CDXDirectDraw			0x34	pointer	hwnd	
+CDXDirectDraw			0x38	pointer	modeList	std::list sentinel of display modes (0x84 nodes {next, prev, DDSURFACEDESC2})
+CDXDirectDraw			0x3c	uint	bltFourCC	the first YUV format the driver can Blt (video surfaces)
+CDXDirectDraw			0x40	uint	overlayFourCC	
+CDXDirectDraw			0x44	byte	overlayStretch	
+CDXDirectDraw			0x48	pointer	hmodule2D	2DintMMX.dll
+CDXDirectDraw			0x4c	pointer	blitter2D	IGraphicsProcessor from GetGraphicsProcessor(): triangle fill (vt[8] flat, vt[9] masked), 3-tap blurs (vt[11] / vt[12]), used by RenderShadow and the software cursor
+CRenderDevice	CDXDirectDraw	0x17c	0x50	pointer	d3d	IDirect3D7
+CRenderDevice			0x54	pointer	device	IDirect3DDevice7 (the plain HAL device; the TnL HAL is never chosen)
+CRenderDevice			0x58	pointer	zBuffer	CDXDirectDrawSurface attached to the render target
+CRenderDevice			0x5c	pointer	helperSurface	1x1 surface created after the z-buffer
+CRenderDevice			0x60	int	zMode	1 = D3DZB_TRUE (the W-buffer choice is overwritten)
+CRenderDevice			0x7c	byte[16]	deviceGuid	IID_IDirect3DHALDevice
+CRenderDevice			0x8c	byte[32]	zFormat	DDPIXELFORMAT of the z-buffer
+CRenderDevice			0xac	pointer	library	CD3DLibrary g_0x7AF068 (RcPtr)
+CRenderDevice			0xb0	pointer	deviceList	D3D devices (0x10C nodes, D3D_EnumDevicesCallback_Add)
+CRenderDevice			0xb4	pointer	zFormatList	z-buffer formats (0x28 nodes)
+CRenderDevice			0xb8	pointer	texFormatList	texture formats (0x28 nodes)
+CRenderDevice			0xbc	byte[20]	texFormatHash	id (0x5650, 0x5550, 0x5551, 0x4444, 0x8888, DXTn) -> DDPIXELFORMAT*; buckets +0xC0 / +0xC4, count +0xCC
+CRenderDevice			0xd0	uint	bestTexFormat	highest id found
+CRenderDevice			0xd4	pointer	vbList	vertex buffers (never filled: CreateVertexBuffer is dead)
+CRenderDevice			0xd8	pointer	currentVb	always 0
+CRenderDevice			0xe0	int	vbVertexCount	
+CRenderDevice			0xe4	pointer	batchIndices	aligned ushort array (count +0xE8, cap +0xEC, grow +0xF0) of the dead batching path
+CRenderDevice			0xf4	pointer	vbList2	
+CRenderDevice			0xf8	pointer	currentVb2	always 0
+CRenderDevice			0x12c	pointer[8]	stageTextures	the CDXDirectDrawSurface bound to stage 0..7 (SetTextureStage caches them)
+CRenderDevice			0x14c	pointer	material	the current RenderMaterial (SetMaterial; the TextureBlend of the object being drawn)
+CRenderDevice			0x150	uint	defaultDiffuse	0xFF000000; DrawMeshBatch flag 4 fills the diffuse array with it
+CRenderDevice			0x158	int	postProcessOn	when set the pipeline vt[35] runs on every vertex batch before the draw [?]
+CRenderDevice			0x15c	int[4]	lastRect	screen RECT of the last DrawMeshBatch with flag 1 (Mesh_ComputeBounds2D); copied into CFigureClientSpecific +0x20 / the scene entry
+CRenderDevice			0x16c	int	statVertices	per frame (BeginFrame resets)
+CRenderDevice			0x170	int	statTriangles	
+CRenderDevice			0x174	int	statDrawCalls	
+CRenderDevice			0x178	int	statTextureChanges	
+RenderMaterial		0x24	0x8	byte	alphaBlend	the device-side material (TextureBlend, vt 0x73DF68; CObject3DClientSpecific +0xDC): ALPHABLENDENABLE when set
+RenderMaterial			0xc	uint	srcBlend	D3DBLEND
+RenderMaterial			0x10	uint	destBlend	
+RenderMaterial			0x14	pointer	effect	CStateBlockSet effect record {+8 / +0xC handle vector (one D3D state block per pass), +0x14 stages per pass}
+RenderMaterial			0x18	pointer	stages	TextureStageRecord[] (0x14 each), one per stage of every pass
+TextureStageRecord		0x14	0x0	uint	texCoordIndex	D3DTSS_TEXCOORDINDEX value; > 0xFFFF (a TCI flag) also sets TEXTURETRANSFORMFLAGS = COUNT2
+TextureStageRecord			0x4	pointer	nameBegin	std::string {begin, end, cap} of the texture name (looked up in CTextureManager g_0x7AF744 on first use)
+TextureStageRecord			0x10	pointer	texture	CTexture* (its +0x5C = the CDXDirectDrawSurface)
+EffectPassRecord		0x28	0x0	byte	stageEnabled	one record per texture stage (pass 1) / per extra pass of a CStateBlockSet effect (BuildDefaultEffect)
+EffectPassRecord			0x4	uint	colorOp	D3DTEXTUREOP
+EffectPassRecord			0x8	uint	colorArg1	D3DTA
+EffectPassRecord			0xc	uint	colorArg2	
+EffectPassRecord			0x10	uint	alphaOp	
+EffectPassRecord			0x14	uint	alphaArg1	
+EffectPassRecord			0x18	uint	alphaArg2	
+EffectPassRecord			0x1c	byte	blendEnabled	
+EffectPassRecord			0x20	uint	srcBlend	
+EffectPassRecord			0x24	uint	destBlend	
+CStateBlockSet		0x118	0x0	pointer	vtable	0x73D840 (ctor goes through 0x73D860)
+CStateBlockSet			0x4	int	refcount	
+CStateBlockSet			0x8	pointer	device	IDirect3DDevice7 (AddRef'd)
+CStateBlockSet			0xc	byte[236]	caps	D3DDEVICEDESC7 (wMaxSimultaneousTextures at +0xC + 0xB2 bounds the stages of a pass)
+CStateBlockSet			0xf8	byte[20]	effectHash	id -> effect record (RegisterEffect / FindEffect)
+CStateBlockSet			0x10c	pointer	defaultHandles	vector of 9 state-block handles (effects 0..8: BuildDefaultEffect)
+CRenderManager		0x38	0x0	pointer	vtable	0x73D808; the world's figure loader behind the figure manager (slots 3 CreateScene, 4 FindOrCreateScene, 5 ClearNamedMap, 6 GetOrCreateFigure)
+CRenderManager			0x4	int	refcount	
+CRenderManager			0x8	pointer	pipeline	ITLPipeline (renderer +8 -> +0xAC -> +0xC)
+CRenderManager			0xc	pointer	archives	std::list of opened resource files (0x18 nodes {next, prev, name std::string, CMappedResource2* +0x14}: figures.res, menus.res)
+CRenderManager			0x10	byte[20]	modelHash	name -> {.., +0x10 FigureModel*} (GetModel)
+CRenderManager			0x24	pointer	renderer	I3DFigureImpl (refcounted)
+CRenderManager			0x28	pointer	scenes	rb multimap name -> CRenderScene* (node +0x1C): one scene per (model, complection) = the mesh cache
+FigureModel		0x20	0x0	pointer	modRes	CMappedResource2 of "<name>.mod" (inner RES: link table + one FIG8 per part)
+FigureModel			0x4	pointer	bonRes	"<name>.bon" (one 96-byte entry per part)
+FigureModel			0x8	pointer	anmRes	"<name>.anm" (one RES per clip)
+FigureModel			0xc	byte[20]	clipHash	clip name -> CMappedResource2 of the opened clip archive (GetAnimationResource)
+CRenderScene		0xb0	0x0	pointer	vtable	0x73D790; the "0xB0 figure instance": the meshes of one model at one complection
+CRenderScene			0x4	int	refcount	
+CRenderScene			0x8	pointer	nameBegin	std::string {begin, end, cap}: the model name
+CRenderScene			0x14	byte[28]	entries	rb map part name -> SceneEntry (node + 0x1C) (FindOrCreateEntry)
+CRenderScene			0x30	float[3]	morphParams	s, d, h the meshes were blended at (FindOrCreateScene matches within 1e-5)
+CRenderScene			0x3c	pointer	vertices	VertexSoABlock[] (32-byte aligned; count +0x40 blocks, cap +0x44, grow +0x48)
+CRenderScene			0x4c	pointer	normals	VertexSoABlock[] (count +0x50, cap +0x54, grow +0x58)
+CRenderScene			0x5c	pointer	uvs	float[2][] (count +0x60, cap +0x64, grow +0x68)
+CRenderScene			0x6c	pointer	components	FigComponent[] (count +0x70, cap +0x74, grow +0x78)
+CRenderScene			0x7c	pointer	morphComponents	uint[] (count +0x80 ...): the .fig trailer, carried but unused by the draw
+CRenderScene			0x8c	pointer	indices	ushort[] (count +0x90, cap +0x94, grow +0x98)
+CRenderScene			0x9c	byte[12]	ranges	rb map part name -> SceneRange (node + 0x1C) (AddMesh / DrawMesh)
+CRenderScene			0xa8	pointer	manager	CRenderManager
+CRenderScene			0xac	pointer	pipeline	ITLPipeline
+SceneEntry		0x50	0x0	int	textureNumber	the .fig header word +0x24 (texture kind 0..0x10) -> CObject3DClientSpecific texture set
+SceneEntry			0x4	int	materialKind	the .fig header word +0x20 (17..25) -> CWorldClient::FindMaterial(kind)
+SceneEntry			0x8	BoundsRecord	bounds	filled by the pipeline's ComputeBounds from the blended vertices
+SceneEntry			0x40	int[4]	screenRect	the last DrawMesh with flag 1 (picking)
+SceneRange		0x30	0x0	int	vertStart	block index into CRenderScene +0x3C
+SceneRange			0x4	int	vertBlocks	
+SceneRange			0x8	int	normStart	
+SceneRange			0xc	int	normBlocks	
+SceneRange			0x10	int	uvStart	
+SceneRange			0x14	int	uvCount	
+SceneRange			0x18	int	compStart	
+SceneRange			0x1c	int	compCount	
+SceneRange			0x20	int	morphStart	
+SceneRange			0x24	int	morphCount	
+SceneRange			0x28	int	idxStart	
+SceneRange			0x2c	int	idxCount	
+CFigure	CObject	0x220	0x1c	float[3]	localPos	the part's position (set by CAnimationNode::UpdateTransform / BindPart)
+CFigure			0x28	float[3]	worldPos	UpdateWorldTransform
+CFigure			0x34	float[4]	localRot	quaternion (w,x,y,z)
+CFigure			0x44	float[4]	worldRot	
+CFigure			0x54	float[16]	modelMatrix	Quat_ToMatrix4 of +0x34 with the position in column 3 (Draw pushes it on the stacks)
+CFigure			0x94	pointer	clientSpecific	CFigureClientSpecific (kind 0x45) that draws it
+CFigure			0x98	pointer	owner	CObject3D (CFigure::SetOwner); its +0xF0 scene lights / draws scene parts [I]
+CFigure			0x9c	pointer	drawVertices	VertexSoABlock* (own +0x1C0 after BindRawBuffers)
+CFigure			0xa0	int	drawVertBlocks	
+CFigure			0xa4	pointer	drawNormals	
+CFigure			0xa8	int	drawNormalBlocks	
+CFigure			0xac	pointer	drawUvs	
+CFigure			0xb0	int	drawUvCount	
+CFigure			0xb4	pointer	drawComponents	FigComponent*
+CFigure			0xb8	int	drawCompCount	
+CFigure			0xbc	pointer	drawMorphComps	
+CFigure			0xc0	int	drawMorphCount	
+CFigure			0xc4	pointer	drawIndices	ushort*
+CFigure			0xc8	int	drawIndexCount	
+CFigure			0xcc	float	uOffset	texture frame animation (AnimateTextureFrame)
+CFigure			0xd0	float	vOffset	
+CFigure			0xd4	uint	constDiffuse	used when flag 0x100 (constant colours); 0xFF000000 for UI figures
+CFigure			0xd8	uint	constSpecular	
+CFigure			0xe0	float[16]	figureMatrix	SetRotationQuat: rotation + position +0x28 (DrawProjected64, AccumulateWorldBounds)
+CFigure			0x120	pointer	name	CString: the part name (vt[7])
+CFigure			0x124	pointer	modelName	CString
+CFigure			0x128	pointer	morphDeltas	Vec3[] per vertex from the .anm track (SetMorphDeltas; count +0x12C, cap +0x130, grow +0x134); added to the SoA vertices at draw
+CFigure			0x138	pointer	diffuseColors	uint[] one per normal (4 * normal blocks; count +0x13C, cap +0x140, grow +0x144): the light kernel output
+CFigure			0x148	pointer	specularColors	uint[] (count +0x14C ...): alpha << 24
+CFigure			0x158	int	materialKind	.fig header +0x20 (17..25)
+CFigure			0x15c	int	textureNumber	.fig header +0x24 (0..0x10; 0xD / 0xE / 0x10 = animated uv grids)
+CFigure			0x160	float[3]	boundsCentre8	ReadBoundsHeader scratch (blended centre / min / max / radius of the 8 corners)
+CFigure			0x16c	float[3]	boundsMin8	
+CFigure			0x178	float[3]	boundsMax8	
+CFigure			0x184	float	boundsRadius8	
+CFigure			0x188	BoundsRecord	bounds	the cull / pick box (CullBox); copied from the scene entry by CObject3D::CreatePart / SetMorphParams
+CFigure			0x1c0	pointer	ownVertices	VertexSoABlock[] (count +0x1C4, cap +0x1C8, grow +0x1CC): LoadFig8 output (kind 0x42 / 0x43 figures)
+CFigure			0x1d0	pointer	ownNormals	(count +0x1D4, cap +0x1D8, grow +0x1DC); kind 0x41 figures (0x1E0) end here
+CFigure			0x1e0	pointer	ownComponents	(count +0x1E4 ...)
+CFigure			0x1f0	pointer	ownMorphComps	(count +0x1F4 ...)
+CFigure			0x200	pointer	ownIndices	(count +0x204 ...)
+CFigure			0x210	pointer	ownUvs	(count +0x214 ...)
+CI3DFigure	CFigure	0x284	0x220	int	visible	Draw skips when 0
+CI3DFigure			0x224	float[3]	ambientRGB	the renderer's ambient during the draw (0..1)
+CI3DFigure			0x23c	float[16]	scaleMatrix	pushed on top of the model matrix (identity in Init)
+CI3DFigure			0x27c	pointer	lightParams	passed to DrawFigure (0 in Init) [?]
+CI3DFigure			0x280	pointer	texture	CTexture bound to stage 0 by Draw
+CFigureClientSpecific	CObject	0x3c	0x1c	pointer	figure	CFigure (CFigure::BindClientSpecific)
+CFigureClientSpecific			0x20	int[4]	screenRect	RECT of the last draw (picking: HitTestPointParts / HitTestRect)
+CFigureClientSpecific			0x30	float[3]	colorScale	1.0 each (Init) [?]
+CAnimationTrack	CObject	0x78	0x1c	pointer	entry	the .adb record (0x58) this clip belongs to (UpdateTransform reads the header floats through it)
+CAnimationTrack			0x20	pointer	node	owner CAnimationNode
+CAnimationTrack			0x24	int	posKeyCount	
+CAnimationTrack			0x28	pointer	posKeys	Vec3[] into the mapped .anm (not copied)
+CAnimationTrack			0x2c	int	rotKeyCount	
+CAnimationTrack			0x30	pointer	rotKeys	quat[] (w,x,y,z) into the mapped .anm
+CAnimationTrack			0x34	int	morphVertexCount	V of the track
+CAnimationTrack			0x38	pointer	morphFrames	Vec3*[] one pointer per frame (count +0x3C = F, cap +0x40, grow +0x44)
+CAnimationTrack			0x48	float	time	last Evaluate time (frames)
+CAnimationTrack			0x4c	float[3]	position	Evaluate output (lerp of the keys)
+CAnimationTrack			0x58	float[4]	rotation	Evaluate output (slerp)
+CAnimationTrack			0x68	pointer	morphVertices	Vec3[V] interpolated deltas (count +0x6C, cap +0x70, grow +0x74) -> CFigure::SetMorphDeltas
+CAnimationNode	CObject	0xa0	0x1c	pointer	name	CString (= the part name)
+CAnimationNode			0x20	pointer	parentName	CString ("" = root)
+CAnimationNode			0x24	pointer	modelName	CString
+CAnimationNode			0x28	pointer	parent	CAnimationNode or 0
+CAnimationNode			0x2c	byte[28]	children	MFC CList of nodes (head +0x30, count +0x38)
+CAnimationNode			0x48	pointer	part	bound CFigure (BindPart; refcounted)
+CAnimationNode			0x4c	pointer	track	current CAnimationTrack (= +0x50 normally)
+CAnimationNode			0x50	pointer	mainTrack	
+CAnimationNode			0x54	pointer	track2	alternate tracks (SetTrackAnimationB / C) [?]
+CAnimationNode			0x58	pointer	track3	
+CAnimationNode			0x5c	float[3]	restOffset	the .bon offset blended at the morph params (Interpolate8 / 6): the child's local position
+CAnimationNode			0x68	float[3]	morphParams	s, d, h
+CAnimationNode			0x74	float[3]	worldPos	UpdateTransform output -> part +0x1C
+CAnimationNode			0x80	float[4]	worldRot	-> part +0x34
+CAnimationNode			0x90	pointer	boneMatrices	aligned 0x40 vector (count +0x94, cap +0x98, grow +0x9C); allocated, never filled
+CAnimationSystem2	CObject	0x78	0x1c	pointer	owner	CObject3D (+0x98 of it points back)
+CAnimationSystem2			0x20	pointer	root	the parentless node (SelectRootNode)
+CAnimationSystem2			0x24	byte[28]	nodes	MFC CList (head +0x28, count +0x30)
+CAnimationSystem2			0x40	pointer	current	the playing .adb entry (0x58) or 0
+CAnimationSystem2			0x44	byte[28]	queue	MFC CList of .adb entries (head +0x48, tail +0x4C, count +0x50, free +0x54)
+CAnimationSystem2			0x60	float	time	frames since the clip start = world ticks (SetTime); Evaluate interpolates the fraction
+CAnimationSystem2			0x64	pointer	endCallback	called by SetTime when a clip ends
+CAnimationSystem2			0x68	float[3]	morphParams	
+CAnimationSystem2			0x74	byte	dirty	Update / ApplyTransforms run only when set
+CObject3DClientSpecific	CObject	0xfc	0x1c	pointer	owner	CObject3D
+CObject3DClientSpecific			0x20	pointer	primarySet	TextureSet for texture kinds 1,3,4,6..9,0xB,0xD..0x10 (the body / skin)
+CObject3DClientSpecific			0x24	pointer	secondarySet	TextureSet for the other kinds (items' own textures, kind 2)
+CObject3DClientSpecific			0x28	pointer	textures	CTexture*[] (count +0x2C, cap +0x30, grow +0x34)
+CObject3DClientSpecific			0x38	pointer	materials	CMaterial*[] (count +0x3C, cap +0x40, grow +0x44)
+CObject3DClientSpecific			0x48	int	registeredMaterials	-1 none (RegisterMaterials)
+CObject3DClientSpecific			0x4c	pointer	shadowReceiverA	shadow receiver arrays (RenderShadow; count +0x50 ...)
+CObject3DClientSpecific			0x5c	pointer	shadowReceiverB	
+CObject3DClientSpecific			0x6c	pointer	shadowReceiverC	
+CObject3DClientSpecific			0x7c	pointer	shadowTexture	CTexture 64x64 A4R4G4B4 (CreateShadowTexture64)
+CObject3DClientSpecific			0x80	float[4]	shadowBounds2D	light-space min x, max x, min y, max y of the caster bitmap
+CObject3DClientSpecific			0x90	BoundsRecord	shadowCullBox	receiver box relative to the owner (IsShadowVisible)
+CObject3DClientSpecific			0xc8	int[4]	drawnRect	union of the parts' rects in Draw -> owner +0x100
+CObject3DClientSpecific			0xd8	pointer	woundsTexture	CTexture kind 6 (CreateWoundsTexture)
+CObject3DClientSpecific			0xdc	pointer	textureBlend	RenderMaterial (TextureBlend 0x24) given to CRenderDevice::SetMaterial for texture set 0
+CObject3DClientSpecific			0xe0	pointer	primaryTexName	CString (SetTextureNames)
+CObject3DClientSpecific			0xe4	pointer	secondaryTexName	CString
+CObject3DClientSpecific			0xe8	float	effectTime	invisibility / stun material pulses
+CObject3DClientSpecific			0xec	uint	lastLitTime	timeGetTime when the lighting cache (owner flag 0x400) was filled
+CObject3DClientSpecific			0xf0	float[3]	scale	GetScale (slot 18); != 1 pushes a scale matrix in Draw (CUnitClientSpecific death shrink etc.)
+TextureSet		0x14	0x0	pointer	texture	CTexture* (CWorldClient::FindTexture(kind); kind at CTexture +0x10)
+TextureSet			0x4	pointer	slots	MaterialSlot*[] (count +0x8, cap +0xC, grow +0x10)
+MaterialSlot		0x14	0x0	pointer	material	CMaterial* (CWorldClient::FindMaterial(kind); kind at CMaterial +0x10)
+MaterialSlot			0x4	pointer	parts	CFigure*[] (count +0x8, cap +0xC, grow +0x10) drawn with this texture + material
+CMapObjectClientSpecific	CObject	0x58	0x1c	pointer	owner	CMapObject
+CMapObjectClientSpecific			0x28	byte[20]	buffEffects	CArray (vt 0x73DC48) of 0x10 {kind, level, CEffect ref, active} (UpdateBuffEffects)
+CMapObjectClientSpecific			0x3c	byte[20]	buffSounds	CArray (vt 0x73DC3C) of 0x14 {kind, handle, -1, counter, active byte} (UpdateBuffSounds; data +0x40, count +0x44)
+CMapObjectClientSpecific			0x50	pointer	light	CLight kind 0x31 of a hero / quest item (ObjLight_Create: pos + 2 z, flags 0x580, 0x40 quest), follows the owner in Update
+CMapObjectClientSpecific			0x54	int	endSoundId	"magic\\end1.wav" played once when a hero's buff is about to expire (-1 none)
+CTerrain	CObject	0xaf8	0x1c	float[3]	pos	terrain origin (0,0,0 in the game); RenderOpaque writes it into the matrix +0x54
+CTerrain			0x34	float[4]	rot	quaternion w,x,y,z (identity from g_0x7C8978)
+CTerrain			0x44	float[4]	worldRot	slot 14 SetRotation
+CTerrain			0x54	float[16]	matrix	row-major 4x4 built by RenderOpaque / RenderWater (Quat_ToMatrix4 + pos in 3,7,11); pushed on the ctx world and view stacks
+CTerrain			0x94	uint	flags	1 water waves (LoadZone clears when EnableWaterWaves=0), 2 animated tiles, 4 map-border fade, 8 ambient sounds, 0x10 terrain sun shadows (cleared when EnableSelfShadowing=0); Load sets |= 0xFFFF
+CTerrain			0x98	float[12]	rotMatrix3	3x3 from SetRotationQuat (unused in play)
+CTerrain			0xd8	pointer	textures	32-byte aligned array of CTexture* (kind 0xB): textureCount ground textures then the lightmap pages that exist
+CTerrain			0xdc	int	textureEntries	
+CTerrain			0xe0	int	textureCapacity	
+CTerrain			0xe4	int	textureGrow	
+CTerrain			0xe8	pointer	materials	CMaterial* per texture entry (kind 0x12: diffuse 0.3 ambient 0.7 specular 0.2 power 5)
+CTerrain			0xec	int	materialEntries	
+CTerrain			0xf0	int	materialCapacity	
+CTerrain			0xf4	int	materialGrow	
+CTerrain			0xf8	CString	mapStem	file name without extension ("zone2")
+CTerrain			0xfc	CString	mapPath	path without extension
+CTerrain			0x100	int	loaded	1 after Load
+CTerrain			0x104	int	sectorsX	.mp header dword 2
+CTerrain			0x108	int	sectorsY	.mp header dword 3
+CTerrain			0x10c	float	sizeX	sectorsX * 32 (world units)
+CTerrain			0x110	float	sizeY	sectorsY * 32
+CTerrain			0x114	float	maxHeight	.mp header dword 1: packed z = ushort * maxHeight / 65535
+CTerrain			0x118	int	textureSize	.mp header dword 5 (texels)
+CTerrain			0x11c	int	textureCount	.mp header dword 4; passes 0..count+1 ground, count+2..2count+3 water
+CTerrain			0x120	int	tileSize	.mp header dword 7 (texels per tile in the texture)
+CTerrain			0x124	int	tilesPerRow	textureSize / tileSize
+CTerrain			0x128	int	tilesPerTexture	tilesPerRow^2; tile id / tilesPerTexture = texture index
+CTerrain			0x12c	pointer	materialsTbl	TerrainMaterial[materialCount] (0x38 each, 32-byte aligned)
+CTerrain			0x130	int	materialCount	.mp header u16 at 0x20
+CTerrain			0x134	int	materialCapacity	
+CTerrain			0x138	int	materialGrow2	
+CTerrain			0x13c	pointer	tileTypes	int[tileTypeCount + 16]: tile id -> tile type (material class 0..15; the 16 extra entries are 0xF); GetMaterialAt
+CTerrain			0x140	int	tileTypeCount	.mp header dword 6
+CTerrain			0x144	int	tileTypeCapacity	
+CTerrain			0x148	int	tileTypeGrow	
+CTerrain			0x14c	pointer	animatedTiles	int[tileTypeCount]: tile id -> frame count (0 = static); from the .mp pairs {u16 id, u16 frames}
+CTerrain			0x150	int	animatedCount	
+CTerrain			0x154	int	animatedCapacity	
+CTerrain			0x158	int	animatedGrow	
+CTerrain			0x15c	byte[108]	reader	embedded CResourceBase-derived .mpr archive reader (0x6C bytes, up to +0x1C8) (vt[1] open, vt[3] close, vt[5] read file, vt[21] exists)
+CTerrain			0x1c8	pointer[4]	tileUVs	per rotation 0..3: float[18] per tile (u[9] then v[9]) x tilesPerTexture (Terrain_BuildTileUVs, 8-texel inset)
+CTerrain			0x1d8	pointer[4]	pageUVs	per rotation: full-height strips for the lightmap pages (one per tile column)
+CTerrain			0x1e8	pointer	vertexTileLinks	0x441 x {int count, int tile[4]}: the 16x16 tiles touching each of the 33x33 sector vertices (BuildVertexTileLinks)
+CTerrain			0x1f8	pointer	sectorGrid	sectorsX pointers to sectorsY slots holding the CList node of the loaded sector (0 = not loaded)
+CTerrain			0x1fc	pointer	sectorListVt	CList<TerrainSector*> (MFC): +0x200 head (MRU), +0x204 tail, +0x208 count, +0x20C free, +0x210 plex, +0x214 block size 10; node {next, prev, sector}
+CTerrain			0x200	pointer	sectorListHead	
+CTerrain			0x204	pointer	sectorListTail	the oldest sector; recycled by GetSector when unused for 0xF0 frames
+CTerrain			0x208	int	sectorCount	
+CTerrain			0x20c	pointer	sectorListFree	
+CTerrain			0x210	pointer	sectorListPlex	
+CTerrain			0x214	int	sectorListBlock	
+CTerrain			0x218	int	frame	incremented by Tick; sector stamps +0x384 compare to it
+CTerrain			0x21c	int	relightBudget	ticks over which SetSunLight spreads the relights (LightingFreq / 66); < 1 = all sectors relight at once
+CTerrain			0x220	int	sunCountdown	Tick: at 0 reload from relightBudget and SetSunLight again (only when budget > 0)
+CTerrain			0x224	float[4]	ambient	r g b a 0..1 from CWorldClient +0x6AC (SetSunLight)
+CTerrain			0x234	float	rayDzDx	nz/nx of the unit vector towards the sun (TraceSunRay x-step rise)
+CTerrain			0x238	float	rayDxDz	nx/nz (unused by the trace)
+CTerrain			0x23c	float	rayDzDy	nz/ny (y-step rise)
+CTerrain			0x240	float	rayDyDz	ny/nz (unused)
+CTerrain			0x244	int	rayStepsX	round(95 * nx): sign = step direction
+CTerrain			0x248	int	rayStepsY	round(95 * ny)
+CTerrain			0x24c	pointer	traceSector	scratch: the sector being relit (TerrainSector_Relight)
+CTerrain			0x250	int	traceCol	scratch: vertex column of the vertex being lit
+CTerrain			0x254	int	traceRow	scratch: vertex row
+CTerrain			0x258	pointer	sunLight	CLight* (kind 0x2E) kept by SetSunLight
+CTerrain			0x25c	pointer	lightHashVt	hash of attached lights by light id: buckets +0x260 / +0x264, count +0x26C, max id +0x270; node (0x2C pool) {next, id, light*, sx0, sy0, sx1, sy1, vx0, vy0, vx1, vy1}
+CTerrain			0x260	pointer	lightBucketsBegin	
+CTerrain			0x264	pointer	lightBucketsEnd	
+CTerrain			0x26c	int	lightCount	
+CTerrain			0x270	int	lightMaxId	
+CTerrain			0x274	float[3]	windDir	SetWind direction, normalised and scaled by 0.449 * (pi/2 + asin(..)); x / y multiply the wave column / row
+CTerrain			0x280	float	waveAmplitude	0.3 * wind strength (times material +0x2C per water material)
+CTerrain			0x284	float	windStrength	clamp(strength, 0, 1); x50 x material amplitude x material rgb = wave specular colour
+CTerrain			0x288	float	wavePhase	starts 2 pi; Tick adds wavePhaseSpeed every tick
+CTerrain			0x28c	float	wavePhaseSpeed	-0.15 * wind strength per tick
+CTerrain			0x290	pointer	wavePhaseTable	float[33*33] random radial bumps (BuildWaveTable), borders wrap: per-vertex phase offset
+CTerrain			0x294	int	wavePhaseCount	0x441
+CTerrain			0x298	int	wavePhaseCapacity	
+CTerrain			0x29c	int	wavePhaseGrow	
+CTerrain			0x2a0	float[512]	sineTable	sin(i * pi / 256): the wave lookup (index = round(angle * 256 / pi) & 0x1FF)
+CTerrain			0xaa0	int	lodFloor	minimum LOD SelectSectorLod may pick (0)
+CTerrain			0xaa4	int	visibleFirstRow	SetVisibleQuad / SetVisibleArea
+CTerrain			0xaa8	pointer	visibleColMin	int per visible row
+CTerrain			0xaac	int	visibleRows	
+CTerrain			0xab8	pointer	visibleColMax	int per visible row
+CTerrain			0xac8	int[3]	ambientLoopHandles	the three looping ambient sounds (-1 none)
+CTerrain			0xad4	int[3]	ambientLoopTypes	their tile types
+CTerrain			0xae0	CString	ambientWorld	"Gipat" / "Ingos" / "Suslanger" / "Dungeon": folder of the ambient wavs
+CTerrain			0xae4	int	lightmapPages	pages found by LoadTextures (0 in retail maps)
+CTerrain			0xaec	pointer	sectorHeightDeltas	per sector (0x14-byte record: vt?, float* +4 (one per material), count +8, cap +0xC, grow +0x10): pending height change of each water material (SetMaterialHeight), applied by TerrainSector_ApplyMaterialHeightDeltas
+CTerrain			0xaf0	int	sectorHeightDeltaCount	sectorsX * sectorsY
+CTerrain			0xaf4	int	sectorHeightDeltaCapacity	
+TerrainMaterial		0x38	0x0	int	type	.mp word 0: 4 = flat water (no wave offset, vertices snap to the ground x/y), others wave; 0xFFFF in a record = none
+TerrainMaterial			0x4	float[3]	rgb	.mp words 1..3 (marsh 0.19 0.54 0.36, river 0.19 0.32 0.65, lava red)
+TerrainMaterial			0x10	float	alpha	.mp word 4
+TerrainMaterial			0x14	float	absorb	1 / (1 - alpha): the under-water darkening factor (k = absorb * depth^2 / 15)
+TerrainMaterial			0x18	byte	alphaByte	round(alpha * 255) = the water vertex alpha (+0x4F)
+TerrainMaterial			0x1c	float[3]	tint	min(1, .mp word 5 * rgb): the water vertex base colour (+0x43)
+TerrainMaterial			0x2c	float	waveAmplitude	.mp word 6; also the priority key when a water vertex touches several materials (lowest wins)
+TerrainMaterial			0x30	float	word7	.mp word 7 (unused in the code read)
+TerrainMaterial			0x34	float	heightDelta	accumulated SetMaterialHeight (water level) change
+TerrainSector		0x394	0x0	byte	glowLightSeen	a flag-0x40 (night glow) light contributed in the current relight pass
+TerrainSector			0x4	uint	flags	1 loaded (.sec read), 2 geometry built (BuildMesh), 4 lit (vertex colours valid)
+TerrainSector			0x8	int	sx	
+TerrainSector			0xc	int	sy	
+TerrainSector			0x10	int	hasWater	.sec flags bit 0: a second (water) vertex layer
+TerrainSector			0x14	int	secFlags	.sec flags & 3 (!= 0: the water tile material map follows the tiles)
+TerrainSector			0x18	pointer	secData	the mapped .sec payload after the 5-byte header (packed vertices, tile words)
+TerrainSector			0x1c	pointer	terrain	CTerrain*
+TerrainSector			0x20	int	textureCount	copy of terrain +0x11C
+TerrainSector			0x24	int	tilesPerTexture	copy of terrain +0x128
+TerrainSector			0x28	uint	boundsFlags	CViewFrustum box: 2 set
+TerrainSector			0x2c	float[3]	boundsCentre	sx*32+16, sy*32+16, (zmin+zmax)/2
+TerrainSector			0x38	float[3]	boundsMin	-16, -16, zmin-1-zmid
+TerrainSector			0x44	float[3]	boundsMax	16, 16, zmax+1-zmid
+TerrainSector			0x60	int	frustumResult	0 inside, 1 partially, 2 culled (CullFrustum)
+TerrainSector			0x64	byte[224]	quarterBounds	4 x 0x38: the same box record per 16x16-vertex quarter (centre +-8)
+TerrainSector			0x144	int[4]	quarterFrustum	per quarter: 0 / 1 (needs clipping) / 2 culled
+TerrainSector			0x154	float	zMin	
+TerrainSector			0x158	float	zMax	
+TerrainSector			0x15c	pointer	waterMaterialsVt	CByteArray of the water material indices present (+0x160 data, +0x164 count)
+TerrainSector			0x160	pointer	waterMaterials	
+TerrainSector			0x164	int	waterMaterialCount	
+TerrainSector			0x170	int	lod	0 every vertex, 1 every 2nd, 2 every 4th (SelectSectorLod)
+TerrainSector			0x174	int	seamPrev	1 when the y-1 (LOD 0) / x-1 (LOD 1) neighbour is one LOD coarser
+TerrainSector			0x178	int	seamNext	y+1 / x+1 neighbour coarser
+TerrainSector			0x180	pointer	vertices	float[3] {world x, y, z} x 0x441 per layer (water layer at +0x441 entries); x/y carry sub-unit offsets from the .sec
+TerrainSector			0x184	int	vertexCount	0x441 or 0x882
+TerrainSector			0x188	int	vertexCapacity	
+TerrainSector			0x18c	int	vertexGrow	
+TerrainSector			0x194	pointer	records	TerrainVertex[0x441 per layer] (0x54 each; water layer at +0x16554 bytes)
+TerrainSector			0x198	int	recordCount	
+TerrainSector			0x19c	int	recordCapacity	
+TerrainSector			0x1a0	int	recordGrow	
+TerrainSector			0x1a4	pointer	tileIds	int[256] (+256 for the water layer): the 14-bit tile id of each 2x2-unit tile (y*16+x); texture = id / tilesPerTexture or page beyond textureCount
+TerrainSector			0x1a8	int	tileIdCount	
+TerrainSector			0x1ac	int	tileIdCapacity	
+TerrainSector			0x1b0	int	tileIdGrow	
+TerrainSector			0x1b4	byte[256]	tileRotations	word >> 14: quarter turns of the tile UVs
+TerrainSector			0x2b4	pointer	waterTileMaterials	int[256]: terrain material index of each water tile, -1 none (.sec u16 map)
+TerrainSector			0x2b8	int	waterTileCount	
+TerrainSector			0x2bc	int	waterTileCapacity	
+TerrainSector			0x2c0	int	waterTileGrow	
+TerrainSector			0x2c4	byte[80]	quarterEdgeFlags	4 x 0x14 CArray<CByteArray> {vtable 0x7441A8, CByteArray* per pass (+0x2C8), count, cap, grow}: per tile edge flags 1 top 2 bottom 4 left 8 right (LOD seam triangles)
+TerrainSector			0x314	byte[80]	quarterStrips	4 x 0x14 CArray<Vector10> {vtable 0x7441B4, vector(0x10) per pass (+0x318), count, cap, grow}: 9 StripTriplets per tile of that quarter drawn in that pass
+TerrainSector			0x364	pointer	animTiles	TerrainAnimTile[animCount] (0x18 each)
+TerrainSector			0x368	int	animTileCount	
+TerrainSector			0x36c	int	animTileCapacity	
+TerrainSector			0x370	int	animTileGrow	
+TerrainSector			0x374	pointer	materialHistogram	int[16]: tiles per tile type (ambient sounds)
+TerrainSector			0x378	int	histogramCount	16
+TerrainSector			0x37c	int	histogramCapacity	
+TerrainSector			0x380	int	histogramGrow	
+TerrainSector			0x384	int	lastUseFrame	terrain frame of the last GetSector; eviction after 0xF0 frames
+TerrainSector			0x388	int	relightCountdown	-1 none; ticks until flag 4 is cleared (ScheduleRelight / TickRelight)
+TerrainSector			0x38c	int	modified	editor flag (SaveModifiedSectors)
+TerrainSector			0x390	int	field_390	reset to 0
+TerrainVertex		0x54	0x0	float[4]	screen	x, y, z, rhw written by TransformVertices each frame (pre-transformed FVF 0x1C4)
+TerrainVertex			0x10	byte	clipFlags	0 when the quarter is fully inside the frustum
+TerrainVertex			0x11	uint	diffuse	D3DCOLOR a r g b: a = alpha +0x4F, rgb = max(sun colour, point lights) (LightVertexDynamic); unaligned
+TerrainVertex			0x15	uint	specular	D3DCOLOR: a = map edge fade, rgb = night-glow lights; water: the wave highlight (Animate)
+TerrainVertex			0x19	float[3]	basePos	water layer only: the vertex position before the wave offset
+TerrainVertex			0x25	ushort	material	water layer: terrain material index, 0xFFFF = no water here
+TerrainVertex			0x27	float	waterDepth	ground layer: water z - ground z of the same grid point (negative on dry land)
+TerrainVertex			0x2b	float[3]	normal	from the packed .sec dword: nx = ((d>>11 & 0x7FF) - 1000)/1000, ny = ((d & 0x7FF) - 1000)/1000, nz = (d>>22)/1000
+TerrainVertex			0x37	float[3]	sunColour	cached ambient / sun / shadow result (LightVertexSun); input of the dynamic pass
+TerrainVertex			0x43	float[3]	baseColour	0 on the ground; water: the material tint (+0x1C)
+TerrainVertex			0x4f	byte	alpha	0xFF ground; water: material alphaByte
+TerrainVertex			0x50	pointer	lightLinks	head of the light-link list {next, prev, chunk, CLight*} (16-byte pooled nodes)
+TerrainAnimTile		0x18	0x0	pointer	triplets	the tile's 9 StripTriplets whose u / 1-v are rewritten each frame
+TerrainAnimTile			0x4	int	rotation	tile rotation 0..3
+TerrainAnimTile			0x8	int	tileColumn	tile index within its texture (frame 0)
+TerrainAnimTile			0xc	int	frame	current frame (random start)
+TerrainAnimTile			0x10	int	frameCount	terrain animatedTiles[id]
+TerrainAnimTile			0x14	int	chance	0x796960[tileType]: per 3 frames chance / 1000 to start a cycle; >= 1000 loops continuously
+StripTriplet		0xc	0x0	pointer	record	TerrainVertex*
+StripTriplet			0x4	float	u	
+StripTriplet			0x8	float	v	stored as 1 - v
+MmpHeader		0x4c	0x0	uint	magic	"MMP\0"
+MmpHeader			0x4	uint	width	
+MmpHeader			0x8	uint	height	
+MmpHeader			0xc	uint	mipCount	PNT3: payload size instead
+MmpHeader			0x10	uint	fourcc	DXT1 / DXT3 / PNT3 / 0x5551 QU / 0x5650 PV / 0x4444 DD / 0x8888
+MmpHeader			0x14	uint	bitsPerPixel	
+MmpHeader			0x18	uint[12]	masks	alpha / red / green / blue {mask, shift, bits} (mmp-format.md)
+MmpHeader			0x48	uint	extraSize	bytes of an extra block between the header and mip 0 (0 in the files seen); level 0 starts at 0x4C + extraSize
+CTexture	CObject	0x68	0x1c	CString	name	
+CTexture			0x20	int	width	of the loaded level 0 (after the mip skip)
+CTexture			0x24	int	height	
+CTexture			0x28	int	byteSize	uploaded bytes (UploadMip); summed in CTextureManager bytesInUse
+CTexture			0x2c	pointer	extraBlock	copy of the MMP extra block (CArray<byte>: +0x30 size, +0x34 cap, +0x38 grow)
+CTexture			0x30	int	extraSize	
+CTexture			0x34	int	extraCapacity	
+CTexture			0x38	int	extraGrow	
+CTexture			0x3c	uint[8]	pixelFormat	DDPIXELFORMAT (dwSize 0x20, flags, fourcc, bit count, R G B A masks) chosen by CRenderDevice::FindTextureFormat
+CTexture			0x5c	pointer	surface	CDXDirectDrawSurface* (refcounted): the managed texture; +0x10 of it = IDirectDrawSurface7
+CTexture			0x60	pointer	pixelMap	system copy used by the textured shadow fill (never set by the mmp path)
+CTexture			0x64	int	lastUse	time stamp for PurgeOlderThan
+CTextureManager	CObjectManager	0xf0	0xbc	pointer	vtable2	secondary vtable 0x743D18 (Serialize of the id list)
+CTextureManager			0xc0	pointer	listHead	CList of loaded textures, oldest first (TrimCache evicts from the head)
+CTextureManager			0xc4	pointer	listTail	
+CTextureManager			0xc8	int	listCount	
+CTextureManager			0xcc	pointer	listFree	
+CTextureManager			0xd0	pointer	listPlex	
+CTextureManager			0xd4	int	listBlock	10
+CTextureManager			0xd8	int	bytesInUse	sum of texture byteSize (+0x28)
+CTextureManager			0xdc	int	cacheBudget	free local video memory / 10 (SetDevice); TrimCache evicts above it; CORRECTION: earlier notes had +0xD8 budget / +0xDC size
+CTextureManager			0xe0	pointer	shadowScratch	the shared 64x64 A4R4G4B4 system-memory texture (GetShadowScratchTexture)
+CTextureManager			0xe4	pointer	device	CRenderDevice* (refcounted)
+CTextureManager			0xe8	int	mipSkip	mip levels dropped on load = AppSettings g_0x79BCDC (0..3)
+CTextureManager			0xec	int	smallTextures	1 when the device caps max texture size < 257: levels above 511 dropped
+CMaterial	CObject	0x9c	0x1c	CString	name	
+CMaterial			0x20	float[3]	diffuse	D3DMATERIAL7 block: terrain 0.3
+CMaterial			0x2c	float	alpha	1.0
+CMaterial			0x30	float[3]	ambient	0.7
+CMaterial			0x40	float[3]	specular	0.2
+CMaterial			0x50	float[3]	emissive	0
+CMaterial			0x60	float	power	5.0
+CMaterial			0x64	pointer	frameDeque	std::deque of texture frames (0x200-byte nodes; +0x74 / +0x78 / +0x7C / +0x80 iterators) for animated materials
+CMaterial			0x8c	CString	textureName	
+CMaterial			0x90	int	field_90	0
+CMaterial			0x94	CString	textureName2	
+CMaterial			0x98	int	field_98	0
+CMaterialManager	CObjectManager	0xd0	0xbc	pointer	templateHashVt	kind -> 0x44-byte material template {kind, 16 dwords} from materials.res (Init); buckets +0xC0 / +0xC4, count +0xCC
+CMaterialManager			0xc0	pointer	templateBucketsBegin	
+CMaterialManager			0xc4	pointer	templateBucketsEnd	
+CMaterialManager			0xcc	int	templateCount	
+CLight	CObject	0x134	0x1c	float[3]	pos	point light position (world); scratch for the sun
+CLight			0x28	float[3]	modelPos	position in the lit object's model space (CFigureClientSpecific::RenderLit)
+CLight			0x34	float[4]	rot	quaternion (identity)
+CLight			0x94	int	kind	1 positional, 3 directional
+CLight			0x98	float[3]	colour	r g b 0..1 (the sun: UpdateDayLight every frame)
+CLight			0xc8	float[3]	posCopy	InitPositional
+CLight			0xd4	float[3]	direction	the way the light travels (sun: z < 0); InitDirectional / UpdateDayLight
+CLight			0xe0	float	radius	ctor sqrt(FLT_MAX); point lights set it
+CLight			0xe4	float	field_e4	1.0
+CLight			0xe8	float	field_e8	1.0
+CLight			0x100	float	radiusSq	
+CLight			0x104	float	attenK	1 / radius^2: att = 1 - d^2 * attenK
+CLight			0x108	float[3]	sunModelDir	sun only: -direction in the lit object's model space
+CLight			0x114	float[3]	diffuseTerm	intensity * material diffuse * colour (PrecomputeMaterialTerms)
+CLight			0x120	float	materialAlpha	
+CLight			0x124	float[3]	specularTerm	intensity * material specular * colour
+CLight			0x130	float	field_130	1.0
+CSky		0x10	0x0	pointer	figure	CSkyObject* (the dome CFigure)
+CSky			0x4	int	field_4	0
+CSky			0x8	pointer	texture	CTextureHolder: kind 0x3D "sky00"
+CSky			0xc	int	rotate	1: spin about Z by GetTimeSum / 3000 rad
+CSkyObject		0x230	0x138	pointer	diffuseColours	D3DCOLOR per vertex: sky colour, alpha 0 on the horizon ring (Recolour)
+CSkyObject			0x148	pointer	specularColours	D3DCOLOR per vertex: the second colour, 0 on the horizon ring
+CSkyObject			0x13c	int	vertexCount	
+CSkyObject			0x1c0	pointer	positions	SoA float blocks (x[4] y[4] z[4] w[4]), 32-byte aligned, raw pointer at -4
+CSkyObject			0x1d0	pointer	normals	SoA
+CSkyObject			0x220	pointer	horizonTable	float per vertex: sqrt(-normal z) for vertices with z >= 1, 0 on the horizon ring
+CSkyObject			0x224	int	horizonCount	
+CSkyObject			0x228	int	horizonCapacity	
+CSkyObject			0x22c	int	horizonGrow	
+CVisibilityFog	CObject	0x69	0x1c	float[4]	boundsCentre	CViewFrustum box record: centre + radius (ComputeBounds)
+CVisibilityFog			0x30	float[3]	boundsMin	
+CVisibilityFog			0x3c	float[3]	boundsMax	
+CVisibilityFog			0x54	pointer	cellHashVt	hash map key (y << 16 | x) -> FogCell; buckets +0x58 / +0x5C, count +0x64
+CVisibilityFog			0x58	pointer	cellBucketsBegin	
+CVisibilityFog			0x5c	pointer	cellBucketsEnd	
+CVisibilityFog			0x64	int	cellCount	
+CVisibilityFog			0x68	byte	boundsValid	cleared by RebuildCells / Init; Render recomputes above 12000 cells
+FogCell		0x20	0x0	pointer	next	hash chain
+FogCell			0x4	uint	key	(y << 16) | x of the 0.5 m tile
+FogCell			0x8	short	tileX	
+FogCell			0xa	short	tileY	
+FogCell			0xc	float	worldX	0.5 * (tileX + rand/2^33 - 0.25): jittered
+FogCell			0x10	float	worldY	
+FogCell			0x14	float	worldZ	world height (vt[30]) + 0.5
+FogCell			0x18	float	alpha	eases towards 1 while alive, halves each tick when stale, removed below 0.01
+FogCell			0x1c	byte	alive	0 = stale (not in the last RebuildCells grid)
+FogCell			0x1d	byte	sprite	0..14: cycles each tick; uv record g_0x7ABA58 + sprite * 4
+CVisFogManager	CBaseManager	0xcc	0xb0	pointer	texture	CTextureHolder (fog sprite atlas) bound by RenderAll
+CVisFogManager			0xb8	pointer	fogListHead	CList<CVisibilityFog*>: +0xBC tail, +0xC0 count, +0xC4 free, +0xC8 plex
+CVisFogManager			0xbc	pointer	fogListTail	
+CVisFogManager			0xc0	int	fogCount	
+CVisFogManager			0xc4	pointer	fogListFree	
+CVisFogManager			0xc8	pointer	fogListPlex	
+LightningSegment		0xa8	0x0	float[3]	origin	start point
+LightningSegment			0xc	float[3]	side	orthonormal to dir, scaled to min(len, 15)
+LightningSegment			0x18	float[3]	up	
+LightningSegment			0x24	float[3]	dir	(to - from) / pointCount per point
+LightningSegment			0x30	byte[96]	seeds	3 pairs of noise seeds {2 ints lattice, 2 floats gradient} at +0x30/+0x40/+0x50 and +0x60/+0x70/+0x80
+LightningSegment			0x90	float	seedTime	last whole-step time of EvalNoise
+LightningSegment			0x94	pointer	points	float[4] per point (16 bytes), 32-byte aligned
+LightningSegment			0x98	int	pointCount	
+LightningSegment			0xa4	float	width	polyline width factor
+CLightning	CObject	0x514	0x1c	pointer	boltTexture	CTextureHolder "Lightning" / "DemonLightning" (6 frames)
+CLightning			0x20	pointer	glowTexture	"SmtgLight" / "DemonLight"
+CLightning			0x24	float[4]	bounds	CViewFrustum record (+0x24 = 3, centre +0x28, radius +0x34)
+CLightning			0x38	float[3]	boundsMin	
+CLightning			0x44	float[3]	boundsMax	
+CLightning			0x5c	LightningSegment	mainSegment	ends +0x104
+CLightning			0x104	byte[1008]	branches	LightningSegment[6]
+CLightning			0x4f4	float[6]	branchFractions	0.2 0.3 0.5 0.8 0.9 0.9 along the main bolt (type != 0)
+CLightning			0x50c	float	type	> 0 thin spell bolt (amplitude 0.05), 0 random-branch bolt (width 4), < 0 static (no Update in Render)
+CLightning			0x510	float	amplitude	0.3 / 0.05 lateral jitter scale
+CPrintDecal		0x8c	0x0	pointer	vtable	0x73F754 CBloodPrint, 0x73F760 CFootPrint, 0x73F76C CFirePrint: slots Update / Read / Write
+CPrintDecal			0x4	byte	meshBuilt	
+CPrintDecal			0x5	byte	active	Render draws only when set
+CPrintDecal			0x8	float	x	
+CPrintDecal			0xc	float	y	
+CPrintDecal			0x10	float	halfA	rectangle half extent (grows by +0x18 per tick)
+CPrintDecal			0x14	float	halfB	
+CPrintDecal			0x18	float	growth	
+CPrintDecal			0x1c	short	ttl	ticks left; Update returns it
+CPrintDecal			0x20	pointer	textureName	std::string ("bloodprints", "footprints"/"footprints%d", "fireprints"); +0x24 end, +0x28 capacity end
+CPrintDecal			0x2c	pointer	texture	CTexture* ref
+CPrintDecal			0x30	float	atlasU0	
+CPrintDecal			0x34	float	atlasV0	
+CPrintDecal			0x38	float	atlasW	blood 0.25, footprint 1/16, fire 0.5
+CPrintDecal			0x3c	float	atlasH	blood 0.25, footprint 1/8, fire 0.5
+CPrintDecal			0x40	float	uvRotation	random k * pi/2 (blood, fire), 0 (footprint)
+CPrintDecal			0x44	float	angle	rectangle rotation (footprint: unit direction; blood: spins)
+CPrintDecal			0x48	byte	edgeFade	CTerrain::GetEdgeFadeAlpha at creation
+CPrintDecal			0x4c	float	opacity	(1 - clamp01((life0 - ttl) / life0)) * maxOpacity
+CPrintDecal			0x50	float	maxOpacity	
+CPrintDecal			0x54	uint	colour	D3DCOLOR; alpha byte rewritten from opacity each Render; blood: the light colour of the moment
+CPrintDecal			0x58	int	life0	initial ttl
+CPrintDecal			0x5c	pointer	xyz	receiver mesh SoA blocks (ClipBuf format); +0x60 blocks, +0x64 cap, +0x68 grow
+CPrintDecal			0x60	int	xyzBlocks	
+CPrintDecal			0x6c	pointer	uv	float[2] per vertex; +0x70 count
+CPrintDecal			0x70	int	uvCount	
+CPrintDecal			0x7c	pointer	indices	ushort; +0x80 count
+CPrintDecal			0x80	int	indexCount	
+CBloodPrint	CPrintDecal	0x9c	0x8c	float	spin	angle increment per tick = pi/180 * 30 / ttl
+CBloodPrint			0x90	short	growTicks	min(ttl / 2, 45): the mesh is rebuilt every tick while >= 0
+CBloodPrint			0x94	int	atlasHiBits	atlasCellBits >> 16
+CBloodPrint			0x98	byte	param11	
+CFootPrint	CPrintDecal	0x94	0x8c	int	param11	dword from AddTerrainPrint2
+CFootPrint			0x90	int	unitTypeId	-1: "footprints", else "footprints%d"
+ClipBuf		0x7c	0x0	pointer	xyzArray	descriptor {data*, count, cap, grow}: SoA blocks x[4] y[4] z[4] pad[4] (64 B per 4 vertices), 32-byte aligned
+ClipBuf			0x4	pointer	uvArray	descriptor: {u, v} per vertex
+ClipBuf			0x8	pointer	indexArray	descriptor: ushort triangle list
+ClipBuf			0xc	float[3]	axisU	Eu' / |Eu'|^2: u = P . axisU + offU
+ClipBuf			0x18	float[3]	axisV	
+ClipBuf			0x24	float[3]	lightDir	normalised L (copy of +0x48)
+ClipBuf			0x30	float[3]	origin	corner 3 (u = v = 0)
+ClipBuf			0x3c	float[3]	stepPerHeight	L / |L.z|
+ClipBuf			0x48	float[3]	lightDirIn	
+ClipBuf			0x54	float[3]	casterPos	
+ClipBuf			0x60	float	offU	
+ClipBuf			0x64	float	offV	
+ClipBuf			0x68	float	capOffset	cap(P) = L . P + capOffset >= 0 (0.33 * radius upstream of the caster)
+ClipBuf			0x6c	float	axisULen	
+ClipBuf			0x70	float	axisVLen	
+ClipBuf			0x74	int	vertexCount	
+ClipBuf			0x78	int	indexCount	
+CPrintsDb		0x60	0x0	pointer	bloodBegin	vector of 0x28-byte BloodPrints records (prints.db block 1); global g_0x7C89C8
+CPrintsDb			0x4	pointer	bloodEnd	
+CPrintsDb			0x8	pointer	bloodCapacity	
+CPrintsDb			0xc	pointer	bloodByName	hash map name -> record
+CPrintsDb			0x20	pointer	footBegin	vector of 0x34-byte FootPrints records (block 2); g_0x7C89E8
+CPrintsDb			0x24	pointer	footEnd	
+CPrintsDb			0x28	pointer	footCapacity	
+CPrintsDb			0x2c	pointer	footByName	
+CPrintsDb			0x40	pointer	fireBegin	vector of 0x28-byte FirePrints records (block 3); g_0x7C8A08
+CPrintsDb			0x44	pointer	fireEnd	
+CPrintsDb			0x48	pointer	fireCapacity	
+CPrintsDb			0x4c	pointer	fireByName	
+CAcksDb		0x60	0x0	pointer	answersBegin	vector of 0x1C4-byte Answers records (acks.db block 1)
+CAcksDb			0x4	pointer	answersEnd	
+CAcksDb			0x8	pointer	answersCapacity	
+CAcksDb			0xc	pointer	answersByName	hash map name -> record
+CAcksDb			0x20	pointer	cryesBegin	vector of 0x5C-byte Cryes records (block 2)
+CAcksDb			0x24	pointer	cryesEnd	
+CAcksDb			0x28	pointer	cryesCapacity	
+CAcksDb			0x2c	pointer	cryesByName	
+CAcksDb			0x40	pointer	othersBegin	vector of 0x38-byte Others records (block 3)
+CAcksDb			0x44	pointer	othersEnd	
+CAcksDb			0x48	pointer	othersCapacity	
+CAcksDb			0x4c	pointer	othersByName	
+AcksAnswer		0x1c4	0x0	pointer	name	std::string (the NPC / actor key)
+AcksAnswer			0xc	pointer	listsById	hash map sound kind id (0..0x18) -> list; filled by CAcksDb::Load
+AcksAnswer			0x20	byte[264]	lists	0x16 lists of 0xC bytes {begin, end, cap} of 0x28-byte voice-line records {wav path, weight, subtitle, text id} for ids 0..0x15 (database-format.md fields 10..44)
+WaterLevelRecord		0x10	0x0	int	materialId	terrain material index
+WaterLevelRecord			0x4	int	stepsLeft	
+WaterLevelRecord			0x8	float	level	current height; WaterLevels::Read applies it with CTerrain::SetMaterialHeight
+WaterLevelRecord			0xc	float	step	per tick
+CBitmapDib		0x48	0x0	pointer	vtable	0x744288
+CBitmapDib			0x4	pointer	palette	RGBQUAD* (header + 0x28)
+CBitmapDib			0xc	pointer	pixels	
+CBitmapDib			0x10	pointer	header	BITMAPINFOHEADER* (own 0x28 / 0x34 bytes or inside the mapped file)
+CBitmapDib			0x14	int	field_14	
+CBitmapDib			0x18	int	ownsHeader	1 = operator new
+CBitmapDib			0x1c	int	ownsPixels	
+CBitmapDib			0x20	int	imageSize	biSizeImage or rows * stride
+CBitmapDib			0x24	int	paletteEntries	
+CBitmapDib			0x28	int	maskBytes	0xC for 16 / 32 bpp (BI_BITFIELDS masks after the header)
+CBitmapDib			0x3c	pointer	fileHandle	LoadFile mapping: CreateFile
+CBitmapDib			0x40	pointer	mappingHandle	
+CBitmapDib			0x44	pointer	mappedView	

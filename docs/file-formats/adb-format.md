@@ -12,7 +12,7 @@ Reverse-engineered from the files only (2026-10-03; tools: `_cpr/claude-re/anm/a
 char[4] "ADB\0"
 u32     records
 char[24] the model's name ("Male", "Bird00", "MainColumn"...)
-f32[3]  ? (Male 0.507 1.052 1.073; Bird00 1.0 1.01 1.02)
+f32[3]  root-position / model-offset scale at height 0, reference, height 1 (CObject3D::GetModelLerp 0x518D30, game-exe/renderer.md; Male 0.507 1.052 1.073; Bird00 1.0 1.01 1.02)
 records x 88 bytes
 ```
 
