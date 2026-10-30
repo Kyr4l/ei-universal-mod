@@ -94,6 +94,25 @@ static void PaintAt(App& app, float x, float y) {
     app.terrainRebuild = true;
 }
 
+// Turns the tile laid at the mouse a quarter (`dir` 1 as R turns the brush, -1 back), the water tile in Water
+// paint: Shift+R / Shift+wheel over the view. One undo step per turn.
+void TurnTileAtMouse(App& app, int dir) {
+    mpr::Map& m = app.terrain;
+    int si, row, col;
+    if (!app.tileBrush || !app.terrainLoaded || !app.hoverGround || !TileAt(m, app.ground.x, app.ground.y, si, row, col)) return;
+    mpr::Sector& s = m.sectors[static_cast<size_t>(si)];
+    if (app.brushWater && (!s.water || s.waterMaterial[row][col] < 0)) { app.terrainMessage = "No water tile here to turn"; return; }
+    EditStep step;
+    step.kind = EditStep::Terrain;
+    step.file = app.terrainPath;
+    step.sectors.push_back({si, s});
+    uint16_t& t = app.brushWater ? s.waterTiles[row][col] : s.landTiles[row][col];
+    t = static_cast<uint16_t>((t & 0x3FFF) | ((((t >> 14) + dir) & 3) << 14));
+    PushUndo(app, std::move(step), "Turn a terrain tile");
+    app.terrainEditedSectors.insert(si);
+    app.terrainRebuild = true;
+}
+
 // The brush takes a tile (the palette, the tiles at the mouse, Alt+click); a tile not among the quick
 // tiles goes in the first empty one, so the keys 1-8 bring back the tiles used without setting them up.
 static void PickTile(App& app, int tile) {
@@ -217,7 +236,6 @@ bool HeightBrushInput(App& app, ImVec2 local) {
     return true;
 }
 
-// Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile, Space shows the tiles at the mouse.
 void HeightBrushKeys(App& app) { // F: radius, Shift+F: strength (while held, moving the mouse sideways)
     static float groundRadius = 1.0f; // the ground brush's radius, in cells, before rounding
     if (ImGui::GetIO().WantTextInput || !ImGui::IsKeyDown(ImGuiKey_F)) { groundRadius = static_cast<float>(app.materialRadius); return; }
@@ -232,18 +250,28 @@ void HeightBrushKeys(App& app) { // F: radius, Shift+F: strength (while held, mo
     else app.heightRadius = std::clamp(app.heightRadius * std::pow(1.01f, dx), 1.0f, 32.0f);
 }
 
+// Tile paint's Tiles tab from the next frame on (the tab bar selects it), the brush painting by tile already now.
+void ToTilesTab(App& app) {
+    app.paintTabWanted = 1;
+    app.materialBrush = false;
+}
+
+// Keys while the brush is on: 1-8 take a quick tile, comma and period turn the tile, Space shows the tiles at the mouse.
+// In the Grounds tab they go to the Tiles tab: a tile key means painting by tile.
 void TerrainBrushKeys(App& app) {
     if (!app.tileBrush || ImGui::GetIO().WantTextInput) return;
-    if (app.viewHovered && !app.materialBrush) {
+    bool tileKey = false;
+    if (app.viewHovered) {
         // Space is the picker's (TilePicker) while the mouse is over the view: owned, the keyboard navigation does
         // not also press the last clicked button of the sidebar with it.
         ImGui::SetKeyOwner(ImGuiKey_Space, ImGui::GetID("##tilepickerkey"));
-        if (ImGui::IsKeyPressed(ImGuiKey_Space, false)) app.tilePickerOpen = true;
+        if (ImGui::IsKeyPressed(ImGuiKey_Space, false)) { app.tilePickerOpen = true; tileKey = true; }
     }
     for (int i = 0; i < 8; ++i)
-        if (ImGui::IsKeyPressed(static_cast<ImGuiKey>(ImGuiKey_1 + i), false) && app.quickTiles[i] >= 0) app.brushTile = app.quickTiles[i];
-    if (ImGui::IsKeyPressed(ImGuiKey_Comma, false)) app.brushRotation = (app.brushRotation + 3) % 4;
-    if (ImGui::IsKeyPressed(ImGuiKey_Period, false)) app.brushRotation = (app.brushRotation + 1) % 4;
+        if (ImGui::IsKeyPressed(static_cast<ImGuiKey>(ImGuiKey_1 + i), false) && app.quickTiles[i] >= 0) { app.brushTile = app.quickTiles[i]; tileKey = true; }
+    if (ImGui::IsKeyPressed(ImGuiKey_Comma, false)) { app.brushRotation = (app.brushRotation + 3) % 4; tileKey = true; }
+    if (ImGui::IsKeyPressed(ImGuiKey_Period, false)) { app.brushRotation = (app.brushRotation + 1) % 4; tileKey = true; }
+    if (tileKey && app.materialBrush && !app.brushWater) ToTilesTab(app);
 }
 
 // The outline of the tile the brush would paint.
@@ -936,7 +964,9 @@ void TilePanel(App& app, bool inShelf) {
     }
     if (!tm) {
         app.materialBrush = false;
-        ImGui::TextDisabled("No material data for these textures (vanilla terrains, or a <terrain>-materials.tsv sidecar in the output folder): paint by tile.");
+        ImGui::TextDisabled("No ground data: paint by tile");
+        ImGui::SetItemTooltip("Painting by ground needs to know which grounds each tile shows: known for the vanilla terrains only.\n"
+                              "A custom terrain can get it from a %s-materials.tsv table (um-multitool's materials/README.md).", m.name.c_str());
         TilesPanel(app);
         return;
     }

@@ -436,7 +436,8 @@ void Toolbar(App& app) {
             ImGui::SameLine();
             TileImage(app, std::max(app.brushTile, 0), ImGui::GetFrameHeight(), app.brushRotation);
             ImGui::SameLine();
-            ImGui::TextDisabled("tile %d, turn %d (R , . Ctrl+wheel; Space: tiles)  %s", app.brushTile, app.brushRotation * 90, app.brushWater ? "water" : "land");
+            ImGui::TextDisabled("tile %d, turn %d (R , . Ctrl+wheel; Space: tiles; %s: the tile at the mouse)  %s", app.brushTile, app.brushRotation * 90,
+                               ui::BindName(app.lib.mapKeys[config::kKeyTurnTile]).c_str(), app.brushWater ? "water" : "land");
         } else if (mode == 2) {
             static const char* const kTools[] = {"Raise", "Lower", "Smooth", "Flatten"};
             for (int i = 0; i < 4; ++i) { ImGui::SameLine(); ImGui::RadioButton(kTools[i], &app.heightMode, i); }
@@ -506,10 +507,10 @@ void BottomBar(App& app) {
     if (app.heightBrush || app.tileBrush) { // the mode's mouse and keys, as Blender's status bar
         ImGui::TextColored(ImVec4(1.0f, 0.82f, 0.4f, 1), app.heightBrush
             ? "Sculpt: left drag shapes the ground (one undo per stroke)  F radius  Shift+F strength  %s tool shelf  (Tools > Rebuild navmesh after)"
-            : app.materialBrush ? "Tile paint by ground: left drag paints (the transitions around follow)  Alt+click picks the ground under the mouse  %s tool shelf"
-            : app.brushWater ? "Water paint: left drag paints the water tile and material  Space tiles at the mouse  Alt+click picks  1-8 quick tiles  R , . Ctrl+wheel turn  %s tool shelf"
-            : "Tile paint: left drag paints  Space tiles at the mouse  Alt+click picks a tile  1-8 quick tiles  R , . Ctrl+wheel turn  %s tool shelf",
-            ui::BindName(app.lib.mapKeys[config::kKeyToolShelf]).c_str());
+            : app.materialBrush ? "Tile paint by ground: left drag paints (the transitions around follow)  Alt+click picks the ground  Space / 1-8: by tile  %s Shift+wheel turn the tile at the mouse  %s tool shelf"
+            : app.brushWater ? "Water paint: left drag paints the water tile and material  Space tiles at the mouse  Alt+click picks  1-8 quick tiles  R , . Ctrl+wheel turn the brush  %s Shift+wheel turn the tile at the mouse  %s tool shelf"
+            : "Tile paint: left drag paints  Space tiles at the mouse  Alt+click picks a tile  1-8 quick tiles  R , . Ctrl+wheel turn the brush  %s Shift+wheel turn the tile at the mouse  %s tool shelf",
+            ui::BindName(app.lib.mapKeys[config::kKeyTurnTile]).c_str(), ui::BindName(app.lib.mapKeys[config::kKeyToolShelf]).c_str());
         ImGui::SameLine();
     }
     if (ImGui::Checkbox("Lighting", &app.lib.lightingOn)) app.lib.SaveConfig();

@@ -552,6 +552,8 @@ bool TerrainBrushInput(App& app, ImVec2 local);
 bool HeightBrushInput(App& app, ImVec2 local);
 void HeightBrushKeys(App& app);
 void TerrainBrushKeys(App& app);
+void ToTilesTab(App& app);
+void TurnTileAtMouse(App& app, int dir);
 void TerrainBrushOutline(App& app, ImDrawList* draw, ImVec2 min, ImVec2 size);
 void TileImage(App& app, int tile, float side, int rotation = 0);
 void SculptPanel(App& app, bool inShelf = false);

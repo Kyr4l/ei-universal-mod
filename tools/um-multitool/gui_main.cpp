@@ -700,6 +700,7 @@ static void KeysHelp(const Library& lib, int tab) { // tab: 0 File Processing, 1
         row("1 ... 8", "Tile painting: the quick tiles");
         row(i18n::Tr("Space"), "Tile painting: every tile, at the mouse (a click takes one)");
         row(std::string("R  , / .  ") + i18n::Tr("Ctrl+wheel"), "Tile painting: turn the brush");
+        row(i18n::Tr("Shift+wheel"), "Tile painting: turn the tile under the mouse");
         row(i18n::Tr("Alt+click"), "Tile painting: pick the tile under the mouse; script areas shown: pick an area");
         row(i18n::Tr("Ctrl+click"), "Logic mode: add a patrol point to the selected unit; a selected trap: a cast point");
         row(i18n::Tr("Ctrl+Shift+click"), "A selected trap: an activation area");

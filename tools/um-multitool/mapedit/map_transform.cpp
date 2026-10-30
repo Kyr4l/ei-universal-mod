@@ -265,7 +265,11 @@ void Keys(App& app) {
     }
     if (pressed(config::kKeyFind)) { app.findOpen = true; app.findFocus = true; }
     if (app.xf.mode == Transform::None) { TerrainBrushKeys(app); HeightBrushKeys(app); }
-    if (app.xf.mode == Transform::None && app.tileBrush && pressed(config::kKeyRotate)) app.brushRotation = (app.brushRotation + 1) % 4; // R: turn the tile
+    if (app.xf.mode == Transform::None && app.tileBrush && pressed(config::kKeyRotate)) { // R: turn the brush's tile
+        app.brushRotation = (app.brushRotation + 1) % 4;
+        if (app.materialBrush && !app.brushWater) ToTilesTab(app);
+    }
+    if (app.xf.mode == Transform::None && app.tileBrush && app.viewHovered && pressed(config::kKeyTurnTile)) TurnTileAtMouse(app, 1);
     if (pressed(config::kKeySelectAll) && app.xf.mode == Transform::None) { SelectAll(app); app.requestTab = SideTab::Objects; }
     if (app.xf.mode == Transform::None) {
         if (pressed(config::kKeyDelete)) {
@@ -979,8 +983,11 @@ void ViewportInput(App& app, ImVec2 min, ImVec2 size) {
             MoveTarget(app, std::sin(yaw) * mx - std::cos(yaw) * my, -std::cos(yaw) * mx - std::sin(yaw) * my, 0.0f);
         }
     }
+    const float shiftWheel = io.MouseWheel != 0.0f ? io.MouseWheel : io.MouseWheelH; // some systems send Shift+wheel sideways
     if (hovered && io.MouseWheel != 0.0f && io.KeyCtrl && app.tileBrush && !app.materialBrush) { // Ctrl + wheel turns the tile
         app.brushRotation = (app.brushRotation + (io.MouseWheel > 0 ? 1 : 3)) % 4;
+    } else if (hovered && shiftWheel != 0.0f && io.KeyShift && !io.KeyCtrl && app.tileBrush) { // Shift + wheel turns the laid tile
+        TurnTileAtMouse(app, shiftWheel > 0 ? 1 : -1);
     } else if (hovered && io.MouseWheel != 0.0f) {
         cam.distance *= std::pow(0.85f, io.MouseWheel);
         cam.distance = std::max(1.5f, std::min(cam.distance, 3000.0f));
