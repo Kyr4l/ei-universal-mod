@@ -372,4 +372,4 @@ Global:
 
 ## Coverage
 
-Coverage (13797 functions): named 13793, guess 4.
+Coverage (13797 functions): named 13746, guess 51.

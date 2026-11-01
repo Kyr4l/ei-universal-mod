@@ -270,8 +270,8 @@ Class tree (vtables): `CDescBase` 0x73C5C4 (0x4c: ChunkFile base, `+0x18` id, `+
 name, `+0x40` comment, `+0x48` kind) -> `CObjectDesc` 0x73C5F0 (0x8c, kind 1) -> `CTorchDesc` 0x73C620 (0xa0, kind 6),
 `CMagicTrapDesc` 0x73C650 (0xd0, kind 7), `CLeverDesc` 0x73C6B0 (0xa4, kind 8), `CUnitDesc` 0x73C6E0 (0x324, kind 5); `CDescBase` ->
 `CEffectDesc` 0x73C728 (`+0x4c` effect, `+0x50` enabled) -> `CParticleDesc` 0x73C758 (kind 4), `CLightDesc` 0x73C788 (kind 2),
-`CSoundDesc` 0x73C7B8 (kind 3). Slots: 0 OnChunk (one `switch` on the child id), 3 GetTypeName, 4 GetDisplayName, 5 MoveBy, 6 GetObject,
-7 Spawn, 8 Remove, 9 Write, 10 WriteChunk, 11 WriteFields. `MobFile_ParseChunks` 0x481F00 creates them per OBJECTSECTION child and
+`CSoundDesc` 0x73C7B8 (kind 3). Slots (re-checked by the generic sweep 2026-11-01 against vt 0x73C5C4..0x73C7B8): 0 OnChunk (one `switch` on the child id), 2 GetObject, 3 empty one-arg slot, 4 GetTypeName / GetDisplayName, 5 MoveBy,
+7 Spawn, 6 Remove, 8 MarkDirty, 9 Write / WriteChunk, 10 deleting dtor, 11 WriteFields. `MobFile_ParseChunks` 0x481F00 creates them per OBJECTSECTION child and
 `CreateObjectFromDesc` 0x5927C0 turns them into objects (world-server.md 4.4, not repeated). The readers are tolerant: unknown children
 are ignored, missing ones keep the ctor defaults listed below.
 

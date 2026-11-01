@@ -341,7 +341,7 @@ Only the top screen draws; screens below are frozen as the screenshot and their 
 | `ShowMessageBar(text)` 0x5F75B0 | loading / saving | synchronous: an 800x40 green centred text at y = 280 rendered once |
 | `AddChatLine(text, colour)` 0x5F82F0 | `LobbyClient::OnAddressLine` (um-engine mp_ghost hooks this call at 0x41E656) | `CUIMessageLog::AddMessage` |
 | `EnableChatInput` 0x5F7C60 / `ClearChatLines` 0x5F7C80 | Enter in the battle / camp / dialog / trade screens | lobby chat line |
-| `ConsoleAddText` 0x5F7EB0 | `LogStream::Dtor` (every game log line) | `CUIConsole::AddText` |
+| `ConsoleAddText` 0x5F7EB0 | `LogStream::sync` (every game log line) | `CUIConsole::AddText` |
 
 ### 4.6 The message log `CUIMessageLog` (`CInterface +0x1C`, vt 0x7400DC / 0x7400A8, `CUIWidget` + 0x10) [V]
 
@@ -493,7 +493,7 @@ then 15 px lines in `0xA7D7E4`; `FormatResistLists` 0x5F13A0 turns 7 floats into
   game uses only `CamCtlFree`; what the old scheme was for is unknown.
 - `GetGroundPoint` / `ShowPart` / `ItemLink::Clone`: the decompiles show fall-through stores after the conditional branch
   (likely dropped returns); the behaviour described is the sensible one, not verified in assembly [?].
-- Which globals the static initialisers 0x5EA7C0 / 0x5EBF60.. / 0x5F4660 / 0x5FC1A0 / 0x5FC5B0 (g_0x7C7CF8, g_0x7C7D20..28,
+- Which globals the static initialisers 0x5EA7C0 / 0x5EBF60.. / 0x5F4660 / 0x5FC1A0 / 0x5FC5B0 (g_0x7C7CF8 (answered by the generic sweep: 0x7C7CF8 / 7C7D28 / 7C7E00 / 7C7E28 / 7C7E50 = 1.0f, 0x7C7D20 = 2 pi, 0x7C7D24 = pi/2: per-TU math-header constants, unreferenced), g_0x7C7D20..28,
   g_0x7C7E00, g_0x7C7E28, g_0x7C7E50) hold; `g_0x7C7E58` is the default widget colour.
 - The `MapZoneRecord` (0x5C) string fields beyond `+0x20 / +0x24` and the allod record's embedded `CObject` at `+0x18` [?].
 - `CSoftCursorFrame::CreateFromMmp`: the per-pixel copy loops were eliminated by the compiler's optimiser in the decompile; the

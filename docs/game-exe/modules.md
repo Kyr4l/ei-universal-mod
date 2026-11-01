@@ -248,7 +248,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004461B0 | 45 | CString_WriteToStream | calls stream->vt[14](CString data, length) then releases the buffer |
 | 0x00446210 | 41 | Quat_StaticInit_Identity2 | sets global quaternion g_0x79B9A0 to (1,0,0,0) |
 | 0x00446AF0 | 35 | CFakeUnit::Init | slot 2: 0x508870(+0x4e0); 0x508930(+0x4e0, this); CUnit::Init |
-| 0x004461F0 | 31 | StaticInit_Consts3_4461F0 | static initializer: sets 3 globals (0, 0, 0) |
+| 0x004461F0 | 31 | StaticInit_Vec3Zero_g79B9B0 | CRT: per-translation-unit copy of the header constant Vec3 zero {0,0,0} at g_0x79B9B0 |
 | 0x004468F0 | 30 | CFakeUnit::~CFakeUnit | slot 0: deleting destructor (root layout) |
 | 0x004467F0 | 29 | CFakeUnit::ForwardSlot20_v31 | slot 31: forwards (a,b,c) to the specific (+0x240) virtual slot 20 |
 | 0x004468B0 | 26 | CUnit::v59_GetSpeedA | CUnit slot 59: 0x52F920(this, &a, &b) and returns a (float) |
@@ -429,10 +429,10 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00471B10 | 12595 | Scene3ds_ConvertToModel | 12.6 KB: copies a parsed 3DS scene (reader vt[13] header) into the internal model arrays (0x18c-byte object entries, vertex/face/material lists); called from CFakeUnit::LoadModelFromScene |
-| 0x00471A90 | 25 | InitFields3_471A90 | initializes 3 field(s) from constants/arguments (param_1, param_2, param_3) |
-| 0x00471AB0 | 24 | InitFields3_471AB0 | initializes 3 field(s) from constants/arguments (*param_1, param_1[1], param_1[2]) |
-| 0x00471AD0 | 24 | InitFields3_471AD0 | initializes 3 field(s) from constants/arguments (*param_1, param_1[1], param_1[2]) |
-| 0x00471AF0 | 24 | InitFields3_471AF0 | initializes 3 field(s) from constants/arguments (*param_1, param_1[1], param_1[2]) |
+| 0x00471A90 | 25 | Vec3_Ctor3f | (this, x, y, z): writes the three floats (3ds material colour triples in Scene3ds_BuildFigures / ConvertToModel) |
+| 0x00471AB0 | 24 | Material3ds::SetColor20 | stores a float triple at +0x20 of the 0x9c 3ds material record (the second of the three colour triples read after the material name) [?] ambient / diffuse / specular order |
+| 0x00471AD0 | 24 | Material3ds::SetColor30 | stores a float triple at +0x30 of the 0x9c 3ds material record (the first triple read) [?] |
+| 0x00471AF0 | 24 | Material3ds::SetColor40 | stores a float triple at +0x40 of the 0x9c 3ds material record (the third triple read) [?] |
 
 ## 0x474000 - 0x47E000: MFC CArray/CMap instantiations, IStream/CMemStream/CFileStream, MsgStream family (file / peer / TCP), CTcpNetDriver, Huffman coder, unit prototype apply
 
@@ -484,18 +484,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00481660 | 2029 | MobFile_Load | loads a zone/mission (.mob) file via MobFile_ParseChunks: fills PlayerRelations g_0x7C2BC4 (32x32), builds per-name std::map<string,list> of descriptors, instantiates objects; 2 KB |
 | 0x00481F00 | 1327 | MobFile_ParseChunks | ChunkFile parser of a mission/zone file: tags 0xACCEECCA/0xACCEECCB (two strings), 0xABD0 (light: defaults 0.2/0.6/14.0, placed via 0x58EE20), 0xB000 (descriptor list: sub-tags 0xAA01 0x68, 0xBBAB0000 0xD0, 0xBBAC0000 0xA4, 0xBBBB... |
-| 0x00482EF0 | 703 | RbMap_Insert_482EF0 | std::map<string-range,list> insert with hint: handles begin/end cases, InsertUnique fallback, rebalance |
-| 0x00483950 | 580 | DwordVector_Reserve_483950 | vector<uint>::reserve(n) |
-| 0x004827D0 | 432 | List24_Ctor_4827D0 | construct std::list<0x18-byte>: allocate sentinel node from pool g_0x79B22C |
-| 0x00483760 | 420 | RbMap_InsertUnique_483760 | std::map insert_unique: descend comparing string ranges (StringRange_Compare), then InsertAt unless the key exists |
-| 0x004835D0 | 389 | RbMap_InsertAt_4835D0 | std::map<string-range,...> _M_insert at a given parent: creates node (RbNode_New), links left/right, rebalances (rotate left/right) |
-| 0x004831B0 | 387 | Vec3Vector_InsertRealloc_4831B0 | vector<12-byte> insert grow path using Vec3Range_Copy / Vec3Range_FillN |
-| 0x00483BA0 | 314 | DwordVector_InsertN_483BA0 | vector<uint>::insert(pos,n,value), grow path 0x484180 |
+| 0x00482EF0 | 703 | RbMap_Insert_482EF0 | STL: std::map<string-range,list> insert with hint: handles begin/end cases, InsertUnique fallback, rebalance |
+| 0x00483950 | 580 | DwordVector_Reserve_483950 | STL: vector<uint>::reserve(n) |
+| 0x004827D0 | 432 | List24_Ctor_4827D0 | STL: construct std::list<0x18-byte>: allocate sentinel node from pool g_0x79B22C |
+| 0x00483760 | 420 | RbMap_InsertUnique_483760 | STL: std::map insert_unique: descend comparing string ranges (StringRange_Compare), then InsertAt unless the key exists |
+| 0x004835D0 | 389 | RbMap_InsertAt_4835D0 | STL: std::map<string-range,...> _M_insert at a given parent: creates node (RbNode_New), links left/right, rebalances (rotate left/right) |
+| 0x004831B0 | 387 | Vec3Vector_InsertRealloc_4831B0 | STL: vector<12-byte> insert grow path using Vec3Range_Copy / Vec3Range_FillN |
+| 0x00483BA0 | 314 | DwordVector_InsertN_483BA0 | STL: vector<uint>::insert(pos,n,value), grow path 0x484180 |
 | 0x00482AA0 | 286 | String_CtorFromRange | construct std::string from [first,last) (PoolAlloc, copy, throw on length overflow) |
-| 0x00483DF0 | 235 | RbNode_New_483DF0 | allocate a 0x20-byte tree node (pool g_0x79B230) and copy-construct key (String_CtorRange) and value list (0x483F00) |
-| 0x00482640 | 212 | NodeAlloc32_482640 | allocate 0x20-byte node from pool g_0x79B230 (refill 20 via chunk allocator) |
-| 0x004833B0 | 202 | HashMap_Ctor_4833B0 | construct hash map object: sentinel list, bucket vector of NextPrime(100) |
-| 0x004824B0 | 191 | ListHolder_Destroy_4824B0 | destroy a std::list (+0xC) of 0x18-byte nodes via PoolFree and the owning containers |
+| 0x00483DF0 | 235 | RbNode_New_483DF0 | STL: allocate a 0x20-byte tree node (pool g_0x79B230) and copy-construct key (String_CtorRange) and value list (0x483F00) |
+| 0x00482640 | 212 | NodeAlloc32_482640 | STL: allocate 0x20-byte node from pool g_0x79B230 (refill 20 via chunk allocator) |
+| 0x004833B0 | 202 | HashMap_Ctor_4833B0 | STL: construct hash map object: sentinel list, bucket vector of NextPrime(100) |
+| 0x004824B0 | 191 | ListHolder_Destroy_4824B0 | STL: destroy a std::list (+0xC) of 0x18-byte nodes via PoolFree and the owning containers |
 
 ## 0x484000 - 0x499000: particle effects (CParticle, 'Particle effect ...')
 
@@ -1178,16 +1178,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005E2A30 | 2045 | CUIMessageLog::AddMessage | (text, colour): word-wraps the text at 0x30C px (CInterface::MeasureText font 1; DBCS aware; a '^' followed by a digit 0..7 is a colour escape: bit0 blue, bit1 green, bit2 red -> ^7 white, ^4 red, ^2 green, ^1 blue, ^6 yellow) int... |
 | 0x005E26F0 | 265 | CUIMessageLog::CUIMessageLog | (CInterface): CUIWidget base with vt 0x7400DC (sub-object 0x7400A8 at +0x94): line list +0x148 (0x18 nodes: +8 text, +0xC colour codes, +0x10 time, +0x14 CUIBlitSurface), chat input text +0x150, caret +0x154, input mode +0x14C = 0... |
 | 0x005E28E0 | 172 | CUIMessageLog::~body | releases CString +0x150, destroys every line, frees the list, base widget dtor 0x5FE930 |
-| 0x005E2520 | 139 | NodeAlloc24_5E2520 | allocate 0x18-byte node from pool |
+| 0x005E2520 | 139 | NodeAlloc24_5E2520 | STL: allocate 0x18-byte node from pool; callers List24_InsertBefore_5E24E0 |
 | 0x005E2670 | 113 | UIMessageLine::Destroy | destroy one line: delete its sub-widget (+0xC), release two CStrings (+0,+4) |
 | 0x005E2990 | 79 | CUIMessageLog::Tick | slot 24 (called every frame by CInterface::ProcessPendingScreens on +0x1C): erases the lines older than 20000 ms (node +0x10 vs timeGetTime) |
 | 0x005E29E0 | 69 | CUIMessageLog::BlitSurfaces | slot 22: places each line surface at (10, 10 + 16 * i), blits it (surface vt[0]) and then the base CUIWidget::BlitSurfaces (the input line). Was Layout |
-| 0x005E2480 | 67 | List24_Clear_5E2480 | std::list clear into 0x18-byte pool |
-| 0x005E24E0 | 41 | List24_InsertBefore_5E24E0 | allocate and link a 0x18-byte node |
+| 0x005E2480 | 67 | List24_Clear_5E2480 | STL: std::list clear into 0x18-byte pool; 1 unwind funclet(s) (0x728da6) |
+| 0x005E24E0 | 41 | List24_InsertBefore_5E24E0 | STL: allocate and link a 0x18-byte node; callers Timer_Schedule |
 | 0x005E2620 | 41 | Quat_StaticInit_Identity4 | sets global quaternion g_0x7C7B98 to (1,0,0,0) |
-| 0x005E25B0 | 40 | List24_EraseNode_5E25B0 | unlink node to 0x18-byte pool |
-| 0x005E25E0 | 32 | StaticInit_Guarded_5E25E0 | static initializer with a once-guard (bit 0 of 0x007CAEE4) that registers the destructor at 0x004013D0 with atexit; the object needs no constructor code |
-| 0x005E2600 | 31 | StaticInit_Consts3_5E2600 | static initializer: sets 3 globals (0, 0, 0) |
+| 0x005E25B0 | 40 | List24_EraseNode_5E25B0 | STL: unlink node to 0x18-byte pool; callers CFlyingHitPoints::Draw |
+| 0x005E25E0 | 32 | StaticInit_NoopGuarded_f5E25E0 | compiler: per-TU initialiser of a header static object with an empty ctor and an empty dtor (0x4013D0 is a bare ret): sets bit 0 of the shared guard g_0x7CAEE4 and registers the dtor with atexit; no effect (163 copies in the exe) |
+| 0x005E2600 | 31 | StaticInit_Vec3Zero_g7C7BA8 | per-TU static const zero vector g_0x7C7BA8 = (0, 0, 0) (3 floats, a math header constant copied into every TU next to its 1.0f / identity-quaternion copies); unreferenced (every use was folded by the compiler) |
 | 0x005E28C0 | 30 | CUIMessageLog::DeletingDtor | scalar deleting destructor of vt 0x7400DC |
 
 ## 0x5E3000 - 0x5E7000: chat/console panels (CUIMessageLog edit, CUIConsole), software cursor (CSoftCursor), ScreenFade, CI3DFigure
@@ -1449,16 +1449,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x0068E640 | 681 | CMaterialManager::Init | slot 2: CBaseManager::Init; opens '<data>materials.res' (vt[16]); for every (kind, file name) pair of the table 0x743BF8..0x743C37: the material file (vt[19]: u16 name length + name + 17 dwords: diffuse rgb, alpha, ambient rgb, sp... |
-| 0x0068EC20 | 580 | DwordVector_Reserve_68EC20 | vector<uint>::reserve(n) |
+| 0x0068EC20 | 580 | DwordVector_Reserve_68EC20 | STL: vector<uint>::reserve(n) |
 | 0x0068D5A0 | 394 | CLight::ApplyPointWrap | (atten, in rgb, normal, L unit, d, out): k = 1 - d^2 * (+0x104); k < 0 -> out = in; w = N.L + 1 when N.L <= 0 else 1 ('wrap'); out_c = min(1, in_c + w * k * atten * colour_c); the terrain point-light term (TerrainSector_LightVerte... |
-| 0x0068C680 | 362 | StlString_Reserve_68C680 | basic_string grow/reserve with length_error check ("basic_string") |
+| 0x0068C680 | 362 | StlString_Reserve_68C680 | STL: basic_string grow/reserve with length_error check ("basic_string") |
 | 0x0068DE30 | 347 | CMaterial::~CMaterial_body | vt_CMaterial: pops all deque elements, frees nodes and map, CStrings released, CObject base dtor 0x455930 |
 | 0x0068CB90 | 327 | PartialSort_Bytes | std::partial_sort for chars (heap select) |
 | 0x0068D450 | 323 | CLight::ApplyPoint | plain N.L point light without the wrap term; no callers (dead) |
-| 0x0068EE70 | 314 | DwordVector_InsertN_68EE70 | vector<uint>::insert(pos,n,value), grow path 0x68F040 |
+| 0x0068EE70 | 314 | DwordVector_InsertN_68EE70 | STL: vector<uint>::insert(pos,n,value), grow path 0x68F040 |
 | 0x0068D310 | 310 | CLight::ApplyDirectional | (intensity, in rgb, normal, out rgb): t = -(dir . N); t <= 0 -> out = in; else out_c = min(1, in_c + t * intensity * colour_c); the terrain sun term (TerrainSector_LightVertexSun) |
 | 0x0068DBC0 | 294 | CMaterial::CMaterial | vt_CMaterial (0x9C bytes): CObject header, name +0x1C = '', alpha +0x2C = 1.0, texture-frame deque +0x64 (0x200-byte nodes), texture names +0x8C / +0x94 = '', +0x90 / +0x98 = 0; the D3D material block is +0x20 diffuse rgb, +0x2C a... |
-| 0x0068E1C0 | 272 | Deque_InitMap_68E1C0 | compute node map size ((n>>5)+3, min 8), allocate map and nodes, set start/finish |
+| 0x0068E1C0 | 272 | Deque_InitMap_68E1C0 | STL: compute node map size ((n>>5)+3, min 8), allocate map and nodes, set start/finish |
 | 0x0068C820 | 249 | SpellProto_FindByCode | (code C string) -> SpellProto* or 0: std::string lookup in the spell code map g_0x7C851C (CSpellContainer::Finalize derives the proto index) |
 | 0x0068E3F0 | 246 | CMaterialManager::CMaterialManager | CObjectManager ctor (0x674D90); the kind -> material template hash at +0xBC (NextPrime(100) buckets +0xC0 / +0xC4, count +0xCC), nodes 0x50 bytes {next, kind, 0x44-byte template} |
 | 0x0068D850 | 245 | CLightManager::CLightManager | CBaseManager ctor; +0xC0 / +0xCC fields, +0xD4 light-id std::list sentinel (pool g_0x79B228) |
@@ -1481,7 +1481,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00693970 | 747 | CTextureManager::SaveComposedTexture | compose layers (ComposeLayers) and write the result to "textures\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
 | 0x0069A480 | 733 | ShopStock::SelectSpellFilters | (table = SpellsDb S_* vector of 0x34 records): clears the hashes +0x50 / +0x64; +0x50 = the allowed spell protos (+0x38 list) that the table lists with the player's bit in +0x30; +0x64 = the allowed perk protos (+0x44) keyed by th... |
 | 0x00691D80 | 649 | CTextureManager::CreateRenderTarget | create texture kind (param) with the device texture format table (0x68F6C0), fatal "Can't find texture format %d.\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
-| 0x0069BAC0 | 621 | DwordVector_Serialize_69BAC0 | write a vector<uint> (count then items) to a stream |
+| 0x0069BAC0 | 621 | DwordVector_Serialize_69BAC0 | STL: write a vector<uint> (count then items) to a stream |
 | 0x00699A40 | 579 | ShopStock::AddQuickInstructions | (min, max, out list): "instruction quick item" loot items per allowed quick proto (+0x20) and "scroll" items, count rand(min..max) |
 
 ## 0x69F000 - 0x6AE000: CItem* + CItemManager + items.idb

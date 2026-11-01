@@ -3566,8 +3566,8 @@ NetClient			0x25a8	pointer	serverInfos	STLport list of ServerInfo (the browser r
 NetClient			0x25ac	pointer	addrBookBegin	vector<NetServerRecord 0x2c> (end +0x25b0, cap +0x25b4): the saved server address book (AddrBook_Serialize)
 NetClient			0x25b8	int	addrBookExtra	dword saved with the address book
 NetClient			0x25bc	pointer	probeQueue	STLport list (0x18 nodes) of addresses to send one get-info to (TickDiscovery pops the first each call)
-NetClient			0x25c0	pointer	requeueList	addresses re-queued for probing when +0x25c4 is set (the LAN browser refresh)
-NetClient			0x25c4	byte	requeueFlag	
+NetClient			0x25c0	pointer	requeueList	addresses re-queued for probing when +0x25c4 is set (the LAN browser refresh); [?] sweep A: 0x4422D0 copies a 16-byte NetAddress into +0x25c0..+0x25cc before TickDiscovery, which tests the +0x25c4 dword: probably the selected server address, not a list + flag
+NetClient			0x25c4	byte	requeueFlag	[?] sweep A: 0x4422D0 copies a 16-byte NetAddress into +0x25c0..+0x25cc before TickDiscovery, which tests the +0x25c4 dword: probably the selected server address, not a list + flag
 NetClient			0x25d0	int	roundRobin	index of the next address-book server probed by TickDiscovery
 LobbyServer	NetServer	0x2600	0x2570	float	heartbeatTimer	master-server heartbeat every 20 s while public
 LobbyServer			0x2574	int	isPublic	SetPublic: resolves the master address and starts the heartbeat (needs g_0x79BED8 non-empty: empty in this build)
