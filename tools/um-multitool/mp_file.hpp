@@ -39,9 +39,14 @@ struct Member {
     float complection[3] = {};
     std::vector<uint32_t> lists[4]; // weapons, belt, worn armour, spell items
     std::string s1, s6;           // "Hero", the prototype name
-    uint32_t a = 0, b = 0, d = 0, e = 0;
+    uint32_t a = 0, b = 0, d = 0, e = 0; // game.exe HeroRecord: a stance (+0x770), b the weapon in hand = index in lists[0] (+0x774, -1 none), d follow target (+0x77c), e battle button (+0x780)
     uint8_t c = 0;
 };
+// The object id of the weapon in hand (Member::b; the first weapon when b is out of range), 0 when none.
+inline uint32_t WieldedId(const Member& m) {
+    if (m.lists[0].empty() || m.b == 0xFFFFFFFFu) return 0;
+    return m.b < m.lists[0].size() ? m.lists[0][m.b] : m.lists[0][0];
+}
 struct QuestVar { std::string name; float value = 0; };
 struct Character {
     uint32_t head = 0x114, version = 0x74;

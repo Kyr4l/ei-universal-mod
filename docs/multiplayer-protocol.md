@@ -226,7 +226,7 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x08 | 0x670F50 | the character: the .mp file's decompressed content (mp-format.md "Data", zone := the quest's name) read by 0x6618C0, then u8 0, then the 0x00 identity block above | the hero upload. The real client appends u32 100 + "Tango\0" and uninitialised bytes; the bot sends only the content + 0 + identity and is accepted |
 | 0x09 | 0x671060 | none | READY: link state 4 -> 1, then 0x590700(player) spawns the hero in the world. Sent by the real client with 0x40 right behind it |
 | 0x10 | 0x66FAC0 | **unknown** | |
-| 0x30 | 0x66FFF0 -> 0x5D39E0 | u32 n, n x u32 unit id, u32 flags (0), f32 x, f32 y, f32 z (0) | MOVE to a point (a ground click) for the listed units |
+| 0x30 | 0x66FFF0 -> 0x5D39E0 | u32 n, n x u32 unit id, u32 flags (0), f32 x, f32 y, f32 z (0) | MOVE to a point (a ground click) for the listed units. `AiLogicPlayer::MoveToNow` **releases the unit's leader (0x39) and its kept target** unless the party fights (player mode 2): a bot that moves its hero must send 0x39 again after the move (0x39 cancels a running move, so only once the move has ended; checked on the rig 2026-11-01) |
 | 0x31 | 0x670190 -> 0x5D3C30 (order 4) | u32 n, n x u32 unit id, u32 0, u32 target unit id, u32 0 | ATTACK (confirmed: the bot gained EXP). Also used on objects near a body (loot?) |
 | 0x32 | 0x6708D0 | **decoded**: u32 spell, u32 caster unit id, f32 x, f32 y, f32 z, u8 flag (21 bytes) | cast at a point (`CPlayerServer::OnMsg_CastAt` -> `AiLogicPlayer::CastAt` -> `CUnitServer::QueueCastAt`). Client sender `CPlayerClient::SendMsg32` 0x66ACD0 |
 | 0x33 | 0x670820 -> 0x5D3D20 | **decoded**: u32 spell, u32 caster unit id, u32 target object id, u8 flag (13 bytes) | cast on a target (`OnMsg_CastOn` -> `AiLogicPlayer::CastOn` -> `CUnitServer::QueueCastOn`). Client sender `SendMsg33` 0x66AC70. The spell is NOT an object id: without bit 31 it is an index into the hero's quick-item array (`CUnit::GetItemSpell`); with bit 31 (`slot \| 0x80000000`, `SendMsg33_UseWeapon` 0x66AD40) it is a weapon-slot index and the item there (`CItemQuick` subtype 5 / 8) is used at once: its attached spell is cast with `CWorldServer::CastSpellMulti` and a charge is consumed |
@@ -235,8 +235,9 @@ else: the bot's zero bytes were read as identity blocks).
 | 0x36 | 0x670310 | u32 n, n x u32 unit ids, u32 0, **u32 interaction id (0x18A95 = loot)**, u32 -1, u32 target unit id (decoded from the handler's six reads, 2026-10-20; the captured x, y floats after it are not read) | the interaction order (`OnLootOrder`): the nearest listed unit is ordered to go to the target and interact; for 0x18A95 on a dead unit `CUnitServer::ExecuteInteraction` 0x54F000 calls `CWorldServer::LootUnit` (everything the body holds goes into the looter's party at once) and removes the body |
 | 0x37 | 0x670810 | none | no-op |
 | 0x38 | 0x670A40 | **unknown** | |
-| 0x39 | 0x670A90 | **unknown** | |
-| 0x3A, 0x3B | | **unknown** | container / item orders (not mapped) |
+| 0x39 | 0x670A90 | u32 unit id, u32 leader unit id | SetLeader (`AiLogicPlayer::SetLeader` 0x5D3DE0): the server's own follow (`Brain::TickFollow`), works across players; the unit itself as the leader clears it |
+| 0x3A | | **unknown** | |
+| 0x3B | 0x66FB70 | u32 unit id, u8 v | the battle button (`CUnit::SetField438`, net section 13): only a hero with 1 defends itself and friendly sides by the game's logic (`AiLogicPlayer::Regroup`); the .mp keeps the player's last choice (member tail, `HeroRecord +0x780`). Checked on the rig 2026-11-01: a hero poked to 0 was back at 1 after um-bot's 0x3B |
 | 0x40 | 0x670B20 | f32 x, f32 y (map units) | the client's view point (its camera / hero), ~2 per second; stored, not a move |
 | 0x50 | 0x670B60 | **unknown** | |
 

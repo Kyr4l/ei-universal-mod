@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
     CHECK(growth::PerkCost(fake, 0, 3) > growth::PerkCost(fake, 0, 0) * 5);
 
     // the saved characters: the file round trip, the spent experience explained by skills + abilities (8.mp: exactly)
-    int parsed = 0;
+    int parsed = 0, spellsSame = 0, spellsTotal = 0;
     for (const char* name : {"1", "2", "5", "6", "7", "8", "9"}) {
         mp::Character ch; std::string e;
         if (!mp::Load(root + "/Universal-Mod/mp/" + name + ".mp", ch, e)) continue;
@@ -39,16 +39,21 @@ int main(int argc, char** argv) {
         CHECK(mp::Serialize(ch).size() > 100);
         std::vector<uint8_t> raw; CHECK(mp::Unpack(mp::Pack(mp::Serialize(ch), 0, 0), raw, e) && raw == mp::Serialize(ch));
         std::vector<uint8_t> lz; CHECK(mp::Unpack(mp::PackLz(mp::Serialize(ch), 0, 0), lz, e) && lz == mp::Serialize(ch)); // the compressed upload decodes to the same bytes
-        // spells: a rebuilt spell object equals the saved one (the saves older than the database differ in a few; at least most must match)
-        int same = 0, total = 0;
+        // spells: a rebuilt spell object equals the saved one (spells made with an older database differ; 1.mp has 6 of 11 such: counted over all saves)
         for (const mp::Object& o : ch.lists[1]) if (o.kind == 0x3002 && o.detail.size() == 66) {
             std::vector<int> runes; for (int k = 50; k < 58; ++k) if (o.detail[static_cast<size_t>(k)]) runes.push_back(o.detail[static_cast<size_t>(k)] - 1);
             uint32_t id; std::memcpy(&id, o.detail.data(), 4);
-            ++total; if (spells::Build(db, o.b, runes, id, 0).object == o.detail) ++same;
+            ++spellsTotal; if (spells::Build(db, o.b, runes, id, 0).object == o.detail) ++spellsSame;
         }
-        CHECK(total == 0 || same * 2 >= total);
     }
     CHECK(parsed >= 5);
+    {   // the weapon in hand is HeroRecord +0x774 (Member::b), not the first weapon: 1.mp holds its hunter crossbow (2nd), 11.mp its stone battle sword (3rd)
+        mp::Character ch; std::string e;
+        if (mp::Load(root + "/Universal-Mod/mp/1.mp", ch, e)) { const mp::Object* o = shop::FindObject(ch, mp::WieldedId(ch.members[0])); CHECK(o && o->kind == 0x3004 && o->b == 49); }
+        if (mp::Load(root + "/Universal-Mod/mp/11.mp", ch = mp::Character{}, e)) { const mp::Object* o = shop::FindObject(ch, mp::WieldedId(ch.members[0])); CHECK(o && o->kind == 0x3004 && o->b == 7); }
+        mp::Member m; CHECK(mp::WieldedId(m) == 0); m.lists[0] = {5, 6}; m.b = 1; CHECK(mp::WieldedId(m) == 6); m.b = 9; CHECK(mp::WieldedId(m) == 5); m.b = 0xFFFFFFFFu; CHECK(mp::WieldedId(m) == 0);
+    }
+    CHECK(spellsTotal == 0 || spellsSame * 2 >= spellsTotal);
     {   // 8.mp: 498 experience spent = its skills and 3 abilities (the cheapest order of the abilities)
         mp::Character ch; std::string e;
         if (mp::Load(root + "/Universal-Mod/mp/8.mp", ch, e)) {

@@ -236,7 +236,7 @@ inline Plan MakePlan(const items::Database& db, const mp::Character& ch, const P
     std::map<int, const mp::Object*> armorBy;          // armor type -> worn piece
     for (uint32_t id : me.lists[2]) if (const mp::Object* o = FindObject(ch, id)) if (o->kind == 0x3005 && static_cast<size_t>(o->b) < db.List(items::Category::Armors).size()) armorBy[db.List(items::Category::Armors)[o->b].typeId] = o;
     const mp::Object* weapon = nullptr;
-    for (uint32_t id : me.lists[0]) if (const mp::Object* o = FindObject(ch, id)) if (o->kind == 0x3004) { weapon = o; break; }
+    if (const mp::Object* o = FindObject(ch, mp::WieldedId(me))) if (o->kind == 0x3004) weapon = o;
     // 3. The wishes first (priority): each is bought when the shop offers it now and the money / lift allow; worn wished gear is kept.
     std::map<int, bool> armorDone; bool weaponDone = false;
     long keep = 0;                                         // money the step must leave (set after the wishes)
@@ -361,7 +361,10 @@ inline std::string Apply(const items::Database& db, mp::Character& ch, const Pla
     auto erase = [&](std::vector<uint32_t>& v, uint32_t id) { v.erase(std::remove(v.begin(), v.end(), id), v.end()); };
     uint32_t next = 1;
     for (const auto& list : ch.lists) for (const mp::Object& o : list) next = std::max(next, o.id + 1);
+    const uint32_t wielded = mp::WieldedId(me);
+    bool wieldedSold = false;
     for (uint32_t id : plan.sell) {
+        if (id == wielded) wieldedSold = true;
         for (int k = 0; k < 4; ++k) erase(me.lists[k], id);
         erase(ch.backpack, id);
         ch.lists[0].erase(std::remove_if(ch.lists[0].begin(), ch.lists[0].end(), [&](const mp::Object& o) { return o.id == id; }), ch.lists[0].end());
@@ -371,6 +374,12 @@ inline std::string Apply(const items::Database& db, mp::Character& ch, const Pla
         mp::Object obj; obj.id = next++; obj.kind = o.kind; obj.a = static_cast<uint16_t>(o.material); obj.b = static_cast<uint16_t>(o.row); obj.detail = b.detail;
         ch.lists[0].push_back(obj);
         me.lists[o.kind == 0x3004 ? 0 : 2].push_back(obj.id); // worn: the weapon slot / the armor slots
+        if (o.kind == 0x3004 && wieldedSold) { me.b = static_cast<uint32_t>(me.lists[0].size() - 1); wieldedSold = false; } // the new weapon replaces the one in hand: it is taken in hand
+    }
+    { // the weapon in hand stays the same one (selling another weapon moves the list): its new index; sold without a new one: the first weapon, or none
+        const auto it = std::find(me.lists[0].begin(), me.lists[0].end(), wielded);
+        if (wielded && it != me.lists[0].end()) me.b = static_cast<uint32_t>(it - me.lists[0].begin());
+        else if (wieldedSold || (me.b != 0xFFFFFFFFu && me.b >= me.lists[0].size())) me.b = me.lists[0].empty() ? 0xFFFFFFFFu : 0;
     }
     if (plan.potionRow >= 0) for (mp::Object& o : ch.lists[0]) if (o.kind == 0x3006 && o.b == plan.potionRow && o.detail.size() >= 48) {
         const uint32_t have = std::max<uint32_t>(1, DU(o, 44)), now = have + static_cast<uint32_t>(plan.potionAdd);

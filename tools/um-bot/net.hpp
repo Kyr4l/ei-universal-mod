@@ -124,6 +124,10 @@ public:
     void MoveTo(float x, float y, float z = 0, uint32_t flags = 0) {
         if (!worldUnit) return;
         { char b[80]; std::snprintf(b, sizeof b, "order: move to (%.1f,%.1f) ", x, y); Log(std::string(b) + "[" + orderWhy_ + "] " + Where3()); orderWhy_ = "?"; }
+        // The server's handler (AiLogicPlayer::MoveToNow 0x5D39E0) releases the hero's leader and its kept target unless the party fights (player mode 2): the follow link
+        // is gone and is sent again once this move has ended (SetLeader would cancel the move).
+        if (leaderOf_) { leaderOf_ = 0; Log("the move drops the server's follow link: linked again when the move ends"); }
+        leaderLostAt_ = Now(); ownMoveSeen_ = false;
         std::vector<uint8_t> m{0x30};
         Put32(m, 1); Put32(m, worldUnit); Put32(m, flags);
         for (float f : {x, y, z}) { uint32_t v; std::memcpy(&v, &f, 4); Put32(m, v); }
@@ -492,6 +496,16 @@ public:
         StreamMessage(m);
         Log("order: set leader of unit " + std::to_string(unit) + " to " + std::to_string(leader));
     }
+    // 0x3B (u32 unit, u8 v): the battle button (CUnit +0x438, net section 13). Only a hero with it on (1) defends itself and the friendly sides by the game's own logic
+    // (AiLogicPlayer::Regroup); the character file keeps the player's last choice, so the bot sets it when it enters.
+    void SetBattleButton(uint8_t v) {
+        if (!worldUnit) return;
+        std::vector<uint8_t> m{0x3B};
+        Put32(m, worldUnit); m.push_back(v);
+        StreamMessage(m);
+        Log("order: battle button " + std::to_string(v));
+        battleFor_ = worldUnit;
+    }
     void SetPace(int mode) {
         if (!worldUnit) return;
         std::vector<uint8_t> m{0x35};
@@ -707,6 +721,7 @@ public:
             wantPace = catchUp_ ? 3 : pace; // far behind the host (it sprints with a double click, which its pace field does not show): run until near again
         }
         if (state == State::Accepted && worldUnit && wantPace != paceSent_) SetPace(wantPace);
+        if (state == State::Accepted && worldUnit && Alive() && battleFor_ != worldUnit) SetBattleButton(1); // once per hero (checked on the rig: a hero whose +0x438 was poked to 0 had it back at 1)
         SpellSteps();
         // Heal itself: drink the belt potion (quick slot potionSlot, CastOn with `slot | 0x80000000` on ourselves) when the health falls below healSelfBelow %.
         // The answer is read from our own health 2.5 s later; two drinks without a rise = no potion left (or none that heals).
@@ -722,7 +737,7 @@ public:
                 if (drinkSpell_) spellFails_ = 0; else potionFails_ = 0;
                 drinkAt_ = 0;
             } else if (drinkAt_ > 0 && Now() - drinkAt_ > (drinkSpell_ ? 4.5 : 1.0)) { // the potion works within 0.2 s; a spell has a cast time (~1.6 s, after the stance switch)
-                if (drinkSpell_) { if (++spellFails_ >= 4) Log("the Healing spell raised the health 4 times in a row: not casting it on itself any more"); }
+                if (drinkSpell_) { if (++spellFails_ >= 4) Log("the Healing spell raised nothing 4 times in a row: not casting it on itself any more"); }
                 else { potionsLeft_ = false; healAt_ = 0; Log("the potion raised nothing: the belt is empty, not drinking any more"); }
                 drinkAt_ = 0;
             }
@@ -785,8 +800,11 @@ public:
         bool fighting = false;
         uint32_t ownTarget = 0; bool underAttack = false;
         if (state == State::Accepted && worldUnit) {
+            // Our hero's attack (field 10 mode 3): a cast shows the same way, so a hero as the target (the Healing spell on the host / on us) is no fight; a melee hero's mode
+            // drops to none between swings (rig 2026-11-01: attack / none every 0.5 s), so the server's target of the last 2.5 s still counts (the bot walked off to another monster in a gap).
             const auto ot = unitTarget_.find(worldUnit);
-            if (ot != unitTarget_.end() && !dead_.count(ot->second)) ownTarget = ot->second;
+            if (ot != unitTarget_.end() && !dead_.count(ot->second) && !IsHero(ot->second)) { ownTarget = ot->second; lastOwnTarget_ = ownTarget; lastOwnTargetAt_ = Now(); }
+            else if (lastOwnTarget_ && Now() - lastOwnTargetAt_ < 2.5 && !dead_.count(lastOwnTarget_) && unitPos.count(lastOwnTarget_)) ownTarget = lastOwnTarget_;
             for (const auto& kv : unitTarget_) if (kv.second == worldUnit && !dead_.count(kv.first) && !IsHero(kv.first)) underAttack = true;
             if (ownTarget && !leashed_) { fightTarget_ = ownTarget; idleFrom_ = 0; }
             else if (idleFrom_ == 0) idleFrom_ = Now();
@@ -836,7 +854,7 @@ public:
             }
             { // keep the current target while it lives and stays near: switching (or moving) would cancel the attack
                 float x, y, mx, my;
-                if (fightTarget_ && !dead_.count(fightTarget_) && Where(fightTarget_, x, y) && Where(worldUnit, mx, my) &&
+                if (fightTarget_ && !dead_.count(fightTarget_) && !IsHero(fightTarget_) && Where(fightTarget_, x, y) && Where(worldUnit, mx, my) &&
                     std::hypot(x - mx, y - my) <= sight * 2) { t = fightTarget_; d = std::hypot(x - mx, y - my); }
             }
             const bool sticky = t && t == fightTarget_;
@@ -870,14 +888,14 @@ public:
                     // must find it in the hero's known list): found 2026-10-19 by ordering from 9, 8, 7, 5 units (refused) and ~3 (accepted). So: walk up to
                     // kAttackReach, order the attack, and take "our own update says: attacking this unit" as the answer (unitTarget_, field 10 mode 3).
                     // The order goes out from where we stand (a bow needs no walk: the server brings the hero into its weapon's range, OrderReachDistance); only when it
-                    // is refused twice (the target is not in the hero's known list yet) does the bot walk closer, as before.
+                    // is refused (the target is not in the hero's known list yet: the seeing range is the sight times the target's visibility, often under 13) does the bot walk closer.
                     // Where to stand: the server only accepts an attack order on a target the hero has SEEN (within its sight, 13-14 units), so the order goes out from just inside the sight;
-                    // an archer stays there (min(weapon range, sight) x 0.9: a bow reaches 10-18) and the server walks a melee hero in by itself. Only after two refusals does the bot step closer (never
+                    // an archer stays there (min(weapon range, sight) x 0.9: a bow reaches 10-18) and the server walks a melee hero in by itself. Only after a refusal does the bot step closer (never
                     // the old "run up to 3 units": that ran archers into the monsters and woke the pack).
                     const float known = std::min(sight * 0.9f, 13.0f);
                     const float stand = weaponRange > 1.5f ? std::min(weaponRange * 0.9f, known) : known;
                     const bool outOfReach = d > stand + 1.0f;
-                    const bool walk = outOfReach || (engageTries_ >= 2 && d > 3.5f);
+                    const bool walk = outOfReach || (engageTries_ >= 1 && d > 3.5f); // rig 2026-11-01: refused at 9-11 units every time, then accepted after one step
                     const float stopAt = outOfReach ? stand : std::max(2.5f, d - 3.0f);
                     if (Now() - attackedAt_ > (walk ? 1.2 : 1.5)) {
                         if (engageTries_ >= 8) { ignored_[t] = Now() + 30; fightTarget_ = 0; fighting = false; Log("attack on unit " + std::to_string(t) + " refused " + std::to_string(engageTries_) + " times: leaving it for 30 s"); }
@@ -902,10 +920,12 @@ public:
         const bool leaderMode = useLeader && followHost && state == State::Accepted && worldUnit && Alive();
         if (leaderMode) {
             const uint32_t host = HostUnit();
-            if (chatStay_) { if (leaderOf_) { SetLeader(worldUnit, worldUnit); leaderOf_ = 0; float x, y; if (Where(worldUnit, x, y)) { orderWhy_ = "stay"; MoveTo(x, y); } } }
-            else if (host && (leaderOf_ != host || leaderFor_ != worldUnit) && Now() - leaderAt_ > 1.5) { SetLeader(worldUnit, host); leaderOf_ = host; leaderFor_ = worldUnit; leaderAt_ = Now(); }
-            // Where the host is: it walked, so its snapshot is stale. When the server's follow stops our hero (move -> none) next to it, the host is within its FollowMinDist of us.
             const auto md = unitMode_.find(worldUnit); const int modeNow = md == unitMode_.end() ? 0 : md->second;
+            if (modeNow == 2) ownMoveSeen_ = true;
+            const bool ownMove = ownMoveSeen_ ? modeNow == 2 && Now() - leaderLostAt_ < 8 : Now() - leaderLostAt_ < 3; // our own move still runs: until its mode 2 was seen and has ended (it showed 0.1-1.6 s after the order on the rig), at most 8 s; never seen: 3 s
+            if (chatStay_) { if (leaderOf_) { SetLeader(worldUnit, worldUnit); leaderOf_ = 0; float x, y; if (Where(worldUnit, x, y)) { orderWhy_ = "stay"; MoveTo(x, y); } } }
+            else if (host && (leaderOf_ != host || leaderFor_ != worldUnit) && Now() - leaderAt_ > 1.5 && !ownMove) { SetLeader(worldUnit, host); leaderOf_ = host; leaderFor_ = worldUnit; leaderAt_ = Now(); leaderPrevMode_ = modeNow; }
+            // Where the host is: it walked, so its snapshot is stale. When the server's follow stops our hero (move -> none) next to it, the host is within its FollowMinDist of us.
             float mx, my;
             if (leaderOf_ == host && host && modeNow == 0 && leaderPrevMode_ == 2 && !fighting && !fightTarget_ && SnapshotWelcome(host) && Where(worldUnit, mx, my)) {
                 const auto old = unitPos.find(host);
@@ -1115,10 +1135,10 @@ private:
     uint32_t fightTarget_ = 0;
     double diagAt_ = 0, stateLogAt_ = 0; int diagMode_ = -1; float diagX_ = 0, diagY_ = 0;
     double targetSince_ = 0, idleSince_ = 0, selfHurtAt_ = -99, idleFrom_ = 0; // idleFrom_: since when our hero attacks nothing (0: it does)
-    uint32_t attackedTarget_ = 0;
+    uint32_t attackedTarget_ = 0, lastOwnTarget_ = 0; double lastOwnTargetAt_ = 0;
     int targetHp_ = 0;
     std::map<uint32_t, double> ignored_; // targets left alone until then
-    float followX_ = -99, followY_ = -99; double followOrderAt_ = 0, hostUnknownLogAt_ = 0, leaderAt_ = 0; uint32_t leaderOf_ = 0, leaderFor_ = 0; int leaderPrevMode_ = 0; uint32_t paceHost_ = 0; bool paceFirst_ = true; bool catchUp_ = false; // the last follow destination, when it was ordered; run to catch up with the host
+    float followX_ = -99, followY_ = -99; double followOrderAt_ = 0, hostUnknownLogAt_ = 0, leaderAt_ = 0; uint32_t leaderOf_ = 0, leaderFor_ = 0; int leaderPrevMode_ = 0; double leaderLostAt_ = -99; bool ownMoveSeen_ = true; uint32_t battleFor_ = 0; uint32_t paceHost_ = 0; bool paceFirst_ = true; bool catchUp_ = false; // the last follow destination, when it was ordered; run to catch up with the host
     void AnswerSwap(uint16_t a, uint16_t b) { // the mirrored record (what clicking their head does): the same refs, swapped (the server pairs records whose refs are swapped)
         pairOut_.assign(13, 0); Put32(pairOut_, 1);
         const bool same = std::getenv("UM_BOT_SWAPSAME") != nullptr; // research: answer with the refs in the same order
@@ -1193,7 +1213,7 @@ private:
         if (phase_ != Phase::InWorld && phase_ != Phase::Entering) return;
         Log("leaving the quest zone (back to the lobby)");
         phase_ = Phase::Lobby; worldUnit = 0; heroJoined_ = true;
-        fightTarget_ = 0; leashed_ = false; catchUp_ = false; leaderOf_ = leaderFor_ = 0; leaderPrevMode_ = 0; paceSent_ = -1; hostGoneAt_ = 0; // the world state stays: re-entering the same quest resends no creations (the host's world is the same); a new quest clears it in Enter()
+        fightTarget_ = 0; lastOwnTarget_ = 0; leashed_ = false; catchUp_ = false; leaderOf_ = leaderFor_ = 0; leaderPrevMode_ = 0; battleFor_ = 0; paceSent_ = -1; hostGoneAt_ = 0; // the world state stays: re-entering the same quest resends no creations (the host's world is the same); a new quest clears it in Enter()
         SetJoin(1, heroId_);
     }
     std::deque<std::pair<float, float>> hostTrail_; double trailAt_ = 0; // where the host walked (a point every 1.5 units): the bot retraces it instead of cutting across to the host
@@ -1458,7 +1478,7 @@ private:
                 // Our hero again after a death (respawned): a new unit id in our record.
                 if (p.name == name_ && worldUnit && p.state == 0 && IsPlayerId(p.unitId) && p.unitId != worldUnit) {
                     Log("our hero is now unit " + std::to_string(p.unitId) + " (respawned?)");
-                    worldUnit = p.unitId; paceSent_ = -1; fightTarget_ = 0; attackedTarget_ = 0;
+                    worldUnit = p.unitId; paceSent_ = -1; fightTarget_ = 0; attackedTarget_ = 0; lastOwnTarget_ = 0;
                     Respawned(); // as the game's client after a death: the entry again (JOIN 3, upload, ready, JOIN 0)
                 }
                 break;

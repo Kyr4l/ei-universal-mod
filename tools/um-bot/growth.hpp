@@ -93,7 +93,7 @@ inline bool CanLearn(const items::Database& db, const mp::Member& m, size_t inde
 // The ability group of the weapon the character wields (sword 0, axe 1, dagger 2, spear 3, bludgeon 4, bow 5, crossbow 6), or the role's usual one.
 inline int WeaponGroupOf(const items::Database& db, const mp::Character& ch, int role) {
     if (!ch.members.empty() && !ch.members[0].lists[0].empty()) {
-        const uint32_t id = ch.members[0].lists[0][0];
+        const uint32_t id = mp::WieldedId(ch.members[0]);
         for (const mp::Object& o : ch.lists[0]) if (o.id == id && o.kind == 0x3004) {
             const auto& L = db.List(items::Category::Weapons);
             if (o.b < L.size()) {

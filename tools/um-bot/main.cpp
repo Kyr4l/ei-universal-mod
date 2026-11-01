@@ -40,7 +40,7 @@
 #include <fstream>
 #include <iterator>
 
-static const char* const kVersion = "0.1.31";
+static const char* const kVersion = "0.1.32";
 
 
 struct App {
@@ -125,6 +125,14 @@ static int FindHealSpellSlot(const mp::Character& ch, const items::Database& db)
         if (sp && sp->kind == 0x3002 && sp->b < db.spells.size() && Lower(db.spells[sp->b].code) == "healing") return static_cast<int>(i);
     }
     return -1;
+}
+
+// The range of the weapon in hand (database column Range: bows 10-18, crossbows 12-22; 0 = melee or no database).
+static float WieldedRange(const mp::Character& ch, const items::Database& db) {
+    if (ch.members.empty()) return 0;
+    const auto& weapons = db.List(items::Category::Weapons);
+    const mp::Object* o = FindObject(ch, mp::WieldedId(ch.members[0]));
+    return o && o->kind == 0x3004 && o->b < weapons.size() ? weapons[o->b].n[23] : 0.0f;
 }
 
 // The spells the client casts: the Healing spell.
@@ -621,11 +629,7 @@ static void Sonar(const net::Client& c, float size, float range) {
 static void StatusPanel(App& app) {
     const bool on = app.client.state == net::Client::State::Accepted;
     app.client.followDistance = app.cfg.followDistance;
-    app.client.weaponRange = 0; // the wielded weapon's range (database column Range)
-    if (app.dbLoaded && !app.character.members.empty()) {
-        const auto& weapons = app.db.List(items::Category::Weapons);
-        for (uint32_t id : app.character.members[0].lists[0]) if (const mp::Object* o = shop::FindObject(app.character, id)) if (o->kind == 0x3004 && o->b < weapons.size()) { app.client.weaponRange = weapons[o->b].n[23]; break; }
-    }
+    app.client.weaponRange = app.dbLoaded ? WieldedRange(app.character, app.db) : 0.0f;
     app.client.pace = app.cfg.pace == bot::Pace::AlwaysWalk ? 2 : 3;
     app.client.engagement = static_cast<int>(app.cfg.engagement); // Passive / Defensive / Aggressive
     app.client.healSelfBelow = app.cfg.healSelfBelow; app.client.usePotions = app.cfg.usePotions;
@@ -846,7 +850,8 @@ int main(int argc, char** argv) {
             { items::Database& db = shopDb; // the healing potion's slot, and the Healing spell's
               if (!dbf.empty() && !ch.members.empty()) { const int ps = FindHealPotionSlot(ch, db); if (ps >= 0) client.potionSlot = ps; SetSpellSlots(client, ch, db, cfg); }
               client.healHostBelow = cfg.healPlayerBelow;
-              std::printf("database: %s, healing potion slot %d, Healing spell slot %d\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot); }
+              client.weaponRange = dbf.empty() ? 0.0f : WieldedRange(ch, db);
+              std::printf("database: %s, healing potion slot %d, Healing spell slot %d, weapon range %.1f\n", dbf.empty() ? "none found" : dbf.c_str(), client.potionSlot, client.healSpellSlot, client.weaponRange); }
             if (std::getenv("UM_BOT_NOSPELL")) client.healSpellSlot = -1; // research: potion only
             if (std::getenv("UM_BOT_NOPOTION")) client.usePotions = false; // research: spell only
             client.leash = cfg.leashDistance; client.priority = static_cast<int>(cfg.priority); client.matchPace = cfg.pace == bot::Pace::MatchPlayer;
@@ -868,7 +873,7 @@ int main(int argc, char** argv) {
                 client.Update();
                 if (client.holdEntry && !shopped && client.joined && (!client.chosenQuest.empty() || !client.quests.empty())) { // the shop visit
                     const unsigned seed = std::getenv("UM_BOT_SHOPSEED") ? static_cast<unsigned>(std::atoi(std::getenv("UM_BOT_SHOPSEED"))) : 1u;
-                    if (!dbf.empty() && !ch.members.empty()) { const std::string said = DoCamp(ch, shopDb, cfg, client, seed, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); }
+                    if (!dbf.empty() && !ch.members.empty()) { const std::string said = DoCamp(ch, shopDb, cfg, client, seed, cfg.character); if (!said.empty()) std::printf("%s\n", said.c_str()); client.weaponRange = WieldedRange(ch, shopDb); }
                     shopped = true; client.holdEntry = false;
                 }
                 if (client.reconnect && client.state == net::Client::State::Idle) { // as the window does after leaving the world
