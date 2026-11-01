@@ -419,7 +419,7 @@ hdr[0x48], size^2, isPNT3)`; `"Texture %s dimentions are incorrect"` fatal) and 
 `CFileRegistry` (`Open` 0x6945A0: `CMappedFile`, magic 0x45AB3EFB; `FindData(section, key, type)` 0x6946D0: hash = sum of
 `tolower(c)` % bucket count, 6-byte buckets `{u16 next, u32 offset}`, section then key tables, names with u16 lengths compared
 case-insensitively, key entry `{u8 type, u16 len, name, value}`, types 0 int / 1 float / 2 string / 0x80 float[] / 0x81 int[] /
-0x82 string[]; `reg-format.md`); `CIniFile` = `GetPrivateProfileString` wrappers (`GetString` 0x696030, `GetIntArray`, `GetVec3`,
+0x82 string[]; `reg-format.md`); `CIniFile` = `GetPrivateProfileString` wrappers (`GetString` 0x696030, `GetIntArray`, `GetVec3` (0x696B20 / 0x696C50 are really `GetWordArray` / `GetDwordArray`: variable-length arrays),
 `WriteString` 0x696E60 ...); `CWinRegistry` = `RegOpenKeyEx / RegQueryValueEx` wrappers (`GetDWord` 0x698610, `GetBinFloat` 0x698750,
 `GetString` 0x6976B0, the Set* twins) under the HKCU key the AppSettings use.
 

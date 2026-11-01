@@ -80,7 +80,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0040E910 | 581 | CCamera::StartRecording | (index): in <work>\camera\: renames camera.cam to camera%.4d.cam (next free number) and opens a fresh camera\<index>.cam for recording: path +0x2EC, flags /= 0x10 (main then calls RecordKeyframe every frame), g_0x7AF5C0 /= 0x10. W... |
 | 0x0040D470 | 562 | CCamera::TurnTowardsCarrier | (immediate): rotates the view quaternion +0x34 towards the carrier unit (CBaseManager::FindById g_0x7AF5F8, +0x11C) in 10% steps (full step when immediate) then LevelRoll; no callers in this build |
 | 0x0040D710 | 555 | CCamera::LevelRoll | derives the roll of the view quaternion +0x34 (angle between the right axis and the horizontal of -up); when >= 1 deg rotates 10% of it back about the cross axis, then AvoidObstacles. Was ClampPitch (it does not clamp the pitch: U... |
-| 0x0040C060 | 515 | DwordVector_ctorN8 | vector<dword>(n) with inline chunk allocator |
+| 0x0040C060 | 515 | DwordVector_ctorN8 | STL: vector<node*>(n) bucket vector ctor with the pool chunk refill inlined (g_0x79B224 lists, chunk_alloc); HashTable_Resize_40BC30 = rehash of the archive's written-object id set (Archive_Open / HashSetU32_Insert) |
 | 0x0040EFB0 | 506 | CCamera::PlayCamFile | (time): flag 0x20 playback of the keyframes +0x2F0: finds the segment (current index +0x304, time offset +0x300), lerps the position +0x1C and slerps the quaternion +0x34; past the last key copies it and clears flag 0x20; main cal... |
 | 0x0040D9B0 | 404 | Terrain_SampleHeightBox | (centre xy*, unused, unused, step, halfW, halfH, out avg, out min, out max): CWorldClient::GetHeight on a grid of points centre +- half extents at the given step (inside the terrain g_0x7AF738 +0x10C/+0x110), returns the average /... |
 | 0x0040CC30 | 387 | CObject3D::UpdateWorldTransform | CObject3D slot 15: calls slot 14 (world rot) then world pos (+0x28) = parent pos + local pos (+0x1c) rotated by the parent quat (arg = parent's 7 floats: pos? no: arg[0..3] quat, used as rotation); helpers 0x401DE0 vec3 set, 0x40C... |
@@ -155,13 +155,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0042DE90 | 397 | ClipPoly_YMax | (...): polygon clip against y <= plane |
+| 0x0042DE90 | 397 | ClipPoly_YMax | (unused, verts (0x20 each), &nextVertex, idx[] ushort in/out, &count, yMax): Sutherland-Hodgman pass against y <= yMax: inside vertices kept, crossing edges get a Vertex32_Lerp'd vertex at verts[*nextVertex++]; scratch list g_0x79... |
 | 0x0042DB70 | 389 | ClipPoly_XMax | (outcode, verts (0x20 each), &vertCount, idx[], &count, x): Sutherland-Hodgman clip of the polygon index list against x <= plane: keeps inside vertices, interpolates new ones (Vertex32_Lerp) appended at vertCount; scratch g_0x79B6... |
-| 0x0042DD00 | 389 | ClipPoly_XMin | (...): polygon clip against x > plane (see ClipPoly_XMax) |
+| 0x0042DD00 | 389 | ClipPoly_XMin | as ClipPoly_YMax but keeps x > plane (x > 0 in ClipTriangle; vertex x at +0): kept vertices and Vertex32_Lerp'd crossings at verts[*nextVertex++] through the scratch list g_0x79B66C, idx[] and *count rewritten; ClipTriangle / Clip... |
 | 0x0042D700 | 386 | CClientSpecificManager::CreateByKind | slot 14 factory (kind): 0x45 CFigureClientSpecific (0x3c bytes, ctor 0x5A7010), 0x46 CObject3DClientSpecific (0xfc, 0x51AB00), 0x47 CMapObjectClientSpecific (0x58, 0x510450), 0x48 CUnitClientSpecific (0xdc, 0x533AD0), 0x49 CPlayer... |
 | 0x0042D910 | 363 | ClipTriangle | (verts, outcodes, idx[3], &vertCount, &count, xMax, yMax): outcode test (all three share a bit -> fully out, -1; none -> trivially in), else clips the triangle against the six planes x <= xMax, x > 0, y > 0, y <= yMax, z <= 1, z >... |
-| 0x0042D370 | 357 | Bytes_InsertN | vector<byte>::_M_fill_insert (pos, n, value*) |
-| 0x0042D4E0 | 287 | Bytes_InsertNRealloc | vector<byte>::_M_fill_insert reallocating path |
+| 0x0042D370 | 357 | Bytes_InsertN | STL: vector<byte>::insert(pos, n, value) in-place path (memmove of the tail, fill), grow path Bytes_InsertNRealloc; ChunkFile::ReadBytesToString (chunk payload into a byte vector) and CString_Scramble |
+| 0x0042D4E0 | 287 | Bytes_InsertNRealloc | STL: vector<byte>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n) from the pool / new, both halves copied, fill, old buffer freed); Bytes_InsertN and ByteVector_Resize (CString_Scramble / Unscramble, LoadWor... |
 | 0x0042DA80 | 229 | ClipPolygon | (verts, idx[], &vertCount, &count, xMax, yMax): clips a polygon against the six view planes (no outcodes) and re-triangulates it as a fan |
 | 0x0042D1C0 | 146 | ChunkFile::ctor | (name CString): vtable 0x73BE94 -> 0x73BE9C, tag / consumed / length / start = 0, parent +0x14 = 0, CFile at +0x18, opens the file; NO CALLERS (the chunk reader is only used through sub-chunk objects created by the owning serializ... |
 | 0x0042D060 | 120 | ChunkFile::ReadVec4B | (out): reads 16 bytes (default {1, 0, 0, 0}) through CFile::Read and stores {0x10, ?, x, y}; second function named ReadVec4 (the other is 0x42CEC0) |
@@ -187,9 +187,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00431370 | 562 | BigNum_ModExp | (base, exponent bits, modulus, nBytes, out): square-and-multiply modular exponentiation on 16-bit limbs (BigNum_DivMod); NO CALLERS: a leftover key-exchange routine, never used by the game |
 | 0x0042E4D0 | 465 | Vertex32_Lerp | (a, b, t, out): interpolates a 0x20-byte vertex: position +0..+0xc, two packed ARGB colours +0x10 / +0x14 (per channel), uv +0x18 / +0x1c |
 | 0x0042FAE0 | 444 | LzCodec_InitTables | static initializer of the LZ match-length code tables g_0x79B848 (code) / g_0x79B7C0 (bits): lengths 1..6 fixed codes (1,3,5,3,5,5 bits), 7..10 = 6-bit code, 11..18 = 8-bit, 19..34 = 10-bit; offset tables g_0x79B738 / g_0x79B6B0 f... |
-| 0x0042E020 | 397 | ClipPoly_YMin | (...): polygon clip against y > plane |
-| 0x0042E1B0 | 397 | ClipPoly_ZMax | (...): polygon clip against z <= plane |
-| 0x0042E340 | 397 | ClipPoly_ZMin | (...): polygon clip against z > plane |
+| 0x0042E020 | 397 | ClipPoly_YMin | as ClipPoly_YMax but keeps y > plane (y > 0 in ClipTriangle): inside vertices kept, crossing edges interpolated (Vertex32_Lerp) into new vertices at verts[*nextVertex++], results written back into idx[] and *count through the scra... |
+| 0x0042E1B0 | 397 | ClipPoly_ZMax | as ClipPoly_YMax but against z <= plane (z <= 1 in ClipTriangle; vertex z at +8): kept / interpolated vertices through the scratch list g_0x79B66C, idx[] and *count rewritten; ClipTriangle / ClipPolygon |
+| 0x0042E340 | 397 | ClipPoly_ZMin | as ClipPoly_YMax but keeps z > plane (z > 0 near plane in ClipTriangle; vertex z at +8): new vertices from Vertex32_Lerp at verts[*nextVertex++], idx[] and *count rewritten; ClipTriangle / ClipPolygon |
 
 ## 0x433000 - 0x444000: net transport: NetConnection / NetServer / NetClient (A)
 
@@ -220,7 +220,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00445360 | 703 | StringMap_InsertValue | (this, out iterator, hint, value*): hinted red-black insertion of a {key, text} pair (703 bytes) |
 | 0x00444D00 | 584 | DebugText::Render | (this): draws the key/value table of the debug text map +4 into the overlay window +0x14 (UI DC 0x5FDC00; background 0x70BB04 / 0x7090C2): one line per entry with a shadow offset (1,1) in two columns (key left half, value right ha... |
-| 0x00444090 | 475 | NetServerRecordVector_Resize | vector<0x2c record {16 bytes, GameBuffer}>::resize(n) |
+| 0x00444090 | 475 | NetServerRecordVector_Resize | STL: vector<NetServerRecord 0x2c>::resize(n): a default record (zero NetAddress + GameBuffer::ctor) inserted n - size times (NetServerRecords_InsertN) or the tail destroyed (GameBuffer::dtor); AddrBook_Serialize when loading the l... |
 | 0x004447E0 | 441 | StringMap_SetValue | slot 0 (this, key, text): finds or creates the entry for the key and overwrites its text with the given string (copy / grow) |
 | 0x00445A00 | 420 | StringMap_InsertUnique | (this, out {iterator, bool}, value*): descends the tree comparing keys, handles the duplicate case, inserts via StringMap_InsertNode |
 | 0x00445870 | 389 | StringMap_InsertNode | (this, out iterator, force-left, parent, value*): red-black tree insertion with rotations (RbTree_RotateLeft / Right) |
@@ -241,7 +241,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00446C10 | 4909 | CFakeUnit::LoadModelFromScene | loads a "scenes\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\... |
 | 0x00446910 | 466 | CFakeUnit::~CFakeUnit_body | vtable vt_CFakeUnit; tears down animation system +0x4E0, CUnit body, decrements 0x220-byte entries in array +0x534, three member arrays (0x27-dword, 5-dword elements) |
-| 0x004466D0 | 213 | CFakeUnit::CFakeUnit | ctor (kind 0x39 in CMapObjectManager, 0x580 bytes) |
+| 0x004466D0 | 213 | CFakeUnit::CFakeUnit | ctor (0x580 bytes, kind 0x39 in CMapObjectManager::CreateByKind): CUnit::CUnit, CAnimationSystemOld::ctor at +0x4e0, four empty MFC arrays at +0x530 (vt 0x73C108) / +0x544 (0x73C0FC) / +0x558 (0x73C0F0) / +0x56c (0x73C0E4), then v... |
 | 0x00446B20 | 116 | CFakeUnit::Done | slot 3: 0x5088E0(+0x4e0); 0x508930(+0x4e0, 0); CUnit::Done; destroys the +0x534[] objects (count +0x538, 0x220 bytes each, vt[0](0)) and frees the array |
 | 0x00446050 | 114 | CString_InitDefaultConst | static-init helper: builds a CString from constant g_0x7842D8 and assigns it to this (SEH frame) |
 | 0x00446BA0 | 112 | CFakeUnit::v62_Load | CFakeUnit slot 62 (name, arg): 0x446C10(name, arg, this); for each of the +0x534[] entries (0x220 bytes, count +0x538): 0x59F390(entry, vt[18]()->vt[23](0x45 kind, -1)) (RegisterInstant of a CFigureClientSpecific per entry); retur... |
@@ -346,16 +346,16 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00461CB0 | 1256 | CHoover::CollectUnitLoot | (world, unit, out items CList, out proto-drop CList, unused, out money): 0 when flag 0x100000 (looted); creates the unit proto's drop names (+0xe8 vector, CItemManager::CreateItemByName) into both lists; money = rand(proto +0xd0..... |
 | 0x004626E0 | 560 | HashSetBuckets_Reserve | (this, minBuckets): bucket vector grown to the next prime with zero fill |
-| 0x00461980 | 515 | StringIntMapBuckets_ctorN | bucket vector(n) with inline chunk allocator |
+| 0x00461980 | 515 | StringIntMapBuckets_ctorN | STL: vector<node*>(n) bucket vector ctor (pool refill inlined); StringIntMap_Rehash = the NamedFloatMap / string -> int maps (NamedFloatMap_Set / Read, StringIntMap_GetOrInsert) |
 | 0x00462C10 | 465 | KeyBindings_Load | fills the 88 key records g_0x7857B0 (0x48 each: +0 scancode, +4 static name '1'..'KP_STAR'..'DEL', +8 GetKeyNameText text for the options screen), zeroes the scancode -> action table g_0x79BF70[0x200] and reads <saves root>\config... |
 | 0x00461750 | 382 | StringIntMap_Rehash | (this, minBuckets): next prime from 0x73B914, re-links the nodes with hash*5 on the key |
 | 0x00462DF0 | 373 | KeyBindings_Save | writes <saves root>\config\keyboard.ini: one '%s %s\n' line (key name, action name) for every scancode of g_0x79BF70 with a non-zero action that has a key record |
-| 0x00462960 | 334 | DwordVector_InsertRealloc7 | vector<dword>::insert with reallocation |
+| 0x00462960 | 334 | DwordVector_InsertRealloc7 | STL: vector<node*>::insert(pos, n, value) reallocating path of HashSetBuckets_Reserve = the bucket vector of the CInventory object hash set +0x50 (CInventory::ctor, 100 buckets) |
 | 0x00461260 | 255 | NamedIntMap_Write | (map, stream): writes count + {name, int} pairs (CParty::Write). Was StringIntMap_Write |
 | 0x00462420 | 241 | CInventory::dtorBody | vt_CInventory: frees the bucket map +0x50 nodes (0xc each) and the bucket vector, then CItem::dtor body (0x69FD70) |
 | 0x004613C0 | 233 | StringIntMap_GetOrInsert | (this, CString key*): rehash, find the key (hash*5, strcmp) or insert a new node; returns &value (node +8) |
 | 0x004615B0 | 202 | StringIntMapNode_Create | (pair {CString, int}*): allocates a 0x10 node from pool g_0x79B228, copy-constructs the key and stores the value at +8 |
-| 0x00462AF0 | 201 | DwordBuffer_AllocCopy14 | allocate n dwords from the size pool and copy a range in |
+| 0x00462AF0 | 201 | DwordBuffer_AllocCopy14 | STL: allocate n dwords (size pool / new) and copy a range in; HashSetBuckets_Reserve = the bucket vector of the CInventory object hash set +0x50 (CInventory::ctor) |
 | 0x00461190 | 193 | Stream_ReadCString | reads a NUL-terminated string from a stream (stream->vt[1](ptr,1) per char) into a new std::string (STLport); returns it |
 | 0x00462540 | 186 | CInventory::Done | slot 3: releases (vt[4]) every object of the hash set +0x4c.. then CItem::Done |
 
@@ -366,18 +366,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x00463390 | 841 | LeversDb::Load | (this = g_0x79C1A0, res dir): opens <dir>database.res (CMappedResource; "databases.res" only in the error text), reads "Levers.ldb" into a CMemStream, tagged archive (Archive_Open version 1): tag 1 = the LeverPrototypes block (Lev... |
-| 0x00465520 | 690 | LeverRecordVector_InsertN | vector<LeverRecord>::insert(pos, n, value) |
-| 0x00463E80 | 580 | DwordVector_Reserve | vector<dword>::reserve(n) |
-| 0x00464210 | 580 | DwordVector_Reserve2 | vector<dword>::reserve(n) (variant) |
-| 0x00465310 | 515 | DwordVector_ctorN2 | vector<dword>(n) with inline chunk allocator |
+| 0x00465520 | 690 | LeverRecordVector_InsertN | STL: vector<LeverRecord 0x2c>::insert(pos, n, value) in-place path (CString copies via operator=, UninitCopy / UninitFill), grow path 0x465800; LeverRecordVector_Resize (Levers.ldb load) |
+| 0x00463E80 | 580 | DwordVector_Reserve | STL: vector<node*>::reserve(n) of the bucket vector +4 of the string-keyed hash maps built by StringHashMap_ctor100 (LeversDb, PerksDb, SpellsDb, ItemsDb tables, QuestsDb, ObjPartyRecord, AddrBook); pool g_0x79B224 up to 0x80 byte... |
+| 0x00464210 | 580 | DwordVector_Reserve2 | STL: vector<node*>::reserve(n) of the bucket vector of LeversDb +0xc leverMap (LeversDb::ctor, 101 buckets); DwordBuffer_AllocCopy9 |
+| 0x00465310 | 515 | DwordVector_ctorN2 | STL: vector<node*>(n) bucket vector ctor (pool refill inlined); HashMapStrDword_Rehash3 = LeversDb leverMap +0xc (NameMap_FindOrInsert) and StringHash_FindOrInsert3 |
 | 0x00465800 | 480 | LeverRecordVector_InsertRealloc | vector<LeverRecord>::insert with reallocation (grow by max(n, size)) |
 | 0x004637C0 | 432 | StlList18_ctor | STLport list ctor: allocates the sentinel node (0x18 nodes from the pool) and links it to itself |
 | 0x00463AA0 | 426 | StlList10_ctor | STLport list ctor: allocates the sentinel node (0x10 nodes from the pool) and links it to itself |
 | 0x00465EE0 | 385 | LightningNoise_AddBand | (table of 400 floats, i0, i1, amp0, amp1): for harmonics i0..i1 adds random-phase sin/cos terms with amplitude interpolated from amp0 to amp1 (ISAAC rng g_0x7A9D40) |
 | 0x00463120 | 376 | LeversDb::dtor | frees the name map nodes (0x14: next, std::string key, LeverRecord*) + buckets and the vector<LeverRecord 0x2c> |
 | 0x00464F30 | 348 | HashMapStrDword_Rehash3 | (this, minBuckets): grow buckets to the next prime and re-link the nodes by String_Hash (variant) |
-| 0x00464910 | 334 | DwordVector_InsertRealloc | vector<dword>::insert with reallocation |
-| 0x00464B70 | 334 | DwordVector_InsertRealloc2 | vector<dword>::insert with reallocation (variant) |
+| 0x00464910 | 334 | DwordVector_InsertRealloc | STL: vector<node*>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n), DwordRange_Copy both halves); DwordVector_InsertN (StringHashMap_ctor100 bucket fill) and ArchiveTagHash_Rehash (archive tag-name hash +0x5... |
+| 0x00464B70 | 334 | DwordVector_InsertRealloc2 | STL: vector<node*>::insert(pos, n, value) reallocating path behind DwordVector_InsertN2 = the 101-bucket fill of LeversDb leverMap +0xc in LeversDb::ctor |
 | 0x004645A0 | 331 | Archive_dtor | tagged archive dtor (45 callers): clears list +0x70 (0xc nodes), hash +0x60, list +0x50 (0x18 nodes), frees the two CMemStream buffers (+0x40, +0x18; vt 0x73BD90 -> base 0x73BDB0) |
 
 ## 0x466000 - 0x469000: CLight + CLightning (lightning.dat)
@@ -398,7 +398,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00467150 | 391 | CLightning::ComputeBounds | (this): min/max +0x38/+0x44 over the main segment +0x5c and 6 sub segments at +0x104 (0xa8 each); centre +0x28, half extents, radius +0x34, +0x24 = 3 |
 | 0x00466FD0 | 381 | CLightning::ExtendBounds | (this, segment): widens min +0x38..+0x40 / max +0x44..+0x4c by the segment's points (+0x94, count +0x98) |
 | 0x00466CE0 | 377 | CLightning::UpdatePoints | (this, time, scale): EvalNoise into g_0x79C1F8 / g_0x79C838, then point i (+0x94, 16 bytes) = origin +0 + i * dir +0x24 + dx * side +0xc + dy * up +0x18 (drift-corrected) |
-| 0x00468680 | 266 | CLightningManager::CreateByKind | slot 14 factory (kind -> CLightning) |
+| 0x00468680 | 266 | CLightningManager::CreateByKind | slot 14 factory: operator new(0x514) + inline CLightning ctor: CObject base (vt 0x73B8E0, id -1), bounds / segments zeroed, the 6 LightningSegment branches +0x104 constructed (__ehvec), vt_CLightning, type +0x50c = 1.0, amplitude ... |
 | 0x00468C50 | 263 | CArray16_SetSize | (this = CArray of 16-byte elements, n, growStep or -1): allocates 32-byte aligned storage (raw pointer kept at -4), grow step clamped 4..0x400 |
 
 ## 0x469000 - 0x470000: .mob object descriptors (CObjectDesc / CUnitDesc / CLightDesc / CSoundDesc / CParticleDesc / torch / lever / trap) + 3DS figure builder
@@ -557,7 +557,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004BA1C0 | 85 | AiLogicGuard::Ctor | (this, pos[3], radius, stayTime): vt 0x73D128 then GuardPoint_Init; kind 0. Script UMGuard / UMGuardEx. Was Class73D128::ctor |
 | 0x004BA250 | 84 | Class73D128::Clone | slot 3 of 0x73D128 -> new 0x20-byte copy with +8 .. +0x1c (guard point pos, radius, stay time, +0x1c) copied |
 | 0x004BA5B0 | 84 | ObjHolder73D1C4::dtor_base | (this): the object +8 released (vt[4]); vt -> 0x73BB68 (scalar dtor body) |
-| 0x004BA8C0 | 84 | ObjHolder73D260::dtor_base | (this): the object +8 released (vt[4]); vt -> 0x73BB68 |
+| 0x004BA8C0 | 84 | AiLogicAggression::dtor_base | vt 0x73D260 dtor body: releases the kept target ref +8 (vt[4] Release) and clears it, vt -> 0x73BB68; AiLogicAggression::DeletingDtor. Was ObjHolder73D260::dtor_base |
 | 0x004BA450 | 78 | AiLogicFollow::Ctor | (this, target): vt 0x73D15C then 0x73D1C4; +8 = target with refcount ++; kind 10. Script UMFollow. Was ObjHolder73D1C4::ctor |
 
 ## 0x4BB000 - 0x4D6000: WorldScript compiler (lexer, #define, Duplicate script) + spell name table
@@ -640,7 +640,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004DA170 | 138 | GameBuffer::Read | (this, dest, n): zero-fills dest, copies n bytes from the buffer (via refill through vt slot 3 on underrun); sets error flag 8 on short reads (14 callers) |
 | 0x004DAFC0 | 125 | BufferedFile_GrowWindow | vt 0x73F8A4/0x73F8C8 slot 1 (this, n): grows the window buffer to n + 0x400 bytes and rebases the cursors |
 | 0x004DA630 | 124 | GameBuffer::GrowForRead | vt 0x73D624 slot 0 (this, n): reallocates the buffer for pending data + n * 2 + 0x40 |
-| 0x004DA6B0 | 124 | GameBuffer::GrowForWrite | vt 0x73D624 slot 1 (this, n): like GrowForRead for writing |
+| 0x004DA6B0 | 124 | GameBuffer::GrowForWrite | vt 0x73D624 slot 1 (n bytes needed): new buffer of (used = bias +0x14 + cursor - data + n) * 2 + 0x40 bytes, [data, capacityEnd) copied, old freed, data +4 / cursor +8 / validEnd +0x10 rebased, capacityEnd +0xc = new end; the writ... |
 | 0x004DAA80 | 110 | GameBuffer::Assign | (this, src): frees the buffer, copies src's buffer, valid end, cursor and flags (7 callers) |
 | 0x004DA5C0 | 109 | GameBuffer::Grow | (this, n): reallocates the buffer to size * 2 + 0x40 + n and rebases the cursors (10 callers) |
 
@@ -655,11 +655,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004DF030 | 1186 | CTextManager::SeekSection | (this, name or 0): scans the open text for a section header and positions the cursor after it; name 0 = next section (22 callers) |
 | 0x004DFCB0 | 848 | CTextManager::ReadLines | (this, out CStringArray, terminator): reads lines until the terminator token or end of text and appends them (32 callers) |
 | 0x004DF8D0 | 674 | CTextManager::ReadLineValue | (this, out string, default): reads the rest of the line (stops at LF/CR); returns 0 at end of text (52 callers) |
-| 0x004DD0D0 | 589 | StringVector_InsertN | vector<std::string>::insert(pos, n, value) |
-| 0x004DCA90 | 580 | CharSetBuckets_Reserve | hash set<char>: grow to the next prime |
+| 0x004DD0D0 | 589 | StringVector_InsertN | STL: vector<std::string>::insert(pos, n, value) in-place path (String_Append / AssignRange shuffles, StringRange_UninitCopy), grow path 0x4DCE90; StringVector_Resize (SpellSetRecord rune lists) |
+| 0x004DCA90 | 580 | CharSetBuckets_Reserve | STL: vector<node*>::reserve(n) of the bucket vector +4..+0xc of the global char hash set g_0x7AB8D8 (CharSet_ctor reserves 101); pool chunk refill inlined |
 | 0x004DB200 | 538 | BufferedFile_Read | slot 3 (buf, n): reads n bytes through the window buffer (+4 base, +8 pos, +0xc end, +0x10 valid end, +0x14 file offset), refilling via slot 7 |
-| 0x004DD8A0 | 515 | CharSetBuckets_ctorN | bucket vector(n) with inline chunk allocator |
-| 0x004DCE90 | 472 | StringVector_InsertRealloc | vector<std::string>::insert with reallocation (27 callers) |
+| 0x004DD8A0 | 515 | CharSetBuckets_ctorN | STL: vector<node*>(n) bucket vector ctor (pool refill inlined); CharSetBuckets_Rehash of the global char set g_0x7AB8D8 |
+| 0x004DCE90 | 472 | StringVector_InsertRealloc | STL: vector<std::string>::insert(pos, n, value) reallocating path (buffer max(2 size, size + n) from the pool, StringRange_UninitCopy both halves, old strings freed); the push_back grow path of 27 name-list builders (CollectNames,... |
 | 0x004DF510 | 450 | CTextManager::SkipToSectionEnd | (this): skips lines until a line starting with the section terminator token |
 | 0x004DC670 | 445 | String_ReplaceAny | (this, out, char): copies skipping/replacing characters found in a set (uses 0x4DD3B0 find_first_of) |
 | 0x004DB420 | 434 | BufferedFile_Write | slot 4 (buf, n): writes n bytes into the window buffer, marking it dirty (+0x18 bit 1) and extending the valid end |
@@ -676,7 +676,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004E1C60 | 584 | CVisibilityFog::RebuildCells | (grid {x0, y0, rows ptr, w, h}): marks every cell stale (+0x1C = 0); for every non-zero byte of the grid: key = (y0 + row) << 16 / (x0 + col): an existing cell is marked alive, a new one gets {+8 short x, +0xA short y, +0xC world ... |
 | 0x004E2BC0 | 560 | HashBuckets_Reserve | (this, minBuckets): bucket vector grown to the next prime with zero fill |
 | 0x004E1AB0 | 405 | CVisibilityFog::Tick | slot 6, per tick: every cell: alpha (+0x18) *= 0.5 when stale (+0x1C == 0) else alpha = 1 - (1 - alpha) * 0.5 (eases towards 1); cells below 0.01 are removed (keys collected in g_0x7ABB58); sprite +0x1D = (sprite + 1) % 15; return... |
-| 0x004E2FA0 | 334 | DwordVector_InsertRealloc9 | vector<dword>::insert with reallocation |
+| 0x004E2FA0 | 334 | DwordVector_InsertRealloc9 | STL: vector<dword>::insert(pos, n, value) reallocating path (DwordRange_Copy_4E35C0), the push_back grow path of CVisibilityFog::Tick (cell list), DialogScreen::Build / Update and CBattleHud::Update (id lists) |
 | 0x004E13E0 | 328 | CTextManager::GetItemDescription | (this, item, out CString): builds the item description text from the GetItemTextKeys keys and the "format_item1" / "format_item2" strings (when the stack count is below 2) |
 | 0x004E2290 | 314 | CVisFogManager::CreateByKind | slot 14 factory: kind -> new CVisibilityFog (vt_CVisibilityFog, 0x69 bytes: CObject + bounds +0x1C.., min +0x30, max +0x3C, cell hash +0x54 (buckets +0x58 / +0x5C, count +0x64), bounds flag +0x68) |
 | 0x004E24E0 | 310 | CVisibilityFog::dtorBody | vt_CVisibilityFog: frees the cell nodes (0x20 bytes, pool g_0x79B230) and buckets +0x58, then the CObject dtor 0x455930 |
@@ -702,7 +702,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x004E5E50 | 2530 | CRenderDevice::CRenderDevice | (hwnd, driver node, fullScreen, w, h, bpp, 0, 1, zDepth, 0): CDXDirectDraw base at +0; QueryInterface IID_IDirect3D7 (0x745A80) -> +0x50; EnumDevices into +0xB0 and picks ONLY the node whose GUID == IID_IDirect3DHALDevice (0x745A5... |
 | 0x004E4C80 | 2525 | CEffectObj::UpdateParticles_Alt | 2.5 KB: second effect particle update variant (positions from object transform, velocity +0xA8..+0xB0, jitter) |
 | 0x004F7F00 | 2245 | CRenderManager::BuildFigureMesh | (scene, part name, data** (FIG8 file), s, d, h): the entry of the scene's +0x14 map (FindOrCreateEntry) gets +0 = textureNumber (file +0x24), +4 = materialKind (file +0x20, the 17..25 word); the 10-dword header is read, the bounds... |
-| 0x004E8900 | 1795 | Mesh_ComputeBounds2D_C | compute 2D min/max bounds (variant), 1.8 KB |
+| 0x004E8900 | 1795 | Mesh_ComputeBounds2D_C | (this = CRenderDevice, {verts, count}, skipFlags or 0): screen RECT of the projected 32-byte vertices (x +0, y +4; loop unrolled by 4): min/max over all, or only those whose skipFlags byte is 0 (clipped vertices skipped); SetRect ... |
 | 0x004E7FB0 | 1783 | Mesh_ComputeBounds2D_A | compute 2D min/max of projected vertices for a draw call set (mode 0 / 1), 1.8 KB |
 | 0x004EEE30 | 1756 | CDXDirectDraw::CreateSurfaces | (backBuffers (> 10 = "Probably, this is a PROGRAMMERS ERROR"), with3D): windowed (+0x20 bit 0 clear): primary (DDSCAPS_PRIMARYSURFACE 0x200) -> +0x14, then backBuffers == 0 -> the render surface +0x18 wraps the primary itself, els... |
 | 0x004F9FD0 | 1690 | CRenderManager::BuildFigureMeshB | build a scene mesh entry for a figure part (1.7 KB): FindOrCreateEntry, GetNamedValue, vertex/index arrays from the figure data |
@@ -804,7 +804,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00525070 | 848 | UnitStats_ApplyDamage | (stats, unit, placement, hit, weapon): part = +0x110 + hit[11]*0xf4, state < 2 -> 0; per type i with dmg = hit[i]*hit[9] > 0: armor tiers (heroes 2..0, others 0) with state (+0x44+0x48t) > 1 absorb hit[10] * tierValue_i (wearing t... |
 | 0x00522CE0 | 822 | UnitStats_PackToRecord | (stats, unit, record 0x108 = CUnit +0x330): +4 exp, +8 exp + accum - spent, +0xc/+0xd/+0xe str/dex/int, +0x10..+0x13 stance speed mults * 127.5, +0x14 base speed * 25.5, +0x15 action speed, +0x16 carry max short, +0xf move type, +... |
 | 0x00528AB0 | 738 | UnitStats_RaiseSkill | (stats, skill, delta, unit): server units: byte +0x6cb[skill] += delta; the cost is added to the experience accumulator and flushed into total +4 and spent +8; max HP/mana and parts refreshed; Recompute2 |
-| 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | same for the attribute skill bytes +0x6c8[kind] |
+| 0x00528DA0 | 738 | UnitStats_RaiseAttrSkill | (stats, kind, delta, unit): server units only (unit specific +0x170 vt[12] type 0x39): attributeSkills byte +0x6c8[kind] += delta, the experience cost (pow of the old / new level) goes into expAccumulator +0x700 and a positive acc... |
 | 0x00524CD0 | 712 | UnitStats_Recompute | (stats, carriedWeight): older/simpler recompute (camp / client side): attributes + perk bytes +0x6ea..+0x6ec, +0x44 = -2, part max HP rescale with the health perk, +0x50 = arg, +0x54 carry max, +0x58/+0x5c limb factors, +0x28, +0x... |
 | 0x00520FA0 | 631 | vector18_InsertN | STLport vector<Record18>::insert(pos, n, value) |
 | 0x005254B0 | 618 | UnitStats_ApplyHit | (stats, unit, placement, hit[15], weapon): location > 6 -> 0; sets statFlags +0x6F8 bit 1 (head hit, location 0) / bit 2 (hit[5] > 0: damage type 5 present; the damage-type order is the items.idb one); per damage type i: eff_i = m... |
@@ -830,7 +830,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0052A4B0 | 452 | CMagicTrapObject::CastAtTargets | (target list): needs a spell +0x23c; world vt[28](x, y); an area spell (flags +0x3c & 0x10000000 clear) with cast points (+0x254 count +0x25c) casts at every cast point (CWorldServer::CastSpellMulti(g_0x7AFF60, spell, 0, trap pos,... |
 | 0x00529B80 | 407 | CTrapObject::Update | slot 6: CMapObject::Update; if armed (flags bit 19 0x80000) and world->IsServer(): 0x5C0BD0(world+0x294 unit grid, pos +0x1c, list (vtable 0x73D454), 1.0) collects the units within 1.0 and triggers on them (76 lines) |
 | 0x0052C740 | 407 | ObjRefCList::Serialize | slot 2 of 0x73E730: CArchive of the list's object pointers (4 bytes each; refcounted on load) |
-| 0x0052BFC0 | 400 | CTorchObject::Init | slot 2 Init() -> bool (root layout) |
+| 0x0052BFC0 | 400 | CTorchObject::Init | slot 2 Init() -> 1: CMapObject::Init, the specific ref +0x238 released (vt[4]), then the DeltaCodecSet +0x1C4 is sized to exactly 5 NetSections (0xA0 each: array +0x1C8, count +0x1CC, capacity +0x1D0, grow +0x1D4; allocated / grow... |
 | 0x00529090 | 390 | UnitStats_BoostMaxHP | (stats, delta, unit) -> 1 (needs a server specific 0x39): max HP +0xc += delta; the specific +0x2c = min(1, pow(+0x10 / g_0x7C5454, ...) * g_0x7C5458 * (1 + perk 0x10 bonus / 100) * strengthen / weaken buff ratio (0.005 per level)... |
 
 ## 0x52E000 - 0x533000: CUnit (+ CFakeUnit overrides)
@@ -839,7 +839,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 
 | addr | size | name | purpose |
 |---|---|---|---|
-| 0x0052EF90 | 1962 | CUnit::ReadNetState |  |
+| 0x0052EF90 | 1962 | CUnit::ReadNetState | slot 49 (mode 0 full / 1 delta) -> 1 only when every net section ended where the delta base says (g_0x7A9794 vt[5] == vt[4]). CMapObject::ReadNetState (sections 0-3) then the unit sections of the DeltaCodecSet +0x1C4: 4 = the 0x10... |
 | 0x00531A80 | 1848 | CFakeUnit::Read | slot 9: reads a unit from the stream (CMapObject::Read, specific read, name string at +0x238, placement, stats, orders); in network mode (world kind 8) 1.8 KB |
 | 0x005321C0 | 1160 | CFakeUnit::Write | slot 10: writes a unit to the stream (CMapObject::Write, specific write, name, placement, stats, mover) 1.2 KB |
 | 0x0052EC70 | 798 | CUnit::WriteNetState | CUnit slot 50: CMapObject::WriteNetState, then sections 4 = +0x330 (0x523720), 5 = 0x52EC10 stats (4 dwords, 1 dword (-1 if flags&0x40000000), 6 dwords), then if server (specific typeId 0x3e) specific->vt[29](); 6 = +0x264,+0x268,... |
@@ -849,7 +849,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00530570 | 442 | CUnit::UpdateMoveParams | specific vt[45] (UpdateSpeedFactors); server: +0x324 move class = server +0x24c (crawl) / +0x24e (sneak) / +0x248 (walk/run) by stance, +0x32c radius = max(+0x144,+0x148) * 0.9 (+0.2 player units, max 2.0; 0.01 for big protos with... |
 | 0x00532860 | 435 | CUnit::GetAttachPoint2 | (out pos[3]): kind-0x32 units: the bone named at 0x78F95C (0x516A80 / 0x5188B0); others: the specific's point (0x535770) or local pos + offset +0x128..+0x130; with an anim state: pos + forward * a + right * b (0x401DE0 / 0x40CDC0) |
 | 0x00532E70 | 434 | Segments1C_Serialize | slot 2 (CArchive): load / store of the 0x1c-byte segment CArray (0x708B3D count, 0x708B0F / 0x708832 / 0x708941) |
-| 0x0052E400 | 396 | CUnit::Init | slot 2 Init() -> bool (root layout) |
+| 0x0052E400 | 396 | CUnit::Init | slot 2 Init() -> 1 (CFakeUnit::Init too): CMapObject::Init, CUnit::ResetFields, then the DeltaCodecSet +0x1C4 is sized to exactly 14 NetSections (0xA0 each: array +0x1C8, count +0x1CC, capacity +0x1D0, grow +0x1D4; NetSections_Con... |
 | 0x0052E5B0 | 392 | CUnit::ResetFields | resets the CUnit-level fields (called by the ctor and the dtor) |
 | 0x00530A60 | 391 | CUnit::IsBehindTarget | (target): player units only, melee weapon: 1 when the target's facing (quat +0x34) . direction to this unit < -0.5 (attacking from behind = backstab) |
 | 0x00531220 | 387 | CUnit::AddObject4A0 | (obj): refcount++, appended to the CArray +0x4a0 (count +0x4a4, cap +0x4a8, step +0x4ac); MarkNetDirty |
@@ -888,7 +888,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00541960 | 1098 | UdbRaceModel::CopyCtor | copy-construct UdbRaceModel (0x168). Was UnitDbEntry::CopyCtor |
 | 0x0053F530 | 1050 | UnitProtoVector_InsertN | vector<UnitProto>::insert(pos, n, value) (copies value to a 0x120 local, shifts, assigns) |
 | 0x0053FCC0 | 1038 | UdbRaceModelVector_InsertN | vector<UdbRaceModel>::insert(pos, n, value). Was UnitDbEntryVector_InsertN |
-| 0x00540B80 | 960 | UnitProto::CopyCtor | copy-construct UnitProto (0x120) |
+| 0x00540B80 | 960 | UnitProto::CopyCtor | (src): copy-constructs the 0x120-byte UnitProto field by field: name +0, raceName +4 (CString copies), raceIndex +8 .. detonation +0x30 (dwords), field_34 (CString), +0x38..+0x44, hpMax +0x48 .. naturalAttack +0x64[5], naturalAtta... |
 | 0x0053F950 | 873 | UdbNpcRecordVector_InsertN | vector<UdbNpcRecord>::insert(pos, n, value). Was HeroRecordVector_InsertN |
 | 0x00543760 | 653 | UdbRaceModel_CopyRangeBackward | copy-assign a range of UdbRaceModel (0x168) records backward. Was UnitDbEntry_CopyRangeBackward |
 | 0x00540510 | 651 | UdbRaceModel_CopyRange | copy-assign a range of UdbRaceModel (0x168) records forward. Was UnitDbEntry_CopyRange |
@@ -910,7 +910,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005561C0 | 1427 | CUnitServer::Write | slot 10 Write(stream) (root layout: save stream, vt[2] write) |
 | 0x00550100 | 1298 | CUnitServer::BuildActionAnimQueue | (queue, out duration, kind, flags): attack: key = attack kind mask / flags / 0x90000; kind 6 interactions by param (0x5440000 / 0x5040000 / 0x4c40000, talk 0xc000000..); fallback 0x2890000; stance transitions around it; *duration ... |
 | 0x0054E600 | 1203 | CUnitServer::ValidateQueuedOrder | (order, msg): non-player units: always 1 (kind 6 excepted); player units: FindInteractPoint (fails -> SendMsg0E_MoveState kind 3 flag 1, 0); CanReachTarget and IsOrderTargetReachable -> SendMsg0E_MoveState(kind 3), player message ... |
-| 0x00555D10 | 1198 | CUnitServer::Read | slot 9 Read(stream) (root layout: save stream, vt[1] read) |
+| 0x00555D10 | 1198 | CUnitServer::Read | slot 9 Read(save stream; +8 = save version): the field order of CUnitServer::Write 0x5561C0: paused +0x20 (1), frozenAnim +0x21 (1), currentAnim +0x24 (AnimQueue_ReadSave) + its start tick +0x38 (4), CMover::ReadState +0x3c, actio... |
 | 0x0054A150 | 1104 | CUnitServer::ApplyPendingStance | when +0x170/+0x174 (wanted stance / combat mode) differ from +0x168/+0x16c: tests the new stance on the passability map (refused -> restore, message 0xd, 0); accepted: walking units are stopped (state 6), the transition animation ... |
 | 0x00553F40 | 1097 | CUnitServer::TakeHit | slot 20 (hit[15], attacker CUnit or 0, attacker object): unresolved hits (/hit[8]/ finite, spells) are rolled here (ResolveHitChance); alive: ActivateObject + combat log; damage is skipped for player units when their player +0x108... |
 | 0x0054F000 | 1092 | CUnitServer::ExecuteInteraction | (target) at the action end of kind 6: talk (0x18A95): world dialog start + noise; param 0/1/2 = the attribute skills science / stealing / tame (log line ' is using skill <name> his_skill = .. target_skill = ..': own vs target Attr... |
@@ -932,11 +932,11 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0055B170 | 580 | vector4_Reserve | STLport vector<dword>::reserve(n) with the node allocator inlined |
 | 0x0055D050 | 521 | vector3C_InsertGrow | STLport vector<Record3C>::insert with reallocation |
 | 0x0055C7D0 | 515 | vector4_CtorN | STLport vector<dword>(n) constructor with the node allocator inlined |
-| 0x0055C9F0 | 515 | vector4_CtorN2 | copy of vector4_CtorN |
-| 0x0055DDD0 | 515 | vector4_CtorN3 | copy of vector4_CtorN |
+| 0x0055C9F0 | 515 | vector4_CtorN2 | STL: STLport vector<dword>::vector(n, value) (size pool); the bucket vector of HashTable_Resize2 |
+| 0x0055DDD0 | 515 | vector4_CtorN3 | STL: STLport vector<dword>::vector(n, value) (size pool); the bucket vector of HashTable_Resize3 |
 | 0x0055D300 | 503 | vector24_InsertGrow | STLport vector<PathRecord 0x24>::insert with reallocation |
 | 0x00557960 | 498 | Records4C_Serialize | slot 2 (CArchive): load / store of a 0x4c-byte record CArray (0x558E10 init / 0x46C290 dtor) |
-| 0x0055D9F0 | 491 | Record3C_Assign | assigns a 0x3c-byte record |
+| 0x0055D9F0 | 491 | MapExitRecord_Assign | STL: operator= of the 0x3C-byte zone exit record (MapExitRecord_ConstructN 0x4606A0): short +0, vector<dword> +4 (DwordBuffer_AllocCopy5 / Dwords_CopyRangeReturnEnd_B), vector<dword> +0x10 (vectorInt_Assign), byte +0x1c, dwords +0... |
 
 ## 0x55E000 - 0x565000: CWorld base (managers, time of day, RefListPair +0x60) + CWorldClient (object lists / grids, CBridgeManager walkable quads, sky, day-light tables, CWeather at +0x6f4), CTerrain / CTextManager / CParticleManager / CVisFogManager dtors
 
@@ -993,7 +993,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x005790E0 | 210 | World_SetStatScramble | (active): main calls it with 1 while the window is active and 0 when not; acts only when the flag g_0x79026C changes: on 1 -> 0 (deactivation) a fresh key is drawn from the ISAAC pool g_0x7A9D40[g_0x7A9D44] into g_0x7AFECC and Wor... |
 | 0x00579FB0 | 168 | Session_WriteMissionSave | (CFileStream, a): CWorldServer::WriteSave into a CMemStream then MpFile::WriteContainer (version g_0x790260, flags 0x80). Writes mission.sav. Was Game_WriteSaveFile |
 | 0x005794B0 | 155 | CDemoScreen::Create | (CInterface): new 0x184-byte CDemoScreen (vt 0x73F7F8: the attract-mode demo / intro screen, not a base class; CString +0x164, demo names +0x170) handed to CInterface::SetPendingScreen. Was CUIWindow_73F7F8::Create |
-| 0x00579730 | 155 | CDemoScreen::Create2 | identical second copy. Was CUIWindow_73F7F8::Create2 |
+| 0x00579730 | 155 | CDemoScreen::Create2 | identical second copy of CDemoScreen::Create (CUIWindow 0x184 bytes, vt 0x73F7F8, +0x94 = the 0x73F7C4 interface, the CStringArray at +0x188, the byte +0x184 = 1): CInterface::SetPendingScreen(g_0x7C7D50, window). No callers (link... |
 | 0x00579420 | 126 | Session_LeaveGameToMenu | (this, a, CParty): same as request kind 5: CPlayer::SetPartyBlock(client connection owner, party), UnloadZone, CWorldClient::ConnectToLobbyHost; without a lobby server Game_EnterZone("MainMenu", 2) else Lobby_ResetMpGameState; con... |
 | 0x005796B0 | 95 | CDemoScreen::~body | destroys the CString +0x164 and the demo list, then CUIWindow::~body. Was CUIWindow_73F7F8::~body |
 | 0x005793E0 | 62 | Session_PlayRecordedStream | (file): UnloadZone, CWorldClient::AttachDualFileStream (recorded packet playback), connection +0x84 = 1, +0x85 = 0. Caller CUIScreen73F7F8::PlayIntroMovie. Was Game_AttachClientStream |
@@ -1057,9 +1057,9 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x00596350 | 671 | CWorldServer::LoadWorldScript | (mob file name): World_MapFilePath; chunk 0xA000 then 0xACCEECCB (encrypted script: CString_Unscramble) or 0xACCEECCA (plain text); GSWorld::Reset(+0x12874) and Compiler_CompileText(+0x12874, text, 1). Used for zone records of kin... |
 | 0x005957E0 | 645 | CWorldServer::UnloadZone | (7 callers: every session transition): every player ClearOwnerObject + removed from the manager; +0x15c = 0; loot records +0x12e64 cleared; mob names +0x124 cleared; navGridOn +0x172 = 0; both GSWorld::Reset; PlayerRelations::Rese... |
 | 0x00595480 | 606 | CWorldServer::LoadZone | (mpr name, mob name, progress zone name): +0xe0 = 0; World_SelectProgressVideo + Movie_PlayIntro (the loading screen video); both files must exist (as given or under World_MapPath) else 0; World_LoadAIGraphStream -> FatalError "CW... |
-| 0x0059A710 | 580 | Dwords_Reserve3 | vector<dword>::reserve |
-| 0x0059AB10 | 580 | Dwords_Reserve4 | vector<dword>::reserve |
-| 0x0059D800 | 580 | Dwords_Reserve5 | vector<dword>::reserve |
+| 0x0059A710 | 580 | Dwords_Reserve3 | STL: vector<dword>::reserve(n) with the inlined STLport allocator (Dwords_AllocCopy5 copies, old block freed); the bucket vector of IdHash_CtorDefault2 |
+| 0x0059AB10 | 580 | Dwords_Reserve4 | STL: vector<dword>::reserve(n) with the inlined STLport allocator (Dwords_AllocCopy6 copies, old block freed); the bucket vector of IdHash_CtorDefault3 |
+| 0x0059D800 | 580 | Dwords_Reserve5 | STL: vector<dword>::reserve(n) with the inlined STLport allocator (Dwords_AllocCopy7 copies, old block freed); the bucket vector of IdHash_CtorDefault4 |
 | 0x005993A0 | 532 | NavSectorArray::Serialize | slot 2 of 0x73F9EC: CArchive of the 0x54-byte NavSector array (NavSector_ConstructN for new ones) (CollisionMap sectors). Was Array54::Serialize |
 | 0x00596140 | 521 | World_LoadAIGraphStream | (mpr name, mob name, out CMemStream): with a mob name: its file is opened and the AIGRAPH chunk (magic 0x31415926, Stream_CompareWith) copied into the stream; else "<mpr base>.grp" copied whole (vt[7] CopyFrom); false when neither... |
 | 0x00596C60 | 519 | CWorldServer::RemoveAllObjects | RemoveObject on every object of +0x12da0 (collected first); cast list +0x12e2c released; item update list +0x12e48 cleared; WaterLevels cleared (+0x70) |
@@ -1387,7 +1387,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x00675770 | 721 | CMappedFile::Open | (path, writable): GetDiskFreeSpace / GetSystemInfo choose FILE_FLAG_NO_BUFFERING (0x20000080) when the sector size divides the page size else 0x10000080; CreateFileA (+0; read or read-write, share read), GetFileSize (+0xc; "Too la... |
 | 0x00674AC0 | 540 | CResourceBase::ListFiles | (out CStringArray, pattern or 0): every entry name, or those whose name / extension match the wildcard (_splitpath + WildcardMatch, case-insensitive) |
-| 0x00674070 | 515 | DwordVector_ctorN3 | vector<dword>(n) with inline chunk allocator |
+| 0x00674070 | 515 | DwordVector_ctorN3 | STL: vector<node*>(n) zeroed bucket table with the STLport node allocator inlined; the rehash of the CMappedResource file name hash (StringHash_Rehash2 <- StringHash_GetOrInsert2 <- OpenFile) |
 | 0x00675050 | 429 | CObjectManager::OpenProtoResource | slot 16 (name) -> bool: when a record of +0xb0 has that name: 1; else a new CMappedResource (0x58, 0x671280) is appended as {name, resource} and opened with its vt[1] Open(name, 0): the manager's prototype / database archives (CIt... |
 | 0x00675DD0 | 408 | CEffectSound::ctor | CObject (vt 0x73B8E0) -> CEffect (vt 0x73BA38: delta codec +0xa8 with 4 CMemStreams, the +0xf8 one vt 0x73C960) -> vt_CEffectSound: sound handle +0x25c = -1 (stops it via 0x6B94A0 when set), +0x254 = 1, +0x14c byte, +0x24c/+0x250 ... |
 | 0x00674910 | 378 | CResourceBase::CreateAccelTable | (pairs {name, index}*, count): +0x1c = max index + 1 slots (-1 filled) with the entry index of every name (fixed numbering of often-used entries); "CResourceBase::CreateAccelTable(). Index out of range / No entry" |
@@ -1429,18 +1429,18 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 |---|---|---|---|
 | 0x0068BF60 | 1333 | CSpellContainer::Finalize | rebuilds the embedded CSpell +0x30 from the proto +0x1C (InitFromProto values; id = proto index << 16) then applies every rune of +0x20 by its code: 'a' area += v * proto Area (then radius = sqrt(area / pi)); 'd' duration += ftol(... |
 | 0x00684550 | 1174 | SpellsDb::Load | (res path): 'spells.sdb' from the database .res (CMappedResource) into a CMemStream; archive tag 1 -> vector<SpellProto 0x84> +0 (begin g_0x7C8510 / end g_0x7C8514) and the code -> proto map +0xC (g_0x7C851C, keyed by the CODE +4,... |
-| 0x00685BE0 | 836 | SpellProtoVector_InsertN | vector<SpellProto>::insert(pos, n, value) |
-| 0x006850D0 | 756 | SpellSetRecordVector_InsertN | vector<0x34 record>::insert(pos, n, value) |
+| 0x00685BE0 | 836 | SpellProtoVector_InsertN | STL: vector<SpellProto 0x84>::insert(pos, n, value) (in-place shift with SpellProto::operator_assign / placement copies, else InsertRealloc); used by SpellProtoVector_Resize |
+| 0x006850D0 | 756 | SpellSetRecordVector_InsertN | STL: vector<SpellSetRecord 0x34>::insert(pos, n, value) (in-place shift with operator_assign / placement copies, else InsertRealloc); used by SpellSetRecordVector_Resize |
 | 0x00689030 | 728 | CSpellManager::CreateSpellByName | ('code{rune;rune;...}', e.g. 'fireball{e1;r1}'): the spell CODE (+4) looked up in g_0x7C851C, the rune codes in g_0x7C853C; world vt[17] = the CSpellConstructor: SetManager, BeginConstructSpell(proto), AddRune per rune, EndConstru... |
-| 0x006853D0 | 614 | SpellSetRecord_CopyRange2 | copy-assign a range of 0x34 records forward (variant) |
-| 0x006863C0 | 599 | SpellSetRecord_CopyRange | copy-assign a range of 0x34 records forward |
-| 0x0068A0F0 | 580 | DwordVector_Reserve3 | vector<dword>::reserve(n) (variant) |
+| 0x006853D0 | 614 | SpellSetRecord_CopyRange2 | STL: copy [first, last) of SpellSetRecord 0x34 forward onto dest (operator_assign per record: the three std::strings and two string vectors); the erase shift of SpellSetRecordVector_Resize |
+| 0x006863C0 | 599 | SpellSetRecord_CopyRange | STL: copy [first, last) of SpellSetRecord 0x34 forward onto dest (operator_assign per record); the loading reset of SpellSetRecordVector_Serialize |
+| 0x0068A0F0 | 580 | DwordVector_Reserve3 | STL: vector<dword>::reserve(n) (size pool buffer, elements copied); the bucket / id vector of CSpellManager::CSpellManager |
 | 0x0068B4C0 | 576 | CSpell::IsValidTarget | (caster, target) -> bool: flags +0x3C low 16 bits: 1 'ff' only friends (the player masks +0x244/+0x248/+0x250 say not enemy), 2 'fe' only enemies, 4 'fh' model unhuma/unhufe, 8 'fg' unmogo, 0x10 'fo' unorma/unorfe, 0x20 'fl' unmol... |
-| 0x006875D0 | 571 | SpellProto::operator_assign | copy-assign the 0x84 spell proto |
+| 0x006875D0 | 571 | SpellProto::operator_assign | copy-assigns a SpellProto 0x84 (the std::string code / name fields and the numeric spell fields); 3 calls in SpellProtoVector_InsertN |
 | 0x00689B70 | 560 | HashMapUint_RehashPrime | (this, minBuckets): bucket vector grown to the next prime (binary search in 0x73B914) with zero fill |
-| 0x00686910 | 543 | SpellProtoVector_InsertRealloc | vector<SpellProto>::insert with reallocation |
+| 0x00686910 | 543 | SpellProtoVector_InsertRealloc | STL: vector<SpellProto 0x84>::_M_insert_overflow (grow path of insert); used by SpellProtoVector_InsertN |
 | 0x006866B0 | 538 | SpellSetRecord::operator_assign | copy-assign the 0x34 record (string +0, string vectors +0xc / +0x18, string +0x24, +0x30) |
-| 0x00685F30 | 528 | SpellSetRecordVector_InsertRealloc | vector<0x34 record>::insert with reallocation |
+| 0x00685F30 | 528 | SpellSetRecordVector_InsertRealloc | STL: vector<SpellSetRecord 0x34>::_M_insert_overflow (grow path of insert: new size-pool buffer, placement copies, old records destroyed); used by SpellSetRecordVector_InsertN |
 
 ## 0x68C000 - 0x68F000: CLight / CLightManager / CMaterial / CMaterialManager
 
@@ -1453,7 +1453,7 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x0068D5A0 | 394 | CLight::ApplyPointWrap | (atten, in rgb, normal, L unit, d, out): k = 1 - d^2 * (+0x104); k < 0 -> out = in; w = N.L + 1 when N.L <= 0 else 1 ('wrap'); out_c = min(1, in_c + w * k * atten * colour_c); the terrain point-light term (TerrainSector_LightVerte... |
 | 0x0068C680 | 362 | StlString_Reserve_68C680 | STL: basic_string grow/reserve with length_error check ("basic_string") |
 | 0x0068DE30 | 347 | CMaterial::~CMaterial_body | vt_CMaterial: pops all deque elements, frees nodes and map, CStrings released, CObject base dtor 0x455930 |
-| 0x0068CB90 | 327 | PartialSort_Bytes | std::partial_sort for chars (heap select) |
+| 0x0068CB90 | 327 | PartialSort_Bytes | STL: partial_sort over a char range (heap select: make_heap + adjust_heap + sort_heap); used by CSpellContainer::Finalize |
 | 0x0068D450 | 323 | CLight::ApplyPoint | plain N.L point light without the wrap term; no callers (dead) |
 | 0x0068EE70 | 314 | DwordVector_InsertN_68EE70 | STL: vector<uint>::insert(pos,n,value), grow path 0x68F040 |
 | 0x0068D310 | 310 | CLight::ApplyDirectional | (intensity, in rgb, normal, out rgb): t = -(dir . N); t <= 0 -> out = in; else out_c = min(1, in_c + t * intensity * colour_c); the terrain sun term (TerrainSector_LightVertexSun) |
@@ -1497,13 +1497,13 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | 0x006A67A0 | 1141 | ItemsDb::Load | (this = ItemsDb 0xc0 at g_0x7C86D8, res path): items.idb through a CMappedResource into a CMemStream; tagged archive: tag 1 Materials (vector +0 stride 0x50, name map +0xc), 2 Weapons (+0x20 stride 0xb4, map +0x2c), 3 Armors (+0x4... |
 | 0x006A4B90 | 1071 | CItemLoot::GetIconName | slot 19 (out CString): category 1 "material%04d" (material index +0x54); category 2: table 0 / 1 -> "%s_%.2d.%d" with the referenced weapon / armor proto's type prefix, 2 "qitem%04d", 3 "prototype%04d", 4 "modifier.."; else "litem... |
 | 0x006A5030 | 973 | CItemLoot::GetInitIconName | slot 20 (out CString): "initwe%s%dweapon" / "initar%s%darmor" / "initqi%ditem" / "initlim%ditem" by the referenced table |
-| 0x006A9420 | 835 | QuickProtoVector_InsertN | vector<QuickProto>::insert(pos, n, value) |
+| 0x006A9420 | 835 | QuickProtoVector_InsertN | STL: vector<QuickProto 0x8C>::insert(pos, n, value) (in-place shift with ItemProto8C::operator_assign / placement copies, else InsertRealloc); used by QuickProtoVector_Resize |
 | 0x006A3CD0 | 797 | CItemQuick::GetIconName | slot 19 (out CString): "qitem%04d" (+ ".%s" of the proto's M.Type +0x10 when set) from the quick proto index; the weapon / armor / loot / quest tables are consulted by kind first |
-| 0x006A8C50 | 715 | WeaponProtoVector_InsertN | vector<WeaponProto>::insert(pos, n, value) |
-| 0x006A9830 | 713 | QuestProtoVector_InsertN | vector<QuestProto>::insert(pos, n, value) |
-| 0x006A90B0 | 693 | ArmorProtoVector_InsertN | vector<ArmorProto>::insert(pos, n, value) |
+| 0x006A8C50 | 715 | WeaponProtoVector_InsertN | STL: vector<WeaponProto 0xB4>::insert(pos, n, value) (in-place shift with operator_assign / placement copies, else InsertRealloc); used by WeaponProtoVector_Resize |
+| 0x006A9830 | 713 | QuestProtoVector_InsertN | STL: vector<QuestProto 0x7C>::insert(pos, n, value) (in-place shift with operator_assign / placement copies, else InsertRealloc); used by QuestProtoVector_Resize |
+| 0x006A90B0 | 693 | ArmorProtoVector_InsertN | STL: vector<ArmorProto 200>::insert(pos, n, value) (in-place shift with operator_assign / placement copies, else InsertRealloc); used by ArmorProtoVector_Resize |
 | 0x006AD900 | 674 | Briefing::SerializeFields | (this = quests.qdb briefing record 0x6c, archive): tag 0 name +0, 1 exp +0xc, 2 money +0x10, 3 give items +0x14, 4 string +0x5c, 5 remove items +0x20, 6 give quests +0x2c, 7 complete quests +0x38, 8 available zones +0x44, 9 comple... |
-| 0x006A9B00 | 663 | LootProtoVector_InsertN | vector<LootProto>::insert(pos, n, value) |
+| 0x006A9B00 | 663 | LootProtoVector_InsertN | STL: vector<LootProto 0x78>::insert(pos, n, value) (in-place shift with operator_assign / placement copies, else InsertRealloc); used by LootProtoVector_Resize |
 
 ## 0x6AE000 - 0x6B4000: quests database (quests.qdb)
 
@@ -1512,19 +1512,19 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006AE8E0 | 3042 | QuestsDb::ParseQuestReg | (this = QuestsDb (ECX), text) -> 1: parses a zone's quest.reg (CFileRegistry::Attach on the CTextManager buffer): [quest] name, exp, money, zone index, order, questplaces "{x;y}" pairs -> a Quest appended to +0 (name map rebuilt);... |
-| 0x006B27E0 | 958 | BriefingVector_InsertN | vector<Briefing>::insert(pos, n, value) |
+| 0x006B27E0 | 958 | BriefingVector_InsertN | STL: vector<Briefing 0x6C>::insert(pos, n, value) (in-place shift with Briefing::operator_assign / placement copies, else InsertRealloc); used by BriefingVector_Resize |
 | 0x006AE3A0 | 923 | QuestsDb::Load | (this = g_0x7C87A8, res dir): opens <dir>database.res (always; "databases.res" only in the error text), reads "quests.qdb" into a CMemStream, tagged archive version 1: tag 1 = the quest block -> vector +0 (Quest::SerializeFields 0... |
-| 0x006B39E0 | 727 | Briefing_CopyRange | copy-assign a range of Briefing (0x6c) records forward |
-| 0x006B2450 | 679 | QuestVector_InsertN | vector<Quest>::insert(pos, n, value) |
-| 0x006B3E60 | 662 | Briefing::operator_assign | copy-assign Briefing (0x6c) |
-| 0x006B02B0 | 609 | CStringVector_Reserve | vector<CString>::reserve(n) (8 callers) |
+| 0x006B39E0 | 727 | Briefing_CopyRange | STL: copy [first, last) of Briefing 0x6C forward onto dest (Briefing::operator_assign per record); the loading reset of BriefingVector_Serialize |
+| 0x006B2450 | 679 | QuestVector_InsertN | STL: vector<Quest 0x38>::insert(pos, n, value) (in-place shift with Quest::operator_assign / placement copies, else InsertRealloc); used by QuestVector_Resize |
+| 0x006B3E60 | 662 | Briefing::operator_assign | copy-assigns a Briefing 0x6C (its std::strings and vectors); 2 calls in BriefingVector_InsertN |
+| 0x006B02B0 | 609 | CStringVector_Reserve | STL: vector<CString>::reserve(n) (size pool buffer, CString copies, old destroyed); 8 calls in QuestsDb::ParseQuestReg (the quest .reg string lists) |
 | 0x006B2BA0 | 569 | Briefing_CopyRange2 | copy-assign a range of Briefing (0x6c) records forward (variant) |
 | 0x006AFCF0 | 560 | QuestMap_Rehash | (this = quest name map g_0x7C87B4, minBuckets): grow buckets to the next prime and re-link the nodes |
 | 0x006AFFC0 | 560 | BriefingMap_Rehash | (this = briefing name map g_0x7C87D4, minBuckets): grow buckets to the next prime and re-link the nodes |
-| 0x006B1CB0 | 553 | Briefing::CopyCtor | copy-construct Briefing (0x6c) |
-| 0x006B1480 | 524 | BriefingVector_InsertRealloc | vector<Briefing>::insert with reallocation |
-| 0x006B0EF0 | 523 | QuestVector_InsertRealloc | vector<Quest>::insert with reallocation |
-| 0x006B2240 | 519 | BriefingVector_Resize | vector<Briefing>::resize(n) |
+| 0x006B1CB0 | 553 | Briefing::CopyCtor | copy-constructs a Briefing 0x6C (its std::strings and vectors); used by BriefingVector_InsertRealloc |
+| 0x006B1480 | 524 | BriefingVector_InsertRealloc | STL: vector<Briefing 0x6C>::_M_insert_overflow (grow path of insert); used by BriefingTable_AddUnique, BriefingVector_PushBack and BriefingVector_InsertN |
+| 0x006B0EF0 | 523 | QuestVector_InsertRealloc | STL: vector<Quest 0x38>::_M_insert_overflow (grow path of insert); used by QuestVector_PushBack and QuestVector_InsertN |
+| 0x006B2240 | 519 | BriefingVector_Resize | STL: vector<Briefing 0x6C>::resize(n) (QuestsDb briefings): InsertN of default records or erase of the tail; used by BriefingVector_Serialize |
 
 ## 0x6B4000 - 0x6C3000: CMusicSystem / CSoundManager / mp3 (Miles)
 
@@ -1575,17 +1575,17 @@ Generated from `functions.tsv` / `modules.tsv`. For every module: the theme and 
 | addr | size | name | purpose |
 |---|---|---|---|
 | 0x006D7620 | 3520 | CAcksDb::Load | (dataDir) -> bool: opens '<dir>database.res' and its 'acks.db' ('Can't open acks database'); Archive tags 1 / 2 / 3 = the Answers (0x1C4 records, 0x71 dwords) / Cryes (0x5C) / Others (0x38) blocks of database-format.md into the ve... |
-| 0x006DE370 | 2156 | AcksAnswer::CopyCtor | copy-constructs a 0x1C4-byte Answers record |
+| 0x006DE370 | 2156 | AcksAnswer::CopyCtor | copy-constructs an acks.db Answers record 0x1C4: the name std::string, the id -> list hash map +0xC and the 0x16 voice-line vectors +0x20 (0x28 lines each, PtrVector_CtorN_6DEF90 + copies); used by AcksAnswersVector_Resize / _Inse... |
 | 0x006CCF20 | 1567 | CTerrain::BuildShadowReceiverMesh | (clipBuf, corners SoA float[16]): the terrain cell box under the shadow prism (the rectangle slid up the light ray to the highest vertex of the box, 1-cell margin, clamped to the map), ClipBuf::ReserveForTriangles(((nx+1)*(ny+1) +... |
 | 0x006D5BF0 | 1475 | CBitmapDib::LoadMmpMipLevel | (stream, level) -> bool: reads an MMP header (0x4C bytes; 'read error 1', 'wrong level for mipmap' when width < 2^level), seeks to mip `level` (hdr +0x48 extra block + the level-size sum, relative to the header end) and builds a D... |
 | 0x006DC390 | 1423 | AcksAnswer::~AcksAnswer | destroys a 0x1C4-byte Answers record (hash tables, line vectors, strings) |
 | 0x006CEDE0 | 1324 | CPrintDecal::Render | (this) -> bool: inactive (+5 == 0) -> 1; mesh not built (+4 == 0): z0 = CBridgeManager::GetHeightAt(world +0x1D4, x, y, world vt[27] terrain height), the 4 rectangle corners (half extents +0x10 / +0x14 rotated by +0x44) at z0 -> C... |
 | 0x006D0630 | 1106 | CPrintsDb::Load | (dataDir) -> bool: opens '<dir>database.res' (CMappedResource; FatalError 'Can't open database file' naming databases.res) and its 'prints.db' ('Can't open terrain prints database'); the Archive tags 1 / 2 / 3 (database-format.md ... |
-| 0x006DF3E0 | 972 | AcksCryesRange_AssignTail | assign the tail range of 0x5C-byte Cryes records |
+| 0x006DF3E0 | 972 | AcksLineRange_Assign2 | STL: vector<voice-line record 0x28>::assign(first, last) variant (String_Assign per line, Rec28Vector_Assign / Rec2CVector_Assign for the nested lists, realloc via Rec28_AllocCopy); the line list copy of AcksAnswersVector_Resize. ... |
 | 0x006DC000 | 910 | AcksAnswer::AcksAnswer | constructor of a 0x1C4-byte Answers record: name string, the id -> list hash (+0xC), 0x19 vectors of 0x28-byte voice-line records {wav path, weight, subtitle, text id} (+0x20 + k * 0xC) and the remaining fields; was CDatabaseTable... |
-| 0x006DD6C0 | 875 | AcksCryesVector_AssignN | assign n copies of a 0x5C-byte Cryes record |
+| 0x006DD6C0 | 875 | AcksCryesVector_AssignN | STL: vector<Cryes record 0x5C>::_M_fill_insert / assign n copies of one record (each record = std::string name, a vector of 0x28 voice-line records and a hash set; in-place copies or AcksCryesVector_InsertRealloc); used by AcksCry... |
 | 0x006D8430 | 796 | CAcksDb::PlayUnitHitSound | (unit, ..): hit sound of a unit: hero check, proto lookup (CUnit::GetProto2), 'weapons\..' paths, CWorldClient::GetEnvironmentMask, CSoundManager::PlaySound |
-| 0x006DDA30 | 755 | AcksOthersVector_AssignN | assign n copies of a 0x38-byte Others record |
+| 0x006DDA30 | 755 | AcksOthersVector_AssignN | STL: vector<Others record 0x38>::_M_fill_insert / assign n copies of one record (std::string name, a 0x28 voice-line vector and a hash set; in-place copies or AcksOthersVector_InsertRealloc); used by AcksOthersVector_Resize (CAcks... |
 | 0x006D2E40 | 723 | DbRecord40Vector_AssignN | assign n copies of a 0x28-byte record (string copies), grow path 0x6D3430; 723 bytes |
 | 0x006D3120 | 711 | Record52Vector_Assign | vector of 0x34-byte records assign(n, value)/insert helper with std::string copies; 711 bytes |
 
